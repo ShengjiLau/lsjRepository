@@ -14,7 +14,6 @@
     <modules>
         <module>user-api</module>
         <module>userinfo-service</module>
-        <module>user-controller</module>
     </modules>
 
 
