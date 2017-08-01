@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.service;
 
 import com.lcdt.userinfo.dto.RegisterDto;
+import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.model.FrontUserInfo;
 
 /**
@@ -8,7 +9,7 @@ import com.lcdt.userinfo.model.FrontUserInfo;
  */
 public interface UserService {
 
-	FrontUserInfo registerUser(RegisterDto registerDto);
+	FrontUserInfo registerUser(RegisterDto registerDto) throws PhoneHasRegisterException;
 
 	boolean isPhoneBeenRegester(String phone);
 

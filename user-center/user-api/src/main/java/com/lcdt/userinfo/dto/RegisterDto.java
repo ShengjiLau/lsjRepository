@@ -9,4 +9,20 @@ public class RegisterDto {
 
 	private String password;
 
+
+	public String getUserPhoneNum() {
+		return userPhoneNum;
+	}
+
+	public void setUserPhoneNum(String userPhoneNum) {
+		this.userPhoneNum = userPhoneNum;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }
