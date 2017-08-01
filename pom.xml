@@ -9,6 +9,7 @@
     <modules>
         <module>mybatis-generator</module>
         <module>user-center</module>
+        <module>cwms-web</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>
