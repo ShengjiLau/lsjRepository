@@ -45,4 +45,7 @@ public interface FrontUserInfoMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(FrontUserInfo record);
+
+
+    List<FrontUserInfo> queryByUserPhone(String userName);
 }

@@ -2,6 +2,7 @@ package com.lcdt.userinfo.service;
 
 import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
+import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.FrontUserInfo;
 
 /**
@@ -15,7 +16,7 @@ public interface UserService {
 
 	boolean checkUserLogin();
 
-	FrontUserInfo queryByUserId(Integer userId);
+	FrontUserInfo queryByUserId(Integer userId) throws UserNotExistException;
 
-	FrontUserInfo queryByPhone(String phone);
+	FrontUserInfo queryByPhone(String phone) throws UserNotExistException;
 }

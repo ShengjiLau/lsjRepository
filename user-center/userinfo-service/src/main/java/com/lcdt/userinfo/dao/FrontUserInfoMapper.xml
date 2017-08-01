@@ -128,4 +128,11 @@
     user_reg_source
     from front_user_info
   </select>
+
+  <select id="queryByUserPhone" resultMap="BaseResultMap">
+    SELECT * FROM front_user_info
+    WHERE user_name = #{userName,jdbcType=VARCHAR}
+  </select>
+
+
 </mapper>
