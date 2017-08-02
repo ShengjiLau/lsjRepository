@@ -18,11 +18,23 @@
             <artifactId>user-api</artifactId>
             <version>1.0</version>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.7</version>
         </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>1.7.7</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
@@ -37,11 +49,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <groupId>io.netty</groupId>
+            <artifactId>netty</artifactId>
+            <version>3.10.6.Final</version>
         </dependency>
+
 
         <dependency>
             <groupId>net.sourceforge.jtds</groupId>

@@ -22,7 +22,6 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class MybatisConfig implements TransactionManagementConfigurer {
 
-
 	@Autowired
 	DataSource dataSource;
 
