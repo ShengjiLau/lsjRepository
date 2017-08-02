@@ -6,9 +6,11 @@
         <artifactId>cwms</artifactId>
         <groupId>com.lcdt.cloud</groupId>
         <version>1.0</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <packaging>jar</packaging>
     <artifactId>userinfo-service</artifactId>
 
     <dependencies>
@@ -48,6 +50,13 @@
     </dependencies>
 
     <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+
         <resources>
             <resource>
                 <directory>src/main/java</directory>
