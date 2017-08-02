@@ -20,10 +20,8 @@ public class YbqTest {
 
     @Test
     public void testUserMapper(){
-
         System.out.println(userService.checkUserLogin());
         System.out.println(11111);
-
     }
 
 
