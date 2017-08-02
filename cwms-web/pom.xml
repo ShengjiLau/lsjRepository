@@ -11,12 +11,10 @@
 
     <artifactId>cwms-web</artifactId>
     <dependencies>
-        <dependency>
+         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>user-api</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>
-
-
 </project>
