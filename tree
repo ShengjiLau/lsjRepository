@@ -1,148 +1,16 @@
 [INFO] Scanning for projects...
-Downloading: http://101.200.215.10:8083/repository/maven-public/org/springframework/boot/spring-boot-starter-parent/$%7Bboot-version%7D/spring-boot-starter-parent-$%7Bboot-version%7D.pom
-[ERROR] [ERROR] Some problems were encountered while processing the POMs:
-[FATAL] Non-resolvable parent POM for com.lcdt.cloud:cwms:1.0: Could not transfer artifact org.springframework.boot:spring-boot-starter-parent:pom:${boot-version} from/to lcdt (http://101.200.215.10:8083/repository/maven-public/): Failed to transfer file: http://101.200.215.10:8083/repository/maven-public/org/springframework/boot/spring-boot-starter-parent/$%7Bboot-version%7D/spring-boot-starter-parent-$%7Bboot-version%7D.pom. Return code is: 500 , ReasonPhrase:javax.servlet.ServletException: java.lang.IllegalArgumentException: Illegal character in path at index 54: /org/springframework/boot/spring-boot-starter-parent/${boot-version}/spring-boot-starter-parent-${boot-version}.pom. and 'parent.relativePath' points at wrong local POM @ line 20, column 13
- @ 
+Downloading: http://mirrors.ibiblio.org/pub/mirrors/maven2/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE/spring-boot-starter-parent-1.5.3.RELEASE.pom
+2 KB   6 KB   10 KB   14 KB   15 KB   16 KB   20 KB   24 KB   28 KB   32 KB   33 KB   37 KB   41 KB   45 KB   49 KB   50 KB   54 KB   58 KB   62 KB   63 KB   67 KB   71 KB   75 KB   79 KB   83 KB   87 KB   91 KB   95 KB   99 KB   [WARNING] Checksum validation failed, expected <html> but is b113767b47336dcc165c5dd2222b5df4cb86b7ce for http://mirrors.ibiblio.org/pub/mirrors/maven2/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE/spring-boot-starter-parent-1.5.3.RELEASE.pom
+2 KB    3 KB   5 KB   7 KB   9 KB   12 KB   13 KB   15 KB   19 KB   22 KB   23 KB   25 KB   27 KB   29 KB   32 KB   33 KB   36 KB   37 KB   40 KB   42 KB   46 KB   50 KB   52 KB   53 KB   55 KB   57 KB   59 KB   63 KB   64 KB   66 KB   67 KB   70 KB   72 KB   76 KB   76 KB   77 KB   81 KB   82 KB   83 KB   87 KB   87 KB   89 KB   90 KB   94 KB   94 KB   98 KB   99 KB   [WARNING] Checksum validation failed, expected <html> but is b113767b47336dcc165c5dd2222b5df4cb86b7ce for http://mirrors.ibiblio.org/pub/mirrors/maven2/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE/spring-boot-starter-parent-1.5.3.RELEASE.pom
+        Downloaded: http://mirrors.ibiblio.org/pub/mirrors/maven2/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE/spring-boot-starter-parent-1.5.3.RELEASE.pom (99 KB at 4.5 KB/sec)
 [ERROR] The build could not read 1 project -> [Help 1]
 [ERROR]   
-[ERROR]   The project com.lcdt.cloud:cwms:1.0 (/Users/ss/dev_work_code/cwms/pom.xml) has 1 error
-[ERROR]     Non-resolvable parent POM for com.lcdt.cloud:cwms:1.0: Could not transfer artifact org.springframework.boot:spring-boot-starter-parent:pom:${boot-version} from/to lcdt (http://101.200.215.10:8083/repository/maven-public/): Failed to transfer file: http://101.200.215.10:8083/repository/maven-public/org/springframework/boot/spring-boot-starter-parent/$%7Bboot-version%7D/spring-boot-starter-parent-$%7Bboot-version%7D.pom. Return code is: 500 , ReasonPhrase:javax.servlet.ServletException: java.lang.IllegalArgumentException: Illegal character in path at index 54: /org/springframework/boot/spring-boot-starter-parent/${boot-version}/spring-boot-starter-parent-${boot-version}.pom. and 'parent.relativePath' points at wrong local POM @ line 20, column 13 -> [Help 2]
+[ERROR]   The project com.lcdt.cloud:cwms:1.0 (D:\Per_Program\Spring_Inetpub\cwms\pom.xml) has 1 error
+[ERROR]     Non-parseable POM D:\Oracle\maven_repo\org\springframework\boot\spring-boot-starter-parent\1.5.3.RELEASE\spring-boot-starter-parent-1.5.3.RELEASE.pom: Expected root element 'project' but found 'html' (position: START_TAG seen <html>... @1:6)  @ D:\Oracle\maven_repo\org\springframework\boot\spring-boot-starter-parent\1.5.3.RELEASE\spring-boot-starter-parent-1.5.3.RELEASE.pom, line 1, column 6 -> [Help 2]
 [ERROR] 
 [ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
 [ERROR] Re-run Maven using the -X switch to enable full debug logging.
 [ERROR] 
 [ERROR] For more information about the errors and possible solutions, please read the following articles:
 [ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/ProjectBuildingException
-[ERROR] [Help 2] http://cwiki.apache.org/confluence/display/MAVEN/UnresolvableModelException
-[INFO] Scanning for projects...
-[INFO] ------------------------------------------------------------------------
-[INFO] Reactor Build Order:
-[INFO] 
-[INFO] cwms
-[INFO] userinfo-service
-[INFO]                                                                         
-[INFO] ------------------------------------------------------------------------
-[INFO] Building cwms 1.0
-[INFO] ------------------------------------------------------------------------
-Downloading: http://101.200.215.10:8083/repository/maven-public/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.pom
-Downloaded: http://101.200.215.10:8083/repository/maven-public/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.pom (0 B at 0.0 KB/sec)
-Downloading: http://101.200.215.10:8083/repository/maven-public/ch/qos/logback/logback-parent/1.2.3/logback-parent-1.2.3.pom
-Downloaded: http://101.200.215.10:8083/repository/maven-public/ch/qos/logback/logback-parent/1.2.3/logback-parent-1.2.3.pom (0 B at 0.0 KB/sec)
-Downloading: http://101.200.215.10:8083/repository/maven-public/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.jar
-Downloaded: http://101.200.215.10:8083/repository/maven-public/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.jar (0 B at 0.0 KB/sec)
-[INFO] 
-[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ cwms ---
-[INFO] com.lcdt.cloud:cwms:pom:1.0
-[INFO] +- org.springframework.boot:spring-boot-starter:jar:1.5.3.RELEASE:compile
-[INFO] |  +- org.springframework.boot:spring-boot:jar:1.5.3.RELEASE:compile
-[INFO] |  +- org.springframework.boot:spring-boot-autoconfigure:jar:1.5.3.RELEASE:compile
-[INFO] |  +- org.springframework.boot:spring-boot-starter-logging:jar:1.5.3.RELEASE:compile
-[INFO] |  |  +- ch.qos.logback:logback-classic:jar:1.1.11:compile
-[INFO] |  |  |  \- ch.qos.logback:logback-core:jar:1.2.3:compile
-[INFO] |  |  +- org.slf4j:jcl-over-slf4j:jar:1.7.25:compile
-[INFO] |  |  +- org.slf4j:jul-to-slf4j:jar:1.7.25:compile
-[INFO] |  |  \- org.slf4j:log4j-over-slf4j:jar:1.7.25:compile
-[INFO] |  +- org.springframework:spring-core:jar:4.3.8.RELEASE:compile
-[INFO] |  \- org.yaml:snakeyaml:jar:1.17:runtime
-[INFO] +- org.springframework.boot:spring-boot-starter-web:jar:1.5.3.RELEASE:compile
-[INFO] |  +- org.springframework.boot:spring-boot-starter-tomcat:jar:1.5.3.RELEASE:compile
-[INFO] |  |  +- org.apache.tomcat.embed:tomcat-embed-core:jar:8.5.14:compile
-[INFO] |  |  +- org.apache.tomcat.embed:tomcat-embed-el:jar:8.5.14:compile
-[INFO] |  |  \- org.apache.tomcat.embed:tomcat-embed-websocket:jar:8.5.14:compile
-[INFO] |  +- org.hibernate:hibernate-validator:jar:5.4.0.Final:compile
-[INFO] |  |  +- javax.validation:validation-api:jar:1.1.0.Final:compile
-[INFO] |  |  +- org.jboss.logging:jboss-logging:jar:3.3.1.Final:compile
-[INFO] |  |  \- com.fasterxml:classmate:jar:1.3.3:compile
-[INFO] |  +- com.fasterxml.jackson.core:jackson-databind:jar:2.8.8:compile
-[INFO] |  |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.8.0:compile
-[INFO] |  |  \- com.fasterxml.jackson.core:jackson-core:jar:2.8.8:compile
-[INFO] |  +- org.springframework:spring-web:jar:4.3.8.RELEASE:compile
-[INFO] |  \- org.springframework:spring-webmvc:jar:4.3.8.RELEASE:compile
-[INFO] +- com.alibaba:dubbo:jar:2.8.4:compile
-[INFO] |  +- org.springframework:spring-beans:jar:4.3.8.RELEASE:compile
-[INFO] |  +- org.springframework:spring-context:jar:4.3.8.RELEASE:compile
-[INFO] |  +- org.springframework:spring-aop:jar:4.3.8.RELEASE:compile
-[INFO] |  +- aopalliance:aopalliance:jar:1.0:compile
-[INFO] |  +- org.springframework:spring-expression:jar:4.3.8.RELEASE:compile
-[INFO] |  +- io.netty:netty:jar:3.7.0.Final:compile
-[INFO] |  +- log4j:log4j:jar:1.2.16:compile
-[INFO] |  +- org.javassist:javassist:jar:3.21.0-GA:compile
-[INFO] |  +- javax.servlet:javax.servlet-api:jar:3.1.0:compile
-[INFO] |  +- org.apache.httpcomponents:httpclient:jar:4.5.3:compile
-[INFO] |  +- org.apache.httpcomponents:httpcore:jar:4.4.6:compile
-[INFO] |  +- commons-logging:commons-logging:jar:1.1.1:compile
-[INFO] |  +- commons-codec:commons-codec:jar:1.10:compile
-[INFO] |  +- commons-pool:commons-pool:jar:1.6:compile
-[INFO] |  +- org.apache.curator:curator-framework:jar:2.5.0:compile
-[INFO] |  +- org.apache.curator:curator-client:jar:2.5.0:compile
-[INFO] |  +- org.slf4j:slf4j-api:jar:1.7.25:compile
-[INFO] |  \- com.google.guava:guava:jar:16.0.1:compile
-[INFO] \- org.apache.zookeeper:zookeeper:jar:3.4.9:compile
-[INFO]    \- jline:jline:jar:0.9.94:compile
-[INFO]                                                                         
-[INFO] ------------------------------------------------------------------------
-[INFO] Building userinfo-service 1.0
-[INFO] ------------------------------------------------------------------------
-[INFO] 
-[INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ userinfo-service ---
-[INFO] com.lcdt.cloud:userinfo-service:jar:1.0
-[INFO] +- org.mybatis:mybatis:jar:3.4.1:compile
-[INFO] +- net.sourceforge.jtds:jtds:jar:1.3.1:compile
-[INFO] +- org.springframework.boot:spring-boot-starter:jar:1.5.3.RELEASE:compile
-[INFO] |  +- org.springframework.boot:spring-boot:jar:1.5.3.RELEASE:compile
-[INFO] |  +- org.springframework.boot:spring-boot-autoconfigure:jar:1.5.3.RELEASE:compile
-[INFO] |  +- org.springframework.boot:spring-boot-starter-logging:jar:1.5.3.RELEASE:compile
-[INFO] |  |  +- ch.qos.logback:logback-classic:jar:1.1.11:compile
-[INFO] |  |  |  \- ch.qos.logback:logback-core:jar:1.2.3:compile
-[INFO] |  |  +- org.slf4j:jcl-over-slf4j:jar:1.7.25:compile
-[INFO] |  |  +- org.slf4j:jul-to-slf4j:jar:1.7.25:compile
-[INFO] |  |  \- org.slf4j:log4j-over-slf4j:jar:1.7.25:compile
-[INFO] |  +- org.springframework:spring-core:jar:4.3.8.RELEASE:compile
-[INFO] |  \- org.yaml:snakeyaml:jar:1.17:runtime
-[INFO] +- org.springframework.boot:spring-boot-starter-web:jar:1.5.3.RELEASE:compile
-[INFO] |  +- org.springframework.boot:spring-boot-starter-tomcat:jar:1.5.3.RELEASE:compile
-[INFO] |  |  +- org.apache.tomcat.embed:tomcat-embed-core:jar:8.5.14:compile
-[INFO] |  |  +- org.apache.tomcat.embed:tomcat-embed-el:jar:8.5.14:compile
-[INFO] |  |  \- org.apache.tomcat.embed:tomcat-embed-websocket:jar:8.5.14:compile
-[INFO] |  +- org.hibernate:hibernate-validator:jar:5.4.0.Final:compile
-[INFO] |  |  +- javax.validation:validation-api:jar:1.1.0.Final:compile
-[INFO] |  |  +- org.jboss.logging:jboss-logging:jar:3.3.1.Final:compile
-[INFO] |  |  \- com.fasterxml:classmate:jar:1.3.3:compile
-[INFO] |  +- com.fasterxml.jackson.core:jackson-databind:jar:2.8.8:compile
-[INFO] |  |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.8.0:compile
-[INFO] |  |  \- com.fasterxml.jackson.core:jackson-core:jar:2.8.8:compile
-[INFO] |  +- org.springframework:spring-web:jar:4.3.8.RELEASE:compile
-[INFO] |  \- org.springframework:spring-webmvc:jar:4.3.8.RELEASE:compile
-[INFO] +- com.alibaba:dubbo:jar:2.8.4:compile
-[INFO] |  +- org.springframework:spring-beans:jar:4.3.8.RELEASE:compile
-[INFO] |  +- org.springframework:spring-context:jar:4.3.8.RELEASE:compile
-[INFO] |  +- org.springframework:spring-aop:jar:4.3.8.RELEASE:compile
-[INFO] |  +- aopalliance:aopalliance:jar:1.0:compile
-[INFO] |  +- org.springframework:spring-expression:jar:4.3.8.RELEASE:compile
-[INFO] |  +- io.netty:netty:jar:3.7.0.Final:compile
-[INFO] |  +- log4j:log4j:jar:1.2.16:compile
-[INFO] |  +- org.javassist:javassist:jar:3.21.0-GA:compile
-[INFO] |  +- javax.servlet:javax.servlet-api:jar:3.1.0:compile
-[INFO] |  +- org.apache.httpcomponents:httpclient:jar:4.5.3:compile
-[INFO] |  +- org.apache.httpcomponents:httpcore:jar:4.4.6:compile
-[INFO] |  +- commons-logging:commons-logging:jar:1.1.1:compile
-[INFO] |  +- commons-codec:commons-codec:jar:1.10:compile
-[INFO] |  +- commons-pool:commons-pool:jar:1.6:compile
-[INFO] |  +- org.apache.curator:curator-framework:jar:2.5.0:compile
-[INFO] |  +- org.apache.curator:curator-client:jar:2.5.0:compile
-[INFO] |  +- org.slf4j:slf4j-api:jar:1.7.25:compile
-[INFO] |  \- com.google.guava:guava:jar:16.0.1:compile
-[INFO] \- org.apache.zookeeper:zookeeper:jar:3.4.9:compile
-[INFO]    \- jline:jline:jar:0.9.94:compile
-[INFO] ------------------------------------------------------------------------
-[INFO] Reactor Summary:
-[INFO] 
-[INFO] cwms ............................................... SUCCESS [ 27.047 s]
-[INFO] userinfo-service ................................... SUCCESS [  0.114 s]
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 27.936 s
-[INFO] Finished at: 2017-07-31T15:05:32+08:00
-[INFO] Final Memory: 25M/311M
-[INFO] ------------------------------------------------------------------------
+[ERROR] [Help 2] http://cwiki.apache.org/confluence/display/MAVEN/ModelParseException
