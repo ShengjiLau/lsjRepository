@@ -96,4 +96,15 @@
     industry, create_user_id
     from t_ue_company
   </select>
+
+
+  <select id="selectByUserId" resultMap="BaseResultMap">
+
+    select comp_id, full_name, auth_status, short_name, admin_name, contact_way, region_info,
+    reg_address, create_dt, reg_capital, business_scope, comp_intro, reg_dt, remark,
+    industry, create_user_id
+    from t_ue_company
+    WHERE create_user_id = #{createUserId,jdbcType=INTEGER}
+  </select>
+
 </mapper>

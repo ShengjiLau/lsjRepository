@@ -9,13 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>wms-user</artifactId>
+    <artifactId>wms-permission</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.lcdt.cloud</groupId>
-            <artifactId>user-api</artifactId>
-            <version>1.0</version>
-        </dependency>
-    </dependencies>
+
 </project>

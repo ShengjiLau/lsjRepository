@@ -1,4 +1,4 @@
-package com.lcdt.controller;
+package com.lcdt.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,9 +10,9 @@ import org.springframework.context.annotation.ImportResource;
  */
 @SpringBootApplication
 @ImportResource("dubbo-web-consumer.xml")
-public class WebApp {
+public class WmsWebApp {
     public static void main(String[] args) {
-        SpringApplication.run(WebApp.class, args);
+        SpringApplication.run(WmsWebApp.class, args);
     }
 
 }

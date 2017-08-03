@@ -5,9 +5,11 @@ package com.lcdt.userinfo.dto;
  */
 public class RegisterDto {
 
-	private String userPhoneNum;
+	private String userPhoneNum;//手机号 账号
 
 	private String password;
+
+	private String name;//姓名，用户名
 
 
 	public String getUserPhoneNum() {

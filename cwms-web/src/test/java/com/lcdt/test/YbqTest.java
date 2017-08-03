@@ -1,7 +1,7 @@
 package com.lcdt.test;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.lcdt.controller.WebApp;
+import com.lcdt.web.WmsWebApp;
 import com.lcdt.userinfo.service.UserService;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -12,8 +12,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 /**
  * Created by ybq on 2017/7/13.
  */
+@Ignore
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,classes = WebApp.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,classes = WmsWebApp.class)
 @Ignore
 public class YbqTest {
 
