@@ -4,11 +4,14 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.lcdt.cwms.user.dao.WmsCompanyMapper;
 import com.lcdt.cwms.user.dao.WmsCompanyUserRelationMapper;
 import com.lcdt.cwms.user.dto.CreateCompanyDto;
+import com.lcdt.cwms.user.exception.GroupNotExistException;
 import com.lcdt.cwms.user.model.WmsCompany;
+import com.lcdt.cwms.user.model.WmsCompanyUserGroup;
 import com.lcdt.cwms.user.model.WmsCompanyUserRelation;
 import com.lcdt.cwms.user.service.CompanyService;
 import com.lcdt.cwms.user.service.GroupService;
 import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.FrontUserInfo;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,7 +45,10 @@ public class CompanyServiceImpl implements CompanyService {
 	@Transactional
 	@Override
 	public WmsCompany createCompany(CreateCompanyDto createCompanyDto) throws UserNotExistException {
-		userService.queryByUserId(createCompanyDto.getUserId());
+		FrontUserInfo frontUserInfo = userService.queryByUserId(createCompanyDto.getUserId());
+		if (frontUserInfo == null) {
+			throw new UserNotExistException();
+		}
 		WmsCompany wmsCompany = new WmsCompany();
 		wmsCompany.setCreateUserId(createCompanyDto.getUserId());
 		wmsCompany.setBusinessScope(createCompanyDto.getBusinessScope());
@@ -54,7 +60,14 @@ public class CompanyServiceImpl implements CompanyService {
 		wmsCompanyUserRelation.setCompanyId(wmsCompany.getCompId());
 
 		//创建公司时在创建一个默认的顶级组
-		groupService.createGroup(null, wmsCompany.getFullName(), wmsCompany.getCompId());
+		WmsCompanyUserGroup group = groupService.createGroup(null, wmsCompany.getFullName(), wmsCompany.getCompId());
+
+		//将用户加入默认组
+		try {
+			groupService.addUserToGroup(group.getGroupId(), createCompanyDto.getUserId());
+		} catch (GroupNotExistException e) {
+			e.printStackTrace();
+		}
 		return wmsCompany;
 	}
 
