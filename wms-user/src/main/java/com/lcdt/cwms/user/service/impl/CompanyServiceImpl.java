@@ -46,6 +46,14 @@ public class CompanyServiceImpl implements CompanyService {
 		wmsCompany.setAuthStatus((short) 0);
 		wmsCompany.setFullName(createCompanyDto.getCompanyName());
 		int insert = wmsCompanyDao.insert(wmsCompany);
+		WmsCompanyUserRelation wmsCompanyUserRelation = new WmsCompanyUserRelation();
+		wmsCompanyUserRelation.setUserId(createCompanyDto.getUserId());
+		wmsCompanyUserRelation.setCompanyId(wmsCompany.getCompId());
+
+		//创建公司时在创建一个默认的顶级组
+
+
+
 		return wmsCompany;
 	}
 
@@ -56,9 +64,8 @@ public class CompanyServiceImpl implements CompanyService {
 	 */
 	@Transactional
 	@Override
-	public List<WmsCompany> userCompanys(Integer userId) {
-//		List<WmsCompanyUserRelation> relations = userCompanyDao.selectByUserId(userId);
-
-		return null;
+	public List<WmsCompanyUserRelation> userCompanys(Integer userId) {
+		List<WmsCompanyUserRelation> wmsCompanyUserRelations = userCompanyDao.selectCompanyByUserId(userId);
+		return wmsCompanyUserRelations;
 	}
 }

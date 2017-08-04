@@ -2,6 +2,7 @@ package com.lcdt.cwms.user.service;
 
 import com.lcdt.cwms.user.dto.CreateCompanyDto;
 import com.lcdt.cwms.user.model.WmsCompany;
+import com.lcdt.cwms.user.model.WmsCompanyUserRelation;
 import com.lcdt.userinfo.exception.UserNotExistException;
 
 import java.util.List;
@@ -13,6 +14,6 @@ public interface CompanyService {
 
 	 WmsCompany createCompany(CreateCompanyDto createCompanyDto) throws UserNotExistException;
 
-	 List<WmsCompany> userCompanys(Integer userId);
+	 List<WmsCompanyUserRelation> userCompanys(Integer userId);
 
 }

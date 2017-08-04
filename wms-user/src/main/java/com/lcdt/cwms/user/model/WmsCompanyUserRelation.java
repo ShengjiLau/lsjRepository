@@ -28,7 +28,7 @@ public class WmsCompanyUserRelation {
      *
      * @mbg.generated
      */
-    private Integer companyId;
+    private Long companyId;
 
     /**
      *
@@ -105,7 +105,7 @@ public class WmsCompanyUserRelation {
      *
      * @mbg.generated
      */
-    public Integer getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
@@ -117,7 +117,7 @@ public class WmsCompanyUserRelation {
      *
      * @mbg.generated
      */
-    public void setCompanyId(Integer companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 
