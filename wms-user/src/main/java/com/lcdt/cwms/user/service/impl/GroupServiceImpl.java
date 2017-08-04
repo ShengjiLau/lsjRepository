@@ -10,12 +10,14 @@ import com.lcdt.cwms.user.service.GroupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
  * Created by ss on 2017/8/4.
  */
+@Transactional
 public class GroupServiceImpl implements GroupService {
 
 	@Autowired
@@ -73,6 +75,9 @@ public class GroupServiceImpl implements GroupService {
 	@Override
 	public void removeUserFromGroup(Integer groupId, Integer userId) {
 		List<WmsCompanyUserGroupRelation> relation = userGroupDao.selectByGroupUser(groupId, userId);
-
+		if (relation != null && !relation.isEmpty()) {
+			WmsCompanyUserGroupRelation wmsCompanyUserGroupRelation = relation.get(0);
+			groupDao.deleteByPrimaryKey(wmsCompanyUserGroupRelation.getGroupId());
+		}
 	}
 }
