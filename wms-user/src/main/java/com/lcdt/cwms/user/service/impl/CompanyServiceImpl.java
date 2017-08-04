@@ -7,6 +7,7 @@ import com.lcdt.cwms.user.dto.CreateCompanyDto;
 import com.lcdt.cwms.user.model.WmsCompany;
 import com.lcdt.cwms.user.model.WmsCompanyUserRelation;
 import com.lcdt.cwms.user.service.CompanyService;
+import com.lcdt.cwms.user.service.GroupService;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,10 @@ public class CompanyServiceImpl implements CompanyService {
 	UserService userService;
 
 	@Autowired
-	WmsCompanyUserRelationMapper userCompanyDao;
+	GroupService groupService;
 
+	@Autowired
+	WmsCompanyUserRelationMapper userCompanyDao;
 
 	/**
 	 * 用户创建公司时，创建一个默认部门，默认部门不显示
@@ -51,9 +54,7 @@ public class CompanyServiceImpl implements CompanyService {
 		wmsCompanyUserRelation.setCompanyId(wmsCompany.getCompId());
 
 		//创建公司时在创建一个默认的顶级组
-
-
-
+		groupService.createGroup(null, wmsCompany.getFullName(), wmsCompany.getCompId());
 		return wmsCompany;
 	}
 
@@ -62,7 +63,7 @@ public class CompanyServiceImpl implements CompanyService {
 	 * @param userId
 	 * @return
 	 */
-	@Transactional
+	@Transactional(readOnly = true)
 	@Override
 	public List<WmsCompanyUserRelation> userCompanys(Integer userId) {
 		List<WmsCompanyUserRelation> wmsCompanyUserRelations = userCompanyDao.selectCompanyByUserId(userId);

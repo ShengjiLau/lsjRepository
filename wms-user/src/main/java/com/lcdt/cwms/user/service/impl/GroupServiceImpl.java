@@ -29,7 +29,7 @@ public class GroupServiceImpl implements GroupService {
 	private Logger logger = LoggerFactory.getLogger(GroupService.class);
 
 	@Override
-	public WmsCompanyUserGroup createGroup(Integer parentGroupId, String groupName, Integer companyId) {
+	public WmsCompanyUserGroup createGroup(Integer parentGroupId, String groupName, Long companyId) {
 		WmsCompanyUserGroup wmsCompanyUserGroup = new WmsCompanyUserGroup();
 		wmsCompanyUserGroup.setCompanyId(companyId);
 		wmsCompanyUserGroup.setParentGroupId(parentGroupId);

@@ -11,7 +11,7 @@ import com.lcdt.cwms.user.model.WmsCompanyUserGroupRelation;
 public interface GroupService {
 
 	//新建组
-	WmsCompanyUserGroup createGroup(Integer parentGroupId, String groupName, Integer companyId);
+	WmsCompanyUserGroup createGroup(Integer parentGroupId, String groupName, Long companyId);
 
 	//加入组
 	WmsCompanyUserGroupRelation addUserToGroup(Integer groupId, Integer userId) throws GroupNotExistException;
