@@ -25,4 +25,5 @@ public interface GroupService {
 	//从组中移除用户
 	void removeUserFromGroup(Integer groupId,Integer userId);
 
+
 }
