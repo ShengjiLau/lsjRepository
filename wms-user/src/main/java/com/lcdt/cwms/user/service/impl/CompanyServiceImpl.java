@@ -2,8 +2,10 @@ package com.lcdt.cwms.user.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.lcdt.cwms.user.dao.WmsCompanyMapper;
+import com.lcdt.cwms.user.dao.WmsCompanyUserRelationMapper;
 import com.lcdt.cwms.user.dto.CreateCompanyDto;
 import com.lcdt.cwms.user.model.WmsCompany;
+import com.lcdt.cwms.user.model.WmsCompanyUserRelation;
 import com.lcdt.cwms.user.service.CompanyService;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.service.UserService;
@@ -25,9 +27,12 @@ public class CompanyServiceImpl implements CompanyService {
 	@Reference
 	UserService userService;
 
+	@Autowired
+	WmsCompanyUserRelationMapper userCompanyDao;
+
 
 	/**
-	 * 用户创建公司
+	 * 用户创建公司时，创建一个默认部门，默认部门不显示
 	 * @param createCompanyDto
 	 * @return
 	 */
@@ -52,6 +57,7 @@ public class CompanyServiceImpl implements CompanyService {
 	@Transactional
 	@Override
 	public List<WmsCompany> userCompanys(Integer userId) {
+//		List<WmsCompanyUserRelation> relations = userCompanyDao.selectByUserId(userId);
 
 		return null;
 	}

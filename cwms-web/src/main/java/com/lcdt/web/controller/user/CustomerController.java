@@ -5,7 +5,6 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.service.UserService;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,23 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/customer")
 public class CustomerController {
 
-    @Reference
-    private UserService userService;
+	@Reference
+	private UserService userService;
 
-    @RequestMapping("/register_page")
-    public void registerPage(){
+	@RequestMapping("/register_page")
+	public void registerPage() {
 
-    }
+	}
 
 
-    @RequestMapping("/registeruser")
-    public void registerUser(RegisterDto registerDto){
-        try {
-            userService.registerUser(registerDto);
-        } catch (PhoneHasRegisterException e) {
-            e.printStackTrace();
-        }
-    }
+	@RequestMapping("/registeruser")
+	public void registerUser(RegisterDto registerDto) {
+		try {
+			userService.registerUser(registerDto);
+		} catch (PhoneHasRegisterException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
 

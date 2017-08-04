@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,classes = WmsWebApp.class)
-@Ignore
 public class YbqTest {
 
     @Reference

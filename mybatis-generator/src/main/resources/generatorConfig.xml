@@ -140,6 +140,17 @@
             <!--<columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->
         </table>
 
+        <table tableName="t_ue_group" domainObjectName="WmsCompanyUserGroup">
+            <generatedKey column="group_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
+
+        <table tableName="t_ue_group_relation" domainObjectName="WmsCompanyUserGroupRelation">
+            <generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
+
+        <table tableName="t_ue_user_company" domainObjectName="WmsCompanyUserRelation">
+            <generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
         <!--<table tableName="t"-->
 
 
