@@ -10,8 +10,10 @@ import com.lcdt.cwms.user.service.GroupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.NamedThreadLocal;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,7 +44,7 @@ public class GroupServiceImpl implements GroupService {
 	@Override
 	public WmsCompanyUserGroupRelation addUserToGroup(Integer groupId, Integer userId) throws GroupNotExistException {
 		WmsCompanyUserGroup wmsCompanyUserGroup = groupDao.selectByPrimaryKey(groupId);
-		if (wmsCompanyUserGroup == null){
+		if (wmsCompanyUserGroup == null) {
 			throw new GroupNotExistException();
 		}
 
@@ -59,7 +61,7 @@ public class GroupServiceImpl implements GroupService {
 		List<WmsCompanyUserGroupRelation> relations = userGroupDao.selectByGroupId(groupId);
 		if (relations != null && !relations.isEmpty()) {
 			throw new RelationExistException();
-		}else{
+		} else {
 			groupDao.deleteByPrimaryKey(groupId);
 		}
 	}
@@ -78,6 +80,43 @@ public class GroupServiceImpl implements GroupService {
 		if (relation != null && !relation.isEmpty()) {
 			WmsCompanyUserGroupRelation wmsCompanyUserGroupRelation = relation.get(0);
 			groupDao.deleteByPrimaryKey(wmsCompanyUserGroupRelation.getGroupId());
+		}
+	}
+
+	@Override
+	public List<WmsCompanyUserGroup> getUserGroupList(Integer companyId, Integer userId) {
+		List<WmsCompanyUserGroupRelation> relations = userGroupDao.selectByGroupUser(companyId, userId);
+		if (relations == null || relations.isEmpty()) {
+			return null;
+		} else {
+			WmsCompanyUserGroupRelation rela = relations.get(0);
+			//这里应该只有一个唯一结果，用户只能和一个部门关联
+			WmsCompanyUserGroup group = groupDao.selectByPrimaryKey(rela.getGroupId());
+			recursiveSubGroups(group);
+			return threadLocal.get();
+		}
+	}
+
+	private ThreadLocal<List<WmsCompanyUserGroup>> threadLocal = new NamedThreadLocal<List<WmsCompanyUserGroup>>("subGroups");
+
+	//递归获取所有下级部门
+	public void recursiveSubGroups(WmsCompanyUserGroup group) {
+		List<WmsCompanyUserGroup> subGroups = groupDao.selectSubGroup(group.getGroupId());
+		if (subGroups == null || subGroups.isEmpty()) {
+			return;
+		} else {
+			for (WmsCompanyUserGroup group1 : subGroups) {
+				System.out.println(group1.getGroupId());
+				List localSubGroups = threadLocal.get();
+				if (localSubGroups == null) {
+					ArrayList<WmsCompanyUserGroup> groups = new ArrayList<WmsCompanyUserGroup>();
+					groups.add(group1);
+					threadLocal.set(groups);
+				}else{
+					localSubGroups.add(group1);
+				}
+				recursiveSubGroups(group1);
+			}
 		}
 	}
 }

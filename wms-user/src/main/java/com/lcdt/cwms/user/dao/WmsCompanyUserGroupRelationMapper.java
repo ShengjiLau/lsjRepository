@@ -47,5 +47,5 @@ public interface WmsCompanyUserGroupRelationMapper {
 
     List<WmsCompanyUserGroupRelation> selectByGroupId(Integer groupId);
 
-    List<WmsCompanyUserGroupRelation> selectByGroupUser(Integer groupId, Integer userId);
+    List<WmsCompanyUserGroupRelation> selectByGroupUser(Integer companyId, Integer userId);
 }

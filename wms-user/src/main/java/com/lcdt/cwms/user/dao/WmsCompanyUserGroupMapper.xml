@@ -55,5 +55,9 @@
     from t_ue_group
   </select>
 
+  <select id="selectSubGroup" resultMap="BaseResultMap">
+    select * from t_ue_group
+    WHERE parent_group_id = #{groupId,jdbcType=INTEGER}
+  </select>
 
 </mapper>

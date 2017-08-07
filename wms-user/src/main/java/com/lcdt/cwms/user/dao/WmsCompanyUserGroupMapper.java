@@ -44,4 +44,6 @@ public interface WmsCompanyUserGroupMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(WmsCompanyUserGroup record);
+
+    List<WmsCompanyUserGroup> selectSubGroup(Integer groupId);
 }

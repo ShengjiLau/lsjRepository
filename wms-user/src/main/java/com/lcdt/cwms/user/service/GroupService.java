@@ -5,6 +5,8 @@ import com.lcdt.cwms.user.exception.RelationExistException;
 import com.lcdt.cwms.user.model.WmsCompanyUserGroup;
 import com.lcdt.cwms.user.model.WmsCompanyUserGroupRelation;
 
+import java.util.List;
+
 /**
  * Created by ss on 2017/8/4.
  */
@@ -25,5 +27,5 @@ public interface GroupService {
 	//从组中移除用户
 	void removeUserFromGroup(Integer groupId,Integer userId);
 
-
+	List<WmsCompanyUserGroup> getUserGroupList(Integer companyId, Integer userId);
 }
