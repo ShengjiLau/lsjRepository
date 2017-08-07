@@ -13,6 +13,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface permission {
 
+
 	String name() default "";
 
 	PermissionType type();
