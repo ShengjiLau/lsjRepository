@@ -22,6 +22,7 @@ import java.util.List;
 /**
  * Created by ss on 2017/8/3.
  */
+@Transactional
 @Service
 public class CompanyServiceImpl implements CompanyService {
 

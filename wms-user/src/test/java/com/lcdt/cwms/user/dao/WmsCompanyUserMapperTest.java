@@ -5,6 +5,7 @@ import com.lcdt.cwms.user.model.WmsCompany;
 import com.lcdt.cwms.user.model.WmsCompanyUserRelation;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 
@@ -13,6 +14,7 @@ import java.util.List;
 /**
  * Created by ss on 2017/8/4.
  */
+@Ignore
 public class WmsCompanyUserMapperTest {
 
 	private SqlSession sqlSession = MybatisUtils.openSession();
