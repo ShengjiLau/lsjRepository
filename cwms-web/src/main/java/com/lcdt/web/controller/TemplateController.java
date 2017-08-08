@@ -12,7 +12,7 @@ public class TemplateController {
     @RequestMapping("/helloHtml")
     public String helloHtml(Map<String,Object> map){
 
-        map.put("hello","from Temp2121212lateController.helloHtml");
+        map.put("hello","dfsafda");
         return"/ybq/helloHtml";
     }
 }
