@@ -13,6 +13,6 @@ public class TemplateController {
     public String helloHtml(Map<String,Object> map){
 
         map.put("hello","from Temp2121212lateController.helloHtml");
-        return"/ybq/helloHtml";
+        return "/ybq/helloHtml";
     }
 }

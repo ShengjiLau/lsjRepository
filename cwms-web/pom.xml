@@ -32,6 +32,11 @@
         </dependency>
 
         <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+            <version>1.9.21</version>
+        </dependency>
+        <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>common-config</artifactId>
             <version>1.0</version>
