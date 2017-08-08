@@ -19,6 +19,6 @@
     <!--<dubbo:reference id="userService" interface="com.lcdt.userinfo.service.UserService" />-->
 
 
-    <dubbo:annotation package="com.lcdt.web.controller.user,com.lcdt.cwms.user.service"></dubbo:annotation>
+    <dubbo:annotation package="com.lcdt.web.auth,com.lcdt.web.controller.user,com.lcdt.cwms.user.service"></dubbo:annotation>
 
 </beans>
