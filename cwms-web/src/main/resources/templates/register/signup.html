@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="utf-8"/>
+    <title>注册</title>
+    <link th:href="@{//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link th:href="@{//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{//cdn.bootcss.com/animate.css/3.5.2/animate.min.css}" rel="stylesheet"/>
+
+    <link rel="stylesheet" th:href="@{/satic/css/iconfont.css}"/>
+    <link rel="stylesheet" th:href="@{/satic/css/signup.min.css}"/>
+    <style media="screen">
+    #form-block{
+      display: none;
+    }
+    .animatedtd {
+      -webkit-animation-duration: 0.3s;
+      animation-duration: 0.3s;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+    }
+    </style>
+</head>
+<body>
+<header class="navbar navbar-static-top bs-docs-nav" id="top">
+    <div class="container">
+
+        <nav id="bs-navbar" class="collapse navbar-collapse">
+            <div class="navbar-header">
+                <!-- <a href="#" class="navbar-brand">大驼队·用户注册</a> -->
+                <p><img src="./img/logo.png" alt="" th:src="@{/images/logo.png}" /> <span>·</span><span id="user-type">用户注册</span></p>
+            </div>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <p>我已注册，现在<a href="" target="_blank">登录</a></p>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<div class="container">
+    <div class="dtd-panel  panel-default">
+        <div class="dtd-signup-panel">
+            <div class="row">
+                <div class="col-sm-4 dtd-sign-step active">
+                    <p>1.选择注册类型</p>
+                </div>
+                <div class="col-sm-4 dtd-sign-step">
+                    <p>2.填写基本信息</p>
+                </div>
+                <div class="col-sm-4 dtd-sign-step">
+                    <p>3.完成注册</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dtd-panel choose-panel panel-default " id = 'choose-block'>
+        <div class="panel-body">
+            <div class="row options-row">
+                <div class="col-sm-6 ">
+                    <p class="choose-title">货主</p>
+                    <p class="choose-info">承运商管理、业务一键下单、物流货物跟踪、运输节点控制</p>
+                    <a  type="button" class="btn  btn-choose" onClick="goform('signuphuozhu')">选择</a>
+                </div>
+                <div class="col-sm-6 right-choose">
+                    <p class="choose-title">承运商</p>
+                    <p class="choose-info">承运商管理、业务一键下单、物流货物跟踪、运输节点控制</p>
+                    <a type="button" class="btn  btn-choose" onClick="goform('signupchengyunshang')">选择</a>
+                </div>
+            </div>
+            <p class="remind-text">点击“选择”即表示您已阅读并同意<a href="" data-toggle="modal" data-target="#remind-modal">用户使用协议。</a></p>
+        </div>
+    </div>
+
+    <div class="form-panel panel-default  animatedtd fadeInRight" role="form" id = 'form-block' data-toggle="validator" >
+        <div class="panel-body">
+            <form class="form-horizontal signup-form" id='signup-form'>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-3 control-label">姓名：</label>
+                    <div class="col-sm-6">
+                        <input  class="form-control input-lg"  id="inputEmail3" placeholder="请输入1-20位姓名" required pattern ="\S{1,20}" title="请输入1-20位姓名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone-num" class="col-sm-3 control-label">手机号：</label>
+                    <div class="col-sm-6">
+                        <input  class="form-control input-lg"  id="phone-num" placeholder="请输入11位手机号" pattern ="[0-9]{11}" title="请输入11正确手机号" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-3 control-label">验证码：</label>
+                    <div class="col-sm-3 btn-helf">
+                        <input id="code-input" class="form-control input-lg" placeholder="请输入验证码" required>
+                    </div>
+                    <div class="col-sm-3">
+                        <a  class="btn get-code-btn btn-default" id="get-codes-btn" ><span>获取验证码</span></a>
+                    </div>
+                    <div class="col-sm-9 col-sm-push-3 help-block">若短信验证码获取失败，请获取<a >语音验证码。</a></div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword3" class="col-sm-3 control-label">密码：</label>
+                    <div class="col-sm-6">
+                        <input type="password" class="form-control input-lg" id="inputPassword3" placeholder="请再次输入密码" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label  class="col-sm-3 control-label">确认密码：</label>
+                    <div class="col-sm-6">
+                        <input type="password" class="form-control input-lg" id="inputPassword3" placeholder="请输入推荐人手机号" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-3 control-label">推荐人电话：</label>
+                    <div class="col-sm-6">
+                        <input  class="form-control input-lg" id="inputEmail3" placeholder="请输入推荐人手机号">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        <button data-loading-text="发送中..." class="btn sub-btn btn-default">注册</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="success-panel panel-default  animatedtd fadeInRight" id="success-block">
+        <div class="ok-body">
+            <div class="ok-icon"><i class="iconfont icon-selected"></i></div>
+            <p>恭喜您，账号注册成功！</p>
+            <a href="" class="btn btn-default gosignin">立即登录</a>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="remind-modal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">用户协议</h4>
+            </div>
+            <div class="modal-body">
+                <p>用户协议</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+</body>
+
+</html>
