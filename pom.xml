@@ -16,6 +16,8 @@
         <module>wms-user</module>
         <module>common-config</module>
         <module>wms-permission</module>
+        <module>wms-notify</module>
+        <module>common-utils</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>
@@ -95,8 +97,6 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
         </dependency>
-
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -140,6 +140,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.lcdt</groupId>
+            <artifactId>yico</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
     <build>
