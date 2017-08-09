@@ -6,7 +6,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * Created by ss on 2017/8/9.
@@ -15,14 +14,26 @@ public class WmsUserNamePwdAuthFilter extends UsernamePasswordAuthenticationFilt
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-
-
-
-
+		String captchaCode = CaptchaUtil.getCaptchaString(request);
+		if (captchaCode != null) {
+			String captchaCode1 = request.getParameter("captchaCode");
+			if (captchaCode1 == null || !captchaCode.equals(captchaCode1)) {
+				throw new CaptchaCodeErrorException("验证码错误");
+			}
+		}
 		return super.attemptAuthentication(request, response);
 	}
 
 
+	static class CaptchaCodeErrorException extends AuthenticationException {
 
+		public CaptchaCodeErrorException(String msg, Throwable t) {
+			super(msg, t);
+		}
+
+		public CaptchaCodeErrorException(String msg) {
+			super(msg);
+		}
+	}
 
 }

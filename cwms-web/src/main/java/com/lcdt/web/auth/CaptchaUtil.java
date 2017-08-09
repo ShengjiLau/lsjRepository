@@ -25,8 +25,10 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
  * @date 2016-5-7 上午8:33:08
  * @version 1.0
  */
-public final class CaptchaUtil
-{
+public final class CaptchaUtil{
+
+	public static final String SESSION_KEY_CAPTCHA = "SESSION_KEY_CAPTCHA";
+
 	private CaptchaUtil(){}
 
 	/*
@@ -44,7 +46,7 @@ public final class CaptchaUtil
 	/*
 	 * 获取6位随机数
 	 */
-	private static String getRandomString()
+	private static String getSessionKeyCaptcha()
 	{
 		StringBuffer buffer = new StringBuffer();
 		for(int i = 0; i < 6; i++)
@@ -72,14 +74,14 @@ public final class CaptchaUtil
 				255 - c.getBlue());
 	}
 
-	public static void outputCaptcha(HttpServletRequest request, HttpServletResponse response)
+	public static String outputCaptcha(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
 
 		response.setContentType("image/jpeg");
 
-		String randomString = getRandomString();
-		request.getSession(true).setAttribute("randomString", randomString);
+		String randomString = getSessionKeyCaptcha();
+		request.getSession(true).setAttribute(SESSION_KEY_CAPTCHA, randomString);
 
 		int width = 100;
 		int height = 30;
@@ -105,5 +107,13 @@ public final class CaptchaUtil
 		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
 		encoder.encode(bi);
 		out.flush();
+		return randomString;
 	}
+
+	public static String getCaptchaString(HttpServletRequest request){
+		String randomString = request.getSession() == null ? null : (String) request.getSession().getAttribute(CaptchaUtil.SESSION_KEY_CAPTCHA);
+		return randomString;
+	}
+
+
 }

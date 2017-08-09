@@ -19,8 +19,9 @@ public class CaptchaController {
 	//返回验证码
 	@RequestMapping("/auth/getcaptcha")
 	public void captcha(HttpServletRequest request, HttpServletResponse response) {
+
 		try {
-			CaptchaUtil.outputCaptcha(request,response);
+			String randomString = CaptchaUtil.outputCaptcha(request, response);
 		} catch (ServletException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
