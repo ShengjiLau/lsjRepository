@@ -1,8 +1,8 @@
-package lcdt.wms.notify.sms.impl;
+package com.lcdt.notify.sms.impl;
 
 import com.lcdt.util.MD5;
-import lcdt.wms.notify.dto.SmsDto;
-import lcdt.wms.notify.sms.SmsService;
+import com.lcdt.notify.dto.SmsDto;
+import com.lcdt.notify.sms.SmsService;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;

@@ -16,7 +16,7 @@
         <module>wms-user</module>
         <module>common-config</module>
         <module>wms-permission</module>
-        <module>wms-notify</module>
+        <module>common-notify</module>
         <module>common-utils</module>
     </modules>
     <properties>

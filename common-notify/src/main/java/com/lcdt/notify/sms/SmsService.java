@@ -1,6 +1,6 @@
-package lcdt.wms.notify.sms;
+package com.lcdt.notify.sms;
 
-import lcdt.wms.notify.dto.SmsDto;
+import com.lcdt.notify.dto.SmsDto;
 
 /**
  * Created by ybq on 2017/8/9.

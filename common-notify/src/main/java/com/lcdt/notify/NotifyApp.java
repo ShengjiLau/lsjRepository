@@ -1,4 +1,4 @@
-package lcdt.wms.notify;
+package com.lcdt.notify;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
