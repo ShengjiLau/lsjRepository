@@ -1,8 +1,7 @@
-package com.lcdt.notify.sms.impl;
+package com.lcdt.notify.service.impl;
 
+import com.lcdt.notify.service.SmsService;
 import com.lcdt.util.MD5;
-import com.lcdt.notify.dto.SmsDto;
-import com.lcdt.notify.sms.SmsService;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -14,6 +13,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.tl.commons.util.DateUtility;
 
@@ -30,17 +30,22 @@ public class SmsServiceImpl implements SmsService {
 
     private Logger logger = LoggerFactory.getLogger(SmsServiceImpl.class);
 
+    @Value("${url:http://160.19.212.218:8080/eums/utf8/send_strong.do}")
+    public String url;
+    @Value("${name:dtdtz}")
+    public String name;
+    @Value("${pwd:n8ie41u7}")
+    public String pwd;
+
     @Override
-    public boolean sendSms(SmsDto smsDto, String[] phones, String signature, String message) {
-
+    public boolean sendSms(String[] phones, String signature, String message) {
         if(phones==null) return false;
-
-        HttpPost httpPost = new HttpPost(smsDto.getUrl());
+        HttpPost httpPost = new HttpPost(url);
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-        nameValuePairs.add(new BasicNameValuePair("name", smsDto.getName()));
+        nameValuePairs.add(new BasicNameValuePair("name", name));
         String seed = DateUtility.date2String(new Date(),"yyyyMMddHHmmss");
         nameValuePairs.add(new BasicNameValuePair("seed", seed));
-        nameValuePairs.add(new BasicNameValuePair("key", encodeKey(smsDto, seed)));
+        nameValuePairs.add(new BasicNameValuePair("key", encodeKey(seed)));
         nameValuePairs.add(new BasicNameValuePair("dest", phoneNumsValue(phones)));
         nameValuePairs.add(new BasicNameValuePair("content", signature + message));
         UrlEncodedFormEntity uefEntity;
@@ -78,21 +83,23 @@ public class SmsServiceImpl implements SmsService {
 
 
     @Override
-    public String findSmsBalance(SmsDto smsDto) {
+    public String findSmsBalance() {
+        System.out.println(name);
+        System.out.println(url);
         return null;
     }
 
 
-    private static String encodeKey(SmsDto smsDto, String seed) {
+    private String encodeKey(String seed) {
         MD5 md5 = new MD5();
-        String p1 = md5.getMD5ofStr(smsDto.getPwd());
+        String p1 = md5.getMD5ofStr(pwd);
         String key = md5.getMD5ofStr(p1.toLowerCase() + seed).toLowerCase();
         return key;
     }
 
 
 
-    private static String phoneNumsValue(String[] phoneNums) {
+    private String phoneNumsValue(String[] phoneNums) {
         StringBuffer stringBuilder = new StringBuffer();
         for (String phone : phoneNums) {
             if (phone != null && !phone.equals("")) {
@@ -102,4 +109,7 @@ public class SmsServiceImpl implements SmsService {
         }
         return stringBuilder.toString();
     }
+
+
+
 }

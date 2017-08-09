@@ -1,6 +1,4 @@
-package com.lcdt.notify.sms;
-
-import com.lcdt.notify.dto.SmsDto;
+package com.lcdt.notify.service;
 
 /**
  * Created by ybq on 2017/8/9.
@@ -9,18 +7,16 @@ public interface SmsService {
 
     /***
      * 短息发送
-     * @param smsDto
      * @param phones
      * @param signature
      * @param message
      */
-    boolean sendSms(SmsDto smsDto, String[] phones, String signature, String message);
+    boolean sendSms(String[] phones, String signature, String message);
 
     /***
      * 短信余额查询
-     * @param smsDto
      * @return
      */
-    String findSmsBalance(SmsDto smsDto);
+    String findSmsBalance();
 
 }
