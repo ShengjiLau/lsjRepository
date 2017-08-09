@@ -13,6 +13,14 @@ public class WmsUserDetails implements UserDetails {
 
 	FrontUserInfo userInfo;
 
+	public FrontUserInfo getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(FrontUserInfo userInfo) {
+		this.userInfo = userInfo;
+	}
+
 	public WmsUserDetails(FrontUserInfo userInfo) {
 		this.userInfo = userInfo;
 	}
