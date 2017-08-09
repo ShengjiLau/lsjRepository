@@ -8,9 +8,7 @@
     <dubbo:application name="common-notify-service"  />
     <!-- 用dubbo协议在20880端口暴露服务 -->
     <dubbo:registry protocol="zookeeper" address="zookeeper://127.0.0.1:2181"/>
-
     <dubbo:protocol name="dubbo" port="20881" />
-
     <dubbo:annotation package="com.lcdt.notify.service.impl"/>
 
 </beans>
