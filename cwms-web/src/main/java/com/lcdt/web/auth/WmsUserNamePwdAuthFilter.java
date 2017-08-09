@@ -15,12 +15,10 @@ public class WmsUserNamePwdAuthFilter extends UsernamePasswordAuthenticationFilt
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-		System.out.println("wmsusername filter");
-		HttpSession session = request.getSession();
 
-		if (requiresAuthentication(request, response)) {
 
-		}
+
+
 		return super.attemptAuthentication(request, response);
 	}
 

@@ -42,34 +42,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					public String encode(CharSequence rawPassword) {
 						return RegisterUtils.md5Encrypt(rawPassword.toString());
 					}
-
 					@Override
 					public boolean matches(CharSequence rawPassword, String encodedPassword) {
 						return encode(rawPassword).toUpperCase().equals(encodedPassword.toUpperCase());
 					}
 				});
-
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.addFilterAt(wmsUserNamePwdAuthFilter(), UsernamePasswordAuthenticationFilter.class);
-		http.authorizeRequests().anyRequest().authenticated()
-				.and().authorizeRequests().antMatchers("/auth/**").permitAll()
-				.and().formLogin().loginPage("/auth/loginpage")
-				.loginProcessingUrl("/login")
-				.successHandler(new LoginSuccessHandler())
+		http.addFilterAt(wmsUserNamePwdAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+				.authorizeRequests().antMatchers("/auth/**").permitAll()
+				.anyRequest().authenticated()
+				.and().formLogin().loginPage("/auth/loginpage").loginProcessingUrl("/login").successHandler(new LoginSuccessHandler())
 				.and().logout().logoutUrl("/signout").logoutSuccessUrl("/auth/loginpage").permitAll()
 				.and().csrf().disable();
 	}
-
 
 	@Bean
 	public WmsUserNamePwdAuthFilter wmsUserNamePwdAuthFilter() throws Exception {
 		WmsUserNamePwdAuthFilter filter = new WmsUserNamePwdAuthFilter();
 		filter.setAuthenticationManager(authenticationManagerBean());
 		filter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler());
-//		filter.setAuthenticationFailureHandler(failureHandler);
 		return filter;
 	}
 
