@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>wms-mobile</artifactId>
+    <artifactId>wms-sms</artifactId>
 
 
 </project>
