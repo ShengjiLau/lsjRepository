@@ -13,6 +13,8 @@ public class RegisterDto {
 
 	private String introducer; //推荐人
 
+	private String ecode; //手机验证码
+
 
 
 	public String getUserPhoneNum() {

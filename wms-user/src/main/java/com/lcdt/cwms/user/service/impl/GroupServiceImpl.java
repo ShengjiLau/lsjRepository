@@ -22,7 +22,6 @@ import java.util.List;
  */
 @Service
 @Transactional
-@Service
 public class GroupServiceImpl implements GroupService {
 
 	@Autowired
