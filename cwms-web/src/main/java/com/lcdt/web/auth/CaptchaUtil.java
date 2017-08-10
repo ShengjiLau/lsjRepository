@@ -133,6 +133,9 @@ public final class CaptchaUtil{
 	 */
 	public static String getCaptchaString(HttpServletRequest request) throws CaptchaTimeExpireException {
 		CaptchaAndTime captchaAndTime = request.getSession() == null ? null : (CaptchaAndTime) request.getSession().getAttribute(CaptchaUtil.SESSION_KEY_CAPTCHA);
+		if (captchaAndTime == null) {
+			throw new CaptchaTimeExpireException();
+		}
 		boolean isTimeExpire = isTimeExpire(captchaAndTime.getCreateTime(), 30, TimeUnit.SECONDS);
 		if (isTimeExpire) {
 			throw new CaptchaTimeExpireException();

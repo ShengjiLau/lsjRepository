@@ -19,6 +19,7 @@ public class CustomerController {
 	@Reference
 	private UserService userService;
 
+
 	@RequestMapping("/register_page")
 	public void registerPage() {
 

@@ -1,8 +1,6 @@
 package com.lcdt.web.config;
 
-import com.lcdt.web.auth.LoginSuccessHandler;
-import com.lcdt.web.auth.SecurityUserDeatilService;
-import com.lcdt.web.auth.WmsUserNamePwdAuthFilter;
+import com.lcdt.web.auth.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -64,8 +62,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public WmsUserNamePwdAuthFilter wmsUserNamePwdAuthFilter() throws Exception {
 		WmsUserNamePwdAuthFilter filter = new WmsUserNamePwdAuthFilter();
 		filter.setAuthenticationManager(authenticationManagerBean());
-		filter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler());
+		filter.setAuthenticationSuccessHandler(new AjaxLoginSuccessHandler());
+		filter.setAuthenticationFailureHandler(loginFailureHandler());
 		return filter;
+	}
+
+
+	@Bean
+	public AjaxLoginFailureHandler loginFailureHandler(){
+		return new AjaxLoginFailureHandler();
 	}
 
 }

@@ -12,7 +12,7 @@ public interface UserService {
 
 	FrontUserInfo registerUser(RegisterDto registerDto) throws PhoneHasRegisterException;
 
-	boolean isPhoneBeenRegester(String phone);
+	boolean isPhoneBeenRegister(String phone);
 
 	boolean checkUserLogin();
 
