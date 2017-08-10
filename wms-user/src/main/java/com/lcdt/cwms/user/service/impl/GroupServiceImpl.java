@@ -20,6 +20,7 @@ import java.util.List;
 /**
  * Created by ss on 2017/8/4.
  */
+@Service
 @Transactional
 @Service
 public class GroupServiceImpl implements GroupService {

@@ -33,7 +33,7 @@
             targetPackage     指定生成的model生成所在的包名
             targetProject     指定在该项目下所在的路径
         -->
-        <javaModelGenerator targetPackage="com.lcdt.cwms.user.model" targetProject="MAVEN">
+        <javaModelGenerator targetPackage="com.lcdt.wms.permission.model" targetProject="MAVEN">
             <!-- 是否对model添加 构造函数 -->
             <property name="constructorBased" value="false"/>
 
@@ -51,7 +51,7 @@
         </javaModelGenerator>
 
         <!--Mapper映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 -->
-        <sqlMapGenerator targetPackage="com.lcdt.cwms.user.dao" targetProject="MAVEN">
+        <sqlMapGenerator targetPackage="com.lcdt.wms.permission.dao" targetProject="MAVEN">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
@@ -61,7 +61,7 @@
                 type="MIXEDMAPPER",生成基于注解的Java Model 和相应的Mapper对象
                 type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
         -->
-        <javaClientGenerator targetPackage="com.lcdt.cwms.user.dao" targetProject="MAVEN" type="XMLMAPPER">
+        <javaClientGenerator targetPackage="com.lcdt.wms.permission.dao" targetProject="MAVEN" type="XMLMAPPER">
 
             <!--
                     定义Maper.java 源代码中的ByExample() 方法的可视性，可选的值有：
@@ -133,27 +133,48 @@
         -->
 
 
-        <table  tableName="t_ue_company" domainObjectName="WmsCompany" >
-            <generatedKey column="comp_id" sqlStatement="MYSQL" identity="true" />
-            <!--<columnOverride column="DATE_FIELD" property="startDate" />-->
-            <!--<ignoreColumn column="FRED" />-->
-            <!--<columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />-->
-        </table>
+        <!--<table  tableName="t_ue_company" domainObjectName="WmsCompany" >-->
+            <!--<generatedKey column="comp_id" sqlStatement="MYSQL" identity="true" />-->
+            <!--&lt;!&ndash;<columnOverride column="DATE_FIELD" property="startDate" />&ndash;&gt;-->
+            <!--&lt;!&ndash;<ignoreColumn column="FRED" />&ndash;&gt;-->
+            <!--&lt;!&ndash;<columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />&ndash;&gt;-->
+        <!--</table>-->
 
-        <table tableName="t_ue_group" domainObjectName="WmsCompanyUserGroup">
+        <!--<table tableName="t_ue_group" domainObjectName="WmsCompanyUserGroup">-->
+            <!--<generatedKey column="group_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
+
+        <!--<table tableName="t_ue_group_relation" domainObjectName="WmsCompanyUserGroupRelation">-->
+            <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
+
+        <!--<table tableName="t_ue_user_company" domainObjectName="WmsCompanyUserRelation">-->
+            <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
+
+
+        <table tableName="t_up_group" domainObjectName="WmsPermissionGroup">
             <generatedKey column="group_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
 
-        <table tableName="t_ue_group_relation" domainObjectName="WmsCompanyUserGroupRelation">
+        <table tableName="t_up_group_permission" domainObjectName="WmsPermissionGroupRelation">
             <generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
 
-        <table tableName="t_ue_user_company" domainObjectName="WmsCompanyUserRelation">
+        <table tableName="t_up_permission" domainObjectName="WmsPermission">
+            <generatedKey column="permission_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
+
+        <table tableName="t_up_role" domainObjectName="WmsRole">
+            <generatedKey column="role_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
+
+        <table tableName="t_up_role_permission" domainObjectName="WmsRolePermission">
             <generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
-        <!--<table tableName="t"-->
 
-
-
+        <table tableName="t_up_user_role" domainObjectName="WmsUserRole">
+            <generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
     </context>
 </generatorConfiguration>
