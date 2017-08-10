@@ -11,14 +11,13 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import com.lcdt.web.exception.CaptchaTimeExpireException;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
+
+
 
 /**
  * @ClassName: CaptchaUtil
@@ -110,11 +109,20 @@ public final class CaptchaUtil{
 			g.drawRect(random.nextInt(width), random.nextInt(height), 1, 1);
 		}
 
+		try {
+			ImageIO.write(bi, "JPEG", response.getOutputStream());
+		} catch (Exception e) {
+			e.printStackTrace();
+			e.printStackTrace();
+		}
+
 		// 转成JPEG格式
-		ServletOutputStream out = response.getOutputStream();
-		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-		encoder.encode(bi);
-		out.flush();
+//		ServletOutputStream out = response.getOutputStream();
+//		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+//		encoder.encode(bi);
+//		out.flush();
+
+
 		return randomString;
 	}
 
