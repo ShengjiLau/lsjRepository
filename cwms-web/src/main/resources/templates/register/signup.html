@@ -95,7 +95,7 @@
                 <div class="form-group">
                     <label for="inputPassword" name = "inputPassword" class="col-sm-3 control-label">密码：</label>
                     <div class="col-sm-6">
-                        <input type="password" class="form-control input-lg" id="inputPassword" data-error="密码最小六位" data-minlength="6" placeholder="请输入密码" required name="password">
+                        <input type="password" class="form-control input-lg" id="inputPassword" data-error="密码最小六位" data-minlength="6" placeholder="请输入密码" name="password" required>
                         <div class="help-block with-errors"></div>
 
                     </div>
@@ -103,7 +103,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">确认密码：</label>
                     <div class="col-sm-6">
-                        <input type="password" class="form-control input-lg" id="inputPasswordConfirm"  data-error="两次输入不一致" data-match="#inputPassword" placeholder="请输入推荐人手机号" required>
+                        <input type="password" class="form-control input-lg" id="inputPasswordConfirm"  data-error="两次输入不一致" data-match="#inputPassword" placeholder="请输入推荐人手机号"  name="password1" required>
                         <div class="help-block with-errors"></div>
 
                     </div>
@@ -158,7 +158,6 @@
 <!-- /.modal -->
 <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="/js/wms_signup.min.js" charset="utf-8"></script>
 <script src="https://cdn.bootcss.com/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 <script type="text/javascript">
     $("#voice-code-form").submit(function () {
@@ -191,17 +190,63 @@
                 console.log(data);
             }
         });
-
-
-
-
-
-    })
-    $(function(){
-
-
-
     });
+
+    $('#get-codes-btn').click(function () {
+        if ($("#phone-num").val().length == 11) {
+
+
+
+
+
+
+
+            var form = document.getElementById("signup-form");
+            var fd = new FormData(form);
+            $.ajax({
+                url : '/register/vSmsCode',
+                type : 'POST',
+                data : fd,
+                async : false,
+                cache : false,
+                contentType : false,// 告诉jQuery不要去设置Content-Type请求头
+                processData : false,// 告诉jQuery不要去处理发送的数据
+                success : function(data) {
+                    console.log(data);
+                    if (!data.flag && data.msg!="") {
+                        alert(data.msg);
+                    } else {
+                        settime($(this));
+
+                    }
+                },
+                error : function(data) {
+                    console.log(data);
+                }
+            });
+
+
+        }else {
+            alert("请填写正确手机号")
+        }
+    });
+
+    var count=60;
+    function settime(obj) {
+        if (count == 0) {
+            obj.removeClass("disabled");
+            obj.html("<span class=''>重新获取验证码</span>");
+            count = 60;
+            return;
+        } else {
+            obj.addClass('disabled')
+            obj.html("<span class=''>重新发送(" + count + ")</span>");
+            count--;
+        }
+        setTimeout(function() { settime($('#get-codes-btn')) } ,1000)
+    }
+
+
 
 
 

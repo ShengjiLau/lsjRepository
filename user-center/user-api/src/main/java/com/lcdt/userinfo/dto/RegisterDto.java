@@ -3,11 +3,12 @@ package com.lcdt.userinfo.dto;
 /**
  * Created by ss on 2017/7/31.
  */
-public class RegisterDto {
+public class RegisterDto implements java.io.Serializable{
 
 	private String userPhoneNum;//手机号 账号
 
 	private String password;
+	private String password1;
 
 	private String name;//姓名，用户名
 
@@ -47,5 +48,21 @@ public class RegisterDto {
 
 	public void setIntroducer(String introducer) {
 		this.introducer = introducer;
+	}
+
+	public String getEcode() {
+		return ecode;
+	}
+
+	public void setEcode(String ecode) {
+		this.ecode = ecode;
+	}
+
+	public String getPassword1() {
+		return password1;
+	}
+
+	public void setPassword1(String password1) {
+		this.password1 = password1;
 	}
 }
