@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	@Override
 	public FrontUserInfo registerUser(RegisterDto registerDto) throws PhoneHasRegisterException {
-		boolean phoneBeenRegester = isPhoneBeenRegister(registerDto.getUserPhoneNum());
+		boolean phoneBeenRegester = isPhoneBeenRegester(registerDto.getUserPhoneNum());
 		if (phoneBeenRegester) {
 			throw new PhoneHasRegisterException();
 		}
@@ -40,13 +40,14 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public boolean isPhoneBeenRegister(String phone) {
+	public boolean isPhoneBeenRegester(String phone) {
 		List<FrontUserInfo> frontUserInfos = userInfoMapper.queryByUserPhone(phone);
 		if (frontUserInfos == null || frontUserInfos.isEmpty()) {
 			return false;
 		}
 		return true;
 	}
+
 
 	@Override
 	public boolean checkUserLogin() {
