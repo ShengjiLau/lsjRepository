@@ -53,11 +53,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.addFilterAt(wmsUserNamePwdAuthFilter(), UsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests().antMatchers("/auth/**").permitAll()
-				.anyRequest().authenticated()
 				.antMatchers("/register/**").permitAll()
+				.anyRequest().authenticated()
 				.and().formLogin().loginPage("/auth/loginpage").loginProcessingUrl("/login").successHandler(new LoginSuccessHandler())
 				.and().logout().logoutUrl("/signout").logoutSuccessUrl("/auth/loginpage").permitAll()
-
 				.and().csrf().disable();
 	}
 
