@@ -14,9 +14,7 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import org.tl.commons.util.DateUtility;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -25,7 +23,7 @@ import java.util.Date;
 /**
  * Created by ybq on 2017/8/9.
  */
-@Service
+@com.alibaba.dubbo.config.annotation.Service
 public class SmsServiceImpl implements SmsService {
 
     private Logger logger = LoggerFactory.getLogger(SmsServiceImpl.class);

@@ -50,7 +50,7 @@ public final class CaptchaUtil{
 	private static String getSessionKeyCaptcha()
 	{
 		StringBuffer buffer = new StringBuffer();
-		for(int i = 0; i < 6; i++)
+		for(int i = 0; i < 4; i++)
 		{
 			buffer.append(CHARS[random.nextInt(CHARS.length)]);
 		}
@@ -90,7 +90,7 @@ public final class CaptchaUtil{
 
 		request.getSession(true).setAttribute(SESSION_KEY_CAPTCHA,captchaAndTime);
 
-		int width = 100;
+		int width = 80;
 		int height = 30;
 
 		Color color = getRandomColor();
@@ -108,7 +108,6 @@ public final class CaptchaUtil{
 		{
 			g.drawRect(random.nextInt(width), random.nextInt(height), 1, 1);
 		}
-
 		try {
 			ImageIO.write(bi, "JPEG", response.getOutputStream());
 		} catch (Exception e) {
@@ -121,7 +120,6 @@ public final class CaptchaUtil{
 //		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
 //		encoder.encode(bi);
 //		out.flush();
-
 
 		return randomString;
 	}
