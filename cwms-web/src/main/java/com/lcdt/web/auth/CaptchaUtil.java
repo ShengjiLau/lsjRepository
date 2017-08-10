@@ -9,12 +9,14 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.lcdt.web.exception.CaptchaTimeExpireException;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
@@ -80,8 +82,14 @@ public final class CaptchaUtil{
 
 		response.setContentType("image/jpeg");
 
+
 		String randomString = getSessionKeyCaptcha();
-		request.getSession(true).setAttribute(SESSION_KEY_CAPTCHA, randomString);
+
+		CaptchaAndTime captchaAndTime = new CaptchaAndTime();
+		captchaAndTime.setCaptcha(randomString);
+		captchaAndTime.setCreateTime(System.currentTimeMillis()/1000);
+
+		request.getSession(true).setAttribute(SESSION_KEY_CAPTCHA,captchaAndTime);
 
 		int width = 100;
 		int height = 30;
@@ -110,10 +118,40 @@ public final class CaptchaUtil{
 		return randomString;
 	}
 
-	public static String getCaptchaString(HttpServletRequest request){
-		String randomString = request.getSession() == null ? null : (String) request.getSession().getAttribute(CaptchaUtil.SESSION_KEY_CAPTCHA);
-		return randomString;
+
+	/**
+	 * 返回验证码，如果验证码过期 抛出异常
+	 * @param request
+	 * @return
+	 * @throws CaptchaTimeExpireException
+	 */
+	public static String getCaptchaString(HttpServletRequest request) throws CaptchaTimeExpireException {
+		CaptchaAndTime captchaAndTime = request.getSession() == null ? null : (CaptchaAndTime) request.getSession().getAttribute(CaptchaUtil.SESSION_KEY_CAPTCHA);
+		boolean isTimeExpire = isTimeExpire(captchaAndTime.getCreateTime(), 30, TimeUnit.SECONDS);
+		if (isTimeExpire) {
+			throw new CaptchaTimeExpireException();
+		}else {
+			return captchaAndTime.getCaptcha();
+		}
 	}
 
+
+	/**
+	 * 判断beginTimeStamp 是否已过期
+	 * @param beginTimeStamp
+	 * @param period
+	 * @return
+	 */
+	public static boolean isTimeExpire(long beginTimeStamp, long period, TimeUnit timeUnit){
+
+		long l = System.currentTimeMillis() / 1000 - beginTimeStamp;
+		long convert = TimeUnit.MILLISECONDS.convert(period, timeUnit);
+		if (l >= convert){
+			return true; //已过期
+		}else{
+			return false;
+		}
+
+	}
 
 }

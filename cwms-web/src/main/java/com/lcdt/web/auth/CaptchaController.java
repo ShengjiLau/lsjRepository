@@ -1,7 +1,5 @@
 package com.lcdt.web.auth;
 
-import org.apache.http.HttpResponse;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -19,7 +17,6 @@ public class CaptchaController {
 	//返回验证码
 	@RequestMapping("/auth/getcaptcha")
 	public void captcha(HttpServletRequest request, HttpServletResponse response) {
-
 		try {
 			String randomString = CaptchaUtil.outputCaptcha(request, response);
 		} catch (ServletException e) {
@@ -28,5 +25,4 @@ public class CaptchaController {
 			e.printStackTrace();
 		}
 	}
-
 }
