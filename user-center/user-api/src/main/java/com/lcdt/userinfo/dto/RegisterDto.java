@@ -11,6 +11,9 @@ public class RegisterDto {
 
 	private String name;//姓名，用户名
 
+	private String introducer; //推荐人
+
+
 
 	public String getUserPhoneNum() {
 		return userPhoneNum;
@@ -26,5 +29,21 @@ public class RegisterDto {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getIntroducer() {
+		return introducer;
+	}
+
+	public void setIntroducer(String introducer) {
+		this.introducer = introducer;
 	}
 }

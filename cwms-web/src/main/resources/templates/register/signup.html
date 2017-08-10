@@ -3,24 +3,45 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>注册</title>
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="//cdn.bootcss.com/animate.css/3.5.2/animate.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/iconfont.css">
     <link rel="stylesheet" href="/css/signup.min.css">
     <style media="screen">
-        #form-block{
-            display: none;
-        }
         .animatedtd {
             -webkit-animation-duration: 0.3s;
             animation-duration: 0.3s;
             -webkit-animation-fill-mode: both;
             animation-fill-mode: both;
         }
+        .has-error .form-control:focus,.has-error .form-control{
+            border-color: #ff5459;
+        }
+        .has-error .checkbox, .has-error .checkbox-inline, .has-error .control-label, .has-error .help-block, .has-error .radio, .has-error .radio-inline, .has-error.checkbox label, .has-error.checkbox-inline label, .has-error.radio label, .has-error.radio-inline label{
+            color:  #ff5459;
+        }
+        ::-webkit-input-placeholder { /* WebKit browsers */
+            color:#d7d7d7 !important;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color:#d7d7d7 !important;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color:#d7d7d7 !important;
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10+ */
+            color:#d7d7d7 !important;
+        }
+        .choose-block{
+            height: 220px;
+        }
+
     </style>
 </head>
+
 <body>
 <header class="navbar navbar-static-top bs-docs-nav" id="top">
     <div class="container">
@@ -28,102 +49,163 @@
         <nav id="bs-navbar" class="collapse navbar-collapse">
             <div class="navbar-header">
                 <!-- <a href="#" class="navbar-brand">大驼队·用户注册</a> -->
-                <p><img src="/images/logo.png" alt=""> <span>·</span><span id="user-type">用户注册</span></p>
+                <p><img src="../images/logo.png" alt=""> <span>·</span><span id="user-type">用户注册</span></p>
             </div>
-
-            <!--<ul class="nav navbar-nav navbar-right">-->
-                <!--<li>-->
-                    <!--<p>我已注册，现在<a href="" target="_blank">登录</a></p>-->
-                <!--</li>-->
-            <!--</ul>-->
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <p>我已注册，现在<a href="" target="_blank">登录</a></p>
+                </li>
+            </ul>
         </nav>
     </div>
 </header>
-<div class="container">
 
-    <div class="form-panel panel-default" role="form" id = 'choose-block' data-toggle="validator" >
+<div class="container">
+    <div class="form-panel panel-default  animatedtd fadeInRight" role="form" id='form-block'>
         <div class="panel-body">
-            <form class="form-horizontal signup-form" id='signup-form'>
+            <form class="form-horizontal signup-form" id='signup-form'  data-toggle="validator">
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">姓名：</label>
+                    <div class="col-sm-6">
+                        <input class="form-control input-lg" id="name" name = "name" placeholder="请输入1-20位姓名" required pattern="\S{1,20}" data-error="请输入1-20位姓名">
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="phone-num" class="col-sm-3 control-label">手机号：</label>
                     <div class="col-sm-6">
-                        <input  class="form-control input-lg"  id="phone-num" placeholder="请输入11位手机号" pattern ="[0-9]{11}" title="请输入11正确手机号" required>
+                        <input class="form-control input-lg" id="phone-num" name = "userPhoneNum" placeholder="请输入11位手机号" pattern="[0-9]{11}" title="请输入11正确手机号" required>
+                        <div class="help-block with-errors"></div>
+
                     </div>
                 </div>
                 <div class="form-group">
-                    <label  class="col-sm-3 control-label">验证码：</label>
+                    <label class="col-sm-3 control-label">验证码：</label>
                     <div class="col-sm-3 btn-helf">
-                        <input id="code-input" class="form-control input-lg" placeholder="请输入验证码" required>
+                        <input id="code-input" class="form-control input-lg" name = "ecode" placeholder="请输入验证码" required>
+                        <div class="help-block with-errors"></div>
+
                     </div>
                     <div class="col-sm-3">
-                        <a  class="btn get-code-btn btn-default" id="get-codes-btn" ><span>获取验证码</span></a>
+                        <a class="btn get-code-btn btn-default" id="get-codes-btn"><span>获取验证码</span></a>
                     </div>
-                    <div class="col-sm-9 col-sm-push-3 help-block">若短信验证码获取失败，请获取<a >语音验证码。</a></div>
+                    <div class="col-sm-9 col-sm-push-3 help-block">若短信验证码获取失败，请获取<a class="voice-btn" data-toggle="modal" data-target="#voice-modal">
+                        语音验证码。</a></div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-3 control-label">姓名：</label>
+                    <label for="inputPassword" name = "inputPassword" class="col-sm-3 control-label">密码：</label>
                     <div class="col-sm-6">
-                        <input  class="form-control input-lg"  id="inputEmail3" placeholder="请输入1-20位姓名" required pattern ="\S{1,20}" title="请输入1-20位姓名">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-3 control-label">密码：</label>
-                    <div class="col-sm-6">
-                        <input type="password" class="form-control input-lg" id="inputPassword3" placeholder="请再次输入密码" required>
+                        <input type="password" class="form-control input-lg" id="inputPassword" data-error="密码最小六位" data-minlength="6" placeholder="请输入密码" required name="password">
+                        <div class="help-block with-errors"></div>
+
                     </div>
                 </div>
                 <div class="form-group">
-                    <label  class="col-sm-3 control-label">确认密码：</label>
+                    <label class="col-sm-3 control-label">确认密码：</label>
                     <div class="col-sm-6">
-                        <input type="password" class="form-control input-lg" id="inputPassword3" placeholder="请输入推荐人手机号" required>
+                        <input type="password" class="form-control input-lg" id="inputPasswordConfirm"  data-error="两次输入不一致" data-match="#inputPassword" placeholder="请输入推荐人手机号" required>
+                        <div class="help-block with-errors"></div>
+
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-3 control-label">推荐人电话：</label>
                     <div class="col-sm-6">
-                        <input  class="form-control input-lg" id="inputEmail3" placeholder="请输入推荐人手机号">
+                        <input class="form-control input-lg" id="inputEmail3" placeholder="请输入推荐人手机号">
+                        <div class="help-block with-errors"></div>
+
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-6">
-                        <button data-loading-text="发送中..." class="btn sub-btn btn-default">注册</button>
+                        <button data-loading-text="发送中..." id="sub-btn" class="btn sub-btn btn-default">注册</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal signup-modal fade" id="voice-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <form class="form-horizontal signup-form " data-toggle="validator" id='voice-code-form'>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">验证码：</label>
+                        <div class="col-sm-4 btn-helf">
+                            <input id="code-input" class="form-control input-lg" pattern ="\S{4,6}" data-error="请输入至少4位随机码" required><div class="help-block with-errors"></div>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="vc-img-btn"><img src="" alt="./public/vc.png" id="vcId"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-group">
+                        <button  class="btn sub-btn btn-primary">确定</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <div class="success-panel panel-default  animatedtd fadeInRight" id="success-block">
-        <div class="ok-body">
-            <div class="ok-icon"><i class="iconfont icon-selected"></i></div>
-            <p>恭喜您，账号注册成功！</p>
-            <a href="" class="btn btn-default gosignin">立即登录</a>
-        </div>
-    </div>
 </div>
 
-<div class="modal fade" tabindex="-1" id="remind-modal" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">用户协议</h4>
-            </div>
-            <div class="modal-body">
-                <p>用户协议</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
 <!-- /.modal -->
 <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script src="//cdn.bootcss.com/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="js/signup.min.js" charset="utf-8"></script>
+<script src="/js/wms_signup.min.js" charset="utf-8"></script>
+<script src="https://cdn.bootcss.com/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+<script type="text/javascript">
+    $("#voice-code-form").submit(function () {
+        $("#voice-code-form .sub-btn").button('loading');
+        setTimeout(function() {
+                $("#voice-code-form sub-btn").button('reset')
+                lc="success"
+                $('#voice-modal').modal('hide');
+            }
+            ,1000)
+        return false;
+    })
+    $("#signup-form").submit(function (event) {
+        var form = document.getElementById("signup-form");
+        var fd = new FormData(form);
+        event.preventDefault();
+
+        $.ajax({
+            url : '/register/save',
+            type : 'POST',
+            data : fd,
+            async : false,
+            cache : false,
+            contentType : false,// 告诉jQuery不要去设置Content-Type请求头
+            processData : false,// 告诉jQuery不要去处理发送的数据
+            success : function(data) {
+                console.log(data);
+            },
+            error : function(data) {
+                console.log(data);
+            }
+        });
+
+
+
+
+
+    })
+    $(function(){
+
+
+
+    });
+
+
+
+</script>
 </body>
 
 </html>

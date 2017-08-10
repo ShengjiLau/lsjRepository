@@ -59,6 +59,7 @@ public class SmsServiceImpl implements SmsService {
                 if (entity != null) {
                     //判断是否发送成功
                     String responseStr = EntityUtils.toString(entity);
+                    logger.debug("短信回执内容", responseStr);
                     boolean isSendSuccess = responseStr.contains("success");
                     if (isSendSuccess) {
                         logger.info("短信发送成功：内容{}，手机号：{}", message, phones);

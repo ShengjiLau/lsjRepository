@@ -2,10 +2,12 @@ package com.lcdt.web.controller.register;
 
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Map;
 
@@ -21,20 +23,23 @@ public class RegisterController {
      * @param map
      * @return
      */
-    @RequestMapping(path = "/add", method = RequestMethod.GET)
+    @RequestMapping(path = "/index")
     public String index(Map<String,Object> map){
         return"/register/signup";
     }
 
     /***
      * 注册提交
-     * @param map
+     * @param registerDto
      * @return
      */
     @RequestMapping(path = "/save", method = RequestMethod.POST)
-    public String toSave(Map<String,Object> map) {
+    @ResponseBody
+    public String toSave(RegisterDto registerDto) {
         System.out.println(111111);
-        return "";
+        System.out.println(registerDto.getName());
+        return registerDto.getName();
+
     }
 
 
