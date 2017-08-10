@@ -22,7 +22,7 @@ public class RegisterController {
      * 注册首页
      * @return
      */
-    @RequestMapping(path = "/index", method = RequestMethod.GET)
+    @RequestMapping(path = "/index")
     public String index(){
         return"/register/signup";
     }
