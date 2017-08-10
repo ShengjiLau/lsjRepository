@@ -49,7 +49,7 @@
         <nav id="bs-navbar" class="collapse navbar-collapse">
             <div class="navbar-header">
                 <!-- <a href="#" class="navbar-brand">大驼队·用户注册</a> -->
-                <p><img src="./img/logo.png" alt=""> <span>·</span><span id="user-type">用户注册</span></p>
+                <p><img src="../img/logo.png" alt=""> <span>·</span><span id="user-type">用户注册</span></p>
             </div>
             <ul class="nav navbar-nav navbar-right">
                 <li>
@@ -118,7 +118,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-6">
-                        <button data-loading-text="发送中..." id="sub-btn" class="btn sub-btn btn-default">注册</button>
+                        <button data-loading-text="发送中..." id="sub-btn" class="btn sub-btn btn-default"  type="submit">注册</button>
                     </div>
                 </div>
             </form>
@@ -141,13 +141,13 @@
                             <input id="code-input" class="form-control input-lg" pattern ="\S{4,6}" data-error="请输入至少4位随机码" required><div class="help-block with-errors"></div>
                         </div>
                         <div class="col-sm-3">
-                            <a class="vc-img-btn"><img src="" alt="./public/vc.png" id="vcId"></a>
+                            <a class="vc-img-btn"><img alt="./public/vc.png" src="/auth/getcaptcha" /></a>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <div class="form-group">
-                        <button  class="btn sub-btn btn-primary">确定</button>
+                        <button  class="btn sub-btn btn-primary" data-loading-text="发送中...">确定</button>
                     </div>
                 </div>
             </form>
