@@ -20,11 +20,10 @@ public class RegisterController {
 
     /***
      * 注册首页
-     * @param map
      * @return
      */
-    @RequestMapping(path = "/index")
-    public String index(Map<String,Object> map){
+    @RequestMapping(path = "/index", method = RequestMethod.GET)
+    public String index(){
         return"/register/signup";
     }
 
