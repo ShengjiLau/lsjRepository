@@ -19,6 +19,5 @@ public class WmsWebApp {
     public static void main(String[] args) {
         SpringApplication.run(WmsWebApp.class, args);
     }
-
 }
 
