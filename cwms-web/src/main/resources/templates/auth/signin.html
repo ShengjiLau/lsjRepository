@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="utf-8">
@@ -9,18 +9,20 @@
     <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/signup.min.css">
     <style media="screen">
-          .form-panel {
+        .form-panel {
             position: fixed;
-          left: 50px;
-          top: 50px;
-          bottom: 50px;
-          right: 50px;
-          }
-          .panel-body{
+            left: 50px;
+            top: 50px;
+            bottom: 50px;
+            right: 50px;
+        }
+
+        .panel-body {
             width: 600px;
             margin: auto;
-          }
-          .logo{
+        }
+
+        .logo {
             background-position: 50%;
             margin-bottom: 50px;
             background-repeat: no-repeat;
@@ -30,94 +32,186 @@
             padding: 17px;
             background-size: 80%;
             background-image: url(/img/logo_name.png);
-          }
+        }
+
         .animatedtd {
             -webkit-animation-duration: 0.3s;
             animation-duration: 0.3s;
             -webkit-animation-fill-mode: both;
             animation-fill-mode: both;
         }
-        .has-error .form-control:focus,.has-error .form-control{
-          border-color: #ff5459;
+
+        .has-error .form-control:focus, .has-error .form-control {
+            border-color: #ff5459;
         }
-        .has-error .checkbox, .has-error .checkbox-inline, .has-error .control-label, .has-error .help-block, .has-error .radio, .has-error .radio-inline, .has-error.checkbox label, .has-error.checkbox-inline label, .has-error.radio label, .has-error.radio-inline label{
-          color:  #ff5459;
+
+        .has-error .checkbox, .has-error .checkbox-inline, .has-error .control-label, .has-error .help-block, .has-error .radio, .has-error .radio-inline, .has-error.checkbox label, .has-error.checkbox-inline label, .has-error.radio label, .has-error.radio-inline label {
+            color: #ff5459;
         }
+
         ::-webkit-input-placeholder { /* WebKit browsers */
-        color:#d7d7d7 !important;
+            color: #d7d7d7 !important;
         }
+
         :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-          color:#d7d7d7 !important;
+            color: #d7d7d7 !important;
         }
+
         ::-moz-placeholder { /* Mozilla Firefox 19+ */
-          color:#d7d7d7 !important;
+            color: #d7d7d7 !important;
         }
+
         :-ms-input-placeholder { /* Internet Explorer 10+ */
-          color:#d7d7d7 !important;
+            color: #d7d7d7 !important;
         }
-        .choose-block{
-          height: 220px;
+
+        .choose-block {
+            height: 220px;
+        }
+        .modal-content,modal-body{
+            display: inline-block;
+            text-align: center;
+            border-radius: 0;
+            border:none;
+        }
+        .modal-dialog{
+            text-align: center;
+        }
+        .modal{
+            border-radius: 0;
         }
 
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="form-panel panel-default  animatedtd fadeInRight" role="form" id='form-block'>
-            <div class="panel-body">
-              <div class="logo">
-
-              </div>
-                <form class="form-horizontal signup-form" id='signup-form' method="post" action="/login"  data-toggle="validator">
-                    <div class="form-group">
-                        <label for="phone-num" class="col-sm-3 control-label">手机号：</label>
-                        <div class="col-sm-6">
-                            <input class="form-control input-lg" id="phone-num" name = "username" placeholder="请输入11位手机号" pattern="[0-9]{11}" title="请输入11正确手机号" required>
-                            <div class="help-block with-errors"></div>
-
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPassword" ame = "inputPassword" class="col-sm-3 control-label">密码：</label>
-                        <div class="col-sm-6">
-                            <input type="password" name="password" class="form-control input-lg" id="inputPassword" data-error="密码最小六位" data-minlength="6" placeholder="请输入密码" required>
-                            <div class="help-block with-errors"></div>
-
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">验证码：</label>
-                        <div class="col-sm-3 btn-helf">
-                            <input id="code-input" class="form-control input-lg" name = "ecode" placeholder="请输入验证码" required>
-                            <div class="help-block with-errors"></div>
-
-                        </div>
-                        <div class="col-sm-3">
-                          <a class="vc-img-btn"><img src="/auth/getcaptcha" alt="./public/vc.png"></a>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-3 col-sm-6">
-                            <input type="submit" data-loading-text="发送中..." id="sub-btn" class="btn sub-btn btn-default">登陆</input>
-                        </div>
-                    </div>
-                </form>
+<div class="container">
+    <div class="form-panel panel-default  animatedtd fadeInRight" role="form" id='form-block'>
+        <div class="panel-body">
+            <div class="logo">
 
             </div>
+            <form class="form-horizontal signup-form" id='signin-form' method="post" data-toggle="validator">
+                <div class="form-group">
+                    <label for="phone-num" class="col-sm-3 control-label">手机号：</label>
+                    <div class="col-sm-6">
+                        <input class="form-control input-lg" id="phone-num" name="username" placeholder="请输入11位手机号"
+                               pattern="[0-9]{11}" title="请输入11正确手机号" required>
+                        <div class="help-block with-errors"></div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword" ame="inputPassword" class="col-sm-3 control-label">密码：</label>
+                    <div class="col-sm-6">
+                        <input type="password" name="password" class="form-control input-lg" id="inputPassword"
+                               data-error="密码最小六位" data-minlength="6" placeholder="请输入密码" required>
+                        <div class="help-block with-errors"></div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">验证码：</label>
+                    <div class="col-sm-3 btn-helf">
+                        <input id="code-input" class="form-control input-lg" name="captchaCode" placeholder="请输入验证码"
+                               required>
+                        <div class="help-block with-errors"></div>
+
+                    </div>
+                    <div class="col-sm-3">
+                        <a class="vc-img-btn"><img id="captchaimg" src="/auth/getcaptcha" alt="./public/vc.png" onclick="refreshCaptcha()"></a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        <button  data-loading-text="发送中..." id="sub-btn"
+                                class="btn sub-btn btn-default" onclick="login(event)">登陆</button>
+                    </div>
+                </div>
+            </form>
+
         </div>
     </div>
-    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdn.bootcss.com/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
-    <!--<script type="text/javascript">-->
-    <!--$("#signup-form").submit(function (event) {-->
-      <!--var form = document.getElementById("signup-form");-->
-      <!--var fd = new FormData(form);-->
-      <!--console.log(fd.get("userPhone"));-->
-      <!--event.preventDefault();-->
-    <!--})-->
-    <!--</script>-->
+</div>
+
+<div class="modal fade" tabindex="-1" id="gss-modal" role="dialog">
+    <div class="modal-dialog" role="document" style="margin: 240px auto">
+        <div class="modal-content">
+            <div class="modal-body" style="background-color:#eeeeee">
+                <div style="display: inline-block;padding: 10px;border-bottom-color: #848484" >
+                    <span style="text-align: center;font-size: 24px;color: forestgreen;">ahsdiuhaisudhiasuhdiau</span>
+                </div>
+                <br/>
+                <div style="display: inline-block;padding: 10px" >
+                    <span style="text-align: center;font-size: 24px;color: forestgreen;">ahsdiuhaisudhiasuhdiau</span>
+
+                </div>
+                <br/>
+                <div style="display: inline-block;padding: 10px" >
+                    <span style="text-align: center;font-size: 24px;color: forestgreen;">ahsdiuhaisudhiasuhdiau</span>
+                    <br/>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+<script type="text/javascript">
+    $("#gss-modal").modal()
+    function login(event) {
+        event.preventDefault();
+
+        var form = document.getElementById("signin-form");
+        var fd = new FormData(form);
+
+        $.ajax({
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                url: '/login',
+                data: fd,
+                success: function (data) {
+                    //登陆成功选择公司
+                    console.log(data)
+                    show();
+                },
+                error: function (data) {
+                    var result = JSON.parse(data);
+                    alert(result.message);
+                },
+            });
+    }
+
+    //刷新验证码
+    function refreshCaptcha(){
+     document.getElementById("captchaimg").src="/auth/getcaptcha?random=" + Math.random();
+     return false;
+    }
+
+    function show() {
+//        $("#gss").html("")
+//        var gss = [{
+//            name:"aaa",
+//            id:"1",
+//        },{
+//            name:"bb",
+//            id:"1",
+//        },{
+//            name:"cc",
+//            id:"1",
+//        }]
+//        for (var i = 0; i < gss.length; i++) {
+//            $("#gss").append('<li><a href="/'+gss[i].id+'">'+gss[i].name+"</a></li>")
+//        }
+        $("#gss-modal").modal()
+    }
+
+
+</script>
 </body>
 
 </html>
