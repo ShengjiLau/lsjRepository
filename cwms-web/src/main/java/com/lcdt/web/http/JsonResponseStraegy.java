@@ -3,6 +3,10 @@ package com.lcdt.web.http;
 //import com.alibaba.dubbo.common.json.JSONObject;
 
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletOutputStream;
@@ -28,11 +32,35 @@ public class JsonResponseStraegy {
 	}
 
 
-	public void responseError(HttpServletResponse response,Exception exception){
+	public void responseLoginError(HttpServletResponse response, Exception e) {
 		setResponseJsonHeader(response);
 		JSONObject errorObj = new JSONObject();
 		errorObj.put("code", -1);
-		errorObj.put("message", exception.getMessage());
+		if (e instanceof InternalAuthenticationServiceException) {
+			errorObj.put("message", "服务器错误");
+		}else if (e instanceof AuthenticationException){
+			errorObj.put("message", e.getMessage());
+			if (e instanceof BadCredentialsException) {
+				errorObj.put("message", "密码错误");
+			} else if (e instanceof UsernameNotFoundException) {
+				errorObj.put("message", "用户不存在");
+			}
+		}else{
+			errorObj.put("meeage", "未知错误");
+		}
+		writeJsonToResponse(response, errorObj);
+	}
+
+	public void responseError(HttpServletResponse response,Exception exception){
+		setResponseJsonHeader(response);
+		JSONObject errorObj = new JSONObject();
+		exception.getLocalizedMessage();
+		errorObj.put("code", -1);
+		errorObj.put("message", exception.getLocalizedMessage());
+		writeJsonToResponse(response, errorObj);
+	}
+
+	private void writeJsonToResponse(HttpServletResponse response, JSONObject errorObj) {
 		PrintWriter writer = null;
 		try {
 			writer = response.getWriter();

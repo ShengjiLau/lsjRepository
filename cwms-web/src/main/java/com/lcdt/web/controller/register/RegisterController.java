@@ -97,7 +97,7 @@ public class RegisterController {
         Map<String,Object> map = new HashMap();
         String msg = "";
         boolean flag = false;
-        if (!userService.isPhoneBeenRegester(registerDto.getUserPhoneNum())) { //根据用户首页号检查用户是否有注册
+        if (!userService.isPhoneBeenRegister(registerDto.getUserPhoneNum())) { //根据用户首页号检查用户是否有注册
             msg = "手机号"+registerDto.getUserPhoneNum()+"已注册，请选用别的号注册！";
         } else {
             Long  cTime = System.currentTimeMillis(); //其实时间
