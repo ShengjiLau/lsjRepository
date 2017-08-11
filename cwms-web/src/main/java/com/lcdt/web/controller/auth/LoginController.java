@@ -1,5 +1,6 @@
 package com.lcdt.web.controller.auth;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lcdt.cwms.user.model.WmsCompanyUserRelation;
 import com.lcdt.cwms.user.service.CompanyService;
 import com.lcdt.web.auth.WmsUserDetails;
@@ -38,9 +39,9 @@ public class LoginController {
 		SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		WmsUserDetails user = (WmsUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<WmsCompanyUserRelation> wmsCompanyUserRelations = companyService.userCompanys(user.getUserInfo().getUserId());
-
-//		ResponseEntity
-
-		return user.getUserInfo().getUserId().toString();
+		JSONObject obj = new JSONObject();
+		obj.put("code", 0);
+		obj.put("data", wmsCompanyUserRelations);
+		return obj.toString();
 	}
 }

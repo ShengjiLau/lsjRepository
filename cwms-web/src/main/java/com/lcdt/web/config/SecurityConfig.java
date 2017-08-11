@@ -10,8 +10,11 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
+import java.util.Locale;
 
 /**
  * Created by ss on 2017/8/8.
@@ -40,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					public String encode(CharSequence rawPassword) {
 						return RegisterUtils.md5Encrypt(rawPassword.toString());
 					}
+
 					@Override
 					public boolean matches(CharSequence rawPassword, String encodedPassword) {
 						return encode(rawPassword).toUpperCase().equals(encodedPassword.toUpperCase());
@@ -69,8 +73,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 	@Bean
-	public AjaxLoginFailureHandler loginFailureHandler(){
+	public AjaxLoginFailureHandler loginFailureHandler() {
 		return new AjaxLoginFailureHandler();
+	}
+
+	@Bean
+	public LocaleResolver localeResolver() {
+		SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
+		sessionLocaleResolver.setDefaultLocale(Locale.CHINA);
+		return sessionLocaleResolver;
 	}
 
 }
