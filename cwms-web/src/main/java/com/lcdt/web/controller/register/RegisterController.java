@@ -8,7 +8,6 @@ import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.model.FrontUserInfo;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.web.utils.RandomNoUtil;
-import com.sun.deploy.net.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 @Controller
 @RequestMapping("/register")
@@ -37,7 +35,7 @@ public class RegisterController {
      * 注册首页
      * @return
      */
-    @RequestMapping(path = "/index")
+    @RequestMapping(path = "")
     public ModelAndView index(){
         return new ModelAndView("/register/signup");
     }
@@ -66,6 +64,9 @@ public class RegisterController {
             if (!registerDto.getPassword().equals(registerDto.getPassword1())) {
                 msg = "两次输入密码不一样！";
             }
+            if (userService.isPhoneBeenRegister(registerDto.getUserPhoneNum())) { //根据用户首页号检查用户是否有注册
+                msg = "手机号"+registerDto.getUserPhoneNum()+"已注册！";
+            }
         }
         if (msg == "") {
             try {
@@ -80,8 +81,6 @@ public class RegisterController {
                 e.printStackTrace();
             }
         }
-
-
         map.put("msg",msg);
         map.put("flag",flag);
         return map;
@@ -97,7 +96,7 @@ public class RegisterController {
         Map<String,Object> map = new HashMap();
         String msg = "";
         boolean flag = false;
-        if (!userService.isPhoneBeenRegester(registerDto.getUserPhoneNum())) { //根据用户首页号检查用户是否有注册
+        if (userService.isPhoneBeenRegister(registerDto.getUserPhoneNum())) { //根据用户首页号检查用户是否有注册
             msg = "手机号"+registerDto.getUserPhoneNum()+"已注册，请选用别的号注册！";
         } else {
             Long  cTime = System.currentTimeMillis(); //其实时间
@@ -105,16 +104,18 @@ public class RegisterController {
                 httpSession.setAttribute("CWMS_SMS_SEND_TIME", cTime);
                 String[] phones = new String[]{registerDto.getUserPhoneNum()};
                 String vCode = RandomNoUtil.createRandom(true,4);
-                flag = smsService.sendSms(phones,signature,vCode);
+                smsService.sendSms(phones,signature,vCode);
                 httpSession.setAttribute("CWMS_SMS_VCODE", vCode+"_"+registerDto.getUserPhoneNum());
+                flag = true;
             } else {
                 Long oTime = Long.valueOf(httpSession.getAttribute("CWMS_SMS_SEND_TIME").toString());
                 if (cTime - oTime >= 60*1000) { //大于1分中重新获取
                     httpSession.setAttribute("CWMS_SMS_SEND_TIME", cTime);
                     String[] phones = new String[]{registerDto.getUserPhoneNum()};
                     String vCode = RandomNoUtil.createRandom(true,4);
-                    flag = smsService.sendSms(phones, signature, vCode);
+                    smsService.sendSms(phones, signature, vCode);
                     httpSession.setAttribute("CWMS_SMS_VCODE", vCode+"_"+registerDto.getUserPhoneNum());
+                    flag = true;
                 }
             }
         }
@@ -123,6 +124,13 @@ public class RegisterController {
         return map;
     }
 
-
+    /***
+     * 注册成功页
+     * @return
+     */
+    @RequestMapping(path = "/regSuccess")
+    public ModelAndView regSuccess(){
+        return new ModelAndView("/register/signup_success");
+    }
 
 }
