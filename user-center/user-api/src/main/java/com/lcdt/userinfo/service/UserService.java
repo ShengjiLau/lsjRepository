@@ -16,7 +16,7 @@ public interface UserService {
 
 	boolean checkUserLogin();
 
-	FrontUserInfo queryByUserId(Integer userId) throws UserNotExistException;
+	FrontUserInfo queryByUserId(Long userId) throws UserNotExistException;
 
 	FrontUserInfo queryByPhone(String phone) throws UserNotExistException;
 }

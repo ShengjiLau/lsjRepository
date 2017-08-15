@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public FrontUserInfo queryByUserId(Integer userId) throws UserNotExistException {
+	public FrontUserInfo queryByUserId(Long userId) throws UserNotExistException {
 		FrontUserInfo frontUserInfo = userInfoMapper.selectByPrimaryKey(userId);
 		if (frontUserInfo == null) {
 			throw new UserNotExistException();
