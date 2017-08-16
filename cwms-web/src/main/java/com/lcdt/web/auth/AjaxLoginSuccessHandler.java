@@ -23,10 +23,6 @@ public class AjaxLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandl
 			jsonResponseStraegy.responseOk(response);
 			return;
 		}
-
 		super.onAuthenticationSuccess(request, response, authentication);
 	}
-
-
-
 }
