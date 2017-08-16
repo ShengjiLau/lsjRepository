@@ -1,20 +1,39 @@
 package com.lcdt.userinfo.service;
 
-import com.lcdt.userinfo.dto.WmsCompanyDto;
+import com.github.pagehelper.PageInfo;
+import com.lcdt.userinfo.dto.CompanyDto;
+import com.lcdt.userinfo.exception.CompanyExistException;
+import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.CompanyMember;
-import com.lcdt.userinfo.model.WmsCompany;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ybq on 2017/8/15.
  */
 public interface CompanyService {
 
-    WmsCompany createWmsCompany(WmsCompanyDto dto);
+    /**
+     * 创建企业
+     * @param dto
+     * @return
+     * @throws CompanyExistException
+     */
+     Company createCompany(CompanyDto dto) throws CompanyExistException;
 
-    List<WmsCompany> wmsCompayList(WmsCompanyDto dto);
+    /***
+     * 加入企业
+     * @param dto
+     * @return
+     * @throws CompanyExistException
+     */
+    CompanyMember joinCompany(CompanyDto dto) throws CompanyExistException;
 
-    CompanyMember  joinCompany(WmsCompanyDto dto);
-
+    /***
+     * 获取企业列表
+     * @param m
+     * @return
+     */
+    PageInfo companyList(Map m);
 }

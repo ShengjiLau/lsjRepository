@@ -38,7 +38,7 @@ public class LoginController {
 	public String loginSuccessChooseCompany() {
 		SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		WmsUserDetails user = (WmsUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		List<WmsCompanyUserRelation> wmsCompanyUserRelations = companyService.userCompanys(user.getUserInfo().getUserId());
+		List<WmsCompanyUserRelation> wmsCompanyUserRelations = null;//companyService.userCompanys(user.getUserInfo().getUserId());
 		JSONObject obj = new JSONObject();
 		obj.put("code", 0);
 		obj.put("data", wmsCompanyUserRelations);

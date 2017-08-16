@@ -3,6 +3,7 @@ package com.lcdt.userinfo.dao;
 import com.lcdt.userinfo.model.CompanyMember;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CompanyMemberMapper {
     /**
@@ -44,4 +45,12 @@ public interface CompanyMemberMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(CompanyMember record);
+
+    /***
+     *  企业-用户 关系查询
+     * @return
+     */
+    List<CompanyMember> selectByCondition(Map map);
+
+
 }

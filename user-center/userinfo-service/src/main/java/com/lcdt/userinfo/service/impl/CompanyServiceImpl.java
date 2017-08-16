@@ -29,15 +29,34 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Transactional
     @Override
-    public WmsCompany createWmsCompany(WmsCompanyDto dto) {
+    public Company createCompany(CompanyDto dto) throws CompanyExistException {
+        Map map = new HashMap<String, Object>();
+        map.put("userId", dto.getUserId());
+        map.put("companyName", dto.getCompanyName());
+        List<CompanyMember> memberList = companyMemberMapper.selectByCondition(map);
+        if (memberList!=null && memberList.size()>0) {
+           throw new CompanyExistException();
+        }
+        Date dt = new Date();
+        //创建企业
+        Company company = new Company();
+        company.setCompanyName(dto.getCompanyName());
+        company.setCreateId(dto.getUserId());
+        company.setCreateDt(dt);
+        company.setCreateName(dto.getCreateUserName());
+        companyMapper.insert(company);
 
-        return null;
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<WmsCompany> wmsCompayList(WmsCompanyDto dto) {
-        return null;
+        //创建关系
+        if (company != null && company.getCompanyId()!=null) {
+            CompanyMember companyMember = new CompanyMember();
+            companyMember.setCompanyId(company.getCompanyId());
+            companyMember.setUserId(dto.getUserId());
+            companyMember.setCompanyId(company.getCompanyId());
+            companyMember.setCompanyName(company.getCompanyName());
+            companyMember.setRegDt(dt);
+            companyMemberMapper.insert(companyMember);
+        }
+        return company;
     }
 
     @Transactional
