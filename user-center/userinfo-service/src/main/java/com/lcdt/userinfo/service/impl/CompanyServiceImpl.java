@@ -1,5 +1,7 @@
 package com.lcdt.userinfo.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dao.CompanyMapper;
 import com.lcdt.userinfo.dao.CompanyMemberMapper;
 import com.lcdt.userinfo.dto.CompanyDto;
@@ -87,11 +89,25 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
 
-
     @Transactional(readOnly = true)
     @Override
-    public List<CompanyMember> compayList(CompanyDto dto) {
-        return null;
+    public PageInfo compayList(Map m) {
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+        if (m.containsKey("page_no")) {
+           if (m.get("page_no")!=null) {
+               pageNo = (int) m.get("page_no");
+           }
+        }
+        if (m.containsKey("page_size")) {
+            if(m.get("page_size")!=null) {
+                pageSize = (int) m.get("page_size");
+            }
+        }
+        PageHelper.startPage(pageNo, pageSize);
+        List<CompanyMember> list = companyMemberMapper.selectByCondition(m);
+        PageInfo pageInfo = new PageInfo(list);
+        return pageInfo;
     }
 
 
