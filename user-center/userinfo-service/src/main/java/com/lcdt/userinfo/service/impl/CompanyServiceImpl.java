@@ -1,11 +1,11 @@
 package com.lcdt.userinfo.service.impl;
 
+import com.lcdt.userinfo.dao.CompanyMapper;
 import com.lcdt.userinfo.dao.CompanyMemberMapper;
-import com.lcdt.userinfo.dao.WmsCompanyMapper;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
+import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.CompanyMember;
-import com.lcdt.userinfo.model.WmsCompany;
 import com.lcdt.userinfo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
-    private WmsCompanyMapper wmsCompanyMapper;
+    private CompanyMapper companyMapper;
 
 
     @Autowired
@@ -33,7 +33,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Transactional
     @Override
-    public WmsCompany createWmsCompany(CompanyDto dto) throws CompanyExistException {
+    public Company createCompany(CompanyDto dto) throws CompanyExistException {
         Map map = new HashMap<String, Object>();
         map.put("userId", dto.getUserId());
         map.put("companyName", dto.getCompanyName());
@@ -43,24 +43,24 @@ public class CompanyServiceImpl implements CompanyService {
         }
         Date dt = new Date();
         //创建企业
-        WmsCompany wmsCompany = new WmsCompany();
-        wmsCompany.setCompanyName(dto.getCompanyName());
-        wmsCompany.setCreateId(dto.getUserId());
-        wmsCompany.setCreateDt(dt);
-        wmsCompany.setCreateName(dto.getCreateUserName());
-        wmsCompanyMapper.insert(wmsCompany);
+        Company company = new Company();
+        company.setCompanyName(dto.getCompanyName());
+        company.setCreateId(dto.getUserId());
+        company.setCreateDt(dt);
+        company.setCreateName(dto.getCreateUserName());
+        companyMapper.insert(company);
 
         //创建关系
-        if (wmsCompany != null && wmsCompany.getCompanyId()!=null) {
+        if (company != null && company.getCompanyId()!=null) {
             CompanyMember companyMember = new CompanyMember();
-            companyMember.setCompanyId(wmsCompany.getCompanyId());
+            companyMember.setCompanyId(company.getCompanyId());
             companyMember.setUserId(dto.getUserId());
-            companyMember.setCompanyId(wmsCompany.getCompanyId());
-            companyMember.setCompanyName(wmsCompany.getCompanyName());
+            companyMember.setCompanyId(company.getCompanyId());
+            companyMember.setCompanyName(company.getCompanyName());
             companyMember.setRegDt(dt);
             companyMemberMapper.insert(companyMember);
         }
-        return wmsCompany;
+        return company;
     }
 
 
@@ -90,7 +90,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<CompanyMember> wmsCompayList(CompanyDto dto) {
+    public List<CompanyMember> compayList(CompanyDto dto) {
         return null;
     }
 
