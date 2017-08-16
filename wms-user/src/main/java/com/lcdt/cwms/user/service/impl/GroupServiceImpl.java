@@ -49,7 +49,6 @@ public class GroupServiceImpl implements GroupService {
 		if (wmsCompanyUserGroup == null) {
 			throw new GroupNotExistException();
 		}
-
 		WmsCompanyUserGroupRelation relation = new WmsCompanyUserGroupRelation();
 		relation.setCompanyId(wmsCompanyUserGroup.getCompanyId());
 		relation.setUserId(userId);

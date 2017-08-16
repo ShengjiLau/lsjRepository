@@ -14,6 +14,6 @@ public interface CompanyService {
 
 	 WmsCompany createCompany(CreateCompanyDto createCompanyDto) throws UserNotExistException;
 
-	 List<WmsCompanyUserRelation> userCompanys(Integer userId);
+	 List<WmsCompanyUserRelation> userCompanys(Long userId);
 
 }

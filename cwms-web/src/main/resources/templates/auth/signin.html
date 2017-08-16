@@ -177,7 +177,12 @@
                 success: function (data) {
                     //登陆成功选择公司
                     console.log(data)
-                    show();
+                    if (data.code == 0) {
+                        getCompanys();
+                    }else{
+                        alert(data.message)
+                    }
+
                 },
                 error: function (data) {
                     var result = JSON.parse(data);
@@ -185,6 +190,18 @@
                 },
             });
     }
+
+    function getCompanys() {
+        $.ajax({
+            type:"POST",
+            url:"/auth/companys",
+            success:function (data) {
+                console.log(data)
+            }
+        })
+
+    }
+
 
     //刷新验证码
     function refreshCaptcha(){

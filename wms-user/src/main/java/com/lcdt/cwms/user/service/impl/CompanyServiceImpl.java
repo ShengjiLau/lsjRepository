@@ -79,7 +79,7 @@ public class CompanyServiceImpl implements CompanyService {
 	 */
 	@Transactional(readOnly = true)
 	@Override
-	public List<WmsCompanyUserRelation> userCompanys(Integer userId) {
+	public List<WmsCompanyUserRelation> userCompanys(Long userId) {
 		List<WmsCompanyUserRelation> wmsCompanyUserRelations = userCompanyDao.selectCompanyByUserId(userId);
 		return wmsCompanyUserRelations;
 	}
