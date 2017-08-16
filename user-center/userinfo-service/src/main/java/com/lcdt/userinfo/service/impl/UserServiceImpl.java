@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,6 +35,9 @@ public class UserServiceImpl implements UserService {
 		registerUser.setUserName(registerDto.getUserPhoneNum());
 		String md5EncryptPwd = RegisterUtils.md5Encrypt(registerDto.getPassword());
 		registerUser.setUserPass(md5EncryptPwd);
+		registerUser.setName(registerDto.getName());
+		registerUser.setIntroducer(registerDto.getIntroducer());
+		registerUser.setRegDt(new Date());
 		int insert = userInfoMapper.insert(registerUser);
 		return registerUser;
 	}
@@ -58,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public FrontUserInfo queryByUserId(Integer userId) throws UserNotExistException {
+	public FrontUserInfo queryByUserId(Long userId) throws UserNotExistException {
 		FrontUserInfo frontUserInfo = userInfoMapper.selectByPrimaryKey(userId);
 		if (frontUserInfo == null) {
 			throw new UserNotExistException();
