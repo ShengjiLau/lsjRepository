@@ -35,5 +35,5 @@ public interface CompanyService {
      * @param m
      * @return
      */
-    PageInfo compayList(Map m);
+    PageInfo companyList(Map m);
 }

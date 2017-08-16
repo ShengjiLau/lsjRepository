@@ -91,7 +91,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Transactional(readOnly = true)
     @Override
-    public PageInfo compayList(Map m) {
+    public PageInfo companyList(Map m) {
         int pageNo = 1;
         int pageSize = 0; //0表示所有
         if (m.containsKey("page_no")) {
@@ -109,8 +109,5 @@ public class CompanyServiceImpl implements CompanyService {
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
     }
-
-
-
 
 }

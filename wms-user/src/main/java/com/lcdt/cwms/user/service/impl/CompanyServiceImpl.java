@@ -26,7 +26,7 @@ import java.util.List;
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
-	@Autowired
+/*	@Autowired
 	WmsCompanyMapper wmsCompanyDao;
 
 	@Reference
@@ -38,11 +38,11 @@ public class CompanyServiceImpl implements CompanyService {
 	@Autowired
 	WmsCompanyUserRelationMapper userCompanyDao;
 
-	/**
+	*//**
 	 * 用户创建公司时，创建一个默认部门，默认部门不显示
 	 * @param createCompanyDto
 	 * @return
-	 */
+	 *//*
 	@Transactional
 	@Override
 	public WmsCompany createCompany(CreateCompanyDto createCompanyDto) throws UserNotExistException {
@@ -72,15 +72,15 @@ public class CompanyServiceImpl implements CompanyService {
 		return wmsCompany;
 	}
 
-	/**
+	*//**
 	 * 查询用户所属公司
 	 * @param userId
 	 * @return
-	 */
+	 *//*
 	@Transactional(readOnly = true)
 	@Override
 	public List<WmsCompanyUserRelation> userCompanys(Integer userId) {
 		List<WmsCompanyUserRelation> wmsCompanyUserRelations = userCompanyDao.selectCompanyByUserId(userId);
 		return wmsCompanyUserRelations;
-	}
+	}*/
 }
