@@ -24,90 +24,88 @@ import java.util.Map;
 @com.alibaba.dubbo.config.annotation.Service
 public class CompanyServiceImpl implements CompanyService {
 
-    @Autowired
-    private CompanyMapper companyMapper;
+	@Autowired
+	private CompanyMapper companyMapper;
+
+	@Autowired
+	private CompanyMemberMapper companyMemberMapper;
+
+	@Transactional
+	@Override
+	public Company createCompany(CompanyDto dto) throws CompanyExistException {
+		Map map = new HashMap<String, Object>();
+		map.put("userId", dto.getUserId());
+		map.put("companyName", dto.getCompanyName());
+		List<CompanyMember> memberList = companyMemberMapper.selectByCondition(map);
+		if (memberList != null && memberList.size() > 0) {
+			throw new CompanyExistException();
+		}
+		Date dt = new Date();
+		//创建企业
+		Company company = new Company();
+		company.setCompanyName(dto.getCompanyName());
+		company.setCreateId(dto.getUserId());
+		company.setCreateDt(dt);
+		company.setCreateName(dto.getCreateUserName());
+		companyMapper.insert(company);
+
+		//创建关系
+		if (company != null && company.getCompanyId() != null) {
+			CompanyMember companyMember = new CompanyMember();
+			companyMember.setCompanyId(company.getCompanyId());
+			companyMember.setUserId(dto.getUserId());
+			companyMember.setCompanyId(company.getCompanyId());
+			companyMember.setCompanyName(company.getCompanyName());
+			companyMember.setRegDt(dt);
+			companyMemberMapper.insert(companyMember);
+		}
+		return company;
+	}
 
 
-    @Autowired
-    private CompanyMemberMapper companyMemberMapper;
+	@Transactional
+	@Override
+	public CompanyMember joinCompany(CompanyDto dto) throws CompanyExistException {
+		Map map = new HashMap<String, Object>();
+		map.put("userId", dto.getUserId());
+		map.put("companyId", dto.getCompanyId());
+		List<CompanyMember> memberList = companyMemberMapper.selectByCondition(map);
+		if (memberList != null && memberList.size() > 0) {
+			throw new CompanyExistException();
+		}
+
+		CompanyMember companyMember = new CompanyMember();
+		companyMember.setCompanyId(dto.getCompanyId());
+		companyMember.setUserId(dto.getUserId());
+		companyMember.setCompanyId(dto.getCompanyId());
+		companyMember.setCompanyName(dto.getCompanyName());
+		companyMember.setRegDt(new Date());
+		companyMemberMapper.insert(companyMember);
+
+		return companyMember;
+	}
 
 
+	@Transactional(readOnly = true)
+	@Override
+	public PageInfo companyList(Map m) {
+		int pageNo = 1;
+		int pageSize = 0; //0表示所有
 
-    @Transactional
-    @Override
-    public Company createCompany(CompanyDto dto) throws CompanyExistException {
-        Map map = new HashMap<String, Object>();
-        map.put("userId", dto.getUserId());
-        map.put("companyName", dto.getCompanyName());
-        List<CompanyMember> memberList = companyMemberMapper.selectByCondition(map);
-        if (memberList!=null && memberList.size()>0) {
-            throw new CompanyExistException();
-        }
-        Date dt = new Date();
-        //创建企业
-        Company company = new Company();
-        company.setCompanyName(dto.getCompanyName());
-        company.setCreateId(dto.getUserId());
-        company.setCreateDt(dt);
-        company.setCreateName(dto.getCreateUserName());
-        companyMapper.insert(company);
-
-        //创建关系
-        if (company != null && company.getCompanyId()!=null) {
-            CompanyMember companyMember = new CompanyMember();
-            companyMember.setCompanyId(company.getCompanyId());
-            companyMember.setUserId(dto.getUserId());
-            companyMember.setCompanyId(company.getCompanyId());
-            companyMember.setCompanyName(company.getCompanyName());
-            companyMember.setRegDt(dt);
-            companyMemberMapper.insert(companyMember);
-        }
-        return company;
-    }
-
-
-    @Transactional
-    @Override
-    public CompanyMember joinCompany(CompanyDto dto) throws CompanyExistException {
-        Map map = new HashMap<String, Object>();
-        map.put("userId", dto.getUserId());
-        map.put("companyId", dto.getCompanyId());
-        List<CompanyMember> memberList = companyMemberMapper.selectByCondition(map);
-        if (memberList!=null && memberList.size()>0) {
-            throw new CompanyExistException();
-        }
-
-        CompanyMember companyMember = new CompanyMember();
-        companyMember.setCompanyId(dto.getCompanyId());
-        companyMember.setUserId(dto.getUserId());
-        companyMember.setCompanyId(dto.getCompanyId());
-        companyMember.setCompanyName(dto.getCompanyName());
-        companyMember.setRegDt(new Date());
-        companyMemberMapper.insert(companyMember);
-
-        return companyMember;
-    }
-
-
-    @Transactional(readOnly = true)
-    @Override
-    public PageInfo companyList(Map m) {
-        int pageNo = 1;
-        int pageSize = 0; //0表示所有
-        if (m.containsKey("page_no")) {
-            if (m.get("page_no")!=null) {
-                pageNo = (int) m.get("page_no");
-            }
-        }
-        if (m.containsKey("page_size")) {
-            if(m.get("page_size")!=null) {
-                pageSize = (int) m.get("page_size");
-            }
-        }
-        PageHelper.startPage(pageNo, pageSize);
-        List<CompanyMember> list = companyMemberMapper.selectByCondition(m);
-        PageInfo pageInfo = new PageInfo(list);
-        return pageInfo;
-    }
+		if (m.containsKey("page_no")) {
+			if (m.get("page_no") != null) {
+				pageNo = (Integer) m.get("page_no");
+			}
+		}
+		if (m.containsKey("page_size")) {
+			if (m.get("page_size") != null) {
+				pageSize = (Integer) m.get("page_size");
+			}
+		}
+		PageHelper.startPage(pageNo, pageSize);
+		List<CompanyMember> list = companyMemberMapper.selectByCondition(m);
+		PageInfo pageInfo = new PageInfo(list);
+		return pageInfo;
+	}
 
 }
