@@ -54,9 +54,8 @@ public class AuthTicketService {
 
 
 	static class Ticket {
-		Long userId;
-		String ip;
-
+		private Long userId;
+		private String ip;
 
 		public Long getUserId() {
 			return userId;
