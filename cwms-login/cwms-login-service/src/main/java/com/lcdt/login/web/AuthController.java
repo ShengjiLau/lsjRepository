@@ -1,6 +1,10 @@
 package com.lcdt.login.web;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.lcdt.login.service.AuthTicketService;
+import com.lcdt.userinfo.exception.PassErrorException;
+import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.FrontUserInfo;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,14 +29,14 @@ public class AuthController {
 	@Autowired
 	RequestAuthRedirectStrategy strategy;
 
-	@Autowired
+	@Reference
 	UserService userService;
 
 	@RequestMapping("/")
 	public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response){
 		Cookie[] cookies = request.getCookies();
 		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals(COOKIETICKETNAME) && ticketService.isTicketValid(cookie.getValue())){
+			if (cookie.getName().equals(COOKIETICKETNAME) && ticketService.isTicketValid(cookie.getValue()) != null){
 				strategy.hasAuthRedirect(request,response);
 				return null;
 			}
@@ -42,7 +46,18 @@ public class AuthController {
 	}
 
 	@RequestMapping("/login")
-	public ModelAndView login(String username,String password){
+	public ModelAndView login(String username,String password,HttpServletRequest request,HttpServletResponse response){
+		try {
+			FrontUserInfo frontUserInfo = userService.userLogin(username, password);
+			boolean inResponse = ticketService.generateTicketInResponse(request, response, frontUserInfo.getUserId());
+			if (inResponse) {
+				strategy.hasAuthRedirect(request,response);
+			}
+		} catch (UserNotExistException e) {
+			e.printStackTrace();
+		} catch (PassErrorException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 

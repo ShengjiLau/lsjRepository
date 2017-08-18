@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -14,14 +16,34 @@ import java.io.UnsupportedEncodingException;
 @Service
 public class AuthTicketService {
 
+
 	private DesEncypt encypt = new DesEncypt("91BE73DFEDFD0908");
 
-
-	public boolean isTicketValid(String ticket) {
+	public Ticket isTicketValid(String ticket) {
 
 		try {
 			String decode = encypt.decode(ticket);
 			Ticket ticket1 = JSON.parseObject(decode, Ticket.class);
+			return ticket1;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public boolean generateTicketInResponse(HttpServletRequest request, HttpServletResponse response,Long userId) {
+		Ticket ticket = new Ticket();
+		ticket.setIp(request.getRemoteAddr());
+		ticket.setUserId(userId);
+		try {
+			String ticketStr = encypt.encode(JSON.toJSONString(ticket));
+			Cookie cookie = new Cookie("cwms_ticket", ticketStr);
+			cookie.setDomain("");
+			response.addCookie(cookie);
 			return true;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -34,26 +56,8 @@ public class AuthTicketService {
 		return false;
 	}
 
-	public String generateTicket(HttpServletRequest request, Long userId) {
-		Ticket ticket = new Ticket();
-		ticket.setIp(request.getRemoteAddr());
-		ticket.setUserId(userId);
 
-		try {
-			return encypt.encode(JSON.toJSONString(ticket));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
-
-	static class Ticket {
+	public static class Ticket {
 		private Long userId;
 		private String ip;
 

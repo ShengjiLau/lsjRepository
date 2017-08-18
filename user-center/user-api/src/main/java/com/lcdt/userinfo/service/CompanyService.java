@@ -6,7 +6,6 @@ import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.CompanyMember;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,26 +13,27 @@ import java.util.Map;
  */
 public interface CompanyService {
 
-    /**
-     * 创建企业
-     * @param dto
-     * @return
-     * @throws CompanyExistException
-     */
-     Company createCompany(CompanyDto dto) throws CompanyExistException;
+	/**
+	 * 创建企业
+	 *
+	 * @param dto
+	 * @return
+	 * @throws CompanyExistException
+	 */
+	Company createCompany(CompanyDto dto) throws CompanyExistException;
 
-    /***
-     * 加入企业
-     * @param dto
-     * @return
-     * @throws CompanyExistException
-     */
-    CompanyMember joinCompany(CompanyDto dto) throws CompanyExistException;
+	/***
+	 * 加入企业
+	 * @param dto
+	 * @return
+	 * @throws CompanyExistException
+	 */
+	CompanyMember joinCompany(CompanyDto dto) throws CompanyExistException;
 
-    /***
-     * 获取企业列表
-     * @param m
-     * @return
-     */
-    PageInfo companyList(Map m);
+	/***
+	 * 获取企业列表
+	 * @param m
+	 * @return
+	 */
+	PageInfo companyList(Map m);
 }

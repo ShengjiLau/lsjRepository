@@ -2,6 +2,7 @@ package com.lcdt.userinfo.service.impl;
 
 import com.lcdt.userinfo.dao.FrontUserInfoMapper;
 import com.lcdt.userinfo.dto.RegisterDto;
+import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.FrontUserInfo;
@@ -53,6 +54,15 @@ public class UserServiceImpl implements UserService {
 		return true;
 	}
 
+	@Transactional
+	public FrontUserInfo userLogin(String username, String pwd) throws UserNotExistException, PassErrorException {
+		FrontUserInfo frontUserInfo = queryByPhone(username);
+		if (frontUserInfo.getUserPass().equals(RegisterUtils.md5Encrypt(pwd))){
+			return frontUserInfo;
+		}else{
+			throw new PassErrorException();
+		}
+	}
 
 
 	@Override

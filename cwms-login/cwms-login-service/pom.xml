@@ -3,32 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>cwms</artifactId>
+        <artifactId>cwms-login</artifactId>
         <groupId>com.lcdt.cloud</groupId>
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cwms-login</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>cwms-login-api</module>
-        <module>cwms-login-service</module>
-    </modules>
-
+    <artifactId>cmws-login-service</artifactId>
 
     <dependencies>
-
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>user-api</artifactId>
+            <artifactId>cwms-login-api</artifactId>
             <version>1.0</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.31</version>
-        </dependency>
     </dependencies>
+
 </project>
