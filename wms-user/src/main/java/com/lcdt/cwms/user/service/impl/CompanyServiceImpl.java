@@ -1,23 +1,8 @@
 package com.lcdt.cwms.user.service.impl;
 
-import com.alibaba.dubbo.config.annotation.Reference;
-import com.lcdt.cwms.user.dao.WmsCompanyMapper;
-import com.lcdt.cwms.user.dao.WmsCompanyUserRelationMapper;
-import com.lcdt.cwms.user.dto.CreateCompanyDto;
-import com.lcdt.cwms.user.exception.GroupNotExistException;
-import com.lcdt.cwms.user.model.WmsCompany;
-import com.lcdt.cwms.user.model.WmsCompanyUserGroup;
-import com.lcdt.cwms.user.model.WmsCompanyUserRelation;
 import com.lcdt.cwms.user.service.CompanyService;
-import com.lcdt.cwms.user.service.GroupService;
-import com.lcdt.userinfo.exception.UserNotExistException;
-import com.lcdt.userinfo.model.FrontUserInfo;
-import com.lcdt.userinfo.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Created by ss on 2017/8/3.

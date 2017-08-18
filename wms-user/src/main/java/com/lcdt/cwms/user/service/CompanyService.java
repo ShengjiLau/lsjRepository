@@ -12,8 +12,8 @@ import java.util.List;
  */
 public interface CompanyService {
 
-	 WmsCompany createCompany(CreateCompanyDto createCompanyDto) throws UserNotExistException;
+/*	 WmsCompany createCompany(CreateCompanyDto createCompanyDto) throws UserNotExistException;
 
-	 List<WmsCompanyUserRelation> userCompanys(Long userId);
+	 List<WmsCompanyUserRelation> userCompanys(Long userId);*/
 
 }
