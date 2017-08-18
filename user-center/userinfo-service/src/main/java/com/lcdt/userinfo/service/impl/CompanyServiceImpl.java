@@ -1,21 +1,15 @@
 package com.lcdt.userinfo.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.lcdt.userinfo.dao.CompanyMapper;
 import com.lcdt.userinfo.dao.CompanyMemberMapper;
-import com.lcdt.userinfo.dto.CompanyDto;
-import com.lcdt.userinfo.exception.CompanyExistException;
-import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.dao.WmsCompanyMapper;
+import com.lcdt.userinfo.dto.WmsCompanyDto;
 import com.lcdt.userinfo.model.CompanyMember;
+import com.lcdt.userinfo.model.WmsCompany;
 import com.lcdt.userinfo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -25,7 +19,7 @@ import java.util.Map;
 public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
-    private CompanyMapper companyMapper;
+    private WmsCompanyMapper wmsCompanyMapper;
 
 
     @Autowired
@@ -65,49 +59,11 @@ public class CompanyServiceImpl implements CompanyService {
         return company;
     }
 
-
     @Transactional
     @Override
-    public CompanyMember joinCompany(CompanyDto dto) throws CompanyExistException {
-        Map map = new HashMap<String, Object>();
-        map.put("userId", dto.getUserId());
-        map.put("companyId", dto.getCompanyId());
-        List<CompanyMember> memberList = companyMemberMapper.selectByCondition(map);
-        if (memberList!=null && memberList.size()>0) {
-            throw new CompanyExistException();
-        }
-
-        CompanyMember companyMember = new CompanyMember();
-        companyMember.setCompanyId(dto.getCompanyId());
-        companyMember.setUserId(dto.getUserId());
-        companyMember.setCompanyId(dto.getCompanyId());
-        companyMember.setCompanyName(dto.getCompanyName());
-        companyMember.setRegDt(new Date());
-        companyMemberMapper.insert(companyMember);
-
-        return companyMember;
+    public CompanyMember joinCompany(WmsCompanyDto dto) {
+        return null;
     }
 
-
-    @Transactional(readOnly = true)
-    @Override
-    public PageInfo companyList(Map m) {
-        int pageNo = 1;
-        int pageSize = 0; //0表示所有
-        if (m.containsKey("page_no")) {
-           if (m.get("page_no")!=null) {
-               pageNo = (int) m.get("page_no");
-           }
-        }
-        if (m.containsKey("page_size")) {
-            if(m.get("page_size")!=null) {
-                pageSize = (int) m.get("page_size");
-            }
-        }
-        PageHelper.startPage(pageNo, pageSize);
-        List<CompanyMember> list = companyMemberMapper.selectByCondition(m);
-        PageInfo pageInfo = new PageInfo(list);
-        return pageInfo;
-    }
 
 }
