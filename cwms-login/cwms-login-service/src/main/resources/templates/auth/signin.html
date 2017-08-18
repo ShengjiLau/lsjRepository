@@ -91,7 +91,7 @@
             <div class="logo">
 
             </div>
-            <form class="form-horizontal signup-form" id='signin-form' method="post" data-toggle="validator">
+            <form class="form-horizontal signup-form" id='signin-form' method="post" data-toggle="validator" action="/login">
                 <div class="form-group">
                     <label for="phone-num" class="col-sm-3 control-label">手机号：</label>
                     <div class="col-sm-6">
@@ -124,8 +124,12 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-6">
-                        <button  data-loading-text="发送中..." id="sub-btn"
-                                class="btn sub-btn btn-default" onclick="login(event)">登陆</button>
+
+                        <!--<input type="submit" class="btn sub-btn btn-default" ></div>>-->
+                        <input type="submit" value="提交" class="btn sub-btn btn-default" />
+
+                        <!--<button  data-loading-text="发送中..." id="sub-btn"-->
+                                <!--class="btn sub-btn btn-default" onclick="login(event)">登陆</button>-->
                     </div>
                 </div>
             </form>

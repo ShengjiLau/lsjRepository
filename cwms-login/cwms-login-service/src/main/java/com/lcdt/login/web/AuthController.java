@@ -60,7 +60,7 @@ public class AuthController {
 		} catch (PassErrorException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return new ModelAndView("/auth/signin");
 	}
 
 
