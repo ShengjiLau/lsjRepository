@@ -4,7 +4,8 @@ package com.lcdt.login.web;
  * Created by ss on 2017/8/9.
  */
 
-import com.lcdt.web.exception.CaptchaTimeExpireException;
+
+import com.lcdt.login.exception.CaptchaTimeExpireException;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;

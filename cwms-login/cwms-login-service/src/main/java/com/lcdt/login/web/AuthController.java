@@ -41,7 +41,7 @@ public class AuthController {
 				return null;
 			}
 		}
-		ModelAndView view = new ModelAndView("redirect:/auth/signin");
+		ModelAndView view = new ModelAndView("/auth/signin");
 		return view;
 	}
 
