@@ -16,7 +16,6 @@ public class CasLoginEntryPoint implements AuthenticationEntryPoint {
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-
 		String callback = request.getRequestURL().toString();
 		String url = "http://login.datuodui.com:8080/login";
 		String encode = URLEncoder.encode(callback, "UTF-8");

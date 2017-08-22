@@ -21,14 +21,12 @@ public class TicketAuthProvider implements AuthenticationProvider {
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		TicketAuthenticationToken token = (TicketAuthenticationToken) authentication;
-
 		Object credentials = authentication.getCredentials();
 		String ticket = (String) credentials;
 		try {
 			FrontUserInfo frontUserInfo = loginService.queryTicket(ticket);
 			token.setDetails(frontUserInfo);
 			token.setAuthenticated(true);
-//				((TicketAuthenticationToken) authentication).eraseCredentials();
 			return token;
 		} catch (InvalidTicketException e) {
 			e.printStackTrace();
