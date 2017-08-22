@@ -1,18 +1,17 @@
 package com.lcdt.web.config;
 
-import com.lcdt.web.auth.*;
+import com.lcdt.web.auth.TicketAccessDeniedHandler;
+import com.lcdt.web.auth.TicketAuthenticationFilter;
 import com.lcdt.web.sso.auth.CasLoginEntryPoint;
 import com.lcdt.web.sso.auth.TicketAuthProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.LocaleResolver;
@@ -28,12 +27,7 @@ import java.util.Locale;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	SecurityUserDeatilService userDeatilService;
-
-	@Autowired
 	WmsWebLoginFailureHandler failureHandler;
-
-
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
@@ -44,19 +38,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(ticketAuthProvider());
-
-		auth.userDetailsService(userDeatilService)
-				.passwordEncoder(new PasswordEncoder() {
-					@Override
-					public String encode(CharSequence rawPassword) {
-						return RegisterUtils.md5Encrypt(rawPassword.toString());
-					}
-
-					@Override
-					public boolean matches(CharSequence rawPassword, String encodedPassword) {
-						return encode(rawPassword).toUpperCase().equals(encodedPassword.toUpperCase());
-					}
-				});
 	}
 
 	@Override
@@ -78,17 +59,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public CasLoginEntryPoint entryPoint(){
+	public CasLoginEntryPoint entryPoint() {
 		return new CasLoginEntryPoint();
 	}
 
-//	@Bean
-//	public TicketAuthFilter ticketAuthFilter(){
-//		return new TicketAuthFilter();
-//	}
-
-	public TicketAuthenticationFilter ticketAuthenticationFilter(){
-//		super(new AntPathRequestMatcher("/login", "POST"));
+	public TicketAuthenticationFilter ticketAuthenticationFilter() {
 		TicketAuthenticationFilter ticketAuthenticationFilter = new TicketAuthenticationFilter(new AntPathRequestMatcher("/**"));
 		try {
 			ticketAuthenticationFilter.setAuthenticationManager(authenticationManager());
@@ -99,30 +74,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public TicketAuthProvider ticketAuthProvider(){
+	public TicketAuthProvider ticketAuthProvider() {
 		return new TicketAuthProvider();
 	}
 
-
 	@Bean
-	public WmsUserNamePwdAuthFilter wmsUserNamePwdAuthFilter() throws Exception {
-		WmsUserNamePwdAuthFilter filter = new WmsUserNamePwdAuthFilter();
-		filter.setAuthenticationManager(authenticationManagerBean());
-		filter.setAuthenticationSuccessHandler(new AjaxLoginSuccessHandler());
-		filter.setAuthenticationFailureHandler(loginFailureHandler());
-		return filter;
-	}
-
-	@Bean
-	public TicketAccessDeniedHandler deniedHandler(){
+	public TicketAccessDeniedHandler deniedHandler() {
 		return new TicketAccessDeniedHandler();
 	}
 
-
-	@Bean
-	public AjaxLoginFailureHandler loginFailureHandler() {
-		return new AjaxLoginFailureHandler();
-	}
 
 	@Bean
 	public LocaleResolver localeResolver() {

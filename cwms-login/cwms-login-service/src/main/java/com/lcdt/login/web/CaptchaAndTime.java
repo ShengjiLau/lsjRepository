@@ -1,4 +1,4 @@
-package com.lcdt.web.auth;
+package com.lcdt.login.web;
 
 /**
  * Created by ss on 2017/8/10.

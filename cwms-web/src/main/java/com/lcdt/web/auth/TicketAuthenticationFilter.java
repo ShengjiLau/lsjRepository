@@ -40,7 +40,6 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 			if (request.getCookies() == null) {
 				chain.doFilter(request, res);
 			}
-
 			for (Cookie cookie : request.getCookies()) {
 				if (cookie.getName().equals("cwms_ticket")) {
 					TicketAuthenticationToken authResult = null;
@@ -51,11 +50,9 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 						if (authResult == null) {
 							return;
 						}
-//						chain.doFilter(req, res);
 					} catch (InternalAuthenticationServiceException failed) {
 						unsuccessfulAuthentication(request, response, failed);
 					} catch (AuthenticationException failed) {
-						// Authentication failed
 						unsuccessfulAuthentication(request, response, failed);
 						return;
 					}

@@ -1,22 +1,20 @@
-package com.lcdt.web.auth;
+package com.lcdt.login.web;
 
 /**
  * Created by ss on 2017/8/9.
  */
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+
+import com.lcdt.web.exception.CaptchaTimeExpireException;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.lcdt.web.exception.CaptchaTimeExpireException;
-
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 /**
