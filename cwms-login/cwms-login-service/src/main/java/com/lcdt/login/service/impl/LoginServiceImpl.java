@@ -9,6 +9,7 @@ import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.FrontUserInfo;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Created by ss on 2017/8/18.
@@ -22,6 +23,9 @@ public class LoginServiceImpl implements LoginService {
 	@Reference
 	UserService userService;
 
+	@Value("${login.host}")
+	private String host;
+
 	@Override
 	public FrontUserInfo queryTicket(String ticket) throws InvalidTicketException, UserNotExistException {
 		AuthTicketService.Ticket ticketValid = ticketService.isTicketValid(ticket);
@@ -30,6 +34,16 @@ public class LoginServiceImpl implements LoginService {
 		}
 		FrontUserInfo frontUserInfo = userService.queryByUserId(ticketValid.getUserId());
 		return frontUserInfo;
+	}
+
+
+	public String loginUrl(String srcUrl){
+		if (!host.startsWith("http://")) {
+			host = "http://" + host;
+		}
+		StringBuilder sb = new StringBuilder(host);
+		sb.append("?").append("auth_callback=").append(srcUrl);
+		return sb.toString();
 	}
 
 }

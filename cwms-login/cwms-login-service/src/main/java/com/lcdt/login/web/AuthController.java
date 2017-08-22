@@ -52,6 +52,7 @@ public class AuthController {
 			boolean inResponse = ticketService.generateTicketInResponse(request, response, frontUserInfo.getUserId());
 			if (inResponse) {
 				strategy.hasAuthRedirect(request,response);
+				return null;
 			}else{
 				return new ModelAndView("/auth/signin");
 			}

@@ -53,14 +53,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.addFilterAt(wmsUserNamePwdAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+
+		http.addFilterAt(ticketAuthFilter(), UsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests().antMatchers("/auth/**").permitAll()
 				.antMatchers("/register/**").permitAll()
 				.anyRequest().authenticated()
 				.and().formLogin().loginPage("/auth/loginpage").loginProcessingUrl("/login").successHandler(new LoginSuccessHandler())
 				.and().logout().logoutUrl("/signout").logoutSuccessUrl("/auth/loginpage").permitAll()
+				.and().exceptionHandling().accessDeniedHandler(deniedHandler())
 				.and().csrf().disable();
+
+		;
 	}
+
+	@Bean
+	public TicketAuthFilter ticketAuthFilter(){
+		return new TicketAuthFilter();
+	}
+
+
 
 	@Bean
 	public WmsUserNamePwdAuthFilter wmsUserNamePwdAuthFilter() throws Exception {
@@ -69,6 +80,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		filter.setAuthenticationSuccessHandler(new AjaxLoginSuccessHandler());
 		filter.setAuthenticationFailureHandler(loginFailureHandler());
 		return filter;
+	}
+
+	@Bean
+	public TicketAccessDeniedHandler deniedHandler(){
+		return new TicketAccessDeniedHandler();
 	}
 
 

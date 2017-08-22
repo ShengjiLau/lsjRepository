@@ -19,6 +19,7 @@
         </encoder>
     </appender>
     <logger level = "DEBUG" name="org.springframework.security"></logger>
+    <logger level = "DEBUG" name="org.springframework.web"></logger>
     <root level="info">
         <appender-ref ref="STDOUT" />
     </root>

@@ -11,5 +11,12 @@
 
     <artifactId>wms-permission</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>cwms-login-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
 
 </project>

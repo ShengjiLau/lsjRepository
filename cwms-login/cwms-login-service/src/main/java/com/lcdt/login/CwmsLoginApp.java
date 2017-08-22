@@ -9,10 +9,10 @@ import org.springframework.context.annotation.ImportResource;
  */
 @SpringBootApplication
 @ImportResource("dubbo-web-consumer.xml")
-public class AppStarter {
+public class CwmsLoginApp {
 
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(AppStarter.class)
+		new SpringApplicationBuilder(CwmsLoginApp.class)
 				.run(args);
 	}
 

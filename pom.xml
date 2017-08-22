@@ -18,6 +18,7 @@
         <module>wms-permission</module>
         <module>common-notify</module>
         <module>common-utils</module>
+        <module>cwms-login</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>
@@ -149,11 +150,9 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <!--<version</version>-->
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>com.lcdt</groupId>
             <artifactId>yico</artifactId>

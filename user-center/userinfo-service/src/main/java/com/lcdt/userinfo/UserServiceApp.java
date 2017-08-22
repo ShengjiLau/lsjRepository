@@ -12,12 +12,12 @@ import java.util.concurrent.CountDownLatch;
  */
 @SpringBootApplication
 @ImportResource("dubbo-user-provider.xml")
-public class AppContext {
+public class UserServiceApp {
 
 	public static void main(String[] args) {
 
 		ConfigurableApplicationContext run = new SpringApplicationBuilder()
-				.sources(AppContext.class)
+				.sources(UserServiceApp.class)
 				.web(false)
 				.run(args);
 

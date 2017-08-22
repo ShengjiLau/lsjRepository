@@ -11,5 +11,6 @@ public interface LoginService {
 
 	FrontUserInfo queryTicket(String ticket) throws InvalidTicketException, UserNotExistException;
 
+	String loginUrl(String srcUrl);
 
 }

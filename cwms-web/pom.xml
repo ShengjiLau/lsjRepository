@@ -11,6 +11,14 @@
 
     <artifactId>cwms-web</artifactId>
     <dependencies>
+
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>cwms-login-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>user-api</artifactId>

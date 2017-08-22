@@ -8,6 +8,8 @@ import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.FrontUserInfo;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.utils.RegisterUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,8 @@ import java.util.List;
 @Service
 @com.alibaba.dubbo.config.annotation.Service
 public class UserServiceImpl implements UserService {
+
+	private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Autowired
 	private FrontUserInfoMapper userInfoMapper;
@@ -57,7 +61,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public FrontUserInfo userLogin(String username, String pwd) throws UserNotExistException, PassErrorException {
 		FrontUserInfo frontUserInfo = queryByPhone(username);
-		if (frontUserInfo.getUserPass().equals(RegisterUtils.md5Encrypt(pwd))){
+		if (frontUserInfo.getUserPass().toUpperCase().equals(RegisterUtils.md5Encrypt(pwd).toUpperCase())){
 			return frontUserInfo;
 		}else{
 			throw new PassErrorException();
@@ -83,6 +87,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional(readOnly = true)
 	@Override
 	public FrontUserInfo queryByPhone(String phone) throws UserNotExistException {
+		logger.info("queryByPhone userPhone {} ",phone);
 		List<FrontUserInfo> frontUserInfos = userInfoMapper.queryByUserPhone(phone);
 		if (frontUserInfos == null || frontUserInfos.isEmpty()) {
 			throw new UserNotExistException();

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ss on 2017/8/17.
@@ -18,7 +19,7 @@ public class RequestAuthRedirectStrategy {
 	private static final String AUTH_CALLBACK = "auth_callback";
 
 	@Value("${login.defaultcallback}")
-	private static String default_callback;
+	private static String default_callback = "http://test.datuodui.com:8088";
 
 	@Value("${login.safecallback}")
 	private static List<String> safeCallbackUrls;
@@ -26,6 +27,7 @@ public class RequestAuthRedirectStrategy {
 
 	public void hasAuthRedirect(HttpServletRequest request, HttpServletResponse response) {
 		String callback = request.getParameter(AUTH_CALLBACK);
+		Map<String, String[]> parameterMap = request.getParameterMap();
 		if (StringUtils.isEmpty(callback) || !isCallBackSafe(callback)) {
 			callback = default_callback;
 		}
