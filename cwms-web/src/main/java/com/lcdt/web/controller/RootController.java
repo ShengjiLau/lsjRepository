@@ -1,6 +1,7 @@
 package com.lcdt.web.controller;
 
 import com.lcdt.cwms.user.service.CompanyService;
+import com.lcdt.userinfo.model.FrontUserInfo;
 import com.lcdt.web.auth.WmsUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -26,8 +27,9 @@ public class RootController {
 	public String IndexController() {
 		Authentication authentication =
 				SecurityContextHolder.getContext().getAuthentication();
-		WmsUserDetails userDetails = (WmsUserDetails) authentication.getPrincipal();
-		return "index userId:" + userDetails.getUserInfo().getUserId();
+		FrontUserInfo details = (FrontUserInfo) authentication.getDetails();
+//		WmsUserDetails userDetails = (WmsUserDetails) authentication.getPrincipal();
+		return "index userId:" + details.getUserId();
 	}
 
 

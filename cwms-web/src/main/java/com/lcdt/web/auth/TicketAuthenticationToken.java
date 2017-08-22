@@ -11,9 +11,16 @@ import java.util.Collection;
 public class TicketAuthenticationToken extends AbstractAuthenticationToken {
 
 
+	private Object principal;
 	private String ticket;
 
+	public String getTicket() {
+		return ticket;
+	}
 
+	public void setTicket(String ticket) {
+		this.ticket = ticket;
+	}
 
 	/**
 	 * Creates a token with the supplied array of authorities.
@@ -27,11 +34,11 @@ public class TicketAuthenticationToken extends AbstractAuthenticationToken {
 
 	@Override
 	public Object getCredentials() {
-		return null;
+		return ticket;
 	}
 
 	@Override
 	public Object getPrincipal() {
-		return null;
+		return principal;
 	}
 }

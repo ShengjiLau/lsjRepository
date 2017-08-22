@@ -1,6 +1,7 @@
 package com.lcdt.login.service;
 
 import com.alibaba.fastjson.JSON;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.BadPaddingException;
@@ -9,6 +10,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by ss on 2017/8/17.
@@ -16,6 +19,8 @@ import java.io.UnsupportedEncodingException;
 @Service
 public class AuthTicketService {
 
+	@Value("${login.cookieHost}")
+	public String cookieHost;
 
 	private DesEncypt encypt = new DesEncypt("91BE73DFEDFD0908");
 
@@ -42,7 +47,7 @@ public class AuthTicketService {
 		try {
 			String ticketStr = encypt.encode(JSON.toJSONString(ticket));
 			Cookie cookie = new Cookie("cwms_ticket", ticketStr);
-			cookie.setDomain("");
+			cookie.setDomain(getHost(request.getRequestURI()));
 			response.addCookie(cookie);
 			return true;
 		} catch (UnsupportedEncodingException e) {
@@ -54,6 +59,20 @@ public class AuthTicketService {
 		}
 
 		return false;
+	}
+
+
+	//获取父域名
+	private String getHost(String url){
+
+		if (cookieHost != null && cookieHost.length() > 0) {
+			return cookieHost;
+		}
+
+		Pattern p = Pattern.compile("(?<=http://|\\.)[^.]*?\\.(com|cn|net|org|biz|info|cc|tv)", Pattern.CASE_INSENSITIVE);
+		Matcher matcher = p.matcher(url);
+		matcher.find();
+		return matcher.group();
 	}
 
 

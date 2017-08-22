@@ -27,7 +27,6 @@ public class RequestAuthRedirectStrategy {
 
 	public void hasAuthRedirect(HttpServletRequest request, HttpServletResponse response) {
 		String callback = request.getParameter(AUTH_CALLBACK);
-		Map<String, String[]> parameterMap = request.getParameterMap();
 		if (StringUtils.isEmpty(callback) || !isCallBackSafe(callback)) {
 			callback = default_callback;
 		}
@@ -40,6 +39,9 @@ public class RequestAuthRedirectStrategy {
 
 
 	public boolean isCallBackSafe(String callback) {
+		if (safeCallbackUrls == null) {
+			return true;
+		}
 		for (String url : safeCallbackUrls) {
 			if (url.equals(callback)) {
 				return true;

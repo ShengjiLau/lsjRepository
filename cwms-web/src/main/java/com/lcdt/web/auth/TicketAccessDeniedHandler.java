@@ -14,6 +14,6 @@ import java.io.IOException;
 public class TicketAccessDeniedHandler implements AccessDeniedHandler {
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-		response.sendRedirect("login.datuodui.com");
+		response.sendRedirect("http://login.datuodui.com:8080");
 	}
 }

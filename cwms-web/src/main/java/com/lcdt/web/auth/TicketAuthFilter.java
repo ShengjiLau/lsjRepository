@@ -39,6 +39,7 @@ public class TicketAuthFilter extends GenericFilterBean {
 					try {
 						FrontUserInfo frontUserInfo = loginService.queryTicket(cookie.getValue());
 						TicketAuthenticationToken token = new TicketAuthenticationToken(null);
+						token.setAuthenticated(true);
 						token.setDetails(frontUserInfo);
 						SecurityContextHolder.getContext().setAuthentication(token);
 						hasTicket = true;
@@ -49,12 +50,15 @@ public class TicketAuthFilter extends GenericFilterBean {
 					}
 				}
 			}
-			String callback = "http://test.datuodui.com:8088";
-			String url = "http://login.datuodui.com:8080/login";
-			String encode = URLEncoder.encode(callback, "UTF-8");
-			url = url+"?auth_callback="+encode;
-			response.sendRedirect(url);
-			return;
+			if (!hasTicket){
+				String callback = "http://test.datuodui.com:8088";
+				String url = "http://login.datuodui.com:8080/login";
+				String encode = URLEncoder.encode(callback, "UTF-8");
+				url = url+"?auth_callback="+encode;
+				response.sendRedirect(url);
+				return;
+			}
+
 		}
 		filterChain.doFilter(servletRequest, servletResponse);
 	}
