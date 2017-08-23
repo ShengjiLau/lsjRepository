@@ -4,6 +4,7 @@ import com.lcdt.web.auth.TicketAccessDeniedHandler;
 import com.lcdt.web.auth.TicketAuthenticationFilter;
 import com.lcdt.web.sso.auth.CasLoginEntryPoint;
 import com.lcdt.web.sso.auth.TicketAuthProvider;
+import com.lcdt.web.sso.auth.TicketLogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,15 +44,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.exceptionHandling().authenticationEntryPoint(entryPoint());
-
 		http.addFilterAt(ticketAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests().antMatchers("/auth/**").permitAll()
 				.antMatchers("/register/**").permitAll()
 				.anyRequest().authenticated()
-				.and().logout().logoutUrl("/signout").logoutSuccessUrl("/auth/loginpage").permitAll()
+				.and().logout().logoutSuccessHandler(ticketLogoutSuccessHandler()).logoutUrl("/signout").logoutSuccessUrl("/auth/loginpage").permitAll()
 				.and().exceptionHandling().accessDeniedHandler(deniedHandler())
 				.and().csrf().disable();
 	}
+
+	@Bean
+	public TicketLogoutSuccessHandler ticketLogoutSuccessHandler(){
+		return new TicketLogoutSuccessHandler();
+	}
+
 
 	@Bean
 	public CasLoginEntryPoint entryPoint() {
