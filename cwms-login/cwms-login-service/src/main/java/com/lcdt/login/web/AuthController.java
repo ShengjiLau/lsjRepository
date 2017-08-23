@@ -66,8 +66,8 @@ public class AuthController {
 
 
 	@RequestMapping("/logout")
-	public ModelAndView logout(HttpServletRequest resquest){
-
+	public ModelAndView logout(HttpServletRequest request,HttpServletResponse response){
+		ticketService.removeTicketInCookie(request,response);
 
 
 
