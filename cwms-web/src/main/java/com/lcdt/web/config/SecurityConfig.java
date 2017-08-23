@@ -42,20 +42,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-
 		http.exceptionHandling().authenticationEntryPoint(entryPoint());
 
 		http.addFilterAt(ticketAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-
 				.authorizeRequests().antMatchers("/auth/**").permitAll()
 				.antMatchers("/register/**").permitAll()
-
 				.anyRequest().authenticated()
 				.and().logout().logoutUrl("/signout").logoutSuccessUrl("/auth/loginpage").permitAll()
 				.and().exceptionHandling().accessDeniedHandler(deniedHandler())
 				.and().csrf().disable();
-
-		;
 	}
 
 	@Bean

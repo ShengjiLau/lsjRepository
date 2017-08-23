@@ -1,5 +1,6 @@
 package com.lcdt.web.sso.auth;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
@@ -14,10 +15,13 @@ import java.net.URLEncoder;
  */
 public class CasLoginEntryPoint implements AuthenticationEntryPoint {
 
+	@Value("${loginurl}")
+	private String loginUrl;
+
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 		String callback = request.getRequestURL().toString();
-		String url = "http://login.datuodui.com:8080/login";
+		String url = loginUrl;
 		String encode = URLEncoder.encode(callback, "UTF-8");
 		url = url+"?auth_callback="+encode;
 		if (!response.isCommitted()){
