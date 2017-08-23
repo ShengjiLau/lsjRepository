@@ -21,7 +21,7 @@ public class AuthTicketService {
 
 	@Value("${login.cookieHost}")
 	public String cookieHost;
-
+	public String ticketCookieKey = "ticketCookieKey";
 	private DesEncypt encypt = new DesEncypt("91BE73DFEDFD0908");
 
 	public Ticket isTicketValid(String ticket) {
@@ -40,13 +40,27 @@ public class AuthTicketService {
 		return null;
 	}
 
-	public boolean generateTicketInResponse(HttpServletRequest request, HttpServletResponse response,Long userId) {
+	public void removeTicketInCookie(HttpServletRequest request, HttpServletResponse response) {
+		request.getCookies();
+		for (Cookie cookie : request.getCookies()) {
+			if (cookie.getName().equals(ticketCookieKey)) {
+				Cookie cookie1 = new Cookie(ticketCookieKey, "");
+				cookie1.setMaxAge(0);
+				cookie1.setPath(cookie.getPath());
+				cookie1.setDomain(cookie.getDomain());
+				response.addCookie(cookie);
+			}
+		}
+	}
+
+
+	public boolean generateTicketInResponse(HttpServletRequest request, HttpServletResponse response, Long userId) {
 		Ticket ticket = new Ticket();
 		ticket.setIp(request.getRemoteAddr());
 		ticket.setUserId(userId);
 		try {
 			String ticketStr = encypt.encode(JSON.toJSONString(ticket));
-			Cookie cookie = new Cookie("cwms_ticket", ticketStr);
+			Cookie cookie = new Cookie(ticketCookieKey, ticketStr);
 			cookie.setDomain(getHost(request.getRequestURI()));
 			response.addCookie(cookie);
 			return true;
@@ -63,7 +77,7 @@ public class AuthTicketService {
 
 
 	//获取父域名
-	private String getHost(String url){
+	private String getHost(String url) {
 
 		if (cookieHost != null && cookieHost.length() > 0) {
 			return cookieHost;

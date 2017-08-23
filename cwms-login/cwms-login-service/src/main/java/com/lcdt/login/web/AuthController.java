@@ -65,5 +65,14 @@ public class AuthController {
 	}
 
 
+	@RequestMapping("/logout")
+	public ModelAndView logout(HttpServletRequest resquest){
+
+
+
+
+		return new ModelAndView("/auth/signin");
+	}
+
 
 }
