@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>登陆</title>
+    <title>大驼队登陆</title>
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/signup.min.css">
@@ -125,11 +125,7 @@
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-6">
                         <input type="hidden" name="auth_callback" id="hidden_callback">
-                        <!--<input type="submit" class="btn sub-btn btn-default" ></div>>-->
-                        <input type="submit" value="提交" class="btn sub-btn btn-default" />
-
-                        <!--<button  data-loading-text="发送中..." id="sub-btn"-->
-                                <!--class="btn sub-btn btn-default" onclick="login(event)">登陆</button>-->
+                        <input type="submit" value="提交" class="btn sub-btn btn-default" onclick="login(event)" />
                     </div>
                 </div>
             </form>
@@ -141,20 +137,8 @@
 <div class="modal fade" tabindex="-1" id="gss-modal" role="dialog">
     <div class="modal-dialog" role="document" style="margin: 240px auto">
         <div class="modal-content">
-            <div class="modal-body" style="background-color:#eeeeee">
-                <div style="display: inline-block;padding: 10px;border-bottom-color: #848484" >
-                    <span style="text-align: center;font-size: 24px;color: forestgreen;">ahsdiuhaisudhiasuhdiau</span>
-                </div>
-                <br/>
-                <div style="display: inline-block;padding: 10px" >
-                    <span style="text-align: center;font-size: 24px;color: forestgreen;">ahsdiuhaisudhiasuhdiau</span>
+            <div class="modal-body" id="modelbody" style="background-color:#eeeeee">
 
-                </div>
-                <br/>
-                <div style="display: inline-block;padding: 10px" >
-                    <span style="text-align: center;font-size: 24px;color: forestgreen;">ahsdiuhaisudhiasuhdiau</span>
-                    <br/>
-                </div>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -178,7 +162,7 @@
     }
 
 
-    $("#gss-modal").modal()
+
     function login(event) {
         event.preventDefault();
 
@@ -193,9 +177,11 @@
                 data: fd,
                 success: function (data) {
                     //登陆成功选择公司
-                    console.log(data)
+
+                    var data = JSON.parse(data);
                     if (data.code == 0) {
-                        getCompanys();
+                        console.log(data)
+                        showCompanys(data)
                     }else{
                         alert(data.message)
                     }
@@ -207,14 +193,41 @@
                 },
             });
     }
+    
+    
+    function showCompanys(data) {
+        for (var i = 0 ; i < data.data.length ; i++) {
+            var member = data.data[i];
+            var html = "<div style=\"display: inline-block;padding: 10px;border-bottom-color: #848484\" >"
+                    +"<span onclick='chooseCompany("+member.companyId+")' style=\"text-align: center;font-size: 24px;color: forestgreen;\">"
+                    + member.companyName+"</span></div><br/>"
+            $("#modelbody").append(html)
+        }
+        $("#gss-modal").modal()
+    }
 
-    function getCompanys() {
+    function chooseCompany(companyId) {
+        var requestp = {"companyId":companyId}
         $.ajax({
-            type:"POST",
-            url:"/auth/companys",
-            success:function (data) {
-                console.log(data)
-            }
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            url: '/chooseCompany',
+            data: requestp,
+            success: function (data) {
+                //登陆成功选择公司
+                var data = JSON.parse(data);
+                if (data.code == 0) {
+                    console.log(data)
+                    //选择公司成功后跳转会authcallback
+                }else{
+                    console.log(data.message)
+                }
+            },
+            error: function (data) {
+                var result = JSON.parse(data);
+                alert(result.message);
+            },
         })
 
     }

@@ -21,7 +21,7 @@ public class AuthTicketService {
 
 	@Value("${login.cookieHost}")
 	public String cookieHost;
-	public String ticketCookieKey = "ticketCookieKey";
+	public String ticketCookieKey = "cwms_ticket";
 	private DesEncypt encypt = new DesEncypt("91BE73DFEDFD0908");
 
 	public Ticket isTicketValid(String ticket) {
@@ -54,10 +54,12 @@ public class AuthTicketService {
 	}
 
 
-	public boolean generateTicketInResponse(HttpServletRequest request, HttpServletResponse response, Long userId) {
+	public boolean generateTicketInResponse(HttpServletRequest request, HttpServletResponse response, Long userId,Integer companyId) {
 		Ticket ticket = new Ticket();
 		ticket.setIp(request.getRemoteAddr());
 		ticket.setUserId(userId);
+		ticket.setCompanyId(companyId);
+
 		try {
 			String ticketStr = encypt.encode(JSON.toJSONString(ticket));
 			Cookie cookie = new Cookie(ticketCookieKey, ticketStr);
@@ -93,6 +95,15 @@ public class AuthTicketService {
 	public static class Ticket {
 		private Long userId;
 		private String ip;
+		private Integer companyId;
+
+		public Integer getCompanyId() {
+			return companyId;
+		}
+
+		public void setCompanyId(Integer companyId) {
+			this.companyId = companyId;
+		}
 
 		public Long getUserId() {
 			return userId;

@@ -58,6 +58,15 @@ public class JsonResponseStraegy {
 		writeJsonToResponse(response, errorObj);
 	}
 
+
+	public String responseSuccessString(Object obj){
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("code", 0);
+		jsonObject.put("message", "success");
+		jsonObject.put("data", obj);
+		return jsonObject.toString();
+	}
+
 	private void writeJsonToResponse(HttpServletResponse response, JSONObject errorObj) {
 		PrintWriter writer = null;
 		try {
@@ -68,7 +77,6 @@ public class JsonResponseStraegy {
 			e.printStackTrace();
 		}
 	}
-
 
 	public void responseOk(HttpServletResponse response) {
 		setResponseJsonHeader(response);

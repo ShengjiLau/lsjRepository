@@ -101,16 +101,16 @@
     WHERE 1=1
     <trim prefix="" suffix="" suffixOverrides="">
       <if test="memberId != null &amp;&amp; memberId != ''">
-        member_id = #{memberId,jdbcType=BIGINT},
+       AND member_id = #{memberId,jdbcType=BIGINT}
       </if>
       <if test="userId != null &amp;&amp; userId != ''">
-        user_id = #{userId,jdbcType=BIGINT},
+        and user_id = #{userId,jdbcType=BIGINT}
       </if>
       <if test="companyId != null &amp;&amp; companyId != ''">
-        company_id = #{companyId,jdbcType=BIGINT},
+        and company_id = #{companyId,jdbcType=BIGINT}
       </if>
       <if test="companyName != null &amp;&amp; companyName != ''">
-        company_name = #{companyName,jdbcType=VARCHAR},
+        and company_name = #{companyName,jdbcType=VARCHAR}
       </if>
     </trim>
     order by member_id

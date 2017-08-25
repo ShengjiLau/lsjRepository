@@ -87,6 +87,13 @@ public class CompanyServiceImpl implements CompanyService {
 
 
 	@Transactional(readOnly = true)
+	public List<CompanyMember> companyList(Long userId){
+		HashMap conditions = new HashMap(2);
+		conditions.put("userId", userId);
+		return companyMemberMapper.selectByCondition(conditions);
+	}
+
+	@Transactional(readOnly = true)
 	@Override
 	public PageInfo companyList(Map m) {
 		int pageNo = 1;
@@ -107,5 +114,9 @@ public class CompanyServiceImpl implements CompanyService {
 		PageInfo pageInfo = new PageInfo(list);
 		return pageInfo;
 	}
+
+
+
+
 
 }

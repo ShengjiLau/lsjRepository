@@ -6,6 +6,7 @@ import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.CompanyMember;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,4 +37,7 @@ public interface CompanyService {
 	 * @return
 	 */
 	PageInfo companyList(Map m);
+
+
+	List<CompanyMember> companyList(Long userId);
 }
