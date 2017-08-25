@@ -40,4 +40,7 @@ public interface CompanyService {
 
 
 	List<CompanyMember> companyList(Long userId);
+
+
+	CompanyMember queryByUserIdCompanyId(Long userId, Integer companyId);
 }

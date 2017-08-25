@@ -94,6 +94,20 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Transactional(readOnly = true)
+	public CompanyMember queryByUserIdCompanyId(Long userId, Integer companyId) {
+		HashMap hashMap = new HashMap();
+		hashMap.put("userId", userId);
+		hashMap.put("companyId", companyId);
+		List<CompanyMember> members = companyMemberMapper.selectByCondition(hashMap);
+		if (members == null || members.isEmpty()) {
+			return null;
+		}else{
+			return members.get(0);
+		}
+	}
+
+
+	@Transactional(readOnly = true)
 	@Override
 	public PageInfo companyList(Map m) {
 		int pageNo = 1;

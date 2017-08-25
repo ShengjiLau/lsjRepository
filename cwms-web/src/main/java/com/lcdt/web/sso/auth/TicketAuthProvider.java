@@ -1,10 +1,10 @@
 package com.lcdt.web.sso.auth;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.lcdt.login.bean.TicketAuthentication;
 import com.lcdt.login.exception.InvalidTicketException;
 import com.lcdt.login.service.LoginService;
 import com.lcdt.userinfo.exception.UserNotExistException;
-import com.lcdt.userinfo.model.FrontUserInfo;
 import com.lcdt.web.auth.TicketAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -24,8 +24,8 @@ public class TicketAuthProvider implements AuthenticationProvider {
 		Object credentials = authentication.getCredentials();
 		String ticket = (String) credentials;
 		try {
-			FrontUserInfo frontUserInfo = loginService.queryTicket(ticket);
-			token.setDetails(frontUserInfo);
+			TicketAuthentication ticketAuthentication = loginService.queryTicket(ticket);
+			token.setDetails(ticketAuthentication);
 			token.setAuthenticated(true);
 			return token;
 		} catch (InvalidTicketException e) {
