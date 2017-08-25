@@ -124,7 +124,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-6">
-                        <input type="hidden" name="auth_callback" id="hidden_callback">
+                        <input type="hidden"  name="auth_callback" id="hidden_callback">
                         <input type="submit" value="提交" class="btn sub-btn btn-default" onclick="login(event)" />
                     </div>
                 </div>
@@ -196,6 +196,9 @@
     
     
     function showCompanys(data) {
+
+        $("#modelbody").html("");
+
         for (var i = 0 ; i < data.data.length ; i++) {
             var member = data.data[i];
             var html = "<div style=\"display: inline-block;padding: 10px;border-bottom-color: #848484\" >"
@@ -208,18 +211,24 @@
 
     function chooseCompany(companyId) {
         var requestp = {"companyId":companyId}
+        var form = new FormData()
+        form.append("companyId", companyId);
         $.ajax({
             processData: false,
             contentType: false,
             type: 'POST',
             url: '/chooseCompany',
-            data: requestp,
+            data:form,
             success: function (data) {
                 //登陆成功选择公司
                 var data = JSON.parse(data);
                 if (data.code == 0) {
                     console.log(data)
                     //选择公司成功后跳转会authcallback
+                    callback = $("#hidden_callback").val();
+                    if(callback != null) {
+                        window.location.href = callback;
+                    }
                 }else{
                     console.log(data.message)
                 }

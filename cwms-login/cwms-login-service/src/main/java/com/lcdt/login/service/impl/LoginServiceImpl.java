@@ -2,11 +2,14 @@ package com.lcdt.login.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.lcdt.login.bean.TicketAuthentication;
 import com.lcdt.login.exception.InvalidTicketException;
 import com.lcdt.login.service.AuthTicketService;
 import com.lcdt.login.service.LoginService;
 import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.CompanyMember;
 import com.lcdt.userinfo.model.FrontUserInfo;
+import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,17 +26,28 @@ public class LoginServiceImpl implements LoginService {
 	@Reference
 	UserService userService;
 
+	@Reference
+	CompanyService companyService;
+
 	@Value("${login.host}")
 	private String host;
 
 	@Override
-	public FrontUserInfo queryTicket(String ticket) throws InvalidTicketException, UserNotExistException {
+	public TicketAuthentication queryTicket(String ticket) throws InvalidTicketException, UserNotExistException {
 		AuthTicketService.Ticket ticketValid = ticketService.isTicketValid(ticket);
 		if (ticketValid == null) {
 			throw new InvalidTicketException("ticket 验证失败");
 		}
 		FrontUserInfo frontUserInfo = userService.queryByUserId(ticketValid.getUserId());
-		return frontUserInfo;
+		TicketAuthentication authentication = new TicketAuthentication();
+		authentication.setUserInfo(frontUserInfo);
+		if (ticketValid.getCompanyId() == null) {
+			authentication.setChooseCompany(false);
+		}else{
+			CompanyMember companyMember = companyService.queryByUserIdCompanyId(ticketValid.getUserId(), ticketValid.getCompanyId());
+			authentication.setCompanyMember(companyMember);
+		}
+		return authentication;
 	}
 
 

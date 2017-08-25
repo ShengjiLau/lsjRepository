@@ -56,14 +56,11 @@ public class AuthController {
 	@RequestMapping("/login")
 	@ResponseBody
 	public String login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
-
 		JSONObject jsonObject = new JSONObject();
-
 		try {
 			FrontUserInfo frontUserInfo = userService.userLogin(username, password);
 			LoginSessionReposity.setUserInSession(request, frontUserInfo);
 			List<CompanyMember> companyMembers = companyService.companyList(frontUserInfo.getUserId());
-
 			jsonObject.put("data", companyMembers);
 			jsonObject.put("code", 0);
 			jsonObject.put("message", "success");
@@ -101,7 +98,6 @@ public class AuthController {
 		}
 
 		List<CompanyMember> companyMembers = companyService.companyList(userInfo.getUserId());
-
 		jsonObject.put("data", companyMembers);
 		jsonObject.put("code", 0);
 		jsonObject.put("message", "success");
@@ -110,7 +106,7 @@ public class AuthController {
 
 	@RequestMapping("/chooseCompany")
 	@ResponseBody
-	public String chooseCompany(HttpServletRequest request,HttpServletResponse response,Integer companyId){
+	public String chooseCompany(HttpServletRequest request, HttpServletResponse response, Integer companyId) {
 		//生成ticket
 		JSONObject jsonObject = new JSONObject();
 		FrontUserInfo userInfo = LoginSessionReposity.getUserInfo(request);
@@ -121,7 +117,7 @@ public class AuthController {
 		}
 		jsonObject.put("code", 0);
 		jsonObject.put("message", "success");
-		ticketService.generateTicketInResponse(request, response, userInfo.getUserId(),companyId);
+		ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
 		return jsonObject.toString();
 	}
 

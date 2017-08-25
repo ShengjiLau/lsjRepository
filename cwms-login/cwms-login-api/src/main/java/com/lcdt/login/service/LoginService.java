@@ -1,5 +1,6 @@
 package com.lcdt.login.service;
 
+import com.lcdt.login.bean.TicketAuthentication;
 import com.lcdt.login.exception.InvalidTicketException;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.FrontUserInfo;
@@ -9,7 +10,7 @@ import com.lcdt.userinfo.model.FrontUserInfo;
  */
 public interface LoginService {
 
-	FrontUserInfo queryTicket(String ticket) throws InvalidTicketException, UserNotExistException;
+	TicketAuthentication queryTicket(String ticket) throws InvalidTicketException, UserNotExistException;
 
 	String loginUrl(String srcUrl);
 
