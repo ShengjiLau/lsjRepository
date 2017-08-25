@@ -42,6 +42,12 @@ public class AuthController {
 
 	@RequestMapping("/")
 	public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
+
+		boolean isLogin = LoginSessionReposity.isLogin(request);
+		if (isLogin) {
+			strategy.hasAuthRedirect(request,response);
+		}
+
 		Cookie[] cookies = request.getCookies();
 		for (Cookie cookie : cookies) {
 			if (cookie.getName().equals(COOKIETICKETNAME) && ticketService.isTicketValid(cookie.getValue()) != null) {
