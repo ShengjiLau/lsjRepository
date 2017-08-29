@@ -25,7 +25,6 @@ public class AuthTicketService {
 	private DesEncypt encypt = new DesEncypt("91BE73DFEDFD0908");
 
 	public Ticket isTicketValid(String ticket) {
-
 		try {
 			String decode = encypt.decode(ticket);
 			Ticket ticket1 = JSON.parseObject(decode, Ticket.class);
@@ -41,7 +40,6 @@ public class AuthTicketService {
 	}
 
 	public void removeTicketInCookie(HttpServletRequest request, HttpServletResponse response) {
-		request.getCookies();
 		for (Cookie cookie : request.getCookies()) {
 			if (cookie.getName().equals(ticketCookieKey)) {
 				Cookie cookie1 = new Cookie(ticketCookieKey, "");
