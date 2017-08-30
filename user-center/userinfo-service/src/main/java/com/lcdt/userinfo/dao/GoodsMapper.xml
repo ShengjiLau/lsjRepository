@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lcdt.cwms.user.dao.GoodsMapper">
+<mapper namespace="com.lcdt.userinfo.dao.GoodsMapper">
   <resultMap id="BaseResultMap" type="com.lcdt.userinfo.model.Goods">
     <!--
       WARNING - @mbg.generated
