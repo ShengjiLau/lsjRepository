@@ -14,6 +14,10 @@ public class LoginSessionReposity {
 
 	public static FrontUserInfo getUserInfo(HttpServletRequest request){
 		HttpSession session = request.getSession(false);
+		if (session == null) {
+			return null;
+		}
+
 		Object user = session.getAttribute(USERINFO_SESSION);
 		if (user == null) {
 			return null;
@@ -23,7 +27,7 @@ public class LoginSessionReposity {
 	}
 
 	public static boolean isLogin(HttpServletRequest request) {
-		return true;
+		return getUserInfo(request) != null;
 	}
 
 
