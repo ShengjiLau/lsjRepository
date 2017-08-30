@@ -1,6 +1,6 @@
-package com.lcdt.userinfo.dao;
+package com.lcdt.goods.dao;
 
-import com.lcdt.userinfo.model.Goods;
+import com.lcdt.goods.model.Goods;
 
 import java.util.List;
 

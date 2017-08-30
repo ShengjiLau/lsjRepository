@@ -1,4 +1,4 @@
-package com.lcdt.userinfo.service;
+package com.lcdt.goods.service;
 
 /**
  * Created by ybq on 2017/8/30.
