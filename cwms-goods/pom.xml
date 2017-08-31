@@ -15,6 +15,11 @@
         <module>cwms-goods-api</module>
         <module>cwms-goods-service</module>
     </modules>
-
+    <dependencies>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
