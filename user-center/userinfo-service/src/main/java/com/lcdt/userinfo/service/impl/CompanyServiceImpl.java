@@ -128,9 +128,4 @@ public class CompanyServiceImpl implements CompanyService {
 		PageInfo pageInfo = new PageInfo(list);
 		return pageInfo;
 	}
-
-
-
-
-
 }
