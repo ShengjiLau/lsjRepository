@@ -8,7 +8,6 @@ import java.security.NoSuchAlgorithmException;
  */
 public class RegisterUtils {
 
-
 	static final char[] HEXSTRING = "0123456789abcdef".toCharArray();
 
 	public static String md5Encrypt(String srcPwd) {

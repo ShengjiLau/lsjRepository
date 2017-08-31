@@ -6,7 +6,6 @@ import com.lcdt.cwms.user.service.CompanyService;
 import com.lcdt.web.auth.WmsUserDetails;
 import com.lcdt.web.http.JsonResponseStraegy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

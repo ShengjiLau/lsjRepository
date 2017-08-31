@@ -16,7 +16,6 @@ import java.io.IOException;
 @Service
 public class WmsWebLoginFailureHandler implements AuthenticationFailureHandler {
 
-
 	private static final String failureTimekey = "failure-time";
 
 	private static final Integer needValidCodeTime = 3;
