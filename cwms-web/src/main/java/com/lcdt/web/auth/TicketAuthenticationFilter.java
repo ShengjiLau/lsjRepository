@@ -34,9 +34,7 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 		super.doFilter(req, res, chain);
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-
 		if (SecurityContextHolder.getContext().getAuthentication() == null) {
-
 			if (request.getCookies() == null) {
 				chain.doFilter(request, res);
 			}
@@ -56,12 +54,10 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 						unsuccessfulAuthentication(request, response, failed);
 						return;
 					}
-
 					successfulAuthentication(request, response, chain, authResult);
 					return;
 				}
 			}
-
 		}
 		chain.doFilter(request, response);
 	}
