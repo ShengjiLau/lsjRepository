@@ -1,8 +1,9 @@
-package com.lcdt.userinfo.dao;
+package com.lcdt.goods.dao;
 
-import com.lcdt.userinfo.model.Goods;
+import com.lcdt.goods.model.Goods;
 
 import java.util.List;
+import java.util.Map;
 
 public interface GoodsMapper {
     /**
@@ -44,4 +45,7 @@ public interface GoodsMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(Goods record);
+
+
+    List<Goods> selectByCondition(Map map);
 }

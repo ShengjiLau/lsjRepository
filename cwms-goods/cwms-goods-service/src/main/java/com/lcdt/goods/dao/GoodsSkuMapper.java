@@ -1,8 +1,9 @@
-package com.lcdt.userinfo.dao;
+package com.lcdt.goods.dao;
 
-import com.lcdt.userinfo.model.GoodsSku;
+import com.lcdt.goods.model.GoodsSku;
 
 import java.util.List;
+import java.util.Map;
 
 public interface GoodsSkuMapper {
     /**
@@ -44,4 +45,7 @@ public interface GoodsSkuMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(GoodsSku record);
+
+
+    List<GoodsSku> selectByCondition(Map map);
 }

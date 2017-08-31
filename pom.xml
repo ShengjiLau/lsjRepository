@@ -19,6 +19,7 @@
         <module>common-notify</module>
         <module>common-utils</module>
         <module>cwms-login</module>
+        <module>cwms-goods</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>

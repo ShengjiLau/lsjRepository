@@ -1,4 +1,4 @@
-package com.lcdt.userinfo.model;
+package com.lcdt.goods.model;
 
 public class GoodsProperty {
     /**
