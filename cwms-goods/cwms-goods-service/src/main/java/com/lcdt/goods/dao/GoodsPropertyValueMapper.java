@@ -1,8 +1,10 @@
 package com.lcdt.goods.dao;
 
+import com.lcdt.goods.model.GoodsProperty;
 import com.lcdt.goods.model.GoodsPropertyValue;
 
 import java.util.List;
+import java.util.Map;
 
 public interface GoodsPropertyValueMapper {
     /**
@@ -44,4 +46,6 @@ public interface GoodsPropertyValueMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(GoodsPropertyValue record);
+
+    List<GoodsPropertyValue> selectByCondition(Map map);
 }

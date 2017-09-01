@@ -3,5 +3,5 @@ package com.lcdt.goods.exception;
 /**
  * Created by ybq on 2017/8/31.
  */
-public class GoodsNoExistException extends Throwable {
+public class GoodsNotExistException extends Throwable {
 }

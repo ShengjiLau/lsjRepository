@@ -1,8 +1,10 @@
 package com.lcdt.goods.dao;
 
+import com.lcdt.goods.model.Goods;
 import com.lcdt.goods.model.GoodsFeildsTemplate;
 
 import java.util.List;
+import java.util.Map;
 
 public interface GoodsFeildsTemplateMapper {
     /**
@@ -44,4 +46,7 @@ public interface GoodsFeildsTemplateMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(GoodsFeildsTemplate record);
+
+
+    List<GoodsFeildsTemplate> selectByCondition(Map map);
 }

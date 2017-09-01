@@ -3,6 +3,7 @@ package com.lcdt.goods.dao;
 import com.lcdt.goods.model.GoodsProperty;
 
 import java.util.List;
+import java.util.Map;
 
 public interface GoodsPropertyMapper {
     /**
@@ -44,4 +45,9 @@ public interface GoodsPropertyMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(GoodsProperty record);
+
+
+    List<GoodsProperty> selectByCondition(Map map);
+
+
 }

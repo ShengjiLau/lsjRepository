@@ -2,10 +2,8 @@ package com.lcdt.goods.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.goods.dto.GoodsDto;
-import com.lcdt.goods.exception.GoodsExistException;
-import com.lcdt.goods.exception.GoodsNoExistException;
-import com.lcdt.goods.exception.GoodsSkuExistException;
-import com.lcdt.goods.exception.GoodsSkuNoExistException;
+import com.lcdt.goods.dto.GoodsFeildsTemplateDto;
+import com.lcdt.goods.exception.*;
 
 import java.util.Map;
 
@@ -24,7 +22,7 @@ public interface GoodsService {
      * 商品主删除
      * @param dto
      */
-    boolean goodsDelete(GoodsDto dto) throws GoodsNoExistException;
+    boolean goodsDelete(GoodsDto dto) throws GoodsNotExistException;
 
 
     /***
@@ -32,9 +30,7 @@ public interface GoodsService {
      * @param goodsSkuId
      * @return
      */
-    boolean goodsSkuDelete(Long goodsSkuId) throws GoodsSkuNoExistException;
-
-
+    boolean goodsSkuDelete(Long goodsSkuId) throws GoodsSkuNotExistException;
 
     /***
      * 商品列表
@@ -44,5 +40,24 @@ public interface GoodsService {
     PageInfo goodsList(Map m);
 
 
+    /***
+     * 商品字段模版保存
+     * @param dto
+     */
+    void goodsFieldsTemplateAdd(GoodsFeildsTemplateDto dto) throws GoodsFeildsTemplateExistException;
+
+
+    /***
+     * 商品字段模版删除
+     * @param goodFieldsId
+     */
+    boolean goodsFieldsTemplateDelete(Long goodFieldsId) throws GoodsFeildsTemplateNotExistException;
+
+
+    /***
+     * 商品字段模版更新
+     * @param dto
+     */
+    void goodsFieldsTemplateUpdate(GoodsFeildsTemplateDto dto) throws GoodsFeildsTemplateNotExistException;
 
 }

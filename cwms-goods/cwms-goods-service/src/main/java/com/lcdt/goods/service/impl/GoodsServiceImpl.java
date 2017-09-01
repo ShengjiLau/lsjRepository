@@ -1,15 +1,15 @@
 package com.lcdt.goods.service.impl;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.goods.dao.GoodsFeildsTemplateMapper;
 import com.lcdt.goods.dao.GoodsMapper;
 import com.lcdt.goods.dao.GoodsSkuMapper;
 import com.lcdt.goods.dto.GoodsDto;
+import com.lcdt.goods.dto.GoodsFeildsTemplateDto;
 import com.lcdt.goods.dto.GoodsSkuDto;
-import com.lcdt.goods.exception.GoodsExistException;
-import com.lcdt.goods.exception.GoodsNoExistException;
-import com.lcdt.goods.exception.GoodsSkuExistException;
-import com.lcdt.goods.exception.GoodsSkuNoExistException;
+import com.lcdt.goods.exception.*;
 import com.lcdt.goods.model.Goods;
+import com.lcdt.goods.model.GoodsFeildsTemplate;
 import com.lcdt.goods.model.GoodsSku;
 import com.lcdt.goods.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +32,9 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
     private GoodsSkuMapper goodsSkuMapper; //商品属性
+
+    @Autowired
+    private GoodsFeildsTemplateMapper goodsFeildsTemplateMapper; //模版字段
 
 
     @Transactional(rollbackFor = Throwable.class)
@@ -80,10 +83,10 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Transactional
     @Override
-    public boolean goodsDelete(GoodsDto dto) throws GoodsNoExistException {
+    public boolean goodsDelete(GoodsDto dto) throws GoodsNotExistException {
         Goods goods = goodsMapper.selectByPrimaryKey(dto.getGoodsId());
         if (goods == null) {
-            throw new GoodsNoExistException();
+            throw new GoodsNotExistException();
         }
         Map map1 = new HashMap<String, Object>();
         map1.put("companyId", dto.getCompanyId());
@@ -101,18 +104,57 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Transactional
     @Override
-    public boolean goodsSkuDelete(Long goodsSkuId) throws GoodsSkuNoExistException {
+    public boolean goodsSkuDelete(Long goodsSkuId) throws GoodsSkuNotExistException {
         GoodsSku goodsSku = goodsSkuMapper.selectByPrimaryKey(goodsSkuId);
         if (goodsSku == null) {
-            throw new GoodsSkuNoExistException();
+            throw new GoodsSkuNotExistException();
         }
         return goodsSkuMapper.deleteByPrimaryKey(goodsSkuId)==1 ? true : false;
     }
 
 
-
     @Override
     public PageInfo goodsList(Map m) {
         return null;
+    }
+
+
+    @Transactional
+    @Override
+    public void goodsFieldsTemplateAdd(GoodsFeildsTemplateDto dto) throws GoodsFeildsTemplateExistException {
+        Map map = new HashMap<String, Object>();
+        map.put("templateName", dto.getTemplateName());
+        map.put("companyId", dto.getCompanyId());
+        List<Goods> goodsList = goodsMapper.selectByCondition(map);
+        if (goodsList != null && goodsList.size() > 0) {
+            throw new GoodsFeildsTemplateExistException();
+        }
+        GoodsFeildsTemplate vo = new GoodsFeildsTemplate();
+        vo.setTemplateName(dto.getTemplateName());
+        vo.setTemplateContent(vo.getTemplateContent());
+        vo.setCompanyId(vo.getCompanyId());
+        goodsFeildsTemplateMapper.insert(vo);
+    }
+
+    @Transactional
+    @Override
+    public boolean goodsFieldsTemplateDelete(Long goodFieldsId) throws GoodsFeildsTemplateNotExistException {
+        GoodsFeildsTemplate vo = goodsFeildsTemplateMapper.selectByPrimaryKey(goodFieldsId);
+        if (vo==null) {
+            throw new GoodsFeildsTemplateNotExistException();
+        }
+        return goodsFeildsTemplateMapper.deleteByPrimaryKey(goodFieldsId)==1 ? true : false;
+    }
+
+    @Transactional
+    @Override
+    public void goodsFieldsTemplateUpdate(GoodsFeildsTemplateDto dto) throws GoodsFeildsTemplateNotExistException {
+        GoodsFeildsTemplate vo = goodsFeildsTemplateMapper.selectByPrimaryKey(dto.getGoodFieldsId());
+        if (vo==null) {
+            throw new GoodsFeildsTemplateNotExistException();
+        }
+        vo.setTemplateName(dto.getTemplateName());
+        vo.setTemplateContent(dto.getTemplateContent());
+        goodsFeildsTemplateMapper.updateByPrimaryKey(vo);
     }
 }
