@@ -49,12 +49,15 @@ public class AuthController {
 		}
 
 		Cookie[] cookies = request.getCookies();
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals(COOKIETICKETNAME) && ticketService.isTicketValid(cookie.getValue()) != null) {
-				strategy.hasAuthRedirect(request, response);
-				return null;
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals(COOKIETICKETNAME) && ticketService.isTicketValid(cookie.getValue()) != null) {
+					strategy.hasAuthRedirect(request, response);
+					return null;
+				}
 			}
 		}
+
 		ModelAndView view = new ModelAndView("/auth/signin");
 		return view;
 	}
