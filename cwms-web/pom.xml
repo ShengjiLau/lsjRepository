@@ -77,6 +77,10 @@
             <artifactId>cwms-goods-api</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>net.sourceforge.jtds</groupId>
+            <artifactId>jtds</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
