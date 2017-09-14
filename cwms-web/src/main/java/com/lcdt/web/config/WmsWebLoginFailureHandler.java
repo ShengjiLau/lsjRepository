@@ -28,7 +28,7 @@ public class WmsWebLoginFailureHandler implements AuthenticationFailureHandler {
 			attribute = 0;
 		}
 
-		attribute ++ ;
+		attribute ++;
 		session.setAttribute("validCode", "1234");
 	}
 }

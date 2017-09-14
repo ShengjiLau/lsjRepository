@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cwms-login</artifactId>
+    <artifactId>cwms-sso</artifactId>
     <packaging>pom</packaging>
     <modules>
         <module>cwms-login-api</module>
