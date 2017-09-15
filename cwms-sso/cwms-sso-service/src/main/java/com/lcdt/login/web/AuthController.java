@@ -87,10 +87,10 @@ public class AuthController {
 		}
 	}
 
-
 	@RequestMapping("/logout")
 	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
 		ticketService.removeTicketInCookie(request, response);
+		LoginSessionReposity.clearUserSession(request);
 		return new ModelAndView("/auth/signin");
 	}
 
@@ -98,7 +98,6 @@ public class AuthController {
 	@RequestMapping("/companys")
 	public String showCompanys(HttpServletRequest request) {
 		JSONObject jsonObject = new JSONObject();
-
 		FrontUserInfo userInfo = LoginSessionReposity.getUserInfo(request);
 		if (userInfo == null) {
 			jsonObject.put("code", -1);

@@ -1,5 +1,6 @@
-package com.lcdt.login.web;
+package com.lcdt.login.web.filter;
 
+import com.lcdt.login.web.LoginSessionReposity;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
  * Created by ss on 2017/8/25.
  */
 public class LoginInterceptor implements HandlerInterceptor {
+
 	@Override
 	public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 		if (!hasLogin(httpServletRequest) && matchLoginUrl(httpServletRequest)) {

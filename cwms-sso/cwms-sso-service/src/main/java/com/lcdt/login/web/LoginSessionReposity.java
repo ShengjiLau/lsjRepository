@@ -3,6 +3,7 @@ package com.lcdt.login.web;
 import com.lcdt.userinfo.model.FrontUserInfo;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -36,4 +37,8 @@ public class LoginSessionReposity {
 		session.setAttribute(USERINFO_SESSION,userInfo);
 	}
 
+	public static void clearUserSession(HttpServletRequest request){
+		HttpSession session = request.getSession(false);
+		session.invalidate();
+	}
 }
