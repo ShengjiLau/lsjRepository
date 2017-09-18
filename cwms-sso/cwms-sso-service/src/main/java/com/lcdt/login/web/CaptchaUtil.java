@@ -159,7 +159,6 @@ public final class CaptchaUtil{
 		}else{
 			return false;
 		}
-
 	}
 
 }

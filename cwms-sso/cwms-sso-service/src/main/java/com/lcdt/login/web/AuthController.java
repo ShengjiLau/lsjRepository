@@ -42,12 +42,10 @@ public class AuthController {
 
 	@RequestMapping("/")
 	public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
-
 		boolean isLogin = LoginSessionReposity.isLogin(request);
 		if (isLogin) {
 			strategy.hasAuthRedirect(request,response);
 		}
-
 		Cookie[] cookies = request.getCookies();
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
@@ -57,7 +55,6 @@ public class AuthController {
 				}
 			}
 		}
-
 		ModelAndView view = new ModelAndView("/auth/signin");
 		return view;
 	}

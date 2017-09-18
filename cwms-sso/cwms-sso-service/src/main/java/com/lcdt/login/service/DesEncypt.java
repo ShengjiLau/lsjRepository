@@ -64,8 +64,6 @@ public class DesEncypt {
 		return b;
 	}
 
-
-
 	private static int parse(char c) {
 		if (c >= 'a')
 			return (c - 'a' + 10) & 0x0f;

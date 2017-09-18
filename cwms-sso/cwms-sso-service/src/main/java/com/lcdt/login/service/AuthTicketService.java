@@ -1,6 +1,8 @@
 package com.lcdt.login.service;
 
 import com.alibaba.fastjson.JSON;
+import com.lcdt.login.ticket.TicketBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ public class AuthTicketService {
 	@Value("${login.cookieHost}")
 	public String cookieHost;
 	public String ticketCookieKey = "cwms_ticket";
+	@Autowired
+	TicketManager ticketManager;
 	private DesEncypt encypt = new DesEncypt("91BE73DFEDFD0908");
 
 	public Ticket isTicketValid(String ticket) {
@@ -42,6 +46,10 @@ public class AuthTicketService {
 	public void removeTicketInCookie(HttpServletRequest request, HttpServletResponse response) {
 		for (Cookie cookie : request.getCookies()) {
 			if (cookie.getName().equals(ticketCookieKey)) {
+
+				String ticket = cookie.getValue();
+				ticketManager.removeTicketCache(ticket);
+
 				Cookie cookie1 = new Cookie(ticketCookieKey, "");
 				cookie1.setMaxAge(0);
 				cookie1.setPath(cookie.getPath());
@@ -49,20 +57,32 @@ public class AuthTicketService {
 				response.addCookie(cookie);
 			}
 		}
+
 	}
 
 
-	public boolean generateTicketInResponse(HttpServletRequest request, HttpServletResponse response, Long userId,Integer companyId) {
+	public boolean generateTicketInResponse(HttpServletRequest request, HttpServletResponse response, Long userId, Integer companyId) {
 		Ticket ticket = new Ticket();
 		ticket.setIp(request.getRemoteAddr());
 		ticket.setUserId(userId);
 		ticket.setCompanyId(companyId);
+
+		TicketBean ticketBean = new TicketBean();
+		ticketBean.setCompanyId(Long.valueOf(companyId));
+		ticketBean.setUserId(Long.valueOf(userId));
+		ticketBean.setCreateTime(System.currentTimeMillis()/1000);
+		ticketBean.setValidateTime(60*60*12L);
+		ticketBean.setClientIp(request.getRemoteAddr());
+
 
 		try {
 			String ticketStr = encypt.encode(JSON.toJSONString(ticket));
 			Cookie cookie = new Cookie(ticketCookieKey, ticketStr);
 			cookie.setDomain(getHost(request.getRequestURI()));
 			response.addCookie(cookie);
+
+			ticketManager.saveTicket(ticketStr,ticketBean);
+
 			return true;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
