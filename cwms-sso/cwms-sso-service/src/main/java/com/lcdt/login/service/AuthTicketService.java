@@ -42,7 +42,6 @@ public class AuthTicketService {
 				response.addCookie(cookie);
 			}
 		}
-
 	}
 
 
@@ -55,7 +54,7 @@ public class AuthTicketService {
 		ticketBean.setValidateTime(60 * 60 * 12L);
 		ticketBean.setClientIp(request.getRemoteAddr());
 
-		String ticket = createTicket();
+		String ticket = createTicket(); //要在ticket中设置相关信息
 
 		Cookie cookie = new Cookie(ticketCookieKey, ticket);
 		cookie.setDomain(getHost(request.getRequestURI()));
