@@ -18,19 +18,23 @@ public class LoginInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 
+
 		if (matchExcludeUrls(httpServletRequest,o)) {
 			return true;
 		}
 
-		if (LoginSessionReposity.isLogin(httpServletRequest)) {
+		if (!LoginSessionReposity.isLogin(httpServletRequest)) {
 			httpServletResponse.sendRedirect("/login");
 			return false;
 		}
 
 		if (!LoginSessionReposity.loginCompany(httpServletRequest)) {
-			httpServletResponse.sendRedirect("/chooseCompany");
+			httpServletResponse.sendRedirect("/company");
 			return true;
 		}
+
+
+
 		return true;
 	}
 

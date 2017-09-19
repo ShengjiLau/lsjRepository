@@ -129,4 +129,24 @@ public class AuthController {
 		return jsonObject.toString();
 	}
 
+	@RequestMapping("/company")
+	@ExcludeIntercept
+	public ModelAndView chooseCompanyPage(HttpServletRequest request){
+		FrontUserInfo userInfo = LoginSessionReposity.getUserInfoInSession(request);
+		List<CompanyMember> companyMembers = companyService.companyList(userInfo.getUserId());
+		ModelAndView view = new ModelAndView("/auth/company");
+		view.addObject(companyMembers);
+		return view;
+	}
+
+	@RequestMapping("/logincompany")
+	@ExcludeIntercept
+	public ModelAndView loginCompany(Integer companyId,HttpServletRequest request,HttpServletResponse response){
+		FrontUserInfo userInfo = LoginSessionReposity.getUserInfoInSession(request);
+		CompanyMember companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);
+		ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
+		strategy.hasAuthRedirect(request, response);
+		return null;
+	}
+
 }
