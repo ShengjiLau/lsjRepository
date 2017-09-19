@@ -2,6 +2,7 @@ package com.lcdt.login.web;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
+import com.lcdt.login.annontion.ExcludeIntercept;
 import com.lcdt.login.service.AuthTicketService;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.UserNotExistException;
@@ -59,6 +60,7 @@ public class AuthController {
 		return view;
 	}
 
+	@ExcludeIntercept
 	@RequestMapping("/login")
 	@ResponseBody
 	public String login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
@@ -95,7 +97,7 @@ public class AuthController {
 	@RequestMapping("/companys")
 	public String showCompanys(HttpServletRequest request) {
 		JSONObject jsonObject = new JSONObject();
-		FrontUserInfo userInfo = LoginSessionReposity.getUserInfo(request);
+		FrontUserInfo userInfo = LoginSessionReposity.getUserInfoInSession(request);
 		if (userInfo == null) {
 			jsonObject.put("code", -1);
 			jsonObject.put("message", "请先登陆");
@@ -109,12 +111,13 @@ public class AuthController {
 		return jsonObject.toString();
 	}
 
+
 	@RequestMapping("/chooseCompany")
 	@ResponseBody
 	public String chooseCompany(HttpServletRequest request, HttpServletResponse response, Integer companyId) {
 		//生成ticket
 		JSONObject jsonObject = new JSONObject();
-		FrontUserInfo userInfo = LoginSessionReposity.getUserInfo(request);
+		FrontUserInfo userInfo = LoginSessionReposity.getUserInfoInSession(request);
 		if (userInfo == null) {
 			jsonObject.put("code", -1);
 			jsonObject.put("message", "请先登陆");
