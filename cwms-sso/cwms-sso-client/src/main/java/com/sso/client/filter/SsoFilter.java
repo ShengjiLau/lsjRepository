@@ -1,16 +1,19 @@
 package com.sso.client.filter;
 
+import com.sso.client.utils.PropertyUtils;
+
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.net.URLEncoder;
 
 /**
  * Created by ss on 2017/9/18.
  */
-public class SsoFilter implements Filter{
+public class SsoFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -27,36 +30,47 @@ public class SsoFilter implements Filter{
 		String ticket = findTicketInCookie(httpRequest);
 
 		if (ticket == null) {
-			redirectLogin(httpResponse);
-		}else{
-
+			redirectLogin(httpRequest,httpResponse);
+			return;
+		} else {
 			if (ticketInSession == null) {
 				//设置用户信息
 				HttpSession session1 = httpRequest.getSession(true);
 				session1.setAttribute("ticket", ticket);
-				chain.doFilter(request,response);
+				chain.doFilter(request, response);
 			}
 
 			if (!ticketInSession.equals(ticket)) {
 				//重新加载回到首页
+				//
 				redirectHome(httpResponse);
 				return;
-			}else{
-				chain.doFilter(request,response);
+			} else {
+				chain.doFilter(request, response);
 			}
 		}
 	}
 
-	public void redirectHome(HttpServletResponse response){
+	public void redirectHome(HttpServletResponse response) {
 
 	}
 
-	public void redirectLogin(HttpServletResponse response){
-
+	public void redirectLogin(HttpServletRequest request,HttpServletResponse response) {
+		try {
+			if (!response.isCommitted()) {
+				String callback = request.getRequestURL().toString();
+				String url = PropertyUtils.readProperties(PropertyUtils.LOGIN_URL);
+				String encode = URLEncoder.encode(callback, "UTF-8");
+				url = url+"?auth_callback="+encode;
+				response.sendRedirect(url);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 
-	public String getTicketInSession(HttpSession session){
+	public String getTicketInSession(HttpSession session) {
 		return null;
 	}
 
@@ -64,7 +78,7 @@ public class SsoFilter implements Filter{
 		Cookie[] cookies = request.getCookies();
 
 		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("")) {
+			if (cookie.getName().equals("cwms_ticket")) {
 				return cookie.getValue();
 			}
 		}

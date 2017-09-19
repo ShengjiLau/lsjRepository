@@ -34,10 +34,10 @@ public class AuthController {
 	@Autowired
 	RequestAuthRedirectStrategy strategy;
 
-	@Reference
+	@Reference(check = false)
 	UserService userService;
 
-	@Reference
+	@Reference(check = false)
 	CompanyService companyService;
 
 	@RequestMapping("/")

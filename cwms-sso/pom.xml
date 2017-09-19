@@ -12,10 +12,9 @@
     <artifactId>cwms-sso</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>cwms-login-api</module>
-        <module>cwms-login-service</module>
         <module>cwms-sso-client</module>
         <module>cwms-sso-common</module>
+        <module>cwms-sso-demo</module>
     </modules>
 
     <dependencies>

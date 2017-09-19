@@ -6,6 +6,7 @@ import com.lcdt.login.bean.TicketAuthentication;
 import com.lcdt.login.exception.InvalidTicketException;
 import com.lcdt.login.service.AuthTicketService;
 import com.lcdt.login.service.LoginService;
+import com.lcdt.login.ticket.TicketBean;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.CompanyMember;
 import com.lcdt.userinfo.model.FrontUserInfo;
@@ -34,7 +35,7 @@ public class LoginServiceImpl implements LoginService {
 
 	@Override
 	public TicketAuthentication queryTicket(String ticket) throws InvalidTicketException, UserNotExistException {
-		AuthTicketService.Ticket ticketValid = ticketService.isTicketValid(ticket);
+		TicketBean ticketValid = ticketService.isTicketValid(ticket);
 		if (ticketValid == null) {
 			throw new InvalidTicketException("ticket 验证失败");
 		}
@@ -44,7 +45,7 @@ public class LoginServiceImpl implements LoginService {
 		if (ticketValid.getCompanyId() == null) {
 			authentication.setChooseCompany(false);
 		}else{
-			CompanyMember companyMember = companyService.queryByUserIdCompanyId(ticketValid.getUserId(), ticketValid.getCompanyId());
+			CompanyMember companyMember = companyService.queryByUserIdCompanyId(ticketValid.getUserId(), ticketValid.getCompanyId().intValue());
 			authentication.setCompanyMember(companyMember);
 		}
 		return authentication;
