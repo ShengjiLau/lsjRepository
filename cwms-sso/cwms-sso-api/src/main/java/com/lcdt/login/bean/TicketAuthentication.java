@@ -14,6 +14,15 @@ public class TicketAuthentication implements Serializable {
 	private CompanyMember companyMember;
 	private FrontUserInfo userInfo;
 
+	private String ticket;
+
+	public String getTicket() {
+		return ticket;
+	}
+
+	public void setTicket(String ticket) {
+		this.ticket = ticket;
+	}
 
 	public boolean isChooseCompany() {
 		return chooseCompany;

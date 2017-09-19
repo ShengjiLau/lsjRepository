@@ -41,6 +41,7 @@ public class LoginServiceImpl implements LoginService {
 		}
 		FrontUserInfo frontUserInfo = userService.queryByUserId(ticketValid.getUserId());
 		TicketAuthentication authentication = new TicketAuthentication();
+		authentication.setTicket(ticket);
 		authentication.setUserInfo(frontUserInfo);
 		if (ticketValid.getCompanyId() == null) {
 			authentication.setChooseCompany(false);

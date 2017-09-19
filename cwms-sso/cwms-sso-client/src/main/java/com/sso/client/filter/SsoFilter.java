@@ -1,6 +1,7 @@
 package com.sso.client.filter;
 
 import com.sso.client.utils.PropertyUtils;
+import com.sso.client.utils.TicketHelper;
 
 import javax.servlet.*;
 import javax.servlet.http.Cookie;
@@ -27,7 +28,7 @@ public class SsoFilter implements Filter {
 
 		HttpSession session = httpRequest.getSession(false);
 		String ticketInSession = getTicketInSession(session);
-		String ticket = findTicketInCookie(httpRequest);
+		String ticket = TicketHelper.findTicketInCookie(httpRequest);
 
 		if (ticket == null) {
 			redirectLogin(httpRequest,httpResponse);
@@ -74,16 +75,7 @@ public class SsoFilter implements Filter {
 		return null;
 	}
 
-	public String findTicketInCookie(HttpServletRequest request) {
-		Cookie[] cookies = request.getCookies();
 
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("cwms_ticket")) {
-				return cookie.getValue();
-			}
-		}
-		return null;
-	}
 
 
 	@Override

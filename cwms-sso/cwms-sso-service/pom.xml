@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>cwms-login-api</artifactId>
+            <artifactId>cwms-sso-api</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
@@ -28,6 +28,11 @@
             <version>1.9.21</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>cwms-sso-common</artifactId>
+            <version>1.0</version>
+        </dependency>
 
     </dependencies>
 

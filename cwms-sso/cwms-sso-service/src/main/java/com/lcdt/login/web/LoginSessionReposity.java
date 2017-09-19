@@ -2,6 +2,8 @@ package com.lcdt.login.web;
 
 import com.lcdt.userinfo.model.CompanyMember;
 import com.lcdt.userinfo.model.FrontUserInfo;
+import com.sso.common.utils.TicketHelper;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,7 +28,12 @@ public class LoginSessionReposity {
 	}
 
 	public static boolean loginCompany(HttpServletRequest request){
-		return isLogin(request) ? getCompanyMember(request) == null ? false : true : false;
+		boolean companyIsLogin = isLogin(request) ? getCompanyMember(request) == null ? false : true : false;
+		String ticketInCookie = TicketHelper.findTicketInCookie(request);
+		if (!StringUtils.isEmpty(ticketInCookie) && companyIsLogin) {
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean isLogin(HttpServletRequest request) {
