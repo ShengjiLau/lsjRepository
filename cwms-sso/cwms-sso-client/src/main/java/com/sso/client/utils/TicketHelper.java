@@ -10,7 +10,9 @@ public class TicketHelper {
 
 	public static String findTicketInCookie(HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
-
+		if (cookies == null) {
+			return null;
+		}
 		for (Cookie cookie : cookies) {
 			if (cookie.getName().equals("cwms_ticket")) {
 				return cookie.getValue();

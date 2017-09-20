@@ -1,17 +1,18 @@
-package com.lcdt.web.auth;
+package com.lcdt.web.sso.auth;
 
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import com.sso.client.utils.TicketHelper;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -31,39 +32,53 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-		super.doFilter(req, res, chain);
+
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-		if (SecurityContextHolder.getContext().getAuthentication() == null) {
-			if (request.getCookies() == null) {
-				chain.doFilter(request, res);
-			}
-			for (Cookie cookie : request.getCookies()) {
-				if (cookie.getName().equals("cwms_ticket")) {
-					TicketAuthenticationToken authResult = null;
-					try {
-						authResult = new TicketAuthenticationToken(null);
-						authResult.setTicket(cookie.getValue());
-						authResult = (TicketAuthenticationToken) getAuthenticationManager().authenticate(authResult);
-						if (authResult == null) {
-							return;
-						}
-					} catch (InternalAuthenticationServiceException failed) {
-						unsuccessfulAuthentication(request, response, failed);
-					} catch (AuthenticationException failed) {
-						unsuccessfulAuthentication(request, response, failed);
-						return;
-					}
-					successfulAuthentication(request, response, chain, authResult);
-					return;
-				}
-			}
+
+		if (!requiresAuthentication(request, response)) {
+			chain.doFilter(req,res);
+			return;
 		}
-		chain.doFilter(request, response);
+//		setContinueChainBeforeSuccessfulAuthentication(true);
+		super.doFilter(req, res, chain);
 	}
+
+	protected boolean requiresAuthentication(HttpServletRequest request,
+											 HttpServletResponse response) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null) {
+			return true;
+		}
+		if (authentication.isAuthenticated()) {
+			TicketAuthenticationToken token = (TicketAuthenticationToken) authentication;
+			Object credentials = authentication.getCredentials();
+			String ticket = (String) credentials;
+			String ticketInCookie = TicketHelper.findTicketInCookie(request);
+			if (ticketInCookie == null || !ticket.equals(ticketInCookie)) {
+				return true;
+			}
+			return false;
+
+		}
+		return true;
+
+
+	}
+
+
+
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-		return null;
+		String ticketInCookie = TicketHelper.findTicketInCookie(request);
+		if (StringUtils.isEmpty(ticketInCookie)){
+			throw new TicketAuthException("请先登陆");
+		}
+
+		TicketAuthenticationToken token = new TicketAuthenticationToken(null);
+		token.setTicket(ticketInCookie);
+		Authentication authenticate = getAuthenticationManager().authenticate(token);
+		return authenticate;
 	}
 }

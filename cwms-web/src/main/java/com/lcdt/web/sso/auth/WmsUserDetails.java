@@ -1,4 +1,4 @@
-package com.lcdt.web.auth;
+package com.lcdt.web.sso.auth;
 
 import com.lcdt.userinfo.model.FrontUserInfo;
 import org.springframework.security.core.GrantedAuthority;

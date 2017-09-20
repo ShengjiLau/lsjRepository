@@ -1,4 +1,4 @@
-package com.lcdt.web.auth;
+package com.lcdt.web.sso.auth;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

@@ -5,7 +5,7 @@ import com.lcdt.login.bean.TicketAuthentication;
 import com.lcdt.login.exception.InvalidTicketException;
 import com.lcdt.login.service.LoginService;
 import com.lcdt.userinfo.exception.UserNotExistException;
-import com.lcdt.web.auth.TicketAuthenticationToken;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -29,12 +29,10 @@ public class TicketAuthProvider implements AuthenticationProvider {
 			token.setAuthenticated(true);
 			return token;
 		} catch (InvalidTicketException e) {
-			e.printStackTrace();
+			throw new TicketAuthException("请先登陆");
 		} catch (UserNotExistException e) {
-			e.printStackTrace();
+			throw new TicketAuthException("请先登陆");
 		}
-
-		return null;
 	}
 
 	@Override

@@ -1,8 +1,9 @@
 package com.lcdt.web.config;
 
-import com.lcdt.web.auth.TicketAccessDeniedHandler;
-import com.lcdt.web.auth.TicketAuthenticationFilter;
+import com.lcdt.web.sso.auth.TicketAccessDeniedHandler;
+import com.lcdt.web.sso.auth.TicketAuthenticationFilter;
 import com.lcdt.web.sso.auth.CasLoginEntryPoint;
+import com.lcdt.web.sso.auth.TicketAuthFailureHandler;
 import com.lcdt.web.sso.auth.TicketAuthProvider;
 import com.lcdt.web.sso.auth.TicketLogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.exceptionHandling().authenticationEntryPoint(entryPoint());
+
 		http.addFilterAt(ticketAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests().antMatchers("/auth/**").permitAll()
 				.antMatchers("/register/**").permitAll()
@@ -66,6 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	public TicketAuthenticationFilter ticketAuthenticationFilter() {
 		TicketAuthenticationFilter ticketAuthenticationFilter = new TicketAuthenticationFilter(new AntPathRequestMatcher("/**"));
+		ticketAuthenticationFilter.setAuthenticationFailureHandler(new TicketAuthFailureHandler());
 		try {
 			ticketAuthenticationFilter.setAuthenticationManager(authenticationManager());
 		} catch (Exception e) {

@@ -3,7 +3,7 @@ package com.lcdt.web.controller.auth;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.cwms.user.model.WmsCompanyUserRelation;
 import com.lcdt.cwms.user.service.CompanyService;
-import com.lcdt.web.auth.WmsUserDetails;
+import com.lcdt.web.sso.auth.WmsUserDetails;
 import com.lcdt.web.http.JsonResponseStraegy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
