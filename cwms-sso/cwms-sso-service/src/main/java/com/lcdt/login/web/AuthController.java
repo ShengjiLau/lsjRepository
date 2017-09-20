@@ -4,6 +4,8 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.login.annontion.ExcludeIntercept;
 import com.lcdt.login.service.AuthTicketService;
+import com.lcdt.login.web.filter.CompanyInterceptor;
+import com.lcdt.login.web.filter.LoginInterceptor;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.CompanyMember;
@@ -19,12 +21,14 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
  * Created by ss on 2017/8/17.
  */
 @Controller
+@RequestMapping("/account")
 public class AuthController {
 
 	private static final String COOKIETICKETNAME = "TICKET";
@@ -42,25 +46,30 @@ public class AuthController {
 	CompanyService companyService;
 
 	@RequestMapping("/")
+	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
 	public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
 		boolean isLogin = LoginSessionReposity.isLogin(request);
-		if (isLogin) {
-			strategy.hasAuthRedirect(request,response);
+		if (!isLogin) {
+			ModelAndView view = new ModelAndView("/auth/signin");
+			return view;
 		}
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (cookie.getName().equals(COOKIETICKETNAME) && ticketService.isTicketValid(cookie.getValue()) != null) {
-					strategy.hasAuthRedirect(request, response);
-					return null;
-				}
+
+		if (LoginSessionReposity.loginCompany(request)) {
+			strategy.hasAuthRedirect(request,response);
+		}else{
+			try {
+				response.sendRedirect("/account/company");
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
+			return null;
+
 		}
 		ModelAndView view = new ModelAndView("/auth/signin");
 		return view;
 	}
 
-	@ExcludeIntercept
+	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
 	@RequestMapping("/login")
 	@ResponseBody
 	public String login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
@@ -95,6 +104,7 @@ public class AuthController {
 
 
 	@RequestMapping("/companys")
+	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
 	public String showCompanys(HttpServletRequest request) {
 		JSONObject jsonObject = new JSONObject();
 		FrontUserInfo userInfo = LoginSessionReposity.getUserInfoInSession(request);
@@ -114,6 +124,7 @@ public class AuthController {
 
 	@RequestMapping("/chooseCompany")
 	@ResponseBody
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
 	public String chooseCompany(HttpServletRequest request, HttpServletResponse response, Integer companyId) {
 		//生成ticket
 		JSONObject jsonObject = new JSONObject();
@@ -125,26 +136,31 @@ public class AuthController {
 		}
 		jsonObject.put("code", 0);
 		jsonObject.put("message", "success");
+		CompanyMember companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);
+		LoginSessionReposity.setCompanyMemberInSession(request,companyMember);
+
 		ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
 		return jsonObject.toString();
 	}
 
 	@RequestMapping("/company")
-	@ExcludeIntercept
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
 	public ModelAndView chooseCompanyPage(HttpServletRequest request){
 		FrontUserInfo userInfo = LoginSessionReposity.getUserInfoInSession(request);
 		List<CompanyMember> companyMembers = companyService.companyList(userInfo.getUserId());
 		ModelAndView view = new ModelAndView("/auth/company");
-		view.addObject(companyMembers);
+//		view.addObject(companyMembers);
+		view.addObject("companyMembers", companyMembers);
 		return view;
 	}
 
 	@RequestMapping("/logincompany")
-	@ExcludeIntercept
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
 	public ModelAndView loginCompany(Integer companyId,HttpServletRequest request,HttpServletResponse response){
 		FrontUserInfo userInfo = LoginSessionReposity.getUserInfoInSession(request);
 		CompanyMember companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);
 		ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
+		LoginSessionReposity.setCompanyMemberInSession(request,companyMember);
 		strategy.hasAuthRedirect(request, response);
 		return null;
 	}

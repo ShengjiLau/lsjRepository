@@ -106,11 +106,14 @@
     <div class="form-panel panel-default  animatedtd fadeInRight" role="form" id='form-block'>
         <div class="panel-body">
             <div class="logo"></div>
+
+            <p th:text="${#lists.size(companyMembers)}"></p>
+
             <div class="company-box" th:each="company : ${companyMembers}">
                 <div class="company">
                     <p style="line-height: 30px" th:text="${company.companyName}">公司名</p>
                     <div class="enterbutton">
-                        <a th:href="@{/logincompany(companyId=${company.companyId})}">进入公司</a>
+                        <a th:href="@{/account/logincompany(companyId=${company.companyId})}">进入公司</a>
                     </div>
                 </div>
             </div>

@@ -7,20 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by ss on 2017/8/25.
+ * Created by ss on 2017/9/19.
  */
-public class LoginInterceptor extends ExcludeUrlAnnontionInterceptor {
-
+public class CompanyInterceptor extends ExcludeUrlAnnontionInterceptor  {
 
 	@Override
 	public boolean doPreHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-		if (!LoginSessionReposity.isLogin(request)) {
-			RequestAuthRedirectStrategy.rediectToLoginPage(request,response);
+		if (!LoginSessionReposity.loginCompany(request)) {
+			RequestAuthRedirectStrategy.rediectToCompanyPage(request,response);
 			return false;
 		}
 
 		return true;
 	}
-
 }

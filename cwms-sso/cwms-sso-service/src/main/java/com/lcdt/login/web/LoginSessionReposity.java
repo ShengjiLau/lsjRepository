@@ -1,5 +1,6 @@
 package com.lcdt.login.web;
 
+import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.CompanyMember;
 import com.lcdt.userinfo.model.FrontUserInfo;
 import com.sso.common.utils.TicketHelper;
@@ -27,6 +28,7 @@ public class LoginSessionReposity {
 		return objectInSession;
 	}
 
+	//判断当前是否已经选择公司
 	public static boolean loginCompany(HttpServletRequest request){
 		boolean companyIsLogin = isLogin(request) ? getCompanyMember(request) == null ? false : true : false;
 		String ticketInCookie = TicketHelper.findTicketInCookie(request);
@@ -44,6 +46,12 @@ public class LoginSessionReposity {
 		HttpSession session = request.getSession(true);
 		session.setAttribute(USERINFO_SESSION,userInfo);
 	}
+
+	public static void setCompanyMemberInSession(HttpServletRequest request, CompanyMember member){
+		HttpSession session = request.getSession(true);
+		session.setAttribute(COMPANY_SESSION,member);
+	}
+
 
 	public static void clearUserSession(HttpServletRequest request){
 		HttpSession session = request.getSession(false);

@@ -1,5 +1,6 @@
 package com.lcdt.login.config;
 
+import com.lcdt.login.web.filter.CompanyInterceptor;
 import com.lcdt.login.web.filter.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -13,7 +14,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new LoginInterceptor());
+		registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/account/**");
+		registry.addInterceptor(new CompanyInterceptor()).addPathPatterns("/account/**");
 	}
 
 }

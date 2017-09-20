@@ -1,6 +1,7 @@
 package com.lcdt.login.service;
 
 import com.lcdt.login.ticket.TicketBean;
+import com.lcdt.login.web.LoginSessionReposity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -35,11 +36,11 @@ public class AuthTicketService {
 			if (cookie.getName().equals(ticketCookieKey)) {
 				String ticket = cookie.getValue();
 				ticketManager.removeTicketCache(ticket);
-				Cookie cookie1 = new Cookie(ticketCookieKey, "");
-				cookie1.setMaxAge(0);
-				cookie1.setPath(cookie.getPath());
-				cookie1.setDomain(cookie.getDomain());
-				response.addCookie(cookie);
+				Cookie removedCookie = new Cookie(ticketCookieKey, null);
+				removedCookie.setMaxAge(0);
+				removedCookie.setDomain("datuodui.com");
+				removedCookie.setPath("/");
+				response.addCookie(removedCookie);
 			}
 		}
 	}
@@ -55,12 +56,12 @@ public class AuthTicketService {
 		ticketBean.setClientIp(request.getRemoteAddr());
 
 		String ticket = createTicket(); //要在ticket中设置相关信息
-
 		Cookie cookie = new Cookie(ticketCookieKey, ticket);
 		cookie.setDomain(getHost(request.getRequestURI()));
+		cookie.setPath("/");
 		response.addCookie(cookie);
-
 		ticketManager.saveTicket(ticket, ticketBean);
+
 		return true;
 
 	}

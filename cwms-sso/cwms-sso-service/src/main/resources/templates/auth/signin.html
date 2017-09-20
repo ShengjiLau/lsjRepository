@@ -91,7 +91,7 @@
             <div class="logo">
 
             </div>
-            <form class="form-horizontal signup-form" id='signin-form' method="post" data-toggle="validator" action="/login">
+            <form class="form-horizontal signup-form" id='signin-form' method="post" data-toggle="validator" action="/account/login">
                 <div class="form-group">
                     <label for="phone-num" class="col-sm-3 control-label">手机号：</label>
                     <div class="col-sm-6">
@@ -173,7 +173,7 @@
                 processData: false,
                 contentType: false,
                 type: 'POST',
-                url: '/login',
+                url: '/account/login',
                 data: fd,
                 success: function (data) {
                     //登陆成功选择公司
@@ -217,7 +217,7 @@
             processData: false,
             contentType: false,
             type: 'POST',
-            url: '/chooseCompany',
+            url: '/account/chooseCompany',
             data:form,
             success: function (data) {
                 //登陆成功选择公司
