@@ -1,6 +1,7 @@
 package com.sso.client.filter;
 
 import com.sso.client.utils.PropertyUtils;
+import com.sso.client.utils.RedirectHelper;
 import com.sso.client.utils.TicketHelper;
 
 import javax.servlet.*;
@@ -57,17 +58,7 @@ public class SsoFilter implements Filter {
 	}
 
 	public void redirectLogin(HttpServletRequest request,HttpServletResponse response) {
-		try {
-			if (!response.isCommitted()) {
-				String callback = request.getRequestURL().toString();
-				String url = PropertyUtils.readProperties(PropertyUtils.LOGIN_URL);
-				String encode = URLEncoder.encode(callback, "UTF-8");
-				url = url+"?auth_callback="+encode;
-				response.sendRedirect(url);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		RedirectHelper.redirectToLoginUrlWithAuthBack(request,response);
 	}
 
 
