@@ -2,6 +2,8 @@ package com.lcdt.login.service;
 
 import com.lcdt.login.ticket.TicketBean;
 import com.lcdt.login.web.LoginSessionReposity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ import java.util.regex.Pattern;
  */
 @Service
 public class AuthTicketService {
+
+
+	private static Logger logger = LoggerFactory.getLogger(AuthTicketService.class);
 
 	@Value("${login.cookieHost}")
 	public String cookieHost;
@@ -48,6 +53,8 @@ public class AuthTicketService {
 
 	public boolean generateTicketInResponse(HttpServletRequest request, HttpServletResponse response, Long userId, Integer companyId) {
 
+		logger.info("generate ticket userId: " + userId + " companyId: " + companyId);
+
 		TicketBean ticketBean = new TicketBean();
 		ticketBean.setCompanyId(Long.valueOf(companyId));
 		ticketBean.setUserId(Long.valueOf(userId));
@@ -61,9 +68,7 @@ public class AuthTicketService {
 		cookie.setPath("/");
 		response.addCookie(cookie);
 		ticketManager.saveTicket(ticket, ticketBean);
-
 		return true;
-
 	}
 
 	private String createTicket() {

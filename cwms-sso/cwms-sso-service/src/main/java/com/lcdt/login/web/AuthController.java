@@ -31,7 +31,6 @@ import java.util.List;
 @RequestMapping("/account")
 public class AuthController {
 
-	private static final String COOKIETICKETNAME = "TICKET";
 
 	@Autowired
 	AuthTicketService ticketService;
@@ -45,6 +44,12 @@ public class AuthController {
 	@Reference(check = false)
 	CompanyService companyService;
 
+	/**
+	 * 登陆页面
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping("/")
 	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
 	public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
@@ -69,6 +74,14 @@ public class AuthController {
 		return view;
 	}
 
+	/**
+	 * 登陆入口
+	 * @param username
+	 * @param password
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
 	@RequestMapping("/login")
 	@ResponseBody
@@ -149,7 +162,6 @@ public class AuthController {
 		FrontUserInfo userInfo = LoginSessionReposity.getUserInfoInSession(request);
 		List<CompanyMember> companyMembers = companyService.companyList(userInfo.getUserId());
 		ModelAndView view = new ModelAndView("/auth/company");
-//		view.addObject(companyMembers);
 		view.addObject("companyMembers", companyMembers);
 		return view;
 	}
