@@ -1,6 +1,7 @@
 package com.lcdt.web.sso.auth;
 
 import com.sso.client.utils.PropertyUtils;
+import com.sso.client.utils.RedirectHelper;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
@@ -15,6 +16,7 @@ import java.io.IOException;
 public class TicketAuthFailureHandler implements AuthenticationFailureHandler {
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-		response.sendRedirect(PropertyUtils.readProperties(PropertyUtils.LOGIN_URL));
+		RedirectHelper.redirectToLoginUrlWithAuthBack(request,response);
 	}
+
 }

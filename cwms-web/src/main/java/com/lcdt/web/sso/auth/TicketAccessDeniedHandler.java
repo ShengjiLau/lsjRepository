@@ -1,5 +1,6 @@
 package com.lcdt.web.sso.auth;
 
+import com.sso.client.utils.RedirectHelper;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
@@ -14,6 +15,6 @@ import java.io.IOException;
 public class TicketAccessDeniedHandler implements AccessDeniedHandler {
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-		response.sendRedirect("http://login.datuodui.com:8080");
+		RedirectHelper.redirectToLoginUrlWithAuthBack(request,response);
 	}
 }
