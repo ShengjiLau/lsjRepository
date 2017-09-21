@@ -464,4 +464,24 @@ public class CompanyMember implements java.io.Serializable {
     public void setRoleNames(String roleNames) {
         this.roleNames = roleNames == null ? null : roleNames.trim();
     }
+
+    @Override
+    public String toString() {
+        return "CompanyMember{" +
+                "memberId=" + memberId +
+                ", userId=" + userId +
+                ", companyId=" + companyId +
+                ", companyName='" + companyName + '\'' +
+                ", regDt=" + regDt +
+                ", departIds='" + departIds + '\'' +
+                ", roleIds='" + roleIds + '\'' +
+                ", positions='" + positions + '\'' +
+                ", userValid=" + userValid +
+                ", loginDt=" + loginDt +
+                ", departIdsBak='" + departIdsBak + '\'' +
+                ", departNames='" + departNames + '\'' +
+                ", roleIdsBak='" + roleIdsBak + '\'' +
+                ", roleNames='" + roleNames + '\'' +
+                '}';
+    }
 }
