@@ -16,7 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
  * Created by ss on 2017/8/3.
  */
 @Controller
-public class RootController {
+public final class RootController {
+
+	public final String IndexPage = "index";
 
 	@Autowired
 	CompanyService companyService;
@@ -28,8 +30,8 @@ public class RootController {
 				SecurityContextHolder.getContext().getAuthentication();
 		TicketAuthentication details = (TicketAuthentication) authentication.getDetails();
 
-		ModelAndView view = new ModelAndView("index");
-		view.addObject("userinfo", "当前用户登录信息：" + details.getCompanyMember().toString() + " \n ticket:" + details.getTicket());
+		ModelAndView view = new ModelAndView(IndexPage);
+		view.addObject("userinfo",details.getCompanyMember().toString() + " \n ticket:" + details.getTicket());
 		String logouturl = RedirectHelper.assembleUrl(PropertyUtils.readProperties("sso.server.logout"), "test.datuodui.com:8088/asd");
 		view.addObject("company", PropertyUtils.readProperties("sso.server.company"));
 		view.addObject("logout", logouturl);
