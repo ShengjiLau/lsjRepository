@@ -3,6 +3,7 @@ package com.lcdt.web.controller;
 import com.lcdt.cwms.user.service.CompanyService;
 import com.lcdt.login.bean.TicketAuthentication;
 import com.sso.client.utils.PropertyUtils;
+import com.sso.client.utils.RedirectHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,12 +30,10 @@ public class RootController {
 
 		ModelAndView view = new ModelAndView("index");
 		view.addObject("userinfo", "当前用户登录信息：" + details.getCompanyMember().toString() + " \n ticket:" + details.getTicket());
-		view.addObject("logout", PropertyUtils.readProperties("sso.server.logout"));
+		String logouturl = RedirectHelper.assembleUrl(PropertyUtils.readProperties("sso.server.logout"), "test.datuodui.com:8088/asd");
 		view.addObject("company", PropertyUtils.readProperties("sso.server.company"));
-
+		view.addObject("logout", logouturl);
 		return view;
-
-//		return "index userId:" + details.getUserInfo().getUserId() + "company:"+details.getCompanyMember().getCompanyName();
 	}
 
 
