@@ -7,6 +7,10 @@ smsServiceName="NotifyApp"
 webAppName="WmsWebApp"
 
 rootFile=`pwd`/..
+apps=("UserServiceApp","CwmsLoginApp","NotifyApp","WmsWebApp")
+echo ${apps[*]}
+
+
 
 rs="jps -l"
 running=`${rs} | grep ${userServiceName}`

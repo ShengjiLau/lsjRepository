@@ -12,6 +12,7 @@ import com.lcdt.userinfo.model.CompanyMember;
 import com.lcdt.userinfo.model.FrontUserInfo;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.UserService;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +43,8 @@ public class AuthController {
 
 	@Reference(check = false)
 	CompanyService companyService;
+
+	private static String LOGIN_PAGE = "/auth/signin";
 
 	/**
 	 * 登陆页面
@@ -113,7 +116,11 @@ public class AuthController {
 	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
 		ticketService.removeTicketInCookie(request, response);
 		LoginSessionReposity.clearUserSession(request);
-		return new ModelAndView("/auth/signin");
+		String authCallback = RequestAuthRedirectStrategy.getAuthCallback(request);
+
+		ModelAndView view = new ModelAndView(LOGIN_PAGE);
+		view.addObject(RequestAuthRedirectStrategy.AUTH_CALLBACK, authCallback);
+		return view;
 	}
 
 

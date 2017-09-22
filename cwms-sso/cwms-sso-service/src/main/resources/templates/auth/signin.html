@@ -124,7 +124,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-3 col-sm-6">
-                        <input type="hidden"  name="auth_callback" id="hidden_callback">
+                        <input type="hidden"  name="auth_callback" id="hidden_callback" th:value="${auth_callback}">
                         <input type="submit" value="提交" class="btn sub-btn btn-default" onclick="login(event)" />
                     </div>
                 </div>
@@ -152,7 +152,6 @@
 
 
     var back = GetQueryString("auth_callback");
-    $("#hidden_callback").val(back);
 
     function GetQueryString(name)
     {
@@ -224,8 +223,15 @@
                 var data = JSON.parse(data);
                 if (data.code == 0) {
                     console.log(data)
+
                     //选择公司成功后跳转会authcallback
                     callback = $("#hidden_callback").val();
+                    console.log("callback url" + callback);
+
+                    if (callback == null || callback == undefined || callback == "") {
+                        callback = "http://test.datuodui.com:8088";
+                    }
+
                     if(callback != null) {
                         window.location.href = callback;
                     }

@@ -5,7 +5,7 @@
 <body>
 	<p th:text="${userinfo}"></p>
 
-	<a href="http://login.datuodui.com:8080/account/logout">退出登陆</a>
+	<a th:attr="href=${logout}">退出登陆</a>
 
 	<a href="http://login.datuodui.com:8080/account/company">切换公司</a>
 

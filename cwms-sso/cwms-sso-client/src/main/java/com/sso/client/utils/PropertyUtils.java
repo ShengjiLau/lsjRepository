@@ -11,8 +11,6 @@ public class PropertyUtils {
 
 	public static final String LOGIN_URL = "sso.server.login";
 
-
-
 	private static final String PROPERTY_LOCATION = "sso.properties";
 
 	private static Properties properties;
@@ -20,7 +18,6 @@ public class PropertyUtils {
 	static {
 		loadProps();
 	}
-
 
 	synchronized static private void loadProps(){
 		properties = new Properties();
