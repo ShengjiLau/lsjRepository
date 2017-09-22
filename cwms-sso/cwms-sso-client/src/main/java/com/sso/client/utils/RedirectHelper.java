@@ -11,6 +11,26 @@ import java.net.URLEncoder;
  */
 public final class RedirectHelper {
 
+	public static final String HTTP_PREFIX = "http://";
+
+	public static final String HTTPS_PREFIX = "https://";
+
+
+
+	public static String assembleUrl(String requestUrl, String callbackUrl) {
+		try {
+			if (!callbackUrl.toLowerCase().startsWith(HTTP_PREFIX) && !callbackUrl.startsWith(HTTPS_PREFIX)) {
+				callbackUrl = HTTP_PREFIX + callbackUrl;
+			}
+			callbackUrl = URLEncoder.encode(callbackUrl, "UTF-8");
+			requestUrl = requestUrl + "?auth_callback=" + callbackUrl;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return requestUrl;
+	}
+
+
 	public static String assembleLoginUrlWithAuthBack(HttpServletRequest request){
 		String loginUrl = PropertyUtils.readProperties(PropertyUtils.LOGIN_URL);
 		String callback = request.getRequestURL().toString();
