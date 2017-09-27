@@ -20,8 +20,6 @@ import java.util.regex.Pattern;
  */
 @Service
 public class AuthTicketService {
-
-
 	private static Logger logger = LoggerFactory.getLogger(AuthTicketService.class);
 
 	@Value("${login.cookieHost}")
@@ -83,12 +81,9 @@ public class AuthTicketService {
 		if (cookieHost != null && cookieHost.length() > 0) {
 			return cookieHost;
 		}
-
 		Pattern p = Pattern.compile("(?<=http://|\\.)[^.]*?\\.(com|cn|net|org|biz|info|cc|tv)", Pattern.CASE_INSENSITIVE);
 		Matcher matcher = p.matcher(url);
 		matcher.find();
 		return matcher.group();
 	}
-
-
 }

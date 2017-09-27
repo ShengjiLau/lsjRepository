@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Created by ss on 2017/9/19.
+ * 标记不需要拦截的controller
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
