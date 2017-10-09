@@ -47,7 +47,7 @@ public class AuthController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = {"/",""})
+	@RequestMapping(value = {"/", ""})
 	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
 	public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
 		boolean isLogin = LoginSessionReposity.isLogin(request);
@@ -107,7 +107,6 @@ public class AuthController {
 	}
 
 
-
 	@RequestMapping("/logout")
 	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
 		ticketService.removeTicketInCookie(request, response);
@@ -118,45 +117,6 @@ public class AuthController {
 		return view;
 	}
 
-
-	@RequestMapping("/companys")
-	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
-	public String showCompanys(HttpServletRequest request) {
-		JSONObject jsonObject = new JSONObject();
-		FrontUserInfo userInfo = LoginSessionReposity.getUserInfoInSession(request);
-		if (userInfo == null) {
-			jsonObject.put("code", -1);
-			jsonObject.put("message", "请先登陆");
-			return jsonObject.toString();
-		}
-
-		List<CompanyMember> companyMembers = companyService.companyList(userInfo.getUserId());
-		jsonObject.put("data", companyMembers);
-		jsonObject.put("code", 0);
-		jsonObject.put("message", "success");
-		return jsonObject.toString();
-	}
-
-
-	@RequestMapping("/chooseCompany")
-	@ResponseBody
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
-	public String chooseCompany(HttpServletRequest request, HttpServletResponse response, Integer companyId) {
-		//生成ticket
-		JSONObject jsonObject = new JSONObject();
-		FrontUserInfo userInfo = LoginSessionReposity.getUserInfoInSession(request);
-		if (userInfo == null) {
-			jsonObject.put("code", -1);
-			jsonObject.put("message", "请先登陆");
-			return jsonObject.toString();
-		}
-		jsonObject.put("code", 0);
-		jsonObject.put("message", "success");
-		CompanyMember companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);
-		LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
-		ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
-		return jsonObject.toString();
-	}
 
 	@RequestMapping("/company")
 	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
