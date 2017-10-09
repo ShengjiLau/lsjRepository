@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <title>选择企业</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="/asset/style/iconfont.css">
+    <style media="screen">
+      html,body{
+        padding: 0;
+        margin: 0;
+        color: #333;
+      }
+      a:link {text-decoration: none;color: #F60;}a:visited {text-decoration: none;color: inherit;}a:hover {text-decoration: none;}a:active {text-decoration: none;font-weight: bold;}
+      .nav-head{
+        height: 60px;
+        border-bottom: 1px solid #ccc;
+      }
+      nav{
+        width: 900px;
+        margin:auto;
+        height: 60px;
+        border-bottom: 1px solid #ccc;
+      }
+        nav .logo{
+          display: inline-block;
+        }
+      nav .logo img{
+        height: 37px;
+        margin-top: 10px;
+      }
+      .page{
+        width: 900px;
+        margin: auto;
+        padding-top: 100px;
+      }
+      .user-menu{
+        font-size: 16px;
+        float: right;
+        line-height: 60px;
+      }
+      .user-menu a{
+        margin-left: 20px;
+      }
+      .user-menu a i{
+        font-size: 120%;
+        margin-right: 5px;
+      }
+      .com-top{
+        color: #333;
+          margin-bottom: 15px;
+          font-size: 14px;
+      }
+      .com-top .create-btn{
+        float: right;
+      }
+      .com-list-contaner{
+      border: 1px solid #ccc;
+      padding: 0 20px;
+      }
+      .com-list{
+        list-style: none;
+        padding: 0;
+        margin:0;
+      }
+      .com-list li:after{
+         content:"."; display:block; height:0; visibility:hidden; clear:both;
+      }
+      .com-list li{
+        border-bottom: 1px solid #f0f0f0;
+        padding: 32px 0;
+      }
+      .com-list li:last-child{
+        border: none;
+      }
+      .com-list li .com-info{
+        float: left;
+      }
+      .com-list li .com-info .title{
+        font-size: 16px;
+        line-height: 18px;
+        font-weight: bold;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+      .com-list li .com-info .sub-title{
+        line-height: 14px;
+        margin:0;
+        font-size: 12px;
+      }
+      .com-list li .acts{
+        float: right;
+      }
+      .com-list li .acts a{
+        display: block;
+      }
+      .com-list li .acts a.go{
+        width: 78px;
+        height: 32px;
+        background: #0891fb;
+        font-size: 16px;
+        color: #fff;
+        text-align: center;
+        line-height: 32px;
+        border-radius: 3px;
+      }
+      .com-list li .acts a.exit{
+        font-size:12px;
+        margin-top: 8px;
+        color:#f23c3c;
+        width: 78px;
+        line-height: 12px;
+        text-align:center;
+      }
+      .onlygo{
+        margin-top: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nav-head">
+      <nav>
+        <div class="logo">
+          <img src="/asset/image/logo_top.png" alt="">
+        </div>
+        <div class="user-menu">
+          <a href=""><i class="iconfont icon-user"></i>小A专线</a>
+          <a href=""><i class="iconfont icon-logout01"></i>退出</a>
+        </div>
+      </nav>
+    </div>
+
+    <div class="page">
+      <div class="com-top">
+        <span>选择企业</span>
+        <a href="" class="create-btn"> <span style="font-size:140%"> &#43;</span>创建企业</a>
+      </div>
+      <div class="com-list-contaner">
+
+        <ul class="com-list"  th:each="company : ${companyMembers}">
+          <li>
+            <div class="com-info">
+              <p class="title" th:text="${company.companyName}">俄罗斯科技</p>
+              <p class="sub-title">我是管理员</p>
+            </div>
+            <div class="acts">
+              <a class="go" th:href="@{/account/logincompany(companyId=${company.companyId})}">进入</a>
+              <a href="" class="exit">解除关系</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </body>
+</html>

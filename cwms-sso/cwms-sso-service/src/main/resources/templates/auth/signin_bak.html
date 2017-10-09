@@ -160,6 +160,8 @@
         if(r!=null)return  unescape(r[2]); return null;
     }
 
+
+
     function login(event) {
         event.preventDefault();
 
@@ -245,6 +247,7 @@
 
     }
 
+
     //刷新验证码
     function refreshCaptcha(){
      document.getElementById("captchaimg").src="/auth/getcaptcha?random=" + Math.random();
@@ -252,9 +255,25 @@
     }
 
     function show() {
+//        $("#gss").html("")
+//        var gss = [{
+//            name:"aaa",
+//            id:"1",
+//        },{
+//            name:"bb",
+//            id:"1",
+//        },{
+//            name:"cc",
+//            id:"1",
+//        }]
+//        for (var i = 0; i < gss.length; i++) {
+//            $("#gss").append('<li><a href="/'+gss[i].id+'">'+gss[i].name+"</a></li>")
+//        }
         $("#gss-modal").modal()
     }
 
+
 </script>
 </body>
+
 </html>
