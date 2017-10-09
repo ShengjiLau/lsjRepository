@@ -12,7 +12,6 @@ import com.lcdt.userinfo.model.CompanyMember;
 import com.lcdt.userinfo.model.FrontUserInfo;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.UserService;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,20 +30,15 @@ import java.util.List;
 @RequestMapping("/account")
 public class AuthController {
 
-
+	private static String LOGIN_PAGE = "/signin";
 	@Autowired
 	AuthTicketService ticketService;
-
 	@Autowired
 	RequestAuthRedirectStrategy strategy;
-
 	@Reference(check = false)
 	UserService userService;
-
 	@Reference(check = false)
 	CompanyService companyService;
-
-	private static String LOGIN_PAGE = "/auth/signin";
 
 	/**
 	 * 登陆页面
@@ -53,12 +47,12 @@ public class AuthController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping("/")
+	@RequestMapping(value = {"/",""})
 	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
 	public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
 		boolean isLogin = LoginSessionReposity.isLogin(request);
 		if (!isLogin) {
-			ModelAndView view = new ModelAndView("/auth/signin");
+			ModelAndView view = new ModelAndView(LOGIN_PAGE);
 			return view;
 		}
 
@@ -73,12 +67,12 @@ public class AuthController {
 			return null;
 
 		}
-		ModelAndView view = new ModelAndView("/auth/signin");
+		ModelAndView view = new ModelAndView(LOGIN_PAGE);
 		return view;
 	}
 
 	/**
-	 * 登陆入口
+	 * 登陆入口 返回json数据
 	 *
 	 * @param username
 	 * @param password
@@ -112,12 +106,13 @@ public class AuthController {
 		}
 	}
 
+
+
 	@RequestMapping("/logout")
 	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
 		ticketService.removeTicketInCookie(request, response);
 		LoginSessionReposity.clearUserSession(request);
 		String authCallback = RequestAuthRedirectStrategy.getAuthCallback(request);
-
 		ModelAndView view = new ModelAndView(LOGIN_PAGE);
 		view.addObject(RequestAuthRedirectStrategy.AUTH_CALLBACK, authCallback);
 		return view;
@@ -159,7 +154,6 @@ public class AuthController {
 		jsonObject.put("message", "success");
 		CompanyMember companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);
 		LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
-
 		ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
 		return jsonObject.toString();
 	}
@@ -169,7 +163,7 @@ public class AuthController {
 	public ModelAndView chooseCompanyPage(HttpServletRequest request) {
 		FrontUserInfo userInfo = LoginSessionReposity.getUserInfoInSession(request);
 		List<CompanyMember> companyMembers = companyService.companyList(userInfo.getUserId());
-		ModelAndView view = new ModelAndView("/auth/company");
+		ModelAndView view = new ModelAndView("/chooseCom");
 		view.addObject("companyMembers", companyMembers);
 		return view;
 	}

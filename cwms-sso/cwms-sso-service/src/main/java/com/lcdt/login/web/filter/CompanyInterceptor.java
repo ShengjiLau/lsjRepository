@@ -17,13 +17,11 @@ public class CompanyInterceptor extends ExcludeUrlAnnontionInterceptor  {
 
 	@Override
 	public boolean doPreHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
 		if (!LoginSessionReposity.loginCompany(request)) {
 			RequestAuthRedirectStrategy.rediectToCompanyPage(request,response);
 			logger.info(request.getRequestURI() + " 未选择公司 跳转至公司页面");
 			return false;
 		}
-
 		return true;
 	}
 }
