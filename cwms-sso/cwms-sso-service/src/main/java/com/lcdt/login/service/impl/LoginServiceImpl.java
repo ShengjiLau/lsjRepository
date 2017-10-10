@@ -8,8 +8,8 @@ import com.lcdt.login.service.AuthTicketService;
 import com.lcdt.login.service.LoginService;
 import com.lcdt.login.ticket.TicketBean;
 import com.lcdt.userinfo.exception.UserNotExistException;
-import com.lcdt.userinfo.model.CompanyMember;
-import com.lcdt.userinfo.model.FrontUserInfo;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,15 +39,15 @@ public class LoginServiceImpl implements LoginService {
 		if (ticketValid == null) {
 			throw new InvalidTicketException("ticket 验证失败");
 		}
-		FrontUserInfo frontUserInfo = userService.queryByUserId(ticketValid.getUserId());
+		User user = userService.queryByUserId(ticketValid.getUserId());
 		TicketAuthentication authentication = new TicketAuthentication();
 		authentication.setTicket(ticket);
-		authentication.setUserInfo(frontUserInfo);
+		authentication.setUser(user);
 		if (ticketValid.getCompanyId() == null) {
 			authentication.setChooseCompany(false);
 		}else{
-			CompanyMember companyMember = companyService.queryByUserIdCompanyId(ticketValid.getUserId(), ticketValid.getCompanyId().intValue());
-			authentication.setCompanyMember(companyMember);
+			UserCompRel companyMember = companyService.queryByUserIdCompanyId(ticketValid.getUserId(), ticketValid.getCompanyId().intValue());
+			authentication.setUserCompRel(companyMember);
 		}
 		return authentication;
 	}

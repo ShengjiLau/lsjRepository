@@ -4,22 +4,22 @@ import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.exception.UserNotExistException;
-import com.lcdt.userinfo.model.FrontUserInfo;
+import com.lcdt.userinfo.model.User;
 
 /**
  * Created by ss on 2017/7/31.
  */
 public interface UserService {
 
-	FrontUserInfo registerUser(RegisterDto registerDto) throws PhoneHasRegisterException;
+	User registerUser(RegisterDto registerDto) throws PhoneHasRegisterException;
 
 	boolean isPhoneBeenRegister(String phone);
 
 	boolean checkUserLogin();
 
-	FrontUserInfo queryByUserId(Long userId) throws UserNotExistException;
+	User queryByUserId(Long userId) throws UserNotExistException;
 
-	FrontUserInfo queryByPhone(String phone) throws UserNotExistException;
+	User queryByPhone(String phone) throws UserNotExistException;
 
-	FrontUserInfo userLogin(String username, String pwd) throws UserNotExistException, PassErrorException;
+	User userLogin(String username, String pwd) throws UserNotExistException, PassErrorException;
 }

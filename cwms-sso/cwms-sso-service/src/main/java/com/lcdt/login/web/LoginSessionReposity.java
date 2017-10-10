@@ -1,8 +1,7 @@
 package com.lcdt.login.web;
 
-import com.lcdt.userinfo.model.Company;
-import com.lcdt.userinfo.model.CompanyMember;
-import com.lcdt.userinfo.model.FrontUserInfo;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.sso.common.utils.TicketHelper;
 import org.springframework.util.StringUtils;
 
@@ -18,13 +17,13 @@ public class LoginSessionReposity {
 
 	private static final String COMPANY_SESSION = "company";
 
-	public static FrontUserInfo getUserInfoInSession(HttpServletRequest request){
+	public static User getUserInfoInSession(HttpServletRequest request){
 		HttpSession session = request.getSession(false);
-		return getObjectInSession(FrontUserInfo.class, session, USERINFO_SESSION);
+		return getObjectInSession(User.class, session, USERINFO_SESSION);
 	}
 
-	public static CompanyMember getCompanyMember(HttpServletRequest request) {
-		CompanyMember objectInSession = getObjectInSession(CompanyMember.class,request.getSession(false), COMPANY_SESSION);
+	public static UserCompRel getCompanyMember(HttpServletRequest request) {
+		UserCompRel objectInSession = getObjectInSession(UserCompRel.class,request.getSession(false), COMPANY_SESSION);
 		return objectInSession;
 	}
 
@@ -42,12 +41,12 @@ public class LoginSessionReposity {
 		return getUserInfoInSession(request) != null;
 	}
 
-	public static void setUserInSession(HttpServletRequest request,FrontUserInfo userInfo){
+	public static void setUserInSession(HttpServletRequest request,User userInfo){
 		HttpSession session = request.getSession(true);
 		session.setAttribute(USERINFO_SESSION,userInfo);
 	}
 
-	public static void setCompanyMemberInSession(HttpServletRequest request, CompanyMember member){
+	public static void setCompanyMemberInSession(HttpServletRequest request, UserCompRel member){
 		HttpSession session = request.getSession(true);
 		session.setAttribute(COMPANY_SESSION,member);
 	}

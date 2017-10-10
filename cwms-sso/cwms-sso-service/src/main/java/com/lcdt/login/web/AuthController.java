@@ -8,8 +8,8 @@ import com.lcdt.login.web.filter.CompanyInterceptor;
 import com.lcdt.login.web.filter.LoginInterceptor;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.UserNotExistException;
-import com.lcdt.userinfo.model.CompanyMember;
-import com.lcdt.userinfo.model.FrontUserInfo;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,9 +86,9 @@ public class AuthController {
 	public String login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
 		JSONObject jsonObject = new JSONObject();
 		try {
-			FrontUserInfo frontUserInfo = userService.userLogin(username, password);
-			LoginSessionReposity.setUserInSession(request, frontUserInfo);
-			List<CompanyMember> companyMembers = companyService.companyList(frontUserInfo.getUserId());
+			User user = userService.userLogin(username, password);
+			LoginSessionReposity.setUserInSession(request, user);
+			List<UserCompRel> companyMembers = companyService.companyList(user.getUserId());
 			jsonObject.put("data", companyMembers);
 			jsonObject.put("code", 0);
 			jsonObject.put("message", "success");
@@ -121,8 +121,8 @@ public class AuthController {
 	@RequestMapping("/company")
 	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
 	public ModelAndView chooseCompanyPage(HttpServletRequest request) {
-		FrontUserInfo userInfo = LoginSessionReposity.getUserInfoInSession(request);
-		List<CompanyMember> companyMembers = companyService.companyList(userInfo.getUserId());
+		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
+		List<UserCompRel> companyMembers = companyService.companyList(userInfo.getUserId());
 		ModelAndView view = new ModelAndView("/chooseCom");
 		view.addObject("companyMembers", companyMembers);
 		return view;
@@ -131,8 +131,8 @@ public class AuthController {
 	@RequestMapping("/logincompany")
 	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
 	public ModelAndView loginCompany(Integer companyId, HttpServletRequest request, HttpServletResponse response) {
-		FrontUserInfo userInfo = LoginSessionReposity.getUserInfoInSession(request);
-		CompanyMember companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);
+		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
+		UserCompRel companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);
 		ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
 		LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
 		strategy.hasAuthRedirect(request, response);
