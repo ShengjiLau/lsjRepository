@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.contract.dao.ContractMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.Contract">
+    <id column="contract_id" jdbcType="BIGINT" property="contractId" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="sign_date" jdbcType="TIMESTAMP" property="signDate" />
+    <result column="type" jdbcType="SMALLINT" property="type" />
+    <result column="contact_status" jdbcType="SMALLINT" property="contactStatus" />
+    <result column="cycle" jdbcType="SMALLINT" property="cycle" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="party_a" jdbcType="VARCHAR" property="partyA" />
+    <result column="party_a_principal" jdbcType="VARCHAR" property="partyAPrincipal" />
+    <result column="party_b" jdbcType="VARCHAR" property="partyB" />
+    <result column="party_b_principal" jdbcType="VARCHAR" property="partyBPrincipal" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="terms" jdbcType="VARCHAR" property="terms" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_contract
+    where contract_id = #{contractId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.Contract">
+    <selectKey keyProperty="contractId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_contract (code, title, sign_date, 
+      type, contact_status, cycle, 
+      pay_type, party_a, party_a_principal, 
+      party_b, party_b_principal, start_date, 
+      end_date, summary, terms, 
+      file_url)
+    values (#{code,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{signDate,jdbcType=TIMESTAMP}, 
+      #{type,jdbcType=SMALLINT}, #{contactStatus,jdbcType=SMALLINT}, #{cycle,jdbcType=SMALLINT}, 
+      #{payType,jdbcType=VARCHAR}, #{partyA,jdbcType=VARCHAR}, #{partyAPrincipal,jdbcType=VARCHAR}, 
+      #{partyB,jdbcType=VARCHAR}, #{partyBPrincipal,jdbcType=VARCHAR}, #{startDate,jdbcType=TIMESTAMP}, 
+      #{endDate,jdbcType=TIMESTAMP}, #{summary,jdbcType=VARCHAR}, #{terms,jdbcType=VARCHAR}, 
+      #{fileUrl,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.Contract">
+    update t_contract
+    set code = #{code,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      sign_date = #{signDate,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=SMALLINT},
+      contact_status = #{contactStatus,jdbcType=SMALLINT},
+      cycle = #{cycle,jdbcType=SMALLINT},
+      pay_type = #{payType,jdbcType=VARCHAR},
+      party_a = #{partyA,jdbcType=VARCHAR},
+      party_a_principal = #{partyAPrincipal,jdbcType=VARCHAR},
+      party_b = #{partyB,jdbcType=VARCHAR},
+      party_b_principal = #{partyBPrincipal,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      summary = #{summary,jdbcType=VARCHAR},
+      terms = #{terms,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR}
+    where contract_id = #{contractId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select contract_id, code, title, sign_date, type, contact_status, cycle, pay_type, 
+    party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, summary, 
+    terms, file_url
+    from t_contract
+    where contract_id = #{contractId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select contract_id, code, title, sign_date, type, contact_status, cycle, pay_type, 
+    party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, summary, 
+    terms, file_url
+    from t_contract
+  </select>
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.Contract">
+    <id column="contract_id" jdbcType="BIGINT" property="contractId" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="sign_date" jdbcType="TIMESTAMP" property="signDate" />
+    <result column="type" jdbcType="SMALLINT" property="type" />
+    <result column="contact_status" jdbcType="SMALLINT" property="contactStatus" />
+    <result column="cycle" jdbcType="SMALLINT" property="cycle" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="party_a" jdbcType="VARCHAR" property="partyA" />
+    <result column="party_a_principal" jdbcType="VARCHAR" property="partyAPrincipal" />
+    <result column="party_b" jdbcType="VARCHAR" property="partyB" />
+    <result column="party_b_principal" jdbcType="VARCHAR" property="partyBPrincipal" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="terms" jdbcType="VARCHAR" property="terms" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_contract
+    where contract_id = #{contractId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.Contract">
+    <selectKey keyProperty="contractId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_contract (code, title, sign_date, 
+      type, contact_status, cycle, 
+      pay_type, party_a, party_a_principal, 
+      party_b, party_b_principal, start_date, 
+      end_date, summary, terms, 
+      file_url)
+    values (#{code,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{signDate,jdbcType=TIMESTAMP}, 
+      #{type,jdbcType=SMALLINT}, #{contactStatus,jdbcType=SMALLINT}, #{cycle,jdbcType=SMALLINT}, 
+      #{payType,jdbcType=VARCHAR}, #{partyA,jdbcType=VARCHAR}, #{partyAPrincipal,jdbcType=VARCHAR}, 
+      #{partyB,jdbcType=VARCHAR}, #{partyBPrincipal,jdbcType=VARCHAR}, #{startDate,jdbcType=TIMESTAMP}, 
+      #{endDate,jdbcType=TIMESTAMP}, #{summary,jdbcType=VARCHAR}, #{terms,jdbcType=VARCHAR}, 
+      #{fileUrl,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.Contract">
+    update t_contract
+    set code = #{code,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      sign_date = #{signDate,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=SMALLINT},
+      contact_status = #{contactStatus,jdbcType=SMALLINT},
+      cycle = #{cycle,jdbcType=SMALLINT},
+      pay_type = #{payType,jdbcType=VARCHAR},
+      party_a = #{partyA,jdbcType=VARCHAR},
+      party_a_principal = #{partyAPrincipal,jdbcType=VARCHAR},
+      party_b = #{partyB,jdbcType=VARCHAR},
+      party_b_principal = #{partyBPrincipal,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      summary = #{summary,jdbcType=VARCHAR},
+      terms = #{terms,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR}
+    where contract_id = #{contractId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select contract_id, code, title, sign_date, type, contact_status, cycle, pay_type, 
+    party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, summary, 
+    terms, file_url
+    from t_contract
+    where contract_id = #{contractId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select contract_id, code, title, sign_date, type, contact_status, cycle, pay_type, 
+    party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, summary, 
+    terms, file_url
+    from t_contract
+  </select>
+</mapper>
