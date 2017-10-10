@@ -31,7 +31,7 @@ public final class RootController {
 		TicketAuthentication details = (TicketAuthentication) authentication.getDetails();
 
 		ModelAndView view = new ModelAndView(IndexPage);
-		view.addObject("userinfo",details.getCompanyMember().toString() + " \n ticket:" + details.getTicket());
+		view.addObject("userinfo",details.getUserCompRel().toString() + " \n ticket:" + details.getTicket());
 		String logouturl = RedirectHelper.assembleUrl(PropertyUtils.readProperties("sso.server.logout"), "test.datuodui.com:8088/asd");
 		view.addObject("company", PropertyUtils.readProperties("sso.server.company"));
 		view.addObject("logout", logouturl);

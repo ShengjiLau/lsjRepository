@@ -15,7 +15,6 @@
         <module>cwms-web</module>
         <module>wms-user</module>
         <module>common-config</module>
-        <module>wms-permission</module>
         <module>common-notify</module>
         <module>common-utils</module>
         <module>cwms-sso</module>

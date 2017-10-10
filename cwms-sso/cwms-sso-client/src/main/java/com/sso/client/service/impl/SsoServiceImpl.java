@@ -9,8 +9,6 @@ import com.sso.client.service.SsoService;
 public class SsoServiceImpl implements SsoService {
 
 
-
-
 	@Override
 	public SsoUserModel loadUserInfo(String ticket) {
 		return null;

@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.model.Company;
-import com.lcdt.userinfo.model.CompanyMember;
+import com.lcdt.userinfo.model.UserCompRel;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,7 @@ public interface CompanyService {
 	 * @return
 	 * @throws CompanyExistException
 	 */
-	CompanyMember joinCompany(CompanyDto dto) throws CompanyExistException;
+	UserCompRel joinCompany(CompanyDto dto) throws CompanyExistException;
 
 	/***
 	 * 获取企业列表
@@ -39,8 +39,8 @@ public interface CompanyService {
 	PageInfo companyList(Map m);
 
 
-	List<CompanyMember> companyList(Long userId);
+	List<UserCompRel> companyList(Long userId);
 
 
-	CompanyMember queryByUserIdCompanyId(Long userId, Integer companyId);
+	UserCompRel queryByUserIdCompanyId(Long userId, Integer companyId);
 }

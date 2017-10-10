@@ -3,11 +3,11 @@ package com.lcdt.userinfo.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dao.CompanyMapper;
-import com.lcdt.userinfo.dao.CompanyMemberMapper;
+import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.model.Company;
-import com.lcdt.userinfo.model.CompanyMember;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,22 +28,22 @@ public class CompanyServiceImpl implements CompanyService {
 	private CompanyMapper companyMapper;
 
 	@Autowired
-	private CompanyMemberMapper companyMemberMapper;
+	private UserCompRelMapper userCompRelMapper;
 
 	@Transactional
 	@Override
 	public Company createCompany(CompanyDto dto) throws CompanyExistException {
 		Map map = new HashMap<String, Object>();
 		map.put("userId", dto.getUserId());
-		map.put("companyName", dto.getCompanyName());
-		List<CompanyMember> memberList = companyMemberMapper.selectByCondition(map);
+		map.put("compId", dto.getCompanyId());
+		List<UserCompRel> memberList = userCompRelMapper.selectByCondition(map);
 		if (memberList != null && memberList.size() > 0) {
 			throw new CompanyExistException();
 		}
 		Date dt = new Date();
 		//创建企业
 		Company company = new Company();
-		company.setCompanyName(dto.getCompanyName());
+	/*	company.setCompanyName(dto.getCompanyName());
 		company.setCreateId(dto.getUserId());
 		company.setCreateDt(dt);
 		company.setCreateName(dto.getCreateUserName());
@@ -58,47 +58,47 @@ public class CompanyServiceImpl implements CompanyService {
 			companyMember.setCompanyName(company.getCompanyName());
 			companyMember.setRegDt(dt);
 			companyMemberMapper.insert(companyMember);
-		}
+		}*/
 		return company;
 	}
 
 
 	@Transactional
 	@Override
-	public CompanyMember joinCompany(CompanyDto dto) throws CompanyExistException {
+	public UserCompRel joinCompany(CompanyDto dto) throws CompanyExistException {
 		Map map = new HashMap<String, Object>();
 		map.put("userId", dto.getUserId());
-		map.put("companyId", dto.getCompanyId());
-		List<CompanyMember> memberList = companyMemberMapper.selectByCondition(map);
+		map.put("fullName", dto.getCompanyName());
+		List<UserCompRel> memberList = userCompRelMapper.selectByCondition(map);
 		if (memberList != null && memberList.size() > 0) {
 			throw new CompanyExistException();
 		}
 
-		CompanyMember companyMember = new CompanyMember();
-		companyMember.setCompanyId(dto.getCompanyId());
+		UserCompRel userCompRel = new UserCompRel();
+/*		companyMember.setCompanyId(dto.getCompanyId());
 		companyMember.setUserId(dto.getUserId());
 		companyMember.setCompanyId(dto.getCompanyId());
 		companyMember.setCompanyName(dto.getCompanyName());
 		companyMember.setRegDt(new Date());
-		companyMemberMapper.insert(companyMember);
+		companyMemberMapper.insert(companyMember);*/
 
-		return companyMember;
+		return userCompRel;
 	}
 
 
 	@Transactional(readOnly = true)
-	public List<CompanyMember> companyList(Long userId){
+	public List<UserCompRel> companyList(Long userId){
 		HashMap conditions = new HashMap(2);
 		conditions.put("userId", userId);
-		return companyMemberMapper.selectByCondition(conditions);
+		return userCompRelMapper.selectByCondition(conditions);
 	}
 
 	@Transactional(readOnly = true)
-	public CompanyMember queryByUserIdCompanyId(Long userId, Integer companyId) {
+	public UserCompRel queryByUserIdCompanyId(Long userId, Integer companyId) {
 		HashMap hashMap = new HashMap();
 		hashMap.put("userId", userId);
-		hashMap.put("companyId", companyId);
-		List<CompanyMember> members = companyMemberMapper.selectByCondition(hashMap);
+		hashMap.put("compId", companyId);
+		List<UserCompRel> members = userCompRelMapper.selectByCondition(hashMap);
 		if (members == null || members.isEmpty()) {
 			return null;
 		}else{
@@ -124,7 +124,7 @@ public class CompanyServiceImpl implements CompanyService {
 			}
 		}
 		PageHelper.startPage(pageNo, pageSize);
-		List<CompanyMember> list = companyMemberMapper.selectByCondition(m);
+		List<UserCompRel> list = userCompRelMapper.selectByCondition(m);
 		PageInfo pageInfo = new PageInfo(list);
 		return pageInfo;
 	}
