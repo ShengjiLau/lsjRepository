@@ -10,13 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cwms-sso-client</artifactId>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>5.0.0.BUILD-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
+
 
 
 </project>
