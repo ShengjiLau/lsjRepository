@@ -42,6 +42,7 @@ public class ContractServiceImpl implements ContractSerivce{
         }
     }
 
+
     @Override
     public List<Contract> queryContract(Contract contract, ContractApproval contractApproval) {
         return null;

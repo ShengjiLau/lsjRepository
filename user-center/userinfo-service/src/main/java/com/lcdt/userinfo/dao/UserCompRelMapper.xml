@@ -71,7 +71,7 @@
     WHERE 1=1
     <trim prefix="" suffix="" suffixOverrides="">
       <if test="userId != null &amp;&amp; userId != ''">
-        AND user_id = #{memberId,jdbcType=BIGINT}
+        AND user_id = #{userId,jdbcType=BIGINT}
       </if>
       <if test="compId != null &amp;&amp; compId != ''">
         and comp_id = #{compId,jdbcType=BIGINT}

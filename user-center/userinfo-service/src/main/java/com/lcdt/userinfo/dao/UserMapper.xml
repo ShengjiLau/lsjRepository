@@ -93,6 +93,6 @@
 
   <select id="queryByUserPhone" resultMap="BaseResultMap">
     SELECT * FROM t_uc_user
-    WHERE user_name = #{phone,jdbcType=VARCHAR}
+    WHERE phone = #{phone,jdbcType=VARCHAR}
   </select>
 </mapper>

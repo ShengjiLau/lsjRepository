@@ -12,7 +12,6 @@ import java.util.Collection;
 public class TicketAuthenticationToken extends AbstractAuthenticationToken {
 
 
-	private Object principal;
 	private String ticket;
 
 	private TicketAuthentication authentication;

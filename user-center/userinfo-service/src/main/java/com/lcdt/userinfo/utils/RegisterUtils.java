@@ -23,6 +23,7 @@ public class RegisterUtils {
 	}
 
 
+
 	public static String binaryTohexString(byte[] bytes) {
 		char[] hexs = new char[bytes.length * 2];
 		for (int i = 0, offset = 0; i < bytes.length; i++) {
