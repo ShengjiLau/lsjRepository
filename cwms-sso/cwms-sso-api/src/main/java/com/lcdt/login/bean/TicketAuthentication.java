@@ -1,7 +1,7 @@
 package com.lcdt.login.bean;
 
-import com.lcdt.userinfo.model.CompanyMember;
-import com.lcdt.userinfo.model.FrontUserInfo;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 
 import java.io.Serializable;
 
@@ -11,8 +11,8 @@ import java.io.Serializable;
 public class TicketAuthentication implements Serializable {
 
 	private boolean chooseCompany;
-	private CompanyMember companyMember;
-	private FrontUserInfo userInfo;
+	private UserCompRel userCompRel;
+	private User user;
 
 	private String ticket;
 
@@ -32,19 +32,19 @@ public class TicketAuthentication implements Serializable {
 		this.chooseCompany = chooseCompany;
 	}
 
-	public CompanyMember getCompanyMember() {
-		return companyMember;
+	public UserCompRel getUserCompRel() {
+		return userCompRel;
 	}
 
-	public void setCompanyMember(CompanyMember companyMember) {
-		this.companyMember = companyMember;
+	public void setUserCompRel(UserCompRel userCompRel) {
+		this.userCompRel = userCompRel;
 	}
 
-	public FrontUserInfo getUserInfo() {
-		return userInfo;
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserInfo(FrontUserInfo userInfo) {
-		this.userInfo = userInfo;
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

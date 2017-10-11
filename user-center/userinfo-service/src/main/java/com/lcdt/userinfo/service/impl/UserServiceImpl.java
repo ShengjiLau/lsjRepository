@@ -1,11 +1,11 @@
 package com.lcdt.userinfo.service.impl;
 
-import com.lcdt.userinfo.dao.FrontUserInfoMapper;
+import com.lcdt.userinfo.dao.UserMapper;
 import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.exception.UserNotExistException;
-import com.lcdt.userinfo.model.FrontUserInfo;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.utils.RegisterUtils;
 import org.slf4j.Logger;
@@ -13,9 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by ss on 2017/7/31.
@@ -27,23 +24,25 @@ public class UserServiceImpl implements UserService {
 	private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Autowired
-	private FrontUserInfoMapper userInfoMapper;
+	private UserMapper userMapper;
 
 	@Transactional
 	@Override
-	public FrontUserInfo registerUser(RegisterDto registerDto) throws PhoneHasRegisterException {
+	public User registerUser(RegisterDto registerDto) throws PhoneHasRegisterException {
 		boolean phoneBeenRegester = isPhoneBeenRegister(registerDto.getUserPhoneNum());
 		if (phoneBeenRegester) {
 			throw new PhoneHasRegisterException();
 		}
-		FrontUserInfo registerUser = new FrontUserInfo();
-		registerUser.setUserName(registerDto.getUserPhoneNum());
+		User registerUser = new User();
+
+
+/*		registerUser.setUserName(registerDto.getUserPhoneNum());
 		String md5EncryptPwd = RegisterUtils.md5Encrypt(registerDto.getPassword());
 		registerUser.setUserPass(md5EncryptPwd);
 		registerUser.setName(registerDto.getName());
 		registerUser.setIntroducer(registerDto.getIntroducer());
-		registerUser.setRegDt(new Date());
-		int insert = userInfoMapper.insert(registerUser);
+		registerUser.setRegDt(new Date());*/
+		int insert = userMapper.insert(registerUser);
 		return registerUser;
 	}
 
@@ -51,18 +50,20 @@ public class UserServiceImpl implements UserService {
 	@Transactional(readOnly = true)
 	@Override
 	public boolean isPhoneBeenRegister(String phone) {
-		List<FrontUserInfo> frontUserInfos = userInfoMapper.queryByUserPhone(phone);
-		if (frontUserInfos == null || frontUserInfos.isEmpty()) {
+
+
+/*		User user = userMapper.queryByUserPhone(phone);
+		if (user == null) {
 			return false;
-		}
+		}*/
 		return true;
 	}
 
 	@Transactional
-	public FrontUserInfo userLogin(String username, String pwd) throws UserNotExistException, PassErrorException {
-		FrontUserInfo frontUserInfo = queryByPhone(username);
-		if (frontUserInfo.getUserPass().toUpperCase().equals(RegisterUtils.md5Encrypt(pwd).toUpperCase())){
-			return frontUserInfo;
+	public User userLogin(String username, String pwd) throws UserNotExistException, PassErrorException {
+		User user = queryByPhone(username);
+		if (user.getPwd().toUpperCase().equals(RegisterUtils.md5Encrypt(pwd).toUpperCase())){
+			return user;
 		}else{
 			throw new PassErrorException();
 		}
@@ -76,23 +77,22 @@ public class UserServiceImpl implements UserService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public FrontUserInfo queryByUserId(Long userId) throws UserNotExistException {
-		FrontUserInfo frontUserInfo = userInfoMapper.selectByPrimaryKey(userId);
-		if (frontUserInfo == null) {
+	public User queryByUserId(Long userId) throws UserNotExistException {
+		User user = userMapper.selectByPrimaryKey(userId);
+		if (user == null) {
 			throw new UserNotExistException();
 		}
-		return frontUserInfo;
+		return user;
 	}
 
 	@Transactional(readOnly = true)
 	@Override
-	public FrontUserInfo queryByPhone(String phone) throws UserNotExistException {
-		logger.info("queryByPhone userPhone {} ",phone);
-		List<FrontUserInfo> frontUserInfos = userInfoMapper.queryByUserPhone(phone);
-		if (frontUserInfos == null || frontUserInfos.isEmpty()) {
+	public User queryByPhone(String phone) throws UserNotExistException {
+		User user = userMapper.queryByUserPhone(phone);
+		if (user == null) {
 			throw new UserNotExistException();
 		}
-		return frontUserInfos.get(0);
+		return user;
 	}
 
 

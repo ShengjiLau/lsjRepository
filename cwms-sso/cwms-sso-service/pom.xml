@@ -36,6 +36,11 @@
             <artifactId>cwms-sso-common</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>wms-sms</artifactId>
+            <version>1.0</version>
+        </dependency>
 
     </dependencies>
 
