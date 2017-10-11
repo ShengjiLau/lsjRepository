@@ -54,13 +54,13 @@ public class TicketAuthenticationToken extends AbstractAuthenticationToken {
 	@Override
 	public Object getPrincipal() {
 		if (authentication != null) {
-			return  authentication.getUserInfo();
+			return  authentication.getUser();
 		}
 		return null;
 	}
 
 	@Override
 	public String getName() {
-		return authentication.getUserInfo().getName();
+		return authentication.getUser().getRealName();
 	}
 }
