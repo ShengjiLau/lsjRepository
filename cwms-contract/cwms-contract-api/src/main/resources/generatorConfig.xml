@@ -172,15 +172,15 @@
             <generatedKey column="pop_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
 
-        <table tableName="t_sale_order" domainObjectName="SaleOrder">
+        <table tableName="t_sales_order" domainObjectName="SalesOrder">
             <generatedKey column="so_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
 
-        <table tableName="t_sale_order_approval" domainObjectName="SaleOrderApproval">
+        <table tableName="t_sales_order_approval" domainObjectName="SalesOrderApproval">
             <generatedKey column="soa_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
 
-        <table tableName="t_sale_order_product" domainObjectName="SaleOrderProduct">
+        <table tableName="t_sales_order_product" domainObjectName="SalesOrderProduct">
             <generatedKey column="sop_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
     </context>
