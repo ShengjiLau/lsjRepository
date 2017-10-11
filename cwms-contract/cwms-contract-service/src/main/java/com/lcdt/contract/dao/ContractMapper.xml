@@ -42,38 +42,38 @@
         #{fileUrl,jdbcType=VARCHAR})
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.Contract">
-    update t_contract
-    set code = #{code,jdbcType=VARCHAR},
-      title = #{title,jdbcType=VARCHAR},
-      sign_date = #{signDate,jdbcType=TIMESTAMP},
-      type = #{type,jdbcType=SMALLINT},
-      contact_status = #{contactStatus,jdbcType=SMALLINT},
-      cycle = #{cycle,jdbcType=SMALLINT},
-      pay_type = #{payType,jdbcType=VARCHAR},
-      party_a = #{partyA,jdbcType=VARCHAR},
-      party_a_principal = #{partyAPrincipal,jdbcType=VARCHAR},
-      party_b = #{partyB,jdbcType=VARCHAR},
-      party_b_principal = #{partyBPrincipal,jdbcType=VARCHAR},
-      start_date = #{startDate,jdbcType=TIMESTAMP},
-      end_date = #{endDate,jdbcType=TIMESTAMP},
-      summary = #{summary,jdbcType=VARCHAR},
-      terms = #{terms,jdbcType=VARCHAR},
-      file_url = #{fileUrl,jdbcType=VARCHAR}
-    where contract_id = #{contractId,jdbcType=BIGINT}
-  </update>
+        update t_contract
+        set code = #{code,jdbcType=VARCHAR},
+          title = #{title,jdbcType=VARCHAR},
+          sign_date = #{signDate,jdbcType=TIMESTAMP},
+          type = #{type,jdbcType=SMALLINT},
+          contact_status = #{contactStatus,jdbcType=SMALLINT},
+          cycle = #{cycle,jdbcType=SMALLINT},
+          pay_type = #{payType,jdbcType=VARCHAR},
+          party_a = #{partyA,jdbcType=VARCHAR},
+          party_a_principal = #{partyAPrincipal,jdbcType=VARCHAR},
+          party_b = #{partyB,jdbcType=VARCHAR},
+          party_b_principal = #{partyBPrincipal,jdbcType=VARCHAR},
+          start_date = #{startDate,jdbcType=TIMESTAMP},
+          end_date = #{endDate,jdbcType=TIMESTAMP},
+          summary = #{summary,jdbcType=VARCHAR},
+          terms = #{terms,jdbcType=VARCHAR},
+          file_url = #{fileUrl,jdbcType=VARCHAR}
+        where contract_id = #{contractId,jdbcType=BIGINT}
+    </update>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select contract_id, code, title, sign_date, type, contact_status, cycle, pay_type, 
-    party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, summary, 
-    terms, file_url
-    from t_contract
-    where contract_id = #{contractId,jdbcType=BIGINT}
-  </select>
+        select contract_id, code, title, sign_date, type, contact_status, cycle, pay_type,
+        party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, summary,
+        terms, file_url
+        from t_contract
+        where contract_id = #{contractId,jdbcType=BIGINT}
+    </select>
     <select id="selectAll" resultMap="BaseResultMap">
-    select contract_id, code, title, sign_date, type, contact_status, cycle, pay_type, 
-    party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, summary, 
-    terms, file_url
-    from t_contract
-  </select>
+        select contract_id, code, title, sign_date, type, contact_status, cycle, pay_type,
+        party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, summary,
+        terms, file_url
+        from t_contract
+    </select>
     <resultMap id="BaseResultMap" type="com.lcdt.contract.model.Contract">
         <id column="contract_id" jdbcType="BIGINT" property="contractId"/>
         <result column="code" jdbcType="VARCHAR" property="code"/>
@@ -94,9 +94,9 @@
         <result column="file_url" jdbcType="VARCHAR" property="fileUrl"/>
     </resultMap>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from t_contract
-    where contract_id = #{contractId,jdbcType=BIGINT}
-  </delete>
+        delete from t_contract
+        where contract_id = #{contractId,jdbcType=BIGINT}
+    </delete>
     <insert id="insert" parameterType="com.lcdt.contract.model.Contract">
         <selectKey keyProperty="contractId" order="AFTER" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID()
@@ -115,36 +115,36 @@
         #{fileUrl,jdbcType=VARCHAR})
     </insert>
     <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.Contract">
-    update t_contract
-    set code = #{code,jdbcType=VARCHAR},
-      title = #{title,jdbcType=VARCHAR},
-      sign_date = #{signDate,jdbcType=TIMESTAMP},
-      type = #{type,jdbcType=SMALLINT},
-      contact_status = #{contactStatus,jdbcType=SMALLINT},
-      cycle = #{cycle,jdbcType=SMALLINT},
-      pay_type = #{payType,jdbcType=VARCHAR},
-      party_a = #{partyA,jdbcType=VARCHAR},
-      party_a_principal = #{partyAPrincipal,jdbcType=VARCHAR},
-      party_b = #{partyB,jdbcType=VARCHAR},
-      party_b_principal = #{partyBPrincipal,jdbcType=VARCHAR},
-      start_date = #{startDate,jdbcType=TIMESTAMP},
-      end_date = #{endDate,jdbcType=TIMESTAMP},
-      summary = #{summary,jdbcType=VARCHAR},
-      terms = #{terms,jdbcType=VARCHAR},
-      file_url = #{fileUrl,jdbcType=VARCHAR}
-    where contract_id = #{contractId,jdbcType=BIGINT}
-  </update>
+        update t_contract
+        set code = #{code,jdbcType=VARCHAR},
+          title = #{title,jdbcType=VARCHAR},
+          sign_date = #{signDate,jdbcType=TIMESTAMP},
+          type = #{type,jdbcType=SMALLINT},
+          contact_status = #{contactStatus,jdbcType=SMALLINT},
+          cycle = #{cycle,jdbcType=SMALLINT},
+          pay_type = #{payType,jdbcType=VARCHAR},
+          party_a = #{partyA,jdbcType=VARCHAR},
+          party_a_principal = #{partyAPrincipal,jdbcType=VARCHAR},
+          party_b = #{partyB,jdbcType=VARCHAR},
+          party_b_principal = #{partyBPrincipal,jdbcType=VARCHAR},
+          start_date = #{startDate,jdbcType=TIMESTAMP},
+          end_date = #{endDate,jdbcType=TIMESTAMP},
+          summary = #{summary,jdbcType=VARCHAR},
+          terms = #{terms,jdbcType=VARCHAR},
+          file_url = #{fileUrl,jdbcType=VARCHAR}
+        where contract_id = #{contractId,jdbcType=BIGINT}
+    </update>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select contract_id, code, title, sign_date, type, contact_status, cycle, pay_type, 
-    party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, summary, 
-    terms, file_url
-    from t_contract
-    where contract_id = #{contractId,jdbcType=BIGINT}
-  </select>
+        select contract_id, code, title, sign_date, type, contact_status, cycle, pay_type,
+        party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, summary,
+        terms, file_url
+        from t_contract
+        where contract_id = #{contractId,jdbcType=BIGINT}
+    </select>
     <select id="selectAll" resultMap="BaseResultMap">
-    select contract_id, code, title, sign_date, type, contact_status, cycle, pay_type, 
-    party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, summary, 
-    terms, file_url
-    from t_contract
-  </select>
+        select contract_id, code, title, sign_date, type, contact_status, cycle, pay_type,
+        party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, summary,
+        terms, file_url
+        from t_contract
+    </select>
 </mapper>
