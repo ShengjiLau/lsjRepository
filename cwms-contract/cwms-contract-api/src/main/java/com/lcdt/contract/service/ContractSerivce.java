@@ -15,7 +15,7 @@ public interface ContractSerivce {
      * 新建合同
      * @return
      */
-    int addContract();
+    int addContract(Contract contract,ContractApproval contractApproval);
 
     /**
      * 查询合同列表
