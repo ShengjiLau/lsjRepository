@@ -9,7 +9,9 @@ import com.lcdt.web.sso.auth.TicketLogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,7 +28,9 @@ import java.util.Locale;
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
 
 	@Autowired
 	WmsWebLoginFailureHandler failureHandler;
@@ -49,7 +53,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterAt(ticketAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests().antMatchers("/auth/**").permitAll()
 				.antMatchers("/register/**").permitAll()
-				.anyRequest().authenticated()
 				.and().logout().logoutSuccessHandler(ticketLogoutSuccessHandler()).logoutUrl("/signout").logoutSuccessUrl("/auth/loginpage").permitAll()
 				.and().exceptionHandling().accessDeniedHandler(deniedHandler())
 				.and().csrf().disable();
@@ -86,7 +89,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public TicketAccessDeniedHandler deniedHandler() {
 		return new TicketAccessDeniedHandler();
 	}
-
 
 	@Bean
 	public LocaleResolver localeResolver() {

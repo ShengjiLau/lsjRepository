@@ -13,13 +13,12 @@
         <module>mybatis-generator</module>
         <module>user-center</module>
         <module>cwms-web</module>
-        <module>wms-user</module>
         <module>common-config</module>
-        <module>wms-permission</module>
         <module>common-notify</module>
         <module>common-utils</module>
         <module>cwms-sso</module>
         <module>cwms-goods</module>
+        <module>clms-permission</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>

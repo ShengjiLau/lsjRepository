@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class IndexController {
 
 	@ResponseBody
-	@RequestMapping("/")
+	@RequestMapping(value = {"/",""})
 	public String index(){
 		return "this is demo index";
 	}

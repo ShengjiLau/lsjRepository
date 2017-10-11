@@ -3,6 +3,7 @@ package com.lcdt.web.sso.auth;
 import com.sso.client.utils.PropertyUtils;
 import com.sso.client.utils.RedirectHelper;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import javax.servlet.ServletException;

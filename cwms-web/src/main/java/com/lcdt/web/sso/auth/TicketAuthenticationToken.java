@@ -1,5 +1,6 @@
 package com.lcdt.web.sso.auth;
 
+import com.lcdt.login.bean.TicketAuthentication;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -13,6 +14,12 @@ public class TicketAuthenticationToken extends AbstractAuthenticationToken {
 
 	private Object principal;
 	private String ticket;
+
+	private TicketAuthentication authentication;
+
+	public void setAuthentication(TicketAuthentication authentication) {
+		this.authentication = authentication;
+	}
 
 	public String getTicket() {
 		return ticket;
@@ -32,13 +39,28 @@ public class TicketAuthenticationToken extends AbstractAuthenticationToken {
 		super(authorities);
 	}
 
+
+
 	@Override
 	public Object getCredentials() {
 		return ticket;
 	}
 
 	@Override
+	public Object getDetails() {
+		return authentication;
+	}
+
+	@Override
 	public Object getPrincipal() {
-		return principal;
+		if (authentication != null) {
+			return  authentication.getUserInfo();
+		}
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		return authentication.getUserInfo().getName();
 	}
 }

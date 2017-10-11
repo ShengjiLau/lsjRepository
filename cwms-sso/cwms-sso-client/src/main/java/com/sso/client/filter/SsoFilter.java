@@ -34,22 +34,18 @@ public class SsoFilter implements Filter {
 		if (ticket == null) {
 			redirectLogin(httpRequest,httpResponse);
 			return;
-		} else {
+		}
+		else {
 			if (ticketInSession == null) {
 				//设置用户信息
 				HttpSession session1 = httpRequest.getSession(true);
 				session1.setAttribute("ticket", ticket);
-				chain.doFilter(request, response);
 			}
-
-			if (!ticketInSession.equals(ticket)) {
-				//重新加载回到首页
-				//
+			else if (!ticketInSession.equals(ticket)){
 				redirectHome(httpResponse);
 				return;
-			} else {
-				chain.doFilter(request, response);
 			}
+			chain.doFilter(request, response);
 		}
 	}
 
@@ -65,8 +61,6 @@ public class SsoFilter implements Filter {
 	public String getTicketInSession(HttpSession session) {
 		return null;
 	}
-
-
 
 
 	@Override

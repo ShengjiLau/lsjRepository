@@ -25,7 +25,7 @@ public class TicketAuthProvider implements AuthenticationProvider {
 		String ticket = (String) credentials;
 		try {
 			TicketAuthentication ticketAuthentication = loginService.queryTicket(ticket);
-			token.setDetails(ticketAuthentication);
+			token.setAuthentication(ticketAuthentication);
 			token.setAuthenticated(true);
 			return token;
 		} catch (InvalidTicketException e) {
