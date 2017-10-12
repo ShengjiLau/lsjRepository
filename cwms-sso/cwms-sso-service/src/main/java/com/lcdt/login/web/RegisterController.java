@@ -1,4 +1,4 @@
-package com.lcdt.web.controller.register;
+package com.lcdt.login.web;
 
 
 import com.alibaba.dubbo.config.annotation.Reference;
@@ -7,7 +7,7 @@ import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
-import com.lcdt.web.utils.RandomNoUtil;
+import com.lcdt.util.RandomNoUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/register")
+@RequestMapping("/auth/register")
 public class RegisterController {
 
     @Reference
