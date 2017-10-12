@@ -40,11 +40,15 @@ public class CompanyServiceImpl implements CompanyService {
 		if (memberList != null && memberList.size() > 0) {
 			throw new CompanyExistException();
 		}
-
+		Date dt = new Date();
 		//创建企业
 		Company company = new Company();
 		company.setFullName(dto.getCompanyName());
 		company.setShortName(dto.getShortName());
+		company.setAuthentication((short)0);//未认证
+		company.setCreateId(dto.getUserId());
+		company.setCreateName(dto.getCreateName());
+		company.setCreateDate(dt);
 		companyMapper.insert(company);
 
 		//创建关系
@@ -53,6 +57,7 @@ public class CompanyServiceImpl implements CompanyService {
 			companyMember.setFullName(company.getFullName());
 			companyMember.setUserId(dto.getUserId());
 			companyMember.setCompId(company.getCompId());
+			companyMember.setCreateDate(dt);
 			userCompRelMapper.insert(companyMember);
 		}
 		return company;
@@ -70,15 +75,13 @@ public class CompanyServiceImpl implements CompanyService {
 			throw new CompanyExistException();
 		}
 
-		UserCompRel userCompRel = new UserCompRel();
-/*		companyMember.setCompanyId(dto.getCompanyId());
+		UserCompRel companyMember = new UserCompRel();
+		companyMember.setFullName(dto.getCompanyName());
 		companyMember.setUserId(dto.getUserId());
-		companyMember.setCompanyId(dto.getCompanyId());
-		companyMember.setCompanyName(dto.getCompanyName());
-		companyMember.setRegDt(new Date());
-		companyMemberMapper.insert(companyMember);*/
-
-		return userCompRel;
+		companyMember.setCompId(dto.getCompanyId());
+		companyMember.setCreateDate(new Date());
+		userCompRelMapper.insert(companyMember);
+		return companyMember;
 	}
 
 

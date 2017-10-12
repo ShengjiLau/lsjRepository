@@ -1,5 +1,7 @@
 package com.lcdt.userinfo.model;
 
+import java.util.Date;
+
 public class UserCompRel implements java.io.Serializable {
     /**
      *
@@ -38,6 +40,9 @@ public class UserCompRel implements java.io.Serializable {
      * @mbg.generated
      */
     private String fullName;
+
+
+    private Date createDate;
 
 
 
@@ -136,5 +141,13 @@ public class UserCompRel implements java.io.Serializable {
      */
     public void setFullName(String fullName) {
         this.fullName = fullName == null ? null : fullName.trim();
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }

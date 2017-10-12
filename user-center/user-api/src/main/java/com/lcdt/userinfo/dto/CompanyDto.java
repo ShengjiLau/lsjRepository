@@ -9,9 +9,10 @@ public class CompanyDto implements java.io.Serializable {
 
     private Long userId; //用户ID
     private Long companyId; //企业ID
-    private String companyName; //企业名
+    private String companyName; //企业全称
+    private String shortName;//企业简称
     private Long createId; //创建者ID
-    private String createUserName; //创建者姓名
+    private String createName; //创建者姓名
     private Date createDt; //创建时间
 
     public Long getUserId() {
@@ -46,13 +47,6 @@ public class CompanyDto implements java.io.Serializable {
         this.createId = createId;
     }
 
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
 
     public Date getCreateDt() {
         return createDt;
@@ -60,5 +54,21 @@ public class CompanyDto implements java.io.Serializable {
 
     public void setCreateDt(Date createDt) {
         this.createDt = createDt;
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
     }
 }
