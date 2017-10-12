@@ -83,27 +83,35 @@ public class AuthController {
 	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
 	@RequestMapping("/login")
 	@ResponseBody
-	public String login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
+	public String login(String username, String password,String captchacode, HttpServletRequest request, HttpServletResponse response) {
 		JSONObject jsonObject = new JSONObject();
-		try {
-			User user = userService.userLogin(username, password);
-			LoginSessionReposity.setUserInSession(request, user);
-			List<UserCompRel> companyMembers = companyService.companyList(user.getUserId());
-			jsonObject.put("data", companyMembers);
-			jsonObject.put("code", 0);
-			jsonObject.put("message", "success");
-			return jsonObject.toString();
-		} catch (UserNotExistException e) {
-			e.printStackTrace();
-			jsonObject.put("message", "账号不存在");
+		boolean flag = LoginSessionReposity.captchaIsOk(request, captchacode);
+		if (!flag) {
+			jsonObject.put("message", "验证码不正确");
 			jsonObject.put("code", -1);
 			return jsonObject.toString();
-		} catch (PassErrorException e) {
-			jsonObject.put("message", "账号密码错误");
-			jsonObject.put("code", -1);
-			e.printStackTrace();
-			return jsonObject.toString();
+		} else {
+			try {
+				User user = userService.userLogin(username, password);
+				LoginSessionReposity.setUserInSession(request, user);
+				List<UserCompRel> companyMembers = companyService.companyList(user.getUserId());
+				jsonObject.put("data", companyMembers);
+				jsonObject.put("code", 0);
+				jsonObject.put("message", "success");
+				return jsonObject.toString();
+			} catch (UserNotExistException e) {
+				e.printStackTrace();
+				jsonObject.put("message", "账号不存在");
+				jsonObject.put("code", -1);
+				return jsonObject.toString();
+			} catch (PassErrorException e) {
+				jsonObject.put("message", "账号密码错误");
+				jsonObject.put("code", -1);
+				e.printStackTrace();
+				return jsonObject.toString();
+			}
 		}
+
 	}
 
 

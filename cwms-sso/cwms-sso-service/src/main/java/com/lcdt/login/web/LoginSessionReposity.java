@@ -17,6 +17,8 @@ public class LoginSessionReposity {
 
 	private static final String COMPANY_SESSION = "company";
 
+	private static final String CAPTCHA_SESSION = "captcha_code";
+
 	public static User getUserInfoInSession(HttpServletRequest request){
 		HttpSession session = request.getSession(false);
 		return getObjectInSession(User.class, session, USERINFO_SESSION);
@@ -56,6 +58,29 @@ public class LoginSessionReposity {
 		HttpSession session = request.getSession(false);
 		session.invalidate();
 	}
+
+
+	/***
+	 * 验证码压入session
+	 * @param request
+	 * @param captchaCode
+	 */
+	public static void setCaptchaSession(HttpServletRequest request, String captchaCode) {
+		HttpSession session = request.getSession(true);
+		session.setAttribute(CAPTCHA_SESSION,captchaCode);
+	}
+
+	public static boolean captchaIsOk(HttpServletRequest request, String captchaCode) {
+			HttpSession session = request.getSession(true);
+			String tCode = session.getAttribute(CAPTCHA_SESSION).toString();
+			captchaCode = captchaCode.toUpperCase();
+			if (!StringUtils.isEmpty(tCode) && tCode.equals(captchaCode)) {
+				return true;
+			}
+			return false;
+	}
+
+
 
 
 	public static <T> T getObjectInSession(Class<T> clazz,HttpSession session, String key) {

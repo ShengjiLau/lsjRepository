@@ -23,6 +23,7 @@ public class CaptchaController {
 	public void captcha(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String randomString = CaptchaUtil.outputCaptcha(request, response);
+			LoginSessionReposity.setCaptchaSession(request, randomString);
 		} catch (ServletException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

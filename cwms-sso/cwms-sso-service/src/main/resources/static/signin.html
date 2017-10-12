@@ -27,9 +27,9 @@
             </div>
           </div>
           <div class="form-row">
-            <label for="captcha">验证码：</label>
+            <label for="captchacode">验证码：</label>
             <div class="clms-input capcha_input">
-              <input type="text" name="captchaCode" value="" >
+              <input type="text" name="captchacode" value="" >
             </div>
             <div class="capcha_img">
               <img id="captchaimg" src="/auth/getcaptcha" alt="./public/vc.png" onclick="refreshCaptcha()"></a>            </div>
@@ -59,12 +59,11 @@
 
       $.validator.setDefaults({
         submitHandler: function() {
-
             var form = document.getElementById("signin-form");
-            var fd = new FormData(form);
-            console.log(fd);
 
-            $.ajax({
+            var fd = new FormData(form);
+
+           $.ajax({
                 processData: false,
                 contentType: false,
                 type: 'POST',
@@ -72,7 +71,6 @@
                 data: fd,
                 success: function (data) {
                     //登陆成功选择公司
-
                     var data = JSON.parse(data);
                     if (data.code == 0) {
                         console.log(data)
@@ -80,7 +78,6 @@
                     }else{
                         alert(data.message)
                     }
-
                 },
                 error: function (data) {
                     var result = JSON.parse(data);
@@ -103,22 +100,22 @@
 
         $().ready(function() {
 
-        $("#signin-form").validate({
-          rules:{     //配置验证规则，key就是被验证的dom对象，value就是调用验证的方法(也是json格式)
-                username:{
-                    required:true,  //必填。如果验证方法不需要参数，则配置为true
-                    rangelength:[6,12]
-                },
-                password:{
-                    required:true,
-                    rangelength:[6,12]
-                },
-                captcha:{
-                    required:true,
-                    rangelength:[3,5],
-                }
-            }
-        });
+          $("#signin-form").validate({
+            rules:{     //配置验证规则，key就是被验证的dom对象，value就是调用验证的方法(也是json格式)
+                  username:{
+                      required:true,  //必填。如果验证方法不需要参数，则配置为true
+                      rangelength:[6,12]
+                  },
+                  password:{
+                      required:true,
+                      rangelength:[6,12]
+                  },
+                captchacode:{
+                      required:true,
+                      rangelength:[1,4],
+                  }
+              }
+          });
       });
 
 
