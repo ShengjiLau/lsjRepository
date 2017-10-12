@@ -28,7 +28,7 @@
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <p>我已注册，现在<a href="../auth/loginpage" target="_blank">登录</a></p>
+                        <p>我已注册，现在<a href="#" onclick="login();">登录</a></p>
                     </li>
                 </ul>
             </nav>
@@ -39,16 +39,24 @@
             <div class="ok-body">
                 <div class="ok-icon"><i class="iconfont icon-xuanze"></i></div>
                 <h3>恭喜您，账号注册成功！</h3>
-                <button class="btn btn-default gosignin" id="btn_login">立即登录</button>
+                <button class="btn btn-default gosignin" id="btn_login" onclick="login();">立即登录</button>
             </div>
 
         </div>
     </div>
     <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
+
+        var login = function () {
+            var hStr = window.location.href.split(":")[0];
+            window.location.href = hStr+"://"+window.location.host+"/account";
+        }
+
+/*
+
         $("#btn_login").click(function(){
-            window.location.href="../auth/loginpage";
-        });
+
+        });*/
 
     </script>
 </body>
