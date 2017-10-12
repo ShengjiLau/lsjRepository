@@ -40,25 +40,21 @@ public class CompanyServiceImpl implements CompanyService {
 		if (memberList != null && memberList.size() > 0) {
 			throw new CompanyExistException();
 		}
-		Date dt = new Date();
+
 		//创建企业
 		Company company = new Company();
-	/*	company.setCompanyName(dto.getCompanyName());
-		company.setCreateId(dto.getUserId());
-		company.setCreateDt(dt);
-		company.setCreateName(dto.getCreateUserName());
+		company.setFullName(dto.getCompanyName());
+		company.setShortName(dto.getShortName());
 		companyMapper.insert(company);
 
 		//创建关系
-		if (company != null && company.getCompanyId() != null) {
-			CompanyMember companyMember = new CompanyMember();
-			companyMember.setCompanyId(company.getCompanyId());
+		if (company != null && company.getCompId() != null) {
+			UserCompRel companyMember = new UserCompRel();
+			companyMember.setFullName(company.getFullName());
 			companyMember.setUserId(dto.getUserId());
-			companyMember.setCompanyId(company.getCompanyId());
-			companyMember.setCompanyName(company.getCompanyName());
-			companyMember.setRegDt(dt);
-			companyMemberMapper.insert(companyMember);
-		}*/
+			companyMember.setCompId(company.getCompId());
+			userCompRelMapper.insert(companyMember);
+		}
 		return company;
 	}
 
