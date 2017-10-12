@@ -1,9 +1,11 @@
 package com.lcdt.login.bean;
 
+import com.lcdt.clms.permission.model.Permission;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by ss on 2017/8/25.
@@ -14,7 +16,17 @@ public class TicketAuthentication implements Serializable {
 	private UserCompRel userCompRel;
 	private User user;
 
+	private List<Permission> permissions;
+
 	private String ticket;
+
+	public List<Permission> getPermissions() {
+		return permissions;
+	}
+
+	public void setPermissions(List<Permission> permissions) {
+		this.permissions = permissions;
+	}
 
 	public String getTicket() {
 		return ticket;

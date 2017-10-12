@@ -1,10 +1,12 @@
 package com.lcdt.web.sso.auth;
 
+import com.lcdt.clms.permission.model.Permission;
 import com.lcdt.login.bean.TicketAuthentication;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by ss on 2017/8/21.
@@ -38,7 +40,24 @@ public class TicketAuthenticationToken extends AbstractAuthenticationToken {
 		super(authorities);
 	}
 
+	List<GrantedAuthority> authorities;
 
+	@Override
+	public Collection<GrantedAuthority> getAuthorities() {
+
+		List<Permission> permissions = authentication.getPermissions();
+
+		if (permissions == null || permissions.isEmpty()) {
+			return authorities;
+		}
+		else if (authorities == null){
+			for (Permission permission : permissions) {
+				PermissionAuthority permissionAuthority = new PermissionAuthority(permission);
+				authorities.add(permissionAuthority);
+			}
+		}
+		return authorities;
+	}
 
 	@Override
 	public Object getCredentials() {
@@ -62,4 +81,19 @@ public class TicketAuthenticationToken extends AbstractAuthenticationToken {
 	public String getName() {
 		return authentication.getUser().getRealName();
 	}
+
+	static class PermissionAuthority implements GrantedAuthority{
+
+		Permission permission;
+
+		public PermissionAuthority(Permission permission) {
+			this.permission = permission;
+		}
+
+		@Override
+		public String getAuthority() {
+			return permission.getPermissionCode();
+		}
+	}
+
 }

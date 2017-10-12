@@ -165,9 +165,9 @@
             <generatedKey column="role_permission_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
 
-        <!--<table tableName="t_up_role" domainObjectName="WmsRole">-->
-            <!--<generatedKey column="role_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
-        <!--</table>-->
+        <table tableName="role_user_relation" domainObjectName="RoleUserRelation">
+            <generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
 
         <!--<table tableName="t_up_role_permission" domainObjectName="WmsRolePermission">-->
             <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
