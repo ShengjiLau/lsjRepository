@@ -108,6 +108,7 @@ public class AuthController {
 
 
 	@RequestMapping("/logout")
+	@ExcludeIntercept(excludeIntercept = CompanyInterceptor.class)
 	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
 		ticketService.removeTicketInCookie(request, response);
 		LoginSessionReposity.clearUserSession(request);
