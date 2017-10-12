@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
 		registerUser.setReferrerPhone(registerDto.getIntroducer());
 		registerUser.setRegisterDate(new Date());
 		registerUser.setUserStatus((short)1); //默认启用状态
+		registerUser.setMobileCountry("86");
 		int insert = userMapper.insert(registerUser);
 		return registerUser;
 	}

@@ -40,7 +40,7 @@
             </button>
           </div>
           <div class="form-row login-btn-row">
-            <a href="" class="primary-btn">立即注册</a>
+            <a href="#" class="primary-btn" onclick="register();">立即注册</a>
             <a href="" class="default-btn">忘记密码</a>
           </div>
         </form>
@@ -62,6 +62,7 @@
 
             var form = document.getElementById("signin-form");
             var fd = new FormData(form);
+            console.log(fd);
 
             $.ajax({
                 processData: false,
@@ -89,14 +90,19 @@
         }
       });
 
+      //注册逻辑
+      var register = function () {
+          var hStr = window.location.href.split(":")[0];
+          window.location.href = hStr+"://"+window.location.host+"/auth/register";
+      }
+
 
         function showCompanys() {
             window.location.href = "/account/company";
         }
 
+        $().ready(function() {
 
-      $().ready(function() {
-        console.log("f");
         $("#signin-form").validate({
           rules:{     //配置验证规则，key就是被验证的dom对象，value就是调用验证的方法(也是json格式)
                 username:{
@@ -114,6 +120,9 @@
             }
         });
       });
+
+
+
       </script>
 
   </body>
