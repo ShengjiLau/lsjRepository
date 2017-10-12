@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * Created by ss on 2017/7/31.
  */
@@ -34,14 +36,13 @@ public class UserServiceImpl implements UserService {
 			throw new PhoneHasRegisterException();
 		}
 		User registerUser = new User();
-
-
-/*		registerUser.setUserName(registerDto.getUserPhoneNum());
+		registerUser.setPhone(registerDto.getUserPhoneNum());
 		String md5EncryptPwd = RegisterUtils.md5Encrypt(registerDto.getPassword());
-		registerUser.setUserPass(md5EncryptPwd);
-		registerUser.setName(registerDto.getName());
-		registerUser.setIntroducer(registerDto.getIntroducer());
-		registerUser.setRegDt(new Date());*/
+		registerUser.setPwd(md5EncryptPwd);
+		registerUser.setRealName(registerDto.getName());
+		registerUser.setReferrerPhone(registerDto.getIntroducer());
+		registerUser.setRegisterDate(new Date());
+		registerUser.setUserStatus((short)1); //默认启用状态
 		int insert = userMapper.insert(registerUser);
 		return registerUser;
 	}

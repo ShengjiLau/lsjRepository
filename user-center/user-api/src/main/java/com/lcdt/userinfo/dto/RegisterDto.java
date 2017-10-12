@@ -6,16 +6,11 @@ package com.lcdt.userinfo.dto;
 public class RegisterDto implements java.io.Serializable{
 
 	private String userPhoneNum;//手机号 账号
-
 	private String password;
 	private String password1;
-
 	private String name;//姓名，用户名
-
 	private String introducer; //推荐人
-
 	private String ecode; //手机验证码
-
 
 
 	public String getUserPhoneNum() {
