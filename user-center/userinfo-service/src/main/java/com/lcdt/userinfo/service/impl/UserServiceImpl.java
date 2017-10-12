@@ -50,12 +50,10 @@ public class UserServiceImpl implements UserService {
 	@Transactional(readOnly = true)
 	@Override
 	public boolean isPhoneBeenRegister(String phone) {
-
-
-/*		User user = userMapper.queryByUserPhone(phone);
+		User user = userMapper.queryByUserPhone(phone);
 		if (user == null) {
 			return false;
-		}*/
+		}
 		return true;
 	}
 

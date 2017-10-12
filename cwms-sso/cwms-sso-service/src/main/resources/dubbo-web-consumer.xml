@@ -14,6 +14,6 @@
     <dubbo:registry address="zookeeper://127.0.0.1:2181" />
     <dubbo:protocol name="dubbo" port="20883" />
     <!--<dubbo:reference id="userService" interface="com.lcdt.userinfo.service.UserService" />-->
-    <dubbo:annotation package="com.lcdt.login.service,com.lcdt.login.web,com.lcdt.cwms.user.service,com.lcdt.notify.service"></dubbo:annotation>
+    <dubbo:annotation package="com.lcdt.login.service,com.lcdt.login.web,com.lcdt.userinfo.service,com.lcdt.notify.service"></dubbo:annotation>
 
 </beans>
