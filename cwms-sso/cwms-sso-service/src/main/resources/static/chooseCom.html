@@ -140,11 +140,11 @@
         <ul class="com-list"  th:each="company : ${companyMembers}">
           <li>
             <div class="com-info">
-              <p class="title" th:text="${company.companyName}">俄罗斯科技</p>
+              <p class="title" th:text="${company.compId}">俄罗斯科技</p>
               <p class="sub-title">我是管理员</p>
             </div>
             <div class="acts">
-              <a class="go" th:href="@{/account/logincompany(companyId=${company.companyId})}">进入</a>
+              <a class="go" th:href="@{/account/logincompany(companyId=${company.compId})}">进入</a>
               <a href="" class="exit">解除关系</a>
             </div>
           </li>

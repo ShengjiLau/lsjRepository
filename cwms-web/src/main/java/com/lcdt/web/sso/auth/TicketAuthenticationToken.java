@@ -5,6 +5,7 @@ import com.lcdt.login.bean.TicketAuthentication;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class TicketAuthenticationToken extends AbstractAuthenticationToken {
 	public void setAuthentication(TicketAuthentication authentication) {
 		this.authentication = authentication;
 	}
+
 
 	public String getTicket() {
 		return ticket;
@@ -51,6 +53,8 @@ public class TicketAuthenticationToken extends AbstractAuthenticationToken {
 			return authorities;
 		}
 		else if (authorities == null){
+			authorities = new ArrayList<GrantedAuthority>();
+
 			for (Permission permission : permissions) {
 				PermissionAuthority permissionAuthority = new PermissionAuthority(permission);
 				authorities.add(permissionAuthority);

@@ -12,11 +12,6 @@
     <artifactId>clms-permission</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>com.lcdt.cloud</groupId>
-            <artifactId>cwms-sso-api</artifactId>
-            <version>1.0</version>
-        </dependency>
 
         <dependency>
             <groupId>com.lcdt.cloud</groupId>

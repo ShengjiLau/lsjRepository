@@ -33,12 +33,19 @@ public final class RootController {
 
 
 		ModelAndView view = new ModelAndView(IndexPage);
-		view.addObject("userinfo",details.getUserCompRel().toString() + " \n ticket:" + details.getTicket());
+		view.addObject("userinfo", authentication.toString()+authentication.getAuthorities().size());
 		String logouturl = RedirectHelper.assembleUrl(PropertyUtils.readProperties("sso.server.logout"), "test.datuodui.com:8088/asd");
 		view.addObject("company", PropertyUtils.readProperties("sso.server.company"));
 		view.addObject("logout", logouturl);
 		return view;
 	}
 
+
+	@RequestMapping("/test")
+	@ResponseBody
+	@PreAuthorize("hasPermission('test_a')")
+	public String testController(){
+		return "这是一个测试Controller";
+	}
 
 }
