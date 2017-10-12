@@ -1,7 +1,8 @@
 package com.lcdt.clms.permission.service;
 
-import com.lcdt.clms.permission.bean.Role;
-import com.lcdt.clms.permission.model.WmsUserRole;
+
+import com.lcdt.clms.permission.model.Permission;
+import com.lcdt.clms.permission.model.Role;
 
 import java.util.List;
 
@@ -10,8 +11,13 @@ import java.util.List;
  */
 public interface UserRoleService {
 
-	List<WmsUserRole> getUserRole(Integer userId, Long companyId);
+	List<com.lcdt.clms.permission.model.Role> getUserRole(Long userId, Long companyId);
 
-	Role createCompanyRole(Long companyId,Role insertRole);
+	Role createCompanyRole(Long companyId, Role insertRole);
+
+	Role updateCompanyRole(Role updatedRole);
+
+	Role addRolePermission(Role originalRole, Permission addedPermission);
+
 
 }
