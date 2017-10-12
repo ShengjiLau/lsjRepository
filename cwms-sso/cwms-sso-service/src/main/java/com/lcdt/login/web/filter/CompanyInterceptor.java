@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CompanyInterceptor extends ExcludeUrlAnnontionInterceptor  {
 
-	private static Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
+	private static Logger logger = LoggerFactory.getLogger(CompanyInterceptor.class);
 
 	@Override
 	public boolean doPreHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

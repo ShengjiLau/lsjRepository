@@ -1,6 +1,5 @@
 package com.lcdt.web.controller;
 
-import com.lcdt.cwms.user.service.CompanyService;
 import com.lcdt.login.bean.TicketAuthentication;
 import com.sso.client.utils.PropertyUtils;
 import com.sso.client.utils.RedirectHelper;
@@ -20,10 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 public final class RootController {
 
 	public final String IndexPage = "index";
-
-	@Autowired
-	CompanyService companyService;
-
 
 	@RequestMapping("/")
 	public ModelAndView IndexController() {

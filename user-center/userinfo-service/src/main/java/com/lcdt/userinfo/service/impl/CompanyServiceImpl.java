@@ -43,22 +43,23 @@ public class CompanyServiceImpl implements CompanyService {
 		Date dt = new Date();
 		//创建企业
 		Company company = new Company();
-	/*	company.setCompanyName(dto.getCompanyName());
+		company.setFullName(dto.getCompanyName());
+		company.setShortName(dto.getShortName());
+		company.setAuthentication((short)0);//未认证
 		company.setCreateId(dto.getUserId());
-		company.setCreateDt(dt);
-		company.setCreateName(dto.getCreateUserName());
+		company.setCreateName(dto.getCreateName());
+		company.setCreateDate(dt);
 		companyMapper.insert(company);
 
 		//创建关系
-		if (company != null && company.getCompanyId() != null) {
-			CompanyMember companyMember = new CompanyMember();
-			companyMember.setCompanyId(company.getCompanyId());
+		if (company != null && company.getCompId() != null) {
+			UserCompRel companyMember = new UserCompRel();
+			companyMember.setFullName(company.getFullName());
 			companyMember.setUserId(dto.getUserId());
-			companyMember.setCompanyId(company.getCompanyId());
-			companyMember.setCompanyName(company.getCompanyName());
-			companyMember.setRegDt(dt);
-			companyMemberMapper.insert(companyMember);
-		}*/
+			companyMember.setCompId(company.getCompId());
+			companyMember.setCreateDate(dt);
+			userCompRelMapper.insert(companyMember);
+		}
 		return company;
 	}
 
@@ -74,15 +75,13 @@ public class CompanyServiceImpl implements CompanyService {
 			throw new CompanyExistException();
 		}
 
-		UserCompRel userCompRel = new UserCompRel();
-/*		companyMember.setCompanyId(dto.getCompanyId());
+		UserCompRel companyMember = new UserCompRel();
+		companyMember.setFullName(dto.getCompanyName());
 		companyMember.setUserId(dto.getUserId());
-		companyMember.setCompanyId(dto.getCompanyId());
-		companyMember.setCompanyName(dto.getCompanyName());
-		companyMember.setRegDt(new Date());
-		companyMemberMapper.insert(companyMember);*/
-
-		return userCompRel;
+		companyMember.setCompId(dto.getCompanyId());
+		companyMember.setCreateDate(new Date());
+		userCompRelMapper.insert(companyMember);
+		return companyMember;
 	}
 
 
