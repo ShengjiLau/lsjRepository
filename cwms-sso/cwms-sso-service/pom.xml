@@ -19,13 +19,20 @@
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>cwms-sso-api</artifactId>
             <version>1.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>clms-permission-api</artifactId>
+                    <groupId>com.lcdt.cloud</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>clms-permission</artifactId>
+            <artifactId>clms-permission-service</artifactId>
             <version>1.0</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

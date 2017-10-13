@@ -14,9 +14,10 @@
     <dependencies>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>cwms-sso-client</artifactId>
+            <artifactId>clms-security</artifactId>
             <version>1.0</version>
         </dependency>
+
     </dependencies>
 
 </project>

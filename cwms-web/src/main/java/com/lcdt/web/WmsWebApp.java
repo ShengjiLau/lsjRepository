@@ -1,5 +1,7 @@
 package com.lcdt.web;
 
+import com.lcdt.clms.security.SecurityConfig;
+import com.lcdt.clms.security.annontion.EnableClmsSecurity;
 import com.lcdt.wms.config.MybatisCommonConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,8 +15,9 @@ import org.springframework.context.annotation.ImportResource;
  */
 @SpringBootApplication
 @ImportResource("dubbo-web-consumer.xml")
-@Import(MybatisCommonConfig.class)
+@Import({MybatisCommonConfig.class})
 @ComponentScan("com.lcdt.*.*")
+@EnableClmsSecurity
 public class WmsWebApp {
     public static void main(String[] args) {
         SpringApplication.run(WmsWebApp.class, args);

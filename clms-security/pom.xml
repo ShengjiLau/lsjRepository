@@ -9,32 +9,31 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cwms-sso</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>cwms-sso-client</module>
-        <module>cwms-sso-common</module>
-        <module>cwms-sso-demo</module>
-        <module>cwms-sso-api</module>
-        <module>cwms-sso-service</module>
-    </modules>
+    <artifactId>clms-security</artifactId>
+
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>user-api</artifactId>
+            <artifactId>clms-permission-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>cwms-sso-client</artifactId>
             <version>1.0</version>
         </dependency>
 
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.31</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>cwms-sso-api</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
-
 </project>

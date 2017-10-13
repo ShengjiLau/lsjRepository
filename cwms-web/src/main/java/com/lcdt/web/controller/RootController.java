@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
  * Created by ss on 2017/8/3.
  */
 @Controller
-public final class RootController {
+public class RootController {
 
 	public final String IndexPage = "index";
 
