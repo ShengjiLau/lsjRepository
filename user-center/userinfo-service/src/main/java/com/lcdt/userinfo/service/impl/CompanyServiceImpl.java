@@ -35,7 +35,7 @@ public class CompanyServiceImpl implements CompanyService {
 	public Company createCompany(CompanyDto dto) throws CompanyExistException {
 		Map map = new HashMap<String, Object>();
 		map.put("userId", dto.getUserId());
-		map.put("compId", dto.getCompanyId());
+		map.put("fullName", dto.getCompanyName());
 		List<UserCompRel> memberList = userCompRelMapper.selectByCondition(map);
 		if (memberList != null && memberList.size() > 0) {
 			throw new CompanyExistException();
@@ -127,4 +127,16 @@ public class CompanyServiceImpl implements CompanyService {
 		PageInfo pageInfo = new PageInfo(list);
 		return pageInfo;
 	}
+
+
+
+	@Transactional(readOnly = true)
+	public Company findCompany(CompanyDto dto) {
+		Company vo = new Company();
+		vo.setFullName(dto.getCompanyName());
+		return companyMapper.selectByCondition(vo);
+
+	}
+
+
 }

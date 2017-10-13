@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>登录</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-  <link rel="stylesheet" href="./asset/style/iconfont.css">
+  <link rel="stylesheet" href="/asset/style/iconfont.css">
   <style media="screen">
     html,
     body {
@@ -183,11 +183,11 @@
   <div class="nav-head">
     <nav>
       <div class="logo">
-        <img src="./asset/image/logo_top.png" alt="">
+        <img src="/asset/image/logo_top.png" alt="">
       </div>
       <div class="user-menu">
-        <a href=""><i class="iconfont icon-user"></i>小A专线</a>
-        <a href=""><i class="iconfont icon-logout01"></i>退出</a>
+        <a href="#"><i class="iconfont icon-user"></i>小A专线</a>
+        <a href="/account/logout"><i class="iconfont icon-logout01"></i>退出</a>
       </div>
     </nav>
   </div>
@@ -199,15 +199,15 @@
     <div class="signin-form">
       <form class="" action="index.html" id="com-create-form" method="post">
         <div class="form-row">
-          <label for="password">公司名称</label>
+          <label for="fullname">公司名称</label>
           <div class="clms-input">
-            <input type="text" name="comname" value="">
+            <input type="text" name="fullname" value="">
           </div>
         </div>
         <div class="form-row">
-          <label for="password">所属行业</label>
+          <label for="industry">所属行业</label>
           <div class="clms-input">
-            <select>
+            <select name="industry">
               <option value="" disabled="" selected="" style="display:none;">请选择</option>
                 <option value ="1">Volvo</option>
                 <option value ="2">zhongtai</option>
@@ -228,22 +228,52 @@
   <script src="https://cdn.bootcss.com/jquery-validate/1.17.0/jquery.validate.min.js"></script>
   <script src="https://cdn.bootcss.com/jquery-validate/1.17.0/localization/messages_zh.min.js"></script>
   <script type="text/javascript">
-    $.validator.setDefaults({
-      submitHandler: function() {
-        console.log("提交事件!");
-      }
-    });
     $().ready(function() {
-      console.log("f");
       $("#com-create-form").validate({
         rules: { //配置验证规则，key就是被验证的dom对象，value就是调用验证的方法(也是json格式)
-          comname: {
+            fullname: {
             required: true, //必填。如果验证方法不需要参数，则配置为true
             minlength:2
-          }
+          },
+          industry:{
+              required:true
+          },
         }
       });
     });
+
+    //
+    $.validator.setDefaults({
+        submitHandler: function() {
+            var form = document.getElementById("com-create-form");
+            var fd = new FormData(form);
+            $.ajax({
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                url: '/account/initcompany',
+                data: fd,
+                success: function (data) {
+                  console.log(data);
+                    var data = JSON.parse(data);
+                    if (data.code == 0) {
+                    }else{
+                        alert(data.message)
+                    }
+                },
+                error: function (data) {
+                    var result = JSON.parse(data);
+                    alert(result.message);
+                },
+            });
+
+
+        }
+    });
+
+
+
+
   </script>
 </body>
 </html>

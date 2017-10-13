@@ -45,4 +45,8 @@ public interface CompanyMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(Company record);
+
+
+    Company selectByCondition(Company record);
+
 }

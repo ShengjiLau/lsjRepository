@@ -43,4 +43,12 @@ public interface CompanyService {
 
 
 	UserCompRel queryByUserIdCompanyId(Long userId, Integer companyId);
+
+
+	/***
+	 * 根据条件查询公司信息
+	 * @param dto
+	 * @return
+	 */
+	Company findCompany(CompanyDto dto);
 }

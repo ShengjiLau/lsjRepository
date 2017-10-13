@@ -6,8 +6,11 @@ import com.lcdt.login.annontion.ExcludeIntercept;
 import com.lcdt.login.service.AuthTicketService;
 import com.lcdt.login.web.filter.CompanyInterceptor;
 import com.lcdt.login.web.filter.LoginInterceptor;
+import com.lcdt.userinfo.dto.CompanyDto;
+import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
@@ -126,8 +129,15 @@ public class AuthController {
 		return view;
 	}
 
+	@RequestMapping("/createcompany")
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
+	public ModelAndView createCompanyPage(HttpServletRequest request) {
+		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
+		ModelAndView view = new ModelAndView("/createCom");
+		return view;
+	}
 
-	@RequestMapping("/company")
+	@RequestMapping("/choosecompany")
 	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
 	public ModelAndView chooseCompanyPage(HttpServletRequest request) {
 		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
@@ -136,6 +146,46 @@ public class AuthController {
 		view.addObject("companyMembers", companyMembers);
 		return view;
 	}
+
+
+	/**
+	 * 企业初始化
+	 * @param fullname
+	 * @param industry
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
+	@RequestMapping("/initcompany")
+	@ResponseBody
+	public String initCompany(String fullname, String industry, HttpServletRequest request, HttpServletResponse response) {
+		JSONObject jsonObject = new JSONObject();
+		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
+		CompanyDto dtoVo = new CompanyDto();
+		dtoVo.setCompanyName(fullname);
+		if (companyService.findCompany(dtoVo)!=null) {
+			jsonObject.put("message", "企业名称已存在");
+			jsonObject.put("code", -1);
+			return jsonObject.toString();
+		} else {
+			try {
+				dtoVo.setUserId(userInfo.getUserId());
+				dtoVo.setCreateName(userInfo.getRealName());
+				Company company = companyService.createCompany(dtoVo);
+			} catch (CompanyExistException e) {
+				jsonObject.put("message", "用户已加入企业");
+				jsonObject.put("code", -1);
+				e.printStackTrace();
+				return jsonObject.toString();
+			}
+		}
+		jsonObject.put("code", 0);
+		return jsonObject.toString();
+	}
+
+
+
 
 	@RequestMapping("/logincompany")
 	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
@@ -147,5 +197,7 @@ public class AuthController {
 		strategy.hasAuthRedirect(request, response);
 		return null;
 	}
+
+
 
 }

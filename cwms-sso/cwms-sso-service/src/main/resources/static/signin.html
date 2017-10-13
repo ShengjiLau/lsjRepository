@@ -51,30 +51,61 @@
     <script src="https://cdn.bootcss.com/jquery-validate/1.17.0/jquery.validate.min.js"></script>
     <script src="https://cdn.bootcss.com/jquery-validate/1.17.0/localization/messages_zh.min.js"></script>
     <script type="text/javascript">
+        $().ready(function() {
+            $("#signin-form").validate({
+                rules:{     //配置验证规则，key就是被验证的dom对象，value就是调用验证的方法(也是json格式)
+                    username:{
+                        required:true,  //必填。如果验证方法不需要参数，则配置为true
+                        rangelength:[6,12]
+                    },
+                    password:{
+                        required:true,
+                        rangelength:[6,12]
+                    },
+                    captchacode:{
+                        required:true,
+                        rangelength:[1,4],
+                    }
+                }
+            });
+        });
 
-        function refreshCaptcha(){
+        //验证码
+        var refreshCaptcha = function(){
             document.getElementById("captchaimg").src="/auth/getcaptcha?random=" + Math.random();
             return false;
         }
 
-      $.validator.setDefaults({
+
+        //注册逻辑
+        var register = function () {
+            var hStr = window.location.href.split(":")[0];
+            window.location.href = hStr+"://"+window.location.host+"/auth/register";
+        }
+
+
+        $.validator.setDefaults({
         submitHandler: function() {
             var form = document.getElementById("signin-form");
-
             var fd = new FormData(form);
-
-           $.ajax({
+            $.ajax({
                 processData: false,
                 contentType: false,
                 type: 'POST',
                 url: '/account/login',
                 data: fd,
                 success: function (data) {
-                    //登陆成功选择公司
                     var data = JSON.parse(data);
                     if (data.code == 0) {
-                        console.log(data)
-                        showCompanys(data)
+                        if (data.hasOwnProperty("data")) {
+                            var dataArray = data.data;
+                            if (dataArray.length==0) { //没有企业关系
+                                window.location.href = "/account/createcompany";
+                            } else {
+                                window.location.href = "/account/choosecompany";
+                            }
+                        }
+
                     }else{
                         alert(data.message)
                     }
@@ -84,39 +115,10 @@
                     alert(result.message);
                 },
             });
+
         }
       });
 
-      //注册逻辑
-      var register = function () {
-          var hStr = window.location.href.split(":")[0];
-          window.location.href = hStr+"://"+window.location.host+"/auth/register";
-      }
-
-
-        function showCompanys() {
-            window.location.href = "/account/company";
-        }
-
-        $().ready(function() {
-
-          $("#signin-form").validate({
-            rules:{     //配置验证规则，key就是被验证的dom对象，value就是调用验证的方法(也是json格式)
-                  username:{
-                      required:true,  //必填。如果验证方法不需要参数，则配置为true
-                      rangelength:[6,12]
-                  },
-                  password:{
-                      required:true,
-                      rangelength:[6,12]
-                  },
-                captchacode:{
-                      required:true,
-                      rangelength:[1,4],
-                  }
-              }
-          });
-      });
 
 
 
