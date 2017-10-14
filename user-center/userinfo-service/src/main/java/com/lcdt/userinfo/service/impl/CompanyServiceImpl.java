@@ -57,6 +57,7 @@ public class CompanyServiceImpl implements CompanyService {
 			companyMember.setFullName(company.getFullName());
 			companyMember.setUserId(dto.getUserId());
 			companyMember.setCompId(company.getCompId());
+			companyMember.setIsCreate((short)0); //企业创建者
 			companyMember.setCreateDate(dt);
 			userCompRelMapper.insert(companyMember);
 		}
@@ -74,12 +75,12 @@ public class CompanyServiceImpl implements CompanyService {
 		if (memberList != null && memberList.size() > 0) {
 			throw new CompanyExistException();
 		}
-
 		UserCompRel companyMember = new UserCompRel();
 		companyMember.setFullName(dto.getCompanyName());
 		companyMember.setUserId(dto.getUserId());
 		companyMember.setCompId(dto.getCompanyId());
 		companyMember.setCreateDate(new Date());
+		companyMember.setIsCreate((short)1); //加入者
 		userCompRelMapper.insert(companyMember);
 		return companyMember;
 	}
@@ -93,7 +94,7 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Transactional(readOnly = true)
-	public UserCompRel queryByUserIdCompanyId(Long userId, Integer companyId) {
+	public UserCompRel queryByUserIdCompanyId(Long userId, Long companyId) {
 		HashMap hashMap = new HashMap();
 		hashMap.put("userId", userId);
 		hashMap.put("compId", companyId);
@@ -136,6 +137,11 @@ public class CompanyServiceImpl implements CompanyService {
 		vo.setFullName(dto.getCompanyName());
 		return companyMapper.selectByCondition(vo);
 
+	}
+
+	@Override
+	public int removeCompanyRel(Long relId) {
+		return userCompRelMapper.deleteByPrimaryKey(relId);
 	}
 
 

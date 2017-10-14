@@ -42,7 +42,7 @@ public interface CompanyService {
 	List<UserCompRel> companyList(Long userId);
 
 
-	UserCompRel queryByUserIdCompanyId(Long userId, Integer companyId);
+	UserCompRel queryByUserIdCompanyId(Long userId, Long companyId);
 
 
 	/***
@@ -51,4 +51,12 @@ public interface CompanyService {
 	 * @return
 	 */
 	Company findCompany(CompanyDto dto);
+
+	/***
+	 * 解除公司关系
+	 * @param relId
+	 * @return
+	 */
+	int removeCompanyRel(Long relId);
+
 }

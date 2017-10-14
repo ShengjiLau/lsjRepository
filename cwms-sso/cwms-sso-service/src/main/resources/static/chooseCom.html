@@ -133,23 +133,23 @@
     <div class="page">
       <div class="com-top">
         <span>选择企业</span>
-        <a href="" class="create-btn"> <span style="font-size:140%"> &#43;</span>创建企业</a>
+        <a href="/account/createcompany" class="create-btn"> <span style="font-size:140%"> &#43;</span>创建企业</a>
       </div>
-<!--      <div class="com-list-contaner">
-
+     <div class="com-list-contaner">
         <ul class="com-list"  th:each="company : ${companyMembers}">
           <li>
             <div class="com-info">
-              <p class="title" th:text="${company.companyName}">俄罗斯科技</p>
-              <p class="sub-title">我是管理员</p>
+              <p class="title" th:text="${company.fullName}">公司名称</p>
+              <p class="sub-title"><span th:if="${company.isCreate}==0">我是管理员</span><span th:if="${company.isCreate}==1">我是员工</span></p>
             </div>
             <div class="acts">
-              <a class="go" th:href="@{/account/logincompany(companyId=${company.companyId})}">进入</a>
-              <a href="" class="exit">解除关系</a>
+              <a class="go" th:href="@{/account/logincompany(companyid=${company.compId})}">进入</a>
+              <span th:if="${company.isCreate}==0"> <a th:href="@{/account/removecompany(usercomprelid=${company.userCompRelId},companyid=${company.compId})}" class="exit">解除关系</a></span>
+
             </div>
           </li>
         </ul>
-      </div>-->
+      </div>
     </div>
 
   </body>

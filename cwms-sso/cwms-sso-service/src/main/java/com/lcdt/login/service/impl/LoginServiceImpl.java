@@ -46,7 +46,7 @@ public class LoginServiceImpl implements LoginService {
 		if (ticketValid.getCompanyId() == null) {
 			authentication.setChooseCompany(false);
 		}else{
-			UserCompRel companyMember = companyService.queryByUserIdCompanyId(ticketValid.getUserId(), ticketValid.getCompanyId().intValue());
+			UserCompRel companyMember = companyService.queryByUserIdCompanyId(ticketValid.getUserId(), ticketValid.getCompanyId().longValue());
 			authentication.setUserCompRel(companyMember);
 		}
 		return authentication;

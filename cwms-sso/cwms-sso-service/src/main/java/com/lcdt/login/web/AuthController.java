@@ -173,6 +173,12 @@ public class AuthController {
 				dtoVo.setUserId(userInfo.getUserId());
 				dtoVo.setCreateName(userInfo.getRealName());
 				Company company = companyService.createCompany(dtoVo);
+
+				/*****
+				 *
+				 * 此处做其它业务
+				 *
+				 */
 			} catch (CompanyExistException e) {
 				jsonObject.put("message", "用户已加入企业");
 				jsonObject.put("code", -1);
@@ -185,14 +191,37 @@ public class AuthController {
 	}
 
 
+	/**
+	 * 解除绑定关系
+	 * @param companyid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
+	@RequestMapping("/removecompany")
+	public void removeCompany(Long usercomprelid, Long companyid, HttpServletRequest request, HttpServletResponse response) {
+		JSONObject jsonObject = new JSONObject();
+		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
+		int flag = companyService.removeCompanyRel(usercomprelid);
+		try {
+			response.sendRedirect("/account/choosecompany");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+
+
 
 
 	@RequestMapping("/logincompany")
 	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
-	public ModelAndView loginCompany(Integer companyId, HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView loginCompany(Long companyid, HttpServletRequest request, HttpServletResponse response) {
 		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
-		UserCompRel companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);
-		ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
+		UserCompRel companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyid);
+		ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyid);
 		LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
 		strategy.hasAuthRedirect(request, response);
 		return null;

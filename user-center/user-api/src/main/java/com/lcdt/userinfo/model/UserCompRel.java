@@ -43,6 +43,16 @@ public class UserCompRel implements java.io.Serializable {
 
     private Date createDate;
 
+    public short getIsCreate() {
+        return isCreate;
+    }
+
+    public void setIsCreate(short isCreate) {
+        this.isCreate = isCreate;
+    }
+
+    private short isCreate;
+
 
 
     /**

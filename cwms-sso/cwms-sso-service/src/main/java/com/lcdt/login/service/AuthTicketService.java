@@ -49,7 +49,7 @@ public class AuthTicketService {
 	}
 
 
-	public boolean generateTicketInResponse(HttpServletRequest request, HttpServletResponse response, Long userId, Integer companyId) {
+	public boolean generateTicketInResponse(HttpServletRequest request, HttpServletResponse response, Long userId, Long companyId) {
 
 		logger.info("generate ticket userId: " + userId + " companyId: " + companyId);
 
