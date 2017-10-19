@@ -14,7 +14,7 @@ public class TicketHelper {
 			return null;
 		}
 		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("cwms_ticket")) {
+			if ("cwms_ticket".equals(cookie.getName())) {
 				return cookie.getValue();
 			}
 		}

@@ -43,7 +43,7 @@ public class DesEncypt {
 	 *
 	 */
 	private static SecretKey keyGenerator(String keyStr) throws Exception {
-		byte input[] = HexString2Bytes(keyStr);
+		byte[] input = hexString2Bytes(keyStr);
 		DESKeySpec desKey = new DESKeySpec(input);
 		// 创建一个密匙工厂，然后用它把DESKeySpec转换成
 		SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
@@ -53,7 +53,7 @@ public class DesEncypt {
 
 
 	// 从十六进制字符串到字节数组转换
-	public static byte[] HexString2Bytes(String hexstr) {
+	public static byte[] hexString2Bytes(String hexstr) {
 		byte[] b = new byte[hexstr.length() / 2];
 		int j = 0;
 		for (int i = 0; i < b.length; i++) {
@@ -65,10 +65,12 @@ public class DesEncypt {
 	}
 
 	private static int parse(char c) {
-		if (c >= 'a')
+		if (c >= 'a') {
 			return (c - 'a' + 10) & 0x0f;
-		if (c >= 'A')
+		}
+		if (c >= 'A'){
 			return (c - 'A' + 10) & 0x0f;
+		}
 		return (c - '0') & 0x0f;
 	}
 

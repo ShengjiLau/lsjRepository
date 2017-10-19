@@ -8,7 +8,10 @@ import com.lcdt.clms.permission.model.RoleUserRelation;
 import com.lcdt.clms.permission.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +28,13 @@ public class UserRoleServiceImpl implements UserRoleService{
 	@Autowired
 	RoleUserRelationMapper roleUserRelationDao;
 
-
 	/**
 	 * 获取用户角色
 	 * @param userId
 	 * @param companyId
 	 * @return
 	 */
-	@Transactional(readOnly = true)
+	@Transactional(readOnly = true,rollbackFor = Exception.class)
 	@Override
 	public List<Role> getUserRole(Long userId, Long companyId) {
 		List<RoleUserRelation> relations = roleUserRelationDao.selectByUserAndCompany(userId, companyId);
@@ -50,9 +52,9 @@ public class UserRoleServiceImpl implements UserRoleService{
 
 
 
+	@Transactional
 	@Override
 	public Role createCompanyRole(Long companyId, Role insertRole) {
-
 		return null;
 	}
 

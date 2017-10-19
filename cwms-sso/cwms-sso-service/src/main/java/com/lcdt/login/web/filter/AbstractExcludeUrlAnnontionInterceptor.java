@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by ss on 2017/9/19.
  */
-public abstract class ExcludeUrlAnnontionInterceptor implements HandlerInterceptor {
+public abstract class AbstractExcludeUrlAnnontionInterceptor implements HandlerInterceptor {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

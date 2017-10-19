@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by ss on 2017/9/28.
  */
-public abstract class FilterProxy implements Filter{
+public abstract class AbstractFilterProxy implements Filter{
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {

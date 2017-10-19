@@ -30,10 +30,10 @@ public class CompanyServiceImpl implements CompanyService {
 	@Autowired
 	private UserCompRelMapper userCompRelMapper;
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Company createCompany(CompanyDto dto) throws CompanyExistException {
-		Map map = new HashMap<String, Object>();
+		Map map = new HashMap<String, Object>(2);
 		map.put("userId", dto.getUserId());
 		map.put("compId", dto.getCompanyId());
 		List<UserCompRel> memberList = userCompRelMapper.selectByCondition(map);
@@ -43,27 +43,11 @@ public class CompanyServiceImpl implements CompanyService {
 		Date dt = new Date();
 		//创建企业
 		Company company = new Company();
-	/*	company.setCompanyName(dto.getCompanyName());
-		company.setCreateId(dto.getUserId());
-		company.setCreateDt(dt);
-		company.setCreateName(dto.getCreateUserName());
-		companyMapper.insert(company);
-
-		//创建关系
-		if (company != null && company.getCompanyId() != null) {
-			CompanyMember companyMember = new CompanyMember();
-			companyMember.setCompanyId(company.getCompanyId());
-			companyMember.setUserId(dto.getUserId());
-			companyMember.setCompanyId(company.getCompanyId());
-			companyMember.setCompanyName(company.getCompanyName());
-			companyMember.setRegDt(dt);
-			companyMemberMapper.insert(companyMember);
-		}*/
 		return company;
 	}
 
 
-	@Transactional
+	@Transactional(readOnly = true,rollbackFor = Exception.class)
 	@Override
 	public UserCompRel joinCompany(CompanyDto dto) throws CompanyExistException {
 		Map map = new HashMap<String, Object>();
@@ -87,6 +71,7 @@ public class CompanyServiceImpl implements CompanyService {
 
 
 	@Transactional(readOnly = true)
+	@Override
 	public List<UserCompRel> companyList(Long userId){
 		HashMap conditions = new HashMap(2);
 		conditions.put("userId", userId);
@@ -94,6 +79,7 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Transactional(readOnly = true)
+	@Override
 	public UserCompRel queryByUserIdCompanyId(Long userId, Integer companyId) {
 		HashMap hashMap = new HashMap();
 		hashMap.put("userId", userId);

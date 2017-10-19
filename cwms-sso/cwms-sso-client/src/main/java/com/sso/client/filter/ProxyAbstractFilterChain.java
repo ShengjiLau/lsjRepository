@@ -7,13 +7,13 @@ import java.util.List;
 /**
  * Created by ss on 2017/10/9.
  */
-public class ProxyFilterChain extends FilterProxy {
+public class ProxyAbstractFilterChain extends AbstractFilterProxy {
 
 
 	private List<Filter> filters;
 	private int pos = 0;
 
-	public ProxyFilterChain(List<Filter> filters) {
+	public ProxyAbstractFilterChain(List<Filter> filters) {
 		this.filters = filters;
 	}
 

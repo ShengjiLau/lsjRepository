@@ -4,8 +4,8 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.login.annontion.ExcludeIntercept;
 import com.lcdt.login.service.AuthTicketService;
-import com.lcdt.login.web.filter.CompanyInterceptor;
-import com.lcdt.login.web.filter.LoginInterceptor;
+import com.lcdt.login.web.filter.CompanyInterceptorAbstract;
+import com.lcdt.login.web.filter.LoginInterceptorAbstract;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.User;
@@ -48,7 +48,7 @@ public class AuthController {
 	 * @return
 	 */
 	@RequestMapping(value = {"/", ""})
-	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
+	@ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
 	public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
 		boolean isLogin = LoginSessionReposity.isLogin(request);
 		if (!isLogin) {
@@ -80,7 +80,7 @@ public class AuthController {
 	 * @param response
 	 * @return
 	 */
-	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
+	@ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
 	@RequestMapping("/login")
 	@ResponseBody
 	public String login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
@@ -108,7 +108,7 @@ public class AuthController {
 
 
 	@RequestMapping("/logout")
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
 	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
 		ticketService.removeTicketInCookie(request, response);
 		LoginSessionReposity.clearUserSession(request);
@@ -120,7 +120,7 @@ public class AuthController {
 
 
 	@RequestMapping("/company")
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
 	public ModelAndView chooseCompanyPage(HttpServletRequest request) {
 		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
 		List<UserCompRel> companyMembers = companyService.companyList(userInfo.getUserId());
@@ -130,7 +130,7 @@ public class AuthController {
 	}
 
 	@RequestMapping("/logincompany")
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
 	public ModelAndView loginCompany(Integer companyId, HttpServletRequest request, HttpServletResponse response) {
 		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
 		UserCompRel companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);

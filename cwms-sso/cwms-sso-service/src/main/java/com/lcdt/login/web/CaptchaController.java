@@ -1,8 +1,8 @@
 package com.lcdt.login.web;
 
 import com.lcdt.login.annontion.ExcludeIntercept;
-import com.lcdt.login.web.filter.CompanyInterceptor;
-import com.lcdt.login.web.filter.LoginInterceptor;
+import com.lcdt.login.web.filter.CompanyInterceptorAbstract;
+import com.lcdt.login.web.filter.LoginInterceptorAbstract;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -19,7 +19,7 @@ public class CaptchaController {
 
 	//返回验证码
 	@RequestMapping("/auth/getcaptcha")
-	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
+	@ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
 	public void captcha(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String randomString = CaptchaUtil.outputCaptcha(request, response);

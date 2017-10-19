@@ -9,19 +9,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Created by ss on 2017/9/19.
+ * Created by ss on 2017/8/25.
  */
-public class CompanyInterceptor extends ExcludeUrlAnnontionInterceptor  {
+public class LoginInterceptorAbstract extends AbstractExcludeUrlAnnontionInterceptor {
 
-	private static Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
+	private static Logger logger = LoggerFactory.getLogger(LoginInterceptorAbstract.class);
 
 	@Override
 	public boolean doPreHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		if (!LoginSessionReposity.loginCompany(request)) {
-			RequestAuthRedirectStrategy.rediectToCompanyPage(request,response);
-			logger.info(request.getRequestURI() + " 未选择公司 跳转至公司页面");
+		if (!LoginSessionReposity.isLogin(request)) {
+			RequestAuthRedirectStrategy.rediectToLoginPage(request,response);
+			logger.info(request.getRequestURI() + " 未登录 跳转登陆页");
 			return false;
 		}
 		return true;
 	}
+
 }

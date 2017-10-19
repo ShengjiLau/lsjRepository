@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Transactional
+	@Override
 	public User userLogin(String username, String pwd) throws UserNotExistException, PassErrorException {
 		User user = queryByPhone(username);
 		if (user.getPwd().toUpperCase().equals(RegisterUtils.md5Encrypt(pwd).toUpperCase())){

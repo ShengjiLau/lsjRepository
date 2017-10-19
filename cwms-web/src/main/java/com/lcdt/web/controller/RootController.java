@@ -26,7 +26,7 @@ public class RootController {
 
 
 	@RequestMapping("/")
-	public ModelAndView IndexController() {
+	public ModelAndView indexController() {
 		Authentication authentication =
 				SecurityContextHolder.getContext().getAuthentication();
 		TicketAuthentication details = (TicketAuthentication) authentication.getDetails();

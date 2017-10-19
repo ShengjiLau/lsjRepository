@@ -101,14 +101,12 @@ public class SmsServiceImpl implements SmsService {
     private String phoneNumsValue(String[] phoneNums) {
         StringBuffer stringBuilder = new StringBuffer();
         for (String phone : phoneNums) {
-            if (phone != null && !phone.equals("")) {
+            if (!phone.equals("")) {
                 stringBuilder.append(phone);
                 stringBuilder.append(",");
             }
         }
         return stringBuilder.toString();
     }
-
-
 
 }

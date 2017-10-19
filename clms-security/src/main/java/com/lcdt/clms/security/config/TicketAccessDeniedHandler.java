@@ -23,6 +23,7 @@ public class TicketAccessDeniedHandler implements AccessDeniedHandler {
 
 		if (authentication != null && authentication.isAuthenticated()) {
 			if (!response.isCommitted()) {
+				response.setCharacterEncoding("UTF-8");
 				response.sendError(HttpServletResponse.SC_FORBIDDEN,accessDeniedException.getMessage());
 			}
 		}
