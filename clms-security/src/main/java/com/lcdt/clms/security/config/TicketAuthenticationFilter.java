@@ -30,18 +30,6 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 	}
 
 	@Override
-	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-
-		HttpServletRequest request = (HttpServletRequest) req;
-		HttpServletResponse response = (HttpServletResponse) res;
-
-//		if (!requiresAuthentication(request, response)) {
-//			chain.doFilter(req,res);
-//			return;
-//		}
-		super.doFilter(req, res, chain);
-	}
-
 	protected boolean requiresAuthentication(HttpServletRequest request,
 											 HttpServletResponse response) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -57,13 +45,9 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 				return true;
 			}
 			return false;
-
 		}
 		return true;
-
-
 	}
-
 
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
@@ -71,7 +55,6 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 		if (StringUtils.isEmpty(ticketInCookie)){
 			throw new TicketAuthException("请先登陆");
 		}
-
 		TicketAuthenticationToken token = new TicketAuthenticationToken(ticketInCookie);
 		Authentication authenticate = getAuthenticationManager().authenticate(token);
 		return authenticate;

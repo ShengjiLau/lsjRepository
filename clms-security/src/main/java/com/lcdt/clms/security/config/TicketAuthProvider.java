@@ -2,6 +2,7 @@ package com.lcdt.clms.security.config;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.lcdt.clms.permission.model.Permission;
+import com.lcdt.clms.permission.model.SysRole;
 import com.lcdt.login.bean.TicketAuthentication;
 import com.lcdt.login.exception.InvalidTicketException;
 import com.lcdt.login.service.LoginService;
@@ -10,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +22,7 @@ import java.util.List;
  */
 public class TicketAuthProvider implements AuthenticationProvider {
 
-	@Reference
+	@Reference(timeout = 1000)
 	private LoginService loginService;
 
 	@Override
@@ -39,20 +41,26 @@ public class TicketAuthProvider implements AuthenticationProvider {
 
 
 	protected TicketAuthenticationToken createLoginSuccessAuthentication(String ticket, TicketAuthentication authentication) {
-
+		//将permission的permissionCode 和 sysRole中的Role转化成SpringSecurity中的authority
 		List<Permission> permissions = authentication.getPermissions();
-
 		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
 		if (permissions != null && !permissions.isEmpty()) {
 			for (Permission permission : permissions) {
-				TicketAuthenticationToken.PermissionAuthority permissionAuthority = new TicketAuthenticationToken.PermissionAuthority(permission);
-				authorities.add(permissionAuthority);
+				SimpleGrantedAuthority authority = new SimpleGrantedAuthority(permission.getPermissionCode());
+				authorities.add(authority);
+			}
+		}
+
+		List<SysRole> sysRoles = authentication.getSysRoles();
+		if (null != sysRoles && !sysRoles.isEmpty()) {
+			for (SysRole role : sysRoles) {
+				SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getSysRoleCode());
+				authorities.add(authority);
 			}
 		}
 
 		TicketAuthenticationToken ticketAuthenticationToken = new TicketAuthenticationToken(ticket, authentication, authorities);
-
 		return ticketAuthenticationToken;
 	}
 

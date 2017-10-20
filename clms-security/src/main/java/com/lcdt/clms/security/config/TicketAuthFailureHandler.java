@@ -11,6 +11,10 @@ import java.io.IOException;
 
 /**
  * Created by ss on 2017/9/19.
+ * ticket 认证错误时 跳转到登陆地址
+ * 可能得问题 ticket失效 验证错误
+ *
+ *
  */
 public class TicketAuthFailureHandler implements AuthenticationFailureHandler {
 	@Override

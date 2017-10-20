@@ -59,18 +59,4 @@ public class TicketAuthenticationToken extends AbstractAuthenticationToken {
 		return authentication.getUser().getRealName();
 	}
 
-	static class PermissionAuthority implements GrantedAuthority{
-
-		Permission permission;
-
-		public PermissionAuthority(Permission permission) {
-			this.permission = permission;
-		}
-
-		@Override
-		public String getAuthority() {
-			return permission.getPermissionCode();
-		}
-	}
-
 }
