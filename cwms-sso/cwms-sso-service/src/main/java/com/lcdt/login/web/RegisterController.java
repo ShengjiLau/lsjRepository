@@ -27,7 +27,7 @@ public class RegisterController {
     @Reference
     private UserService userService;
 
-    @Reference(check = false)
+    @Reference(check = false,version = "test")
     private SmsService smsService;
 
     private String signature = "【大驼队】";

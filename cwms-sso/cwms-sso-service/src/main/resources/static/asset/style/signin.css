@@ -95,7 +95,10 @@ box-sizing: border-box;
     border-right: 1px solid #ccc;
 }
 .page{
-  padding-top: 215px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }
 .clms-input span+input{
   padding-left: 60px;
@@ -109,10 +112,10 @@ box-sizing: border-box;
   display: inline-block;
   border:1px solid #acacac;
   padding: 2px;
-  width:80px;
+  width:90px;
   vertical-align: top;
   margin-top: 4px;
-  height:30px;
+  height:32px;
 }
 .clms-input.capcha_input{
   width: 190px;
