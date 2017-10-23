@@ -24,6 +24,7 @@ public class IndexController {
 
 	@ResponseBody
 	@RequestMapping("/test")
+	@PreAuthorize("hasPermission('index')")
 	public String test(){
 		return "this is test page";
 	}

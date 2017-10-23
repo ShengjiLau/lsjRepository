@@ -30,8 +30,6 @@ public class RootController {
 		Authentication authentication =
 				SecurityContextHolder.getContext().getAuthentication();
 		TicketAuthentication details = (TicketAuthentication) authentication.getDetails();
-
-
 		ModelAndView view = new ModelAndView(IndexPage);
 		view.addObject("userinfo", authentication.toString()+authentication.getAuthorities().size());
 		String logouturl = RedirectHelper.assembleUrl(PropertyUtils.readProperties("sso.server.logout"), "test.datuodui.com:8088/asd");
@@ -40,12 +38,12 @@ public class RootController {
 		return view;
 	}
 
-
 	@RequestMapping("/test")
 	@ResponseBody
 	@PreAuthorize("hasPermission('test_a')")
 	public String testController(){
 		return "这是一个测试Controller";
 	}
+
 
 }

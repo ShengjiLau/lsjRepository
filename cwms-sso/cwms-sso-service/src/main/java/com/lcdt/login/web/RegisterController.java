@@ -22,6 +22,8 @@ import java.util.Map;
 @RequestMapping("/auth/register")
 public class RegisterController {
 
+    public final String registerPagePath = "/register/signup";
+
     @Reference
     private UserService userService;
 
@@ -37,7 +39,7 @@ public class RegisterController {
      */
     @RequestMapping(path = "")
     public ModelAndView index(){
-        return new ModelAndView("/register/signup");
+        return new ModelAndView(registerPagePath);
     }
 
     /***

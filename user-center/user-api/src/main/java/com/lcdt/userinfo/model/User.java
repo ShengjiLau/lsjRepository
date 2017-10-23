@@ -497,4 +497,6 @@ public class User implements java.io.Serializable {
     public void setUserStatus(Short userStatus) {
         this.userStatus = userStatus;
     }
+
+
 }

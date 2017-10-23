@@ -13,4 +13,5 @@ import java.lang.annotation.*;
 @Import(SecurityConfig.class)
 @Inherited
 public @interface EnableClmsSecurity {
+
 }

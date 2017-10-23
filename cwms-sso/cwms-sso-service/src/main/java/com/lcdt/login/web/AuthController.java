@@ -12,6 +12,8 @@ import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,7 @@ import java.util.List;
 public class AuthController {
 
 	private static String LOGIN_PAGE = "/signin";
+	private static Logger logger = LoggerFactory.getLogger(AuthController.class);
 	@Autowired
 	AuthTicketService ticketService;
 	@Autowired
@@ -89,6 +92,9 @@ public class AuthController {
 			User user = userService.userLogin(username, password);
 			LoginSessionReposity.setUserInSession(request, user);
 			List<UserCompRel> companyMembers = companyService.companyList(user.getUserId());
+
+			logger.info("登陆成功 userId:" + user.getUserId() + ";账号：" + user.getPhone());
+
 			jsonObject.put("data", companyMembers);
 			jsonObject.put("code", 0);
 			jsonObject.put("message", "success");

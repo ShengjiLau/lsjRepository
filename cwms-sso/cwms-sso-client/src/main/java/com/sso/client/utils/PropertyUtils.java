@@ -21,7 +21,6 @@ public class PropertyUtils {
 
 	synchronized static private void loadProps(){
 		properties = new Properties();
-
 		InputStream resourceAsStream = PropertyUtils.class.getClassLoader().getResourceAsStream(PROPERTY_LOCATION);
 		try {
 			properties.load(resourceAsStream);
@@ -37,7 +36,6 @@ public class PropertyUtils {
 			}
 		}
 	}
-
 
 	public static String readProperties(String key){
 		if (properties != null) {

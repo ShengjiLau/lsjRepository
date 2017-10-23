@@ -17,22 +17,6 @@
             <version>1.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.lcdt.cloud</groupId>
-            <artifactId>clms-permission-api</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lcdt.cloud</groupId>
-            <artifactId>cwms-sso-api</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.lcdt.cloud</groupId>
-            <artifactId>cwms-sso-client</artifactId>
-            <version>1.0</version>
-        </dependency>
 
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
