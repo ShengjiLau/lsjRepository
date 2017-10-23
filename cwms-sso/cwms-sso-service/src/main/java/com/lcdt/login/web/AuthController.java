@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by ss on 2017/8/17.
@@ -225,6 +225,40 @@ public class AuthController {
 		LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
 		strategy.hasAuthRedirect(request, response);
 		return null;
+	}
+
+
+	//测试DEMO
+
+	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
+	@RequestMapping("/loaddata")
+	@ResponseBody
+	public String loaddata(HttpServletRequest request, HttpServletResponse response) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("name","王小二");
+		jsonObject.put("sex","男");
+		jsonObject.put("birthday",new Date());
+		jsonObject.put("birthday1","1981-01-05");
+		jsonObject.put("hight",124);
+
+		List<User> list = new ArrayList<User>();
+		User userInfo = new User();
+		userInfo.setRealName("王峰");
+		userInfo.setPhone("3116085");
+		list.add(userInfo);
+		User userInfo1 = new User();
+		userInfo1.setRealName("张三");
+		userInfo1.setPhone("3116000");
+		list.add(userInfo1);
+		jsonObject.put("list",list);
+
+		Map map = new HashMap();
+
+		map.put("title","中国人民");
+		map.put("address","人民即到一号");
+		jsonObject.put("map",map);
+
+		return jsonObject.toString();
 	}
 
 
