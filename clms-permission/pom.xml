@@ -10,13 +10,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>clms-permission</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>clms-permission-api</module>
+        <module>clms-permission-service</module>
+    </modules>
 
     <dependencies>
-        <dependency>
-            <groupId>com.lcdt.cloud</groupId>
-            <artifactId>cwms-sso-api</artifactId>
-            <version>1.0</version>
-        </dependency>
+
+
     </dependencies>
 
 </project>

@@ -1,11 +1,10 @@
 package com.sso.client.config;
 
-import com.sso.client.filter.ProxyFilterChain;
+import com.sso.client.filter.ProxyAbstractFilterChain;
 import com.sso.client.filter.SsoFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -23,7 +22,7 @@ public class SsoFilterConfig extends WebMvcConfigurerAdapter {
 		ArrayList<Filter> filters = new ArrayList<>();
 		SsoFilter ssoFilter = new SsoFilter();
 		filters.add(ssoFilter);
-		ProxyFilterChain proxyFilterChain = new ProxyFilterChain(filters);
+		ProxyAbstractFilterChain proxyFilterChain = new ProxyAbstractFilterChain(filters);
 		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(proxyFilterChain);
 		return filterRegistrationBean;
 	}

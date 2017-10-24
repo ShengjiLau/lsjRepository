@@ -51,6 +51,7 @@
         </javaModelGenerator>
 
         <!--Mapper映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 -->
+        <!--<sqlMapGenerator targetPackage="com.lcdt.userinfo.dao" targetProject="MAVEN">-->
         <sqlMapGenerator targetPackage="com.lcdt.clms.permission.dao" targetProject="MAVEN">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
@@ -61,6 +62,7 @@
                 type="MIXEDMAPPER",生成基于注解的Java Model 和相应的Mapper对象
                 type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
         -->
+        <!--<javaClientGenerator targetPackage="com.lcdt.userinfo.dao" targetProject="MAVEN" type="XMLMAPPER">-->
         <javaClientGenerator targetPackage="com.lcdt.clms.permission.dao" targetProject="MAVEN" type="XMLMAPPER">
 
             <!--
@@ -153,20 +155,20 @@
         <!--</table>-->
 
 
-        <table tableName="role" domainObjectName="Role">
-            <generatedKey column="role_id" sqlStatement="MYSQL" identity="true"></generatedKey>
-        </table>
-
-        <table tableName="permission" domainObjectName="Permission">
-            <generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>
-        </table>
-
-        <table tableName="role_permission" domainObjectName="RolePermission">
-            <generatedKey column="role_permission_id" sqlStatement="MYSQL" identity="true"></generatedKey>
-        </table>
-
-        <!--<table tableName="t_up_role" domainObjectName="WmsRole">-->
+        <!--<table tableName="role" domainObjectName="Role">-->
             <!--<generatedKey column="role_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
+
+        <!--<table tableName="permission" domainObjectName="Permission">-->
+            <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
+
+        <!--<table tableName="role_permission" domainObjectName="RolePermission">-->
+            <!--<generatedKey column="role_permission_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
+
+        <!--<table tableName="role_user_relation" domainObjectName="RoleUserRelation">-->
+            <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
 
         <!--<table tableName="t_up_role_permission" domainObjectName="WmsRolePermission">-->
@@ -176,5 +178,23 @@
         <!--<table tableName="t_up_user_role" domainObjectName="WmsUserRole">-->
             <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
+
+
+
+        <!--<table tableName="t_uc_group" domainObjectName="Group">-->
+            <!--<generatedKey column="group_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
+        <!--<table tableName="t_uc_user_group" domainObjectName="UserGroupRelation">-->
+            <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
+
+        <table tableName="sys_role" domainObjectName="SysRole">
+        <generatedKey column="sys_role_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
+        <table tableName="sys_role_user_company" domainObjectName="SysRoleUserCompany">
+        <generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
+
+
     </context>
 </generatorConfiguration>

@@ -54,6 +54,10 @@ public class LoginSessionReposity {
 	}
 
 
+	/**
+	 * 删除session
+	 * @param request
+	 */
 	public static void clearUserSession(HttpServletRequest request){
 		HttpSession session = request.getSession(false);
 		session.invalidate();

@@ -7,9 +7,11 @@ import javax.servlet.http.HttpServletRequest;
  */
 public final class HttpUtils {
 
+	public static String xmlHttpRequestHeader = "XMLHttpRequest";
+
 	public static boolean isAjaxRequest(HttpServletRequest request) {
 		String xmlhttpHeader = request.getHeader("X-Requested-With");
-		if (xmlhttpHeader != null && xmlhttpHeader.equals("XMLHttpRequest")) {
+		if (xmlHttpRequestHeader.equals(xmlhttpHeader)){
 			return true;
 		} else {
 			return false;

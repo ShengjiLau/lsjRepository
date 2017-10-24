@@ -188,7 +188,7 @@ public class MD5 {
     /*
      * md5Transform是MD5核心变换程序，有md5Update调用，block是分块的原始字节
      */
-    private void md5Transform(byte block[]) {
+    private void md5Transform(byte[] block) {
         long a = state[0], b = state[1], c = state[2], d = state[3];
         long[] x = new long[16];
         Decode(x, block, 64);

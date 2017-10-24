@@ -28,7 +28,7 @@ public class GoodsPropertyServiceImpl implements GoodsPropertyService {
     private GoodsPropertyValueMapper goodsPropertyValueMapper;
 
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void goodsPropertyAdd(GoodsPropertyDto dto) throws GoodsPropertyExistException {
         Map map = new HashMap<String, Object>();

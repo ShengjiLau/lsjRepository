@@ -4,10 +4,8 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.login.annontion.ExcludeIntercept;
 import com.lcdt.login.service.AuthTicketService;
-import com.lcdt.login.web.filter.CompanyInterceptor;
-import com.lcdt.login.web.filter.LoginInterceptor;
-import com.lcdt.userinfo.dto.CompanyDto;
-import com.lcdt.userinfo.exception.CompanyExistException;
+import com.lcdt.login.web.filter.CompanyInterceptorAbstract;
+import com.lcdt.login.web.filter.LoginInterceptorAbstract;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.Company;
@@ -24,7 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
 
 /**
  * Created by ss on 2017/8/17.
@@ -51,7 +49,7 @@ public class AuthController {
 	 * @return
 	 */
 	@RequestMapping(value = {"/", ""})
-	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
+	@ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
 	public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
 		boolean isLogin = LoginSessionReposity.isLogin(request);
 		if (!isLogin) {
@@ -83,43 +81,35 @@ public class AuthController {
 	 * @param response
 	 * @return
 	 */
-	@ExcludeIntercept(excludeIntercept = {LoginInterceptor.class, CompanyInterceptor.class})
+	@ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
 	@RequestMapping("/login")
 	@ResponseBody
-	public String login(String username, String password,String captchacode, HttpServletRequest request, HttpServletResponse response) {
+	public String login(String username, String password, HttpServletRequest request, HttpServletResponse response) {
 		JSONObject jsonObject = new JSONObject();
-		boolean flag = LoginSessionReposity.captchaIsOk(request, captchacode);
-		if (!flag) {
-			jsonObject.put("message", "验证码不正确");
+		try {
+			User user = userService.userLogin(username, password);
+			LoginSessionReposity.setUserInSession(request, user);
+			List<UserCompRel> companyMembers = companyService.companyList(user.getUserId());
+			jsonObject.put("data", companyMembers);
+			jsonObject.put("code", 0);
+			jsonObject.put("message", "success");
+			return jsonObject.toString();
+		} catch (UserNotExistException e) {
+			e.printStackTrace();
+			jsonObject.put("message", "账号不存在");
 			jsonObject.put("code", -1);
 			return jsonObject.toString();
-		} else {
-			try {
-				User user = userService.userLogin(username, password);
-				LoginSessionReposity.setUserInSession(request, user);
-				List<UserCompRel> companyMembers = companyService.companyList(user.getUserId());
-				jsonObject.put("data", companyMembers);
-				jsonObject.put("code", 0);
-				jsonObject.put("message", "success");
-				return jsonObject.toString();
-			} catch (UserNotExistException e) {
-				e.printStackTrace();
-				jsonObject.put("message", "账号不存在");
-				jsonObject.put("code", -1);
-				return jsonObject.toString();
-			} catch (PassErrorException e) {
-				jsonObject.put("message", "账号密码错误");
-				jsonObject.put("code", -1);
-				e.printStackTrace();
-				return jsonObject.toString();
-			}
+		} catch (PassErrorException e) {
+			jsonObject.put("message", "账号密码错误");
+			jsonObject.put("code", -1);
+			e.printStackTrace();
+			return jsonObject.toString();
 		}
-
 	}
 
 
 	@RequestMapping("/logout")
-	@ExcludeIntercept(excludeIntercept = CompanyInterceptor.class)
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
 	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
 		ticketService.removeTicketInCookie(request, response);
 		LoginSessionReposity.clearUserSession(request);
@@ -130,15 +120,16 @@ public class AuthController {
 	}
 
 	@RequestMapping("/createcompany")
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
 	public ModelAndView createCompanyPage(HttpServletRequest request) {
 		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
 		ModelAndView view = new ModelAndView("/createCom");
 		return view;
 	}
 
-	@RequestMapping("/choosecompany")
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
+
+	@RequestMapping("/company")
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
 	public ModelAndView chooseCompanyPage(HttpServletRequest request) {
 		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
 		List<UserCompRel> companyMembers = companyService.companyList(userInfo.getUserId());
@@ -156,7 +147,7 @@ public class AuthController {
 	 * @param response
 	 * @return
 	 */
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
 	@RequestMapping("/initcompany")
 	@ResponseBody
 	public String initCompany(String fullname, String industry, HttpServletRequest request, HttpServletResponse response) {
@@ -198,7 +189,7 @@ public class AuthController {
 	 * @param response
 	 * @return
 	 */
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
 	@RequestMapping("/removecompany")
 	public void removeCompany(Long usercomprelid, Long companyid, HttpServletRequest request, HttpServletResponse response) {
 		JSONObject jsonObject = new JSONObject();
@@ -217,11 +208,11 @@ public class AuthController {
 
 
 	@RequestMapping("/logincompany")
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptor.class})
-	public ModelAndView loginCompany(Long companyid, HttpServletRequest request, HttpServletResponse response) {
+	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
+	public ModelAndView loginCompany(Integer companyId, HttpServletRequest request, HttpServletResponse response) {
 		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
-		UserCompRel companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyid);
-		ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyid);
+		UserCompRel companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);
+		ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
 		LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
 		strategy.hasAuthRedirect(request, response);
 		return null;

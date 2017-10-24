@@ -30,10 +30,10 @@ public class CompanyServiceImpl implements CompanyService {
 	@Autowired
 	private UserCompRelMapper userCompRelMapper;
 
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Company createCompany(CompanyDto dto) throws CompanyExistException {
-		Map map = new HashMap<String, Object>();
+		Map map = new HashMap<String, Object>(2);
 		map.put("userId", dto.getUserId());
 		map.put("fullName", dto.getCompanyName());
 		List<UserCompRel> memberList = userCompRelMapper.selectByCondition(map);
@@ -65,7 +65,7 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 
-	@Transactional
+	@Transactional(readOnly = true,rollbackFor = Exception.class)
 	@Override
 	public UserCompRel joinCompany(CompanyDto dto) throws CompanyExistException {
 		Map map = new HashMap<String, Object>();
@@ -87,6 +87,7 @@ public class CompanyServiceImpl implements CompanyService {
 
 
 	@Transactional(readOnly = true)
+	@Override
 	public List<UserCompRel> companyList(Long userId){
 		HashMap conditions = new HashMap(2);
 		conditions.put("userId", userId);
@@ -94,6 +95,7 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Transactional(readOnly = true)
+	@Override
 	public UserCompRel queryByUserIdCompanyId(Long userId, Long companyId) {
 		HashMap hashMap = new HashMap();
 		hashMap.put("userId", userId);

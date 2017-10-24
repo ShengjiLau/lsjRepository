@@ -20,6 +20,7 @@
         <module>cwms-goods</module>
         <module>clms-permission</module>
         <module>cwms-contract</module>
+        <module>clms-security</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>

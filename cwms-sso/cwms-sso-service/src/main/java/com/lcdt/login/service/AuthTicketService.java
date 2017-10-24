@@ -75,14 +75,16 @@ public class AuthTicketService {
 	}
 
 
+
+	private static Pattern HOST_PATTERN = Pattern.compile("(?<=http://|\\.)[^.]*?\\.(com|cn|net|org|biz|info|cc|tv)", Pattern.CASE_INSENSITIVE);
+
 	//获取父域名
 	private String getHost(String url) {
 
 		if (cookieHost != null && cookieHost.length() > 0) {
 			return cookieHost;
 		}
-		Pattern p = Pattern.compile("(?<=http://|\\.)[^.]*?\\.(com|cn|net|org|biz|info|cc|tv)", Pattern.CASE_INSENSITIVE);
-		Matcher matcher = p.matcher(url);
+		Matcher matcher = HOST_PATTERN.matcher(url);
 		matcher.find();
 		return matcher.group();
 	}
