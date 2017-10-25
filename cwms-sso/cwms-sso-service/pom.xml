@@ -29,7 +29,7 @@
 
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>clms-permission-service</artifactId>
+            <artifactId>clms-permission-api</artifactId>
             <version>1.0</version>
         </dependency>
 

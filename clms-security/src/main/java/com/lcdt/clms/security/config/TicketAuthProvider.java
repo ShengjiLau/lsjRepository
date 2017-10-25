@@ -47,7 +47,7 @@ public class TicketAuthProvider implements AuthenticationProvider {
 
 		if (permissions != null && !permissions.isEmpty()) {
 			for (Permission permission : permissions) {
-				SimpleGrantedAuthority authority = new SimpleGrantedAuthority(permission.getPermissionCode());
+				SimpleGrantedAuthority authority = new SimpleGrantedAuthority(permission.getPermissionCode().toUpperCase());
 				authorities.add(authority);
 			}
 		}
@@ -55,7 +55,7 @@ public class TicketAuthProvider implements AuthenticationProvider {
 		List<SysRole> sysRoles = authentication.getSysRoles();
 		if (null != sysRoles && !sysRoles.isEmpty()) {
 			for (SysRole role : sysRoles) {
-				SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getSysRoleCode());
+				SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getSysRoleCode().toUpperCase());
 				authorities.add(authority);
 			}
 		}

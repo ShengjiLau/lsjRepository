@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.dao;
 
 import com.lcdt.userinfo.model.UserGroupRelation;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -48,4 +49,5 @@ public interface UserGroupRelationMapper {
 
     List<UserGroupRelation> selectByGroupId(Long groupId);
 
+    List<UserGroupRelation> selectByUserCompany(@Param("userId") Long userId, @Param("companyId") Long companyId);
 }

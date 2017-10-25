@@ -44,4 +44,6 @@ public interface SysRoleMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(SysRole record);
+
+    List<SysRole> selectByRoleCode(String roleCode);
 }
