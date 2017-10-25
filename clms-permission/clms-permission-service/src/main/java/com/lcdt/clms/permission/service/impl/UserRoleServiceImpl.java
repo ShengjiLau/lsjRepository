@@ -8,10 +8,7 @@ import com.lcdt.clms.permission.model.RoleUserRelation;
 import com.lcdt.clms.permission.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +17,7 @@ import java.util.List;
  * Created by ss on 2017/8/8.
  */
 @Service
-public class UserRoleServiceImpl implements UserRoleService{
+public class UserRoleServiceImpl implements UserRoleService {
 
 	@Autowired
 	RoleMapper userRoleDao;

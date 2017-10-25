@@ -1,6 +1,7 @@
 package com.lcdt.clms.permission.dao;
 
 import com.lcdt.clms.permission.model.SysRoleUserCompany;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -44,4 +45,8 @@ public interface SysRoleUserCompanyMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(SysRoleUserCompany record);
+
+
+    List<SysRoleUserCompany> selectByUserCompany(@Param("userId") Long userId,@Param("companyId") Long companyId);
+
 }

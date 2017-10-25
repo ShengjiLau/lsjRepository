@@ -47,7 +47,7 @@ public class MybatisConfig implements TransactionManagementConfigurer {
 	@Bean
 	public static MapperScannerConfigurer mapperScannerConfigurer() {
 		MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-		mapperScannerConfigurer.setBasePackage("com.lcdt.userinfo.dao");
+		mapperScannerConfigurer.setBasePackage("com.lcdt.userinfo.dao;com.lcdt.clms.permission.dao");
 		return mapperScannerConfigurer;
 	}
 

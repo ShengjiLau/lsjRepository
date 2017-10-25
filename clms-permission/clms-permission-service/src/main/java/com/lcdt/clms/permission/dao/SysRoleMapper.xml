@@ -60,4 +60,12 @@
     select sys_role_id, sys_role_code, sys_role_name, sys_role_comment
     from sys_role
   </select>
+
+  <select id="selectByRoleCode" resultMap="BaseResultMap">
+
+    select sys_role_id, sys_role_code, sys_role_name, sys_role_comment
+    from sys_role
+    WHERE sys_role_code = #{roleCode,jdbcType=VARCHAR}
+  </select>
+
 </mapper>

@@ -41,4 +41,12 @@ public class RootController {
 	}
 
 
+	@RequestMapping("/admin")
+	@ResponseBody
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+	public String testRoleController(){
+		return "这是测试role的controller";
+	}
+
+
 }

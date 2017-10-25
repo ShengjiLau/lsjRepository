@@ -124,7 +124,7 @@
           <img src="/asset/image/logo_top.png" alt="">
         </div>
         <div class="user-menu">
-          <a href="#"><i class="iconfont icon-user"></i>小A专线</a>
+          <a href="#" th:utext="${session.userinfo.realName}"><i class="iconfont icon-user"></i></a>
           <a href="/account/logout"><i class="iconfont icon-logout01"></i>退出</a>
         </div>
       </nav>

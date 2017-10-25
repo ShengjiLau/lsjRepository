@@ -38,15 +38,8 @@ public class LoginServiceImpl implements LoginService {
 	@Reference
 	CompanyService companyService;
 
-	@Autowired
+	@Reference
 	UserPermissionService permissionService;
-
-	@Autowired
-	UserRoleService userRoleService;
-
-	@Autowired
-	SysRoleService sysRoleService;
-
 
 
 	@Value("${login.host}")
@@ -69,8 +62,7 @@ public class LoginServiceImpl implements LoginService {
 			authentication.setUserCompRel(companyMember);
 			List<Permission> permissions = permissionService.userPermissions(companyMember.getUserId(), companyMember.getCompId());
 			authentication.setPermissions(permissions);
-			List<Role> userRole = userRoleService.getUserRole(user.getUserId(), companyMember.getCompId());
-			List<SysRole> sysRoles = sysRoleService.userSystemRole(user.getUserId(), companyMember.getCompId());
+			List<SysRole> sysRoles = permissionService.userSysRoles(user.getUserId(), companyMember.getCompId());
 			authentication.setSysRoles(sysRoles);
 		}
 		return authentication;

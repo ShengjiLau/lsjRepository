@@ -10,6 +10,7 @@ import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -22,6 +23,7 @@ import java.util.Map;
  * Created by ybq on 2017/8/15.
  */
 @com.alibaba.dubbo.config.annotation.Service
+@Service
 public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
@@ -29,6 +31,7 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	private UserCompRelMapper userCompRelMapper;
+
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -45,7 +48,8 @@ public class CompanyServiceImpl implements CompanyService {
 		Company company = new Company();
 		company.setFullName(dto.getCompanyName());
 		company.setShortName(dto.getShortName());
-		company.setAuthentication((short)0);//未认证
+		//未认证
+		company.setAuthentication((short)0);
 		company.setCreateId(dto.getUserId());
 		company.setCreateName(dto.getCreateName());
 		company.setCreateDate(dt);
@@ -61,6 +65,8 @@ public class CompanyServiceImpl implements CompanyService {
 			companyMember.setCreateDate(dt);
 			userCompRelMapper.insert(companyMember);
 		}
+
+
 		return company;
 	}
 
@@ -134,6 +140,7 @@ public class CompanyServiceImpl implements CompanyService {
 
 
 	@Transactional(readOnly = true)
+	@Override
 	public Company findCompany(CompanyDto dto) {
 		Company vo = new Company();
 		vo.setFullName(dto.getCompanyName());

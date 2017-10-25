@@ -1,8 +1,10 @@
 package com.lcdt.userinfo;
 
+import com.lcdt.clms.permission.PermissionAppConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 import java.util.concurrent.CountDownLatch;
@@ -12,6 +14,7 @@ import java.util.concurrent.CountDownLatch;
  */
 @SpringBootApplication
 @ImportResource("dubbo-user-provider.xml")
+@Import(PermissionAppConfiguration.class)
 public class UserServiceApp {
 
 	public static void main(String[] args) {
@@ -28,6 +31,5 @@ public class UserServiceApp {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
 	}
 }
