@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Created by ss on 2017/9/19.
  */
-public class CompanyInterceptor extends ExcludeUrlAnnontionInterceptor  {
+public class CompanyInterceptorAbstract extends AbstractExcludeUrlAnnontionInterceptor  {
 
-	private static Logger logger = LoggerFactory.getLogger(CompanyInterceptor.class);
+	private static Logger logger = LoggerFactory.getLogger(CompanyInterceptorAbstract.class);
 
 	@Override
 	public boolean doPreHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
