@@ -68,4 +68,11 @@
     WHERE group_id = #{groupId,jdbcType=BIGINT}
   </select>
 
+  <select id="selectByUserCompany" resultMap="BaseResultMap">
+    select relation_id, user_id, company_id, group_id
+    from t_uc_user_group
+    WHERE user_id = #{userId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </select>
+
+
 </mapper>

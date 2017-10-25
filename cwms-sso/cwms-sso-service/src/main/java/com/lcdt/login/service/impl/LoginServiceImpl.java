@@ -3,7 +3,11 @@ package com.lcdt.login.service.impl;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.lcdt.clms.permission.model.Permission;
+import com.lcdt.clms.permission.model.Role;
+import com.lcdt.clms.permission.model.SysRole;
+import com.lcdt.clms.permission.service.SysRoleService;
 import com.lcdt.clms.permission.service.UserPermissionService;
+import com.lcdt.clms.permission.service.UserRoleService;
 import com.lcdt.login.bean.TicketAuthentication;
 import com.lcdt.login.exception.InvalidTicketException;
 import com.lcdt.login.service.AuthTicketService;
@@ -34,8 +38,9 @@ public class LoginServiceImpl implements LoginService {
 	@Reference
 	CompanyService companyService;
 
-	@Autowired
+	@Reference
 	UserPermissionService permissionService;
+
 
 	@Value("${login.host}")
 	private String host;
@@ -57,11 +62,14 @@ public class LoginServiceImpl implements LoginService {
 			authentication.setUserCompRel(companyMember);
 			List<Permission> permissions = permissionService.userPermissions(companyMember.getUserId(), companyMember.getCompId());
 			authentication.setPermissions(permissions);
+			List<SysRole> sysRoles = permissionService.userSysRoles(user.getUserId(), companyMember.getCompId());
+			authentication.setSysRoles(sysRoles);
 		}
 		return authentication;
 	}
 
 
+	@Override
 	public String loginUrl(String srcUrl){
 		if (!host.startsWith("http://")) {
 			host = "http://" + host;

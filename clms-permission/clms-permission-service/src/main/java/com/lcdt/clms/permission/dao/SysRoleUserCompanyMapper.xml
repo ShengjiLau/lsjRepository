@@ -60,4 +60,13 @@
     select relation_id, user_id, company_id, sys_role_id
     from sys_role_user_company
   </select>
+
+  <select id="selectByUserCompany" resultMap="BaseResultMap">
+     select relation_id, user_id, company_id, sys_role_id
+    from sys_role_user_company
+    WHERE user_id = #{userId}
+    and company_id = #{companyId}
+  </select>
+
+
 </mapper>

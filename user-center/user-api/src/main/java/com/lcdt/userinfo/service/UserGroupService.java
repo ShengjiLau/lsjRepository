@@ -1,5 +1,6 @@
 package com.lcdt.userinfo.service;
 
+import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserGroupRelation;
@@ -11,9 +12,9 @@ import java.util.List;
  */
 public interface UserGroupService {
 
-	List<UserGroupRelation> userGroups(User users);
+	List<UserGroupRelation> userGroups(Long userId,Long companyId);
 
-	UserGroupRelation addUserToGroup(User user, Group group);
+	UserGroupRelation addUserToGroup(Long companyId,Long userId, Group group);
 
 	boolean removeUserFromGroup(UserGroupRelation relation);
 

@@ -1,6 +1,7 @@
 package com.lcdt.clms.permission.service;
 
 import com.lcdt.clms.permission.model.Permission;
+import com.lcdt.clms.permission.model.SysRole;
 
 import java.util.List;
 
@@ -10,5 +11,7 @@ import java.util.List;
 public interface UserPermissionService {
 
 	List<Permission> userPermissions(Long userId, Long companyId);
+
+	List<SysRole> userSysRoles(Long userId, Long companyId);
 
 }
