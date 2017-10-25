@@ -144,7 +144,7 @@
               <p class="sub-title"><span th:if="${company.isCreate}==0">我是管理员</span><span th:if="${company.isCreate}==1">我是员工</span></p>
             </div>
             <div class="acts">
-              <a class="go" th:href="@{/account/logincompany(companyid=${company.compId})}">进入</a>
+              <a class="go" th:href="@{/account/logincompany(companyId=${company.compId})}">进入</a>
               <span th:if="${company.isCreate}==0"> <a th:href="@{/account/removecompany(usercomprelid=${company.userCompRelId},companyid=${company.compId})}" class="exit">解除关系</a></span>
 
             </div>
