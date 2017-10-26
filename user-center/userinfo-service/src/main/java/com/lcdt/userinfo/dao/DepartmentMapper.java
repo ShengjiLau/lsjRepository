@@ -3,6 +3,7 @@ package com.lcdt.userinfo.dao;
 import com.lcdt.userinfo.model.Department;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DepartmentMapper {
     /**
@@ -44,4 +45,11 @@ public interface DepartmentMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(Department record);
+
+    /***
+     * 根据条件查询
+     * @param map
+     * @return
+     */
+    List<Department> selectByCondition(Map map);
 }

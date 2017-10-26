@@ -91,7 +91,7 @@
     from t_uc_user
   </select>
 
-  <select id="queryByUserPhone" resultMap="BaseResultMap">
+  <select id="queryByUserPhone" parameterType="java.lang.String"  resultMap="BaseResultMap">
     SELECT user_id, mobile_country, phone, email, wechat, qq, real_name, nick_name, pwd,
     birthday, picture_url, intro_memo, register_date, referrer_phone, user_status FROM t_uc_user
     WHERE phone = #{phone,jdbcType=VARCHAR}
