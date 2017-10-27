@@ -1,5 +1,8 @@
 package com.lcdt.items.model;
 
+/**
+ * 商品自定属性值存放
+ */
 public class CustomValue {
     /**
      *

@@ -1,5 +1,8 @@
 package com.lcdt.items.model;
 
+/**
+ * 自定义属性
+ */
 public class CustomProperty {
     /**
      *

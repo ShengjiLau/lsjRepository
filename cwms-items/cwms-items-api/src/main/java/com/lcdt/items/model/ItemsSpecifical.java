@@ -1,5 +1,8 @@
 package com.lcdt.items.model;
 
+/**
+ * 商品规格
+ */
 public class ItemsSpecifical {
     /**
      *

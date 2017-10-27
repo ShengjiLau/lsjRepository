@@ -1,5 +1,8 @@
 package com.lcdt.items.model;
 
+/**
+ * 换算关系
+ */
 public class ConversionRel {
     /**
      *

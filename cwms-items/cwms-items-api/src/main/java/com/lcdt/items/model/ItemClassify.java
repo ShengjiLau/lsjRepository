@@ -1,5 +1,8 @@
 package com.lcdt.items.model;
 
+/**
+ * 商品分类
+ */
 public class ItemClassify {
     /**
      *

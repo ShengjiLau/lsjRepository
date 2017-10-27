@@ -1,5 +1,8 @@
 package com.lcdt.items.model;
 
+/**
+ * 商品扩展属性
+ */
 public class ItemsExtendProperty {
     /**
      *

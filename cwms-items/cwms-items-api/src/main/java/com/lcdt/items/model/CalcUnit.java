@@ -1,5 +1,8 @@
 package com.lcdt.items.model;
 
+/**
+ * 计量单位
+ */
 public class CalcUnit {
     /**
      *

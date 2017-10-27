@@ -1,5 +1,8 @@
 package com.lcdt.items.model;
 
+/**
+ * 子商品
+ */
 public class SubItemsInfo {
     /**
      *
