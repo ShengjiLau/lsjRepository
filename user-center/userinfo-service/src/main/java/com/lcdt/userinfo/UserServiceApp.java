@@ -1,6 +1,7 @@
 package com.lcdt.userinfo;
 
 import com.lcdt.clms.permission.PermissionAppConfiguration;
+import com.lcdt.clms.security.annontion.EnableClmsSecurity;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -15,21 +16,14 @@ import java.util.concurrent.CountDownLatch;
 @SpringBootApplication
 @ImportResource("dubbo-user-provider.xml")
 @Import(PermissionAppConfiguration.class)
+@EnableClmsSecurity
 public class UserServiceApp {
 
 	public static void main(String[] args) {
 
 		ConfigurableApplicationContext run = new SpringApplicationBuilder()
 				.sources(UserServiceApp.class)
-				.web(false)
 				.run(args);
 
-		//block main thread
-		CountDownLatch countDownLatch = new CountDownLatch(1);
-		try {
-			countDownLatch.await();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 }

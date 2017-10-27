@@ -9,6 +9,25 @@
 	<a th:attr="href=${logout}">退出登陆</a>
 
 	<a href="http://login.datuodui.com:8080/account/company">切换公司</a>
-
+	<button onclick="testAjax()">测试ajax</button>
 </body>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+	
+	function testAjax() {
+		$.ajax(
+			{
+			    url : "/api/test",
+				type : "POST",
+				success : function (data,status,xhr) {
+                    alert(data);
+                },
+
+			}
+		)
+    }
+	
+	
+</script>
+
 </html>

@@ -13,6 +13,13 @@
     <artifactId>userinfo-service</artifactId>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>common-utils</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-permission-service</artifactId>
@@ -24,6 +31,12 @@
             <version>1.0</version>
         </dependency>
 
+        <!--权限验证模块-->
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-security</artifactId>
+            <version>1.0</version>
+        </dependency>
 
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
@@ -60,6 +73,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
 

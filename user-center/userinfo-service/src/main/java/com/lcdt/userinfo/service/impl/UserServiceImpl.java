@@ -28,6 +28,13 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserMapper userMapper;
 
+	//TODO 用户信息改变需要通知其他其他系统 更新用户信息
+	@Override
+	public User updateUser(User user) {
+		userMapper.updateByPrimaryKey(user);
+		return user;
+	}
+
 	@Transactional
 	@Override
 	public User registerUser(RegisterDto registerDto) throws PhoneHasRegisterException {

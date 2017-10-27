@@ -4,13 +4,12 @@ import com.lcdt.clms.permission.model.SysRole;
 import com.lcdt.clms.permission.service.SysRoleService;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
+import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.Department;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.UserGroupRelation;
-import com.lcdt.userinfo.service.CompanyService;
-import com.lcdt.userinfo.service.CreateCompanyService;
-import com.lcdt.userinfo.service.GroupManageService;
-import com.lcdt.userinfo.service.UserGroupService;
+import com.lcdt.userinfo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,17 +39,21 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	@Autowired
 	UserGroupService userGroupService;
 
+	@Autowired
+	DepartmentService departmentService;
+
 	private SysRole sysAdminRole;
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public Company createCompany(CompanyDto companyDto) throws CompanyExistException {
+	public Company createCompany(CompanyDto companyDto) throws CompanyExistException, DeptmentExistException {
 		Company company = companyService.createCompany(companyDto);
 		//默认添加创建者为管理员权限
 		sysRoleService.addUserSysRole(getSysAdminRole(), company.getCreateId(), company.getCompId());
 		Group defaultCompanyGroup = createDefaultCompanyGroup(company);
 		//创建者加入默认新建组
 		addToGroup(defaultCompanyGroup, company.getCompId(), company.getCreateId());
+		setUpDepartMent(company);
 		return company;
 	}
 
@@ -64,6 +67,20 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		group.setIsValid(true);
 		groupManageService.createGroup(group);
 		return group;
+	}
+
+
+	/**
+	 * 设置初始部门
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	private Department setUpDepartMent(Company company) throws DeptmentExistException {
+		Department department = new Department();
+		department.setCompanyId(company.getCompId());
+		department.setDeptName(company.getFullName());
+		departmentService.createDepartment(department);
+		return department;
 	}
 
 

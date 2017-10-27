@@ -112,7 +112,7 @@ public class Department implements java.io.Serializable {
      *
      * @param deptPid the value for t_department.dept_pid
      *
-     * @mbg.generated
+     * @mbg.generate
      */
     public void setDeptPid(Long deptPid) {
         this.deptPid = deptPid;

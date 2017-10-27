@@ -11,6 +11,8 @@ import com.lcdt.userinfo.model.User;
  */
 public interface UserService {
 
+	User updateUser(User user);
+
 	User registerUser(RegisterDto registerDto) throws PhoneHasRegisterException;
 
 	boolean isPhoneBeenRegister(String phone);

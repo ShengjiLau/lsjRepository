@@ -8,6 +8,7 @@ import com.lcdt.login.web.filter.CompanyInterceptorAbstract;
 import com.lcdt.login.web.filter.LoginInterceptorAbstract;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
+import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.Company;
@@ -186,6 +187,11 @@ public class AuthController {
 			try {
 				Company company = createCompanyService.createCompany(dtoVo);
 			} catch (CompanyExistException e) {
+				e.printStackTrace();
+				jsonObject.put("code", -1);
+				jsonObject.put("message", "企业名称已存在");
+				return jsonObject.toString();
+			} catch (DeptmentExistException e) {
 				e.printStackTrace();
 				jsonObject.put("code", -1);
 				jsonObject.put("message", "企业名称已存在");
