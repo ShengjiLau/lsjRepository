@@ -69,7 +69,7 @@
         </dependency>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>cwms-goods-api</artifactId>
+            <artifactId>cwms-items-api</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
