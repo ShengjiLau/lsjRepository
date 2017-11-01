@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by ss on 2017/10/27.
+ * TODO 参数校验 swagger api
  */
 @RestController
 @RequestMapping("/api/user")
@@ -21,6 +22,7 @@ public class UserApi {
 	UserService userService;
 
 	@RequestMapping(value = "/get",produces = WebProduces.JSON_UTF_8)
+	@PreAuthorize("hasAnyAuthority('userget')")
 	public User getUserInfo(){
 		User user = SecurityInfoGetter.getUser();
 		//将密码设置为空字符串

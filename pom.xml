@@ -21,6 +21,7 @@
         <module>clms-permission</module>
         <module>cwms-contract</module>
         <module>clms-security</module>
+        <module>clms-swagger</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>

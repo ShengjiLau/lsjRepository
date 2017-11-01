@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class TicketAuthProvider implements AuthenticationProvider {
 
-	@Reference(timeout = 1000)
+	@Reference(timeout = 10000,check = false)
 	private LoginService loginService;
 
 	@Override

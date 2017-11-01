@@ -1,4 +1,4 @@
-package com.lcdt.web.utils;
+package com.lcdt.util;
 
 import javax.servlet.http.HttpServletRequest;
 
