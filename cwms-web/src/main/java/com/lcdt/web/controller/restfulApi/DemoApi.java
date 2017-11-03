@@ -8,6 +8,7 @@ import io.swagger.annotations.Api;
 import org.apache.catalina.security.SecurityUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,16 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController("/api")
 @RequestMapping("/api")
-@Api(value = "demoapi")
+@Api("swagger测试api")
 public class DemoApi {
 
-	@RequestMapping("/test")
+	@RequestMapping(value = "/test",method = {RequestMethod.GET})
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
 	public String test(){
 		return "测试ajax";
 	}
 
-	@RequestMapping(value = "/user",produces = WebProduces.JSON_UTF_8)
+	@RequestMapping(value = "/user",produces = WebProduces.JSON_UTF_8,method = {RequestMethod.GET})
 	@ResponseBody
 	@Code("1")
 	public User restTest(){

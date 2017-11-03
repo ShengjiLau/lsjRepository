@@ -62,6 +62,7 @@ public class AuthController {
 	@ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
 	public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
 		boolean isLogin = LoginSessionReposity.isLogin(request);
+		LoginSessionReposity.setCallBackUrl(request);
 		if (!isLogin) {
 			ModelAndView view = new ModelAndView(LOGIN_PAGE);
 			return view;
@@ -97,8 +98,8 @@ public class AuthController {
 	public String login(String username, String password,String captchacode, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
 		JSONObject jsonObject = new JSONObject();
-
 		boolean captchaIsOk = LoginSessionReposity.captchaIsOk(request, captchacode);
+		captchaIsOk = true;
 		if (!captchaIsOk) {
 			jsonObject.put("code", -1);
 			jsonObject.put("message", "验证码错误");
@@ -152,8 +153,12 @@ public class AuthController {
 	public ModelAndView chooseCompanyPage(HttpServletRequest request) {
 		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
 		List<UserCompRel> companyMembers = companyService.companyList(userInfo.getUserId());
+		String authCallback = RequestAuthRedirectStrategy.getAuthCallback(request);
 		ModelAndView view = new ModelAndView("/chooseCom");
 		view.addObject("companyMembers", companyMembers);
+		if (authCallback != null) {
+			view.addObject("authcallback", authCallback);
+		}
 		return view;
 	}
 

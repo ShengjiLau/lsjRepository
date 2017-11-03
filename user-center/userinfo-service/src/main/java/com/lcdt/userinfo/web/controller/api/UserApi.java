@@ -22,7 +22,6 @@ public class UserApi {
 	UserService userService;
 
 	@RequestMapping(value = "/get",produces = WebProduces.JSON_UTF_8)
-	@PreAuthorize("hasAnyAuthority('userget')")
 	public User getUserInfo(){
 		User user = SecurityInfoGetter.getUser();
 		//将密码设置为空字符串

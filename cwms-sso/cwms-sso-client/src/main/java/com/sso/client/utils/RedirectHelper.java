@@ -32,7 +32,6 @@ public final class RedirectHelper {
 
 
 	public static String assembleLoginUrlWithAuthBack(HttpServletRequest request){
-		String loginUrl = PropertyUtils.readProperties(PropertyUtils.LOGIN_URL);
 		String callback = request.getRequestURL().toString();
 		String url = PropertyUtils.readProperties(PropertyUtils.LOGIN_URL);
 		String encode = "";

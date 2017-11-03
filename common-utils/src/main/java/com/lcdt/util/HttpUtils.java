@@ -1,6 +1,8 @@
 package com.lcdt.util;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by ss on 2017/8/10.
@@ -17,5 +19,15 @@ public final class HttpUtils {
 			return false;
 		}
 	}
+	private static Pattern HOST_PATTERN = Pattern.compile("(?<=http://|\\.)[^.]*?\\.(com|cn|net|org|biz|info|cc|tv)", Pattern.CASE_INSENSITIVE);
 
+	//获取父域名
+	public static String getUrlDomain(String url) {
+		if (url.contains("localhost")) {
+			return "localhost";
+		}
+		Matcher matcher = HOST_PATTERN.matcher(url);
+		String result = matcher.find() ? matcher.group() : "";
+		return result;
+	}
 }

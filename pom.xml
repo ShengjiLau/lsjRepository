@@ -22,6 +22,7 @@
         <module>cwms-contract</module>
         <module>clms-security</module>
         <module>clms-swagger</module>
+        <module>clms-response-converter</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>

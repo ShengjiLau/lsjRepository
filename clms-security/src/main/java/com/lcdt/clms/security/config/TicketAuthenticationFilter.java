@@ -1,17 +1,17 @@
 package com.lcdt.clms.security.config;
 
 import com.sso.client.utils.TicketHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -21,18 +21,22 @@ import java.io.IOException;
  */
 public class TicketAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
+	private AuthenticationSuccessHandler successHandler = new ForwardRequestHandler();
+
 	public TicketAuthenticationFilter(String defaultFilterProcessesUrl) {
 		super(defaultFilterProcessesUrl);
 	}
 
 	public TicketAuthenticationFilter(RequestMatcher requiresAuthenticationRequestMatcher) {
 		super(requiresAuthenticationRequestMatcher);
+		this.setAuthenticationSuccessHandler(successHandler);
 	}
 
 	@Override
 	protected boolean requiresAuthentication(HttpServletRequest request,
 											 HttpServletResponse response) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
 		if (authentication == null) {
 			return true;
 		}
@@ -59,4 +63,27 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 		Authentication authenticate = getAuthenticationManager().authenticate(token);
 		return authenticate;
 	}
+
+	public static class ForwardRequestHandler implements AuthenticationSuccessHandler{
+
+		private Logger logger = LoggerFactory.getLogger(ForwardRequestHandler.class);
+
+		@Override
+		public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+			//尝试把请求再次转发到之前的地址
+			logger.info("forward request {}",request.getServletPath());
+			request.getRequestDispatcher(request.getServletPath()).forward(request,response);
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
 }

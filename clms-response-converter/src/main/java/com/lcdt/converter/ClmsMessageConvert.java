@@ -1,4 +1,4 @@
-package com.lcdt.wms.config;
+package com.lcdt.converter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
@@ -14,14 +14,22 @@ public class ClmsMessageConvert extends FastJsonHttpMessageConverter {
 
 	public JSONObject successObject = new JSONObject();
 
+
 	@Override
 	protected void writeInternal(Object obj, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
-
-
+		//
 		successObject.put("data", obj);
 		successObject.put("message", "请求成功");
 		successObject.put("code", 0);
-
 		super.writeInternal(successObject, outputMessage);
+	}
+
+	@Override
+	protected boolean supports(Class<?> clazz) {
+		if (clazz.isAssignableFrom(ResponseData.class)) {
+			return true;
+		}else{
+			return false;
+		}
 	}
 }

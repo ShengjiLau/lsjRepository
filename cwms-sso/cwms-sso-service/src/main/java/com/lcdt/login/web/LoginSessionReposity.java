@@ -3,6 +3,7 @@ package com.lcdt.login.web;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.sso.common.utils.TicketHelper;
+import org.springframework.http.HttpRequest;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,22 @@ public class LoginSessionReposity {
 	private static final String COMPANY_SESSION = "company";
 
 	private static final String CAPTCHA_SESSION = "captcha_code";
+	private static final String AUTH_CALLBACK = "auth_callback";
+
+	public static void setCallBackUrl(HttpServletRequest request) {
+		String authCallback = RequestAuthRedirectStrategy.getAuthCallback(request);
+		if (!StringUtils.isEmpty(authCallback)) {
+			HttpSession session = request.getSession(true);
+			session.setAttribute(AUTH_CALLBACK, authCallback);
+		}
+	}
+
+	public static String getCallback(HttpServletRequest request){
+		HttpSession session = request.getSession(false);
+		return getObjectInSession(String.class, session, AUTH_CALLBACK);
+	}
+
+
 
 	public static User getUserInfoInSession(HttpServletRequest request){
 		HttpSession session = request.getSession(false);
@@ -76,7 +93,10 @@ public class LoginSessionReposity {
 
 	public static boolean captchaIsOk(HttpServletRequest request, String captchaCode) {
 			HttpSession session = request.getSession(true);
-			String tCode = session.getAttribute(CAPTCHA_SESSION).toString();
+			Object tCode = session.getAttribute(CAPTCHA_SESSION);
+			if (tCode == null) {
+				return false;
+			}
 			captchaCode = captchaCode.toUpperCase();
 			if (!StringUtils.isEmpty(tCode) && tCode.equals(captchaCode)) {
 				return true;

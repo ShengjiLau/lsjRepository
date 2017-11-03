@@ -1,5 +1,6 @@
 package com.lcdt.login.web;
 
+import com.lcdt.util.HttpUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -53,8 +54,24 @@ public class RequestAuthRedirectStrategy {
 	public void hasAuthRedirect(HttpServletRequest request, HttpServletResponse response) {
 		String callback = request.getParameter(AUTH_CALLBACK);
 		if (StringUtils.isEmpty(callback) || !isCallBackSafe(callback)) {
-			callback = default_callback;
+			if (LoginSessionReposity.getCallback(request) != null) {
+				callback = LoginSessionReposity.getCallback(request);
+			}else {
+				callback = default_callback;
+			}
 		}
+		//这里要判断是否是在同一个根域名下
+		String callBackDomain = HttpUtils.getUrlDomain(callback);
+		String requestDomain = HttpUtils.getUrlDomain(request.getRequestURL().toString());
+		if (!callBackDomain.equals(requestDomain)) {
+			try {
+				response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED,"错误请求");
+				return;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 		try {
 			response.sendRedirect(callback);
 		} catch (IOException e) {
