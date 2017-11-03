@@ -35,7 +35,7 @@ public class RootController {
 
 	@RequestMapping("/test")
 	@ResponseBody
-	@PreAuthorize("hasPermission('test_a')")
+	@PreAuthorize("hasAnyAuthority('test_a')")
 	public String testController(){
 		return "这是一个测试Controller";
 	}

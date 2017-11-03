@@ -23,7 +23,7 @@ public class AuthTicketService {
 	private static Logger logger = LoggerFactory.getLogger(AuthTicketService.class);
 
 	@Value("${login.cookieHost}")
-	public String cookieHost;
+	public static String cookieHost;
 
 	public String ticketCookieKey = "cwms_ticket";
 
@@ -62,7 +62,7 @@ public class AuthTicketService {
 
 		String ticket = createTicket(); //要在ticket中设置相关信息
 		Cookie cookie = new Cookie(ticketCookieKey, ticket);
-		cookie.setDomain(getHost(request.getRequestURI()));
+		cookie.setDomain(getHost(request.getRequestURL().toString()));
 		cookie.setPath("/");
 		response.addCookie(cookie);
 		ticketManager.saveTicket(ticket, ticketBean);
@@ -80,12 +80,14 @@ public class AuthTicketService {
 
 	//获取父域名
 	private String getHost(String url) {
-
 		if (cookieHost != null && cookieHost.length() > 0) {
 			return cookieHost;
 		}
+		if (url.contains("localhost")) {
+			return "localhost";
+		}
 		Matcher matcher = HOST_PATTERN.matcher(url);
-		matcher.find();
-		return matcher.group();
+		String result = matcher.find() ? matcher.group() : "";
+		return result;
 	}
 }

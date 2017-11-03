@@ -32,13 +32,13 @@ public class LoginServiceImpl implements LoginService {
 	@Autowired
 	AuthTicketService ticketService;
 
-	@Reference
+	@Reference(check = false)
 	UserService userService;
 
-	@Reference
+	@Reference(check = false)
 	CompanyService companyService;
 
-	@Reference
+	@Reference(check = false)
 	UserPermissionService permissionService;
 
 
