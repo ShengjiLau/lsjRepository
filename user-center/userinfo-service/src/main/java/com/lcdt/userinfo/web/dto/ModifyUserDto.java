@@ -1,15 +1,19 @@
 package com.lcdt.userinfo.web.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 /**
  * Created by ss on 2017/10/27.
  * 修改用户信息form 表单的数据
  */
+
 public class ModifyUserDto {
 
 	private String avatarUrl;
 
+	@ApiModelProperty(value = "用户名",required = true)
 	private String name;
 
 	private String nickName;

@@ -13,16 +13,18 @@ import java.util.List;
  * Created by ss on 2017/8/8.
  */
 @Configuration
-public class SpringWebConfig extends WebMvcConfigurerAdapter{
+public class ClmsResponseConvertConfig extends WebMvcConfigurerAdapter{
 
 
 	private List<MediaType> supportMediaTypes = new ArrayList<>(10);
 
+
 	@Override
-	public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-		super.extendMessageConverters(converters);
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		super.configureMessageConverters(converters);
 		ClmsMessageConvert clmsMessageConvert = new ClmsMessageConvert();
 		supportMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
 		converters.add(clmsMessageConvert);
 	}
+
 }

@@ -14,7 +14,6 @@ public class ClmsMessageConvert extends FastJsonHttpMessageConverter {
 
 	public JSONObject successObject = new JSONObject();
 
-
 	@Override
 	protected void writeInternal(Object obj, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
 		//
@@ -26,10 +25,6 @@ public class ClmsMessageConvert extends FastJsonHttpMessageConverter {
 
 	@Override
 	protected boolean supports(Class<?> clazz) {
-		if (clazz.isAssignableFrom(ResponseData.class)) {
-			return true;
-		}else{
-			return false;
-		}
+		return ResponseData.class.isAssignableFrom(clazz);
 	}
 }
