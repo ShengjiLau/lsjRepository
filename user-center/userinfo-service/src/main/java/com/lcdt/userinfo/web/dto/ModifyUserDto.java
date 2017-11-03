@@ -1,7 +1,10 @@
 package com.lcdt.userinfo.web.dto;
 
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -13,15 +16,22 @@ public class ModifyUserDto {
 
 	private String avatarUrl;
 
-	@ApiModelProperty(value = "用户名",required = true)
+	@ApiModelProperty(value = "姓名",required = true)
+	@NotEmpty
+	@Size(min = 2,max = 6)
 	private String name;
 
+	@ApiModelProperty(value = "昵称",required = true)
+	@NotEmpty
+	@Size(min = 2,max = 6)
 	private String nickName;
 
+	@Email
 	private String email;
 
 	private Date birthDay;
 
+	@Size(max = 100)
 	private String intro;
 
 	public String getAvatarUrl() {
