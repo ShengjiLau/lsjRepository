@@ -32,6 +32,12 @@ public class CompanyServiceImpl implements CompanyService {
 	@Autowired
 	private UserCompRelMapper userCompRelMapper;
 
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public Company selectById(Long companyId){
+		return companyMapper.selectByPrimaryKey(companyId);
+	}
+
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override

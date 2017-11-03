@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.web.controller.api;
 
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.utils.RegisterUtils;
@@ -11,6 +12,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -42,6 +46,15 @@ public class UserApi {
 		user.setPwd("");
 		return user;
 	}
+
+	@ApiOperation("获取用户权限")
+	@RequestMapping(value = "/authorities",method = RequestMethod.GET)
+	public List<? extends GrantedAuthority> getUserAuthorities() {
+		Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		ArrayListResponseWrapper<? extends GrantedAuthority> grantedAuthorities = new ArrayListResponseWrapper<>(authorities);
+		return grantedAuthorities;
+	}
+
 
 	@ApiOperation("编辑用户个人信息")
 	@RequestMapping(value = "/modify",method = RequestMethod.POST)
