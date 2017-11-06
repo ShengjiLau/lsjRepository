@@ -46,8 +46,9 @@ public interface ItemClassifyMapper {
     int updateByPrimaryKey(ItemClassify record);
 
     /**
-     * 根据企业companyId查询
+     * 根据企业companyId和pid查询
      * @param companyId
+     * @param pid
      * @return
      */
     List<ItemClassify> selectClassifyByCompanyIdAndPid(Long companyId,Long pid);
@@ -58,4 +59,11 @@ public interface ItemClassifyMapper {
      * @return
      */
     List<ItemClassify> selectClassifyByPid(Long pid);
+
+    /**
+     * 根据companyId查询企业下的所有分类
+     * @param companyId
+     * @return
+     */
+    List<ItemClassify> selectClassifyByCompanyId(Long companyId);
 }

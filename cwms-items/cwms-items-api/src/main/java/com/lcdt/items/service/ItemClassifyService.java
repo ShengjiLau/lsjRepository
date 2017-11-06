@@ -50,7 +50,7 @@ public interface ItemClassifyService {
      * @param pid
      * @return
      */
-    List<ItemClassify> queryItemClassifyByCompanyId(Long companyId,Long pid);
+    List<ItemClassify> queryItemClassifyByCompanyIdAndPid(Long companyId,Long pid);
 
     /**
      * 根据父 pid 查询子类
@@ -58,4 +58,14 @@ public interface ItemClassifyService {
      * @return
      */
     List<ItemClassify> queryItemClassifyByPid(Long pid);
+
+
+    /**
+     * 根据企业companyId,查询所有ItemsClassify
+     * @param companyId
+     * @return
+     */
+    List<ItemClassify> queryItemClassifyByCompanyId(Long companyId);
+
+
 }

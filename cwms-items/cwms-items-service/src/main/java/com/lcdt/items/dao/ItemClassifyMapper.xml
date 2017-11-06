@@ -72,4 +72,10 @@
     FROM t_item_classify
     WHERE pid = #{pid,jdbcType=BIGINT}
   </select>
+
+  <select id="selectClassifyByCompanyId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT classify_id,pid,classify_name,company_id
+    FROM t_item_classify
+    WHERE company_id=#{companyId,jdbcType=BIGINT}
+  </select>
 </mapper>

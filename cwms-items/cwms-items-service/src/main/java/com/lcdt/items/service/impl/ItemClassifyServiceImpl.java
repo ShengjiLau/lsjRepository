@@ -78,7 +78,7 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
     }
 
     @Override
-    public List<ItemClassify> queryItemClassifyByCompanyId(Long companyId, Long pid) {
+    public List<ItemClassify> queryItemClassifyByCompanyIdAndPid(Long companyId, Long pid) {
         List<ItemClassify> itemClassifyList = null;
         try {
             itemClassifyList = itemClassifyMapper.selectClassifyByCompanyIdAndPid(companyId, pid);
@@ -100,4 +100,18 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
             return itemClassifyList;
         }
     }
+
+    @Override
+    public List<ItemClassify> queryItemClassifyByCompanyId(Long companyId) {
+        List<ItemClassify> itemClassifyList=null;
+        try{
+            itemClassifyList=itemClassifyMapper.selectClassifyByCompanyId(companyId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return itemClassifyList;
+        }
+    }
+
+
 }
