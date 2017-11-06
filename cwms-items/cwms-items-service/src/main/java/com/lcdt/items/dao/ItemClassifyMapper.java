@@ -44,4 +44,18 @@ public interface ItemClassifyMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(ItemClassify record);
+
+    /**
+     * 根据企业companyId查询
+     * @param companyId
+     * @return
+     */
+    List<ItemClassify> selectClassifyByCompanyIdAndPid(Long companyId,Long pid);
+
+    /**
+     * 根据父 pid 查询了类
+     * @param pid
+     * @return
+     */
+    List<ItemClassify> selectClassifyByPid(Long pid);
 }

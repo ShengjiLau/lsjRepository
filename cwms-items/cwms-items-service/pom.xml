@@ -13,11 +13,91 @@
     <dependencies>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-response-converter</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-swagger</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>common-utils</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-permission-service</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-permission-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!--权限验证模块-->
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-security</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
             <artifactId>cwms-items-api</artifactId>
             <version>1.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty</artifactId>
+            <version>3.10.6.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.38</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>4.1.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
     </dependencies>
+
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+
         <resources>
             <resource>
                 <directory>src/main/java</directory>
