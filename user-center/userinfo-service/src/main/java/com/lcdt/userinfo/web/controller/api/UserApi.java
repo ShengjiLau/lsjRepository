@@ -60,7 +60,6 @@ public class UserApi {
 	@RequestMapping(value = "/modify",method = RequestMethod.POST)
 	public User editUserInfo(@Validated ModifyUserDto modifyUserDto, BindingResult result) {
 
-		//TODO 校验错误的异常处理返回异常状态
 		if (result.hasErrors()) {
 			throw new ValidateException("参数错误");
 		}

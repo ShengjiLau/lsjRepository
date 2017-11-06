@@ -12,6 +12,7 @@ import com.lcdt.userinfo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -38,6 +39,14 @@ public class CompanyServiceImpl implements CompanyService {
 		return companyMapper.selectByPrimaryKey(companyId);
 	}
 
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public Company updateCompany(Company company) {
+		int i = companyMapper.updateByPrimaryKey(company);
+		return company;
+	}
+
+
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -53,6 +62,17 @@ public class CompanyServiceImpl implements CompanyService {
 		//创建企业
 		Company company = new Company();
 		company.setFullName(dto.getCompanyName());
+		if (!StringUtils.isEmpty(dto.getShortName())) {
+			//企业简称默认取企业全称的前六位
+			if (dto.getCompanyName().length() <= 6) {
+				dto.setShortName(dto.getCompanyName());
+			}
+			else{
+				dto.setShortName(dto.getCompanyName().substring(0,6));
+			}
+		}
+
+		company.setIndustry(dto.getIndustry());
 		company.setShortName(dto.getShortName());
 		//未认证
 		company.setAuthentication((short)0);
