@@ -2,6 +2,7 @@ package com.lcdt.items.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.lcdt.items.dao.ItemClassifyMapper;
+import com.lcdt.items.dto.ItemClassifyDto;
 import com.lcdt.items.model.ItemClassify;
 import com.lcdt.items.service.ItemClassifyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,14 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
     private ItemClassifyMapper itemClassifyMapper;
 
     @Override
-    public int addItemClassify(ItemClassify record) {
+    public int addItemClassify(ItemClassifyDto itemClassifyDto) {
         try {
-            return itemClassifyMapper.insert(record);
+            ItemClassify itemClassify = new ItemClassify();
+            itemClassify.setClassifyName(itemClassifyDto.getClassifyName());
+            itemClassify.setCompanyId(itemClassify.getCompanyId());
+            itemClassify.setPid(itemClassify.getPid());
+            int result = itemClassifyMapper.insert(itemClassify);
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -42,9 +48,15 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
     }
 
     @Override
-    public int modifyByPrimaryKey(ItemClassify record) {
+    public int modifyByPrimaryKey(ItemClassifyDto itemClassifyDto) {
         try {
-            return itemClassifyMapper.updateByPrimaryKey(record);
+            ItemClassify itemClassify = new ItemClassify();
+            itemClassify.setClassifyId(itemClassifyDto.getClassifyId());
+            itemClassify.setClassifyName(itemClassifyDto.getClassifyName());
+            itemClassify.setCompanyId(itemClassify.getCompanyId());
+            itemClassify.setPid(itemClassify.getPid());
+            int result = itemClassifyMapper.updateByPrimaryKey(itemClassify);
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -64,9 +76,9 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
     }
 
     @Override
-    public List<ItemClassify> queryItemClassifyByCompanyId(Long companyId,Long pid) {
+    public List<ItemClassify> queryItemClassifyByCompanyId(Long companyId, Long pid) {
         try {
-            return itemClassifyMapper.selectClassifyByCompanyIdAndPid(companyId,pid);
+            return itemClassifyMapper.selectClassifyByCompanyIdAndPid(companyId, pid);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -76,11 +88,11 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
 
     @Override
     public List<ItemClassify> queryItemClassifyByPid(Long pid) {
-        try{
+        try {
             return itemClassifyMapper.selectClassifyByPid(pid);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             return null;
         }
     }

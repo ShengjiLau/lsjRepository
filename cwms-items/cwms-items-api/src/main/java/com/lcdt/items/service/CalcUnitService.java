@@ -1,6 +1,7 @@
 package com.lcdt.items.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.items.dto.CalcUnitDto;
 import com.lcdt.items.model.CalcUnit;
 
 import java.util.List;
@@ -13,10 +14,10 @@ public interface CalcUnitService {
     /**
      * 新增单位 CalcUnit
      *
-     * @param calcUnit
+     * @param calcUnitDto
      * @return
      */
-    int addCalcUnit(CalcUnit calcUnit);
+    int addCalcUnit(CalcUnitDto calcUnitDto);
 
     /**
      * 根据unitId删除计量单位
@@ -29,10 +30,10 @@ public interface CalcUnitService {
     /**
      * 根据unitId更新计量单位CalcUnit
      *
-     * @param record
+     * @param calcUnitDto
      * @return
      */
-    int modifyCalcUnitByPrimaryKey(CalcUnit record);
+    int modifyCalcUnitByPrimaryKey(CalcUnitDto calcUnitDto);
 
     /**
      * 根据unitId查询一条CalcUnit

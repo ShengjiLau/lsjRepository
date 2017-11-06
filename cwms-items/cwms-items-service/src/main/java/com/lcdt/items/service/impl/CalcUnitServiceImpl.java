@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.items.dao.CalcUnitMapper;
+import com.lcdt.items.dto.CalcUnitDto;
 import com.lcdt.items.model.CalcUnit;
 import com.lcdt.items.service.CalcUnitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,13 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     private CalcUnitMapper calcUnitMapper;
 
     @Override
-    public int addCalcUnit(CalcUnit calcUnit) {
+    public int addCalcUnit(CalcUnitDto calcUnitDto) {
         try {
-
-            return calcUnitMapper.insert(calcUnit);
-
+            CalcUnit calcUnit = new CalcUnit();
+            calcUnit.setUnitName(calcUnitDto.getUnitName());
+            calcUnit.setCompanyId(calcUnitDto.getCompanyId());
+            int result = calcUnitMapper.insert(calcUnit);
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -47,9 +50,14 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     }
 
     @Override
-    public int modifyCalcUnitByPrimaryKey(CalcUnit record) {
+    public int modifyCalcUnitByPrimaryKey(CalcUnitDto calcUnitDto) {
         try {
-            calcUnitMapper.updateByPrimaryKey(record);
+            CalcUnit calcUnit = new CalcUnit();
+            calcUnit.setUnitId(calcUnitDto.getUnitId());
+            calcUnit.setUnitName(calcUnitDto.getUnitName());
+            calcUnit.setCompanyId(calcUnitDto.getCompanyId());
+            int result = calcUnitMapper.updateByPrimaryKey(calcUnit);
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -60,7 +68,7 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     @Override
     public CalcUnit queryCalcUnitByPrimaryKey(Long unitId) {
         try {
-            calcUnitMapper.selectByPrimaryKey(unitId);
+            return calcUnitMapper.selectByPrimaryKey(unitId);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -70,12 +78,12 @@ public class CalcUnitServiceImpl implements CalcUnitService {
 
     @Override
     public List<CalcUnit> queryCalcUnitByCompanyId(Long companyId, PageInfo pageInfo) {
-        try{
-            PageHelper.startPage(pageInfo.getPageNum(),pageInfo.getPageSize());
-//            return calcUnitMapper.selectCalcUnitByCompanyId(companyId);
-        }catch (Exception e){
+        try {
+            PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+            return calcUnitMapper.selectCalcUnitByCompanyId(companyId);
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             return null;
         }
     }
