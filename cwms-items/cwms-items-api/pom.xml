@@ -11,6 +11,14 @@
 
     <artifactId>cwms-items-api</artifactId>
 
+    <packaging>jar</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-response-converter</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
 
 </project>

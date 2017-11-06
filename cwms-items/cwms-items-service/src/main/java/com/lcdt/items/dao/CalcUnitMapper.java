@@ -44,4 +44,11 @@ public interface CalcUnitMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(CalcUnit record);
+
+    /**
+     * 根据companyId查询CalcUnit
+     * @param companyId
+     * @return
+     */
+    List<CalcUnit> selectCalcUnitByCompanyId(Long companyId);
 }
