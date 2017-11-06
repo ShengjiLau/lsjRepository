@@ -22,78 +22,82 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
 
     @Override
     public int addItemClassify(ItemClassifyDto itemClassifyDto) {
+        int result = 0;
         try {
             ItemClassify itemClassify = new ItemClassify();
             itemClassify.setClassifyName(itemClassifyDto.getClassifyName());
             itemClassify.setCompanyId(itemClassify.getCompanyId());
             itemClassify.setPid(itemClassify.getPid());
-            int result = itemClassifyMapper.insert(itemClassify);
-            return result;
+            result = itemClassifyMapper.insert(itemClassify);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return 0;
+            return result;
         }
     }
 
     @Override
     public int deleteItemClassify(Long classifyId) {
+        int result = 0;
         try {
-            return itemClassifyMapper.deleteByPrimaryKey(classifyId);
+            result = itemClassifyMapper.deleteByPrimaryKey(classifyId);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return 0;
+            return result;
         }
     }
 
     @Override
     public int modifyByPrimaryKey(ItemClassifyDto itemClassifyDto) {
+        int result = 0;
         try {
             ItemClassify itemClassify = new ItemClassify();
             itemClassify.setClassifyId(itemClassifyDto.getClassifyId());
             itemClassify.setClassifyName(itemClassifyDto.getClassifyName());
             itemClassify.setCompanyId(itemClassify.getCompanyId());
             itemClassify.setPid(itemClassify.getPid());
-            int result = itemClassifyMapper.updateByPrimaryKey(itemClassify);
-            return result;
+            result = itemClassifyMapper.updateByPrimaryKey(itemClassify);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return 0;
+            return result;
         }
     }
 
     @Override
     public ItemClassify queryByPrimaryKey(Long classifyId) {
+        ItemClassify itemClassify = null;
         try {
-            return itemClassifyMapper.selectByPrimaryKey(classifyId);
+            itemClassify = itemClassifyMapper.selectByPrimaryKey(classifyId);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return null;
+            return itemClassify;
         }
     }
 
     @Override
     public List<ItemClassify> queryItemClassifyByCompanyId(Long companyId, Long pid) {
+        List<ItemClassify> itemClassifyList = null;
         try {
-            return itemClassifyMapper.selectClassifyByCompanyIdAndPid(companyId, pid);
+            itemClassifyList = itemClassifyMapper.selectClassifyByCompanyIdAndPid(companyId, pid);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return null;
+            return itemClassifyList;
         }
     }
 
     @Override
     public List<ItemClassify> queryItemClassifyByPid(Long pid) {
+        List<ItemClassify> itemClassifyList = null;
         try {
-            return itemClassifyMapper.selectClassifyByPid(pid);
+            itemClassifyList = itemClassifyMapper.selectClassifyByPid(pid);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return null;
+            return itemClassifyList;
         }
     }
 }

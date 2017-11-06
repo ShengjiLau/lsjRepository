@@ -24,67 +24,69 @@ public class CalcUnitServiceImpl implements CalcUnitService {
 
     @Override
     public int addCalcUnit(CalcUnitDto calcUnitDto) {
+        int result = 0;
         try {
             CalcUnit calcUnit = new CalcUnit();
             calcUnit.setUnitName(calcUnitDto.getUnitName());
             calcUnit.setCompanyId(calcUnitDto.getCompanyId());
-            int result = calcUnitMapper.insert(calcUnit);
-            return result;
+            result = calcUnitMapper.insert(calcUnit);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-
-            return 0;
+            return result;
         }
     }
 
     @Override
     public int deleteCalcUnit(Long unitId) {
+        int result = 0;
         try {
-            return calcUnitMapper.deleteByPrimaryKey(unitId);
+            result = calcUnitMapper.deleteByPrimaryKey(unitId);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return 0;
+            return result;
         }
     }
 
     @Override
     public int modifyCalcUnitByPrimaryKey(CalcUnitDto calcUnitDto) {
+        int result = 0;
         try {
             CalcUnit calcUnit = new CalcUnit();
             calcUnit.setUnitId(calcUnitDto.getUnitId());
             calcUnit.setUnitName(calcUnitDto.getUnitName());
             calcUnit.setCompanyId(calcUnitDto.getCompanyId());
-            int result = calcUnitMapper.updateByPrimaryKey(calcUnit);
-            return result;
+            result = calcUnitMapper.updateByPrimaryKey(calcUnit);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return 0;
+            return result;
         }
     }
 
     @Override
     public CalcUnit queryCalcUnitByPrimaryKey(Long unitId) {
+        CalcUnit calcUnit = null;
         try {
-            return calcUnitMapper.selectByPrimaryKey(unitId);
+            calcUnit = calcUnitMapper.selectByPrimaryKey(unitId);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return null;
+            return calcUnit;
         }
     }
 
     @Override
     public List<CalcUnit> queryCalcUnitByCompanyId(Long companyId, PageInfo pageInfo) {
+        List<CalcUnit> calcUnitList = null;
         try {
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-            return calcUnitMapper.selectCalcUnitByCompanyId(companyId);
+            calcUnitList = calcUnitMapper.selectCalcUnitByCompanyId(companyId);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return null;
+            return calcUnitList;
         }
     }
 }
