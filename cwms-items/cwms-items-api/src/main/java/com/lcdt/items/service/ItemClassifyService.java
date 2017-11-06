@@ -33,7 +33,7 @@ public interface ItemClassifyService {
      * @param record
      * @return
      */
-    int updateByPrimaryKey(ItemClassify record);
+    int modifyByPrimaryKey(ItemClassify record);
 
     /**
      * 根据classifyId查询商品分类
@@ -41,12 +41,20 @@ public interface ItemClassifyService {
      * @param classifyId
      * @return
      */
-    ItemClassify selectByPrimaryKey(Long classifyId);
+    ItemClassify queryByPrimaryKey(Long classifyId);
 
     /**
-     * 根据企业companyId 查询这个企业下的分类
+     * 根据companyId，和 pid查询一级分类，也可以查询子分类
      * @param companyId
+     * @param pid
      * @return
      */
-    List<ItemClassify> queryItemClassifyByCompanyId(Long companyId);
+    List<ItemClassify> queryItemClassifyByCompanyId(Long companyId,Long pid);
+
+    /**
+     * 根据父 pid 查询子类
+     * @param pid
+     * @return
+     */
+    List<ItemClassify> queryItemClassifyByPid(Long pid);
 }

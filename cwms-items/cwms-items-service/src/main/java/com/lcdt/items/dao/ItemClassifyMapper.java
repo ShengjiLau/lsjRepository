@@ -50,5 +50,12 @@ public interface ItemClassifyMapper {
      * @param companyId
      * @return
      */
-    List<ItemClassify> selectClassifyByCompanyId(Long companyId);
+    List<ItemClassify> selectClassifyByCompanyIdAndPid(Long companyId,Long pid);
+
+    /**
+     * 根据父 pid 查询了类
+     * @param pid
+     * @return
+     */
+    List<ItemClassify> selectClassifyByPid(Long pid);
 }

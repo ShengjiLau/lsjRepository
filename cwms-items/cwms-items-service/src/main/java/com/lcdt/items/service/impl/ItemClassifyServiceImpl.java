@@ -42,7 +42,7 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
     }
 
     @Override
-    public int updateByPrimaryKey(ItemClassify record) {
+    public int modifyByPrimaryKey(ItemClassify record) {
         try {
             return itemClassifyMapper.updateByPrimaryKey(record);
         } catch (Exception e) {
@@ -53,7 +53,7 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
     }
 
     @Override
-    public ItemClassify selectByPrimaryKey(Long classifyId) {
+    public ItemClassify queryByPrimaryKey(Long classifyId) {
         try {
             return itemClassifyMapper.selectByPrimaryKey(classifyId);
         } catch (Exception e) {
@@ -64,12 +64,23 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
     }
 
     @Override
-    public List<ItemClassify> queryItemClassifyByCompanyId(Long companyId) {
+    public List<ItemClassify> queryItemClassifyByCompanyId(Long companyId,Long pid) {
         try {
-            return itemClassifyMapper.selectClassifyByCompanyId(companyId);
+            return itemClassifyMapper.selectClassifyByCompanyIdAndPid(companyId,pid);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            return null;
+        }
+    }
+
+    @Override
+    public List<ItemClassify> queryItemClassifyByPid(Long pid) {
+        try{
+            return itemClassifyMapper.selectClassifyByPid(pid);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
             return null;
         }
     }
