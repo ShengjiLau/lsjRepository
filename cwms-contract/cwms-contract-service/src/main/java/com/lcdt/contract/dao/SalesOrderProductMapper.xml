@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.contract.dao.SalesOrderProductMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.SalesOrderProduct">
+    <id column="sop_id" jdbcType="BIGINT" property="sopId" />
+    <result column="so_id" jdbcType="BIGINT" property="soId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="total" jdbcType="DECIMAL" property="total" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_sales_order_product
+    where sop_id = #{sopId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.SalesOrderProduct">
+    <selectKey keyProperty="sopId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_sales_order_product (so_id, name, code, 
+      sku, num, price, total
+      )
+    values (#{soId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{sku,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, #{total,jdbcType=DECIMAL}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.SalesOrderProduct">
+    update t_sales_order_product
+    set so_id = #{soId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      sku = #{sku,jdbcType=VARCHAR},
+      num = #{num,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      total = #{total,jdbcType=DECIMAL}
+    where sop_id = #{sopId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select sop_id, so_id, name, code, sku, num, price, total
+    from t_sales_order_product
+    where sop_id = #{sopId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select sop_id, so_id, name, code, sku, num, price, total
+    from t_sales_order_product
+  </select>
+</mapper>
