@@ -14,6 +14,13 @@ import java.util.Map;
  */
 public interface CompanyService {
 
+
+	Company updateCompany(Company company);
+
+
+	Company selectById(Long companyId);
+
+
 	/**
 	 * 创建企业
 	 *
