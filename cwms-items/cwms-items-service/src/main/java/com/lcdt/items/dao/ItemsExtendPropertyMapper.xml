@@ -98,6 +98,6 @@
       <if test="classifyName!=null">classify_name = #{classifyName,jdbcType=VARCHAR},</if>
       <if test="companyId!=null">company_id = #{companyId,jdbcType=BIGINT},</if>
     </set>
-    where where company_id = #{companyId,jdbcType=BIGINT} and title = #{titleExtend,jdbcType=VARCHAR}
+    where company_id = #{companyId,jdbcType=BIGINT} and title = #{titleExtend,jdbcType=VARCHAR}
   </update>
 </mapper>
