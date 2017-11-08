@@ -28,6 +28,14 @@ public interface ItemClassifyService {
      */
     int deleteItemClassify(Long classifyId);
 
+
+    /**
+     * 删除商品分类以及此分类下的所有子分类
+     * @param classifyId
+     * @return
+     */
+    int deleteItemsClassifyAndchildren(Long classifyId);
+
     /**
      * 根据商品classifyId修改商品分类
      *

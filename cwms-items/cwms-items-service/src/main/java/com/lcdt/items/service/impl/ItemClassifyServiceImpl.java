@@ -49,6 +49,25 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
     }
 
     @Override
+    public int deleteItemsClassifyAndchildren(Long classifyId) {
+        int result=0;
+        delRecursion(classifyId);
+       return result;
+    }
+
+    private void delRecursion(Long classifyId){
+        List<ItemClassify> children=queryItemClassifyByPid(classifyId);
+        if(children!=null&&children.size()>0){
+            for(int i=0;i<children.size();i++){
+                delRecursion(children.get(i).getClassifyId());
+                deleteItemClassify(children.get(i).getClassifyId());
+            }
+        }else{
+            return;
+        }
+    }
+
+    @Override
     public int modifyByPrimaryKey(ItemClassifyDto itemClassifyDto) {
         int result = 0;
         try {
