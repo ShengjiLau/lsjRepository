@@ -1,6 +1,5 @@
 package com.lcdt.userinfo.dao;
 
-
 import com.lcdt.userinfo.model.CompanyCertificate;
 
 import java.util.List;

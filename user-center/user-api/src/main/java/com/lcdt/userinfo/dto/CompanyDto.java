@@ -14,6 +14,15 @@ public class CompanyDto implements java.io.Serializable {
     private Long createId; //创建者ID
     private String createName; //创建者姓名
     private Date createDt; //创建时间
+    private String industry;
+
+    public String getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
+    }
 
     public Long getUserId() {
         return userId;

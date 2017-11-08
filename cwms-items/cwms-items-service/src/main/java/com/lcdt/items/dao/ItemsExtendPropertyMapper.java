@@ -1,6 +1,7 @@
 package com.lcdt.items.dao;
 
 import com.lcdt.items.model.ItemsExtendProperty;
+import com.lcdt.items.model.ItemsExtendPropertyDao;
 
 import java.util.List;
 
@@ -44,4 +45,27 @@ public interface ItemsExtendPropertyMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(ItemsExtendProperty record);
+
+    /**
+     * 批量插入记录
+     * @param itemsExtendPropertyList
+     * @return
+     */
+    int insertByBatch(List<ItemsExtendProperty> itemsExtendPropertyList);
+
+    /**
+     * 批量删除商品扩展属性
+     * @param itemsExtendProperty
+     * @return
+     */
+    int delByBatch(ItemsExtendProperty itemsExtendProperty);
+
+
+    /**
+     * 批量更新商品扩展属性
+     * @param itemsExtendPropertyExtend
+     * @return
+     */
+    int updateByBatch(ItemsExtendPropertyDao itemsExtendPropertyExtend);
+
 }

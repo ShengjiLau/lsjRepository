@@ -72,4 +72,32 @@
     company_id
     from t_items_extend_property
   </select>
+  <insert id="insertByBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+    insert into t_items_extend_property (title, field_type,
+    control_name, classify_id, classify_name,
+    company_id)
+    values
+    <foreach collection="itemsExtendPropertyList" item="item" separator=",">
+      (#{title,jdbcType=VARCHAR}, #{fieldType,jdbcType=VARCHAR},
+      #{controlName,jdbcType=SMALLINT}, #{classifyId,jdbcType=BIGINT}, #{classifyName,jdbcType=VARCHAR},
+      #{companyId,jdbcType=BIGINT})
+    </foreach>
+  </insert>
+  <delete id="delByBatch" parameterType="com.lcdt.items.model.ItemsExtendPropertye">
+    delete from t_items_extend_property
+    where company_id = #{companyId,jdbcType=BIGINT} and title = #{title,jdbcType=VARCHAR}
+  </delete>
+  <update id="updateByBatch" parameterType="com.lcdt.items.model.ItemsExtendPropertyDao" >
+    update t_items_extend_property
+    <set>
+      <if test="title!=null">title = #{title,jdbcType=VARCHAR},</if>
+      <!--<if test="fieldName!=null">field_name = #{fieldName,jdbcType=VARCHAR},</if>-->
+      <if test="fieldType!=null">field_type = #{fieldType,jdbcType=VARCHAR},</if>
+      <if test="controlName!=null">control_name = #{controlName,jdbcType=SMALLINT},</if>
+      <if test="classifyId!=null">classify_id = #{classifyId,jdbcType=BIGINT},</if>
+      <if test="classifyName!=null">classify_name = #{classifyName,jdbcType=VARCHAR},</if>
+      <if test="companyId!=null">company_id = #{companyId,jdbcType=BIGINT},</if>
+    </set>
+    where company_id = #{companyId,jdbcType=BIGINT} and title = #{titleExtend,jdbcType=VARCHAR}
+  </update>
 </mapper>

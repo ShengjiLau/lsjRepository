@@ -44,4 +44,12 @@ public interface CustomPropertyMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(CustomProperty record);
+
+    /**
+     * 根据公司id查询记录
+     * @param companyId
+     * @return
+     */
+    List<CustomProperty> selectByCompanyId(Long companyId);
+    
 }
