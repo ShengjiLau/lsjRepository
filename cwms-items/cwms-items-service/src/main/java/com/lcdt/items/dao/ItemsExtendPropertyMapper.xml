@@ -83,7 +83,7 @@
       #{companyId,jdbcType=BIGINT})
     </foreach>
   </insert>
-  <delete id="delByBatch" parameterType="com.lcdt.items.model.ItemsExtendPropertye">
+  <delete id="delByBatch" parameterType="com.lcdt.items.model.ItemsExtendProperty">
     delete from t_items_extend_property
     where company_id = #{companyId,jdbcType=BIGINT} and title = #{title,jdbcType=VARCHAR}
   </delete>
