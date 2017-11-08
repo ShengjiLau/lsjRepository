@@ -188,6 +188,7 @@
             <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
 
+<<<<<<< HEAD
         <table tableName="t_my_client" domainObjectName="MyClient">
             <generatedKey column="my_client_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
@@ -200,7 +201,18 @@
 <!--        <table tableName="sys_role_user_company" domainObjectName="SysRoleUserCompany">
         <generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>-->
+=======
+        <!--<table tableName="sys_role" domainObjectName="SysRole">-->
+        <!--<generatedKey column="sys_role_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
+        <!--<table tableName="sys_role_user_company" domainObjectName="SysRoleUserCompany">-->
+        <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
+>>>>>>> 7d0371d4a1396953bdc1f02f0007fdca87c094df
 
+        <table tableName="t_uc_company_certificate" domainObjectName="CompanyCertificate">
+        <generatedKey column="certi_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
 
     </context>
 </generatorConfiguration>
