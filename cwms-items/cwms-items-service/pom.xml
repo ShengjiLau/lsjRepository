@@ -43,12 +43,6 @@
         <!--权限验证模块-->
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>clms-security</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.lcdt.cloud</groupId>
             <artifactId>cwms-items-api</artifactId>
             <version>1.0</version>
         </dependency>
