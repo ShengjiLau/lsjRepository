@@ -38,7 +38,7 @@ public class ItemsExtendProperty {
      *
      * @mbg.generated
      */
-    private String fieldType;
+    private Short fieldType;
 
     /**
      *
@@ -156,7 +156,7 @@ public class ItemsExtendProperty {
      *
      * @mbg.generated
      */
-    public String getFieldType() {
+    public Short getFieldType() {
         return fieldType;
     }
 
@@ -168,8 +168,8 @@ public class ItemsExtendProperty {
      *
      * @mbg.generated
      */
-    public void setFieldType(String fieldType) {
-        this.fieldType = fieldType == null ? null : fieldType.trim();
+    public void setFieldType(Short fieldType) {
+        this.fieldType = fieldType == null ? null : fieldType;
     }
 
     /**
