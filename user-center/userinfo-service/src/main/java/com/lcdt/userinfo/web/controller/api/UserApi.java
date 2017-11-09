@@ -2,10 +2,12 @@ package com.lcdt.userinfo.web.controller.api;
 
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
+import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.utils.RegisterUtils;
 import com.lcdt.userinfo.web.dto.ModifyUserDto;
+import com.lcdt.userinfo.web.exception.PwdErrorException;
 import com.lcdt.util.WebProduces;
 import com.lcdt.util.validate.ValidateException;
 import io.swagger.annotations.Api;
@@ -88,11 +90,17 @@ public class UserApi {
 
 	@RequestMapping(value = "/modifypwd",method = RequestMethod.POST)
 	@ApiOperation("修改用户密码")
-	public User modifyPwd(@ApiParam(required = true) String oldPwd,@ApiParam(required = true) String newPwd) {
+	public User modifyPwd(@ApiParam(required = true) String oldPwd,@ApiParam(required = true) String newPwd) throws UserNotExistException {
 		String encodeNewpwd = RegisterUtils.md5Encrypt(newPwd);
 		String encodeOldpwd = RegisterUtils.md5Encrypt(oldPwd);
 		User user = SecurityInfoGetter.getUser();
-
+		User originUser = userService.queryByUserId(user.getUserId());
+		if (originUser.getPwd().equals(encodeOldpwd)) {
+			originUser.setPwd(encodeNewpwd);
+			userService.updateUser(user);
+		}else{
+			throw new PwdErrorException("密码不正确");
+		}
 		return user;
 	}
 
