@@ -78,4 +78,16 @@
     retail_price, spec_comb, company_id
     from t_sub_items_info
   </select>
+
+  <select id="selectSubItemsInfoListByItemId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT sub_item_id, item_id, image, code, bar_code, purchase_price, wholesale_price,
+    retail_price, spec_comb, company_id
+    FROM t_sub_items_info
+    WHERE item_id=#{itemId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteSubItemsInfoByItemId" parameterType="java.lang.Long">
+    DELETE FROM t_sub_items_info
+    WHERE item_id=#{itemId,jdbcType=BIGINT}
+  </delete>
 </mapper>

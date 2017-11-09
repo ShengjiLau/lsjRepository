@@ -43,4 +43,15 @@ public interface SubItemsInfoMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(SubItemsInfo record);
+
+    /**
+     * 根据主商品 itemId 查询此主商品下的所有子商品
+     *
+     * @param itemId
+     * @return
+     */
+    List<SubItemsInfo> selectSubItemsInfoListByItemId(Long itemId);
+
+
+    int deleteSubItemsInfoByItemId(Long itemId);
 }
