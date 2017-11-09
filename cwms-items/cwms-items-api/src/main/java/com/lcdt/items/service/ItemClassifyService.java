@@ -34,7 +34,7 @@ public interface ItemClassifyService {
      * @param classifyId
      * @return
      */
-    int deleteItemsClassifyAndchildren(Long classifyId);
+    int deleteItemsClassifyAndChildren(Long classifyId);
 
     /**
      * 根据商品classifyId修改商品分类

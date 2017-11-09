@@ -1,7 +1,5 @@
 package com.lcdt.items.dto;
 
-import com.lcdt.items.model.SubItemsInfo;
-
 import java.util.List;
 
 /**

@@ -44,4 +44,12 @@ public interface ItemsSpecificalMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(ItemsSpecifical record);
+
+    /**
+     * 查询此企业下的子商品规格
+     *
+     * @param companyId
+     * @return
+     */
+    List<ItemsSpecifical> selectItemsSpecificalListByCompanyId(Long companyId);
 }

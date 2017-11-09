@@ -49,22 +49,31 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
     }
 
     @Override
-    public int deleteItemsClassifyAndchildren(Long classifyId) {
+    public int deleteItemsClassifyAndChildren(Long classifyId) {
         int result=0;
-        delRecursion(classifyId);
-       return result;
+        try{
+            result+=delRecursion(classifyId);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return result;
+        }
     }
 
-    private void delRecursion(Long classifyId){
+    /**
+     * 递归删除此classifyId的分类和此id下的所有子分类
+     * @param classifyId
+     */
+    private int delRecursion(Long classifyId){
+        int size=0;
         List<ItemClassify> children=queryItemClassifyByPid(classifyId);
         if(children!=null&&children.size()>0){
             for(int i=0;i<children.size();i++){
-                delRecursion(children.get(i).getClassifyId());
-                deleteItemClassify(children.get(i).getClassifyId());
+                size+=delRecursion(children.get(i).getClassifyId());
             }
-        }else{
-            return;
         }
+        size+=deleteItemClassify(classifyId);
+        return size;
     }
 
     @Override

@@ -60,4 +60,10 @@
     select spec_id, spec_name, spec_value, company_id
     from t_items_specifical
   </select>
+
+  <select id="selectItemsSpecificalListByCompanyId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT spec_id,spec_name,spec_value,company_id
+    FROM t_items_specifical
+    WHERE company_id=#{companyId,jdbcType=BIGINT}
+  </select>
 </mapper>
