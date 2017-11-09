@@ -2,7 +2,6 @@ package com.lcdt.login.web;
 
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.lcdt.notify.service.SmsService;
 import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.model.User;
@@ -27,8 +26,8 @@ public class RegisterController {
     @Reference
     private UserService userService;
 
-    @Reference(check = false,version = "test")
-    private SmsService smsService;
+//    @Reference(check = false,version = "test")
+//    private SmsService smsService;
 
     private String signature = "【大驼队】";
 
@@ -106,7 +105,7 @@ public class RegisterController {
                 httpSession.setAttribute("CWMS_SMS_SEND_TIME", cTime);
                 String[] phones = new String[]{registerDto.getUserPhoneNum()};
                 String vCode = RandomNoUtil.createRandom(true,4);
-                smsService.sendSms(phones,signature,vCode);
+//                smsService.sendSms(phones,signature,vCode);
                 httpSession.setAttribute("CWMS_SMS_VCODE", vCode+"_"+registerDto.getUserPhoneNum());
                 flag = true;
             } else {
@@ -115,7 +114,7 @@ public class RegisterController {
                     httpSession.setAttribute("CWMS_SMS_SEND_TIME", cTime);
                     String[] phones = new String[]{registerDto.getUserPhoneNum()};
                     String vCode = RandomNoUtil.createRandom(true,4);
-                    smsService.sendSms(phones, signature, vCode);
+//                    smsService.sendSms(phones, signature, vCode);
                     httpSession.setAttribute("CWMS_SMS_VCODE", vCode+"_"+registerDto.getUserPhoneNum());
                     flag = true;
                 }

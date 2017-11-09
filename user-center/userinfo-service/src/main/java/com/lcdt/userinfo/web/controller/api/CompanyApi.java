@@ -2,6 +2,7 @@ package com.lcdt.userinfo.web.controller.api;
 
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.CompanyCertificate;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.web.dto.ModifyCompanyAuthDto;
 import com.lcdt.userinfo.web.dto.ModifyCompanyInfoDto;
@@ -28,6 +29,14 @@ public class CompanyApi {
 
 	@Autowired
 	CompanyService companyService;
+
+	@ApiOperation("获取公司认证图片信息")
+	@RequestMapping(value = "/getauthinfo",method = RequestMethod.GET)
+	public CompanyCertificate getAuthInfo(){
+		Long companyId = SecurityInfoGetter.getCompanyId();
+		return companyService.getCompanyCert(companyId);
+	}
+
 
 	/**
 	 * 提交认证图片信息

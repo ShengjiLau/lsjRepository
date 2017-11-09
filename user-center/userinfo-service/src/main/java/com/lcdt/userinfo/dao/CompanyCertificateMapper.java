@@ -44,4 +44,7 @@ public interface CompanyCertificateMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(CompanyCertificate record);
+
+    List<CompanyCertificate> selectByCompanyId(Long companyId);
+
 }

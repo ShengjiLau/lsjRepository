@@ -6,15 +6,13 @@
         <artifactId>cwms-sso</artifactId>
         <groupId>com.lcdt.cloud</groupId>
         <version>1.0</version>
-        <!--<relativePath>../../</relativePath>-->
-        <!--<relativePath></relativePath>-->
-        <!--<relativePath></relativePath>-->
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cmws-sso-service</artifactId>
-
+    <artifactId>clms-sso-service</artifactId>
+    <name>sso-service</name>
     <dependencies>
+
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>cwms-sso-api</artifactId>
@@ -32,7 +30,6 @@
             <artifactId>clms-permission-api</artifactId>
             <version>1.0</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -52,10 +49,22 @@
         </dependency>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>wms-sms</artifactId>
+            <artifactId>clms-notify</artifactId>
             <version>1.0</version>
         </dependency>
 
+
     </dependencies>
 
+    <build>
+        <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+                <finalName>sso-service</finalName>
+            </configuration>
+        </plugin>
+        </plugins>
+    </build>
 </project>

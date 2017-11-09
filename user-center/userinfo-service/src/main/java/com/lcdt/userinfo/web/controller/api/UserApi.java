@@ -92,6 +92,7 @@ public class UserApi {
 		String encodeNewpwd = RegisterUtils.md5Encrypt(newPwd);
 		String encodeOldpwd = RegisterUtils.md5Encrypt(oldPwd);
 		User user = SecurityInfoGetter.getUser();
+
 		return user;
 	}
 

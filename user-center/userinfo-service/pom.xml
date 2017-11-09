@@ -11,7 +11,7 @@
 
     <packaging>jar</packaging>
     <artifactId>userinfo-service</artifactId>
-
+    <name>user-service</name>
     <dependencies>
 
         <dependency>
@@ -98,6 +98,9 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <finalName>user-service</finalName>
+                    </configuration>
                 </plugin>
             </plugins>
 

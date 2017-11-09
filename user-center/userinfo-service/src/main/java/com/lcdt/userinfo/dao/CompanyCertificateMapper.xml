@@ -78,4 +78,12 @@
     zuzhijigou, shuiwudengji, yinghangkaihu, yingyunxuke
     from t_uc_company_certificate
   </select>
+
+  <select id="selectByCompanyId" resultMap="BaseResultMap">
+       select certi_id, comp_id, identity_front, identity_back, three_certificates, yingyezhizhao,
+    zuzhijigou, shuiwudengji, yinghangkaihu, yingyunxuke
+    from t_uc_company_certificate
+    WHERE comp_id = #{companyId,jdbcType=BIGINT}
+  </select>
+
 </mapper>

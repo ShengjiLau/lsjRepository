@@ -9,8 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>wms-sms</artifactId>
-
+    <artifactId>clms-notify</artifactId>
+    <name>clms-notify</name>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
@@ -18,5 +19,17 @@
             <version>1.0</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <finalName>clms-notify</finalName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

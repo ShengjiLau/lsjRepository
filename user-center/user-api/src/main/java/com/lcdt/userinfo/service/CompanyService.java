@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.CompanyCertificate;
 import com.lcdt.userinfo.model.UserCompRel;
 
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.Map;
  */
 public interface CompanyService {
 
+
+	CompanyCertificate getCompanyCert(Long companyId);
 
 	Company updateCompany(Company company);
 
