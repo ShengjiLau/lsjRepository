@@ -9,7 +9,7 @@
     <id column="item_temp_id" jdbcType="BIGINT" property="itemTempId" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="field_name" jdbcType="VARCHAR" property="fieldName" />
-    <result column="field_type" jdbcType="VARCHAR" property="fieldType" />
+    <result column="field_type" jdbcType="SMALLINT" property="fieldType" />
     <result column="control_name" jdbcType="SMALLINT" property="controlName" />
     <result column="classify_id" jdbcType="BIGINT" property="classifyId" />
     <result column="classify_name" jdbcType="VARCHAR" property="classifyName" />
@@ -34,7 +34,7 @@
     insert into t_items_extend_property (title, field_name, field_type, 
       control_name, classify_id, classify_name, 
       company_id)
-    values (#{title,jdbcType=VARCHAR}, #{fieldName,jdbcType=VARCHAR}, #{fieldType,jdbcType=VARCHAR}, 
+    values (#{title,jdbcType=VARCHAR}, #{fieldName,jdbcType=VARCHAR}, #{fieldType,jdbcType=SMALLINT},
       #{controlName,jdbcType=SMALLINT}, #{classifyId,jdbcType=BIGINT}, #{classifyName,jdbcType=VARCHAR}, 
       #{companyId,jdbcType=BIGINT})
   </insert>
@@ -46,7 +46,7 @@
     update t_items_extend_property
     set title = #{title,jdbcType=VARCHAR},
       field_name = #{fieldName,jdbcType=VARCHAR},
-      field_type = #{fieldType,jdbcType=VARCHAR},
+      field_type = #{fieldType,jdbcType=SMALLINT},
       control_name = #{controlName,jdbcType=SMALLINT},
       classify_id = #{classifyId,jdbcType=BIGINT},
       classify_name = #{classifyName,jdbcType=VARCHAR},
@@ -78,7 +78,7 @@
     company_id)
     values
     <foreach collection="itemsExtendPropertyList" item="item" separator=",">
-      (#{title,jdbcType=VARCHAR}, #{fieldType,jdbcType=VARCHAR},
+      (#{title,jdbcType=VARCHAR}, #{fieldType,jdbcType=SMALLINT},
       #{controlName,jdbcType=SMALLINT}, #{classifyId,jdbcType=BIGINT}, #{classifyName,jdbcType=VARCHAR},
       #{companyId,jdbcType=BIGINT})
     </foreach>
@@ -92,7 +92,7 @@
     <set>
       <if test="title!=null">title = #{title,jdbcType=VARCHAR},</if>
       <!--<if test="fieldName!=null">field_name = #{fieldName,jdbcType=VARCHAR},</if>-->
-      <if test="fieldType!=null">field_type = #{fieldType,jdbcType=VARCHAR},</if>
+      <if test="fieldType!=null">field_type = #{fieldType,jdbcType=SMALLINT},</if>
       <if test="controlName!=null">control_name = #{controlName,jdbcType=SMALLINT},</if>
       <if test="classifyId!=null">classify_id = #{classifyId,jdbcType=BIGINT},</if>
       <if test="classifyName!=null">classify_name = #{classifyName,jdbcType=VARCHAR},</if>
