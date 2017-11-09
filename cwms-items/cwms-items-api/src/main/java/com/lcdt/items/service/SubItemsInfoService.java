@@ -2,6 +2,7 @@ package com.lcdt.items.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.items.dto.SubItemsInfoDto;
+import com.lcdt.items.model.SubItemsInfo;
 
 import java.util.List;
 
@@ -25,13 +26,6 @@ public interface SubItemsInfoService {
      * @return
      */
     int deleteSubItemsInfo(Long subItemId);
-
-    /**
-     * 根据主商品 itemId 删除此主商品下的所有子商品
-     * @param itemId
-     * @return
-     */
-    int deleteSubItemsInfoByItemId(Long itemId);
 
     /**
      * 根据子商品 subItemId 修改子商品
@@ -65,4 +59,13 @@ public interface SubItemsInfoService {
      * @return
      */
     List<SubItemsInfo> querySubItemsInfoListByItemId(Long itemsId, PageInfo pageInfo);
+
+    /**
+     * 根据主商品 itemId 删除此主商品下的所有子商品
+     * @param itemId
+     * @return
+     */
+    int deleteSubItemsInfoByItemId(Long itemId);
+
+
 }

@@ -7,6 +7,7 @@ package com.lcdt.items.dto;
 public class SubItemsInfoDto {
     private Long subItemId;
     private Long itemId;
+    private String image;
     private String code;
     private String barCode;
     private Float purchasePrice;
@@ -29,6 +30,14 @@ public class SubItemsInfoDto {
 
     public void setItemId(Long itemId) {
         this.itemId = itemId;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getCode() {
