@@ -20,7 +20,7 @@ public class RequestAuthRedirectStrategy {
 	public static final String COMPANYPAGE = "/account/company";
 	public static final String AUTH_CALLBACK = "auth_callback";
 	@Value("${login.defaultcallback}")
-	private static String default_callback = "http://test.datuodui.com:8088";
+	private static String default_callback;
 	@Value("${login.safecallback}")
 	private static List<String> safeCallbackUrls;
 

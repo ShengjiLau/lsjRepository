@@ -46,7 +46,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         map.put("deptId",obj.getDeptId());
         List<Department> list = departmentMapper.selectByCondition(map);
         if (list!=null && list.size()>0) {
-            throw new DeptmentExistException();
+            throw new DeptmentExistException("部门已存在");
         } else {
             return  departmentMapper.updateByPrimaryKey(obj);
         }
@@ -79,4 +79,22 @@ public class DepartmentServiceImpl implements DepartmentService {
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Long getMaxIndex(Map m) {
+        Long maxIndex = departmentMapper.getMaxIndex(m);
+        if(maxIndex==null) maxIndex = 0l;
+        return ++maxIndex;
+     }
+
+
+    @Transactional(readOnly = true)
+    @Override
+    public Department getDepartment(Long deptId) {
+        return departmentMapper.selectByPrimaryKey(deptId);
+    }
+
+
+
 }

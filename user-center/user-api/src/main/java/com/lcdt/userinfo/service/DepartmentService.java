@@ -4,12 +4,21 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.model.Department;
 
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by yangbinq on 2017/10/26.
  */
 public interface DepartmentService {
+
+
+    /***
+     * 根据主键获取部门信息
+     * @param deptId
+     * @return
+     */
+    Department getDepartment(Long deptId);
 
     /***
      * 创建部门
@@ -38,6 +47,15 @@ public interface DepartmentService {
      * @return
      */
     PageInfo deptmentList(Map m);
+
+    /***
+     * 获取企业下最大的排序值+1
+     * @param m
+     * @return
+     */
+    Long getMaxIndex(Map m);
+
+
 
 
 
