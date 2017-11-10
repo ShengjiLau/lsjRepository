@@ -68,4 +68,9 @@
     select custom_id, property_type, property_name, property_field, company_id
     from t_custom_property where company_id =#{companyId,jdbcType=BIGINT}
   </select>
+  <select id="selectByPropertyName" resultMap="BaseResultMap" parameterType="com.lcdt.items.model.CustomProperty">
+    select custom_id, property_type, property_name, property_field, company_id
+    from t_custom_property where company_id =#{companyId,jdbcType=BIGINT}
+    and property_type = #{propertyType,jdbcType=SMALLINT} and property_name=#{propertyName,jdbcType=VARCHAR}
+  </select>
 </mapper>

@@ -16,6 +16,13 @@ public interface CustomPropertyService {
     List<CustomProperty> customPropertyList(Long companyId);
 
     /**
+     * 新增自定义属性
+     * @param customProperty
+     * @return
+     */
+    int insertCustomProperty(CustomProperty customProperty);
+
+    /**
      * 根据主键更新记录
      * @param customProperty
      * @return

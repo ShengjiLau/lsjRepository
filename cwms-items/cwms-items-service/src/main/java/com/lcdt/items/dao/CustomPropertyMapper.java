@@ -51,5 +51,12 @@ public interface CustomPropertyMapper {
      * @return
      */
     List<CustomProperty> selectByCompanyId(Long companyId);
+
+    /**
+     * 根据属性名查询
+     * @param customProperty
+     * @return
+     */
+    List<CustomProperty> selectByPropertyName(CustomProperty customProperty);
     
 }
