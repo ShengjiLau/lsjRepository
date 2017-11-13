@@ -92,4 +92,11 @@
       #{item.companyId,jdbcType=BIGINT})
     </foreach>
   </insert>
+  <delete id="deleteItemAndSubItemId" parameterType="java.lang.String">
+    delete from t_custom_value
+    where item_id=#{0}
+    <if test="#{1}!=null">
+      or sub_item_id in (#{1})
+    </if>
+  </delete>
 </mapper>

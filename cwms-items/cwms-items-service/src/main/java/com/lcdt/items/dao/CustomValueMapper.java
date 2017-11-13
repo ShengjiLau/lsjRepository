@@ -61,4 +61,13 @@ public interface CustomValueMapper {
      * @return
      */
     int insertForBatch(List<CustomValue> customValueList);
+
+    /**
+     *  删除商品和子商品：一次性删除主子商品（没子商品传入null值）
+     * @param itemId    主商品id
+     * @param subItemIds    子商品id串，英文逗号分隔;
+     * @return
+     */
+    int deleteItemAndSubItemId(String itemId,String subItemIds);
+
 }
