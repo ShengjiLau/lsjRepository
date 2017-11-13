@@ -52,6 +52,17 @@ public interface SubItemsInfoMapper {
      */
     List<SubItemsInfo> selectSubItemsInfoListByItemId(Long itemId);
 
-
+    /**
+     * 根据商品itemId删除子商品
+     * @param itemId
+     * @return
+     */
     int deleteSubItemsInfoByItemId(Long itemId);
+
+    /**
+     * 批量插入数据
+     * @param subItemsInfoList
+     * @return
+     */
+    int insertByBatch(List<SubItemsInfo> subItemsInfoList);
 }

@@ -47,14 +47,13 @@ public interface ItemClassifyMapper {
 
     /**
      * 根据企业companyId和pid查询
-     * @param companyId
-     * @param pid
+     * @param itemClassify
      * @return
      */
-    List<ItemClassify> selectClassifyByCompanyIdAndPid(Long companyId,Long pid);
+    List<ItemClassify> selectClassifyByCompanyIdAndPid(ItemClassify itemClassify);
 
     /**
-     * 根据父 pid 查询了类
+     * 根据父 pid 查询分类类
      * @param pid
      * @return
      */

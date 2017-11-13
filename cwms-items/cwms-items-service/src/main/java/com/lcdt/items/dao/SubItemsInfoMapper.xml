@@ -90,4 +90,18 @@
     DELETE FROM t_sub_items_info
     WHERE item_id=#{itemId,jdbcType=BIGINT}
   </delete>
+
+  <insert id="insertByBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="sub_item_id">
+    insert into t_sub_items_info (item_id, image, code,
+      bar_code, purchase_price, wholesale_price,
+      retail_price, spec_comb, company_id
+      )
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.itemId,jdbcType=BIGINT}, #{item.image,jdbcType=VARCHAR}, #{item.code,jdbcType=VARCHAR},
+      #{item.barCode,jdbcType=VARCHAR}, #{item.purchasePrice,jdbcType=REAL}, #{item.wholesalePrice,jdbcType=REAL},
+      #{item.retailPrice,jdbcType=REAL}, #{item.specComb,jdbcType=VARCHAR}, #{item.companyId,jdbcType=BIGINT}
+      )
+    </foreach>
+  </insert>
 </mapper>

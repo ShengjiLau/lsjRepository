@@ -7,6 +7,7 @@ import com.lcdt.items.dao.ItemsSpecificalMapper;
 import com.lcdt.items.dto.ItemsSpecificalDto;
 import com.lcdt.items.model.ItemsSpecifical;
 import com.lcdt.items.service.ItemsSpecificalService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 @Transactional
 public class ItemsSpecificalServiceImpl implements ItemsSpecificalService {
 
+    @Autowired
     private ItemsSpecificalMapper itemsSpecificalMapper;
 
     @Override

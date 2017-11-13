@@ -1,5 +1,6 @@
 package com.lcdt.items.dao;
 
+import com.lcdt.items.dto.ItemsInfoDto;
 import com.lcdt.items.model.ItemsInfo;
 
 import java.util.List;
@@ -44,4 +45,11 @@ public interface ItemsInfoMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(ItemsInfo record);
+
+    /**
+     * 根据商品编码和企业ID查询商品
+     * @param itemsInfo
+     * @return
+     */
+    ItemsInfo selectByCodeAndCompanyId(ItemsInfo itemsInfo);
 }

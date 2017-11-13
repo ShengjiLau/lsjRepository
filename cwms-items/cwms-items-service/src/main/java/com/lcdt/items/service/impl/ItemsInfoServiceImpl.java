@@ -2,13 +2,23 @@ package com.lcdt.items.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.items.config.SnowflakeIdWorker;
+import com.lcdt.items.dao.ConversionRelMapper;
+import com.lcdt.items.dao.CustomValueMapper;
 import com.lcdt.items.dao.ItemsInfoMapper;
+import com.lcdt.items.dao.SubItemsInfoMapper;
 import com.lcdt.items.dto.ItemsInfoDto;
+import com.lcdt.items.dto.SubItemsInfoDto;
+import com.lcdt.items.model.CustomValue;
 import com.lcdt.items.model.ItemsInfo;
+import com.lcdt.items.model.SubItemsInfo;
 import com.lcdt.items.service.ItemsInfoService;
+import com.lcdt.items.utils.ItemsInfoDtoToItemsInfoUtil;
+import com.lcdt.items.utils.SubItemsInfoDtoToSubItemsInfoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,41 +31,100 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     @Autowired
     private ItemsInfoMapper itemsInfoMapper;
 
+    @Autowired
+    private SubItemsInfoMapper subItemsInfoMapper;
+
+    @Autowired
+    private CustomValueMapper customValueMapper;
+
+    @Autowired
+    private ConversionRelMapper conversionRelMapper;
+
     @Override
     public int addItemsInfo(ItemsInfoDto itemsInfoDto) {
-        int result=0;
-        try{
-            ItemsInfo itemsInfo=new ItemsInfo();
-            itemsInfo.setSubject(itemsInfoDto.getSubject());
-            itemsInfo.setCode(itemsInfoDto.getCode());
-            itemsInfo.setBarCode(itemsInfoDto.getBarCode());
-            itemsInfo.setTradeType(itemsInfoDto.getTradeType());
-            itemsInfo.setPurchasePrice(itemsInfoDto.getPurchasePrice());
-            itemsInfo.setRetailPrice(itemsInfoDto.getRetailPrice());
-            itemsInfo.setRetailPrice(itemsInfoDto.getRetailPrice());
-            itemsInfo.setIntroduction(itemsInfoDto.getIntroduction());
-            itemsInfo.setImage1(itemsInfoDto.getImage1());
-            itemsInfo.setImage2(itemsInfoDto.getImage2());
-            itemsInfo.setImage3(itemsInfoDto.getImage3());
-            itemsInfo.setImage4(itemsInfoDto.getImage4());
-            itemsInfo.setImage5(itemsInfoDto.getImage5());
-            itemsInfo.setClassifyId(itemsInfoDto.getClassifyId());
-            itemsInfo.setClassifyName(itemsInfoDto.getClassifyName());
-            itemsInfo.setUnitId(itemsInfoDto.getUnitId());
-            itemsInfo.setUnitName(itemsInfoDto.getUnitName());
-            itemsInfo.setConverId(itemsInfoDto.getConverId());
+        int result = 0;
+        try {
+            ItemsInfo itemsInfo = ItemsInfoDtoToItemsInfoUtil.parseItemsInfo(itemsInfoDto);
 
+            //新增商品
+            result+=itemsInfoMapper.insert(itemsInfo);
 
-        }catch (Exception e){
+            //自定义属性值
+            if (itemsInfoDto.getCustomValueList() != null) {
+                for (int i = 0; i < itemsInfoDto.getCustomValueList().size(); i++) {
+                    itemsInfoDto.getCustomValueList().get(i).setItemId(itemsInfo.getItemId());
+                }
+                result+=customValueMapper.insertForBatch(itemsInfoDto.getCustomValueList());
+            }
+
+            //判断商品类型 1、单规格商品，2、多规格商品，3、组合商品
+            if (itemsInfoDto.getItemType() == 2) {
+                //判断子商品是否为空
+                if (itemsInfoDto.getSubItemsInfoDtoList() != null) {
+                    for (SubItemsInfoDto dto : itemsInfoDto.getSubItemsInfoDtoList()) {
+
+                        //新增子商品
+                        //给dto增加商品itemsId
+                        dto.setItemId(itemsInfo.getItemId());
+                        SubItemsInfo subItemsInfo = SubItemsInfoDtoToSubItemsInfoUtil.parseSubItemsInfo(dto);
+                        result += subItemsInfoMapper.insert(subItemsInfo);
+
+                        //子商品自定义属性值
+                        if (dto.getCustomValueList() != null) {
+                            for (int i = 0; i < dto.getCustomValueList().size(); i++) {
+                                dto.getCustomValueList().get(i).setSubItemId(subItemsInfo.getSubItemId());
+                            }
+                            result+=customValueMapper.insertForBatch(dto.getCustomValueList());
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             return result;
         }
     }
 
     @Override
     public int deleteItemsInfo(Long itemId) {
-        return 0;
+        int result=0;
+        try{
+            ItemsInfo itemsInfo=itemsInfoMapper.selectByPrimaryKey(itemId);
+            //子商品 subItemId 用 , 分隔开的字符串
+            StringBuffer subItemsInfoIds=null;
+            if(itemsInfo!=null){
+                //判断商品类型，删除子商品
+                if(itemsInfo.getItemType()==2){
+                    List<SubItemsInfo> subItemsInfoList=subItemsInfoMapper.selectSubItemsInfoListByItemId(itemId);
+                    //如果子商品不为空，则组装用 , 分隔开的字符串，以便批量删除了商品的自定义属性值
+                    if(subItemsInfoList!=null){
+                        for(int i=0;i<subItemsInfoList.size();i++){
+                            if(i==0){
+                                subItemsInfoIds.append(subItemsInfoList.get(i).getSubItemId());
+                            }else{
+                                subItemsInfoIds.append(",").append(subItemsInfoList.get(i).getSubItemId());
+                            }
+                        }
+                    }
+                    result+=subItemsInfoMapper.deleteSubItemsInfoByItemId(itemId);
+                }
+            }
+            //判断是否有多单位，如果有，则删除
+            if(itemsInfo.getConverId()!=null&&itemsInfo.getConverId()>0){
+                result+=conversionRelMapper.deleteByPrimaryKey(itemsInfo.getConverId());
+            }
+            //删除自定义属性值
+            result+=customValueMapper.deleteItemAndSubItemId(itemId.toString(),subItemsInfoIds.toString());
+            //删除主商品
+            result=itemsInfoMapper.deleteByPrimaryKey(itemId);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return result;
+        }
     }
 
     @Override
@@ -71,5 +140,27 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     @Override
     public List<ItemsInfo> queryItemsInfoByCompanyId(Long companyId, PageInfo pageInfo) {
         return null;
+    }
+
+    @Override
+    public String getAutoItemCode() {
+        SnowflakeIdWorker snowflakeIdWorker = new SnowflakeIdWorker(0, 0);
+        String itemCode = "PN" + snowflakeIdWorker.nextId();
+        return itemCode;
+    }
+
+    @Override
+    public ItemsInfo queryItemsInfoByCodeAndCompanyId(String code, Long companyId) {
+        ItemsInfo result = null;
+        try {
+            ItemsInfo itemsInfo = new ItemsInfo();
+            itemsInfo.setCode(code);
+            itemsInfo.setCompanyId(companyId);
+            result = itemsInfoMapper.selectByCodeAndCompanyId(itemsInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return result;
+        }
     }
 }

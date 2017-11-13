@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface ItemsInfoService {
     /**
-     * 增加新商品
+     * 增加新商品,在调用此方法之前需要先调用 queryItemsInfoByCodeAndCompanyId() 判断此企业下的商品编码是否存在,确认本企业内商品编码的唯一性
      * @param itemsInfoDto
      * @return
      */
@@ -26,7 +26,7 @@ public interface ItemsInfoService {
     int deleteItemsInfo(Long itemId);
 
     /**
-     * 根据商品 itemId 修改商品
+     * 根据商品 itemId 修改商品 在调用此方法之前需要先调用 queryItemsInfoByCodeAndCompanyId() 判断此企业下的商品编码是否存在,确认本企业内商品编码的唯一性
      * @param itemsInfoDto
      * @return
      */
@@ -46,4 +46,18 @@ public interface ItemsInfoService {
      * @return
      */
     List<ItemsInfo> queryItemsInfoByCompanyId(Long companyId, PageInfo pageInfo);
+
+    /**
+     * 系统自动生成商品编码
+     * @return
+     */
+    String getAutoItemCode();
+
+    /**
+     * 根据商品编码和企业ID查询商品是,判断本企业内的商品编码是否唯一
+     * @param code
+     * @param companyId
+     * @return
+     */
+    ItemsInfo queryItemsInfoByCodeAndCompanyId(String code ,Long companyId);
 }

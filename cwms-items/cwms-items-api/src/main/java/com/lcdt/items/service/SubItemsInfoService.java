@@ -67,5 +67,12 @@ public interface SubItemsInfoService {
      */
     int deleteSubItemsInfoByItemId(Long itemId);
 
+    /**
+     * 传入SubItemsInfo列表，批量插入数据
+     * @param subItemsInfoList
+     * @return
+     */
+    int addSubItemsInfoBatch(List<SubItemsInfo> subItemsInfoList);
+
 
 }

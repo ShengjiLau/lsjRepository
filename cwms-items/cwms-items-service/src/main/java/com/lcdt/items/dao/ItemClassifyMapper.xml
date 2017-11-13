@@ -61,7 +61,7 @@
     from t_item_classify
   </select>
 
-  <select id="selectClassifyByCompanyIdAndPid" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectClassifyByCompanyIdAndPid" parameterType="com.lcdt.items.model.ItemClassify" resultMap="BaseResultMap">
     SELECT classify_id,pid,classify_name,company_id
     FROM t_item_classify
     WHERE company_id=#{companyId,jdbcType=BIGINT} and pid=#{pid,jdbcType=BIGINT}

@@ -1,5 +1,9 @@
 package com.lcdt.items.dto;
 
+import com.lcdt.items.model.CustomValue;
+
+import java.util.List;
+
 /**
  * Created by lyqishan on 2017/11/8
  */
@@ -15,6 +19,8 @@ public class SubItemsInfoDto {
     private Float retailPrice;
     private String specComb;
     private Long companyId;
+
+    private List<CustomValue> customValueList;
 
     public Long getSubItemId() {
         return subItemId;
@@ -94,5 +100,13 @@ public class SubItemsInfoDto {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public List<CustomValue> getCustomValueList() {
+        return customValueList;
+    }
+
+    public void setCustomValueList(List<CustomValue> customValueList) {
+        this.customValueList = customValueList;
     }
 }

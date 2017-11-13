@@ -109,7 +109,10 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
     public List<ItemClassify> queryItemClassifyByCompanyIdAndPid(Long companyId, Long pid) {
         List<ItemClassify> itemClassifyList = null;
         try {
-            itemClassifyList = itemClassifyMapper.selectClassifyByCompanyIdAndPid(companyId, pid);
+            ItemClassify itemClassify=new ItemClassify();
+            itemClassify.setCompanyId(companyId);
+            itemClassify.setPid(pid);
+            itemClassifyList = itemClassifyMapper.selectClassifyByCompanyIdAndPid(itemClassify);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -138,6 +141,72 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
             e.printStackTrace();
         }finally {
             return itemClassifyList;
+        }
+    }
+
+    @Override
+    public List<ItemClassify> queryItemClassifyAndAllChildren(Long companyId) {
+        List<ItemClassify> itemClassifyList=null;
+        try{
+            ItemClassify itemClassify=new ItemClassify();
+            itemClassify.setCompanyId(companyId);
+            itemClassify.setPid(0L);
+            itemClassifyList=itemClassifyMapper.selectClassifyByCompanyIdAndPid(itemClassify);
+            for(ItemClassify list:itemClassifyList){
+                list.setClassifyList(queryItemClassifyAllChildren(list.getClassifyId()));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return itemClassifyList;
+        }
+    }
+
+    @Override
+    public String queryCassifyIdAndAllChildrenClassifyIds(Long classifyId) {
+        return queryChildrenClassifyIds(classifyId);
+    }
+
+    /**
+     * 递归查询子分类
+     * @param pid
+     * @return
+     */
+    private List<ItemClassify> queryItemClassifyAllChildren(Long pid){
+        List<ItemClassify> itemClassifyList=null;
+        try{
+            itemClassifyList=itemClassifyMapper.selectClassifyByPid(pid);
+            if(itemClassifyList!=null&&itemClassifyList.size()>0){
+                for(ItemClassify list:itemClassifyList){
+                    list.setClassifyList(queryItemClassifyAllChildren(list.getClassifyId()));
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return itemClassifyList;
+        }
+    }
+
+    /**
+     * 递归查询子分类并返回字符串
+     * @param pid
+     * @return
+     */
+    private String queryChildrenClassifyIds(Long pid){
+        List<ItemClassify> itemClassifyList=null;
+        StringBuilder classifyIds=new StringBuilder(pid.toString());
+        try{
+            itemClassifyList=itemClassifyMapper.selectClassifyByPid(pid);
+            if(itemClassifyList!=null&&itemClassifyList.size()>0){
+                for(ItemClassify list:itemClassifyList){
+                    classifyIds.append(",").append(queryChildrenClassifyIds(list.getClassifyId()));
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return classifyIds.toString();
         }
     }
 
