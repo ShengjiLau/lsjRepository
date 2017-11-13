@@ -137,8 +137,9 @@
     combination_info, company_id, item_type
     from t_items_info
     <where>
+      company_id = #{companyId,jdbcType=BIGINT}
       <if test="subject!=null and subject!=''">
-        subject = #{subject,jdbcType=VARCHAR}
+        and subject = #{subject,jdbcType=VARCHAR}
       </if>
       <if test="code!=null and code!=''">
         and code = #{code,jdbcType=VARCHAR}
