@@ -34,7 +34,7 @@ public class ItemsInfoDto {
     private String combinationInfo;
     private Long companyId;
     private Short itemType;
-    private List<SubItemsInfoDto> subItemsInfoDtos;
+    private List<SubItemsInfoDto> subItemsInfoDtoList;
 
     private List<CustomValue> customValueList;
 
@@ -239,12 +239,12 @@ public class ItemsInfoDto {
         this.itemType = itemType;
     }
 
-    public List<SubItemsInfoDto> getSubItemsInfoDtos() {
-        return subItemsInfoDtos;
+    public List<SubItemsInfoDto> getSubItemsInfoDtoList() {
+        return subItemsInfoDtoList;
     }
 
-    public void setSubItemsInfoDtos(List<SubItemsInfoDto> subItemsInfoDtos) {
-        this.subItemsInfoDtos = subItemsInfoDtos;
+    public void setSubItemsInfoDtoList(List<SubItemsInfoDto> subItemsInfoDtoList) {
+        this.subItemsInfoDtoList = subItemsInfoDtoList;
     }
 
     public List<CustomValue> getCustomValueList() {
