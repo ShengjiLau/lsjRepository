@@ -126,6 +126,9 @@ public class DepartmentApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('dept_remove')")
     public Department removeDept(@Validated DepartmentDto dto) {
 
+        /***
+         * 这块删除逻辑待定（所涉及到的部门模块）
+         */
         return null;
     }
 
