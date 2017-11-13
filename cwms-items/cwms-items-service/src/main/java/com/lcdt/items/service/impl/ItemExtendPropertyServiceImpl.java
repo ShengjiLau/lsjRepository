@@ -19,7 +19,7 @@ import java.util.List;
 public class ItemExtendPropertyServiceImpl implements ItemsExtendPropertyService {
 
     @Autowired
-    ItemsExtendPropertyMapper itemsExtendPropertyMapper;
+    private ItemsExtendPropertyMapper itemsExtendPropertyMapper;
 
     @Override
     public int insertByBatch(List<ItemsExtendProperty> itemsExtendPropertyList) {

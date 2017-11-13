@@ -24,13 +24,13 @@ import java.util.List;
 public class CustomPropertyServiceImpl implements CustomPropertyService{
 
     @Autowired
-    CustomPropertyMapper customPropertyMapper;
+    private CustomPropertyMapper customPropertyMapper;
 
     @Autowired
-    ItemsExtendPropertyMapper itemsExtendPropertyMapper;
+    private ItemsExtendPropertyMapper itemsExtendPropertyMapper;
 
     @Autowired
-    ItemClassifyMapper itemClassifyMapper;
+    private ItemClassifyMapper itemClassifyMapper;
 
     @Override
     public List<CustomProperty> customPropertyList(Long companyId) {

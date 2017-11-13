@@ -26,7 +26,7 @@ public class CustomPropertyController {
 
     //@Reference
     @Autowired
-    CustomPropertyService customPropertyService;
+    private CustomPropertyService customPropertyService;
 
     @ApiOperation(value = "获取企业下所有的自定义属性", notes = "获取企业下所有的自定义属性")
     @GetMapping("/list")
