@@ -37,7 +37,7 @@ public class Role {
      *
      * @mbg.generated
      */
-    private String roleCompanyId;
+    private Long roleCompanyId;
 
     private List<Permission> permissions;
 
@@ -129,7 +129,7 @@ public class Role {
      *
      * @mbg.generated
      */
-    public String getRoleCompanyId() {
+    public Long getRoleCompanyId() {
         return roleCompanyId;
     }
 
@@ -141,7 +141,7 @@ public class Role {
      *
      * @mbg.generated
      */
-    public void setRoleCompanyId(String roleCompanyId) {
-        this.roleCompanyId = roleCompanyId == null ? null : roleCompanyId.trim();
+    public void setRoleCompanyId(Long roleCompanyId) {
+        this.roleCompanyId = roleCompanyId;
     }
 }

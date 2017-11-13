@@ -44,4 +44,7 @@ public interface PermissionMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(Permission record);
+
+    List<Permission> selectByCategory(String category);
+
 }

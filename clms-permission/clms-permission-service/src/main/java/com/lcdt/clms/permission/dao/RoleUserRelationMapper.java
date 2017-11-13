@@ -49,4 +49,6 @@ public interface RoleUserRelationMapper {
 
     List<RoleUserRelation> selectByUserAndCompany(@Param("userId") Long userId, @Param("companyId") Long companyId);
 
+    List<RoleUserRelation> selectByRoleId(Long roleId);
+
 }

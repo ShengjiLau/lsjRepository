@@ -67,5 +67,11 @@
     WHERE user_id = #{userId,jdbcType=BIGINT}
     and company_id = #{companyId,jdbcType=BIGINT}
   </select>
+  
+  <select id="selectByRoleId" resultMap="BaseResultMap">
+    SELECT * from role_user_relation
+    WHERE user_id = #{userId,jdbcType = BIGINT}
+    and role_id = #{roleId,jdbcType = BIGINT}
+  </select>
 
 </mapper>

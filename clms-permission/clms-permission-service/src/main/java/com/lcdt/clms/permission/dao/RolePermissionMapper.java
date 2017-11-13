@@ -50,4 +50,7 @@ public interface RolePermissionMapper {
 
     List<Permission> selectByRoleId(@Param("roleId") Long roleId);
 
+
+    List<RolePermission> selectByRolePermission(@Param("roleId") Long roleId, @Param("permissionId") Long permissionId);
+
 }
