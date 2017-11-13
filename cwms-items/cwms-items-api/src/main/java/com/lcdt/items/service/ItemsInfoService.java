@@ -3,6 +3,7 @@ package com.lcdt.items.service;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.items.dto.ItemsInfoDto;
 import com.lcdt.items.model.ItemsInfo;
+import com.lcdt.items.model.ItemsInfoDao;
 
 import java.util.List;
 
@@ -39,13 +40,6 @@ public interface ItemsInfoService {
      */
     ItemsInfo queryItemsInfoByItemId(Long itemId);
 
-    /**
-     * 查询商品列表
-     * @param companyId
-     * @param pageInfo
-     * @return
-     */
-    List<ItemsInfo> queryItemsInfoByCompanyId(Long companyId, PageInfo pageInfo);
 
     /**
      * 系统自动生成商品编码
@@ -60,4 +54,13 @@ public interface ItemsInfoService {
      * @return
      */
     ItemsInfo queryItemsInfoByCodeAndCompanyId(String code ,Long companyId);
+
+    /**
+     * 查询商品列表
+     * @param itemsInfoDao
+     * @param pageInfo
+     * @return
+     */
+    List<ItemsInfo> queryItemsByCondition(ItemsInfoDao itemsInfoDao, PageInfo pageInfo);
+
 }

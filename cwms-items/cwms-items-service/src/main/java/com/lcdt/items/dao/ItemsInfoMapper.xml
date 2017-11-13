@@ -122,6 +122,7 @@
     combination_info, company_id, item_type
     from t_items_info
   </select>
+<<<<<<< Updated upstream
 
   <select id="selectByCodeAndCompanyId" parameterType="com.lcdt.items.model.ItemsInfo" resultMap="BaseResultMap">
     SELECT item_id, subject, code, bar_code, classify_name, classify_id, trade_type,
@@ -130,5 +131,27 @@
     combination_info, company_id, item_type
     FOR t_items_info
     WHERE code=#{code,jdbcType=VARCHAR} and company_id=#{companyId,jdbcType=BIGINT}
+=======
+  <select id="selectByCondition" parameterType="com.lcdt.items.model.ItemsInfoDao" resultMap="BaseResultMap">
+    select item_id, subject, code, bar_code, classify_name, classify_id, trade_type,
+    purchase_price, wholesale_price, retail_price, introduction, image_1, image_2, image_3,
+    image_4, image_5, conver_id, unit_id, unit_name, sub_item_property, store_rule, item_batch,
+    combination_info, company_id, item_type
+    from t_items_info
+    <where>
+      <if test="subject!=null and subject!=''">
+        subject = #{subject,jdbcType=VARCHAR}
+      </if>
+      <if test="code!=null and code!=''">
+        and code = #{code,jdbcType=VARCHAR}
+      </if>
+      <if test="itemType!=null and itemType!=''">
+        and item_type = #{itemType,jdbcType=SMALLINT}
+      </if>
+      <if test="classifyIds!=null and classifyIds!=''">
+        and classify_id in(#{itemId,jdbcType=VARCHAR})
+      </if>
+    </where>
+>>>>>>> Stashed changes
   </select>
 </mapper>

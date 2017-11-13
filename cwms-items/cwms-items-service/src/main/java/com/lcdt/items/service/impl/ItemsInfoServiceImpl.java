@@ -1,6 +1,7 @@
 package com.lcdt.items.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.items.config.SnowflakeIdWorker;
 import com.lcdt.items.dao.ConversionRelMapper;
@@ -9,8 +10,8 @@ import com.lcdt.items.dao.ItemsInfoMapper;
 import com.lcdt.items.dao.SubItemsInfoMapper;
 import com.lcdt.items.dto.ItemsInfoDto;
 import com.lcdt.items.dto.SubItemsInfoDto;
-import com.lcdt.items.model.CustomValue;
 import com.lcdt.items.model.ItemsInfo;
+import com.lcdt.items.model.ItemsInfoDao;
 import com.lcdt.items.model.SubItemsInfo;
 import com.lcdt.items.service.ItemsInfoService;
 import com.lcdt.items.utils.ItemsInfoDtoToItemsInfoUtil;
@@ -18,7 +19,6 @@ import com.lcdt.items.utils.SubItemsInfoDtoToSubItemsInfoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -138,8 +138,12 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     }
 
     @Override
-    public List<ItemsInfo> queryItemsInfoByCompanyId(Long companyId, PageInfo pageInfo) {
-        return null;
+    public List<ItemsInfo> queryItemsByCondition(ItemsInfoDao itemsInfoDao, PageInfo pageInfo) {
+        //查询获得该分类下的所有子孙分类classifyId
+
+        //使用分页工具进行分页
+        PageHelper.startPage(pageInfo.getPageNum(),pageInfo.getPageSize());
+        return itemsInfoMapper.selectByCondition(itemsInfoDao);
     }
 
     @Override
