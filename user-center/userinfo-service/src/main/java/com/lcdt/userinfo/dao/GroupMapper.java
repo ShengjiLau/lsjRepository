@@ -3,6 +3,7 @@ package com.lcdt.userinfo.dao;
 import com.lcdt.userinfo.model.Group;
 
 import java.util.List;
+import java.util.Map;
 
 public interface GroupMapper {
     /**
@@ -44,4 +45,11 @@ public interface GroupMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(Group record);
+
+    /***
+     * 根据条件查询
+     * @param map
+     * @return
+     */
+    List<Group> selectByCondition(Map map);
 }

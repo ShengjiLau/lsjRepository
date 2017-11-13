@@ -25,16 +25,16 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int createDepartment(Department obj) throws DeptmentExistException {
-        Map map = new HashMap<>();
+    public int createDepartment(Department obj) throws DeptmentExistException {       Map map = new HashMap<>();
         map.put("companyId",obj.getCompanyId());
         map.put("deptName",obj.getDeptName());
         List<Department> list = departmentMapper.selectByCondition(map);
         if (list!=null && list.size()>0) {
-            throw new DeptmentExistException();
+            throw new DeptmentExistException("部门已存在");
         } else {
             return departmentMapper.insert(obj);
         }
+
     }
 
     @Transactional(rollbackFor = Exception.class)
