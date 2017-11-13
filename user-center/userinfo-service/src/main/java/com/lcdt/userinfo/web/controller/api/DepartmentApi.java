@@ -41,7 +41,7 @@ public class DepartmentApi {
      *
      * @return
      */
-    @ApiOperation("新增部门 入口参数 [deptName/deptPid]")
+    @ApiOperation("新增部门")
     @RequestMapping(value = "/deptAdd",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('dept_add')")
     public Department deptAdd(@Validated DepartmentDto dto) {
@@ -70,21 +70,23 @@ public class DepartmentApi {
     @ApiOperation("部门排序")
     @RequestMapping(value = "/deptOrder",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('dept_list')")
-    public Department deptOrder(@ApiParam(value = "部门ID",required = true) @RequestParam Long deptId, @ApiParam(value = "1-升 2-降",required = true) Integer flag) {
+    public Department deptOrder(@ApiParam(value = "部门ID-变动ID",required = true) @RequestParam Long deptId,
+                                @ApiParam(value = "部门ID-被变ID",required = true) @RequestParam Long deptId1) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Department department = departmentService.getDepartment(deptId);
         if (department == null) {
             throw new DeptmentExistException("部门不存在");
         }
-        if (flag==1) { //升序
-            department.setDeptOrder(department.getDeptId()+1);
-        } else {
-            if (department.getDeptOrder()<=1) {
-                department.setDeptOrder(0l);
-            } else {
-                department.setDeptOrder(department.getDeptOrder()-1);
-            }
+        Department department1 = departmentService.getDepartment(deptId1);
+        if (department1 == null) {
+            throw new DeptmentExistException("部门不存在");
         }
+        long index1 = department.getDeptOrder();
+        long index2 = department1.getDeptOrder();
+        department.setDeptOrder(index2);
+        departmentService.updateDepartment(department);
+        department1.setDeptOrder(index1);
+        departmentService.updateDepartment(department1);
         return department;
     }
 
@@ -96,7 +98,7 @@ public class DepartmentApi {
      */
     @ApiOperation("修改部门")
     @RequestMapping(value = "/deptEdit",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('dept_update')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('dept_edit')")
     public Department deptEdit(@ApiParam(value = "部门ID",required = true) @RequestParam Long deptId,
                                @ApiParam(value = "类型ID",required = true) @RequestParam Long deptPid,
                                @ApiParam(value = "部门名称",required = true)  @RequestParam String deptName) {
@@ -122,7 +124,7 @@ public class DepartmentApi {
      * @return
      */
     @ApiOperation("部门移除")
-    @RequestMapping(value = "/removeDept",method = RequestMethod.POST)
+    @RequestMapping(value = "/deptremove",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('dept_remove')")
     public Department removeDept(@Validated DepartmentDto dto) {
 
@@ -138,7 +140,7 @@ public class DepartmentApi {
      * @return
      */
     @ApiOperation("部门列表")
-    @RequestMapping(value = "/deptList",method = RequestMethod.POST)
+    @RequestMapping(value = "/deptList",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('dept_list')")
     public DeparmentResultDto deptList(@ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                        @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {

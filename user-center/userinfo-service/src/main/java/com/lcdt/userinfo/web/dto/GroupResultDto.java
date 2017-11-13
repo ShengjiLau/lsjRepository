@@ -2,23 +2,24 @@ package com.lcdt.userinfo.web.dto;
 
 import com.lcdt.converter.ResponseData;
 import com.lcdt.userinfo.model.Department;
+import com.lcdt.userinfo.model.Group;
 
 import java.util.List;
 
 /**
  * Created by yangbinq on 2017/11/9.
  */
-public class DeparmentResultDto implements ResponseData {
+public class GroupResultDto implements ResponseData {
 
-    private List<Department> list;
+    private List<Group> list;
 
     private long total;
 
-    public List<Department> getList() {
+    public List<Group> getList() {
         return list;
     }
 
-    public void setList(List<Department> list) {
+    public void setList(List<Group> list) {
         this.list = list;
     }
 

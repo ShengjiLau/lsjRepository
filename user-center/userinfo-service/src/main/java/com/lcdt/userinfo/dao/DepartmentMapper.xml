@@ -72,7 +72,7 @@
     from t_department
     where 1=1
     <trim prefix="" suffix="" suffixOverrides="">
-      <if test="companyId != null &amp;&amp; companyId != ''">
+      <if test="companyId != null">
         and company_id=#{companyId,jdbcType=BIGINT}
       </if>
       <if test="deptName != null &amp;&amp; deptName != ''">
