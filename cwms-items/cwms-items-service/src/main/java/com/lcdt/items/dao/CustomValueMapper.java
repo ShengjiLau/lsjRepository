@@ -44,4 +44,21 @@ public interface CustomValueMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(CustomValue record);
+
+
+    /**
+     * 修改商品时：一次性获取商品主商品和子商品自定义属性值
+     * @param itemId    主商品id
+     * @param subItemIds    子商品id串，英文逗号分隔;
+     * @return
+     */
+    List<CustomValue> selectItemAndSubItem(String itemId,String subItemIds);
+
+
+    /**
+     * 批量插入商品自定义属性值
+     * @param customValueList
+     * @return
+     */
+    int insertForBatch(List<CustomValue> customValueList);
 }

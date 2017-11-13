@@ -72,4 +72,24 @@
     property_type, company_id
     from t_custom_value
   </select>
+  <select id="selectItemAndSubItem" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select vid, item_id, sub_item_id, property_field, property_value, property_name,
+    property_type, company_id
+    from t_custom_value
+    where item_id=#{0}
+    <if test="#{1}!=null">
+      or sub_item_id in (#{1})
+    </if>
+  </select>
+  <insert id="insertForBatch" parameterType="java.util.List"  useGeneratedKeys="true" keyProperty="vid">
+    insert into t_custom_value (item_id, sub_item_id, property_field,
+    property_value, property_name, property_type,
+    company_id)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.itemId,jdbcType=BIGINT}, #{item.subItemId,jdbcType=BIGINT}, #{item.propertyField,jdbcType=VARCHAR},
+      #{item.propertyValue,jdbcType=VARCHAR}, #{item.propertyName,jdbcType=VARCHAR}, #{item.propertyType,jdbcType=SMALLINT},
+      #{item.companyId,jdbcType=BIGINT})
+    </foreach>
+  </insert>
 </mapper>

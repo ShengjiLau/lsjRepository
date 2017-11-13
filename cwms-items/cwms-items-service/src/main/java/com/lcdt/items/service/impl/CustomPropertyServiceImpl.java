@@ -10,7 +10,6 @@ import com.lcdt.items.model.ItemsExtendProperty;
 import com.lcdt.items.model.ItemsExtendPropertyDao;
 import com.lcdt.items.service.CustomPropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;

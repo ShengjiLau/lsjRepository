@@ -1,5 +1,7 @@
 package com.lcdt.items.dto;
 
+import com.lcdt.items.model.CustomValue;
+
 import java.util.List;
 
 /**
@@ -33,6 +35,8 @@ public class ItemsInfoDto {
     private Long companyId;
     private Short itemType;
     private List<SubItemsInfoDto> subItemsInfoDtos;
+
+    private List<CustomValue> customValueList;
 
 
     public Long getItemId() {
@@ -241,5 +245,13 @@ public class ItemsInfoDto {
 
     public void setSubItemsInfoDtos(List<SubItemsInfoDto> subItemsInfoDtos) {
         this.subItemsInfoDtos = subItemsInfoDtos;
+    }
+
+    public List<CustomValue> getCustomValueList() {
+        return customValueList;
+    }
+
+    public void setCustomValueList(List<CustomValue> customValueList) {
+        this.customValueList = customValueList;
     }
 }
