@@ -122,8 +122,6 @@
     combination_info, company_id, item_type
     from t_items_info
   </select>
-<<<<<<< Updated upstream
-
   <select id="selectByCodeAndCompanyId" parameterType="com.lcdt.items.model.ItemsInfo" resultMap="BaseResultMap">
     SELECT item_id, subject, code, bar_code, classify_name, classify_id, trade_type,
     purchase_price, wholesale_price, retail_price, introduction, image_1, image_2, image_3,
@@ -131,7 +129,7 @@
     combination_info, company_id, item_type
     FOR t_items_info
     WHERE code=#{code,jdbcType=VARCHAR} and company_id=#{companyId,jdbcType=BIGINT}
-=======
+  </select>
   <select id="selectByCondition" parameterType="com.lcdt.items.model.ItemsInfoDao" resultMap="BaseResultMap">
     select item_id, subject, code, bar_code, classify_name, classify_id, trade_type,
     purchase_price, wholesale_price, retail_price, introduction, image_1, image_2, image_3,

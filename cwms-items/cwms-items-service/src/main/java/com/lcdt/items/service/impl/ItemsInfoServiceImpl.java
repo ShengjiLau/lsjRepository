@@ -13,6 +13,7 @@ import com.lcdt.items.dto.SubItemsInfoDto;
 import com.lcdt.items.model.ItemsInfo;
 import com.lcdt.items.model.ItemsInfoDao;
 import com.lcdt.items.model.SubItemsInfo;
+import com.lcdt.items.service.ItemClassifyService;
 import com.lcdt.items.service.ItemsInfoService;
 import com.lcdt.items.utils.ItemsInfoDtoToItemsInfoUtil;
 import com.lcdt.items.utils.SubItemsInfoDtoToSubItemsInfoUtil;
@@ -39,6 +40,9 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
 
     @Autowired
     private ConversionRelMapper conversionRelMapper;
+
+    @Autowired
+    private ItemClassifyService itemClassifyService;
 
     @Override
     public int addItemsInfo(ItemsInfoDto itemsInfoDto) {
@@ -140,7 +144,7 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     @Override
     public List<ItemsInfo> queryItemsByCondition(ItemsInfoDao itemsInfoDao, PageInfo pageInfo) {
         //查询获得该分类下的所有子孙分类classifyId
-
+        String classifyIds = itemClassifyService.queryCassifyIdAndAllChildrenClassifyIds(itemsInfoDao.getClassifyId());
         //使用分页工具进行分页
         PageHelper.startPage(pageInfo.getPageNum(),pageInfo.getPageSize());
         return itemsInfoMapper.selectByCondition(itemsInfoDao);
