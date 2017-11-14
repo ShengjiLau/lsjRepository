@@ -187,8 +187,6 @@ public class DepartmentApi {
             for(Department tobj : tlist) {
                 childList.add(tobj);
             }
-        } else {
-            return null;
         }
         for (Department department : childList) {
             List<Department> list1 = getChild(department);
@@ -199,9 +197,9 @@ public class DepartmentApi {
                 department.setIsSub((short)0); //存在
             }
         }
-/*        if (childList.size() == 0) {
-
-        }*/
+        if (childList.size() == 0) {
+            return null;
+        }
         return childList;
     }
 
