@@ -1,14 +1,29 @@
 package com.lcdt.userinfo.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * Created by ss on 2017/7/31.
  */
 public class RegisterDto implements java.io.Serializable{
 
+	@ApiModelProperty(required = true)
+	@NotBlank
 	private String userPhoneNum;//手机号 账号
+
+	@ApiModelProperty(required = true)
+	@NotBlank
 	private String password;
+	@ApiModelProperty(required = true)
+	@NotBlank
 	private String password1;
+
+	@ApiModelProperty(required = true)
+	@NotBlank
 	private String name;//姓名，用户名
+
+
 	private String introducer; //推荐人
 	private String ecode; //手机验证码
 

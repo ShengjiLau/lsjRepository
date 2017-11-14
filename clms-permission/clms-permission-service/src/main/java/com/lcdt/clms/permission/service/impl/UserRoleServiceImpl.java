@@ -114,7 +114,21 @@ public class UserRoleServiceImpl implements UserRoleService {
 				rolePermissionDao.deleteByPrimaryKey(rolePermission.getRolePermissionId());
 			}
 		}
+	}
 
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public void setCompanyUserRole(Long userId, Long companyId, List<Long> roleId) {
+		if (roleId == null) {
+			return;
+		}
+		for (Long id : roleId) {
+			RoleUserRelation roleUserRelation = new RoleUserRelation();
+			roleUserRelation.setUserId(userId);
+			roleUserRelation.setCompanyId(companyId);
+			roleUserRelation.setRoleId(id);
+			roleUserRelationDao.insert(roleUserRelation);
+		}
 	}
 
 }
