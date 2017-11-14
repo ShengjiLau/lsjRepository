@@ -4,6 +4,7 @@ package com.lcdt.userinfo.web.controller.api;
  * Created by yangbinq on 2017/11/13.
  */
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.exception.GroupExistException;
@@ -17,10 +18,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -96,14 +94,20 @@ public class GroupApi {
     @ApiOperation("项目组移除")
     @RequestMapping(value = "/groupRemove",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_remove')")
-    public Boolean deptRemove(@ApiParam(value = "项目组ID",required = true) @RequestParam Long groupId) {
+    @ResponseBody
+    public String deptRemove(@ApiParam(value = "项目组ID",required = true) @RequestParam Long groupId) {
+        boolean flag = false;
         try {
             Group group = new Group();
             group.setGroupId(groupId);
-            return groupManageService.deleteGroup(group);
+            flag = groupManageService.deleteGroup(group);
         } catch (GroupExistException e) {
             throw new GroupExistException(e.getMessage());
         }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message",flag?"删除成功！":"删除失败！");
+        jsonObject.put("code",flag?0:-1);
+        return jsonObject.toString();
     }
 
 

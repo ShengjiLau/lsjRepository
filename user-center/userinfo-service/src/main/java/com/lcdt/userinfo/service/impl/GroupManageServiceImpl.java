@@ -40,8 +40,8 @@ public class GroupManageServiceImpl implements GroupManageService {
 		if (userGroupRelations != null && !userGroupRelations.isEmpty()) {
 			return false;
 		}
-		groupDao.deleteByPrimaryKey(group.getGroupId());
-		return true;
+		return groupDao.deleteByPrimaryKey(group.getGroupId())==1?true : false;
+
 	}
 
 	@Transactional(rollbackFor = Exception.class)
