@@ -155,9 +155,8 @@ public class DepartmentApi {
         if (pageInfo.getTotal()>0) {
             list = pageInfo.getList();
             for (Department tobj :list) {
-                if(tobj.getDeptPid()==0) continue;
                 List<Department> list1 = getChild(tobj);
-                if (list!=null && list1.size()>0) {
+                if (list1!=null && list1.size()>0) {
                     tobj.setList(list1);
                     tobj.setIsSub((short)1); //存在
                 } else {
@@ -188,6 +187,8 @@ public class DepartmentApi {
             for(Department tobj : tlist) {
                 childList.add(tobj);
             }
+        } else {
+            return null;
         }
         for (Department department : childList) {
             List<Department> list1 = getChild(department);
@@ -198,12 +199,9 @@ public class DepartmentApi {
                 department.setIsSub((short)0); //存在
             }
         }
-        if (childList.size() == 0) {
-            return null;
-        }
+/*        if (childList.size() == 0) {
 
-
-
+        }*/
         return childList;
     }
 
