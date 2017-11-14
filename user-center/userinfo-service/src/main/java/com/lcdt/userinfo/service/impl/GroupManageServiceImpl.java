@@ -98,6 +98,23 @@ public class GroupManageServiceImpl implements GroupManageService {
 		return pageInfo;
 	}
 
+	@Override
+	public void setCompanyUserGroup(Long userId, Long companyId, List<Long> groupId) {
+
+		if (groupId == null) {
+			return;
+		}
+
+		for (Long id : groupId) {
+			UserGroupRelation userGroupRelation = new UserGroupRelation();
+			userGroupRelation.setCompanyId(companyId);
+			userGroupRelation.setUserId(userId);
+			userGroupRelation.setGroupId(id);
+			relationDao.insert(userGroupRelation);
+		}
+
+	}
+
 
 
 

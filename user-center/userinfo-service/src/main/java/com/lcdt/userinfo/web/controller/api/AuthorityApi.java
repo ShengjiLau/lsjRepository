@@ -9,10 +9,13 @@ import com.lcdt.clms.permission.service.UserRoleService;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.converter.ResponseData;
+import com.lcdt.userinfo.web.dto.CreateRoleDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,9 +56,9 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/getcompanyRole", method = RequestMethod.GET)
 	@ApiOperation("获取所有角色信息")
-	public ArrayListResponseWrapper<Role> getCompanyRole(Integer pageNo) {
+	public ArrayListResponseWrapper<Role> getCompanyRole(Integer pageNo,Integer pageSize) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
-		PageHelper.startPage(pageNo, 10);
+		PageHelper.startPage(pageNo, pageSize);
 		List<Role> companyRole = roleService.getCompanyRole(companyId);
 		return new ArrayListResponseWrapper<Role>(companyRole);
 	}
@@ -63,8 +66,11 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/addrole", method = RequestMethod.POST)
 	@ApiOperation("添加角色")
-	public Role addRole(Role role) {
+	public Role addRole(@Validated CreateRoleDto roleDto) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
+		Role role = new Role();
+		BeanUtils.copyProperties(roleDto, role);
+		role.setRoleCompanyId(companyId);
 		Role companyRole = roleService.createCompanyRole(companyId, role);
 		return companyRole;
 	}

@@ -24,4 +24,6 @@ public interface UserService {
 	User queryByPhone(String phone) throws UserNotExistException;
 
 	User userLogin(String username, String pwd) throws UserNotExistException, PassErrorException;
+
+	User selectUserByPhone(String phone);
 }
