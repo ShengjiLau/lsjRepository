@@ -13,6 +13,7 @@ import com.lcdt.userinfo.web.dto.CreateRoleDto;
 import com.lcdt.userinfo.web.dto.PageResultDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -56,7 +57,7 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/getcompanyRole", method = RequestMethod.GET)
 	@ApiOperation("获取所有角色信息")
-	public PageResultDto<Role> getCompanyRole(Integer pageNo,Integer pageSize) {
+	public PageResultDto<Role> getCompanyRole(@ApiParam(required = true) Integer pageNo, @ApiParam(required = true) Integer pageSize) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		PageHelper.startPage(pageNo, pageSize);
 		List<Role> companyRole = roleService.getCompanyRole(companyId);
