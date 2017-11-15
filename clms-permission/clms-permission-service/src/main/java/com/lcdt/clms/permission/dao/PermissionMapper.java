@@ -47,4 +47,6 @@ public interface PermissionMapper {
 
     List<Permission> selectByCategory(String category);
 
+    List<Permission> selectByRoleId(Long roleId);
+
 }

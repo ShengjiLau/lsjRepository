@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.clms.permission.dao.PermissionMapper">
-  <resultMap id="BaseResultMap" type="com.lcdt.clms.permission.model.Permission">
-    <id column="permission_id" jdbcType="INTEGER" property="permissionId" />
-    <result column="permission_remark" jdbcType="VARCHAR" property="permissionRemark" />
-    <result column="permission_name" jdbcType="VARCHAR" property="permissionName" />
-    <result column="permission_prefix" jdbcType="VARCHAR" property="permissionPrefix" />
-    <result column="permission_code" jdbcType="VARCHAR" property="permissionCode" />
-    <result column="permission_category" jdbcType="VARCHAR" property="permissionCategory"/>
-  </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <resultMap id="BaseResultMap" type="com.lcdt.clms.permission.model.Permission">
+        <id column="permission_id" jdbcType="INTEGER" property="permissionId"/>
+        <result column="permission_remark" jdbcType="VARCHAR" property="permissionRemark"/>
+        <result column="permission_name" jdbcType="VARCHAR" property="permissionName"/>
+        <result column="permission_prefix" jdbcType="VARCHAR" property="permissionPrefix"/>
+        <result column="permission_code" jdbcType="VARCHAR" property="permissionCode"/>
+        <result column="permission_category" jdbcType="VARCHAR" property="permissionCategory"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from permission
     where permission_id = #{permissionId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.lcdt.clms.permission.model.Permission">
+    <insert id="insert" parameterType="com.lcdt.clms.permission.model.Permission">
     insert into permission (permission_id, permission_remark, permission_name,
       permission_prefix, permission_code    ,permission_category)
     values (#{permissionId,jdbcType=INTEGER}, #{permissionRemark,jdbcType=VARCHAR}, #{permissionName,jdbcType=VARCHAR}, 
       #{permissionPrefix,jdbcType=VARCHAR}, #{permissionCode,jdbcType=VARCHAR},#{permissionCategory,jdbcType=VARCHAR})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.lcdt.clms.permission.model.Permission">
+    <update id="updateByPrimaryKey" parameterType="com.lcdt.clms.permission.model.Permission">
     update permission
     set permission_remark = #{permissionRemark,jdbcType=VARCHAR},
       permission_name = #{permissionName,jdbcType=VARCHAR},
@@ -28,22 +28,32 @@
       ,permission_category = #{permissionCategory,jdbcType=VARCHAR}
     where permission_id = #{permissionId,jdbcType=INTEGER}
   </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select permission_id, permission_remark, permission_name, permission_prefix, permission_code    ,permission_category
     from permission
     where permission_id = #{permissionId,jdbcType=INTEGER}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
+    <select id="selectAll" resultMap="BaseResultMap">
     select permission_id, permission_remark, permission_name, permission_prefix, permission_code
     ,permission_category
     from permission
   </select>
 
-  <select id="selectByCategory" resultMap="BaseResultMap">
+    <select id="selectByCategory" resultMap="BaseResultMap">
   select permission_id, permission_remark, permission_name, permission_prefix, permission_code
     ,permission_category
     from permission
     where permission_category = #{category,jdbcType=VARCHAR}
   </select>
+
+    <select id="selectByRoleId" resultMap="BaseResultMap">
+
+
+  select p.* from clms_uc_db.permission p LEFT JOIN clms_uc_db.role_permission r
+
+  on r.permission_id = p.permission_id WHERE r.role_id = #{roleId,jdbcType=INTEGER}
+
+  </select>
+
 
 </mapper>

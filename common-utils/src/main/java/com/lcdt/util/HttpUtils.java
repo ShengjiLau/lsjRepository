@@ -1,5 +1,7 @@
 package com.lcdt.util;
 
+import org.springframework.util.StringUtils;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +25,11 @@ public final class HttpUtils {
 
 	//获取父域名
 	public static String getUrlDomain(String url) {
+
+		if (StringUtils.isEmpty(url)) {
+			return "";
+		}
+
 		if (url.contains("localhost")) {
 			return "localhost";
 		}
