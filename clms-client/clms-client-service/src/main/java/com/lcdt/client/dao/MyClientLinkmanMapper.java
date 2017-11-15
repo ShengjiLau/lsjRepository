@@ -1,6 +1,7 @@
-package com.lcdt.userinfo.dao;
+package com.lcdt.client.dao;
 
-import com.lcdt.userinfo.model.MyClientLinkman;
+
+import com.lcdt.client.model.MyClientLinkman;
 
 import java.util.List;
 

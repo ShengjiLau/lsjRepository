@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.dao;
 
-import com.lcdt.userinfo.model.MyClient;
+
+import com.lcdt.client.model.MyClient;
 
 import java.util.List;
 
