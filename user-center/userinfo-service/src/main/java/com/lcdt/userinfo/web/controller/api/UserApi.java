@@ -1,5 +1,6 @@
 package com.lcdt.userinfo.web.controller.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.userinfo.exception.UserNotExistException;
@@ -8,6 +9,7 @@ import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.utils.RegisterUtils;
 import com.lcdt.userinfo.web.dto.ModifyUserDto;
 import com.lcdt.userinfo.web.exception.PwdErrorException;
+import com.lcdt.util.RandomNoUtil;
 import com.lcdt.util.WebProduces;
 import com.lcdt.util.validate.ValidateException;
 import io.swagger.annotations.Api;
@@ -20,11 +22,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.Collection;
 import java.util.List;
 
@@ -105,4 +105,66 @@ public class UserApi {
 	}
 
 
+	@ApiOperation("更换手机号")
+	@RequestMapping(value = "/changephone",method = RequestMethod.POST)
+	public User changePhone(HttpSession httpSession,
+							@ApiParam(value = "登录密码",required = true) @RequestParam String pwd,
+							@ApiParam(value = "新手机号",required = true) @RequestParam String newphone,
+							@ApiParam(value = "验证码",required = true) @RequestParam String captcha) {
+		if (userService.isPhoneBeenRegister(newphone)) {
+			throw new ValidateException("手机号"+newphone+"已注册！");
+		}
+		User user = SecurityInfoGetter.getUser(); //获取当前登录账号
+		try {
+			user = userService.queryByUserId(user.getUserId());
+		} catch (UserNotExistException e) {
+			throw new ValidateException("获取用户信息出错:"+e.getMessage());
+		}
+		String encodeNewpwd = RegisterUtils.md5Encrypt(pwd);
+		if (!user.getPwd().equals(encodeNewpwd)) {
+			throw new PwdErrorException("密码不正确！");
+		}
+		String vCodeSession = (String) httpSession.getAttribute("CWMS_SMS_VCODE");
+		if (vCodeSession==null) {
+			throw new ValidateException("验证码无效！");
+		} else {
+			if (!captcha.equals(vCodeSession.split("_")[0])) {
+				throw new ValidateException("验证码无效！");
+			}
+		}
+		user.setPhone(newphone);
+		userService.updateUser(user);
+		return user;
+	}
+
+
+	@ApiOperation("发送验证码")
+	@RequestMapping(value = "/getCaptcha",method = RequestMethod.POST)
+	@ResponseBody
+	public String getCaptcha(HttpSession httpSession,@ApiParam(value = "新手机号",required = true) @RequestParam String newphone) {
+		if (userService.isPhoneBeenRegister(newphone)) {
+			throw new ValidateException("手机号"+newphone+"已注册！");
+		}
+		Long  cTime = System.currentTimeMillis(); //其实时间
+		if (httpSession.getAttribute("CWMS_SMS_SEND_TIME")==null) {
+			httpSession.setAttribute("CWMS_SMS_SEND_TIME", cTime);
+			String[] phones = new String[]{newphone};
+			String vCode = RandomNoUtil.createRandom(true,4);
+//          smsService.sendSms(phones,signature,vCode);
+			httpSession.setAttribute("CWMS_SMS_VCODE", vCode+"_"+newphone);
+		} else {
+			Long oTime = Long.valueOf(httpSession.getAttribute("CWMS_SMS_SEND_TIME").toString());
+			if (cTime - oTime >= 60*1000) { //大于1分中重新获取
+				httpSession.setAttribute("CWMS_SMS_SEND_TIME", cTime);
+				String[] phones = new String[]{newphone};
+				String vCode = RandomNoUtil.createRandom(true,4);
+//                    smsService.sendSms(phones, signature, vCode);
+				httpSession.setAttribute("CWMS_SMS_VCODE", vCode+"_"+newphone);
+			}
+		}
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("message","");
+		jsonObject.put("code",0);
+		return jsonObject.toString();
+	}
 }
