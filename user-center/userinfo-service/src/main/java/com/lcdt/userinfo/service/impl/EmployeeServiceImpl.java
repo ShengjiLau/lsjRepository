@@ -33,8 +33,6 @@ public class EmployeeServiceImpl {
 	@Autowired
 	GroupManageService groupService;
 
-	/**
-	 */
 	@Transactional(rollbackFor = Exception.class)
 	public boolean addEmployee(CreateEmployeeAccountDto dto) {
 		String phone = dto.getUserPhoneNum();
@@ -64,9 +62,6 @@ public class EmployeeServiceImpl {
 		if (dto.getGroups() != null && !dto.getGroups().isEmpty()) {
 			groupService.setCompanyUserGroup(user.getUserId(), companyId, dto.getGroups());
 		}
-
 		return true;
-
 	}
-
 }

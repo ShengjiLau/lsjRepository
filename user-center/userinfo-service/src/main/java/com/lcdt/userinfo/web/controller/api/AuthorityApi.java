@@ -10,11 +10,11 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.converter.ResponseData;
 import com.lcdt.userinfo.web.dto.CreateRoleDto;
+import com.lcdt.userinfo.web.dto.PageResultDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,11 +56,12 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/getcompanyRole", method = RequestMethod.GET)
 	@ApiOperation("获取所有角色信息")
-	public ArrayListResponseWrapper<Role> getCompanyRole(Integer pageNo,Integer pageSize) {
+	public PageResultDto<Role> getCompanyRole(Integer pageNo,Integer pageSize) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		PageHelper.startPage(pageNo, pageSize);
 		List<Role> companyRole = roleService.getCompanyRole(companyId);
-		return new ArrayListResponseWrapper<Role>(companyRole);
+		PageResultDto pageResultDto = new PageResultDto(companyRole);
+		return pageResultDto;
 	}
 
 
@@ -75,7 +76,7 @@ public class AuthorityApi {
 		return companyRole;
 	}
 
-	static EmptyResponseDate emptyResponseDate = new EmptyResponseDate();
+	static EmptyResponseDate emptyResponseData = new EmptyResponseDate();
 
 	@RequestMapping(value = "/removerole", method = RequestMethod.POST)
 	@ApiOperation("删除角色")
@@ -89,21 +90,20 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/addRolePermission", method = RequestMethod.POST)
 	@ApiOperation("增加角色权限")
-	public ResponseData addPermissionForRole(Long roleId, Long permissionId) {
+	public EmptyResponseDate addPermissionForRole(Long roleId, Long permissionId) {
 		roleService.addRolePermission(roleId, permissionId);
-		return emptyResponseDate;
+		return emptyResponseData;
 	}
 
 	@RequestMapping(value = "/removeRolePermission", method = RequestMethod.POST)
 	@ApiOperation("删除角色权限")
-	public ResponseData removePermissionRole(Long roleId, Long permissionId) {
+	public EmptyResponseDate removePermissionRole(Long roleId, Long permissionId) {
 		roleService.removeRolePermission(roleId, permissionId);
-		return emptyResponseDate;
+		return emptyResponseData;
 	}
 
 	static class EmptyResponseDate implements ResponseData{
-
-
+		String result = "请求成功";
 	}
 
 

@@ -61,8 +61,6 @@ public class CompanyServiceImpl implements CompanyService {
 		return company;
 	}
 
-
-
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Company createCompany(CompanyDto dto) throws CompanyExistException {
@@ -106,8 +104,6 @@ public class CompanyServiceImpl implements CompanyService {
 			companyMember.setCreateDate(dt);
 			userCompRelMapper.insert(companyMember);
 		}
-
-
 		return company;
 	}
 
@@ -186,7 +182,6 @@ public class CompanyServiceImpl implements CompanyService {
 		Company vo = new Company();
 		vo.setFullName(dto.getCompanyName());
 		return companyMapper.selectByCondition(vo);
-
 	}
 
 	@Override

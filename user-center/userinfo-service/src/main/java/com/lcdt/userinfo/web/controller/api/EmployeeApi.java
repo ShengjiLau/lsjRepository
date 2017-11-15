@@ -1,5 +1,6 @@
 package com.lcdt.userinfo.web.controller.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lcdt.userinfo.service.impl.EmployeeServiceImpl;
 import com.lcdt.userinfo.web.dto.CreateEmployeeAccountDto;
 import io.swagger.annotations.Api;
@@ -18,14 +19,34 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/employee")
 public class EmployeeApi {
 
+
+	public static JSONObject successMessage ;
+	public static JSONObject failMessage;
+
+	static {
+		successMessage = new JSONObject();
+		successMessage.put("code", 0);
+		successMessage.put("message", "请求成功");
+
+		failMessage = new JSONObject();
+		failMessage.put("code", -1);
+		failMessage.put("message", "请求异常");
+	}
+
+
 	@Autowired
 	EmployeeServiceImpl employeeService;
 
 
 	@ApiOperation("添加员工接口")
 	@RequestMapping(value = "/addemployee", method = RequestMethod.POST)
-	public void addEmployeeAccount(@Validated CreateEmployeeAccountDto dto) {
-		employeeService.addEmployee(dto);
+	public String addEmployeeAccount(@Validated CreateEmployeeAccountDto dto) {
+		boolean b = employeeService.addEmployee(dto);
+		if (b) {
+			return successMessage.toString();
+		}else {
+			return failMessage.toString();
+		}
 	}
 
 
