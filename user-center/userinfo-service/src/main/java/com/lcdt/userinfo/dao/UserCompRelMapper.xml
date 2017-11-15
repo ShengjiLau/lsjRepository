@@ -14,15 +14,12 @@
     <result column="is_create" jdbcType="SMALLINT" property="isCreate" />
 
     <association property="user" column="user_id" javaType="com.lcdt.userinfo.model.User"
-    select="com.lcdt.userinfo.dao.UserMapper.selectByPrimaryKey"
-    >
-
-    </association>
+    select="com.lcdt.userinfo.dao.UserMapper.selectByPrimaryKey" fetchType="lazy"
+    ></association>
 
     <association property="company" column="comp_id"
                  javaType="com.lcdt.userinfo.model.Company"
-                 select="com.lcdt.userinfo.dao.CompanyMapper.selectByPrimaryKey"
-    ></association>
+                 select="com.lcdt.userinfo.dao.CompanyMapper.selectByPrimaryKey" fetchType="lazy"></association>
 
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

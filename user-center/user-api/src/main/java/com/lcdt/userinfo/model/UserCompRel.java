@@ -1,8 +1,10 @@
 package com.lcdt.userinfo.model;
 
+import com.lcdt.converter.ResponseData;
+
 import java.util.Date;
 
-public class UserCompRel implements java.io.Serializable {
+public class UserCompRel implements java.io.Serializable,ResponseData {
 
 
     private Company company;
