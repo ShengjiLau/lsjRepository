@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ss on 2017/11/14.
@@ -33,8 +36,6 @@ public class EmployeeServiceImpl {
 	@Autowired
 	GroupManageService groupService;
 
-	/**
-	 */
 	@Transactional(rollbackFor = Exception.class)
 	public boolean addEmployee(CreateEmployeeAccountDto dto) {
 		String phone = dto.getUserPhoneNum();
@@ -64,9 +65,17 @@ public class EmployeeServiceImpl {
 		if (dto.getGroups() != null && !dto.getGroups().isEmpty()) {
 			groupService.setCompanyUserGroup(user.getUserId(), companyId, dto.getGroups());
 		}
-
 		return true;
-
 	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public List<UserCompRel> queryAllEmployee(Long companyId){
+		HashMap<String, Long> conditionMap = new HashMap<>(10);
+		conditionMap.put("compId", companyId);
+		List<UserCompRel> userCompRels = userCompanyDao.selectByCondition(conditionMap);
+		return userCompRels;
+	}
+
+
 
 }

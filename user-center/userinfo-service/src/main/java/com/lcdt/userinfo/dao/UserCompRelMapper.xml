@@ -12,6 +12,17 @@
     <result column="full_name" jdbcType="VARCHAR" property="fullName" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="is_create" jdbcType="SMALLINT" property="isCreate" />
+
+    <association property="user" column="user_id" javaType="com.lcdt.userinfo.model.User"
+    select="com.lcdt.userinfo.dao.UserMapper.selectByPrimaryKey"
+    >
+    </association>
+
+    <association property="company" column="comp_id"
+                 javaType="com.lcdt.userinfo.model.Company"
+                 select="com.lcdt.userinfo.dao.CompanyMapper.selectByPrimaryKey"
+    ></association>
+
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--

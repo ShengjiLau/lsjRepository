@@ -12,9 +12,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
-	@Bean
-	public ExceptionHandler exceptionHandler(){
-		return new ExceptionHandler();
-	}
+//	@Bean
+//	public ExceptionHandler exceptionHandler(){
+//		return new ExceptionHandler();
+//	}
 
 }
