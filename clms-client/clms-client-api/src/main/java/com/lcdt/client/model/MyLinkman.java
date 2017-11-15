@@ -1,4 +1,4 @@
-package com.lcdt.userinfo.model;
+package com.lcdt.client.model;
 
 import java.util.Date;
 

@@ -23,6 +23,7 @@
         <module>clms-swagger</module>
         <module>clms-response-converter</module>
         <module>clms-notify</module>
+        <module>clms-client</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>
