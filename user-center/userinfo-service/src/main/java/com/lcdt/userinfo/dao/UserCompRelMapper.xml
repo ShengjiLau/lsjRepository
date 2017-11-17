@@ -16,7 +16,7 @@
     <result column="dept_names" jdbcType="VARCHAR" property="deptNames" />
 
     <association property="user" column="user_id" javaType="com.lcdt.userinfo.model.User"
-    select="com.lcdt.userinfo.dao.UserMapper.selectByPrimaryKey" fetchType="eager"
+    select="com.lcdt.userinfo.dao.UserMapper.selectByPrimaryKeyWithoutPwd" fetchType="eager"
     ></association>
 
     <association property="company" column="comp_id"
@@ -99,7 +99,7 @@
 
   <select id="selectBySearchDto" parameterType="com.lcdt.userinfo.web.dto.SearchEmployeeDto" resultMap="BaseResultMap"
           >
-    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create
+    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create,dept_ids
     from t_uc_user_comp_rel  comp
     <if test="realName != null">
       LEFT JOIN t_uc_user u on comp.user_id = u.user_id
@@ -118,9 +118,7 @@
     <where>
 
       <if test="companyId != null">
-
         comp.comp_id = #{companyId}
-
       </if>
 
       <if test="realName != null">
@@ -132,6 +130,12 @@
       <if test="groupId != null">
         g.group_id = #{groupId}
       </if>
+
+      <if test="departId != null">
+        find_in_set(#{departId},dept_ids)
+      </if>
+
+
     </where>
 
 

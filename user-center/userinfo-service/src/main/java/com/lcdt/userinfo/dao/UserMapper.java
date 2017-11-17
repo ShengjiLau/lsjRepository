@@ -51,4 +51,7 @@ public interface UserMapper {
      * @return
      */
     User queryByUserPhone(String phone);
+
+
+    User selectByPrimaryKeyWithoutPwd(Long userId);
 }

@@ -2,7 +2,6 @@ package com.lcdt.userinfo.web.dto;
 
 import com.lcdt.userinfo.dto.RegisterDto;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.List;
 public class CreateEmployeeAccountDto extends RegisterDto implements Serializable {
 
 	@ApiModelProperty(required = true)
-	@NotBlank
 	private Long departId;
 
 	private String nickName;
