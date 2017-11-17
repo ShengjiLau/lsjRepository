@@ -69,7 +69,7 @@ public class DepartmentApi {
      */
     @ApiOperation("部门排序")
     @RequestMapping(value = "/deptOrder",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('dept_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('dept_order')")
     public Department deptOrder(@ApiParam(value = "部门ID-变动ID",required = true) @RequestParam Long deptId,
                                 @ApiParam(value = "部门ID-被变ID",required = true) @RequestParam Long deptId1) {
         Long companyId = SecurityInfoGetter.getCompanyId();
