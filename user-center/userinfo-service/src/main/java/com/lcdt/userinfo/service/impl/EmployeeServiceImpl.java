@@ -4,8 +4,10 @@ import com.lcdt.clms.permission.service.UserRoleService;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
+import com.lcdt.userinfo.model.Department;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.userinfo.service.DepartmentService;
 import com.lcdt.userinfo.service.GroupManageService;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.web.dto.CreateEmployeeAccountDto;
@@ -35,6 +37,9 @@ public class EmployeeServiceImpl {
 	@Autowired
 	GroupManageService groupService;
 
+	@Autowired
+	DepartmentService departmentService;
+
 	@Transactional(rollbackFor = Exception.class)
 	public boolean addEmployee(CreateEmployeeAccountDto dto) {
 		String phone = dto.getUserPhoneNum();
@@ -51,10 +56,17 @@ public class EmployeeServiceImpl {
 		}
 		//创建公司关联
 		Long companyId = SecurityInfoGetter.getCompanyId();
+
+
+		Department department = departmentService.getDepartment(dto.getDepartId());
+
+
 		UserCompRel userCompRel = new UserCompRel();
 		userCompRel.setCompId(companyId);
 		userCompRel.setUserId(user.getUserId());
 		userCompRel.setCreateDate(new Date());
+		userCompRel.setDeptIds(String.valueOf(department.getDeptId()));
+		userCompRel.setDeptNames(String.valueOf(department.getDeptName()));
 		userCompanyDao.insert(userCompRel);
 
 		if (dto.getRoles() != null && !dto.getRoles().isEmpty()) {
