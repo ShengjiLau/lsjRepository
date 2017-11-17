@@ -60,10 +60,6 @@ public class RequestAuthRedirectStrategy {
 				callback = default_callback;
 			}
 		}
-//		if (StringUtils.isEmpty(callback)) {
-//			throw new IllegalArgumentException("没有callback");
-//		}
-
 
 		//这里要判断是否是在同一个根域名下
 		String callBackDomain = HttpUtils.getUrlDomain(callback);

@@ -6,6 +6,7 @@ import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.impl.EmployeeServiceImpl;
 import com.lcdt.userinfo.web.dto.CreateEmployeeAccountDto;
 import com.lcdt.userinfo.web.dto.PageResultDto;
+import com.lcdt.userinfo.web.dto.SearchEmployeeDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -55,9 +56,10 @@ public class EmployeeApi {
 
 	@ApiOperation("所有员工列表")
 	@RequestMapping(value = "/employeelist", method = RequestMethod.POST)
-	public PageResultDto employeeList(@ApiParam(required = true) Integer pageNo, @ApiParam(required = true) Integer pageSize) {
+	public PageResultDto employeeList(@ApiParam(required = true) Integer pageNo, @ApiParam(required = true) Integer pageSize,SearchEmployeeDto dto) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
-		List<UserCompRel> userCompRels = employeeService.queryAllEmployee(companyId);
+		dto.setCompanyId(companyId);
+		List<UserCompRel> userCompRels = employeeService.queryAllEmployee(dto);
 		PageResultDto<UserCompRel> userCompRelPageResultDto = new PageResultDto<>(userCompRels);
 		return userCompRelPageResultDto;
 	}

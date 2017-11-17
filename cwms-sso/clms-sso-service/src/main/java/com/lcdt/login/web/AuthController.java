@@ -17,6 +17,8 @@ import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.CreateCompanyService;
 import com.lcdt.userinfo.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
@@ -36,6 +38,9 @@ import java.util.*;
 @Controller
 @RequestMapping("/account")
 public class AuthController {
+
+
+	private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 	private static String LOGIN_PAGE = "/signin";
 	public final String CHOOSE_COMPANY_PAGE = "/account/company";
@@ -153,6 +158,12 @@ public class AuthController {
 	public ModelAndView chooseCompanyPage(HttpServletRequest request) {
 		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
 		List<UserCompRel> companyMembers = companyService.companyList(userInfo.getUserId());
+		UserCompRel userCompRel = companyMembers.get(0);
+		String fullName = userCompRel.getCompany().getFullName();
+
+		logger.info("选择公司"+fullName);
+
+
 		String authCallback = RequestAuthRedirectStrategy.getAuthCallback(request);
 		ModelAndView view = new ModelAndView("/chooseCom");
 		view.addObject("companyMembers", companyMembers);

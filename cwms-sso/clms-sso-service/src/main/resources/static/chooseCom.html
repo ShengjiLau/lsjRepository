@@ -139,7 +139,7 @@
         <ul class="com-list"  th:each="company : ${companyMembers}">
           <li>
             <div class="com-info">
-              <p class="title" th:text="${company.fullName}">公司名称</p>
+              <p class="title" th:text="${company.company.fullName}">公司名称</p>
               <p class="sub-title"><span th:if="${company.isCreate}==0">我是管理员</span><span th:if="${company.isCreate}==1">我是员工</span></p>
             </div>
             <div class="acts">

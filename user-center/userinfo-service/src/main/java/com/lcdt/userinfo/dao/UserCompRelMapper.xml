@@ -14,12 +14,12 @@
     <result column="is_create" jdbcType="SMALLINT" property="isCreate" />
 
     <association property="user" column="user_id" javaType="com.lcdt.userinfo.model.User"
-    select="com.lcdt.userinfo.dao.UserMapper.selectByPrimaryKey" fetchType="lazy"
+    select="com.lcdt.userinfo.dao.UserMapper.selectByPrimaryKey" fetchType="eager"
     ></association>
 
     <association property="company" column="comp_id"
                  javaType="com.lcdt.userinfo.model.Company"
-                 select="com.lcdt.userinfo.dao.CompanyMapper.selectByPrimaryKey" fetchType="lazy"></association>
+                 select="com.lcdt.userinfo.dao.CompanyMapper.selectByPrimaryKey" fetchType="eager"></association>
 
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -91,6 +91,52 @@
     </trim>
     order by user_comp_rel_id
   </select>
+
+  <select id="selectBySearchDto" parameterType="com.lcdt.userinfo.web.dto.SearchEmployeeDto" resultMap="BaseResultMap"
+          >
+    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create
+    from t_uc_user_comp_rel  comp
+    <if test="realName != null">
+      LEFT JOIN t_uc_user u on comp.user_id = u.user_id
+    </if>
+
+    <if test="roleId != null ">
+      LEFT JOIN role_user_relation r on r.user_id = comp.user_id
+    and comp.comp_id = r.company_id
+    </if>
+
+    <if test="groupId = null">
+      left join t_uc_user_group g on comp.user_id = g.user_id
+      and comp.comp_id = g.company_id
+    </if>
+
+    <where>
+
+      <if test="companyId != null">
+
+        comp.comp_id = #{companyId}
+
+      </if>
+
+      <if test="realName != null">
+        u.real_name = #{realName}
+      </if>
+      <if test="roleId != null">
+        r.role_id = #{roleId}
+      </if>
+      <if test="groupId != null">
+        g.group_id = #{groupId}
+      </if>
+    </where>
+
+
+  </select>
+
+
+
+
+
+
 
   
 
