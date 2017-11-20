@@ -3,6 +3,7 @@ package com.lcdt.userinfo.service;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.model.Department;
+import com.lcdt.userinfo.model.UserCompRel;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public interface DepartmentService {
      * @param obj
      * @return
      */
-    int updateDepartment(Department obj) throws DeptmentExistException;
+    int getIdsNames(Department obj) throws DeptmentExistException;
 
     /***
      * 移除部门
@@ -56,7 +57,7 @@ public interface DepartmentService {
     Long getMaxIndex(Map m);
 
 
-
+    String getIdsNames(String departIds);
 
 
 

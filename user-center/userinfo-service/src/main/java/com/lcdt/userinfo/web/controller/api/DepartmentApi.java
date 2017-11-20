@@ -84,9 +84,9 @@ public class DepartmentApi {
         long index1 = department.getDeptOrder();
         long index2 = department1.getDeptOrder();
         department.setDeptOrder(index2);
-        departmentService.updateDepartment(department);
+        departmentService.getIdsNames(department);
         department1.setDeptOrder(index1);
-        departmentService.updateDepartment(department1);
+        departmentService.getIdsNames(department1);
         return department;
     }
 
@@ -109,7 +109,7 @@ public class DepartmentApi {
         department.setCompanyId(companyId);
         department.setDeptName(deptName);
         try {
-            departmentService.updateDepartment(department);
+            departmentService.getIdsNames(department);
         } catch (DeptmentExistException e) {
             throw new DeptmentExistException(e.getMessage());
         }

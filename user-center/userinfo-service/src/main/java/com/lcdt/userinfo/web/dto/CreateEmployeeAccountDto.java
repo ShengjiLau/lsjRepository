@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class CreateEmployeeAccountDto extends RegisterDto implements Serializable {
 
-	@ApiModelProperty(required = true)
-	private Long departId;
+	@ApiModelProperty(required = true,value = "用户所属部门，属于多个部门用逗号隔开")
+	private String departIds;
 
 	private String nickName;
 
@@ -34,12 +34,12 @@ public class CreateEmployeeAccountDto extends RegisterDto implements Serializabl
 		isEnable = enable;
 	}
 
-	public Long getDepartId() {
-		return departId;
+	public String getDepartIds() {
+		return departIds;
 	}
 
-	public void setDepartId(Long departId) {
-		this.departId = departId;
+	public void setDepartIds(String departIds) {
+		this.departIds = departIds;
 	}
 
 	public String getNickName() {

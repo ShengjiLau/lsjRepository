@@ -9,6 +9,7 @@ import com.lcdt.userinfo.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +40,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public int updateDepartment(Department obj) throws DeptmentExistException {
+	public int getIdsNames(Department obj) throws DeptmentExistException {
 		Map map = new HashMap<>();
 		map.put("companyId", obj.getCompanyId());
 		map.put("deptName", obj.getDeptName());
@@ -95,5 +96,28 @@ public class DepartmentServiceImpl implements DepartmentService {
 		return departmentMapper.selectByPrimaryKey(deptId);
 	}
 
+
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public String getIdsNames(String departIds) {
+
+		if (StringUtils.isEmpty(departIds)) {
+			return "";
+		}
+
+
+		StringBuffer sb = new StringBuffer();
+		String[] split = departIds.split(",");
+		for (String id : split) {
+			Department department = departmentMapper.selectByPrimaryKey(Long.valueOf(id));
+			if (department == null) {
+				throw new NullPointerException("部门不存在");
+			}
+			sb.append(department.getDeptName()).append(',');
+		}
+		int i = sb.lastIndexOf(",");
+		sb.deleteCharAt(i);
+		return sb.toString();
+	}
 
 }

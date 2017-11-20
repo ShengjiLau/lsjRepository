@@ -3,6 +3,7 @@ package com.lcdt.userinfo.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.permission.model.RoleUserRelation;
 import com.lcdt.userinfo.dao.GroupMapper;
 import com.lcdt.userinfo.dao.UserGroupRelationMapper;
 import com.lcdt.userinfo.exception.DeptmentExistException;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,6 +100,7 @@ public class GroupManageServiceImpl implements GroupManageService {
 		return pageInfo;
 	}
 
+	@Transactional
 	@Override
 	public void setCompanyUserGroup(Long userId, Long companyId, List<Long> groupId) {
 
@@ -114,15 +117,23 @@ public class GroupManageServiceImpl implements GroupManageService {
 		}
 	}
 
+	@Transactional
 	@Override
 	public void updateCompanyUsergroup(Long userId, Long companyId, List<Long> groups) {
 		//更新group
+		//删除被取消的用户组
+		relationDao.deleteNotInGroups(userId,companyId,groups);
 
+		//新增用户组
 
+		List<UserGroupRelation> relations = relationDao.selectByUserCompany(userId, companyId);
+		ArrayList<Long> ids = new ArrayList<>();
+		for (UserGroupRelation relation : relations) {
+			ids.add(relation.getGroupId());
+		}
+		groups.removeAll(ids);
 
-
-
-
+		relationDao.insertGroups(userId,companyId,groups);
 	}
 
 

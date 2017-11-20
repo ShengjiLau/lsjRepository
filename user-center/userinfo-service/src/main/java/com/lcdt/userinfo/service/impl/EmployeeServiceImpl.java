@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -65,14 +66,13 @@ public class EmployeeServiceImpl {
 			return false;
 		}
 
-
-		Department department = departmentService.getDepartment(dto.getDepartId());
+		String department = departmentService.getIdsNames(dto.getDepartIds());
 		UserCompRel userCompRel = new UserCompRel();
 		userCompRel.setCompId(companyId);
 		userCompRel.setUserId(user.getUserId());
 		userCompRel.setCreateDate(new Date());
-		userCompRel.setDeptIds(String.valueOf(department.getDeptId()));
-		userCompRel.setDeptNames(String.valueOf(department.getDeptName()));
+		userCompRel.setDeptIds(dto.getDepartIds());
+		userCompRel.setDeptNames(department);
 		userCompanyDao.insert(userCompRel);
 
 		if (dto.getRoles() != null && !dto.getRoles().isEmpty()) {
@@ -104,10 +104,21 @@ public class EmployeeServiceImpl {
 		User user = userCompRel.getUser();
 		BeanUtils.copyProperties(dto, user);
 		userService.updateUser(user);
+		//更新用户部门信息
+
+		String departIds = dto.getDepartIds();
+		if (!StringUtils.isEmpty(departIds)) {
+			String idsNames = departmentService.getIdsNames(departIds);
+			userCompRel.setDeptNames(idsNames);
+		}
+
+		userCompanyDao.updateByPrimaryKey(userCompRel);
+
 		//更新权限
 		roleService.updateCompanyUserRole(user.getUserId(),userCompRel.getCompany().getCompId(),dto.getRoles());
 		//更新用户组
 		groupService.updateCompanyUsergroup(user.getUserId(),userCompRel.getCompany().getCompId(),dto.getGroups());
+		userCompRel = userCompanyDao.selectByPrimaryKey(userCompRelId);
 		return userCompRel;
 	}
 
