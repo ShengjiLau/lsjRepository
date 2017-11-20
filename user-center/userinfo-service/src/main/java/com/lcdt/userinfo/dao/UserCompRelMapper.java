@@ -54,6 +54,9 @@ public interface UserCompRelMapper {
      */
     List<UserCompRel> selectByCondition(Map map);
 
+    List<UserCompRel> selectByUserIdCompanyId(Long userId, Long companyId);
+
+
     List<UserCompRel> selectBySearchDto(SearchEmployeeDto dto);
 
 }

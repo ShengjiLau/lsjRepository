@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -57,10 +58,14 @@ public class EmployeeServiceImpl {
 		//创建公司关联
 		Long companyId = SecurityInfoGetter.getCompanyId();
 
+		//是否已加入公司
+		boolean userInCompany = isUserInCompany(user.getUserId(), companyId);
+		if (userInCompany) {
+			return false;
+		}
+
 
 		Department department = departmentService.getDepartment(dto.getDepartId());
-
-
 		UserCompRel userCompRel = new UserCompRel();
 		userCompRel.setCompId(companyId);
 		userCompRel.setUserId(user.getUserId());
@@ -83,6 +88,12 @@ public class EmployeeServiceImpl {
 	public List<UserCompRel> queryAllEmployee(SearchEmployeeDto search) {
 		List<UserCompRel> userCompRels = userCompanyDao.selectBySearchDto(search);
 		return userCompRels;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public boolean isUserInCompany(Long userId, Long companyId) {
+		List<UserCompRel> userCompRels = userCompanyDao.selectByUserIdCompanyId(userId,companyId);
+		return userCompRels != null && !userCompRels.isEmpty();
 	}
 
 
