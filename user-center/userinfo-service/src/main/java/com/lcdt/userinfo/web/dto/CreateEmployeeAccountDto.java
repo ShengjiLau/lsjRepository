@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.web.dto;
 
 import com.lcdt.userinfo.dto.RegisterDto;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -22,8 +23,10 @@ public class CreateEmployeeAccountDto extends RegisterDto implements Serializabl
 
 	private Boolean isEnable;
 
+	@ApiModelProperty(hidden = true)
 	private List<Long> groups;
 
+	@ApiModelProperty(hidden = true)
 	private List<Long> roles;
 
 	public Boolean getEnable() {

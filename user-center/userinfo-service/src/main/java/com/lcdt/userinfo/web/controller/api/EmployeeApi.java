@@ -9,6 +9,7 @@ import com.lcdt.userinfo.web.dto.PageResultDto;
 import com.lcdt.userinfo.web.dto.SearchEmployeeDto;
 import com.lcdt.userinfo.web.dto.UpdateEmployeeAccountDto;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,10 +50,10 @@ public class EmployeeApi {
 
 	@ApiOperation("添加员工接口")
 	@RequestMapping(value = "/addemployee", method = RequestMethod.POST)
-	public String addEmployeeAccount(@Validated CreateEmployeeAccountDto dto, @RequestBody List<Long> groups,@RequestBody List<Long> roles) {
+	public String addEmployeeAccount(@Validated CreateEmployeeAccountDto dto, @ApiParam(required = true)@RequestBody ArrayList<Long> jsonGroups,@RequestBody ArrayList<Long> jsonRoles) {
 
-		dto.setGroups(groups);
-		dto.setRoles(roles);
+		dto.setGroups(jsonGroups);
+		dto.setRoles(jsonRoles);
 
 		boolean b = employeeService.addEmployee(dto);
 		if (b) {
