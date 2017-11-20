@@ -57,6 +57,17 @@ public class UserCompRel implements java.io.Serializable,ResponseData {
 
     private Date createDate;
 
+    private Boolean isEnable;
+
+    public Boolean getIsEnable() {
+        return isEnable;
+    }
+
+    public void setIsEnable(Boolean enable) {
+        isEnable = enable;
+    }
+
+
     public short getIsCreate() {
         return isCreate;
     }

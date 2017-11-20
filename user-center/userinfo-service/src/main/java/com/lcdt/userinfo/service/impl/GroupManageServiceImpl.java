@@ -112,32 +112,19 @@ public class GroupManageServiceImpl implements GroupManageService {
 			userGroupRelation.setGroupId(id);
 			relationDao.insert(userGroupRelation);
 		}
+	}
+
+	@Override
+	public void updateCompanyUsergroup(Long userId, Long companyId, List<Long> groups) {
+		//更新group
+
+
+
+
+
 
 	}
 
 
 
-
-
-/*	public Group modifyGroupName(Group originalGroup, String newName) {
-
-		Map map = new HashMap<>();
-		map.put("companyId",originalGroup.getCompanyId());
-		map.put("deptName",obj.getDeptName());
-		map.put("deptId",obj.getDeptId());
-		List<Department> list = departmentMapper.selectByCondition(map);
-		if (list!=null && list.size()>0) {
-			throw new DeptmentExistException("部门已存在");
-		} else {
-			return  departmentMapper.updateByPrimaryKey(obj);
-		}
-
-
-
-		if (originalGroup != null) {
-			originalGroup.setGroupName(newName);
-		}
-		groupDao.updateByPrimaryKey(originalGroup);
-		return originalGroup;
-	}*/
 }

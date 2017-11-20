@@ -22,5 +22,6 @@ public interface GroupManageService {
 
 	void setCompanyUserGroup(Long userId, Long companyId, List<Long> roleId);
 
+	void updateCompanyUsergroup(Long userId, Long companyId, List<Long> groups);
 
 }

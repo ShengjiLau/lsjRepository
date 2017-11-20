@@ -1,6 +1,7 @@
 package com.lcdt.clms.permission.dao;
 
 import com.lcdt.clms.permission.model.Permission;
+import com.lcdt.clms.permission.model.Role;
 import com.lcdt.clms.permission.model.RolePermission;
 import org.apache.ibatis.annotations.Param;
 
@@ -52,5 +53,7 @@ public interface RolePermissionMapper {
 
 
     List<RolePermission> selectByRolePermission(@Param("roleId") Long roleId, @Param("permissionId") Long permissionId);
+
+
 
 }

@@ -20,9 +20,19 @@ public class CreateEmployeeAccountDto extends RegisterDto implements Serializabl
 
 	private String comment;
 
+	private Boolean isEnable;
+
 	private List<Long> groups;
 
 	private List<Long> roles;
+
+	public Boolean getEnable() {
+		return isEnable;
+	}
+
+	public void setEnable(Boolean enable) {
+		isEnable = enable;
+	}
 
 	public Long getDepartId() {
 		return departId;

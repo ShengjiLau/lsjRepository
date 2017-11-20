@@ -73,4 +73,11 @@ on rp.permission_id = p.permission_id WHERE rp.role_id = #{roleId,jdbcType = BIG
   </select>
 
 
+
+
+
+
+
+
+
 </mapper>

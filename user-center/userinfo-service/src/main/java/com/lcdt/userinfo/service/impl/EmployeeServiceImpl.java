@@ -12,12 +12,13 @@ import com.lcdt.userinfo.service.GroupManageService;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.web.dto.CreateEmployeeAccountDto;
 import com.lcdt.userinfo.web.dto.SearchEmployeeDto;
+import com.lcdt.userinfo.web.dto.UpdateEmployeeAccountDto;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -92,9 +93,24 @@ public class EmployeeServiceImpl {
 
 	@Transactional(rollbackFor = Exception.class)
 	public boolean isUserInCompany(Long userId, Long companyId) {
-		List<UserCompRel> userCompRels = userCompanyDao.selectByUserIdCompanyId(userId,companyId);
+		List<UserCompRel> userCompRels = userCompanyDao.selectByUserIdCompanyId(userId, companyId);
 		return userCompRels != null && !userCompRels.isEmpty();
 	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public UserCompRel updateEmployee(UpdateEmployeeAccountDto dto){
+		Long userCompRelId = dto.getUserCompRelId();
+		UserCompRel userCompRel = userCompanyDao.selectByPrimaryKey(userCompRelId);
+		User user = userCompRel.getUser();
+		BeanUtils.copyProperties(dto, user);
+		userService.updateUser(user);
+		//更新权限
+		roleService.updateCompanyUserRole(user.getUserId(),userCompRel.getCompany().getCompId(),dto.getRoles());
+		//更新用户组
+		groupService.updateCompanyUsergroup(user.getUserId(),userCompRel.getCompany().getCompId(),dto.getGroups());
+		return userCompRel;
+	}
+
 
 
 }

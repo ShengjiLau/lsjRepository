@@ -63,4 +63,18 @@ public class EmployeeApi {
 		PageResultDto<UserCompRel> userCompRelPageResultDto = new PageResultDto<>(userCompRels);
 		return userCompRelPageResultDto;
 	}
+
+
+	@ApiOperation("更新员工接口")
+	@RequestMapping(value = "/updateemployee",method = RequestMethod.POST)
+	public UserCompRel updateEmployee(CreateEmployeeAccountDto dto) {
+
+
+
+
+
+		return null;
+	}
+
+
 }

@@ -73,5 +73,27 @@
     WHERE user_id = #{userId,jdbcType = BIGINT}
     and role_id = #{roleId,jdbcType = BIGINT}
   </select>
+  <delete id="deleteNotInRoles" >
+    DELETE FROM role_user_relation
+    where user_id = #{userId}
+    and company_id = #{companyId}
+    <if test="roles != null">
+      and role_id not in
+      <foreach item="item" index="index" collection="roles"
+               open="(" separator="," close=")"
+      >
+        #{item}
+      </foreach>
+    </if>
+  </delete>
 
+  <insert id="insertRoles">
+    INSERT INTO role_user_permission
+    (role_id, user_id,company_id)
+    values
+    <foreach collection="insertRoles" item="item"
+              separator="," close=";">
+      (#{item,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT})
+    </foreach>
+  </insert>
 </mapper>
