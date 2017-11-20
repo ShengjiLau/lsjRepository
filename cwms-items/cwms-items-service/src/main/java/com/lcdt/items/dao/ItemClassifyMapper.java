@@ -1,6 +1,7 @@
 package com.lcdt.items.dao;
 
 import com.lcdt.items.model.ItemClassify;
+import com.lcdt.items.model.ItemClassifyDao;
 
 import java.util.List;
 
@@ -65,4 +66,9 @@ public interface ItemClassifyMapper {
      * @return
      */
     List<ItemClassify> selectClassifyByCompanyId(Long companyId);
+
+
+    List<ItemClassifyDao> selectClassifyAndChildren(ItemClassify itemClassify);
+
+    List<ItemClassify> testFunction(Long classifyId);
 }

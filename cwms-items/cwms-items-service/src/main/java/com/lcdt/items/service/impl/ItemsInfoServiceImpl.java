@@ -10,6 +10,7 @@ import com.lcdt.items.dao.ItemsInfoMapper;
 import com.lcdt.items.dao.SubItemsInfoMapper;
 import com.lcdt.items.dto.ItemsInfoDto;
 import com.lcdt.items.dto.SubItemsInfoDto;
+import com.lcdt.items.model.CustomValue;
 import com.lcdt.items.model.ItemsInfo;
 import com.lcdt.items.model.ItemsInfoDao;
 import com.lcdt.items.model.SubItemsInfo;
@@ -133,21 +134,84 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
 
     @Override
     public int modifyItemsInfo(ItemsInfoDto itemsInfoDto) {
+        int result=0;
+        try{
+            ItemsInfo itemsInfo = ItemsInfoDtoToItemsInfoUtil.parseItemsInfo(itemsInfoDto);
+            //更新主商品
+            result=itemsInfoMapper.updateByPrimaryKey(itemsInfo);
+
+            //主商品自定义属性值更新
+            if (itemsInfoDto.getCustomValueList() != null) {
+                for(CustomValue customValue:itemsInfoDto.getCustomValueList()){
+                    result+=customValueMapper.updateByPrimaryKey(customValue);
+                }
+            }
+
+            //判断商品类型 1、单规格商品，2、多规格商品，3、组合商品
+            if (itemsInfoDto.getItemType() == 2) {
+                //判断子商品是否为空
+                if (itemsInfoDto.getSubItemsInfoDtoList() != null) {
+                    for (SubItemsInfoDto dto : itemsInfoDto.getSubItemsInfoDtoList()) {
+
+                        //子商品更新
+                        SubItemsInfo subItemsInfo = SubItemsInfoDtoToSubItemsInfoUtil.parseSubItemsInfo(dto);
+                        result += subItemsInfoMapper.updateByPrimaryKey(subItemsInfo);
+
+                        //子商品自定义属性值更新
+                        if (dto.getCustomValueList() != null) {
+                            for (CustomValue customValue:dto.getCustomValueList()) {
+                                result+=customValueMapper.updateByPrimaryKey(customValue);
+                            }
+
+                        }
+                    }
+                }
+            }
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+
+        }
         return 0;
     }
 
     @Override
     public ItemsInfo queryItemsInfoByItemId(Long itemId) {
-        return null;
+        ItemsInfo itemsInfo=null;
+        try{
+            itemsInfo=itemsInfoMapper.selectByPrimaryKey(itemId);
+            StringBuilder subItemIds=null;
+            if(itemsInfo.getItemType()==2){
+                List<SubItemsInfo> subItemsInfoList=subItemsInfoMapper.selectSubItemsInfoListByItemId(itemId);
+                for(int i=0;i<subItemsInfoList.size();i++){
+                    if(i==0){
+                        subItemIds=new StringBuilder(subItemsInfoList.get(i).getSubItemId().toString());
+                    }else{
+                        subItemIds.append(",").append(subItemsInfoList.get(i).getSubItemId().toString());
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return itemsInfo;
+        }
     }
 
     @Override
     public List<ItemsInfo> queryItemsByCondition(ItemsInfoDao itemsInfoDao, PageInfo pageInfo) {
-        //查询获得该分类下的所有子孙分类classifyId
-        String classifyIds = itemClassifyService.queryCassifyIdAndAllChildrenClassifyIds(itemsInfoDao.getClassifyId());
-        //使用分页工具进行分页
-        PageHelper.startPage(pageInfo.getPageNum(),pageInfo.getPageSize());
-        return itemsInfoMapper.selectByCondition(itemsInfoDao);
+        List<ItemsInfo> resultList=null;
+        try{
+            //使用分页工具进行分页
+            PageHelper.startPage(pageInfo.getPageNum(),pageInfo.getPageSize());
+            resultList=itemsInfoMapper.selectByCondition(itemsInfoDao);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return resultList;
+        }
     }
 
     @Override

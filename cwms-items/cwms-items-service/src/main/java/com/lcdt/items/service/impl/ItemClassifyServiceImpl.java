@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.lcdt.items.dao.ItemClassifyMapper;
 import com.lcdt.items.dto.ItemClassifyDto;
 import com.lcdt.items.model.ItemClassify;
+import com.lcdt.items.model.ItemClassifyDao;
 import com.lcdt.items.service.ItemClassifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -145,20 +146,17 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
     }
 
     @Override
-    public List<ItemClassify> queryItemClassifyAndAllChildren(Long companyId) {
-        List<ItemClassify> itemClassifyList=null;
+    public List<ItemClassifyDao> queryItemClassifyAndChildren(Long companyId) {
+        List<ItemClassifyDao> itemClassifyDaoList=null;
         try{
             ItemClassify itemClassify=new ItemClassify();
             itemClassify.setCompanyId(companyId);
             itemClassify.setPid(0L);
-            itemClassifyList=itemClassifyMapper.selectClassifyByCompanyIdAndPid(itemClassify);
-            for(ItemClassify list:itemClassifyList){
-                list.setClassifyList(queryItemClassifyAllChildren(list.getClassifyId()));
-            }
+            itemClassifyDaoList=itemClassifyMapper.selectClassifyAndChildren(itemClassify);
         }catch (Exception e){
             e.printStackTrace();
         }finally {
-            return itemClassifyList;
+            return itemClassifyDaoList;
         }
     }
 
@@ -167,25 +165,10 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
         return queryChildrenClassifyIds(classifyId);
     }
 
-    /**
-     * 递归查询子分类
-     * @param pid
-     * @return
-     */
-    private List<ItemClassify> queryItemClassifyAllChildren(Long pid){
-        List<ItemClassify> itemClassifyList=null;
-        try{
-            itemClassifyList=itemClassifyMapper.selectClassifyByPid(pid);
-            if(itemClassifyList!=null&&itemClassifyList.size()>0){
-                for(ItemClassify list:itemClassifyList){
-                    list.setClassifyList(queryItemClassifyAllChildren(list.getClassifyId()));
-                }
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            return itemClassifyList;
-        }
+    @Override
+    public List<ItemClassify> testFunction(Long classifyId) {
+
+        return itemClassifyMapper.testFunction(classifyId);
     }
 
     /**
@@ -209,6 +192,5 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
             return classifyIds.toString();
         }
     }
-
 
 }

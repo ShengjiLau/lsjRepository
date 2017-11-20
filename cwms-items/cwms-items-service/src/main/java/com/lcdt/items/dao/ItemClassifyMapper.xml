@@ -11,6 +11,15 @@
     <result column="classify_name" jdbcType="VARCHAR" property="classifyName" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
   </resultMap>
+  <!--获取树状结构分类-->
+  <resultMap id="ChildResultMap" type="com.lcdt.items.model.ItemClassifyDao">
+    <id column="classify_id" jdbcType="BIGINT" property="classifyId" />
+    <result column="pid" jdbcType="BIGINT" property="pid" />
+    <result column="classify_name" jdbcType="VARCHAR" property="classifyName" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <collection property="childClassifyList"  column="classify_id" ofType="com.lcdt.items.model.ItemClassifyDao" select="findClassifyByPid"></collection>
+  </resultMap>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - @mbg.generated
@@ -77,5 +86,24 @@
     SELECT classify_id,pid,classify_name,company_id
     FROM t_item_classify
     WHERE company_id=#{companyId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectClassifyAndChildren" parameterType="com.lcdt.items.model.ItemClassify" resultMap="ChildResultMap">
+    SELECT classify_id,pid,classify_name,company_id
+    FROM t_item_classify
+    WHERE company_id=#{companyId,jdbcType=BIGINT} and pid=#{pid,jdbcType=BIGINT}
+  </select>
+
+  <!--根据pid查询子分类-->
+  <select id="findClassifyByPid" parameterType="java.lang.Long" resultMap="ChildResultMap">
+    SELECT classify_id,pid,classify_name,company_id
+    FROM t_item_classify
+    WHERE pid = #{classifyId,jdbcType=BIGINT}
+  </select>
+
+  <select id="testFunction" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT classify_id,pid,classify_name,company_id
+    FROM t_item_classify
+    WHERE FIND_IN_SET(classify_id,SELECT_CHILDREN_CLASSIFYID(#{classifyId,jdbcType=BIGINT}))
   </select>
 </mapper>

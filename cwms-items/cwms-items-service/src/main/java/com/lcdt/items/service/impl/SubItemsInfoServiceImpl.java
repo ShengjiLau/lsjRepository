@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.items.dao.CustomValueMapper;
 import com.lcdt.items.dao.SubItemsInfoMapper;
 import com.lcdt.items.dto.SubItemsInfoDto;
+import com.lcdt.items.model.CustomValue;
 import com.lcdt.items.model.SubItemsInfo;
 import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.items.utils.SubItemsInfoDtoToSubItemsInfoUtil;
@@ -39,7 +40,7 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
                 for (int i = 0; i < subItemsInfoDto.getCustomValueList().size(); i++) {
                     subItemsInfoDto.getCustomValueList().get(i).setSubItemId(subItemsInfo.getSubItemId());
                 }
-                result+=customValueMapper.insertForBatch(subItemsInfoDto.getCustomValueList());
+                result += customValueMapper.insertForBatch(subItemsInfoDto.getCustomValueList());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,7 +53,11 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     public int deleteSubItemsInfo(Long subItemId) {
         int result = 0;
         try {
+            //子商品删除
             result = subItemsInfoMapper.deleteByPrimaryKey(subItemId);
+            //子商品自定义属性删除
+            result += customValueMapper.deleteItemAndSubItemId(null, subItemId.toString());
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -65,6 +70,14 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
         int result = 0;
         try {
             SubItemsInfo subItemsInfo = SubItemsInfoDtoToSubItemsInfoUtil.parseSubItemsInfo(subItemsInfoDto);
+
+            //更新子商品自定义属性
+            if (subItemsInfoDto.getCustomValueList() != null) {
+                for (CustomValue customValue : subItemsInfoDto.getCustomValueList()) {
+                    result += customValueMapper.updateByPrimaryKey(customValue);
+                }
+            }
+            //更新子商品
             result = subItemsInfoMapper.updateByPrimaryKey(subItemsInfo);
         } catch (Exception e) {
             e.printStackTrace();
