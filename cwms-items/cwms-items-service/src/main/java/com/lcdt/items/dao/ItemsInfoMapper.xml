@@ -147,8 +147,8 @@
       <if test="itemType!=null and itemType!=''">
         and item_type = #{itemType,jdbcType=SMALLINT}
       </if>
-      <if test="classifyIds!=null and classifyIds!=''">
-        and classify_id in(#{itemId,jdbcType=VARCHAR})
+      <if test="classifyId!=null and classifyId!=''">
+        and FIND_IN_SET(classify_id,SELECT_CHILDREN_CLASSIFYID(#{classifyId,jdbcType=BIGINT}))
       </if>
     </where>
   </select>

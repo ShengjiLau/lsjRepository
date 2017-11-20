@@ -2,6 +2,7 @@ package com.lcdt.items.service;
 
 import com.lcdt.items.dto.ItemClassifyDto;
 import com.lcdt.items.model.ItemClassify;
+import com.lcdt.items.model.ItemClassifyDao;
 
 import java.util.List;
 
@@ -80,7 +81,7 @@ public interface ItemClassifyService {
      * @param companyId
      * @return
      */
-    List<ItemClassify> queryItemClassifyAndAllChildren(Long companyId);
+    List<ItemClassifyDao> queryItemClassifyAndChildren(Long companyId);
 
     /**
      * 根据分类 classifyId 查询此分类id和所有子分类id ,以 , 分开，组装成字符串（ 1,2,3,4 ）
@@ -88,5 +89,7 @@ public interface ItemClassifyService {
      * @return
      */
     String queryCassifyIdAndAllChildrenClassifyIds(Long classifyId);
+
+    List<ItemClassify> testFunction(Long classifyId);
 
 }

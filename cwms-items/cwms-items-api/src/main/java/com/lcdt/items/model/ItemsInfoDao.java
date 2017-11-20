@@ -14,4 +14,5 @@ public class ItemsInfoDao extends ItemsInfo {
     public void setClassifyIds(String classifyIds) {
         this.classifyIds = classifyIds;
     }
+
 }
