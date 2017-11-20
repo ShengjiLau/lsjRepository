@@ -77,6 +77,12 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Transactional(readOnly = true)
+	@Override
+	public User selectUserByPhone(String phone) {
+		return userMapper.queryByUserPhone(phone);
+	}
+
 
 	@Override
 	public boolean checkUserLogin() {

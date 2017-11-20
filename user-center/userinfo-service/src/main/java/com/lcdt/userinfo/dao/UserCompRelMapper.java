@@ -1,6 +1,8 @@
 package com.lcdt.userinfo.dao;
 
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.userinfo.web.dto.SearchEmployeeDto;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -52,5 +54,10 @@ public interface UserCompRelMapper {
      * @return
      */
     List<UserCompRel> selectByCondition(Map map);
+
+    List<UserCompRel> selectByUserIdCompanyId(@Param("userId") Long userId, @Param("companyId") Long companyId);
+
+
+    List<UserCompRel> selectBySearchDto(SearchEmployeeDto dto);
 
 }

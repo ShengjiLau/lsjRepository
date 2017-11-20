@@ -38,6 +38,11 @@ public class PropertyUtils {
 	}
 
 	public static String readProperties(String key){
+		String value = System.getenv(key);
+		if (value != null && value.length() > 0) {
+			return value;
+		}
+
 		if (properties != null) {
 			Object o = properties.get(key);
 			String property = properties.getProperty(key, "");

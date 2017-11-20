@@ -1,7 +1,5 @@
 package com.lcdt.wms.config;
 
-import com.github.pagehelper.PageHelper;
-import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -16,7 +14,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
 import javax.sql.DataSource;
-import java.util.Properties;
 
 /**
  * Created by ss on 2017/8/4.
@@ -46,17 +43,17 @@ public class MybatisCommonConfig implements TransactionManagementConfigurer {
 		sqlSessionFactoryBean.setDataSource(dataSource);
 		sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
 
-		//分页插件
-		PageHelper pageHelper = new PageHelper();
-		Properties properties = new Properties();
-		properties.setProperty("reasonable", "true");
-		properties.setProperty("supportMethodsArguments", "true");
-		properties.setProperty("returnPageInfo", "check");
-		properties.setProperty("params", "count=countSql");
-		pageHelper.setProperties(properties);
-
-		//添加插件
-		sqlSessionFactoryBean.setPlugins(new Interceptor[]{pageHelper});
+//		//分页插件
+//		PageHelper pageHelper = new PageHelper();
+//		Properties properties = new Properties();
+//		properties.setProperty("reasonable", "true");
+//		properties.setProperty("supportMethodsArguments", "true");
+//		properties.setProperty("returnPageInfo", "check");
+//		properties.setProperty("params", "count=countSql");
+//		pageHelper.setProperties(properties);
+//
+//		//添加插件
+//		sqlSessionFactoryBean.setPlugins(new Interceptor[]{pageHelper});
 
 		try {
 			SqlSessionFactory object = sqlSessionFactoryBean.getObject();

@@ -17,7 +17,7 @@ public class RolePermission {
      *
      * @mbg.generated
      */
-    private Integer roleId;
+    private Long roleId;
 
     /**
      *
@@ -26,7 +26,7 @@ public class RolePermission {
      *
      * @mbg.generated
      */
-    private Integer permissionId;
+    private Long permissionId;
 
 
     private Permission permission;
@@ -71,7 +71,7 @@ public class RolePermission {
      *
      * @mbg.generated
      */
-    public Integer getRoleId() {
+    public Long getRoleId() {
         return roleId;
     }
 
@@ -83,7 +83,7 @@ public class RolePermission {
      *
      * @mbg.generated
      */
-    public void setRoleId(Integer roleId) {
+    public void setRoleId(Long roleId) {
         this.roleId = roleId;
     }
 
@@ -95,7 +95,7 @@ public class RolePermission {
      *
      * @mbg.generated
      */
-    public Integer getPermissionId() {
+    public Long getPermissionId() {
         return permissionId;
     }
 
@@ -107,7 +107,7 @@ public class RolePermission {
      *
      * @mbg.generated
      */
-    public void setPermissionId(Integer permissionId) {
+    public void setPermissionId(Long permissionId) {
         this.permissionId = permissionId;
     }
 }

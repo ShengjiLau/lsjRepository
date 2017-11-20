@@ -52,4 +52,11 @@ public interface DepartmentMapper {
      * @return
      */
     List<Department> selectByCondition(Map map);
+
+    /***
+     * 获取当前企业下最大索引
+     * @param map
+     * @return
+     */
+    Long getMaxIndex(Map map);
 }

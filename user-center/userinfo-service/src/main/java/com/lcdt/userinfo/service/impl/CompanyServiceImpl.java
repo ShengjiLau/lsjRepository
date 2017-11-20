@@ -2,11 +2,13 @@ package com.lcdt.userinfo.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.userinfo.dao.CompanyCertificateMapper;
 import com.lcdt.userinfo.dao.CompanyMapper;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.CompanyCertificate;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,19 @@ public class CompanyServiceImpl implements CompanyService {
 	@Autowired
 	private UserCompRelMapper userCompRelMapper;
 
+	@Autowired
+	public CompanyCertificateMapper certificateDao;
+
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public CompanyCertificate getCompanyCert(Long companyId){
+		List<CompanyCertificate> companyCertificate = certificateDao.selectByCompanyId(companyId);
+		if (companyCertificate != null && !companyCertificate.isEmpty()) {
+			return companyCertificate.get(0);
+		}
+		return null;
+	}
+
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Company selectById(Long companyId){
@@ -45,8 +60,6 @@ public class CompanyServiceImpl implements CompanyService {
 		int i = companyMapper.updateByPrimaryKey(company);
 		return company;
 	}
-
-
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -91,8 +104,6 @@ public class CompanyServiceImpl implements CompanyService {
 			companyMember.setCreateDate(dt);
 			userCompRelMapper.insert(companyMember);
 		}
-
-
 		return company;
 	}
 
@@ -171,7 +182,6 @@ public class CompanyServiceImpl implements CompanyService {
 		Company vo = new Company();
 		vo.setFullName(dto.getCompanyName());
 		return companyMapper.selectByCondition(vo);
-
 	}
 
 	@Override

@@ -63,4 +63,21 @@
 on rp.permission_id = p.permission_id WHERE rp.role_id = #{roleId,jdbcType = BIGINT}
   </select>
 
+
+  <select id="selectByRolePermission" resultMap="BaseResultMap">
+
+    select role_permission_id, role_id, permission_id
+    from role_permission
+    WHERE role_id = #{roleId,jdbcType=BIGINT}
+    and permission_id = #{permissionId,jdbcType = BIGINT}
+  </select>
+
+
+
+
+
+
+
+
+
 </mapper>

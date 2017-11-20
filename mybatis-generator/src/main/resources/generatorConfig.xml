@@ -7,7 +7,7 @@
     <properties resource="generator.properties"></properties>
 
     <!--指定特定数据库的jdbc驱动jar包的位置 -->
-    <!--<classPathEntry location="${jdbc.driverLocation}"/>-->
+   <classPathEntry location="${jdbc.driverLocation}"/>
 
     <context id="default" targetRuntime="MyBatis3Simple">
 
@@ -188,12 +188,27 @@
             <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
 
+<<<<<<< HEAD
+        <table tableName="t_my_client" domainObjectName="MyClient">
+            <generatedKey column="my_client_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
+        <table tableName="t_my_client_linkman" domainObjectName="MyClientLinkman">
+            <generatedKey column="my_client_linkman_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
+        <table tableName="t_my_linkman" domainObjectName="MyLinkman">
+            <generatedKey column="my_linkman_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
+<!--        <table tableName="sys_role_user_company" domainObjectName="SysRoleUserCompany">
+        <generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>-->
+=======
         <!--<table tableName="sys_role" domainObjectName="SysRole">-->
         <!--<generatedKey column="sys_role_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
         <!--<table tableName="sys_role_user_company" domainObjectName="SysRoleUserCompany">-->
         <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
+>>>>>>> 7d0371d4a1396953bdc1f02f0007fdca87c094df
 
         <table tableName="t_uc_company_certificate" domainObjectName="CompanyCertificate">
         <generatedKey column="certi_id" sqlStatement="MYSQL" identity="true"></generatedKey>

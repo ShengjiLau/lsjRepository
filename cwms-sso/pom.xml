@@ -16,7 +16,7 @@
         <module>cwms-sso-common</module>
         <module>cwms-sso-demo</module>
         <module>cwms-sso-api</module>
-        <module>cwms-sso-service</module>
+        <module>clms-sso-service</module>
     </modules>
 
     <dependencies>

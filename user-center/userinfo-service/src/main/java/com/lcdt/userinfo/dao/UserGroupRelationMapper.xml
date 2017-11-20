@@ -74,5 +74,32 @@
     WHERE user_id = #{userId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </select>
 
+  <delete id="deleteNotInGroups" >
+
+    DELETE FROM t_uc_user_group
+    where user_id = #{userId}
+    and company_id = #{companyId}
+    <if test="groups != null">
+      and group_id not in
+      <foreach item="item" index="index" collection="groups"
+               open="(" separator="," close=")"
+      >
+        #{item}
+      </foreach>
+    </if>
+
+  </delete>
+
+  <insert id="insertGroups">
+    INSERT INTO t_uc_user_group
+    (group_id, user_id,company_id)
+    values
+    <foreach collection="insertGroups" item="item"
+             separator="," close=";">
+      (#{item,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT})
+    </foreach>
+  </insert>
+
+
 
 </mapper>

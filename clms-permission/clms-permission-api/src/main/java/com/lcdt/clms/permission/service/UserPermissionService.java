@@ -14,4 +14,8 @@ public interface UserPermissionService {
 
 	List<SysRole> userSysRoles(Long userId, Long companyId);
 
+	List<Permission> getAllPermissionInfo();
+
+	List<Permission> getPermissionByCategory(String category);
+
 }
