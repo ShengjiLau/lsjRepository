@@ -7,11 +7,13 @@ import com.lcdt.userinfo.service.impl.EmployeeServiceImpl;
 import com.lcdt.userinfo.web.dto.CreateEmployeeAccountDto;
 import com.lcdt.userinfo.web.dto.PageResultDto;
 import com.lcdt.userinfo.web.dto.SearchEmployeeDto;
+import com.lcdt.userinfo.web.dto.UpdateEmployeeAccountDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,7 +47,11 @@ public class EmployeeApi {
 
 	@ApiOperation("添加员工接口")
 	@RequestMapping(value = "/addemployee", method = RequestMethod.POST)
-	public String addEmployeeAccount(@Validated CreateEmployeeAccountDto dto) {
+	public String addEmployeeAccount(@Validated CreateEmployeeAccountDto dto, @RequestBody List<Long> groups,@RequestBody List<Long> roles) {
+
+		dto.setGroups(groups);
+		dto.setRoles(roles);
+
 		boolean b = employeeService.addEmployee(dto);
 		if (b) {
 			return successMessage.toString();
@@ -67,14 +73,12 @@ public class EmployeeApi {
 
 	@ApiOperation("更新员工接口")
 	@RequestMapping(value = "/updateemployee",method = RequestMethod.POST)
-	public UserCompRel updateEmployee(CreateEmployeeAccountDto dto) {
-
-
-
-
-
-		return null;
+	public UserCompRel updateEmployee(UpdateEmployeeAccountDto dto) {
+		UserCompRel userCompRel = employeeService.updateEmployee(dto);
+		return userCompRel;
 	}
+
+
 
 
 }
