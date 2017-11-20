@@ -1,4 +1,4 @@
-package com.lcdt.userinfo.dao;
+package com.lcdt.client.dao;
 
 
 import com.lcdt.client.model.MyClient;
@@ -45,4 +45,19 @@ public interface MyClientMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(MyClient record);
+
+    /**
+     * 根据条件查询客户列表
+     * @param myClient
+     * @return
+     */
+    List<MyClient> selectByCondition(MyClient myClient);
+
+    /**
+     * 更新状态
+     * @param myClient
+     * @return
+     */
+    int updateStatus(MyClient myClient);
+
 }
