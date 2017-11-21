@@ -32,14 +32,14 @@ public class CustomPropertyController {
     @GetMapping("/list")
     public List<CustomProperty> getCustomProperty(HttpSession httpSession) {
         logger.info("customPropertyService------------------", customPropertyService.getClass().getMethods().toString());
-        Long companyId = 8L;  //从session获取companyId
+        Long companyId = 8L;  //TODO 从session获取companyId
         return customPropertyService.customPropertyList(companyId);
     }
 
     @ApiOperation(value = "更新自定义属性", notes = "更新对应企业下的自定义属性")
     @PostMapping("/update")
     public String updateCoustomProperty(CustomProperty customProperty, HttpSession httpSession) {
-        Long companyId = 8L;  //从session获取companyId
+        Long companyId = 8L;  //TODO 从session获取companyId
         customProperty.setCompanyId(companyId);
         customPropertyService.updateByCustomId(customProperty);
         return "success";
@@ -55,7 +55,7 @@ public class CustomPropertyController {
     @ApiOperation(value = "新增自定义属性", notes = "新增自定义属性")
     @PostMapping("/add")
     public String addCustomProperty(CustomProperty customProperty, HttpSession httpSession) {
-        Long companyId = 8L;  //从session获取companyId
+        Long companyId = 8L;  //TODO 从session获取companyId
         customProperty.setCompanyId(companyId);
         customPropertyService.insertCustomProperty(customProperty);
         return "success";
