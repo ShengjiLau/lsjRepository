@@ -1,8 +1,11 @@
 package com.lcdt.userinfo.web.controller.api;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.service.impl.EmployeeServiceImpl;
 import com.lcdt.userinfo.web.dto.CreateEmployeeAccountDto;
 import com.lcdt.userinfo.web.dto.PageResultDto;
@@ -12,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import jdk.nashorn.internal.ir.RuntimeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +35,9 @@ import java.util.List;
 @Api(value = "员工接口", description = "员工相关接口")
 @RequestMapping("/api/employee")
 public class EmployeeApi {
+
+	@Autowired
+	UserService userService;
 
 
 	public static JSONObject successMessage ;
@@ -50,7 +58,11 @@ public class EmployeeApi {
 
 	@ApiOperation("添加员工接口")
 	@RequestMapping(value = "/addemployee", method = RequestMethod.POST)
-	public String addEmployeeAccount(@Validated CreateEmployeeAccountDto dto, @ApiParam(required = true)@RequestBody ArrayList<Long> jsonGroups,@RequestBody ArrayList<Long> jsonRoles) {
+	public String addEmployeeAccount(@Validated CreateEmployeeAccountDto dto, HttpServletRequest request) {
+		String groups = request.getParameter("jsonGroups");
+		String roles = request.getParameter("jsonRoles");
+		List<Long> jsonGroups = JSONArray.parseArray(groups, Long.class);
+		List<Long> jsonRoles = JSONArray.parseArray(roles, Long.class);
 
 		dto.setGroups(jsonGroups);
 		dto.setRoles(jsonRoles);
@@ -81,6 +93,12 @@ public class EmployeeApi {
 		return userCompRel;
 	}
 
+	@ApiOperation("获取手机号的用户信息")
+	@RequestMapping(value = "/queryphone",method = RequestMethod.POST)
+	public User queryUserPhone(String phone){
+		User user = userService.selectUserByPhone(phone);
+		return user;
+	}
 
 
 

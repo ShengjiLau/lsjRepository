@@ -52,4 +52,6 @@ public interface GroupMapper {
      * @return
      */
     List<Group> selectByCondition(Map map);
+
+    List<Group> selectUserCompanyGroups(Long userId, Long companyId);
 }

@@ -1,6 +1,7 @@
 package com.lcdt.clms.permission.dao;
 
 import com.lcdt.clms.permission.model.Role;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -46,4 +47,7 @@ public interface RoleMapper {
     int updateByPrimaryKey(Role record);
 
     List<Role> selectByCompanyId(Long companyId);
+
+    List<Role> selectUserCompanyRoles(@Param("userId") Long userId, @Param("companyId") Long companyId);
+
 }
