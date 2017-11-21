@@ -24,6 +24,7 @@
         <module>clms-response-converter</module>
         <module>clms-notify</module>
         <module>clms-client</module>
+        <module>clms-traffic</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>

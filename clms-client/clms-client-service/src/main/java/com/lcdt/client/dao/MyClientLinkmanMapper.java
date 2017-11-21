@@ -45,4 +45,19 @@ public interface MyClientLinkmanMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(MyClientLinkman record);
+
+    /**
+     * 根据myClientId查询相关联系人
+     * @param myClientId
+     * @return
+     */
+    List<MyClientLinkman> selectByMyClientId(Long myClientId);
+
+    /**
+     * 更新是否为默认
+     * @param myClientLinkman
+     * @return
+     */
+    int updateIsDefault(MyClientLinkman myClientLinkman);
+
 }
