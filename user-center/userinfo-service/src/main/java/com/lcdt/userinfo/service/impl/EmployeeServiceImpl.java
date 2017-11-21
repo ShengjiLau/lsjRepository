@@ -5,7 +5,6 @@ import com.lcdt.clms.permission.service.UserRoleService;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
-import com.lcdt.userinfo.model.Department;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
