@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
 		registerUser.setRegisterDate(new Date());
 		registerUser.setUserStatus((short)1); //默认启用状态
 		registerUser.setMobileCountry("86");
+		registerUser.setEmail(registerDto.getEmail());
 		int insert = userMapper.insert(registerUser);
 		return registerUser;
 	}

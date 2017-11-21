@@ -75,6 +75,11 @@ public class EmployeeServiceImpl {
 		userCompRel.setCreateDate(new Date());
 		userCompRel.setDeptIds(dto.getDepartIds());
 		userCompRel.setDeptNames(department);
+		if (!StringUtils.isEmpty(dto.getDuty())) {
+			userCompRel.setDuty(dto.getDuty());
+		}
+
+
 		userCompanyDao.insert(userCompRel);
 
 		if (dto.getRoles() != null && !dto.getRoles().isEmpty()) {
