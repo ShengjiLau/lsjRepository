@@ -4,6 +4,7 @@ package com.lcdt.client.dao;
 import com.lcdt.client.model.MyClient;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MyClientMapper {
     /**
@@ -48,10 +49,10 @@ public interface MyClientMapper {
 
     /**
      * 根据条件查询客户列表
-     * @param myClient
+     * @param map
      * @return
      */
-    List<MyClient> selectByCondition(MyClient myClient);
+    List<MyClient> selectByCondition(Map map);
 
     /**
      * 更新状态
