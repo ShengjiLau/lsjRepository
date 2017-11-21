@@ -54,7 +54,7 @@ public class CustomPropertyServiceImpl implements CustomPropertyService{
             itemsExtendProperty.setCompanyId(customProperty.getCompanyId());
             itemsExtendProperty.setTitle(customProperty.getPropertyName());
             itemsExtendProperty.setFieldType(customProperty.getPropertyType());
-            /**！！！这个地方注意一下，现在是默认0，就是文本框，后续如果有其他类型，这个地方对应获取相应的值*/
+            //TODO 这个地方注意一下，现在是默认0，就是文本框，后续如果有其他类型，这个地方对应获取相应的值*/
             itemsExtendProperty.setControlName(new Short("0"));
             itemsExtendProperty.setClassifyId(itemClassifyList.get(i).getClassifyId());
             itemsExtendProperty.setClassifyName(itemClassifyList.get(i).getClassifyName());
