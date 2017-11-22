@@ -21,7 +21,6 @@ import java.util.concurrent.CountDownLatch;
 public class UserServiceApp {
 
 	public static void main(String[] args) {
-
 		ConfigurableApplicationContext run = new SpringApplicationBuilder()
 				.sources(UserServiceApp.class)
 				.run(args);

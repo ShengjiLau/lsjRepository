@@ -22,8 +22,8 @@ public class YbqTest1 {
 
         @Test
         public void test(){
-               // smsService.findSmsBalance();
-               //System.out.println(11111);
+               smsService.findSmsBalance();
+               System.out.println(11111);
 
         }
 

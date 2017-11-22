@@ -1,19 +1,25 @@
 package com.lcdt.client;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.lcdt.notify.service.SmsService;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
- * @AUTHOR liuh
- * @DATE 2017-11-16
+ * Created by yangbinq on 2017/11/22.
  */
 @SpringBootApplication
-@MapperScan("com.lcdt.client.dao")
+@ImportResource("classpath:dubbo-client-provider.xml")
 public class ClientServiceApp {
-    public static void main(String[] args) {
+   public static void main(String[] args) {
+        ConfigurableApplicationContext run = new SpringApplicationBuilder() .sources(ClientServiceApp.class).run(args);
+   }
 
-        SpringApplication.run(ClientServiceApp.class, args);
 
-    }
 }

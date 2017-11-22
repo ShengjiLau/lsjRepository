@@ -11,8 +11,8 @@ import org.springframework.context.annotation.ImportResource;
  * Created by yangbinq on 2017/11/20.
  */
 @SpringBootApplication
-@ImportResource("dubbo-traffic-provider.xml")
-@Import(com.lcdt.swagger.SwaggerConfig.class)
+@ImportResource("dubbo-traffic-consumer.xml")
+@Import({com.lcdt.swagger.SwaggerConfig.class})
 @EnableClmsSecurity
 public class TrafficServiceApp {
     public static void main(String[] args) {
