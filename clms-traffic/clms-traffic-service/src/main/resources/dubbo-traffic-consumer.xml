@@ -10,8 +10,9 @@
 
     <dubbo:application name="traffic-service"/>
 
-    <dubbo:registry protocol="zookeeper" address="zookeeper://127.0.0.1:2181"/>
+    <dubbo:registry protocol="zookeeper" address="${ZKHOST}"/>
 
+    <dubbo:protocol name="dubbo" port="20886" />
 
     <dubbo:annotation package="com.lcdt.traffic.web.controller.api"></dubbo:annotation>
 

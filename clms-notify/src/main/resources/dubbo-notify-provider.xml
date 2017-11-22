@@ -8,10 +8,8 @@
     <!-- 提供方应用信息，用于计算依赖关系 -->
     <dubbo:application name="common-notify-service"  />
     <!-- 用dubbo协议在20880端口暴露服务 -->
-    <dubbo:registry protocol="zookeeper" address="zookeeper://127.0.0.1:2181"/>
+    <dubbo:registry protocol="zookeeper" address="${ZKHOST}"/>
     <dubbo:protocol name="dubbo" port="20889" />
-<!--
-    <dubbo:service interface="com.lcdt.notify.service.SmsService" ref="smsService" />
-    <bean id="smsService" class="com.lcdt.notify.service.impl.SmsServiceImpl" />-->
+
     <dubbo:annotation package="com.lcdt.notify.service"/>
 </beans>
