@@ -33,7 +33,6 @@ public class MybatisConfig implements TransactionManagementConfigurer {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource);
 		sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
-
 		try {
 			SqlSessionFactory object = sqlSessionFactoryBean.getObject();
 			return object;

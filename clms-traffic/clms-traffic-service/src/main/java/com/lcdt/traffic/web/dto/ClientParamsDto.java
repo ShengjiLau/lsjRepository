@@ -19,7 +19,7 @@ public class ClientParamsDto {
     @ApiModelProperty(value = "县")
     private String county;
 
-    @ApiModelProperty(value = "状态")
+    @ApiModelProperty(value = "状态  1-开启 0-停用")
     private Integer status;
 
 

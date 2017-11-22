@@ -2,13 +2,10 @@ package com.lcdt.client.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.client.dao.MyClientLinkmanMapper;
-import com.lcdt.client.model.MyClient;
-import com.lcdt.client.model.MyClientLinkman;
-import com.lcdt.client.service.MyClientService;
 import com.lcdt.client.dao.MyClientMapper;
+import com.lcdt.client.model.MyClient;
+import com.lcdt.client.service.MyClientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -19,14 +16,11 @@ import java.util.Map;
  * @DATE 2017-11-16
  */
 
-@Service
+@com.alibaba.dubbo.config.annotation.Service
 public class MyClientServiceImpl implements MyClientService {
 
     @Autowired
     private MyClientMapper myClientMapper;
-
-    @Autowired
-    private MyClientLinkmanMapper myClientLinkmanMapper;
 
 
     @Transactional(readOnly = true)
@@ -93,7 +87,7 @@ public class MyClientServiceImpl implements MyClientService {
     }
 
     @Override
-    public int delMyClientLinkman(Long myClientLinkmanId) {
+    public int de·                                                                                                          lMyClientLinkman(Long myClientLinkmanId) {
         return myClientLinkmanMapper.deleteByPrimaryKey(myClientLinkmanId);
     }
 

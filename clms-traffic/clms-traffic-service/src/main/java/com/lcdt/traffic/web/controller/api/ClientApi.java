@@ -1,5 +1,6 @@
 package com.lcdt.traffic.web.controller.api;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.client.model.MyClient;
@@ -12,7 +13,6 @@ import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,16 +31,18 @@ import java.util.Map;
 @Api(value = "客户接口",description = "运输客户模块接口")
 public class ClientApi {
 
-    @Autowired
+    @Reference
     private MyClientService myClientService;
+
 
     @ApiOperation("我的客户列表")
     @RequestMapping(value = "/clientList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_client_list')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_client_list')")
     public ClientListDto clientList(@Validated ClientParamsDto dto,
                                     @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                     @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
+
+      Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);
         map.put("page_no", pageNo);
@@ -49,7 +51,7 @@ public class ClientApi {
         if (StringUtil.isNotEmpty(dto.getComplexContition())) {
            map.put("complexStr",dto.getComplexContition());
         }
-        if (dto.getStatus()>0) {
+        if (dto.getStatus()!=null) {
             map.put("status",dto.getStatus());
         }
         if (StringUtil.isNotEmpty(dto.getProvince())) {
@@ -74,13 +76,15 @@ public class ClientApi {
      *
      * @return
      */
+/*
     @ApiOperation("客户详情")
     @RequestMapping(value = "/clientDetail",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_client_list')")
+   // @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_client_list')")
     public MyClient clientDetail(@ApiParam(value = "客户ID",required = true) @RequestParam Long myClientId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         return myClientService.getMyClientDetail(myClientId);
     }
+*/
 
 
 
