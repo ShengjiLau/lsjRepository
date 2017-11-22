@@ -1,5 +1,7 @@
 package com.sso.client.utils;
 
+import org.springframework.util.StringUtils;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -34,6 +36,14 @@ public final class RedirectHelper {
 	public static String assembleLoginUrlWithAuthBack(HttpServletRequest request){
 		String callback = request.getRequestURL().toString();
 		String url = PropertyUtils.readProperties(PropertyUtils.LOGIN_URL);
+		if (StringUtils.isEmpty(url)) {
+			return "";
+		}
+		if (!url.startsWith("http")) {
+			url = "http://" + url;
+		}
+
+
 		String encode = "";
 		try {
 			encode = URLEncoder.encode(callback, "UTF-8");
@@ -48,6 +58,14 @@ public final class RedirectHelper {
 
 		if (!response.isCommitted()) {
 			try {
+				String redirectUrl = assembleLoginUrlWithAuthBack(request);
+				if (StringUtils.isEmpty(redirectUrl)) {
+					response.setCharacterEncoding("UTF-8");
+					response.sendError(404, "没有找到登陆页面");
+					response.setHeader("Content-Type","text/html;charset=UTF-8");
+					return;
+				}
+
 				response.sendRedirect(assembleLoginUrlWithAuthBack(request));
 			} catch (IOException e) {
 				e.printStackTrace();
