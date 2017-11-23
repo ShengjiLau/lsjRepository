@@ -54,6 +54,7 @@ public class CustomPropertyServiceImpl implements CustomPropertyService{
             itemsExtendProperty.setCompanyId(customProperty.getCompanyId());
             itemsExtendProperty.setTitle(customProperty.getPropertyName());
             itemsExtendProperty.setFieldType(customProperty.getPropertyType());
+            itemsExtendProperty.setRemarks(customProperty.getRemarks());
             //TODO 这个地方注意一下，现在是默认0，就是文本框，后续如果有其他类型，这个地方对应获取相应的值*/
             itemsExtendProperty.setControlName(new Short("0"));
             itemsExtendProperty.setClassifyId(itemClassifyList.get(i).getClassifyId());
@@ -77,6 +78,7 @@ public class CustomPropertyServiceImpl implements CustomPropertyService{
         itemsExtendPropertyDao.setTitle(customProperty.getPropertyName());  //要更新的内容，属性名
         itemsExtendPropertyDao.setTitleExtend(oldCustomProrerty.getPropertyName()); //被更新的属性名+companyId定位修改数据
         itemsExtendPropertyDao.setCompanyId(customProperty.getCompanyId());     //注入companyId
+        itemsExtendPropertyDao.setRemarks(customProperty.getRemarks());
 
         int rows = customPropertyMapper.updateByPrimaryKey(customProperty);     //更新自定义属性表数据
         itemsExtendPropertyMapper.updateByBatch(itemsExtendPropertyDao);        //更新商品扩展表数据

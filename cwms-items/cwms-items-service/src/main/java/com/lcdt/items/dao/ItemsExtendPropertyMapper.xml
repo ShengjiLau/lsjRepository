@@ -82,7 +82,7 @@
     <foreach collection="list" item="item" separator=",">
       (#{item.title,jdbcType=VARCHAR}, #{item.fieldType,jdbcType=SMALLINT},
       #{item.controlName,jdbcType=SMALLINT}, #{item.classifyId,jdbcType=BIGINT}, #{item.classifyName,jdbcType=VARCHAR},
-      #{item.companyId,jdbcType=BIGINT}, #{remarks,jdbcType=VARCHAR})
+      #{item.companyId,jdbcType=BIGINT}, #{item.remarks,jdbcType=VARCHAR})
     </foreach>
   </insert>
   <delete id="delByBatch" parameterType="com.lcdt.items.model.ItemsExtendProperty">
