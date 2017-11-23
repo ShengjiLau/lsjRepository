@@ -15,7 +15,7 @@
     <result column="real_name" jdbcType="VARCHAR" property="realName" />
     <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
     <result column="pwd" jdbcType="VARCHAR" property="pwd" />
-    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="birthday" jdbcType="BIGINT" property="birthday" />
     <result column="picture_url" jdbcType="VARCHAR" property="pictureUrl" />
     <result column="intro_memo" jdbcType="VARCHAR" property="introMemo" />
     <result column="register_date" jdbcType="TIMESTAMP" property="registerDate" />
@@ -45,7 +45,7 @@
       referrer_phone, user_status)
     values (#{mobileCountry,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{wechat,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, 
-      #{nickName,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, 
+      #{nickName,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, #{birthday,jdbcType=BIGINT},
       #{pictureUrl,jdbcType=VARCHAR}, #{introMemo,jdbcType=VARCHAR}, #{registerDate,jdbcType=TIMESTAMP}, 
       #{referrerPhone,jdbcType=VARCHAR}, #{userStatus,jdbcType=SMALLINT})
   </insert>
@@ -63,7 +63,7 @@
       real_name = #{realName,jdbcType=VARCHAR},
       nick_name = #{nickName,jdbcType=VARCHAR},
       pwd = #{pwd,jdbcType=VARCHAR},
-      birthday = #{birthday,jdbcType=DATE},
+      birthday = #{birthday,jdbcType=BIGINT},
       picture_url = #{pictureUrl,jdbcType=VARCHAR},
       intro_memo = #{introMemo,jdbcType=VARCHAR},
       register_date = #{registerDate,jdbcType=TIMESTAMP},

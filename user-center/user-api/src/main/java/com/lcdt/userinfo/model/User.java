@@ -93,7 +93,7 @@ public class User implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated
      */
-    private Date birthday;
+    private Long birthday;
 
     /**
      *
@@ -365,7 +365,7 @@ public class User implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated
      */
-    public Date getBirthday() {
+    public Long getBirthday() {
         return birthday;
     }
 
@@ -377,7 +377,7 @@ public class User implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated
      */
-    public void setBirthday(Date birthday) {
+    public void setBirthday(Long birthday) {
         this.birthday = birthday;
     }
 

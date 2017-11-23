@@ -1,6 +1,9 @@
 package com.lcdt.client;
 
+<<<<<<< HEAD
 import com.lcdt.clms.security.annontion.EnableClmsSecurity;
+=======
+>>>>>>> 9c4ffe692ea4497e040ad45bc709eb6ff60b6829
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -16,9 +19,7 @@ import org.springframework.context.annotation.ImportResource;
 @Import({com.lcdt.swagger.SwaggerConfig.class})
 @EnableClmsSecurity
 public class ClientServiceApp {
-   public static void main(String[] args) {
-        ConfigurableApplicationContext run = new SpringApplicationBuilder() .sources(ClientServiceApp.class).run(args);
-   }
-
-
+	public static void main(String[] args) {
+		ConfigurableApplicationContext run = new SpringApplicationBuilder().sources(ClientServiceApp.class).run(args);
+	}
 }

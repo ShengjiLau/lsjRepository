@@ -69,4 +69,7 @@ public interface CompanyService {
 	 */
 	int removeCompanyRel(Long relId);
 
+	CompanyCertificate updateCompanyCert(CompanyCertificate companyCertificate);
+
+	CompanyCertificate queryCertByCompanyId(Long companyId);
 }

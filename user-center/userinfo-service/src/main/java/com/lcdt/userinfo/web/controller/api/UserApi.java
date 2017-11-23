@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,6 +68,7 @@ public class UserApi {
 		}
 
 		User user = SecurityInfoGetter.getUser();
+		user = userService.selectUserByPhone(user.getPhone());
 		user.setNickName(modifyUserDto.getNickName());
 		user.setRealName(modifyUserDto.getName());
 		if (!StringUtils.isEmpty(modifyUserDto.getAvatarUrl())) {
@@ -167,4 +169,5 @@ public class UserApi {
 		jsonObject.put("code",0);
 		return jsonObject.toString();
 	}
+
 }
