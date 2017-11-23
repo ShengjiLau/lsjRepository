@@ -47,7 +47,7 @@ public class ClientApi {
         map.put("companyId", companyId);
         map.put("page_no", pageNo);
         map.put("page_size", pageSize);
-        map.put("clientType", ConstantVO.TRAFFIC_CLIENT_TYPE);//运输客户
+        //map.put("clientType", ConstantVO.TRAFFIC_CLIENT_TYPE);//运输客户
         if (StringUtil.isNotEmpty(dto.getComplexContition())) {
            map.put("complexStr",dto.getComplexContition());
         }
