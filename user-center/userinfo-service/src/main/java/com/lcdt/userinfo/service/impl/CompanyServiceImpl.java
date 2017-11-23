@@ -14,12 +14,10 @@ import com.lcdt.userinfo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -192,14 +190,18 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public CompanyCertificate updateCompanyCert(CompanyCertificate companyCertificate){
-		certificateDao.updateByPrimaryKey(companyCertificate);
+		if (companyCertificate.getCertiId() == null) {
+			certificateDao.insert(companyCertificate);
+		}else{
+			certificateDao.updateByPrimaryKey(companyCertificate);
+		}
 		return companyCertificate;
 	}
 
 	@Override
 	public CompanyCertificate queryCertByCompanyId(Long companyId) {
 		List<CompanyCertificate> companyCertificates = certificateDao.selectByCompanyId(companyId);
-		if (companyCertificates != null) {
+		if (!CollectionUtils.isEmpty(companyCertificates)) {
 			return companyCertificates.get(0);
 		}else {
 			return null;

@@ -30,9 +30,6 @@ public class CompanyApi {
 	@Autowired
 	CompanyService companyService;
 
-
-
-
 	@ApiOperation("获取公司认证图片信息")
 	@RequestMapping(value = "/getauthinfo",method = RequestMethod.GET)
 	public CompanyCertificate getAuthInfo(){
@@ -52,6 +49,10 @@ public class CompanyApi {
 	public CompanyCertificate updateAuthInfo(@Validated ModifyCompanyAuthDto dto) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		CompanyCertificate companyCertificate = companyService.queryCertByCompanyId(companyId);
+		if (companyCertificate == null) {
+			companyCertificate = new CompanyCertificate();
+			companyCertificate.setCompId(companyId);
+		}
 		BeanUtils.copyProperties(dto,companyCertificate);
 		companyService.updateCompanyCert(companyCertificate);
 		return companyCertificate;
