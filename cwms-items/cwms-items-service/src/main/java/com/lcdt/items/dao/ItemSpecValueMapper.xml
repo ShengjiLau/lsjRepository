@@ -60,4 +60,8 @@
     select spv_id, sp_value, spk_id, company_id
     from t_item_spec_value
   </select>
+  <delete id="deleteBySpkId" parameterType="java.lang.Long">
+    DELETE FROM t_item_spec_value
+    where spk_id = #{spkId,jdbcType=BIGINT}
+  </delete>
 </mapper>

@@ -44,4 +44,11 @@ public interface ItemSpecValueMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(ItemSpecValue record);
+
+    /**
+     * 根据自定义规格键的spkId删除规格值
+     * @param spkId
+     * @return
+     */
+    int deleteBySpkId(Long spkId);
 }

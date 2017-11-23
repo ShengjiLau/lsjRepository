@@ -1,6 +1,7 @@
 package com.lcdt.items.dao;
 
 import com.lcdt.items.model.ItemSpecKey;
+import com.lcdt.items.model.ItemSpecificationDao;
 
 import java.util.List;
 
@@ -44,4 +45,11 @@ public interface ItemSpecKeyMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(ItemSpecKey record);
+
+    /**
+     * 根据企业 companyId 获取此企业下的所有自定义规格
+     * @param companyId
+     * @return
+     */
+    List<ItemSpecificationDao> selectSpecificationList(Long companyId);
 }

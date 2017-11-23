@@ -19,6 +19,7 @@ public class SubItemsInfoDto {
     private Float retailPrice;
     private String specComb;
     private Long companyId;
+    private List<ItemSpecKeyValueDto> itemSpecKeyValueDtoList;
 
     private List<CustomValue> customValueList;
 
@@ -108,5 +109,13 @@ public class SubItemsInfoDto {
 
     public void setCustomValueList(List<CustomValue> customValueList) {
         this.customValueList = customValueList;
+    }
+
+    public List<ItemSpecKeyValueDto> getItemSpecKeyValueDtoList() {
+        return itemSpecKeyValueDtoList;
+    }
+
+    public void setItemSpecKeyValueDtoList(List<ItemSpecKeyValueDto> itemSpecKeyValueDtoList) {
+        this.itemSpecKeyValueDtoList = itemSpecKeyValueDtoList;
     }
 }

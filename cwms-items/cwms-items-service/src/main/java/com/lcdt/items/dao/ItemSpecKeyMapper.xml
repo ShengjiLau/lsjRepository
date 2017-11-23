@@ -10,6 +10,18 @@
     <result column="sp_name" jdbcType="VARCHAR" property="spName" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
   </resultMap>
+  <resultMap id="ResultMapOfItemSpecificationDao" type="com.lcdt.items.model.ItemSpecificationDao">
+    <id column="spk_id" jdbcType="BIGINT" property="spkId" />
+    <result column="sp_name" jdbcType="VARCHAR" property="spName" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <collection property="itemSpecValueList" column="spk_id" ofType="com.lcdt.items.model.ItemSpecValue" select="selectSpecValueList"></collection>
+  </resultMap>
+  <resultMap id="ResultMapOfItemSpecValue" type="com.lcdt.items.model.ItemSpecValue">
+    <id column="spv_id" jdbcType="BIGINT" property="spvId" />
+    <result column="sp_value" jdbcType="VARCHAR" property="spValue" />
+    <result column="spk_id" jdbcType="BIGINT" property="spkId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+  </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - @mbg.generated
@@ -55,5 +67,15 @@
     -->
     select spk_id, sp_name, company_id
     from t_item_spec_key
+  </select>
+  <select id="selectSpecValueList" parameterType="java.lang.Long" resultMap="ResultMapOfItemSpecValue">
+    select spv_id, sp_value, spk_id, company_id
+    from t_item_spec_value
+    where spk_id = #{spkId,jdbcType=BIGINT}
+  </select>
+  <select id="selectSpecificationList" parameterType="java.lang.Long" resultMap="ResultMapOfItemSpecificationDao">
+    select spk_id, sp_name, company_id
+    from t_item_spec_key
+    where company_id = #{companyId,jdbcType=BIGINT}
   </select>
 </mapper>

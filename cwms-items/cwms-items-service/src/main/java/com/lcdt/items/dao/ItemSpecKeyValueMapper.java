@@ -44,4 +44,18 @@ public interface ItemSpecKeyValueMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(ItemSpecKeyValue record);
+
+    /**
+     * 批量插入商品自定义规格
+     * @param itemSpecKeyValueList
+     * @return
+     */
+    int insertForBatch(List<ItemSpecKeyValue> itemSpecKeyValueList);
+
+    /**
+     * 根据子商品subItemId删除规格
+     * @param subItemId
+     * @return
+     */
+    int deleteBySubItemId(Long subItemId);
 }
