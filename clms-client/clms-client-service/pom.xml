@@ -46,7 +46,7 @@
         </dependency>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>clms-notify</artifactId>
+            <artifactId>clms-security</artifactId>
             <version>1.0</version>
         </dependency>
 

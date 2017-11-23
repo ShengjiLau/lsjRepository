@@ -1,18 +1,17 @@
-package com.lcdt.traffic.web.controller.api;
+package com.lcdt.client.web.controller.api;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
-import com.lcdt.client.model.MyClient;
-import com.lcdt.client.service.MyClientService;
-import com.lcdt.client.vo.ConstantVO;
+import com.lcdt.client.model.Client;
+import com.lcdt.client.service.ClientService;
+import com.lcdt.client.web.dto.ClientListDto;
+import com.lcdt.client.web.dto.ClientParamsDto;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.traffic.web.dto.ClientListDto;
-import com.lcdt.traffic.web.dto.ClientParamsDto;
 import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +30,8 @@ import java.util.Map;
 @Api(value = "客户接口",description = "运输客户模块接口")
 public class ClientApi {
 
-    @Reference
-    private MyClientService myClientService;
+    @Autowired
+    private ClientService clientService;
 
 
     @ApiOperation("我的客户列表")
@@ -63,7 +62,7 @@ public class ClientApi {
         if (StringUtil.isNotEmpty(dto.getCounty())) {
             map.put("county",dto.getCounty());
         }
-        PageInfo pageInfo = myClientService.getMyClientList(map);
+        PageInfo pageInfo = clientService.getMyClientList(map);
         ClientListDto dto1 = new ClientListDto();
         dto1.setList(pageInfo.getList());
         dto1.setTotal(pageInfo.getTotal());
@@ -99,7 +98,7 @@ public class ClientApi {
     @ApiOperation("新增客户")
     @RequestMapping(value = "/clientAdd",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('client_add')")
-    public MyClient clientAdd(@Validated ClientParamsDto dto) {
+    public Client clientAdd(@Validated ClientParamsDto dto) {
 
 
 
@@ -119,7 +118,7 @@ public class ClientApi {
     @ApiOperation("客户编辑")
     @RequestMapping(value = "/clientEdit",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('client_add')")
-    public MyClient clientEdit(@Validated ClientParamsDto dto) {
+    public Client clientEdit(@Validated ClientParamsDto dto) {
 
 
 

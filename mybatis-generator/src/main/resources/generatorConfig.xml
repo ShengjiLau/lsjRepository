@@ -187,9 +187,11 @@
         <!--<table tableName="t_uc_user_group" domainObjectName="UserGroupRelation">-->
             <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
-
-        <table tableName="t_my_client_linkman" domainObjectName="ClientLinkman">
-            <generatedKey column="my_linkman_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        <table tableName="t_client" domainObjectName="Client">
+            <generatedKey column="client_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
+        <table tableName="t_client_linkman" domainObjectName="ClientLinkman">
+            <generatedKey column="linkman_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
 
 
