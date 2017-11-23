@@ -34,8 +34,8 @@
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="bind_cpid" jdbcType="BIGINT" property="bindCpid" />
     <result column="bind_company" jdbcType="VARCHAR" property="bindCompany" />
-    <collection property="myClientLinkmanList" column="my_client_id"
-                select="com.lcdt.client.MyLinkmanMapper.selectByMyClientId" />
+    <collection property="myClientLinkmanList" column="my_client_id" ofType="com.lcdt.client.model.MyClientLinkman" javaType="ArrayList"
+                select="com.lcdt.client.dao.MyClientLinkmanMapper.selectByMyClientId" />
 
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -135,10 +135,15 @@
     city, county, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
     attachment_1, attachment_2, invoice_title, registration_no, bank_name, bank_no, registration_address,
     tel_no1, invoice_remark, status, company_id,bind_cpid,bind_company
-    from t_my_client
+    from t_my_client t1
     <where>
-      company_id = #{companyId,jdbcType=BIGINT}
-      and client_type = #{clientType,jdbcType=SMALLINT}
+      1=1
+      <if test="companyId!=null">
+        and  company_id = #{companyId,jdbcType=BIGINT}
+      </if>
+      <if test="clientType!=null">
+        and  client_type = #{clientType,jdbcType=SMALLINT}
+      </if>
       <if test="province!=null and province!=''">
         and province = #{province,jdbcType=VARCHAR}
       </if>
