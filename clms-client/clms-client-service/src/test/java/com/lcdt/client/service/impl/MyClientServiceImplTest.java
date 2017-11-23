@@ -1,6 +1,7 @@
 package com.lcdt.client.service.impl;
 
 import com.lcdt.client.service.ClientService;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import static org.junit.Assert.assertTrue;
  * @AUTHOR liuh
  * @DATE 2017-11-16
  */
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class MyClientServiceImplTest {

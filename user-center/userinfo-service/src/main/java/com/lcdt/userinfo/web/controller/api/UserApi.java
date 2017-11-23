@@ -45,6 +45,8 @@ public class UserApi {
 	@RequestMapping(value = "/get", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
 	public User getUserInfo() {
 		User user = SecurityInfoGetter.getUser();
+		//从数据库读取用户信息
+		user = userService.selectUserByPhone(user.getPhone());
 		//将密码设置为空字符串
 		user.setPwd("");
 		return user;
