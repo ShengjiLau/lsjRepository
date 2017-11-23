@@ -190,4 +190,21 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 
+	@Override
+	public CompanyCertificate updateCompanyCert(CompanyCertificate companyCertificate){
+		certificateDao.updateByPrimaryKey(companyCertificate);
+		return companyCertificate;
+	}
+
+	@Override
+	public CompanyCertificate queryCertByCompanyId(Long companyId) {
+		List<CompanyCertificate> companyCertificates = certificateDao.selectByCompanyId(companyId);
+		if (companyCertificates != null) {
+			return companyCertificates.get(0);
+		}else {
+			return null;
+		}
+	}
+
+
 }
