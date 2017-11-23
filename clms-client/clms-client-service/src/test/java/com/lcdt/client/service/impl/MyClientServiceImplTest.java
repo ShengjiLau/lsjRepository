@@ -1,15 +1,11 @@
 package com.lcdt.client.service.impl;
 
-import com.github.pagehelper.PageInfo;
-import com.lcdt.client.model.MyClient;
-import com.lcdt.client.service.MyClientService;
+import com.lcdt.client.service.ClientService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -22,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 public class MyClientServiceImplTest {
 
     @Autowired
-    private MyClientService myClientService;
+    private ClientService myClientService;
 
     @Test
     public void getMyClientList() throws Exception {

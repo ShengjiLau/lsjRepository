@@ -1,8 +1,7 @@
-package com.lcdt.traffic.web.dto;
+package com.lcdt.client.web.dto;
 
-import com.lcdt.client.model.MyClient;
+import com.lcdt.client.model.Client;
 import com.lcdt.converter.ResponseData;
-import com.lcdt.userinfo.model.Department;
 
 import java.util.List;
 
@@ -11,15 +10,15 @@ import java.util.List;
  */
 public class ClientListDto implements ResponseData {
 
-    private List<MyClient> list;
+    private List<Client> list;
 
     private long total;
 
-    public List<MyClient> getList() {
+    public List<Client> getList() {
         return list;
     }
 
-    public void setList(List<MyClient> list) {
+    public void setList(List<Client> list) {
         this.list = list;
     }
 

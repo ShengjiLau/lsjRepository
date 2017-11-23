@@ -1,17 +1,15 @@
 package com.lcdt.client.service;
 
 import com.github.pagehelper.PageInfo;
-import com.lcdt.client.model.MyClient;
-import com.lcdt.client.model.MyClientLinkman;
+import com.lcdt.client.model.Client;
 
-import java.util.List;
 import java.util.Map;
 
 /**
  * @AUTHOR liuh
  * @DATE 2017-11-16
  */
-public interface MyClientService {
+public interface ClientService {
 
     /**
      * 根据查询条件获取客户列表
@@ -25,7 +23,7 @@ public interface MyClientService {
      * @param myClientId
      * @return
      */
-    MyClient getMyClientDetail(Long myClientId);
+    Client getMyClientDetail(Long myClientId);
 
    /* *//**
      * 更新客户信息

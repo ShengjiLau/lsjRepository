@@ -2,9 +2,9 @@ package com.lcdt.client.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.client.dao.MyClientMapper;
-import com.lcdt.client.model.MyClient;
-import com.lcdt.client.service.MyClientService;
+import com.lcdt.client.dao.ClientMapper;
+import com.lcdt.client.model.Client;
+import com.lcdt.client.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,10 +17,10 @@ import java.util.Map;
  */
 
 @com.alibaba.dubbo.config.annotation.Service
-public class MyClientServiceImpl implements MyClientService {
+public class ClientServiceImpl implements ClientService {
 
     @Autowired
-    private MyClientMapper myClientMapper;
+    private ClientMapper clientMapper;
 
 
     @Transactional(readOnly = true)
@@ -40,15 +40,15 @@ public class MyClientServiceImpl implements MyClientService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
-        List<MyClient> list = myClientMapper.selectByCondition(m);
+        List<Client> list = clientMapper.selectByCondition(m);
         PageInfo pageInfo = new PageInfo(list);
 
         return  pageInfo;
     }
 
     @Override
-    public MyClient getMyClientDetail(Long myClientId) {
-        return myClientMapper.selectByPrimaryKey(myClientId);
+    public Client getMyClientDetail(Long myClientId) {
+        return clientMapper.selectByPrimaryKey(myClientId);
     }
 
 /*    @Override
