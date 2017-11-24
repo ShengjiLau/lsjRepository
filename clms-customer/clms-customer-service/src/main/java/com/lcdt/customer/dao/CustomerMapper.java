@@ -3,6 +3,7 @@ package com.lcdt.customer.dao;
 import com.lcdt.customer.model.Customer;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CustomerMapper {
     /**
@@ -44,4 +45,7 @@ public interface CustomerMapper {
      * @mbg.generated Fri Nov 24 10:56:38 CST 2017
      */
     int updateByPrimaryKey(Customer record);
+
+    List<Customer> selectByCondition(Map map);
+
 }
