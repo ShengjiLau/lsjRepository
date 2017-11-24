@@ -64,6 +64,7 @@ public class ClientApi {
         ClientListDto dto1 = new ClientListDto();
         dto1.setList(pageInfo.getList());
         dto1.setTotal(pageInfo.getTotal());
+
         return dto1;
     }
 
