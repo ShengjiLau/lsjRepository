@@ -83,6 +83,28 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Transactional(readOnly = true)
 	@Override
+	public PageInfo deptmentTreeList(Map m) {
+		int pageNo = 1;
+		int pageSize = 0; //0表示所有
+
+		if (m.containsKey("page_no")) {
+			if (m.get("page_no") != null) {
+				pageNo = (Integer) m.get("page_no");
+			}
+		}
+		if (m.containsKey("page_size")) {
+			if (m.get("page_size") != null) {
+				pageSize = (Integer) m.get("page_size");
+			}
+		}
+		PageHelper.startPage(pageNo, pageSize);
+		List<Department> list = departmentMapper.departmentTreeList(m);
+		PageInfo pageInfo = new PageInfo(list);
+		return pageInfo;
+	}
+
+	@Transactional(readOnly = true)
+	@Override
 	public Long getMaxIndex(Map m) {
 		Long maxIndex = departmentMapper.getMaxIndex(m);
 		if (maxIndex == null) maxIndex = 0l;
