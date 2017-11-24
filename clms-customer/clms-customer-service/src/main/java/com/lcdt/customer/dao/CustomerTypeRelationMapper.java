@@ -45,4 +45,13 @@ public interface CustomerTypeRelationMapper {
      * @mbg.generated Fri Nov 24 10:56:38 CST 2017
      */
     int updateByPrimaryKey(CustomerTypeRelation record);
+
+    /***
+     * 清除客户对应的关系类型
+     * @param record
+     * @return
+     */
+    int deleteCustomerType(CustomerTypeRelation record);
+
+
 }

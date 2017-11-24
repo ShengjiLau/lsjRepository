@@ -34,6 +34,7 @@ public interface CustomerService {
      */
     Customer getCustomerDetail(Long customerId);
 
+
     /***
      * 新增客户
      * @param customer
@@ -41,28 +42,34 @@ public interface CustomerService {
      */
     int addCustomer(Customer customer) throws CustomerException;
 
+    /***
+     * 新增客户联系人
+     * @param customerContact
+     * @return
+     */
+    int addCustomerContact(CustomerContact customerContact);
 
     /***
      * 更新客户信息
      * @param customer
      * @return
      */
-    int updateCustomer(Customer customer);
-
+    int updateCustomer(Customer customer) throws CustomerException ;
 
     /**
      * 更新客户联系人信息
-     * @param CustomerContact
+     * @param customerContact
      * @return
      */
-    int updateCustomerContact(CustomerContact CustomerContact);
+    int updateCustomerContact(CustomerContact customerContact);
+
 
     /***
      * 获取客户联系人信息
      * @param contactId
      * @return
      */
-    CustomerContact getCustomerContactDetail(Long contactId);
+    CustomerContact customerContactDetail(Long contactId);
 
 
     /***
@@ -72,6 +79,13 @@ public interface CustomerService {
      */
     int oldCustomerContactIsNull(CustomerContact customerContact);
 
+
+    /***
+     * 删除客户联系人
+     * @param contactId
+     * @return
+     */
+    int customerContactRemove(Long contactId);
 
 
 }

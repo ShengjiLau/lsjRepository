@@ -8,7 +8,8 @@ import com.lcdt.customer.exception.CustomerException;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.model.CustomerContact;
 import com.lcdt.customer.service.CustomerService;
-import com.lcdt.customer.web.dto.CustomerAddParamsDto;
+import com.lcdt.customer.web.dto.CustomerParamsDto;
+import com.lcdt.customer.web.dto.CustomerContactParamsDto;
 import com.lcdt.customer.web.dto.CustomerListResultDto;
 import com.lcdt.customer.web.dto.CustomerListParamsDto;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -16,15 +17,14 @@ import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.alibaba.fastjson.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -96,11 +96,18 @@ public class CustomerApi {
     @ApiOperation("新增客户")
     @RequestMapping(value = "/customerAdd",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_add')")
-    public Customer customerAdd(@Validated CustomerAddParamsDto dto) {
+    public Customer customerAdd(@Validated CustomerParamsDto dto) {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
         Customer customer = new Customer();
-        return null;
+        BeanUtils.copyProperties(customer, dto);
+        customer.setCompanyId(companyId);
+        try {
+            customerService.addCustomer(customer);
+        } catch (CustomerException e) {
+            throw new CustomerException(e.getMessage());
+        }
+        return customer;
     }
 
 
@@ -111,9 +118,19 @@ public class CustomerApi {
      */
     @ApiOperation("客户编辑")
     @RequestMapping(value = "/customerEdit",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_add')")
-    public Customer customerEdit(@Validated CustomerListParamsDto dto) {
-        return null;
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_edit')")
+    public Customer customerEdit(@Validated CustomerParamsDto dto) {
+        //客户主表、联系人表、客户类型关系部分
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Customer customer = new Customer();
+        BeanUtils.copyProperties(customer, dto);
+        customer.setCompanyId(companyId);
+        try {
+            customerService.updateCustomer(customer);
+        } catch (CustomerException e) {
+            throw new CustomerException(e.getMessage());
+        }
+        return customer;
     }
 
 
@@ -187,10 +204,10 @@ public class CustomerApi {
         map.put("page_size", pageSize);
 
         PageInfo pageInfo = customerService.customerContactList(map);
-        CustomerListResultDto dto1 = new CustomerListResultDto();
-        dto1.setCustomerContactList(pageInfo.getList());
-        dto1.setTotal(pageInfo.getTotal());
-        return dto1;
+        CustomerListResultDto dto = new CustomerListResultDto();
+        dto.setCustomerContactList(pageInfo.getList());
+        dto.setTotal(pageInfo.getTotal());
+        return dto;
     }
 
 
@@ -207,7 +224,7 @@ public class CustomerApi {
     public String customerContactIsDefault(@ApiParam(value = "客户联系人ID",required = true) @RequestParam Long contactId,
                                      @ApiParam(value = "状态(1-设置默认，0-取消默认)",required = true) @RequestParam short isDefault) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        CustomerContact customerContact = customerService.getCustomerContactDetail(contactId);
+        CustomerContact customerContact = customerService.customerContactDetail(contactId);
         if (customerContact==null) {
             throw new CustomerContactException("联系人不存在！");
         }
@@ -235,8 +252,58 @@ public class CustomerApi {
         return jsonObject.toString();
     }
 
+    /**
+     * 新增客户联系人
+     *
+     * @return
+     */
+    @ApiOperation("新增客户联系人")
+    @RequestMapping(value = "/customerContactAdd",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_add')")
+    public CustomerContact customerContactAdd(@Validated CustomerContactParamsDto dto) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        CustomerContact vo = new CustomerContact();
+        BeanUtils.copyProperties(vo, dto);
+        vo.setCompanyId(companyId);
+        customerService.addCustomerContact(vo);
+        return vo;
+    }
 
 
+    /**
+     * 编辑客户联系人
+     *
+     * @return
+     */
+    @ApiOperation("编辑客户联系人")
+    @RequestMapping(value = "/customerContactEdit",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_add')")
+    public CustomerContact customerContactEdit(@Validated CustomerContactParamsDto dto) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        CustomerContact vo = new CustomerContact();
+        BeanUtils.copyProperties(vo, dto);
+        vo.setCompanyId(companyId);
+        customerService.updateCustomerContact(vo);
+        return vo;
+    }
+
+
+
+    /**
+     * 客户联系人删除
+     * @param contactId
+     * @return
+     */
+    @ApiOperation("客户联系人删除")
+    @RequestMapping(value = "/customerRemove",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_remove')")
+    public String customerContactRemove(@ApiParam(value = "客户联系人ID",required = true) @RequestParam Long contactId) {
+        int flag = customerService.customerContactRemove(contactId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message",flag==1?"删除成功！":"删除失败！");
+        jsonObject.put("code",flag==1?0:-1);
+        return jsonObject.toString();
+    }
 
 
 }

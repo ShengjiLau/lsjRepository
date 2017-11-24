@@ -59,7 +59,7 @@ public interface CustomerContactMapper {
 
     /**
      * 把旧的默认联系人置空
-     * @param CustomerContact
+     * @param customerContact
      * @return
      */
     int oldCustomerContactIsNull(CustomerContact customerContact);

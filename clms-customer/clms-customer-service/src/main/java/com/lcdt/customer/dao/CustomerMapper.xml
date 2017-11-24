@@ -293,6 +293,11 @@
       <if test="complexStr!=null and complexStr!=''">
         and (client_name like '%#{complexStr,jdbcType=VARCHAR}%' or short_name like'%#{complexStr,jdbcType=VARCHAR}%' or customer_code like '%#{complexStr,jdbcType=VARCHAR}%')
       </if>
+      <!--这块只限编辑查询用BEGIN-->
+      <if test="customerId!=null">
+        and  customer_id &lt;&gt; #{customerId,jdbcType=BIGINT}
+      </if>
+      <!--这块只限编辑查询用END-->
     </where>
     order by customer_id
   </select>
