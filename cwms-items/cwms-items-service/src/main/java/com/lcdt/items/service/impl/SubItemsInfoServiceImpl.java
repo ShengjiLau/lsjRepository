@@ -38,39 +38,33 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     @Override
     public int addSubItemsInfo(SubItemsInfoDto subItemsInfoDto) {
         int result = 0;
-        try {
-            SubItemsInfo subItemsInfo = SubItemsInfoDtoToSubItemsInfoUtil.parseSubItemsInfo(subItemsInfoDto);
-            result = subItemsInfoMapper.insert(subItemsInfo);
+        SubItemsInfo subItemsInfo = SubItemsInfoDtoToSubItemsInfoUtil.parseSubItemsInfo(subItemsInfoDto);
+        result = subItemsInfoMapper.insert(subItemsInfo);
 
-            //子商品自定义属性值
-            if (subItemsInfoDto.getCustomValueList() != null) {
-                for (int i = 0; i < subItemsInfoDto.getCustomValueList().size(); i++) {
-                    subItemsInfoDto.getCustomValueList().get(i).setSubItemId(subItemsInfo.getSubItemId());
-                }
-                result += customValueMapper.insertForBatch(subItemsInfoDto.getCustomValueList());
+        //子商品自定义属性值
+        if (subItemsInfoDto.getCustomValueList() != null) {
+            for (int i = 0; i < subItemsInfoDto.getCustomValueList().size(); i++) {
+                subItemsInfoDto.getCustomValueList().get(i).setSubItemId(subItemsInfo.getSubItemId());
             }
-
-            if(subItemsInfoDto.getItemSpecKeyValueDtoList()!=null){
-                List<ItemSpecKeyValue> itemSpecKeyValueList=new ArrayList<ItemSpecKeyValue>();
-                for(int i=0;i<subItemsInfoDto.getItemSpecKeyValueDtoList().size();i++){
-                    ItemSpecKeyValueDto itemSpecKeyValueDto=subItemsInfoDto.getItemSpecKeyValueDtoList().get(i);
-                    ItemSpecKeyValue itemSpecKeyValue=new ItemSpecKeyValue();
-                    itemSpecKeyValue.setSpkId(itemSpecKeyValueDto.getSpkId());
-                    itemSpecKeyValue.setSpName(itemSpecKeyValueDto.getSpName());
-                    itemSpecKeyValue.setSpvId(itemSpecKeyValueDto.getSpvId());
-                    itemSpecKeyValue.setSpValue(itemSpecKeyValueDto.getSpValue());
-                    itemSpecKeyValue.setCompanyId(subItemsInfo.getCompanyId());
-                    itemSpecKeyValue.setSubItemId(subItemsInfo.getSubItemId());
-                    itemSpecKeyValueList.add(itemSpecKeyValue);
-                }
-                result+=itemSpecKeyValueMapper.insertForBatch(itemSpecKeyValueList);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return result;
+            result += customValueMapper.insertForBatch(subItemsInfoDto.getCustomValueList());
         }
+
+        if (subItemsInfoDto.getItemSpecKeyValueDtoList() != null) {
+            List<ItemSpecKeyValue> itemSpecKeyValueList = new ArrayList<ItemSpecKeyValue>();
+            for (int i = 0; i < subItemsInfoDto.getItemSpecKeyValueDtoList().size(); i++) {
+                ItemSpecKeyValueDto itemSpecKeyValueDto = subItemsInfoDto.getItemSpecKeyValueDtoList().get(i);
+                ItemSpecKeyValue itemSpecKeyValue = new ItemSpecKeyValue();
+                itemSpecKeyValue.setSpkId(itemSpecKeyValueDto.getSpkId());
+                itemSpecKeyValue.setSpName(itemSpecKeyValueDto.getSpName());
+                itemSpecKeyValue.setSpvId(itemSpecKeyValueDto.getSpvId());
+                itemSpecKeyValue.setSpValue(itemSpecKeyValueDto.getSpValue());
+                itemSpecKeyValue.setCompanyId(subItemsInfo.getCompanyId());
+                itemSpecKeyValue.setSubItemId(subItemsInfo.getSubItemId());
+                itemSpecKeyValueList.add(itemSpecKeyValue);
+            }
+            result += itemSpecKeyValueMapper.insertForBatch(itemSpecKeyValueList);
+        }
+        return result;
     }
 
     @Override
@@ -82,7 +76,7 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
             //子商品自定义属性删除
             result += customValueMapper.deleteItemAndSubItemId(null, subItemId.toString());
 
-            result+=itemSpecKeyValueMapper.deleteBySubItemId(subItemId);
+            result += itemSpecKeyValueMapper.deleteBySubItemId(subItemId);
 
         } catch (Exception e) {
             e.printStackTrace();

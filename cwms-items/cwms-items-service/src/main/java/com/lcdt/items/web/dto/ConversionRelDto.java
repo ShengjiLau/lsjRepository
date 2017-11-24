@@ -1,37 +1,32 @@
-package com.lcdt.items.dto;
+package com.lcdt.items.web.dto;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Created by lyqishan on 06/11/2017
  */
 
 public class ConversionRelDto {
+
+    @ApiModelProperty(value = "多单位id",required = true)
     private Long converId;
+
+    @ApiModelProperty(value = "最小单位id",required = true)
     private Long unitId;
+
+    @ApiModelProperty(value = "最小单位名字",required = true)
     private String unitName;
+
+    @ApiModelProperty(value = "多单位第一个单位换算关系数",required = true)
     private Integer data1;
+    @ApiModelProperty(value = "多单位第一个单位id",required = true)
     private Long unitId1;
+    @ApiModelProperty(value = "多单位第一个单位名字",required = true)
     private String unitName1;
+
     private Integer data2;
     private Long unitId2;
     private String unitName2;
-    private Long companyId;
-
-
-    public ConversionRelDto() {
-    }
-
-    public ConversionRelDto(Long converId, Long unitId, String unitName, Integer data1, Long unitId1, String unitName1, Integer data2, Long unitId2, String unitName2, Long companyId) {
-        this.converId = converId;
-        this.unitId = unitId;
-        this.unitName = unitName;
-        this.data1 = data1;
-        this.unitId1 = unitId1;
-        this.unitName1 = unitName1;
-        this.data2 = data2;
-        this.unitId2 = unitId2;
-        this.unitName2 = unitName2;
-        this.companyId = companyId;
-    }
 
     public Long getConverId() {
         return converId;
@@ -103,13 +98,5 @@ public class ConversionRelDto {
 
     public void setUnitName2(String unitName2) {
         this.unitName2 = unitName2;
-    }
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
     }
 }

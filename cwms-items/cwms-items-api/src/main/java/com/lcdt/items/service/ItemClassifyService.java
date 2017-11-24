@@ -1,6 +1,5 @@
 package com.lcdt.items.service;
 
-import com.lcdt.items.dto.ItemClassifyDto;
 import com.lcdt.items.model.ItemClassify;
 import com.lcdt.items.model.ItemClassifyDao;
 
@@ -16,10 +15,10 @@ public interface ItemClassifyService {
     /**
      * 增加商品分类 ItemClassify
      *
-     * @param itemClassifyDto
+     * @param itemClassify
      * @return
      */
-    int addItemClassify(ItemClassifyDto itemClassifyDto);
+    ItemClassify addItemClassify(ItemClassify itemClassify);
 
     /**
      * 根据商品分类classifyId删除商品分类
@@ -40,10 +39,10 @@ public interface ItemClassifyService {
     /**
      * 根据商品classifyId修改商品分类
      *
-     * @param itemClassifyDto
+     * @param itemClassify
      * @return
      */
-    int modifyByPrimaryKey(ItemClassifyDto itemClassifyDto);
+    int modifyByPrimaryKey(ItemClassify itemClassify);
 
     /**
      * 根据classifyId查询商品分类

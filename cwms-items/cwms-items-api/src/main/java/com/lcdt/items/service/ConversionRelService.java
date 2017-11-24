@@ -1,6 +1,5 @@
 package com.lcdt.items.service;
 
-import com.lcdt.items.dto.ConversionRelDto;
 import com.lcdt.items.model.ConversionRel;
 
 /**
@@ -10,10 +9,10 @@ import com.lcdt.items.model.ConversionRel;
 public interface ConversionRelService {
     /**
      * 增加一个多单位计算
-     * @param conversionRelDto
+     * @param conversionRel
      * @return
      */
-    ConversionRel addConversionRel(ConversionRelDto conversionRelDto);
+    ConversionRel addConversionRel(ConversionRel conversionRel);
 
     /**
      * 根据converId删除一个多单位
@@ -24,10 +23,10 @@ public interface ConversionRelService {
 
     /**
      * 根据converId修改一个多单位
-     * @param conversionRelDto
+     * @param conversionRel
      * @return
      */
-    int modifyConversionRel(ConversionRelDto conversionRelDto);
+    int modifyConversionRel(ConversionRel conversionRel);
 
     /**
      * 根据converId查询ConversionRel
