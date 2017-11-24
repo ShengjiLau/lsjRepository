@@ -45,4 +45,11 @@ public interface ItemSpecificationService {
      */
     List<ItemSpecificationDao> querySpecification(Long companyId);
 
+    /**
+     * 根据自定义规格名主键删除 规格名和规格值 add by liuh
+     * @param spkId
+     * @return
+     */
+    int deleteSpecificationKeyAndValueBySpkId(Long spkId);
+
 }

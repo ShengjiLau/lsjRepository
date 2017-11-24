@@ -1,5 +1,9 @@
 package com.lcdt.items.dto;
 
+
+import com.lcdt.items.model.ItemSpecValue;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.List;
 
 /**
@@ -7,10 +11,15 @@ import java.util.List;
  */
 
 public class ItemSpecKeyDto {
+
     private Long spkId;
+
+    @NotEmpty(message = "规格名称spName不能为空")
     private String spName;
+
     private Long companyId;
-    List<ItemSpecValueDto> itemSpecValueDtoList;
+
+    private List<ItemSpecValue> itemSpecValueList;
 
     public Long getSpkId() {
         return spkId;
@@ -36,11 +45,11 @@ public class ItemSpecKeyDto {
         this.companyId = companyId;
     }
 
-    public List<ItemSpecValueDto> getItemSpecValueDtoList() {
-        return itemSpecValueDtoList;
+    public List<ItemSpecValue> getItemSpecValueList() {
+        return itemSpecValueList;
     }
 
-    public void setItemSpecValueDtoList(List<ItemSpecValueDto> itemSpecValueDtoList) {
-        this.itemSpecValueDtoList = itemSpecValueDtoList;
+    public void setItemSpecValueList(List<ItemSpecValue> itemSpecValueList) {
+        this.itemSpecValueList = itemSpecValueList;
     }
 }

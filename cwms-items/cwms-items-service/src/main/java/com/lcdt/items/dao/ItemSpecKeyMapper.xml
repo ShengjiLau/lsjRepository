@@ -78,4 +78,9 @@
     from t_item_spec_key
     where company_id = #{companyId,jdbcType=BIGINT}
   </select>
+  <select id="selectSpecificationBySpName" resultMap="BaseResultMap">
+    select spk_id, sp_name, company_id
+    from t_item_spec_key
+    where company_id = #{0} and sp_name=#{1}
+  </select>
 </mapper>

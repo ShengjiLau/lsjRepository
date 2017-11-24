@@ -28,14 +28,19 @@ public class ItemSpecificationServiceImpl implements ItemSpecificationService {
 
     @Override
     public int addSpecification(ItemSpecKeyDto itemSpecKeyDto) {
+        //获取属性名是否存在
+        List<ItemSpecKey> itemSpecKeyList = itemSpecKeyMapper.selectSpecificationBySpName(itemSpecKeyDto.getCompanyId(), itemSpecKeyDto.getSpName());
+        if (itemSpecKeyList.size() > 0) {
+            throw new RuntimeException("商品属性名已经存在");    //如果属性名已存在就直接抛出异常
+        }
         int reslut = 0;
         try {
             ItemSpecKey itemSpecKey = new ItemSpecKey();
             itemSpecKey.setSpName(itemSpecKeyDto.getSpName());
             itemSpecKey.setCompanyId(itemSpecKeyDto.getCompanyId());
             reslut += itemSpecKeyMapper.insert(itemSpecKey);
-            if (itemSpecKeyDto.getItemSpecValueDtoList() != null) {
-                for (ItemSpecValueDto dto : itemSpecKeyDto.getItemSpecValueDtoList()) {
+            if (itemSpecKeyDto.getItemSpecValueList() != null) {
+                for (ItemSpecValue dto : itemSpecKeyDto.getItemSpecValueList()) {
                     ItemSpecValue itemSpecValue = new ItemSpecValue();
                     itemSpecValue.setSpValue(dto.getSpValue());
                     itemSpecValue.setSpkId(itemSpecKey.getSpkId());
@@ -84,7 +89,26 @@ public class ItemSpecificationServiceImpl implements ItemSpecificationService {
             itemSpecKey.setSpName(itemSpecKeyDto.getSpName());
             itemSpecKey.setCompanyId(itemSpecKeyDto.getCompanyId());
             reslut += itemSpecKeyMapper.updateByPrimaryKey(itemSpecKey);
-            if (itemSpecKeyDto.getItemSpecValueDtoList() != null) {
+            /**
+             * //mod by liuh
+             * 修改属性值会有三种情况：
+             * 1.修改原来的规格值得更新
+             * 2.新增规格值的需要新增
+             * 3.删除的规格值需要删除
+             * 介于处理这三种情况处理比较繁琐，所以直接采用删除关联值，然后重新新增的方式
+             */
+            itemSpecValueMapper.deleteBySpkId(itemSpecKeyDto.getSpkId());   //删除规格关联的属性值
+            if (itemSpecKeyDto.getItemSpecValueList() != null) {
+                for (ItemSpecValue dto : itemSpecKeyDto.getItemSpecValueList()) {
+                    ItemSpecValue itemSpecValue = new ItemSpecValue();
+                    itemSpecValue.setSpvId(dto.getSpvId());
+                    itemSpecValue.setSpValue(dto.getSpValue());
+                    itemSpecValue.setCompanyId(dto.getCompanyId());
+                    itemSpecValue.setSpkId(itemSpecKey.getSpkId());
+                    reslut += itemSpecValueMapper.insert(itemSpecValue);
+                }
+            }
+            /*if (itemSpecKeyDto.getItemSpecValueDtoList() != null) {
                 for (ItemSpecValueDto dto : itemSpecKeyDto.getItemSpecValueDtoList()) {
                     ItemSpecValue itemSpecValue = new ItemSpecValue();
                     itemSpecValue.setSpvId(dto.getSpvId());
@@ -97,7 +121,7 @@ public class ItemSpecificationServiceImpl implements ItemSpecificationService {
                         reslut += itemSpecValueMapper.updateByPrimaryKey(itemSpecValue);
                     }
                 }
-            }
+            }*/
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -107,13 +131,21 @@ public class ItemSpecificationServiceImpl implements ItemSpecificationService {
 
     @Override
     public List<ItemSpecificationDao> querySpecification(Long companyId) {
-        List<ItemSpecificationDao> resultList=null;
-        try{
-            resultList=itemSpecKeyMapper.selectSpecificationList(companyId);
-        }catch (Exception e){
+        List<ItemSpecificationDao> resultList = null;
+        try {
+            resultList = itemSpecKeyMapper.selectSpecificationList(companyId);
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             return resultList;
         }
+    }
+
+    @Override
+    public int deleteSpecificationKeyAndValueBySpkId(Long spkId) {
+        int result = 0;
+        result += itemSpecKeyMapper.deleteByPrimaryKey(spkId);
+        result += itemSpecValueMapper.deleteBySpkId(spkId);
+        return result;
     }
 }

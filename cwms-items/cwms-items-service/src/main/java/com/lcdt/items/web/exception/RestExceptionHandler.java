@@ -19,12 +19,12 @@ public class RestExceptionHandler {
 
 	@org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
 	@ResponseBody
-	public String defaultErrorHandler(HttpServletRequest request,Exception e){
+	public JSONObject defaultErrorHandler(HttpServletRequest request,Exception e){
 		logger.error(e.getMessage(),e);
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("code", -1);
 		jsonObject.put("message", e.getMessage()==null?"空指针异常":e.getMessage());
-		return jsonObject.toString();
+		return jsonObject;
 	}
 
 }
