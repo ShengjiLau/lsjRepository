@@ -40,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(readOnly = true)
     @Override
-    public PageInfo getCustomerList(Map m) {
+    public PageInfo customerList(Map m) {
         int pageNo = 1;
         int pageSize = 0; //0表示所有
 
@@ -69,13 +69,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transient
     @Override
-    public int addCustomer(Customer customer) {
+    public int addCustomer(Customer customer) throws CustomerException {
         Map map = new HashMap();
         map.put("companyId", customer.getCompanyId());
         map.put("clientName", customer.getCustomerName());
         List<Customer> list = customerMapper.selectByCondition(map);
         if (list.size()>0) {
-            throw new CustomerException("客户名称已存在");
+            throw new CustomerException("客户已存在，请联系管理员分配！");
         }
         int flag = customerMapper.insert(customer);
         if (flag>0) {
@@ -112,7 +112,56 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
+    @Transient
+    @Override
+    public int updateCustomer(Customer customer) {
+        return customerMapper.updateByPrimaryKey(customer);
+    }
 
+
+    @Transactional(readOnly = true)
+    @Override
+    public PageInfo customerContactList(Map m) {
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+
+        if (m.containsKey("page_no")) {
+            if (m.get("page_no") != null) {
+                pageNo = (Integer) m.get("page_no");
+            }
+        }
+        if (m.containsKey("page_size")) {
+            if (m.get("page_size") != null) {
+                pageSize = (Integer) m.get("page_size");
+            }
+        }
+        PageHelper.startPage(pageNo, pageSize);
+        List<CustomerContact> list = customerContactMapper.selectByCondition(m);
+        PageInfo pageInfo = new PageInfo(list);
+
+        return  pageInfo;
+    }
+
+    @Transactional
+    @Override
+    public int updateCustomerContact(CustomerContact CustomerContact) {
+        return customerContactMapper.updateByPrimaryKey(CustomerContact);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public CustomerContact getCustomerContactDetail(Long contactId) {
+        return customerContactMapper.selectByPrimaryKey(contactId);
+    }
+
+    @Override
+    public int oldCustomerContactIsNull(CustomerContact customerContact) {
+
+
+
+
+        return customerContactMapper.oldCustomerContactIsNull(customerContact);
+    }
 
 
 /*    @Override

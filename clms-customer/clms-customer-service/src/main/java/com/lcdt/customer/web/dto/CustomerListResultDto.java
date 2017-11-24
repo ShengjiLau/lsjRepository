@@ -2,15 +2,18 @@ package com.lcdt.customer.web.dto;
 
 import com.lcdt.converter.ResponseData;
 import com.lcdt.customer.model.Customer;
+import com.lcdt.customer.model.CustomerContact;
 
 import java.util.List;
 
 /**
  * Created by yangbinq on 2017/11/21.
  */
-public class CustomerListDto implements ResponseData {
+public class CustomerListResultDto implements ResponseData {
 
     private List<Customer> list;
+
+    private List<CustomerContact> customerContactList;
 
     private long total;
 
@@ -28,5 +31,13 @@ public class CustomerListDto implements ResponseData {
 
     public void setTotal(long total) {
         this.total = total;
+    }
+
+    public List<CustomerContact> getCustomerContactList() {
+        return customerContactList;
+    }
+
+    public void setCustomerContactList(List<CustomerContact> customerContactList) {
+        this.customerContactList = customerContactList;
     }
 }

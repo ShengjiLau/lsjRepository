@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Created by yangbinq on 2017/11/21.
  */
-public class CustomerParamsDto {
+public class CustomerListParamsDto {
 
     @ApiModelProperty(value = "综合条件(客户姓名/简称/编码)")
     private String complexContition;

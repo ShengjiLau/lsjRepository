@@ -1061,12 +1061,4 @@ public class Customer {
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
-
-    public List<CustomerContact> getCustomerContactList() {
-        return customerContactList;
-    }
-
-    public void setCustomerContactList(List<CustomerContact> customerContactList) {
-        this.customerContactList = customerContactList;
-    }
 }
