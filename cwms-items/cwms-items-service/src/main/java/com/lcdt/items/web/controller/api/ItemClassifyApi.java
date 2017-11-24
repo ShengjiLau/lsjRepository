@@ -35,6 +35,7 @@ public class ItemClassifyApi {
         itemClassify.setPid(pid);
         itemClassify.setClassifyName(classifyName);
         itemClassify.setCompanyId(8L);
+        itemClassify.setIsDefault(false);
         if (itemClassifyService.addItemClassify(itemClassify) != null) {
             return itemClassify;
         } else {
@@ -61,12 +62,14 @@ public class ItemClassifyApi {
     @PostMapping("/update")
     public JSONObject modifyItemClassify(HttpSession httpSession, @ApiParam(value = "分类id", required = true) @RequestParam Long classifyId,
                                          @ApiParam(value = "分类名字", required = true) @RequestParam String classifyName,
-                                         @ApiParam(value = "父类id", required = true) @RequestParam Long pid) {
+                                         @ApiParam(value = "父类id", required = true) @RequestParam Long pid,
+                                         @ApiParam(value = "是否是默认分类", required = true) @RequestParam boolean isDefault) {
         Long companyId = 8L;
         ItemClassify itemClassify = new ItemClassify();
         itemClassify.setClassifyId(classifyId);
         itemClassify.setClassifyName(classifyName);
         itemClassify.setPid(pid);
+        itemClassify.setIsDefault(isDefault);
         itemClassify.setCompanyId(companyId);
         int result = itemClassifyService.modifyByPrimaryKey(itemClassify);
         if (result > 0) {

@@ -109,33 +109,4 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
         return itemClassifyDaoList;
     }
 
-    @Override
-    public String queryCassifyIdAndAllChildrenClassifyIds(Long classifyId) {
-        return queryChildrenClassifyIds(classifyId);
-    }
-
-    @Override
-    public List<ItemClassify> testFunction(Long classifyId) {
-
-        return itemClassifyMapper.testFunction(classifyId);
-    }
-
-    /**
-     * 递归查询子分类并返回字符串
-     *
-     * @param pid
-     * @return
-     */
-    private String queryChildrenClassifyIds(Long pid) {
-        List<ItemClassify> itemClassifyList = null;
-        StringBuilder classifyIds = new StringBuilder(pid.toString());
-        itemClassifyList = itemClassifyMapper.selectClassifyByPid(pid);
-        if (itemClassifyList != null && itemClassifyList.size() > 0) {
-            for (ItemClassify list : itemClassifyList) {
-                classifyIds.append(",").append(queryChildrenClassifyIds(list.getClassifyId()));
-            }
-        }
-        return classifyIds.toString();
-    }
-
 }

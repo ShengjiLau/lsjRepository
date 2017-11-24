@@ -82,13 +82,5 @@ public interface ItemClassifyService {
      */
     List<ItemClassifyDao> queryItemClassifyAndChildren(Long companyId);
 
-    /**
-     * 根据分类 classifyId 查询此分类id和所有子分类id ,以 , 分开，组装成字符串（ 1,2,3,4 ）
-     * @param classifyId
-     * @return
-     */
-    String queryCassifyIdAndAllChildrenClassifyIds(Long classifyId);
-
-    List<ItemClassify> testFunction(Long classifyId);
 
 }
