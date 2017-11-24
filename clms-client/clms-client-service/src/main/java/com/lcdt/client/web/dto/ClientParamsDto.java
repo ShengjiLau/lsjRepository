@@ -22,6 +22,9 @@ public class ClientParamsDto {
     @ApiModelProperty(value = "状态  1-开启 0-停用")
     private Integer status;
 
+    @ApiModelProperty(required = true, value = "组ID")
+    private String groupIds;
+
 
     public String getComplexContition() {
         return complexContition;
@@ -61,5 +64,13 @@ public class ClientParamsDto {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getGroupIds() {
+        return groupIds;
+    }
+
+    public void setGroupIds(String groupIds) {
+        this.groupIds = groupIds;
     }
 }

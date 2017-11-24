@@ -188,6 +188,7 @@ public class DepartmentApi {
                 childList.add(tobj);
             }
         }
+
         for (Department department : childList) {
             List<Department> list1 = getChild(department);
             if (list1!=null && list1.size()>0) {
