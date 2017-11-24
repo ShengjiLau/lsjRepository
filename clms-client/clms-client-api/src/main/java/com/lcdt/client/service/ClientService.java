@@ -16,14 +16,30 @@ public interface ClientService {
      * @param m
      * @return
      */
-    PageInfo getMyClientList(Map m);
+    PageInfo getClientList(Map m);
 
     /**
      * 获取客户详情信息
      * @param myClientId
      * @return
      */
-    Client getMyClientDetail(Long myClientId);
+    Client getClientDetail(Long myClientId);
+
+
+    /***
+     * 新增客户
+     * @param myClient
+     * @return
+     */
+    int addClient(Client myClient);
+
+
+
+
+    /**
+
+
+
 
    /* *//**
      * 更新客户信息
@@ -32,12 +48,7 @@ public interface ClientService {
      *//*
     int updateMyClient(MyClient myClient);
 
-    *//**
-     * 新增客户信息
-     * @param myClient
-     * @return
-     *//*
-    int addMyClient(MyClient myClient);
+
 
     *//**
      * 删除客户信息

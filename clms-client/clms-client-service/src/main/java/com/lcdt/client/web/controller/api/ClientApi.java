@@ -26,13 +26,12 @@ import java.util.Map;
  * Created by yangbinq on 2017/11/20.
  */
 @RestController
-@RequestMapping("/api/traffic/client")
-@Api(value = "客户接口",description = "运输客户模块接口")
+@RequestMapping("/api/client")
+@Api(value = "客户接口",description = "客户模块接口")
 public class ClientApi {
 
     @Autowired
     private ClientService clientService;
-
 
     @ApiOperation("我的客户列表")
     @RequestMapping(value = "/clientList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
@@ -40,13 +39,12 @@ public class ClientApi {
     public ClientListDto clientList(@Validated ClientParamsDto dto,
                                     @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                     @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
-
-      Long companyId = SecurityInfoGetter.getCompanyId();
+        Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);
         map.put("page_no", pageNo);
         map.put("page_size", pageSize);
-        //map.put("clientType", ConstantVO.TRAFFIC_CLIENT_TYPE);//运输客户
+
         if (StringUtil.isNotEmpty(dto.getComplexContition())) {
            map.put("complexStr",dto.getComplexContition());
         }
@@ -62,33 +60,25 @@ public class ClientApi {
         if (StringUtil.isNotEmpty(dto.getCounty())) {
             map.put("county",dto.getCounty());
         }
-        PageInfo pageInfo = clientService.getMyClientList(map);
+        PageInfo pageInfo = clientService.getClientList(map);
         ClientListDto dto1 = new ClientListDto();
         dto1.setList(pageInfo.getList());
         dto1.setTotal(pageInfo.getTotal());
         return dto1;
     }
 
-
     /**
      * 客户详情
-     *
      * @return
      */
-/*
+
     @ApiOperation("客户详情")
     @RequestMapping(value = "/clientDetail",method = RequestMethod.POST)
    // @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_client_list')")
-    public MyClient clientDetail(@ApiParam(value = "客户ID",required = true) @RequestParam Long myClientId) {
+    public Client clientDetail(@ApiParam(value = "客户ID",required = true) @RequestParam Long myClientId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        return myClientService.getMyClientDetail(myClientId);
+        return clientService.getClientDetail(myClientId);
     }
-*/
-
-
-
-
-
 
     /**
      * 客户新增
@@ -99,16 +89,11 @@ public class ClientApi {
     @RequestMapping(value = "/clientAdd",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('client_add')")
     public Client clientAdd(@Validated ClientParamsDto dto) {
-
+        //客户主表、联系人表、客户类型关系部分
 
 
         return null;
     }
-
-
-
-
-
 
     /**
      * 客户编辑

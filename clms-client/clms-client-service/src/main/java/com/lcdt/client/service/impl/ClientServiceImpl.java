@@ -2,12 +2,20 @@ package com.lcdt.client.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.client.dao.ClientLinkmanMapper;
 import com.lcdt.client.dao.ClientMapper;
+import com.lcdt.client.dao.ClientTypeRelationMapper;
+import com.lcdt.client.exception.ClientException;
 import com.lcdt.client.model.Client;
+import com.lcdt.client.model.ClientLinkman;
+import com.lcdt.client.model.ClientTypeRelation;
 import com.lcdt.client.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.beans.Transient;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,16 +24,21 @@ import java.util.Map;
  * @DATE 2017-11-16
  */
 
-@com.alibaba.dubbo.config.annotation.Service
 public class ClientServiceImpl implements ClientService {
 
     @Autowired
     private ClientMapper clientMapper;
 
+    @Autowired
+    private ClientLinkmanMapper clientLinkmanMapper;
+
+    @Autowired
+    private ClientTypeRelationMapper clientTypeRelationMapper;
+
 
     @Transactional(readOnly = true)
     @Override
-    public PageInfo getMyClientList(Map m) {
+    public PageInfo getClientList(Map m) {
         int pageNo = 1;
         int pageSize = 0; //0表示所有
 
@@ -47,9 +60,58 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client getMyClientDetail(Long myClientId) {
+    public Client getClientDetail(Long myClientId) {
         return clientMapper.selectByPrimaryKey(myClientId);
     }
+
+
+    @Transient
+    @Override
+    public int addClient(Client client) {
+        Map map = new HashMap();
+        map.put("companyId", client.getCompanyId());
+        map.put("clientName", client.getClientName());
+        List<Client> list = clientMapper.selectByCondition(map);
+        if (list.size()>0) {
+            throw new ClientException("客户名称已存在");
+        }
+        int flag = clientMapper.insert(client);
+        if (flag>0) {
+            //默认联系人
+            ClientLinkman clientLinkman = new ClientLinkman();
+            clientLinkman.setName(client.getLinkMan());
+            clientLinkman.setDuty(client.getLinkDuty());
+            clientLinkman.setMobile(client.getLinkTel());
+            clientLinkman.setMail(client.getLinkEmail());
+            clientLinkman.setIsDefault((short) 1); //默认联系人
+            clientLinkman.setCompanyId(client.getCompanyId());
+            clientLinkman.setProvince(client.getProvince());
+            clientLinkman.setCity(client.getCity());
+            clientLinkman.setCounty(client.getCounty());
+            clientLinkman.setDetailAddress(client.getDetailAddress());
+            clientLinkman.setClientId(client.getClientId());
+            clientLinkmanMapper.insert(clientLinkman);
+
+            //组关系表
+            if (!StringUtils.isEmpty(client.getClientTypes())) {
+                String[] typeArrays = client.getClientTypes().split(",");  //传过来的值用逗号隔开
+                for (int i=0; i<typeArrays.length; i++) {
+
+                    ClientTypeRelation relationObj = new ClientTypeRelation();
+                    relationObj.setClientId(client.getClientId());
+                    relationObj.setClientName(client.getClientName());
+                    relationObj.setClientType(Short.valueOf(typeArrays[i]));
+                    relationObj.setCompanyId(client.getCompanyId());
+                    clientTypeRelationMapper.insert(relationObj);
+                }
+            }
+        }
+        return flag;
+    }
+
+
+
+
 
 /*    @Override
     public List<MyClientLinkman> getMyClientLinkman(Long myClientId) {
@@ -61,10 +123,6 @@ public class ClientServiceImpl implements ClientService {
         return myClientMapper.updateByPrimaryKey(myClient);
     }
 
-    @Override
-    public int addMyClient(MyClient myClient) {
-        return myClientMapper.insert(myClient);
-    }
 
     @Override
     public int delMyClient(Long myClientId) {
