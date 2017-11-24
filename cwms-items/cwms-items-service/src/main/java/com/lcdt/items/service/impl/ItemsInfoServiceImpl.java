@@ -45,39 +45,34 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     @Override
     public int addItemsInfo(ItemsInfoDto itemsInfoDto) {
         int result = 0;
-        try {
-            ItemsInfo itemsInfo = ItemsInfoDtoToItemsInfoUtil.parseItemsInfo(itemsInfoDto);
+        ItemsInfo itemsInfo = ItemsInfoDtoToItemsInfoUtil.parseItemsInfo(itemsInfoDto);
 
-            //新增商品
-            result += itemsInfoMapper.insert(itemsInfo);
+        //新增商品
+        result += itemsInfoMapper.insert(itemsInfo);
 
-            //自定义属性值
-            if (itemsInfoDto.getCustomValueList() != null) {
-                for (int i = 0; i < itemsInfoDto.getCustomValueList().size(); i++) {
-                    itemsInfoDto.getCustomValueList().get(i).setItemId(itemsInfo.getItemId());
-                }
-                result += customValueMapper.insertForBatch(itemsInfoDto.getCustomValueList());
+        //自定义属性值
+        if (itemsInfoDto.getCustomValueList() != null) {
+            for (int i = 0; i < itemsInfoDto.getCustomValueList().size(); i++) {
+                itemsInfoDto.getCustomValueList().get(i).setItemId(itemsInfo.getItemId());
             }
-
-            //判断商品类型 1、单规格商品，2、多规格商品，3、组合商品
-            if (itemsInfoDto.getItemType() == 1 || itemsInfoDto.getItemType() == 2) {
-                //判断子商品是否为空
-                if (itemsInfoDto.getSubItemsInfoDtoList() != null) {
-                    for (SubItemsInfoDto dto : itemsInfoDto.getSubItemsInfoDtoList()) {
-                        //新增子商品
-                        //给dto增加商品itemsId
-                        dto.setItemId(itemsInfo.getItemId());
-                        dto.setCompanyId(itemsInfo.getCompanyId());
-                        subItemsInfoService.addSubItemsInfo(dto);
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return result;
+            result += customValueMapper.insertForBatch(itemsInfoDto.getCustomValueList());
         }
+
+        //判断商品类型 1、单规格商品，2、多规格商品，3、组合商品
+        if (itemsInfoDto.getItemType() == 1 || itemsInfoDto.getItemType() == 2) {
+            //判断子商品是否为空
+            if (itemsInfoDto.getSubItemsInfoDtoList() != null) {
+                for (SubItemsInfoDto dto : itemsInfoDto.getSubItemsInfoDtoList()) {
+                    //新增子商品
+                    //给dto增加商品itemsId
+                    dto.setItemId(itemsInfo.getItemId());
+                    dto.setCompanyId(itemsInfo.getCompanyId());
+                    result+=subItemsInfoService.addSubItemsInfo(dto);
+                }
+            }
+        }
+
+        return result;
     }
 
     @Override

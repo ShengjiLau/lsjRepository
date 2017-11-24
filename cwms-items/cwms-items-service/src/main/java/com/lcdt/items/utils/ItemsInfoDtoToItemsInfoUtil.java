@@ -36,7 +36,12 @@ public class ItemsInfoDtoToItemsInfoUtil {
         itemsInfo.setUnitId(itemsInfoDto.getUnitId());
         itemsInfo.setUnitName(itemsInfoDto.getUnitName());
         itemsInfo.setConverId(itemsInfoDto.getConverId());
-
+        itemsInfo.setSubItemProperty(itemsInfoDto.getSubItemProperty());
+        itemsInfo.setStoreRule(itemsInfoDto.getStoreRule());
+        itemsInfo.setItemBatch(itemsInfoDto.getItemBatch());
+        itemsInfo.setCombinationInfo(itemsInfoDto.getCombinationInfo());
+        itemsInfo.setCompanyId(itemsInfoDto.getCompanyId());
+        itemsInfo.setItemType(itemsInfoDto.getItemType());
         return itemsInfo;
     }
 }

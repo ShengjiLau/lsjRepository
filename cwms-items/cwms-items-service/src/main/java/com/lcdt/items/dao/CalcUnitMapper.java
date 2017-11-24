@@ -51,4 +51,11 @@ public interface CalcUnitMapper {
      * @return
      */
     List<CalcUnit> selectCalcUnitByCompanyId(Long companyId);
+
+    /**
+     * 根据 CalcUnit 查询
+     * @param calcUnit
+     * @return
+     */
+    List<CalcUnit> selectCalcUnitList(CalcUnit calcUnit);
 }
