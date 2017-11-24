@@ -1,16 +1,18 @@
 package com.lcdt.customer.service.impl;
 
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.dao.CustomerContactMapper;
 import com.lcdt.customer.dao.CustomerMapper;
 import com.lcdt.customer.dao.CustomerTypeRelationMapper;
-import com.lcdt.customer.exception.ClientException;
+import com.lcdt.customer.exception.CustomerException;
 import com.lcdt.customer.model.CustomerContact;
 import com.lcdt.customer.model.CustomerTypeRelation;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -23,7 +25,7 @@ import java.util.Map;
  * @AUTHOR liuh
  * @DATE 2017-11-16
  */
-
+@Service
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
@@ -38,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(readOnly = true)
     @Override
-    public PageInfo getClientList(Map m) {
+    public PageInfo getCustomerList(Map m) {
         int pageNo = 1;
         int pageSize = 0; //0表示所有
 
@@ -60,20 +62,20 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer getClientDetail(Long myClientId) {
-        return customerMapper.selectByPrimaryKey(myClientId);
+    public Customer getCustomerDetail(Long customerId) {
+        return customerMapper.selectByPrimaryKey(customerId);
     }
 
 
     @Transient
     @Override
-    public int addClient(Customer customer) {
+    public int addCustomer(Customer customer) {
         Map map = new HashMap();
         map.put("companyId", customer.getCompanyId());
         map.put("clientName", customer.getCustomerName());
         List<Customer> list = customerMapper.selectByCondition(map);
         if (list.size()>0) {
-            throw new ClientException("客户名称已存在");
+            throw new CustomerException("客户名称已存在");
         }
         int flag = customerMapper.insert(customer);
         if (flag>0) {

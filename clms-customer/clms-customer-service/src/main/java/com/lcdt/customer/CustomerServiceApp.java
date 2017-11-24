@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ImportResource;
  * Created by yangbinq on 2017/11/22.
  */
 @SpringBootApplication
-@ImportResource("classpath:dubbo-client-provider.xml")
+@ImportResource("classpath:dubbo-customer-provider.xml")
 @Import({com.lcdt.swagger.SwaggerConfig.class})
 @EnableClmsSecurity
 public class CustomerServiceApp {

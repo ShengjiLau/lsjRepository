@@ -2,8 +2,10 @@ package com.lcdt.customer.web.controller.api;
 
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
-import com.lcdt.customer.web.dto.ClientListDto;
-import com.lcdt.customer.web.dto.ClientParamsDto;
+import com.lcdt.customer.model.Customer;
+import com.lcdt.customer.service.CustomerService;
+import com.lcdt.customer.web.dto.CustomerListDto;
+import com.lcdt.customer.web.dto.CustomerParamsDto;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
@@ -24,19 +26,19 @@ import java.util.Map;
  * Created by yangbinq on 2017/11/20.
  */
 @RestController
-@RequestMapping("/api/client")
+@RequestMapping("/api/customer")
 @Api(value = "客户接口",description = "客户模块接口")
-public class ClientApi {
+public class CustomerApi {
 
     @Autowired
-    private ClientService clientService;
+    private CustomerService customerService;
 
     @ApiOperation("我的客户列表")
-    @RequestMapping(value = "/clientList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
-    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_client_list')")
-    public ClientListDto clientList(@Validated ClientParamsDto dto,
-                                    @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
-                                    @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+    @RequestMapping(value = "/customerList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_list')")
+    public CustomerListDto customerList(@Validated CustomerParamsDto dto,
+                                        @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+                                        @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);
@@ -58,11 +60,10 @@ public class ClientApi {
         if (StringUtil.isNotEmpty(dto.getCounty())) {
             map.put("county",dto.getCounty());
         }
-        PageInfo pageInfo = clientService.getClientList(map);
-        ClientListDto dto1 = new ClientListDto();
+        PageInfo pageInfo = customerService.getCustomerList(map);
+        CustomerListDto dto1 = new CustomerListDto();
         dto1.setList(pageInfo.getList());
         dto1.setTotal(pageInfo.getTotal());
-
         return dto1;
     }
 
@@ -72,11 +73,11 @@ public class ClientApi {
      */
 
     @ApiOperation("客户详情")
-    @RequestMapping(value = "/clientDetail",method = RequestMethod.POST)
-   // @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_client_list')")
-    public Customer clientDetail(@ApiParam(value = "客户ID",required = true) @RequestParam Long myClientId) {
+    @RequestMapping(value = "/customerDetail",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_list')")
+    public Customer customerDetail(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        return clientService.getClientDetail(myClientId);
+        return customerService.getCustomerDetail(customerId);
     }
 
     /**
@@ -85,12 +86,10 @@ public class ClientApi {
      * @return
      */
     @ApiOperation("新增客户")
-    @RequestMapping(value = "/clientAdd",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('client_add')")
-    public Customer clientAdd(@Validated ClientParamsDto dto) {
+    @RequestMapping(value = "/customerAdd",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_add')")
+    public Customer customerAdd(@Validated CustomerParamsDto dto) {
         //客户主表、联系人表、客户类型关系部分
-
-
         return null;
     }
 
@@ -100,11 +99,9 @@ public class ClientApi {
      * @return
      */
     @ApiOperation("客户编辑")
-    @RequestMapping(value = "/clientEdit",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('client_add')")
-    public Customer clientEdit(@Validated ClientParamsDto dto) {
-
-
+    @RequestMapping(value = "/customerEdit",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_add')")
+    public Customer customerEdit(@Validated CustomerParamsDto dto) {
 
         return null;
     }

@@ -40,7 +40,7 @@
     <result column="link_email" jdbcType="VARCHAR" property="linkEmail" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <collection property="customerContactList" column="customer_id" ofType="com.lcdt.customer.model.CustomerContact" javaType="ArrayList"
-                select="com.lcdt.customer.dao.selectByCustomerId" />
+                select="com.lcdt.customer.dao.CustomerContactMapper.selectByCustomerId" />
 
 
   </resultMap>
@@ -156,7 +156,7 @@
     attachment_1, attachment_2, invoice_title, registration_no, bank_name, bank_no, registration_address,
     tel_no1, invoice_remark, bind_cpid, status, bind_company, link_man, link_duty, link_tel,
     link_email, company_id
-    from t_client
+    from t_customer
     <where>
       1=1
       <if test="companyId!=null">

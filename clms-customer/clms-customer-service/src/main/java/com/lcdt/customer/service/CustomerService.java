@@ -16,22 +16,22 @@ public interface CustomerService {
      * @param m
      * @return
      */
-    PageInfo getClientList(Map m);
+    PageInfo getCustomerList(Map m);
 
     /**
      * 获取客户详情信息
-     * @param myClientId
+     * @param customerId
      * @return
      */
-    Customer getClientDetail(Long myClientId);
+    Customer getCustomerDetail(Long customerId);
 
 
     /***
      * 新增客户
-     * @param myCustomer
+     * @param customer
      * @return
      */
-    int addClient(Customer myCustomer);
+    int addCustomer(Customer customer);
 
 
 

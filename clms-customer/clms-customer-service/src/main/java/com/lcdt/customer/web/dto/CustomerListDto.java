@@ -1,13 +1,14 @@
 package com.lcdt.customer.web.dto;
 
 import com.lcdt.converter.ResponseData;
+import com.lcdt.customer.model.Customer;
 
 import java.util.List;
 
 /**
  * Created by yangbinq on 2017/11/21.
  */
-public class ClientListDto implements ResponseData {
+public class CustomerListDto implements ResponseData {
 
     private List<Customer> list;
 
