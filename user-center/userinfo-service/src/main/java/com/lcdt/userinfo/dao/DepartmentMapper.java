@@ -53,6 +53,9 @@ public interface DepartmentMapper {
      */
     List<Department> selectByCondition(Map map);
 
+    List<Department> departmentTreeList(Map map);
+
+
     /***
      * 获取当前企业下最大索引
      * @param map

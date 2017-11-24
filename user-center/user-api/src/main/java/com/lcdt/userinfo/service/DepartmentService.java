@@ -48,6 +48,7 @@ public interface DepartmentService {
      * @return
      */
     PageInfo deptmentList(Map m);
+    PageInfo deptmentTreeList(Map m);
 
     /***
      * 获取企业下最大的排序值+1
