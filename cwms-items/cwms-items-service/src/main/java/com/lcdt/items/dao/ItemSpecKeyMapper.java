@@ -52,4 +52,12 @@ public interface ItemSpecKeyMapper {
      * @return
      */
     List<ItemSpecificationDao> selectSpecificationList(Long companyId);
+
+    /**
+     * 根据规格值名查询（用来判断该企业下新增和插入规格名是否重复） add by liuh
+     * @param companyId
+     * @param spName
+     * @return
+     */
+    List<ItemSpecKey> selectSpecificationBySpName(Long companyId, String spName);
 }
