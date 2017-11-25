@@ -23,7 +23,6 @@ public interface CompanyService {
 
 	Company selectById(Long companyId);
 
-
 	/**
 	 * 创建企业
 	 *
