@@ -295,7 +295,7 @@ public class CustomerApi {
      * @return
      */
     @ApiOperation("客户联系人删除")
-    @RequestMapping(value = "/customerRemove",method = RequestMethod.POST)
+    @RequestMapping(value = "/customerContactRemove",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_remove')")
     public String customerContactRemove(@ApiParam(value = "客户联系人ID",required = true) @RequestParam Long contactId) {
         int flag = customerService.customerContactRemove(contactId);
