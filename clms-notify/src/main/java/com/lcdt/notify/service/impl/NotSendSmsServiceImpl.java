@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by ss on 2017/10/23.
  */
-@Service(version = "test")
+@Service(version = "customer")
 public class NotSendSmsServiceImpl implements SmsService{
 
 	private Logger logger = LoggerFactory.getLogger(NotSendSmsServiceImpl.class);
