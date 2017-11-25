@@ -1,7 +1,9 @@
 package com.lcdt.customer.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.customer.exception.CustomerException;
 import com.lcdt.customer.model.Customer;
+import com.lcdt.customer.model.CustomerContact;
 
 import java.util.Map;
 
@@ -16,7 +18,14 @@ public interface CustomerService {
      * @param m
      * @return
      */
-    PageInfo getCustomerList(Map m);
+    PageInfo customerList(Map m);
+
+    /**
+     * 查询客户下的联系人
+     * @param m
+     * @return
+     */
+    PageInfo customerContactList(Map m);
 
     /**
      * 获取客户详情信息
@@ -31,71 +40,52 @@ public interface CustomerService {
      * @param customer
      * @return
      */
-    int addCustomer(Customer customer);
+    int addCustomer(Customer customer) throws CustomerException;
 
+    /***
+     * 新增客户联系人
+     * @param customerContact
+     * @return
+     */
+    int addCustomerContact(CustomerContact customerContact);
 
-
+    /***
+     * 更新客户信息
+     * @param customer
+     * @return
+     */
+    int updateCustomer(Customer customer) throws CustomerException ;
 
     /**
-
-
-
-
-   /* *//**
-     * 更新客户信息
-     * @param myClient
+     * 更新客户联系人信息
+     * @param customerContact
      * @return
-     *//*
-    int updateMyClient(MyClient myClient);
+     */
+    int updateCustomerContact(CustomerContact customerContact);
 
 
-
-    *//**
-     * 删除客户信息
-     * @param myClientId
+    /***
+     * 获取客户联系人信息
+     * @param contactId
      * @return
-     *//*
-    int delMyClient(Long myClientId);
+     */
+    CustomerContact customerContactDetail(Long contactId);
 
-    *//**
-     * 启用/停用客户状态
-     * @param myClient
+
+    /***
+     * 把旧的默认联系人取消
+     * @param customerContact
      * @return
-     *//*
-    int toggleMyClientStatus(MyClient myClient);
+     */
+    int oldCustomerContactIsNull(CustomerContact customerContact);
 
-    *//**
-     * 获取客户联系人
-     * @param myClientId
-     * @return
-     *//*
-    List<MyClientLinkman> getMyClientLinkman(Long myClientId);
 
-    *//**
-     * 更新客户联系人
-     * @param myClientLinkman
-     * @return
-     *//*
-    int updateMyClientLinkman(MyClientLinkman myClientLinkman);
-
-    *//**
-     * 新增客户联系人
-     * @param myClientLinkman
-     * @return
-     *//*
-    int addMyClientLinkman(MyClientLinkman myClientLinkman);
-
-    *//**
+    /***
      * 删除客户联系人
-     * @param myClientLinkmanId
+     * @param contactId
      * @return
-     *//*
-    int delMyClientLinkman(Long myClientLinkmanId);
+     */
+    int customerContactRemove(Long contactId);
 
-    *//**
-     * 设置默认联系人
-     * @param myClientLinkmanId
-     * @return
-     *//*
-    int setDefaultLinkman(Long myClientLinkmanId);*/
+
 }
