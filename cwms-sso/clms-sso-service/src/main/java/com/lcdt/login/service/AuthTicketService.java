@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,6 +30,9 @@ public class AuthTicketService {
 
 	@Autowired
 	TicketManager ticketManager;
+
+	@Autowired
+	CreateTicketService createTicketService;
 
 	public TicketBean isTicketValid(String ticket) {
 		return ticketManager.get(ticket);
@@ -70,9 +74,9 @@ public class AuthTicketService {
 	}
 
 	private String createTicket() {
-		UUID uuid = UUID.randomUUID();
-		return uuid.toString().replaceAll("-", "");
+		return createTicketService.createTicket();
 	}
+
 
 
 
