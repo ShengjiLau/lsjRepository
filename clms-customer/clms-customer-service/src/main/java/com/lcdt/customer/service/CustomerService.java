@@ -87,5 +87,12 @@ public interface CustomerService {
      */
     int customerContactRemove(Long contactId);
 
+    /**
+     * 修改用户状态
+     * @param customer
+     * @return
+     */
+    int modifyCustomer(Customer customer);
+
 
 }
