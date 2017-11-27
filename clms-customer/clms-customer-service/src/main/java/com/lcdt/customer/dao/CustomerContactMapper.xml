@@ -107,7 +107,7 @@
   </select>
 
   <select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
-    contact_id, customer_id, name, duty, mobile, mail, birthday, gender, province,
+    select contact_id, customer_id, name, duty, mobile, mail, birthday, gender, province,
     city, county, detail_address, remark, is_default, company_id
     from t_customer_contact
     <where>

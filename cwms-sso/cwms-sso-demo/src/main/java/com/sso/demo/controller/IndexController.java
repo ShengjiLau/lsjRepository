@@ -26,7 +26,7 @@ public class IndexController {
 	@RequestMapping("/test")
 	@PreAuthorize("hasPermission('index')")
 	public String test(){
-		return "this is test page";
+		return "this is customer page";
 	}
 
 }

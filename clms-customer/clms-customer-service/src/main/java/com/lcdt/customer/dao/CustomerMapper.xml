@@ -269,14 +269,15 @@
       <if test="companyId!=null">
         and  company_id = #{companyId,jdbcType=BIGINT}
       </if>
-      <if test="clientName!=null and clientName!=''">
+      <if test="customerName!=null and customerName!=''">
         and  customer_name = #{customerName,jdbcType=VARCHAR}
       </if>
       <if test="clientTypes!=null and clientTypes!=''">
         and  client_typs = #{clientTypes,jdbcType=VARCHAR}
       </if>
+
       <if test="groupIds!=null and groupIds!=''">
-        and  group_ids in (#{groupIds,jdbcType=VARCHAR})
+        and  ${groupIds}
       </if>
       <if test="province!=null and province!=''">
         and province = #{province,jdbcType=VARCHAR}
@@ -295,7 +296,7 @@
       </if>
       <!--这块只限编辑查询用BEGIN-->
       <if test="customerId!=null">
-        and  customer_id &lt;&gt; #{customerId,jdbcType=BIGINT}
+        and  customer_id != #{customerId,jdbcType=BIGINT}
       </if>
       <!--这块只限编辑查询用END-->
     </where>
