@@ -1,5 +1,7 @@
 package com.lcdt.customer.service.impl;
 
+import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.User;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.io.StringWriter;
+import java.util.Properties;
 
 /**
  * Created by ss on 2017/11/24.
@@ -15,43 +18,52 @@ import java.io.StringWriter;
 @Service
 public class InviteCustomerService {
 
-
 	@Autowired
 	private JavaMailSender mailSender;
 
 	VelocityContext velocityContext = new VelocityContext();
+
+	public String templateName = "/inviteEmail.vm";
+
+	public String inviteEmailSubject = "主题：邀请您使用大驼队协同物流运输系统";
+
 	/**
 	 * 发送邀请邮件
+	 * @param inviteEmailTo
 	 */
-	public void sendInviteEmail(String inviteEmailTo) {
-
-
+	public void sendInviteEmail(String inviteEmailTo, String whoInvitedUserName, User whoBeInvited, Company companyBeInvited,String beInvitedCompanyTypeName) {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setFrom("mawei@lichendt.com");
-		message.setTo("18754988272@163.com");
-		message.setSubject("主题：简单邮件");
-		message.setText(resolveInviteEmailContent());
-
+		message.setTo(whoBeInvited.getEmail());
+		message.setSubject(inviteEmailSubject);
+		message.setText(resolveInviteEmailContent(whoInvitedUserName, whoBeInvited.getRealName(),
+				companyBeInvited.getFullName(),beInvitedCompanyTypeName,beInvitedUrl()));
 		mailSender.send(message);
 	}
 
 
-	public String resolveInviteEmailContent(){
+	public String resolveInviteEmailContent(String customerName,String inviteUserName,String inviteCompanyName,String inviteCompanyTypeName,String inviteUrl){
 		StringWriter w = new StringWriter();
-		velocityContext.put("username", "测试邮件");
-		velocityContext.put("inviteUser", "被邀请的人");
-		velocityContext.put("inviteCompanyName", "被邀请的公司名");
-		velocityContext.put("inviteCompanyType", "被邀请的公司类型");
-		velocityContext.put("inviteUrl", "http://www.baidu.com");
+		Properties properties=new Properties();
+		//设置velocity资源加载方式为class
+		properties.setProperty("resource.loader", "class");
+		properties.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+		Velocity.init(properties);
+		velocityContext.put("username", customerName);
+		velocityContext.put("inviteUser",inviteUserName);
+		velocityContext.put("inviteCompanyName", inviteCompanyName);
+		velocityContext.put("inviteCompanyType", inviteCompanyTypeName);
+		velocityContext.put("inviteUrl", inviteUrl);
 
-		Velocity.mergeTemplate("inviteEmail.vm", "UTF-8", velocityContext, w);
-//		Velocity.evaluate()
-
-//		velocityContext.internalPut("")
-
-		return "这是一封测试邮件";
+		Velocity.mergeTemplate(templateName, "UTF-8", velocityContext, w);
+		StringWriter stringWriter = new StringWriter();
+		Velocity.evaluate(velocityContext, stringWriter, "", w.toString());
+		return stringWriter.toString();
 	}
 
-
+	//TODO 被邀请人的邀请链接 需要时间该邀请链接的过期时间和用户检验
+	public String beInvitedUrl() {
+		return "";
+	}
 
 }

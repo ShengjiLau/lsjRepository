@@ -44,8 +44,10 @@ public class AuthController {
 
 	private static String LOGIN_PAGE = "/signin";
 	public final String CHOOSE_COMPANY_PAGE = "/account/company";
+
 	@Autowired
 	AuthTicketService ticketService;
+
 	@Autowired
 	RequestAuthRedirectStrategy strategy;
 	@Reference(check = false)
