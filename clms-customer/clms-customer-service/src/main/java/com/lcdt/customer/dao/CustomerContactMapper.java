@@ -48,6 +48,7 @@ public interface CustomerContactMapper {
      * @mbg.generated Fri Nov 24 10:56:38 CST 2017
      */
     int updateByPrimaryKey(CustomerContact record);
+    int updateByPrimaryKeySelective(CustomerContact record);
 
     /***
      * 按条件查询

@@ -128,7 +128,6 @@
       This element was generated on Fri Nov 24 10:56:38 CST 2017.
     -->
     update t_customer
-    set
     <set>
       <if test="customerName != null &amp;&amp; customerName !=''">
         customer_name = #{customerName,jdbcType=VARCHAR},
