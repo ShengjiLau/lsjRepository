@@ -20,6 +20,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -67,6 +68,22 @@ public class CustomerApi {
         if (StringUtil.isNotEmpty(dto.getCounty())) {
             map.put("county",dto.getCounty());
         }
+        if (StringUtil.isNotEmpty(dto.getGroupIds())) {
+            String[] groupIdArray = dto.getGroupIds().split(",");
+            StringBuffer sb = new StringBuffer();
+            sb.append("(");
+            for (int i=0;i<groupIdArray.length;i++) {
+
+                sb.append(" find_in_set('"+groupIdArray[i]+"',group_ids)");
+                if(i!=groupIdArray.length-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+
+           map.put("groupIds", sb.toString());
+        }
+
         PageInfo pageInfo = customerService.customerList(map);
         CustomerListResultDto dto1 = new CustomerListResultDto();
         dto1.setList(pageInfo.getList());
@@ -100,7 +117,7 @@ public class CustomerApi {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
         Customer customer = new Customer();
-        BeanUtils.copyProperties(customer, dto);
+        BeanUtils.copyProperties(dto,customer);
         customer.setCompanyId(companyId);
         try {
             customerService.addCustomer(customer);
@@ -123,7 +140,7 @@ public class CustomerApi {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
         Customer customer = new Customer();
-        BeanUtils.copyProperties(customer, dto);
+        BeanUtils.copyProperties(dto, customer);
         customer.setCompanyId(companyId);
         try {
             customerService.updateCustomer(customer);
@@ -147,7 +164,7 @@ public class CustomerApi {
                                       @ApiParam(value = "状态(1-启，0-停)",required = true) @RequestParam short status) {
         Customer customer = customerService.getCustomerDetail(customerId);
         customer.setStatus(status);
-        Integer flag = customerService.updateCustomer(customer);
+        Integer flag = customerService.modifyCustomer(customer);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
@@ -241,8 +258,8 @@ public class CustomerApi {
                 vo.setCompanyId(companyId);
                 vo.setContactId(customerContact.getContactId());
                 customerService.oldCustomerContactIsNull(vo);
-                message = "已启用！";
             }
+            message = "设置完成！";
             code = 0;
         } else {
             message = "操作失败，请重试！";
@@ -263,8 +280,9 @@ public class CustomerApi {
     public CustomerContact customerContactAdd(@Validated CustomerContactParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         CustomerContact vo = new CustomerContact();
-        BeanUtils.copyProperties(vo, dto);
+        BeanUtils.copyProperties(dto, vo);
         vo.setCompanyId(companyId);
+        vo.setIsDefault((short)0); //非默认联系人
         customerService.addCustomerContact(vo);
         return vo;
     }
@@ -281,7 +299,7 @@ public class CustomerApi {
     public CustomerContact customerContactEdit(@Validated CustomerContactParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         CustomerContact vo = new CustomerContact();
-        BeanUtils.copyProperties(vo, dto);
+        BeanUtils.copyProperties(dto, vo);
         vo.setCompanyId(companyId);
         customerService.updateCustomerContact(vo);
         return vo;

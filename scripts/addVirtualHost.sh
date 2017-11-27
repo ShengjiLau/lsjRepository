@@ -1,7 +1,7 @@
 #!/bin/bash
 #设置虚拟host
 SSO_SERVER="login.datuodui.com"
-TEST_SERVER="test.datuodui.com"
+TEST_SERVER="customer.datuodui.com"
 DEMO_SERVER="demo.datuodui.com"
 
 HOST_PATH="/etc/hosts";

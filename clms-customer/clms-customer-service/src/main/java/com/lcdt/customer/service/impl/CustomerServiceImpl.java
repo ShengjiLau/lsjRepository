@@ -80,11 +80,12 @@ public class CustomerServiceImpl implements CustomerService {
     public int addCustomer(Customer customer) throws CustomerException {
         Map map = new HashMap();
         map.put("companyId", customer.getCompanyId());
-        map.put("clientName", customer.getCustomerName());
+        map.put("customerName", customer.getCustomerName());
         List<Customer> list = customerMapper.selectByCondition(map);
         if (list.size()>0) {
             throw new CustomerException("客户已存在，请联系管理员分配！");
         }
+        customer.setStatus((short)1);
         int flag = customerMapper.insert(customer);
         if (flag>0) {
             //默认联系人
@@ -124,7 +125,7 @@ public class CustomerServiceImpl implements CustomerService {
         Map map = new HashMap();
         map.put("companyId", customer.getCompanyId());
         map.put("customerId", customer.getCustomerId());
-        map.put("clientName", customer.getCustomerName());
+        map.put("customerName", customer.getCustomerName());
         List<Customer> list = customerMapper.selectByCondition(map);
         if (list.size()>0) {
             throw new CustomerException("客户已存在，请联系管理员分配！");
@@ -154,9 +155,17 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
+    @Transactional
+    @Override
+    public int modifyCustomer(Customer customer) {
+        int flag = customerMapper.updateByPrimaryKey(customer);
+          return flag;
+    }
 
 
-    @Transactional(readOnly = true)
+
+
+    @Transactional
     @Override
     public PageInfo customerContactList(Map m) {
         int pageNo = 1;
