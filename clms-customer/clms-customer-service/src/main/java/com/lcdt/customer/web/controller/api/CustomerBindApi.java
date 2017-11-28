@@ -4,7 +4,9 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.customer.dao.CustomerMapper;
 import com.lcdt.customer.model.Customer;
+import com.lcdt.customer.model.CustomerInviteLog;
 import com.lcdt.customer.service.CustomerService;
+import com.lcdt.customer.service.impl.InviteLogService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,9 @@ public class CustomerBindApi {
 	@Autowired
 	CustomerMapper mapper;
 
+	@Autowired
+	InviteLogService inviteLogService;
+
 	@ApiOperation("绑定客户")
 	@RequestMapping("/bind")
 	public Customer bind(Long inviteId,Long customerId){
@@ -39,7 +44,16 @@ public class CustomerBindApi {
 
 	@ApiOperation("绑定客户页面")
 	@RequestMapping("/customerlist")
-	public ModelAndView customer(String token){
+	public ModelAndView customer(Long a,String token){
+		//TODO 检查链接上的token 有效性
+		CustomerInviteLog customerInviteLog = inviteLogService.selectByInviteId(a);
+		if (customerInviteLog.getIsValid() == 0) {
+			ModelAndView modelAndView = new ModelAndView();
+			modelAndView.setViewName("invite_not_valid");
+			return modelAndView;
+		}
+
+
 		HashMap<Object, Object> map = new HashMap<>();
 		PageInfo<Customer> pageInfo = customerService.customerList(map);
 		List<Customer> list = pageInfo.getList();

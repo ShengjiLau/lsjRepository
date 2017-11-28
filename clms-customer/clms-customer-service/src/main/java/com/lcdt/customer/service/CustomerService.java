@@ -13,6 +13,9 @@ import java.util.Map;
  */
 public interface CustomerService {
 
+
+    Customer selectByCustomerId(Long customerId);
+
     /**
      * 根据查询条件获取客户列表
      * @param m

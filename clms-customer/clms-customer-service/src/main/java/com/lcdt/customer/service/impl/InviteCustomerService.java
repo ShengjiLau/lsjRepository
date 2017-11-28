@@ -1,5 +1,6 @@
 package com.lcdt.customer.service.impl;
 
+import com.lcdt.customer.model.Customer;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
 import org.apache.velocity.VelocityContext;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.StringWriter;
 import java.util.Properties;
@@ -60,7 +62,7 @@ public class InviteCustomerService {
 		return stringWriter.toString();
 	}
 
-	//TODO 被邀请人的邀请链接 需要时间该邀请链接的过期时间和用户检验
+
 	public String beInvitedUrl() {
 		return "";
 	}

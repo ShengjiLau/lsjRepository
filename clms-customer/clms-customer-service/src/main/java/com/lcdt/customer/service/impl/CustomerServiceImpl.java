@@ -39,6 +39,12 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerTypeRelationMapper contomerTypeRelation;
 
 
+    @Override
+    public Customer selectByCustomerId(Long customerId) {
+        Customer customer = customerMapper.selectByPrimaryKey(customerId);
+        return customer;
+    }
+
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerList(Map m) {

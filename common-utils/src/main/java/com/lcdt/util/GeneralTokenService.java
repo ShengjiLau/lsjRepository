@@ -16,7 +16,6 @@ public class GeneralTokenService {
 	 * @return
 	 */
 	public static String generateToken(Map<Object,Object> values,long validTime){
-
 		return null;
 	}
 
