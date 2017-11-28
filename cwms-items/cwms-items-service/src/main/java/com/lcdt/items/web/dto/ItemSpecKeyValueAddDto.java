@@ -7,9 +7,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 
 public class ItemSpecKeyValueAddDto {
-    @ApiModelProperty(value = "规格名称", required = true)
+    @ApiModelProperty(value = "规格名称", required = false)
     private String spName;
-    @ApiModelProperty(value = "规格值", required = true)
+    @ApiModelProperty(value = "规格值", required = false)
     private String spValue;
 
     public String getSpName() {
