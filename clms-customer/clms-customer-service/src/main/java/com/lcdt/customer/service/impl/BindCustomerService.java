@@ -31,8 +31,6 @@ public class BindCustomerService {
 		inviteCustomer.setCompanyId(beInvitedCompanyId);
 		return customer;
 	}
-
-
 }
 
 
