@@ -9,16 +9,16 @@ import java.util.List;
  * @AUTHOR liuh
  * @DATE 2017-11-28
  */
-public class BaseDto<T> implements ResponseData{
+public class PageBaseDto<T> implements ResponseData{
 
     private List<T> list;
     private long total;
 
-    public BaseDto(List<T> list) {
+    public PageBaseDto(List<T> list) {
         this.list = list;
     }
 
-    public BaseDto(List<T> list, long total) {
+    public PageBaseDto(List<T> list, long total) {
         this.list = list;
         this.total = total;
     }

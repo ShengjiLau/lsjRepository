@@ -2,19 +2,20 @@ package com.lcdt.items.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.items.dto.ItemsInfoDto;
-import com.lcdt.items.model.ItemsInfo;
 import com.lcdt.items.model.ItemsInfoDao;
 import com.lcdt.items.service.ItemsInfoService;
-import com.lcdt.items.web.dto.BaseDto;
+import com.lcdt.items.web.dto.PageBaseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -49,11 +50,11 @@ public class ItemsInfoApi {
 
     @ApiOperation(value = "商品列表", notes = "获取商品列表") //add by liuh
     @GetMapping("/list")
-    public BaseDto<List<ItemsInfoDao>> getItemInfoList(@Validated ItemsInfoDao itemsInfoDao, PageInfo pageInfo, HttpSession httpSession) {
+    public PageBaseDto<List<ItemsInfoDao>> getItemInfoList(@Validated ItemsInfoDao itemsInfoDao, PageInfo pageInfo, HttpSession httpSession) {
         Long companyId = 8L; //TODO 后面从session中获取
         itemsInfoDao.setCompanyId(companyId);
         PageInfo<List<ItemsInfoDao>> listPageInfo = itemsInfoService.queryItemsByCondition(itemsInfoDao,pageInfo);
-        return new BaseDto(listPageInfo.getList(),listPageInfo.getTotal());
+        return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
     }
 
 }
