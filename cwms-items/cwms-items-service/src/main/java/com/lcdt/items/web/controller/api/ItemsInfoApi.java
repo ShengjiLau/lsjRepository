@@ -2,7 +2,6 @@ package com.lcdt.items.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.items.dto.ItemsInfoDto;
 import com.lcdt.items.model.*;
 import com.lcdt.items.model.ItemsInfoDao;
 import com.lcdt.items.service.ItemsInfoService;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
