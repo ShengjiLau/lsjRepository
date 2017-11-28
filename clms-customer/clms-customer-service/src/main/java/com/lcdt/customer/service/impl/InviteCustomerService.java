@@ -29,9 +29,8 @@ public class InviteCustomerService {
 
 	/**
 	 * 发送邀请邮件
-	 * @param inviteEmailTo
 	 */
-	public void sendInviteEmail(String inviteEmailTo, String whoInvitedUserName, User whoBeInvited, Company companyBeInvited,String beInvitedCompanyTypeName) {
+	public void sendInviteEmail(String whoInvitedUserName, User whoBeInvited, Company companyBeInvited,String beInvitedCompanyTypeName) {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setFrom("mawei@lichendt.com");
 		message.setTo(whoBeInvited.getEmail());

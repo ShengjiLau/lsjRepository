@@ -13,8 +13,8 @@ public class InviteCustomerServiceTest {
 
 	@Test
 	public void testParserTemplate(){
-		String s = service.resolveInviteEmailContent();
-		System.out.println(s);
+//		String s = service.resolveInviteEmailContent();
+//		System.out.println(s);
 	}
 
 
