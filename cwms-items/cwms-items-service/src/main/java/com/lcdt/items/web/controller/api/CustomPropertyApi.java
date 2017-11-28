@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.items.model.CustomProperty;
 import com.lcdt.items.service.CustomPropertyService;
+import com.lcdt.items.web.dto.PageBaseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -36,12 +37,11 @@ public class CustomPropertyApi {
 
     @ApiOperation(value = "获取企业下所有的自定义属性", notes = "获取企业下所有的自定义属性")
     @GetMapping("/list")
-    public List<CustomProperty> getCustomProperty(HttpSession httpSession) {
+    public PageBaseDto<List<CustomProperty>> getCustomProperty(HttpSession httpSession) {
         logger.info("customPropertyService------------------", customPropertyService.getClass().getMethods().toString());
         Long companyId = 8L;  //TODO 从session获取companyId
         List<CustomProperty> customPropertyList = customPropertyService.customPropertyList(companyId);
-        ArrayListResponseWrapper arrayListResponseWrapper = new ArrayListResponseWrapper(customPropertyList);
-        return arrayListResponseWrapper;
+        return new PageBaseDto(customPropertyList);
     }
 
     @ApiOperation(value = "更新自定义属性", notes = "更新对应企业下的自定义属性")

@@ -3,6 +3,8 @@ package com.lcdt.items.model;
 import com.lcdt.converter.ResponseData;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 自定义属性
  */
@@ -23,7 +25,7 @@ public class CustomProperty implements ResponseData {
      *
      * @mbg.generated
      */
-    @NotEmpty(message = "自定义属性类型不能为空")
+    @NotNull(message = "自定义属性类型不能为空")
     private Short propertyType;
 
     /**

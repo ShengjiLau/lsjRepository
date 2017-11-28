@@ -33,7 +33,7 @@
             targetPackage     指定生成的model生成所在的包名
             targetProject     指定在该项目下所在的路径
         -->
-        <javaModelGenerator targetPackage="com.lcdt.userinfo.model" targetProject="MAVEN">
+        <javaModelGenerator targetPackage="com.lcdt.items.model" targetProject="MAVEN">
             <!-- 是否对model添加 构造函数 -->
             <property name="constructorBased" value="false"/>
 
@@ -52,7 +52,7 @@
 
         <!--Mapper映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 -->
         <!--<sqlMapGenerator targetPackage="com.lcdt.userinfo.dao" targetProject="MAVEN">-->
-        <sqlMapGenerator targetPackage="com.lcdt.userinfo.dao" targetProject="MAVEN">
+        <sqlMapGenerator targetPackage="com.lcdt.items.dao" targetProject="MAVEN">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
@@ -63,7 +63,7 @@
                 type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
         -->
         <!--<javaClientGenerator targetPackage="com.lcdt.userinfo.dao" targetProject="MAVEN" type="XMLMAPPER">-->
-        <javaClientGenerator targetPackage="com.lcdt.userinfo.dao" targetProject="MAVEN" type="XMLMAPPER">
+        <javaClientGenerator targetPackage="com.lcdt.items.dao" targetProject="MAVEN" type="XMLMAPPER">
 
             <!--
                     定义Maper.java 源代码中的ByExample() 方法的可视性，可选的值有：
@@ -188,30 +188,8 @@
             <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
 
-<<<<<<< HEAD
-        <table tableName="t_my_client" domainObjectName="MyClient">
-            <generatedKey column="my_client_id" sqlStatement="MYSQL" identity="true"></generatedKey>
-        </table>
-        <table tableName="t_my_client_linkman" domainObjectName="MyClientLinkman">
-            <generatedKey column="my_client_linkman_id" sqlStatement="MYSQL" identity="true"></generatedKey>
-        </table>
-        <table tableName="t_my_linkman" domainObjectName="MyLinkman">
-            <generatedKey column="my_linkman_id" sqlStatement="MYSQL" identity="true"></generatedKey>
-        </table>
-<!--        <table tableName="sys_role_user_company" domainObjectName="SysRoleUserCompany">
-        <generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>
-        </table>-->
-=======
-        <!--<table tableName="sys_role" domainObjectName="SysRole">-->
-        <!--<generatedKey column="sys_role_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
-        <!--</table>-->
-        <!--<table tableName="sys_role_user_company" domainObjectName="SysRoleUserCompany">-->
-        <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
-        <!--</table>-->
->>>>>>> 7d0371d4a1396953bdc1f02f0007fdca87c094df
-
-        <table tableName="t_uc_company_certificate" domainObjectName="CompanyCertificate">
-        <generatedKey column="certi_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        <table tableName="t_item_classify" domainObjectName="ItemClassify">
+        <generatedKey column="classify_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
 
     </context>

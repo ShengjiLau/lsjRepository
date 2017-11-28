@@ -180,16 +180,18 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     }
 
     @Override
-    public List<ItemsInfo> queryItemsByCondition(ItemsInfoDao itemsInfoDao, PageInfo pageInfo) {
-        List<ItemsInfo> resultList = null;
+    public PageInfo<List<ItemsInfoDao>> queryItemsByCondition(ItemsInfo itemsInfo, PageInfo pageInfo) {
+        List<ItemsInfoDao> resultList = null;
+        PageInfo page = null;
         try {
             //使用分页工具进行分页
             PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-            resultList = itemsInfoMapper.selectByCondition(itemsInfoDao);
+            resultList = itemsInfoMapper.selectByCondition(itemsInfo);
+            page = new PageInfo(resultList);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            return resultList;
+            return page;
         }
     }
 

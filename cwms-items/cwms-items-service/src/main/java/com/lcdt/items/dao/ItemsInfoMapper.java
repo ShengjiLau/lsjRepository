@@ -55,8 +55,8 @@ public interface ItemsInfoMapper {
     ItemsInfo selectByCodeAndCompanyId(ItemsInfo itemsInfo);
     /**
      * 根据相关查询条件查询相关
-     * @param itemsInfoDao
+     * @param itemsInfo
      * @return
      */
-    List<ItemsInfo> selectByCondition(ItemsInfoDao itemsInfoDao);
+    List<ItemsInfoDao> selectByCondition(ItemsInfo itemsInfo);
 }
