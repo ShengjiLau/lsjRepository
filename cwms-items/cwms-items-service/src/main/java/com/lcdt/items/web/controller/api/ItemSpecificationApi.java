@@ -21,7 +21,7 @@ import java.util.List;
  * @AUTHOR liuh
  * @DATE 2017-11-23
  */
-@Api(description = "商品自定义规格")
+@Api(description = "商品自定义规格Api")
 @RestController
 @RequestMapping("/item/specification")
 public class ItemSpecificationApi {
@@ -40,7 +40,7 @@ public class ItemSpecificationApi {
 
     @ApiOperation(value = "新增自定义规格", notes = "新增自定义规格")
     @PostMapping("/add")
-    public JSONObject addItemspecification(@Validated ItemSpecKeyDto itemSpecKeyDto, BindingResult bindingResult, HttpSession httpSession) {
+    public JSONObject addItemspecification(@Validated @RequestBody ItemSpecKeyDto itemSpecKeyDto, BindingResult bindingResult, HttpSession httpSession) {
         //TODO 此处得校验暂时无法校验内部包含的list里得对象属性，后续可以通过自定义验证来解决（时间问题暂时搁置）
         JSONObject jsonObject = new JSONObject();
         if (bindingResult.hasErrors()) {
