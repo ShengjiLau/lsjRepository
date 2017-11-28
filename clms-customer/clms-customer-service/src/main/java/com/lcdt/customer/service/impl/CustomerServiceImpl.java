@@ -68,14 +68,14 @@ public class CustomerServiceImpl implements CustomerService {
         return customerMapper.selectByPrimaryKey(customerId);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int addCustomerContact(CustomerContact customerContact) {
         return customerContactMapper.insert(customerContact);
     }
 
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int addCustomer(Customer customer) throws CustomerException {
         Map map = new HashMap();
@@ -119,7 +119,7 @@ public class CustomerServiceImpl implements CustomerService {
         return flag;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int updateCustomer(Customer customer) throws CustomerException  {
         Map map = new HashMap();
@@ -130,7 +130,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (list.size()>0) {
             throw new CustomerException("客户已存在，请联系管理员分配！");
         }
-        int flag = customerMapper.updateByPrimaryKey(customer);
+        int flag = customerMapper.updateByPrimaryKeySelective(customer);
         if (flag>0) {
              //组关系表
             if (!StringUtils.isEmpty(customer.getClientTypes())) {
@@ -155,15 +155,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int modifyCustomer(Customer customer) {
         int flag = customerMapper.updateByPrimaryKey(customer);
           return flag;
     }
-
-
-
 
     @Transactional
     @Override
@@ -188,10 +185,10 @@ public class CustomerServiceImpl implements CustomerService {
         return  pageInfo;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int updateCustomerContact(CustomerContact CustomerContact) {
-        return customerContactMapper.updateByPrimaryKey(CustomerContact);
+        return customerContactMapper.updateByPrimaryKeySelective(CustomerContact);
     }
 
     @Transactional(readOnly = true)
@@ -200,12 +197,13 @@ public class CustomerServiceImpl implements CustomerService {
         return customerContactMapper.selectByPrimaryKey(contactId);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int oldCustomerContactIsNull(CustomerContact customerContact) {
         return customerContactMapper.oldCustomerContactIsNull(customerContact);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int customerContactRemove(Long contactId) {
         return customerContactMapper.deleteByPrimaryKey(contactId);
