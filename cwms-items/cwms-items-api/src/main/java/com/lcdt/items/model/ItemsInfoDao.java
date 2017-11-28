@@ -1,5 +1,7 @@
 package com.lcdt.items.model;
 
+import java.util.List;
+
 /**
  * @AUTHOR liuh
  * @DATE 2017-11-13
@@ -15,4 +17,23 @@ public class ItemsInfoDao extends ItemsInfo {
         this.classifyIds = classifyIds;
     }
 
+    List<SubItemsInfoDao> subItemsInfoDaoList;
+
+    List<CustomValue> customValueList;
+
+    public List<SubItemsInfoDao> getSubItemsInfoDaoList() {
+        return subItemsInfoDaoList;
+    }
+
+    public void setSubItemsInfoDaoList(List<SubItemsInfoDao> subItemsInfoDaoList) {
+        this.subItemsInfoDaoList = subItemsInfoDaoList;
+    }
+
+    public List<CustomValue> getCustomValueList() {
+        return customValueList;
+    }
+
+    public void setCustomValueList(List<CustomValue> customValueList) {
+        this.customValueList = customValueList;
+    }
 }

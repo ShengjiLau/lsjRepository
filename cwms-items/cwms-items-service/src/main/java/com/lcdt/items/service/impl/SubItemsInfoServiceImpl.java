@@ -11,6 +11,7 @@ import com.lcdt.items.dto.SubItemsInfoDto;
 import com.lcdt.items.model.CustomValue;
 import com.lcdt.items.model.ItemSpecKeyValue;
 import com.lcdt.items.model.SubItemsInfo;
+import com.lcdt.items.model.SubItemsInfoDao;
 import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.items.utils.SubItemsInfoDtoToSubItemsInfoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,33 +37,23 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     private ItemSpecKeyValueMapper itemSpecKeyValueMapper;
 
     @Override
-    public int addSubItemsInfo(SubItemsInfoDto subItemsInfoDto) {
+    public int addSubItemsInfo(SubItemsInfoDao subItemsInfoDao) {
         int result = 0;
-        SubItemsInfo subItemsInfo = SubItemsInfoDtoToSubItemsInfoUtil.parseSubItemsInfo(subItemsInfoDto);
-        result = subItemsInfoMapper.insert(subItemsInfo);
+        result = subItemsInfoMapper.insert(subItemsInfoDao);
 
         //子商品自定义属性值
-        if (subItemsInfoDto.getCustomValueList() != null) {
-            for (int i = 0; i < subItemsInfoDto.getCustomValueList().size(); i++) {
-                subItemsInfoDto.getCustomValueList().get(i).setSubItemId(subItemsInfo.getSubItemId());
+        if (subItemsInfoDao.getCustomValueList() != null) {
+            for (int i = 0; i < subItemsInfoDao.getCustomValueList().size(); i++) {
+                subItemsInfoDao.getCustomValueList().get(i).setSubItemId(subItemsInfoDao.getSubItemId());
             }
-            result += customValueMapper.insertForBatch(subItemsInfoDto.getCustomValueList());
+            result += customValueMapper.insertForBatch(subItemsInfoDao.getCustomValueList());
         }
 
-        if (subItemsInfoDto.getItemSpecKeyValueDtoList() != null) {
-            List<ItemSpecKeyValue> itemSpecKeyValueList = new ArrayList<ItemSpecKeyValue>();
-            for (int i = 0; i < subItemsInfoDto.getItemSpecKeyValueDtoList().size(); i++) {
-                ItemSpecKeyValueDto itemSpecKeyValueDto = subItemsInfoDto.getItemSpecKeyValueDtoList().get(i);
-                ItemSpecKeyValue itemSpecKeyValue = new ItemSpecKeyValue();
-                itemSpecKeyValue.setSpkId(itemSpecKeyValueDto.getSpkId());
-                itemSpecKeyValue.setSpName(itemSpecKeyValueDto.getSpName());
-                itemSpecKeyValue.setSpvId(itemSpecKeyValueDto.getSpvId());
-                itemSpecKeyValue.setSpValue(itemSpecKeyValueDto.getSpValue());
-                itemSpecKeyValue.setCompanyId(subItemsInfo.getCompanyId());
-                itemSpecKeyValue.setSubItemId(subItemsInfo.getSubItemId());
-                itemSpecKeyValueList.add(itemSpecKeyValue);
+        if (subItemsInfoDao.getItemSpecKeyValueList() != null) {
+            for (int i = 0; i < subItemsInfoDao.getItemSpecKeyValueList().size(); i++) {
+                subItemsInfoDao.getItemSpecKeyValueList().get(i).setSubItemId(subItemsInfoDao.getSubItemId());
             }
-            result += itemSpecKeyValueMapper.insertForBatch(itemSpecKeyValueList);
+            result += itemSpecKeyValueMapper.insertForBatch(subItemsInfoDao.getItemSpecKeyValueList());
         }
         return result;
     }
@@ -86,19 +77,17 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     }
 
     @Override
-    public int modifySubItemsInfo(SubItemsInfoDto subItemsInfoDto) {
+    public int modifySubItemsInfo(SubItemsInfoDao subItemsInfoDao) {
         int result = 0;
         try {
-            SubItemsInfo subItemsInfo = SubItemsInfoDtoToSubItemsInfoUtil.parseSubItemsInfo(subItemsInfoDto);
-
             //更新子商品自定义属性
-            if (subItemsInfoDto.getCustomValueList() != null) {
-                for (CustomValue customValue : subItemsInfoDto.getCustomValueList()) {
+            if (subItemsInfoDao.getCustomValueList() != null) {
+                for (CustomValue customValue : subItemsInfoDao.getCustomValueList()) {
                     result += customValueMapper.updateByPrimaryKey(customValue);
                 }
             }
             //更新子商品
-            result = subItemsInfoMapper.updateByPrimaryKey(subItemsInfo);
+            result = subItemsInfoMapper.updateByPrimaryKey(subItemsInfoDao);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -146,13 +135,8 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     @Override
     public int deleteSubItemsInfoByItemId(Long itemId) {
         int result = 0;
-        try {
-            result = subItemsInfoMapper.deleteSubItemsInfoByItemId(itemId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return result;
-        }
+        result = subItemsInfoMapper.deleteSubItemsInfoByItemId(itemId);
+        return result;
     }
 
     @Override

@@ -70,19 +70,21 @@
   </select>
 
   <insert id="insertForBatch" parameterType="java.util.List"  useGeneratedKeys="true" keyProperty="spkv_id">
-    insert into t_item_spec_key_value (spk_id, sp_name, spv_id,
-    sp_value, sub_item_id, company_id
-    )
-    values
+    insert into t_item_spec_key_value (spk_id,sp_name,spv_id,sp_value, sub_item_id, company_id) values
     <foreach collection="list" item="item" separator=",">
-      (#{spkId,jdbcType=BIGINT}, #{spName,jdbcType=VARCHAR}, #{spvId,jdbcType=BIGINT},
-      #{spValue,jdbcType=VARCHAR}, #{subItemId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}
+      (#{item.spkId,jdbcType=BIGINT}, #{item.spName,jdbcType=VARCHAR}, #{item.spvId,jdbcType=BIGINT},
+      #{item.spValue,jdbcType=VARCHAR}, #{item.subItemId,jdbcType=BIGINT}, #{item.companyId,jdbcType=BIGINT}
       )
     </foreach>
   </insert>
   <delete id="deleteBySubItemId" parameterType="java.lang.Long">
     delete from t_item_spec_key_value
     where sub_item_id = #{subItemId,jdbcType=BIGINT}
+  </delete>
+
+  <delete id="deleteBySubItemIds" parameterType="String">
+    delete from t_item_spec_key_value
+    where sub_item_id in (#{subItemId,jdbcType=BIGINT})
   </delete>
 
 </mapper>

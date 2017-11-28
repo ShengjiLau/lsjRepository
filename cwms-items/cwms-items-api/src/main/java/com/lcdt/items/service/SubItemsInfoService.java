@@ -3,6 +3,7 @@ package com.lcdt.items.service;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.items.dto.SubItemsInfoDto;
 import com.lcdt.items.model.SubItemsInfo;
+import com.lcdt.items.model.SubItemsInfoDao;
 
 import java.util.List;
 
@@ -14,10 +15,10 @@ public interface SubItemsInfoService {
     /**
      * 新增子商品
      *
-     * @param subItemsInfoDto
+     * @param subItemsInfoDao
      * @return
      */
-    int addSubItemsInfo(SubItemsInfoDto subItemsInfoDto);
+    int addSubItemsInfo(SubItemsInfoDao subItemsInfoDao);
 
     /**
      * 根据子商品 subItemId 删除子商品
@@ -30,10 +31,10 @@ public interface SubItemsInfoService {
     /**
      * 根据子商品 subItemId 修改子商品
      *
-     * @param subItemsInfoDto
+     * @param subItemsInfoDao
      * @return
      */
-    int modifySubItemsInfo(SubItemsInfoDto subItemsInfoDto);
+    int modifySubItemsInfo(SubItemsInfoDao subItemsInfoDao);
 
     /**
      * 根据子商品 subItemId 查询单个子商品

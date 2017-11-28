@@ -14,10 +14,10 @@ import java.util.List;
 public interface ItemsInfoService {
     /**
      * 增加新商品,在调用此方法之前需要先调用 queryItemsInfoByCodeAndCompanyId() 判断此企业下的商品编码是否存在,确认本企业内商品编码的唯一性
-     * @param itemsInfoDto
+     * @param itemsInfoDao
      * @return
      */
-    int addItemsInfo(ItemsInfoDto itemsInfoDto);
+    int addItemsInfo(ItemsInfoDao itemsInfoDao);
 
     /**
      * 删除商品，同时需要删除主商品下的全部子商品
@@ -28,10 +28,10 @@ public interface ItemsInfoService {
 
     /**
      * 根据商品 itemId 修改商品 在调用此方法之前需要先调用 queryItemsInfoByCodeAndCompanyId() 判断此企业下的商品编码是否存在,确认本企业内商品编码的唯一性
-     * @param itemsInfoDto
+     * @param itemsInfoDao
      * @return
      */
-    int modifyItemsInfo(ItemsInfoDto itemsInfoDto);
+    int modifyItemsInfo(ItemsInfoDao itemsInfoDao);
 
     /**
      * 根据商品itemId查询单个子商品

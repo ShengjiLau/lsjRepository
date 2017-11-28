@@ -58,4 +58,11 @@ public interface ItemSpecKeyValueMapper {
      * @return
      */
     int deleteBySubItemId(Long subItemId);
+
+    /**
+     * 根据subItemIds批量删除
+     * @param subItemIds
+     * @return
+     */
+    int deleteBySubItemIds(String subItemIds);
 }

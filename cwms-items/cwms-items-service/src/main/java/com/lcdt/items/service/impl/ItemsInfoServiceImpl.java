@@ -41,37 +41,38 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     @Autowired
     private SubItemsInfoService subItemsInfoService;
 
+    @Autowired
+    private ItemSpecKeyValueMapper itemSpecKeyValueMapper;
+
 
     @Override
-    public int addItemsInfo(ItemsInfoDto itemsInfoDto) {
+    public int addItemsInfo(ItemsInfoDao itemsInfoDao) {
         int result = 0;
-        ItemsInfo itemsInfo = ItemsInfoDtoToItemsInfoUtil.parseItemsInfo(itemsInfoDto);
 
         //新增商品
-        result += itemsInfoMapper.insert(itemsInfo);
+        result += itemsInfoMapper.insert(itemsInfoDao);
 
         //自定义属性值
-        if (itemsInfoDto.getCustomValueList() != null) {
-            for (int i = 0; i < itemsInfoDto.getCustomValueList().size(); i++) {
-                itemsInfoDto.getCustomValueList().get(i).setItemId(itemsInfo.getItemId());
+        if (itemsInfoDao.getCustomValueList() != null) {
+            for (int i = 0; i < itemsInfoDao.getCustomValueList().size(); i++) {
+                itemsInfoDao.getCustomValueList().get(i).setItemId(itemsInfoDao.getItemId());
             }
-            result += customValueMapper.insertForBatch(itemsInfoDto.getCustomValueList());
+            result += customValueMapper.insertForBatch(itemsInfoDao.getCustomValueList());
         }
 
         //判断商品类型 1、单规格商品，2、多规格商品，3、组合商品
-        if (itemsInfoDto.getItemType() == 1 || itemsInfoDto.getItemType() == 2) {
+        if (itemsInfoDao.getItemType() == 1 || itemsInfoDao.getItemType() == 2) {
             //判断子商品是否为空
-            if (itemsInfoDto.getSubItemsInfoDtoList() != null) {
-                for (SubItemsInfoDto dto : itemsInfoDto.getSubItemsInfoDtoList()) {
+            if (itemsInfoDao.getSubItemsInfoDaoList() != null) {
+                for (SubItemsInfoDao dao : itemsInfoDao.getSubItemsInfoDaoList()) {
                     //新增子商品
                     //给dto增加商品itemsId
-                    dto.setItemId(itemsInfo.getItemId());
-                    dto.setCompanyId(itemsInfo.getCompanyId());
-                    result+=subItemsInfoService.addSubItemsInfo(dto);
+                    dao.setItemId(itemsInfoDao.getItemId());
+                    dao.setCompanyId(itemsInfoDao.getCompanyId());
+                    result+=subItemsInfoService.addSubItemsInfo(dao);
                 }
             }
         }
-
         return result;
     }
 
@@ -81,7 +82,7 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
         try {
             ItemsInfo itemsInfo = itemsInfoMapper.selectByPrimaryKey(itemId);
             //子商品 subItemId 用 , 分隔开的字符串
-            StringBuffer subItemsInfoIds = null;
+            StringBuffer subItemsInfoIds = new StringBuffer();
             if (itemsInfo != null) {
                 //判断商品类型，删除子商品
                 if (itemsInfo.getItemType() == 2) {
@@ -96,8 +97,11 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
                             }
                         }
                     }
+                    //删除子商品规格
+                    result += itemSpecKeyValueMapper.deleteBySubItemIds(subItemsInfoIds.toString());
                     result += subItemsInfoService.deleteSubItemsInfoByItemId(itemId);
                 }
+
             }
             //判断是否有多单位，如果有，则删除
             if (itemsInfo.getConverId() != null && itemsInfo.getConverId() > 0) {
@@ -116,32 +120,31 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     }
 
     @Override
-    public int modifyItemsInfo(ItemsInfoDto itemsInfoDto) {
+    public int modifyItemsInfo(ItemsInfoDao itemsInfoDao) {
         int result = 0;
         try {
-            ItemsInfo itemsInfo = ItemsInfoDtoToItemsInfoUtil.parseItemsInfo(itemsInfoDto);
             //更新主商品
-            result = itemsInfoMapper.updateByPrimaryKey(itemsInfo);
+            result = itemsInfoMapper.updateByPrimaryKey(itemsInfoDao);
 
             //主商品自定义属性值更新
-            if (itemsInfoDto.getCustomValueList() != null) {
-                for (CustomValue customValue : itemsInfoDto.getCustomValueList()) {
+            if (itemsInfoDao.getCustomValueList() != null) {
+                for (CustomValue customValue : itemsInfoDao.getCustomValueList()) {
                     result += customValueMapper.updateByPrimaryKey(customValue);
                 }
             }
             //判断商品类型 1、单规格商品，2、多规格商品，3、组合商品
-            if (itemsInfoDto.getItemType() == 2 || itemsInfoDto.getItemType() == 1) {
+            if (itemsInfoDao.getItemType() == 2 || itemsInfoDao.getItemType() == 1) {
                 //判断子商品是否为空
-                if (itemsInfoDto.getSubItemsInfoDtoList() != null) {
-                    for (SubItemsInfoDto dto : itemsInfoDto.getSubItemsInfoDtoList()) {
-                        if (dto.getSubItemId() != null && dto.getSubItemId() > 0) {
+                if (itemsInfoDao.getSubItemsInfoDaoList() != null) {
+                    for (SubItemsInfoDao dao : itemsInfoDao.getSubItemsInfoDaoList()) {
+                        if (dao.getSubItemId() != null && dao.getSubItemId() > 0) {
                             //子商品更新
-                            result += subItemsInfoService.modifySubItemsInfo(dto);
+                            result += subItemsInfoService.modifySubItemsInfo(dao);
                         } else {
                             //子商品添加
-                            dto.setItemId(itemsInfo.getItemId());
-                            dto.setCompanyId(itemsInfo.getCompanyId());
-                            result += subItemsInfoService.modifySubItemsInfo(dto);
+                            dao.setItemId(dao.getItemId());
+                            dao.setCompanyId(dao.getCompanyId());
+                            result += subItemsInfoService.modifySubItemsInfo(dao);
                         }
                     }
                 }
