@@ -134,9 +134,9 @@ public class CustomerApi {
      * @return
      */
     @ApiOperation("客户编辑")
-    @RequestMapping(value = "/customerEdit",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_edit')")
-    public Customer customerEdit(@Validated CustomerParamsDto dto) {
+    @RequestMapping(value = "/customerUpdate",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_update')")
+    public Customer customerUpdate(@Validated CustomerParamsDto dto) {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
         Customer customer = new Customer();
@@ -158,9 +158,9 @@ public class CustomerApi {
      * @return
      */
     @ApiOperation("客户修改状态")
-    @RequestMapping(value = "/customStatusModify",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_status_modify')")
-    public String customStatusModify(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
+    @RequestMapping(value = "/customStatusUpdate",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_status_update')")
+    public String customStatusUpdate(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
                                       @ApiParam(value = "状态(1-启，0-停)",required = true) @RequestParam short status) {
         Customer customer = customerService.getCustomerDetail(customerId);
         customer.setStatus(status);
@@ -294,9 +294,9 @@ public class CustomerApi {
      * @return
      */
     @ApiOperation("编辑客户联系人")
-    @RequestMapping(value = "/customerContactEdit",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_add')")
-    public CustomerContact customerContactEdit(@Validated CustomerContactParamsDto dto) {
+    @RequestMapping(value = "/customerContactUpdate",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_Update')")
+    public CustomerContact customerContactUpdate(@Validated CustomerContactParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         CustomerContact vo = new CustomerContact();
         BeanUtils.copyProperties(dto, vo);
