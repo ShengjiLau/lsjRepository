@@ -53,6 +53,13 @@ public interface CalcUnitMapper {
     int deleteByUnitIdAndCompanyId(CalcUnit calcUnit);
 
     /**
+     * 根据 unitId 和 companyId 修改单位
+     * @param calcUnit
+     * @return
+     */
+    int updateByUnitIdAndCompanyId(CalcUnit calcUnit);
+
+    /**
      * 传 unitId 和 companyId 查询单位
      * @param calcUnit
      * @return

@@ -39,9 +39,9 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     }
 
     @Override
-    public int modifyCalcUnitByPrimaryKey(CalcUnit calcUnit) {
+    public int modifyByUnitIdAndCompanyId(CalcUnit calcUnit) {
         int result = 0;
-        result = calcUnitMapper.updateByPrimaryKey(calcUnit);
+        result = calcUnitMapper.updateByUnitIdAndCompanyId(calcUnit);
         return result;
     }
 
@@ -76,6 +76,4 @@ public class CalcUnitServiceImpl implements CalcUnitService {
             return false;
         }
     }
-
-
 }

@@ -56,16 +56,19 @@
     select unit_id, unit_name, company_id
     from t_calc_unit
   </select>
-
   <delete id="deleteByUnitIdAndCompanyId" parameterType="com.lcdt.items.model.CalcUnit">
     delete from t_calc_unit
-    where unit_id = #{unitId,jdbcType=BIGINT} and companId=#{companId,jdbcType=BIGINT}
+    where unit_id = #{unitId,jdbcType=BIGINT} and company_id=#{companyId,jdbcType=BIGINT}
   </delete>
-
+  <update id="updateByUnitIdAndCompanyId" parameterType="com.lcdt.items.model.CalcUnit">
+    update t_calc_unit
+    set unit_name = #{unitName,jdbcType=VARCHAR}
+    where unit_id = #{unitId,jdbcType=BIGINT} and company_id=#{companyId,jdbcType=BIGINT}
+  </update>
   <select id="selectByUnitIdAndCompanyId" parameterType="com.lcdt.items.model.CalcUnit" resultMap="BaseResultMap">
     select unit_id, unit_name, company_id
     from t_calc_unit
-    where unit_id = #{unitId,jdbcType=BIGINT} and companId=#{companId,jdbcType=BIGINT}
+    where unit_id = #{unitId,jdbcType=BIGINT} and company_id=#{companyId,jdbcType=BIGINT}
   </select>
 
   <select id="selectCalcUnitByCompanyId" parameterType="java.lang.Long" resultMap="BaseResultMap">
