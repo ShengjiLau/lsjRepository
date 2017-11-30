@@ -68,12 +68,27 @@ public class CustomerApi {
         if (StringUtil.isNotEmpty(dto.getCounty())) {
             map.put("county",dto.getCounty());
         }
+
+        if (StringUtil.isNotEmpty(dto.getCustomerType())) { //1-销售客户2-仓储客户3-运输客户4-仓储服务商5-运输服务商6-供应商7-其他
+            String[] customTypeArray = dto.getCustomerType().split(",");
+            StringBuffer sb = new StringBuffer();
+            sb.append("(");
+            for (int i=0;i<customTypeArray.length;i++) {
+                sb.append(" find_in_set('"+customTypeArray[i]+"',client_types)");
+                if(i!=customTypeArray.length-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+            map.put("customerType", sb.toString());
+        }
+
+
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {
             String[] groupIdArray = dto.getGroupIds().split(",");
             StringBuffer sb = new StringBuffer();
             sb.append("(");
             for (int i=0;i<groupIdArray.length;i++) {
-
                 sb.append(" find_in_set('"+groupIdArray[i]+"',group_ids)");
                 if(i!=groupIdArray.length-1){
                     sb.append(" or ");

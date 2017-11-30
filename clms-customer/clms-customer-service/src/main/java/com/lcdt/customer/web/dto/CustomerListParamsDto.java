@@ -22,6 +22,17 @@ public class CustomerListParamsDto {
     @ApiModelProperty(value = "状态  1-开启 0-停用")
     private Integer status;
 
+
+    @ApiModelProperty(value = "客户类型  1-销售客户 \n" +
+            "2-仓储客户\n" +
+            "3-运输客户\n" +
+            "4-仓储服务商\n" +
+            "5-运输服务商\n" +
+            "6-供应商 \n" +
+            "7-其他\n")
+    private String customerType;
+
+
     @ApiModelProperty(required = true, value = "组ID")
     private String groupIds;
 
@@ -73,4 +84,13 @@ public class CustomerListParamsDto {
     public void setGroupIds(String groupIds) {
         this.groupIds = groupIds;
     }
+
+    public String getCustomerType() {
+        return customerType;
+    }
+
+    public void setCustomerType(String customerType) {
+        this.customerType = customerType;
+    }
 }
+
