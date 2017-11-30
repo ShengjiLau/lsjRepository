@@ -40,8 +40,8 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
-    public Customer selectByCustomerId(Long customerId) {
-        Customer customer = customerMapper.selectByPrimaryKey(customerId);
+    public Customer selectByCustomerId(Long customerId, Long companyId) {
+        Customer customer = customerMapper.selectByPrimaryKey(customerId, companyId);
         return customer;
     }
 
@@ -70,8 +70,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(readOnly = true)
     @Override
-    public Customer getCustomerDetail(Long customerId) {
-        return customerMapper.selectByPrimaryKey(customerId);
+    public Customer getCustomerDetail(Long customerId, Long companyId) {
+        return customerMapper.selectByPrimaryKey(customerId, companyId);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -144,7 +144,7 @@ public class CustomerServiceImpl implements CustomerService {
                 //先清楚原来的组关系，再更新
                 CustomerTypeRelation tempObj = new CustomerTypeRelation();
                 tempObj.setCustomerId(customer.getCustomerId());
-                tempObj.setCustomerId(customer.getCompanyId());
+                tempObj.setCompanyId(customer.getCompanyId());
                 contomerTypeRelation.deleteCustomerType(tempObj);
 
                  for (int i=0; i<typeArrays.length; i++) {
@@ -199,8 +199,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(readOnly = true)
     @Override
-    public CustomerContact customerContactDetail(Long contactId) {
-        return customerContactMapper.selectByPrimaryKey(contactId);
+    public CustomerContact customerContactDetail(Long contactId, Long companyId) {
+        return customerContactMapper.selectByPrimaryKey(contactId, companyId);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -211,8 +211,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int customerContactRemove(Long contactId) {
-        return customerContactMapper.deleteByPrimaryKey(contactId);
+    public int customerContactRemove(Long contactId, Long companyId) {
+        return customerContactMapper.deleteByPrimaryKey(contactId,companyId);
     }
 
 

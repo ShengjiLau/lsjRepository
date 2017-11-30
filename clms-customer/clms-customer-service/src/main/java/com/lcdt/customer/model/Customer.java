@@ -2,6 +2,7 @@ package com.lcdt.customer.model;
 
 import com.lcdt.converter.ResponseData;
 
+import java.util.Date;
 import java.util.List;
 
 public class Customer implements java.io.Serializable,ResponseData {
@@ -279,6 +280,12 @@ public class Customer implements java.io.Serializable,ResponseData {
      * @mbg.generated Fri Nov 24 10:56:38 CST 2017
      */
     private String linkEmail;
+
+
+    private long createId;
+    private String createName;
+    private Date createDate;
+
 
     /**
      *
@@ -1058,5 +1065,38 @@ public class Customer implements java.io.Serializable,ResponseData {
      */
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+
+    public long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(long createId) {
+        this.createId = createId;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public List<CustomerContact> getCustomerContactList() {
+        return customerContactList;
+    }
+
+    public void setCustomerContactList(List<CustomerContact> customerContactList) {
+        this.customerContactList = customerContactList;
     }
 }

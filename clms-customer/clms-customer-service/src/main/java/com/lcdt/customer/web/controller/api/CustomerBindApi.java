@@ -38,7 +38,7 @@ public class CustomerBindApi {
 	@RequestMapping("/bind")
 	public Customer bind(Long inviteId,Long customerId){
 		Long companyId = SecurityInfoGetter.getCompanyId();
-		Customer customer = mapper.selectByPrimaryKey(customerId);
+		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
 		customer.setCompanyId(companyId);
 		customerService.updateCustomer(customer);
 		return customer;

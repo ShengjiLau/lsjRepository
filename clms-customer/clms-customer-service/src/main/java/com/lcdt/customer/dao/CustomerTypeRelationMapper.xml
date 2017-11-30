@@ -22,6 +22,7 @@
     delete from t_customer_type_relation
     where customer_type_id = #{customerTypeId,jdbcType=BIGINT}
   </delete>
+
   <insert id="insert" parameterType="com.lcdt.customer.model.CustomerTypeRelation">
     <!--
       WARNING - @mbg.generated
@@ -32,9 +33,9 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_customer_type_relation (customer_id, customer_name, customer_type, 
-      company_id)
+      company_id,create_id,create_name,create_date)
     values (#{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, #{customerType,jdbcType=SMALLINT}, 
-      #{companyId,jdbcType=BIGINT})
+      #{companyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.customer.model.CustomerTypeRelation">
     <!--

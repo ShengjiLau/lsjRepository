@@ -117,7 +117,7 @@ public class CustomerApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_list')")
     public Customer customerDetail(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        return customerService.getCustomerDetail(customerId);
+        return customerService.getCustomerDetail(customerId, companyId);
     }
 
     /**
@@ -177,7 +177,8 @@ public class CustomerApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_status_update')")
     public String customStatusUpdate(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
                                       @ApiParam(value = "状态(1-启，0-停)",required = true) @RequestParam short status) {
-        Customer customer = customerService.getCustomerDetail(customerId);
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Customer customer = customerService.getCustomerDetail(customerId, companyId);
         customer.setStatus(status);
         Integer flag = customerService.modifyCustomer(customer);
         JSONObject jsonObject = new JSONObject();
@@ -209,7 +210,8 @@ public class CustomerApi {
     @RequestMapping(value = "/customerRemove",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_remove')")
     public String customerRemove(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId) {
-        Customer customer = customerService.getCustomerDetail(customerId);
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Customer customer = customerService.getCustomerDetail(customerId, companyId);
         if (customer.getStatus()==1) {
             throw new CustomerException("此客户未停用，不能删除！");
         }
@@ -256,7 +258,7 @@ public class CustomerApi {
     public String customerContactIsDefault(@ApiParam(value = "客户联系人ID",required = true) @RequestParam Long contactId,
                                      @ApiParam(value = "状态(1-设置默认，0-取消默认)",required = true) @RequestParam short isDefault) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        CustomerContact customerContact = customerService.customerContactDetail(contactId);
+        CustomerContact customerContact = customerService.customerContactDetail(contactId, companyId);
         if (customerContact==null) {
             throw new CustomerContactException("联系人不存在！");
         }
@@ -331,7 +333,8 @@ public class CustomerApi {
     @RequestMapping(value = "/customerContactRemove",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_remove')")
     public String customerContactRemove(@ApiParam(value = "客户联系人ID",required = true) @RequestParam Long contactId) {
-        int flag = customerService.customerContactRemove(contactId);
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        int flag = customerService.customerContactRemove(contactId,companyId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("message",flag==1?"删除成功！":"删除失败！");
         jsonObject.put("code",flag==1?0:-1);
