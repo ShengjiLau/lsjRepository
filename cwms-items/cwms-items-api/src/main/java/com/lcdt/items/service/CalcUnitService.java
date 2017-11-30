@@ -27,12 +27,12 @@ public interface CalcUnitService {
     int deleteCalcUnit(Long unitId,Long companyId);
 
     /**
-     * 根据unitId更新计量单位CalcUnit
+     * 根据unitId 和 companyId 更新计量单位CalcUnit
      *
      * @param calcUnit
      * @return
      */
-    int modifyCalcUnitByPrimaryKey(CalcUnit calcUnit);
+    int modifyByUnitIdAndCompanyId(CalcUnit calcUnit);
 
     /**
      * 根据unitId查询一条CalcUnit
