@@ -24,7 +24,7 @@ public interface CalcUnitService {
      * @param unitId
      * @return
      */
-    int deleteCalcUnit(Long unitId);
+    int deleteCalcUnit(Long unitId,Long companyId);
 
     /**
      * 根据unitId更新计量单位CalcUnit
@@ -40,7 +40,7 @@ public interface CalcUnitService {
      * @param unitId
      * @return
      */
-    CalcUnit queryCalcUnitByPrimaryKey(Long unitId);
+    CalcUnit queryCalcUnit(Long unitId,Long companyId);
 
     /**
      * 根据companyId查询此企业下的所有计量单位,无分页

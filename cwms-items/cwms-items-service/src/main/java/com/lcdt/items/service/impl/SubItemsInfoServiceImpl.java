@@ -6,18 +6,13 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.items.dao.CustomValueMapper;
 import com.lcdt.items.dao.ItemSpecKeyValueMapper;
 import com.lcdt.items.dao.SubItemsInfoMapper;
-import com.lcdt.items.dto.ItemSpecKeyValueDto;
-import com.lcdt.items.dto.SubItemsInfoDto;
 import com.lcdt.items.model.CustomValue;
-import com.lcdt.items.model.ItemSpecKeyValue;
 import com.lcdt.items.model.SubItemsInfo;
 import com.lcdt.items.model.SubItemsInfoDao;
 import com.lcdt.items.service.SubItemsInfoService;
-import com.lcdt.items.utils.SubItemsInfoDtoToSubItemsInfoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -110,13 +105,9 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     @Override
     public List<SubItemsInfo> querySubItemsInfoListByItemId(Long itemId) {
         List<SubItemsInfo> list = null;
-        try {
-            list = subItemsInfoMapper.selectSubItemsInfoListByItemId(itemId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return list;
-        }
+        list = subItemsInfoMapper.selectSubItemsInfoListByItemId(itemId);
+        return list;
+
     }
 
     @Override
@@ -149,6 +140,13 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
         } finally {
             return result;
         }
+    }
+
+    @Override
+    public List<SubItemsInfoDao> querySubAndSpecAndPropListByItemId(Long itemId) {
+        List<SubItemsInfoDao> list = null;
+        list = subItemsInfoMapper.selectSubAndSpecAndPropListByItemId(itemId);
+        return list;
     }
 
 

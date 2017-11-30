@@ -1,6 +1,5 @@
 package com.lcdt.items.dao;
 
-import com.lcdt.items.dto.ItemsInfoDto;
 import com.lcdt.items.model.ItemsInfo;
 import com.lcdt.items.model.ItemsInfoDao;
 
@@ -59,4 +58,11 @@ public interface ItemsInfoMapper {
      * @return
      */
     List<ItemsInfoDao> selectByCondition(ItemsInfo itemsInfo);
+
+    /**
+     * 根据id查询
+     * @param itemId
+     * @return
+     */
+    ItemsInfoDao selectIetmsInfoDetails(Long itemId);
 }

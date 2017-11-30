@@ -57,6 +57,17 @@
     from t_calc_unit
   </select>
 
+  <delete id="deleteByUnitIdAndCompanyId" parameterType="com.lcdt.items.model.CalcUnit">
+    delete from t_calc_unit
+    where unit_id = #{unitId,jdbcType=BIGINT} and companId=#{companId,jdbcType=BIGINT}
+  </delete>
+
+  <select id="selectByUnitIdAndCompanyId" parameterType="com.lcdt.items.model.CalcUnit" resultMap="BaseResultMap">
+    select unit_id, unit_name, company_id
+    from t_calc_unit
+    where unit_id = #{unitId,jdbcType=BIGINT} and companId=#{companId,jdbcType=BIGINT}
+  </select>
+
   <select id="selectCalcUnitByCompanyId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     SELECT unit_id,unit_name,company_id
     FROM t_calc_unit

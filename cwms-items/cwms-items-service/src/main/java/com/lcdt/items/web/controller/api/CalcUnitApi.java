@@ -19,7 +19,7 @@ import java.util.List;
  * Created by lyqishan on 2017/11/24
  */
 
-@Api("单位管理api")
+@Api(description = "单位管理api")
 @RestController
 @RequestMapping("/items/calcunit")
 public class CalcUnitApi {
@@ -40,7 +40,7 @@ public class CalcUnitApi {
         int result = calcUnitService.addCalcUnit(calcUnit);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", "1");
+            jsonObject.put("code", 1);
             jsonObject.put("message", "添加成功");
             return jsonObject;
         } else {
@@ -51,10 +51,11 @@ public class CalcUnitApi {
     @ApiOperation("删除单位")
     @PostMapping("/delete")
     public JSONObject delCalcUnit(HttpSession httpSession,@ApiParam(value = "单位Id", required = true) @RequestParam Long unitId) {
-        int result = calcUnitService.deleteCalcUnit(unitId);
+        Long companyId=8L;
+        int result = calcUnitService.deleteCalcUnit(unitId,companyId);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", "1");
+            jsonObject.put("code", 1);
             jsonObject.put("message", "删除成功");
             return jsonObject;
         } else {
@@ -63,7 +64,7 @@ public class CalcUnitApi {
     }
 
     @ApiOperation("修改单位")
-    @PostMapping("/update")
+    @PostMapping("/modify")
     public JSONObject modifyCalcUnit(HttpSession httpSession,
                                      @ApiParam(value = "单位Id", required = true) @RequestParam Long unitId,
                                      @ApiParam(value = "单位名称", required = true) @RequestParam String unitName) {
@@ -77,7 +78,7 @@ public class CalcUnitApi {
         int result = calcUnitService.modifyCalcUnitByPrimaryKey(calcUnit);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", "1");
+            jsonObject.put("code", 1);
             jsonObject.put("message", "修改成功");
             return jsonObject;
         } else {
@@ -89,7 +90,7 @@ public class CalcUnitApi {
     @GetMapping("/query")
     public CalcUnit queryCalcUnit(HttpSession httpSession,@ApiParam(value = "单位Id", required = true) @RequestParam Long unitId) {
         Long companyId = 8L;
-        return calcUnitService.queryCalcUnitByPrimaryKey(unitId);
+        return calcUnitService.queryCalcUnit(unitId,companyId);
     }
 
     @ApiOperation("查询单位")

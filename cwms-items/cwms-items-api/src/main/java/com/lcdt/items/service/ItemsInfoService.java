@@ -1,7 +1,6 @@
 package com.lcdt.items.service;
 
 import com.github.pagehelper.PageInfo;
-import com.lcdt.items.dto.ItemsInfoDto;
 import com.lcdt.items.model.ItemsInfo;
 import com.lcdt.items.model.ItemsInfoDao;
 
@@ -62,5 +61,12 @@ public interface ItemsInfoService {
      * @return
      */
     PageInfo<List<ItemsInfoDao>> queryItemsByCondition(ItemsInfo itemsInfo, PageInfo pageInfo);
+
+    /**
+     * 根据itemId查询商品详情
+     * @param itemId
+     * @return
+     */
+    ItemsInfoDao queryIetmsInfoDetails(Long itemId);
 
 }

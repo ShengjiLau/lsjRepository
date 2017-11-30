@@ -70,4 +70,18 @@ public interface CustomValueMapper {
      */
     int deleteItemAndSubItemId(String itemId,String subItemIds);
 
+    /**
+     * 根据 子商品subItemId 查询
+     * @param subItemId
+     * @return
+     */
+    List<CustomValue> selectCustomValueBySubItemId(Long subItemId);
+
+    /**
+     * 根据主商品 itemId 查询
+     * @param itemId
+     * @return
+     */
+    List<CustomValue> selectCustomValueByItemId(Long itemId);
+
 }

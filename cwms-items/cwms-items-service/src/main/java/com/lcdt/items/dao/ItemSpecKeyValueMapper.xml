@@ -87,4 +87,10 @@
     where sub_item_id in (#{subItemId,jdbcType=BIGINT})
   </delete>
 
+  <select id="selectSpecKeyValueBySubItemId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select spkv_id, spk_id, sp_name, spv_id, sp_value, sub_item_id, company_id
+    from t_item_spec_key_value
+    where sub_item_id = #{subItemId,jdbcType=BIGINT}
+  </select>
+
 </mapper>

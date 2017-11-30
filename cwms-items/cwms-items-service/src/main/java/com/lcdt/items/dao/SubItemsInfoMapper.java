@@ -1,6 +1,8 @@
 package com.lcdt.items.dao;
 
 import com.lcdt.items.model.SubItemsInfo;
+import com.lcdt.items.model.SubItemsInfoDao;
+
 import java.util.List;
 
 public interface SubItemsInfoMapper {
@@ -65,4 +67,11 @@ public interface SubItemsInfoMapper {
      * @return
      */
     int insertByBatch(List<SubItemsInfo> subItemsInfoList);
+
+    /**
+     * 查询列表
+     * @param itemId
+     * @return
+     */
+    List<SubItemsInfoDao> selectSubAndSpecAndPropListByItemId(Long itemId);
 }

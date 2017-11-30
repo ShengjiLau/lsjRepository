@@ -1,7 +1,6 @@
 package com.lcdt.items.service;
 
 import com.github.pagehelper.PageInfo;
-import com.lcdt.items.dto.SubItemsInfoDto;
 import com.lcdt.items.model.SubItemsInfo;
 import com.lcdt.items.model.SubItemsInfoDao;
 
@@ -75,5 +74,10 @@ public interface SubItemsInfoService {
      */
     int addSubItemsInfoBatch(List<SubItemsInfo> subItemsInfoList);
 
-
+    /**
+     * 查询列表
+     * @param itemId
+     * @return
+     */
+    List<SubItemsInfoDao> querySubAndSpecAndPropListByItemId(Long itemId);
 }

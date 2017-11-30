@@ -71,4 +71,6 @@ public interface ItemClassifyMapper {
     List<ItemClassifyDao> selectClassifyAndChildren(ItemClassify itemClassify);
 
     List<ItemClassify> testFunction(Long classifyId);
+
+    List<ItemClassify> selectClassifyByMinChildren(Long classifyId);
 }

@@ -1,6 +1,7 @@
-package com.lcdt.items.dto;
+package com.lcdt.items.web.dto;
 
 import com.lcdt.items.model.CustomValue;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
@@ -9,30 +10,55 @@ import java.util.List;
  */
 
 public class ItemsInfoDto {
+    @ApiModelProperty(value = "商品id",required = false)
     private Long itemId;
+    @ApiModelProperty(value = "商品名称",required = true)
     private String subject;
+    @ApiModelProperty(value = "商品编码",hidden = true)
     private String code;
+    @ApiModelProperty(value = "商品条码",hidden = true)
     private String barCode;
+    @ApiModelProperty(value = "分类名称",required = true)
     private String classifyName;
+    @ApiModelProperty(value = "分类id",required = true)
     private Long classifyId;
+    @ApiModelProperty(value = "交易类型",required = false)
     private Short tradeType;
+    @ApiModelProperty(value = "采购价",hidden = true)
     private Float purchasePrice;
+    @ApiModelProperty(value = "批发价",hidden = true)
     private Float wholesalePrice;
+    @ApiModelProperty(value = "零售价",hidden = true)
     private Float retailPrice;
+    @ApiModelProperty(value = "商品简介",required = false)
     private String introduction;
+    @ApiModelProperty(value = "图片",required = false)
     private String image1;
+    @ApiModelProperty(value = "图片",required = false)
     private String image2;
+    @ApiModelProperty(value = "图片",required = false)
     private String image3;
+    @ApiModelProperty(value = "图片",required = false)
     private String image4;
+    @ApiModelProperty(value = "图片",required = false)
     private String image5;
+    @ApiModelProperty(value = "多单位id",hidden = true)
     private Long converId;
+    @ApiModelProperty(value = "单位id",required = true)
     private Long unitId;
+    @ApiModelProperty(value = "名称",required = true)
     private String unitName;
+    @ApiModelProperty(value = "原多规格JSON串",hidden = true)
     private String subItemProperty;
+    @ApiModelProperty(value = "存储",hidden = true)
     private Short storeRule;
+    @ApiModelProperty(value = "",hidden = true)
     private Short itemBatch;
+    @ApiModelProperty(value = "组合",hidden = true)
     private String combinationInfo;
+    @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
+    @ApiModelProperty(value = "商品类型",required=true)
     private Short itemType;
     private List<SubItemsInfoDto> subItemsInfoDtoList;
 

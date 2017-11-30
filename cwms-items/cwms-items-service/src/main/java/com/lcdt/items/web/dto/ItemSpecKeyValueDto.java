@@ -1,16 +1,25 @@
-package com.lcdt.items.dto;
+package com.lcdt.items.web.dto;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Created by lyqishan on 2017/11/22
  */
 
 public class ItemSpecKeyValueDto {
+    @ApiModelProperty(value = "多规格id",hidden = true)
     private Long spkvId;
+    @ApiModelProperty(value = "多规格名称id",hidden = true)
     private Long spkId;
+    @ApiModelProperty(value = "多规格id",required = false)
     private String spName;
+    @ApiModelProperty(value = "多规格值id",hidden = true)
     private Long spvId;
+    @ApiModelProperty(value = "多规格id",required = false)
     private String spValue;
+    @ApiModelProperty(value = "子商品id",hidden = true)
     private Long subItemId;
+    @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
 
     public Long getSpkvId() {

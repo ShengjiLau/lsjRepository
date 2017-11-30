@@ -1,23 +1,22 @@
 package com.lcdt.items.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lcdt.converter.ArrayListResponseWrapper;
+import com.lcdt.items.model.SubItemsInfoDao;
 import com.lcdt.items.service.SubItemsInfoService;
-import com.lcdt.items.web.dto.SubItemsInfoAddDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Created by lyqishan on 2017/11/28
  */
-@Api("子商品信息api")
+@Api(description = "子商品信息api")
 @RestController
 @RequestMapping("/items/subitemsinfo")
 public class SubItemsInfoApi {
@@ -36,6 +35,13 @@ public class SubItemsInfoApi {
         }else {
             throw new RuntimeException("删除失败");
         }
+    }
+
+    @ApiOperation("查询子商品列表")
+    @GetMapping("/list")
+    public List<SubItemsInfoDao> querySubItemsInfo(HttpSession httpSession, @ApiParam(value = "子商品Id", required = true) @RequestParam Long itemId){
+        List<SubItemsInfoDao> subItemsInfoList=new ArrayListResponseWrapper<SubItemsInfoDao>(subItemsInfoService.querySubAndSpecAndPropListByItemId(itemId));
+        return subItemsInfoList;
     }
 
 }

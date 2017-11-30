@@ -1,6 +1,7 @@
-package com.lcdt.items.dto;
+package com.lcdt.items.web.dto;
 
 import com.lcdt.items.model.CustomValue;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
@@ -9,15 +10,25 @@ import java.util.List;
  */
 
 public class SubItemsInfoDto {
+    @ApiModelProperty(value = "子商品id",required = false)
     private Long subItemId;
+    @ApiModelProperty(value = "商品id",required = false)
     private Long itemId;
+    @ApiModelProperty(value = "子商品图片",required = false)
     private String image;
+    @ApiModelProperty(value = "子商品编码",required = false)
     private String code;
+    @ApiModelProperty(value = "子商品条码",required = false)
     private String barCode;
+    @ApiModelProperty(value = "采购价",required = false)
     private Float purchasePrice;
+    @ApiModelProperty(value = "批发价",required = false)
     private Float wholesalePrice;
+    @ApiModelProperty(value = "零售价",required = false)
     private Float retailPrice;
+    @ApiModelProperty(value = "组合规格",hidden = true)
     private String specComb;
+    @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
     private List<ItemSpecKeyValueDto> itemSpecKeyValueDtoList;
 

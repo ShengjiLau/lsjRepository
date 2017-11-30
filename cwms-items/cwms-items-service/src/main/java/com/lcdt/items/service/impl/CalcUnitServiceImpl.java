@@ -29,9 +29,12 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     }
 
     @Override
-    public int deleteCalcUnit(Long unitId) {
+    public int deleteCalcUnit(Long unitId,Long companId) {
         int result = 0;
-        result = calcUnitMapper.deleteByPrimaryKey(unitId);
+        CalcUnit calcUnit=new CalcUnit();
+        calcUnit.setUnitId(unitId);
+        calcUnit.setCompanyId(companId);
+        result = calcUnitMapper.deleteByUnitIdAndCompanyId(calcUnit);
         return result;
     }
 
@@ -43,8 +46,11 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     }
 
     @Override
-    public CalcUnit queryCalcUnitByPrimaryKey(Long unitId) {
-        return calcUnitMapper.selectByPrimaryKey(unitId);
+    public CalcUnit queryCalcUnit(Long unitId,Long companyId) {
+        CalcUnit calcUnit=new CalcUnit();
+        calcUnit.setUnitId(unitId);
+        calcUnit.setCompanyId(companyId);
+        return calcUnitMapper.selectByUnitIdAndCompanyId(calcUnit);
     }
 
     @Override

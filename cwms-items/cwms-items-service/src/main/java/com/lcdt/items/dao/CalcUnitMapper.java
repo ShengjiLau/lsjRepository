@@ -46,10 +46,25 @@ public interface CalcUnitMapper {
     int updateByPrimaryKey(CalcUnit record);
 
     /**
+     * 传 unitId 和 companyId 删除单位
+     * @param calcUnit
+     * @return
+     */
+    int deleteByUnitIdAndCompanyId(CalcUnit calcUnit);
+
+    /**
+     * 传 unitId 和 companyId 查询单位
+     * @param calcUnit
+     * @return
+     */
+    CalcUnit selectByUnitIdAndCompanyId(CalcUnit calcUnit);
+
+    /**
      * 根据companyId查询CalcUnit
      * @param companyId
      * @return
      */
+
     List<CalcUnit> selectCalcUnitByCompanyId(Long companyId);
 
     /**

@@ -5,18 +5,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.items.config.SnowflakeIdWorker;
 import com.lcdt.items.dao.*;
-import com.lcdt.items.dto.ItemsInfoDto;
-import com.lcdt.items.dto.SubItemsInfoDto;
 import com.lcdt.items.model.*;
 import com.lcdt.items.service.ConversionRelService;
-import com.lcdt.items.service.ItemClassifyService;
 import com.lcdt.items.service.ItemsInfoService;
 import com.lcdt.items.service.SubItemsInfoService;
-import com.lcdt.items.utils.ItemsInfoDtoToItemsInfoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,7 +64,7 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
                     //给dto增加商品itemsId
                     dao.setItemId(itemsInfoDao.getItemId());
                     dao.setCompanyId(itemsInfoDao.getCompanyId());
-                    result+=subItemsInfoService.addSubItemsInfo(dao);
+                    result += subItemsInfoService.addSubItemsInfo(dao);
                 }
             }
         }
@@ -122,38 +117,33 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     @Override
     public int modifyItemsInfo(ItemsInfoDao itemsInfoDao) {
         int result = 0;
-        try {
-            //更新主商品
-            result = itemsInfoMapper.updateByPrimaryKey(itemsInfoDao);
+        //更新主商品
+        result = itemsInfoMapper.updateByPrimaryKey(itemsInfoDao);
 
-            //主商品自定义属性值更新
-            if (itemsInfoDao.getCustomValueList() != null) {
-                for (CustomValue customValue : itemsInfoDao.getCustomValueList()) {
-                    result += customValueMapper.updateByPrimaryKey(customValue);
-                }
+        //主商品自定义属性值更新
+        if (itemsInfoDao.getCustomValueList() != null) {
+            for (CustomValue customValue : itemsInfoDao.getCustomValueList()) {
+                result += customValueMapper.updateByPrimaryKey(customValue);
             }
-            //判断商品类型 1、单规格商品，2、多规格商品，3、组合商品
-            if (itemsInfoDao.getItemType() == 2 || itemsInfoDao.getItemType() == 1) {
-                //判断子商品是否为空
-                if (itemsInfoDao.getSubItemsInfoDaoList() != null) {
-                    for (SubItemsInfoDao dao : itemsInfoDao.getSubItemsInfoDaoList()) {
-                        if (dao.getSubItemId() != null && dao.getSubItemId() > 0) {
-                            //子商品更新
-                            result += subItemsInfoService.modifySubItemsInfo(dao);
-                        } else {
-                            //子商品添加
-                            dao.setItemId(dao.getItemId());
-                            dao.setCompanyId(dao.getCompanyId());
-                            result += subItemsInfoService.modifySubItemsInfo(dao);
-                        }
+        }
+        //判断商品类型 1、单规格商品，2、多规格商品，3、组合商品
+        if (itemsInfoDao.getItemType() == 2 || itemsInfoDao.getItemType() == 1) {
+            //判断子商品是否为空
+            if (itemsInfoDao.getSubItemsInfoDaoList() != null) {
+                for (SubItemsInfoDao dao : itemsInfoDao.getSubItemsInfoDaoList()) {
+                    if (dao.getSubItemId() != null && dao.getSubItemId() > 0) {
+                        //子商品更新
+                        result += subItemsInfoService.modifySubItemsInfo(dao);
+                    } else {
+                        //子商品添加
+                        dao.setItemId(dao.getItemId());
+                        dao.setCompanyId(dao.getCompanyId());
+                        result += subItemsInfoService.addSubItemsInfo(dao);
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return result;
         }
+        return result;
     }
 
     @Override
@@ -193,6 +183,11 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
         } finally {
             return page;
         }
+    }
+
+    @Override
+    public ItemsInfoDao queryIetmsInfoDetails(Long itemId) {
+        return itemsInfoMapper.selectIetmsInfoDetails(itemId);
     }
 
     @Override

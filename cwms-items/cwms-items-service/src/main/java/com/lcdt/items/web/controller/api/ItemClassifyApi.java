@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by lyqishan on 2017/11/24
  */
-@Api("分类管理api")
+@Api(description = "分类管理api")
 @RestController
 @RequestMapping("/items/itemclassify")
 public class ItemClassifyApi {
@@ -50,7 +50,7 @@ public class ItemClassifyApi {
         int result = itemClassifyService.deleteItemsClassifyAndChildren(classifyId);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", "0");
+            jsonObject.put("code", 0);
             jsonObject.put("message", "删除成功");
             return jsonObject;
         } else {
@@ -59,7 +59,7 @@ public class ItemClassifyApi {
     }
 
     @ApiOperation("修改分类")
-    @PostMapping("/update")
+    @PostMapping("/modify")
     public JSONObject modifyItemClassify(HttpSession httpSession, @ApiParam(value = "分类id", required = true) @RequestParam Long classifyId,
                                          @ApiParam(value = "分类名字", required = true) @RequestParam String classifyName,
                                          @ApiParam(value = "父类id", required = true) @RequestParam Long pid,

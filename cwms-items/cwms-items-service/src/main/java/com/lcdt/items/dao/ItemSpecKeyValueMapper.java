@@ -65,4 +65,11 @@ public interface ItemSpecKeyValueMapper {
      * @return
      */
     int deleteBySubItemIds(String subItemIds);
+
+    /**
+     * 根据子商品 subItemId 查询
+     * @param subItemId
+     * @return
+     */
+    List<ItemSpecKeyValue> selectSpecKeyValueBySubItemId(Long subItemId);
 }

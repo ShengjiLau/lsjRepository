@@ -11,10 +11,7 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -22,7 +19,7 @@ import javax.servlet.http.HttpSession;
  * Created by lyqishan on 2017/11/24
  */
 
-@Api("多单位管理api")
+@Api(description = "多单位管理api")
 @RestController
 @RequestMapping("/items/conversionrel")
 public class ConversionRelApi {
@@ -32,7 +29,7 @@ public class ConversionRelApi {
     private ConversionRelService conversionRelService;
 
     @ApiOperation("修改多单位")
-    @PostMapping("/update")
+    @PostMapping("/modify")
     public ConversionRel addConversionRel(HttpSession httpSession, ConversionRelDto conversionRelDto){
         ConversionRel conversionRel=new ConversionRel();
         conversionRel.setConverId(conversionRelDto.getConverId());
@@ -59,7 +56,7 @@ public class ConversionRelApi {
     }
 
     @ApiOperation("查询多单位")
-    @PostMapping("/query")
+    @GetMapping("/query")
     public ConversionRel queryConversionRel(HttpSession httpSession, @ApiParam(value = "多单位id", required = true) @RequestParam Long converId){
         ConversionRel conversionRel=conversionRelService.queryConversionRel(converId);
         if(conversionRel!=null){

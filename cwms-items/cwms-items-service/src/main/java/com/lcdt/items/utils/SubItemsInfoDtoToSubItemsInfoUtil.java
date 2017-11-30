@@ -1,7 +1,7 @@
 package com.lcdt.items.utils;
 
-import com.lcdt.items.dto.SubItemsInfoDto;
 import com.lcdt.items.model.SubItemsInfo;
+import com.lcdt.items.web.dto.SubItemsInfoDto;
 
 /**
  * Created by lyqishan on 2017/11/13
