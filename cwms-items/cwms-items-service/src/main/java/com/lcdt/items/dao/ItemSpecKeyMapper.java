@@ -60,4 +60,12 @@ public interface ItemSpecKeyMapper {
      * @return
      */
     List<ItemSpecKey> selectSpecificationBySpName(Long companyId, String spName);
+
+    /**
+     * 根据主键和companyId删除
+     * @param spkId
+     * @param companyId
+     * @return
+     */
+    int deleteBySpkIdAndCompanyId(Long spkId,Long companyId);
 }

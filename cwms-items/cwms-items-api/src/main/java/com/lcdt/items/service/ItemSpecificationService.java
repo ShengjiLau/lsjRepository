@@ -22,14 +22,14 @@ public interface ItemSpecificationService {
      * @param spkId
      * @return
      */
-    int deleteSpecification(Long spkId);
+    int deleteSpecification(Long spkId,Long companyId);
 
     /**
      * 根据自定义规格 value 的 spvId 删除某个自定义规格的value
      * @param spvId
      * @return
      */
-    int deleteItemSpecvalue(Long spvId);
+    int deleteItemSpecvalue(Long spvId,Long companyId);
 
     /**
      * 修改自定义规格
@@ -50,6 +50,6 @@ public interface ItemSpecificationService {
      * @param spkId
      * @return
      */
-    int deleteSpecificationKeyAndValueBySpkId(Long spkId);
+    int deleteSpecificationKeyAndValueBySpkId(Long spkId, Long companyId);
 
 }

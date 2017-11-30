@@ -50,7 +50,7 @@
     -->
     select spv_id, sp_value, spk_id, company_id
     from t_item_spec_value
-    where spv_id = #{spvId,jdbcType=BIGINT}
+    where spv_id = #{0} and company_id = #{1}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     <!--
@@ -60,8 +60,12 @@
     select spv_id, sp_value, spk_id, company_id
     from t_item_spec_value
   </select>
-  <delete id="deleteBySpkId" parameterType="java.lang.Long">
+  <delete id="deleteBySpkIdAndCompanyId" parameterType="java.lang.Long">
     DELETE FROM t_item_spec_value
-    where spk_id = #{spkId,jdbcType=BIGINT}
+    where spk_id = #{0} and company_id = #{1}
+  </delete>
+  <delete id="deleteBySpvIdAndCompanyId" parameterType="java.lang.Long">
+    DELETE FROM t_item_spec_value
+    where spv_id = #{0} and company_id = #{1}
   </delete>
 </mapper>

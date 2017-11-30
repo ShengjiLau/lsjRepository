@@ -41,7 +41,7 @@ public class CustomPropertyApi {
         logger.info("customPropertyService------------------", customPropertyService.getClass().getMethods().toString());
         Long companyId = 8L;  //TODO 从session获取companyId
         List<CustomProperty> customPropertyList = customPropertyService.customPropertyList(companyId);
-        return new PageBaseDto(customPropertyList);
+        return new PageBaseDto(customPropertyList,customPropertyList.size());
     }
 
     @ApiOperation(value = "更新自定义属性", notes = "更新对应企业下的自定义属性")
@@ -51,12 +51,12 @@ public class CustomPropertyApi {
         customProperty.setCompanyId(companyId);
         JSONObject jsonObject = new JSONObject();
         if (bindingResult.hasErrors()) {
-            jsonObject.put("code", "-1");
+            jsonObject.put("code", -1);
             jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
             return jsonObject;
         }
         customPropertyService.updateByCustomId(customProperty);
-        jsonObject.put("code", "0");
+        jsonObject.put("code", 0);
         jsonObject.put("message", "更新成功");
         return jsonObject;
     }
@@ -79,12 +79,12 @@ public class CustomPropertyApi {
         JSONObject jsonObject = new JSONObject();
 
         if (bindingResult.hasErrors()) {
-            jsonObject.put("code", "-1");
+            jsonObject.put("code", -1);
             jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
             return jsonObject;
         }
         customPropertyService.insertCustomProperty(customProperty);
-        jsonObject.put("code", "0");
+        jsonObject.put("code", 0);
         jsonObject.put("message", "新增成功");
         return jsonObject;
     }

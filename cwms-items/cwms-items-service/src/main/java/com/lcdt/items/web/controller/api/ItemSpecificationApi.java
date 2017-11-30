@@ -40,7 +40,7 @@ public class ItemSpecificationApi {
 
     @ApiOperation(value = "新增自定义规格", notes = "新增自定义规格")
     @PostMapping("/add")
-    public JSONObject addItemspecification(@Validated @RequestBody ItemSpecKeyDto itemSpecKeyDto, BindingResult bindingResult, HttpSession httpSession) {
+    public JSONObject addItemspecification(@Validated ItemSpecKeyDto itemSpecKeyDto, BindingResult bindingResult, HttpSession httpSession) {
         //TODO 此处得校验暂时无法校验内部包含的list里得对象属性，后续可以通过自定义验证来解决（时间问题暂时搁置）
         JSONObject jsonObject = new JSONObject();
         if (bindingResult.hasErrors()) {
@@ -58,7 +58,7 @@ public class ItemSpecificationApi {
 
     @ApiOperation(value = "编辑自定义规格", notes = "编辑自定义规格")
     @PostMapping("/modify")
-    public JSONObject modItemspecification(@Validated @RequestBody ItemSpecKeyDto itemSpecKeyDto, BindingResult bindingResult, HttpSession httpSession) {
+    public JSONObject modItemspecification(@Validated ItemSpecKeyDto itemSpecKeyDto, BindingResult bindingResult, HttpSession httpSession) {
         //TODO 此处得校验暂时无法校验内部包含的list里得对象属性，后续可以通过自定义验证来解决（时间问题暂时搁置）
         JSONObject jsonObject = new JSONObject();
         if (bindingResult.hasErrors()) {
@@ -83,9 +83,9 @@ public class ItemSpecificationApi {
             jsonObject.put("message", "spkId不能为空");
             return jsonObject;
         }
-//        Long companyId = 1L; // 后面从session中获取
+        Long companyId = 1L; // 后面从session中获取
 //        itemSpecKeyDto.setCompanyId(companyId);
-        int rows = itemSpecificationService.deleteSpecificationKeyAndValueBySpkId(spkId);
+        int rows = itemSpecificationService.deleteSpecificationKeyAndValueBySpkId(spkId,companyId);
         if(rows>0){
             jsonObject.put("code", 0);
             jsonObject.put("message", "删除成功");

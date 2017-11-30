@@ -83,4 +83,8 @@
     from t_item_spec_key
     where company_id = #{0} and sp_name=#{1}
   </select>
+  <delete id="deleteBySpkIdAndCompanyId" parameterType="java.lang.Long">
+    delete from t_item_spec_key
+    where spk_id = #{0} and company_id = #{1}
+  </delete>
 </mapper>

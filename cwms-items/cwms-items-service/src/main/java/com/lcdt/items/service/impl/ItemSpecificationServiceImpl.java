@@ -56,11 +56,11 @@ public class ItemSpecificationServiceImpl implements ItemSpecificationService {
     }
 
     @Override
-    public int deleteSpecification(Long spkId) {
+    public int deleteSpecification(Long spkId,Long companyId) {
         int reslut = 0;
         try {
-            reslut += itemSpecValueMapper.deleteBySpkId(spkId);
-            reslut += itemSpecKeyMapper.deleteByPrimaryKey(spkId);
+            reslut += itemSpecValueMapper.deleteBySpkIdAndCompanyId(spkId,companyId);
+            reslut += itemSpecKeyMapper.deleteBySpkIdAndCompanyId(spkId,companyId);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -69,10 +69,10 @@ public class ItemSpecificationServiceImpl implements ItemSpecificationService {
     }
 
     @Override
-    public int deleteItemSpecvalue(Long spvId) {
+    public int deleteItemSpecvalue(Long spvId,Long companyId) {
         int reslut = 0;
         try {
-            reslut += itemSpecValueMapper.deleteByPrimaryKey(spvId);
+            reslut += itemSpecValueMapper.deleteBySpvIdAndCompanyId(spvId,companyId);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -97,7 +97,7 @@ public class ItemSpecificationServiceImpl implements ItemSpecificationService {
              * 3.删除的规格值需要删除
              * 介于处理这三种情况处理比较繁琐，所以直接采用删除关联值，然后重新新增的方式
              */
-            itemSpecValueMapper.deleteBySpkId(itemSpecKeyDto.getSpkId());   //删除规格关联的属性值
+            itemSpecValueMapper.deleteBySpkIdAndCompanyId(itemSpecKeyDto.getSpkId(),itemSpecKeyDto.getCompanyId());   //删除规格关联的属性值
             if (itemSpecKeyDto.getItemSpecValueList() != null) {
                 for (ItemSpecValue dto : itemSpecKeyDto.getItemSpecValueList()) {
                     ItemSpecValue itemSpecValue = new ItemSpecValue();
@@ -142,10 +142,10 @@ public class ItemSpecificationServiceImpl implements ItemSpecificationService {
     }
 
     @Override
-    public int deleteSpecificationKeyAndValueBySpkId(Long spkId) {
+    public int deleteSpecificationKeyAndValueBySpkId(Long spkId, Long companyId) {
         int result = 0;
-        result += itemSpecKeyMapper.deleteByPrimaryKey(spkId);
-        result += itemSpecValueMapper.deleteBySpkId(spkId);
+        result += itemSpecKeyMapper.deleteBySpkIdAndCompanyId(spkId,companyId);
+        result += itemSpecValueMapper.deleteBySpkIdAndCompanyId(spkId,companyId);
         return result;
     }
 }
