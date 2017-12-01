@@ -27,8 +27,8 @@
     <selectKey keyProperty="relationId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_uc_user_group (user_id, company_id, group_id
-    values (#{userId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT}
+    insert into t_uc_user_group (user_id, company_id, group_id,group_create_date
+    values (#{userId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT},#{groupCreateDate,jdbcType=TIMESTAMP}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.UserGroupRelation">
