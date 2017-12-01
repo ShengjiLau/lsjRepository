@@ -57,17 +57,15 @@ public class Group implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated
      */
-    private Date createTime;
+    private Date groupCreateDate;
 
-    private Long createId;
-    private String createName;
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getGroupCreateDate() {
+        return groupCreateDate;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setGroupCreateDate(Date groupCreateDate) {
+        this.groupCreateDate = groupCreateDate;
     }
 
     /**
@@ -199,21 +197,5 @@ public class Group implements java.io.Serializable,ResponseData {
 
     public void setValid(Boolean valid) {
         isValid = valid;
-    }
-
-    public Long getCreateId() {
-        return createId;
-    }
-
-    public void setCreateId(Long createId) {
-        this.createId = createId;
-    }
-
-    public String getCreateName() {
-        return createName;
-    }
-
-    public void setCreateName(String createName) {
-        this.createName = createName;
     }
 }

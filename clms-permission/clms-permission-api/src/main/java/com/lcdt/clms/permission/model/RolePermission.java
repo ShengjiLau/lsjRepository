@@ -36,7 +36,20 @@ public class RolePermission {
 
     private Long createId;
     private String createName;
-    private Date creatDate;
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    private Date createDate;
+
+
+
+
 
     public Long getCreateId() {
         return createId;
@@ -54,13 +67,6 @@ public class RolePermission {
         this.createName = createName;
     }
 
-    public Date getCreatDate() {
-        return creatDate;
-    }
-
-    public void setCreatDate(Date creatDate) {
-        this.creatDate = creatDate;
-    }
 
     public Permission getPermission() {
         return permission;

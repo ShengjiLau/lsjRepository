@@ -26,8 +26,7 @@
     <selectKey keyProperty="rolePermissionId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into role_permission (role_id, permission_id,
-    create_id,create_name,create_date,last_login_time
+    insert into role_permission (role_id, permission_id,create_id,create_name,create_date
     )
     values (#{roleId,jdbcType=INTEGER}, #{permissionId,jdbcType=INTEGER},
     #{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP})

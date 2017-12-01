@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -77,9 +78,9 @@ public class AuthorityApi {
 		Role role = new Role();
 		BeanUtils.copyProperties(roleDto, role);
 		role.setRoleCompanyId(companyId);
-
-
-
+		role.setCreateId(loginUser.getUserId());
+		role.setCreateDate(new Date());
+		role.setCreateName(loginUser.getRealName());
 		Role companyRole = roleService.createCompanyRole(companyId, role);
 		return companyRole;
 	}
@@ -107,7 +108,8 @@ public class AuthorityApi {
 	@RequestMapping(value = "/addRolePermission", method = RequestMethod.POST)
 	@ApiOperation("增加角色权限")
 	public EmptyResponseDate addPermissionForRole(Long roleId, Long permissionId) {
-		roleService.addRolePermission(roleId, permissionId);
+		User loginUser = SecurityInfoGetter.getUser();
+		roleService.addRolePermission(roleId, permissionId,loginUser.getUserId(),loginUser.getRealName());
 		return emptyResponseData;
 	}
 

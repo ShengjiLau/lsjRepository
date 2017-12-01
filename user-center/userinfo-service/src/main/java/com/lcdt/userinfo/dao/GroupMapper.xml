@@ -29,10 +29,9 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_uc_group (group_name, company_id, is_valid, 
-      group_remark, create_time,create_id,create_name)
+      group_remark, group_create_date)
     values (#{groupName,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{isValid,jdbcType=BIT}, 
-      #{groupRemark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},#{createId,jdbcType=BIGINT},
-       #{createName,jdbcType=VARCHAR})
+      #{groupRemark,jdbcType=VARCHAR}, #{groupCreateDate,jdbcType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.Group">
     <!--

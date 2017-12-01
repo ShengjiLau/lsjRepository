@@ -44,8 +44,15 @@ public class Role implements ResponseData {
 
     private Long createId;
     private String createName;
-    private Date creatDate;
+    private Date createDate;
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 
     public Long getCreateId() {
         return createId;
@@ -63,13 +70,7 @@ public class Role implements ResponseData {
         this.createName = createName;
     }
 
-    public Date getCreatDate() {
-        return creatDate;
-    }
 
-    public void setCreatDate(Date creatDate) {
-        this.creatDate = creatDate;
-    }
 
     private List<Permission> permissions;
 
