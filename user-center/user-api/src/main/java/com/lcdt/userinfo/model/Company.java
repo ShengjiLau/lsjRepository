@@ -3,6 +3,7 @@ package com.lcdt.userinfo.model;
 import com.lcdt.converter.ResponseData;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class Company implements java.io.Serializable,ResponseData{

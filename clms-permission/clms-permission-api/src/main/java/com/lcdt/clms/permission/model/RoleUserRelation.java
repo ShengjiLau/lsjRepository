@@ -1,5 +1,7 @@
 package com.lcdt.clms.permission.model;
 
+import java.util.Date;
+
 public class RoleUserRelation {
     /**
      *
@@ -46,6 +48,36 @@ public class RoleUserRelation {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+
+    private Date relationCreateDate;
+    private Long createId;
+    private String createName;
+
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Long createId) {
+        this.createId = createId;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
+
+    public Date getRelationCreateDate() {
+        return relationCreateDate;
+    }
+
+    public void setRelationCreateDate(Date relationCreateDate) {
+        this.relationCreateDate = relationCreateDate;
     }
 
     /**

@@ -2,6 +2,7 @@ package com.lcdt.clms.permission.model;
 
 import com.lcdt.converter.ResponseData;
 
+import java.util.Date;
 import java.util.List;
 
 public class Role implements ResponseData {
@@ -40,6 +41,36 @@ public class Role implements ResponseData {
      * @mbg.generated
      */
     private Long roleCompanyId;
+
+    private Long createId;
+    private String createName;
+    private Date createDate;
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Long createId) {
+        this.createId = createId;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
+
 
     private List<Permission> permissions;
 

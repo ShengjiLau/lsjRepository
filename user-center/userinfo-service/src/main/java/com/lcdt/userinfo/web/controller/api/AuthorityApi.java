@@ -10,6 +10,7 @@ import com.lcdt.clms.permission.service.UserRoleService;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.converter.ResponseData;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.web.dto.CreateRoleDto;
 import com.lcdt.userinfo.web.dto.PageResultDto;
 import io.swagger.annotations.Api;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -72,9 +74,13 @@ public class AuthorityApi {
 	@ApiOperation("添加角色")
 	public Role addRole(@Validated CreateRoleDto roleDto) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
+		User loginUser = SecurityInfoGetter.getUser();
 		Role role = new Role();
 		BeanUtils.copyProperties(roleDto, role);
 		role.setRoleCompanyId(companyId);
+		role.setCreateId(loginUser.getUserId());
+		role.setCreateDate(new Date());
+		role.setCreateName(loginUser.getRealName());
 		Role companyRole = roleService.createCompanyRole(companyId, role);
 		return companyRole;
 	}
@@ -102,7 +108,8 @@ public class AuthorityApi {
 	@RequestMapping(value = "/addRolePermission", method = RequestMethod.POST)
 	@ApiOperation("增加角色权限")
 	public EmptyResponseDate addPermissionForRole(Long roleId, Long permissionId) {
-		roleService.addRolePermission(roleId, permissionId);
+		User loginUser = SecurityInfoGetter.getUser();
+		roleService.addRolePermission(roleId, permissionId,loginUser.getUserId(),loginUser.getRealName());
 		return emptyResponseData;
 	}
 
