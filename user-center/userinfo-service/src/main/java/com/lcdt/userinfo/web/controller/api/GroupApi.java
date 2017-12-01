@@ -9,6 +9,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.exception.GroupExistException;
 import com.lcdt.userinfo.model.Group;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.GroupManageService;
 import com.lcdt.userinfo.web.dto.GroupDto;
 import com.lcdt.userinfo.web.dto.GroupResultDto;
@@ -45,12 +46,14 @@ public class GroupApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_add')")
     public Group groupAdd(@Validated GroupDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
         Group group = new Group();
         group.setCompanyId(companyId);
         group.setGroupName(dto.getGroupName());
         group.setCreatTime(new Date());
         group.setIsValid(dto.getIsValid());
-
+        group.setCreatId(loginUser.getUserId());
+        group.setCreateName(loginUser.getRealName());
         group.setGroupRemark(dto.getGroupRemark());
         try {
             groupManageService.createGroup(group);

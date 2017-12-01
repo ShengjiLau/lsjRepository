@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.beans.Transient;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,6 +108,9 @@ public class CustomerServiceImpl implements CustomerService {
             customerContact.setCounty(customer.getCounty());
             customerContact.setDetailAddress(customer.getDetailAddress());
             customerContact.setCustomerId(customer.getCustomerId());
+            customerContact.setCreateId(customer.getCreateId());
+            customerContact.setCreateName(customer.getCreateName());
+            customerContact.setCreateDate(new Date());
             customerContactMapper.insert(customerContact);
 
             //组关系表
@@ -118,6 +122,11 @@ public class CustomerServiceImpl implements CustomerService {
                     relationObj.setCustomerName(customer.getCustomerName());
                     relationObj.setCustomerType(Short.valueOf(typeArrays[i]));
                     relationObj.setCompanyId(customer.getCompanyId());
+
+                    relationObj.setCreateId(customer.getCreateId());
+                    relationObj.setCreateName(customer.getCreateName());
+                    relationObj.setCreateDate(new Date());
+
                     contomerTypeRelation.insert(relationObj);
                 }
             }
@@ -153,6 +162,10 @@ public class CustomerServiceImpl implements CustomerService {
                     relationObj.setCustomerName(customer.getCustomerName());
                     relationObj.setCustomerType(Short.valueOf(typeArrays[i]));
                     relationObj.setCompanyId(customer.getCompanyId());
+                    relationObj.setCreateId(customer.getCreateId());
+                    relationObj.setCreateName(customer.getCreateName());
+                    relationObj.setCreateDate(new Date());
+
                     contomerTypeRelation.insert(relationObj);
                 }
             }

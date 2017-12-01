@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.model.Department;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.DepartmentService;
 import com.lcdt.userinfo.web.dto.DepartmentDto;
 import com.lcdt.userinfo.web.dto.DeparmentResultDto;
@@ -46,10 +47,15 @@ public class DepartmentApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('dept_add')")
     public Department deptAdd(@Validated DepartmentDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
         Department department = new Department();
         department.setCompanyId(companyId);
         department.setDeptName(dto.getDeptName());
         department.setDeptPid(dto.getDeptPid());
+
+        department.setCreatId(loginUser.getUserId());
+        department.setCreateName(loginUser.getRealName());
+
         Map map = new HashMap();
         map.put("companyId",companyId);
         department.setDeptOrder(departmentService.getMaxIndex(map));

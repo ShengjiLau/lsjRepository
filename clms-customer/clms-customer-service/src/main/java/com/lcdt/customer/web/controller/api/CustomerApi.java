@@ -13,6 +13,7 @@ import com.lcdt.customer.web.dto.CustomerContactParamsDto;
 import com.lcdt.customer.web.dto.CustomerListResultDto;
 import com.lcdt.customer.web.dto.CustomerListParamsDto;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -131,8 +133,12 @@ public class CustomerApi {
     public Customer customerAdd(@Validated CustomerParamsDto dto) {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
         Customer customer = new Customer();
         BeanUtils.copyProperties(dto,customer);
+        customer.setCreateId(loginUser.getUserId());
+        customer.setCreateName(loginUser.getRealName());
+        customer.setCreateDate(new Date());
         customer.setCompanyId(companyId);
         try {
             customerService.addCustomer(customer);
@@ -154,9 +160,12 @@ public class CustomerApi {
     public Customer customerUpdate(@Validated CustomerParamsDto dto) {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
         Customer customer = new Customer();
         BeanUtils.copyProperties(dto, customer);
         customer.setCompanyId(companyId);
+        customer.setCreateId(loginUser.getUserId());
+        customer.setCreateName(loginUser.getRealName());
         try {
             customerService.updateCustomer(customer);
         } catch (CustomerException e) {
@@ -296,10 +305,14 @@ public class CustomerApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_add')")
     public CustomerContact customerContactAdd(@Validated CustomerContactParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
         CustomerContact vo = new CustomerContact();
         BeanUtils.copyProperties(dto, vo);
         vo.setCompanyId(companyId);
         vo.setIsDefault((short)0); //非默认联系人
+        vo.setCreateId(loginUser.getUserId());
+        vo.setCreateName(loginUser.getRealName());
+        vo.setCreateDate(new Date());
         customerService.addCustomerContact(vo);
         return vo;
     }
