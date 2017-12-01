@@ -1,9 +1,11 @@
 package com.lcdt.items.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.items.model.CalcUnit;
 import com.lcdt.items.service.CalcUnitService;
+import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,9 +34,14 @@ public class CalcUnitApi {
     @ApiOperation("新增单位")
     @PostMapping("/add")
     public JSONObject addCalcUnit( HttpSession httpSession,@ApiParam(value = "单位名称", required = true) @RequestParam String unitName) {
+        Long companyId= SecurityInfoGetter.getCompanyId();
+        User user=SecurityInfoGetter.getUser();
         CalcUnit calcUnit = new CalcUnit();
         calcUnit.setUnitName(unitName);
-        calcUnit.setCompanyId(8L);
+        calcUnit.setCreateId(user.getUserId());
+        calcUnit.setCreateName(user.getRealName());
+        calcUnit.setCreateDate(new Date());
+        calcUnit.setCompanyId(companyId);
         if (calcUnitService.isUnitNameExist(calcUnit)) {
             throw new RuntimeException("单位名称已存在");
         }
@@ -71,6 +79,9 @@ public class CalcUnitApi {
         CalcUnit calcUnit = new CalcUnit();
         calcUnit.setUnitId(unitId);
         calcUnit.setUnitName(unitName);
+        calcUnit.setCreateId(8L);
+        calcUnit.setCreateName("张三");
+        calcUnit.setCreateDate(new Date());
         calcUnit.setCompanyId(8L);
         if (calcUnitService.isUnitNameExist(calcUnit)) {
             throw new RuntimeException("单位名称已存在");

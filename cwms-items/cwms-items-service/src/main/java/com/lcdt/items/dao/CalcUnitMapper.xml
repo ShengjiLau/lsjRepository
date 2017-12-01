@@ -26,8 +26,8 @@
     <selectKey keyProperty="unitId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_calc_unit (unit_name, company_id)
-    values (#{unitName,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT})
+    insert into t_calc_unit (unit_name, company_id,create_id,create_name,create_date)
+    values (#{unitName,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},#{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},#{createDate,jdbcType=DATE})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.items.model.CalcUnit">
     <!--
