@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
 		registerUser.setUserStatus((short)1); //默认启用状态
 		registerUser.setMobileCountry("86");
 		registerUser.setEmail(registerDto.getEmail());
+		registerUser.setLastLoginTime(new Date());
 		int insert = userMapper.insert(registerUser);
 		return registerUser;
 	}
@@ -71,6 +72,11 @@ public class UserServiceImpl implements UserService {
 	public User userLogin(String username, String pwd) throws UserNotExistException, PassErrorException {
 		User user = queryByPhone(username);
 		if (user.getPwd().toUpperCase().equals(RegisterUtils.md5Encrypt(pwd).toUpperCase())){
+
+			user.setLastLoginTime(new Date()); //更新登录时间
+			userMapper.updateByPrimaryKey(user);
+
+
 			return user;
 		}else{
 			throw new PassErrorException();
