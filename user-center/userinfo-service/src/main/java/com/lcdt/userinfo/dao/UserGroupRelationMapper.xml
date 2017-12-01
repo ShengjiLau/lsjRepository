@@ -28,7 +28,6 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_uc_user_group (user_id, company_id, group_id
-      )
     values (#{userId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT}
       )
   </insert>

@@ -35,11 +35,12 @@
     </selectKey>
     insert into t_uc_company_certificate (comp_id, identity_front, identity_back, 
       three_certificates, yingyezhizhao, zuzhijigou, 
-      shuiwudengji, yinghangkaihu, yingyunxuke
+      shuiwudengji, yinghangkaihu, yingyunxuke,create_id,create_name
       )
     values (#{compId,jdbcType=BIGINT}, #{identityFront,jdbcType=VARCHAR}, #{identityBack,jdbcType=VARCHAR}, 
       #{threeCertificates,jdbcType=VARCHAR}, #{yingyezhizhao,jdbcType=VARCHAR}, #{zuzhijigou,jdbcType=VARCHAR}, 
-      #{shuiwudengji,jdbcType=VARCHAR}, #{yinghangkaihu,jdbcType=VARCHAR}, #{yingyunxuke,jdbcType=VARCHAR}
+      #{shuiwudengji,jdbcType=VARCHAR}, #{yinghangkaihu,jdbcType=VARCHAR}, #{yingyunxuke,jdbcType=VARCHAR},
+      #{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.CompanyCertificate">
