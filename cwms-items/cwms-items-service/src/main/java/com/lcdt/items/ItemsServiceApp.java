@@ -1,8 +1,9 @@
 package com.lcdt.items;
 
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.boot.SpringApplication;
+import com.lcdt.clms.security.annontion.EnableClmsSecurity;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ImportResource;
 
 /**
@@ -10,8 +11,9 @@ import org.springframework.context.annotation.ImportResource;
  */
 @SpringBootApplication
 @ImportResource("classpath:dubbo-items-provider.xml")
+@EnableClmsSecurity
 public class ItemsServiceApp {
-    public static void main(String args[]){
-        SpringApplication.run(ItemsServiceApp.class,args);
+    public static void main(String args[]) {
+        ConfigurableApplicationContext run = new SpringApplicationBuilder().sources(ItemsServiceApp.class).run(args);
     }
 }
