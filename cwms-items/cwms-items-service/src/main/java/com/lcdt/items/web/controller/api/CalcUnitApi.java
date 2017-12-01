@@ -40,7 +40,6 @@ public class CalcUnitApi {
         calcUnit.setUnitName(unitName);
         calcUnit.setCreateId(user.getUserId());
         calcUnit.setCreateName(user.getRealName());
-        calcUnit.setCreateDate(new Date());
         calcUnit.setCompanyId(companyId);
         if (calcUnitService.isUnitNameExist(calcUnit)) {
             throw new RuntimeException("单位名称已存在");
@@ -59,7 +58,7 @@ public class CalcUnitApi {
     @ApiOperation("删除单位")
     @PostMapping("/delete")
     public JSONObject delCalcUnit(HttpSession httpSession,@ApiParam(value = "单位Id", required = true) @RequestParam Long unitId) {
-        Long companyId=8L;
+        Long companyId= SecurityInfoGetter.getCompanyId();
         int result = calcUnitService.deleteCalcUnit(unitId,companyId);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
@@ -76,13 +75,11 @@ public class CalcUnitApi {
     public JSONObject modifyCalcUnit(HttpSession httpSession,
                                      @ApiParam(value = "单位Id", required = true) @RequestParam Long unitId,
                                      @ApiParam(value = "单位名称", required = true) @RequestParam String unitName) {
+        Long companyId= SecurityInfoGetter.getCompanyId();
         CalcUnit calcUnit = new CalcUnit();
         calcUnit.setUnitId(unitId);
         calcUnit.setUnitName(unitName);
-        calcUnit.setCreateId(8L);
-        calcUnit.setCreateName("张三");
-        calcUnit.setCreateDate(new Date());
-        calcUnit.setCompanyId(8L);
+        calcUnit.setCompanyId(companyId);
         if (calcUnitService.isUnitNameExist(calcUnit)) {
             throw new RuntimeException("单位名称已存在");
         }
@@ -100,14 +97,18 @@ public class CalcUnitApi {
     @ApiOperation("查询单位")
     @GetMapping("/query")
     public CalcUnit queryCalcUnit(HttpSession httpSession,@ApiParam(value = "单位Id", required = true) @RequestParam Long unitId) {
-        Long companyId = 8L;
-        return calcUnitService.queryCalcUnit(unitId,companyId);
+        Long companyId= SecurityInfoGetter.getCompanyId();
+        CalcUnit calcUnit=calcUnitService.queryCalcUnit(unitId,companyId);
+        if(calcUnit==null){
+            calcUnit=new CalcUnit();
+        }
+        return calcUnit;
     }
 
     @ApiOperation("查询单位")
     @GetMapping("/list")
     public List<CalcUnit> queryCalcUnitList(HttpSession httpSession) {
-        Long companyId = 8L;
+        Long companyId= SecurityInfoGetter.getCompanyId();
         List<CalcUnit> calcUnitList=new ArrayListResponseWrapper<CalcUnit>(calcUnitService.queryCalcUnitByCompanyId(companyId));
         return calcUnitList;
     }
