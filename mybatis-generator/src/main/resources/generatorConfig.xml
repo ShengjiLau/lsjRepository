@@ -11,7 +11,9 @@
 
     <context id="default" targetRuntime="MyBatis3Simple">
 
-
+        <commentGenerator>
+            <property name="suppressDate" value="false" />
+        </commentGenerator>
         <!--jdbc的数据库连接 -->
         <jdbcConnection driverClass="${jdbc.driverClass}" connectionURL="${jdbc.connectionURL}" userId="${jdbc.userId}" password="${jdbc.password}">
         </jdbcConnection>
@@ -180,17 +182,19 @@
         <!--</table>-->
         <!--<table tableName="t_uc_user_group" domainObjectName="UserGroupRelation">-->
             <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--&lt;!&ndash;</table>&ndash;&gt;-->
+        <!--<table tableName="t_customer" domainObjectName="Customer">-->
+            <!--<generatedKey column="customer_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
-        <table tableName="t_customer" domainObjectName="Customer">
-            <generatedKey column="customer_id" sqlStatement="MYSQL" identity="true"></generatedKey>
-        </table>
-        <table tableName="t_customer_contact" domainObjectName="ContomerContact">
-            <generatedKey column="contact_id" sqlStatement="MYSQL" identity="true"></generatedKey>
-        </table>
+        <!--<table tableName="t_customer_contact" domainObjectName="ContomerContact">-->
+            <!--<generatedKey column="contact_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
 
-        <table tableName="t_customer_type_relation" domainObjectName="ContomerTypeRelation">
-            <generatedKey column="customer_type_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        <!--<table tableName="t_customer_type_relation" domainObjectName="ContomerTypeRelation">-->
+            <!--<generatedKey column="customer_type_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
+        <table tableName="t_customer_invite_log" domainObjectName="CustomerInviteLog">
+        <generatedKey column="invite_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
-
     </context>
 </generatorConfiguration>

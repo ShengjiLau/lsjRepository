@@ -10,17 +10,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 /**
  * Created by ss on 2017/11/24.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = CustomerServiceApp.class)
-public class SpringBootMailSenderTest {
+public class SpringBootMailSenderTest extends BaseSpringbootTest{
 
-	@Autowired
-	InviteCustomerService inviteCustomerService;
 
-	@Test
-	public void testSendEmail() {
-		inviteCustomerService.sendInviteEmail("asjd");
-	}
 
 
 }

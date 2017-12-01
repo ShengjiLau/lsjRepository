@@ -68,12 +68,27 @@ public class CustomerApi {
         if (StringUtil.isNotEmpty(dto.getCounty())) {
             map.put("county",dto.getCounty());
         }
+
+        if (StringUtil.isNotEmpty(dto.getCustomerType())) { //1-销售客户2-仓储客户3-运输客户4-仓储服务商5-运输服务商6-供应商7-其他
+            String[] customTypeArray = dto.getCustomerType().split(",");
+            StringBuffer sb = new StringBuffer();
+            sb.append("(");
+            for (int i=0;i<customTypeArray.length;i++) {
+                sb.append(" find_in_set('"+customTypeArray[i]+"',client_types)");
+                if(i!=customTypeArray.length-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+            map.put("customerType", sb.toString());
+        }
+
+
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {
             String[] groupIdArray = dto.getGroupIds().split(",");
             StringBuffer sb = new StringBuffer();
             sb.append("(");
             for (int i=0;i<groupIdArray.length;i++) {
-
                 sb.append(" find_in_set('"+groupIdArray[i]+"',group_ids)");
                 if(i!=groupIdArray.length-1){
                     sb.append(" or ");
@@ -102,7 +117,7 @@ public class CustomerApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_list')")
     public Customer customerDetail(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        return customerService.getCustomerDetail(customerId);
+        return customerService.getCustomerDetail(customerId, companyId);
     }
 
     /**
@@ -134,9 +149,9 @@ public class CustomerApi {
      * @return
      */
     @ApiOperation("客户编辑")
-    @RequestMapping(value = "/customerEdit",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_edit')")
-    public Customer customerEdit(@Validated CustomerParamsDto dto) {
+    @RequestMapping(value = "/customerUpdate",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_update')")
+    public Customer customerUpdate(@Validated CustomerParamsDto dto) {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
         Customer customer = new Customer();
@@ -158,11 +173,12 @@ public class CustomerApi {
      * @return
      */
     @ApiOperation("客户修改状态")
-    @RequestMapping(value = "/customStatusModify",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_status_modify')")
-    public String customStatusModify(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
+    @RequestMapping(value = "/customStatusUpdate",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_status_update')")
+    public String customStatusUpdate(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
                                       @ApiParam(value = "状态(1-启，0-停)",required = true) @RequestParam short status) {
-        Customer customer = customerService.getCustomerDetail(customerId);
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Customer customer = customerService.getCustomerDetail(customerId, companyId);
         customer.setStatus(status);
         Integer flag = customerService.modifyCustomer(customer);
         JSONObject jsonObject = new JSONObject();
@@ -194,7 +210,8 @@ public class CustomerApi {
     @RequestMapping(value = "/customerRemove",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_remove')")
     public String customerRemove(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId) {
-        Customer customer = customerService.getCustomerDetail(customerId);
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Customer customer = customerService.getCustomerDetail(customerId, companyId);
         if (customer.getStatus()==1) {
             throw new CustomerException("此客户未停用，不能删除！");
         }
@@ -241,7 +258,7 @@ public class CustomerApi {
     public String customerContactIsDefault(@ApiParam(value = "客户联系人ID",required = true) @RequestParam Long contactId,
                                      @ApiParam(value = "状态(1-设置默认，0-取消默认)",required = true) @RequestParam short isDefault) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        CustomerContact customerContact = customerService.customerContactDetail(contactId);
+        CustomerContact customerContact = customerService.customerContactDetail(contactId, companyId);
         if (customerContact==null) {
             throw new CustomerContactException("联系人不存在！");
         }
@@ -294,9 +311,9 @@ public class CustomerApi {
      * @return
      */
     @ApiOperation("编辑客户联系人")
-    @RequestMapping(value = "/customerContactEdit",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_add')")
-    public CustomerContact customerContactEdit(@Validated CustomerContactParamsDto dto) {
+    @RequestMapping(value = "/customerContactUpdate",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_Update')")
+    public CustomerContact customerContactUpdate(@Validated CustomerContactParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         CustomerContact vo = new CustomerContact();
         BeanUtils.copyProperties(dto, vo);
@@ -316,7 +333,8 @@ public class CustomerApi {
     @RequestMapping(value = "/customerContactRemove",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_remove')")
     public String customerContactRemove(@ApiParam(value = "客户联系人ID",required = true) @RequestParam Long contactId) {
-        int flag = customerService.customerContactRemove(contactId);
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        int flag = customerService.customerContactRemove(contactId,companyId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("message",flag==1?"删除成功！":"删除失败！");
         jsonObject.put("code",flag==1?0:-1);

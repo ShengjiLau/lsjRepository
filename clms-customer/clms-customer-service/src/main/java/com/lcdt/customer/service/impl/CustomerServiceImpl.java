@@ -39,6 +39,12 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerTypeRelationMapper contomerTypeRelation;
 
 
+    @Override
+    public Customer selectByCustomerId(Long customerId, Long companyId) {
+        Customer customer = customerMapper.selectByPrimaryKey(customerId, companyId);
+        return customer;
+    }
+
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerList(Map m) {
@@ -64,18 +70,18 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(readOnly = true)
     @Override
-    public Customer getCustomerDetail(Long customerId) {
-        return customerMapper.selectByPrimaryKey(customerId);
+    public Customer getCustomerDetail(Long customerId, Long companyId) {
+        return customerMapper.selectByPrimaryKey(customerId, companyId);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int addCustomerContact(CustomerContact customerContact) {
         return customerContactMapper.insert(customerContact);
     }
 
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int addCustomer(Customer customer) throws CustomerException {
         Map map = new HashMap();
@@ -119,7 +125,7 @@ public class CustomerServiceImpl implements CustomerService {
         return flag;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int updateCustomer(Customer customer) throws CustomerException  {
         Map map = new HashMap();
@@ -130,7 +136,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (list.size()>0) {
             throw new CustomerException("客户已存在，请联系管理员分配！");
         }
-        int flag = customerMapper.updateByPrimaryKey(customer);
+        int flag = customerMapper.updateByPrimaryKeySelective(customer);
         if (flag>0) {
              //组关系表
             if (!StringUtils.isEmpty(customer.getClientTypes())) {
@@ -138,7 +144,7 @@ public class CustomerServiceImpl implements CustomerService {
                 //先清楚原来的组关系，再更新
                 CustomerTypeRelation tempObj = new CustomerTypeRelation();
                 tempObj.setCustomerId(customer.getCustomerId());
-                tempObj.setCustomerId(customer.getCompanyId());
+                tempObj.setCompanyId(customer.getCompanyId());
                 contomerTypeRelation.deleteCustomerType(tempObj);
 
                  for (int i=0; i<typeArrays.length; i++) {
@@ -155,15 +161,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int modifyCustomer(Customer customer) {
         int flag = customerMapper.updateByPrimaryKey(customer);
           return flag;
     }
-
-
-
 
     @Transactional
     @Override
@@ -188,27 +191,28 @@ public class CustomerServiceImpl implements CustomerService {
         return  pageInfo;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int updateCustomerContact(CustomerContact CustomerContact) {
-        return customerContactMapper.updateByPrimaryKey(CustomerContact);
+        return customerContactMapper.updateByPrimaryKeySelective(CustomerContact);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public CustomerContact customerContactDetail(Long contactId) {
-        return customerContactMapper.selectByPrimaryKey(contactId);
+    public CustomerContact customerContactDetail(Long contactId, Long companyId) {
+        return customerContactMapper.selectByPrimaryKey(contactId, companyId);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public int oldCustomerContactIsNull(CustomerContact customerContact) {
         return customerContactMapper.oldCustomerContactIsNull(customerContact);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public int customerContactRemove(Long contactId) {
-        return customerContactMapper.deleteByPrimaryKey(contactId);
+    public int customerContactRemove(Long contactId, Long companyId) {
+        return customerContactMapper.deleteByPrimaryKey(contactId,companyId);
     }
 
 

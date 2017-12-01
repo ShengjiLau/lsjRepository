@@ -13,6 +13,9 @@ import java.util.Map;
  */
 public interface CustomerService {
 
+
+    Customer selectByCustomerId(Long customerId, Long companyId);
+
     /**
      * 根据查询条件获取客户列表
      * @param m
@@ -32,7 +35,7 @@ public interface CustomerService {
      * @param customerId
      * @return
      */
-    Customer getCustomerDetail(Long customerId);
+    Customer getCustomerDetail(Long customerId, Long companyId);
 
 
     /***
@@ -69,7 +72,7 @@ public interface CustomerService {
      * @param contactId
      * @return
      */
-    CustomerContact customerContactDetail(Long contactId);
+    CustomerContact customerContactDetail(Long contactId, Long companyId);
 
 
     /***
@@ -85,7 +88,7 @@ public interface CustomerService {
      * @param contactId
      * @return
      */
-    int customerContactRemove(Long contactId);
+    int customerContactRemove(Long contactId, Long companyId);
 
     /**
      * 修改用户状态
