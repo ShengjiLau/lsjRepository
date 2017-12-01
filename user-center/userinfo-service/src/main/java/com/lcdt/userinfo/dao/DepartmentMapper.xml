@@ -44,9 +44,9 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_department (dept_name, dept_pid, dept_order, 
-      company_id)
+      company_id,create_id,create_name)
     values (#{deptName,jdbcType=VARCHAR}, #{deptPid,jdbcType=BIGINT}, #{deptOrder,jdbcType=BIGINT}, 
-      #{companyId,jdbcType=BIGINT})
+      #{companyId,jdbcType=BIGINT},#{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.Department">
     <!--

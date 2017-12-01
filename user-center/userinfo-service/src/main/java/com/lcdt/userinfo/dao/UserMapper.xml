@@ -42,12 +42,12 @@
       wechat, qq, real_name, 
       nick_name, pwd, birthday, 
       picture_url, intro_memo, register_date, 
-      referrer_phone, user_status)
+      referrer_phone, user_status,last_login_time)
     values (#{mobileCountry,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{wechat,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, 
       #{nickName,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, #{birthday,jdbcType=BIGINT},
       #{pictureUrl,jdbcType=VARCHAR}, #{introMemo,jdbcType=VARCHAR}, #{registerDate,jdbcType=TIMESTAMP}, 
-      #{referrerPhone,jdbcType=VARCHAR}, #{userStatus,jdbcType=SMALLINT})
+      #{referrerPhone,jdbcType=VARCHAR}, #{userStatus,jdbcType=SMALLINT},#{lastLoginTime,jdbcType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.User">
     <!--

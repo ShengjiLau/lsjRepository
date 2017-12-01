@@ -46,7 +46,7 @@
       link_tel, link_email, link_remark, 
       invoice_title, registration_no, bank_name, 
       bank_no, registration_address, tel_no1, 
-      invoice_remark, company_logo,create_id,create_name,create_date)
+      invoice_remark, company_logo,create_id,create_name)
     values (#{fullName,jdbcType=VARCHAR}, #{shortName,jdbcType=VARCHAR}, #{authentication,jdbcType=SMALLINT}, 
       #{authenticationRemark,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
       #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{detailAddress,jdbcType=VARCHAR}, 
@@ -56,7 +56,7 @@
       #{invoiceTitle,jdbcType=VARCHAR}, #{registrationNo,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, 
       #{bankNo,jdbcType=VARCHAR}, #{registrationAddress,jdbcType=VARCHAR}, #{telNo1,jdbcType=VARCHAR}, 
       #{invoiceRemark,jdbcType=VARCHAR}, #{companyLogo,jdbcType=VARCHAR},#{createId,jdbcType=BIGINT},
-      #{createName,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP})
+      #{createName,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.Company">
     update t_uc_company
