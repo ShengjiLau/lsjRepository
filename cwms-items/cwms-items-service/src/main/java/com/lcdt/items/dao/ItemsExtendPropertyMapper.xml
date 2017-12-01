@@ -34,10 +34,10 @@
     </selectKey>
     insert into t_items_extend_property (title, field_name, field_type, 
       control_name, classify_id, classify_name, 
-      company_id,remarks)
+      company_id,remarks,create_id,create_name,create_date)
     values (#{title,jdbcType=VARCHAR}, #{fieldName,jdbcType=VARCHAR}, #{fieldType,jdbcType=SMALLINT},
       #{controlName,jdbcType=SMALLINT}, #{classifyId,jdbcType=BIGINT}, #{classifyName,jdbcType=VARCHAR}, 
-      #{companyId,jdbcType=BIGINT},#{remarks,jdbcType=VARCHAR})
+      #{companyId,jdbcType=BIGINT},#{remarks,jdbcType=VARCHAR},#{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP)
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.items.model.ItemsExtendProperty">
     <!--

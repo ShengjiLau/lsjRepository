@@ -30,9 +30,9 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_custom_property (property_type, property_name, property_field, 
-      company_id,remarks)
+      company_id,remarks,,create_id,create_name,create_date)
     values (#{propertyType,jdbcType=SMALLINT}, #{propertyName,jdbcType=VARCHAR}, #{propertyField,jdbcType=VARCHAR}, 
-      #{companyId,jdbcType=BIGINT},#{remarks,jdbcType=VARCHAR})
+      #{companyId,jdbcType=BIGINT},#{remarks,jdbcType=VARCHAR},#{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP)
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.items.model.CustomProperty">
     <!--

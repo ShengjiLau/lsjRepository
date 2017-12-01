@@ -38,8 +38,8 @@
     <selectKey keyProperty="spkId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_item_spec_key (sp_name, company_id)
-    values (#{spName,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT})
+    insert into t_item_spec_key (sp_name, company_id,create_id,create_name,create_date)
+    values (#{spName,jdbcType=VARCHAR},#{companyId,jdbcType=BIGINT},#{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP)
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.items.model.ItemSpecKey">
     <!--

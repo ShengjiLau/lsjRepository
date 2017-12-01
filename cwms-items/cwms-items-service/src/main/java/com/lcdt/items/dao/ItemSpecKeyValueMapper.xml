@@ -31,10 +31,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_item_spec_key_value (spk_id, sp_name, spv_id, 
-      sp_value, sub_item_id, company_id
+      sp_value, sub_item_id, company_id,create_id,create_name,create_date
       )
     values (#{spkId,jdbcType=BIGINT}, #{spName,jdbcType=VARCHAR}, #{spvId,jdbcType=BIGINT}, 
-      #{spValue,jdbcType=VARCHAR}, #{subItemId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}
+      #{spValue,jdbcType=VARCHAR}, #{subItemId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT},
+      #{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.items.model.ItemSpecKeyValue">
