@@ -235,7 +235,7 @@ public class CustomerApi {
 
     @ApiOperation("客户联系人列表")
     @RequestMapping(value = "/customerContactList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact')")
     public CustomerListResultDto customerContactList(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
                                                      @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                                      @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
@@ -263,7 +263,7 @@ public class CustomerApi {
      */
     @ApiOperation("客户联系人默认状态修改")
     @RequestMapping(value = "/customerContactIsDefault",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_is_default')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact')")
     public String customerContactIsDefault(@ApiParam(value = "客户联系人ID",required = true) @RequestParam Long contactId,
                                      @ApiParam(value = "状态(1-设置默认，0-取消默认)",required = true) @RequestParam short isDefault) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -302,7 +302,7 @@ public class CustomerApi {
      */
     @ApiOperation("新增客户联系人")
     @RequestMapping(value = "/customerContactAdd",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_add')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact')")
     public CustomerContact customerContactAdd(@Validated CustomerContactParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -325,7 +325,7 @@ public class CustomerApi {
      */
     @ApiOperation("编辑客户联系人")
     @RequestMapping(value = "/customerContactUpdate",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_Update')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact')")
     public CustomerContact customerContactUpdate(@Validated CustomerContactParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         CustomerContact vo = new CustomerContact();
@@ -344,7 +344,7 @@ public class CustomerApi {
      */
     @ApiOperation("客户联系人删除")
     @RequestMapping(value = "/customerContactRemove",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_remove')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact')")
     public String customerContactRemove(@ApiParam(value = "客户联系人ID",required = true) @RequestParam Long contactId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         int flag = customerService.customerContactRemove(contactId,companyId);
