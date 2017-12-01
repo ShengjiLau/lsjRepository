@@ -56,8 +56,7 @@
       This element was generated on Fri Nov 24 10:56:38 CST 2017.
     -->
     update t_customer_contact
-    set customer_id = #{customerId,jdbcType=BIGINT},
-      name = #{name,jdbcType=VARCHAR},
+    set name = #{name,jdbcType=VARCHAR},
       duty = #{duty,jdbcType=VARCHAR},
       mobile = #{mobile,jdbcType=VARCHAR},
       mail = #{mail,jdbcType=VARCHAR},
@@ -69,7 +68,7 @@
       detail_address = #{detailAddress,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       is_default = #{isDefault,jdbcType=SMALLINT}
-    where contact_id = #{contactId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+    where contact_id = #{contactId,jdbcType=BIGINT} and customer_id = #{customerId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
 
   <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.customer.model.CustomerContact">
