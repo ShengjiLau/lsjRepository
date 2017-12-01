@@ -72,11 +72,8 @@ public class UserServiceImpl implements UserService {
 	public User userLogin(String username, String pwd) throws UserNotExistException, PassErrorException {
 		User user = queryByPhone(username);
 		if (user.getPwd().toUpperCase().equals(RegisterUtils.md5Encrypt(pwd).toUpperCase())){
-
 			user.setLastLoginTime(new Date()); //更新登录时间
 			userMapper.updateByPrimaryKey(user);
-
-
 			return user;
 		}else{
 			throw new PassErrorException();

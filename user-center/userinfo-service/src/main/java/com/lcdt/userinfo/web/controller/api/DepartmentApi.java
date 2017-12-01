@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yangbinq on 2017/11/9.
@@ -53,8 +50,9 @@ public class DepartmentApi {
         department.setDeptName(dto.getDeptName());
         department.setDeptPid(dto.getDeptPid());
 
-        department.setCreatId(loginUser.getUserId());
+        department.setCreateId(loginUser.getUserId());
         department.setCreateName(loginUser.getRealName());
+        department.setCreatDate(new Date());
 
         Map map = new HashMap();
         map.put("companyId",companyId);

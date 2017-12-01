@@ -50,9 +50,9 @@ public class GroupApi {
         Group group = new Group();
         group.setCompanyId(companyId);
         group.setGroupName(dto.getGroupName());
-        group.setCreatTime(new Date());
+        group.setCreateTime(new Date());
         group.setIsValid(dto.getIsValid());
-        group.setCreatId(loginUser.getUserId());
+        group.setCreateId(loginUser.getUserId());
         group.setCreateName(loginUser.getRealName());
         group.setGroupRemark(dto.getGroupRemark());
         try {
