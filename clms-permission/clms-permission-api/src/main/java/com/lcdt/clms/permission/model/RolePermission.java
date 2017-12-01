@@ -1,5 +1,7 @@
 package com.lcdt.clms.permission.model;
 
+import java.util.Date;
+
 public class RolePermission {
     /**
      *
@@ -30,6 +32,35 @@ public class RolePermission {
 
 
     private Permission permission;
+
+
+    private Long createId;
+    private String createName;
+    private Date creatDate;
+
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Long createId) {
+        this.createId = createId;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
+    public Date getCreatDate() {
+        return creatDate;
+    }
+
+    public void setCreatDate(Date creatDate) {
+        this.creatDate = creatDate;
+    }
 
     public Permission getPermission() {
         return permission;
