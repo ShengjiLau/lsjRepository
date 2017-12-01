@@ -2,6 +2,7 @@ package com.lcdt.login.bean;
 
 import com.lcdt.clms.permission.model.Permission;
 import com.lcdt.clms.permission.model.SysRole;
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 
@@ -17,11 +18,21 @@ public class TicketAuthentication implements Serializable {
 	private UserCompRel userCompRel;
 	private User user;
 
+	private List<Group> groups;
+
 	private List<Permission> permissions;
 	private List<SysRole> sysRoles;
 
 	private String ticket;
 
+
+	public List<Group> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<Group> groups) {
+		this.groups = groups;
+	}
 
 	public List<SysRole> getSysRoles() {
 		return sysRoles;

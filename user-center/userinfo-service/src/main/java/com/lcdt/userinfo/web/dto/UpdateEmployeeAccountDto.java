@@ -10,7 +10,6 @@ public class UpdateEmployeeAccountDto extends CreateEmployeeAccountDto {
 	@ApiModelProperty(required = true)
 	private Long userCompRelId;
 
-
 	public Long getUserCompRelId() {
 		return userCompRelId;
 	}

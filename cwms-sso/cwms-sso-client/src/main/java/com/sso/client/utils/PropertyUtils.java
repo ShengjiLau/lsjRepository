@@ -9,7 +9,7 @@ import java.util.Properties;
  */
 public class PropertyUtils {
 
-	public static final String LOGIN_URL = "sso.server.login";
+	public static final String LOGIN_URL = "ssoserverlogin";
 
 	private static final String PROPERTY_LOCATION = "sso.properties";
 
@@ -38,6 +38,12 @@ public class PropertyUtils {
 	}
 
 	public static String readProperties(String key){
+		String property1 = System.getProperty(key);
+		if (property1 != null) {
+			return property1;
+		}
+
+
 		String value = System.getenv(key);
 		if (value != null && value.length() > 0) {
 			return value;
@@ -50,5 +56,6 @@ public class PropertyUtils {
 		}
 		return null;
 	}
+
 
 }

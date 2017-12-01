@@ -23,7 +23,6 @@ public interface CompanyService {
 
 	Company selectById(Long companyId);
 
-
 	/**
 	 * 创建企业
 	 *
@@ -69,4 +68,7 @@ public interface CompanyService {
 	 */
 	int removeCompanyRel(Long relId);
 
+	CompanyCertificate updateCompanyCert(CompanyCertificate companyCertificate);
+
+	CompanyCertificate queryCertByCompanyId(Long companyId);
 }

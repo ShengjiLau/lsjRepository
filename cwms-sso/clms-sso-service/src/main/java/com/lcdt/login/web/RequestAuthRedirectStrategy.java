@@ -66,6 +66,7 @@ public class RequestAuthRedirectStrategy {
 		String requestDomain = HttpUtils.getUrlDomain(request.getRequestURL().toString());
 		if (!callBackDomain.equals(requestDomain)) {
 			try {
+				response.setCharacterEncoding("UTF-8");
 				response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED,"错误请求");
 				return;
 			} catch (IOException e) {

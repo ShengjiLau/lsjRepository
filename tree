@@ -62,7 +62,7 @@
 [INFO] |  +- commons-codec:commons-codec:jar:1.10:compile
 [INFO] |  +- commons-pool:commons-pool:jar:1.6:compile
 [INFO] |  +- org.apache.curator:curator-framework:jar:2.5.0:compile
-[INFO] |  +- org.apache.curator:curator-client:jar:2.5.0:compile
+[INFO] |  +- org.apache.curator:curator-customer:jar:2.5.0:compile
 [INFO] |  +- org.slf4j:slf4j-api:jar:1.7.25:compile
 [INFO] |  \- com.google.guava:guava:jar:16.0.1:compile
 [INFO] +- org.apache.zookeeper:zookeeper:jar:3.4.9:compile
@@ -135,7 +135,7 @@
 [INFO] |  +- commons-codec:commons-codec:jar:1.10:compile
 [INFO] |  +- commons-pool:commons-pool:jar:1.6:compile
 [INFO] |  +- org.apache.curator:curator-framework:jar:2.5.0:compile
-[INFO] |  +- org.apache.curator:curator-client:jar:2.5.0:compile
+[INFO] |  +- org.apache.curator:curator-customer:jar:2.5.0:compile
 [INFO] |  +- org.slf4j:slf4j-api:jar:1.7.25:compile
 [INFO] |  \- com.google.guava:guava:jar:16.0.1:compile
 [INFO] +- org.apache.zookeeper:zookeeper:jar:3.4.9:compile
@@ -208,7 +208,7 @@
 [INFO] |  +- commons-codec:commons-codec:jar:1.10:compile
 [INFO] |  +- commons-pool:commons-pool:jar:1.6:compile
 [INFO] |  +- org.apache.curator:curator-framework:jar:2.5.0:compile
-[INFO] |  +- org.apache.curator:curator-client:jar:2.5.0:compile
+[INFO] |  +- org.apache.curator:curator-customer:jar:2.5.0:compile
 [INFO] |  +- org.slf4j:slf4j-api:jar:1.7.25:compile
 [INFO] |  \- com.google.guava:guava:jar:16.0.1:compile
 [INFO] +- org.apache.zookeeper:zookeeper:jar:3.4.9:compile
@@ -281,7 +281,7 @@
 [INFO] |  +- commons-codec:commons-codec:jar:1.10:compile
 [INFO] |  +- commons-pool:commons-pool:jar:1.6:compile
 [INFO] |  +- org.apache.curator:curator-framework:jar:2.5.0:compile
-[INFO] |  +- org.apache.curator:curator-client:jar:2.5.0:compile
+[INFO] |  +- org.apache.curator:curator-customer:jar:2.5.0:compile
 [INFO] |  +- org.slf4j:slf4j-api:jar:1.7.25:compile
 [INFO] |  \- com.google.guava:guava:jar:16.0.1:compile
 [INFO] +- org.apache.zookeeper:zookeeper:jar:3.4.9:compile
@@ -386,7 +386,7 @@
 [INFO] |  +- commons-codec:commons-codec:jar:1.10:compile
 [INFO] |  +- commons-pool:commons-pool:jar:1.6:compile
 [INFO] |  +- org.apache.curator:curator-framework:jar:2.5.0:compile
-[INFO] |  +- org.apache.curator:curator-client:jar:2.5.0:compile
+[INFO] |  +- org.apache.curator:curator-customer:jar:2.5.0:compile
 [INFO] |  +- org.slf4j:slf4j-api:jar:1.7.25:compile
 [INFO] |  \- com.google.guava:guava:jar:16.0.1:compile
 [INFO] +- org.apache.zookeeper:zookeeper:jar:3.4.9:compile
@@ -459,7 +459,7 @@
 [INFO] |  +- commons-codec:commons-codec:jar:1.10:compile
 [INFO] |  +- commons-pool:commons-pool:jar:1.6:compile
 [INFO] |  +- org.apache.curator:curator-framework:jar:2.5.0:compile
-[INFO] |  +- org.apache.curator:curator-client:jar:2.5.0:compile
+[INFO] |  +- org.apache.curator:curator-customer:jar:2.5.0:compile
 [INFO] |  +- org.slf4j:slf4j-api:jar:1.7.25:compile
 [INFO] |  \- com.google.guava:guava:jar:16.0.1:compile
 [INFO] +- org.apache.zookeeper:zookeeper:jar:3.4.9:compile
@@ -511,7 +511,7 @@
 [INFO] |  +- commons-codec:commons-codec:jar:1.10:compile
 [INFO] |  +- commons-pool:commons-pool:jar:1.6:compile
 [INFO] |  +- org.apache.curator:curator-framework:jar:2.5.0:compile
-[INFO] |  +- org.apache.curator:curator-client:jar:2.5.0:compile
+[INFO] |  +- org.apache.curator:curator-customer:jar:2.5.0:compile
 [INFO] |  +- org.slf4j:slf4j-api:jar:1.7.25:compile
 [INFO] |  \- com.google.guava:guava:jar:16.0.1:compile
 [INFO] +- org.apache.zookeeper:zookeeper:jar:3.4.9:compile

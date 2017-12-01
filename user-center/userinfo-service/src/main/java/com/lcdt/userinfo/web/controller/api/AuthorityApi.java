@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.web.controller.api;
 
-import com.alibaba.dubbo.common.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.lcdt.clms.permission.model.Permission;
 import com.lcdt.clms.permission.model.Role;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -84,8 +86,16 @@ public class AuthorityApi {
 	public String removeRole(Long roleId) {
 		boolean result = roleService.removeCompanyRole(roleId);
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("code", -1);
-		jsonObject.put("message","存在用户设置为该角色，请先修改用户角色后删除");
+		if (!result) {
+			jsonObject.put("code", -1);
+			jsonObject.put("message","存在用户设置为该角色，请先修改用户角色后删除");
+		}
+		else{
+			jsonObject.put("code", 0);
+			jsonObject.put("messgae","操作成功");
+		}
+
+
 		return jsonObject.toString();
 	}
 
@@ -95,6 +105,20 @@ public class AuthorityApi {
 		roleService.addRolePermission(roleId, permissionId);
 		return emptyResponseData;
 	}
+
+
+	@RequestMapping(value = "/updateRolePermission", method = RequestMethod.POST)
+	@ApiOperation("批量编辑角色权限")
+	public String addPermissionsForRole(Long roleId, HttpServletRequest request) {
+		String permissions = request.getParameter("permissions");
+		List<Long> permissionlist = JSONArray.parseArray(permissions, Long.class);
+		roleService.updateRolePermissions(roleId, permissionlist);
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("code", 0);
+		jsonObject.put("messgae", "操作成功");
+		return jsonObject.toJSONString();
+	}
+
 
 	@RequestMapping(value = "/removeRolePermission", method = RequestMethod.POST)
 	@ApiOperation("删除角色权限")
@@ -106,6 +130,5 @@ public class AuthorityApi {
 	static class EmptyResponseDate implements ResponseData{
 		String result = "请求成功";
 	}
-
 
 }

@@ -30,4 +30,8 @@ public interface UserRoleService {
 	void setCompanyUserRole(Long userId, Long companyId, List<Long> roleId);
 
 	void updateCompanyUserRole(Long userId,Long companyId,List<Long> roleIds);
+
+	List<Role> userCompanyRole(Long userId, Long companyId);
+
+	void updateRolePermissions(Long roleId, List<Long> permissions);
 }

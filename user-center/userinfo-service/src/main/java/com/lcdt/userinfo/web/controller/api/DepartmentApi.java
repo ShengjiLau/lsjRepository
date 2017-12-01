@@ -150,17 +150,21 @@ public class DepartmentApi {
         map.put("page_no",pageNo);
         map.put("page_size",pageSize);
         map.put("deptPid",0); //获取一级栏目
-        PageInfo pageInfo = departmentService.deptmentList(map);
+        PageInfo pageInfo = departmentService.deptmentTreeList(map);
         List<Department> list = null;
         if (pageInfo.getTotal()>0) {
             list = pageInfo.getList();
             for (Department tobj :list) {
+                if(tobj.getChildNum()==0) {
+                    tobj.setIsSub((short)0);
+                    continue;
+                }
                 List<Department> list1 = getChild(tobj);
                 if (list1!=null && list1.size()>0) {
                     tobj.setList(list1);
-                    tobj.setIsSub((short)1); //存在
+                    tobj.setIsSub((short)1);
                 } else {
-                    tobj.setIsSub((short)0); //存在
+                    tobj.setIsSub((short)0);
                 }
 
             }
@@ -181,7 +185,7 @@ public class DepartmentApi {
         Map map = new HashMap();
         map.put("companyId",obj.getCompanyId());
         map.put("deptPid",obj.getDeptId());
-        PageInfo pageInfo = departmentService.deptmentList(map);
+        PageInfo pageInfo = departmentService.deptmentTreeList(map);
         if (pageInfo.getTotal()>0) {
             List<Department> tlist = pageInfo.getList();
             for(Department tobj : tlist) {
@@ -189,12 +193,16 @@ public class DepartmentApi {
             }
         }
         for (Department department : childList) {
+            if(department.getChildNum()==0) {
+                department.setIsSub((short)0);
+                continue;
+            }
             List<Department> list1 = getChild(department);
             if (list1!=null && list1.size()>0) {
                 department.setList(list1);
-                department.setIsSub((short)1); //存在
+                department.setIsSub((short)1);
             } else {
-                department.setIsSub((short)0); //存在
+                department.setIsSub((short)0);
             }
         }
         if (childList.size() == 0) {

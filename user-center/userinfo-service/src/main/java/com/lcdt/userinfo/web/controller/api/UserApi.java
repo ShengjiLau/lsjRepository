@@ -16,6 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,8 +44,11 @@ public class UserApi {
 
 	@ApiOperation("获取用户信息")
 	@RequestMapping(value = "/get", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('getUserInfo')")
 	public User getUserInfo() {
 		User user = SecurityInfoGetter.getUser();
+		//从数据库读取用户信息
+		user = userService.selectUserByPhone(user.getPhone());
 		//将密码设置为空字符串
 		user.setPwd("");
 		return user;
@@ -67,6 +72,7 @@ public class UserApi {
 		}
 
 		User user = SecurityInfoGetter.getUser();
+		user = userService.selectUserByPhone(user.getPhone());
 		user.setNickName(modifyUserDto.getNickName());
 		user.setRealName(modifyUserDto.getName());
 		if (!StringUtils.isEmpty(modifyUserDto.getAvatarUrl())) {
@@ -167,4 +173,5 @@ public class UserApi {
 		jsonObject.put("code",0);
 		return jsonObject.toString();
 	}
+
 }

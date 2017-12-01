@@ -137,5 +137,10 @@ public class GroupManageServiceImpl implements GroupManageService {
 	}
 
 
+	@Transactional
+	public List<Group> userCompanyGroups(Long userId, Long companyId) {
+		return groupDao.selectUserCompanyGroups(userId, companyId);
+	}
+
 
 }

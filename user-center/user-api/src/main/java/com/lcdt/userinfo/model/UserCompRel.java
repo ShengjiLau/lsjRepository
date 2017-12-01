@@ -59,6 +59,24 @@ public class UserCompRel implements java.io.Serializable,ResponseData {
 
     private Boolean isEnable;
 
+    private String duty;
+
+    public Boolean getEnable() {
+        return isEnable;
+    }
+
+    public void setEnable(Boolean enable) {
+        isEnable = enable;
+    }
+
+    public String getDuty() {
+        return duty;
+    }
+
+    public void setDuty(String duty) {
+        this.duty = duty;
+    }
+
     public Boolean getIsEnable() {
         return isEnable;
     }

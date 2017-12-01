@@ -72,12 +72,16 @@ on rp.permission_id = p.permission_id WHERE rp.role_id = #{roleId,jdbcType = BIG
     and permission_id = #{permissionId,jdbcType = BIGINT}
   </select>
 
+  <delete id="deleteeRolePermissions">
+    delete from role_permission  where role_id = #{roleId,jdbcType=BIGINT}
+  </delete>
 
 
-
-
-
-
-
+  <insert id="insertRolePermission">
+  insert into role_permission (role_id,permission_id) values
+    <foreach collection="permissions" item="item" separator=","  close=";">
+       (#{roleId,jdbcType=BIGINT}, #{item,jdbcType=BIGINT})
+    </foreach>
+  </insert>
 
 </mapper>

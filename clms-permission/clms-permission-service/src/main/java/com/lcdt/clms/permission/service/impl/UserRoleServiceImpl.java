@@ -107,6 +107,15 @@ public class UserRoleServiceImpl implements UserRoleService {
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
+	public void updateRolePermissions(Long roleId, List<Long> permissions) {
+		rolePermissionDao.deleteeRolePermissions(roleId);
+		if (permissions != null && !permissions.isEmpty()) {
+			rolePermissionDao.insertRolePermission(roleId,permissions);
+		}
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	@Override
 	public void removeRolePermission(Long roleId, Long permissionId) {
 		List<RolePermission> rolePermissions = rolePermissionDao.selectByRolePermission(roleId, permissionId);
 		if (rolePermissions != null && rolePermissions.size() > 0) {
@@ -145,5 +154,11 @@ public class UserRoleServiceImpl implements UserRoleService {
 		}
 		roleIds.removeAll(ids);
 		roleUserRelationDao.insertRoles(roleIds);
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	@Override
+	public List<Role> userCompanyRole(Long userId, Long companyId) {
+		return userRoleDao.selectUserCompanyRoles(userId, companyId);
 	}
 }

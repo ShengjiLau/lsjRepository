@@ -17,8 +17,6 @@ public class CreateEmployeeAccountDto extends RegisterDto implements Serializabl
 
 	private String nickName;
 
-	private String email;
-
 	private String comment;
 
 	private Boolean isEnable;
@@ -28,6 +26,16 @@ public class CreateEmployeeAccountDto extends RegisterDto implements Serializabl
 
 	@ApiModelProperty(hidden = true)
 	private List<Long> roles;
+
+	private String duty;
+
+	public String getDuty() {
+		return duty;
+	}
+
+	public void setDuty(String duty) {
+		this.duty = duty;
+	}
 
 	public Boolean getEnable() {
 		return isEnable;
@@ -51,14 +59,6 @@ public class CreateEmployeeAccountDto extends RegisterDto implements Serializabl
 
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public String getComment() {

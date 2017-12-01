@@ -27,6 +27,15 @@ public class RegisterDto implements java.io.Serializable{
 	private String introducer; //推荐人
 	private String ecode; //手机验证码
 
+	private String email;
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public String getUserPhoneNum() {
 		return userPhoneNum;

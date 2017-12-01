@@ -48,5 +48,14 @@
     from role
     WHERE role_company_id = #{companyId,jdbcType=INTEGER}
   </select>
+    <select id="selectUserCompanyRoles" resultMap="BaseResultMap">
+
+  SELECT r.* from
+    role_user_relation rr
+  LEFT JOIN role r
+  on rr.role_id = r.role_id
+  WHERE rr.user_id = #{userId,jdbcType=BIGINT} and rr.company_id = #{companyId,jdbcType = BIGINT}
+
+    </select>
 
 </mapper>

@@ -54,6 +54,9 @@ public interface RolePermissionMapper {
 
     List<RolePermission> selectByRolePermission(@Param("roleId") Long roleId, @Param("permissionId") Long permissionId);
 
+    void deleteeRolePermissions(Long roleId);
+
+    void insertRolePermission(@Param("roleId")Long roleId,@Param("permissions") List<Long> permissions);
 
 
 }

@@ -11,6 +11,7 @@
     <result column="dept_ids" jdbcType="VARCHAR" property="deptIds" />
     <result column="dept_names" jdbcType="VARCHAR" property="deptNames" />
     <result column="is_enable" jdbcType="TINYINT" property="isEnable"></result>
+    <result column="duty" jdbcType="VARCHAR" property="duty"></result>
     <association property="user" column="user_id" javaType="com.lcdt.userinfo.model.User"
     select="com.lcdt.userinfo.dao.UserMapper.selectByPrimaryKeyWithoutPwd" fetchType="eager"
     ></association>
@@ -18,30 +19,30 @@
                  javaType="com.lcdt.userinfo.model.Company"
                  select="com.lcdt.userinfo.dao.CompanyMapper.selectByPrimaryKey" fetchType="eager"></association>
 
-    <collection property="groups" ofType="com.lcdt.userinfo.model.Group"
-                autoMapping="true" fetchType="eager" column="group_id"
-                select="com.lcdt.userinfo.dao.GroupMapper.selectByPrimaryKey" >
-      <!--<id property="groupId" column="group_id"></id>-->
+    <!--<collection property="groups" ofType="com.lcdt.userinfo.model.UserGroupRelation"-->
+                <!--autoMapping="true" fetchType="eager" column="{groupId=group_id,companyId=comp_id}"-->
+                <!--select="com.lcdt.userinfo.dao.UserGroupRelationMapper.selectByUserCompany" >-->
+      <!--&lt;!&ndash;<id property="groupId" column="group_id"></id>&ndash;&gt;-->
 
-    <!--<id column="group_id" jdbcType="BIGINT" property="groupId" />-->
-    <!--<result column="group_name" jdbcType="VARCHAR" property="groupName" />-->
-    <!--<result column="company_id" jdbcType="BIGINT" property="companyId" />-->
-    <!--<result column="is_valid" jdbcType="BIT" property="isValid" />-->
-    <!--<result column="group_remark" jdbcType="VARCHAR" property="groupRemark" />-->
-    <!--<result column="creat_time" jdbcType="TIMESTAMP" property="creatTime" />-->
+    <!--&lt;!&ndash;<id column="group_id" jdbcType="BIGINT" property="groupId" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<result column="group_name" jdbcType="VARCHAR" property="groupName" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<result column="company_id" jdbcType="BIGINT" property="companyId" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<result column="is_valid" jdbcType="BIT" property="isValid" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<result column="group_remark" jdbcType="VARCHAR" property="groupRemark" />&ndash;&gt;-->
+    <!--&lt;!&ndash;<result column="creat_time" jdbcType="TIMESTAMP" property="creatTime" />&ndash;&gt;-->
 
-    </collection>
+    <!--</collection>-->
 
-    <collection property="roles" ofType="com.lcdt.clms.permission.model.Role"
-                autoMapping="true" column="role_id"
-                fetchType="eager"
-                select="com.lcdt.clms.permission.dao.RoleMapper.selectByPrimaryKey"
-    >
-      <!--<id column="role_id" jdbcType="INTEGER" property="roleId"/>-->
-      <!--<result column="role_name" jdbcType="VARCHAR" property="roleName"/>-->
-      <!--<result column="role_comment" jdbcType="VARCHAR" property="roleComment"/>-->
-      <!--<result column="role_company_id" jdbcType="LONGVARCHAR" property="roleCompanyId"/>-->
-    </collection>
+    <!--<collection property="roles" ofType="com.lcdt.clms.permission.model.Role"-->
+                <!--autoMapping="true" column="role_id"-->
+                <!--fetchType="eager"-->
+                <!--select="com.lcdt.clms.permission.dao.RoleMapper.selectByPrimaryKey"-->
+    <!--&gt;-->
+      <!--&lt;!&ndash;<id column="role_id" jdbcType="INTEGER" property="roleId"/>&ndash;&gt;-->
+      <!--&lt;!&ndash;<result column="role_name" jdbcType="VARCHAR" property="roleName"/>&ndash;&gt;-->
+      <!--&lt;!&ndash;<result column="role_comment" jdbcType="VARCHAR" property="roleComment"/>&ndash;&gt;-->
+      <!--&lt;!&ndash;<result column="role_company_id" jdbcType="LONGVARCHAR" property="roleCompanyId"/>&ndash;&gt;-->
+    <!--</collection>-->
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
@@ -59,9 +60,9 @@
     <selectKey keyProperty="userCompRelId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_uc_user_comp_rel (user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names)
+    insert into t_uc_user_comp_rel (user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,duty)
     values (#{userId,jdbcType=BIGINT}, #{compId,jdbcType=BIGINT}, #{fullName,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP},#{isCreate,jdbcType=SMALLINT}
-    ,#{deptIds,jdbcType=VARCHAR}, #{deptNames,jdbcType=VARCHAR})
+    ,#{deptIds,jdbcType=VARCHAR}, #{deptNames,jdbcType=VARCHAR},#{duty,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.UserCompRel">
     <!--
@@ -80,19 +81,19 @@
     where user_comp_rel_id = #{userCompRelId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,is_enable
+    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,is_enable,duty
     from t_uc_user_comp_rel
     where user_comp_rel_id = #{userCompRelId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names
+    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,duty
     from t_uc_user_comp_rel
   </select>
 
 
 
   <select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names
+    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,duty
     from t_uc_user_comp_rel
     WHERE 1=1
     <trim prefix="" suffix="" suffixOverrides="">
@@ -111,7 +112,7 @@
 
   <select id="selectBySearchDto" parameterType="com.lcdt.userinfo.web.dto.SearchEmployeeDto" resultMap="BaseResultMap"
           >
-    select user_comp_rel_id, comp.user_id,comp.is_enable, comp_id,full_name,create_date,is_create,dept_ids,r.*,g.*
+    select DISTINCT user_comp_rel_id, comp.user_id,comp.is_enable, comp_id,full_name,create_date,is_create,dept_ids,duty
     from t_uc_user_comp_rel  comp
     <if test="realName != null">
       LEFT JOIN t_uc_user u on comp.user_id = u.user_id
@@ -143,15 +144,11 @@
   </select>
 
   <select id="selectByUserIdCompanyId" resultMap="BaseResultMap">
-     select user_comp_rel_id, comp.user_id, comp_id,full_name,create_date,is_create,dept_ids
+     select user_comp_rel_id, comp.user_id, comp_id,full_name,create_date,is_create,dept_ids,duty
     from t_uc_user_comp_rel  comp
     WHERE
     comp.user_id = #{userId}
     and comp.comp_id = #{companyId}
   </select>
-
-
-
-
 
 </mapper>

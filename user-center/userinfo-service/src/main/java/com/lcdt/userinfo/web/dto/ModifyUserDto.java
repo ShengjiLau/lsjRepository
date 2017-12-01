@@ -5,7 +5,6 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 /**
  * Created by ss on 2017/10/27.
@@ -29,7 +28,7 @@ public class ModifyUserDto {
 	@Email
 	private String email;
 
-	private Date birthDay;
+	private Long birthDay;
 
 	@Size(max = 100)
 	private String intro;
@@ -66,11 +65,11 @@ public class ModifyUserDto {
 		this.email = email;
 	}
 
-	public Date getBirthDay() {
+	public Long getBirthDay() {
 		return birthDay;
 	}
 
-	public void setBirthDay(Date birthDay) {
+	public void setBirthDay(Long birthDay) {
 		this.birthDay = birthDay;
 	}
 

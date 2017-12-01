@@ -1,10 +1,11 @@
 package com.lcdt.userinfo.service.impl;
 
+import com.lcdt.clms.permission.model.Role;
 import com.lcdt.clms.permission.service.UserRoleService;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
-import com.lcdt.userinfo.model.Department;
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.DepartmentService;
@@ -73,6 +74,11 @@ public class EmployeeServiceImpl {
 		userCompRel.setCreateDate(new Date());
 		userCompRel.setDeptIds(dto.getDepartIds());
 		userCompRel.setDeptNames(department);
+		if (!StringUtils.isEmpty(dto.getDuty())) {
+			userCompRel.setDuty(dto.getDuty());
+		}
+
+
 		userCompanyDao.insert(userCompRel);
 
 		if (dto.getRoles() != null && !dto.getRoles().isEmpty()) {
@@ -88,6 +94,13 @@ public class EmployeeServiceImpl {
 	@Transactional(rollbackFor = Exception.class)
 	public List<UserCompRel> queryAllEmployee(SearchEmployeeDto search) {
 		List<UserCompRel> userCompRels = userCompanyDao.selectBySearchDto(search);
+		for (UserCompRel compRel : userCompRels) {
+			Long userId = compRel.getUser().getUserId();
+			List<Group> groups = groupService.userCompanyGroups(userId,compRel.getCompId());
+			compRel.setGroups(groups);
+			List<Role> roles = roleService.userCompanyRole(userId, compRel.getCompId());
+			compRel.setRoles(roles);
+		}
 		return userCompRels;
 	}
 

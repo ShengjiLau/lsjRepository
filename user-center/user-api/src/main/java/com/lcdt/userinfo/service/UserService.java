@@ -4,7 +4,10 @@ import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
+
+import java.util.List;
 
 /**
  * Created by ss on 2017/7/31.

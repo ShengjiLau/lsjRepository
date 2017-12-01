@@ -49,4 +49,6 @@ public interface PermissionMapper {
 
     List<Permission> selectByRoleId(Long roleId);
 
+    List<Permission> selectByPermissionValue(String permissionValue);
+
 }

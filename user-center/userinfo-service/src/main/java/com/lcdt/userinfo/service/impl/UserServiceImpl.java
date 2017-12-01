@@ -28,7 +28,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserMapper userMapper;
 
-	//TODO 用户信息改变需要通知其他其他系统 更新用户信息
 	@Override
 	public User updateUser(User user) {
 		userMapper.updateByPrimaryKey(user);
@@ -51,6 +50,7 @@ public class UserServiceImpl implements UserService {
 		registerUser.setRegisterDate(new Date());
 		registerUser.setUserStatus((short)1); //默认启用状态
 		registerUser.setMobileCountry("86");
+		registerUser.setEmail(registerDto.getEmail());
 		int insert = userMapper.insert(registerUser);
 		return registerUser;
 	}
