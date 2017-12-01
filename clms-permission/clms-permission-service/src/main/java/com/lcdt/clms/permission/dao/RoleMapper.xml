@@ -23,7 +23,7 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into role (role_name, role_comment, role_company_id,create_id,create_name,create_date)
-        values (#{roleName,jdbcType=VARCHAR}, #{roleComment,jdbcType=VARCHAR}, #{roleCompanyId,jdbcType=LONGVARCHAR,
+        values (#{roleName,jdbcType=VARCHAR}, #{roleComment,jdbcType=VARCHAR}, #{roleCompanyId,jdbcType=LONGVARCHAR},
         #{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP}}
         )
     </insert>
