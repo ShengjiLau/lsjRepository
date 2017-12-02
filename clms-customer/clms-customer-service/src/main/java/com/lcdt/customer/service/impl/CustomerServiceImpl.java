@@ -4,10 +4,12 @@ package com.lcdt.customer.service.impl;
 import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleSelectRestriction;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.customer.dao.CustomerCollectionMapper;
 import com.lcdt.customer.dao.CustomerContactMapper;
 import com.lcdt.customer.dao.CustomerMapper;
 import com.lcdt.customer.dao.CustomerTypeRelationMapper;
 import com.lcdt.customer.exception.CustomerException;
+import com.lcdt.customer.model.CustomerCollection;
 import com.lcdt.customer.model.CustomerContact;
 import com.lcdt.customer.model.CustomerTypeRelation;
 import com.lcdt.customer.model.Customer;
@@ -38,6 +40,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerTypeRelationMapper contomerTypeRelation;
+
+
+    @Autowired
+    private CustomerCollectionMapper customerCollectionMapper;
 
 
     @Override
@@ -77,14 +83,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int addCustomerContact(CustomerContact customerContact) {
+    public int customerContactAdd(CustomerContact customerContact) {
         return customerContactMapper.insert(customerContact);
     }
 
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int addCustomer(Customer customer) throws CustomerException {
+    public int customerAdd(Customer customer) throws CustomerException {
         Map map = new HashMap();
         map.put("companyId", customer.getCompanyId());
         map.put("customerName", customer.getCustomerName());
@@ -136,7 +142,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int updateCustomer(Customer customer) throws CustomerException  {
+    public int customerUpdate(Customer customer) throws CustomerException  {
         Map map = new HashMap();
         map.put("companyId", customer.getCompanyId());
         map.put("customerId", customer.getCustomerId());
@@ -176,10 +182,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int modifyCustomer(Customer customer) {
+    public int customerModify(Customer customer) {
         int flag = customerMapper.updateByPrimaryKey(customer);
           return flag;
     }
+
 
     @Transactional
     @Override
@@ -206,7 +213,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int updateCustomerContact(CustomerContact CustomerContact) {
+    public int customerContactUpdate(CustomerContact CustomerContact) {
         return customerContactMapper.updateByPrimaryKeySelective(CustomerContact);
     }
 
@@ -228,5 +235,60 @@ public class CustomerServiceImpl implements CustomerService {
         return customerContactMapper.deleteByPrimaryKey(contactId,companyId);
     }
 
+
+
+    @Transactional
+    @Override
+    public PageInfo customerCollectionList(Map m) {
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+
+        if (m.containsKey("page_no")) {
+            if (m.get("page_no") != null) {
+                pageNo = (Integer) m.get("page_no");
+            }
+        }
+        if (m.containsKey("page_size")) {
+            if (m.get("page_size") != null) {
+                pageSize = (Integer) m.get("page_size");
+            }
+        }
+        PageHelper.startPage(pageNo, pageSize);
+        List<CustomerCollection> list = customerCollectionMapper.selectByCondition(m);
+        PageInfo pageInfo = new PageInfo(list);
+        return  pageInfo;
+    }
+
+    @Override
+    public int customerCollectionAdd(CustomerCollection customerCollection) throws CustomerException {
+        Map map = new HashMap();
+        map.put("companyId", customerCollection.getCompanyId());
+        map.put("collectionName", customerCollection.getCollectionName());
+        List<CustomerCollection> list = customerCollectionMapper.selectByCondition(map);
+        if (list.size()>0) {
+            throw new CustomerException("组名已存在！");
+        }
+        int flag = customerCollectionMapper.insert(customerCollection);
+        return flag;
+    }
+
+    @Override
+    public int customerCollectionUpdate(CustomerCollection customerCollection) throws CustomerException {
+        Map map = new HashMap();
+        map.put("companyId", customerCollection.getCompanyId());
+        map.put("collectionName", customerCollection.getCollectionName());
+        map.put("collectionId", customerCollection.getCollectionId());
+        List<CustomerCollection> list = customerCollectionMapper.selectByCondition(map);
+        if (list.size()>0) {
+            throw new CustomerException("组名已存在！");
+        }
+        int flag = customerCollectionMapper.updateByPrimaryKey(customerCollection);
+        return flag;
+    }
+
+    @Override
+    public int customerCollectionRemove(Long collectionId, Long companyId) {
+        return customerCollectionMapper.deleteByPrimaryKey(collectionId,companyId);
+    }
 
 }

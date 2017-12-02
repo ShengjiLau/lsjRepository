@@ -6,6 +6,7 @@ import com.github.pagehelper.util.StringUtil;
 import com.lcdt.customer.exception.CustomerContactException;
 import com.lcdt.customer.exception.CustomerException;
 import com.lcdt.customer.model.Customer;
+import com.lcdt.customer.model.CustomerCollection;
 import com.lcdt.customer.model.CustomerContact;
 import com.lcdt.customer.service.CustomerService;
 import com.lcdt.customer.web.dto.CustomerParamsDto;
@@ -141,7 +142,7 @@ public class CustomerApi {
         customer.setCreateDate(new Date());
         customer.setCompanyId(companyId);
         try {
-            customerService.addCustomer(customer);
+            customerService.customerAdd(customer);
         } catch (CustomerException e) {
             throw new CustomerException(e.getMessage());
         }
@@ -167,7 +168,7 @@ public class CustomerApi {
         customer.setCreateId(loginUser.getUserId());
         customer.setCreateName(loginUser.getRealName());
         try {
-            customerService.updateCustomer(customer);
+            customerService.customerUpdate(customer);
         } catch (CustomerException e) {
             throw new CustomerException(e.getMessage());
         }
@@ -189,7 +190,7 @@ public class CustomerApi {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Customer customer = customerService.getCustomerDetail(customerId, companyId);
         customer.setStatus(status);
-        Integer flag = customerService.modifyCustomer(customer);
+        Integer flag = customerService.customerModify(customer);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
@@ -272,7 +273,7 @@ public class CustomerApi {
             throw new CustomerContactException("联系人不存在！");
         }
         customerContact.setIsDefault(isDefault);
-        Integer flag = customerService.updateCustomerContact(customerContact);
+        Integer flag = customerService.customerContactUpdate(customerContact);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
@@ -313,7 +314,7 @@ public class CustomerApi {
         vo.setCreateId(loginUser.getUserId());
         vo.setCreateName(loginUser.getRealName());
         vo.setCreateDate(new Date());
-        customerService.addCustomerContact(vo);
+        customerService.customerContactAdd(vo);
         return vo;
     }
 
@@ -331,7 +332,7 @@ public class CustomerApi {
         CustomerContact vo = new CustomerContact();
         BeanUtils.copyProperties(dto, vo);
         vo.setCompanyId(companyId);
-        customerService.updateCustomerContact(vo);
+        customerService.customerContactUpdate(vo);
         return vo;
     }
 
@@ -348,6 +349,101 @@ public class CustomerApi {
     public String customerContactRemove(@ApiParam(value = "客户联系人ID",required = true) @RequestParam Long contactId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         int flag = customerService.customerContactRemove(contactId,companyId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message",flag==1?"删除成功！":"删除失败！");
+        jsonObject.put("code",flag==1?0:-1);
+        return jsonObject.toString();
+    }
+
+
+
+
+    @ApiOperation("客户组列表")
+    @RequestMapping(value = "/customerCollectionList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
+    public CustomerListResultDto customerCollectionList(  @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+                                                     @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
+        PageInfo pageInfo = customerService.customerCollectionList(map);
+        CustomerListResultDto dto = new CustomerListResultDto();
+        dto.setCustomerCollectionList(pageInfo.getList());
+        dto.setTotal(pageInfo.getTotal());
+        return dto;
+    }
+
+
+
+    /**
+     * 新增客户组
+     *
+     * @return
+     */
+    @ApiOperation("新增客户组")
+    @RequestMapping(value = "/customerCollectionAdd",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
+    public CustomerCollection customerContactAdd(@ApiParam(value = "组名称",required = true) @RequestParam String collectionName,
+                                                 @ApiParam(value = "备注") @RequestParam String remark) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+        CustomerCollection vo = new CustomerCollection();
+        vo.setCompanyId(companyId);
+        vo.setCreateId(loginUser.getUserId());
+        vo.setCreateName(loginUser.getRealName());
+        vo.setCreateDate(new Date());
+        vo.setCollectionName(collectionName);
+        vo.setRemark(remark);
+        try {
+            customerService.customerCollectionAdd(vo);
+        } catch (CustomerException e) {
+            throw new CustomerException(e.getMessage());
+        }
+        return vo;
+    }
+
+
+    /**
+     * 编辑客户组
+     *
+     * @return
+     */
+    @ApiOperation("编辑客户组")
+    @RequestMapping(value = "/customerCollectionUpdate",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
+    public CustomerCollection customerContactUpdate(@ApiParam(value = "组名ID",required = true) @RequestParam Long collectionId,
+                                                    @ApiParam(value = "组名称",required = true) @RequestParam String collectionName,
+                                                    @ApiParam(value = "备注") @RequestParam String remark) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+        CustomerCollection vo = new CustomerCollection();
+        vo.setCompanyId(companyId);
+        vo.setCollectionId(collectionId);
+        vo.setCollectionName(collectionName);
+        vo.setRemark(remark);
+        try {
+            customerService.customerCollectionUpdate(vo);
+        } catch (CustomerException e) {
+            throw new CustomerException(e.getMessage());
+        }
+        return vo;
+    }
+
+
+
+    /**
+     * 客户组删除
+     * @param collectionId
+     * @return
+     */
+    @ApiOperation("客户组删除")
+    @RequestMapping(value = "/customerCollectionRemove",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
+    public String customerCollectionRemove(@ApiParam(value = "组名ID",required = true) @RequestParam Long collectionId) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        int flag = customerService.customerCollectionRemove(collectionId,companyId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("message",flag==1?"删除成功！":"删除失败！");
         jsonObject.put("code",flag==1?0:-1);
