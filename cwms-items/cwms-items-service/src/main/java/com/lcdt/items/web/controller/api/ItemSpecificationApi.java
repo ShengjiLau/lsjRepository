@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ public class ItemSpecificationApi {
 
     @ApiOperation(value = "获取自定义规格", notes = "获取自定义规格")
     @GetMapping("/list")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_specification_list')")
     public List<ItemSpecificationDao> getItemspecificationList(HttpSession httpSession) {
         Long companyId = 1L; //TODO 后面从session中获取
         List<ItemSpecificationDao> itemSpecificationDaoList = itemSpecificationService.querySpecification(companyId);
@@ -40,6 +42,7 @@ public class ItemSpecificationApi {
 
     @ApiOperation(value = "新增自定义规格", notes = "新增自定义规格")
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_specification_add')")
     public JSONObject addItemspecification(@Validated ItemSpecKeyDto itemSpecKeyDto, BindingResult bindingResult, HttpSession httpSession) {
         //TODO 此处得校验暂时无法校验内部包含的list里得对象属性，后续可以通过自定义验证来解决（时间问题暂时搁置）
         JSONObject jsonObject = new JSONObject();
@@ -58,6 +61,7 @@ public class ItemSpecificationApi {
 
     @ApiOperation(value = "编辑自定义规格", notes = "编辑自定义规格")
     @PostMapping("/modify")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_specification_edit')")
     public JSONObject modItemspecification(@Validated ItemSpecKeyDto itemSpecKeyDto, BindingResult bindingResult, HttpSession httpSession) {
         //TODO 此处得校验暂时无法校验内部包含的list里得对象属性，后续可以通过自定义验证来解决（时间问题暂时搁置）
         JSONObject jsonObject = new JSONObject();
@@ -76,6 +80,7 @@ public class ItemSpecificationApi {
 
     @ApiOperation(value = "删除自定义规格", notes = "删除自定义规格")
     @PostMapping("/delete")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_specification_remove')")
     public JSONObject delItemspecification(@RequestParam(value = "spkId",defaultValue = "0")  Long spkId, HttpSession httpSession) {
         JSONObject jsonObject = new JSONObject();
         if (spkId==0) {

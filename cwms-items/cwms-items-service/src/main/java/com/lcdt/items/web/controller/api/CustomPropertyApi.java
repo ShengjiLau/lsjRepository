@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,7 @@ public class CustomPropertyApi {
 
     @ApiOperation(value = "获取企业下所有的自定义属性", notes = "获取企业下所有的自定义属性")
     @GetMapping("/list")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_customproperty_list')")
     public PageBaseDto<List<CustomProperty>> getCustomProperty(HttpSession httpSession) {
         logger.info("customPropertyService------------------", customPropertyService.getClass().getMethods().toString());
         Long companyId = 8L;  //TODO 从session获取companyId
@@ -46,6 +48,7 @@ public class CustomPropertyApi {
 
     @ApiOperation(value = "更新自定义属性", notes = "更新对应企业下的自定义属性")
     @PostMapping("/modfiy")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_customproperty_edit')")
     public JSONObject modCoustomProperty(@Validated CustomProperty customProperty, BindingResult bindingResult, HttpSession httpSession) {
         Long companyId = 8L;  //TODO 从session获取companyId
         customProperty.setCompanyId(companyId);
@@ -63,6 +66,7 @@ public class CustomPropertyApi {
 
     @ApiOperation(value = "删除自定义属性", notes = "根据主键删除对应自定义属性")
     @PostMapping("/delete")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_customproperty_remove')")
     public JSONObject delCustomProperty(Long customId) {
         JSONObject jsonObject = new JSONObject();
         customPropertyService.delByCustomId(customId);
@@ -73,6 +77,7 @@ public class CustomPropertyApi {
 
     @ApiOperation(value = "新增自定义属性", notes = "新增自定义属性")
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_customproperty_add')")
     public JSONObject addCustomProperty(@Validated CustomProperty customProperty, BindingResult bindingResult, HttpSession httpSession) {
         Long companyId = 8L;  //TODO 从session获取companyId
         customProperty.setCompanyId(companyId);
