@@ -358,7 +358,7 @@ public class CustomerApi {
 
 
 
-    @ApiOperation("客户组列表")
+    @ApiOperation("客户组(竞价)列表")
     @RequestMapping(value = "/customerCollectionList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
     public CustomerListResultDto customerCollectionList(  @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
@@ -382,10 +382,10 @@ public class CustomerApi {
      *
      * @return
      */
-    @ApiOperation("新增客户组")
+    @ApiOperation("新增客户组(竞价)")
     @RequestMapping(value = "/customerCollectionAdd",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
-    public CustomerCollection customerContactAdd(@ApiParam(value = "组名称",required = true) @RequestParam String collectionName,
+    public CustomerCollection customerCollectionAdd(@ApiParam(value = "组名称",required = true) @RequestParam String collectionName,
                                                  @ApiParam(value = "备注") @RequestParam String remark) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -410,10 +410,10 @@ public class CustomerApi {
      *
      * @return
      */
-    @ApiOperation("编辑客户组")
+    @ApiOperation("编辑客户组(竞价)")
     @RequestMapping(value = "/customerCollectionUpdate",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
-    public CustomerCollection customerContactUpdate(@ApiParam(value = "组名ID",required = true) @RequestParam Long collectionId,
+    public CustomerCollection customerCollectionUpdate(@ApiParam(value = "组名ID",required = true) @RequestParam Long collectionId,
                                                     @ApiParam(value = "组名称",required = true) @RequestParam String collectionName,
                                                     @ApiParam(value = "备注") @RequestParam String remark) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -438,7 +438,7 @@ public class CustomerApi {
      * @param collectionId
      * @return
      */
-    @ApiOperation("客户组删除")
+    @ApiOperation("客户组(竞价)删除")
     @RequestMapping(value = "/customerCollectionRemove",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
     public String customerCollectionRemove(@ApiParam(value = "组名ID",required = true) @RequestParam Long collectionId) {
@@ -449,6 +449,30 @@ public class CustomerApi {
         jsonObject.put("code",flag==1?0:-1);
         return jsonObject.toString();
     }
+
+
+
+    @ApiOperation("客户组(竞价)选择")
+    @RequestMapping(value = "/customerCollectionSelect", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
+    public CustomerListResultDto customerCollectionSelect(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId) {
+        //拉取所竞价组
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", 1);
+        map.put("page_size",0);
+        PageInfo pageInfo = customerService.customerCollectionList(map);
+        Customer customer =  customerService.getCustomerDetail(customerId, companyId);
+        CustomerListResultDto dto = new CustomerListResultDto();
+        dto.setCustomerCollectionList(pageInfo.getList());
+        if (customer != null) {
+            dto.setCollectionIds(customer.getCollectionIds());
+        }
+        return dto;
+    }
+
+
 
 
 }

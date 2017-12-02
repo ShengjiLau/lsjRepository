@@ -20,6 +20,9 @@ public class CustomerListResultDto implements ResponseData {
 
     private long total;
 
+    private String collectionIds;
+
+
     public List<Customer> getList() {
         return list;
     }
@@ -51,4 +54,14 @@ public class CustomerListResultDto implements ResponseData {
     public void setCustomerCollectionList(List<CustomerCollection> customerCollectionList) {
         this.customerCollectionList = customerCollectionList;
     }
+
+    public String getCollectionIds() {
+        return collectionIds;
+    }
+
+    public void setCollectionIds(String collectionIds) {
+        this.collectionIds = collectionIds;
+    }
 }
+
+

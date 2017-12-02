@@ -72,12 +72,12 @@
     select collection_id, collection_name,remark, create_id, create_name, create_date, company_id
     from t_customer_collection
     <where>
-      company_id = #{companyId,jdbcType=BIGINT}
+       company_id = #{companyId,jdbcType=BIGINT}
       <if test="collectionName != null &amp;&amp; collectionName !=''">
-        collection_name = #{collectionName,jdbcType=VARCHAR},
+        and collection_name = #{collectionName,jdbcType=VARCHAR}
       </if>
       <if test="collectionId != null">
-        collection_id != #{collectionId,jdbcType=BIGINT},
+        and   collection_id != #{collectionId,jdbcType=BIGINT}
       </if>
     </where>
     order by collection_id
