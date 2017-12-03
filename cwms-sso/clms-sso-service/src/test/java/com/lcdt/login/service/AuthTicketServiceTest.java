@@ -31,7 +31,6 @@ public class AuthTicketServiceTest {
 		stringStringHashMap.put("token", "this is token");
 
 		String auth0 = JWT.create()
-//				.withExpiresAt(new Date())
 				.withIssuer("auth0")
 				.withHeader(stringStringHashMap)
 				.sign(algorithmHS);

@@ -2,6 +2,7 @@ package com.lcdt.login.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.dubbo.rpc.RpcContext;
 import com.lcdt.clms.permission.model.Permission;
 import com.lcdt.clms.permission.model.Role;
 import com.lcdt.clms.permission.model.SysRole;
@@ -52,6 +53,7 @@ public class LoginServiceImpl implements LoginService {
 			throw new InvalidTicketException("ticket 验证失败");
 		}
 		User user = userService.queryByUserId(ticketValid.getUserId());
+//		RpcContext.getContext().getFuture();
 		TicketAuthentication authentication = new TicketAuthentication();
 		authentication.setTicket(ticket);
 		authentication.setUser(user);

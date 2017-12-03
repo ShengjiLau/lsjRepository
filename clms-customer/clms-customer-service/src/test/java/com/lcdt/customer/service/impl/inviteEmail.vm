@@ -1,7 +1,0 @@
-<html>
-<body>
-<h3>你好， ${username},欢迎使用大驼队协同运输系统</h3>
-${inviteUser}邀请您成为${inviteCompanyName}${inviteCompanyType}，一起使用大驼队cLMS实现供应链业务协同，请点击邀请链接确认。
-<b>${inviteUrl}</b>
-</body>
-</html>

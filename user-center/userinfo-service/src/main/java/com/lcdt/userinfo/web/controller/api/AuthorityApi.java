@@ -3,6 +3,7 @@ package com.lcdt.userinfo.web.controller.api;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.permission.model.Permission;
 import com.lcdt.clms.permission.model.Role;
 import com.lcdt.clms.permission.service.UserPermissionService;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +40,20 @@ public class AuthorityApi {
 
 	@Autowired
 	UserRoleService roleService;
+
+	@ApiOperation("获取所有已定义的权限")
+	@RequestMapping(value = "allpermissions",method = RequestMethod.GET)
+	public PageResultDto<Permission> getAllPermissions(@RequestParam(required = false) Integer pageNo){
+		if (pageNo != null) {
+			PageHelper.startPage(pageNo, 10);
+			List<Permission> allPermissionInfo = permissionService.getAllPermissionInfo();
+			return new PageResultDto(allPermissionInfo);
+		}else{
+			List<Permission> allPermissionInfo = permissionService.getAllPermissionInfo();
+			return new PageResultDto(allPermissionInfo);
+		}
+	}
+
 
 	@RequestMapping(value = "/rolePermissons", method = RequestMethod.GET)
 	@ApiOperation("获取某个角色下的权限信息")

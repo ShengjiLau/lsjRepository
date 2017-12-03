@@ -36,7 +36,6 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 	protected boolean requiresAuthentication(HttpServletRequest request,
 											 HttpServletResponse response) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
 		if (authentication == null) {
 			return true;
 		}
@@ -45,6 +44,7 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 			Object credentials = authentication.getCredentials();
 			String ticket = (String) credentials;
 			String ticketInCookie = TicketHelper.findTicketInCookie(request);
+			//cookie 中的token 和 session 中的token 不同时 说明 token 过期 需要重新验证(这里可能是登陆了新的账号或者切换公司的操作)
 			if (ticketInCookie == null || !ticket.equals(ticketInCookie)) {
 				return true;
 			}

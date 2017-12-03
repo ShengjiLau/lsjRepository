@@ -77,9 +77,6 @@ public class AuthTicketService {
 		return createTicketService.createTicket();
 	}
 
-
-
-
 	private static Pattern HOST_PATTERN = Pattern.compile("(?<=http://|\\.)[^.]*?\\.(com|cn|net|org|biz|info|cc|tv)", Pattern.CASE_INSENSITIVE);
 
 	//获取父域名

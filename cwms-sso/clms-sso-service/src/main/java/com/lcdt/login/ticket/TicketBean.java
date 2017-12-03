@@ -57,4 +57,9 @@ public class TicketBean implements Serializable{
 	public void setCompanyId(Long companyId) {
 		this.companyId = companyId;
 	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }
