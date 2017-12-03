@@ -62,7 +62,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		Group group = new Group();
 		group.setGroupName(defaultGroupName);
 		group.setCompanyId(company.getCompId());
-		group.setCreatTime(new Date());
+		group.setCreateDate(new Date());
 		group.setGroupRemark(defaultGroupRemark);
 		group.setIsValid(true);
 		groupManageService.createGroup(group);

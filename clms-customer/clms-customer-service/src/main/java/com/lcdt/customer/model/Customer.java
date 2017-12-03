@@ -282,10 +282,28 @@ public class Customer implements java.io.Serializable,ResponseData {
     private String linkEmail;
 
 
+    private String collectionIds;
+    private String collectionNames;
+
     private long createId;
     private String createName;
     private Date createDate;
 
+    public String getCollectionIds() {
+        return collectionIds;
+    }
+
+    public void setCollectionIds(String collectionIds) {
+        this.collectionIds = collectionIds;
+    }
+
+    public String getCollectionNames() {
+        return collectionNames;
+    }
+
+    public void setCollectionNames(String collectionNames) {
+        this.collectionNames = collectionNames;
+    }
 
     /**
      *

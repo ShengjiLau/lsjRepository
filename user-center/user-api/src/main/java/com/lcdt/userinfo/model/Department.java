@@ -63,16 +63,16 @@ public class Department implements java.io.Serializable,ResponseData {
     private short childNum;
 
 
-    private Long creatId;
+    private Long createId;
     private String createName;
     private Date creatDate;
 
-    public Long getCreatId() {
-        return creatId;
+    public Long getCreateId() {
+        return createId;
     }
 
-    public void setCreatId(Long creatId) {
-        this.creatId = creatId;
+    public void setCreateId(Long createId) {
+        this.createId = createId;
     }
 
     public String getCreateName() {
@@ -236,4 +236,6 @@ public class Department implements java.io.Serializable,ResponseData {
     public void setChildNum(short childNum) {
         this.childNum = childNum;
     }
+
+
 }

@@ -68,7 +68,11 @@
       intro_memo = #{introMemo,jdbcType=VARCHAR},
       register_date = #{registerDate,jdbcType=TIMESTAMP},
       referrer_phone = #{referrerPhone,jdbcType=VARCHAR},
-      user_status = #{userStatus,jdbcType=SMALLINT}
+      user_status = #{userStatus,jdbcType=SMALLINT},
+      <if test="lastLoginTime != null">
+        last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP}
+      </if>
+
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
 

@@ -88,6 +88,28 @@ public class CustomerParamsDto {
     private String invoiceRemark;
 
 
+    @ApiModelProperty(value = "组集合-竞价 IDs")
+    private String collectionIds;
+
+    @ApiModelProperty(value = "组名称-竞价 names")
+    private String collectionNames;
+
+    public String getCollectionIds() {
+        return collectionIds;
+    }
+
+    public void setCollectionIds(String collectionIds) {
+        this.collectionIds = collectionIds;
+    }
+
+    public String getCollectionNames() {
+        return collectionNames;
+    }
+
+    public void setCollectionNames(String collectionNames) {
+        this.collectionNames = collectionNames;
+    }
+
     public String getCustomerName() {
         return customerName;
     }

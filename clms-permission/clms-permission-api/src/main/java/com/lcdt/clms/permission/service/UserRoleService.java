@@ -23,7 +23,7 @@ public interface UserRoleService {
 
 	Role updateCompanyRole(Role updatedRole);
 
-	void addRolePermission(Long roleId, Long addedPermission);
+	void addRolePermission(Long roleId, Long addedPermission,Long createId,String createName);
 
 	void removeRolePermission(Long roleId, Long permissionId);
 

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.model.Department;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.DepartmentService;
 import com.lcdt.userinfo.web.dto.DepartmentDto;
 import com.lcdt.userinfo.web.dto.DeparmentResultDto;
@@ -18,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yangbinq on 2017/11/9.
@@ -46,10 +44,16 @@ public class DepartmentApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('dept_add')")
     public Department deptAdd(@Validated DepartmentDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
         Department department = new Department();
         department.setCompanyId(companyId);
         department.setDeptName(dto.getDeptName());
         department.setDeptPid(dto.getDeptPid());
+
+        department.setCreateId(loginUser.getUserId());
+        department.setCreateName(loginUser.getRealName());
+        department.setCreatDate(new Date());
+
         Map map = new HashMap();
         map.put("companyId",companyId);
         department.setDeptOrder(departmentService.getMaxIndex(map));

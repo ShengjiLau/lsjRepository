@@ -6,6 +6,7 @@ import com.github.pagehelper.util.StringUtil;
 import com.lcdt.customer.exception.CustomerContactException;
 import com.lcdt.customer.exception.CustomerException;
 import com.lcdt.customer.model.Customer;
+import com.lcdt.customer.model.CustomerCollection;
 import com.lcdt.customer.model.CustomerContact;
 import com.lcdt.customer.service.CustomerService;
 import com.lcdt.customer.web.dto.CustomerParamsDto;
@@ -13,6 +14,7 @@ import com.lcdt.customer.web.dto.CustomerContactParamsDto;
 import com.lcdt.customer.web.dto.CustomerListResultDto;
 import com.lcdt.customer.web.dto.CustomerListParamsDto;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -131,11 +134,15 @@ public class CustomerApi {
     public Customer customerAdd(@Validated CustomerParamsDto dto) {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
         Customer customer = new Customer();
         BeanUtils.copyProperties(dto,customer);
+        customer.setCreateId(loginUser.getUserId());
+        customer.setCreateName(loginUser.getRealName());
+        customer.setCreateDate(new Date());
         customer.setCompanyId(companyId);
         try {
-            customerService.addCustomer(customer);
+            customerService.customerAdd(customer);
         } catch (CustomerException e) {
             throw new CustomerException(e.getMessage());
         }
@@ -154,11 +161,14 @@ public class CustomerApi {
     public Customer customerUpdate(@Validated CustomerParamsDto dto) {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
         Customer customer = new Customer();
         BeanUtils.copyProperties(dto, customer);
         customer.setCompanyId(companyId);
+        customer.setCreateId(loginUser.getUserId());
+        customer.setCreateName(loginUser.getRealName());
         try {
-            customerService.updateCustomer(customer);
+            customerService.customerUpdate(customer);
         } catch (CustomerException e) {
             throw new CustomerException(e.getMessage());
         }
@@ -180,7 +190,7 @@ public class CustomerApi {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Customer customer = customerService.getCustomerDetail(customerId, companyId);
         customer.setStatus(status);
-        Integer flag = customerService.modifyCustomer(customer);
+        Integer flag = customerService.customerModify(customer);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
@@ -226,7 +236,7 @@ public class CustomerApi {
 
     @ApiOperation("客户联系人列表")
     @RequestMapping(value = "/customerContactList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact')")
     public CustomerListResultDto customerContactList(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
                                                      @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                                      @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
@@ -254,7 +264,7 @@ public class CustomerApi {
      */
     @ApiOperation("客户联系人默认状态修改")
     @RequestMapping(value = "/customerContactIsDefault",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_is_default')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact')")
     public String customerContactIsDefault(@ApiParam(value = "客户联系人ID",required = true) @RequestParam Long contactId,
                                      @ApiParam(value = "状态(1-设置默认，0-取消默认)",required = true) @RequestParam short isDefault) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -263,7 +273,7 @@ public class CustomerApi {
             throw new CustomerContactException("联系人不存在！");
         }
         customerContact.setIsDefault(isDefault);
-        Integer flag = customerService.updateCustomerContact(customerContact);
+        Integer flag = customerService.customerContactUpdate(customerContact);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
@@ -293,14 +303,18 @@ public class CustomerApi {
      */
     @ApiOperation("新增客户联系人")
     @RequestMapping(value = "/customerContactAdd",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_add')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact')")
     public CustomerContact customerContactAdd(@Validated CustomerContactParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
         CustomerContact vo = new CustomerContact();
         BeanUtils.copyProperties(dto, vo);
         vo.setCompanyId(companyId);
         vo.setIsDefault((short)0); //非默认联系人
-        customerService.addCustomerContact(vo);
+        vo.setCreateId(loginUser.getUserId());
+        vo.setCreateName(loginUser.getRealName());
+        vo.setCreateDate(new Date());
+        customerService.customerContactAdd(vo);
         return vo;
     }
 
@@ -312,13 +326,13 @@ public class CustomerApi {
      */
     @ApiOperation("编辑客户联系人")
     @RequestMapping(value = "/customerContactUpdate",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_Update')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact')")
     public CustomerContact customerContactUpdate(@Validated CustomerContactParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         CustomerContact vo = new CustomerContact();
         BeanUtils.copyProperties(dto, vo);
         vo.setCompanyId(companyId);
-        customerService.updateCustomerContact(vo);
+        customerService.customerContactUpdate(vo);
         return vo;
     }
 
@@ -331,7 +345,7 @@ public class CustomerApi {
      */
     @ApiOperation("客户联系人删除")
     @RequestMapping(value = "/customerContactRemove",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact_remove')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_contact')")
     public String customerContactRemove(@ApiParam(value = "客户联系人ID",required = true) @RequestParam Long contactId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         int flag = customerService.customerContactRemove(contactId,companyId);
@@ -340,6 +354,125 @@ public class CustomerApi {
         jsonObject.put("code",flag==1?0:-1);
         return jsonObject.toString();
     }
+
+
+
+
+    @ApiOperation("客户组(竞价)列表")
+    @RequestMapping(value = "/customerCollectionList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
+    public CustomerListResultDto customerCollectionList(  @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+                                                     @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
+        PageInfo pageInfo = customerService.customerCollectionList(map);
+        CustomerListResultDto dto = new CustomerListResultDto();
+        dto.setCustomerCollectionList(pageInfo.getList());
+        dto.setTotal(pageInfo.getTotal());
+        return dto;
+    }
+
+
+
+    /**
+     * 新增客户组
+     *
+     * @return
+     */
+    @ApiOperation("新增客户组(竞价)")
+    @RequestMapping(value = "/customerCollectionAdd",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
+    public CustomerCollection customerCollectionAdd(@ApiParam(value = "组名称",required = true) @RequestParam String collectionName,
+                                                 @ApiParam(value = "备注") @RequestParam String remark) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+        CustomerCollection vo = new CustomerCollection();
+        vo.setCompanyId(companyId);
+        vo.setCreateId(loginUser.getUserId());
+        vo.setCreateName(loginUser.getRealName());
+        vo.setCreateDate(new Date());
+        vo.setCollectionName(collectionName);
+        vo.setRemark(remark);
+        try {
+            customerService.customerCollectionAdd(vo);
+        } catch (CustomerException e) {
+            throw new CustomerException(e.getMessage());
+        }
+        return vo;
+    }
+
+
+    /**
+     * 编辑客户组
+     *
+     * @return
+     */
+    @ApiOperation("编辑客户组(竞价)")
+    @RequestMapping(value = "/customerCollectionUpdate",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
+    public CustomerCollection customerCollectionUpdate(@ApiParam(value = "组名ID",required = true) @RequestParam Long collectionId,
+                                                    @ApiParam(value = "组名称",required = true) @RequestParam String collectionName,
+                                                    @ApiParam(value = "备注") @RequestParam String remark) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+        CustomerCollection vo = new CustomerCollection();
+        vo.setCompanyId(companyId);
+        vo.setCollectionId(collectionId);
+        vo.setCollectionName(collectionName);
+        vo.setRemark(remark);
+        try {
+            customerService.customerCollectionUpdate(vo);
+        } catch (CustomerException e) {
+            throw new CustomerException(e.getMessage());
+        }
+        return vo;
+    }
+
+
+
+    /**
+     * 客户组删除
+     * @param collectionId
+     * @return
+     */
+    @ApiOperation("客户组(竞价)删除")
+    @RequestMapping(value = "/customerCollectionRemove",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
+    public String customerCollectionRemove(@ApiParam(value = "组名ID",required = true) @RequestParam Long collectionId) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        int flag = customerService.customerCollectionRemove(collectionId,companyId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message",flag==1?"删除成功！":"删除失败！");
+        jsonObject.put("code",flag==1?0:-1);
+        return jsonObject.toString();
+    }
+
+
+
+    @ApiOperation("客户组(竞价)选择")
+    @RequestMapping(value = "/customerCollectionSelect", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
+    public CustomerListResultDto customerCollectionSelect(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId) {
+        //拉取所竞价组
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", 1);
+        map.put("page_size",0);
+        PageInfo pageInfo = customerService.customerCollectionList(map);
+        Customer customer =  customerService.getCustomerDetail(customerId, companyId);
+        CustomerListResultDto dto = new CustomerListResultDto();
+        dto.setCustomerCollectionList(pageInfo.getList());
+        if (customer != null) {
+            dto.setCollectionIds(customer.getCollectionIds());
+        }
+        return dto;
+    }
+
+
 
 
 }

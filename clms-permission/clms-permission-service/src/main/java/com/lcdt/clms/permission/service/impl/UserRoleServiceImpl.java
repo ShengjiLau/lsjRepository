@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -95,12 +96,15 @@ public class UserRoleServiceImpl implements UserRoleService {
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void addRolePermission(Long roleId, Long permissionId) {
+	public void addRolePermission(Long roleId, Long permissionId,Long createId,String createName) {
 		List<RolePermission> rolePermissions = rolePermissionDao.selectByRolePermission(roleId, permissionId);
 		if (rolePermissions != null && !rolePermissions.isEmpty()) {
 			RolePermission rolePermission = new RolePermission();
 			rolePermission.setPermissionId(permissionId);
 			rolePermission.setRoleId(roleId);
+			rolePermission.setCreateId(createId);
+			rolePermission.setCreateName(createName);
+			rolePermission.setCreateDate(new Date());
 			rolePermissionDao.insert(rolePermission);
 		}
 	}
@@ -136,6 +140,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 			roleUserRelation.setUserId(userId);
 			roleUserRelation.setCompanyId(companyId);
 			roleUserRelation.setRoleId(id);
+			roleUserRelation.setRelationCreateDate(new Date());
 			roleUserRelationDao.insert(roleUserRelation);
 		}
 	}

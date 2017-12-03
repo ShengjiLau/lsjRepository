@@ -39,6 +39,10 @@
     <result column="link_tel" jdbcType="VARCHAR" property="linkTel" />
     <result column="link_email" jdbcType="VARCHAR" property="linkEmail" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+
+    <result column="collection_ids" jdbcType="VARCHAR" property="collectionIds" />
+    <result column="collection_names" jdbcType="VARCHAR" property="collectionNames" />
+
     <collection property="customerContactList" column="customer_id" ofType="com.lcdt.customer.model.CustomerContact" javaType="ArrayList"
                 select="com.lcdt.customer.dao.CustomerContactMapper.selectByCustomerId" />
   </resultMap>
@@ -219,6 +223,12 @@
       <if test="linkEmail != null  &amp;&amp; linkEmail !=''">
         link_email = #{linkEmail,jdbcType=VARCHAR},
       </if>
+      <if test="collectionIds != null  &amp;&amp; collectionIds !=''">
+        collection_ids = #{collectionIds,jdbcType=VARCHAR},
+      </if>
+      <if test="collectionNames != null  &amp;&amp; collectionNames !=''">
+        collection_names = #{collectionNames,jdbcType=VARCHAR},
+      </if>
     </set>
     where customer_id = #{customerId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
@@ -235,7 +245,7 @@
     city, county, detail_address, group_ids, group_names, post_code, tel_no, fax, remark, 
     attachment_1, attachment_2, invoice_title, registration_no, bank_name, bank_no, registration_address, 
     tel_no1, invoice_remark, bind_comp_id, status, bind_company, link_man, link_duty, link_tel,
-    link_email, company_id
+    link_email, company_id,collection_ids,collection_names
     from t_customer
     where customer_id = #{0} and company_id = #{1}
   </select>
@@ -258,7 +268,7 @@
     city, county, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
     attachment_1, attachment_2, invoice_title, registration_no, bank_name, bank_no, registration_address,
     tel_no1, invoice_remark, bind_comp_id, status, bind_company, link_man, link_duty, link_tel,
-    link_email, company_id
+    link_email, company_id,collection_ids,collection_names
     from t_customer
     <where>
       company_id = #{companyId,jdbcType=BIGINT}
