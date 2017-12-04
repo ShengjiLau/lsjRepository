@@ -48,7 +48,7 @@ public class TicketAuthProvider implements AuthenticationProvider {
 
 		if (permissions != null && !permissions.isEmpty()) {
 			for (Permission permission : permissions) {
-				SimpleGrantedAuthority authority = new SimpleGrantedAuthority(permission.getPermissionCode().toUpperCase());
+				SimpleGrantedAuthority authority = new SimpleGrantedAuthority(permission.getPermissionCode().toLowerCase());
 				authorities.add(authority);
 			}
 		}

@@ -24,7 +24,6 @@ import java.util.*;
  * Created by ybq on 2017/8/15.
  */
 @com.alibaba.dubbo.config.annotation.Service
-@Service
 public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired

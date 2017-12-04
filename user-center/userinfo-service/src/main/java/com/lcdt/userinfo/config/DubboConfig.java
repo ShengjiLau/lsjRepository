@@ -1,33 +1,30 @@
-package com.lcdt.login.config;
+package com.lcdt.userinfo.config;
 
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ConsumerConfig;
-import com.alibaba.dubbo.config.ProtocolConfig;
+import com.alibaba.dubbo.config.ProviderConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.config.spring.context.annotation.DubboComponentScan;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Created by ss on 2017/12/1.
+ * Created by ss on 2017/12/4.
  */
 @Configuration
-@DubboComponentScan(basePackages = {"com.lcdt.login.service",""})
+@DubboComponentScan(basePackages = {"com.lcdt.userinfo.service.impl","com.lcdt.clms.permission.service.impl"})
 public class DubboConfig {
+
+	@Value("")
+	private static String ZKHOST = "";
+
 
 	@Bean
 	public ApplicationConfig applicationConfig(){
 		ApplicationConfig applicationConfig = new ApplicationConfig();
-		applicationConfig.setName("clms-login");
+		applicationConfig.setName("user-service");
 		return applicationConfig;
-	}
-
-
-	@Bean
-	public ProtocolConfig protocolConfig(){
-		ProtocolConfig protocolConfig = new ProtocolConfig();
-		protocolConfig.setPort(20883);
-		return protocolConfig;
 	}
 
 	@Bean
@@ -44,5 +41,11 @@ public class DubboConfig {
 		consumerConfig.setTimeout(3000);
 		return consumerConfig;
 	}
+
+
+//	public ProviderConfig providerConfig(){
+//		ProviderConfig providerConfig = new ProviderConfig();
+//		providerConfig.set
+//	}
 
 }

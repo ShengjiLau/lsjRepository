@@ -15,7 +15,7 @@ import java.util.concurrent.CountDownLatch;
  * Created by ss on 2017/7/31.
  */
 @SpringBootApplication
-@ImportResource("dubbo-user-provider.xml")
+//@ImportResource("dubbo-user-provider.xml")
 @Import({PermissionAppConfiguration.class, ClmsResponseConvertConfig.class})
 @EnableClmsSecurity
 public class UserServiceApp {
