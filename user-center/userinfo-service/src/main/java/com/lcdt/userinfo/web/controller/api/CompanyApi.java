@@ -151,7 +151,6 @@ public class CompanyApi {
 		return company;
 	}
 
-
 	private Company updateCompanyWithDto(Object dto) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		Company company = companyService.selectById(companyId);
@@ -159,5 +158,4 @@ public class CompanyApi {
 		companyService.updateCompany(company);
 		return company;
 	}
-
 }
