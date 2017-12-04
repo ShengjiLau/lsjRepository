@@ -33,6 +33,11 @@
             <artifactId>clms-permission-api</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
         <!--权限验证模块-->
         <dependency>
