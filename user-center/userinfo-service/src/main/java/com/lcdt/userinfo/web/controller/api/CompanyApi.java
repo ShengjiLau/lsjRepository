@@ -154,15 +154,10 @@ public class CompanyApi {
 
 	private Company updateCompanyWithDto(Object dto) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
-
-
-
 		Company company = companyService.selectById(companyId);
 		BeanUtils.copyProperties(company, dto);
 		companyService.updateCompany(company);
 		return company;
 	}
-
-
 
 }
