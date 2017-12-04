@@ -15,6 +15,8 @@
     <result column="classify_name" jdbcType="VARCHAR" property="classifyName" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
@@ -37,7 +39,8 @@
       company_id,remarks,create_id,create_name,create_date)
     values (#{title,jdbcType=VARCHAR}, #{fieldName,jdbcType=VARCHAR}, #{fieldType,jdbcType=SMALLINT},
       #{controlName,jdbcType=SMALLINT}, #{classifyId,jdbcType=BIGINT}, #{classifyName,jdbcType=VARCHAR}, 
-      #{companyId,jdbcType=BIGINT},#{remarks,jdbcType=VARCHAR},#{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP)
+      #{companyId,jdbcType=BIGINT},#{remarks,jdbcType=VARCHAR},#{createId,jdbcType=BIGINT},
+      #{createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP)
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.items.model.ItemsExtendProperty">
     <!--
@@ -74,15 +77,14 @@
     company_id,remarks
     from t_items_extend_property
   </select>
-  <insert id="insertByBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="item_temp_id">
-    insert into t_items_extend_property (title, field_type,
-    control_name, classify_id, classify_name,
-    company_id,remarks)
-    values
-    <foreach collection="list" item="item" separator=",">
+  <insert id="insertByBatch" useGeneratedKeys="true" keyProperty="item_temp_id">
+    insert into t_items_extend_property (title, field_type,control_name, classify_id, classify_name,
+    company_id,remarks,create_id,create_name,create_date) values
+    <foreach item="item" collection="list" separator=",">
       (#{item.title,jdbcType=VARCHAR}, #{item.fieldType,jdbcType=SMALLINT},
       #{item.controlName,jdbcType=SMALLINT}, #{item.classifyId,jdbcType=BIGINT}, #{item.classifyName,jdbcType=VARCHAR},
-      #{item.companyId,jdbcType=BIGINT}, #{item.remarks,jdbcType=VARCHAR})
+      #{item.companyId,jdbcType=BIGINT}, #{item.remarks,jdbcType=VARCHAR},
+      #{item.createId,jdbcType=BIGINT},#{item.createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP )
     </foreach>
   </insert>
   <delete id="delByBatch" parameterType="com.lcdt.items.model.ItemsExtendProperty">

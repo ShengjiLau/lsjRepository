@@ -30,7 +30,7 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_custom_property (property_type, property_name, property_field, 
-      company_id,remarks,,create_id,create_name,create_date)
+      company_id,remarks,create_id,create_name,create_date)
     values (#{propertyType,jdbcType=SMALLINT}, #{propertyName,jdbcType=VARCHAR}, #{propertyField,jdbcType=VARCHAR}, 
       #{companyId,jdbcType=BIGINT},#{remarks,jdbcType=VARCHAR},#{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP)
   </insert>
@@ -47,7 +47,7 @@
       <if test="companyId!=null">company_id = #{companyId,jdbcType=BIGINT},</if>
       <if test="remarks!=null">remarks = #{remarks,jdbcType=VARCHAR},</if>
     </set>
-    where custom_id = #{customId,jdbcType=BIGINT}
+    where custom_id = #{customId,jdbcType=BIGINT} and company_id= #{companyId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     <!--
@@ -75,4 +75,8 @@
     from t_custom_property where company_id =#{companyId,jdbcType=BIGINT}
     and property_type = #{propertyType,jdbcType=SMALLINT} and property_name=#{propertyName,jdbcType=VARCHAR}
   </select>
+  <delete id="deleteByCompanyId" parameterType="java.lang.Long">
+    delete from t_custom_property
+    where custom_id = #{0} and company_id = #{1}
+  </delete>
 </mapper>

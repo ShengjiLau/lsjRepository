@@ -1,6 +1,7 @@
 package com.lcdt.items.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.items.dto.ItemSpecKeyDto;
 import com.lcdt.items.model.ItemSpecificationDao;
@@ -34,7 +35,7 @@ public class ItemSpecificationApi {
     @GetMapping("/list")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_specification_list')")
     public List<ItemSpecificationDao> getItemspecificationList(HttpSession httpSession) {
-        Long companyId = 1L; //TODO 后面从session中获取
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         List<ItemSpecificationDao> itemSpecificationDaoList = itemSpecificationService.querySpecification(companyId);
         ArrayListResponseWrapper arrayListResponseWrapper = new ArrayListResponseWrapper(itemSpecificationDaoList);
         return arrayListResponseWrapper;
@@ -51,8 +52,12 @@ public class ItemSpecificationApi {
             jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
             return jsonObject;
         }
-        Long companyId = 1L; //TODO 后面从session中获取
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long userId = SecurityInfoGetter.getUser().getUserId();
+        String userName = SecurityInfoGetter.getUser().getRealName();
         itemSpecKeyDto.setCompanyId(companyId);
+        itemSpecKeyDto.setCreateId(userId);
+        itemSpecKeyDto.setCreateName(userName);
         itemSpecificationService.addSpecification(itemSpecKeyDto);
         jsonObject.put("code", 0);
         jsonObject.put("message", "新增成功");
@@ -70,7 +75,7 @@ public class ItemSpecificationApi {
             jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
             return jsonObject;
         }
-        Long companyId = 1L; //TODO 后面从session中获取
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         itemSpecKeyDto.setCompanyId(companyId);
         itemSpecificationService.modifySpecification(itemSpecKeyDto);
         jsonObject.put("code", 0);
@@ -88,7 +93,7 @@ public class ItemSpecificationApi {
             jsonObject.put("message", "spkId不能为空");
             return jsonObject;
         }
-        Long companyId = 1L; // 后面从session中获取
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
 //        itemSpecKeyDto.setCompanyId(companyId);
         int rows = itemSpecificationService.deleteSpecificationKeyAndValueBySpkId(spkId,companyId);
         if(rows>0){

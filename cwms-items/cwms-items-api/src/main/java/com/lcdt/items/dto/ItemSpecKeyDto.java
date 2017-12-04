@@ -19,6 +19,10 @@ public class ItemSpecKeyDto {
 
     private Long companyId;
 
+    private Long createId;
+
+    private String createName;
+
     private List<ItemSpecValue> itemSpecValueList;
 
     public Long getSpkId() {
@@ -43,6 +47,22 @@ public class ItemSpecKeyDto {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Long createId) {
+        this.createId = createId;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
     }
 
     public List<ItemSpecValue> getItemSpecValueList() {

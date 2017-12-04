@@ -58,5 +58,8 @@ public interface CustomPropertyMapper {
      * @return
      */
     List<CustomProperty> selectByPropertyName(CustomProperty customProperty);
+
+
+    int deleteByCompanyId(Long customId,Long companyId);
     
 }

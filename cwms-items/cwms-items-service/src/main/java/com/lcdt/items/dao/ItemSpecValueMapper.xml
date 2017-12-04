@@ -27,10 +27,9 @@
     <selectKey keyProperty="spvId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_item_spec_value (sp_value, spk_id, company_id
-      )
-    values (#{spValue,jdbcType=VARCHAR}, #{spkId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}
-      )
+    insert into t_item_spec_value (sp_value, spk_id, company_id,create_id,create_name,create_date)
+    values (#{spValue,jdbcType=VARCHAR}, #{spkId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT},
+    #{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP)
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.items.model.ItemSpecValue">
     <!--

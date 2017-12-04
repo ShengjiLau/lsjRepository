@@ -87,4 +87,10 @@
     delete from t_item_spec_key
     where spk_id = #{0} and company_id = #{1}
   </delete>
+  <update id="updateByspkIdAndCompanyId" parameterType="com.lcdt.items.model.ItemSpecKey">
+    update t_item_spec_key
+    set sp_name = #{spName,jdbcType=VARCHAR},
+    company_id = #{companyId,jdbcType=BIGINT}
+    where spk_id = #{spkId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </update>
 </mapper>

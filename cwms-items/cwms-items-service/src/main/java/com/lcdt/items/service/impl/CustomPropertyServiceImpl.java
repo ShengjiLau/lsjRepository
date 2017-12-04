@@ -52,6 +52,8 @@ public class CustomPropertyServiceImpl implements CustomPropertyService{
             /*new一个商品扩展属性对象，并set相关需要插入的数据*/
             ItemsExtendProperty itemsExtendProperty = new ItemsExtendProperty();
             itemsExtendProperty.setCompanyId(customProperty.getCompanyId());
+            itemsExtendProperty.setCreateId(customProperty.getCreateId());  //增加创建人id
+            itemsExtendProperty.setCreateName(customProperty.getCreateName());  //增加创建人name
             itemsExtendProperty.setTitle(customProperty.getPropertyName());
             itemsExtendProperty.setFieldType(customProperty.getPropertyType());
             itemsExtendProperty.setRemarks(customProperty.getRemarks());
@@ -62,15 +64,18 @@ public class CustomPropertyServiceImpl implements CustomPropertyService{
             itemsExtendPropertyList.add(itemsExtendProperty);
         }
         customPropertyMapper.insert(customProperty);    //插入自定义属性
-        itemsExtendPropertyMapper.insertByBatch(itemsExtendPropertyList);   //批量插入商品扩展属性数据
+        if(itemsExtendPropertyList.size()>0){
+            itemsExtendPropertyMapper.insertByBatch(itemsExtendPropertyList);   //批量插入商品扩展属性数据
+        }
+
         return 0;
     }
 
     @Override
     public int updateByCustomId(CustomProperty customProperty) {
         List customPropertyList =  customPropertyMapper.selectByPropertyName(customProperty); //获取属性名称是否重复
-        if(customPropertyList.size()>0){    //重复直接返回-1，交给上层处理
-            return -1;
+        if(customPropertyList.size()>0){    //属性名重复抛出异常
+            throw new RuntimeException("属性名已经存在");
         }
         CustomProperty oldCustomProrerty = customPropertyMapper.selectByPrimaryKey(customProperty.getCustomId());   //查询需要修改的自定义属性数据
         /*声明一个商品属性扩展dao对象，并set注入相关更新的数据和条件*/
@@ -86,14 +91,14 @@ public class CustomPropertyServiceImpl implements CustomPropertyService{
     }
 
     @Override
-    public int delByCustomId(Long customId) {
+    public int delByCustomId(Long customId,Long companyId) {
         CustomProperty customProperty =  customPropertyMapper.selectByPrimaryKey(customId); //获取该条自定义属性内容
         /*构造商品扩展对象并set注入对应的属性名称和公司id*/
         ItemsExtendProperty itemsExtendProperty = new ItemsExtendProperty();
         itemsExtendProperty.setTitle(customProperty.getPropertyName());
         itemsExtendProperty.setCompanyId(customProperty.getCompanyId());
 
-        int rows = customPropertyMapper.deleteByPrimaryKey(customId);   //删除自定义属性记录
+        int rows = customPropertyMapper.deleteByCompanyId(customId,companyId);   //删除自定义属性记录
         itemsExtendPropertyMapper.delByBatch(itemsExtendProperty);  //同时删除对应商品扩展属性
 
         return rows;    //不为零则删除成功

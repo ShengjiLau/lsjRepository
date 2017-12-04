@@ -68,4 +68,11 @@ public interface ItemSpecKeyMapper {
      * @return
      */
     int deleteBySpkIdAndCompanyId(Long spkId,Long companyId);
+
+    /**
+     * 根据主键和公司id更新
+     * @param itemSpecKey
+     * @return
+     */
+    int updateByspkIdAndCompanyId(ItemSpecKey itemSpecKey);
 }

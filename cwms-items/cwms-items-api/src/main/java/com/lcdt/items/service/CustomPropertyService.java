@@ -35,7 +35,7 @@ public interface CustomPropertyService {
      * @param customId
      * @return
      */
-    int delByCustomId(Long customId);
+    int delByCustomId(Long customId,Long companyId);
 
 
 

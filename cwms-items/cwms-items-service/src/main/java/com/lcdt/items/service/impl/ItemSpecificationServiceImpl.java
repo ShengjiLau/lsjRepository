@@ -38,6 +38,8 @@ public class ItemSpecificationServiceImpl implements ItemSpecificationService {
             ItemSpecKey itemSpecKey = new ItemSpecKey();
             itemSpecKey.setSpName(itemSpecKeyDto.getSpName());
             itemSpecKey.setCompanyId(itemSpecKeyDto.getCompanyId());
+            itemSpecKey.setCreateId(itemSpecKeyDto.getCreateId());
+            itemSpecKey.setCreateName(itemSpecKeyDto.getCreateName());
             reslut += itemSpecKeyMapper.insert(itemSpecKey);
             if (itemSpecKeyDto.getItemSpecValueList() != null) {
                 for (ItemSpecValue dto : itemSpecKeyDto.getItemSpecValueList()) {
@@ -45,6 +47,8 @@ public class ItemSpecificationServiceImpl implements ItemSpecificationService {
                     itemSpecValue.setSpValue(dto.getSpValue());
                     itemSpecValue.setSpkId(itemSpecKey.getSpkId());
                     itemSpecValue.setCompanyId(itemSpecKey.getCompanyId());
+                    itemSpecValue.setCreateId(itemSpecKeyDto.getCreateId());
+                    itemSpecValue.setCreateName(itemSpecKeyDto.getCreateName());
                     reslut += itemSpecValueMapper.insert(itemSpecValue);
                 }
             }
@@ -88,7 +92,7 @@ public class ItemSpecificationServiceImpl implements ItemSpecificationService {
             itemSpecKey.setSpkId(itemSpecKeyDto.getSpkId());
             itemSpecKey.setSpName(itemSpecKeyDto.getSpName());
             itemSpecKey.setCompanyId(itemSpecKeyDto.getCompanyId());
-            reslut += itemSpecKeyMapper.updateByPrimaryKey(itemSpecKey);
+            reslut += itemSpecKeyMapper.updateByspkIdAndCompanyId(itemSpecKey);
             /**
              * //mod by liuh
              * 修改属性值会有三种情况：
@@ -103,7 +107,7 @@ public class ItemSpecificationServiceImpl implements ItemSpecificationService {
                     ItemSpecValue itemSpecValue = new ItemSpecValue();
                     itemSpecValue.setSpvId(dto.getSpvId());
                     itemSpecValue.setSpValue(dto.getSpValue());
-                    itemSpecValue.setCompanyId(dto.getCompanyId());
+                    itemSpecValue.setCompanyId(itemSpecKeyDto.getCompanyId());
                     itemSpecValue.setSpkId(itemSpecKey.getSpkId());
                     reslut += itemSpecValueMapper.insert(itemSpecValue);
                 }

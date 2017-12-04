@@ -26,7 +26,7 @@ public class CustomProperty implements ResponseData {
      *
      * @mbg.generated
      */
-    @NotNull(message = "自定义属性类型不能为空")
+//    @NotNull(message = "自定义属性类型不能为空")
     private Short propertyType;
 
     /**

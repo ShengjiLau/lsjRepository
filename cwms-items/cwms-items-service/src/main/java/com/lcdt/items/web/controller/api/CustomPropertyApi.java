@@ -1,6 +1,7 @@
 package com.lcdt.items.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.items.model.CustomProperty;
 import com.lcdt.items.service.CustomPropertyService;
@@ -41,7 +42,7 @@ public class CustomPropertyApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_customproperty_list')")
     public PageBaseDto<List<CustomProperty>> getCustomProperty(HttpSession httpSession) {
         logger.info("customPropertyService------------------", customPropertyService.getClass().getMethods().toString());
-        Long companyId = 8L;  //TODO 从session获取companyId
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         List<CustomProperty> customPropertyList = customPropertyService.customPropertyList(companyId);
         return new PageBaseDto(customPropertyList,customPropertyList.size());
     }
@@ -50,7 +51,7 @@ public class CustomPropertyApi {
     @PostMapping("/modfiy")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_customproperty_edit')")
     public JSONObject modCoustomProperty(@Validated CustomProperty customProperty, BindingResult bindingResult, HttpSession httpSession) {
-        Long companyId = 8L;  //TODO 从session获取companyId
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         customProperty.setCompanyId(companyId);
         JSONObject jsonObject = new JSONObject();
         if (bindingResult.hasErrors()) {
@@ -69,7 +70,8 @@ public class CustomPropertyApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_customproperty_remove')")
     public JSONObject delCustomProperty(Long customId) {
         JSONObject jsonObject = new JSONObject();
-        customPropertyService.delByCustomId(customId);
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        customPropertyService.delByCustomId(customId,companyId);
         jsonObject.put("code", 1);
         jsonObject.put("message", "删除成功");
         return jsonObject;
@@ -79,8 +81,12 @@ public class CustomPropertyApi {
     @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_customproperty_add')")
     public JSONObject addCustomProperty(@Validated CustomProperty customProperty, BindingResult bindingResult, HttpSession httpSession) {
-        Long companyId = 8L;  //TODO 从session获取companyId
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long userId = SecurityInfoGetter.getUser().getUserId();
+        String userName = SecurityInfoGetter.getUser().getRealName();
         customProperty.setCompanyId(companyId);
+        customProperty.setCreateId(userId);
+        customProperty.setCreateName(userName);
         JSONObject jsonObject = new JSONObject();
 
         if (bindingResult.hasErrors()) {
