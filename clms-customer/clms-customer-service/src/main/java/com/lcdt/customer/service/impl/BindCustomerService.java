@@ -24,7 +24,7 @@ public class BindCustomerService {
 		//绑定被邀请公司的客户 和 邀请公司
 		Customer customer = customerService.selectByCustomerId(customerId,inviteCompanyId);
 		customer.setCompanyId(inviteCompanyId);
-		customerService.updateCustomer(customer);
+		customerService.customerUpdate(customer);
 		//绑定邀请公司的客户 和 被邀请公司
 		Long inviteCustomerId = customerInviteLog.getInviteCustomerId();
 		Customer inviteCustomer = customerService.selectByCustomerId(inviteCustomerId, inviteCustomerId);

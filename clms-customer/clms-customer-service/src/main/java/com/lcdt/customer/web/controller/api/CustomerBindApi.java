@@ -40,7 +40,7 @@ public class CustomerBindApi {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
 		customer.setCompanyId(companyId);
-		customerService.updateCustomer(customer);
+		customerService.customerUpdate(customer);
 		return customer;
 	}
 
