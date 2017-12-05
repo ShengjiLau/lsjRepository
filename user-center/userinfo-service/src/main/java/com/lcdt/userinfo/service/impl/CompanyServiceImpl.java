@@ -7,10 +7,10 @@ import com.lcdt.userinfo.dao.CompanyMapper;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
-import com.lcdt.userinfo.model.Company;
-import com.lcdt.userinfo.model.CompanyCertificate;
-import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.userinfo.model.*;
 import com.lcdt.userinfo.service.CompanyService;
+import com.lcdt.userinfo.service.GroupManageService;
+import com.lcdt.userinfo.service.UserGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +34,11 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	public CompanyCertificateMapper certificateDao;
+
+	@Autowired
+	public GroupManageService groupService;
+
+
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -144,7 +149,10 @@ public class CompanyServiceImpl implements CompanyService {
 		if (members == null || members.isEmpty()) {
 			return null;
 		}else{
-			return members.get(0);
+			UserCompRel compRel = members.get(0);
+			List<Group> groups = groupService.userCompanyGroups(compRel.getUserId(), compRel.getCompId());
+			compRel.setGroups(groups);
+			return compRel;
 		}
 	}
 

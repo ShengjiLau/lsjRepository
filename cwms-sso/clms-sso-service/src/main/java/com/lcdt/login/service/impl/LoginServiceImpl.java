@@ -61,6 +61,8 @@ public class LoginServiceImpl implements LoginService {
 			authentication.setChooseCompany(false);
 		}else{
 			UserCompRel companyMember = companyService.queryByUserIdCompanyId(ticketValid.getUserId(), ticketValid.getCompanyId().longValue());
+//			companyMember.setGroups();
+
 			authentication.setUserCompRel(companyMember);
 			List<Permission> permissions = permissionService.userPermissions(companyMember.getUserId(), companyMember.getCompId());
 			authentication.setPermissions(permissions);
