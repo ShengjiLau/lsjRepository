@@ -1,6 +1,7 @@
 package com.lcdt.items.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSONArray;
 import com.lcdt.items.dao.ItemSpecKeyMapper;
 import com.lcdt.items.dao.ItemSpecValueMapper;
 import com.lcdt.items.dto.ItemSpecKeyDto;
@@ -42,7 +43,9 @@ public class ItemSpecificationServiceImpl implements ItemSpecificationService {
             itemSpecKey.setCreateName(itemSpecKeyDto.getCreateName());
             reslut += itemSpecKeyMapper.insert(itemSpecKey);
             if (itemSpecKeyDto.getItemSpecValueList() != null) {
-                for (ItemSpecValue dto : itemSpecKeyDto.getItemSpecValueList()) {
+                JSONArray jsonArray = JSONArray.parseArray(itemSpecKeyDto.getItemSpecValueList());
+                List<ItemSpecValue> itemSpecValueList = jsonArray.toJavaList(ItemSpecValue.class);
+                for (ItemSpecValue dto : itemSpecValueList) {
                     ItemSpecValue itemSpecValue = new ItemSpecValue();
                     itemSpecValue.setSpValue(dto.getSpValue());
                     itemSpecValue.setSpkId(itemSpecKey.getSpkId());
@@ -103,7 +106,9 @@ public class ItemSpecificationServiceImpl implements ItemSpecificationService {
              */
             itemSpecValueMapper.deleteBySpkIdAndCompanyId(itemSpecKeyDto.getSpkId(),itemSpecKeyDto.getCompanyId());   //删除规格关联的属性值
             if (itemSpecKeyDto.getItemSpecValueList() != null) {
-                for (ItemSpecValue dto : itemSpecKeyDto.getItemSpecValueList()) {
+                JSONArray jsonArray = JSONArray.parseArray(itemSpecKeyDto.getItemSpecValueList());
+                List<ItemSpecValue> itemSpecValueList = jsonArray.toJavaList(ItemSpecValue.class);
+                for (ItemSpecValue dto : itemSpecValueList) {
                     ItemSpecValue itemSpecValue = new ItemSpecValue();
                     itemSpecValue.setSpvId(dto.getSpvId());
                     itemSpecValue.setSpValue(dto.getSpValue());
