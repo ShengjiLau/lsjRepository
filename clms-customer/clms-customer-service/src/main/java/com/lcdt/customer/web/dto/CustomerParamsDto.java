@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Created by yangbinq on 2017/11/24.
  */
-public class CustomerParamsDto {
+public class gitCustomerParamsDto {
     @ApiModelProperty(value = "客户ID(编辑时必传)")
     private Long customerId;
 
