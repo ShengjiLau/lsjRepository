@@ -35,11 +35,11 @@
     </selectKey>
     insert into t_conversion_rel (unit_id, unit_name, data1, 
       unit_id1, unit_name1, data2, 
-      unit_id2, unit_name2, company_id
+      unit_id2, unit_name2, company_id,create_id,create_name,create_date
       )
     values (#{unitId,jdbcType=BIGINT}, #{unitName,jdbcType=VARCHAR}, #{data1,jdbcType=DECIMAL}, 
       #{unitId1,jdbcType=BIGINT}, #{unitName1,jdbcType=VARCHAR}, #{data2,jdbcType=DECIMAL}, 
-      #{unitId2,jdbcType=BIGINT}, #{unitName2,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}
+      #{unitId2,jdbcType=BIGINT}, #{unitName2,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.items.model.ConversionRel">
@@ -77,5 +77,30 @@
     select conver_id, unit_id, unit_name, data1, unit_id1, unit_name1, data2, unit_id2, 
     unit_name2, company_id
     from t_conversion_rel
+  </select>
+
+  <delete id="deleteByConverIdAndCompanyId" parameterType="com.lcdt.items.model.ConversionRel">
+    delete from t_conversion_rel
+    where conver_id = #{converId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </delete>
+
+  <update id="updateByConverIdAndCompanyId" parameterType="com.lcdt.items.model.ConversionRel">
+    update t_conversion_rel
+    set unit_id = #{unitId,jdbcType=BIGINT},
+    unit_name = #{unitName,jdbcType=VARCHAR},
+    data1 = #{data1,jdbcType=DECIMAL},
+    unit_id1 = #{unitId1,jdbcType=BIGINT},
+    unit_name1 = #{unitName1,jdbcType=VARCHAR},
+    data2 = #{data2,jdbcType=DECIMAL},
+    unit_id2 = #{unitId2,jdbcType=BIGINT},
+    unit_name2 = #{unitName2,jdbcType=VARCHAR}
+    where conver_id = #{converId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByConverIdAndCompanyId" parameterType="com.lcdt.items.model.ConversionRel" resultMap="BaseResultMap">
+    select conver_id, unit_id, unit_name, data1, unit_id1, unit_name1, data2, unit_id2,
+    unit_name2, company_id
+    from t_conversion_rel
+    where conver_id = #{converId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </select>
 </mapper>

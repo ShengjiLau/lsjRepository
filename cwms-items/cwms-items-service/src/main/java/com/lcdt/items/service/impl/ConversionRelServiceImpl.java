@@ -24,23 +24,23 @@ public class ConversionRelServiceImpl implements ConversionRelService {
     }
 
     @Override
-    public int deleteConversionRel(Long converId) {
-        int result = 0;
-        result = conversionRelMapper.deleteByPrimaryKey(converId);
-        return result;
+    public int deleteConversionRel(Long converId,Long companyId) {
+        ConversionRel conversionRel=new ConversionRel();
+        conversionRel.setConverId(converId);
+        conversionRel.setCompanyId(companyId);
+        return conversionRelMapper.deleteByConverIdAndCompanyId(conversionRel);
     }
 
     @Override
     public int modifyConversionRel(ConversionRel conversionRel) {
-        int result = 0;
-        result = conversionRelMapper.updateByPrimaryKey(conversionRel);
-        return result;
+        return conversionRelMapper.updateByConverIdAndCompanyId(conversionRel);
     }
 
     @Override
-    public ConversionRel queryConversionRel(Long converId) {
-        ConversionRel conversionRel = null;
-        conversionRel = conversionRelMapper.selectByPrimaryKey(converId);
-        return conversionRel;
+    public ConversionRel queryConversionRel(Long converId,Long companyId) {
+        ConversionRel conversionRel = new ConversionRel();
+        conversionRel.setConverId(converId);
+        conversionRel.setCompanyId(companyId);
+        return conversionRelMapper.selectByConverIdAndCompanyId(conversionRel);
     }
 }

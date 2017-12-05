@@ -47,6 +47,19 @@ public interface ItemClassifyMapper {
     int updateByPrimaryKey(ItemClassify record);
 
     /**
+     * 根据 classifyId 和 companyId 删除记录
+     * @param itemClassify
+     * @return
+     */
+    int deleteByClassifyIdAndCompanyId(ItemClassify itemClassify);
+
+    /**
+     * 根据 classifyId 和 companyId 修改分类
+     * @param itemClassify
+     * @return
+     */
+    int updateByClassifyIdAndCompanyId(ItemClassify itemClassify);
+    /**
      * 根据企业companyId和pid查询
      * @param itemClassify
      * @return

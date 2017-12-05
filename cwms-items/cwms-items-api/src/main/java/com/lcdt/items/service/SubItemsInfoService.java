@@ -25,7 +25,14 @@ public interface SubItemsInfoService {
      * @param subItemId
      * @return
      */
-    int deleteSubItemsInfo(Long subItemId);
+    int deleteSubItemsInfo(Long subItemId,Long companyId);
+
+    /**
+     * 根据主商品 itemId 删除此主商品下的所有子商品
+     * @param itemId
+     * @return
+     */
+    int deleteSubItemsInfoByItemId(Long itemId,Long companyId);
 
     /**
      * 根据子商品 subItemId 修改子商品
@@ -41,43 +48,21 @@ public interface SubItemsInfoService {
      * @param subItemId
      * @return
      */
-    SubItemsInfo querySubItemsInfoBySubItemId(Long subItemId);
-
+    SubItemsInfoDao querySubItemsInfoBySubItemId(Long subItemId,Long companyId);
     /**
-     * 根据主商品 itemId 查询此主商品下的所有子商品
-     *
+     * 查询列表
      * @param itemId
+     * @param companyId
      * @return
      */
-    List<SubItemsInfo> querySubItemsInfoListByItemId(Long itemId);
+    List<SubItemsInfoDao> querySubAndSpecAndPropListByItemId(Long itemId,Long companyId);
 
-    /**
-     * 根据主商品 itemId 查询此主商品下的所有子商品，包含分页
-     *
-     * @param itemsId
-     * @param pageInfo
-     * @return
-     */
-    List<SubItemsInfo> querySubItemsInfoListByItemId(Long itemsId, PageInfo pageInfo);
-
-    /**
-     * 根据主商品 itemId 删除此主商品下的所有子商品
-     * @param itemId
-     * @return
-     */
-    int deleteSubItemsInfoByItemId(Long itemId);
-
-    /**
-     * 传入SubItemsInfo列表，批量插入数据
-     * @param subItemsInfoList
-     * @return
-     */
-    int addSubItemsInfoBatch(List<SubItemsInfo> subItemsInfoList);
 
     /**
      * 查询列表
      * @param itemId
+     * @param companyId
      * @return
      */
-    List<SubItemsInfoDao> querySubAndSpecAndPropListByItemId(Long itemId);
+    List<SubItemsInfo> querySubItemsInfoListByItemId(Long itemId,Long companyId);
 }

@@ -3,6 +3,7 @@ package com.lcdt.items.dao;
 import com.lcdt.items.model.ItemSpecKeyValue;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ItemSpecKeyValueMapper {
     /**
@@ -53,18 +54,18 @@ public interface ItemSpecKeyValueMapper {
     int insertForBatch(List<ItemSpecKeyValue> itemSpecKeyValueList);
 
     /**
-     * 根据子商品subItemId删除规格
-     * @param subItemId
+     * 根据子商品subItemId 和 companyId 删除规格
+     * @param itemSpecKeyValue
      * @return
      */
-    int deleteBySubItemId(Long subItemId);
+    int deleteBySubItemIdAndCompanyId(ItemSpecKeyValue itemSpecKeyValue);
 
     /**
-     * 根据subItemIds批量删除
-     * @param subItemIds
+     * 根据subItemIds 和 companyId 批量删除
+     * @param map
      * @return
      */
-    int deleteBySubItemIds(String subItemIds);
+    int deleteBySubItemIds(Map<String,Object> map);
 
     /**
      * 根据子商品 subItemId 查询

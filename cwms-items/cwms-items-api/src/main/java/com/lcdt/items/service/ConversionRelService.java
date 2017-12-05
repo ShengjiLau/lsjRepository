@@ -19,19 +19,19 @@ public interface ConversionRelService {
      * @param converId
      * @return
      */
-    int deleteConversionRel(Long converId);
-
+    int deleteConversionRel(Long converId,Long companyId);
     /**
-     * 根据converId修改一个多单位
+     * 根据 converId 和 companyId 修改一个多单位
      * @param conversionRel
      * @return
      */
     int modifyConversionRel(ConversionRel conversionRel);
 
     /**
-     * 根据converId查询ConversionRel
+     * 根据converId 和 companyId 查询 ConversionRel
      * @param converId
+     * @param companyId
      * @return
      */
-    ConversionRel queryConversionRel(Long converId);
+    ConversionRel queryConversionRel(Long converId,Long companyId);
 }

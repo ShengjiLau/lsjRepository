@@ -2,11 +2,13 @@ package com.lcdt.items.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.items.model.*;
 import com.lcdt.items.model.ItemsInfoDao;
 import com.lcdt.items.service.ItemsInfoService;
 import com.lcdt.items.web.dto.ItemsInfoDto;
 import com.lcdt.items.web.dto.PageBaseDto;
+import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -37,8 +39,9 @@ public class ItemsInfoApi {
     @ApiOperation("新增商品")
     @PostMapping("/add")
     public JSONObject addItemInfo(ItemsInfoDto itemsInfoDto, HttpSession httpSession) {
-        Long companyId = 8L;
-        int result = itemsInfoService.addItemsInfo(parseItemsInfoDao(itemsInfoDto,companyId));
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User user=SecurityInfoGetter.getUser();
+        int result = itemsInfoService.addItemsInfo(parseItemsInfoDao(itemsInfoDto,companyId,user));
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
@@ -52,7 +55,7 @@ public class ItemsInfoApi {
     @ApiOperation(value = "商品列表", notes = "获取商品列表") //add by liuh
     @GetMapping("/list")
     public PageBaseDto<List<ItemsInfoDao>> getItemInfoList(@Validated ItemsInfoDao itemsInfoDao, PageInfo pageInfo, HttpSession httpSession) {
-        Long companyId = 8L; //TODO 后面从session中获取
+        Long companyId = SecurityInfoGetter.getCompanyId(); //TODO 后面从session中获取
         itemsInfoDao.setCompanyId(companyId);
         PageInfo<List<ItemsInfoDao>> listPageInfo = itemsInfoService.queryItemsByCondition(itemsInfoDao,pageInfo);
         return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
@@ -61,7 +64,8 @@ public class ItemsInfoApi {
     @ApiOperation("删除商品")
     @PostMapping("/delete")
     public JSONObject deleteItemsInfo(HttpSession httpSession, @ApiParam(value = "商品Id", required = true) @RequestParam Long itemId) {
-        int result = itemsInfoService.deleteItemsInfo(itemId);
+        Long companyId=SecurityInfoGetter.getCompanyId();
+        int result = itemsInfoService.deleteItemsInfo(itemId,companyId);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
@@ -72,28 +76,25 @@ public class ItemsInfoApi {
             throw new RuntimeException("删除失败");
         }
     }
-    @ApiOperation("查询商品")
-    @GetMapping("/queryonlyitemsinfo")
-    public ItemsInfo queryItemsInfo(HttpSession httpSession, @ApiParam(value = "商品Id", required = true) @RequestParam Long itemId){
-        ItemsInfo itemsInfo=new ItemsInfo();
-        itemsInfo=itemsInfoService.queryItemsInfoByItemId(itemId);
-        return itemsInfo;
-    }
-
 
     @ApiOperation("查询商品")
     @GetMapping("/queryitemsinfo")
     public ItemsInfo queryItemsInfoDetails(HttpSession httpSession, @ApiParam(value = "商品Id", required = true) @RequestParam Long itemId){
+        Long companyId=SecurityInfoGetter.getCompanyId();
         ItemsInfoDao itemsInfoDao=null;
-        itemsInfoDao=itemsInfoService.queryIetmsInfoDetails(itemId);
+        itemsInfoDao=itemsInfoService.queryIetmsInfoDetails(itemId,companyId);
+        if(itemsInfoDao==null){
+            itemsInfoDao=new ItemsInfoDao();
+        }
         return itemsInfoDao;
     }
 
     @ApiOperation("修改商品")
     @PostMapping("/modify")
     public JSONObject modifyItemsInfo(HttpSession httpSession,ItemsInfoDto itemsInfoDto){
-        Long companyId = 8L;
-        int result = itemsInfoService.modifyItemsInfo(parseItemsInfoDao(itemsInfoDto,companyId));
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User user=SecurityInfoGetter.getUser();
+        int result = itemsInfoService.modifyItemsInfo(parseItemsInfoDao(itemsInfoDto,companyId,user));
         JSONObject jsonObject=new JSONObject();
         if(result>0){
             jsonObject.put("code",0);
@@ -111,7 +112,7 @@ public class ItemsInfoApi {
      * @param companyId
      * @return
      */
-    private ItemsInfoDao parseItemsInfoDao(ItemsInfoDto itemsInfoDto,Long companyId){
+    private ItemsInfoDao parseItemsInfoDao(ItemsInfoDto itemsInfoDto, Long companyId, User user){
         ItemsInfoDao itemsInfoDao = new ItemsInfoDao();
         itemsInfoDao.setItemId(itemsInfoDto.getItemId());
         itemsInfoDao.setSubject(itemsInfoDto.getSubject());
@@ -123,7 +124,25 @@ public class ItemsInfoApi {
         itemsInfoDao.setTradeType(itemsInfoDto.getTradeType());
         itemsInfoDao.setItemType(itemsInfoDto.getItemType());
         itemsInfoDao.setCompanyId(companyId);
-
+        itemsInfoDao.setCreateId(user.getUserId());
+        itemsInfoDao.setCreateName(user.getRealName());
+        //多单位
+        if(itemsInfoDto.getConversionRelDto()!=null){
+            ConversionRel conversionRel=new ConversionRel();
+            conversionRel.setConverId(itemsInfoDto.getConverId());
+            conversionRel.setUnitId(itemsInfoDto.getConversionRelDto().getUnitId());
+            conversionRel.setUnitName(itemsInfoDto.getConversionRelDto().getUnitName());
+            conversionRel.setUnitId1(itemsInfoDto.getConversionRelDto().getUnitId1());
+            conversionRel.setUnitName1(itemsInfoDto.getConversionRelDto().getUnitName1());
+            conversionRel.setData1(itemsInfoDto.getConversionRelDto().getData1());
+            conversionRel.setUnitId2(itemsInfoDto.getConversionRelDto().getUnitId2());
+            conversionRel.setUnitName2(itemsInfoDto.getConversionRelDto().getUnitName2());
+            conversionRel.setData2(itemsInfoDto.getConversionRelDto().getData2());
+            conversionRel.setCreateId(user.getUserId());
+            conversionRel.setCreateName(user.getRealName());
+            conversionRel.setCompanyId(companyId);
+            itemsInfoDao.setConversionRel(conversionRel);
+        }
         //主商品自定义属性
         if (itemsInfoDto.getCustomValueList() != null) {
             List<CustomValue> customValueList = new ArrayList<CustomValue>();
@@ -134,6 +153,8 @@ public class ItemsInfoApi {
                 customValue.setPropertyName(itemsInfoDto.getCustomValueList().get(i).getPropertyName());
                 customValue.setItemId(itemsInfoDto.getCustomValueList().get(i).getItemId());
                 customValue.setCompanyId(companyId);
+                customValue.setCreateId(user.getUserId());
+                customValue.setCreateName(user.getRealName());
                 customValueList.add(customValue);
             }
             itemsInfoDao.setCustomValueList(customValueList);
@@ -151,6 +172,8 @@ public class ItemsInfoApi {
                 subItemsInfoDao.setWholesalePrice(itemsInfoDto.getSubItemsInfoDtoList().get(i).getWholesalePrice());
                 subItemsInfoDao.setRetailPrice(itemsInfoDto.getSubItemsInfoDtoList().get(i).getRetailPrice());
                 subItemsInfoDao.setCompanyId(companyId);
+                subItemsInfoDao.setCreateId(user.getUserId());
+                subItemsInfoDao.setCreateName(user.getRealName());
                 //子商品自定义属性
                 if (itemsInfoDto.getSubItemsInfoDtoList().get(i).getCustomValueList() != null) {
                     List<CustomValue> subCustomValueList = new ArrayList<CustomValue>();
@@ -161,6 +184,8 @@ public class ItemsInfoApi {
                         customValue.setPropertyName(itemsInfoDto.getSubItemsInfoDtoList().get(i).getCustomValueList().get(j).getPropertyName());
                         customValue.setSubItemId(itemsInfoDto.getSubItemsInfoDtoList().get(i).getCustomValueList().get(j).getSubItemId());
                         customValue.setCompanyId(companyId);
+                        customValue.setCreateId(user.getUserId());
+                        customValue.setCreateName(user.getRealName());
                         subCustomValueList.add(customValue);
 
                     }
@@ -175,6 +200,8 @@ public class ItemsInfoApi {
                         itemSpecKeyValue.setSpValue(itemsInfoDto.getSubItemsInfoDtoList().get(i).getItemSpecKeyValueDtoList().get(j).getSpValue());
                         itemSpecKeyValue.setSpName(itemsInfoDto.getSubItemsInfoDtoList().get(i).getItemSpecKeyValueDtoList().get(j).getSpName());
                         itemSpecKeyValue.setCompanyId(companyId);
+                        itemSpecKeyValue.setCreateId(user.getUserId());
+                        itemSpecKeyValue.setCreateName(user.getRealName());
                         itemSpecKeyValueList.add(itemSpecKeyValue);
                     }
                     subItemsInfoDao.setItemSpecKeyValueList(itemSpecKeyValueList);

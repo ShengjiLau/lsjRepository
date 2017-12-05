@@ -32,16 +32,9 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
     }
 
     @Override
-    public int deleteItemClassify(Long classifyId) {
+    public int deleteItemsClassifyAndChildren(Long classifyId, Long companyId) {
         int result = 0;
-        result = itemClassifyMapper.deleteByPrimaryKey(classifyId);
-        return result;
-    }
-
-    @Override
-    public int deleteItemsClassifyAndChildren(Long classifyId) {
-        int result = 0;
-        result += delRecursion(classifyId);
+        result += delRecursion(classifyId, companyId);
         return result;
     }
 
@@ -50,29 +43,27 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
      *
      * @param classifyId
      */
-    private int delRecursion(Long classifyId) {
+    private int delRecursion(Long classifyId, Long companyId) {
         int size = 0;
-        List<ItemClassify> children = queryItemClassifyByPid(classifyId);
+        ItemClassify itemClassify = new ItemClassify();
+        itemClassify.setCompanyId(companyId);
+        itemClassify.setClassifyId(classifyId);
+        itemClassify.setPid(classifyId);
+        List<ItemClassify> children = itemClassifyMapper.selectClassifyByCompanyIdAndPid(itemClassify);
         if (children != null && children.size() > 0) {
             for (int i = 0; i < children.size(); i++) {
-                size += delRecursion(children.get(i).getClassifyId());
+                size += delRecursion(children.get(i).getClassifyId(), companyId);
             }
         }
-        size += deleteItemClassify(classifyId);
+        size += itemClassifyMapper.deleteByClassifyIdAndCompanyId(itemClassify);
         return size;
     }
 
     @Override
-    public int modifyByPrimaryKey(ItemClassify itemClassify) {
+    public int modifyByClassifyIdAndCompanyId(ItemClassify itemClassify) {
         int result = 0;
-        result = itemClassifyMapper.updateByPrimaryKey(itemClassify);
+        result = itemClassifyMapper.updateByClassifyIdAndCompanyId(itemClassify);
         return result;
-    }
-
-    @Override
-    public ItemClassify queryByPrimaryKey(Long classifyId) {
-        ItemClassify itemClassify = itemClassifyMapper.selectByPrimaryKey(classifyId);
-        return itemClassify;
     }
 
     @Override
@@ -82,13 +73,6 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
         itemClassify.setCompanyId(companyId);
         itemClassify.setPid(pid);
         itemClassifyList = itemClassifyMapper.selectClassifyByCompanyIdAndPid(itemClassify);
-        return itemClassifyList;
-    }
-
-    @Override
-    public List<ItemClassify> queryItemClassifyByPid(Long pid) {
-        List<ItemClassify> itemClassifyList = null;
-        itemClassifyList = itemClassifyMapper.selectClassifyByPid(pid);
         return itemClassifyList;
     }
 

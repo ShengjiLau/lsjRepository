@@ -23,7 +23,7 @@ public interface ItemsInfoService {
      * @param itemId
      * @return
      */
-    int deleteItemsInfo(Long itemId);
+    int deleteItemsInfo(Long itemId,Long companyId);
 
     /**
      * 根据商品 itemId 修改商品 在调用此方法之前需要先调用 queryItemsInfoByCodeAndCompanyId() 判断此企业下的商品编码是否存在,确认本企业内商品编码的唯一性
@@ -32,27 +32,13 @@ public interface ItemsInfoService {
      */
     int modifyItemsInfo(ItemsInfoDao itemsInfoDao);
 
+
     /**
-     * 根据商品itemId查询单个子商品
+     * 根据itemId查询商品详情
      * @param itemId
      * @return
      */
-    ItemsInfo queryItemsInfoByItemId(Long itemId);
-
-
-    /**
-     * 系统自动生成商品编码
-     * @return
-     */
-    String getAutoItemCode();
-
-    /**
-     * 根据商品编码和企业ID查询商品是,判断本企业内的商品编码是否唯一
-     * @param code
-     * @param companyId
-     * @return
-     */
-    ItemsInfo queryItemsInfoByCodeAndCompanyId(String code ,Long companyId);
+    ItemsInfoDao queryIetmsInfoDetails(Long itemId,Long companyId);
 
     /**
      * 查询商品列表
@@ -61,12 +47,4 @@ public interface ItemsInfoService {
      * @return
      */
     PageInfo<List<ItemsInfoDao>> queryItemsByCondition(ItemsInfo itemsInfo, PageInfo pageInfo);
-
-    /**
-     * 根据itemId查询商品详情
-     * @param itemId
-     * @return
-     */
-    ItemsInfoDao queryIetmsInfoDetails(Long itemId);
-
 }

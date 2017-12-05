@@ -9,10 +9,14 @@ import com.lcdt.items.model.*;
 import com.lcdt.items.service.ConversionRelService;
 import com.lcdt.items.service.ItemsInfoService;
 import com.lcdt.items.service.SubItemsInfoService;
+import net.sf.jsqlparser.expression.operators.relational.OldOracleJoinBinaryExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lyqishan on 2017/10/26
@@ -44,6 +48,11 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     public int addItemsInfo(ItemsInfoDao itemsInfoDao) {
         int result = 0;
 
+        if(itemsInfoDao.getConversionRel()!=null){
+            conversionRelService.addConversionRel(itemsInfoDao.getConversionRel());
+            itemsInfoDao.setConverId(itemsInfoDao.getConversionRel().getConverId());
+        }
+
         //新增商品
         result += itemsInfoMapper.insert(itemsInfoDao);
 
@@ -63,7 +72,6 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
                     //新增子商品
                     //给dto增加商品itemsId
                     dao.setItemId(itemsInfoDao.getItemId());
-                    dao.setCompanyId(itemsInfoDao.getCompanyId());
                     result += subItemsInfoService.addSubItemsInfo(dao);
                 }
             }
@@ -72,58 +80,48 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     }
 
     @Override
-    public int deleteItemsInfo(Long itemId) {
+    public int deleteItemsInfo(Long itemId, Long companyId) {
         int result = 0;
-        try {
-            ItemsInfo itemsInfo = itemsInfoMapper.selectByPrimaryKey(itemId);
-            //子商品 subItemId 用 , 分隔开的字符串
-            StringBuffer subItemsInfoIds = new StringBuffer();
-            if (itemsInfo != null) {
-                //判断商品类型，删除子商品
-                if (itemsInfo.getItemType() == 2) {
-                    List<SubItemsInfo> subItemsInfoList = subItemsInfoService.querySubItemsInfoListByItemId(itemId);
-                    //如果子商品不为空，则组装用 , 分隔开的字符串，以便批量删除了商品的自定义属性值
-                    if (subItemsInfoList != null) {
-                        for (int i = 0; i < subItemsInfoList.size(); i++) {
-                            if (i == 0) {
-                                subItemsInfoIds.append(subItemsInfoList.get(i).getSubItemId());
-                            } else {
-                                subItemsInfoIds.append(",").append(subItemsInfoList.get(i).getSubItemId());
-                            }
-                        }
-                    }
-                    //删除子商品规格
-                    result += itemSpecKeyValueMapper.deleteBySubItemIds(subItemsInfoIds.toString());
-                    result += subItemsInfoService.deleteSubItemsInfoByItemId(itemId);
-                }
-
+        ItemsInfo item = new ItemsInfo();
+        item.setItemId(itemId);
+        item.setCompanyId(companyId);
+        ItemsInfo itemsInfo = itemsInfoMapper.selectByItemIdAndCompanyId(item);
+        if (itemsInfo != null) {
+            //判断商品类型，删除子商品
+            if (itemsInfo.getItemType() == 2 || itemsInfo.getItemType() == 1) {
+                subItemsInfoService.deleteSubItemsInfoByItemId(itemId, companyId);
             }
             //判断是否有多单位，如果有，则删除
             if (itemsInfo.getConverId() != null && itemsInfo.getConverId() > 0) {
-                result += conversionRelService.deleteConversionRel(itemsInfo.getConverId());
+                result += conversionRelService.deleteConversionRel(itemsInfo.getConverId(), companyId);
             }
             //删除自定义属性值
-            result += customValueMapper.deleteItemAndSubItemId(itemId.toString(), subItemsInfoIds.toString());
+            Map<String,Object> map=new HashMap<String,Object>();
+            map.put("itemId",itemId);
+            map.put("subItemIdList",null);
+            map.put("companyId",companyId);
+            result += customValueMapper.deleteItemAndSubItemId(map);
             //删除主商品
-            result = itemsInfoMapper.deleteByPrimaryKey(itemId);
+            result = itemsInfoMapper.deleteByItemIdAndCompanyId(itemsInfo);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return result;
         }
+        return result;
     }
 
     @Override
     public int modifyItemsInfo(ItemsInfoDao itemsInfoDao) {
         int result = 0;
+        if(itemsInfoDao.getConversionRel()!=null){
+            conversionRelService.modifyConversionRel(itemsInfoDao.getConversionRel());
+            itemsInfoDao.setConverId(itemsInfoDao.getConversionRel().getConverId());
+        }
         //更新主商品
-        result = itemsInfoMapper.updateByPrimaryKey(itemsInfoDao);
+        result = itemsInfoMapper.updateByItemIdAndCompanyId(itemsInfoDao);
 
         //主商品自定义属性值更新
         if (itemsInfoDao.getCustomValueList() != null) {
             for (CustomValue customValue : itemsInfoDao.getCustomValueList()) {
-                result += customValueMapper.updateByPrimaryKey(customValue);
+                result += customValueMapper.updateByVidAndCompanyId(customValue);
             }
         }
         //判断商品类型 1、单规格商品，2、多规格商品，3、组合商品
@@ -137,36 +135,12 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
                     } else {
                         //子商品添加
                         dao.setItemId(dao.getItemId());
-                        dao.setCompanyId(dao.getCompanyId());
                         result += subItemsInfoService.addSubItemsInfo(dao);
                     }
                 }
             }
         }
         return result;
-    }
-
-    @Override
-    public ItemsInfo queryItemsInfoByItemId(Long itemId) {
-        ItemsInfo itemsInfo = null;
-        try {
-            itemsInfo = itemsInfoMapper.selectByPrimaryKey(itemId);
-            StringBuilder subItemIds = null;
-            if (itemsInfo.getItemType() == 2) {
-                List<SubItemsInfo> subItemsInfoList = subItemsInfoMapper.selectSubItemsInfoListByItemId(itemId);
-                for (int i = 0; i < subItemsInfoList.size(); i++) {
-                    if (i == 0) {
-                        subItemIds = new StringBuilder(subItemsInfoList.get(i).getSubItemId().toString());
-                    } else {
-                        subItemIds.append(",").append(subItemsInfoList.get(i).getSubItemId().toString());
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return itemsInfo;
-        }
     }
 
     @Override
@@ -186,29 +160,10 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     }
 
     @Override
-    public ItemsInfoDao queryIetmsInfoDetails(Long itemId) {
-        return itemsInfoMapper.selectIetmsInfoDetails(itemId);
-    }
-
-    @Override
-    public String getAutoItemCode() {
-        SnowflakeIdWorker snowflakeIdWorker = new SnowflakeIdWorker(0, 0);
-        String itemCode = "PN" + snowflakeIdWorker.nextId();
-        return itemCode;
-    }
-
-    @Override
-    public ItemsInfo queryItemsInfoByCodeAndCompanyId(String code, Long companyId) {
-        ItemsInfo result = null;
-        try {
-            ItemsInfo itemsInfo = new ItemsInfo();
-            itemsInfo.setCode(code);
-            itemsInfo.setCompanyId(companyId);
-            result = itemsInfoMapper.selectByCodeAndCompanyId(itemsInfo);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return result;
-        }
+    public ItemsInfoDao queryIetmsInfoDetails(Long itemId,Long companyId) {
+        ItemsInfo itemsInfo=new ItemsInfo();
+        itemsInfo.setItemId(itemId);
+        itemsInfo.setCompanyId(companyId);
+        return itemsInfoMapper.selectIetmsInfoDetails(itemsInfo);
     }
 }

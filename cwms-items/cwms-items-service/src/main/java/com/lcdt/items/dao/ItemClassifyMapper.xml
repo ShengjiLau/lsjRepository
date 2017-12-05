@@ -34,9 +34,9 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_item_classify (pid, classify_name, company_id,
-    is_default)
+    is_default,create_id,create_name,create_date)
     values (#{pid,jdbcType=BIGINT}, #{classifyName,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
-    #{isDefault,jdbcType=BIT})
+    #{isDefault,jdbcType=BIT},#{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP)
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.items.model.ItemClassify">
     <!--
@@ -67,6 +67,16 @@
     select classify_id, pid, classify_name, company_id, is_default
     from t_item_classify
   </select>
+  <delete id="deleteByClassifyIdAndCompanyId" parameterType="com.lcdt.items.model.ItemClassify">
+    delete from t_item_classify
+    where classify_id = #{classifyId,jdbcType=BIGINT} and company_id=#{companyId,jdbcType=BIGINT} and is_default=0
+  </delete>
+
+  <update id="updateByClassifyIdAndCompanyId" parameterType="com.lcdt.items.model.ItemClassify">
+    update t_item_classify
+    set classify_name = #{classifyName,jdbcType=VARCHAR}
+    where classify_id = #{classifyId,jdbcType=BIGINT} and company_id=#{companyId,jdbcType=BIGINT}
+  </update>
 
   <select id="selectClassifyByCompanyIdAndPid" parameterType="com.lcdt.items.model.ItemClassify" resultMap="BaseResultMap">
     SELECT classify_id,pid,classify_name,company_id, is_default

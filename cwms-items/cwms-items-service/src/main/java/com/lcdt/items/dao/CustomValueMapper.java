@@ -3,6 +3,7 @@ package com.lcdt.items.dao;
 import com.lcdt.items.model.CustomValue;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CustomValueMapper {
     /**
@@ -64,11 +65,9 @@ public interface CustomValueMapper {
 
     /**
      *  删除商品和子商品：一次性删除主子商品（没子商品传入null值）
-     * @param itemId    主商品id
-     * @param subItemIds    子商品id串，英文逗号分隔;
      * @return
      */
-    int deleteItemAndSubItemId(String itemId,String subItemIds);
+    int deleteItemAndSubItemId(Map<String,Object> map);
 
     /**
      * 根据 子商品subItemId 查询
@@ -84,4 +83,10 @@ public interface CustomValueMapper {
      */
     List<CustomValue> selectCustomValueByItemId(Long itemId);
 
+    /**
+     * 根据 vid 和 companyId 更新自定义属性值
+     * @param customValue
+     * @return
+     */
+    int updateByVidAndCompanyId(CustomValue customValue);
 }

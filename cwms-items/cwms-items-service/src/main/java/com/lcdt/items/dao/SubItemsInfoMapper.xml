@@ -41,11 +41,11 @@
     </selectKey>
     insert into t_sub_items_info (item_id, image, code, 
       bar_code, purchase_price, wholesale_price, 
-      retail_price, spec_comb, company_id
+      retail_price, spec_comb, company_id,create_id,create_name,create_date
       )
     values (#{itemId,jdbcType=BIGINT}, #{image,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{barCode,jdbcType=VARCHAR}, #{purchasePrice,jdbcType=REAL}, #{wholesalePrice,jdbcType=REAL}, 
-      #{retailPrice,jdbcType=REAL}, #{specComb,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}
+      #{retailPrice,jdbcType=REAL}, #{specComb,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},#{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.items.model.SubItemsInfo" >
@@ -85,12 +85,10 @@
     from t_sub_items_info
   </select>
 
-  <select id="selectSubItemsInfoListByItemId" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    SELECT sub_item_id, item_id, image, code, bar_code, purchase_price, wholesale_price,
-    retail_price, spec_comb, company_id
-    FROM t_sub_items_info
-    WHERE item_id=#{itemId,jdbcType=BIGINT}
-  </select>
+  <delete id="deleteBySubItemIdAndCompanyId" parameterType="com.lcdt.items.model.SubItemsInfo" >
+    delete from t_sub_items_info
+    where sub_item_id = #{subItemId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </delete>
 
   <select id="selectSubAndSpecAndPropListByItemId" parameterType="java.lang.Long" resultMap="SubItemInfo">
     SELECT sub_item_id, item_id, image, code, bar_code, purchase_price, wholesale_price,
@@ -99,9 +97,16 @@
     WHERE item_id=#{itemId,jdbcType=BIGINT}
   </select>
 
-  <delete id="deleteSubItemsInfoByItemId" parameterType="java.lang.Long">
+  <select id="selectSubAndSpecAndPropListByItemIdAndCompanyId" parameterType="com.lcdt.items.model.SubItemsInfo" resultMap="SubItemInfo">
+    SELECT sub_item_id, item_id, image, code, bar_code, purchase_price, wholesale_price,
+    retail_price, spec_comb, company_id
+    FROM t_sub_items_info
+    WHERE item_id=#{itemId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteSubItemsInfoByItemIdAndCompanyId" parameterType="com.lcdt.items.model.SubItemsInfo">
     DELETE FROM t_sub_items_info
-    WHERE item_id=#{itemId,jdbcType=BIGINT}
+    WHERE item_id=#{itemId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </delete>
 
   <insert id="insertByBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="sub_item_id">
@@ -117,4 +122,31 @@
       )
     </foreach>
   </insert>
+
+  <update id="updateBySubItemIdAndCompanyId" parameterType="com.lcdt.items.model.SubItemsInfo" >
+    update t_sub_items_info
+    set item_id = #{itemId,jdbcType=BIGINT},
+    image = #{image,jdbcType=VARCHAR},
+    code = #{code,jdbcType=VARCHAR},
+    bar_code = #{barCode,jdbcType=VARCHAR},
+    purchase_price = #{purchasePrice,jdbcType=REAL},
+    wholesale_price = #{wholesalePrice,jdbcType=REAL},
+    retail_price = #{retailPrice,jdbcType=REAL},
+    spec_comb = #{specComb,jdbcType=VARCHAR}
+    where sub_item_id = #{subItemId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectBySubItemIdAndCompanyId" resultMap="SubItemInfo" parameterType="com.lcdt.items.model.SubItemsInfo" >
+    select sub_item_id, item_id, image, code, bar_code, purchase_price, wholesale_price,
+    retail_price, spec_comb, company_id
+    from t_sub_items_info
+    where sub_item_id = #{subItemId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectSubItemInfotByItemIdAndCompanyId" resultMap="BaseResultMap" parameterType="com.lcdt.items.model.SubItemsInfo" >
+    select sub_item_id, item_id, image, code, bar_code, purchase_price, wholesale_price,
+    retail_price, spec_comb, company_id
+    from t_sub_items_info
+    where item_id=#{itemId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </select>
 </mapper>
