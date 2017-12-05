@@ -14,7 +14,7 @@
   </resultMap>
   <!--获取树状结构分类-->
   <resultMap id="ChildResultMap" type="com.lcdt.items.model.ItemClassifyDao" extends="BaseResultMap">
-    <collection property="childClassifyList"  column="classify_id" ofType="com.lcdt.items.model.ItemClassifyDao" select="findClassifyByPid"></collection>
+    <collection property="list"  column="classify_id" ofType="com.lcdt.items.model.ItemClassifyDao" select="findClassifyByPid"></collection>
   </resultMap>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

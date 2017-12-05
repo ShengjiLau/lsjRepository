@@ -1,7 +1,9 @@
 package com.lcdt.items.service;
 
+import com.github.pagehelper.PageInfo;
 import com.lcdt.items.model.ItemClassify;
 import com.lcdt.items.model.ItemClassifyDao;
+import com.lcdt.items.model.ItemsInfoDao;
 
 import java.util.List;
 
@@ -57,7 +59,7 @@ public interface ItemClassifyService {
      * @param companyId
      * @return
      */
-    List<ItemClassifyDao> queryItemClassifyAndChildren(Long companyId);
+    PageInfo<List<ItemClassifyDao>> queryItemClassifyAndChildren(Long companyId, PageInfo pageInfo);
 
 
 }

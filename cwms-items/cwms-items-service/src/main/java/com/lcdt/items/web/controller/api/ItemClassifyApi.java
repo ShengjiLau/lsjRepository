@@ -1,10 +1,14 @@
 package com.lcdt.items.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.items.model.ItemClassify;
+import com.lcdt.items.model.ItemClassifyDao;
+import com.lcdt.items.model.ItemsInfoDao;
 import com.lcdt.items.service.ItemClassifyService;
+import com.lcdt.items.web.dto.PageBaseDto;
 import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -87,10 +91,13 @@ public class ItemClassifyApi {
 
     @ApiOperation("查询分类列表")
     @GetMapping("/list")
-    public List<ItemClassify> modifyClassify(HttpSession httpSession) {
+    public PageBaseDto<List<ItemClassifyDao>> modifyClassify(HttpSession httpSession) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        List<ItemClassify> itemClassifyList = new ArrayListResponseWrapper<ItemClassify>(itemClassifyService.queryItemClassifyAndChildren(companyId));
-        return itemClassifyList;
+        PageInfo pageInfo=new PageInfo();
+        pageInfo.setPageSize(0);
+        pageInfo.setPageNum(1);
+        PageInfo<List<ItemClassifyDao>> listPageInfo = itemClassifyService.queryItemClassifyAndChildren(companyId,pageInfo);
+        return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
     }
 
 

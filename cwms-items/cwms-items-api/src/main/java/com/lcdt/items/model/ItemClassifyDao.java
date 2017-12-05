@@ -9,13 +9,13 @@ import java.util.List;
 public class ItemClassifyDao extends ItemClassify{
 
     //子分类
-    private List<ItemClassify> childClassifyList;
+    private List<ItemClassify> list;
 
-    public List<ItemClassify> getChildClassifyList() {
-        return childClassifyList;
+    public List<ItemClassify> getList() {
+        return list;
     }
 
-    public void setChildClassifyList(List<ItemClassify> childClassifyList) {
-        this.childClassifyList = childClassifyList;
+    public void setList(List<ItemClassify> list) {
+        this.list = list;
     }
 }

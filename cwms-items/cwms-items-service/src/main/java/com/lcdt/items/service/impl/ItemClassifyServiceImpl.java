@@ -1,9 +1,12 @@
 package com.lcdt.items.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lcdt.items.dao.ItemClassifyMapper;
 import com.lcdt.items.model.ItemClassify;
 import com.lcdt.items.model.ItemClassifyDao;
+import com.lcdt.items.model.ItemsInfoDao;
 import com.lcdt.items.service.ItemClassifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,13 +87,17 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
     }
 
     @Override
-    public List<ItemClassifyDao> queryItemClassifyAndChildren(Long companyId) {
+    public PageInfo<List<ItemClassifyDao>> queryItemClassifyAndChildren(Long companyId, PageInfo pageInfo) {
         List<ItemClassifyDao> itemClassifyDaoList = null;
         ItemClassify itemClassify = new ItemClassify();
         itemClassify.setCompanyId(companyId);
         itemClassify.setPid(0L);
+        PageInfo page = null;
+        //使用分页工具进行分页
+        PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         itemClassifyDaoList = itemClassifyMapper.selectClassifyAndChildren(itemClassify);
-        return itemClassifyDaoList;
+        page = new PageInfo(itemClassifyDaoList);
+        return page;
     }
 
 }
