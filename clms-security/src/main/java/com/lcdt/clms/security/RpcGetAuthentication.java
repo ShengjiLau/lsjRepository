@@ -25,8 +25,6 @@ public class RpcGetAuthentication implements Authentication {
 
 	private ConcurrentHashMap<String, TicketAuthentication> authMap = new ConcurrentHashMap<>();
 
-
-
 	@Reference(check = false)
 	private LoginService loginService;
 
@@ -34,17 +32,12 @@ public class RpcGetAuthentication implements Authentication {
 		ticketThreadLocal.set(ticket);
 	}
 
-
 	private TicketAuthentication queryAndSaveAuthInfo() throws InvalidTicketException, UserNotExistException {
 		String s = ticketThreadLocal.get();
 		TicketAuthentication ticketAuthentication = loginService.queryTicket(s);
 		authMap.put(s,ticketAuthentication);
 		return ticketAuthentication;
 	}
-
-
-
-
 
 	public String getTicket() {
 		String ticket = ticketThreadLocal.get();

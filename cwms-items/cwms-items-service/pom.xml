@@ -10,7 +10,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cwms-items-service</artifactId>
+    <packaging>jar</packaging>
+
+    <name>item-service</name>
+
     <dependencies>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>common-config</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-swagger</artifactId>
@@ -20,17 +30,6 @@
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>common-utils</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.lcdt.cloud</groupId>
-            <artifactId>clms-permission-service</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lcdt.cloud</groupId>
-            <artifactId>clms-permission-api</artifactId>
             <version>1.0</version>
         </dependency>
 
@@ -88,6 +87,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <finalName>items-service</finalName>
+                </configuration>
             </plugin>
         </plugins>
 
