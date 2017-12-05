@@ -20,7 +20,6 @@ import java.util.List;
  * Created by ss on 2017/10/12.
  */
 @com.alibaba.dubbo.config.annotation.Service
-@Service
 public class UserPermissionServiceImpl implements UserPermissionService {
 
 	@Autowired

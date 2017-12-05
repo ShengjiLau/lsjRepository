@@ -8,6 +8,7 @@ import com.lcdt.userinfo.model.User;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailMessage;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,10 @@ public class InviteCustomerService {
 		message.setText(resolveInviteEmailContent(whoInvitedUserName, whoBeInvited.getRealName(),
 				companyBeInvited.getFullName(),beInvitedCompanyTypeName,
 				beInvitedUrl(customerInviteLog.getInviteId(),customerInviteLog.getInviteToken())));
+		mailSender.send(message);
+	}
+
+	public void sendEmail(SimpleMailMessage message){
 		mailSender.send(message);
 	}
 

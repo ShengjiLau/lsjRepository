@@ -4,10 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.service.GroupManageService;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.utils.RegisterUtils;
 import com.lcdt.userinfo.web.dto.ModifyUserDto;
+import com.lcdt.userinfo.web.dto.UserInfoDto;
 import com.lcdt.userinfo.web.exception.PwdErrorException;
 import com.lcdt.util.RandomNoUtil;
 import com.lcdt.util.WebProduces;
@@ -42,16 +45,22 @@ public class UserApi {
 	@Autowired
 	UserService userService;
 
+	@Autowired
+	GroupManageService groupManageService;
+
 	@ApiOperation("获取用户信息")
 	@RequestMapping(value = "/get", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('getUserInfo')")
-	public User getUserInfo() {
+	public UserInfoDto getUserInfo() {
 		User user = SecurityInfoGetter.getUser();
-		//从数据库读取用户信息
+		List<Group> groups = SecurityInfoGetter.groups();
 		user = userService.selectUserByPhone(user.getPhone());
 		//将密码设置为空字符串
 		user.setPwd("");
-		return user;
+		UserInfoDto userInfoDto = new UserInfoDto();
+		userInfoDto.setGroups(groups);
+		userInfoDto.setUser(user);
+		return userInfoDto;
 	}
 
 	@ApiOperation("获取用户权限")

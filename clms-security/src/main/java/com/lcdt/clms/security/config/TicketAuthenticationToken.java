@@ -14,7 +14,6 @@ import java.util.List;
  */
 public class TicketAuthenticationToken extends AbstractAuthenticationToken {
 
-
 	public TicketAuthenticationToken(String ticketString) {
 		super(null);
 		this.ticket = ticketString;

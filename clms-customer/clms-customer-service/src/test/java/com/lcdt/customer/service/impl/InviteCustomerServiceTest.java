@@ -1,31 +1,29 @@
 package com.lcdt.customer.service.impl;
 
-import com.lcdt.customer.model.Customer;
-import com.lcdt.userinfo.model.Company;
-import com.lcdt.userinfo.model.User;
+import com.lcdt.customer.BaseSpringBootTest;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 
 import static org.junit.Assert.*;
 
 /**
- * Created by ss on 2017/11/25.
+ * Created by ss on 2017/11/28.
  */
-public class InviteCustomerServiceTest {
+public class InviteCustomerServiceTest extends BaseSpringBootTest {
 
-	private InviteCustomerService service = new InviteCustomerService();
-
-	@Test
-	public void resolveInviteEmailContent() throws Exception {
-		String s = service.resolveInviteEmailContent("", "", "", "", "");
-		System.out.println(s);
-	}
+	@Autowired
+	InviteCustomerService inviteCustomerService;
 
 	@Test
-	public void sendInviteEmail() throws Exception {
-		service.sendInviteEmail(new Customer(), "username", new User(), new Company(), "typeName");
+	public void testSendEmail(){
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("737298251@qq.com");
+		message.setTo("mawei@lichendt.com");
+		message.setSubject("这是一封测试邮件");
+		message.setText("这是一封测试邮件");
+		inviteCustomerService.sendEmail(message);
 	}
 
-	@Test
-	public void testParserTemplate(){
-	}
+
 }

@@ -8,8 +8,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 /**
  * Created by ss on 2017/11/28.
  */
-@Ignore //基础类 no test case
+@Ignore
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = CustomerServiceApp.class)
-public class BaseSpringbootTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,classes = CustomerServiceApp.class)
+public class BaseSpringBootTest {
 }
