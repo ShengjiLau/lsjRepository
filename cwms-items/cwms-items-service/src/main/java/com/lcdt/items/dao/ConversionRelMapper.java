@@ -44,4 +44,24 @@ public interface ConversionRelMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(ConversionRel record);
+
+    /**
+     * 根据 converId 和 companyId 删除多单位
+     * @param conversionRel
+     * @return
+     */
+    int deleteByConverIdAndCompanyId(ConversionRel conversionRel);
+    /**
+     * 根据 converId 和 companyId 修改多单位关系
+     * @param conversionRel
+     * @return
+     */
+    int updateByConverIdAndCompanyId(ConversionRel conversionRel);
+
+    /**
+     * 通过 converId 和 companyId 查询多单位
+     * @param conversionRel
+     * @return
+     */
+    ConversionRel selectByConverIdAndCompanyId(ConversionRel conversionRel);
 }

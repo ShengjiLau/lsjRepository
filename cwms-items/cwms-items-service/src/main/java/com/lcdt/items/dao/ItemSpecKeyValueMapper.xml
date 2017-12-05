@@ -71,21 +71,25 @@
   </select>
 
   <insert id="insertForBatch" parameterType="java.util.List"  useGeneratedKeys="true" keyProperty="spkv_id">
-    insert into t_item_spec_key_value (spk_id,sp_name,spv_id,sp_value, sub_item_id, company_id) values
+    insert into t_item_spec_key_value (spk_id,sp_name,spv_id,sp_value, sub_item_id, company_id,create_id,create_name,create_date) values
     <foreach collection="list" item="item" separator=",">
       (#{item.spkId,jdbcType=BIGINT}, #{item.spName,jdbcType=VARCHAR}, #{item.spvId,jdbcType=BIGINT},
-      #{item.spValue,jdbcType=VARCHAR}, #{item.subItemId,jdbcType=BIGINT}, #{item.companyId,jdbcType=BIGINT}
+      #{item.spValue,jdbcType=VARCHAR}, #{item.subItemId,jdbcType=BIGINT}, #{item.companyId,jdbcType=BIGINT}, #{item.createId,jdbcType=BIGINT},#{item.createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP
       )
     </foreach>
   </insert>
-  <delete id="deleteBySubItemId" parameterType="java.lang.Long">
+  <delete id="deleteBySubItemIdAndCompanyId" parameterType="com.lcdt.items.model.ItemSpecKeyValue">
     delete from t_item_spec_key_value
-    where sub_item_id = #{subItemId,jdbcType=BIGINT}
+    where company_id = #{companyId,jdbcType=BIGINT} and sub_item_id = #{subItemId,jdbcType=BIGINT}
   </delete>
 
-  <delete id="deleteBySubItemIds" parameterType="String">
+  <delete id="deleteBySubItemIds" parameterType="java.util.Map">
     delete from t_item_spec_key_value
-    where sub_item_id in (#{subItemId,jdbcType=BIGINT})
+    where company_id = #{companyId} and sub_item_id in
+    <foreach item="subItemId" index="index" collection="subItemIdList"
+             open="(" separator="," close=")">
+      #{subItemId}
+    </foreach>
   </delete>
 
   <select id="selectSpecKeyValueBySubItemId" parameterType="java.lang.Long" resultMap="BaseResultMap">

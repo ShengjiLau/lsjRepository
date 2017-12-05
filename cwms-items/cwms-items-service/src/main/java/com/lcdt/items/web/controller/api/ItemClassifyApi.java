@@ -1,9 +1,11 @@
 package com.lcdt.items.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.items.model.ItemClassify;
 import com.lcdt.items.service.ItemClassifyService;
+import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -31,10 +33,14 @@ public class ItemClassifyApi {
     @PostMapping("/add")
     public ItemClassify addItemClassify(HttpSession httpSession, @ApiParam(value = "父类id", required = true) @RequestParam Long pid,
                                         @ApiParam(value = "分类名字", required = true) @RequestParam String classifyName) {
+        Long companyId= SecurityInfoGetter.getCompanyId();
+        User user=SecurityInfoGetter.getUser();
         ItemClassify itemClassify = new ItemClassify();
         itemClassify.setPid(pid);
         itemClassify.setClassifyName(classifyName);
-        itemClassify.setCompanyId(8L);
+        itemClassify.setCompanyId(companyId);
+        itemClassify.setCreateId(user.getUserId());
+        itemClassify.setCreateName(user.getRealName());
         itemClassify.setIsDefault(false);
         if (itemClassifyService.addItemClassify(itemClassify) != null) {
             return itemClassify;
@@ -47,7 +53,8 @@ public class ItemClassifyApi {
     @ApiOperation("删除分类")
     @PostMapping("/delete")
     public JSONObject delItemClassify(HttpSession httpSession, @ApiParam(value = "分类ID", required = true) @RequestParam Long classifyId) {
-        int result = itemClassifyService.deleteItemsClassifyAndChildren(classifyId);
+        Long companyId=SecurityInfoGetter.getCompanyId();
+        int result = itemClassifyService.deleteItemsClassifyAndChildren(classifyId,companyId);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
@@ -61,17 +68,13 @@ public class ItemClassifyApi {
     @ApiOperation("修改分类")
     @PostMapping("/modify")
     public JSONObject modifyItemClassify(HttpSession httpSession, @ApiParam(value = "分类id", required = true) @RequestParam Long classifyId,
-                                         @ApiParam(value = "分类名字", required = true) @RequestParam String classifyName,
-                                         @ApiParam(value = "父类id", required = true) @RequestParam Long pid,
-                                         @ApiParam(value = "是否是默认分类", required = true) @RequestParam boolean isDefault) {
-        Long companyId = 8L;
+                                         @ApiParam(value = "分类名字", required = true) @RequestParam String classifyName) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
         ItemClassify itemClassify = new ItemClassify();
         itemClassify.setClassifyId(classifyId);
         itemClassify.setClassifyName(classifyName);
-        itemClassify.setPid(pid);
-        itemClassify.setIsDefault(isDefault);
         itemClassify.setCompanyId(companyId);
-        int result = itemClassifyService.modifyByPrimaryKey(itemClassify);
+        int result = itemClassifyService.modifyByClassifyIdAndCompanyId(itemClassify);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
@@ -85,7 +88,7 @@ public class ItemClassifyApi {
     @ApiOperation("查询分类列表")
     @GetMapping("/list")
     public List<ItemClassify> modifyClassify(HttpSession httpSession) {
-        Long companyId = 8L;
+        Long companyId = SecurityInfoGetter.getCompanyId();
         List<ItemClassify> itemClassifyList = new ArrayListResponseWrapper<ItemClassify>(itemClassifyService.queryItemClassifyAndChildren(companyId));
         return itemClassifyList;
     }

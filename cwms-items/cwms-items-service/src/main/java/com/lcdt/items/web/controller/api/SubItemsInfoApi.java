@@ -1,6 +1,7 @@
 package com.lcdt.items.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.items.model.SubItemsInfoDao;
 import com.lcdt.items.service.SubItemsInfoService;
@@ -26,7 +27,8 @@ public class SubItemsInfoApi {
     @ApiOperation("删除子商品")
     @PostMapping("/delete")
     public JSONObject deleteSubItemsInfo(HttpSession httpSession, @ApiParam(value = "子商品Id", required = true) @RequestParam Long subItemId){
-        int result=subItemsInfoService.deleteSubItemsInfo(subItemId);
+        Long companyId= SecurityInfoGetter.getCompanyId();
+        int result=subItemsInfoService.deleteSubItemsInfo(subItemId,companyId);
         if(result>0){
             JSONObject jsonObject=new JSONObject();
             jsonObject.put("code",0);
@@ -40,7 +42,8 @@ public class SubItemsInfoApi {
     @ApiOperation("查询子商品列表")
     @GetMapping("/list")
     public List<SubItemsInfoDao> querySubItemsInfo(HttpSession httpSession, @ApiParam(value = "子商品Id", required = true) @RequestParam Long itemId){
-        List<SubItemsInfoDao> subItemsInfoList=new ArrayListResponseWrapper<SubItemsInfoDao>(subItemsInfoService.querySubAndSpecAndPropListByItemId(itemId));
+        Long companyId=SecurityInfoGetter.getCompanyId();
+        List<SubItemsInfoDao> subItemsInfoList=new ArrayListResponseWrapper<SubItemsInfoDao>(subItemsInfoService.querySubAndSpecAndPropListByItemId(itemId,companyId));
         return subItemsInfoList;
     }
 

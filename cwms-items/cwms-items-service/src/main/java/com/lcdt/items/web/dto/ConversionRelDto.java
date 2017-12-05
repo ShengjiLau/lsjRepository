@@ -8,24 +8,27 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class ConversionRelDto {
 
-    @ApiModelProperty(value = "多单位id",required = true)
+    @ApiModelProperty(value = "多单位id",required = false)
     private Long converId;
 
-    @ApiModelProperty(value = "最小单位id",required = true)
+    @ApiModelProperty(value = "最小单位id",required = false)
     private Long unitId;
 
-    @ApiModelProperty(value = "最小单位名字",required = true)
+    @ApiModelProperty(value = "最小单位名字",required = false)
     private String unitName;
 
-    @ApiModelProperty(value = "多单位第一个单位换算关系数",required = true)
+    @ApiModelProperty(value = "多单位第一个单位换算关系数",required = false)
     private Integer data1;
-    @ApiModelProperty(value = "多单位第一个单位id",required = true)
+    @ApiModelProperty(value = "多单位第一个单位id",required = false)
     private Long unitId1;
-    @ApiModelProperty(value = "多单位第一个单位名字",required = true)
+    @ApiModelProperty(value = "多单位第一个单位名字",required = false)
     private String unitName1;
 
+    @ApiModelProperty(value = "多单位第二个单位换算关系数",required = false)
     private Integer data2;
+    @ApiModelProperty(value = "多单位第二个单位id",required = false)
     private Long unitId2;
+    @ApiModelProperty(value = "多单位第二个单位名字",required = false)
     private String unitName2;
 
     public Long getConverId() {

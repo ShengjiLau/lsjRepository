@@ -1,6 +1,7 @@
 package com.lcdt.items.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.items.model.ConversionRel;
 import com.lcdt.items.service.ConversionRelService;
 import com.lcdt.items.web.dto.ConversionRelDto;
@@ -31,6 +32,7 @@ public class ConversionRelApi {
     @ApiOperation("修改多单位")
     @PostMapping("/modify")
     public ConversionRel addConversionRel(HttpSession httpSession, ConversionRelDto conversionRelDto){
+        Long companyId= SecurityInfoGetter.getCompanyId();
         ConversionRel conversionRel=new ConversionRel();
         conversionRel.setConverId(conversionRelDto.getConverId());
 
@@ -45,7 +47,7 @@ public class ConversionRelApi {
         conversionRel.setUnitName2(conversionRelDto.getUnitName2());
         conversionRel.setData2(conversionRelDto.getData2());
 
-        conversionRel.setCompanyId(8L);
+        conversionRel.setCompanyId(companyId);
 
         int result=conversionRelService.modifyConversionRel(conversionRel);
         if(result>0){
@@ -58,7 +60,8 @@ public class ConversionRelApi {
     @ApiOperation("查询多单位")
     @GetMapping("/query")
     public ConversionRel queryConversionRel(HttpSession httpSession, @ApiParam(value = "多单位id", required = true) @RequestParam Long converId){
-        ConversionRel conversionRel=conversionRelService.queryConversionRel(converId);
+        Long companyId=SecurityInfoGetter.getCompanyId();
+        ConversionRel conversionRel=conversionRelService.queryConversionRel(converId,companyId);
         if(conversionRel!=null){
             return conversionRel;
         }else{

@@ -47,6 +47,13 @@ public interface ItemsInfoMapper {
     int updateByPrimaryKey(ItemsInfo record);
 
     /**
+     * 根据 itemId 和 companyId 查询
+     * @param itemsInfo
+     * @return
+     */
+    ItemsInfo selectByItemIdAndCompanyId(ItemsInfo itemsInfo);
+
+    /**
      * 根据商品编码和企业ID查询商品
      * @param itemsInfo
      * @return
@@ -60,9 +67,24 @@ public interface ItemsInfoMapper {
     List<ItemsInfoDao> selectByCondition(ItemsInfo itemsInfo);
 
     /**
-     * 根据id查询
-     * @param itemId
+     * 根据itemId 和 companyId 查询
+     * @param itemsInfo
      * @return
      */
-    ItemsInfoDao selectIetmsInfoDetails(Long itemId);
+    ItemsInfoDao selectIetmsInfoDetails(ItemsInfo itemsInfo);
+
+
+    /**
+     * 根据 itemId 和 companyId 删除商品
+     * @param itemsInfo
+     * @return
+     */
+    int deleteByItemIdAndCompanyId(ItemsInfo itemsInfo);
+
+    /**
+     * 根据 itemId 和 companyId 更新商品
+     * @param itemsInfo
+     * @return
+     */
+    int updateByItemIdAndCompanyId(ItemsInfo itemsInfo);
 }

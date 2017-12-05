@@ -60,6 +60,9 @@ public class ItemsInfoDto {
     private Long companyId;
     @ApiModelProperty(value = "商品类型",required=true)
     private Short itemType;
+
+    private ConversionRelDto conversionRelDto;
+
     private List<SubItemsInfoDto> subItemsInfoDtoList;
 
     private List<CustomValue> customValueList;
@@ -279,5 +282,13 @@ public class ItemsInfoDto {
 
     public void setCustomValueList(List<CustomValue> customValueList) {
         this.customValueList = customValueList;
+    }
+
+    public ConversionRelDto getConversionRelDto() {
+        return conversionRelDto;
+    }
+
+    public void setConversionRelDto(ConversionRelDto conversionRelDto) {
+        this.conversionRelDto = conversionRelDto;
     }
 }

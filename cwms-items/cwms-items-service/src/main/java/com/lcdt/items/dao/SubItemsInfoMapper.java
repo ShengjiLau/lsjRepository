@@ -47,19 +47,18 @@ public interface SubItemsInfoMapper {
     int updateByPrimaryKey(SubItemsInfo record);
 
     /**
-     * 根据主商品 itemId 查询此主商品下的所有子商品
-     *
-     * @param itemId
+     * 根据 subItemId 和 companyId 删除子商品
+     * @param subItemsInfo
      * @return
      */
-    List<SubItemsInfo> selectSubItemsInfoListByItemId(Long itemId);
+    int deleteBySubItemIdAndCompanyId(SubItemsInfo subItemsInfo);
 
     /**
-     * 根据商品itemId删除子商品
-     * @param itemId
+     * 根据商品 itemId 和 companyId 删除子商品
+     * @param subItemsInfo
      * @return
      */
-    int deleteSubItemsInfoByItemId(Long itemId);
+    int deleteSubItemsInfoByItemIdAndCompanyId(SubItemsInfo subItemsInfo);
 
     /**
      * 批量插入数据
@@ -74,4 +73,31 @@ public interface SubItemsInfoMapper {
      * @return
      */
     List<SubItemsInfoDao> selectSubAndSpecAndPropListByItemId(Long itemId);
+
+    /**
+     * 根据itemId 和 companyId 查询列表
+     * @param subItemsInfo
+     * @return
+     */
+    List<SubItemsInfoDao> selectSubAndSpecAndPropListByItemIdAndCompanyId(SubItemsInfo subItemsInfo);
+
+    /**
+     * 根据 subItemId 和 companyId 修改
+     */
+    int updateBySubItemIdAndCompanyId(SubItemsInfo subItemsInfo);
+
+    /**
+     * 根据 subItemId 和 companyId 查询
+     * @param subItemsInfo
+     * @return
+     */
+    SubItemsInfoDao selectBySubItemIdAndCompanyId(SubItemsInfo subItemsInfo);
+
+
+    /**
+     * 根据itemId 和 companyId 查询列表
+     * @param subItemsInfo
+     * @return
+     */
+    List<SubItemsInfo> selectSubItemInfotByItemIdAndCompanyId(SubItemsInfo subItemsInfo);
 }

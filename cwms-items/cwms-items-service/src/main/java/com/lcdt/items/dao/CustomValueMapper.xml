@@ -33,10 +33,10 @@
     </selectKey>
     insert into t_custom_value (item_id, sub_item_id, property_field, 
       property_value, property_name, property_type, 
-      company_id)
+      company_id,create_id,create_name,create_date)
     values (#{itemId,jdbcType=BIGINT}, #{subItemId,jdbcType=BIGINT}, #{propertyField,jdbcType=VARCHAR}, 
       #{propertyValue,jdbcType=VARCHAR}, #{propertyName,jdbcType=VARCHAR}, #{propertyType,jdbcType=SMALLINT}, 
-      #{companyId,jdbcType=BIGINT})
+      #{companyId,jdbcType=BIGINT},#{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP)
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.items.model.CustomValue">
     <!--
@@ -84,20 +84,26 @@
   <insert id="insertForBatch" parameterType="java.util.List"  useGeneratedKeys="true" keyProperty="vid">
     insert into t_custom_value (item_id, sub_item_id, property_field,
     property_value, property_name, property_type,
-    company_id)
+    company_id,create_id,create_name,create_date)
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.itemId,jdbcType=BIGINT}, #{item.subItemId,jdbcType=BIGINT}, #{item.propertyField,jdbcType=VARCHAR},
       #{item.propertyValue,jdbcType=VARCHAR}, #{item.propertyName,jdbcType=VARCHAR}, #{item.propertyType,jdbcType=SMALLINT},
-      #{item.companyId,jdbcType=BIGINT})
+      #{item.companyId,jdbcType=BIGINT},#{item.createId,jdbcType=BIGINT},#{item.createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP)
     </foreach>
   </insert>
-  <delete id="deleteItemAndSubItemId" parameterType="java.lang.String">
+  <delete id="deleteItemAndSubItemId" parameterType="java.util.Map">
     delete from t_custom_value
-    where item_id=#{0}
-    <if test="#{1}!=null">
-      or sub_item_id in (#{1})
-    </if>
+    where (item_id=#{itemId}
+    <if test="subItemIdList!=null and subItemIdList.size>0">
+      or sub_item_id in
+      <foreach item="subItemId" index="index" collection="subItemIdList"
+               open="(" separator="," close=")">
+        #{subItemId}
+      </foreach>
+
+    </if>)
+    and company_id=#{companyId}
   </delete>
   <!--根据sub_item_id获取子商品自定义属性 -->
   <select id="selectCustomValueBySubItemId" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -113,4 +119,14 @@
     from t_custom_value
     where item_id = #{itemId,jdbcType=BIGINT}
   </select>
+  <update id="updateByVidAndCompanyId" parameterType="com.lcdt.items.model.CustomValue">
+    update t_custom_value
+    set item_id = #{itemId,jdbcType=BIGINT},
+    sub_item_id = #{subItemId,jdbcType=BIGINT},
+    property_field = #{propertyField,jdbcType=VARCHAR},
+    property_value = #{propertyValue,jdbcType=VARCHAR},
+    property_name = #{propertyName,jdbcType=VARCHAR},
+    property_type = #{propertyType,jdbcType=SMALLINT}
+    where vid = #{vid,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </update>
 </mapper>

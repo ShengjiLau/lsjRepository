@@ -64,7 +64,7 @@
       image_3, image_4, image_5, 
       conver_id, unit_id, unit_name, 
       sub_item_property, store_rule, item_batch, 
-      combination_info, company_id, item_type
+      combination_info, company_id, item_type,create_id,create_name,create_date
       )
     values (#{subject,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{barCode,jdbcType=VARCHAR}, 
       #{classifyName,jdbcType=VARCHAR}, #{classifyId,jdbcType=BIGINT}, #{tradeType,jdbcType=SMALLINT}, 
@@ -73,7 +73,7 @@
       #{image3,jdbcType=VARCHAR}, #{image4,jdbcType=VARCHAR}, #{image5,jdbcType=VARCHAR}, 
       #{converId,jdbcType=BIGINT}, #{unitId,jdbcType=BIGINT}, #{unitName,jdbcType=VARCHAR}, 
       #{subItemProperty,jdbcType=VARCHAR}, #{storeRule,jdbcType=SMALLINT}, #{itemBatch,jdbcType=SMALLINT}, 
-      #{combinationInfo,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{itemType,jdbcType=SMALLINT}
+      #{combinationInfo,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{itemType,jdbcType=SMALLINT},#{createId,jdbcType=BIGINT},#{createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.items.model.ItemsInfo">
@@ -131,6 +131,16 @@
     combination_info, company_id, item_type
     from t_items_info
   </select>
+
+  <select id="selectByItemIdAndCompanyId" parameterType="com.lcdt.items.model.ItemsInfo" resultMap="BaseResultMap">
+    select item_id, subject, code, bar_code, classify_name, classify_id, trade_type,
+    purchase_price, wholesale_price, retail_price, introduction, image_1, image_2, image_3,
+    image_4, image_5, conver_id, unit_id, unit_name, sub_item_property, store_rule, item_batch,
+    combination_info, company_id, item_type
+    from t_items_info
+    where item_id = #{itemId,jdbcType=BIGINT} and company_id=#{companyId,jdbcType=BIGINT}
+  </select>
+
   <select id="selectByCodeAndCompanyId" parameterType="com.lcdt.items.model.ItemsInfo" resultMap="BaseResultMap">
     SELECT item_id, subject, code, bar_code, classify_name, classify_id, trade_type,
     purchase_price, wholesale_price, retail_price, introduction, image_1, image_2, image_3,
@@ -162,12 +172,44 @@
     </where>
   </select>
 
-  <select id="selectIetmsInfoDetails" parameterType="java.lang.Long" resultMap="ItemsInfoDao">
+  <select id="selectIetmsInfoDetails" parameterType="com.lcdt.items.model.ItemsInfo" resultMap="ItemsInfoDao">
     SELECT item_id, subject, code, bar_code, classify_name, classify_id, trade_type,
     purchase_price, wholesale_price, retail_price, introduction, image_1, image_2, image_3,
     image_4, image_5, conver_id, unit_id, unit_name, sub_item_property, store_rule, item_batch,
     combination_info, company_id, item_type
     FROM t_items_info
-    WHERE item_id=#{itemId,jdbcType=BIGINT}
+    WHERE item_id=#{itemId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </select>
+
+  <delete id="deleteByItemIdAndCompanyId" parameterType="com.lcdt.items.model.ItemsInfo">
+    delete from t_items_info
+    where item_id=#{itemId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </delete>
+  <update id="updateByItemIdAndCompanyId" parameterType="com.lcdt.items.model.ItemsInfo">
+    update t_items_info
+    set subject = #{subject,jdbcType=VARCHAR},
+    code = #{code,jdbcType=VARCHAR},
+    bar_code = #{barCode,jdbcType=VARCHAR},
+    classify_name = #{classifyName,jdbcType=VARCHAR},
+    classify_id = #{classifyId,jdbcType=BIGINT},
+    trade_type = #{tradeType,jdbcType=SMALLINT},
+    purchase_price = #{purchasePrice,jdbcType=REAL},
+    wholesale_price = #{wholesalePrice,jdbcType=REAL},
+    retail_price = #{retailPrice,jdbcType=REAL},
+    introduction = #{introduction,jdbcType=VARCHAR},
+    image_1 = #{image1,jdbcType=VARCHAR},
+    image_2 = #{image2,jdbcType=VARCHAR},
+    image_3 = #{image3,jdbcType=VARCHAR},
+    image_4 = #{image4,jdbcType=VARCHAR},
+    image_5 = #{image5,jdbcType=VARCHAR},
+    conver_id = #{converId,jdbcType=BIGINT},
+    unit_id = #{unitId,jdbcType=BIGINT},
+    unit_name = #{unitName,jdbcType=VARCHAR},
+    sub_item_property = #{subItemProperty,jdbcType=VARCHAR},
+    store_rule = #{storeRule,jdbcType=SMALLINT},
+    item_batch = #{itemBatch,jdbcType=SMALLINT},
+    combination_info = #{combinationInfo,jdbcType=VARCHAR},
+    item_type = #{itemType,jdbcType=SMALLINT}
+    where item_id = #{itemId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </update>
 </mapper>
