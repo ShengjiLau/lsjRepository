@@ -3,6 +3,7 @@ package com.lcdt.userinfo;
 import com.lcdt.clms.permission.PermissionAppConfiguration;
 import com.lcdt.clms.security.annontion.EnableClmsSecurity;
 import com.lcdt.converter.ClmsResponseConvertConfig;
+import com.lcdt.wms.config.DubboConfig;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -15,8 +16,8 @@ import java.util.concurrent.CountDownLatch;
  * Created by ss on 2017/7/31.
  */
 @SpringBootApplication
-@ImportResource("dubbo-user-provider.xml")
-@Import({PermissionAppConfiguration.class, ClmsResponseConvertConfig.class})
+//@ImportResource("dubbo-user-provider.xml")
+@Import({PermissionAppConfiguration.class, ClmsResponseConvertConfig.class, DubboConfig.class})
 @EnableClmsSecurity
 public class UserServiceApp {
 

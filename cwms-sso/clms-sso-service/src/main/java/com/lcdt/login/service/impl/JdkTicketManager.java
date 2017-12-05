@@ -2,6 +2,7 @@ package com.lcdt.login.service.impl;
 
 import com.lcdt.login.service.TicketManager;
 import com.lcdt.login.ticket.TicketBean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -11,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by ss on 2017/9/18.
  */
 @Service
+@Primary
 public class JdkTicketManager implements TicketManager {
 
 	private ConcurrentHashMap<String, TicketBean> ticketCache = new ConcurrentHashMap<>(20);

@@ -19,7 +19,6 @@ import java.util.Date;
 /**
  * Created by ss on 2017/7/31.
  */
-@Service
 @com.alibaba.dubbo.config.annotation.Service
 public class UserServiceImpl implements UserService {
 
