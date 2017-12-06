@@ -7,10 +7,10 @@ import com.lcdt.login.ticket.TicketBean;
  */
 public interface TicketManager {
 
-	public TicketBean get(String ticket);
+	TicketBean get(String ticket);
 
-	public void saveTicket(String ticket, TicketBean ticketBean);
+	void saveTicket(String ticket, TicketBean ticketBean);
 
-	public boolean removeTicketCache(String ticket);
+	boolean removeTicketCache(String ticket);
 
 }

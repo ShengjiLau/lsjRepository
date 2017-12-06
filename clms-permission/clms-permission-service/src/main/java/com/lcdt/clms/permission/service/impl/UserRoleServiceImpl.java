@@ -9,6 +9,7 @@ import com.lcdt.clms.permission.model.RolePermission;
 import com.lcdt.clms.permission.model.RoleUserRelation;
 import com.lcdt.clms.permission.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -107,6 +108,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 			rolePermission.setCreateDate(new Date());
 			rolePermissionDao.insert(rolePermission);
 		}
+		//TODO 发送角色更新事件
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -166,4 +168,10 @@ public class UserRoleServiceImpl implements UserRoleService {
 	public List<Role> userCompanyRole(Long userId, Long companyId) {
 		return userRoleDao.selectUserCompanyRoles(userId, companyId);
 	}
+
+	@Async
+	private void updateUserHash(Integer userid){
+
+	}
+
 }

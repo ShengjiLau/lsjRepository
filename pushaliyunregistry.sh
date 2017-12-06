@@ -35,6 +35,7 @@ echo "编译失败"
 say "编译失败"
 fi
 }
+maven_build
 docker_login
 
 read -p "请输入镜像名称: " imagename

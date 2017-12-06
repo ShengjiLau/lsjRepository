@@ -53,7 +53,6 @@ public class LoginServiceImpl implements LoginService {
 			throw new InvalidTicketException("ticket 验证失败");
 		}
 		User user = userService.queryByUserId(ticketValid.getUserId());
-//		RpcContext.getContext().getFuture();
 		TicketAuthentication authentication = new TicketAuthentication();
 		authentication.setTicket(ticket);
 		authentication.setUser(user);
@@ -61,8 +60,6 @@ public class LoginServiceImpl implements LoginService {
 			authentication.setChooseCompany(false);
 		}else{
 			UserCompRel companyMember = companyService.queryByUserIdCompanyId(ticketValid.getUserId(), ticketValid.getCompanyId().longValue());
-//			companyMember.setGroups();
-
 			authentication.setUserCompRel(companyMember);
 			List<Permission> permissions = permissionService.userPermissions(companyMember.getUserId(), companyMember.getCompId());
 			authentication.setPermissions(permissions);
@@ -81,6 +78,12 @@ public class LoginServiceImpl implements LoginService {
 		StringBuilder sb = new StringBuilder(host);
 		sb.append("?").append("auth_callback=").append(srcUrl);
 		return sb.toString();
+	}
+
+	@Override
+	public boolean needUpdateAuth(String ticket) {
+		//根据ticket 拿到user 判断user 信息的更新时间
+		return false;
 	}
 
 }

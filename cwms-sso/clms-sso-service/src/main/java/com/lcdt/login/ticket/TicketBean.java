@@ -17,6 +17,8 @@ public class TicketBean implements Serializable{
 
 	private Long companyId; //用户选择公司id
 
+	//指示用户某个时间段的状态的hash值 用来检测 用户属性 是否发生改变
+	private String uniquehashcode;
 
 	public Long getCreateTime() {
 		return createTime;

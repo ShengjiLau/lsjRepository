@@ -13,4 +13,6 @@ public interface LoginService {
 
 	String loginUrl(String srcUrl);
 
+	boolean needUpdateAuth(String ticket);
+
 }

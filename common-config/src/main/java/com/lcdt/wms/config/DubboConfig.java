@@ -51,7 +51,7 @@ public class DubboConfig {
 	@Bean
 	public ConsumerConfig consumerConfig(){
 		ConsumerConfig consumerConfig = new ConsumerConfig();
-		consumerConfig.setTimeout(3000);
+		consumerConfig.setTimeout(30000);
 		return consumerConfig;
 	}
 
