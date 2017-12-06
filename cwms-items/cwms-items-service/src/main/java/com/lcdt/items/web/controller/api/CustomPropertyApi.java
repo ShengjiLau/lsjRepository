@@ -72,7 +72,7 @@ public class CustomPropertyApi {
         JSONObject jsonObject = new JSONObject();
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         customPropertyService.delByCustomId(customId,companyId);
-        jsonObject.put("code", 1);
+        jsonObject.put("code", 0);
         jsonObject.put("message", "删除成功");
         return jsonObject;
     }

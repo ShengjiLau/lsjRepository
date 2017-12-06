@@ -4,13 +4,14 @@ package com.lcdt.items.dto;
 import com.lcdt.items.model.ItemSpecValue;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by lyqishan on 2017/11/22
  */
 
-public class ItemSpecKeyDto {
+public class ItemSpecKeyDto implements Serializable{
 
     private Long spkId;
 
@@ -23,7 +24,7 @@ public class ItemSpecKeyDto {
 
     private String createName;
 
-    private List<ItemSpecValue> itemSpecValueList;
+    private String itemSpecValueList;
 
     public Long getSpkId() {
         return spkId;
@@ -65,11 +66,11 @@ public class ItemSpecKeyDto {
         this.createName = createName;
     }
 
-    public List<ItemSpecValue> getItemSpecValueList() {
+    public String getItemSpecValueList() {
         return itemSpecValueList;
     }
 
-    public void setItemSpecValueList(List<ItemSpecValue> itemSpecValueList) {
+    public void setItemSpecValueList(String itemSpecValueList) {
         this.itemSpecValueList = itemSpecValueList;
     }
 }
