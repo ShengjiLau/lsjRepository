@@ -24,6 +24,10 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="attachment_1" jdbcType="VARCHAR" property="attachment1" />
     <result column="attachment_2" jdbcType="VARCHAR" property="attachment2" />
+
+    <result column="attachment_name1" jdbcType="VARCHAR" property="attachmentName1" />
+    <result column="attachment_name2" jdbcType="VARCHAR" property="attachmentName2" />
+
     <result column="invoice_title" jdbcType="VARCHAR" property="invoiceTitle" />
     <result column="registration_no" jdbcType="VARCHAR" property="registrationNo" />
     <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
@@ -66,8 +70,8 @@
       client_types, province, city, 
       county, detail_address, group_ids, 
       group_names, post_code, tel_no, 
-      fax, remark, attachment_1, 
-      attachment_2, invoice_title, registration_no, 
+      fax, remark, attachment_1, attachment_name1,
+      attachment_2,attachment_name2, invoice_title, registration_no,
       bank_name, bank_no, registration_address, 
       tel_no1, invoice_remark, bind_comp_id,
       status, bind_company, link_man, 
@@ -77,8 +81,8 @@
       #{clientTypes,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
       #{county,jdbcType=VARCHAR}, #{detailAddress,jdbcType=VARCHAR}, #{groupIds,jdbcType=VARCHAR}, 
       #{groupNames,jdbcType=VARCHAR}, #{postCode,jdbcType=VARCHAR}, #{telNo,jdbcType=VARCHAR}, 
-      #{fax,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR}, 
-      #{attachment2,jdbcType=VARCHAR}, #{invoiceTitle,jdbcType=VARCHAR}, #{registrationNo,jdbcType=VARCHAR}, 
+      #{fax,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR}, #{attachmentName1,jdbcType=VARCHAR},
+    #{attachment2,jdbcType=VARCHAR},#{attachmentName2,jdbcType=VARCHAR}, #{invoiceTitle,jdbcType=VARCHAR}, #{registrationNo,jdbcType=VARCHAR},
       #{bankName,jdbcType=VARCHAR}, #{bankNo,jdbcType=VARCHAR}, #{registrationAddress,jdbcType=VARCHAR}, 
       #{telNo1,jdbcType=VARCHAR}, #{invoiceRemark,jdbcType=VARCHAR}, #{bindCpid,jdbcType=BIGINT}, 
       #{status,jdbcType=SMALLINT}, #{bindCompany,jdbcType=VARCHAR}, #{linkMan,jdbcType=VARCHAR}, 
@@ -107,7 +111,9 @@
       fax = #{fax,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       attachment_1 = #{attachment1,jdbcType=VARCHAR},
+      attachment_name1 = #{attachmentName1,jdbcType=VARCHAR},
       attachment_2 = #{attachment2,jdbcType=VARCHAR},
+      attachment_name2 = #{attachmentName2,jdbcType=VARCHAR},
       invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
       registration_no = #{registrationNo,jdbcType=VARCHAR},
       bank_name = #{bankName,jdbcType=VARCHAR},
@@ -178,9 +184,16 @@
       <if test="attachment1 != null &amp;&amp; attachment1 !=''">
         attachment_1 = #{attachment1,jdbcType=VARCHAR},
       </if>
+      <if test="attachmentName1 != null &amp;&amp; attachmentName1 !=''">
+        attachment_name1 = #{attachmentName1,jdbcType=VARCHAR},
+      </if>
       <if test="attachment2 != null &amp;&amp; attachment2 !=''">
         attachment_2 = #{attachment2,jdbcType=VARCHAR},
       </if>
+      <if test="attachmentName2 != null &amp;&amp; attachmentName2 !=''">
+        attachment_name2 = #{attachmentName2,jdbcType=VARCHAR},
+      </if>
+
       <if test="invoiceTitle != null &amp;&amp; invoiceTitle !=''">
         invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
       </if>
@@ -243,7 +256,7 @@
     -->
     select customer_id, customer_name, short_name, customer_code, client_types, province, 
     city, county, detail_address, group_ids, group_names, post_code, tel_no, fax, remark, 
-    attachment_1, attachment_2, invoice_title, registration_no, bank_name, bank_no, registration_address, 
+    attachment_1, attachment_2,attachment_name1,attachment_name2, invoice_title, registration_no, bank_name, bank_no, registration_address,
     tel_no1, invoice_remark, bind_comp_id, status, bind_company, link_man, link_duty, link_tel,
     link_email, company_id,collection_ids,collection_names
     from t_customer
@@ -257,7 +270,7 @@
     -->
     select customer_id, customer_name, short_name, customer_code, client_types, province, 
     city, county, detail_address, group_ids, group_names, post_code, tel_no, fax, remark, 
-    attachment_1, attachment_2, invoice_title, registration_no, bank_name, bank_no, registration_address, 
+    attachment_1, attachment_2, attachment_name1,attachment_name2,invoice_title, registration_no, bank_name, bank_no, registration_address,
     tel_no1, invoice_remark, bind_comp_id, status, bind_company, link_man, link_duty, link_tel,
     link_email, company_id
     from t_customer
@@ -266,7 +279,7 @@
   <select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
     select customer_id, customer_name, short_name, customer_code, client_types, province,
     city, county, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
-    attachment_1, attachment_2, invoice_title, registration_no, bank_name, bank_no, registration_address,
+    attachment_1,attachment_name1,attachment_name2,attachment_2, invoice_title, registration_no, bank_name, bank_no, registration_address,
     tel_no1, invoice_remark, bind_comp_id, status, bind_company, link_man, link_duty, link_tel,
     link_email, company_id,collection_ids,collection_names
     from t_customer
