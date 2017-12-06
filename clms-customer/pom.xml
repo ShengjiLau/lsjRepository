@@ -16,10 +16,7 @@
         <module>clms-customer-service</module>
     </modules>
     <dependencies>
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-response-converter</artifactId>

@@ -1,12 +1,15 @@
 package com.lcdt.userinfo.web.controller.api;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.permission.dao.PermissionMapper;
 import com.lcdt.clms.permission.model.Permission;
 import com.lcdt.clms.permission.service.UserPermissionService;
+import com.lcdt.userinfo.model.User;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.expression.EvaluationContext;
@@ -15,6 +18,7 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +31,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +50,20 @@ public class DebugController implements ApplicationContextAware {
 	PermissionMapper mapper;
 	ExpressionParser expressionParser = new SpelExpressionParser();
 	private ApplicationContext applicationContext;
+
+	@Autowired
+	@Qualifier("sessionRegistry")
+	private SessionRegistry sessionRegistry;
+
+	@RequestMapping("/logininuser")
+	public String allLoginUser(HttpSession session,Long userId,Long companyId){
+		session.setAttribute("demo","demo");
+		List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
+
+		//接受到通知需要更新时
+		return JSON.toJSONString(allPrincipals);
+	}
+
 
 	@RequestMapping("/per")
 	public String notSavePermissions(HttpServletRequest request) {

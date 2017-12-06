@@ -1,8 +1,11 @@
 package com.lcdt.clms.security.config;
 
+import com.lcdt.login.service.LoginService;
 import com.sso.client.utils.TicketHelper;
+import jdk.nashorn.internal.ir.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +35,10 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 		this.setAuthenticationSuccessHandler(successHandler);
 	}
 
+	@Reference
+	private LoginService loginService;
+
+
 	@Override
 	protected boolean requiresAuthentication(HttpServletRequest request,
 											 HttpServletResponse response) {
@@ -47,6 +54,11 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 			//cookie 中的token 和 session 中的token 不同时 说明 token 过期 需要重新验证(这里可能是登陆了新的账号或者切换公司的操作)
 			if (ticketInCookie == null || !ticket.equals(ticketInCookie)) {
 				return true;
+			}else{
+				TicketAuthenticationToken token2 = new TicketAuthenticationToken(ticketInCookie);
+				//验证cookie中的token
+				Authentication authenticate = getAuthenticationManager().authenticate(token);
+				SecurityContextHolder.getContext().setAuthentication(authenticate);
 			}
 			return false;
 		}
@@ -60,6 +72,7 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 			throw new TicketAuthException("请先登陆");
 		}
 		TicketAuthenticationToken token = new TicketAuthenticationToken(ticketInCookie);
+		//验证cookie中的token
 		Authentication authenticate = getAuthenticationManager().authenticate(token);
 		return authenticate;
 	}
@@ -75,15 +88,4 @@ public class TicketAuthenticationFilter extends AbstractAuthenticationProcessing
 			request.getRequestDispatcher(request.getServletPath()).forward(request,response);
 		}
 	}
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -60,6 +60,9 @@ public class Group implements java.io.Serializable,ResponseData {
     private Long createId;
     private String createName;
 
+
+
+
     public Long getCreateId() {
         return createId;
     }

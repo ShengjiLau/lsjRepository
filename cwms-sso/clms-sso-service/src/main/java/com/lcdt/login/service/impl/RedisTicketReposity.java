@@ -43,4 +43,12 @@ public class RedisTicketReposity implements TicketManager {
 		valueOperations.set(ticket,null);
 		return true;
 	}
+
+
+	public boolean needUpdate(String ticket) {
+		TicketBean ticketBean = get(ticket);
+		Long userId = ticketBean.getUserId();
+		return true;
+	}
+
 }
