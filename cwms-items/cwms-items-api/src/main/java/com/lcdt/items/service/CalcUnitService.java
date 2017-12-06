@@ -55,7 +55,7 @@ public interface CalcUnitService {
      * @param pageInfo
      * @return
      */
-    List<CalcUnit> queryCalcUnitByCompanyId(Long companyId, PageInfo pageInfo);
+    PageInfo<List<CalcUnit>> queryCalcUnitByCompanyId(Long companyId, PageInfo pageInfo);
 
     /**
      * 判断本企业内单位名称是否存在

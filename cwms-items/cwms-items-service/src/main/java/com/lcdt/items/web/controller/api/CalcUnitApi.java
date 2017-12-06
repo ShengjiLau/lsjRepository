@@ -1,10 +1,11 @@
 package com.lcdt.items.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.items.model.CalcUnit;
 import com.lcdt.items.service.CalcUnitService;
+import com.lcdt.items.web.dto.PageBaseDto;
 import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,7 +47,7 @@ public class CalcUnitApi {
         int result = calcUnitService.addCalcUnit(calcUnit);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", 1);
+            jsonObject.put("code", 0);
             jsonObject.put("message", "添加成功");
             return jsonObject;
         } else {
@@ -62,7 +62,7 @@ public class CalcUnitApi {
         int result = calcUnitService.deleteCalcUnit(unitId,companyId);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", 1);
+            jsonObject.put("code", 0);
             jsonObject.put("message", "删除成功");
             return jsonObject;
         } else {
@@ -86,7 +86,7 @@ public class CalcUnitApi {
         int result = calcUnitService.modifyByUnitIdAndCompanyId(calcUnit);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", 1);
+            jsonObject.put("code", 0);
             jsonObject.put("message", "修改成功");
             return jsonObject;
         } else {
@@ -107,9 +107,12 @@ public class CalcUnitApi {
 
     @ApiOperation("查询单位")
     @GetMapping("/list")
-    public List<CalcUnit> queryCalcUnitList(HttpSession httpSession) {
+    public PageBaseDto<List<CalcUnit>> queryCalcUnitList(HttpSession httpSession) {
         Long companyId= SecurityInfoGetter.getCompanyId();
-        List<CalcUnit> calcUnitList=new ArrayListResponseWrapper<CalcUnit>(calcUnitService.queryCalcUnitByCompanyId(companyId));
-        return calcUnitList;
+        PageInfo pageInfo=new PageInfo();
+        pageInfo.setPageSize(0);
+        pageInfo.setPageNum(1);
+        PageInfo<List<CalcUnit>> listPageInfo=calcUnitService.queryCalcUnitByCompanyId(companyId,pageInfo);
+        return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
     }
 }

@@ -60,11 +60,13 @@ public class CalcUnitServiceImpl implements CalcUnitService {
 
 
     @Override
-    public List<CalcUnit> queryCalcUnitByCompanyId(Long companyId, PageInfo pageInfo) {
+    public PageInfo<List<CalcUnit>> queryCalcUnitByCompanyId(Long companyId, PageInfo pageInfo) {
         List<CalcUnit> calcUnitList = null;
+        PageInfo page=null;
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         calcUnitList = calcUnitMapper.selectCalcUnitByCompanyId(companyId);
-        return calcUnitList;
+        page=new PageInfo(calcUnitList);
+        return page;
     }
 
     @Override
