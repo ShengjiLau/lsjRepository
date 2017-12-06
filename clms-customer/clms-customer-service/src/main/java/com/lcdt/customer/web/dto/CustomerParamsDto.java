@@ -54,8 +54,14 @@ public class CustomerParamsDto {
     @ApiModelProperty(value = "附件1")
     private String attachment1;
 
+    @ApiModelProperty(value = "附件1名称")
+    private String attachmentName1;
+
     @ApiModelProperty(value = "附件2")
     private String attachment2;
+
+    @ApiModelProperty(value = "附件2名称")
+    private String attachmentName2;
 
     @ApiModelProperty(value = "联系人")
     private String linkMan;
@@ -332,5 +338,21 @@ public class CustomerParamsDto {
 
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+
+    public String getAttachmentName1() {
+        return attachmentName1;
+    }
+
+    public void setAttachmentName1(String attachmentName1) {
+        this.attachmentName1 = attachmentName1;
+    }
+
+    public String getAttachmentName2() {
+        return attachmentName2;
+    }
+
+    public void setAttachmentName2(String attachmentName2) {
+        this.attachmentName2 = attachmentName2;
     }
 }
