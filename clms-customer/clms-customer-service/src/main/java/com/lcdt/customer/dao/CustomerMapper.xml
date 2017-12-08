@@ -292,8 +292,8 @@
         and  client_typs = #{clientTypes,jdbcType=VARCHAR}
       </if>
 
-      <if test="groupIds!=null and groupIds!=''">
-        and  ${groupIds}
+      <if test="collectionIds!=null and collectionIds!=''">
+        and  ${collectionIds}
       </if>
       <if test="province!=null and province!=''">
         and province = #{province,jdbcType=VARCHAR}
