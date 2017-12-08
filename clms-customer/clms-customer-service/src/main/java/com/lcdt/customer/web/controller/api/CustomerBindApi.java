@@ -55,7 +55,6 @@ public class CustomerBindApi {
 			modelAndView.setViewName("invite_not_valid");
 			return modelAndView;
 		}
-
 		HashMap<Object, Object> map = new HashMap<>();
 		PageInfo<Customer> pageInfo = customerService.customerList(map);
 		List<Customer> list = pageInfo.getList();
