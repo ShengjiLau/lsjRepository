@@ -36,7 +36,7 @@
     <result column="classify_ids" jdbcType="VARCHAR" property="classifyIds" />
   </resultMap>
   <resultMap id="ItemsInfoDao" type="com.lcdt.items.model.ItemsInfoDao" extends="BaseResultMap">
-    <association property="itemClassifyList" column="classify_id" select="com.lcdt.items.dao.ItemClassifyMapper.selectClassifyByMinChildren"/>
+    <association property="itemClassifyList" column="classify_id" select="com.lcdt.items.dao.ItemClassifyMapper.selectItemsInfoClassifyByMinChildren"/>
     <association property="conversionRel" column="conver_id" select="com.lcdt.items.dao.ConversionRelMapper.selectByPrimaryKey"/>
     <collection property="subItemsInfoDaoList" column="item_id" ofType="com.lcdt.items.model.SubItemsInfoDao" select="com.lcdt.items.dao.SubItemsInfoMapper.selectSubAndSpecAndPropListByItemId"/>
     <collection property="customValueList" column="item_id" ofType="com.lcdt.items.model.CustomValue" select="com.lcdt.items.dao.CustomValueMapper.selectCustomValueByItemId"/>
@@ -158,7 +158,7 @@
     <where>
       company_id = #{companyId,jdbcType=BIGINT}
       <if test="subject!=null and subject!=''">
-        and (subject like '#{subject,jdbcType=VARCHAR}' or code like '#{code,jdbcType=VARCHAR}')
+        and (subject like concat('%',#{subject,jdbcType=VARCHAR},'%')  or item_id in (select DISTINCT item_id from t_sub_items_info where code like  concat('%',#{code,jdbcType=VARCHAR},'%')) )
       </if>
       <!--<if test="code!=null and code!=''">-->
         <!--and code = #{code,jdbcType=VARCHAR}-->
@@ -221,7 +221,7 @@
     <where>
       company_id = #{companyId,jdbcType=BIGINT}
       <if test="subject!=null and subject!=''">
-        and (subject like '#{subject,jdbcType=VARCHAR}' or code like '#{code,jdbcType=VARCHAR}')
+        and (subject like concat('%',#{subject,jdbcType=VARCHAR},'%')  or item_id in (select DISTINCT item_id from t_sub_items_info where code like  concat('%',#{code,jdbcType=VARCHAR},'%')) )
       </if>
       <!--<if test="code!=null and code!=''">-->
       <!--and code = #{code,jdbcType=VARCHAR}-->

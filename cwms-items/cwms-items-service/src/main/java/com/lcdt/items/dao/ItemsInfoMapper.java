@@ -88,6 +88,10 @@ public interface ItemsInfoMapper {
      */
     int updateByItemIdAndCompanyId(ItemsInfo itemsInfo);
 
-
+    /**
+     * 根据相关查询条件查询相关
+     * @param itemsInfo
+     * @return
+     */
     List<ItemsInfoDao> selectByItemsInfo(ItemsInfo itemsInfo);
 }
