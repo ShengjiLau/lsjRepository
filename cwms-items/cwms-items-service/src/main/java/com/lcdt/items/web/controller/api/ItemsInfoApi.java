@@ -105,7 +105,7 @@ public class ItemsInfoApi {
 
         }
     }
-    @ApiOperation(value = "商品列表", notes = "获取商品列表返回所有信息") //add by liuh
+    @ApiOperation(value = "商品列表", notes = "获取商品列表返回所有信息")
     @GetMapping("/itemsinfolist")
     public PageBaseDto<List<ItemsInfoDao>> queryItemInfoList(@Validated ItemsInfoDao itemsInfoDao, PageInfo pageInfo, HttpSession httpSession) {
         Long companyId = SecurityInfoGetter.getCompanyId();
