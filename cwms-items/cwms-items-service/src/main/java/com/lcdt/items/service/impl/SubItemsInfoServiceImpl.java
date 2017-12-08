@@ -126,13 +126,16 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     }
 
     @Override
-    public List<SubItemsInfoDao> querySubAndSpecAndPropListByItemId(Long itemId, Long companyId) {
+    public PageInfo<List<SubItemsInfoDao>> querySubAndSpecAndPropListByItemId(Long itemId, Long companyId,PageInfo pageInfo) {
         List<SubItemsInfoDao> list = null;
+        PageInfo page = null;
         SubItemsInfo subItemsInfo=new SubItemsInfo();
         subItemsInfo.setItemId(itemId);
         subItemsInfo.setCompanyId(companyId);
+        PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         list = subItemsInfoMapper.selectSubAndSpecAndPropListByItemIdAndCompanyId(subItemsInfo);
-        return list;
+        page = new PageInfo(list);
+        return page;
     }
 
     @Override

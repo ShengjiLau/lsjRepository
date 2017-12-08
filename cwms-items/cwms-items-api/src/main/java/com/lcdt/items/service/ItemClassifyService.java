@@ -62,4 +62,6 @@ public interface ItemClassifyService {
     PageInfo<List<ItemClassifyDao>> queryItemClassifyAndChildren(Long companyId, PageInfo pageInfo);
 
 
+    PageInfo<List<ItemClassify>> queryClassifyByMinChildren(Long classifyId,Long companyId,PageInfo pageInfo);
+
 }

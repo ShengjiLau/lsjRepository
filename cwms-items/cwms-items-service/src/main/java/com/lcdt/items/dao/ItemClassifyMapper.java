@@ -85,5 +85,5 @@ public interface ItemClassifyMapper {
 
     List<ItemClassify> testFunction(Long classifyId);
 
-    List<ItemClassify> selectClassifyByMinChildren(Long classifyId);
+    List<ItemClassify> selectClassifyByMinChildren(Long classifyId,Long companyId);
 }
