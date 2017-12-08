@@ -105,7 +105,14 @@ public class ItemsInfoApi {
 
         }
     }
-
+    @ApiOperation(value = "商品列表", notes = "获取商品列表返回所有信息") //add by liuh
+    @GetMapping("/itemsinfolist")
+    public PageBaseDto<List<ItemsInfoDao>> queryItemInfoList(@Validated ItemsInfoDao itemsInfoDao, PageInfo pageInfo, HttpSession httpSession) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        itemsInfoDao.setCompanyId(companyId);
+        PageInfo<List<ItemsInfoDao>> listPageInfo = itemsInfoService.queryItemsByItemsInfo(itemsInfoDao,pageInfo);
+        return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
+    }
     /**
      * 私有方法，前端dto转换成dao
      * @param itemsInfoDto

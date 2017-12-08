@@ -47,4 +47,12 @@ public interface ItemsInfoService {
      * @return
      */
     PageInfo<List<ItemsInfoDao>> queryItemsByCondition(ItemsInfo itemsInfo, PageInfo pageInfo);
+
+    /**
+     * 查询商品列表
+     * @param itemsInfo
+     * @param pageInfo
+     * @return
+     */
+    PageInfo<List<ItemsInfoDao>> queryItemsByItemsInfo(ItemsInfo itemsInfo, PageInfo pageInfo);
 }

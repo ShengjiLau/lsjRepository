@@ -212,4 +212,27 @@
     item_type = #{itemType,jdbcType=SMALLINT}
     where item_id = #{itemId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
+  <select id="selectByItemsInfo" parameterType="com.lcdt.items.model.ItemsInfo" resultMap="ItemsInfoDao">
+    select item_id, subject, code, bar_code, classify_name, classify_id, trade_type,
+    purchase_price, wholesale_price, retail_price, introduction, image_1, image_2, image_3,
+    image_4, image_5, conver_id, unit_id, unit_name, sub_item_property, store_rule, item_batch,
+    combination_info, company_id, item_type
+    from t_items_info
+    <where>
+      company_id = #{companyId,jdbcType=BIGINT}
+      <if test="subject!=null and subject!=''">
+        and (subject like '#{subject,jdbcType=VARCHAR}' or code like '#{code,jdbcType=VARCHAR}')
+      </if>
+      <!--<if test="code!=null and code!=''">-->
+      <!--and code = #{code,jdbcType=VARCHAR}-->
+      <!--</if>-->
+      <if test="itemType!=null and itemType!=''">
+        and item_type = #{itemType,jdbcType=SMALLINT}
+      </if>
+      <if test="classifyId!=null and classifyId!=''">
+        and FIND_IN_SET(classify_id,SELECT_CHILDREN_CLASSIFYID(#{classifyId,jdbcType=BIGINT}))
+      </if>
+    </where>
+  </select>
+
 </mapper>

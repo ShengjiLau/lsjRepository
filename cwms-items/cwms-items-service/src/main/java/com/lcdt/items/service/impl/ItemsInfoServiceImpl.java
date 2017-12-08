@@ -48,7 +48,7 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     public int addItemsInfo(ItemsInfoDao itemsInfoDao) {
         int result = 0;
 
-        if(itemsInfoDao.getConversionRel()!=null){
+        if (itemsInfoDao.getConversionRel() != null) {
             conversionRelService.addConversionRel(itemsInfoDao.getConversionRel());
             itemsInfoDao.setConverId(itemsInfoDao.getConversionRel().getConverId());
         }
@@ -96,10 +96,10 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
                 result += conversionRelService.deleteConversionRel(itemsInfo.getConverId(), companyId);
             }
             //删除自定义属性值
-            Map<String,Object> map=new HashMap<String,Object>();
-            map.put("itemId",itemId);
-            map.put("subItemIdList",null);
-            map.put("companyId",companyId);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("itemId", itemId);
+            map.put("subItemIdList", null);
+            map.put("companyId", companyId);
             result += customValueMapper.deleteItemAndSubItemId(map);
             //删除主商品
             result = itemsInfoMapper.deleteByItemIdAndCompanyId(itemsInfo);
@@ -111,7 +111,7 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     @Override
     public int modifyItemsInfo(ItemsInfoDao itemsInfoDao) {
         int result = 0;
-        if(itemsInfoDao.getConversionRel()!=null){
+        if (itemsInfoDao.getConversionRel() != null) {
             conversionRelService.modifyConversionRel(itemsInfoDao.getConversionRel());
             itemsInfoDao.setConverId(itemsInfoDao.getConversionRel().getConverId());
         }
@@ -147,21 +147,27 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     public PageInfo<List<ItemsInfoDao>> queryItemsByCondition(ItemsInfo itemsInfo, PageInfo pageInfo) {
         List<ItemsInfoDao> resultList = null;
         PageInfo page = null;
-        try {
-            //使用分页工具进行分页
-            PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-            resultList = itemsInfoMapper.selectByCondition(itemsInfo);
-            page = new PageInfo(resultList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return page;
-        }
+        //使用分页工具进行分页
+        PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+        resultList = itemsInfoMapper.selectByCondition(itemsInfo);
+        page = new PageInfo(resultList);
+        return page;
     }
 
     @Override
-    public ItemsInfoDao queryIetmsInfoDetails(Long itemId,Long companyId) {
-        ItemsInfo itemsInfo=new ItemsInfo();
+    public PageInfo<List<ItemsInfoDao>> queryItemsByItemsInfo(ItemsInfo itemsInfo, PageInfo pageInfo) {
+        List<ItemsInfoDao> resultList = null;
+        PageInfo page = null;
+        //使用分页工具进行分页
+        PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+        resultList = itemsInfoMapper.selectByItemsInfo(itemsInfo);
+        page = new PageInfo(resultList);
+        return page;
+    }
+
+    @Override
+    public ItemsInfoDao queryIetmsInfoDetails(Long itemId, Long companyId) {
+        ItemsInfo itemsInfo = new ItemsInfo();
         itemsInfo.setItemId(itemId);
         itemsInfo.setCompanyId(companyId);
         return itemsInfoMapper.selectIetmsInfoDetails(itemsInfo);

@@ -91,7 +91,7 @@ public class ItemClassifyApi {
 
     @ApiOperation("查询分类列表")
     @GetMapping("/list")
-    public PageBaseDto<List<ItemClassifyDao>> modifyClassify(HttpSession httpSession) {
+    public PageBaseDto<List<ItemClassifyDao>> queryClassify(HttpSession httpSession) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageInfo pageInfo=new PageInfo();
         pageInfo.setPageSize(0);
@@ -100,5 +100,14 @@ public class ItemClassifyApi {
         return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
     }
 
-
+    @ApiOperation("根据最小分类id查询他的所有上级分类")
+    @GetMapping("/parentlist")
+    public PageBaseDto<List<ItemClassify>> queryParentItemClassifyByMinClassifyId(HttpSession httpSession,@ApiParam(value = "分类id", required = true) @RequestParam Long classifyId){
+        Long companyId=SecurityInfoGetter.getCompanyId();
+        PageInfo pageInfo=new PageInfo();
+        pageInfo.setPages(0);
+        pageInfo.setPageNum(1);
+        PageInfo<List<ItemClassify>> listPageInfo=itemClassifyService.queryClassifyByMinChildren(classifyId,companyId,pageInfo);
+        return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
+    }
 }

@@ -87,4 +87,7 @@ public interface ItemsInfoMapper {
      * @return
      */
     int updateByItemIdAndCompanyId(ItemsInfo itemsInfo);
+
+
+    List<ItemsInfoDao> selectByItemsInfo(ItemsInfo itemsInfo);
 }
