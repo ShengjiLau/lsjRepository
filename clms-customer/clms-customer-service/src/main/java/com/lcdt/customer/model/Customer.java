@@ -282,11 +282,8 @@ public class Customer implements java.io.Serializable,ResponseData {
      * @mbg.generated Fri Nov 24 10:56:38 CST 2017
      */
     private String linkEmail;
-
-
     private String collectionIds;
     private String collectionNames;
-
     private long createId;
     private String createName;
     private Date createDate;
