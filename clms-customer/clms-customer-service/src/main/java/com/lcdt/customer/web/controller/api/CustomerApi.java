@@ -28,7 +28,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.tl.commons.util.DateUtility;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -309,6 +311,11 @@ public class CustomerApi {
         User loginUser = SecurityInfoGetter.getUser();
         CustomerContact vo = new CustomerContact();
         BeanUtils.copyProperties(dto, vo);
+        try {
+            vo.setBirthday(DateUtility.string2Date(dto.getBirthday1(),"yyyy-MM-dd"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         vo.setCompanyId(companyId);
         vo.setIsDefault((short)0); //非默认联系人
         vo.setCreateId(loginUser.getUserId());
@@ -331,6 +338,11 @@ public class CustomerApi {
         Long companyId = SecurityInfoGetter.getCompanyId();
         CustomerContact vo = new CustomerContact();
         BeanUtils.copyProperties(dto, vo);
+        try {
+            vo.setBirthday(DateUtility.string2Date(dto.getBirthday1(),"yyyy-MM-dd"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         vo.setCompanyId(companyId);
         customerService.customerContactUpdate(vo);
         return vo;
