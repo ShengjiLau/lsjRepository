@@ -33,8 +33,8 @@ public class CustomerListParamsDto {
     private String customerType;
 
 
-    @ApiModelProperty(required = true, value = "组ID")
-    private String groupIds;
+    @ApiModelProperty(required = true, value = "分组ID")
+    private String collectionIds;
 
 
     public String getComplexContition() {
@@ -77,20 +77,20 @@ public class CustomerListParamsDto {
         this.status = status;
     }
 
-    public String getGroupIds() {
-        return groupIds;
-    }
-
-    public void setGroupIds(String groupIds) {
-        this.groupIds = groupIds;
-    }
-
     public String getCustomerType() {
         return customerType;
     }
 
     public void setCustomerType(String customerType) {
         this.customerType = customerType;
+    }
+
+    public String getCollectionIds() {
+        return collectionIds;
+    }
+
+    public void setCollectionIds(String collectionIds) {
+        this.collectionIds = collectionIds;
     }
 }
 

@@ -31,8 +31,8 @@ public class CustomerContactParamsDto {
     @ApiModelProperty(value = "邮箱")
     private String mail;
 
-    @ApiModelProperty(value = "生日")
-    private Date birthday;
+    @ApiModelProperty(value = "生日-(格式yyyy-MM-dd)")
+    private String birthday1;
 
     @ApiModelProperty(value = "性别")
     private String gender;
@@ -105,12 +105,12 @@ public class CustomerContactParamsDto {
         this.mail = mail;
     }
 
-    public Date getBirthday() {
-        return birthday;
+    public String getBirthday1() {
+        return birthday1;
     }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+    public void setBirthday1(String birthday1) {
+        this.birthday1 = birthday1;
     }
 
     public String getGender() {
