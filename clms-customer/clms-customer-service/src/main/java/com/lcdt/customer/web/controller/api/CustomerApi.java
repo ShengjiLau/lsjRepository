@@ -361,7 +361,7 @@ public class CustomerApi {
     @ApiOperation("客户组(竞价)列表")
     @RequestMapping(value = "/customerCollectionList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
-    public CustomerListResultDto customerCollectionList(  @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+    public CustomerListResultDto customerCollectionList(@ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                                      @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
