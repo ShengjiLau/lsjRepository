@@ -89,19 +89,19 @@ public class CustomerApi {
         }
 
 
-        if (StringUtil.isNotEmpty(dto.getGroupIds())) {
-            String[] groupIdArray = dto.getGroupIds().split(",");
+        if (StringUtil.isNotEmpty(dto.getCollectionIds())) {
+            String[] groupIdArray = dto.getCollectionIds().split(",");
             StringBuffer sb = new StringBuffer();
             sb.append("(");
             for (int i=0;i<groupIdArray.length;i++) {
-                sb.append(" find_in_set('"+groupIdArray[i]+"',group_ids)");
+                sb.append(" find_in_set('"+groupIdArray[i]+"',collection_ids)");
                 if(i!=groupIdArray.length-1){
                     sb.append(" or ");
                 }
             }
             sb.append(")");
 
-           map.put("groupIds", sb.toString());
+           map.put("collectionIds", sb.toString());
         }
 
         PageInfo pageInfo = customerService.customerList(map);
