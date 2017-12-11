@@ -178,6 +178,9 @@ public class CustomerApi {
     }
 
 
+
+
+
     /**
      * 客户状态修改
      * @param customerId
@@ -482,6 +485,36 @@ public class CustomerApi {
             dto.setCollectionIds(customer.getCollectionIds());
         }
         return dto;
+    }
+
+
+
+
+
+    /**
+     * 客户绑定
+     *
+     * @return
+     */
+    @ApiOperation("客户绑定")
+    @RequestMapping(value = "/customerCollectionBind",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
+    public Customer customerCollectionBind(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
+                                           @ApiParam(value = "组ID",required = true) @RequestParam String collectionIds,
+                                           @ApiParam(value = "组名称",required = true) @RequestParam String collectionNames) {
+        //客户主表、联系人表、客户类型关系部分
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Customer customer = new Customer();
+        customer.setCollectionIds(collectionIds);
+        customer.setCollectionNames(collectionNames);
+        customer.setCompanyId(companyId);
+        customer.setCustomerId(customerId);
+        try {
+            customerService.customerCollectionBind(customer);
+        } catch (CustomerException e) {
+            throw new CustomerException(e.getMessage());
+        }
+        return customer;
     }
 
 

@@ -121,14 +121,14 @@
       registration_address = #{registrationAddress,jdbcType=VARCHAR},
       tel_no1 = #{telNo1,jdbcType=VARCHAR},
       invoice_remark = #{invoiceRemark,jdbcType=VARCHAR},
-    bind_comp_id = #{bindCpid,jdbcType=BIGINT},
+      bind_comp_id = #{bindCpid,jdbcType=BIGINT},
       status = #{status,jdbcType=SMALLINT},
       bind_company = #{bindCompany,jdbcType=VARCHAR},
       link_man = #{linkMan,jdbcType=VARCHAR},
       link_duty = #{linkDuty,jdbcType=VARCHAR},
       link_tel = #{linkTel,jdbcType=VARCHAR},
       link_email = #{linkEmail,jdbcType=VARCHAR}
-    where customer_id = #{customerId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+      where customer_id = #{customerId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
 
   <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.customer.model.Customer">
