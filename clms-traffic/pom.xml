@@ -16,5 +16,12 @@
         <module>clms-traffic-service</module>
     </modules>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-response-converter</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
 
 </project>

@@ -13,6 +13,11 @@
     <dependencies>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
+            <artifactId>common-config</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-security</artifactId>
             <version>1.0</version>
         </dependency>
@@ -27,11 +32,7 @@
             <artifactId>clms-swagger</artifactId>
             <version>1.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.lcdt.cloud</groupId>
-            <artifactId>clms-customer-api</artifactId>
-            <version>1.0</version>
-        </dependency>
+
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
