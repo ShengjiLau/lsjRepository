@@ -280,6 +280,18 @@ public class CustomerServiceImpl implements CustomerService {
         return  pageInfo;
     }
 
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int customerCollectionBind(Customer customer) {
+        int flag = customerMapper.updateByPrimaryKeySelective(customer);
+        return flag;
+    }
+
+
+
+
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int customerContactUpdate(CustomerContact CustomerContact) {

@@ -60,6 +60,8 @@ public interface CustomerService {
      */
     int customerUpdate(Customer customer) throws CustomerException ;
 
+    int customerCollectionBind(Customer customer);
+
     /**
      * 更新客户联系人信息
      * @param customerContact
