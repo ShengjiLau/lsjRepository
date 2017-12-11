@@ -504,14 +504,13 @@ public class CustomerApi {
                                            @ApiParam(value = "组名称",required = true) @RequestParam String collectionNames) {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
-        User loginUser = SecurityInfoGetter.getUser();
         Customer customer = new Customer();
         customer.setCollectionIds(collectionIds);
         customer.setCollectionNames(collectionNames);
         customer.setCompanyId(companyId);
         customer.setCustomerId(customerId);
         try {
-            customerService.customerUpdate(customer);
+            customerService.customerCollectionBind(customer);
         } catch (CustomerException e) {
             throw new CustomerException(e.getMessage());
         }
