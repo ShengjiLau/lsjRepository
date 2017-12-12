@@ -35,8 +35,4 @@
         </plugin>
     </plugins>
 
-    <mappers>
-        <package name="com.lcdt.traffic.dao"></package>
-    </mappers>
-
 </configuration>
