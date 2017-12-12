@@ -3,33 +3,23 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>cwms</artifactId>
+        <artifactId>clms-notify</artifactId>
         <groupId>com.lcdt.cloud</groupId>
         <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>clms-notify</artifactId>
-    <name>clms-notify</name>
-    <modules>
-        <module>clms-notify-api</module>
-        <module>clms-notify-service</module>
-        <module>clms-notify-demo</module>
-    </modules>
-    <packaging>pom</packaging>
+    <artifactId>clms-notify-api</artifactId>
+
     <dependencies>
+
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>common-utils</artifactId>
+            <artifactId>user-api</artifactId>
             <version>1.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.3</version>
-        </dependency>
+
+
     </dependencies>
-
-
 
 </project>

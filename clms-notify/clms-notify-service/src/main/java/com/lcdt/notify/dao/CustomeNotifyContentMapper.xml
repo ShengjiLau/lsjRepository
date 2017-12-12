@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.notify.dao.CustomeNotifyContentMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.notify.model.CustomeNotifyContent">
+    <id column="custome_id" jdbcType="BIGINT" property="customeId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="template_id" jdbcType="BIGINT" property="templateId" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from custome_notify_content
+    where custome_id = #{customeId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.notify.model.CustomeNotifyContent">
+    insert into custome_notify_content (custome_id, company_id, template_id, 
+      content, create_time, update_time
+      )
+    values (#{customeId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, #{templateId,jdbcType=BIGINT}, 
+      #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.notify.model.CustomeNotifyContent">
+    update custome_notify_content
+    set company_id = #{companyId,jdbcType=BIGINT},
+      template_id = #{templateId,jdbcType=BIGINT},
+      content = #{content,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where custome_id = #{customeId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select custome_id, company_id, template_id, content, create_time, update_time
+    from custome_notify_content
+    where custome_id = #{customeId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select custome_id, company_id, template_id, content, create_time, update_time
+    from custome_notify_content
+  </select>
+</mapper>
