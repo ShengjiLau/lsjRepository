@@ -5,7 +5,7 @@ public class Notify {
 
     private String receiveRole;
 
-    private Integer templateId;
+    private Long templateId;
 
     private String notifyName;
 
@@ -27,11 +27,11 @@ public class Notify {
         this.receiveRole = receiveRole == null ? null : receiveRole.trim();
     }
 
-    public Integer getTemplateId() {
+    public Long getTemplateId() {
         return templateId;
     }
 
-    public void setTemplateId(Integer templateId) {
+    public void setTemplateId(Long templateId) {
         this.templateId = templateId;
     }
 

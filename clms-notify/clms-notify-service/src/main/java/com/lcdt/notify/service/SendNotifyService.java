@@ -15,6 +15,10 @@ public class SendNotifyService {
         String eventName = event.getEventName();
         //query notify by event Name
         List<Notify> notifies = notifyService.queryNotifyByEventName(eventName);
+
+
+
+
         //TODO 用户通知设置开发
     }
 
