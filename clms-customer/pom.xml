@@ -16,7 +16,6 @@
         <module>clms-customer-service</module>
     </modules>
     <dependencies>
-
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-response-converter</artifactId>
