@@ -28,7 +28,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.tl.commons.util.DateUtility;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -87,19 +89,19 @@ public class CustomerApi {
         }
 
 
-        if (StringUtil.isNotEmpty(dto.getGroupIds())) {
-            String[] groupIdArray = dto.getGroupIds().split(",");
+        if (StringUtil.isNotEmpty(dto.getCollectionIds())) {
+            String[] groupIdArray = dto.getCollectionIds().split(",");
             StringBuffer sb = new StringBuffer();
             sb.append("(");
             for (int i=0;i<groupIdArray.length;i++) {
-                sb.append(" find_in_set('"+groupIdArray[i]+"',group_ids)");
+                sb.append(" find_in_set('"+groupIdArray[i]+"',collection_ids)");
                 if(i!=groupIdArray.length-1){
                     sb.append(" or ");
                 }
             }
             sb.append(")");
 
-           map.put("groupIds", sb.toString());
+           map.put("collectionIds", sb.toString());
         }
 
         PageInfo pageInfo = customerService.customerList(map);
@@ -174,6 +176,9 @@ public class CustomerApi {
         }
         return customer;
     }
+
+
+
 
 
     /**
@@ -309,6 +314,11 @@ public class CustomerApi {
         User loginUser = SecurityInfoGetter.getUser();
         CustomerContact vo = new CustomerContact();
         BeanUtils.copyProperties(dto, vo);
+        try {
+            vo.setBirthday(DateUtility.string2Date(dto.getBirthday1(),"yyyy-MM-dd"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         vo.setCompanyId(companyId);
         vo.setIsDefault((short)0); //非默认联系人
         vo.setCreateId(loginUser.getUserId());
@@ -331,6 +341,11 @@ public class CustomerApi {
         Long companyId = SecurityInfoGetter.getCompanyId();
         CustomerContact vo = new CustomerContact();
         BeanUtils.copyProperties(dto, vo);
+        try {
+            vo.setBirthday(DateUtility.string2Date(dto.getBirthday1(),"yyyy-MM-dd"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         vo.setCompanyId(companyId);
         customerService.customerContactUpdate(vo);
         return vo;
@@ -361,7 +376,7 @@ public class CustomerApi {
     @ApiOperation("客户组(竞价)列表")
     @RequestMapping(value = "/customerCollectionList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
-    public CustomerListResultDto customerCollectionList(  @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+    public CustomerListResultDto customerCollectionList(@ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                                      @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
@@ -470,6 +485,42 @@ public class CustomerApi {
             dto.setCollectionIds(customer.getCollectionIds());
         }
         return dto;
+    }
+
+
+
+
+
+    /**
+     * 客户绑定
+     *
+     * @return
+     */
+    @ApiOperation("客户绑定")
+    @RequestMapping(value = "/customerCollectionBind",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
+    public Customer customerCollectionBind(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
+                                           @ApiParam(value = "是否取消(1-是，0否)",required = true) @RequestParam(value="isCancel", defaultValue="0") short isCancel,
+                                           @ApiParam(value = "组ID") @RequestParam String collectionIds,
+                                           @ApiParam(value = "组名称") @RequestParam String collectionNames) {
+        //客户主表、联系人表、客户类型关系部分
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Customer customer = new Customer();
+        if(isCancel==1) {
+            customer.setCollectionIds("");
+            customer.setCollectionNames("");
+        } else {
+            customer.setCollectionIds(collectionIds);
+            customer.setCollectionNames(collectionNames);
+        }
+        customer.setCompanyId(companyId);
+        customer.setCustomerId(customerId);
+        try {
+            customerService.customerCollectionBind(customer);
+        } catch (CustomerException e) {
+            throw new CustomerException(e.getMessage());
+        }
+        return customer;
     }
 
 

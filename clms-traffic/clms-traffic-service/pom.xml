@@ -12,31 +12,43 @@
     <artifactId>clms-traffic-service</artifactId>
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>common-config</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-security</artifactId>
             <version>1.0</version>
         </dependency>
+
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-response-converter</artifactId>
             <version>1.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-swagger</artifactId>
             <version>1.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.lcdt.cloud</groupId>
-            <artifactId>clms-customer-api</artifactId>
-            <version>1.0</version>
-        </dependency>
+
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
@@ -51,10 +63,6 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
