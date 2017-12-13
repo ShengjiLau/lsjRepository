@@ -6,10 +6,12 @@ package com.lcdt.traffic.vo;
 public class ConstantVO {
 
 
+
+
+
     //计划-创建方式
     public static String PLAN_SOURCE_ENTERING = "10"; //录入
     public static String PLAN_SOURCE_PUSH = "20";//推送
-
 
     //计划-状态
     public static String PLAN_STATUS_WAITE＿PUBLISH = "10"; //待发布
