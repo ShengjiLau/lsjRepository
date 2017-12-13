@@ -1,5 +1,6 @@
 package com.lcdt.traffic.service.impl;
 
+import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.PlanDetailMapper;
 import com.lcdt.traffic.dao.WaybillPlanMapper;
 import com.lcdt.traffic.model.WaybillPlan;
@@ -27,7 +28,8 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
     private PlanDetailMapper planDetailMapper;
 
 
-
+    @com.alibaba.dubbo.config.annotation.Reference
+    public CustomerRpcService customerRpcService;
 
 
     @Transactional(rollbackFor = Exception.class)
