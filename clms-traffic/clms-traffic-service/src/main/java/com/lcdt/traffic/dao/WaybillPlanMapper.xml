@@ -113,7 +113,7 @@
       company_id, plan_days, pubdate, 
       finish_date, cancel_date, cancel_man, 
       cancel_remark)
-    values (#{planCode,jdbcType=VARCHAR}, #{serialCode,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT}, 
+    values (#{planCode,jdbcType=VARCHAR}, #{serialCode,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT},
       #{groupName,jdbcType=VARCHAR}, #{planSource,jdbcType=VARCHAR}, #{planStatus,jdbcType=VARCHAR}, 
       #{sendCardStatus,jdbcType=SMALLINT}, #{sendOrderType,jdbcType=SMALLINT}, #{carrierType,jdbcType=SMALLINT}, 
       #{bidingStart,jdbcType=TIMESTAMP}, #{bidingEnd,jdbcType=TIMESTAMP}, #{customerId,jdbcType=BIGINT}, 

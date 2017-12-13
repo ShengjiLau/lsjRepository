@@ -2,6 +2,7 @@ package com.ybq;
 
 import com.lcdt.traffic.TrafficServiceApp;
 import com.lcdt.traffic.dao.WaybillPlanMapper;
+import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import org.junit.Test;
@@ -27,9 +28,14 @@ public class Test1 {
 
     @Test
     @Rollback
-    public void testRegister() {
-        System.out.println(1111);
-        System.out.println(waybillPlanMapper);
+    public void test() {
+
+        WaybillPlan obj = new WaybillPlan();
+
+        obj.setPlanCode("okok");
+
+        System.out.println("插入结果："+waybillPlanMapper.insert(obj));
+
     }
 
 }
