@@ -24,8 +24,6 @@ public class NotifyService {
         List<Notify> notifies = notifyDao.queryByEventName(eventName);
 
         //解析模板 推送
-
-
         return notifies;
     }
 
