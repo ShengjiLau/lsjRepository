@@ -167,7 +167,19 @@ public class WaybillParamsDto {
     private Long CompanyId;
     private Long createId;
     private String createName;
+    private String planSource; //计划来源
 
+
+
+
+
+    public String getPlanSource() {
+        return planSource;
+    }
+
+    public void setPlanSource(String planSource) {
+        this.planSource = planSource;
+    }
 
     public String getCarrierCollectionIds() {
         return carrierCollectionIds;

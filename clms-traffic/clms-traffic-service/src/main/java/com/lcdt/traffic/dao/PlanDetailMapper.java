@@ -44,4 +44,13 @@ public interface PlanDetailMapper {
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
     int updateByPrimaryKey(PlanDetail record);
+
+
+    /***
+     * 批量添加运单详情
+     * @param planDetailList
+     * @return
+     */
+    int batchAddPlanDetail(List<PlanDetail> planDetailList);
+
 }
