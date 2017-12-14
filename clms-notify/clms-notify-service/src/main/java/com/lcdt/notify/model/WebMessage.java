@@ -13,7 +13,9 @@ public class WebMessage {
 
     private Long messageReceiveCompanyId;
 
-    private Long messageIsread;
+    private Boolean messageIsread;
+
+    private String messageAttachUrl;
 
     public Long getMessageId() {
         return messageId;
@@ -55,11 +57,19 @@ public class WebMessage {
         this.messageReceiveCompanyId = messageReceiveCompanyId;
     }
 
-    public Long getMessageIsread() {
+    public Boolean getMessageIsread() {
         return messageIsread;
     }
 
-    public void setMessageIsread(Long messageIsread) {
+    public void setMessageIsread(Boolean messageIsread) {
         this.messageIsread = messageIsread;
+    }
+
+    public String getMessageAttachUrl() {
+        return messageAttachUrl;
+    }
+
+    public void setMessageAttachUrl(String messageAttachUrl) {
+        this.messageAttachUrl = messageAttachUrl == null ? null : messageAttachUrl.trim();
     }
 }

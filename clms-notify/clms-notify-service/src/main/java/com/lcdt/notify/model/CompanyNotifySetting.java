@@ -7,7 +7,9 @@ public class CompanyNotifySetting {
 
     private Long notifyId;
 
-    private Boolean enable;
+    private Boolean enableSms;
+
+    private Boolean enableWeb;
 
     public Long getSettingId() {
         return settingId;
@@ -33,11 +35,19 @@ public class CompanyNotifySetting {
         this.notifyId = notifyId;
     }
 
-    public Boolean getEnable() {
-        return enable;
+    public Boolean getEnableSms() {
+        return enableSms;
     }
 
-    public void setEnable(Boolean enable) {
-        this.enable = enable;
+    public void setEnableSms(Boolean enableSms) {
+        this.enableSms = enableSms;
+    }
+
+    public Boolean getEnableWeb() {
+        return enableWeb;
+    }
+
+    public void setEnableWeb(Boolean enableWeb) {
+        this.enableWeb = enableWeb;
     }
 }

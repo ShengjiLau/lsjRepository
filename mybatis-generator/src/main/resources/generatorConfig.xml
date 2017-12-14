@@ -212,5 +212,8 @@
         <table tableName="web_message" domainObjectName="WebMessage">
             <generatedKey column="message_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
+        <table tableName="mq_message_log" domainObjectName="MqMessageLog">
+            <generatedKey column="message_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
     </context>
 </generatorConfiguration>

@@ -44,4 +44,5 @@
     template_event_name, template_name
     from msg_template
   </select>
+
 </mapper>

@@ -39,9 +39,8 @@ public class AliMqConfig {
         producerProperties.setProperty(PropertyKeyConst.AccessKey, configContants.getAccess_key());
         producerProperties.setProperty(PropertyKeyConst.SecretKey, configContants.getSecret_key());
         producerProperties.setProperty(PropertyKeyConst.ONSAddr, configContants.getOnsAddress());
-
+        producerProperties.setProperty(PropertyKeyConst.ConsumerId, configContants.getConsumer_id());
         Consumer consumer = ONSFactory.createConsumer(producerProperties);
-
         consumer.start();
         return consumer;
     }

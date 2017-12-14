@@ -4,11 +4,17 @@
 
   <select id="queryByEventName" resultMap="com.lcdt.notify.dao.NotifyMapper.BaseResultMap">
 
-       select notify_id, receive_role, template_id, notify_name, event_name
+    select notify_id, receive_role, template_id, notify_name, event_name
     from notify
     where event_name = #{eventName,jdbcType=VARCHAR}
 
   </select>
-
+    
+   <select id="queryByTemplateId" resultMap="com.lcdt.notify.dao.CustomeNotifyContentMapper.BaseResultMap">
+    select custome_id, company_id, template_id, content, create_time, update_time
+    from custome_notify_content
+    where template_id = #{templateId}
+    and company_id = #{companyId}
+   </select>
 
 </mapper>

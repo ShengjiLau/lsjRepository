@@ -7,7 +7,8 @@
     <result column="message_create_time" jdbcType="TIMESTAMP" property="messageCreateTime" />
     <result column="message_receive_user_id" jdbcType="BIGINT" property="messageReceiveUserId" />
     <result column="message_receive_company_id" jdbcType="BIGINT" property="messageReceiveCompanyId" />
-    <result column="message_isread" jdbcType="BIGINT" property="messageIsread" />
+    <result column="message_isread" jdbcType="BIT" property="messageIsread" />
+    <result column="message_attach_url" jdbcType="VARCHAR" property="messageAttachUrl" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from web_message
@@ -19,10 +20,10 @@
     </selectKey>
     insert into web_message (message_content, message_create_time, 
       message_receive_user_id, message_receive_company_id, 
-      message_isread)
+      message_isread, message_attach_url)
     values (#{messageContent,jdbcType=VARCHAR}, #{messageCreateTime,jdbcType=TIMESTAMP}, 
       #{messageReceiveUserId,jdbcType=BIGINT}, #{messageReceiveCompanyId,jdbcType=BIGINT}, 
-      #{messageIsread,jdbcType=BIGINT})
+      #{messageIsread,jdbcType=BIT}, #{messageAttachUrl,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.notify.model.WebMessage">
     update web_message
@@ -30,18 +31,20 @@
       message_create_time = #{messageCreateTime,jdbcType=TIMESTAMP},
       message_receive_user_id = #{messageReceiveUserId,jdbcType=BIGINT},
       message_receive_company_id = #{messageReceiveCompanyId,jdbcType=BIGINT},
-      message_isread = #{messageIsread,jdbcType=BIGINT}
+      message_isread = #{messageIsread,jdbcType=BIT},
+      message_attach_url = #{messageAttachUrl,jdbcType=VARCHAR}
     where message_id = #{messageId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select message_id, message_content, message_create_time, message_receive_user_id, 
-    message_receive_company_id, message_isread
+    message_receive_company_id, message_isread, message_attach_url
     from web_message
     where message_id = #{messageId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select message_id, message_content, message_create_time, message_receive_user_id, 
-    message_receive_company_id, message_isread
+    message_receive_company_id, message_isread, message_attach_url
     from web_message
   </select>
+
 </mapper>

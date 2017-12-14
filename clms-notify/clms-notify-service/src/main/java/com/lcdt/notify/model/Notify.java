@@ -11,6 +11,12 @@ public class Notify {
 
     private String eventName;
 
+    private String category;
+
+    private Boolean defaultEnableWeb;
+
+    private Boolean defaultEnableSms;
+
     public Long getNotifyId() {
         return notifyId;
     }
@@ -49,5 +55,29 @@ public class Notify {
 
     public void setEventName(String eventName) {
         this.eventName = eventName == null ? null : eventName.trim();
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category == null ? null : category.trim();
+    }
+
+    public Boolean getDefaultEnableWeb() {
+        return defaultEnableWeb;
+    }
+
+    public void setDefaultEnableWeb(Boolean defaultEnableWeb) {
+        this.defaultEnableWeb = defaultEnableWeb;
+    }
+
+    public Boolean getDefaultEnableSms() {
+        return defaultEnableSms;
+    }
+
+    public void setDefaultEnableSms(Boolean defaultEnableSms) {
+        this.defaultEnableSms = defaultEnableSms;
     }
 }

@@ -1,20 +1,42 @@
 package com.lcdt.notify.rpcservice;
 
-import com.lcdt.userinfo.model.Company;
-import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.notify.model.DefaultNotifyReceiver;
+import com.lcdt.notify.model.DefaultNotifySender;
+import com.lcdt.notify.model.NotifyReceiver;
+import com.lcdt.notify.model.NotifySender;
 
-public class TrafficStatusChangeEvent {
+import java.io.Serializable;
+
+public class TrafficStatusChangeEvent implements Serializable{
+
+    public TrafficStatusChangeEvent(){
+
+    }
+
+    public TrafficStatusChangeEvent(String eventName, Object attachment, DefaultNotifyReceiver receiver,DefaultNotifySender sender) {
+        this.eventName = eventName;
+        this.attachment = attachment;
+        this.receiver = receiver;
+        this.sender = sender;
+    }
 
     private String eventName;
 
     //推送通知的编译上下文
     private Object attachment;
 
-    private Company sendCompany;//发送公司
-
     //需要是多个角色
-    private UserCompRel receiver;
+    private DefaultNotifyReceiver receiver;
 
+    private DefaultNotifySender sender;
+
+    public NotifySender getSender() {
+        return sender;
+    }
+
+    public void setSender(DefaultNotifySender sender) {
+        this.sender = sender;
+    }
 
     public String getEventName() {
         return eventName;
@@ -32,19 +54,11 @@ public class TrafficStatusChangeEvent {
         this.attachment = attachment;
     }
 
-    public Company getSendCompany() {
-        return sendCompany;
-    }
-
-    public void setSendCompany(Company sendCompany) {
-        this.sendCompany = sendCompany;
-    }
-
-    public UserCompRel getReceiver() {
+    public NotifyReceiver getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(UserCompRel receiver) {
+    public void setReceiver(DefaultNotifyReceiver receiver) {
         this.receiver = receiver;
     }
 }

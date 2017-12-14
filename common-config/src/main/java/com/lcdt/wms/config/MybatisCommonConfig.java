@@ -33,7 +33,7 @@ public class MybatisCommonConfig implements TransactionManagementConfigurer {
 	@Bean
 	public static MapperScannerConfigurer mapperScannerConfigurer() {
 		MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-		mapperScannerConfigurer.setBasePackage("com.lcdt.cwms.user.dao,com.lcdt.*.*.dao");
+		mapperScannerConfigurer.setBasePackage("com.lcdt.*.*.dao,com.lcdt.*.dao");
 		return mapperScannerConfigurer;
 	}
 
