@@ -48,8 +48,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void createWaybillPlan(WaybillParamsDto dto) {
-        short flag = 1; //如果为1为发布，2暂存
+    public WaybillPlan createWaybillPlan(WaybillParamsDto dto, short flag) {
         WaybillPlan vo = new WaybillPlan(); //复制传来对象值
         BeanUtils.copyProperties(dto, vo);
         vo.setCreateDate(new Date()); //创建时间
@@ -96,6 +95,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
 
             }
         }
+        return vo;
     }
 
 
