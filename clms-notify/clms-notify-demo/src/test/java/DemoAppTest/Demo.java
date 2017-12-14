@@ -4,9 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.lcdt.notify.model.BaseAttachment;
 import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.DefaultNotifySender;
-import com.lcdt.notify.rpcservice.TrafficStatusChangeEvent;
+import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import org.junit.Test;
 
 import java.io.*;
@@ -20,11 +21,15 @@ public class Demo {
         defaultNotifyReceiver.setCompanyId(1L);
         defaultNotifyReceiver.setUserId(1L);
         defaultNotifyReceiver.setPhoneNum("15666836323");
-
         DefaultNotifySender defaultNotifySender = new DefaultNotifySender(1L, 1L);
 
-        TrafficStatusChangeEvent test_event = new TrafficStatusChangeEvent("test_event", new Object(), defaultNotifyReceiver, defaultNotifySender);
-        System.out.println(JSONObject.toJSONString(test_event));
+        ClmsNotifyProducerTest.TestAttachment testAttachment = new ClmsNotifyProducerTest.TestAttachment();
+        testAttachment.setA("lichen");
+        testAttachment.setB("数据");
+
+
+
+        TrafficStatusChangeEvent test_event = new TrafficStatusChangeEvent("test_event", testAttachment, defaultNotifyReceiver, defaultNotifySender);System.out.println(JSONObject.toJSONString(test_event));
         byte[] bytes = JSON.toJSONBytes(test_event, SerializerFeature.BrowserCompatible);
         System.out.println(new String(bytes));
         TrafficStatusChangeEvent o = JSON.parseObject(bytes, TrafficStatusChangeEvent.class, Feature.AllowArbitraryCommas);
@@ -39,10 +44,15 @@ public class Demo {
         defaultNotifyReceiver.setCompanyId(1L);
         defaultNotifyReceiver.setUserId(1L);
         defaultNotifyReceiver.setPhoneNum("15666836323");
-
         DefaultNotifySender defaultNotifySender = new DefaultNotifySender(1L, 1L);
 
-        TrafficStatusChangeEvent test_event = new TrafficStatusChangeEvent("test_event", new EventObject(), defaultNotifyReceiver, defaultNotifySender);
+        ClmsNotifyProducerTest.TestAttachment testAttachment = new ClmsNotifyProducerTest.TestAttachment();
+        testAttachment.setA("lichen");
+        testAttachment.setB("数据");
+
+        testAttachment.setWebNotifyUrl("www.baidu.com");
+
+        TrafficStatusChangeEvent test_event = new TrafficStatusChangeEvent("test_event", testAttachment, defaultNotifyReceiver, defaultNotifySender);
 
         byte[] serialize1 = serialize(test_event);
         String string = new java.lang.String(serialize1);

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,7 +15,7 @@ public class TemplateParser {
 
     static Pattern pattern = Pattern.compile("(\\$\\{([a-zA-Z0-9]+)\\})");
 
-    public static String parseTemplateParams(String tempalte, Object valueBean) {
+    public static String parseTemplateParams(String tempalte, Map<String,String> valueBean) {
         Matcher m = pattern.matcher(tempalte);
         StringBuffer stringBuffer = new StringBuffer();
         while (m.find()) {
@@ -24,6 +25,12 @@ public class TemplateParser {
         }
         m.appendTail(stringBuffer);
         return stringBuffer.toString();
+    }
+
+
+    public static String resolveTemplateVariables(String propertyName,Map<String,String> bean){
+        String s = bean.get(propertyName);
+        return s == null ? "" : s;
     }
 
     public static String resolveTemplateVariables(String propertyName,Object bean){

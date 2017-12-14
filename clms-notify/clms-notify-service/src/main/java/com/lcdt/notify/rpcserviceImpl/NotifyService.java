@@ -1,6 +1,6 @@
 package com.lcdt.notify.rpcserviceImpl;
 
-import com.lcdt.notify.rpcservice.TrafficStatusChangeEvent;
+import com.lcdt.notify.model.TrafficStatusChangeEvent;
 
 public class NotifyService implements com.lcdt.notify.rpcservice.NotifyService{
 

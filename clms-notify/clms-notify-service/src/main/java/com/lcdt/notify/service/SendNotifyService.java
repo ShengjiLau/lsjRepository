@@ -1,18 +1,15 @@
 package com.lcdt.notify.service;
 
 import com.lcdt.notify.dao.NotifyDao;
-import com.lcdt.notify.model.CompanyNotifySetting;
-import com.lcdt.notify.model.Notify;
-import com.lcdt.notify.model.NotifyReceiver;
-import com.lcdt.notify.model.NotifySender;
+import com.lcdt.notify.model.*;
 import com.lcdt.notify.notifyimpl.SmsNotifyImpl;
 import com.lcdt.notify.notifyimpl.WebNotifyImpl;
-import com.lcdt.notify.rpcservice.TrafficStatusChangeEvent;
-import com.lcdt.userinfo.model.Company;
+import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SendNotifyService {
@@ -32,12 +29,12 @@ public class SendNotifyService {
     @Autowired
     WebNotifyImpl webNotify;
 
-    public void handleEvent(TrafficStatusChangeEvent event) {
+    public void handleEvent(JsonParserPropertyEvent event) {
         String eventName = event.getEventName();
         //query notify by event Name
         List<Notify> notifies = notifyService.queryNotifyByEventName(eventName);
-        
-        Object attachment = event.getAttachment();
+
+        Map attachment = event.getAttachment();
         NotifyReceiver receiver = event.getReceiver();
         NotifySender sender = event.getSender();
 
@@ -49,14 +46,14 @@ public class SendNotifyService {
             Long templateId = notify.getTemplateId();
             String templateContent = notifyService.templateContent(templateId, sendCompanyId);
             String notifyContent = TemplateParser.parseTemplateParams(templateContent, attachment);
-
+            String url = "";
             if (companyNotifySetting.getEnableSms()) {
                 //发送短信通知
                 smsNotify.sendSmsNotify(notifyContent, receiver.getPhoneNum());
             }
             if (companyNotifySetting.getEnableWeb()) {
                 //发送web通知
-                webNotify.sendWebNotify(notifyContent,receiver,attachment);
+                webNotify.sendWebNotify(notifyContent,receiver,url);
             }
         }
     }

@@ -15,6 +15,7 @@
         <module>clms-notify-api</module>
         <module>clms-notify-service</module>
         <module>clms-notify-demo</module>
+        <module>clms-notify-producer-config</module>
     </modules>
     <packaging>pom</packaging>
     <dependencies>

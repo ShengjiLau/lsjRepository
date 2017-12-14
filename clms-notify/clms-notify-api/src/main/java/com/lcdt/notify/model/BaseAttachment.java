@@ -1,5 +1,6 @@
 package com.lcdt.notify.model;
 
+
 public class BaseAttachment {
 
     private String webNotifyUrl;

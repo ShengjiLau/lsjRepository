@@ -7,8 +7,9 @@ import com.aliyun.openservices.ons.api.ConsumeContext;
 import com.aliyun.openservices.ons.api.Message;
 import com.aliyun.openservices.ons.api.MessageListener;
 import com.lcdt.notify.dao.MqMessageLogMapper;
+import com.lcdt.notify.model.JsonParserPropertyEvent;
 import com.lcdt.notify.model.MqMessageLog;
-import com.lcdt.notify.rpcservice.TrafficStatusChangeEvent;
+import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.notify.service.SendNotifyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +46,10 @@ public class NotifyServiceListener implements MessageListener{
             return CommitMessage;
         }
 
-
         byte[] body = message.getBody();
+
         //反序列化 转化成bean
-        TrafficStatusChangeEvent event = JSONObject.parseObject(body, TrafficStatusChangeEvent.class, Feature.SupportNonPublicField);
+        JsonParserPropertyEvent event = JSONObject.parseObject(body, JsonParserPropertyEvent.class, Feature.SupportNonPublicField);
 
         logger.info("consume message : {} {} {}",event.getClass().getSimpleName(),event.getEventName(),event.getSender().sendCompanyId());
 
@@ -60,6 +61,7 @@ public class NotifyServiceListener implements MessageListener{
         });
         return CommitMessage;
     }
+
 
     @Autowired
     MqMessageLogMapper mapper;
