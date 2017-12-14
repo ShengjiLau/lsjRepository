@@ -24,7 +24,7 @@ import static com.aliyun.openservices.ons.api.Action.CommitMessage;
 @Component
 public class NotifyServiceListener implements MessageListener{
 
-    Executor executor = Executors.newFixedThreadPool(30);
+    Executor executor = Executors.newFixedThreadPool(4);
 
     @Autowired
     private SendNotifyService sendNotifyService;

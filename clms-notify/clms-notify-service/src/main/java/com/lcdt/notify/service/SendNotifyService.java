@@ -56,7 +56,7 @@ public class SendNotifyService {
             }
             if (companyNotifySetting.getEnableWeb()) {
                 //发送web通知
-                webNotify.sendWebNotify(notifyContent,receiver);
+                webNotify.sendWebNotify(notifyContent,receiver,attachment);
             }
         }
     }

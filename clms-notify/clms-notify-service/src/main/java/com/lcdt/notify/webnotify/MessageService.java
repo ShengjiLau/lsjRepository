@@ -19,12 +19,13 @@ public class MessageService {
     @Autowired
     WebMessageDao webMessageDao;
 
-    public void createWebMessage(String content,Long receiveCompanyId,Long receiverUserId){
+    public void createWebMessage(String content,Long receiveCompanyId,Long receiverUserId,String url){
         WebMessage webMessage = new WebMessage();
         webMessage.setMessageContent(content);
         webMessage.setMessageReceiveCompanyId(receiveCompanyId);
         webMessage.setMessageReceiveUserId(receiverUserId);
         webMessage.setMessageIsread(false);
+        webMessage.setMessageAttachUrl(url);
         webMessageMapper.insert(webMessage);
     }
 

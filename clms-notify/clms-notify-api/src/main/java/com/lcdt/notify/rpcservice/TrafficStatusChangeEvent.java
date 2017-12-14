@@ -1,9 +1,6 @@
 package com.lcdt.notify.rpcservice;
 
-import com.lcdt.notify.model.DefaultNotifyReceiver;
-import com.lcdt.notify.model.DefaultNotifySender;
-import com.lcdt.notify.model.NotifyReceiver;
-import com.lcdt.notify.model.NotifySender;
+import com.lcdt.notify.model.*;
 
 import java.io.Serializable;
 
@@ -13,7 +10,7 @@ public class TrafficStatusChangeEvent implements Serializable{
 
     }
 
-    public TrafficStatusChangeEvent(String eventName, Object attachment, DefaultNotifyReceiver receiver,DefaultNotifySender sender) {
+    public TrafficStatusChangeEvent(String eventName, BaseAttachment attachment, DefaultNotifyReceiver receiver,DefaultNotifySender sender) {
         this.eventName = eventName;
         this.attachment = attachment;
         this.receiver = receiver;
@@ -23,7 +20,7 @@ public class TrafficStatusChangeEvent implements Serializable{
     private String eventName;
 
     //推送通知的编译上下文
-    private Object attachment;
+    private BaseAttachment attachment;
 
     //需要是多个角色
     private DefaultNotifyReceiver receiver;
@@ -46,11 +43,11 @@ public class TrafficStatusChangeEvent implements Serializable{
         this.eventName = eventName;
     }
 
-    public Object getAttachment() {
+    public BaseAttachment getAttachment() {
         return attachment;
     }
 
-    public void setAttachment(Object attachment) {
+    public void setAttachment(BaseAttachment attachment) {
         this.attachment = attachment;
     }
 
