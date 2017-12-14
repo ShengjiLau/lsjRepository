@@ -11,9 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by yangbinq on 2017/12/13.
@@ -27,18 +25,22 @@ public class WaybillPlanApi {
     @Autowired
     private WaybillPlanService waybillPlanService;
 
+
     @ApiOperation("发布计划")
     @RequestMapping(value = "/publishWaybillPlan",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_publish_waybill_plan')")
-    public WaybillPlan publishWaybillPlan(@Validated WaybillParamsDto dto) {
+    public String publishWaybillPlan(@RequestBody WaybillParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
         dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
-        return  waybillPlanService.createWaybillPlan(dto, (short) 1);
+        waybillPlanService.createWaybillPlan(dto, (short) 1);
+        return null;
    }
+
+
 
 
     @ApiOperation("暂存计划")
@@ -52,7 +54,6 @@ public class WaybillPlanApi {
         dto.setCompanyId(companyId);
         dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING);//计划来源-录入
         return  waybillPlanService.createWaybillPlan(dto, (short) 2);
-
     }
 
 

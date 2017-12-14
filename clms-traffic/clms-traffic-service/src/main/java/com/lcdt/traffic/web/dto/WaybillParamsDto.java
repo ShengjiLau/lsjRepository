@@ -1,8 +1,10 @@
 package com.lcdt.traffic.web.dto;
 
+import com.lcdt.traffic.model.PlanDetail;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by yangbinq on 2017/12/13.
@@ -162,8 +164,6 @@ public class WaybillParamsDto {
             "6-多式联运\n,itemName:项目名,itemValue:项目值}]")
     private String transportWayItems;
 
-
-
     private Long CompanyId;
     private Long createId;
     private String createName;
@@ -171,6 +171,15 @@ public class WaybillParamsDto {
 
 
 
+    @ApiModelProperty(value = "计划详细")
+    private List<PlanDetail> planDetailList;
+
+    public List<PlanDetail> getPlanDetailList() {
+        return planDetailList;
+    }
+    public void setPlanDetailList(List<PlanDetail> planDetailList) {
+        this.planDetailList = planDetailList;
+    }
 
 
     public String getPlanSource() {

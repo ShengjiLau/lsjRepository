@@ -72,6 +72,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CHENGYUNSHANG)) { //承运商(获取承运商ID)
             String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
             Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
@@ -99,9 +100,8 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
     }
 
 
-
     //直派--承运商
-    private void procedure1(WaybillPlan vo, WaybillParamsDto dto,  short flag) {
+    private void procedure1(WaybillPlan vo,  WaybillParamsDto dto,  short flag) {
         if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) { //指定承运商
             if (dto.getIsApproval()==0) { //不需要审批
                 if (flag==1) { //1为发布
@@ -182,12 +182,14 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                 }
 
             } else { //需要审批 //生成计划单 （审批通过后，生成派单）
-                vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
+
                 if (flag==1) { //1为发布
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_APPROVAL); //待发布
                 } else {
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //待发布
                 }
+                vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
+
                 waybillPlanMapper.insert(vo); //生成计划
                 List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
                 for (PlanDetail obj : planDetailList) {
