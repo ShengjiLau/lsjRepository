@@ -82,38 +82,44 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
         //具体业务处理
         if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CHENGYUNSHANG)) { //承运商
-                procedure1(vo, dto,  flag);
+                planDirectProcedure(vo, dto,  flag, (short)1);
             } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
-                procedure1(vo, dto,  flag);
+                planDirectProcedure(vo, dto,  flag,(short)2);
             } else { //其它（发布后派单）
-                procedure1(vo, dto,  flag);
+                noCarrierProcedure(vo,dto,flag);
             }
         } else  if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_JINGJIA)) { //竞价
-            if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CHENGYUNSHANG)) { //承运商
-
-            } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
-
-
-            }
+             planBiddingProcedure(vo, dto, flag);
         }
         return vo;
     }
 
 
-    //直派--承运商
-    private void procedure1(WaybillPlan vo,  WaybillParamsDto dto,  short flag) {
+    /***
+     * 直派
+     * @param vo -- 需要保存的计划
+     * @param dto -- 前端传来的计划参数
+     * @param flag -- 操作动作(1-发布，2-暂存)
+     * @param carrierType -- 承运人类型(1-承运商，2-司机)
+     *
+     */
+    private void planDirectProcedure(WaybillPlan vo, WaybillParamsDto dto, short flag, short carrierType) {
         if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) { //指定承运商
             if (dto.getIsApproval()==0) { //不需要审批
-                if (flag==1) { //1为发布
-                    vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //已派完
-                    vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//派车中
+                if (flag==1) { //发布--操作
+                    if(carrierType==1) { //承运商
+                        vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //计划状态(已派完)
+                        vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//计划状态(派车中)
+                    } else {
+                        vo.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED); //计划状态(已派完)
+                        vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//计划状态(派车中)
+                    }
                     waybillPlanMapper.insert(vo);
-
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();
                     for (PlanDetail obj : planDetailList) {
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
                         obj.setCreateId(vo.getCreateId());
-                        obj.setRemainderAmount((float)0);//初期【计划=剩余】
+                        obj.setRemainderAmount((float)0); //全部派完--剩余为0
                         obj.setCreateName(vo.getCreateName());
                         obj.setCreateDate(new Date());
                         obj.setUpdateId(vo.getUpdateId());
@@ -124,15 +130,14 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                     }
                     planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
 
-
                     SplitGoods splitGoods = new SplitGoods(); //派单
                     splitGoods.setWaybillPlanId(vo.getWaybillPlanId());
                     splitGoods.setCarrierType(vo.getCarrierType());
                     splitGoods.setCarrierCollectionIds(dto.getCarrierCollectionIds());//承运商ID
-                    splitGoods.setCarrierCollectionNames(dto.getCarrierCollectionNames());
+                    splitGoods.setCarrierCollectionNames(dto.getCarrierCollectionNames());//承运商
                     splitGoods.setCarrierPhone(dto.getCarrierPhone());//司机电话
                     splitGoods.setCarrierVehicle(dto.getCarrierVehicle());//车号
-                    splitGoods.setTransportWay(dto.getTransportWay());
+                    splitGoods.setTransportWay(dto.getTransportWay());//承运方式
                     splitGoods.setSplitRemark("计划直接生成的...");
                     splitGoods.setCreateId(splitGoods.getCreateId());
                     splitGoods.setCreateName(splitGoods.getCreateName());
@@ -148,8 +153,8 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                     for (PlanDetail obj : planDetailList) {
                         SplitGoodsDetail tObj = new SplitGoodsDetail();
                         tObj.setPlanDetailId(obj.getPlanDetailId());
-                        tObj.setAllotAmount((float) 0);
-                        tObj.setFactAllotAmount(obj.getPlanAmount());
+                        tObj.setAllotAmount((float) 0); //待派数量
+                        tObj.setFactAllotAmount(obj.getPlanAmount()); //实际派单数
                         tObj.setFreightPrice(obj.getFreightPrice());
                         tObj.setFreightTotal(obj.getFreightTotal());
                         tObj.setDetailRemark("计划直接生成...");
@@ -165,13 +170,19 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                     }
                     splitGoodsDetailMapper.batchAddSplitGoodsDetail(splitGoodsDetailList);
 
-                } else { //2为暂存
+
+                    /***
+                     *如果是司机需要生成运单
+                     */
+
+
+                } else { //暂存 -- 操作
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //待发布
                     vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
                     waybillPlanMapper.insert(vo); //生成计划
                     List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
                     for (PlanDetail obj : planDetailList) {
-                        obj.setRemainderAmount(obj.getPlanAmount());//初期【计划=剩余】
+                        obj.setRemainderAmount(obj.getPlanAmount());//计划==剩余
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
                         obj.setCreateId(vo.getCreateId());
                         obj.setCreateName(vo.getCreateName());
@@ -186,7 +197,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                 }
 
             } else { //需要审批 //生成计划单 （审批通过后，生成派单）
-                if (flag==1) {
+                if (flag==1) { //发布--操作
                      vo.setPlanStatus(ConstantVO.PLAN_STATUS_APPROVAL); //审批中
                 } else {
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //待发布
@@ -196,11 +207,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                 List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
                 for (PlanDetail obj : planDetailList) {
                     obj.setWaybillPlanId(vo.getWaybillPlanId());
-                    if (flag==1) {
-                        obj.setRemainderAmount((float)0);
-                    } else {
-                        obj.setRemainderAmount(obj.getPlanAmount());//初期【计划=剩余】
-                    }
+                    obj.setRemainderAmount(obj.getPlanAmount());
                     obj.setCreateId(vo.getCreateId());
                     obj.setCreateName(vo.getCreateName());
                     obj.setCreateDate(new Date());
@@ -213,43 +220,101 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                 planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
             }
         } else { //未指定承运商(只生成计划)
-            if (dto.getIsApproval()==0) { //不需要审批
-                if (flag==1) { //发布--操作
-                    vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
-                    vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//车状态(派车中)
-                } else { //暂存--操作
-                    vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //计划状态(待发布)
-                    vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
-                }
-            } else { // 需要审批
-                if (flag==1) { //发布--操作
-                    vo.setPlanStatus(ConstantVO.PLAN_STATUS_APPROVAL); //计划状态(审批)
-                    vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
-                } else { //暂存--操作
-                    vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //计划状态(待发布)
-                    vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
-                }
-            }
-            waybillPlanMapper.insert(vo); //生成计划
-            List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
-            for (PlanDetail obj : planDetailList) {
-                obj.setWaybillPlanId(vo.getWaybillPlanId());
-                obj.setRemainderAmount(obj.getPlanAmount());//初期【计划=剩余】
-                obj.setCreateId(vo.getCreateId());
-                obj.setCreateName(vo.getCreateName());
-                obj.setCreateDate(new Date());
-                obj.setUpdateId(vo.getUpdateId());
-                obj.setUpdateName(vo.getUpdateName());
-                obj.setUpdateTime(obj.getCreateDate());
-                obj.setCompanyId(vo.getCompanyId());
-                obj.setIsDeleted(vo.getIsDeleted());
-            }
-            planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
-
-
+            noCarrierProcedure(vo,dto,flag);
         }
     }
 
+
+    /***
+     * 未指定承运商
+     *
+     * @param vo -- 需要保存的计划
+     * @param dto -- 前端传来的计划参数
+     * @param flag -- 操作动作(1-发布，2-暂存)
+     */
+    private void noCarrierProcedure(WaybillPlan vo, WaybillParamsDto dto,short flag) {
+        if (dto.getIsApproval()==0) { //不需要审批
+            if (flag==1) { //发布--操作
+                vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
+                vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
+            } else { //暂存--操作
+                vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //计划状态(待发布)
+                vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
+            }
+        } else { // 需要审批
+            if (flag==1) { //发布--操作
+                vo.setPlanStatus(ConstantVO.PLAN_STATUS_APPROVAL); //计划状态(审批)
+                vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
+            } else { //暂存--操作
+                vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //计划状态(待发布)
+                vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
+            }
+        }
+        waybillPlanMapper.insert(vo); //生成计划
+        List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
+        for (PlanDetail obj : planDetailList) {
+            obj.setWaybillPlanId(vo.getWaybillPlanId());
+            obj.setRemainderAmount(obj.getPlanAmount());//初期【计划=剩余】
+            obj.setCreateId(vo.getCreateId());
+            obj.setCreateName(vo.getCreateName());
+            obj.setCreateDate(new Date());
+            obj.setUpdateId(vo.getUpdateId());
+            obj.setUpdateName(vo.getUpdateName());
+            obj.setUpdateTime(obj.getCreateDate());
+            obj.setCompanyId(vo.getCompanyId());
+            obj.setIsDeleted(vo.getIsDeleted());
+        }
+        planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
+    }
+
+
+
+
+    /***
+     * 竞价
+     * @param vo -- 需要保存的计划
+     * @param dto -- 前端传来的计划参数
+     * @param flag -- 操作动作(1-发布，2-暂存)
+     * @param carrierType -- 承运人类型(1-承运商，2-司机)
+     *
+     */
+    private void planBiddingProcedure(WaybillPlan vo, WaybillParamsDto dto, short flag) { {
+        if (dto.getIsApproval()==0) { //不需要审批
+            if (flag==1) { //发布--操作
+                vo.setPlanStatus(ConstantVO.PLAN_STATUS_BIDDING); //计划状态(竞价中)
+                vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//计划状态(派车中)
+            } else { //暂存--操作
+                vo.setPlanStatus(ConstantVO.PLAN_STATUS_BIDDING); //计划状态(竞价中)
+                vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//计划状态(派车中)
+            }
+
+        } else { //需要审核
+            if (flag==1) { //发布--操作
+                vo.setPlanStatus(ConstantVO.PLAN_STATUS_APPROVAL); //计划状态(审批中)
+                vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//计划状态(派车中)
+            } else { //暂存--操作
+                vo.setPlanStatus(ConstantVO.PLAN_STATUS_BIDDING); //计划状态(竞价中)
+                vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//计划状态(派车中)
+            }
+        }
+        waybillPlanMapper.insert(vo);
+        List<PlanDetail> planDetailList = dto.getPlanDetailList();
+        for (PlanDetail obj : planDetailList) {
+            obj.setWaybillPlanId(vo.getWaybillPlanId());
+            obj.setCreateId(vo.getCreateId());
+            obj.setRemainderAmount(obj.getPlanAmount());
+            obj.setCreateName(vo.getCreateName());
+            obj.setCreateDate(new Date());
+            obj.setUpdateId(vo.getUpdateId());
+            obj.setUpdateName(vo.getUpdateName());
+            obj.setUpdateTime(obj.getCreateDate());
+            obj.setCompanyId(vo.getCompanyId());
+            obj.setIsDeleted(vo.getIsDeleted());
+        }
+
+    }
+
+}
 
 
 
