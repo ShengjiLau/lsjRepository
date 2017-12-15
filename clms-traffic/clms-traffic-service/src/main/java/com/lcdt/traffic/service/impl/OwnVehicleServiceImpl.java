@@ -38,8 +38,8 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
     @Reference
     public UserService userService;
 
-//    @Reference
-//    public DriverService driverService;
+    @Reference
+    public DriverService driverService;
 
     @Override
     public int addVehicle(OwnVehicleDto ownVehicleDto) {
@@ -74,7 +74,7 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
                     driver.setAffiliatedCompany(ownVehicleDto.getAffiliatedCompany());
                     driver.setDriverName(ownVehicleDto.getVehicleDriverName());
                     driver.setDriverPhone(phone);
-//                    driverService.addDriver(driver);    //保存司机信息
+                    driverService.addDriver(driver);    //保存司机信息
                 } catch (PhoneHasRegisterException e) {
                     e.printStackTrace();
                 }
