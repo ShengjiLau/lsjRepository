@@ -291,4 +291,38 @@ public class ItemsInfoDto {
     public void setConversionRelDto(ConversionRelDto conversionRelDto) {
         this.conversionRelDto = conversionRelDto;
     }
+
+    @Override
+    public String toString() {
+        return "ItemsInfoDto{" +
+                "itemId=" + itemId +
+                ", subject='" + subject + '\'' +
+                ", code='" + code + '\'' +
+                ", barCode='" + barCode + '\'' +
+                ", classifyName='" + classifyName + '\'' +
+                ", classifyId=" + classifyId +
+                ", tradeType=" + tradeType +
+                ", purchasePrice=" + purchasePrice +
+                ", wholesalePrice=" + wholesalePrice +
+                ", retailPrice=" + retailPrice +
+                ", introduction='" + introduction + '\'' +
+                ", image1='" + image1 + '\'' +
+                ", image2='" + image2 + '\'' +
+                ", image3='" + image3 + '\'' +
+                ", image4='" + image4 + '\'' +
+                ", image5='" + image5 + '\'' +
+                ", converId=" + converId +
+                ", unitId=" + unitId +
+                ", unitName='" + unitName + '\'' +
+                ", subItemProperty='" + subItemProperty + '\'' +
+                ", storeRule=" + storeRule +
+                ", itemBatch=" + itemBatch +
+                ", combinationInfo='" + combinationInfo + '\'' +
+                ", companyId=" + companyId +
+                ", itemType=" + itemType +
+                ", conversionRelDto=" + conversionRelDto +
+                ", subItemsInfoDtoList=" + subItemsInfoDtoList +
+                ", customValueList=" + customValueList +
+                '}';
+    }
 }
