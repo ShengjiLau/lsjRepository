@@ -19,11 +19,7 @@ public class DubboConfig {
 	@Value("${applicationName:dubbo-app}")
 	public String applicationName = "clms-sso";
 
-<<<<<<< HEAD
-	@Value("${protocalport:20883}")
-=======
 	@Value("${protocolPort:20880}")
->>>>>>> dev_client
 	public Integer protocolPort = 20883;
 
 	@Value("${zookeeperUrl:127.0.0.1:2181}")
