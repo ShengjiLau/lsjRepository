@@ -341,10 +341,12 @@ public class CustomerApi {
         Long companyId = SecurityInfoGetter.getCompanyId();
         CustomerContact vo = new CustomerContact();
         BeanUtils.copyProperties(dto, vo);
-        try {
-            vo.setBirthday(DateUtility.string2Date(dto.getBirthday1(),"yyyy-MM-dd"));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (!StringUtils.isEmpty(dto.getBirthday1())) {
+            try {
+                vo.setBirthday(DateUtility.string2Date(dto.getBirthday1(),"yyyy-MM-dd"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         vo.setCompanyId(companyId);
         customerService.customerContactUpdate(vo);
