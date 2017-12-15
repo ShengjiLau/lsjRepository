@@ -108,10 +108,12 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //已派完
                     vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//派车中
                     waybillPlanMapper.insert(vo);
-                    List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
+
+                    List<PlanDetail> planDetailList = dto.getPlanDetailList();
                     for (PlanDetail obj : planDetailList) {
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
                         obj.setCreateId(vo.getCreateId());
+                        obj.setRemainderAmount((float)0);//初期【计划=剩余】
                         obj.setCreateName(vo.getCreateName());
                         obj.setCreateDate(new Date());
                         obj.setUpdateId(vo.getUpdateId());
@@ -121,6 +123,8 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                         obj.setIsDeleted(vo.getIsDeleted());
                     }
                     planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
+
+
                     SplitGoods splitGoods = new SplitGoods(); //派单
                     splitGoods.setWaybillPlanId(vo.getWaybillPlanId());
                     splitGoods.setCarrierType(vo.getCarrierType());
@@ -144,7 +148,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                     for (PlanDetail obj : planDetailList) {
                         SplitGoodsDetail tObj = new SplitGoodsDetail();
                         tObj.setPlanDetailId(obj.getPlanDetailId());
-                        tObj.setAllotAmount(obj.getPlanAmount());
+                        tObj.setAllotAmount((float) 0);
                         tObj.setFactAllotAmount(obj.getPlanAmount());
                         tObj.setFreightPrice(obj.getFreightPrice());
                         tObj.setFreightTotal(obj.getFreightTotal());
@@ -164,10 +168,10 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                 } else { //2为暂存
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //待发布
                     vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
-
                     waybillPlanMapper.insert(vo); //生成计划
                     List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
                     for (PlanDetail obj : planDetailList) {
+                        obj.setRemainderAmount(obj.getPlanAmount());//初期【计划=剩余】
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
                         obj.setCreateId(vo.getCreateId());
                         obj.setCreateName(vo.getCreateName());
@@ -182,18 +186,21 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                 }
 
             } else { //需要审批 //生成计划单 （审批通过后，生成派单）
-
-                if (flag==1) { //1为发布
-                    vo.setPlanStatus(ConstantVO.PLAN_STATUS_APPROVAL); //待发布
+                if (flag==1) {
+                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_APPROVAL); //审批中
                 } else {
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //待发布
                 }
                 vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
-
                 waybillPlanMapper.insert(vo); //生成计划
                 List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
                 for (PlanDetail obj : planDetailList) {
                     obj.setWaybillPlanId(vo.getWaybillPlanId());
+                    if (flag==1) {
+                        obj.setRemainderAmount((float)0);
+                    } else {
+                        obj.setRemainderAmount(obj.getPlanAmount());//初期【计划=剩余】
+                    }
                     obj.setCreateId(vo.getCreateId());
                     obj.setCreateName(vo.getCreateName());
                     obj.setCreateDate(new Date());
@@ -205,17 +212,29 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                 }
                 planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
             }
-        } else { //未指定承运商
-            if (flag==1) { //1为发布
-                vo.setPlanStatus(ConstantVO.PLAN_STATUS_APPROVAL); //待发布
-            } else {
-                vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //待发布
+        } else { //未指定承运商(只生成计划)
+            if (dto.getIsApproval()==0) { //不需要审批
+                if (flag==1) { //发布--操作
+                    vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
+                    vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//车状态(派车中)
+                } else { //暂存--操作
+                    vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //计划状态(待发布)
+                    vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
+                }
+            } else { // 需要审批
+                if (flag==1) { //发布--操作
+                    vo.setPlanStatus(ConstantVO.PLAN_STATUS_APPROVAL); //计划状态(审批)
+                    vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
+                } else { //暂存--操作
+                    vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //计划状态(待发布)
+                    vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
+                }
             }
-            vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
             waybillPlanMapper.insert(vo); //生成计划
             List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
             for (PlanDetail obj : planDetailList) {
                 obj.setWaybillPlanId(vo.getWaybillPlanId());
+                obj.setRemainderAmount(obj.getPlanAmount());//初期【计划=剩余】
                 obj.setCreateId(vo.getCreateId());
                 obj.setCreateName(vo.getCreateName());
                 obj.setCreateDate(new Date());
@@ -226,6 +245,8 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                 obj.setIsDeleted(vo.getIsDeleted());
             }
             planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
+
+
         }
     }
 
