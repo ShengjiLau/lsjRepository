@@ -72,6 +72,19 @@
     <result column="cancel_date" jdbcType="TIMESTAMP" property="cancelDate" />
     <result column="cancel_man" jdbcType="VARCHAR" property="cancelMan" />
     <result column="cancel_remark" jdbcType="VARCHAR" property="cancelRemark" />
+
+    <!--计划详细-->
+    <collection property="planDetailList" column="{waybill_plan_id=waybill_plan_id,company_id=company_id,is_deleted=0}"
+                ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
+                select="com.lcdt.traffic.dao.PlanDetailMapper.selectByWaybillPlanId" />
+
+    <!--派单记录-->
+    <collection property="splitGoodsList" column="{waybill_plan_id=waybill_plan_id,company_id=company_id,is_deleted=0}"
+                ofType="com.lcdt.traffic.model.SplitGoods" javaType="ArrayList"
+                select="com.lcdt.traffic.dao.SplitGoodsMapper.selectByCustomerId" />
+
+    <!--运单记录-->
+
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
