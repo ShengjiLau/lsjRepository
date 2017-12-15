@@ -38,7 +38,7 @@ public class ItemsInfoApi {
 
     @ApiOperation("新增商品")
     @PostMapping("/add")
-    public JSONObject addItemInfo(ItemsInfoDto itemsInfoDto, HttpSession httpSession) {
+    public JSONObject addItemInfo(@RequestBody ItemsInfoDto itemsInfoDto, HttpSession httpSession) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User user=SecurityInfoGetter.getUser();
         int result = itemsInfoService.addItemsInfo(parseItemsInfoDao(itemsInfoDto,companyId,user));
@@ -91,7 +91,7 @@ public class ItemsInfoApi {
 
     @ApiOperation("修改商品")
     @PostMapping("/modify")
-    public JSONObject modifyItemsInfo(HttpSession httpSession,ItemsInfoDto itemsInfoDto){
+    public JSONObject modifyItemsInfo(HttpSession httpSession,@RequestBody ItemsInfoDto itemsInfoDto){
         Long companyId = SecurityInfoGetter.getCompanyId();
         User user=SecurityInfoGetter.getUser();
         int result = itemsInfoService.modifyItemsInfo(parseItemsInfoDao(itemsInfoDto,companyId,user));
