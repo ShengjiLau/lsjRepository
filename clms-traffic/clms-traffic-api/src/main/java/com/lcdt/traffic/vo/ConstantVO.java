@@ -15,6 +15,7 @@ public class ConstantVO {
 
     //计划-状态
     public static String PLAN_STATUS_WAITE＿PUBLISH = "10"; //待发布
+    public static String PLAN_STATUS_BIDDING = "15";//竞价中
     public static String PLAN_STATUS_APPROVAL = "20";//审批中
     public static String PLAN_STATUS_SEND_ORDERS = "30";//派单中
     public static String PLAN_STATUS_SEND_OFF = "40";//已派完

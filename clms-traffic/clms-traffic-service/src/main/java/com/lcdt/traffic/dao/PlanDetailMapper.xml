@@ -27,6 +27,7 @@
     <result column="detail_remark" jdbcType="VARCHAR" property="detailRemark" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
   </resultMap>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - @mbg.generated
@@ -36,6 +37,7 @@
     delete from t_plan_detail
     where plan_detail_id = #{planDetailId,jdbcType=BIGINT}
   </delete>
+
   <insert id="insert" parameterType="com.lcdt.traffic.model.PlanDetail">
     <!--
       WARNING - @mbg.generated
@@ -60,6 +62,10 @@
       #{isDeleted,jdbcType=SMALLINT}, #{detailRemark,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}
       )
   </insert>
+
+
+
+
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.PlanDetail">
     <!--
       WARNING - @mbg.generated
@@ -110,4 +116,28 @@
     update_id, update_name, update_time, is_deleted, detail_remark, company_id
     from t_plan_detail
   </select>
+
+
+  <insert id="batchAddPlanDetail" useGeneratedKeys="true" parameterType="java.util.List" keyProperty="planDetailId" >
+    insert into t_plan_detail (waybill_plan_id, goods_id, goods_name,
+    goods_sepc, unit, plan_amount,
+    remainder_amount, freight_price, freight_total,
+    create_id, create_name, create_date,
+    update_id, update_name, update_time,
+    is_deleted, detail_remark, company_id
+    )
+    values
+    <foreach collection="list" item="goods" index="index" separator="," >
+      (#{goods.waybillPlanId}, #{goods.goodsId}, #{goods.goodsName},
+      #{goods.goodsSepc}, #{goods.unit}, #{goods.planAmount},
+      #{goods.remainderAmount}, #{goods.freightPrice}, #{goods.freightTotal},
+      #{goods.createId}, #{goods.createName}, #{goods.createDate},
+      #{goods.updateId}, #{goods.updateName}, #{goods.updateTime},
+      #{goods.isDeleted}, #{goods.detailRemark}, #{goods.companyId}
+      )
+    </foreach>
+  </insert>
+
+
+
 </mapper>

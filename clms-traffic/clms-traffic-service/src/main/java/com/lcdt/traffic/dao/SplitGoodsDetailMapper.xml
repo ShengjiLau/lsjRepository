@@ -102,4 +102,26 @@
     update_id, update_name, update_time, is_deleted, company_id
     from t_split_goods_detail
   </select>
+
+  <insert id="batchAddSplitGoodsDetail" useGeneratedKeys="true" parameterType="java.util.List" keyProperty="splitGoodsDetailId" >
+    insert into t_plan_detail (split_goods_id, plan_detail_id, allot_amount,
+    fact_allot_amount, freight_price, freight_total,
+    detail_remark, create_id, create_name,
+    create_date, update_id, update_name,
+    update_time, is_deleted, company_id
+    )
+    values
+    <foreach collection="list" item="splitGoods" index="index" separator="," >
+      (#{splitGoods.splitGoodsId}, #{splitGoods.planDetailId}, #{splitGoods.allotAmount},
+      #{splitGoods.factAllotAmount}, #{splitGoods.freightPrice}, #{splitGoods.freightTotal},
+      #{splitGoods.detailRemark}, #{splitGoods.createId}, #{splitGoods.createName},
+      #{splitGoods.createDate}, #{splitGoods.updateId}, #{splitGoods.updateName},
+      #{splitGoods.updateTime}, #{splitGoods.isDeleted}, #{splitGoods.companyId}
+      )
+    </foreach>
+  </insert>
+
+
+
+
 </mapper>

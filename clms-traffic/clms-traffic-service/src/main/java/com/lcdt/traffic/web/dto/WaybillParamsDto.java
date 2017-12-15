@@ -1,8 +1,11 @@
 package com.lcdt.traffic.web.dto;
 
+import com.lcdt.traffic.model.PlanDetail;
+import com.lcdt.traffic.model.TransportWayItems;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by yangbinq on 2017/12/13.
@@ -162,12 +165,45 @@ public class WaybillParamsDto {
             "6-多式联运\n,itemName:项目名,itemValue:项目值}]")
     private String transportWayItems;
 
-
-
     private Long CompanyId;
     private Long createId;
     private String createName;
+    private String planSource; //计划来源
 
+    @ApiModelProperty(value = "计划详细")
+    private List<PlanDetail> planDetailList;
+
+    @ApiModelProperty(value = "运输项目列表")
+    private List<TransportWayItems> transportWayItemsList;
+
+
+
+    public List<PlanDetail> getPlanDetailList() {
+        return planDetailList;
+    }
+    public void setPlanDetailList(List<PlanDetail> planDetailList) {
+        this.planDetailList = planDetailList;
+    }
+
+
+    public List<TransportWayItems> getTransportWayItemsList() {
+        return transportWayItemsList;
+    }
+
+    public void setTransportWayItemsList(List<TransportWayItems> transportWayItemsList) {
+        this.transportWayItemsList = transportWayItemsList;
+    }
+
+
+
+
+    public String getPlanSource() {
+        return planSource;
+    }
+
+    public void setPlanSource(String planSource) {
+        this.planSource = planSource;
+    }
 
     public String getCarrierCollectionIds() {
         return carrierCollectionIds;

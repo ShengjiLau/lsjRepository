@@ -44,4 +44,11 @@ public interface SplitGoodsDetailMapper {
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
     int updateByPrimaryKey(SplitGoodsDetail record);
+
+    /**
+     * 派单明细批量保存
+     * @param list
+     * @return
+     */
+    int batchAddSplitGoodsDetail(List<SplitGoodsDetail> list);
 }

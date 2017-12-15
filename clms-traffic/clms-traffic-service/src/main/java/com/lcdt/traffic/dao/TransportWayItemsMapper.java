@@ -44,4 +44,11 @@ public interface TransportWayItemsMapper {
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
     int updateByPrimaryKey(TransportWayItems record);
+
+    /***
+     * 批量录入运输方式项目
+     * @param list
+     * @return
+     */
+    int batchAddTransportWayItems(List<TransportWayItems> list);
 }

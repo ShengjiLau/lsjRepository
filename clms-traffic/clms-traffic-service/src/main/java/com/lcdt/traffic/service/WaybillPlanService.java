@@ -1,5 +1,6 @@
 package com.lcdt.traffic.service;
 
+import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,10 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface WaybillPlanService {
 
-    /***
-     *  创建计划
+
+    /**
+     * 创建计划
+     *
      * @param dto
+     * @param flag -- 如果为1为发布，2暂存
+     * @return
      */
-    void createWaybillPlan(WaybillParamsDto dto);
+    WaybillPlan createWaybillPlan(WaybillParamsDto dto, short flag);
 
 }
