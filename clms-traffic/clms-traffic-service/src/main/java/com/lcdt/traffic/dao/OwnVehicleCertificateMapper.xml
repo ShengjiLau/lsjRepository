@@ -34,15 +34,14 @@
       certificate_attachment1, certificate_attachment2, 
       certificate_attachment3, group_remark, create_id, 
       create_name, create_date, update_id, 
-      update_name, update_date, is_deleted, 
-      compnay_id)
+      update_name, update_date, compnay_id)
     values (#{dgId,jdbcType=BIGINT}, #{ownVehicleId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, 
       #{certificateType,jdbcType=VARCHAR}, #{processDt,jdbcType=TIMESTAMP}, #{certificateValidityBegin,jdbcType=TIMESTAMP}, 
       #{certificateValidityEnd,jdbcType=TIMESTAMP}, #{certificateFee,jdbcType=REAL}, 
       #{certificateAttachment1,jdbcType=VARCHAR}, #{certificateAttachment2,jdbcType=VARCHAR}, 
       #{certificateAttachment3,jdbcType=VARCHAR}, #{groupRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
       #{createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{updateId,jdbcType=BIGINT},
-      #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, 
+      #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP},
       #{compnayId,jdbcType=BIGINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnVehicleCertificate">
@@ -64,7 +63,6 @@
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
       update_date = CURRENT_TIMESTAMP,
-      is_deleted = #{isDeleted,jdbcType=SMALLINT},
       compnay_id = #{compnayId,jdbcType=BIGINT}
     where dg_id = #{dgId,jdbcType=BIGINT}
   </update>
