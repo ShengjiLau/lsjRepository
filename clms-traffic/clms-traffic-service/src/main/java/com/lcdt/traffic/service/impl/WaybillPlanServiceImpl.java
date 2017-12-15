@@ -15,6 +15,7 @@ import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.tl.commons.util.DateUtility;
@@ -27,6 +28,7 @@ import java.util.List;
 /**
  * Created by yangbinq on 2017/12/13.
  */
+@Service
 public class WaybillPlanServiceImpl implements WaybillPlanService {
 
     @Autowired
