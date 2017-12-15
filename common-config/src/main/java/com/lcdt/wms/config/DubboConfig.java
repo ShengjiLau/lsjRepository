@@ -44,7 +44,7 @@ public class DubboConfig {
 	public RegistryConfig registryConfig(){
 		RegistryConfig registryConfig = new RegistryConfig();
 		registryConfig.setAddress(zookeeperUrl);
-		registryConfig.setProtocol("zookeeper");
+		registryConfig.setClient("zkclient");
 		return registryConfig;
 	}
 
