@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.traffic.dao.OwnDriverCertificateMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.OwnDriverCertificate">
+    <id column="dg_id" jdbcType="BIGINT" property="dgId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="certificate_type" jdbcType="VARCHAR" property="certificateType" />
+    <result column="process_dt" jdbcType="TIMESTAMP" property="processDt" />
+    <result column="certificate_validity_begin" jdbcType="TIMESTAMP" property="certificateValidityBegin" />
+    <result column="certificate_validity_end" jdbcType="TIMESTAMP" property="certificateValidityEnd" />
+    <result column="certificate_fee" jdbcType="REAL" property="certificateFee" />
+    <result column="certificate_attachment1" jdbcType="VARCHAR" property="certificateAttachment1" />
+    <result column="certificate_attachment2" jdbcType="VARCHAR" property="certificateAttachment2" />
+    <result column="certificate_attachment3" jdbcType="VARCHAR" property="certificateAttachment3" />
+    <result column="group_remark" jdbcType="VARCHAR" property="groupRemark" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_id" jdbcType="BIGINT" property="updateId" />
+    <result column="update_name" jdbcType="VARCHAR" property="updateName" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+    <result column="compnay_id" jdbcType="BIGINT" property="compnayId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_own_driver_certificate
+    where dg_id = #{dgId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.traffic.model.OwnDriverCertificate">
+    insert into t_own_driver_certificate (dg_id, user_id, group_name, 
+      certificate_type, process_dt, certificate_validity_begin, 
+      certificate_validity_end, certificate_fee, 
+      certificate_attachment1, certificate_attachment2, 
+      certificate_attachment3, group_remark, create_id, 
+      create_name, create_date, update_id, 
+      update_name, update_date, is_deleted, 
+      compnay_id)
+    values (#{dgId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, 
+      #{certificateType,jdbcType=VARCHAR}, #{processDt,jdbcType=TIMESTAMP}, #{certificateValidityBegin,jdbcType=TIMESTAMP}, 
+      #{certificateValidityEnd,jdbcType=TIMESTAMP}, #{certificateFee,jdbcType=REAL}, 
+      #{certificateAttachment1,jdbcType=VARCHAR}, #{certificateAttachment2,jdbcType=VARCHAR}, 
+      #{certificateAttachment3,jdbcType=VARCHAR}, #{groupRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
+      #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, 
+      #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, 
+      #{compnayId,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnDriverCertificate">
+    update t_own_driver_certificate
+    set user_id = #{userId,jdbcType=BIGINT},
+      group_name = #{groupName,jdbcType=VARCHAR},
+      certificate_type = #{certificateType,jdbcType=VARCHAR},
+      process_dt = #{processDt,jdbcType=TIMESTAMP},
+      certificate_validity_begin = #{certificateValidityBegin,jdbcType=TIMESTAMP},
+      certificate_validity_end = #{certificateValidityEnd,jdbcType=TIMESTAMP},
+      certificate_fee = #{certificateFee,jdbcType=REAL},
+      certificate_attachment1 = #{certificateAttachment1,jdbcType=VARCHAR},
+      certificate_attachment2 = #{certificateAttachment2,jdbcType=VARCHAR},
+      certificate_attachment3 = #{certificateAttachment3,jdbcType=VARCHAR},
+      group_remark = #{groupRemark,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=BIGINT},
+      create_name = #{createName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_id = #{updateId,jdbcType=BIGINT},
+      update_name = #{updateName,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      compnay_id = #{compnayId,jdbcType=BIGINT}
+    where dg_id = #{dgId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select dg_id, user_id, group_name, certificate_type, process_dt, certificate_validity_begin, 
+    certificate_validity_end, certificate_fee, certificate_attachment1, certificate_attachment2, 
+    certificate_attachment3, group_remark, create_id, create_name, create_date, update_id, 
+    update_name, update_date, is_deleted, compnay_id
+    from t_own_driver_certificate
+    where dg_id = #{dgId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select dg_id, user_id, group_name, certificate_type, process_dt, certificate_validity_begin, 
+    certificate_validity_end, certificate_fee, certificate_attachment1, certificate_attachment2, 
+    certificate_attachment3, group_remark, create_id, create_name, create_date, update_id, 
+    update_name, update_date, is_deleted, compnay_id
+    from t_own_driver_certificate
+  </select>
+</mapper>
