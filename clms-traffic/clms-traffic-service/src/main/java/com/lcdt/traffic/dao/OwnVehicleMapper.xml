@@ -63,7 +63,7 @@
       vehicle_tailstock_photo, vehicle_tyre_spec, 
       group_id, create_id, create_name, 
       create_date, update_id, update_name, 
-      update_date, is_deleted, compnay_id
+      update_date, compnay_id
       )
     values (#{ownVehicleId,jdbcType=BIGINT}, #{affiliatedCompany,jdbcType=VARCHAR}, #{vehicleNum,jdbcType=VARCHAR}, 
       #{vehicleTrailerNum,jdbcType=VARCHAR}, #{vehicleCategory,jdbcType=SMALLINT}, #{vehicleType,jdbcType=VARCHAR}, 
@@ -79,7 +79,7 @@
       #{vehicleTailstockPhoto,jdbcType=VARCHAR}, #{vehicleTyreSpec,jdbcType=VARCHAR}, 
       #{groupId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, 
       CURRENT_TIMESTAMP , #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR},
-      #{updateDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, #{compnayId,jdbcType=BIGINT}
+      #{updateDate,jdbcType=TIMESTAMP}, #{compnayId,jdbcType=BIGINT}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnVehicle">
@@ -122,7 +122,6 @@
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
       update_date = CURRENT_TIMESTAMP,
-      is_deleted = #{isDeleted,jdbcType=SMALLINT},
       compnay_id = #{compnayId,jdbcType=BIGINT}
     where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT}
   </update>

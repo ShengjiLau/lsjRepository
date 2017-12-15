@@ -1,4 +1,4 @@
-package com.lcdt.traffic.web.api;
+package com.lcdt.traffic.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
