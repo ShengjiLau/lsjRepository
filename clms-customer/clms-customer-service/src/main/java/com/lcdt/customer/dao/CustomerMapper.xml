@@ -236,10 +236,10 @@
       <if test="linkEmail != null  &amp;&amp; linkEmail !=''">
         link_email = #{linkEmail,jdbcType=VARCHAR},
       </if>
-      <if test="collectionIds != null  &amp;&amp; collectionIds !=''">
+      <if test="collectionIds != null">
         collection_ids = #{collectionIds,jdbcType=VARCHAR},
       </if>
-      <if test="collectionNames != null  &amp;&amp; collectionNames !=''">
+      <if test="collectionNames != null">
         collection_names = #{collectionNames,jdbcType=VARCHAR},
       </if>
     </set>

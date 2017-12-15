@@ -33,7 +33,7 @@ public class CustomerListParamsDto {
     private String customerType;
 
 
-    @ApiModelProperty(required = true, value = "分组ID")
+    @ApiModelProperty(value = "分组ID")
     private String collectionIds;
 
 

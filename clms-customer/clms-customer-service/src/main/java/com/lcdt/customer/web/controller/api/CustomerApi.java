@@ -341,10 +341,12 @@ public class CustomerApi {
         Long companyId = SecurityInfoGetter.getCompanyId();
         CustomerContact vo = new CustomerContact();
         BeanUtils.copyProperties(dto, vo);
-        try {
-            vo.setBirthday(DateUtility.string2Date(dto.getBirthday1(),"yyyy-MM-dd"));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (!StringUtils.isEmpty(dto.getBirthday1())) {
+            try {
+                vo.setBirthday(DateUtility.string2Date(dto.getBirthday1(),"yyyy-MM-dd"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         vo.setCompanyId(companyId);
         customerService.customerContactUpdate(vo);
@@ -500,13 +502,19 @@ public class CustomerApi {
     @RequestMapping(value = "/customerCollectionBind",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
     public Customer customerCollectionBind(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
-                                           @ApiParam(value = "组ID",required = true) @RequestParam String collectionIds,
-                                           @ApiParam(value = "组名称",required = true) @RequestParam String collectionNames) {
+                                           @ApiParam(value = "是否取消(1-是，0否)",required = true) @RequestParam(value="isCancel", defaultValue="0") short isCancel,
+                                           @ApiParam(value = "组ID") @RequestParam String collectionIds,
+                                           @ApiParam(value = "组名称") @RequestParam String collectionNames) {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
         Customer customer = new Customer();
-        customer.setCollectionIds(collectionIds);
-        customer.setCollectionNames(collectionNames);
+        if(isCancel==1) {
+            customer.setCollectionIds("");
+            customer.setCollectionNames("");
+        } else {
+            customer.setCollectionIds(collectionIds);
+            customer.setCollectionNames(collectionNames);
+        }
         customer.setCompanyId(companyId);
         customer.setCustomerId(customerId);
         try {
