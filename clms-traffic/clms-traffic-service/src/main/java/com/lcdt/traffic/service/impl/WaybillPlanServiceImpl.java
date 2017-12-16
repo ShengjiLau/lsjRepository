@@ -9,12 +9,10 @@ import com.lcdt.traffic.dao.SplitGoodsDetailMapper;
 import com.lcdt.traffic.dao.SplitGoodsMapper;
 import com.lcdt.traffic.dao.WaybillPlanMapper;
 import com.lcdt.traffic.exception.WaybillPlanException;
-import com.lcdt.traffic.model.PlanDetail;
-import com.lcdt.traffic.model.SplitGoods;
-import com.lcdt.traffic.model.SplitGoodsDetail;
-import com.lcdt.traffic.model.WaybillPlan;
+import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.WaybillPlanService;
 import com.lcdt.traffic.vo.ConstantVO;
+import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,7 +174,6 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                         splitGoodsDetailList.add(tObj);
                     }
                     splitGoodsDetailMapper.batchAddSplitGoodsDetail(splitGoodsDetailList);
-
 
                     /***
                      *如果是司机需要生成运单
@@ -344,26 +341,42 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
     }
 
 
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public WaybillPlan publishWayBillPlan(WaybillParamsDto dto) throws WaybillPlanException {
-
         //只有是暂存(待发布状态的，才能点发布)
-        if(true) {
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(),dto.getCompanyId());
+        if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
+        if (waybillPlan.getPlanStatus().equals(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH)) {
+            if (waybillPlan.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
+                if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CHENGYUNSHANG)) { //承运商
 
+                } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
 
+                } else { //其它（发布后派单）
 
+                }
+            } else  if (waybillPlan.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_JINGJIA)) { //竞价
+
+            }
+        } else {
+            throw new WaybillPlanException("计划处于'未发布'状态不能发布！");
         }
+        return waybillPlan;
+    }
 
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public WaybillPlan modifyWayBillPlan(WaybillParamsDto dto) {
 
 
+        return null;
+    }
 
-
-
-
-
-
+    @Override
+    public PlanLeaveMsg addPlanLeaveMsg(PlanLeaveMsgParamsDto dto) {
         return null;
     }
 

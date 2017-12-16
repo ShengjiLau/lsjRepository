@@ -1,7 +1,9 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
+import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +42,25 @@ public interface WaybillPlanService {
      * @return
      */
     WaybillPlan publishWayBillPlan(WaybillParamsDto dto);
+
+
+    /***
+     *编辑计划
+     *
+     * @param dto
+     * @return
+     */
+    WaybillPlan modifyWayBillPlan(WaybillParamsDto dto);
+
+
+    /***
+     * 计划留言
+     * @param dto
+     * @return
+     */
+    PlanLeaveMsg addPlanLeaveMsg(PlanLeaveMsgParamsDto dto);
+
+
 
 
 

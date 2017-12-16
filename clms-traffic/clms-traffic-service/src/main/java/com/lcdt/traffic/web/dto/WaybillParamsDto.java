@@ -12,6 +12,11 @@ import java.util.List;
  */
 public class WaybillParamsDto {
 
+
+    @ApiModelProperty(value = "计划主键ID")
+    private Long waybillPlanId;
+
+
     @ApiModelProperty(value = "计划编码")
     private Long planCode;
 
@@ -627,5 +632,13 @@ public class WaybillParamsDto {
 
     public void setTransportWayItems(String transportWayItems) {
         this.transportWayItems = transportWayItems;
+    }
+
+    public Long getWaybillPlanId() {
+        return waybillPlanId;
+    }
+
+    public void setWaybillPlanId(Long waybillPlanId) {
+        this.waybillPlanId = waybillPlanId;
     }
 }
