@@ -3,6 +3,7 @@ package com.lcdt.traffic.dao;
 import com.lcdt.traffic.model.WaybillPlan;
 
 import java.util.List;
+import java.util.Map;
 
 public interface WaybillPlanMapper {
     /**
@@ -44,4 +45,12 @@ public interface WaybillPlanMapper {
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
     int updateByPrimaryKey(WaybillPlan record);
+
+
+    /***
+     * 根据条件查询相关运但计划
+     * @param map
+     * @return
+     */
+    List<WaybillPlan> selectByCondition(Map map);
 }

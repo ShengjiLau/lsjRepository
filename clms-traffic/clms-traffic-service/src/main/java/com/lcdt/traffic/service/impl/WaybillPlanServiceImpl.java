@@ -1,11 +1,14 @@
 package com.lcdt.traffic.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.PlanDetailMapper;
 import com.lcdt.traffic.dao.SplitGoodsDetailMapper;
 import com.lcdt.traffic.dao.SplitGoodsMapper;
 import com.lcdt.traffic.dao.WaybillPlanMapper;
+import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.PlanDetail;
 import com.lcdt.traffic.model.SplitGoods;
 import com.lcdt.traffic.model.SplitGoodsDetail;
@@ -24,6 +27,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yangbinq on 2017/12/13.
@@ -95,6 +99,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
         }
         return vo;
     }
+
 
 
     /***
@@ -277,7 +282,6 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
      * @param vo -- 需要保存的计划
      * @param dto -- 前端传来的计划参数
      * @param flag -- 操作动作(1-发布，2-暂存)
-     * @param carrierType -- 承运人类型(1-承运商，2-司机)
      *
      */
     private void planBiddingProcedure(WaybillPlan vo, WaybillParamsDto dto, short flag) { {
@@ -318,7 +322,50 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
 
 }
 
+    @Override
+    public PageInfo wayBillPlanList(Map map) {
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
 
+        if (map.containsKey("page_no")) {
+            if (map.get("page_no") != null) {
+                pageNo = (Integer) map.get("page_no");
+            }
+        }
+        if (map.containsKey("page_size")) {
+            if (map.get("page_size") != null) {
+                pageSize = (Integer) map.get("page_size");
+            }
+        }
+        PageHelper.startPage(pageNo, pageSize);
+        List<WaybillPlan> list = waybillPlanMapper.selectByCondition(map);
+        PageInfo pageInfo = new PageInfo(list);
+        return pageInfo;
+    }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public WaybillPlan publishWayBillPlan(WaybillParamsDto dto) throws WaybillPlanException {
+
+        //只有是暂存(待发布状态的，才能点发布)
+        if(true) {
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+        return null;
+    }
 
 
 }
