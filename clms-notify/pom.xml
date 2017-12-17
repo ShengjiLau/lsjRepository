@@ -11,7 +11,13 @@
 
     <artifactId>clms-notify</artifactId>
     <name>clms-notify</name>
-    <packaging>jar</packaging>
+    <modules>
+        <module>clms-notify-api</module>
+        <module>clms-notify-service</module>
+        <module>clms-notify-demo</module>
+        <module>clms-notify-producer-config</module>
+    </modules>
+    <packaging>pom</packaging>
     <dependencies>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
@@ -25,16 +31,6 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <finalName>clms-notify</finalName>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+
 
 </project>
