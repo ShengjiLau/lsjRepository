@@ -155,7 +155,7 @@
   <!-- ——————————————————————————————————————————华丽分割线—————————————————————————————————————————————— -->
 
 
-  <resultMap id="ResultMapDto" type="com.lcdt.traffic.dto.OwnVehicleDto">
+  <resultMap id="ResultMapDto" type="com.lcdt.traffic.web.dto.OwnVehicleDto">
     <id column="own_vehicle_id" jdbcType="BIGINT" property="ownVehicleId" />
     <result column="affiliated_company" jdbcType="VARCHAR" property="affiliatedCompany" />
     <result column="vehicle_num" jdbcType="VARCHAR" property="vehicleNum" />
@@ -201,9 +201,9 @@
     </collection>
   </resultMap>
 
-  <select id="selectVehicleNum" parameterType="java.lang.String">
+  <select id="selectVehicleNum" resultType="java.lang.Integer">
     select count(own_vehicle_id)
     from t_own_vehicle
-    where vehicle_num = #{vehicleNum,jdbcType=VARCHAR}
+    where vehicle_num = #{0}
   </select>
 </mapper>

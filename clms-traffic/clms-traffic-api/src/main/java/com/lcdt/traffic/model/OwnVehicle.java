@@ -1,9 +1,10 @@
 package com.lcdt.traffic.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class OwnVehicle {
+public class OwnVehicle implements Serializable {
     private Long ownVehicleId;
 
     private String affiliatedCompany;
