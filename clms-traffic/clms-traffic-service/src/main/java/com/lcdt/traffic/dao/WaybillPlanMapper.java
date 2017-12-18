@@ -46,6 +46,8 @@ public interface WaybillPlanMapper {
      */
     int updateByPrimaryKey(WaybillPlan record);
 
+    int updateWaybillPlan(WaybillPlan record);
+
 
     /***
      * 根据条件查询相关运但计划

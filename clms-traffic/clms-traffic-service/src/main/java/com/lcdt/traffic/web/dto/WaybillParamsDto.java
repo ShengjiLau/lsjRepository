@@ -174,6 +174,12 @@ public class WaybillParamsDto {
     private Long createId;
     private String createName;
     private String planSource; //计划来源
+    private Long updateId;
+    private String updateName;
+    private Date updateTime;
+
+
+
 
     @ApiModelProperty(value = "计划详细")
     private List<PlanDetail> planDetailList;
@@ -640,5 +646,29 @@ public class WaybillParamsDto {
 
     public void setWaybillPlanId(Long waybillPlanId) {
         this.waybillPlanId = waybillPlanId;
+    }
+
+    public Long getUpdateId() {
+        return updateId;
+    }
+
+    public void setUpdateId(Long updateId) {
+        this.updateId = updateId;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

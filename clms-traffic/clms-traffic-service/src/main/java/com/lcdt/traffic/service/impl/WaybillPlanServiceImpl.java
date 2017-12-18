@@ -115,9 +115,9 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                     if(carrierType==1) { //承运商
                         vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //计划状态(已派完)
                         vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//计划状态(派车中)
-                    } else {
+                    } else { //司机
                         vo.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED); //计划状态(已派完)
-                        vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//计划状态(派车中)
+                        vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//计划状态(已派完)
                     }
                     waybillPlanMapper.insert(vo);
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();
@@ -163,14 +163,14 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                         tObj.setFreightPrice(obj.getFreightPrice());
                         tObj.setFreightTotal(obj.getFreightTotal());
                         tObj.setDetailRemark("计划直接生成...");
-                        tObj.setCreateId(obj.getCreateId());
-                        tObj.setCreateName(obj.getCreateName());
+                        tObj.setCreateId(dto.getCreateId());
+                        tObj.setCreateName(dto.getCreateName());
                         tObj.setCreateDate(new Date());
-                        tObj.setUpdateId(obj.getUpdateId());
-                        tObj.setUpdateName(obj.getUpdateName());
+                        tObj.setUpdateId(dto.getUpdateId());
+                        tObj.setUpdateName(dto.getUpdateName());
                         tObj.setUpdateTime(tObj.getCreateDate());
-                        tObj.setCompanyId(obj.getCompanyId());
-                        tObj.setIsDeleted(obj.getIsDeleted());
+                        tObj.setCompanyId(dto.getCompanyId());
+                        tObj.setIsDeleted((short)0);
                         splitGoodsDetailList.add(tObj);
                     }
                     splitGoodsDetailMapper.batchAddSplitGoodsDetail(splitGoodsDetailList);
@@ -219,7 +219,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                     obj.setUpdateName(vo.getUpdateName());
                     obj.setUpdateTime(obj.getCreateDate());
                     obj.setCompanyId(vo.getCompanyId());
-                    obj.setIsDeleted(vo.getIsDeleted());
+                    obj.setIsDeleted(((short)0);
                 }
                 planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
             }
@@ -266,7 +266,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
             obj.setUpdateName(vo.getUpdateName());
             obj.setUpdateTime(obj.getCreateDate());
             obj.setCompanyId(vo.getCompanyId());
-            obj.setIsDeleted(vo.getIsDeleted());
+            obj.setIsDeleted(((short)0);
         }
         planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
     }
@@ -312,7 +312,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
             obj.setUpdateName(vo.getUpdateName());
             obj.setUpdateTime(obj.getCreateDate());
             obj.setCompanyId(vo.getCompanyId());
-            obj.setIsDeleted(vo.getIsDeleted());
+            obj.setIsDeleted(((short)0);
         }
 
     }
@@ -344,27 +344,112 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public WaybillPlan publishWayBillPlan(WaybillParamsDto dto) throws WaybillPlanException {
-        //只有是暂存(待发布状态的，才能点发布)
+    public WaybillPlan publishWayBillPlan(WaybillParamsDto dto) throws WaybillPlanException { //只有是暂存(待发布状态的，才能点发布)
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(),dto.getCompanyId());
+        WaybillPlan updateObj = new WaybillPlan();
+        updateObj.setWaybillPlanId(waybillPlan.getWaybillPlanId());
         if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
         if (waybillPlan.getPlanStatus().equals(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH)) {
-            if (waybillPlan.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
-                if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CHENGYUNSHANG)) { //承运商
+            if (!StringUtils.isEmpty(waybillPlan.getCarrierCollectionIds())) { //指定承运商
+                if (waybillPlan.getIsApproval()==0 ) { //不需要审批
+                    if (waybillPlan.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
+                            if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CHENGYUNSHANG)) { //承运商
+                                updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //计划状态(已派完)
+                                updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//计划状态(派车中)
+                            } else if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
+                                updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED); //计划状态(已派完)
+                                updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//计划状态(已派完)
+                            }
 
-                } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
+                            List<PlanDetail> planDetailList = waybillPlan.getPlanDetailList();
+                            if (planDetailList!=null && planDetailList.size()>0) { //更新计划详细
+                                for (PlanDetail planDetail : planDetailList) {
+                                    planDetail.setRemainderAmount((float)0); //全部派完--剩余为0
+                                    planDetail.setUpdateId(dto.getUpdateId());
+                                    planDetail.setUpdateName(dto.getUpdateName());
+                                    planDetail.setUpdateTime(new Date());
+                                    planDetailMapper.updateByPrimaryKey(planDetail);
+                                }
 
-                } else { //其它（发布后派单）
+                                SplitGoods splitGoods = new SplitGoods(); //派单
+                                splitGoods.setWaybillPlanId(waybillPlan.getWaybillPlanId());
+                                splitGoods.setCarrierType(waybillPlan.getCarrierType());
+                                splitGoods.setCarrierCollectionIds(waybillPlan.getCarrierCollectionIds());//承运商ID
+                                splitGoods.setCarrierCollectionNames(waybillPlan.getCarrierCollectionNames());//承运商
+                                splitGoods.setCarrierPhone(waybillPlan.getCarrierPhone());//司机电话
+                                splitGoods.setCarrierVehicle(waybillPlan.getCarrierVehicle());//车号
+                                splitGoods.setTransportWay(waybillPlan.getTransportWay());//承运方式
+                                splitGoods.setSplitRemark("发布生成...");
+                                splitGoods.setCreateId(dto.getCreateId());
+                                splitGoods.setCreateName(dto.getCreateName());
+                                splitGoods.setCreateDate(new Date());
+                                splitGoods.setUpdateId(dto.getUpdateId());
+                                splitGoods.setUpdateName(dto.getUpdateName());
+                                splitGoods.setUpdateTime(splitGoods.getCreateDate());
+                                splitGoods.setCompanyId(dto.getCompanyId());
+                                splitGoods.setIsDeleted((short)0);
+                                splitGoodsMapper.insert(splitGoods);
 
+                                List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
+                                for (PlanDetail obj : planDetailList) {
+                                    SplitGoodsDetail tObj = new SplitGoodsDetail();
+                                    tObj.setPlanDetailId(obj.getPlanDetailId());
+                                    tObj.setAllotAmount((float) 0); //待派数量
+                                    tObj.setFactAllotAmount(obj.getPlanAmount()); //实际派单数
+                                    tObj.setFreightPrice(obj.getFreightPrice());
+                                    tObj.setFreightTotal(obj.getFreightTotal());
+                                    tObj.setDetailRemark("发布生在....");
+                                    tObj.setCreateId(obj.getCreateId());
+                                    tObj.setCreateName(obj.getCreateName());
+                                    tObj.setCreateDate(new Date());
+                                    tObj.setUpdateId(obj.getUpdateId());
+                                    tObj.setUpdateName(obj.getUpdateName());
+                                    tObj.setUpdateTime(tObj.getCreateDate());
+                                    tObj.setCompanyId(obj.getCompanyId());
+                                    tObj.setIsDeleted((short)0);
+                                    splitGoodsDetailList.add(tObj);
+                                }
+                                splitGoodsDetailMapper.batchAddSplitGoodsDetail(splitGoodsDetailList);
+                                /****************司机生成运单********************/
+                            }
+
+                    } else  if (waybillPlan.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_JINGJIA)) { //竞价
+
+                            if (waybillPlan.getIsApproval()==0) { //不需要审批
+                                updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_BIDDING); //计划状态(竞价中)
+                                updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//计划状态(派车中)
+                            } else { //需要审核
+                                updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_BIDDING); //计划状态(竞价中)
+                                updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//计划状态(派车中)
+                            }
+                    }
+
+                } else {// 需要审批
+                    updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_APPROVAL); //审批中
+                    updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
+               }
+
+            } else { //未指派承运人
+                if(waybillPlan.getIsApproval()==0) { //不需要审批
+                    updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
+                    updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
+                } else { // 需要审批
+                    updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_APPROVAL); //计划状态(审批)
+                    updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
                 }
-            } else  if (waybillPlan.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_JINGJIA)) { //竞价
+             }
+            //更新人信息
+            updateObj.setUpdateId(dto.getUpdateId());
+            updateObj.setUpdateName(dto.getUpdateName());
+            updateObj.setUpdateTime(new Date());
+            waybillPlanMapper.updateByPrimaryKey(updateObj);
 
-            }
         } else {
             throw new WaybillPlanException("计划处于'未发布'状态不能发布！");
         }
         return waybillPlan;
     }
+
 
 
     @Transactional(rollbackFor = Exception.class)
