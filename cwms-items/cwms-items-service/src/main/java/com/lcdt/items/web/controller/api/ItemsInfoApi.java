@@ -130,6 +130,11 @@ public class ItemsInfoApi {
         itemsInfoDao.setIntroduction(itemsInfoDto.getIntroduction());
         itemsInfoDao.setTradeType(itemsInfoDto.getTradeType());
         itemsInfoDao.setItemType(itemsInfoDto.getItemType());
+        itemsInfoDao.setImage1(itemsInfoDto.getImage1());
+        itemsInfoDao.setImage2(itemsInfoDto.getImage2());
+        itemsInfoDao.setImage3(itemsInfoDto.getImage3());
+        itemsInfoDao.setImage4(itemsInfoDto.getImage4());
+        itemsInfoDao.setImage5(itemsInfoDto.getImage5());
         itemsInfoDao.setCompanyId(companyId);
         itemsInfoDao.setCreateId(user.getUserId());
         itemsInfoDao.setCreateName(user.getRealName());
@@ -173,6 +178,7 @@ public class ItemsInfoApi {
                 SubItemsInfoDao subItemsInfoDao = new SubItemsInfoDao();
                 subItemsInfoDao.setSubItemId(itemsInfoDto.getSubItemsInfoDtoList().get(i).getSubItemId());
                 subItemsInfoDao.setItemId(itemsInfoDto.getSubItemsInfoDtoList().get(i).getItemId());
+                subItemsInfoDao.setImage(itemsInfoDto.getSubItemsInfoDtoList().get(i).getImage());
                 subItemsInfoDao.setCode(itemsInfoDto.getSubItemsInfoDtoList().get(i).getCode());
                 subItemsInfoDao.setBarCode(itemsInfoDto.getSubItemsInfoDtoList().get(i).getBarCode());
                 subItemsInfoDao.setPurchasePrice(itemsInfoDto.getSubItemsInfoDtoList().get(i).getPurchasePrice());
