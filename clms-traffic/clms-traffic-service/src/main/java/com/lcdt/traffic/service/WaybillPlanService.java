@@ -19,11 +19,20 @@ public interface WaybillPlanService {
     /**
      * 创建计划
      *
-     * @param dto
+     * @param dto -- 创建人、公司等信息
      * @param flag -- 如果为1为发布，2暂存
      * @return
      */
     WaybillPlan createWaybillPlan(WaybillParamsDto dto, short flag);
+
+    /***
+     * 发布计划
+     *
+     * @param dto-- 更新人、公司等信息
+     *
+     * @return
+     */
+    WaybillPlan publishWayBillPlan(WaybillParamsDto dto);
 
 
     /***
@@ -33,16 +42,6 @@ public interface WaybillPlanService {
      * @return
      */
     PageInfo wayBillPlanList(Map map);
-
-
-    /***
-     * 发布计划
-     *
-     * @param dto
-     * @return
-     */
-    WaybillPlan publishWayBillPlan(WaybillParamsDto dto);
-
 
     /***
      *编辑计划

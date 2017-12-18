@@ -56,8 +56,8 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
         WaybillPlan vo = new WaybillPlan(); //复制传来对象值
         BeanUtils.copyProperties(dto, vo);
         vo.setCreateDate(new Date()); //创建时间
-        vo.setUpdateId(vo.getCreateId()); //默认为创建人
-        vo.setUpdateName(vo.getCreateName());
+        vo.setUpdateId(dto.getCreateId()); //默认为创建人
+        vo.setUpdateName(dto.getCreateName());
         vo.setUpdateTime(vo.getCreateDate());
         vo.setIsDeleted((short) 0); //未删除
         try {
@@ -123,15 +123,16 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();
                     for (PlanDetail obj : planDetailList) {
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
-                        obj.setCreateId(vo.getCreateId());
                         obj.setRemainderAmount((float)0); //全部派完--剩余为0
                         obj.setCreateName(vo.getCreateName());
+                        obj.setCreateId(vo.getCreateId());
                         obj.setCreateDate(new Date());
                         obj.setUpdateId(vo.getUpdateId());
-                        obj.setUpdateName(vo.getUpdateName());
+                        obj.setUpdateName(obj.getUpdateName());
                         obj.setUpdateTime(obj.getCreateDate());
                         obj.setCompanyId(vo.getCompanyId());
-                        obj.setIsDeleted(vo.getIsDeleted());
+
+                        obj.setIsDeleted((short)0);
                     }
                     planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
 
@@ -144,14 +145,15 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                     splitGoods.setCarrierVehicle(dto.getCarrierVehicle());//车号
                     splitGoods.setTransportWay(dto.getTransportWay());//承运方式
                     splitGoods.setSplitRemark("计划直接生成的...");
-                    splitGoods.setCreateId(splitGoods.getCreateId());
-                    splitGoods.setCreateName(splitGoods.getCreateName());
+                    splitGoods.setCreateId(vo.getCreateId());
+                    splitGoods.setCreateName(vo.getCreateName());
                     splitGoods.setCreateDate(new Date());
                     splitGoods.setUpdateId(splitGoods.getUpdateId());
-                    splitGoods.setUpdateName(splitGoods.getUpdateName());
+                    splitGoods.setUpdateName(splitGoods.getCreateName());
                     splitGoods.setUpdateTime(splitGoods.getCreateDate());
                     splitGoods.setCompanyId(splitGoods.getCompanyId());
-                    splitGoods.setIsDeleted(splitGoods.getIsDeleted());
+                    splitGoods.setCarrierCompanyId(vo.getCarrierCompanyId());
+                    splitGoods.setIsDeleted((short)0);
                     splitGoodsMapper.insert(splitGoods);
 
                     List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
@@ -163,13 +165,13 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                         tObj.setFreightPrice(obj.getFreightPrice());
                         tObj.setFreightTotal(obj.getFreightTotal());
                         tObj.setDetailRemark("计划直接生成...");
-                        tObj.setCreateId(dto.getCreateId());
-                        tObj.setCreateName(dto.getCreateName());
+                        tObj.setCreateId(vo.getCreateId());
+                        tObj.setCreateName(vo.getCreateName());
                         tObj.setCreateDate(new Date());
                         tObj.setUpdateId(dto.getUpdateId());
-                        tObj.setUpdateName(dto.getUpdateName());
+                        tObj.setUpdateName(vo.getUpdateName());
                         tObj.setUpdateTime(tObj.getCreateDate());
-                        tObj.setCompanyId(dto.getCompanyId());
+                        tObj.setCompanyId(vo.getCompanyId());
                         tObj.setIsDeleted((short)0);
                         splitGoodsDetailList.add(tObj);
                     }
@@ -195,7 +197,8 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                         obj.setUpdateName(vo.getUpdateName());
                         obj.setUpdateTime(obj.getCreateDate());
                         obj.setCompanyId(vo.getCompanyId());
-                        obj.setIsDeleted(vo.getIsDeleted());
+                        obj.setIsDeleted((short)0);
+                        planDetailList.add(obj);
                     }
                     planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
                 }
@@ -219,7 +222,8 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                     obj.setUpdateName(vo.getUpdateName());
                     obj.setUpdateTime(obj.getCreateDate());
                     obj.setCompanyId(vo.getCompanyId());
-                    obj.setIsDeleted(((short)0);
+                    obj.setIsDeleted((short)0);
+                    planDetailList.add(obj);
                 }
                 planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
             }
@@ -255,7 +259,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
             }
         }
         waybillPlanMapper.insert(vo); //生成计划
-        List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
+        List<PlanDetail> planDetailList = dto.getPlanDetailList();
         for (PlanDetail obj : planDetailList) {
             obj.setWaybillPlanId(vo.getWaybillPlanId());
             obj.setRemainderAmount(obj.getPlanAmount());//初期【计划=剩余】
@@ -266,7 +270,8 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
             obj.setUpdateName(vo.getUpdateName());
             obj.setUpdateTime(obj.getCreateDate());
             obj.setCompanyId(vo.getCompanyId());
-            obj.setIsDeleted(((short)0);
+            obj.setIsDeleted((short)0);
+            planDetailList.add(obj);
         }
         planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
     }
@@ -312,7 +317,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
             obj.setUpdateName(vo.getUpdateName());
             obj.setUpdateTime(obj.getCreateDate());
             obj.setCompanyId(vo.getCompanyId());
-            obj.setIsDeleted(((short)0);
+            obj.setIsDeleted((short)0);
         }
 
     }
@@ -387,6 +392,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                                 splitGoods.setUpdateName(dto.getUpdateName());
                                 splitGoods.setUpdateTime(splitGoods.getCreateDate());
                                 splitGoods.setCompanyId(dto.getCompanyId());
+                                splitGoods.setCarrierCompanyId(waybillPlan.getCarrierCompanyId());
                                 splitGoods.setIsDeleted((short)0);
                                 splitGoodsMapper.insert(splitGoods);
 
@@ -414,7 +420,6 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                             }
 
                     } else  if (waybillPlan.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_JINGJIA)) { //竞价
-
                             if (waybillPlan.getIsApproval()==0) { //不需要审批
                                 updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_BIDDING); //计划状态(竞价中)
                                 updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//计划状态(派车中)
