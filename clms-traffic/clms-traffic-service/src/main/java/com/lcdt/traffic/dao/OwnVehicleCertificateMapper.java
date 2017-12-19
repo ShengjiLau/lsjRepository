@@ -27,4 +27,11 @@ public interface OwnVehicleCertificateMapper {
      * @return
      */
     int updateBatch(List<OwnVehicleCertificate> ownVehicleCertificateList);
+
+    /**
+     * 删除证件（实为更新isDeleted字段）
+     * @param ownVehicle
+     * @return
+     */
+    int deleteByUpdate(OwnVehicleCertificate ownVehicle);
 }

@@ -92,7 +92,7 @@
     certificate_attachment1, certificate_attachment2,
     certificate_attachment3, group_remark, create_id,
     create_name, create_date, update_id,
-    update_name, update_date, is_deleted,
+    update_name, update_date,
     compnay_id)
     values
     <foreach item="item" collection="list" separator=",">
@@ -102,7 +102,7 @@
       #{item.certificateAttachment1,jdbcType=VARCHAR}, #{item.certificateAttachment2,jdbcType=VARCHAR},
       #{item.certificateAttachment3,jdbcType=VARCHAR}, #{item.groupRemark,jdbcType=VARCHAR}, #{item.createId,jdbcType=BIGINT},
       #{item.createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{item.updateId,jdbcType=BIGINT},
-      #{item.updateName,jdbcType=VARCHAR}, #{item.updateDate,jdbcType=TIMESTAMP}, #{item.isDeleted,jdbcType=SMALLINT},
+      #{item.updateName,jdbcType=VARCHAR}, #{item.updateDate,jdbcType=TIMESTAMP},
       #{item.compnayId,jdbcType=BIGINT})
     </foreach>
   </insert>
@@ -126,13 +126,16 @@
       create_date = #{item.createDate,jdbcType=TIMESTAMP},
       update_id = #{item.updateId,jdbcType=BIGINT},
       update_name = #{item.updateName,jdbcType=VARCHAR},
-      update_date = CURRENT_TIMESTAMP,
-      is_deleted = #{item.isDeleted,jdbcType=SMALLINT},
+      is_deleted = #{item.isDeleted,jdbcType=SMALLINT}
       where ovc_id = #{item.ovcId,jdbcType=BIGINT} and compnay_id = #{item.compnayId,jdbcType=BIGINT}
     </foreach>
   </update>
   <update id="deleteByUpdate" >
-      update t_own_vehicle_certificate set is_deleted = 1
-      where ovc_id = #{0} and compnay_id = #{1}
+      update t_own_vehicle_certificate
+      set is_deleted = 1,
+      update_id = #{updateId,jdbcType=BIGINT},
+      update_name = #{updateName,jdbcType=VARCHAR},
+      update_date = CURRENT_TIMESTAMP
+      where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT} and compnay_id = #{compnayId,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -1,5 +1,7 @@
 package com.lcdt.traffic.service;
 
+import com.github.pagehelper.PageInfo;
+import com.lcdt.traffic.model.OwnVehicle;
 import com.lcdt.traffic.web.dto.OwnVehicleDto;
 
 import java.util.List;
@@ -12,6 +14,7 @@ public interface OwnVehicleService {
 
     /**
      * 新增车辆
+     *
      * @param ownVehicleDto
      * @return
      */
@@ -19,6 +22,7 @@ public interface OwnVehicleService {
 
     /**
      * 修改更新车辆
+     *
      * @param ownVehicleDto
      * @return
      */
@@ -26,14 +30,16 @@ public interface OwnVehicleService {
 
     /**
      * 删除车辆
-     * @param ownVehicleId
+     *
+     * @param ownVehicleDto
      * @return
      */
-    int delVehicle(Long ownVehicleId);
+    int delVehicle(OwnVehicleDto ownVehicleDto);
 
     /**
      * 车辆列表
+     *
      * @return
      */
-    List<OwnVehicleDto> ownVehicleDtoList();
+    PageInfo<List<OwnVehicle>> ownVehicleList(OwnVehicle ownVehicle, PageInfo pageInfo);
 }
