@@ -19,10 +19,10 @@ public class DubboConfig {
 	@Value("${applicationName:dubbo-app}")
 	public String applicationName = "clms-sso";
 
-	@Value("${protocolPort:20883}")
+	@Value("${protocolport:20883}")
 	public Integer protocolPort = 20883;
 
-	@Value("${zookeeperUrl:127.0.0.1:2181}")
+	@Value("${zookeeperurl:127.0.0.1:2181}")
 	private String zookeeperUrl = "127.0.0.1:2181";
 
 	@Bean
