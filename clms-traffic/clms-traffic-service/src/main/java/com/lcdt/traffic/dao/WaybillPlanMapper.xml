@@ -558,6 +558,10 @@
           <if test="pubdateEnd != null and pubdateEnd != ''">
             and  #{pubdate,jdbcType=TIMESTAMP} >= pubdate
           </if>
+          <if test="sendOrderType != null">
+            and  send_order_type = #{sendOrderType,jdbcType=SMALLINT}
+          </if>
+
           <if test="goodsInfo != null and goodsInfo!=''">
             and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like '%'+#{goodsInfo,jdbcType=VARCHAR}+'%')
           </if>

@@ -112,6 +112,10 @@ public class WaybillPlanApi {
         if (!sb.toString().isEmpty()) {
             map.put("groupIds", sb.toString());
         }
+
+        if (dto.getSendOrderType()>0) {
+            map.put("sendOrderType",dto.getSendOrderType());
+        }
         if (StringUtil.isNotEmpty(dto.getCustomerName())) {
             map.put("customerName",dto.getCustomerName());
         }

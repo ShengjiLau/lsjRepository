@@ -374,8 +374,9 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                                     planDetail.setUpdateId(dto.getUpdateId());
                                     planDetail.setUpdateName(dto.getUpdateName());
                                     planDetail.setUpdateTime(new Date());
-                                    planDetailMapper.updateByPrimaryKey(planDetail);
+                                   // planDetailMapper.updateByPrimaryKey(planDetail);
                                 }
+                                planDetailMapper.batchUpdatePlanDetail(planDetailList);
 
                                 SplitGoods splitGoods = new SplitGoods(); //派单
                                 splitGoods.setWaybillPlanId(waybillPlan.getWaybillPlanId());

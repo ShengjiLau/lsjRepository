@@ -48,6 +48,11 @@ public class WaybillPlanListParamsDto {
     @ApiModelProperty(value = "货物名称")
     private String goodsInfo;
 
+
+    @ApiModelProperty(value="派单方式")
+    private short sendOrderType;
+
+
     public Long getCarrierCompanyId() {
         return carrierCompanyId;
     }
@@ -142,5 +147,13 @@ public class WaybillPlanListParamsDto {
 
     public void setGoodsInfo(String goodsInfo) {
         this.goodsInfo = goodsInfo;
+    }
+
+    public short getSendOrderType() {
+        return sendOrderType;
+    }
+
+    public void setSendOrderType(short sendOrderType) {
+        this.sendOrderType = sendOrderType;
     }
 }
