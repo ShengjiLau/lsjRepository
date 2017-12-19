@@ -55,7 +55,7 @@ public interface SubItemsInfoService {
      * @param companyId
      * @return
      */
-    List<SubItemsInfoDao> querySubAndSpecAndPropListByItemId(Long itemId,Long companyId);
+    PageInfo<List<SubItemsInfoDao>> querySubAndSpecAndPropListByItemId(Long itemId,Long companyId,PageInfo pageInfo);
 
 
     /**

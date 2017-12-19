@@ -100,4 +100,15 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
         return page;
     }
 
+    @Override
+    public PageInfo<List<ItemClassify>> queryClassifyByMinChildren(Long classifyId, Long companyId,PageInfo pageInfo) {
+        List<ItemClassify> itemClassifyList=null;
+        PageInfo page = null;
+        //使用分页工具进行分页
+        PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+        itemClassifyList=itemClassifyMapper.selectClassifyByMinChildren(classifyId,companyId);
+        page = new PageInfo(itemClassifyList);
+        return page;
+    }
+
 }

@@ -38,7 +38,7 @@ public class ItemsInfoApi {
 
     @ApiOperation("新增商品")
     @PostMapping("/add")
-    public JSONObject addItemInfo(ItemsInfoDto itemsInfoDto, HttpSession httpSession) {
+    public JSONObject addItemInfo(@RequestBody ItemsInfoDto itemsInfoDto, HttpSession httpSession) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User user=SecurityInfoGetter.getUser();
         int result = itemsInfoService.addItemsInfo(parseItemsInfoDao(itemsInfoDto,companyId,user));
@@ -91,7 +91,7 @@ public class ItemsInfoApi {
 
     @ApiOperation("修改商品")
     @PostMapping("/modify")
-    public JSONObject modifyItemsInfo(HttpSession httpSession,ItemsInfoDto itemsInfoDto){
+    public JSONObject modifyItemsInfo(HttpSession httpSession,@RequestBody ItemsInfoDto itemsInfoDto){
         Long companyId = SecurityInfoGetter.getCompanyId();
         User user=SecurityInfoGetter.getUser();
         int result = itemsInfoService.modifyItemsInfo(parseItemsInfoDao(itemsInfoDto,companyId,user));
@@ -105,7 +105,14 @@ public class ItemsInfoApi {
 
         }
     }
-
+    @ApiOperation(value = "商品列表", notes = "获取商品列表返回所有信息")
+    @GetMapping("/itemsinfolist")
+    public PageBaseDto<List<ItemsInfoDao>> queryItemInfoList(@Validated ItemsInfoDao itemsInfoDao, PageInfo pageInfo, HttpSession httpSession) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        itemsInfoDao.setCompanyId(companyId);
+        PageInfo<List<ItemsInfoDao>> listPageInfo = itemsInfoService.queryItemsByItemsInfo(itemsInfoDao,pageInfo);
+        return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
+    }
     /**
      * 私有方法，前端dto转换成dao
      * @param itemsInfoDto
@@ -123,6 +130,11 @@ public class ItemsInfoApi {
         itemsInfoDao.setIntroduction(itemsInfoDto.getIntroduction());
         itemsInfoDao.setTradeType(itemsInfoDto.getTradeType());
         itemsInfoDao.setItemType(itemsInfoDto.getItemType());
+        itemsInfoDao.setImage1(itemsInfoDto.getImage1());
+        itemsInfoDao.setImage2(itemsInfoDto.getImage2());
+        itemsInfoDao.setImage3(itemsInfoDto.getImage3());
+        itemsInfoDao.setImage4(itemsInfoDto.getImage4());
+        itemsInfoDao.setImage5(itemsInfoDto.getImage5());
         itemsInfoDao.setCompanyId(companyId);
         itemsInfoDao.setCreateId(user.getUserId());
         itemsInfoDao.setCreateName(user.getRealName());
@@ -166,6 +178,7 @@ public class ItemsInfoApi {
                 SubItemsInfoDao subItemsInfoDao = new SubItemsInfoDao();
                 subItemsInfoDao.setSubItemId(itemsInfoDto.getSubItemsInfoDtoList().get(i).getSubItemId());
                 subItemsInfoDao.setItemId(itemsInfoDto.getSubItemsInfoDtoList().get(i).getItemId());
+                subItemsInfoDao.setImage(itemsInfoDto.getSubItemsInfoDtoList().get(i).getImage());
                 subItemsInfoDao.setCode(itemsInfoDto.getSubItemsInfoDtoList().get(i).getCode());
                 subItemsInfoDao.setBarCode(itemsInfoDto.getSubItemsInfoDtoList().get(i).getBarCode());
                 subItemsInfoDao.setPurchasePrice(itemsInfoDto.getSubItemsInfoDtoList().get(i).getPurchasePrice());
