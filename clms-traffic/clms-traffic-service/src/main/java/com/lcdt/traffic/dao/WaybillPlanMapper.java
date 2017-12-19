@@ -50,7 +50,7 @@ public interface WaybillPlanMapper {
 
 
     /***
-     * 根据条件查询相关运但计划
+     * 根据条件查询计划
      * @param map
      * @return
      */

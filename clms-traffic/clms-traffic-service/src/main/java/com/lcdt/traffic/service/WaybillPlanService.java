@@ -61,6 +61,12 @@ public interface WaybillPlanService {
     PlanLeaveMsg planLeaveMsgAdd(PlanLeaveMsgParamsDto dto);
 
 
+    /***
+     * 留言列表
+     * @param map
+     * @return
+     */
+    PageInfo planLeaveMsgList(Map map);
 
 
 
