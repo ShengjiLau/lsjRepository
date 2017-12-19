@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.pay.dao.PayOrderMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.pay.model.PayOrder">
+    <id column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="order_type" jdbcType="INTEGER" property="orderType" />
+    <result column="order_amount" jdbcType="VARCHAR" property="orderAmount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="order_pay_user_id" jdbcType="BIGINT" property="orderPayUserId" />
+    <result column="order_pay_company_id" jdbcType="BIGINT" property="orderPayCompanyId" />
+    <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from pay_order
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.pay.model.PayOrder">
+    <selectKey keyProperty="orderId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pay_order (order_type, order_amount, create_time, 
+      order_pay_user_id, order_pay_company_id, order_status, 
+      order_no)
+    values (#{orderType,jdbcType=INTEGER}, #{orderAmount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{orderPayUserId,jdbcType=BIGINT}, #{orderPayCompanyId,jdbcType=BIGINT}, #{orderStatus,jdbcType=INTEGER}, 
+      #{orderNo,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.pay.model.PayOrder">
+    update pay_order
+    set order_type = #{orderType,jdbcType=INTEGER},
+      order_amount = #{orderAmount,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      order_pay_user_id = #{orderPayUserId,jdbcType=BIGINT},
+      order_pay_company_id = #{orderPayCompanyId,jdbcType=BIGINT},
+      order_status = #{orderStatus,jdbcType=INTEGER},
+      order_no = #{orderNo,jdbcType=VARCHAR}
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select order_id, order_type, order_amount, create_time, order_pay_user_id, order_pay_company_id, 
+    order_status, order_no
+    from pay_order
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select order_id, order_type, order_amount, create_time, order_pay_user_id, order_pay_company_id, 
+    order_status, order_no
+    from pay_order
+  </select>
+
+</mapper>

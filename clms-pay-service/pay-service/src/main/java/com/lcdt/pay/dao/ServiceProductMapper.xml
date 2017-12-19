@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.pay.dao.ServiceProductMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.pay.model.ServiceProduct">
+    <id column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="product_valid" jdbcType="BIT" property="productValid" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from service_product
+    where product_id = #{productId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.pay.model.ServiceProduct">
+    <selectKey keyProperty="productId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into service_product (product_name, product_valid)
+    values (#{productName,jdbcType=VARCHAR}, #{productValid,jdbcType=BIT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.pay.model.ServiceProduct">
+    update service_product
+    set product_name = #{productName,jdbcType=VARCHAR},
+      product_valid = #{productValid,jdbcType=BIT}
+    where product_id = #{productId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select product_id, product_name, product_valid
+    from service_product
+    where product_id = #{productId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select product_id, product_name, product_valid
+    from service_product
+  </select>
+</mapper>

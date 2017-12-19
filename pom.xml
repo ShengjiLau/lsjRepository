@@ -25,6 +25,7 @@
         <module>clms-notify</module>
         <module>clms-customer</module>
         <module>clms-traffic</module>
+        <module>clms-pay-service</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>

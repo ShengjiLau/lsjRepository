@@ -41,7 +41,11 @@ public class MybatisCommonConfig implements TransactionManagementConfigurer {
 	public SqlSessionFactory sqlSessionFactory() {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource);
-		sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
+		ClassPathResource classPathResource = new ClassPathResource("mybatis-config.xml");
+		if (classPathResource.exists()) {
+			sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
+		}
+
 
 //		//分页插件
 //		PageHelper pageHelper = new PageHelper();
