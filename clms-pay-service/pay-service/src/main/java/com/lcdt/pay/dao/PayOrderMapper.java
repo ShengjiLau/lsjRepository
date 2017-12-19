@@ -14,4 +14,7 @@ public interface PayOrderMapper {
     List<PayOrder> selectAll();
 
     int updateByPrimaryKey(PayOrder record);
+
+    List<PayOrder> selectByOrderNo(String orderNo);
+
 }

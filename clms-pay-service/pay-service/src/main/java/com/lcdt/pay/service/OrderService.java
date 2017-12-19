@@ -6,4 +6,8 @@ public interface OrderService {
 
     PayOrder selectByOrderId(Long orderId);
 
+    PayOrder selectByOrderNo(String orderNo);
+
+    PayOrder updateStatus(PayOrder order);
+
 }

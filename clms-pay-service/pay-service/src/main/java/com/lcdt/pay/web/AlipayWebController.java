@@ -69,16 +69,18 @@ public class AlipayWebController {
             parameterMap.put(s, parameter);
         }
 
-
+        String orderNo = "";
         boolean b = false;
         try {
             b = AlipaySignature.rsaCheckV1(parameterMap, AlipayContants.getAlipayPublicKey(), CHARSET,AlipayContants.getSignType());
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
+
         if (b) {
             //TODO 业务操作 绑定成功
-
+            PayOrder payOrder = orderService.selectByOrderNo(orderNo);
+            orderService.updateStatus(payOrder);
         }else{
             return;
         }
