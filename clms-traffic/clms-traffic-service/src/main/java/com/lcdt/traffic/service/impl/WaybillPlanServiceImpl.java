@@ -4,10 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
-import com.lcdt.traffic.dao.PlanDetailMapper;
-import com.lcdt.traffic.dao.SplitGoodsDetailMapper;
-import com.lcdt.traffic.dao.SplitGoodsMapper;
-import com.lcdt.traffic.dao.WaybillPlanMapper;
+import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.WaybillPlanService;
@@ -45,6 +42,10 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
     @Autowired
     private SplitGoodsDetailMapper splitGoodsDetailMapper; //派单详细
 
+    @Autowired
+    private PlanLeaveMsgMapper planLeaveMsgMapper; //计划留言
+
+
 
     @com.alibaba.dubbo.config.annotation.Reference
     public CustomerRpcService customerRpcService;  //客户信息
@@ -77,7 +78,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
             e.printStackTrace();
         }
 
-        if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CHENGYUNSHANG)) { //承运商(获取承运商ID)
+        if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
             String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
             Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
             vo.setCarrierCompanyId(customer.getCompanyId());
@@ -85,7 +86,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
 
         //具体业务处理
         if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
-            if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CHENGYUNSHANG)) { //承运商
+            if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
                 planDirectProcedure(vo, dto,  flag, (short)1);
             } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
                 planDirectProcedure(vo, dto,  flag,(short)2);
@@ -350,7 +351,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public WaybillPlan publishWayBillPlan(WaybillParamsDto dto) throws WaybillPlanException { //只有是暂存(待发布状态的，才能点发布)
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(),dto.getCompanyId());
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId());
         WaybillPlan updateObj = new WaybillPlan();
         updateObj.setWaybillPlanId(waybillPlan.getWaybillPlanId());
         if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
@@ -358,7 +359,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
             if (!StringUtils.isEmpty(waybillPlan.getCarrierCollectionIds())) { //指定承运商
                 if (waybillPlan.getIsApproval()==0 ) { //不需要审批
                     if (waybillPlan.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
-                            if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CHENGYUNSHANG)) { //承运商
+                            if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
                                 updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //计划状态(已派完)
                                 updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//计划状态(派车中)
                             } else if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
@@ -460,15 +461,66 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public WaybillPlan modifyWayBillPlan(WaybillParamsDto dto) {
-
-
         return null;
     }
+
+
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public PlanLeaveMsg planLeaveMsgAdd(PlanLeaveMsgParamsDto dto) throws WaybillPlanException {
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId());
+        if (waybillPlan != null) { //计划存在
+            PlanLeaveMsg planLeaveMsg = new PlanLeaveMsg();
+            if (waybillPlan.getCompanyId()==dto.getCompanyId()) { //说明是货主
+                planLeaveMsg.setLeaveType(ConstantVO.PLAN_LEAVE_MSG_TYPE_SHIPPER);
+                planLeaveMsg.setCompanyName(dto.getCompanyName());
+                planLeaveMsg.setCompanyId(dto.getCompanyId());
+                planLeaveMsg.setShipperName(dto.getRealName());
+            } else if(waybillPlan.getCarrierCompanyId() == dto.getCompanyId()) { //说明是承运人
+                planLeaveMsg.setLeaveType(ConstantVO.PLAN_LEAVE_MSG_TYPE_CARRIER);
+                planLeaveMsg.setCarrierCompanyName(dto.getCompanyName());
+                planLeaveMsg.setCarrierCompanyId(dto.getCompanyId());
+                planLeaveMsg.setCarrierName(dto.getRealName());
+            }
+            planLeaveMsg.setCreateId(dto.getUserId());
+            planLeaveMsg.setCreateName(dto.getRealName());
+            planLeaveMsg.setCreateDate(planLeaveMsg.getLeaveDate());
+            planLeaveMsg.setUpdateId(dto.getUserId());
+            planLeaveMsg.setUpdateName(dto.getRealName());
+            planLeaveMsg.setUpdateTime(planLeaveMsg.getLeaveDate());
+            planLeaveMsg.setLeaveMsg(dto.getLeaveMsg());
+            planLeaveMsg.setLeaveDate(new Date());
+            planLeaveMsg.setIsDeleted((short)0);
+            planLeaveMsgMapper.insert(planLeaveMsg);
+        } else {
+            throw new WaybillPlanException("计划不存在！");
+        }
+        return null;
+    }
+
 
     @Override
-    public PlanLeaveMsg addPlanLeaveMsg(PlanLeaveMsgParamsDto dto) {
-        return null;
+    public PageInfo wayBillPlanList(Map map) {
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+
+        if (map.containsKey("page_no")) {
+            if (map.get("page_no") != null) {
+                pageNo = (Integer) map.get("page_no");
+            }
+        }
+        if (map.containsKey("page_size")) {
+            if (map.get("page_size") != null) {
+                pageSize = (Integer) map.get("page_size");
+            }
+        }
+        PageHelper.startPage(pageNo, pageSize);
+        List<WaybillPlan> list = waybillPlanMapper.selectByCondition(map);
+        PageInfo pageInfo = new PageInfo(list);
+        return pageInfo;
     }
+
 
 
 }

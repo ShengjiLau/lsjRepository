@@ -1,6 +1,7 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
@@ -32,7 +33,7 @@ public interface WaybillPlanService {
      *
      * @return
      */
-    WaybillPlan publishWayBillPlan(WaybillParamsDto dto);
+    WaybillPlan publishWayBillPlan(WaybillParamsDto dto) throws WaybillPlanException;
 
 
     /***
@@ -57,7 +58,7 @@ public interface WaybillPlanService {
      * @param dto
      * @return
      */
-    PlanLeaveMsg addPlanLeaveMsg(PlanLeaveMsgParamsDto dto);
+    PlanLeaveMsg planLeaveMsgAdd(PlanLeaveMsgParamsDto dto);
 
 
 

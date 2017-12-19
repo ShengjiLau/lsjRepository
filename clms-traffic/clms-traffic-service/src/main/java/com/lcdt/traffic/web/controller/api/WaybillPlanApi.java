@@ -3,14 +3,18 @@ package com.lcdt.traffic.web.controller.api;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.exception.WaybillPlanException;
+import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.WaybillPlanService;
 import com.lcdt.traffic.vo.ConstantVO;
+import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import com.lcdt.traffic.web.dto.WaybillPlanListParamsDto;
 import com.lcdt.traffic.web.dto.WaybillPlanResultDto;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -34,6 +38,7 @@ public class WaybillPlanApi {
 
     @Autowired
     private WaybillPlanService waybillPlanService;
+
 
     @ApiOperation("创建--发布")
     @RequestMapping(value = "/createWaybillPlan",method = RequestMethod.POST)
@@ -140,6 +145,43 @@ public class WaybillPlanApi {
         dto1.setList(pageInfo.getList());
         dto1.setTotal(pageInfo.getTotal());
         return dto1;
+    }
+
+
+
+    @ApiOperation("留言-列表")
+    @RequestMapping(value = "/planLeaveMsgList",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_list')")
+    public PlanLeaveMsg planLeaveMsgList(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+
+        return null;
+
+    }
+
+
+    @ApiOperation("留言-添加")
+    @RequestMapping(value = "/planLeaveMsgAdd",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_Add')")
+    public PlanLeaveMsg planLeaveMsgAdd(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
+                                        @ApiParam(value = "留言内容",required = true) @RequestParam String leaveMsg) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        User loginUser = SecurityInfoGetter.getUser();
+        PlanLeaveMsgParamsDto dto = new PlanLeaveMsgParamsDto();
+        dto.setCompanyId(userCompRel.getCompId());
+        dto.setCompanyName(userCompRel.getFullName());
+        dto.setUserId(loginUser.getUserId());
+        dto.setRealName(loginUser.getRealName());
+        dto.setLeaveMsg(leaveMsg);
+        dto.setWaybillPlanId(waybillPlanId);
+        PlanLeaveMsg planLeaveMsg = null;
+        try {
+            planLeaveMsg = waybillPlanService.planLeaveMsgAdd(dto);
+        } catch (WaybillPlanException e) {
+            throw new WaybillPlanException(e.getMessage());
+        }
+        return planLeaveMsg;
     }
 
 

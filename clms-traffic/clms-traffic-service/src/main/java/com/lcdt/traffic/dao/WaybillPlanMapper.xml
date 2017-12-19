@@ -477,7 +477,7 @@
     carrier_company_id, company_id, plan_days, pubdate, finish_date, cancel_date, cancel_man, 
     cancel_remark
     from t_waybill_plan
-    where waybill_plan_id = #{0} and company_id = #{1}
+    where waybill_plan_id = #{0}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     <!--

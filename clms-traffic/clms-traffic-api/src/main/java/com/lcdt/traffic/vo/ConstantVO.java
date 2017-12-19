@@ -36,11 +36,12 @@ public class ConstantVO {
 
     //计划-承运人类型
     public static Short PLAN_CARRIER_TYPE_ELSE = 0; //其它
-    public static Short PLAN_CARRIER_TYPE_CHENGYUNSHANG = 1; //承运商
+    public static Short PLAN_CARRIER_TYPE_CARRIER = 1; //承运商
     public static Short PLAN_CARRIER_TYPE_DRIVER = 2; //司机
 
 
-
-
+    //计划-留言-留言人类型
+    public static Short PLAN_LEAVE_MSG_TYPE_SHIPPER = 1;//货主
+    public static Short PLAN_LEAVE_MSG_TYPE_CARRIER = 2;//承运商
 
 }

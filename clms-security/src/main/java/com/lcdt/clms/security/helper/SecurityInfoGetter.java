@@ -29,6 +29,15 @@ public class SecurityInfoGetter {
 		return userCompRel.getCompId();
 	}
 
+
+	public static UserCompRel geUserCompRel(){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		TicketAuthentication details = (TicketAuthentication) authentication.getDetails();
+		UserCompRel userCompRel = details.getUserCompRel();
+		return userCompRel;
+	}
+
+
 	public static List<Group> groups(){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		TicketAuthentication details = (TicketAuthentication) authentication.getDetails();
