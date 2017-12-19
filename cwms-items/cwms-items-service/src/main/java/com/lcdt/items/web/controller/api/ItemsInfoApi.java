@@ -1,5 +1,6 @@
 package com.lcdt.items.web.controller.api;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -130,11 +131,11 @@ public class ItemsInfoApi {
         itemsInfoDao.setIntroduction(itemsInfoDto.getIntroduction());
         itemsInfoDao.setTradeType(itemsInfoDto.getTradeType());
         itemsInfoDao.setItemType(itemsInfoDto.getItemType());
-        itemsInfoDao.setImage1(itemsInfoDto.getImage1());
-        itemsInfoDao.setImage2(itemsInfoDto.getImage2());
-        itemsInfoDao.setImage3(itemsInfoDto.getImage3());
-        itemsInfoDao.setImage4(itemsInfoDto.getImage4());
-        itemsInfoDao.setImage5(itemsInfoDto.getImage5());
+        if(itemsInfoDto.getImages()!=null){
+            for(int i=0;i<itemsInfoDto.getImages().size();i++){
+                itemsInfoDao.setImages(JSON.toJSONString(itemsInfoDto.getImages()));
+            }
+        }
         itemsInfoDao.setCompanyId(companyId);
         itemsInfoDao.setCreateId(user.getUserId());
         itemsInfoDao.setCreateName(user.getRealName());

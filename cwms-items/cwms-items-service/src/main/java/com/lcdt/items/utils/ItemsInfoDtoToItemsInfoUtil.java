@@ -26,11 +26,6 @@ public class ItemsInfoDtoToItemsInfoUtil {
         itemsInfo.setRetailPrice(itemsInfoDto.getRetailPrice());
         itemsInfo.setRetailPrice(itemsInfoDto.getRetailPrice());
         itemsInfo.setIntroduction(itemsInfoDto.getIntroduction());
-        itemsInfo.setImage1(itemsInfoDto.getImage1());
-        itemsInfo.setImage2(itemsInfoDto.getImage2());
-        itemsInfo.setImage3(itemsInfoDto.getImage3());
-        itemsInfo.setImage4(itemsInfoDto.getImage4());
-        itemsInfo.setImage5(itemsInfoDto.getImage5());
         itemsInfo.setClassifyId(itemsInfoDto.getClassifyId());
         itemsInfo.setClassifyName(itemsInfoDto.getClassifyName());
         itemsInfo.setUnitId(itemsInfoDto.getUnitId());

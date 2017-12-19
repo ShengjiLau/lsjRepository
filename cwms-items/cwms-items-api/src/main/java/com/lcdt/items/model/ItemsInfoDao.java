@@ -1,5 +1,7 @@
 package com.lcdt.items.model;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.lcdt.converter.ResponseData;
 
 import java.io.Serializable;
@@ -19,6 +21,8 @@ public class ItemsInfoDao extends ItemsInfo{
     private ConversionRel conversionRel;
 
     private List<ItemClassify> itemClassifyList;
+
+    private JSONArray imgs;
 
     public String getClassifyIds() {
         return classifyIds;
@@ -58,5 +62,13 @@ public class ItemsInfoDao extends ItemsInfo{
 
     public void setItemClassifyList(List<ItemClassify> itemClassifyList) {
         this.itemClassifyList = itemClassifyList;
+    }
+
+    public JSONArray getImgs() {
+        return JSON.parseArray(getImages());
+    }
+
+    public void setImgs(JSONArray imgs) {
+        this.imgs = imgs;
     }
 }
