@@ -7,7 +7,7 @@ public class PayOrder {
 
     private Integer orderType;
 
-    private String orderAmount;
+    private Integer orderAmount;
 
     private Date createTime;
 
@@ -35,12 +35,12 @@ public class PayOrder {
         this.orderType = orderType;
     }
 
-    public String getOrderAmount() {
+    public Integer getOrderAmount() {
         return orderAmount;
     }
 
-    public void setOrderAmount(String orderAmount) {
-        this.orderAmount = orderAmount == null ? null : orderAmount.trim();
+    public void setOrderAmount(Integer orderAmount) {
+        this.orderAmount = orderAmount == null ? null : orderAmount;
     }
 
     public Date getCreateTime() {

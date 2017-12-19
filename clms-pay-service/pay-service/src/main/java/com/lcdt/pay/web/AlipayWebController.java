@@ -7,8 +7,12 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.lcdt.pay.config.AlipayContants;
 import com.lcdt.pay.model.AlipayTradeOrder;
+import com.lcdt.pay.model.OrderStatus;
 import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.service.OrderService;
+import com.lcdt.pay.utils.MoneyNumUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +33,9 @@ public class AlipayWebController {
     @Autowired
     OrderService orderService;
 
+    private Logger logger = LoggerFactory.getLogger(AlipayWebController.class);
+
+
     @RequestMapping("/pay")
     public void payPage(HttpServletResponse httpResponse, PayOrder payOrder) throws IOException {
 
@@ -37,6 +44,11 @@ public class AlipayWebController {
         Integer orderStatus = serverOrder.getOrderStatus();
         //判断是否是待支付状态
 
+        if (serverOrder.getOrderStatus() != OrderStatus.PENDINGPAY) {
+            throw new RuntimeException("订单状态异常");
+        }
+
+
         //获得初始化的AlipayClient
         AlipayClient alipayClient = new DefaultAlipayClient(AlipayContants.getApiGataway(), AlipayContants.getAppId()
                 , AlipayContants.getAppPrivateKey(), FORMAT, CHARSET, AlipayContants.getAlipayPublicKey(),AlipayContants.getSignType());
@@ -44,8 +56,7 @@ public class AlipayWebController {
         AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();//创建API对应的request
         AlipayTradeOrder alipayTradeOrder = new AlipayTradeOrder();
         alipayTradeOrder.setTradeNo(payOrder.getOrderNo());
-//        alipayTradeOrder.setProductCode(payOrder.get);
-        alipayTradeOrder.setTotalAmount(payOrder.getOrderAmount());
+        alipayTradeOrder.setTotalAmount(MoneyNumUtil.integerMoneyToString(payOrder.getOrderAmount()));
 
         String form = "";
         try {
@@ -78,9 +89,14 @@ public class AlipayWebController {
         }
 
         if (b) {
-            //TODO 业务操作 绑定成功
             PayOrder payOrder = orderService.selectByOrderNo(orderNo);
-            orderService.updateStatus(payOrder);
+            if (payOrder == null) {
+                logger.error("充值订单数据库没有记录 orderNo:  {} ",payOrder.getOrderNo());
+                return;
+            }
+
+            orderService.changeToPayFinish(payOrder);
+            return;
         }else{
             return;
         }

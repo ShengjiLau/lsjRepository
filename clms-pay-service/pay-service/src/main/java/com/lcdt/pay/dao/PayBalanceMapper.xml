@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.lcdt.pay.model.PayBalance">
     <id column="balance_id" jdbcType="BIGINT" property="balanceId" />
     <result column="balance_company_id" jdbcType="BIGINT" property="balanceCompanyId" />
-    <result column="balance" jdbcType="VARCHAR" property="balance" />
+    <result column="balance" jdbcType="INTEGER" property="balance" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -17,13 +17,13 @@
     </selectKey>
     insert into pay_balance (balance_company_id, balance, update_time
       )
-    values (#{balanceCompanyId,jdbcType=BIGINT}, #{balance,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}
+    values (#{balanceCompanyId,jdbcType=BIGINT}, #{balance,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.pay.model.PayBalance">
     update pay_balance
     set balance_company_id = #{balanceCompanyId,jdbcType=BIGINT},
-      balance = #{balance,jdbcType=VARCHAR},
+      balance = #{balance,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where balance_id = #{balanceId,jdbcType=BIGINT}
   </update>
@@ -34,6 +34,14 @@
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select balance_id, balance_company_id, balance, update_time
-    from pay_balance
+    from pay_balance∑
   </select>
+
+  <select id="selectByCompanyId" resultMap="BaseResultMap">
+    select balance_id, balance_company_id, balance, update_time
+    from pay_balance
+    WHERE balance_company_id = #{balanceCompanyId,jdbcType=BIGINT}
+
+  </select>
+
 </mapper>

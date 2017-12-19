@@ -8,6 +8,6 @@ public interface OrderService {
 
     PayOrder selectByOrderNo(String orderNo);
 
-    PayOrder updateStatus(PayOrder order);
 
+    PayOrder changeToPayFinish(PayOrder payOrder);
 }

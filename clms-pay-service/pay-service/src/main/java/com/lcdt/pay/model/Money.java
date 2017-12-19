@@ -2,17 +2,17 @@ package com.lcdt.pay.model;
 
 public class Money {
 
-    public Money(String moneyNum) {
+    public Money(Integer moneyNum) {
         this.moneyNum = moneyNum;
     }
 
-    private String moneyNum;
+    private Integer moneyNum;
 
-    public String getMoneyNum() {
+    public Integer getMoneyNum() {
         return moneyNum;
     }
 
-    public void setMoneyNum(String moneyNum) {
+    public void setMoneyNum(Integer moneyNum) {
         this.moneyNum = moneyNum;
     }
 }

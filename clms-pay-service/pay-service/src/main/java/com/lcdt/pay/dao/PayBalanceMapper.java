@@ -14,4 +14,7 @@ public interface PayBalanceMapper {
     List<PayBalance> selectAll();
 
     int updateByPrimaryKey(PayBalance record);
+
+    PayBalance selectByCompanyId(Long companyId);
+
 }

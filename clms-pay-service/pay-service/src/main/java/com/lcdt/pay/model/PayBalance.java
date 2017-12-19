@@ -7,7 +7,7 @@ public class PayBalance {
 
     private Long balanceCompanyId;
 
-    private String balance;
+    private Integer balance;
 
     private Date updateTime;
 
@@ -27,12 +27,12 @@ public class PayBalance {
         this.balanceCompanyId = balanceCompanyId;
     }
 
-    public String getBalance() {
+    public Integer getBalance() {
         return balance;
     }
 
-    public void setBalance(String balance) {
-        this.balance = balance == null ? null : balance.trim();
+    public void setBalance(Integer balance) {
+        this.balance = balance;
     }
 
     public Date getUpdateTime() {
