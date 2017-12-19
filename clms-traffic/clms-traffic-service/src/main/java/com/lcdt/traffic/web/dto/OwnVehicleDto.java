@@ -13,6 +13,10 @@ public class OwnVehicleDto extends OwnVehicle {
 
     private List<OwnVehicleCertificate> ownVehicleCertificateList;
 
+    private int pageNum;
+
+    private int pageSize;
+
     public List<OwnVehicleCertificate> getOwnVehicleCertificateList() {
         return ownVehicleCertificateList;
     }
@@ -21,5 +25,19 @@ public class OwnVehicleDto extends OwnVehicle {
         this.ownVehicleCertificateList = ownVehicleCertificateList;
     }
 
+    public int getPageNum() {
+        return pageNum;
+    }
 
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 }

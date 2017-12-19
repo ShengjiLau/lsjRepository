@@ -1,6 +1,7 @@
 package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.OwnVehicle;
+
 import java.util.List;
 
 public interface OwnVehicleMapper {
@@ -16,8 +17,26 @@ public interface OwnVehicleMapper {
 
     /**
      * 查询车牌持否存在 （查询的为count，0不存在）
+     *
      * @param vehicleNum
      * @return
      */
     int selectVehicleNum(String vehicleNum);
+
+    /**
+     * 删除车辆（实际为更新is_deteted字段）
+     *
+     * @param ownVehicle
+     * @return
+     */
+    int deleteByUpdate(OwnVehicle ownVehicle);
+
+    /**
+     * 按条件查询
+     *
+     * @param ownVehicle
+     * @return
+     */
+    List<OwnVehicle> selectByCondition(OwnVehicle ownVehicle);
+
 }
