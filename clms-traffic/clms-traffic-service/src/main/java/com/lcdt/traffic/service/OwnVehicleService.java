@@ -1,7 +1,6 @@
 package com.lcdt.traffic.service;
 
-import com.lcdt.traffic.dto.OwnVehicleDto;
-import com.lcdt.traffic.model.OwnVehicle;
+import com.lcdt.traffic.web.dto.OwnVehicleDto;
 
 import java.util.List;
 
@@ -20,10 +19,10 @@ public interface OwnVehicleService {
 
     /**
      * 修改更新车辆
-     * @param ownVehicle
+     * @param ownVehicleDto
      * @return
      */
-    int modVhehicle(OwnVehicle ownVehicle);
+    int modVehicle(OwnVehicleDto ownVehicleDto);
 
     /**
      * 删除车辆

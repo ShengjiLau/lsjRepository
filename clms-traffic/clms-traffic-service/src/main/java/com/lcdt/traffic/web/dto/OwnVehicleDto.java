@@ -1,4 +1,4 @@
-package com.lcdt.traffic.dto;
+package com.lcdt.traffic.web.dto;
 
 import com.lcdt.traffic.model.OwnVehicle;
 import com.lcdt.traffic.model.OwnVehicleCertificate;

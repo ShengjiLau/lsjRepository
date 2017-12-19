@@ -3,13 +3,15 @@ package com.lcdt.traffic.model;
 import java.util.Date;
 
 public class OwnVehicleCertificate {
-    private Long dgId;
+    private Long ovcId;
 
     private Long ownVehicleId;
 
     private String groupName;
 
     private String certificateType;
+
+    private String certificateNo;
 
     private Date processDt;
 
@@ -43,12 +45,12 @@ public class OwnVehicleCertificate {
 
     private Long compnayId;
 
-    public Long getDgId() {
-        return dgId;
+    public Long getOvcId() {
+        return ovcId;
     }
 
-    public void setDgId(Long dgId) {
-        this.dgId = dgId;
+    public void setOvcId(Long ovcId) {
+        this.ovcId = ovcId;
     }
 
     public Long getOwnVehicleId() {
@@ -73,6 +75,14 @@ public class OwnVehicleCertificate {
 
     public void setCertificateType(String certificateType) {
         this.certificateType = certificateType == null ? null : certificateType.trim();
+    }
+
+    public String getCertificateNo() {
+        return certificateNo;
+    }
+
+    public void setCertificateNo(String certificateNo) {
+        this.certificateNo = certificateNo;
     }
 
     public Date getProcessDt() {
