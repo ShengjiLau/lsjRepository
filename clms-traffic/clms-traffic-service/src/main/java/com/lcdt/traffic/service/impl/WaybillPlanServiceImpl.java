@@ -500,27 +500,5 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
     }
 
 
-    @Override
-    public PageInfo wayBillPlanList(Map map) {
-        int pageNo = 1;
-        int pageSize = 0; //0表示所有
-
-        if (map.containsKey("page_no")) {
-            if (map.get("page_no") != null) {
-                pageNo = (Integer) map.get("page_no");
-            }
-        }
-        if (map.containsKey("page_size")) {
-            if (map.get("page_size") != null) {
-                pageSize = (Integer) map.get("page_size");
-            }
-        }
-        PageHelper.startPage(pageNo, pageSize);
-        List<WaybillPlan> list = waybillPlanMapper.selectByCondition(map);
-        PageInfo pageInfo = new PageInfo(list);
-        return pageInfo;
-    }
-
-
 
 }
