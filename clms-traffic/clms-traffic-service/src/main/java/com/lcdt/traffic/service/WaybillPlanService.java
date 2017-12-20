@@ -16,16 +16,6 @@ import java.util.Map;
  */
 public interface WaybillPlanService {
 
-
-    /**
-     * 创建计划
-     *
-     * @param dto -- 创建人、公司等信息
-     * @param flag -- 如果为1为发布，2暂存
-     * @return
-     */
-    WaybillPlan createWaybillPlan(WaybillParamsDto dto, short flag);
-
     /***
      * 发布计划
      *
@@ -53,14 +43,6 @@ public interface WaybillPlanService {
      */
     WaybillPlan loadWaybillPlan(WaybillParamsDto dto);
 
-
-    /***
-     *编辑计划
-     *
-     * @param dto
-     * @return
-     */
-    WaybillPlan modifyWayBillPlan(WaybillParamsDto dto);
 
 
     /***

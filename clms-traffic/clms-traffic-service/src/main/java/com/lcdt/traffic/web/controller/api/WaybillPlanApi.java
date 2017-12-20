@@ -6,6 +6,8 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
+import com.lcdt.traffic.service.WaybillPlan4CreateService;
+import com.lcdt.traffic.service.WaybillPlan4EditService;
 import com.lcdt.traffic.service.WaybillPlanService;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.*;
@@ -34,7 +36,15 @@ import java.util.Map;
 public class WaybillPlanApi {
 
     @Autowired
+    private WaybillPlan4CreateService waybillPlan4CreateService; //计划创建
+
+    @Autowired
+    private WaybillPlan4EditService waybillPlan4EditService; //计划编辑
+
+    @Autowired
     private WaybillPlanService waybillPlanService;
+
+
 
 
     @ApiOperation("创建--发布")
@@ -47,7 +57,7 @@ public class WaybillPlanApi {
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
         dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
-        return waybillPlanService.createWaybillPlan(dto, (short) 1);
+        return waybillPlan4CreateService.createWaybillPlan(dto, (short) 1);
    }
 
 
@@ -61,8 +71,38 @@ public class WaybillPlanApi {
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
         dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING);//计划来源-录入
-        return  waybillPlanService.createWaybillPlan(dto, (short) 2);
+        return  waybillPlan4CreateService.createWaybillPlan(dto, (short) 2);
     }
+
+
+
+    @ApiOperation("编辑--发布")
+    @RequestMapping(value = "/waybillPlanEdit4Publish",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_plan_edit_4_publish')")
+    public WaybillPlan waybillPlanEdit4Publish(@RequestBody WaybillParamsDto dto) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+        dto.setUpdateId(loginUser.getUserId());
+        dto.setUpdateName(loginUser.getRealName());
+        dto.setCompanyId(companyId);
+        dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
+        return waybillPlan4EditService.waybillPlanEdit(dto, (short) 1);
+    }
+
+
+    @ApiOperation("编辑--暂存")
+    @RequestMapping(value = "/waybillPlanEdit4Storage",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_plan_edit_4_storage')")
+    public WaybillPlan waybillPlanEdit4Storage(@RequestBody WaybillParamsDto dto) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+        dto.setUpdateId(loginUser.getUserId());
+        dto.setUpdateName(loginUser.getRealName());
+        dto.setCompanyId(companyId);
+        dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING);
+        return waybillPlan4EditService.waybillPlanEdit(dto, (short) 2);
+    }
+
 
 
     @ApiOperation("创建完--发布")
@@ -203,8 +243,8 @@ public class WaybillPlanApi {
     }
 
 
-    @ApiOperation("拉取计划信息-单个详细")
-    @RequestMapping(value = "/storageWaybillPlan",method = RequestMethod.GET)
+    @ApiOperation("拉取计划信息-编辑")
+    @RequestMapping(value = "/loadWaybillPlan",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_waybill_plan')")
     public WaybillPlan loadWaybillPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -212,12 +252,12 @@ public class WaybillPlanApi {
         dto.setCompanyId(companyId);
         dto.setWaybillPlanId(waybillPlanId);
         try {
-            return  waybillPlanService.loadWaybillPlan(dto);
+            WaybillPlan waybillPlan = waybillPlanService.loadWaybillPlan(dto);
+            return  waybillPlan;
         } catch (WaybillPlanException e) {
             throw new WaybillPlanException(e.getMessage());
         }
     }
-
 
 
 
