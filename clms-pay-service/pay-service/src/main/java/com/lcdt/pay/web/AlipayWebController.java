@@ -142,12 +142,6 @@ public class AlipayWebController {
 
     }
 
-    public AlipayTradePagePayRequest request(AlipayTradeOrder tradeOrder) {
-        AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();//创建API对应的request
-        alipayRequest.setReturnUrl(AlipayContants.getReturnUrl());
-        alipayRequest.setNotifyUrl(AlipayContants.getNotifyUrl());//在公共参数中设置回跳和通知地址
-        alipayRequest.setBizContent(tradeOrder.alipayBizContent());
-        return alipayRequest;
-    }
+
 
 }

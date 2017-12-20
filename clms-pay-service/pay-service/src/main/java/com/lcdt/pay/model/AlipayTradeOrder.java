@@ -35,38 +35,6 @@ public class AlipayTradeOrder {
     @JSONField(name = "extend_params")
     private HashMap<String,String> extendParams;
 
-    public String alipayBizContent(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("{");
-        sb.append("\"out_trade_no\":");
-        sb.append("\"").append(tradeNo).append("\",");
-        sb.append("\"product_code\":");
-        sb.append("\"").append(productCode).append("\",");
-        sb.append("\"total_amount\":");
-        sb.append("\"").append(totalAmount).append("\",");
-        sb.append("\"body\":");
-        sb.append("\"").append(body).append("\",");
-        sb.append("\"passback_params\":");
-        sb.append("\"").append(passbackparams).append("\",");
-
-        sb.append("\"extend_params\":");
-
-        sb.append("{\"sys_service_provider_id\":\"2088511833207846\"}");
-        sb.append("}");
-        return sb.toString();
-    }
-
-    public static void main(String[] args) {
-//        JSONObject.toJSONString(new Object(), SerializerFeature.BrowserCompatible);
-        AlipayTradeOrder alipayTradeOrder = new AlipayTradeOrder();
-        alipayTradeOrder.setTradeNo(OrderNoGenerator.generatorOrderNo());
-        alipayTradeOrder.setTotalAmount(MoneyNumUtil.integerMoneyToString(19));
-        alipayTradeOrder.setProductCode("FAST_INSTANT_TRADE_PAY");
-        alipayTradeOrder.setSubject("clms 充值");
-        alipayTradeOrder.setBody("clms 充值");
-        String s = JSONObject.toJSONString(alipayTradeOrder);
-        System.out.println(s);
-    }
 
     public String getTradeNo() {
         return tradeNo;
