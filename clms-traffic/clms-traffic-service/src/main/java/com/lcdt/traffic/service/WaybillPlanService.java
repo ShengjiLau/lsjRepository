@@ -44,6 +44,16 @@ public interface WaybillPlanService {
      */
     PageInfo wayBillPlanList(Map map);
 
+
+    /***
+     * 拉取计划详细信息
+     *
+     * @param dto
+     * @return
+     */
+    WaybillPlan loadWaybillPlan(WaybillParamsDto dto);
+
+
     /***
      *编辑计划
      *
@@ -67,6 +77,9 @@ public interface WaybillPlanService {
      * @return
      */
     PageInfo planLeaveMsgList(Map map);
+
+
+
 
 
 

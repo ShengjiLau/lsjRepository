@@ -346,12 +346,21 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
         return pageInfo;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public WaybillPlan loadWaybillPlan(WaybillParamsDto dto) throws WaybillPlanException  {
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(), dto.getCompanyId(), (short)0);
+        if (waybillPlan == null) {
+            throw new WaybillPlanException("计划不存在！");
+        }
+        return waybillPlan;
+    }
 
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public WaybillPlan publishWayBillPlan(WaybillParamsDto dto) throws WaybillPlanException { //只有是暂存(待发布状态的，才能点发布)
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId());
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(), dto.getCompanyId(), (short)0);
         WaybillPlan updateObj = new WaybillPlan();
         updateObj.setWaybillPlanId(waybillPlan.getWaybillPlanId());
         if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
@@ -470,7 +479,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public PlanLeaveMsg planLeaveMsgAdd(PlanLeaveMsgParamsDto dto) throws WaybillPlanException {
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId());
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(),dto.getCreateCompanyId(),(short)0);
         if (waybillPlan != null) { //计划存在
             PlanLeaveMsg planLeaveMsg = new PlanLeaveMsg();
             if (waybillPlan.getCompanyId()==dto.getCompanyId()) { //说明是货主
@@ -521,7 +530,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
             }
         }
         //先获取计划，根据计划判断是货主还是承运人
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(Long.valueOf(map.get("waybillPlanId").toString()));
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(Long.valueOf(map.get("waybillPlanId").toString()),Long.valueOf(map.get("createCompanyId").toString()), (short)0);
         long companyId = Long.valueOf(map.get("companyId").toString());//登录人企业ID
         PageInfo pageInfo = null;
         if (waybillPlan != null) { //计划存在
