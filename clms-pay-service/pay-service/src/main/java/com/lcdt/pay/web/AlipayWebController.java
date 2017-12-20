@@ -86,8 +86,8 @@ public class AlipayWebController {
         alipayRequest.setBizContent(JSONObject.toJSONString(alipayTradeOrder));//填充业务参数
 
 
-        alipayRequest.setReturnUrl("http://domain.com/CallBack/return_url.jsp");
-        alipayRequest.setNotifyUrl("http://domain.com/CallBack/notify_url.jsp");//在公共参数中设置回跳和通知地址
+        alipayRequest.setReturnUrl(AlipayContants.getReturnUrl());
+        alipayRequest.setNotifyUrl(AlipayContants.getNotifyUrl());//在公共参数中设置回跳和通知地址
         String form = "";
         try {
             form = alipayClient.pageExecute(alipayRequest).getBody(); //调用SDK生成表单
