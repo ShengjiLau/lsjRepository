@@ -42,7 +42,7 @@
     <result column="update_name" jdbcType="VARCHAR" property="updateName" />
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
-    <result column="compnay_id" jdbcType="BIGINT" property="compnayId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_own_vehicle
@@ -63,7 +63,7 @@
       vehicle_tailstock_photo, vehicle_tyre_spec, 
       group_id, create_id, create_name, 
       create_date, update_id, update_name, 
-      update_date, compnay_id
+      update_date, company_id
       )
     values (#{affiliatedCompany,jdbcType=VARCHAR}, #{vehicleNum,jdbcType=VARCHAR},
       #{vehicleTrailerNum,jdbcType=VARCHAR}, #{vehicleCategory,jdbcType=SMALLINT}, #{vehicleType,jdbcType=VARCHAR}, 
@@ -79,7 +79,7 @@
       #{vehicleTailstockPhoto,jdbcType=VARCHAR}, #{vehicleTyreSpec,jdbcType=VARCHAR}, 
       #{groupId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, 
       CURRENT_TIMESTAMP , #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR},
-      #{updateDate,jdbcType=TIMESTAMP}, #{compnayId,jdbcType=BIGINT}
+      #{updateDate,jdbcType=TIMESTAMP}, #{companyId,jdbcType=BIGINT}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnVehicle">
@@ -119,7 +119,7 @@
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
       update_date = CURRENT_TIMESTAMP
-    where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT} and compnay_id = #{compnayId,jdbcType=BIGINT}
+    where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select own_vehicle_id, affiliated_company, vehicle_num, vehicle_trailer_num, vehicle_category, 
@@ -130,7 +130,7 @@
     vehicle_two_level_period, vehicle_insurance_company, vehicle_policy_num, vehicle_insurance_expiry_date, 
     vehicle_headerstock_photo, vehicle_tailstock_photo, vehicle_tyre_spec, group_id, 
     create_id, create_name, create_date, update_id, update_name, update_date, is_deleted, 
-    compnay_id
+    company_id
     from t_own_vehicle
     where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT}
   </select>
@@ -143,7 +143,7 @@
     vehicle_two_level_period, vehicle_insurance_company, vehicle_policy_num, vehicle_insurance_expiry_date, 
     vehicle_headerstock_photo, vehicle_tailstock_photo, vehicle_tyre_spec, group_id, 
     create_id, create_name, create_date, update_id, update_name, update_date, is_deleted, 
-    compnay_id
+    company_id
     from t_own_vehicle
   </select>
 
@@ -192,8 +192,8 @@
     <result column="update_name" jdbcType="VARCHAR" property="updateName" />
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
-    <result column="compnay_id" jdbcType="BIGINT" property="compnayId" />
-    <collection property="ownVehicleCertificateList" column="own_vehicle_id" autoMapping="true">
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <collection property="ownVehicleCertificateList" column="own_vehicle_id" ofType="com.lcdt.traffic.model.OwnVehicleCertificate">
     </collection>
   </resultMap>
 
@@ -208,7 +208,7 @@
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
       update_date = CURRENT_TIMESTAMP
-    where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT} and compnay_id = #{compnayId,jdbcType=BIGINT}
+    where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
   <select id="selectByCondition" parameterType="com.lcdt.traffic.model.OwnVehicle" resultMap="BaseResultMap">
     select own_vehicle_id, affiliated_company, vehicle_num, vehicle_trailer_num, vehicle_category,
@@ -219,10 +219,10 @@
     vehicle_two_level_period, vehicle_insurance_company, vehicle_policy_num, vehicle_insurance_expiry_date,
     vehicle_headerstock_photo, vehicle_tailstock_photo, vehicle_tyre_spec, group_id,
     create_id, create_name, create_date, update_id, update_name, update_date, is_deleted,
-    compnay_id
+    company_id
     from t_own_vehicle
     <where>
-      compnay_id = #{compnayId,jdbcType=BIGINT}
+      company_id = #{companyId,jdbcType=BIGINT}
       <if test="affiliatedCompany!=null and affiliatedCompany!=''">
         and affiliated_company like '%#{affiliatedCompany,jdbcType=VARCHAR}%'
       </if>
@@ -236,5 +236,19 @@
         and vehicle_category = #{vehicleCategory,jdbcType=VARCHAR}
       </if>
     </where>
+  </select>
+  <select id="selectDetail" resultMap="ResultMapDto">
+    select t1.own_vehicle_id, t1.affiliated_company, t1.vehicle_num, t1.vehicle_trailer_num, t1.vehicle_category,
+    t1.vehicle_type, t1.vehicle_length, t1.vehicle_load, t1.vehicle_driver_phone, t1.vehicle_driver_name,
+    t1.vehicle_brand, t1.vehicle_specifications, t1.vehicle_remark, t1.vehicle_vin, t1.vehicle_engine_number,
+    t1.chassis_number, t1.vehicle_axle_number, t1.vehicle_wheelbase, t1.vehicle_tyre_amount, t1.energy_type,
+    t1.swept_volume, t1.vehicle_color, t1.vehicle_factory_date, t1.vehicle_buying_date, t1.vehicle_annual_date,
+    t1.vehicle_two_level_period, t1.vehicle_insurance_company, t1.vehicle_policy_num, t1.vehicle_insurance_expiry_date,
+    t1.vehicle_headerstock_photo, t1.vehicle_tailstock_photo, t1.vehicle_tyre_spec, t1.group_id,t1.company_id,
+    t2.ovc_id, t2.own_vehicle_id, t2.group_name, t2.certificate_type,certificate_no, t2.process_dt, t2.certificate_validity_begin,
+    t2.certificate_validity_end, t2.certificate_fee, t2.certificate_attachment1, t2.certificate_attachment2,
+    t2.certificate_attachment3, t2.group_remark
+    from t_own_vehicle t1 left join t_own_vehicle_certificate t2 on t1.own_vehicle_id = t2.own_vehicle_id
+    where t1.own_vehicle_id = #{0} and company_id = #{1}
   </select>
 </mapper>

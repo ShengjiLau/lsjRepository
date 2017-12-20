@@ -25,7 +25,7 @@
     <result column="update_name" jdbcType="VARCHAR" property="updateName" />
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
-    <result column="compnay_id" jdbcType="BIGINT" property="compnayId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_own_driver
@@ -39,7 +39,7 @@
       driver_city, driver_district, driver_address, 
       driver_remark, create_id, create_name, 
       create_date, update_id, update_name, 
-      update_date, is_deleted, compnay_id
+      update_date, is_deleted, company_id
       )
     values (#{userId,jdbcType=BIGINT}, #{driverId,jdbcType=BIGINT}, #{affiliatedCompany,jdbcType=VARCHAR}, 
       #{driverName,jdbcType=VARCHAR}, #{driverPhone,jdbcType=VARCHAR}, #{driverCategory,jdbcType=SMALLINT}, 
@@ -48,7 +48,7 @@
       #{driverCity,jdbcType=VARCHAR}, #{driverDistrict,jdbcType=VARCHAR}, #{driverAddress,jdbcType=VARCHAR}, 
       #{driverRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, 
       #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, 
-      #{updateDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, #{compnayId,jdbcType=BIGINT}
+      #{updateDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, #{companyId,jdbcType=BIGINT}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnDriver">
@@ -75,14 +75,14 @@
       update_name = #{updateName,jdbcType=VARCHAR},
       update_date = #{updateDate,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=SMALLINT},
-      compnay_id = #{compnayId,jdbcType=BIGINT}
+      company_id = #{companyId,jdbcType=BIGINT}
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select user_id, driver_ID, affiliated_company, driver_name, driver_phone, driver_category, 
     driver_email, driver_sex, driver_nationality, driver_birthday, driver_license, driver_province, 
     driver_city, driver_district, driver_address, driver_remark, create_id, create_name, 
-    create_date, update_id, update_name, update_date, is_deleted, compnay_id
+    create_date, update_id, update_name, update_date, is_deleted, company_id
     from t_own_driver
     where user_id = #{userId,jdbcType=BIGINT}
   </select>
@@ -90,7 +90,7 @@
     select user_id, driver_ID, affiliated_company, driver_name, driver_phone, driver_category, 
     driver_email, driver_sex, driver_nationality, driver_birthday, driver_license, driver_province, 
     driver_city, driver_district, driver_address, driver_remark, create_id, create_name, 
-    create_date, update_id, update_name, update_date, is_deleted, compnay_id
+    create_date, update_id, update_name, update_date, is_deleted, company_id
     from t_own_driver
   </select>
 </mapper>
