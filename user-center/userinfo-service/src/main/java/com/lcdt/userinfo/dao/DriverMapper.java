@@ -13,4 +13,11 @@ public interface DriverMapper {
     List<Driver> selectAll();
 
     int updateByPrimaryKey(Driver record);
+
+    /**
+     * 根据手机号码串批量查询定位状态及定位信息
+     * @param driverPhoneArr
+     * @return
+     */
+    List<Driver> selectByPhone(List<String> driverPhoneList);
 }

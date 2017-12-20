@@ -3,6 +3,7 @@ package com.lcdt.traffic.service;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.OwnVehicle;
 import com.lcdt.traffic.web.dto.OwnVehicleDto;
+import com.lcdt.userinfo.model.Driver;
 
 import java.util.List;
 
@@ -42,4 +43,11 @@ public interface OwnVehicleService {
      * @return
      */
     PageInfo<List<OwnVehicle>> ownVehicleList(OwnVehicle ownVehicle, PageInfo pageInfo);
+
+    /**
+     * 获取定位信息
+     * @param driverPhoneList
+     * @return
+     */
+    List<Driver> getGpsInfo(List<String> driverPhoneList);
 }
