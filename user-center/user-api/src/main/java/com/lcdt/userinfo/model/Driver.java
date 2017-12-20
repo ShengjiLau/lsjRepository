@@ -50,6 +50,8 @@ public class Driver implements Serializable,ResponseData {
 
     private String shortCurrentLocation;
 
+    private Short gpsStatus;
+
     private Long createId;
 
     private String createName;
@@ -238,6 +240,14 @@ public class Driver implements Serializable,ResponseData {
 
     public void setShortCurrentLocation(String shortCurrentLocation) {
         this.shortCurrentLocation = shortCurrentLocation == null ? null : shortCurrentLocation.trim();
+    }
+
+    public Short getGpsStatus() {
+        return gpsStatus;
+    }
+
+    public void setGpsStatus(Short gpsStatus) {
+        this.gpsStatus = gpsStatus;
     }
 
     public Long getCreateId() {

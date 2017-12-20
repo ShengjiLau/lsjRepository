@@ -177,4 +177,9 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
         PageInfo page = new PageInfo(ownVehicleMapper.selectByCondition(ownVehicle));
         return page;
     }
+
+    @Override
+    public List<Driver> getGpsInfo(List<String> driverPhoneList) {
+        return driverService.getGpsInfo(driverPhoneList);
+    }
 }
