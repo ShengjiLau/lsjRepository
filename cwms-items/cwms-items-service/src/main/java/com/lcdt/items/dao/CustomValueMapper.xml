@@ -121,12 +121,8 @@
   </select>
   <update id="updateByVidAndCompanyId" parameterType="com.lcdt.items.model.CustomValue">
     update t_custom_value
-    set item_id = #{itemId,jdbcType=BIGINT},
-    sub_item_id = #{subItemId,jdbcType=BIGINT},
-    property_field = #{propertyField,jdbcType=VARCHAR},
-    property_value = #{propertyValue,jdbcType=VARCHAR},
-    property_name = #{propertyName,jdbcType=VARCHAR},
-    property_type = #{propertyType,jdbcType=SMALLINT}
+    set property_value = #{propertyValue,jdbcType=VARCHAR},
+    property_name = #{propertyName,jdbcType=VARCHAR}
     where vid = #{vid,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
 </mapper>
