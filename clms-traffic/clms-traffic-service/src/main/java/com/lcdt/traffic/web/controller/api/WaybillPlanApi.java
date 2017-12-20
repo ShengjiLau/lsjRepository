@@ -8,10 +8,7 @@ import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.WaybillPlanService;
 import com.lcdt.traffic.vo.ConstantVO;
-import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
-import com.lcdt.traffic.web.dto.WaybillParamsDto;
-import com.lcdt.traffic.web.dto.WaybillPlanListParamsDto;
-import com.lcdt.traffic.web.dto.WaybillPlanResultDto;
+import com.lcdt.traffic.web.dto.*;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
@@ -43,15 +40,14 @@ public class WaybillPlanApi {
     @ApiOperation("创建--发布")
     @RequestMapping(value = "/createWaybillPlan",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_create_waybill_plan')")
-    public String createWaybillPlan(@RequestBody WaybillParamsDto dto) {
+    public WaybillPlan createWaybillPlan(@RequestBody WaybillParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
         dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
-        waybillPlanService.createWaybillPlan(dto, (short) 1);
-        return null;
+        return waybillPlanService.createWaybillPlan(dto, (short) 1);
    }
 
 
@@ -85,7 +81,7 @@ public class WaybillPlanApi {
 
 
     @ApiOperation("我的计划-列表")
-    @RequestMapping(value = "/myPlanList",method = RequestMethod.POST)
+    @RequestMapping(value = "/myPlanList",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_my_waybill_plan_list')")
     public WaybillPlanResultDto myPlanList(@Validated WaybillPlanListParamsDto dto,
                              @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
@@ -95,6 +91,7 @@ public class WaybillPlanApi {
         map.put("companyId", companyId);
         map.put("page_no", pageNo);
         map.put("page_size", pageSize);
+        map.put("isDeleted",0); //未删除的
 
         StringBuffer sb = new StringBuffer();
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
@@ -110,8 +107,13 @@ public class WaybillPlanApi {
             }
             sb.append(")");
         }
+
         if (!sb.toString().isEmpty()) {
             map.put("groupIds", sb.toString());
+        }
+
+        if (dto.getSendOrderType()>0) {
+            map.put("sendOrderType",dto.getSendOrderType());
         }
         if (StringUtil.isNotEmpty(dto.getCustomerName())) {
             map.put("customerName",dto.getCustomerName());
@@ -150,14 +152,30 @@ public class WaybillPlanApi {
 
 
     @ApiOperation("留言-列表")
-    @RequestMapping(value = "/planLeaveMsgList",method = RequestMethod.POST)
+    @RequestMapping(value = "/planLeaveMsgList",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_list')")
-    public PlanLeaveMsg planLeaveMsgList(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+    public PlanLeaveMsgResultDto planLeaveMsgList( @ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
+                                                   @ApiParam(value = "创建计划企业ID",required = true) @RequestParam Long createCompanyId,
+                                                   @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+                                                   @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        User loginUser = SecurityInfoGetter.getUser();
-
-        return null;
-
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("createCompanyId",createCompanyId); //创建计划企业ID
+        map.put("waybillPlanId", waybillPlanId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
+        map.put("isDeleted",0); //未删除的
+        PageInfo pageInfo = waybillPlanService.planLeaveMsgList(map);
+        PlanLeaveMsgResultDto dto = new PlanLeaveMsgResultDto();
+        if (pageInfo!=null) {
+            dto.setList(pageInfo.getList());
+            dto.setTotal(pageInfo.getTotal());
+        } else {
+            dto.setList(null);
+            dto.setTotal(0);
+        }
+        return dto;
     }
 
 
@@ -165,6 +183,7 @@ public class WaybillPlanApi {
     @RequestMapping(value = "/planLeaveMsgAdd",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_Add')")
     public PlanLeaveMsg planLeaveMsgAdd(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
+                                        @ApiParam(value = "创建计划企业ID",required = true) @RequestParam Long companyId,
                                         @ApiParam(value = "留言内容",required = true) @RequestParam String leaveMsg) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         User loginUser = SecurityInfoGetter.getUser();
@@ -175,14 +194,32 @@ public class WaybillPlanApi {
         dto.setRealName(loginUser.getRealName());
         dto.setLeaveMsg(leaveMsg);
         dto.setWaybillPlanId(waybillPlanId);
-        PlanLeaveMsg planLeaveMsg = null;
+        dto.setCreateCompanyId(companyId); //创建计划企业ID
         try {
-            planLeaveMsg = waybillPlanService.planLeaveMsgAdd(dto);
+            return waybillPlanService.planLeaveMsgAdd(dto);
         } catch (WaybillPlanException e) {
             throw new WaybillPlanException(e.getMessage());
         }
-        return planLeaveMsg;
     }
+
+
+    @ApiOperation("拉取计划信息-单个详细")
+    @RequestMapping(value = "/storageWaybillPlan",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_waybill_plan')")
+    public WaybillPlan loadWaybillPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        WaybillParamsDto dto = new WaybillParamsDto();
+        dto.setCompanyId(companyId);
+        dto.setWaybillPlanId(waybillPlanId);
+        try {
+            return  waybillPlanService.loadWaybillPlan(dto);
+        } catch (WaybillPlanException e) {
+            throw new WaybillPlanException(e.getMessage());
+        }
+    }
+
+
+
 
 
 

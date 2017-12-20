@@ -324,7 +324,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
     }
 
 }
-
+    @Transactional(readOnly = true)
     @Override
     public PageInfo wayBillPlanList(Map map) {
         int pageNo = 1;
@@ -346,12 +346,21 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
         return pageInfo;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public WaybillPlan loadWaybillPlan(WaybillParamsDto dto) throws WaybillPlanException  {
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(), dto.getCompanyId(), (short)0);
+        if (waybillPlan == null) {
+            throw new WaybillPlanException("计划不存在！");
+        }
+        return waybillPlan;
+    }
 
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public WaybillPlan publishWayBillPlan(WaybillParamsDto dto) throws WaybillPlanException { //只有是暂存(待发布状态的，才能点发布)
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId());
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(), dto.getCompanyId(), (short)0);
         WaybillPlan updateObj = new WaybillPlan();
         updateObj.setWaybillPlanId(waybillPlan.getWaybillPlanId());
         if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
@@ -374,8 +383,9 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                                     planDetail.setUpdateId(dto.getUpdateId());
                                     planDetail.setUpdateName(dto.getUpdateName());
                                     planDetail.setUpdateTime(new Date());
-                                    planDetailMapper.updateByPrimaryKey(planDetail);
+                                   // planDetailMapper.updateByPrimaryKey(planDetail);
                                 }
+                                planDetailMapper.batchUpdatePlanDetail(planDetailList);
 
                                 SplitGoods splitGoods = new SplitGoods(); //派单
                                 splitGoods.setWaybillPlanId(waybillPlan.getWaybillPlanId());
@@ -469,7 +479,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public PlanLeaveMsg planLeaveMsgAdd(PlanLeaveMsgParamsDto dto) throws WaybillPlanException {
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId());
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(),dto.getCreateCompanyId(),(short)0);
         if (waybillPlan != null) { //计划存在
             PlanLeaveMsg planLeaveMsg = new PlanLeaveMsg();
             if (waybillPlan.getCompanyId()==dto.getCompanyId()) { //说明是货主
@@ -482,6 +492,9 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                 planLeaveMsg.setCarrierCompanyName(dto.getCompanyName());
                 planLeaveMsg.setCarrierCompanyId(dto.getCompanyId());
                 planLeaveMsg.setCarrierName(dto.getRealName());
+
+                //承运人也得保存
+                planLeaveMsg.setCompanyId(waybillPlan.getCompanyId());
             }
             planLeaveMsg.setCreateId(dto.getUserId());
             planLeaveMsg.setCreateName(dto.getRealName());
@@ -499,6 +512,40 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
         return null;
     }
 
+
+    @Transactional(readOnly = true)
+    @Override
+    public PageInfo planLeaveMsgList(Map map) {
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+
+        if (map.containsKey("page_no")) {
+            if (map.get("page_no") != null) {
+                pageNo = (Integer) map.get("page_no");
+            }
+        }
+        if (map.containsKey("page_size")) {
+            if (map.get("page_size") != null) {
+                pageSize = (Integer) map.get("page_size");
+            }
+        }
+        //先获取计划，根据计划判断是货主还是承运人
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(Long.valueOf(map.get("waybillPlanId").toString()),Long.valueOf(map.get("createCompanyId").toString()), (short)0);
+        long companyId = Long.valueOf(map.get("companyId").toString());//登录人企业ID
+        PageInfo pageInfo = null;
+        if (waybillPlan != null) { //计划存在
+            PlanLeaveMsg planLeaveMsg = new PlanLeaveMsg();
+            if (waybillPlan.getCompanyId() == companyId) { //说明是货主
+                map.put("companyId",companyId);
+            } else {
+                map.put("carrierCompanyId",companyId);
+            }
+            PageHelper.startPage(pageNo, pageSize);
+            List<PlanLeaveMsg> list = planLeaveMsgMapper.selectByCondition(map);
+            pageInfo = new PageInfo(list);
+        }
+        return pageInfo;
+    }
 
 
 }

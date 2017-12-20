@@ -18,6 +18,9 @@ public class PlanLeaveMsgParamsDto {
     private String realName; //登录用户名
 
 
+    private Long createCompanyId; //创建企业ID
+
+
     public Long getWaybillPlanId() {
         return waybillPlanId;
     }
@@ -64,6 +67,14 @@ public class PlanLeaveMsgParamsDto {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public Long getCreateCompanyId() {
+        return createCompanyId;
+    }
+
+    public void setCreateCompanyId(Long createCompanyId) {
+        this.createCompanyId = createCompanyId;
     }
 }
 

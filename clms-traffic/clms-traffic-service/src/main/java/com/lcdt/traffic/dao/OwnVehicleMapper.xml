@@ -48,8 +48,8 @@
     delete from t_own_vehicle
     where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.lcdt.traffic.model.OwnVehicle" useGeneratedKeys="true" keyProperty="own_vehicle_id">
-    insert into t_own_vehicle (own_vehicle_id, affiliated_company, vehicle_num, 
+  <insert id="insert" parameterType="com.lcdt.traffic.model.OwnVehicle" useGeneratedKeys="true" keyProperty="ownVehicleId">
+    insert into t_own_vehicle (affiliated_company, vehicle_num,
       vehicle_trailer_num, vehicle_category, vehicle_type, 
       vehicle_length, vehicle_load, vehicle_driver_phone, 
       vehicle_driver_name, vehicle_brand, vehicle_specifications, 
@@ -65,7 +65,7 @@
       create_date, update_id, update_name, 
       update_date, compnay_id
       )
-    values (#{ownVehicleId,jdbcType=BIGINT}, #{affiliatedCompany,jdbcType=VARCHAR}, #{vehicleNum,jdbcType=VARCHAR}, 
+    values (#{affiliatedCompany,jdbcType=VARCHAR}, #{vehicleNum,jdbcType=VARCHAR},
       #{vehicleTrailerNum,jdbcType=VARCHAR}, #{vehicleCategory,jdbcType=SMALLINT}, #{vehicleType,jdbcType=VARCHAR}, 
       #{vehicleLength,jdbcType=VARCHAR}, #{vehicleLoad,jdbcType=DECIMAL}, #{vehicleDriverPhone,jdbcType=VARCHAR}, 
       #{vehicleDriverName,jdbcType=VARCHAR}, #{vehicleBrand,jdbcType=VARCHAR}, #{vehicleSpecifications,jdbcType=VARCHAR}, 
@@ -116,14 +116,10 @@
       vehicle_tailstock_photo = #{vehicleTailstockPhoto,jdbcType=VARCHAR},
       vehicle_tyre_spec = #{vehicleTyreSpec,jdbcType=VARCHAR},
       group_id = #{groupId,jdbcType=BIGINT},
-      create_id = #{createId,jdbcType=BIGINT},
-      create_name = #{createName,jdbcType=VARCHAR},
-      create_date = #{createDate,jdbcType=TIMESTAMP},
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
-      update_date = CURRENT_TIMESTAMP,
-      compnay_id = #{compnayId,jdbcType=BIGINT}
-    where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT}
+      update_date = CURRENT_TIMESTAMP
+    where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT} and compnay_id = #{compnayId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select own_vehicle_id, affiliated_company, vehicle_num, vehicle_trailer_num, vehicle_category, 
@@ -205,5 +201,40 @@
     select count(own_vehicle_id)
     from t_own_vehicle
     where vehicle_num = #{0}
+  </select>
+  <update id="deleteByUpdate" parameterType="com.lcdt.traffic.model.OwnVehicle">
+    update t_own_vehicle
+    set is_deleted = 1,
+      update_id = #{updateId,jdbcType=BIGINT},
+      update_name = #{updateName,jdbcType=VARCHAR},
+      update_date = CURRENT_TIMESTAMP
+    where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT} and compnay_id = #{compnayId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByCondition" parameterType="com.lcdt.traffic.model.OwnVehicle" resultMap="BaseResultMap">
+    select own_vehicle_id, affiliated_company, vehicle_num, vehicle_trailer_num, vehicle_category,
+    vehicle_type, vehicle_length, vehicle_load, vehicle_driver_phone, vehicle_driver_name,
+    vehicle_brand, vehicle_specifications, vehicle_remark, vehicle_vin, vehicle_engine_number,
+    chassis_number, vehicle_axle_number, vehicle_wheelbase, vehicle_tyre_amount, energy_type,
+    swept_volume, vehicle_color, vehicle_factory_date, vehicle_buying_date, vehicle_annual_date,
+    vehicle_two_level_period, vehicle_insurance_company, vehicle_policy_num, vehicle_insurance_expiry_date,
+    vehicle_headerstock_photo, vehicle_tailstock_photo, vehicle_tyre_spec, group_id,
+    create_id, create_name, create_date, update_id, update_name, update_date, is_deleted,
+    compnay_id
+    from t_own_vehicle
+    <where>
+      compnay_id = #{compnayId,jdbcType=BIGINT}
+      <if test="affiliatedCompany!=null and affiliatedCompany!=''">
+        and affiliated_company like '%#{affiliatedCompany,jdbcType=VARCHAR}%'
+      </if>
+      <if test="vehicleNum!=null and vehicleNum!=''">
+        and vehicle_num like '%#{vehicleNum,jdbcType=VARCHAR}%'
+      </if>
+      <if test="vehicleDriverName!=null and vehicleDriverName!=''">
+        and (vehicle_driver_name like '%#{vehicleDriverName,jdbcType=VARCHAR}%' or vehicle_driver_phone like '%#{vehicleDriverName,jdbcType=VARCHAR}%')
+      </if>
+      <if test="vehicleCategory==0 or vehicleCategory==1">
+        and vehicle_category = #{vehicleCategory,jdbcType=VARCHAR}
+      </if>
+    </where>
   </select>
 </mapper>

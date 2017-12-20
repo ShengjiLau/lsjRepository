@@ -57,4 +57,12 @@ public interface PlanDetailMapper {
      */
     int batchAddPlanDetail(List<PlanDetail> planDetailList);
 
+
+    /***
+     * 批量添加运单详情
+     * @param planDetailList
+     * @return
+     */
+    int batchUpdatePlanDetail(List<PlanDetail> planDetailList);
+
 }

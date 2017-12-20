@@ -1,8 +1,10 @@
 package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.PlanLeaveMsg;
+import com.lcdt.traffic.model.WaybillPlan;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PlanLeaveMsgMapper {
     /**
@@ -44,4 +46,13 @@ public interface PlanLeaveMsgMapper {
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
     int updateByPrimaryKey(PlanLeaveMsg record);
+
+
+
+    /***
+     * 根据条件查询留言
+     * @param map
+     * @return
+     */
+    List<PlanLeaveMsg> selectByCondition(Map map);
 }
