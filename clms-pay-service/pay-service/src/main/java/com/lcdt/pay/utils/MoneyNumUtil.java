@@ -11,9 +11,7 @@ public final class MoneyNumUtil {
 
 
     public static String integerMoneyToString(Integer amount){
-        int a=9;
-        int b=7;
-        DecimalFormat df=new DecimalFormat("0.0");
+        DecimalFormat df=new DecimalFormat("0.00");
         String format = df.format((float) amount / 10);
         return format;
     }

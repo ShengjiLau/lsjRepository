@@ -57,7 +57,6 @@ public class OrderServiceImpl implements OrderService{
      */
     public void buyServiceProduct(Long orderId,Long companyId, Integer productPackageId) {
 
-        //TODO 这里做幂等
         PayOrder payOrder = selectByOrderId(orderId);
         if (payOrder.getOrderStatus() != OrderStatus.PENDINGPAY) {
             throw new RuntimeException("订单已处理");

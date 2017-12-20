@@ -1,21 +1,27 @@
 package com.lcdt.pay.web;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.pay.config.AlipayContants;
 import com.lcdt.pay.model.AlipayTradeOrder;
 import com.lcdt.pay.model.OrderStatus;
 import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.service.OrderService;
+import com.lcdt.pay.service.TopupService;
 import com.lcdt.pay.utils.MoneyNumUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,15 +41,34 @@ public class AlipayWebController {
 
     private Logger logger = LoggerFactory.getLogger(AlipayWebController.class);
 
+    @Autowired
+    TopupService topupService;
+
+
+    /**
+     * 新建一个充值订单
+     * @return
+     */
+    @RequestMapping("/topup")
+    @ResponseBody
+    public PayOrder createTopupPayOrder(Integer amount){
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Long userId = SecurityInfoGetter.getUser().getUserId();
+        PayOrder topUpOrder = topupService.createTopUpOrder(amount, companyId, userId);
+        return topUpOrder;
+    }
+
 
     @RequestMapping("/pay")
-    public void payPage(HttpServletResponse httpResponse, PayOrder payOrder) throws IOException {
+    public void payPage(HttpServletResponse httpResponse, Long orderId) throws IOException {
 
-        Long orderId = payOrder.getOrderId();
+//        Long orderId = payOrder.getOrderId();
+        if (orderId == null) {
+            return;
+        }
         PayOrder serverOrder = orderService.selectByOrderId(orderId);
         Integer orderStatus = serverOrder.getOrderStatus();
         //判断是否是待支付状态
-
         if (serverOrder.getOrderStatus() != OrderStatus.PENDINGPAY) {
             throw new RuntimeException("订单状态异常");
         }
@@ -55,9 +80,16 @@ public class AlipayWebController {
 
         AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();//创建API对应的request
         AlipayTradeOrder alipayTradeOrder = new AlipayTradeOrder();
-        alipayTradeOrder.setTradeNo(payOrder.getOrderNo());
-        alipayTradeOrder.setTotalAmount(MoneyNumUtil.integerMoneyToString(payOrder.getOrderAmount()));
+        alipayTradeOrder.setTradeNo(serverOrder.getOrderNo());
+        alipayTradeOrder.setTotalAmount(MoneyNumUtil.integerMoneyToString(serverOrder.getOrderAmount()));
+        alipayTradeOrder.setProductCode("FAST_INSTANT_TRADE_PAY");
+        alipayTradeOrder.setSubject("clms充值");
+        alipayTradeOrder.setBody("clms充值");
+        alipayRequest.setBizContent(JSONObject.toJSONString(alipayTradeOrder));//填充业务参数
 
+
+        alipayRequest.setReturnUrl("http://domain.com/CallBack/return_url.jsp");
+        alipayRequest.setNotifyUrl("http://domain.com/CallBack/notify_url.jsp");//在公共参数中设置回跳和通知地址
         String form = "";
         try {
             form = alipayClient.pageExecute(alipayRequest).getBody(); //调用SDK生成表单
@@ -80,7 +112,12 @@ public class AlipayWebController {
             parameterMap.put(s, parameter);
         }
 
-        String orderNo = "";
+        String orderNo = parameterMap.get("out_trade_no");
+        String tradeStatus = parameterMap.get("trade_status");
+        if (!"TRADE_SUCCESS".equals(tradeStatus)) {
+            return;
+        }
+
         boolean b = false;
         try {
             b = AlipaySignature.rsaCheckV1(parameterMap, AlipayContants.getAlipayPublicKey(), CHARSET,AlipayContants.getSignType());
@@ -96,8 +133,6 @@ public class AlipayWebController {
             }
 
             orderService.changeToPayFinish(payOrder);
-            return;
-        }else{
             return;
         }
     }

@@ -1,9 +1,13 @@
 package com.lcdt.pay.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
-@PropertySource("classpath:alipay-${spring.profiles.active}.properties")
+@ConfigurationProperties
+@PropertySource("classpath:/alipay-${spring.profiles.active}.properties")
+@Component
 public class AlipayContants {
 
     private static String APP_PRIVATE_KEY;

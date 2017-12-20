@@ -215,21 +215,23 @@
         <!--<table tableName="mq_message_log" domainObjectName="MqMessageLog">-->
             <!--<generatedKey column="message_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
-        <table tableName="pay_balance" domainObjectName="PayBalance">
-        <generatedKey column="balance_id" sqlStatement="MYSQL" identity="true"></generatedKey>
-        </table>
+        <!--<table tableName="pay_balance" domainObjectName="PayBalance">-->
+        <!--<generatedKey column="balance_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
 
-        <table tableName="pay_order" domainObjectName="PayOrder">
-            <generatedKey column="order_id" sqlStatement="MYSQL" identity="true"></generatedKey>
-        </table>
+        <!--<table tableName="pay_order" domainObjectName="PayOrder">-->
+            <!--<generatedKey column="order_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
 
-        <table tableName="service_product" domainObjectName="ServiceProduct">
-            <generatedKey column="product_id" sqlStatement="MYSQL" identity="true"></generatedKey>
-        </table>
+        <!--<table tableName="service_product" domainObjectName="ServiceProduct">-->
+            <!--<generatedKey column="product_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
 
-        <table tableName="service_product_package" domainObjectName="ServiceProductPackage">
-            <generatedKey column="package_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        <!--<table tableName="service_product_package" domainObjectName="ServiceProductPackage">-->
+            <!--<generatedKey column="package_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
+        <table tableName="company_service_count" domainObjectName="CompanyServiceCount">
+        <generatedKey column="count_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
-
     </context>
 </generatorConfiguration>
