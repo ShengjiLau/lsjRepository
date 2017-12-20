@@ -23,6 +23,10 @@ public class PageBaseDto<T> implements ResponseData{
         this.total = total;
     }
 
+    public PageBaseDto() {
+
+    }
+
     public List<T> getList() {
         return list;
     }

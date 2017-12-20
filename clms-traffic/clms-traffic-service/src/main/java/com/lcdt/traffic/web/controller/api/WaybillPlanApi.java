@@ -184,7 +184,7 @@ public class WaybillPlanApi {
     @ApiOperation("我的计划-列表")
     @RequestMapping(value = "/myPlanList",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_my_waybill_plan_list')")
-    public WaybillPlanResultDto myPlanList(@Validated WaybillPlanListParamsDto dto,
+    public PageBaseDto myPlanList(@Validated WaybillPlanListParamsDto dto,
                              @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                              @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -244,9 +244,7 @@ public class WaybillPlanApi {
             map.put("goodsInfo",dto.getGoodsInfo());
         }
         PageInfo pageInfo = waybillPlanService.wayBillPlanList(map);
-        WaybillPlanResultDto dto1 = new WaybillPlanResultDto();
-        dto1.setList(pageInfo.getList());
-        dto1.setTotal(pageInfo.getTotal());
+        PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
 
@@ -255,7 +253,7 @@ public class WaybillPlanApi {
     @ApiOperation("留言-列表")
     @RequestMapping(value = "/planLeaveMsgList",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_list')")
-    public PlanLeaveMsgResultDto planLeaveMsgList( @ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
+    public PageBaseDto planLeaveMsgList( @ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
                                                    @ApiParam(value = "创建计划企业ID",required = true) @RequestParam Long createCompanyId,
                                                    @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                                    @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
@@ -268,7 +266,7 @@ public class WaybillPlanApi {
         map.put("page_size", pageSize);
         map.put("isDeleted",0); //未删除的
         PageInfo pageInfo = waybillPlanService.planLeaveMsgList(map);
-        PlanLeaveMsgResultDto dto = new PlanLeaveMsgResultDto();
+        PageBaseDto dto = new PageBaseDto();
         if (pageInfo!=null) {
             dto.setList(pageInfo.getList());
             dto.setTotal(pageInfo.getTotal());
@@ -317,13 +315,7 @@ public class WaybillPlanApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_4_direct')")
     public String splitGoods4Direct(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
 
-
-
-
-
-
-
-        return  null;
+       return  null;
     }
 
 
