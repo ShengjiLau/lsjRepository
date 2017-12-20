@@ -226,6 +226,7 @@
         and FIND_IN_SET(classify_id,SELECT_CHILDREN_CLASSIFYID(#{classifyId,jdbcType=BIGINT}))
       </if>
     </where>
+      order by item_id desc
   </select>
 
 </mapper>
