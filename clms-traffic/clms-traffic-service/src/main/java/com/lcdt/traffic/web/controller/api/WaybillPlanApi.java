@@ -1,5 +1,6 @@
 package com.lcdt.traffic.web.controller.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -61,7 +62,7 @@ public class WaybillPlanApi {
    }
 
 
-    @ApiOperation("暂存计划")
+    @ApiOperation("创建--暂存计划")
     @RequestMapping(value = "/storageWaybillPlan",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_storage_waybill_plan')")
     public WaybillPlan storageWaybillPlan(@Validated WaybillParamsDto dto) {
@@ -105,7 +106,7 @@ public class WaybillPlanApi {
 
 
 
-    @ApiOperation("创建完--发布")
+    @ApiOperation("列表--发布")
     @RequestMapping(value = "/publishWaybillPlan",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_publish_waybill_plan')")
     public WaybillPlan publishWaybillPlan(@RequestBody WaybillParamsDto dto) {
@@ -118,6 +119,66 @@ public class WaybillPlanApi {
         dto.setUpdateName(loginUser.getRealName());
         return waybillPlanService.publishWayBillPlan(dto);
     }
+
+
+    @ApiOperation("计划审核通过")
+    @RequestMapping(value = "/publishWaybillPlan",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_plan_check_pass')")
+    public WaybillPlan waybillPlanCheckPass(@RequestBody WaybillParamsDto dto) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+        dto.setCreateId(loginUser.getUserId());
+        dto.setCreateName(loginUser.getRealName());
+        dto.setCompanyId(companyId);
+        dto.setUpdateId(loginUser.getUserId());
+        dto.setUpdateName(loginUser.getRealName());
+        try {
+            return waybillPlanService.wayBillPlanCheckPass(dto);
+        } catch (WaybillPlanException e) {
+            throw new WaybillPlanException(e.getMessage());
+        }
+
+    }
+
+
+    @ApiOperation("拉取计划信息-编辑")
+    @RequestMapping(value = "/loadWaybillPlan",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_waybill_plan')")
+    public WaybillPlan loadWaybillPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        WaybillParamsDto dto = new WaybillParamsDto();
+        dto.setCompanyId(companyId);
+        dto.setWaybillPlanId(waybillPlanId);
+        try {
+            WaybillPlan waybillPlan = waybillPlanService.loadWaybillPlan(dto);
+            return  waybillPlan;
+        } catch (WaybillPlanException e) {
+            throw new WaybillPlanException(e.getMessage());
+        }
+    }
+
+
+
+
+    @ApiOperation("计划详细删除")
+    @RequestMapping(value = "/",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_detail_delete')")
+    public String planDetailDelete(@ApiParam(value = "计划商品ID",required = true) @RequestParam Long planDetailId) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        JSONObject jsonObject = new JSONObject();
+        Integer flag = waybillPlanService.planDetailDelete(planDetailId,companyId);
+        String message = null;
+        int code = -1;
+        if (flag>0) {
+            code = 0;
+        } else {
+            message = "操作失败，请重试！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
+    }
+
 
 
     @ApiOperation("我的计划-列表")
@@ -243,21 +304,29 @@ public class WaybillPlanApi {
     }
 
 
-    @ApiOperation("拉取计划信息-编辑")
-    @RequestMapping(value = "/loadWaybillPlan",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_waybill_plan')")
-    public WaybillPlan loadWaybillPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        WaybillParamsDto dto = new WaybillParamsDto();
-        dto.setCompanyId(companyId);
-        dto.setWaybillPlanId(waybillPlanId);
-        try {
-            WaybillPlan waybillPlan = waybillPlanService.loadWaybillPlan(dto);
-            return  waybillPlan;
-        } catch (WaybillPlanException e) {
-            throw new WaybillPlanException(e.getMessage());
-        }
+    @ApiOperation("派单-信息拉取")
+    @RequestMapping(value = "/splitGoodsLoad",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_load')")
+    public String splitGoodsLoad(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+
+        return  null;
     }
+
+    @ApiOperation("派单-直派")
+    @RequestMapping(value = "/splitGoods4Direct",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_4_direct')")
+    public String splitGoods4Direct(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+
+
+
+
+
+
+
+        return  null;
+    }
+
+
 
 
 

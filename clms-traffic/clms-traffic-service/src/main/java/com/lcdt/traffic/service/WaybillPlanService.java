@@ -27,6 +27,18 @@ public interface WaybillPlanService {
 
 
     /***
+     * 计划审核
+     *
+     * @param dto-- 更新人、公司等信息
+     *
+     * @return
+     */
+    WaybillPlan wayBillPlanCheckPass(WaybillParamsDto dto) throws WaybillPlanException;
+
+
+
+
+    /***
      * 计划查询列表
      *
      * @param map
@@ -61,6 +73,13 @@ public interface WaybillPlanService {
     PageInfo planLeaveMsgList(Map map);
 
 
+    /***
+     * 删除计划商品
+     * @param planDetailId
+     * @param companyId
+     * @return
+     */
+    Integer planDetailDelete(Long planDetailId, Long companyId);
 
 
 

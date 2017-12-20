@@ -316,8 +316,9 @@ public class WaybillPlan4CreateServiceImpl implements WaybillPlan4CreateService 
             obj.setUpdateTime(obj.getCreateDate());
             obj.setCompanyId(vo.getCompanyId());
             obj.setIsDeleted((short)0);
+            planDetailList.add(obj);
         }
-
+        planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
     }
 
 
