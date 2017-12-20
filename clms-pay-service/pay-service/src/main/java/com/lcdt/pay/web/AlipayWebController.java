@@ -61,8 +61,6 @@ public class AlipayWebController {
 
     @RequestMapping("/pay")
     public void payPage(HttpServletResponse httpResponse, Long orderId) throws IOException {
-
-//        Long orderId = payOrder.getOrderId();
         if (orderId == null) {
             return;
         }
