@@ -61,17 +61,21 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     public int deleteSubItemsInfo(Long subItemId, Long companyId) {
         int result = 0;
         SubItemsInfo subItemsInfo = new SubItemsInfo();
-        subItemsInfo.setItemId(subItemId);
+        subItemsInfo.setSubItemId(subItemId);
         subItemsInfo.setCompanyId(companyId);
+
+        Map<String,Object> map=new HashMap<String,Object>();
+        List<Long> subItemIdList = new ArrayList<Long>();
+        subItemIdList.add(subItemId);
+        map.put("itemId",null);
+        map.put("subItemIdList",subItemIdList);
+        map.put("companyId",companyId);
+        //删除规格
+        result += itemSpecKeyValueMapper.deleteBySubItemIds(map);
+        //删除自定义属性值
+        result += customValueMapper.deleteItemAndSubItemId(map);
         //子商品删除
-        result = subItemsInfoMapper.deleteBySubItemIdAndCompanyId(subItemsInfo);
-        //子商品自定义属性删除
-//        result += customValueMapper.deleteItemAndSubItemId(null, subItemId.toString(), companyId.toString());
-        //子商品规格
-        ItemSpecKeyValue itemSpecKeyValue = new ItemSpecKeyValue();
-        itemSpecKeyValue.setSubItemId(subItemId);
-        itemSpecKeyValue.setCompanyId(companyId);
-        result += itemSpecKeyValueMapper.deleteBySubItemIdAndCompanyId(itemSpecKeyValue);
+        result += subItemsInfoMapper.deleteBySubItemIdAndCompanyId(subItemsInfo);
         return result;
     }
 
