@@ -45,7 +45,16 @@ public interface OwnVehicleService {
     PageInfo<List<OwnVehicle>> ownVehicleList(OwnVehicle ownVehicle, PageInfo pageInfo);
 
     /**
+     * 车辆详情
+     *
+     * @param ownVehicleId
+     * @return
+     */
+    OwnVehicleDto ownVehicleDetail(Long ownVehicleId, Long companyId);
+
+    /**
      * 获取定位信息
+     *
      * @param driverPhoneList
      * @return
      */

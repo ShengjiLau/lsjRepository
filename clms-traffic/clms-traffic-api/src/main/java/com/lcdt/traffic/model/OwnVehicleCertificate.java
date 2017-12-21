@@ -43,7 +43,7 @@ public class OwnVehicleCertificate {
 
     private Short isDeleted;
 
-    private Long compnayId;
+    private Long companyId;
 
     public Long getOvcId() {
         return ovcId;
@@ -205,11 +205,11 @@ public class OwnVehicleCertificate {
         this.isDeleted = isDeleted;
     }
 
-    public Long getCompnayId() {
-        return compnayId;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setCompnayId(Long compnayId) {
-        this.compnayId = compnayId;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 }

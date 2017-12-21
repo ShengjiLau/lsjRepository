@@ -85,7 +85,7 @@ public class OwnVehicle implements Serializable {
 
     private Short isDeleted;
 
-    private Long compnayId;
+    private Long companyId;
 
     public Long getOwnVehicleId() {
         return ownVehicleId;
@@ -407,11 +407,11 @@ public class OwnVehicle implements Serializable {
         this.isDeleted = isDeleted;
     }
 
-    public Long getCompnayId() {
-        return compnayId;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setCompnayId(Long compnayId) {
-        this.compnayId = compnayId;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 }

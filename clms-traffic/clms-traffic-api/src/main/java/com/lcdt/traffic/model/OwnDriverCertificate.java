@@ -43,7 +43,7 @@ public class OwnDriverCertificate {
 
     private Short isDeleted;
 
-    private Long compnayId;
+    private Long companyId;
 
     public Long getOdcId() {
         return odcId;
@@ -205,11 +205,11 @@ public class OwnDriverCertificate {
         this.isDeleted = isDeleted;
     }
 
-    public Long getCompnayId() {
-        return compnayId;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setCompnayId(Long compnayId) {
-        this.compnayId = compnayId;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 }
