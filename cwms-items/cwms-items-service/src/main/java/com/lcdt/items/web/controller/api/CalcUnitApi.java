@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -33,6 +34,7 @@ public class CalcUnitApi {
 
     @ApiOperation("新增单位")
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_calc_unit_add')")
     public JSONObject addCalcUnit( HttpSession httpSession,@ApiParam(value = "单位名称", required = true) @RequestParam String unitName) {
         Long companyId= SecurityInfoGetter.getCompanyId();
         User user=SecurityInfoGetter.getUser();
@@ -57,6 +59,7 @@ public class CalcUnitApi {
 
     @ApiOperation("删除单位")
     @PostMapping("/delete")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_calc_unit_delete')")
     public JSONObject delCalcUnit(HttpSession httpSession,@ApiParam(value = "单位Id", required = true) @RequestParam Long unitId) {
         Long companyId= SecurityInfoGetter.getCompanyId();
         int result = calcUnitService.deleteCalcUnit(unitId,companyId);
@@ -72,6 +75,7 @@ public class CalcUnitApi {
 
     @ApiOperation("修改单位")
     @PostMapping("/modify")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_calc_unit_modify')")
     public JSONObject modifyCalcUnit(HttpSession httpSession,
                                      @ApiParam(value = "单位Id", required = true) @RequestParam Long unitId,
                                      @ApiParam(value = "单位名称", required = true) @RequestParam String unitName) {
@@ -96,6 +100,7 @@ public class CalcUnitApi {
 
     @ApiOperation("查询单位")
     @GetMapping("/query")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_calc_unit_query')")
     public CalcUnit queryCalcUnit(HttpSession httpSession,@ApiParam(value = "单位Id", required = true) @RequestParam Long unitId) {
         Long companyId= SecurityInfoGetter.getCompanyId();
         CalcUnit calcUnit=calcUnitService.queryCalcUnit(unitId,companyId);
@@ -107,6 +112,7 @@ public class CalcUnitApi {
 
     @ApiOperation("查询单位")
     @GetMapping("/list")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_calc_unit_list')")
     public PageBaseDto<List<CalcUnit>> queryCalcUnitList(HttpSession httpSession) {
         Long companyId= SecurityInfoGetter.getCompanyId();
         PageInfo pageInfo=new PageInfo();
