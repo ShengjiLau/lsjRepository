@@ -125,8 +125,7 @@
 
   <update id="updateBySubItemIdAndCompanyId" parameterType="com.lcdt.items.model.SubItemsInfo" >
     update t_sub_items_info
-    set item_id = #{itemId,jdbcType=BIGINT},
-    image = #{image,jdbcType=VARCHAR},
+    set image = #{image,jdbcType=VARCHAR},
     code = #{code,jdbcType=VARCHAR},
     bar_code = #{barCode,jdbcType=VARCHAR},
     purchase_price = #{purchasePrice,jdbcType=REAL},

@@ -88,7 +88,7 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
 
         List<SubItemsInfo> subItemsInfoList = subItemsInfoMapper.selectSubItemInfotByItemIdAndCompanyId(subItemsInfo);
         //如果子商品不为空，则组装用 , 分隔开的字符串，以便批量删除了商品的自定义属性值
-        if (subItemsInfoList != null) {
+        if (subItemsInfoList != null&&subItemsInfoList.size()>0) {
             //子商品 subItemId 用 , 分隔开的字符串
             List<Long> subItemIdList = new ArrayList<Long>();
             for (int i = 0; i < subItemsInfoList.size(); i++) {
