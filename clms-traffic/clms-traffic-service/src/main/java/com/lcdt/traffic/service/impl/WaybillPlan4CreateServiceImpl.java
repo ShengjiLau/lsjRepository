@@ -152,14 +152,15 @@ public class WaybillPlan4CreateServiceImpl implements WaybillPlan4CreateService 
                     splitGoods.setCompanyId(splitGoods.getCompanyId());
                     splitGoods.setCarrierCompanyId(vo.getCarrierCompanyId());
                     splitGoods.setIsDeleted((short)0);
+                    splitGoods.setGroupId(vo.getGroupId());
                     splitGoodsMapper.insert(splitGoods);
 
                     List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
                     for (PlanDetail obj : planDetailList) {
                         SplitGoodsDetail tObj = new SplitGoodsDetail();
                         tObj.setPlanDetailId(obj.getPlanDetailId());
-                        tObj.setAllotAmount((float) 0); //待派数量
-                        tObj.setFactAllotAmount(obj.getPlanAmount()); //实际派单数
+                        tObj.setAllotAmount(obj.getPlanAmount()); //派单数量
+                        tObj.setRemainAmount((float) 0); //本次剩余
                         tObj.setFreightPrice(obj.getFreightPrice());
                         tObj.setFreightTotal(obj.getFreightTotal());
                         tObj.setDetailRemark("计划直接生成...");

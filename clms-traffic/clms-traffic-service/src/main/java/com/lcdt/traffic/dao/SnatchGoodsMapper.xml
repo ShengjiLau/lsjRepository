@@ -24,6 +24,7 @@
     <result column="update_name" jdbcType="VARCHAR" property="updateName" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
@@ -47,14 +48,14 @@
       carrier_collection_names, offer_id, offer_name, 
       offer_phone, is_using, company_id, 
       create_id, create_name, create_date, 
-      update_id, update_name, update_time, 
-      is_deleted)
+      update_id, update_name, update_time,
+      group_id,is_deleted)
     values (#{waybillPlanId,jdbcType=BIGINT}, #{offerDate,jdbcType=TIMESTAMP}, #{carrierCollectionIds,jdbcType=VARCHAR}, 
       #{carrierCollectionNames,jdbcType=VARCHAR}, #{offerId,jdbcType=BIGINT}, #{offerName,jdbcType=VARCHAR}, 
       #{offerPhone,jdbcType=VARCHAR}, #{isUsing,jdbcType=SMALLINT}, #{companyId,jdbcType=BIGINT}, 
       #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{isDeleted,jdbcType=SMALLINT})
+      #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},
+      #{groupId,jdbcType=BIGINT},#{isDeleted,jdbcType=SMALLINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.SnatchGoods">
     <!--
@@ -78,6 +79,7 @@
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
+      group_id = #{groupId,jdbcType=BIGINT},
       is_deleted = #{isDeleted,jdbcType=SMALLINT}
     where snatch_goods_id = #{snatchGoodsId,jdbcType=BIGINT}
   </update>
@@ -89,7 +91,7 @@
     -->
     select snatch_goods_id, waybill_plan_id, offer_date, carrier_collection_ids, carrier_collection_names, 
     offer_id, offer_name, offer_phone, is_using, company_id, create_id, create_name, 
-    create_date, update_id, update_name, update_time, is_deleted
+    create_date, update_id, update_name, update_time, group_id, is_deleted
     from t_snatch_goods
     where snatch_goods_id = #{snatchGoodsId,jdbcType=BIGINT}
   </select>
@@ -101,7 +103,7 @@
     -->
     select snatch_goods_id, waybill_plan_id, offer_date, carrier_collection_ids, carrier_collection_names, 
     offer_id, offer_name, offer_phone, is_using, company_id, create_id, create_name, 
-    create_date, update_id, update_name, update_time, is_deleted
+    create_date, update_id, update_name, update_time, group_id, is_deleted
     from t_snatch_goods
   </select>
 </mapper>

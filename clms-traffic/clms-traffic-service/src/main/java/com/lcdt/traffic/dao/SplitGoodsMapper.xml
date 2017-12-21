@@ -25,6 +25,7 @@
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="carrier_company_id" jdbcType="BIGINT" property="carrierCompanyId" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
@@ -49,13 +50,13 @@
       transport_way, split_remark, create_id, 
       create_name, create_date, update_id, 
       update_name, update_time, is_deleted, 
-      carrier_company_id, company_id)
+      carrier_company_id, company_id,group_id)
     values (#{waybillPlanId,jdbcType=BIGINT}, #{carrierType,jdbcType=SMALLINT}, #{carrierCollectionIds,jdbcType=VARCHAR}, 
       #{carrierCollectionNames,jdbcType=VARCHAR}, #{carrierPhone,jdbcType=VARCHAR}, #{carrierVehicle,jdbcType=VARCHAR}, 
       #{transportWay,jdbcType=SMALLINT}, #{splitRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
       #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, 
       #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, 
-      #{carrierCompanyId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT})
+      #{carrierCompanyId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT},#{groupId,jdbcType=BIGINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.SplitGoods">
     <!--
@@ -80,6 +81,7 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=SMALLINT},
       carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
+      group_id = #{groupId,jdbcType=BIGINT},
       company_id = #{companyId,jdbcType=BIGINT}
     where split_goods_id = #{splitGoodsId,jdbcType=BIGINT}
   </update>
@@ -91,7 +93,7 @@
     -->
     select split_goods_id, waybill_plan_id, carrier_type, carrier_collection_ids, carrier_collection_names, 
     carrier_phone, carrier_vehicle, transport_way, split_remark, create_id, create_name, 
-    create_date, update_id, update_name, update_time, is_deleted, carrier_company_id, 
+    create_date, update_id, update_name, update_time, is_deleted, carrier_company_id,group_id,
     company_id
     from t_split_goods
     where split_goods_id = #{splitGoodsId,jdbcType=BIGINT}
@@ -106,7 +108,7 @@
     -->
     select split_goods_id, waybill_plan_id, carrier_type, carrier_collection_ids, carrier_collection_names,
     carrier_phone, carrier_vehicle, transport_way, split_remark, create_id, create_name,
-    create_date, update_id, update_name, update_time, is_deleted, carrier_company_id,
+    create_date, update_id, update_name, update_time, is_deleted, carrier_company_id,group_id,
     company_id
     from t_split_goods
     where waybill_plan_id = #{0} and company_id = #{1} and is_deleted = #{2}
@@ -122,7 +124,7 @@
     -->
     select split_goods_id, waybill_plan_id, carrier_type, carrier_collection_ids, carrier_collection_names, 
     carrier_phone, carrier_vehicle, transport_way, split_remark, create_id, create_name, 
-    create_date, update_id, update_name, update_time, is_deleted, carrier_company_id, 
+    create_date, update_id, update_name, update_time, is_deleted, carrier_company_id,group_id,
     company_id
     from t_split_goods
   </select>

@@ -46,8 +46,6 @@ public class WaybillPlanApi {
     private WaybillPlanService waybillPlanService;
 
 
-
-
     @ApiOperation("创建--发布")
     @RequestMapping(value = "/createWaybillPlan",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_create_waybill_plan')")
@@ -122,7 +120,7 @@ public class WaybillPlanApi {
 
 
     @ApiOperation("计划审核通过")
-    @RequestMapping(value = "/publishWaybillPlan",method = RequestMethod.POST)
+    @RequestMapping(value = "/waybillPlanCheckPass",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_plan_check_pass')")
     public WaybillPlan waybillPlanCheckPass(@RequestBody WaybillParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -313,7 +311,11 @@ public class WaybillPlanApi {
     @ApiOperation("派单-直派")
     @RequestMapping(value = "/splitGoods4Direct",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_4_direct')")
-    public String splitGoods4Direct(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+    public String splitGoods4Direct(@ApiParam(value = "派单详细信息") @RequestBody List<SplitGoodsParamsDto> list) {
+
+
+
+
 
        return  null;
     }

@@ -88,14 +88,15 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                             splitGoods.setCompanyId(dto.getCompanyId());
                             splitGoods.setCarrierCompanyId(waybillPlan.getCarrierCompanyId());
                             splitGoods.setIsDeleted((short)0);
+                            splitGoods.setGroupId(waybillPlan.getGroupId());
                             splitGoodsMapper.insert(splitGoods);
 
                             List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
                             for (PlanDetail obj : planDetailList) {
                                 SplitGoodsDetail tObj = new SplitGoodsDetail();
                                 tObj.setPlanDetailId(obj.getPlanDetailId());
-                                tObj.setAllotAmount((float) 0); //待派数量
-                                tObj.setFactAllotAmount(obj.getPlanAmount()); //实际派单数
+                                tObj.setAllotAmount(obj.getPlanAmount()); //派单数量
+                                tObj.setRemainAmount((float) 0); //本次剩余
                                 tObj.setFreightPrice(obj.getFreightPrice());
                                 tObj.setFreightTotal(obj.getFreightTotal());
                                 tObj.setDetailRemark("发布生在....");
@@ -192,6 +193,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
             splitGoods.setUpdateTime(opDate);
             splitGoods.setCompanyId(dto.getCompanyId());
             splitGoods.setCarrierCompanyId(waybillPlan.getCarrierCompanyId());
+            splitGoods.setGroupId(waybillPlan.getGroupId());
             splitGoods.setIsDeleted((short)0);
             splitGoodsMapper.insert(splitGoods);
 
@@ -199,8 +201,8 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
             for (PlanDetail obj : planDetailList) {
                 SplitGoodsDetail tObj = new SplitGoodsDetail();
                 tObj.setPlanDetailId(obj.getPlanDetailId());
-                tObj.setAllotAmount((float) 0); //待派数量
-                tObj.setFactAllotAmount(obj.getPlanAmount()); //实际派单数
+                tObj.setAllotAmount(obj.getPlanAmount()); //派单数量
+                tObj.setRemainAmount((float) 0); //本次剩余
                 tObj.setFreightPrice(obj.getFreightPrice());
                 tObj.setFreightTotal(obj.getFreightTotal());
                 tObj.setDetailRemark("审批通过后生成...");
