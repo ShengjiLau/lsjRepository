@@ -49,7 +49,7 @@ public class OwnDriver {
 
     private Short isDeleted;
 
-    private Long compnayId;
+    private Long companyId;
 
     public Long getUserId() {
         return userId;
@@ -235,11 +235,11 @@ public class OwnDriver {
         this.isDeleted = isDeleted;
     }
 
-    public Long getCompnayId() {
-        return compnayId;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setCompnayId(Long compnayId) {
-        this.compnayId = compnayId;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 }

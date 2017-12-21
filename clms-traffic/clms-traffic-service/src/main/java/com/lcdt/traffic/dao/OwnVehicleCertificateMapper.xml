@@ -22,7 +22,7 @@
     <result column="update_name" jdbcType="VARCHAR" property="updateName" />
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
-    <result column="compnay_id" jdbcType="BIGINT" property="compnayId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_own_vehicle_certificate
@@ -35,7 +35,7 @@
       certificate_attachment1, certificate_attachment2, 
       certificate_attachment3, group_remark, create_id, 
       create_name, create_date, update_id, 
-      update_name, update_date, compnay_id)
+      update_name, update_date, company_id)
     values (#{ownVehicleId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR},#{certificateType,jdbcType=VARCHAR},
       #{certificateNo,jdbcType=VARCHAR}, #{processDt,jdbcType=TIMESTAMP}, #{certificateValidityBegin,jdbcType=TIMESTAMP},
       #{certificateValidityEnd,jdbcType=TIMESTAMP}, #{certificateFee,jdbcType=REAL}, 
@@ -43,7 +43,7 @@
       #{certificateAttachment3,jdbcType=VARCHAR}, #{groupRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
       #{createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{updateId,jdbcType=BIGINT},
       #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP},
-      #{compnayId,jdbcType=BIGINT})
+      #{companyId,jdbcType=BIGINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnVehicleCertificate">
     update t_own_vehicle_certificate
@@ -65,14 +65,14 @@
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
       update_date = CURRENT_TIMESTAMP,
-      compnay_id = #{compnayId,jdbcType=BIGINT}
+      company_id = #{companyId,jdbcType=BIGINT}
     where ovc_id = #{ovcId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select ovc_id, own_vehicle_id, group_name, certificate_type, certificate_no,process_dt, certificate_validity_begin,
     certificate_validity_end, certificate_fee, certificate_attachment1, certificate_attachment2, 
     certificate_attachment3, group_remark, create_id, create_name, create_date, update_id, 
-    update_name, update_date, is_deleted, compnay_id
+    update_name, update_date, is_deleted, company_id
     from t_own_vehicle_certificate
     where ovc_id = #{ovcId,jdbcType=BIGINT} and is_deleted=0
   </select>
@@ -80,7 +80,7 @@
     select ovc_id, own_vehicle_id, group_name, certificate_type,certificate_no, process_dt, certificate_validity_begin,
     certificate_validity_end, certificate_fee, certificate_attachment1, certificate_attachment2, 
     certificate_attachment3, group_remark, create_id, create_name, create_date, update_id, 
-    update_name, update_date, is_deleted, compnay_id
+    update_name, update_date, is_deleted, company_id
     from t_own_vehicle_certificate
   </select>
 
@@ -93,7 +93,7 @@
     certificate_attachment3, group_remark, create_id,
     create_name, create_date, update_id,
     update_name, update_date,
-    compnay_id)
+    company_id)
     values
     <foreach item="item" collection="list" separator=",">
       (#{item.ownVehicleId,jdbcType=BIGINT}, #{item.groupName,jdbcType=VARCHAR},#{item.certificateType,jdbcType=VARCHAR},
@@ -103,7 +103,7 @@
       #{item.certificateAttachment3,jdbcType=VARCHAR}, #{item.groupRemark,jdbcType=VARCHAR}, #{item.createId,jdbcType=BIGINT},
       #{item.createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{item.updateId,jdbcType=BIGINT},
       #{item.updateName,jdbcType=VARCHAR}, #{item.updateDate,jdbcType=TIMESTAMP},
-      #{item.compnayId,jdbcType=BIGINT})
+      #{item.companyId,jdbcType=BIGINT})
     </foreach>
   </insert>
   <update id="updateBatch" parameterType="java.util.List">
@@ -127,7 +127,7 @@
       update_id = #{item.updateId,jdbcType=BIGINT},
       update_name = #{item.updateName,jdbcType=VARCHAR},
       is_deleted = #{item.isDeleted,jdbcType=SMALLINT}
-      where ovc_id = #{item.ovcId,jdbcType=BIGINT} and compnay_id = #{item.compnayId,jdbcType=BIGINT}
+      where ovc_id = #{item.ovcId,jdbcType=BIGINT} and company_id = #{item.companyId,jdbcType=BIGINT}
     </foreach>
   </update>
   <update id="deleteByUpdate" >
@@ -136,6 +136,6 @@
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
       update_date = CURRENT_TIMESTAMP
-      where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT} and compnay_id = #{compnayId,jdbcType=BIGINT}
+      where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
 </mapper>

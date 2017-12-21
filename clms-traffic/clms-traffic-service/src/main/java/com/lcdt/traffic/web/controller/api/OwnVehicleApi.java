@@ -1,13 +1,14 @@
 package com.lcdt.traffic.web.controller.api;
 
+import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.model.OwnVehicle;
 import com.lcdt.traffic.service.OwnVehicleService;
-import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.OwnVehicleDto;
+import com.lcdt.traffic.web.dto.PageBaseDto;
+import com.lcdt.userinfo.model.Driver;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -17,11 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,7 +44,7 @@ public class OwnVehicleApi {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
         String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
-        ownVehicleDto.setCompnayId(companyId);
+        ownVehicleDto.setCompanyId(companyId);
         ownVehicleDto.setCreateId(userId);
         ownVehicleDto.setCreateName(userName);
         JSONObject jsonObject = new JSONObject();
@@ -68,7 +67,7 @@ public class OwnVehicleApi {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
         String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
-        ownVehicleDto.setCompnayId(companyId);
+        ownVehicleDto.setCompanyId(companyId);
         ownVehicleDto.setUpdateId(userId);
         ownVehicleDto.setUpdateName(userName);
         JSONObject jsonObject = new JSONObject();
@@ -90,7 +89,7 @@ public class OwnVehicleApi {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
         String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
-        ownVehicleDto.setCompnayId(companyId);
+        ownVehicleDto.setCompanyId(companyId);
         ownVehicleDto.setUpdateId(userId);
         ownVehicleDto.setUpdateName(userName);
         JSONObject jsonObject = new JSONObject();
@@ -106,21 +105,44 @@ public class OwnVehicleApi {
     }
 
     @ApiOperation(value = "车辆列表", notes = "获取车辆")
-    @PostMapping("/list")
+    @GetMapping("/list")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_list')")
     public PageBaseDto<List<OwnVehicle>> ownVehicleList(@RequestBody OwnVehicleDto ownVehicleDto) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         OwnVehicle ownVehicle = new OwnVehicle();
         BeanUtils.copyProperties(ownVehicleDto, ownVehicle);
-        ownVehicle.setCompnayId(companyId);
+        ownVehicle.setCompanyId(companyId);
 
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(ownVehicleDto.getPageNum());    //设置页码
         pageInfo.setPageSize(ownVehicleDto.getPageSize());  //设置每页条数
         PageInfo<List<OwnVehicle>> listPageInfo = ownVehicleService.ownVehicleList(ownVehicle, pageInfo);
         logger.debug("车辆总条数：" + listPageInfo.getTotal());
-        logger.debug("listPageInfo:"+listPageInfo.toString());
+        logger.debug("listPageInfo:" + listPageInfo.toString());
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
+        return pageBaseDto;
+    }
+
+    @ApiOperation(value = "车辆详情", notes = "车辆详情包含证件信息")
+    @GetMapping("/detail")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_list')")
+    public OwnVehicleDto ownVehicleList(Long ownVehicleId) {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        OwnVehicle ownVehicle = new OwnVehicle();
+//        BeanUtils.copyProperties(ownVehicleDto, ownVehicle);
+        OwnVehicleDto ownVehicleDto = ownVehicleService.ownVehicleDetail(ownVehicleId,companyId);
+        return ownVehicleDto;
+    }
+
+    @ApiOperation(value = "获取车辆位置", notes = "根据随车手机号获取车辆(基站定位)")
+    @GetMapping("/current_location")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_list')")
+    public PageBaseDto<List<Driver>> ownVehicleList(@RequestParam String[] driverPhoneArr) {
+//        String driverPhones = StringUtils.join(driverPhoneArr,",");
+        List<String> driverPhoneList = Arrays.asList(driverPhoneArr);
+        logger.debug("driverPhones:" + driverPhoneList.size());
+        List<Driver> driverList = ownVehicleService.getGpsInfo(driverPhoneList);
+        PageBaseDto pageBaseDto = new PageBaseDto(driverList, driverList.size());
         return pageBaseDto;
     }
 

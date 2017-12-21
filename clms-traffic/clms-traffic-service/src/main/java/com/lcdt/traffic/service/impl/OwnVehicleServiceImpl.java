@@ -60,7 +60,7 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
                 ownVehicleCertificate.setOwnVehicleId(ownVehicle.getOwnVehicleId());
                 ownVehicleCertificate.setCreateId(ownVehicleDto.getCreateId());
                 ownVehicleCertificate.setCreateName(ownVehicleDto.getCreateName());
-                ownVehicleCertificate.setCompnayId(ownVehicleDto.getCompnayId());
+                ownVehicleCertificate.setCompanyId(ownVehicleDto.getCompanyId());
             }
             ownVehicleCertificateMapper.insertBatch(ownVehicleDto.getOwnVehicleCertificateList());  //批量插入车辆证件
 
@@ -108,12 +108,12 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
                     if (item.getOvcId() == null) {   //没有主键的则为新增
                         item.setCreateId(ownVehicleDto.getCreateId());
                         item.setCreateName(ownVehicleDto.getCreateName());
-                        item.setCompnayId(ownVehicleDto.getCompnayId());
+                        item.setCompanyId(ownVehicleDto.getCompanyId());
                         list1.add(item);
                     } else {
                         item.setUpdateId(ownVehicleDto.getCreateId());
                         item.setUpdateName(ownVehicleDto.getCreateName());
-                        item.setCompnayId(ownVehicleDto.getCompnayId());
+                        item.setCompanyId(ownVehicleDto.getCompanyId());
                         list2.add(item);
                     }
                 }
@@ -162,7 +162,7 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
             ownVehicleCertificate.setOwnVehicleId(ownVehicleDto.getOwnVehicleId());
             ownVehicleCertificate.setUpdateId(ownVehicleDto.getUpdateId());
             ownVehicleCertificate.setUpdateName(ownVehicleDto.getUpdateName());
-            ownVehicleCertificate.setCompnayId(ownVehicleDto.getCompnayId());
+            ownVehicleCertificate.setCompanyId(ownVehicleDto.getCompanyId());
             ownVehicleCertificateMapper.deleteByUpdate(ownVehicleCertificate);
         } catch (Exception e) {
             throw new RuntimeException("删除失败!");
@@ -176,5 +176,15 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         PageInfo page = new PageInfo(ownVehicleMapper.selectByCondition(ownVehicle));
         return page;
+    }
+
+    @Override
+    public OwnVehicleDto ownVehicleDetail(Long ownVehicleId, Long companyId) {
+        return ownVehicleMapper.selectDetail(ownVehicleId, companyId);
+    }
+
+    @Override
+    public List<Driver> getGpsInfo(List<String> driverPhoneList) {
+        return driverService.getGpsInfo(driverPhoneList);
     }
 }

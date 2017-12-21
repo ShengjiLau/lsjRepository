@@ -1,6 +1,7 @@
 package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.OwnVehicle;
+import com.lcdt.traffic.web.dto.OwnVehicleDto;
 
 import java.util.List;
 
@@ -38,5 +39,12 @@ public interface OwnVehicleMapper {
      * @return
      */
     List<OwnVehicle> selectByCondition(OwnVehicle ownVehicle);
+
+    /**
+     * 查询车辆详情
+     * @param ownVehicleId
+     * @return
+     */
+    OwnVehicleDto selectDetail(Long ownVehicleId, Long companyId);
 
 }

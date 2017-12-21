@@ -22,7 +22,7 @@
     <result column="update_name" jdbcType="VARCHAR" property="updateName" />
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
-    <result column="compnay_id" jdbcType="BIGINT" property="compnayId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_own_driver_certificate
@@ -36,7 +36,7 @@
       certificate_attachment3, group_remark, create_id, 
       create_name, create_date, update_id, 
       update_name, update_date, is_deleted, 
-      compnay_id)
+      company_id)
     values (#{userId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{certificateType,jdbcType=VARCHAR},
       #{certificateNo,jdbcType=VARCHAR}, #{processDt,jdbcType=TIMESTAMP}, #{certificateValidityBegin,jdbcType=TIMESTAMP},
       #{certificateValidityEnd,jdbcType=TIMESTAMP}, #{certificateFee,jdbcType=REAL}, 
@@ -44,7 +44,7 @@
       #{certificateAttachment3,jdbcType=VARCHAR}, #{groupRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
       #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, 
       #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, 
-      #{compnayId,jdbcType=BIGINT})
+      #{companyId,jdbcType=BIGINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnDriverCertificate">
     update t_own_driver_certificate
@@ -67,14 +67,14 @@
       update_name = #{updateName,jdbcType=VARCHAR},
       update_date = #{updateDate,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=SMALLINT},
-      compnay_id = #{compnayId,jdbcType=BIGINT}
+      company_id = #{companyId,jdbcType=BIGINT}
     where odc_id = #{odcId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select odc_id, user_id, group_name, certificate_type, certificate_no, process_dt, certificate_validity_begin,
     certificate_validity_end, certificate_fee, certificate_attachment1, certificate_attachment2, 
     certificate_attachment3, group_remark, create_id, create_name, create_date, update_id, 
-    update_name, update_date, is_deleted, compnay_id
+    update_name, update_date, is_deleted, company_id
     from t_own_driver_certificate
     where odc_id = #{odcId,jdbcType=BIGINT}
   </select>
@@ -82,7 +82,7 @@
     select odc_id, user_id, group_name, certificate_type, certificate_no, process_dt, certificate_validity_begin,
     certificate_validity_end, certificate_fee, certificate_attachment1, certificate_attachment2, 
     certificate_attachment3, group_remark, create_id, create_name, create_date, update_id, 
-    update_name, update_date, is_deleted, compnay_id
+    update_name, update_date, is_deleted, company_id
     from t_own_driver_certificate
   </select>
 </mapper>
