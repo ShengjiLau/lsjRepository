@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.traffic.dao.DriverGroupRelationshipMapper">
   <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.DriverGroupRelationship">
-    <id column="driver_group_id" jdbcType="BIGINT" property="driverGroupId" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="dg_id" jdbcType="BIGINT" property="dgId" />
+    <id column="dgr_id" jdbcType="BIGINT" property="dgrId" />
+    <result column="own_driver_id" jdbcType="BIGINT" property="ownDriverId" />
+    <result column="driver_group_id" jdbcType="BIGINT" property="driverGroupId" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
@@ -18,19 +18,19 @@
     where driver_group_id = #{driverGroupId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lcdt.traffic.model.DriverGroupRelationship">
-    insert into t_driver_group_relationship (driver_group_id, user_id, dg_id, 
+    insert into t_driver_group_relationship (dgr_id, own_driver_id, driver_group_id,
       create_id, create_name, create_date, 
       update_id, update_name, update_date, 
       company_id)
-    values (#{driverGroupId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{dgId,jdbcType=BIGINT}, 
+    values (#{dgrId,jdbcType=BIGINT}, #{ownDriverId,jdbcType=BIGINT}, #{driverGroupId,jdbcType=BIGINT},
       #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
       #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
       #{companyId,jdbcType=BIGINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.DriverGroupRelationship">
     update t_driver_group_relationship
-    set user_id = #{userId,jdbcType=BIGINT},
-      dg_id = #{dgId,jdbcType=BIGINT},
+    set own_driver_id = #{ownDriverId,jdbcType=BIGINT},
+      driver_group_id = #{driverGroupId,jdbcType=BIGINT},
       create_id = #{createId,jdbcType=BIGINT},
       create_name = #{createName,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
@@ -41,13 +41,13 @@
     where driver_group_id = #{driverGroupId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select driver_group_id, user_id, dg_id, create_id, create_name, create_date, update_id, 
+    select dgr_id, own_driver_id, driver_group_id, create_id, create_name, create_date, update_id,
     update_name, update_date, company_id
     from t_driver_group_relationship
-    where driver_group_id = #{driverGroupId,jdbcType=BIGINT}
+    where dgr_id = #{dgrId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select driver_group_id, user_id, dg_id, create_id, create_name, create_date, update_id, 
+    select dgr_id, own_driver_id, driver_group_id, create_id, create_name, create_date, update_id,
     update_name, update_date, company_id
     from t_driver_group_relationship
   </select>

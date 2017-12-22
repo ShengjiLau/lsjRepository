@@ -4,11 +4,11 @@ import com.lcdt.traffic.model.DriverGroup;
 import java.util.List;
 
 public interface DriverGroupMapper {
-    int deleteByPrimaryKey(Long dgId);
+    int deleteByPrimaryKey(Long driverGroupId);
 
     int insert(DriverGroup record);
 
-    DriverGroup selectByPrimaryKey(Long dgId);
+    DriverGroup selectByPrimaryKey(Long driverGroupId);
 
     List<DriverGroup> selectAll();
 

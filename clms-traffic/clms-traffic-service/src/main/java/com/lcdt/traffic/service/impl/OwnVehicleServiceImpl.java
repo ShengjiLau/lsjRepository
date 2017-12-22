@@ -48,12 +48,12 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
 
     @Override
     public int addVehicle(OwnVehicleDto ownVehicleDto) {
-        int count = ownVehicleMapper.selectVehicleNum(ownVehicleDto.getVehicleNum());
+        OwnVehicle ownVehicle = new OwnVehicle();
+        BeanUtils.copyProperties(ownVehicleDto, ownVehicle); //复制对象属性
+        int count = ownVehicleMapper.selectVehicleNum(ownVehicle);
         if (count != 0) {   //判断车牌号是否重复
             throw new RuntimeException("车牌号不能重复!");
         } else {
-            OwnVehicle ownVehicle = new OwnVehicle();
-            BeanUtils.copyProperties(ownVehicleDto, ownVehicle); //复制对象属性
             ownVehicleMapper.insert(ownVehicle);    //保存车辆基本信息
             //设置证件的创建人/id创建人/公司id
             for (OwnVehicleCertificate ownVehicleCertificate : ownVehicleDto.getOwnVehicleCertificateList()) {
@@ -68,7 +68,7 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
             String phone = ownVehicleDto.getVehicleDriverPhone().trim();
             if (!userService.isPhoneBeenRegister(phone)) { //为空则保存司机账号信息
                 RegisterDto registerDto = new RegisterDto();
-                registerDto.setUserPhoneNum(ownVehicleDto.getVehicleDriverPhone());
+                registerDto.setUserPhoneNum(phone);
                 registerDto.setPassword(RegisterUtils.md5Encrypt(phone.substring(5)));
                 logger.debug("司机账号默认密码：" + phone.substring(5));
                 registerDto.setIntroducer("");
@@ -94,12 +94,12 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
 
     @Override
     public int modVehicle(OwnVehicleDto ownVehicleDto) {
-        int count = ownVehicleMapper.selectVehicleNum(ownVehicleDto.getVehicleNum());
+        OwnVehicle ownVehicle = new OwnVehicle();
+        BeanUtils.copyProperties(ownVehicleDto, ownVehicle); //复制对象属性
+        int count = ownVehicleMapper.selectVehicleNum(ownVehicle);
         if (count != 0) {   //判断车牌号是否重复
             throw new RuntimeException("车牌号不能重复!");
         } else {
-            OwnVehicle ownVehicle = new OwnVehicle();
-            BeanUtils.copyProperties(ownVehicleDto, ownVehicle); //复制对象属性
             ownVehicleMapper.updateByPrimaryKey(ownVehicle);    //更新车辆基本信息
             List<OwnVehicleCertificate> list1 = new ArrayList<>();
             List<OwnVehicleCertificate> list2 = new ArrayList<>();

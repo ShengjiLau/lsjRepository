@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.traffic.dao.DriverGroupMapper">
   <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.DriverGroup">
-    <id column="dg_id" jdbcType="BIGINT" property="dgId" />
+    <id column="driver_group_id" jdbcType="BIGINT" property="driverGroupId" />
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <result column="group_remark" jdbcType="VARCHAR" property="groupRemark" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
@@ -16,14 +16,14 @@
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_driver_group
-    where dg_id = #{dgId,jdbcType=BIGINT}
+    where driver_group_id = #{driverGroupId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lcdt.traffic.model.DriverGroup">
-    insert into t_driver_group (dg_id, group_name, group_remark, 
+    insert into t_driver_group (driver_group_id, group_name, group_remark, 
       create_id, create_name, create_date, 
       update_id, update_name, update_date, 
       is_deleted, compnay_id)
-    values (#{dgId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{groupRemark,jdbcType=VARCHAR}, 
+    values (#{driverGroupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{groupRemark,jdbcType=VARCHAR}, 
       #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
       #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
       #{isDeleted,jdbcType=SMALLINT}, #{compnayId,jdbcType=BIGINT})
@@ -40,16 +40,16 @@
       update_date = #{updateDate,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=SMALLINT},
       compnay_id = #{compnayId,jdbcType=BIGINT}
-    where dg_id = #{dgId,jdbcType=BIGINT}
+    where driver_group_id = #{driverGroupId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select dg_id, group_name, group_remark, create_id, create_name, create_date, update_id, 
+    select driver_group_id, group_name, group_remark, create_id, create_name, create_date, update_id, 
     update_name, update_date, is_deleted, compnay_id
     from t_driver_group
-    where dg_id = #{dgId,jdbcType=BIGINT}
+    where driver_group_id = #{driverGroupId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select dg_id, group_name, group_remark, create_id, create_name, create_date, update_id, 
+    select driver_group_id, group_name, group_remark, create_id, create_name, create_date, update_id, 
     update_name, update_date, is_deleted, compnay_id
     from t_driver_group
   </select>
