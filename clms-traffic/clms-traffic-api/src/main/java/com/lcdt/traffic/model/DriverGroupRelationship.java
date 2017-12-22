@@ -3,11 +3,11 @@ package com.lcdt.traffic.model;
 import java.util.Date;
 
 public class DriverGroupRelationship {
+    private Long dgrId;
+
+    private Long ownDriverId;
+
     private Long driverGroupId;
-
-    private Long userId;
-
-    private Long dgId;
 
     private Long createId;
 
@@ -23,28 +23,28 @@ public class DriverGroupRelationship {
 
     private Long companyId;
 
+    public Long getDgrId() {
+        return dgrId;
+    }
+
+    public void setDgrId(Long dgrId) {
+        this.dgrId = dgrId;
+    }
+
+    public Long getOwnDriverId() {
+        return ownDriverId;
+    }
+
+    public void setOwnDriverId(Long ownDriverId) {
+        this.ownDriverId = ownDriverId;
+    }
+
     public Long getDriverGroupId() {
         return driverGroupId;
     }
 
     public void setDriverGroupId(Long driverGroupId) {
         this.driverGroupId = driverGroupId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getDgId() {
-        return dgId;
-    }
-
-    public void setDgId(Long dgId) {
-        this.dgId = dgId;
     }
 
     public Long getCreateId() {

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.traffic.dao.OwnDriverMapper">
   <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.OwnDriver">
-    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <id column="own_driver_id" jdbcType="BIGINT" property="ownDriverId" />
     <result column="driver_ID" jdbcType="BIGINT" property="driverId" />
     <result column="affiliated_company" jdbcType="VARCHAR" property="affiliatedCompany" />
     <result column="driver_name" jdbcType="VARCHAR" property="driverName" />
@@ -29,26 +29,24 @@
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_own_driver
-    where user_id = #{userId,jdbcType=BIGINT}
+    where own_driver_id = #{ownDriverId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.lcdt.traffic.model.OwnDriver">
-    insert into t_own_driver (user_id, driver_ID, affiliated_company, 
-      driver_name, driver_phone, driver_category, 
-      driver_email, driver_sex, driver_nationality, 
-      driver_birthday, driver_license, driver_province, 
-      driver_city, driver_district, driver_address, 
-      driver_remark, create_id, create_name, 
-      create_date, update_id, update_name, 
-      update_date, is_deleted, company_id
+  <insert id="insert" parameterType="com.lcdt.traffic.model.OwnDriver" useGeneratedKeys="true" keyProperty="ownDriverId">
+    insert into t_own_driver (own_driver_id, driver_ID, affiliated_company,
+      driver_name, driver_phone, driver_category,
+      driver_email, driver_sex, driver_nationality,
+      driver_birthday, driver_license, driver_province,
+      driver_city, driver_district, driver_address,
+      driver_remark, create_id, create_name,
+      create_date, company_id
       )
-    values (#{userId,jdbcType=BIGINT}, #{driverId,jdbcType=BIGINT}, #{affiliatedCompany,jdbcType=VARCHAR}, 
-      #{driverName,jdbcType=VARCHAR}, #{driverPhone,jdbcType=VARCHAR}, #{driverCategory,jdbcType=SMALLINT}, 
-      #{driverEmail,jdbcType=VARCHAR}, #{driverSex,jdbcType=SMALLINT}, #{driverNationality,jdbcType=VARCHAR}, 
-      #{driverBirthday,jdbcType=DATE}, #{driverLicense,jdbcType=VARCHAR}, #{driverProvince,jdbcType=VARCHAR}, 
-      #{driverCity,jdbcType=VARCHAR}, #{driverDistrict,jdbcType=VARCHAR}, #{driverAddress,jdbcType=VARCHAR}, 
-      #{driverRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, 
-      #{updateDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, #{companyId,jdbcType=BIGINT}
+    values (#{ownDriverId,jdbcType=BIGINT}, #{driverId,jdbcType=BIGINT}, #{affiliatedCompany,jdbcType=VARCHAR},
+      #{driverName,jdbcType=VARCHAR}, #{driverPhone,jdbcType=VARCHAR}, #{driverCategory,jdbcType=SMALLINT},
+      #{driverEmail,jdbcType=VARCHAR}, #{driverSex,jdbcType=SMALLINT}, #{driverNationality,jdbcType=VARCHAR},
+      #{driverBirthday,jdbcType=DATE}, #{driverLicense,jdbcType=VARCHAR}, #{driverProvince,jdbcType=VARCHAR},
+      #{driverCity,jdbcType=VARCHAR}, #{driverDistrict,jdbcType=VARCHAR}, #{driverAddress,jdbcType=VARCHAR},
+      #{driverRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR},
+      #{createDate,jdbcType=TIMESTAMP}, #{companyId,jdbcType=BIGINT}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnDriver">
@@ -68,29 +66,116 @@
       driver_district = #{driverDistrict,jdbcType=VARCHAR},
       driver_address = #{driverAddress,jdbcType=VARCHAR},
       driver_remark = #{driverRemark,jdbcType=VARCHAR},
-      create_id = #{createId,jdbcType=BIGINT},
-      create_name = #{createName,jdbcType=VARCHAR},
-      create_date = #{createDate,jdbcType=TIMESTAMP},
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
       update_date = #{updateDate,jdbcType=TIMESTAMP},
-      is_deleted = #{isDeleted,jdbcType=SMALLINT},
       company_id = #{companyId,jdbcType=BIGINT}
-    where user_id = #{userId,jdbcType=BIGINT}
+    where own_driver_id = #{ownDriverId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select user_id, driver_ID, affiliated_company, driver_name, driver_phone, driver_category, 
-    driver_email, driver_sex, driver_nationality, driver_birthday, driver_license, driver_province, 
-    driver_city, driver_district, driver_address, driver_remark, create_id, create_name, 
+    select own_driver_id, driver_ID, affiliated_company, driver_name, driver_phone, driver_category,
+    driver_email, driver_sex, driver_nationality, driver_birthday, driver_license, driver_province,
+    driver_city, driver_district, driver_address, driver_remark, create_id, create_name,
     create_date, update_id, update_name, update_date, is_deleted, company_id
     from t_own_driver
-    where user_id = #{userId,jdbcType=BIGINT}
+    where own_driver_id = #{ownDriverId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select user_id, driver_ID, affiliated_company, driver_name, driver_phone, driver_category, 
-    driver_email, driver_sex, driver_nationality, driver_birthday, driver_license, driver_province, 
-    driver_city, driver_district, driver_address, driver_remark, create_id, create_name, 
+    select own_driver_id, driver_ID, affiliated_company, driver_name, driver_phone, driver_category,
+    driver_email, driver_sex, driver_nationality, driver_birthday, driver_license, driver_province,
+    driver_city, driver_district, driver_address, driver_remark, create_id, create_name,
     create_date, update_id, update_name, update_date, is_deleted, company_id
     from t_own_driver
+  </select>
+
+
+  <resultMap id="ResultMapDto" type="com.lcdt.traffic.web.dto.OwnDriverDto">
+    <id column="own_driver_id" jdbcType="BIGINT" property="ownDriverId" />
+    <result column="driver_ID" jdbcType="BIGINT" property="driverId" />
+    <result column="affiliated_company" jdbcType="VARCHAR" property="affiliatedCompany" />
+    <result column="driver_name" jdbcType="VARCHAR" property="driverName" />
+    <result column="driver_phone" jdbcType="VARCHAR" property="driverPhone" />
+    <result column="driver_category" jdbcType="SMALLINT" property="driverCategory" />
+    <result column="driver_email" jdbcType="VARCHAR" property="driverEmail" />
+    <result column="driver_sex" jdbcType="SMALLINT" property="driverSex" />
+    <result column="driver_nationality" jdbcType="VARCHAR" property="driverNationality" />
+    <result column="driver_birthday" jdbcType="DATE" property="driverBirthday" />
+    <result column="driver_license" jdbcType="VARCHAR" property="driverLicense" />
+    <result column="driver_province" jdbcType="VARCHAR" property="driverProvince" />
+    <result column="driver_city" jdbcType="VARCHAR" property="driverCity" />
+    <result column="driver_district" jdbcType="VARCHAR" property="driverDistrict" />
+    <result column="driver_address" jdbcType="VARCHAR" property="driverAddress" />
+    <result column="driver_remark" jdbcType="VARCHAR" property="driverRemark" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <collection property="ownDriverCertificateList" column="own_vehicle_id" resultMap="odcResultMap">
+    </collection>
+  </resultMap>
+  <resultMap id="odcResultMap" type="com.lcdt.traffic.model.OwnDriverCertificate">
+    <id column="odc_id" jdbcType="BIGINT" property="odcId" />
+    <result column="own_driver_id" jdbcType="BIGINT" property="ownDriverId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="certificate_type" jdbcType="VARCHAR" property="certificateType" />
+    <result column="certificate_no" jdbcType="VARCHAR" property="certificateNo" />
+    <result column="process_dt" jdbcType="TIMESTAMP" property="processDt" />
+    <result column="certificate_validity_begin" jdbcType="TIMESTAMP" property="certificateValidityBegin" />
+    <result column="certificate_validity_end" jdbcType="TIMESTAMP" property="certificateValidityEnd" />
+    <result column="certificate_fee" jdbcType="REAL" property="certificateFee" />
+    <result column="certificate_attachment1" jdbcType="VARCHAR" property="certificateAttachment1" />
+    <result column="certificate_attachment2" jdbcType="VARCHAR" property="certificateAttachment2" />
+    <result column="certificate_attachment3" jdbcType="VARCHAR" property="certificateAttachment3" />
+    <result column="group_remark" jdbcType="VARCHAR" property="groupRemark" />
+  </resultMap>
+
+  <select id="selectDriverPhone" resultType="java.lang.Integer" parameterType="com.lcdt.traffic.model.OwnDriver">
+    select count(own_driver_id)
+    from t_own_driver
+    where driver_phone = #{driverPhone,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}
+    <if test="ownDriverId!=null and ownDriverId!=''">
+        and own_driver_id != #{ownDriverId,jdbcType=BIGINT}
+    </if>
+  </select>
+  <update id="deleteByUpdate" parameterType="com.lcdt.traffic.model.OwnDriver">
+    update t_own_driver
+    set is_deleted = 1,
+    update_id = #{updateId,jdbcType=BIGINT},
+    update_name = #{updateName,jdbcType=VARCHAR},
+    update_date = CURRENT_TIMESTAMP
+    where own_driver_id = #{ownDriverId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByCondition" parameterType="com.lcdt.traffic.model.OwnDriver" resultMap="BaseResultMap">
+    select own_driver_id, driver_ID, affiliated_company, driver_name, driver_phone, driver_category,
+    driver_email, driver_sex, driver_nationality, driver_birthday, driver_license, driver_province,
+    driver_city, driver_district, driver_address, driver_remark, create_id, create_name,
+    create_date, update_id, update_name, update_date, is_deleted, company_id
+    from t_own_driver
+    <where>
+      company_id = #{companyId,jdbcType=BIGINT} and is_deleted = 0
+      <if test="affiliatedCompany!=null and affiliatedCompany!=''">
+        and affiliated_company like '%#{affiliatedCompany,jdbcType=VARCHAR}%'
+      </if>
+      <if test="driverName!=null and driverName!=''">
+        and driver_name like '%#{driverName,jdbcType=VARCHAR}%'
+      </if>
+      <if test="driverPhone!=null and driverPhone!=''">
+        and driver_phone like '%#{driverPhone,jdbcType=VARCHAR}%'
+      </if>
+      <if test="driverCategory==0 or driverCategory==1">
+        and driver_category = #{driverCategory,jdbcType=VARCHAR}
+      </if>
+      <if test="driverGroupId!=null and driverGroupId==''">
+        and own_driver_id in(select own_driver_id from t_driver_group_relationship where driver_group_id=#{driverGroupId,jdbcType=VARCHAR})
+      </if>
+    </where>
+  </select>
+  <select id="selectDetail" resultMap="ResultMapDto">
+    select t1.own_driver_id, t1.driver_ID, t1.affiliated_company, t1.driver_name, t1.driver_phone, t1.driver_category,
+    t1.driver_email, t1.driver_sex, t1.driver_nationality, t1.driver_birthday, t1.driver_license, t1.driver_province,
+    t1.driver_city, t1.driver_district, t1.driver_address, t1.driver_remark, t1.create_id, t1.create_name,
+    t1.create_date, t1.update_id, t1.update_name, t1.update_date, t1.is_deleted, t1.company_id,
+    t2.odc_id, t2.own_driver_id, t2.group_name, t2.certificate_type, t2.certificate_no, t2.process_dt, t2.certificate_validity_begin,
+    t2.certificate_validity_end, t2.certificate_fee, t2.certificate_attachment1, t2.certificate_attachment2,
+    t2.certificate_attachment3, t2.group_remark
+    from t_own_driver t1 left join t_own_driver_certificate t2 on t1.own_driver_id = t2.own_driver_id
+    where t1.own_driver_id = #{0} and t1.company_id = #{1}
   </select>
 </mapper>

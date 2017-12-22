@@ -3,7 +3,7 @@ package com.lcdt.traffic.model;
 import java.util.Date;
 
 public class DriverGroup {
-    private Long dgId;
+    private Long driverGroupId;
 
     private String groupName;
 
@@ -25,12 +25,12 @@ public class DriverGroup {
 
     private Long compnayId;
 
-    public Long getDgId() {
-        return dgId;
+    public Long getDriverGroupId() {
+        return driverGroupId;
     }
 
-    public void setDgId(Long dgId) {
-        this.dgId = dgId;
+    public void setDriverGroupId(Long driverGroupId) {
+        this.driverGroupId = driverGroupId;
     }
 
     public String getGroupName() {

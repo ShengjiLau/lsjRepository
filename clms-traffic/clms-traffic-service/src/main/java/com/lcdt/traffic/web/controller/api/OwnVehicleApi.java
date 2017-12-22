@@ -137,7 +137,7 @@ public class OwnVehicleApi {
     @ApiOperation(value = "获取车辆位置", notes = "根据随车手机号获取车辆(基站定位)")
     @GetMapping("/current_location")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_list')")
-    public PageBaseDto<List<Driver>> ownVehicleList(@RequestParam String[] driverPhoneArr) {
+    public PageBaseDto<List<Driver>> getGpstStatus(@RequestParam String[] driverPhoneArr) {
 //        String driverPhones = StringUtils.join(driverPhoneArr,",");
         List<String> driverPhoneList = Arrays.asList(driverPhoneArr);
         logger.debug("driverPhones:" + driverPhoneList.size());

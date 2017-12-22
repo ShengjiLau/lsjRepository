@@ -5,7 +5,7 @@ import java.util.Date;
 public class OwnDriverCertificate {
     private Long odcId;
 
-    private Long userId;
+    private Long ownDriverId;
 
     private String groupName;
 
@@ -53,12 +53,12 @@ public class OwnDriverCertificate {
         this.odcId = odcId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getOwnDriverId() {
+        return ownDriverId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setOwnDriverId(Long ownDriverId) {
+        this.ownDriverId = ownDriverId;
     }
 
     public String getGroupName() {

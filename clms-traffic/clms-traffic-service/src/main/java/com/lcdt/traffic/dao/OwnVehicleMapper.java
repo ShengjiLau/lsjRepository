@@ -19,10 +19,10 @@ public interface OwnVehicleMapper {
     /**
      * 查询车牌持否存在 （查询的为count，0不存在）
      *
-     * @param vehicleNum
+     * @param ownVehicle
      * @return
      */
-    int selectVehicleNum(String vehicleNum);
+    int selectVehicleNum(OwnVehicle ownVehicle);
 
     /**
      * 删除车辆（实际为更新is_deteted字段）

@@ -3,7 +3,7 @@ package com.lcdt.traffic.model;
 import java.util.Date;
 
 public class OwnDriver {
-    private Long userId;
+    private Long ownDriverId;
 
     private Long driverId;
 
@@ -51,12 +51,15 @@ public class OwnDriver {
 
     private Long companyId;
 
-    public Long getUserId() {
-        return userId;
+    /**扩展字段*/
+    private Long driverGroupId;
+
+    public Long getOwnDriverId() {
+        return ownDriverId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setOwnDriverId(Long ownDriverId) {
+        this.ownDriverId = ownDriverId;
     }
 
     public Long getDriverId() {
@@ -241,5 +244,13 @@ public class OwnDriver {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public Long getDriverGroupId() {
+        return driverGroupId;
+    }
+
+    public void setDriverGroupId(Long driverGroupId) {
+        this.driverGroupId = driverGroupId;
     }
 }

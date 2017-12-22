@@ -3,7 +3,7 @@
 <mapper namespace="com.lcdt.traffic.dao.OwnDriverCertificateMapper">
   <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.OwnDriverCertificate">
     <id column="odc_id" jdbcType="BIGINT" property="odcId" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="own_driver_id" jdbcType="BIGINT" property="ownDriverId" />
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <result column="certificate_type" jdbcType="VARCHAR" property="certificateType" />
     <result column="certificate_no" jdbcType="VARCHAR" property="certificateNo" />
@@ -29,7 +29,7 @@
     where odc_id = #{odcId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lcdt.traffic.model.OwnDriverCertificate">
-    insert into t_own_driver_certificate (user_id, group_name,
+    insert into t_own_driver_certificate (own_driver_id, group_name,
       certificate_type,certificate_no, process_dt, certificate_validity_begin,
       certificate_validity_end, certificate_fee, 
       certificate_attachment1, certificate_attachment2, 
@@ -37,7 +37,7 @@
       create_name, create_date, update_id, 
       update_name, update_date, is_deleted, 
       company_id)
-    values (#{userId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{certificateType,jdbcType=VARCHAR},
+    values (#{ownDriverId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{certificateType,jdbcType=VARCHAR},
       #{certificateNo,jdbcType=VARCHAR}, #{processDt,jdbcType=TIMESTAMP}, #{certificateValidityBegin,jdbcType=TIMESTAMP},
       #{certificateValidityEnd,jdbcType=TIMESTAMP}, #{certificateFee,jdbcType=REAL}, 
       #{certificateAttachment1,jdbcType=VARCHAR}, #{certificateAttachment2,jdbcType=VARCHAR}, 
@@ -48,7 +48,7 @@
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnDriverCertificate">
     update t_own_driver_certificate
-    set user_id = #{userId,jdbcType=BIGINT},
+    set own_driver_id = #{ownDriverId,jdbcType=BIGINT},
       group_name = #{groupName,jdbcType=VARCHAR},
       certificate_type = #{certificateType,jdbcType=VARCHAR},
       certificate_no = #{certificateNo,jdbcType=VARCHAR},
@@ -71,7 +71,7 @@
     where odc_id = #{odcId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select odc_id, user_id, group_name, certificate_type, certificate_no, process_dt, certificate_validity_begin,
+    select odc_id, own_driver_id, group_name, certificate_type, certificate_no, process_dt, certificate_validity_begin,
     certificate_validity_end, certificate_fee, certificate_attachment1, certificate_attachment2, 
     certificate_attachment3, group_remark, create_id, create_name, create_date, update_id, 
     update_name, update_date, is_deleted, company_id
@@ -79,10 +79,64 @@
     where odc_id = #{odcId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select odc_id, user_id, group_name, certificate_type, certificate_no, process_dt, certificate_validity_begin,
+    select odc_id, own_driver_id, group_name, certificate_type, certificate_no, process_dt, certificate_validity_begin,
     certificate_validity_end, certificate_fee, certificate_attachment1, certificate_attachment2, 
     certificate_attachment3, group_remark, create_id, create_name, create_date, update_id, 
     update_name, update_date, is_deleted, company_id
     from t_own_driver_certificate
   </select>
+
+  <insert id="insertBatch">
+    insert into t_own_driver_certificate (own_driver_id, group_name,
+    certificate_type,certificate_no, process_dt, certificate_validity_begin,
+    certificate_validity_end, certificate_fee,
+    certificate_attachment1, certificate_attachment2,
+    certificate_attachment3, group_remark, create_id,
+    create_name, create_date, update_id,
+    update_name, update_date,
+    company_id)
+    values
+    <foreach item="item" collection="list" separator=",">
+      (#{item.ownDriverId,jdbcType=BIGINT}, #{item.groupName,jdbcType=VARCHAR},#{item.certificateType,jdbcType=VARCHAR},
+      #{item.certificateNo,jdbcType=VARCHAR}, #{item.processDt,jdbcType=TIMESTAMP}, #{item.certificateValidityBegin,jdbcType=TIMESTAMP},
+      #{item.certificateValidityEnd,jdbcType=TIMESTAMP}, #{item.certificateFee,jdbcType=REAL},
+      #{item.certificateAttachment1,jdbcType=VARCHAR}, #{item.certificateAttachment2,jdbcType=VARCHAR},
+      #{item.certificateAttachment3,jdbcType=VARCHAR}, #{item.groupRemark,jdbcType=VARCHAR}, #{item.createId,jdbcType=BIGINT},
+      #{item.createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{item.updateId,jdbcType=BIGINT},
+      #{item.updateName,jdbcType=VARCHAR}, #{item.updateDate,jdbcType=TIMESTAMP},
+      #{item.companyId,jdbcType=BIGINT})
+    </foreach>
+  </insert>
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach separator=";" index="index" item="item" collection="list" close="" open="">
+      update t_own_driver_certificate
+      set own_driver_id = #{item.ownDriverId,jdbcType=BIGINT},
+      group_name = #{item.groupName,jdbcType=VARCHAR},
+      certificate_type = #{item.certificateType,jdbcType=VARCHAR},
+      certificate_no = #{item.certificateNo,jdbcType=VARCHAR},
+      process_dt = #{item.processDt,jdbcType=TIMESTAMP},
+      certificate_validity_begin = #{item.certificateValidityBegin,jdbcType=TIMESTAMP},
+      certificate_validity_end = #{item.certificateValidityEnd,jdbcType=TIMESTAMP},
+      certificate_fee = #{item.certificateFee,jdbcType=REAL},
+      certificate_attachment1 = #{item.certificateAttachment1,jdbcType=VARCHAR},
+      certificate_attachment2 = #{item.certificateAttachment2,jdbcType=VARCHAR},
+      certificate_attachment3 = #{item.certificateAttachment3,jdbcType=VARCHAR},
+      group_remark = #{item.groupRemark,jdbcType=VARCHAR},
+      create_id = #{item.createId,jdbcType=BIGINT},
+      create_name = #{item.createName,jdbcType=VARCHAR},
+      create_date = #{item.createDate,jdbcType=TIMESTAMP},
+      update_id = #{item.updateId,jdbcType=BIGINT},
+      update_name = #{item.updateName,jdbcType=VARCHAR},
+      is_deleted = #{item.isDeleted,jdbcType=SMALLINT}
+      where odc_id = #{item.odcId,jdbcType=BIGINT} and company_id = #{item.companyId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <update id="deleteByUpdate" >
+    update t_own_driver_certificate
+    set is_deleted = 1,
+    update_id = #{updateId,jdbcType=BIGINT},
+    update_name = #{updateName,jdbcType=VARCHAR},
+    update_date = CURRENT_TIMESTAMP
+    where own_driver_id = #{ownDriverId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </update>
 </mapper>
