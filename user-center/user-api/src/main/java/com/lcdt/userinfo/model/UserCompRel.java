@@ -101,11 +101,6 @@ public class UserCompRel implements java.io.Serializable,ResponseData {
 
     private Boolean isEnable;
 
-
-
-
-
-
     private String duty;
 
     public Boolean getEnable() {

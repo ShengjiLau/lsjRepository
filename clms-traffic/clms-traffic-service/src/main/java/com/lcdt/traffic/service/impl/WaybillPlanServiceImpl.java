@@ -150,8 +150,9 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
         return waybillPlan;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public WaybillPlan wayBillPlanCheckPass(WaybillParamsDto dto) throws WaybillPlanException {
+    public WaybillPlan wayBillPlanCheckPass(WaybillParamsDto dto) {
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(), dto.getCompanyId(), (short)0);
         if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
         if (waybillPlan.getIsApproval()==0) throw new WaybillPlanException("计划不需要审批！");
@@ -254,7 +255,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
 
     @Transactional(readOnly = true)
     @Override
-    public WaybillPlan loadWaybillPlan(WaybillParamsDto dto) throws WaybillPlanException  {
+    public WaybillPlan loadWaybillPlan(WaybillParamsDto dto) {
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(), dto.getCompanyId(), (short)0);
         if (waybillPlan == null) {
             throw new WaybillPlanException("计划不存在！");
@@ -265,7 +266,7 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public PlanLeaveMsg planLeaveMsgAdd(PlanLeaveMsgParamsDto dto) throws WaybillPlanException {
+    public PlanLeaveMsg planLeaveMsgAdd(PlanLeaveMsgParamsDto dto) {
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(),dto.getCreateCompanyId(),(short)0);
         if (waybillPlan != null) { //计划存在
             PlanLeaveMsg planLeaveMsg = new PlanLeaveMsg();

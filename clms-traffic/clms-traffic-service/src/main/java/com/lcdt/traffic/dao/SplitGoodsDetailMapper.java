@@ -3,6 +3,7 @@ package com.lcdt.traffic.dao;
 import com.lcdt.traffic.model.SplitGoodsDetail;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SplitGoodsDetailMapper {
     /**
@@ -51,4 +52,7 @@ public interface SplitGoodsDetailMapper {
      * @return
      */
     int batchAddSplitGoodsDetail(List<SplitGoodsDetail> list);
+
+
+
 }

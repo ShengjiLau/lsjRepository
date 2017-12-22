@@ -3,6 +3,7 @@ package com.lcdt.traffic.dao;
 import com.lcdt.traffic.model.PlanDetail;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PlanDetailMapper {
     /**
@@ -64,5 +65,13 @@ public interface PlanDetailMapper {
      * @return
      */
     int batchUpdatePlanDetail(List<PlanDetail> planDetailList);
+
+
+    /***
+     * 根据条件查询
+     * @param map
+     * @return
+     */
+    List<PlanDetail> selectByCondition(Map map);
 
 }

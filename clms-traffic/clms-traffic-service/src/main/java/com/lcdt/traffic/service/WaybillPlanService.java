@@ -23,7 +23,7 @@ public interface WaybillPlanService {
      *
      * @return
      */
-    WaybillPlan publishWayBillPlan(WaybillParamsDto dto) throws WaybillPlanException;
+    WaybillPlan publishWayBillPlan(WaybillParamsDto dto);
 
 
     /***
@@ -33,10 +33,7 @@ public interface WaybillPlanService {
      *
      * @return
      */
-    WaybillPlan wayBillPlanCheckPass(WaybillParamsDto dto) throws WaybillPlanException;
-
-
-
+    WaybillPlan wayBillPlanCheckPass(WaybillParamsDto dto);
 
     /***
      * 计划查询列表

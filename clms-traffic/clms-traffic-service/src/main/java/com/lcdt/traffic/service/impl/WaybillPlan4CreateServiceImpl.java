@@ -28,7 +28,6 @@ import java.util.Map;
  * Created by yangbinq on 2017/12/13.
  */
 @Service
-
 public class WaybillPlan4CreateServiceImpl implements WaybillPlan4CreateService {
 
     @Autowired
@@ -112,10 +111,10 @@ public class WaybillPlan4CreateServiceImpl implements WaybillPlan4CreateService 
                 if (flag==1) { //发布--操作
                     if(carrierType==1) { //承运商
                         vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //计划状态(已派完)
-                        vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//计划状态(派车中)
+                        vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//派车状态(派车中)
                     } else { //司机
                         vo.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED); //计划状态(已派完)
-                        vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//计划状态(已派完)
+                        vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//派车状态(已派完)
                     }
                     waybillPlanMapper.insert(vo);
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();

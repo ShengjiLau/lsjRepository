@@ -17,8 +17,8 @@ public class SplitGoodsDetailParamsDto {
     private String goodsName; //商品名称
     private String goodsSepc; //商品规格
     private String unit; //商品单位
-    private Float allotAmount; //待派
-    private Float factAllotAmount; //实际派单
+    private Float allotAmount; //派单数量
+    private Float remainAmount; //剩余数量
     private Float freightPrice; //运单单价
     private Float freightTotal; //运单总价
     private String detailRemark;
@@ -80,14 +80,6 @@ public class SplitGoodsDetailParamsDto {
         this.allotAmount = allotAmount;
     }
 
-    public Float getFactAllotAmount() {
-        return factAllotAmount;
-    }
-
-    public void setFactAllotAmount(Float factAllotAmount) {
-        this.factAllotAmount = factAllotAmount;
-    }
-
     public Float getFreightPrice() {
         return freightPrice;
     }
@@ -110,5 +102,14 @@ public class SplitGoodsDetailParamsDto {
 
     public void setDetailRemark(String detailRemark) {
         this.detailRemark = detailRemark;
+    }
+
+
+    public Float getRemainAmount() {
+        return remainAmount;
+    }
+
+    public void setRemainAmount(Float remainAmount) {
+        this.remainAmount = remainAmount;
     }
 }
