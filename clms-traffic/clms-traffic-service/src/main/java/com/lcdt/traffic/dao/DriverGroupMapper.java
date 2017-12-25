@@ -10,7 +10,9 @@ public interface DriverGroupMapper {
 
     DriverGroup selectByPrimaryKey(Long driverGroupId);
 
-    List<DriverGroup> selectAll();
+    int deleteByUpdate(DriverGroup driverGroup);
+
+    List<DriverGroup> selectAll(Long companyId);
 
     int updateByPrimaryKey(DriverGroup record);
 }
