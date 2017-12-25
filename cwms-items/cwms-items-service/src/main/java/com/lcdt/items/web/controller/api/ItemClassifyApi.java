@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -35,6 +36,7 @@ public class ItemClassifyApi {
 
     @ApiOperation("新增分类")
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_classify_add')")
     public ItemClassify addItemClassify(HttpSession httpSession, @ApiParam(value = "父类id", required = true) @RequestParam Long pid,
                                         @ApiParam(value = "分类名字", required = true) @RequestParam String classifyName) {
         Long companyId= SecurityInfoGetter.getCompanyId();
@@ -56,6 +58,7 @@ public class ItemClassifyApi {
 
     @ApiOperation("删除分类")
     @PostMapping("/delete")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_classify_delete')")
     public JSONObject delItemClassify(HttpSession httpSession, @ApiParam(value = "分类ID", required = true) @RequestParam Long classifyId) {
         Long companyId=SecurityInfoGetter.getCompanyId();
         int result = itemClassifyService.deleteItemsClassifyAndChildren(classifyId,companyId);
@@ -71,6 +74,7 @@ public class ItemClassifyApi {
 
     @ApiOperation("修改分类")
     @PostMapping("/modify")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_classify_modify')")
     public JSONObject modifyItemClassify(HttpSession httpSession, @ApiParam(value = "分类id", required = true) @RequestParam Long classifyId,
                                          @ApiParam(value = "分类名字", required = true) @RequestParam String classifyName) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -91,6 +95,7 @@ public class ItemClassifyApi {
 
     @ApiOperation("查询分类列表")
     @GetMapping("/list")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_classify_list')")
     public PageBaseDto<List<ItemClassifyDao>> queryClassify(HttpSession httpSession) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageInfo pageInfo=new PageInfo();
@@ -102,6 +107,7 @@ public class ItemClassifyApi {
 
     @ApiOperation("根据最小分类id查询他的所有上级分类")
     @GetMapping("/parentlist")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_classify_parentlist')")
     public PageBaseDto<List<ItemClassify>> queryParentItemClassifyByMinClassifyId(HttpSession httpSession,@ApiParam(value = "分类id", required = true) @RequestParam Long classifyId){
         Long companyId=SecurityInfoGetter.getCompanyId();
         PageInfo pageInfo=new PageInfo();

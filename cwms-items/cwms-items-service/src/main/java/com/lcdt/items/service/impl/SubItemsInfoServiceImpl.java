@@ -61,17 +61,21 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     public int deleteSubItemsInfo(Long subItemId, Long companyId) {
         int result = 0;
         SubItemsInfo subItemsInfo = new SubItemsInfo();
-        subItemsInfo.setItemId(subItemId);
+        subItemsInfo.setSubItemId(subItemId);
         subItemsInfo.setCompanyId(companyId);
+
+        Map<String,Object> map=new HashMap<String,Object>();
+        List<Long> subItemIdList = new ArrayList<Long>();
+        subItemIdList.add(subItemId);
+        map.put("itemId",null);
+        map.put("subItemIdList",subItemIdList);
+        map.put("companyId",companyId);
+        //删除规格
+        result += itemSpecKeyValueMapper.deleteBySubItemIds(map);
+        //删除自定义属性值
+        result += customValueMapper.deleteItemAndSubItemId(map);
         //子商品删除
-        result = subItemsInfoMapper.deleteBySubItemIdAndCompanyId(subItemsInfo);
-        //子商品自定义属性删除
-//        result += customValueMapper.deleteItemAndSubItemId(null, subItemId.toString(), companyId.toString());
-        //子商品规格
-        ItemSpecKeyValue itemSpecKeyValue = new ItemSpecKeyValue();
-        itemSpecKeyValue.setSubItemId(subItemId);
-        itemSpecKeyValue.setCompanyId(companyId);
-        result += itemSpecKeyValueMapper.deleteBySubItemIdAndCompanyId(itemSpecKeyValue);
+        result += subItemsInfoMapper.deleteBySubItemIdAndCompanyId(subItemsInfo);
         return result;
     }
 
@@ -84,7 +88,7 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
 
         List<SubItemsInfo> subItemsInfoList = subItemsInfoMapper.selectSubItemInfotByItemIdAndCompanyId(subItemsInfo);
         //如果子商品不为空，则组装用 , 分隔开的字符串，以便批量删除了商品的自定义属性值
-        if (subItemsInfoList != null) {
+        if (subItemsInfoList != null&&subItemsInfoList.size()>0) {
             //子商品 subItemId 用 , 分隔开的字符串
             List<Long> subItemIdList = new ArrayList<Long>();
             for (int i = 0; i < subItemsInfoList.size(); i++) {

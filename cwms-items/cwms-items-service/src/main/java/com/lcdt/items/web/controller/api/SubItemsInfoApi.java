@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -28,6 +29,7 @@ public class SubItemsInfoApi {
 
     @ApiOperation("删除子商品")
     @PostMapping("/delete")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sub_item_delete')")
     public JSONObject deleteSubItemsInfo(HttpSession httpSession, @ApiParam(value = "子商品Id", required = true) @RequestParam Long subItemId){
         Long companyId= SecurityInfoGetter.getCompanyId();
         int result=subItemsInfoService.deleteSubItemsInfo(subItemId,companyId);
@@ -43,6 +45,7 @@ public class SubItemsInfoApi {
 
     @ApiOperation("查询子商品列表")
     @GetMapping("/list")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sub_item_list')")
     public PageBaseDto<List<SubItemsInfoDao>> querySubItemsInfo(HttpSession httpSession, @ApiParam(value = "子商品Id", required = true) @RequestParam Long itemId){
         Long companyId=SecurityInfoGetter.getCompanyId();
         PageInfo page=new PageInfo();
