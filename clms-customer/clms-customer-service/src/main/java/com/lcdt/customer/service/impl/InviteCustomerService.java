@@ -1,6 +1,7 @@
 package com.lcdt.customer.service.impl;
 
 import com.lcdt.customer.dao.CustomerInviteLogMapper;
+import com.lcdt.customer.dao.CustomerMapper;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.model.CustomerInviteLog;
 import com.lcdt.userinfo.model.Company;
@@ -35,6 +36,23 @@ public class InviteCustomerService {
 
 	@Autowired
 	CustomerInviteLogMapper inviteLogdao;
+
+	@Autowired
+	CustomerMapper mapper;
+
+
+	public String buildInviteEmailContent(Long customerId,Long companyId,User inviteUser,Company inviteCompany){
+		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
+		CustomerInviteLog customerInviteLog = new CustomerInviteLog();
+		customerInviteLog.setInviteCompanyId(customer.getCompanyId());
+		customerInviteLog.setInviteCustomerId(customer.getCustomerId());
+		inviteLogdao.insert(customerInviteLog);
+		String clientTypes = customer.getClientTypes();
+		return resolveInviteEmailContent(customer.getCustomerName(), inviteUser.getRealName(), inviteCompany.getShortName(),
+				clientTypes,beInvitedUrl(customerInviteLog.getInviteId(),customerInviteLog.getInviteToken()));
+	}
+
+
 	/**
 	 * 发送邀请邮件
 	 */
@@ -52,6 +70,7 @@ public class InviteCustomerService {
 				beInvitedUrl(customerInviteLog.getInviteId(),customerInviteLog.getInviteToken())));
 		mailSender.send(message);
 	}
+
 
 	public void sendEmail(SimpleMailMessage message){
 		mailSender.send(message);

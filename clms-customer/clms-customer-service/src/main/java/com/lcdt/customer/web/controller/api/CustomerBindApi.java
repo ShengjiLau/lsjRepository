@@ -6,7 +6,9 @@ import com.lcdt.customer.dao.CustomerMapper;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.model.CustomerInviteLog;
 import com.lcdt.customer.service.CustomerService;
+import com.lcdt.customer.service.impl.InviteCustomerService;
 import com.lcdt.customer.service.impl.InviteLogService;
+import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +35,21 @@ public class CustomerBindApi {
 
 	@Autowired
 	InviteLogService inviteLogService;
+
+	@Autowired
+	InviteCustomerService inviteCustomerService;
+
+	@ApiOperation("邀请客户绑定")
+	@RequestMapping("/invitecustomer")
+	public String inviteCustomer(Long customerId, String bindEmail) {
+		Long companyId = SecurityInfoGetter.getCompanyId();
+		User user = SecurityInfoGetter.getUser();
+
+		inviteCustomerService.buildInviteEmailContent(customerId,companyId,user,);
+
+		return null;
+	}
+
 
 	@ApiOperation("绑定客户")
 	@RequestMapping("/bind")
