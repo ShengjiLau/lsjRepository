@@ -3,6 +3,7 @@ package com.lcdt.traffic.service.impl;
 import com.lcdt.traffic.dao.DriverGroupMapper;
 import com.lcdt.traffic.model.DriverGroup;
 import com.lcdt.traffic.service.DriverGroupService;
+import com.lcdt.traffic.web.dto.DriverGroupDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +37,10 @@ public class DriverGroupServiceImpl implements DriverGroupService {
     @Override
     public List<DriverGroup> selectAll(Long companyId) {
         return driverGroupMapper.selectAll(companyId);
+    }
+
+    @Override
+    public List<DriverGroupDto> selectRelationship(Long ownDriverId,Long companyId) {
+        return driverGroupMapper.selectRelationship(ownDriverId, companyId);
     }
 }

@@ -1,6 +1,7 @@
 package com.lcdt.traffic.service;
 
 import com.lcdt.traffic.model.DriverGroup;
+import com.lcdt.traffic.web.dto.DriverGroupDto;
 
 import java.util.List;
 
@@ -17,5 +18,7 @@ public interface DriverGroupService {
     int delDriverGroup(DriverGroup driverGroup);
 
     List<DriverGroup> selectAll(Long companyId);
+
+    List<DriverGroupDto> selectRelationship(Long ownDriverId, Long companyId);
 
 }

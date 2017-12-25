@@ -3,8 +3,10 @@ package com.lcdt.traffic.service.impl;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.traffic.dao.DriverGroupRelationshipMapper;
 import com.lcdt.traffic.dao.OwnDriverCertificateMapper;
 import com.lcdt.traffic.dao.OwnDriverMapper;
+import com.lcdt.traffic.model.DriverGroupRelationship;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.model.OwnDriverCertificate;
 import com.lcdt.traffic.service.OwnDriverService;
@@ -39,6 +41,8 @@ public class OwnDriverServiceImpl implements OwnDriverService {
     private OwnDriverMapper ownDriverMapper;
     @Autowired
     private OwnDriverCertificateMapper ownDriverCertificateMapper;
+    @Autowired
+    private DriverGroupRelationshipMapper driverGroupRelationshipMapper;
 
     @Reference
     public UserService userService;
@@ -186,5 +190,20 @@ public class OwnDriverServiceImpl implements OwnDriverService {
     @Override
     public List<Driver> getGpsInfo(List<String> driverPhoneList) {
         return driverService.getGpsInfo(driverPhoneList);
+    }
+
+    @Override
+    public int addGroupInfo(List<DriverGroupRelationship> driverGroupRelationshipList) {
+        /**先删除之前的关系，然后重新插入关系*/
+        DriverGroupRelationship driverGroupRelationship = driverGroupRelationshipList.get(0);
+        int result = 0;
+        try {
+            driverGroupRelationshipMapper.deleteByOwnDriverId(driverGroupRelationship.getOwnDriverId(), driverGroupRelationship.getCompanyId());
+            result = driverGroupRelationshipMapper.insertBatch(driverGroupRelationshipList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("添加分组信息失败");
+        }
+        return result;
     }
 }

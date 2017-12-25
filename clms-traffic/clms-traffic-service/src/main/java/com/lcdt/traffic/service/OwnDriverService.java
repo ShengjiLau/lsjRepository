@@ -1,6 +1,7 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.traffic.model.DriverGroupRelationship;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.web.dto.OwnDriverDto;
 import com.lcdt.userinfo.model.Driver;
@@ -59,4 +60,6 @@ public interface OwnDriverService {
      * @return
      */
     List<Driver> getGpsInfo(List<String> driverPhoneList);
+
+    int addGroupInfo(List<DriverGroupRelationship> driverGroupRelationshipList);
 }
