@@ -80,10 +80,18 @@ public interface ItemClassifyMapper {
      */
     List<ItemClassify> selectClassifyByCompanyId(Long companyId);
 
-
+    /**
+     * 获取此类下的所有树状分类
+     * @param itemClassify
+     * @return
+     */
     List<ItemClassifyDao> selectClassifyAndChildren(ItemClassify itemClassify);
 
-    List<ItemClassify> testFunction(Long classifyId);
-
-    List<ItemClassify> selectClassifyByMinChildren(Long classifyId);
+    /**
+     * 通过最小分类id查询此分类的所有父类
+     * @param classifyId
+     * @param companyId
+     * @return
+     */
+    List<ItemClassify> selectClassifyByMinChildren(Long classifyId,Long companyId);
 }

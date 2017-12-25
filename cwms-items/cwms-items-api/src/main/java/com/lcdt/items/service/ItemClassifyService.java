@@ -62,4 +62,13 @@ public interface ItemClassifyService {
     PageInfo<List<ItemClassifyDao>> queryItemClassifyAndChildren(Long companyId, PageInfo pageInfo);
 
 
+    /**
+     * 通过最小分类获取所有父类
+     * @param classifyId
+     * @param companyId
+     * @param pageInfo
+     * @return
+     */
+    PageInfo<List<ItemClassify>> queryClassifyByMinChildren(Long classifyId,Long companyId,PageInfo pageInfo);
+
 }

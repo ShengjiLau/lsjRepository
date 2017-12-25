@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.traffic.dao.DriverGroupMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.DriverGroup">
+    <id column="driver_group_id" jdbcType="BIGINT" property="driverGroupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="group_remark" jdbcType="VARCHAR" property="groupRemark" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_id" jdbcType="BIGINT" property="updateId" />
+    <result column="update_name" jdbcType="VARCHAR" property="updateName" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+    <result column="compnay_id" jdbcType="BIGINT" property="compnayId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_driver_group
+    where driver_group_id = #{driverGroupId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.traffic.model.DriverGroup">
+    insert into t_driver_group (driver_group_id, group_name, group_remark, 
+      create_id, create_name, create_date, 
+      update_id, update_name, update_date, 
+      is_deleted, compnay_id)
+    values (#{driverGroupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{groupRemark,jdbcType=VARCHAR}, 
+      #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
+      #{isDeleted,jdbcType=SMALLINT}, #{compnayId,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.DriverGroup">
+    update t_driver_group
+    set group_name = #{groupName,jdbcType=VARCHAR},
+      group_remark = #{groupRemark,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=BIGINT},
+      create_name = #{createName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_id = #{updateId,jdbcType=BIGINT},
+      update_name = #{updateName,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      compnay_id = #{compnayId,jdbcType=BIGINT}
+    where driver_group_id = #{driverGroupId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select driver_group_id, group_name, group_remark, create_id, create_name, create_date, update_id, 
+    update_name, update_date, is_deleted, compnay_id
+    from t_driver_group
+    where driver_group_id = #{driverGroupId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select driver_group_id, group_name, group_remark, create_id, create_name, create_date, update_id, 
+    update_name, update_date, is_deleted, compnay_id
+    from t_driver_group
+  </select>
+</mapper>

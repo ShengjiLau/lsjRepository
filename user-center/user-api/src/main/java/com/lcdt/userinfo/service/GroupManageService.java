@@ -3,6 +3,8 @@ package com.lcdt.userinfo.service;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.exception.GroupExistException;
 import com.lcdt.userinfo.model.Group;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserGroupRelation;
 
 import java.util.List;
 import java.util.Map;
@@ -24,4 +26,29 @@ public interface GroupManageService {
 
 	void updateCompanyUsergroup(Long userId, Long companyId, List<Long> groups);
 	List<Group> userCompanyGroups(Long userId, Long companyId);
+
+	/***
+	 * 组用户列表
+	 * @param m
+	 * @return
+	 */
+	PageInfo selectGroupUserList(Map m);
+
+
+
+	/***
+	 * 组用户添加
+	 * @param userGroupRelation
+	 * @return
+	 */
+	int groupUserAdd(UserGroupRelation userGroupRelation);
+
+
+	/***
+	 * 组用户删除
+	 * @param userGroupRelation
+	 * @return
+	 */
+	int groupUserDelete(UserGroupRelation userGroupRelation);
+
 }

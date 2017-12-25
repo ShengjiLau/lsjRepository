@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -31,6 +32,7 @@ public class ConversionRelApi {
 
     @ApiOperation("修改多单位")
     @PostMapping("/modify")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_conversionrel_modify')")
     public ConversionRel addConversionRel(HttpSession httpSession, ConversionRelDto conversionRelDto){
         Long companyId= SecurityInfoGetter.getCompanyId();
         ConversionRel conversionRel=new ConversionRel();
@@ -59,6 +61,7 @@ public class ConversionRelApi {
 
     @ApiOperation("查询多单位")
     @GetMapping("/query")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_conversionrel_query')")
     public ConversionRel queryConversionRel(HttpSession httpSession, @ApiParam(value = "多单位id", required = true) @RequestParam Long converId){
         Long companyId=SecurityInfoGetter.getCompanyId();
         ConversionRel conversionRel=conversionRelService.queryConversionRel(converId,companyId);

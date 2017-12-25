@@ -18,7 +18,7 @@ public class ClmsMessageConvert extends FastJsonHttpMessageConverter {
 	public ClmsMessageConvert() {
 		super();
 		FastJsonConfig fastJsonConfig = getFastJsonConfig();
-		fastJsonConfig.setSerializerFeatures(SerializerFeature.DisableCircularReferenceDetect);
+		fastJsonConfig.setSerializerFeatures(SerializerFeature.DisableCircularReferenceDetect,SerializerFeature.WriteMapNullValue);
 
 	}
 

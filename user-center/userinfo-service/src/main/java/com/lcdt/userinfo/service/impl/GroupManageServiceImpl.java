@@ -6,9 +6,11 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.permission.model.RoleUserRelation;
 import com.lcdt.userinfo.dao.GroupMapper;
 import com.lcdt.userinfo.dao.UserGroupRelationMapper;
+import com.lcdt.userinfo.dao.UserMapper;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.model.Department;
 import com.lcdt.userinfo.model.Group;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserGroupRelation;
 import com.lcdt.userinfo.service.GroupManageService;
 import org.slf4j.Logger;
@@ -32,6 +34,12 @@ public class GroupManageServiceImpl implements GroupManageService {
 
 	@Autowired
 	public UserGroupRelationMapper relationDao;
+
+
+	@Autowired
+	private UserMapper userMapper;
+
+
 
 	public static Logger logger = LoggerFactory.getLogger(GroupManageServiceImpl.class);
 
@@ -140,6 +148,46 @@ public class GroupManageServiceImpl implements GroupManageService {
 	@Transactional
 	public List<Group> userCompanyGroups(Long userId, Long companyId) {
 		return groupDao.selectUserCompanyGroups(userId, companyId);
+	}
+
+
+	@Transactional(readOnly = true)
+	@Override
+	public PageInfo selectGroupUserList(Map m) {
+		int pageNo = 1;
+		int pageSize = 0; //0表示所有
+
+		if (m.containsKey("page_no")) {
+			if (m.get("page_no") != null) {
+				pageNo = (Integer) m.get("page_no");
+			}
+		}
+		if (m.containsKey("page_size")) {
+			if (m.get("page_size") != null) {
+				pageSize = (Integer) m.get("page_size");
+			}
+		}
+		PageHelper.startPage(pageNo, pageSize);
+		List<User> list  = userMapper.selectUser4Group(Long.valueOf(m.get("companyId").toString()));
+		PageInfo pageInfo = new PageInfo(list);
+		return pageInfo;
+	}
+
+	@Transactional
+	@Override
+	public int groupUserAdd(UserGroupRelation userGroupRelation) {
+		List<UserGroupRelation> list = relationDao.selectByUserIdAndCmpId(userGroupRelation);
+		if(list!=null && list.size()>0) {
+			throw new RuntimeException("成员已存在！");
+		}
+		return relationDao.insert(userGroupRelation);
+	}
+
+	@Transactional
+	@Override
+	public int groupUserDelete(UserGroupRelation userGroupRelation) {
+
+		return relationDao.deleteByUserGroupRelation(userGroupRelation);
 	}
 
 

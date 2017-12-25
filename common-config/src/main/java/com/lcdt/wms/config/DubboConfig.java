@@ -13,13 +13,13 @@ import org.springframework.context.annotation.Configuration;
  * Created by ss on 2017/12/1.
  */
 @Configuration
-@DubboComponentScan(basePackages = {"com.lcdt.login.service","com.lcdt.*.service.impl","com.lcdt.clms.*.service.impl"})
+@DubboComponentScan(basePackages = {"com.lcdt.*.service","com.lcdt.*.service.impl","com.lcdt.clms.*.service.impl"})
 public class DubboConfig {
 
 	@Value("${applicationName:dubbo-app}")
 	public String applicationName = "clms-sso";
 
-	@Value("${protocalport:20880}")
+	@Value("${protocolport:20883}")
 	public Integer protocolPort = 20883;
 
 	@Value("${zookeeperurl:127.0.0.1:2181}")

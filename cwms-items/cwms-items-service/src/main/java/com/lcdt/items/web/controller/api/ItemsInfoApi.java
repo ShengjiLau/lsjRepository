@@ -1,5 +1,6 @@
 package com.lcdt.items.web.controller.api;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -15,6 +16,7 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +40,8 @@ public class ItemsInfoApi {
 
     @ApiOperation("新增商品")
     @PostMapping("/add")
-    public JSONObject addItemInfo(ItemsInfoDto itemsInfoDto, HttpSession httpSession) {
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_add')")
+    public JSONObject addItemInfo(@RequestBody ItemsInfoDto itemsInfoDto, HttpSession httpSession) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User user=SecurityInfoGetter.getUser();
         int result = itemsInfoService.addItemsInfo(parseItemsInfoDao(itemsInfoDto,companyId,user));
@@ -52,17 +55,18 @@ public class ItemsInfoApi {
         }
     }
 
-    @ApiOperation(value = "商品列表", notes = "获取商品列表") //add by liuh
-    @GetMapping("/list")
-    public PageBaseDto<List<ItemsInfoDao>> getItemInfoList(@Validated ItemsInfoDao itemsInfoDao, PageInfo pageInfo, HttpSession httpSession) {
-        Long companyId = SecurityInfoGetter.getCompanyId(); //TODO 后面从session中获取
-        itemsInfoDao.setCompanyId(companyId);
-        PageInfo<List<ItemsInfoDao>> listPageInfo = itemsInfoService.queryItemsByCondition(itemsInfoDao,pageInfo);
-        return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
-    }
+//    @ApiOperation(value = "商品列表", notes = "获取商品列表") //add by liuh
+//    @GetMapping("/list")
+//    public PageBaseDto<List<ItemsInfoDao>> getItemInfoList(@Validated ItemsInfoDao itemsInfoDao, PageInfo pageInfo, HttpSession httpSession) {
+//        Long companyId = SecurityInfoGetter.getCompanyId(); //TODO 后面从session中获取
+//        itemsInfoDao.setCompanyId(companyId);
+//        PageInfo<List<ItemsInfoDao>> listPageInfo = itemsInfoService.queryItemsByCondition(itemsInfoDao,pageInfo);
+//        return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
+//    }
 
     @ApiOperation("删除商品")
     @PostMapping("/delete")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_remove')")
     public JSONObject deleteItemsInfo(HttpSession httpSession, @ApiParam(value = "商品Id", required = true) @RequestParam Long itemId) {
         Long companyId=SecurityInfoGetter.getCompanyId();
         int result = itemsInfoService.deleteItemsInfo(itemId,companyId);
@@ -79,6 +83,7 @@ public class ItemsInfoApi {
 
     @ApiOperation("查询商品")
     @GetMapping("/queryitemsinfo")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_query')")
     public ItemsInfo queryItemsInfoDetails(HttpSession httpSession, @ApiParam(value = "商品Id", required = true) @RequestParam Long itemId){
         Long companyId=SecurityInfoGetter.getCompanyId();
         ItemsInfoDao itemsInfoDao=null;
@@ -91,7 +96,8 @@ public class ItemsInfoApi {
 
     @ApiOperation("修改商品")
     @PostMapping("/modify")
-    public JSONObject modifyItemsInfo(HttpSession httpSession,ItemsInfoDto itemsInfoDto){
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_modify')")
+    public JSONObject modifyItemsInfo(HttpSession httpSession,@RequestBody ItemsInfoDto itemsInfoDto){
         Long companyId = SecurityInfoGetter.getCompanyId();
         User user=SecurityInfoGetter.getUser();
         int result = itemsInfoService.modifyItemsInfo(parseItemsInfoDao(itemsInfoDto,companyId,user));
@@ -102,10 +108,17 @@ public class ItemsInfoApi {
             return jsonObject;
         }else{
             throw new RuntimeException("修改失败");
-
         }
     }
-
+    @ApiOperation(value = "商品列表", notes = "获取商品列表返回所有信息")
+    @GetMapping("/itemsinfolist")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_list')")
+    public PageBaseDto<List<ItemsInfoDao>> queryItemInfoList(@Validated ItemsInfoDao itemsInfoDao, PageInfo pageInfo, HttpSession httpSession) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        itemsInfoDao.setCompanyId(companyId);
+        PageInfo<List<ItemsInfoDao>> listPageInfo = itemsInfoService.queryItemsByItemsInfo(itemsInfoDao,pageInfo);
+        return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
+    }
     /**
      * 私有方法，前端dto转换成dao
      * @param itemsInfoDto
@@ -123,6 +136,11 @@ public class ItemsInfoApi {
         itemsInfoDao.setIntroduction(itemsInfoDto.getIntroduction());
         itemsInfoDao.setTradeType(itemsInfoDto.getTradeType());
         itemsInfoDao.setItemType(itemsInfoDto.getItemType());
+        if(itemsInfoDto.getImages()!=null){
+            for(int i=0;i<itemsInfoDto.getImages().size();i++){
+                itemsInfoDao.setImages(JSON.toJSONString(itemsInfoDto.getImages()));
+            }
+        }
         itemsInfoDao.setCompanyId(companyId);
         itemsInfoDao.setCreateId(user.getUserId());
         itemsInfoDao.setCreateName(user.getRealName());
@@ -166,6 +184,7 @@ public class ItemsInfoApi {
                 SubItemsInfoDao subItemsInfoDao = new SubItemsInfoDao();
                 subItemsInfoDao.setSubItemId(itemsInfoDto.getSubItemsInfoDtoList().get(i).getSubItemId());
                 subItemsInfoDao.setItemId(itemsInfoDto.getSubItemsInfoDtoList().get(i).getItemId());
+                subItemsInfoDao.setImage(itemsInfoDto.getSubItemsInfoDtoList().get(i).getImage());
                 subItemsInfoDao.setCode(itemsInfoDto.getSubItemsInfoDtoList().get(i).getCode());
                 subItemsInfoDao.setBarCode(itemsInfoDto.getSubItemsInfoDtoList().get(i).getBarCode());
                 subItemsInfoDao.setPurchasePrice(itemsInfoDto.getSubItemsInfoDtoList().get(i).getPurchasePrice());
