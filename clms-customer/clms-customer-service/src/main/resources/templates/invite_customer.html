@@ -283,7 +283,10 @@
     </nav>
 </div>
 <div class="content">
-    <form class="" action="index.html" id="choose-customer" method="post">
+    <form class="" action="/api/customer/bind" id="choose-customer" method="post">
+
+        <input type="hidden" th:value="${log.inviteId}" name="inviteId">
+
         <div class="form-row">
             <label >当前企业：</label>
             <div style="display:inline-block;vertical-align: top;
@@ -292,8 +295,8 @@
         <div class="form-row">
             <label for="customer">关联客户：</label>
             <div class="clms-input">
-                <select th:each="customer: ${list} " name="comtype">
-                    <option th:value = "${customer.customerId}"  th:text = "${customer.customerName}">Volvo</option>
+                <select name="customerId">
+                    <option th:each="customer: ${list} " th:value = "${customer.customerId}"  th:text = "${customer.customerName}">Volvo</option>
                 </select>
             </div>
         </div>

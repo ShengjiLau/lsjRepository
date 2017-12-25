@@ -60,6 +60,7 @@ public class InviteCustomerService {
 		CustomerInviteLog customerInviteLog = new CustomerInviteLog();
 		customerInviteLog.setInviteCompanyId(inviteCustomer.getCompanyId());
 		customerInviteLog.setInviteCustomerId(inviteCustomer.getCustomerId());
+		customerInviteLog.setInviteToken(uuidToken());
 		inviteLogdao.insert(customerInviteLog);
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setFrom("mawei@lichendt.com");
@@ -71,6 +72,11 @@ public class InviteCustomerService {
 		mailSender.send(message);
 	}
 
+
+	public String uuidToken(){
+		String replace = UUID.randomUUID().toString().replace("-", "");
+		return replace;
+	}
 
 	public void sendEmail(SimpleMailMessage message){
 		mailSender.send(message);
