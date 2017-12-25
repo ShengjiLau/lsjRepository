@@ -248,6 +248,47 @@ public class WaybillPlanApi {
 
 
 
+
+    @ApiOperation("客户计划-列表")
+    @RequestMapping(value = "/clientPlanList",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_client_waybill_plan_list')")
+    public PageBaseDto clientPlanList(@Validated WaybillPlanListParamsDto dto,
+                                      @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+                                      @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        List<Group> groupLists = SecurityInfoGetter.groups();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
+        map.put("isDeleted",0); //未删除的
+
+
+
+
+
+
+
+
+        PageInfo pageInfo = waybillPlanService.wayBillPlanList(map);
+
+
+
+
+
+
+
+        PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
+        return dto1;
+    }
+
+
+
+
+
+
+
+
     @ApiOperation("留言-列表")
     @RequestMapping(value = "/planLeaveMsgList",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_list')")
