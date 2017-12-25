@@ -15,7 +15,7 @@
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_driver_group_relationship
-    where driver_group_id = #{driverGroupId,jdbcType=BIGINT}
+    where dgr_id = #{dgrId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lcdt.traffic.model.DriverGroupRelationship">
     insert into t_driver_group_relationship (dgr_id, own_driver_id, driver_group_id,
@@ -51,4 +51,18 @@
     update_name, update_date, company_id
     from t_driver_group_relationship
   </select>
+  <delete id="deleteByOwnDriverId">
+    delete from t_driver_group_relationship
+    where own_driver_id = #{0} and company_id= #{1}
+  </delete>
+  <insert id="insertBatch" useGeneratedKeys="true" keyProperty="dgrId">
+    insert into t_driver_group_relationship (own_driver_id, driver_group_id,
+    create_id, create_name, create_date,
+    company_id) values
+    <foreach collection="list" item="item" separator=",">
+    (#{item.ownDriverId,jdbcType=BIGINT}, #{item.driverGroupId,jdbcType=BIGINT},
+    #{item.createId,jdbcType=BIGINT}, #{item.createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP ,
+    #{item.companyId,jdbcType=BIGINT})
+    </foreach>
+  </insert>
 </mapper>

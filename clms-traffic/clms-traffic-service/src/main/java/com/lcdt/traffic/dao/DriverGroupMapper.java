@@ -1,6 +1,8 @@
 package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.DriverGroup;
+import com.lcdt.traffic.web.dto.DriverGroupDto;
+
 import java.util.List;
 
 public interface DriverGroupMapper {
@@ -15,4 +17,6 @@ public interface DriverGroupMapper {
     List<DriverGroup> selectAll(Long companyId);
 
     int updateByPrimaryKey(DriverGroup record);
+
+    List<DriverGroupDto> selectRelationship(Long ownDriverId, Long companyId);
 }
