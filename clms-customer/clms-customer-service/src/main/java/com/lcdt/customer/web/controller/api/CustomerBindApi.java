@@ -1,5 +1,6 @@
 package com.lcdt.customer.web.controller.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.customer.dao.CustomerInviteLogMapper;
@@ -42,14 +43,32 @@ public class CustomerBindApi {
 	@Autowired
 	CustomerInviteLogMapper inviteLogMapper;
 
-	@ApiOperation("邀请客户绑定")
+	@ApiOperation("获取邀请邮件内容")
 	@RequestMapping(value = "/invitecustomer",method = RequestMethod.GET)
-	public String inviteCustomer(Long customerId, String bindEmail) {
+	public String inviteCustomer(Long customerId) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		User user = SecurityInfoGetter.getUser();
 		Company company = SecurityInfoGetter.geUserCompRel().getCompany();
 		return inviteCustomerService.buildInviteEmailContent(customerId,companyId,user,company);
 	}
+
+
+
+	@ApiOperation("发送邀请邮件")
+	@RequestMapping(value = "/sendemail",method = RequestMethod.GET)
+	public String inviteCustomer(Long customerId, String bindEmail,Long inviteId) {
+		Long companyId = SecurityInfoGetter.getCompanyId();
+		User user = SecurityInfoGetter.getUser();
+		Company company = SecurityInfoGetter.geUserCompRel().getCompany();
+		CustomerInviteLog customerInviteLog = inviteLogMapper.selectByPrimaryKey(inviteId);
+		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
+		inviteCustomerService.sendInviteEmail(bindEmail,customerInviteLog,customer,companyId,user,company);
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("code", 0);
+		jsonObject.put("message", "发送成功");
+		return jsonObject.toString();
+	}
+
 
 
 	@ApiOperation("绑定客户")
