@@ -45,6 +45,14 @@ public interface WaybillPlanService {
 
 
     /***
+     *客户计划列表
+     *
+     * @return
+     */
+    PageInfo clientPlanList(Map map);
+
+
+    /***
      * 拉取计划详细信息
      *
      * @param dto

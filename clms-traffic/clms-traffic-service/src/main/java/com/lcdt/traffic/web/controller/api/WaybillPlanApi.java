@@ -23,9 +23,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Created by yangbinq on 2017/12/13.
@@ -191,7 +193,6 @@ public class WaybillPlanApi {
         map.put("page_no", pageNo);
         map.put("page_size", pageSize);
         map.put("isDeleted",0); //未删除的
-
         StringBuffer sb = new StringBuffer();
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
             sb.append(" find_in_set('"+dto.getGroupIds()+"',group_id)");
@@ -262,20 +263,54 @@ public class WaybillPlanApi {
         map.put("page_no", pageNo);
         map.put("page_size", pageSize);
         map.put("isDeleted",0); //未删除的
+        if (dto.getSendOrderType()>0) {
+            map.put("sendOrderType",dto.getSendOrderType());
+        }
+        if (StringUtil.isNotEmpty(dto.getCustomerName())) {
+            map.put("customerName",dto.getCustomerName());
+        }
+        if (StringUtil.isNotEmpty(dto.getSerialCode())) {
+            map.put("serialCode",dto.getSerialCode());
+        }
+        if (StringUtil.isNotEmpty(dto.getPlanStatus())) {
+            map.put("planStatus",dto.getPlanStatus());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveProvince())) {
+            map.put("receiveProvince",dto.getReceiveProvince());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveCity())) {
+            map.put("receiveCity",dto.getReceiveCity());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveCounty())) {
+            map.put("receiveCounty",dto.getReceiveCounty());
+        }
+        if (StringUtil.isNotEmpty(dto.getPubdateBegin())) { //发布时间
+            map.put("pubdateBegin",dto.getPubdateBegin());
+        }
+        if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
+            map.put("pubdateEnd",dto.getPubdateEnd());
+        }
+        if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
+            map.put("goodsInfo",dto.getGoodsInfo());
+        }
+        StringBuffer sb = new StringBuffer();
+        if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
+            sb.append(" find_in_set('"+dto.getGroupIds()+"',group_id)");
+        } else {
+            List<Group> groupList = SecurityInfoGetter.groups();
+            for(int i=0;i<groupList.size();i++) {
+                Group group = groupList.get(i);
+                sb.append(" find_in_set('"+group.getGroupId()+"',group_id)");
+                if(i!=groupList.size()-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+        }
 
+        map.put("group_ids",sb.toString());//权限组列表
 
-
-
-
-
-
-
-        PageInfo pageInfo = waybillPlanService.wayBillPlanList(map);
-
-
-
-
-
+        PageInfo pageInfo = waybillPlanService.clientPlanList(map);
 
 
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());

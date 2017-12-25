@@ -54,4 +54,12 @@ public interface UserMapper {
 
 
     User selectByPrimaryKeyWithoutPwd(Long userId);
+
+
+    /***
+     * 获取组下的员工
+     * @return
+     */
+    List<User> selectUser4Group(Long companyId);
+
 }

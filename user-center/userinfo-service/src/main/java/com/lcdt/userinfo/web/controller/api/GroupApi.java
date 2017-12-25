@@ -10,6 +10,7 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.exception.GroupExistException;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserGroupRelation;
 import com.lcdt.userinfo.service.GroupManageService;
 import com.lcdt.userinfo.web.dto.GroupDto;
 import com.lcdt.userinfo.web.dto.GroupResultDto;
@@ -136,6 +137,75 @@ public class GroupApi {
         rDto.setList(pageInfo.getList());
         rDto.setTotal(pageInfo.getTotal());
         return rDto;
+    }
+
+
+
+    /**
+     * 组员工列表
+     *
+     * @return
+     */
+    @ApiOperation("组员工列表")
+    @RequestMapping(value = "/groupUserList",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_list')")
+    public GroupResultDto groupUserList(@ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+                                   @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId",companyId);
+        map.put("page_no",pageNo);
+        map.put("page_size",pageSize);
+        PageInfo pageInfo = groupManageService.selectGroupUserList(map);
+        GroupResultDto rDto = new GroupResultDto();
+        rDto.setUserList(pageInfo.getList());
+        rDto.setTotal(pageInfo.getTotal());
+        return rDto;
+    }
+
+
+    /**
+     * 组成员添加
+     *
+     * @return
+     */
+    @ApiOperation("组成员添加")
+    @RequestMapping(value = "/groupUserAdd",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_add')")
+    public String groupUserAdd(@ApiParam(value = "员工ID",required = true) @RequestParam Long userId,
+                                       @ApiParam(value = "组ID",required = true) @RequestParam Long groupId) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        UserGroupRelation vo = new UserGroupRelation();
+        vo.setCompanyId(companyId);
+        vo.setUserId(userId);
+        vo.setGroupId(groupId);
+        Integer flag = groupManageService.groupUserAdd(vo);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message",flag==1?"添加成功！":"添加失败！");
+        jsonObject.put("code",flag==1?0:-1);
+        return jsonObject.toString();
+    }
+
+    /**
+     * 组成员删除
+     *
+     * @return
+     */
+    @ApiOperation("组成员删除")
+    @RequestMapping(value = "/groupUserdelete",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_delete')")
+    public String groupUserdelete(@ApiParam(value = "员工ID",required = true) @RequestParam Long userId,
+                                  @ApiParam(value = "组ID",required = true) @RequestParam Long groupId) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        UserGroupRelation vo = new UserGroupRelation();
+        vo.setCompanyId(companyId);
+        vo.setUserId(userId);
+        vo.setGroupId(groupId);
+        Integer flag = groupManageService.groupUserDelete(vo);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message",flag==1?"删除成功！":"删除失败！");
+        jsonObject.put("code",flag==1?0:-1);
+        return jsonObject.toString();
     }
 
 

@@ -7,6 +7,9 @@ import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by ss on 2017/11/24.
  */
@@ -21,4 +24,13 @@ public class CustomerRpcServiceImpl implements CustomerRpcService {
         Customer vo = customerMapper.selectInnerByPrimaryKey(customerId);
         return vo;
     }
+
+
+
+    @Override
+    public List<Customer> findBindCompanyIds(Map map) {
+        return customerMapper.selectByCondition(map);
+    }
+
+
 }

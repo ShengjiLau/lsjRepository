@@ -331,7 +331,12 @@
       <if test="customerType!=null">
         and ${customerType}
       </if>
-
+      <if test="bindCpid != null">
+        and bind_comp_id is not null and bind_comp_id != ''
+      </if>
+      <if test="groupIds!=null and groupIds!=''">
+        and  ${groupIds}
+      </if>
       <!--这块只限编辑查询用BEGIN-->
       <if test="customerId!=null">
         and  customer_id != #{customerId,jdbcType=BIGINT}

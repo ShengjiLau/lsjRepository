@@ -2,6 +2,8 @@ package com.lcdt.traffic.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.customer.model.Customer;
+import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
@@ -14,10 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yangbinq on 2017/12/13.
@@ -39,6 +38,13 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
 
     @Autowired
     private PlanLeaveMsgMapper planLeaveMsgMapper; //计划留言
+
+
+
+    @com.alibaba.dubbo.config.annotation.Reference
+    public CustomerRpcService customerRpcService;  //客户信息
+
+
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -340,5 +346,39 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
     public Integer planDetailDelete(Long planDetailId, Long companyId) {
         return planDetailMapper.deleteByPrimaryKey(planDetailId,companyId);
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public PageInfo clientPlanList(Map map) {
+        //查询用户对应的企业绑定客户企业ID
+        map.put("bindCpid","111");//标识绑定企业ID不为空的企业
+        List<Customer> customerList = customerRpcService.findBindCompanyIds(map);
+        if (customerList!=null && customerList.size()>0) { //承运人ID
+            StringBuffer sb = new StringBuffer();
+            sb.append("(");
+            for (int i=0;i<customerList.size();i++) {
+                sb.append(" find_in_set('"+customerList.get(i).getBindCpid()+"',carrier_company_id)");
+                if(i!=customerList.size()-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+            map.put("carrierCompanyIds",String.join(",", sb.toString()));
+
+            //
+
+
+
+
+        }
+
+
+
+
+        return null;
+    }
+
+
+
 
 }
