@@ -70,7 +70,4 @@ public class CustomerBindApi {
 		return true;
 	}
 
-
-
-
 }
