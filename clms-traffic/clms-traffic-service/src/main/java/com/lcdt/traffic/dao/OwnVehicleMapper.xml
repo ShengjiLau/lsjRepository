@@ -62,8 +62,7 @@
       vehicle_insurance_expiry_date, vehicle_headerstock_photo, 
       vehicle_tailstock_photo, vehicle_tyre_spec, 
       group_id, create_id, create_name, 
-      create_date, update_id, update_name, 
-      update_date, company_id
+      create_date, company_id
       )
     values (#{affiliatedCompany,jdbcType=VARCHAR}, #{vehicleNum,jdbcType=VARCHAR},
       #{vehicleTrailerNum,jdbcType=VARCHAR}, #{vehicleCategory,jdbcType=SMALLINT}, #{vehicleType,jdbcType=VARCHAR}, 
@@ -78,8 +77,7 @@
       #{vehicleInsuranceExpiryDate,jdbcType=TIMESTAMP}, #{vehicleHeaderstockPhoto,jdbcType=VARCHAR}, 
       #{vehicleTailstockPhoto,jdbcType=VARCHAR}, #{vehicleTyreSpec,jdbcType=VARCHAR}, 
       #{groupId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, 
-      CURRENT_TIMESTAMP , #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR},
-      #{updateDate,jdbcType=TIMESTAMP}, #{companyId,jdbcType=BIGINT}
+      CURRENT_TIMESTAMP , #{companyId,jdbcType=BIGINT}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnVehicle">
@@ -227,9 +225,7 @@
     chassis_number, vehicle_axle_number, vehicle_wheelbase, vehicle_tyre_amount, energy_type,
     swept_volume, vehicle_color, vehicle_factory_date, vehicle_buying_date, vehicle_annual_date,
     vehicle_two_level_period, vehicle_insurance_company, vehicle_policy_num, vehicle_insurance_expiry_date,
-    vehicle_headerstock_photo, vehicle_tailstock_photo, vehicle_tyre_spec, group_id,
-    create_id, create_name, create_date, update_id, update_name, update_date, is_deleted,
-    company_id
+    vehicle_headerstock_photo, vehicle_tailstock_photo, vehicle_tyre_spec, group_id,company_id
     from t_own_vehicle
     <where>
       company_id = #{companyId,jdbcType=BIGINT} and is_deleted=0
