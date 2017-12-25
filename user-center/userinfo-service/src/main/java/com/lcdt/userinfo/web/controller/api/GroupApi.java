@@ -149,11 +149,13 @@ public class GroupApi {
     @ApiOperation("组员工列表")
     @RequestMapping(value = "/groupUserList",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_list')")
-    public GroupResultDto groupUserList(@ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+    public GroupResultDto groupUserList(@ApiParam(value = "组ID",required = true) @RequestParam Long groupId,
+                                    @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                    @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId",companyId);
+        map.put("groupId",groupId);
         map.put("page_no",pageNo);
         map.put("page_size",pageSize);
         PageInfo pageInfo = groupManageService.selectGroupUserList(map);
@@ -202,6 +204,81 @@ public class GroupApi {
         vo.setUserId(userId);
         vo.setGroupId(groupId);
         Integer flag = groupManageService.groupUserDelete(vo);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message",flag==1?"删除成功！":"删除失败！");
+        jsonObject.put("code",flag==1?0:-1);
+        return jsonObject.toString();
+    }
+
+
+
+    /**
+     * 组-不存在客户列表
+     *
+     * @return
+     */
+    @ApiOperation("组-不存在客户列表")
+    @RequestMapping(value = "/groupCustomerList",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_customer_list')")
+    public GroupResultDto groupCustomerList(@ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+                                        @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId",companyId);
+        map.put("page_no",pageNo);
+        map.put("page_size",pageSize);
+        PageInfo pageInfo = groupManageService.selectGroupUserList(map);
+        GroupResultDto rDto = new GroupResultDto();
+        rDto.setUserList(pageInfo.getList());
+        rDto.setTotal(pageInfo.getTotal());
+        return rDto;
+    }
+
+
+    /**
+     * 组客户添加
+     *
+     * @return
+     */
+    @ApiOperation("组客户添加")
+    @RequestMapping(value = "/groupCustomerAdd",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_customer_add')")
+    public String groupCustomerAdd(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
+                                   @ApiParam(value = "组ID",required = true) @RequestParam Long groupId,
+                                   @ApiParam(value = "组名",required = true) @RequestParam String groupName) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap<String,String>();
+        map.put("companyId",companyId);
+        map.put("customerId",customerId);
+        map.put("groupId",groupId);
+        map.put("groupName",groupName);
+
+        Integer flag = groupManageService.groupCustomerAdd(map);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message",flag==1?"添加成功！":"添加失败！");
+        jsonObject.put("code",flag==1?0:-1);
+        return jsonObject.toString();
+    }
+
+
+    /**
+     * 组客户删除
+     *
+     * @return
+     */
+    @ApiOperation("组客户删除")
+    @RequestMapping(value = "/groupCustomerDelete",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_customer_delete')")
+    public String groupCustomerDelete(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
+                                   @ApiParam(value = "组ID",required = true) @RequestParam Long groupId,
+                                   @ApiParam(value = "组名",required = true) @RequestParam String groupName) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap<String,String>();
+        map.put("companyId",companyId);
+        map.put("customerId",customerId);
+        map.put("groupId",groupId);
+        map.put("groupName",groupName);
+        Integer flag = groupManageService.groupCustomerdelete(map);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("message",flag==1?"删除成功！":"删除失败！");
         jsonObject.put("code",flag==1?0:-1);

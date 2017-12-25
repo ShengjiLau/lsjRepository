@@ -4,6 +4,8 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.permission.model.RoleUserRelation;
+import com.lcdt.customer.model.Customer;
+import com.lcdt.userinfo.dao.CustomerMapper;
 import com.lcdt.userinfo.dao.GroupMapper;
 import com.lcdt.userinfo.dao.UserGroupRelationMapper;
 import com.lcdt.userinfo.dao.UserMapper;
@@ -17,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +41,11 @@ public class GroupManageServiceImpl implements GroupManageService {
 
 	@Autowired
 	private UserMapper userMapper;
+
+	@Autowired
+	private CustomerMapper customerMapper;
+
+
 
 
 
@@ -168,7 +176,7 @@ public class GroupManageServiceImpl implements GroupManageService {
 			}
 		}
 		PageHelper.startPage(pageNo, pageSize);
-		List<User> list  = userMapper.selectUser4Group(Long.valueOf(m.get("companyId").toString()));
+		List<User> list  = userMapper.selectUser4Group(Long.valueOf(m.get("groupId").toString()),Long.valueOf(m.get("companyId").toString()));
 		PageInfo pageInfo = new PageInfo(list);
 		return pageInfo;
 	}
@@ -188,6 +196,105 @@ public class GroupManageServiceImpl implements GroupManageService {
 	public int groupUserDelete(UserGroupRelation userGroupRelation) {
 
 		return relationDao.deleteByUserGroupRelation(userGroupRelation);
+	}
+
+	@Override
+	public int groupCustomerAdd(Map map) {
+		Long companyId = Long.valueOf(map.get("companyId").toString());
+		Long customerId = Long.valueOf(map.get("customerId").toString());
+		String groupId = map.get("groupId").toString();
+		String groupName = map.get("groupName").toString();
+		Customer customer =  customerMapper.selectByPrimaryKey(customerId,companyId);
+		if (customer==null) {
+			throw new RuntimeException("获取客户信息失败！");
+		}
+
+			if (!StringUtils.isEmpty(customer.getGroupIds())) {
+			String groupIds = customer.getGroupIds();
+			String[] str1 = groupIds.split(",");
+			if (str1!=null && str1.length>0) {
+				boolean flag = false;
+				for(int i=0;i<str1.length;i++) {
+					if(groupId.equals(str1[i])){
+						flag=true;
+						break;
+					}
+				}
+				if(!flag){
+					customer.setGroupIds(customer.getGroupIds()+","+groupId);
+				}
+			} else {
+				//不
+			}
+		} else {
+			customer.setGroupIds(groupId);
+		}
+
+		if (!StringUtils.isEmpty(customer.getGroupNames())) {
+			String groupNames = customer.getGroupNames();
+			String[] str1 = groupNames.split(",");
+			if (str1!=null && str1.length>0) {
+				boolean flag = false;
+				for(int i=0;i<str1.length;i++) {
+					if(groupName.equals(str1[i])){
+						flag=true;
+						break;
+					}
+				}
+				if(!flag){
+					customer.setGroupNames(customer.getGroupNames()+","+groupName);
+				}
+			} else {
+				//不
+			}
+		} else {
+			customer.setGroupNames(groupName);
+		}
+		return customerMapper.updateByPrimaryKey(customer);
+	}
+
+	@Override
+	public int groupCustomerdelete(Map map) {
+		Long companyId = Long.valueOf(map.get("companyId").toString());
+		Long customerId = Long.valueOf(map.get("customerId").toString());
+		String groupId = map.get("groupId").toString();
+		String groupName = map.get("groupName").toString();
+		Customer customer =  customerMapper.selectByPrimaryKey(customerId,companyId);
+		if (customer==null) {
+			throw new RuntimeException("获取客户信息失败！");
+		}
+		if(!StringUtils.isEmpty(customer.getGroupIds())) {
+			String groupIds = customer.getGroupIds();
+			List<String> groupIdsArray = new ArrayList<String>();
+			String[] str1 = groupIds.split(",");
+			if (str1!=null && str1.length>0) {
+				for(int i=0;i<str1.length;i++) {
+					if(!groupId.equals(str1[i])){
+						groupIdsArray.add(str1[i]);
+					}
+				}
+				customer.setGroupIds(String.join(",",groupIdsArray));
+			} else {
+				customer.setGroupIds("");
+			}
+		}
+		if (!StringUtils.isEmpty(customer.getGroupIds())) {
+			List<String> groupNamesArray = new ArrayList<String>();
+			String groupNames = customer.getGroupNames();
+			String[] str2 = groupNames.split(",");
+			if (str2!=null && str2.length>0) {
+				for(int i=0;i<str2.length;i++) {
+					if (!groupName.equals(str2[i])){
+						groupNamesArray.add(str2[i]);
+					}
+				}
+				customer.setGroupNames(String.join(",",groupNamesArray));
+			} else {
+				customer.setGroupNames("");
+			}
+		}
+
+		return customerMapper.updateByPrimaryKey(customer);
 	}
 
 

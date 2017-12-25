@@ -14,7 +14,9 @@ import com.lcdt.customer.web.dto.CustomerContactParamsDto;
 import com.lcdt.customer.web.dto.CustomerListResultDto;
 import com.lcdt.customer.web.dto.CustomerListParamsDto;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserGroupRelation;
 import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +35,7 @@ import org.tl.commons.util.DateUtility;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -88,20 +91,47 @@ public class CustomerApi {
             map.put("customerType", sb.toString());
         }
 
-
+        //竞价(抢单用)
         if (StringUtil.isNotEmpty(dto.getCollectionIds())) {
-            String[] groupIdArray = dto.getCollectionIds().split(",");
+            String[] collectionIds = dto.getCollectionIds().split(",");
             StringBuffer sb = new StringBuffer();
             sb.append("(");
-            for (int i=0;i<groupIdArray.length;i++) {
-                sb.append(" find_in_set('"+groupIdArray[i]+"',collection_ids)");
-                if(i!=groupIdArray.length-1){
+            for (int i=0;i<collectionIds.length;i++) {
+                sb.append(" find_in_set('"+collectionIds[i]+"',collection_ids)");
+                if(i!=collectionIds.length-1){
                     sb.append(" or ");
                 }
             }
             sb.append(")");
 
            map.put("collectionIds", sb.toString());
+        }
+
+
+        //项目分组
+        if (StringUtil.isNotEmpty(dto.getGroupIds())) {
+            String[] groupIdArray = dto.getGroupIds().split(",");
+            StringBuffer sb = new StringBuffer();
+            sb.append("(");
+            for (int i=0;i<groupIdArray.length;i++) {
+                sb.append(" find_in_set('"+groupIdArray[i]+"',group_ids)");
+                if(i!=groupIdArray.length-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+            map.put("groupIds", sb.toString());
+        } else {
+            StringBuffer sb = new StringBuffer();
+            List<Group> groupList = SecurityInfoGetter.groups();
+            for(int i=0;i<groupList.size();i++) {
+                Group group = groupList.get(i);
+                sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)");
+                if(i!=groupList.size()-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
         }
 
         PageInfo pageInfo = customerService.customerList(map);
@@ -489,10 +519,6 @@ public class CustomerApi {
         return dto;
     }
 
-
-
-
-
     /**
      * 客户绑定
      *
@@ -524,6 +550,9 @@ public class CustomerApi {
         }
         return customer;
     }
+
+
+
 
 
 

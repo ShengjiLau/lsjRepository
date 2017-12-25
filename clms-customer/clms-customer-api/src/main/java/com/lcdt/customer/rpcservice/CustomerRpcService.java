@@ -10,7 +10,10 @@ import java.util.Map;
  */
 public interface CustomerRpcService {
 
+
     Customer findCustomerById(Long customerId);
+
+    Customer findCustomerById(Long customerId, Long companyId);
 
 
     /**

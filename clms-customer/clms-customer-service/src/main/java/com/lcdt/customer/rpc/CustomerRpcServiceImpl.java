@@ -25,6 +25,10 @@ public class CustomerRpcServiceImpl implements CustomerRpcService {
         return vo;
     }
 
+    @Override
+    public Customer findCustomerById(Long customerId, Long companyId) {
+        return customerMapper.selectByPrimaryKey(customerId,companyId);
+    }
 
 
     @Override

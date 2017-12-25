@@ -60,6 +60,6 @@ public interface UserMapper {
      * 获取组下的员工
      * @return
      */
-    List<User> selectUser4Group(Long companyId);
+    List<User> selectUser4Group(Long groupId, Long companyId);
 
 }
