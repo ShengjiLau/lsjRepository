@@ -46,7 +46,7 @@
       #{driverBirthday,jdbcType=DATE}, #{driverLicense,jdbcType=VARCHAR}, #{driverProvince,jdbcType=VARCHAR},
       #{driverCity,jdbcType=VARCHAR}, #{driverDistrict,jdbcType=VARCHAR}, #{driverAddress,jdbcType=VARCHAR},
       #{driverRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR},
-      #{createDate,jdbcType=TIMESTAMP}, #{companyId,jdbcType=BIGINT}
+      CURRENT_TIMESTAMP , #{companyId,jdbcType=BIGINT}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnDriver">
@@ -68,7 +68,7 @@
       driver_remark = #{driverRemark,jdbcType=VARCHAR},
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
-      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      update_date = CURRENT_TIMESTAMP ,
       company_id = #{companyId,jdbcType=BIGINT}
     where own_driver_id = #{ownDriverId,jdbcType=BIGINT}
   </update>
@@ -145,8 +145,7 @@
   <select id="selectByCondition" parameterType="com.lcdt.traffic.model.OwnDriver" resultMap="BaseResultMap">
     select own_driver_id, driver_ID, affiliated_company, driver_name, driver_phone, driver_category,
     driver_email, driver_sex, driver_nationality, driver_birthday, driver_license, driver_province,
-    driver_city, driver_district, driver_address, driver_remark, create_id, create_name,
-    create_date, update_id, update_name, update_date, is_deleted, company_id
+    driver_city, driver_district, driver_address, driver_remark, company_id
     from t_own_driver
     <where>
       company_id = #{companyId,jdbcType=BIGINT} and is_deleted = 0

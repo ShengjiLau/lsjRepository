@@ -23,7 +23,7 @@ public class DriverGroup {
 
     private Short isDeleted;
 
-    private Long compnayId;
+    private Long companyId;
 
     public Long getDriverGroupId() {
         return driverGroupId;
@@ -105,11 +105,11 @@ public class DriverGroup {
         this.isDeleted = isDeleted;
     }
 
-    public Long getCompnayId() {
-        return compnayId;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setCompnayId(Long compnayId) {
-        this.compnayId = compnayId;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 }
