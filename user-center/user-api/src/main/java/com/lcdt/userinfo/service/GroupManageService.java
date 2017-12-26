@@ -51,4 +51,33 @@ public interface GroupManageService {
 	 */
 	int groupUserDelete(UserGroupRelation userGroupRelation);
 
+
+	/**
+	 * 组客户添加
+	 *
+	 * @param map
+	 * @return
+	 */
+	int groupCustomerAdd(Map map) ;
+
+
+
+	/**
+	 * 组客户删除
+	 *
+	 * @param map
+	 * @return
+	 */
+	int groupCustomerdelete(Map map);
+
+
+
+
+	/***
+	 * 组客户不存在列表
+	 * @param m
+	 * @return
+	 */
+	PageInfo selectGroupClientList(Map m);
+
 }

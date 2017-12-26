@@ -350,9 +350,9 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public PageInfo clientPlanList(Map map) {
-        //查询用户对应的企业绑定客户企业ID
+
         map.put("bindCpid","111");//标识绑定企业ID不为空的企业
-        List<Customer> customerList = customerRpcService.findBindCompanyIds(map);
+        List<Customer> customerList = customerRpcService.findBindCompanyIds(map); //查询用户对应的企业绑定客户企业ID
         if (customerList!=null && customerList.size()>0) { //承运人ID
             StringBuffer sb = new StringBuffer();
             sb.append("(");
@@ -363,9 +363,18 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
                 }
             }
             sb.append(")");
-            map.put("carrierCompanyIds",String.join(",", sb.toString()));
+            map.put("carrierCompanyIds",sb.toString());
+
+
 
             //
+
+
+
+
+
+
+
 
 
 

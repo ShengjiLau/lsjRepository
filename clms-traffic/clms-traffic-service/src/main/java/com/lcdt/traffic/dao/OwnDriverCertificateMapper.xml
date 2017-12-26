@@ -92,9 +92,7 @@
     certificate_validity_end, certificate_fee,
     certificate_attachment1, certificate_attachment2,
     certificate_attachment3, group_remark, create_id,
-    create_name, create_date, update_id,
-    update_name, update_date,
-    company_id)
+    create_name, create_date,company_id)
     values
     <foreach item="item" collection="list" separator=",">
       (#{item.ownDriverId,jdbcType=BIGINT}, #{item.groupName,jdbcType=VARCHAR},#{item.certificateType,jdbcType=VARCHAR},
@@ -102,9 +100,7 @@
       #{item.certificateValidityEnd,jdbcType=TIMESTAMP}, #{item.certificateFee,jdbcType=REAL},
       #{item.certificateAttachment1,jdbcType=VARCHAR}, #{item.certificateAttachment2,jdbcType=VARCHAR},
       #{item.certificateAttachment3,jdbcType=VARCHAR}, #{item.groupRemark,jdbcType=VARCHAR}, #{item.createId,jdbcType=BIGINT},
-      #{item.createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{item.updateId,jdbcType=BIGINT},
-      #{item.updateName,jdbcType=VARCHAR}, #{item.updateDate,jdbcType=TIMESTAMP},
-      #{item.companyId,jdbcType=BIGINT})
+      #{item.createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP,#{item.companyId,jdbcType=BIGINT})
     </foreach>
   </insert>
   <update id="updateBatch" parameterType="java.util.List">
@@ -122,12 +118,9 @@
       certificate_attachment2 = #{item.certificateAttachment2,jdbcType=VARCHAR},
       certificate_attachment3 = #{item.certificateAttachment3,jdbcType=VARCHAR},
       group_remark = #{item.groupRemark,jdbcType=VARCHAR},
-      create_id = #{item.createId,jdbcType=BIGINT},
-      create_name = #{item.createName,jdbcType=VARCHAR},
-      create_date = #{item.createDate,jdbcType=TIMESTAMP},
       update_id = #{item.updateId,jdbcType=BIGINT},
       update_name = #{item.updateName,jdbcType=VARCHAR},
-      is_deleted = #{item.isDeleted,jdbcType=SMALLINT}
+      update_date = CURRENT_TIMESTAMP
       where odc_id = #{item.odcId,jdbcType=BIGINT} and company_id = #{item.companyId,jdbcType=BIGINT}
     </foreach>
   </update>

@@ -12,45 +12,71 @@
     <result column="update_name" jdbcType="VARCHAR" property="updateName" />
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
-    <result column="compnay_id" jdbcType="BIGINT" property="compnayId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_driver_group
     where driver_group_id = #{driverGroupId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lcdt.traffic.model.DriverGroup">
-    insert into t_driver_group (driver_group_id, group_name, group_remark, 
-      create_id, create_name, create_date, 
-      update_id, update_name, update_date, 
-      is_deleted, compnay_id)
-    values (#{driverGroupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{groupRemark,jdbcType=VARCHAR}, 
-      #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
-      #{isDeleted,jdbcType=SMALLINT}, #{compnayId,jdbcType=BIGINT})
+    insert into t_driver_group (group_name, group_remark,
+      create_id, create_name, create_date, company_id)
+    values (#{groupName,jdbcType=VARCHAR}, #{groupRemark,jdbcType=VARCHAR},
+      #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR},
+      CURRENT_TIMESTAMP , #{companyId,jdbcType=BIGINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.DriverGroup">
     update t_driver_group
-    set group_name = #{groupName,jdbcType=VARCHAR},
-      group_remark = #{groupRemark,jdbcType=VARCHAR},
-      create_id = #{createId,jdbcType=BIGINT},
-      create_name = #{createName,jdbcType=VARCHAR},
-      create_date = #{createDate,jdbcType=TIMESTAMP},
+    <set>
+      <if test="groupName!=null">
+        group_name = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupRemark!=null">
+        group_remark = #{groupRemark,jdbcType=VARCHAR},
+      </if>
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
-      update_date = #{updateDate,jdbcType=TIMESTAMP},
-      is_deleted = #{isDeleted,jdbcType=SMALLINT},
-      compnay_id = #{compnayId,jdbcType=BIGINT}
-    where driver_group_id = #{driverGroupId,jdbcType=BIGINT}
+      update_date = CURRENT_TIMESTAMP
+    </set>
+    where driver_group_id = #{driverGroupId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select driver_group_id, group_name, group_remark, create_id, create_name, create_date, update_id, 
-    update_name, update_date, is_deleted, compnay_id
+    update_name, update_date, is_deleted, company_id
     from t_driver_group
     where driver_group_id = #{driverGroupId,jdbcType=BIGINT}
   </select>
+  <update id="deleteByUpdate" parameterType="com.lcdt.traffic.model.DriverGroup">
+    update t_driver_group
+    set is_deleted = 1,
+    update_id = #{updateId,jdbcType=BIGINT},
+    update_name = #{updateName,jdbcType=VARCHAR},
+    update_date = CURRENT_TIMESTAMP
+    where driver_group_id = #{driverGroupId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </update>
   <select id="selectAll" resultMap="BaseResultMap">
-    select driver_group_id, group_name, group_remark, create_id, create_name, create_date, update_id, 
-    update_name, update_date, is_deleted, compnay_id
-    from t_driver_group
+    select driver_group_id, group_name, group_remark, company_id
+    from t_driver_group where company_id = #{companyId,jdbcType=BIGINT} and is_deleted = 0
+  </select>
+
+
+  <resultMap id="BaseResultMapDto" type="com.lcdt.traffic.web.dto.DriverGroupDto">
+    <id column="driver_group_id" jdbcType="BIGINT" property="driverGroupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="group_remark" jdbcType="VARCHAR" property="groupRemark" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <association property="driverGroupRelationship" javaType="com.lcdt.traffic.model.DriverGroupRelationship">
+      <id column="dgr_id" jdbcType="BIGINT" property="dgrId" />
+      <result column="own_driver_id" jdbcType="BIGINT" property="ownDriverId" />
+      <result column="driver_group_id" jdbcType="BIGINT" property="driverGroupId" />
+    </association>
+  </resultMap>
+
+
+  <select id="selectRelationship" resultMap="BaseResultMapDto">
+    select t1.driver_group_id, t1.group_name, t1.group_remark, t1.company_id,
+    t2.dgr_id, t2.own_driver_id, t2.driver_group_id
+    from t_driver_group t1 left join t_driver_group_relationship t2 on t1.driver_group_id = t2.driver_group_id
+    where t2.own_driver_id = #{0} and t1.company_id = #{1} and is_deleted = 0
   </select>
 </mapper>

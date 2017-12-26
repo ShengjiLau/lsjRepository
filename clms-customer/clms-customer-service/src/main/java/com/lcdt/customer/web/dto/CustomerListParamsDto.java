@@ -33,8 +33,11 @@ public class CustomerListParamsDto {
     private String customerType;
 
 
-    @ApiModelProperty(value = "分组ID")
+    @ApiModelProperty(value = "竞价分组ID")
     private String collectionIds;
+
+    @ApiModelProperty(value = "项目分组ID")
+    private String groupIds;
 
 
     public String getComplexContition() {
@@ -91,6 +94,14 @@ public class CustomerListParamsDto {
 
     public void setCollectionIds(String collectionIds) {
         this.collectionIds = collectionIds;
+    }
+
+    public String getGroupIds() {
+        return groupIds;
+    }
+
+    public void setGroupIds(String groupIds) {
+        this.groupIds = groupIds;
     }
 }
 

@@ -13,4 +13,8 @@ public interface DriverGroupRelationshipMapper {
     List<DriverGroupRelationship> selectAll();
 
     int updateByPrimaryKey(DriverGroupRelationship record);
+
+    int deleteByOwnDriverId(Long ownDriverId, Long companyId);
+
+    int insertBatch(List<DriverGroupRelationship> driverGroupRelationshipList);
 }
