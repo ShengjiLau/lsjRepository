@@ -10,6 +10,7 @@ import com.lcdt.customer.model.CustomerInviteLog;
 import com.lcdt.customer.service.CustomerService;
 import com.lcdt.customer.service.impl.InviteCustomerService;
 import com.lcdt.customer.service.impl.InviteLogService;
+import com.lcdt.customer.web.dto.InviteDto;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.ApiOperation;
@@ -44,8 +45,9 @@ public class CustomerBindApi {
 	CustomerInviteLogMapper inviteLogMapper;
 
 	@ApiOperation("获取邀请邮件内容")
-	@RequestMapping(value = "/invitecustomer",method = RequestMethod.GET)
-	public String inviteCustomer(Long customerId) {
+	@RequestMapping(value = "/invitecustomer",method = RequestMethod.POST)
+	@ResponseBody
+	public InviteDto inviteCustomer(Long customerId) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		User user = SecurityInfoGetter.getUser();
 		Company company = SecurityInfoGetter.geUserCompRel().getCompany();
@@ -55,13 +57,13 @@ public class CustomerBindApi {
 
 
 	@ApiOperation("发送邀请邮件")
-	@RequestMapping(value = "/sendemail",method = RequestMethod.GET)
-	public String inviteCustomer(Long customerId, String bindEmail,Long inviteId) {
+	@RequestMapping(value = "/sendemail",method = RequestMethod.POST)
+	public String inviteCustomer(String bindEmail,Long inviteId) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		User user = SecurityInfoGetter.getUser();
 		Company company = SecurityInfoGetter.geUserCompRel().getCompany();
 		CustomerInviteLog customerInviteLog = inviteLogMapper.selectByPrimaryKey(inviteId);
-		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
+		Customer customer = mapper.selectByPrimaryKey(customerInviteLog.getInviteCustomerId(), companyId);
 		inviteCustomerService.sendInviteEmail(bindEmail,customerInviteLog,customer,companyId,user,company);
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("code", 0);
@@ -72,7 +74,7 @@ public class CustomerBindApi {
 
 
 	@ApiOperation("绑定客户")
-	@RequestMapping("/bind")
+	@RequestMapping(value = "/bind",method = RequestMethod.POST)
 	@ResponseBody
 	public ModelAndView bind(Long inviteId,Long customerId){
 		Long companyId = SecurityInfoGetter.getCompanyId();
@@ -89,7 +91,7 @@ public class CustomerBindApi {
 	}
 
 	@ApiOperation("绑定客户页面")
-	@RequestMapping("/customerlist")
+	@RequestMapping(value = "/customerlist",method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('bindCustomer') or hasRole('ROLE_SYS_ADMIN')")
 	public ModelAndView customer(@RequestParam(name = "a") Long inviteLogId,@RequestParam(name = "b") String token){
 		//TODO 检查链接上的token 有效性

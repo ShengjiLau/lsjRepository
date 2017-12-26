@@ -4,6 +4,7 @@ import com.lcdt.customer.dao.CustomerInviteLogMapper;
 import com.lcdt.customer.dao.CustomerMapper;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.model.CustomerInviteLog;
+import com.lcdt.customer.web.dto.InviteDto;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
 import org.apache.velocity.VelocityContext;
@@ -42,15 +43,19 @@ public class InviteCustomerService {
 	CustomerMapper mapper;
 
 
-	public String buildInviteEmailContent(Long customerId,Long companyId,User inviteUser,Company inviteCompany){
+	public InviteDto buildInviteEmailContent(Long customerId,Long companyId,User inviteUser,Company inviteCompany){
 		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
 		CustomerInviteLog customerInviteLog = new CustomerInviteLog();
 		customerInviteLog.setInviteCompanyId(customer.getCompanyId());
 		customerInviteLog.setInviteCustomerId(customer.getCustomerId());
 		inviteLogdao.insert(customerInviteLog);
 		String clientTypes = customer.getClientTypes();
-		return resolveInviteEmailContent(customer.getCustomerName(), inviteUser.getRealName(), inviteCompany.getShortName(),
+		String content = resolveInviteEmailContent(customer.getCustomerName(), inviteUser.getRealName(), inviteCompany.getShortName(),
 				clientTypes,beInvitedUrl(customerInviteLog.getInviteId(),customerInviteLog.getInviteToken()));
+		InviteDto inviteDto = new InviteDto();
+		inviteDto.setInviteContent(content);
+		inviteDto.setInviteId(customerInviteLog.getInviteId());
+		return inviteDto;
 	}
 
 
