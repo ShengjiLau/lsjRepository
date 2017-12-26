@@ -19,6 +19,6 @@ public interface DriverGroupService {
 
     List<DriverGroup> selectAll(Long companyId);
 
-    List<DriverGroupDto> selectRelationship(Long ownDriverId, Long companyId);
+    List<DriverGroupDto> selectRelationship(Long companyId);
 
 }

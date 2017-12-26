@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.traffic.dao.DriverGroupMapper">
+  <cache />
   <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.DriverGroup">
     <id column="driver_group_id" jdbcType="BIGINT" property="driverGroupId" />
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
@@ -65,18 +66,14 @@
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <result column="group_remark" jdbcType="VARCHAR" property="groupRemark" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
-    <association property="driverGroupRelationship" javaType="com.lcdt.traffic.model.DriverGroupRelationship">
-      <id column="dgr_id" jdbcType="BIGINT" property="dgrId" />
-      <result column="own_driver_id" jdbcType="BIGINT" property="ownDriverId" />
-      <result column="driver_group_id" jdbcType="BIGINT" property="driverGroupId" />
-    </association>
+    <result column="dgr_id" jdbcType="BIGINT" property="dgrId" />
   </resultMap>
 
 
   <select id="selectRelationship" resultMap="BaseResultMapDto">
     select t1.driver_group_id, t1.group_name, t1.group_remark, t1.company_id,
-    t2.dgr_id, t2.own_driver_id, t2.driver_group_id
+    t2.dgr_id
     from t_driver_group t1 left join t_driver_group_relationship t2 on t1.driver_group_id = t2.driver_group_id
-    where t2.own_driver_id = #{0} and t1.company_id = #{1} and is_deleted = 0
+    where t1.company_id = #{0} and is_deleted = 0
   </select>
 </mapper>

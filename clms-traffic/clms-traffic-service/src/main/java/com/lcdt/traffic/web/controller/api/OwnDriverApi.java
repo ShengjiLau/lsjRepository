@@ -132,7 +132,7 @@ public class OwnDriverApi {
 
     @ApiOperation(value = "司机详情", notes = "司机详情包含证件信息")
     @GetMapping("/detail")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_detail')")
     public OwnDriverDto ownDriverList(Long ownDriverId) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         OwnDriver ownDriver = new OwnDriver();
@@ -186,13 +186,16 @@ public class OwnDriverApi {
     }
 
     @ApiOperation(value = "获取司机所属分组", notes = "设置司机所属的分组")
-    @PostMapping("/drivergroup")
+    @GetMapping("/drivergroup")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_drivergroup')")
-    public PageBaseDto<List<DriverGroupDto>> setGroup(@RequestBody OwnDriver ownDriver) {
+    public PageBaseDto<List<DriverGroupDto>> setGroup() {
+        Long t1 = System.currentTimeMillis();
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-        Long ownDriverId = ownDriver.getOwnDriverId();
-        List<DriverGroupDto> driverGroupDtoList = driverGroupService.selectRelationship(ownDriverId,companyId);
+//        Long ownDriverId = ownDriver.getOwnDriverId();
+        List<DriverGroupDto> driverGroupDtoList = driverGroupService.selectRelationship(companyId);
         PageBaseDto pageBaseDto = new PageBaseDto(driverGroupDtoList, driverGroupDtoList.size());
+        Long t2 = System.currentTimeMillis();
+        System.out.println("获取分组列表耗时："+(t2-t1)+"ms");
         return pageBaseDto;
     }
 
