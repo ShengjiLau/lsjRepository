@@ -4,7 +4,7 @@ import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.model.*;
-import com.lcdt.traffic.service.plan4CreateService;
+import com.lcdt.traffic.service.Plan4CreateService;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import org.springframework.beans.BeanUtils;
@@ -23,7 +23,7 @@ import java.util.List;
  * Created by yangbinq on 2017/12/13.
  */
 @Service
-public class Plan4CreateServiceImpl implements plan4CreateService {
+public class Plan4CreateServiceImpl implements Plan4CreateService {
 
     @Autowired
     private WaybillPlanMapper waybillPlanMapper; //计划

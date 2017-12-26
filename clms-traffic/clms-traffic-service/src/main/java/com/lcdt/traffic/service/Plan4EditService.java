@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by yangbinq on 2017/12/13.
  */
-public interface plan4EditService {
+public interface Plan4EditService {
 
     /***
      * 编辑计划-发布、暂存

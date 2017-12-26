@@ -7,9 +7,9 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
-import com.lcdt.traffic.service.plan4CreateService;
-import com.lcdt.traffic.service.plan4EditService;
-import com.lcdt.traffic.service.planService;
+import com.lcdt.traffic.service.Plan4CreateService;
+import com.lcdt.traffic.service.Plan4EditService;
+import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.*;
 import com.lcdt.userinfo.model.Group;
@@ -37,13 +37,13 @@ import java.util.Map;
 public class OwnPlanApi {
 
     @Autowired
-    private plan4CreateService plan4CreateService; //计划创建
+    private Plan4CreateService plan4CreateService; //计划创建
 
     @Autowired
-    private plan4EditService plan4EditService; //计划编辑
+    private Plan4EditService plan4EditService; //计划编辑
 
     @Autowired
-    private planService planService;
+    private PlanService planService;
 
 
     @ApiOperation("创建--发布")
@@ -164,7 +164,7 @@ public class OwnPlanApi {
     public String planDetailDelete(@ApiParam(value = "计划商品ID",required = true) @RequestParam Long planDetailId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         JSONObject jsonObject = new JSONObject();
-        Integer flag =planService.planDetailDelete(planDetailId,companyId);
+        Integer flag = planService.planDetailDelete(planDetailId,companyId);
         String message = null;
         int code = -1;
         if (flag>0) {

@@ -7,7 +7,7 @@ import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
-import com.lcdt.traffic.service.planService;
+import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
@@ -22,7 +22,7 @@ import java.util.*;
  * Created by yangbinq on 2017/12/13.
  */
 @Service
-public class PlanServiceImpl implements planService {
+public class PlanServiceImpl implements PlanService {
 
     @Autowired
     private WaybillPlanMapper waybillPlanMapper; //计划

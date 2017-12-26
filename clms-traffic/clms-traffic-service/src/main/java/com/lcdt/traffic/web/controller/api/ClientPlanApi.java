@@ -3,9 +3,7 @@ package com.lcdt.traffic.web.controller.api;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.traffic.service.plan4CreateService;
-import com.lcdt.traffic.service.plan4EditService;
-import com.lcdt.traffic.service.planService;
+import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.WaybillPlanListParamsDto;
 import com.lcdt.userinfo.model.Group;
@@ -32,14 +30,9 @@ import java.util.Map;
 @Api(value = "客户计划",description = "客户计划接口")
 public class ClientPlanApi {
 
-    @Autowired
-    private plan4CreateService waybillPlan4CreateService; //计划创建
 
     @Autowired
-    private plan4EditService waybillPlan4EditService; //计划编辑
-
-    @Autowired
-    private planService waybillPlanService;
+    private PlanService planService;
 
 
     @ApiOperation("客户计划-列表-竞价")
@@ -109,7 +102,7 @@ public class ClientPlanApi {
         map.put("group_ids",sb.toString());//计划
         map.put("groupIds",sb.toString());//客户
 
-        PageInfo pageInfo = waybillPlanService.clientPlanList(map);
+        PageInfo pageInfo = planService.clientPlanList(map);
 
 
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
