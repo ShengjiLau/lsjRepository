@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.web.dto;
 
 import com.lcdt.converter.ResponseData;
+import com.lcdt.customer.model.Customer;
 import com.lcdt.userinfo.model.Department;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
@@ -14,6 +15,7 @@ public class GroupResultDto implements ResponseData {
 
     private List<Group> list;
     private List<User>  userList;
+    private List<Customer> customerList;
 
     private long total;
 
@@ -39,5 +41,13 @@ public class GroupResultDto implements ResponseData {
 
     public void setUserList(List<User> userList) {
         this.userList = userList;
+    }
+
+    public List<Customer> getCustomerList() {
+        return customerList;
+    }
+
+    public void setCustomerList(List<Customer> customerList) {
+        this.customerList = customerList;
     }
 }

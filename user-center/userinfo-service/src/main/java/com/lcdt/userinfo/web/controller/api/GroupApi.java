@@ -220,16 +220,23 @@ public class GroupApi {
     @ApiOperation("组-不存在客户列表")
     @RequestMapping(value = "/groupCustomerList",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_customer_list')")
-    public GroupResultDto groupCustomerList(@ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+    public GroupResultDto groupCustomerList(@ApiParam(value = "组ID",required = true) @RequestParam Long groupId,
+                                        @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                         @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId",companyId);
         map.put("page_no",pageNo);
+        if (groupId>0) {
+            StringBuffer sb = new StringBuffer();
+            sb.append(" NOT find_in_set('"+groupId+"',group_ids)");
+            map.put("groupIds", sb.toString());
+        }
+
         map.put("page_size",pageSize);
-        PageInfo pageInfo = groupManageService.selectGroupUserList(map);
+        PageInfo pageInfo = groupManageService.selectGroupClientList(map);
         GroupResultDto rDto = new GroupResultDto();
-        rDto.setUserList(pageInfo.getList());
+        rDto.setCustomerList(pageInfo.getList());
         rDto.setTotal(pageInfo.getTotal());
         return rDto;
     }

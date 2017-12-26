@@ -198,6 +198,7 @@ public class GroupManageServiceImpl implements GroupManageService {
 		return relationDao.deleteByUserGroupRelation(userGroupRelation);
 	}
 
+	@Transactional
 	@Override
 	public int groupCustomerAdd(Map map) {
 		Long companyId = Long.valueOf(map.get("companyId").toString());
@@ -253,6 +254,7 @@ public class GroupManageServiceImpl implements GroupManageService {
 		return customerMapper.updateByPrimaryKey(customer);
 	}
 
+	@Transactional
 	@Override
 	public int groupCustomerdelete(Map map) {
 		Long companyId = Long.valueOf(map.get("companyId").toString());
@@ -295,6 +297,28 @@ public class GroupManageServiceImpl implements GroupManageService {
 		}
 
 		return customerMapper.updateByPrimaryKey(customer);
+	}
+
+	@Transactional
+	@Override
+	public PageInfo selectGroupClientList(Map m) {
+		int pageNo = 1;
+		int pageSize = 0; //0表示所有
+
+		if (m.containsKey("page_no")) {
+			if (m.get("page_no") != null) {
+				pageNo = (Integer) m.get("page_no");
+			}
+		}
+		if (m.containsKey("page_size")) {
+			if (m.get("page_size") != null) {
+				pageSize = (Integer) m.get("page_size");
+			}
+		}
+		PageHelper.startPage(pageNo, pageSize);
+		List<Customer> list  = customerMapper.selectByCondition(m);
+		PageInfo pageInfo = new PageInfo(list);
+		return pageInfo;
 	}
 
 

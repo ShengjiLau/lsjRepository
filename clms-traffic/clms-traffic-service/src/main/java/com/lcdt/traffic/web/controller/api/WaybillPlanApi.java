@@ -197,6 +197,7 @@ public class WaybillPlanApi {
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
             sb.append(" find_in_set('"+dto.getGroupIds()+"',group_id)");
         } else {
+            sb.append("(");
             List<Group> groupList = SecurityInfoGetter.groups();
             for(int i=0;i<groupList.size();i++) {
                 Group group = groupList.get(i);
@@ -257,7 +258,6 @@ public class WaybillPlanApi {
                                       @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                       @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        List<Group> groupLists = SecurityInfoGetter.groups();
         Map map = new HashMap();
         map.put("companyId", companyId);
         map.put("page_no", pageNo);
@@ -294,21 +294,29 @@ public class WaybillPlanApi {
             map.put("goodsInfo",dto.getGoodsInfo());
         }
         StringBuffer sb = new StringBuffer();
+        StringBuffer sb1 = new StringBuffer();
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
-            sb.append(" find_in_set('"+dto.getGroupIds()+"',group_id)");
+            sb.append(" find_in_set('"+dto.getGroupIds()+"',group_id)"); //计划表
+            sb1.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
         } else {
+            sb.append("(");
+            sb1.append("(");
             List<Group> groupList = SecurityInfoGetter.groups();
             for(int i=0;i<groupList.size();i++) {
                 Group group = groupList.get(i);
-                sb.append(" find_in_set('"+group.getGroupId()+"',group_id)");
+                sb.append(" find_in_set('"+group.getGroupId()+"',group_id)");//计划表
+                sb1.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
                 if(i!=groupList.size()-1){
                     sb.append(" or ");
+                    sb1.append(" or ");
                 }
             }
             sb.append(")");
+            sb1.append(")");
         }
 
-        map.put("group_ids",sb.toString());//权限组列表
+        map.put("group_ids",sb.toString());//计划
+        map.put("groupIds",sb.toString());//客户
 
         PageInfo pageInfo = waybillPlanService.clientPlanList(map);
 
@@ -316,10 +324,6 @@ public class WaybillPlanApi {
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
-
-
-
-
 
 
 

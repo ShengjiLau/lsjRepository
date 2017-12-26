@@ -70,4 +70,14 @@ public interface GroupManageService {
 	 */
 	int groupCustomerdelete(Map map);
 
+
+
+
+	/***
+	 * 组客户不存在列表
+	 * @param m
+	 * @return
+	 */
+	PageInfo selectGroupClientList(Map m);
+
 }
