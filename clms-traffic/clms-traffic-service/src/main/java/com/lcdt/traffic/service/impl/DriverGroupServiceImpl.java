@@ -40,7 +40,7 @@ public class DriverGroupServiceImpl implements DriverGroupService {
     }
 
     @Override
-    public List<DriverGroupDto> selectRelationship(Long ownDriverId,Long companyId) {
-        return driverGroupMapper.selectRelationship(ownDriverId, companyId);
+    public List<DriverGroupDto> selectRelationship(Long companyId) {
+        return driverGroupMapper.selectRelationship(companyId);
     }
 }

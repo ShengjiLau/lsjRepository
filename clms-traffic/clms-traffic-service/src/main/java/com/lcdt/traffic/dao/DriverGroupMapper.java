@@ -18,5 +18,5 @@ public interface DriverGroupMapper {
 
     int updateByPrimaryKey(DriverGroup record);
 
-    List<DriverGroupDto> selectRelationship(Long ownDriverId, Long companyId);
+    List<DriverGroupDto> selectRelationship(Long companyId);
 }
