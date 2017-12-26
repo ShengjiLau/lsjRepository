@@ -7,7 +7,7 @@ import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
-import com.lcdt.traffic.service.WaybillPlanService;
+import com.lcdt.traffic.service.planService;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
@@ -22,7 +22,7 @@ import java.util.*;
  * Created by yangbinq on 2017/12/13.
  */
 @Service
-public class WaybillPlanServiceImpl implements WaybillPlanService {
+public class PlanServiceImpl implements planService {
 
     @Autowired
     private WaybillPlanMapper waybillPlanMapper; //计划
@@ -351,8 +351,9 @@ public class WaybillPlanServiceImpl implements WaybillPlanService {
     @Override
     public PageInfo clientPlanList(Map map) {
 
+        //查询该企业下绑定客户列表（获取绑定客户中的绑定企业ID）
         map.put("bindCpid","111");//标识绑定企业ID不为空的企业
-        List<Customer> customerList = customerRpcService.findBindCompanyIds(map); //查询用户对应的企业绑定客户企业ID
+        List<Customer> customerList = customerRpcService.findBindCompanyIds(map);
         if (customerList!=null && customerList.size()>0) { //承运人ID
             StringBuffer sb = new StringBuffer();
             sb.append("(");
