@@ -1,9 +1,13 @@
 package com.lcdt.traffic.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
+import com.lcdt.traffic.dao.WaybillPlanMapper;
+import com.lcdt.traffic.dto.ClientPlanDto;
 import com.lcdt.traffic.service.ClientPlanService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -18,9 +22,25 @@ import java.util.Map;
 @Service
 public class ClientPlanServiceImpl implements ClientPlanService {
 
-    @com.alibaba.dubbo.config.annotation.Reference
-    public CustomerRpcService customerRpcService;  //客户信息
 
+    @com.alibaba.dubbo.config.annotation.Reference
+    private CustomerRpcService customerRpcService;  //客户信息
+
+
+    @Autowired
+    private WaybillPlanMapper waybillPlanMapper;
+
+
+    /****
+     * 1、登录人-指承运人，承运人登录企业ID及登录人所有的组权限；
+     * 2、根据上述条件获取登录人对应的客户表中的绑定客户列表；
+     * 3、绑定客户条件：绑定ID不为空，客户列表中的企业ID==登录人企业ID
+     */
+    private List<Customer> bindCustomerList(Map map) {
+        map.put("bindCpid","111");//标识绑定企业ID不为空的企业
+        List<Customer> customerList = customerRpcService.findBindCompanyIds(map);
+        return  customerList;
+    }
 
     /****
      * 客户计划查询公共条件（创建企业ID条件及竞价组条件）
@@ -30,15 +50,8 @@ public class ClientPlanServiceImpl implements ClientPlanService {
      *
      * @return
      */
-    private Map  clientPlanSearch4CmpIdGroup(Map map) {
+    private Map  clientPlanSearch4CmpIdGroup(Map map, List<Customer> customerList) {
         Map resultMap = new HashMap();
-        /****
-         * 1、登录人-指承运人，承运人登录企业ID及登录人所有的组权限；
-         * 2、根据上述条件获取登录人对应的客户表中的绑定客户列表；
-         * 3、绑定客户条件：绑定ID不为空，客户列表中的企业ID==登录人企业ID
-         */
-        map.put("bindCpid","111");//标识绑定企业ID不为空的企业
-        List<Customer> customerList = customerRpcService.findBindCompanyIds(map);
         if (customerList!=null && customerList.size()>0) { //承运人ID
             /****
              * 1、登录人对应客户列表信息（承运人对应的货主列表信息）；
@@ -90,21 +103,61 @@ public class ClientPlanServiceImpl implements ClientPlanService {
             }
 
         }
-
-
-
         return resultMap;
-
     }
+
+
+    /***
+     * 计划来源
+     * @param compId
+     * @param customerList
+     * @return
+     */
+    private String planSource(Long compId, List<Customer> customerList) {
+        for (Customer customer: customerList) {
+            if(customer.getBindCpid()==compId) {
+                return customer.getCustomerName();
+            }
+        }
+        return null;
+    }
+
+
 
     @Transactional(readOnly = true)
     @Override
     public PageInfo clientPlanList4Bidding(Map map) {
-         Map cMap = clientPlanSearch4CmpIdGroup(map); //查询对应在的企业组、竞价组条件
+        List<Customer> customerList = bindCustomerList(map);
+         Map cMap = clientPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        map.put("companyIds",map.get("companyIds"));
+        map.put("carrierCollectionIds",map.get("carrierCollectionIds"));
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+        if (map.containsKey("page_no")) {
+            if (map.get("page_no") != null) {
+                pageNo = (Integer) map.get("page_no");
+            }
+        }
+        if (map.containsKey("page_size")) {
+            if (map.get("page_size") != null) {
+                pageSize = (Integer) map.get("page_size");
+            }
+        }
+        PageHelper.startPage(pageNo, pageSize);
+        List<ClientPlanDto> list = waybillPlanMapper.clientPlan4Bidding(map);
+        if (list!=null && list.size()>0) {
+            for(ClientPlanDto dto :list){
+                dto.setPlanSource(planSource(dto.getCompanyId(),customerList));
+            }
+       }
 
-
-
-
-        return null;
+        PageInfo pageInfo = new PageInfo(list);
+        return pageInfo;
     }
+
+
+
+
+
+
 }

@@ -97,7 +97,6 @@ public class ClientPlanApi {
         map.put("groupIds",sb.toString());//客户
         PageInfo pageInfo = clientPlanService.clientPlanList4Bidding(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
-
         return dto1;
     }
 
