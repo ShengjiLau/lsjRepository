@@ -354,6 +354,8 @@ public class PlanServiceImpl implements PlanService {
         //查询该企业下绑定客户列表（获取绑定客户中的绑定企业ID）
         map.put("bindCpid","111");//标识绑定企业ID不为空的企业
         List<Customer> customerList = customerRpcService.findBindCompanyIds(map);
+
+
         if (customerList!=null && customerList.size()>0) { //承运人ID
             StringBuffer sb = new StringBuffer();
             sb.append("(");

@@ -1,9 +1,9 @@
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://101.37.21.24:3306/clms_ct_db?useUnicode=true&characterEncoding=utf-8
-    name: root
-    password: Root123!
+    url: jdbc:mysql://rm-2ze35w2s039360x3w7o.mysql.rds.aliyuncs.com:3306/clms_ct_db?useUnicode=true&characterEncoding=utf-8
+    name: clms_root
+    password: clMs201801#@01&
     driver-class-name: com.alibaba.druid.proxy.DruidDriver
 logging:
   config: classpath:logback-config.xml
