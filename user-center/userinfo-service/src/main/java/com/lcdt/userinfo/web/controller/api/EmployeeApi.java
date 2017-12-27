@@ -104,23 +104,4 @@ public class EmployeeApi {
 		return user;
 	}
 
-
-
-	@ApiOperation("非组内员工列表")
-	@RequestMapping(value = "/notInGroupEmplist", method = RequestMethod.POST)
-	public PageResultDto notInGroupEmplist(@ApiParam(required = true) Integer pageNo, @ApiParam(required = true) Integer pageSize,SearchEmployeeDto dto) {
-		Long companyId = SecurityInfoGetter.getCompanyId();
-		dto.setCompanyId(companyId);
-		List<UserCompRel> userCompRels = employeeService.queryNotInGroupEmp(dto);
-		PageResultDto<UserCompRel> userCompRelPageResultDto = new PageResultDto<>(userCompRels);
-		return userCompRelPageResultDto;
-	}
-
-
-
-
-
-
-
-
 }

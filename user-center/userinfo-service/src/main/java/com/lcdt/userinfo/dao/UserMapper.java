@@ -3,6 +3,7 @@ package com.lcdt.userinfo.dao;
 import com.lcdt.userinfo.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserMapper {
     /**
@@ -60,6 +61,6 @@ public interface UserMapper {
      * 获取组下的员工
      * @return
      */
-    List<User> selectUser4Group(Long groupId, Long companyId);
+    List<User> selectUser4Group(Map m);
 
 }
