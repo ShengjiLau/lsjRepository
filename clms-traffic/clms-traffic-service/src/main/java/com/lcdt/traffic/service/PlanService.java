@@ -44,13 +44,6 @@ public interface PlanService {
     PageInfo wayBillPlanList(Map map);
 
 
-    /***
-     *客户计划列表
-     *
-     * @return
-     */
-    PageInfo clientPlanList(Map map);
-
 
     /***
      * 拉取计划详细信息
