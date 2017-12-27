@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by yangbinq on 2017/12/13.
  */
-public interface WaybillPlanService {
+public interface PlanService {
 
     /***
      * 发布计划

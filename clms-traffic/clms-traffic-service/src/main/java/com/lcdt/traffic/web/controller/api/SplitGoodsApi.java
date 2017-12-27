@@ -19,7 +19,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/api/splitgoods")
+@RequestMapping("/api/splitoods")
 @Api(value = "派单",description = "派单接口")
 public class SplitGoodsApi {
 

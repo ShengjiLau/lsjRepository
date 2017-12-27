@@ -1,8 +1,9 @@
 package com.lcdt.traffic.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class DriverGroup {
+public class DriverGroup implements Serializable{
     private Long driverGroupId;
 
     private String groupName;

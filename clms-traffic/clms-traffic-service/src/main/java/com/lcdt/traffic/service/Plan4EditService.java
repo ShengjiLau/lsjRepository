@@ -12,15 +12,19 @@ import java.util.Map;
 /**
  * Created by yangbinq on 2017/12/13.
  */
-public interface WaybillPlan4CreateService {
+public interface Plan4EditService {
 
-    /**
-     * 创建计划
-     *
-     * @param dto -- 创建人、公司等信息
-     * @param flag -- 如果为1为发布，2暂存
+    /***
+     * 编辑计划-发布、暂存
+     * @param dto
+     * @param flag
      * @return
      */
-    WaybillPlan createWaybillPlan(WaybillParamsDto dto, short flag);
+    WaybillPlan waybillPlanEdit(WaybillParamsDto dto, short flag);
+
+
+
+
+
 
 }
