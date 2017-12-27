@@ -166,6 +166,36 @@ public class GroupApi {
     }
 
 
+
+    /**
+     * 组员工不存在列表
+     *
+     * @return
+     */
+    @ApiOperation("组员工不存在列表")
+    @RequestMapping(value = "/groupUserNotList",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_not_list')")
+    public GroupResultDto groupUserNotList(@ApiParam(value = "组ID",required = true) @RequestParam Long groupId,
+                                        @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+                                        @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId",companyId);
+        map.put("groupIdNot",groupId);
+        map.put("page_no",pageNo);
+        map.put("page_size",pageSize);
+        PageInfo pageInfo = groupManageService.selectGroupUserList(map);
+        GroupResultDto rDto = new GroupResultDto();
+        rDto.setUserList(pageInfo.getList());
+        rDto.setTotal(pageInfo.getTotal());
+        return rDto;
+    }
+
+
+
+
+
+
     /**
      * 组成员添加
      *

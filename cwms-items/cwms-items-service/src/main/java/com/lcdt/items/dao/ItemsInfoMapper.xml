@@ -229,4 +229,18 @@
       order by item_id desc
   </select>
 
+    <select id="selectByItemsCalUnitId" parameterType="com.lcdt.items.model.ItemsInfo" resultMap="BaseResultMap">
+        select item_id, subject, code, bar_code, classify_name, classify_id, trade_type,
+        purchase_price, wholesale_price, retail_price, introduction, images, conver_id, unit_id, unit_name, sub_item_property, store_rule, item_batch,
+        combination_info, company_id, item_type
+        from t_items_info
+        <where>
+            company_id = #{companyId,jdbcType=BIGINT}
+            <if test="unitId!=null and unitId!=''">
+              and unit_id = #{unitId,jdbcType=BIGINT}
+            </if>
+        </where>
+        order by item_id desc
+    </select>
+
 </mapper>
