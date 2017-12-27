@@ -18,6 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Version;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -172,7 +173,7 @@ public class GroupApi {
      *
      * @return
      */
-    @ApiOperation("组员工不存在列表")
+    @ApiOperation(value = "组员工不存在列表v1")
     @RequestMapping(value = "/groupUserNotList",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_not_list')")
     public GroupResultDto groupUserNotList(@ApiParam(value = "组ID",required = true) @RequestParam Long groupId,
