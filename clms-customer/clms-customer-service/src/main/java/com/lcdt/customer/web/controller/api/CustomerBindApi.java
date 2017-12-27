@@ -1,18 +1,22 @@
 package com.lcdt.customer.web.controller.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.customer.dao.CustomerInviteLogMapper;
 import com.lcdt.customer.dao.CustomerMapper;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.model.CustomerInviteLog;
 import com.lcdt.customer.service.CustomerService;
+import com.lcdt.customer.service.impl.InviteCustomerService;
 import com.lcdt.customer.service.impl.InviteLogService;
+import com.lcdt.customer.web.dto.InviteDto;
+import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
@@ -34,32 +38,78 @@ public class CustomerBindApi {
 	@Autowired
 	InviteLogService inviteLogService;
 
-	@ApiOperation("绑定客户")
-	@RequestMapping("/bind")
-	public Customer bind(Long inviteId,Long customerId){
+	@Autowired
+	InviteCustomerService inviteCustomerService;
+
+	@Autowired
+	CustomerInviteLogMapper inviteLogMapper;
+
+	@ApiOperation("获取邀请邮件内容")
+	@RequestMapping(value = "/invitecustomer",method = RequestMethod.POST)
+	@ResponseBody
+	public InviteDto inviteCustomer(Long customerId) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
+		User user = SecurityInfoGetter.getUser();
+		Company company = SecurityInfoGetter.geUserCompRel().getCompany();
+		return inviteCustomerService.buildInviteEmailContent(customerId,companyId,user,company);
+	}
+
+
+
+	@ApiOperation("发送邀请邮件")
+	@RequestMapping(value = "/sendemail",method = RequestMethod.POST)
+	public String inviteCustomer(String bindEmail,Long inviteId) {
+		Long companyId = SecurityInfoGetter.getCompanyId();
+		User user = SecurityInfoGetter.getUser();
+		Company company = SecurityInfoGetter.geUserCompRel().getCompany();
+		CustomerInviteLog customerInviteLog = inviteLogMapper.selectByPrimaryKey(inviteId);
+		Customer customer = mapper.selectByPrimaryKey(customerInviteLog.getInviteCustomerId(), companyId);
+		inviteCustomerService.sendInviteEmail(bindEmail,customerInviteLog,customer,companyId,user,company);
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("code", 0);
+		jsonObject.put("message", "发送成功");
+		return jsonObject.toString();
+	}
+
+
+
+	@ApiOperation("绑定客户")
+	@RequestMapping(value = "/bind",method = RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView bind(Long inviteId,Long customerId){
+		Long companyId = SecurityInfoGetter.getCompanyId();
+
+		CustomerInviteLog customerInviteLog = inviteLogService.selectByInviteId(inviteId);
+		customerInviteLog.setIsValid(0);
+		inviteLogMapper.updateByPrimaryKey(customerInviteLog);
+
 		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
 		customer.setCompanyId(companyId);
 		customerService.customerUpdate(customer);
-		return customer;
+		ModelAndView successView = new ModelAndView("invite_success");
+		return successView;
 	}
 
 	@ApiOperation("绑定客户页面")
-	@RequestMapping("/customerlist")
-	@PreAuthorize("hasAuthority('bindCustomer') or hasRole('sys_admin_role')")
+	@RequestMapping(value = "/customerlist",method = RequestMethod.GET)
+	@PreAuthorize("hasAuthority('bindCustomer') or hasRole('ROLE_SYS_ADMIN')")
 	public ModelAndView customer(@RequestParam(name = "a") Long inviteLogId,@RequestParam(name = "b") String token){
 		//TODO 检查链接上的token 有效性
 		CustomerInviteLog customerInviteLog = inviteLogService.selectByInviteId(inviteLogId);
-		if (customerInviteLog.getIsValid() == 0) {
+
+		if (customerInviteLog.getIsValid() == 0 || !customerInviteLog.getInviteToken().equals(token)) {
 			ModelAndView modelAndView = new ModelAndView();
 			modelAndView.setViewName("invite_not_valid");
 			return modelAndView;
 		}
+
 		HashMap<Object, Object> map = new HashMap<>();
+		Long companyId = SecurityInfoGetter.getCompanyId();
+		map.put("companyId", companyId);
 		PageInfo<Customer> pageInfo = customerService.customerList(map);
 		List<Customer> list = pageInfo.getList();
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("invite.html");
+		modelAndView.setViewName("invite_customer");
 		modelAndView.addObject("list", list);
 		modelAndView.addObject("log", customerInviteLog);
 		return modelAndView;
@@ -68,8 +118,5 @@ public class CustomerBindApi {
 	public boolean isTokenValid(String token){
 		return true;
 	}
-
-
-
 
 }

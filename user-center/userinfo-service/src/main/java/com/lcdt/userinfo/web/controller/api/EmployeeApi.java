@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import jdk.nashorn.internal.ir.RuntimeNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,6 +59,7 @@ public class EmployeeApi {
 
 	@ApiOperation("添加员工接口")
 	@RequestMapping(value = "/addemployee", method = RequestMethod.POST)
+	@PreAuthorize("hasAnyAuthority('employee_add') or hasRole('ROLE_SYS_ADMIN')")
 	public String addEmployeeAccount(@Validated CreateEmployeeAccountDto dto, HttpServletRequest request) {
 		String groups = request.getParameter("jsonGroups");
 		String roles = request.getParameter("jsonRoles");
@@ -77,6 +79,7 @@ public class EmployeeApi {
 
 	@ApiOperation("所有员工列表")
 	@RequestMapping(value = "/employeelist", method = RequestMethod.POST)
+	@PreAuthorize("hasAnyAuthority('employee_list') or hasRole('ROLE_SYS_ADMIN')")
 	public PageResultDto employeeList(@ApiParam(required = true) Integer pageNo, @ApiParam(required = true) Integer pageSize,SearchEmployeeDto dto) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		dto.setCompanyId(companyId);
@@ -88,6 +91,7 @@ public class EmployeeApi {
 
 	@ApiOperation("更新员工接口")
 	@RequestMapping(value = "/updateemployee",method = RequestMethod.POST)
+	@PreAuthorize("hasAnyAuthority('employee_edit') or hasRole('ROLE_SYS_ADMIN')")
 	public UserCompRel updateEmployee(UpdateEmployeeAccountDto dto) {
 		UserCompRel userCompRel = employeeService.updateEmployee(dto);
 		return userCompRel;

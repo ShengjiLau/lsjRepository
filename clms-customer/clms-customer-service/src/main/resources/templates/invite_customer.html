@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>邀请</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="./asset/style/iconfont.css">
+    <style media="screen">
+        html,
+        body {
+            height: 100%;
+            margin:0;
+            padding: 0;
+            background: #f9fafb;
+            color: #333;
+        }
+        nav{
+            width: 900px;
+            margin:auto;
+            height: 60px;
+            background-color: #fff;
+        }
+        nav .logo{
+            display: inline-block;
+            line-height: 59px;
+        }
+        nav .logo img{
+            height: 37px;
+            vertical-align: middle;
+        }
+        .nav-head{
+            height: 60px;
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .user-menu{
+            font-size: 16px;
+            float: right;
+            line-height: 60px;
+        }
+        .user-menu a{
+            margin-left: 20px;
+        }
+        .user-menu a i{
+            font-size: 120%;
+            margin-right: 5px;
+        }
+        button {
+            border: none;
+        }
+
+        a:link {
+            text-decoration: none;
+            color: #F60;
+        }
+
+        a:visited {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        a:active {
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        input {
+            border: none;
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #f0f0f0;
+            /*width: 420px;*/
+            /*margin: 40px auto 0 auto;*/
+            padding: 40px;
+            border-radius: 12px;
+            transition: all .3s;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+
+        .content:hover {
+            box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
+            border-color: transparent;
+        }
+
+        input.error:focus {
+            outline: 0;
+            border: 1px solid red;
+        }
+
+        input.error {
+            border: 1px solid red;
+        }
+
+        .form-row label.error {
+            color: red;
+            width: 100%;
+            font-size: 12px;
+            left: 0;
+            top: 48px;
+            text-align: left;
+        }
+
+        label {
+            text-align: right;
+            display: inline-block;
+        }
+        /*select {*/
+        /*!*Chrome和Firefox里面的边框是不一样的，所以复写了一下*!*/
+        /*border: solid 1px #000;*/
+
+        /*!*很关键：将默认的select选择框样式清除*!*/
+        /*appearance:none;*/
+        /*-moz-appearance:none;*/
+        /*-webkit-appearance:none;*/
+
+        /*!*在选择框的最右侧中间显示小箭头图片*!*/
+        /*background: url("http://ourjs.github.io/static/2015/arrow.png") no-repeat scroll right center transparent;*/
+
+
+        /*!*为下拉小箭头留出一点位置，避免被文字覆盖*!*/
+        /*padding-right: 14px;*/
+        /*}*/
+
+
+        /*!*清除ie的默认选择框样式清除，隐藏下拉箭头*!*/
+        /*select::-ms-expand { display: none; }*/
+
+        .normalText{
+            font-size: 14px;
+            color: #333;
+        }
+        .line{
+            height: 1px;
+            background: #e6e7eb;
+            margin-top: 40px;
+        }
+
+        .form-row{
+            font-size: 16px;
+            line-height: 21px;
+            margin-top: 20px;
+        }
+        .form-row>label {
+            vertical-align: top;
+            margin-top: 11px;
+        }
+        .form-row label{
+            width:80px;
+            margin-right: 8px;
+        }
+        .clms-input input{
+            padding: 10px;
+            border: 1px solid #ccc;
+            width: 100%;
+            line-height: 21px;
+            font-size: 16px;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .clms-input select {
+            padding: 11px 10px 12px 10px;
+            border: 1px solid #ccc;
+            width: 100%;
+            line-height: 21px;
+            height: 44px;
+            color: #333;
+            background: #fff;
+            font-size: 16px;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .clms-input{
+            border-radius: 4px;
+            position: relative;
+            display: inline-block;
+            width: 300px;
+            box-sizing:border-box;
+        }
+        .clms-input span,.clms-input img{
+            position: absolute;
+        }
+        .clms-input span{
+            line-height: 21px;
+            z-index: 999;
+            margin: 10px 8px;
+            padding-right: 10px;
+            border-right: 1px solid #ccc;
+        }
+        .page{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+        .clms-input span+input{
+            padding-left: 60px;
+        }
+
+        .next-btn-row.form-row{
+            width: 300px;
+            margin-left: 90px;
+        }
+        .capcha_img{
+            display: inline-block;
+            border:1px solid #acacac;
+            padding: 2px;
+            width:90px;
+            vertical-align: top;
+            margin-top: 4px;
+            height:32px;
+        }
+        .clms-input.capcha_input{
+            width: 190px;
+        }
+        .next-btn{
+            width: 100%;
+            height: 48px;
+            color: #333;
+            font-size: 16px;
+            text-align: center;
+            display: inline-block;
+            background: #F2F2F2;
+            border: 1px solid #CCCCCC;
+            border-radius: 4px;
+        }
+        .next-btn-row.form-row .default-btn{
+            float: right;
+        }
+        .next-btn-row.form-row .primary-btn{
+            color:#0891fb;
+        }
+
+        .alert-image{
+            margin: 0 auto;
+            width: 48px;
+            height: 48px;
+            background-color: #ffa033
+        }
+        .alert-error{
+            margin-top: 8px;text-align: center;font-size: 16px;font-weight: lighter; color: #ffa033
+        }
+        .alert-success{
+            margin-top: 8px;text-align: center;font-size: 16px;font-weight: lighter; color: #1DC11D
+        }
+        .alert-content{
+            margin-top: 12px;text-align: center;
+        }
+        .register{
+            margin-top: 30px;
+            width: 300px;
+            height: 48px;
+            color: #333;
+            font-size: 16px;
+            text-align: center;
+            display: inline-block;
+            background: #F2F2F2;
+            border: 1px solid #CCCCCC;
+            border-radius: 4px;
+            margin-left: 60px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="nav-head">
+    <nav>
+        <div class="logo">
+            <img src="./asset/image/logo_top.png" alt="">
+        </div>
+        <div class="user-menu">
+            <a href=""><i class="iconfont icon-user"></i>小A专线</a>
+            <a href=""><i class="iconfont icon-logout01"></i>退出</a>
+        </div>
+    </nav>
+</div>
+<div class="content">
+    <form class="" action="/api/customer/bind" id="choose-customer" method="post">
+
+        <input type="hidden" th:value="${log.inviteId}" name="inviteId">
+
+        <div class="form-row">
+            <label >当前企业：</label>
+            <div style="display:inline-block;vertical-align: top;
+            margin-top: 11px;" >立晨物流</div>
+        </div>
+        <div class="form-row">
+            <label for="customer">关联客户：</label>
+            <div class="clms-input">
+                <select name="customerId">
+                    <option th:each="customer: ${list} " th:value = "${customer.customerId}"  th:text = "${customer.customerName}">Volvo</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row next-btn-row" style="margin-top:32px;">
+            <button type="submit" class="next-btn">
+                下一步
+            </button>
+        </div>
+
+    </form>
+</div>
+</body>
+</html>

@@ -99,7 +99,7 @@
     select g.* FROM
   t_uc_user_group ug
   LEFT JOIN t_uc_group g on ug.group_id = g.group_id
-  WHERE ug.company_id = 1 AND ug.user_id = 24
+  WHERE ug.company_id = #{companyId,jdbcType=BIGINT} AND ug.user_id = #{userId,jdbcType=BIGINT}
   </select>
 
 

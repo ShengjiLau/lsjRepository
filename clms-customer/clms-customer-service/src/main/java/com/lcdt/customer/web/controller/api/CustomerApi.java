@@ -208,9 +208,6 @@ public class CustomerApi {
     }
 
 
-
-
-
     /**
      * 客户状态修改
      * @param customerId
@@ -383,8 +380,6 @@ public class CustomerApi {
         return vo;
     }
 
-
-
     /**
      * 客户联系人删除
      * @param contactId
@@ -402,9 +397,6 @@ public class CustomerApi {
         return jsonObject.toString();
     }
 
-
-
-
     @ApiOperation("客户组(竞价)列表")
     @RequestMapping(value = "/customerCollectionList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
@@ -421,7 +413,6 @@ public class CustomerApi {
         dto.setTotal(pageInfo.getTotal());
         return dto;
     }
-
 
 
     /**

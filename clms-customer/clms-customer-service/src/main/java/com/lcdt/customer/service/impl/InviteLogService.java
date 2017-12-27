@@ -2,6 +2,7 @@ package com.lcdt.customer.service.impl;
 
 import com.lcdt.customer.dao.CustomerInviteLogMapper;
 import com.lcdt.customer.model.CustomerInviteLog;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class InviteLogService {
 
+	@Autowired
 	public CustomerInviteLogMapper inviteLogDao;
 
 	public CustomerInviteLog selectByInviteId(Long inviteId){

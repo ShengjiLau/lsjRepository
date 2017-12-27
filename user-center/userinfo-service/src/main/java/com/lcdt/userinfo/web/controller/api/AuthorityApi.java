@@ -19,6 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -77,6 +78,7 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/getcompanyRole", method = RequestMethod.GET)
 	@ApiOperation("获取所有角色信息")
+	@PreAuthorize("hasAnyAuthority('role_list') or hasRole('ROLE_SYS_ADMIN')")
 	public PageResultDto<Role> getCompanyRole(@ApiParam(required = true) Integer pageNo, @ApiParam(required = true) Integer pageSize) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		PageHelper.startPage(pageNo, pageSize);
@@ -88,6 +90,7 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/addrole", method = RequestMethod.POST)
 	@ApiOperation("添加角色")
+	@PreAuthorize("hasAnyAuthority('role_add') or hasRole('ROLE_SYS_ADMIN')")
 	public Role addRole(@Validated CreateRoleDto roleDto) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		User loginUser = SecurityInfoGetter.getUser();
@@ -105,6 +108,7 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/removerole", method = RequestMethod.POST)
 	@ApiOperation("删除角色")
+	@PreAuthorize("hasAnyAuthority('role_remove') or hasRole('ROLE_SYS_ADMIN')")
 	public String removeRole(Long roleId) {
 		boolean result = roleService.removeCompanyRole(roleId);
 		JSONObject jsonObject = new JSONObject();
@@ -123,6 +127,7 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/addRolePermission", method = RequestMethod.POST)
 	@ApiOperation("增加角色权限")
+	@PreAuthorize("hasAnyAuthority('role_addpermission') or hasRole('ROLE_SYS_ADMIN')")
 	public EmptyResponseDate addPermissionForRole(Long roleId, Long permissionId) {
 		User loginUser = SecurityInfoGetter.getUser();
 		roleService.addRolePermission(roleId, permissionId,loginUser.getUserId(),loginUser.getRealName());
@@ -145,6 +150,7 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/removeRolePermission", method = RequestMethod.POST)
 	@ApiOperation("删除角色权限")
+	@PreAuthorize("hasAnyAuthority('role_removepermission') or hasRole('ROLE_SYS_ADMIN')")
 	public EmptyResponseDate removePermissionRole(Long roleId, Long permissionId) {
 		roleService.removeRolePermission(roleId, permissionId);
 		return emptyResponseData;

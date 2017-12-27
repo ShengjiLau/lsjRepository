@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.pay.dao.ServiceProductPackageMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.pay.model.ServiceProductPackage">
+    <id column="package_id" jdbcType="INTEGER" property="packageId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="package_des" jdbcType="VARCHAR" property="packageDes" />
+    <result column="product_num" jdbcType="INTEGER" property="productNum" />
+    <result column="package_price" jdbcType="VARCHAR" property="packagePrice" />
+    <result column="package_type" jdbcType="INTEGER" property="packageType" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from service_product_package
+    where package_id = #{packageId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.pay.model.ServiceProductPackage">
+    <selectKey keyProperty="packageId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into service_product_package (product_id, package_des, product_num, 
+      package_price, package_type)
+    values (#{productId,jdbcType=INTEGER}, #{packageDes,jdbcType=VARCHAR}, #{productNum,jdbcType=INTEGER}, 
+      #{packagePrice,jdbcType=VARCHAR}, #{packageType,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.pay.model.ServiceProductPackage">
+    update service_product_package
+    set product_id = #{productId,jdbcType=INTEGER},
+      package_des = #{packageDes,jdbcType=VARCHAR},
+      product_num = #{productNum,jdbcType=INTEGER},
+      package_price = #{packagePrice,jdbcType=VARCHAR},
+      package_type = #{packageType,jdbcType=INTEGER}
+    where package_id = #{packageId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select package_id, product_id, package_des, product_num, package_price, package_type
+    from service_product_package
+    where package_id = #{packageId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select package_id, product_id, package_des, product_num, package_price, package_type
+    from service_product_package
+  </select>
+</mapper>

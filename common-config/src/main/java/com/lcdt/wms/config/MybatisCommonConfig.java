@@ -33,7 +33,7 @@ public class MybatisCommonConfig implements TransactionManagementConfigurer {
 	@Bean
 	public static MapperScannerConfigurer mapperScannerConfigurer() {
 		MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-		mapperScannerConfigurer.setBasePackage("com.lcdt.cwms.user.dao,com.lcdt.*.*.dao");
+		mapperScannerConfigurer.setBasePackage("com.lcdt.*.*.dao,com.lcdt.*.dao");
 		return mapperScannerConfigurer;
 	}
 
@@ -41,7 +41,11 @@ public class MybatisCommonConfig implements TransactionManagementConfigurer {
 	public SqlSessionFactory sqlSessionFactory() {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource);
-		sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
+		ClassPathResource classPathResource = new ClassPathResource("mybatis-config.xml");
+		if (classPathResource.exists()) {
+			sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
+		}
+
 
 //		//分页插件
 //		PageHelper pageHelper = new PageHelper();

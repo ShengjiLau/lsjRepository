@@ -15,9 +15,7 @@ import java.util.List;
 @Configuration
 public class ClmsResponseConvertConfig extends WebMvcConfigurerAdapter{
 
-
 	private List<MediaType> supportMediaTypes = new ArrayList<>(10);
-
 
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
