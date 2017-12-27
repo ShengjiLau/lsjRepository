@@ -2,7 +2,7 @@ package com.lcdt.userinfo.model;
 
 import java.util.Date;
 
-public class LoginLog {
+public class LoginLog implements java.io.Serializable {
     private Long logId;
 
     private Long userId;
