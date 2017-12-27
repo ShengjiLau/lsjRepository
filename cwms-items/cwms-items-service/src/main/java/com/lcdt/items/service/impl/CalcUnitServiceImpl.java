@@ -5,7 +5,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.items.dao.CalcUnitMapper;
 import com.lcdt.items.model.CalcUnit;
+import com.lcdt.items.model.ItemsInfo;
 import com.lcdt.items.service.CalcUnitService;
+import com.lcdt.items.service.ItemsInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,9 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     @Autowired
     private CalcUnitMapper calcUnitMapper;
 
+    @Autowired
+    private ItemsInfoService itemsInfoService;
+
     @Override
     public int addCalcUnit(CalcUnit calcUnit) {
         int result = 0;
@@ -29,12 +34,17 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     }
 
     @Override
-    public int deleteCalcUnit(Long unitId,Long companId) {
+    public int deleteCalcUnit(Long unitId,Long companyId) {
         int result = 0;
-        CalcUnit calcUnit=new CalcUnit();
-        calcUnit.setUnitId(unitId);
-        calcUnit.setCompanyId(companId);
-        result = calcUnitMapper.deleteByUnitIdAndCompanyId(calcUnit);
+        List<ItemsInfo> list=itemsInfoService.queryItemsByCalUnitId(unitId,companyId);
+        if(list!=null&&list.size()>0){
+            throw new RuntimeException("删除失败，单位已被使用！");
+        }else {
+            CalcUnit calcUnit=new CalcUnit();
+            calcUnit.setUnitId(unitId);
+            calcUnit.setCompanyId(companyId);
+            result = calcUnitMapper.deleteByUnitIdAndCompanyId(calcUnit);
+        }
         return result;
     }
 

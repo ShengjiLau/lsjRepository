@@ -166,10 +166,20 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     }
 
     @Override
+    public List<ItemsInfo> queryItemsByCalUnitId(Long calUnitId, Long companyId) {
+        ItemsInfo itemsInfo=new ItemsInfo();
+        itemsInfo.setCompanyId(companyId);
+        itemsInfo.setUnitId(calUnitId);
+        return itemsInfoMapper.selectByItemsCalUnitId(itemsInfo);
+    }
+
+    @Override
     public ItemsInfoDao queryIetmsInfoDetails(Long itemId, Long companyId) {
         ItemsInfo itemsInfo = new ItemsInfo();
         itemsInfo.setItemId(itemId);
         itemsInfo.setCompanyId(companyId);
         return itemsInfoMapper.selectIetmsInfoDetails(itemsInfo);
     }
+
+
 }

@@ -55,4 +55,7 @@ public interface ItemsInfoService {
      * @return
      */
     PageInfo<List<ItemsInfoDao>> queryItemsByItemsInfo(ItemsInfo itemsInfo, PageInfo pageInfo);
+
+
+    List<ItemsInfo> queryItemsByCalUnitId(Long calUnitId,Long companyId);
 }
