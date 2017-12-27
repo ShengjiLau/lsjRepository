@@ -35,19 +35,21 @@ public abstract class AbstractExcludeUrlAnnontionInterceptor implements HandlerI
 	public abstract boolean doPreHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception;
 
 	public boolean matchExcludeUrls(HttpServletRequest request,Object handler) {
-
-		ExcludeIntercept excludeIntercept = ((HandlerMethod) handler).getMethodAnnotation(ExcludeIntercept.class);
-		if (excludeIntercept == null) {
+		if (handler instanceof HandlerMethod) {
+			ExcludeIntercept excludeIntercept = ((HandlerMethod) handler).getMethodAnnotation(ExcludeIntercept.class);
+			if (excludeIntercept == null) {
+				return false;
+			}
+			Class[] classes = excludeIntercept.excludeIntercept();
+			for (Class c : classes) {
+				if (c.equals(this.getClass())) {
+					return true;
+				}
+			}
 			return false;
 		}
-		Class[] classes = excludeIntercept.excludeIntercept();
-		for (Class c : classes) {
-			if (c.equals(this.getClass())) {
-				return true;
-			}
-		}
+			return true;
 
-		return false;
 	}
 
 }

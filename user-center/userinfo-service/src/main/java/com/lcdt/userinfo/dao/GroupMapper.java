@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.dao;
 
 import com.lcdt.userinfo.model.Group;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -53,5 +54,5 @@ public interface GroupMapper {
      */
     List<Group> selectByCondition(Map map);
 
-    List<Group> selectUserCompanyGroups(Long userId, Long companyId);
+    List<Group> selectUserCompanyGroups(@Param("userId") Long userId, @Param("companyId") Long companyId);
 }
