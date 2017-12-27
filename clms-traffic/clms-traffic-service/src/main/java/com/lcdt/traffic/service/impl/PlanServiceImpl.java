@@ -355,8 +355,8 @@ public class PlanServiceImpl implements PlanService {
         map.put("bindCpid","111");//标识绑定企业ID不为空的企业
         List<Customer> customerList = customerRpcService.findBindCompanyIds(map);
 
+       if (customerList!=null && customerList.size()>0) { //承运人ID
 
-        if (customerList!=null && customerList.size()>0) { //承运人ID
             StringBuffer sb = new StringBuffer();
             sb.append("(");
             for (int i=0;i<customerList.size();i++) {
@@ -370,19 +370,18 @@ public class PlanServiceImpl implements PlanService {
 
 
 
-            //
+            //承运商组
+           for (Customer obj: customerList) { //遍历
 
 
-
-
-
-
-
-
+           }
 
 
 
         }
+
+
+
 
 
 

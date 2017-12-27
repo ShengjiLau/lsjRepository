@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -103,6 +104,25 @@ public class EmployeeServiceImpl {
 		}
 		return userCompRels;
 	}
+
+
+	@Transactional(rollbackFor = Exception.class)
+	public List<UserCompRel> queryNotInGroupEmp(SearchEmployeeDto search) {
+		List<UserCompRel> userCompRels = userCompanyDao.selectBySearchDto(search);
+		List<UserCompRel> resultCompRels = new ArrayList<UserCompRel>();
+
+		for (UserCompRel compRel : userCompRels) {
+			Long userId = compRel.getUser().getUserId();
+			List<Group> groups = groupService.userCompanyGroups(userId,compRel.getCompId());
+			compRel.setGroups(groups);
+			List<Role> roles = roleService.userCompanyRole(userId, compRel.getCompId());
+			compRel.setRoles(roles);
+		}
+		return resultCompRels;
+	}
+
+
+
 
 	@Transactional(rollbackFor = Exception.class)
 	public boolean isUserInCompany(Long userId, Long companyId) {
