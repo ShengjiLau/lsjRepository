@@ -107,7 +107,6 @@ public class ItemClassifyApi {
 
     @ApiOperation("根据最小分类id查询他的所有上级分类")
     @GetMapping("/parentlist")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_classify_parentlist')")
     public PageBaseDto<List<ItemClassify>> queryParentItemClassifyByMinClassifyId(HttpSession httpSession,@ApiParam(value = "分类id", required = true) @RequestParam Long classifyId){
         Long companyId=SecurityInfoGetter.getCompanyId();
         PageInfo pageInfo=new PageInfo();

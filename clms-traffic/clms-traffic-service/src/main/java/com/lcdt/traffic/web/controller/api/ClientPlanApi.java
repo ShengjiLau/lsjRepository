@@ -3,6 +3,7 @@ package com.lcdt.traffic.web.controller.api;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.service.ClientPlanService;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.WaybillPlanListParamsDto;
@@ -32,7 +33,7 @@ public class ClientPlanApi {
 
 
     @Autowired
-    private PlanService planService;
+    private ClientPlanService clientPlanService;
 
 
     @ApiOperation("客户计划-列表-竞价")
@@ -47,18 +48,15 @@ public class ClientPlanApi {
         map.put("page_no", pageNo);
         map.put("page_size", pageSize);
         map.put("isDeleted",0); //未删除的
-        if (dto.getSendOrderType()>0) {
-            map.put("sendOrderType",dto.getSendOrderType());
-        }
-        if (StringUtil.isNotEmpty(dto.getCustomerName())) {
-            map.put("customerName",dto.getCustomerName());
-        }
-        if (StringUtil.isNotEmpty(dto.getSerialCode())) {
+
+        if (StringUtil.isNotEmpty(dto.getSerialCode())) { //流水号
             map.put("serialCode",dto.getSerialCode());
         }
-        if (StringUtil.isNotEmpty(dto.getPlanStatus())) {
-            map.put("planStatus",dto.getPlanStatus());
+
+        if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
+            map.put("customerName",dto.getCustomerName());
         }
+        //收货地
         if (StringUtil.isNotEmpty(dto.getReceiveProvince())) {
             map.put("receiveProvince",dto.getReceiveProvince());
         }
@@ -68,15 +66,19 @@ public class ClientPlanApi {
         if (StringUtil.isNotEmpty(dto.getReceiveCounty())) {
             map.put("receiveCounty",dto.getReceiveCounty());
         }
-        if (StringUtil.isNotEmpty(dto.getPubdateBegin())) { //发布时间
+        //计划发布时间
+        if (StringUtil.isNotEmpty(dto.getPubdateBegin())) { //计划发布时间
             map.put("pubdateBegin",dto.getPubdateBegin());
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
             map.put("pubdateEnd",dto.getPubdateEnd());
         }
+        //货物信息
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
             map.put("goodsInfo",dto.getGoodsInfo());
         }
+
+        //组权限信息
         StringBuffer sb = new StringBuffer();
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
             sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
@@ -92,13 +94,10 @@ public class ClientPlanApi {
             }
             sb.append(")");
         }
-
         map.put("groupIds",sb.toString());//客户
-
-        PageInfo pageInfo = planService.clientPlanList(map);
-
-
+        PageInfo pageInfo = clientPlanService.clientPlanList4Bidding(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
+
         return dto1;
     }
 

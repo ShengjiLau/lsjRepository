@@ -530,7 +530,6 @@
               carrier_company_id, company_id, plan_days, pubdate, finish_date, cancel_date, cancel_man,
               cancel_remark
         from t_waybill_plan
-
         <where>
           <if test=" isDeleted!=null">
             and  is_deleted = #{isDeleted,jdbcType=SMALLINT},
@@ -580,5 +579,8 @@
         </where>
         order by waybill_plan_id desc
     </select>
+
+
+
 
 </mapper>

@@ -55,15 +55,6 @@ public class ItemsInfoApi {
         }
     }
 
-//    @ApiOperation(value = "商品列表", notes = "获取商品列表") //add by liuh
-//    @GetMapping("/list")
-//    public PageBaseDto<List<ItemsInfoDao>> getItemInfoList(@Validated ItemsInfoDao itemsInfoDao, PageInfo pageInfo, HttpSession httpSession) {
-//        Long companyId = SecurityInfoGetter.getCompanyId(); //TODO 后面从session中获取
-//        itemsInfoDao.setCompanyId(companyId);
-//        PageInfo<List<ItemsInfoDao>> listPageInfo = itemsInfoService.queryItemsByCondition(itemsInfoDao,pageInfo);
-//        return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
-//    }
-
     @ApiOperation("删除商品")
     @PostMapping("/delete")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_remove')")
@@ -83,7 +74,6 @@ public class ItemsInfoApi {
 
     @ApiOperation("查询商品")
     @GetMapping("/queryitemsinfo")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_query')")
     public ItemsInfo queryItemsInfoDetails(HttpSession httpSession, @ApiParam(value = "商品Id", required = true) @RequestParam Long itemId){
         Long companyId=SecurityInfoGetter.getCompanyId();
         ItemsInfoDao itemsInfoDao=null;
