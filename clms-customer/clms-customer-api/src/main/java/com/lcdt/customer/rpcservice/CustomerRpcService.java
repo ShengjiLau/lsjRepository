@@ -15,7 +15,6 @@ public interface CustomerRpcService {
 
     Customer findCustomerById(Long customerId, Long companyId);
 
-
     /**
      * 查询企业绑定客户ID
      *
@@ -23,5 +22,8 @@ public interface CustomerRpcService {
      * @return
      */
     List<Customer> findBindCompanyIds(Map map);
+
+
+
 
 }
