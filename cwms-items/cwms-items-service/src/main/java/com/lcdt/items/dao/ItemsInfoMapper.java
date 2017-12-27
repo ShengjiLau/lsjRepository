@@ -94,4 +94,11 @@ public interface ItemsInfoMapper {
      * @return
      */
     List<ItemsInfoDao> selectByItemsInfo(ItemsInfo itemsInfo);
+
+    /**
+     * 根据单位id
+     * @param itemsInfo
+     * @return
+     */
+    List<ItemsInfo> selectByItemsCalUnitId(ItemsInfo itemsInfo);
 }
