@@ -123,7 +123,7 @@
          WHERE r1.user_id in(select g1.user_id from t_uc_user_group g1 where g1.company_id=#{companyId,jdbcType=BIGINT} and g1.group_id=#{groupId,jdbcType=BIGINT})
       </if>
       <if test="groupIdNot!=null">
-          WHERE r1.user_id in(select g1.user_id from t_uc_user_group g1 where g1.company_id=#{companyId,jdbcType=BIGINT} and g1.group_id!=#{groupIdNot,jdbcType=BIGINT})
+          WHERE r1.user_id not in(select g1.user_id from t_uc_user_group g1 where g1.company_id=#{companyId,jdbcType=BIGINT} and g1.group_id=#{groupIdNot,jdbcType=BIGINT}) and r1.comp_id=#{companyId,jdbcType=BIGINT}
       </if>
   </select>
 

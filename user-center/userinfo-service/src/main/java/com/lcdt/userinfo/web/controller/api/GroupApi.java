@@ -211,6 +211,7 @@ public class GroupApi {
         vo.setCompanyId(companyId);
         vo.setUserId(userId);
         vo.setGroupId(groupId);
+        vo.setGroupCreateDate(new Date());
         Integer flag = groupManageService.groupUserAdd(vo);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("message",flag==1?"添加成功！":"添加失败！");

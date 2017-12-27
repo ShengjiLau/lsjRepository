@@ -630,10 +630,6 @@ public class WaybillPlan implements java.io.Serializable,ResponseData {
 
 
 
-
-
-
-
     /***
      * 计划详细
      */
