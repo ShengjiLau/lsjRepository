@@ -100,7 +100,6 @@ public class CalcUnitApi {
 
     @ApiOperation("查询单位")
     @GetMapping("/query")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_calc_unit_query')")
     public CalcUnit queryCalcUnit(HttpSession httpSession,@ApiParam(value = "单位Id", required = true) @RequestParam Long unitId) {
         Long companyId= SecurityInfoGetter.getCompanyId();
         CalcUnit calcUnit=calcUnitService.queryCalcUnit(unitId,companyId);
