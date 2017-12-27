@@ -7,10 +7,7 @@ import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.service.impl.EmployeeServiceImpl;
-import com.lcdt.userinfo.web.dto.CreateEmployeeAccountDto;
-import com.lcdt.userinfo.web.dto.PageResultDto;
-import com.lcdt.userinfo.web.dto.SearchEmployeeDto;
-import com.lcdt.userinfo.web.dto.UpdateEmployeeAccountDto;
+import com.lcdt.userinfo.web.dto.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -103,5 +100,16 @@ public class EmployeeApi {
 		User user = userService.selectUserByPhone(phone);
 		return user;
 	}
+
+	@ApiOperation("员工禁用开关接口")
+	@RequestMapping(value = "/enableemployee", method = RequestMethod.POST)
+	@PreAuthorize("hasAnyAuthority('employee_edit') or hasRole('ROLE_SYS_ADMIN')")
+	public UserCompRel toggleEnableEmployee(ToggleEmployeeEnableDto dto) {
+
+		UserCompRel userCompRel = employeeService.toggleEnableEmployee(dto);
+		return userCompRel;
+
+	}
+
 
 }

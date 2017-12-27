@@ -10,6 +10,19 @@ public class UpdateEmployeeAccountDto extends CreateEmployeeAccountDto {
 	@ApiModelProperty(required = true)
 	private Long userCompRelId;
 
+	@ApiModelProperty(required = false)
+	private Boolean isEnable;
+
+	@Override
+	public Boolean getEnable() {
+		return isEnable;
+	}
+
+	@Override
+	public void setEnable(Boolean enable) {
+		isEnable = enable;
+	}
+
 	public Long getUserCompRelId() {
 		return userCompRelId;
 	}
