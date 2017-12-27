@@ -29,4 +29,14 @@ public class DriverServiceImpl implements DriverService {
     public List<Driver> getGpsInfo(List<String> driverPhoneList) {
         return driverMapper.selectByPhone(driverPhoneList);
     }
+
+    @Override
+    public int modGpsStatus(Driver driver) {
+        return driverMapper.updateGpsStatus(driver);
+    }
+
+    @Override
+    public int updateLocation(Driver driver) {
+        return driverMapper.updateLocation(driver);
+    }
 }
