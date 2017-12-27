@@ -13,6 +13,7 @@ import com.lcdt.userinfo.service.GroupManageService;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.web.dto.CreateEmployeeAccountDto;
 import com.lcdt.userinfo.web.dto.SearchEmployeeDto;
+import com.lcdt.userinfo.web.dto.ToggleEmployeeEnableDto;
 import com.lcdt.userinfo.web.dto.UpdateEmployeeAccountDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,8 @@ public class EmployeeServiceImpl {
 
 	@Autowired
 	DepartmentService departmentService;
+
+
 
 	@Transactional(rollbackFor = Exception.class)
 	public boolean addEmployee(CreateEmployeeAccountDto dto) {
@@ -123,6 +126,9 @@ public class EmployeeServiceImpl {
 		userService.updateUser(user);
 		//更新用户部门信息
 
+		userCompanyDao.updateByPrimaryKey(userCompRel);
+
+
 		String departIds = dto.getDepartIds();
 		if (!StringUtils.isEmpty(departIds)) {
 			String idsNames = departmentService.getIdsNames(departIds);
@@ -136,6 +142,16 @@ public class EmployeeServiceImpl {
 		//更新用户组
 		groupService.updateCompanyUsergroup(user.getUserId(),userCompRel.getCompany().getCompId(),dto.getGroups());
 		userCompRel = userCompanyDao.selectByPrimaryKey(userCompRelId);
+		return userCompRel;
+	}
+
+
+	@Transactional(rollbackFor = Exception.class)
+	public UserCompRel toggleEnableEmployee(ToggleEmployeeEnableDto dto){
+		UserCompRel userCompRel = userCompanyDao.selectByPrimaryKey(dto.getUserCompRelId());
+		userCompRel.setEnable(dto.getEnable());
+		userCompanyDao.updateByPrimaryKey(userCompRel);
+
 		return userCompRel;
 	}
 
