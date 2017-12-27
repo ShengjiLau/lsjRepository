@@ -13,11 +13,14 @@ import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.LoginLog;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.CreateCompanyService;
+import com.lcdt.userinfo.service.LoginLogService;
 import com.lcdt.userinfo.service.UserService;
+import com.lcdt.util.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -243,6 +246,8 @@ public class AuthController {
 
 	}
 
+	@Reference(async = true)
+	LoginLogService loginLogService;
 
 	@RequestMapping("/logincompany")
 	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
@@ -258,6 +263,14 @@ public class AuthController {
 		ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
 		LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
 		strategy.hasAuthRedirect(request, response);
+
+		LoginLog loginLog = new LoginLog();
+		loginLog.setUserId(userInfo.getUserId());
+		loginLog.setLoginCompanyId(companyId);
+		loginLog.setLoginAgent("PC");
+		loginLog.setLoginIp(HttpUtils.getLocalIp(request));
+		loginLogService.saveLog(loginLog);
+
 		return null;
 	}
 
