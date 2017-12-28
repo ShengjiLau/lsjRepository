@@ -72,8 +72,14 @@
   </select>
   <select id="selectByPropertyName" resultMap="BaseResultMap" parameterType="com.lcdt.items.model.CustomProperty">
     select custom_id, property_type, property_name, property_field, company_id,remarks
-    from t_custom_property where company_id =#{companyId,jdbcType=BIGINT}
-    and property_type = #{propertyType,jdbcType=SMALLINT} and property_name=#{propertyName,jdbcType=VARCHAR}
+    from t_custom_property
+    <where>
+      company_id =#{companyId,jdbcType=BIGINT}
+      and property_type = #{propertyType,jdbcType=SMALLINT} and property_name=#{propertyName,jdbcType=VARCHAR}
+      <if test="customId!=null and customId!='' and customId>0">
+      and  custom_id != #{customId,jdbcType=BIGINT}
+      </if>
+    </where>
   </select>
   <delete id="deleteByCompanyId" parameterType="java.lang.Long">
     delete from t_custom_property
