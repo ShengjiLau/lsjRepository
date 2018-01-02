@@ -90,7 +90,7 @@
 
 
   <!---->
-  <resultMap id="ClientPlanBaseResultMap" type="com.lcdt.traffic.dto.ClientPlanDto">
+  <resultMap id="ClientPlanBaseResultMap" type="com.lcdt.traffic.dto.CustomerPlanDto">
     <id column="waybill_plan_id" jdbcType="BIGINT" property="waybillPlanId" />
     <result column="plan_code" jdbcType="VARCHAR" property="planCode" />
     <result column="serial_code" jdbcType="VARCHAR" property="serialCode" />
@@ -589,14 +589,12 @@
     不包括已抢的计划
     就是自己能抢的计划，可能这个计划多家公司都能看见。如果改计划我报价了，就在已抢里面
   -->
-  <select id="clientPlan4Bidding" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
+  <select id="customerPlan4Bidding" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
     select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id
     from t_waybill_plan p1
     <where>
       and plan_status = '15' and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.company_id = p1.company_id)
-      <if test=" isDeleted!=null">
-        and  is_deleted = #{isDeleted,jdbcType=SMALLINT},
-      </if>
+      and  is_deleted = 0
       <if test="serialCode!=null and serialCode!=''">
         and (serial_code like '%'+#{serialCode,jdbcType=VARCHAR}+'%')
       </if>
@@ -639,16 +637,14 @@
      满足前提条件：抢单记录关联计划，并且没有产生派单给当前登录人所在的企业
      理解：这个计划我参与报价了，但还没有派单给我 ,只要不是'取消'的就行
   -->
-  <select id="clientPlanList4Offer" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
+  <select id="customerPlanList4Offer" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
     select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id
     from t_waybill_plan p1
     <where>
       and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.carrier_company_id = p1.company_id and sn.is_deleted=0)
       and waybill_plan_id not in (SELECT waybill_plan_id FROM t_split_goods sg where sg.company_id = p1.company_id and sg.is_deleted=0)
       and plan_status != '60'
-      <if test=" isDeleted!=null">
-        and  is_deleted = #{isDeleted,jdbcType=SMALLINT},
-      </if>
+      and is_deleted = 0
       <if test="serialCode!=null and serialCode!=''">
         and (serial_code like '%'+#{serialCode,jdbcType=VARCHAR}+'%')
       </if>
@@ -665,10 +661,10 @@
         and receive_county = #{receiveCounty,jdbcType=VARCHAR}
       </if>
       <if test="pubdateBegin != null and pubdateBegin != ''">
-        and  pubdate >= #{pubdateBegin,jdbcType=TIMESTAMP}
+        and pubdate >= #{pubdateBegin,jdbcType=TIMESTAMP}
       </if>
       <if test="pubdateEnd != null and pubdateEnd != ''">
-        and  #{pubdate,jdbcType=TIMESTAMP} >= pubdate
+        and #{pubdate,jdbcType=TIMESTAMP} >= pubdate
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
         and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like '%'+#{goodsInfo,jdbcType=VARCHAR}+'%'  and is_deleted=0)
@@ -692,16 +688,14 @@
      查询条件：计划发布时间
      满足前提条件：我能抢单的计划（不包括已抢的），但是该计划已经派单完成，同时已经超过竞价的结束时间的
    -->
-  <select id="clientPlanList4Pass" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
+  <select id="customerPlanList4Pass" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
     select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id
     from t_waybill_plan p1
     <where>
       and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.carrier_company_id = p1.company_id and sn.is_deleted=0)
       and (SELECT SUM(remainder_amount) FROM t_plan_detail pd where pd.company_id = p1.company_id and pd.is_deleted=0)=0
       and now() >= p1.biding_end
-      <if test=" isDeleted!=null">
-        and  is_deleted = #{isDeleted,jdbcType=SMALLINT},
-      </if>
+      and  is_deleted = 0
       <if test="serialCode!=null and serialCode!=''">
         and (serial_code like '%'+#{serialCode,jdbcType=VARCHAR}+'%')
       </if>
@@ -741,12 +735,259 @@
 
 
 
+  <!--客户计划（派车中）
+      查询条件：计划发布时间 、派单时间
+      满足前提条件：计划派单关联计划，同时派单（派单当前登录人所在的企业）的货物剩余数量>0的
+   -->
+  <select id="customerPlanList4VehicleDoing" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
+    SELECT
+    wp.waybill_plan_id,
+    wp.plan_code,
+    wp.serial_code,
+    wp.receive_province,
+    wp.receive_city,
+    wp.receive_county,
+    wp.receive_address,
+    wp.company_id
+    FROM t_split_goods sp
+    LEFT JOIN t_waybill_plan wp
+    on sp.waybill_plan_id = wp.waybill_plan_id
+    <where>
+      and sp.split_goods_id in (
+      SELECT sgd.split_goods_id From t_split_goods_detail sgd where sgd.split_goods_id
+      in(select max(sgd1.split_goods_id) from t_split_goods_detail sgd1 where sgd1.remain_amount>0  and wp.company_id = sgd1.company_id and sgd1.is_deleted=0)
+      and wp.company_id = sgd.company_id and sgd.is_deleted=0
+      )
+      <if test=" isDeleted!=null">
+        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      </if>
+      <if test="serialCode!=null and serialCode!=''">
+        and (wp.serial_code like '%'+#{serialCode,jdbcType=VARCHAR}+'%')
+      </if>
+      <if test="customerName!=null and customerName!=''">
+        and (wp.customer_name like '%'+#{customerName,jdbcType=VARCHAR}+'%')
+      </if>
+      <if test="receiveProvince!=null and receiveProvince!=''">
+        and wp.receive_province = #{receiveProvince,jdbcType=VARCHAR}
+      </if>
+      <if test="receiveCity!=null and receiveCity!=''">
+        and wp.receive_city = #{receiveCity,jdbcType=VARCHAR}
+      </if>
+      <if test="receiveCounty!=null and receiveCounty!=''">
+        and wp.receive_county = #{receiveCounty,jdbcType=VARCHAR}
+      </if>
+      <!--派单时间-->
+      <if test="disDateBegin != null and disDateBegin != ''">
+        and  sp.create_date >= #{disDateBegin,jdbcType=TIMESTAMP}
+      </if>
+      <if test="disDateEnd != null and disDateEnd != ''">
+        and  #{disDateEnd,jdbcType=TIMESTAMP} >= sp.create_date
+      </if>
+      <if test="goodsInfo != null and goodsInfo!=''">
+        and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like '%'+#{goodsInfo,jdbcType=VARCHAR}+'%'  and is_deleted=0)
+      </if>
+      <if test="groupIds!=null and groupIds!=''">
+        and ${groupIds}
+      </if>
+      <if test="companyIds!=null">
+        and ${companyIds}
+      </if>
+      <if test="carrierCollectionIds!=null">
+        and ${carrierCollectionIds}
+      </if>
+    </where>
+    order by waybill_plan_id desc
+  </select>
 
+  <!--客户计划（已派车）
+      查询条件：派单时间
+       满足前提条件：计划派单关联计划，同时派单（派单当前登录人所在的企业）的货物剩余数量=0的
+   -->
+  <select id="customerPlanList4VehicleHave" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
+    SELECT
+    wp.waybill_plan_id,
+    wp.plan_code,
+    wp.serial_code,
+    wp.receive_province,
+    wp.receive_city,
+    wp.receive_county,
+    wp.receive_address,
+    wp.company_id
+    FROM t_split_goods sp
+    LEFT JOIN t_waybill_plan wp
+    on sp.waybill_plan_id = wp.waybill_plan_id
+    <where>
+      and sp.split_goods_id in (
+        SELECT sgd.split_goods_id From t_split_goods_detail sgd where sgd.split_goods_id
+        in(select max(sgd1.split_goods_id) from t_split_goods_detail sgd1 where sgd1.remain_amount=0  and wp.company_id = sgd1.company_id and sgd1.is_deleted=0)
+        and wp.company_id = sgd.company_id and sgd.is_deleted=0
+      )
+      <if test=" isDeleted!=null">
+        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      </if>
+      <if test="serialCode!=null and serialCode!=''">
+        and (wp.serial_code like '%'+#{serialCode,jdbcType=VARCHAR}+'%')
+      </if>
+      <if test="customerName!=null and customerName!=''">
+        and (wp.customer_name like '%'+#{customerName,jdbcType=VARCHAR}+'%')
+      </if>
+      <if test="receiveProvince!=null and receiveProvince!=''">
+        and wp.receive_province = #{receiveProvince,jdbcType=VARCHAR}
+      </if>
+      <if test="receiveCity!=null and receiveCity!=''">
+        and wp.receive_city = #{receiveCity,jdbcType=VARCHAR}
+      </if>
+      <if test="receiveCounty!=null and receiveCounty!=''">
+        and wp.receive_county = #{receiveCounty,jdbcType=VARCHAR}
+      </if>
+      <!--派单时间-->
+      <if test="disDateBegin != null and disDateBegin != ''">
+        and  sp.create_date >= #{disDateBegin,jdbcType=TIMESTAMP}
+      </if>
+      <if test="disDateEnd != null and disDateEnd != ''">
+        and  #{disDateEnd,jdbcType=TIMESTAMP} >= sp.create_date
+      </if>
+      <if test="goodsInfo != null and goodsInfo!=''">
+        and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like '%'+#{goodsInfo,jdbcType=VARCHAR}+'%'  and is_deleted=0)
+      </if>
+      <if test="groupIds!=null and groupIds!=''">
+        and ${groupIds}
+      </if>
+      <if test="companyIds!=null">
+        and ${companyIds}
+      </if>
+      <if test="carrierCollectionIds!=null">
+        and ${carrierCollectionIds}
+      </if>
+    </where>
+    order by waybill_plan_id desc
+  </select>
 
+  <!--客户计划（已完成）
+         查询条件：派单时间
+          满足前提条件：计划派单关联计划，派单（派单当前登录人所在的企业）的货物剩余数量=0的，并且该派单下的运单全部完成的。
+     -->
+  <select id="customerPlanList4Completed" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
+    SELECT
+    wp.waybill_plan_id,
+    wp.plan_code,
+    wp.serial_code,
+    wp.receive_province,
+    wp.receive_city,
+    wp.receive_county,
+    wp.receive_address,
+    wp.company_id
+    FROM t_split_goods sp
+    LEFT JOIN t_waybill_plan wp
+    on sp.waybill_plan_id = wp.waybill_plan_id
+    <where>
+      and sp.split_goods_id in (
+      SELECT sgd.split_goods_id From t_split_goods_detail sgd where sgd.split_goods_id
+      in(select max(sgd1.split_goods_id) from t_split_goods_detail sgd1 where sgd1.remain_amount=0)
+      )
+      and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status!=7 )=0
+      <if test=" isDeleted!=null">
+        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      </if>
+      <if test="serialCode!=null and serialCode!=''">
+        and (wp.serial_code like '%'+#{serialCode,jdbcType=VARCHAR}+'%')
+      </if>
+      <if test="customerName!=null and customerName!=''">
+        and (wp.customer_name like '%'+#{customerName,jdbcType=VARCHAR}+'%')
+      </if>
+      <if test="receiveProvince!=null and receiveProvince!=''">
+        and wp.receive_province = #{receiveProvince,jdbcType=VARCHAR}
+      </if>
+      <if test="receiveCity!=null and receiveCity!=''">
+        and wp.receive_city = #{receiveCity,jdbcType=VARCHAR}
+      </if>
+      <if test="receiveCounty!=null and receiveCounty!=''">
+        and wp.receive_county = #{receiveCounty,jdbcType=VARCHAR}
+      </if>
+      <!--派单时间-->
+      <if test="disDateBegin != null and disDateBegin != ''">
+        and  sp.create_date >= #{disDateBegin,jdbcType=TIMESTAMP}
+      </if>
+      <if test="disDateEnd != null and disDateEnd != ''">
+        and  #{disDateEnd,jdbcType=TIMESTAMP} >= sp.create_date
+      </if>
+      <if test="goodsInfo != null and goodsInfo!=''">
+        and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like '%'+#{goodsInfo,jdbcType=VARCHAR}+'%'  and is_deleted=0)
+      </if>
+      <if test="groupIds!=null and groupIds!=''">
+        and ${groupIds}
+      </if>
+      <if test="companyIds!=null">
+        and ${companyIds}
+      </if>
+      <if test="carrierCollectionIds!=null">
+        and ${carrierCollectionIds}
+      </if>
+    </where>
+    order by waybill_plan_id desc
+  </select>
 
-
-
-
-
+  <!--客户计划（已取消）
+         查询条件：派单时间
+          满足前提条件：派单货物的原始和剩余数量都是0的
+     -->
+  <select id="customerPlanList4Cancel" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
+    SELECT
+    wp.waybill_plan_id,
+    wp.plan_code,
+    wp.serial_code,
+    wp.receive_province,
+    wp.receive_city,
+    wp.receive_county,
+    wp.receive_address,
+    wp.company_id
+    FROM t_split_goods sp
+    LEFT JOIN t_waybill_plan wp
+    on sp.waybill_plan_id = wp.waybill_plan_id
+    <where>
+      sp.split_goods_id in (
+      SELECT sgd.split_goods_id From t_split_goods_detail sgd where wp.company_id = sgd.company_id and sgd.is_deleted=0
+             and (select SUM(remain_amount+allot_amount) from t_split_goods_detail sgd1 where wp.company_id = sgd1.company_id and sgd1.is_deleted=0)=0
+      )
+      <if test=" isDeleted!=null">
+        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      </if>
+      <if test="serialCode!=null and serialCode!=''">
+        and (wp.serial_code like '%'+#{serialCode,jdbcType=VARCHAR}+'%')
+      </if>
+      <if test="customerName!=null and customerName!=''">
+        and (wp.customer_name like '%'+#{customerName,jdbcType=VARCHAR}+'%')
+      </if>
+      <if test="receiveProvince!=null and receiveProvince!=''">
+        and wp.receive_province = #{receiveProvince,jdbcType=VARCHAR}
+      </if>
+      <if test="receiveCity!=null and receiveCity!=''">
+        and wp.receive_city = #{receiveCity,jdbcType=VARCHAR}
+      </if>
+      <if test="receiveCounty!=null and receiveCounty!=''">
+        and wp.receive_county = #{receiveCounty,jdbcType=VARCHAR}
+      </if>
+      <!--派单时间-->
+      <if test="disDateBegin != null and disDateBegin != ''">
+        and  sp.create_date >= #{disDateBegin,jdbcType=TIMESTAMP}
+      </if>
+      <if test="disDateEnd != null and disDateEnd != ''">
+        and  #{disDateEnd,jdbcType=TIMESTAMP} >= sp.create_date
+      </if>
+      <if test="goodsInfo != null and goodsInfo!=''">
+        and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like '%'+#{goodsInfo,jdbcType=VARCHAR}+'%' and is_deleted=0)
+      </if>
+      <if test="groupIds!=null and groupIds!=''">
+        and ${groupIds}
+      </if>
+      <if test="companyIds!=null">
+        and ${companyIds}
+      </if>
+      <if test="carrierCollectionIds!=null">
+        and ${carrierCollectionIds}
+      </if>
+    </where>
+    order by waybill_plan_id desc
+  </select>
 
 </mapper>

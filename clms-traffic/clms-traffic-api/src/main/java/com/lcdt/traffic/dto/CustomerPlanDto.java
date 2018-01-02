@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by yangbinq on 2017/12/27.
  */
-public class ClientPlanDto implements java.io.Serializable {
+public class CustomerPlanDto implements java.io.Serializable {
 
     private Long waybillPlanId;
     private String planCode;

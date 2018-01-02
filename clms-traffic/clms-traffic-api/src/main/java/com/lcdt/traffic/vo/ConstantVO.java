@@ -44,4 +44,14 @@ public class ConstantVO {
     public static Short PLAN_LEAVE_MSG_TYPE_SHIPPER = 1;//货主
     public static Short PLAN_LEAVE_MSG_TYPE_CARRIER = 2;//承运商
 
+    //运单状态
+    public static short WAYBILL_STATUS_WATIE_SEND=1; //待发货
+    public static short WAYBILL_STATUS_HAVE_FACTORY=2;//已入厂
+    public static short WAYBILL_STATUS_HAVE_LOADING=3;//已装车
+    public static short WAYBILL_STATUS_IN_TRANSIT=4;//运输中
+    public static short WAYBILL_STATUS_IS_UNLOADING=5;//已卸货
+    public static short WAYBILL_STATUS_HAVE_SIGNED=6;//已签收
+    public static short WAYBILL_STATUS_HAVE_FINISH=7;//已完成
+    public static short WAYBILL_STATUS_HAVE_CANCEL=8;//已取消
+
 }
