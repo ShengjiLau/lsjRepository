@@ -485,9 +485,9 @@ public class CustomerPlanApi {
     }
 
 
-    @ApiOperation("客户计划-报价")
-    @RequestMapping(value = "/clientPlanOfferOwner",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_client_plan_offer_owner')")
+    @ApiOperation("客户计划-报价-信息拉取")
+    @RequestMapping(value = "/clientPlanOfferLoadData",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_client_plan_offer_load_data')")
     public PageBaseDto clientPlanOfferOwner(@Validated WaybillPlanListParamsDto dto,
                                              @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                              @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
@@ -499,5 +499,20 @@ public class CustomerPlanApi {
         return null;
     }
 
+
+
+    @ApiOperation("客户计划-报价-信息拉取")
+    @RequestMapping(value = "/clientPlanOfferOwn",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_client_plan_offer_own')")
+    public PageBaseDto clientPlanOfferOwn(@Validated WaybillPlanListParamsDto dto,
+                                            @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+                                            @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+
+
+
+
+        return null;
+    }
 
 }

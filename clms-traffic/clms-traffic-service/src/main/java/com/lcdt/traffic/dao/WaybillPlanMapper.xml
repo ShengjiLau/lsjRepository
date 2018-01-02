@@ -885,7 +885,7 @@
       SELECT sgd.split_goods_id From t_split_goods_detail sgd where sgd.split_goods_id
       in(select max(sgd1.split_goods_id) from t_split_goods_detail sgd1 where sgd1.remain_amount=0)
       )
-      and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status<>7 )=0
+      and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status!=7 )=0
       <if test=" isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
