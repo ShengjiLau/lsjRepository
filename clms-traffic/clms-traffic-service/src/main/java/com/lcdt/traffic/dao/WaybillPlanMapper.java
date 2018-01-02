@@ -1,6 +1,6 @@
 package com.lcdt.traffic.dao;
 
-import com.lcdt.traffic.dto.ClientPlanDto;
+import com.lcdt.traffic.dto.CustomerPlanDto;
 import com.lcdt.traffic.model.WaybillPlan;
 
 import java.util.List;
@@ -52,39 +52,46 @@ public interface WaybillPlanMapper {
     /***
      * 客户计划-竞价中
      */
-    List<ClientPlanDto> clientPlan4Bidding(Map map);
+    List<CustomerPlanDto> customerPlan4Bidding(Map map);
 
 
     /***
      * 客户计划-已报价
      */
-    List<ClientPlanDto> clientPlanList4Offer(Map map);
+    List<CustomerPlanDto> customerPlanList4Offer(Map map);
 
     /***
      * 客户计划-已错过
      */
-    List<ClientPlanDto> clientPlanList4Pass(Map map);
+    List<CustomerPlanDto> customerPlanList4Pass(Map map);
 
 
     /***
      * 客户计划-派车中
      * @return
      */
-    List<ClientPlanDto> clientPlanList4VehicleDoing(Map map);
+    List<CustomerPlanDto> customerPlanList4VehicleDoing(Map map);
 
 
     /***
      * 客户计划-已派车
      */
-    List<ClientPlanDto> clientPlanList4VehicleHave(Map map);
+    List<CustomerPlanDto> customerPlanList4VehicleHave(Map map);
 
+
+    /***
+     * 客户计划-已完成
+     * @param map
+     * @return
+     */
+    List<CustomerPlanDto> customerPlanList4Completed(Map map);
 
     /***
      * 客户计划-已取消
      * @param map
      * @return
      */
-    List<ClientPlanDto> clientPlanList4Cancel(Map map);
+    List<CustomerPlanDto> customerPlanList4Cancel(Map map);
 
 
 }

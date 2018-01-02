@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by yangbinq on 2017/12/27.
  */
-public interface ClientPlanService {
+public interface CustomerPlanService {
 
 
     /****
@@ -15,7 +15,7 @@ public interface ClientPlanService {
      * @param map
      * @return
      */
-    PageInfo clientPlanList4Bidding(Map map);
+    PageInfo customerPlanList4Bidding(Map map);
 
 
     /***
@@ -23,7 +23,7 @@ public interface ClientPlanService {
      * @param map
      * @return
      */
-    PageInfo clientPlanList4Offer(Map map);
+    PageInfo customerPlanList4Offer(Map map);
 
 
     /***
@@ -31,7 +31,7 @@ public interface ClientPlanService {
      * @param map
      * @return
      */
-    PageInfo clientPlanList4Pass(Map map);
+    PageInfo customerPlanList4Pass(Map map);
 
 
     /***
@@ -39,7 +39,7 @@ public interface ClientPlanService {
      * @param map
      * @return
      */
-    PageInfo clientPlanList4VehicleDoing(Map map);
+    PageInfo customerPlanList4VehicleDoing(Map map);
 
 
     /***
@@ -47,7 +47,7 @@ public interface ClientPlanService {
      * @param map
      * @return
      */
-    PageInfo clientPlanList4VehicleHave(Map map);
+    PageInfo customerPlanList4VehicleHave(Map map);
 
 
     /***
@@ -55,7 +55,7 @@ public interface ClientPlanService {
      * @param map
      * @return
      */
-    PageInfo clientPlanList4Completed(Map map);
+    PageInfo customerPlanList4Completed(Map map);
 
 
 
@@ -64,7 +64,7 @@ public interface ClientPlanService {
      * @param map
      * @return
      */
-    PageInfo clientPlanList4Cancel(Map map);
+    PageInfo customerPlanList4Cancel(Map map);
 
 
 

@@ -3,8 +3,7 @@ package com.lcdt.traffic.web.controller.api;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.traffic.service.ClientPlanService;
-import com.lcdt.traffic.service.PlanService;
+import com.lcdt.traffic.service.CustomerPlanService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.WaybillPlanListParamsDto;
 import com.lcdt.userinfo.model.Group;
@@ -27,13 +26,13 @@ import java.util.Map;
  * Created by yangbinq on 2017/12/26.
  */
 @RestController
-@RequestMapping("/api/clientplan")
+@RequestMapping("/api/customerplan")
 @Api(value = "客户计划",description = "客户计划接口")
-public class ClientPlanApi {
+public class CustomerPlanApi {
 
 
     @Autowired
-    private ClientPlanService clientPlanService;
+    private CustomerPlanService customerPlanService;
 
 
     @ApiOperation("客户计划-列表-竞价")
@@ -95,7 +94,7 @@ public class ClientPlanApi {
             sb.append(")");
         }
         map.put("groupIds",sb.toString());//客户
-        PageInfo pageInfo = clientPlanService.clientPlanList4Bidding(map);
+        PageInfo pageInfo = customerPlanService.customerPlanList4Bidding(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -161,7 +160,7 @@ public class ClientPlanApi {
             sb.append(")");
         }
         map.put("groupIds",sb.toString());//客户
-        PageInfo pageInfo = clientPlanService.clientPlanList4Offer(map);
+        PageInfo pageInfo = customerPlanService.customerPlanList4Offer(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -225,7 +224,7 @@ public class ClientPlanApi {
             sb.append(")");
         }
         map.put("groupIds",sb.toString());//客户
-        PageInfo pageInfo = clientPlanService.clientPlanList4Pass(map);
+        PageInfo pageInfo = customerPlanService.customerPlanList4Pass(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -289,7 +288,7 @@ public class ClientPlanApi {
             sb.append(")");
         }
         map.put("groupIds",sb.toString());//客户
-        PageInfo pageInfo = clientPlanService.clientPlanList4VehicleDoing(map);
+        PageInfo pageInfo = customerPlanService.customerPlanList4VehicleDoing(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -352,7 +351,7 @@ public class ClientPlanApi {
             sb.append(")");
         }
         map.put("groupIds",sb.toString());//客户
-        PageInfo pageInfo = clientPlanService.clientPlanList4VehicleHave(map);
+        PageInfo pageInfo = customerPlanService.customerPlanList4VehicleHave(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -416,14 +415,9 @@ public class ClientPlanApi {
             sb.append(")");
         }
         map.put("groupIds",sb.toString());//客户
-        PageInfo pageInfo = clientPlanService.clientPlanList4Completed(map);
+        PageInfo pageInfo = customerPlanService.customerPlanList4Completed(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
-
-
-
-
-
-        return null;
+        return dto1;
     }
 
 
@@ -485,8 +479,25 @@ public class ClientPlanApi {
             sb.append(")");
         }
         map.put("groupIds",sb.toString());//客户
-        PageInfo pageInfo = clientPlanService.clientPlanList4Cancel(map);
+        PageInfo pageInfo = customerPlanService.customerPlanList4Cancel(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
+
+
+    @ApiOperation("客户计划-报价")
+    @RequestMapping(value = "/clientPlanOfferOwner",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_client_plan_offer_owner')")
+    public PageBaseDto clientPlanOfferOwner(@Validated WaybillPlanListParamsDto dto,
+                                             @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+                                             @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+
+
+
+
+        return null;
+    }
+
+
 }

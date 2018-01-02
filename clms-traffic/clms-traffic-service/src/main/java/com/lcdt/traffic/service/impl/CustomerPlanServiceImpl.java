@@ -5,8 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.WaybillPlanMapper;
-import com.lcdt.traffic.dto.ClientPlanDto;
-import com.lcdt.traffic.service.ClientPlanService;
+import com.lcdt.traffic.dto.CustomerPlanDto;
+import com.lcdt.traffic.service.CustomerPlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +20,7 @@ import java.util.Map;
  * Created by yangbinq on 2017/12/27.
  */
 @Service
-public class ClientPlanServiceImpl implements ClientPlanService {
+public class CustomerPlanServiceImpl implements CustomerPlanService {
 
 
     @com.alibaba.dubbo.config.annotation.Reference
@@ -50,7 +50,7 @@ public class ClientPlanServiceImpl implements ClientPlanService {
      *
      * @return
      */
-    private Map  clientPlanSearch4CmpIdGroup(Map map, List<Customer> customerList) {
+    private Map  customerPlanSearch4CmpIdGroup(Map map, List<Customer> customerList) {
         Map resultMap = new HashMap();
         if (customerList!=null && customerList.size()>0) { //承运人ID
             /****
@@ -126,9 +126,9 @@ public class ClientPlanServiceImpl implements ClientPlanService {
 
     @Transactional(readOnly = true)
     @Override
-    public PageInfo clientPlanList4Bidding(Map map) {
+    public PageInfo customerPlanList4Bidding(Map map) {
         List<Customer> customerList = bindCustomerList(map);
-        Map cMap = clientPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
         map.put("companyIds",map.get("companyIds"));
         map.put("carrierCollectionIds",map.get("carrierCollectionIds"));
         int pageNo = 1;
@@ -144,9 +144,9 @@ public class ClientPlanServiceImpl implements ClientPlanService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
-        List<ClientPlanDto> list = waybillPlanMapper.clientPlan4Bidding(map);
+        List<CustomerPlanDto> list = waybillPlanMapper.customerPlan4Bidding(map);
         if (list!=null && list.size()>0) {
-            for(ClientPlanDto dto :list){
+            for(CustomerPlanDto dto :list){
                 dto.setPlanSource(planSource(dto.getCompanyId(),customerList));
             }
        }
@@ -156,9 +156,9 @@ public class ClientPlanServiceImpl implements ClientPlanService {
     }
 
     @Override
-    public PageInfo clientPlanList4Offer(Map map) {
+    public PageInfo customerPlanList4Offer(Map map) {
         List<Customer> customerList = bindCustomerList(map);
-        Map cMap = clientPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
         map.put("companyIds",map.get("companyIds"));
         map.put("carrierCollectionIds",map.get("carrierCollectionIds"));
         int pageNo = 1;
@@ -174,9 +174,9 @@ public class ClientPlanServiceImpl implements ClientPlanService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
-        List<ClientPlanDto> list = waybillPlanMapper.clientPlanList4Offer(map);
+        List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Offer(map);
         if (list!=null && list.size()>0) {
-            for(ClientPlanDto dto :list){
+            for(CustomerPlanDto dto :list){
                 dto.setPlanSource(planSource(dto.getCompanyId(),customerList));
             }
         }
@@ -186,9 +186,9 @@ public class ClientPlanServiceImpl implements ClientPlanService {
     }
 
     @Override
-    public PageInfo clientPlanList4Pass(Map map) {
+    public PageInfo customerPlanList4Pass(Map map) {
         List<Customer> customerList = bindCustomerList(map);
-        Map cMap = clientPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
         map.put("companyIds",map.get("companyIds"));
         map.put("carrierCollectionIds",map.get("carrierCollectionIds"));
         int pageNo = 1;
@@ -204,9 +204,9 @@ public class ClientPlanServiceImpl implements ClientPlanService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
-        List<ClientPlanDto> list = waybillPlanMapper.clientPlanList4Offer(map);
+        List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Offer(map);
         if (list!=null && list.size()>0) {
-            for(ClientPlanDto dto :list){
+            for(CustomerPlanDto dto :list){
                 dto.setPlanSource(planSource(dto.getCompanyId(),customerList));
             }
         }
@@ -216,9 +216,9 @@ public class ClientPlanServiceImpl implements ClientPlanService {
     }
 
     @Override
-    public PageInfo clientPlanList4VehicleDoing(Map map) {
+    public PageInfo customerPlanList4VehicleDoing(Map map) {
         List<Customer> customerList = bindCustomerList(map);
-        Map cMap = clientPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
         map.put("companyIds",map.get("companyIds"));
         map.put("carrierCollectionIds",map.get("carrierCollectionIds"));
         int pageNo = 1;
@@ -234,9 +234,9 @@ public class ClientPlanServiceImpl implements ClientPlanService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
-        List<ClientPlanDto> list = waybillPlanMapper.clientPlanList4VehicleDoing(map);
+        List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4VehicleDoing(map);
         if (list!=null && list.size()>0) {
-            for(ClientPlanDto dto :list){
+            for(CustomerPlanDto dto :list){
                 dto.setPlanSource(planSource(dto.getCompanyId(),customerList));
             }
         }
@@ -246,9 +246,9 @@ public class ClientPlanServiceImpl implements ClientPlanService {
     }
 
     @Override
-    public PageInfo clientPlanList4VehicleHave(Map map) {
+    public PageInfo customerPlanList4VehicleHave(Map map) {
         List<Customer> customerList = bindCustomerList(map);
-        Map cMap = clientPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
         map.put("companyIds",map.get("companyIds"));
         map.put("carrierCollectionIds",map.get("carrierCollectionIds"));
         int pageNo = 1;
@@ -264,9 +264,9 @@ public class ClientPlanServiceImpl implements ClientPlanService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
-        List<ClientPlanDto> list = waybillPlanMapper.clientPlanList4VehicleHave(map);
+        List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4VehicleHave(map);
         if (list!=null && list.size()>0) {
-            for(ClientPlanDto dto :list){
+            for(CustomerPlanDto dto :list){
                 dto.setPlanSource(planSource(dto.getCompanyId(),customerList));
             }
         }
@@ -276,14 +276,9 @@ public class ClientPlanServiceImpl implements ClientPlanService {
     }
 
     @Override
-    public PageInfo clientPlanList4Completed(Map map) {
-        return null;
-    }
-
-    @Override
-    public PageInfo clientPlanList4Cancel(Map map) {
+    public PageInfo customerPlanList4Completed(Map map) {
         List<Customer> customerList = bindCustomerList(map);
-        Map cMap = clientPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
         map.put("companyIds",map.get("companyIds"));
         map.put("carrierCollectionIds",map.get("carrierCollectionIds"));
         int pageNo = 1;
@@ -299,9 +294,38 @@ public class ClientPlanServiceImpl implements ClientPlanService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
-        List<ClientPlanDto> list = waybillPlanMapper.clientPlanList4Cancel(map);
+        List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Completed(map);
         if (list!=null && list.size()>0) {
-            for(ClientPlanDto dto :list){
+            for(CustomerPlanDto dto :list){
+                dto.setPlanSource(planSource(dto.getCompanyId(),customerList));
+            }
+        }
+        PageInfo pageInfo = new PageInfo(list);
+        return pageInfo;
+    }
+
+    @Override
+    public PageInfo customerPlanList4Cancel(Map map) {
+        List<Customer> customerList = bindCustomerList(map);
+        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        map.put("companyIds",map.get("companyIds"));
+        map.put("carrierCollectionIds",map.get("carrierCollectionIds"));
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+        if (map.containsKey("page_no")) {
+            if (map.get("page_no") != null) {
+                pageNo = (Integer) map.get("page_no");
+            }
+        }
+        if (map.containsKey("page_size")) {
+            if (map.get("page_size") != null) {
+                pageSize = (Integer) map.get("page_size");
+            }
+        }
+        PageHelper.startPage(pageNo, pageSize);
+        List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Cancel(map);
+        if (list!=null && list.size()>0) {
+            for(CustomerPlanDto dto :list){
                 dto.setPlanSource(planSource(dto.getCompanyId(),customerList));
             }
         }
