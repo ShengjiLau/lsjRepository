@@ -90,7 +90,7 @@
 
 
   <!---->
-  <resultMap id="ClientPlanBaseResultMap" type="com.lcdt.traffic.dto.CustomerPlanDto">
+  <resultMap id="CustomerPlanBaseResultMap" type="com.lcdt.traffic.dto.CustomerPlanDto">
     <id column="waybill_plan_id" jdbcType="BIGINT" property="waybillPlanId" />
     <result column="plan_code" jdbcType="VARCHAR" property="planCode" />
     <result column="serial_code" jdbcType="VARCHAR" property="serialCode" />
@@ -589,7 +589,7 @@
     不包括已抢的计划
     就是自己能抢的计划，可能这个计划多家公司都能看见。如果改计划我报价了，就在已抢里面
   -->
-  <select id="customerPlan4Bidding" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
+  <select id="customerPlan4Bidding" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id
     from t_waybill_plan p1
     <where>
@@ -637,7 +637,7 @@
      满足前提条件：抢单记录关联计划，并且没有产生派单给当前登录人所在的企业
      理解：这个计划我参与报价了，但还没有派单给我 ,只要不是'取消'的就行
   -->
-  <select id="customerPlanList4Offer" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
+  <select id="customerPlanList4Offer" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id
     from t_waybill_plan p1
     <where>
@@ -688,7 +688,7 @@
      查询条件：计划发布时间
      满足前提条件：我能抢单的计划（不包括已抢的），但是该计划已经派单完成，同时已经超过竞价的结束时间的
    -->
-  <select id="customerPlanList4Pass" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
+  <select id="customerPlanList4Pass" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id
     from t_waybill_plan p1
     <where>
@@ -739,7 +739,7 @@
       查询条件：计划发布时间 、派单时间
       满足前提条件：计划派单关联计划，同时派单（派单当前登录人所在的企业）的货物剩余数量>0的
    -->
-  <select id="customerPlanList4VehicleDoing" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
+  <select id="customerPlanList4VehicleDoing" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
     wp.waybill_plan_id,
     wp.plan_code,
@@ -803,7 +803,7 @@
       查询条件：派单时间
        满足前提条件：计划派单关联计划，同时派单（派单当前登录人所在的企业）的货物剩余数量=0的
    -->
-  <select id="customerPlanList4VehicleHave" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
+  <select id="customerPlanList4VehicleHave" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
     wp.waybill_plan_id,
     wp.plan_code,
@@ -867,7 +867,7 @@
          查询条件：派单时间
           满足前提条件：计划派单关联计划，派单（派单当前登录人所在的企业）的货物剩余数量=0的，并且该派单下的运单全部完成的。
      -->
-  <select id="customerPlanList4Completed" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
+  <select id="customerPlanList4Completed" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
     wp.waybill_plan_id,
     wp.plan_code,
@@ -931,7 +931,7 @@
          查询条件：派单时间
           满足前提条件：派单货物的原始和剩余数量都是0的
      -->
-  <select id="customerPlanList4Cancel" parameterType="java.util.Map" resultMap="ClientPlanBaseResultMap">
+  <select id="customerPlanList4Cancel" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
     wp.waybill_plan_id,
     wp.plan_code,

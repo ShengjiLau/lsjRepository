@@ -4,17 +4,26 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
+import com.lcdt.traffic.dao.SnatchGoodsDetailMapper;
+import com.lcdt.traffic.dao.SnatchGoodsMapper;
+import com.lcdt.traffic.dao.SplitGoodsDetailMapper;
 import com.lcdt.traffic.dao.WaybillPlanMapper;
 import com.lcdt.traffic.dto.CustomerPlanDto;
+import com.lcdt.traffic.dto.SnatchOfferDto;
+import com.lcdt.traffic.exception.WaybillPlanException;
+import com.lcdt.traffic.model.PlanDetail;
+import com.lcdt.traffic.model.SnatchGoods;
+import com.lcdt.traffic.model.SnatchGoodsDetail;
+import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.CustomerPlanService;
+import com.lcdt.traffic.vo.ConstantVO;
+import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yangbinq on 2017/12/27.
@@ -22,13 +31,17 @@ import java.util.Map;
 @Service
 public class CustomerPlanServiceImpl implements CustomerPlanService {
 
-
     @com.alibaba.dubbo.config.annotation.Reference
     private CustomerRpcService customerRpcService;  //客户信息
 
+    @Autowired
+    private WaybillPlanMapper waybillPlanMapper; //计划
 
     @Autowired
-    private WaybillPlanMapper waybillPlanMapper;
+    private SnatchGoodsMapper snatchGoodsMapper; //抢单主
+
+    @Autowired
+    private SnatchGoodsDetailMapper snatchGoodsDetailMapper; //抢单子
 
 
     /****
@@ -331,6 +344,52 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         }
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
+    }
+
+    @Override
+    public int customerPlanOfferOwn(SnatchOfferDto dto, SnatchGoods snatchGoods) {
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(), dto.getCompanyId(), (short)0);
+        if (null == waybillPlan) {
+            throw new WaybillPlanException("计划不存在！");
+        }
+        Date dt = new Date();
+        snatchGoods.setWaybillPlanId(dto.getWaybillPlanId());
+        snatchGoods.setCreateDate(dt);
+        snatchGoods.setUpdateTime(dt);
+        snatchGoods.setOfferDate(dt);//报价时间
+        snatchGoods.setCarrierCollectionIds(waybillPlan.getCarrierCollectionIds()); //承运商组
+        snatchGoods.setCarrierCollectionNames(waybillPlan.getCarrierCollectionNames());
+        snatchGoods.setGroupId(waybillPlan.getGroupId()); //所属项目组
+        snatchGoods.setIsDeleted((short)0);
+        snatchGoods.setIsUsing(ConstantVO.SNATCH_GOODS_USING_DOING);
+        int flag1 = 1,flag2 =1 ;
+        flag1 = snatchGoodsMapper.insert(snatchGoods);
+
+        List<PlanDetail> list = dto.getPlanDetailList();
+        if (null != list  && list.size()>0) {
+            List<SnatchGoodsDetail> snatchList = new ArrayList<SnatchGoodsDetail>();
+            for (PlanDetail obj :list) {
+                SnatchGoodsDetail tempObj = new SnatchGoodsDetail();
+                tempObj.setSnatchGoodsId(snatchGoods.getSnatchGoodsId());
+                tempObj.setPlanDetailId(obj.getPlanDetailId());
+                tempObj.setCreateDate(dt);
+                tempObj.setOfferPrice(obj.getOfferPrice());
+                tempObj.setOfferTotal(obj.getOfferTotal());
+                tempObj.setOfferRemark(obj.getOfferRemark());
+                tempObj.setCreateId(snatchGoods.getCreateId());
+                tempObj.setCreateName(snatchGoods.getCreateName());
+                tempObj.setCreateDate(dt);
+                tempObj.setUpdateId(snatchGoods.getCreateId());
+                tempObj.setUpdateName(snatchGoods.getCreateName());
+                tempObj.setUpdateTime(dt);
+                tempObj.setIsDeleted((short)0);
+                snatchList.add(tempObj);
+            }
+            flag2 = snatchGoodsDetailMapper.batchAddSnatchGoodsDetail(snatchList);
+        }
+
+        return flag1+flag2>1?1:0;
+
     }
 
 
