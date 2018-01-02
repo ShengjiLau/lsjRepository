@@ -25,22 +25,21 @@ public interface WaybillTransferRecordService {
     int deleteWaybillTransferRecord(Long id,Long companyId);
 
     /**
-     * 修改换车记录
+     * 修改换车记录：客户运单需要传递参数（id,carrierCompanyId,和其它参数）;我的运单需要传递参数（id,companyId,和其它参数）
      * @param dto
      * @return
      */
     int modifyWaybillTransferRecord(WaybillTransferRecordDto dto);
 
     /**
-     * 查询换车记录
-     * @param id
-     * @param companyId
+     * 查询换车记录：客户运单需要传递参数（id,carrierCompanyId,和其它参数）;我的运单需要传递参数（id,companyId,和其它参数）
+     * @param dto
      * @return
      */
-    WaybillTransferRecord queryWaybillTransferRecord(Long id,Long companyId);
+    WaybillTransferRecord queryWaybillTransferRecord(WaybillTransferRecordDto dto);
 
     /**
-     * 查询换车记录列表
+     * 查询的车记录列表：客户运单需要传递参数（id,carrierCompanyId,和其它参数）;我的运单需要传递参数（id,companyId,和其它参数）
      * @param dto
      * @param pageInfo
      * @return

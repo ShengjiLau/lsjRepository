@@ -1,5 +1,7 @@
 package com.lcdt.traffic.web.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 /**
@@ -31,19 +33,19 @@ public class WaybillLeaveMsgDto {
     private String carrierCompanyName;
 
     private String carrierName;
-
+    @ApiModelProperty(value = "创建人id",hidden = true)
     private Long createId;
-
+    @ApiModelProperty(value = "创建人名字",hidden = true)
     private String createName;
-
+    @ApiModelProperty(value = "创建日期",hidden = true)
     private Long createDate;
-
+    @ApiModelProperty(value = "更新人id",hidden = true)
     private Long updateId;
-
+    @ApiModelProperty(value = "更新人名字",hidden = true)
     private String updateName;
-
+    @ApiModelProperty(value = "更新日期",hidden = true)
     private Date udpateDate;
-
+    @ApiModelProperty(value = "是否删除",hidden = true)
     private Short isDeleted;
 
     public Long getId() {

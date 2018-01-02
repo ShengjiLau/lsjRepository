@@ -37,15 +37,14 @@ public class WaybillTransferRecordServiceImpl implements WaybillTransferRecordSe
     public int modifyWaybillTransferRecord(WaybillTransferRecordDto dto) {
         WaybillTransferRecord waybillTransferRecord=new WaybillTransferRecord();
         BeanUtils.copyProperties(dto,waybillTransferRecord);
-        return waybillTransferRecordMapper.updateByIdAndCompanyId(waybillTransferRecord);
+        return waybillTransferRecordMapper.updateTranserRecordByIdAndXCompanyId(waybillTransferRecord);
     }
 
     @Override
-    public WaybillTransferRecord queryWaybillTransferRecord(Long id, Long companyId) {
-        WaybillTransferRecord waybillTransferRecord=new WaybillTransferRecord();
-        waybillTransferRecord.setId(id);
-        waybillTransferRecord.setCompanyId(companyId);
-        return waybillTransferRecordMapper.selectByIdAndCompanyId(waybillTransferRecord);
+    public WaybillTransferRecord queryWaybillTransferRecord(WaybillTransferRecordDto dto) {
+        WaybillTransferRecord waybillTransferRecord =new WaybillTransferRecord();
+        BeanUtils.copyProperties(dto,waybillTransferRecord);
+        return waybillTransferRecordMapper.selectTranserRecordByIdAndXCompanyId(waybillTransferRecord);
     }
 
     @Override
@@ -55,7 +54,7 @@ public class WaybillTransferRecordServiceImpl implements WaybillTransferRecordSe
         WaybillTransferRecord waybillTransferRecord=new WaybillTransferRecord();
         BeanUtils.copyProperties(dto,waybillTransferRecord);
         PageHelper.startPage(pageInfo.getPageNum(),pageInfo.getPageSize());
-        resultList=waybillTransferRecordMapper.selectByCondition(waybillTransferRecord);
+        resultList=waybillTransferRecordMapper.selectTranserRecordByCondition(waybillTransferRecord);
         page=new PageInfo(resultList);
         return page;
     }

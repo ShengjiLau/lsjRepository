@@ -25,22 +25,21 @@ public interface WaybillLeaveMsgService {
     int deleteWaybillLeaveMsg(Long id,Long companyId);
 
     /**
-     * 修改留言
+     * 运单留言修改：客户运单需要传递参数（id,carrierCompanyId,和其它参数）;我的运单需要传递参数（id,companyId,和其它参数）
      * @param dto
      * @return
      */
     int modifyWaybillLeaveMsg(WaybillLeaveMsgDto dto);
 
     /**
-     * 查询留言
-     * @param id
-     * @param companyId
+     * 运单留言查询：客户运单需要传递参数（id,carrierCompanyId,和其它参数）;我的运单需要传递参数（id,companyId,和其它参数）
+     * @param dto
      * @return
      */
-    WaybillLeaveMsg queryWaybillLeaveMsg(Long id,Long companyId);
+    WaybillLeaveMsg queryWaybillLeaveMsg(WaybillLeaveMsgDto dto);
 
     /**
-     * 查询留言列表
+     * 运单留言列表：客户运单需要传递参数（id,carrierCompanyId,和其它参数）;我的运单需要传递参数（id,companyId,和其它参数）
      * @param dto
      * @param pageInfo
      * @return

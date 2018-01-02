@@ -120,13 +120,10 @@
     shipper_company_id = #{shipperCompanyId,jdbcType=BIGINT},
     shipper_company_name = #{shipperCompanyName,jdbcType=VARCHAR},
     shipper_name = #{shipperName,jdbcType=VARCHAR},
-    carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
-    carrier_company_name = #{carrierCompanyName,jdbcType=VARCHAR},
-    carrier_name = #{carrierName,jdbcType=VARCHAR},
     update_id = #{updateId,jdbcType=BIGINT},
     update_name = #{updateName,jdbcType=VARCHAR},
     udpate_date = CURRENT_TIMESTAMP
-    where id = #{id,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT} and (company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
   </update>
 
   <select id="selectByIdAndCompanyId" parameterType="com.lcdt.traffic.model.WaybillLeaveMsg" resultMap="BaseResultMap">
@@ -134,7 +131,7 @@
     shipper_company_name, shipper_name, carrier_company_id, carrier_company_name, carrier_name,
     create_id, create_name, create_date, update_id, update_name, udpate_date, is_deleted
     from t_waybill_leave_msg
-    where id = #{id,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT} and (company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
   </select>
 
   <select id="selectByCondition" parameterType="com.lcdt.traffic.model.WaybillLeaveMsg" resultMap="BaseResultMap">
@@ -143,7 +140,7 @@
     create_id, create_name, create_date, update_id, update_name, udpate_date, is_deleted
     from t_waybill_leave_msg
     <where>
-      company_id = #{companyId,jdbcType=BIGINT}
+      (company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
       <if test="waybillId!=null and waybillId!='' and waybillId>0">
         and waybill_id = #{waybillId,jdbcType=BIGINT}
       </if>

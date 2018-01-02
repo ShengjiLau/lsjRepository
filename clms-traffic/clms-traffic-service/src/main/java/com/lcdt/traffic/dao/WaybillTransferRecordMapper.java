@@ -46,23 +46,23 @@ public interface WaybillTransferRecordMapper {
     int updateByPrimaryKey(WaybillTransferRecord record);
 
     /**
-     * 根据换车记录id 和 企业id 修改换车记录
+     * 修改换车记录：客户运单需要传递参数（id,carrierCompanyId,和其它参数）;我的运单需要传递参数（id,companyId,和其它参数）
      * @param waybillTransferRecord
      * @return
      */
-    int updateByIdAndCompanyId(WaybillTransferRecord waybillTransferRecord);
+    int updateTranserRecordByIdAndXCompanyId(WaybillTransferRecord waybillTransferRecord);
 
     /**
-     * 根据换车记录id 和 企业id 查询换车记录
+     * 查询单条换车记录：客户运单需要传递参数（id,carrierCompanyId,和其它参数）;我的运单需要传递参数（id,companyId,和其它参数）
      * @param waybillTransferRecord
      * @return
      */
-    WaybillTransferRecord selectByIdAndCompanyId(WaybillTransferRecord waybillTransferRecord);
+    WaybillTransferRecord selectTranserRecordByIdAndXCompanyId(WaybillTransferRecord waybillTransferRecord);
 
     /**
-     * 根据条件查询列表
+     * 查询换车记录列表：客户运单需要传递参数（id,carrierCompanyId,和其它参数）;我的运单需要传递参数（id,companyId,和其它参数）
      * @param waybillTransferRecord
      * @return
      */
-    List<WaybillTransferRecord> selectByCondition(WaybillTransferRecord waybillTransferRecord);
+    List<WaybillTransferRecord> selectTranserRecordByCondition(WaybillTransferRecord waybillTransferRecord);
 }

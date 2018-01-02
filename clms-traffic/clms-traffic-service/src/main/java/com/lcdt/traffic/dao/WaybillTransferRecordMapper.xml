@@ -19,6 +19,7 @@
     <result column="case_num" jdbcType="VARCHAR" property="caseNum" />
     <result column="seal_num" jdbcType="VARCHAR" property="sealNum" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="carrier_company_id" jdbcType="BIGINT" property="carrierCompanyId"/>
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
@@ -48,14 +49,14 @@
     insert into t_waybill_transfer_record (waybill_id, transfer_date, vechicle_id, 
       vechicle_num, driver_id, driver_name, 
       driver_phone, transfer_name, case_num, 
-      seal_num, company_id, create_id, 
+      seal_num, company_id,carrier_company_id, create_id,
       create_name, create_date, update_id, 
       update_name, update_date, is_deleted
       )
     values (#{waybillId,jdbcType=BIGINT}, #{transferDate,jdbcType=TIMESTAMP}, #{vechicleId,jdbcType=BIGINT}, 
       #{vechicleNum,jdbcType=VARCHAR}, #{driverId,jdbcType=BIGINT}, #{driverName,jdbcType=VARCHAR}, 
       #{driverPhone,jdbcType=VARCHAR}, #{transferName,jdbcType=VARCHAR}, #{caseNum,jdbcType=VARCHAR}, 
-      #{sealNum,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, 
+      #{sealNum,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},#{carrierCompanyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT},
       #{createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{updateId,jdbcType=BIGINT},
       #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 0
       )
@@ -78,6 +79,7 @@
       case_num = #{caseNum,jdbcType=VARCHAR},
       seal_num = #{sealNum,jdbcType=VARCHAR},
       company_id = #{companyId,jdbcType=BIGINT},
+      carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
       create_id = #{createId,jdbcType=BIGINT},
       create_name = #{createName,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
@@ -94,7 +96,7 @@
       This element was generated on Wed Dec 20 10:13:16 CST 2017.
     -->
     select id, waybill_id, transfer_date, vechicle_id, vechicle_num, driver_id, driver_name, 
-    driver_phone, transfer_name, case_num, seal_num, company_id, create_id, create_name, 
+    driver_phone, transfer_name, case_num, seal_num, company_id,carrier_company_id, create_id, create_name,
     create_date, update_id, update_name, update_date, is_deleted
     from t_waybill_transfer_record
     where id = #{id,jdbcType=BIGINT}
@@ -112,13 +114,13 @@
   </select>
   <select id="selectByWaybillId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select id, waybill_id, transfer_date, vechicle_id, vechicle_num, driver_id, driver_name,
-    driver_phone, transfer_name, case_num, seal_num, company_id, create_id, create_name,
+    driver_phone, transfer_name, case_num, seal_num, company_id,carrier_company_id,  create_id, create_name,
     create_date, update_id, update_name, update_date, is_deleted
     from t_waybill_transfer_record
     where waybill_id = #{id,jdbcType=BIGINT}
   </select>
 
-  <update id="updateByIdAndCompanyId" parameterType="com.lcdt.traffic.model.WaybillTransferRecord">
+  <update id="updateTranserRecordByIdAndXCompanyId" parameterType="com.lcdt.traffic.model.WaybillTransferRecord">
     update t_waybill_transfer_record
     set waybill_id = #{waybillId,jdbcType=BIGINT},
     transfer_date = #{transferDate,jdbcType=TIMESTAMP},
@@ -133,28 +135,32 @@
     update_id = #{updateId,jdbcType=BIGINT},
     update_name = #{updateName,jdbcType=VARCHAR},
     update_date = CURRENT_TIMESTAMP
-    where id = #{id,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+    where
+      id = #{id,jdbcType=BIGINT}
+      and (company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
   </update>
-  <select id="selectByIdAndCompanyId" parameterType="com.lcdt.traffic.model.WaybillTransferRecord" resultMap="BaseResultMap">
+  <select id="selectTranserRecordByIdAndXCompanyId" parameterType="com.lcdt.traffic.model.WaybillTransferRecord" resultMap="BaseResultMap">
     select id, waybill_id, transfer_date, vechicle_id, vechicle_num, driver_id, driver_name,
-    driver_phone, transfer_name, case_num, seal_num, company_id, create_id, create_name,
+    driver_phone, transfer_name, case_num, seal_num, company_id,carrier_company_id,  create_id, create_name,
     create_date, update_id, update_name, update_date, is_deleted
     from t_waybill_transfer_record
-    where waybill_id = #{id,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+    where
+      id = #{id,jdbcType=BIGINT} and (company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
   </select>
-  <select id="selectByCondition" parameterType="com.lcdt.traffic.model.WaybillTransferRecord" resultMap="BaseResultMap">
+  <select id="selectTranserRecordByCondition" parameterType="com.lcdt.traffic.model.WaybillTransferRecord" resultMap="BaseResultMap">
     select id, waybill_id, transfer_date, vechicle_id, vechicle_num, driver_id, driver_name,
-    driver_phone, transfer_name, case_num, seal_num, company_id, create_id, create_name,
+    driver_phone, transfer_name, case_num, seal_num, company_id,carrier_company_id, create_id, create_name,
     create_date, update_id, update_name, update_date, is_deleted
     from t_waybill_transfer_record
     <where>
-      company_id = #{companyId,jdbcType=BIGINT}
-      <if test="waybillId!=null and waybillId!='' and waybillId>0">
+      (company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
+      <if test="waybillId!=null and waybillId!=''">
         and waybill_id = #{waybillId,jdbcType=BIGINT}
       </if>
       <if test="isDeleted!=null and isDeleted!=''">
         and is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
     </where>
+    order by id desc
   </select>
 </mapper>

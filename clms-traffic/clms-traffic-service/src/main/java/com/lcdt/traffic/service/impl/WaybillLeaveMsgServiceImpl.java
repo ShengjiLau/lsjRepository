@@ -41,10 +41,9 @@ public class WaybillLeaveMsgServiceImpl implements WaybillLeaveMsgService {
     }
 
     @Override
-    public WaybillLeaveMsg queryWaybillLeaveMsg(Long id, Long companyId) {
+    public WaybillLeaveMsg queryWaybillLeaveMsg(WaybillLeaveMsgDto dto) {
         WaybillLeaveMsg waybillLeaveMsg=new WaybillLeaveMsg();
-        waybillLeaveMsg.setId(id);
-        waybillLeaveMsg.setCompanyId(companyId);
+        BeanUtils.copyProperties(dto,waybillLeaveMsg);
         return waybillLeaveMsgMapper.selectByIdAndCompanyId(waybillLeaveMsg);
     }
 
