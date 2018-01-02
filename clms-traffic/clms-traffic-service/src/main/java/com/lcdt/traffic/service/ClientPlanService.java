@@ -17,4 +17,56 @@ public interface ClientPlanService {
      */
     PageInfo clientPlanList4Bidding(Map map);
 
+
+    /***
+     * 客户计划-已报价
+     * @param map
+     * @return
+     */
+    PageInfo clientPlanList4Offer(Map map);
+
+
+    /***
+     * 客户计-已错过
+     * @param map
+     * @return
+     */
+    PageInfo clientPlanList4Pass(Map map);
+
+
+    /***
+     * 客户计划-派车中
+     * @param map
+     * @return
+     */
+    PageInfo clientPlanList4VehicleDoing(Map map);
+
+
+    /***
+     * 客户计划-已派车
+     * @param map
+     * @return
+     */
+    PageInfo clientPlanList4VehicleHave(Map map);
+
+
+    /***
+     * 客户计划-已完成
+     * @param map
+     * @return
+     */
+    PageInfo clientPlanList4Completed(Map map);
+
+
+
+    /***
+     * 客户计划-已取消
+     * @param map
+     * @return
+     */
+    PageInfo clientPlanList4Cancel(Map map);
+
+
+
+
 }

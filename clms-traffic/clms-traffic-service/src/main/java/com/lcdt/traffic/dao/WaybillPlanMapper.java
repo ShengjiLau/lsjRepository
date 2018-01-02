@@ -54,4 +54,37 @@ public interface WaybillPlanMapper {
      */
     List<ClientPlanDto> clientPlan4Bidding(Map map);
 
+
+    /***
+     * 客户计划-已报价
+     */
+    List<ClientPlanDto> clientPlanList4Offer(Map map);
+
+    /***
+     * 客户计划-已错过
+     */
+    List<ClientPlanDto> clientPlanList4Pass(Map map);
+
+
+    /***
+     * 客户计划-派车中
+     * @return
+     */
+    List<ClientPlanDto> clientPlanList4VehicleDoing(Map map);
+
+
+    /***
+     * 客户计划-已派车
+     */
+    List<ClientPlanDto> clientPlanList4VehicleHave(Map map);
+
+
+    /***
+     * 客户计划-已取消
+     * @param map
+     * @return
+     */
+    List<ClientPlanDto> clientPlanList4Cancel(Map map);
+
+
 }
