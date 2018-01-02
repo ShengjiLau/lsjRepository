@@ -108,7 +108,62 @@ public class ClientPlanApi {
     public PageBaseDto clientPlanList4Offer(@Validated WaybillPlanListParamsDto dto,
                                             @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                             @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
-        return null;
+
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
+
+        if (StringUtil.isNotEmpty(dto.getSerialCode())) { //流水号
+            map.put("serialCode",dto.getSerialCode());
+        }
+
+        if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
+            map.put("customerName",dto.getCustomerName());
+        }
+        //收货地
+        if (StringUtil.isNotEmpty(dto.getReceiveProvince())) {
+            map.put("receiveProvince",dto.getReceiveProvince());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveCity())) {
+            map.put("receiveCity",dto.getReceiveCity());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveCounty())) {
+            map.put("receiveCounty",dto.getReceiveCounty());
+        }
+        //计划发布时间
+        if (StringUtil.isNotEmpty(dto.getPubdateBegin())) { //计划发布时间
+            map.put("pubdateBegin",dto.getPubdateBegin());
+        }
+        if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
+            map.put("pubdateEnd",dto.getPubdateEnd());
+        }
+        //货物信息
+        if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
+            map.put("goodsInfo",dto.getGoodsInfo());
+        }
+
+        //组权限信息
+        StringBuffer sb = new StringBuffer();
+        if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
+            sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+        } else {
+            sb.append("(");
+            List<Group> groupList = SecurityInfoGetter.groups();
+            for(int i=0;i<groupList.size();i++) {
+                Group group = groupList.get(i);
+                sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+                if(i!=groupList.size()-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+        }
+        map.put("groupIds",sb.toString());//客户
+        PageInfo pageInfo = clientPlanService.clientPlanList4Offer(map);
+        PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
+        return dto1;
     }
 
 
@@ -118,7 +173,61 @@ public class ClientPlanApi {
     public PageBaseDto clientPlanList4Pass(@Validated WaybillPlanListParamsDto dto,
                                            @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                            @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
-        return null;
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
+
+        if (StringUtil.isNotEmpty(dto.getSerialCode())) { //流水号
+            map.put("serialCode",dto.getSerialCode());
+        }
+
+        if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
+            map.put("customerName",dto.getCustomerName());
+        }
+        //收货地
+        if (StringUtil.isNotEmpty(dto.getReceiveProvince())) {
+            map.put("receiveProvince",dto.getReceiveProvince());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveCity())) {
+            map.put("receiveCity",dto.getReceiveCity());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveCounty())) {
+            map.put("receiveCounty",dto.getReceiveCounty());
+        }
+        //计划发布时间
+        if (StringUtil.isNotEmpty(dto.getPubdateBegin())) { //计划发布时间
+            map.put("pubdateBegin",dto.getPubdateBegin());
+        }
+        if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
+            map.put("pubdateEnd",dto.getPubdateEnd());
+        }
+        //货物信息
+        if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
+            map.put("goodsInfo",dto.getGoodsInfo());
+        }
+
+        //组权限信息
+        StringBuffer sb = new StringBuffer();
+        if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
+            sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+        } else {
+            sb.append("(");
+            List<Group> groupList = SecurityInfoGetter.groups();
+            for(int i=0;i<groupList.size();i++) {
+                Group group = groupList.get(i);
+                sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+                if(i!=groupList.size()-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+        }
+        map.put("groupIds",sb.toString());//客户
+        PageInfo pageInfo = clientPlanService.clientPlanList4Pass(map);
+        PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
+        return dto1;
     }
 
 
@@ -128,7 +237,61 @@ public class ClientPlanApi {
     public PageBaseDto clientPlanList4VehicleDoing(@Validated WaybillPlanListParamsDto dto,
                                                    @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                                    @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
-        return null;
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
+
+        if (StringUtil.isNotEmpty(dto.getSerialCode())) { //流水号
+            map.put("serialCode",dto.getSerialCode());
+        }
+
+        if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
+            map.put("customerName",dto.getCustomerName());
+        }
+        //收货地
+        if (StringUtil.isNotEmpty(dto.getReceiveProvince())) {
+            map.put("receiveProvince",dto.getReceiveProvince());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveCity())) {
+            map.put("receiveCity",dto.getReceiveCity());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveCounty())) {
+            map.put("receiveCounty",dto.getReceiveCounty());
+        }
+
+        if (StringUtil.isNotEmpty(dto.getDisDateBegin())) { //派单时间-开始
+            map.put("disDateBegin",dto.getDisDateBegin());
+        }
+        if (StringUtil.isNotEmpty(dto.getPubdateEnd())) { //派单时间-结束
+            map.put("disDateEnd",dto.getDisDateEnd());
+        }
+        //货物信息
+        if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
+            map.put("goodsInfo",dto.getGoodsInfo());
+        }
+
+        //组权限信息
+        StringBuffer sb = new StringBuffer();
+        if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
+            sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+        } else {
+            sb.append("(");
+            List<Group> groupList = SecurityInfoGetter.groups();
+            for(int i=0;i<groupList.size();i++) {
+                Group group = groupList.get(i);
+                sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+                if(i!=groupList.size()-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+        }
+        map.put("groupIds",sb.toString());//客户
+        PageInfo pageInfo = clientPlanService.clientPlanList4VehicleDoing(map);
+        PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
+        return dto1;
     }
 
     @ApiOperation("客户计划-列表-已派车")
@@ -137,7 +300,61 @@ public class ClientPlanApi {
     public PageBaseDto clientPlanList4VehicleHave(@Validated WaybillPlanListParamsDto dto,
                                                   @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                                   @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
-        return null;
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
+
+        if (StringUtil.isNotEmpty(dto.getSerialCode())) { //流水号
+            map.put("serialCode",dto.getSerialCode());
+        }
+
+        if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
+            map.put("customerName",dto.getCustomerName());
+        }
+        //收货地
+        if (StringUtil.isNotEmpty(dto.getReceiveProvince())) {
+            map.put("receiveProvince",dto.getReceiveProvince());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveCity())) {
+            map.put("receiveCity",dto.getReceiveCity());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveCounty())) {
+            map.put("receiveCounty",dto.getReceiveCounty());
+        }
+
+        if (StringUtil.isNotEmpty(dto.getDisDateBegin())) { //派单时间-开始
+            map.put("disDateBegin",dto.getDisDateBegin());
+        }
+        if (StringUtil.isNotEmpty(dto.getPubdateEnd())) { //派单时间-结束
+            map.put("disDateEnd",dto.getDisDateEnd());
+        }
+        //货物信息
+        if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
+            map.put("goodsInfo",dto.getGoodsInfo());
+        }
+
+        //组权限信息
+        StringBuffer sb = new StringBuffer();
+        if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
+            sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+        } else {
+            sb.append("(");
+            List<Group> groupList = SecurityInfoGetter.groups();
+            for(int i=0;i<groupList.size();i++) {
+                Group group = groupList.get(i);
+                sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+                if(i!=groupList.size()-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+        }
+        map.put("groupIds",sb.toString());//客户
+        PageInfo pageInfo = clientPlanService.clientPlanList4VehicleHave(map);
+        PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
+        return dto1;
     }
 
 
@@ -147,6 +364,65 @@ public class ClientPlanApi {
     public PageBaseDto clientPlanList4Completed(@Validated WaybillPlanListParamsDto dto,
                                                 @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                                 @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
+
+        if (StringUtil.isNotEmpty(dto.getSerialCode())) { //流水号
+            map.put("serialCode",dto.getSerialCode());
+        }
+
+        if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
+            map.put("customerName",dto.getCustomerName());
+        }
+        //收货地
+        if (StringUtil.isNotEmpty(dto.getReceiveProvince())) {
+            map.put("receiveProvince",dto.getReceiveProvince());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveCity())) {
+            map.put("receiveCity",dto.getReceiveCity());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveCounty())) {
+            map.put("receiveCounty",dto.getReceiveCounty());
+        }
+
+        if (StringUtil.isNotEmpty(dto.getDisDateBegin())) { //派单时间-开始
+            map.put("disDateBegin",dto.getDisDateBegin());
+        }
+        if (StringUtil.isNotEmpty(dto.getPubdateEnd())) { //派单时间-结束
+            map.put("disDateEnd",dto.getDisDateEnd());
+        }
+        //货物信息
+        if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
+            map.put("goodsInfo",dto.getGoodsInfo());
+        }
+
+        //组权限信息
+        StringBuffer sb = new StringBuffer();
+        if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
+            sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+        } else {
+            sb.append("(");
+            List<Group> groupList = SecurityInfoGetter.groups();
+            for(int i=0;i<groupList.size();i++) {
+                Group group = groupList.get(i);
+                sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+                if(i!=groupList.size()-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+        }
+        map.put("groupIds",sb.toString());//客户
+        PageInfo pageInfo = clientPlanService.clientPlanList4Completed(map);
+        PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
+
+
+
+
+
         return null;
     }
 
@@ -157,6 +433,60 @@ public class ClientPlanApi {
     public PageBaseDto clientPlanList4Cancel(@Validated WaybillPlanListParamsDto dto,
                                              @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                              @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
-        return null;
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
+
+        if (StringUtil.isNotEmpty(dto.getSerialCode())) { //流水号
+            map.put("serialCode",dto.getSerialCode());
+        }
+
+        if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
+            map.put("customerName",dto.getCustomerName());
+        }
+        //收货地
+        if (StringUtil.isNotEmpty(dto.getReceiveProvince())) {
+            map.put("receiveProvince",dto.getReceiveProvince());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveCity())) {
+            map.put("receiveCity",dto.getReceiveCity());
+        }
+        if (StringUtil.isNotEmpty(dto.getReceiveCounty())) {
+            map.put("receiveCounty",dto.getReceiveCounty());
+        }
+
+        if (StringUtil.isNotEmpty(dto.getDisDateBegin())) { //派单时间-开始
+            map.put("disDateBegin",dto.getDisDateBegin());
+        }
+        if (StringUtil.isNotEmpty(dto.getPubdateEnd())) { //派单时间-结束
+            map.put("disDateEnd",dto.getDisDateEnd());
+        }
+        //货物信息
+        if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
+            map.put("goodsInfo",dto.getGoodsInfo());
+        }
+
+        //组权限信息
+        StringBuffer sb = new StringBuffer();
+        if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
+            sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+        } else {
+            sb.append("(");
+            List<Group> groupList = SecurityInfoGetter.groups();
+            for(int i=0;i<groupList.size();i++) {
+                Group group = groupList.get(i);
+                sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+                if(i!=groupList.size()-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+        }
+        map.put("groupIds",sb.toString());//客户
+        PageInfo pageInfo = clientPlanService.clientPlanList4Cancel(map);
+        PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
+        return dto1;
     }
 }
