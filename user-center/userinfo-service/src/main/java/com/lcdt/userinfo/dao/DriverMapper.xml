@@ -92,7 +92,7 @@
     select user_id, affiliated_company, driver_name, driver_phone, driver_ID, driver_category, 
     driver_email, driver_sex, driver_nationality, driver_birthday, driver_license, driver_province, 
     driver_city, driver_district, driver_address, driver_header_img, driver_license_photo, 
-    driver_ID_photo, driver_ID_neg_photo, driver_remark, current_location, short_current_location, 
+    driver_ID_photo, driver_ID_neg_photo, driver_remark, current_location, short_current_location, gps_status,
     create_id, create_name, create_date, update_id, update_name, update_date, is_deleted
     from t_driver
     where user_id = #{userId,jdbcType=BIGINT}
@@ -112,5 +112,15 @@
       #{item}
     </foreach>
   </select>
-
+  <update id="updateGpsStatus" parameterType="com.lcdt.userinfo.model.Driver">
+    update t_driver
+    set gps_status = #{gpsStatus,jdbcType=VARCHAR}
+    where driver_phone = #{driverPhone,jdbcType=VARCHAR}
+  </update>
+  <update id="updateLocation" parameterType="com.lcdt.userinfo.model.Driver">
+    update t_driver
+    set  current_location = #{currentLocation,jdbcType=VARCHAR},
+    short_current_location = #{shortCurrentLocation,jdbcType=VARCHAR}
+    where driver_phone = #{driverPhone,jdbcType=VARCHAR}
+  </update>
 </mapper>

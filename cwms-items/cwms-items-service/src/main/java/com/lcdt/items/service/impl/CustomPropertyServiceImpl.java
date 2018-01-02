@@ -40,8 +40,8 @@ public class CustomPropertyServiceImpl implements CustomPropertyService{
     @Override
     public int insertCustomProperty(CustomProperty customProperty) {
         List customPropertyList =  customPropertyMapper.selectByPropertyName(customProperty); //获取属性名称是否重复
-        if(customPropertyList.size()>0){    //重复直接返回-1，交给上层处理
-            return -1;
+        if(customPropertyList.size()>0){    //属性名重复抛出异常
+            throw new RuntimeException("属性名已经存在");
         }
         //查询企业下的所有商品分类
         List<ItemClassify> itemClassifyList = itemClassifyMapper.selectClassifyByCompanyId(customProperty.getCompanyId());

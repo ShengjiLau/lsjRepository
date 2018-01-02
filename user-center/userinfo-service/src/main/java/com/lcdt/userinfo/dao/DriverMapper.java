@@ -16,8 +16,17 @@ public interface DriverMapper {
 
     /**
      * 根据手机号码串批量查询定位状态及定位信息
-     * @param driverPhoneArr
+     * @param driverPhoneList
      * @return
      */
     List<Driver> selectByPhone(List<String> driverPhoneList);
+
+    /**
+     * 根据手机号修改定位状态
+     * @param record
+     * @return
+     */
+    int updateGpsStatus(Driver record);
+
+    int updateLocation(Driver driver);
 }
