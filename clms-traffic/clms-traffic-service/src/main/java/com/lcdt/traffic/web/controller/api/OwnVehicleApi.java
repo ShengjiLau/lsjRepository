@@ -107,7 +107,7 @@ public class OwnVehicleApi {
     @ApiOperation(value = "车辆列表", notes = "获取车辆")
     @GetMapping("/list")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_list')")
-    public PageBaseDto<List<OwnVehicle>> ownVehicleList(@RequestBody OwnVehicleDto ownVehicleDto) {
+    public PageBaseDto<List<OwnVehicle>> ownVehicleList(OwnVehicleDto ownVehicleDto) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         OwnVehicle ownVehicle = new OwnVehicle();
         BeanUtils.copyProperties(ownVehicleDto, ownVehicle);
