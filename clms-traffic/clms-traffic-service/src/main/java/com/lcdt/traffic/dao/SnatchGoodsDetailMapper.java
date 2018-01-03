@@ -45,6 +45,8 @@ public interface SnatchGoodsDetailMapper {
      */
     int updateByPrimaryKey(SnatchGoodsDetail record);
 
+    List<SnatchGoodsDetail> selectBySnatchGoodsDetailId(Long snatchGoodsId, short isDeleted);
+
 
 
     /***

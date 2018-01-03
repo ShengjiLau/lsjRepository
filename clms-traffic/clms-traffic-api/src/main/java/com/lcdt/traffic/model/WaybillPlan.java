@@ -645,6 +645,9 @@ public class WaybillPlan implements java.io.Serializable,ResponseData {
 
 
 
+
+
+
     public List<PlanDetail> getPlanDetailList() {
         return planDetailList;
     }

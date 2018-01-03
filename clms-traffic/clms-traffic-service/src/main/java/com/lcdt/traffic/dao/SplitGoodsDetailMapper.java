@@ -54,5 +54,8 @@ public interface SplitGoodsDetailMapper {
     int batchAddSplitGoodsDetail(List<SplitGoodsDetail> list);
 
 
+    List<SplitGoodsDetail> selectBySplitGoodsId(Long splitGoodsId, Long companyId, Short isDeleted);
+
+
 
 }

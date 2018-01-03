@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Created by yangbinq on 2018/1/2.
- *  Desc: 派车
+ *  Desc: 竞价派车
  */
 public class SplitVehicleDto implements java.io.Serializable {
 

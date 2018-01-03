@@ -365,9 +365,6 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         snatchGoods.setCreateDate(dt);
         snatchGoods.setUpdateTime(dt);
         snatchGoods.setOfferDate(dt);//报价时间
-        snatchGoods.setCarrierCollectionIds(waybillPlan.getCarrierCollectionIds()); //承运商组
-        snatchGoods.setCarrierCollectionNames(waybillPlan.getCarrierCollectionNames());
-        snatchGoods.setGroupId(waybillPlan.getGroupId()); //所属项目组
         snatchGoods.setIsDeleted((short)0);
         snatchGoods.setIsUsing(ConstantVO.SNATCH_GOODS_USING_DOING);
         int flag1 = 1,flag2 =1 ;
@@ -491,8 +488,14 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 splitRemainAmount = splitRemainAmount + obj.getRemainAmount();//统计派单剩余数量（国为竞价是一次派单所以这块可以循环统计，否则要取最大ID的剩余数）
             }
         }
+        boolean isComplete = false; //就改口派完
         if (sumAmount>splitRemainAmount) {
             throw new RuntimeException("本次派车总数量："+sumAmount+"，剩余待派数量："+splitRemainAmount+"，派车失败！");
+        } else {
+            if(sumAmount-splitRemainAmount==0) {
+                isComplete = true;
+            }
+
         }
 
 
@@ -503,6 +506,8 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             for(SplitGoodsDetail obj : splitGoodsDetails) {
                 obj.setRemainAmount(obj.getRemainAmount() - sumAmount); //剩余=原剩余-本次派车数
                 splitGoodsDetailMapper.updateByPrimaryKey(obj);
+            }
+            if (isComplete) { //
             }
         }
         return flag;

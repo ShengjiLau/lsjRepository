@@ -44,4 +44,8 @@ public interface SnatchGoodsMapper {
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
     int updateByPrimaryKey(SnatchGoods record);
+
+
+
+    List<SnatchGoods> selectByWaybillPlanId(Long waybillPlanId);
 }

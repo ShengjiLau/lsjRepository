@@ -1,9 +1,20 @@
 package com.lcdt.traffic.web.controller.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.dao.SnatchGoodsMapper;
+import com.lcdt.traffic.dao.TransportWayItemsMapper;
+import com.lcdt.traffic.dto.BindingSplitDto;
+import com.lcdt.traffic.dto.BindingSplitParamsDto;
+import com.lcdt.traffic.exception.WaybillPlanException;
+import com.lcdt.traffic.model.SnatchGoods;
 import com.lcdt.traffic.model.SplitGoods;
+import com.lcdt.traffic.model.TransportWayItems;
+import com.lcdt.traffic.model.WaybillPlan;
+import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.service.SplitGoodsService;
 import com.lcdt.traffic.web.dto.SplitGoodsParamsDto;
+import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,19 +34,30 @@ import java.util.List;
 @Api(value = "派单",description = "派单接口")
 public class SplitGoodsApi {
 
-
     @Autowired
     private SplitGoodsService splitGoodsService;
 
+    @Autowired
+    private PlanService planService;
+
+    @Autowired
+    private SnatchGoodsMapper snatchGoodsMapper; //抢单
+
+    @Autowired
+    private TransportWayItemsMapper transportWayItemsMapper; //运输项目
 
 
-    @ApiOperation("派单-信息拉取")
-    @RequestMapping(value = "/splitGoodsLoad",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_load')")
-    public String splitGoodsLoad(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+
+
+    @ApiOperation("派单-直派-信息拉取")
+    @RequestMapping(value = "/splitGoodsLoad4Direct",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_load_4_direct')")
+    public String splitGoodsLoad4Direct(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
 
         return  null;
     }
+
+
 
     @ApiOperation(value = "派单-直派")
     @RequestMapping(value = "/splitGoods4Direct",method = RequestMethod.POST)
@@ -43,8 +65,73 @@ public class SplitGoodsApi {
     public String splitGoods4Direct(@ApiParam(value = "派单详细信息", required = true) @RequestBody SplitGoodsParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
-        splitGoodsService.splitGoods4Direct(dto,loginUser,companyId);
-        return null;
+        int flag = splitGoodsService.splitGoods4Direct(dto,loginUser,companyId);
+        JSONObject jsonObject = new JSONObject();
+        String message = null;
+        int code = -1;
+        if (flag>0) {
+            code = 0;
+        } else {
+            message = "操作失败，请重试！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
     }
+
+
+
+    @ApiOperation("派单-竞价-信息拉取")
+    @RequestMapping(value = "/splitGoodsLoad4Binding",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_load_4_binding')")
+    public BindingSplitDto splitGoodsLoad4Binding(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        WaybillParamsDto dto = new WaybillParamsDto();
+        dto.setCompanyId(companyId);
+        dto.setWaybillPlanId(waybillPlanId);
+        WaybillPlan waybillPlan = planService.loadWaybillPlan(dto);
+        BindingSplitDto rdto = new BindingSplitDto();
+        rdto.setWaybillPlan(waybillPlan);//计划划
+        List<SnatchGoods> list = snatchGoodsMapper.selectByWaybillPlanId(waybillPlanId);
+        rdto.setSnatchGoodsList(list);//抢单
+        List<TransportWayItems> transportWayItemsList = transportWayItemsMapper.selectByWaybillPlanId(waybillPlanId);
+        rdto.setTransportWayItemsList(transportWayItemsList); //输入项目
+        return  rdto;
+    }
+
+
+
+
+
+    @ApiOperation(value = "派单-竞价")
+    @RequestMapping(value = "/splitGoods4Bidding",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_4_bidding')")
+    public String splitGoods4Bidding(@RequestBody BindingSplitParamsDto dto) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+
+
+
+
+
+
+
+
+
+        int flag = 0;
+        JSONObject jsonObject = new JSONObject();
+        String message = null;
+        int code = -1;
+        if (flag>0) {
+            code = 0;
+        } else {
+            message = "操作失败，请重试！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
+    }
+
+
 
 }
