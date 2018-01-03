@@ -2,13 +2,16 @@ package com.lcdt.traffic.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.service.WaybillService;
+import com.lcdt.traffic.util.ClmsBeanUtil;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.WaybillCustListParamsDto;
 import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillOwnListParamsDto;
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -138,11 +141,34 @@ public class WaybillApi {
                                                      @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
-        dto.setCompanyId(companyId);
-        PageInfo pageInfo = new PageInfo();
-        pageInfo.setPageNum(pageNo);
-        pageInfo.setPageSize(pageSize);
-        PageInfo<List<Waybill>> listPageInfo = waybillService.queryOwnWaybillList(dto, pageInfo);
+        //组权限信息
+        StringBuffer sb = new StringBuffer();
+        if (dto.getGroupId()!=null&&dto.getGroupId()>0) {//传业务组，查这个组帮定的客户
+            sb.append(" find_in_set('"+dto.getGroupId()+"',group_id)"); //项目组id
+        } else {
+            //没传组，查这个用户所有组帮定的客户
+
+            List<Group> groupList = SecurityInfoGetter.groups();
+            if(groupList!=null&&groupList.size()>0){
+                sb.append("(");
+                for(int i=0;i<groupList.size();i++) {
+                    Group group = groupList.get(i);
+                    sb.append(" find_in_set('"+group.getGroupId()+"',group_id)"); //所有项目组ids
+                    if(i!=groupList.size()-1){
+                        sb.append(" or ");
+                    }
+                }
+                sb.append(")");
+            }
+
+        }
+        Map map=ClmsBeanUtil.beanToMap(dto);
+        map.put("companyId",companyId);
+        map.put("pageNo",pageNo);
+        map.put("pageSize",pageSize);
+        map.put("isDeleted",0);
+        map.put("groupIds",sb.toString());
+        PageInfo<List<Waybill>> listPageInfo = waybillService.queryOwnWaybillList(map);
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         return pageBaseDto;
     }
@@ -155,11 +181,35 @@ public class WaybillApi {
                                                           @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
-        dto.setCompanyId(companyId);
-        PageInfo pageInfo = new PageInfo();
-        pageInfo.setPageNum(pageNo);
-        pageInfo.setPageSize(pageSize);
-        PageInfo<List<Waybill>> listPageInfo = waybillService.queryCustomerWaybillList(dto, pageInfo);
+
+        //组权限信息
+        StringBuffer sb = new StringBuffer();
+        if (dto.getGroupId()!=null&&dto.getGroupId()>0) {//传业务组，查这个组帮定的客户
+            sb.append(" find_in_set('"+dto.getGroupId()+"',group_ids)"); //客户表
+        } else {
+            //没传组，查这个用户所有组帮定的客户
+
+            List<Group> groupList = SecurityInfoGetter.groups();
+            if(groupList!=null&&groupList.size()>0){
+                sb.append("(");
+                for(int i=0;i<groupList.size();i++) {
+                    Group group = groupList.get(i);
+                    sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)"); //客户表
+                    if(i!=groupList.size()-1){
+                        sb.append(" or ");
+                    }
+                }
+                sb.append(")");
+            }
+
+        }
+        Map map= ClmsBeanUtil.beanToMap(dto);
+        map.put("companyId",companyId);
+        map.put("pageNo",pageNo);
+        map.put("pageSize",pageSize);
+        map.put("isDeleted",0);
+        map.put("groupIds",sb.toString());
+        PageInfo<List<Waybill>> listPageInfo = waybillService.queryCustomerWaybillList(map);
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         return pageBaseDto;
     }

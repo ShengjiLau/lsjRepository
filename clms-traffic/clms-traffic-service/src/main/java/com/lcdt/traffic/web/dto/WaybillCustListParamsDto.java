@@ -27,8 +27,13 @@ public class WaybillCustListParamsDto {
     private String goodsName;
     @ApiModelProperty(value = "运单来源")
     private String waybillSource;
-    @ApiModelProperty(value = "企业id", hidden = true)
-    private Long companyId;
+    @ApiModelProperty(value = "司机姓名（门卫出库管理时的查询条件）")
+    private String driverInfo;
+    @ApiModelProperty(value = "开始计划发货时间（门卫出库管理时的查询条件）")
+    private String startStartDate;
+    @ApiModelProperty(value = "结束计划发货时间（门卫出库管理时的查询条件）")
+    private String endStartDate;
+
 
     public String getWaybillCode() {
         return waybillCode;
@@ -110,11 +115,27 @@ public class WaybillCustListParamsDto {
         this.waybillSource = waybillSource;
     }
 
-    public Long getCompanyId() {
-        return companyId;
+    public String getDriverInfo() {
+        return driverInfo;
     }
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+    public void setDriverInfo(String driverInfo) {
+        this.driverInfo = driverInfo;
+    }
+
+    public String getStartStartDate() {
+        return startStartDate;
+    }
+
+    public void setStartStartDate(String startStartDate) {
+        this.startStartDate = startStartDate;
+    }
+
+    public String getEndStartDate() {
+        return endStartDate;
+    }
+
+    public void setEndStartDate(String endStartDate) {
+        this.endStartDate = endStartDate;
     }
 }

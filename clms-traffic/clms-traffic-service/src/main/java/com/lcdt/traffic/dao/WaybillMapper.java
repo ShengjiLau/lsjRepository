@@ -2,7 +2,6 @@ package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillDao;
-import com.lcdt.traffic.vo.WaybillVO;
 
 import java.util.List;
 import java.util.Map;
@@ -76,17 +75,17 @@ public interface WaybillMapper {
     WaybillDao selectCustomerWaybillByIdAndCarrierCompanyId(Waybill waybill);
     /**
      * 根据查询条件查询我的运单
-     * @param waybillVO
+     * @param map
      * @return
      */
-    List<WaybillDao> selectOwnByCondition(WaybillVO waybillVO);
+    List<WaybillDao> selectOwnByCondition(Map map);
 
     /**
      * 查询条件查询客户运单
-     * @param waybillVO
+     * @param map
      * @return
      */
-    List<WaybillDao> selectCustomerByCondition(WaybillVO waybillVO);
+    List<WaybillDao> selectCustomerByCondition(Map map);
 
     /**
      * 批量修改我的运单的状态

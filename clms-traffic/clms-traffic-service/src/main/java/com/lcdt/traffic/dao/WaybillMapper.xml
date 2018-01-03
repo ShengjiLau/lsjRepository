@@ -385,7 +385,7 @@
     where id = #{id,jdbcType=BIGINT} and carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
   </select>
 
-  <select id="selectOwnByCondition" parameterType="com.lcdt.traffic.vo.WaybillVO" resultMap="BaseWaybillDaoMap">
+  <select id="selectOwnByCondition" parameterType="java.util.Map" resultMap="BaseWaybillDaoMap">
     select id, waybill_plan_id,split_goods_id, waybill_code, waybill_status,waybill_source, group_id, group_name, driver_id,
     driver_name, driver_phone, vechicle_id, vechicle_num, customer_id, customer_name,
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
@@ -401,11 +401,14 @@
       <if test="waybillCode!=null and waybillCode!=''">
         and waybill_code = #{waybillCode,jdbcType=VARCHAR}
       </if>
-      <if test="waybillStatus!=null and waybillStatus!='' and waybillStatus>0">
+      <if test="waybillStatus!=null and waybillStatus!=''">
         and waybill_status = #{waybillStatus,jdbcType=SMALLINT}
       </if>
-      <if test="groupId!=null and groupId!='' and groupId>0">
-        and group_id = #{groupId,jdbcType=BIGINT}
+      <if test="groupIds!=null and groupIds!=''">
+        and  ${groupIds}
+      </if>
+      <if test="groupIds==null or groupIds==''">
+        and  group_id is null
       </if>
       <if test="receiveProvince!=null and receiveProvince!=''">
         and receive_province = #{receiveProvince,jdbcType=VARCHAR}
@@ -413,8 +416,8 @@
       <if test="receiveCity!=null and receiveCity!=''">
         and receive_city = #{receiveCity,jdbcType=VARCHAR}
       </if>
-      <if test="receiveCounty!=null and receiveCounty!=''">
-        and receive_county = #{receiveCounty,jdbcType=VARCHAR}
+      <if test="receiveCity!=null and receiveCity!=''">
+        and receive_city = #{receiveCity,jdbcType=VARCHAR}
       </if>
       <if test="startCreateDate!=null and startCreateDate!=''">
         and create_date &gt;= #{startCreateDate,jdbcType=VARCHAR}
@@ -425,13 +428,22 @@
       <if test="goodsName != null and goodsName!=''">
         and id in (select waybill_id from t_waybill_items where goods_name like concat('%',#{goodsName,jdbcType=VARCHAR},'%'))
       </if>
+      <if test="driverInfo!=null and driverInfo!=''">
+        and (driver_name like concat('%',#{driverInfo,jdbcType=VARCHAR},'%') or driver_phone like concat('%',#{driverInfo,jdbcType=VARCHAR},'%') or vechicle_num like concat('%',#{driverInfo,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="startStartDate!=null and startStartDate!=''">
+        and start_date &gt;= #{startStartDate,jdbcType=VARCHAR}
+      </if>
+      <if test="endStartDate!=null and endStartDate!=''">
+        and start_date &lt;= #{endStartDate,jdbcType=VARCHAR}
+      </if>
       <if test="isDeleted!=null and isDeleted!=''">
-        and is_deleted &lt;= #{isDeleted,jdbcType=VARCHAR}
+        and is_deleted = #{isDeleted,jdbcType=VARCHAR}
       </if>
     </where>
     order by id desc
   </select>
-  <select id="selectCustomerByCondition" parameterType="com.lcdt.traffic.vo.WaybillVO" resultMap="BaseWaybillDaoMap">
+  <select id="selectCustomerByCondition" parameterType="java.util.Map" resultMap="BaseWaybillDaoMap">
     select id, waybill_plan_id, split_goods_id,waybill_code, waybill_status,waybill_source, group_id, group_name, driver_id,
     driver_name, driver_phone, vechicle_id, vechicle_num, customer_id, customer_name,
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
@@ -443,15 +455,18 @@
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted
     from t_waybill
-    <where>carrier_company_id = #{carrier_company_id,jdbcType=BIGINT}
+    <where>carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
+      <if test="companyIds!=null">
+        and ${companyIds}
+      </if>
+      <if test="companyIds==null">
+        and company_id is null
+      </if>
       <if test="waybillCode!=null and waybillCode!=''">
         and waybill_code = #{waybillCode,jdbcType=VARCHAR}
       </if>
-      <if test="waybillStatus!=null and waybillStatus!='' and waybillStatus>0">
+      <if test="waybillStatus!=null and waybillStatus!=''">
         and waybill_status = #{waybillStatus,jdbcType=SMALLINT}
-      </if>
-      <if test="groupId!=null and groupId!='' and groupId>0">
-        and group_id = #{groupId,jdbcType=BIGINT}
       </if>
       <if test="receiveProvince!=null and receiveProvince!=''">
         and receive_province = #{receiveProvince,jdbcType=VARCHAR}
@@ -473,6 +488,21 @@
       </if>
       <if test="goodsName != null and goodsName!=''">
         and id in (select waybill_id from t_waybill_items where goods_name like concat('%',#{goodsName,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="driverInfo!=null and driverInfo!=''">
+        and (driver_name like concat('%',#{driverInfo,jdbcType=VARCHAR},'%') or driver_phone like concat('%',#{driverInfo,jdbcType=VARCHAR},'%') or vechicle_num like concat('%',#{driverInfo,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="startStartDate!=null and startStartDate!=''">
+        and start_date &gt;= #{startStartDate,jdbcType=VARCHAR}
+      </if>
+      <if test="endStartDate!=null and endStartDate!=''">
+        and start_date &lt;= #{endStartDate,jdbcType=VARCHAR}
+      </if>
+      <if test="isDeleted!=null and isDeleted!=''">
+        and is_deleted = #{isDeleted,jdbcType=VARCHAR}
+      </if>
+      <if test="isDeleted!=null and isDeleted!=''">
+        and is_deleted = #{isDeleted,jdbcType=VARCHAR}
       </if>
     </where>
     order by id desc
