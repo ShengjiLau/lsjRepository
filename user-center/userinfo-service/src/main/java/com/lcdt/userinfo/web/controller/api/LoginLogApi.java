@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class LoginLogApi {
     LoginLogMapper dao;
 
     @RequestMapping(value = "/loginlog",method = RequestMethod.GET)
-    public PageResultDto companyUserLogs(@ApiParam(required = true) Integer pageNo, @ApiParam(required = true) Integer pageSize){
+    public PageResultDto companyUserLogs(@ApiParam(required = true)@RequestParam Integer pageNo, @RequestParam @ApiParam(required = true) Integer pageSize){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
         List<LoginLog> loginLogs = dao.selectByCompanyId(companyId);
