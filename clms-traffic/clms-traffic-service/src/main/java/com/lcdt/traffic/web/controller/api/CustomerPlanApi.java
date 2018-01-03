@@ -5,12 +5,15 @@ import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dto.SnatchOfferDto;
+import com.lcdt.traffic.dto.SplitVehicleDto;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.SnatchGoods;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.CustomerPlanService;
 import com.lcdt.traffic.service.PlanService;
+import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
+import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import com.lcdt.traffic.web.dto.WaybillPlanListParamsDto;
 import com.lcdt.userinfo.model.Group;
@@ -40,6 +43,8 @@ public class CustomerPlanApi {
 
     @Autowired
     private PlanService planService;
+
+
 
 
     @ApiOperation("客户计划-列表-竞价")
@@ -538,5 +543,43 @@ public class CustomerPlanApi {
         jsonObject.put("code",code);
         return jsonObject.toString();
     }
+
+
+
+    @ApiOperation("客户计划-派车")
+    @RequestMapping(value = "/customerPlanSplitVehicle",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_split_vehicle')")
+    public String customerPlanSplitVehicle(@RequestBody SplitVehicleDto dto) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User user = SecurityInfoGetter.getUser();
+        WaybillDto waybillDto = new WaybillDto();
+        waybillDto.setCreateId(user.getUserId());
+        waybillDto.setCreateName(user.getRealName());
+        waybillDto.setCarrierCompanyId(companyId);
+        waybillDto.setDriverId(dto.getDriverId());//司机ID
+        waybillDto.setDriverName(dto.getDriverName());
+        waybillDto.setDriverPhone(dto.getDriverPhone());
+        waybillDto.setVechicleId(dto.getVehicleId());
+        waybillDto.setVechicleNum(dto.getVechicleNum());//车牌
+        waybillDto.setWaybillRemark(dto.getWaybillRemark());
+
+        int flag = customerPlanService.customerPlanSplitVehicle(dto, waybillDto);
+        JSONObject jsonObject = new JSONObject();
+        String message = null;
+        int code = -1;
+        if (flag>0) {
+            code = 0;
+        } else {
+            message = "操作失败，请重试！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
+    }
+
+
+
+
+
 
 }
