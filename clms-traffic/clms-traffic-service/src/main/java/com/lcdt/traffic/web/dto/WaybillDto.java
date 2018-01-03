@@ -14,6 +14,8 @@ public class WaybillDto {
 
     private Long waybillPlanId;
 
+    private Long splitGoodsId;
+
     private String waybillCode;
 
     private Short waybillStatus;
@@ -150,6 +152,14 @@ public class WaybillDto {
 
     public void setWaybillPlanId(Long waybillPlanId) {
         this.waybillPlanId = waybillPlanId;
+    }
+
+    public Long getSplitGoodsId() {
+        return splitGoodsId;
+    }
+
+    public void setSplitGoodsId(Long splitGoodsId) {
+        this.splitGoodsId = splitGoodsId;
     }
 
     public String getWaybillCode() {
