@@ -6,13 +6,13 @@ import java.util.List;
 
 /**
  * Created by yangbinq on 2018/1/2.
- *  Desc: 抢购报价
+ *  Desc: 抢单报价
  */
 public class SnatchOfferDto implements java.io.Serializable {
 
     private Long waybillPlanId;
     private List<PlanDetail> PlanDetailList; //计划详细
-    private Long companyId; //获取企业ID
+    private Long companyId; //获取(计划)企业ID
 
 
     public Long getWaybillPlanId() {

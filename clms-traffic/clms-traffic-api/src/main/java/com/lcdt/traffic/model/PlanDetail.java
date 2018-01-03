@@ -192,6 +192,10 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
     private String offerRemark;
 
 
+    //待派数量(竞价派车)
+    private Float allotAmount;
+
+
     public Object getSplitGoodsDetailObj() {
         return splitGoodsDetailObj;
     }
@@ -707,5 +711,13 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
 
     public void setAllotAmountTotal(Float allotAmountTotal) {
         this.allotAmountTotal = allotAmountTotal;
+    }
+
+    public Float getAllotAmount() {
+        return allotAmount;
+    }
+
+    public void setAllotAmount(Float allotAmount) {
+        this.allotAmount = allotAmount;
     }
 }

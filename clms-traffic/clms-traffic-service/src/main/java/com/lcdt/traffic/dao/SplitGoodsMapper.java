@@ -27,9 +27,15 @@ public interface SplitGoodsMapper {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    SplitGoods selectByPrimaryKey(Long splitGoodsId);
+    /***
+     * 根据派单ID、企业ID
+     * @param splitGoodsId
+     * @param companyId
+     * @return
+     */
+    SplitGoods selectByPrimaryKey(Long splitGoodsId, Long companyId);
 
-    SplitGoods selectByWaybillPlanId(Long waybillPlanId, Long companyId, Short isDeleted);
+    List<SplitGoods> selectByWaybillPlanId(Long waybillPlanId, Long companyId, Short isDeleted);
 
 
     /**

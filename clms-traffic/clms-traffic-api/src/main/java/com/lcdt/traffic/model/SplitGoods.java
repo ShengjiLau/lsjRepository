@@ -3,6 +3,7 @@ package com.lcdt.traffic.model;
 import com.lcdt.converter.ResponseData;
 
 import java.util.Date;
+import java.util.List;
 
 public class SplitGoods implements java.io.Serializable,ResponseData {
     /**
@@ -168,6 +169,19 @@ public class SplitGoods implements java.io.Serializable,ResponseData {
     private Long companyId;
 
     private Long groupId;
+
+
+    public List<SplitGoodsDetail> getSplitGoodsDetailList() {
+        return splitGoodsDetailList;
+    }
+
+    public void setSplitGoodsDetailList(List<SplitGoodsDetail> splitGoodsDetailList) {
+        this.splitGoodsDetailList = splitGoodsDetailList;
+    }
+
+    //派单详细列表
+    private List<SplitGoodsDetail> splitGoodsDetailList;
+
 
 
     public Long getGroupId() {
