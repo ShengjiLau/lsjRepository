@@ -8,9 +8,11 @@ import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.PlanService;
+import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
+import com.lcdt.userinfo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +41,8 @@ public class PlanServiceImpl implements PlanService {
     @Autowired
     private PlanLeaveMsgMapper planLeaveMsgMapper; //计划留言
 
+    @Autowired
+    private WaybillService waybillService;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -324,13 +328,35 @@ public class PlanServiceImpl implements PlanService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Integer planDetailDelete(Long planDetailId, Long companyId) {
+    public Integer  planDetailDelete(Long planDetailId, Long companyId) {
         return planDetailMapper.deleteByPrimaryKey(planDetailId,companyId);
     }
 
+    @Override
+    public Integer planCancel(Long waybillPlanId, Long companyId, User user) {
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(waybillPlanId, companyId, (short)0);
+        if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
+        if (waybillPlan.getPlanStatus()==ConstantVO.PLAN_STATUS_COMPLETED) {
+            throw new WaybillPlanException("计划已完成，不能取消！");
+        }
 
 
 
+
+
+
+
+
+
+
+
+        Date dt = new Date();
+        waybillPlan.setUpdateTime(dt);
+        waybillPlan.setUpdateId(user.getUserId());
+        waybillPlan.setUpdateName(user.getRealName());
+        waybillPlanMapper.updateByPrimaryKey(waybillPlan);
+        return null;
+    }
 
 
 }
