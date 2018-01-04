@@ -299,6 +299,25 @@ public class OwnPlanApi {
 
 
 
+    @ApiOperation("计划--取消")
+    @RequestMapping(value = "/cancelOwnPlan",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_cancel_own_plan')")
+    public String cancelOwnPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+        User loginUser = SecurityInfoGetter.getUser();
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        int flag = planService.planCancel(waybillPlanId,companyId,loginUser);
+        JSONObject jsonObject = new JSONObject();
+        String message = null;
+        int code = -1;
+        if (flag>0) {
+            code = 0;
+        } else {
+            message = "操作失败，请重试！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
+    }
 
 
 
