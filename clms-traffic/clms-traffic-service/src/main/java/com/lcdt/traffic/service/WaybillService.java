@@ -90,5 +90,10 @@ public interface WaybillService {
      */
     int modifyCustomerWaybillStatus(Map map);
 
-
+    /**
+     * 验证是否已经存在已卸货或者已完成的运单,返回运单列表（传companyId,waybillPlanId,isDeleted)
+     * @param map
+     * @return
+     */
+    PageInfo queryPlannedWaybillList(Map map);
 }
