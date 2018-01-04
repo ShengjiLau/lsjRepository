@@ -14,6 +14,29 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-response-converter</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.10</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.yicomm</groupId>
             <artifactId>alipaysdk</artifactId>
             <version>1.0.0</version>

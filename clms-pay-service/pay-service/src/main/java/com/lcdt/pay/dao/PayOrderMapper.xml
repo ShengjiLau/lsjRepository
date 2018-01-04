@@ -55,4 +55,13 @@
     WHERE order_no = #{orderNo,jdbcType=VARCHAR}
 
   </select>
+
+  <select id="selectByCompanyId" resultMap="BaseResultMap">
+
+      select order_id, order_type, order_amount, create_time, order_pay_user_id, order_pay_company_id,
+    order_status, order_no
+    from pay_order
+    WHERE order_pay_company_id = #{companyId,jdbcType=BIGINT}
+  </select>
+
 </mapper>

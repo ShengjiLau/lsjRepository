@@ -10,13 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class TopUpServiceImpl implements TopupService{
 
     @Autowired
     PayOrderMapper orderMapper;
-
 
     @Override
     public PayOrder createTopUpOrder(Integer money, Long companyId,Long userId) {
@@ -30,8 +31,15 @@ public class TopUpServiceImpl implements TopupService{
         return topUpPayOrder;
     }
 
+
+    public List<PayOrder> topUpOrderList(Long companyId){
+        List<PayOrder> payOrders = orderMapper.selectByCompanyId(companyId);
+        return payOrders;
+    }
+
+
     @Override
     public void doTopUp(PayOrder payOrder) {
-
+        
     }
 }

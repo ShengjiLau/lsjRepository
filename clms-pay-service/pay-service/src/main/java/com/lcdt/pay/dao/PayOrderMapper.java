@@ -17,4 +17,7 @@ public interface PayOrderMapper {
 
     List<PayOrder> selectByOrderNo(String orderNo);
 
+
+    List<PayOrder> selectByCompanyId(Long companyId);
+
 }
