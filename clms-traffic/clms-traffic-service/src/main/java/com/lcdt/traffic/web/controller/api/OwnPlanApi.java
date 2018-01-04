@@ -305,11 +305,11 @@ public class OwnPlanApi {
     public String cancelOwnPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
         User loginUser = SecurityInfoGetter.getUser();
         Long companyId = SecurityInfoGetter.getCompanyId();
-        int flag = planService.planCancel(waybillPlanId,companyId,loginUser);
+        Integer flag = planService.ownPlanCancel(waybillPlanId,companyId,loginUser);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
-        if (flag>0) {
+        if (flag==1) {
             code = 0;
         } else {
             message = "操作失败，请重试！";

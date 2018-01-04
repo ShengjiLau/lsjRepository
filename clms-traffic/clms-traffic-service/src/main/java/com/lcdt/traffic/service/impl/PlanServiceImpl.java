@@ -2,8 +2,6 @@ package com.lcdt.traffic.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.customer.model.Customer;
-import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
@@ -333,30 +331,35 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    public Integer planCancel(Long waybillPlanId, Long companyId, User user) {
+    public Integer ownPlanCancel(Long waybillPlanId, Long companyId, User user) {
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(waybillPlanId, companyId, (short)0);
         if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
         if (waybillPlan.getPlanStatus()==ConstantVO.PLAN_STATUS_COMPLETED) {
             throw new WaybillPlanException("计划已完成，不能取消！");
         }
-
-
-
-
-
-
-
-
-
-
-
         Date dt = new Date();
+        //验证是否已经存在已卸货或者已完成的运单，如果存在则提示：该计划存在已经卸货或者完成的运单，不可取消！
+        Map map = new HashMap<String,String>();
+        map.put("companyId", companyId);
+        map.put("waybillPlanId",waybillPlanId);
+        map.put("isDeleted",0);
+        PageInfo pg = waybillService.queryPlannedWaybillList(map);
+        if (pg.getTotal()>0) {
+            throw new WaybillPlanException("该计划存在已经卸货或者完成的运单，不可取消！");
+        } else {
+            map.put("waybillStatus",ConstantVO.WAYBILL_STATUS_HAVE_CANCEL);
+            map.put("updateId",user.getUserId());
+            map.put("updateName",user.getRealName());
+            waybillService.modifyOwnWaybillStatusByWaybillPlanId(map);
+        }
+        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_CANCEL);
         waybillPlan.setUpdateTime(dt);
         waybillPlan.setUpdateId(user.getUserId());
         waybillPlan.setUpdateName(user.getRealName());
         waybillPlanMapper.updateByPrimaryKey(waybillPlan);
-        return null;
+        return 1;
     }
 
 
 }
+
