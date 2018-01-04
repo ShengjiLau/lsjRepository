@@ -93,7 +93,7 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_waybill (waybill_plan_id,split_goods_id, waybill_code, waybill_status, waybill_source
+    insert into t_waybill (waybill_plan_id,split_goods_id, waybill_code, waybill_status, waybill_source,
       group_id, group_name, driver_id, 
       driver_name, driver_phone, vechicle_id, 
       vechicle_num, customer_id, customer_name, 
