@@ -404,6 +404,9 @@
       <if test="waybillStatus!=null and waybillStatus!=''">
         and waybill_status = #{waybillStatus,jdbcType=SMALLINT}
       </if>
+      <if test="waybillPlanId!=null and waybillPlanId!=''">
+        and waybill_plan_id = #{waybillPlanId,jdbcType=SMALLINT}
+      </if>
       <if test="groupIds!=null and groupIds!=''">
         and  ${groupIds}
       </if>
@@ -524,5 +527,37 @@
     update_name = #{updateName,jdbcType=VARCHAR},
     update_date = CURRENT_TIMESTAMP
     where id in ( #{waybillIds,jdbcType=VARCHAR} ) and carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectPlannedWaybill" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select id, waybill_plan_id,split_goods_id, waybill_code, waybill_status,waybill_source, group_id, group_name, driver_id,
+    driver_name, driver_phone, vechicle_id, vechicle_num, customer_id, customer_name,
+    customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
+    send_city, send_county, send_address, receive_man, receive_phone, receive_province,
+    receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
+    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
+    attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
+    attachment5, attachment5_name, waybill_remark, carrier_company_id, company_id, pub_date,
+    finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
+    update_id, update_name, update_date, is_deleted
+    from t_waybill
+    <where>company_id = #{companyId,jdbcType=BIGINT} and (waybill_status = 5 or waybill_status=7)
+      <if test="waybillPlanId!=null and waybillPlanId!=''">
+        and waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT}
+      </if>
+      <if test="isDeleted!=null and isDeleted!=''">
+        and is_deleted = #{isDeleted,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by id desc
+  </select>
+
+  <update id="updateOwnWaybillStatusByWaybillPlanId" parameterType="java.util.Map">
+    update t_waybill
+    set waybill_status = #{waybillStatus,jdbcType=SMALLINT},
+    update_id = #{updateId,jdbcType=BIGINT},
+    update_name = #{updateName,jdbcType=VARCHAR},
+    update_date = CURRENT_TIMESTAMP
+    where waybill_plan_id = ( #{waybillPlanId,jdbcType=BIGINT} ) and company_id = #{companyId,jdbcType=BIGINT}
   </update>
 </mapper>

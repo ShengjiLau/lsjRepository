@@ -277,5 +277,10 @@ public class WaybillServiceImpl implements WaybillService {
         return page;
     }
 
+    @Override
+    public int modifyOwnWaybillStatusByWaybillPlanId(Map map) {
+        return waybillMapper.updateOwnWaybillStatusByWaybillPlanId(map);
+    }
+
 
 }

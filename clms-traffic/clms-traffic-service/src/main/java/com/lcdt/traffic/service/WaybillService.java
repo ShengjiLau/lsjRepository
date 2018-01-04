@@ -96,4 +96,11 @@ public interface WaybillService {
      * @return
      */
     PageInfo queryPlannedWaybillList(Map map);
+
+    /**
+     * 根据计划id更新运单状态（参数：waybillStatus，updateId，updateName，waybill_plan_id，companyId）
+     * @param map
+     * @return
+     */
+    int modifyOwnWaybillStatusByWaybillPlanId(Map map);
 }

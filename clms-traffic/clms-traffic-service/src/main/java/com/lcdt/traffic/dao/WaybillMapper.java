@@ -100,4 +100,18 @@ public interface WaybillMapper {
      * @return
      */
     int updateCustomerWaybillStatus(Map map);
+
+    /**
+     * 计划取消时查询此计划下是否存在已卸货或者已完成的运单
+     * @param map
+     * @return
+     */
+    List<Waybill> selectPlannedWaybill(Map map);
+
+    /**
+     * 根据计划id更新运单状态（参数：waybillStatus，updateId，updateName，waybill_plan_id，companyId）
+     * @param map
+     * @return
+     */
+    int updateOwnWaybillStatusByWaybillPlanId(Map map);
 }
