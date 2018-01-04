@@ -85,6 +85,7 @@
     <collection property="splitGoodsList" column="{waybill_plan_id=waybill_plan_id,company_id=company_id,is_deleted=0}"
                 ofType="com.lcdt.traffic.model.SplitGoods" javaType="ArrayList"
                 select="com.lcdt.traffic.dao.SplitGoodsMapper.selectByCustomerId" />
+
     <!--运单记录-->
   </resultMap>
 

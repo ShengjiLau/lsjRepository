@@ -73,12 +73,6 @@ public class PlanServiceImpl implements PlanService {
 
                             SplitGoods splitGoods = new SplitGoods(); //派单
                             splitGoods.setWaybillPlanId(waybillPlan.getWaybillPlanId());
-                            splitGoods.setCarrierType(waybillPlan.getCarrierType());
-                            splitGoods.setCarrierCollectionIds(waybillPlan.getCarrierCollectionIds());//承运商ID
-                            splitGoods.setCarrierCollectionNames(waybillPlan.getCarrierCollectionNames());//承运商
-                            splitGoods.setCarrierPhone(waybillPlan.getCarrierPhone());//司机电话
-                            splitGoods.setCarrierVehicle(waybillPlan.getCarrierVehicle());//车号
-                            splitGoods.setTransportWay(waybillPlan.getTransportWay());//承运方式
                             splitGoods.setSplitRemark("发布生成...");
                             splitGoods.setCreateId(dto.getCreateId());
                             splitGoods.setCreateName(dto.getCreateName());
@@ -89,7 +83,6 @@ public class PlanServiceImpl implements PlanService {
                             splitGoods.setCompanyId(dto.getCompanyId());
                             splitGoods.setCarrierCompanyId(waybillPlan.getCarrierCompanyId());
                             splitGoods.setIsDeleted((short)0);
-                            splitGoods.setGroupId(waybillPlan.getGroupId());
                             splitGoodsMapper.insert(splitGoods);
 
                             List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
@@ -180,12 +173,6 @@ public class PlanServiceImpl implements PlanService {
             planDetailMapper.batchUpdatePlanDetail(planDetailList);
             SplitGoods splitGoods = new SplitGoods(); //派单
             splitGoods.setWaybillPlanId(waybillPlan.getWaybillPlanId());
-            splitGoods.setCarrierType(waybillPlan.getCarrierType());
-            splitGoods.setCarrierCollectionIds(waybillPlan.getCarrierCollectionIds());//承运商ID
-            splitGoods.setCarrierCollectionNames(waybillPlan.getCarrierCollectionNames());//承运商
-            splitGoods.setCarrierPhone(waybillPlan.getCarrierPhone());//司机电话
-            splitGoods.setCarrierVehicle(waybillPlan.getCarrierVehicle());//车号
-            splitGoods.setTransportWay(waybillPlan.getTransportWay());//承运方式
             splitGoods.setSplitRemark("审批通过后生成....");
             splitGoods.setCreateId(dto.getUpdateId());
             splitGoods.setCreateName(dto.getUpdateName());
@@ -195,7 +182,6 @@ public class PlanServiceImpl implements PlanService {
             splitGoods.setUpdateTime(opDate);
             splitGoods.setCompanyId(dto.getCompanyId());
             splitGoods.setCarrierCompanyId(waybillPlan.getCarrierCompanyId());
-            splitGoods.setGroupId(waybillPlan.getGroupId());
             splitGoods.setIsDeleted((short)0);
             splitGoodsMapper.insert(splitGoods);
 

@@ -30,7 +30,7 @@ public interface PlanDetailMapper {
      */
     PlanDetail selectByPrimaryKey(Long planDetailId);
 
-    PlanDetail selectByWaybillPlanId(Long waybillPlanId, Long companyId, Short isDeleted);
+    List<PlanDetail> selectByWaybillPlanId(Long waybillPlanId, Long companyId, Short isDeleted);
 
 
 

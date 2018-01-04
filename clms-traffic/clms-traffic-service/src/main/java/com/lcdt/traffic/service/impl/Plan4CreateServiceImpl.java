@@ -130,12 +130,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
 
                     SplitGoods splitGoods = new SplitGoods(); //派单
                     splitGoods.setWaybillPlanId(vo.getWaybillPlanId());
-                    splitGoods.setCarrierType(vo.getCarrierType());
-                    splitGoods.setCarrierCollectionIds(dto.getCarrierCollectionIds());//承运商ID
-                    splitGoods.setCarrierCollectionNames(dto.getCarrierCollectionNames());//承运商
-                    splitGoods.setCarrierPhone(dto.getCarrierPhone());//司机电话
-                    splitGoods.setCarrierVehicle(dto.getCarrierVehicle());//车号
-                    splitGoods.setTransportWay(dto.getTransportWay());//承运方式
                     splitGoods.setSplitRemark("计划直接生成的...");
                     splitGoods.setCreateId(vo.getCreateId());
                     splitGoods.setCreateName(vo.getCreateName());
@@ -146,7 +140,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     splitGoods.setCompanyId(splitGoods.getCompanyId());
                     splitGoods.setCarrierCompanyId(vo.getCarrierCompanyId());
                     splitGoods.setIsDeleted((short)0);
-                    splitGoods.setGroupId(vo.getGroupId());
                     splitGoodsMapper.insert(splitGoods);
 
                     List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
