@@ -1,5 +1,6 @@
 package com.lcdt.notify;
 
+import com.lcdt.clms.security.annontion.EnableClmsSecurity;
 import com.lcdt.swagger.SwaggerConfig;
 import com.lcdt.wms.config.AliMqConfig;
 import com.lcdt.wms.config.MybatisCommonConfig;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.ImportResource;
 @SpringBootApplication
 @Import({MybatisCommonConfig.class, SwaggerConfig.class})
 @ImportResource("classpath:consumer.xml")
+@EnableClmsSecurity
 public class NotifyServiceApp {
     public static void main(String[] args) {
         SpringApplication.run(NotifyServiceApp.class, args);

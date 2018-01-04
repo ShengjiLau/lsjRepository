@@ -11,4 +11,31 @@
     and message_receive_user_id = #{userId}
     </select>
 
+
+    <update id="setReadMessage">
+      update web_message
+      set message_isread = 1
+      where message_receive_company_id = #{companyId,jdbcType=BIGINT}
+      ,message_receive_user_id = #{userId,jdbcType = BIGINT}
+      and message_id = #{messageId,jdbcType=BIGINT}
+    </update>
+
+    <select id="unreadMessageCount" resultType="Integer">
+        select count(*) from web_message
+        WHERE
+        message_receive_company_id = #{companyId,jdbcType=BIGINT}
+      and message_receive_user_id = #{userId,jdbcType = BIGINT}
+
+    </select>
+
+    <delete id="removeMessage" >
+
+        DELETE from web_message
+
+        where message_receive_company_id = #{companyId,jdbcType=BIGINT}
+      ,message_receive_user_id = #{userId,jdbcType = BIGINT}
+      and message_id = #{messageId,jdbcType=BIGINT}
+
+    </delete>
+
 </mapper>
