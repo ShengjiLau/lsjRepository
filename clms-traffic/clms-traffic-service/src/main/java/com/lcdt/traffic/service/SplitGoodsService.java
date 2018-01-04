@@ -1,5 +1,6 @@
 package com.lcdt.traffic.service;
 
+import com.lcdt.traffic.dto.BindingSplitParamsDto;
 import com.lcdt.traffic.web.dto.SplitGoodsParamsDto;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
@@ -21,6 +22,22 @@ public interface SplitGoodsService {
      * @return
      */
     Integer splitGoods4Direct(SplitGoodsParamsDto dto, User user, Long companyId);
+
+
+
+
+    /***
+     * 竞价派单-承运商
+     *
+     * @param dto -- 前端页面传来的分配对象
+     * @param user -- 当前登录用户
+     * @param companyId -- 用户所属企业ID
+     * @return
+     */
+    Integer splitGoods4Bidding(BindingSplitParamsDto dto, User user, Long companyId);
+
+
+
 
 
 }

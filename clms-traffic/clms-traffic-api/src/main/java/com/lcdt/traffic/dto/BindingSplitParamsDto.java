@@ -15,8 +15,11 @@ public class BindingSplitParamsDto implements java.io.Serializable{
 
     private Long waybillPlanId; //计划ID
     private Long snatchGoodsId; // 抢单ID
+
     private List<TransportWayItems> transportWayItemsList;//运输项目
 
+
+    private Long carrierCompanyId; //承运人企业ID
 
 
     public Long getWaybillPlanId() {
@@ -41,5 +44,13 @@ public class BindingSplitParamsDto implements java.io.Serializable{
 
     public void setTransportWayItemsList(List<TransportWayItems> transportWayItemsList) {
         this.transportWayItemsList = transportWayItemsList;
+    }
+
+    public Long getCarrierCompanyId() {
+        return carrierCompanyId;
+    }
+
+    public void setCarrierCompanyId(Long carrierCompanyId) {
+        this.carrierCompanyId = carrierCompanyId;
     }
 }

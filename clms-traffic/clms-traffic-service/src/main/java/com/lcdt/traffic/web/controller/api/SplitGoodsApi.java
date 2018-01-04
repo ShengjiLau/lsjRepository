@@ -109,16 +109,7 @@ public class SplitGoodsApi {
     public String splitGoods4Bidding(@RequestBody BindingSplitParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
-
-
-
-
-
-
-
-
-
-        int flag = 0;
+        int flag = splitGoodsService.splitGoods4Bidding(dto, loginUser, companyId);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
