@@ -5,7 +5,10 @@ import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.Plan4CreateService;
+import com.lcdt.traffic.service.WaybillService;
+import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
+import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,10 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
 
     @com.alibaba.dubbo.config.annotation.Reference
     public CustomerRpcService customerRpcService;  //客户信息
+
+
+    @Autowired
+    private WaybillService waybillService; //运单
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -123,7 +130,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         obj.setUpdateName(obj.getUpdateName());
                         obj.setUpdateTime(obj.getCreateDate());
                         obj.setCompanyId(vo.getCompanyId());
-
                         obj.setIsDeleted((short)0);
                     }
                     planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
@@ -162,11 +168,15 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         splitGoodsDetailList.add(tObj);
                     }
                     splitGoodsDetailMapper.batchAddSplitGoodsDetail(splitGoodsDetailList);
-
                     /***
                      *如果是司机需要生成运单
                      */
-
+                    if (carrierType == 2) {
+                        WaybillDto  waybillDto = PlanBO.getInstance().toWaybillItemsDto(vo,planDetailList,splitGoodsDetailList);
+                        if (null!=waybillDto) {
+                            waybillService.addWaybill(waybillDto);
+                        }
+                    }
 
                 } else { //暂存 -- 操作
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //待发布
