@@ -255,5 +255,27 @@ public class WaybillServiceImpl implements WaybillService {
         return waybillMapper.updateCustomerWaybillStatus(map);
     }
 
+    @Override
+    public PageInfo queryPlannedWaybillList(Map map) {
+        List<Waybill> resultList = null;
+        PageInfo page = null;
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+        if (map.containsKey("pageNo")) {
+            if (map.get("pageNo") != null) {
+                pageNo = (Integer) map.get("pageNo");
+            }
+        }
+        if (map.containsKey("pageSize")) {
+            if (map.get("pageSize") != null) {
+                pageSize = (Integer) map.get("pageSize");
+            }
+        }
+        PageHelper.startPage(pageNo, pageSize);
+        resultList = waybillMapper.selectPlannedWaybill(map);
+        page = new PageInfo(resultList);
+        return page;
+    }
+
 
 }
