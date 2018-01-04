@@ -12,6 +12,10 @@ public class WaybillItemsDto {
 
     private Long id;
 
+    private Long splitGoodsDetailId;
+
+    private Long planDetailId;
+
     private Long waybillId;
 
     private Long goodsId;
@@ -57,6 +61,22 @@ public class WaybillItemsDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getSplitGoodsDetailId() {
+        return splitGoodsDetailId;
+    }
+
+    public void setSplitGoodsDetailId(Long splitGoodsDetailId) {
+        this.splitGoodsDetailId = splitGoodsDetailId;
+    }
+
+    public Long getPlanDetailId() {
+        return planDetailId;
+    }
+
+    public void setPlanDetailId(Long planDetailId) {
+        this.planDetailId = planDetailId;
     }
 
     public Long getWaybillId() {

@@ -1,6 +1,7 @@
 package com.lcdt.traffic.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.github.pagehelper.Constant;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
@@ -11,6 +12,7 @@ import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillDao;
 import com.lcdt.traffic.model.WaybillItems;
 import com.lcdt.traffic.service.WaybillService;
+import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.WaybillDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -247,11 +249,13 @@ public class WaybillServiceImpl implements WaybillService {
 
     @Override
     public int modifyOwnWaybillStatus(Map map) {
+        modifySplitGoodsAmount((short) map.get("waybillStatus"));
         return waybillMapper.updateOwnWaybillStatus(map);
     }
 
     @Override
     public int modifyCustomerWaybillStatus(Map map) {
+        modifySplitGoodsAmount((short) map.get("waybillStatus"));
         return waybillMapper.updateCustomerWaybillStatus(map);
     }
 
@@ -279,8 +283,21 @@ public class WaybillServiceImpl implements WaybillService {
 
     @Override
     public int modifyOwnWaybillStatusByWaybillPlanId(Map map) {
+        modifySplitGoodsAmount((short) map.get("waybillStatus"));
         return waybillMapper.updateOwnWaybillStatusByWaybillPlanId(map);
     }
 
+    /**
+     * 取消运单时，需要将运单数量还原到派单，运单状态置为取消
+     * @param waybillStatus
+     * @return
+     */
+    private int modifySplitGoodsAmount(short waybillStatus){
+        if(waybillStatus== ConstantVO.WAYBILL_STATUS_HAVE_CANCEL){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
 
 }
