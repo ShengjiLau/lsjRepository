@@ -109,7 +109,7 @@ public interface WaybillMapper {
     List<Waybill> selectPlannedWaybill(Map map);
 
     /**
-     * 根据计划id更新运单状态（参数：waybillStatus，updateId，updateName，waybill_plan_id，companyId）
+     * 根据计划id更新运单状态（参数：waybillStatus，updateId，updateName，waybillPlanId，companyId）
      * @param map
      * @return
      */
