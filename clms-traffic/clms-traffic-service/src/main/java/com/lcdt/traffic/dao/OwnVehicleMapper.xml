@@ -31,8 +31,12 @@
     <result column="vehicle_insurance_company" jdbcType="VARCHAR" property="vehicleInsuranceCompany" />
     <result column="vehicle_policy_num" jdbcType="VARCHAR" property="vehiclePolicyNum" />
     <result column="vehicle_insurance_expiry_date" jdbcType="TIMESTAMP" property="vehicleInsuranceExpiryDate" />
-    <result column="vehicle_headerstock_photo" jdbcType="VARCHAR" property="vehicleHeaderstockPhoto" />
-    <result column="vehicle_tailstock_photo" jdbcType="VARCHAR" property="vehicleTailstockPhoto" />
+    <result column="vehicle_headerstock_photo1" jdbcType="VARCHAR" property="vehicleHeaderstockPhoto1" />
+    <result column="vehicle_headerstock_photo2" jdbcType="VARCHAR" property="vehicleHeaderstockPhoto2" />
+    <result column="vehicle_headerstock_photo3" jdbcType="VARCHAR" property="vehicleHeaderstockPhoto3" />
+    <result column="vehicle_tailstock_photo1" jdbcType="VARCHAR" property="vehicleTailstockPhoto1" />
+    <result column="vehicle_tailstock_photo2" jdbcType="VARCHAR" property="vehicleTailstockPhoto2" />
+    <result column="vehicle_tailstock_photo3" jdbcType="VARCHAR" property="vehicleTailstockPhoto3" />
     <result column="vehicle_tyre_spec" jdbcType="VARCHAR" property="vehicleTyreSpec" />
     <result column="group_id" jdbcType="BIGINT" property="groupId" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
@@ -59,8 +63,9 @@
       vehicle_color, vehicle_factory_date, vehicle_buying_date, 
       vehicle_annual_date, vehicle_two_level_period, 
       vehicle_insurance_company, vehicle_policy_num, 
-      vehicle_insurance_expiry_date, vehicle_headerstock_photo, 
-      vehicle_tailstock_photo, vehicle_tyre_spec, 
+      vehicle_insurance_expiry_date, vehicle_headerstock_photo1,
+      vehicle_headerstock_photo2,vehicle_headerstock_photo3,
+      vehicle_tailstock_photo1,vehicle_tailstock_photo2,vehicle_tailstock_photo3, vehicle_tyre_spec,
       group_id, create_id, create_name, 
       create_date, company_id
       )
@@ -74,8 +79,10 @@
       #{vehicleColor,jdbcType=VARCHAR}, #{vehicleFactoryDate,jdbcType=TIMESTAMP}, #{vehicleBuyingDate,jdbcType=TIMESTAMP}, 
       #{vehicleAnnualDate,jdbcType=TIMESTAMP}, #{vehicleTwoLevelPeriod,jdbcType=TIMESTAMP}, 
       #{vehicleInsuranceCompany,jdbcType=VARCHAR}, #{vehiclePolicyNum,jdbcType=VARCHAR}, 
-      #{vehicleInsuranceExpiryDate,jdbcType=TIMESTAMP}, #{vehicleHeaderstockPhoto,jdbcType=VARCHAR}, 
-      #{vehicleTailstockPhoto,jdbcType=VARCHAR}, #{vehicleTyreSpec,jdbcType=VARCHAR}, 
+      #{vehicleInsuranceExpiryDate,jdbcType=TIMESTAMP}, #{vehicleHeaderstockPhoto1,jdbcType=VARCHAR},
+      #{vehicleHeaderstockPhoto2,jdbcType=VARCHAR}, #{vehicleHeaderstockPhoto3,jdbcType=VARCHAR},
+      #{vehicleTailstockPhoto1,jdbcType=VARCHAR},#{vehicleTailstockPhoto2,jdbcType=VARCHAR},
+      #{vehicleTailstockPhoto3,jdbcType=VARCHAR}, #{vehicleTyreSpec,jdbcType=VARCHAR},
       #{groupId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, 
       CURRENT_TIMESTAMP , #{companyId,jdbcType=BIGINT}
       )
@@ -110,8 +117,12 @@
       vehicle_insurance_company = #{vehicleInsuranceCompany,jdbcType=VARCHAR},
       vehicle_policy_num = #{vehiclePolicyNum,jdbcType=VARCHAR},
       vehicle_insurance_expiry_date = #{vehicleInsuranceExpiryDate,jdbcType=TIMESTAMP},
-      vehicle_headerstock_photo = #{vehicleHeaderstockPhoto,jdbcType=VARCHAR},
-      vehicle_tailstock_photo = #{vehicleTailstockPhoto,jdbcType=VARCHAR},
+      vehicle_headerstock_photo1 = #{vehicleHeaderstockPhoto1,jdbcType=VARCHAR},
+      vehicle_headerstock_photo2 = #{vehicleHeaderstockPhoto2,jdbcType=VARCHAR},
+      vehicle_headerstock_photo3 = #{vehicleHeaderstockPhoto3,jdbcType=VARCHAR},
+      vehicle_tailstock_photo1 = #{vehicleTailstockPhoto1,jdbcType=VARCHAR},
+      vehicle_tailstock_photo2 = #{vehicleTailstockPhoto2,jdbcType=VARCHAR},
+      vehicle_tailstock_photo3 = #{vehicleTailstockPhoto3,jdbcType=VARCHAR},
       vehicle_tyre_spec = #{vehicleTyreSpec,jdbcType=VARCHAR},
       group_id = #{groupId,jdbcType=BIGINT},
       update_id = #{updateId,jdbcType=BIGINT},
@@ -126,7 +137,8 @@
     chassis_number, vehicle_axle_number, vehicle_wheelbase, vehicle_tyre_amount, energy_type, 
     swept_volume, vehicle_color, vehicle_factory_date, vehicle_buying_date, vehicle_annual_date, 
     vehicle_two_level_period, vehicle_insurance_company, vehicle_policy_num, vehicle_insurance_expiry_date, 
-    vehicle_headerstock_photo, vehicle_tailstock_photo, vehicle_tyre_spec, group_id, 
+    vehicle_headerstock_photo1,vehicle_headerstock_photo2,vehicle_headerstock_photo3,
+    vehicle_tailstock_photo1, vehicle_tailstock_photo2,vehicle_tailstock_photo3,vehicle_tyre_spec, group_id,
     create_id, create_name, create_date, update_id, update_name, update_date, is_deleted, 
     company_id
     from t_own_vehicle
@@ -139,7 +151,8 @@
     chassis_number, vehicle_axle_number, vehicle_wheelbase, vehicle_tyre_amount, energy_type, 
     swept_volume, vehicle_color, vehicle_factory_date, vehicle_buying_date, vehicle_annual_date, 
     vehicle_two_level_period, vehicle_insurance_company, vehicle_policy_num, vehicle_insurance_expiry_date, 
-    vehicle_headerstock_photo, vehicle_tailstock_photo, vehicle_tyre_spec, group_id, 
+    vehicle_headerstock_photo1,vehicle_headerstock_photo2,vehicle_headerstock_photo3,
+    vehicle_tailstock_photo1, vehicle_tailstock_photo2,vehicle_tailstock_photo3, vehicle_tyre_spec, group_id,
     create_id, create_name, create_date, update_id, update_name, update_date, is_deleted, 
     company_id
     from t_own_vehicle
@@ -179,8 +192,12 @@
     <result column="vehicle_insurance_company" jdbcType="VARCHAR" property="vehicleInsuranceCompany" />
     <result column="vehicle_policy_num" jdbcType="VARCHAR" property="vehiclePolicyNum" />
     <result column="vehicle_insurance_expiry_date" jdbcType="TIMESTAMP" property="vehicleInsuranceExpiryDate" />
-    <result column="vehicle_headerstock_photo" jdbcType="VARCHAR" property="vehicleHeaderstockPhoto" />
-    <result column="vehicle_tailstock_photo" jdbcType="VARCHAR" property="vehicleTailstockPhoto" />
+    <result column="vehicle_headerstock_photo1" jdbcType="VARCHAR" property="vehicleHeaderstockPhoto1" />
+    <result column="vehicle_headerstock_photo2" jdbcType="VARCHAR" property="vehicleHeaderstockPhoto2" />
+    <result column="vehicle_headerstock_photo3" jdbcType="VARCHAR" property="vehicleHeaderstockPhoto3" />
+    <result column="vehicle_tailstock_photo1" jdbcType="VARCHAR" property="vehicleTailstockPhoto1" />
+    <result column="vehicle_tailstock_photo2" jdbcType="VARCHAR" property="vehicleTailstockPhoto2" />
+    <result column="vehicle_tailstock_photo3" jdbcType="VARCHAR" property="vehicleTailstockPhoto3" />
     <result column="vehicle_tyre_spec" jdbcType="VARCHAR" property="vehicleTyreSpec" />
     <result column="group_id" jdbcType="BIGINT" property="groupId" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
@@ -225,18 +242,19 @@
     chassis_number, vehicle_axle_number, vehicle_wheelbase, vehicle_tyre_amount, energy_type,
     swept_volume, vehicle_color, vehicle_factory_date, vehicle_buying_date, vehicle_annual_date,
     vehicle_two_level_period, vehicle_insurance_company, vehicle_policy_num, vehicle_insurance_expiry_date,
-    vehicle_headerstock_photo, vehicle_tailstock_photo, vehicle_tyre_spec, group_id,company_id
+    vehicle_headerstock_photo1,vehicle_headerstock_photo2,vehicle_headerstock_photo3,
+    vehicle_tailstock_photo1, vehicle_tailstock_photo2,vehicle_tailstock_photo3, vehicle_tyre_spec, group_id,company_id
     from t_own_vehicle
     <where>
       company_id = #{companyId,jdbcType=BIGINT} and is_deleted=0
       <if test="affiliatedCompany!=null and affiliatedCompany!=''">
-        and affiliated_company like '%#{affiliatedCompany,jdbcType=VARCHAR}%'
+        and affiliated_company like concat('%',#{affiliatedCompany,jdbcType=VARCHAR},'%')
       </if>
       <if test="vehicleNum!=null and vehicleNum!=''">
-        and vehicle_num like '%#{vehicleNum,jdbcType=VARCHAR}%'
+        and vehicle_num like concat('%',#{vehicleNum,jdbcType=VARCHAR},'%')
       </if>
       <if test="vehicleDriverName!=null and vehicleDriverName!=''">
-        and (vehicle_driver_name like '%#{vehicleDriverName,jdbcType=VARCHAR}%' or vehicle_driver_phone like '%#{vehicleDriverName,jdbcType=VARCHAR}%')
+        and (vehicle_driver_name like concat('%',#{vehicleDriverName,jdbcType=VARCHAR},'%') or vehicle_driver_phone like concat('%',#{vehicleDriverName,jdbcType=VARCHAR},'%'))
       </if>
       <if test="vehicleCategory==0 or vehicleCategory==1">
         and vehicle_category = #{vehicleCategory,jdbcType=VARCHAR}
@@ -250,7 +268,8 @@
     t1.chassis_number, t1.vehicle_axle_number, t1.vehicle_wheelbase, t1.vehicle_tyre_amount, t1.energy_type,
     t1.swept_volume, t1.vehicle_color, t1.vehicle_factory_date, t1.vehicle_buying_date, t1.vehicle_annual_date,
     t1.vehicle_two_level_period, t1.vehicle_insurance_company, t1.vehicle_policy_num, t1.vehicle_insurance_expiry_date,
-    t1.vehicle_headerstock_photo, t1.vehicle_tailstock_photo, t1.vehicle_tyre_spec, t1.group_id,t1.company_id,
+    t1.vehicle_headerstock_photo1,t1.vehicle_headerstock_photo2,t1.vehicle_headerstock_photo3,
+    t1.vehicle_tailstock_photo1,t1.vehicle_tailstock_photo2,t1.vehicle_tailstock_photo3, t1.vehicle_tyre_spec, t1.group_id,t1.company_id,
     t2.ovc_id, t2.own_vehicle_id, t2.group_name, t2.certificate_type,certificate_no, t2.process_dt, t2.certificate_validity_begin,
     t2.certificate_validity_end, t2.certificate_fee, t2.certificate_attachment1, t2.certificate_attachment2,
     t2.certificate_attachment3, t2.group_remark

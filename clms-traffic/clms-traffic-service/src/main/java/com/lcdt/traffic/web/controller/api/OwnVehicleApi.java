@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -141,9 +142,15 @@ public class OwnVehicleApi {
 //        String driverPhones = StringUtils.join(driverPhoneArr,",");
         List<String> driverPhoneList = Arrays.asList(driverPhoneArr);
         logger.debug("driverPhones:" + driverPhoneList.size());
-        List<Driver> driverList = ownVehicleService.getGpsInfo(driverPhoneList);
-        PageBaseDto pageBaseDto = new PageBaseDto(driverList, driverList.size());
-        return pageBaseDto;
+        if(driverPhoneList.size()>0){
+            List<Driver> driverList = ownVehicleService.getGpsInfo(driverPhoneList);
+            PageBaseDto pageBaseDto = new PageBaseDto(driverList, driverList.size());
+            return pageBaseDto;
+        }else {
+            return new PageBaseDto(new ArrayList(),0);
+        }
+
+
     }
 
 }
