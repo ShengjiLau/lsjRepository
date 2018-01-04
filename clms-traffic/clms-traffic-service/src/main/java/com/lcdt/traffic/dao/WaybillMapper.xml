@@ -114,7 +114,7 @@
       create_name, create_date, update_id, 
       update_name, update_date, is_deleted
       )
-    values (#{waybillPlanId,jdbcType=BIGINT}, #{splitGoodsId,jdbcType=BIGINT},#{waybillCode,jdbcType=VARCHAR}, #{waybillStatus,jdbcType=SMALLINT}, #{waybillSource,jdbcType=VARCHAR}
+    values (#{waybillPlanId,jdbcType=BIGINT}, #{splitGoodsId,jdbcType=BIGINT},#{waybillCode,jdbcType=VARCHAR}, #{waybillStatus,jdbcType=SMALLINT}, #{waybillSource,jdbcType=VARCHAR},
       #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{driverId,jdbcType=BIGINT}, 
       #{driverName,jdbcType=VARCHAR}, #{driverPhone,jdbcType=VARCHAR}, #{vechicleId,jdbcType=BIGINT}, 
       #{vechicleNum,jdbcType=VARCHAR}, #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, 

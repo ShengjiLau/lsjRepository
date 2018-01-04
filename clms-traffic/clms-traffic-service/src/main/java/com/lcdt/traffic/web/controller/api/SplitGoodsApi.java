@@ -69,7 +69,7 @@ public class SplitGoodsApi {
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
-        if (flag>0) {
+        if (flag==1) {
             code = 0;
         } else {
             message = "操作失败，请重试！";
@@ -113,7 +113,30 @@ public class SplitGoodsApi {
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
-        if (flag>0) {
+        if (flag==1) {
+            code = 0;
+        } else {
+            message = "操作失败，请重试！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
+    }
+
+
+
+
+    @ApiOperation(value = "派单-取消")
+    @RequestMapping(value = "/splitGoodsCancel",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_cancel')")
+    public String splitGoodsCancel(@ApiParam(value = "计划ID",required = true) @RequestParam Long splitGoodsId) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+        int flag = splitGoodsService.splitGoodsCancel(splitGoodsId, loginUser, companyId);
+        JSONObject jsonObject = new JSONObject();
+        String message = null;
+        int code = -1;
+        if (flag==1) {
             code = 0;
         } else {
             message = "操作失败，请重试！";

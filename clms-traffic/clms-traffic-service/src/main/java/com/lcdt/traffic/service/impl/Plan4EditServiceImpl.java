@@ -6,7 +6,10 @@ import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.Plan4EditService;
+import com.lcdt.traffic.service.WaybillService;
+import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
+import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,9 @@ public class Plan4EditServiceImpl implements Plan4EditService {
 
     @com.alibaba.dubbo.config.annotation.Reference
     public CustomerRpcService customerRpcService;  //客户信息
+
+    @Autowired
+    private WaybillService waybillService; //运单
 
 
 
@@ -171,7 +177,12 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                     /***
                      *如果是司机需要生成运单
                      */
-
+                    if (carrierType == 2) {
+                        WaybillDto waybillDto = PlanBO.getInstance().toWaybillItemsDto(vo,planDetailList,splitGoodsDetailList);
+                        if (null!=waybillDto) {
+                            waybillService.addWaybill(waybillDto);
+                        }
+                    }
 
                 } else { //暂存 -- 操作
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //待发布
