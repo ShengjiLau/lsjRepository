@@ -37,6 +37,16 @@ public interface SplitGoodsService {
     Integer splitGoods4Bidding(BindingSplitParamsDto dto, User user, Long companyId);
 
 
+    /***
+     * 派单取消
+     *
+     * @param splitGoodsId
+     * @param user
+     * @param companyId
+     */
+    Integer splitGoodsCancel(Long splitGoodsId, User user, Long companyId);
+
+
 
 
 

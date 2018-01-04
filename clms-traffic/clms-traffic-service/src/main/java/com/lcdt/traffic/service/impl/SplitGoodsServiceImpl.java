@@ -263,25 +263,62 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             waybillPlanMapper.updateByPrimaryKey(waybillPlan);
 
         } else {//如果是司机生成派单、运单
-
-
-
         }
+        return 1;
+    }
 
-
+    @Override
+    public Integer splitGoodsCancel(Long splitGoodsId, User user, Long companyId) {
+        SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(splitGoodsId, companyId);
+        if (splitGoods == null) throw new SplitGoodsException("派单信息异常！");
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(splitGoods.getWaybillPlanId(),companyId, (short)0); //查询对应的计划
+        float remainAmount = 0; //剩余数量
+        List<SplitGoodsDetail> splitGoodsDetailList = splitGoods.getSplitGoodsDetailList();
+        if (null!=splitGoodsDetailList && splitGoodsDetailList.size()>0) {
+           for (SplitGoodsDetail obj : splitGoodsDetailList) {
+               remainAmount+=obj.getRemainAmount();
+           }
+        }
+        if(remainAmount<=0) { throw new SplitGoodsException("没有剩余派单数量，不能取消！"); }
+        for (SplitGoodsDetail obj : splitGoodsDetailList) {
+            if (obj.getRemainAmount()>0) {
+               updateSplitGoodsAmount(obj, waybillPlan.getPlanDetailList(), user);
+           }
+        }
         return 1;
     }
 
 
+    /***
+     * 拍单取消更该派单数量、计划数量
+     *
+     * @param splitGoodsDetail
+     * @param planDetailList
+     * @param user
+     */
+    private void updateSplitGoodsAmount(SplitGoodsDetail splitGoodsDetail, List<PlanDetail> planDetailList, User user){
+        if (null!=planDetailList && planDetailList.size()>0) {
+            for (PlanDetail obj: planDetailList) {
+                if (obj.getPlanDetailId()==splitGoodsDetail.getPlanDetailId()) {
+                    obj.setRemainderAmount(obj.getRemainderAmount()+splitGoodsDetail.getRemainAmount());//计划剩余数量=计划现剩余数量+派单剩余数量
+                    //更新计划详细
+                    obj.setUpdateId(user.getUserId());
+                    obj.setUpdateTime(new Date());
+                    obj.setUpdateName(user.getRealName());
+                    planDetailMapper.updateByPrimaryKey(obj);
+                    //更新派单详细
+                    splitGoodsDetail.setRemainAmount(0f);//派单剩余数量
+                    splitGoodsDetail.setAllotAmount(splitGoodsDetail.getAllotAmount() - splitGoodsDetail.getRemainAmount()); //派单待派数量(已派出的数量)=派单现待派数量-派单剩余数量
+                    splitGoodsDetail.setUpdateId(user.getUserId());
+                    splitGoodsDetail.setUpdateTime(new Date());
+                    splitGoodsDetail.setUpdateName(user.getRealName());
+                    splitGoodsDetailMapper.updateByPrimaryKey(splitGoodsDetail);
+                }
+            }
 
 
-
-
-
-
-
-
-
+        }
+    }
 
 
 }
