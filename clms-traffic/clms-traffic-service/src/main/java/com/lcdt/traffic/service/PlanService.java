@@ -88,7 +88,7 @@ public interface PlanService {
      * @param user
      * @return
      */
-    Integer planCancel(Long waybillPlanId, Long companyId, User user);
+    Integer ownPlanCancel(Long waybillPlanId, Long companyId, User user);
 
 
 
