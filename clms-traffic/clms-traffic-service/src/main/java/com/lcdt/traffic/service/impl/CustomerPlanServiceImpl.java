@@ -12,6 +12,7 @@ import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.CustomerPlanService;
 import com.lcdt.traffic.service.WaybillService;
+import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillItemsDto;
@@ -403,59 +404,13 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         if (null == waybillPlan) {
             throw new WaybillPlanException("计划不存在！");
         }
-        waybillDto.setWaybillPlanId(waybillPlan.getWaybillPlanId());//计划ID
-        waybillDto.setWaybillStatus(ConstantVO.WAYBILL_STATUS_WATIE_SEND);
-        waybillDto.setGroupId(waybillPlan.getGroupId());
-        waybillDto.setGroupName(waybillPlan.getGroupName());
-        waybillDto.setCustomerName(waybillPlan.getCustomerName());
-        waybillDto.setCustomerPhone(waybillPlan.getCustomerPhone());
-        waybillDto.setCustContactMan(waybillPlan.getCustContactMan());
-        waybillDto.setSendMan(waybillPlan.getSendMan());
-        waybillDto.setSendPhone(waybillPlan.getSendPhone());
-        waybillDto.setSendProvince(waybillPlan.getSendProvince());
-        waybillDto.setSendCity(waybillPlan.getSendCity());
-        waybillDto.setSendCounty(waybillPlan.getSendCounty());
-        waybillDto.setSendAddress(waybillPlan.getSendAddress());
-        waybillDto.setReceiveMan(waybillPlan.getReceiveMan());
-        waybillDto.setReceiveProvince(waybillPlan.getReceiveProvince());
-        waybillDto.setReceiveCity(waybillPlan.getReceiveCity());
-        waybillDto.setReceiveCounty(waybillPlan.getReceiveCounty());
-        waybillDto.setReceivePhone(waybillPlan.getReceivePhone());
-        waybillDto.setReceiveAddress(waybillPlan.getReceiveAddress());
-        waybillDto.setTransportWay(waybillPlan.getTransportWay());//运输方式
-        waybillDto.setGoodsType(waybillPlan.getGoodsType());
-        waybillDto.setStartDate(waybillPlan.getStartDate());
-        waybillDto.setArriveDate(waybillPlan.getArriveDate());
-        waybillDto.setIsReceipt(waybillPlan.getIsReceipt());
-        waybillDto.setIsUrgent(waybillPlan.getIsUrgent());
 
-        /***
-         *
-           0-上门装货
-           1-送货到站
-           3-送货上门
-           4-到站自体
-           5-加急
-         */
-        waybillDto.setDistributionWay(waybillPlan.getDistributionWay());
-        waybillDto.setAttachment1(waybillPlan.getAttachment1());
-        waybillDto.setAttachment2(waybillPlan.getAttachment2());
-        waybillDto.setAttachment3(waybillPlan.getAttachment3());
-        waybillDto.setAttachment4(waybillPlan.getAttachment4());
-        waybillDto.setAttachment5(waybillPlan.getAttachment5());
-        waybillDto.setAttachment1Name(waybillPlan.getAttachment1Name());
-        waybillDto.setAttachment2Name(waybillPlan.getAttachment2Name());
-        waybillDto.setAttachment3Name(waybillPlan.getAttachment3Name());
-        waybillDto.setAttachment4Name(waybillPlan.getAttachment4Name());
-        waybillDto.setAttachment5Name(waybillPlan.getAttachment5Name());
-        waybillDto.setCompanyId(waybillPlan.getCompanyId());
-
+        PlanBO.getInstance().converPlan2Waybill(waybillPlan);  //计划转为运单
         List<PlanDetail> list = dto.getPlanDetailList();
         float sumAmount = 0; //统计本次派车重量
         List<WaybillItemsDto> waybillItemsDtos = new ArrayList<WaybillItemsDto>();
         if (null != list  && list.size()>0) {
             Date dt = new Date();
-
             for (PlanDetail obj :list) {
                 WaybillItemsDto tempDto = new WaybillItemsDto();
                 tempDto.setCompanyId(waybillDto.getCompanyId());
@@ -472,6 +427,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 tempDto.setFreightPrice(obj.getFreightPrice());
                 tempDto.setFreightTotal(obj.getFreightTotal());
                 tempDto.setRemark(obj.getDetailRemark());//备注
+                tempDto.setPlanDetailId(obj.getPlanDetailId());//计划主ID
                 waybillItemsDtos.add(tempDto);
             }
         }
@@ -486,6 +442,12 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         if (null!=splitGoodsDetails && splitGoodsDetails.size()>0) {
             for(SplitGoodsDetail obj : splitGoodsDetails) {
                 splitRemainAmount = splitRemainAmount + obj.getRemainAmount();//统计派单剩余数量（国为竞价是一次派单所以这块可以循环统计，否则要取最大ID的剩余数）
+                //给运单明细赋派单ID
+                for (WaybillItemsDto waybillItemsDto : waybillItemsDtos) {
+                    if(obj.getPlanDetailId()==waybillItemsDto.getPlanDetailId()) {
+                        waybillItemsDto.setSplitGoodsDetailId(obj.getSplitGoodsDetailId());
+                    }
+                }
             }
         }
         boolean isComplete = false; //就改口派完

@@ -7,8 +7,10 @@ import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.service.WaybillService;
+import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
+import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import com.lcdt.userinfo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -207,7 +209,18 @@ public class PlanServiceImpl implements PlanService {
                 splitGoodsDetailList.add(tObj);
             }
             splitGoodsDetailMapper.batchAddSplitGoodsDetail(splitGoodsDetailList);
-            /***司机生成运单***/
+            /***
+             *如果是司机需要生成运单
+             */
+            if (carrierType == 2) {
+                WaybillDto waybillDto = PlanBO.getInstance().toWaybillItemsDto(waybillPlan, planDetailList, splitGoodsDetailList);
+                if (null!=waybillDto) {
+                    waybillService.addWaybill(waybillDto);
+                }
+            }
+
+
+
         } else { //未指定承运商
             updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
             updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
