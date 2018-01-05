@@ -49,7 +49,7 @@ public class SmsNotifyImpl  {
     }
 
 
-    public boolean sendSms(String[] phonsNums, String message,Long sendCompanyId) {
+    public boolean sendSms(String[] phonsNums, String message,Long smsLogId) {
 
         if (phonsNums == null) {
             return false;
@@ -64,7 +64,7 @@ public class SmsNotifyImpl  {
         nameValuePairs.add(new BasicNameValuePair("key", encodeKey(seed)));
         nameValuePairs.add(new BasicNameValuePair("dest", phoneNumsValue(phonsNums)));
         nameValuePairs.add(new BasicNameValuePair("content", "【大驼队】" + message));
-        nameValuePairs.add(new BasicNameValuePair("reference", String.valueOf(sendCompanyId)));
+        nameValuePairs.add(new BasicNameValuePair("reference", String.valueOf(smsLogId)));
 
 
         UrlEncodedFormEntity uefEntity;
