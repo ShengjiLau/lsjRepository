@@ -9,6 +9,20 @@
     <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
     <result column="login_company_id" jdbcType="INTEGER" property="loginCompanyId" />
   </resultMap>
+
+  <resultMap id="Dto" type="com.lcdt.userinfo.model.LoginLogDto">
+    <id column="log_id" jdbcType="BIGINT" property="logId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+    <result column="login_agent" jdbcType="VARCHAR" property="loginAgent" />
+    <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
+    <result column="login_company_id" jdbcType="INTEGER" property="loginCompanyId" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+
+  </resultMap>
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from login_log
     where log_id = #{logId,jdbcType=BIGINT}
@@ -41,9 +55,12 @@
     from login_log
   </select>
 
-  <select id="selectByCompanyId" resultMap="BaseResultMap">
-    select log_id, user_id, login_time, login_agent, login_ip, login_company_id
-    from login_log WHERE login_company_id = #{companyId,jdbcType=BIGINT}
+  <select id="selectByCompanyId" resultMap="Dto">
+    select log_id, u.user_id, login_time, login_agent, login_ip, login_company_id,
+    u.phone, u.real_name
+    from login_log l left JOIN
+    t_uc_user u on u.user_id = l.user_id
+    WHERE login_company_id = #{companyId,jdbcType=BIGINT}
   </select>
 
 </mapper>

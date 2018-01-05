@@ -18,7 +18,7 @@ public class InviteCustomerServiceTest extends BaseSpringBootTest {
 	@Test
 	public void testSendEmail(){
 		SimpleMailMessage message = new SimpleMailMessage();
-		message.setFrom("737298251@qq.com");
+		message.setFrom("service@datuodui.com");
 		message.setTo("mawei@lichendt.com");
 		message.setSubject("这是一封测试邮件");
 		message.setText("这是一封测试邮件");
