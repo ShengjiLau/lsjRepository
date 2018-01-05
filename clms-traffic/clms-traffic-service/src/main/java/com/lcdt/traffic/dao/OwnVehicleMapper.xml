@@ -222,7 +222,7 @@
   <select id="selectVehicleNum" resultType="java.lang.Integer">
     select count(own_vehicle_id)
     from t_own_vehicle
-    where vehicle_num = #{vehicleNum,jdbcType=VARCHAR} and and company_id = #{companyId,jdbcType=BIGINT}
+    where vehicle_num = #{vehicleNum,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}
     <if test="ownVehicleId!=null and ownVehicleId!=''">
       and own_vehicle_id != #{ownVehicleId,jdbcType=BIGINT}
     </if>

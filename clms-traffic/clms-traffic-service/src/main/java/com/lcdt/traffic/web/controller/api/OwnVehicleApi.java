@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.model.OwnVehicle;
 import com.lcdt.traffic.service.OwnVehicleService;
+import com.lcdt.traffic.web.dto.BaseDto;
 import com.lcdt.traffic.web.dto.OwnVehicleDto;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.userinfo.model.Driver;
@@ -127,12 +128,13 @@ public class OwnVehicleApi {
     @ApiOperation(value = "车辆详情", notes = "车辆详情包含证件信息")
     @GetMapping("/detail")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_list')")
-    public OwnVehicleDto ownVehicleList(Long ownVehicleId) {
+    public BaseDto ownVehicleList(Long ownVehicleId) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         OwnVehicle ownVehicle = new OwnVehicle();
 //        BeanUtils.copyProperties(ownVehicleDto, ownVehicle);
         OwnVehicleDto ownVehicleDto = ownVehicleService.ownVehicleDetail(ownVehicleId,companyId);
-        return ownVehicleDto;
+        BaseDto baseDto = new BaseDto(ownVehicleDto);
+        return baseDto;
     }
 
     @ApiOperation(value = "获取车辆位置", notes = "根据随车手机号获取车辆(基站定位)")

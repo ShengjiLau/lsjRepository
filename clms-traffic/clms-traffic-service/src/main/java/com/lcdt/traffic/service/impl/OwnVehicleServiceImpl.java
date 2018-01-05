@@ -55,37 +55,40 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
             throw new RuntimeException("车牌号不能重复!");
         } else {
             ownVehicleMapper.insert(ownVehicle);    //保存车辆基本信息
-            //设置证件的创建人/id创建人/公司id
-            for (OwnVehicleCertificate ownVehicleCertificate : ownVehicleDto.getOwnVehicleCertificateList()) {
-                ownVehicleCertificate.setOwnVehicleId(ownVehicle.getOwnVehicleId());
-                ownVehicleCertificate.setCreateId(ownVehicleDto.getCreateId());
-                ownVehicleCertificate.setCreateName(ownVehicleDto.getCreateName());
-                ownVehicleCertificate.setCompanyId(ownVehicleDto.getCompanyId());
+            if(null!=ownVehicleDto.getOwnVehicleCertificateList() && ownVehicleDto.getOwnVehicleCertificateList().size()>0) {
+                //设置证件的创建人/id创建人/公司id
+                for (OwnVehicleCertificate ownVehicleCertificate : ownVehicleDto.getOwnVehicleCertificateList()) {
+                    ownVehicleCertificate.setOwnVehicleId(ownVehicle.getOwnVehicleId());
+                    ownVehicleCertificate.setCreateId(ownVehicleDto.getCreateId());
+                    ownVehicleCertificate.setCreateName(ownVehicleDto.getCreateName());
+                    ownVehicleCertificate.setCompanyId(ownVehicleDto.getCompanyId());
+                }
+                ownVehicleCertificateMapper.insertBatch(ownVehicleDto.getOwnVehicleCertificateList());  //批量插入车辆证件
             }
-            ownVehicleCertificateMapper.insertBatch(ownVehicleDto.getOwnVehicleCertificateList());  //批量插入车辆证件
-
             /**下面判断用户表中是否存在该随车电话的账号，不存在的话，则自动保存一条司机的账号信息*/
-            String phone = ownVehicleDto.getVehicleDriverPhone().trim();
-            if (!userService.isPhoneBeenRegister(phone)) { //为空则保存司机账号信息
-                RegisterDto registerDto = new RegisterDto();
-                registerDto.setUserPhoneNum(phone);
-                registerDto.setPassword(RegisterUtils.md5Encrypt(phone.substring(5)));
-                logger.debug("司机账号默认密码：" + phone.substring(5));
-                registerDto.setIntroducer("");
-                registerDto.setEmail("");
-                try {
-                    User user = userService.registerUser(registerDto);  //保存账号信息
-                    Driver driver = new Driver();
-                    driver.setUserId(user.getUserId());
-                    driver.setAffiliatedCompany(ownVehicleDto.getAffiliatedCompany());
-                    driver.setDriverName(ownVehicleDto.getVehicleDriverName());
-                    driver.setDriverPhone(phone);
-                    driver.setCreateId(ownVehicleDto.getCreateId());
-                    driver.setCreateName(ownVehicleDto.getCreateName());
-                    driverService.addDriver(driver);    //保存司机信息
-                } catch (PhoneHasRegisterException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException("保存司机账号信息失败！");
+            if(null != ownVehicleDto.getVehicleDriverPhone()) {
+                String phone = ownVehicleDto.getVehicleDriverPhone().trim();
+                if (!userService.isPhoneBeenRegister(phone)) { //为空则保存司机账号信息
+                    RegisterDto registerDto = new RegisterDto();
+                    registerDto.setUserPhoneNum(phone);
+                    registerDto.setPassword(RegisterUtils.md5Encrypt(phone.substring(5)));
+                    logger.debug("司机账号默认密码：" + phone.substring(5));
+                    registerDto.setIntroducer("");
+                    registerDto.setEmail("");
+                    try {
+                        User user = userService.registerUser(registerDto);  //保存账号信息
+                        Driver driver = new Driver();
+                        driver.setUserId(user.getUserId());
+                        driver.setAffiliatedCompany(ownVehicleDto.getAffiliatedCompany());
+                        driver.setDriverName(ownVehicleDto.getVehicleDriverName());
+                        driver.setDriverPhone(phone);
+                        driver.setCreateId(ownVehicleDto.getCreateId());
+                        driver.setCreateName(ownVehicleDto.getCreateName());
+                        driverService.addDriver(driver);    //保存司机信息
+                    } catch (PhoneHasRegisterException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException("保存司机账号信息失败！");
+                    }
                 }
             }
         }
