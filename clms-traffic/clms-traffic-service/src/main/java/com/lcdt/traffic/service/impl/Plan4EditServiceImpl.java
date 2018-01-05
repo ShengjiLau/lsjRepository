@@ -178,7 +178,8 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                      *如果是司机需要生成运单
                      */
                     if (carrierType == 2) {
-                        WaybillDto waybillDto = PlanBO.getInstance().toWaybillItemsDto(vo,planDetailList,splitGoodsDetailList);
+                        WaybillDto waybillDto = new WaybillDto();
+                        PlanBO.getInstance().toWaybillItemsDto(vo,splitGoods,waybillDto,planDetailList,splitGoodsDetailList);
                         if (null!=waybillDto) {
                             waybillService.addWaybill(waybillDto);
                         }

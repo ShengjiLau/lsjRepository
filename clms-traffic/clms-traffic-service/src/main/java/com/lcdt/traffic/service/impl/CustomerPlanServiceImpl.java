@@ -404,8 +404,10 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         if (null == waybillPlan) {
             throw new WaybillPlanException("计划不存在！");
         }
+        SplitGoods tObj = new SplitGoods();
+        tObj.setSplitGoodsId(dto.getSplitGoodsId());
 
-        PlanBO.getInstance().converPlan2Waybill(waybillPlan);  //计划转为运单
+        PlanBO.getInstance().converPlan2Waybill(waybillPlan,tObj, waybillDto);  //计划转为运单
         List<PlanDetail> list = dto.getPlanDetailList();
         float sumAmount = 0; //统计本次派车重量
         List<WaybillItemsDto> waybillItemsDtos = new ArrayList<WaybillItemsDto>();
@@ -459,8 +461,6 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             }
 
         }
-
-
         //整合运单主子关系
         waybillDto.setWaybillItemsDtoList(waybillItemsDtos);
         int flag = waybillService.addWaybill(waybillDto);
