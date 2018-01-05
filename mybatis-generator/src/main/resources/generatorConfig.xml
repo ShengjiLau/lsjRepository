@@ -30,7 +30,7 @@
             targetPackage     指定生成的model生成所在的包名
             targetProject     指定在该项目下所在的路径
         -->
-        <javaModelGenerator targetPackage="com.lcdt.userinfo.model" targetProject="MAVEN">
+        <javaModelGenerator targetPackage="com.lcdt.notify.model" targetProject="MAVEN">
             <!-- 是否对model添加 构造函数 -->
             <property name="constructorBased" value="false"/>
 
@@ -49,7 +49,7 @@
 
         <!--Mapper映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 -->
         <!--<sqlMapGenerator targetPackage="com.lcdt.userinfo.dao" targetProject="MAVEN">-->
-        <sqlMapGenerator targetPackage="com.lcdt.userinfo.dao" targetProject="MAVEN">
+        <sqlMapGenerator targetPackage="com.lcdt.notify.dao" targetProject="MAVEN">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
@@ -60,7 +60,7 @@
                 type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
         -->
         <!--<javaClientGenerator targetPackage="com.lcdt.userinfo.dao" targetProject="MAVEN" type="XMLMAPPER">-->
-        <javaClientGenerator targetPackage="com.lcdt.userinfo.dao" targetProject="MAVEN" type="XMLMAPPER">
+        <javaClientGenerator targetPackage="com.lcdt.notify.dao" targetProject="MAVEN" type="XMLMAPPER">
 
             <!--
                     定义Maper.java 源代码中的ByExample() 方法的可视性，可选的值有：
@@ -233,10 +233,11 @@
         <!--<table tableName="company_service_count" domainObjectName="CompanyServiceCount">-->
         <!--<generatedKey column="count_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
-        <table tableName="login_log" domainObjectName="LoginLog">
-        <generatedKey column="log_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        <table tableName="event_category" domainObjectName="EventCateGory">
+        <generatedKey column="event_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
 
+        <!--<table tableNm></table>-->
 
     </context>
 </generatorConfiguration>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.notify.dao.SmsLogMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.notify.model.SmsLog">
+    <id column="sms_id" jdbcType="BIGINT" property="smsId" />
+    <result column="is_pay" jdbcType="BIT" property="isPay" />
+    <result column="seed_company_id" jdbcType="BIGINT" property="seedCompanyId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sms_log
+    where sms_id = #{smsId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.notify.model.SmsLog">
+    <selectKey keyProperty="smsId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sms_log (is_pay, seed_company_id)
+    values (#{isPay,jdbcType=BIT}, #{seedCompanyId,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.notify.model.SmsLog">
+    update sms_log
+    set is_pay = #{isPay,jdbcType=BIT},
+      seed_company_id = #{seedCompanyId,jdbcType=BIGINT}
+    where sms_id = #{smsId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select sms_id, is_pay, seed_company_id
+    from sms_log
+    where sms_id = #{smsId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select sms_id, is_pay, seed_company_id
+    from sms_log
+  </select>
+</mapper>

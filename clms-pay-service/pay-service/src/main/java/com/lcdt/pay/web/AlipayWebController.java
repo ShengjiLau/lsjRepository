@@ -187,7 +187,6 @@ public class AlipayWebController {
         } catch (WriterException e1) {
             e1.printStackTrace();
         }
-
     }
 
     private static BufferedImage toBufferedImage(BitMatrix bitMatrix){

@@ -49,7 +49,7 @@ public class SendNotifyService {
             String url = "";
             if (companyNotifySetting.getEnableSms()) {
                 //发送短信通知
-                smsNotify.sendSmsNotify(notifyContent, receiver.getPhoneNum());
+                smsNotify.sendSmsNotify(notifyContent, receiver.getPhoneNum(),sendCompanyId);
             }
             if (companyNotifySetting.getEnableWeb()) {
                 //发送web通知
