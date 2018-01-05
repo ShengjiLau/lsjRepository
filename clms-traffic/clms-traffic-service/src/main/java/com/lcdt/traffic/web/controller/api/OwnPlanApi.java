@@ -57,7 +57,6 @@ public class OwnPlanApi {
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
         dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
-
         JSONObject jsonObject = new JSONObject();
         if (bindingResult.hasErrors()) {
             jsonObject.put("code", -1);
@@ -74,7 +73,7 @@ public class OwnPlanApi {
     @ApiOperation("创建--暂存计划")
     @RequestMapping(value = "/storagePlan",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_storage_plan')")
-    public JSONObject storagePlan(@Validated WaybillParamsDto dto, BindingResult bindingResult) {
+    public JSONObject storagePlan(@RequestBody WaybillParamsDto dto, BindingResult bindingResult) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         dto.setCreateId(loginUser.getUserId());

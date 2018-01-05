@@ -44,7 +44,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
     @com.alibaba.dubbo.config.annotation.Reference
     public CustomerRpcService customerRpcService;  //客户信息
 
-
     @Autowired
     private WaybillService waybillService; //运单
 
@@ -145,10 +144,10 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     splitGoods.setCreateId(vo.getCreateId());
                     splitGoods.setCreateName(vo.getCreateName());
                     splitGoods.setCreateDate(new Date());
-                    splitGoods.setUpdateId(splitGoods.getUpdateId());
-                    splitGoods.setUpdateName(splitGoods.getCreateName());
-                    splitGoods.setUpdateTime(splitGoods.getCreateDate());
-                    splitGoods.setCompanyId(splitGoods.getCompanyId());
+                    splitGoods.setUpdateId(vo.getUpdateId());
+                    splitGoods.setUpdateName(vo.getCreateName());
+                    splitGoods.setUpdateTime(vo.getCreateDate());
+                    splitGoods.setCompanyId(vo.getCompanyId());
                     splitGoods.setCarrierCompanyId(vo.getCarrierCompanyId());
                     splitGoods.setIsDeleted((short)0);
                     splitGoodsMapper.insert(splitGoods);
@@ -199,7 +198,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //待发布
                     vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
                     waybillPlanMapper.insert(vo); //生成计划
-                    List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
+                    List<PlanDetail> planDetailList = dto.getPlanDetailList();
                     for (PlanDetail obj : planDetailList) {
                         obj.setRemainderAmount(obj.getPlanAmount());//计划==剩余
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
@@ -211,7 +210,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         obj.setUpdateTime(obj.getCreateDate());
                         obj.setCompanyId(vo.getCompanyId());
                         obj.setIsDeleted((short)0);
-                        planDetailList.add(obj);
                     }
                     planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
                 }
