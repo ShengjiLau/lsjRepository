@@ -78,15 +78,13 @@
     <result column="cancel_man" jdbcType="VARCHAR" property="cancelMan" />
     <result column="cancel_remark" jdbcType="VARCHAR" property="cancelRemark" />
     <!--计划详细-->
-    <collection property="planDetailList" column="{waybill_plan_id=waybill_plan_id,company_id=company_id,is_deleted=0}"
+    <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
                 select="com.lcdt.traffic.dao.PlanDetailMapper.selectByWaybillPlanId" />
     <!--派单记录-->
-    <collection property="splitGoodsList" column="{waybill_plan_id=waybill_plan_id,company_id=company_id,is_deleted=0}"
+    <collection property="splitGoodsList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.SplitGoods" javaType="ArrayList"
-                select="com.lcdt.traffic.dao.SplitGoodsMapper.selectByCustomerId" />
-
-    <!--运单记录-->
+                select="com.lcdt.traffic.dao.SplitGoodsMapper.selectByWaybillPlanId" />
   </resultMap>
 
 
@@ -531,7 +529,7 @@
         from t_waybill_plan
         <where>
           <if test=" isDeleted!=null">
-            and  is_deleted = #{isDeleted,jdbcType=SMALLINT},
+            and  is_deleted = #{isDeleted,jdbcType=SMALLINT}
           </if>
           <if test=" carrierCompanyId!=null">
             and  carrier_company_id = #{ carrierCompanyId,jdbcType=BIGINT}
