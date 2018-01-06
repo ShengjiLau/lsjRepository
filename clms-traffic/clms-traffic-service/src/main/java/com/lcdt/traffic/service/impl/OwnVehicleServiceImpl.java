@@ -24,7 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @AUTHOR liuh
@@ -104,20 +106,31 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
             throw new RuntimeException("车牌号不能重复!");
         } else {
             ownVehicleMapper.updateByPrimaryKey(ownVehicle);    //更新车辆基本信息
+            //获取该车下面的证件ovcId用来匹配被删除的证件
+            List<Long> ovcIdList = ownVehicleCertificateMapper.selectOvcIdByOwnVehicleId(ownVehicle.getOwnVehicleId());
             List<OwnVehicleCertificate> list1 = new ArrayList<>();
             List<OwnVehicleCertificate> list2 = new ArrayList<>();
+            List<OwnVehicleCertificate> list3 = new ArrayList<>();
             if (null != ownVehicleDto.getOwnVehicleCertificateList()) {
                 for (OwnVehicleCertificate item : ownVehicleDto.getOwnVehicleCertificateList()) {  //迭代根据ownVehicleId来区分是新增还是插入
+                    item.setOwnVehicleId(ownVehicle.getOwnVehicleId());
                     if (item.getOvcId() == null) {   //没有主键的则为新增
-                        item.setCreateId(ownVehicleDto.getCreateId());
-                        item.setCreateName(ownVehicleDto.getCreateName());
+                        item.setCreateId(ownVehicleDto.getUpdateId());
+                        item.setCreateName(ownVehicleDto.getUpdateName());
                         item.setCompanyId(ownVehicleDto.getCompanyId());
                         list1.add(item);
                     } else {
-                        item.setUpdateId(ownVehicleDto.getCreateId());
-                        item.setUpdateName(ownVehicleDto.getCreateName());
+
+                        item.setUpdateId(ownVehicleDto.getUpdateId());
+                        item.setUpdateName(ownVehicleDto.getUpdateName());
                         item.setCompanyId(ownVehicleDto.getCompanyId());
                         list2.add(item);
+                        //
+                        for(Long ovcId : ovcIdList){
+                            if(item.getOvcId()==ovcId){
+                                ovcIdList.remove(ovcId);
+                            }
+                        }
                     }
                 }
                 if (list1.size() > 0) {
@@ -125,6 +138,13 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
                 }
                 if (list2.size() > 0) {
                     ownVehicleCertificateMapper.updateBatch(list2); //批量更新车辆证件
+                }
+                if(ovcIdList.size()>0){
+                    Map<String, Object> params = new HashMap<String, Object>();
+                    params.put("ovcIds",ovcIdList);
+                    params.put("updateId",ownVehicleDto.getCreateId());
+                    params.put("updateName",ownVehicleDto.getCreateName());
+                    ownVehicleCertificateMapper.deleteByBatch(params);
                 }
                 /**下面判断用户表中是否存在该随车电话的账号，不存在的话，则自动保存一条司机的账号信息*/
                 String phone = ownVehicleDto.getVehicleDriverPhone().trim();

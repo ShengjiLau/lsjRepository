@@ -131,4 +131,19 @@
       update_date = CURRENT_TIMESTAMP
       where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
+  <select id="selectOvcIdByOwnVehicleId" parameterType="java.lang.Long" resultType="java.lang.Long">
+      select ovc_id
+      from t_own_vehicle_certificate where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT}
+  </select>
+  <update id="deleteByBatch" parameterType="Map">
+    update t_own_vehicle_certificate
+    set is_deleted = 1,
+    update_id = #{updateId,jdbcType=BIGINT},
+    update_name = #{updateName,jdbcType=VARCHAR},
+    update_date = CURRENT_TIMESTAMP
+    where ovc_id in
+    <foreach item="item" index="index" collection="ovcIds" open="(" separator="," close=")">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </update>
 </mapper>

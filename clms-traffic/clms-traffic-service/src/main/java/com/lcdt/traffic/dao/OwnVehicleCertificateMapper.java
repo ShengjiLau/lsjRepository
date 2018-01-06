@@ -2,6 +2,7 @@ package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.OwnVehicleCertificate;
 import java.util.List;
+import java.util.Map;
 
 public interface OwnVehicleCertificateMapper {
     int deleteByPrimaryKey(Long dgId);
@@ -34,4 +35,19 @@ public interface OwnVehicleCertificateMapper {
      * @return
      */
     int deleteByUpdate(OwnVehicleCertificate ownVehicle);
+
+    /**
+     * 根据我的车辆id查询该车辆下的证件ocvId
+     * @param OwnVehicleId
+     * @return
+     */
+    List<Long> selectOvcIdByOwnVehicleId(Long OwnVehicleId);
+
+    /**
+     * 根据主键批量删除
+     * @param map
+     * @return
+     */
+    int deleteByBatch(Map<String, Object> map);
+
 }

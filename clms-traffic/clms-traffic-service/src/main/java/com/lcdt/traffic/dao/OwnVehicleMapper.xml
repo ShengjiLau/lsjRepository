@@ -87,7 +87,7 @@
       CURRENT_TIMESTAMP , #{companyId,jdbcType=BIGINT}
       )
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnVehicle">
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnVehicle" useGeneratedKeys="true" keyProperty="ownVehicleId">
     update t_own_vehicle
     set affiliated_company = #{affiliatedCompany,jdbcType=VARCHAR},
       vehicle_num = #{vehicleNum,jdbcType=VARCHAR},
@@ -201,7 +201,7 @@
     <result column="vehicle_tyre_spec" jdbcType="VARCHAR" property="vehicleTyreSpec" />
     <result column="group_id" jdbcType="BIGINT" property="groupId" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
-    <collection property="ownVehicleCertificateList" column="own_vehicle_id" resultMap="ovcResultMap">
+    <collection property="ownVehicleCertificateList" column="own_vehicle_id" resultMap="ovcResultMap" notNullColumn="ovc_id">
     </collection>
   </resultMap>
   <resultMap id="ovcResultMap" type="com.lcdt.traffic.model.OwnVehicleCertificate">
@@ -273,7 +273,7 @@
     t2.ovc_id, t2.own_vehicle_id, t2.group_name, t2.certificate_type,certificate_no, t2.process_dt, t2.certificate_validity_begin,
     t2.certificate_validity_end, t2.certificate_fee, t2.certificate_attachment1, t2.certificate_attachment2,
     t2.certificate_attachment3, t2.group_remark
-    from t_own_vehicle t1 left join t_own_vehicle_certificate t2 on t1.own_vehicle_id = t2.own_vehicle_id
+    from t_own_vehicle t1 left join t_own_vehicle_certificate t2 on t1.own_vehicle_id = t2.own_vehicle_id and t2.is_deleted=0
     where t1.own_vehicle_id = #{0} and t1.company_id = #{1}
   </select>
 </mapper>
