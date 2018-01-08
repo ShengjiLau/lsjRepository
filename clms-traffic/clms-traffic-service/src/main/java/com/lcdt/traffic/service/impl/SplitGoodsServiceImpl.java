@@ -59,7 +59,11 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Integer splitGoods4Direct(SplitGoodsParamsDto dto, User user, Long companyId) {
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(), companyId, (short)0); //查询对应的计划
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",dto.getWaybillPlanId());
+        tMap.put("companyId",companyId);
+        tMap.put("isDeleted","0");
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap); //查询对应的计划
         if (waybillPlan == null) throw new SplitGoodsException("计划异常为空！");
         List<PlanDetail> planDetailList =  waybillPlan.getPlanDetailList();
         if (planDetailList!=null && planDetailList.size()>0) {
@@ -203,7 +207,11 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
     @Override
     public Integer splitGoods4Bidding(BindingSplitParamsDto dto, User user, Long companyId) {
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(),companyId, (short)0); //查询对应的计划
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",dto.getWaybillPlanId());
+        tMap.put("companyId",companyId);
+        tMap.put("isDeleted","0");
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap); //查询对应的计划
         if (waybillPlan == null) throw new SplitGoodsException("计划异常为空！");
         if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //只生成派单
             Date opDate = new Date();
@@ -271,7 +279,11 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
     public Integer splitGoodsCancel(Long splitGoodsId, User user, Long companyId) {
         SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(splitGoodsId, companyId);
         if (splitGoods == null) throw new SplitGoodsException("派单信息异常！");
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(splitGoods.getWaybillPlanId(),companyId, (short)0); //查询对应的计划
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",splitGoods.getWaybillPlanId());
+        tMap.put("companyId",companyId);
+        tMap.put("isDeleted","0");
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap); //查询对应的计划
         float remainAmount = 0; //剩余数量
         List<SplitGoodsDetail> splitGoodsDetailList = splitGoods.getSplitGoodsDetailList();
         if (null!=splitGoodsDetailList && splitGoodsDetailList.size()>0) {

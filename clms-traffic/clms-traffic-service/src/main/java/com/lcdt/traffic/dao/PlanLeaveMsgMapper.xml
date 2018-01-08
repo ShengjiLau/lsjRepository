@@ -119,7 +119,7 @@
     from t_plan_leave_msg
     <where>
       <if test="isDeleted!=null">
-        and  is_deleted = #{isDeleted,jdbcType=SMALLINT},
+        and is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
       <if test="waybillPlanId!=null">
         and  waybill_plan_id = #{ waybillPlanId,jdbcType=BIGINT}

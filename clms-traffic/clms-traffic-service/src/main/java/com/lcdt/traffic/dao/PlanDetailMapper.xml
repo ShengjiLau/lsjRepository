@@ -168,7 +168,7 @@
       set
           waybill_plan_id = #{goods.waybillPlanId},
           goods_id = #{goods.goodsId},
-          sub_goods_id = #{subGoodsId},
+          sub_goods_id = #{goods.subGoodsId},
           goods_name = #{goods.goodsName},
           goods_sepc = #{goods.goodsSepc},
           unit = #{goods.unit},
@@ -181,7 +181,7 @@
           update_time = #{goods.updateTime},
           is_deleted = #{goods.isDeleted},
           detail_remark = #{goods.detailRemark}
-      where plan_detail_id = #{goods.planDetailId,jdbcType=BIGINT} and compnay_id = #{goods.compnayId}
+      where plan_detail_id = #{goods.planDetailId,jdbcType=BIGINT} and company_id = #{goods.companyId}
     </foreach>
   </update>
 

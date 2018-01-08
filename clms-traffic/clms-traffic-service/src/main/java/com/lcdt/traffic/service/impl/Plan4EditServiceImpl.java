@@ -19,9 +19,7 @@ import org.springframework.util.StringUtils;
 import org.tl.commons.util.DateUtility;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by yangbinq on 2017/12/13.
@@ -54,7 +52,11 @@ public class Plan4EditServiceImpl implements Plan4EditService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public WaybillPlan waybillPlanEdit(WaybillParamsDto dto, short flag) throws WaybillPlanException {
-        WaybillPlan vo = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(),dto.getCompanyId(),(short)0);
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",dto.getWaybillPlanId());
+        tMap.put("companyId",dto.getCompanyId());
+        tMap.put("isDeleted","0");
+        WaybillPlan vo = waybillPlanMapper.selectByPrimaryKey(tMap);
         if (vo==null) {
             throw new WaybillPlanException("计划不存在！");
         }
