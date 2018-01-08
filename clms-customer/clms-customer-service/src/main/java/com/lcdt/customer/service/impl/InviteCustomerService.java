@@ -1,5 +1,6 @@
 package com.lcdt.customer.service.impl;
 
+import com.lcdt.customer.config.ConfigConstant;
 import com.lcdt.customer.dao.CustomerInviteLogMapper;
 import com.lcdt.customer.dao.CustomerMapper;
 import com.lcdt.customer.model.Customer;
@@ -35,6 +36,9 @@ public class InviteCustomerService {
 	public String templateName = "/inviteEmail.vm";
 
 	public String inviteEmailSubject = "主题：邀请您使用大驼队协同物流运输系统";
+
+	@Autowired
+	ConfigConstant configConstant;
 
 	@Autowired
 	CustomerInviteLogMapper inviteLogdao;
@@ -138,8 +142,8 @@ public class InviteCustomerService {
 		velocityContext.put("inviteUser",inviteUserName);
 		velocityContext.put("inviteCompanyName", inviteCompanyName);
 		velocityContext.put("inviteCompanyType", inviteCompanyTypeName);
+		inviteUrl = configConstant.bindurlHost + inviteUrl;
 		velocityContext.put("inviteUrl", inviteUrl);
-
 		Velocity.mergeTemplate(templateName, "UTF-8", velocityContext, w);
 		StringWriter stringWriter = new StringWriter();
 		Velocity.evaluate(velocityContext, stringWriter, "", w.toString());
