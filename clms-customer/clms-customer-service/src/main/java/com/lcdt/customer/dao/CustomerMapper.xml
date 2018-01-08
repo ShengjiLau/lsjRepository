@@ -330,6 +330,7 @@
       <if test="customerType!=null">
         and ${customerType}
       </if>
+      <!---->
       <if test="bindCpid != null">
         and bind_comp_id is not null and bind_comp_id != ''
       </if>

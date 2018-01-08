@@ -9,34 +9,34 @@ public class CustomerParamsDto {
     @ApiModelProperty(value = "客户ID(编辑时必传)")
     private Long customerId;
 
-    @ApiModelProperty(required = true, value = "客户名称")
+    @ApiModelProperty(value = "客户名称")
     private String customerName;
 
-    @ApiModelProperty(required = true, value = "客户简称")
+    @ApiModelProperty( value = "客户简称")
     private String shortName;
 
     @ApiModelProperty(value = "客户编码")
     private String customerCode;
 
-    @ApiModelProperty(required = true, value = "客户类型(逗号隔开ID:1,2,3,4,5,6,7)")
+    @ApiModelProperty(value = "客户类型(逗号隔开ID:1,2,3,4,5,6,7)")
     private String clientTypes;
 
-    @ApiModelProperty(required = true, value = "所属地区-省")
+    @ApiModelProperty(value = "所属地区-省")
     private String province;
 
-    @ApiModelProperty(required = true, value = "所属地区-市")
+    @ApiModelProperty(value = "所属地区-市")
     private String city;
 
-    @ApiModelProperty(required = true, value = "所属地区-县")
+    @ApiModelProperty(value = "所属地区-县")
     private String county;
 
-    @ApiModelProperty(required = true, value = "详细地址")
+    @ApiModelProperty(value = "详细地址")
     private String detailAddress;
 
-    @ApiModelProperty(required = true, value = "业务项目组名(逗号隔开:1,2,3,4,5,6,7)")
+    @ApiModelProperty(value = "业务项目组名(逗号隔开:1,2,3,4,5,6,7)")
     private String groupIds;
 
-    @ApiModelProperty(required = true, value = "项目项目组(逗号隔开:组1,组2,组3)")
+    @ApiModelProperty(value = "项目项目组(逗号隔开:组1,组2,组3)")
     private String groupNames;
 
     @ApiModelProperty(value = "邮编")

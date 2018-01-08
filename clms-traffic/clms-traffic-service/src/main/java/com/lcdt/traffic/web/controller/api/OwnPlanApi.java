@@ -171,24 +171,31 @@ public class OwnPlanApi {
     @ApiOperation("计划审核通过")
     @RequestMapping(value = "/planCheckPass",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_check_pass')")
-    public JSONObject planCheckPass(@RequestBody WaybillParamsDto dto, BindingResult bindingResult) {
+    public JSONObject planCheckPass(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+        WaybillParamsDto dto = new WaybillParamsDto();
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
+        dto.setWaybillPlanId(waybillPlanId);
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
         JSONObject jsonObject = new JSONObject();
-        if (bindingResult.hasErrors()) {
-            jsonObject.put("code", -1);
-            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
-            return jsonObject;
+        WaybillPlan waybillPlan =  planService.wayBillPlanCheckPass(dto);
+        String message = "审批成功！";
+        int code = -1;
+        if (waybillPlan!=null && waybillPlan.getIsApproval()==2) {
+            code = 0;
+        } else {
+            message = "审批失败，请重试！";
         }
-        planService.wayBillPlanCheckPass(dto);
-        jsonObject.put("code", 0);
-        jsonObject.put("message", "审核通过！");
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
         return jsonObject;
+
+
+
 
     }
 
@@ -196,22 +203,13 @@ public class OwnPlanApi {
     @ApiOperation("拉取计划信息-编辑")
     @RequestMapping(value = "/loadPlan",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_plan')")
-    public JSONObject loadPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId, BindingResult bindingResult) {
+    public WaybillPlan loadPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         WaybillParamsDto dto = new WaybillParamsDto();
         dto.setCompanyId(companyId);
         dto.setWaybillPlanId(waybillPlanId);
-        JSONObject jsonObject = new JSONObject();
-        if (bindingResult.hasErrors()) {
-            jsonObject.put("code", -1);
-            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
-            return jsonObject;
-        }
         WaybillPlan waybillPlan = planService.loadWaybillPlan(dto);
-        jsonObject.put("code", 0);
-        jsonObject.put("message", "");
-        jsonObject.put("waybillPlan", waybillPlan);
-        return jsonObject;
+        return waybillPlan;
     }
 
 
@@ -220,21 +218,16 @@ public class OwnPlanApi {
     @ApiOperation("计划详细删除")
     @RequestMapping(value = "/planDetailDelete",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_detail_delete')")
-    public JSONObject planDetailDelete(@ApiParam(value = "计划商品ID",required = true) @RequestParam Long planDetailId, BindingResult bindingResult) {
+    public JSONObject planDetailDelete(@ApiParam(value = "计划详细ID",required = true) @RequestParam Long planDetailId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         JSONObject jsonObject = new JSONObject();
-        if (bindingResult.hasErrors()) {
-            jsonObject.put("code", -1);
-            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
-            return jsonObject;
-        }
         Integer flag = planService.planDetailDelete(planDetailId,companyId);
-        String message = null;
+        String message = "删除成功！";
         int code = -1;
         if (flag>0) {
             code = 0;
         } else {
-            message = "操作失败，请重试！";
+            message = "删除失败，请重试！";
         }
         jsonObject.put("message",message);
         jsonObject.put("code",code);
@@ -315,8 +308,8 @@ public class OwnPlanApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_list')")
     public PageBaseDto planLeaveMsgList( @ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
                                                    @ApiParam(value = "创建计划企业ID",required = true) @RequestParam Long createCompanyId,
-                                                   @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
-                                                   @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+                                                   @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                                   @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);
@@ -343,27 +336,28 @@ public class OwnPlanApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_Add')")
     public JSONObject planLeaveMsgAdd(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
                                         @ApiParam(value = "创建计划企业ID",required = true) @RequestParam Long companyId,
-                                        @ApiParam(value = "留言内容",required = true) @RequestParam String leaveMsg, BindingResult bindingResult) {
+                                        @ApiParam(value = "留言内容",required = true) @RequestParam String leaveMsg) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         User loginUser = SecurityInfoGetter.getUser();
         PlanLeaveMsgParamsDto dto = new PlanLeaveMsgParamsDto();
         dto.setCompanyId(userCompRel.getCompId());
-        dto.setCompanyName(userCompRel.getFullName());
+        dto.setCompanyName(userCompRel.getCompany().getFullName());
         dto.setUserId(loginUser.getUserId());
         dto.setRealName(loginUser.getRealName());
         dto.setLeaveMsg(leaveMsg);
         dto.setWaybillPlanId(waybillPlanId);
         dto.setCreateCompanyId(companyId); //创建计划企业ID
-
         JSONObject jsonObject = new JSONObject();
-        if (bindingResult.hasErrors()) {
-            jsonObject.put("code", -1);
-            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
-            return jsonObject;
+        PlanLeaveMsg planLeaveMsg =  planService.planLeaveMsgAdd(dto);
+        String message = "添加成功！";
+        int code = -1;
+        if (planLeaveMsg!=null) {
+            code = 0;
+        } else {
+            message = "添加失败！";
         }
-        planService.planLeaveMsgAdd(dto);
-        jsonObject.put("code", 0);
-        jsonObject.put("message", "添加成功！");
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
         return jsonObject;
     }
 
@@ -372,19 +366,22 @@ public class OwnPlanApi {
     @ApiOperation("计划--取消")
     @RequestMapping(value = "/cancelOwnPlan",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_cancel_own_plan')")
-    public JSONObject cancelOwnPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId, BindingResult bindingResult) {
+    public String cancelOwnPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
         User loginUser = SecurityInfoGetter.getUser();
         Long companyId = SecurityInfoGetter.getCompanyId();
+        Integer flag = planService.ownPlanCancel(waybillPlanId,companyId,loginUser);
         JSONObject jsonObject = new JSONObject();
-        if (bindingResult.hasErrors()) {
-            jsonObject.put("code", -1);
-            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
-            return jsonObject;
+        String message = "取消成功！";
+        int code = -1;
+        if (flag==1) {
+            code = 0;
+        } else {
+            message = "取消失败！";
         }
-        planService.ownPlanCancel(waybillPlanId,companyId,loginUser);
-        jsonObject.put("code", 0);
-        jsonObject.put("message", "取消成功！");
-        return jsonObject;
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
+
     }
 
 

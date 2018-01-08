@@ -232,9 +232,6 @@
       attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
       is_approval = #{isApproval,jdbcType=SMALLINT},
       plan_remark = #{planRemark,jdbcType=VARCHAR},
-      create_id = #{createId,jdbcType=BIGINT},
-      create_name = #{createName,jdbcType=VARCHAR},
-      create_date = #{createDate,jdbcType=TIMESTAMP},
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -501,7 +498,7 @@
           and company_id = #{companyId,jdbcType=BIGINT}
         </if>
         <if test=" isDeleted!=null">
-          and  is_deleted = #{isDeleted,jdbcType=SMALLINT},
+          and  is_deleted = #{isDeleted,jdbcType=SMALLINT}
         </if>
     </where>
 
