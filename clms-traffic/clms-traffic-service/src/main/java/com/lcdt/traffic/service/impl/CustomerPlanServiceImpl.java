@@ -166,6 +166,10 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
+
+
+        map.remove("groupIds");//移除
+
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlan4Bidding(map);
         if (list!=null && list.size()>0) {
             for(CustomerPlanDto dto :list){
@@ -196,6 +200,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
+        map.remove("groupIds");//移除
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Offer(map);
         if (list!=null && list.size()>0) {
             for(CustomerPlanDto dto :list){
@@ -226,6 +231,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
+        map.remove("groupIds");//移除
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Offer(map);
         if (list!=null && list.size()>0) {
             for(CustomerPlanDto dto :list){
@@ -256,6 +262,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
+        map.remove("groupIds");//移除
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4VehicleDoing(map);
         if (list!=null && list.size()>0) {
             for(CustomerPlanDto dto :list){
@@ -286,6 +293,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
+        map.remove("groupIds");//移除
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4VehicleHave(map);
         if (list!=null && list.size()>0) {
             for(CustomerPlanDto dto :list){
@@ -316,6 +324,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
+        map.remove("groupIds");//移除
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Completed(map);
         if (list!=null && list.size()>0) {
             for(CustomerPlanDto dto :list){
@@ -345,6 +354,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
+        map.remove("groupIds");//移除
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Cancel(map);
         if (list!=null && list.size()>0) {
             for(CustomerPlanDto dto :list){

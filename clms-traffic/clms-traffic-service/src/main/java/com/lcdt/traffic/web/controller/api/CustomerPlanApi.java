@@ -51,8 +51,8 @@ public class CustomerPlanApi {
     @RequestMapping(value = "/customerPlanList4Bidding",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_bidding')")
     public PageBaseDto customerPlanList4Bidding(@Validated WaybillPlanListParamsDto dto,
-                                              @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
-                                              @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+                                              @ApiParam(value = "页码",required = true,defaultValue = "1") @RequestParam Integer pageNo,
+                                              @ApiParam(value = "每页显示条数",required = true,defaultValue = "10") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);
@@ -98,7 +98,7 @@ public class CustomerPlanApi {
             List<Group> groupList = SecurityInfoGetter.groups();
             for(int i=0;i<groupList.size();i++) {
                 Group group = groupList.get(i);
-                sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+                sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)"); //客户表
                 if(i!=groupList.size()-1){
                     sb.append(" or ");
                 }
@@ -164,7 +164,7 @@ public class CustomerPlanApi {
             List<Group> groupList = SecurityInfoGetter.groups();
             for(int i=0;i<groupList.size();i++) {
                 Group group = groupList.get(i);
-                sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+                sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)"); //客户表
                 if(i!=groupList.size()-1){
                     sb.append(" or ");
                 }
@@ -228,7 +228,7 @@ public class CustomerPlanApi {
             List<Group> groupList = SecurityInfoGetter.groups();
             for(int i=0;i<groupList.size();i++) {
                 Group group = groupList.get(i);
-                sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+                sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)"); //客户表
                 if(i!=groupList.size()-1){
                     sb.append(" or ");
                 }
@@ -292,7 +292,7 @@ public class CustomerPlanApi {
             List<Group> groupList = SecurityInfoGetter.groups();
             for(int i=0;i<groupList.size();i++) {
                 Group group = groupList.get(i);
-                sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+                sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)"); //客户表
                 if(i!=groupList.size()-1){
                     sb.append(" or ");
                 }
@@ -355,7 +355,7 @@ public class CustomerPlanApi {
             List<Group> groupList = SecurityInfoGetter.groups();
             for(int i=0;i<groupList.size();i++) {
                 Group group = groupList.get(i);
-                sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+                sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)"); //客户表
                 if(i!=groupList.size()-1){
                     sb.append(" or ");
                 }
@@ -419,7 +419,7 @@ public class CustomerPlanApi {
             List<Group> groupList = SecurityInfoGetter.groups();
             for(int i=0;i<groupList.size();i++) {
                 Group group = groupList.get(i);
-                sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+                sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)"); //客户表
                 if(i!=groupList.size()-1){
                     sb.append(" or ");
                 }
@@ -483,7 +483,7 @@ public class CustomerPlanApi {
             List<Group> groupList = SecurityInfoGetter.groups();
             for(int i=0;i<groupList.size();i++) {
                 Group group = groupList.get(i);
-                sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+                sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)"); //客户表
                 if(i!=groupList.size()-1){
                     sb.append(" or ");
                 }
