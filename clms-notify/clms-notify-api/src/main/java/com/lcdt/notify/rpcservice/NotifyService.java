@@ -6,4 +6,5 @@ public interface NotifyService {
 
     void sendEventNotify(TrafficStatusChangeEvent event);
 
+    void sendSms(String[] phons ,String content);
 }

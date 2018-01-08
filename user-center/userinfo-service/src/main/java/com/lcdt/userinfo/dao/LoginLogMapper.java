@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.dao;
 
 import com.lcdt.userinfo.model.LoginLog;
+import com.lcdt.userinfo.model.LoginLogDto;
 
 import java.util.List;
 
@@ -15,6 +16,6 @@ public interface LoginLogMapper {
 
     int updateByPrimaryKey(LoginLog record);
 
-    List<LoginLog> selectByCompanyId(Long companyId);
+    List<LoginLogDto> selectByCompanyId(Long companyId);
 
 }

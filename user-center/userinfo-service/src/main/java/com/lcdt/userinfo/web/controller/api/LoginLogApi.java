@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.dao.LoginLogMapper;
 import com.lcdt.userinfo.model.LoginLog;
+import com.lcdt.userinfo.model.LoginLogDto;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.web.dto.PageResultDto;
 import io.swagger.annotations.ApiParam;
@@ -27,8 +28,8 @@ public class LoginLogApi {
     public PageResultDto companyUserLogs(@ApiParam(required = true)@RequestParam Integer pageNo, @RequestParam @ApiParam(required = true) Integer pageSize){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
-        List<LoginLog> loginLogs = dao.selectByCompanyId(companyId);
-        PageResultDto<LoginLog> userCompRelPageResultDto = new PageResultDto<>(loginLogs);
+        List<LoginLogDto> loginLogs = dao.selectByCompanyId(companyId);
+        PageResultDto<LoginLogDto> userCompRelPageResultDto = new PageResultDto<>(loginLogs);
         return userCompRelPageResultDto;
     }
 

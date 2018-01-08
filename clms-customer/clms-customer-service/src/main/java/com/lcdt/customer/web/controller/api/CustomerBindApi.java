@@ -84,7 +84,11 @@ public class CustomerBindApi {
 		inviteLogMapper.updateByPrimaryKey(customerInviteLog);
 
 		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
-		customer.setCompanyId(companyId);
+		if (customer.getBindCpid() != null) {
+			throw new RuntimeException("客户已绑定");
+		}
+
+		customer.setBindCpid(companyId);
 		customerService.customerUpdate(customer);
 		ModelAndView successView = new ModelAndView("invite_success");
 		return successView;
@@ -96,7 +100,6 @@ public class CustomerBindApi {
 	public ModelAndView customer(@RequestParam(name = "a") Long inviteLogId,@RequestParam(name = "b") String token){
 		//TODO 检查链接上的token 有效性
 		CustomerInviteLog customerInviteLog = inviteLogService.selectByInviteId(inviteLogId);
-
 		if (customerInviteLog.getIsValid() == 0 || !customerInviteLog.getInviteToken().equals(token)) {
 			ModelAndView modelAndView = new ModelAndView();
 			modelAndView.setViewName("invite_not_valid");

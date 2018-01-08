@@ -1,6 +1,8 @@
 package com.lcdt.notify.notifyimpl;
 
+import com.lcdt.notify.dao.SmsLogMapper;
 import com.lcdt.notify.model.NotifyReceiver;
+import com.lcdt.notify.model.SmsLog;
 import com.lcdt.util.MD5;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -13,6 +15,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,21 +29,27 @@ public class SmsNotifyImpl  {
 
     private Logger logger = LoggerFactory.getLogger(SmsNotifyImpl.class);
 
-    private static String username = "dtdtz";
-    private static String pwd = "n8ie41u7";
+    private static String username = "dtdhy";
+    private static String pwd = "qls4pm9j";
 
     public static final String SMS_API = "http://160.19.212.218:8080/eums/utf8/send_strong.do";
     CloseableHttpClient httpClient = HttpClients.createDefault();
 
-    public boolean sendSmsNotify(String content, String phoneNum) {
+    @Autowired
+    SmsLogMapper smsLogMapper;
+
+    public boolean sendSmsNotify(String content, String phoneNum,Long companyId) {
         logger.info("发送短信通知 >>> {} >>> {}",content,phoneNum);
-        
+        SmsLog smsLog = new SmsLog();
+        smsLog.setSeedCompanyId(companyId);
+        smsLog.setIsPay(false);
+        smsLogMapper.insert(smsLog);
+        sendSms(new String[]{phoneNum}, content, smsLog.getSmsId());
         return true;
     }
 
 
-
-    public boolean sendSms(String[] phonsNums, String message) {
+    public boolean sendSms(String[] phonsNums, String message,Long smsLogId) {
 
         if (phonsNums == null) {
             return false;
@@ -55,7 +64,8 @@ public class SmsNotifyImpl  {
         nameValuePairs.add(new BasicNameValuePair("key", encodeKey(seed)));
         nameValuePairs.add(new BasicNameValuePair("dest", phoneNumsValue(phonsNums)));
         nameValuePairs.add(new BasicNameValuePair("content", "【大驼队】" + message));
-//		nameValuePairs.add(new BasicNameValuePair("reference", String.valueOf(recordId)));
+        nameValuePairs.add(new BasicNameValuePair("reference", String.valueOf(smsLogId)));
+
 
         UrlEncodedFormEntity uefEntity;
         try {

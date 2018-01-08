@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.imageio.ImageIO;
@@ -60,7 +61,7 @@ public class AlipayWebController {
      * 新建一个充值订单
      * @return
      */
-    @RequestMapping("/topup")
+    @RequestMapping(value = "/topup",method = RequestMethod.POST)
     @ResponseBody
     public PayOrder createTopupPayOrder(Integer amount){
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -187,7 +188,6 @@ public class AlipayWebController {
         } catch (WriterException e1) {
             e1.printStackTrace();
         }
-
     }
 
     private static BufferedImage toBufferedImage(BitMatrix bitMatrix){

@@ -33,7 +33,7 @@ public class WaybillTransferRecordApi {
     @ApiOperation("客户运单--换车记录--新增")
     @RequestMapping(value = "/customer/add", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybilltransferrecord_add')")
-    public JSONObject addWaybillTransferRecord(WaybillTransferRecordDto dto) {
+    public JSONObject addCustomerWaybillTransferRecord(WaybillTransferRecordDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User logidUser = SecurityInfoGetter.getUser();
         dto.setCarrierCompanyId(companyId);
@@ -50,10 +50,30 @@ public class WaybillTransferRecordApi {
         }
     }
 
+    @ApiOperation("我的运单--换车记录--新增")
+    @RequestMapping(value = "/own/add", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybilltransferrecord_add')")
+    public JSONObject addOwnWaybillTransferRecord(WaybillTransferRecordDto dto) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User logidUser = SecurityInfoGetter.getUser();
+        dto.setCompanyId(companyId);
+        dto.setCreateId(logidUser.getUserId());
+        dto.setCreateName(logidUser.getRealName());
+        int result = waybillTransferRecordService.addWaybillTransferRecord(dto);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "添加成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("添加失败");
+        }
+    }
+
     @ApiOperation("客户运单--换车记录--修改")
     @RequestMapping(value = "/customer/modify", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybilltransferrecord_modify')")
-    public JSONObject modifyWaybillTransferRecord(WaybillTransferRecordDto dto){
+    public JSONObject modifyCustomerWaybillTransferRecord(WaybillTransferRecordDto dto){
         Long companyId=SecurityInfoGetter.getCompanyId();
         User loginUser=SecurityInfoGetter.getUser();
         dto.setCarrierCompanyId(companyId);
@@ -70,13 +90,44 @@ public class WaybillTransferRecordApi {
         }
     }
 
+    @ApiOperation("我的运单--换车记录--修改")
+    @RequestMapping(value = "/own/modify", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybilltransferrecord_modify')")
+    public JSONObject modifyOwnWaybillTransferRecord(WaybillTransferRecordDto dto){
+        Long companyId=SecurityInfoGetter.getCompanyId();
+        User loginUser=SecurityInfoGetter.getUser();
+        dto.setCompanyId(companyId);
+        dto.setUpdateId(loginUser.getUserId());
+        dto.setUpdateName(loginUser.getRealName());
+        int result=waybillTransferRecordService.modifyWaybillTransferRecord(dto);
+        if(result>0){
+            JSONObject jsonObject=new JSONObject();
+            jsonObject.put("code",0);
+            jsonObject.put("message","修改成功");
+            return jsonObject;
+        }else {
+            throw new RuntimeException("修改失败");
+        }
+    }
+
     @ApiOperation("客户运单--换车记录--查询")
     @RequestMapping(value = "/customer/query", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybilltransferrecord_query')")
-    public WaybillTransferRecord queryWaybillTransferRecord(@ApiParam(value = "换车记录id", required = true) @RequestParam Long recordId){
+    public WaybillTransferRecord queryCustomerWaybillTransferRecord(@ApiParam(value = "换车记录id", required = true) @RequestParam Long recordId){
         Long companyId=SecurityInfoGetter.getCompanyId();
         WaybillTransferRecordDto waybillTransferRecordDto = new WaybillTransferRecordDto();
         waybillTransferRecordDto.setCarrierCompanyId(companyId);
+        waybillTransferRecordDto.setId(recordId);
+        return waybillTransferRecordService.queryWaybillTransferRecord(waybillTransferRecordDto);
+    }
+
+    @ApiOperation("我的运单--换车记录--查询")
+    @RequestMapping(value = "/own/query", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybilltransferrecord_query')")
+    public WaybillTransferRecord queryOwnWaybillTransferRecord(@ApiParam(value = "换车记录id", required = true) @RequestParam Long recordId){
+        Long companyId=SecurityInfoGetter.getCompanyId();
+        WaybillTransferRecordDto waybillTransferRecordDto = new WaybillTransferRecordDto();
+        waybillTransferRecordDto.setCompanyId(companyId);
         waybillTransferRecordDto.setId(recordId);
         return waybillTransferRecordService.queryWaybillTransferRecord(waybillTransferRecordDto);
     }

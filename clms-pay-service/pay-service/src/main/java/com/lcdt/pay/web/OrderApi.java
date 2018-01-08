@@ -1,9 +1,12 @@
 package com.lcdt.pay.web;
 
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.converter.ArrayListResponseWrapper;
+import com.lcdt.pay.model.CompanyServiceCount;
 import com.lcdt.pay.model.PayBalance;
 import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.service.CompanyBalanceService;
+import com.lcdt.pay.service.CompanyServiceCountService;
 import com.lcdt.pay.service.TopupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +25,10 @@ public class OrderApi {
     @Autowired
     CompanyBalanceService balanceService;
 
+    @Autowired
+    CompanyServiceCountService companyServiceCountService;
+
+
     /**
      * 查看所有订单
      */
@@ -39,7 +46,20 @@ public class OrderApi {
     public PayBalance companyBalance(){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PayBalance payBalance = balanceService.companyBalance(companyId);
+        if (payBalance == null) {
+            payBalance = new PayBalance();
+            payBalance.setBalance(0);
+            payBalance.setBalanceCompanyId(companyId);
+        }
         return payBalance;
+    }
+
+    @RequestMapping(value = "/companyservice",method = RequestMethod.GET)
+    public  ArrayListResponseWrapper<CompanyServiceCount>  companyServiceCount(){
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        List<CompanyServiceCount> companyServiceCounts = companyServiceCountService.companyServiceCount(companyId);
+        ArrayListResponseWrapper<CompanyServiceCount> companyServiceCounts1 = new ArrayListResponseWrapper<>(companyServiceCounts);
+        return companyServiceCounts1;
     }
 
 }

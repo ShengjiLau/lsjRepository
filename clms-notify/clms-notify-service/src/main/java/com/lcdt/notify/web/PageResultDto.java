@@ -17,6 +17,11 @@ public class PageResultDto<T> implements ResponseData,Serializable{
 	}
 
 	public PageResultDto(List<T> result) {
+
+		if (result == null) {
+			return;
+		}
+
 		if (result instanceof Page) {
 			this.total = ((Page) result).getTotal();
 			this.list = ((Page) result).getResult();
