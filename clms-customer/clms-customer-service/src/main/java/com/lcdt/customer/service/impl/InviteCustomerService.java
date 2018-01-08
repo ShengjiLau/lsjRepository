@@ -45,6 +45,11 @@ public class InviteCustomerService {
 
 	public InviteDto buildInviteEmailContent(Long customerId,Long companyId,User inviteUser,Company inviteCompany){
 		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
+
+		if (customer == null) {
+			throw new RuntimeException("客户不存在");
+		}
+
 		CustomerInviteLog customerInviteLog = new CustomerInviteLog();
 		customerInviteLog.setInviteCompanyId(customer.getCompanyId());
 		customerInviteLog.setInviteCustomerId(customer.getCustomerId());

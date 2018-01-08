@@ -84,7 +84,11 @@ public class CustomerBindApi {
 		inviteLogMapper.updateByPrimaryKey(customerInviteLog);
 
 		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
-		customer.setCompanyId(companyId);
+		if (customer.getBindCpid() != null) {
+			throw new RuntimeException("客户已绑定");
+		}
+
+		customer.setBindCpid(companyId);
 		customerService.customerUpdate(customer);
 		ModelAndView successView = new ModelAndView("invite_success");
 		return successView;
