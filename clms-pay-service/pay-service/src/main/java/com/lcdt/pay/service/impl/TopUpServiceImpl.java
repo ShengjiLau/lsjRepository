@@ -1,5 +1,6 @@
 package com.lcdt.pay.service.impl;
 
+import com.lcdt.pay.dao.OrderType;
 import com.lcdt.pay.dao.PayOrderMapper;
 import com.lcdt.pay.model.Money;
 import com.lcdt.pay.model.PayOrder;
@@ -33,7 +34,7 @@ public class TopUpServiceImpl implements TopupService{
 
 
     public List<PayOrder> topUpOrderList(Long companyId){
-        List<PayOrder> payOrders = orderMapper.selectByCompanyId(companyId);
+        List<PayOrder> payOrders = orderMapper.selectByCompanyId(companyId, OrderType.TOPUPORDER);
         return payOrders;
     }
 

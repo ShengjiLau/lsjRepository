@@ -80,29 +80,35 @@ public class InviteCustomerService {
 
 	public String clientTypeToString(String types){
 		String str = "";
+		int addcount = 0;
 		StringTokenizer st = new StringTokenizer(types, ",");
 		while(st.hasMoreElements()){
+			if (addcount != 0) {
+				str = str + ",";
+			}
+
+			++addcount;
 			switch (st.nextToken()) {
 				case "1":
-					str = str + "销售客户,";
+					str = str + "销售客户";
 					break;
 				case "2":
-					str = str + "仓储客户,";
+					str = str + "仓储客户";
 					break;
 				case "3":
-					str = str + "运输客户,";
+					str = str + "运输客户";
 					break;
 				case "4":
-					str = str + "仓储服务商,";
+					str = str + "仓储服务商";
 					break;
 				case "5":
-					str = str + "运输服务商,";
+					str = str + "运输服务商";
 					break;
 				case "6":
-					str = str + "供应商,";
+					str = str + "供应商";
 					break;
 				case "7":
-					str = str + "其他,";
+					str = str + "其他";
 					break;
 			}
 

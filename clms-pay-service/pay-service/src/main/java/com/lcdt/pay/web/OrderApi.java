@@ -1,6 +1,7 @@
 package com.lcdt.pay.web;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.pay.dao.PayOrderMapper;
@@ -11,6 +12,7 @@ import com.lcdt.pay.service.ServiceProductPackageService;
 import com.lcdt.pay.service.TopupService;
 import com.lcdt.pay.service.impl.OrderServiceImpl;
 import com.lcdt.pay.utils.OrderNoGenerator;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,15 +44,34 @@ public class OrderApi {
     OrderServiceImpl orderService;
 
     /**
-     * 查看所有订单
+     * 查看充值订单
      */
     @RequestMapping(value = "/topuplist",method = RequestMethod.GET)
-    public ArrayListResponseWrapper<PayOrder> orderList(){
+    public PageResultDto<PayOrder> orderList(Integer pageNo,Integer pageSize){
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        PageHelper.startPage(pageNo, pageSize);
+        List<PayOrder> payOrders = topupService.topUpOrderList(companyId);
+        return new PageResultDto<PayOrder>(payOrders);
+    }
+
+
+    @RequestMapping(value = "/topuplist",method = RequestMethod.GET)
+    public ArrayListResponseWrapper<PayOrder> payOrderList(){
         Long companyId = SecurityInfoGetter.getCompanyId();
         List<PayOrder> payOrders = topupService.topUpOrderList(companyId);
         ArrayListResponseWrapper<PayOrder> payOrders1 = new ArrayListResponseWrapper<>(payOrders);
         return payOrders1;
     }
+
+    @ApiOperation("获取余额消费订单")
+    @RequestMapping(value = "payOrders",method = RequestMethod.POST)
+    public PageResultDto<PayOrder> payOrders(String productName,Integer pageNo,Integer pageSize){
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        PageHelper.startPage(pageNo, pageSize);
+        List<PayOrder> payOrders = orderMapper.selectPayOrderByProductName(companyId, productName);
+        return new PageResultDto<PayOrder>(payOrders);
+    }
+
 
     /**
      * 查看公司余额
