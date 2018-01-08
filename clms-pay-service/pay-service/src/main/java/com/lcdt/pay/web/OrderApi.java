@@ -1,13 +1,16 @@
 package com.lcdt.pay.web;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
-import com.lcdt.pay.model.CompanyServiceCount;
-import com.lcdt.pay.model.PayBalance;
-import com.lcdt.pay.model.PayOrder;
+import com.lcdt.pay.dao.PayOrderMapper;
+import com.lcdt.pay.model.*;
 import com.lcdt.pay.service.CompanyBalanceService;
 import com.lcdt.pay.service.CompanyServiceCountService;
+import com.lcdt.pay.service.ServiceProductPackageService;
 import com.lcdt.pay.service.TopupService;
+import com.lcdt.pay.service.impl.OrderServiceImpl;
+import com.lcdt.pay.utils.OrderNoGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,15 +31,25 @@ public class OrderApi {
     @Autowired
     CompanyServiceCountService companyServiceCountService;
 
+    @Autowired
+    ServiceProductPackageService packageService;
+
+    @Autowired
+    PayOrderMapper orderMapper;
+
+
+    @Autowired
+    OrderServiceImpl orderService;
 
     /**
      * 查看所有订单
      */
     @RequestMapping(value = "/topuplist",method = RequestMethod.GET)
-    public List<PayOrder> orderList(){
+    public ArrayListResponseWrapper<PayOrder> orderList(){
         Long companyId = SecurityInfoGetter.getCompanyId();
         List<PayOrder> payOrders = topupService.topUpOrderList(companyId);
-        return payOrders;
+        ArrayListResponseWrapper<PayOrder> payOrders1 = new ArrayListResponseWrapper<>(payOrders);
+        return payOrders1;
     }
 
     /**
@@ -61,5 +74,42 @@ public class OrderApi {
         ArrayListResponseWrapper<CompanyServiceCount> companyServiceCounts1 = new ArrayListResponseWrapper<>(companyServiceCounts);
         return companyServiceCounts1;
     }
+
+
+    @RequestMapping(value = "/productpackage",method = RequestMethod.POST)
+    public ArrayListResponseWrapper<ServiceProductPackage> serviceProductPackages(String packageType){
+        List<ServiceProductPackage> serviceProductPackages = packageService.serviceProductPackageList(packageType);
+        return new ArrayListResponseWrapper<ServiceProductPackage>(serviceProductPackages);
+    }
+
+    @RequestMapping(value = "/createorder",method = RequestMethod.POST)
+    public PayOrder createPayOrder(){
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Long userId = SecurityInfoGetter.getUser().getUserId();
+
+        PayOrder payOrder = new PayOrder();
+        payOrder.setOrderStatus(OrderStatus.PENDINGPAY);
+        payOrder.setOrderPayCompanyId(companyId);
+        payOrder.setOrderPayUserId(userId);
+        payOrder.setOrderNo(OrderNoGenerator.generatorOrderNo());
+        payOrder.setOrderType(2);
+
+        orderMapper.insert(payOrder);
+
+        return payOrder;
+
+    }
+
+
+    @RequestMapping(value = "/buypackage",method = RequestMethod.POST)
+    public String buyServicePackage(Integer packageId,Long orderId){
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        orderService.buyServiceProduct(orderId,companyId,packageId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "操作成功");
+        return jsonObject.toString();
+    }
+
 
 }

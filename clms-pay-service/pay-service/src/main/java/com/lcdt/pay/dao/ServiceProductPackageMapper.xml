@@ -40,4 +40,13 @@
     select package_id, product_id, package_des, product_num, package_price, package_type
     from service_product_package
   </select>
+
+  <select id="selectBypackageType" resultMap="BaseResultMap">
+    select package_id, product_id, package_des, product_num, package_price, package_type
+    from service_product_package
+    <if test="packageType != null">
+      WHERE package_type = #{packageType,jdbcType=VARCHAR}
+    </if>
+  </select>
+
 </mapper>
