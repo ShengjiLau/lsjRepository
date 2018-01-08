@@ -85,9 +85,9 @@ public class OwnVehicleApi {
     }
 
     @ApiOperation(value = "删除车辆", notes = "删除车辆")
-    @PostMapping("/detele")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_detele')")
-    public JSONObject delOwnVehicle(@Validated @RequestBody OwnVehicleDto ownVehicleDto, BindingResult bindingResult) {
+    @PostMapping("/delete")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_delete')")
+    public JSONObject delOwnVehicle(@RequestBody OwnVehicleDto ownVehicleDto, BindingResult bindingResult) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
         String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
@@ -100,9 +100,15 @@ public class OwnVehicleApi {
             jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
             return jsonObject;
         }
-        ownVehicleService.delVehicle(ownVehicleDto);
-        jsonObject.put("code", 0);
-        jsonObject.put("message", "删除成功");
+        int row = ownVehicleService.delVehicle(ownVehicleDto);
+        if(row>0){
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "删除成功");
+        }else{
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "该数据已被删除");
+        }
+
         return jsonObject;
     }
 

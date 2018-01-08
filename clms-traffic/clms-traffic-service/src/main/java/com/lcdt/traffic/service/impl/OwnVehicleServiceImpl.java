@@ -23,10 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @AUTHOR liuh
@@ -110,10 +108,9 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
             List<Long> ovcIdList = ownVehicleCertificateMapper.selectOvcIdByOwnVehicleId(ownVehicle.getOwnVehicleId());
             List<OwnVehicleCertificate> list1 = new ArrayList<>();
             List<OwnVehicleCertificate> list2 = new ArrayList<>();
-            List<OwnVehicleCertificate> list3 = new ArrayList<>();
             if (null != ownVehicleDto.getOwnVehicleCertificateList()) {
                 for (OwnVehicleCertificate item : ownVehicleDto.getOwnVehicleCertificateList()) {  //迭代根据ownVehicleId来区分是新增还是插入
-                    item.setOwnVehicleId(ownVehicle.getOwnVehicleId());
+                    item.setOwnVehicleId(ownVehicle.getOwnVehicleId());     //设置ownVehicleId
                     if (item.getOvcId() == null) {   //没有主键的则为新增
                         item.setCreateId(ownVehicleDto.getUpdateId());
                         item.setCreateName(ownVehicleDto.getUpdateName());
@@ -126,9 +123,13 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
                         item.setCompanyId(ownVehicleDto.getCompanyId());
                         list2.add(item);
                         //
-                        for(Long ovcId : ovcIdList){
-                            if(item.getOvcId()==ovcId){
-                                ovcIdList.remove(ovcId);
+                        if(null!=ovcIdList) {
+                            Iterator<Long> it = ovcIdList.iterator();
+                            while(it.hasNext()){
+                                Long ovcId = it.next();
+                                if(ovcId==item.getOvcId()){
+                                    it.remove();
+                                }
                             }
                         }
                     }
@@ -142,8 +143,8 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
                 if(ovcIdList.size()>0){
                     Map<String, Object> params = new HashMap<String, Object>();
                     params.put("ovcIds",ovcIdList);
-                    params.put("updateId",ownVehicleDto.getCreateId());
-                    params.put("updateName",ownVehicleDto.getCreateName());
+                    params.put("updateId",ownVehicleDto.getUpdateId());
+                    params.put("updateName",ownVehicleDto.getUpdateName());
                     ownVehicleCertificateMapper.deleteByBatch(params);
                 }
                 /**下面判断用户表中是否存在该随车电话的账号，不存在的话，则自动保存一条司机的账号信息*/
@@ -161,8 +162,8 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
                         driver.setAffiliatedCompany(ownVehicleDto.getAffiliatedCompany());
                         driver.setDriverName(ownVehicleDto.getVehicleDriverName());
                         driver.setDriverPhone(phone);
-                        driver.setCreateId(ownVehicleDto.getCreateId());
-                        driver.setCreateName(ownVehicleDto.getCreateName());
+                        driver.setCreateId(ownVehicleDto.getUpdateId());
+                        driver.setCreateName(ownVehicleDto.getUpdateName());
                         driverService.addDriver(driver);    //保存司机信息
                     } catch (PhoneHasRegisterException e) {
                         e.printStackTrace();

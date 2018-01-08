@@ -87,9 +87,9 @@ public class OwnDriverApi {
     }
 
     @ApiOperation(value = "删除司机", notes = "删除司机")
-    @PostMapping("/detele")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_detele')")
-    public JSONObject delOwnDriver(@Validated @RequestBody OwnDriverDto ownDriverDto, BindingResult bindingResult) {
+    @PostMapping("/delete")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_delete')")
+    public JSONObject delOwnDriver(@RequestBody OwnDriverDto ownDriverDto, BindingResult bindingResult) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
         String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
@@ -102,9 +102,14 @@ public class OwnDriverApi {
             jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
             return jsonObject;
         }
-        ownDriverService.delDriver(ownDriverDto);
-        jsonObject.put("code", 0);
-        jsonObject.put("message", "删除成功");
+        int row = ownDriverService.delDriver(ownDriverDto);
+        if(row>0){
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "删除成功");
+        }else{
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "该数据已被删除");
+        }
         return jsonObject;
     }
 
