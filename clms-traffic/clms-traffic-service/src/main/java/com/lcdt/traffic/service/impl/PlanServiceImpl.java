@@ -213,14 +213,10 @@ public class PlanServiceImpl implements PlanService {
              *如果是司机需要生成运单
              */
             if (carrierType == 2) {
-                WaybillDto waybillDto = PlanBO.getInstance().toWaybillItemsDto(waybillPlan, planDetailList, splitGoodsDetailList);
-                if (null!=waybillDto) {
-                    waybillService.addWaybill(waybillDto);
-                }
+                WaybillDto waybillDto = new WaybillDto();
+                PlanBO.getInstance().toWaybillItemsDto(waybillPlan, splitGoods, waybillDto, planDetailList, splitGoodsDetailList);
+                waybillService.addWaybill(waybillDto);
             }
-
-
-
         } else { //未指定承运商
             updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
             updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)

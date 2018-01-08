@@ -73,13 +73,17 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                 vo.setArriveDate(DateUtility.string2Date(dto.getArriveDate(),"yyyy-MM-dd HH:mm:ss"));
             }
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new RuntimeException("竞价/起运时间、送达有误！");
         }
 
-        if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
-            String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
-            Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
-            vo.setCarrierCompanyId(customer.getCompanyId());
+        if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
+            if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
+                String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
+                Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
+                vo.setCarrierCompanyId(customer.getCompanyId());
+            } else { // 司机
+                vo.setCarrierCompanyId(vo.getCompanyId()); //获取下的本企业司机
+            }
         }
 
         //具体业务处理
@@ -178,7 +182,8 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                      *如果是司机需要生成运单
                      */
                     if (carrierType == 2) {
-                        WaybillDto waybillDto = PlanBO.getInstance().toWaybillItemsDto(vo,planDetailList,splitGoodsDetailList);
+                        WaybillDto waybillDto = new WaybillDto();
+                        PlanBO.getInstance().toWaybillItemsDto(vo,splitGoods,waybillDto,planDetailList,splitGoodsDetailList);
                         if (null!=waybillDto) {
                             waybillService.addWaybill(waybillDto);
                         }
