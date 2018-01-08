@@ -75,8 +75,8 @@ public class DriverGroupApi {
     }
 
     @ApiOperation(value = "删除分组", notes = "删除分组")
-    @PostMapping("/detele")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('drivergroup_detele')")
+    @PostMapping("/delete")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('drivergroup_delete')")
     public JSONObject delOwnDriver(@RequestBody DriverGroup driverGroup, BindingResult bindingResult) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id

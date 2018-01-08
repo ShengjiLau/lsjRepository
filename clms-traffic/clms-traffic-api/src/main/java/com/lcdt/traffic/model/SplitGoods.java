@@ -117,6 +117,16 @@ public class SplitGoods implements java.io.Serializable,ResponseData {
      */
     private Long companyId;
 
+    public String getCancelRemark() {
+        return cancelRemark;
+    }
+
+    public void setCancelRemark(String cancelRemark) {
+        this.cancelRemark = cancelRemark;
+    }
+
+    private String cancelRemark;
+
 
 
     public List<SplitGoodsDetail> getSplitGoodsDetailList() {

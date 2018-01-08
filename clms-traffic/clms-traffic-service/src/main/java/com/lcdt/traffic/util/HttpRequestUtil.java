@@ -1,8 +1,8 @@
 package com.lcdt.traffic.util;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lcdt.util.HttpUtils;
-import com.sun.org.apache.regexp.internal.RE;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -12,7 +12,6 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
-import sun.net.www.http.HttpClient;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
@@ -41,7 +40,7 @@ public class HttpRequestUtil {
             pm += "&" + key + "=" + params.get(key);
         }
         url = url + "?" + pm.substring(1);
-//        System.out.println("===> url" + url);
+        System.out.println("===> url:" + url);
         String response = restTemplate.getForObject(url, String.class);
         String jsonString = null;
         try {

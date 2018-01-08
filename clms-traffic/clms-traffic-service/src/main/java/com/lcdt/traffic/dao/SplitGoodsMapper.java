@@ -3,6 +3,7 @@ package com.lcdt.traffic.dao;
 import com.lcdt.traffic.model.SplitGoods;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SplitGoodsMapper {
     /**
@@ -35,7 +36,13 @@ public interface SplitGoodsMapper {
      */
     SplitGoods selectByPrimaryKey(Long splitGoodsId, Long companyId);
 
-    List<SplitGoods> selectByWaybillPlanId(Long waybillPlanId, Long companyId, Short isDeleted);
+
+    /**
+     * Long waybillPlanId, Long companyId, Short isDeleted
+     * @param map
+     * @return
+     */
+    List<SplitGoods> selectByWaybillPlanId(Map map);
 
 
     /**

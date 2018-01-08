@@ -78,15 +78,13 @@
     <result column="cancel_man" jdbcType="VARCHAR" property="cancelMan" />
     <result column="cancel_remark" jdbcType="VARCHAR" property="cancelRemark" />
     <!--计划详细-->
-    <collection property="planDetailList" column="{waybill_plan_id=waybill_plan_id,company_id=company_id,is_deleted=0}"
+    <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
                 select="com.lcdt.traffic.dao.PlanDetailMapper.selectByWaybillPlanId" />
     <!--派单记录-->
-    <collection property="splitGoodsList" column="{waybill_plan_id=waybill_plan_id,company_id=company_id,is_deleted=0}"
+    <collection property="splitGoodsList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.SplitGoods" javaType="ArrayList"
-                select="com.lcdt.traffic.dao.SplitGoodsMapper.selectByCustomerId" />
-
-    <!--运单记录-->
+                select="com.lcdt.traffic.dao.SplitGoodsMapper.selectByWaybillPlanId" />
   </resultMap>
 
 
@@ -151,7 +149,7 @@
       company_id, plan_days, pubdate, 
       finish_date, cancel_date, cancel_man, 
       cancel_remark)
-    values (#{planCode,jdbcType=VARCHAR}, #{serialCode,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT},
+    values (#{planCode,jdbcType=VARCHAR}, F_PLAN_SERIAL_CODE('TP'), #{groupId,jdbcType=BIGINT},
       #{groupName,jdbcType=VARCHAR}, #{planSource,jdbcType=VARCHAR}, #{planStatus,jdbcType=VARCHAR}, 
       #{sendCardStatus,jdbcType=SMALLINT}, #{sendOrderType,jdbcType=SMALLINT}, #{carrierType,jdbcType=SMALLINT},
       #{carrierCollectionIds,jdbcType=VARCHAR},#{carrierCollectionNames,jdbcType=VARCHAR}, #{carrierPhone,jdbcType=VARCHAR}, #{carrierVehicle,jdbcType=VARCHAR},
@@ -183,7 +181,6 @@
     -->
     update t_waybill_plan
     set plan_code = #{planCode,jdbcType=VARCHAR},
-      serial_code = #{serialCode,jdbcType=VARCHAR},
       group_id = #{groupId,jdbcType=BIGINT},
       group_name = #{groupName,jdbcType=VARCHAR},
       carrier_collection_ids = #{carrierCollectionIds,jdbcType=VARCHAR},
@@ -266,9 +263,6 @@
     <set>
       <if test="planCode != null">
         plan_code = #{planCode,jdbcType=VARCHAR},
-      </if>
-      <if test="serialCode != null">
-        serial_code = #{serialCode,jdbcType=VARCHAR},
       </if>
       <if test="groupId != null">
         group_id = #{groupId,jdbcType=BIGINT},
@@ -535,7 +529,7 @@
         from t_waybill_plan
         <where>
           <if test=" isDeleted!=null">
-            and  is_deleted = #{isDeleted,jdbcType=SMALLINT},
+            and  is_deleted = #{isDeleted,jdbcType=SMALLINT}
           </if>
           <if test=" carrierCompanyId!=null">
             and  carrier_company_id = #{ carrierCompanyId,jdbcType=BIGINT}

@@ -1,6 +1,7 @@
 package com.lcdt.traffic.util;
 
 import com.lcdt.traffic.model.PlanDetail;
+import com.lcdt.traffic.model.SplitGoods;
 import com.lcdt.traffic.model.SplitGoodsDetail;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.vo.ConstantVO;
@@ -28,9 +29,9 @@ public class PlanBO {
         return instance;
     }
 
-    public WaybillDto converPlan2Waybill(WaybillPlan waybillPlan) {
-        WaybillDto waybillDto = new WaybillDto();
+    public void converPlan2Waybill(WaybillPlan waybillPlan, SplitGoods splitGoods,WaybillDto waybillDto) {
         waybillDto.setWaybillPlanId(waybillPlan.getWaybillPlanId());//计划ID
+        if(splitGoods!=null) waybillDto.setSplitGoodsId(splitGoods.getSplitGoodsId());
         waybillDto.setWaybillStatus(ConstantVO.WAYBILL_STATUS_WATIE_SEND);
         waybillDto.setGroupId(waybillPlan.getGroupId());
         waybillDto.setGroupName(waybillPlan.getGroupName());
@@ -67,7 +68,6 @@ public class PlanBO {
         waybillDto.setAttachment4Name(waybillPlan.getAttachment4Name());
         waybillDto.setAttachment5Name(waybillPlan.getAttachment5Name());
         waybillDto.setCompanyId(waybillPlan.getCompanyId());
-        return waybillDto;
 
     }
 
@@ -76,12 +76,13 @@ public class PlanBO {
      * 计划至运单转化(全部派完的)
      *
      * @param waybillPlan --计划
+     * @param waybillPlan --派单
      * @param planDetailList --计划详细
      * @param splitGoodsDetailList -- 派单详细
      * @return
      */
-    public WaybillDto toWaybillItemsDto(WaybillPlan waybillPlan, List<PlanDetail> planDetailList, List<SplitGoodsDetail> splitGoodsDetailList) {
-        WaybillDto waybillDto = converPlan2Waybill(waybillPlan);
+    public WaybillDto toWaybillItemsDto(WaybillPlan waybillPlan, SplitGoods splitGoods,WaybillDto waybillDto , List<PlanDetail> planDetailList, List<SplitGoodsDetail> splitGoodsDetailList) {
+        converPlan2Waybill(waybillPlan, splitGoods, waybillDto);
         List<WaybillItemsDto> waybillItemsDtos = new ArrayList<WaybillItemsDto>();
         Date dt = new Date();
         for (PlanDetail obj :planDetailList) {

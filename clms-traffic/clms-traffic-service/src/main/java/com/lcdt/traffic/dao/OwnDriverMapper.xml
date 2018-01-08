@@ -49,7 +49,7 @@
       CURRENT_TIMESTAMP , #{companyId,jdbcType=BIGINT}
       )
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnDriver">
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.OwnDriver" useGeneratedKeys="true" keyProperty="ownDriverId">
     update t_own_driver
     set driver_ID = #{driverId,jdbcType=BIGINT},
       affiliated_company = #{affiliatedCompany,jdbcType=VARCHAR},
@@ -107,7 +107,7 @@
     <result column="driver_address" jdbcType="VARCHAR" property="driverAddress" />
     <result column="driver_remark" jdbcType="VARCHAR" property="driverRemark" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
-    <collection property="ownDriverCertificateList" column="own_vehicle_id" resultMap="odcResultMap">
+    <collection property="ownDriverCertificateList" column="own_vehicle_id" resultMap="odcResultMap" notNullColumn="odc_id">
     </collection>
   </resultMap>
   <resultMap id="odcResultMap" type="com.lcdt.traffic.model.OwnDriverCertificate">
@@ -150,13 +150,13 @@
     <where>
       company_id = #{companyId,jdbcType=BIGINT} and is_deleted = 0
       <if test="affiliatedCompany!=null and affiliatedCompany!=''">
-        and affiliated_company like '%#{affiliatedCompany,jdbcType=VARCHAR}%'
+        and affiliated_company like concat('%',#{affiliatedCompany,jdbcType=VARCHAR},'%')
       </if>
       <if test="driverName!=null and driverName!=''">
-        and driver_name like '%#{driverName,jdbcType=VARCHAR}%'
+        and driver_name like concat('%',#{driverName,jdbcType=VARCHAR},'%')
       </if>
       <if test="driverPhone!=null and driverPhone!=''">
-        and driver_phone like '%#{driverPhone,jdbcType=VARCHAR}%'
+        and driver_phone like concat('%'#{driverPhone,jdbcType=VARCHAR},'%')
       </if>
       <if test="driverCategory==0 or driverCategory==1">
         and driver_category = #{driverCategory,jdbcType=VARCHAR}
@@ -174,7 +174,7 @@
     t2.odc_id, t2.own_driver_id, t2.group_name, t2.certificate_type, t2.certificate_no, t2.process_dt, t2.certificate_validity_begin,
     t2.certificate_validity_end, t2.certificate_fee, t2.certificate_attachment1, t2.certificate_attachment2,
     t2.certificate_attachment3, t2.group_remark
-    from t_own_driver t1 left join t_own_driver_certificate t2 on t1.own_driver_id = t2.own_driver_id
+    from t_own_driver t1 left join t_own_driver_certificate t2 on t1.own_driver_id = t2.own_driver_id and t2.is_deleted=0
     where t1.own_driver_id = #{0} and t1.company_id = #{1}
   </select>
 </mapper>

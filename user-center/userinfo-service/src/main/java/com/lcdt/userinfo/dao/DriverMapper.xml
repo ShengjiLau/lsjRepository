@@ -46,8 +46,7 @@
       driver_header_img, driver_license_photo, driver_ID_photo, 
       driver_ID_neg_photo, driver_remark, current_location, 
       short_current_location, create_id, create_name, 
-      create_date, update_id, update_name, 
-      update_date, is_deleted)
+      create_date, is_deleted)
     values (#{userId,jdbcType=BIGINT}, #{affiliatedCompany,jdbcType=VARCHAR}, #{driverName,jdbcType=VARCHAR}, 
       #{driverPhone,jdbcType=VARCHAR}, #{driverId,jdbcType=BIGINT}, #{driverCategory,jdbcType=SMALLINT}, 
       #{driverEmail,jdbcType=VARCHAR}, #{driverSex,jdbcType=SMALLINT}, #{driverNationality,jdbcType=VARCHAR}, 
@@ -56,8 +55,7 @@
       #{driverHeaderImg,jdbcType=VARCHAR}, #{driverLicensePhoto,jdbcType=VARCHAR}, #{driverIdPhoto,jdbcType=VARCHAR}, 
       #{driverIdNegPhoto,jdbcType=VARCHAR}, #{driverRemark,jdbcType=VARCHAR}, #{currentLocation,jdbcType=VARCHAR}, 
       #{shortCurrentLocation,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, 
-      CURRENT_TIMESTAMP , #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR},
-      #{updateDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT})
+      CURRENT_TIMESTAMP, #{isDeleted,jdbcType=SMALLINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.Driver">
     update t_driver
