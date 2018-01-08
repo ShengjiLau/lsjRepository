@@ -63,9 +63,13 @@ public class OwnVehicle implements Serializable {
 
     private Date vehicleInsuranceExpiryDate;
 
-    private String vehicleHeaderstockPhoto;
+    private String vehicleHeaderstockPhoto1;
+    private String vehicleHeaderstockPhoto2;
+    private String vehicleHeaderstockPhoto3;
 
-    private String vehicleTailstockPhoto;
+    private String vehicleTailstockPhoto1;
+    private String vehicleTailstockPhoto2;
+    private String vehicleTailstockPhoto3;
 
     private String vehicleTyreSpec;
 
@@ -319,20 +323,52 @@ public class OwnVehicle implements Serializable {
         this.vehicleInsuranceExpiryDate = vehicleInsuranceExpiryDate;
     }
 
-    public String getVehicleHeaderstockPhoto() {
-        return vehicleHeaderstockPhoto;
+    public String getVehicleHeaderstockPhoto1() {
+        return vehicleHeaderstockPhoto1;
     }
 
-    public void setVehicleHeaderstockPhoto(String vehicleHeaderstockPhoto) {
-        this.vehicleHeaderstockPhoto = vehicleHeaderstockPhoto == null ? null : vehicleHeaderstockPhoto.trim();
+    public void setVehicleHeaderstockPhoto1(String vehicleHeaderstockPhoto1) {
+        this.vehicleHeaderstockPhoto1 = vehicleHeaderstockPhoto1;
     }
 
-    public String getVehicleTailstockPhoto() {
-        return vehicleTailstockPhoto;
+    public String getVehicleHeaderstockPhoto2() {
+        return vehicleHeaderstockPhoto2;
     }
 
-    public void setVehicleTailstockPhoto(String vehicleTailstockPhoto) {
-        this.vehicleTailstockPhoto = vehicleTailstockPhoto == null ? null : vehicleTailstockPhoto.trim();
+    public void setVehicleHeaderstockPhoto2(String vehicleHeaderstockPhoto2) {
+        this.vehicleHeaderstockPhoto2 = vehicleHeaderstockPhoto2;
+    }
+
+    public String getVehicleHeaderstockPhoto3() {
+        return vehicleHeaderstockPhoto3;
+    }
+
+    public void setVehicleHeaderstockPhoto3(String vehicleHeaderstockPhoto3) {
+        this.vehicleHeaderstockPhoto3 = vehicleHeaderstockPhoto3;
+    }
+
+    public String getVehicleTailstockPhoto1() {
+        return vehicleTailstockPhoto1;
+    }
+
+    public void setVehicleTailstockPhoto1(String vehicleTailstockPhoto1) {
+        this.vehicleTailstockPhoto1 = vehicleTailstockPhoto1;
+    }
+
+    public String getVehicleTailstockPhoto2() {
+        return vehicleTailstockPhoto2;
+    }
+
+    public void setVehicleTailstockPhoto2(String vehicleTailstockPhoto2) {
+        this.vehicleTailstockPhoto2 = vehicleTailstockPhoto2;
+    }
+
+    public String getVehicleTailstockPhoto3() {
+        return vehicleTailstockPhoto3;
+    }
+
+    public void setVehicleTailstockPhoto3(String vehicleTailstockPhoto3) {
+        this.vehicleTailstockPhoto3 = vehicleTailstockPhoto3;
     }
 
     public String getVehicleTyreSpec() {
