@@ -41,7 +41,10 @@
      select count_id, company_id, product_name, product_service_num
     from company_service_count
     where company_id = #{companyId,jdbcType=BIGINT}
-    and product_name = #{productName,jdbcType=VARCHAR}
+    <if test="productName != null">
+      and product_name = #{productName,jdbcType=VARCHAR}
+    </if>
+
   </select>
 
 

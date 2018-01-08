@@ -16,6 +16,6 @@ public interface CompanyServiceCountMapper {
 
     int updateByPrimaryKey(CompanyServiceCount record);
 
-    CompanyServiceCount selectByCompanyId(@Param("companyId") Long companyId, @Param("productName") String productName);
+    List<CompanyServiceCount> selectByCompanyId(@Param("companyId") Long companyId, @Param("productName") String productName);
 
 }
