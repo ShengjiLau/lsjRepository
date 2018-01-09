@@ -45,6 +45,11 @@ public class PlanServiceImpl implements PlanService {
     private WaybillService waybillService;
 
 
+    @Autowired
+    private TransportWayItemsMapper transportWayItemsMapper;
+
+
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public WaybillPlan publishWayBillPlan(WaybillParamsDto dto) throws WaybillPlanException { //只有是暂存(待发布状态的，才能点发布)

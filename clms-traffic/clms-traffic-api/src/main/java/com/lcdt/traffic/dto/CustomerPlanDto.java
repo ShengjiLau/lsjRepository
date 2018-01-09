@@ -18,8 +18,8 @@ public class CustomerPlanDto implements java.io.Serializable {
     private String receiveCity;
     private String receiveCounty;
     private String receiveAddress;
+    private Short isDeleted;
     private Long companyId;
-
 
     public Long getWaybillPlanId() {
         return waybillPlanId;
@@ -99,5 +99,13 @@ public class CustomerPlanDto implements java.io.Serializable {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public Short getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Short isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }

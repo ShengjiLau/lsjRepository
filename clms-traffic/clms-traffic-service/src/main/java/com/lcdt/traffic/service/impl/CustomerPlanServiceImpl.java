@@ -59,7 +59,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
      * 3、绑定客户条件：绑定ID不为空，客户列表中的企业ID==登录人企业ID
      */
     private List<Customer> bindCustomerList(Map map) {
-        map.put("bindCpid","111");//标识绑定企业ID不为空的企业
+        map.put("bindCpid","111");//标识绑定企业ID不为空的企业（承运商对应的所有绑定企业）
         List<Customer> customerList = customerRpcService.findBindCompanyIds(map);
         return  customerList;
     }
@@ -95,9 +95,9 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                     sb.append(" or ");
                 }
 
-                //查询当前人所在的承运商组
+                //查询当前人所在的承运商组(站在货主角度来查询)
                 map.put("companyId",ownCompanyId);
-                map.put("bindCompId",carrierCompanyId);//标识绑定企业ID不为空的企业
+                map.put("bindCompId",carrierCompanyId);
                 List<Customer> customer4GroupList = customerRpcService.findBindCompanyIds(map);
                 for (Customer obj1: customer4GroupList) {
                     if (!StringUtils.isEmpty(obj1.getCollectionIds())) {
