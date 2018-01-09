@@ -51,6 +51,8 @@ public class SmsNotifyImpl  {
 
     public boolean sendSms(String[] phonsNums, String message,Long smsLogId) {
 
+        logger.info("调用短信api >>> {} >>> {}",phonsNums[0],message);
+
         if (phonsNums == null) {
             return false;
         }
