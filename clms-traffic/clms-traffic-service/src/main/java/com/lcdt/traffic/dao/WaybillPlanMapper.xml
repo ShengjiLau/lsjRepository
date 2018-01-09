@@ -97,9 +97,11 @@
     <result column="receive_city" jdbcType="VARCHAR" property="receiveCity" />
     <result column="receive_county" jdbcType="VARCHAR" property="receiveCounty" />
     <result column="receive_address" jdbcType="VARCHAR" property="receiveAddress" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+
    <!--计划详细-->
-    <collection property="planDetailList" column="{waybill_plan_id=waybill_plan_id,company_id=company_id,is_deleted=0}"
+    <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
                 select="com.lcdt.traffic.dao.PlanDetailMapper.selectByWaybillPlanId" />
   </resultMap>
@@ -582,7 +584,7 @@
     就是自己能抢的计划，可能这个计划多家公司都能看见。如果改计划我报价了，就在已抢里面
   -->
   <select id="customerPlan4Bidding" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id
+    select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
     from t_waybill_plan p1
     <where>
       and plan_status = '15' and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.company_id = p1.company_id)
@@ -630,10 +632,11 @@
      理解：这个计划我参与报价了，但还没有派单给我 ,只要不是'取消'的就行
   -->
   <select id="customerPlanList4Offer" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id
+    select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
     from t_waybill_plan p1
     <where>
-      and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.carrier_company_id = p1.company_id and sn.is_deleted=0)
+      and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.company_id = p1.carrier_company_id and sn.is_deleted=0)
+
       and waybill_plan_id not in (SELECT waybill_plan_id FROM t_split_goods sg where sg.company_id = p1.company_id and sg.is_deleted=0)
       and plan_status != '60'
       and is_deleted = 0
@@ -681,10 +684,10 @@
      满足前提条件：我能抢单的计划（不包括已抢的），但是该计划已经派单完成，同时已经超过竞价的结束时间的
    -->
   <select id="customerPlanList4Pass" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id
+    select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
     from t_waybill_plan p1
     <where>
-      and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.carrier_company_id = p1.company_id and sn.is_deleted=0)
+      and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where p1.carrier_company_id = sn.company_id and sn.is_deleted=0)
       and (SELECT SUM(remainder_amount) FROM t_plan_detail pd where pd.company_id = p1.company_id and pd.is_deleted=0)=0
       and now() >= p1.biding_end
       and  is_deleted = 0
@@ -740,7 +743,8 @@
     wp.receive_city,
     wp.receive_county,
     wp.receive_address,
-    wp.company_id
+    wp.company_id,
+    wp.is_deleted
     FROM t_split_goods sp
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
@@ -804,7 +808,8 @@
     wp.receive_city,
     wp.receive_county,
     wp.receive_address,
-    wp.company_id
+    wp.company_id,
+    wp.is_deleted
     FROM t_split_goods sp
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
@@ -868,7 +873,8 @@
     wp.receive_city,
     wp.receive_county,
     wp.receive_address,
-    wp.company_id
+    wp.company_id,
+    wp.is_deleted
     FROM t_split_goods sp
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
@@ -932,7 +938,8 @@
     wp.receive_city,
     wp.receive_county,
     wp.receive_address,
-    wp.company_id
+    wp.company_id,
+    wp.is_deleted
     FROM t_split_goods sp
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id

@@ -117,8 +117,8 @@ public class CustomerPlanApi {
     @RequestMapping(value = "/customerPlanList4Offer",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_offer')")
     public PageBaseDto customerPlanList4Offer(@Validated WaybillPlanListParamsDto dto,
-                                            @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
-                                            @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+                                            @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                            @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
 
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
@@ -182,8 +182,8 @@ public class CustomerPlanApi {
     @RequestMapping(value = "/customerPlanList4Pass",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_pass')")
     public PageBaseDto customerPlanList4Pass(@Validated WaybillPlanListParamsDto dto,
-                                           @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
-                                           @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+                                           @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                           @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);
@@ -246,8 +246,8 @@ public class CustomerPlanApi {
     @RequestMapping(value = "/customerPlanList4VehicleDoing",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_vehicle_doing')")
     public PageBaseDto customerPlanList4VehicleDoing(@Validated WaybillPlanListParamsDto dto,
-                                                   @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
-                                                   @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+                                                   @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                                   @ApiParam(value = "每页显示条数",required = true, defaultValue = "2") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);
@@ -309,8 +309,8 @@ public class CustomerPlanApi {
     @RequestMapping(value = "/customerPlanList4VehicleHave",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_vehicle_have')")
     public PageBaseDto customerPlanList4VehicleHave(@Validated WaybillPlanListParamsDto dto,
-                                                  @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
-                                                  @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+                                                  @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                                  @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);
@@ -373,8 +373,8 @@ public class CustomerPlanApi {
     @RequestMapping(value = "/customerPlanList4Completed",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_vehicle_completed')")
     public PageBaseDto customerPlanList4Completed(@Validated WaybillPlanListParamsDto dto,
-                                                @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
-                                                @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+                                                @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                                @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);
@@ -437,8 +437,8 @@ public class CustomerPlanApi {
     @RequestMapping(value = "/customerPlanList4Cancel",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_vehicle_cancel')")
     public PageBaseDto customerPlanList4Cancel(@Validated WaybillPlanListParamsDto dto,
-                                             @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
-                                             @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+                                             @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                             @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);
