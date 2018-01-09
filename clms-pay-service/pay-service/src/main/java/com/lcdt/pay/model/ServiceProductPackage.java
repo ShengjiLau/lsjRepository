@@ -11,7 +11,7 @@ public class ServiceProductPackage {
 
     private String packagePrice;
 
-    private Integer packageType;
+    private String packageType;
 
     public Integer getPackageId() {
         return packageId;
@@ -53,11 +53,11 @@ public class ServiceProductPackage {
         this.packagePrice = packagePrice == null ? null : packagePrice.trim();
     }
 
-    public Integer getPackageType() {
+    public String getPackageType() {
         return packageType;
     }
 
-    public void setPackageType(Integer packageType) {
+    public void setPackageType(String packageType) {
         this.packageType = packageType;
     }
 }

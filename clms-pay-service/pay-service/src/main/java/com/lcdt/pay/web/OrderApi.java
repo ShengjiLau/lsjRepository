@@ -126,6 +126,8 @@ public class OrderApi {
         payOrder.setOrderNo(OrderNoGenerator.generatorOrderNo());
         payOrder.setOrderType(2);
         payOrder.setOrderProductId(productId);
+
+
         orderMapper.insert(payOrder);
 
         return payOrder;
