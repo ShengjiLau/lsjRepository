@@ -14,4 +14,5 @@ public interface ServiceProductPackageMapper {
     List<ServiceProductPackage> selectAll();
 
     int updateByPrimaryKey(ServiceProductPackage record);
+    List<ServiceProductPackage> selectBypackageType(String packageType);
 }

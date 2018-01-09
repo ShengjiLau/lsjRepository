@@ -26,4 +26,5 @@ public class InviteCustomerServiceTest extends BaseSpringBootTest {
 	}
 
 
+
 }

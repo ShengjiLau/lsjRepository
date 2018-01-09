@@ -19,6 +19,16 @@ public class PayOrder {
 
     private String orderNo;
 
+    private Integer orderProductId;
+
+    public Integer getOrderProductId() {
+        return orderProductId;
+    }
+
+    public void setOrderProductId(Integer orderProductId) {
+        this.orderProductId = orderProductId;
+    }
+
     public Long getOrderId() {
         return orderId;
     }
