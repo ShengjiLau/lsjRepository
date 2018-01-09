@@ -4,12 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
+import com.lcdt.pay.dao.OrderType;
 import com.lcdt.pay.dao.PayOrderMapper;
+import com.lcdt.pay.dao.ServiceProductMapper;
 import com.lcdt.pay.model.*;
-import com.lcdt.pay.service.CompanyBalanceService;
-import com.lcdt.pay.service.CompanyServiceCountService;
-import com.lcdt.pay.service.ServiceProductPackageService;
-import com.lcdt.pay.service.TopupService;
+import com.lcdt.pay.service.*;
 import com.lcdt.pay.service.impl.OrderServiceImpl;
 import com.lcdt.pay.utils.OrderNoGenerator;
 import io.swagger.annotations.ApiOperation;
@@ -41,7 +40,10 @@ public class OrderApi {
 
 
     @Autowired
-    OrderServiceImpl orderService;
+    OrderService orderService;
+
+    @Autowired
+    ServiceProductMapper productMapper;
 
     /**
      * 查看充值订单
@@ -50,15 +52,18 @@ public class OrderApi {
     public PageResultDto<PayOrder> orderList(Integer pageNo,Integer pageSize){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
-        List<PayOrder> payOrders = topupService.topUpOrderList(companyId);
+        List<PayOrder> payOrders = topupService.topUpOrderList(companyId, OrderType.TOPUPORDER);
         return new PageResultDto<PayOrder>(payOrders);
     }
 
-
-    @RequestMapping(value = "/topuplist",method = RequestMethod.GET)
+    /**
+     * 查看消费订单
+     * @return
+     */
+    @RequestMapping(value = "/payorderlist",method = RequestMethod.GET)
     public ArrayListResponseWrapper<PayOrder> payOrderList(){
         Long companyId = SecurityInfoGetter.getCompanyId();
-        List<PayOrder> payOrders = topupService.topUpOrderList(companyId);
+        List<PayOrder> payOrders = topupService.topUpOrderList(companyId,OrderType.PAYORDER);
         ArrayListResponseWrapper<PayOrder> payOrders1 = new ArrayListResponseWrapper<>(payOrders);
         return payOrders1;
     }
@@ -104,9 +109,15 @@ public class OrderApi {
     }
 
     @RequestMapping(value = "/createorder",method = RequestMethod.POST)
-    public PayOrder createPayOrder(){
+    public PayOrder createPayOrder(Integer productId){
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
+
+        ServiceProduct serviceProduct = productMapper.selectByPrimaryKey(productId);
+        if (serviceProduct == null) {
+            throw new RuntimeException("产品不存在");
+        }
+
 
         PayOrder payOrder = new PayOrder();
         payOrder.setOrderStatus(OrderStatus.PENDINGPAY);
@@ -114,7 +125,7 @@ public class OrderApi {
         payOrder.setOrderPayUserId(userId);
         payOrder.setOrderNo(OrderNoGenerator.generatorOrderNo());
         payOrder.setOrderType(2);
-
+        payOrder.setOrderProductId(productId);
         orderMapper.insert(payOrder);
 
         return payOrder;

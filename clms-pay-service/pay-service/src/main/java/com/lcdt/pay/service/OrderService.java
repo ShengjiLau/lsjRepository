@@ -10,4 +10,6 @@ public interface OrderService {
 
 
     PayOrder changeToPayFinish(PayOrder payOrder);
+
+    void buyServiceProduct(Long orderId,Long companyId, Integer productPackageId);
 }

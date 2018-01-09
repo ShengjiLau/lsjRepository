@@ -10,7 +10,7 @@ public interface TopupService {
     PayOrder createTopUpOrder(Integer money,Long companyId,Long userId);
 
     void doTopUp(PayOrder payOrder);
-    List<PayOrder> topUpOrderList(Long companyId);
+    List<PayOrder> topUpOrderList(Long companyId,Integer orderType);
 
 
 }
