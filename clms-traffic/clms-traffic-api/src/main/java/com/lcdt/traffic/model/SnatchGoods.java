@@ -143,6 +143,17 @@ public class SnatchGoods implements java.io.Serializable,ResponseData {
     private Short isDeleted;
 
 
+    public Long getPlanCompanyId() {
+        return planCompanyId;
+    }
+
+    public void setPlanCompanyId(Long planCompanyId) {
+        this.planCompanyId = planCompanyId;
+    }
+
+    private Long planCompanyId;
+
+
     public List<SnatchGoodsDetail> getSnatchGoodsDetailList() {
         return snatchGoodsDetailList;
     }

@@ -10,6 +10,7 @@ import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,12 +41,18 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
     @Autowired
     private SplitGoodsDetailMapper splitGoodsDetailMapper; //派单详细
 
+    @Autowired
+    private TransportWayItemsMapper transportWayItemsMapper;
+
 
     @com.alibaba.dubbo.config.annotation.Reference
     public CustomerRpcService customerRpcService;  //客户信息
 
     @Autowired
     private WaybillService waybillService; //运单
+
+
+
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -74,7 +81,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
         } catch (ParseException e) {
             throw new RuntimeException("竞价/起运时间、送达有误！");
         }
-
         if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
                 String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
@@ -84,7 +90,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 vo.setCarrierCompanyId(vo.getCompanyId()); //获取下的本企业司机
             }
         }
-
 
         //具体业务处理
         if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
@@ -123,6 +128,8 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//派车状态(已派完)
                     }
                     waybillPlanMapper.insert(vo);
+                    createTransportWayItems(dto, vo);//批量创建栏目
+
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();
                     for (PlanDetail obj : planDetailList) {
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
@@ -137,6 +144,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         obj.setIsDeleted((short)0);
                     }
                     planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
+
 
                     SplitGoods splitGoods = new SplitGoods(); //派单
                     splitGoods.setWaybillPlanId(vo.getWaybillPlanId());
@@ -198,6 +206,8 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //待发布
                     vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
                     waybillPlanMapper.insert(vo); //生成计划
+                    createTransportWayItems(dto, vo);//批量创建栏目
+
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();
                     for (PlanDetail obj : planDetailList) {
                         obj.setRemainderAmount(obj.getPlanAmount());//计划==剩余
@@ -222,6 +232,8 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 }
                 vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
                 waybillPlanMapper.insert(vo); //生成计划
+                createTransportWayItems(dto, vo);//批量创建栏目
+
                 List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
                 for (PlanDetail obj : planDetailList) {
                     obj.setWaybillPlanId(vo.getWaybillPlanId());
@@ -270,6 +282,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
             }
         }
         waybillPlanMapper.insert(vo); //生成计划
+        createTransportWayItems(dto, vo);//批量创建栏目
         List<PlanDetail> planDetailList = dto.getPlanDetailList();
         if (null!=planDetailList && planDetailList.size()>0) {
             for (PlanDetail obj : planDetailList) {
@@ -287,6 +300,20 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
             planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
         }
     }
+
+    /***
+     * 创建运输入方式
+     */
+    private void createTransportWayItems(WaybillParamsDto dto,WaybillPlan vo) {
+          if (dto.getTransportWayItemsList()!=null && dto.getTransportWayItemsList().size()>0) {
+              transportWayItemsMapper.deleteByWaybillPlanId(vo.getWaybillPlanId());//删除原有的运输入方式
+              for (TransportWayItems item : dto.getTransportWayItemsList()) {
+                  item.setWaybillPlanId(vo.getWaybillPlanId());
+              }
+              transportWayItemsMapper.batchAddTransportWayItems(dto.getTransportWayItemsList());
+          }
+    }
+
 
 
 }

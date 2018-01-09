@@ -47,6 +47,11 @@ public class Plan4EditServiceImpl implements Plan4EditService {
     private WaybillService waybillService; //运单
 
 
+    @Autowired
+    private TransportWayItemsMapper transportWayItemsMapper;
+
+
+
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -124,6 +129,8 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                         vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//计划状态(已派完)
                     }
                     waybillPlanMapper.updateWaybillPlan(vo);
+                    createTransportWayItems(dto, vo);//批量创建栏目
+
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();
                     for (PlanDetail obj : planDetailList) {
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
@@ -195,6 +202,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //待发布
                     vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
                     waybillPlanMapper.updateWaybillPlan(vo); //生成计划
+                    createTransportWayItems(dto, vo);//批量创建栏目
 
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();
                     for (PlanDetail obj : planDetailList) {
@@ -226,6 +234,8 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                 }
                 vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
                 waybillPlanMapper.updateWaybillPlan(vo); //生成计划
+                createTransportWayItems(dto, vo);//批量创建栏目
+
                 List<PlanDetail> planDetailList = dto.getPlanDetailList();
                 for (PlanDetail obj : planDetailList) {
                     obj.setWaybillPlanId(vo.getWaybillPlanId());
@@ -280,6 +290,8 @@ public class Plan4EditServiceImpl implements Plan4EditService {
             }
         }
         waybillPlanMapper.updateWaybillPlan(vo); //生成计划
+        createTransportWayItems(dto, vo);//批量创建栏目
+
         List<PlanDetail> planDetailList = dto.getPlanDetailList();
         for (PlanDetail obj : planDetailList) {
             obj.setWaybillPlanId(vo.getWaybillPlanId());
@@ -328,6 +340,8 @@ public class Plan4EditServiceImpl implements Plan4EditService {
             }
         }
         waybillPlanMapper.updateWaybillPlan(vo);
+        createTransportWayItems(dto, vo);//批量创建栏目
+
         List<PlanDetail> planDetailList = dto.getPlanDetailList();
         for (PlanDetail obj : planDetailList) {
             obj.setWaybillPlanId(vo.getWaybillPlanId());
@@ -352,6 +366,18 @@ public class Plan4EditServiceImpl implements Plan4EditService {
 
 
 
+    /***
+     * 创建运输入方式
+     */
+    private void createTransportWayItems(WaybillParamsDto dto,WaybillPlan vo) {
+        if (dto.getTransportWayItemsList()!=null && dto.getTransportWayItemsList().size()>0) {
+            transportWayItemsMapper.deleteByWaybillPlanId(vo.getWaybillPlanId());//删除原有的运输入方式
+            for (TransportWayItems item : dto.getTransportWayItemsList()) {
+                item.setWaybillPlanId(vo.getWaybillPlanId());
+            }
+            transportWayItemsMapper.batchAddTransportWayItems(dto.getTransportWayItemsList());
+        }
+    }
 
 
 

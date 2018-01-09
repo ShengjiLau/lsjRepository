@@ -530,6 +530,7 @@ public class CustomerPlanApi {
         snatchGoods.setUpdateName(user.getRealName());
         snatchGoods.setOfferPhone(user.getPhone()); //抢单人电话
         snatchGoods.setCompanyId(companyId);
+        snatchGoods.setPlanCompanyId(dto.getCompanyId());//计划企业ID
         int flag = customerPlanService.customerPlanOfferOwn(dto,snatchGoods);
         JSONObject jsonObject = new JSONObject();
         String message = null;
