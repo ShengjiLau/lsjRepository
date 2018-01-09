@@ -71,8 +71,7 @@
 
 
   <insert id="batchAddTransportWayItems" useGeneratedKeys="true" parameterType="java.util.List" keyProperty="transportWayItemsId" >
-    insert into t_transport_way_items (waybill_plan_id, transport_way, item_name,
-    item_value)
+    insert into t_transport_way_items (waybill_plan_id, transport_way, item_name,item_value)
     values
     <foreach collection="list" item="transportWayItem" index="index" separator="," >
       (#{transportWayItem.waybillPlanId}, #{transportWayItem.transportWay}, #{transportWayItem.itemName},
