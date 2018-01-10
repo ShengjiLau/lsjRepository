@@ -2,17 +2,16 @@ package com.lcdt.traffic.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.service.WaybillService;
-import com.lcdt.traffic.util.ClmsBeanUtil;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.WaybillCustListParamsDto;
 import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillOwnListParamsDto;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.util.ClmsBeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -162,7 +161,7 @@ public class WaybillApi {
             }
 
         }
-        Map map=ClmsBeanUtil.beanToMap(dto);
+        Map map= ClmsBeanUtil.beanToMap(dto);
         map.put("companyId",companyId);
         map.put("pageNo",pageNo);
         map.put("pageSize",pageSize);

@@ -1,9 +1,11 @@
 package com.lcdt.items.dao;
 
+import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.model.SubItemsInfo;
 import com.lcdt.items.model.SubItemsInfoDao;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SubItemsInfoMapper {
     /**
@@ -100,4 +102,11 @@ public interface SubItemsInfoMapper {
      * @return
      */
     List<SubItemsInfo> selectSubItemInfotByItemIdAndCompanyId(SubItemsInfo subItemsInfo);
+
+    /**
+     * 查询货物列表
+     * @param map
+     * @return
+     */
+    List<GoodsInfoDao> selectByCondition(Map map);
 }

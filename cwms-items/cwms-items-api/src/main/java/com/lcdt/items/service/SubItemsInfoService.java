@@ -1,10 +1,12 @@
 package com.lcdt.items.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.model.SubItemsInfo;
 import com.lcdt.items.model.SubItemsInfoDao;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lyqishan on 2017/11/9
@@ -65,4 +67,11 @@ public interface SubItemsInfoService {
      * @return
      */
     List<SubItemsInfo> querySubItemsInfoListByItemId(Long itemId,Long companyId);
+
+    /**
+     * 根据条件查询列表
+     * @param map
+     * @return
+     */
+    PageInfo<List<GoodsInfoDao>> queryByCondition(Map map);
 }

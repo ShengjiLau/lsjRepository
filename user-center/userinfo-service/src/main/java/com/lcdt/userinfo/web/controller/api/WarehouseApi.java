@@ -25,7 +25,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/warehouse")
-@Api(value = "仓库api", description = "仓库库位操作")
+@Api(value = "仓库api", description = "仓库操作")
 public class WarehouseApi {
 
     @Autowired
