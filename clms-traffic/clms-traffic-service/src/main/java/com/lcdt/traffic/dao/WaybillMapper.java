@@ -114,4 +114,25 @@ public interface WaybillMapper {
      * @return
      */
     int updateOwnWaybillStatusByWaybillPlanId(Map map);
+
+    /**
+     * 根据waybillId or waybillPlanId 查询列表 返回带运单货物详细的列表
+     * @param map
+     * @return
+     */
+    List<WaybillDao> selectWaybillByIdOrPlanId(Map map);
+
+    /**
+     * 根据waybillId or waybillPlanId 查询列表 返回运单列表
+     * @param map
+     * @return
+     */
+    List<Waybill> selectWaybillPlanId(Map map);
+
+    /**
+     * 根据planId查询列表
+     * @param map
+     * @return
+     */
+    List<Waybill> selectWaybillByPlanId(Map map);
 }

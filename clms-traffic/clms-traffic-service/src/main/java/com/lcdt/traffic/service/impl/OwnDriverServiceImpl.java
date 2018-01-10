@@ -58,15 +58,16 @@ public class OwnDriverServiceImpl implements OwnDriverService {
             throw new RuntimeException("手机号不能重复!");
         } else {
             ownDriverMapper.insert(ownDriver);    //保存车司机本信息
-            //设置证件的创建人/id创建人/公司id
-            for (OwnDriverCertificate ownDriverCertificate : ownDriverDto.getOwnDriverCertificateList()) {
-                ownDriverCertificate.setOwnDriverId(ownDriver.getOwnDriverId());
-                ownDriverCertificate.setCreateId(ownDriverDto.getCreateId());
-                ownDriverCertificate.setCreateName(ownDriverDto.getCreateName());
-                ownDriverCertificate.setCompanyId(ownDriverDto.getCompanyId());
+            if(null!=ownDriverDto.getOwnDriverCertificateList() && ownDriverDto.getOwnDriverCertificateList().size()>0) {
+                //设置证件的创建人/id创建人/公司id
+                for (OwnDriverCertificate ownDriverCertificate : ownDriverDto.getOwnDriverCertificateList()) {
+                    ownDriverCertificate.setOwnDriverId(ownDriver.getOwnDriverId());
+                    ownDriverCertificate.setCreateId(ownDriverDto.getCreateId());
+                    ownDriverCertificate.setCreateName(ownDriverDto.getCreateName());
+                    ownDriverCertificate.setCompanyId(ownDriverDto.getCompanyId());
+                }
+                ownDriverCertificateMapper.insertBatch(ownDriverDto.getOwnDriverCertificateList());  //批量插入车辆证件
             }
-            ownDriverCertificateMapper.insertBatch(ownDriverDto.getOwnDriverCertificateList());  //批量插入车辆证件
-
             /**下面判断用户表中是否存在该司机电话的账号，不存在的话，则自动保存一条司机的账号信息*/
             String phone = ownDriverDto.getDriverPhone().trim();
             if (!userService.isPhoneBeenRegister(phone)) { //为空则保存司机账号信息

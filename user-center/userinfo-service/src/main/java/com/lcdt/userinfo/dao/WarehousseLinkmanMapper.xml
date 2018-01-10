@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.userinfo.dao.WarehousseLinkmanMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.userinfo.model.WarehouseLinkman">
+    <id column="wh_linkman_id" jdbcType="BIGINT" property="whLinkmanId" />
+    <result column="wh_id" jdbcType="BIGINT" property="whId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="duty" jdbcType="VARCHAR" property="duty" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="mail" jdbcType="VARCHAR" property="mail" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="sex" jdbcType="VARCHAR" property="sex" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="county" jdbcType="VARCHAR" property="county" />
+    <result column="detail_address" jdbcType="VARCHAR" property="detailAddress" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="is_default" jdbcType="SMALLINT" property="isDefault" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="update_id" jdbcType="BIGINT" property="updateId" />
+    <result column="update_name" jdbcType="VARCHAR" property="updateName" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_warehouse_linkman
+    where wh_linkman_id = #{whLinkmanId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.userinfo.model.WarehouseLinkman">
+    <selectKey keyProperty="whLinkmanId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_warehouse_linkman (wh_id, name, duty, 
+      mobile, mail, birthday, 
+      sex, province, city, 
+      county, detail_address, remark, 
+      is_default, create_id, create_name, 
+      create_date, company_id, update_id, 
+      update_name, update_time, is_deleted
+      )
+    values (#{whId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{duty,jdbcType=VARCHAR}, 
+      #{mobile,jdbcType=VARCHAR}, #{mail,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE}, 
+      #{sex,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{county,jdbcType=VARCHAR}, #{detailAddress,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{isDefault,jdbcType=SMALLINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{companyId,jdbcType=BIGINT}, #{updateId,jdbcType=BIGINT}, 
+      #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.WarehouseLinkman">
+    update t_warehouse_linkman
+    set wh_id = #{whId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      duty = #{duty,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      mail = #{mail,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=DATE},
+      sex = #{sex,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      detail_address = #{detailAddress,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      is_default = #{isDefault,jdbcType=SMALLINT},
+      create_id = #{createId,jdbcType=BIGINT},
+      create_name = #{createName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      company_id = #{companyId,jdbcType=BIGINT},
+      update_id = #{updateId,jdbcType=BIGINT},
+      update_name = #{updateName,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+    where wh_linkman_id = #{whLinkmanId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select wh_linkman_id, wh_id, name, duty, mobile, mail, birthday, sex, province, city, 
+    county, detail_address, remark, is_default, create_id, create_name, create_date, 
+    company_id, update_id, update_name, update_time, is_deleted
+    from t_warehouse_linkman
+    where wh_linkman_id = #{whLinkmanId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select wh_linkman_id, wh_id, name, duty, mobile, mail, birthday, sex, province, city, 
+    county, detail_address, remark, is_default, create_id, create_name, create_date, 
+    company_id, update_id, update_name, update_time, is_deleted
+    from t_warehouse_linkman
+  </select>
+</mapper>
