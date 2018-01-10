@@ -49,7 +49,7 @@ public class GprsLocationBo {
      */
     public JSONObject authOpen(String moblile){
         Map map = new HashMap<>();
-        map.put("moblie",moblile);
+        map.put("mobile",moblile);
         map.put("key", GprsLocationBo.KEY);
         map.put("secret",GprsLocationBo.SECRET);
         return HttpRequestUtil.httpGet(GprsLocationBo.OPEN_URL,map,60000);
@@ -62,7 +62,7 @@ public class GprsLocationBo {
      */
     public JSONObject authStatus(String moblile){
         Map map = new HashMap<>();
-        map.put("moblie",moblile);
+        map.put("mobile",moblile);
         map.put("key", GprsLocationBo.KEY);
         map.put("secret",GprsLocationBo.SECRET);
         return HttpRequestUtil.httpGet(GprsLocationBo.STATUS_URL,map,5000);
@@ -75,7 +75,7 @@ public class GprsLocationBo {
      */
     public JSONObject queryLocation(String moblile){
         Map map = new HashMap<>();
-        map.put("moblie",moblile);
+        map.put("mobile",moblile);
         map.put("key", GprsLocationBo.KEY);
         map.put("secret",GprsLocationBo.SECRET);
         return HttpRequestUtil.httpGet(GprsLocationBo.QUERY_URL,map,60000);
