@@ -6,6 +6,7 @@ import com.lcdt.userinfo.dao.WarehousseMapper;
 import com.lcdt.userinfo.model.Warehouse;
 import com.lcdt.userinfo.service.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Map;
 /**
  * Created by yangbinq on 2018/1/10.
  */
+@Service
 public class WarehouseSeviceImpl implements WarehouseService {
 
     @Autowired
