@@ -108,10 +108,13 @@
     <where>
       company_id = #{companyId,jdbcType=BIGINT}
       <if test="isDeleted!=null">
-        and  is_deleted = #{isDeleted,jdbcType=VARCHAR}
+        and  is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      </if>
+      <if test="whType!=null">
+        and  wh_type = #{whType,jdbcType=SMALLINT}
       </if>
       <if test="whStatus!=null">
-        and  wh_status = #{whStatus,jdbcType=VARCHAR}
+        and  wh_status = #{whStatus,jdbcType=SMALLINT}
       </if>
     </where>
     order by wh_id desc
