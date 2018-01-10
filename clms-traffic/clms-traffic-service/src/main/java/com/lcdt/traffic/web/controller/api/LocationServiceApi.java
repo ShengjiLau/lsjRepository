@@ -77,21 +77,21 @@ public class LocationServiceApi {
 
     @ApiOperation(value = "查询定位状态是否激活", notes = "点击等待激活按钮 （会优先查询接口，然后同步更新本地数据库）")
     @GetMapping("/locationstatus")
-    public JSONObject queryStatus(String moblie) {
-        logger.debug("moblie:" + moblie);
+    public JSONObject queryStatus(String mobile) {
+        logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
-        JSONObject result = GprsLocationBo.getInstance().authStatus(moblie);
+        JSONObject result = GprsLocationBo.getInstance().authStatus(mobile);
         int resid = result.getInteger("resid");
         if (resid == 1) {   //白名单且已开通定位，更新本地数据库定位状态为2
             Driver driver = new Driver();
-            driver.setDriverPhone(moblie);
+            driver.setDriverPhone(mobile);
             driver.setGpsStatus(new Short("2"));
             driverService.modGpsStatus(driver);
             jsonObject.put("code", resid);
             jsonObject.put("msg", "定位已激活");
         } else if (resid == 0) {    //未激活
             jsonObject.put("code", resid);
-            jsonObject.put("msg", "司机" + moblie + "没有回复短信激活，再次发送开通短信？");
+            jsonObject.put("msg", "司机" + mobile + "没有回复短信激活，再次发送开通短信？");
         } else if (resid == -1) {    //手机号不存在
             jsonObject.put("code", resid);
             jsonObject.put("msg", "查找不到该手机");
@@ -104,14 +104,14 @@ public class LocationServiceApi {
 
     @ApiOperation(value = "定位激活开通", notes = "会调用接口发送定位激活授权短信")
     @GetMapping("/authstatus")
-    public JSONObject authOpen(String moblie) {
-        logger.debug("moblie:" + moblie);
+    public JSONObject authOpen(String mobile) {
+        logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
-        JSONObject result = GprsLocationBo.getInstance().authOpen(moblie);
+        JSONObject result = GprsLocationBo.getInstance().authOpen(mobile);
         int resid = result.getInteger("resid");
         if (resid == 0) {   //白名单开通成功，请通知用户回复短信小写的y
             Driver driver = new Driver();
-            driver.setDriverPhone(moblie);
+            driver.setDriverPhone(mobile);
             driver.setGpsStatus(new Short("2"));
             driverService.modGpsStatus(driver);
             jsonObject.put("code", 0);
@@ -144,14 +144,14 @@ public class LocationServiceApi {
 
     @ApiOperation(value = "基站定位", notes = "通过接口查询定位信息，并同步到本地数据库")
     @GetMapping("/querylocation")
-    public JSONObject queryLocation(String moblie) {
-        logger.debug("moblie:" + moblie);
+    public JSONObject queryLocation(String mobile) {
+        logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
-        JSONObject result = GprsLocationBo.getInstance().queryLocation(moblie);
+        JSONObject result = GprsLocationBo.getInstance().queryLocation(mobile);
         int resid = result.getInteger("resid");
         if (resid == 0) {   //正确返回
             Driver driver = new Driver();
-            driver.setDriverPhone(moblie);
+            driver.setDriverPhone(mobile);
             driver.setCurrentLocation(result.getString("location"));
             driver.setShortCurrentLocation(result.getString("street"));
             driverService.updateLocation(driver);
