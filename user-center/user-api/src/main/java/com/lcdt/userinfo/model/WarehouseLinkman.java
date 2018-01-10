@@ -2,28 +2,22 @@ package com.lcdt.userinfo.model;
 
 import java.util.Date;
 
-public class Warehousse {
+public class WarehouseLinkman {
+    private Long whLinkmanId;
+
     private Long whId;
 
-    private String whName;
+    private String name;
 
-    private String whCode;
-
-    private Short whType;
-
-    private Short whStatus;
-
-    private Long customerId;
-
-    private String customerName;
-
-    private String principal;
+    private String duty;
 
     private String mobile;
 
     private String mail;
 
-    private String telNum;
+    private Date birthday;
+
+    private String sex;
 
     private String province;
 
@@ -33,15 +27,17 @@ public class Warehousse {
 
     private String detailAddress;
 
-    private String postCode;
-
     private String remark;
+
+    private Short isDefault;
 
     private Long createId;
 
     private String createName;
 
     private Date createDate;
+
+    private Long companyId;
 
     private Long updateId;
 
@@ -51,7 +47,13 @@ public class Warehousse {
 
     private Short isDeleted;
 
-    private Long companyId;
+    public Long getWhLinkmanId() {
+        return whLinkmanId;
+    }
+
+    public void setWhLinkmanId(Long whLinkmanId) {
+        this.whLinkmanId = whLinkmanId;
+    }
 
     public Long getWhId() {
         return whId;
@@ -61,60 +63,20 @@ public class Warehousse {
         this.whId = whId;
     }
 
-    public String getWhName() {
-        return whName;
+    public String getName() {
+        return name;
     }
 
-    public void setWhName(String whName) {
-        this.whName = whName == null ? null : whName.trim();
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
     }
 
-    public String getWhCode() {
-        return whCode;
+    public String getDuty() {
+        return duty;
     }
 
-    public void setWhCode(String whCode) {
-        this.whCode = whCode == null ? null : whCode.trim();
-    }
-
-    public Short getWhType() {
-        return whType;
-    }
-
-    public void setWhType(Short whType) {
-        this.whType = whType;
-    }
-
-    public Short getWhStatus() {
-        return whStatus;
-    }
-
-    public void setWhStatus(Short whStatus) {
-        this.whStatus = whStatus;
-    }
-
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName == null ? null : customerName.trim();
-    }
-
-    public String getPrincipal() {
-        return principal;
-    }
-
-    public void setPrincipal(String principal) {
-        this.principal = principal == null ? null : principal.trim();
+    public void setDuty(String duty) {
+        this.duty = duty == null ? null : duty.trim();
     }
 
     public String getMobile() {
@@ -133,12 +95,20 @@ public class Warehousse {
         this.mail = mail == null ? null : mail.trim();
     }
 
-    public String getTelNum() {
-        return telNum;
+    public Date getBirthday() {
+        return birthday;
     }
 
-    public void setTelNum(String telNum) {
-        this.telNum = telNum == null ? null : telNum.trim();
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex == null ? null : sex.trim();
     }
 
     public String getProvince() {
@@ -173,20 +143,20 @@ public class Warehousse {
         this.detailAddress = detailAddress == null ? null : detailAddress.trim();
     }
 
-    public String getPostCode() {
-        return postCode;
-    }
-
-    public void setPostCode(String postCode) {
-        this.postCode = postCode == null ? null : postCode.trim();
-    }
-
     public String getRemark() {
         return remark;
     }
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public Short getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(Short isDefault) {
+        this.isDefault = isDefault;
     }
 
     public Long getCreateId() {
@@ -211,6 +181,14 @@ public class Warehousse {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public Long getUpdateId() {
@@ -243,13 +221,5 @@ public class Warehousse {
 
     public void setIsDeleted(Short isDeleted) {
         this.isDeleted = isDeleted;
-    }
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
     }
 }

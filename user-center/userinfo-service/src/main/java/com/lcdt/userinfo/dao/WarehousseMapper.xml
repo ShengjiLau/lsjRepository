@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.userinfo.dao.WarehousseMapper">
-  <resultMap id="BaseResultMap" type="com.lcdt.userinfo.model.Warehousse">
+  <resultMap id="BaseResultMap" type="com.lcdt.userinfo.model.Warehouse">
     <id column="wh_id" jdbcType="BIGINT" property="whId" />
     <result column="wh_name" jdbcType="VARCHAR" property="whName" />
     <result column="wh_code" jdbcType="VARCHAR" property="whCode" />
@@ -32,7 +32,7 @@
     delete from t_warehouse
     where wh_id = #{whId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.lcdt.userinfo.model.Warehousse">
+  <insert id="insert" parameterType="com.lcdt.userinfo.model.Warehouse">
     <selectKey keyProperty="whId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -55,7 +55,7 @@
       #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, #{companyId,jdbcType=BIGINT}
       )
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.Warehousse">
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.Warehouse">
     update t_warehouse
     set wh_name = #{whName,jdbcType=VARCHAR},
       wh_code = #{whCode,jdbcType=VARCHAR},
@@ -98,4 +98,23 @@
     company_id
     from t_warehouse
   </select>
+
+  <select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select wh_id, wh_name, wh_code, wh_type, wh_status, customer_id, customer_name, principal,
+    mobile, mail, tel_num, province, city, county, detail_address, post_code, remark,
+    create_id, create_name, create_date, update_id, update_name, update_time, is_deleted,
+    company_id
+    from t_warehouse
+    <where>
+      company_id = #{companyId,jdbcType=BIGINT}
+      <if test="isDeleted!=null">
+        and  is_deleted = #{isDeleted,jdbcType=VARCHAR}
+      </if>
+      <if test="whStatus!=null">
+        and  wh_status = #{whStatus,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by wh_id desc
+  </select>
+
 </mapper>

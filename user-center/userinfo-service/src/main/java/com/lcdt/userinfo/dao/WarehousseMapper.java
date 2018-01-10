@@ -1,17 +1,21 @@
 package com.lcdt.userinfo.dao;
 
-import com.lcdt.userinfo.model.Warehousse;
+import com.lcdt.userinfo.model.Warehouse;
 
 import java.util.List;
+import java.util.Map;
 
 public interface WarehousseMapper {
     int deleteByPrimaryKey(Long whId);
 
-    int insert(Warehousse record);
+    int insert(Warehouse record);
 
-    Warehousse selectByPrimaryKey(Long whId);
+    Warehouse selectByPrimaryKey(Long whId);
 
-    List<Warehousse> selectAll();
+    List<Warehouse> selectAll();
 
-    int updateByPrimaryKey(Warehousse record);
+    int updateByPrimaryKey(Warehouse record);
+
+
+    List<Warehouse> selectByCondition(Map map);
 }

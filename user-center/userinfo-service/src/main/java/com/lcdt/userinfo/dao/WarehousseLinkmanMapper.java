@@ -1,17 +1,17 @@
 package com.lcdt.userinfo.dao;
 
-import com.lcdt.userinfo.model.WarehousseLinkman;
+import com.lcdt.userinfo.model.WarehouseLinkman;
 
 import java.util.List;
 
 public interface WarehousseLinkmanMapper {
     int deleteByPrimaryKey(Long whLinkmanId);
 
-    int insert(WarehousseLinkman record);
+    int insert(WarehouseLinkman record);
 
-    WarehousseLinkman selectByPrimaryKey(Long whLinkmanId);
+    WarehouseLinkman selectByPrimaryKey(Long whLinkmanId);
 
-    List<WarehousseLinkman> selectAll();
+    List<WarehouseLinkman> selectAll();
 
-    int updateByPrimaryKey(WarehousseLinkman record);
+    int updateByPrimaryKey(WarehouseLinkman record);
 }
