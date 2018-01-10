@@ -6,7 +6,10 @@ import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.Plan4EditService;
+import com.lcdt.traffic.service.WaybillService;
+import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
+import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +19,7 @@ import org.springframework.util.StringUtils;
 import org.tl.commons.util.DateUtility;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by yangbinq on 2017/12/13.
@@ -42,13 +43,25 @@ public class Plan4EditServiceImpl implements Plan4EditService {
     @com.alibaba.dubbo.config.annotation.Reference
     public CustomerRpcService customerRpcService;  //客户信息
 
+    @Autowired
+    private WaybillService waybillService; //运单
+
+
+    @Autowired
+    private TransportWayItemsMapper transportWayItemsMapper;
+
+
 
 
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public WaybillPlan waybillPlanEdit(WaybillParamsDto dto, short flag) throws WaybillPlanException {
-        WaybillPlan vo = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(),dto.getCompanyId(),(short)0);
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",dto.getWaybillPlanId());
+        tMap.put("companyId",dto.getCompanyId());
+        tMap.put("isDeleted","0");
+        WaybillPlan vo = waybillPlanMapper.selectByPrimaryKey(tMap);
         if (vo==null) {
             throw new WaybillPlanException("计划不存在！");
         }
@@ -67,13 +80,17 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                 vo.setArriveDate(DateUtility.string2Date(dto.getArriveDate(),"yyyy-MM-dd HH:mm:ss"));
             }
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new RuntimeException("竞价/起运时间、送达有误！");
         }
 
-        if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
-            String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
-            Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
-            vo.setCarrierCompanyId(customer.getCompanyId());
+        if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
+            if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
+                String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
+                Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
+                vo.setCarrierCompanyId(customer.getCompanyId());
+            } else { // 司机
+                vo.setCarrierCompanyId(vo.getCompanyId()); //获取下的本企业司机
+            }
         }
 
         //具体业务处理
@@ -112,6 +129,8 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                         vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//计划状态(已派完)
                     }
                     waybillPlanMapper.updateWaybillPlan(vo);
+                    createTransportWayItems(dto, vo);//批量创建栏目
+
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();
                     for (PlanDetail obj : planDetailList) {
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
@@ -135,12 +154,6 @@ public class Plan4EditServiceImpl implements Plan4EditService {
 
                     SplitGoods splitGoods = new SplitGoods(); //派单
                     splitGoods.setWaybillPlanId(vo.getWaybillPlanId());
-                    splitGoods.setCarrierType(vo.getCarrierType());
-                    splitGoods.setCarrierCollectionIds(dto.getCarrierCollectionIds());//承运商ID
-                    splitGoods.setCarrierCollectionNames(dto.getCarrierCollectionNames());//承运商
-                    splitGoods.setCarrierPhone(dto.getCarrierPhone());//司机电话
-                    splitGoods.setCarrierVehicle(dto.getCarrierVehicle());//车号
-                    splitGoods.setTransportWay(dto.getTransportWay());//承运方式
                     splitGoods.setSplitRemark("计划直接生成的...");
                     splitGoods.setCreateId(vo.getCreateId());
                     splitGoods.setCreateName(vo.getCreateName());
@@ -151,7 +164,6 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                     splitGoods.setCompanyId(splitGoods.getCompanyId());
                     splitGoods.setCarrierCompanyId(vo.getCarrierCompanyId());
                     splitGoods.setIsDeleted((short)0);
-                    splitGoods.setGroupId(vo.getGroupId());
                     splitGoodsMapper.insert(splitGoods);
 
                     List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
@@ -178,12 +190,19 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                     /***
                      *如果是司机需要生成运单
                      */
-
+                    if (carrierType == 2) {
+                        WaybillDto waybillDto = new WaybillDto();
+                        PlanBO.getInstance().toWaybillItemsDto(vo,splitGoods,waybillDto,planDetailList,splitGoodsDetailList);
+                        if (null!=waybillDto) {
+                            waybillService.addWaybill(waybillDto);
+                        }
+                    }
 
                 } else { //暂存 -- 操作
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //待发布
                     vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
                     waybillPlanMapper.updateWaybillPlan(vo); //生成计划
+                    createTransportWayItems(dto, vo);//批量创建栏目
 
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();
                     for (PlanDetail obj : planDetailList) {
@@ -215,6 +234,8 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                 }
                 vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
                 waybillPlanMapper.updateWaybillPlan(vo); //生成计划
+                createTransportWayItems(dto, vo);//批量创建栏目
+
                 List<PlanDetail> planDetailList = dto.getPlanDetailList();
                 for (PlanDetail obj : planDetailList) {
                     obj.setWaybillPlanId(vo.getWaybillPlanId());
@@ -269,6 +290,8 @@ public class Plan4EditServiceImpl implements Plan4EditService {
             }
         }
         waybillPlanMapper.updateWaybillPlan(vo); //生成计划
+        createTransportWayItems(dto, vo);//批量创建栏目
+
         List<PlanDetail> planDetailList = dto.getPlanDetailList();
         for (PlanDetail obj : planDetailList) {
             obj.setWaybillPlanId(vo.getWaybillPlanId());
@@ -317,6 +340,8 @@ public class Plan4EditServiceImpl implements Plan4EditService {
             }
         }
         waybillPlanMapper.updateWaybillPlan(vo);
+        createTransportWayItems(dto, vo);//批量创建栏目
+
         List<PlanDetail> planDetailList = dto.getPlanDetailList();
         for (PlanDetail obj : planDetailList) {
             obj.setWaybillPlanId(vo.getWaybillPlanId());
@@ -341,6 +366,18 @@ public class Plan4EditServiceImpl implements Plan4EditService {
 
 
 
+    /***
+     * 创建运输入方式
+     */
+    private void createTransportWayItems(WaybillParamsDto dto,WaybillPlan vo) {
+        if (dto.getTransportWayItemsList()!=null && dto.getTransportWayItemsList().size()>0) {
+            transportWayItemsMapper.deleteByWaybillPlanId(vo.getWaybillPlanId());//删除原有的运输入方式
+            for (TransportWayItems item : dto.getTransportWayItemsList()) {
+                item.setWaybillPlanId(vo.getWaybillPlanId());
+            }
+            transportWayItemsMapper.batchAddTransportWayItems(dto.getTransportWayItemsList());
+        }
+    }
 
 
 

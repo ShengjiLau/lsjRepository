@@ -54,5 +54,15 @@ public interface SplitGoodsDetailMapper {
     int batchAddSplitGoodsDetail(List<SplitGoodsDetail> list);
 
 
+    /***
+     * 获取派单详细(splitGoodsId/companyId/isDeleted)
+     *
+     * @param map
+     *
+     * @return
+     */
+    List<SplitGoodsDetail> selectBySplitGoodsId(Map map);
+
+
 
 }

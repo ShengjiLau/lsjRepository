@@ -630,10 +630,6 @@ public class WaybillPlan implements java.io.Serializable,ResponseData {
 
 
 
-
-
-
-
     /***
      * 计划详细
      */
@@ -644,6 +640,9 @@ public class WaybillPlan implements java.io.Serializable,ResponseData {
      * 派单主表
      */
     private List<SplitGoods> splitGoodsList;
+
+
+
 
 
 

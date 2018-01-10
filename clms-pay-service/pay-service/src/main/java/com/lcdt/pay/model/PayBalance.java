@@ -1,8 +1,10 @@
 package com.lcdt.pay.model;
 
+import com.lcdt.converter.ResponseData;
+
 import java.util.Date;
 
-public class PayBalance {
+public class PayBalance implements ResponseData{
     private Long balanceId;
 
     private Long balanceCompanyId;

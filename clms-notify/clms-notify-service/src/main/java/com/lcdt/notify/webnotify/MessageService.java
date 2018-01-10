@@ -34,8 +34,8 @@ public class MessageService {
         return webMessages;
     }
 
-    public void readMessage(Long messageId){
-        webMessageDao.setReadMessage(messageId);
+    public void readMessage(Long messageId,Long companyId,Long userId){
+        webMessageDao.setReadMessage(messageId,companyId,userId);
     }
 
 }

@@ -107,7 +107,7 @@
     where plan_detail_id = #{planDetailId,jdbcType=BIGINT}
   </select>
 
-  <select id="selectByWaybillPlanId" resultMap="BaseResultMap">
+  <select id="selectByWaybillPlanId" parameterType="java.util.Map" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated
 
@@ -118,7 +118,7 @@
     remainder_amount, freight_price, freight_total, create_id, create_name, create_date,
     update_id, update_name, update_time, is_deleted, detail_remark, company_id
     from t_plan_detail
-    where waybill_plan_id = #{0} and company_id = #{1} and is_deleted = #{2}
+    where waybill_plan_id = #{waybillPlanId} and company_id = #{companyId} and is_deleted = #{isDeleted}
   </select>
 
 
@@ -168,7 +168,7 @@
       set
           waybill_plan_id = #{goods.waybillPlanId},
           goods_id = #{goods.goodsId},
-          sub_goods_id = #{subGoodsId},
+          sub_goods_id = #{goods.subGoodsId},
           goods_name = #{goods.goodsName},
           goods_sepc = #{goods.goodsSepc},
           unit = #{goods.unit},
@@ -181,7 +181,7 @@
           update_time = #{goods.updateTime},
           is_deleted = #{goods.isDeleted},
           detail_remark = #{goods.detailRemark}
-      where plan_detail_id = #{goods.planDetailId,jdbcType=BIGINT} and compnay_id = #{goods.compnayId}
+      where plan_detail_id = #{goods.planDetailId,jdbcType=BIGINT} and company_id = #{goods.companyId}
     </foreach>
   </update>
 

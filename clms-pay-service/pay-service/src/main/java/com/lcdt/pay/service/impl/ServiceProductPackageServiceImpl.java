@@ -1,12 +1,18 @@
 package com.lcdt.pay.service.impl;
 
+import com.lcdt.pay.dao.PayBalanceMapper;
 import com.lcdt.pay.dao.ServiceProductMapper;
 import com.lcdt.pay.dao.ServiceProductPackageMapper;
+import com.lcdt.pay.model.PayBalance;
 import com.lcdt.pay.model.ServiceProduct;
 import com.lcdt.pay.model.ServiceProductPackage;
+import com.lcdt.pay.service.CompanyBalanceService;
 import com.lcdt.pay.service.ServiceProductPackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class ServiceProductPackageServiceImpl implements ServiceProductPackageService {
@@ -16,6 +22,14 @@ public class ServiceProductPackageServiceImpl implements ServiceProductPackageSe
 
     @Autowired
     ServiceProductMapper productMapper;
+
+    @Autowired
+    ServiceProductPackageMapper productPackageMapper;
+
+    @Autowired
+    CompanyBalanceService balanceService;
+    @Autowired
+    PayBalanceMapper balanceMapper;
 
     @Override
     public ServiceProductPackage createServiceProductPackage(ServiceProductPackage servicePackage) {
@@ -27,4 +41,16 @@ public class ServiceProductPackageServiceImpl implements ServiceProductPackageSe
         mapper.insert(servicePackage);
         return servicePackage;
     }
+
+
+    @Transactional
+    public List<ServiceProductPackage> serviceProductPackageList(String packageType){
+        List<ServiceProductPackage> serviceProductPackages = mapper.selectBypackageType(packageType);
+        return serviceProductPackages;
+    }
+
+
+
+
+
 }

@@ -44,4 +44,15 @@ public interface SnatchGoodsDetailMapper {
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
     int updateByPrimaryKey(SnatchGoodsDetail record);
+
+    List<SnatchGoodsDetail> selectBySnatchGoodsDetailId(Long snatchGoodsId, short isDeleted);
+
+
+
+    /***
+     * 批量添加抢单详情
+     * @param snatchGoodsDetailList
+     * @return
+     */
+    int batchAddSnatchGoodsDetail(List<SnatchGoodsDetail> snatchGoodsDetailList);
 }

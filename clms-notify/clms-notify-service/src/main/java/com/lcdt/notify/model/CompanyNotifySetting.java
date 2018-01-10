@@ -1,6 +1,8 @@
 package com.lcdt.notify.model;
 
-public class CompanyNotifySetting {
+import com.lcdt.converter.ResponseData;
+
+public class CompanyNotifySetting implements ResponseData{
     private Long settingId;
 
     private Long companyId;

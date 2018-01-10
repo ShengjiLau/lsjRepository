@@ -2,15 +2,17 @@ package com.lcdt.traffic.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.customer.model.Customer;
-import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.PlanService;
+import com.lcdt.traffic.service.WaybillService;
+import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
+import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
+import com.lcdt.userinfo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,17 +41,23 @@ public class PlanServiceImpl implements PlanService {
     @Autowired
     private PlanLeaveMsgMapper planLeaveMsgMapper; //计划留言
 
+    @Autowired
+    private WaybillService waybillService;
 
 
-    @com.alibaba.dubbo.config.annotation.Reference
-    public CustomerRpcService customerRpcService;  //客户信息
+    @Autowired
+    private TransportWayItemsMapper transportWayItemsMapper;
 
 
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public WaybillPlan publishWayBillPlan(WaybillParamsDto dto) throws WaybillPlanException { //只有是暂存(待发布状态的，才能点发布)
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(), dto.getCompanyId(), (short)0);
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",dto.getWaybillPlanId());
+        tMap.put("companyId",dto.getCompanyId());
+        tMap.put("isDeleted","0");
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         WaybillPlan updateObj = new WaybillPlan();
         updateObj.setWaybillPlanId(waybillPlan.getWaybillPlanId());
         if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
@@ -78,12 +86,6 @@ public class PlanServiceImpl implements PlanService {
 
                             SplitGoods splitGoods = new SplitGoods(); //派单
                             splitGoods.setWaybillPlanId(waybillPlan.getWaybillPlanId());
-                            splitGoods.setCarrierType(waybillPlan.getCarrierType());
-                            splitGoods.setCarrierCollectionIds(waybillPlan.getCarrierCollectionIds());//承运商ID
-                            splitGoods.setCarrierCollectionNames(waybillPlan.getCarrierCollectionNames());//承运商
-                            splitGoods.setCarrierPhone(waybillPlan.getCarrierPhone());//司机电话
-                            splitGoods.setCarrierVehicle(waybillPlan.getCarrierVehicle());//车号
-                            splitGoods.setTransportWay(waybillPlan.getTransportWay());//承运方式
                             splitGoods.setSplitRemark("发布生成...");
                             splitGoods.setCreateId(dto.getCreateId());
                             splitGoods.setCreateName(dto.getCreateName());
@@ -94,7 +96,6 @@ public class PlanServiceImpl implements PlanService {
                             splitGoods.setCompanyId(dto.getCompanyId());
                             splitGoods.setCarrierCompanyId(waybillPlan.getCarrierCompanyId());
                             splitGoods.setIsDeleted((short)0);
-                            splitGoods.setGroupId(waybillPlan.getGroupId());
                             splitGoodsMapper.insert(splitGoods);
 
                             List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
@@ -159,21 +160,24 @@ public class PlanServiceImpl implements PlanService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public WaybillPlan wayBillPlanCheckPass(WaybillParamsDto dto) {
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(), dto.getCompanyId(), (short)0);
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",dto.getWaybillPlanId());
+        tMap.put("companyId",dto.getCompanyId());
+        tMap.put("isDeleted","0");
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
         if (waybillPlan.getIsApproval()==0) throw new WaybillPlanException("计划不需要审批！");
-        WaybillPlan updateObj = new WaybillPlan();
-        updateObj.setWaybillPlanId(waybillPlan.getWaybillPlanId());
-        updateObj.setCompanyId(waybillPlan.getCompanyId());
+        waybillPlan.setWaybillPlanId(waybillPlan.getWaybillPlanId());
+        waybillPlan.setCompanyId(waybillPlan.getCompanyId());
         Date opDate = new Date();
         if (!StringUtils.isEmpty(waybillPlan.getCarrierCollectionIds())) { //指定承运商
             short carrierType = waybillPlan.getCarrierType();
             if (carrierType == 1) { //承运商
-                updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //计划状态(已派完)
-                updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//计划状态(派车中)
+                waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //计划状态(已派完)
+                waybillPlan.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//计划状态(派车中)
             } else { //司机
-                updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED); //计划状态(已派完)
-                updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//计划状态(已派完)
+                waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED); //计划状态(已派完)
+                waybillPlan.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//计划状态(已派完)
             }
             List<PlanDetail> planDetailList = waybillPlan.getPlanDetailList();
             for (PlanDetail obj : planDetailList) {
@@ -183,14 +187,9 @@ public class PlanServiceImpl implements PlanService {
                 obj.setUpdateTime(opDate);
             }
             planDetailMapper.batchUpdatePlanDetail(planDetailList);
+
             SplitGoods splitGoods = new SplitGoods(); //派单
             splitGoods.setWaybillPlanId(waybillPlan.getWaybillPlanId());
-            splitGoods.setCarrierType(waybillPlan.getCarrierType());
-            splitGoods.setCarrierCollectionIds(waybillPlan.getCarrierCollectionIds());//承运商ID
-            splitGoods.setCarrierCollectionNames(waybillPlan.getCarrierCollectionNames());//承运商
-            splitGoods.setCarrierPhone(waybillPlan.getCarrierPhone());//司机电话
-            splitGoods.setCarrierVehicle(waybillPlan.getCarrierVehicle());//车号
-            splitGoods.setTransportWay(waybillPlan.getTransportWay());//承运方式
             splitGoods.setSplitRemark("审批通过后生成....");
             splitGoods.setCreateId(dto.getUpdateId());
             splitGoods.setCreateName(dto.getUpdateName());
@@ -200,7 +199,6 @@ public class PlanServiceImpl implements PlanService {
             splitGoods.setUpdateTime(opDate);
             splitGoods.setCompanyId(dto.getCompanyId());
             splitGoods.setCarrierCompanyId(waybillPlan.getCarrierCompanyId());
-            splitGoods.setGroupId(waybillPlan.getGroupId());
             splitGoods.setIsDeleted((short)0);
             splitGoodsMapper.insert(splitGoods);
 
@@ -224,16 +222,25 @@ public class PlanServiceImpl implements PlanService {
                 splitGoodsDetailList.add(tObj);
             }
             splitGoodsDetailMapper.batchAddSplitGoodsDetail(splitGoodsDetailList);
-            /***司机生成运单***/
+            /***
+             *如果是司机需要生成运单
+             */
+            if (carrierType == 2) {
+                WaybillDto waybillDto = new WaybillDto();
+                PlanBO.getInstance().toWaybillItemsDto(waybillPlan, splitGoods, waybillDto, planDetailList, splitGoodsDetailList);
+                waybillService.addWaybill(waybillDto);
+            }
         } else { //未指定承运商
-            updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
-            updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
+            waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
+            waybillPlan.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
        }
         //更新人信息
-        updateObj.setUpdateId(dto.getUpdateId());
-        updateObj.setUpdateName(dto.getUpdateName());
-        updateObj.setUpdateTime(opDate);
-        waybillPlanMapper.updateByPrimaryKey(updateObj);
+        waybillPlan.setUpdateId(dto.getUpdateId());
+        waybillPlan.setUpdateName(dto.getUpdateName());
+        waybillPlan.setUpdateTime(opDate);
+        waybillPlan.setIsApproval((short)2); //审批通过
+        waybillPlanMapper.updateWaybillPlan(waybillPlan);
+        waybillPlan.setIsApproval(waybillPlan.getIsApproval());
         return waybillPlan;
     }
 
@@ -262,7 +269,11 @@ public class PlanServiceImpl implements PlanService {
     @Transactional(readOnly = true)
     @Override
     public WaybillPlan loadWaybillPlan(WaybillParamsDto dto) {
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(), dto.getCompanyId(), (short)0);
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",dto.getWaybillPlanId());
+        tMap.put("companyId",dto.getCompanyId());
+        tMap.put("isDeleted","0");
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         if (waybillPlan == null) {
             throw new WaybillPlanException("计划不存在！");
         }
@@ -273,9 +284,15 @@ public class PlanServiceImpl implements PlanService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public PlanLeaveMsg planLeaveMsgAdd(PlanLeaveMsgParamsDto dto) {
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(dto.getWaybillPlanId(),dto.getCreateCompanyId(),(short)0);
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",dto.getWaybillPlanId());
+        tMap.put("companyId",dto.getCompanyId());
+        tMap.put("isDeleted","0");
+        PlanLeaveMsg planLeaveMsg = null;
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         if (waybillPlan != null) { //计划存在
-            PlanLeaveMsg planLeaveMsg = new PlanLeaveMsg();
+            planLeaveMsg = new PlanLeaveMsg();
+            planLeaveMsg.setWaybillPlanId(waybillPlan.getWaybillPlanId());
             if (waybillPlan.getCompanyId()==dto.getCompanyId()) { //说明是货主
                 planLeaveMsg.setLeaveType(ConstantVO.PLAN_LEAVE_MSG_TYPE_SHIPPER);
                 planLeaveMsg.setCompanyName(dto.getCompanyName());
@@ -291,18 +308,19 @@ public class PlanServiceImpl implements PlanService {
             }
             planLeaveMsg.setCreateId(dto.getUserId());
             planLeaveMsg.setCreateName(dto.getRealName());
-            planLeaveMsg.setCreateDate(planLeaveMsg.getLeaveDate());
+            planLeaveMsg.setCreateDate(new Date());
             planLeaveMsg.setUpdateId(dto.getUserId());
             planLeaveMsg.setUpdateName(dto.getRealName());
             planLeaveMsg.setUpdateTime(planLeaveMsg.getLeaveDate());
             planLeaveMsg.setLeaveMsg(dto.getLeaveMsg());
             planLeaveMsg.setLeaveDate(new Date());
+            planLeaveMsg.setUpdateTime(planLeaveMsg.getCreateDate());
             planLeaveMsg.setIsDeleted((short)0);
             planLeaveMsgMapper.insert(planLeaveMsg);
         } else {
             throw new WaybillPlanException("计划不存在！");
         }
-        return null;
+        return planLeaveMsg;
     }
 
 
@@ -323,7 +341,11 @@ public class PlanServiceImpl implements PlanService {
             }
         }
         //先获取计划，根据计划判断是货主还是承运人
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(Long.valueOf(map.get("waybillPlanId").toString()),Long.valueOf(map.get("createCompanyId").toString()), (short)0);
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",map.get("waybillPlanId"));
+        tMap.put("companyId",map.get("createCompanyId"));
+        tMap.put("isDeleted","0");
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         long companyId = Long.valueOf(map.get("companyId").toString());//登录人企业ID
         PageInfo pageInfo = null;
         if (waybillPlan != null) { //计划存在
@@ -343,54 +365,47 @@ public class PlanServiceImpl implements PlanService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Integer planDetailDelete(Long planDetailId, Long companyId) {
+    public Integer  planDetailDelete(Long planDetailId, Long companyId) {
         return planDetailMapper.deleteByPrimaryKey(planDetailId,companyId);
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
-    public PageInfo clientPlanList(Map map) {
-
-        //查询该企业下绑定客户列表（获取绑定客户中的绑定企业ID）
-        map.put("bindCpid","111");//标识绑定企业ID不为空的企业
-        List<Customer> customerList = customerRpcService.findBindCompanyIds(map);
-
-
-        if (customerList!=null && customerList.size()>0) { //承运人ID
-            StringBuffer sb = new StringBuffer();
-            sb.append("(");
-            for (int i=0;i<customerList.size();i++) {
-                sb.append(" find_in_set('"+customerList.get(i).getBindCpid()+"',carrier_company_id)");
-                if(i!=customerList.size()-1){
-                    sb.append(" or ");
-                }
-            }
-            sb.append(")");
-            map.put("carrierCompanyIds",sb.toString());
-
-
-
-            //
-
-
-
-
-
-
-
-
-
-
-
+    public Integer ownPlanCancel(Long waybillPlanId, Long companyId, User user) {
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",waybillPlanId);
+        tMap.put("companyId",companyId);
+        tMap.put("isDeleted","0");
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
+        if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
+        if (waybillPlan.getPlanStatus().equals(ConstantVO.PLAN_STATUS_COMPLETED)) {
+            throw new WaybillPlanException("计划已完成，不能取消！");
         }
-
-
-
-
-        return null;
+        if (waybillPlan.getPlanStatus().equals(ConstantVO.PLAN_STATUS_CANCEL)) {
+            throw new WaybillPlanException("计划已取消！");
+        }
+        Date dt = new Date();
+        //验证是否已经存在已卸货或者已完成的运单，如果存在则提示：该计划存在已经卸货或者完成的运单，不可取消！
+        Map map = new HashMap<String,String>();
+        map.put("companyId", companyId);
+        map.put("waybillPlanId",waybillPlanId);
+        map.put("isDeleted",0);
+        PageInfo pg = waybillService.queryPlannedWaybillList(map);
+        if (pg.getTotal()>0) {
+            throw new WaybillPlanException("该计划存在已经卸货或者完成的运单，不可取消！");
+        } else {
+            map.put("waybillStatus",ConstantVO.WAYBILL_STATUS_HAVE_CANCEL);
+            map.put("updateId",user.getUserId());
+            map.put("updateName",user.getRealName());
+            waybillService.modifyOwnWaybillStatusByWaybillPlanId(map);
+        }
+        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_CANCEL);
+        waybillPlan.setUpdateTime(dt);
+        waybillPlan.setUpdateId(user.getUserId());
+        waybillPlan.setUpdateName(user.getRealName());
+        waybillPlanMapper.updateByPrimaryKey(waybillPlan);
+        return 1;
     }
 
 
-
-
 }
+

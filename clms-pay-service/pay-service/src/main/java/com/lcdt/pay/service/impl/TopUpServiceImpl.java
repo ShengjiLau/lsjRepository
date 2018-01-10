@@ -1,5 +1,6 @@
 package com.lcdt.pay.service.impl;
 
+import com.lcdt.pay.dao.OrderType;
 import com.lcdt.pay.dao.PayOrderMapper;
 import com.lcdt.pay.model.Money;
 import com.lcdt.pay.model.PayOrder;
@@ -10,13 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class TopUpServiceImpl implements TopupService{
 
     @Autowired
     PayOrderMapper orderMapper;
-
 
     @Override
     public PayOrder createTopUpOrder(Integer money, Long companyId,Long userId) {
@@ -30,8 +32,15 @@ public class TopUpServiceImpl implements TopupService{
         return topUpPayOrder;
     }
 
+
+    public List<PayOrder> topUpOrderList(Long companyId,Integer orderType){
+        List<PayOrder> payOrders = orderMapper.selectByCompanyId(companyId, orderType);
+        return payOrders;
+    }
+
+
     @Override
     public void doTopUp(PayOrder payOrder) {
-
+        
     }
 }

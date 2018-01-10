@@ -2,11 +2,13 @@ package com.lcdt.login.web;
 
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.lcdt.notify.rpcservice.NotifyService;
 import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.util.RandomNoUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,6 +30,10 @@ public class RegisterController {
 
 //    @Reference(check = false,version = "customer")
 //    private SmsService smsService;
+
+    @Reference(async = true)
+    NotifyService notifyService;
+
 
     private String signature = "【大驼队】";
 
@@ -105,7 +111,9 @@ public class RegisterController {
                 httpSession.setAttribute("CWMS_SMS_SEND_TIME", cTime);
                 String[] phones = new String[]{registerDto.getUserPhoneNum()};
                 String vCode = RandomNoUtil.createRandom(true,4);
-//                smsService.sendSms(phones,signature,vCode);
+
+
+                notifyService.sendSms(phones,vCode);
                 httpSession.setAttribute("CWMS_SMS_VCODE", vCode+"_"+registerDto.getUserPhoneNum());
                 flag = true;
             } else {

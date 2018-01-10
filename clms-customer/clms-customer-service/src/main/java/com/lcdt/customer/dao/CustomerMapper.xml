@@ -309,7 +309,6 @@
       <if test="clientTypes!=null and clientTypes!=''">
         and  client_typs = #{clientTypes,jdbcType=VARCHAR}
       </if>
-
       <if test="collectionIds!=null and collectionIds!=''">
         and  ${collectionIds}
       </if>
@@ -331,8 +330,12 @@
       <if test="customerType!=null">
         and ${customerType}
       </if>
+      <!---->
       <if test="bindCpid != null">
         and bind_comp_id is not null and bind_comp_id != ''
+      </if>
+      <if test="bindCompId != null">
+        and bind_comp_id is not null and bind_comp_id = #{bindCompId,jdbcType=BIGINT}
       </if>
       <if test="groupIds!=null and groupIds!=''">
         and  ${groupIds}

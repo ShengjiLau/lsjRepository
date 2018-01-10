@@ -7,10 +7,7 @@ import com.lcdt.traffic.model.DriverGroupRelationship;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.service.DriverGroupService;
 import com.lcdt.traffic.service.OwnDriverService;
-import com.lcdt.traffic.web.dto.DriverGroupDto;
-import com.lcdt.traffic.web.dto.OwnDriverDto;
-import com.lcdt.traffic.web.dto.OwnDriverGroupRelationshipDto;
-import com.lcdt.traffic.web.dto.PageBaseDto;
+import com.lcdt.traffic.web.dto.*;
 import com.lcdt.userinfo.model.Driver;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -90,9 +87,9 @@ public class OwnDriverApi {
     }
 
     @ApiOperation(value = "删除司机", notes = "删除司机")
-    @PostMapping("/detele")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_detele')")
-    public JSONObject delOwnDriver(@Validated @RequestBody OwnDriverDto ownDriverDto, BindingResult bindingResult) {
+    @PostMapping("/delete")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_delete')")
+    public JSONObject delOwnDriver(@RequestBody OwnDriverDto ownDriverDto, BindingResult bindingResult) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
         String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
@@ -105,9 +102,14 @@ public class OwnDriverApi {
             jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
             return jsonObject;
         }
-        ownDriverService.delDriver(ownDriverDto);
-        jsonObject.put("code", 0);
-        jsonObject.put("message", "删除成功");
+        int row = ownDriverService.delDriver(ownDriverDto);
+        if(row>0){
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "删除成功");
+        }else{
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "该数据已被删除");
+        }
         return jsonObject;
     }
 
@@ -133,12 +135,13 @@ public class OwnDriverApi {
     @ApiOperation(value = "司机详情", notes = "司机详情包含证件信息")
     @GetMapping("/detail")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_detail')")
-    public OwnDriverDto ownDriverList(Long ownDriverId) {
+    public BaseDto ownDriverList(Long ownDriverId) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         OwnDriver ownDriver = new OwnDriver();
 //        BeanUtils.copyProperties(ownDriverDto, ownDriver);
         OwnDriverDto ownDriverDto = ownDriverService.ownDriverDetail(ownDriverId, companyId);
-        return ownDriverDto;
+        BaseDto baseDto = new BaseDto(ownDriverDto);
+        return baseDto;
     }
 
     @ApiOperation(value = "获取司机位置", notes = "根据随车手机号获取司机(基站定位)")

@@ -48,16 +48,20 @@ public class TicketAuthProvider implements AuthenticationProvider {
 
 		if (permissions != null && !permissions.isEmpty()) {
 			for (Permission permission : permissions) {
-				SimpleGrantedAuthority authority = new SimpleGrantedAuthority(permission.getPermissionCode().toLowerCase());
-				authorities.add(authority);
+				if (permission != null) {
+					SimpleGrantedAuthority authority = new SimpleGrantedAuthority(permission.getPermissionCode().toLowerCase());
+					authorities.add(authority);
+				}
 			}
 		}
 
 		List<SysRole> sysRoles = authentication.getSysRoles();
 		if (null != sysRoles && !sysRoles.isEmpty()) {
 			for (SysRole role : sysRoles) {
-				SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getSysRoleCode().toUpperCase());
-				authorities.add(authority);
+				if (role != null) {
+					SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getSysRoleCode().toUpperCase());
+					authorities.add(authority);
+				}
 			}
 		}
 
@@ -70,4 +74,6 @@ public class TicketAuthProvider implements AuthenticationProvider {
 	public boolean supports(Class<?> authentication) {
 		return TicketAuthenticationToken.class.equals(authentication);
 	}
+
 }
+

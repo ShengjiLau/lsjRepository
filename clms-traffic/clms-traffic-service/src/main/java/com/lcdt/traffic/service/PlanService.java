@@ -6,6 +6,7 @@ import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
+import com.lcdt.userinfo.model.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -44,13 +45,6 @@ public interface PlanService {
     PageInfo wayBillPlanList(Map map);
 
 
-    /***
-     *客户计划列表
-     *
-     * @return
-     */
-    PageInfo clientPlanList(Map map);
-
 
     /***
      * 拉取计划详细信息
@@ -86,6 +80,15 @@ public interface PlanService {
      */
     Integer planDetailDelete(Long planDetailId, Long companyId);
 
+
+    /***
+     * 计划取消
+     * @param waybillPlanId
+     * @param companyId
+     * @param user
+     * @return
+     */
+    Integer ownPlanCancel(Long waybillPlanId, Long companyId, User user);
 
 
 

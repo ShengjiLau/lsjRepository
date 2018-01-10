@@ -25,8 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @AUTHOR liuh
@@ -59,15 +58,16 @@ public class OwnDriverServiceImpl implements OwnDriverService {
             throw new RuntimeException("手机号不能重复!");
         } else {
             ownDriverMapper.insert(ownDriver);    //保存车司机本信息
-            //设置证件的创建人/id创建人/公司id
-            for (OwnDriverCertificate ownDriverCertificate : ownDriverDto.getOwnDriverCertificateList()) {
-                ownDriverCertificate.setOwnDriverId(ownDriver.getOwnDriverId());
-                ownDriverCertificate.setCreateId(ownDriverDto.getCreateId());
-                ownDriverCertificate.setCreateName(ownDriverDto.getCreateName());
-                ownDriverCertificate.setCompanyId(ownDriverDto.getCompanyId());
+            if(null!=ownDriverDto.getOwnDriverCertificateList() && ownDriverDto.getOwnDriverCertificateList().size()>0) {
+                //设置证件的创建人/id创建人/公司id
+                for (OwnDriverCertificate ownDriverCertificate : ownDriverDto.getOwnDriverCertificateList()) {
+                    ownDriverCertificate.setOwnDriverId(ownDriver.getOwnDriverId());
+                    ownDriverCertificate.setCreateId(ownDriverDto.getCreateId());
+                    ownDriverCertificate.setCreateName(ownDriverDto.getCreateName());
+                    ownDriverCertificate.setCompanyId(ownDriverDto.getCompanyId());
+                }
+                ownDriverCertificateMapper.insertBatch(ownDriverDto.getOwnDriverCertificateList());  //批量插入车辆证件
             }
-            ownDriverCertificateMapper.insertBatch(ownDriverDto.getOwnDriverCertificateList());  //批量插入车辆证件
-
             /**下面判断用户表中是否存在该司机电话的账号，不存在的话，则自动保存一条司机的账号信息*/
             String phone = ownDriverDto.getDriverPhone().trim();
             if (!userService.isPhoneBeenRegister(phone)) { //为空则保存司机账号信息
@@ -105,20 +105,33 @@ public class OwnDriverServiceImpl implements OwnDriverService {
             throw new RuntimeException("手机号不能重复!");
         } else {
             ownDriverMapper.updateByPrimaryKey(ownDriver);    //更新司机基本信息
+            //获取该司机下面的证件odcId用来匹配被删除的证件
+            List<Long> odcIdList = ownDriverCertificateMapper.selectOvcIdByOwnDriverId(ownDriver.getOwnDriverId());
             List<OwnDriverCertificate> list1 = new ArrayList<>();
             List<OwnDriverCertificate> list2 = new ArrayList<>();
             if (null != ownDriverDto.getOwnDriverCertificateList()) {
                 for (OwnDriverCertificate item : ownDriverDto.getOwnDriverCertificateList()) {  //迭代根据ownDriverId来区分是新增还是插入
+                    item.setOwnDriverId(ownDriver.getOwnDriverId());    //设置ownDriverId
                     if (item.getOdcId() == null) {   //没有主键的则为新增
-                        item.setCreateId(ownDriverDto.getCreateId());
-                        item.setCreateName(ownDriverDto.getCreateName());
+                        item.setCreateId(ownDriverDto.getUpdateId());
+                        item.setCreateName(ownDriverDto.getUpdateName());
                         item.setCompanyId(ownDriverDto.getCompanyId());
                         list1.add(item);
                     } else {
-                        item.setUpdateId(ownDriverDto.getCreateId());
-                        item.setUpdateName(ownDriverDto.getCreateName());
+                        item.setUpdateId(ownDriverDto.getUpdateId());
+                        item.setUpdateName(ownDriverDto.getUpdateName());
                         item.setCompanyId(ownDriverDto.getCompanyId());
                         list2.add(item);
+
+                        if(null!=odcIdList) {
+                            Iterator<Long> it = odcIdList.iterator();
+                            while(it.hasNext()){
+                                Long ovcId = it.next();
+                                if(ovcId==item.getOdcId()){
+                                    it.remove();
+                                }
+                            }
+                        }
                     }
                 }
                 if (list1.size() > 0) {
@@ -126,6 +139,13 @@ public class OwnDriverServiceImpl implements OwnDriverService {
                 }
                 if (list2.size() > 0) {
                     ownDriverCertificateMapper.updateBatch(list2); //批量更新司机证件
+                }
+                if(odcIdList.size()>0){
+                    Map<String, Object> params = new HashMap<String, Object>();
+                    params.put("odcIds",odcIdList);
+                    params.put("updateId",ownDriverDto.getUpdateId());
+                    params.put("updateName",ownDriverDto.getUpdateName());
+                    ownDriverCertificateMapper.deleteByBatch(params);
                 }
                 /**下面判断用户表中是否存在该司机电话的账号，不存在的话，则自动保存一条司机的账号信息*/
                 String phone = ownDriverDto.getDriverPhone().trim();
@@ -142,8 +162,8 @@ public class OwnDriverServiceImpl implements OwnDriverService {
                         driver.setAffiliatedCompany(ownDriverDto.getAffiliatedCompany());
                         driver.setDriverName(ownDriverDto.getDriverName());
                         driver.setDriverPhone(phone);
-                        driver.setCreateId(ownDriverDto.getCreateId());
-                        driver.setCreateName(ownDriverDto.getCreateName());
+                        driver.setCreateId(ownDriverDto.getUpdateId());
+                        driver.setCreateName(ownDriverDto.getUpdateName());
                         driverService.addDriver(driver);    //保存司机信息
                     } catch (PhoneHasRegisterException e) {
                         e.printStackTrace();

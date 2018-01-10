@@ -45,6 +45,12 @@ public class WaybillPlanListParamsDto {
     private String pubdateEnd;
 
 
+    @ApiModelProperty(value = "派单时间-开始")
+    private String disDateBegin;
+    @ApiModelProperty(value = "派单时间-结束")
+    private String disDateEnd;
+
+
     @ApiModelProperty(value = "货物名称")
     private String goodsInfo;
 
@@ -155,5 +161,21 @@ public class WaybillPlanListParamsDto {
 
     public void setSendOrderType(short sendOrderType) {
         this.sendOrderType = sendOrderType;
+    }
+
+    public String getDisDateBegin() {
+        return disDateBegin;
+    }
+
+    public void setDisDateBegin(String disDateBegin) {
+        this.disDateBegin = disDateBegin;
+    }
+
+    public String getDisDateEnd() {
+        return disDateEnd;
+    }
+
+    public void setDisDateEnd(String disDateEnd) {
+        this.disDateEnd = disDateEnd;
     }
 }

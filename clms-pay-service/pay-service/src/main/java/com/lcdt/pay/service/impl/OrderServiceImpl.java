@@ -81,7 +81,11 @@ public class OrderServiceImpl implements OrderService{
 
         ServiceProduct serviceProduct = productMapper.selectByPrimaryKey(productId);
 
-        CompanyServiceCount companyServiceCount = countMapper.selectByCompanyId(companyId,serviceProduct.getProductName());
+        List<CompanyServiceCount> companyServiceCounts = countMapper.selectByCompanyId(companyId,serviceProduct.getProductName());
+        CompanyServiceCount companyServiceCount = null;
+        if (!CollectionUtils.isEmpty(companyServiceCounts)) {
+            companyServiceCount = companyServiceCounts.get(0);
+        }
 
         if (companyServiceCount == null) {
             CompanyServiceCount companyServiceCount1 = new CompanyServiceCount();
@@ -113,6 +117,5 @@ public class OrderServiceImpl implements OrderService{
         mapper.updateByPrimaryKey(payOrder);
         return payOrder;
     }
-
 
 }

@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.model.OwnVehicle;
 import com.lcdt.traffic.service.OwnVehicleService;
+import com.lcdt.traffic.web.dto.BaseDto;
 import com.lcdt.traffic.web.dto.OwnVehicleDto;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.userinfo.model.Driver;
@@ -20,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -83,9 +85,9 @@ public class OwnVehicleApi {
     }
 
     @ApiOperation(value = "删除车辆", notes = "删除车辆")
-    @PostMapping("/detele")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_detele')")
-    public JSONObject delOwnVehicle(@Validated @RequestBody OwnVehicleDto ownVehicleDto, BindingResult bindingResult) {
+    @PostMapping("/delete")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_delete')")
+    public JSONObject delOwnVehicle(@RequestBody OwnVehicleDto ownVehicleDto, BindingResult bindingResult) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
         String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
@@ -98,16 +100,22 @@ public class OwnVehicleApi {
             jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
             return jsonObject;
         }
-        ownVehicleService.delVehicle(ownVehicleDto);
-        jsonObject.put("code", 0);
-        jsonObject.put("message", "删除成功");
+        int row = ownVehicleService.delVehicle(ownVehicleDto);
+        if(row>0){
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "删除成功");
+        }else{
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "该数据已被删除");
+        }
+
         return jsonObject;
     }
 
     @ApiOperation(value = "车辆列表", notes = "获取车辆")
     @GetMapping("/list")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_list')")
-    public PageBaseDto<List<OwnVehicle>> ownVehicleList(@RequestBody OwnVehicleDto ownVehicleDto) {
+    public PageBaseDto<List<OwnVehicle>> ownVehicleList(OwnVehicleDto ownVehicleDto) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         OwnVehicle ownVehicle = new OwnVehicle();
         BeanUtils.copyProperties(ownVehicleDto, ownVehicle);
@@ -126,12 +134,13 @@ public class OwnVehicleApi {
     @ApiOperation(value = "车辆详情", notes = "车辆详情包含证件信息")
     @GetMapping("/detail")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_list')")
-    public OwnVehicleDto ownVehicleList(Long ownVehicleId) {
+    public BaseDto ownVehicleList(Long ownVehicleId) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         OwnVehicle ownVehicle = new OwnVehicle();
 //        BeanUtils.copyProperties(ownVehicleDto, ownVehicle);
         OwnVehicleDto ownVehicleDto = ownVehicleService.ownVehicleDetail(ownVehicleId,companyId);
-        return ownVehicleDto;
+        BaseDto baseDto = new BaseDto(ownVehicleDto);
+        return baseDto;
     }
 
     @ApiOperation(value = "获取车辆位置", notes = "根据随车手机号获取车辆(基站定位)")
@@ -141,9 +150,15 @@ public class OwnVehicleApi {
 //        String driverPhones = StringUtils.join(driverPhoneArr,",");
         List<String> driverPhoneList = Arrays.asList(driverPhoneArr);
         logger.debug("driverPhones:" + driverPhoneList.size());
-        List<Driver> driverList = ownVehicleService.getGpsInfo(driverPhoneList);
-        PageBaseDto pageBaseDto = new PageBaseDto(driverList, driverList.size());
-        return pageBaseDto;
+        if(driverPhoneList.size()>0){
+            List<Driver> driverList = ownVehicleService.getGpsInfo(driverPhoneList);
+            PageBaseDto pageBaseDto = new PageBaseDto(driverList, driverList.size());
+            return pageBaseDto;
+        }else {
+            return new PageBaseDto(new ArrayList(),0);
+        }
+
+
     }
 
 }

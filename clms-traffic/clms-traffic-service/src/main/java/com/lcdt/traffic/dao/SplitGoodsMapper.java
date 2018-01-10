@@ -3,6 +3,7 @@ package com.lcdt.traffic.dao;
 import com.lcdt.traffic.model.SplitGoods;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SplitGoodsMapper {
     /**
@@ -27,9 +28,21 @@ public interface SplitGoodsMapper {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    SplitGoods selectByPrimaryKey(Long splitGoodsId);
+    /***
+     * 根据派单ID、企业ID
+     * @param splitGoodsId
+     * @param companyId
+     * @return
+     */
+    SplitGoods selectByPrimaryKey(Long splitGoodsId, Long companyId);
 
-    SplitGoods selectByWaybillPlanId(Long waybillPlanId, Long companyId, Short isDeleted);
+
+    /**
+     * Long waybillPlanId, Long companyId, Short isDeleted
+     * @param map
+     * @return
+     */
+    List<SplitGoods> selectByWaybillPlanId(Map map);
 
 
     /**

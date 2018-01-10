@@ -18,6 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Version;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -166,6 +167,36 @@ public class GroupApi {
     }
 
 
+
+    /**
+     * 组员工不存在列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "组员工不存在列表v1")
+    @RequestMapping(value = "/groupUserNotList",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_not_list')")
+    public GroupResultDto groupUserNotList(@ApiParam(value = "组ID",required = true) @RequestParam Long groupId,
+                                        @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+                                        @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId",companyId);
+        map.put("groupIdNot",groupId);
+        map.put("page_no",pageNo);
+        map.put("page_size",pageSize);
+        PageInfo pageInfo = groupManageService.selectGroupUserList(map);
+        GroupResultDto rDto = new GroupResultDto();
+        rDto.setUserList(pageInfo.getList());
+        rDto.setTotal(pageInfo.getTotal());
+        return rDto;
+    }
+
+
+
+
+
+
     /**
      * 组成员添加
      *
@@ -181,6 +212,7 @@ public class GroupApi {
         vo.setCompanyId(companyId);
         vo.setUserId(userId);
         vo.setGroupId(groupId);
+        vo.setGroupCreateDate(new Date());
         Integer flag = groupManageService.groupUserAdd(vo);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("message",flag==1?"添加成功！":"添加失败！");

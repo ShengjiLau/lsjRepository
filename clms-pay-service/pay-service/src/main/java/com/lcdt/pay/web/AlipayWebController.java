@@ -1,13 +1,16 @@
 package com.lcdt.pay.web;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.pay.config.AlipayContants;
 import com.lcdt.pay.model.AlipayTradeOrder;
@@ -16,18 +19,25 @@ import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.service.OrderService;
 import com.lcdt.pay.service.TopupService;
 import com.lcdt.pay.utils.MoneyNumUtil;
+import com.lcdt.pay.utils.WechatPayApi;
+import com.lcdt.util.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class AlipayWebController {
@@ -44,12 +54,14 @@ public class AlipayWebController {
     @Autowired
     TopupService topupService;
 
-
+    @Autowired
+    WechatPayApi wechatPayApi;
+    
     /**
      * 新建一个充值订单
      * @return
      */
-    @RequestMapping("/topup")
+    @RequestMapping(value = "/topup",method = RequestMethod.POST)
     @ResponseBody
     public PayOrder createTopupPayOrder(Integer amount){
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -59,7 +71,7 @@ public class AlipayWebController {
     }
 
 
-    @RequestMapping("/pay")
+    @RequestMapping("/alipay")
     public void payPage(HttpServletResponse httpResponse, Long orderId) throws IOException {
         if (orderId == null) {
             return;
@@ -140,6 +152,58 @@ public class AlipayWebController {
 
     }
 
+    @RequestMapping("/wechatqrcode")
+    public void wechatQrcode(HttpServletResponse response,Long orderId,HttpServletRequest request){
+        PayOrder serverOrder = orderService.selectByOrderId(orderId);
+        Integer orderStatus = serverOrder.getOrderStatus();
+        //判断是否是待支付状态
+        if (serverOrder.getOrderStatus() != OrderStatus.PENDINGPAY) {
+            throw new RuntimeException("订单状态异常");
+        }
+
+        String localIp = HttpUtils.getLocalIp(request);
+
+        String qrcodeUrl = wechatPayApi.createWechatOrder(serverOrder.getOrderNo(), localIp, serverOrder.getOrderAmount());
+
+
+        if( qrcodeUrl ==null || "".equals(qrcodeUrl))
+            return;
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+        Map hints = new HashMap();
+        hints.put(EncodeHintType.CHARACTER_SET, "UTF-8"); //设置字符集编码类型
+        BitMatrix bitMatrix = null;
+        try {
+            bitMatrix = multiFormatWriter.encode(qrcodeUrl, BarcodeFormat.QR_CODE, 300, 300,hints);
+            BufferedImage image = toBufferedImage(bitMatrix);
+            //输出二维码图片流
+            try {
+//                response.setHeader();
+                response.setContentType("image/png");
+                response.setHeader("Pragma","no-cache");
+                response.setHeader("Cache-Control","no-cache");
+                ImageIO.write(image, "png", response.getOutputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (WriterException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    private static BufferedImage toBufferedImage(BitMatrix bitMatrix){
+        BufferedImage image = null;
+        int width = bitMatrix.getWidth();
+        int height = bitMatrix.getHeight();
+        image = new BufferedImage(width, height,BufferedImage.TYPE_INT_ARGB);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                image.setRGB(x, y, bitMatrix.get(x, y) == true ?
+                        Color.BLACK.getRGB():Color.WHITE.getRGB());
+            }
+        }
+
+        return image;
+    }
 
 
 }

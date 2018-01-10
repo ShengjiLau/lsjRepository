@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>pay-service</module>
+        <module>clms-pay-api</module>
     </modules>
 
 

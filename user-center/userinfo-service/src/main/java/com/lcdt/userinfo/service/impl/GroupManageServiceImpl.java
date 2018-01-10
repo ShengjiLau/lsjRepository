@@ -176,7 +176,7 @@ public class GroupManageServiceImpl implements GroupManageService {
 			}
 		}
 		PageHelper.startPage(pageNo, pageSize);
-		List<User> list  = userMapper.selectUser4Group(Long.valueOf(m.get("groupId").toString()),Long.valueOf(m.get("companyId").toString()));
+		List<User> list  = userMapper.selectUser4Group(m);
 		PageInfo pageInfo = new PageInfo(list);
 		return pageInfo;
 	}
