@@ -81,7 +81,7 @@ public class OrderServiceImpl implements OrderService{
 
         ServiceProduct serviceProduct = productMapper.selectByPrimaryKey(productId);
 
-        List<CompanyServiceCount> companyServiceCounts = countMapper.selectByCompanyId(companyId,serviceProduct.getProductName());
+        List<CompanyServiceCount> companyServiceCounts = countMapper.selectByCompanyId(companyId,serviceProduct.getServiceName());
         CompanyServiceCount companyServiceCount = null;
         if (!CollectionUtils.isEmpty(companyServiceCounts)) {
             companyServiceCount = companyServiceCounts.get(0);
@@ -90,19 +90,21 @@ public class OrderServiceImpl implements OrderService{
         if (companyServiceCount == null) {
             CompanyServiceCount companyServiceCount1 = new CompanyServiceCount();
             companyServiceCount1.setCompanyId(companyId);
-            companyServiceCount1.setProductName(serviceProduct.getProductName());
+            companyServiceCount1.setProductName(serviceProduct.getServiceName());
+            companyServiceCount1.setProductServiceNum(serviceProductPackage.getProductNum());
             countMapper.insert(companyServiceCount1);
             companyServiceCount = companyServiceCount1;
-        }
-        if (companyServiceCount.getProductServiceNum() == null) {
-            companyServiceCount.setProductServiceNum(serviceProductPackage.getProductNum());
         }else{
-            companyServiceCount.setProductServiceNum(companyServiceCount.getProductServiceNum() + serviceProductPackage.getProductNum());
+            if (companyServiceCount.getProductServiceNum() == null) {
+                companyServiceCount.setProductServiceNum(serviceProductPackage.getProductNum());
+            }else{
+                companyServiceCount.setProductServiceNum(companyServiceCount.getProductServiceNum() + serviceProductPackage.getProductNum());
+            }
             countMapper.updateByPrimaryKey(companyServiceCount);
         }
 
-        payOrder.setOrderStatus(OrderStatus.PAYED);
 
+        payOrder.setOrderStatus(OrderStatus.PAYED);
         mapper.updateByPrimaryKey(payOrder);
     }
 

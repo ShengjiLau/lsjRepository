@@ -5,6 +5,7 @@
     <id column="product_id" jdbcType="INTEGER" property="productId" />
     <result column="product_name" jdbcType="VARCHAR" property="productName" />
     <result column="product_valid" jdbcType="BIT" property="productValid" />
+    <result column="product_service" jdbcType="VARCHAR" property="serviceName" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from service_product
@@ -14,8 +15,8 @@
     <selectKey keyProperty="productId" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into service_product (product_name, product_valid)
-    values (#{productName,jdbcType=VARCHAR}, #{productValid,jdbcType=BIT})
+    insert into service_product (product_name, product_valid,product_service)
+    values (#{productName,jdbcType=VARCHAR}, #{productValid,jdbcType=BIT},#{serviceName,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.pay.model.ServiceProduct">
     update service_product
@@ -24,12 +25,12 @@
     where product_id = #{productId,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select product_id, product_name, product_valid
+    select product_id, product_name, product_valid,product_service
     from service_product
     where product_id = #{productId,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select product_id, product_name, product_valid
+    select product_id, product_name, product_valid,product_service
     from service_product
   </select>
 </mapper>
