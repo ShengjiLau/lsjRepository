@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.pay.dao.ProductCountLogMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.pay.rpc.ProductCountLog">
+    <id column="service_count_log_id" jdbcType="BIGINT" property="serviceCountLogId" />
+    <result column="log_no" jdbcType="VARCHAR" property="logNo" />
+    <result column="log_des" jdbcType="VARCHAR" property="logDes" />
+    <result column="service_name" jdbcType="VARCHAR" property="serviceName" />
+    <result column="consume_num" jdbcType="INTEGER" property="consumeNum" />
+    <result column="remain_num" jdbcType="INTEGER" property="remainNum" />
+    <result column="log_type" jdbcType="INTEGER" property="logType" />
+    <result column="deduct" jdbcType="INTEGER" property="deduct" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from product_count_log
+    where service_count_log_id = #{serviceCountLogId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.pay.rpc.ProductCountLog">
+    <selectKey keyProperty="serviceCountLogId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into product_count_log (log_no, log_des, service_name, 
+      consume_num, remain_num, log_type, 
+      deduct)
+    values (#{logNo,jdbcType=VARCHAR}, #{logDes,jdbcType=VARCHAR}, #{serviceName,jdbcType=VARCHAR}, 
+      #{consumeNum,jdbcType=INTEGER}, #{remainNum,jdbcType=INTEGER}, #{logType,jdbcType=INTEGER}, 
+      #{deduct,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.pay.rpc.ProductCountLog">
+    update product_count_log
+    set log_no = #{logNo,jdbcType=VARCHAR},
+      log_des = #{logDes,jdbcType=VARCHAR},
+      service_name = #{serviceName,jdbcType=VARCHAR},
+      consume_num = #{consumeNum,jdbcType=INTEGER},
+      remain_num = #{remainNum,jdbcType=INTEGER},
+      log_type = #{logType,jdbcType=INTEGER},
+      deduct = #{deduct,jdbcType=INTEGER}
+    where service_count_log_id = #{serviceCountLogId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select service_count_log_id, log_no, log_des, service_name, consume_num, remain_num, 
+    log_type, deduct
+    from product_count_log
+    where service_count_log_id = #{serviceCountLogId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select service_count_log_id, log_no, log_des, service_name, consume_num, remain_num, 
+    log_type, deduct
+    from product_count_log
+  </select>
+
+  <select id="selectByProductNameCompanyId" resultMap="BaseResultMap">
+       select service_count_log_id, log_no, log_des, service_name, consume_num, remain_num,company_id,log_time
+    log_type, deduct
+    from product_count_log
+    where
+    company_id = #{companyId}
+
+    <if test="productName != null">
+      and service_name = #{productName}
+    </if>
+
+    <if test="beginTime != null">
+      log_time &gt;= #{beginTime,jdbcType=DATETIME}
+
+    </if>
+
+    <if test="endTime != null">
+      log_time &lt;= #{beginTime,jdbcType=DATETIME}
+    </if>
+
+  </select>
+
+
+</mapper>

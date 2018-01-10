@@ -121,6 +121,8 @@ public class AuthController {
 
 		try {
 			User user = userService.userLogin(username, password);
+
+
 			LoginSessionReposity.setUserInSession(request, user);
 			List<UserCompRel> companyMembers = companyService.companyList(user.getUserId());
 			jsonObject.put("data", companyMembers);

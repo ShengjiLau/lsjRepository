@@ -68,6 +68,15 @@
       and order_type = #{orderType,jdbcType=INTEGER}
     </if>
 
+    <if test="beginTime != null">
+      and create_time &gt;= #{beginTime,jdbcType=DATETIME}
+    </if>
+
+    <if test="endTime != null">
+      and create_time &lt;=  #{endTime,jdbcType=DATETIME}
+    </if>
+
+    order by create_time DESC
 
   </select>
 

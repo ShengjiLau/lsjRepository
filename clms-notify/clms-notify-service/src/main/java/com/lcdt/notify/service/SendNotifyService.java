@@ -31,6 +31,7 @@ public class SendNotifyService {
 
     public void handleEvent(JsonParserPropertyEvent event) {
         String eventName = event.getEventName();
+
         //query notify by event Name
         List<Notify> notifies = notifyService.queryNotifyByEventName(eventName);
 

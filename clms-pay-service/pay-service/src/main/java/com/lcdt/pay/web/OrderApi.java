@@ -6,8 +6,11 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.pay.dao.OrderType;
 import com.lcdt.pay.dao.PayOrderMapper;
+import com.lcdt.pay.dao.ProductCountLogMapper;
 import com.lcdt.pay.dao.ServiceProductMapper;
 import com.lcdt.pay.model.*;
+import com.lcdt.pay.rpc.ProductCountLog;
+import com.lcdt.pay.rpc.ProductCountService;
 import com.lcdt.pay.service.*;
 import com.lcdt.pay.service.impl.OrderServiceImpl;
 import com.lcdt.pay.utils.OrderNoGenerator;
@@ -15,8 +18,10 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -45,6 +50,29 @@ public class OrderApi {
     @Autowired
     ServiceProductMapper productMapper;
 
+    @Autowired
+    ProductCountService countService;
+
+    @ApiOperation("查看所有订单")
+    @RequestMapping(value = "/orders",method = RequestMethod.GET)
+    public PageResultDto<PayOrder> allorderlist(Integer pageNo, Integer pageSize, @RequestParam(required = false) Date beginTime,@RequestParam(required = false) Date endTime){
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        PageHelper.startPage(pageNo, pageSize);
+        List<PayOrder> payOrders = topupService.topUpOrderList(companyId, null,beginTime,endTime);
+        return new PageResultDto<PayOrder>(payOrders);
+    }
+
+
+    @ApiOperation("查看服务消费流水")
+    @RequestMapping(value = "/servicelog",method = RequestMethod.GET)
+    public PageResultDto<ProductCountLog> countlogs(Integer pageNo, Integer pageSize, String servicename,@RequestParam(required = false) Date beginTime,@RequestParam(required = false) Date endTime){
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        PageHelper.startPage(pageNo, pageSize);
+        List<ProductCountLog> productCountLogs = countService.countLogs(companyId, servicename, beginTime, endTime);
+        return new PageResultDto<ProductCountLog>(productCountLogs);
+    }
+
+
     /**
      * 查看充值订单
      */
@@ -52,7 +80,7 @@ public class OrderApi {
     public PageResultDto<PayOrder> orderList(Integer pageNo,Integer pageSize){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
-        List<PayOrder> payOrders = topupService.topUpOrderList(companyId, OrderType.TOPUPORDER);
+        List<PayOrder> payOrders = topupService.topUpOrderList(companyId, OrderType.TOPUPORDER,null,null);
         return new PageResultDto<PayOrder>(payOrders);
     }
 
@@ -63,7 +91,7 @@ public class OrderApi {
     @RequestMapping(value = "/payorderlist",method = RequestMethod.GET)
     public ArrayListResponseWrapper<PayOrder> payOrderList(){
         Long companyId = SecurityInfoGetter.getCompanyId();
-        List<PayOrder> payOrders = topupService.topUpOrderList(companyId,OrderType.PAYORDER);
+        List<PayOrder> payOrders = topupService.topUpOrderList(companyId,OrderType.PAYORDER,null,null);
         ArrayListResponseWrapper<PayOrder> payOrders1 = new ArrayListResponseWrapper<>(payOrders);
         return payOrders1;
     }
@@ -126,8 +154,6 @@ public class OrderApi {
         payOrder.setOrderNo(OrderNoGenerator.generatorOrderNo());
         payOrder.setOrderType(2);
         payOrder.setOrderProductId(productId);
-
-
         orderMapper.insert(payOrder);
 
         return payOrder;

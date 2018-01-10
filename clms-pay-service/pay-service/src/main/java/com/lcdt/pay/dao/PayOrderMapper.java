@@ -3,6 +3,7 @@ package com.lcdt.pay.dao;
 import com.lcdt.pay.model.PayOrder;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface PayOrderMapper {
@@ -18,7 +19,7 @@ public interface PayOrderMapper {
 
     List<PayOrder> selectByOrderNo(String orderNo);
 
-    List<PayOrder> selectByCompanyId(@Param("companyId") Long companyId,@Param("orderType") Integer orderType);
+    List<PayOrder> selectByCompanyId(@Param("companyId") Long companyId, @Param("orderType") Integer orderType, @Param("beginTime") Date beginTime,@Param("endTime") Date endTime);
 
     List<PayOrder> selectPayOrderByProductName(@Param("companyId") Long companyId, @Param("productName") String productName);
 }

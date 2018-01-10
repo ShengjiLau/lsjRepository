@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,8 +34,8 @@ public class TopUpServiceImpl implements TopupService{
     }
 
 
-    public List<PayOrder> topUpOrderList(Long companyId,Integer orderType){
-        List<PayOrder> payOrders = orderMapper.selectByCompanyId(companyId, orderType);
+    public List<PayOrder> topUpOrderList(Long companyId, Integer orderType, Date beginTime,Date endTime){
+        List<PayOrder> payOrders = orderMapper.selectByCompanyId(companyId, orderType,beginTime,endTime);
         return payOrders;
     }
 

@@ -3,6 +3,7 @@ package com.lcdt.notify.notifyimpl;
 import com.lcdt.notify.dao.SmsLogMapper;
 import com.lcdt.notify.model.NotifyReceiver;
 import com.lcdt.notify.model.SmsLog;
+import com.lcdt.pay.rpc.ProductCountService;
 import com.lcdt.util.MD5;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -36,10 +37,15 @@ public class SmsNotifyImpl  {
     CloseableHttpClient httpClient = HttpClients.createDefault();
 
     @Autowired
+    private ProductCountService productCountService;
+
+    @Autowired
     SmsLogMapper smsLogMapper;
 
     public boolean sendSmsNotify(String content, String phoneNum,Long companyId) {
         logger.info("发送短信通知 >>> {} >>> {}",content,phoneNum);
+        productCountService.logAddProductCount("sms_service","",1,"");
+
         SmsLog smsLog = new SmsLog();
         smsLog.setSeedCompanyId(companyId);
         smsLog.setIsPay(false);

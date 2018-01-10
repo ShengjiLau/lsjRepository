@@ -1,8 +1,10 @@
 package com.lcdt.pay.model;
 
+import com.lcdt.converter.ResponseData;
+
 import java.util.Date;
 
-public class PayOrder {
+public class PayOrder implements ResponseData{
     private Long orderId;
 
     private Integer orderType;
