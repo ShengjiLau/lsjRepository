@@ -1,4 +1,4 @@
-package com.lcdt.traffic.util;
+package com.lcdt.util;
 
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
