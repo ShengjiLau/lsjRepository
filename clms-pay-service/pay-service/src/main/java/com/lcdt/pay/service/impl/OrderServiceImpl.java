@@ -1,8 +1,10 @@
 package com.lcdt.pay.service.impl;
 
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.pay.Exception.MoneyDontEnoughException;
 import com.lcdt.pay.dao.*;
 import com.lcdt.pay.model.*;
+import com.lcdt.pay.rpc.ProductCountService;
 import com.lcdt.pay.service.CompanyBalanceService;
 import com.lcdt.pay.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,9 @@ public class OrderServiceImpl implements OrderService{
 
     @Autowired
     CompanyServiceCountMapper countMapper;
+
+    @Autowired
+    ProductCountService productCountService;
 
 
 
@@ -106,6 +111,11 @@ public class OrderServiceImpl implements OrderService{
 
         payOrder.setOrderStatus(OrderStatus.PAYED);
         mapper.updateByPrimaryKey(payOrder);
+
+        String phone = SecurityInfoGetter.getUser().getPhone();
+
+        productCountService.logAddProductCount(serviceProduct.getServiceName(),"购买服务包",serviceProductPackage.getProductNum(),phone,companyId);
+
     }
 
     public PayOrder changeToPayFinish(PayOrder payOrder){
