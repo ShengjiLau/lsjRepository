@@ -6,7 +6,7 @@ import com.lcdt.notify.notifyimpl.SmsNotifyImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
-public class NotifyService implements com.lcdt.notify.rpcservice.NotifyService{
+public class NotifyServiceImpl implements com.lcdt.notify.rpcservice.NotifyService{
 
     @Autowired
     SmsNotifyImpl smsNotify;

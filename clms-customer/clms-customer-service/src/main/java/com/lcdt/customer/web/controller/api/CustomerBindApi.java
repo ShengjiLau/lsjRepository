@@ -100,11 +100,16 @@ public class CustomerBindApi {
 	public ModelAndView customer(@RequestParam(name = "a") Long inviteLogId,@RequestParam(name = "b") String token){
 		//TODO 检查链接上的token 有效性
 		CustomerInviteLog customerInviteLog = inviteLogService.selectByInviteId(inviteLogId);
-		if (customerInviteLog.getIsValid() == 0 || !customerInviteLog.getInviteToken().equals(token)) {
-			ModelAndView modelAndView = new ModelAndView();
-			modelAndView.setViewName("invite_not_valid");
-			return modelAndView;
+
+		if (customerInviteLog.getIsValid() != null) {
+			if (customerInviteLog.getIsValid() == 0 || !customerInviteLog.getInviteToken().equals(token)) {
+				ModelAndView modelAndView = new ModelAndView();
+				modelAndView.setViewName("invite_not_valid");
+				return modelAndView;
+			}
 		}
+
+
 
 		HashMap<Object, Object> map = new HashMap<>();
 		Long companyId = SecurityInfoGetter.getCompanyId();

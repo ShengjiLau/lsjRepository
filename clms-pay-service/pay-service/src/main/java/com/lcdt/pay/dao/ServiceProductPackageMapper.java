@@ -1,6 +1,7 @@
 package com.lcdt.pay.dao;
 
 import com.lcdt.pay.model.ServiceProductPackage;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,5 +15,7 @@ public interface ServiceProductPackageMapper {
     List<ServiceProductPackage> selectAll();
 
     int updateByPrimaryKey(ServiceProductPackage record);
-    List<ServiceProductPackage> selectBypackageType(String packageType);
+
+
+    List<ServiceProductPackage> selectBypackageType(@Param("packageType") String packageType);
 }
