@@ -6,10 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.items.dao.CustomValueMapper;
 import com.lcdt.items.dao.ItemSpecKeyValueMapper;
 import com.lcdt.items.dao.SubItemsInfoMapper;
-import com.lcdt.items.model.CustomValue;
-import com.lcdt.items.model.ItemSpecKeyValue;
-import com.lcdt.items.model.SubItemsInfo;
-import com.lcdt.items.model.SubItemsInfoDao;
+import com.lcdt.items.model.*;
 import com.lcdt.items.service.SubItemsInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,12 +61,12 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
         subItemsInfo.setSubItemId(subItemId);
         subItemsInfo.setCompanyId(companyId);
 
-        Map<String,Object> map=new HashMap<String,Object>();
+        Map<String, Object> map = new HashMap<String, Object>();
         List<Long> subItemIdList = new ArrayList<Long>();
         subItemIdList.add(subItemId);
-        map.put("itemId",null);
-        map.put("subItemIdList",subItemIdList);
-        map.put("companyId",companyId);
+        map.put("itemId", null);
+        map.put("subItemIdList", subItemIdList);
+        map.put("companyId", companyId);
         //删除规格
         result += itemSpecKeyValueMapper.deleteBySubItemIds(map);
         //删除自定义属性值
@@ -82,22 +79,22 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     @Override
     public int deleteSubItemsInfoByItemId(Long itemId, Long companyId) {
         int result = 0;
-        SubItemsInfo subItemsInfo=new SubItemsInfo();
+        SubItemsInfo subItemsInfo = new SubItemsInfo();
         subItemsInfo.setItemId(itemId);
         subItemsInfo.setCompanyId(companyId);
 
         List<SubItemsInfo> subItemsInfoList = subItemsInfoMapper.selectSubItemInfotByItemIdAndCompanyId(subItemsInfo);
         //如果子商品不为空，则组装用 , 分隔开的字符串，以便批量删除了商品的自定义属性值
-        if (subItemsInfoList != null&&subItemsInfoList.size()>0) {
+        if (subItemsInfoList != null && subItemsInfoList.size() > 0) {
             //子商品 subItemId 用 , 分隔开的字符串
             List<Long> subItemIdList = new ArrayList<Long>();
             for (int i = 0; i < subItemsInfoList.size(); i++) {
                 subItemIdList.add(subItemsInfoList.get(i).getSubItemId());
             }
-            Map<String,Object> map=new HashMap<String,Object>();
-            map.put("itemId",null);
-            map.put("subItemIdList",subItemIdList);
-            map.put("companyId",companyId);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("itemId", null);
+            map.put("subItemIdList", subItemIdList);
+            map.put("companyId", companyId);
             //删除规格
             result += itemSpecKeyValueMapper.deleteBySubItemIds(map);
             //删除自定义属性值
@@ -130,10 +127,10 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     }
 
     @Override
-    public PageInfo<List<SubItemsInfoDao>> querySubAndSpecAndPropListByItemId(Long itemId, Long companyId,PageInfo pageInfo) {
+    public PageInfo<List<SubItemsInfoDao>> querySubAndSpecAndPropListByItemId(Long itemId, Long companyId, PageInfo pageInfo) {
         List<SubItemsInfoDao> list = null;
         PageInfo page = null;
-        SubItemsInfo subItemsInfo=new SubItemsInfo();
+        SubItemsInfo subItemsInfo = new SubItemsInfo();
         subItemsInfo.setItemId(itemId);
         subItemsInfo.setCompanyId(companyId);
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
@@ -145,11 +142,36 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     @Override
     public List<SubItemsInfo> querySubItemsInfoListByItemId(Long itemId, Long companyId) {
         List<SubItemsInfo> list = null;
-        SubItemsInfo subItemsInfo=new SubItemsInfo();
+        SubItemsInfo subItemsInfo = new SubItemsInfo();
         subItemsInfo.setItemId(itemId);
         subItemsInfo.setCompanyId(companyId);
         list = subItemsInfoMapper.selectSubItemInfotByItemIdAndCompanyId(subItemsInfo);
         return list;
+    }
+
+    @Override
+    public PageInfo<List<GoodsInfoDao>> queryByCondition(Map map) {
+        List<GoodsInfoDao> list = null;
+        PageInfo page = null;
+
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+
+        if (map.containsKey("page_no")) {
+            if (map.get("page_no") != null) {
+                pageNo = (Integer) map.get("page_no");
+            }
+        }
+        if (map.containsKey("page_size")) {
+            if (map.get("page_size") != null) {
+                pageSize = (Integer) map.get("page_size");
+            }
+        }
+
+        PageHelper.startPage(pageNo, pageSize);
+        list = subItemsInfoMapper.selectByCondition(map);
+        page = new PageInfo(list);
+        return page;
     }
 
 

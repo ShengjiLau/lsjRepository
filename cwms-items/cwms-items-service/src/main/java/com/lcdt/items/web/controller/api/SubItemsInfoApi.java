@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
+import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.model.SubItemsInfoDao;
 import com.lcdt.items.service.SubItemsInfoService;
+import com.lcdt.items.web.dto.GoodsListParamsDto;
 import com.lcdt.items.web.dto.PageBaseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,7 +17,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lyqishan on 2017/11/28
@@ -52,5 +56,15 @@ public class SubItemsInfoApi {
         PageInfo<List<SubItemsInfoDao>> listPageInfo=subItemsInfoService.querySubAndSpecAndPropListByItemId(itemId,companyId,page);
         return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
     }
+
+    @ApiOperation("查询商品列表")
+    @GetMapping("/goodslist")
+    public PageBaseDto<List<GoodsInfoDao>> queryGoodsList(GoodsListParamsDto params){
+        Long companyId=SecurityInfoGetter.getCompanyId();
+        Map map= new HashMap();
+        PageInfo<List<GoodsInfoDao>> listPageInfo=subItemsInfoService.queryByCondition(map);
+        return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
+    }
+
 
 }
