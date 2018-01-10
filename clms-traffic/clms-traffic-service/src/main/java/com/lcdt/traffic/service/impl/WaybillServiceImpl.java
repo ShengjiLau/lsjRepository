@@ -249,14 +249,18 @@ public class WaybillServiceImpl implements WaybillService {
 
     @Override
     public int modifyOwnWaybillStatus(Map map) {
-        modifySplitGoodsAmount((short) map.get("waybillStatus"));
-        return waybillMapper.updateOwnWaybillStatus(map);
+        int result=0;
+        result=waybillMapper.updateOwnWaybillStatus(map);
+        modifyWaybillPlanInfo(map);
+        return result;
     }
 
     @Override
     public int modifyCustomerWaybillStatus(Map map) {
-        modifySplitGoodsAmount((short) map.get("waybillStatus"));
-        return waybillMapper.updateCustomerWaybillStatus(map);
+        int result=0;
+        result=waybillMapper.updateCustomerWaybillStatus(map);
+        modifyWaybillPlanInfo(map);
+        return result;
     }
 
     @Override
@@ -283,20 +287,52 @@ public class WaybillServiceImpl implements WaybillService {
 
     @Override
     public int modifyOwnWaybillStatusByWaybillPlanId(Map map) {
-        modifySplitGoodsAmount((short) map.get("waybillStatus"));
-        return waybillMapper.updateOwnWaybillStatusByWaybillPlanId(map);
+        int result=0;
+        result=waybillMapper.updateOwnWaybillStatusByWaybillPlanId(map);
+        modifyWaybillPlanInfo(map);
+        return result;
     }
 
     /**
-     * 取消运单时，需要将运单数量还原到派单，运单状态置为取消
-     * @param waybillStatus
+     * 取消运单时，需要将运单数量还原到派单，运单状态置为取消,运单完成时，判断此plan下的运单是否全部完成，如果是全部完成，则更新计划状态为完成状态
+     * @param map
      * @return
      */
-    private int modifySplitGoodsAmount(short waybillStatus){
+    private void modifyWaybillPlanInfo(Map map){
+        short waybillStatus=(short)map.get("waybillStatus");
         if(waybillStatus== ConstantVO.WAYBILL_STATUS_HAVE_CANCEL){
-            return 1;
-        }else{
-            return 0;
+            List<WaybillDao> list=waybillMapper.selectWaybillByIdOrPlanId(map);
+            if(list!=null&&list.size()>0){
+                for(WaybillDao dao:list){
+                    List<WaybillItems> itemsList=dao.getWaybillItemsList();
+                    for(WaybillItems item:itemsList){
+                        //根据派单货物明细id更新派单货物明细数量
+                        float amount=item.getAmount();
+                        Long splitGoodsDetailId=item.getSplitGoodsDetailId();
+                    }
+                }
+
+            }
+
+        }
+        if(waybillStatus==ConstantVO.WAYBILL_STATUS_HAVE_FINISH){
+            List<Waybill> list=waybillMapper.selectWaybillPlanId(map);
+            if(list!=null&&list.size()>0){
+                for(Waybill waybill:list){
+                    map.put("waybillPlanId",waybill.getWaybillPlanId());
+                    List<Waybill> waybillList=waybillMapper.selectWaybillByPlanId(map);
+                    boolean flag=false;
+                    for(Waybill bill:waybillList){
+                        if(bill.getWaybillStatus()!=ConstantVO.WAYBILL_STATUS_HAVE_FINISH){
+                            flag=true;
+                            break;
+                        }
+                    }
+                    if(flag){
+                        //此计划下的运单全部完成，根据计划id 更新计划状态为完成
+                    }
+                }
+            }
         }
     }
 

@@ -75,6 +75,9 @@
     <collection property="waybillItemsList" column="id" ofType="com.lcdt.traffic.model.WaybillItems" select="com.lcdt.traffic.dao.WaybillItemsMapper.selectByWaybillId"/>
     <collection property="waybillTransferRecordList" column="id" ofType="com.lcdt.traffic.model.WaybillTransferRecord" select="com.lcdt.traffic.dao.WaybillTransferRecordMapper.selectByWaybillId"/>
   </resultMap>
+  <resultMap id="BaseWaybillAndItems" type="com.lcdt.traffic.model.WaybillDao" extends="BaseResultMap">
+    <collection property="waybillItemsList" column="id" ofType="com.lcdt.traffic.model.WaybillItems" select="com.lcdt.traffic.dao.WaybillItemsMapper.selectByWaybillId"/>
+  </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - @mbg.generated
@@ -560,4 +563,48 @@
     update_date = CURRENT_TIMESTAMP
     where waybill_plan_id = ( #{waybillPlanId,jdbcType=BIGINT} ) and company_id = #{companyId,jdbcType=BIGINT}
   </update>
+  <select id="selectWaybillByIdOrPlanId" parameterType="java.util.Map" resultMap="BaseWaybillAndItems">
+    select id, waybill_plan_id,split_goods_id, waybill_code, waybill_status,waybill_source, group_id, group_name, driver_id,
+    driver_name, driver_phone, vechicle_id, vechicle_num, customer_id, customer_name,
+    customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
+    send_city, send_county, send_address, receive_man, receive_phone, receive_province,
+    receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
+    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
+    attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
+    attachment5, attachment5_name, waybill_remark, carrier_company_id, company_id, pub_date,
+    finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
+    update_id, update_name, update_date, is_deleted
+    from t_waybill
+    where(company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
+        and (waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT} or id in ( #{waybillIds,jdbcType=VARCHAR} ))
+        and is_deleted = 0
+    order by id desc
+  </select>
+
+  <select id="selectWaybillPlanId" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select distinct waybill_plan_id
+    from t_waybill
+    where (company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
+      and (waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT} or id in ( #{waybillIds,jdbcType=VARCHAR} ))
+      and is_deleted = 0
+  </select>
+
+  <select id="selectWaybillByPlanId" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select id, waybill_plan_id,split_goods_id, waybill_code, waybill_status,waybill_source, group_id, group_name, driver_id,
+    driver_name, driver_phone, vechicle_id, vechicle_num, customer_id, customer_name,
+    customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
+    send_city, send_county, send_address, receive_man, receive_phone, receive_province,
+    receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
+    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
+    attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
+    attachment5, attachment5_name, waybill_remark, carrier_company_id, company_id, pub_date,
+    finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
+    update_id, update_name, update_date, is_deleted
+    from t_waybill
+    where(company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
+    and waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT}
+    and is_deleted = 0
+    order by id desc
+  </select>
+
 </mapper>

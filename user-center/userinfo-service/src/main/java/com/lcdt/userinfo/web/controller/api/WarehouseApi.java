@@ -35,8 +35,8 @@ public class WarehouseApi {
     @RequestMapping(value = "/customerList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_list')")
     public PageBaseDto customerList(@Validated WarehouseDto dto,
-                                    @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
-                                    @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+                                    @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                    @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);
