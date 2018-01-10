@@ -54,8 +54,10 @@ public class AuthController {
 
 	@Autowired
 	RequestAuthRedirectStrategy strategy;
+
 	@Reference(check = false)
 	UserService userService;
+
 	@Reference(check = false)
 	CompanyService companyService;
 

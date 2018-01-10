@@ -516,7 +516,7 @@ public class CustomerPlanApi {
 
 
     @ApiOperation("客户计划-报价")
-    @RequestMapping(value = "/customerPlanOfferOwn",method = RequestMethod.GET)
+    @RequestMapping(value = "/customerPlanOfferOwn",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_offer_own')")
     public String customerPlanOfferOwn(@RequestBody SnatchOfferDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -548,7 +548,7 @@ public class CustomerPlanApi {
 
 
     @ApiOperation("客户计划-派车")
-    @RequestMapping(value = "/customerPlanSplitVehicle",method = RequestMethod.GET)
+    @RequestMapping(value = "/customerPlanSplitVehicle",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_split_vehicle')")
     public String customerPlanSplitVehicle(@RequestBody SplitVehicleDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();

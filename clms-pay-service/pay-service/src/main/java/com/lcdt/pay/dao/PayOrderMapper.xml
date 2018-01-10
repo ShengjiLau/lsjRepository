@@ -79,13 +79,9 @@
     on p.order_product_id = s.product_id
     WHERE order_pay_company_id = #{companyId,jdbcType=BIGINT}
     and order_type = 2
-
     <if test="productName != null">
-      and s.product_name = #{productName,jdbcType=VARCHAR}
+      and s.product_service = #{productName,jdbcType=VARCHAR}
     </if>
-
   </select>
-
-
 
 </mapper>
