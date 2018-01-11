@@ -233,11 +233,8 @@
         <!--<table tableName="company_service_count" domainObjectName="CompanyServiceCount">-->
         <!--<generatedKey column="count_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
-        <table tableName="t_warehouse" domainObjectName="Warehousse">
-        <generatedKey column="wh_id" sqlStatement="MYSQL" identity="true"></generatedKey>
-        </table>
-        <table tableName="t_warehouse_linkman" domainObjectName="WarehousseLinkman">
-            <generatedKey column="wh_linkman_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        <table tableName="t_warehouse_loc" domainObjectName="WarehousseLoc">
+        <generatedKey column="wh_loc_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
 
         <!--<table tableNm></table>-->
