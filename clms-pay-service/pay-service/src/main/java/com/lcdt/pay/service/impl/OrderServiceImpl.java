@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class giOrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService{
 
     @Autowired
     PayOrderMapper mapper;
