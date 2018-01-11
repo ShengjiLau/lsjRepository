@@ -5,6 +5,7 @@ import com.lcdt.pay.dao.PayOrderMapper;
 import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.service.OrderService;
 import com.lcdt.pay.service.TopupService;
+import com.lcdt.pay.service.impl.OrderServiceImpl;
 import com.lcdt.pay.wechatpay.Signature;
 import com.lcdt.pay.wechatpay.XMLParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class WechatPayController {
                     List<PayOrder> payOrders = mapper.selectByOrderNo(orderId);
                     if (!CollectionUtils.isEmpty(payOrders)) {
                         PayOrder payOrder = payOrders.get(0);
-                        orderService.changeToPayFinish(payOrder);
+                        orderService.changeToPayFinish(payOrder, OrderServiceImpl.PayType.WECHATPAY);
                         jo.put("return_code", "SUCCESS");
                         jo.put("return_msg", "OK");
                     }

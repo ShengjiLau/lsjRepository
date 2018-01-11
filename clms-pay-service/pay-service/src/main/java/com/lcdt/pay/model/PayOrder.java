@@ -23,6 +23,16 @@ public class PayOrder implements ResponseData{
 
     private Integer orderProductId;
 
+    private Integer payType;
+
+    public Integer getPayType() {
+        return payType;
+    }
+
+    public void setPayType(Integer payType) {
+        this.payType = payType;
+    }
+
     public Integer getOrderProductId() {
         return orderProductId;
     }

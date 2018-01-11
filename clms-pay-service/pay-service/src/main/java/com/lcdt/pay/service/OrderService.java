@@ -9,7 +9,7 @@ public interface OrderService {
     PayOrder selectByOrderNo(String orderNo);
 
 
-    PayOrder changeToPayFinish(PayOrder payOrder);
+    PayOrder changeToPayFinish(PayOrder payOrder,Integer payType);
 
     void buyServiceProduct(Long orderId,Long companyId, Integer productPackageId);
 }

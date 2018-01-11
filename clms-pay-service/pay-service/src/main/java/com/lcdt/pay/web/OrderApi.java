@@ -55,20 +55,22 @@ public class OrderApi {
 
     @ApiOperation("查看所有订单")
     @RequestMapping(value = "/orders",method = RequestMethod.GET)
-    public PageResultDto<PayOrder> allorderlist(Integer pageNo, Integer pageSize, @RequestParam(required = false) Date beginTime,@RequestParam(required = false) Date endTime){
+    public PageResultDto<PayOrder> allorderlist(Integer pageNo, Integer pageSize, @RequestParam(required = false) Date beginTime,@RequestParam(required = false) Date endTime,@RequestParam(required = false)Integer orderType
+        ,@RequestParam(required = false) Integer payType
+    ){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
-        List<PayOrder> payOrders = topupService.topUpOrderList(companyId, null,beginTime,endTime);
+        List<PayOrder> payOrders = topupService.topUpOrderList(companyId, orderType,beginTime,endTime,payType);
         return new PageResultDto<PayOrder>(payOrders);
     }
 
 
     @ApiOperation("查看服务消费流水")
     @RequestMapping(value = "/servicelog",method = RequestMethod.GET)
-    public PageResultDto<ProductCountLog> countlogs(Integer pageNo, Integer pageSize, String servicename,@RequestParam(required = false) Date beginTime,@RequestParam(required = false) Date endTime){
+    public PageResultDto<ProductCountLog> countlogs(Integer pageNo, Integer pageSize, String servicename,@RequestParam(required = false) Date beginTime,@RequestParam(required = false) Date endTime,@RequestParam(required = false) Integer logType){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
-        List<ProductCountLog> productCountLogs = countService.countLogs(companyId, servicename, beginTime, endTime);
+        List<ProductCountLog> productCountLogs = countService.countLogs(companyId, servicename, beginTime, endTime,logType);
         return new PageResultDto<ProductCountLog>(productCountLogs);
     }
 
@@ -80,7 +82,7 @@ public class OrderApi {
     public PageResultDto<PayOrder> orderList(Integer pageNo,Integer pageSize){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
-        List<PayOrder> payOrders = topupService.topUpOrderList(companyId, OrderType.TOPUPORDER,null,null);
+        List<PayOrder> payOrders = topupService.topUpOrderList(companyId, OrderType.TOPUPORDER,null,null,null);
         return new PageResultDto<PayOrder>(payOrders);
     }
 
@@ -91,7 +93,7 @@ public class OrderApi {
     @RequestMapping(value = "/payorderlist",method = RequestMethod.GET)
     public ArrayListResponseWrapper<PayOrder> payOrderList(){
         Long companyId = SecurityInfoGetter.getCompanyId();
-        List<PayOrder> payOrders = topupService.topUpOrderList(companyId,OrderType.PAYORDER,null,null);
+        List<PayOrder> payOrders = topupService.topUpOrderList(companyId,OrderType.PAYORDER,null,null,null);
         ArrayListResponseWrapper<PayOrder> payOrders1 = new ArrayListResponseWrapper<>(payOrders);
         return payOrders1;
     }

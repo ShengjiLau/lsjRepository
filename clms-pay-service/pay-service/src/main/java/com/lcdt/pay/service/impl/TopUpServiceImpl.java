@@ -34,8 +34,8 @@ public class TopUpServiceImpl implements TopupService{
     }
 
 
-    public List<PayOrder> topUpOrderList(Long companyId, Integer orderType, Date beginTime,Date endTime){
-        List<PayOrder> payOrders = orderMapper.selectByCompanyId(companyId, orderType,beginTime,endTime);
+    public List<PayOrder> topUpOrderList(Long companyId, Integer orderType, Date beginTime,Date endTime,Integer payType){
+        List<PayOrder> payOrders = orderMapper.selectByCompanyId(companyId, orderType,beginTime,endTime,payType);
         return payOrders;
     }
 
@@ -44,4 +44,6 @@ public class TopUpServiceImpl implements TopupService{
     public void doTopUp(PayOrder payOrder) {
         
     }
+
+
 }

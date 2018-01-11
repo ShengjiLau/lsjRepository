@@ -12,7 +12,7 @@ public interface TopupService {
 
     void doTopUp(PayOrder payOrder);
 
-    List<PayOrder> topUpOrderList(Long companyId, Integer orderType, Date beginTime, Date endTime);
+    List<PayOrder> topUpOrderList(Long companyId, Integer orderType, Date beginTime, Date endTime,Integer payType);
 
 
 }

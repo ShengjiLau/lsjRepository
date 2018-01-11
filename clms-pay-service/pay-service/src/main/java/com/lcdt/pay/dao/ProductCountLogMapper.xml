@@ -70,6 +70,10 @@
       and log_time &lt;= #{beginTime,jdbcType=DATETIME}
     </if>
 
+    <if test="logType != null">
+      and log_type = #{logType,jdbcType=INTEGER}
+    </if>
+
   </select>
 
 

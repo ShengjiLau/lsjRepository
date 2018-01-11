@@ -17,6 +17,7 @@ public interface ProductCountLogMapper {
 
     int updateByPrimaryKey(ProductCountLog record);
 
-    List<ProductCountLog> selectByProductNameCompanyId(@Param("companyId") Long companyId,@Param("productName") String productName,@Param("beginTime") Date beginTime,@Param("endTime") Date endTime);
+    List<ProductCountLog> selectByProductNameCompanyId(@Param("companyId") Long companyId,@Param("productName") String productName,@Param("beginTime") Date beginTime,@Param("endTime") Date endTime
+    ,@Param("logType") Integer logType);
 
 }

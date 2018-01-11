@@ -18,6 +18,7 @@ import com.lcdt.pay.model.OrderStatus;
 import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.service.OrderService;
 import com.lcdt.pay.service.TopupService;
+import com.lcdt.pay.service.impl.OrderServiceImpl;
 import com.lcdt.pay.utils.MoneyNumUtil;
 import com.lcdt.pay.utils.WechatPayApi;
 import com.lcdt.util.HttpUtils;
@@ -142,7 +143,7 @@ public class AlipayWebController {
                 return;
             }
 
-            orderService.changeToPayFinish(payOrder);
+            orderService.changeToPayFinish(payOrder, OrderServiceImpl.PayType.ALIPAY);
             return;
         }
     }

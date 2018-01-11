@@ -39,8 +39,8 @@ public class ProductCountServiceImpl implements ProductCountService {
         countLogMapper.insert(productCountLog);
     }
 
-    public List<ProductCountLog> countLogs(Long companyId, String productName, Date startTime, Date endTime){
-        return countLogMapper.selectByProductNameCompanyId(companyId, productName, startTime, endTime);
+    public List<ProductCountLog> countLogs(Long companyId, String productName, Date startTime, Date endTime,Integer logType){
+        return countLogMapper.selectByProductNameCompanyId(companyId, productName, startTime, endTime,logType);
     }
 
 

@@ -110,6 +110,7 @@ public class OrderServiceImpl implements OrderService{
 
 
         payOrder.setOrderStatus(OrderStatus.PAYED);
+        payOrder.setPayType(PayType.BALANCEPAY);
         mapper.updateByPrimaryKey(payOrder);
 
         String phone = SecurityInfoGetter.getUser().getPhone();
@@ -118,7 +119,7 @@ public class OrderServiceImpl implements OrderService{
 
     }
 
-    public PayOrder changeToPayFinish(PayOrder payOrder){
+    public PayOrder changeToPayFinish(PayOrder payOrder,Integer payType){
         //检查订单号是否已经被处理过
         if (payOrder.getOrderStatus() != OrderStatus.PENDINGPAY) {
             throw new RuntimeException("订单已付款");
@@ -126,8 +127,16 @@ public class OrderServiceImpl implements OrderService{
         //检查是否已付款
         balanceService.rechargeBalance(payOrder.getOrderAmount(), payOrder.getOrderPayCompanyId());
         payOrder.setOrderStatus(OrderStatus.PAYED);
+        payOrder.setPayType(payType);
         mapper.updateByPrimaryKey(payOrder);
         return payOrder;
+    }
+
+    public static final class PayType {
+        public static final Integer ALIPAY = 1;
+        public static final Integer BALANCEPAY = 0;
+        public static final Integer WECHATPAY = 2;
+        public static final Integer OFFLINEPAY = 3;
     }
 
 }
