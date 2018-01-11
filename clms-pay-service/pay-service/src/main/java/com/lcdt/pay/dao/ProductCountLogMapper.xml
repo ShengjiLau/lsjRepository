@@ -54,7 +54,7 @@
   </select>
 
   <select id="selectByProductNameCompanyId" resultMap="BaseResultMap">
-       select service_count_log_id, log_no, log_des, service_name, consume_num, remain_num,company_id,log_time
+       select service_count_log_id, log_no, log_des, service_name, consume_num, remain_num,company_id,log_time,
     log_type, deduct,log_time,user_name
     from product_count_log
     where
