@@ -25,6 +25,16 @@ public class PayOrder implements ResponseData{
 
     private Integer payType;
 
+    private String createUserName;
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
     public Integer getPayType() {
         return payType;
     }

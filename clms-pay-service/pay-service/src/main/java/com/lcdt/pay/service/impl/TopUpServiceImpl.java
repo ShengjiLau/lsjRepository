@@ -7,6 +7,10 @@ import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.service.TopupService;
 import com.lcdt.pay.utils.OrderNoGenerator;
 import com.lcdt.pay.utils.PayOrderFactory;
+import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.service.UserService;
+import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,14 +25,27 @@ public class TopUpServiceImpl implements TopupService{
     @Autowired
     PayOrderMapper orderMapper;
 
+    @Reference
+    UserService userService;
+
     @Override
     public PayOrder createTopUpOrder(Integer money, Long companyId,Long userId) {
+
+        User user = null;
+        try {
+            user = userService.queryByUserId(userId);
+        } catch (UserNotExistException e) {
+            e.printStackTrace();
+            return null;
+        }
+
         PayOrder topUpPayOrder = PayOrderFactory.createTopUpPayOrder();
         topUpPayOrder.setOrderAmount(money);
         topUpPayOrder.setOrderPayCompanyId(companyId);
         topUpPayOrder.setOrderPayUserId(userId);
         topUpPayOrder.setOrderStatus(0);
         topUpPayOrder.setOrderNo(OrderNoGenerator.generatorOrderNo());
+        topUpPayOrder.setCreateUserName(user.getPhone());
         orderMapper.insert(topUpPayOrder);
         return topUpPayOrder;
     }
