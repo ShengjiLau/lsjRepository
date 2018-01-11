@@ -59,5 +59,10 @@ public class ProductCountServiceImpl implements ProductCountService {
         String s = UUID.randomUUID().toString();
         return s.replace("-", "");
     }
-
+    public static final class PayType {
+        public static final Integer ALIPAY = 1;
+        public static final Integer BALANCEPAY = 0;
+        public static final Integer WECHATPAY = 2;
+        public static final Integer OFFLINEPAY = 3;
+    }
 }
