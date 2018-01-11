@@ -157,14 +157,14 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
         int pageNo = 1;
         int pageSize = 0; //0表示所有
 
-        if (map.containsKey("page_no")) {
-            if (map.get("page_no") != null) {
-                pageNo = (Integer) map.get("page_no");
+        if (map.containsKey("pageNo")) {
+            if (map.get("pageNo") != null) {
+                pageNo = (Integer) map.get("pageNo");
             }
         }
-        if (map.containsKey("page_size")) {
-            if (map.get("page_size") != null) {
-                pageSize = (Integer) map.get("page_size");
+        if (map.containsKey("pageSize")) {
+            if (map.get("pageSize") != null) {
+                pageSize = (Integer) map.get("pageSize");
             }
         }
 
