@@ -65,12 +65,17 @@ public class LocationServiceApi {
         driver.setGpsStatus(new Short("1"));
         JSONObject jsonObject = new JSONObject();
         try {
-            driverService.modGpsStatus(driver);
-            jsonObject.put("code", 0);
-            jsonObject.put("message", "操作成功");
+            int row = driverService.modGpsStatus(driver);
+            if(row>0){
+                jsonObject.put("code", 0);
+                jsonObject.put("message", "开通成功");
+            }else{
+                jsonObject.put("code", -1);
+                jsonObject.put("message", "该司机不存在");
+            }
         } catch (Exception e) {
             jsonObject.put("code", -1);
-            jsonObject.put("message", "定位状态异常");
+            jsonObject.put("message", "操作失败");
         }
         return jsonObject;
     }

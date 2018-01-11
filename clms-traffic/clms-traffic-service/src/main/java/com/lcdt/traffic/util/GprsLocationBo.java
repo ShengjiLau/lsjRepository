@@ -44,12 +44,12 @@ public class GprsLocationBo {
 
     /**
      * 请求开通定位服务 (返回值说明：http://doc.oschina.net/shujudu?t=197482)
-     * @param moblile
+     * @param mobile
      * @return
      */
-    public JSONObject authOpen(String moblile){
+    public JSONObject authOpen(String mobile){
         Map map = new HashMap<>();
-        map.put("mobile",moblile);
+        map.put("mobile",mobile);
         map.put("key", GprsLocationBo.KEY);
         map.put("secret",GprsLocationBo.SECRET);
         return HttpRequestUtil.httpGet(GprsLocationBo.OPEN_URL,map,60000);
@@ -57,25 +57,25 @@ public class GprsLocationBo {
 
     /**
      * 手机定位状态查询 (返回值说明：http://doc.oschina.net/shujudu?t=197485)
-     * @param moblile
+     * @param mobile
      * @return
      */
-    public JSONObject authStatus(String moblile){
+    public JSONObject authStatus(String mobile){
         Map map = new HashMap<>();
-        map.put("mobile",moblile);
+        map.put("mobile",mobile);
         map.put("key", GprsLocationBo.KEY);
         map.put("secret",GprsLocationBo.SECRET);
-        return HttpRequestUtil.httpGet(GprsLocationBo.STATUS_URL,map,5000);
+        return HttpRequestUtil.httpGet(GprsLocationBo.STATUS_URL,map,15000);
     }
 
     /**
      * 实时定位查询 (返回值说明：http://doc.oschina.net/shujudu?t=197483)
-     * @param moblile
+     * @param mobile
      * @return
      */
-    public JSONObject queryLocation(String moblile){
+    public JSONObject queryLocation(String mobile){
         Map map = new HashMap<>();
-        map.put("mobile",moblile);
+        map.put("mobile",mobile);
         map.put("key", GprsLocationBo.KEY);
         map.put("secret",GprsLocationBo.SECRET);
         return HttpRequestUtil.httpGet(GprsLocationBo.QUERY_URL,map,60000);
