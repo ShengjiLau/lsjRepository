@@ -36,5 +36,9 @@ public class CustomerRpcServiceImpl implements CustomerRpcService {
         return customerMapper.selectByCondition(map);
     }
 
+    @Override
+    public Map<String,Object> selectCarrierAndCustomer(Long companyId){
+        return customerMapper.selectCarrierAndCustomer(companyId);
+    }
 
 }

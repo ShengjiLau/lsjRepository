@@ -24,6 +24,11 @@ public interface CustomerRpcService {
     List<Customer> findBindCompanyIds(Map map);
 
 
-
+    /**
+     * 运输首页右侧客户相关的概览统计
+     * @param companyId
+     * @return
+     */
+    Map<String,Object> selectCarrierAndCustomer(Long companyId);
 
 }
