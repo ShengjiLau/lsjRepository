@@ -42,9 +42,9 @@ public class SmsNotifyImpl  {
     @Autowired
     SmsLogMapper smsLogMapper;
 
-    public boolean sendSmsNotify(String content, String phoneNum,Long companyId) {
+    public boolean sendSmsNotify(String operateUsername,String content, String phoneNum,Long companyId) {
         logger.info("发送短信通知 >>> {} >>> {}",content,phoneNum);
-        productCountService.logAddProductCount("sms_service","",1,"");
+        productCountService.logAddProductCount("sms_service","",1,operateUsername,companyId);
 
         SmsLog smsLog = new SmsLog();
         smsLog.setSeedCompanyId(companyId);

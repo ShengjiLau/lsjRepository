@@ -12,7 +12,7 @@
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
     <result column="order_product_id" jdbcType="INTEGER" property="orderProductId" />
     <result column="pay_type" jdbcType="INTEGER" property="payType" />
-
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from pay_order
@@ -24,10 +24,10 @@
     </selectKey>
     insert into pay_order (order_type, order_amount, create_time, 
       order_pay_user_id, order_pay_company_id, order_status, 
-      order_no,order_product_id,pay_type)
+      order_no,order_product_id,pay_type,create_user_name)
     values (#{orderType,jdbcType=INTEGER}, #{orderAmount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{orderPayUserId,jdbcType=BIGINT}, #{orderPayCompanyId,jdbcType=BIGINT}, #{orderStatus,jdbcType=INTEGER}, 
-      #{orderNo,jdbcType=VARCHAR},#{orderProductId,jdbcType=INTEGER},#{payType,jdbcType=INTEGER})
+      #{orderNo,jdbcType=VARCHAR},#{orderProductId,jdbcType=INTEGER},#{payType,jdbcType=INTEGER},#{createUserName,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.pay.model.PayOrder">
     update pay_order
@@ -42,18 +42,18 @@
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select order_id, order_type, order_amount, create_time, order_pay_user_id, order_pay_company_id, 
-    order_status, order_no,order_product_id,pay_type
+    order_status, order_no,order_product_id,pay_type,create_user_name
     from pay_order
     where order_id = #{orderId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select order_id, order_type, order_amount, create_time, order_pay_user_id, order_pay_company_id, 
-    order_status, order_no,order_product_id,pay_type
+    order_status, order_no,order_product_id,pay_type,create_user_name
     from pay_order
   </select>
   <select id="selectByOrderNo" resultMap="BaseResultMap">
     select order_id, order_type, order_amount, create_time, order_pay_user_id, order_pay_company_id,
-    order_status, order_no,order_product_id,pay_type
+    order_status, order_no,order_product_id,pay_type,create_user_name
     from pay_order
     WHERE order_no = #{orderNo,jdbcType=VARCHAR}
 
@@ -62,7 +62,7 @@
   <select id="selectByCompanyId" resultMap="BaseResultMap">
 
       select order_id, order_type, order_amount, create_time, order_pay_user_id, order_pay_company_id,
-    order_status, order_no,order_product_id,pay_type
+    order_status, order_no,order_product_id,pay_type,create_user_name
     from pay_order
 
     WHERE order_pay_company_id = #{companyId,jdbcType=BIGINT}
@@ -89,7 +89,7 @@
   <select id="selectPayOrderByProductName" resultMap="BaseResultMap">
 
     select order_id, order_type, order_amount, create_time, order_pay_user_id, order_pay_company_id,
-    order_status, order_no,order_product_id,pay_type
+    order_status, order_no,order_product_id,pay_type,create_user_name
     from pay_order p left join service_product s
     on p.order_product_id = s.product_id
     WHERE order_pay_company_id = #{companyId,jdbcType=BIGINT}

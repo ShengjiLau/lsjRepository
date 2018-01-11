@@ -142,6 +142,8 @@ public class OrderApi {
     public PayOrder createPayOrder(Integer productId){
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
+        String phone = SecurityInfoGetter.getUser().getPhone();
+
 
         ServiceProduct serviceProduct = productMapper.selectByPrimaryKey(productId);
         if (serviceProduct == null) {
@@ -156,6 +158,7 @@ public class OrderApi {
         payOrder.setOrderNo(OrderNoGenerator.generatorOrderNo());
         payOrder.setOrderType(2);
         payOrder.setOrderProductId(productId);
+        payOrder.setCreateUserName(phone);
         orderMapper.insert(payOrder);
 
         return payOrder;

@@ -1,10 +1,14 @@
 package com.lcdt.notify.service;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.lcdt.notify.dao.NotifyDao;
 import com.lcdt.notify.model.*;
 import com.lcdt.notify.notifyimpl.SmsNotifyImpl;
 import com.lcdt.notify.notifyimpl.WebNotifyImpl;
 import com.lcdt.notify.model.TrafficStatusChangeEvent;
+import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +33,9 @@ public class SendNotifyService {
     @Autowired
     WebNotifyImpl webNotify;
 
+    @Reference
+    UserService userService;
+
     public void handleEvent(JsonParserPropertyEvent event) {
         String eventName = event.getEventName();
 
@@ -40,7 +47,13 @@ public class SendNotifyService {
         NotifySender sender = event.getSender();
 
         Long sendCompanyId = sender.sendCompanyId();
-
+        User user = null;
+        try {
+            user = userService.queryByUserId(sender.sendUserId());
+        } catch (UserNotExistException e) {
+            e.printStackTrace();
+            return;
+        }
         for (Notify notify : notifies) {
             CompanyNotifySetting companyNotifySetting = notifyService.queryCompanyNotifySetting(sendCompanyId, notify.getNotifyId());
 
@@ -50,7 +63,7 @@ public class SendNotifyService {
             String url = "";
             if (companyNotifySetting.getEnableSms()) {
                 //发送短信通知
-                smsNotify.sendSmsNotify(notifyContent, receiver.getPhoneNum(),sendCompanyId);
+                smsNotify.sendSmsNotify(notifyContent, receiver.getPhoneNum(),user.getPhone(),sendCompanyId);
             }
             if (companyNotifySetting.getEnableWeb()) {
                 //发送web通知
