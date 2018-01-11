@@ -11,6 +11,8 @@
     <result column="log_type" jdbcType="INTEGER" property="logType" />
     <result column="deduct" jdbcType="INTEGER" property="deduct" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="log_time" jdbcType="TIMESTAMP" property="logTime"></result>
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from product_count_log
@@ -22,10 +24,10 @@
     </selectKey>
     insert into product_count_log (log_no, log_des, service_name, 
       consume_num, remain_num, log_type, 
-      deduct)
+      deduct,user_name)
     values (#{logNo,jdbcType=VARCHAR}, #{logDes,jdbcType=VARCHAR}, #{serviceName,jdbcType=VARCHAR}, 
       #{consumeNum,jdbcType=INTEGER}, #{remainNum,jdbcType=INTEGER}, #{logType,jdbcType=INTEGER}, 
-      #{deduct,jdbcType=INTEGER})
+      #{deduct,jdbcType=INTEGER},#{userName,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.pay.rpc.ProductCountLog">
     update product_count_log
@@ -35,24 +37,25 @@
       consume_num = #{consumeNum,jdbcType=INTEGER},
       remain_num = #{remainNum,jdbcType=INTEGER},
       log_type = #{logType,jdbcType=INTEGER},
-      deduct = #{deduct,jdbcType=INTEGER}
+      deduct = #{deduct,jdbcType=INTEGER},
+        user_name = #{userName,jdbcType=VARCHAR}
     where service_count_log_id = #{serviceCountLogId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select service_count_log_id, log_no, log_des, service_name, consume_num, remain_num, 
-    log_type, deduct
+    log_type, deduct,log_time,user_name
     from product_count_log
     where service_count_log_id = #{serviceCountLogId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select service_count_log_id, log_no, log_des, service_name, consume_num, remain_num, 
-    log_type, deduct
+    log_type, deduct,log_time,user_name
     from product_count_log
   </select>
 
   <select id="selectByProductNameCompanyId" resultMap="BaseResultMap">
        select service_count_log_id, log_no, log_des, service_name, consume_num, remain_num,company_id,log_time
-    log_type, deduct
+    log_type, deduct,log_time,user_name
     from product_count_log
     where
     company_id = #{companyId}

@@ -1,6 +1,7 @@
 package com.lcdt.pay.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.pay.dao.ProductCountLogMapper;
 import com.lcdt.pay.rpc.ProductCountLog;
 import com.lcdt.pay.rpc.ProductCountService;
@@ -24,6 +25,8 @@ public class ProductCountServiceImpl implements ProductCountService {
         productCountLog.setLogDes(des);
         productCountLog.setLogNo(uuidno());
         productCountLog.setLogType(CountLogType.COUNSUMETYPE);
+        productCountLog.setUserName(userName);
+
         countLogMapper.insert(productCountLog);
     }
 
@@ -36,6 +39,7 @@ public class ProductCountServiceImpl implements ProductCountService {
         productCountLog.setLogNo(uuidno());
         productCountLog.setLogType(CountLogType.TOPUPCOUNTTYPE);
         productCountLog.setCompanyId(companyId);
+        productCountLog.setUserName(userName);
         countLogMapper.insert(productCountLog);
     }
 

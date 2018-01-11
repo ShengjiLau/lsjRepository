@@ -1,5 +1,7 @@
 package com.lcdt.pay.rpc;
 
+import java.util.Date;
+
 public class ProductCountLog {
     private Long serviceCountLogId;
 
@@ -18,6 +20,26 @@ public class ProductCountLog {
     private Integer deduct;
 
     private Long companyId;
+
+    private Date logTime;
+
+    private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Date getLogTime() {
+        return logTime;
+    }
+
+    public void setLogTime(Date logTime) {
+        this.logTime = logTime;
+    }
 
     public Long getCompanyId() {
         return companyId;
