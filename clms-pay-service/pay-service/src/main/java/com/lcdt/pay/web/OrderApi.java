@@ -16,11 +16,11 @@ import com.lcdt.pay.service.impl.OrderServiceImpl;
 import com.lcdt.pay.utils.OrderNoGenerator;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
+import java.beans.PropertyEditorSupport;
 import java.util.Date;
 import java.util.List;
 
@@ -55,8 +55,11 @@ public class OrderApi {
 
     @ApiOperation("查看所有订单")
     @RequestMapping(value = "/orders",method = RequestMethod.GET)
-    public PageResultDto<PayOrder> allorderlist(Integer pageNo, Integer pageSize, @RequestParam(required = false) Date beginTime,@RequestParam(required = false) Date endTime,@RequestParam(required = false)Integer orderType
-        ,@RequestParam(required = false) Integer payType
+    public PageResultDto<PayOrder> allorderlist(Integer pageNo, Integer pageSize,
+                                                @RequestParam(required = false) Date beginTime,
+                                                @RequestParam(required = false) Date endTime,
+                                                @RequestParam(required = false)Integer orderType
+        , @RequestParam(required = false) Integer payType
     ){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
@@ -176,5 +179,15 @@ public class OrderApi {
         return jsonObject.toString();
     }
 
+
+    @InitBinder
+    public void initBinder(final WebDataBinder webdataBinder) {
+        webdataBinder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                setValue(new Date(Long.valueOf(text)));
+            }
+        });
+    }
 
 }

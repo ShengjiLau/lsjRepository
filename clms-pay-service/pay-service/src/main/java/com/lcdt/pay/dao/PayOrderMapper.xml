@@ -71,11 +71,11 @@
     </if>
 
     <if test="beginTime != null">
-      and create_time &gt;= #{beginTime,jdbcType=DATETIME}
+      and create_time &gt;= #{beginTime,jdbcType=TIMESTAMP}
     </if>
 
     <if test="endTime != null">
-      and create_time &lt;=  #{endTime,jdbcType=DATETIME}
+      and create_time &lt;=  #{endTime,jdbcType=TIMESTAMP}
     </if>
     <if test="payType != null">
       and pay_type = #{payType,jdbcType=INTEGER}
