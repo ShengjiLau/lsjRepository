@@ -17,10 +17,8 @@ public class ProductCountServiceImpl implements ProductCountService {
     @Autowired
     ProductCountLogMapper countLogMapper;
 
-
-
     @Override
-    public void reduceProductCount(String productName, String des, Integer countNum, String userName,Long companyId) {
+    public ProductCountLog reduceProductCount(String productName, String des, Integer countNum, String userName,Long companyId,Integer remainCounts) {
         ProductCountLog productCountLog = new ProductCountLog();
         productCountLog.setServiceName(productName);
         productCountLog.setConsumeNum(countNum);
@@ -28,8 +26,8 @@ public class ProductCountServiceImpl implements ProductCountService {
         productCountLog.setLogNo(uuidno());
         productCountLog.setLogType(CountLogType.COUNSUMETYPE);
         productCountLog.setUserName(userName);
-
         countLogMapper.insert(productCountLog);
+        return productCountLog;
     }
 
     @Override
@@ -50,6 +48,8 @@ public class ProductCountServiceImpl implements ProductCountService {
     public List<ProductCountLog> countLogs(Long companyId, String productName, Date startTime, Date endTime,Integer logType){
         return countLogMapper.selectByProductNameCompanyId(companyId, productName, startTime, endTime,logType);
     }
+
+
 
 
     static final class CountLogType {

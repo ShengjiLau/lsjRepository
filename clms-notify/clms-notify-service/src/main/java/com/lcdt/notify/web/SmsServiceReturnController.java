@@ -25,14 +25,8 @@ public class SmsServiceReturnController {
     @RequestMapping("/smsreturn")
     public String receiveSmsServiceReturn(String reference) {
         if (reference != null) {
-
-            SmsLog smsLog = smsLogMapper.selectByPrimaryKey(Long.valueOf(reference));
-            if (smsLog != null && !smsLog.getIsPay()) {
-                smsCountService.reduceSmsCount(smsLog.getSeedCompanyId(),SmsCountService.smsServiceProductName);
-                smsLog.setIsPay(true);
-                smsLogMapper.updateByPrimaryKey(smsLog);
-                return "SUCCESS";
-            }
+            smsCountService.reduceSmsCount(Long.valueOf(reference),SmsCountService.smsServiceProductName,1);
+            return "SUCCESS";
         }
         return "SUCCESS";
     }

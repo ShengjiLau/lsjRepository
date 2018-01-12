@@ -51,10 +51,10 @@ public class SmsNotifyImpl  {
         if (!b) {
             logger.info("短信余额不足 companyId:{}",companyId);
             return false;
-
         }
         logger.info("发送短信通知 >>> {} >>> {}",content,phoneNum);
-        ProductCountLog countLog = productCountService.logAddProductCount("sms_service", eventMetaData.getEventDisplayName(), 1, operateUsername, companyId,null);
+
+        ProductCountLog countLog = productCountService.reduceProductCount("sms_service", eventMetaData.getEventDisplayName(), 1, operateUsername, companyId,null);
         sendSms(new String[]{phoneNum}, content, countLog.getServiceCountLogId());
         return true;
     }

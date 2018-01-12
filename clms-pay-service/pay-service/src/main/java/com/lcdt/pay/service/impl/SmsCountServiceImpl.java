@@ -20,9 +20,9 @@ public class SmsCountServiceImpl implements SmsCountService {
 
     @Transactional
     @Override
-    public void reduceSmsCount(Long countLogId, Long companyId, String productName) {
-        CompanyServiceCount companyServiceCount = countService.reduceCompanyProductCount(companyId, productName, 1);
+    public void reduceSmsCount(Long countLogId,  String productName,Integer reduceNum) {
         ProductCountLog productCountLog = countLogMapper.selectByPrimaryKey(countLogId);
+        CompanyServiceCount companyServiceCount = countService.reduceCompanyProductCount(productCountLog.getCompanyId(), productName, reduceNum);
         productCountLog.setRemainNum(companyServiceCount.getProductServiceNum());
         countLogMapper.updateByPrimaryKey(productCountLog);
     }
