@@ -111,11 +111,12 @@ public class OrderServiceImpl implements OrderService{
 
         payOrder.setOrderStatus(OrderStatus.PAYED);
         payOrder.setPayType(PayType.BALANCEPAY);
+
         mapper.updateByPrimaryKey(payOrder);
 
         String phone = SecurityInfoGetter.getUser().getPhone();
 
-        productCountService.logAddProductCount(serviceProduct.getServiceName(),"购买服务包",serviceProductPackage.getProductNum(),phone,companyId);
+        productCountService.logAddProductCount(serviceProduct.getServiceName(),"购买服务包",serviceProductPackage.getProductNum(),phone,companyId,companyServiceCount.getProductServiceNum());
 
     }
 

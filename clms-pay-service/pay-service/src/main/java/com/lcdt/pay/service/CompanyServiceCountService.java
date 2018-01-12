@@ -9,6 +9,8 @@ public interface CompanyServiceCountService {
 
     List<CompanyServiceCount> companyServiceCount(Long companyId);
 
+    CompanyServiceCount reduceCompanyProductCount(Long companyId,String serviceName,Integer reduceNum);
 
+    boolean checkCompanyProductCount(Long companyId,String serviceName,Integer reduceNum);
 
 }

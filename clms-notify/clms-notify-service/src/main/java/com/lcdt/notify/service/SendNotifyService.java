@@ -1,6 +1,7 @@
 package com.lcdt.notify.service;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.lcdt.notify.dao.EventMetaDataMapper;
 import com.lcdt.notify.dao.NotifyDao;
 import com.lcdt.notify.model.*;
 import com.lcdt.notify.notifyimpl.SmsNotifyImpl;
@@ -36,9 +37,12 @@ public class SendNotifyService {
     @Reference
     UserService userService;
 
+    @Autowired
+    EventMetaDataMapper eventMetaDataMapper;
+
     public void handleEvent(JsonParserPropertyEvent event) {
         String eventName = event.getEventName();
-
+        EventMetaData eventMetaData = eventMetaDataMapper.selectByEventName(eventName);
         //query notify by event Name
         List<Notify> notifies = notifyService.queryNotifyByEventName(eventName);
 
@@ -63,7 +67,7 @@ public class SendNotifyService {
             String url = "";
             if (companyNotifySetting.getEnableSms()) {
                 //发送短信通知
-                smsNotify.sendSmsNotify(notifyContent, receiver.getPhoneNum(),user.getPhone(),sendCompanyId);
+                smsNotify.sendSmsNotify(eventMetaData,notifyContent, receiver.getPhoneNum(),user.getPhone(),sendCompanyId);
             }
             if (companyNotifySetting.getEnableWeb()) {
                 //发送web通知

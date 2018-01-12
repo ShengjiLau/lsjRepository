@@ -2,6 +2,7 @@ package com.lcdt.notify.web;
 
 import com.lcdt.notify.dao.SmsLogMapper;
 import com.lcdt.notify.model.SmsLog;
+import com.lcdt.pay.rpc.ProductCountService;
 import com.lcdt.pay.rpc.SmsCountService;
 import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,13 @@ public class SmsServiceReturnController {
     @Reference
     SmsCountService smsCountService;
 
+    @Autowired
+    ProductCountService productCountService;
+
     @RequestMapping("/smsreturn")
     public String receiveSmsServiceReturn(String reference) {
         if (reference != null) {
+
             SmsLog smsLog = smsLogMapper.selectByPrimaryKey(Long.valueOf(reference));
             if (smsLog != null && !smsLog.getIsPay()) {
                 smsCountService.reduceSmsCount(smsLog.getSeedCompanyId(),SmsCountService.smsServiceProductName);

@@ -27,6 +27,26 @@ public class PayOrder implements ResponseData{
 
     private String createUserName;
 
+    private String orderDes;
+
+    private Integer balance;
+
+    public Integer getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Integer balance) {
+        this.balance = balance;
+    }
+
+    public String getOrderDes() {
+        return orderDes;
+    }
+
+    public void setOrderDes(String orderDes) {
+        this.orderDes = orderDes;
+    }
+
     public String getCreateUserName() {
         return createUserName;
     }

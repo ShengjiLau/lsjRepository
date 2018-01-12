@@ -5,6 +5,7 @@ import com.lcdt.pay.dao.PayOrderMapper;
 import com.lcdt.pay.model.Money;
 import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.service.TopupService;
+import com.lcdt.pay.utils.MoneyNumUtil;
 import com.lcdt.pay.utils.OrderNoGenerator;
 import com.lcdt.pay.utils.PayOrderFactory;
 import com.lcdt.userinfo.exception.UserNotExistException;
@@ -46,6 +47,7 @@ public class TopUpServiceImpl implements TopupService{
         topUpPayOrder.setOrderStatus(0);
         topUpPayOrder.setOrderNo(OrderNoGenerator.generatorOrderNo());
         topUpPayOrder.setCreateUserName(user.getPhone());
+        topUpPayOrder.setOrderDes("账户余额充值"+ MoneyNumUtil.integerMoneyToString(money)+"元");
         orderMapper.insert(topUpPayOrder);
         return topUpPayOrder;
     }
