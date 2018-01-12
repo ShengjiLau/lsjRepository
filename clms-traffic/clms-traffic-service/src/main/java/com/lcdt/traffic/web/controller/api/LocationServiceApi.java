@@ -2,7 +2,9 @@ package com.lcdt.traffic.web.controller.api;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
+import com.lcdt.traffic.service.OwnDriverService;
 import com.lcdt.traffic.util.GprsLocationBo;
+import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.userinfo.model.Driver;
 import com.lcdt.userinfo.model.LocationCallbackModel;
 import com.lcdt.userinfo.service.DriverService;
@@ -10,7 +12,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @AUTHOR liuh
@@ -26,6 +32,9 @@ public class LocationServiceApi {
 
     @Reference
     private DriverService driverService;
+
+    @Autowired
+    private OwnDriverService ownDriverService;
 
     @ApiOperation(value = "定位激活回调地址", notes = "用来接收基站定位第三方发送的回调信息（无任何权限控制）")
     @GetMapping("/callback")
@@ -65,12 +74,17 @@ public class LocationServiceApi {
         driver.setGpsStatus(new Short("1"));
         JSONObject jsonObject = new JSONObject();
         try {
-            driverService.modGpsStatus(driver);
-            jsonObject.put("code", 0);
-            jsonObject.put("message", "操作成功");
+            int row = driverService.modGpsStatus(driver);
+            if(row>0){
+                jsonObject.put("code", 0);
+                jsonObject.put("message", "开通成功");
+            }else{
+                jsonObject.put("code", -1);
+                jsonObject.put("message", "该司机不存在");
+            }
         } catch (Exception e) {
             jsonObject.put("code", -1);
-            jsonObject.put("message", "定位状态异常");
+            jsonObject.put("message", "操作失败");
         }
         return jsonObject;
     }
@@ -169,6 +183,17 @@ public class LocationServiceApi {
             jsonObject.put("msg", "接口返回错误");
         }
         return jsonObject;
+    }
+
+    @ApiOperation(value = "列表获取位置信息", notes = "根据手机号获取位置(基站定位),多个手机号需要用逗号分隔")
+    @GetMapping("/current_location")
+    public PageBaseDto<List<Driver>> getGpstStatus(@RequestParam String[] driverPhoneArr) {
+//        String driverPhones = StringUtils.join(driverPhoneArr,",");
+        List<String> driverPhoneList = Arrays.asList(driverPhoneArr);
+        logger.debug("driverPhones:" + driverPhoneList.size());
+        List<Driver> driverList = ownDriverService.getGpsInfo(driverPhoneList);
+        PageBaseDto pageBaseDto = new PageBaseDto(driverList, driverList.size());
+        return pageBaseDto;
     }
 
 }

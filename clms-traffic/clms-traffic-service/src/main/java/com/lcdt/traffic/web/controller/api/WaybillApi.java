@@ -187,7 +187,6 @@ public class WaybillApi {
             sb.append(" find_in_set('"+dto.getGroupId()+"',group_ids)"); //客户表
         } else {
             //没传组，查这个用户所有组帮定的客户
-
             List<Group> groupList = SecurityInfoGetter.groups();
             if(groupList!=null&&groupList.size()>0){
                 sb.append("(");

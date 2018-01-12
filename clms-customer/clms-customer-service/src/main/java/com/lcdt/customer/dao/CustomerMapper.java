@@ -50,4 +50,5 @@ public interface CustomerMapper {
     int updateByPrimaryKeySelective(Customer record);
     List<Customer> selectByCondition(Map map);
 
+    Map<String,Object> selectCarrierAndCustomer(Long companyId);
 }
