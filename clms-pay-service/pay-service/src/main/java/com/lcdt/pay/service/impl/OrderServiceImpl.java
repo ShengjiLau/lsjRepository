@@ -82,6 +82,10 @@ public class OrderServiceImpl implements OrderService{
         money.setBalance(money.getBalance() - price);
         balanceMapper.updateByPrimaryKey(money);
 
+        //记录消费流水
+        logConsumeBalance(money,payOrder);
+
+
         Integer productId = serviceProductPackage.getProductId();
 
         ServiceProduct serviceProduct = productMapper.selectByPrimaryKey(productId);
@@ -120,13 +124,30 @@ public class OrderServiceImpl implements OrderService{
 
     }
 
+    @Autowired
+    BalanceLogMapper balanceLogMapper;
+
+    public void logConsumeBalance(PayBalance payBalance,PayOrder payOrder){
+
+        BalanceLog balanceLog = new BalanceLog();
+        balanceLog.setAmount(payOrder.getOrderAmount());
+        balanceLog.setCurrentBalance(payBalance.getBalance());
+        balanceLog.setLogDes(payOrder.getOrderDes());
+        balanceLog.setLogType(OrderType.PAYORDER);
+        balanceLog.setLogUsername(payOrder.getCreateUserName());
+
+        balanceLogMapper.insert(balanceLog);
+    }
+
+
     public PayOrder changeToPayFinish(PayOrder payOrder,Integer payType){
         //检查订单号是否已经被处理过
         if (payOrder.getOrderStatus() != OrderStatus.PENDINGPAY) {
             throw new RuntimeException("订单已付款");
         }
+
         //检查是否已付款
-        balanceService.rechargeBalance(payOrder.getOrderAmount(), payOrder.getOrderPayCompanyId());
+        balanceService.rechargeBalance(payOrder.getOrderAmount(), payOrder.getOrderPayCompanyId(),payOrder.getCreateUserName());
         payOrder.setOrderStatus(OrderStatus.PAYED);
         payOrder.setPayType(payType);
         mapper.updateByPrimaryKey(payOrder);

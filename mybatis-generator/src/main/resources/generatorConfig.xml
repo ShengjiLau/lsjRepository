@@ -243,10 +243,12 @@
         <!--</table>-->
 
         <!--<table tableNm></table>-->
-        <table tableName="event_meta" domainObjectName="EventMetaData">
-        <generatedKey column="event_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        <!--<table tableName="event_meta" domainObjectName="EventMetaData">-->
+        <!--<generatedKey column="event_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
+        <table tableName="balance_log" domainObjectName="BalanceLog">
+            <generatedKey column="balance_log_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
-
 
     </context>
 </generatorConfiguration>

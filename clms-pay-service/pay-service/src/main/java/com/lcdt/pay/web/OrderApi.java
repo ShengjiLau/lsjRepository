@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
-import com.lcdt.pay.dao.OrderType;
-import com.lcdt.pay.dao.PayOrderMapper;
-import com.lcdt.pay.dao.ProductCountLogMapper;
-import com.lcdt.pay.dao.ServiceProductMapper;
+import com.lcdt.pay.dao.*;
 import com.lcdt.pay.model.*;
 import com.lcdt.pay.rpc.ProductCountLog;
 import com.lcdt.pay.rpc.ProductCountService;
@@ -178,6 +175,20 @@ public class OrderApi {
         jsonObject.put("message", "操作成功");
         return jsonObject.toString();
     }
+
+    @Autowired
+    BalanceLogMapper balanceLogMapper;
+
+
+    @RequestMapping(value = "/balancelog",method = RequestMethod.POST)
+    public PageResultDto<BalanceLog> balanceLog(@RequestParam(required = false) Date startTime,@RequestParam(required = false) Date endTime
+        ,@RequestParam(required = false) Integer payType,@RequestParam(required = false)Integer orderType)
+    {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, startTime, endTime, orderType);
+        return new PageResultDto<BalanceLog>(balanceLogs);
+    }
+
 
 
     @InitBinder
