@@ -7,6 +7,6 @@ public interface CompanyBalanceService {
 
     PayBalance companyBalance(Long companyId);
 
-    boolean rechargeBalance(Integer amount,Long companyId);
+    boolean rechargeBalance(Integer amount,Long companyId,String username);
 
 }

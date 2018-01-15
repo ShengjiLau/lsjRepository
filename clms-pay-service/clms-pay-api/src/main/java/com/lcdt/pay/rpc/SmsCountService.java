@@ -6,6 +6,7 @@ public interface SmsCountService {
 
     public static String gmsLocationService = "gms_service";
 
-    void reduceSmsCount(Long companyId,String productName);
+    void reduceSmsCount(Long countLogId,String productName,Integer reduceNum);
 
+    boolean checkSmsCount(Long companyId,Integer num);
 }

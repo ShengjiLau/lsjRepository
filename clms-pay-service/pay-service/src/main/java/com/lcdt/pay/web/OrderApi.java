@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
-import com.lcdt.pay.dao.OrderType;
-import com.lcdt.pay.dao.PayOrderMapper;
-import com.lcdt.pay.dao.ProductCountLogMapper;
-import com.lcdt.pay.dao.ServiceProductMapper;
+import com.lcdt.pay.dao.*;
 import com.lcdt.pay.model.*;
 import com.lcdt.pay.rpc.ProductCountLog;
 import com.lcdt.pay.rpc.ProductCountService;
@@ -16,11 +13,11 @@ import com.lcdt.pay.service.impl.OrderServiceImpl;
 import com.lcdt.pay.utils.OrderNoGenerator;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
+import java.beans.PropertyEditorSupport;
 import java.util.Date;
 import java.util.List;
 
@@ -55,8 +52,11 @@ public class OrderApi {
 
     @ApiOperation("查看所有订单")
     @RequestMapping(value = "/orders",method = RequestMethod.GET)
-    public PageResultDto<PayOrder> allorderlist(Integer pageNo, Integer pageSize, @RequestParam(required = false) Date beginTime,@RequestParam(required = false) Date endTime,@RequestParam(required = false)Integer orderType
-        ,@RequestParam(required = false) Integer payType
+    public PageResultDto<PayOrder> allorderlist(Integer pageNo, Integer pageSize,
+                                                @RequestParam(required = false) Date beginTime,
+                                                @RequestParam(required = false) Date endTime,
+                                                @RequestParam(required = false)Integer orderType
+        , @RequestParam(required = false) Integer payType
     ){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
@@ -176,5 +176,29 @@ public class OrderApi {
         return jsonObject.toString();
     }
 
+    @Autowired
+    BalanceLogMapper balanceLogMapper;
+
+
+    @RequestMapping(value = "/balancelog",method = RequestMethod.POST)
+    public PageResultDto<BalanceLog> balanceLog(@RequestParam(required = false) Date startTime,@RequestParam(required = false) Date endTime
+        ,@RequestParam(required = false) Integer payType,@RequestParam(required = false)Integer orderType)
+    {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, startTime, endTime, orderType);
+        return new PageResultDto<BalanceLog>(balanceLogs);
+    }
+
+
+
+    @InitBinder
+    public void initBinder(final WebDataBinder webdataBinder) {
+        webdataBinder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                setValue(new Date(Long.valueOf(text)));
+            }
+        });
+    }
 
 }

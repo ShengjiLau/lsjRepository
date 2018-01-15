@@ -1,9 +1,12 @@
 package com.lcdt.notify.notifyimpl;
 
 import com.lcdt.notify.dao.SmsLogMapper;
+import com.lcdt.notify.model.EventMetaData;
 import com.lcdt.notify.model.NotifyReceiver;
 import com.lcdt.notify.model.SmsLog;
+import com.lcdt.pay.rpc.ProductCountLog;
 import com.lcdt.pay.rpc.ProductCountService;
+import com.lcdt.pay.rpc.SmsCountService;
 import com.lcdt.util.MD5;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -40,22 +43,24 @@ public class SmsNotifyImpl  {
     private ProductCountService productCountService;
 
     @Autowired
-    SmsLogMapper smsLogMapper;
+    SmsCountService smsCountService;
 
-    public boolean sendSmsNotify(String operateUsername,String content, String phoneNum,Long companyId) {
+    public boolean sendSmsNotify(EventMetaData eventMetaData,String operateUsername, String content, String phoneNum, Long companyId) {
+
+        boolean b = smsCountService.checkSmsCount(companyId, 1);
+        if (!b) {
+            logger.info("短信余额不足 companyId:{}",companyId);
+            return false;
+        }
         logger.info("发送短信通知 >>> {} >>> {}",content,phoneNum);
-        productCountService.logAddProductCount("sms_service","",1,operateUsername,companyId);
 
-        SmsLog smsLog = new SmsLog();
-        smsLog.setSeedCompanyId(companyId);
-        smsLog.setIsPay(false);
-        smsLogMapper.insert(smsLog);
-        sendSms(new String[]{phoneNum}, content, smsLog.getSmsId());
+        ProductCountLog countLog = productCountService.reduceProductCount("sms_service", eventMetaData.getEventDisplayName(), 1, operateUsername, companyId,null);
+        sendSms(new String[]{phoneNum}, content, countLog.getServiceCountLogId());
         return true;
     }
 
 
-    public boolean sendSms(String[] phonsNums, String message,Long smsLogId) {
+    public boolean sendSms(String[] phonsNums, String message,Long productServiceLogId) {
 
         logger.info("调用短信api >>> {} >>> {}",phonsNums[0],message);
 
@@ -72,7 +77,7 @@ public class SmsNotifyImpl  {
         nameValuePairs.add(new BasicNameValuePair("key", encodeKey(seed)));
         nameValuePairs.add(new BasicNameValuePair("dest", phoneNumsValue(phonsNums)));
         nameValuePairs.add(new BasicNameValuePair("content", "【大驼队】" + message));
-        nameValuePairs.add(new BasicNameValuePair("reference", String.valueOf(smsLogId)));
+        nameValuePairs.add(new BasicNameValuePair("reference", String.valueOf(productServiceLogId)));
 
 
         UrlEncodedFormEntity uefEntity;
