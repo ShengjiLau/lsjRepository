@@ -26,6 +26,7 @@
         <module>clms-customer</module>
         <module>clms-traffic</module>
         <module>clms-pay-service</module>
+        <module>common-quartz</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>

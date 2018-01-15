@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.quartz.service.IQuartzService;
 import com.lcdt.traffic.exception.WaybillPlanException;
+import com.lcdt.traffic.job.TestJob;
 import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.Plan4CreateService;
@@ -45,6 +47,11 @@ public class OwnPlanApi {
 
     @Autowired
     private PlanService planService;
+
+
+    @Autowired
+    private IQuartzService iQuartzService;
+
 
 
     @ApiOperation("创建--发布")
@@ -204,6 +211,13 @@ public class OwnPlanApi {
     @RequestMapping(value = "/loadPlan",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_plan')")
     public WaybillPlan loadPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+
+        iQuartzService.deleteJob("job_product_pull", "jGroup_product_pull");
+
+        iQuartzService.startSchedule("job_product_pull", "jGroup_product_pull", "0/10 * * * * ?", "trigger_product_pull",
+                "tGroup__product_pull", TestJob.class);
+        iQuartzService.test();
+
         Long companyId = SecurityInfoGetter.getCompanyId();
         WaybillParamsDto dto = new WaybillParamsDto();
         dto.setCompanyId(companyId);
