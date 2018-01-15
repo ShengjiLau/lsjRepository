@@ -14,6 +14,7 @@ import com.lcdt.pay.utils.OrderNoGenerator;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,7 +68,10 @@ public class OrderApi {
 
     @ApiOperation("查看服务消费流水")
     @RequestMapping(value = "/servicelog",method = RequestMethod.GET)
-    public PageResultDto<ProductCountLog> countlogs(Integer pageNo, Integer pageSize, String servicename,@RequestParam(required = false) Date beginTime,@RequestParam(required = false) Date endTime,@RequestParam(required = false) Integer logType){
+    public PageResultDto<ProductCountLog> countlogs(Integer pageNo, Integer pageSize, String servicename,
+                                                    @RequestParam(required = false) Date beginTime,
+                                                    @RequestParam(required = false) Date endTime,
+                                                    @RequestParam(required = false) Integer logType){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
         List<ProductCountLog> productCountLogs = countService.countLogs(companyId, servicename, beginTime, endTime,logType);
@@ -144,12 +148,10 @@ public class OrderApi {
         Long userId = SecurityInfoGetter.getUser().getUserId();
         String phone = SecurityInfoGetter.getUser().getPhone();
 
-
         ServiceProduct serviceProduct = productMapper.selectByPrimaryKey(productId);
         if (serviceProduct == null) {
             throw new RuntimeException("产品不存在");
         }
-
 
         PayOrder payOrder = new PayOrder();
         payOrder.setOrderStatus(OrderStatus.PENDINGPAY);
@@ -181,11 +183,14 @@ public class OrderApi {
 
 
     @RequestMapping(value = "/balancelog",method = RequestMethod.POST)
-    public PageResultDto<BalanceLog> balanceLog(@RequestParam(required = false) Date startTime,@RequestParam(required = false) Date endTime
+    public PageResultDto<BalanceLog> balanceLog(Integer pageSize,Integer pageNo,
+                                                @RequestParam(required = false) Date beginTime,
+                                                @RequestParam(required = false) Date endTime
         ,@RequestParam(required = false) Integer payType,@RequestParam(required = false)Integer orderType)
     {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, startTime, endTime, orderType);
+        PageHelper.startPage(pageNo, pageSize);
+        List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, beginTime, endTime, orderType,payType);
         return new PageResultDto<BalanceLog>(balanceLogs);
     }
 
@@ -196,6 +201,10 @@ public class OrderApi {
         webdataBinder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
+                if (StringUtils.isEmpty(text)) {
+                    setValue(null);
+                    return;
+                }
                 setValue(new Date(Long.valueOf(text)));
             }
         });

@@ -31,4 +31,11 @@ public class SmsCountServiceImpl implements SmsCountService {
     public boolean checkSmsCount(Long companyId, Integer num) {
         return countService.checkCompanyProductCount(companyId, "sms_service", num);
     }
+
+
+    @Override
+    public boolean checkProductCount(Long companyId,Integer num,String serviceName){
+        return countService.checkCompanyProductCount(companyId, serviceName, num);
+    }
+
 }

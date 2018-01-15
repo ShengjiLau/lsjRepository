@@ -21,5 +21,6 @@ public interface BalanceLogMapper {
     List<BalanceLog> selectByCompanyId(@Param("companyId") Long companyId,
                                        @Param("beginTime") Date beginTime,
                                        @Param("endTime") Date endTime,
-                                       @Param("orderType") Integer orderType);
+                                       @Param("orderType") Integer orderType,
+                                       @Param("payType") Integer payType);
 }

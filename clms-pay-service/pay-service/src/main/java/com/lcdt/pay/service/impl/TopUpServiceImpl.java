@@ -26,24 +26,17 @@ public class TopUpServiceImpl implements TopupService{
     @Autowired
     PayOrderMapper orderMapper;
 
-    @Reference
-    UserService userService;
 
     @Override
-    public PayOrder createTopUpOrder(Integer money, Long companyId,Long userId) {
+    public PayOrder createTopUpOrder(Integer money, Long companyId,User user) {
 
-        User user = null;
-        try {
-            user = userService.queryByUserId(userId);
-        } catch (UserNotExistException e) {
-            e.printStackTrace();
-            return null;
-        }
+
 
         PayOrder topUpPayOrder = PayOrderFactory.createTopUpPayOrder();
         topUpPayOrder.setOrderAmount(money);
         topUpPayOrder.setOrderPayCompanyId(companyId);
-        topUpPayOrder.setOrderPayUserId(userId);
+        topUpPayOrder.setOrderPayUserId(user.getUserId());
+        topUpPayOrder.setCreateUserName(user.getPhone());
         topUpPayOrder.setOrderStatus(0);
         topUpPayOrder.setOrderNo(OrderNoGenerator.generatorOrderNo());
         topUpPayOrder.setCreateUserName(user.getPhone());

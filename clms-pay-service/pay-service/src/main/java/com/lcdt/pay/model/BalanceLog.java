@@ -19,6 +19,27 @@ public class BalanceLog {
 
     private String logUsername;
 
+    private Long orderId;
+
+
+    private PayOrder payOrder;
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public PayOrder getPayOrder() {
+        return payOrder;
+    }
+
+    public void setPayOrder(PayOrder payOrder) {
+        this.payOrder = payOrder;
+    }
+
 
     private Long companyId;
 

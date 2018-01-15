@@ -65,12 +65,11 @@
     </if>
 
     <if test="beginTime != null">
-      and log_time &gt;= #{beginTime,jdbcType=DATETIME}
-
+      and log_time &gt;= #{beginTime,jdbcType=TIMESTAMP}
     </if>
 
     <if test="endTime != null">
-      and log_time &lt;= #{beginTime,jdbcType=DATETIME}
+      and log_time &lt;= #{beginTime,jdbcType=TIMESTAMP}
     </if>
 
     <if test="logType != null">

@@ -11,6 +11,23 @@
     <result column="log_des" jdbcType="VARCHAR" property="logDes" />
     <result column="log_username" jdbcType="VARCHAR" property="logUsername" />
     <result column="company_id" jdbcType="BIGINT" property="companyId"></result>
+    <association property="payOrder" column="order_id" javaType="com.lcdt.pay.model.PayOrder"
+                 fetchType="eager" select="com.lcdt.pay.dao.PayOrderMapper.selectByPrimaryKey">
+      <id column="order_id" jdbcType="BIGINT" property="orderId" />
+      <result column="order_type" jdbcType="INTEGER" property="orderType" />
+      <result column="order_amount" jdbcType="INTEGER" property="orderAmount" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="order_pay_user_id" jdbcType="BIGINT" property="orderPayUserId" />
+      <result column="order_pay_company_id" jdbcType="BIGINT" property="orderPayCompanyId" />
+      <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+      <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+      <result column="order_product_id" jdbcType="INTEGER" property="orderProductId" />
+      <result column="pay_type" jdbcType="INTEGER" property="payType" />
+      <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+      <result column="order_des" jdbcType="VARCHAR" property="orderDes"></result>
+      <result column="balance" jdbcType="INTEGER" property="balance" />
+    </association>
+
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from balance_log
@@ -21,11 +38,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into balance_log (log_type, current_balance, amount, 
-      log_time, log_no, log_des, 
-      log_username,company_id)
+      log_time, log_no, log_des,
+      log_username,company_id, order_id)
     values (#{logType,jdbcType=INTEGER}, #{currentBalance,jdbcType=INTEGER}, #{amount,jdbcType=INTEGER}, 
       #{logTime,jdbcType=TIMESTAMP}, #{logNo,jdbcType=VARCHAR}, #{logDes,jdbcType=VARCHAR}, 
-      #{logUsername,jdbcType=VARCHAR},#{companyId,jdbcType=BIGINT})
+      #{logUsername,jdbcType=VARCHAR},#{companyId,jdbcType=BIGINT},#{orderId,jdbcType=BIGINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.pay.model.BalanceLog">
     update balance_log
@@ -40,33 +57,38 @@
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select balance_log_id, log_type, current_balance, amount, log_time, log_no, log_des, 
-    log_username,company_id
+    log_username,company_id,order_id
     from balance_log
     where balance_log_id = #{balanceLogId,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select balance_log_id, log_type, current_balance, amount, log_time, log_no, log_des, 
-    log_username,company_id
+    log_username,company_id,order_id
     from balance_log
   </select>
 
   <select id="selectByCompanyId" resultMap="BaseResultMap">
-    select balance_log_id, log_type, current_balance, amount, log_time, log_no, log_des,
-    log_username,company_id
-    from balance_log
-    where company_id = #{companyId}
+    select b.*
+    from balance_log b
+    left join pay_order p on p.order_id = b.order_id
+    where b.company_id = #{companyId}
 
     <if test="orderType != null">
-      and order_type = #{log_type,jdbcType=INTEGER}
+      and b.log_type = #{orderType,jdbcType=INTEGER}
     </if>
 
     <if test="beginTime != null">
-      and log_time &gt;= #{beginTime,jdbcType=TIMESTAMP}
+      and b.log_time &gt;= #{beginTime,jdbcType=TIMESTAMP}
     </if>
 
     <if test="endTime != null">
-      and log_time &lt;=  #{endTime,jdbcType=TIMESTAMP}
+      and b.log_time &lt;=  #{endTime,jdbcType=TIMESTAMP}
     </if>
+    <if test="payType != null">
+      and p.pay_type = #{payType,jdbcType=INTEGER}
+
+    </if>
+
 
 
   </select>

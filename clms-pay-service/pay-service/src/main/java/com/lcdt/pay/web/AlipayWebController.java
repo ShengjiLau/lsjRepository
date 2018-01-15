@@ -21,6 +21,7 @@ import com.lcdt.pay.service.TopupService;
 import com.lcdt.pay.service.impl.OrderServiceImpl;
 import com.lcdt.pay.utils.MoneyNumUtil;
 import com.lcdt.pay.utils.WechatPayApi;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.util.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +68,8 @@ public class AlipayWebController {
     public PayOrder createTopupPayOrder(Integer amount){
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
-        PayOrder topUpOrder = topupService.createTopUpOrder(amount, companyId, userId);
+        User user = SecurityInfoGetter.getUser();
+        PayOrder topUpOrder = topupService.createTopUpOrder(amount, companyId, user);
         return topUpOrder;
     }
 
@@ -97,8 +99,6 @@ public class AlipayWebController {
         alipayTradeOrder.setSubject("clms充值");
         alipayTradeOrder.setBody("clms充值");
         alipayRequest.setBizContent(JSONObject.toJSONString(alipayTradeOrder));//填充业务参数
-
-
         alipayRequest.setReturnUrl(AlipayContants.getReturnUrl());
         alipayRequest.setNotifyUrl(AlipayContants.getNotifyUrl());//在公共参数中设置回跳和通知地址
         String form = "";
@@ -148,10 +148,7 @@ public class AlipayWebController {
         }
     }
 
-    @RequestMapping("/alipay/return")
-    public void alipayReturn(){
 
-    }
 
     @RequestMapping("/wechatqrcode")
     public void wechatQrcode(HttpServletResponse response,Long orderId,HttpServletRequest request){
