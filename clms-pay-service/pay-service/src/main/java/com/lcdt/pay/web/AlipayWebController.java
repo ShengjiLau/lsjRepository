@@ -150,10 +150,7 @@ public class AlipayWebController {
         }
     }
 
-    @RequestMapping("/alipay/return")
-    public void alipayReturn(){
 
-    }
 
     @RequestMapping("/wechatqrcode")
     public void wechatQrcode(HttpServletResponse response,Long orderId,HttpServletRequest request){
