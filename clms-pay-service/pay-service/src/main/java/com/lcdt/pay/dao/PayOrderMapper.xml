@@ -106,9 +106,18 @@
     on p.order_product_id = s.product_id
     WHERE order_pay_company_id = #{companyId,jdbcType=BIGINT}
     and order_type = 2
-    <if test="productName != null">
+    <if test="productName != null and productName != '' ">
       and s.product_service = #{productName,jdbcType=VARCHAR}
     </if>
+
+    <if test="beginTime != null">
+      and create_time &gt;= #{beginTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="endTime != null">
+      and create_time &lt;=  #{endTime,jdbcType=TIMESTAMP}
+    </if>
+
+
   </select>
 
 </mapper>
