@@ -99,8 +99,6 @@ public class AlipayWebController {
         alipayTradeOrder.setSubject("clms充值");
         alipayTradeOrder.setBody("clms充值");
         alipayRequest.setBizContent(JSONObject.toJSONString(alipayTradeOrder));//填充业务参数
-
-
         alipayRequest.setReturnUrl(AlipayContants.getReturnUrl());
         alipayRequest.setNotifyUrl(AlipayContants.getNotifyUrl());//在公共参数中设置回跳和通知地址
         String form = "";

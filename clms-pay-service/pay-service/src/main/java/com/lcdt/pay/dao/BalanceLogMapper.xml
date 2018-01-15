@@ -74,7 +74,7 @@
     where company_id = #{companyId}
 
     <if test="orderType != null">
-      and order_type = #{log_type,jdbcType=INTEGER}
+      and log_type = #{orderType,jdbcType=INTEGER}
     </if>
 
     <if test="beginTime != null">

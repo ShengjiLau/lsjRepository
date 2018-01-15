@@ -9,4 +9,8 @@ public interface SmsCountService {
     void reduceSmsCount(Long countLogId,String productName,Integer reduceNum);
 
     boolean checkSmsCount(Long companyId,Integer num);
+
+
+    boolean checkProductCount(Long companyId,Integer num,String serviceName);
+
 }

@@ -14,6 +14,7 @@ import com.lcdt.pay.utils.OrderNoGenerator;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -179,12 +180,14 @@ public class OrderApi {
 
 
     @RequestMapping(value = "/balancelog",method = RequestMethod.POST)
-    public PageResultDto<BalanceLog> balanceLog(Integer pageSize,Integer pageNo,@RequestParam(required = false) Date startTime,@RequestParam(required = false) Date endTime
+    public PageResultDto<BalanceLog> balanceLog(Integer pageSize,Integer pageNo,
+                                                @RequestParam(required = false) Date beginTime,
+                                                @RequestParam(required = false) Date endTime
         ,@RequestParam(required = false) Integer payType,@RequestParam(required = false)Integer orderType)
     {
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
-        List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, startTime, endTime, orderType);
+        List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, beginTime, endTime, orderType);
         return new PageResultDto<BalanceLog>(balanceLogs);
     }
 
@@ -195,6 +198,10 @@ public class OrderApi {
         webdataBinder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
+                if (StringUtils.isEmpty(text)) {
+                    setValue(null);
+                    return;
+                }
                 setValue(new Date(Long.valueOf(text)));
             }
         });
