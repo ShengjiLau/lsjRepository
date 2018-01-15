@@ -100,6 +100,11 @@
             <artifactId>velocity</artifactId>
             <version>1.7</version>
         </dependency>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>common-quartz</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>
