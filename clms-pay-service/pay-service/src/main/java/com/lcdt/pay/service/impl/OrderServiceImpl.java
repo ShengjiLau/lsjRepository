@@ -128,14 +128,13 @@ public class OrderServiceImpl implements OrderService{
     BalanceLogMapper balanceLogMapper;
 
     public void logConsumeBalance(PayBalance payBalance,PayOrder payOrder){
-
         BalanceLog balanceLog = new BalanceLog();
         balanceLog.setAmount(payOrder.getOrderAmount());
         balanceLog.setCurrentBalance(payBalance.getBalance());
         balanceLog.setLogDes(payOrder.getOrderDes());
         balanceLog.setLogType(OrderType.PAYORDER);
         balanceLog.setLogUsername(payOrder.getCreateUserName());
-
+        balanceLog.setOrderId(payOrder.getOrderId());
         balanceLogMapper.insert(balanceLog);
     }
 
@@ -147,7 +146,7 @@ public class OrderServiceImpl implements OrderService{
         }
 
         //检查是否已付款
-        balanceService.rechargeBalance(payOrder.getOrderAmount(), payOrder.getOrderPayCompanyId(),payOrder.getCreateUserName());
+        balanceService.rechargeBalance(payOrder,payOrder.getOrderPayCompanyId(),payOrder.getCreateUserName());
         payOrder.setOrderStatus(OrderStatus.PAYED);
         payOrder.setPayType(payType);
         mapper.updateByPrimaryKey(payOrder);

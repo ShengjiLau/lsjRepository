@@ -5,6 +5,7 @@ import com.lcdt.pay.dao.OrderType;
 import com.lcdt.pay.dao.PayBalanceMapper;
 import com.lcdt.pay.model.BalanceLog;
 import com.lcdt.pay.model.PayBalance;
+import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.service.CompanyBalanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,11 +27,14 @@ public class CompanyBalanceServiceImpl implements CompanyBalanceService{
 
 
     @Override
-    public boolean rechargeBalance(Integer amount,Long companyId,String userName) {
+    public boolean rechargeBalance(PayOrder payOrder, Long companyId, String userName) {
+
+        Integer amount = payOrder.getOrderAmount();
 
         if (amount == null || amount == 0) {
             return true;
         }
+
 
         PayBalance payBalance = mapper.selectByCompanyId(companyId);
         Integer balance = payBalance.getBalance();
@@ -43,7 +47,7 @@ public class CompanyBalanceServiceImpl implements CompanyBalanceService{
         balanceLog.setLogDes("充值");
         balanceLog.setLogType(OrderType.TOPUPORDER);
         balanceLog.setLogUsername(userName);
-
+        balanceLog.setOrderId(payOrder.getOrderId());
         balanceLogMapper.insert(balanceLog);
 
         return true;

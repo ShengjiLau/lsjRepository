@@ -179,10 +179,11 @@ public class OrderApi {
 
 
     @RequestMapping(value = "/balancelog",method = RequestMethod.POST)
-    public PageResultDto<BalanceLog> balanceLog(@RequestParam(required = false) Date startTime,@RequestParam(required = false) Date endTime
+    public PageResultDto<BalanceLog> balanceLog(Integer pageSize,Integer pageNo,@RequestParam(required = false) Date startTime,@RequestParam(required = false) Date endTime
         ,@RequestParam(required = false) Integer payType,@RequestParam(required = false)Integer orderType)
     {
         Long companyId = SecurityInfoGetter.getCompanyId();
+        PageHelper.startPage(pageNo, pageSize);
         List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, startTime, endTime, orderType);
         return new PageResultDto<BalanceLog>(balanceLogs);
     }
