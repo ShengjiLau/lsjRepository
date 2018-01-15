@@ -44,9 +44,6 @@ public class CustomerPlanApi {
     private PlanService planService;
 
 
-
-
-
     @ApiOperation("客户计划-列表-竞价")
     @RequestMapping(value = "/customerPlanList4Bidding",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_bidding')")
@@ -119,7 +116,6 @@ public class CustomerPlanApi {
     public PageBaseDto customerPlanList4Offer(@Validated WaybillPlanListParamsDto dto,
                                             @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
                                             @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
-
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);
@@ -133,8 +129,8 @@ public class CustomerPlanApi {
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
             map.put("customerName",dto.getCustomerName());
         }
-        //收货地
-        if (StringUtil.isNotEmpty(dto.getReceiveProvince())) {
+
+        if (StringUtil.isNotEmpty(dto.getReceiveProvince())) { //收货地
             map.put("receiveProvince",dto.getReceiveProvince());
         }
         if (StringUtil.isNotEmpty(dto.getReceiveCity())) {
@@ -143,20 +139,20 @@ public class CustomerPlanApi {
         if (StringUtil.isNotEmpty(dto.getReceiveCounty())) {
             map.put("receiveCounty",dto.getReceiveCounty());
         }
-        //计划发布时间
+
         if (StringUtil.isNotEmpty(dto.getPubdateBegin())) { //计划发布时间
             map.put("pubdateBegin",dto.getPubdateBegin());
         }
+
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
             map.put("pubdateEnd",dto.getPubdateEnd());
         }
-        //货物信息
-        if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
+
+        if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {//货物信息
             map.put("goodsInfo",dto.getGoodsInfo());
         }
 
-        //组权限信息
-        StringBuffer sb = new StringBuffer();
+        StringBuffer sb = new StringBuffer(); //组权限信息
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
             sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
         } else {
