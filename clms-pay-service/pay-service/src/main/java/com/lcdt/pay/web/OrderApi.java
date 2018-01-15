@@ -68,7 +68,10 @@ public class OrderApi {
 
     @ApiOperation("查看服务消费流水")
     @RequestMapping(value = "/servicelog",method = RequestMethod.GET)
-    public PageResultDto<ProductCountLog> countlogs(Integer pageNo, Integer pageSize, String servicename,@RequestParam(required = false) Date beginTime,@RequestParam(required = false) Date endTime,@RequestParam(required = false) Integer logType){
+    public PageResultDto<ProductCountLog> countlogs(Integer pageNo, Integer pageSize, String servicename,
+                                                    @RequestParam(required = false) Date beginTime,
+                                                    @RequestParam(required = false) Date endTime,
+                                                    @RequestParam(required = false) Integer logType){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
         List<ProductCountLog> productCountLogs = countService.countLogs(companyId, servicename, beginTime, endTime,logType);
@@ -187,7 +190,7 @@ public class OrderApi {
     {
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
-        List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, beginTime, endTime, orderType);
+        List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, beginTime, endTime, orderType,payType);
         return new PageResultDto<BalanceLog>(balanceLogs);
     }
 

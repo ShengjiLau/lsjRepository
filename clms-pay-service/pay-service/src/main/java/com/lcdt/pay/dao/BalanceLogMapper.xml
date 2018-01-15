@@ -68,22 +68,27 @@
   </select>
 
   <select id="selectByCompanyId" resultMap="BaseResultMap">
-    select balance_log_id, log_type, current_balance, amount, log_time, log_no, log_des,
-    log_username,company_id,order_id
-    from balance_log
-    where company_id = #{companyId}
+    select b.*
+    from balance_log b
+    left join pay_order p on p.order_id = b.order_id
+    where b.company_id = #{companyId}
 
     <if test="orderType != null">
-      and log_type = #{orderType,jdbcType=INTEGER}
+      and b.log_type = #{orderType,jdbcType=INTEGER}
     </if>
 
     <if test="beginTime != null">
-      and log_time &gt;= #{beginTime,jdbcType=TIMESTAMP}
+      and b.log_time &gt;= #{beginTime,jdbcType=TIMESTAMP}
     </if>
 
     <if test="endTime != null">
-      and log_time &lt;=  #{endTime,jdbcType=TIMESTAMP}
+      and b.log_time &lt;=  #{endTime,jdbcType=TIMESTAMP}
     </if>
+    <if test="payType != null">
+      and p.pay_type = #{payType,jdbcType=INTEGER}
+
+    </if>
+
 
 
   </select>
