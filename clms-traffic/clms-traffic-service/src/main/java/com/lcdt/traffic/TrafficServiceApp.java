@@ -16,10 +16,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 @Import({com.lcdt.swagger.SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class})
-@DubboComponentScan(basePackages = "com.lcdt.customer.rpcservice")
+@DubboComponentScan(basePackages = "com.lcdt.customer.rpcservice,com.lcdt.traffic.rpc.impl")
 @EnableClmsSecurity
 public class TrafficServiceApp {
     public static void main(String[] args) {
         ConfigurableApplicationContext run = new SpringApplicationBuilder().sources(TrafficServiceApp.class).run(args);
     }
+
 }

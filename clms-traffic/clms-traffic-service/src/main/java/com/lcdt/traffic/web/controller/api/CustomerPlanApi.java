@@ -11,7 +11,6 @@ import com.lcdt.traffic.model.SnatchGoods;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.CustomerPlanService;
 import com.lcdt.traffic.service.PlanService;
-import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
@@ -43,6 +42,7 @@ public class CustomerPlanApi {
 
     @Autowired
     private PlanService planService;
+
 
 
 
@@ -502,6 +502,7 @@ public class CustomerPlanApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_offer_load_data')")
     public WaybillPlan customerPlanOfferOwner(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
                                             @ApiParam(value = "创建计划企业ID",required = true) @RequestParam Long companyId) {
+
         WaybillParamsDto dto = new WaybillParamsDto();
         dto.setCompanyId(companyId);
         dto.setWaybillPlanId(waybillPlanId);
