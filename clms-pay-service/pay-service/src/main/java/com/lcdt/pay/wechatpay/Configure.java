@@ -1,9 +1,13 @@
 package com.lcdt.pay.wechatpay;
 
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 /**
  * 这里放置各种配置数据
  */
+@Component
 public class Configure {
 //这个就是自己要保管好的私有Key了（切记只能放在自己的后台代码里，不能放在任何可能被看到源代码的客户端程序中）
 	// 每次自己Post数据给API的时候都要用这个key来对所有字段进行签名，生成的签名会放在Sign这个字段，API收到Post数据的时候也会用同样的签名算法对Post过来的数据进行签名和验证
@@ -62,10 +66,19 @@ public class Configure {
 	
 	//7) 统一下单api
 	public static String UNIFIEDORDER_API = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-//	public static String NOTIFY_URL = "https://erp.cangkuguanjia.com/pay/WeixinpayNotifyUrl";
+
+	@Value("${wechatpay_notifyurl}")
 	public static String NOTIFY_URL = "https://tms.datuodui.com/pay/WeixinpayNotifyUrl";//异步回调url ip需外网能访问
 
-	public static boolean isUseThreadToDoReport() {
+    public static String getNotifyUrl() {
+        return NOTIFY_URL;
+    }
+
+    public static void setNotifyUrl(String notifyUrl) {
+        NOTIFY_URL = notifyUrl;
+    }
+
+    public static boolean isUseThreadToDoReport() {
 		return useThreadToDoReport;
 	}
 

@@ -57,19 +57,19 @@
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select balance_log_id, log_type, current_balance, amount, log_time, log_no, log_des, 
-    log_username,company_id
+    log_username,company_id,order_id
     from balance_log
     where balance_log_id = #{balanceLogId,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select balance_log_id, log_type, current_balance, amount, log_time, log_no, log_des, 
-    log_username,company_id
+    log_username,company_id,order_id
     from balance_log
   </select>
 
   <select id="selectByCompanyId" resultMap="BaseResultMap">
     select balance_log_id, log_type, current_balance, amount, log_time, log_no, log_des,
-    log_username,company_id
+    log_username,company_id,order_id
     from balance_log
     where company_id = #{companyId}
 
