@@ -74,6 +74,7 @@
   <resultMap id="BaseWaybillDaoMap" type="com.lcdt.traffic.model.WaybillDao" extends="BaseResultMap">
     <collection property="waybillItemsList" column="id" ofType="com.lcdt.traffic.model.WaybillItems" select="com.lcdt.traffic.dao.WaybillItemsMapper.selectByWaybillId"/>
     <collection property="waybillTransferRecordList" column="id" ofType="com.lcdt.traffic.model.WaybillTransferRecord" select="com.lcdt.traffic.dao.WaybillTransferRecordMapper.selectByWaybillId"/>
+    <collection property="waybillPositionSettingList" column="id" ofType="com.lcdt.traffic.model.WaybillPositionSetting" select="com.lcdt.traffic.dao.WaybillPositionSettingMapper.selectByWaybillId"/>
   </resultMap>
   <resultMap id="BaseWaybillAndItems" type="com.lcdt.traffic.model.WaybillDao" extends="BaseResultMap">
     <collection property="waybillItemsList" column="id" ofType="com.lcdt.traffic.model.WaybillItems" select="com.lcdt.traffic.dao.WaybillItemsMapper.selectByWaybillId"/>
