@@ -131,10 +131,10 @@
                 #{item,jdbcType=BIGINT}
             </foreach>
         </if>
-        <if test="planType==0">
+        <if test="waybillType==0">
             and carrier_company_id=company_id
         </if>
-        <if test="planType==1">
+        <if test="waybillType==1">
             and carrier_company_id!=company_id
         </if>
         ) a
