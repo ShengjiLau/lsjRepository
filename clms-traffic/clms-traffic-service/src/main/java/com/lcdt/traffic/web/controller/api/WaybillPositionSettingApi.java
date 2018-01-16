@@ -6,7 +6,6 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.model.WaybillPositionSetting;
 import com.lcdt.traffic.service.WaybillPositionSettingService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
-import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillPositionSettingDto;
 import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.Api;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import sun.jvm.hotspot.debugger.Page;
 
 import java.util.HashMap;
 import java.util.List;
