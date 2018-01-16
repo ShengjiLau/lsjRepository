@@ -9,6 +9,7 @@ import java.util.List;
 public class WaybillDao extends Waybill{
     List<WaybillItems> waybillItemsList;
     List<WaybillTransferRecord> waybillTransferRecordList;
+    List<WaybillPositionSetting> waybillPositionSettingList;
     public List<WaybillItems> getWaybillItemsList() {
         return waybillItemsList;
     }
@@ -23,5 +24,13 @@ public class WaybillDao extends Waybill{
 
     public void setWaybillTransferRecordList(List<WaybillTransferRecord> waybillTransferRecordList) {
         this.waybillTransferRecordList = waybillTransferRecordList;
+    }
+
+    public List<WaybillPositionSetting> getWaybillPositionSettingList() {
+        return waybillPositionSettingList;
+    }
+
+    public void setWaybillPositionSettingList(List<WaybillPositionSetting> waybillPositionSettingList) {
+        this.waybillPositionSettingList = waybillPositionSettingList;
     }
 }

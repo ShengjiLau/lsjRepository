@@ -1,8 +1,11 @@
 package com.lcdt.traffic.model;
 
+import com.lcdt.converter.ResponseData;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class WaybillPositionSetting {
+public class WaybillPositionSetting implements Serializable,ResponseData {
     private Long wpsId;
 
     private Long waybillId;

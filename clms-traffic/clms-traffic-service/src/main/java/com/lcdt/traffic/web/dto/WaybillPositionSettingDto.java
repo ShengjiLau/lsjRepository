@@ -1,5 +1,7 @@
 package com.lcdt.traffic.web.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 /**
@@ -7,36 +9,37 @@ import java.util.Date;
  */
 
 public class WaybillPositionSettingDto {
+    @ApiModelProperty(value = "运单定位设置Id（新增的时候不用填，修改的时候需要填）")
     private Long wpsId;
-
+    @ApiModelProperty(value = "运单ID")
     private Long waybillId;
-
+    @ApiModelProperty(value = "司机手机号")
     private String driverPhone;
-
+    @ApiModelProperty(value = "定位类型1、GPS定位" + "2、基站定位" + "3、GPS优先+基站定位")
     private Short wpsType;
-
+    @ApiModelProperty(value = "定位频率1、固定间隔" + "2、固定时间")
     private Short frequencyType;
-
+    @ApiModelProperty(value = "固定间隔")
     private Integer fixedInterval;
-
+    @ApiModelProperty(value = "固定时间")
     private String fixedTime;
-
+    @ApiModelProperty(value = "企业id（客户运单需要传运单的企业ID）")
     private Long companyId;
-
+    @ApiModelProperty(value = "承运人企业ID（我的运单需要传承运商的企业ID）")
     private Long carrierCompanyId;
-
+    @ApiModelProperty(value = "创建人ID",hidden = true)
     private Long createId;
-
+    @ApiModelProperty(value = "创建人名字",hidden = true)
     private String createName;
-
+    @ApiModelProperty(value = "创建时间",hidden = true)
     private Date createDate;
-
+    @ApiModelProperty(value = "更新人ID",hidden = true)
     private Long updateId;
-
+    @ApiModelProperty(value = "更新人名字",hidden = true)
     private String updateName;
-
+    @ApiModelProperty(value = "更新时间",hidden = true)
     private Date updateDate;
-
+    @ApiModelProperty(value = "是否删除",hidden = true)
     private Short isDeleted;
 
     public Long getWpsId() {
