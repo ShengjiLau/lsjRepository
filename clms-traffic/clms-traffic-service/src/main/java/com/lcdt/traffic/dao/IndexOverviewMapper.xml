@@ -23,12 +23,52 @@
                     #{item,jdbcType=BIGINT}
                 </foreach>
             </if>
-            <if test="pubdate!=null and pubdate!=''">
-                <![CDATA[
-              and pubdate >= #{pubdate,jdbcType=TIMESTAMP} and pubdate < #{pubdate1,jdbcType=TIMESTAMP}
-            ]]>
+            <if test="date_interval!=null and date_interval!=''">
+                and pubdate &lt;= CURDATE() and pubdate &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+            </if>
+            <if test="pubdate_start!=null and pubdate_start!=''">
+              and pubdate &gt;= #{pubdate_start,jdbcType=TIMESTAMP} and pubdate &lt;= #{pubdate_end,jdbcType=TIMESTAMP}
             </if>
         </where>
+    </select>
+    <select id="selectPlanData" resultType="Map" parameterType="Map">
+        SELECT date(dday) t_date, count(*) - 1 as count
+        FROM
+        (
+            SELECT dt as dday
+            FROM t_date
+            where 1=1
+            <if test="date_interval!=null and date_interval!=''">
+                and date(dt) &lt;=CURDATE() and date(dt) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+            </if>
+            <if test="pubdate_start!=null and pubdate_start!=''">
+                and date(dt) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(dt) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+            </if>
+        UNION ALL
+            SELECT pubdate
+            FROM t_waybill_plan
+            where
+            company_id=#{companyId,jdbcType=BIGINT} and is_deleted=0
+            <if test="date_interval!=null and date_interval!=''">
+                and date(pubdate) &lt;= CURDATE() and date(pubdate) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+            </if>
+            <if test="pubdate_start!=null and pubdate_start!=''">
+                and date(pubdate) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(pubdate) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+            </if>
+            <if test="groupIds!=null and groupIds.size>0">
+                and group_id in
+                <foreach item="item" index="index" collection="groupIds" open="(" separator="," close=")">
+                    #{item,jdbcType=BIGINT}
+                </foreach>
+            </if>
+            <if test="planType==0">
+                and carrier_company_id=company_id
+            </if>
+            <if test="planType==1">
+                and carrier_company_id!=company_id
+            </if>
+        ) a
+        GROUP BY t_date
     </select>
     <select id="selectWaybill" resultType="Map" parameterType="Map">
         select sum(case when waybill_status=1 then 1 else 0 end) as daifahuo,
@@ -59,6 +99,45 @@
             ]]>
             </if>
         </where>
+    </select>
+    <select id="selectWaybillData" resultType="Map" parameterType="Map">
+        SELECT date(dday) t_date, count(*) - 1 as count
+        FROM
+        (
+        SELECT dt as dday
+        FROM t_date
+        where 1=1
+        <if test="date_interval!=null and date_interval!=''">
+            and date(dt) &lt;=CURDATE() and date(dt) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+        </if>
+        <if test="pubdate_start!=null and pubdate_start!=''">
+            and date(dt) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(dt) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+        </if>
+        UNION ALL
+        SELECT pub_date
+        FROM t_waybill
+        where
+        company_id=#{companyId,jdbcType=BIGINT} and is_deleted=0
+        <if test="date_interval!=null and date_interval!=''">
+            and date(pub_date) &lt;= CURDATE() and date(pub_date) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+        </if>
+        <if test="pubdate_start!=null and pubdate_start!=''">
+            and date(pub_date) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(pub_date) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+        </if>
+        <if test="groupIds!=null and groupIds.size>0">
+            and group_id in
+            <foreach item="item" index="index" collection="groupIds" open="(" separator="," close=")">
+                #{item,jdbcType=BIGINT}
+            </foreach>
+        </if>
+        <if test="planType==0">
+            and carrier_company_id=company_id
+        </if>
+        <if test="planType==1">
+            and carrier_company_id!=company_id
+        </if>
+        ) a
+        GROUP BY t_date
     </select>
     <select id="selectPlanAndWaybill" resultType="Map" parameterType="Long">
         select sum(case when (plan_status=15 or plan_status=20 or plan_status=30 or plan_status=40) then 1 else 0 end) as plan_waybill

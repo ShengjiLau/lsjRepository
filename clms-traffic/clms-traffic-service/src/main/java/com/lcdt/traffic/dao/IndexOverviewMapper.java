@@ -13,6 +13,13 @@ public interface IndexOverviewMapper {
      */
     Map<String,Object> selectPlan(Map map);
 
+    /**
+     * 计划统计详情数据
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> selectPlanData(Map map);
+
 
     /**
      * 运单统计
@@ -20,6 +27,13 @@ public interface IndexOverviewMapper {
      * @return
      */
     Map<String,Object> selectWaybill(Map map);
+
+    /**
+     * 运单统计详情数据
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> selectWaybillData(Map map);
 
     /**
      * 执行中的计划和在途运单统计
