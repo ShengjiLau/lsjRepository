@@ -15,5 +15,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.antMatcher("/alipay/notify").authorizeRequests().anyRequest().permitAll();
+        http.antMatcher("/wechatpaynotify").authorizeRequests().anyRequest().permitAll();
     }
 }

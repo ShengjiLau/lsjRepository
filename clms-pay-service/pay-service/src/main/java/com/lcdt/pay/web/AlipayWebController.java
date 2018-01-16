@@ -58,7 +58,8 @@ public class AlipayWebController {
 
     @Autowired
     WechatPayApi wechatPayApi;
-    
+
+
     /**
      * 新建一个充值订单
      * @return
@@ -125,6 +126,9 @@ public class AlipayWebController {
 
         String orderNo = parameterMap.get("out_trade_no");
         String tradeStatus = parameterMap.get("trade_status");
+
+        logger.info("接受支付宝 支付推送 交易订单号：{}  支付状态 {} ",orderNo,tradeStatus);
+
         if (!"TRADE_SUCCESS".equals(tradeStatus)) {
             return;
         }

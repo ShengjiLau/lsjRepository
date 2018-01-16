@@ -99,7 +99,6 @@
   </select>
 
   <select id="selectPayOrderByProductName" resultMap="BaseResultMap">
-
     select order_id, order_type, order_amount, create_time, order_pay_user_id, order_pay_company_id,
     order_status, order_no,order_product_id,pay_type,create_user_name,order_des,balance
     from pay_order p left join service_product s
@@ -107,7 +106,8 @@
     WHERE order_pay_company_id = #{companyId,jdbcType=BIGINT}
     and order_type = 2
     <if test="productName != null and productName != '' ">
-      and s.product_service like '%'||#{productName,jdbcType=VARCHAR}||'%'
+      <bind name="pattern" value="'%' + productName + '%'" />
+      and s.product_name like #{pattern}
     </if>
 
     <if test="beginTime != null">

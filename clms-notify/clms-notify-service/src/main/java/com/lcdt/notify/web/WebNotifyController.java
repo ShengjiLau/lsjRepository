@@ -9,14 +9,18 @@ import com.lcdt.notify.dao.WebMessageDao;
 import com.lcdt.notify.dao.WebMessageMapper;
 import com.lcdt.notify.model.WebMessage;
 import com.lcdt.notify.webnotify.MessageService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController()
 @RequestMapping("/api/webmessages")
+@Api("网页通知轮寻接口")
 public class WebNotifyController {
 
 
@@ -31,7 +35,8 @@ public class WebNotifyController {
     /**
      * 获取通知消息
      */
-    @RequestMapping("/list")
+    @ApiOperation("获取消息列表")
+    @RequestMapping(value = "/list",method = RequestMethod.GET)
     public PageResultDto<WebMessage> messageList(Integer pageNo, Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
@@ -44,7 +49,8 @@ public class WebNotifyController {
     /**
      * 设置消息已读
      */
-    @RequestMapping("/read")
+    @ApiOperation("设置消息已读")
+    @RequestMapping(value = "/read",method = RequestMethod.GET)
     public WebMessage readMessage(Long messageId) {
         Long userId = SecurityInfoGetter.getUser().getUserId();
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -57,7 +63,8 @@ public class WebNotifyController {
     /**
      * 消息未读数
      */
-    @RequestMapping("/unreadcount")
+    @ApiOperation("获取消息未读数")
+    @RequestMapping(value = "/unreadcount",method = RequestMethod.GET)
     public String messageTotalNum() {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
@@ -74,7 +81,8 @@ public class WebNotifyController {
     /**
      * 删除消息
      */
-    @RequestMapping("/remove")
+    @ApiOperation("删除消息")
+    @RequestMapping(value = "/remove",method = RequestMethod.GET)
     public String removeMessage(Long messageId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();

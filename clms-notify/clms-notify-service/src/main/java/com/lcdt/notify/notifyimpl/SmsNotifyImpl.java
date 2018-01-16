@@ -1,5 +1,6 @@
 package com.lcdt.notify.notifyimpl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.lcdt.notify.dao.SmsLogMapper;
 import com.lcdt.notify.model.EventMetaData;
 import com.lcdt.notify.model.NotifyReceiver;
@@ -39,10 +40,10 @@ public class SmsNotifyImpl  {
     public static final String SMS_API = "http://160.19.212.218:8080/eums/utf8/send_strong.do";
     CloseableHttpClient httpClient = HttpClients.createDefault();
 
-    @Autowired
+    @Reference
     private ProductCountService productCountService;
 
-    @Autowired
+    @Reference
     SmsCountService smsCountService;
 
     public boolean sendSmsNotify(EventMetaData eventMetaData,String operateUsername, String content, String phoneNum, Long companyId) {

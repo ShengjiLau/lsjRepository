@@ -1,10 +1,10 @@
 package com.lcdt.notify.web;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.lcdt.notify.dao.SmsLogMapper;
 import com.lcdt.notify.model.SmsLog;
 import com.lcdt.pay.rpc.ProductCountService;
 import com.lcdt.pay.rpc.SmsCountService;
-import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,7 @@ public class SmsServiceReturnController {
     @Reference
     SmsCountService smsCountService;
 
-    @Autowired
+    @com.alibaba.dubbo.config.annotation.Reference
     ProductCountService productCountService;
 
     @RequestMapping("/smsreturn")
