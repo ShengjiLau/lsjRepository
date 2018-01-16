@@ -10,7 +10,6 @@ public interface SmsCountService {
 
     boolean checkSmsCount(Long companyId,Integer num);
 
-
     boolean checkProductCount(Long companyId,Integer num,String serviceName);
 
 }
