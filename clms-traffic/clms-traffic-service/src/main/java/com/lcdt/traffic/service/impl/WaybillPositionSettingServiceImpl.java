@@ -1,5 +1,6 @@
 package com.lcdt.traffic.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.WaybillPositionSettingMapper;
 import com.lcdt.traffic.model.Waybill;
@@ -8,6 +9,8 @@ import com.lcdt.traffic.service.WaybillPositionSettingService;
 import com.lcdt.traffic.web.dto.WaybillPositionSettingDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +18,8 @@ import java.util.Map;
 /**
  * Created by lyqishan on 2018/1/15
  */
-
+@Transactional
+@Service
 public class WaybillPositionSettingServiceImpl implements WaybillPositionSettingService{
 
     @Autowired
@@ -33,12 +37,12 @@ public class WaybillPositionSettingServiceImpl implements WaybillPositionSetting
     public int modifyWaybillPositionSetting(WaybillPositionSettingDto dto) {
         WaybillPositionSetting waybillPositionSetting=new WaybillPositionSetting();
         BeanUtils.copyProperties(dto,waybillPositionSetting);
-        return waybillPositionSettingMapper.updateByPrimaryKey(waybillPositionSetting);
+        return waybillPositionSettingMapper.updateByWpsIdAndXCompanyId(waybillPositionSetting);
     }
 
     @Override
     public WaybillPositionSetting queryWaybillPositionSetting(Map map) {
-        return null;
+        return waybillPositionSettingMapper.selectByWpsIdAndXCompanyId(map);
     }
 
     @Override
@@ -57,6 +61,9 @@ public class WaybillPositionSettingServiceImpl implements WaybillPositionSetting
                 pageSize = (Integer) map.get("pageSize");
             }
         }
-        return null;
+        PageHelper.startPage(pageNo,pageSize);
+        resultList=waybillPositionSettingMapper.selectByWaybillIdAndXCompanyId(map);
+        page=new PageInfo(resultList);
+        return page;
     }
 }
