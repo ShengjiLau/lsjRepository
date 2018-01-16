@@ -27,12 +27,36 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
 
     @Override
     public Map planStatistics(Map map) {
-        return indexOverviewMapper.selectPlan(map);
+        Map<String,Object> map1 = indexOverviewMapper.selectPlan(map);  //总的统计
+        if (null == map1) {
+            map1 = new HashMap<>();
+            map1.put("paidanzhong", 0);
+            map1.put("jingjiazhong", 0);
+            map1.put("yipaidan", 0);
+            map1.put("yipaiche", 0);
+            map1.put("yiwancheng", 0);
+        }
+        List<Map<String,Object>> mapList = indexOverviewMapper.selectPlanData(map);     //统计详情查询用来做折线的数据
+        map1.put("detail",mapList);
+        return map1;
     }
 
     @Override
     public Map waybillStatistics(Map map) {
-        return indexOverviewMapper.selectWaybill(map);
+        Map<String,Object> map1 = indexOverviewMapper.selectWaybill(map);
+        if (null == map1) {
+            map1 = new HashMap<>();
+            map1.put("daifahuo", 0);
+            map1.put("yiruchang", 0);
+            map1.put("yichuku", 0);
+            map1.put("yunshuzhong", 0);
+            map1.put("yixiehuo", 0);
+            map1.put("yiqianshou", 0);
+            map1.put("yiwancheng", 0);
+        }
+        List<Map<String,Object>> mapList = indexOverviewMapper.selectWaybillData(map);     //统计详情查询用来做折线的数据
+        map1.put("detail",mapList);
+        return map1;
     }
 
     @Override

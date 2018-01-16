@@ -40,26 +40,22 @@ public class IndexOverviewApi {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Map map = (Map) JSON.parseObject(param);
         String ids = map.get("groupIds") != null && map.get("groupIds") != "" ? map.get("groupIds").toString() : "";
-        String[] idArr = ids.split(",");
-        List groupIds = Arrays.asList(idArr);
         map.put("companyId", companyId);
-        map.put("groupIds", groupIds);
+        if(!"".equals(ids)){
+            String[] idArr = ids.split(",");
+            List groupIds = Arrays.asList(idArr);
+            map.put("groupIds", groupIds);
+        }
         JSONObject jsonObject = new JSONObject();
         try {
             Map<String, Object> resultMap = indexOverviewService.planStatistics(map);
-            if (null == resultMap) {
-                resultMap = new HashMap<>();
-                resultMap.put("paidanzhong", 0);
-                resultMap.put("jingjiazhong", 0);
-                resultMap.put("yipaidan", 0);
-                resultMap.put("yipaiche", 0);
-                resultMap.put("yiwancheng", 0);
-            }
+
             JSONObject jsonResult = new JSONObject(resultMap);
             jsonObject.put("code", 0);
             jsonObject.put("message", "查询成功");
             jsonObject.put("data", jsonResult);
         } catch (Exception e) {
+            e.printStackTrace();
             jsonObject.put("code", -1);
             jsonObject.put("message", new RuntimeException(e));
         }
@@ -73,23 +69,16 @@ public class IndexOverviewApi {
         Long companyId = SecurityInfoGetter.getCompanyId();      //  获取companyId
         Map map = (Map) JSON.parseObject(param);
         String ids = map.get("groupIds") != null && map.get("groupIds") != "" ? map.get("groupIds").toString() : "";
-        String[] idArr = ids.split(",");
-        List groupIds = Arrays.asList(idArr);
         map.put("companyId", companyId);
-        map.put("groupIds", groupIds);
+        if(!"".equals(ids)){
+            String[] idArr = ids.split(",");
+            List groupIds = Arrays.asList(idArr);
+            map.put("groupIds", groupIds);
+        }
         JSONObject jsonObject = new JSONObject();
         try {
             Map<String, Object> resultMap = indexOverviewService.waybillStatistics(map);
-            if (null == resultMap) {
-                resultMap = new HashMap<>();
-                resultMap.put("daifahuo", 0);
-                resultMap.put("yiruchang", 0);
-                resultMap.put("yichuku", 0);
-                resultMap.put("yunshuzhong", 0);
-                resultMap.put("yixiehuo", 0);
-                resultMap.put("yiqianshou", 0);
-                resultMap.put("yiwancheng", 0);
-            }
+
             JSONObject jsonResult = new JSONObject(resultMap);
             jsonObject.put("code", 0);
             jsonObject.put("message", "查询成功");

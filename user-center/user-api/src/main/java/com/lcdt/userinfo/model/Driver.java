@@ -52,6 +52,8 @@ public class Driver implements Serializable,ResponseData {
 
     private Short gpsStatus;
 
+    private Date locationTime;
+
     private Long createId;
 
     private String createName;
@@ -248,6 +250,14 @@ public class Driver implements Serializable,ResponseData {
 
     public void setGpsStatus(Short gpsStatus) {
         this.gpsStatus = gpsStatus;
+    }
+
+    public Date getLocationTime() {
+        return locationTime;
+    }
+
+    public void setLocationTime(Date locationTime) {
+        this.locationTime = locationTime;
     }
 
     public Long getCreateId() {

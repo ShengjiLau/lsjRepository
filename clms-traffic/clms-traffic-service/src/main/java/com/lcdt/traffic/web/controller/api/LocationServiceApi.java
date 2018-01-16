@@ -14,8 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.tl.commons.util.DateUtility;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -72,19 +74,20 @@ public class LocationServiceApi {
         logger.debug("driverPhone:" + mobile);
         Driver driver = new Driver();
         driver.setGpsStatus(new Short("1"));
+        driver.setDriverPhone(mobile);
         JSONObject jsonObject = new JSONObject();
         try {
             int row = driverService.modGpsStatus(driver);
             if(row>0){
                 jsonObject.put("code", 0);
-                jsonObject.put("message", "开通成功");
+                jsonObject.put("msg", "开通成功");
             }else{
                 jsonObject.put("code", -1);
-                jsonObject.put("message", "该司机不存在");
+                jsonObject.put("msg", "该司机不存在");
             }
         } catch (Exception e) {
             jsonObject.put("code", -1);
-            jsonObject.put("message", "操作失败");
+            jsonObject.put("msg", "操作失败");
         }
         return jsonObject;
     }
@@ -171,6 +174,7 @@ public class LocationServiceApi {
             driverService.updateLocation(driver);
             jsonObject.put("code", resid);
             jsonObject.put("location",result.getString("location"));
+            jsonObject.put("locationTime", DateUtility.getCurrDatetime());
             jsonObject.put("msg", "查询成功");
         } else if (resid == -80) {    //	余额不足,请充值:请联系客服
             jsonObject.put("code", resid);
