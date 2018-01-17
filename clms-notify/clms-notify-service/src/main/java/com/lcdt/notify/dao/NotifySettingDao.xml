@@ -3,7 +3,7 @@
 <mapper namespace="com.lcdt.notify.dao.NotifySettingDao">
 
 
-    <select id="selectByNotifyAndCompany" resultMap="com.lcdt.notify.dao.NotifySettingMapper.BaseResultMap">
+    <select id="selectByNotifyAndCompany" resultMap="com.lcdt.notify.dao.CompanyNotifySettingMapper.BaseResultMap">
         SELECT * from company_notify_setting
         where company_id = #{companyId}
         and notify_id = #{notifyId}

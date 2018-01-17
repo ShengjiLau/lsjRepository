@@ -19,18 +19,19 @@ public class MessageService {
     @Autowired
     WebMessageDao webMessageDao;
 
-    public void createWebMessage(String content,Long receiveCompanyId,Long receiverUserId,String url){
+    public void createWebMessage(String category,String content,Long receiveCompanyId,Long receiverUserId,String url){
         WebMessage webMessage = new WebMessage();
         webMessage.setMessageContent(content);
         webMessage.setMessageReceiveCompanyId(receiveCompanyId);
         webMessage.setMessageReceiveUserId(receiverUserId);
         webMessage.setMessageIsread(false);
         webMessage.setMessageAttachUrl(url);
+        webMessage.setMessageCategory(category);
         webMessageMapper.insert(webMessage);
     }
 
-    public List<WebMessage> messages(Long companyId,Long userId){
-        List<WebMessage> webMessages = webMessageDao.selectUnReadMessage(companyId, userId);
+    public List<WebMessage> messages(Long companyId,Long userId,String category){
+        List<WebMessage> webMessages = webMessageDao.selectUnReadMessage(companyId, userId,category);
         return webMessages;
     }
 
