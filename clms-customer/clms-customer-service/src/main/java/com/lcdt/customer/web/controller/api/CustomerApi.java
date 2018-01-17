@@ -402,6 +402,8 @@ public class CustomerApi {
         return jsonObject.toString();
     }
 
+
+
     @ApiOperation("客户组(竞价)列表")
     @RequestMapping(value = "/customerCollectionList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
@@ -413,11 +415,51 @@ public class CustomerApi {
         map.put("page_no", pageNo);
         map.put("page_size", pageSize);
         PageInfo pageInfo = customerService.customerCollectionList(map);
+        if(pageInfo.getTotal()>0) {
+            List<CustomerCollection> customerCollections = pageInfo.getList();
+            for (CustomerCollection obj :customerCollections) {
+                 List<Customer> customerList = getCustomerList(obj.getCollectionId());
+                 obj.setCustomerList(customerList);
+            }
+        }
         CustomerListResultDto dto = new CustomerListResultDto();
         dto.setCustomerCollectionList(pageInfo.getList());
         dto.setTotal(pageInfo.getTotal());
         return dto;
     }
+
+
+    /***
+     * 获取组内所有客户
+     * @return
+     */
+    private List<Customer>  getCustomerList(Long collectionIds) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", 1);
+        map.put("page_size", 0);
+         //1-销售客户2-仓储客户3-运输客户4-仓储服务商5-运输服务商6-供应商7-其他
+        StringBuffer sb = new StringBuffer();
+        sb.append("(");
+        sb.append(" find_in_set('5',client_types)");
+        sb.append(")");
+        map.put("customerType", sb.toString());
+
+        //竞价(抢单用)
+        sb = new StringBuffer();
+        sb.append("(");
+        sb.append(" find_in_set('"+collectionIds+"',collection_ids)");
+        sb.append(")");
+        map.put("collectionIds", sb.toString());
+        PageInfo pageInfo = customerService.customerList(map);
+        if(pageInfo.getTotal()>0)
+            return pageInfo.getList();
+        else
+            return null;
+    }
+
+
 
 
     /**

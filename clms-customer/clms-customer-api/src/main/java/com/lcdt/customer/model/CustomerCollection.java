@@ -3,6 +3,7 @@ package com.lcdt.customer.model;
 import com.lcdt.converter.ResponseData;
 
 import java.util.Date;
+import java.util.List;
 
 public class CustomerCollection implements java.io.Serializable,ResponseData {
     /**
@@ -69,6 +70,8 @@ public class CustomerCollection implements java.io.Serializable,ResponseData {
     }
 
     private String remark;
+
+    private List<Customer> customerList;
 
 
 
@@ -214,5 +217,13 @@ public class CustomerCollection implements java.io.Serializable,ResponseData {
      */
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public List<Customer> getCustomerList() {
+        return customerList;
+    }
+
+    public void setCustomerList(List<Customer> customerList) {
+        this.customerList = customerList;
     }
 }

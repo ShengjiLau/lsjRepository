@@ -93,10 +93,11 @@
                     #{item,jdbcType=BIGINT}
                 </foreach>
             </if>
-            <if test="pubdate!=null and pubdate!=''">
-                <![CDATA[
-              and pub_date >= #{pubdate,jdbcType=TIMESTAMP} and pub_date < #{pubdate1,jdbcType=TIMESTAMP}
-            ]]>
+            <if test="date_interval!=null and date_interval!=''">
+                and pub_date &lt;= CURDATE() and pub_date &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+            </if>
+            <if test="pubdate_start!=null and pubdate_start!=''">
+                and pub_date &gt;= #{pubdate_start,jdbcType=TIMESTAMP} and pub_date &lt;= #{pubdate_end,jdbcType=TIMESTAMP}
             </if>
         </where>
     </select>
@@ -130,10 +131,10 @@
                 #{item,jdbcType=BIGINT}
             </foreach>
         </if>
-        <if test="planType==0">
+        <if test="waybillType==0">
             and carrier_company_id=company_id
         </if>
-        <if test="planType==1">
+        <if test="waybillType==1">
             and carrier_company_id!=company_id
         </if>
         ) a
