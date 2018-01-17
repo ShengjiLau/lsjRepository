@@ -17,6 +17,16 @@ public class WebMessage {
 
     private String messageAttachUrl;
 
+    private String messageCategory;
+
+    public String getMessageCategory() {
+        return messageCategory;
+    }
+
+    public void setMessageCategory(String messageCategory) {
+        this.messageCategory = messageCategory;
+    }
+
     public Long getMessageId() {
         return messageId;
     }

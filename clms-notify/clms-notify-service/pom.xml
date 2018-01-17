@@ -16,6 +16,12 @@
 
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-response-converter</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-pay-api</artifactId>
             <version>1.0</version>
         </dependency>

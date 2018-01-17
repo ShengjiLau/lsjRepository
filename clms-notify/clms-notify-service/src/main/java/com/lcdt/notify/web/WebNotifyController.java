@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -37,11 +38,11 @@ public class WebNotifyController {
      */
     @ApiOperation("获取消息列表")
     @RequestMapping(value = "/list",method = RequestMethod.GET)
-    public PageResultDto<WebMessage> messageList(Integer pageNo, Integer pageSize) {
+    public PageResultDto<WebMessage> messageList(@RequestParam(required = false) String messageCategory,Integer pageNo, Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
         PageHelper.startPage(pageNo, pageSize);
-        List<WebMessage> webMessages = webMessageDao.selectUnReadMessage(companyId, userId);
+        List<WebMessage> webMessages = webMessageDao.selectUnReadMessage(companyId, userId,messageCategory);
         return new PageResultDto(webMessages);
     }
 
@@ -65,13 +66,14 @@ public class WebNotifyController {
      */
     @ApiOperation("获取消息未读数")
     @RequestMapping(value = "/unreadcount",method = RequestMethod.GET)
-    public String messageTotalNum() {
+    public String messageTotalNum(@RequestParam(required = false) String messageCategory) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
-        Integer integer = webMessageDao.unreadMessageCount(companyId, userId);
+        Integer integer = webMessageDao.unreadMessageCount(companyId, userId,messageCategory);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", 0);
         jsonObject.put("message", "获取成功");
+        jsonObject.put("data", integer);
         return jsonObject.toString();
     }
 
