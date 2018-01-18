@@ -9,6 +9,9 @@
     WHERE message_isread = 0
     and message_receive_company_id = #{companyId}
     and message_receive_user_id = #{userId}
+        <if test="messageCategory != null and messageCategory != '' ">
+            and message_category = #{messageCategory}
+        </if>
     </select>
 
 
@@ -25,7 +28,9 @@
         WHERE
         message_receive_company_id = #{companyId,jdbcType=BIGINT}
       and message_receive_user_id = #{userId,jdbcType = BIGINT}
-
+      <if test="messageCategory != null and messageCategory != '' ">
+          and message_category = #{messageCategory}
+      </if>
     </select>
 
     <delete id="removeMessage" >

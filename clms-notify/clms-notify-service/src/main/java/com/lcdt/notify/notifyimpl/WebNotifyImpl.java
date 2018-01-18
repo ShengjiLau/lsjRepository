@@ -19,9 +19,9 @@ public class WebNotifyImpl{
     /**
      * 通知
      */
-    public boolean sendWebNotify(String content, NotifyReceiver receiver,String url){
+    public boolean sendWebNotify(String webMessageCategory,String content, NotifyReceiver receiver,String url){
         logger.info("发送web通知 >>> {} >>> userId:{} companyId:{}", content, receiver.getCompanyId(), receiver.getUserId());
-        messageService.createWebMessage(content,receiver.getCompanyId(),receiver.getUserId(),url);
+        messageService.createWebMessage(webMessageCategory,content,receiver.getCompanyId(),receiver.getUserId(),url);
         return true;
     }
 

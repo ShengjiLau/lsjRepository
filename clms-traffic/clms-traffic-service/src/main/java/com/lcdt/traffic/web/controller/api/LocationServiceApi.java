@@ -2,7 +2,9 @@ package com.lcdt.traffic.web.controller.api;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.service.OwnDriverService;
+import com.lcdt.traffic.util.BalanceCheckBo;
 import com.lcdt.traffic.util.GprsLocationBo;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.userinfo.model.Driver;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.tl.commons.util.DateUtility;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,10 +34,13 @@ public class LocationServiceApi {
     Logger logger = LoggerFactory.getLogger(LoggerFactory.class);
 
     @Reference
-    private DriverService driverService;
+    public DriverService driverService;
 
     @Autowired
     private OwnDriverService ownDriverService;
+
+    @Autowired
+    private BalanceCheckBo balanceCheckBo;
 
     @ApiOperation(value = "定位激活回调地址", notes = "用来接收基站定位第三方发送的回调信息（无任何权限控制）")
     @GetMapping("/callback")
@@ -76,6 +80,12 @@ public class LocationServiceApi {
         driver.setGpsStatus(new Short("1"));
         driver.setDriverPhone(mobile);
         JSONObject jsonObject = new JSONObject();
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        if(!balanceCheckBo.check(companyId)){
+            jsonObject.put("code", -1);
+            jsonObject.put("msg", "余额不足！请充值！");
+            return jsonObject;
+        }
         try {
             int row = driverService.modGpsStatus(driver);
             if(row>0){
@@ -97,6 +107,12 @@ public class LocationServiceApi {
     public JSONObject queryStatus(String mobile) {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        if(!balanceCheckBo.check(companyId)){
+            jsonObject.put("code", -1);
+            jsonObject.put("msg", "余额不足！请充值！");
+            return jsonObject;
+        }
         JSONObject result = GprsLocationBo.getInstance().authStatus(mobile);
         int resid = result.getInteger("resid");
         if (resid == 1) {   //白名单且已开通定位，更新本地数据库定位状态为2
@@ -124,6 +140,12 @@ public class LocationServiceApi {
     public JSONObject authOpen(String mobile) {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        if(!balanceCheckBo.check(companyId)){
+            jsonObject.put("code", -1);
+            jsonObject.put("msg", "余额不足！请充值！");
+            return jsonObject;
+        }
         JSONObject result = GprsLocationBo.getInstance().authOpen(mobile);
         int resid = result.getInteger("resid");
         if (resid == 0) {   //白名单开通成功，请通知用户回复短信小写的y
@@ -164,6 +186,12 @@ public class LocationServiceApi {
     public JSONObject queryLocation(String mobile) {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        if(!balanceCheckBo.check(companyId)){
+            jsonObject.put("code", -1);
+            jsonObject.put("msg", "余额不足！请充值！");
+            return jsonObject;
+        }
         JSONObject result = GprsLocationBo.getInstance().queryLocation(mobile);
         int resid = result.getInteger("resid");
         if (resid == 0) {   //正确返回
