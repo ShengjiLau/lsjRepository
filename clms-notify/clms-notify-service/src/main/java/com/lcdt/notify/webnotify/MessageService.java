@@ -30,10 +30,6 @@ public class MessageService {
         webMessageMapper.insert(webMessage);
     }
 
-    public List<WebMessage> messages(Long companyId,Long userId,String category){
-        List<WebMessage> webMessages = webMessageDao.selectUnReadMessage(companyId, userId,category);
-        return webMessages;
-    }
 
     public void readMessage(Long messageId,Long companyId,Long userId){
         webMessageDao.setReadMessage(messageId,companyId,userId);

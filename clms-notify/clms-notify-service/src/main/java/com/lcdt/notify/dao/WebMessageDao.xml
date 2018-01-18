@@ -6,11 +6,14 @@
       select message_id, message_content, message_create_time, message_receive_user_id,
         message_receive_company_id, message_isread
     from web_message
-    WHERE message_isread = 0
-    and message_receive_company_id = #{companyId}
+    WHERE
+     message_receive_company_id = #{companyId}
     and message_receive_user_id = #{userId}
         <if test="messageCategory != null and messageCategory != '' ">
             and message_category = #{messageCategory}
+        </if>
+        <if test="isread != null">
+            and message_isread = #{isread}
         </if>
     </select>
 
@@ -19,7 +22,7 @@
       update web_message
       set message_isread = 1
       where message_receive_company_id = #{companyId,jdbcType=BIGINT}
-      ,message_receive_user_id = #{userId,jdbcType = BIGINT}
+      and message_receive_user_id = #{userId,jdbcType = BIGINT}
       and message_id = #{messageId,jdbcType=BIGINT}
     </update>
 
@@ -31,6 +34,9 @@
       <if test="messageCategory != null and messageCategory != '' ">
           and message_category = #{messageCategory}
       </if>
+        <if test="isread != null">
+            and message_isread = #{isread}
+        </if>
     </select>
 
     <delete id="removeMessage" >
@@ -38,7 +44,7 @@
         DELETE from web_message
 
         where message_receive_company_id = #{companyId,jdbcType=BIGINT}
-      ,message_receive_user_id = #{userId,jdbcType = BIGINT}
+      and message_receive_user_id = #{userId,jdbcType = BIGINT}
       and message_id = #{messageId,jdbcType=BIGINT}
 
     </delete>

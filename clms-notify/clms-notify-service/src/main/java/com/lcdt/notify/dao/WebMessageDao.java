@@ -7,15 +7,16 @@ import java.util.List;
 
 public interface WebMessageDao {
 
-    List<WebMessage> selectUnReadMessage(@Param("companyId") Long companyId,@Param("userId") Long userId,@Param("message_category")
-                                         String messageCategory
+    List<WebMessage> selectUnReadMessage(@Param("companyId") Long companyId,@Param("userId") Long userId,@Param("messageCategory")
+                                         String messageCategory,@Param("isread") Integer isRead
                                          );
 
     void setReadMessage(@Param("messageId") Long messageId,@Param("companyId") Long companyId
     ,@Param("userId") Long userId);
 
-    Integer unreadMessageCount(@Param("companyId") Long companyId, @Param("userId") Long userId,@Param("message_category")
-            String messageCategory);
+    Integer unreadMessageCount(@Param("companyId") Long companyId, @Param("userId") Long userId,@Param("messageCategory")
+            String messageCategory,@Param("isread")Integer isread);
+
 
     void removeMessage(@Param("messageId") Long messageId,@Param("companyId") Long companyId, @Param("userId") Long userId);
 

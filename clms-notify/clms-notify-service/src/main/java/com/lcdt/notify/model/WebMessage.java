@@ -1,8 +1,10 @@
 package com.lcdt.notify.model;
 
+import com.lcdt.converter.ResponseData;
+
 import java.util.Date;
 
-public class WebMessage {
+public class WebMessage implements ResponseData{
     private Long messageId;
 
     private String messageContent;

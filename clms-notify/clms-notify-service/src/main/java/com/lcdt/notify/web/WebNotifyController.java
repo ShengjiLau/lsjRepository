@@ -38,11 +38,11 @@ public class WebNotifyController {
      */
     @ApiOperation("获取消息列表")
     @RequestMapping(value = "/list",method = RequestMethod.GET)
-    public PageResultDto<WebMessage> messageList(@RequestParam(required = false) String messageCategory,Integer pageNo, Integer pageSize) {
+    public PageResultDto<WebMessage> messageList(@RequestParam(required = false) String messageCategory,Integer pageNo, Integer pageSize,@RequestParam(required = false)Integer isread) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
         PageHelper.startPage(pageNo, pageSize);
-        List<WebMessage> webMessages = webMessageDao.selectUnReadMessage(companyId, userId,messageCategory);
+        List<WebMessage> webMessages = webMessageDao.selectUnReadMessage(companyId, userId,messageCategory,isread);
         return new PageResultDto(webMessages);
     }
 
@@ -66,10 +66,10 @@ public class WebNotifyController {
      */
     @ApiOperation("获取消息未读数")
     @RequestMapping(value = "/unreadcount",method = RequestMethod.GET)
-    public String messageTotalNum(@RequestParam(required = false) String messageCategory) {
+    public String messageTotalNum(@RequestParam(required = false) String messageCategory,@RequestParam(required = false) Integer isread) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
-        Integer integer = webMessageDao.unreadMessageCount(companyId, userId,messageCategory);
+        Integer integer = webMessageDao.unreadMessageCount(companyId, userId,messageCategory,isread);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", 0);
         jsonObject.put("message", "获取成功");

@@ -60,6 +60,7 @@ public class InviteCustomerService {
 		customerInviteLog.setInviteToken(uuidToken());
 		inviteLogdao.insert(customerInviteLog);
 		String clientTypes = customer.getClientTypes();
+		clientTypes = clientTypeToString(clientTypes);
 		String content = resolveInviteEmailContent(customer.getCustomerName(), inviteUser.getRealName(), inviteCompany.getShortName(),
 				clientTypes,beInvitedUrl(customerInviteLog.getInviteId(),customerInviteLog.getInviteToken()));
 		InviteDto inviteDto = new InviteDto();
