@@ -94,6 +94,7 @@ public class CustomerBindApi {
 		return successView;
 	}
 
+
 	@ApiOperation("绑定客户页面")
 	@RequestMapping(value = "/customerlist",method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('bindCustomer') or hasRole('ROLE_SYS_ADMIN')")
