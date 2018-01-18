@@ -9,12 +9,16 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <name>traffic-service</name>
     <artifactId>clms-traffic-service</artifactId>
     <dependencies>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-traffic-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-pay-api</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
