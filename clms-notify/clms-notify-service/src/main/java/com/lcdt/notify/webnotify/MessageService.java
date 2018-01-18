@@ -35,4 +35,7 @@ public class MessageService {
         webMessageDao.setReadMessage(messageId,companyId,userId);
     }
 
+    public void readMessages(List messages,Long companyId,Long userId){
+        webMessageDao.readMessages(messages,companyId,userId);
+    }
 }

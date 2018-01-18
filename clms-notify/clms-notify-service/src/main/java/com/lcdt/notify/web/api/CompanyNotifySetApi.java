@@ -7,6 +7,7 @@ import com.lcdt.notify.model.CompanyNotifySetting;
 import com.lcdt.notify.service.NotifyService;
 import com.lcdt.notify.web.PageResultDto;
 import com.lcdt.notify.web.dto.NotifySetDto;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ public class CompanyNotifySetApi {
     /**
      * 获取通知设置列表
      */
+    @ApiOperation("返回设置通知列表")
     @RequestMapping("/list")
     public PageResultDto<NotifySetDto> alltemplateSetting(String category, Integer pageNo, Integer pageSize){
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -34,7 +36,7 @@ public class CompanyNotifySetApi {
         return new PageResultDto<NotifySetDto>(notifySetDtos);
     }
 
-
+    @ApiOperation("短信通知开关")
     @RequestMapping("/toggersms")
     public CompanyNotifySetting customeNotifyTemplate(Long notifyId,boolean isEnable) {
         Long companyId = SecurityInfoGetter.getCompanyId();

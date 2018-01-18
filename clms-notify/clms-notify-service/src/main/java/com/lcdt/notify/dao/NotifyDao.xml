@@ -18,12 +18,13 @@
    </select>
 
     <resultMap id="NotifySetDto" type="com.lcdt.notify.web.dto.NotifySetDto">
-        <id column="notify_id" jdbcType="BIGINT" property="NotifyId" />
+        <id column="notify_id" jdbcType="BIGINT" property="notifyId" />
         <result column="template_content" jdbcType="VARCHAR" property="templateContent" />
         <result column="template_create_time" jdbcType="TIMESTAMP" property="templateCreateTime" />
         <result column="template_parser_context_class" jdbcType="VARCHAR" property="templateParserContextClass" />
         <result column="template_event_name" jdbcType="VARCHAR" property="templateEventName" />
         <result column="template_name" jdbcType="VARCHAR" property="templateName" />
+        <result column="template_id" jdbcType="BIGINT" property="templateId" />
         <result column="default_enable_web" jdbcType="BIT" property="defaultEnableWeb" />
         <result column="default_enable_sms" jdbcType="BIT" property="defaultEnableSms" />
         <result column="content" jdbcType="VARCHAR" property="content" />
@@ -32,14 +33,14 @@
         <result column="receive_role" jdbcType="VARCHAR" property="receiveRole" />
 
         <result column="event_name" jdbcType="VARCHAR" property="eventName" />
-        <result column="event_show_name" jdbcType="VARCHAR" property="eventShowName" />
+        <result column="event_display_name" jdbcType="VARCHAR" property="eventShowName" />
         <result column="event_module_name" jdbcType="VARCHAR" property="eventModuleName" />
     </resultMap>
 
     <select id="selectNotifySetByCateGory" resultMap="NotifySetDto">
 SELECT *
 from notify n
-left join event_category ev
+left join event_meta ev
 on n.event_name = ev.event_name
 
 left join msg_template t
@@ -50,7 +51,10 @@ LEFT JOIN custome_notify_content c
 LEFT JOIN  company_notify_setting s
   on s.notify_id = n.notify_id
   and s.company_id = #{companyId}
-WHERE category = #{category,jdbcType=VARCHAR}
+  <if test="category != null and category != ''">
+      WHERE category = #{category,jdbcType=VARCHAR}
+  </if>
+
 
     </select>
 

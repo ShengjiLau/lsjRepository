@@ -20,4 +20,5 @@ public interface WebMessageDao {
 
     void removeMessage(@Param("messageId") Long messageId,@Param("companyId") Long companyId, @Param("userId") Long userId);
 
+    void readMessages(@Param("messageIds") List messageIds,@Param("companyId") Long companyId, @Param("userId") Long userId);
 }

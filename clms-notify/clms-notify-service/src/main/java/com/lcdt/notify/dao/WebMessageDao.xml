@@ -39,6 +39,20 @@
         </if>
     </select>
 
+    <update id="readMessages" >
+         update web_message
+      set message_isread = 1
+      where message_receive_company_id = #{companyId,jdbcType=BIGINT}
+      and message_receive_user_id = #{userId,jdbcType = BIGINT}
+      <if test="messageids != null">
+          and message_id in
+          <foreach item="item" index="index" collection="messageids" open="(" separator="," close=")">
+              #{item}
+          </foreach>
+      </if>
+    </update>
+
+
     <delete id="removeMessage" >
 
         DELETE from web_message

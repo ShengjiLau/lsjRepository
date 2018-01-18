@@ -12,12 +12,16 @@ import com.lcdt.notify.webnotify.MessageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import sun.util.locale.StringTokenIterator;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 @RestController()
 @RequestMapping("/api/webmessages")
@@ -58,6 +62,28 @@ public class WebNotifyController {
         messageService.readMessage(messageId,companyId,userId);
         WebMessage webMessage = mapper.selectByPrimaryKey(messageId);
         return webMessage;
+    }
+
+
+    @ApiOperation("批量设置消息已读")
+    @RequestMapping(value = "readmessages",method = RequestMethod.POST)
+    public String readMessages(String messageIds){
+        Long userId = SecurityInfoGetter.getUser().getUserId();
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        if (StringUtils.isEmpty(messageIds)) {
+            return null;
+        }
+        StringTokenizer stringTokenizer = new StringTokenizer(messageIds, ",", false);
+        ArrayList<String> strings = new ArrayList<>();
+
+        while (stringTokenizer.hasMoreElements()){
+            strings.add(String.valueOf(stringTokenizer.nextElement()));
+        }
+        webMessageDao.readMessages(strings,companyId,userId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "操作成功");
+        return jsonObject.toString();
     }
 
 
