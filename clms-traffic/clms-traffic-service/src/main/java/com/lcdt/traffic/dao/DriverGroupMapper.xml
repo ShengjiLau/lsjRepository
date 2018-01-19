@@ -76,4 +76,27 @@
     from t_driver_group t1 left join t_driver_group_relationship t2 on t1.driver_group_id = t2.driver_group_id
     where t1.company_id = #{0} and is_deleted = 0
   </select>
+
+
+  <!-- ——————————————————————————————————————————华丽分割线—————————————————————————————————————————————— -->
+
+  <resultMap id="DriverAndGroupResultMap" type="com.lcdt.traffic.model.DriverAndGroup">
+    <id column="driver_group_id" jdbcType="BIGINT" property="driverGroupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="group_remark" jdbcType="VARCHAR" property="groupRemark" />
+    <collection property="driverList" column="driver_group_id" resultMap="driverResult" notNullColumn="own_driver_id">
+    </collection>
+  </resultMap>
+  <resultMap id="driverResult" type="com.lcdt.traffic.model.OwnDriver">
+    <id column="own_driver_id" jdbcType="BIGINT" property="ownDriverId" />
+    <result column="driver_name" jdbcType="VARCHAR" property="driverName" />
+    <result column="driver_phone" jdbcType="VARCHAR" property="driverPhone" />
+  </resultMap>
+
+  <select id="selectDriverAndGroup" resultMap="DriverAndGroupResultMap">
+    select t.driver_group_id,t.group_name,t.group_remark,t2.own_driver_id,t2.driver_name,t2.driver_phone
+    from t_driver_group t LEFT JOIN t_driver_group_relationship t1 ON t.driver_group_id=t1.driver_group_id
+    LEFT JOIN t_own_driver t2 ON t1.own_driver_id = t2.own_driver_id
+    where t.company_id=#{0} and t.is_deleted=0
+  </select>
 </mapper>

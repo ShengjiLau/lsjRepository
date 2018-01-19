@@ -1,6 +1,7 @@
 package com.lcdt.traffic.service.impl;
 
 import com.lcdt.traffic.dao.DriverGroupMapper;
+import com.lcdt.traffic.model.DriverAndGroup;
 import com.lcdt.traffic.model.DriverGroup;
 import com.lcdt.traffic.service.DriverGroupService;
 import com.lcdt.traffic.web.dto.DriverGroupDto;
@@ -42,5 +43,9 @@ public class DriverGroupServiceImpl implements DriverGroupService {
     @Override
     public List<DriverGroupDto> selectRelationship(Long companyId) {
         return driverGroupMapper.selectRelationship(companyId);
+    }
+    @Override
+    public List<DriverAndGroup> selectDriverAndGroup(Long companyId){
+        return  driverGroupMapper.selectDriverAndGroup(companyId);
     }
 }
