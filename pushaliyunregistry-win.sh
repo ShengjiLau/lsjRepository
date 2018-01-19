@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 #阿里docker registry地址
 registry_url=registry.cn-hangzhou.aliyuncs.com/lcdt-clms/
-userservice="user-service 1.0 user-center\userinfo-service"
-clms-sso="clms-sso 1.0 cwms-sso\clms-sso-service"
-customer-service="customer-service 1.0 clms-customer\clms-customer-service"
+#userservice="user-service 1.0 user-center\userinfo-service"
+#clms-sso="clms-sso 1.0 cwms-sso\clms-sso-service"
+#customer-service="customer-service 1.0 clms-customer\clms-customer-service"
 docker_login(){
 docker login --username=hi35700248@aliyun.com -p A1111777  registry.cn-hangzhou.aliyuncs.com
 }
 
 
 push_to_aliregistry(){
+
+docker build -t gbruin/bruin-nginx:test .
+
+docker push gbruin/bruin-nginx:test
+
 imagename=$1
 imagetag=$2
 buildpath=$3
@@ -35,10 +40,16 @@ echo "failed..."
 say "failed..."
 fi
 }
-maven_build
+if [ $1 ];
+then
+  maven_build
+fi
+
 docker_login
 
 read -p "JingXiang-name: " imagename
 read -p "JingXiang-tag: " imagetag
 read -p "JingXiang-path: " imagepath
 push_to_aliregistry $imagename $imagetag $imagepath
+
+read -p "Press any key to continue." var

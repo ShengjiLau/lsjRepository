@@ -642,12 +642,6 @@ public class WaybillPlan implements java.io.Serializable,ResponseData {
     private List<SplitGoods> splitGoodsList;
 
 
-
-
-
-
-
-
     public List<PlanDetail> getPlanDetailList() {
         return planDetailList;
     }
