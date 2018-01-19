@@ -209,7 +209,7 @@ public class OwnPlanApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_plan')")
     public WaybillPlan loadPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
         iQuartzService.deleteJob("job_product_pull", "jGroup_product_pull");
-        iQuartzService.startSchedule("job_product_pull", "jGroup_product_pull", "0/10 * * * * ?", "trigger_product_pull",
+        iQuartzService.startSchedule("job_product_pull", "jGroup_product_pull", "0/5 * * * * ?", "trigger_product_pull",
                 "tGroup__product_pull", TestJob.class);
         iQuartzService.test();
         Long companyId = SecurityInfoGetter.getCompanyId();

@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableClmsSecurity
 public class TrafficServiceApp  {
 
-
     public static void main(String[] args) {
         ConfigurableApplicationContext run = new SpringApplicationBuilder().sources(TrafficServiceApp.class).run(args);
     }
