@@ -1,6 +1,9 @@
 package com.lcdt.traffic.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.DriverGroupMapper;
+import com.lcdt.traffic.model.DriverAndGroup;
 import com.lcdt.traffic.model.DriverGroup;
 import com.lcdt.traffic.service.DriverGroupService;
 import com.lcdt.traffic.web.dto.DriverGroupDto;
@@ -42,5 +45,11 @@ public class DriverGroupServiceImpl implements DriverGroupService {
     @Override
     public List<DriverGroupDto> selectRelationship(Long companyId) {
         return driverGroupMapper.selectRelationship(companyId);
+    }
+    @Override
+    public PageInfo<List<DriverAndGroup>> selectDriverAndGroup(Long companyId, PageInfo pageInfo){
+        PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
+        PageInfo page = new PageInfo(driverGroupMapper.selectDriverAndGroup(companyId));
+        return page;
     }
 }

@@ -7,6 +7,7 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.quartz.service.IQuartzService;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.job.TestJob;
+import com.lcdt.traffic.job.TestJob1;
 import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.Plan4CreateService;
@@ -208,9 +209,9 @@ public class OwnPlanApi {
     @RequestMapping(value = "/loadPlan",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_plan')")
     public WaybillPlan loadPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
-        iQuartzService.deleteJob("job_product_pull", "jGroup_product_pull");
-        iQuartzService.startSchedule("job_product_pull", "jGroup_product_pull", "0/10 * * * * ?", "trigger_product_pull",
-                "tGroup__product_pull", TestJob.class);
+        iQuartzService.deleteJob("job_product_pull1", "jGroup_product_pull1");
+        iQuartzService.startSchedule("job_product_pull1", "jGroup_product_pull1", "0/5 * * * * ?", "trigger_product_pull1",
+                "tGroup__product_pull1", TestJob1.class);
         iQuartzService.test();
         Long companyId = SecurityInfoGetter.getCompanyId();
         WaybillParamsDto dto = new WaybillParamsDto();

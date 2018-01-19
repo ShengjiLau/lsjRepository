@@ -1,7 +1,9 @@
 package com.lcdt.traffic.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.model.DriverAndGroup;
 import com.lcdt.traffic.model.DriverGroup;
 import com.lcdt.traffic.service.DriverGroupService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
@@ -105,4 +107,17 @@ public class DriverGroupApi {
         PageBaseDto pageBaseDto = new PageBaseDto(driverGroupList,driverGroupList.size());
         return pageBaseDto;
     }
+
+    @ApiOperation(value = "分组列表和对应组的司机信息", notes = "分组列表和对应组的司机信息")
+    @PostMapping("/groupdriver")
+    public PageBaseDto<List<DriverAndGroup>> getDriverAndGroupList(int pageNum,int pageSize) {
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(pageNum);    //设置页码
+        pageInfo.setPageSize(pageSize);  //设置每页条数
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        PageInfo<List<DriverAndGroup>> driverAndGroupList = driverGroupService.selectDriverAndGroup(companyId,pageInfo);
+        PageBaseDto pageBaseDto = new PageBaseDto(driverAndGroupList.getList(), driverAndGroupList.getTotal());
+        return pageBaseDto;
+    }
+
 }

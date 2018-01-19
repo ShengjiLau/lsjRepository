@@ -135,4 +135,11 @@ public interface WaybillMapper {
      * @return
      */
     List<Waybill> selectWaybillByPlanId(Map map);
+
+    /**
+     * 定时用的：根据定位设置条件查询订单
+     * @param map
+     * @return
+     */
+    List<Waybill> selectWaybillByPositionSetting(Map map);
 }
