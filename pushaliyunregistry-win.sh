@@ -10,11 +10,6 @@ docker login --username=hi35700248@aliyun.com -p A1111777  registry.cn-hangzhou.
 
 
 push_to_aliregistry(){
-
-docker build -t gbruin/bruin-nginx:test .
-
-docker push gbruin/bruin-nginx:test
-
 imagename=$1
 imagetag=$2
 buildpath=$3
