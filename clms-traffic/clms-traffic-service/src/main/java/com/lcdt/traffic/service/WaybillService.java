@@ -1,11 +1,13 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillDao;
 import com.lcdt.traffic.web.dto.WaybillCustListParamsDto;
 import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillOwnListParamsDto;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -103,4 +105,13 @@ public interface WaybillService {
      * @return
      */
     int modifyOwnWaybillStatusByWaybillPlanId(Map map);
+
+    /**
+     * 定时定位用，根据定位设置，获取运单司机进行定位
+     * @param map
+     * @return
+     */
+    void queryWaybillListToPoPosition(Map map);
+
+
 }
