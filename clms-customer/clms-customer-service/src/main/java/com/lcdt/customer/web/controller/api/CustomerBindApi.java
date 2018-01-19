@@ -90,7 +90,7 @@ public class CustomerBindApi {
 
 		customer.setBindCpid(companyId);
 		customerService.customerUpdate(customer);
-		ModelAndView successView = new ModelAndView("invite_success");
+		ModelAndView successView = new ModelAndView("invite_success_bak");
 		return successView;
 	}
 
@@ -114,6 +114,7 @@ public class CustomerBindApi {
 		HashMap<Object, Object> map = new HashMap<>();
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		map.put("companyId", companyId);
+		map.put("notbind", true);
 		PageInfo<Customer> pageInfo = customerService.customerList(map);
 		List<Customer> list = pageInfo.getList();
 		ModelAndView modelAndView = new ModelAndView();

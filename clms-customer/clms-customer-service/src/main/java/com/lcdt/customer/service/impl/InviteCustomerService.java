@@ -53,6 +53,9 @@ public class InviteCustomerService {
 		if (customer == null) {
 			throw new RuntimeException("客户不存在");
 		}
+		if (customer.getBindCpid() != null) {
+			throw new RuntimeException("客户已绑定");
+		}
 
 		CustomerInviteLog customerInviteLog = new CustomerInviteLog();
 		customerInviteLog.setInviteCompanyId(customer.getCompanyId());
@@ -161,7 +164,7 @@ public class InviteCustomerService {
 	public String beInvitedUrl(Long inviteLogId,String token) {
 		String path = "";
 		StringBuffer stringBuffer = new StringBuffer(path);
-		stringBuffer.append("?a=").append(inviteLogId).append("b=").append(token);
+		stringBuffer.append("?a=").append(inviteLogId).append("&b=").append(token);
 		return stringBuffer.toString();
 	}
 
