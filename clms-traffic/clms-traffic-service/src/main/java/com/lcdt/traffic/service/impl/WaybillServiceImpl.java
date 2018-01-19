@@ -293,6 +293,11 @@ public class WaybillServiceImpl implements WaybillService {
         return result;
     }
 
+    @Override
+    public void queryWaybillListToPoPosition(Map map) {
+
+    }
+
     /**
      * 取消运单时，需要将运单数量还原到派单，运单状态置为取消,运单完成时，判断此plan下的运单是否全部完成，如果是全部完成，则更新计划状态为完成状态
      * @param map
