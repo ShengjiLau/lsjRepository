@@ -1,5 +1,6 @@
 package com.lcdt.traffic.service;
 
+import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.DriverAndGroup;
 import com.lcdt.traffic.model.DriverGroup;
 import com.lcdt.traffic.web.dto.DriverGroupDto;
@@ -22,5 +23,5 @@ public interface DriverGroupService {
 
     List<DriverGroupDto> selectRelationship(Long companyId);
 
-    List<DriverAndGroup> selectDriverAndGroup(Long companyId);
+    PageInfo<List<DriverAndGroup>> selectDriverAndGroup(Long companyId, PageInfo pageInfo);
 }
