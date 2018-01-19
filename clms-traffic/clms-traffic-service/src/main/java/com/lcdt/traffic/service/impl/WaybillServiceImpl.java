@@ -1,6 +1,7 @@
 package com.lcdt.traffic.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Constant;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -12,8 +13,13 @@ import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillDao;
 import com.lcdt.traffic.model.WaybillItems;
 import com.lcdt.traffic.service.WaybillService;
+import com.lcdt.traffic.util.GprsLocationBo;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.WaybillDto;
+import com.lcdt.userinfo.model.Driver;
+import com.lcdt.userinfo.service.DriverService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +36,13 @@ import java.util.Map;
 @Transactional
 @Service
 public class WaybillServiceImpl implements WaybillService {
+
+
+    Logger logger = LoggerFactory.getLogger(LoggerFactory.class);
+
+    @Reference
+    public DriverService driverService;
+
     @Autowired
     private WaybillMapper waybillMapper; //运单
     @Autowired
@@ -295,7 +308,32 @@ public class WaybillServiceImpl implements WaybillService {
 
     @Override
     public void queryWaybillListToPoPosition(Map map) {
-
+        List<Waybill> list=waybillMapper.selectWaybillByPositionSetting(map);
+        if(list!=null&&list.size()>0){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for(Waybill waybill:list){
+                        JSONObject result = GprsLocationBo.getInstance().queryLocation(waybill.getDriverPhone());
+                        int resid = result.getInteger("resid");
+                        if (resid == 0) {   //正确返回
+                            Driver driver = new Driver();
+                            driver.setDriverPhone(waybill.getDriverPhone());
+                            driver.setCurrentLocation(result.getString("location"));
+                            driver.setShortCurrentLocation(result.getString("street"));
+                            driverService.updateLocation(driver);
+                            logger.info("查询成功");
+                        } else if (resid == -80) {    //	余额不足,请充值:请联系客服
+                            logger.warn("余额不足,请充值:请联系客服");
+                        } else if (resid == -130) {    //用户可能关机
+                            logger.warn("用户可能关机");
+                        } else {      //对于移动手机，定位失败时运营商返回的结果
+                            logger.error("接口返回错误");
+                        }
+                    }
+                }
+            }).start();
+        }
     }
 
     /**
