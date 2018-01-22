@@ -111,8 +111,6 @@ public class RegisterController {
                 httpSession.setAttribute("CWMS_SMS_SEND_TIME", cTime);
                 String[] phones = new String[]{registerDto.getUserPhoneNum()};
                 String vCode = RandomNoUtil.createRandom(true,4);
-
-
                 notifyService.sendSms(phones,vCode);
                 httpSession.setAttribute("CWMS_SMS_VCODE", vCode+"_"+registerDto.getUserPhoneNum());
                 flag = true;
