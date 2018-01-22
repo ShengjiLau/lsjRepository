@@ -178,6 +178,16 @@ public class WaybillParamsDto {
     private String updateName;
     private Date updateTime;
 
+    public String getAttachement() {
+        return attachement;
+    }
+
+    public void setAttachement(String attachement) {
+        this.attachement = attachement;
+    }
+
+    private String attachement;//附件串
+
 
 
 

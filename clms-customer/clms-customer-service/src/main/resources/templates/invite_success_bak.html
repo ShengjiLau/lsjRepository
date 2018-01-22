@@ -83,7 +83,6 @@
             top:50%;
             left: 50%;
             transform: translate(-50%,-50%);
-            text-align: center;
         }
 
         .content:hover {
@@ -260,9 +259,12 @@
             height: 48px;
             color: #333;
             font-size: 16px;
+            text-align: center;
+            display: inline-block;
             background: #F2F2F2;
             border: 1px solid #CCCCCC;
             border-radius: 4px;
+            margin-left: 60px;
         }
 
     </style>
@@ -282,7 +284,7 @@
 
 
 <div class="content">
-    <i style="font-size: 48px;color:#1DC11D;font-weight: lighter" class="iconfont icon-round_check1"></i>
+    <div class="alert-image" style="background-color: #1DC11D"></div>
     <div class="alert-success">恭喜您!</div>
     <div class="normalText alert-content">贵公司已成为【联泓新材料】的仓储服务商、运输服务商。</div>
     <button class="register">开始使用</button>

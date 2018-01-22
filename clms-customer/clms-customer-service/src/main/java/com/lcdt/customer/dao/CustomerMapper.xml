@@ -344,6 +344,11 @@
       <if test="customerId!=null">
         and  customer_id != #{customerId,jdbcType=BIGINT}
       </if>
+
+      <if test="notbind != null">
+        and bind_comp_id is NULL
+      </if>
+
       <!--这块只限编辑查询用END-->
     </where>
     order by customer_id
