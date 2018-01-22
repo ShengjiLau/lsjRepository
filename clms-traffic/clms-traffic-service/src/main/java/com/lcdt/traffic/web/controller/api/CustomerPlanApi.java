@@ -90,6 +90,7 @@ public class CustomerPlanApi {
         StringBuffer sb = new StringBuffer();
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
             sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+            map.put("groupIds",sb.toString());//客户
         } else {
             sb.append("(");
             List<Group> groupList = SecurityInfoGetter.groups();
@@ -101,8 +102,11 @@ public class CustomerPlanApi {
                 }
             }
             sb.append(")");
+            if(groupList.size()>0) {
+                map.put("groupIds", sb.toString());//客户
+            }
         }
-        map.put("groupIds",sb.toString());//客户
+
         PageInfo pageInfo = customerPlanService.customerPlanList4Bidding(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -155,6 +159,7 @@ public class CustomerPlanApi {
         StringBuffer sb = new StringBuffer(); //组权限信息
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
             sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+            map.put("groupIds",sb.toString());//客户
         } else {
             sb.append("(");
             List<Group> groupList = SecurityInfoGetter.groups();
@@ -166,8 +171,11 @@ public class CustomerPlanApi {
                 }
             }
             sb.append(")");
+            if(groupList.size()>0) {
+                map.put("groupIds", sb.toString());//客户
+            }
         }
-        map.put("groupIds",sb.toString());//客户
+
         PageInfo pageInfo = customerPlanService.customerPlanList4Offer(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -219,6 +227,7 @@ public class CustomerPlanApi {
         StringBuffer sb = new StringBuffer();
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
             sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+            map.put("groupIds",sb.toString());//客户
         } else {
             sb.append("(");
             List<Group> groupList = SecurityInfoGetter.groups();
@@ -230,8 +239,11 @@ public class CustomerPlanApi {
                 }
             }
             sb.append(")");
+            if(groupList.size()>0) {
+                map.put("groupIds", sb.toString());//客户
+            }
         }
-        map.put("groupIds",sb.toString());//客户
+
         PageInfo pageInfo = customerPlanService.customerPlanList4Pass(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -283,6 +295,7 @@ public class CustomerPlanApi {
         StringBuffer sb = new StringBuffer();
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
             sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+            map.put("groupIds",sb.toString());//客户
         } else {
             sb.append("(");
             List<Group> groupList = SecurityInfoGetter.groups();
@@ -294,8 +307,11 @@ public class CustomerPlanApi {
                 }
             }
             sb.append(")");
+            if(groupList.size()>0) {
+                map.put("groupIds", sb.toString());//客户
+            }
         }
-        map.put("groupIds",sb.toString());//客户
+
         PageInfo pageInfo = customerPlanService.customerPlanList4VehicleDoing(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -346,6 +362,7 @@ public class CustomerPlanApi {
         StringBuffer sb = new StringBuffer();
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
             sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+            map.put("groupIds",sb.toString());//客户
         } else {
             sb.append("(");
             List<Group> groupList = SecurityInfoGetter.groups();
@@ -357,6 +374,9 @@ public class CustomerPlanApi {
                 }
             }
             sb.append(")");
+            if(groupList.size()>0) {
+                map.put("groupIds", sb.toString());//客户
+            }
         }
         map.put("groupIds",sb.toString());//客户
         PageInfo pageInfo = customerPlanService.customerPlanList4VehicleHave(map);
@@ -410,6 +430,7 @@ public class CustomerPlanApi {
         StringBuffer sb = new StringBuffer();
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
             sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+            map.put("groupIds",sb.toString());//客户
         } else {
             sb.append("(");
             List<Group> groupList = SecurityInfoGetter.groups();
@@ -421,8 +442,11 @@ public class CustomerPlanApi {
                 }
             }
             sb.append(")");
+            if(groupList.size()>0) {
+                map.put("groupIds", sb.toString());//客户
+            }
         }
-        map.put("groupIds",sb.toString());//客户
+
         PageInfo pageInfo = customerPlanService.customerPlanList4Completed(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -474,6 +498,7 @@ public class CustomerPlanApi {
         StringBuffer sb = new StringBuffer();
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
             sb.append(" find_in_set('"+dto.getGroupIds()+"',group_ids)"); //客户表
+            map.put("groupIds",sb.toString());//客户
         } else {
             sb.append("(");
             List<Group> groupList = SecurityInfoGetter.groups();
@@ -485,8 +510,11 @@ public class CustomerPlanApi {
                 }
             }
             sb.append(")");
+            if(groupList.size()>0) {
+                map.put("groupIds", sb.toString());//客户
+            }
         }
-        map.put("groupIds",sb.toString());//客户
+
         PageInfo pageInfo = customerPlanService.customerPlanList4Cancel(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
