@@ -1,5 +1,6 @@
 package com.lcdt.traffic.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.*;
@@ -92,6 +93,25 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                 vo.setCarrierCompanyId(vo.getCompanyId()); //获取下的本企业司机
             }
         }
+
+        if (!StringUtils.isEmpty(dto.getAttachement())) { //附件信息处理
+            JSONArray jsonArray = JSONArray.parseArray(dto.getAttachement());
+            List<WaybillParamsDto> waybillParamsDtoList = jsonArray.toJavaList(WaybillParamsDto.class);
+            for (WaybillParamsDto dto1 : waybillParamsDtoList) {
+                vo.setAttachment1(dto1.getAttachment1());
+                vo.setAttachment1Name(dto1.getAttachment1Name());
+                vo.setAttachment2(dto1.getAttachment2());
+                vo.setAttachment2Name(dto1.getAttachment2Name());
+                vo.setAttachment3(dto1.getAttachment3());
+                vo.setAttachment3Name(dto1.getAttachment3Name());
+                vo.setAttachment4(dto1.getAttachment4());
+                vo.setAttachment4Name(dto1.getAttachment4Name());
+                vo.setAttachment5(dto1.getAttachment5());
+                vo.setAttachment5Name(dto1.getAttachment5Name());
+            }
+        }
+
+
 
         //具体业务处理
         if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派

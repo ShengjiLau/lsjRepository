@@ -1,7 +1,7 @@
 FROM java:8-jre
-ADD ./target/notify-service.jar /app/
-RUN echo "Asia/shanghai" > /etc/timezone;
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
-CMD ["java", "-Xmx200m","-jar", "/app/notify-service.jar"]
-EXPOSE 20881
-EXPOSE 52411
+            ADD ./target/notify-service.jar /app/
+            RUN echo "Asia/shanghai" > /etc/timezone;
+            RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+            CMD ["java", "-Xmx200m","-jar", "/app/notify-service.jar"]
+            EXPOSE 20881
+            EXPOSE 52411
