@@ -378,7 +378,6 @@ public class CustomerPlanApi {
                 map.put("groupIds", sb.toString());//客户
             }
         }
-        map.put("groupIds",sb.toString());//客户
         PageInfo pageInfo = customerPlanService.customerPlanList4VehicleHave(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
