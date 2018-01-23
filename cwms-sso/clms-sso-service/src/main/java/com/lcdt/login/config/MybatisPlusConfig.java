@@ -38,6 +38,7 @@ public class MybatisPlusConfig {
         return sqlSessionFactory.getObject();
     }
 
+
     @Bean
     public GlobalConfiguration globalConfiguration() {
         GlobalConfiguration conf = new GlobalConfiguration(new LogicSqlInjector());
@@ -46,6 +47,4 @@ public class MybatisPlusConfig {
         conf.setIdType(2);
         return conf;
     }
-
-
 }
