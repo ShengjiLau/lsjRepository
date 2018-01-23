@@ -35,6 +35,15 @@ public class QuartzServiceImpl implements IQuartzService {
 		}
 	}
 
+	@Override
+	public void startSchedule(JobDetail jobDetail, Trigger trigger) {
+		try {
+			scheduler.scheduleJob(jobDetail, trigger);
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void test() {
 		System.out.println(3333);
 		System.out.println(scheduler);
