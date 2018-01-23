@@ -30,7 +30,7 @@
             targetPackage     指定生成的model生成所在的包名
             targetProject     指定在该项目下所在的路径
         -->
-        <javaModelGenerator targetPackage="com.lcdt.notify.model" targetProject="MAVEN">
+        <javaModelGenerator targetPackage="com.lcdt." targetProject="MAVEN">
             <!-- 是否对model添加 构造函数 -->
             <property name="constructorBased" value="false"/>
 
@@ -246,8 +246,12 @@
         <!--<table tableName="event_meta" domainObjectName="EventMetaData">-->
         <!--<generatedKey column="event_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
-        <table tableName="balance_log" domainObjectName="BalanceLog">
-            <generatedKey column="balance_log_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        <!--<table tableName="balance_log" domainObjectName="BalanceLog">-->
+            <!--<generatedKey column="balance_log_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
+        <!--</table>-->
+
+        <table tableName="valid_code_log" domainObjectName="ValidCodeLog">
+            <generatedKey column="valid_code_log_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
 
     </context>

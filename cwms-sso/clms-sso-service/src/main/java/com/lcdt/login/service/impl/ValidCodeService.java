@@ -38,6 +38,10 @@ public class ValidCodeService {
      * @param timeout
      */
     public void sendValidCode(HttpServletRequest request,String tag,Integer timeout,String phoneNum){
+
+        //TODO 检查号码发送的次数
+
+
         HttpSession session = request.getSession(true);
         String sessionKey = sessionPrefixKey + tag;
         ValidCodeBean attribute = getCodeBean(request, tag);
