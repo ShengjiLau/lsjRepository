@@ -145,8 +145,6 @@ public class WaybillApi {
                                                      @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
-        //组权限信息
-        quartzRpc.startWaybillPositionTimer();
         StringBuffer sb = new StringBuffer();
         if (dto.getGroupId()!=null&&dto.getGroupId()>0) {//传业务组，查这个组帮定的客户
             sb.append(" find_in_set('"+dto.getGroupId()+"',group_id)"); //项目组id
@@ -262,5 +260,15 @@ public class WaybillApi {
         }else{
             throw new RuntimeException("修改失败");
         }
+    }
+
+    @ApiOperation("运单手动定时任务")
+    @RequestMapping(value = "/timer", method = RequestMethod.GET)
+    public JSONObject startPoistionTimer() {
+        quartzRpc.startWaybillPositionTimer();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "开启成功");
+        return jsonObject;
     }
 }
