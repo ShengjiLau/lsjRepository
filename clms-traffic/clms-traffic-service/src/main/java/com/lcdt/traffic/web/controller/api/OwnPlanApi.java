@@ -259,16 +259,19 @@ public class OwnPlanApi {
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
             sb.append(" find_in_set('"+dto.getGroupIds()+"',group_id)");
         } else {
-            sb.append("(");
             List<Group> groupList = SecurityInfoGetter.groups();
-            for(int i=0;i<groupList.size();i++) {
-                Group group = groupList.get(i);
-                sb.append(" find_in_set('"+group.getGroupId()+"',group_id)");
-                if(i!=groupList.size()-1){
-                    sb.append(" or ");
+            if(groupList!=null && groupList.size()>0) {
+                sb.append("(");
+                for(int i=0;i<groupList.size();i++) {
+                    Group group = groupList.get(i);
+                    sb.append(" find_in_set('"+group.getGroupId()+"',group_id)");
+                    if(i!=groupList.size()-1){
+                        sb.append(" or ");
+                    }
                 }
+                sb.append(")");
             }
-            sb.append(")");
+
         }
 
         if (!sb.toString().isEmpty()) {
