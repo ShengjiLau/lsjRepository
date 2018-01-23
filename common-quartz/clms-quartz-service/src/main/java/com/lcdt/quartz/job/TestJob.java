@@ -17,7 +17,6 @@ public class TestJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        rpc.test();
         System.out.println("--------ybq----------");
 
     }
