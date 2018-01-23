@@ -16,8 +16,6 @@ public class DriverAndGroup implements Serializable{
 
     private String groupRemark;
 
-    private Long companyId;
-
     private List<Driver> driverList;
 
     public Long getDriverGroupId() {
@@ -42,14 +40,6 @@ public class DriverAndGroup implements Serializable{
 
     public void setGroupRemark(String groupRemark) {
         this.groupRemark = groupRemark;
-    }
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
     }
 
     public List<Driver> getDriverList() {
