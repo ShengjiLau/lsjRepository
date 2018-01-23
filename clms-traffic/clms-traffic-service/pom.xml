@@ -106,9 +106,10 @@
         </dependency>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>common-quartz</artifactId>
+            <artifactId>quartz-api</artifactId>
             <version>1.0</version>
         </dependency>
+
     </dependencies>
 
     <build>

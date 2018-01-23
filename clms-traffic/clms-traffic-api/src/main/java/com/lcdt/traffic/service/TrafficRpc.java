@@ -1,4 +1,4 @@
-package com.lcdt.traffic.rpc;
+package com.lcdt.traffic.service;
 
 /**
  * Created by yangbinq on 2018/1/12.

@@ -1,7 +1,7 @@
 package com.lcdt.traffic.rpc.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.lcdt.traffic.rpc.TrafficRpc;
+import com.lcdt.traffic.service.TrafficRpc;
 
 /**
  * Created by yangbinq on 2018/1/12.

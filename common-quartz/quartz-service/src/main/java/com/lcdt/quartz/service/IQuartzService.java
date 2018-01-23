@@ -8,7 +8,7 @@ import org.quartz.Trigger;
  */
 public interface IQuartzService {
 
-    void startSchedule(String jName, String jGroup, String cron, String tName, String tGroup, Class c);
+   void startSchedule(String jName, String jGroup, String cron, String tName, String tGroup, Class c);
 
     void startSchedule(JobDetail jobDetail, Trigger trigger);
 
@@ -22,6 +22,6 @@ public interface IQuartzService {
 
     void rescheduleJob(String name, String group, String cron);
 
-    void test();
+
 
 }
