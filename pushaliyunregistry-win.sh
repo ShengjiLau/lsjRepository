@@ -16,6 +16,8 @@ buildpath=$3
 fullimagename=$registry_url$1
 imagenamewithtag=$fullimagename:$2
 echo $imagenamewithtag
+read -p "Press any key to continue." var
+
 docker build -t $fullimagename $3
 imageid=$(docker images | grep $fullimagename | awk 'NR==1{print $3}')
 docker tag $imageid $imagenamewithtag
