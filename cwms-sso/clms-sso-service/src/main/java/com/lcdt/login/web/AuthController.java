@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.lcdt.login.annontion.ExcludeIntercept;
 import com.lcdt.login.exception.LoginError;
 import com.lcdt.login.service.AuthTicketService;
+import com.lcdt.login.service.impl.ValidCodeService;
 import com.lcdt.login.web.filter.CompanyInterceptorAbstract;
 import com.lcdt.login.web.filter.LoginInterceptorAbstract;
+import com.lcdt.notify.rpcservice.NotifyService;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.exception.DeptmentExistException;
@@ -21,6 +23,7 @@ import com.lcdt.userinfo.service.CreateCompanyService;
 import com.lcdt.userinfo.service.LoginLogService;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.util.HttpUtils;
+import org.apache.catalina.manager.util.SessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,237 +47,263 @@ import java.util.*;
 public class AuthController {
 
 
-	private Logger logger = LoggerFactory.getLogger(AuthController.class);
+    private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-	private static String LOGIN_PAGE = "/signin";
-	public final String CHOOSE_COMPANY_PAGE = "/account/company";
+    private static String LOGIN_PAGE = "/signin";
+    public final String CHOOSE_COMPANY_PAGE = "/account/company";
 
-	@Autowired
-	AuthTicketService ticketService;
+    @Autowired
+    AuthTicketService ticketService;
 
-	@Autowired
-	RequestAuthRedirectStrategy strategy;
+    @Autowired
+    RequestAuthRedirectStrategy strategy;
 
-	@Reference(check = false)
-	UserService userService;
+    @Reference(check = false)
+    UserService userService;
 
-	@Reference(check = false)
-	CompanyService companyService;
+    @Reference(check = false)
+    CompanyService companyService;
 
-	@Reference(check = false)
-	CreateCompanyService createCompanyService;
+    @Reference(check = false)
+    CreateCompanyService createCompanyService;
 
-	/**
-	 * 登陆页面
-	 *
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value = {"/", ""})
-	@ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
-	public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
-		boolean isLogin = LoginSessionReposity.isLogin(request);
-		LoginSessionReposity.setCallBackUrl(request);
-		if (!isLogin) {
-			ModelAndView view = new ModelAndView(LOGIN_PAGE);
-			return view;
-		}
+    @Reference(async = true)
+    NotifyService notifyService;
 
-		if (LoginSessionReposity.loginCompany(request)) {
-			strategy.hasAuthRedirect(request, response);
-		} else {
-			try {
-				response.sendRedirect("/account/company");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return null;
+    /**
+     * 登陆页面
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = {"/", ""})
+    @ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
+    public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
+        boolean isLogin = LoginSessionReposity.isLogin(request);
+        LoginSessionReposity.setCallBackUrl(request);
+        if (!isLogin) {
+            ModelAndView view = new ModelAndView(LOGIN_PAGE);
+            return view;
+        }
 
-		}
-		ModelAndView view = new ModelAndView(LOGIN_PAGE);
-		return view;
-	}
+        if (LoginSessionReposity.loginCompany(request)) {
+            strategy.hasAuthRedirect(request, response);
+        } else {
+            try {
+                response.sendRedirect("/account/company");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        ModelAndView view = new ModelAndView(LOGIN_PAGE);
+        return view;
+    }
 
-	/**
-	 * 登陆入口 返回json数据
-	 *
-	 * @param username
-	 * @param password
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
-	@RequestMapping("/login")
-	@ResponseBody
-	public String login(String username, String password,String captchacode, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    /**
+     * 登陆入口 返回json数据
+     *
+     * @param username
+     * @param password
+     * @param request
+     * @param response
+     * @return
+     */
+    @ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
+    @RequestMapping("/login")
+    @ResponseBody
+    public String login(String username, String password, String captchacode, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
 
-		JSONObject jsonObject = new JSONObject();
-		boolean captchaIsOk = LoginSessionReposity.captchaIsOk(request, captchacode);
-		if (!captchaIsOk) {
-			jsonObject.put("code", -1);
-			jsonObject.put("message", "验证码错误");
-			return jsonObject.toString();
-		}
-
-		try {
-			User user = userService.userLogin(username, password);
-
-
-			LoginSessionReposity.setUserInSession(request, user);
-			List<UserCompRel> companyMembers = companyService.companyList(user.getUserId());
-			jsonObject.put("data", companyMembers);
-			jsonObject.put("code", 0);
-			jsonObject.put("message", "success");
-			return jsonObject.toString();
-		} catch (UserNotExistException e) {
-			e.printStackTrace();
-			jsonObject.put("message", "账号不存在");
-			jsonObject.put("code", -1);
-			return jsonObject.toString();
-		} catch (PassErrorException e) {
-			jsonObject.put("message", "账号密码错误");
-			jsonObject.put("code", -1);
-			e.printStackTrace();
-			return jsonObject.toString();
-		}
-	}
-
-
-	@RequestMapping("/logout")
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
-	public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
-		ticketService.removeTicketInCookie(request, response);
-		LoginSessionReposity.clearUserSession(request);
-		String authCallback = RequestAuthRedirectStrategy.getAuthCallback(request);
-		ModelAndView view = new ModelAndView(LOGIN_PAGE);
-		view.addObject(RequestAuthRedirectStrategy.AUTH_CALLBACK, authCallback);
-		return view;
-	}
-
-	@RequestMapping("/createcompany")
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
-	public ModelAndView createCompanyPage(HttpServletRequest request) {
-		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
-		ModelAndView view = new ModelAndView("/createCom");
-		return view;
-	}
+        JSONObject jsonObject = new JSONObject();
+        boolean captchaIsOk = LoginSessionReposity.captchaIsOk(request, captchacode);
+        if (!captchaIsOk) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "验证码错误");
+            return jsonObject.toString();
+        }
+        try {
+            User user = userService.userLogin(username, password);
+            LoginSessionReposity.setUserInSession(request, user);
+            List<UserCompRel> companyMembers = companyService.companyList(user.getUserId());
+            jsonObject.put("data", companyMembers);
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "success");
+            return jsonObject.toString();
+        } catch (UserNotExistException e) {
+            e.printStackTrace();
+            jsonObject.put("message", "账号不存在");
+            jsonObject.put("code", -1);
+            return jsonObject.toString();
+        } catch (PassErrorException e) {
+            jsonObject.put("message", "账号密码错误");
+            jsonObject.put("code", -1);
+            e.printStackTrace();
+            return jsonObject.toString();
+        }
+    }
 
 
-	@RequestMapping({"/company", "choosecompany"})
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
-	public ModelAndView chooseCompanyPage(HttpServletRequest request) {
-		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
-		List<UserCompRel> companyMembers = companyService.companyList(userInfo.getUserId());
-		UserCompRel userCompRel = companyMembers.get(0);
-		String fullName = userCompRel.getCompany().getFullName();
-		logger.info("选择公司"+fullName);
-		String authCallback = RequestAuthRedirectStrategy.getAuthCallback(request);
-		ModelAndView view = new ModelAndView("/chooseCom");
-		view.addObject("companyMembers", companyMembers);
-		if (authCallback != null) {
-			view.addObject("authcallback", authCallback);
-		}
-		return view;
-	}
+    @RequestMapping("/logout")
+    @ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
+    public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
+        ticketService.removeTicketInCookie(request, response);
+        LoginSessionReposity.clearUserSession(request);
+        String authCallback = RequestAuthRedirectStrategy.getAuthCallback(request);
+        ModelAndView view = new ModelAndView(LOGIN_PAGE);
+        view.addObject(RequestAuthRedirectStrategy.AUTH_CALLBACK, authCallback);
+        return view;
+    }
+
+    @RequestMapping("/createcompany")
+    @ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
+    public ModelAndView createCompanyPage(HttpServletRequest request) {
+        User userInfo = LoginSessionReposity.getUserInfoInSession(request);
+        ModelAndView view = new ModelAndView("/createCom");
+        return view;
+    }
 
 
-	private static final String CREATE_COMPANY_SESSION_COUNT = "create_company_count";
-
-	/**
-	 * 企业初始化
-	 *
-	 * @param fullname
-	 * @param industry
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
-	@RequestMapping("/initcompany")
-	@ResponseBody
-	public String initCompany(String fullname, String industry, HttpServletRequest request, HttpServletResponse response,HttpSession session) {
-		JSONObject jsonObject = new JSONObject();
-		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
-		CompanyDto dtoVo = new CompanyDto();
-		dtoVo.setCompanyName(fullname);
-		if (companyService.findCompany(dtoVo) != null) {
-			jsonObject.put("message", "企业名称已存在");
-			jsonObject.put("code", -1);
-			return jsonObject.toString();
-		} else {
-			dtoVo.setUserId(userInfo.getUserId());
-			dtoVo.setCreateName(userInfo.getRealName());
-			try {
-				Company company = createCompanyService.createCompany(dtoVo);
-			} catch (CompanyExistException e) {
-				e.printStackTrace();
-				jsonObject.put("code", -1);
-				jsonObject.put("message", "企业名称已存在");
-				return jsonObject.toString();
-			} catch (DeptmentExistException e) {
-				e.printStackTrace();
-				jsonObject.put("code", -1);
-				jsonObject.put("message", "企业名称已存在");
-				return jsonObject.toString();
-			}
-		}
-		jsonObject.put("code", 0);
-		String redirectUrl = RequestAuthRedirectStrategy.getAuthCallback(request);
-		jsonObject.put("redirecturl", redirectUrl);
-		return jsonObject.toString();
-	}
+    @RequestMapping({"/company", "choosecompany"})
+    @ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
+    public ModelAndView chooseCompanyPage(HttpServletRequest request) {
+        User userInfo = LoginSessionReposity.getUserInfoInSession(request);
+        List<UserCompRel> companyMembers = companyService.companyList(userInfo.getUserId());
+        UserCompRel userCompRel = companyMembers.get(0);
+        String fullName = userCompRel.getCompany().getFullName();
+        logger.info("选择公司" + fullName);
+        String authCallback = RequestAuthRedirectStrategy.getAuthCallback(request);
+        ModelAndView view = new ModelAndView("/chooseCom");
+        view.addObject("companyMembers", companyMembers);
+        if (authCallback != null) {
+            view.addObject("authcallback", authCallback);
+        }
+        return view;
+    }
 
 
-	/**
-	 * 解除绑定关系
-	 *
-	 * @param companyid
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
-	@RequestMapping("/removecompany")
-	public void removeCompany(Long usercomprelid, Long companyid, HttpServletRequest request, HttpServletResponse response) {
-		JSONObject jsonObject = new JSONObject();
-		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
-		int flag = companyService.removeCompanyRel(usercomprelid);
-		try {
-			response.sendRedirect(CHOOSE_COMPANY_PAGE);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    private static final String CREATE_COMPANY_SESSION_COUNT = "create_company_count";
 
-	}
+    /**
+     * 企业初始化
+     *
+     * @param fullname
+     * @param industry
+     * @param request
+     * @param response
+     * @return
+     */
+    @ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
+    @RequestMapping("/initcompany")
+    @ResponseBody
+    public String initCompany(String fullname, String industry, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        JSONObject jsonObject = new JSONObject();
+        User userInfo = LoginSessionReposity.getUserInfoInSession(request);
+        CompanyDto dtoVo = new CompanyDto();
+        dtoVo.setCompanyName(fullname);
+        if (companyService.findCompany(dtoVo) != null) {
+            jsonObject.put("message", "企业名称已存在");
+            jsonObject.put("code", -1);
+            return jsonObject.toString();
+        } else {
+            dtoVo.setUserId(userInfo.getUserId());
+            dtoVo.setCreateName(userInfo.getRealName());
+            try {
+                Company company = createCompanyService.createCompany(dtoVo);
+            } catch (CompanyExistException e) {
+                e.printStackTrace();
+                jsonObject.put("code", -1);
+                jsonObject.put("message", "企业名称已存在");
+                return jsonObject.toString();
+            } catch (DeptmentExistException e) {
+                e.printStackTrace();
+                jsonObject.put("code", -1);
+                jsonObject.put("message", "企业名称已存在");
+                return jsonObject.toString();
+            }
+        }
+        jsonObject.put("code", 0);
+        String redirectUrl = RequestAuthRedirectStrategy.getAuthCallback(request);
+        jsonObject.put("redirecturl", redirectUrl);
+        return jsonObject.toString();
+    }
 
-	@Reference(async = true)
-	LoginLogService loginLogService;
 
-	@RequestMapping("/logincompany")
-	@ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
-	public ModelAndView loginCompany(Long companyId, HttpServletRequest request, HttpServletResponse response) {
-		User userInfo = LoginSessionReposity.getUserInfoInSession(request);
-		UserCompRel companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);
+    /**
+     * 解除绑定关系
+     *
+     * @param companyid
+     * @param request
+     * @param response
+     * @return
+     */
+    @ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
+    @RequestMapping("/removecompany")
+    public void removeCompany(Long usercomprelid, Long companyid, HttpServletRequest request, HttpServletResponse response) {
+        JSONObject jsonObject = new JSONObject();
+        User userInfo = LoginSessionReposity.getUserInfoInSession(request);
+        int flag = companyService.removeCompanyRel(usercomprelid);
+        try {
+            response.sendRedirect(CHOOSE_COMPANY_PAGE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-		if (companyMember == null) {
-			//当前用户不在所选公司之内
-			throw new LoginError("用户不属于该公司");
-		}
+    }
 
-		ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
-		LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
-		strategy.hasAuthRedirect(request, response);
+    @Reference(async = true)
+    LoginLogService loginLogService;
 
-		LoginLog loginLog = new LoginLog();
-		loginLog.setUserId(userInfo.getUserId());
-		loginLog.setLoginCompanyId(companyId);
-		loginLog.setLoginAgent("PC");
-		loginLog.setLoginIp(HttpUtils.getLocalIp(request));
-		loginLogService.saveLog(loginLog);
+    @RequestMapping("/logincompany")
+    @ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
+    public ModelAndView loginCompany(Long companyId, HttpServletRequest request, HttpServletResponse response) {
+        User userInfo = LoginSessionReposity.getUserInfoInSession(request);
+        UserCompRel companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);
 
-		return null;
-	}
+        if (companyMember == null) {
+            //当前用户不在所选公司之内
+            throw new LoginError("用户不属于该公司");
+        }
+
+        ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
+        LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
+        strategy.hasAuthRedirect(request, response);
+        LoginLog loginLog = new LoginLog();
+        loginLog.setUserId(userInfo.getUserId());
+        loginLog.setLoginCompanyId(companyId);
+        loginLog.setLoginAgent("PC");
+        loginLog.setLoginIp(HttpUtils.getLocalIp(request));
+        loginLogService.saveLog(loginLog);
+        return null;
+    }
+
+    @ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class,})
+    public ModelAndView forgetPwd() {
+        return new ModelAndView();
+    }
+
+    @Autowired
+    ValidCodeService validCodeService;
+
+    private static final String FORGET_PASS_TAG = "forgetpwd";
+
+    //发送短信验证码
+    //TODO 设置返回页面
+    @RequestMapping("/sendsmscode")
+    @ResponseBody
+    public String sendValidSms(HttpServletRequest request, String phoneNum) throws UserNotExistException {
+        User user = userService.queryByPhone(phoneNum);
+        validCodeService.sendValidCode(request, FORGET_PASS_TAG, 60, phoneNum);
+        return null;
+    }
+
+    public ModelAndView setNewPwdPage(String validCode,String phone,HttpServletRequest request){
+        boolean codeCorrect = validCodeService.isCodeCorrect(validCode, request, FORGET_PASS_TAG, phone);
+        if (codeCorrect) {
+            return new ModelAndView();
+        }else{
+            return null;
+        }
+    }
 
 }
