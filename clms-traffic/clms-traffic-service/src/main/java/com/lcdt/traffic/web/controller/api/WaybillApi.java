@@ -1,8 +1,10 @@
 package com.lcdt.traffic.web.controller.api;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.quartz.rpc.QuartzRpc;
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
@@ -35,6 +37,9 @@ import java.util.Map;
 public class WaybillApi {
     @Autowired
     private WaybillService waybillService;
+
+    @Reference
+    private QuartzRpc quartzRpc;
 
     @ApiOperation("我的运单--新增")
     @RequestMapping(value = "/own/add", method = RequestMethod.POST)
@@ -141,6 +146,7 @@ public class WaybillApi {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         //组权限信息
+        quartzRpc.startWaybillPositionTimer();
         StringBuffer sb = new StringBuffer();
         if (dto.getGroupId()!=null&&dto.getGroupId()>0) {//传业务组，查这个组帮定的客户
             sb.append(" find_in_set('"+dto.getGroupId()+"',group_id)"); //项目组id

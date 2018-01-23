@@ -1,20 +1,21 @@
 package com.lcdt.traffic.web.controller.api;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.quartz.service.IQuartzService;
-import com.lcdt.traffic.exception.WaybillPlanException;
-import com.lcdt.traffic.job.TestJob;
-import com.lcdt.traffic.job.TestJob1;
+import com.lcdt.quartz.rpc.QuartzRpc;
 import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.Plan4CreateService;
 import com.lcdt.traffic.service.Plan4EditService;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.vo.ConstantVO;
-import com.lcdt.traffic.web.dto.*;
+import com.lcdt.traffic.web.dto.PageBaseDto;
+import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
+import com.lcdt.traffic.web.dto.WaybillParamsDto;
+import com.lcdt.traffic.web.dto.WaybillPlanListParamsDto;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
@@ -50,8 +51,8 @@ public class OwnPlanApi {
     private PlanService planService;
 
 
-    @Autowired
-    private IQuartzService iQuartzService;
+    @Reference
+    private QuartzRpc quartzRpc;
 
 
 
@@ -209,10 +210,7 @@ public class OwnPlanApi {
     @RequestMapping(value = "/loadPlan",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_plan')")
     public WaybillPlan loadPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
-        iQuartzService.deleteJob("job_product_pull1", "jGroup_product_pull1");
-        iQuartzService.startSchedule("job_product_pull1", "jGroup_product_pull1", "0/5 * * * * ?", "trigger_product_pull1",
-                "tGroup__product_pull1", TestJob1.class);
-        iQuartzService.test();
+        quartzRpc.test();
         Long companyId = SecurityInfoGetter.getCompanyId();
         WaybillParamsDto dto = new WaybillParamsDto();
         dto.setCompanyId(companyId);
@@ -261,16 +259,19 @@ public class OwnPlanApi {
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {//业务组
             sb.append(" find_in_set('"+dto.getGroupIds()+"',group_id)");
         } else {
-            sb.append("(");
             List<Group> groupList = SecurityInfoGetter.groups();
-            for(int i=0;i<groupList.size();i++) {
-                Group group = groupList.get(i);
-                sb.append(" find_in_set('"+group.getGroupId()+"',group_id)");
-                if(i!=groupList.size()-1){
-                    sb.append(" or ");
+            if(groupList!=null && groupList.size()>0) {
+                sb.append("(");
+                for(int i=0;i<groupList.size();i++) {
+                    Group group = groupList.get(i);
+                    sb.append(" find_in_set('"+group.getGroupId()+"',group_id)");
+                    if(i!=groupList.size()-1){
+                        sb.append(" or ");
+                    }
                 }
+                sb.append(")");
             }
-            sb.append(")");
+
         }
 
         if (!sb.toString().isEmpty()) {
