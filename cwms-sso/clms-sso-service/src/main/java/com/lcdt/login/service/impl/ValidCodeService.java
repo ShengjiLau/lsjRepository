@@ -41,7 +41,6 @@ public class ValidCodeService {
         HttpSession session = request.getSession(true);
         String sessionKey = sessionPrefixKey + tag;
         ValidCodeBean attribute = getCodeBean(request, tag);
-
         if (attribute == null || !isCodeValid(attribute)) {
             ValidCodeBean validCodeBean = new ValidCodeBean();
             String random = RandomNoUtil.createRandom(true, 4);
@@ -50,18 +49,20 @@ public class ValidCodeService {
             validCodeBean.setTimeout(timeout);
             validCodeBean.setPhoneNums(phoneNum);
             session.setAttribute(sessionKey,validCodeBean);
-            notifyService.sendSms(new String[]{phoneNum},random);
+            notifyService.sendSms(new String[]{phoneNum},generateCodeString(random));
         }
-
         return;
     }
 
-
+    private String generateCodeString(String code){
+        String format = "您好，注册验证码为:%s，%s分钟内有效，感谢使用。";
+        String format1 = String.format(format, code, "15");
+        return format1;
+    }
 
 
     public ValidCodeBean getCodeBean(HttpServletRequest request, String tag) {
         String sessionKey = sessionPrefixKey + tag;
-
         HttpSession session = request.getSession(true);
         Object attribute = session.getAttribute(sessionKey);
         if (attribute != null) {
