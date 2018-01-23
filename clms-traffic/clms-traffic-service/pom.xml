@@ -106,7 +106,7 @@
         </dependency>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>quartz-api</artifactId>
+            <artifactId>clms-quartz-api</artifactId>
             <version>1.0</version>
         </dependency>
 

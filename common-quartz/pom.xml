@@ -12,8 +12,8 @@
     <artifactId>common-quartz</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>quartz-service</module>
-        <module>quartz-api</module>
+        <module>clms-quartz-service</module>
+        <module>clms-quartz-api</module>
     </modules>
     <dependencies>
         <dependency>
