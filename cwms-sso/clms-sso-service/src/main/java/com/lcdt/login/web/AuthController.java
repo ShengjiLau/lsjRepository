@@ -293,7 +293,7 @@ public class AuthController {
     @ResponseBody
     public String sendValidSms(HttpServletRequest request, String phoneNum) throws UserNotExistException {
         User user = userService.queryByPhone(phoneNum);
-        validCodeService.sendValidCode(request, FORGET_PASS_TAG, 60, phoneNum);
+        validCodeService.sendValidCode(request, FORGET_PASS_TAG, 60*15, phoneNum);
         return null;
     }
 
