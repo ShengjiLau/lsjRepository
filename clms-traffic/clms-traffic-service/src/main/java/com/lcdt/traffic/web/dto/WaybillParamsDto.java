@@ -24,7 +24,7 @@ public class WaybillParamsDto {
     private Long groupId;
 
     @ApiModelProperty(value = "所属项目组名称")
-    private Long groupName;
+    private String groupName;
 
     @ApiModelProperty(value = "派单方式 0-其它\n" +
             "1-直派\n" +
@@ -298,11 +298,11 @@ public class WaybillParamsDto {
         this.groupId = groupId;
     }
 
-    public Long getGroupName() {
+    public String getGroupName() {
         return groupName;
     }
 
-    public void setGroupName(Long groupName) {
+    public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
 
