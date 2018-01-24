@@ -56,7 +56,7 @@
     tel_no1, invoice_remark, bind_comp_id, status, bind_company, link_man, link_duty, link_tel,
     link_email, company_id,collection_ids,collection_names
     from t_customer
-    where customer_id = #{0} and company_id = #{1}
+    where customer_id = #{customerId} and company_id = #{companyId}
   </select>
 
 

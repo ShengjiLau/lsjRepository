@@ -1,5 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+　<head>
+    　　<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    　　<title>HTML Email编写指南</title>
+    　　<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    　</head>
+<body style="width: 200px">
 Hi,${username}
-${inviteUser}邀请您成为${inviteCompanyName}的${inviteCompanyType}一起使用大驼队cLMS实现供应链业务协同，请点击邀请链接确认。
-${inviteUrl}
+    ${inviteUser}邀请您成为${inviteCompanyName}的${inviteCompanyType}一起使用大驼队cLMS实现供应链业务协同，请点击邀请链接确认。
+    ${inviteUrl}
 48小时内链接有效，48小时后需要重新邀请。
 如果点击链接无法访问，请将链接复制并粘贴至新的浏览器窗口中访问
+
+</body>
+
+</html>
+
+

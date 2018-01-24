@@ -5,10 +5,8 @@ import com.lcdt.clms.permission.service.SysRoleService;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.exception.DeptmentExistException;
-import com.lcdt.userinfo.model.Company;
-import com.lcdt.userinfo.model.Department;
-import com.lcdt.userinfo.model.Group;
-import com.lcdt.userinfo.model.UserGroupRelation;
+import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.*;
 import com.lcdt.userinfo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,12 +40,23 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	@Autowired
 	DepartmentService departmentService;
 
+	@Autowired
+	UserService userService;
+
 	private SysRole sysAdminRole;
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Company createCompany(CompanyDto companyDto) throws CompanyExistException, DeptmentExistException {
 		Company company = companyService.createCompany(companyDto);
+		try {
+			User user = userService.queryByUserId(company.getCreateId());
+			company.setLinkMan(user.getRealName());
+			company.setLinkTel(user.getPhone());
+			company.setLinkEmail(user.getEmail());
+		} catch (UserNotExistException e) {
+			e.printStackTrace();
+		}
 		//默认添加创建者为管理员权限
 		sysRoleService.addUserSysRole(getSysAdminRole(), company.getCreateId(), company.getCompId());
 		Group defaultCompanyGroup = createDefaultCompanyGroup(company);
@@ -58,7 +67,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	private Group createDefaultCompanyGroup(Company company) {
+	public Group createDefaultCompanyGroup(Company company) {
 		Group group = new Group();
 		group.setGroupName(defaultGroupName);
 		group.setCompanyId(company.getCompId());
@@ -75,7 +84,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	 * @return
 	 */
 	@Transactional(rollbackFor = Exception.class)
-	private Department setUpDepartMent(Company company) throws DeptmentExistException {
+	public Department setUpDepartMent(Company company) throws DeptmentExistException {
 		Department department = new Department();
 		department.setCompanyId(company.getCompId());
 		department.setDeptName(company.getFullName());
@@ -85,7 +94,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 
 
 	@Transactional(rollbackFor = Exception.class)
-	private void addToGroup(Group group, Long userId, Long companyId) {
+	public void addToGroup(Group group, Long userId, Long companyId) {
 		UserGroupRelation userGroupRelation = userGroupService.addUserToGroup(companyId, userId, group);
 	}
 
