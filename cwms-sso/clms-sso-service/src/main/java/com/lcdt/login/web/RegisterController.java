@@ -107,8 +107,10 @@ public class RegisterController {
         if (userService.isPhoneBeenRegister(registerDto.getUserPhoneNum())) { //根据用户首页号检查用户是否有注册
             msg = "手机号" + registerDto.getUserPhoneNum() + "已注册，请选用别的号注册！";
         } else {
-            validCodeService.sendValidCode(request, VALID_CODE_TAG, 60 * 15, registerDto.getUserPhoneNum());
-            flag = true;
+            flag = validCodeService.sendValidCode(request, VALID_CODE_TAG, 60 * 15, registerDto.getUserPhoneNum());
+            if (!flag) {
+                msg = "短信超限";
+            }
         }
         map.put("msg", msg);
         map.put("flag", flag);
