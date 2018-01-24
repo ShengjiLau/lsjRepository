@@ -86,11 +86,9 @@ public class CompanyApi {
 			company.setLinkRemark(modifyContactDto.getContactRemark());
 		}
 
-
 		if (!StringUtils.isEmpty(modifyContactDto.getContactEmail())) {
 			company.setLinkEmail(modifyContactDto.getContactEmail());
 		}
-
 
 		if (!StringUtils.isEmpty(modifyContactDto.getContactDuty())) {
 			company.setLinkDuty(modifyContactDto.getContactDuty());
@@ -128,12 +126,17 @@ public class CompanyApi {
 			company.setPostCode(modifyCompanyInfoDto.getPostCode());
 		}
 
-		if (!StringUtils.isEmpty(modifyCompanyInfoDto.getIntro())) {
-			company.setCompIntro(modifyCompanyInfoDto.getIntro());
+		if (!StringUtils.isEmpty(modifyCompanyInfoDto.getCompIntro())) {
+			company.setCompIntro(modifyCompanyInfoDto.getCompIntro());
 		}
 
-		if (!StringUtils.isEmpty(modifyCompanyInfoDto.getPhone())) {
-			company.setTelNo(modifyCompanyInfoDto.getPhone());
+		if (!StringUtils.isEmpty(modifyCompanyInfoDto.getTelNo())) {
+			company.setTelNo(modifyCompanyInfoDto.getTelNo());
+		}
+
+
+		if (!StringUtils.isEmpty(modifyCompanyInfoDto.getTelNo1())) {
+			company.setTelNo(modifyCompanyInfoDto.getTelNo1());
 		}
 
 		company.setFax(company.getFax());

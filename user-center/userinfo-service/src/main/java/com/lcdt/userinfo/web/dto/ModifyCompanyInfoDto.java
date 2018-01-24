@@ -39,14 +39,22 @@ public class ModifyCompanyInfoDto {
 	@ApiModelProperty("传真")
 	public String fax;
 
-
+/*
 	@ApiModelProperty("电话")
 	@Size(max = 15)
-	public String phone;
+	public String phone;*/
+
+	@ApiModelProperty("公司电话")
+	@Size(max = 15)
+	public String telNo;
+
+	@ApiModelProperty("财务电话")
+	@Size(max = 15)
+	public String telNo1;
 
 	@ApiModelProperty("简介")
 	@Size(max = 30)
-	public String intro;
+	public String compIntro;
 
 	@ApiModelProperty("企业logo")
 	public String companyLogo;
@@ -142,19 +150,27 @@ public class ModifyCompanyInfoDto {
 		this.fax = fax;
 	}
 
-	public String getPhone() {
-		return phone;
+	public String getTelNo() {
+		return telNo;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setTelNo(String telNo) {
+		this.telNo = telNo;
 	}
 
-	public String getIntro() {
-		return intro;
+	public String getTelNo1() {
+		return telNo1;
 	}
 
-	public void setIntro(String intro) {
-		this.intro = intro;
+	public void setTelNo1(String telNo1) {
+		this.telNo1 = telNo1;
+	}
+
+	public String getCompIntro() {
+		return compIntro;
+	}
+
+	public void setCompIntro(String compIntro) {
+		this.compIntro = compIntro;
 	}
 }
