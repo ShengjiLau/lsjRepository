@@ -253,8 +253,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //其它
                 waybillPlanMapper.insert(vo); //生成计划
                 createTransportWayItems(dto, vo);//批量创建栏目
-
-                List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
+                List<PlanDetail> planDetailList = dto.getPlanDetailList(); //new ArrayList<PlanDetail>();
                 for (PlanDetail obj : planDetailList) {
                     obj.setWaybillPlanId(vo.getWaybillPlanId());
                     obj.setRemainderAmount(obj.getPlanAmount());
@@ -266,9 +265,10 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     obj.setUpdateTime(obj.getCreateDate());
                     obj.setCompanyId(vo.getCompanyId());
                     obj.setIsDeleted((short)0);
-                    planDetailList.add(obj);
                 }
-                planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
+                if (planDetailList!=null && planDetailList.size()>0) {
+                    planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
+                }
             }
         } else { //未指定承运商(只生成计划)
             onlyCreateWaybillPlan(vo,dto,flag);
