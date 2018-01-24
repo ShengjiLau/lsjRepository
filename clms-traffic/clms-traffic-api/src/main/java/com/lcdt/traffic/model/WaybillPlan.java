@@ -642,6 +642,12 @@ public class WaybillPlan implements java.io.Serializable,ResponseData {
     private List<SplitGoods> splitGoodsList;
 
 
+    /**
+     * 运单列表
+     */
+    private List<Waybill> waybillList;
+
+
     public List<PlanDetail> getPlanDetailList() {
         return planDetailList;
     }
@@ -2248,5 +2254,13 @@ public class WaybillPlan implements java.io.Serializable,ResponseData {
 
     public void setCarrierVehicle(String carrierVehicle) {
         this.carrierVehicle = carrierVehicle;
+    }
+
+    public List<Waybill> getWaybillList() {
+        return waybillList;
+    }
+
+    public void setWaybillList(List<Waybill> waybillList) {
+        this.waybillList = waybillList;
     }
 }
