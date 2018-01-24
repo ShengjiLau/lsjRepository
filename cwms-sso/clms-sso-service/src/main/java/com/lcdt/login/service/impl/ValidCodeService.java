@@ -1,9 +1,11 @@
 package com.lcdt.login.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.lcdt.login.service.ValidCodeCountService;
 import com.lcdt.notify.rpcservice.NotifyService;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.util.RandomNoUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,9 @@ public class ValidCodeService {
 
     @Reference
     private NotifyService notifyService;
+
+    @Autowired
+    ValidCodeCountService validCodeCountService;
 
     private static final String sessionPrefixKey = "smsvalidcode_";
 
@@ -37,25 +42,28 @@ public class ValidCodeService {
      * @param tag
      * @param timeout
      */
-    public void sendValidCode(HttpServletRequest request,String tag,Integer timeout,String phoneNum){
+    public boolean sendValidCode(HttpServletRequest request,String tag,Integer timeout,String phoneNum){
 
-        //TODO 检查号码发送的次数
-
-
-        HttpSession session = request.getSession(true);
-        String sessionKey = sessionPrefixKey + tag;
-        ValidCodeBean attribute = getCodeBean(request, tag);
-        if (attribute == null || !isCodeValid(attribute)) {
-            ValidCodeBean validCodeBean = new ValidCodeBean();
-            String random = RandomNoUtil.createRandom(true, 4);
-            validCodeBean.setCreateTime(System.currentTimeMillis());
-            validCodeBean.setValidCode(random);
-            validCodeBean.setTimeout(timeout);
-            validCodeBean.setPhoneNums(phoneNum);
-            session.setAttribute(sessionKey,validCodeBean);
-            notifyService.sendSms(new String[]{phoneNum},generateCodeString(random));
+        if (validCodeCountService.phoneTodayCount(phoneNum)) {
+            HttpSession session = request.getSession(true);
+            String sessionKey = sessionPrefixKey + tag;
+            ValidCodeBean attribute = getCodeBean(request, tag);
+            if (attribute == null || !isCodeValid(attribute)) {
+                ValidCodeBean validCodeBean = new ValidCodeBean();
+                String random = RandomNoUtil.createRandom(true, 4);
+                validCodeBean.setCreateTime(System.currentTimeMillis());
+                validCodeBean.setValidCode(random);
+                validCodeBean.setTimeout(timeout);
+                validCodeBean.setPhoneNums(phoneNum);
+                session.setAttribute(sessionKey,validCodeBean);
+                notifyService.sendSms(new String[]{phoneNum},generateCodeString(random));
+                validCodeCountService.updateValidCodeLog(phoneNum);
+                return true;
+            }
         }
-        return;
+        return false;
+
+
     }
 
     private String generateCodeString(String code){
