@@ -101,9 +101,7 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
             map.put("subItemIdList", null);
             map.put("companyId", companyId);
             result += customValueMapper.deleteItemAndSubItemId(map);
-            //删除主商品
-            result = itemsInfoMapper.deleteByItemIdAndCompanyId(itemsInfo);
-
+            result = itemsInfoMapper.deleteByItemIdAndCompanyId(itemsInfo);//删除主商品
         }
         return result;
     }
