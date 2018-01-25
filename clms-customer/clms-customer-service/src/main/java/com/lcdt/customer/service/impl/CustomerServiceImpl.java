@@ -368,8 +368,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public int customerCollectionRemove(Long collectionId, Long companyId) {
-        return customerCollectionMapper.deleteByPrimaryKey(collectionId,companyId);
+    public int customerCollectionRemove(Map map) {
+        return customerCollectionMapper.deleteByPrimaryKey(map);
     }
 
 }
