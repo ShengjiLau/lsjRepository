@@ -242,7 +242,7 @@ public class AuthController {
     public void removeCompany(Long usercomprelid, Long companyid, HttpServletRequest request, HttpServletResponse response) {
         JSONObject jsonObject = new JSONObject();
         User userInfo = LoginSessionReposity.getUserInfoInSession(request);
-        int flag = companyService.removeCompanyRel(usercomprelid);
+        boolean flag = companyService.removeCompanyRel(usercomprelid);
         try {
             response.sendRedirect(CHOOSE_COMPANY_PAGE);
         } catch (IOException e) {
