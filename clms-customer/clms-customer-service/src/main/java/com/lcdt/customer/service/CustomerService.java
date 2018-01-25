@@ -122,7 +122,7 @@ public interface CustomerService {
      * @param customerCollection
      * @return
      */
-    int customerCollectionUpdate(CustomerCollection customerCollection) throws CustomerException ;
+    int customerCollectionUpdate(CustomerCollection customerCollection);
 
 
     /**
