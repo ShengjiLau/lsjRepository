@@ -23,7 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yangbinq on 2017/12/21.
@@ -92,7 +94,9 @@ public class SplitGoodsApi {
         WaybillPlan waybillPlan = planService.loadWaybillPlan(dto);
         BindingSplitDto rdto = new BindingSplitDto();
         rdto.setWaybillPlan(waybillPlan);//计划划
-        List<SnatchGoods> list = snatchGoodsMapper.selectByWaybillPlanId(waybillPlanId);
+        Map map = new HashMap<String,Long>();
+        map.put("waybillPlanId",waybillPlanId);
+        List<SnatchGoods> list = snatchGoodsMapper.selectByWaybillPlanId(map);
         rdto.setSnatchGoodsList(list);//抢单
         List<TransportWayItems> transportWayItemsList = transportWayItemsMapper.selectByWaybillPlanId(waybillPlanId);
         rdto.setTransportWayItemsList(transportWayItemsList); //输入项目

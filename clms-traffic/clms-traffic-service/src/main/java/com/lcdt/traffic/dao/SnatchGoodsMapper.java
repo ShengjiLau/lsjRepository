@@ -3,6 +3,7 @@ package com.lcdt.traffic.dao;
 import com.lcdt.traffic.model.SnatchGoods;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SnatchGoodsMapper {
     /**
@@ -47,5 +48,5 @@ public interface SnatchGoodsMapper {
 
 
 
-    List<SnatchGoods> selectByWaybillPlanId(Long waybillPlanId);
+    List<SnatchGoods> selectByWaybillPlanId(Map map);
 }

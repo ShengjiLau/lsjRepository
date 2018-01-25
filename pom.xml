@@ -12,7 +12,6 @@
     <modules>
         <module>mybatis-generator</module>
         <module>user-center</module>
-        <module>cwms-web</module>
         <module>common-config</module>
         <module>common-utils</module>
         <module>cwms-sso</module>
