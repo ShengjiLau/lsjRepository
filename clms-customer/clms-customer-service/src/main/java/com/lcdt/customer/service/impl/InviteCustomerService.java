@@ -33,7 +33,9 @@ public class InviteCustomerService {
 
 	VelocityContext velocityContext = new VelocityContext();
 
-	public String templateName = "/inviteEmail.vm";
+	public String htmltemplateName = "/inviteEmail.vm";
+
+	public String contentTemplateName = "inviteEmailContent.vm";
 
 	public String inviteEmailSubject = "主题：邀请您使用大驼队协同物流运输系统";
 
@@ -64,7 +66,7 @@ public class InviteCustomerService {
 		inviteLogdao.insert(customerInviteLog);
 		String clientTypes = customer.getClientTypes();
 		clientTypes = clientTypeToString(clientTypes);
-		String content = resolveInviteEmailContent(customer.getCustomerName(), inviteUser.getRealName(), inviteCompany.getShortName(),
+		String content = resolveInviteEmailContent(contentTemplateName,customer.getCustomerName(), inviteUser.getRealName(), inviteCompany.getShortName(),
 				clientTypes,beInvitedUrl(customerInviteLog.getInviteId(),customerInviteLog.getInviteToken()));
 		InviteDto inviteDto = new InviteDto();
 		inviteDto.setInviteContent(content);
@@ -81,7 +83,7 @@ public class InviteCustomerService {
 		message.setFrom("service@datuodui.com");
 		message.setTo(email);
 		message.setSubject(inviteEmailSubject);
-		message.setText(resolveInviteEmailContent(inviteCustomer.getCustomerName(), inviteUser.getRealName(),
+		message.setText(resolveInviteEmailContent(htmltemplateName,inviteCustomer.getCustomerName(), inviteUser.getRealName(),
 				inviteCompany.getFullName(),clientTypeToString(inviteCustomer.getClientTypes()),
 				beInvitedUrl(customerInviteLog.getInviteId(),customerInviteLog.getInviteToken())));
 		mailSender.send(message);
@@ -136,7 +138,7 @@ public class InviteCustomerService {
 	}
 
 
-	public String resolveInviteEmailContent(String customerName,String inviteUserName,String inviteCompanyName,String inviteCompanyTypeName,String inviteUrl){
+	public String resolveInviteEmailContent(String templateName,String customerName,String inviteUserName,String inviteCompanyName,String inviteCompanyTypeName,String inviteUrl){
 		StringWriter w = new StringWriter();
 		Properties properties=new Properties();
 		//设置velocity资源加载方式为class

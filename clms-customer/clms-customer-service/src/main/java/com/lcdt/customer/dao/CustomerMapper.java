@@ -1,6 +1,7 @@
 package com.lcdt.customer.dao;
 
 import com.lcdt.customer.model.Customer;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public interface CustomerMapper {
      *
      * @mbg.generated Fri Nov 24 10:56:38 CST 2017
      */
-    Customer selectByPrimaryKey(Long customerId, Long companyId);
+    Customer selectByPrimaryKey(@Param("customerId") Long customerId, @Param("companyId")Long companyId);
 
     Customer selectInnerByPrimaryKey(Long customerId);
 

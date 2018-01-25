@@ -21,7 +21,6 @@
         <module>clms-security</module>
         <module>clms-pay-service</module>
         <module>user-center</module>
-        <module>cwms-web</module>
         <module>cwms-items</module>
         <module>cwms-contract</module>
         <module>clms-customer</module>
@@ -78,7 +77,7 @@
             <dependency>
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis</artifactId>
-                <version>3.4.1</version>
+                <version>3.4.2</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
             <dependency>

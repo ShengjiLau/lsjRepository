@@ -341,7 +341,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public int customerCollectionAdd(CustomerCollection customerCollection) throws CustomerException {
+    public int customerCollectionAdd(CustomerCollection customerCollection) {
         Map map = new HashMap();
         map.put("companyId", customerCollection.getCompanyId());
         map.put("collectionName", customerCollection.getCollectionName());
@@ -354,7 +354,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public int customerCollectionUpdate(CustomerCollection customerCollection) throws CustomerException {
+    public int customerCollectionUpdate(CustomerCollection customerCollection) {
         Map map = new HashMap();
         map.put("companyId", customerCollection.getCompanyId());
         map.put("collectionName", customerCollection.getCollectionName());

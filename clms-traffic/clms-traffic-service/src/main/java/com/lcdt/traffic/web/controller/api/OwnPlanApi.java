@@ -51,11 +51,6 @@ public class OwnPlanApi {
     private PlanService planService;
 
 
-    @Reference
-    private QuartzRpc quartzRpc;
-
-
-
     @ApiOperation("创建--发布")
     @RequestMapping(value = "/createPlan",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_create_plan')")
@@ -210,7 +205,6 @@ public class OwnPlanApi {
     @RequestMapping(value = "/loadPlan",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_plan')")
     public WaybillPlan loadPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
-        quartzRpc.test();
         Long companyId = SecurityInfoGetter.getCompanyId();
         WaybillParamsDto dto = new WaybillParamsDto();
         dto.setCompanyId(companyId);

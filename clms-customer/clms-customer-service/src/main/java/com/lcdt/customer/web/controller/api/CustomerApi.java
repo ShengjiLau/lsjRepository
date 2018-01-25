@@ -346,10 +346,12 @@ public class CustomerApi {
         User loginUser = SecurityInfoGetter.getUser();
         CustomerContact vo = new CustomerContact();
         BeanUtils.copyProperties(dto, vo);
-        try {
-            vo.setBirthday(DateUtility.string2Date(dto.getBirthday1(),"yyyy-MM-dd"));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if(!StringUtils.isEmpty(dto.getBirthday1())) {
+            try {
+                vo.setBirthday(DateUtility.string2Date(dto.getBirthday1(), "yyyy-MM-dd"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         vo.setCompanyId(companyId);
         vo.setIsDefault((short)0); //非默认联系人
@@ -470,7 +472,7 @@ public class CustomerApi {
     @ApiOperation("新增客户组(竞价)")
     @RequestMapping(value = "/customerCollectionAdd",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
-    public CustomerCollection customerCollectionAdd(@ApiParam(value = "组名称",required = true) @RequestParam String collectionName,
+    public Object customerCollectionAdd(@ApiParam(value = "组名称",required = true) @RequestParam String collectionName,
                                                  @ApiParam(value = "备注") @RequestParam String remark) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -483,10 +485,14 @@ public class CustomerApi {
         vo.setRemark(remark);
         try {
             customerService.customerCollectionAdd(vo);
+            return vo;
         } catch (CustomerException e) {
-            throw new CustomerException(e.getMessage());
+            JSONObject jsonObject = new JSONObject();
+            int code = -1;
+            jsonObject.put("message",e.getMessage());
+            jsonObject.put("code",code);
+            return jsonObject.toString();
         }
-        return vo;
     }
 
 
@@ -498,7 +504,7 @@ public class CustomerApi {
     @ApiOperation("编辑客户组(竞价)")
     @RequestMapping(value = "/customerCollectionUpdate",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
-    public CustomerCollection customerCollectionUpdate(@ApiParam(value = "组名ID",required = true) @RequestParam Long collectionId,
+    public Object customerCollectionUpdate(@ApiParam(value = "组名ID",required = true) @RequestParam Long collectionId,
                                                     @ApiParam(value = "组名称",required = true) @RequestParam String collectionName,
                                                     @ApiParam(value = "备注") @RequestParam String remark) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -510,10 +516,14 @@ public class CustomerApi {
         vo.setRemark(remark);
         try {
             customerService.customerCollectionUpdate(vo);
+            return vo;
         } catch (CustomerException e) {
-            throw new CustomerException(e.getMessage());
+            JSONObject jsonObject = new JSONObject();
+            int code = -1;
+            jsonObject.put("message",e.getMessage());
+            jsonObject.put("code",code);
+            return jsonObject.toString();
         }
-        return vo;
     }
 
 
@@ -565,7 +575,7 @@ public class CustomerApi {
     @ApiOperation("客户绑定")
     @RequestMapping(value = "/customerCollectionBind",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
-    public Customer customerCollectionBind(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
+    public Object customerCollectionBind(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
                                            @ApiParam(value = "是否取消(1-是，0否)",required = true) @RequestParam(value="isCancel", defaultValue="0") short isCancel,
                                            @ApiParam(value = "组ID") @RequestParam String collectionIds,
                                            @ApiParam(value = "组名称") @RequestParam String collectionNames) {
@@ -583,10 +593,15 @@ public class CustomerApi {
         customer.setCustomerId(customerId);
         try {
             customerService.customerCollectionBind(customer);
+            return customer;
         } catch (CustomerException e) {
-            throw new CustomerException(e.getMessage());
+            JSONObject jsonObject = new JSONObject();
+            int code = -1;
+            jsonObject.put("message",e.getMessage());
+            jsonObject.put("code",code);
+            return jsonObject.toString();
         }
-        return customer;
+
     }
 
 
