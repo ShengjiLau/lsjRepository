@@ -538,7 +538,10 @@ public class CustomerApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
     public String customerCollectionRemove(@ApiParam(value = "组名ID",required = true) @RequestParam Long collectionId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        int flag = customerService.customerCollectionRemove(collectionId,companyId);
+        Map map = new HashMap<String,Long>();
+        map.put("collectionId",collectionId);
+        map.put("companyId",companyId);
+        int flag = customerService.customerCollectionRemove(map);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("message",flag==1?"删除成功！":"删除失败！");
         jsonObject.put("code",flag==1?0:-1);

@@ -127,11 +127,10 @@ public interface CustomerService {
 
     /**
      * 客户组删除
-     * @param collectionId
-     * @param companyId
+     * map
      * @return
      */
-    int customerCollectionRemove(Long collectionId, Long companyId);
+    int customerCollectionRemove(Map map);
 
 
 }
