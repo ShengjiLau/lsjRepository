@@ -110,8 +110,6 @@ public class CustomerBindApi {
 			}
 		}
 
-
-
 		HashMap<Object, Object> map = new HashMap<>();
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		map.put("companyId", companyId);
