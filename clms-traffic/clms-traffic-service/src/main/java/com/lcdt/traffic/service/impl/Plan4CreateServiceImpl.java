@@ -121,7 +121,30 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 onlyCreateWaybillPlan(vo,dto,flag);
             }
         } else  if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_JINGJIA)) { //竞价
-            onlyCreateWaybillPlan(vo, dto, flag);
+                if (flag==1) { //发布--操作
+                    vo.setPlanStatus(ConstantVO.PLAN_STATUS_BIDDING); //竞价中
+                } else { //暂存--操作
+                    vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //计划状态(待发布)
+                }
+                 vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
+                 waybillPlanMapper.insert(vo); //生成计划
+                 createTransportWayItems(dto, vo);//批量创建栏目
+                 List<PlanDetail> planDetailList = dto.getPlanDetailList();
+                 if (null!=planDetailList && planDetailList.size()>0) {
+                    for (PlanDetail obj : planDetailList) {
+                        obj.setWaybillPlanId(vo.getWaybillPlanId());
+                        obj.setRemainderAmount(obj.getPlanAmount());//初期【计划=剩余】
+                        obj.setCreateId(vo.getCreateId());
+                        obj.setCreateName(vo.getCreateName());
+                        obj.setCreateDate(new Date());
+                        obj.setUpdateId(vo.getUpdateId());
+                        obj.setUpdateName(vo.getUpdateName());
+                        obj.setUpdateTime(obj.getCreateDate());
+                        obj.setCompanyId(vo.getCompanyId());
+                        obj.setIsDeleted((short)0);
+                    }
+                    planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
+                }
         }
         return vo;
     }
