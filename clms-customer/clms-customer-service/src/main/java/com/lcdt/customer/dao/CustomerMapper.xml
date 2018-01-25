@@ -325,7 +325,7 @@
         and status = #{status,jdbcType=SMALLINT}
       </if>
       <if test="complexStr!=null and complexStr!=''">
-        and (client_name like '%#{complexStr,jdbcType=VARCHAR}%' or short_name like'%#{complexStr,jdbcType=VARCHAR}%' or customer_code like '%#{complexStr,jdbcType=VARCHAR}%')
+        and (customer_name like CONCAT(#{complexStr,jdbcType=VARCHAR}, '%', '%') or short_name like CONCAT(#{complexStr,jdbcType=VARCHAR}, '%', '%')  or customer_code like CONCAT(#{complexStr,jdbcType=VARCHAR}, '%', '%') )
       </if>
       <if test="customerType!=null">
         and ${customerType}
@@ -351,7 +351,7 @@
 
       <!--这块只限编辑查询用END-->
     </where>
-    order by customer_id
+    order by customer_id desc
   </select>
   <select id="selectCarrierAndCustomer" resultType="Map" parameterType="Long">
     select sum(case when FIND_IN_SET('5',client_types) then 1 else 0 end) as carrier_num,

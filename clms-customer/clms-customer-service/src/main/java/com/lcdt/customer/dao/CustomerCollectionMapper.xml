@@ -80,7 +80,7 @@
         and   collection_id != #{collectionId,jdbcType=BIGINT}
       </if>
     </where>
-    order by collection_id
+    order by collection_id desc
   </select>
 
 </mapper>

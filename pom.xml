@@ -10,22 +10,22 @@
     <artifactId>cwms</artifactId>
     <version>1.0</version>
     <modules>
-        <module>mybatis-generator</module>
-        <module>user-center</module>
+        <module>clms-permission</module>
+        <module>clms-response-converter</module>
         <module>common-config</module>
         <module>common-utils</module>
-        <module>cwms-sso</module>
-        <module>cwms-items</module>
-        <module>clms-permission</module>
-        <module>cwms-contract</module>
-        <module>clms-security</module>
+        <module>common-quartz</module>
         <module>clms-swagger</module>
-        <module>clms-response-converter</module>
         <module>clms-notify</module>
+        <module>cwms-sso</module>
+        <module>clms-security</module>
+        <module>clms-pay-service</module>
+        <module>user-center</module>
+        <module>cwms-items</module>
+        <module>cwms-contract</module>
         <module>clms-customer</module>
         <module>clms-traffic</module>
-        <module>clms-pay-service</module>
-        <module>common-quartz</module>
+        <module>mybatis-generator</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>
