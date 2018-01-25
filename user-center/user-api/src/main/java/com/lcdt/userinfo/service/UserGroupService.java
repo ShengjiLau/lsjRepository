@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface UserGroupService {
 
-	List<UserGroupRelation> userGroups(Long userId,Long companyId);
+	List<Group> userGroups(Long userId,Long companyId);
 
 	UserGroupRelation addUserToGroup(Long companyId,Long userId, Group group);
 

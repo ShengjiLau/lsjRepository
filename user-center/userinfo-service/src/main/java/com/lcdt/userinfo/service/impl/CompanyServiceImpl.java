@@ -7,10 +7,12 @@ import com.lcdt.userinfo.dao.CompanyMapper;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
+import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.*;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.GroupManageService;
 import com.lcdt.userinfo.service.UserGroupService;
+import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +40,8 @@ public class CompanyServiceImpl implements CompanyService {
 	@Autowired
 	public GroupManageService groupService;
 
-
+	@Autowired
+	UserService userService;
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -95,6 +98,16 @@ public class CompanyServiceImpl implements CompanyService {
 		company.setCreateName(dto.getCreateName());
 		company.setCreateDate(dt);
 		companyMapper.insert(company);
+
+		try {
+			User user = userService.queryByUserId(company.getCreateId());
+			company.setLinkMan(user.getRealName());
+			company.setLinkTel(user.getPhone());
+			company.setLinkEmail(user.getEmail());
+		} catch (UserNotExistException e) {
+			e.printStackTrace();
+		}
+
 
 		//创建关系
 		if (company != null && company.getCompId() != null) {
@@ -190,8 +203,14 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-	public int removeCompanyRel(Long relId) {
-		return userCompRelMapper.deleteByPrimaryKey(relId);
+	public boolean removeCompanyRel(Long relId) {
+		UserCompRel userCompRel = userCompRelMapper.selectByPrimaryKey(relId);
+		short isCreate = userCompRel.getIsCreate();
+		if (isCreate == 1) {
+			return false;
+		}
+		userCompRelMapper.deleteByPrimaryKey(relId);
+		return true;
 	}
 
 

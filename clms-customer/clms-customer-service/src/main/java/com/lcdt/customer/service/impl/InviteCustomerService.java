@@ -14,9 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailMessage;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.BodyPart;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.io.StringWriter;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -78,14 +86,33 @@ public class InviteCustomerService {
 	/**
 	 * 发送邀请邮件
 	 */
-	public void sendInviteEmail(String email,CustomerInviteLog customerInviteLog,Customer inviteCustomer,Long companyId,User inviteUser,Company inviteCompany) {
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setFrom("service@datuodui.com");
-		message.setTo(email);
-		message.setSubject(inviteEmailSubject);
-		message.setText(resolveInviteEmailContent(htmltemplateName,inviteCustomer.getCustomerName(), inviteUser.getRealName(),
-				inviteCompany.getFullName(),clientTypeToString(inviteCustomer.getClientTypes()),
-				beInvitedUrl(customerInviteLog.getInviteId(),customerInviteLog.getInviteToken())));
+	public void sendInviteEmail(String email,CustomerInviteLog customerInviteLog,Customer inviteCustomer,Long companyId,User inviteUser,Company inviteCompany) throws MessagingException {
+
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message,true,"utf-8");
+
+		String s = resolveInviteEmailContent(htmltemplateName, inviteCustomer.getCustomerName(), inviteUser.getRealName(),
+				inviteCompany.getFullName(), clientTypeToString(inviteCustomer.getClientTypes()),
+				beInvitedUrl(customerInviteLog.getInviteId(), customerInviteLog.getInviteToken()));
+		Multipart mainPart = new MimeMultipart();
+		// 创建一个包含HTML内容的MimeBodyPart
+		BodyPart html = new MimeBodyPart();
+		// 设置HTML内容
+		try {
+			html.setContent(s, "text/html; charset=utf-8");
+			mainPart.addBodyPart(html);
+			message.setContent(mainPart);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+
+		// 将MiniMultipart对象设置为邮件内容
+//		message.setText(mainPart.get);
+
+		helper.setFrom("service@datuodui.com");
+		helper.setTo(email);
+		helper.setSubject(inviteEmailSubject);
+
 		mailSender.send(message);
 	}
 

@@ -2,6 +2,7 @@ package com.lcdt.userinfo.service.impl;
 
 import com.lcdt.clms.permission.model.SysRole;
 import com.lcdt.clms.permission.service.SysRoleService;
+import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.exception.DeptmentExistException;
@@ -11,8 +12,10 @@ import com.lcdt.userinfo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by ss on 2017/10/24.
@@ -43,26 +46,42 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	@Autowired
 	UserService userService;
 
+	@Autowired
+	UserCompRelMapper userCompRelMapper;
+
 	private SysRole sysAdminRole;
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Company createCompany(CompanyDto companyDto) throws CompanyExistException, DeptmentExistException {
 		Company company = companyService.createCompany(companyDto);
-		try {
-			User user = userService.queryByUserId(company.getCreateId());
-			company.setLinkMan(user.getRealName());
-			company.setLinkTel(user.getPhone());
-			company.setLinkEmail(user.getEmail());
-		} catch (UserNotExistException e) {
-			e.printStackTrace();
-		}
+
 		//默认添加创建者为管理员权限
 		sysRoleService.addUserSysRole(getSysAdminRole(), company.getCreateId(), company.getCompId());
 		Group defaultCompanyGroup = createDefaultCompanyGroup(company);
 		//创建者加入默认新建组
 		addToGroup(defaultCompanyGroup, company.getCompId(), company.getCreateId());
-		setUpDepartMent(company);
+
+		List<UserCompRel> userCompRels = userCompRelMapper.selectByUserIdCompanyId(company.getCreateId(), company.getCompId());
+		Department department = setUpDepartMent(company);
+		if (CollectionUtils.isEmpty(userCompRels)) {
+
+			UserCompRel userCompRel = new UserCompRel();
+			userCompRel.setCompId(company.getCompId());
+			userCompRel.setUserId(company.getCreateId());
+			userCompRel.setIsCreate((short) 1);
+			userCompRel.setDeptIds(String.valueOf(department.getDeptId()));
+
+			userCompRelMapper.insert(userCompRel);
+		}else{
+			UserCompRel userCompRel = userCompRels.get(0);
+			userCompRel.setDeptIds(String.valueOf(department.getDeptId()));
+			userCompRel.setDeptNames(department.getDeptName());
+			userCompRel.setIsEnable(true);
+			userCompRelMapper.updateByPrimaryKey(userCompRel);
+		}
+
+
 		return company;
 	}
 

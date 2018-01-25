@@ -22,15 +22,13 @@
     <!--<collection property="groups" ofType="com.lcdt.userinfo.model.UserGroupRelation"-->
                 <!--autoMapping="true" fetchType="eager" column="{groupId=group_id,companyId=comp_id}"-->
                 <!--select="com.lcdt.userinfo.dao.UserGroupRelationMapper.selectByUserCompany" >-->
-      <!--&lt;!&ndash;<id property="groupId" column="group_id"></id>&ndash;&gt;-->
-
-    <!--&lt;!&ndash;<id column="group_id" jdbcType="BIGINT" property="groupId" />&ndash;&gt;-->
-    <!--&lt;!&ndash;<result column="group_name" jdbcType="VARCHAR" property="groupName" />&ndash;&gt;-->
-    <!--&lt;!&ndash;<result column="company_id" jdbcType="BIGINT" property="companyId" />&ndash;&gt;-->
-    <!--&lt;!&ndash;<result column="is_valid" jdbcType="BIT" property="isValid" />&ndash;&gt;-->
-    <!--&lt;!&ndash;<result column="group_remark" jdbcType="VARCHAR" property="groupRemark" />&ndash;&gt;-->
-    <!--&lt;!&ndash;<result column="creat_time" jdbcType="TIMESTAMP" property="creatTime" />&ndash;&gt;-->
-
+    <!--<id property="groupId" column="group_id"></id>-->
+    <!--<id column="group_id" jdbcType="BIGINT" property="groupId" />-->
+    <!--<result column="group_name" jdbcType="VARCHAR" property="groupName" />-->
+    <!--<result column="company_id" jdbcType="BIGINT" property="companyId" />-->
+    <!--<result column="is_valid" jdbcType="BIT" property="isValid" />-->
+    <!--<result column="group_remark" jdbcType="VARCHAR" property="groupRemark" />-->
+    <!--<result column="creat_time" jdbcType="TIMESTAMP" property="creatTime" />-->
     <!--</collection>-->
 
     <!--<collection property="roles" ofType="com.lcdt.clms.permission.model.Role"-->
@@ -76,7 +74,7 @@
         create_date = #{createDate,jdbcType=VARCHAR},
         is_create = #{isCreate,jdbcType=VARCHAR},
         dept_ids = #{deptIds,jdbcType=VARCHAR},
-        dept_names = #{deptNames,jdbcType=VARCHAR}
+        dept_names = #{deptNames,jdbcType=VARCHAR},
         is_enable = #{isEnable,jdbcType=TINYINT}
     where user_comp_rel_id = #{userCompRelId,jdbcType=BIGINT}
   </update>

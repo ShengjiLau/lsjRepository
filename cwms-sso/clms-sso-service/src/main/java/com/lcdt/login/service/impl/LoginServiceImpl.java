@@ -15,9 +15,12 @@ import com.lcdt.login.service.AuthTicketService;
 import com.lcdt.login.service.LoginService;
 import com.lcdt.login.ticket.TicketBean;
 import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.userinfo.model.UserGroupRelation;
 import com.lcdt.userinfo.service.CompanyService;
+import com.lcdt.userinfo.service.UserGroupService;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,6 +45,8 @@ public class LoginServiceImpl implements LoginService {
 	@Reference(check = false)
 	UserPermissionService permissionService;
 
+	@Reference(check = false)
+	UserGroupService userGroupService;
 
 	@Value("${login.host}")
 	private String host;
@@ -65,6 +70,8 @@ public class LoginServiceImpl implements LoginService {
 			authentication.setPermissions(permissions);
 			List<SysRole> sysRoles = permissionService.userSysRoles(user.getUserId(), companyMember.getCompId());
 			authentication.setSysRoles(sysRoles);
+			List<Group> userGroupRelations = userGroupService.userGroups(user.getUserId(), companyMember.getCompId());
+			authentication.setGroups(userGroupRelations);
 		}
 		return authentication;
 	}

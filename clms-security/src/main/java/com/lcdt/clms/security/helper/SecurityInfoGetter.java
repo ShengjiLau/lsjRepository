@@ -41,8 +41,7 @@ public class SecurityInfoGetter {
 	public static List<Group> groups(){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		TicketAuthentication details = (TicketAuthentication) authentication.getDetails();
-		UserCompRel userCompRel = details.getUserCompRel();
-		return userCompRel.getGroups();
+		return details.getGroups();
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.lcdt.userinfo.dao;
 
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.UserGroupRelation;
 import org.apache.ibatis.annotations.Param;
 
@@ -53,7 +54,7 @@ public interface UserGroupRelationMapper {
 
     List<UserGroupRelation> selectByGroupId(Long groupId);
 
-    List<UserGroupRelation> selectByUserCompany(@Param("userId") Long userId, @Param("companyId") Long companyId);
+    List<Group> selectByUserCompany(@Param("userId") Long userId, @Param("companyId") Long companyId);
 
     void deleteNotInGroups(Long userId, Long companyId, List<Long> groups);
 

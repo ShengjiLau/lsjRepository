@@ -19,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.mail.MessagingException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -64,7 +65,11 @@ public class CustomerBindApi {
 		Company company = SecurityInfoGetter.geUserCompRel().getCompany();
 		CustomerInviteLog customerInviteLog = inviteLogMapper.selectByPrimaryKey(inviteId);
 		Customer customer = mapper.selectByPrimaryKey(customerInviteLog.getInviteCustomerId(), companyId);
-		inviteCustomerService.sendInviteEmail(bindEmail,customerInviteLog,customer,companyId,user,company);
+		try {
+			inviteCustomerService.sendInviteEmail(bindEmail,customerInviteLog,customer,companyId,user,company);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("code", 0);
 		jsonObject.put("message", "发送成功");

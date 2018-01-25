@@ -66,7 +66,7 @@ public interface CompanyService {
 	 * @param relId
 	 * @return
 	 */
-	int removeCompanyRel(Long relId);
+	boolean removeCompanyRel(Long relId);
 
 	CompanyCertificate updateCompanyCert(CompanyCertificate companyCertificate);
 

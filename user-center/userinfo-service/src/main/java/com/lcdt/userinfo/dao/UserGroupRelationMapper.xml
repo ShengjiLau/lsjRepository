@@ -11,6 +11,15 @@
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="group_id" jdbcType="BIGINT" property="groupId" />
   </resultMap>
+
+  <resultMap id="GroupResult" type="com.lcdt.userinfo.model.Group">
+    <id column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="is_valid" jdbcType="BIT" property="isValid" />
+    <result column="group_remark" jdbcType="VARCHAR" property="groupRemark" />
+  </resultMap>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
       WARNING - @mbg.generated
@@ -67,10 +76,10 @@
     WHERE group_id = #{groupId,jdbcType=BIGINT}
   </select>
 
-  <select id="selectByUserCompany" resultMap="BaseResultMap">
-    select relation_id, user_id, company_id, group_id
-    from t_uc_user_group
-    WHERE user_id = #{userId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  <select id="selectByUserCompany" resultMap="com.lcdt.userinfo.dao.GroupMapper.BaseResultMap">
+    select g.*  from t_uc_user_group ug
+    left join t_uc_group g on g.group_id = ug.group_id
+        WHERE ug.user_id = #{userId,jdbcType=BIGINT} and ug.company_id = #{companyId,jdbcType=BIGINT}
   </select>
 
   <delete id="deleteNotInGroups" >

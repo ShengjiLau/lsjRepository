@@ -23,8 +23,8 @@ public class UserGroupServiceImpl implements UserGroupService{
 
 
 	@Override
-	public List<UserGroupRelation> userGroups(Long userId,Long companyId) {
-		List<UserGroupRelation> userGroupRelations = userGroupDao.selectByUserCompany(userId, companyId);
+	public List<Group> userGroups(Long userId,Long companyId) {
+		List<Group> userGroupRelations = userGroupDao.selectByUserCompany(userId, companyId);
 		return userGroupRelations;
 	}
 
