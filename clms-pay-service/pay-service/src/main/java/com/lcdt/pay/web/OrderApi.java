@@ -14,6 +14,7 @@ import com.lcdt.pay.utils.OrderNoGenerator;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -169,7 +170,7 @@ public class OrderApi {
 
     }
 
-
+    @PreAuthorize(" hasRole('ROLE_SYS_ADMIN') ")
     @RequestMapping(value = "/buypackage",method = RequestMethod.POST)
     public String buyServicePackage(Integer packageId,Long orderId){
         Long companyId = SecurityInfoGetter.getCompanyId();
