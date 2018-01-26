@@ -22,7 +22,7 @@ public class AliyunOssApi {
 	public String getPolicy() {
 		String endpoint = "oss-cn-beijing.aliyuncs.com";
 		String accessId = "89nsjzR8irwKjep7";
-		String accessKey = "FmAlJ9eob6QLuY1GY1AvoHCLYZWvyS";
+		String accessKey = "F8d08IUID5tFtWI9c88e8qfgbko62s";
 		String bucket = "clms-dtd";
 		String dir = "clms-web";
 		String host = "http://" + bucket + "." + endpoint;
