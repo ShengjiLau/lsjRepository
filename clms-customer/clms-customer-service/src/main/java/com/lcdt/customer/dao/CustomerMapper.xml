@@ -324,16 +324,15 @@
       <if test="status!=null">
         and status = #{status,jdbcType=SMALLINT}
       </if>
-      <if test="complexStr!=null and complexStr!=''">
-        and (customer_name like CONCAT(#{complexStr,jdbcType=VARCHAR}, '%', '%') or short_name like CONCAT(#{complexStr,jdbcType=VARCHAR}, '%', '%')  or customer_code like CONCAT(#{complexStr,jdbcType=VARCHAR}, '%', '%') )
+      <if test="complexContition!=null and complexContition!=''">
+        and (customer_name like CONCAT(#{complexContition,jdbcType=VARCHAR}, '%', '%') or short_name like CONCAT(#{complexContition,jdbcType=VARCHAR}, '%', '%')  or customer_code like CONCAT(#{complexContition,jdbcType=VARCHAR}, '%', '%') )
       </if>
       <if test="customerType!=null">
         and ${customerType}
       </if>
       <!---->
       <if test="bindCpid != null">
-        and bind_comp_id is not null and bind_comp_id != ''
-      </if>
+        and bind_comp_id is not null and bind_comp_id != ''      </if>
       <if test="bindCompId != null">
         and bind_comp_id is not null and bind_comp_id = #{bindCompId,jdbcType=BIGINT}
       </if>
