@@ -132,7 +132,7 @@
       </if>
    </where>
 
-    order by plan_leave_msg_id
+    order by plan_leave_msg_id DESC
   </select>
 
 
