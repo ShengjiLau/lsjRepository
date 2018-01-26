@@ -313,7 +313,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int customerContactRemove(Long contactId, Long companyId) {
-        return customerContactMapper.deleteByPrimaryKey(contactId,companyId);
+        Map map = new HashMap<String,Long>();
+        map.put("contactId",contactId);
+        map.put("companyId",companyId);
+        return customerContactMapper.deleteByPrimaryKey(map);
     }
 
 
