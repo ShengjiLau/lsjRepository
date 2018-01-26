@@ -60,7 +60,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		sysRoleService.addUserSysRole(getSysAdminRole(), company.getCreateId(), company.getCompId());
 		Group defaultCompanyGroup = createDefaultCompanyGroup(company);
 		//创建者加入默认新建组
-		addToGroup(defaultCompanyGroup, company.getCompId(), company.getCreateId());
+		addToGroup(defaultCompanyGroup, company);
 
 		List<UserCompRel> userCompRels = userCompRelMapper.selectByUserIdCompanyId(company.getCreateId(), company.getCompId());
 		Department department = setUpDepartMent(company);
@@ -113,8 +113,8 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 
 
 	@Transactional(rollbackFor = Exception.class)
-	public void addToGroup(Group group, Long userId, Long companyId) {
-		UserGroupRelation userGroupRelation = userGroupService.addUserToGroup(companyId, userId, group);
+	public void addToGroup(Group group, Company company) {
+		UserGroupRelation userGroupRelation = userGroupService.addUserToGroup(company.getCompId(), company.getCreateId(), group);
 	}
 
 
