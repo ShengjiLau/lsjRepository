@@ -124,14 +124,22 @@ public class CustomerApi {
         } else {
             StringBuffer sb = new StringBuffer();
             List<Group> groupList = SecurityInfoGetter.groups();
-            for(int i=0;i<groupList.size();i++) {
-                Group group = groupList.get(i);
-                sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)");
-                if(i!=groupList.size()-1){
-                    sb.append(" or ");
+            if(groupList!=null && groupList.size()>0) {
+                sb.append("(");
+                for(int i=0;i<groupList.size();i++) {
+                    Group group = groupList.get(i);
+                    sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)");
+                    if(i!=groupList.size()-1){
+                        sb.append(" or ");
+                    }
                 }
+
+                sb.append(")");
+
+
             }
-            sb.append(")");
+
+
         }
 
         PageInfo pageInfo = customerService.customerList(map);
