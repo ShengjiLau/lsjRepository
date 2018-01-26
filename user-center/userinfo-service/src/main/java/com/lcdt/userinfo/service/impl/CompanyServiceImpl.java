@@ -92,12 +92,20 @@ public class CompanyServiceImpl implements CompanyService {
 
 		company.setIndustry(dto.getIndustry());
 		company.setShortName(dto.getShortName());
+		if (StringUtils.isEmpty(dto.getShortName())) {
+			if (company.getFullName().length() <= 4) {
+				company.setShortName(company.getFullName());
+			}else{
+				company.setShortName(company.getFullName().substring(0,4));
+			}
+		}
+
+
 		//未认证
 		company.setAuthentication((short)0);
 		company.setCreateId(dto.getUserId());
 		company.setCreateName(dto.getCreateName());
 		company.setCreateDate(dt);
-		companyMapper.insert(company);
 
 		try {
 			User user = userService.queryByUserId(company.getCreateId());
@@ -107,6 +115,9 @@ public class CompanyServiceImpl implements CompanyService {
 		} catch (UserNotExistException e) {
 			e.printStackTrace();
 		}
+
+
+		companyMapper.insert(company);
 
 
 		//创建关系
