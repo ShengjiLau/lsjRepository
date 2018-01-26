@@ -91,6 +91,16 @@ public interface PlanService {
     Integer ownPlanCancel(Long waybillPlanId, Long companyId, User user);
 
 
+    /**
+     *  竞价结束
+     * @param waybillPlanId
+     * @param companyId
+     * @param user
+     * @return
+     */
+    WaybillPlan biddingFinish(Long waybillPlanId, Long companyId, User user);
+
+
 
 
 }
