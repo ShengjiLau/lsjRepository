@@ -29,7 +29,7 @@ public interface CustomerContactMapper {
      *
      * @mbg.generated Fri Nov 24 10:56:38 CST 2017
      */
-    CustomerContact selectByPrimaryKey(Long contactId, Long companyId);
+    CustomerContact selectByPrimaryKey(Map map);
 
     CustomerContact selectByCustomerId(Long contactId);
 

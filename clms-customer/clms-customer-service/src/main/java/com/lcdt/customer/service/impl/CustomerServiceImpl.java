@@ -301,7 +301,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional(readOnly = true)
     @Override
     public CustomerContact customerContactDetail(Long contactId, Long companyId) {
-        return customerContactMapper.selectByPrimaryKey(contactId, companyId);
+        Map map = new HashMap<String,Long>();
+        map.put("contactId",contactId);
+        map.put("companyId",companyId);
+        return customerContactMapper.selectByPrimaryKey(map);
     }
 
     @Transactional(rollbackFor = Exception.class)
