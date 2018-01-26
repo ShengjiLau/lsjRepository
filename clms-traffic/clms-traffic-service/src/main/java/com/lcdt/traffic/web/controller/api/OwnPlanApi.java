@@ -390,6 +390,27 @@ public class OwnPlanApi {
 
 
 
+    @ApiOperation("竞价--结束")
+    @RequestMapping(value = "/biddingFinish",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_bidding_finish')")
+    public String biddingFinish(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+        User loginUser = SecurityInfoGetter.getUser();
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        WaybillPlan waybillPlan = planService.biddingFinish(waybillPlanId,companyId,loginUser);
+        JSONObject jsonObject = new JSONObject();
+        String message = "操作成功！";
+        int code = -1;
+        if (waybillPlan!=null) {
+            code = 0;
+        } else {
+            message = "操作失败！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
+    }
+
+
 
 
 }
