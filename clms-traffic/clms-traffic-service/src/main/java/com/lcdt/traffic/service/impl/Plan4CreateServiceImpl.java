@@ -128,6 +128,27 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 }
                  vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
                  waybillPlanMapper.insert(vo); //生成计划
+
+                 if (flag==1) { //发布--操作
+                    /***
+                     * 发送消息:
+                     *   就是新建计划，选择竞价计划，点击发布
+                     */
+                    if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
+                        if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
+
+
+
+
+                        } else { // 司机
+
+
+
+
+                        }
+                    }
+                 }
+
                  createTransportWayItems(dto, vo);//批量创建栏目
                  List<PlanDetail> planDetailList = dto.getPlanDetailList();
                  if (null!=planDetailList && planDetailList.size()>0) {
