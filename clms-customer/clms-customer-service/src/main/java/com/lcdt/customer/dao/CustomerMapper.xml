@@ -181,16 +181,16 @@
       <if test="remark != null &amp;&amp; remark !=''">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="attachment1 != null &amp;&amp; attachment1 !=''">
+      <if test="attachment1 != null">
         attachment_1 = #{attachment1,jdbcType=VARCHAR},
       </if>
-      <if test="attachmentName1 != null &amp;&amp; attachmentName1 !=''">
+      <if test="attachmentName1 != null">
         attachment_name1 = #{attachmentName1,jdbcType=VARCHAR},
       </if>
-      <if test="attachment2 != null &amp;&amp; attachment2 !=''">
+      <if test="attachment2 != null">
         attachment_2 = #{attachment2,jdbcType=VARCHAR},
       </if>
-      <if test="attachmentName2 != null &amp;&amp; attachmentName2 !=''">
+      <if test="attachmentName2 != null">
         attachment_name2 = #{attachmentName2,jdbcType=VARCHAR},
       </if>
 
