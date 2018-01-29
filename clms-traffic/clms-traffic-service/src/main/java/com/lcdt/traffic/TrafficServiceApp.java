@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableTransactionManagement
 @Import({com.lcdt.swagger.SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class})
-//@DubboComponentScan(basePackages = "com.lcdt.customer.rpcservice,com.lcdt.traffic.rpc.impl,com.lcdt.quartz.service")
 @EnableClmsSecurity
 public class TrafficServiceApp  {
 

@@ -129,6 +129,18 @@ public class PlanServiceImpl implements PlanService {
                             updateObj.setPlanStatus(ConstantVO.PLAN_STATUS_BIDDING); //计划状态(竞价中)
                             updateObj.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//计划状态(派车中)
                         }
+                        /***
+                         * 发送消息:
+                         *   就是新建计划，选择竞价计划，点击发布
+                         */
+
+
+
+
+
+
+
+
                     }
 
                 } else {// 需要审批

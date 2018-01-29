@@ -93,7 +93,7 @@ public class PlanBO {
             tempDto.setCreateName(waybillDto.getCreateName());
             tempDto.setGoodsId(obj.getGoodsId());
             tempDto.setGoodsName(obj.getGoodsName());
-            tempDto.setGoodsSpec(obj.getGoodsSepc());
+            tempDto.setGoodsSpec(obj.getGoodsSpec());
             tempDto.setSubGoodsId(obj.getSubGoodsId());
             tempDto.setUnit(obj.getUnit());
             tempDto.setAmount(obj.getAllotAmount()); //派单数量

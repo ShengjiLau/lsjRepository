@@ -11,15 +11,12 @@ import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.SplitGoodsDetailParamsDto;
 import com.lcdt.traffic.web.dto.SplitGoodsParamsDto;
 import com.lcdt.userinfo.model.User;
-import com.lcdt.userinfo.model.UserCompRel;
-import net.bytebuddy.asm.Advice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -72,7 +69,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             StringBuffer sb = new StringBuffer();
             for (PlanDetail planDetail : planDetailList) {
                  if (!planDetail.isAllot()) {
-                    sb.append("商品："+planDetail.getGoodsName()+"，规格："+planDetail.getGoodsSepc()+
+                    sb.append("商品："+planDetail.getGoodsName()+"，规格："+planDetail.getGoodsSpec()+
                               "，剩余数量："+planDetail.getRemainderAmount()+"，派单数量:"+planDetail.getAllotAmountTotal()+"，不能派！\\n");
                  }
             }
@@ -133,7 +130,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             map.put("isDeleted",0);
             map.put("companyId",companyId);
             map.put("waybillPlanId",waybillPlan.getWaybillPlanId());
-            List<PlanDetail> list  = planDetailMapper.selectByCondition(map);
+            List<PlanDetail> list  = planDetailMapper.selectByWaybillPlanId(map);
             if (list!=null && list.size()>0) {
                 float remainAmount  = 0; //剩余
                 for (PlanDetail tobj : list) {
