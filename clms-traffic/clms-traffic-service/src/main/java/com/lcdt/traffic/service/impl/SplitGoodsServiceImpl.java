@@ -130,7 +130,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             map.put("isDeleted",0);
             map.put("companyId",companyId);
             map.put("waybillPlanId",waybillPlan.getWaybillPlanId());
-            List<PlanDetail> list  = planDetailMapper.selectByCondition(map);
+            List<PlanDetail> list  = planDetailMapper.selectByWaybillPlanId(map);
             if (list!=null && list.size()>0) {
                 float remainAmount  = 0; //剩余
                 for (PlanDetail tobj : list) {
