@@ -39,26 +39,30 @@ public final class HttpUtils {
 	}
 
 	public static String getLocalIp(HttpServletRequest request) {
-		String remoteAddr = request.getRemoteAddr();
-		String forwarded = request.getHeader("X-Forwarded-For");
-		String realIp = request.getHeader("X-Real-IP");
-
-		String ip = null;
-		if (realIp == null) {
-			if (forwarded == null) {
-				ip = remoteAddr;
-			} else {
-				ip = remoteAddr + "/" + forwarded.split(",")[0];
+		String ip = request.getHeader("x-forwarded-for");
+		if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
+			// 多次反向代理后会有多个ip值，第一个ip才是真实ip
+			if( ip.indexOf(",")!=-1 ){
+				ip = ip.split(",")[0];
 			}
-		} else {
-			if (realIp.equals(forwarded)) {
-				ip = realIp;
-			} else {
-				if(forwarded != null){
-					forwarded = forwarded.split(",")[0];
-				}
-				ip = realIp + "/" + forwarded;
-			}
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("HTTP_CLIENT_IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("X-Real-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getRemoteAddr();
 		}
 		return ip;
 	}
