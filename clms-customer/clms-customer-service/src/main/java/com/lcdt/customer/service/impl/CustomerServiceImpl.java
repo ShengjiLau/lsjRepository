@@ -108,7 +108,7 @@ public class CustomerServiceImpl implements CustomerService {
             customerContact.setCompanyId(customer.getCompanyId());
             customerContact.setProvince(customer.getProvince());
             customerContact.setCity(customer.getCity());
-            customerContact.setCounty(customer.getCounty());
+            customerContact.setCounty(customer.getCountry());
             customerContact.setDetailAddress(customer.getDetailAddress());
             customerContact.setCustomerId(customer.getCustomerId());
             customerContact.setCreateId(customer.getCreateId());

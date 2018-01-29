@@ -76,7 +76,7 @@ public class Customer implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Fri Nov 24 10:56:38 CST 2017
      */
-    private String county;
+    private String country;
 
     /**
      *
@@ -492,8 +492,8 @@ public class Customer implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Fri Nov 24 10:56:38 CST 2017
      */
-    public String getCounty() {
-        return county;
+    public String getCountry() {
+        return country;
     }
 
     /**
@@ -504,8 +504,8 @@ public class Customer implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Fri Nov 24 10:56:38 CST 2017
      */
-    public void setCounty(String county) {
-        this.county = county == null ? null : county.trim();
+    public void setCountry(String county) {
+        this.country = county == null ? null : county.trim();
     }
 
     /**
