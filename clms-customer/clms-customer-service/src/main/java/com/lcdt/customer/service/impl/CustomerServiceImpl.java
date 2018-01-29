@@ -108,7 +108,7 @@ public class CustomerServiceImpl implements CustomerService {
             customerContact.setCompanyId(customer.getCompanyId());
             customerContact.setProvince(customer.getProvince());
             customerContact.setCity(customer.getCity());
-            customerContact.setCounty(customer.getCounty());
+            customerContact.setCounty(customer.getCountry());
             customerContact.setDetailAddress(customer.getDetailAddress());
             customerContact.setCustomerId(customer.getCustomerId());
             customerContact.setCreateId(customer.getCreateId());
@@ -301,7 +301,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional(readOnly = true)
     @Override
     public CustomerContact customerContactDetail(Long contactId, Long companyId) {
-        return customerContactMapper.selectByPrimaryKey(contactId, companyId);
+        Map map = new HashMap<String,Long>();
+        map.put("contactId",contactId);
+        map.put("companyId",companyId);
+        return customerContactMapper.selectByPrimaryKey(map);
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -131,8 +131,7 @@
         and  carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
       </if>
    </where>
-
-    order by plan_leave_msg_id
+    order by plan_leave_msg_id DESC
   </select>
 
 
