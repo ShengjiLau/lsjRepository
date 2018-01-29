@@ -260,6 +260,7 @@
         and vehicle_category = #{vehicleCategory,jdbcType=VARCHAR}
       </if>
     </where>
+    order by own_vehicle_id desc
   </select>
   <select id="selectDetail" resultMap="ResultMapDto">
     select t1.own_vehicle_id, t1.affiliated_company, t1.vehicle_num, t1.vehicle_trailer_num, t1.vehicle_category,
