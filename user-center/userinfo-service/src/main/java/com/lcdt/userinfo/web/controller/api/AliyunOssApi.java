@@ -20,15 +20,16 @@ public class AliyunOssApi {
 
 	@RequestMapping("/oss")
 	public String getPolicy() {
-		String endpoint = "oss-cn-beijing.aliyuncs.com";
+		String endPointWithoutProtocol = "oss-cn-beijing.aliyuncs.com";
+		String endpoint = "http://oss-cn-beijing.aliyuncs.com";
 		String accessId = "89nsjzR8irwKjep7";
 		String accessKey = "F8d08IUID5tFtWI9c88e8qfgbko62s";
 		String bucket = "clms-dtd";
 		String dir = "clms-web";
-		String host = "http://" + bucket + "." + endpoint;
+		String host = "http://" + bucket + "." + endPointWithoutProtocol;
 		OSSClient client = new OSSClient(endpoint, accessId, accessKey);
 		try {
-			long expireTime = 30;
+			long expireTime = 300;
 			long expireEndTime = System.currentTimeMillis() + expireTime * 1000;
 			Date expiration = new Date(expireEndTime);
 			PolicyConditions policyConds = new PolicyConditions();

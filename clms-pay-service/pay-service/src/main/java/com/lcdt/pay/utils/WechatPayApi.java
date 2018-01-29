@@ -5,6 +5,8 @@ import com.lcdt.pay.wechatpay.Configure;
 import com.lcdt.pay.wechatpay.HttpsRequest;
 import com.lcdt.pay.wechatpay.UnifiedorderBean;
 import com.lcdt.pay.wechatpay.XMLParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.SAXException;
@@ -23,6 +25,8 @@ public class WechatPayApi {
 
     @Autowired
     HttpsRequest request;
+
+    Logger log = LoggerFactory.getLogger(WechatPayApi.class);
 
     /**
      * 返回微信支付的交易二维码
@@ -43,7 +47,7 @@ public class WechatPayApi {
                     }
                 }
             }else{
-                //log.error(JSONObject.toJSONString(responseMap));
+                log.error(JSONObject.toJSONString(responseMap));
                 return null;
             }
 
