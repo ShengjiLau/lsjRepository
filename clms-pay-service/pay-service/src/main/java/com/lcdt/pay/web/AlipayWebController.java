@@ -152,6 +152,38 @@ public class AlipayWebController {
         }
     }
 
+    /**
+     * 支付宝 验签
+     *
+     * @return
+     */
+    @RequestMapping("/alipay/returnurl")
+    @ResponseBody
+    public String alipayReturn(HttpServletRequest request) {
+        Enumeration<String> parameterNames = request.getParameterNames();
+        Map<String,String> paramters = null;
+        String orderNo = paramters.get("out_trade_no");
+        String tradeStatus = paramters.get("trade_status");
+        try {
+            boolean b = AlipaySignature.rsaCheckV1(paramters, AlipayContants.getAlipayPublicKey(), CHARSET, AlipayContants.getSignType());
+            if (b) {
+                PayOrder payOrder = orderService.selectByOrderNo(orderNo);
+                if (payOrder == null) {
+                    logger.error("充值订单数据库没有记录 orderNo:  {} ",payOrder.getOrderNo());
+                    return "failure";
+                }
+                return "success";
+            }else{
+                return "failure";
+            }
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+
+
+        return null;
+    }
+
 
 
     @RequestMapping("/wechatqrcode")
