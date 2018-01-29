@@ -67,9 +67,13 @@ public class AlipayWebController {
     @RequestMapping(value = "/topup",method = RequestMethod.POST)
     @ResponseBody
     public PayOrder createTopupPayOrder(Integer amount){
+        //这里的单位是元
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
         User user = SecurityInfoGetter.getUser();
+
+        amount = amount * 100;
+
         PayOrder topUpOrder = topupService.createTopUpOrder(amount, companyId, user);
         return topUpOrder;
     }
