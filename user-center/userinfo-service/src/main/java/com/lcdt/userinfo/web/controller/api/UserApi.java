@@ -47,6 +47,7 @@ public class UserApi {
 
 	@Autowired
 	GroupManageService groupManageService;
+	
 
 	@ApiOperation("获取用户信息")
 	@RequestMapping(value = "/get", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
@@ -100,6 +101,7 @@ public class UserApi {
 		}
 
 		userService.updateUser(user);
+		user.setPwd("");
 		return user;
 	}
 
@@ -112,7 +114,7 @@ public class UserApi {
 		User originUser = userService.queryByUserId(user.getUserId());
 		if (originUser.getPwd().equals(encodeOldpwd)) {
 			originUser.setPwd(encodeNewpwd);
-			userService.updateUser(user);
+			userService.updateUser(originUser);
 		}else{
 			throw new PwdErrorException("密码不正确");
 		}
@@ -160,6 +162,7 @@ public class UserApi {
 		if (userService.isPhoneBeenRegister(newphone)) {
 			throw new ValidateException("手机号"+newphone+"已注册！");
 		}
+
 		Long  cTime = System.currentTimeMillis(); //其实时间
 		if (httpSession.getAttribute("CWMS_SMS_SEND_TIME")==null) {
 			httpSession.setAttribute("CWMS_SMS_SEND_TIME", cTime);

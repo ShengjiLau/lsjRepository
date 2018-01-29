@@ -8,6 +8,8 @@ import com.lcdt.pay.service.TopupService;
 import com.lcdt.pay.service.impl.OrderServiceImpl;
 import com.lcdt.pay.wechatpay.Signature;
 import com.lcdt.pay.wechatpay.XMLParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
@@ -32,11 +34,17 @@ public class WechatPayController {
     @Autowired
     PayOrderMapper mapper;
 
+    private Logger logger = LoggerFactory.getLogger(WechatPayController.class);
+
 
     @RequestMapping("/wechatpaynotify")
     @ResponseBody
     public String wechatPay(HttpServletRequest request){
         //orderId 充值的订单编号
+
+        logger.info("微信支付回调开始 ");
+
+
         JSONObject jo = new JSONObject();
         jo.put("return_code", "FAIL");
         try {
@@ -49,11 +57,14 @@ public class WechatPayController {
                     if (!CollectionUtils.isEmpty(payOrders)) {
                         PayOrder payOrder = payOrders.get(0);
                         orderService.changeToPayFinish(payOrder, OrderServiceImpl.PayType.WECHATPAY);
+                        logger.info("微信回调处理成功");
                         jo.put("return_code", "SUCCESS");
                         jo.put("return_msg", "OK");
                     }
                 }
             }else{
+                logger.info("微信回调 签名验证失败");
+
                 jo.put("return_msg", "签名验证失败!");
             }
 

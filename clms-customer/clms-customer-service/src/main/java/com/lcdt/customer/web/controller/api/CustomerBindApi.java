@@ -79,7 +79,7 @@ public class CustomerBindApi {
 
 
 	@ApiOperation("绑定客户")
-	@RequestMapping(value = "/bind",method = RequestMethod.GET)
+	@RequestMapping(value = "/bind",method = RequestMethod.POST)
 	@ResponseBody
 	public ModelAndView bind(Long inviteId,Long customerId){
 		Long companyId = SecurityInfoGetter.getCompanyId();
