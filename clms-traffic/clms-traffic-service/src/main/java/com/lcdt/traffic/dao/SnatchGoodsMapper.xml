@@ -23,7 +23,8 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="plan_company_id" jdbcType="BIGINT" property="planCompanyId" />
-    <collection property="snatchGoodsDetailList" column="{snatch_goods_id=snatch_goods_id,is_deleted=0}"
+
+    <collection property="snatchGoodsDetailList" column="{snatchGoodsId=snatch_goods_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.SnatchGoodsDetail" javaType="ArrayList"
                 select="com.lcdt.traffic.dao.SnatchGoodsDetailMapper.selectBySnatchGoodsDetailId" />
 
@@ -117,7 +118,7 @@
     offer_id, offer_name, offer_phone, is_using, company_id, create_id, create_name,
     create_date, update_id, update_name, update_time, is_deleted,plan_company_id
     from t_snatch_goods
-    where waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT} and is_deleted=0
+    where waybill_plan_id = #{waybillPlanId} and is_deleted=#{isDeleted}
   </select>
 
 
