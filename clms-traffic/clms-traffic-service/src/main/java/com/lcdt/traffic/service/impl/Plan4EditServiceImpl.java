@@ -111,8 +111,6 @@ public class Plan4EditServiceImpl implements Plan4EditService {
             }
         }
 
-
-
         //具体业务处理
         if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
@@ -178,15 +176,20 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                     splitGoods.setCreateId(vo.getCreateId());
                     splitGoods.setCreateName(vo.getCreateName());
                     splitGoods.setCreateDate(new Date());
-                    splitGoods.setUpdateId(splitGoods.getUpdateId());
-                    splitGoods.setUpdateName(splitGoods.getCreateName());
-                    splitGoods.setUpdateTime(splitGoods.getCreateDate());
-                    splitGoods.setCompanyId(splitGoods.getCompanyId());
+                    splitGoods.setUpdateId(vo.getUpdateId());
+                    splitGoods.setUpdateName(vo.getCreateName());
+                    splitGoods.setUpdateTime(new Date());
+                    splitGoods.setCompanyId(vo.getCompanyId());
                     splitGoods.setCarrierCompanyId(vo.getCarrierCompanyId());
+                    splitGoods.setCarrierCollectionIds(vo.getCarrierCollectionIds());
+                    splitGoods.setCarrierCollectionNames(vo.getCarrierCollectionNames());
+                    splitGoods.setCarrierPhone(vo.getCarrierPhone());
+                    splitGoods.setCarrierVehicle(vo.getCarrierVehicle());
                     splitGoods.setIsDeleted((short)0);
                     splitGoodsMapper.insert(splitGoods);
 
                     List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
+                    StringBuffer msgSb = new StringBuffer(); //货物发送明细
                     for (PlanDetail obj : planDetailList) {
                         SplitGoodsDetail tObj = new SplitGoodsDetail();
                         tObj.setPlanDetailId(obj.getPlanDetailId());
@@ -204,17 +207,35 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                         tObj.setCompanyId(vo.getCompanyId());
                         tObj.setIsDeleted((short)0);
                         splitGoodsDetailList.add(tObj);
+                        msgSb.append(obj.getGoodsName()+":"+obj.getPlanAmount()+";");
                     }
                     splitGoodsDetailMapper.batchAddSplitGoodsDetail(splitGoodsDetailList);
 
                     /***
                      *如果是司机需要生成运单
                      */
-                    if (carrierType == 2) {
+                    if (carrierType == ConstantVO.PLAN_CARRIER_TYPE_DRIVER) {
                         WaybillDto waybillDto = new WaybillDto();
                         PlanBO.getInstance().toWaybillItemsDto(vo,splitGoods,waybillDto,planDetailList,splitGoodsDetailList);
                         if (null!=waybillDto) {
                             waybillService.addWaybill(waybillDto);
+                        }
+                    }
+
+
+                    /***
+                     * 发送消息:
+                     *   就是新建计划，选择竞价计划，点击发布
+                     */
+                    if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
+                        String companyName = dto.getCompanyName(); // 货主企业
+                        String serialCode = vo.getSerialCode(); //流水号
+                        String sendAddress = vo.getSendProvince()+" "+vo.getSendCity()+" "+vo.getSendCounty();
+                        String receiveAddress = vo.getReceiveProvince()+" "+vo.getReceiveCity()+" "+vo.getReceiveCounty();
+                        if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
+
+                        } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机else
+
                         }
                     }
 

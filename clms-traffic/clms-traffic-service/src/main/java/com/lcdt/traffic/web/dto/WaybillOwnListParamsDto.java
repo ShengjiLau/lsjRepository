@@ -18,7 +18,7 @@ public class WaybillOwnListParamsDto {
     @ApiModelProperty(value = "收货地县")
     private String receiveCounty;
     @ApiModelProperty(value = "运单状态")
-    private Short waybillStatus;
+    private String waybillStatus;
     @ApiModelProperty(value = "所属项目组id")
     private Long groupId;
     @ApiModelProperty(value = "生成开始时间")
@@ -66,11 +66,11 @@ public class WaybillOwnListParamsDto {
         this.receiveCounty = receiveCounty;
     }
 
-    public Short getWaybillStatus() {
+    public String getWaybillStatus() {
         return waybillStatus;
     }
 
-    public void setWaybillStatus(Short waybillStatus) {
+    public void setWaybillStatus(String waybillStatus) {
         this.waybillStatus = waybillStatus;
     }
 

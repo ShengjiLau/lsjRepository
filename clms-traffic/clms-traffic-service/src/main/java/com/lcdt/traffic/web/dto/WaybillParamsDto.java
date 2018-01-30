@@ -178,6 +178,7 @@ public class WaybillParamsDto {
     private String updateName;
     private Date updateTime;
 
+
     public String getAttachement() {
         return attachement;
     }
@@ -189,13 +190,14 @@ public class WaybillParamsDto {
     private String attachement;//附件串
 
 
-
-
     @ApiModelProperty(value = "计划详细")
     private List<PlanDetail> planDetailList;
 
     @ApiModelProperty(value = "运输项目列表")
     private List<TransportWayItems> transportWayItemsList;
+
+
+    private String companyName; //发布企业
 
 
 
@@ -214,9 +216,6 @@ public class WaybillParamsDto {
     public void setTransportWayItemsList(List<TransportWayItems> transportWayItemsList) {
         this.transportWayItemsList = transportWayItemsList;
     }
-
-
-
 
     public String getPlanSource() {
         return planSource;
@@ -680,5 +679,13 @@ public class WaybillParamsDto {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
     }
 }
