@@ -14,7 +14,7 @@
     <result column="client_types" jdbcType="VARCHAR" property="clientTypes" />
     <result column="province" jdbcType="VARCHAR" property="province" />
     <result column="city" jdbcType="VARCHAR" property="city" />
-    <result column="county" jdbcType="VARCHAR" property="county" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
     <result column="detail_address" jdbcType="VARCHAR" property="detailAddress" />
     <result column="group_ids" jdbcType="VARCHAR" property="groupIds" />
     <result column="group_names" jdbcType="VARCHAR" property="groupNames" />
@@ -51,7 +51,7 @@
       This element was generated on Fri Nov 24 10:56:38 CST 2017.
     -->
     select customer_id, customer_name, short_name, customer_code, client_types, province,
-    city, county, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
+    city, country, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
     attachment_1, attachment_2,attachment_name1,attachment_name2, invoice_title, registration_no, bank_name, bank_no, registration_address,
     tel_no1, invoice_remark, bind_comp_id, status, bind_company, link_man, link_duty, link_tel,
     link_email, company_id,collection_ids,collection_names
@@ -82,7 +82,7 @@
       This element was generated on Fri Nov 24 10:56:38 CST 2017.
     -->
     select customer_id, customer_name, short_name, customer_code, client_types, province,
-    city, county, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
+    city, country, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
     attachment_1, attachment_2,attachment_name1,attachment_name2, invoice_title, registration_no, bank_name, bank_no, registration_address,
     tel_no1, invoice_remark, bind_comp_id, status, bind_company, link_man, link_duty, link_tel,
     link_email, company_id,collection_ids,collection_names
