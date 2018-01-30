@@ -14,9 +14,9 @@ public class AlipayContants {
 
     private static String FORMAT = "json";
 
-    private static String ALIPAY_PUBLIC_KEY;
+    private static String ALIPAY_PUBLIC_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtNS7AWkByJcQ7iuHoZH3Xj2RyoTl0HPqEl2Djn1T0WsPcOPgBvUzj2Z1PjA191SwsIwU8oZeUGiEye2iV80J9eusHaOpFo7xouEuydkSruhy5wEhvMVUpNxWHWw4W297h/b6PaoZ5jRe+HzmZquNWrGYxvG2y8tQkiBi2EqZVF7RWPZ3e0wlTsoepc36lr7b0123HMT1utNKC4HkmYQBd70LVGi/RWWuune7Y+HNFqq//Z4N9LKrIqQEcr/VmLmtXgQ/bWAPXgFidKNUmm6oVuaCtoFVYqwyMkpFLRtzCKyYc8TTJfNhGDHqbimoFtMsjiI7l9FhMNGQvI/rS/j6LwIDAQAB";
 
-    private static String SIGN_TYPE;
+    private static String SIGN_TYPE = "RSA2";
 
     private static String returnUrl = "http://domain.com/CallBack/return_url.jsp";
 
