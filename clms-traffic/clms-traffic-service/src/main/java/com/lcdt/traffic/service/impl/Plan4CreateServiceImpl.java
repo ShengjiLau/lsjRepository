@@ -136,6 +136,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                  waybillPlanMapper.insert(vo); //生成计划
 
                  createTransportWayItems(dto, vo);//批量创建栏目
+                 StringBuffer msgSb = new StringBuffer(); //货物发送明细
                  List<PlanDetail> planDetailList = dto.getPlanDetailList();
                  if (null!=planDetailList && planDetailList.size()>0) {
                     for (PlanDetail obj : planDetailList) {
@@ -149,6 +150,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         obj.setUpdateTime(obj.getCreateDate());
                         obj.setCompanyId(vo.getCompanyId());
                         obj.setIsDeleted((short)0);
+                        msgSb.append(obj.getGoodsName()+":"+obj.getPlanAmount()+";");
                     }
                     planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
                 }
@@ -160,22 +162,17 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                  *   就是新建计划，选择竞价计划，点击发布
                  */
                 if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
-
+                    String companyName = dto.getCompanyName(); // 货主企业
+                    String serialCode = vo.getSerialCode(); //流水号
+                    String sendAddress = vo.getSendProvince()+" "+vo.getSendCity()+" "+vo.getSendCounty();
+                    String receiveAddress = vo.getReceiveProvince()+" "+vo.getReceiveCity()+" "+vo.getReceiveCounty();
                     if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
 
-
-                        vo.getCarrierCompanyId();//承运企业
-
-                    } else { // 司机
-
-
+                    } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机else
 
                     }
-
                 }
             }
-
-
         }
         return vo;
     }
