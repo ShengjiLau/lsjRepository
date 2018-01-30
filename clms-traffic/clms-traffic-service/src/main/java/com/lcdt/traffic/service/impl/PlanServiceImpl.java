@@ -398,7 +398,10 @@ public class PlanServiceImpl implements PlanService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Integer  planDetailDelete(Long planDetailId, Long companyId) {
-        return planDetailMapper.deleteByPrimaryKey(planDetailId,companyId);
+        Map tMap = new HashMap<String,String>();
+        tMap.put("planDetailId",planDetailId);
+        tMap.put("companyId",companyId);
+        return planDetailMapper.deleteByPrimaryKey(tMap);
     }
 
     @Override

@@ -57,7 +57,7 @@
       #{offerPhone,jdbcType=VARCHAR}, #{isUsing,jdbcType=SMALLINT}, #{companyId,jdbcType=BIGINT}, 
       #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
       #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=SMALLINT},
-    , #{planCompanyId,jdbcType=BIGINT})
+      #{planCompanyId,jdbcType=BIGINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.SnatchGoods">
     <!--

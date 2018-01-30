@@ -371,7 +371,6 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         tMap.put("waybillPlanId",dto.getWaybillPlanId());
         tMap.put("companyId",dto.getCompanyId());
         tMap.put("isDeleted","0");
-
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         if (null == waybillPlan) {
             throw new WaybillPlanException("计划不存在！");
@@ -454,7 +453,11 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         }
 
         //获取派单表中待派数量(因为竞价派单是一次生派单，但可以多次派车)
-        SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(dto.getSplitGoodsId(),dto.getCompanyId());
+
+        Map map = new HashMap();
+        map.put("splitGoodsId",dto.getSplitGoodsId());
+        map.put("companyId",dto.getCompanyId());
+        SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(map);
         if (null==splitGoods) {
             throw new RuntimeException("没有派单记录，不能派车！");
         }

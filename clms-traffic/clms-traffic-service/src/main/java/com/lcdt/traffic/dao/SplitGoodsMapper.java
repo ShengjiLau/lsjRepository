@@ -30,11 +30,10 @@ public interface SplitGoodsMapper {
      */
     /***
      * 根据派单ID、企业ID
-     * @param splitGoodsId
-     * @param companyId
+     * @param map
      * @return
      */
-    SplitGoods selectByPrimaryKey(Long splitGoodsId, Long companyId);
+    SplitGoods selectByPrimaryKey(Map map);
 
 
     /**

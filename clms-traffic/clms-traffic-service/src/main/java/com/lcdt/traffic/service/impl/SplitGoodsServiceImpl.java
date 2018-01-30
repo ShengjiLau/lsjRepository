@@ -304,7 +304,10 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
     @Override
     public Integer splitGoodsCancel(Long splitGoodsId, User user, Long companyId) {
-        SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(splitGoodsId, companyId);
+        Map map = new HashMap<>();
+        map.put("splitGoodsId",splitGoodsId);
+        map.put("companyId",companyId);
+        SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(map);
         if (splitGoods == null) throw new SplitGoodsException("派单信息异常！");
         Map tMap = new HashMap<String,String>();
         tMap.put("waybillPlanId",splitGoods.getWaybillPlanId());
