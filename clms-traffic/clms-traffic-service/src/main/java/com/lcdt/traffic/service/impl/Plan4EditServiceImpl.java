@@ -194,6 +194,11 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                         SplitGoodsDetail tObj = new SplitGoodsDetail();
                         tObj.setPlanDetailId(obj.getPlanDetailId());
                         tObj.setAllotAmount(obj.getPlanAmount()); //派单数量
+                        if (carrierType == ConstantVO.PLAN_CARRIER_TYPE_DRIVER) { //如果司机的话为0
+                            tObj.setRemainAmount((float)0); //本次剩余
+                        } else {
+                            tObj.setRemainAmount(obj.getPlanAmount()); //本次剩余
+                        }
                         tObj.setRemainAmount((float) 0); //本次剩余
                         tObj.setFreightPrice(obj.getFreightPrice());
                         tObj.setFreightTotal(obj.getFreightTotal());
