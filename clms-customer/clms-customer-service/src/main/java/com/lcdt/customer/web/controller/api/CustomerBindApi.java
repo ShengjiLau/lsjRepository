@@ -13,6 +13,7 @@ import com.lcdt.customer.service.impl.InviteLogService;
 import com.lcdt.customer.web.dto.InviteDto;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -78,6 +79,7 @@ public class CustomerBindApi {
 
 
 
+	//customerid 被绑定的客户选择的客户
 	@ApiOperation("绑定客户")
 	@RequestMapping(value = "/bind")
 	@ResponseBody
@@ -103,9 +105,9 @@ public class CustomerBindApi {
 		//绑定邀请人的公司id
 		Customer customer1 = mapper.selectByPrimaryKey(customerInviteLog.getInviteCustomerId(), customerInviteLog.getInviteCompanyId());
 		customer1.setBindCpid(companyId);
-		customerService.customerUpdate(customer1);
+		customerService.updateCustomerBindCompId(customer1);
 
-		ModelAndView successView = new ModelAndView("invite_success_bak");
+		ModelAndView successView = new ModelAndView("invite_success");
 		return successView;
 	}
 
@@ -127,6 +129,7 @@ public class CustomerBindApi {
 
 		HashMap<Object, Object> map = new HashMap<>();
 		Long companyId = SecurityInfoGetter.getCompanyId();
+		UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
 		map.put("companyId", companyId);
 		map.put("notbind", true);
 		PageInfo<Customer> pageInfo = customerService.customerList(map);
@@ -135,6 +138,8 @@ public class CustomerBindApi {
 		modelAndView.setViewName("invite_customer");
 		modelAndView.addObject("list", list);
 		modelAndView.addObject("log", customerInviteLog);
+		modelAndView.addObject("currentCompanyName", userCompRel.getCompany().getFullName());
+		modelAndView.addObject("username", userCompRel.getUser().getRealName());
 		return modelAndView;
 	}
 

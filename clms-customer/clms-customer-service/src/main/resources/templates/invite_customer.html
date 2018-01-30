@@ -276,7 +276,7 @@
             <img src="./asset/image/logo_top.png" alt="">
         </div>
         <div class="user-menu">
-            <a href=""><i class="iconfont icon-user"></i>小A专线</a>
+            <a href="" th:text="${username}"><i class="iconfont icon-user"></i></a>
             <a href=""><i class="iconfont icon-logout01"></i>退出</a>
         </div>
     </nav>
@@ -289,7 +289,7 @@
         <div class="form-row">
             <label >当前企业：</label>
             <div style="display:inline-block;vertical-align: top;
-            margin-top: 11px;" >立晨物流</div>
+            margin-top: 11px;" th:text="${currentCompanyName}">当前公司</div>
         </div>
         <div class="form-row">
             <label for="customer">关联客户：</label>

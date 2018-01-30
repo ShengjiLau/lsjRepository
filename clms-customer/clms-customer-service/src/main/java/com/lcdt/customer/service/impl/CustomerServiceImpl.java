@@ -378,4 +378,9 @@ public class CustomerServiceImpl implements CustomerService {
         return customerCollectionMapper.deleteByPrimaryKey(map);
     }
 
+    @Override
+    public void updateCustomerBindCompId(Customer customer) {
+        customerMapper.updateByPrimaryKey(customer);
+    }
+
 }
