@@ -222,6 +222,10 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     splitGoods.setCompanyId(vo.getCompanyId());
                     splitGoods.setCarrierCompanyId(vo.getCarrierCompanyId());
                     splitGoods.setIsDeleted((short)0);
+                    splitGoods.setCarrierCollectionIds(vo.getCarrierCollectionIds());
+                    splitGoods.setCarrierCollectionNames(vo.getCarrierCollectionNames());
+                    splitGoods.setCarrierPhone(vo.getCarrierPhone());
+                    splitGoods.setCarrierVehicle(vo.getCarrierVehicle());
                     splitGoodsMapper.insert(splitGoods);
 
                     List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();

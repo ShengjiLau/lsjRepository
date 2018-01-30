@@ -7,9 +7,12 @@ import com.lcdt.traffic.dto.BindingSplitParamsDto;
 import com.lcdt.traffic.exception.SplitGoodsException;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.SplitGoodsService;
+import com.lcdt.traffic.service.WaybillService;
+import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.SplitGoodsDetailParamsDto;
 import com.lcdt.traffic.web.dto.SplitGoodsParamsDto;
+import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.userinfo.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +20,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yangbinq on 2017/12/21.
@@ -50,6 +51,10 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
     @Autowired
     private SnatchGoodsMapper snatchGoodsMapper;
+
+
+    @Autowired
+    private WaybillService waybillService; //运单
 
 
 
@@ -89,13 +94,24 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             splitGoods.setIsDeleted((short)0);
             splitGoods.setCompanyId(companyId);
 
+            splitGoods.setCarrierCollectionIds(dto.getCarrierCollectionIds());
+            splitGoods.setCarrierCollectionNames(dto.getCarrierCollectionNames());
+            splitGoods.setCarrierPhone(dto.getCarrierPhone());
+            splitGoods.setCarrierVehicle(dto.getCarrierVehicle());
+
+
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
                 String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
                 Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
                 splitGoods.setCarrierCompanyId(customer.getCompanyId());
             }
+
+
+
             //承运商---司机
             splitGoodsMapper.insert(splitGoods);
+
+            List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
             for (PlanDetail planDetail : planDetailList) {
                  if (planDetail.getSplitGoodsDetailObj()!=null) { //说明要分配
                      if (planDetail.isAllot()) { //允许分配
@@ -120,6 +136,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                          splitGoodsDetail.setCompanyId(companyId);
                          splitGoodsDetail.setSplitGoodsId(splitGoods.getSplitGoodsId());
                          splitGoodsDetailMapper.insert(splitGoodsDetail);
+                         splitGoodsDetailList.add(splitGoodsDetail);
                      }
                  }
 
@@ -156,9 +173,22 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                     }
 
                     /***********这块要生成运单**********/
-
-
-
+                    if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER) ) {
+                        WaybillDto waybillDto = new WaybillDto();
+                        waybillDto.setCarrierCompanyId(splitGoods.getCarrierCompanyId());
+                        waybillDto.setCreateId(splitGoods.getCreateId());
+                        waybillDto.setCreateName(splitGoods.getCreateName());
+                        waybillDto.setDriverPhone(splitGoods.getCarrierPhone());
+                        waybillDto.setVechicleNum(splitGoods.getCarrierVehicle());
+                        if(!StringUtils.isEmpty(splitGoods.getCarrierCollectionIds())) {
+                            waybillDto.setDriverName(splitGoods.getCarrierCollectionNames());
+                            waybillDto.setDriverId(Long.valueOf(splitGoods.getCarrierCollectionIds()));
+                        }
+                        PlanBO.getInstance().toWaybillItemsDto(waybillPlan,splitGoods,waybillDto,planDetailList,splitGoodsDetailList);
+                        if (null!=waybillDto) {
+                            waybillService.addWaybill(waybillDto);
+                        }
+                    }
                 }
 
             }

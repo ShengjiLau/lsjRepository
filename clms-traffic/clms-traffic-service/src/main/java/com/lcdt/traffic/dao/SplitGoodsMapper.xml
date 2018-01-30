@@ -20,6 +20,10 @@
     <result column="carrier_company_id" jdbcType="BIGINT" property="carrierCompanyId" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="cancel_remark" jdbcType="VARCHAR" property="cancelRemark" />
+    <result column="carrier_collection_ids" jdbcType="VARCHAR" property="carrierCollectionIds" />
+    <result column="carrier_collection_names" jdbcType="VARCHAR" property="carrierCollectionNames" />
+    <result column="carrier_phone" jdbcType="VARCHAR" property="carrierPhone" />
+    <result column="carrier_vehicle" jdbcType="VARCHAR" property="carrierVehicle" />
     <!--派单详细-->
     <collection property="splitGoodsDetailList" column="{splitGoodsId=split_goods_id,companyId=company_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.SplitGoodsDetail" javaType="ArrayList"
@@ -46,11 +50,13 @@
     insert into t_split_goods (waybill_plan_id, split_remark, create_id,
       create_name, create_date, update_id, 
       update_name, update_time, is_deleted, 
-      carrier_company_id, company_id,cancel_remark)
+      carrier_company_id, company_id,cancel_remark,carrier_collection_ids,
+    carrier_collection_names, carrier_phone, carrier_vehicle)
     values (#{waybillPlanId,jdbcType=BIGINT}, #{splitRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT},
       #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, 
       #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, 
-      #{carrierCompanyId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT},#{cancelRemark,jdbcType=VARCHAR})
+      #{carrierCompanyId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT},#{cancelRemark,jdbcType=VARCHAR},
+      #{carrierCollectionIds,jdbcType=VARCHAR},#{carrierCollectionNames,jdbcType=VARCHAR}, #{carrierPhone,jdbcType=VARCHAR}, #{carrierVehicle,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.SplitGoods">
     <!--
@@ -61,6 +67,10 @@
     update t_split_goods
     set waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT},
       split_remark = #{splitRemark,jdbcType=VARCHAR},
+    carrier_collection_ids = #{carrierCollectionIds,jdbcType=VARCHAR},
+    carrier_collection_names = #{carrierCollectionNames,jdbcType=VARCHAR},
+    carrier_phone = #{carrierPhone,jdbcType=VARCHAR},
+    carrier_vehicle = #{carrierVehicle,jdbcType=VARCHAR},
       create_id = #{createId,jdbcType=BIGINT},
       create_name = #{createName,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
@@ -80,7 +90,8 @@
       This element was generated on Tue Dec 12 09:56:12 CST 2017.
     -->
     select split_goods_id, waybill_plan_id, split_remark, create_id, create_name,
-    create_date, update_id, update_name, update_time, is_deleted, carrier_company_id,company_id,cancel_remark
+    create_date, update_id, update_name, update_time, is_deleted, carrier_company_id,company_id,cancel_remark,
+    carrier_collection_ids,carrier_collection_names, carrier_phone, carrier_vehicle
     from t_split_goods
     where split_goods_id = #{0} and company_id = #{1}
   </select>
@@ -93,7 +104,8 @@
       This element was generated on Tue Dec 12 09:56:12 CST 2017.
     -->
     select split_goods_id, waybill_plan_id, split_remark, create_id, create_name,
-    create_date, update_id, update_name, update_time, is_deleted, carrier_company_id,company_id,cancel_remark
+    create_date, update_id, update_name, update_time, is_deleted, carrier_company_id,company_id,cancel_remark,
+    carrier_collection_ids,carrier_collection_names, carrier_phone, carrier_vehicle
     from t_split_goods
     where waybill_plan_id = #{waybillPlanId} and company_id = #{companyId} and is_deleted = #{isDeleted}
   </select>
@@ -107,7 +119,8 @@
       This element was generated on Tue Dec 12 09:56:12 CST 2017.
     -->
     select split_goods_id, waybill_plan_id, split_remark, create_id, create_name,
-    create_date, update_id, update_name, update_time, is_deleted, carrier_company_id, company_id,cancel_remark
+    create_date, update_id, update_name, update_time, is_deleted, carrier_company_id, company_id,cancel_remark,
+    carrier_collection_ids,carrier_collection_names, carrier_phone, carrier_vehicle
     from t_split_goods
   </select>
 </mapper>
