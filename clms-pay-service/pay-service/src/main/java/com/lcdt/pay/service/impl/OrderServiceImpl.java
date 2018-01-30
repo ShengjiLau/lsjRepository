@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -135,6 +136,9 @@ public class OrderServiceImpl implements OrderService{
         balanceLog.setLogType(payOrder.getOrderType());
         balanceLog.setLogUsername(payOrder.getCreateUserName());
         balanceLog.setOrderId(payOrder.getOrderId());
+        balanceLog.setCompanyId(payOrder.getOrderPayCompanyId());
+        balanceLog.setLogTime(new Date());
+        balanceLog.setLogNo(payOrder.getOrderNo());
         balanceLogMapper.insert(balanceLog);
     }
 

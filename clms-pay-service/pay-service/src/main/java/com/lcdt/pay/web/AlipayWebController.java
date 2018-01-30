@@ -96,7 +96,7 @@ public class AlipayWebController {
 
         //获得初始化的AlipayClient
         AlipayClient alipayClient = new DefaultAlipayClient(AlipayContants.getApiGataway(), AlipayContants.getAppId()
-                , AlipayContants.getAppPrivateKey(), FORMAT, CHARSET, AlipayContants.getAlipayPublicKey(),AlipayContants.getSignType());
+                , AlipayContants.getAppPrivateKey(), FORMAT, CHARSET, AlipayContants.getAlipayPublicKey(),"RSA2");
 
         AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();//创建API对应的request
         AlipayTradeOrder alipayTradeOrder = new AlipayTradeOrder();
@@ -137,23 +137,19 @@ public class AlipayWebController {
             }
             //乱码解决，这段代码在出现乱码时使用
             valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
-             parameterMap.put(name, valueStr);
-        }
+            parameterMap.put(name, valueStr);
 
-        boolean signVerified = AlipaySignature.rsaCheckV1(parameterMap, AlipayContants.getAlipayPublicKey(), CHARSET,AlipayContants.getSignType());
+        }
+        logger.info("alipay 异步请求 {}",request.getRequestURI()+request.getQueryString());
+
+        boolean signVerified = AlipaySignature.rsaCheckV1(parameterMap, AlipayContants.getAlipayPublicKey(), CHARSET, "RSA2");
 
         if (signVerified) {
-
             String orderNo = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"),"UTF-8");
-
             //支付宝交易号
             String trade_orderNono = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"),"UTF-8");
-
             //交易状态
             String tradeStatus = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"),"UTF-8");
-
-
-
             logger.info("接受支付宝 支付推送 交易订单号：{}  支付状态 {} ", orderNo, tradeStatus);
 
             if (!"TRADE_SUCCESS".equals(tradeStatus)) {
@@ -168,6 +164,8 @@ public class AlipayWebController {
 
             orderService.changeToPayFinish(payOrder, OrderServiceImpl.PayType.ALIPAY);
             return "success";
+        }else{
+            logger.info("异步回调延签失败");
         }
 
         return "fail";
@@ -181,22 +179,36 @@ public class AlipayWebController {
      */
     @RequestMapping("/alipay/returnurl")
     @ResponseBody
-    public String alipayReturn(HttpServletRequest request) {
+    public String alipayReturn(HttpServletRequest request) throws UnsupportedEncodingException {
 
-        HashMap<String, String> paramters = new HashMap<>();
-        Enumeration<String> parameterNames = request.getParameterNames();
-        if (parameterNames.hasMoreElements()) {
-            String s = parameterNames.nextElement();
-            String parameter = request.getParameter(s);
-            paramters.put(s, parameter);
+        HashMap<String, String> parameterMap = new HashMap<>();
+
+        Map<String,String[]> requestParams = request.getParameterMap();
+        for (Iterator<String> iter = requestParams.keySet().iterator(); iter.hasNext();) {
+            String name = (String) iter.next();
+            String[] values = (String[]) requestParams.get(name);
+            String valueStr = "";
+            for (int i = 0; i < values.length; i++) {
+                valueStr = (i == values.length - 1) ? valueStr + values[i]
+                        : valueStr + values[i] + ",";
+            }
+            //乱码解决，这段代码在出现乱码时使用
+            valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+            parameterMap.put(name, valueStr);
+
         }
 
-        String orderNo = paramters.get("out_trade_no");
-        String tradeStatus = paramters.get("trade_status");
+        String orderNo = parameterMap.get("out_trade_no");
+        String tradeStatus = parameterMap.get("trade_status");
         try {
-            boolean b = AlipaySignature.rsaCheckV1(paramters, AlipayContants.getAlipayPublicKey(), CHARSET, AlipayContants.getSignType());
+            boolean b = AlipaySignature.rsaCheckV1(parameterMap, AlipayContants.getAlipayPublicKey(), CHARSET, "RSA2");
             if (b) {
                 PayOrder payOrder = orderService.selectByOrderNo(orderNo);
+
+                if (tradeStatus == null) {
+                    return "success";
+                }
+
                 if (tradeStatus.equals("TRADE_SUCCESS")) {
                     if (payOrder == null) {
                         logger.error("充值订单数据库没有记录 orderNo:  {} ",payOrder.getOrderNo());
@@ -204,7 +216,6 @@ public class AlipayWebController {
                     }
                     orderService.changeToPayFinish(payOrder, OrderServiceImpl.PayType.ALIPAY);
                 }
-
                 return "success";
             }else{
                 return "fail";
