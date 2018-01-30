@@ -1,8 +1,10 @@
 package com.lcdt.userinfo.web.controller.api;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
+import com.lcdt.notify.rpcservice.NotifyService;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
@@ -47,7 +49,9 @@ public class UserApi {
 
 	@Autowired
 	GroupManageService groupManageService;
-	
+
+	@Reference
+	NotifyService notifyService;
 
 	@ApiOperation("获取用户信息")
 	@RequestMapping(value = "/get", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
@@ -168,7 +172,7 @@ public class UserApi {
 			httpSession.setAttribute("CWMS_SMS_SEND_TIME", cTime);
 			String[] phones = new String[]{newphone};
 			String vCode = RandomNoUtil.createRandom(true,4);
-//          smsService.sendSms(phones,signature,vCode);
+			notifyService.sendSms(phones,vCode);
 			httpSession.setAttribute("CWMS_SMS_VCODE", vCode+"_"+newphone);
 		} else {
 			Long oTime = Long.valueOf(httpSession.getAttribute("CWMS_SMS_SEND_TIME").toString());

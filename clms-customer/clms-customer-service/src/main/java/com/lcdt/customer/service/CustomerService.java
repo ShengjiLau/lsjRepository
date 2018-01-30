@@ -132,5 +132,6 @@ public interface CustomerService {
      */
     int customerCollectionRemove(Map map);
 
+    void updateCustomerBindCompId(Customer customer);
 
 }

@@ -13,6 +13,13 @@
     <artifactId>userinfo-service</artifactId>
     <name>user-service</name>
     <dependencies>
+
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-notify-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
