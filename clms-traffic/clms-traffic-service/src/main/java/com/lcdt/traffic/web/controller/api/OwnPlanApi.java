@@ -57,10 +57,13 @@ public class OwnPlanApi {
     public JSONObject createPlan(@RequestBody WaybillParamsDto dto, BindingResult bindingResult) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
+        dto.setCompanyName(userCompRel.getCompany().getFullName()); //企业名称
         dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
+
         JSONObject jsonObject = new JSONObject();
         if (bindingResult.hasErrors()) {
             jsonObject.put("code", -1);
@@ -102,12 +105,14 @@ public class OwnPlanApi {
     @RequestMapping(value = "/planEdit4Publish",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_edit_4_publish')")
     public JSONObject planEdit4Publish(@RequestBody WaybillParamsDto dto, BindingResult bindingResult) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
         dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
+        dto.setCompanyName(userCompRel.getCompany().getFullName()); //企业名称
         JSONObject jsonObject = new JSONObject();
         if (bindingResult.hasErrors()) {
             jsonObject.put("code", -1);

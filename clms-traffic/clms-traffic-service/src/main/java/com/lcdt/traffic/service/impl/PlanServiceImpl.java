@@ -75,15 +75,16 @@ public class PlanServiceImpl implements PlanService {
 
                         List<PlanDetail> planDetailList = waybillPlan.getPlanDetailList();
                         if (planDetailList!=null && planDetailList.size()>0) { //更新计划详细
+                            StringBuffer msgSb = new StringBuffer(); //货物发送明细
                             for (PlanDetail planDetail : planDetailList) {
                                 planDetail.setRemainderAmount((float)0); //全部派完--剩余为0
                                 planDetail.setUpdateId(dto.getUpdateId());
                                 planDetail.setUpdateName(dto.getUpdateName());
                                 planDetail.setUpdateTime(new Date());
                                 // planDetailMapper.updateByPrimaryKey(planDetail);
+                                msgSb.append(planDetail.getGoodsName()+":"+planDetail.getPlanAmount()+";");
                             }
                             planDetailMapper.batchUpdatePlanDetail(planDetailList);
-
                             SplitGoods splitGoods = new SplitGoods(); //派单
                             splitGoods.setWaybillPlanId(waybillPlan.getWaybillPlanId());
                             splitGoods.setSplitRemark("发布生成...");
@@ -93,11 +94,14 @@ public class PlanServiceImpl implements PlanService {
                             splitGoods.setUpdateId(dto.getUpdateId());
                             splitGoods.setUpdateName(dto.getUpdateName());
                             splitGoods.setUpdateTime(splitGoods.getCreateDate());
-                            splitGoods.setCompanyId(dto.getCompanyId());
                             splitGoods.setCarrierCompanyId(waybillPlan.getCarrierCompanyId());
+                            splitGoods.setCarrierCollectionIds(waybillPlan.getCarrierCollectionIds());
+                            splitGoods.setCarrierCollectionNames(waybillPlan.getCarrierCollectionNames());
+                            splitGoods.setCarrierPhone(waybillPlan.getCarrierPhone());
+                            splitGoods.setCarrierVehicle(waybillPlan.getCarrierVehicle());
+                            splitGoods.setCompanyId(dto.getCompanyId());
                             splitGoods.setIsDeleted((short)0);
                             splitGoodsMapper.insert(splitGoods);
-
                             List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
                             for (PlanDetail obj : planDetailList) {
                                 SplitGoodsDetail tObj = new SplitGoodsDetail();
@@ -133,14 +137,17 @@ public class PlanServiceImpl implements PlanService {
                          * 发送消息:
                          *   就是新建计划，选择竞价计划，点击发布
                          */
+                        if (!StringUtils.isEmpty(waybillPlan.getCarrierCollectionIds())) {
+                            String companyName = dto.getCompanyName(); // 货主企业
+                            String serialCode = waybillPlan.getSerialCode(); //流水号
+                            String sendAddress = waybillPlan.getSendProvince()+" "+waybillPlan.getSendCity()+" "+waybillPlan.getSendCounty();
+                            String receiveAddress = waybillPlan.getReceiveProvince()+" "+waybillPlan.getReceiveCity()+" "+waybillPlan.getReceiveCounty();
+                            if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
 
+                            } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机else
 
-
-
-
-
-
-
+                            }
+                        }
                     }
 
                 } else {// 需要审批
