@@ -14,7 +14,7 @@
     <result column="client_types" jdbcType="VARCHAR" property="clientTypes" />
     <result column="province" jdbcType="VARCHAR" property="province" />
     <result column="city" jdbcType="VARCHAR" property="city" />
-    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="county" jdbcType="VARCHAR" property="county" />
     <result column="detail_address" jdbcType="VARCHAR" property="detailAddress" />
     <result column="group_ids" jdbcType="VARCHAR" property="groupIds" />
     <result column="group_names" jdbcType="VARCHAR" property="groupNames" />
@@ -68,7 +68,7 @@
     -->
     insert into t_customer (customer_name, short_name, customer_code,
       client_types, province, city,
-    country, detail_address, group_ids,
+    county, detail_address, group_ids,
       group_names, post_code, tel_no, 
       fax, remark, attachment_1, attachment_name1,
       attachment_2,attachment_name2, invoice_title, registration_no,
@@ -79,7 +79,7 @@
       company_id,create_id,create_name,create_date)
     values (#{customerName,jdbcType=VARCHAR}, #{shortName,jdbcType=VARCHAR}, #{customerCode,jdbcType=VARCHAR}, 
       #{clientTypes,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
-      #{country,jdbcType=VARCHAR}, #{detailAddress,jdbcType=VARCHAR}, #{groupIds,jdbcType=VARCHAR},
+      #{county,jdbcType=VARCHAR}, #{detailAddress,jdbcType=VARCHAR}, #{groupIds,jdbcType=VARCHAR},
       #{groupNames,jdbcType=VARCHAR}, #{postCode,jdbcType=VARCHAR}, #{telNo,jdbcType=VARCHAR}, 
       #{fax,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR}, #{attachmentName1,jdbcType=VARCHAR},
     #{attachment2,jdbcType=VARCHAR},#{attachmentName2,jdbcType=VARCHAR}, #{invoiceTitle,jdbcType=VARCHAR}, #{registrationNo,jdbcType=VARCHAR},
@@ -102,7 +102,7 @@
       client_types = #{clientTypes,jdbcType=VARCHAR},
       province = #{province,jdbcType=VARCHAR},
       city = #{city,jdbcType=VARCHAR},
-    country = #{country,jdbcType=VARCHAR},
+    county = #{county,jdbcType=VARCHAR},
       detail_address = #{detailAddress,jdbcType=VARCHAR},
       group_ids = #{groupIds,jdbcType=VARCHAR},
       group_names = #{groupNames,jdbcType=VARCHAR},
@@ -157,8 +157,8 @@
       <if test="city != null &amp;&amp; city !=''">
         city = #{city,jdbcType=VARCHAR},
       </if>
-      <if test="country != null &amp;&amp; country !=''">
-        country = #{country,jdbcType=VARCHAR},
+      <if test="county != null &amp;&amp; county !=''">
+        county = #{county,jdbcType=VARCHAR},
       </if>
       <if test="detailAddress != null &amp;&amp; detailAddress !=''">
         detail_address = #{detailAddress,jdbcType=VARCHAR},
@@ -255,7 +255,7 @@
       This element was generated on Fri Nov 24 10:56:38 CST 2017.
     -->
     select customer_id, customer_name, short_name, customer_code, client_types, province, 
-    city, country, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
+    city, county, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
     attachment_1, attachment_2,attachment_name1,attachment_name2, invoice_title, registration_no, bank_name, bank_no, registration_address,
     tel_no1, invoice_remark, bind_comp_id, status, bind_company, link_man, link_duty, link_tel,
     link_email, company_id,collection_ids,collection_names
@@ -271,7 +271,7 @@
       This element was generated on Fri Nov 24 10:56:38 CST 2017.
     -->
     select customer_id, customer_name, short_name, customer_code, client_types, province,
-    city, country, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
+    city, county, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
     attachment_1, attachment_2,attachment_name1,attachment_name2, invoice_title, registration_no, bank_name, bank_no, registration_address,
     tel_no1, invoice_remark, bind_comp_id, status, bind_company, link_man, link_duty, link_tel,
     link_email, company_id,collection_ids,collection_names
@@ -287,7 +287,7 @@
       This element was generated on Fri Nov 24 10:56:38 CST 2017.
     -->
     select customer_id, customer_name, short_name, customer_code, client_types, province, 
-    city, country, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
+    city, county, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
     attachment_1, attachment_2, attachment_name1,attachment_name2,invoice_title, registration_no, bank_name, bank_no, registration_address,
     tel_no1, invoice_remark, bind_comp_id, status, bind_company, link_man, link_duty, link_tel,
     link_email, company_id
@@ -296,7 +296,7 @@
 
   <select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
     select customer_id, customer_name, short_name, customer_code, client_types, province,
-    city, country, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
+    city, county, detail_address, group_ids, group_names, post_code, tel_no, fax, remark,
     attachment_1,attachment_name1,attachment_name2,attachment_2, invoice_title, registration_no, bank_name, bank_no, registration_address,
     tel_no1, invoice_remark, bind_comp_id, status, bind_company, link_man, link_duty, link_tel,
     link_email, company_id,collection_ids,collection_names
@@ -318,8 +318,8 @@
       <if test="city!=null and city!=''">
         and city = #{city,jdbcType=VARCHAR}
       </if>
-      <if test="country!=null and country!=''">
-        and country = #{country,jdbcType=VARCHAR}
+      <if test="county!=null and county!=''">
+        and county = #{county,jdbcType=VARCHAR}
       </if>
       <if test="status!=null">
         and status = #{status,jdbcType=SMALLINT}
