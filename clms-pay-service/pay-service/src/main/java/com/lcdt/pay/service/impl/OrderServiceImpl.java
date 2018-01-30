@@ -132,11 +132,13 @@ public class OrderServiceImpl implements OrderService{
         balanceLog.setAmount(payOrder.getOrderAmount());
         balanceLog.setCurrentBalance(payBalance.getBalance());
         balanceLog.setLogDes(payOrder.getOrderDes());
-        balanceLog.setLogType(OrderType.PAYORDER);
+        balanceLog.setLogType(payOrder.getOrderType());
         balanceLog.setLogUsername(payOrder.getCreateUserName());
         balanceLog.setOrderId(payOrder.getOrderId());
         balanceLogMapper.insert(balanceLog);
     }
+
+
 
 
     public PayOrder changeToPayFinish(PayOrder payOrder,Integer payType){
@@ -144,12 +146,13 @@ public class OrderServiceImpl implements OrderService{
         if (payOrder.getOrderStatus() != OrderStatus.PENDINGPAY) {
             throw new RuntimeException("订单已付款");
         }
-
         //检查是否已付款
         balanceService.rechargeBalance(payOrder,payOrder.getOrderPayCompanyId(),payOrder.getCreateUserName());
         payOrder.setOrderStatus(OrderStatus.PAYED);
         payOrder.setPayType(payType);
         mapper.updateByPrimaryKey(payOrder);
+        PayBalance payBalance = balanceService.companyBalance(payOrder.getOrderPayCompanyId());
+        logConsumeBalance(payBalance,payOrder);
         return payOrder;
     }
 

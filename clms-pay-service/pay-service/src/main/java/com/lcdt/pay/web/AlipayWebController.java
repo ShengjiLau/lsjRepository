@@ -75,7 +75,7 @@ public class AlipayWebController {
         User user = SecurityInfoGetter.getUser();
 
         //amount单位是元，order中单位是分
-        amount = amount * 10;
+        amount = amount * 100;
         PayOrder topUpOrder = topupService.createTopUpOrder(amount, companyId, user);
         return topUpOrder;
     }
@@ -157,20 +157,20 @@ public class AlipayWebController {
             logger.info("接受支付宝 支付推送 交易订单号：{}  支付状态 {} ", orderNo, tradeStatus);
 
             if (!"TRADE_SUCCESS".equals(tradeStatus)) {
-                return "failure";
+                return "fail";
             }
 
             PayOrder payOrder = orderService.selectByOrderNo(orderNo);
             if (payOrder == null) {
                 logger.error("充值订单数据库没有记录 orderNo:  {} ", payOrder.getOrderNo());
-                return "failure";
+                return "fail";
             }
 
             orderService.changeToPayFinish(payOrder, OrderServiceImpl.PayType.ALIPAY);
             return "success";
         }
 
-        return "failure";
+        return "fail";
 
     }
 
@@ -200,20 +200,20 @@ public class AlipayWebController {
                 if (tradeStatus.equals("TRADE_SUCCESS")) {
                     if (payOrder == null) {
                         logger.error("充值订单数据库没有记录 orderNo:  {} ",payOrder.getOrderNo());
-                        return "failure";
+                        return "fail";
                     }
                     orderService.changeToPayFinish(payOrder, OrderServiceImpl.PayType.ALIPAY);
                 }
 
                 return "success";
             }else{
-                return "failure";
+                return "fail";
             }
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
 
-        return "failure";
+        return "fail";
     }
 
 
