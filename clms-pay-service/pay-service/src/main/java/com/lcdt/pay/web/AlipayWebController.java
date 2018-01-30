@@ -197,10 +197,14 @@ public class AlipayWebController {
             boolean b = AlipaySignature.rsaCheckV1(paramters, AlipayContants.getAlipayPublicKey(), CHARSET, AlipayContants.getSignType());
             if (b) {
                 PayOrder payOrder = orderService.selectByOrderNo(orderNo);
-                if (payOrder == null) {
-                    logger.error("充值订单数据库没有记录 orderNo:  {} ",payOrder.getOrderNo());
-                    return "failure";
+                if (tradeStatus.equals("TRADE_SUCCESS")) {
+                    if (payOrder == null) {
+                        logger.error("充值订单数据库没有记录 orderNo:  {} ",payOrder.getOrderNo());
+                        return "failure";
+                    }
+                    orderService.changeToPayFinish(payOrder, OrderServiceImpl.PayType.ALIPAY);
                 }
+
                 return "success";
             }else{
                 return "failure";
@@ -209,7 +213,7 @@ public class AlipayWebController {
             e.printStackTrace();
         }
 
-        return null;
+        return "failure";
     }
 
 
