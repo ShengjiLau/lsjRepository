@@ -9,6 +9,7 @@ public class PayOrder implements ResponseData{
 
     private Integer orderType;
 
+    //单位为分
     private Integer orderAmount;
 
     private Date createTime;

@@ -62,6 +62,16 @@ public class CompanyServiceImpl implements CompanyService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Company updateCompany(Company company) {
+
+		Company result = companyMapper.selectByCondition(company);
+
+		if (result != null) {
+			if (result.getCompId() != company.getCompId()) {
+				throw new RuntimeException("公司名已存在");
+			}
+		}
+
+
 		int i = companyMapper.updateByPrimaryKey(company);
 		return company;
 	}

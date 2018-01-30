@@ -68,7 +68,7 @@ public class Configure {
 	public static String UNIFIEDORDER_API = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
 	@Value("${wechatpay_notifyurl}")
-	public static String NOTIFY_URL = "https://tms.datuodui.com/pay/WeixinpayNotifyUrl";//异步回调url ip需外网能访问
+	public static String NOTIFY_URL = "http://clms-test.datuodui.com:8087/wechatpaynotify";//异步回调url ip需外网能访问
 
     public static String getNotifyUrl() {
         return NOTIFY_URL;

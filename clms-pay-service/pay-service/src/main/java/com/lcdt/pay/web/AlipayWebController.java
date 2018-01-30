@@ -72,8 +72,8 @@ public class AlipayWebController {
         Long userId = SecurityInfoGetter.getUser().getUserId();
         User user = SecurityInfoGetter.getUser();
 
-        amount = amount * 100;
-
+        //amount单位是元，order中单位是分
+        amount = amount * 10;
         PayOrder topUpOrder = topupService.createTopUpOrder(amount, companyId, user);
         return topUpOrder;
     }
@@ -119,7 +119,8 @@ public class AlipayWebController {
     }
 
     @RequestMapping("/alipay/notify")
-    public void alipayNotify(HttpServletRequest request) {
+    @ResponseBody
+    public String alipayNotify(HttpServletRequest request) {
         HashMap<String, String> parameterMap = new HashMap<>();
         Enumeration<String> parameterNames = request.getParameterNames();
         if (parameterNames.hasMoreElements()) {
@@ -134,7 +135,7 @@ public class AlipayWebController {
         logger.info("接受支付宝 支付推送 交易订单号：{}  支付状态 {} ",orderNo,tradeStatus);
 
         if (!"TRADE_SUCCESS".equals(tradeStatus)) {
-            return;
+            return "failure";
         }
 
         boolean b = false;
@@ -148,12 +149,13 @@ public class AlipayWebController {
             PayOrder payOrder = orderService.selectByOrderNo(orderNo);
             if (payOrder == null) {
                 logger.error("充值订单数据库没有记录 orderNo:  {} ",payOrder.getOrderNo());
-                return;
+                return "failure";
             }
 
             orderService.changeToPayFinish(payOrder, OrderServiceImpl.PayType.ALIPAY);
-            return;
+            return "success";
         }
+        return "failure";
     }
 
     /**
@@ -164,8 +166,15 @@ public class AlipayWebController {
     @RequestMapping("/alipay/returnurl")
     @ResponseBody
     public String alipayReturn(HttpServletRequest request) {
+
+        HashMap<String, String> paramters = new HashMap<>();
         Enumeration<String> parameterNames = request.getParameterNames();
-        Map<String,String> paramters = null;
+        if (parameterNames.hasMoreElements()) {
+            String s = parameterNames.nextElement();
+            String parameter = request.getParameter(s);
+            paramters.put(s, parameter);
+        }
+
         String orderNo = paramters.get("out_trade_no");
         String tradeStatus = paramters.get("trade_status");
         try {
@@ -184,11 +193,16 @@ public class AlipayWebController {
             e.printStackTrace();
         }
 
-
         return null;
     }
 
 
+    public void checkAlipayOrder(){
+
+
+
+        return;
+    }
 
     @RequestMapping("/wechatqrcode")
     public void wechatQrcode(HttpServletResponse response,Long orderId,HttpServletRequest request){
