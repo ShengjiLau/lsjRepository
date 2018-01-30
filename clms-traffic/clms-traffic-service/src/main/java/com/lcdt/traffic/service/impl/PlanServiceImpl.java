@@ -107,7 +107,11 @@ public class PlanServiceImpl implements PlanService {
                                 SplitGoodsDetail tObj = new SplitGoodsDetail();
                                 tObj.setPlanDetailId(obj.getPlanDetailId());
                                 tObj.setAllotAmount(obj.getPlanAmount()); //派单数量
-                                tObj.setRemainAmount((float) 0); //本次剩余
+                                if (waybillPlan.getCarrierType() == ConstantVO.PLAN_CARRIER_TYPE_DRIVER) { //如果司机的话为0
+                                    tObj.setRemainAmount((float)0); //本次剩余
+                                } else {
+                                    tObj.setRemainAmount(obj.getPlanAmount()); //本次剩余
+                                }
                                 tObj.setFreightPrice(obj.getFreightPrice());
                                 tObj.setFreightTotal(obj.getFreightTotal());
                                 tObj.setDetailRemark("发布生在....");
@@ -123,6 +127,11 @@ public class PlanServiceImpl implements PlanService {
                             }
                             splitGoodsDetailMapper.batchAddSplitGoodsDetail(splitGoodsDetailList);
                             /****************司机生成运单********************/
+                            if (waybillPlan.getCarrierType() == ConstantVO.PLAN_CARRIER_TYPE_DRIVER) {
+                                WaybillDto waybillDto = new WaybillDto();
+                                PlanBO.getInstance().toWaybillItemsDto(waybillPlan, splitGoods, waybillDto, planDetailList, splitGoodsDetailList);
+                                waybillService.addWaybill(waybillDto);
+                            }
                         }
 
                     } else  if (waybillPlan.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_JINGJIA)) { //竞价
@@ -226,7 +235,11 @@ public class PlanServiceImpl implements PlanService {
                 SplitGoodsDetail tObj = new SplitGoodsDetail();
                 tObj.setPlanDetailId(obj.getPlanDetailId());
                 tObj.setAllotAmount(obj.getPlanAmount()); //派单数量
-                tObj.setRemainAmount((float) 0); //本次剩余
+                if (carrierType == ConstantVO.PLAN_CARRIER_TYPE_DRIVER) { //如果司机的话为0
+                    tObj.setRemainAmount((float)0); //本次剩余
+                } else {
+                    tObj.setRemainAmount(obj.getPlanAmount()); //本次剩余
+                }
                 tObj.setFreightPrice(obj.getFreightPrice());
                 tObj.setFreightTotal(obj.getFreightTotal());
                 tObj.setDetailRemark("审批通过后生成...");

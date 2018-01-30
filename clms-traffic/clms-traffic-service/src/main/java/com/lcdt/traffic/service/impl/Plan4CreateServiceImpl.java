@@ -241,7 +241,12 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         tObj.setSplitGoodsId(splitGoods.getSplitGoodsId());
                         tObj.setPlanDetailId(obj.getPlanDetailId());
                         tObj.setAllotAmount(obj.getPlanAmount()); //派单数量
-                        tObj.setRemainAmount((float) 0); //本次剩余
+                        if (carrierType == ConstantVO.PLAN_CARRIER_TYPE_DRIVER) { //如果司机的话为0
+                            tObj.setRemainAmount((float)0); //本次剩余
+                        } else {
+                            tObj.setRemainAmount(obj.getPlanAmount()); //本次剩余
+                        }
+
                         tObj.setFreightPrice(obj.getFreightPrice());
                         tObj.setFreightTotal(obj.getFreightTotal());
                         tObj.setDetailRemark("计划直接生成...");
