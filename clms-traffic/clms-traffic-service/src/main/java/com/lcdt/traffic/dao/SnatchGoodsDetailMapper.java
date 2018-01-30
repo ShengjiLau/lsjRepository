@@ -3,6 +3,7 @@ package com.lcdt.traffic.dao;
 import com.lcdt.traffic.model.SnatchGoodsDetail;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SnatchGoodsDetailMapper {
     /**
@@ -45,7 +46,7 @@ public interface SnatchGoodsDetailMapper {
      */
     int updateByPrimaryKey(SnatchGoodsDetail record);
 
-    List<SnatchGoodsDetail> selectBySnatchGoodsDetailId(Long snatchGoodsId, short isDeleted);
+    List<SnatchGoodsDetail> selectBySnatchGoodsDetailId(Map map);
 
 
 
