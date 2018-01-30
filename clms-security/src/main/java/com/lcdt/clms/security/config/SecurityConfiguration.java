@@ -31,7 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		super.configure(web);
-		web.ignoring().antMatchers("/css/**").antMatchers("/js/**").antMatchers("/img/**");
+		web.ignoring().antMatchers("/css/**","/js/**","/img/**","/wechatpaynotify","/alipay/notify","/alipay/returnurl");
 	}
 
 	@Override
@@ -43,16 +43,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());
 		http.exceptionHandling().authenticationEntryPoint(entryPoint());
-		http.authorizeRequests().anyRequest().authenticated();
+
 		http.addFilterAt(ticketAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests().antMatchers("/auth/**").permitAll()
-				.antMatchers("/register/**").permitAll()
-				.antMatchers("/alipay/returnurl").permitAll()
-				.antMatchers("/alipay/notify").permitAll()
-				.antMatchers("/wechatpaynotify").permitAll()
+				.antMatchers("/register/**","/wechatpaynotify","/alipay/notify","/alipay/returnurl").permitAll()
 				.and().logout().logoutSuccessHandler(ticketLogoutSuccessHandler()).logoutUrl("/signout").logoutSuccessUrl("/auth/loginpage").permitAll()
 				.and().exceptionHandling().accessDeniedHandler(deniedHandler())
 				.and().csrf().disable();
+		http.authorizeRequests().anyRequest().authenticated();
 	}
 
 	@Bean
