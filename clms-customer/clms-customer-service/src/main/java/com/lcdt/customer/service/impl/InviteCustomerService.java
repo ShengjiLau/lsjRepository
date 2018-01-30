@@ -71,6 +71,7 @@ public class InviteCustomerService {
 		customerInviteLog.setInviteCompanyId(customer.getCompanyId());
 		customerInviteLog.setInviteCustomerId(customer.getCustomerId());
 		customerInviteLog.setInviteToken(uuidToken());
+
 		inviteLogdao.insert(customerInviteLog);
 		String clientTypes = customer.getClientTypes();
 		clientTypes = clientTypeToString(clientTypes);

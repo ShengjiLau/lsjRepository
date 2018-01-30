@@ -86,15 +86,25 @@ public class CustomerBindApi {
 
 		CustomerInviteLog customerInviteLog = inviteLogService.selectByInviteId(inviteId);
 		customerInviteLog.setIsValid(0);
+
 		inviteLogMapper.updateByPrimaryKey(customerInviteLog);
 
+		Long inviteCompanyId = customerInviteLog.getInviteCompanyId();
+
+		//绑定被邀请的客户id
 		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
 		if (customer.getBindCpid() != null) {
 			throw new RuntimeException("客户已绑定");
 		}
-
-		customer.setBindCpid(companyId);
+		//帮邀请的绑定公司id是 邀请人的公司id
+		customer.setBindCpid(inviteCompanyId);
 		customerService.customerUpdate(customer);
+
+		//绑定邀请人的公司id
+		Customer customer1 = mapper.selectByPrimaryKey(customerInviteLog.getInviteCustomerId(), customerInviteLog.getInviteCompanyId());
+		customer1.setBindCpid(companyId);
+		customerService.customerUpdate(customer1);
+
 		ModelAndView successView = new ModelAndView("invite_success_bak");
 		return successView;
 	}
