@@ -1,5 +1,6 @@
 package com.lcdt.traffic.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONArray;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
@@ -11,6 +12,7 @@ import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
+import com.lcdt.userinfo.rpc.CompanyRpcService;
 import net.bytebuddy.asm.Advice;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +49,11 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
 
 
     @com.alibaba.dubbo.config.annotation.Reference
-    public CustomerRpcService customerRpcService;  //客户信息
+    private CustomerRpcService customerRpcService;  //客户信息
+
+    @Reference
+    private CompanyRpcService companyRpcService; //企业信息
+
 
     @Autowired
     private WaybillService waybillService; //运单
@@ -88,7 +94,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
                 vo.setCarrierCompanyId(customer.getCompanyId());
             } else { // 司机
-                vo.setCarrierCompanyId(vo.getCompanyId()); //获取下的本企业司机
+                vo.setCarrierCompanyId(vo.getCompanyId()); //获取本企业司机
             }
         }
 
@@ -129,26 +135,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                  vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
                  waybillPlanMapper.insert(vo); //生成计划
 
-                 if (flag==1) { //发布--操作
-                    /***
-                     * 发送消息:
-                     *   就是新建计划，选择竞价计划，点击发布
-                     */
-                    if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
-                        if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
-
-
-
-
-                        } else { // 司机
-
-
-
-
-                        }
-                    }
-                 }
-
                  createTransportWayItems(dto, vo);//批量创建栏目
                  List<PlanDetail> planDetailList = dto.getPlanDetailList();
                  if (null!=planDetailList && planDetailList.size()>0) {
@@ -166,6 +152,30 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     }
                     planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
                 }
+
+
+            if (flag==1) { //发布--操作
+                /***
+                 * 发送消息:
+                 *   就是新建计划，选择竞价计划，点击发布
+                 */
+                if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
+
+                    if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
+
+
+                        vo.getCarrierCompanyId();//承运企业
+
+                    } else { // 司机
+
+
+
+                    }
+
+                }
+            }
+
+
         }
         return vo;
     }
