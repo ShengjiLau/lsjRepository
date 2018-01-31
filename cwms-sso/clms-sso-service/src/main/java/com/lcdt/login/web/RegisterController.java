@@ -109,7 +109,7 @@ public class RegisterController {
         } else {
             flag = validCodeService.sendValidCode(request, VALID_CODE_TAG, 60 * 15, registerDto.getUserPhoneNum());
             if (!flag) {
-                msg = "短信超限";
+                msg = "获取验证码已经超限，请明天再试!";
             }
         }
         map.put("msg", msg);
