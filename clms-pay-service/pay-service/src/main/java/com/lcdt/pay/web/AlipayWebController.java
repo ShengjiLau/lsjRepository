@@ -128,10 +128,7 @@ public class AlipayWebController {
 
         Map<String, String> parameterMap = allRequestParamterMap(request);
         boolean b = checkSignature(parameterMap);
-
-        boolean signVerified = AlipaySignature.rsaCheckV1(parameterMap, AlipayContants.getAlipayPublicKey(), CHARSET, "RSA2");
-
-        if (signVerified) {
+        if (b) {
             String orderNo = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
             //支付宝交易号
             String trade_orderNono = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");

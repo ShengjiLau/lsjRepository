@@ -6,15 +6,14 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.model.Group;
+import com.lcdt.userinfo.model.LoginLog;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.DepartmentService;
 import com.lcdt.userinfo.service.GroupManageService;
+import com.lcdt.userinfo.service.LoginLogService;
 import com.lcdt.userinfo.service.UserService;
-import com.lcdt.userinfo.web.dto.CreateEmployeeAccountDto;
-import com.lcdt.userinfo.web.dto.SearchEmployeeDto;
-import com.lcdt.userinfo.web.dto.ToggleEmployeeEnableDto;
-import com.lcdt.userinfo.web.dto.UpdateEmployeeAccountDto;
+import com.lcdt.userinfo.web.dto.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +45,8 @@ public class EmployeeServiceImpl {
 	@Autowired
 	DepartmentService departmentService;
 
+	@Autowired
+	LoginLogService loginLogService;
 
 
 	@Transactional(rollbackFor = Exception.class)
@@ -82,7 +83,6 @@ public class EmployeeServiceImpl {
 			userCompRel.setDuty(dto.getDuty());
 		}
 
-
 		userCompanyDao.insert(userCompRel);
 
 		if (dto.getRoles() != null && !dto.getRoles().isEmpty()) {
@@ -98,12 +98,18 @@ public class EmployeeServiceImpl {
 	@Transactional(rollbackFor = Exception.class)
 	public List<UserCompRel> queryAllEmployee(SearchEmployeeDto search) {
 		List<UserCompRel> userCompRels = userCompanyDao.selectBySearchDto(search);
+		ArrayList<EmployeeDto> employeeDtos = new ArrayList<>(userCompRels.size());
 		for (UserCompRel compRel : userCompRels) {
+			EmployeeDto employeeDto = new EmployeeDto();
 			Long userId = compRel.getUser().getUserId();
 			List<Group> groups = groupService.userCompanyGroups(userId,compRel.getCompId());
 			compRel.setGroups(groups);
 			List<Role> roles = roleService.userCompanyRole(userId, compRel.getCompId());
 			compRel.setRoles(roles);
+			employeeDtos.add(employeeDto);
+
+			LoginLog loginLog = loginLogService.userLastLogin(userId, compRel.getCompId());
+			compRel.setLoginLog(loginLog);
 		}
 		return userCompRels;
 	}

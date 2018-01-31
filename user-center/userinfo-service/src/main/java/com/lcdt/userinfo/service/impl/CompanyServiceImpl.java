@@ -136,7 +136,7 @@ public class CompanyServiceImpl implements CompanyService {
 			companyMember.setFullName(company.getFullName());
 			companyMember.setUserId(dto.getUserId());
 			companyMember.setCompId(company.getCompId());
-			companyMember.setIsCreate((short)0); //企业创建者
+			companyMember.setIsCreate((short)1); //企业创建者
 			companyMember.setCreateDate(dt);
 			userCompRelMapper.insert(companyMember);
 		}

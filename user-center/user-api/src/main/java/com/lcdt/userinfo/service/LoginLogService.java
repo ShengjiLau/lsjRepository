@@ -6,4 +6,6 @@ public interface LoginLogService {
 
     void saveLog(LoginLog log);
 
+    LoginLog userLastLogin(Long userId,Long companyId);
+
 }

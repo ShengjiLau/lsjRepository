@@ -64,6 +64,35 @@ public class NotifyService {
     }
 
 
+    public CompanyNotifySetting setWebNotifyEnable(Long companyId,Long notifyId,boolean enable){
+
+        Notify notify = notifyMapper.selectByPrimaryKey(notifyId);
+        if (notify == null) {
+            throw new RuntimeException("notify 不存在");
+        }
+
+
+        List<CompanyNotifySetting> companyNotifySetting = notifySettingDao.selectByNotifyAndCompany(companyId, notifyId);
+        if (CollectionUtils.isEmpty(companyNotifySetting)) {
+            CompanyNotifySetting companyNotifySetting1 = new CompanyNotifySetting();
+            companyNotifySetting1.setCompanyId(companyId);
+            companyNotifySetting1.setNotifyId(notifyId);
+            companyNotifySetting1.setEnableWeb(enable);
+
+            settingMapper.insert(companyNotifySetting1);
+            return companyNotifySetting1;
+        }else{
+            CompanyNotifySetting setting = companyNotifySetting.get(0);
+            if (setting.getEnableWeb() == enable) {
+                return setting;
+            }else{
+                setting.setEnableWeb(enable);
+                settingMapper.updateByPrimaryKey(setting);
+                return setting;
+            }
+        }
+    }
+
 
     public List<Notify> queryNotifyByEventName(String eventName) {
         List<Notify> notifies = notifyDao.queryByEventName(eventName);

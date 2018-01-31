@@ -2,6 +2,7 @@ package com.lcdt.userinfo.dao;
 
 import com.lcdt.userinfo.model.LoginLog;
 import com.lcdt.userinfo.model.LoginLogDto;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,6 +17,6 @@ public interface LoginLogMapper {
 
     int updateByPrimaryKey(LoginLog record);
 
-    List<LoginLogDto> selectByCompanyId(Long companyId);
+    List<LoginLogDto> selectByCompanyId(@Param("companyId") Long companyId,@Param("username") String username ,@Param("userId") Long userId);
 
 }

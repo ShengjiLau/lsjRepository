@@ -44,5 +44,13 @@ public class CompanyNotifySetApi {
         return companyNotifySetting;
     }
 
+    @ApiOperation("web通知开关")
+    @RequestMapping("/toggersms")
+    public CompanyNotifySetting configWebNotify(Long notifyId,boolean isEnable) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        CompanyNotifySetting companyNotifySetting = notifyService.setWebNotifyEnable(companyId, notifyId, isEnable);
+        return companyNotifySetting;
+    }
+
 
 }
