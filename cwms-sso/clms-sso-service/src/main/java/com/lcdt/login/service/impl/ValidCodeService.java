@@ -43,7 +43,6 @@ public class ValidCodeService {
      * @param timeout
      */
     public boolean sendValidCode(HttpServletRequest request,String tag,Integer timeout,String phoneNum){
-
         if (validCodeCountService.phoneTodayCount(phoneNum)) {
             HttpSession session = request.getSession(true);
             String sessionKey = sessionPrefixKey + tag;
@@ -62,8 +61,6 @@ public class ValidCodeService {
             }
         }
         return false;
-
-
     }
 
     private String generateCodeString(String code){
