@@ -105,9 +105,6 @@ public class SplitGoodsApi {
     }
 
 
-
-
-
     @ApiOperation(value = "派单-竞价")
     @RequestMapping(value = "/splitGoods4Bidding",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_4_bidding')")
@@ -127,7 +124,6 @@ public class SplitGoodsApi {
         jsonObject.put("code",code);
         return jsonObject.toString();
     }
-
 
 
 
