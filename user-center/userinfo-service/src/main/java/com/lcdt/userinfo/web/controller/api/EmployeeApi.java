@@ -62,10 +62,8 @@ public class EmployeeApi {
 		String roles = request.getParameter("jsonRoles");
 		List<Long> jsonGroups = JSONArray.parseArray(groups, Long.class);
 		List<Long> jsonRoles = JSONArray.parseArray(roles, Long.class);
-
 		dto.setGroups(jsonGroups);
 		dto.setRoles(jsonRoles);
-
 		boolean b = employeeService.addEmployee(dto);
 		if (b) {
 			return successMessage.toString();
@@ -105,10 +103,8 @@ public class EmployeeApi {
 	@RequestMapping(value = "/enableemployee", method = RequestMethod.POST)
 	@PreAuthorize("hasAnyAuthority('employee_edit') or hasRole('ROLE_SYS_ADMIN')")
 	public UserCompRel toggleEnableEmployee(ToggleEmployeeEnableDto dto) {
-
 		UserCompRel userCompRel = employeeService.toggleEnableEmployee(dto);
 		return userCompRel;
-
 	}
 
 

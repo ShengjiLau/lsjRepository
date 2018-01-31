@@ -28,7 +28,7 @@ public class LoginLogApi {
     public PageResultDto companyUserLogs(@RequestParam(required = false) String username,@ApiParam(required = true)@RequestParam Integer pageNo, @RequestParam @ApiParam(required = true) Integer pageSize){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
-        List<LoginLogDto> loginLogs = dao.selectByCompanyId(companyId,username);
+        List<LoginLogDto> loginLogs = dao.selectByCompanyId(companyId,username,null);
         PageResultDto<LoginLogDto> userCompRelPageResultDto = new PageResultDto<>(loginLogs);
         return userCompRelPageResultDto;
     }

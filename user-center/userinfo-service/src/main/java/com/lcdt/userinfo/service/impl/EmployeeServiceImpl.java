@@ -84,7 +84,6 @@ public class EmployeeServiceImpl {
 		}
 
 		userCompanyDao.insert(userCompRel);
-
 		if (dto.getRoles() != null && !dto.getRoles().isEmpty()) {
 			roleService.setCompanyUserRole(user.getUserId(), companyId, dto.getRoles());
 		}
