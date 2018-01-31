@@ -33,5 +33,4 @@ public class LoginLogApi {
         return userCompRelPageResultDto;
     }
 
-
 }
