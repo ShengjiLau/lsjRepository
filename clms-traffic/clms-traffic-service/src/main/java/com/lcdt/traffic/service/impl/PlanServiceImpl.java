@@ -303,7 +303,9 @@ public class PlanServiceImpl implements PlanService {
     public WaybillPlan loadWaybillPlan(WaybillParamsDto dto) {
         Map tMap = new HashMap<String,String>();
         tMap.put("waybillPlanId",dto.getWaybillPlanId());
-        tMap.put("companyId",dto.getCompanyId());
+        if(dto.getCompanyId()!=null) {
+            tMap.put("companyId", dto.getCompanyId());
+        }
         tMap.put("isDeleted","0");
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         if (waybillPlan == null) {

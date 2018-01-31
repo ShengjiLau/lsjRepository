@@ -77,6 +77,7 @@
     <result column="cancel_date" jdbcType="TIMESTAMP" property="cancelDate" />
     <result column="cancel_man" jdbcType="VARCHAR" property="cancelMan" />
     <result column="cancel_remark" jdbcType="VARCHAR" property="cancelRemark" />
+
     <!--计划详细-->
     <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
@@ -90,8 +91,8 @@
                 ofType="com.lcdt.traffic.model.Waybill" javaType="ArrayList"
                 select="com.lcdt.traffic.dao.WaybillMapper.selectWaybillByPlanId" />
 
-      <!--抢单报价-->
-      <collection property="snatchGoodsList" column="{waybillPlanId=waybill_plan_id,isDeleted=is_deleted}"
+    <!--抢单报价-->
+    <collection property="snatchGoodsList" column="{waybillPlanId=waybill_plan_id,isDeleted=is_deleted}"
                   ofType="com.lcdt.traffic.model.SnatchGoods" javaType="ArrayList"
                   select="com.lcdt.traffic.dao.SnatchGoodsMapper.selectByWaybillPlanId" />
 

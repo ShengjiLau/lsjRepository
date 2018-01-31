@@ -606,6 +606,19 @@ public class CustomerPlanApi {
 
 
 
+    @ApiOperation("客户计划-派车-详细信息拉取")
+    @RequestMapping(value = "/loadCustomerPlan",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_customer_plan')")
+    public WaybillPlan loadCustomerPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        WaybillParamsDto dto = new WaybillParamsDto();
+        dto.setCompanyId(null);
+        dto.setWaybillPlanId(waybillPlanId);
+        WaybillPlan waybillPlan = planService.loadWaybillPlan(dto);
+        return waybillPlan;
+    }
+
+
 
 
 
