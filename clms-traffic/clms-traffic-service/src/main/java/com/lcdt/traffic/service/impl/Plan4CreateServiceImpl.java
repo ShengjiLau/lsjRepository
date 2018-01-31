@@ -22,9 +22,7 @@ import org.springframework.util.StringUtils;
 import org.tl.commons.util.DateUtility;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by yangbinq on 2017/12/13.
@@ -199,6 +197,11 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//派车状态(已派完)
                     }
                     waybillPlanMapper.insert(vo);
+
+                    Map map = new HashMap();
+                    map.put("waybillPlanId",vo.getWaybillPlanId());
+                    WaybillPlan tWaybillPlan = waybillPlanMapper.selectByPrimaryKey(map);
+                    vo.setSerialCode(tWaybillPlan.getSerialCode());
                     createTransportWayItems(dto, vo);//批量创建栏目
 
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();
