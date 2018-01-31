@@ -129,6 +129,7 @@ public class PlanServiceImpl implements PlanService {
                             /****************司机生成运单********************/
                             if (waybillPlan.getCarrierType() == ConstantVO.PLAN_CARRIER_TYPE_DRIVER) {
                                 WaybillDto waybillDto = new WaybillDto();
+                                waybillDto.setWaybillCode(waybillPlan.getSerialCode()); //流水号
                                 PlanBO.getInstance().toWaybillItemsDto(waybillPlan, splitGoods, waybillDto, planDetailList, splitGoodsDetailList);
                                 waybillService.addWaybill(waybillDto);
                             }
@@ -259,6 +260,7 @@ public class PlanServiceImpl implements PlanService {
              */
             if (carrierType == 2) {
                 WaybillDto waybillDto = new WaybillDto();
+                waybillDto.setWaybillCode(waybillPlan.getSerialCode()); //流水号
                 PlanBO.getInstance().toWaybillItemsDto(waybillPlan, splitGoods, waybillDto, planDetailList, splitGoodsDetailList);
                 waybillService.addWaybill(waybillDto);
             }

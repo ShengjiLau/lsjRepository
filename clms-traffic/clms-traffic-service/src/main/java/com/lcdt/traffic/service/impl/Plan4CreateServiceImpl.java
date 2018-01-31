@@ -266,6 +266,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                      */
                     if (carrierType == 2) {
                         WaybillDto waybillDto = new WaybillDto();
+                        waybillDto.setWaybillCode(vo.getSerialCode()); //流水号
                         waybillDto.setCarrierCompanyId(vo.getCarrierCompanyId());
                         waybillDto.setCreateId(vo.getCreateId());
                         waybillDto.setCreateName(vo.getCreateName());
