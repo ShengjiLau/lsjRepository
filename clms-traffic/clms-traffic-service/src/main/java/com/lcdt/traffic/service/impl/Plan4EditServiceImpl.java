@@ -221,6 +221,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                      */
                     if (carrierType == ConstantVO.PLAN_CARRIER_TYPE_DRIVER) {
                         WaybillDto waybillDto = new WaybillDto();
+                        waybillDto.setWaybillCode(vo.getSerialCode()); //流水号
                         PlanBO.getInstance().toWaybillItemsDto(vo,splitGoods,waybillDto,planDetailList,splitGoodsDetailList);
                         if (null!=waybillDto) {
                             waybillService.addWaybill(waybillDto);

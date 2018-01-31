@@ -118,7 +118,16 @@
       create_name, create_date, update_id, 
       update_name, update_date, is_deleted
       )
-    values (#{waybillPlanId,jdbcType=BIGINT}, #{splitGoodsId,jdbcType=BIGINT},#{waybillCode,jdbcType=VARCHAR}, #{waybillStatus,jdbcType=SMALLINT}, #{waybillSource,jdbcType=VARCHAR},
+    values (#{waybillPlanId,jdbcType=BIGINT}, #{splitGoodsId,jdbcType=BIGINT},
+    <choose>
+      <when test="waybillCode!=null and waybillCode!=''">
+        #{waybillCode,jdbcType=VARCHAR},
+      </when>
+      <otherwise>
+        F_WAYBILL_CODE('TW'),
+      </otherwise>
+    </choose>
+      #{waybillStatus,jdbcType=SMALLINT}, #{waybillSource,jdbcType=VARCHAR},
       #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{driverId,jdbcType=BIGINT}, 
       #{driverName,jdbcType=VARCHAR}, #{driverPhone,jdbcType=VARCHAR}, #{vechicleId,jdbcType=BIGINT}, 
       #{vechicleNum,jdbcType=VARCHAR}, #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, 
@@ -587,7 +596,7 @@
       and is_deleted = 0
   </select>
 
-  <select id="selectWaybillByPlanId" parameterType="java.util.Map" resultMap="BaseResultMap">
+  <select id="selectWaybillByPlanId" parameterType="java.util.Map" resultMap="BaseWaybillAndItems">
     select id, waybill_plan_id,split_goods_id, waybill_code, waybill_status,waybill_source, group_id, group_name, driver_id,
     driver_name, driver_phone, vechicle_id, vechicle_num, customer_id, customer_name,
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
@@ -626,4 +635,13 @@
     order by id desc
   </select>
 
+  <select id="selectByCodeAndCompanyId" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select id, waybill_code,company_id
+    from t_waybill
+    where company_id = #{companyId,jdbcType=BIGINT}
+    and  waybill_code= #{waybillCode,jdbcType=VARCHAR}
+    and is_deleted = 0
+    order by id desc
+  </select>
+  
 </mapper>
