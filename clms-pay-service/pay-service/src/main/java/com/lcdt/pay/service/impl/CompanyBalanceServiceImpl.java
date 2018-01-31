@@ -7,6 +7,8 @@ import com.lcdt.pay.model.BalanceLog;
 import com.lcdt.pay.model.PayBalance;
 import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.service.CompanyBalanceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ public class CompanyBalanceServiceImpl implements CompanyBalanceService{
 
     @Autowired
     BalanceLogMapper balanceLogMapper;
+
+    private Logger logger = LoggerFactory.getLogger(CompanyBalanceServiceImpl.class);
 
     @Override
     public PayBalance companyBalance(Long companyId) {
@@ -39,6 +43,10 @@ public class CompanyBalanceServiceImpl implements CompanyBalanceService{
         PayBalance payBalance = mapper.selectByCompanyId(companyId);
         Integer balance = payBalance.getBalance();
         payBalance.setBalance(balance + amount);
+
+        logger.info("账户充值 companyId {} 金额{}分 当前余额",companyId,amount,balance);
+
+
         mapper.updateByPrimaryKey(payBalance);
 
         BalanceLog balanceLog = new BalanceLog();

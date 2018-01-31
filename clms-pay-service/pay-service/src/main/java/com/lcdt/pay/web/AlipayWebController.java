@@ -94,11 +94,9 @@ public class AlipayWebController {
             throw new RuntimeException("订单状态异常");
         }
 
-
         //获得初始化的AlipayClient
         AlipayClient alipayClient = new DefaultAlipayClient(AlipayContants.getApiGataway(), AlipayContants.getAppId()
                 , AlipayContants.getAppPrivateKey(), FORMAT, CHARSET, AlipayContants.getAlipayPublicKey(), "RSA2");
-
         AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();//创建API对应的request
         AlipayTradeOrder alipayTradeOrder = new AlipayTradeOrder();
         alipayTradeOrder.setTradeNo(serverOrder.getOrderNo());
@@ -109,6 +107,9 @@ public class AlipayWebController {
         alipayRequest.setBizContent(JSONObject.toJSONString(alipayTradeOrder));//填充业务参数
         alipayRequest.setReturnUrl(AlipayContants.getReturnUrl());
         alipayRequest.setNotifyUrl(AlipayContants.getNotifyUrl());//在公共参数中设置回跳和通知地址
+
+        logger.info("支付宝支付请求 api:{} appid :{} charset:{} bizcontent:{} ",AlipayContants.getApiGataway(),AlipayContants.getAppId(),CHARSET,JSONObject.toJSONString(alipayTradeOrder));
+
         String form = "";
         try {
             form = alipayClient.pageExecute(alipayRequest).getBody(); //调用SDK生成表单
@@ -171,6 +172,7 @@ public class AlipayWebController {
         String orderNo = parameterMap.get("out_trade_no");
         String tradeStatus = parameterMap.get("trade_status");
         if (b) {
+            logger.info("支付宝同步验签成功");
             PayOrder payOrder = orderService.selectByOrderNo(orderNo);
 
             if (tradeStatus == null) {
@@ -186,6 +188,8 @@ public class AlipayWebController {
             }
             return "success";
         } else {
+            logger.info("支付宝同步验签失败");
+
             return "fail";
         }
     }
@@ -203,7 +207,7 @@ public class AlipayWebController {
                         : valueStr + values[i] + ",";
             }
             //乱码解决，这段代码在出现乱码时使用
-            valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+//            valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
             parameterMap.put(name, valueStr);
             logger.info("alipay 参数 {} {}", name, valueStr);
         }
