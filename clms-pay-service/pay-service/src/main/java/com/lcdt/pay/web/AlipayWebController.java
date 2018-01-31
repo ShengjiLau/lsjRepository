@@ -215,13 +215,6 @@ public class AlipayWebController {
        return AlipaySignature.rsaCheckV1(parameterMap, AlipayContants.getAlipayPublicKey(), CHARSET, "RSA2");
     }
 
-
-    public void checkAlipayOrder() {
-
-
-        return;
-    }
-
     @RequestMapping("/wechatqrcode")
     public void wechatQrcode(HttpServletResponse response, Long orderId, HttpServletRequest request) {
         PayOrder serverOrder = orderService.selectByOrderId(orderId);
