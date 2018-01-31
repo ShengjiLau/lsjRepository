@@ -453,7 +453,6 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         }
 
         //获取派单表中待派数量(因为竞价派单是一次生派单，但可以多次派车)
-
         Map map = new HashMap();
         map.put("splitGoodsId",dto.getSplitGoodsId());
         map.put("companyId",dto.getCompanyId());
