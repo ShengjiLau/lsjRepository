@@ -184,6 +184,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                             waybillDto.setDriverName(splitGoods.getCarrierCollectionNames());
                             waybillDto.setDriverId(Long.valueOf(splitGoods.getCarrierCollectionIds()));
                         }
+                        waybillDto.setWaybillCode(waybillPlan.getSerialCode()); //流水号
                         PlanBO.getInstance().toWaybillItemsDto(waybillPlan,splitGoods,waybillDto,planDetailList,splitGoodsDetailList);
                         if (null!=waybillDto) {
                             waybillService.addWaybill(waybillDto);

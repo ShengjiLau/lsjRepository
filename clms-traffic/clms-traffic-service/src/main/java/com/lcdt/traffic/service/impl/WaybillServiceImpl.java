@@ -55,6 +55,26 @@ public class WaybillServiceImpl implements WaybillService {
         int result = 0;
         Waybill waybill = new Waybill();
         BeanUtils.copyProperties(waybillDto, waybill);
+
+        //计划传过来，判断对应运单有几条数据，然后生成运单编码
+        if(waybill.getWaybillPlanId()!=null&&waybill.getWaybillPlanId()>0){
+            Map map=new HashMap();
+            map.put("companyId",waybill.getCompanyId());
+            map.put("waybillPlanId",waybill.getWaybillPlanId());
+            List<Waybill> list=waybillMapper.selectWaybillPlanId(map);
+            if(list!=null){
+                waybill.setWaybillCode(waybill.getWaybillCode()+"-"+(list.size()+1));
+            }else {
+                waybill.setWaybillCode(waybill.getWaybillCode()+"-1");
+            }
+        }
+
+        //判断运单编码是否存在（相同企业下的运单编码不能重复）
+        if(null!=waybill.getWaybillCode()&&!("").equals(waybill.getWaybillCode())){
+            if(isExistWaybillByCodeAndCompanyId(waybill.getWaybillCode(),waybill.getCompanyId())){
+                throw new RuntimeException("运单编号已存在!");
+            }
+        }
         //新增运单
         result += waybillMapper.insert(waybill);
         //运单货物详细
@@ -376,6 +396,18 @@ public class WaybillServiceImpl implements WaybillService {
                     }
                 }
             }
+        }
+    }
+
+    private boolean isExistWaybillByCodeAndCompanyId(String waybillCode , Long companyId){
+        Map map=new HashMap();
+        map.put("waybillCode",waybillCode);
+        map.put("companyId",companyId);
+        List<Waybill> waybillList=waybillMapper.selectByCodeAndCompanyId(map);
+        if(waybillList!=null&&waybillList.size()>0){
+            return true;
+        }else {
+            return false;
         }
     }
 

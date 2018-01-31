@@ -142,4 +142,11 @@ public interface WaybillMapper {
      * @return
      */
     List<Waybill> selectWaybillByPositionSetting(Map map);
+
+    /**
+     * 根据waybillCode和companyId查询列表
+     * @param map
+     * @return
+     */
+    List<Waybill> selectByCodeAndCompanyId(Map map);
 }

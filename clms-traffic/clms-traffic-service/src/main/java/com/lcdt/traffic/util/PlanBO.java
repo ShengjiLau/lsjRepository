@@ -96,7 +96,7 @@ public class PlanBO {
             tempDto.setGoodsSpec(obj.getGoodsSpec());
             tempDto.setSubGoodsId(obj.getSubGoodsId());
             tempDto.setUnit(obj.getUnit());
-            tempDto.setAmount(obj.getAllotAmount()); //派单数量
+            tempDto.setAmount(obj.getPlanAmount()); //派单数量
             tempDto.setFreightPrice(obj.getFreightPrice());
             tempDto.setFreightTotal(obj.getFreightTotal());
             tempDto.setRemark(obj.getDetailRemark());//备注
