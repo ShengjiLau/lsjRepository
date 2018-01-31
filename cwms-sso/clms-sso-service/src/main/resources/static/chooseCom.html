@@ -143,7 +143,9 @@
             </div>
             <div class="acts">
               <a class="go" th:href="@{/account/logincompany(companyId=${company.compId})}">进入</a>
-              <span th:if="${company.isCreate}==0"> <a th:href="@{/account/removecompany(usercomprelid=${company.userCompRelId},companyid=${company.compId})}" class="exit">解除关系</a></span>
+              <span th:if="${company.isCreate}==0">
+                <a th:href="@{/account/removecompany(usercomprelid=${company.userCompRelId},companyid=${company.compId})}" class="exit">解除关系</a>
+              </span>
             </div>
           </li>
         </ul>
