@@ -124,7 +124,7 @@
         #{waybillCode,jdbcType=VARCHAR},
       </when>
       <otherwise>
-        F_PLAN_SERIAL_CODE('TW'),
+        F_WAYBILL_CODE('TW'),
       </otherwise>
     </choose>
       #{waybillStatus,jdbcType=SMALLINT}, #{waybillSource,jdbcType=VARCHAR},
