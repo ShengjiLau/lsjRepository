@@ -169,9 +169,7 @@ public class AuthController {
     public ModelAndView chooseCompanyPage(HttpServletRequest request) {
         User userInfo = LoginSessionReposity.getUserInfoInSession(request);
         List<UserCompRel> companyMembers = companyService.companyList(userInfo.getUserId());
-        UserCompRel userCompRel = companyMembers.get(0);
-        String fullName = userCompRel.getCompany().getFullName();
-        logger.info("选择公司" + fullName);
+
         String authCallback = RequestAuthRedirectStrategy.getAuthCallback(request);
         ModelAndView view = new ModelAndView("/chooseCom");
         view.addObject("companyMembers", companyMembers);

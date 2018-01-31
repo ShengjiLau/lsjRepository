@@ -25,10 +25,10 @@ public class LoginLogApi {
     LoginLogMapper dao;
 
     @RequestMapping(value = "/loginlog",method = RequestMethod.GET)
-    public PageResultDto companyUserLogs(@ApiParam(required = true)@RequestParam Integer pageNo, @RequestParam @ApiParam(required = true) Integer pageSize){
+    public PageResultDto companyUserLogs(@RequestParam(required = false) String username,@ApiParam(required = true)@RequestParam Integer pageNo, @RequestParam @ApiParam(required = true) Integer pageSize){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
-        List<LoginLogDto> loginLogs = dao.selectByCompanyId(companyId);
+        List<LoginLogDto> loginLogs = dao.selectByCompanyId(companyId,username);
         PageResultDto<LoginLogDto> userCompRelPageResultDto = new PageResultDto<>(loginLogs);
         return userCompRelPageResultDto;
     }

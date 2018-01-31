@@ -61,6 +61,17 @@
     from login_log l left JOIN
     t_uc_user u on u.user_id = l.user_id
     WHERE login_company_id = #{companyId,jdbcType=BIGINT}
+    <if test="username != null ">
+      and u.real_name like concat('%',#{username,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="userId != null">
+      and u.user_id = #{userId}
+    </if>
+
+    order by login_time DESC
   </select>
+
+
+
 
 </mapper>

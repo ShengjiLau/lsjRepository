@@ -78,6 +78,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 			userCompRel.setDeptIds(String.valueOf(department.getDeptId()));
 			userCompRel.setDeptNames(department.getDeptName());
 			userCompRel.setIsEnable(true);
+			userCompRel.setIsCreate((short) 1);
 			userCompRelMapper.updateByPrimaryKey(userCompRel);
 		}
 

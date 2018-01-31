@@ -17,6 +17,16 @@ public class UserCompRel implements java.io.Serializable,ResponseData {
 
     private User user;
 
+    private LoginLog loginLog;
+
+    public LoginLog getLoginLog() {
+        return loginLog;
+    }
+
+    public void setLoginLog(LoginLog loginLog) {
+        this.loginLog = loginLog;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
