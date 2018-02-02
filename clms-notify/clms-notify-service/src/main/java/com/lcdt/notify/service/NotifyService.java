@@ -53,7 +53,7 @@ public class NotifyService {
             return companyNotifySetting1;
         }else{
             CompanyNotifySetting setting = companyNotifySetting.get(0);
-            if (setting.getEnableSms() == enable) {
+            if (setting.getEnableSms()!= null && setting.getEnableSms() == enable) {
                 return setting;
             }else{
                 setting.setEnableSms(enable);
@@ -83,7 +83,8 @@ public class NotifyService {
             return companyNotifySetting1;
         }else{
             CompanyNotifySetting setting = companyNotifySetting.get(0);
-            if (setting.getEnableWeb() == enable) {
+
+            if (setting.getEnableWeb()!=null && setting.getEnableWeb() == enable) {
                 return setting;
             }else{
                 setting.setEnableWeb(enable);
