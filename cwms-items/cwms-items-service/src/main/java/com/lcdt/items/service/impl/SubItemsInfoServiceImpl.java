@@ -38,14 +38,14 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
         result = subItemsInfoMapper.insert(subItemsInfoDao);
 
         //子商品自定义属性值
-        if (subItemsInfoDao.getCustomValueList() != null) {
+        if (subItemsInfoDao.getCustomValueList() != null&&subItemsInfoDao.getCustomValueList().size()>0) {
             for (int i = 0; i < subItemsInfoDao.getCustomValueList().size(); i++) {
                 subItemsInfoDao.getCustomValueList().get(i).setSubItemId(subItemsInfoDao.getSubItemId());
             }
             result += customValueMapper.insertForBatch(subItemsInfoDao.getCustomValueList());
         }
 
-        if (subItemsInfoDao.getItemSpecKeyValueList() != null) {
+        if (subItemsInfoDao.getItemSpecKeyValueList() != null&&subItemsInfoDao.getItemSpecKeyValueList().size()>0) {
             for (int i = 0; i < subItemsInfoDao.getItemSpecKeyValueList().size(); i++) {
                 subItemsInfoDao.getItemSpecKeyValueList().get(i).setSubItemId(subItemsInfoDao.getSubItemId());
             }
