@@ -83,6 +83,6 @@
   </select>
   <delete id="deleteByCompanyId" parameterType="java.lang.Long">
     delete from t_custom_property
-    where custom_id = #{0} and company_id = #{1}
+    where custom_id = #{arg0} and company_id = #{arg1}
   </delete>
 </mapper>

@@ -57,7 +57,7 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
         result += itemsInfoMapper.insert(itemsInfoDao);
 
         //自定义属性值
-        if (itemsInfoDao.getCustomValueList() != null) {
+        if (itemsInfoDao.getCustomValueList() != null&&itemsInfoDao.getCustomValueList().size()>0) {
             for (int i = 0; i < itemsInfoDao.getCustomValueList().size(); i++) {
                 itemsInfoDao.getCustomValueList().get(i).setItemId(itemsInfoDao.getItemId());
             }
