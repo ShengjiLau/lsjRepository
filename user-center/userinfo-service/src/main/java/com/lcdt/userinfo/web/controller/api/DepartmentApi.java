@@ -170,7 +170,6 @@ public class DepartmentApi {
                 } else {
                     tobj.setIsSub((short)0);
                 }
-
             }
         }
         DeparmentResultDto rDto = new DeparmentResultDto();
