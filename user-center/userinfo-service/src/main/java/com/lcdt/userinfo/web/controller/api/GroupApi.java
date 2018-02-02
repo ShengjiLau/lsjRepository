@@ -11,6 +11,7 @@ import com.lcdt.userinfo.dao.UserGroupRelationMapper;
 import com.lcdt.userinfo.exception.GroupExistException;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.model.UserGroupRelation;
 import com.lcdt.userinfo.service.GroupManageService;
 import com.lcdt.userinfo.web.dto.GroupDto;
@@ -138,7 +139,6 @@ public class GroupApi {
         map.put("companyId",companyId);
         map.put("page_no",pageNo);
         map.put("page_size",pageSize);
-        map.put("deptPid",0); //获取一级栏目
         PageInfo pageInfo = groupManageService.groupList(map);
         GroupResultDto rDto = new GroupResultDto();
         rDto.setList(pageInfo.getList());
@@ -159,7 +159,23 @@ public class GroupApi {
     public  List<Group> deptUserList() {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
-        List<Group> groupsList = userGroupRelationMapper.selectByUserCompany(userId,companyId);
+        UserCompRel userCompRel =SecurityInfoGetter.geUserCompRel();
+        List<Group> groupsList = null;
+        if (userCompRel.getIsCreate()==1 && userCompRel.getCompId()==companyId) { //企业者
+
+            Map map = new HashMap();
+            map.put("companyId",companyId);
+            map.put("page_no",1);
+            map.put("page_size",0);
+            PageInfo pageInfo = groupManageService.groupList(map);
+            groupsList = pageInfo.getList();
+        } else {
+            groupsList = userGroupRelationMapper.selectByUserCompany(userId,companyId);
+
+        }
+
+
+
         return groupsList;
     }
 
