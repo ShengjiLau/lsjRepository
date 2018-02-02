@@ -110,7 +110,8 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		department.setDeptName(company.getFullName());
 		department.setCreateId(company.getCreateId());
 		department.setCreateName(company.getCreateName());
-
+		department.setDeptPid(0L);
+		department.setCreatDate(new Date());
 		departmentService.createDepartment(department);
 		return department;
 	}
