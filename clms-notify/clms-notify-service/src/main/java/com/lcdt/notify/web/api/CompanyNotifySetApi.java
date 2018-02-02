@@ -52,5 +52,4 @@ public class CompanyNotifySetApi {
         return companyNotifySetting;
     }
 
-
 }
