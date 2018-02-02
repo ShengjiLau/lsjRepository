@@ -93,7 +93,22 @@
     create_date, update_id, update_name, update_time, is_deleted, carrier_company_id,company_id,cancel_remark,
     carrier_collection_ids,carrier_collection_names, carrier_phone, carrier_vehicle
     from t_split_goods
-    where split_goods_id = #{splitGoodsId} and company_id = #{companyId}
+    <where>
+      <if test=" splitGoodsId!=null">
+        and split_goods_id = #{splitGoodsId}
+      </if>
+      <if test=" companyId!=null and companyId>0">
+        and company_id = #{companyId,jdbcType=BIGINT}
+      </if>
+      <if test=" isDeleted!=null">
+        and  is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      </if>
+      <if test=" carrierCompanyId!=null">
+        and  carrier_company_id = #{carrierCompanyId,jdbcType=SMALLINT}
+      </if>
+    </where>
+
+
   </select>
 
 

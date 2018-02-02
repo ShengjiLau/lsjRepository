@@ -433,7 +433,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             Date dt = new Date();
             for (PlanDetail obj :list) {
                 WaybillItemsDto tempDto = new WaybillItemsDto();
-                tempDto.setCompanyId(waybillDto.getCompanyId());
+                tempDto.setCompanyId(waybillPlan.getCompanyId());
                 tempDto.setCreateDate(dt);
                 tempDto.setCreateId(waybillDto.getCreateId());
                 tempDto.setCreateName(waybillDto.getCreateName());
@@ -455,7 +455,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         //获取派单表中待派数量(因为竞价派单是一次生派单，但可以多次派车)
         Map map = new HashMap();
         map.put("splitGoodsId",dto.getSplitGoodsId());
-        map.put("companyId",dto.getCompanyId());
+        map.put("carrierCompanyId",dto.getCompanyId());
         SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(map);
         if (null==splitGoods) {
             throw new RuntimeException("没有派单记录，不能派车！");
