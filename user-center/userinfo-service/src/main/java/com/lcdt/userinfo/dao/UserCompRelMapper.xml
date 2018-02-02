@@ -110,9 +110,9 @@
 
   <select id="selectBySearchDto" parameterType="com.lcdt.userinfo.web.dto.SearchEmployeeDto" resultMap="BaseResultMap"
           >
-    select DISTINCT user_comp_rel_id, comp.user_id,comp.is_enable, comp_id,full_name,create_date,is_create,dept_ids,duty
+    select DISTINCT user_comp_rel_id, comp.user_id,comp.is_enable, comp.comp_id,comp.full_name,comp.create_date,comp.is_create,comp.dept_ids,comp.duty
     from t_uc_user_comp_rel  comp
-    <if test="realName != null">
+    <if test="realName != null and realName != ''">
       LEFT JOIN t_uc_user u on comp.user_id = u.user_id
     </if>
 
@@ -125,17 +125,17 @@
         comp.comp_id = #{companyId}
       </if>
 
-      <if test="realName != null">
+      <if test="realName != null and realName != ''">
         and u.real_name like
         CONCAT('%',#{realName,jdbcType=VARCHAR},'%')
       </if>
-      <if test="roleId != null">
+      <if test="roleId != null and roleId != ''">
         and r.role_id = #{roleId}
       </if>
-      <if test="groupId != null">
+      <if test="groupId != null and groupId != ''">
         and g.group_id = #{groupId}
       </if>
-      <if test="departId != null">
+      <if test="departId != null and departId != ''">
         and find_in_set(#{departId},dept_ids)
       </if>
     </where>
