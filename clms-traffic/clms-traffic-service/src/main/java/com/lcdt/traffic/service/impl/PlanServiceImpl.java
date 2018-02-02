@@ -454,7 +454,7 @@ public class PlanServiceImpl implements PlanService {
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
         waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //竞价结束派单中
-        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_CANCEL);
+       // waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_CANCEL);
         waybillPlan.setUpdateTime(new Date());
         waybillPlan.setUpdateId(user.getUserId());
         waybillPlan.setUpdateName(user.getRealName());

@@ -412,10 +412,10 @@
     from t_waybill
     <where>company_id = #{companyId,jdbcType=BIGINT}
       <if test="waybillCode!=null and waybillCode!=''">
-        and waybill_code = #{waybillCode,jdbcType=VARCHAR}
+        and waybill_code like concat('%',#{waybillCode,jdbcType=VARCHAR},'%')
       </if>
       <if test="waybillStatus!=null and waybillStatus!=''">
-        and waybill_status in (#{waybillStatus,jdbcType=VARCHAR})
+        and waybill_status in (${waybillStatus})
       </if>
       <if test="waybillPlanId!=null and waybillPlanId!=''">
         and waybill_plan_id = #{waybillPlanId,jdbcType=SMALLINT}
@@ -479,7 +479,7 @@
         and company_id is null
       </if>
       <if test="waybillCode!=null and waybillCode!=''">
-        and waybill_code = #{waybillCode,jdbcType=VARCHAR}
+        and waybill_code like concat('%',#{waybillCode,jdbcType=VARCHAR},'%')
       </if>
       <if test="waybillStatus!=null and waybillStatus!=''">
         and waybill_status = #{waybillStatus,jdbcType=SMALLINT}
