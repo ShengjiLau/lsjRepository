@@ -57,6 +57,10 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
     private WaybillService waybillService; //运单
 
 
+    @Autowired
+    private TransportWayItemsMapper transportWayItemsMapper;
+
+
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -67,6 +71,16 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
         tMap.put("isDeleted","0");
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap); //查询对应的计划
         if (waybillPlan == null) throw new SplitGoodsException("计划异常为空！");
+
+
+        if (dto.getTransportWayItemsList()!=null && dto.getTransportWayItemsList().size()>0) {
+                transportWayItemsMapper.deleteByWaybillPlanId(waybillPlan.getWaybillPlanId());//删除原有的运输入方式
+                for (TransportWayItems item : dto.getTransportWayItemsList()) {
+                    item.setWaybillPlanId(waybillPlan.getWaybillPlanId());
+                }
+                transportWayItemsMapper.batchAddTransportWayItems(dto.getTransportWayItemsList());
+        }
+
         List<PlanDetail> planDetailList =  waybillPlan.getPlanDetailList();
         if (planDetailList!=null && planDetailList.size()>0) {
             //检查是否允许派单
@@ -241,6 +255,16 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
         tMap.put("isDeleted","0");
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap); //查询对应的计划
         if (waybillPlan == null) throw new SplitGoodsException("计划异常为空！");
+
+        if (dto.getTransportWayItemsList()!=null && dto.getTransportWayItemsList().size()>0) {
+            transportWayItemsMapper.deleteByWaybillPlanId(waybillPlan.getWaybillPlanId());//删除原有的运输入方式
+            for (TransportWayItems item : dto.getTransportWayItemsList()) {
+                item.setWaybillPlanId(waybillPlan.getWaybillPlanId());
+            }
+            transportWayItemsMapper.batchAddTransportWayItems(dto.getTransportWayItemsList());
+        }
+
+
         if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //只生成派单
             Date opDate = new Date();
             SplitGoods splitGoods = new SplitGoods(); //派单主信息

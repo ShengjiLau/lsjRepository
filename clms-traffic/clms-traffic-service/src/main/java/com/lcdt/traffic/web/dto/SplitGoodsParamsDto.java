@@ -1,5 +1,6 @@
 package com.lcdt.traffic.web.dto;
 
+import com.lcdt.traffic.model.TransportWayItems;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
@@ -31,6 +32,10 @@ public class SplitGoodsParamsDto {
     private String carrierVehicle;
 
     private List<SplitGoodsDetailParamsDto> list; //派单明细
+
+    @ApiModelProperty(value = "运输项目列表")
+    private List<TransportWayItems> transportWayItemsList;
+
 
     public String getSplitRemark() {
         return splitRemark;
@@ -94,5 +99,13 @@ public class SplitGoodsParamsDto {
 
     public void setCarrierType(Short carrierType) {
         this.carrierType = carrierType;
+    }
+
+    public List<TransportWayItems> getTransportWayItemsList() {
+        return transportWayItemsList;
+    }
+
+    public void setTransportWayItemsList(List<TransportWayItems> transportWayItemsList) {
+        this.transportWayItemsList = transportWayItemsList;
     }
 }

@@ -589,6 +589,7 @@ public class CustomerPlanApi {
         waybillDto.setVechicleId(dto.getVehicleId());
         waybillDto.setVechicleNum(dto.getVechicleNum());//车牌
         waybillDto.setWaybillRemark(dto.getWaybillRemark());
+        dto.setCompanyId(companyId);
 
         int flag = customerPlanService.customerPlanSplitVehicle(dto, waybillDto);
         JSONObject jsonObject = new JSONObject();
