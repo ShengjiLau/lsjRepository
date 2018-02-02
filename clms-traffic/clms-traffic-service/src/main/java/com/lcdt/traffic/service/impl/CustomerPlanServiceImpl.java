@@ -110,19 +110,24 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             resultMap.put("companyIds",sb.toString()); //计划创建企业
 
             //竞价组
-            collectionIds = sb1.toString().substring(0,sb1.toString().length()-1);
-            if (!StringUtils.isEmpty(collectionIds)) {
-                sb2.append("(");
-                String[] strArrary = collectionIds.split(",");
-                for (int i=0; i<strArrary.length; i++) {
-                    sb.append(" find_in_set('"+strArrary[i]+"',carrier_collection_ids)"); //竞价组
-                    if(i!=customerList.size()-1){
-                        sb.append(" or ");
+            if(!StringUtils.isEmpty(sb1.toString())) {
+                collectionIds = sb1.toString().substring(0,sb1.toString().length()-1);
+                if (!StringUtils.isEmpty(collectionIds)) {
+                    sb2.append("(");
+                    String[] strArrary = collectionIds.split(",");
+                    for (int i=0; i<strArrary.length; i++) {
+                        sb.append(" find_in_set('"+strArrary[i]+"',carrier_collection_ids)"); //竞价组
+                        if(i!=customerList.size()-1){
+                            sb.append(" or ");
+                        }
                     }
+                    sb2.append(")");
+                    resultMap.put("carrierCollectionIds",sb2.toString()); //竞价组
                 }
-                sb2.append(")");
-                resultMap.put("carrierCollectionIds",sb2.toString()); //竞价组
+            } else {
+                resultMap.put("carrierCollectionIds",""); //竞价组
             }
+
 
         }
         return resultMap;
