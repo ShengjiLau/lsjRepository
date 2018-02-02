@@ -125,17 +125,17 @@
         comp.comp_id = #{companyId}
       </if>
 
-      <if test="realName != null and realName != ''">
+      <if test="realName != null and '' != realName ">
         and u.real_name like
         CONCAT('%',#{realName,jdbcType=VARCHAR},'%')
       </if>
-      <if test="roleId != null and roleId != ''">
+      <if test="roleId != null and '' != roleId">
         and r.role_id = #{roleId}
       </if>
-      <if test="groupId != null and groupId != ''">
+      <if test="groupId != null and '' != groupId">
         and g.group_id = #{groupId}
       </if>
-      <if test="departId != null and departId != ''">
+      <if test="departId != null and '' != departId ">
         and find_in_set(#{departId},dept_ids)
       </if>
     </where>

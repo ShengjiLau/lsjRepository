@@ -209,6 +209,7 @@ public class AuthController {
             dtoVo.setCreateName(userInfo.getRealName());
             try {
                 Company company = createCompanyService.createCompany(dtoVo);
+                ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), company.getCompId());
             } catch (CompanyExistException e) {
                 e.printStackTrace();
                 jsonObject.put("code", -1);
@@ -222,9 +223,12 @@ public class AuthController {
             }
         }
         jsonObject.put("code", 0);
+
         String redirectUrl = RequestAuthRedirectStrategy.getAuthCallback(request);
         jsonObject.put("redirecturl", redirectUrl);
+        jsonObject.put("message", "创建成功");
         return jsonObject.toString();
+
     }
 
 
