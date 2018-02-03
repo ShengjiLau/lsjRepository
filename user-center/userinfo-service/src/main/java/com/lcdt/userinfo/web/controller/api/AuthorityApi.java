@@ -20,6 +20,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -145,6 +146,32 @@ public class AuthorityApi {
 		jsonObject.put("code", 0);
 		jsonObject.put("messgae", "操作成功");
 		return jsonObject.toJSONString();
+	}
+
+	@RequestMapping
+	@ApiOperation("修改角色信息")
+	public Role updateRole(Long roleId,@RequestParam(required = false) String roleName,@RequestParam(required = false) Boolean valid){
+		Role role = roleService.selectById(roleId);
+
+		Long companyId = SecurityInfoGetter.getCompanyId();
+		Long roleCompanyId = role.getRoleCompanyId();
+
+		if (!companyId.equals(roleCompanyId)) {
+			throw new RuntimeException("角色不存在该企业");
+		}
+
+		if (role == null) {
+			throw new RuntimeException("角色不存在");
+		}
+		if (!StringUtils.isEmpty(roleName)) {
+			role.setRoleName(roleName);
+		}
+		if (valid != null) {
+			role.setValid(valid);
+		}
+
+		roleService.updateCompanyRole(role);
+		return role;
 	}
 
 
