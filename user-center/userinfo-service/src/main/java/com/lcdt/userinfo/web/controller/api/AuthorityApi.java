@@ -121,8 +121,6 @@ public class AuthorityApi {
 			jsonObject.put("code", 0);
 			jsonObject.put("messgae","操作成功");
 		}
-
-
 		return jsonObject.toString();
 	}
 
