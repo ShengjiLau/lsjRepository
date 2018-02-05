@@ -63,7 +63,8 @@ public class UserRoleServiceImpl implements UserRoleService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public List<Role> getCompanyRole(Long companyId) {
-		return userRoleDao.selectByCompanyId(companyId);
+		List<Role> roles = userRoleDao.selectByCompanyId(companyId);
+		return roles;
 	}
 
 
@@ -80,12 +81,11 @@ public class UserRoleServiceImpl implements UserRoleService {
 	public boolean removeCompanyRole(Long roleId) {
 		List<RoleUserRelation> roleUserRelations = roleUserRelationDao.selectByRoleId(roleId);
 		if (roleUserRelations != null && !roleUserRelations.isEmpty()) {
+			return false;
+		}else{
 			userRoleDao.deleteByPrimaryKey(roleId);
 			return true;
-		}else{
-			return false;
 		}
-
 	}
 
 	@Transactional(rollbackFor = Exception.class)
