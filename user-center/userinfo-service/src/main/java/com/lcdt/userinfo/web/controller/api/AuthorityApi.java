@@ -20,6 +20,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,7 +81,7 @@ public class AuthorityApi {
 	@RequestMapping(value = "/getcompanyRole", method = RequestMethod.GET)
 	@ApiOperation("获取所有角色信息")
 	@PreAuthorize("hasAnyAuthority('role_list') or hasRole('ROLE_SYS_ADMIN')")
-	public PageResultDto<Role> getCompanyRole(@ApiParam(required = true) Integer pageNo, @ApiParam(required = true) Integer pageSize) {
+	public PageResultDto<Role> getCompanyRole(Integer pageNo,Integer pageSize) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		PageHelper.startPage(pageNo, pageSize);
 		List<Role> companyRole = roleService.getCompanyRole(companyId);
@@ -146,7 +147,7 @@ public class AuthorityApi {
 		return jsonObject.toJSONString();
 	}
 
-	@RequestMapping
+	@RequestMapping(value = "/updateRoleInfo",method = RequestMethod.POST)
 	@ApiOperation("修改角色信息")
 	public Role updateRole(Long roleId,@RequestParam(required = false) String roleName,@RequestParam(required = false) Boolean valid){
 		Role role = roleService.selectById(roleId);
