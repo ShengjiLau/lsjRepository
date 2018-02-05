@@ -77,7 +77,7 @@
     company_id,remarks
     from t_items_extend_property
   </select>
-  <insert id="insertByBatch" useGeneratedKeys="true" keyProperty="item_temp_id">
+  <insert id="insertByBatch" useGeneratedKeys="true" keyProperty="itemTempId">
     insert into t_items_extend_property (title, field_type,control_name, classify_id, classify_name,
     company_id,remarks,create_id,create_name,create_date) values
     <foreach item="item" collection="list" separator=",">
