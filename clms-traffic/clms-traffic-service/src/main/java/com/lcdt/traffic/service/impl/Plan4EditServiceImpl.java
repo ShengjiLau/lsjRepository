@@ -88,7 +88,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
                 String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
                 Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
-                vo.setCarrierCompanyId(customer.getCompanyId());
+                vo.setCarrierCompanyId(customer.getBindCpid());
             } else { // 司机
                 vo.setCarrierCompanyId(vo.getCompanyId()); //获取下的本企业司机
             }
