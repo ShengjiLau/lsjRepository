@@ -23,8 +23,8 @@ import java.util.List;
 @com.alibaba.dubbo.config.annotation.Service
 public class CreateCompanyServiceImpl implements CreateCompanyService {
 
-	public final String defaultGroupName = "默认业务组";
-	public final String defaultGroupRemark = "公司默认业务组";
+	public final String defaultGroupName = "默认项目";
+	public final String defaultGroupRemark = "公司默认项目";
 
 	public static final String ADMIN_ROLE_CODE = "role_sys_admin";
 

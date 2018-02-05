@@ -88,8 +88,18 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 		Date dt = new Date();
 		//创建企业
+
+
+
 		Company company = new Company();
 		company.setFullName(dto.getCompanyName());
+		Company company1 = companyMapper.selectByCondition(company);
+		if (company1 != null) {
+			throw new RuntimeException("公司名称已被注册");
+		}
+
+
+
 		if (!StringUtils.isEmpty(dto.getShortName())) {
 			//企业简称默认取企业全称的前六位
 			if (dto.getCompanyName().length() <= 6) {
@@ -138,6 +148,7 @@ public class CompanyServiceImpl implements CompanyService {
 			companyMember.setCompId(company.getCompId());
 			companyMember.setIsCreate((short)1); //企业创建者
 			companyMember.setCreateDate(dt);
+
 			userCompRelMapper.insert(companyMember);
 		}
 		return company;

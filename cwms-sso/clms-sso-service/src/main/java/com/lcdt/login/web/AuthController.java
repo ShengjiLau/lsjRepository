@@ -117,7 +117,6 @@ public class AuthController {
 
         JSONObject jsonObject = new JSONObject();
         boolean captchaIsOk = LoginSessionReposity.captchaIsOk(request, captchacode);
-        captchaIsOk = true;
         if (!captchaIsOk) {
             jsonObject.put("code", -1);
             jsonObject.put("message", "验证码错误");
@@ -144,6 +143,38 @@ public class AuthController {
         }
     }
 
+    @ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
+    @RequestMapping("/testlogin")
+    @ResponseBody
+    public String logintest(String username, String password, String captchacode, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+
+        JSONObject jsonObject = new JSONObject();
+        boolean captchaIsOk = LoginSessionReposity.captchaIsOk(request, captchacode);
+        if (!captchaIsOk) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "验证码错误");
+            return jsonObject.toString();
+        }
+        try {
+            User user = userService.userLogin(username, password);
+            LoginSessionReposity.setUserInSession(request, user);
+            List<UserCompRel> companyMembers = companyService.companyList(user.getUserId());
+            jsonObject.put("data", companyMembers);
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "success");
+            return jsonObject.toString();
+        } catch (UserNotExistException e) {
+            e.printStackTrace();
+            jsonObject.put("message", "账号不存在");
+            jsonObject.put("code", -1);
+            return jsonObject.toString();
+        } catch (PassErrorException e) {
+            jsonObject.put("message", "账号密码错误");
+            jsonObject.put("code", -1);
+            e.printStackTrace();
+            return jsonObject.toString();
+        }
+    }
 
     @RequestMapping("/logout")
     @ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
@@ -199,6 +230,7 @@ public class AuthController {
         JSONObject jsonObject = new JSONObject();
         User userInfo = LoginSessionReposity.getUserInfoInSession(request);
         CompanyDto dtoVo = new CompanyDto();
+        dtoVo.setIndustry(industry);
         dtoVo.setCompanyName(fullname);
         if (companyService.findCompany(dtoVo) != null) {
             jsonObject.put("message", "企业名称已存在");
