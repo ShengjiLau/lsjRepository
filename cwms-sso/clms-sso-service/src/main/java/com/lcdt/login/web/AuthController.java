@@ -259,7 +259,6 @@ public class AuthController {
         jsonObject.put("redirecturl", redirectUrl);
         jsonObject.put("message", "创建成功");
         return jsonObject.toString();
-
     }
 
 
