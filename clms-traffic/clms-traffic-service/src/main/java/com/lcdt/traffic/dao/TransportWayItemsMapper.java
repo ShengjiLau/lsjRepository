@@ -3,6 +3,7 @@ package com.lcdt.traffic.dao;
 import com.lcdt.traffic.model.TransportWayItems;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TransportWayItemsMapper {
     /**
@@ -37,7 +38,7 @@ public interface TransportWayItemsMapper {
      */
     List<TransportWayItems> selectAll();
 
-    List<TransportWayItems> selectByWaybillPlanId(Long waybillPlanId);
+    List<TransportWayItems> selectByWaybillPlanId(Map map);
 
 
     /**

@@ -99,7 +99,9 @@ public class SplitGoodsApi {
         map.put("isDeleted",0);
         List<SnatchGoods> list = snatchGoodsMapper.selectByWaybillPlanId(map);
         rdto.setSnatchGoodsList(list);//抢单
-        List<TransportWayItems> transportWayItemsList = transportWayItemsMapper.selectByWaybillPlanId(waybillPlanId);
+        Map map1 = new HashMap<String,Long>();
+        map1.put("waybillPlanId",waybillPlanId);
+        List<TransportWayItems> transportWayItemsList = transportWayItemsMapper.selectByWaybillPlanId(map1);
         rdto.setTransportWayItemsList(transportWayItemsList); //输入项目
         return  rdto;
     }

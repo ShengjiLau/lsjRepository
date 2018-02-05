@@ -163,7 +163,7 @@ public class WaybillParamsDto {
             "1-需要审批")
     private Short isApproval;
 
-    @ApiModelProperty(value = "运书方式项目[{transportWay:1-陆运\n" +
+    @ApiModelProperty(value = "运输方式项目[{transportWay:1-陆运\n" +
             "2-海运\n" +
             "3-空运\n" +
             "5-铁运\n" +

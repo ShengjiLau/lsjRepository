@@ -648,6 +648,19 @@ public class WaybillPlan implements java.io.Serializable,ResponseData {
      */
     private List<Waybill> waybillList;
 
+    /**
+     * 运输方式
+     */
+    private List<TransportWayItems> transportWayItemsList;
+
+
+    public List<TransportWayItems> getTransportWayItemsList() {
+        return transportWayItemsList;
+    }
+
+    public void setTransportWayItemsList(List<TransportWayItems> transportWayItemsList) {
+        this.transportWayItemsList = transportWayItemsList;
+    }
 
     public List<PlanDetail> getPlanDetailList() {
         return planDetailList;
