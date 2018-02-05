@@ -74,7 +74,7 @@
     select t1.driver_group_id, t1.group_name, t1.group_remark, t1.company_id,
     t2.dgr_id
     from t_driver_group t1 left join t_driver_group_relationship t2 on t1.driver_group_id = t2.driver_group_id
-    where t1.company_id = #{0} and is_deleted = 0
+    where t1.company_id = #{arg0} and is_deleted = 0
   </select>
 
 
@@ -113,7 +113,7 @@
   <select id="selectDriverAndGroup" resultMap="DriverAndGroupResultMap">
     select driver_group_id,group_name,group_remark,company_id
     from t_driver_group
-    where company_id=#{0} and is_deleted=0 order by driver_group_id
+    where company_id=#{arg0} and is_deleted=0 order by driver_group_id
   </select>
   <select id="selectDriverByGroup" resultMap="driverResult">
     select t1.driver_group_id,t2.own_driver_id,t2.driver_name,t2.driver_phone
