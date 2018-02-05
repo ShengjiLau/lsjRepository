@@ -39,6 +39,7 @@ public class WaybillLeaveMsgApi {
         dto.setCompanyId(companyId);
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
+        dto.setLeaveMsgMan(loginUser.getRealName());
         int result = waybillLeaveMsgService.addWaybillLeaveMsg(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();

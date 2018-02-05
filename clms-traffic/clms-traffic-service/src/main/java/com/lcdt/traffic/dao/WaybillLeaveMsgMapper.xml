@@ -52,8 +52,8 @@
       create_name, create_date, update_id, 
       update_name, udpate_date, is_deleted
       )
-    values (#{waybillId,jdbcType=BIGINT}, #{leaveMsgMan,jdbcType=VARCHAR}, #{leaveMsg,jdbcType=VARCHAR}, 
-      #{leaveMsgDate,jdbcType=TIMESTAMP}, #{companyId,jdbcType=BIGINT}, #{shipperCompanyId,jdbcType=BIGINT}, 
+    values (#{waybillId,jdbcType=BIGINT}, #{leaveMsgMan,jdbcType=VARCHAR}, #{leaveMsg,jdbcType=VARCHAR},
+      CURRENT_TIMESTAMP, #{companyId,jdbcType=BIGINT}, #{shipperCompanyId,jdbcType=BIGINT},
       #{shipperCompanyName,jdbcType=VARCHAR}, #{shipperName,jdbcType=VARCHAR}, #{carrierCompanyId,jdbcType=BIGINT}, 
       #{carrierCompanyName,jdbcType=VARCHAR}, #{carrierName,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
       #{createName,jdbcType=VARCHAR},CURRENT_TIMESTAMP, #{updateId,jdbcType=BIGINT},
