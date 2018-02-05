@@ -117,7 +117,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
                 String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
                 Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
-                splitGoods.setCarrierCompanyId(customer.getCompanyId());
+                splitGoods.setCarrierCompanyId(customer.getBindCpid());
             }
 
 
