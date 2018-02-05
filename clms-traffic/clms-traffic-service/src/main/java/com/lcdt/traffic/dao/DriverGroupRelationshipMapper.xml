@@ -53,7 +53,7 @@
   </select>
   <delete id="deleteByOwnDriverId">
     delete from t_driver_group_relationship
-    where own_driver_id = #{0} and company_id= #{1}
+    where own_driver_id = #{arg0} and company_id= #{arg1}
   </delete>
   <insert id="insertBatch" useGeneratedKeys="true" keyProperty="dgrId">
     insert into t_driver_group_relationship (own_driver_id, driver_group_id,

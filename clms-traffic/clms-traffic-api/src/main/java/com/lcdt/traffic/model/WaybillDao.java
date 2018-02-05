@@ -10,6 +10,7 @@ public class WaybillDao extends Waybill{
     List<WaybillItems> waybillItemsList;
     List<WaybillTransferRecord> waybillTransferRecordList;
     List<WaybillPositionSetting> waybillPositionSettingList;
+    List<WaybillLeaveMsg> waybillLeaveMsgList;
     public List<WaybillItems> getWaybillItemsList() {
         return waybillItemsList;
     }
@@ -32,5 +33,13 @@ public class WaybillDao extends Waybill{
 
     public void setWaybillPositionSettingList(List<WaybillPositionSetting> waybillPositionSettingList) {
         this.waybillPositionSettingList = waybillPositionSettingList;
+    }
+
+    public List<WaybillLeaveMsg> getWaybillLeaveMsgList() {
+        return waybillLeaveMsgList;
+    }
+
+    public void setWaybillLeaveMsgList(List<WaybillLeaveMsg> waybillLeaveMsgList) {
+        this.waybillLeaveMsgList = waybillLeaveMsgList;
     }
 }
