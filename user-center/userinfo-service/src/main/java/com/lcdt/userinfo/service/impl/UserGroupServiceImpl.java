@@ -20,15 +20,11 @@ public class UserGroupServiceImpl implements UserGroupService{
 	@Autowired
 	UserGroupRelationMapper userGroupDao;
 
-
-
 	@Override
 	public List<Group> userGroups(Long userId,Long companyId) {
 		List<Group> userGroupRelations = userGroupDao.selectByUserCompany(userId, companyId);
 		return userGroupRelations;
 	}
-
-
 
 	@Override
 	public UserGroupRelation addUserToGroup(Long companyId,Long userId, Group group) {
