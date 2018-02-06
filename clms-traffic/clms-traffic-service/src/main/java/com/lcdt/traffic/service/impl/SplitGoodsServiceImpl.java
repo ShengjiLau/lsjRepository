@@ -320,7 +320,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             waybillPlan.setUpdateId(user.getUserId());
             waybillPlan.setUpdateName(user.getRealName());
             waybillPlan.setUpdateTime(new Date());
-            waybillPlanMapper.updateByPrimaryKey(waybillPlan);
+            waybillPlanMapper.updateWaybillPlan(waybillPlan);
 
         } else {//如果是司机生成派单、运单
         }
