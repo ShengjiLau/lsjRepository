@@ -1,8 +1,10 @@
 package com.lcdt.login.web;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.login.exception.ValidCodeExistException;
 import com.lcdt.login.service.impl.ValidCodeService;
+import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,8 @@ public class ForgetPwdController {
     @Autowired
     ValidCodeService validCodeService;
 
+    @Reference
+    UserService userService;
 
 
     private String validcodeTag = "forgetpwd";
@@ -75,10 +79,7 @@ public class ForgetPwdController {
         Object attribute = session.getAttribute(SESSIONKEY);
         String phone = (String) attribute;
 
-
-
-
-
+        userService.resetPwd(phone, pwd);
         return new ModelAndView("/register/signup_success");
     }
 
