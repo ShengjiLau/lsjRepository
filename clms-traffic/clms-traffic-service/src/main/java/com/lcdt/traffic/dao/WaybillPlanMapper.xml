@@ -123,6 +123,10 @@
     <collection property="waybillList" column="{waybillPlanId=waybill_plan_id,companyId=company_id}"
                 ofType="com.lcdt.traffic.model.Waybill" javaType="ArrayList"
                 select="com.lcdt.traffic.dao.WaybillMapper.selectWaybillByPlanId" />
+    <!--抢单报价-->
+    <collection property="snatchGoodsList" column="{waybillPlanId=waybill_plan_id,isDeleted=is_deleted}"
+                ofType="com.lcdt.traffic.model.SnatchGoods" javaType="ArrayList"
+                select="com.lcdt.traffic.dao.SnatchGoodsMapper.selectByWaybillPlanId" />
   </resultMap>
 
 
@@ -555,10 +559,10 @@
             and  ${groupIds}
           </if>
           <if test="customerName!=null and customerName!=''">
-            and (customer_name like '%'+#{customerName,jdbcType=VARCHAR}+'%')
+            and customer_name like concat('%',#{customerName,jdbcType=VARCHAR},'%')
           </if>
           <if test="serialCode!=null and serialCode!=''">
-            and (serial_code like '%'+#{serialCode,jdbcType=VARCHAR}+'%')
+            and serial_code like like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
           </if>
           <if test="planStatus != null and planStatus!=''">
             and plan_status = #{planStatus,jdbcType=VARCHAR}
@@ -585,7 +589,7 @@
             and ${carrierCompanyIds}
           </if>
           <if test="goodsInfo != null and goodsInfo!=''">
-            and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like '%'+#{goodsInfo,jdbcType=VARCHAR}+'%')
+            and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%'))
           </if>
         </where>
         order by waybill_plan_id desc
@@ -626,7 +630,7 @@
         and  #{pubdate,jdbcType=TIMESTAMP} >= pubdate
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
-        and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like '%'+#{goodsInfo,jdbcType=VARCHAR}+'%')
+        and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%'))
       </if>
       <if test="groupIds!=null and groupIds!=''">
         and ${groupIds}
@@ -676,7 +680,7 @@
         and #{pubdate,jdbcType=TIMESTAMP} >= pubdate
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
-        and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like '%'+#{goodsInfo,jdbcType=VARCHAR}+'%'  and is_deleted=0)
+        and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like  concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') and is_deleted=0)
       </if>
       <if test="groupIds!=null and groupIds!=''">
         and ${groupIds}
@@ -727,7 +731,7 @@
         and  #{pubdate,jdbcType=TIMESTAMP} >= pubdate
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
-        and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like '%'+#{goodsInfo,jdbcType=VARCHAR}+'%'  and is_deleted=0)
+        and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')  and is_deleted=0)
       </if>
       <if test="groupIds!=null and groupIds!=''">
         and ${groupIds}
@@ -794,7 +798,7 @@
         and  #{disDateEnd,jdbcType=TIMESTAMP} >= sp.create_date
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
-        and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like '%'+#{goodsInfo,jdbcType=VARCHAR}+'%'  and is_deleted=0)
+        and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like  concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')  and is_deleted=0)
       </if>
       <if test="groupIds!=null and groupIds!=''">
         and ${groupIds}
@@ -859,7 +863,7 @@
         and  #{disDateEnd,jdbcType=TIMESTAMP} >= sp.create_date
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
-        and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like '%'+#{goodsInfo,jdbcType=VARCHAR}+'%'  and is_deleted=0)
+        and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') and is_deleted=0)
       </if>
       <if test="groupIds!=null and groupIds!=''">
         and ${groupIds}
@@ -924,7 +928,7 @@
         and  #{disDateEnd,jdbcType=TIMESTAMP} >= sp.create_date
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
-        and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like '%'+#{goodsInfo,jdbcType=VARCHAR}+'%'  and is_deleted=0)
+        and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') and is_deleted=0)
       </if>
       <if test="groupIds!=null and groupIds!=''">
         and ${groupIds}
@@ -988,7 +992,7 @@
         and  #{disDateEnd,jdbcType=TIMESTAMP} >= sp.create_date
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
-        and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like '%'+#{goodsInfo,jdbcType=VARCHAR}+'%' and is_deleted=0)
+        and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') and is_deleted=0)
       </if>
       <if test="groupIds!=null and groupIds!=''">
         and ${groupIds}
