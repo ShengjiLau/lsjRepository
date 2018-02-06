@@ -100,6 +100,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	public void sendCompanyInitEvent(UserCompRel compRel){
 		Message message = new Message();
 		message.setKey("companyinit");
+		message.setTopic("clms_user");
 		message.setBody(JSONObject.toJSONBytes(compRel, SerializerFeature.BrowserCompatible));
 		producer.send(message);
 		return;
