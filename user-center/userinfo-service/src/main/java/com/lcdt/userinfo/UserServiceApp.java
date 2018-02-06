@@ -16,7 +16,7 @@ import java.util.concurrent.CountDownLatch;
  * Created by ss on 2017/7/31.
  */
 @SpringBootApplication
-//@ImportResource("dubbo-user-provider.xml")
+@ImportResource("classpath:producer.xml")
 @Import({PermissionAppConfiguration.class, ClmsResponseConvertConfig.class, DubboConfig.class})
 @EnableClmsSecurity
 public class UserServiceApp {
@@ -25,6 +25,5 @@ public class UserServiceApp {
 		ConfigurableApplicationContext run = new SpringApplicationBuilder()
 				.sources(UserServiceApp.class)
 				.run(args);
-
 	}
 }

@@ -45,10 +45,6 @@ public class GroupManageServiceImpl implements GroupManageService {
 	@Autowired
 	private CustomerMapper customerMapper;
 
-
-
-
-
 	public static Logger logger = LoggerFactory.getLogger(GroupManageServiceImpl.class);
 
 	@Transactional(rollbackFor = Exception.class)

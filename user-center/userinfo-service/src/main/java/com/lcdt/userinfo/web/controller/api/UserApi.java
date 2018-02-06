@@ -197,7 +197,7 @@ public class UserApi {
 			}
 		}
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("message","");
+		jsonObject.put("message","发送成功");
 		jsonObject.put("code",0);
 		return jsonObject.toString();
 	}

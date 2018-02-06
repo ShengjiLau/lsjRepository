@@ -86,6 +86,15 @@ public class UserServiceImpl implements UserService {
 		return userMapper.queryByUserPhone(phone);
 	}
 
+	@Override
+	public User resetPwd(String username,String pwd) {
+		String encrypt = RegisterUtils.md5Encrypt(pwd);
+		User user = userMapper.queryByUserPhone(username);
+		user.setPwd(encrypt);
+		userMapper.updateByPrimaryKey(user);
+		return user;
+	}
+
 
 	@Override
 	public boolean checkUserLogin() {
