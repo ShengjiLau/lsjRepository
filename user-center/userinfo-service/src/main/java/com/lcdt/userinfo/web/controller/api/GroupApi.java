@@ -7,9 +7,11 @@ package com.lcdt.userinfo.web.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.userinfo.dao.UserGroupRelationMapper;
 import com.lcdt.userinfo.exception.GroupExistException;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.model.UserGroupRelation;
 import com.lcdt.userinfo.service.GroupManageService;
 import com.lcdt.userinfo.web.dto.GroupDto;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,6 +40,10 @@ public class GroupApi {
 
     @Autowired
     private GroupManageService groupManageService;
+
+    @Autowired
+    private UserGroupRelationMapper userGroupRelationMapper;
+
 
     /**
      * 部门项目组
@@ -125,14 +132,13 @@ public class GroupApi {
     @ApiOperation("项目组列表")
     @RequestMapping(value = "/groupList",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_list')")
-    public GroupResultDto deptList(@ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
+    public GroupResultDto groupList(@ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                        @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId",companyId);
         map.put("page_no",pageNo);
         map.put("page_size",pageSize);
-        map.put("deptPid",0); //获取一级栏目
         PageInfo pageInfo = groupManageService.groupList(map);
         GroupResultDto rDto = new GroupResultDto();
         rDto.setList(pageInfo.getList());
@@ -140,6 +146,38 @@ public class GroupApi {
         return rDto;
     }
 
+
+
+
+    /**
+     * 用户项目组列表
+     * @return
+     */
+    @ApiOperation("用户项目组列表")
+    @RequestMapping(value = "/userGroupList",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_list')")
+    public  List<Group> deptUserList() {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Long userId = SecurityInfoGetter.getUser().getUserId();
+        UserCompRel userCompRel =SecurityInfoGetter.geUserCompRel();
+        List<Group> groupsList = null;
+        if (userCompRel.getIsCreate()==1 && userCompRel.getCompId()==companyId) { //企业者
+
+            Map map = new HashMap();
+            map.put("companyId",companyId);
+            map.put("page_no",1);
+            map.put("page_size",0);
+            PageInfo pageInfo = groupManageService.groupList(map);
+            groupsList = pageInfo.getList();
+        } else {
+            groupsList = userGroupRelationMapper.selectByUserCompany(userId,companyId);
+
+        }
+
+
+
+        return groupsList;
+    }
 
 
     /**

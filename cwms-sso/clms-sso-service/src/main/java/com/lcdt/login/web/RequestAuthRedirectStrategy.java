@@ -20,16 +20,20 @@ public class RequestAuthRedirectStrategy {
 	public static final String COMPANYPAGE = "/account/company";
 	public static final String AUTH_CALLBACK = "auth_callback";
 	@Value("${login.defaultcallback}")
-	private static String default_callback;
+	private static String default_callback = "";
 	@Value("${login.safecallback}")
 	private static List<String> safeCallbackUrls;
 
 	public static String getAuthCallback(HttpServletRequest request){
-		String authcallback = request.getParameter(AUTH_CALLBACK);
-		if (StringUtils.isEmpty(authcallback)) {
-			authcallback = "";
+		String callback = request.getParameter(AUTH_CALLBACK);
+		if (StringUtils.isEmpty(callback)) {
+			if (LoginSessionReposity.getCallback(request) != null) {
+				callback = LoginSessionReposity.getCallback(request);
+			}else {
+				callback = default_callback;
+			}
 		}
-		return authcallback;
+		return callback;
 	}
 
 
@@ -94,5 +98,11 @@ public class RequestAuthRedirectStrategy {
 		return false;
 	}
 
-
+	public static String getDefault_callback() {
+		return default_callback;
+	}
+    @Value("${login.defaultcallback}")
+	public  void setDefault_callback(String default_callback) {
+		RequestAuthRedirectStrategy.default_callback = default_callback;
+	}
 }

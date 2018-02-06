@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
 		registerUser.setMobileCountry("86");
 		registerUser.setEmail(registerDto.getEmail());
 		registerUser.setLastLoginTime(new Date());
+		registerUser.setNickName(registerDto.getName());
 		int insert = userMapper.insert(registerUser);
 		return registerUser;
 	}

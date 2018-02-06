@@ -96,6 +96,12 @@
                   ofType="com.lcdt.traffic.model.SnatchGoods" javaType="ArrayList"
                   select="com.lcdt.traffic.dao.SnatchGoodsMapper.selectByWaybillPlanId" />
 
+
+    <!--运输方式列表-->
+    <collection property="transportWayItemsList" column="{waybillPlanId=waybill_plan_id}"
+                ofType="com.lcdt.traffic.model.TransportWayItems" javaType="ArrayList"
+                select="com.lcdt.traffic.dao.TransportWayItemsMapper.selectByWaybillPlanId" />
+
   </resultMap>
 
   <!---->
@@ -503,13 +509,13 @@
     cancel_remark
     from t_waybill_plan
     <where>
-        <if test=" waybillPlanId!=null">
+        <if test="waybillPlanId!=null">
           and waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT}
         </if>
-        <if test=" companyId!=null and companyId>0">
+        <if test="companyId!=null and companyId>0">
           and company_id = #{companyId,jdbcType=BIGINT}
         </if>
-        <if test=" isDeleted!=null">
+        <if test="isDeleted!=null">
           and  is_deleted = #{isDeleted,jdbcType=SMALLINT}
         </if>
     </where>

@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,7 +62,7 @@ public class RegisterController {
      */
     @RequestMapping(path = "/save", method = RequestMethod.POST)
     @ResponseBody
-    public Map toSave(HttpSession httpSession, RegisterDto registerDto, HttpServletRequest request) {
+    public Map toSave(HttpSession httpSession, @Valid RegisterDto registerDto, HttpServletRequest request) {
         Map<String, Object> map = new HashMap();
         String msg = "";
         boolean flag = false;

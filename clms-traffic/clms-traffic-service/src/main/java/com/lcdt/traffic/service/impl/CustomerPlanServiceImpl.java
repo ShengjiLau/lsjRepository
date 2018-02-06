@@ -110,19 +110,24 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             resultMap.put("companyIds",sb.toString()); //计划创建企业
 
             //竞价组
-            collectionIds = sb1.toString().substring(0,sb1.toString().length()-1);
-            if (!StringUtils.isEmpty(collectionIds)) {
-                sb2.append("(");
-                String[] strArrary = collectionIds.split(",");
-                for (int i=0; i<strArrary.length; i++) {
-                    sb.append(" find_in_set('"+strArrary[i]+"',carrier_collection_ids)"); //竞价组
-                    if(i!=customerList.size()-1){
-                        sb.append(" or ");
+            if(!StringUtils.isEmpty(sb1.toString())) {
+                collectionIds = sb1.toString().substring(0,sb1.toString().length()-1);
+                if (!StringUtils.isEmpty(collectionIds)) {
+                    sb2.append("(");
+                    String[] strArrary = collectionIds.split(",");
+                    for (int i=0; i<strArrary.length; i++) {
+                        sb.append(" find_in_set('"+strArrary[i]+"',carrier_collection_ids)"); //竞价组
+                        if(i!=customerList.size()-1){
+                            sb.append(" or ");
+                        }
                     }
+                    sb2.append(")");
+                    resultMap.put("carrierCollectionIds",sb2.toString()); //竞价组
                 }
-                sb2.append(")");
-                resultMap.put("carrierCollectionIds",sb2.toString()); //竞价组
+            } else {
+                resultMap.put("carrierCollectionIds",""); //竞价组
             }
+
 
         }
         return resultMap;
@@ -416,7 +421,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     public int customerPlanSplitVehicle(SplitVehicleDto dto, WaybillDto waybillDto) {
         Map tMap = new HashMap<String,String>();
         tMap.put("waybillPlanId",dto.getWaybillPlanId());
-        tMap.put("companyId",dto.getCompanyId());
+        //tMap.put("companyId",dto.getCompanyId());
         tMap.put("isDeleted","0");
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         if (null == waybillPlan) {
@@ -433,7 +438,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             Date dt = new Date();
             for (PlanDetail obj :list) {
                 WaybillItemsDto tempDto = new WaybillItemsDto();
-                tempDto.setCompanyId(waybillDto.getCompanyId());
+                tempDto.setCompanyId(waybillPlan.getCompanyId());
                 tempDto.setCreateDate(dt);
                 tempDto.setCreateId(waybillDto.getCreateId());
                 tempDto.setCreateName(waybillDto.getCreateName());
@@ -455,7 +460,8 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         //获取派单表中待派数量(因为竞价派单是一次生派单，但可以多次派车)
         Map map = new HashMap();
         map.put("splitGoodsId",dto.getSplitGoodsId());
-        map.put("companyId",dto.getCompanyId());
+        map.put("carrierCompanyId",dto.getCompanyId());
+        map.put("isDeleted",0);
         SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(map);
         if (null==splitGoods) {
             throw new RuntimeException("没有派单记录，不能派车！");
@@ -483,6 +489,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
 
         }
         //整合运单主子关系
+        waybillDto.setWaybillCode(waybillPlan.getSerialCode());
         waybillDto.setWaybillItemsDtoList(waybillItemsDtos);
         int flag = waybillService.addWaybill(waybillDto);
         if (flag>0) { //更新派单记录剩余派单数

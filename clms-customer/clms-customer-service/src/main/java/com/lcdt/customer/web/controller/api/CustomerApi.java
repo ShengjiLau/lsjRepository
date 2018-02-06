@@ -240,12 +240,12 @@ public class CustomerApi {
         String message = null;
         int code = -1;
         if (flag>0) {
-           if(status==0) { //停止
-               message = "停用后无法继续业务处理！";
-           } else { //启动
-               message = "已启用！";
-           }
-          code = 0;
+            if(status==0) { //停止
+                message = "停用后无法继续业务处理！";
+            } else { //启动
+                message = "已启用！";
+            }
+            code = 0;
         } else {
             message = "操作失败，请重试！";
         }

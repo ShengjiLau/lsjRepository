@@ -22,6 +22,8 @@ public class BindingSplitParamsDto implements java.io.Serializable{
     private Long carrierCompanyId; //承运人企业ID
 
 
+
+
     public Long getWaybillPlanId() {
         return waybillPlanId;
     }

@@ -48,7 +48,7 @@
     <result column="collection_names" jdbcType="VARCHAR" property="collectionNames" />
 
     <collection property="customerContactList" column="customer_id" ofType="com.lcdt.customer.model.CustomerContact" javaType="ArrayList"
-                select="com.lcdt.customer.dao.CustomerContactMapper.selectByCustomerId" />
+                select="com.lcdt.customer.dao.CustomerContactMapper.selectCustomerContactByCID" />
   </resultMap>
   <delete id="deleteByPrimaryKey">
     <!--
