@@ -295,6 +295,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                     }else {
                         splitGoodsDetail.setRemainAmount(0f);
                     }
+                    splitGoodsDetail.setPlanDetailId(planDetail.getPlanDetailId());
                     splitGoodsDetail.setFreightPrice(obj.getOfferPrice());//报单价
                     splitGoodsDetail.setFreightTotal(obj.getOfferTotal());//报总价
                     splitGoodsDetail.setCreateId(user.getUserId());
