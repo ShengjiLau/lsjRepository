@@ -51,16 +51,6 @@ public class SplitGoodsApi {
 
 
 
-    @ApiOperation("派单-直派-信息拉取")
-    @RequestMapping(value = "/splitGoodsLoad4Direct",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_load_4_direct')")
-    public String splitGoodsLoad4Direct(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
-
-        return  null;
-    }
-
-
-
     @ApiOperation(value = "派单-直派")
     @RequestMapping(value = "/splitGoods4Direct",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_4_direct')")
