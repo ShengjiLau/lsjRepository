@@ -113,9 +113,6 @@ public class EmployeeServiceImpl {
 		return userCompRels;
 	}
 
-
-
-
 	@Transactional(rollbackFor = Exception.class)
 	public boolean isUserInCompany(Long userId, Long companyId) {
 		List<UserCompRel> userCompRels = userCompanyDao.selectByUserIdCompanyId(userId, companyId);
@@ -156,10 +153,7 @@ public class EmployeeServiceImpl {
 		UserCompRel userCompRel = userCompanyDao.selectByPrimaryKey(dto.getUserCompRelId());
 		userCompRel.setEnable(dto.getEnable());
 		userCompanyDao.updateByPrimaryKey(userCompRel);
-
 		return userCompRel;
 	}
-
-
 
 }
