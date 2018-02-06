@@ -8,6 +8,7 @@ import com.lcdt.notify.rpcservice.NotifyService;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.GroupManageService;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.utils.RegisterUtils;
@@ -67,6 +68,17 @@ public class UserApi {
 		userInfoDto.setUser(user);
 		return userInfoDto;
 	}
+
+
+	@ApiOperation("获取企业信息")
+	@RequestMapping("/getallinfo")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('getUserInfo')")
+	public UserCompRel userCompInfo(){
+		UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+		userCompRel.getUser().setPwd("");
+		return userCompRel;
+	}
+
 
 	@ApiOperation("获取用户权限")
 	@RequestMapping(value = "/authorities",method = RequestMethod.GET)
