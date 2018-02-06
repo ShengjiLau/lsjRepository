@@ -11,6 +11,7 @@
                 <prop key="ProducerId">sso-service-producer</prop> <!--请替换为自己的账户信息-->
                 <prop key="AccessKey">TRPDkg1YPDjejxKE</prop>
                 <prop key="SecretKey">FmAlJ9eob6QLuY1GY1AvoHCLYZWvyS</prop>
+                <prop key="Topic">clms_user</prop>
             </props>
         </property>
     </bean>
