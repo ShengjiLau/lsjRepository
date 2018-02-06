@@ -35,9 +35,8 @@ public class LoginSessionReposity {
 	}
 
 
-
 	public static User getUserInfoInSession(HttpServletRequest request){
-		HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession(true);
 		return getObjectInSession(User.class, session, USERINFO_SESSION);
 	}
 
