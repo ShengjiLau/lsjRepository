@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.login.annontion.ExcludeIntercept;
 import com.lcdt.login.exception.LoginError;
+import com.lcdt.login.exception.ValidCodeExistException;
 import com.lcdt.login.service.AuthTicketService;
 import com.lcdt.login.service.impl.ValidCodeService;
 import com.lcdt.login.web.filter.CompanyInterceptorAbstract;
@@ -300,6 +301,11 @@ public class AuthController {
 
         ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
         LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
+
+        User userInfoInSession = LoginSessionReposity.getUserInfoInSession(request);
+
+        logger.info("user session is {}",userInfoInSession.getRealName());
+
         strategy.hasAuthRedirect(request, response);
         LoginLog loginLog = new LoginLog();
         loginLog.setUserId(userInfo.getUserId());
@@ -326,7 +332,11 @@ public class AuthController {
     @ResponseBody
     public String sendValidSms(HttpServletRequest request, String phoneNum) throws UserNotExistException {
         User user = userService.queryByPhone(phoneNum);
-        validCodeService.sendValidCode(request, FORGET_PASS_TAG, 60*15, phoneNum);
+        try {
+            validCodeService.sendValidCode(request, FORGET_PASS_TAG, 60*15, phoneNum);
+        } catch (ValidCodeExistException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

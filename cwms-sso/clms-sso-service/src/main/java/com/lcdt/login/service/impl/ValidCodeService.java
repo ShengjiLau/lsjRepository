@@ -1,6 +1,7 @@
 package com.lcdt.login.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.lcdt.login.exception.ValidCodeExistException;
 import com.lcdt.login.service.ValidCodeCountService;
 import com.lcdt.notify.rpcservice.NotifyService;
 import com.lcdt.userinfo.service.UserService;
@@ -42,12 +43,12 @@ public class ValidCodeService {
      * @param tag
      * @param timeout
      */
-    public boolean sendValidCode(HttpServletRequest request,String tag,Integer timeout,String phoneNum){
+    public boolean sendValidCode(HttpServletRequest request,String tag,Integer timeout,String phoneNum) throws ValidCodeExistException {
         if (validCodeCountService.phoneTodayCount(phoneNum)) {
             HttpSession session = request.getSession(true);
             String sessionKey = sessionPrefixKey + tag;
             ValidCodeBean attribute = getCodeBean(request, tag);
-            if (attribute == null || !isCodeValid(attribute)) {
+            if (attribute == null || canSendCode(attribute)) {
                 ValidCodeBean validCodeBean = new ValidCodeBean();
                 String random = RandomNoUtil.createRandom(true, 4);
                 validCodeBean.setCreateTime(System.currentTimeMillis());
@@ -59,9 +60,36 @@ public class ValidCodeService {
                 validCodeCountService.updateValidCodeLog(phoneNum);
                 return true;
             }
+            throw new ValidCodeExistException();
         }
         return false;
     }
+
+    private  boolean canSendCode(ValidCodeBean codeBean){
+
+        if (codeBean == null) {
+            return false;
+        }
+
+        if (codeBean.getCreateTime() == 0) {
+            return false;
+        }
+
+        if (codeBean.getTimeout() == 0) {
+            return true;
+        }
+
+        long createTime = codeBean.getCreateTime();
+        long expireTime = createTime + 60 * 1000;
+        long currentTime = System.currentTimeMillis();
+
+        if (currentTime <= expireTime) {
+            return false;
+        }
+
+        return true;
+    }
+
 
     private String generateCodeString(String code){
         String format = "您好，注册验证码为:%s，%s分钟内有效，感谢使用。";
