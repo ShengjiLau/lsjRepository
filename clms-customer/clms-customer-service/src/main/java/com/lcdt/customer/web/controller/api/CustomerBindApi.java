@@ -146,6 +146,14 @@ public class CustomerBindApi {
 		return modelAndView;
 	}
 
+	@RequestMapping("/unbindCustomer")
+	@ApiOperation("解绑客户")
+	public Customer unBindCustomer(Long customerId){
+		Long companyId = SecurityInfoGetter.getCompanyId();
+		Customer customer = customerService.unBindCustomer(customerId, companyId);
+		return customer;
+	}
+
 	public boolean isTokenValid(String token){
 		return true;
 	}

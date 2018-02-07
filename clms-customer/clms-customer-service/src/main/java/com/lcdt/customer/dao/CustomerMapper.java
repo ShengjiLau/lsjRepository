@@ -52,4 +52,7 @@ public interface CustomerMapper {
     List<Customer> selectByCondition(Map map);
 
     Map<String,Object> selectCarrierAndCustomer(Long companyId);
+
+    Customer selectByCustomerBindCompanyId(@Param("companyId") Long companyId,@Param("bindCompanyId") Long bindCompanyId);
+
 }
