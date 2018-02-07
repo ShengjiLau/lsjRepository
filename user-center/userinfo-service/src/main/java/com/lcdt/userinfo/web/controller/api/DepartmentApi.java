@@ -60,7 +60,7 @@ public class DepartmentApi {
         try {
             departmentService.createDepartment(department);
         } catch (DeptmentExistException e) {
-            throw new DeptmentExistException("部门存在");
+            throw new DeptmentExistException("部门"+dto.getDeptName()+"已经存在!");
         }
         return department;
     }
