@@ -17,7 +17,7 @@ public interface UserRoleService {
 
 	List<Role> getCompanyRole(Long companyId);
 
-	Role createCompanyRole(Long companyId, Role insertRole);
+	int createCompanyRole(Long companyId, Role insertRole);
 
 	boolean removeCompanyRole(Long roleId);
 

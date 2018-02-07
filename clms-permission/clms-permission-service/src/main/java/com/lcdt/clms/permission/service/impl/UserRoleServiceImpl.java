@@ -3,19 +3,17 @@ package com.lcdt.clms.permission.service.impl;
 import com.lcdt.clms.permission.dao.RoleMapper;
 import com.lcdt.clms.permission.dao.RolePermissionMapper;
 import com.lcdt.clms.permission.dao.RoleUserRelationMapper;
-import com.lcdt.clms.permission.model.Permission;
 import com.lcdt.clms.permission.model.Role;
 import com.lcdt.clms.permission.model.RolePermission;
 import com.lcdt.clms.permission.model.RoleUserRelation;
 import com.lcdt.clms.permission.service.UserRoleService;
+import com.lcdt.userinfo.exception.RoleExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by ss on 2017/8/8.
@@ -70,10 +68,17 @@ public class UserRoleServiceImpl implements UserRoleService {
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public Role createCompanyRole(Long companyId, Role insertRole) {
-		insertRole.setRoleCompanyId(companyId);
-		userRoleDao.insert(insertRole);
-		return insertRole;
+	public int createCompanyRole(Long companyId, Role insertRole) {
+		Map map = new HashMap<>();
+		map.put("companyId", insertRole.getRoleCompanyId());
+		map.put("roleName", insertRole.getRoleName());
+		List<Role> list = userRoleDao.selectByCondition(map);
+		if (list != null && list.size() > 0) {
+			throw new RoleExistException();
+		} else {
+			insertRole.setRoleCompanyId(companyId);
+			return userRoleDao.insert(insertRole);
+		}
 	}
 
 	@Transactional(rollbackFor = Exception.class)
