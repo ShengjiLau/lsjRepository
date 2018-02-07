@@ -1,5 +1,9 @@
 package com.lcdt.userinfo.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.aliyun.openservices.ons.api.Message;
+import com.aliyun.openservices.ons.api.Producer;
 import com.lcdt.clms.permission.model.SysRole;
 import com.lcdt.clms.permission.service.SysRoleService;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
@@ -64,27 +68,44 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 
 		List<UserCompRel> userCompRels = userCompRelMapper.selectByUserIdCompanyId(company.getCreateId(), company.getCompId());
 		Department department = setUpDepartMent(company);
+		UserCompRel userCompRel;
 		if (CollectionUtils.isEmpty(userCompRels)) {
 
-			UserCompRel userCompRel = new UserCompRel();
-			userCompRel.setCompId(company.getCompId());
-			userCompRel.setUserId(company.getCreateId());
-			userCompRel.setIsCreate((short) 1);
-			userCompRel.setDeptIds(String.valueOf(department.getDeptId()));
+			UserCompRel userCompRel1 = new UserCompRel();
+			userCompRel1.setCompId(company.getCompId());
+			userCompRel1.setUserId(company.getCreateId());
+			userCompRel1.setIsCreate((short) 1);
+			userCompRel1.setDeptIds(String.valueOf(department.getDeptId()));
 
-			userCompRelMapper.insert(userCompRel);
+			userCompRelMapper.insert(userCompRel1);
+			userCompRel = userCompRel1;
 		}else{
-			UserCompRel userCompRel = userCompRels.get(0);
-			userCompRel.setDeptIds(String.valueOf(department.getDeptId()));
-			userCompRel.setDeptNames(department.getDeptName());
-			userCompRel.setIsEnable(true);
-			userCompRel.setIsCreate((short) 1);
-			userCompRelMapper.updateByPrimaryKey(userCompRel);
+			UserCompRel userCompRel2 = userCompRels.get(0);
+			userCompRel2.setDeptIds(String.valueOf(department.getDeptId()));
+			userCompRel2.setDeptNames(department.getDeptName());
+			userCompRel2.setIsEnable(true);
+			userCompRel2.setIsCreate((short) 1);
+			userCompRelMapper.updateByPrimaryKey(userCompRel2);
+			userCompRel = userCompRel2;
 		}
 
-
+		//发送公司初始化事件
+		sendCompanyInitEvent(userCompRel);
 		return company;
 	}
+
+	@Autowired
+	Producer producer;
+
+	public void sendCompanyInitEvent(UserCompRel compRel){
+		Message message = new Message();
+		message.setKey("companyinit");
+		message.setTopic("clms_user");
+		message.setBody(JSONObject.toJSONBytes(compRel, SerializerFeature.BrowserCompatible));
+		producer.send(message);
+		return;
+	}
+
 
 	@Transactional(rollbackFor = Exception.class)
 	public Group createDefaultCompanyGroup(Company company) {

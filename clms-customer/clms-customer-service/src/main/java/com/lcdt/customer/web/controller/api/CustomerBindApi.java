@@ -107,7 +107,10 @@ public class CustomerBindApi {
 		customer1.setBindCpid(companyId);
 		customerService.updateCustomerBindCompId(customer1);
 
+		User user = SecurityInfoGetter.getUser();
+
 		ModelAndView successView = new ModelAndView("invite_success");
+		successView.addObject("username", user.getRealName());
 		return successView;
 	}
 

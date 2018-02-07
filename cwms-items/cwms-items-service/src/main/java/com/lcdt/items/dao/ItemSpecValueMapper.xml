@@ -49,7 +49,7 @@
     -->
     select spv_id, sp_value, spk_id, company_id
     from t_item_spec_value
-    where spv_id = #{0} and company_id = #{1}
+    where spv_id = #{arg0} and company_id = #{arg1}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     <!--
@@ -61,10 +61,10 @@
   </select>
   <delete id="deleteBySpkIdAndCompanyId" parameterType="java.lang.Long">
     DELETE FROM t_item_spec_value
-    where spk_id = #{0} and company_id = #{1}
+    where spk_id = #{arg0} and company_id = #{arg1}
   </delete>
   <delete id="deleteBySpvIdAndCompanyId" parameterType="java.lang.Long">
     DELETE FROM t_item_spec_value
-    where spv_id = #{0} and company_id = #{1}
+    where spv_id = #{arg0} and company_id = #{arg1}
   </delete>
 </mapper>

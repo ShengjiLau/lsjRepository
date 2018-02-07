@@ -2,6 +2,7 @@ package com.lcdt.login.web;
 
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.lcdt.login.exception.ValidCodeExistException;
 import com.lcdt.login.service.impl.ValidCodeService;
 import com.lcdt.notify.rpcservice.NotifyService;
 import com.lcdt.userinfo.dto.RegisterDto;
@@ -108,10 +109,15 @@ public class RegisterController {
         if (userService.isPhoneBeenRegister(registerDto.getUserPhoneNum())) { //根据用户首页号检查用户是否有注册
             msg = "手机号" + registerDto.getUserPhoneNum() + "已注册，请选用别的号注册！";
         } else {
-            flag = validCodeService.sendValidCode(request, VALID_CODE_TAG, 60 * 15, registerDto.getUserPhoneNum());
-            if (!flag) {
-                msg = "获取验证码已经超限，请明天再试!";
+            try {
+                flag = validCodeService.sendValidCode(request, VALID_CODE_TAG, 60 * 15, registerDto.getUserPhoneNum());
+                if (!flag) {
+                    msg = "获取验证码已经超限，请明天再试!";
+                }
+            } catch (ValidCodeExistException e) {
+                msg = "验证码已发送";
             }
+
         }
         map.put("msg", msg);
         map.put("flag", flag);

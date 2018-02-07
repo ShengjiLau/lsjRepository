@@ -103,6 +103,7 @@ public class InviteCustomerService {
 			html.setContent(s, "text/html; charset=utf-8");
 			mainPart.addBodyPart(html);
 			message.setContent(mainPart);
+
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
@@ -112,7 +113,7 @@ public class InviteCustomerService {
 
 		helper.setFrom("service@datuodui.com");
 		helper.setTo(email);
-		helper.setSubject(inviteEmailSubject);
+		helper.setSubject(inviteUser.getRealName()+inviteEmailSubject);
 
 		mailSender.send(message);
 	}
