@@ -36,7 +36,7 @@ public class LoginSessionReposity {
 
 
 	public static User getUserInfoInSession(HttpServletRequest request){
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		return getObjectInSession(User.class, session, USERINFO_SESSION);
 	}
 
@@ -65,7 +65,7 @@ public class LoginSessionReposity {
 	}
 
 	public static void setCompanyMemberInSession(HttpServletRequest request, UserCompRel member){
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		session.setAttribute(COMPANY_SESSION,member);
 	}
 

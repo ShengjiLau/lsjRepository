@@ -80,6 +80,7 @@ public class InviteCustomerService {
 		InviteDto inviteDto = new InviteDto();
 		inviteDto.setInviteContent(content);
 		inviteDto.setInviteId(customerInviteLog.getInviteId());
+		inviteDto.setInviteUrl(beInvitedUrl(customerInviteLog.getInviteId(),customerInviteLog.getInviteToken()));
 		return inviteDto;
 	}
 

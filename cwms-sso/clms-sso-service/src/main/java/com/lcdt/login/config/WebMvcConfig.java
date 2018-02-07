@@ -2,6 +2,7 @@ package com.lcdt.login.config;
 
 import com.lcdt.login.web.filter.CompanyInterceptorAbstract;
 import com.lcdt.login.web.filter.LoginInterceptorAbstract;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -16,7 +17,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new LoginInterceptorAbstract()).addPathPatterns("/account/**");
+		registry.addInterceptor(loginInterceptorAbstract()).addPathPatterns("/account/**");
 		registry.addInterceptor(new CompanyInterceptorAbstract()).addPathPatterns("/account/**");
 	}
 
@@ -25,4 +26,10 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		super.addResourceHandlers(registry);
 		registry.addResourceHandler("/assert").addResourceLocations("/static/assert/");
 	}
+
+	@Bean
+	public LoginInterceptorAbstract loginInterceptorAbstract(){
+		return new LoginInterceptorAbstract();
+	}
+
 }

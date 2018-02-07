@@ -60,7 +60,6 @@ public class CustomerBindApi {
 	}
 
 
-
 	@ApiOperation("发送邀请邮件")
 	@RequestMapping(value = "/sendemail",method = RequestMethod.POST)
 	public String inviteCustomer(String bindEmail,Long inviteId) {
