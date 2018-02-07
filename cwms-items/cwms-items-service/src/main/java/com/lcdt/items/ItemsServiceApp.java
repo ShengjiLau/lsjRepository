@@ -14,6 +14,7 @@ import org.springframework.context.annotation.ImportResource;
 @SpringBootApplication
 @Import({DubboConfig.class})
 @EnableClmsSecurity
+@ImportResource("consumer.xml")
 public class ItemsServiceApp {
     public static void main(String args[]) {
         ConfigurableApplicationContext run = new SpringApplicationBuilder().sources(ItemsServiceApp.class).run(args);

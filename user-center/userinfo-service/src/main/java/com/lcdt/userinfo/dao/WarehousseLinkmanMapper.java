@@ -3,6 +3,7 @@ package com.lcdt.userinfo.dao;
 import com.lcdt.userinfo.model.WarehouseLinkman;
 
 import java.util.List;
+import java.util.Map;
 
 public interface WarehousseLinkmanMapper {
     int deleteByPrimaryKey(Long whLinkmanId);
@@ -14,4 +15,6 @@ public interface WarehousseLinkmanMapper {
     List<WarehouseLinkman> selectAll();
 
     int updateByPrimaryKey(WarehouseLinkman record);
+
+    List<WarehouseLinkman> selectByCondition(Map map);
 }
