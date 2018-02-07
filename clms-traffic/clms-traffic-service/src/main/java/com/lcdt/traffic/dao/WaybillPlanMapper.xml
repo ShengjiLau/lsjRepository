@@ -768,9 +768,11 @@
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
       and sp.split_goods_id in (
-      SELECT sgd.split_goods_id From t_split_goods_detail sgd where sgd.split_goods_id
-      in(select max(sgd1.split_goods_id) from t_split_goods_detail sgd1 where sgd1.remain_amount>0  and wp.company_id = sgd1.company_id and sgd1.is_deleted=0)
-      and wp.company_id = sgd.company_id and sgd.is_deleted=0
+        select a.split_goods_id from t_split_goods_detail as a
+        where split_goods_detail_id = (select max(b.split_goods_detail_id)
+        from t_split_goods_detail as b
+        where a.split_goods_id = b.split_goods_id and b.remain_amount>0)
+          and sp.company_id = a.company_id and a.is_deleted=0
       )
       <if test=" isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
@@ -833,9 +835,11 @@
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
       and sp.split_goods_id in (
-        SELECT sgd.split_goods_id From t_split_goods_detail sgd where sgd.split_goods_id
-        in(select max(sgd1.split_goods_id) from t_split_goods_detail sgd1 where sgd1.remain_amount=0  and wp.company_id = sgd1.company_id and sgd1.is_deleted=0)
-        and wp.company_id = sgd.company_id and sgd.is_deleted=0
+        select a.split_goods_id from t_split_goods_detail as a
+        where split_goods_detail_id = (select max(b.split_goods_detail_id)
+        from t_split_goods_detail as b
+        where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
+        and sp.company_id = a.company_id and a.is_deleted=0
       )
       <if test=" isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
@@ -898,8 +902,11 @@
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
       and sp.split_goods_id in (
-      SELECT sgd.split_goods_id From t_split_goods_detail sgd where sgd.split_goods_id
-      in(select max(sgd1.split_goods_id) from t_split_goods_detail sgd1 where sgd1.remain_amount=0)
+          select a.split_goods_id from t_split_goods_detail as a
+          where split_goods_detail_id = (select max(b.split_goods_detail_id)
+          from t_split_goods_detail as b
+          where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
+          and sp.company_id = a.company_id and a.is_deleted=0
       )
       and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status!=7 )=0
       <if test=" isDeleted!=null">
