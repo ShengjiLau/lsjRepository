@@ -135,6 +135,6 @@ public interface CustomerService {
 
     void updateCustomerBindCompId(Customer customer);
 
-    Customer unBindCustomer(Long customerId,Long companyId);
+    Customer unBindCustomer(Long customerId,Long companyId) throws CustomerNotBindException;
 
 }

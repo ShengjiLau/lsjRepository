@@ -1,10 +1,12 @@
 package com.lcdt.customer.web.controller.api;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.customer.dao.CustomerInviteLogMapper;
 import com.lcdt.customer.dao.CustomerMapper;
+import com.lcdt.customer.exception.CustomerNotBindException;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.model.CustomerInviteLog;
 import com.lcdt.customer.service.CustomerService;
@@ -14,6 +16,7 @@ import com.lcdt.customer.web.dto.InviteDto;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.userinfo.service.CompanyService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -77,7 +80,8 @@ public class CustomerBindApi {
 		return jsonObject.toString();
 	}
 
-
+	@Reference
+	CompanyService companyService;
 
 	//customerid 被绑定的客户选择的客户
 	@ApiOperation("绑定客户")
@@ -100,7 +104,11 @@ public class CustomerBindApi {
 		}
 		//帮邀请的绑定公司id是 邀请人的公司id
 		customer.setBindCpid(inviteCompanyId);
+		Company company = companyService.selectById(inviteCompanyId);
+		customer.setBindCompany(company.getFullName());
+
 		customerService.customerUpdate(customer);
+
 
 		//绑定邀请人的公司id
 		Customer customer1 = mapper.selectByPrimaryKey(customerInviteLog.getInviteCustomerId(), customerInviteLog.getInviteCompanyId());
@@ -150,7 +158,12 @@ public class CustomerBindApi {
 	@ApiOperation("解绑客户")
 	public Customer unBindCustomer(Long customerId){
 		Long companyId = SecurityInfoGetter.getCompanyId();
-		Customer customer = customerService.unBindCustomer(customerId, companyId);
+		Customer customer = null;
+		try {
+			customer = customerService.unBindCustomer(customerId, companyId);
+		} catch (CustomerNotBindException e) {
+			e.printStackTrace();
+		}
 		return customer;
 	}
 

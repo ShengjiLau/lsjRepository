@@ -92,7 +92,7 @@ public class ValidCodeService {
 
 
     private String generateCodeString(String code){
-        String format = "您好，注册验证码为:%s，%s分钟内有效，感谢使用。";
+        String format = "提醒您，注册验证码为：%s，%s分钟内有效，感谢使用！如非本人操作，请忽略！\n";
         String format1 = String.format(format, code, "15");
         return format1;
     }

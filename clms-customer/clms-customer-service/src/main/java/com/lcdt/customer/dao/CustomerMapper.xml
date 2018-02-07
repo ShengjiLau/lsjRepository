@@ -360,7 +360,7 @@
     where company_id = #{0}
   </select>
 
-  <select id="selectByCustomerBindCompanyId" resultType="BaseResultMap">
+  <select id="selectByCustomerBindCompanyId" resultMap="BaseResultMap">
     select * from t_customer
     WHERE
     bind_comp_id = #{bindCompanyId}
