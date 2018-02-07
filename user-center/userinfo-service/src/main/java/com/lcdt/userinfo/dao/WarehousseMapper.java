@@ -16,6 +16,6 @@ public interface WarehousseMapper {
 
     int updateByPrimaryKey(Warehouse record);
 
-
     List<Warehouse> selectByCondition(Map map);
+
 }

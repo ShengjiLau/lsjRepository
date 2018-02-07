@@ -66,4 +66,26 @@
     create_date, update_id, update_name, update_time, is_deleted, company_id
     from t_warehouse_loc
   </select>
+
+  <select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select wh_loc_id, wh_id, code, loc_type, name, status, remark, create_id,
+    create_name, create_date, update_id, update_name, update_time, is_deleted, company_id
+    from t_warehouse_loc
+    <where>
+      company_id = #{companyId,jdbcType=BIGINT}
+      <if test="isDeleted!=null">
+        and is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      </if>
+      <if test="whId!=null">
+        and wh_id = #{whId,jdbcType=BIGINT}
+      </if>
+      <if test="locType!=null">
+        and loc_type = #{locType,jdbcType=SMALLINT}
+      </if>
+      <if test="code!=null">
+        and code like concat('%',#{code,jdbcType=VARCHAR},'%')
+      </if>
+    </where>
+    order by wh_id desc
+  </select>
 </mapper>

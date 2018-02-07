@@ -88,4 +88,22 @@
     company_id, update_id, update_name, update_time, is_deleted
     from t_warehouse_linkman
   </select>
+
+  <select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select wh_linkman_id, wh_id, name, duty, mobile, mail, birthday, sex,
+    province, city, county, detail_address, remark, is_default, create_id, create_name, create_date,
+    company_id, update_id, update_name, update_time, is_deleted
+    from t_warehouse_linkman
+    <where>
+      company_id = #{companyId,jdbcType=BIGINT}
+      <if test="isDeleted!=null">
+        and  is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      </if>
+      <if test="whId!=null">
+        and  wh_id = #{whId,jdbcType=BIGINT}
+      </if>
+    </where>
+    order by wh_linkman_id desc
+  </select>
+
 </mapper>

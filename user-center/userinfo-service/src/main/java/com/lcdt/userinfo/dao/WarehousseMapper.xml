@@ -113,8 +113,8 @@
       <if test="whType!=null">
         and  wh_type = #{whType,jdbcType=SMALLINT}
       </if>
-      <if test="whStatus!=null">
-        and  wh_status = #{whStatus,jdbcType=SMALLINT}
+      <if test="whName!=null">
+        and  (wh_name like concat('%',#{whName,jdbcType=VARCHAR},'%') or wh_code like concat('%',#{whCode,jdbcType=VARCHAR},'%'))
       </if>
     </where>
     order by wh_id desc
