@@ -105,8 +105,11 @@ public class EmployeeServiceImpl {
 			compRel.setGroups(groups);
 			List<Role> roles = roleService.userCompanyRole(userId, compRel.getCompId());
 			compRel.setRoles(roles);
+			//获取员工所在部门
+			List<UserCompRel> ucrs = userCompanyDao.selectByUserIdCompanyId(userId,compRel.getCompId());
+			if(ucrs!=null&&ucrs.size()>0)
+			{compRel.setDeptNames(ucrs.get(0).getDeptNames());}
 			employeeDtos.add(employeeDto);
-
 			LoginLog loginLog = loginLogService.userLastLogin(userId, compRel.getCompId());
 			compRel.setLoginLog(loginLog);
 		}
