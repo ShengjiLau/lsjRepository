@@ -62,7 +62,7 @@ public class CustomerApi {
         map.put("page_size", pageSize);
 
         if (StringUtil.isNotEmpty(dto.getComplexContition())) {
-           map.put("complexStr",dto.getComplexContition());
+           map.put("complexContition",dto.getComplexContition());
         }
         if (dto.getStatus()!=null) {
             map.put("status",dto.getStatus());
