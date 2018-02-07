@@ -9,6 +9,7 @@ import com.lcdt.customer.dao.CustomerContactMapper;
 import com.lcdt.customer.dao.CustomerMapper;
 import com.lcdt.customer.dao.CustomerTypeRelationMapper;
 import com.lcdt.customer.exception.CustomerException;
+import com.lcdt.customer.exception.CustomerNotBindException;
 import com.lcdt.customer.model.CustomerCollection;
 import com.lcdt.customer.model.CustomerContact;
 import com.lcdt.customer.model.CustomerTypeRelation;
@@ -41,6 +42,30 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerCollectionMapper customerCollectionMapper;
+
+
+    @Transactional(rollbackFor = Exception.class)
+    public Customer unBindCustomer(Long customerId,Long companyId) throws CustomerNotBindException {
+        Customer customer = customerMapper.selectByPrimaryKey(customerId, companyId);
+        Long bindCpid = customer.getBindCpid();
+        if (bindCpid == null) {
+            throw new CustomerNotBindException();
+        }
+
+
+        customer.setBindCpid(null);
+        customerMapper.updateByPrimaryKey(customer);
+
+        Customer customer1 = customerMapper.selectByCustomerBindCompanyId(bindCpid, companyId);
+        if (customer1 == null) {
+            return customer;
+        }else{
+            customer1.setBindCpid(null);
+            customerMapper.updateByPrimaryKey(customer1);
+        }
+
+        return customer;
+    }
 
 
     @Override

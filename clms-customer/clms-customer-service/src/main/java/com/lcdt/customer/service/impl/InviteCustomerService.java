@@ -75,7 +75,7 @@ public class InviteCustomerService {
 		inviteLogdao.insert(customerInviteLog);
 		String clientTypes = customer.getClientTypes();
 		clientTypes = clientTypeToString(clientTypes);
-		String content = resolveInviteEmailContent(contentTemplateName,customer.getCustomerName(), inviteUser.getRealName(), inviteCompany.getShortName(),
+		String content = resolveInviteEmailContent(contentTemplateName,inviteUser.getPhone(),customer.getCustomerName(), inviteUser.getRealName(), inviteCompany.getShortName(),
 				clientTypes,beInvitedUrl(customerInviteLog.getInviteId(),customerInviteLog.getInviteToken()));
 		InviteDto inviteDto = new InviteDto();
 		inviteDto.setInviteContent(content);
@@ -92,7 +92,7 @@ public class InviteCustomerService {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message,true,"utf-8");
 
-		String s = resolveInviteEmailContent(htmltemplateName, inviteCustomer.getCustomerName(), inviteUser.getRealName(),
+		String s = resolveInviteEmailContent(htmltemplateName, inviteUser.getPhone(),inviteCustomer.getCustomerName(), inviteUser.getRealName(),
 				inviteCompany.getFullName(), clientTypeToString(inviteCustomer.getClientTypes()),
 				beInvitedUrl(customerInviteLog.getInviteId(), customerInviteLog.getInviteToken()));
 		Multipart mainPart = new MimeMultipart();
@@ -103,6 +103,7 @@ public class InviteCustomerService {
 			html.setContent(s, "text/html; charset=utf-8");
 			mainPart.addBodyPart(html);
 			message.setContent(mainPart);
+
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
@@ -112,7 +113,7 @@ public class InviteCustomerService {
 
 		helper.setFrom("service@datuodui.com");
 		helper.setTo(email);
-		helper.setSubject(inviteEmailSubject);
+		helper.setSubject(inviteUser.getRealName()+inviteEmailSubject);
 
 		mailSender.send(message);
 	}
@@ -166,7 +167,7 @@ public class InviteCustomerService {
 	}
 
 
-	public String resolveInviteEmailContent(String templateName,String customerName,String inviteUserName,String inviteCompanyName,String inviteCompanyTypeName,String inviteUrl){
+	public String resolveInviteEmailContent(String templateName,String inviteUserPhone,String customerName,String inviteUserName,String inviteCompanyName,String inviteCompanyTypeName,String inviteUrl){
 		StringWriter w = new StringWriter();
 		Properties properties=new Properties();
 		//设置velocity资源加载方式为class
@@ -177,6 +178,7 @@ public class InviteCustomerService {
 		velocityContext.put("inviteUser",inviteUserName);
 		velocityContext.put("inviteCompanyName", inviteCompanyName);
 		velocityContext.put("inviteCompanyType", inviteCompanyTypeName);
+		velocityContext.put("userphone", inviteUserPhone);
 		inviteUrl = configConstant.bindurlHost + inviteUrl;
 		velocityContext.put("inviteUrl", inviteUrl);
 		Velocity.mergeTemplate(templateName, "UTF-8", velocityContext, w);

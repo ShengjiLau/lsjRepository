@@ -1,10 +1,16 @@
 package com.lcdt.userinfo.web.controller.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.userinfo.model.Warehouse;
+import com.lcdt.userinfo.model.WarehouseLinkman;
+import com.lcdt.userinfo.model.WarehouseLoc;
 import com.lcdt.userinfo.service.WarehouseService;
 import com.lcdt.userinfo.web.dto.PageBaseDto;
 import com.lcdt.userinfo.web.dto.WarehouseDto;
+import com.lcdt.userinfo.web.dto.WarehouseLinkmanDto;
+import com.lcdt.userinfo.web.dto.WarehouseLocDto;
 import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.tl.commons.util.StringUtility;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,10 +38,10 @@ public class WarehouseApi {
     @Autowired
     private WarehouseService warehouseService;
 
-    @ApiOperation("仓库列表")
-    @RequestMapping(value = "/customerList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_list')")
-    public PageBaseDto customerList(@Validated WarehouseDto dto,
+    @ApiOperation("仓库管理——列表")
+    @RequestMapping(value = "/warehouseList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('warehouse_list')")
+    public PageBaseDto warehouseList(@Validated WarehouseDto dto,
                                     @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
                                     @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -43,10 +50,12 @@ public class WarehouseApi {
         map.put("page_no", pageNo);
         map.put("page_size", pageSize);
 
-        if (dto.getWhStatus()!=null) {
-            map.put("whStatus",dto.getWhStatus());
+        if(StringUtility.isNotEmpty(dto.getWhName())){
+            map.put("whName", dto.getWhName());
         }
-
+        if (dto.getWhType()!=null) {
+            map.put("whType",dto.getWhType());
+        }
         if (dto.getIsDeleted()!=null) {
             map.put("isDeleted",dto.getIsDeleted());
         }
@@ -57,5 +66,220 @@ public class WarehouseApi {
         return baseDto;
     }
 
+    @ApiOperation("仓库管理——新增")
+    @RequestMapping(value = "/addWarehouse", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_warehouse')")
+    public JSONObject addWarehouse(@Validated Warehouse dto) {
+        int result = warehouseService.addWarehouse(dto);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "添加成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("添加失败");
+        }
+    }
 
+    @ApiOperation("仓库管理——修改")
+    @RequestMapping(value = "/modifyWarehouse", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse')")
+    public JSONObject modifyWarehouse(@Validated Warehouse dto) {
+        int result = warehouseService.modifyWarehouse(dto);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "修改成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("修改失败");
+        }
+    }
+
+    @ApiOperation("仓库管理——删除")
+    @RequestMapping(value = "/deleteWarehouse", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delete_warehouse')")
+    public JSONObject deleteWarehouse(@ApiParam(value = "仓库ID",required = true) @RequestParam Long whId) {
+        int result = warehouseService.deleteWarehouseByPrimaryKey(whId);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "删除成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("删除失败");
+        }
+    }
+
+    @ApiOperation("仓库管理——启用/禁用")
+    @RequestMapping(value = "/modifyWarehouseWhStatus", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_whStatus')")
+    public JSONObject modifyWarehouseWhStatus(@ApiParam(value = "仓库ID",required = true) @RequestParam Long whId) {
+        int result = warehouseService.modifyWarehouseWhStatus(whId);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "修改成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("修改失败");
+        }
+    }
+
+    @ApiOperation("仓库管理——联系人列表")
+    @RequestMapping(value = "/linkman/warehouseLinkmanList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('warehouse_linkman_list')")
+    public PageBaseDto warehouseLinkmanList(@Validated WarehouseLinkmanDto dto) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+
+        if (dto.getIsDeleted()!=null) {
+            map.put("isDeleted",dto.getIsDeleted());
+        }
+        if (dto.getWhId()!=null) {
+            map.put("whId",dto.getWhId());
+        }
+        PageInfo pageInfo = warehouseService.warehouseLinkManList(map);
+        PageBaseDto baseDto = new PageBaseDto();
+        baseDto.setList(pageInfo.getList());
+        baseDto.setTotal(pageInfo.getTotal());
+        return baseDto;
+    }
+
+    @ApiOperation("仓库管理——联系人新增")
+    @RequestMapping(value = "/linkman/addWarehouseLinkman", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_warehouse_linkman')")
+    public JSONObject addWarehouseLinkman(@Validated WarehouseLinkman dto) {
+        int result = warehouseService.addWarehouseLinkMan(dto);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "添加成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("添加失败");
+        }
+    }
+
+    @ApiOperation("仓库管理——联系人修改")
+    @RequestMapping(value = "/linkman/modifyWarehouseLinkman", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_linkman')")
+    public JSONObject modifyWarehouseLinkman(@Validated WarehouseLinkman dto) {
+        int result = warehouseService.modifyWarehouseLinkMan(dto);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "修改成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("修改失败");
+        }
+    }
+
+    @ApiOperation("仓库管理——联系人删除")
+    @RequestMapping(value = "/linkman/deleteWarehouseLinkman", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delete_warehouse_linkman')")
+    public JSONObject deleteWarehouseLinkman(@ApiParam(value = "联系人ID",required = true) @RequestParam Long whLinkmanId) {
+        int result = warehouseService.deleteWarehouseLinkManByPrimaryKey(whLinkmanId);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "删除成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("删除失败");
+        }
+    }
+
+    @ApiOperation("库位管理——列表")
+    @RequestMapping(value = "/loc/warehouselocList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('warehouse_loc_list')")
+    public PageBaseDto warehouseLocList(@Validated WarehouseLocDto dto,
+                                     @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                     @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
+
+        if(StringUtility.isNotEmpty(dto.getCode())){
+            map.put("code", dto.getCode());
+        }
+        if (dto.getLocType()!=null) {
+            map.put("locType",dto.getLocType());
+        }
+        if (dto.getWhId()!=null) {
+            map.put("whId",dto.getWhId());
+        }
+        if (dto.getIsDeleted()!=null) {
+            map.put("isDeleted",dto.getIsDeleted());
+        }
+        PageInfo pageInfo = warehouseService.warehouseLocList(map);
+        PageBaseDto baseDto = new PageBaseDto();
+        baseDto.setList(pageInfo.getList());
+        baseDto.setTotal(pageInfo.getTotal());
+        return baseDto;
+    }
+
+    @ApiOperation("库位管理——新增")
+    @RequestMapping(value = "/addWarehouseLoc", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_warehouse_loc')")
+    public JSONObject addWarehouseLoc(@Validated WarehouseLoc dto) {
+        int result = warehouseService.addWarehouseLoc(dto);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "添加成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("添加失败");
+        }
+    }
+
+    @ApiOperation("库位管理——修改")
+    @RequestMapping(value = "/modifyWarehouseLoc", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_loc')")
+    public JSONObject modifyWarehouseLoc(@Validated WarehouseLoc dto) {
+        int result = warehouseService.modifyWarehouseLoc(dto);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "修改成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("修改失败");
+        }
+    }
+
+    @ApiOperation("库位管理——删除")
+    @RequestMapping(value = "/deleteWarehouseLoc", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delete_warehouse_loc')")
+    public JSONObject deleteWarehouseLoc(@ApiParam(value = "库位ID",required = true) @RequestParam Long whLocId) {
+        int result = warehouseService.deleteWarehouseLocByPrimaryKey(whLocId);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "删除成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("删除失败");
+        }
+    }
+
+    @ApiOperation("库位管理——启用/禁用")
+    @RequestMapping(value = "/modifyWarehouseLocStatus", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_loc_status')")
+    public JSONObject modifyWarehouseLocStatus(@ApiParam(value = "库位ID",required = true) @RequestParam Long whLocId) {
+        int result = warehouseService.modifyWarehouseLocStatus(whLocId);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "修改成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("修改失败");
+        }
+    }
 }

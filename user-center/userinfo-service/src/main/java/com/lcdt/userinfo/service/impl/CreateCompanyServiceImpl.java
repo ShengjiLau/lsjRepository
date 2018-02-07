@@ -90,9 +90,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		}
 
 		//发送公司初始化事件
-
 		sendCompanyInitEvent(userCompRel);
-
 		return company;
 	}
 
@@ -100,12 +98,11 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	Producer producer;
 
 	public void sendCompanyInitEvent(UserCompRel compRel){
-
 		Message message = new Message();
 		message.setKey("companyinit");
+		message.setTopic("clms_user");
 		message.setBody(JSONObject.toJSONBytes(compRel, SerializerFeature.BrowserCompatible));
 		producer.send(message);
-
 		return;
 	}
 
