@@ -52,6 +52,7 @@ public class Department implements java.io.Serializable,ResponseData {
      */
     private Long companyId;
 
+    private Short isDefault;
 
     @Transient
     private List<Department> list;
@@ -61,6 +62,7 @@ public class Department implements java.io.Serializable,ResponseData {
 
     @Transient
     private short childNum;
+
 
 
     private Long createId;
@@ -237,5 +239,11 @@ public class Department implements java.io.Serializable,ResponseData {
         this.childNum = childNum;
     }
 
+    public Short getIsDefault() {
+        return isDefault;
+    }
 
+    public void setIsDefault(Short isDefault) {
+        this.isDefault = isDefault;
+    }
 }
