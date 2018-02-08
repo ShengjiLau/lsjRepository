@@ -70,7 +70,7 @@
             <if test="companyId != null">
                 and role_company_id=#{companyId,jdbcType=BIGINT}
             </if>
-            <if test="deptName != null &amp;&amp; deptName != ''">
+            <if test="roleName != null &amp;&amp; roleName != ''">
                 and role_name=#{roleName,jdbcType=VARCHAR}
             </if>
             <if test="roleId != null">
@@ -78,6 +78,10 @@
             </if>
         </trim>
     </select>
+
+
+
+
 
     <select id="selectByRoleName" resultMap="BaseResultMap">
         select * from role r
