@@ -72,7 +72,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		} else {
 			Department department = departmentMapper.selectByPrimaryKey(deptId);
 			if (department!=null){
-				if (department.getDeptPid()==0) { //不存在子部门同时是一级部门不能删除
+				if (department.getIsDefault()==1) { //不存在子部门同时是一级部门不能删除
 					throw new DeptmentExistException("该部门为一级部门不能删除");
 				}
 				if (department.getCompanyId()!=companyId) { //不同企业下能删除
