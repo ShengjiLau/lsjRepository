@@ -3,15 +3,17 @@ package com.lcdt.clms.permission.service.impl;
 import com.lcdt.clms.permission.dao.RoleMapper;
 import com.lcdt.clms.permission.dao.RolePermissionMapper;
 import com.lcdt.clms.permission.dao.RoleUserRelationMapper;
+import com.lcdt.clms.permission.exception.RoleExistException;
+import com.lcdt.clms.permission.model.Permission;
 import com.lcdt.clms.permission.model.Role;
 import com.lcdt.clms.permission.model.RolePermission;
 import com.lcdt.clms.permission.model.RoleUserRelation;
 import com.lcdt.clms.permission.service.UserRoleService;
-import com.lcdt.userinfo.exception.RoleExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -68,7 +70,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public int createCompanyRole(Long companyId, Role insertRole) {
+	public Role createCompanyRole(Long companyId, Role insertRole) throws RoleExistException {
 		Map map = new HashMap<>();
 		map.put("companyId", insertRole.getRoleCompanyId());
 		map.put("roleName", insertRole.getRoleName());
@@ -77,7 +79,8 @@ public class UserRoleServiceImpl implements UserRoleService {
 			throw new RoleExistException();
 		} else {
 			insertRole.setRoleCompanyId(companyId);
-			return userRoleDao.insert(insertRole);
+			userRoleDao.insert(insertRole);
+			return insertRole;
 		}
 	}
 
@@ -113,7 +116,6 @@ public class UserRoleServiceImpl implements UserRoleService {
 			rolePermission.setCreateDate(new Date());
 			rolePermissionDao.insert(rolePermission);
 		}
-		//TODO 发送角色更新事件
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -123,6 +125,12 @@ public class UserRoleServiceImpl implements UserRoleService {
 		if (permissions != null && !permissions.isEmpty()) {
 			rolePermissionDao.insertRolePermission(roleId,permissions);
 		}
+	}
+
+	@Override
+	public boolean isRoleNameExist(String roleName,Long companyId) {
+		List<Role> roles = userRoleDao.selectByRoleName(roleName, companyId);
+		return !CollectionUtils.isEmpty(roles);
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -172,11 +180,6 @@ public class UserRoleServiceImpl implements UserRoleService {
 	@Override
 	public List<Role> userCompanyRole(Long userId, Long companyId) {
 		return userRoleDao.selectUserCompanyRoles(userId, companyId);
-	}
-
-	@Async
-	private void updateUserHash(Integer userid){
-
 	}
 
 }
