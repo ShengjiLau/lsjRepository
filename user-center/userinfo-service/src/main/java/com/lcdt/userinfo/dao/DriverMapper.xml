@@ -106,6 +106,10 @@
     create_id, create_name, create_date, update_id, update_name, update_date, is_deleted
     from t_driver
   </select>
+  <select id="selectByDriverPhone" resultMap="BaseResultMap">
+    select user_id, driver_name, driver_phone
+    from t_driver where driver_phone=#{arg0}
+  </select>
   <select id="selectByPhone" resultMap="BaseResultMap">
     select driver_phone, current_location, short_current_location, gps_status,location_time
     from t_driver where driver_phone in

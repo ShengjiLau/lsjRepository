@@ -22,4 +22,6 @@ public interface DriverService {
     int modGpsStatus(Driver driver);
 
     int updateLocation(Driver driver);
+
+    boolean isExistDriver(String driverPhone);
 }
