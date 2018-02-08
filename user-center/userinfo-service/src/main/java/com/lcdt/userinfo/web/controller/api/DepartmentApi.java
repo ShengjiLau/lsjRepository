@@ -138,7 +138,7 @@ public class DepartmentApi {
          * 存在子部门或者是部门有被引用
          */
         Long companyId = SecurityInfoGetter.getCompanyId();
-        int flag = departmentService.removeDepartment(deptId,companyId)
+        int flag = departmentService.removeDepartment(deptId,companyId);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
