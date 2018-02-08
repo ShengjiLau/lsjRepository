@@ -79,6 +79,10 @@
         </trim>
     </select>
 
+
+
+
+
     <select id="selectByRoleName" resultMap="BaseResultMap">
         select * from role r
         WHERE role_name = #{roleName}

@@ -71,11 +71,8 @@ public class UserRoleServiceImpl implements UserRoleService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Role createCompanyRole(Long companyId, Role insertRole) throws RoleExistException {
-		Map map = new HashMap<>();
-		map.put("companyId", insertRole.getRoleCompanyId());
-		map.put("roleName", insertRole.getRoleName());
-		List<Role> list = userRoleDao.selectByCondition(map);
-		if (list != null && list.size() > 0) {
+		List<Role> roles = userRoleDao.selectByRoleName(insertRole.getRoleName(), companyId);
+		if (roles != null && roles.size() > 0) {
 			throw new RoleExistException();
 		} else {
 			insertRole.setRoleCompanyId(companyId);
