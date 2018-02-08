@@ -67,6 +67,12 @@
     <if test="userId != null">
       and u.user_id = #{userId}
     </if>
+    <if test="beginTime != null">
+      and login_time &gt;= #{beginTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="endTime != null">
+      and login_time &lt;=  #{endTime,jdbcType=TIMESTAMP}
+    </if>
 
     order by login_time DESC
   </select>

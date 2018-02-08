@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -25,10 +26,14 @@ public class LoginLogApi {
     LoginLogMapper dao;
 
     @RequestMapping(value = "/loginlog",method = RequestMethod.GET)
-    public PageResultDto companyUserLogs(@RequestParam(required = false) String username,@ApiParam(required = true)@RequestParam Integer pageNo, @RequestParam @ApiParam(required = true) Integer pageSize){
+    public PageResultDto companyUserLogs(
+            @RequestParam(required = false) Date beginTime,
+            @RequestParam(required = false) Date endTime,
+
+            @RequestParam(required = false) String username,@ApiParam(required = true)@RequestParam Integer pageNo, @RequestParam @ApiParam(required = true) Integer pageSize){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
-        List<LoginLogDto> loginLogs = dao.selectByCompanyId(companyId,username,null);
+        List<LoginLogDto> loginLogs = dao.selectByCompanyId(companyId,username,null,beginTime,endTime);
         PageResultDto<LoginLogDto> userCompRelPageResultDto = new PageResultDto<>(loginLogs);
         return userCompRelPageResultDto;
     }
