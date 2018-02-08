@@ -3,8 +3,10 @@ package com.lcdt.userinfo.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dao.DepartmentMapper;
+import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.model.Department;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Autowired
 	private DepartmentMapper departmentMapper;
+
+	@Autowired
+	private UserCompRelMapper userCompRelMapper;
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -55,7 +60,34 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public int removeDepartment(Long deptId) {
+	public int removeDepartment(Long deptId, Long companyId) {
+
+		//1、检查部门下是否存在子部门
+		Map map = new HashMap<>();
+		map.put("deptPid", deptId);
+		map.put("companyId", companyId);
+		List<Department> list = departmentMapper.selectByCondition(map);
+		if (list!=null && list.size()>0) {
+			throw new DeptmentExistException("该部门下存在子部门不能删除");
+		} else {
+			Department department = departmentMapper.selectByPrimaryKey(deptId);
+			if (department!=null){
+				if (department.getDeptPid()==0) { //不存在子部门同时是一级部门不能删除
+					throw new DeptmentExistException("该部门为一级部门不能删除");
+				}
+				if (department.getCompanyId()!=companyId) { //不同企业下能删除
+					throw new DeptmentExistException("非法删除数据");
+				}
+			}
+		}
+		//2、查询企业用户部是否有引引用
+		map = new HashMap<>();
+		map.put("compId", "find_in_set('"+deptId+"',\"group_ids\")");
+		map.put("compId", companyId);
+		List<UserCompRel> userCompRelList =  userCompRelMapper.selectByCondition(map);
+		if (userCompRelList!=null && userCompRelList.size()>0) {
+			throw new DeptmentExistException("该部门已有用户在使用，不能删除");
+		}
 		return departmentMapper.deleteByPrimaryKey(deptId);
 	}
 

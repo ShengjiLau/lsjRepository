@@ -40,7 +40,7 @@ public interface DepartmentService {
      * @param deptId
      * @return
      */
-    int removeDepartment(Long deptId);
+    int removeDepartment(Long deptId, Long companyId);
 
     /**
      * 部门列表
@@ -59,6 +59,8 @@ public interface DepartmentService {
 
 
     String getIdsNames(String departIds);
+
+
 
 
 
