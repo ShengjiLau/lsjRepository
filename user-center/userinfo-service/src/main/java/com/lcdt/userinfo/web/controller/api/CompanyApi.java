@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.web.controller.api;
 
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.CompanyCertificate;
 import com.lcdt.userinfo.service.CompanyService;
@@ -8,6 +9,7 @@ import com.lcdt.userinfo.web.dto.ModifyCompanyAuthDto;
 import com.lcdt.userinfo.web.dto.ModifyCompanyInfoDto;
 import com.lcdt.userinfo.web.dto.ModifyContactDto;
 import com.lcdt.userinfo.web.dto.ModifyInvoiceDto;
+import com.lcdt.userinfo.web.exception.CompanyNameExistException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -103,10 +105,22 @@ public class CompanyApi {
 	@ApiOperation("修改企业信息")
 	@RequestMapping(value = "/update_compamy", method = RequestMethod.POST)
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('update_company_info')")
-	public Company updateCompanyInfo(@Validated ModifyCompanyInfoDto modifyCompanyInfoDto) {
+	public Company updateCompanyInfo(@Validated ModifyCompanyInfoDto modifyCompanyInfoDto) throws CompanyNameExistException {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		Company company = companyService.selectById(companyId);
 		company.setShortName(modifyCompanyInfoDto.getShortName());
+		if (!StringUtils.isEmpty(modifyCompanyInfoDto.getFullName())) {
+
+			CompanyDto companyDto = new CompanyDto();
+			companyDto.setCompanyName(modifyCompanyInfoDto.getFullName());
+
+			Company company1 = companyService.findCompany(companyDto);
+			if (company1 != null) {
+				throw new CompanyNameExistException();
+			}
+
+		}
+
 		company.setFullName(modifyCompanyInfoDto.getFullName());
 		company.setIndustry(modifyCompanyInfoDto.getIndustry());
 		company.setProvince(modifyCompanyInfoDto.getProvince());
