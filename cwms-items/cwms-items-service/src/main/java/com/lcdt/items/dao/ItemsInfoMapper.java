@@ -4,6 +4,7 @@ import com.lcdt.items.model.ItemsInfo;
 import com.lcdt.items.model.ItemsInfoDao;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ItemsInfoMapper {
     /**
@@ -101,4 +102,11 @@ public interface ItemsInfoMapper {
      * @return
      */
     List<ItemsInfo> selectByItemsCalUnitId(ItemsInfo itemsInfo);
+
+    /**
+     * 根据分类id
+     * @param map
+     * @return
+     */
+    List<ItemsInfo> selectByClassifyIdCodeAndCompanyId(Map map);
 }
