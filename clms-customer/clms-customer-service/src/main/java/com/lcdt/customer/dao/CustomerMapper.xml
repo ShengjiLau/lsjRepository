@@ -359,4 +359,16 @@
     from t_customer
     where company_id = #{0}
   </select>
+
+  <select id="selectByCustomerBindCompanyId" resultMap="BaseResultMap">
+    select * from t_customer
+    WHERE
+    bind_comp_id = #{bindCompanyId}
+    and company_id = #{companyId}
+
+  </select>
+
+
+
+
 </mapper>

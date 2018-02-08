@@ -95,9 +95,12 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                     sb.append(" or ");
                 }
 
+
                 //查询当前人所在的承运商组(站在货主角度来查询)
                 map.put("companyId",ownCompanyId);
                 map.put("bindCompId",carrierCompanyId);
+                map.remove("groupIds");//货主不需要
+
                 List<Customer> customer4GroupList = customerRpcService.findBindCompanyIds(map);
                 for (Customer obj1: customer4GroupList) {
                     if (!StringUtils.isEmpty(obj1.getCollectionIds())) {
@@ -301,7 +304,9 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         map.remove("groupIds");//移除
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4VehicleHave(map);
         if (list!=null && list.size()>0) {
+            System.out.println(list.size());
             for(CustomerPlanDto dto :list){
+                if(dto==null) continue;
                 dto.setPlanSource(planSource(dto.getCompanyId(),customerList));
             }
         }

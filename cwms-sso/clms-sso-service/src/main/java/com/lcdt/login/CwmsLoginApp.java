@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ImportResource;
  * Created by ss on 2017/8/17.
  */
 @SpringBootApplication
-@Import({RedisConfiguration.class,DubboConfig.class})
+@Import({DubboConfig.class})
 @ImportResource("classpath:producer.xml")
 public class CwmsLoginApp {
 

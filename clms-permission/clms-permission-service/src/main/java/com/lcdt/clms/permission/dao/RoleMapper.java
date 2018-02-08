@@ -4,6 +4,7 @@ import com.lcdt.clms.permission.model.Role;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RoleMapper {
     /**
@@ -50,4 +51,6 @@ public interface RoleMapper {
 
     List<Role> selectUserCompanyRoles(@Param("userId") Long userId, @Param("companyId") Long companyId);
 
+    List<Role> selectByCondition(Map map);
+    List<Role> selectByRoleName(@Param("rolename") String roleName,@Param("companyId") Long companyId);
 }

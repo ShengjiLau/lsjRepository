@@ -2,6 +2,7 @@ package com.lcdt.customer.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.exception.CustomerException;
+import com.lcdt.customer.exception.CustomerNotBindException;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.model.CustomerCollection;
 import com.lcdt.customer.model.CustomerContact;
@@ -133,5 +134,7 @@ public interface CustomerService {
     int customerCollectionRemove(Map map);
 
     void updateCustomerBindCompId(Customer customer);
+
+    Customer unBindCustomer(Long customerId,Long companyId) throws CustomerNotBindException;
 
 }

@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.login.exception.ValidCodeExistException;
 import com.lcdt.login.service.impl.ValidCodeService;
+import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,7 +57,10 @@ public class ForgetPwdController {
     private static final String SESSIONKEY = "forgetpwd_phone";
 
     @RequestMapping("/checkvalidcode")
-    public ModelAndView checkValidCode(HttpServletRequest request,String validcode,String phoneNum){
+    public ModelAndView checkValidCode(HttpServletRequest request,String validcode,String phoneNum) throws UserNotExistException {
+
+        userService.queryByPhone(phoneNum);
+
         boolean codeCorrect = validCodeService.isCodeCorrect(validcode, request, validcodeTag, phoneNum);
         ModelAndView modelAndView = new ModelAndView("/setPassWord");
         if (codeCorrect) {

@@ -104,6 +104,12 @@
       <if test="fullName != null &amp;&amp; fullName != ''">
         and full_name = #{fullName,jdbcType=VARCHAR}
       </if>
+      <!--删除部门逻辑用Begin-->
+      <if test="deptIds != null &amp;&amp; deptIds != ''">
+        and #{deptIds}
+      </if>
+      <!--删除部门逻辑用End-->
+
     </trim>
     order by user_comp_rel_id
   </select>
@@ -121,13 +127,16 @@
       left join t_uc_user_group g on comp.user_id = g.user_id
       and comp.comp_id = g.company_id
     <where>
+
       <if test="companyId != null">
         comp.comp_id = #{companyId}
       </if>
-
       <if test="realName != null and '' != realName ">
-        and u.real_name like
-        CONCAT('%',#{realName,jdbcType=VARCHAR},'%')
+          and (u.real_name like
+          CONCAT('%',#{realName,jdbcType=VARCHAR},'%')
+           or u.phone like
+          CONCAT('%',#{realName,jdbcType=VARCHAR},'%')
+          )
       </if>
       <if test="roleId != null and '' != roleId">
         and r.role_id = #{roleId}
@@ -142,7 +151,7 @@
   </select>
 
   <select id="selectByUserIdCompanyId" resultMap="BaseResultMap">
-     select user_comp_rel_id, comp.user_id, comp_id,full_name,create_date,is_create,dept_ids,duty
+     select user_comp_rel_id, comp.user_id, comp_id,full_name,create_date,is_create,dept_ids,duty,dept_names
     from t_uc_user_comp_rel  comp
     WHERE
     comp.user_id = #{userId}

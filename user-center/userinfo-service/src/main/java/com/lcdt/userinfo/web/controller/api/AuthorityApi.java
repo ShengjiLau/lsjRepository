@@ -3,7 +3,7 @@ package com.lcdt.userinfo.web.controller.api;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.permission.exception.RoleExistException;
 import com.lcdt.clms.permission.model.Permission;
 import com.lcdt.clms.permission.model.Role;
 import com.lcdt.clms.permission.service.UserPermissionService;
@@ -16,11 +16,9 @@ import com.lcdt.userinfo.web.dto.CreateRoleDto;
 import com.lcdt.userinfo.web.dto.PageResultDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,7 +91,7 @@ public class AuthorityApi {
 	@RequestMapping(value = "/addrole", method = RequestMethod.POST)
 	@ApiOperation("添加角色")
 	@PreAuthorize("hasAnyAuthority('role_add') or hasRole('ROLE_SYS_ADMIN')")
-	public Role addRole(@Validated CreateRoleDto roleDto) {
+	public Role addRole(@Validated CreateRoleDto roleDto) throws RoleExistException {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		User loginUser = SecurityInfoGetter.getUser();
 		Role role = new Role();
@@ -102,8 +100,12 @@ public class AuthorityApi {
 		role.setCreateId(loginUser.getUserId());
 		role.setCreateDate(new Date());
 		role.setCreateName(loginUser.getRealName());
-		Role companyRole = roleService.createCompanyRole(companyId, role);
-		return companyRole;
+		try {
+			roleService.createCompanyRole(companyId, role);
+		} catch (RoleExistException e) {
+			throw new RoleExistException("角色"+roleDto.getRoleName()+"已经存在!");
+		}
+		return role;
 	}
 
 	static EmptyResponseDate emptyResponseData = new EmptyResponseDate();

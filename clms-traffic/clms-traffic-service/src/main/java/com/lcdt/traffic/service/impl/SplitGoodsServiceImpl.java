@@ -266,6 +266,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
         Date opDate = new Date();
         SplitGoods splitGoods = new SplitGoods(); //派单主信息
+        splitGoods.setWaybillPlanId(waybillPlan.getWaybillPlanId());
         splitGoods.setCreateDate(opDate);
         splitGoods.setCreateId(user.getUserId());
         splitGoods.setCreateName(user.getRealName());

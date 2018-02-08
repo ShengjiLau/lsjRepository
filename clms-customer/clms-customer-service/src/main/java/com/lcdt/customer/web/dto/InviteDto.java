@@ -8,6 +8,16 @@ public class InviteDto implements ResponseData {
 
     Long inviteId;
 
+    String inviteUrl;
+
+    public String getInviteUrl() {
+        return inviteUrl;
+    }
+
+    public void setInviteUrl(String inviteUrl) {
+        this.inviteUrl = inviteUrl;
+    }
+
     public String getInviteContent() {
         return inviteContent;
     }
