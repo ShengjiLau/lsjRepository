@@ -6,6 +6,7 @@ package com.lcdt.userinfo.exception;
 public class RoleExistException extends RuntimeException {
 
     public RoleExistException() {
+
     }
 
     public RoleExistException(String message) {
