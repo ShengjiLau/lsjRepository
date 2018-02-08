@@ -68,29 +68,44 @@ public class OwnDriverServiceImpl implements OwnDriverService {
                 }
                 ownDriverCertificateMapper.insertBatch(ownDriverDto.getOwnDriverCertificateList());  //批量插入车辆证件
             }
-            /**下面判断用户表中是否存在该司机电话的账号，不存在的话，则自动保存一条司机的账号信息*/
-            String phone = ownDriverDto.getDriverPhone().trim();
-            if (!userService.isPhoneBeenRegister(phone)) { //为空则保存司机账号信息
-                RegisterDto registerDto = new RegisterDto();
-                registerDto.setUserPhoneNum(phone);
-                registerDto.setPassword(RegisterUtils.md5Encrypt(phone.substring(5)));
-                logger.debug("司机账号默认密码：" + phone.substring(5));
-                registerDto.setIntroducer("");
-                registerDto.setEmail("");
-                try {
-                    User user = userService.registerUser(registerDto);  //保存账号信息
-                    Driver driver = new Driver();
-                    driver.setUserId(user.getUserId());
-                    driver.setAffiliatedCompany(ownDriverDto.getAffiliatedCompany());
-                    driver.setDriverName(ownDriverDto.getDriverName());
-                    driver.setDriverPhone(phone);
-                    driver.setCreateId(ownDriverDto.getCreateId());
-                    driver.setCreateName(ownDriverDto.getCreateName());
-                    driverService.addDriver(driver);    //保存司机信息
-                } catch (PhoneHasRegisterException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException("保存司机账号信息失败！");
+            if(null != ownDriverDto.getDriverPhone()) {
+                String phone = ownDriverDto.getDriverPhone().trim();
+                /**判断是否已经开通cLMS司机账号，若没有开通，则自动开通,新增一条司机账号信息*/
+                if(!driverService.isExistDriver(phone)){
+                    if (!userService.isPhoneBeenRegister(phone)) { //为空则保存clms司机账号信息
+                        RegisterDto registerDto = new RegisterDto();
+                        registerDto.setUserPhoneNum(phone);
+                        registerDto.setPassword(RegisterUtils.md5Encrypt(phone.substring(5)));
+                        logger.debug("司机账号默认密码：" + phone.substring(5));
+                        registerDto.setIntroducer("");
+                        registerDto.setEmail("");
+                        try {
+                            User user = userService.registerUser(registerDto);  //保存账号信息
+                            Driver driver = new Driver();
+                            driver.setUserId(user.getUserId());
+                            driver.setAffiliatedCompany(ownDriverDto.getAffiliatedCompany());
+                            driver.setDriverName(ownDriverDto.getDriverName());
+                            driver.setDriverPhone(phone);
+                            driver.setCreateId(ownDriverDto.getCreateId());
+                            driver.setCreateName(ownDriverDto.getCreateName());
+                            driverService.addDriver(driver);    //保存司机信息
+                        } catch (PhoneHasRegisterException e) {
+                            e.printStackTrace();
+                            throw new RuntimeException("保存司机账号信息失败！");
+                        }
+                    }else{
+                        User user = userService.selectUserByPhone(phone);
+                        Driver driver = new Driver();
+                        driver.setUserId(user.getUserId());
+                        driver.setAffiliatedCompany(ownDriverDto.getAffiliatedCompany());
+                        driver.setDriverName(ownDriverDto.getDriverName());
+                        driver.setDriverPhone(phone);
+                        driver.setCreateId(ownDriverDto.getCreateId());
+                        driver.setCreateName(ownDriverDto.getCreateName());
+                        driverService.addDriver(driver);    //保存司机信息
+                    }
                 }
+
             }
         }
         return 1;
@@ -225,5 +240,16 @@ public class OwnDriverServiceImpl implements OwnDriverService {
             throw new RuntimeException("添加分组信息失败");
         }
         return result;
+    }
+
+    @Override
+    public boolean isExistDriver(String driverPhone, Long companyId) {
+        OwnDriver ownDriver = new OwnDriver();
+        ownDriver.setDriverPhone(driverPhone);
+        ownDriver.setCompanyId(companyId);
+        if(ownDriverMapper.selectDriverPhone(ownDriver)==0){
+            return false;
+        }
+        return true;
     }
 }

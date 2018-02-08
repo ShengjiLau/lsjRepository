@@ -12,6 +12,13 @@ public interface DriverMapper {
 
     List<Driver> selectAll();
 
+    /**
+     * 根据手机号查询是否包含司机信息
+     * @param driverPhone
+     * @return
+     */
+    Driver selectByDriverPhone(String driverPhone);
+
     int updateByPrimaryKey(Driver record);
 
     /**

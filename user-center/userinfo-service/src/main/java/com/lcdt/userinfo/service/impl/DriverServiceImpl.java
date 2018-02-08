@@ -39,4 +39,12 @@ public class DriverServiceImpl implements DriverService {
     public int updateLocation(Driver driver) {
         return driverMapper.updateLocation(driver);
     }
+
+    @Override
+    public boolean isExistDriver(String driverPhone) {
+        if(null==driverMapper.selectByDriverPhone(driverPhone)){
+            return false;
+        }
+        return true;
+    }
 }
