@@ -21,7 +21,7 @@ public class LoginLogServiceImpl implements LoginLogService{
 
     @Override
     public LoginLog userLastLogin(Long userId, Long companyId) {
-        List<LoginLogDto> loginLogDtos = loginLogMapper.selectByCompanyId(companyId, null, userId);
+        List<LoginLogDto> loginLogDtos = loginLogMapper.selectByCompanyId(companyId, null, userId,null,null);
         if (CollectionUtils.isEmpty(loginLogDtos)) {
             return null;
         }else{
