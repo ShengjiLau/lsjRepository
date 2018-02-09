@@ -41,6 +41,14 @@ public class CompanyBalanceServiceImpl implements CompanyBalanceService{
 
 
         PayBalance payBalance = mapper.selectByCompanyId(companyId);
+
+        if (payBalance == null) {
+            payBalance = new PayBalance();
+            payBalance.setBalanceCompanyId(companyId);
+
+            mapper.insert(payBalance);
+        }
+
         Integer balance = payBalance.getBalance();
         payBalance.setBalance(balance + amount);
 
