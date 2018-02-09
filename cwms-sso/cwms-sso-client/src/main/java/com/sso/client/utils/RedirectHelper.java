@@ -1,10 +1,12 @@
 package com.sso.client.utils;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -54,9 +56,28 @@ public final class RedirectHelper {
 		return url;
 	}
 
-	public static void redirectToLoginUrlWithAuthBack(HttpServletRequest request, HttpServletResponse response) {
+	public static void redirectToLoginUrlWithAuthBack(HttpServletRequest request, HttpServletResponse response)  {
 
 		if (!response.isCommitted()) {
+			if (isAjaxRequest(request)) {
+				response.setContentType("application/json; charset=UTF-8");
+				PrintWriter writer = null;
+				try {
+					writer = response.getWriter();
+				} catch (IOException e) {
+					e.printStackTrace();
+					return;
+				}
+
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("code", "302");
+				jsonObject.put("message", "请先登录");
+				jsonObject.put("redirecturl", assembleLoginUrlWithAuthBack(request));
+				writer.write(jsonObject.toString());
+				writer.flush();
+				return;
+			}
+
 			try {
 				String redirectUrl = assembleLoginUrlWithAuthBack(request);
 				if (StringUtils.isEmpty(redirectUrl)) {
@@ -73,6 +94,13 @@ public final class RedirectHelper {
 		}
 
 	}
-
+	public static boolean isAjaxRequest(HttpServletRequest request) {
+		String xmlhttpHeader = request.getHeader("X-Requested-With");
+		if ("XMLHttpRequest".equals(xmlhttpHeader)){
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }

@@ -127,6 +127,9 @@ public class EmployeeServiceImpl {
 		Long userCompRelId = dto.getUserCompRelId();
 		UserCompRel userCompRel = userCompanyDao.selectByPrimaryKey(userCompRelId);
 		User user = userCompRel.getUser();
+		if (!StringUtils.isEmpty(dto.getPassword())) {
+			dto.setPassword(user.getPwd());
+		}
 		BeanUtils.copyProperties(dto, user);
 		userService.updateUser(user);
 		//更新用户部门信息

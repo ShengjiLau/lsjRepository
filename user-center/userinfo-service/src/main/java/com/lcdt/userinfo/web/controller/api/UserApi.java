@@ -54,6 +54,24 @@ public class UserApi {
 	@Reference
 	NotifyService notifyService;
 
+	@ApiOperation("手机号是否已注册")
+	@RequestMapping(value = "/isPhoneRegister",method = RequestMethod.POST)
+	public String isPhoneRegister(String phone) {
+
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("code", 0);
+		try {
+			User user = userService.queryByPhone(phone);
+			user.setPwd("");
+			jsonObject.put("data", user);
+		} catch (UserNotExistException e) {
+			e.printStackTrace();
+			jsonObject.put("data", false);
+		}
+		return jsonObject.toString();
+	}
+
+
 	@ApiOperation("获取用户信息")
 	@RequestMapping(value = "/get", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('getUserInfo')")

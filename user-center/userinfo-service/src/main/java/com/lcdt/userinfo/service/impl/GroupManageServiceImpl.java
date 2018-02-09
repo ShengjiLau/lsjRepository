@@ -138,14 +138,18 @@ public class GroupManageServiceImpl implements GroupManageService {
 
 		//新增用户组
 
-		List<Group> relations = relationDao.selectByUserCompany(userId, companyId);
-		ArrayList<Long> ids = new ArrayList<>();
-		for (Group relation : relations) {
-			ids.add(relation.getGroupId());
+		if (groups != null) {
+			List<Group> relations = relationDao.selectByUserCompany(userId, companyId);
+			ArrayList<Long> ids = new ArrayList<>();
+			for (Group relation : relations) {
+				ids.add(relation.getGroupId());
+			}
+			groups.removeAll(ids);
+			relationDao.insertGroups(userId,companyId,groups);
 		}
-		groups.removeAll(ids);
 
-		relationDao.insertGroups(userId,companyId,groups);
+
+
 	}
 
 	@Override

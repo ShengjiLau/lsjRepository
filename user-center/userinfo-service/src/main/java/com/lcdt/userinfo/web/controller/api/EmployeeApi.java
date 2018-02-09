@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class EmployeeApi {
 	@ApiOperation("添加员工接口")
 	@RequestMapping(value = "/addemployee", method = RequestMethod.POST)
 	@PreAuthorize("hasAnyAuthority('employee_add') or hasRole('ROLE_SYS_ADMIN')")
-	public String addEmployeeAccount(@Validated CreateEmployeeAccountDto dto, HttpServletRequest request) {
+	public String addEmployeeAccount(CreateEmployeeAccountDto dto, HttpServletRequest request) {
 		String groups = request.getParameter("jsonGroups");
 		String roles = request.getParameter("jsonRoles");
 		List<Long> jsonGroups = JSONArray.parseArray(groups, Long.class);
@@ -87,7 +88,7 @@ public class EmployeeApi {
 	@ApiOperation("更新员工接口")
 	@RequestMapping(value = "/updateemployee",method = RequestMethod.POST)
 	@PreAuthorize("hasAnyAuthority('employee_edit') or hasRole('ROLE_SYS_ADMIN')")
-	public UserCompRel updateEmployee(UpdateEmployeeAccountDto dto) {
+	public UserCompRel updateEmployee(@Valid UpdateEmployeeAccountDto dto) {
 		UserCompRel userCompRel = employeeService.updateEmployee(dto);
 		return userCompRel;
 	}
