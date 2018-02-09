@@ -299,6 +299,11 @@ public class AuthController {
             throw new LoginError("用户不属于该公司");
         }
 
+        if (companyMember.getIsEnable() != null && companyMember.getIsEnable() == false) {
+            throw new LoginError("用户已被禁用");
+        }
+
+
         ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
         LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
 

@@ -50,11 +50,12 @@ public class CompanyBalanceServiceImpl implements CompanyBalanceService{
         }
 
         Integer balance = payBalance.getBalance();
+        if (balance == null) {
+            balance = 0;
+        }
         payBalance.setBalance(balance + amount);
 
         logger.info("账户充值 companyId {} 金额{}分 当前余额",companyId,amount,balance);
-
-
         mapper.updateByPrimaryKey(payBalance);
 
         BalanceLog balanceLog = new BalanceLog();

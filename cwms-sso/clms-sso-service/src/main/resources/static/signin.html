@@ -54,17 +54,31 @@
         $().ready(function() {
             $("#signin-form").validate({
                 rules:{     //配置验证规则，key就是被验证的dom对象，value就是调用验证的方法(也是json格式)
-                    username:{
+                    phoneNum:{
                         required:true,  //必填。如果验证方法不需要参数，则配置为true
-                        rangelength:[6,12]
+                        rangelength:[6,12],
                     },
                     password:{
                         required:true,
-                        rangelength:[6,12]
+                        rangelength:[6,12],
                     },
-                    captchacode:{
+                    captcha:{
                         required:true,
-                        rangelength:[1,4],
+                        rangelength:[3,5],
+                    }
+                },
+                messages: {
+                    phoneNum: {
+                        required: "请输入手机号",
+                        rangelength: "请输入正确手机号",
+                    },
+                    password:{
+                        required: "请输入密码",
+                        rangelength: "请输入正确密码",
+                    },
+                    captcha:{
+                        required: "请输入验证码",
+                        rangelength: "请输入4位验证码",
                     }
                 }
             });

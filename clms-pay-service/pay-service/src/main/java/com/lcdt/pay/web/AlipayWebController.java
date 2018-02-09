@@ -102,8 +102,8 @@ public class AlipayWebController {
         alipayTradeOrder.setTradeNo(serverOrder.getOrderNo());
         alipayTradeOrder.setTotalAmount(MoneyNumUtil.integerMoneyToString(serverOrder.getOrderAmount()));
         alipayTradeOrder.setProductCode("FAST_INSTANT_TRADE_PAY");
-        alipayTradeOrder.setSubject("clms充值");
-        alipayTradeOrder.setBody("clms充值");
+        alipayTradeOrder.setSubject("大驼队clms账户充值");
+        alipayTradeOrder.setBody("大驼队clms账户充值");
         alipayRequest.setBizContent(JSONObject.toJSONString(alipayTradeOrder));//填充业务参数
         alipayRequest.setReturnUrl(AlipayContants.getReturnUrl());
         alipayRequest.setNotifyUrl(AlipayContants.getNotifyUrl());//在公共参数中设置回跳和通知地址
