@@ -169,8 +169,10 @@ public class UserRoleServiceImpl implements UserRoleService {
 		for (RoleUserRelation relation : relations) {
 			ids.add(relation.getRoleId());
 		}
-		roleIds.removeAll(ids);
-		roleUserRelationDao.insertRoles(roleIds);
+		if (roleIds != null) {
+			roleIds.removeAll(ids);
+			roleUserRelationDao.insertRoles(roleIds,userId,companyId);
+		}
 	}
 
 	@Transactional(rollbackFor = Exception.class)

@@ -185,12 +185,12 @@
         and driver_name like concat('%',#{driverName,jdbcType=VARCHAR},'%')
       </if>
       <if test="driverPhone!=null and driverPhone!=''">
-        and driver_phone like concat('%'#{driverPhone,jdbcType=VARCHAR},'%')
+        and driver_phone like concat('%',#{driverPhone,jdbcType=VARCHAR},'%')
       </if>
       <if test="driverCategory==0 or driverCategory==1">
         and driver_category = #{driverCategory,jdbcType=VARCHAR}
       </if>
-      <if test="driverGroupId!=null and driverGroupId==''">
+      <if test="driverGroupId!=null and driverGroupId!=''">
         and own_driver_id in(select own_driver_id from t_driver_group_relationship where driver_group_id=#{driverGroupId,jdbcType=VARCHAR})
       </if>
       group by own_driver_id desc

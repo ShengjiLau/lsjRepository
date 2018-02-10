@@ -28,7 +28,7 @@ public class UnifiedorderBean implements Serializable{
 
 
 	public static UnifiedorderBean defaultOrderBean(String orderId,Integer total_fee,String ip){
-		UnifiedorderBean unifiedorderBean = new UnifiedorderBean("web", "clms充值订单", orderId, total_fee, ip, "NATIVE");
+		UnifiedorderBean unifiedorderBean = new UnifiedorderBean("web", "大驼队clms账户充值", orderId, total_fee, ip, "NATIVE");
 		try {
 			String sign = Signature.getSign(unifiedorderBean);
 			unifiedorderBean.setSign(sign);

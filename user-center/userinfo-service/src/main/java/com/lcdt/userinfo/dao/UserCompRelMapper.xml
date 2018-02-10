@@ -126,10 +126,10 @@
     and comp.comp_id = r.company_id
       left join t_uc_user_group g on comp.user_id = g.user_id
       and comp.comp_id = g.company_id
-    <where>
+      WHERE is_create = 0
 
       <if test="companyId != null">
-        comp.comp_id = #{companyId}
+        and comp.comp_id = #{companyId}
       </if>
       <if test="realName != null and '' != realName ">
           and (u.real_name like
@@ -147,7 +147,6 @@
       <if test="departId != null and '' != departId ">
         and find_in_set(#{departId},dept_ids)
       </if>
-    </where>
   </select>
 
   <select id="selectByUserIdCompanyId" resultMap="BaseResultMap">

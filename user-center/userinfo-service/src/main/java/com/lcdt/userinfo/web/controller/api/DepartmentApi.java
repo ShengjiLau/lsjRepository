@@ -50,11 +50,10 @@ public class DepartmentApi {
         department.setCompanyId(companyId);
         department.setDeptName(dto.getDeptName());
         department.setDeptPid(dto.getDeptPid());
-
         department.setCreateId(loginUser.getUserId());
         department.setCreateName(loginUser.getRealName());
         department.setCreatDate(new Date());
-
+        department.setIsDefault((short)0);
         Map map = new HashMap();
         map.put("companyId",companyId);
         department.setDeptOrder(departmentService.getMaxIndex(map));
@@ -86,8 +85,8 @@ public class DepartmentApi {
         if (department1 == null) {
             throw new DeptmentExistException("部门不存在");
         }
-        long index1 = department.getDeptOrder();
-        long index2 = department1.getDeptOrder();
+        long index1 = department.getDeptOrder()==null? 0: department.getDeptOrder();
+        long index2 = department1.getDeptOrder()==null? 1: department1.getDeptOrder();
         department.setDeptOrder(index2);
         departmentService.getIdsNames(department);
         department1.setDeptOrder(index1);

@@ -224,7 +224,7 @@ public class WarehouseApi {
     }
 
     @ApiOperation("库位管理——新增")
-    @RequestMapping(value = "/addWarehouseLoc", method = RequestMethod.POST)
+    @RequestMapping(value = "/loc/addWarehouseLoc", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_warehouse_loc')")
     public JSONObject addWarehouseLoc(@Validated WarehouseLoc dto) {
         int result = warehouseService.addWarehouseLoc(dto);
@@ -239,7 +239,7 @@ public class WarehouseApi {
     }
 
     @ApiOperation("库位管理——修改")
-    @RequestMapping(value = "/modifyWarehouseLoc", method = RequestMethod.POST)
+    @RequestMapping(value = "/loc/modifyWarehouseLoc", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_loc')")
     public JSONObject modifyWarehouseLoc(@Validated WarehouseLoc dto) {
         int result = warehouseService.modifyWarehouseLoc(dto);
@@ -254,7 +254,7 @@ public class WarehouseApi {
     }
 
     @ApiOperation("库位管理——删除")
-    @RequestMapping(value = "/deleteWarehouseLoc", method = RequestMethod.POST)
+    @RequestMapping(value = "/loc/deleteWarehouseLoc", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delete_warehouse_loc')")
     public JSONObject deleteWarehouseLoc(@ApiParam(value = "库位ID",required = true) @RequestParam Long whLocId) {
         int result = warehouseService.deleteWarehouseLocByPrimaryKey(whLocId);
@@ -269,7 +269,7 @@ public class WarehouseApi {
     }
 
     @ApiOperation("库位管理——启用/禁用")
-    @RequestMapping(value = "/modifyWarehouseLocStatus", method = RequestMethod.POST)
+    @RequestMapping(value = "/loc/modifyWarehouseLocStatus", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_loc_status')")
     public JSONObject modifyWarehouseLocStatus(@ApiParam(value = "库位ID",required = true) @RequestParam Long whLocId) {
         int result = warehouseService.modifyWarehouseLocStatus(whLocId);

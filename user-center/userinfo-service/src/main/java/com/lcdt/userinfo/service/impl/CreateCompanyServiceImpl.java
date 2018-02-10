@@ -19,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ss on 2017/10/24.
@@ -135,6 +137,12 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		department.setCreatDate(new Date());
 		department.setIsDefault((short)1);
 		departmentService.createDepartment(department);
+
+		Map map = new HashMap();
+		map.put("companyId",company.getCompId());
+		department.setDeptOrder(departmentService.getMaxIndex(map));
+
+
 		return department;
 	}
 

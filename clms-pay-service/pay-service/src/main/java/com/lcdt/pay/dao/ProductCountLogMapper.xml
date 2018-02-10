@@ -75,7 +75,7 @@
     <if test="logType != null">
       and log_type = #{logType,jdbcType=INTEGER}
     </if>
-
+    order by log_time desc
   </select>
 
 
