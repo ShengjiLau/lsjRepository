@@ -89,10 +89,10 @@
   </delete>
 
   <insert id="insertRoles">
-    INSERT INTO role_user_permission
+    INSERT INTO role_user_relation
     (role_id, user_id,company_id)
     values
-    <foreach collection="insertRoles" item="item"
+    <foreach collection="roles" item="item"
               separator="," close=";">
       (#{item,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT})
     </foreach>

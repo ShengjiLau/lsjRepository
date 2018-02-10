@@ -88,7 +88,13 @@ public class EmployeeApi {
 	@ApiOperation("更新员工接口")
 	@RequestMapping(value = "/updateemployee",method = RequestMethod.POST)
 	@PreAuthorize("hasAnyAuthority('employee_edit') or hasRole('ROLE_SYS_ADMIN')")
-	public UserCompRel updateEmployee( UpdateEmployeeAccountDto dto) {
+	public UserCompRel updateEmployee( HttpServletRequest request,UpdateEmployeeAccountDto dto) {
+		String groups = request.getParameter("jsonGroups");
+		String roles = request.getParameter("jsonRoles");
+		List<Long> jsonGroups = JSONArray.parseArray(groups, Long.class);
+		List<Long> jsonRoles = JSONArray.parseArray(roles, Long.class);
+		dto.setGroups(jsonGroups);
+		dto.setRoles(jsonRoles);
 		UserCompRel userCompRel = employeeService.updateEmployee(dto);
 		return userCompRel;
 	}
