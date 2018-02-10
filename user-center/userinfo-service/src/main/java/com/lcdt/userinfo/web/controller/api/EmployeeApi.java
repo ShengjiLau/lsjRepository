@@ -88,7 +88,7 @@ public class EmployeeApi {
 	@ApiOperation("更新员工接口")
 	@RequestMapping(value = "/updateemployee",method = RequestMethod.POST)
 	@PreAuthorize("hasAnyAuthority('employee_edit') or hasRole('ROLE_SYS_ADMIN')")
-	public UserCompRel updateEmployee(@Valid UpdateEmployeeAccountDto dto) {
+	public UserCompRel updateEmployee( UpdateEmployeeAccountDto dto) {
 		UserCompRel userCompRel = employeeService.updateEmployee(dto);
 		return userCompRel;
 	}
