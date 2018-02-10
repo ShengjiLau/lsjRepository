@@ -103,7 +103,7 @@
     (group_id, user_id,company_id)
     values
     <foreach collection="groups" item="item" index="index"
-             separator="," >
+             separator="," close=";">
       (#{item,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT})
     </foreach>
   </insert>
