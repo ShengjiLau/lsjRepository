@@ -102,7 +102,7 @@
     INSERT INTO t_uc_user_group
     (group_id, user_id,company_id)
     values
-    <foreach collection="insertGroups" item="item"
+    <foreach collection="groups" item="item" index="index"
              separator="," close=";">
       (#{item,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT})
     </foreach>

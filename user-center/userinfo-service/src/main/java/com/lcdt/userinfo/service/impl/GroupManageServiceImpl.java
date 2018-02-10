@@ -135,9 +135,7 @@ public class GroupManageServiceImpl implements GroupManageService {
 		//更新group
 		//删除被取消的用户组
 		relationDao.deleteNotInGroups(userId,companyId,groups);
-
 		//新增用户组
-
 		if (groups != null) {
 			List<Group> relations = relationDao.selectByUserCompany(userId, companyId);
 			ArrayList<Long> ids = new ArrayList<>();
@@ -147,8 +145,6 @@ public class GroupManageServiceImpl implements GroupManageService {
 			groups.removeAll(ids);
 			relationDao.insertGroups(userId,companyId,groups);
 		}
-
-
 
 	}
 

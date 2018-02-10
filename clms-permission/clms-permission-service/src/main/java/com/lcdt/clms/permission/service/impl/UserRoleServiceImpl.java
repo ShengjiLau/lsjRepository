@@ -171,7 +171,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 		}
 		if (roleIds != null) {
 			roleIds.removeAll(ids);
-			roleUserRelationDao.insertRoles(roleIds);
+			roleUserRelationDao.insertRoles(roleIds,userId,companyId);
 		}
 	}
 
