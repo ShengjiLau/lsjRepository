@@ -255,6 +255,7 @@ public class GroupManageServiceImpl implements GroupManageService {
 	public int groupCustomerdelete(Map map) {
 		Long companyId = Long.valueOf(map.get("companyId").toString());
 		Long customerId = Long.valueOf(map.get("customerId").toString());
+
 		String groupId = map.get("groupId").toString();
 		String groupName = map.get("groupName").toString();
 		Customer customer =  customerMapper.selectByPrimaryKey(customerId,companyId);

@@ -91,11 +91,14 @@ public class CustomerBindApi {
 
 		CustomerInviteLog customerInviteLog = inviteLogService.selectByInviteId(inviteId);
 		customerInviteLog.setIsValid(0);
-
-		inviteLogMapper.updateByPrimaryKey(customerInviteLog);
-
 		Long inviteCompanyId = customerInviteLog.getInviteCompanyId();
 
+		if (companyId.equals(inviteCompanyId)) {
+			throw new RuntimeException("不能邀请当前登录公司加入！");
+		}
+
+
+		inviteLogMapper.updateByPrimaryKey(customerInviteLog);
 		//绑定被邀请的客户id
 		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
 		if (customer.getBindCpid() != null) {
@@ -118,6 +121,9 @@ public class CustomerBindApi {
 
 		ModelAndView successView = new ModelAndView("invite_success");
 		successView.addObject("username", user.getRealName());
+		String s = inviteCustomerService.clientTypeToString(customer.getClientTypes());
+		String successTipStr = "贵公司已成为【"+company.getFullName()+"】的" + s;
+		successView.addObject("successtip", successTipStr);
 		return successView;
 	}
 

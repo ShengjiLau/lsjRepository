@@ -37,6 +37,12 @@ public final class RedirectHelper {
 
 	public static String assembleLoginUrlWithAuthBack(HttpServletRequest request){
 		String callback = request.getRequestURL().toString();
+		String queryurl = request.getQueryString();
+		if(null != queryurl){
+			callback += "?" + queryurl;
+		}
+
+
 		String url = PropertyUtils.readProperties(PropertyUtils.LOGIN_URL);
 		if (StringUtils.isEmpty(url)) {
 			return "";
@@ -44,7 +50,6 @@ public final class RedirectHelper {
 		if (!url.startsWith("http")) {
 			url = "http://" + url;
 		}
-
 
 		String encode = "";
 		try {
