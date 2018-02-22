@@ -255,7 +255,6 @@ public class AuthController {
             }
         }
         jsonObject.put("code", 0);
-
         String redirectUrl = RequestAuthRedirectStrategy.getAuthCallback(request);
         jsonObject.put("redirecturl", redirectUrl);
         jsonObject.put("message", "创建成功");
