@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>注册 | 大驼队cLMS协同物流管理系统</title>
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/iconfont.css">
+    <link rel="stylesheet" href="/css/signup.min.css">
+    <style media="screen">
+        .animatedtd {
+            -webkit-animation-duration: 0.3s;
+            animation-duration: 0.3s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+        }
+        .has-error .form-control:focus,.has-error .form-control{
+            border-color: #ff5459;
+        }
+        .has-error .checkbox, .has-error .checkbox-inline, .has-error .control-label, .has-error .help-block, .has-error .radio, .has-error .radio-inline, .has-error.checkbox label, .has-error.checkbox-inline label, .has-error.radio label, .has-error.radio-inline label{
+            color:  #ff5459;
+        }
+        ::-webkit-input-placeholder { /* WebKit browsers */
+            color:#d7d7d7 !important;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color:#d7d7d7 !important;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color:#d7d7d7 !important;
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10+ */
+            color:#d7d7d7 !important;
+        }
+        .choose-block{
+            height: 220px;
+        }
+
+    </style>
+</head>
+
+<body>
+<header class="navbar navbar-static-top bs-docs-nav" id="top">
+    <div class="container">
+
+        <nav id="bs-navbar" class="collapse navbar-collapse">
+            <div class="navbar-header">
+                <!-- <a href="#" class="navbar-brand">大驼队·用户注册</a> -->
+                <p><img src="../img/logo_top.png" alt=""> <span>·</span><span id="user-type">用户注册</span></p>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <p>我已注册，现在<a href="/account" target="_blank">登录</a></p>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <div class="form-panel panel-default  animatedtd fadeInRight" role="form" id='form-block'>
+        <div class="panel-body">
+            <form class="form-horizontal signup-form" id='signup-form'  data-toggle="validator">
+                <div class="form-group">
+                    <label for="name" class="col-sm-3 control-label">姓名：</label>
+                    <div class="col-sm-6">
+                        <input class="form-control input-lg" id="name" name = "name" placeholder="请输入1-20位姓名" required pattern="\S{1,20}" data-error="请输入1-20位姓名">
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="phone-num" class="col-sm-3 control-label">手机号：</label>
+                    <div class="col-sm-6">
+                        <input class="form-control input-lg" id="phone-num" name = "userPhoneNum" placeholder="请输入11位手机号" pattern="[0-9]{11}" title="请输入11正确手机号" required>
+                        <div class="help-block with-errors"></div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">验证码：</label>
+                    <div class="col-sm-3 btn-helf">
+                        <input id="code-input" class="form-control input-lg" name = "ecode" placeholder="请输入验证码" required>
+                        <div class="help-block with-errors"></div>
+
+                    </div>
+                    <div class="col-sm-3">
+                        <a class="btn get-code-btn btn-default" id="get-codes-btn"><span>获取验证码</span></a>
+                    </div>
+<!--                    <div class="col-sm-9 col-sm-push-3 help-block">若短信验证码获取失败，请获取<a class="voice-btn" data-toggle="modal" data-target="#voice-modal">
+                        语音验证码。</a></div>-->
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword" name = "inputPassword" class="col-sm-3 control-label">密码：</label>
+                    <div class="col-sm-6">
+                        <input type="password" class="form-control input-lg" id="inputPassword" data-error="密码最小六位" data-minlength="6" placeholder="请输入密码" name="password" required>
+                        <div class="help-block with-errors"></div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">确认密码：</label>
+                    <div class="col-sm-6">
+                        <input type="password" class="form-control input-lg" id="inputPasswordConfirm"  data-error="两次输入不一致" data-match="#inputPassword" placeholder="请再次输入密码"  name="password1" required>
+                        <div class="help-block with-errors"></div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-3 control-label">推荐人电话：</label>
+                    <div class="col-sm-6">
+                        <input class="form-control input-lg" id="introducer_id" placeholder="请输入推荐人手机号" name="introducer">
+                        <div class="help-block with-errors"></div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        <button data-loading-text="发送中..." id="sub-btn" class="btn sub-btn btn-default"  type="submit">注册</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal signup-modal fade" id="voice-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <form class="form-horizontal signup-form " data-toggle="validator" id='voice-code-form'>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">验证码：</label>
+                        <div class="col-sm-4 btn-helf">
+                            <input id="code-input" class="form-control input-lg" pattern ="\S{4,6}" data-error="请输入至少4位随机码" required><div class="help-block with-errors"></div>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="vc-img-btn"><img alt="./public/vc.png" src="/auth/getcaptcha"  id="a_img_code"/></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-group">
+                        <button  class="btn sub-btn btn-primary" data-loading-text="发送中...">确定</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- /.modal -->
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+<script type="text/javascript">
+    $("#voice-code-form").submit(function () {
+        $("#voice-code-form .sub-btn").button('loading');
+        setTimeout(function() {
+                $("#voice-code-form sub-btn").button('reset')
+                lc="success"
+                $('#voice-modal').modal('hide');
+            }
+            ,1000)
+        return false;
+    });
+    /**
+     * 注册提交
+     */
+    $("#signup-form").submit(function (event) {
+        var form = document.getElementById("signup-form");
+        var fd = new FormData(form);
+        event.preventDefault();
+
+        $.ajax({
+            url : '/auth/register/save',
+            type : 'POST',
+            data : fd,
+            async : false,
+            cache : false,
+            contentType : false,// 告诉jQuery不要去设置Content-Type请求头
+            processData : false,// 告诉jQuery不要去处理发送的数据
+            success : function(data) {
+                if (!data.flag) {
+                    alert(data.msg);
+                } else {
+                    window.location.href="../auth/register/regSuccess";
+                }
+                console.log(data);
+            },
+            error : function(data) {
+                console.log(data);
+            }
+        });
+    });
+
+    /**
+     * 获取短信验证码
+     */
+    $('#get-codes-btn').click(function () {
+        if ($("#phone-num").val().length == 11) {
+            var form = document.getElementById("signup-form");
+            var fd = new FormData(form);
+            $.ajax({
+                url : '/auth/register/vSmsCode',
+                type : 'POST',
+                data : fd,
+                async : false,
+                cache : false,
+                contentType : false,// 告诉jQuery不要去设置Content-Type请求头
+                processData : false,// 告诉jQuery不要去处理发送的数据
+                success : function(data) {
+                    console.log(data);
+                    if (!data.flag && data.msg!="") {
+                        alert(data.msg);
+                    } else {
+                        settime($(this));
+                    }
+                },
+                error : function(data) {
+                    console.log(data);
+                }
+            });
+        }else {
+            alert("请填写正确手机号");
+        }
+    });
+
+    var count=60;
+    function settime(obj) {
+        if (count == 0) {
+            obj.removeClass("disabled");
+            obj.html("<span class=''>重新获取验证码</span>");
+            count = 60;
+            return;
+        } else {
+            obj.addClass('disabled')
+            obj.html("<span class=''>重新发送(" + count + ")</span>");
+            count--;
+        }
+        setTimeout(function() { settime($('#get-codes-btn')) } ,1000)
+    }
+
+    $("#a_img_code").click(function() {
+        $("#img_code").attr("src", "/auth/getcaptcha?dt=" + new Date().getSeconds());
+    })
+
+</script>
+</body>
+
+</html>
