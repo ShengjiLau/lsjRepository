@@ -132,8 +132,8 @@
     update_date = CURRENT_TIMESTAMP
     where own_driver_id = #{ownDriverId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
-  <select id="selectOvcIdByOwnDriverId" parameterType="java.lang.Long" resultType="java.lang.Long">
-    select ovc_id
+  <select id="selectOdcIdByOwnDriverId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select odc_id
     from t_own_driver_certificate where own_driver_id = #{ownDriverId,jdbcType=BIGINT}
   </select>
   <update id="deleteByBatch" parameterType="Map">
