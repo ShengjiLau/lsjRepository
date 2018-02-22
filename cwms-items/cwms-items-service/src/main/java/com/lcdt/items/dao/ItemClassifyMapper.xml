@@ -120,4 +120,18 @@
     FROM t_item_classify
     WHERE FIND_IN_SET(classify_id,SELECT_PARENT_CLASSIFYID(#{classifyId,jdbcType=BIGINT})) order by classify_id
   </select>
+  
+  <select id="selectIsExistClassify" parameterType="com.lcdt.items.model.ItemClassify" resultMap="BaseResultMap">
+    SELECT classify_id,pid,classify_name,company_id, is_default
+    FROM t_item_classify
+    <where>
+      company_id = #{companyId,jdbcType=BIGINT} and classify_name = #{classifyName,jdbcType=VARCHAR}
+      <if test="pid!=null and pid!=''">
+        and pid = #{pid,jdbcType=BIGINT}
+      </if>
+      <if test="isDefault!=null and isDefault!=''">
+        and is_default = #{isDefault,jdbcType=BIT}
+      </if>
+    </where>
+  </select>
 </mapper>

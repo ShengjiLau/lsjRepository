@@ -124,4 +124,11 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
         return page;
     }
 
+    @Override
+    public List<ItemClassify> queryIsExistClassify(ItemClassify itemClassify) {
+        List<ItemClassify> itemClassifyList=null;
+        itemClassifyList=itemClassifyMapper.selectIsExistClassify(itemClassify);
+        return itemClassifyList;
+    }
+
 }
