@@ -11,9 +11,7 @@
             <props>
                 <prop key="AccessKey">TRPDkg1YPDjejxKE</prop> <!-- 使用前请修改这些资源信息 -->
                 <prop key="SecretKey">FmAlJ9eob6QLuY1GY1AvoHCLYZWvyS</prop>
-                <prop key="ConsumerId">CID_notify_demo</prop>
-                <prop key="ProducerId">PID_producer_demo</prop>
-                <prop key="Topic">topic_demo</prop>
+                <prop key="Topic">clms_user</prop>
             </props>
         </property>
     </bean>

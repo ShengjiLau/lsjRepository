@@ -11,6 +11,8 @@ import com.lcdt.notify.model.JsonParserPropertyEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -20,8 +22,9 @@ import static com.aliyun.openservices.ons.api.Action.CommitMessage;
 /**
  * Created by lyqishan on 2018/2/6
  */
-
+@Component
 public class ItemsInfoInitializationListener implements MessageListener {
+
     Executor executor = Executors.newFixedThreadPool(4);
     private Logger logger = LoggerFactory.getLogger(ItemsInfoInitializationListener.class);
     @Autowired
@@ -49,6 +52,7 @@ public class ItemsInfoInitializationListener implements MessageListener {
                 itemsInfoInitializationService.itemInfoInitialization(event.getSender().getCompanyId(),event.getEventName(),event.getSender().getUserId());
             }
         });
+
         return CommitMessage;
     }
 

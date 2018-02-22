@@ -109,18 +109,15 @@ public class CompanyApi {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		Company company = companyService.selectById(companyId);
 		company.setShortName(modifyCompanyInfoDto.getShortName());
-		if (!StringUtils.isEmpty(modifyCompanyInfoDto.getFullName())) {
-
+		if (!StringUtils.isEmpty(modifyCompanyInfoDto.getFullName()) &&
+				!modifyCompanyInfoDto.getFullName().equals(company.getFullName()) ) {
 			CompanyDto companyDto = new CompanyDto();
 			companyDto.setCompanyName(modifyCompanyInfoDto.getFullName());
-
 			Company company1 = companyService.findCompany(companyDto);
 			if (company1 != null) {
 				throw new CompanyNameExistException();
 			}
-
 		}
-
 		company.setFullName(modifyCompanyInfoDto.getFullName());
 		company.setIndustry(modifyCompanyInfoDto.getIndustry());
 		company.setProvince(modifyCompanyInfoDto.getProvince());
@@ -147,7 +144,6 @@ public class CompanyApi {
 		if (!StringUtils.isEmpty(modifyCompanyInfoDto.getTelNo())) {
 			company.setTelNo(modifyCompanyInfoDto.getTelNo());
 		}
-
 
 		if (!StringUtils.isEmpty(modifyCompanyInfoDto.getTelNo1())) {
 			company.setTelNo(modifyCompanyInfoDto.getTelNo1());

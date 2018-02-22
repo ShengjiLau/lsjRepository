@@ -5,12 +5,11 @@
 
     <import resource="common.xml"/>
     <bean id="msgListener" class="com.lcdt.items.notify.mqlistener.ItemsInfoInitializationListener"/> <!--Listener配置-->
-
     <bean id="consumer" class="com.aliyun.openservices.ons.api.bean.ConsumerBean" init-method="start"
           destroy-method="shutdown">
         <property name="properties"> <!--消费者配置信息-->
             <props>
-                <prop key="ConsumerId">CID_notify_demo</prop> <!--请替换为自己的账户信息-->
+                <prop key="ConsumerId">CID_ITEMS</prop> <!--请替换为自己的账户信息-->
                 <prop key="AccessKey">TRPDkg1YPDjejxKE</prop>
                 <prop key="SecretKey">FmAlJ9eob6QLuY1GY1AvoHCLYZWvyS</prop>
                 <!--将消费者线程数固定为50个
