@@ -65,7 +65,6 @@ public class EmployeeServiceImpl {
 		}
 		//创建公司关联
 		Long companyId = SecurityInfoGetter.getCompanyId();
-
 		//是否已加入公司
 		boolean userInCompany = isUserInCompany(user.getUserId(), companyId);
 		if (userInCompany) {
