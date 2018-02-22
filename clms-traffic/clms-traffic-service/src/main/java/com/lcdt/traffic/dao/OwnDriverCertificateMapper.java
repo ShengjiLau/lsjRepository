@@ -40,7 +40,7 @@ public interface OwnDriverCertificateMapper {
      * @param OwnDriverId
      * @return
      */
-    List<Long> selectOvcIdByOwnDriverId(Long OwnDriverId);
+    List<Long> selectOdcIdByOwnDriverId(Long OwnDriverId);
 
     /**
      * 根据主键批量删除
