@@ -155,6 +155,10 @@ public class EmployeeServiceImpl {
 	@Transactional(rollbackFor = Exception.class)
 	public UserCompRel toggleEnableEmployee(ToggleEmployeeEnableDto dto){
 		UserCompRel userCompRel = userCompanyDao.selectByPrimaryKey(dto.getUserCompRelId());
+		if (userCompRel.getIsCreate() == 1) {
+			throw new RuntimeException("管理员无法禁用");
+		}
+
 		userCompRel.setEnable(dto.getEnable());
 		userCompanyDao.updateByPrimaryKey(userCompRel);
 		return userCompRel;
