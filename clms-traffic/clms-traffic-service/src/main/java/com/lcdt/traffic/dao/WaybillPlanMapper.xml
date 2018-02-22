@@ -608,6 +608,10 @@
     <where>
       and plan_status = '15' and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.company_id = p1.company_id)
       and  is_deleted = 0
+      <if test="companyId!=null">
+        and carrier_company_id= #{companyId,jdbcType=BIGINT}
+      </if>
+
       <if test="serialCode!=null and serialCode!=''">
         and serial_code like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
       </if>
