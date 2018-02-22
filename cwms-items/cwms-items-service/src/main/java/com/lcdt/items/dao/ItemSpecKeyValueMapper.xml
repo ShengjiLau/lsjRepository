@@ -70,7 +70,7 @@
     from t_item_spec_key_value
   </select>
 
-  <insert id="insertForBatch" parameterType="java.util.List"  useGeneratedKeys="true" keyProperty="spkv_id">
+  <insert id="insertForBatch" parameterType="java.util.List"  useGeneratedKeys="true" keyProperty="spkvId">
     insert into t_item_spec_key_value (spk_id,sp_name,spv_id,sp_value, sub_item_id, company_id,create_id,create_name,create_date) values
     <foreach collection="list" item="item" separator=",">
       (#{item.spkId,jdbcType=BIGINT}, #{item.spName,jdbcType=VARCHAR}, #{item.spvId,jdbcType=BIGINT},
