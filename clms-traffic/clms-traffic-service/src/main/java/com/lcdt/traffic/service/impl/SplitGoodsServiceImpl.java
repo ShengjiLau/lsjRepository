@@ -127,32 +127,31 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
             List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
             for (PlanDetail planDetail : planDetailList) {
-                 if (planDetail.getSplitGoodsDetailObj()!=null) { //说明要分配
-                     if (planDetail.isAllot()) { //允许分配
-                         //更新计划数
-                         planDetail.setRemainderAmount(planDetail.getRemainderAmount() - planDetail.getAllotAmountTotal());
-                         planDetail.setUpdateId(user.getUserId());
-                         planDetail.setUpdateTime(opDate);
-                         planDetail.setUpdateName(user.getRealName());
-                         planDetailMapper.updateByPrimaryKey(planDetail);
+                 if (planDetail.isAllot()) { //允许分配
+                     //更新计划数
+                     planDetail.setRemainderAmount(planDetail.getRemainderAmount() - planDetail.getAllotAmountTotal());
+                     planDetail.setUpdateId(user.getUserId());
+                     planDetail.setUpdateTime(opDate);
+                     planDetail.setUpdateName(user.getRealName());
+                     planDetailMapper.updateByPrimaryKey(planDetail);
 
-                         //插入分配明细
-                         SplitGoodsDetail splitGoodsDetail = new SplitGoodsDetail();
-                         SplitGoodsDetailParamsDto splitGoodsDetailParamsDto =  (SplitGoodsDetailParamsDto)planDetail.getSplitGoodsDetailObj();
-                         BeanUtils.copyProperties(splitGoodsDetailParamsDto, splitGoodsDetail);
-                         splitGoodsDetail.setCreateId(user.getUserId());
-                         splitGoodsDetail.setCreateName(user.getRealName());
-                         splitGoodsDetail.setCreateDate(opDate);
-                         splitGoodsDetail.setUpdateId(user.getUserId());
-                         splitGoodsDetail.setUpdateName(user.getRealName());
-                         splitGoodsDetail.setUpdateTime(opDate);
-                         splitGoodsDetail.setIsDeleted((short)0);
-                         splitGoodsDetail.setCompanyId(companyId);
-                         splitGoodsDetail.setSplitGoodsId(splitGoods.getSplitGoodsId());
-                         splitGoodsDetailMapper.insert(splitGoodsDetail);
-                         splitGoodsDetailList.add(splitGoodsDetail);
-                     }
+                     //插入分配明细
+                     SplitGoodsDetail splitGoodsDetail = new SplitGoodsDetail();
+                     SplitGoodsDetailParamsDto splitGoodsDetailParamsDto =  (SplitGoodsDetailParamsDto)planDetail.getSplitGoodsDetailObj();
+                     BeanUtils.copyProperties(splitGoodsDetailParamsDto, splitGoodsDetail);
+                     splitGoodsDetail.setCreateId(user.getUserId());
+                     splitGoodsDetail.setCreateName(user.getRealName());
+                     splitGoodsDetail.setCreateDate(opDate);
+                     splitGoodsDetail.setUpdateId(user.getUserId());
+                     splitGoodsDetail.setUpdateName(user.getRealName());
+                     splitGoodsDetail.setUpdateTime(opDate);
+                     splitGoodsDetail.setIsDeleted((short)0);
+                     splitGoodsDetail.setCompanyId(companyId);
+                     splitGoodsDetail.setSplitGoodsId(splitGoods.getSplitGoodsId());
+                     splitGoodsDetailMapper.insert(splitGoodsDetail);
+                     splitGoodsDetailList.add(splitGoodsDetail);
                  }
+
 
             }
             //更新计划状态
@@ -227,9 +226,11 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
         for (PlanDetail planDetail : planDetailList) {
             float allotAmountTotal = 0; //分配总数量
             List<SplitGoodsDetailParamsDto> list = dto.getList();
-            SplitGoodsDetailParamsDto  tempObj = null;
+            SplitGoodsDetailParamsDto tempObj = null;
+
             for (SplitGoodsDetailParamsDto obj1 : list) {
-                    if (planDetail.getPlanDetailId()==obj1.getPlanDetailId()) {
+
+                    if (planDetail.getPlanDetailId() - obj1.getPlanDetailId()==0) {
                         allotAmountTotal += obj1.getAllotAmount(); //统计分配数量
                         tempObj = obj1;
                         break; //因为分配只有一种
@@ -238,6 +239,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             if (tempObj!=null) {
                 planDetail.setSplitGoodsDetailObj(tempObj);
             }
+
             planDetail.setAllotAmountTotal(allotAmountTotal);
             if (planDetail.getRemainderAmount()>=allotAmountTotal) { //如果剩余数量>=派单数量
                 planDetail.setAllot(true);
