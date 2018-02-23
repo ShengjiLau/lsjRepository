@@ -408,6 +408,7 @@ public class PlanServiceImpl implements PlanService {
         return planDetailMapper.deleteByPrimaryKey(tMap);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Integer ownPlanCancel(Long waybillPlanId, Long companyId, User user) {
         Map tMap = new HashMap<String,String>();
@@ -445,6 +446,7 @@ public class PlanServiceImpl implements PlanService {
         return 1;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public WaybillPlan biddingFinish(Long waybillPlanId, Long companyId, User user) {
         Map tMap = new HashMap<String,String>();
@@ -460,6 +462,14 @@ public class PlanServiceImpl implements PlanService {
         waybillPlan.setUpdateName(user.getRealName());
         waybillPlanMapper.updateByPrimaryKey(waybillPlan);
         return waybillPlan;
+    }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int updatePlanStatusByWaybill(WaybillPlan waybillPlan) {
+
+       return waybillPlanMapper.updateWaybillPlan(waybillPlan);
     }
 
 
