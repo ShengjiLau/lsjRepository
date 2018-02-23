@@ -35,84 +35,97 @@ import java.util.List;
 @RequestMapping("/api/employee")
 public class EmployeeApi {
 
-	@Autowired
-	UserService userService;
+    @Autowired
+    UserService userService;
 
 
-	public static JSONObject successMessage ;
-	public static JSONObject failMessage;
+    public static JSONObject successMessage;
+    public static JSONObject failMessage;
 
-	static {
-		successMessage = new JSONObject();
-		successMessage.put("code", 0);
-		successMessage.put("message", "请求成功");
+    static {
+        successMessage = new JSONObject();
+        successMessage.put("code", 0);
+        successMessage.put("message", "请求成功");
 
-		failMessage = new JSONObject();
-		failMessage.put("code", -1);
-		failMessage.put("message", "请求异常");
-	}
+        failMessage = new JSONObject();
+        failMessage.put("code", -1);
+        failMessage.put("message", "请求异常");
+    }
 
-	@Autowired
-	EmployeeServiceImpl employeeService;
-
-	@ApiOperation("添加员工接口")
-	@RequestMapping(value = "/addemployee", method = RequestMethod.POST)
-	@PreAuthorize("hasAnyAuthority('employee_add') or hasRole('ROLE_SYS_ADMIN')")
-	public String addEmployeeAccount(CreateEmployeeAccountDto dto, HttpServletRequest request) {
-		String groups = request.getParameter("jsonGroups");
-		String roles = request.getParameter("jsonRoles");
-		List<Long> jsonGroups = JSONArray.parseArray(groups, Long.class);
-		List<Long> jsonRoles = JSONArray.parseArray(roles, Long.class);
-		dto.setGroups(jsonGroups);
-		dto.setRoles(jsonRoles);
-		boolean b = employeeService.addEmployee(dto);
-		if (b) {
-			return successMessage.toString();
-		}else {
-			return failMessage.toString();
-		}
-	}
-
-	@ApiOperation("所有员工列表")
-	@RequestMapping(value = "/employeelist", method = RequestMethod.POST)
-	@PreAuthorize("hasAnyAuthority('employee_list') or hasRole('ROLE_SYS_ADMIN')")
-	public PageResultDto employeeList(@ApiParam(required = true) Integer pageNo, @ApiParam(required = true) Integer pageSize,SearchEmployeeDto dto) {
-		Long companyId = SecurityInfoGetter.getCompanyId();
-		dto.setCompanyId(companyId);
-		List<UserCompRel> userCompRels = employeeService.queryAllEmployee(dto);
-		PageResultDto<UserCompRel> userCompRelPageResultDto = new PageResultDto<>(userCompRels);
-		return userCompRelPageResultDto;
-	}
+    @Autowired
+    EmployeeServiceImpl employeeService;
 
 
-	@ApiOperation("更新员工接口")
-	@RequestMapping(value = "/updateemployee",method = RequestMethod.POST)
-	@PreAuthorize("hasAnyAuthority('employee_edit') or hasRole('ROLE_SYS_ADMIN')")
-	public UserCompRel updateEmployee( HttpServletRequest request,UpdateEmployeeAccountDto dto) {
-		String groups = request.getParameter("jsonGroups");
-		String roles = request.getParameter("jsonRoles");
-		List<Long> jsonGroups = JSONArray.parseArray(groups, Long.class);
-		List<Long> jsonRoles = JSONArray.parseArray(roles, Long.class);
-		dto.setGroups(jsonGroups);
-		dto.setRoles(jsonRoles);
-		UserCompRel userCompRel = employeeService.updateEmployee(dto);
-		return userCompRel;
-	}
+    @ApiOperation("删除员工接口")
+    @RequestMapping(value = "/removeemployee", method = RequestMethod.POST)
+    public String removeEmployee(Long userCompRelId){
+        boolean b = employeeService.removeUserCompRel(userCompRelId);
+        if (b) {
+            return successMessage.toString();
+        } else {
+            return failMessage.toString();
+        }
+    }
 
-	@ApiOperation("获取手机号的用户信息")
-	@RequestMapping(value = "/queryphone",method = RequestMethod.POST)
-	public User queryUserPhone(String phone){
-		User user = userService.selectUserByPhone(phone);
-		return user;
-	}
 
-	@ApiOperation("员工禁用开关接口")
-	@RequestMapping(value = "/enableemployee", method = RequestMethod.POST)
-	@PreAuthorize("hasAnyAuthority('employee_edit') or hasRole('ROLE_SYS_ADMIN')")
-	public UserCompRel toggleEnableEmployee(ToggleEmployeeEnableDto dto) {
-		UserCompRel userCompRel = employeeService.toggleEnableEmployee(dto);
-		return userCompRel;
-	}
+    @ApiOperation("添加员工接口")
+    @RequestMapping(value = "/addemployee", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyAuthority('employee_add') or hasRole('ROLE_SYS_ADMIN')")
+    public String addEmployeeAccount(CreateEmployeeAccountDto dto, HttpServletRequest request) {
+        String groups = request.getParameter("jsonGroups");
+        String roles = request.getParameter("jsonRoles");
+        List<Long> jsonGroups = JSONArray.parseArray(groups, Long.class);
+        List<Long> jsonRoles = JSONArray.parseArray(roles, Long.class);
+        dto.setGroups(jsonGroups);
+        dto.setRoles(jsonRoles);
+        boolean b = employeeService.addEmployee(dto);
+        if (b) {
+            return successMessage.toString();
+        } else {
+            return failMessage.toString();
+        }
+    }
+
+    @ApiOperation("所有员工列表")
+    @RequestMapping(value = "/employeelist", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyAuthority('employee_list') or hasRole('ROLE_SYS_ADMIN')")
+    public PageResultDto employeeList(@ApiParam(required = true) Integer pageNo, @ApiParam(required = true) Integer pageSize, SearchEmployeeDto dto) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        dto.setCompanyId(companyId);
+        List<UserCompRel> userCompRels = employeeService.queryAllEmployee(dto);
+        PageResultDto<UserCompRel> userCompRelPageResultDto = new PageResultDto<>(userCompRels);
+        return userCompRelPageResultDto;
+    }
+
+
+    @ApiOperation("更新员工接口")
+    @RequestMapping(value = "/updateemployee", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyAuthority('employee_edit') or hasRole('ROLE_SYS_ADMIN')")
+    public UserCompRel updateEmployee(HttpServletRequest request, UpdateEmployeeAccountDto dto) {
+        String groups = request.getParameter("jsonGroups");
+        String roles = request.getParameter("jsonRoles");
+        List<Long> jsonGroups = JSONArray.parseArray(groups, Long.class);
+        List<Long> jsonRoles = JSONArray.parseArray(roles, Long.class);
+        dto.setGroups(jsonGroups);
+        dto.setRoles(jsonRoles);
+        UserCompRel userCompRel = employeeService.updateEmployee(dto);
+        return userCompRel;
+    }
+
+    @ApiOperation("获取手机号的用户信息")
+    @RequestMapping(value = "/queryphone", method = RequestMethod.POST)
+    public User queryUserPhone(String phone) {
+        User user = userService.selectUserByPhone(phone);
+        return user;
+    }
+
+    @ApiOperation("员工禁用开关接口")
+    @RequestMapping(value = "/enableemployee", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyAuthority('employee_edit') or hasRole('ROLE_SYS_ADMIN')")
+    public UserCompRel toggleEnableEmployee(ToggleEmployeeEnableDto dto) {
+        UserCompRel userCompRel = employeeService.toggleEnableEmployee(dto);
+        return userCompRel;
+    }
 
 
 }
