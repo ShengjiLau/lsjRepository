@@ -8,6 +8,7 @@ import com.aliyun.openservices.ons.api.Message;
 import com.aliyun.openservices.ons.api.MessageListener;
 import com.lcdt.items.service.ItemsInfoInitializationService;
 import com.lcdt.notify.model.JsonParserPropertyEvent;
+import com.lcdt.userinfo.model.UserCompRel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,19 +38,21 @@ public class ItemsInfoInitializationListener implements MessageListener {
      */
     @Override
     public Action consume(Message message, ConsumeContext context) {
+
+
         String msgID = message.getMsgID();
+
+        logger.info("接收mq消息 msgId:{}",msgID);
 
         byte[] body = message.getBody();
 
         //反序列化 转化成bean
-        JsonParserPropertyEvent event = JSONObject.parseObject(body, JsonParserPropertyEvent.class, Feature.SupportNonPublicField);
-
-        logger.info("consume message : {} {} {}",event.getClass().getSimpleName(),event.getEventName(),event.getSender().sendCompanyId());
+        UserCompRel event = JSONObject.parseObject(body, UserCompRel.class, Feature.SupportNonPublicField);
 
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                itemsInfoInitializationService.itemInfoInitialization(event.getSender().getCompanyId(),event.getEventName(),event.getSender().getUserId());
+                itemsInfoInitializationService.itemInfoInitialization(event.getCompId(),event.getUser().getPhone(),event.getUserId());
             }
         });
 
