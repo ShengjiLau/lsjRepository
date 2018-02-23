@@ -10,6 +10,8 @@ import com.lcdt.userinfo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by lyqishan on 2018/2/6
  */
@@ -31,6 +33,11 @@ public class ItemsInfoInitializationServiceImpl implements ItemsInfoInitializati
         itemClassify.setCreateName(userName);
         itemClassify.setIsDefault(true);
         itemClassify.setCompanyId(companyId);
+        itemClassify.setPid(0L);
+        List<ItemClassify> list=itemClassifyService.queryIsExistClassify(itemClassify);
+        if(list!=null&&list.size()>0){
+           throw new RuntimeException("默认分类已存在");
+        }
         itemClassify=itemClassifyService.addItemClassify(itemClassify);
         if(itemClassify.getClassifyId()!=null&&itemClassify.getClassifyId()>0){
             result+=1;

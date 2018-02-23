@@ -121,7 +121,7 @@ public class OwnDriverServiceImpl implements OwnDriverService {
         } else {
             ownDriverMapper.updateByPrimaryKey(ownDriver);    //更新司机基本信息
             //获取该司机下面的证件odcId用来匹配被删除的证件
-            List<Long> odcIdList = ownDriverCertificateMapper.selectOvcIdByOwnDriverId(ownDriver.getOwnDriverId());
+            List<Long> odcIdList = ownDriverCertificateMapper.selectOdcIdByOwnDriverId(ownDriver.getOwnDriverId());
             List<OwnDriverCertificate> list1 = new ArrayList<>();
             List<OwnDriverCertificate> list2 = new ArrayList<>();
             if (null != ownDriverDto.getOwnDriverCertificateList()) {

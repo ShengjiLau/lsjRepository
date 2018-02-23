@@ -255,7 +255,6 @@ public class AuthController {
             }
         }
         jsonObject.put("code", 0);
-
         String redirectUrl = RequestAuthRedirectStrategy.getAuthCallback(request);
         jsonObject.put("redirecturl", redirectUrl);
         jsonObject.put("message", "创建成功");
@@ -298,6 +297,11 @@ public class AuthController {
             //当前用户不在所选公司之内
             throw new LoginError("用户不属于该公司");
         }
+
+        if (companyMember.getIsEnable() != null && companyMember.getIsEnable() == false) {
+            throw new LoginError("用户已被禁用");
+        }
+
 
         ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
         LoginSessionReposity.setCompanyMemberInSession(request, companyMember);

@@ -43,9 +43,6 @@ public class CalcUnitApi {
         calcUnit.setCreateId(user.getUserId());
         calcUnit.setCreateName(user.getRealName());
         calcUnit.setCompanyId(companyId);
-        if (calcUnitService.isUnitNameExist(calcUnit)) {
-            throw new RuntimeException("单位名称已存在");
-        }
         int result = calcUnitService.addCalcUnit(calcUnit);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();

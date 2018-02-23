@@ -4,14 +4,18 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.items.dao.ItemClassifyMapper;
+import com.lcdt.items.dao.ItemsInfoMapper;
 import com.lcdt.items.model.ItemClassify;
 import com.lcdt.items.model.ItemClassifyDao;
+import com.lcdt.items.model.ItemsInfo;
 import com.lcdt.items.model.ItemsInfoDao;
 import com.lcdt.items.service.ItemClassifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by lyqishan on 2017/10/30
@@ -22,6 +26,8 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
 
     @Autowired
     private ItemClassifyMapper itemClassifyMapper;
+    @Autowired
+    private ItemsInfoMapper itemsInfoMapper;
 
     @Override
     public ItemClassify addItemClassify(ItemClassify itemClassify) {
@@ -48,6 +54,13 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
      */
     private int delRecursion(Long classifyId, Long companyId) {
         int size = 0;
+        Map map=new HashMap();
+        map.put("classifyId",classifyId);
+        map.put("companyId",companyId);
+        List<ItemsInfo> list=itemsInfoMapper.selectByClassifyIdCodeAndCompanyId(map);
+        if(list!=null&&list.size()>0){
+            throw new RuntimeException("此分类或其子分类已被引用，不用删除");
+        }
         ItemClassify itemClassify = new ItemClassify();
         itemClassify.setCompanyId(companyId);
         itemClassify.setClassifyId(classifyId);
@@ -109,6 +122,13 @@ public class ItemClassifyServiceImpl implements ItemClassifyService {
         itemClassifyList=itemClassifyMapper.selectClassifyByMinChildren(classifyId,companyId);
         page = new PageInfo(itemClassifyList);
         return page;
+    }
+
+    @Override
+    public List<ItemClassify> queryIsExistClassify(ItemClassify itemClassify) {
+        List<ItemClassify> itemClassifyList=null;
+        itemClassifyList=itemClassifyMapper.selectIsExistClassify(itemClassify);
+        return itemClassifyList;
     }
 
 }

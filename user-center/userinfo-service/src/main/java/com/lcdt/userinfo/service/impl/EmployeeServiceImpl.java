@@ -65,7 +65,6 @@ public class EmployeeServiceImpl {
 		}
 		//创建公司关联
 		Long companyId = SecurityInfoGetter.getCompanyId();
-
 		//是否已加入公司
 		boolean userInCompany = isUserInCompany(user.getUserId(), companyId);
 		if (userInCompany) {
@@ -127,6 +126,9 @@ public class EmployeeServiceImpl {
 		Long userCompRelId = dto.getUserCompRelId();
 		UserCompRel userCompRel = userCompanyDao.selectByPrimaryKey(userCompRelId);
 		User user = userCompRel.getUser();
+		if (!StringUtils.isEmpty(dto.getPassword())) {
+			dto.setPassword(user.getPwd());
+		}
 		BeanUtils.copyProperties(dto, user);
 		userService.updateUser(user);
 		//更新用户部门信息
@@ -152,6 +154,10 @@ public class EmployeeServiceImpl {
 	@Transactional(rollbackFor = Exception.class)
 	public UserCompRel toggleEnableEmployee(ToggleEmployeeEnableDto dto){
 		UserCompRel userCompRel = userCompanyDao.selectByPrimaryKey(dto.getUserCompRelId());
+		if (userCompRel.getIsCreate() == 1) {
+			throw new RuntimeException("管理员无法禁用");
+		}
+
 		userCompRel.setEnable(dto.getEnable());
 		userCompanyDao.updateByPrimaryKey(userCompRel);
 		return userCompRel;

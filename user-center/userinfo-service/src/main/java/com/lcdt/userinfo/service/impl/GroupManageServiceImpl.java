@@ -135,17 +135,17 @@ public class GroupManageServiceImpl implements GroupManageService {
 		//更新group
 		//删除被取消的用户组
 		relationDao.deleteNotInGroups(userId,companyId,groups);
-
 		//新增用户组
-
-		List<Group> relations = relationDao.selectByUserCompany(userId, companyId);
-		ArrayList<Long> ids = new ArrayList<>();
-		for (Group relation : relations) {
-			ids.add(relation.getGroupId());
+		if (groups != null) {
+			List<Group> relations = relationDao.selectByUserCompany(userId, companyId);
+			ArrayList<Long> ids = new ArrayList<>();
+			for (Group relation : relations) {
+				ids.add(relation.getGroupId());
+			}
+			groups.removeAll(ids);
+			relationDao.insertGroups(userId,companyId,groups);
 		}
-		groups.removeAll(ids);
 
-		relationDao.insertGroups(userId,companyId,groups);
 	}
 
 	@Override
@@ -255,6 +255,7 @@ public class GroupManageServiceImpl implements GroupManageService {
 	public int groupCustomerdelete(Map map) {
 		Long companyId = Long.valueOf(map.get("companyId").toString());
 		Long customerId = Long.valueOf(map.get("customerId").toString());
+
 		String groupId = map.get("groupId").toString();
 		String groupName = map.get("groupName").toString();
 		Customer customer =  customerMapper.selectByPrimaryKey(customerId,companyId);

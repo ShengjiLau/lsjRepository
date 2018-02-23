@@ -52,5 +52,5 @@ public interface RoleMapper {
     List<Role> selectUserCompanyRoles(@Param("userId") Long userId, @Param("companyId") Long companyId);
 
     List<Role> selectByCondition(Map map);
-    List<Role> selectByRoleName(@Param("rolename") String roleName,@Param("companyId") Long companyId);
+    List<Role> selectByRoleName(@Param("roleName") String roleName,@Param("companyId") Long companyId);
 }

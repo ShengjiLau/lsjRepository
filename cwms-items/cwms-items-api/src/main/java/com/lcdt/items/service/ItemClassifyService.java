@@ -6,6 +6,7 @@ import com.lcdt.items.model.ItemClassifyDao;
 import com.lcdt.items.model.ItemsInfoDao;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 商品分类服务 ItemClassifyService
@@ -70,5 +71,13 @@ public interface ItemClassifyService {
      * @return
      */
     PageInfo<List<ItemClassify>> queryClassifyByMinChildren(Long classifyId,Long companyId,PageInfo pageInfo);
+
+
+    /**
+     * 根据条件查询
+     * @param itemClassify
+     * @return
+     */
+    List<ItemClassify> queryIsExistClassify(ItemClassify itemClassify);
 
 }

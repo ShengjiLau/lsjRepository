@@ -56,9 +56,9 @@ public interface UserGroupRelationMapper {
 
     List<Group> selectByUserCompany(@Param("userId") Long userId, @Param("companyId") Long companyId);
 
-    void deleteNotInGroups(Long userId, Long companyId, List<Long> groups);
+    void deleteNotInGroups(@Param("userId") Long userId,@Param("companyId") Long companyId, @Param("groups") List<Long> groups);
 
-    void insertGroups(Long userId, Long companyId, List<Long> groups);
+    void insertGroups(@Param("userId") Long userId,@Param("companyId") Long companyId,@Param("groups") List<Long> groups);
 
     List<UserGroupRelation> selectByUserIdAndCmpId(UserGroupRelation userGroupRelation);
 

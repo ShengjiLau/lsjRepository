@@ -29,6 +29,9 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     @Override
     public int addCalcUnit(CalcUnit calcUnit) {
         int result = 0;
+        if (isUnitNameExist(calcUnit)) {
+            throw new RuntimeException("单位名称已存在");
+        }
         result = calcUnitMapper.insert(calcUnit);
         return result;
     }

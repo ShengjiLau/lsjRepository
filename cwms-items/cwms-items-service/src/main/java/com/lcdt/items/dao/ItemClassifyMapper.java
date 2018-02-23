@@ -4,6 +4,7 @@ import com.lcdt.items.model.ItemClassify;
 import com.lcdt.items.model.ItemClassifyDao;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ItemClassifyMapper {
     /**
@@ -94,4 +95,11 @@ public interface ItemClassifyMapper {
      * @return
      */
     List<ItemClassify> selectClassifyByMinChildren(Long classifyId,Long companyId);
+
+    /**
+     * 根据条件查询
+     * @param itemClassify
+     * @return
+     */
+    List<ItemClassify> selectIsExistClassify(ItemClassify itemClassify);
 }
