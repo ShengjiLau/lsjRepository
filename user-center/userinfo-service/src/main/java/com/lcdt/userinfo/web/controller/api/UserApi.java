@@ -202,7 +202,12 @@ public class UserApi {
 			httpSession.setAttribute("CWMS_SMS_SEND_TIME", cTime);
 			String[] phones = new String[]{newphone};
 			String vCode = RandomNoUtil.createRandom(true,4);
-			notifyService.sendSms(phones,vCode);
+
+			String code = "【大驼队】提醒您，更换手机操作验证码为：%s，如非本人操作，请忽略！";
+			String format = String.format(code, vCode);
+
+
+			notifyService.sendSms(phones,format);
 			httpSession.setAttribute("CWMS_SMS_VCODE", vCode+"_"+newphone);
 		} else {
 			Long oTime = Long.valueOf(httpSession.getAttribute("CWMS_SMS_SEND_TIME").toString());
