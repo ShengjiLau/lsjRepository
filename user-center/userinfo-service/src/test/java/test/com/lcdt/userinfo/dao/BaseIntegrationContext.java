@@ -4,6 +4,7 @@ import com.lcdt.userinfo.UserServiceApp;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import test.com.lcdt.userinfo.TestApp;
 
 /**
  * Created by ss on 2017/7/31.

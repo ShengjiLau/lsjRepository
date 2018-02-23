@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -134,16 +135,23 @@ public class GroupManageServiceImpl implements GroupManageService {
 	public void updateCompanyUsergroup(Long userId, Long companyId, List<Long> groups) {
 		//更新group
 		//删除被取消的用户组
-		relationDao.deleteNotInGroups(userId,companyId,groups);
+		if (!CollectionUtils.isEmpty(groups)) {
+			relationDao.deleteNotInGroups(userId,companyId,groups);
+		}
+
 		//新增用户组
 		if (groups != null) {
 			List<Group> relations = relationDao.selectByUserCompany(userId, companyId);
 			ArrayList<Long> ids = new ArrayList<>();
 			for (Group relation : relations) {
-				ids.add(relation.getGroupId());
+				if (relation != null) {
+					ids.add(relation.getGroupId());
+				}
 			}
 			groups.removeAll(ids);
-			relationDao.insertGroups(userId,companyId,groups);
+			if (groups != null && groups.size() > 0) {
+				relationDao.insertGroups(userId,companyId,groups);
+			}
 		}
 
 	}
