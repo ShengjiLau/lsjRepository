@@ -106,8 +106,11 @@ public class EmployeeServiceImpl {
 			compRel.setRoles(roles);
 			//获取员工所在部门
 			List<UserCompRel> ucrs = userCompanyDao.selectByUserIdCompanyId(userId,compRel.getCompId());
-			if(ucrs!=null&&ucrs.size()>0)
-			{compRel.setDeptNames(ucrs.get(0).getDeptNames());}
+
+			if(ucrs != null && ucrs.size() > 0) {
+				compRel.setDeptNames(ucrs.get(0).getDeptNames());
+			}
+
 			employeeDtos.add(employeeDto);
 			LoginLog loginLog = loginLogService.userLastLogin(userId, compRel.getCompId());
 			compRel.setLoginLog(loginLog);
@@ -138,6 +141,7 @@ public class EmployeeServiceImpl {
 		if (!StringUtils.isEmpty(departIds)) {
 			String idsNames = departmentService.getIdsNames(departIds);
 			userCompRel.setDeptNames(idsNames);
+			userCompRel.setDeptIds(departIds);
 		}
 
 		userCompanyDao.updateByPrimaryKey(userCompRel);

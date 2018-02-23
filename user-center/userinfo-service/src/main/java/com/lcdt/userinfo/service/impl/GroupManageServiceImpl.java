@@ -56,7 +56,6 @@ public class GroupManageServiceImpl implements GroupManageService {
 			return false;
 		}
 		return groupDao.deleteByPrimaryKey(group.getGroupId())==1?true : false;
-
 	}
 
 	@Transactional(rollbackFor = Exception.class)

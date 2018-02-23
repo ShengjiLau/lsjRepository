@@ -33,7 +33,7 @@ import java.util.Map;
 /**
  * Created by yangbinq on 2017/11/9.
  */
-@Api(value = "业务项目组",description = "业务项目组api")
+@Api(value = "业务项目组", description = "业务项目组api")
 @RestController
 @RequestMapping("/api/group")
 public class GroupApi {
@@ -51,7 +51,7 @@ public class GroupApi {
      * @return
      */
     @ApiOperation("新增项目组")
-    @RequestMapping(value = "/groupAdd",method = RequestMethod.POST)
+    @RequestMapping(value = "/groupAdd", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_add')")
     public Group groupAdd(@Validated GroupDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -78,11 +78,11 @@ public class GroupApi {
      * @return
      */
     @ApiOperation("项目组编辑")
-    @RequestMapping(value = "/groupEdit",method = RequestMethod.POST)
+    @RequestMapping(value = "/groupEdit", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_edit')")
-    public Group groupEdit(@ApiParam(value = "项目组ID",required = true) @RequestParam Long groupId,
-                           @ApiParam(value = "项目组名称",required = true) @RequestParam String groupName,
-                           @ApiParam(value = "状态",required = true) @RequestParam Boolean isValid) {
+    public Group groupEdit(@ApiParam(value = "项目组ID", required = true) @RequestParam Long groupId,
+                           @ApiParam(value = "项目组名称", required = true) @RequestParam String groupName,
+                           @ApiParam(value = "状态", required = true) @RequestParam Boolean isValid) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Group group = new Group();
         group.setGroupId(groupId);
@@ -104,24 +104,19 @@ public class GroupApi {
      * @return
      */
     @ApiOperation("项目组移除")
-    @RequestMapping(value = "/groupRemove",method = RequestMethod.POST)
+    @RequestMapping(value = "/groupRemove", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_remove')")
     @ResponseBody
-    public String deptRemove(@ApiParam(value = "项目组ID",required = true) @RequestParam Long groupId) {
+    public String deptRemove(@ApiParam(value = "项目组ID", required = true) @RequestParam Long groupId) {
         boolean flag = false;
-        try {
-            Group group = new Group();
-            group.setGroupId(groupId);
-            flag = groupManageService.deleteGroup(group);
-        } catch (GroupExistException e) {
-            throw new GroupExistException(e.getMessage());
-        }
+        Group group = new Group();
+        group.setGroupId(groupId);
+        flag = groupManageService.deleteGroup(group);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("message",flag?"删除成功！":"删除失败！");
-        jsonObject.put("code",flag?0:-1);
+        jsonObject.put("message", flag ? "删除成功！" : "有员工或客户隶属该项目组不可删除！");
+        jsonObject.put("code", flag ? 0 : -1);
         return jsonObject.toString();
     }
-
 
 
     /**
@@ -130,15 +125,15 @@ public class GroupApi {
      * @return
      */
     @ApiOperation("项目组列表")
-    @RequestMapping(value = "/groupList",method = RequestMethod.GET)
+    @RequestMapping(value = "/groupList", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_list')")
-    public GroupResultDto groupList(@ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
-                                       @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+    public GroupResultDto groupList(@ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
+                                    @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
-        map.put("companyId",companyId);
-        map.put("page_no",pageNo);
-        map.put("page_size",pageSize);
+        map.put("companyId", companyId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
         PageInfo pageInfo = groupManageService.groupList(map);
         GroupResultDto rDto = new GroupResultDto();
         rDto.setList(pageInfo.getList());
@@ -147,33 +142,31 @@ public class GroupApi {
     }
 
 
-
-
     /**
      * 用户项目组列表
+     *
      * @return
      */
     @ApiOperation("用户项目组列表")
-    @RequestMapping(value = "/userGroupList",method = RequestMethod.GET)
+    @RequestMapping(value = "/userGroupList", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_list')")
-    public  List<Group> deptUserList() {
+    public List<Group> deptUserList() {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
-        UserCompRel userCompRel =SecurityInfoGetter.geUserCompRel();
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         List<Group> groupsList = null;
-        if (userCompRel.getIsCreate()==1 && userCompRel.getCompId()==companyId) { //企业者
+        if (userCompRel.getIsCreate() == 1 && userCompRel.getCompId() == companyId) { //企业者
 
             Map map = new HashMap();
-            map.put("companyId",companyId);
-            map.put("page_no",1);
-            map.put("page_size",0);
+            map.put("companyId", companyId);
+            map.put("page_no", 1);
+            map.put("page_size", 0);
             PageInfo pageInfo = groupManageService.groupList(map);
             groupsList = pageInfo.getList();
         } else {
-            groupsList = userGroupRelationMapper.selectByUserCompany(userId,companyId);
+            groupsList = userGroupRelationMapper.selectByUserCompany(userId, companyId);
 
         }
-
 
 
         return groupsList;
@@ -186,24 +179,23 @@ public class GroupApi {
      * @return
      */
     @ApiOperation("组员工列表")
-    @RequestMapping(value = "/groupUserList",method = RequestMethod.GET)
+    @RequestMapping(value = "/groupUserList", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_list')")
-    public GroupResultDto groupUserList(@ApiParam(value = "组ID",required = true) @RequestParam Long groupId,
-                                    @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
-                                   @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+    public GroupResultDto groupUserList(@ApiParam(value = "组ID", required = true) @RequestParam Long groupId,
+                                        @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
+                                        @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
-        map.put("companyId",companyId);
-        map.put("groupId",groupId);
-        map.put("page_no",pageNo);
-        map.put("page_size",pageSize);
+        map.put("companyId", companyId);
+        map.put("groupId", groupId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
         PageInfo pageInfo = groupManageService.selectGroupUserList(map);
         GroupResultDto rDto = new GroupResultDto();
         rDto.setUserList(pageInfo.getList());
         rDto.setTotal(pageInfo.getTotal());
         return rDto;
     }
-
 
 
     /**
@@ -212,17 +204,17 @@ public class GroupApi {
      * @return
      */
     @ApiOperation(value = "组员工不存在列表v1")
-    @RequestMapping(value = "/groupUserNotList",method = RequestMethod.GET)
+    @RequestMapping(value = "/groupUserNotList", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_not_list')")
-    public GroupResultDto groupUserNotList(@ApiParam(value = "组ID",required = true) @RequestParam Long groupId,
-                                        @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
-                                        @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+    public GroupResultDto groupUserNotList(@ApiParam(value = "组ID", required = true) @RequestParam Long groupId,
+                                           @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
+                                           @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
-        map.put("companyId",companyId);
-        map.put("groupIdNot",groupId);
-        map.put("page_no",pageNo);
-        map.put("page_size",pageSize);
+        map.put("companyId", companyId);
+        map.put("groupIdNot", groupId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
         PageInfo pageInfo = groupManageService.selectGroupUserList(map);
         GroupResultDto rDto = new GroupResultDto();
         rDto.setUserList(pageInfo.getList());
@@ -231,20 +223,16 @@ public class GroupApi {
     }
 
 
-
-
-
-
     /**
      * 组成员添加
      *
      * @return
      */
     @ApiOperation("组成员添加")
-    @RequestMapping(value = "/groupUserAdd",method = RequestMethod.GET)
+    @RequestMapping(value = "/groupUserAdd", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_add')")
-    public String groupUserAdd(@ApiParam(value = "员工ID",required = true) @RequestParam Long userId,
-                                       @ApiParam(value = "组ID",required = true) @RequestParam Long groupId) {
+    public String groupUserAdd(@ApiParam(value = "员工ID", required = true) @RequestParam Long userId,
+                               @ApiParam(value = "组ID", required = true) @RequestParam Long groupId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         UserGroupRelation vo = new UserGroupRelation();
         vo.setCompanyId(companyId);
@@ -253,8 +241,8 @@ public class GroupApi {
         vo.setGroupCreateDate(new Date());
         Integer flag = groupManageService.groupUserAdd(vo);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("message",flag==1?"添加成功！":"添加失败！");
-        jsonObject.put("code",flag==1?0:-1);
+        jsonObject.put("message", flag == 1 ? "添加成功！" : "添加失败！");
+        jsonObject.put("code", flag == 1 ? 0 : -1);
         return jsonObject.toString();
     }
 
@@ -264,10 +252,10 @@ public class GroupApi {
      * @return
      */
     @ApiOperation("组成员删除")
-    @RequestMapping(value = "/groupUserdelete",method = RequestMethod.GET)
+    @RequestMapping(value = "/groupUserdelete", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_delete')")
-    public String groupUserdelete(@ApiParam(value = "员工ID",required = true) @RequestParam Long userId,
-                                  @ApiParam(value = "组ID",required = true) @RequestParam Long groupId) {
+    public String groupUserdelete(@ApiParam(value = "员工ID", required = true) @RequestParam Long userId,
+                                  @ApiParam(value = "组ID", required = true) @RequestParam Long groupId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         UserGroupRelation vo = new UserGroupRelation();
         vo.setCompanyId(companyId);
@@ -275,11 +263,10 @@ public class GroupApi {
         vo.setGroupId(groupId);
         Integer flag = groupManageService.groupUserDelete(vo);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("message",flag==1?"删除成功！":"删除失败！");
-        jsonObject.put("code",flag==1?0:-1);
+        jsonObject.put("message", flag == 1 ? "删除成功！" : "删除失败！");
+        jsonObject.put("code", flag == 1 ? 0 : -1);
         return jsonObject.toString();
     }
-
 
 
     /**
@@ -288,22 +275,22 @@ public class GroupApi {
      * @return
      */
     @ApiOperation("组-不存在客户列表")
-    @RequestMapping(value = "/groupCustomerList",method = RequestMethod.GET)
+    @RequestMapping(value = "/groupCustomerList", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_customer_list')")
-    public GroupResultDto groupCustomerList(@ApiParam(value = "组ID",required = true) @RequestParam Long groupId,
-                                        @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
-                                        @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
+    public GroupResultDto groupCustomerList(@ApiParam(value = "组ID", required = true) @RequestParam Long groupId,
+                                            @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
+                                            @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
-        map.put("companyId",companyId);
-        map.put("page_no",pageNo);
-        if (groupId>0) {
+        map.put("companyId", companyId);
+        map.put("page_no", pageNo);
+        if (groupId > 0) {
             StringBuffer sb = new StringBuffer();
-            sb.append(" NOT find_in_set('"+groupId+"',group_ids)");
+            sb.append(" NOT find_in_set('" + groupId + "',group_ids)");
             map.put("groupIds", sb.toString());
         }
 
-        map.put("page_size",pageSize);
+        map.put("page_size", pageSize);
         PageInfo pageInfo = groupManageService.selectGroupClientList(map);
         GroupResultDto rDto = new GroupResultDto();
         rDto.setCustomerList(pageInfo.getList());
@@ -318,22 +305,22 @@ public class GroupApi {
      * @return
      */
     @ApiOperation("组客户添加")
-    @RequestMapping(value = "/groupCustomerAdd",method = RequestMethod.GET)
+    @RequestMapping(value = "/groupCustomerAdd", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_customer_add')")
-    public String groupCustomerAdd(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
-                                   @ApiParam(value = "组ID",required = true) @RequestParam Long groupId,
-                                   @ApiParam(value = "组名",required = true) @RequestParam String groupName) {
+    public String groupCustomerAdd(@ApiParam(value = "客户ID", required = true) @RequestParam Long customerId,
+                                   @ApiParam(value = "组ID", required = true) @RequestParam Long groupId,
+                                   @ApiParam(value = "组名", required = true) @RequestParam String groupName) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        Map map = new HashMap<String,String>();
-        map.put("companyId",companyId);
-        map.put("customerId",customerId);
-        map.put("groupId",groupId);
-        map.put("groupName",groupName);
+        Map map = new HashMap<String, String>();
+        map.put("companyId", companyId);
+        map.put("customerId", customerId);
+        map.put("groupId", groupId);
+        map.put("groupName", groupName);
 
         Integer flag = groupManageService.groupCustomerAdd(map);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("message",flag==1?"添加成功！":"添加失败！");
-        jsonObject.put("code",flag==1?0:-1);
+        jsonObject.put("message", flag == 1 ? "添加成功！" : "添加失败！");
+        jsonObject.put("code", flag == 1 ? 0 : -1);
         return jsonObject.toString();
     }
 
@@ -344,25 +331,23 @@ public class GroupApi {
      * @return
      */
     @ApiOperation("组客户删除")
-    @RequestMapping(value = "/groupCustomerDelete",method = RequestMethod.GET)
+    @RequestMapping(value = "/groupCustomerDelete", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_customer_delete')")
-    public String groupCustomerDelete(@ApiParam(value = "客户ID",required = true) @RequestParam Long customerId,
-                                   @ApiParam(value = "组ID",required = true) @RequestParam Long groupId,
-                                   @ApiParam(value = "组名",required = true) @RequestParam String groupName) {
+    public String groupCustomerDelete(@ApiParam(value = "客户ID", required = true) @RequestParam Long customerId,
+                                      @ApiParam(value = "组ID", required = true) @RequestParam Long groupId,
+                                      @ApiParam(value = "组名", required = true) @RequestParam String groupName) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        Map map = new HashMap<String,String>();
-        map.put("companyId",companyId);
-        map.put("customerId",customerId);
-        map.put("groupId",groupId);
-        map.put("groupName",groupName);
+        Map map = new HashMap<String, String>();
+        map.put("companyId", companyId);
+        map.put("customerId", customerId);
+        map.put("groupId", groupId);
+        map.put("groupName", groupName);
         Integer flag = groupManageService.groupCustomerdelete(map);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("message",flag==1?"删除成功！":"删除失败！");
-        jsonObject.put("code",flag==1?0:-1);
+        jsonObject.put("message", flag == 1 ? "删除成功！" : "删除失败！");
+        jsonObject.put("code", flag == 1 ? 0 : -1);
         return jsonObject.toString();
     }
-
-
 
 
 }
