@@ -216,6 +216,9 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         obj.setUpdateTime(obj.getCreateDate());
                         obj.setCompanyId(vo.getCompanyId());
                         obj.setIsDeleted((short)0);
+                        if (obj.getFreightTotal()==null) { //运费总价 = 单价 * 数量
+                            obj.setFreightTotal(obj.getFreightPrice()*obj.getPlanAmount());
+                        }
                     }
                     planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
 

@@ -57,7 +57,7 @@
       This element was generated on Fri Nov 24 10:56:38 CST 2017.
     -->
     delete from t_customer
-    where customer_id = #{0} and company_id = #{1}
+    where customer_id = #{customerId} and company_id = #{companyId}
   </delete>
 
   <insert id="insert" parameterType="com.lcdt.customer.model.Customer" useGeneratedKeys="true" keyProperty="customerId">

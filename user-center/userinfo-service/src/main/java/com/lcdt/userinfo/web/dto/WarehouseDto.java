@@ -14,9 +14,9 @@ public class WarehouseDto {
             "            1-外协")
     private Short whType;
 
-//    @ApiModelProperty(value = "仓库状态0-启用\n" +
-//            "            1-停用")
-//    private Short whStatus;
+    @ApiModelProperty(value = "仓库状态0-启用\n" +
+            "            1-停用")
+    private Short whStatus;
 
     @ApiModelProperty(value = "是否删除0-未删除\n" +
             "            1-删除")
@@ -38,13 +38,13 @@ public class WarehouseDto {
         this.whType = whType;
     }
 
-//    public Short getWhStatus() {
-//        return whStatus;
-//    }
-//
-//    public void setWhStatus(Short whStatus) {
-//        this.whStatus = whStatus;
-//    }
+    public Short getWhStatus() {
+        return whStatus;
+    }
+
+    public void setWhStatus(Short whStatus) {
+        this.whStatus = whStatus;
+    }
 
     public Short getIsDeleted() {
         return isDeleted;

@@ -137,4 +137,12 @@ public interface CustomerService {
 
     Customer unBindCustomer(Long customerId,Long companyId) throws CustomerNotBindException;
 
+
+    /***
+     * 删除客户（包含客户下的联系人）
+     * @param customer
+     * @return
+     */
+    int customerRemove(Customer customer);
+
 }

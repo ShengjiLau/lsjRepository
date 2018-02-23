@@ -38,6 +38,32 @@ public class WarehouseApi {
     @Autowired
     private WarehouseService warehouseService;
 
+    @ApiOperation("仓库列表")
+    @RequestMapping(value = "/customerList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_list')")
+    public PageBaseDto customerList(@Validated WarehouseDto dto,
+                                    @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                    @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
+
+        if (dto.getWhStatus()!=null) {
+            map.put("whStatus",dto.getWhStatus());
+        }
+
+        if (dto.getIsDeleted()!=null) {
+            map.put("isDeleted",dto.getIsDeleted());
+        }
+        PageInfo pageInfo = warehouseService.warehouseList(map);
+        PageBaseDto baseDto = new PageBaseDto();
+        baseDto.setList(pageInfo.getList());
+        baseDto.setTotal(pageInfo.getTotal());
+        return baseDto;
+    }
+
     @ApiOperation("仓库管理——列表")
     @RequestMapping(value = "/warehouseList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('warehouse_list')")
