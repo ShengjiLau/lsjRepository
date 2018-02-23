@@ -141,6 +141,7 @@ public class EmployeeServiceImpl {
 		if (!StringUtils.isEmpty(departIds)) {
 			String idsNames = departmentService.getIdsNames(departIds);
 			userCompRel.setDeptNames(idsNames);
+			userCompRel.setDeptIds(departIds);
 		}
 
 		userCompanyDao.updateByPrimaryKey(userCompRel);
