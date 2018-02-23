@@ -5,6 +5,7 @@ import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.CompanyCertificate;
 import com.lcdt.userinfo.service.CompanyService;
+import com.lcdt.userinfo.utils.BeanProperties;
 import com.lcdt.userinfo.web.dto.ModifyCompanyAuthDto;
 import com.lcdt.userinfo.web.dto.ModifyCompanyInfoDto;
 import com.lcdt.userinfo.web.dto.ModifyContactDto;
@@ -55,7 +56,7 @@ public class CompanyApi {
 			companyCertificate = new CompanyCertificate();
 			companyCertificate.setCompId(companyId);
 		}
-		BeanUtils.copyProperties(dto,companyCertificate);
+        BeanProperties.copyProperties(dto,companyCertificate,null,null);
 		companyService.updateCompanyCert(companyCertificate);
 		return companyCertificate;
 	}
@@ -157,7 +158,7 @@ public class CompanyApi {
 
 	@RequestMapping(value = "/companyinfo", method = RequestMethod.GET)
 	@ApiOperation("获取企业信息")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('get_companyinfo')")
+//	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('get_companyinfo')")
 	public Company companyInfo() {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		Company company = companyService.selectById(companyId);

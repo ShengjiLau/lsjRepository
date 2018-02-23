@@ -162,7 +162,10 @@ public class UserRoleServiceImpl implements UserRoleService {
 	@Override
 	public void updateCompanyUserRole(Long userId,Long companyId,List<Long> roleIds) {
 		//删除不在list中的已关联的role
-		roleUserRelationDao.deleteNotInRoles(userId,companyId,roleIds);
+		if (roleIds != null && !CollectionUtils.isEmpty(roleIds)) {
+			roleUserRelationDao.deleteNotInRoles(userId,companyId,roleIds);
+		}
+
 		//添加未设置的role
 		List<RoleUserRelation> relations = roleUserRelationDao.selectByUserAndCompany(userId, companyId);
 		ArrayList<Long> ids = new ArrayList<>();
@@ -171,7 +174,9 @@ public class UserRoleServiceImpl implements UserRoleService {
 		}
 		if (roleIds != null) {
 			roleIds.removeAll(ids);
-			roleUserRelationDao.insertRoles(roleIds,userId,companyId);
+			if (!CollectionUtils.isEmpty(roleIds)) {
+				roleUserRelationDao.insertRoles(roleIds,userId,companyId);
+			}
 		}
 	}
 
