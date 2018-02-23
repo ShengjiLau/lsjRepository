@@ -70,12 +70,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int customerRemove(Customer customer) {
-
-        //删除客户
-        customerMapper.deleteByPrimaryKey(customer.getCustomerId(),customer.getCompanyId());
         //删除客户联系人
         customerContactRemove(customer.getCustomerId(), customer.getCompanyId());
-
+        //删除客户
+        customerMapper.deleteByPrimaryKey(customer.getCustomerId(),customer.getCompanyId());
         return 1;
     }
 
