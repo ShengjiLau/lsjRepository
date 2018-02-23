@@ -375,6 +375,12 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                updateSplitGoodsAmount(obj, waybillPlan.getPlanDetailList(), user);
            }
         }
+        //更改计划状态
+        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //从已派完变成派单中
+        waybillPlan.setUpdateId(user.getUserId());
+        waybillPlan.setUpdateName(user.getRealName());
+        waybillPlan.setUpdateTime(new Date());
+        waybillPlanMapper.updateWaybillPlan(waybillPlan);
         return 1;
     }
 
