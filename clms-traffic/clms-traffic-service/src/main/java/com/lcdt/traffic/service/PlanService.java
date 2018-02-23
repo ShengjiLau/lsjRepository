@@ -101,6 +101,13 @@ public interface PlanService {
     WaybillPlan biddingFinish(Long waybillPlanId, Long companyId, User user);
 
 
+    /***
+     * 运单回传更改计划状态
+     * @param waybillPlan
+     */
+    int updatePlanStatusByWaybill(WaybillPlan waybillPlan);
+
+
 
 
 }
