@@ -67,7 +67,20 @@ public class CustomerServiceImpl implements CustomerService {
         return customer;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int customerRemove(Customer customer) {
 
+        //删除客户
+        customerMapper.deleteByPrimaryKey(customer.getCustomerId(),customer.getCompanyId());
+        //删除客户联系人
+        customerContactRemove(customer.getCustomerId(), customer.getCompanyId());
+
+        return 1;
+    }
+
+
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Customer selectByCustomerId(Long customerId, Long companyId) {
         Customer customer = customerMapper.selectByPrimaryKey(customerId, companyId);
