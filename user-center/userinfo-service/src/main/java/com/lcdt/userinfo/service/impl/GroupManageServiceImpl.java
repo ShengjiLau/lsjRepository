@@ -51,6 +51,7 @@ public class GroupManageServiceImpl implements GroupManageService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public boolean deleteGroup(Group group) {
+		Group group1 = groupDao.selectByPrimaryKey(group.getGroupId());
 		List<UserGroupRelation> userGroupRelations = relationDao.selectByGroupId(group.getGroupId());
 		if (userGroupRelations != null && !userGroupRelations.isEmpty()) {
 			return false;
@@ -197,6 +198,9 @@ public class GroupManageServiceImpl implements GroupManageService {
 	@Transactional
 	@Override
 	public int groupUserDelete(UserGroupRelation userGroupRelation) {
+
+
+
 
 		return relationDao.deleteByUserGroupRelation(userGroupRelation);
 	}
