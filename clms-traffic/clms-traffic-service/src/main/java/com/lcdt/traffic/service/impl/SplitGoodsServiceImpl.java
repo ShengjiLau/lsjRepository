@@ -139,6 +139,12 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                      SplitGoodsDetail splitGoodsDetail = new SplitGoodsDetail();
                      SplitGoodsDetailParamsDto splitGoodsDetailParamsDto =  (SplitGoodsDetailParamsDto)planDetail.getSplitGoodsDetailObj();
                      BeanUtils.copyProperties(splitGoodsDetailParamsDto, splitGoodsDetail);
+
+                     if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //如果承运商
+                         splitGoodsDetail.setRemainAmount(splitGoodsDetail.getAllotAmount());
+                     } else {
+                         splitGoodsDetail.setRemainAmount(0f);
+                     }
                      splitGoodsDetail.setCreateId(user.getUserId());
                      splitGoodsDetail.setCreateName(user.getRealName());
                      splitGoodsDetail.setCreateDate(opDate);
@@ -397,7 +403,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
     private void updateSplitGoodsAmount(SplitGoodsDetail splitGoodsDetail, List<PlanDetail> planDetailList, User user){
         if (null!=planDetailList && planDetailList.size()>0) {
             for (PlanDetail obj: planDetailList) {
-                if (obj.getPlanDetailId()==splitGoodsDetail.getPlanDetailId()) {
+                if (obj.getPlanDetailId()-splitGoodsDetail.getPlanDetailId()==0) {
                     obj.setRemainderAmount(obj.getRemainderAmount()+splitGoodsDetail.getRemainAmount());//计划剩余数量=计划现剩余数量+派单剩余数量
                     //更新计划详细
                     obj.setUpdateId(user.getUserId());
