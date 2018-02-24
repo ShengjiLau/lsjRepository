@@ -116,6 +116,10 @@ public class OrderServiceImpl implements OrderService{
 
         payOrder.setOrderStatus(OrderStatus.PAYED);
         payOrder.setPayType(PayType.BALANCEPAY);
+        payOrder.setOrderDes("购买"+serviceProductPackage.getPackageDes());
+        payOrder.setOrderAmount(Integer.valueOf(serviceProductPackage.getPackagePrice()));
+        payOrder.setPayType(PayType.BALANCEPAY);
+        payOrder.setBalance(money.getBalance());
 
         mapper.updateByPrimaryKey(payOrder);
 

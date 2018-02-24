@@ -88,7 +88,7 @@
       and p.pay_type = #{payType,jdbcType=INTEGER}
 
     </if>
-
+  order by log_time DESC
 
 
   </select>
