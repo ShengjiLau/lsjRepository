@@ -139,6 +139,12 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                      SplitGoodsDetail splitGoodsDetail = new SplitGoodsDetail();
                      SplitGoodsDetailParamsDto splitGoodsDetailParamsDto =  (SplitGoodsDetailParamsDto)planDetail.getSplitGoodsDetailObj();
                      BeanUtils.copyProperties(splitGoodsDetailParamsDto, splitGoodsDetail);
+
+                     if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //如果承运商
+                         splitGoodsDetail.setRemainAmount(splitGoodsDetail.getAllotAmount());
+                     } else {
+                         splitGoodsDetail.setRemainAmount(0f);
+                     }
                      splitGoodsDetail.setCreateId(user.getUserId());
                      splitGoodsDetail.setCreateName(user.getRealName());
                      splitGoodsDetail.setCreateDate(opDate);
