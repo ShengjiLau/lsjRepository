@@ -8,6 +8,8 @@ import java.util.Map;
 public interface WarehousseLinkmanMapper {
     int deleteByPrimaryKey(Long whLinkmanId);
 
+    int updateIsDeleteByPrimaryKey(Long whLinkmanId);
+
     int insert(WarehouseLinkman record);
 
     WarehouseLinkman selectByPrimaryKey(Long whLinkmanId);

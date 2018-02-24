@@ -3,6 +3,7 @@ package com.lcdt.userinfo.web.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.Warehouse;
 import com.lcdt.userinfo.model.WarehouseLinkman;
 import com.lcdt.userinfo.model.WarehouseLoc;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.tl.commons.util.StringUtility;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,6 +72,14 @@ public class WarehouseApi {
     @RequestMapping(value = "/addWarehouse", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_warehouse')")
     public JSONObject addWarehouse(@Validated Warehouse dto) {
+        User user = SecurityInfoGetter.getUser();
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        dto.setCreateId(user.getUserId());
+        dto.setCreateName(user.getRealName());
+        dto.setCreateDate(new Date());
+        dto.setIsDeleted((short)0);
+        dto.setCompanyId(companyId);
+
         int result = warehouseService.addWarehouse(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
@@ -85,6 +95,10 @@ public class WarehouseApi {
     @RequestMapping(value = "/modifyWarehouse", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse')")
     public JSONObject modifyWarehouse(@Validated Warehouse dto) {
+        User user = SecurityInfoGetter.getUser();
+        dto.setUpdateId(user.getUserId());
+        dto.setUpdateName(user.getRealName());
+        dto.setUpdateTime(new Date());
         int result = warehouseService.modifyWarehouse(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
@@ -100,7 +114,7 @@ public class WarehouseApi {
     @RequestMapping(value = "/deleteWarehouse", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delete_warehouse')")
     public JSONObject deleteWarehouse(@ApiParam(value = "仓库ID",required = true) @RequestParam Long whId) {
-        int result = warehouseService.deleteWarehouseByPrimaryKey(whId);
+        int result = warehouseService.modifyWarehouseIsDelete(whId);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
@@ -151,6 +165,13 @@ public class WarehouseApi {
     @RequestMapping(value = "/linkman/addWarehouseLinkman", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_warehouse_linkman')")
     public JSONObject addWarehouseLinkman(@Validated WarehouseLinkman dto) {
+        User user = SecurityInfoGetter.getUser();
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        dto.setCreateId(user.getUserId());
+        dto.setCreateName(user.getRealName());
+        dto.setCreateDate(new Date());
+        dto.setIsDeleted((short)0);
+        dto.setCompanyId(companyId);
         int result = warehouseService.addWarehouseLinkMan(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
@@ -166,6 +187,10 @@ public class WarehouseApi {
     @RequestMapping(value = "/linkman/modifyWarehouseLinkman", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_linkman')")
     public JSONObject modifyWarehouseLinkman(@Validated WarehouseLinkman dto) {
+        User user = SecurityInfoGetter.getUser();
+        dto.setUpdateId(user.getUserId());
+        dto.setUpdateName(user.getRealName());
+        dto.setUpdateTime(new Date());
         int result = warehouseService.modifyWarehouseLinkMan(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
@@ -181,7 +206,7 @@ public class WarehouseApi {
     @RequestMapping(value = "/linkman/deleteWarehouseLinkman", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delete_warehouse_linkman')")
     public JSONObject deleteWarehouseLinkman(@ApiParam(value = "联系人ID",required = true) @RequestParam Long whLinkmanId) {
-        int result = warehouseService.deleteWarehouseLinkManByPrimaryKey(whLinkmanId);
+        int result = warehouseService.modifyWarehouseLinkManIsDelete(whLinkmanId);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
@@ -227,6 +252,13 @@ public class WarehouseApi {
     @RequestMapping(value = "/loc/addWarehouseLoc", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_warehouse_loc')")
     public JSONObject addWarehouseLoc(@Validated WarehouseLoc dto) {
+        User user = SecurityInfoGetter.getUser();
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        dto.setCreateId(user.getUserId());
+        dto.setCreateName(user.getRealName());
+        dto.setCreateDate(new Date());
+        dto.setIsDeleted((short)0);
+        dto.setCompanyId(companyId);
         int result = warehouseService.addWarehouseLoc(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
@@ -242,6 +274,10 @@ public class WarehouseApi {
     @RequestMapping(value = "/loc/modifyWarehouseLoc", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_loc')")
     public JSONObject modifyWarehouseLoc(@Validated WarehouseLoc dto) {
+        User user = SecurityInfoGetter.getUser();
+        dto.setUpdateId(user.getUserId());
+        dto.setUpdateName(user.getRealName());
+        dto.setUpdateTime(new Date());
         int result = warehouseService.modifyWarehouseLoc(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
@@ -257,7 +293,7 @@ public class WarehouseApi {
     @RequestMapping(value = "/loc/deleteWarehouseLoc", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delete_warehouse_loc')")
     public JSONObject deleteWarehouseLoc(@ApiParam(value = "库位ID",required = true) @RequestParam Long whLocId) {
-        int result = warehouseService.deleteWarehouseLocByPrimaryKey(whLocId);
+        int result = warehouseService.modifyWarehouseLocIsDelete(whLocId);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);

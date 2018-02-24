@@ -8,6 +8,8 @@ import java.util.Map;
 public interface WarehousseMapper {
     int deleteByPrimaryKey(Long whId);
 
+    int updateIsDeleteByPrimaryKey(Long whId);
+
     int insert(Warehouse record);
 
     Warehouse selectByPrimaryKey(Long whId);

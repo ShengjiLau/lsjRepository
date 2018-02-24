@@ -68,8 +68,8 @@ public class WarehouseSeviceImpl implements WarehouseService {
     }
 
     @Override
-    public int deleteWarehouseByPrimaryKey(Long whId) {
-        int result = warehousseMapper.deleteByPrimaryKey(whId);
+    public int modifyWarehouseIsDelete(Long whId) {
+        int result = warehousseMapper.updateIsDeleteByPrimaryKey(whId);
         return result;
     }
 
@@ -108,8 +108,8 @@ public class WarehouseSeviceImpl implements WarehouseService {
     }
 
     @Override
-    public int deleteWarehouseLinkManByPrimaryKey(Long whLinkmanId) {
-        int result = warehousseLinkManMapper.deleteByPrimaryKey(whLinkmanId);
+    public int modifyWarehouseLinkManIsDelete(Long whLinkmanId) {
+        int result = warehousseLinkManMapper.updateIsDeleteByPrimaryKey(whLinkmanId);
         return result;
     }
 
@@ -149,8 +149,8 @@ public class WarehouseSeviceImpl implements WarehouseService {
     }
 
     @Override
-    public int deleteWarehouseLocByPrimaryKey(Long whLocId) {
-        int result = warehousseLocMapper.deleteByPrimaryKey(whLocId);
+    public int modifyWarehouseLocIsDelete(Long whLocId) {
+        int result = warehousseLocMapper.updateIsDeleteByPrimaryKey(whLocId);
         return result;
     }
 

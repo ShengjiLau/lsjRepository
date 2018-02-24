@@ -22,6 +22,11 @@
     delete from t_warehouse_loc
     where wh_loc_id = #{whLocId,jdbcType=BIGINT}
   </delete>
+  <update id="updateIsDeteleByPrimaryKey" parameterType="java.lang.Long">
+    update t_warehouse_loc
+    set is_deleted = 1
+    where wh_loc_id = #{whLocId,jdbcType=BIGINT}
+  </update>
   <insert id="insert" parameterType="com.lcdt.userinfo.model.WarehouseLoc">
     <selectKey keyProperty="whLocId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()

@@ -33,6 +33,11 @@
     delete from t_warehouse
     where wh_id = #{whId,jdbcType=BIGINT}
   </delete>
+  <update id="updateIsDeleteByPrimaryKey" parameterType="java.lang.Long">
+    update t_warehouse
+    set is_deleted = 1
+    where wh_id = #{whId,jdbcType=BIGINT}
+  </update>
   <insert id="insert" parameterType="com.lcdt.userinfo.model.Warehouse">
     <selectKey keyProperty="whId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
