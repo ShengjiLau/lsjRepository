@@ -18,5 +18,10 @@ public class EmployeeServiceTest extends BaseIntegrationContext{
 
     }
 
+    @Test
+    @Rollback
+    public void testRemoveEmployee(){
+        employeeService.removeUserCompRel(181L);
+    }
 
 }

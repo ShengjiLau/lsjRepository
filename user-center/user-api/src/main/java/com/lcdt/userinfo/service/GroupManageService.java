@@ -14,6 +14,7 @@ import java.util.Map;
  */
 public interface GroupManageService {
 
+	void deleteUserGroupRelation(Long userId,Long companyId);
 	boolean deleteGroup(Group group);
 
 	Group createGroup(Group group) throws GroupExistException;

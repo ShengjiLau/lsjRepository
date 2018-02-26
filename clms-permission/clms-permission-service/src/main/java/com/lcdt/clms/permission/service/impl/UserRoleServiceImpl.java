@@ -32,6 +32,11 @@ public class UserRoleServiceImpl implements UserRoleService {
 	@Autowired
 	RolePermissionMapper rolePermissionDao;
 
+	@Transactional(rollbackFor = Exception.class)
+	public void removeUserRole(Long userId,Long companyId){
+		roleUserRelationDao.removeUserRoleRelation(userId,companyId);
+	}
+
 	@Transactional(readOnly = true,rollbackFor = Exception.class)
 	@Override
 	public Role selectById(Long roleId){

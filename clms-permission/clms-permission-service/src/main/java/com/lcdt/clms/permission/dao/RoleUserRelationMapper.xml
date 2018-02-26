@@ -97,4 +97,11 @@
       (#{item,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT})
     </foreach>
   </insert>
+
+  <delete id="removeUserRoleRelation">
+    delete from role_user_relation
+    where user_id = #{userId,jdbcType=BIGINT}
+    and company_id = #{companyId,jdbcType=BIGINT}
+  </delete>
+
 </mapper>

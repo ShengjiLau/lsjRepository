@@ -63,7 +63,7 @@ public interface UserGroupRelationMapper {
     List<UserGroupRelation> selectByUserIdAndCmpId(UserGroupRelation userGroupRelation);
 
 
-
+    void removeUserGroupRelation(@Param("userId") Long userId,@Param("companyId") Long companyId);
 
 
 }

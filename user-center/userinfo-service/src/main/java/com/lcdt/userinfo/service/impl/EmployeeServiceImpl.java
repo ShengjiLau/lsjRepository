@@ -49,6 +49,8 @@ public class EmployeeServiceImpl {
 	LoginLogService loginLogService;
 
 
+
+
 	@Transactional(rollbackFor = Exception.class)
 	public boolean removeUserCompRel(Long userCompId){
 
@@ -58,6 +60,8 @@ public class EmployeeServiceImpl {
 				return false;
 			}
 			userCompanyDao.deleteByPrimaryKey(userCompRel.getUserCompRelId());
+			roleService.removeUserRole(userCompRel.getUserId(),userCompRel.getCompId());
+			groupService.deleteUserGroupRelation(userCompRel.getUserId(), userCompRel.getCompId());
 			return true;
 		}
 

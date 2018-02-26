@@ -48,6 +48,12 @@ public class GroupManageServiceImpl implements GroupManageService {
 
 	public static Logger logger = LoggerFactory.getLogger(GroupManageServiceImpl.class);
 
+
+	@Transactional(rollbackFor = Exception.class)
+	public void deleteUserGroupRelation(Long userId,Long companyId){
+		relationDao.removeUserGroupRelation(userId,companyId);
+	}
+
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public boolean deleteGroup(Group group) {
