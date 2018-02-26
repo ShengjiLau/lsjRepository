@@ -86,15 +86,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
         } catch (ParseException e) {
             throw new RuntimeException("竞价/起运时间、送达有误！");
         }
-        if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
-            if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
-                String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
-                Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
-                vo.setCarrierCompanyId(customer.getBindCpid());
-            } else { // 司机
-                vo.setCarrierCompanyId(vo.getCompanyId()); //获取本企业司机
-            }
-        }
 
         if (!StringUtils.isEmpty(dto.getAttachement())) { //附件信息处理
             JSONArray jsonArray = JSONArray.parseArray(dto.getAttachement());
@@ -114,13 +105,22 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
         }
 
 
-
         //具体业务处理
         if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
+                if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
+                    String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
+                    Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
+                    vo.setCarrierCompanyId(customer.getBindCpid());
+                    vo.setCarrierCompanyName(customer.getBindCompany()); //绑定企业
+                }
                 planDirectProcedure(vo, dto,  flag, (short)1);
             } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
+                if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
+                    vo.setCarrierCompanyId(vo.getCompanyId()); //获取本企业司机
+                }
                 planDirectProcedure(vo, dto,  flag,(short)2);
+
             } else { //其它（发布后派单）
                 onlyCreateWaybillPlan(vo,dto,flag);
             }
@@ -132,7 +132,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 }
                  vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
                  waybillPlanMapper.insert(vo); //生成计划
-
                  createTransportWayItems(dto, vo);//批量创建栏目
                  StringBuffer msgSb = new StringBuffer(); //货物发送明细
                  List<PlanDetail> planDetailList = dto.getPlanDetailList();

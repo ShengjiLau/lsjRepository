@@ -70,6 +70,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="carrier_company_id" jdbcType="BIGINT" property="carrierCompanyId" />
+    <result column="carrier_company_name" jdbcType="VARCHAR" property="carrierCompanyName" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="plan_days" jdbcType="INTEGER" property="planDays" />
     <result column="pubdate" jdbcType="TIMESTAMP" property="pubdate" />
@@ -95,7 +96,6 @@
     <collection property="snatchGoodsList" column="{waybillPlanId=waybill_plan_id,isDeleted=is_deleted}"
                   ofType="com.lcdt.traffic.model.SnatchGoods" javaType="ArrayList"
                   select="com.lcdt.traffic.dao.SnatchGoodsMapper.selectByWaybillPlanId" />
-
 
     <!--运输方式列表-->
     <collection property="transportWayItemsList" column="{waybillPlanId=waybill_plan_id}"
@@ -170,7 +170,7 @@
       update_time, is_deleted, carrier_company_id, 
       company_id, plan_days, pubdate, 
       finish_date, cancel_date, cancel_man, 
-      cancel_remark)
+      cancel_remark,carrier_company_name)
     values (#{planCode,jdbcType=VARCHAR}, F_PLAN_SERIAL_CODE(#{transportWay,jdbcType=SMALLINT}), #{groupId,jdbcType=BIGINT},
       #{groupName,jdbcType=VARCHAR}, #{planSource,jdbcType=VARCHAR}, #{planStatus,jdbcType=VARCHAR}, 
       #{sendCardStatus,jdbcType=SMALLINT}, #{sendOrderType,jdbcType=SMALLINT}, #{carrierType,jdbcType=SMALLINT},
@@ -193,7 +193,7 @@
       #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, #{carrierCompanyId,jdbcType=BIGINT}, 
       #{companyId,jdbcType=BIGINT}, #{planDays,jdbcType=INTEGER}, #{pubdate,jdbcType=TIMESTAMP}, 
       #{finishDate,jdbcType=TIMESTAMP}, #{cancelDate,jdbcType=TIMESTAMP}, #{cancelMan,jdbcType=VARCHAR}, 
-      #{cancelRemark,jdbcType=VARCHAR})
+      #{cancelRemark,jdbcType=VARCHAR},#{carrierCompanyName,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.WaybillPlan">
     <!--
@@ -259,6 +259,7 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=SMALLINT},
       carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
+      carrier_company_name = #{carrierCompanyName,jdbcType=VARCHAR},
       company_id = #{companyId,jdbcType=BIGINT},
       plan_days = #{planDays,jdbcType=INTEGER},
       pubdate = #{pubdate,jdbcType=TIMESTAMP},
@@ -465,6 +466,10 @@
       <if test="carrierCompanyId != null">
         carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
       </if>
+      <if test="carrierCompanyName != null">
+        carrier_company_name = #{carrierCompanyName,jdbcType=VARCHAR},
+      </if>
+
       <if test="companyId != null">
         company_id = #{companyId,jdbcType=BIGINT},
       </if>
@@ -510,7 +515,7 @@
     attachment4, attachment4_name, attachment5, attachment5_name, is_approval, plan_remark, 
     create_id, create_name, create_date, update_id, update_name, update_time, is_deleted, 
     carrier_company_id, company_id, plan_days, pubdate, finish_date, cancel_date, cancel_man, 
-    cancel_remark
+    cancel_remark,carrier_company_name
     from t_waybill_plan
     <where>
         <if test="waybillPlanId!=null">
@@ -543,7 +548,7 @@
               attachment4, attachment4_name, attachment5, attachment5_name, is_approval, plan_remark,
               create_id, create_name, create_date, update_id, update_name, update_time, is_deleted,
               carrier_company_id, company_id, plan_days, pubdate, finish_date, cancel_date, cancel_man,
-              cancel_remark
+              cancel_remark,carrier_company_name
         from t_waybill_plan
         <where>
           <if test=" isDeleted!=null">
