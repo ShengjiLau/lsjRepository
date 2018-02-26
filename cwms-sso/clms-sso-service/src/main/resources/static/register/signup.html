@@ -96,7 +96,7 @@
               countdown = 6;
               return;
           } else {
-              obj.setAttribute("disabled", true);
+              $("#get-codes-btn").attr("disabled",true)
               obj.innerHTML="重新发送(" + countdown + ")";
               countdown--;
           }
