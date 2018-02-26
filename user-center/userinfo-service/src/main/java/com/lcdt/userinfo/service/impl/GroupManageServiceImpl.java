@@ -204,10 +204,6 @@ public class GroupManageServiceImpl implements GroupManageService {
 	@Transactional
 	@Override
 	public int groupUserDelete(UserGroupRelation userGroupRelation) {
-
-
-
-
 		return relationDao.deleteByUserGroupRelation(userGroupRelation);
 	}
 
