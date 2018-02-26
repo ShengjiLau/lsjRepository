@@ -168,8 +168,8 @@ public class AlipayWebController {
         boolean b = checkSignature(parameterMap);
         String orderNo = parameterMap.get("out_trade_no");
         String tradeStatus = parameterMap.get("trade_status");
-        ModelAndView successView = new ModelAndView("pay/pay_success");
-        ModelAndView failView = new ModelAndView("pay/pay_fail");
+        ModelAndView successView = new ModelAndView("/pay/pay_success");
+        ModelAndView failView = new ModelAndView("/pay/pay_fail");
         if (b) {
             logger.info("支付宝同步验签成功");
             PayOrder payOrder = orderService.selectByOrderNo(orderNo);
