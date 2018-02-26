@@ -194,13 +194,11 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//派车状态(已派车gi)
                     }
                     waybillPlanMapper.insert(vo);
-
                     Map map = new HashMap();
                     map.put("waybillPlanId",vo.getWaybillPlanId());
                     WaybillPlan tWaybillPlan = waybillPlanMapper.selectByPrimaryKey(map);
                     vo.setSerialCode(tWaybillPlan.getSerialCode());
                     createTransportWayItems(dto, vo);//批量创建栏目
-
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();
                     for (PlanDetail obj : planDetailList) {
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
@@ -218,8 +216,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         }
                     }
                     planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
-
-
                     SplitGoods splitGoods = new SplitGoods(); //派单
                     splitGoods.setWaybillPlanId(vo.getWaybillPlanId());
                     splitGoods.setSplitRemark("计划直接生成的...");
@@ -238,7 +234,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     splitGoods.setCarrierPhone(vo.getCarrierPhone());
                     splitGoods.setCarrierVehicle(vo.getCarrierVehicle());
                     splitGoodsMapper.insert(splitGoods);
-
                     List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
                     for (PlanDetail obj : planDetailList) {
                         SplitGoodsDetail tObj = new SplitGoodsDetail();
@@ -250,7 +245,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         } else {
                             tObj.setRemainAmount(obj.getPlanAmount()); //本次剩余
                         }
-
                         tObj.setFreightPrice(obj.getFreightPrice());
                         tObj.setFreightTotal(obj.getFreightTotal());
                         tObj.setDetailRemark("计划直接生成...");
