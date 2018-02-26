@@ -103,8 +103,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 vo.setAttachment5Name(dto1.getAttachment5Name());
             }
         }
-
-
         //具体业务处理
         if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
@@ -118,9 +116,9 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
             } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
                 if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
                     vo.setCarrierCompanyId(vo.getCompanyId()); //获取本企业司机
+                    vo.setCarrierCompanyName(dto.getCompanyName());
                 }
                 planDirectProcedure(vo, dto,  flag,(short)2);
-
             } else { //其它（发布后派单）
                 onlyCreateWaybillPlan(vo,dto,flag);
             }
@@ -232,6 +230,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     splitGoods.setUpdateName(vo.getCreateName());
                     splitGoods.setUpdateTime(vo.getCreateDate());
                     splitGoods.setCompanyId(vo.getCompanyId());
+                    splitGoods.setCarrierCompanyName(vo.getCarrierCompanyName());
                     splitGoods.setCarrierCompanyId(vo.getCarrierCompanyId());
                     splitGoods.setIsDeleted((short)0);
                     splitGoods.setCarrierCollectionIds(vo.getCarrierCollectionIds());
@@ -273,6 +272,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         WaybillDto waybillDto = new WaybillDto();
                         waybillDto.setWaybillCode(vo.getSerialCode()); //流水号
                         waybillDto.setCarrierCompanyId(vo.getCarrierCompanyId());
+                        waybillDto.setCarrierCompanyName(vo.getCarrierCompanyName());
                         waybillDto.setCreateId(vo.getCreateId());
                         waybillDto.setCreateName(vo.getCreateName());
                         waybillDto.setDriverPhone(vo.getCarrierPhone());

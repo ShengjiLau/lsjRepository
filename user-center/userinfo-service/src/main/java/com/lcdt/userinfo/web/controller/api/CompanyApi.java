@@ -158,7 +158,6 @@ public class CompanyApi {
 
 	@RequestMapping(value = "/companyinfo", method = RequestMethod.GET)
 	@ApiOperation("获取企业信息")
-//	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('get_companyinfo')")
 	public Company companyInfo() {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		Company company = companyService.selectById(companyId);

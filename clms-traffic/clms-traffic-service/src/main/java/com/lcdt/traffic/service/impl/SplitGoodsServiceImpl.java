@@ -13,7 +13,9 @@ import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.SplitGoodsDetailParamsDto;
 import com.lcdt.traffic.web.dto.SplitGoodsParamsDto;
 import com.lcdt.traffic.web.dto.WaybillDto;
+import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -64,7 +66,9 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Integer splitGoods4Direct(SplitGoodsParamsDto dto, User user, Long companyId) {
+    public Integer splitGoods4Direct(SplitGoodsParamsDto dto, UserCompRel userCompRel, Long companyId) {
+        User user = userCompRel.getUser();
+        Company company = userCompRel.getCompany();
         Map tMap = new HashMap<String,String>();
         tMap.put("waybillPlanId",dto.getWaybillPlanId());
         tMap.put("companyId",companyId);
@@ -116,13 +120,21 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                 String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
                 Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
                 splitGoods.setCarrierCompanyId(customer.getBindCpid());
-            }
+                splitGoods.setCarrierCompanyName(customer.getBindCompany());
+/*
 
+                waybillPlan.setCarrierCompanyName(customer.getBindCompany());
+                waybillPlan.setCarrierCompanyId(customer.getBindCpid());
+*/
 
+             } else {
+                splitGoods.setCarrierCompanyId(company.getCompId());
+                splitGoods.setCarrierCompanyName(company.getFullName());
 
-            //承运商---司机
+               // waybillPlan.setCarrierCompanyName(companyName);
+               // waybillPlan.setCarrierCompanyId(splitGoods.getCompanyId());
+           }
             splitGoodsMapper.insert(splitGoods);
-
             List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
             for (PlanDetail planDetail : planDetailList) {
                  if (planDetail.isAllot()) { //允许分配
@@ -193,6 +205,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                     if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER) ) {
                         WaybillDto waybillDto = new WaybillDto();
                         waybillDto.setCarrierCompanyId(splitGoods.getCarrierCompanyId());
+                        waybillDto.setCarrierCompanyName(splitGoods.getCarrierCompanyName());
                         waybillDto.setCreateId(splitGoods.getCreateId());
                         waybillDto.setCreateName(splitGoods.getCreateName());
                         waybillDto.setDriverPhone(splitGoods.getCarrierPhone());

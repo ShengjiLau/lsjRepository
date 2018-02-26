@@ -71,7 +71,6 @@ public class CompanyServiceImpl implements CompanyService {
 			}
 		}
 
-
 		int i = companyMapper.updateByPrimaryKey(company);
 		return company;
 	}
