@@ -132,7 +132,7 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
                         result += subItemsInfoService.modifySubItemsInfo(dao);
                     } else {
                         //子商品添加
-                        dao.setItemId(dao.getItemId());
+                        dao.setItemId(itemsInfoDao.getItemId());
                         result += subItemsInfoService.addSubItemsInfo(dao);
                     }
                 }

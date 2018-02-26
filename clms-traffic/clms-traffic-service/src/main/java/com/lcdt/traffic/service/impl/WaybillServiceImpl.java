@@ -12,6 +12,8 @@ import com.lcdt.traffic.dao.WaybillMapper;
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillDao;
 import com.lcdt.traffic.model.WaybillItems;
+import com.lcdt.traffic.model.WaybillPlan;
+import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.GprsLocationBo;
 import com.lcdt.traffic.vo.ConstantVO;
@@ -25,10 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by lyqishan on 2017/12/20
@@ -49,6 +48,9 @@ public class WaybillServiceImpl implements WaybillService {
     private WaybillItemsMapper waybillItemsMapper; //运单货物详细
     @Reference
     private CustomerRpcService customerRpcService;
+
+    @Autowired
+    private PlanService planService;
 
     @Override
     public int addWaybill(WaybillDto waybillDto) {
@@ -393,6 +395,13 @@ public class WaybillServiceImpl implements WaybillService {
                     }
                     if(flag){
                         //此计划下的运单全部完成，根据计划id 更新计划状态为完成
+                        WaybillPlan waybillPlan =new WaybillPlan();
+                        waybillPlan.setUpdateId((Long)map.get("updateId"));
+                        waybillPlan.setUpdateName((String)map.get("updateName"));
+                        waybillPlan.setUpdateTime(new Date());
+                        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED);
+                        waybillPlan.setWaybillPlanId(waybill.getWaybillPlanId());
+                        planService.updatePlanStatusByWaybill(waybillPlan);
                     }
                 }
             }

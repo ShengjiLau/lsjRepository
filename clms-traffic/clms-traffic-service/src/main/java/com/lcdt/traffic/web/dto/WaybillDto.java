@@ -110,6 +110,8 @@ public class WaybillDto {
 
     private Long carrierCompanyId;
 
+    private String carrierCompanyName;
+
     private Long companyId;
 
     private Date pubDate;
@@ -536,6 +538,14 @@ public class WaybillDto {
 
     public void setCarrierCompanyId(Long carrierCompanyId) {
         this.carrierCompanyId = carrierCompanyId;
+    }
+
+    public String getCarrierCompanyName() {
+        return carrierCompanyName;
+    }
+
+    public void setCarrierCompanyName(String carrierCompanyName) {
+        this.carrierCompanyName = carrierCompanyName;
     }
 
     public Long getCompanyId() {

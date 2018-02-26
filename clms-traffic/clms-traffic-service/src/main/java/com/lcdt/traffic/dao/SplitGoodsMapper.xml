@@ -18,6 +18,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="carrier_company_id" jdbcType="BIGINT" property="carrierCompanyId" />
+    <result column="carrier_company_name" jdbcType="VARCHAR" property="carrierCompanyName" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="cancel_remark" jdbcType="VARCHAR" property="cancelRemark" />
     <result column="carrier_collection_ids" jdbcType="VARCHAR" property="carrierCollectionIds" />
@@ -51,12 +52,13 @@
       create_name, create_date, update_id, 
       update_name, update_time, is_deleted, 
       carrier_company_id, company_id,cancel_remark,carrier_collection_ids,
-    carrier_collection_names, carrier_phone, carrier_vehicle)
+    carrier_collection_names, carrier_phone, carrier_vehicle,carrier_company_name)
     values (#{waybillPlanId,jdbcType=BIGINT}, #{splitRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT},
       #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, 
       #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, 
       #{carrierCompanyId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT},#{cancelRemark,jdbcType=VARCHAR},
-      #{carrierCollectionIds,jdbcType=VARCHAR},#{carrierCollectionNames,jdbcType=VARCHAR}, #{carrierPhone,jdbcType=VARCHAR}, #{carrierVehicle,jdbcType=VARCHAR})
+      #{carrierCollectionIds,jdbcType=VARCHAR},#{carrierCollectionNames,jdbcType=VARCHAR}, #{carrierPhone,jdbcType=VARCHAR},
+    #{carrierVehicle,jdbcType=VARCHAR},#{carrierCompanyName,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.SplitGoods">
     <!--
@@ -79,6 +81,7 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=SMALLINT},
       carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
+      carrier_company_name = #{carrierCompanyName,jdbcType=VARCHAR},
       company_id = #{companyId,jdbcType=BIGINT},
       cancel_remark = #{cancelRemark,jdbcType=VARCHAR}
     where split_goods_id = #{splitGoodsId,jdbcType=BIGINT}
@@ -91,7 +94,7 @@
     -->
     select split_goods_id, waybill_plan_id, split_remark, create_id, create_name,
     create_date, update_id, update_name, update_time, is_deleted, carrier_company_id,company_id,cancel_remark,
-    carrier_collection_ids,carrier_collection_names, carrier_phone, carrier_vehicle
+    carrier_collection_ids,carrier_collection_names, carrier_phone, carrier_vehicle,carrier_company_name
     from t_split_goods
     <where>
       <if test="splitGoodsId!=null">
@@ -120,7 +123,7 @@
     -->
     select split_goods_id, waybill_plan_id, split_remark, create_id, create_name,
     create_date, update_id, update_name, update_time, is_deleted, carrier_company_id,company_id,cancel_remark,
-    carrier_collection_ids,carrier_collection_names, carrier_phone, carrier_vehicle
+    carrier_collection_ids,carrier_collection_names, carrier_phone, carrier_vehicle,carrier_company_name
     from t_split_goods
     where waybill_plan_id = #{waybillPlanId} and company_id = #{companyId} and is_deleted = #{isDeleted}
   </select>
@@ -135,7 +138,7 @@
     -->
     select split_goods_id, waybill_plan_id, split_remark, create_id, create_name,
     create_date, update_id, update_name, update_time, is_deleted, carrier_company_id, company_id,cancel_remark,
-    carrier_collection_ids,carrier_collection_names, carrier_phone, carrier_vehicle
+    carrier_collection_ids,carrier_collection_names, carrier_phone, carrier_vehicle,carrier_company_name
     from t_split_goods
   </select>
 </mapper>
