@@ -103,9 +103,6 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             sb.append(")");
             resultMap.put("companyIds",sb.toString()); //====【计划创建企业】
 
-
-
-
             //竞价组
             if(!StringUtils.isEmpty(sb1.toString())) {
                 collectionIds = sb1.toString().substring(0,sb1.toString().length()-1);

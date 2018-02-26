@@ -117,7 +117,7 @@
   <!--获取组下的员工-->
   <select id="selectUser4Group"  parameterType="java.util.Map"  resultMap="BaseResultMap">
       SELECT  u1.user_id, mobile_country, phone, email, wechat, qq, real_name, nick_name, (null) as pwd,
-      birthday, picture_url, intro_memo, register_date, referrer_phone, user_status FROM t_uc_user u1
+      birthday, picture_url, intro_memo, register_date, referrer_phone,  r1.is_enable as user_status FROM t_uc_user u1
       left join t_uc_user_comp_rel r1 on r1.user_id=u1.user_id
       <if test="groupId!=null">
          WHERE r1.user_id in(select g1.user_id from t_uc_user_group g1 where g1.company_id=#{companyId,jdbcType=BIGINT} and g1.group_id=#{groupId,jdbcType=BIGINT})
