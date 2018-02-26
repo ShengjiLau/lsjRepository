@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User updateUser(User user) {
-		userMapper.updateByPrimaryKey(user);
+		userMapper.updateByPrimaryKeyWithoutPwd(user);
 		return user;
 	}
 
