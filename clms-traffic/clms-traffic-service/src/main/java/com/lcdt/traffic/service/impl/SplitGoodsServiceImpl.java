@@ -71,8 +71,6 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
         tMap.put("isDeleted","0");
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap); //查询对应的计划
         if (waybillPlan == null) throw new SplitGoodsException("计划异常为空！");
-
-
         if (dto.getTransportWayItemsList()!=null && dto.getTransportWayItemsList().size()>0) {
                 transportWayItemsMapper.deleteByWaybillPlanId(waybillPlan.getWaybillPlanId());//删除原有的运输入方式
                 for (TransportWayItems item : dto.getTransportWayItemsList()) {
@@ -212,6 +210,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                 }
 
             }
+            waybillPlan.setCarrierType(dto.getCarrierType());
             waybillPlan.setUpdateId(user.getUserId());
             waybillPlan.setUpdateName(user.getRealName());
             waybillPlan.setUpdateTime(new Date());
