@@ -567,7 +567,7 @@
             and customer_name like concat('%',#{customerName,jdbcType=VARCHAR},'%')
           </if>
           <if test="serialCode!=null and serialCode!=''">
-            and serial_code like like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
+            and serial_code like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
           </if>
           <if test="planStatus != null and planStatus!=''">
             and plan_status = #{planStatus,jdbcType=VARCHAR}
