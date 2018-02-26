@@ -57,6 +57,7 @@
     <result column="attachment5_name" jdbcType="VARCHAR" property="attachment5Name" />
     <result column="waybill_remark" jdbcType="VARCHAR" property="waybillRemark" />
     <result column="carrier_company_id" jdbcType="BIGINT" property="carrierCompanyId" />
+    <result column="carrier_company_name" jdbcType="VARCHAR" property="carrierCompanyName" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="pub_date" jdbcType="TIMESTAMP" property="pubDate" />
     <result column="finish_date" jdbcType="TIMESTAMP" property="finishDate" />
@@ -113,7 +114,7 @@
       attachment1_name, attachment2, attachment2_name, 
       attachment3, attachment3_name, attachment4, 
       attachment4_name, attachment5, attachment5_name, 
-      waybill_remark, carrier_company_id, company_id, 
+      waybill_remark, carrier_company_id,carrier_company_name, company_id,
       pub_date, finish_date, cancel_date, 
       cancel_man, cancel_remark, create_id, 
       create_name, create_date, update_id, 
@@ -143,7 +144,7 @@
       #{attachment1Name,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR}, #{attachment2Name,jdbcType=VARCHAR}, 
       #{attachment3,jdbcType=VARCHAR}, #{attachment3Name,jdbcType=VARCHAR}, #{attachment4,jdbcType=VARCHAR}, 
       #{attachment4Name,jdbcType=VARCHAR}, #{attachment5,jdbcType=VARCHAR}, #{attachment5Name,jdbcType=VARCHAR}, 
-      #{waybillRemark,jdbcType=VARCHAR}, #{carrierCompanyId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT},
+      #{waybillRemark,jdbcType=VARCHAR}, #{carrierCompanyId,jdbcType=BIGINT},#{carrierCompanyName,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
       CURRENT_TIMESTAMP, #{finishDate,jdbcType=TIMESTAMP}, #{cancelDate,jdbcType=TIMESTAMP},
       #{cancelMan,jdbcType=VARCHAR}, #{cancelRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
       #{createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{updateId,jdbcType=BIGINT},
@@ -206,6 +207,7 @@
       attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
       waybill_remark = #{waybillRemark,jdbcType=VARCHAR},
       carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
+      carrier_company_name = #{carrierCompanyName,jdbcType=VARCHAR},
       company_id = #{companyId,jdbcType=BIGINT},
       pub_date = #{pubDate,jdbcType=TIMESTAMP},
       finish_date = #{finishDate,jdbcType=TIMESTAMP},
@@ -234,7 +236,7 @@
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date, 
     arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name, 
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name, 
-    attachment5, attachment5_name, waybill_remark, carrier_company_id, company_id, pub_date, 
+    attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date, 
     update_id, update_name, update_date, is_deleted
     from t_waybill
@@ -253,7 +255,7 @@
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date, 
     arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name, 
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name, 
-    attachment5, attachment5_name, waybill_remark, carrier_company_id, company_id, pub_date, 
+    attachment5, attachment5_name, waybill_remark, carrier_company_id, carrier_company_name,company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date, 
     update_id, update_name, update_date, is_deleted
     from t_waybill
@@ -308,6 +310,7 @@
     attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
     waybill_remark = #{waybillRemark,jdbcType=VARCHAR},
     carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
+    carrier_company_name = #{carrierCompanyName,jdbcType=VARCHAR},
     update_id = #{updateId,jdbcType=BIGINT},
     update_name = #{updateName,jdbcType=VARCHAR},
     update_date = CURRENT_TIMESTAMP
@@ -363,6 +366,7 @@
     attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
     waybill_remark = #{waybillRemark,jdbcType=VARCHAR},
     carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
+    carrier_company_name = #{carrierCompanyName,jdbcType=VARCHAR},
     update_id = #{updateId,jdbcType=BIGINT},
     update_name = #{updateName,jdbcType=VARCHAR},
     update_date = CURRENT_TIMESTAMP
@@ -377,7 +381,7 @@
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
     arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
-    attachment5, attachment5_name, waybill_remark, carrier_company_id, company_id, pub_date,
+    attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted
     from t_waybill
@@ -392,7 +396,7 @@
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
     arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
-    attachment5, attachment5_name, waybill_remark, carrier_company_id, company_id, pub_date,
+    attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted
     from t_waybill
@@ -407,7 +411,7 @@
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
     arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
-    attachment5, attachment5_name, waybill_remark, carrier_company_id, company_id, pub_date,
+    attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted
     from t_waybill
@@ -468,7 +472,7 @@
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
     arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
-    attachment5, attachment5_name, waybill_remark, carrier_company_id, company_id, pub_date,
+    attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted
     from t_waybill
@@ -548,7 +552,7 @@
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
     arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
-    attachment5, attachment5_name, waybill_remark, carrier_company_id, company_id, pub_date,
+    attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted
     from t_waybill
@@ -579,7 +583,7 @@
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
     arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
-    attachment5, attachment5_name, waybill_remark, carrier_company_id, company_id, pub_date,
+    attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted
     from t_waybill
@@ -605,7 +609,7 @@
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
     arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
-    attachment5, attachment5_name, waybill_remark, carrier_company_id, company_id, pub_date,
+    attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted
     from t_waybill
