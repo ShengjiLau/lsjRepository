@@ -112,6 +112,7 @@ public class GroupApi {
         Group group = new Group();
         group.setGroupId(groupId);
         flag = groupManageService.deleteGroup(group);
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("message", flag ? "删除成功！" : "有员工或客户隶属该项目组不可删除！");
         jsonObject.put("code", flag ? 0 : -1);

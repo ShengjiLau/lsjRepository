@@ -29,6 +29,11 @@
     delete from t_warehouse_linkman
     where wh_linkman_id = #{whLinkmanId,jdbcType=BIGINT}
   </delete>
+  <update id="updateIsDeleteByPrimaryKey" parameterType="java.lang.Long">
+    update t_warehouse_linkman
+    set is_deleted = 1
+    where wh_linkman_id = #{whLinkmanId,jdbcType=BIGINT}
+  </update>
   <insert id="insert" parameterType="com.lcdt.userinfo.model.WarehouseLinkman">
     <selectKey keyProperty="whLinkmanId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()

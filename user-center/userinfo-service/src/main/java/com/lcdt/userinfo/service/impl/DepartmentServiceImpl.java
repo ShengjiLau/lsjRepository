@@ -82,7 +82,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		}
 		//2、查询企业用户部是否有引引用
 		map = new HashMap<>();
-		map.put("deptIds", "find_in_set('"+deptId+"',\"group_ids\")");
+		map.put("deptIds", "find_in_set('"+deptId+"',dept_ids)");
 		map.put("compId", companyId);
 		List<UserCompRel> userCompRelList =  userCompRelMapper.selectByCondition(map);
 		if (userCompRelList!=null && userCompRelList.size()>0) {

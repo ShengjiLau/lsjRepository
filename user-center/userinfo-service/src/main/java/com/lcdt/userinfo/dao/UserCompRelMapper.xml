@@ -106,7 +106,7 @@
       </if>
       <!--删除部门逻辑用Begin-->
       <if test="deptIds != null &amp;&amp; deptIds != ''">
-        and #{deptIds}
+        and ${deptIds}
       </if>
       <!--删除部门逻辑用End-->
 

@@ -403,7 +403,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
     private void updateSplitGoodsAmount(SplitGoodsDetail splitGoodsDetail, List<PlanDetail> planDetailList, User user){
         if (null!=planDetailList && planDetailList.size()>0) {
             for (PlanDetail obj: planDetailList) {
-                if (obj.getPlanDetailId()==splitGoodsDetail.getPlanDetailId()) {
+                if (obj.getPlanDetailId()-splitGoodsDetail.getPlanDetailId()==0) {
                     obj.setRemainderAmount(obj.getRemainderAmount()+splitGoodsDetail.getRemainAmount());//计划剩余数量=计划现剩余数量+派单剩余数量
                     //更新计划详细
                     obj.setUpdateId(user.getUserId());

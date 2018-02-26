@@ -25,6 +25,8 @@ public class Warehouse {
 
     private String telNum;
 
+    private String fax;
+
     private String province;
 
     private String city;
@@ -139,6 +141,14 @@ public class Warehouse {
 
     public void setTelNum(String telNum) {
         this.telNum = telNum == null ? null : telNum.trim();
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax == null ? null : fax.trim();
     }
 
     public String getProvince() {
