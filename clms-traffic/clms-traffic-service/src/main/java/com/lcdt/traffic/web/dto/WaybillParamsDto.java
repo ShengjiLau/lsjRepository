@@ -18,7 +18,7 @@ public class WaybillParamsDto {
 
 
     @ApiModelProperty(value = "计划编码")
-    private Long planCode;
+    private String planCode;
 
     @ApiModelProperty(value = "所属项目组ID")
     private Long groupId;
@@ -281,11 +281,11 @@ public class WaybillParamsDto {
         this.createName = createName;
     }
 
-    public Long getPlanCode() {
+    public String getPlanCode() {
         return planCode;
     }
 
-    public void setPlanCode(Long planCode) {
+    public void setPlanCode(String planCode) {
         this.planCode = planCode;
     }
 
