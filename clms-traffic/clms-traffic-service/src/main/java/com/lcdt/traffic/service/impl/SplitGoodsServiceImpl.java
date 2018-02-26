@@ -13,6 +13,7 @@ import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.SplitGoodsDetailParamsDto;
 import com.lcdt.traffic.web.dto.SplitGoodsParamsDto;
 import com.lcdt.traffic.web.dto.WaybillDto;
+import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import org.slf4j.Logger;
@@ -67,7 +68,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
     @Override
     public Integer splitGoods4Direct(SplitGoodsParamsDto dto, UserCompRel userCompRel, Long companyId) {
         User user = userCompRel.getUser();
-        String companyName = userCompRel.getCompany().getFullName();
+        Company company = userCompRel.getCompany();
         Map tMap = new HashMap<String,String>();
         tMap.put("waybillPlanId",dto.getWaybillPlanId());
         tMap.put("companyId",companyId);
@@ -120,12 +121,19 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                 Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
                 splitGoods.setCarrierCompanyId(customer.getBindCpid());
                 splitGoods.setCarrierCompanyName(customer.getBindCompany());
+/*
+
                 waybillPlan.setCarrierCompanyName(customer.getBindCompany());
                 waybillPlan.setCarrierCompanyId(customer.getBindCpid());
+*/
+
              } else {
-                waybillPlan.setCarrierCompanyId(splitGoods.getCompanyId());
-                waybillPlan.setCarrierCompanyName(companyName);
-            }
+                splitGoods.setCarrierCompanyId(company.getCompId());
+                splitGoods.setCarrierCompanyName(company.getFullName());
+
+               // waybillPlan.setCarrierCompanyName(companyName);
+               // waybillPlan.setCarrierCompanyId(splitGoods.getCompanyId());
+           }
             splitGoodsMapper.insert(splitGoods);
             List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
             for (PlanDetail planDetail : planDetailList) {
