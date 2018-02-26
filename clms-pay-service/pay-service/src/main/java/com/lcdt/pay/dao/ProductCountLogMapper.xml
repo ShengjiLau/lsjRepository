@@ -24,10 +24,10 @@
     </selectKey>
     insert into product_count_log (log_no, log_des, service_name, 
       consume_num, remain_num, log_type, 
-      deduct,user_name)
+      deduct,user_name,company_id)
     values (#{logNo,jdbcType=VARCHAR}, #{logDes,jdbcType=VARCHAR}, #{serviceName,jdbcType=VARCHAR}, 
       #{consumeNum,jdbcType=INTEGER}, #{remainNum,jdbcType=INTEGER}, #{logType,jdbcType=INTEGER}, 
-      #{deduct,jdbcType=INTEGER},#{userName,jdbcType=VARCHAR})
+      #{deduct,jdbcType=INTEGER},#{userName,jdbcType=VARCHAR},#{companyId,jdbcType=BIGINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.pay.rpc.ProductCountLog">
     update product_count_log

@@ -50,6 +50,22 @@ public class EmployeeServiceImpl {
 
 
 	@Transactional(rollbackFor = Exception.class)
+	public boolean removeUserCompRel(Long userCompId){
+
+		UserCompRel userCompRel = userCompanyDao.selectByPrimaryKey(userCompId);
+		if (userCompRel != null) {
+			if (userCompRel.getIsCreate() == 1) {
+				return false;
+			}
+			userCompanyDao.deleteByPrimaryKey(userCompRel.getUserCompRelId());
+			return true;
+		}
+
+		return false;
+	}
+
+
+	@Transactional(rollbackFor = Exception.class)
 	public boolean addEmployee(CreateEmployeeAccountDto dto) {
 		String phone = dto.getUserPhoneNum();
 		boolean phoneBeenRegister = userService.isPhoneBeenRegister(phone);

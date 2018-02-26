@@ -34,7 +34,7 @@ public interface WarehouseService {
      * @param whId
      * @return
      */
-    int deleteWarehouseByPrimaryKey(Long whId);
+    int modifyWarehouseIsDelete(Long whId);
     /**
      * 启用/禁用仓库
      * @param whId
@@ -65,7 +65,7 @@ public interface WarehouseService {
      * @param whLinkmanId
      * @return
      */
-    int deleteWarehouseLinkManByPrimaryKey(Long whLinkmanId);
+    int modifyWarehouseLinkManIsDelete(Long whLinkmanId);
 
     /**
      * 库位列表查询
@@ -90,7 +90,7 @@ public interface WarehouseService {
      * @param whLocId
      * @return
      */
-    int deleteWarehouseLocByPrimaryKey(Long whLocId);
+    int modifyWarehouseLocIsDelete(Long whLocId);
     /**
      * 启用/禁用库位
      * @param whLocId
