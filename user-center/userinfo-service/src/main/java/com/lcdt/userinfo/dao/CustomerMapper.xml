@@ -88,10 +88,14 @@
     link_email, company_id,collection_ids,collection_names
     from t_customer
     <where>
-     company_id = #{companyId,jdbcType=BIGINT}
+      company_id = #{companyId,jdbcType=BIGINT}
       <if test="groupIds!=null and groupIds!=''">
         and  ${groupIds}
       </if>
+      <if test="bindCompId!=null and bindCompId!=''">
+        and bind_comp_id = #{bindCompany,jdbcType=BIGINT}
+      </if>
+
     </where>
     order by customer_id
   </select>

@@ -613,10 +613,6 @@
     <where>
       and plan_status = '15' and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.company_id = p1.company_id)
       and  is_deleted = 0
-      <if test="companyId!=null">
-        and carrier_company_id= #{companyId,jdbcType=BIGINT}
-      </if>
-
       <if test="serialCode!=null and serialCode!=''">
         and serial_code like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
       </if>
@@ -640,9 +636,6 @@
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
         and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%'))
-      </if>
-      <if test="groupIds!=null and groupIds!=''">
-        and ${groupIds}
       </if>
       <if test="companyIds!=null">
         and ${companyIds}
@@ -691,9 +684,7 @@
       <if test="goodsInfo != null and goodsInfo!=''">
         and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like  concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') and is_deleted=0)
       </if>
-      <if test="groupIds!=null and groupIds!=''">
-        and ${groupIds}
-      </if>
+
       <if test="companyIds!=null">
         and ${companyIds}
       </if>
@@ -741,9 +732,6 @@
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
         and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')  and is_deleted=0)
-      </if>
-      <if test="groupIds!=null and groupIds!=''">
-        and ${groupIds}
       </if>
       <if test="companyIds!=null">
         and ${companyIds}
@@ -811,9 +799,6 @@
       <if test="goodsInfo != null and goodsInfo!=''">
         and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like  concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')  and is_deleted=0)
       </if>
-      <if test="groupIds!=null and groupIds!=''">
-        and ${groupIds}
-      </if>
       <if test="companyIds!=null">
         and ${companyIds}
       </if>
@@ -877,9 +862,6 @@
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
         and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') and is_deleted=0)
-      </if>
-      <if test="groupIds!=null and groupIds!=''">
-        and ${groupIds}
       </if>
       <if test="companyIds!=null">
         and ${companyIds}
@@ -946,9 +928,6 @@
       <if test="goodsInfo != null and goodsInfo!=''">
         and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') and is_deleted=0)
       </if>
-      <if test="groupIds!=null and groupIds!=''">
-        and ${groupIds}
-      </if>
       <if test="companyIds!=null">
         and ${companyIds}
       </if>
@@ -1010,9 +989,7 @@
       <if test="goodsInfo != null and goodsInfo!=''">
         and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') and is_deleted=0)
       </if>
-      <if test="groupIds!=null and groupIds!=''">
-        and ${groupIds}
-      </if>
+
       <if test="companyIds!=null">
         and ${companyIds}
       </if>
