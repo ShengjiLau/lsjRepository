@@ -30,6 +30,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -162,32 +163,33 @@ public class AlipayWebController {
      * @return
      */
     @RequestMapping("/alipay/returnurl")
-    @ResponseBody
-    public String alipayReturn(HttpServletRequest request) throws UnsupportedEncodingException, AlipayApiException {
+    public ModelAndView alipayReturn(HttpServletRequest request) throws UnsupportedEncodingException, AlipayApiException {
         Map<String, String> parameterMap = allRequestParamterMap(request);
         boolean b = checkSignature(parameterMap);
         String orderNo = parameterMap.get("out_trade_no");
         String tradeStatus = parameterMap.get("trade_status");
+        ModelAndView successView = new ModelAndView("/pay/pay_success");
+        ModelAndView failView = new ModelAndView("/pay/pay_fail");
         if (b) {
             logger.info("支付宝同步验签成功");
             PayOrder payOrder = orderService.selectByOrderNo(orderNo);
 
             if (tradeStatus == null) {
-                return "success";
+                return successView;
             }
 
             if (tradeStatus.equals("TRADE_SUCCESS")) {
                 if (payOrder == null) {
                     logger.error("充值订单数据库没有记录 orderNo:  {} ", payOrder.getOrderNo());
-                    return "fail";
+                    return failView;
                 }
                 orderService.changeToPayFinish(payOrder, OrderServiceImpl.PayType.ALIPAY);
             }
-            return "success";
+            return successView;
         } else {
             logger.info("支付宝同步验签失败");
 
-            return "fail";
+            return failView;
         }
     }
 
