@@ -81,11 +81,11 @@ public class LocationServiceApi {
         driver.setDriverPhone(mobile);
         JSONObject jsonObject = new JSONObject();
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-        if(!balanceCheckBo.check(companyId)){
+        /*if(!balanceCheckBo.check(companyId)){
             jsonObject.put("code", -1);
             jsonObject.put("msg", "余额不足！请充值！");
             return jsonObject;
-        }
+        }*/
         try {
             int row = driverService.modGpsStatus(driver);
             if(row>0){
@@ -108,11 +108,11 @@ public class LocationServiceApi {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-        if(!balanceCheckBo.check(companyId)){
+        /*if(!balanceCheckBo.check(companyId)){
             jsonObject.put("code", -1);
             jsonObject.put("msg", "余额不足！请充值！");
             return jsonObject;
-        }
+        }*/
         JSONObject result = GprsLocationBo.getInstance().authStatus(mobile);
         int resid = result.getInteger("resid");
         if (resid == 1) {   //白名单且已开通定位，更新本地数据库定位状态为2
