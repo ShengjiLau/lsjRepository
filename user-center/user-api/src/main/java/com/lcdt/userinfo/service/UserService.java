@@ -14,6 +14,7 @@ import java.util.List;
  */
 public interface UserService {
 
+	User updateUserWithpwd(User user);
 	User updateUser(User user);
 
 	User registerUser(RegisterDto registerDto) throws PhoneHasRegisterException;

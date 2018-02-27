@@ -83,10 +83,6 @@ public class OrderServiceImpl implements OrderService{
         money.setBalance(money.getBalance() - price);
         balanceMapper.updateByPrimaryKey(money);
 
-        //记录消费流水
-        logConsumeBalance(money,payOrder);
-
-
         Integer productId = serviceProductPackage.getProductId();
 
         ServiceProduct serviceProduct = productMapper.selectByPrimaryKey(productId);
@@ -122,10 +118,12 @@ public class OrderServiceImpl implements OrderService{
         payOrder.setBalance(money.getBalance());
 
         mapper.updateByPrimaryKey(payOrder);
+        //记录消费流水
+        logConsumeBalance(money,payOrder);
 
         String phone = SecurityInfoGetter.getUser().getPhone();
 
-        productCountService.logAddProductCount(serviceProduct.getServiceName(),"购买服务包",serviceProductPackage.getProductNum(),phone,companyId,companyServiceCount.getProductServiceNum());
+        productCountService.logAddProductCount(serviceProduct.getServiceName(),"购买"+serviceProductPackage.getPackageDes(),serviceProductPackage.getProductNum(),phone,companyId,companyServiceCount.getProductServiceNum());
 
     }
 

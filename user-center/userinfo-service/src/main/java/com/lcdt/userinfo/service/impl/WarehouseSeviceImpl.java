@@ -113,6 +113,17 @@ public class WarehouseSeviceImpl implements WarehouseService {
         return result;
     }
 
+    @Override
+    public int modifyWarehouseLinkManIsDefault(WarehouseLinkman linkman) {
+        if(linkman.getIsDefault() != null && linkman.getIsDefault() == 1){
+            WarehouseLinkman oldLinkman = warehousseLinkManMapper.selectByPrimaryKey(linkman.getWhLinkmanId());
+            if(oldLinkman != null && oldLinkman.getWhId() != null) {
+                warehousseLinkManMapper.updateIsDefaultByWhId(oldLinkman.getWhId());
+            }
+        }
+        int result = warehousseLinkManMapper.updateIsDefaultByPrimaryKey(linkman);
+        return result;
+    }
     //----------库位列表----------
     @Override
     public PageInfo warehouseLocList(Map m) {
