@@ -16,6 +16,7 @@ import com.lcdt.traffic.service.SplitGoodsService;
 import com.lcdt.traffic.web.dto.SplitGoodsParamsDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -56,8 +57,8 @@ public class SplitGoodsApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_4_direct')")
     public String splitGoods4Direct(@ApiParam(value = "派单详细信息", required = true) @RequestBody SplitGoodsParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        User loginUser = SecurityInfoGetter.getUser();
-        int flag = splitGoodsService.splitGoods4Direct(dto,loginUser,companyId);
+         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        int flag = splitGoodsService.splitGoods4Direct(dto,userCompRel,companyId);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;

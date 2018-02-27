@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface UserRoleService {
 
-
+	void removeUserRole(Long userId,Long companyId);
 	Role selectById(Long roleId);
 
 	List<Role> getUserRole(Long userId, Long companyId);

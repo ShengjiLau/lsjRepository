@@ -119,9 +119,7 @@ public class UserApi {
 		user = userService.selectUserByPhone(user.getPhone());
 		user.setNickName(modifyUserDto.getNickName());
 		user.setRealName(modifyUserDto.getName());
-		if (!StringUtils.isEmpty(modifyUserDto.getAvatarUrl())) {
-			user.setPictureUrl(modifyUserDto.getAvatarUrl());
-		}
+		user.setPictureUrl(modifyUserDto.getAvatarUrl());
 		if (modifyUserDto.getEmail() != null) {
 			user.setEmail(modifyUserDto.getEmail());
 		}

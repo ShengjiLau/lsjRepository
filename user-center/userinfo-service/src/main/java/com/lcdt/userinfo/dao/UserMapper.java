@@ -45,7 +45,7 @@ public interface UserMapper {
      * @mbg.generated
      */
     int updateByPrimaryKey(User record);
-
+    int updateByPrimaryKeyWithoutPwd(User record);
     /***
      * 通过手机号查询用户信息
      * @param phone

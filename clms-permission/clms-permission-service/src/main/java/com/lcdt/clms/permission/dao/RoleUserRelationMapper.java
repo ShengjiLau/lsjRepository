@@ -56,4 +56,7 @@ public interface RoleUserRelationMapper {
 
     void insertRoles(@Param("roles") List<Long> roles,@Param("userId") Long userId,@Param("companyId") Long companyId);
 
+
+    void removeUserRoleRelation(@Param("userId") Long userId,@Param("companyId") Long companyId);
+
 }

@@ -125,10 +125,8 @@ public class CompanyApi {
 		company.setCity(modifyCompanyInfoDto.getCity());
 		company.setCounty(modifyCompanyInfoDto.getCounty());
 		company.setDetailAddress(modifyCompanyInfoDto.getDetailAddress());
+		company.setCompanyLogo(modifyCompanyInfoDto.getCompanyLogo());
 
-		if (!StringUtils.isEmpty(modifyCompanyInfoDto.getCompanyLogo())) {
-			company.setCompanyLogo(modifyCompanyInfoDto.getCompanyLogo());
-		}
 
 		if (!StringUtils.isEmpty(modifyCompanyInfoDto.getFax())) {
 			company.setFax(modifyCompanyInfoDto.getFax());
@@ -158,7 +156,6 @@ public class CompanyApi {
 
 	@RequestMapping(value = "/companyinfo", method = RequestMethod.GET)
 	@ApiOperation("获取企业信息")
-//	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('get_companyinfo')")
 	public Company companyInfo() {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		Company company = companyService.selectById(companyId);

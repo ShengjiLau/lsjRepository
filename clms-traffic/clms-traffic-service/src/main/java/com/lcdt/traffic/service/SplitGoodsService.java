@@ -17,11 +17,11 @@ public interface SplitGoodsService {
      * 直派逻辑
      *
      * @param dto -- 前端页面传来的分配对象
-     * @param user -- 当前登录用户
+     * @param userCompRel -- 当前登录企业用户
      * @param companyId -- 用户所属企业ID
      * @return
      */
-    Integer splitGoods4Direct(SplitGoodsParamsDto dto, User user, Long companyId);
+    Integer splitGoods4Direct(SplitGoodsParamsDto dto, UserCompRel userCompRel, Long companyId);
 
 
 
