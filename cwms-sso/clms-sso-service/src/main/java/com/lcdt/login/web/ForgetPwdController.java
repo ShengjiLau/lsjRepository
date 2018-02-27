@@ -45,8 +45,19 @@ public class ForgetPwdController {
         if (StringUtils.isEmpty(phoneNum)) {
             jsonObject.put("result", false);
             jsonObject.put("message", "手机号码不能为空");
+            return jsonObject.toString();
         }
         try {
+
+            boolean phoneBeenRegister = userService.isPhoneBeenRegister(phoneNum);
+
+            if (!phoneBeenRegister) {
+                jsonObject.put("result", false);
+                jsonObject.put("message", "此手机号码暂未注册，请先注册！");
+                return jsonObject.toString();
+            }
+
+
             boolean b = validCodeService.sendValidCode(request, validcodeTag, 60 * 3, phoneNum);
             jsonObject.put("result", b);
             if (b) {

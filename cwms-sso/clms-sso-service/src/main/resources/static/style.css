@@ -21,6 +21,10 @@ nav .logo img{
   height: 26px;
   vertical-align: middle;
 }
+button:disabled{
+  color: #C7C7C7 !important;
+  background: #F2F2F2 !important;
+}
 .iconfont{
     font-family:"iconfont" !important;
     font-size:14px;font-style:normal;
