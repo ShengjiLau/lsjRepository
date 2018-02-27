@@ -33,6 +33,12 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	public User updateUserWithpwd(User user) {
+		userMapper.updateByPrimaryKey(user);
+		return user;
+	}
+
+
 	@Transactional
 	@Override
 	public User registerUser(RegisterDto registerDto) throws PhoneHasRegisterException {

@@ -146,7 +146,7 @@ public class UserApi {
 		User originUser = userService.queryByUserId(user.getUserId());
 		if (originUser.getPwd().equals(encodeOldpwd)) {
 			originUser.setPwd(encodeNewpwd);
-			userService.updateUser(originUser);
+			userService.updateUserWithpwd(originUser);
 		}else{
 			throw new PwdErrorException("密码不正确");
 		}
