@@ -181,13 +181,17 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         return pageInfo;
     }
 
+
+    @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Offer(Map map) {
+
         List<Customer> customerList = bindCustomerList(map);
         map.remove("groupIds");//移除
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
-        map.put("companyIds",map.get("companyIds"));
-        map.put("carrierCollectionIds",map.get("carrierCollectionIds"));
+
+        map.put("companyIds",cMap.get("companyIds"));
+        map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
         int pageNo = 1;
         int pageSize = 0; //0表示所有
         if (map.containsKey("page_no")) {
@@ -213,13 +217,17 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         return pageInfo;
     }
 
+
+    @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Pass(Map map) {
         List<Customer> customerList = bindCustomerList(map);
         map.remove("groupIds");
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
-        map.put("companyIds",map.get("companyIds"));
-        map.put("carrierCollectionIds",map.get("carrierCollectionIds"));
+
+        map.put("companyIds",cMap.get("companyIds"));
+        map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
+
         int pageNo = 1;
         int pageSize = 0; //0表示所有
         if (map.containsKey("page_no")) {
@@ -234,7 +242,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         }
         PageHelper.startPage(pageNo, pageSize);
 
-        List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Offer(map);
+        List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Pass(map);
         if (list!=null && list.size()>0) {
             for(CustomerPlanDto dto :list){
                 dto.setPlanSource(planSource(dto.getCompanyId(),customerList));
@@ -245,13 +253,15 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         return pageInfo;
     }
 
+
+    @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4VehicleDoing(Map map) {
         List<Customer> customerList = bindCustomerList(map);
         map.remove("groupIds");
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
-        map.put("companyIds",map.get("companyIds"));
-        map.put("carrierCollectionIds",map.get("carrierCollectionIds"));
+        map.put("companyIds",cMap.get("companyIds"));
+        map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
         int pageNo = 1;
         int pageSize = 0; //0表示所有
         if (map.containsKey("page_no")) {
@@ -277,13 +287,15 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         return pageInfo;
     }
 
+
+    @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4VehicleHave(Map map) {
         List<Customer> customerList = bindCustomerList(map);
         map.remove("groupIds");
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
-        map.put("companyIds",map.get("companyIds"));
-        map.put("carrierCollectionIds",map.get("carrierCollectionIds"));
+        map.put("companyIds",cMap.get("companyIds"));
+        map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
         int pageNo = 1;
         int pageSize = 0; //0表示所有
         if (map.containsKey("page_no")) {
@@ -311,13 +323,15 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         return pageInfo;
     }
 
+
+    @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Completed(Map map) {
         List<Customer> customerList = bindCustomerList(map);
         map.remove("groupIds");
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
-        map.put("companyIds",map.get("companyIds"));
-        map.put("carrierCollectionIds",map.get("carrierCollectionIds"));
+        map.put("companyIds",cMap.get("companyIds"));
+        map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
         int pageNo = 1;
         int pageSize = 0; //0表示所有
         if (map.containsKey("page_no")) {
@@ -342,13 +356,15 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         return pageInfo;
     }
 
+
+    @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Cancel(Map map) {
         List<Customer> customerList = bindCustomerList(map);
         map.remove("groupIds");
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
-        map.put("companyIds",map.get("companyIds"));
-        map.put("carrierCollectionIds",map.get("carrierCollectionIds"));
+        map.put("companyIds",cMap.get("companyIds"));
+        map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
         int pageNo = 1;
         int pageSize = 0; //0表示所有
         if (map.containsKey("page_no")) {
@@ -373,6 +389,8 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         return pageInfo;
     }
 
+
+    @Transactional
     @Override
     public int customerPlanOfferOwn(SnatchOfferDto dto, SnatchGoods snatchGoods) {
         Map tMap = new HashMap<String,String>();
@@ -420,6 +438,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
 
     }
 
+    @Transactional
     @Override
     public int customerPlanSplitVehicle(SplitVehicleDto dto, WaybillDto waybillDto) {
         Map tMap = new HashMap<String,String>();
