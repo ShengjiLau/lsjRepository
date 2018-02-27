@@ -66,7 +66,7 @@ public class CompanyServiceImpl implements CompanyService {
 		Company result = companyMapper.selectByCondition(company);
 
 		if (result != null) {
-			if (result.getCompId() != company.getCompId()) {
+			if (!result.getCompId().equals(company.getCompId())) {
 				throw new RuntimeException("公司名已存在");
 			}
 		}
@@ -87,9 +87,6 @@ public class CompanyServiceImpl implements CompanyService {
 		}
 		Date dt = new Date();
 		//创建企业
-
-
-
 		Company company = new Company();
 		company.setFullName(dto.getCompanyName());
 		Company company1 = companyMapper.selectByCondition(company);

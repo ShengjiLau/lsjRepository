@@ -2,6 +2,8 @@ package test.com.lcdt.userinfo.dao;
 
 import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
+import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.service.impl.EmployeeServiceImpl;
 import com.lcdt.userinfo.service.impl.UserServiceImpl;
@@ -64,5 +66,19 @@ public class FrontUserInfoMapperTest extends BaseIntegrationContext {
 		employeeService.updateEmployee(updateEmployeeAccountDto);
 	}
 
+	@Autowired
+	CompanyService companyService;
+
+	@Test
+	@Rollback
+	public void testModifyCompanyName() {
+
+		Company company1 = companyService.selectById(145L);
+
+
+		company1.setShortName("shortNametest");
+
+		companyService.updateCompany(company1);
+	}
 
 }
