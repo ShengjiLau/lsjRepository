@@ -89,6 +89,7 @@ public class ForgetPwdController {
             return modelAndView;
         }else{
             modelAndView.setViewName("/forgetPassword");
+            modelAndView.addObject("error", "验证码错误或已过期，请重新获取！");
             return modelAndView;
         }
     }
