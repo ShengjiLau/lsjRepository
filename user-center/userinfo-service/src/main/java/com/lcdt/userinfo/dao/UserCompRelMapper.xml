@@ -77,7 +77,8 @@
         dept_ids = #{deptIds,jdbcType=VARCHAR},
         dept_names = #{deptNames,jdbcType=VARCHAR},
         is_enable = #{isEnable,jdbcType=TINYINT},
-        comment = #{comment,jdbcType=VARCHAR}
+        comment = #{comment,jdbcType=VARCHAR},
+        duty = #{duty,jdbcType=VARCHAR}
     where user_comp_rel_id = #{userCompRelId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
