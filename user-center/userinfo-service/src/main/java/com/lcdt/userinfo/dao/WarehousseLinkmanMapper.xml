@@ -113,7 +113,7 @@
 
   <update id="updateIsDefaultByPrimaryKey" parameterType="com.lcdt.userinfo.model.WarehouseLinkman">
     update t_warehouse_linkman
-    set is_default = #{isDefault,jdbcType=SMALLINT},
+    set is_default = #{isDefault,jdbcType=SMALLINT}
     where wh_linkman_id = #{whLinkmanId,jdbcType=BIGINT}
   </update>
 
