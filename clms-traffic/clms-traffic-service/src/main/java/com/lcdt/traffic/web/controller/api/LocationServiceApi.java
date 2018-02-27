@@ -68,7 +68,7 @@ public class LocationServiceApi {
         t.start();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", 0);
-        jsonObject.put("msg", "请求成功");
+        jsonObject.put("message", "请求成功");
         return jsonObject;
     }
 
@@ -83,21 +83,21 @@ public class LocationServiceApi {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         /*if(!balanceCheckBo.check(companyId)){
             jsonObject.put("code", -1);
-            jsonObject.put("msg", "余额不足！请充值！");
+            jsonObject.put("message", "余额不足！请充值！");
             return jsonObject;
         }*/
         try {
             int row = driverService.modGpsStatus(driver);
             if(row>0){
                 jsonObject.put("code", 0);
-                jsonObject.put("msg", "开通成功");
+                jsonObject.put("message", "开通成功");
             }else{
                 jsonObject.put("code", -1);
-                jsonObject.put("msg", "该司机不存在");
+                jsonObject.put("message", "该司机不存在");
             }
         } catch (Exception e) {
             jsonObject.put("code", -1);
-            jsonObject.put("msg", "操作失败");
+            jsonObject.put("message", "操作失败");
         }
         return jsonObject;
     }
@@ -110,7 +110,7 @@ public class LocationServiceApi {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         /*if(!balanceCheckBo.check(companyId)){
             jsonObject.put("code", -1);
-            jsonObject.put("msg", "余额不足！请充值！");
+            jsonObject.put("message", "余额不足！请充值！");
             return jsonObject;
         }*/
         JSONObject result = GprsLocationBo.getInstance().authStatus(mobile);
@@ -121,16 +121,16 @@ public class LocationServiceApi {
             driver.setGpsStatus(new Short("2"));
             driverService.modGpsStatus(driver);
             jsonObject.put("code", resid);
-            jsonObject.put("msg", "定位已激活");
+            jsonObject.put("message", "定位已激活");
         } else if (resid == 0) {    //未激活
             jsonObject.put("code", resid);
-            jsonObject.put("msg", "司机" + mobile + "没有回复短信激活，再次发送开通短信？");
+            jsonObject.put("message", "司机" + mobile + "没有回复短信激活，再次发送开通短信？");
         } else if (resid == -1) {    //手机号不存在
             jsonObject.put("code", resid);
-            jsonObject.put("msg", "查找不到该手机");
+            jsonObject.put("message", "查找不到该手机");
         } else {      //resid = -99  黑名单用户
             jsonObject.put("code", resid);
-            jsonObject.put("msg", "黑名单用户");
+            jsonObject.put("message", "黑名单用户");
         }
         return jsonObject;
     }
@@ -143,7 +143,7 @@ public class LocationServiceApi {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         if(!balanceCheckBo.check(companyId)){
             jsonObject.put("code", -1);
-            jsonObject.put("msg", "余额不足！请充值！");
+            jsonObject.put("message", "余额不足！请充值！");
             return jsonObject;
         }
         JSONObject result = GprsLocationBo.getInstance().authOpen(mobile);
@@ -155,15 +155,15 @@ public class LocationServiceApi {
             driverService.modGpsStatus(driver);
             jsonObject.put("code", 0);
             jsonObject.put("resid", resid);
-            jsonObject.put("msg", "白名单开通成功，请通知用户回复短信小写的y");
+            jsonObject.put("message", "白名单开通成功，请通知用户回复短信小写的y");
         } else if (resid == 1) {
             jsonObject.put("code", 0);
             jsonObject.put("resid", resid);
-            jsonObject.put("msg", "定位已激活");
+            jsonObject.put("message", "定位已激活");
         } else if (resid == -3) {
             jsonObject.put("code", 0);
             jsonObject.put("resid", resid);
-            jsonObject.put("msg", "一个手机号一天最多能下发白名单3次，请明天再试");
+            jsonObject.put("message", "一个手机号一天最多能下发白名单3次，请明天再试");
         }else{
             /**
              *  -2	一个手机号一天最多能下发白名单3次，请明天再试
@@ -176,7 +176,7 @@ public class LocationServiceApi {
              *  -80	余额不足,请充值:请联系客服
              */
             jsonObject.put("code", -1);
-            jsonObject.put("msg", "系统错误");  //
+            jsonObject.put("message", "系统错误");  //
         }
         return jsonObject;
     }
@@ -189,7 +189,7 @@ public class LocationServiceApi {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         if(!balanceCheckBo.check(companyId)){
             jsonObject.put("code", -1);
-            jsonObject.put("msg", "余额不足！请充值！");
+            jsonObject.put("message", "余额不足！请充值！");
             return jsonObject;
         }
         JSONObject result = GprsLocationBo.getInstance().queryLocation(mobile);
@@ -203,16 +203,16 @@ public class LocationServiceApi {
             jsonObject.put("code", resid);
             jsonObject.put("location",result.getString("location"));
             jsonObject.put("locationTime", DateUtility.getCurrDatetime());
-            jsonObject.put("msg", "查询成功");
+            jsonObject.put("message", "查询成功");
         } else if (resid == -80) {    //	余额不足,请充值:请联系客服
             jsonObject.put("code", resid);
-            jsonObject.put("msg", "余额不足,请充值:请联系客服");
+            jsonObject.put("message", "余额不足,请充值:请联系客服");
         } else if (resid == -130) {    //用户可能关机
             jsonObject.put("code", resid);
-            jsonObject.put("msg", "用户可能关机");
+            jsonObject.put("message", "用户可能关机");
         } else {      //对于移动手机，定位失败时运营商返回的结果
             jsonObject.put("code", resid);
-            jsonObject.put("msg", "接口返回错误");
+            jsonObject.put("message", "接口返回错误");
         }
         return jsonObject;
     }
