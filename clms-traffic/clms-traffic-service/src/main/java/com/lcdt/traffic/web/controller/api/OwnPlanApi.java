@@ -53,7 +53,7 @@ public class OwnPlanApi {
 
     @ApiOperation("创建--发布")
     @RequestMapping(value = "/createPlan",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_create_plan')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_create_plan') or hasAuthority('traffic_create_plan_1')")
     public JSONObject createPlan(@RequestBody WaybillParamsDto dto, BindingResult bindingResult) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -314,7 +314,7 @@ public class OwnPlanApi {
 
     @ApiOperation("留言-列表")
     @RequestMapping(value = "/planLeaveMsgList",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_list') or hasAuthority('traffic_plan_leave_msg') or hasAuthority('traffic_plan_leave_msg_1')")
     public PageBaseDto planLeaveMsgList( @ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
                                                    @ApiParam(value = "创建计划企业ID",required = true) @RequestParam Long createCompanyId,
                                                    @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
@@ -342,7 +342,7 @@ public class OwnPlanApi {
 
     @ApiOperation("留言-添加")
     @RequestMapping(value = "/planLeaveMsgAdd",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_Add')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_Add') or hasAuthority('traffic_plan_leave_msg') or hasAuthority('traffic_plan_leave_msg_1')")
     public JSONObject planLeaveMsgAdd(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
                                         @ApiParam(value = "创建计划企业ID",required = true) @RequestParam Long companyId,
                                         @ApiParam(value = "留言内容",required = true) @RequestParam String leaveMsg) {
@@ -397,7 +397,7 @@ public class OwnPlanApi {
 
     @ApiOperation("竞价--结束")
     @RequestMapping(value = "/biddingFinish",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_bidding_finish')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_bidding_finish') or hasAuthority('traffic_customer_plan_offer')")
     public String biddingFinish(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
         User loginUser = SecurityInfoGetter.getUser();
         Long companyId = SecurityInfoGetter.getCompanyId();
