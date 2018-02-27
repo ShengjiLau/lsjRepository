@@ -38,7 +38,14 @@ public class ForgetPwdController {
     @RequestMapping("/sendforgetpwdcode")
     @ResponseBody
     public String forgetpwdSendValidCode(HttpServletRequest request,String phoneNum){
+
+
         JSONObject jsonObject = new JSONObject();
+
+        if (StringUtils.isEmpty(phoneNum)) {
+            jsonObject.put("result", false);
+            jsonObject.put("message", "手机号码不能为空");
+        }
         try {
             boolean b = validCodeService.sendValidCode(request, validcodeTag, 60 * 3, phoneNum);
             jsonObject.put("result", b);
