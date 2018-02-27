@@ -46,7 +46,7 @@ public class CustomerPlanApi {
 
     @ApiOperation("客户计划-列表-竞价")
     @RequestMapping(value = "/customerPlanList4Bidding",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_bidding')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_bidding') or hasAuthority('traffic_customer_plan_list')")
     public PageBaseDto customerPlanList4Bidding(@Validated WaybillPlanListParamsDto dto,
                                               @ApiParam(value = "页码",required = true,defaultValue = "1") @RequestParam Integer pageNo,
                                               @ApiParam(value = "每页显示条数",required = true,defaultValue = "10") @RequestParam Integer pageSize) {
@@ -116,7 +116,7 @@ public class CustomerPlanApi {
 
     @ApiOperation("客户计划-列表-已报价")
     @RequestMapping(value = "/customerPlanList4Offer",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_offer')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_offer') or hasAuthority('traffic_customer_plan_list')")
     public PageBaseDto customerPlanList4Offer(@Validated WaybillPlanListParamsDto dto,
                                             @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
                                             @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
@@ -184,7 +184,7 @@ public class CustomerPlanApi {
 
     @ApiOperation("客户计划-列表-已错过")
     @RequestMapping(value = "/customerPlanList4Pass",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_pass')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_pass') or hasAuthority('traffic_customer_plan_list')")
     public PageBaseDto customerPlanList4Pass(@Validated WaybillPlanListParamsDto dto,
                                            @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
                                            @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
@@ -253,7 +253,7 @@ public class CustomerPlanApi {
 
     @ApiOperation("客户计划-列表-派车中")
     @RequestMapping(value = "/customerPlanList4VehicleDoing",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_vehicle_doing')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_vehicle_doing')or hasAuthority('traffic_customer_plan_list')")
     public PageBaseDto customerPlanList4VehicleDoing(@Validated WaybillPlanListParamsDto dto,
                                                    @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
                                                    @ApiParam(value = "每页显示条数",required = true, defaultValue = "2") @RequestParam Integer pageSize) {
@@ -320,7 +320,7 @@ public class CustomerPlanApi {
 
     @ApiOperation("客户计划-列表-已派车")
     @RequestMapping(value = "/customerPlanList4VehicleHave",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_vehicle_have')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_vehicle_have') or hasAuthority('traffic_customer_plan_list')")
     public PageBaseDto customerPlanList4VehicleHave(@Validated WaybillPlanListParamsDto dto,
                                                   @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
                                                   @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
@@ -387,7 +387,7 @@ public class CustomerPlanApi {
 
     @ApiOperation("客户计划-列表-已完成")
     @RequestMapping(value = "/customerPlanList4Completed",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_vehicle_completed')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_vehicle_completed') or hasAuthority('traffic_customer_plan_list')")
     public PageBaseDto customerPlanList4Completed(@Validated WaybillPlanListParamsDto dto,
                                                 @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
                                                 @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
@@ -456,7 +456,7 @@ public class CustomerPlanApi {
 
     @ApiOperation("客户计划-列表-已取消")
     @RequestMapping(value = "/customerPlanList4Cancel",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_vehicle_cancel')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_vehicle_cancel') or hasAuthority('traffic_customer_plan_list')")
     public PageBaseDto customerPlanList4Cancel(@Validated WaybillPlanListParamsDto dto,
                                              @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
                                              @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
@@ -524,7 +524,7 @@ public class CustomerPlanApi {
 
     @ApiOperation("客户计划-报价-信息拉取")
     @RequestMapping(value = "/customerPlanOfferLoadData",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_offer_load_data')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_offer_load_data') or hasAuthority('traffic_customer_plan_offer') or hasAuthority('traffic_customer_plan_offer_1')")
     public WaybillPlan customerPlanOfferOwner(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
                                             @ApiParam(value = "创建计划企业ID",required = true) @RequestParam Long companyId) {
 
@@ -543,7 +543,7 @@ public class CustomerPlanApi {
 
     @ApiOperation("客户计划-报价")
     @RequestMapping(value = "/customerPlanOfferOwn",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_offer_own')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_offer_own')  or hasAuthority('traffic_customer_plan_offer_1')")
     public String customerPlanOfferOwn(@RequestBody SnatchOfferDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User user = SecurityInfoGetter.getUser();
@@ -609,7 +609,7 @@ public class CustomerPlanApi {
 
     @ApiOperation("客户计划-派车-详细信息拉取")
     @RequestMapping(value = "/loadCustomerPlan",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_customer_plan')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_split_vehicle')")
     public WaybillPlan loadCustomerPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         WaybillParamsDto dto = new WaybillParamsDto();
