@@ -158,7 +158,9 @@ public class EmployeeServiceImpl {
 		userService.updateUser(user);
 		//更新用户部门信息
 
-		userCompanyDao.updateByPrimaryKey(userCompRel);
+		userCompRel.setComment(dto.getComment());
+		userCompRel.setDuty(dto.getDuty());
+
 		String departIds = dto.getDepartIds();
 		if (!StringUtils.isEmpty(departIds)) {
 			String idsNames = departmentService.getIdsNames(departIds);

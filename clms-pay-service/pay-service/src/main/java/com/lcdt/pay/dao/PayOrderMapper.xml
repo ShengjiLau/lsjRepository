@@ -94,10 +94,7 @@
     <if test="payType != null">
       and pay_type = #{payType,jdbcType=INTEGER}
     </if>
-
-
     order by create_time DESC
-
   </select>
 
   <select id="selectPayOrderByProductName" resultMap="BaseResultMap">
