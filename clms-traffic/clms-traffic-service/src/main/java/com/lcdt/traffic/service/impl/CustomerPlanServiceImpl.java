@@ -261,10 +261,10 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         map.remove("groupIds");
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
-            map.put("companyIds", cMap.get("companyIds").toString().replace("carrier_collection_ids", "wp.carrier_collection_ids"));
+            map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
         if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString().replace("company_id", "wp.company_id"));
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString().replace("carrier_collection_ids", "wp.carrier_collection_ids"));
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -299,10 +299,10 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         map.remove("groupIds");
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
-            map.put("companyIds", cMap.get("companyIds").toString().replace("carrier_collection_ids", "wp.carrier_collection_ids"));
+            map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
         if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString().replace("company_id", "wp.company_id"));
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString().replace("carrier_collection_ids", "wp.carrier_collection_ids"));
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -339,10 +339,10 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         map.remove("groupIds");
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
-            map.put("companyIds", cMap.get("companyIds").toString().replace("carrier_collection_ids", "wp.carrier_collection_ids"));
+            map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
         if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString().replace("company_id", "wp.company_id"));
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString().replace("carrier_collection_ids", "wp.carrier_collection_ids"));
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -376,10 +376,10 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         map.remove("groupIds");
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
-            map.put("companyIds", cMap.get("companyIds").toString().replace("carrier_collection_ids", "wp.carrier_collection_ids"));
+            map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
         if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString().replace("company_id", "wp.company_id"));
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString().replace("carrier_collection_ids", "wp.carrier_collection_ids"));
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
