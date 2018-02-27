@@ -98,6 +98,9 @@ public class ForgetPwdController {
     public ModelAndView setNewPwd(HttpServletRequest request,String pwd) {
         HttpSession session = request.getSession(false);
         Object attribute = session.getAttribute(SESSIONKEY);
+
+
+
         ModelAndView modelAndView = new ModelAndView();
 
         if (StringUtils.isEmpty(pwd)) {

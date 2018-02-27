@@ -49,8 +49,9 @@ public class CompanyServiceImpl implements CompanyService {
 		List<CompanyCertificate> companyCertificate = certificateDao.selectByCompanyId(companyId);
 		if (companyCertificate != null && !companyCertificate.isEmpty()) {
 			return companyCertificate.get(0);
+		}else{
+			return new CompanyCertificate();
 		}
-		return null;
 	}
 
 	@Transactional(rollbackFor = Exception.class)
