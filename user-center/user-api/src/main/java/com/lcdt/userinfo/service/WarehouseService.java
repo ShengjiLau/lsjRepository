@@ -68,6 +68,13 @@ public interface WarehouseService {
     int modifyWarehouseLinkManIsDelete(Long whLinkmanId);
 
     /**
+     * 启用/禁用仓库
+     * @param linkman
+     * @return
+     */
+    int modifyWarehouseLinkManIsDefault(WarehouseLinkman linkman);
+
+    /**
      * 库位列表查询
      * @param m
      * @return
