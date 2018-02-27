@@ -148,7 +148,7 @@ public class UserApi {
 			originUser.setPwd(encodeNewpwd);
 			userService.updateUserWithpwd(originUser);
 		}else{
-			throw new PwdErrorException("密码不正确");
+			throw new PwdErrorException("旧密码不正确");
 		}
 		return user;
 	}
