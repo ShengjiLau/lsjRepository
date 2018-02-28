@@ -54,6 +54,9 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     @Override
     public int modifyByUnitIdAndCompanyId(CalcUnit calcUnit) {
         int result = 0;
+        if (isUnitNameExist(calcUnit)) {
+            throw new RuntimeException("单位名称已存在");
+        }
         result = calcUnitMapper.updateByUnitIdAndCompanyId(calcUnit);
         return result;
     }
@@ -86,6 +89,9 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     public boolean isUnitNameExist(CalcUnit calcUnit) {
         List<CalcUnit> calcUnitList=calcUnitMapper.selectCalcUnitList(calcUnit);
         if(calcUnitList!=null&&calcUnitList.size()>0){
+            if(calcUnit.getUnitName().equals(calcUnitList.get(0).getUnitName())&&calcUnit.getUnitId()==calcUnitList.get(0).getUnitId()){
+                return false;
+            }
             return true;
         }else{
             return false;
