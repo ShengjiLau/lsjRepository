@@ -26,6 +26,7 @@
         <module>clms-customer</module>
         <module>clms-traffic</module>
         <module>mybatis-generator</module>
+        <module>clms-contract</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>
