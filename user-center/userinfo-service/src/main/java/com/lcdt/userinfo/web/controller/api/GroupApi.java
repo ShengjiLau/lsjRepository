@@ -166,9 +166,7 @@ public class GroupApi {
             groupsList = pageInfo.getList();
         } else {
             groupsList = userGroupRelationMapper.selectByUserCompany(userId, companyId);
-
         }
-
 
         return groupsList;
     }

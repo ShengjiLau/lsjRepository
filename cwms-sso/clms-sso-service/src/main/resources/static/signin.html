@@ -32,7 +32,7 @@
               <input type="text" name="captchacode" value="" placeholder="请输入验证码">
             </div>
             <div class="capcha_img">
-              <img style="width: 100%" id="captchaimg" src="/auth/getcaptcha" alt="./public/vc.png" onclick="refreshCaptcha()"></a>            </div>
+              <img style="width: 100%" id="captchaimg" src="/auth/getcaptcha" alt="./public/vc.png" onclick="refreshCaptcha()"></a></div>
           </div>
           <div class="form-row login-btn-row" style="margin-top:32px;">
             <button type="submit" class="login-btn">
@@ -62,7 +62,7 @@
                         required:true,
                         rangelength:[6,12],
                     },
-                    captcha:{
+                    captchacode:{
                         required:true,
                         rangelength:[3,5],
                     }
@@ -76,7 +76,7 @@
                         required: "请输入密码",
                         rangelength: "请输入正确密码",
                     },
-                    captcha:{
+                    captchacode:{
                         required: "请输入验证码",
                         rangelength: "请输入4位验证码",
                     }
