@@ -201,7 +201,7 @@ public class UserApi {
 			String[] phones = new String[]{newphone};
 			String vCode = RandomNoUtil.createRandom(true,4);
 
-			String code = "【大驼队】提醒您，更换手机操作验证码为：%s，如非本人操作，请忽略！";
+			String code = "提醒您，更换手机操作验证码为：%s，如非本人操作，请忽略！";
 			String format = String.format(code, vCode);
 
 

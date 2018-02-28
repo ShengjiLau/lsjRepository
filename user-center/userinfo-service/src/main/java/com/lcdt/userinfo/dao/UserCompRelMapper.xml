@@ -13,6 +13,9 @@
     <result column="is_enable" jdbcType="TINYINT" property="isEnable"></result>
     <result column="duty" jdbcType="VARCHAR" property="duty"></result>
     <result column="comment" jdbcType="VARCHAR" property="comment"></result>
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName"></result>
+    <result column="email" jdbcType="VARCHAR" property="email"></result>
+    <result column="name" jdbcType="VARCHAR" property="name"></result>
     <association property="user" column="user_id" javaType="com.lcdt.userinfo.model.User"
     select="com.lcdt.userinfo.dao.UserMapper.selectByPrimaryKeyWithoutPwd" fetchType="eager"
     ></association>
@@ -59,9 +62,9 @@
     <selectKey keyProperty="userCompRelId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_uc_user_comp_rel (user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,duty,comment)
+    insert into t_uc_user_comp_rel (user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,duty,comment,nick_name,email,name)
     values (#{userId,jdbcType=BIGINT}, #{compId,jdbcType=BIGINT}, #{fullName,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP},#{isCreate,jdbcType=SMALLINT}
-    ,#{deptIds,jdbcType=VARCHAR}, #{deptNames,jdbcType=VARCHAR},#{duty,jdbcType=VARCHAR},#{comment,jdbcType=VARCHAR})
+    ,#{deptIds,jdbcType=VARCHAR}, #{deptNames,jdbcType=VARCHAR},#{duty,jdbcType=VARCHAR},#{comment,jdbcType=VARCHAR},#{nickName,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.UserCompRel">
     <!--
@@ -78,23 +81,26 @@
         dept_names = #{deptNames,jdbcType=VARCHAR},
         is_enable = #{isEnable,jdbcType=TINYINT},
         comment = #{comment,jdbcType=VARCHAR},
-        duty = #{duty,jdbcType=VARCHAR}
+        duty = #{duty,jdbcType=VARCHAR},
+        nick_name = #{nickName,jdbcType=VARCHAR},
+    email = #{email,jdbcType=VARCHAR},
+    name = #{name,jdbcType=VARCHAR}
     where user_comp_rel_id = #{userCompRelId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,is_enable,duty,comment
+    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,is_enable,duty,comment,nick_name,email,name
     from t_uc_user_comp_rel
     where user_comp_rel_id = #{userCompRelId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,duty,comment
+    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,duty,comment,nick_name,email,name
     from t_uc_user_comp_rel
   </select>
 
 
 
   <select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,duty,comment
+    select user_comp_rel_id, user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,duty,comment,nick_name,email,name
     from t_uc_user_comp_rel
     WHERE 1=1
     <trim prefix="" suffix="" suffixOverrides="">
@@ -120,6 +126,7 @@
   <select id="selectBySearchDto" parameterType="com.lcdt.userinfo.web.dto.SearchEmployeeDto" resultMap="BaseResultMap"
           >
     select DISTINCT user_comp_rel_id, comp.user_id,comp.is_enable, comp.comp_id,comp.full_name,comp.create_date,comp.is_create,comp.dept_ids,comp.duty,comp.comment
+    ,comp.nick_name,comp.email,comp.name
     from t_uc_user_comp_rel  comp
     <if test="realName != null and realName != ''">
       LEFT JOIN t_uc_user u on comp.user_id = u.user_id
@@ -154,6 +161,7 @@
 
   <select id="selectByUserIdCompanyId" resultMap="BaseResultMap">
      select user_comp_rel_id, comp.user_id, comp_id,full_name,create_date,is_create,dept_ids,duty,dept_names,comment
+         ,comp.nick_name,comp.email,comp.name
     from t_uc_user_comp_rel  comp
     WHERE
     comp.user_id = #{userId}

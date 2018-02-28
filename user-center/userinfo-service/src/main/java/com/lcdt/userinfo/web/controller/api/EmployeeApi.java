@@ -78,7 +78,8 @@ public class EmployeeApi {
         List<Long> jsonRoles = JSONArray.parseArray(roles, Long.class);
         dto.setGroups(jsonGroups);
         dto.setRoles(jsonRoles);
-        boolean b = employeeService.addEmployee(dto);
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        boolean b = employeeService.addEmployee(dto,companyId);
         if (b) {
             return successMessage.toString();
         } else {

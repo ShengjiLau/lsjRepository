@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lcdt.login.exception.ValidCodeExistException;
 import com.lcdt.login.service.impl.ValidCodeService;
 import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -72,11 +73,15 @@ public class ForgetPwdController {
 
     @RequestMapping("/checkvalidcode")
     public ModelAndView checkValidCode(HttpServletRequest request,String validcode,String phoneNum) throws UserNotExistException {
-
-        userService.queryByPhone(phoneNum);
+        ModelAndView modelAndView = new ModelAndView("/setPassWord");
+        User user = userService.queryByPhone(phoneNum);
+        if (user == null) {
+            modelAndView.setViewName("/forgetPassword");
+            modelAndView.addObject("error", "此手机号暂未注册，请先注册");
+        }
 
         boolean codeCorrect = validCodeService.isCodeCorrect(validcode, request, validcodeTag, phoneNum);
-        ModelAndView modelAndView = new ModelAndView("/setPassWord");
+
         if (codeCorrect) {
             //如果验证码正确
             HttpSession session = request.getSession(true);
