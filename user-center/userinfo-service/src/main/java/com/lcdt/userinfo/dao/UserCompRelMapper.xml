@@ -62,7 +62,7 @@
     <selectKey keyProperty="userCompRelId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_uc_user_comp_rel (user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,duty,comment,nick_name,email,name
+    insert into t_uc_user_comp_rel (user_id, comp_id,full_name,create_date,is_create,dept_ids,dept_names,duty,comment,nick_name,email,name)
     values (#{userId,jdbcType=BIGINT}, #{compId,jdbcType=BIGINT}, #{fullName,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP},#{isCreate,jdbcType=SMALLINT}
     ,#{deptIds,jdbcType=VARCHAR}, #{deptNames,jdbcType=VARCHAR},#{duty,jdbcType=VARCHAR},#{comment,jdbcType=VARCHAR},#{nickName,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR})
   </insert>

@@ -15,6 +15,21 @@ public class EmployeeServiceTest extends BaseIntegrationContext{
     @Rollback
     public void testAddEmployee(){
 
+        String comment = "";
+        String nickname = "nickname";
+
+
+        CreateEmployeeAccountDto createEmployeeAccountDto = new CreateEmployeeAccountDto();
+        createEmployeeAccountDto.setUserPhoneNum("15666836323");
+        createEmployeeAccountDto.setComment(comment);
+        createEmployeeAccountDto.setNickName(nickname);
+        String duty = "duty";
+        createEmployeeAccountDto.setDuty(duty);
+
+
+        boolean b = employeeService.addEmployee(createEmployeeAccountDto, 1L);
+
+
 
     }
 

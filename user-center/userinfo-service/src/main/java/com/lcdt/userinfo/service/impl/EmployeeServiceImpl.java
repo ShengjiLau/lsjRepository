@@ -70,7 +70,7 @@ public class EmployeeServiceImpl {
 
 
 	@Transactional(rollbackFor = Exception.class)
-	public boolean addEmployee(CreateEmployeeAccountDto dto) {
+	public boolean addEmployee(CreateEmployeeAccountDto dto,Long companyId) {
 		String phone = dto.getUserPhoneNum();
 		boolean phoneBeenRegister = userService.isPhoneBeenRegister(phone);
 		User user = null;
@@ -84,7 +84,6 @@ public class EmployeeServiceImpl {
 			user = userService.selectUserByPhone(phone);
 		}
 		//创建公司关联
-		Long companyId = SecurityInfoGetter.getCompanyId();
 		//是否已加入公司
 		boolean userInCompany = isUserInCompany(user.getUserId(), companyId);
 		if (userInCompany) {
