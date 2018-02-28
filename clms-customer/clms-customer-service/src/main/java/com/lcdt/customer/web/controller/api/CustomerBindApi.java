@@ -94,7 +94,8 @@ public class CustomerBindApi {
 		Long inviteCompanyId = customerInviteLog.getInviteCompanyId();
 
 		if (companyId.equals(inviteCompanyId)) {
-			throw new RuntimeException("不能邀请当前登录公司加入！");
+//			throw new RuntimeException("不能邀请当前登录公司加入！");
+			return new ModelAndView("/error");
 		}
 
 
