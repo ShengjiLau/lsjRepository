@@ -98,12 +98,13 @@ public class EmployeeServiceImpl {
 		userCompRel.setCreateDate(new Date());
 		userCompRel.setDeptIds(dto.getDepartIds());
 		userCompRel.setDeptNames(department);
-		if (!StringUtils.isEmpty(dto.getDuty())) {
-			userCompRel.setDuty(dto.getDuty());
-		}
-		if (!StringUtils.isEmpty(dto.getComment())) {
-			userCompRel.setComment(dto.getComment());
-		}
+		userCompRel.setDuty(dto.getDuty());
+		userCompRel.setComment(dto.getComment());
+		userCompRel.setEmail(dto.getEmail());
+		userCompRel.setNickName(dto.getNickName());
+		userCompRel.setName(dto.getName());
+
+
 		userCompanyDao.insert(userCompRel);
 		if (dto.getRoles() != null && !dto.getRoles().isEmpty()) {
 			roleService.setCompanyUserRole(user.getUserId(), companyId, dto.getRoles());
@@ -151,17 +152,18 @@ public class EmployeeServiceImpl {
 		Long userCompRelId = dto.getUserCompRelId();
 		UserCompRel userCompRel = userCompanyDao.selectByPrimaryKey(userCompRelId);
 		User user = userCompRel.getUser();
-		if (!StringUtils.isEmpty(dto.getPassword())) {
-			dto.setPassword(user.getPwd());
-		}
-		BeanUtils.copyProperties(dto, user);
-		userService.updateUser(user);
+
+//		BeanUtils.copyProperties(dto, user);
+//		userService.updateUser(user);
 		//更新用户部门信息
 
 		userCompRel.setComment(dto.getComment());
 		userCompRel.setDuty(dto.getDuty());
-
+		userCompRel.setEmail(dto.getEmail());
+		userCompRel.setNickName(dto.getNickName());
+		userCompRel.setName(dto.getName());
 		String departIds = dto.getDepartIds();
+
 		if (!StringUtils.isEmpty(departIds)) {
 			String idsNames = departmentService.getIdsNames(departIds);
 			userCompRel.setDeptNames(idsNames);
