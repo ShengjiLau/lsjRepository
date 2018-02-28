@@ -33,7 +33,6 @@ public class ModifyInvoiceDto {
 	public String registrationAddress;
 
 	@ApiModelProperty(required = true,value = "备注")
-	@NotBlank
 	public String invoiceRemark;
 
 	public String getInvoiceTitle() {
