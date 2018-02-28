@@ -322,7 +322,7 @@ public class PlanServiceImpl implements PlanService {
     public PlanLeaveMsg planLeaveMsgAdd(PlanLeaveMsgParamsDto dto) {
         Map tMap = new HashMap<String,String>();
         tMap.put("waybillPlanId",dto.getWaybillPlanId());
-        tMap.put("companyId",dto.getCompanyId());
+        tMap.put("companyId",dto.getCreateCompanyId());
         tMap.put("isDeleted","0");
         PlanLeaveMsg planLeaveMsg = null;
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
@@ -334,12 +334,11 @@ public class PlanServiceImpl implements PlanService {
                 planLeaveMsg.setCompanyName(dto.getCompanyName());
                 planLeaveMsg.setCompanyId(dto.getCompanyId());
                 planLeaveMsg.setShipperName(dto.getRealName());
-            } else if(waybillPlan.getCarrierCompanyId() == dto.getCompanyId()) { //说明是承运人
+            }else{ //说明是承运人 //(waybillPlan.getCarrierCompanyId() == dto.getCompanyId())
                 planLeaveMsg.setLeaveType(ConstantVO.PLAN_LEAVE_MSG_TYPE_CARRIER);
                 planLeaveMsg.setCarrierCompanyName(dto.getCompanyName());
                 planLeaveMsg.setCarrierCompanyId(dto.getCompanyId());
                 planLeaveMsg.setCarrierName(dto.getRealName());
-                //承运人也得保存
                 planLeaveMsg.setCompanyId(waybillPlan.getCompanyId());
             }
             planLeaveMsg.setCreateId(dto.getUserId());
