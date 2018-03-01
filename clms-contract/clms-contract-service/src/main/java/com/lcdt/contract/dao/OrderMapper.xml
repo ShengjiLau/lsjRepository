@@ -25,6 +25,7 @@
     <result column="receiver_city" jdbcType="VARCHAR" property="receiverCity" />
     <result column="receive_district" jdbcType="VARCHAR" property="receiveDistrict" />
     <result column="receive_address" jdbcType="VARCHAR" property="receiveAddress" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="group_id" jdbcType="BIGINT" property="groupId" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
@@ -41,7 +42,7 @@
       send_city, send_district, send_address, 
       send_time, pack_require, receiver, 
       receiver_phone, receiver_province, receiver_city, 
-      receive_district, receive_address, create_time, 
+      receive_district, receive_address, remarks, create_time,
       group_id,company_id)
     values (#{orderId,jdbcType=BIGINT}, #{supplier,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
       #{orderType,jdbcType=SMALLINT}, #{contractCode,jdbcType=VARCHAR}, #{distributionType,jdbcType=SMALLINT}, 
@@ -50,7 +51,7 @@
       #{sendCity,jdbcType=VARCHAR}, #{sendDistrict,jdbcType=VARCHAR}, #{sendAddress,jdbcType=VARCHAR}, 
       #{sendTime,jdbcType=TIMESTAMP}, #{packRequire,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, 
       #{receiverPhone,jdbcType=VARCHAR}, #{receiverProvince,jdbcType=VARCHAR}, #{receiverCity,jdbcType=VARCHAR}, 
-      #{receiveDistrict,jdbcType=VARCHAR}, #{receiveAddress,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{receiveDistrict,jdbcType=VARCHAR}, #{receiveAddress,jdbcType=VARCHAR},#{remarks,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
       #{groupId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.Order">
@@ -77,6 +78,7 @@
       receiver_city = #{receiverCity,jdbcType=VARCHAR},
       receive_district = #{receiveDistrict,jdbcType=VARCHAR},
       receive_address = #{receiveAddress,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       group_id = #{groupId,jdbcType=BIGINT}
       company_id = #{companyId,jdbcType=BIGINT}
@@ -86,7 +88,7 @@
     select order_id, supplier, order_no, order_type, contract_code, distribution_type, 
     pay_type, receive_warehouse, file_url, sender, sender_phone, send_province, send_city, 
     send_district, send_address, send_time, pack_require, receiver, receiver_phone, receiver_province, 
-    receiver_city, receive_district, receive_address, create_time, group_id,company_id
+    receiver_city, receive_district, receive_address, remarks, create_time, group_id,company_id
     from t_order
     where order_id = #{orderId,jdbcType=BIGINT}
   </select>
@@ -94,7 +96,7 @@
     select order_id, supplier, order_no, order_type, contract_code, distribution_type, 
     pay_type, receive_warehouse, file_url, sender, sender_phone, send_province, send_city, 
     send_district, send_address, send_time, pack_require, receiver, receiver_phone, receiver_province, 
-    receiver_city, receive_district, receive_address, create_time, group_id,company_id
+    receiver_city, receive_district, receive_address, remarks, create_time, group_id,company_id
     from t_order
   </select>
 </mapper>
