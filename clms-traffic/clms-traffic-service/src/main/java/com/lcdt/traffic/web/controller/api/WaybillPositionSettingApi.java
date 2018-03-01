@@ -34,7 +34,7 @@ public class WaybillPositionSettingApi {
 
     @ApiOperation("我的运单--定位设置--新增")
     @RequestMapping(value = "/own/add", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybillpositionsetting_add')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybillpositionsetting')")
     public JSONObject addOwnWaybillPositionSetting(WaybillPositionSettingDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -54,7 +54,7 @@ public class WaybillPositionSettingApi {
 
     @ApiOperation("客户运单--定位设置--新增")
     @RequestMapping(value = "/customer/add", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybillpositionsetting_add')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybillpositionsetting')")
     public JSONObject addCustomerWaybillPositionSetting(WaybillPositionSettingDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -74,7 +74,7 @@ public class WaybillPositionSettingApi {
 
     @ApiOperation("我的运单--定位设置--修改")
     @RequestMapping(value = "/own/modify", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybillpositionsetting_modify')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybillpositionsetting')")
     public JSONObject modifyOwnWaybillPositionSetting(WaybillPositionSettingDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -94,7 +94,7 @@ public class WaybillPositionSettingApi {
 
     @ApiOperation("客户运单--定位设置--修改")
     @RequestMapping(value = "/customer/modify", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybillpositionsetting_modify')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybillpositionsetting')")
     public JSONObject modifyCustomerWaybillPositionSetting(WaybillPositionSettingDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -114,7 +114,7 @@ public class WaybillPositionSettingApi {
 
     @ApiOperation("我的运单--定位设置--查询")
     @RequestMapping(value = "/own/query", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybillpositionsetting_query')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybillpositionsetting')")
     public PageBaseDto<List<WaybillPositionSetting>> queryOwnWaybillPositionSetting(@ApiParam(value = "运单id", required = true) @RequestParam Long waybillId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map=new HashMap();
@@ -127,7 +127,7 @@ public class WaybillPositionSettingApi {
 
     @ApiOperation("客户运单--定位设置--查询")
     @RequestMapping(value = "/customer/query", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybillpositionsetting_query')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybillpositionsetting')")
     public PageBaseDto<List<WaybillPositionSetting>> queryCustomerWaybillPositionSetting(@ApiParam(value = "运单id", required = true) @RequestParam Long waybillId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map=new HashMap();
