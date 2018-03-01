@@ -22,7 +22,6 @@
         <module>clms-pay-service</module>
         <module>user-center</module>
         <module>cwms-items</module>
-        <module>cwms-contract</module>
         <module>clms-customer</module>
         <module>clms-traffic</module>
         <module>mybatis-generator</module>
