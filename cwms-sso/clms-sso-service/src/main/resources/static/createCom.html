@@ -20,7 +20,7 @@
       height: 60px;
       line-height: 60px;
       color: #333;
-      border-bottom: 1px solid #ccc;
+      /*border-bottom: 1px solid #ccc;*/
     }
     nav .logo{
       display: inline-block;
@@ -31,10 +31,10 @@
     .nav-head{
       height: 60px;
       background: #fff;
-      border-bottom: 1px solid #ccc;
+      border-bottom: 1px solid #f0f0f0;
     }
     .user-menu{
-      font-size: 16px;
+      font-size: 12px;
       float: right;
       line-height: 60px;
     }
@@ -76,7 +76,7 @@
       background: rgba(255, 255, 255, 0.8);
       border: 1px solid #f0f0f0;
       width: 500px;
-      margin: 215px auto 0 auto;
+      margin: 158px auto 0 auto;
       padding: 0 30px 50px 30px;
       border-radius: 12px;
       transition: all .3s;
@@ -179,17 +179,23 @@
 </head>
 
 <body>
-  <div class="nav-head">
-    <nav>
-      <div class="logo">
-        <img src="/asset/image/logo_top.png" alt="">
-      </div>
-      <div class="user-menu">
-        <a href="#" th:utext="${session.userinfo.realName}"><i class="iconfont icon-user"></i></a>
-        <a href="/account/logout"><i class="iconfont icon-logout01"></i>退出</a>
-      </div>
-    </nav>
-  </div>
+<div class="nav-head">
+  <nav>
+    <div class="logo">
+      <img src="/asset/image/logo_top.png" alt="">
+    </div>
+    <div class="user-menu">
+          <span>
+            <span class="ant-dropdown-link ant-dropdown-trigger" href="#" style="font-weight: 100;">
+              <div class="pic" style="width: 24px;margin-right: 5px;height: 24px;vertical-align: middle;border-radius: 13px;overflow: hidden;display: inline-block;">
+                <img src="http://clms-dtd.oss-cn-beijing.aliyuncs.com/1519896299962logo.png" alt="此处有头像" style="width: 100%; vertical-align: top;">
+              </div><!-- react-text: 54 --><label th:utext="${session.userinfo.realName}"/><!-- /react-text -->
+            </span>
+            <span><a href="/account/logout"><i class="iconfont icon-logout01"></i>退出</label></span>
+          </span>
+    </div>
+  </nav>
+</div>
 
   <div class="signin-box">
     <div class="logo-box">
@@ -228,7 +234,7 @@
         </div>
         <div class="form-row login-btn-row" style="margin-bottom:0;margin-top:32px;">
           <button type="submit" class="login-btn">
-              开始使用
+              进入企业
             </button>
         </div>
       </form>
