@@ -151,7 +151,7 @@ public class GroupApi {
     @ApiOperation("用户项目组列表")
     @RequestMapping(value = "/userGroupList", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_list')")
-    public String userGroupList() {
+    public List<Group> deptUserList() {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
