@@ -156,19 +156,27 @@ public class GroupApi {
         Long userId = SecurityInfoGetter.getUser().getUserId();
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         List<Group> groupsList = null;
+        GroupResultDto rDto = new GroupResultDto();
         if (userCompRel.getIsCreate() == 1 && userCompRel.getCompId() == companyId) { //企业者
-
             Map map = new HashMap();
             map.put("companyId", companyId);
             map.put("page_no", 1);
             map.put("page_size", 0);
             PageInfo pageInfo = groupManageService.groupList(map);
             groupsList = pageInfo.getList();
+            rDto.setList(groupsList);
+            rDto.setTotal(pageInfo.getTotal());
         } else {
             groupsList = userGroupRelationMapper.selectByUserCompany(userId, companyId);
+            rDto.setList(groupsList);
+            rDto.setTotal(groupsList!=null?groupsList.size():0);
         }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("data",rDto);
+        jsonObject.put("code", 0);
+        jsonObject.put("message","请求成功")
 
-        return groupsList;
+        return jsonObject.toString();
     }
 
 
