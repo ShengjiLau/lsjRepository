@@ -277,7 +277,7 @@
         </div>
         <div class="user-menu">
             <a href="" th:text="${username}"><i class="iconfont icon-user"></i></a>
-            <a href=""><i class="iconfont icon-logout01"></i>退出</a>
+            <a href=""><i class="iconfont icon-logout01" onclick="signout()"></i>退出</a>
         </div>
     </nav>
 </div>
@@ -306,6 +306,24 @@
         </div>
 
     </form>
+
+    <script type="text/javascript">
+
+        function signout(){
+            var name = "cwms_ticket";
+            var exp = new Date();
+            exp.setTime(exp.getTime() - 1);
+            var cval=getCookie(name);
+            if(cval!=null)
+                document.cookie = name + "="+cval+";expires="+exp.toGMTString();
+                window.location.href="http://39.107.12.215:52412/account/"
+        }
+
+
+
+
+    </script>
+
 </div>
 </body>
 </html>

@@ -95,6 +95,35 @@ public class ForgetPwdController {
         }
     }
 
+    @RequestMapping("/checkcode")
+    @ResponseBody
+    public String checkCode(HttpServletRequest request,String validcode,String phoneNum) throws UserNotExistException {
+        JSONObject jsonObject = new JSONObject();
+        if (StringUtils.isEmpty(phoneNum)) {
+            jsonObject.put("result", false);
+            jsonObject.put("message", "手机号码不能为空");
+            return jsonObject.toString();
+        }
+        boolean phoneBeenRegister = userService.isPhoneBeenRegister(phoneNum);
+        if (!phoneBeenRegister) {
+            jsonObject.put("result", false);
+            jsonObject.put("message", "此手机号码暂未注册，请先注册！");
+            return jsonObject.toString();
+        }
+
+        boolean codeCorrect = validCodeService.isCodeCorrect(validcode, request, validcodeTag, phoneNum);
+        if (codeCorrect) {
+            //如果验证码正确
+            jsonObject.put("result", true);
+            HttpSession session = request.getSession(true);
+            session.setAttribute(SESSIONKEY, phoneNum);
+        }else{
+            jsonObject.put("result", false);
+            jsonObject.put("message", "验证码错误或已过期，请重新获取！");
+        }
+        return jsonObject.toString();
+    }
+
     @RequestMapping("/setnewpwd")
     public ModelAndView setNewPwd(HttpServletRequest request,String pwd) {
         HttpSession session = request.getSession(false);
