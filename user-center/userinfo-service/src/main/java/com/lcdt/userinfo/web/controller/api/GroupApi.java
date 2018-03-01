@@ -174,7 +174,7 @@ public class GroupApi {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("data",rDto);
         jsonObject.put("code", 0);
-        jsonObject.put("message","请求成功")
+        jsonObject.put("message","请求成功");
 
         return jsonObject.toString();
     }
