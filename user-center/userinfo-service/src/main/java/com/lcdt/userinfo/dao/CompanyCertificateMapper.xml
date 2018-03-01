@@ -16,6 +16,7 @@
     <result column="shuiwudengji" jdbcType="VARCHAR" property="shuiwudengji" />
     <result column="yinghangkaihu" jdbcType="VARCHAR" property="yinghangkaihu" />
     <result column="yingyunxuke" jdbcType="VARCHAR" property="yingyunxuke" />
+    <result column="create_id" jdbcType="BIGINT" property="createId"/>
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--

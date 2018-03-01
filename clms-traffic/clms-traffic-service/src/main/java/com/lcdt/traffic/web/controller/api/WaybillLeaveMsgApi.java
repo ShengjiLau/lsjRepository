@@ -32,7 +32,7 @@ public class WaybillLeaveMsgApi {
 
     @ApiOperation("我的运单--留言--新增")
     @RequestMapping(value = "/own/add", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_leave_msg_add')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybill_leave_msg')")
     public JSONObject addOwnWaybillLeaveMsg(WaybillLeaveMsgDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -53,7 +53,7 @@ public class WaybillLeaveMsgApi {
 
     @ApiOperation("我的运单--留言--修改")
     @RequestMapping(value = "/own/modify", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_leave_msg_modify')")
+   // @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_leave_msg_modify')")
     public JSONObject modifyWaybillLeaveMsg(WaybillLeaveMsgDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -73,7 +73,7 @@ public class WaybillLeaveMsgApi {
 
     @ApiOperation("我的运单--留言--根据id查询")
     @RequestMapping(value = "/own/query", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_leave_msg_query')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_leave_msg_query')")
     public WaybillLeaveMsg queryWaybillLeaveMsg(@ApiParam(value = "运单id", required = true) @RequestParam Long msgId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         WaybillLeaveMsgDto dto = new WaybillLeaveMsgDto();
@@ -84,7 +84,7 @@ public class WaybillLeaveMsgApi {
 
     @ApiOperation("我的运单--留言--列表")
     @RequestMapping(value = "/own/list", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_leave_msg_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybill_leave_msg')")
     public PageBaseDto<List<WaybillLeaveMsg>> waybillLeaveMsgList(WaybillLeaveMsgDto dto,
                                                                   @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
                                                                   @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
@@ -102,7 +102,7 @@ public class WaybillLeaveMsgApi {
 
     @ApiOperation("客户运单--留言--新增")
     @RequestMapping(value = "/customer/add", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_leave_msg_add')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybill_leave_msg')")
     public JSONObject addCustomerWaybillLeaveMsg(WaybillLeaveMsgDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -122,7 +122,7 @@ public class WaybillLeaveMsgApi {
 
     @ApiOperation("客户运单--留言--修改")
     @RequestMapping(value = "/customer/modify", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_leave_msg_modify')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_leave_msg_modify')")
     public JSONObject modifyCustomerWaybillLeaveMsg(WaybillLeaveMsgDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -142,7 +142,7 @@ public class WaybillLeaveMsgApi {
 
     @ApiOperation("客户运单--留言--根据id查询")
     @RequestMapping(value = "/customer/query", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_leave_msg_query')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_leave_msg_query')")
     public WaybillLeaveMsg queryCustomerWaybillLeaveMsg(@ApiParam(value = "运单id", required = true) @RequestParam Long msgId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         WaybillLeaveMsgDto dto = new WaybillLeaveMsgDto();
@@ -153,7 +153,7 @@ public class WaybillLeaveMsgApi {
 
     @ApiOperation("客户运单--留言--列表")
     @RequestMapping(value = "/customer/list", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_leave_msg_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybill_leave_msg')")
     public PageBaseDto<List<WaybillLeaveMsg>> CustomerWaybillLeaveMsgList(WaybillLeaveMsgDto dto,
                                                                           @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
                                                                           @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
