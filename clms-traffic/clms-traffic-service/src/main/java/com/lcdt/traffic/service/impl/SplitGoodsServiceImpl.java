@@ -109,13 +109,10 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             splitGoods.setUpdateTime(opDate);
             splitGoods.setIsDeleted((short)0);
             splitGoods.setCompanyId(companyId);
-
             splitGoods.setCarrierCollectionIds(dto.getCarrierCollectionIds());
             splitGoods.setCarrierCollectionNames(dto.getCarrierCollectionNames());
             splitGoods.setCarrierPhone(dto.getCarrierPhone());
             splitGoods.setCarrierVehicle(dto.getCarrierVehicle());
-
-
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
                 String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
                 Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
@@ -248,7 +245,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
             for (SplitGoodsDetailParamsDto obj1 : list) {
 
-                    if (planDetail.getPlanDetailId() - obj1.getPlanDetailId()==0) {
+                    if (planDetail.getPlanDetailId().equals(obj1.getPlanDetailId())) {
                         allotAmountTotal += obj1.getAllotAmount(); //统计分配数量
                         tempObj = obj1;
                         break; //因为分配只有一种
