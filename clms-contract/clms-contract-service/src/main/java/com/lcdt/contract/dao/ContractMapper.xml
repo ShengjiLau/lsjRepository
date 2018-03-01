@@ -7,7 +7,7 @@
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="sign_date" jdbcType="TIMESTAMP" property="signDate" />
     <result column="type" jdbcType="SMALLINT" property="type" />
-    <result column="contact_status" jdbcType="SMALLINT" property="contactStatus" />
+    <result column="contract_status" jdbcType="SMALLINT" property="contractStatus" />
     <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
     <result column="cycle" jdbcType="SMALLINT" property="cycle" />
     <result column="pay_type" jdbcType="VARCHAR" property="payType" />
@@ -29,14 +29,14 @@
   </delete>
   <insert id="insert" parameterType="com.lcdt.contract.model.Contract">
     insert into t_contract (contract_id, contract_code, title, 
-      sign_date, type, contact_status, approval_status,
+      sign_date, type, contract_status, approval_status,
       cycle, pay_type, party_a, 
       party_a_principal, party_b, party_b_principal, 
       start_date, end_date, summary, 
       terms, file_url, group_id,company_id
       )
     values (#{contractId,jdbcType=BIGINT}, #{contractCode,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
-      #{signDate,jdbcType=TIMESTAMP}, #{type,jdbcType=SMALLINT}, #{contactStatus,jdbcType=SMALLINT},  #{approvalStatus,jdbcType=SMALLINT},
+      #{signDate,jdbcType=TIMESTAMP}, #{type,jdbcType=SMALLINT}, #{contractStatus,jdbcType=SMALLINT},  #{approvalStatus,jdbcType=SMALLINT},
       #{cycle,jdbcType=SMALLINT}, #{payType,jdbcType=VARCHAR}, #{partyA,jdbcType=VARCHAR}, 
       #{partyAPrincipal,jdbcType=VARCHAR}, #{partyB,jdbcType=VARCHAR}, #{partyBPrincipal,jdbcType=VARCHAR}, 
       #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, #{summary,jdbcType=VARCHAR}, 
@@ -49,7 +49,7 @@
       title = #{title,jdbcType=VARCHAR},
       sign_date = #{signDate,jdbcType=TIMESTAMP},
       type = #{type,jdbcType=SMALLINT},
-      contact_status = #{contactStatus,jdbcType=SMALLINT},
+      contract_status = #{contractStatus,jdbcType=SMALLINT},
       approval_status = #{approvalStatus,jdbcType=SMALLINT},
       cycle = #{cycle,jdbcType=SMALLINT},
       pay_type = #{payType,jdbcType=VARCHAR},
@@ -67,14 +67,14 @@
     where contract_id = #{contractId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select contract_id, contract_code, title, sign_date, type, contact_status, approval_status, cycle,
+    select contract_id, contract_code, title, sign_date, type, contract_status, approval_status, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, 
     summary, terms, file_url, group_id,company_id
     from t_contract
     where contract_id = #{contractId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select contract_id, contract_code, title, sign_date, type, contact_status,approval_status, cycle,
+    select contract_id, contract_code, title, sign_date, type, contract_status,approval_status, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, 
     summary, terms, file_url, group_id,company_id
     from t_contract
@@ -82,7 +82,7 @@
 
 
   <select id="selectByCondition" resultMap="BaseResultMap">
-    select contract_id, contract_code, title, sign_date, type, contact_status,approval_status, cycle,
+    select contract_id, contract_code, title, sign_date, type, contract_status,approval_status, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,
     summary, terms, file_url, group_id,company_id
     from t_contract
@@ -97,8 +97,8 @@
       <if test="signBeginDate!=null and signBeginDate!=''">
         and sign_date &gt; #{signBeginDate,jdbcType=TIMESTAMP} and sign_date &lt; #{signEndDate,jdbcType=TIMESTAMP}
       </if>
-      <if test="contactStatus!=null and contactStatus!=''">
-        and contact_status = #{contactStatus,jdbcType=SMALLINT}
+      <if test="contractStatus!=null and contractStatus!=''">
+        and contract_status = #{contractStatus,jdbcType=SMALLINT}
       </if>
       <if test="groupId!=null and groupId!=''">
         and group_id = #{groupId,jdbcType=BIGINT}

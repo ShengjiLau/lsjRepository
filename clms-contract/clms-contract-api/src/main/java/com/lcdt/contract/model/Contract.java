@@ -13,7 +13,7 @@ public class Contract {
 
     private Short type;
 
-    private Short contactStatus;
+    private Short contractStatus;
 
     private Short approvalStatus;
 
@@ -83,12 +83,12 @@ public class Contract {
         this.type = type;
     }
 
-    public Short getContactStatus() {
-        return contactStatus;
+    public Short getContractStatus() {
+        return contractStatus;
     }
 
-    public void setContactStatus(Short contactStatus) {
-        this.contactStatus = contactStatus;
+    public void setContractStatus(Short contractStatus) {
+        this.contractStatus = contractStatus;
     }
 
     public Short getApprovalStatus() {
