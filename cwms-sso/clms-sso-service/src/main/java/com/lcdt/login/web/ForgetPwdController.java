@@ -74,11 +74,6 @@ public class ForgetPwdController {
     @RequestMapping("/checkvalidcode")
     public ModelAndView checkValidCode(HttpServletRequest request,String validcode,String phoneNum) throws UserNotExistException {
         ModelAndView modelAndView = new ModelAndView("/setPassWord");
-        /*if(phoneNum.equals("")||validcode.equals(""))
-        {
-            modelAndView.setViewName("/forgetPassword");
-            return modelAndView;
-        }*/
         User user = userService.queryByPhone(phoneNum);
         if (user == null) {
             modelAndView.setViewName("/forgetPassword");
