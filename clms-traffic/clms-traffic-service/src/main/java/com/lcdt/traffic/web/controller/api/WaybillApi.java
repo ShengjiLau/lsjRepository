@@ -43,7 +43,7 @@ public class WaybillApi {
 
     @ApiOperation("我的运单--新增")
     @RequestMapping(value = "/own/add", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_add')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_add')")
     public JSONObject addOwnWaybill(WaybillDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -63,7 +63,7 @@ public class WaybillApi {
 
     @ApiOperation("客户运单--新增")
     @RequestMapping(value = "/customer/add", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_add')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_add')")
     public JSONObject addCustomerWaybill(WaybillDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -83,7 +83,7 @@ public class WaybillApi {
 
     @ApiOperation("我的运单--修改")
     @RequestMapping(value = "/own/modify", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_modify')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_modify')")
     public JSONObject modifyOwnWaybill(WaybillDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -103,7 +103,7 @@ public class WaybillApi {
 
     @ApiOperation("客户运单--修改")
     @RequestMapping(value = "/customer/modify", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_modify')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_modify')")
     public JSONObject modifyCustomerWaybill(WaybillDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -123,7 +123,7 @@ public class WaybillApi {
 
     @ApiOperation("我的运单--运单")
     @RequestMapping(value = "/own/query", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_query')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_query')")
     public Waybill queryOwnWaybill(@ApiParam(value = "运单id", required = true) @RequestParam Long waybillId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         return waybillService.queryOwnWaybill(waybillId, companyId);
@@ -131,7 +131,7 @@ public class WaybillApi {
 
     @ApiOperation("客户运单--运单")
     @RequestMapping(value = "/customer/query", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_query')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_query')")
     public Waybill queryCustomerWaybill(@ApiParam(value = "运单id", required = true) @RequestParam Long waybillId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         return waybillService.queryCustomerWaybill(waybillId, companyId);
@@ -139,7 +139,7 @@ public class WaybillApi {
 
     @ApiOperation("我的运单--列表")
     @RequestMapping(value = "/own/list", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybill_list')")
     public PageBaseDto<List<Waybill>> ownWaybillList(WaybillOwnListParamsDto dto,
                                                      @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
                                                      @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
@@ -178,7 +178,7 @@ public class WaybillApi {
 
     @ApiOperation("客户运单--列表")
     @RequestMapping(value = "/customer/list", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybill_list')")
     public PageBaseDto<List<Waybill>> customerWaybilllist(WaybillCustListParamsDto dto,
                                                           @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
                                                           @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
@@ -218,6 +218,7 @@ public class WaybillApi {
 
     @ApiOperation("我的运单--修改状态")
     @RequestMapping(value = "/own/modifystatus", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_modify_status')")
     public JSONObject modifyOwnWaybillStatus(@ApiParam(value = "状态", required = true) @RequestParam Short waybillStatus,
                                                      @ApiParam(value = "运单id字符串，多个 id 以 , 隔开", required = true) @RequestParam String waybillIds) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -241,6 +242,7 @@ public class WaybillApi {
 
     @ApiOperation("客户运单--修改状态")
     @RequestMapping(value = "/customer/modifystatus", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_modify_status')")
     public JSONObject modifyCustomerWaybillStatus(@ApiParam(value = "状态", required = true) @RequestParam Short waybillStatus,
                                           @ApiParam(value = "运单id字符串，多个 id 以 , 隔开", required = true) @RequestParam String waybillIds) {
         Long companyId = SecurityInfoGetter.getCompanyId();
