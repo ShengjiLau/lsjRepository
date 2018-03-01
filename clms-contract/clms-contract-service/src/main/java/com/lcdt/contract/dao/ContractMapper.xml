@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.contract.dao.ContractMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.Contract">
+    <id column="contract_id" jdbcType="BIGINT" property="contractId" />
+    <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="sign_date" jdbcType="TIMESTAMP" property="signDate" />
+    <result column="type" jdbcType="SMALLINT" property="type" />
+    <result column="contact_status" jdbcType="SMALLINT" property="contactStatus" />
+    <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
+    <result column="cycle" jdbcType="SMALLINT" property="cycle" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="party_a" jdbcType="VARCHAR" property="partyA" />
+    <result column="party_a_principal" jdbcType="VARCHAR" property="partyAPrincipal" />
+    <result column="party_b" jdbcType="VARCHAR" property="partyB" />
+    <result column="party_b_principal" jdbcType="VARCHAR" property="partyBPrincipal" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="terms" jdbcType="VARCHAR" property="terms" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_contract
+    where contract_id = #{contractId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.Contract">
+    insert into t_contract (contract_id, contract_code, title, 
+      sign_date, type, contact_status, approval_status,
+      cycle, pay_type, party_a, 
+      party_a_principal, party_b, party_b_principal, 
+      start_date, end_date, summary, 
+      terms, file_url, group_id,company_id
+      )
+    values (#{contractId,jdbcType=BIGINT}, #{contractCode,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{signDate,jdbcType=TIMESTAMP}, #{type,jdbcType=SMALLINT}, #{contactStatus,jdbcType=SMALLINT},  #{approvalStatus,jdbcType=SMALLINT},
+      #{cycle,jdbcType=SMALLINT}, #{payType,jdbcType=VARCHAR}, #{partyA,jdbcType=VARCHAR}, 
+      #{partyAPrincipal,jdbcType=VARCHAR}, #{partyB,jdbcType=VARCHAR}, #{partyBPrincipal,jdbcType=VARCHAR}, 
+      #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, #{summary,jdbcType=VARCHAR}, 
+      #{terms,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.Contract">
+    update t_contract
+    set contract_code = #{contractCode,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      sign_date = #{signDate,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=SMALLINT},
+      contact_status = #{contactStatus,jdbcType=SMALLINT},
+      approval_status = #{approvalStatus,jdbcType=SMALLINT},
+      cycle = #{cycle,jdbcType=SMALLINT},
+      pay_type = #{payType,jdbcType=VARCHAR},
+      party_a = #{partyA,jdbcType=VARCHAR},
+      party_a_principal = #{partyAPrincipal,jdbcType=VARCHAR},
+      party_b = #{partyB,jdbcType=VARCHAR},
+      party_b_principal = #{partyBPrincipal,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      summary = #{summary,jdbcType=VARCHAR},
+      terms = #{terms,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=BIGINT}
+      company_id = #{companyId,jdbcType=BIGINT}
+    where contract_id = #{contractId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select contract_id, contract_code, title, sign_date, type, contact_status, approval_status, cycle,
+    pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, 
+    summary, terms, file_url, group_id,company_id
+    from t_contract
+    where contract_id = #{contractId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select contract_id, contract_code, title, sign_date, type, contact_status,approval_status, cycle,
+    pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, 
+    summary, terms, file_url, group_id,company_id
+    from t_contract
+  </select>
+
+
+  <select id="selectByCondition" resultMap="BaseResultMap">
+    select contract_id, contract_code, title, sign_date, type, contact_status,approval_status, cycle,
+    pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,
+    summary, terms, file_url, group_id,company_id
+    from t_contract
+    <where>
+      type = #{type,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}
+      <if test="title!=null and title!=''">
+        and title like concat('%',#{title,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="contractCode!=null and contractCode!=''">
+        and contract_code like concat('%',#{contractCode,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="signBeginDate!=null and signBeginDate!=''">
+        and sign_date &gt; #{signBeginDate,jdbcType=TIMESTAMP} and sign_date &lt; #{signEndDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="contactStatus!=null and contactStatus!=''">
+        and contact_status = #{contactStatus,jdbcType=SMALLINT}
+      </if>
+      <if test="groupId!=null and groupId!=''">
+        and group_id = #{groupId,jdbcType=BIGINT}
+      </if>
+      <if test="approvalStatus!=null and approvalStatus!=''">
+        and approval_status = #{approvalStatus,jdbcType=SMALLINT}
+      </if>
+    </where>
+  </select>
+</mapper>
