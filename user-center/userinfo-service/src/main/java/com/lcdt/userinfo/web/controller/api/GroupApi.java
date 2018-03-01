@@ -151,7 +151,8 @@ public class GroupApi {
     @ApiOperation("用户项目组列表")
     @RequestMapping(value = "/userGroupList", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_list')")
-    public List<Group> deptUserList() {
+    @ResponseBody
+    public String deptUserList() {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
@@ -174,7 +175,7 @@ public class GroupApi {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("data",rDto);
         jsonObject.put("code", 0);
-        jsonObject.put("message","请求成功")
+        jsonObject.put("message","请求成功");
 
         return jsonObject.toString();
     }
