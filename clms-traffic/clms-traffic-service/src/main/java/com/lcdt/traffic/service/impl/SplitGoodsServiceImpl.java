@@ -419,8 +419,11 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                     obj.setUpdateTime(new Date());
                     obj.setUpdateName(user.getRealName());
                     planDetailMapper.updateByPrimaryKey(obj);
+
+
                     //更新派单详细
                     splitGoodsDetailMapper.deleteByPrimaryKey(splitGoodsDetail.getSplitGoodsDetailId());
+                    splitGoodsMapper.deleteByPrimaryKey(splitGoodsDetail.getSplitGoodsId());
                   /*  splitGoodsDetail.setRemainAmount(0f);//派单剩余数量
                     splitGoodsDetail.setAllotAmount(splitGoodsDetail.getAllotAmount() - splitGoodsDetail.getRemainAmount()); //派单待派数量(已派出的数量)=派单现待派数量-派单剩余数量
                     splitGoodsDetail.setUpdateId(user.getUserId());
