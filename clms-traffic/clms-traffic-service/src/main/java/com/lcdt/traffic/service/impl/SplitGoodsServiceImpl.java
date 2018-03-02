@@ -412,22 +412,37 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
     private void updateSplitGoodsAmount(SplitGoodsDetail splitGoodsDetail, List<PlanDetail> planDetailList, User user){
         if (null!=planDetailList && planDetailList.size()>0) {
             for (PlanDetail obj: planDetailList) {
-                if (obj.getPlanDetailId()-splitGoodsDetail.getPlanDetailId()==0) {
+
+                if (obj.getPlanDetailId().equals(splitGoodsDetail.getPlanDetailId())) {
+
                     obj.setRemainderAmount(obj.getRemainderAmount()+splitGoodsDetail.getRemainAmount());//计划剩余数量=计划现剩余数量+派单剩余数量
-                    //更新计划详细
-                    obj.setUpdateId(user.getUserId());
+                    obj.setUpdateId(user.getUserId());  //更新计划详细
                     obj.setUpdateTime(new Date());
                     obj.setUpdateName(user.getRealName());
                     planDetailMapper.updateByPrimaryKey(obj);
-                    //更新派单详细
-                    splitGoodsDetailMapper.deleteByPrimaryKey(splitGoodsDetail.getSplitGoodsDetailId());
-                  /*  splitGoodsDetail.setRemainAmount(0f);//派单剩余数量
+
+                    Map map = new HashMap();
+                    map.put("splitGoodsId",splitGoodsDetail.getSplitGoodsId());
+                    map.put("companyId",splitGoodsDetail.getCompanyId());
+                    map.put("isDeleted",0);
+
+                    splitGoodsDetailMapper.deleteByPrimaryKey(splitGoodsDetail.getSplitGoodsDetailId());  //先删除子明细
+                     //再查询主下面是否存在子明细，如果有，不删除主，没有删除主
+                    List<SplitGoodsDetail> splitGoodsDetailList = splitGoodsDetailMapper.selectBySplitGoodsId(map);
+                    if (splitGoodsDetailList!=null && splitGoodsDetailList.size()<=0) { //如果再没有子商品的话
+                        splitGoodsMapper.deleteByPrimaryKey(splitGoodsDetail.getSplitGoodsId());
+                    }
+
+                    /*splitGoodsDetail.setRemainAmount(0f);//派单剩余数量
                     splitGoodsDetail.setAllotAmount(splitGoodsDetail.getAllotAmount() - splitGoodsDetail.getRemainAmount()); //派单待派数量(已派出的数量)=派单现待派数量-派单剩余数量
                     splitGoodsDetail.setUpdateId(user.getUserId());
                     splitGoodsDetail.setUpdateTime(new Date());
                     splitGoodsDetail.setUpdateName(user.getRealName());
                     splitGoodsDetailMapper.updateByPrimaryKey(splitGoodsDetail);*/
                 }
+
+
+
             }
 
 
