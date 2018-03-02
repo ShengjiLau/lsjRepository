@@ -62,7 +62,11 @@
   <select id="selectByGroupName" resultType="java.lang.Integer">
     select count(driver_group_id)
     from t_driver_group
-    where company_id = #{arg0,jdbcType=BIGINT} and group_name = #{arg1,jdbcType=VARCHAR} and is_deleted = 0
+    where company_id = #{arg0,jdbcType=BIGINT} and group_name = #{arg1,jdbcType=VARCHAR}
+    <if test="arg2!=null and arg2!=''">
+      and driver_group_id != #{arg2,jdbcType=BIGINT}
+    </if>
+    and is_deleted = 0
   </select>
 
 
