@@ -48,7 +48,6 @@ public final class RedirectHelper {
 
 	public static String assembleLoginUrlWithAuthBack(HttpServletRequest request){
 		String callback = request.getRequestURL().toString();
-
 		String queryurl = request.getQueryString();
 		if(null != queryurl){
 			callback += "?" + queryurl;
