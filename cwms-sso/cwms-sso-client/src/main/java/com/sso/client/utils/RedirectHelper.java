@@ -35,6 +35,17 @@ public final class RedirectHelper {
 	}
 
 
+	public static String getLoginUrl(){
+		String url = PropertyUtils.readProperties(PropertyUtils.LOGIN_URL);
+		if (StringUtils.isEmpty(url)) {
+			return "";
+		}
+		if (!url.startsWith("http")) {
+			url = "http://" + url;
+		}
+		return url;
+	}
+
 	public static String assembleLoginUrlWithAuthBack(HttpServletRequest request){
 		String callback = request.getRequestURL().toString();
 
@@ -52,13 +63,7 @@ public final class RedirectHelper {
 			callback = callback + "?" + request.getQueryString();
 		}
 
-		String url = PropertyUtils.readProperties(PropertyUtils.LOGIN_URL);
-		if (StringUtils.isEmpty(url)) {
-			return "";
-		}
-		if (!url.startsWith("http")) {
-			url = "http://" + url;
-		}
+		String url = getLoginUrl();
 
 		String encode = "";
 		try {
