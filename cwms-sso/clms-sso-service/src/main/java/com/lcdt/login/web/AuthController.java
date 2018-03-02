@@ -303,11 +303,8 @@ public class AuthController {
             modelAndView.addObject("msg", "用户已被禁用");
             return modelAndView;
         }
-
-
         ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
         LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
-
         User userInfoInSession = LoginSessionReposity.getUserInfoInSession(request);
 
         logger.info("user session is {}",userInfoInSession.getRealName());

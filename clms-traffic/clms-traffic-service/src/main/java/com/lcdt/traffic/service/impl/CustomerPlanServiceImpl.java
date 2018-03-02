@@ -268,7 +268,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
         if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString().replace("carrier_collection_ids", "wp.carrier_collection_ids"));
+            map.put("carrierCollectionIds", "(sp.carrier_company_id="+map.get("bindCompId").toString()+" or wp.carrier_company_id="+map.get("bindCompId").toString()+")");
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
