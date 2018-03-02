@@ -212,7 +212,7 @@ public class LocationServiceApi {
             jsonObject.put("message", "用户可能关机");
         } else {      //对于移动手机，定位失败时运营商返回的结果
             jsonObject.put("code", resid);
-            jsonObject.put("message", "接口返回错误");
+            jsonObject.put("message", "定位失败，请联系客服！");
         }
         return jsonObject;
     }
