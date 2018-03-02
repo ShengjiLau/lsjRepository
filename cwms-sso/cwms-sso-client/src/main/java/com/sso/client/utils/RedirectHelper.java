@@ -46,8 +46,11 @@ public final class RedirectHelper {
 				+ ":"
 				+ request.getServerPort()           //端口号
 				+ request.getContextPath()      //项目名称
-				+ request.getServletPath()      //请求页面或其他地址
-				+ "?" + (request.getQueryString()); //参数
+				+ request.getServletPath();
+		//请求页面或其他地址
+		if (request.getQueryString() != null) {
+			callback = callback + "?" + request.getQueryString();
+		}
 
 		String url = PropertyUtils.readProperties(PropertyUtils.LOGIN_URL);
 		if (StringUtils.isEmpty(url)) {
