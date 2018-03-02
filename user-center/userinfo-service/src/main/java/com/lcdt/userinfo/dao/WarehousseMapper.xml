@@ -28,6 +28,10 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <!--仓库联系人-->
+    <collection property="linkmanList" column="{whId=wh_id,isDeleted=is_deleted}"
+                ofType="com.lcdt.userinfo.model.WarehouseLinkman" javaType="ArrayList"
+                select="com.lcdt.userinfo.dao.WarehousseLinkmanMapper.selectByWhId" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_warehouse
