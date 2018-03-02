@@ -23,7 +23,7 @@ public interface DriverGroupMapper {
      * @param groupName
      * @return
      */
-    int selectByGroupName(Long companyId,String groupName);
+    int selectByGroupName(Long companyId,String groupName,Long driverGroupId);
 
     int updateByPrimaryKey(DriverGroup record);
 
