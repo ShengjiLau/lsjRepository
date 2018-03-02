@@ -264,6 +264,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Integer splitGoods4Bidding(BindingSplitParamsDto dto, User user, Long companyId) {
         Map tMap = new HashMap<String,String>();
@@ -367,6 +368,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
         return 1;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Integer splitGoodsCancel(Long splitGoodsId, User user, Long companyId) {
         Map map = new HashMap<>();
