@@ -39,7 +39,7 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public PageInfo<List<Contract>> ontractList(ContractDto contractDto, PageInfo pageInfo) {
+    public PageInfo<List<Contract>> ContractList(ContractDto contractDto, PageInfo pageInfo) {
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         PageInfo page = new PageInfo(contractMapper.selectByCondition(contractDto));
         return page;

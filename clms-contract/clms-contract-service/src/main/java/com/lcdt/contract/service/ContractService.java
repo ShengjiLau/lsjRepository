@@ -37,5 +37,5 @@ public interface ContractService {
      * 获取合同列表
      * @return
      */
-    PageInfo<List<Contract>> ontractList(ContractDto contractDto, PageInfo pageInfo);
+    PageInfo<List<Contract>> ContractList(ContractDto contractDto, PageInfo pageInfo);
 }

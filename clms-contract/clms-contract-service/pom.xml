@@ -41,11 +41,11 @@
             <artifactId>clms-swagger</artifactId>
             <version>1.0</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.lcdt.cloud</groupId>-->
-            <!--<artifactId>clms-security</artifactId>-->
-            <!--<version>1.0</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-security</artifactId>
+            <version>1.0</version>
+        </dependency>
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
@@ -85,11 +85,11 @@
             <artifactId>velocity</artifactId>
             <version>1.7</version>
         </dependency>
-        <dependency>
+       <!--   <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-quartz-api</artifactId>
             <version>1.0</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
 

@@ -43,7 +43,7 @@ public class ContractApi {
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(contractDto.getPageNum());    //设置页码
         pageInfo.setPageSize(contractDto.getPageSize());  //设置每页条数
-        PageInfo<List<Contract>> listPageInfo = contractService.ontractList(contractDto, pageInfo);
+        PageInfo<List<Contract>> listPageInfo = contractService.ContractList(contractDto, pageInfo);
         logger.debug("合同总条数：" + listPageInfo.getTotal());
         logger.debug("listPageInfo:" + listPageInfo.toString());
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
