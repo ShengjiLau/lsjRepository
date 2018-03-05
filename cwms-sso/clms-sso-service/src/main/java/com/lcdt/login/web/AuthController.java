@@ -299,13 +299,12 @@ public class AuthController {
         }
 
         if (companyMember.getIsEnable() != null && companyMember.getIsEnable() == false) {
-            throw new LoginError("用户已被禁用");
+            ModelAndView modelAndView = new ModelAndView("/error");
+            modelAndView.addObject("msg", "用户已被禁用");
+            return modelAndView;
         }
-
-
         ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
         LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
-
         User userInfoInSession = LoginSessionReposity.getUserInfoInSession(request);
 
         logger.info("user session is {}",userInfoInSession.getRealName());

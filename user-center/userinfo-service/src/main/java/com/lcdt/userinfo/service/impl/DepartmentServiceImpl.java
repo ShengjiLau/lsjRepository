@@ -75,7 +75,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 				if (department.getIsDefault()!=null && department.getIsDefault()==1) { //不存在子部门同时是一级部门不能删除
 					throw new DeptmentExistException("该部门为一级部门不能删除");
 				}
-				if (department.getCompanyId()!=companyId) { //不同企业下能删除
+				if (!department.getCompanyId().equals(companyId)) { //不同企业下能删除
 					throw new DeptmentExistException("非法删除数据");
 				}
 			}

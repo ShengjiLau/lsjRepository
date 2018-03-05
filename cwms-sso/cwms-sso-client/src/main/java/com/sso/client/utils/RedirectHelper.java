@@ -35,22 +35,36 @@ public final class RedirectHelper {
 	}
 
 
-	public static String assembleLoginUrlWithAuthBack(HttpServletRequest request){
-		String callback = request.getRequestURL().toString();
-
-		String queryurl = request.getQueryString();
-		if(null != queryurl){
-			callback += "?" + queryurl;
-		}
-
-
+	public static String getLoginUrl(){
 		String url = PropertyUtils.readProperties(PropertyUtils.LOGIN_URL);
 		if (StringUtils.isEmpty(url)) {
 			return "";
 		}
-		if (!url.startsWith("http")) {
-			url = "http://" + url;
+		if (url.startsWith(HTTP_PREFIX) || url.startsWith(HTTPS_PREFIX)) {
+			return url;
+		} else {
+			url = HTTP_PREFIX + url;
+			return url;
 		}
+	}
+
+	public static String assembleLoginUrlWithAuthBack(HttpServletRequest request){
+		String callback = request.getRequestURL().toString();
+		String queryurl = request.getQueryString();
+		if(null != queryurl){
+			callback += "?" + queryurl;
+		}
+		callback = HTTP_PREFIX + request.getServerName() //服务器地址
+				+ ":"
+				+ request.getServerPort()           //端口号
+				+ request.getContextPath()      //项目名称
+				+ request.getServletPath();
+		//请求页面或其他地址
+		if (request.getQueryString() != null) {
+			callback = callback + "?" + request.getQueryString();
+		}
+
+		String url = getLoginUrl();
 
 		String encode = "";
 		try {
@@ -78,7 +92,7 @@ public final class RedirectHelper {
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("code", "302");
 				jsonObject.put("message", "请先登录");
-				jsonObject.put("redirecturl", assembleLoginUrlWithAuthBack(request));
+				jsonObject.put("redirecturl", getLoginUrl());
 				writer.write(jsonObject.toString());
 				writer.flush();
 				return;

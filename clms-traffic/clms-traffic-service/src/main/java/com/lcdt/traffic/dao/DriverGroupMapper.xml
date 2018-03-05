@@ -59,6 +59,15 @@
     select driver_group_id, group_name, group_remark, company_id
     from t_driver_group where company_id = #{companyId,jdbcType=BIGINT} and is_deleted = 0
   </select>
+  <select id="selectByGroupName" resultType="java.lang.Integer">
+    select count(driver_group_id)
+    from t_driver_group
+    where company_id = #{arg0,jdbcType=BIGINT} and group_name = #{arg1,jdbcType=VARCHAR}
+    <if test="arg2!=null and arg2!=''">
+      and driver_group_id != #{arg2,jdbcType=BIGINT}
+    </if>
+    and is_deleted = 0
+  </select>
 
 
   <resultMap id="BaseResultMapDto" type="com.lcdt.traffic.web.dto.DriverGroupDto">

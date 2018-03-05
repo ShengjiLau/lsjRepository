@@ -109,13 +109,10 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             splitGoods.setUpdateTime(opDate);
             splitGoods.setIsDeleted((short)0);
             splitGoods.setCompanyId(companyId);
-
             splitGoods.setCarrierCollectionIds(dto.getCarrierCollectionIds());
             splitGoods.setCarrierCollectionNames(dto.getCarrierCollectionNames());
             splitGoods.setCarrierPhone(dto.getCarrierPhone());
             splitGoods.setCarrierVehicle(dto.getCarrierVehicle());
-
-
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
                 String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
                 Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
@@ -248,7 +245,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
             for (SplitGoodsDetailParamsDto obj1 : list) {
 
-                    if (planDetail.getPlanDetailId() - obj1.getPlanDetailId()==0) {
+                    if (planDetail.getPlanDetailId().equals(obj1.getPlanDetailId())) {
                         allotAmountTotal += obj1.getAllotAmount(); //统计分配数量
                         tempObj = obj1;
                         break; //因为分配只有一种
@@ -267,6 +264,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Integer splitGoods4Bidding(BindingSplitParamsDto dto, User user, Long companyId) {
         Map tMap = new HashMap<String,String>();
@@ -370,6 +368,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
         return 1;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Integer splitGoodsCancel(Long splitGoodsId, User user, Long companyId) {
         Map map = new HashMap<>();
@@ -415,21 +414,37 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
     private void updateSplitGoodsAmount(SplitGoodsDetail splitGoodsDetail, List<PlanDetail> planDetailList, User user){
         if (null!=planDetailList && planDetailList.size()>0) {
             for (PlanDetail obj: planDetailList) {
-                if (obj.getPlanDetailId()-splitGoodsDetail.getPlanDetailId()==0) {
+
+                if (obj.getPlanDetailId().equals(splitGoodsDetail.getPlanDetailId())) {
+
                     obj.setRemainderAmount(obj.getRemainderAmount()+splitGoodsDetail.getRemainAmount());//计划剩余数量=计划现剩余数量+派单剩余数量
-                    //更新计划详细
-                    obj.setUpdateId(user.getUserId());
+                    obj.setUpdateId(user.getUserId());  //更新计划详细
                     obj.setUpdateTime(new Date());
                     obj.setUpdateName(user.getRealName());
                     planDetailMapper.updateByPrimaryKey(obj);
-                    //更新派单详细
-                    splitGoodsDetail.setRemainAmount(0f);//派单剩余数量
+
+                    Map map = new HashMap();
+                    map.put("splitGoodsId",splitGoodsDetail.getSplitGoodsId());
+                    map.put("companyId",splitGoodsDetail.getCompanyId());
+                    map.put("isDeleted",0);
+
+                    splitGoodsDetailMapper.deleteByPrimaryKey(splitGoodsDetail.getSplitGoodsDetailId());  //先删除子明细
+                     //再查询主下面是否存在子明细，如果有，不删除主，没有删除主
+                    List<SplitGoodsDetail> splitGoodsDetailList = splitGoodsDetailMapper.selectBySplitGoodsId(map);
+                    if (splitGoodsDetailList!=null && splitGoodsDetailList.size()<=0) { //如果再没有子商品的话
+                        splitGoodsMapper.deleteByPrimaryKey(splitGoodsDetail.getSplitGoodsId());
+                    }
+
+                    /*splitGoodsDetail.setRemainAmount(0f);//派单剩余数量
                     splitGoodsDetail.setAllotAmount(splitGoodsDetail.getAllotAmount() - splitGoodsDetail.getRemainAmount()); //派单待派数量(已派出的数量)=派单现待派数量-派单剩余数量
                     splitGoodsDetail.setUpdateId(user.getUserId());
                     splitGoodsDetail.setUpdateTime(new Date());
                     splitGoodsDetail.setUpdateName(user.getRealName());
-                    splitGoodsDetailMapper.updateByPrimaryKey(splitGoodsDetail);
+                    splitGoodsDetailMapper.updateByPrimaryKey(splitGoodsDetail);*/
                 }
+
+
+
             }
 
 

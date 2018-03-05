@@ -17,6 +17,14 @@ public interface DriverGroupMapper {
 
     List<DriverGroup> selectAll(Long companyId);
 
+    /**
+     * 查询分组是否存在（查询的为count，0不存在）
+     * @param companyId
+     * @param groupName
+     * @return
+     */
+    int selectByGroupName(Long companyId,String groupName,Long driverGroupId);
+
     int updateByPrimaryKey(DriverGroup record);
 
     List<DriverGroupDto> selectRelationship(Long companyId);

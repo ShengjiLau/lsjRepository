@@ -384,11 +384,14 @@ public class PlanServiceImpl implements PlanService {
         long companyId = Long.valueOf(map.get("companyId").toString());//登录人企业ID
         PageInfo pageInfo = null;
         if (waybillPlan != null) { //计划存在
-            PlanLeaveMsg planLeaveMsg = new PlanLeaveMsg();
+         PlanLeaveMsg planLeaveMsg = new PlanLeaveMsg();
+            map.remove("companyId");
+            map.remove("createCompanyId");
             if (waybillPlan.getCompanyId() == companyId) { //说明是货主
                 map.put("companyId",companyId);
             } else {
-                map.put("carrierCompanyId",companyId);
+                map.put("carrierCompanyId4leaveMsg",companyId);
+                map.put("companyId",waybillPlan.getCompanyId());
             }
             PageHelper.startPage(pageNo, pageSize);
             List<PlanLeaveMsg> list = planLeaveMsgMapper.selectByCondition(map);

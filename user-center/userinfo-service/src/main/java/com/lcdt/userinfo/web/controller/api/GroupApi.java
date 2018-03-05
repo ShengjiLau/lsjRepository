@@ -151,26 +151,32 @@ public class GroupApi {
     @ApiOperation("用户项目组列表")
     @RequestMapping(value = "/userGroupList", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_list')")
-    public List<Group> deptUserList() {
+    public JSONObject deptUserList() {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         List<Group> groupsList = null;
-        if (userCompRel.getIsCreate() == 1 && userCompRel.getCompId() == companyId) { //企业者
-
+        GroupResultDto rDto = new GroupResultDto();
+/*        if (userCompRel.getIsCreate() == 1 ) { //企业者
             Map map = new HashMap();
             map.put("companyId", companyId);
             map.put("page_no", 1);
             map.put("page_size", 0);
             PageInfo pageInfo = groupManageService.groupList(map);
             groupsList = pageInfo.getList();
-        } else {
-            groupsList = userGroupRelationMapper.selectByUserCompany(userId, companyId);
+            rDto.setList(groupsList);
+            rDto.setTotal(pageInfo.getTotal());
+        } else { }*/
+        groupsList = userGroupRelationMapper.selectByUserCompany(userId, companyId);
+        rDto.setList(groupsList);
+        rDto.setTotal(groupsList!=null?groupsList.size():0);
 
-        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("data",rDto);
+        jsonObject.put("code", 0);
+        jsonObject.put("message","请求成功");
 
-
-        return groupsList;
+        return jsonObject;
     }
 
 

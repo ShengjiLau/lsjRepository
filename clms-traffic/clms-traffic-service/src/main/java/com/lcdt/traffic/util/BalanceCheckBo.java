@@ -15,6 +15,6 @@ public class BalanceCheckBo {
     public SmsCountService smsCountService;
 
     public boolean check(Long companyId){
-        return smsCountService.checkProductCount(companyId,1,"gms_service");
+        return smsCountService.checkProductCount(companyId,1,"gms_location");
     }
 }

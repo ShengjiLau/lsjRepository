@@ -151,6 +151,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
 
         //根据登录人（权限组），获取对应客户列表中绑定的客户企业（货主）
         List<Customer> customerList = bindCustomerList(map);
+        if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");//移除
         //查询对应在的企业组、竞价组条件
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList);
@@ -185,8 +186,9 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Offer(Map map) {
-
         List<Customer> customerList = bindCustomerList(map);
+        if(customerList==null || customerList.size()==0) return new PageInfo();
+
         map.remove("groupIds");//移除
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
 
@@ -222,6 +224,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Override
     public PageInfo customerPlanList4Pass(Map map) {
         List<Customer> customerList = bindCustomerList(map);
+        if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
 
@@ -258,13 +261,14 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Override
     public PageInfo customerPlanList4VehicleDoing(Map map) {
         List<Customer> customerList = bindCustomerList(map);
+        if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
         if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString().replace("carrier_collection_ids", "wp.carrier_collection_ids"));
+            map.put("carrierCollectionIds", "(sp.carrier_company_id="+map.get("bindCompId").toString()+" or wp.carrier_company_id="+map.get("bindCompId").toString()+")");
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -296,6 +300,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Override
     public PageInfo customerPlanList4VehicleHave(Map map) {
         List<Customer> customerList = bindCustomerList(map);
+        if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
@@ -336,6 +341,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Override
     public PageInfo customerPlanList4Completed(Map map) {
         List<Customer> customerList = bindCustomerList(map);
+        if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
@@ -373,6 +379,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Override
     public PageInfo customerPlanList4Cancel(Map map) {
         List<Customer> customerList = bindCustomerList(map);
+        if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
