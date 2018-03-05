@@ -14,7 +14,7 @@ import com.lcdt.traffic.dao.WaybillItemsMapper;
 import com.lcdt.traffic.dao.WaybillMapper;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
-import com.lcdt.traffic.notify.WaybillAttachment;
+import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.GprsLocationBo;
@@ -458,7 +458,7 @@ public class WaybillServiceImpl implements WaybillService {
                     User shipperUser=userService.queryByUserId(splitGoods.getCreateId());
                     shipperNotifyReceiver.setPhoneNum(shipperUser.getPhone());
 
-                    WaybillAttachment shipperAttachment = new WaybillAttachment();
+                    CommonAttachment shipperAttachment = new CommonAttachment();
                     shipperAttachment.setCarrierCompany(dao.getCarrierCompanyName());
                     shipperAttachment.setDriverName(dao.getDriverName());
                     shipperAttachment.setWaybillCode(dao.getWaybillCode());
@@ -478,7 +478,7 @@ public class WaybillServiceImpl implements WaybillService {
                     carrierNotifyReceiver.setUserId(dao.getCreateId());
                     carrierNotifyReceiver.setPhoneNum(carrierCompanyUser.getPhone());
 
-                    WaybillAttachment carrierAttachment = new WaybillAttachment();
+                    CommonAttachment carrierAttachment = new CommonAttachment();
                     carrierAttachment.setWaybillCode(dao.getWaybillCode());
                     carrierAttachment.setOwnerPhone(shipperUser.getPhone());
                     carrierAttachment.setWebNotifyUrl("");
@@ -491,7 +491,7 @@ public class WaybillServiceImpl implements WaybillService {
                     DefaultNotifyReceiver receiveNotifyReceiver = new DefaultNotifyReceiver();
                     receiveNotifyReceiver.setPhoneNum(dao.getReceivePhone());
 
-                    WaybillAttachment receiveAttachment = new WaybillAttachment();
+                    CommonAttachment receiveAttachment = new CommonAttachment();
 
                     TrafficStatusChangeEvent receive_event = new TrafficStatusChangeEvent("carrier_bill_finish", receiveAttachment, receiveNotifyReceiver, defaultNotifySender);
                     producer.sendNotifyEvent(receive_event);
@@ -510,15 +510,14 @@ public class WaybillServiceImpl implements WaybillService {
         defaultNotifyReceiver.setCompanyId(1L);
         defaultNotifyReceiver.setUserId(1L);
         defaultNotifyReceiver.setPhoneNum("15965792008");
+
         DefaultNotifySender defaultNotifySender = new DefaultNotifySender(1L, 1L);
 
-        WaybillAttachment testAttachment = new WaybillAttachment();
+        CommonAttachment testAttachment = new CommonAttachment();
         testAttachment.setWaybillCode("LT20180226000001-2");
         testAttachment.setCarrierCompany("立晨物流");
         testAttachment.setCarrierPhone("15965792008");
-
         testAttachment.setWebNotifyUrl("www.baidu.com");
-
         TrafficStatusChangeEvent test_event = new TrafficStatusChangeEvent("carrier_bill_finish", testAttachment, defaultNotifyReceiver, defaultNotifySender);
         producer.sendNotifyEvent(test_event);
     }
