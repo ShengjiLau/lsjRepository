@@ -45,7 +45,7 @@ public class InviteCustomerService {
 
 	public String contentTemplateName = "inviteEmailContent.vm";
 
-	public String inviteEmailSubject = "主题：邀请您使用大驼队协同物流运输系统";
+	public String inviteEmailSubject = "邀请您使用大驼队协同物流管理系统";
 
 	@Autowired
 	ConfigConstant configConstant;
