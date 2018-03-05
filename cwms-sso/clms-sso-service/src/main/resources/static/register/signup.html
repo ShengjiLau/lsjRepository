@@ -191,6 +191,7 @@
               },
               userPhoneNum:{
                     required:true,  //必填。如果验证方法不需要参数，则配置为true
+                    rangelength:[11,11],
                     checkPhone:true,
                 },
                 password:{
@@ -213,7 +214,8 @@
                 },
                 userPhoneNum: {
                   required: "请输入手机号",
-                  checkPhone: "请输入正确手机号",
+                    rangelength:'请输入11位手机号码',
+                  checkPhone: "请输入正确的手机号码格式",
               },
               password:{
                 required: "请输入密码",

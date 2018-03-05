@@ -183,8 +183,8 @@ box-sizing: border-box;
 .sms_capcha_btn,.sms_capcha_btn .inline-btn{
   display: inline-block;
   vertical-align: top;
-  padding: 2px;
-  width:137px;
+ /* padding: 2px;*/
+  width:140px;
 }
 .clms-input.capcha_input{
   width: 190px;
@@ -234,7 +234,7 @@ button.inline-btn.normal{
 
 .login-btn-row.form-row{
   width: 300px;
-  margin-left: 90px;
+  margin-left: 110px;
 }
 .capcha_img{
   display: inline-block;
