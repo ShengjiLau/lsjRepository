@@ -557,6 +557,10 @@
           <if test=" carrierCompanyId!=null">
             and  carrier_company_id = #{ carrierCompanyId,jdbcType=BIGINT}
           </if>
+          <if test=" carrierCompanyId4leaveMsg!=null">
+            and (carrier_company_id = #{ carrierCompanyId4leaveMsg,jdbcType=BIGINT} or company_id = #{companyId,jdbcType=BIGINT} )
+          </if>
+
           <if test="companyId!=null">
             and  company_id = #{companyId,jdbcType=BIGINT}
           </if>
