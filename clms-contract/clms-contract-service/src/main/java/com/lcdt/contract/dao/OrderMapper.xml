@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.contract.dao.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.Order">
+    <id column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="supplier" jdbcType="VARCHAR" property="supplier" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="order_type" jdbcType="SMALLINT" property="orderType" />
+    <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
+    <result column="distribution_type" jdbcType="SMALLINT" property="distributionType" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="receive_warehouse" jdbcType="VARCHAR" property="receiveWarehouse" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="sender" jdbcType="VARCHAR" property="sender" />
+    <result column="sender_phone" jdbcType="VARCHAR" property="senderPhone" />
+    <result column="send_province" jdbcType="VARCHAR" property="sendProvince" />
+    <result column="send_city" jdbcType="VARCHAR" property="sendCity" />
+    <result column="send_district" jdbcType="VARCHAR" property="sendDistrict" />
+    <result column="send_address" jdbcType="VARCHAR" property="sendAddress" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="pack_require" jdbcType="VARCHAR" property="packRequire" />
+    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone" />
+    <result column="receiver_province" jdbcType="VARCHAR" property="receiverProvince" />
+    <result column="receiver_city" jdbcType="VARCHAR" property="receiverCity" />
+    <result column="receive_district" jdbcType="VARCHAR" property="receiveDistrict" />
+    <result column="receive_address" jdbcType="VARCHAR" property="receiveAddress" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_order
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.Order">
+    insert into t_order (order_id, supplier, order_no, 
+      order_type, contract_code, distribution_type, 
+      pay_type, receive_warehouse, file_url, 
+      sender, sender_phone, send_province, 
+      send_city, send_district, send_address, 
+      send_time, pack_require, receiver, 
+      receiver_phone, receiver_province, receiver_city, 
+      receive_district, receive_address, create_time, 
+      group_id,company_id)
+    values (#{orderId,jdbcType=BIGINT}, #{supplier,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
+      #{orderType,jdbcType=SMALLINT}, #{contractCode,jdbcType=VARCHAR}, #{distributionType,jdbcType=SMALLINT}, 
+      #{payType,jdbcType=VARCHAR}, #{receiveWarehouse,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, 
+      #{sender,jdbcType=VARCHAR}, #{senderPhone,jdbcType=VARCHAR}, #{sendProvince,jdbcType=VARCHAR}, 
+      #{sendCity,jdbcType=VARCHAR}, #{sendDistrict,jdbcType=VARCHAR}, #{sendAddress,jdbcType=VARCHAR}, 
+      #{sendTime,jdbcType=TIMESTAMP}, #{packRequire,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, 
+      #{receiverPhone,jdbcType=VARCHAR}, #{receiverProvince,jdbcType=VARCHAR}, #{receiverCity,jdbcType=VARCHAR}, 
+      #{receiveDistrict,jdbcType=VARCHAR}, #{receiveAddress,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{groupId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.Order">
+    update t_order
+    set supplier = #{supplier,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      order_type = #{orderType,jdbcType=SMALLINT},
+      contract_code = #{contractCode,jdbcType=VARCHAR},
+      distribution_type = #{distributionType,jdbcType=SMALLINT},
+      pay_type = #{payType,jdbcType=VARCHAR},
+      receive_warehouse = #{receiveWarehouse,jdbcType=VARCHAR},
+      file_url = #{fileUrl,jdbcType=VARCHAR},
+      sender = #{sender,jdbcType=VARCHAR},
+      sender_phone = #{senderPhone,jdbcType=VARCHAR},
+      send_province = #{sendProvince,jdbcType=VARCHAR},
+      send_city = #{sendCity,jdbcType=VARCHAR},
+      send_district = #{sendDistrict,jdbcType=VARCHAR},
+      send_address = #{sendAddress,jdbcType=VARCHAR},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      pack_require = #{packRequire,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=VARCHAR},
+      receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+      receiver_province = #{receiverProvince,jdbcType=VARCHAR},
+      receiver_city = #{receiverCity,jdbcType=VARCHAR},
+      receive_district = #{receiveDistrict,jdbcType=VARCHAR},
+      receive_address = #{receiveAddress,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      group_id = #{groupId,jdbcType=BIGINT}
+      company_id = #{companyId,jdbcType=BIGINT}
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select order_id, supplier, order_no, order_type, contract_code, distribution_type, 
+    pay_type, receive_warehouse, file_url, sender, sender_phone, send_province, send_city, 
+    send_district, send_address, send_time, pack_require, receiver, receiver_phone, receiver_province, 
+    receiver_city, receive_district, receive_address, create_time, group_id,company_id
+    from t_order
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select order_id, supplier, order_no, order_type, contract_code, distribution_type, 
+    pay_type, receive_warehouse, file_url, sender, sender_phone, send_province, send_city, 
+    send_district, send_address, send_time, pack_require, receiver, receiver_phone, receiver_province, 
+    receiver_city, receive_district, receive_address, create_time, group_id,company_id
+    from t_order
+  </select>
+</mapper>

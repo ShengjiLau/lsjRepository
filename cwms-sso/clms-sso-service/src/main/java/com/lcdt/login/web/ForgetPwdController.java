@@ -77,7 +77,6 @@ public class ForgetPwdController {
         User user = userService.queryByPhone(phoneNum);
         if (user == null) {
             modelAndView.setViewName("/forgetPassword");
-            modelAndView.addObject("error", "此手机号暂未注册，请先注册");
         }
 
         boolean codeCorrect = validCodeService.isCodeCorrect(validcode, request, validcodeTag, phoneNum);
@@ -87,10 +86,10 @@ public class ForgetPwdController {
             HttpSession session = request.getSession(true);
             session.setAttribute(SESSIONKEY, phoneNum);
             modelAndView.addObject("phonenum", phoneNum);
+
             return modelAndView;
         }else{
             modelAndView.setViewName("/forgetPassword");
-            modelAndView.addObject("error", "验证码错误或已过期，请重新获取！");
             return modelAndView;
         }
     }

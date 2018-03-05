@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.contract.dao.OrderApprovalMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.OrderApproval">
+    <id column="oa_id" jdbcType="BIGINT" property="oaId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="type" jdbcType="SMALLINT" property="type" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_order_approval
+    where oa_id = #{oaId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.OrderApproval">
+    insert into t_order_approval (oa_id, order_id, user_id, 
+      name, dept_name, sort, 
+      type, status, content, 
+      time)
+    values (#{oaId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{name,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, 
+      #{type,jdbcType=SMALLINT}, #{status,jdbcType=SMALLINT}, #{content,jdbcType=VARCHAR}, 
+      #{time,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.OrderApproval">
+    update t_order_approval
+    set order_id = #{orderId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      dept_name = #{deptName,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=INTEGER},
+      type = #{type,jdbcType=SMALLINT},
+      status = #{status,jdbcType=SMALLINT},
+      content = #{content,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP}
+    where oa_id = #{oaId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select oa_id, order_id, user_id, name, dept_name, sort, type, status, content, time
+    from t_order_approval
+    where oa_id = #{oaId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select oa_id, order_id, user_id, name, dept_name, sort, type, status, content, time
+    from t_order_approval
+  </select>
+</mapper>

@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Warehouse {
     private Long whId;
@@ -54,6 +55,11 @@ public class Warehouse {
     private Short isDeleted;
 
     private Long companyId;
+
+    /***
+     * 仓库联系人
+     */
+    private List<WarehouseLinkman> linkmanList;
 
     public Long getWhId() {
         return whId;
@@ -261,5 +267,13 @@ public class Warehouse {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public List<WarehouseLinkman> getLinkmanList() {
+        return linkmanList;
+    }
+
+    public void setLinkmanList(List<WarehouseLinkman> linkmanList) {
+        this.linkmanList = linkmanList;
     }
 }

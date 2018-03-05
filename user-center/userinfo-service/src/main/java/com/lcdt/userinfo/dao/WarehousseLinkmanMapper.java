@@ -23,4 +23,6 @@ public interface WarehousseLinkmanMapper {
     int updateIsDefaultByPrimaryKey(WarehouseLinkman record);
 
     int updateIsDefaultByWhId(Long whId);
+
+    List<WarehouseLinkman> selectByWhId(Map map);
 }
