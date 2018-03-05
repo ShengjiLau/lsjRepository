@@ -267,23 +267,6 @@ public class WaybillServiceImpl implements WaybillService {
         resultList = waybillMapper.selectOwnByCondition(map);
         page = new PageInfo(resultList);
 
-        //消息测试
-        DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
-        defaultNotifyReceiver.setCompanyId(1L);
-        defaultNotifyReceiver.setUserId(1L);
-        defaultNotifyReceiver.setPhoneNum("15965792008");
-        DefaultNotifySender defaultNotifySender = new DefaultNotifySender(1L, 1L);
-
-        WaybillAttachment testAttachment = new WaybillAttachment();
-        testAttachment.setWaybillCode("LT20180226000001-2");
-        testAttachment.setCarrierCompany("立晨物流");
-        testAttachment.setCarrierPhone("15965792008");
-
-        testAttachment.setWebNotifyUrl("www.baidu.com");
-
-        TrafficStatusChangeEvent test_event = new TrafficStatusChangeEvent("carrier_bill_finish", testAttachment, defaultNotifyReceiver, defaultNotifySender);
-        producer.sendNotifyEvent(test_event);
-
         return page;
     }
 
@@ -519,6 +502,25 @@ public class WaybillServiceImpl implements WaybillService {
                 }
             }
         }
+    }
+
+    public void testNotify(){
+        //消息测试
+        DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
+        defaultNotifyReceiver.setCompanyId(1L);
+        defaultNotifyReceiver.setUserId(1L);
+        defaultNotifyReceiver.setPhoneNum("15965792008");
+        DefaultNotifySender defaultNotifySender = new DefaultNotifySender(1L, 1L);
+
+        WaybillAttachment testAttachment = new WaybillAttachment();
+        testAttachment.setWaybillCode("LT20180226000001-2");
+        testAttachment.setCarrierCompany("立晨物流");
+        testAttachment.setCarrierPhone("15965792008");
+
+        testAttachment.setWebNotifyUrl("www.baidu.com");
+
+        TrafficStatusChangeEvent test_event = new TrafficStatusChangeEvent("carrier_bill_finish", testAttachment, defaultNotifyReceiver, defaultNotifySender);
+        producer.sendNotifyEvent(test_event);
     }
 
 }
