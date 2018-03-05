@@ -59,7 +59,7 @@ public class AuthController {
     @Autowired
     RequestAuthRedirectStrategy strategy;
 
-    @Reference(check = false)
+    @Reference
     UserService userService;
 
     @Reference(check = false)

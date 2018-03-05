@@ -271,7 +271,7 @@
 <div class="nav-head">
     <nav>
         <div class="logo">
-            <img src="/asset/image/logo_top.png" alt="">
+            <img src="./asset/image/logo_top.png" alt="">
         </div>
         <div class="user-menu">
             <a href="" th:text="${username}"><i class="iconfont icon-user"></i>小A专线</a>
@@ -285,9 +285,16 @@
     <i style="font-size: 48px;color:#1DC11D;font-weight: lighter" class="iconfont icon-round_check1"></i>
     <div class="alert-success">恭喜您!</div>
     <div class="normalText alert-content" th:text="${successtip}">贵公司已成为【联泓新材料】的仓储服务商、运输服务商。</div>
-    <button class="register">开始使用</button>
+    <button class="register" onclick="gotoindex()">开始使用</button>
 </div>
 
+<script th:inline="javascript">
+    function gotoindex() {
+        hosturl = [[${host}]];
+        window.location.href = hosturl;
+    }
+
+</script>
 
 </body>
 </html>
