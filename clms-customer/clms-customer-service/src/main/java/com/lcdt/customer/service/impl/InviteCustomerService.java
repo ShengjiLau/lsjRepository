@@ -152,7 +152,6 @@ public class InviteCustomerService {
 					str = str + "其他";
 					break;
 			}
-
 		}
 		return str;
 	}
