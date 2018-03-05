@@ -2,6 +2,7 @@ package com.lcdt.contract.web.controller.api;
 
 import com.github.pagehelper.PageInfo;
 //import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.model.Contract;
 import com.lcdt.contract.model.ContractDto;
 import com.lcdt.contract.service.ContractService;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,9 +37,9 @@ public class ContractApi {
 
     @ApiOperation(value = "合同列表", notes = "合同列表数据")
     @GetMapping("/list")
-//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('contract_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('contract_list')")
     public PageBaseDto<List<Contract>> contractList(ContractDto contractDto) {
-        Long companyId = 73l;//SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         contractDto.setCompanyId(companyId);
 
         PageInfo pageInfo = new PageInfo();
