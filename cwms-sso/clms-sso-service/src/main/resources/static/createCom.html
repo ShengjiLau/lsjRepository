@@ -139,7 +139,7 @@
 
     .clms-input input,
     .clms-input select {
-      padding: 11px 10px 12px 10px;
+      padding: 10px;
       border: 1px solid #ccc;
       width: 100%;
       line-height: 21px;
@@ -188,7 +188,7 @@
           <span>
             <span class="ant-dropdown-link ant-dropdown-trigger" href="#" style="font-weight: 100;">
               <div class="pic" style="width: 24px;margin-right: 5px;height: 24px;vertical-align: middle;border-radius: 13px;overflow: hidden;display: inline-block;">
-                <img src="http://clms-dtd.oss-cn-beijing.aliyuncs.com/1519896299962logo.png" alt="此处有头像" style="width: 100%; vertical-align: top;">
+                <img th:src="${session.userinfo.pictureUrl}" alt="此处有头像" style="width: 100%; vertical-align: top;">
               </div><!-- react-text: 54 --><label th:utext="${session.userinfo.realName}"/><!-- /react-text -->
             </span>
             <span><a href="/account/logout"><i class="iconfont icon-logout01"></i>退出</label></span>
@@ -206,7 +206,7 @@
         <div class="form-row">
           <label for="fullname">企业名称</label>
           <div class="clms-input">
-            <input id="fullname" type="text" name="fullname" value="" placeholder="请输入公司名称">
+            <input id="fullname" type="text" name="fullname" value="" placeholder="请输入企业名称">
           </div>
         </div>
         <div class="form-row">
@@ -249,7 +249,7 @@
           rules: { //配置验证规则，key就是被验证的dom对象，value就是调用验证的方法(也是json格式)
               fullname: {
                   required: true, //必填。如果验证方法不需要参数，则配置为true
-                  minlength:2
+                rangelength:[2,30],
               },
               industry: {
                   required: true, //必填。如果验证方法不需要参数，则配置为true
@@ -258,6 +258,7 @@
           messages: {
               fullname: {
                   required: "请输入公司名",
+                rangelength: "请输入2-30位公司名称",
               },
               industry:{
                   required: "请选择公司类型",
@@ -295,10 +296,6 @@
 
         }
     });
-
-
-
-
   </script>
 </body>
 </html>

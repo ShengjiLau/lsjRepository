@@ -2,6 +2,7 @@ package com.lcdt.traffic.dto;
 
 import com.lcdt.traffic.model.PlanDetail;
 import com.lcdt.traffic.model.SnatchGoods;
+import com.lcdt.traffic.model.SplitGoods;
 import com.lcdt.traffic.model.Waybill;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class CustomerPlanDto implements java.io.Serializable {
     private List<PlanDetail> PlanDetailList; //计划详细
     private List<Waybill> waybillList; //运单列表
     private List<SnatchGoods> snatchGoodsList; //报价列表
+    private List<SplitGoods> splitGoodsList;
 
     private String receiveProvince;
     private String receiveCity;
@@ -128,6 +130,14 @@ public class CustomerPlanDto implements java.io.Serializable {
 
     public void setSnatchGoodsList(List<SnatchGoods> snatchGoodsList) {
         this.snatchGoodsList = snatchGoodsList;
+    }
+
+    public List<SplitGoods> getSplitGoodsList() {
+        return splitGoodsList;
+    }
+
+    public void setSplitGoodsList(List<SplitGoods> splitGoodsList) {
+        this.splitGoodsList = splitGoodsList;
     }
 }
 

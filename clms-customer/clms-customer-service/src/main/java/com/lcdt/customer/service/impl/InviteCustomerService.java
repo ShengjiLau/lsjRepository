@@ -125,7 +125,7 @@ public class InviteCustomerService {
 		StringTokenizer st = new StringTokenizer(types, ",");
 		while(st.hasMoreElements()){
 			if (addcount != 0) {
-				str = str + ",";
+				str = str + "、";
 			}
 
 			++addcount;

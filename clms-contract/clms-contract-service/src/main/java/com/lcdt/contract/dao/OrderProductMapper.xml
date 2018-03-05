@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.contract.dao.OrderProductMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.OrderProduct">
+    <id column="op_id" jdbcType="BIGINT" property="opId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="total" jdbcType="DECIMAL" property="total" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_order_product
+    where op_id = #{opId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.OrderProduct">
+    insert into t_order_product (op_id, order_id, name, 
+      code, sku, num, price, 
+      total)
+    values (#{opId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{code,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, 
+      #{total,jdbcType=DECIMAL})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.OrderProduct">
+    update t_order_product
+    set order_id = #{orderId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      sku = #{sku,jdbcType=VARCHAR},
+      num = #{num,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      total = #{total,jdbcType=DECIMAL}
+    where op_id = #{opId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select op_id, order_id, name, code, sku, num, price, total
+    from t_order_product
+    where op_id = #{opId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select op_id, order_id, name, code, sku, num, price, total
+    from t_order_product
+  </select>
+</mapper>

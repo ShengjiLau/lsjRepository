@@ -24,7 +24,7 @@ public class DriverGroupServiceImpl implements DriverGroupService {
 
     @Override
     public int addDriverGroup(DriverGroup driverGroup) {
-        int count = driverGroupMapper.selectByGroupName(driverGroup.getCompanyId(),driverGroup.getGroupName());
+        int count = driverGroupMapper.selectByGroupName(driverGroup.getCompanyId(),driverGroup.getGroupName(),null);
         if(count!=0){
             throw new RuntimeException("司机分组不能重复!");
         }
@@ -33,7 +33,7 @@ public class DriverGroupServiceImpl implements DriverGroupService {
 
     @Override
     public int modDriverGroup(DriverGroup driverGroup) {
-        int count = driverGroupMapper.selectByGroupName(driverGroup.getCompanyId(),driverGroup.getGroupName());
+        int count = driverGroupMapper.selectByGroupName(driverGroup.getCompanyId(),driverGroup.getGroupName(),driverGroup.getDriverGroupId());
         if(count!=0){
             throw new RuntimeException("司机分组不能重复!");
         }

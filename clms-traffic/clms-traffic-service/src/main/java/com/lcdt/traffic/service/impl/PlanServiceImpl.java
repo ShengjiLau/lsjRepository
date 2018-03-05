@@ -390,7 +390,8 @@ public class PlanServiceImpl implements PlanService {
             if (waybillPlan.getCompanyId() == companyId) { //说明是货主
                 map.put("companyId",companyId);
             } else {
-                map.put("carrierCompanyId",companyId);
+                map.put("carrierCompanyId4leaveMsg",companyId);
+                map.put("companyId",waybillPlan.getCompanyId());
             }
             PageHelper.startPage(pageNo, pageSize);
             List<PlanLeaveMsg> list = planLeaveMsgMapper.selectByCondition(map);

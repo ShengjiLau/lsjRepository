@@ -110,12 +110,12 @@ box-sizing: border-box;
 }
 .capcha_img{
   display: inline-block;
-  border:1px solid #acacac;
-  padding: 2px;
-  width:90px;
+  border: 1px solid #d9d9d9;
+  /* padding: 2px; */
+  width: 100px;
   vertical-align: top;
-  margin-top: 4px;
-  height:32px;
+  margin-top: 1px;
+  height: 38px;
 }
 .sms_capcha_btn{
   display: inline-block;

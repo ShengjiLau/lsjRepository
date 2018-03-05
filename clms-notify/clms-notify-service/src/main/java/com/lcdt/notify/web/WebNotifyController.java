@@ -75,7 +75,6 @@ public class WebNotifyController {
         }
         StringTokenizer stringTokenizer = new StringTokenizer(messageIds, ",", false);
         ArrayList<String> strings = new ArrayList<>();
-
         while (stringTokenizer.hasMoreElements()){
             strings.add(String.valueOf(stringTokenizer.nextElement()));
         }
@@ -114,7 +113,6 @@ public class WebNotifyController {
     public String removeMessage(Long messageId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
-//        Integer integer = webMessageDao.unreadMessageCount(companyId, userId);
         webMessageDao.removeMessage(messageId,companyId,userId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", 0);
