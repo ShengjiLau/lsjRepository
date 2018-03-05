@@ -81,7 +81,7 @@ box-sizing: border-box;
   border-radius: 4px;
   position: relative;
   display: inline-block;
-  width: 300px;
+  width: 306px;
   box-sizing:border-box;
 }
 .clms-input span,.clms-input img{
@@ -105,8 +105,9 @@ box-sizing: border-box;
 }
 
 .login-btn-row.form-row{
-  width: 300px;
+  width: 306px;
   margin-left: 90px;
+  font-size: 12px;
 }
 .capcha_img{
   display: inline-block;
@@ -115,6 +116,7 @@ box-sizing: border-box;
   width: 100px;
   vertical-align: top;
   margin-top: 1px;
+  margin-left: 8px;
   height: 38px;
 }
 .sms_capcha_btn{
