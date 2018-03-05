@@ -6,7 +6,7 @@ import com.lcdt.notify.model.BaseAttachment;
  * Created by lyqishan on 2018/2/27
  */
 
-public class WaybillAttachment extends BaseAttachment {
+public class CommonAttachment extends BaseAttachment {
     private String ownerCompany; //货主公司
     private String carrierCompany; //承运商公司
     private String contractCustomer; //合同客户名

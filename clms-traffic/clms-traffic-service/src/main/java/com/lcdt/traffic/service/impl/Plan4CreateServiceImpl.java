@@ -167,9 +167,15 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     String receiveAddress = vo.getReceiveProvince()+" "+vo.getReceiveCity()+" "+vo.getReceiveCounty();
                     if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
 
+
+
                     } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机else
 
+
                     }
+
+
+
                 }
             }
         }
