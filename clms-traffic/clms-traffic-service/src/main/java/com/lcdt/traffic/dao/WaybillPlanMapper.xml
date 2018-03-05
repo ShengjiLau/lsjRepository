@@ -127,6 +127,11 @@
     <collection property="snatchGoodsList" column="{waybillPlanId=waybill_plan_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.SnatchGoods" javaType="ArrayList"
                 select="com.lcdt.traffic.dao.SnatchGoodsMapper.selectByWaybillPlanId" />
+
+      <!--派单记录-->
+      <collection property="splitGoodsList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
+                  ofType="com.lcdt.traffic.model.SplitGoods" javaType="ArrayList"
+                  select="com.lcdt.traffic.dao.SplitGoodsMapper.selectByWaybillPlanId" />
   </resultMap>
 
 
