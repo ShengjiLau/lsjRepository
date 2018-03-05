@@ -17,20 +17,21 @@ public class ModifyUserDto {
 
 	@ApiModelProperty(value = "姓名",required = true)
 	@NotEmpty
-	@Size(min = 2,max = 6)
+	@Size(min = 1,max = 20,message = "姓名长度为1到20个字符")
 	private String name;
 
 	@ApiModelProperty(value = "昵称",required = true)
 	@NotEmpty
-	@Size(min = 2,max = 6)
+	@Size(min = 1,max = 6,message = "昵称长度为1到6个字符")
 	private String nickName;
 
 	@Email
+	@Size(max = 50,message = "电子邮箱长度不能超过50个字符")
 	private String email;
 
 	private Long birthDay;
 
-	@Size(max = 100)
+	@Size(max = 100 , message = "简介长度不能超过100个字符")
 	private String intro;
 
 	public String getAvatarUrl() {

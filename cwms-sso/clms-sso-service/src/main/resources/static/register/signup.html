@@ -36,20 +36,20 @@
         <div class="form-row require">
           <label for="name">姓名：</label>
           <div class="clms-input">
-            <input type="text" name="name"  value="" id="name" placeholder="请输入2-20位姓名">
+            <input type="text" name="name"  value="" id="name" placeholder="请输入姓名">
           </div>
         </div>
         <div class="form-row require">
           <label for="userPhoneNum">手机号：</label>
           <div class="clms-input">
             <span>+86</span>
-            <input type="text" id="phone-num" name = "userPhoneNum"  value="" placeholder="请输入11位手机号码">
+            <input type="text" id="userPhoneNum" name = "userPhoneNum"  value="" placeholder="请输入手机号码">
           </div>
         </div>
         <div class="form-row require">
           <label for="ecode">验证码：</label>
           <div class="clms-input sms-capcha-input">
-            <input type="text" name="ecode" value="" id="code-input" placeholder="请输入验证码" >
+            <input type="text" name="ecode" value="" id="ecode" placeholder="请输入验证码" >
           </div>
           <div class="sms_capcha_btn">
             <button type="button"  id="get-codes-btn" class="inline-btn normal" >
@@ -61,19 +61,19 @@
         <div class="form-row require">
           <label for="password">密码：</label>
           <div class="clms-input">
-            <input type="password" name="password" id="inputPassword"  value="" placeholder="请输入6-20位密码">
+            <input type="password" name="password" id="password"  value="" placeholder="请输入密码">
           </div>
         </div>
         <div class="form-row require">
           <label for="password1">确认密码：</label>
           <div class="clms-input">
-            <input type="password" name="password1"  id="inputPasswordConfirm"  value="" placeholder="请再次输入密码">
+            <input type="password" name="password1"  id="password1"  value="" placeholder="请再次输入密码">
           </div>
         </div>
         <div class="form-row">
           <label for="introducer">推荐人手机号：</label>
           <div class="clms-input">
-            <input type="text"  id="introducer_id" name="introducer" value="" placeholder="请输入推荐人手机号码">
+            <input type="text"  id="introducer" name="introducer" value="" placeholder="请输入推荐人手机号码">
           </div>
         </div>
         <div class="form-row" style="margin-top:32px;">
@@ -87,7 +87,7 @@
     <script src="https://cdn.bootcss.com/jquery-validate/1.17.0/jquery.validate.min.js"></script>
     <script src="https://cdn.bootcss.com/jquery-validate/1.17.0/localization/messages_zh.min.js"></script>
     <script type="text/javascript">
-      var countdown=6;
+      var countdown = 60;
       function settime(obj) {
           obj = $("#get-codes-btn");
           if (countdown == 0) {
@@ -120,7 +120,7 @@
        * 获取短信验证码
        */
       $('#get-codes-btn').click(function () {
-          if ($("#phone-num").val().length == 11) {
+          if ($("#userPhoneNum").val().length == 11) {
               var form = document.getElementById("signup-form");
               var fd = new FormData(form);
               $.ajax({
@@ -200,7 +200,7 @@
                 },
               password1:{
                     required:true,
-                    equalTo:"#inputPassword",
+                    equalTo:"#password",
                 },
               ecode:{
                     required:true,
@@ -210,7 +210,7 @@
             messages: {
                 name: {
                     required: "请输入姓名",
-                    checkPhone: "请输入2-6个字",
+                    checkPhone: "请输入2-6个字的姓名",
                 },
                 userPhoneNum: {
                   required: "请输入手机号",
@@ -219,11 +219,11 @@
               },
               password:{
                 required: "请输入密码",
-                rangelength: "请输入正确密码",
+                rangelength: "请输入6-20位的密码",
               },
                 password1:{
                 required: "请输入密码",
-                equalTo: "输入的密码不一致",
+                equalTo: "2次输入的密码不一致",
               },
                 ecode:{
                 required: "请输入验证码",

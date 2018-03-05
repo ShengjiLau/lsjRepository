@@ -112,7 +112,7 @@ public class UserApi {
 	public User editUserInfo(@Validated ModifyUserDto modifyUserDto, BindingResult result) {
 
 		if (result.hasErrors()) {
-			throw new ValidateException("参数错误");
+			throw new ValidateException(result.getAllErrors().get(0).getDefaultMessage());
 		}
 
 		User user = SecurityInfoGetter.getUser();

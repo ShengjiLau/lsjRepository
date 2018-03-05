@@ -179,7 +179,7 @@ box-sizing: border-box;
 .sms_capcha_btn,.sms_capcha_btn .inline-btn{
   display: inline-block;
   vertical-align: top;
- /* padding: 2px;*/
+  padding: 2px;
   width:137px;
 }
 .clms-input.capcha_input{

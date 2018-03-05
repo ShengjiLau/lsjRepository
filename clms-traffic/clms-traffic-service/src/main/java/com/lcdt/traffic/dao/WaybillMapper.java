@@ -149,4 +149,10 @@ public interface WaybillMapper {
      * @return
      */
     List<Waybill> selectByCodeAndCompanyId(Map map);
+
+
+    /**
+     * 根据waybillIds查询运单
+     */
+    List<WaybillDao> selectWaybillByWaybillIds(Map map);
 }

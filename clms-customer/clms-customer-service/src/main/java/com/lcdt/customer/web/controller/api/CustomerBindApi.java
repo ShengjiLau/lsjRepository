@@ -49,6 +49,13 @@ public class CustomerBindApi {
 	@Autowired
 	CustomerInviteLogMapper inviteLogMapper;
 
+	@RequestMapping(value = "/testbindwebpage")
+	public ModelAndView testBindSuccessView(){
+		ModelAndView modelAndView = new ModelAndView("/invite_success");
+		modelAndView.addObject("host", "www.baidu.com");
+		return modelAndView;
+	}
+
 	@ApiOperation("获取邀请邮件内容")
 	@RequestMapping(value = "/invitecustomer",method = RequestMethod.POST)
 	@ResponseBody

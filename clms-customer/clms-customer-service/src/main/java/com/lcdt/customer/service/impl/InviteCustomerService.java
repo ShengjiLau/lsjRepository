@@ -45,7 +45,7 @@ public class InviteCustomerService {
 
 	public String contentTemplateName = "inviteEmailContent.vm";
 
-	public String inviteEmailSubject = "主题：邀请您使用大驼队协同物流运输系统";
+	public String inviteEmailSubject = "邀请您使用大驼队协同物流管理系统";
 
 	@Autowired
 	ConfigConstant configConstant;
@@ -125,7 +125,7 @@ public class InviteCustomerService {
 		StringTokenizer st = new StringTokenizer(types, ",");
 		while(st.hasMoreElements()){
 			if (addcount != 0) {
-				str = str + ",";
+				str = str + "、";
 			}
 
 			++addcount;
@@ -152,7 +152,6 @@ public class InviteCustomerService {
 					str = str + "其他";
 					break;
 			}
-
 		}
 		return str;
 	}
