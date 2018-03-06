@@ -123,6 +123,7 @@ public class CustomerBindApi {
 		String s = inviteCustomerService.clientTypeToString(customer.getClientTypes());
 		String successTipStr = "贵公司已成为【"+company.getFullName()+"】的" + s;
 		successView.addObject("successtip", successTipStr);
+		successView.addObject("host", "http://39.107.12.215:88");
 		return successView;
 	}
 
