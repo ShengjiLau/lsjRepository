@@ -250,6 +250,11 @@ public class CompanyServiceImpl implements CompanyService {
 		}else{
 			certificateDao.updateByPrimaryKey(companyCertificate);
 		}
+		Long compId = companyCertificate.getCompId();
+		Company company = companyMapper.selectByPrimaryKey(compId);
+		company.setAuthentication((short) 2);
+		companyMapper.updateByPrimaryKey(company);
+
 		return companyCertificate;
 	}
 
