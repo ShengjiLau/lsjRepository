@@ -247,13 +247,13 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             waybillPlan.setUpdateTime(new Date());
             waybillPlanMapper.updateByPrimaryKey(waybillPlan);
 
+            String sendAddress = waybillPlan.getSendProvince()+" "+waybillPlan.getSendCity()+" "+waybillPlan.getSendCounty()+" "+waybillPlan.getSendAddress();
+            String receiveAddress = waybillPlan.getReceiveProvince()+" "+waybillPlan.getReceiveCity()+" "+waybillPlan.getReceiveCounty()+" "+waybillPlan.getReceiveAddress();
 
             //派单消息
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
-                String sendAddress = waybillPlan.getSendProvince()+" "+waybillPlan.getSendCity()+" "+waybillPlan.getSendCounty()+" "+waybillPlan.getSendAddress();
-                String receiveAddress = waybillPlan.getReceiveProvince()+" "+waybillPlan.getReceiveCity()+" "+waybillPlan.getReceiveCounty()+" "+waybillPlan.getReceiveAddress();
-                DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(company.getCompId(), user.getUserId()); //发送
-                User receiveUser = companyRpcService.findCompanyCreate(splitGoods.getCarrierCompanyId()); //承运商对应企业管理员
+                    DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(company.getCompId(), user.getUserId()); //发送
+                    User receiveUser = companyRpcService.findCompanyCreate(splitGoods.getCarrierCompanyId()); //承运商对应企业管理员
                 if (receiveUser!=null) {
                     DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(splitGoods.getCarrierCompanyId(),receiveUser.getUserId(),receiveUser.getPhone()); //接收
                     CommonAttachment attachment = new CommonAttachment();
@@ -271,13 +271,40 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                         DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(company.getCompId(), user.getUserId()); //发送
                 /*        User driverUser = companyRpcService.findUserByPhone(splitGoods.getCarrierPhone());
                         if (driverUser!=null) { }*/
-                            DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(splitGoods.getCarrierCompanyId(),null,splitGoods.getCarrierPhone()); //接收
-                            CommonAttachment attachment = new CommonAttachment();
+                        //司机
+                        DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(splitGoods.getCarrierCompanyId(),null,splitGoods.getCarrierPhone()); //接收
+                        CommonAttachment attachment = new CommonAttachment();
+                        attachment.setOwnerCompany(company.getFullName()); //货主公司
+                        attachment.setWaybillCode(waybill.getWaybillCode()); //运单流水号
+                        attachment.setAppUrl(ConstantVO.APP_URL); //APP下载URL
+                        TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("bill_to_driver", attachment, defaultNotifyReceiver, defaultNotifySender);
+                        producer.sendNotifyEvent(plan_publish_event);
+                         //合同客户
+                        if (!StringUtils.isEmpty(waybillPlan.getCustomerPhone())) {
+                            defaultNotifyReceiver = NotifyUtils.notifyReceiver(splitGoods.getCarrierCompanyId(),null,waybillPlan.getCustomerPhone()); //接收
+                            attachment = new CommonAttachment();
                             attachment.setOwnerCompany(company.getFullName()); //货主公司
-                            attachment.setWaybillCode(waybill.getWaybillCode()); //运单流水号
-                            attachment.setAppUrl(ConstantVO.APP_URL); //APP下载URL
-                            TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("bill_to_driver", attachment, defaultNotifyReceiver, defaultNotifySender);
+                            attachment.setDestinationAdress(receiveAddress);
+                            attachment.setGoodsDetail(sb_goods.toString());
+                            attachment.setDriverName(splitGoods.getCarrierCollectionNames());
+                            attachment.setVehicleNum(splitGoods.getCarrierVehicle());
+                            attachment.setDriverPhone(splitGoods.getCarrierPhone());
+                            plan_publish_event = new TrafficStatusChangeEvent("bill_to_driver", attachment, defaultNotifyReceiver, defaultNotifySender);
                             producer.sendNotifyEvent(plan_publish_event);
+                        }
+                        //收货人
+                        if (!StringUtils.isEmpty(waybillPlan.getReceivePhone())) {
+                            defaultNotifyReceiver = NotifyUtils.notifyReceiver(splitGoods.getCarrierCompanyId(),null,waybillPlan.getReceivePhone()); //接收
+                            attachment = new CommonAttachment();
+                            attachment.setOwnerCompany(company.getFullName()); //货主公司
+                            attachment.setDestinationAdress(receiveAddress);
+                            attachment.setGoodsDetail(sb_goods.toString());
+                            attachment.setDriverName(splitGoods.getCarrierCollectionNames());
+                            attachment.setDriverPhone(splitGoods.getCarrierPhone());
+                            plan_publish_event = new TrafficStatusChangeEvent("bill_to_driver", attachment, defaultNotifyReceiver, defaultNotifySender);
+                            producer.sendNotifyEvent(plan_publish_event);
+                        }
+
 
                     }
             }
@@ -456,6 +483,30 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
         waybillPlan.setUpdateName(user.getRealName());
         waybillPlan.setUpdateTime(new Date());
         waybillPlanMapper.updateWaybillPlan(waybillPlan);
+
+        //派单取消息
+        if (!StringUtils.isEmpty(splitGoods.getCarrierCompanyId())) {
+            DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(waybillPlan.getCompanyId(), user.getUserId()); //发送
+            User carrierUser = companyRpcService.findCompanyCreate(splitGoods.getCarrierCompanyId()); //承运人企业创建者ID
+            if (null!= carrierUser) {
+                DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(splitGoods.getCarrierCompanyId(),carrierUser.getUserId(),carrierUser.getPhone()); //接收
+                CommonAttachment attachment = new CommonAttachment();
+                attachment.setPlanSerialNum(waybillPlan.getSerialCode());//计划流水号
+                Company company = companyRpcService.findCompanyByCid(companyId);
+                if (null!=company) {
+                    attachment.setOwnerCompany(company.getFullName());
+                    User ownUser = companyRpcService.findCompanyCreate(companyId);
+                    if(null!=ownUser) {
+                        attachment.setOwnerPhone(ownUser.getPhone());
+                    }
+                    attachment.setCancelFlag(ConstantVO.CANCEL_FLAG);
+                    TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("task_cancel_carrier", attachment, defaultNotifyReceiver, defaultNotifySender);
+                    producer.sendNotifyEvent(plan_publish_event);
+
+                }
+            }
+
+        }
         return 1;
     }
 

@@ -33,5 +33,10 @@ public class CompanyRpcServiceImpl implements CompanyRpcService {
     }
 
 
+    @Override
+    public User findUserByPhone(String phone) {
+        return userMapper.queryByUserPhone(phone);
+    }
+
 
 }
