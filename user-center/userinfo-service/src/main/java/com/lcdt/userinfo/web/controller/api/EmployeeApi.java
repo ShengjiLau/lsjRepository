@@ -49,7 +49,7 @@ public class EmployeeApi {
 
         failMessage = new JSONObject();
         failMessage.put("code", -1);
-        failMessage.put("message", "请求异常");
+        failMessage.put("message", "账号已加入公司");
     }
 
     @Autowired

@@ -20,4 +20,6 @@ public class TrafficRpcImpl implements TrafficRpc {
     public void waybillPositionTimer(Map map) {
         waybillService.queryWaybillListToPoPosition(map);
     }
+
+
 }
