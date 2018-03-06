@@ -13,6 +13,8 @@ public class Order {
 
     private String contractCode;
 
+    private String approvalStatus;
+
     private Short distributionType;
 
     private String payType;
@@ -95,6 +97,14 @@ public class Order {
 
     public void setContractCode(String contractCode) {
         this.contractCode = contractCode == null ? null : contractCode.trim();
+    }
+
+    public String getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(String approvalStatus) {
+        this.approvalStatus = approvalStatus;
     }
 
     public Short getDistributionType() {

@@ -8,6 +8,7 @@
     <result column="order_type" jdbcType="SMALLINT" property="orderType" />
     <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
     <result column="distribution_type" jdbcType="SMALLINT" property="distributionType" />
+    <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
     <result column="pay_type" jdbcType="VARCHAR" property="payType" />
     <result column="receive_warehouse" jdbcType="VARCHAR" property="receiveWarehouse" />
     <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
@@ -36,7 +37,7 @@
   </delete>
   <insert id="insert" parameterType="com.lcdt.contract.model.Order">
     insert into t_order (order_id, supplier, order_no, 
-      order_type, contract_code, distribution_type, 
+      order_type, contract_code, approval_status, distribution_type,
       pay_type, receive_warehouse, file_url, 
       sender, sender_phone, send_province, 
       send_city, send_district, send_address, 
@@ -45,7 +46,7 @@
       receive_district, receive_address, remarks, create_time,
       group_id,company_id)
     values (#{orderId,jdbcType=BIGINT}, #{supplier,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
-      #{orderType,jdbcType=SMALLINT}, #{contractCode,jdbcType=VARCHAR}, #{distributionType,jdbcType=SMALLINT}, 
+      #{orderType,jdbcType=SMALLINT}, #{contractCode,jdbcType=VARCHAR},#{approvalStatus,jdbcType=SMALLINT}, #{distributionType,jdbcType=SMALLINT},
       #{payType,jdbcType=VARCHAR}, #{receiveWarehouse,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, 
       #{sender,jdbcType=VARCHAR}, #{senderPhone,jdbcType=VARCHAR}, #{sendProvince,jdbcType=VARCHAR}, 
       #{sendCity,jdbcType=VARCHAR}, #{sendDistrict,jdbcType=VARCHAR}, #{sendAddress,jdbcType=VARCHAR}, 
@@ -60,6 +61,7 @@
       order_no = #{orderNo,jdbcType=VARCHAR},
       order_type = #{orderType,jdbcType=SMALLINT},
       contract_code = #{contractCode,jdbcType=VARCHAR},
+      approval_status = #{approvalStatus,jdbcType=SMALLINT},
       distribution_type = #{distributionType,jdbcType=SMALLINT},
       pay_type = #{payType,jdbcType=VARCHAR},
       receive_warehouse = #{receiveWarehouse,jdbcType=VARCHAR},
@@ -85,7 +87,7 @@
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select order_id, supplier, order_no, order_type, contract_code, distribution_type, 
+    select order_id, supplier, order_no, order_type, contract_code, approval_status, distribution_type,
     pay_type, receive_warehouse, file_url, sender, sender_phone, send_province, send_city, 
     send_district, send_address, send_time, pack_require, receiver, receiver_phone, receiver_province, 
     receiver_city, receive_district, receive_address, remarks, create_time, group_id,company_id
@@ -93,7 +95,7 @@
     where order_id = #{orderId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select order_id, supplier, order_no, order_type, contract_code, distribution_type, 
+    select order_id, supplier, order_no, order_type, contract_code,approval_status, distribution_type,
     pay_type, receive_warehouse, file_url, sender, sender_phone, send_province, send_city, 
     send_district, send_address, send_time, pack_require, receiver, receiver_phone, receiver_province, 
     receiver_city, receive_district, receive_address, remarks, create_time, group_id,company_id
