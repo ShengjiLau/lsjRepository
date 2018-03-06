@@ -252,4 +252,9 @@ public class OwnDriverServiceImpl implements OwnDriverService {
         }
         return true;
     }
+
+    @Override
+    public List<OwnDriver> driverListByGroupId(Long companyId, String groupIds){
+        return ownDriverMapper.selectDriverByGroupIds(companyId,groupIds);
+    }
 }

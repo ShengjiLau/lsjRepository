@@ -188,7 +188,7 @@ public class OwnDriverApi {
         return jsonObject;
     }
 
-    @ApiOperation(value = "获取司机所属分组", notes = "设置司机所属的分组")
+    @ApiOperation(value = "获取司机所属分组", notes = "获取司机所属分组")
     @GetMapping("/drivergroup")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_drivergroup')")
     public PageBaseDto<List<DriverGroupDto>> setGroup() {

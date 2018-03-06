@@ -64,4 +64,12 @@ public interface OwnDriverService {
     int addGroupInfo(List<DriverGroupRelationship> driverGroupRelationshipList);
 
     boolean isExistDriver(String driverPhone, Long companyId);
+
+    /**
+     * 根据groupIds获取组下所有司机信息
+     * @param companyId
+     * @param groupIds
+     * @return
+     */
+    List<OwnDriver> driverListByGroupId(Long companyId, String groupIds);
 }
