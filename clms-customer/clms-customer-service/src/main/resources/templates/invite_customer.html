@@ -314,9 +314,19 @@
             var exp = new Date();
             exp.setTime(exp.getTime() - 1);
             var cval=getCookie(name);
+
             if(cval!=null)
                 document.cookie = name + "="+cval+";expires="+exp.toGMTString();
                 window.location.href="http://39.107.12.215:52412/account/"
+        }
+
+        function getCookie(name)
+        {
+            var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+            if(arr=document.cookie.match(reg))
+                return unescape(arr[2]);
+            else
+                return null;
         }
 
 
