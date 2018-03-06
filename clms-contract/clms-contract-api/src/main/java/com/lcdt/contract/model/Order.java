@@ -55,6 +55,10 @@ public class Order {
 
     private Date createTime;
 
+    private Date approvalStartDate; //审批发起时间begin
+
+    private Date approvalEndDate;   //审批发起时间end
+
     private Long groupId;
 
     private Long companyId;
@@ -265,6 +269,22 @@ public class Order {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Date getApprovalStartDate() {
+        return approvalStartDate;
+    }
+
+    public void setApprovalStartDate(Date approvalStartDate) {
+        this.approvalStartDate = approvalStartDate;
+    }
+
+    public Date getApprovalEndDate() {
+        return approvalEndDate;
+    }
+
+    public void setApprovalEndDate(Date approvalEndDate) {
+        this.approvalEndDate = approvalEndDate;
     }
 
     public Long getGroupId() {

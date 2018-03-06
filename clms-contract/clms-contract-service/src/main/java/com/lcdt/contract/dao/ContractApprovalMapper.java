@@ -13,4 +13,6 @@ public interface ContractApprovalMapper {
     List<ContractApproval> selectAll();
 
     int updateByPrimaryKey(ContractApproval record);
+
+
 }
