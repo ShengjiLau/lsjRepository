@@ -281,7 +281,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                         producer.sendNotifyEvent(plan_publish_event);
                          //合同客户
                         if (!StringUtils.isEmpty(waybillPlan.getCustomerPhone())) {
-                            defaultNotifyReceiver = NotifyUtils.notifyReceiver(splitGoods.getCarrierCompanyId(),null,waybillPlan.getCustomerPhone()); //接收
+                            defaultNotifyReceiver = NotifyUtils.notifyReceiver(null,null,waybillPlan.getCustomerPhone()); //接收
                             attachment = new CommonAttachment();
                             attachment.setOwnerCompany(company.getFullName()); //货主公司
                             attachment.setDestinationAdress(receiveAddress);
@@ -294,7 +294,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                         }
                         //收货人
                         if (!StringUtils.isEmpty(waybillPlan.getReceivePhone())) {
-                            defaultNotifyReceiver = NotifyUtils.notifyReceiver(splitGoods.getCarrierCompanyId(),null,waybillPlan.getReceivePhone()); //接收
+                            defaultNotifyReceiver = NotifyUtils.notifyReceiver(null,null,waybillPlan.getReceivePhone()); //接收
                             attachment = new CommonAttachment();
                             attachment.setOwnerCompany(company.getFullName()); //货主公司
                             attachment.setDestinationAdress(receiveAddress);
@@ -304,8 +304,6 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                             plan_publish_event = new TrafficStatusChangeEvent("bill_to_driver", attachment, defaultNotifyReceiver, defaultNotifySender);
                             producer.sendNotifyEvent(plan_publish_event);
                         }
-
-
                     }
             }
         } else {
