@@ -1,0 +1,161 @@
+html,body{
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  background:#f9fafb;
+  color: #333;
+}
+a:link {text-decoration: none;color: #F60;}a:visited {text-decoration: none;color: inherit;}a:hover {text-decoration: none;}a:active {text-decoration: none;font-weight: bold;}
+.nav-head{
+  height: 60px;
+  background-color: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+nav{
+  width: 900px;
+  margin:auto;
+  height: 60px;
+  background-color: #fff;
+}
+  nav .logo{
+    display: inline-block;
+  }
+nav .logo img{
+  margin-top: 10px;
+}
+@font-face {
+  font-family: 'iconfont';  /* project id 437295 */
+  src: url('//at.alicdn.com/t/font_437295_mm9wg1ryyb3ayvi.eot');
+  src: url('//at.alicdn.com/t/font_437295_mm9wg1ryyb3ayvi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_437295_mm9wg1ryyb3ayvi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_437295_mm9wg1ryyb3ayvi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_437295_mm9wg1ryyb3ayvi.svg#iconfont') format('svg');
+}
+.iconfont{
+    font-family:"iconfont" !important;
+    font-size:14px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+  }
+.page{
+  width: 900px;
+  margin: 100px auto;
+  border: 1px solid #f0f0f0;
+  background: #fff;
+  border-radius:12px;
+  padding: 20px;
+}
+.user-menu{
+  font-size: 12px;
+  float: right;
+  line-height: 60px;
+}
+.user-menu a{
+  margin-left: 20px;
+}
+.user-menu a i{
+  font-size: 120%;
+  margin-right: 5px;
+}
+.com-top{
+  color: #333;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+.com-top .create-btn{
+  float: right;
+  color:#108ee9;
+}
+.com-list-contaner{
+}
+.com-list{
+  list-style: none;
+  padding: 0;
+  margin:0;
+}
+.com-list li .acts{
+  float: right;
+}
+.com-list li .acts a{
+  display: block;
+}
+.com-list li .acts a.go{
+  width: 88px;
+  height: 32px;
+  background: #0891fb;
+  font-size: 14px;
+  color: #fff;
+  text-align: center;
+  line-height: 32px;
+  border-radius: 3px;
+}
+
+.com-list li.deny .acts a.go,.com-list li.disable .acts a.go{
+  background:#f2f2f2;
+  border:1px solid #e6e6e6;
+  border-radius:2px;
+  color: #c7c7c7;
+}
+.com-list li .acts a.exit{
+  font-size:12px;
+  margin-top: 8px;
+  color:#f23c3c;
+  width: 88px;
+  line-height: 12px;
+  text-align:center;
+}
+.onlygo{
+  margin-top: 8px;
+}
+.com-list li:after{
+   content:"."; display:block; height:0; visibility:hidden; clear:both;
+}
+.com-list li{
+  border-bottom: 1px solid #f0f0f0;
+  padding: 32px 0;
+}
+.com-list li:last-child{
+  border: none;
+}
+.com-list li .com-info{
+  float: left;
+}
+
+.com-list li .com-info .title{
+  font-size: 16px;
+  line-height: 20px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+.com-list li.deny .com-info .title span{
+  line-height: 20px;
+  color: #999999;
+}
+.com-list li .com-info .title span.name{
+  font-size: 16px;
+  margin-right: 2px;
+  color: #333;
+  line-height: 20px;
+}
+
+.com-list li .com-info .title span ,.com-list li .com-info .title span .iconfont{
+  font-size: 12px;
+  margin-right: 2px;
+  line-height: 20px;
+}
+.com-list li .com-info .title span .iconfont{
+  font-size: 16px;
+}
+.disable .title span{
+  color:#ffa033;
+}
+.com-list li .com-info .sub-title{
+  color: #999999;
+}
+.com-list li .com-info .sub-title{
+  line-height: 14px;
+  margin:0;
+  font-size: 12px;
+}
