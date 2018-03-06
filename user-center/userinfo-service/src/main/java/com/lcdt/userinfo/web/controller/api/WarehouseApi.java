@@ -85,7 +85,7 @@ public class WarehouseApi {
         dto.setCompanyId(companyId);
 
         int result = warehouseService.addWarehouse(dto);
-        if (result > 0) {
+        if (result == 2) {//同时添加仓库及默认联系人
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "添加成功");

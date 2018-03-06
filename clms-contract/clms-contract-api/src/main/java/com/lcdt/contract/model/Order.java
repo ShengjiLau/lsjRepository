@@ -49,6 +49,8 @@ public class Order {
 
     private String receiveAddress;
 
+    private String remarks;
+
     private Date createTime;
 
     private Long groupId;
@@ -237,6 +239,14 @@ public class Order {
 
     public void setReceiveAddress(String receiveAddress) {
         this.receiveAddress = receiveAddress == null ? null : receiveAddress.trim();
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public Date getCreateTime() {
