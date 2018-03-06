@@ -4,16 +4,24 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONArray;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
+import com.lcdt.notify.model.DefaultNotifyReceiver;
+import com.lcdt.notify.model.DefaultNotifySender;
+import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.model.*;
+import com.lcdt.traffic.notify.ClmsNotifyProducer;
+import com.lcdt.traffic.notify.CommonAttachment;
+import com.lcdt.traffic.notify.NotifyUtils;
 import com.lcdt.traffic.service.Plan4CreateService;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
+import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.Driver;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,8 +53,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
     @Autowired
     private TransportWayItemsMapper transportWayItemsMapper;
 
-
-    @com.alibaba.dubbo.config.annotation.Reference
+    @Reference
     private CustomerRpcService customerRpcService;  //客户信息
 
     @Reference
@@ -55,6 +62,9 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
 
     @Autowired
     private WaybillService waybillService; //运单
+
+    @Autowired
+    private ClmsNotifyProducer producer;
 
 
 
@@ -74,13 +84,13 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
             if (!StringUtils.isEmpty(dto.getBidingStart())) { //竞价开始
                 vo.setBidingStart(DateUtility.string2Date(dto.getBidingStart(),"yyyy-MM-dd HH:mm:ss"));
             }
-            if (!StringUtils.isEmpty(dto.getBidingEnd())) { //竞价结束
+            if (!StringUtils.isEmpty(dto.getBidingEnd())) { //结束
                 vo.setBidingEnd(DateUtility.string2Date(dto.getBidingEnd(),"yyyy-MM-dd HH:mm:ss"));
             }
             if (!StringUtils.isEmpty(dto.getStartDate())) { //起运时间
                 vo.setStartDate(DateUtility.string2Date(dto.getStartDate(),"yyyy-MM-dd HH:mm:ss"));
             }
-            if (!StringUtils.isEmpty(dto.getArriveDate())) { //送达时间
+            if (!StringUtils.isEmpty(dto.getArriveDate())) { //时间
                 vo.setArriveDate(DateUtility.string2Date(dto.getArriveDate(),"yyyy-MM-dd HH:mm:ss"));
             }
         } catch (ParseException e) {
@@ -135,9 +145,9 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                  vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
                  waybillPlanMapper.insert(vo); //生成计划
                  createTransportWayItems(dto, vo);//批量创建栏目
-                 StringBuffer msgSb = new StringBuffer(); //货物发送明细
+                 StringBuffer sb_goods = new StringBuffer(); //货物发送明细
                  List<PlanDetail> planDetailList = dto.getPlanDetailList();
-                 if (null!=planDetailList && planDetailList.size()>0) {
+                  if (null!=planDetailList && planDetailList.size()>0) {
                     for (PlanDetail obj : planDetailList) {
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
                         obj.setRemainderAmount(obj.getPlanAmount());//初期【计划=剩余】
@@ -149,33 +159,89 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         obj.setUpdateTime(obj.getCreateDate());
                         obj.setCompanyId(vo.getCompanyId());
                         obj.setIsDeleted((short)0);
-                        msgSb.append(obj.getGoodsName()+":"+obj.getPlanAmount()+";");
+                        sb_goods.append(obj.getGoodsName()+":"+obj.getPlanAmount()+";");
                     }
                     planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
                 }
 
 
-            if (flag==1) { //发布--操作
+
+              if (flag==1) { //发布--操作
                 /***
                  * 发送消息:
                  *   就是新建计划，选择竞价计划，点击发布
                  */
+                String companyName = dto.getCompanyName(); // 货主企业
+                String serialCode = vo.getSerialCode(); //流水号
+                String sendAddress = vo.getSendProvince()+" "+vo.getSendCity()+" "+vo.getSendCounty()+" "+vo.getSendAddress();
+                String receiveAddress = vo.getReceiveProvince()+" "+vo.getReceiveCity()+" "+vo.getReceiveCounty()+" "+vo.getReceiveAddress();
                 if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
-                    String companyName = dto.getCompanyName(); // 货主企业
-                    String serialCode = vo.getSerialCode(); //流水号
-                    String sendAddress = vo.getSendProvince()+" "+vo.getSendCity()+" "+vo.getSendCounty();
-                    String receiveAddress = vo.getReceiveProvince()+" "+vo.getReceiveCity()+" "+vo.getReceiveCounty();
+                    String[] ids = dto.getCarrierCollectionIds().split(","); //竞价组ID
+                    StringBuffer sb = new StringBuffer();
                     if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
+                        //竞价组内的客户->客户绑定的企业->企业的创建者
+                        if (ids!=null && ids.length>0) {
+                            sb.append("(");
+                            for(int i=0;i<ids.length;i++) {
+                                sb.append(" find_in_set('"+ids[i]+"',collection_ids)");
+                                if(i!=ids.length-1){
+                                    sb.append(" or ");
+                                }
+                            }
+                            sb.append(")");
+                        }
 
+                    } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
+                        if (ids!=null && ids.length>0) {
 
-
+                        }
+                   }
+                    if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
+                        Map map = new HashMap();
+                        if (!sb.toString().isEmpty()) {
+                            map.put("collectionIds", sb.toString());
+                            map.put("companyId",dto.getCompanyId());
+                            map.put("bindCpid","111");//标识绑定企业ID不为空的企业（承运商对应的所有绑定企业）
+                            List<Customer> customerList = customerRpcService.findBindCompanyIds(map);
+                            if (null!=customerList && customerList.size()>0) {
+                                DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(dto.getCompanyId(), dto.getCreateId()); //发送
+                                for (Customer customer: customerList) {  //遍历客户，查询对应企业，进行发送
+                                    Long bindCompId = customer.getBindCpid(); //绑定企业ID;
+                                    Company company = companyRpcService.findCompanyByCid(bindCompId);
+                                    if (null != company) {
+                                        User user = companyRpcService.findCompanyCreate(company.getCompId());
+                                        if (user!=null) {
+                                            DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(company.getCompId(),user.getUserId(),user.getPhone()); //接收
+                                            CommonAttachment attachment = new CommonAttachment();
+                                            attachment.setOwnerCompany(companyName);
+                                            attachment.setPlanSerialNum(serialCode);
+                                            attachment.setOriginAddress(sendAddress);
+                                            attachment.setDestinationAdress(receiveAddress);
+                                            attachment.setGoodsDetail(sb_goods.toString());
+                                            TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("plan_publish", attachment, defaultNotifyReceiver, defaultNotifySender);
+                                            producer.sendNotifyEvent(plan_publish_event);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机else
-
-
+                        List<Driver> driverList = null;
+                        if (null!=driverList && driverList.size()>0) {
+                            DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(dto.getCompanyId(), dto.getCreateId()); //发送
+                            for (Driver driver: driverList) {  //遍历客户，查询对应企业，进行发送
+                                DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(dto.getCompanyId(),dto.getCreateId(),driver.getDriverPhone()); //接收
+                                CommonAttachment attachment = new CommonAttachment();
+                                attachment.setOwnerCompany(companyName);
+                                attachment.setPlanSerialNum(serialCode);
+                                attachment.setOriginAddress(sendAddress);
+                                attachment.setDestinationAdress(receiveAddress);
+                                attachment.setGoodsDetail(sb_goods.toString());
+                                TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("plan_publish", attachment, defaultNotifyReceiver, defaultNotifySender);
+                                producer.sendNotifyEvent(plan_publish_event);
+                            }
+                        }
                     }
-
-
-
                 }
             }
         }

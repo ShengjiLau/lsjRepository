@@ -57,7 +57,7 @@ public class SplitGoodsApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_4_direct') or hasAuthority('traffic_split_goods')")
     public String splitGoods4Direct(@ApiParam(value = "派单详细信息", required = true) @RequestBody SplitGoodsParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         int flag = splitGoodsService.splitGoods4Direct(dto,userCompRel,companyId);
         JSONObject jsonObject = new JSONObject();
         String message = null;
