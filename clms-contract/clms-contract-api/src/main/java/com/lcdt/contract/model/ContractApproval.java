@@ -2,7 +2,7 @@ package com.lcdt.contract.model;
 
 import java.util.Date;
 
-public class ContractCpproval {
+public class ContractApproval {
     private Long caId;
 
     private Long contractId;

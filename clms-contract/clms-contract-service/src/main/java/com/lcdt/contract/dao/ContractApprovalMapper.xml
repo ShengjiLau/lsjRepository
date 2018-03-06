@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.contract.dao.ContractApprovalMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.ContractApproval">
+    <id column="ca_id" jdbcType="BIGINT" property="caId" />
+    <result column="contract_id" jdbcType="BIGINT" property="contractId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="type" jdbcType="SMALLINT" property="type" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_contract_approval
+    where ca_id = #{caId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.ContractApproval">
+    insert into t_contract_approval (ca_id, contract_id, user_id, 
+      name, dept_name, sort, 
+      type, status, content, 
+      time)
+    values (#{caId,jdbcType=BIGINT}, #{contractId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{name,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, 
+      #{type,jdbcType=SMALLINT}, #{status,jdbcType=SMALLINT}, #{content,jdbcType=VARCHAR}, 
+      #{time,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.ContractApproval">
+    update t_contract_approval
+    set contract_id = #{contractId,jdbcType=BIGINT},
+      user_id = #{userId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      dept_name = #{deptName,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=INTEGER},
+      type = #{type,jdbcType=SMALLINT},
+      status = #{status,jdbcType=SMALLINT},
+      content = #{content,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP}
+    where ca_id = #{caId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select ca_id, contract_id, user_id, name, dept_name, sort, type, status, content, 
+    time
+    from t_contract_approval
+    where ca_id = #{caId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ca_id, contract_id, user_id, name, dept_name, sort, type, status, content, 
+    time
+    from t_contract_approval
+  </select>
+
+
+  <!-- ——————————————————————————————————————————华丽分割线—————————————————————————————————————————————— -->
+
+  <resultMap id="ContractApprovalVOMap" type="com.lcdt.contract.vo.ContractApprovalVO">
+    <id column="contract_id" jdbcType="BIGINT" property="contractId" />
+    <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="sign_date" jdbcType="TIMESTAMP" property="signDate" />
+    <result column="type" jdbcType="SMALLINT" property="type" />
+    <result column="contract_status" jdbcType="SMALLINT" property="contractStatus" />
+    <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
+    <result column="cycle" jdbcType="SMALLINT" property="cycle" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="party_a" jdbcType="VARCHAR" property="partyA" />
+    <result column="party_a_principal" jdbcType="VARCHAR" property="partyAPrincipal" />
+    <result column="party_b" jdbcType="VARCHAR" property="partyB" />
+    <result column="party_b_principal" jdbcType="VARCHAR" property="partyBPrincipal" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
+    <result column="terms" jdbcType="VARCHAR" property="terms" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <collection property="contractApprovalList">
+      <id column="ca_id" jdbcType="BIGINT" property="caId" />
+      <result column="user_id" jdbcType="BIGINT" property="userId" />
+      <result column="name" jdbcType="VARCHAR" property="name" />
+      <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+      <result column="sort" jdbcType="INTEGER" property="sort" />
+      <result column="type" jdbcType="SMALLINT" property="type" />
+      <result column="status" jdbcType="SMALLINT" property="status" />
+      <result column="content" jdbcType="VARCHAR" property="content" />
+      <result column="time" jdbcType="TIMESTAMP" property="time" />
+    </collection>
+  </resultMap>
+</mapper>
+
+

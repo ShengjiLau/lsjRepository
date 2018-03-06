@@ -13,6 +13,8 @@ public class Order {
 
     private String contractCode;
 
+    private String approvalStatus;
+
     private Short distributionType;
 
     private String payType;
@@ -52,6 +54,10 @@ public class Order {
     private String remarks;
 
     private Date createTime;
+
+    private Date approvalStartDate; //审批发起时间begin
+
+    private Date approvalEndDate;   //审批发起时间end
 
     private Long groupId;
 
@@ -95,6 +101,14 @@ public class Order {
 
     public void setContractCode(String contractCode) {
         this.contractCode = contractCode == null ? null : contractCode.trim();
+    }
+
+    public String getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(String approvalStatus) {
+        this.approvalStatus = approvalStatus;
     }
 
     public Short getDistributionType() {
@@ -255,6 +269,22 @@ public class Order {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Date getApprovalStartDate() {
+        return approvalStartDate;
+    }
+
+    public void setApprovalStartDate(Date approvalStartDate) {
+        this.approvalStartDate = approvalStartDate;
+    }
+
+    public Date getApprovalEndDate() {
+        return approvalEndDate;
+    }
+
+    public void setApprovalEndDate(Date approvalEndDate) {
+        this.approvalEndDate = approvalEndDate;
     }
 
     public Long getGroupId() {

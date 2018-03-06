@@ -17,6 +17,8 @@
     <result column="party_b_principal" jdbcType="VARCHAR" property="partyBPrincipal" />
     <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
     <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="approval_start_date" jdbcType="TIMESTAMP" property="approvalStartDate" />
+    <result column="approval_end_date" jdbcType="TIMESTAMP" property="approvalEndDate" />
     <result column="summary" jdbcType="VARCHAR" property="summary" />
     <result column="terms" jdbcType="VARCHAR" property="terms" />
     <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
@@ -32,14 +34,15 @@
       sign_date, type, contract_status, approval_status,
       cycle, pay_type, party_a, 
       party_a_principal, party_b, party_b_principal, 
-      start_date, end_date, summary, 
+      start_date, end_date,approval_start_date, approval_end_date, summary,
       terms, file_url, group_id,company_id
       )
     values (#{contractId,jdbcType=BIGINT}, #{contractCode,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
       #{signDate,jdbcType=TIMESTAMP}, #{type,jdbcType=SMALLINT}, #{contractStatus,jdbcType=SMALLINT},  #{approvalStatus,jdbcType=SMALLINT},
       #{cycle,jdbcType=SMALLINT}, #{payType,jdbcType=VARCHAR}, #{partyA,jdbcType=VARCHAR}, 
       #{partyAPrincipal,jdbcType=VARCHAR}, #{partyB,jdbcType=VARCHAR}, #{partyBPrincipal,jdbcType=VARCHAR}, 
-      #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, #{summary,jdbcType=VARCHAR}, 
+      #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP},#{approvalStartDate,jdbcType=TIMESTAMP},
+      #{approvalEndDate,jdbcType=TIMESTAMP},  #{summary,jdbcType=VARCHAR},
       #{terms,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT}
       )
   </insert>
@@ -59,6 +62,8 @@
       party_b_principal = #{partyBPrincipal,jdbcType=VARCHAR},
       start_date = #{startDate,jdbcType=TIMESTAMP},
       end_date = #{endDate,jdbcType=TIMESTAMP},
+      approval_start_date = #{approvalStartDate,jdbcType=TIMESTAMP},
+      approval_end_date = #{approvalEndDate,jdbcType=TIMESTAMP},
       summary = #{summary,jdbcType=VARCHAR},
       terms = #{terms,jdbcType=VARCHAR},
       file_url = #{fileUrl,jdbcType=VARCHAR},
@@ -68,14 +73,14 @@
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select contract_id, contract_code, title, sign_date, type, contract_status, approval_status, cycle,
-    pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, 
+    pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id
     from t_contract
     where contract_id = #{contractId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select contract_id, contract_code, title, sign_date, type, contract_status,approval_status, cycle,
-    pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, 
+    pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id
     from t_contract
   </select>
@@ -83,7 +88,7 @@
 
   <select id="selectByCondition" resultMap="BaseResultMap">
     select contract_id, contract_code, title, sign_date, type, contract_status,approval_status, cycle,
-    pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,
+    pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id
     from t_contract
     <where>

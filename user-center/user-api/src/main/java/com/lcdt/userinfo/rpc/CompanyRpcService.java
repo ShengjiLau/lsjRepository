@@ -23,4 +23,13 @@ public interface CompanyRpcService {
      */
     User findCompanyCreate(Long companyId);
 
+
+
+    /***
+     * 根据电话查询对应企业用户
+     * @param phone
+     * @return
+     */
+    User findUserByPhone(String phone);
+
 }
