@@ -50,7 +50,6 @@ public class CustomerBindApi {
 	CustomerInviteLogMapper inviteLogMapper;
 
 
-
 	@ApiOperation("获取邀请邮件内容")
 	@RequestMapping(value = "/invitecustomer",method = RequestMethod.POST)
 	@ResponseBody
