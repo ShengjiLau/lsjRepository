@@ -49,12 +49,7 @@ public class CustomerBindApi {
 	@Autowired
 	CustomerInviteLogMapper inviteLogMapper;
 
-	@RequestMapping(value = "/testbindwebpage")
-	public ModelAndView testBindSuccessView(){
-		ModelAndView modelAndView = new ModelAndView("/invite_success");
-		modelAndView.addObject("host", "www.baidu.com");
-		return modelAndView;
-	}
+
 
 	@ApiOperation("获取邀请邮件内容")
 	@RequestMapping(value = "/invitecustomer",method = RequestMethod.POST)
@@ -101,7 +96,6 @@ public class CustomerBindApi {
 		Long inviteCompanyId = customerInviteLog.getInviteCompanyId();
 
 		if (companyId.equals(inviteCompanyId)) {
-//			throw new RuntimeException("不能邀请当前登录公司加入！");
 			return new ModelAndView("/error");
 		}
 
@@ -116,13 +110,12 @@ public class CustomerBindApi {
 		customer.setBindCpid(inviteCompanyId);
 		Company company = companyService.selectById(inviteCompanyId);
 		customer.setBindCompany(company.getFullName());
-
 		customerService.customerUpdate(customer);
-
-
 		//绑定邀请人的公司id
 		Customer customer1 = mapper.selectByPrimaryKey(customerInviteLog.getInviteCustomerId(), customerInviteLog.getInviteCompanyId());
+		Company company1 = companyService.selectById(companyId);
 		customer1.setBindCpid(companyId);
+		customer1.setBindCompany(company1.getFullName());
 		customerService.updateCustomerBindCompId(customer1);
 
 		User user = SecurityInfoGetter.getUser();
