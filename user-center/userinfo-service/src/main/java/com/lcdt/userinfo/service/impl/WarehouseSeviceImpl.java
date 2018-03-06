@@ -63,7 +63,7 @@ public class WarehouseSeviceImpl implements WarehouseService {
         linkman.setWhId(warehouse.getWhId());
         linkman.setName(warehouse.getPrincipal());
         linkman.setMobile(warehouse.getMobile());
-        linkman.setMobile(warehouse.getMail());
+        linkman.setMail(warehouse.getMail());
         linkman.setProvince(warehouse.getProvince());
         linkman.setCity(warehouse.getCity());
         linkman.setCounty(warehouse.getCounty());
