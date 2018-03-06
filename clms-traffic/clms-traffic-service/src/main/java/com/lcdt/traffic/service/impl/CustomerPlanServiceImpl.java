@@ -536,8 +536,8 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         //整合运单主子关系
         waybillDto.setWaybillCode(waybillPlan.getSerialCode());
         waybillDto.setWaybillItemsDtoList(waybillItemsDtos);
-        int flag = waybillService.addWaybill(waybillDto);
-        if (flag>0) { //更新派单记录剩余派单数
+        Waybill waybill = waybillService.addWaybill(waybillDto);
+        if (waybill!=null) { //更新派单记录剩余派单数
             for(SplitGoodsDetail obj : splitGoodsDetails) {
                 obj.setRemainAmount(obj.getRemainAmount() - sumAmount); //剩余=原剩余-本次派车数
                 splitGoodsDetailMapper.updateByPrimaryKey(obj);
@@ -545,6 +545,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             if (isComplete) { //
             }
         }
+        int flag = waybill==null?0:1;
         return flag;
     }
 
