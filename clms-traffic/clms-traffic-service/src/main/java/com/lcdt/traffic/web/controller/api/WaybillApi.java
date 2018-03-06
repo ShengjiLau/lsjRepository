@@ -50,8 +50,8 @@ public class WaybillApi {
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
-        int result = waybillService.addWaybill(dto);
-        if (result > 0) {
+        Waybill  result = waybillService.addWaybill(dto);
+        if (result !=null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "添加成功");
@@ -70,8 +70,8 @@ public class WaybillApi {
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCarrierCompanyId(companyId);
-        int result = waybillService.addWaybill(dto);
-        if (result > 0) {
+        Waybill  result = waybillService.addWaybill(dto);
+        if (result !=null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "添加成功");

@@ -21,7 +21,7 @@ public interface WaybillService {
      * @param waybillDto
      * @return
      */
-    int addWaybill(WaybillDto waybillDto);
+    Waybill addWaybill(WaybillDto waybillDto);
 
     /**
      * 运单删除

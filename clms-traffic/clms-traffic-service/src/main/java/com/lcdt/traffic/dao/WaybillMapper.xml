@@ -661,7 +661,7 @@
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted
     from t_waybill
-    where id in ( #{waybillIds,jdbcType=VARCHAR} ))
+    where id in ( #{waybillIds,jdbcType=VARCHAR} )
     and is_deleted = 0
     order by id desc
   </select>
