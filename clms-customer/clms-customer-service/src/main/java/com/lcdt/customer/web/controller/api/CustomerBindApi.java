@@ -50,7 +50,6 @@ public class CustomerBindApi {
 	CustomerInviteLogMapper inviteLogMapper;
 
 
-
 	@ApiOperation("获取邀请邮件内容")
 	@RequestMapping(value = "/invitecustomer",method = RequestMethod.POST)
 	@ResponseBody
@@ -117,14 +116,13 @@ public class CustomerBindApi {
 		customer1.setBindCpid(companyId);
 		customer1.setBindCompany(company1.getFullName());
 		customerService.updateCustomerBindCompId(customer1);
-
 		User user = SecurityInfoGetter.getUser();
-
 		ModelAndView successView = new ModelAndView("invite_success");
 		successView.addObject("username", user.getRealName());
 		String s = inviteCustomerService.clientTypeToString(customer.getClientTypes());
 		String successTipStr = "贵公司已成为【"+company.getFullName()+"】的" + s;
 		successView.addObject("successtip", successTipStr);
+		successView.addObject("host", "http://39.107.12.215:88");
 		return successView;
 	}
 
