@@ -272,7 +272,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                 /*        User driverUser = companyRpcService.findUserByPhone(splitGoods.getCarrierPhone());
                         if (driverUser!=null) { }*/
                         //司机
-                        DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(splitGoods.getCarrierCompanyId(),null,splitGoods.getCarrierPhone()); //接收
+                        DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(null,null,splitGoods.getCarrierPhone()); //接收
                         CommonAttachment attachment = new CommonAttachment();
                         attachment.setOwnerCompany(company.getFullName()); //货主公司
                         attachment.setWaybillCode(waybill.getWaybillCode()); //运单流水号

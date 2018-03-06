@@ -12,6 +12,7 @@ import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.NotifyUtils;
+import com.lcdt.traffic.service.OwnDriverService;
 import com.lcdt.traffic.service.Plan4CreateService;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.PlanBO;
@@ -65,6 +66,9 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
 
     @Autowired
     private ClmsNotifyProducer producer;
+
+    @Autowired
+    private OwnDriverService ownDriverService;
 
 
 
@@ -191,11 +195,9 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                             sb.append(")");
                         }
 
-                    } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
-                        if (ids!=null && ids.length>0) {
-
-                        }
-                   }
+                    } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) {
+                        //司机
+                    }
                     if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
                         Map map = new HashMap();
                         if (!sb.toString().isEmpty()) {
@@ -227,10 +229,10 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         }
 
                     } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机else
-                        List<Driver> driverList = null;
+                        List<OwnDriver> driverList = ownDriverService.driverListByGroupId(dto.getCompanyId(),dto.getCarrierCollectionIds());
                         if (null!=driverList && driverList.size()>0) {
                             DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(dto.getCompanyId(), dto.getCreateId()); //发送
-                            for (Driver driver: driverList) {  //遍历客户，查询对应企业，进行发送
+                            for (OwnDriver driver: driverList) {  //遍历客户，查询对应企业，进行发送
                                 DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(dto.getCompanyId(),null,driver.getDriverPhone()); //接收
                                 CommonAttachment attachment = new CommonAttachment();
                                 attachment.setOwnerCompany(companyName);
@@ -268,7 +270,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//派车状态(派车中)
                     } else { //司机
                         vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //计划状态(已派完)
-                        vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//派车状态(已派车gi)
+                        vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//派车状态(已派车)
                     }
                     waybillPlanMapper.insert(vo);
                     Map map = new HashMap();
