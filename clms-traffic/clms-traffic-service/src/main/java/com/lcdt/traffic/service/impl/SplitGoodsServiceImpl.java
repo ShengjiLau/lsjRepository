@@ -253,6 +253,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                     String sendAddress = waybillPlan.getSendProvince()+" "+waybillPlan.getSendCity()+" "+waybillPlan.getSendCounty()+" "+waybillPlan.getSendAddress();
                     String receiveAddress = waybillPlan.getReceiveProvince()+" "+waybillPlan.getReceiveCity()+" "+waybillPlan.getReceiveCounty()+" "+waybillPlan.getReceiveAddress();
                     DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(waybillPlan.getCompanyId(), waybillPlan.getCreateId()); //发送
+
                     User user1 = companyRpcService.findCompanyCreate(splitGoods.getCarrierCompanyId()); //承运商对应企业管理员
                     if (user1!=null) {
                         DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(splitGoods.getCarrierCompanyId(),user1.getUserId(),user1.getPhone()); //接收
