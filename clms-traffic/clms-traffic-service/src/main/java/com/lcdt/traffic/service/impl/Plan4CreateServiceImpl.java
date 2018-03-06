@@ -225,12 +225,13 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                                 }
                             }
                         }
+
                     } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机else
                         List<Driver> driverList = null;
                         if (null!=driverList && driverList.size()>0) {
                             DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(dto.getCompanyId(), dto.getCreateId()); //发送
                             for (Driver driver: driverList) {  //遍历客户，查询对应企业，进行发送
-                                DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(dto.getCompanyId(),dto.getCreateId(),driver.getDriverPhone()); //接收
+                                DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(dto.getCompanyId(),null,driver.getDriverPhone()); //接收
                                 CommonAttachment attachment = new CommonAttachment();
                                 attachment.setOwnerCompany(companyName);
                                 attachment.setPlanSerialNum(serialCode);
