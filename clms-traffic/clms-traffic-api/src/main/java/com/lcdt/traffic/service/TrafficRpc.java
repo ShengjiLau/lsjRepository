@@ -1,5 +1,8 @@
 package com.lcdt.traffic.service;
 
+import com.lcdt.traffic.model.OwnDriver;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -8,4 +11,12 @@ import java.util.Map;
 public interface TrafficRpc {
 
     void waybillPositionTimer(Map map);
+
+    /**
+     * 根据groupIds获取组下所有司机信息
+     * @param companyId
+     * @param groupIds
+     * @return
+     */
+    List<OwnDriver> driverListByGroupId(Long companyId, String groupIds);
 }

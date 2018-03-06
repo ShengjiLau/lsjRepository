@@ -47,4 +47,13 @@ public interface OwnDriverMapper {
      * @return
      */
     OwnDriverDto selectDetail(Long ownDriverId, Long companyId);
+
+    /**
+     * 根据groupIds获取司机信息
+     * @param companyId
+     * @param groupIds
+     * @return
+     */
+    List<OwnDriver> selectDriverByGroupIds(Long companyId,String groupIds);
+
 }

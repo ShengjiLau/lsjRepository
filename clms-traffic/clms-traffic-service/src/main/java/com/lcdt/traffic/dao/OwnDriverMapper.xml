@@ -211,4 +211,11 @@
     from t_own_driver t1 left join t_own_driver_certificate t2 on t1.own_driver_id = t2.own_driver_id and t2.is_deleted=0
     where t1.own_driver_id = #{arg0} and t1.company_id = #{arg1}
   </select>
+  <select id="selectDriverByGroupIds" parameterType="com.lcdt.traffic.model.OwnDriver" resultMap="BaseResultMap">
+  select t1.own_driver_id, t1.driver_ID, t1.affiliated_company, t1.driver_name, t1.driver_phone, t1.driver_category,
+  t1.driver_email, t1.driver_sex, t1.driver_nationality, t1.driver_birthday, t1.driver_license, t1.driver_province,
+  t1.driver_city, t1.driver_district, t1.driver_address, t1.driver_remark, t1.company_id
+  from t_own_driver t1 left join t_driver_group_relationship t2
+  where t1.company_id = #{arg0} and t2.group_id in (#{arg1})
+  </select>
 </mapper>
