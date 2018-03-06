@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +59,22 @@ public class WarehouseSeviceImpl implements WarehouseService {
     @Override
     public int addWarehouse(Warehouse warehouse) {
         int result = warehousseMapper.insert(warehouse);
+        WarehouseLinkman linkman = new WarehouseLinkman();
+        linkman.setWhId(warehouse.getWhId());
+        linkman.setName(warehouse.getPrincipal());
+        linkman.setMobile(warehouse.getMobile());
+        linkman.setMobile(warehouse.getMail());
+        linkman.setProvince(warehouse.getProvince());
+        linkman.setCity(warehouse.getCity());
+        linkman.setCounty(warehouse.getCounty());
+        linkman.setDetailAddress(warehouse.getDetailAddress());
+        linkman.setCreateId(warehouse.getCreateId());
+        linkman.setCreateName(warehouse.getCreateName());
+        linkman.setCreateDate(new Date());
+        linkman.setIsDefault((short)1);
+        linkman.setIsDeleted((short)0);
+        linkman.setCompanyId(warehouse.getCompanyId());
+        result += addWarehouseLinkMan(linkman);
         return result;
     }
 
