@@ -474,9 +474,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             }
             flag2 = snatchGoodsDetailMapper.batchAddSnatchGoodsDetail(snatchList);
         }
-
         return flag1+flag2>1?1:0;
-
     }
 
     @Transactional
@@ -488,12 +486,21 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         if (null == waybillPlan) {throw new WaybillPlanException("计划不存在！"); }
 
+
+        Map map = new HashMap();
+        map.put("splitGoodsId",dto.getSplitGoodsId());
+        map.put("carrierCompanyId",dto.getCompanyId());
+        map.put("isDeleted",0);
+        SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(map);
+        if (null==splitGoods) { throw new RuntimeException("没有派单记录，不能派车！"); }
+
+
+
         SplitGoods tObj = new SplitGoods();
         tObj.setSplitGoodsId(dto.getSplitGoodsId());
         PlanBO.getInstance().converPlan2Waybill(waybillPlan,tObj, waybillDto);  //计划转为运单
-
         List<PlanDetail> list = dto.getPlanDetailList();
-        float sumAmount = 0; //统计本次派车重量
+        float sumAmount = 0; //统计本次派车总重量（这块本应是循环比较的，前端目前验证了派出只能派最大数量，所的这块把所有的明细派车数加在一起比较）
         List<WaybillItemsDto> waybillItemsDtos = new ArrayList<WaybillItemsDto>();
         StringBuffer sb_goods = new StringBuffer(); //货物发送明细
         if (null != list  && list.size()>0) {
@@ -519,17 +526,6 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 sb_goods.append(obj.getGoodsName()+":"+obj.getAllotAmount()+";"); //
             }
         }
-
-
-
-
-        Map map = new HashMap();
-        map.put("splitGoodsId",dto.getSplitGoodsId());
-        map.put("carrierCompanyId",dto.getCompanyId());
-        map.put("isDeleted",0);
-        SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(map);
-        if (null==splitGoods) { throw new RuntimeException("没有派单记录，不能派车！"); }
-
         float splitRemainAmount = 0 ;
         List<SplitGoodsDetail> splitGoodsDetails = splitGoods.getSplitGoodsDetailList(); //因为派车是按派单来的
         if (null!=splitGoodsDetails && splitGoodsDetails.size()>0) {
@@ -542,22 +538,27 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 }
             }
         }
-
         boolean isComplete = false;
         if (sumAmount>splitRemainAmount) {
             throw new RuntimeException("本次派车总数量："+sumAmount+"，剩余待派数量："+splitRemainAmount+"，派车失败！");
         } else {
-            if(sumAmount-splitRemainAmount==0) {
+            if(sumAmount-splitRemainAmount==0) { //全部派完的话，更新计划状态
                 isComplete = true;
             }
         }
         waybillDto.setWaybillCode(waybillPlan.getSerialCode());   //整合运单主子关系
         waybillDto.setWaybillItemsDtoList(waybillItemsDtos);
         Waybill waybill = waybillService.addWaybill(waybillDto);
-        if (waybill!=null) { //更新派单记录剩余派单数
-            for(SplitGoodsDetail obj : splitGoodsDetails) {
-                obj.setRemainAmount(obj.getRemainAmount() - sumAmount); //剩余=原剩余-本次派车数
-                splitGoodsDetailMapper.updateByPrimaryKey(obj);
+
+        if (waybill!=null) {
+            for (PlanDetail obj1 :list) {//剩余=原剩余-本次派车数
+                for (SplitGoodsDetail obj : splitGoodsDetails) {
+                    if(obj1.getPlanDetailId().equals(obj.getPlanDetailId())) {
+                        obj.setRemainAmount(obj.getRemainAmount() - obj.getAllotAmount());
+                        splitGoodsDetailMapper.updateByPrimaryKey(obj);
+                        break;
+                    }
+                }
             }
             if (isComplete) { //更新计划
                 waybillPlan.setUpdateId(waybillDto.getCreateId());
@@ -571,11 +572,11 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
 
        //派车发消息
        if (!StringUtils.isEmpty(splitGoods.getCarrierPhone())) {
-
            User ownUser = companyRpcService.findCompanyCreate(waybillPlan.getCompanyId());
            Company ownCompany = companyRpcService.findCompanyByCid(waybillPlan.getCompanyId());
            DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(ownCompany.getCompId(), ownUser.getUserId()); //发送
            String receiveAddress = waybillPlan.getReceiveProvince()+" "+waybillPlan.getReceiveCity()+" "+waybillPlan.getReceiveCounty()+" "+waybillPlan.getReceiveAddress();
+
            //货主
            DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(ownCompany.getCompId(),ownUser.getUserId(),ownUser.getPhone()); //接收
            CommonAttachment attachment = new CommonAttachment();

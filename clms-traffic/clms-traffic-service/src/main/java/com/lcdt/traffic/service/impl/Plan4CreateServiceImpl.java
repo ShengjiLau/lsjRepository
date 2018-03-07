@@ -60,7 +60,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
     @Reference
     private CompanyRpcService companyRpcService; //企业信息
 
-
     @Autowired
     private WaybillService waybillService; //运单
 

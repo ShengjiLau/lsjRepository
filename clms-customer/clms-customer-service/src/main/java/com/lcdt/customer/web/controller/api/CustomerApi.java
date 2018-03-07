@@ -171,7 +171,7 @@ public class CustomerApi {
     @ApiOperation("新增客户")
     @RequestMapping(value = "/customerAdd",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_add')")
-    public Customer customerAdd(@Validated CustomerParamsDto dto) {
+    public String customerAdd(@Validated CustomerParamsDto dto) {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -181,12 +181,18 @@ public class CustomerApi {
         customer.setCreateName(loginUser.getRealName());
         customer.setCreateDate(new Date());
         customer.setCompanyId(companyId);
+        String message = null;
+        JSONObject jsonObject = new JSONObject();
+        int code = -1;
         try {
             customerService.customerAdd(customer);
+            code=0;
         } catch (CustomerException e) {
-            throw new CustomerException(e.getMessage());
+            message = e.getMessage();
         }
-        return customer;
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
     }
 
 
@@ -198,7 +204,7 @@ public class CustomerApi {
     @ApiOperation("客户编辑")
     @RequestMapping(value = "/customerUpdate",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_update')")
-    public Customer customerUpdate(@Validated CustomerParamsDto dto) {
+    public String customerUpdate(@Validated CustomerParamsDto dto) {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -207,12 +213,20 @@ public class CustomerApi {
         customer.setCompanyId(companyId);
         customer.setCreateId(loginUser.getUserId());
         customer.setCreateName(loginUser.getRealName());
+
+
+        String message = null;
+        JSONObject jsonObject = new JSONObject();
+        int code = -1;
         try {
             customerService.customerUpdate(customer);
+            code=0;
         } catch (CustomerException e) {
-            throw new CustomerException(e.getMessage());
+            message = e.getMessage();
         }
-        return customer;
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
     }
 
 
