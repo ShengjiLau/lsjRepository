@@ -54,31 +54,23 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
     @Autowired
     private SplitGoodsDetailMapper splitGoodsDetailMapper; //派单详细
 
-
     @com.alibaba.dubbo.config.annotation.Reference
     public CustomerRpcService customerRpcService;  //客户信息
-
 
     @Autowired
     private SnatchGoodsMapper snatchGoodsMapper;
 
-
     @Autowired
     private WaybillService waybillService; //运单
-
 
     @Autowired
     private TransportWayItemsMapper transportWayItemsMapper;
 
-
     @Autowired
     private ClmsNotifyProducer producer;
 
-
     @Reference
     private CompanyRpcService companyRpcService; //企业信息
-
-
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -547,9 +539,6 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                     splitGoodsDetail.setUpdateName(user.getRealName());
                     splitGoodsDetailMapper.updateByPrimaryKey(splitGoodsDetail);*/
                 }
-
-
-
             }
 
 
