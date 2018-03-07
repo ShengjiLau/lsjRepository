@@ -55,7 +55,7 @@
 
   <!-- ——————————————————————————————————————————华丽分割线—————————————————————————————————————————————— -->
 
-  <resultMap id="ContractApprovalVOMap" type="com.lcdt.contract.vo.ContractApprovalVO">
+  <resultMap id="ContractApprovalDtoMap" type="com.lcdt.contract.web.dto.ContractApprovalDto">
     <id column="contract_id" jdbcType="BIGINT" property="contractId" />
     <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
     <result column="title" jdbcType="VARCHAR" property="title" />
@@ -71,6 +71,8 @@
     <result column="party_b_principal" jdbcType="VARCHAR" property="partyBPrincipal" />
     <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
     <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="approval_start_date" jdbcType="TIMESTAMP" property="approvalStartDate" />
+    <result column="approval_end_date" jdbcType="TIMESTAMP" property="approvalEndDate" />
     <result column="summary" jdbcType="VARCHAR" property="summary" />
     <result column="terms" jdbcType="VARCHAR" property="terms" />
     <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
@@ -88,6 +90,50 @@
       <result column="time" jdbcType="TIMESTAMP" property="time" />
     </collection>
   </resultMap>
+
+  <select id="selectContractApprovalByCondition" resultMap="ContractApprovalDtoMap">
+    select t1.contract_id, t1.contract_code, t1.title, t1.type, t1.contract_status,
+    t1.approval_status,t1.approval_start_date, t1.approval_end_date, group_id,company_id,
+    t2.ca_id, t2.user_id, t2.name, t2.dept_name, t2.sort, t2.type, t2.status, t2.content,t2.time
+    from t_contract t1 left join
+    (select * from t_contract_approval
+    <where>
+      user_id = #{userId,jdbcType=BIGINT}
+      <if test="tempStatus!=null and tempStatus==0">
+        and sort = 0
+      </if>
+      <if test="tempStatus!=null and tempStatus==1">
+        and status = 1
+      </if>
+      <if test="tempStatus!=null and tempStatus==2">
+        and status = 2
+      </if>
+      <if test="tempStatus!=null and tempStatus==3">
+        and status = 0
+      </if>
+    </where>
+    order by time) t2 on t1.contract_id = t2.contract_id
+    <where>
+      t1.type = #{type,jdbcType=VARCHAR} and t1.company_id = #{companyId,jdbcType=BIGINT}
+      <if test="title!=null and title!=''">
+        and t1.title like concat('%',#{title,jdbcType=VARCHAR},'%') or t1.contract_code like concat('%',#{title,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="approvalStartDate!=null and approvalStartDate!=''">
+        and t1.approval_start_date &gt; #{approvalStartDate,jdbcType=TIMESTAMP} and t1.approval_end_date &lt; #{approvalEndDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="contractStatus!=null and contractStatus!=''">
+        and t1.contract_status = #{contractStatus,jdbcType=SMALLINT}
+      </if>
+      <if test="groupId!=null and groupId!=''">
+        and t1.group_id = #{groupId,jdbcType=BIGINT}
+      </if>
+      <if test="approvalStatus!=null and approvalStatus!=''">
+        and t1.approval_status = #{approvalStatus,jdbcType=SMALLINT}
+      </if>
+
+    </where>
+  </select>
+
 </mapper>
 
 
