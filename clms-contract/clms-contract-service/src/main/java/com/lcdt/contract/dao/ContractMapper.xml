@@ -113,4 +113,10 @@
       </if>
     </where>
   </select>
+
+  <update id="updateContractStatus" parameterType="com.lcdt.contract.model.Contract">
+    update t_contract
+    set contract_status = #{contractStatus,jdbcType=SMALLINT}
+    where contract_id = #{contractId,jdbcType=BIGINT}
+  </update>
 </mapper>

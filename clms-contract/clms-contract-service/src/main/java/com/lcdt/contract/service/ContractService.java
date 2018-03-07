@@ -2,7 +2,7 @@ package com.lcdt.contract.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.contract.model.Contract;
-import com.lcdt.contract.model.ContractDto;
+import com.lcdt.contract.web.dto.ContractDto;
 
 import java.util.List;
 
@@ -11,20 +11,19 @@ import java.util.List;
  * @DATE 2018-02-28
  */
 public interface ContractService {
-
     /**
      * 新增合同
      * @param contract
      * @return
      */
-    int addContract(Contract contract);
+    int addContract(ContractDto contract);
 
     /**
      * 修改合同
      * @param contract
      * @return
      */
-    int modContract(Contract contract);
+    int modContract(ContractDto contract);
 
     /**
      * 删除单个合同
@@ -38,4 +37,11 @@ public interface ContractService {
      * @return
      */
     PageInfo<List<Contract>> ontractList(ContractDto contractDto, PageInfo pageInfo);
+
+    /**
+     * 终止合同
+     * @param contract
+     * @return
+     */
+    int modContractStatus(Contract contract);
 }

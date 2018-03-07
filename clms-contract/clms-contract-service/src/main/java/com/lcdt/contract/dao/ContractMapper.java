@@ -1,7 +1,7 @@
 package com.lcdt.contract.dao;
 
 import com.lcdt.contract.model.Contract;
-import com.lcdt.contract.model.ContractDto;
+import com.lcdt.contract.web.dto.ContractDto;
 
 import java.util.List;
 
@@ -22,4 +22,11 @@ public interface ContractMapper {
      * @return
      */
     List<Contract> selectByCondition(ContractDto contractDto);
+
+    /**
+     * 修改合同状态
+     * @param record
+     * @return
+     */
+    int updateContractStatus(Contract record);
 }
