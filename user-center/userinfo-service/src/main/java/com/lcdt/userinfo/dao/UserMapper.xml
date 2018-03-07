@@ -161,7 +161,7 @@
     -->
     select  user_id, mobile_country, phone, email, wechat, qq, real_name, nick_name,
       birthday, picture_url, intro_memo, register_date, referrer_phone, user_status from t_uc_user where user_id in(
-    SELECT user_id from t_uc_user_comp_rel r where  r.comp_id=#{compId,jdbcType=BIGINT} and is_create=0
+    SELECT user_id from t_uc_user_comp_rel r where  r.comp_id=#{compId,jdbcType=BIGINT} and is_create=1
     )
   </select>
 
