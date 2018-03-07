@@ -543,7 +543,6 @@ public class CustomerApi {
         vo.setCollectionName(collectionName);
         vo.setRemark(remark);
 
-
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;

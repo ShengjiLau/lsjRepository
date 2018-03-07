@@ -443,60 +443,94 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Integer splitGoodsCancel(Long splitGoodsId, User user, Long companyId) {
+    public Integer splitGoodsCancel(Long splitGoodsId, Long splitGoodsDetailId, User user, Long companyId) {
         Map map = new HashMap<>();
         map.put("splitGoodsId",splitGoodsId);
         map.put("companyId",companyId);
         SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(map);
         if (splitGoods == null) throw new SplitGoodsException("派单信息异常！");
+
+        float remainAmount = 0; //剩余数量
+        List<SplitGoodsDetail> splitGoodsDetailList = splitGoods.getSplitGoodsDetailList();
+        if (null!=splitGoodsDetailList && splitGoodsDetailList.size()>0) {
+            for (SplitGoodsDetail obj : splitGoodsDetailList) {
+                if(obj.getSplitGoodsDetailId().equals(splitGoodsDetailId)) {
+                    remainAmount = obj.getRemainAmount();
+                    break;
+                }
+            }
+        }
+        if(remainAmount<=0) { throw new SplitGoodsException("没有剩余派单数量，不能取消！"); }
         Map tMap = new HashMap<String,String>();
         tMap.put("waybillPlanId",splitGoods.getWaybillPlanId());
         tMap.put("companyId",companyId);
         tMap.put("isDeleted","0");
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap); //查询对应的计划
-        float remainAmount = 0; //剩余数量
-        List<SplitGoodsDetail> splitGoodsDetailList = splitGoods.getSplitGoodsDetailList();
-        if (null!=splitGoodsDetailList && splitGoodsDetailList.size()>0) {
-           for (SplitGoodsDetail obj : splitGoodsDetailList) {
-               remainAmount+=obj.getRemainAmount();
-           }
-        }
-        if(remainAmount<=0) { throw new SplitGoodsException("没有剩余派单数量，不能取消！"); }
+
+        boolean opFlag = false;
         for (SplitGoodsDetail obj : splitGoodsDetailList) {
-            if (obj.getRemainAmount()>0) {
-               updateSplitGoodsAmount(obj, waybillPlan.getPlanDetailList(), user);
-           }
-        }
-        //更改计划状态
-        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //从已派完变成派单中
-        waybillPlan.setUpdateId(user.getUserId());
-        waybillPlan.setUpdateName(user.getRealName());
-        waybillPlan.setUpdateTime(new Date());
-        waybillPlanMapper.updateWaybillPlan(waybillPlan);
-
-        //派单取消息
-        if (!StringUtils.isEmpty(splitGoods.getCarrierCompanyId())) {
-            DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(waybillPlan.getCompanyId(), user.getUserId()); //发送
-            User carrierUser = companyRpcService.findCompanyCreate(splitGoods.getCarrierCompanyId()); //承运人企业创建者ID
-            if (null!= carrierUser) {
-                DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(splitGoods.getCarrierCompanyId(),carrierUser.getUserId(),carrierUser.getPhone()); //接收
-                CommonAttachment attachment = new CommonAttachment();
-                attachment.setPlanSerialNum(waybillPlan.getSerialCode());//计划流水号
-                Company company = companyRpcService.findCompanyByCid(companyId);
-                if (null!=company) {
-                    attachment.setOwnerCompany(company.getFullName());
-                    User ownUser = companyRpcService.findCompanyCreate(companyId);
-                    if(null!=ownUser) {
-                        attachment.setOwnerPhone(ownUser.getPhone());
-                    }
-                    attachment.setCancelFlag(ConstantVO.CANCEL_FLAG);
-                    TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("task_cancel_carrier", attachment, defaultNotifyReceiver, defaultNotifySender);
-                    producer.sendNotifyEvent(plan_publish_event);
-
+            if (obj.getSplitGoodsDetailId().equals(splitGoodsDetailId)) {
+                for (PlanDetail obj1: waybillPlan.getPlanDetailList()) {
+                        if (obj.getPlanDetailId().equals(obj1.getPlanDetailId())) {
+                            obj1.setRemainderAmount(obj1.getRemainderAmount() + obj.getRemainAmount());//计划剩余数量=计划现剩余数量+派单剩余数量
+                            obj1.setUpdateId(user.getUserId());  //更新计划详细
+                            obj1.setUpdateTime(new Date());
+                            obj1.setUpdateName(user.getRealName());
+                            planDetailMapper.updateByPrimaryKey(obj1);
+                            opFlag = true;
+                            splitGoodsDetailMapper.deleteByPrimaryKey(splitGoodsDetailId);  //先删除子明细
+                            break;
+                        }
                 }
+                break;
+            }
+        }
+
+        if (opFlag) {
+            Map map1 = new HashMap();
+            map1.put("splitGoodsId",splitGoodsId);
+            map1.put("companyId", companyId);
+            map1.put("isDeleted",0);
+            //再查询主下面是否存在子明细，如果有，不删除主，没有删除主
+            List<SplitGoodsDetail> tmp_splitGoodsDetail_list = splitGoodsDetailMapper.selectBySplitGoodsId(map);
+            if (tmp_splitGoodsDetail_list!=null && tmp_splitGoodsDetail_list.size()<=0) { //如果再没有子商品的话
+                splitGoodsMapper.deleteByPrimaryKey(splitGoodsId);
+                //更改计划状态
+                waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //从已派完变成派单中
+                waybillPlan.setUpdateId(user.getUserId());
+                waybillPlan.setUpdateName(user.getRealName());
+                waybillPlan.setUpdateTime(new Date());
+                waybillPlanMapper.updateWaybillPlan(waybillPlan);
+            }
+
+
+            //派单取消息
+            if (!StringUtils.isEmpty(splitGoods.getCarrierCompanyId())) {
+                DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(waybillPlan.getCompanyId(), user.getUserId()); //发送
+                User carrierUser = companyRpcService.findCompanyCreate(splitGoods.getCarrierCompanyId()); //承运人企业创建者ID
+                if (null!= carrierUser) {
+                    DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(splitGoods.getCarrierCompanyId(),carrierUser.getUserId(),carrierUser.getPhone()); //接收
+                    CommonAttachment attachment = new CommonAttachment();
+                    attachment.setPlanSerialNum(waybillPlan.getSerialCode());//计划流水号
+                    Company company = companyRpcService.findCompanyByCid(companyId);
+                    if (null!=company) {
+                        attachment.setOwnerCompany(company.getFullName());
+                        User ownUser = companyRpcService.findCompanyCreate(companyId);
+                        if(null!=ownUser) {
+                            attachment.setOwnerPhone(ownUser.getPhone());
+                        }
+                        attachment.setCancelFlag(ConstantVO.CANCEL_FLAG);
+                        TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("task_cancel_carrier", attachment, defaultNotifyReceiver, defaultNotifySender);
+                        producer.sendNotifyEvent(plan_publish_event);
+
+                    }
+                }
+
             }
 
         }
+
+
         return 1;
     }
 
