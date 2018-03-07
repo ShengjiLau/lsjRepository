@@ -65,6 +65,12 @@ public class SendNotifyService {
             String templateContent = notifyService.templateContent(templateId, sendCompanyId);
             String notifyContent = TemplateParser.parseTemplateParams(templateContent, attachment);
             String url = "";
+
+            if (notify.getReceiveRole().equals("承运商")) {
+                smsNotify.sendSmsNotify(eventMetaData,notifyContent, receiver.getCarrierPhone(),user.getPhone(),sendCompanyId);
+
+            }
+
             if (companyNotifySetting.getEnableSms()) {
                 //发送短信通知
                 smsNotify.sendSmsNotify(eventMetaData,notifyContent, receiver.getPhoneNum(),user.getPhone(),sendCompanyId);

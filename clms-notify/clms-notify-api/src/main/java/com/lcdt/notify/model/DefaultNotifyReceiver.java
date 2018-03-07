@@ -10,8 +10,17 @@ public class DefaultNotifyReceiver implements NotifyReceiver,Serializable {
 
    private String phoneNum;
 
+   //承运商手机
+   private String carrierPhone;
+
+
     public Long getCompanyId() {
         return companyId;
+    }
+
+    @Override
+    public String getCarrierPhone() {
+        return carrierPhone;
     }
 
     public void setCompanyId(Long companyId) {
