@@ -71,9 +71,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
     private OwnDriverService ownDriverService;
 
 
-
-
-
     @Transactional(rollbackFor = Exception.class)
     @Override
     public WaybillPlan createWaybillPlan(WaybillParamsDto dto, short flag) {
