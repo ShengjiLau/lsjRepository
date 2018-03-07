@@ -41,10 +41,11 @@ public interface SplitGoodsService {
      * 派单取消
      *
      * @param splitGoodsId
+     * @param splitGoodsDetailId
      * @param user
      * @param companyId
      */
-    Integer splitGoodsCancel(Long splitGoodsId, User user, Long companyId);
+    Integer splitGoodsCancel(Long splitGoodsId, Long splitGoodsDetailId, User user, Long companyId);
 
 
 
