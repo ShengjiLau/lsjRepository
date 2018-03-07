@@ -189,7 +189,6 @@ public class CustomerApi {
             code=0;
         } catch (CustomerException e) {
             message = e.getMessage();
-            throw new CustomerException(e.getMessage());
         }
         jsonObject.put("message",message);
         jsonObject.put("code",code);
@@ -224,7 +223,6 @@ public class CustomerApi {
             code=0;
         } catch (CustomerException e) {
             message = e.getMessage();
-            throw new CustomerException(e.getMessage());
         }
         jsonObject.put("message",message);
         jsonObject.put("code",code);
