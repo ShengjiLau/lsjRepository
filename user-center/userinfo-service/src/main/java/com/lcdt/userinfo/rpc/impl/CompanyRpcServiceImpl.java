@@ -30,8 +30,8 @@ public class CompanyRpcServiceImpl implements CompanyRpcService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public User findCompanyCreate(Long companyId) {
-        return userMapper.compCreateUserByCompId(companyId);
+    public User findCompanyCreate(Long compId) {
+        return userMapper.compCreateUserByCompId(compId);
     }
 
 

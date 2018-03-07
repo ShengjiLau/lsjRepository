@@ -60,6 +60,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
     @Reference
     private CompanyRpcService companyRpcService; //企业信息
 
+
     @Autowired
     private WaybillService waybillService; //运单
 
@@ -175,8 +176,11 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                  * 发送消息:
                  *   就是新建计划，选择竞价计划，点击发布
                  */
+                Map serialCodeMap = new HashMap();
+                serialCodeMap.put("waybillPlanId",vo.getWaybillPlanId());
+                WaybillPlan tWaybillPlan = waybillPlanMapper.selectByPrimaryKey(serialCodeMap);
                 String companyName = dto.getCompanyName(); // 货主企业
-                String serialCode = vo.getSerialCode(); //流水号
+                String serialCode = tWaybillPlan.getSerialCode(); //流水号
                 String sendAddress = vo.getSendProvince()+" "+vo.getSendCity()+" "+vo.getSendCounty()+" "+vo.getSendAddress();
                 String receiveAddress = vo.getReceiveProvince()+" "+vo.getReceiveCity()+" "+vo.getReceiveCounty()+" "+vo.getReceiveAddress();
                 if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
@@ -277,6 +281,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     map.put("waybillPlanId",vo.getWaybillPlanId());
                     WaybillPlan tWaybillPlan = waybillPlanMapper.selectByPrimaryKey(map);
                     vo.setSerialCode(tWaybillPlan.getSerialCode());
+
                     createTransportWayItems(dto, vo);//批量创建栏目
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();
                     StringBuffer sb_goods = new StringBuffer(); //货物发送明细
