@@ -15,6 +15,10 @@ public class ContractDto extends Contract{
 
     private List<ContractProduct> contractProductList;
 
+    private int tempStatus;
+
+    private Long userId;
+
     private int pageNum;
 
     private int pageSize;
@@ -33,6 +37,22 @@ public class ContractDto extends Contract{
 
     public void setContractProductList(List<ContractProduct> contractProductList) {
         this.contractProductList = contractProductList;
+    }
+
+    public int getTempStatus() {
+        return tempStatus;
+    }
+
+    public void setTempStatus(int tempStatus) {
+        this.tempStatus = tempStatus;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public int getPageNum() {
