@@ -184,6 +184,7 @@ public class CustomerApi {
         try {
             customerService.customerAdd(customer);
         } catch (CustomerException e) {
+
             throw new CustomerException(e.getMessage());
         }
         return customer;
