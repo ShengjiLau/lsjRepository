@@ -43,4 +43,44 @@
     select cp_id, contract_id, product_name, product_code, sku, num, price, payment
     from t_contract_product
   </select>
+
+  <insert id="insertBatch">
+    insert into t_contract_product (cp_id, contract_id, product_name,
+    product_code, sku, num,
+    price, payment)
+    values
+    <foreach item="item" collection="list" separator=",">
+      (#{cpId,jdbcType=BIGINT}, #{contractId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR},
+      #{productCode,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER},
+      #{price,jdbcType=DECIMAL}, #{payment,jdbcType=DECIMAL})
+    </foreach>
+  </insert>
+
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach separator=";" index="index" item="item" collection="list" close="" open="">
+      update t_contract_product
+      set contract_id = #{contractId,jdbcType=BIGINT},
+      product_name = #{productName,jdbcType=VARCHAR},
+      product_code = #{productCode,jdbcType=VARCHAR},
+      sku = #{sku,jdbcType=VARCHAR},
+      num = #{num,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      payment = #{payment,jdbcType=DECIMAL}
+      where cp_id = #{cpId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <update id="deleteByBatch" parameterType="Map">
+    update t_own_driver_certificate
+    set is_deleted = 1
+    where cp_id in
+    <foreach item="item" index="index" collection="cpIds" open="(" separator="," close=")">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <select id="selectCpIdByContractId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select cp_id
+    from t_contract_product where contract_id = #{contractId,jdbcType=BIGINT}
+  </select>
 </mapper>

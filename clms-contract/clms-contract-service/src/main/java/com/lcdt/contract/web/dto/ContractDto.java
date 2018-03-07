@@ -1,5 +1,6 @@
 package com.lcdt.contract.web.dto;
 
+
 import java.util.Date;
 
 import com.lcdt.contract.model.Contract;
@@ -8,29 +9,66 @@ import com.lcdt.contract.model.Contract;
  * @AUTHOR liuh
  * @DATE 2018-02-28
  */
-public class ContractDto extends  Contract{
 
-    private Date signBeginDate;
-    private Date signEndDate;
+
+
+import com.lcdt.contract.model.ContractApproval;
+import com.lcdt.contract.model.ContractProduct;
+
+import java.util.List;
+
+/**
+ * Created by liz on 2018/3/7.
+ */
+public class ContractDto extends Contract{
+
+    private List<ContractApproval> contractApprovalList;
+
+    private List<ContractProduct> contractProductList;
+
+    private int tempStatus;
+
+    private Long userId;
+
 
     private int pageNum;
 
     private int pageSize;
 
-    public Date getSignBeginDate() {
-        return signBeginDate;
+
+   
+
+    public List<ContractApproval> getContractApprovalList() {
+        return contractApprovalList;
     }
 
-    public void setSignBeginDate(Date signBeginDate) {
-        this.signBeginDate = signBeginDate;
+    public void setContractApprovalList(List<ContractApproval> contractApprovalList) {
+        this.contractApprovalList = contractApprovalList;
     }
 
-    public Date getSignEndDate() {
-        return signEndDate;
+    public List<ContractProduct> getContractProductList() {
+        return contractProductList;
     }
 
-    public void setSignEndDate(Date signEndDate) {
-        this.signEndDate = signEndDate;
+    public void setContractProductList(List<ContractProduct> contractProductList) {
+        this.contractProductList = contractProductList;
+    }
+
+    public int getTempStatus() {
+        return tempStatus;
+    }
+
+    public void setTempStatus(int tempStatus) {
+        this.tempStatus = tempStatus;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+
     }
 
     public int getPageNum() {

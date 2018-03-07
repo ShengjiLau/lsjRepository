@@ -11,20 +11,19 @@ import java.util.List;
  * @DATE 2018-02-28
  */
 public interface ContractService {
-
     /**
      * 新增合同
-     * @param contract
+     * @param dto
      * @return
      */
-    int addContract(Contract contract);
+    int addContract(ContractDto dto);
 
     /**
      * 修改合同
-     * @param contract
+     * @param dto
      * @return
      */
-    int modContract(Contract contract);
+    int modContract(ContractDto dto);
 
     /**
      * 删除单个合同
@@ -37,5 +36,12 @@ public interface ContractService {
      * 获取合同列表
      * @return
      */
-    PageInfo<List<Contract>> ContractList(ContractDto contractDto, PageInfo pageInfo);
+    PageInfo<List<Contract>> ontractList(ContractDto contractDto, PageInfo pageInfo);
+
+    /**
+     * 终止合同
+     * @param contract
+     * @return
+     */
+    int modContractStatus(Contract contract);
 }

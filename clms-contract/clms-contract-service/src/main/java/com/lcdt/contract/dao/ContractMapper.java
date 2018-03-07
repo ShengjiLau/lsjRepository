@@ -22,4 +22,11 @@ public interface ContractMapper {
      * @return
      */
     List<Contract> selectByCondition(ContractDto contractDto);
+
+    /**
+     * 修改合同状态
+     * @param record
+     * @return
+     */
+    int updateContractStatus(Contract record);
 }

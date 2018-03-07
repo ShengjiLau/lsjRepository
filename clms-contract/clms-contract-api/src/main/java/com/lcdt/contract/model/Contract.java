@@ -33,6 +33,10 @@ public class Contract {
 
     private Date endDate;
 
+    private Date approvalStartDate; //审批发起时间begin
+
+    private Date approvalEndDate;   //审批发起时间end
+
     private String summary;
 
     private String terms;
@@ -161,6 +165,22 @@ public class Contract {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public Date getApprovalStartDate() {
+        return approvalStartDate;
+    }
+
+    public void setApprovalStartDate(Date approvalStartDate) {
+        this.approvalStartDate = approvalStartDate;
+    }
+
+    public Date getApprovalEndDate() {
+        return approvalEndDate;
+    }
+
+    public void setApprovalEndDate(Date approvalEndDate) {
+        this.approvalEndDate = approvalEndDate;
     }
 
     public String getSummary() {
