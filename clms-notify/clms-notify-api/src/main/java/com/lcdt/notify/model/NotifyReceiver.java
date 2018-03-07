@@ -8,4 +8,5 @@ public interface NotifyReceiver {
 
     Long getCompanyId();
 
+    String getCarrierPhone();
 }
