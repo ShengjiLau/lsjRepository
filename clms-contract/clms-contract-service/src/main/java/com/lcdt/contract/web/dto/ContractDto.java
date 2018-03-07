@@ -2,6 +2,7 @@ package com.lcdt.contract.web.dto;
 
 import com.lcdt.contract.model.Contract;
 import com.lcdt.contract.model.ContractApproval;
+import com.lcdt.contract.model.ContractProduct;
 
 import java.util.List;
 
@@ -11,6 +12,8 @@ import java.util.List;
 public class ContractDto extends Contract{
 
     private List<ContractApproval> contractApprovalList;
+
+    private List<ContractProduct> contractProductList;
 
     private int pageNum;
 
@@ -22,6 +25,14 @@ public class ContractDto extends Contract{
 
     public void setContractApprovalList(List<ContractApproval> contractApprovalList) {
         this.contractApprovalList = contractApprovalList;
+    }
+
+    public List<ContractProduct> getContractProductList() {
+        return contractProductList;
+    }
+
+    public void setContractProductList(List<ContractProduct> contractProductList) {
+        this.contractProductList = contractProductList;
     }
 
     public int getPageNum() {

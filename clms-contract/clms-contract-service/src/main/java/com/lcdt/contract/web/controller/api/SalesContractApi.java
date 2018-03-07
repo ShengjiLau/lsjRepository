@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.model.Contract;
-import com.lcdt.contract.model.ContractDto;
+import com.lcdt.contract.web.dto.ContractDto;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.PageBaseDto;
 import io.swagger.annotations.Api;
@@ -53,7 +53,7 @@ public class SalesContractApi {
     @ApiOperation("合同新建")
     @RequestMapping(value = "/addContracte", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_sales_contracte')")
-    public JSONObject addWarehouse(@Validated Contract dto) {
+    public JSONObject addWarehouse(@Validated ContractDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         dto.setCompanyId(companyId);
 
@@ -71,7 +71,7 @@ public class SalesContractApi {
     @ApiOperation("合同编辑")
     @RequestMapping(value = "/modifyContract", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_sales_contract')")
-    public JSONObject modifyWarehouse(@Validated Contract dto) {
+    public JSONObject modifyWarehouse(@Validated ContractDto dto) {
         int result = contractService.modContract(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();

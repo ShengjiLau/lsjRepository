@@ -13,17 +13,17 @@ import java.util.List;
 public interface ContractService {
     /**
      * 新增合同
-     * @param contract
+     * @param dto
      * @return
      */
-    int addContract(ContractDto contract);
+    int addContract(ContractDto dto);
 
     /**
      * 修改合同
-     * @param contract
+     * @param dto
      * @return
      */
-    int modContract(ContractDto contract);
+    int modContract(ContractDto dto);
 
     /**
      * 删除单个合同
