@@ -1,7 +1,7 @@
 package com.lcdt.contract.dao;
 
 import com.lcdt.contract.model.Contract;
-import com.lcdt.contract.model.ContractDto;
+import com.lcdt.contract.web.dto.ContractDto;
 
 import java.util.List;
 

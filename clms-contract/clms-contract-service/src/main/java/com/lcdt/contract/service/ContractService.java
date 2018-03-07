@@ -2,7 +2,7 @@ package com.lcdt.contract.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.contract.model.Contract;
-import com.lcdt.contract.model.ContractDto;
+import com.lcdt.contract.web.dto.ContractDto;
 
 import java.util.List;
 

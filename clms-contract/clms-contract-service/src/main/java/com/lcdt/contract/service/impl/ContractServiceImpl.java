@@ -4,8 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.contract.dao.ContractMapper;
 import com.lcdt.contract.model.Contract;
-import com.lcdt.contract.model.ContractDto;
 import com.lcdt.contract.service.ContractService;
+import com.lcdt.contract.web.dto.ContractDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
