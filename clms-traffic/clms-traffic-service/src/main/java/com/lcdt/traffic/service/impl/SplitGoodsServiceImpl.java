@@ -492,7 +492,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             map1.put("companyId", companyId);
             map1.put("isDeleted",0);
             //再查询主下面是否存在子明细，如果有，不删除主，没有删除主
-            List<SplitGoodsDetail> tmp_splitGoodsDetail_list = splitGoodsDetailMapper.selectBySplitGoodsId(map);
+            List<SplitGoodsDetail> tmp_splitGoodsDetail_list = splitGoodsDetailMapper.selectBySplitGoodsId(map1);
             if (tmp_splitGoodsDetail_list!=null && tmp_splitGoodsDetail_list.size()<=0) { //如果再没有子商品的话
                 splitGoodsMapper.deleteByPrimaryKey(splitGoodsId);
                 //更改计划状态

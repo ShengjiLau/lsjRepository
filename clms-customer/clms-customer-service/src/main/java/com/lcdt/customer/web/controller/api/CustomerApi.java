@@ -641,6 +641,47 @@ public class CustomerApi {
 
 
 
+    @ApiOperation("客户组成员列表")
+    @RequestMapping(value = "/collectionMemberList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
+    public CustomerListResultDto collectionMemberList(@ApiParam(value = "组ID串") @RequestParam String collectionIds) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        CustomerListResultDto dto = new CustomerListResultDto();
+        if(StringUtils.isEmpty(collectionIds)) {
+            dto.setCustomerContactList(null);
+            dto.setTotal(0);
+        } else {
+
+            String[] collectArray = collectionIds.split("'");
+            StringBuffer sb = new StringBuffer();
+            if(collectArray!=null && collectArray.length>0) {
+                sb.append("(");
+                for(int i=0;i<collectArray.length;i++) {
+                    //组ID
+                    sb.append(" find_in_set('"+collectArray[i]+"',collection_ids)");
+                    if(i!=collectArray.length-1){
+                        sb.append(" or ");
+                    }
+
+                }
+                sb.append(")");
+            }
+            Map map = new HashMap();
+            map.put("companyId", companyId);
+            map.put("page_no", 1);
+            map.put("page_size", 0);
+            map.put("collectionIds", sb.toString());
+            PageInfo pageInfo = customerService.customerList(map);
+            dto.setCustomerContactList(pageInfo.getList());
+            dto.setTotal(pageInfo.getTotal());
+
+
+        }
+        return dto;
+    }
+
+
+
 
 
 
