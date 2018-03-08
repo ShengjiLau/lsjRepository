@@ -51,9 +51,9 @@ public interface OwnDriverMapper {
     /**
      * 根据groupIds获取司机信息
      * @param companyId
-     * @param groupIds
+     * @param driverGroupId
      * @return
      */
-    List<OwnDriver> selectDriverByGroupIds(Long companyId,String groupIds);
+    List<OwnDriver> selectDriverByGroupIds(Long companyId,String driverGroupId);
 
 }
