@@ -154,5 +154,5 @@ public interface WaybillMapper {
     /**
      * 根据waybillIds查询运单
      */
-    List<WaybillDao> selectWaybillByWaybillIds(Map map);
+    List<WaybillDao> selectWaybillByWaybillIds(String waybillIds);
 }
