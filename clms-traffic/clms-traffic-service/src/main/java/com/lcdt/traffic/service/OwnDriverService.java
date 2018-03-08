@@ -68,8 +68,8 @@ public interface OwnDriverService {
     /**
      * 根据groupIds获取组下所有司机信息
      * @param companyId
-     * @param groupIds
+     * @param driverGroupId
      * @return
      */
-    List<OwnDriver> driverListByGroupId(Long companyId, String groupIds);
+    List<OwnDriver> driverListByGroupId(Long companyId, String driverGroupId);
 }

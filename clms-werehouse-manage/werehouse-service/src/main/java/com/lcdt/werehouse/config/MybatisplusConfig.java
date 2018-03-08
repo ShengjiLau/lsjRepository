@@ -22,7 +22,7 @@ import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 
 @Configuration
-@MapperScan("com.baomidou.springboot.mapper*")
+@MapperScan("com.lcdt.werehouse.mapper*")
 public class MybatisplusConfig {
 
     /**
