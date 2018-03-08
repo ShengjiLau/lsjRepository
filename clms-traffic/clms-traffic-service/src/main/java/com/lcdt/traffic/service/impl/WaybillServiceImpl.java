@@ -488,22 +488,22 @@ public class WaybillServiceImpl implements WaybillService {
 
     }
 
-    //我的运单状态更改时，发送的消息
+    //客户运单状态更改时，发送的消息
     private void modifyCustomerWaybillStatusToSendNotify(Map map){
         short status=(short)map.get("waybillStatus");
         String waybillIds=(String)map.get("waybillIds");
         Long userId=(Long)map.get("updateId");
         Long companyId=(Long) map.get("companyId");
 
-        //承运商卸货
+        //客户运单 承运商卸货
         if(status==ConstantVO.WAYBILL_STATUS_IS_UNLOADING) {
             waybillSenderNotify.customerUnloadingSendNotify(waybillIds,companyId,userId);
         }
-        //我的运单 已完成
+        //客户运单 已完成
         if(status==ConstantVO.WAYBILL_STATUS_HAVE_FINISH){
             waybillSenderNotify.customerFinishSendNotify(waybillIds,companyId,userId);
         }
-        //我的运单 已取消
+        //客户运单 已取消
         if(status==ConstantVO.WAYBILL_STATUS_HAVE_CANCEL){
             waybillSenderNotify.customerCancelSendNotify(waybillIds,companyId,userId);
         }
