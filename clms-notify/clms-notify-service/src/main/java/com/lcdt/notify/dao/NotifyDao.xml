@@ -4,7 +4,7 @@
 
   <select id="queryByEventName" resultMap="com.lcdt.notify.dao.NotifyMapper.BaseResultMap">
 
-    select notify_id, receive_role, template_id, notify_name, event_name，category
+    select notify_id, receive_role, template_id, notify_name, event_name,category
     from notify
     where event_name = #{eventName,jdbcType=VARCHAR}
 
