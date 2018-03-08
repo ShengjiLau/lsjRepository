@@ -140,7 +140,7 @@
       </if>
       <if test="realName != null and '' != realName ">
           and (u.real_name like
-          CONCAT('%',#{realName,jdbcType=VARCHAR},'%')
+          CONCAT('%',#{realName,jdbcType=VARCHAR},'%'))
       </if>
       <if test="roleId != null and '' != roleId">
         and r.role_id = #{roleId}
