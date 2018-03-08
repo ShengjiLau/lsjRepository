@@ -78,7 +78,7 @@ public class WaybillSenderNotify {
                     e.printStackTrace();
                 }
                 commonAttachment.setCarrierPhone(carrierCompanyUser.getPhone());
-                commonAttachment.setWebNotifyUrl("www.baidu.com");
+                commonAttachment.setWebNotifyUrl("/transport.html#//myWaybill/"+dao.getWaybillCode());
 
                 //接收者是承运商，承运商不是货主本人
                 if(dao.getCompanyId()!=dao.getCarrierCompanyId()){
@@ -88,7 +88,7 @@ public class WaybillSenderNotify {
                 }
 
                 commonAttachment.setOwnerPhone(shipperUser.getPhone());
-                commonAttachment.setCarrierWebNotifyUrl("www.datuodui.com");
+                commonAttachment.setCarrierWebNotifyUrl("/transport.html#//customerWaybill/"+dao.getWaybillCode());
 
                 //合同客户
                 if(dao.getCustomerPhone()!=null&&!dao.getCustomerPhone().equals("")){
@@ -186,7 +186,7 @@ public class WaybillSenderNotify {
                 commonAttachment.setCarrierCompany(dao.getCarrierCompanyName());
                 commonAttachment.setDriverName(dao.getDriverName());
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
-                commonAttachment.setWebNotifyUrl("www.baidu.com");
+                commonAttachment.setWebNotifyUrl("/transport.html#//myWaybill/"+dao.getWaybillCode());
 
                 //承运商不是货主本人
                 if(dao.getCompanyId()!=dao.getCarrierCompanyId()){
@@ -204,7 +204,7 @@ public class WaybillSenderNotify {
 
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
                 commonAttachment.setOwnerPhone(shipperUser.getPhone());
-                commonAttachment.setCarrierWebNotifyUrl("www.datuodui.com");
+                commonAttachment.setCarrierWebNotifyUrl("/transport.html#//customerWaybill/"+dao.getWaybillCode());
 
                 //客户
                 if(dao.getCustomerPhone()!=null&&dao.getCustomerPhone().equals("")){
@@ -313,7 +313,7 @@ public class WaybillSenderNotify {
                 commonAttachment.setCarrierCompany(dao.getCarrierCompanyName());
                 commonAttachment.setDriverName(dao.getDriverName());
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
-                commonAttachment.setWebNotifyUrl("www.datuodui.com");
+                commonAttachment.setWebNotifyUrl("/transport.html#//myWaybill/"+dao.getWaybillCode());
 
                 //承运商不是货主本人
                 if(dao.getCompanyId()!=dao.getCarrierCompanyId()){
@@ -329,7 +329,7 @@ public class WaybillSenderNotify {
                     defaultNotifyReceiver.setCarrierPhoneNum(carrierCompanyUser.getPhone());
                 }
                 commonAttachment.setOwnerPhone(shipperUser.getPhone());
-                commonAttachment.setCarrierWebNotifyUrl("www.datuodui.com");
+                commonAttachment.setCarrierWebNotifyUrl("/transport.html#//customerWaybill/"+dao.getWaybillCode());
 
                 //判断客户是否有客户电话，有就发送短信，没有就不发送
                 if(dao.getCustomerPhone()!=null&&!dao.getCustomerPhone().equals("")){
@@ -443,7 +443,7 @@ public class WaybillSenderNotify {
                     e.printStackTrace();
                 }
                 commonAttachment.setCarrierPhone(carrierUser.getPhone());
-                commonAttachment.setWebNotifyUrl("www.datuodui.com");
+                commonAttachment.setWebNotifyUrl("/transport.html#//myWaybill/"+dao.getWaybillCode());
 
                 //接收者是合同客户 判断客户是否有客户电话，有就发送短信，没有就不发送
                 if (dao.getCustomerPhone() != null&&!dao.getCustomerPhone().equals("")) {
@@ -561,7 +561,7 @@ public class WaybillSenderNotify {
                 shipperAttachment.setVehicleNum(dao.getVechicleNum());
                 shipperAttachment.setDriverName(dao.getDriverName());
                 shipperAttachment.setDriverPhone(dao.getDriverPhone());
-                shipperAttachment.setWebNotifyUrl("www.baidu.com");
+                shipperAttachment.setWebNotifyUrl("/transport.html#//myWaybill/"+dao.getWaybillCode());
 
                 TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("driver_unload", shipperAttachment, shipperNotifyReceiver, NotifyUtils.notifySender(sendCompanyId,sendUserId));
                 producer.sendNotifyEvent(shipper_event);
@@ -585,7 +585,7 @@ public class WaybillSenderNotify {
                     carrierAttachment.setVehicleNum(dao.getVechicleNum());
                     carrierAttachment.setDriverName(dao.getDriverName());
                     carrierAttachment.setDriverPhone(dao.getDriverPhone());
-                    carrierAttachment.setWebNotifyUrl("www.baidu.com");
+                    carrierAttachment.setWebNotifyUrl("/transport.html#//myWaybill/"+dao.getWaybillCode());
 
                     TrafficStatusChangeEvent carrier_event = new TrafficStatusChangeEvent("driver_unload", carrierAttachment, carrierNotifyReceiver, NotifyUtils.notifySender(sendCompanyId,sendUserId));
                     producer.sendNotifyEvent(carrier_event);
@@ -658,7 +658,7 @@ public class WaybillSenderNotify {
                     e.printStackTrace();
                 }
                 commonAttachment.setCarrierPhone(carrierUser.getPhone());
-                commonAttachment.setWebNotifyUrl("www.baidu.com");
+                commonAttachment.setWebNotifyUrl("/transport.html#//myWaybill/"+dao.getWaybillCode());
 
 
                 //判断客户是否有客户电话，有就发送短信，没有就不发送
@@ -700,7 +700,7 @@ public class WaybillSenderNotify {
                 CommonAttachment commonAttachment = new CommonAttachment();
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
                 commonAttachment.setDriverName(dao.getDriverName());
-                commonAttachment.setWebNotifyUrl("www.baidu.com");
+                commonAttachment.setWebNotifyUrl("/transport.html#//myWaybill/"+dao.getWaybillCode());
 
                 TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("driver_upload", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(sendCompanyId,sendUserId));
                 producer.sendNotifyEvent(shipper_event);
@@ -731,7 +731,7 @@ public class WaybillSenderNotify {
                 CommonAttachment commonAttachment = new CommonAttachment();
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
                 commonAttachment.setCarrierCompany(dao.getCarrierCompanyName());
-                commonAttachment.setWebNotifyUrl("www.baidu.com");
+                commonAttachment.setWebNotifyUrl("/transport.html#//myWaybill/"+dao.getWaybillCode());
 
                 TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("carrier_upload", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(sendCompanyId,sendUserId));
                 producer.sendNotifyEvent(shipper_event);
@@ -777,7 +777,7 @@ public class WaybillSenderNotify {
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
                 commonAttachment.setOwnerCompany(onwCompany.getFullName());
                 commonAttachment.setOwnerPhone(shipperUser.getPhone());
-                commonAttachment.setCarrierWebNotifyUrl("www.baidu.com");
+                commonAttachment.setCarrierWebNotifyUrl("/transport.html#//customerWaybill/"+dao.getWaybillCode());
 
                 //发送司机
                 if(dao.getDriverPhone()!=null&&!dao.getDriverPhone().equals("")){
@@ -843,7 +843,7 @@ public class WaybillSenderNotify {
                 commonAttachment.setOwnerCompany(onwCompany.getFullName());
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
                 commonAttachment.setOwnerPhone(shipperUser.getPhone());
-                commonAttachment.setCarrierWebNotifyUrl("www.baidu.com");
+                commonAttachment.setCarrierWebNotifyUrl("/transport.html#//customerWaybill/"+dao.getWaybillCode());
 
                 //接收者是司机
                 defaultNotifyReceiver.setDriverPhoneNum(dao.getDriverPhone());
@@ -892,7 +892,7 @@ public class WaybillSenderNotify {
                     e.printStackTrace();
                 }
                 commonAttachment.setCarrierPhone(carrierCompanyUser.getPhone());
-                commonAttachment.setWebNotifyUrl("www.baidu.com");
+                commonAttachment.setWebNotifyUrl("/transport.html#//myWaybill/"+dao.getWaybillCode());
 
 
                 //接收者是司机
@@ -945,7 +945,7 @@ public class WaybillSenderNotify {
                     e.printStackTrace();
                 }
                 commonAttachment.setCarrierPhone(carrierCompanyUser.getPhone());
-                commonAttachment.setWebNotifyUrl("www.baidu.com");
+                commonAttachment.setWebNotifyUrl("/transport.html#//customerWaybill/"+dao.getWaybillCode());
 
                 //接收者是司机
                 if(dao.getDriverPhone()!=null&&!dao.getDriverPhone().equals("")){
