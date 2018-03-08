@@ -1,11 +1,13 @@
 package com.lcdt.werehouse.entity;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
 
-
+@TableName("in_house_plan")
 public class InHousePlan extends Model<InHousePlan>{
     private Long planId;
 
@@ -17,6 +19,7 @@ public class InHousePlan extends Model<InHousePlan>{
 
     private Integer groupId;
 
+    @TableField(value = "company_id")
     private Long companyId;
 
     private String customerName;
