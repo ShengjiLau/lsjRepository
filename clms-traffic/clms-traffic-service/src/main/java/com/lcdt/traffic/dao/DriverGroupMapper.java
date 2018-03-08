@@ -3,6 +3,7 @@ package com.lcdt.traffic.dao;
 import com.lcdt.traffic.model.DriverAndGroup;
 import com.lcdt.traffic.model.DriverGroup;
 import com.lcdt.traffic.web.dto.DriverGroupDto;
+import com.lcdt.traffic.web.dto.DriverGroupDto2;
 
 import java.util.List;
 
@@ -30,4 +31,12 @@ public interface DriverGroupMapper {
     List<DriverGroupDto> selectRelationship(Long companyId);
 
     List<DriverAndGroup> selectDriverAndGroup(Long companyId);
+
+    /**
+     * 根据groupIds获取司机信息
+     * @param companyId
+     * @param driverGroupId
+     * @return
+     */
+    List<DriverGroupDto2> selectDriverByGroupIds2(Long companyId, String driverGroupId);
 }
