@@ -39,6 +39,7 @@ public class WaybillTransferRecordApi {
         dto.setCarrierCompanyId(companyId);
         dto.setCreateId(logidUser.getUserId());
         dto.setCreateName(logidUser.getRealName());
+        dto.setType(2);
         int result = waybillTransferRecordService.addWaybillTransferRecord(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
@@ -59,6 +60,7 @@ public class WaybillTransferRecordApi {
         dto.setCompanyId(companyId);
         dto.setCreateId(logidUser.getUserId());
         dto.setCreateName(logidUser.getRealName());
+        dto.setType(1);
         int result = waybillTransferRecordService.addWaybillTransferRecord(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();

@@ -1,5 +1,6 @@
 package com.lcdt.userinfo.rpc.impl;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.lcdt.userinfo.dao.CompanyMapper;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.dao.UserMapper;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created by yangbinq on 2018/1/30.
  */
+@Service(timeout = 5000)
 public class CompanyRpcServiceImpl implements CompanyRpcService {
 
     @Autowired
@@ -28,8 +30,8 @@ public class CompanyRpcServiceImpl implements CompanyRpcService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public User findCompanyCreate(Long companyId) {
-        return userMapper.compCreateUserByCompId(companyId);
+    public User findCompanyCreate(Long compId) {
+        return userMapper.compCreateUserByCompId(compId);
     }
 
 

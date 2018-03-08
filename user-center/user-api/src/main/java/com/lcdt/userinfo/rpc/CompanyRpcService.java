@@ -21,7 +21,7 @@ public interface CompanyRpcService {
      * @param companyId
      * @return
      */
-    User findCompanyCreate(Long companyId);
+    User findCompanyCreate(Long compId);
 
 
 

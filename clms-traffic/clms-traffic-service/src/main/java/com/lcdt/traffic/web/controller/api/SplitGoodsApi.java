@@ -123,10 +123,13 @@ public class SplitGoodsApi {
     @ApiOperation(value = "派单-取消")
     @RequestMapping(value = "/splitGoodsCancel",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_cancel') or hasAuthority('traffic_split_goods')")
-    public String splitGoodsCancel(@ApiParam(value = "计划ID",required = true) @RequestParam Long splitGoodsId) {
+    public String splitGoodsCancel(@ApiParam(value = "派单主ID",required = true) @RequestParam Long splitGoodsId,
+                                   @ApiParam(value = "派单明细ID",required = true) @RequestParam Long splitGoodsDetailId
+
+                                    ) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
-        int flag = splitGoodsService.splitGoodsCancel(splitGoodsId, loginUser, companyId);
+        int flag = splitGoodsService.splitGoodsCancel(splitGoodsId, splitGoodsDetailId,loginUser, companyId);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;

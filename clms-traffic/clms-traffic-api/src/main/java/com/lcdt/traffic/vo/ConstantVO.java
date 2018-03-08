@@ -62,4 +62,5 @@ public class ConstantVO {
     //计划消息中的APP_URL
     public static String APP_URL = "";
     public static String CANCEL_FLAG = "";
+
 }

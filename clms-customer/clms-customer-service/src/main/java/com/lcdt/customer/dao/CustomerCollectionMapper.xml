@@ -83,4 +83,17 @@
     order by collection_id desc
   </select>
 
+
+  <select id="selectByCollectionIds" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select collection_id, collection_name,remark, create_id, create_name, create_date, company_id
+    from t_customer_collection
+    <where>
+        company_id = #{companyId,jdbcType=BIGINT}
+        <if test="ids != null">
+         and collection_id in (${ids})
+        </if>
+    </where>
+    order by collection_id desc
+  </select>
+
 </mapper>

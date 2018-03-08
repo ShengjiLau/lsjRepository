@@ -50,6 +50,9 @@ public class WaybillTransferRecordDto {
     @ApiModelProperty(value = "是否删除",hidden = true)
     private Short isDeleted;
 
+    @ApiModelProperty(value = "1：我的运单--换车记录--新增、2：客户运单--换车记录--新增、",hidden = true)
+    private int type;
+
     public Long getId() {
         return id;
     }
@@ -208,5 +211,13 @@ public class WaybillTransferRecordDto {
 
     public void setIsDeleted(Short isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

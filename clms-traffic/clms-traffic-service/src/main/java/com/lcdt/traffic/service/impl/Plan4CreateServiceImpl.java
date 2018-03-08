@@ -71,9 +71,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
     private OwnDriverService ownDriverService;
 
 
-
-
-
     @Transactional(rollbackFor = Exception.class)
     @Override
     public WaybillPlan createWaybillPlan(WaybillParamsDto dto, short flag) {
@@ -176,11 +173,16 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                  * 发送消息:
                  *   就是新建计划，选择竞价计划，点击发布
                  */
-                String companyName = dto.getCompanyName(); // 货主企业
-                String serialCode = vo.getSerialCode(); //流水号
-                String sendAddress = vo.getSendProvince()+" "+vo.getSendCity()+" "+vo.getSendCounty()+" "+vo.getSendAddress();
-                String receiveAddress = vo.getReceiveProvince()+" "+vo.getReceiveCity()+" "+vo.getReceiveCounty()+" "+vo.getReceiveAddress();
                 if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
+                    Map serialCodeMap = new HashMap();
+                    serialCodeMap.put("waybillPlanId",vo.getWaybillPlanId());
+                    WaybillPlan tWaybillPlan = waybillPlanMapper.selectByPrimaryKey(serialCodeMap);
+                    String companyName = dto.getCompanyName(); // 货主企业
+                    String serialCode = tWaybillPlan.getSerialCode(); //流水号
+                    String sendAddress = vo.getSendProvince()+" "+vo.getSendCity()+" "+vo.getSendCounty()+" "+vo.getSendAddress();
+                    String receiveAddress = vo.getReceiveProvince()+" "+vo.getReceiveCity()+" "+vo.getReceiveCounty()+" "+vo.getReceiveAddress();
+                    DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(dto.getCompanyId(), dto.getCreateId()); //发送
+
                     String[] ids = dto.getCarrierCollectionIds().split(","); //竞价组ID
                     StringBuffer sb = new StringBuffer();
                     if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
@@ -207,20 +209,20 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                             map.put("bindCpid","111");//标识绑定企业ID不为空的企业（承运商对应的所有绑定企业）
                             List<Customer> customerList = customerRpcService.findBindCompanyIds(map);
                             if (null!=customerList && customerList.size()>0) {
-                                DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(dto.getCompanyId(), dto.getCreateId()); //发送
                                 for (Customer customer: customerList) {  //遍历客户，查询对应企业，进行发送
                                     Long bindCompId = customer.getBindCpid(); //绑定企业ID;
                                     Company company = companyRpcService.findCompanyByCid(bindCompId);
                                     if (null != company) {
                                         User user = companyRpcService.findCompanyCreate(company.getCompId());
                                         if (user!=null) {
-                                            DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(company.getCompId(),user.getUserId(),user.getPhone()); //接收
+                                            DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyCarrierReceiver(company.getCompId(),user.getUserId(),user.getPhone()); //接收
                                             CommonAttachment attachment = new CommonAttachment();
                                             attachment.setOwnerCompany(companyName);
                                             attachment.setPlanSerialNum(serialCode);
                                             attachment.setOriginAddress(sendAddress);
                                             attachment.setDestinationAdress(receiveAddress);
                                             attachment.setGoodsDetail(sb_goods.toString());
+                                            attachment.setCarrierWebNotifyUrl("");//客户计划列表，按流水号查询
                                             TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("plan_publish", attachment, defaultNotifyReceiver, defaultNotifySender);
                                             producer.sendNotifyEvent(plan_publish_event);
                                         }
@@ -228,24 +230,22 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                                 }
                             }
                         }
-
                     } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机else
-                        List<OwnDriver> driverList = ownDriverService.driverListByGroupId(dto.getCompanyId(),dto.getCarrierCollectionIds());
-                        if (null!=driverList && driverList.size()>0) {
-                            DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(dto.getCompanyId(), dto.getCreateId()); //发送
-                            for (OwnDriver driver: driverList) {  //遍历客户，查询对应企业，进行发送
-                                DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(dto.getCompanyId(),null,driver.getDriverPhone()); //接收
-                                CommonAttachment attachment = new CommonAttachment();
-                                attachment.setOwnerCompany(companyName);
-                                attachment.setPlanSerialNum(serialCode);
-                                attachment.setOriginAddress(sendAddress);
-                                attachment.setDestinationAdress(receiveAddress);
-                                attachment.setGoodsDetail(sb_goods.toString());
-                                TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("plan_publish", attachment, defaultNotifyReceiver, defaultNotifySender);
-                                producer.sendNotifyEvent(plan_publish_event);
+                             List<OwnDriver> driverList = ownDriverService.driverListByGroupId(dto.getCompanyId(),dto.getCarrierCollectionIds());
+                            if (null!=driverList && driverList.size()>0) {
+                                for (OwnDriver driver: driverList) {  //遍历客户，查询对应企业，进行发送
+                                    DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyDriverReceiver(driver.getDriverPhone()); //接收
+                                    CommonAttachment attachment = new CommonAttachment();
+                                    attachment.setOwnerCompany(companyName);
+                                    attachment.setPlanSerialNum(serialCode);
+                                    attachment.setOriginAddress(sendAddress);
+                                    attachment.setDestinationAdress(receiveAddress);
+                                    attachment.setGoodsDetail(sb_goods.toString());
+                                    TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("plan_publish", attachment, defaultNotifyReceiver, defaultNotifySender);
+                                    producer.sendNotifyEvent(plan_publish_event);
+                                }
                             }
                         }
-                    }
                 }
             }
         }
@@ -278,6 +278,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     map.put("waybillPlanId",vo.getWaybillPlanId());
                     WaybillPlan tWaybillPlan = waybillPlanMapper.selectByPrimaryKey(map);
                     vo.setSerialCode(tWaybillPlan.getSerialCode());
+
                     createTransportWayItems(dto, vo);//批量创建栏目
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();
                     StringBuffer sb_goods = new StringBuffer(); //货物发送明细
@@ -363,51 +364,30 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         if (null!=waybillDto) {
                             waybillService.addWaybill(waybillDto);
                         }
-
                         //如果生成运单触发消息机制
-                        String sendAddress = vo.getSendProvince()+" "+vo.getSendCity()+" "+vo.getSendCounty()+" "+vo.getSendAddress();
                         String receiveAddress = vo.getReceiveProvince()+" "+vo.getReceiveCity()+" "+vo.getReceiveCounty()+" "+vo.getReceiveAddress();
 
-                        if (!StringUtils.isEmpty(splitGoods.getCarrierPhone())) { //司机
+                        if (!StringUtils.isEmpty(splitGoods.getCarrierPhone())) {
                             Company company = companyRpcService.findCompanyByCid(vo.getCompanyId()); //货主企业
                             DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(vo.getCompanyId(), vo.getCreateId()); //发送
-                            DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyReceiver(null,null,splitGoods.getCarrierPhone()); //接收
+
+                            //接收对象
+                            DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
+                            defaultNotifyReceiver.setCustomerPhoneNum(vo.getCustomerPhone());//合同客户电话
+                            defaultNotifyReceiver.setReceivePhoneNum(vo.getReceivePhone());//司机
+
                             CommonAttachment attachment = new CommonAttachment();
                             attachment.setOwnerCompany(company.getFullName()); //货主公司
-                            attachment.setWaybillCode(vo.getSerialCode()); //运单流水号
-                            attachment.setAppUrl(ConstantVO.APP_URL); //APP下载URL
+                            attachment.setDestinationAdress(receiveAddress);
+                            attachment.setGoodsDetail(sb_goods.toString());
+                            attachment.setVehicleNum(vo.getCarrierVehicle()); //车辆
+                            attachment.setDriverName(vo.getCarrierCollectionNames());//司机名
+                            attachment.setDriverPhone(vo.getCarrierPhone()); //司机手机
+
                             TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("bill_to_driver", attachment, defaultNotifyReceiver, defaultNotifySender);
                             producer.sendNotifyEvent(plan_publish_event);
-
-                            //合同客户
-                            if (!StringUtils.isEmpty(vo.getCustomerPhone())) {
-                                defaultNotifyReceiver = NotifyUtils.notifyReceiver(null,null,vo.getCustomerPhone()); //接收
-                                attachment = new CommonAttachment();
-                                attachment.setOwnerCompany(company.getFullName()); //货主公司
-                                attachment.setDestinationAdress(receiveAddress);
-                                attachment.setGoodsDetail(sb_goods.toString());
-                                attachment.setDriverName(vo.getCarrierCollectionNames());//司机名
-                                attachment.setVehicleNum(vo.getCarrierPhone());
-                                attachment.setDriverName(vo.getCarrierVehicle());
-                                plan_publish_event = new TrafficStatusChangeEvent("bill_to_driver", attachment, defaultNotifyReceiver, defaultNotifySender);
-                                producer.sendNotifyEvent(plan_publish_event);
-                            }
-                            //收货人
-                            if (!StringUtils.isEmpty(vo.getReceivePhone())) {
-                                defaultNotifyReceiver = NotifyUtils.notifyReceiver(null,null,vo.getReceivePhone()); //接收
-                                attachment = new CommonAttachment();
-                                attachment.setOwnerCompany(company.getFullName()); //货主公司
-                                attachment.setDestinationAdress(receiveAddress);
-                                attachment.setGoodsDetail(sb_goods.toString());
-                                attachment.setDriverName(vo.getCarrierCollectionNames());//司机名
-                                attachment.setVehicleNum(vo.getCarrierPhone());
-                                plan_publish_event = new TrafficStatusChangeEvent("bill_to_driver", attachment, defaultNotifyReceiver, defaultNotifySender);
-                                producer.sendNotifyEvent(plan_publish_event);
-                            }
-
-
                         }
-                   }
+                    }
 
                 } else { //暂存 -- 操作
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //待发布

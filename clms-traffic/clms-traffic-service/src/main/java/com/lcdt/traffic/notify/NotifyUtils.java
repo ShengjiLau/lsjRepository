@@ -20,21 +20,34 @@ public class NotifyUtils {
         return  defaultNotifySender;
     }
 
+
     /****
-     *  消息接收
+     *  消息接收(承运商)
      * @param companyId
      * @param userId
      * @param Phone
      * @return
      */
-    public static DefaultNotifyReceiver notifyReceiver(Long companyId, Long userId, String Phone) {
+    public static DefaultNotifyReceiver notifyCarrierReceiver(Long companyId, Long userId, String Phone) {
         DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver(); //消息测试
-        defaultNotifyReceiver.setCompanyId(companyId);
-        defaultNotifyReceiver.setUserId(userId);
-        defaultNotifyReceiver.setPhoneNum(Phone);
+        defaultNotifyReceiver.setCarrierCompanyId(companyId);
+        defaultNotifyReceiver.setCarrierUserId(userId);
+        defaultNotifyReceiver.setCarrierPhoneNum(Phone);
         return defaultNotifyReceiver;
     }
 
+
+
+    /****
+     *  消息接收(司机)
+     * @param Phone
+     * @return
+     */
+    public static DefaultNotifyReceiver notifyDriverReceiver(String Phone) {
+        DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver(); //消息测试
+        defaultNotifyReceiver.setDriverPhoneNum(Phone);
+        return defaultNotifyReceiver;
+    }
 
 
 }

@@ -118,7 +118,6 @@
         and ${deptIds}
       </if>
       <!--删除部门逻辑用End-->
-
     </trim>
     order by user_comp_rel_id
   </select>
@@ -131,22 +130,17 @@
     <if test="realName != null and realName != ''">
       LEFT JOIN t_uc_user u on comp.user_id = u.user_id
     </if>
-
       LEFT JOIN role_user_relation r on r.user_id = comp.user_id
     and comp.comp_id = r.company_id
       left join t_uc_user_group g on comp.user_id = g.user_id
       and comp.comp_id = g.company_id
       WHERE 1=1
-
       <if test="companyId != null">
         and comp.comp_id = #{companyId}
       </if>
       <if test="realName != null and '' != realName ">
           and (u.real_name like
-          CONCAT('%',#{realName,jdbcType=VARCHAR},'%')
-           or u.phone like
-          CONCAT('%',#{realName,jdbcType=VARCHAR},'%')
-          )
+          CONCAT('%',#{realName,jdbcType=VARCHAR},'%'))
       </if>
       <if test="roleId != null and '' != roleId">
         and r.role_id = #{roleId}

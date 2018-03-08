@@ -3,9 +3,11 @@ package com.lcdt.traffic.web.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.traffic.model.DriverAndGroup;
 import com.lcdt.traffic.model.DriverGroup;
 import com.lcdt.traffic.service.DriverGroupService;
+import com.lcdt.traffic.web.dto.DriverGroupDto2;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -120,4 +122,15 @@ public class DriverGroupApi {
         return pageBaseDto;
     }
 
+
+    @ApiOperation(value = "根据司机分组获取司机信息", notes = "根据groupIds获取分组及司机信息")
+    @GetMapping("/getdrivers")
+//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_drivergroup')")
+    public List<DriverGroupDto2> driverList(String driverGroupId) {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+//        Long ownDriverId = ownDriver.getOwnDriverId();
+        List<DriverGroupDto2> driverGroupDto2List = driverGroupService.driverListByGroupId2(companyId,driverGroupId);
+        ArrayListResponseWrapper arrayListResponseWrapper = new ArrayListResponseWrapper(driverGroupDto2List);
+        return arrayListResponseWrapper;
+    }
 }
