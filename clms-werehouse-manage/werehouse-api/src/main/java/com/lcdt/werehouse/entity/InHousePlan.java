@@ -1,9 +1,12 @@
 package com.lcdt.werehouse.entity;
 
+import com.baomidou.mybatisplus.activerecord.Model;
+
+import java.io.Serializable;
 import java.util.Date;
 
 
-public class InHousePlan {
+public class InHousePlan extends Model<InHousePlan>{
     private Long planId;
 
     private String planNo;
@@ -192,5 +195,10 @@ public class InHousePlan {
 
     public void setDeliveryCompanyName(String deliveryCompanyName) {
         this.deliveryCompanyName = deliveryCompanyName == null ? null : deliveryCompanyName.trim();
+    }
+
+    @Override
+    protected Serializable pkVal() {
+        return planId;
     }
 }
