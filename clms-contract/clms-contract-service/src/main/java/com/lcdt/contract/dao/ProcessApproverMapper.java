@@ -13,4 +13,11 @@ public interface ProcessApproverMapper {
     List<ProcessApprover> selectAll();
 
     int updateByPrimaryKey(ProcessApprover record);
+
+    /**
+     * 批量插入审批人信息
+     * @param processApproverList
+     * @return
+     */
+    int insertBatch(List<ProcessApprover> processApproverList);
 }

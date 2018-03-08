@@ -15,6 +15,8 @@ public class ApprovalProcess {
 
     private Date createTime;
 
+    private Long companyId;
+
     public Long getProcessId() {
         return processId;
     }
@@ -61,5 +63,13 @@ public class ApprovalProcess {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 }

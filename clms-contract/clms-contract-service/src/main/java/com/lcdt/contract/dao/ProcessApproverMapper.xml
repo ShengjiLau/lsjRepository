@@ -39,4 +39,15 @@
     select approver_id, process_id, user_id, name, dept_name, sort
     from t_process_approver
   </select>
+
+  <insert id="insertBatch">
+    insert into t_process_approver (process_id, user_id,
+    name, dept_name, sort
+    ) values
+    <foreach item="item" collection="list" separator=",">
+      (#{item.processId,jdbcType=BIGINT}, #{item.userId,jdbcType=BIGINT},
+      #{item.name,jdbcType=VARCHAR}, #{item.deptName,jdbcType=VARCHAR}, #{item.sort,jdbcType=INTEGER}
+      )
+    </foreach>
+  </insert>
 </mapper>
