@@ -1,17 +1,18 @@
 package com.lcdt.traffic.web.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @AUTHOR liuh
  * @DATE 2018-03-08
  */
-public class DriverGroupDto2 {
+public class DriverGroupDto2 implements Serializable{
 
     private Long driverGroupId;
     private String groupName;
 
-    List<OwnDriverDto2> ownDriverDto2List;
+    private List<OwnDriverDto2> driverList;
 
     public Long getDriverGroupId() {
         return driverGroupId;
@@ -29,11 +30,11 @@ public class DriverGroupDto2 {
         this.groupName = groupName;
     }
 
-    public List<OwnDriverDto2> getOwnDriverDto2List() {
-        return ownDriverDto2List;
+    public List<OwnDriverDto2> getDriverList() {
+        return driverList;
     }
 
-    public void setOwnDriverDto2List(List<OwnDriverDto2> ownDriverDto2List) {
-        this.ownDriverDto2List = ownDriverDto2List;
+    public void setDriverList(List<OwnDriverDto2> driverList) {
+        this.driverList = driverList;
     }
 }

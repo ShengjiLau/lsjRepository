@@ -138,10 +138,10 @@
     </collection>
   </resultMap>
   <resultMap id="OwnDriverDto2Dto" type="com.lcdt.traffic.web.dto.OwnDriverDto2">
-    <id column="driver_group_id" jdbcType="BIGINT" property="driverGroupId" />
-    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <id column="own_driver_id" jdbcType="BIGINT" property="ownDriverId" />
+    <result column="driver_name" jdbcType="VARCHAR" property="driverName" />
   </resultMap>
-  <select id="selectDriverByGroupIds2" parameterType="com.lcdt.traffic.model.OwnDriver" resultMap="DriverGroupDto2ResultMap">
+  <select id="selectDriverByGroupIds2" resultMap="DriverGroupDto2ResultMap">
     select t1.driver_group_id,t1.group_name, t3.own_driver_id, t3.driver_name
     from t_driver_group t1 left join t_driver_group_relationship t2 on t1.driver_group_id = t2.driver_group_id
     left join t_own_driver t3 on t2.own_driver_id = t3.own_driver_id

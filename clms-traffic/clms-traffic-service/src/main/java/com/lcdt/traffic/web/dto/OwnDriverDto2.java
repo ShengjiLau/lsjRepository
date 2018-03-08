@@ -1,10 +1,12 @@
 package com.lcdt.traffic.web.dto;
 
+import java.io.Serializable;
+
 /**
  * @AUTHOR liuh
  * @DATE 2018-03-08
  */
-public class OwnDriverDto2 {
+public class OwnDriverDto2 implements Serializable{
 
     private Long ownDriverId;
     private String driverName;
