@@ -11,6 +11,7 @@ import com.lcdt.traffic.dao.WaybillTransferRecordMapper;
 import com.lcdt.traffic.model.WaybillTransferRecord;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.CommonAttachment;
+import com.lcdt.traffic.notify.WaybillSenderNotify;
 import com.lcdt.traffic.service.WaybillTransferRecordService;
 import com.lcdt.traffic.web.dto.WaybillTransferRecordDto;
 import com.lcdt.userinfo.model.User;
@@ -41,6 +42,9 @@ public class WaybillTransferRecordServiceImpl implements WaybillTransferRecordSe
     @Autowired
     private WaybillMapper waybillMapper; //运单
 
+    @Autowired
+    private WaybillSenderNotify waybillSenderNotify;
+
     @Override
     public int addWaybillTransferRecord(WaybillTransferRecordDto dto) {
         int result=0;
@@ -48,9 +52,14 @@ public class WaybillTransferRecordServiceImpl implements WaybillTransferRecordSe
         BeanUtils.copyProperties(dto,waybillTransferRecord);
         result+= waybillTransferRecordMapper.insert(waybillTransferRecord);
 
-
-
-
+        //1、我的运单 的 换车记录  2、客户运单的换车记录
+        if(dto.getType()==1){
+            //我的运单 换车记录发送消息通知
+            waybillSenderNotify.ownTranserRecordSendNotify(dto.getWaybillId().toString(),dto.getCompanyId(),dto.getCreateId(),waybillTransferRecord);
+        }else if(dto.getType()==2){
+            //客户运单 换车记录发送消息知道
+            waybillSenderNotify.customerTranserRecordSendNotify(dto.getWaybillId().toString(),dto.getCompanyId(),dto.getCreateId(),waybillTransferRecord);
+        }
         return result;
     }
 
@@ -83,9 +92,5 @@ public class WaybillTransferRecordServiceImpl implements WaybillTransferRecordSe
         resultList=waybillTransferRecordMapper.selectTranserRecordByCondition(waybillTransferRecord);
         page=new PageInfo(resultList);
         return page;
-    }
-
-    private void sendNotify(WaybillTransferRecordDto dto){
-
     }
 }

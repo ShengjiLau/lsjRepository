@@ -649,7 +649,7 @@
     order by id desc
   </select>
 
-  <select id="selectWaybillByWaybillIds" parameterType="java.util.Map" resultMap="BaseWaybillAndItems">
+  <select id="selectWaybillByWaybillIds" parameterType="java.lang.String" resultMap="BaseWaybillAndItems">
     select id, waybill_plan_id,split_goods_id, waybill_code, waybill_status,waybill_source, group_id, group_name, driver_id,
     driver_name, driver_phone, vechicle_id, vechicle_num, customer_id, customer_name,
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
