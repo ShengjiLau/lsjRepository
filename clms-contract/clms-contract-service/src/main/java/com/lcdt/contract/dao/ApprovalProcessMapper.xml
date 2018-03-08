@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.contract.dao.ApprovalProcessMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.ApprovalProcess">
+    <id column="process_id" jdbcType="BIGINT" property="processId" />
+    <result column="process_name" jdbcType="VARCHAR" property="processName" />
+    <result column="process_type" jdbcType="SMALLINT" property="processType" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_approval_process
+    where process_id = #{processId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.ApprovalProcess">
+    insert into t_approval_process (process_id, process_name, process_type, 
+      group_id, remarks, create_time
+      )
+    values (#{processId,jdbcType=BIGINT}, #{processName,jdbcType=VARCHAR}, #{processType,jdbcType=SMALLINT}, 
+      #{groupId,jdbcType=BIGINT}, #{remarks,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.ApprovalProcess">
+    update t_approval_process
+    set process_name = #{processName,jdbcType=VARCHAR},
+      process_type = #{processType,jdbcType=SMALLINT},
+      group_id = #{groupId,jdbcType=BIGINT},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where process_id = #{processId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select process_id, process_name, process_type, group_id, remarks, create_time
+    from t_approval_process
+    where process_id = #{processId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select process_id, process_name, process_type, group_id, remarks, create_time
+    from t_approval_process
+  </select>
+</mapper>
