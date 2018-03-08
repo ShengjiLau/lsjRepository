@@ -70,7 +70,7 @@ public class MybatisplusConfig {
         });
 
 
-        sqlParserList.add(tenantSqlParser);
+//        sqlParserList.add(tenantSqlParser);
         paginationInterceptor.setSqlParserList(sqlParserList);
         // 以下过滤方式与 @SqlParser(filter = true) 注解等效
 //        paginationInterceptor.setSqlParserFilter(new ISqlParserFilter() {

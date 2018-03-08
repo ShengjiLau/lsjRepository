@@ -1,11 +1,12 @@
 #spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
 spring:
   datasource:
-    driverClassName: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://rm-2ze35w2s039360x3w7o.mysql.rds.aliyuncs.com:3306/clms_werehouse_db?characterEncoding=utf-8&useSSL=false
     username: clms_root
     password: clMs201801#@01&
-    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 6
 mybatis-plus:
   mapper-locations: classpath:/com/lcdt/werehouse/mapper/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
@@ -33,7 +34,7 @@ mybatis-plus:
     #自定义SQL注入器
     #sql-injector: com.baomidou.springboot.xxx
     # SQL 解析缓存，开启后多租户 @SqlParser 注解生效
-    sql-parser-cache: true
+#    sql-parser-cache: true
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
