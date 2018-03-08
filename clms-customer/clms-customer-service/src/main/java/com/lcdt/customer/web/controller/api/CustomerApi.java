@@ -3,16 +3,14 @@ package com.lcdt.customer.web.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
+import com.lcdt.customer.dao.CustomerCollectionMapper;
 import com.lcdt.customer.exception.CustomerContactException;
 import com.lcdt.customer.exception.CustomerException;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.model.CustomerCollection;
 import com.lcdt.customer.model.CustomerContact;
 import com.lcdt.customer.service.CustomerService;
-import com.lcdt.customer.web.dto.CustomerParamsDto;
-import com.lcdt.customer.web.dto.CustomerContactParamsDto;
-import com.lcdt.customer.web.dto.CustomerListResultDto;
-import com.lcdt.customer.web.dto.CustomerListParamsDto;
+import com.lcdt.customer.web.dto.*;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
@@ -33,10 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.tl.commons.util.DateUtility;
 
 import java.text.ParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yangbinq on 2017/11/20.
@@ -48,6 +43,10 @@ public class CustomerApi {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private CustomerCollectionMapper customerCollectionMapper;
+
 
     @ApiOperation("我的客户列表")
     @RequestMapping(value = "/customerList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
@@ -644,40 +643,59 @@ public class CustomerApi {
     @ApiOperation("客户组成员列表")
     @RequestMapping(value = "/collectionMemberList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
-    public CustomerListResultDto collectionMemberList(@ApiParam(value = "组ID串") @RequestParam String collectionIds) {
+    public String collectionMemberList(@ApiParam(value = "组ID串" ,required = true) @RequestParam String collectionIds) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        CustomerListResultDto dto = new CustomerListResultDto();
-        if(StringUtils.isEmpty(collectionIds)) {
-            dto.setCustomerContactList(null);
-            dto.setTotal(0);
-        } else {
+        String[] collectArray = collectionIds.split(",");
+        StringBuffer sb = new StringBuffer();
 
-            String[] collectArray = collectionIds.split("'");
-            StringBuffer sb = new StringBuffer();
-            if(collectArray!=null && collectArray.length>0) {
-                sb.append("(");
-                for(int i=0;i<collectArray.length;i++) {
-                    //组ID
-                    sb.append(" find_in_set('"+collectArray[i]+"',collection_ids)");
-                    if(i!=collectArray.length-1){
-                        sb.append(" or ");
-                    }
-
+        List<CustomerGoupDto> customerGoupDtoList = new ArrayList<CustomerGoupDto>();
+        if(collectArray!=null && collectArray.length>0) {
+            sb.append("(");
+            for(int i=0;i<collectArray.length;i++) {
+                //组ID
+                sb.append(" find_in_set('"+collectArray[i]+"',collection_ids)");
+                if(i!=collectArray.length-1){
+                    sb.append(" or ");
                 }
-                sb.append(")");
+
             }
-            Map map = new HashMap();
-            map.put("companyId", companyId);
-            map.put("page_no", 1);
-            map.put("page_size", 0);
-            map.put("collectionIds", sb.toString());
-            PageInfo pageInfo = customerService.customerList(map);
-            dto.setCustomerContactList(pageInfo.getList());
-            dto.setTotal(pageInfo.getTotal());
-
-
+            sb.append(")");
         }
-        return dto;
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", 1);
+        map.put("page_size", 0);
+        map.put("collectionIds", sb.toString());
+        PageInfo pageInfo = customerService.customerList(map);
+        List<CustomerCollection> customerCollections = customerCollectionMapper.selectByCollectionIds(companyId,collectionIds);
+        if (customerCollections!=null && customerCollections.size()>0) {
+            for (CustomerCollection obj : customerCollections) {
+                CustomerGoupDto customerGoupDto = new CustomerGoupDto();
+                customerGoupDto.setCollectionId(obj.getCollectionId());
+                customerGoupDto.setCollectionName(obj.getCollectionName());
+                List<CustomerDto> customerDtoList = new ArrayList<CustomerDto>();
+
+                  if (pageInfo.getTotal()>0) {
+                      List<Customer> customers = pageInfo.getList();
+                      for (Customer customer1 : customers){
+                            if (customer1.getCollectionIds().indexOf(obj.getCollectionId().toString())>0) {
+                                CustomerDto customerDto = new CustomerDto();
+                                customerDto.setCustomerId(customer1.getCustomerId());
+                                customerDto.setCustomerName(customer1.getCustomerName());
+                                customerDtoList.add(customerDto);
+                            }
+                      }
+                  }
+                customerGoupDto.setCustomerDtoList(customerDtoList);
+                customerGoupDtoList.add(customerGoupDto);
+            }
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message","");
+        jsonObject.put("code",0);
+        jsonObject.put("data",customerGoupDtoList);
+        return jsonObject.toString();
+
     }
 
 
