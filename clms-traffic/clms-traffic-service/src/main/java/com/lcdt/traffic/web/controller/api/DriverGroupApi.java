@@ -128,8 +128,11 @@ public class DriverGroupApi {
 //    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_drivergroup')")
     public List<DriverGroupDto2> driverList(String driverGroupId) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-//        Long ownDriverId = ownDriver.getOwnDriverId();
-        List<DriverGroupDto2> driverGroupDto2List = driverGroupService.driverListByGroupId2(companyId,driverGroupId);
+        if(null==driverGroupId || driverGroupId==""){
+            throw new RuntimeException("参数为空");
+        }
+        String [] groupIds = driverGroupId.split(",");
+        List<DriverGroupDto2> driverGroupDto2List = driverGroupService.driverListByGroupId2(companyId,groupIds);
         ArrayListResponseWrapper arrayListResponseWrapper = new ArrayListResponseWrapper(driverGroupDto2List);
         return arrayListResponseWrapper;
     }
