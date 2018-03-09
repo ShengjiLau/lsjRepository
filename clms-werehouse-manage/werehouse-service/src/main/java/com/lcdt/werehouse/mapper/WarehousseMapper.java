@@ -1,5 +1,7 @@
 package com.lcdt.werehouse.mapper;
 
+import com.lcdt.werehouse.entity.Warehouse;
+
 import java.util.List;
 import java.util.Map;
 
