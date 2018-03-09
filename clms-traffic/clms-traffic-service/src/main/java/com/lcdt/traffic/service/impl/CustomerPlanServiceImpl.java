@@ -127,7 +127,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                     String[] strArrary = collectionIds.split(",");
                     for (int i=0; i<strArrary.length; i++) {
                         sb2.append(" find_in_set('"+strArrary[i]+"',carrier_collection_ids)"); //竞价组
-                        if(i!=customerList.size()-1){
+                        if(i!=strArrary.length-1){
                             sb2.append(" or ");
                         }
                     }
