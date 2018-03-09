@@ -76,8 +76,8 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
         if(null!=mapList && mapList.size()>0){
             Map map = (Map)mapList.get(0);
             Map map1 = (Map)mapList.get(0);
-            resultMap.put("planNum",new Integer(map.get("plan_waybill")+""));     //设置执行中的计划统计数量
-            resultMap.put("waybillNum",new Integer(map1.get("plan_waybill")+""));   //设置在途运单统计数量
+            resultMap.put("planNum",new Integer(null==map?"0":map.get("plan_waybill")+""));     //设置执行中的计划统计数量
+            resultMap.put("waybillNum",new Integer(null==map1?"0":map1.get("plan_waybill")+""));   //设置在途运单统计数量
         }else{
             resultMap.put("planNum",0);      //设置执行中的计划统计数量为0
             resultMap.put("waybillNum",0);   //设置在途运单统计数量为0
