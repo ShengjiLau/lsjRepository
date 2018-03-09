@@ -4,7 +4,7 @@
 
     <select id="selectUnReadMessage" resultMap="com.lcdt.notify.dao.WebMessageMapper.BaseResultMap">
       select message_id, message_content, message_create_time, message_receive_user_id,
-        message_receive_company_id, message_isread
+        message_receive_company_id, message_isread,message_attach_url,message_category
     from web_message
     WHERE
      message_receive_company_id = #{companyId}
