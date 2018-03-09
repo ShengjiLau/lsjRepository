@@ -9,6 +9,9 @@ import com.lcdt.notify.model.DefaultNotifySender;
  */
 public class NotifyUtils {
 
+    public static final String OWN_WAYBILL_WEB_NOTIFY_URL="/transport.html#/myWaybill/";
+    public static final String CUSTOMER_WAYBILL_WEB_NOTIFY_URL="/transport.html#/customerWaybill/";
+
     /***
      * 消息发送
      * @param companyId
