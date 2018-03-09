@@ -198,16 +198,4 @@ public class OwnDriverApi {
         PageBaseDto pageBaseDto = new PageBaseDto(driverGroupDtoList, driverGroupDtoList.size());
         return pageBaseDto;
     }
-
-    @ApiOperation(value = "根据司机分组获取司机信息", notes = "根据groupIds获取司机信息")
-    @GetMapping("/getdrivers")
-//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_drivergroup')")
-    public BaseDto driverList(String driverGroupId) {
-        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-//        Long ownDriverId = ownDriver.getOwnDriverId();
-        List<OwnDriver> ownDriverList = ownDriverService.driverListByGroupId(companyId,driverGroupId);
-        BaseDto baseDto = new BaseDto(ownDriverList);
-        return baseDto;
-    }
-
 }

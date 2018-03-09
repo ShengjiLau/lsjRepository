@@ -7,6 +7,7 @@ import com.lcdt.traffic.model.DriverAndGroup;
 import com.lcdt.traffic.model.DriverGroup;
 import com.lcdt.traffic.service.DriverGroupService;
 import com.lcdt.traffic.web.dto.DriverGroupDto;
+import com.lcdt.traffic.web.dto.DriverGroupDto2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,5 +60,10 @@ public class DriverGroupServiceImpl implements DriverGroupService {
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         PageInfo page = new PageInfo(driverGroupMapper.selectDriverAndGroup(companyId));
         return page;
+    }
+
+    @Override
+    public List<DriverGroupDto2> driverListByGroupId2(Long companyId, String driverGroupId){
+        return driverGroupMapper.selectDriverByGroupIds2(companyId,driverGroupId);
     }
 }
