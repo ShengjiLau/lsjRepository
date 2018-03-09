@@ -20,4 +20,12 @@ public interface ProcessApproverMapper {
      * @return
      */
     int insertBatch(List<ProcessApprover> processApproverList);
+
+    /**
+     * 根据审批流程id删除审批人信息
+     * @param ProcessId
+     * @return
+     */
+    int delByProcessId(Long ProcessId);
+
 }

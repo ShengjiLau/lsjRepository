@@ -6,7 +6,7 @@ import com.lcdt.contract.web.dto.ApprovalProcessDto;
 import java.util.List;
 
 public interface ApprovalProcessMapper {
-    int deleteByPrimaryKey(Long processId);
+    int deleteByPrimaryKey(Long processId,Long companyId);
 
     int insert(ApprovalProcess record);
 

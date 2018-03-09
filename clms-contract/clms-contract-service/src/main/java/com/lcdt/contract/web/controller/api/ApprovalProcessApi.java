@@ -56,8 +56,8 @@ public class ApprovalProcessApi {
 
     @ApiOperation(value = "新增审批流程", notes = "新增审批流程")
     @PostMapping("/add")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_add')")
-    public JSONObject addOwnDriver(@RequestBody ApprovalProcessDto approvalProcessDto, BindingResult bindingResult) {
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('approval_process_add')")
+    public JSONObject addApprovalProcess(@RequestBody ApprovalProcessDto approvalProcessDto, BindingResult bindingResult) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         approvalProcessDto.setCompanyId(companyId);
         JSONObject jsonObject = new JSONObject();
@@ -73,4 +73,36 @@ public class ApprovalProcessApi {
         return jsonObject;
     }
 
+    @ApiOperation(value = "修改审批流程", notes = "新增审批流程")
+    @PostMapping("/modify")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('approval_process_modify')")
+    public JSONObject modArrpovalProcess(@RequestBody ApprovalProcessDto approvalProcessDto, BindingResult bindingResult) {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        approvalProcessDto.setCompanyId(companyId);
+        JSONObject jsonObject = new JSONObject();
+        if (bindingResult.hasErrors()) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
+            return jsonObject;
+        }
+        approvalProcessService.modApprovalProcess(approvalProcessDto);
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "修改成功");
+
+        return jsonObject;
+    }
+
+    @ApiOperation(value = "删除审批流程", notes = "删除审批流程及相关审批人信息")
+    @PostMapping("/delete")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('approval_process_delete')")
+    public JSONObject delArrpovalProcess(Long processId) {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        JSONObject jsonObject = new JSONObject();
+
+        approvalProcessService.delApprovalProcess(processId,companyId);
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "修改成功");
+
+        return jsonObject;
+    }
 }

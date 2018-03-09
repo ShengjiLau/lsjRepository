@@ -35,8 +35,9 @@ public interface ApprovalProcessService {
 
     /**
      * 删除审批流程
-     * @param approvalProcessDto
+     * @param processId
+     * @param companyId
      * @return
      */
-    int delApprovalProcess(ApprovalProcessDto approvalProcessDto);
+    int delApprovalProcess(Long processId,Long companyId);
 }
