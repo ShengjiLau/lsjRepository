@@ -2,10 +2,12 @@ package com.lcdt.contract.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.dao.ContractMapper;
 import com.lcdt.contract.dao.ContractProductMapper;
 import com.lcdt.contract.model.Contract;
 
+import com.lcdt.contract.model.Order;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.ContractDto;
 
@@ -107,5 +109,23 @@ public class ContractServiceImpl implements ContractService {
     public int modContractStatus(Contract contract) {
         int result = contractMapper.updateContractStatus(contract);
         return result;
+    }
+
+    @Override
+    public int createOrderByContract(Long contractId) {
+        Contract contract = contractMapper.selectByPrimaryKey(contractId);
+        if(contract != null){
+            Order order = new Order();
+            order.setContractCode(contract.getContractCode());
+            order.setOrderType(contract.getType());
+            order.setPayType(contract.getPayType());
+
+            order.setGroupId(contract.getGroupId());
+            order.setCompanyId(contract.getCompanyId());
+            order.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
+            order.setCreateTime(new Date());
+            int result = contractMapper.insert(contract);
+        }
+        return 0;
     }
 }
