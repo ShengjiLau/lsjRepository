@@ -12,7 +12,7 @@
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_approval_process
-    where process_id = #{processId,jdbcType=BIGINT}
+    where process_id = #{arg0} and company_id = #{arg1}
   </delete>
   <insert id="insert" parameterType="com.lcdt.contract.model.ApprovalProcess" useGeneratedKeys="true" keyProperty="processId">
     insert into t_approval_process (process_name, process_type,
@@ -27,10 +27,8 @@
     set process_name = #{processName,jdbcType=VARCHAR},
       process_type = #{processType,jdbcType=SMALLINT},
       group_id = #{groupId,jdbcType=BIGINT},
-      remarks = #{remarks,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      company_id = #{companyId,jdbcType=BIGINT}
-    where process_id = #{processId,jdbcType=BIGINT}
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where process_id = #{processId,jdbcType=BIGINT} and company_id=#{companyId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select process_id, process_name, process_type, group_id, remarks, create_time, company_id

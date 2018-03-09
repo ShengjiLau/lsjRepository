@@ -50,4 +50,9 @@
       )
     </foreach>
   </insert>
+
+  <delete id="delByProcessId" parameterType="java.lang.Long">
+    delete from t_process_approver
+    where process_id = #{arg0}
+  </delete>
 </mapper>
