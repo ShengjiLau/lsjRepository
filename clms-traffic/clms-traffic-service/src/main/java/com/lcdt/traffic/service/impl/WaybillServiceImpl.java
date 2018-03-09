@@ -88,7 +88,7 @@ public class WaybillServiceImpl implements WaybillService {
             Map map=new HashMap();
             map.put("companyId",waybill.getCompanyId());
             map.put("waybillPlanId",waybill.getWaybillPlanId());
-            List<Waybill> list=waybillMapper.selectWaybillPlanId(map);
+            List<Waybill> list=waybillMapper.selectWaybillByPlanId(map);
             if(list!=null){
                 waybill.setWaybillCode(waybill.getWaybillCode()+"-"+(list.size()+1));
             }else {
