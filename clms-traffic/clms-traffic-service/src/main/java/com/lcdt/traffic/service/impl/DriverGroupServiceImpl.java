@@ -11,7 +11,9 @@ import com.lcdt.traffic.web.dto.DriverGroupDto2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @AUTHOR liuh
@@ -63,7 +65,10 @@ public class DriverGroupServiceImpl implements DriverGroupService {
     }
 
     @Override
-    public List<DriverGroupDto2> driverListByGroupId2(Long companyId, String driverGroupId){
-        return driverGroupMapper.selectDriverByGroupIds2(companyId,driverGroupId);
+    public List<DriverGroupDto2> driverListByGroupId2(Long companyId, String [] groupIds){
+        Map<String,Object> map = new HashMap<>();
+        map.put("companyId",companyId);
+        map.put("groupIds",groupIds);
+        return driverGroupMapper.selectDriverByGroupIds2(map);
     }
 }

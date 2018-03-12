@@ -48,6 +48,7 @@ public class NotifyService {
             companyNotifySetting1.setCompanyId(companyId);
             companyNotifySetting1.setNotifyId(notifyId);
             companyNotifySetting1.setEnableSms(enable);
+            companyNotifySetting1.setEnableWeb(true);
 
             settingMapper.insert(companyNotifySetting1);
             return companyNotifySetting1;

@@ -88,7 +88,7 @@ public class WaybillServiceImpl implements WaybillService {
             Map map=new HashMap();
             map.put("companyId",waybill.getCompanyId());
             map.put("waybillPlanId",waybill.getWaybillPlanId());
-            List<Waybill> list=waybillMapper.selectWaybillPlanId(map);
+            List<Waybill> list=waybillMapper.selectWaybillByPlanId(map);
             if(list!=null){
                 waybill.setWaybillCode(waybill.getWaybillCode()+"-"+(list.size()+1));
             }else {
@@ -102,6 +102,11 @@ public class WaybillServiceImpl implements WaybillService {
                 throw new RuntimeException("运单编号已存在!");
             }
         }
+
+        //设置承运商名字
+        Company company=companyService.selectById(waybill.getCarrierCompanyId());
+        waybill.setCarrierCompanyName(company.getFullName());
+
         //新增运单
         result += waybillMapper.insert(waybill);
         //运单货物详细
