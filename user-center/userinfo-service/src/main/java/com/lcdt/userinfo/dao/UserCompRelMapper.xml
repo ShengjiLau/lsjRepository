@@ -151,6 +151,7 @@
       <if test="departId != null and '' != departId ">
         and find_in_set(#{departId},dept_ids)
       </if>
+    order by comp.create_date DESC
   </select>
 
   <select id="selectByUserIdCompanyId" resultMap="BaseResultMap">
