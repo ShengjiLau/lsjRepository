@@ -82,7 +82,7 @@ public class SendNotifyService {
                 if (receiver != null && receiver.getCarrierPhoneNum() != null && !receiver.getCarrierPhoneNum().equals("")) {
                     if (companyNotifySetting.getEnableSms()) {
                         //发送短信通知
-                        smsNotify.sendSmsNotify(eventMetaData, user.getRealName(), notifyContent, receiver.getPhoneNum(), sendCompanyId);
+                        smsNotify.sendSmsNotify(eventMetaData, user.getRealName(), notifyContent, receiver.getCarrierPhoneNum(), sendCompanyId);
                     }
                 }
                 if (receiver != null && receiver.getCarrierCompanyId() != null && receiver.getCarrierUserId() != null) {

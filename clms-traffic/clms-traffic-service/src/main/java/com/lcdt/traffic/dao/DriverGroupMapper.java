@@ -6,6 +6,7 @@ import com.lcdt.traffic.web.dto.DriverGroupDto;
 import com.lcdt.traffic.web.dto.DriverGroupDto2;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DriverGroupMapper {
     int deleteByPrimaryKey(Long driverGroupId);
@@ -34,9 +35,8 @@ public interface DriverGroupMapper {
 
     /**
      * 根据groupIds获取司机信息
-     * @param companyId
-     * @param driverGroupId
+     * @param map
      * @return
      */
-    List<DriverGroupDto2> selectDriverByGroupIds2(Long companyId, String driverGroupId);
+    List<DriverGroupDto2> selectDriverByGroupIds2(Map<String,Object> map);
 }

@@ -142,9 +142,12 @@
     <result column="driver_name" jdbcType="VARCHAR" property="driverName" />
   </resultMap>
   <select id="selectDriverByGroupIds2" resultMap="DriverGroupDto2ResultMap">
-    select t1.driver_group_id,t1.group_name, t3.own_driver_id, t3.driver_name
+    select t1.driver_group_id,t1.group_name, t3.own_driver_id, t3.driver_name,t2.dgr_id
     from t_driver_group t1 left join t_driver_group_relationship t2 on t1.driver_group_id = t2.driver_group_id
     left join t_own_driver t3 on t2.own_driver_id = t3.own_driver_id
-    where t1.company_id = #{arg0} and t2.driver_group_id in (#{arg1})
+    where t1.company_id = #{companyId} and t2.driver_group_id in
+    <foreach collection="groupIds" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>
   </select>
 </mapper>

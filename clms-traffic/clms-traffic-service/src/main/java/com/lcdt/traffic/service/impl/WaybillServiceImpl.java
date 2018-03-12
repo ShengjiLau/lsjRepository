@@ -102,6 +102,11 @@ public class WaybillServiceImpl implements WaybillService {
                 throw new RuntimeException("运单编号已存在!");
             }
         }
+
+        //设置承运商名字
+        Company company=companyService.selectById(waybill.getCarrierCompanyId());
+        waybill.setCarrierCompanyName(company.getFullName());
+
         //新增运单
         result += waybillMapper.insert(waybill);
         //运单货物详细

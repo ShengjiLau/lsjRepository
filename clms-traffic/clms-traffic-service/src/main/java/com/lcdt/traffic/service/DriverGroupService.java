@@ -29,8 +29,8 @@ public interface DriverGroupService {
     /**
      * 根据groupIds获取组下所有司机信息（带分组信息）
      * @param companyId
-     * @param driverGroupId
+     * @param groupIds
      * @return
      */
-    List<DriverGroupDto2> driverListByGroupId2(Long companyId, String driverGroupId);
+    List<DriverGroupDto2> driverListByGroupId2(Long companyId, String [] groupIds);
 }

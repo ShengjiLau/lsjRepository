@@ -544,6 +544,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 isComplete = true;
             }
         }
+
         waybillDto.setWaybillCode(waybillPlan.getSerialCode());   //整合运单主子关系
         waybillDto.setWaybillItemsDtoList(waybillItemsDtos);
         Waybill waybill = waybillService.addWaybill(waybillDto);
