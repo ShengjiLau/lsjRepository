@@ -59,10 +59,19 @@ public final class CaptchaUtil{
 	/*
 	 * 获取随机数颜色
 	 */
-	private static Color getRandomColor()
+	private static Color getRandomColor(int fc, int bc)
 	{
-		return new Color(random.nextInt(255),random.nextInt(255),
-				random.nextInt(255));
+		Random random = new Random();
+		if (fc > 255)
+			fc = 255;
+		if (bc > 255)
+			bc = 255;
+		int r = fc + random.nextInt(bc - fc);
+		int g = fc + random.nextInt(bc - fc);
+		int b = fc + random.nextInt(bc - fc);
+		return new Color(r, g, b);
+	/*	return new Color(random.nextInt(255),random.nextInt(255),
+				random.nextInt(255));*/
 	}
 
 	/*
@@ -92,13 +101,13 @@ public final class CaptchaUtil{
 		int width = 80;
 		int height = 30;
 
-		Color color = getRandomColor();
-		Color reverse = getReverseColor(color);
+		Color color = getRandomColor(200, 250);
+		Color reverse = getReverseColor(getRandomColor(160, 250));
 
 		BufferedImage bi = new BufferedImage(width, height,
 				BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = bi.createGraphics();
-		g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 16));
+		g.setFont(new Font("Times   New   Roman", Font.PLAIN, 18));
 		g.setColor(color);
 		g.fillRect(0, 0, width, height);
 		g.setColor(reverse);
