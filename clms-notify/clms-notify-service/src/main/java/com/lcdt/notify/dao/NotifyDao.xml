@@ -54,7 +54,7 @@ LEFT JOIN  company_notify_setting s
   <if test="category != null and category != ''">
       WHERE category = #{category,jdbcType=VARCHAR}
   </if>
-
+order by n.notify_id
 
     </select>
 

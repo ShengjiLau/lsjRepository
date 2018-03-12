@@ -1,5 +1,6 @@
 package com.lcdt.traffic.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.*;
@@ -12,7 +13,9 @@ import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
 import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
+import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +50,10 @@ public class PlanServiceImpl implements PlanService {
 
     @Autowired
     private TransportWayItemsMapper transportWayItemsMapper;
+
+    @Reference
+    private CompanyRpcService companyRpcService; //企业信息
+
 
 
 
@@ -296,6 +303,28 @@ public class PlanServiceImpl implements PlanService {
         }
         PageHelper.startPage(pageNo, pageSize);
         List<WaybillPlan> list = waybillPlanMapper.selectByCondition(map);
+
+        if(list!=null && list.size()>0) { //
+            for(WaybillPlan obj :list) {
+                List<SnatchGoods> snatchGoodsList = obj.getSnatchGoodsList();
+                if (snatchGoodsList!=null && snatchGoodsList.size()>0) {
+                    for(SnatchGoods snatchGoods :snatchGoodsList) {
+                        Long jj_company_id = snatchGoods.getCompanyId(); //竞价企业ID
+                        Company carrierCompany = companyRpcService.findCompanyByCid(jj_company_id);
+                        if (carrierCompany != null) {
+                            snatchGoods.setOfferName(carrierCompany.getFullName());
+                        }
+
+                    }
+                }
+
+
+            }
+
+
+        }
+
+
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
     }

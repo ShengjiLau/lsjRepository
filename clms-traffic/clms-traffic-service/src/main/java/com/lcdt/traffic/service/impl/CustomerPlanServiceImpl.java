@@ -446,6 +446,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         snatchGoods.setUpdateTime(dt);
         snatchGoods.setOfferDate(dt);//报价时间
         snatchGoods.setIsDeleted((short)0);
+        snatchGoods.setOfferRemark(dto.getOfferRemark());
         snatchGoods.setIsUsing(ConstantVO.SNATCH_GOODS_USING_DOING);
         int flag1 = 1,flag2 =1 ;
         flag1 = snatchGoodsMapper.insert(snatchGoods);
@@ -544,6 +545,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 isComplete = true;
             }
         }
+
         waybillDto.setWaybillCode(waybillPlan.getSerialCode());   //整合运单主子关系
         waybillDto.setWaybillItemsDtoList(waybillItemsDtos);
         Waybill waybill = waybillService.addWaybill(waybillDto);
