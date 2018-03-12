@@ -17,7 +17,7 @@ public class OrderNoGenerator {
     public static String generateTimeNo(){
         int countNo = atomicInteger.addAndGet(1);
 
-        DecimalFormat df = new DecimalFormat("0000");
+        DecimalFormat df = new DecimalFormat("00000");
         String str2 = df.format(countNo);
 
         long timestamp = System.currentTimeMillis() / 1000;
