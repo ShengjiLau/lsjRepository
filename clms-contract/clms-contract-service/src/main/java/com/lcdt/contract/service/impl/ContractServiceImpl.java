@@ -138,6 +138,7 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public int createOrderByContract(Long contractId) {
+        int result = 0;
         Contract contract = contractMapper.selectByPrimaryKey(contractId);
         if(contract != null){
             Order order = new Order();
@@ -149,8 +150,8 @@ public class ContractServiceImpl implements ContractService {
             order.setCompanyId(contract.getCompanyId());
             order.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
             order.setCreateTime(new Date());
-            int result = contractMapper.insert(contract);
+            result = contractMapper.insert(contract);
         }
-        return 0;
+        return result;
     }
 }

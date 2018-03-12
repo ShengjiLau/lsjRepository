@@ -108,7 +108,7 @@ public class SalesContractApi {
     public JSONObject createPurchaseOrder(@ApiParam(value = "合同ID",required = true) @RequestParam Long contractId) {
         Contract dto = new Contract();
         dto.setContractId(contractId);
-        int result = contractService.modContractStatus(dto);
+        int result = contractService.createOrderByContract(contractId);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
