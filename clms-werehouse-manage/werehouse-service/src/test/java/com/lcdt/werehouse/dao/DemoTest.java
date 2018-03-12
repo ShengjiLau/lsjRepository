@@ -14,11 +14,8 @@ public class DemoTest extends BaseIntegrationContext{
     @Test
     @Rollback
     public void testInsertPlan() {
-
         InHousePlan inHousePlan = new InHousePlan();
         inHousePlan.setCompanyId(1L);
-
-
         mapper.insert(inHousePlan);
     }
 
