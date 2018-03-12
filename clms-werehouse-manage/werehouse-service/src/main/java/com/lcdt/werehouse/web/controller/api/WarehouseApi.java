@@ -2,12 +2,12 @@ package com.lcdt.werehouse.web.controller.api;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.userinfo.web.dto.PageBaseDto;
 import com.lcdt.util.WebProduces;
 import com.lcdt.werehouse.entity.Warehouse;
 import com.lcdt.werehouse.entity.WarehouseLinkman;
 import com.lcdt.werehouse.entity.WarehouseLoc;
 import com.lcdt.werehouse.service.WarehouseService;
+import com.lcdt.werehouse.web.dto.PageBaseDto;
 import com.lcdt.werehouse.web.dto.WarehouseDto;
 import com.lcdt.werehouse.web.dto.WarehouseLinkmanDto;
 import com.lcdt.werehouse.web.dto.WarehouseLocDto;
