@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class OrderNoGenerator {
 
+    //单机下可以
     public static String generatorOrderNo(){
         String replace = generateTimeNo();
         return replace;
