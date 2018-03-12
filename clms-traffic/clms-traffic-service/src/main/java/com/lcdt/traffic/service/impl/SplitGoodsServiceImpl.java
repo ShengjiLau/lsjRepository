@@ -225,7 +225,10 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                             waybillDto.setDriverId(Long.valueOf(splitGoods.getCarrierCollectionIds()));
                         }
                         waybillDto.setWaybillCode(waybillPlan.getSerialCode()); //流水号
+                        waybillDto.setWaybillRemark(splitGoods.getSplitRemark());//这块需要传  计划→派单→运单，显示派单时的派单备注
                         PlanBO.getInstance().toWaybillItemsDto(waybillPlan,splitGoods,waybillDto,planDetailList,splitGoodsDetailList);
+                        waybillDto.setWaybillRemark(waybillPlan.getPlanRemark());//3、计划→运单，显示新建计划时的计划备注
+
                         if (null!=waybillDto) {
                             waybill = waybillService.addWaybill(waybillDto);
                         }
