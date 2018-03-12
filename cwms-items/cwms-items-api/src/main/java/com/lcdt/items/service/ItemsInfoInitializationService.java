@@ -1,6 +1,5 @@
 package com.lcdt.items.service;
 
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
 /**
  * Created by lyqishan on 2018/2/6
