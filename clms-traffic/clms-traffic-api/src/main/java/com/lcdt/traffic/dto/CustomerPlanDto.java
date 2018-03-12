@@ -27,6 +27,7 @@ public class CustomerPlanDto implements java.io.Serializable {
     private String receiveAddress;
     private Short isDeleted;
     private Long companyId;
+    private Long splitGoodsId;
 
     public Long getWaybillPlanId() {
         return waybillPlanId;
@@ -138,6 +139,14 @@ public class CustomerPlanDto implements java.io.Serializable {
 
     public void setSplitGoodsList(List<SplitGoods> splitGoodsList) {
         this.splitGoodsList = splitGoodsList;
+    }
+
+    public Long getSplitGoodsId() {
+        return splitGoodsId;
+    }
+
+    public void setSplitGoodsId(Long splitGoodsId) {
+        this.splitGoodsId = splitGoodsId;
     }
 }
 
