@@ -115,6 +115,7 @@
     <result column="receive_address" jdbcType="VARCHAR" property="receiveAddress" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="split_goods_id" jdbcType="BIGINT" property="splitGoodsId" />
    <!--计划列表-->
     <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
@@ -617,7 +618,7 @@
     就是自己能抢的计划，可能这个计划多家公司都能看见。如果改计划我报价了，就在已抢里面
   -->
   <select id="customerPlan4Bidding" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
+    select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
     from t_waybill_plan p1
     <where>
       and plan_status = '15' and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id)
@@ -662,7 +663,7 @@
      理解：这个计划我参与报价了，但还没有派单给我 ,只要不是'取消'的就行
   -->
   <select id="customerPlanList4Offer" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
+    select '-1' as split_goods_id,waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
     from t_waybill_plan p1
     <where>
       and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
@@ -710,7 +711,7 @@
      满足前提条件：我能抢单的计划（不包括已抢的），但是该计划已经派单完成，同时已经超过竞价的结束时间的
    -->
   <select id="customerPlanList4Pass" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
+    select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
     from t_waybill_plan p1
     <where>
       and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
@@ -759,6 +760,7 @@
    -->
   <select id="customerPlanList4VehicleDoing" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
+    sp.split_goods_id,
     wp.waybill_plan_id,
     wp.plan_code,
     wp.serial_code,
@@ -824,6 +826,7 @@
    -->
   <select id="customerPlanList4VehicleHave" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
+    sp.split_goods_id,
     wp.waybill_plan_id,
     wp.plan_code,
     wp.serial_code,
@@ -888,6 +891,7 @@
      -->
   <select id="customerPlanList4Completed" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
+    sp.split_goods_id,
     wp.waybill_plan_id,
     wp.plan_code,
     wp.serial_code,
@@ -953,6 +957,7 @@
      -->
   <select id="customerPlanList4Cancel" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
+    sp.split_goods_id,
     wp.waybill_plan_id,
     wp.plan_code,
     wp.serial_code,
