@@ -24,7 +24,4 @@ public class OrderNoGenerator {
         return String.valueOf(timestamp) + str2;
     }
 
-
-
-
 }
