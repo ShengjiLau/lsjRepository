@@ -54,14 +54,14 @@ public class ItemsInfoInitializationServiceImpl implements ItemsInfoInitializati
         calcUnit1.setCompanyId(companyId);
         calcUnit1.setCreateId(userId);
         calcUnit1.setCreateName(userName);
-        calcUnit1.setUnitName("立方");
+        calcUnit1.setUnitName("件");
         result+=calcUnitService.addCalcUnit(calcUnit1);
 
         CalcUnit calcUnit2=new CalcUnit();
         calcUnit2.setCompanyId(companyId);
         calcUnit2.setCreateId(userId);
         calcUnit2.setCreateName(userName);
-        calcUnit2.setUnitName("件");
+        calcUnit2.setUnitName("方");
         result+=calcUnitService.addCalcUnit(calcUnit2);
         return result;
     }
