@@ -89,7 +89,7 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     public boolean isUnitNameExist(CalcUnit calcUnit) {
         List<CalcUnit> calcUnitList=calcUnitMapper.selectCalcUnitList(calcUnit);
         if(calcUnitList!=null&&calcUnitList.size()>0){
-            if(calcUnit.getUnitName().equals(calcUnitList.get(0).getUnitName())&&calcUnit.getUnitId()==calcUnitList.get(0).getUnitId()){
+            if(calcUnit.getUnitName().equals(calcUnitList.get(0).getUnitName())&&calcUnit.getUnitId().equals(calcUnitList.get(0).getUnitId())){
                 return false;
             }
             return true;
