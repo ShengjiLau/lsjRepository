@@ -159,7 +159,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 			return "";
 		}
 
-
 		StringBuffer sb = new StringBuffer();
 		String[] split = departIds.split(",");
 		for (String id : split) {
