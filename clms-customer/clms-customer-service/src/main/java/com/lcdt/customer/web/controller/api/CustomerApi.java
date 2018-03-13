@@ -89,7 +89,6 @@ public class CustomerApi {
             sb.append(")");
             map.put("customerType", sb.toString());
         }
-
         //竞价(抢单用)
         if (StringUtil.isNotEmpty(dto.getCollectionIds())) {
             String[] collectionIds = dto.getCollectionIds().split(",");
@@ -105,8 +104,6 @@ public class CustomerApi {
 
            map.put("collectionIds", sb.toString());
         }
-
-
         //项目分组
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {
             String[] groupIdArray = dto.getGroupIds().split(",");
@@ -132,15 +129,9 @@ public class CustomerApi {
                         sb.append(" or ");
                     }
                 }
-
                 sb.append(")");
-
-
             }
-
-
         }
-
         PageInfo pageInfo = customerService.customerList(map);
         CustomerListResultDto dto1 = new CustomerListResultDto();
         dto1.setList(pageInfo.getList());

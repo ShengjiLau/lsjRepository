@@ -61,7 +61,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public int removeDepartment(Long deptId, Long companyId) {
-
 		//1、检查部门下是否存在子部门
 		Map map = new HashMap<>();
 		map.put("deptPid", deptId);
@@ -158,7 +157,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 		if (StringUtils.isEmpty(departIds)) {
 			return "";
 		}
-
 		StringBuffer sb = new StringBuffer();
 		String[] split = departIds.split(",");
 		for (String id : split) {
