@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.werehouse.entity.Warehouse;
 import com.lcdt.werehouse.entity.WarehouseLinkman;
 import com.lcdt.werehouse.entity.WarehouseLoc;
+import com.lcdt.userinfo.model.User;
 
 import java.util.Map;
 
@@ -17,6 +18,13 @@ public interface WarehouseService {
      * @return
      */
     PageInfo warehouseList(Map m);
+    /**
+     * 初始化仓库
+     * @param user
+     * @param companyId
+     * @return
+     */
+    int initWarehouse(User user, Long companyId);
     /**
      * 新增仓库
      * @param warehouse

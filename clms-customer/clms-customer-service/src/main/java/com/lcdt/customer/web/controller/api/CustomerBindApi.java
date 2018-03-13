@@ -63,6 +63,7 @@ public class CustomerBindApi {
 
 	@ApiOperation("发送邀请邮件")
 	@RequestMapping(value = "/sendemail",method = RequestMethod.POST)
+	@PreAuthorize("hasAnyAuthority('customer_bind') or hasRole('ROLE_SYS_ADMIN')")
 	public String inviteCustomer(String bindEmail,Long inviteId) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		User user = SecurityInfoGetter.getUser();
@@ -160,6 +161,7 @@ public class CustomerBindApi {
 
 	@RequestMapping("/unbindCustomer")
 	@ApiOperation("解绑客户")
+	@PreAuthorize("hasAnyAuthority('customer_bind') or hasRole('ROLE_SYS_ADMIN')")
 	public Customer unBindCustomer(Long customerId){
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		Customer customer = null;

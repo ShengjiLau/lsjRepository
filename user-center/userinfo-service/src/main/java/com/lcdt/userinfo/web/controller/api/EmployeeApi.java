@@ -58,6 +58,7 @@ public class EmployeeApi {
 
     @ApiOperation("删除员工接口")
     @RequestMapping(value = "/removeemployee", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyAuthority('employee_delete') or hasRole('ROLE_SYS_ADMIN')")
     public String removeEmployee(Long userCompRelId){
         boolean b = employeeService.removeUserCompRel(userCompRelId);
         if (b) {

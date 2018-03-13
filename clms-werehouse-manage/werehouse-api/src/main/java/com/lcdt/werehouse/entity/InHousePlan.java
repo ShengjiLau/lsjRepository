@@ -2,13 +2,16 @@ package com.lcdt.werehouse.entity;
 
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @TableName("in_house_plan")
 public class InHousePlan extends Model<InHousePlan>{
+    @TableId(value = "plan_id", type = IdType.AUTO)
     private Long planId;
 
     private String planNo;
@@ -19,7 +22,6 @@ public class InHousePlan extends Model<InHousePlan>{
 
     private Integer groupId;
 
-    @TableField(value = "company_id")
     private Long companyId;
 
     private String customerName;

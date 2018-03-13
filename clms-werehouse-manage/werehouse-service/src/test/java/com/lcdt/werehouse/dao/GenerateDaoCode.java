@@ -42,6 +42,7 @@ public class GenerateDaoCode {
         if (!serviceNameStartWithI) {
             config.setServiceName("%sService");
         }
+
         new AutoGenerator().setGlobalConfig(config)
                 .setDataSource(dataSourceConfig)
                 .setStrategy(strategyConfig)
