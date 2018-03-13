@@ -40,8 +40,7 @@ public class WarehouseApi {
     @Autowired
     private WarehouseService warehouseService;
 
-    public int initWarehouse(User user) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
+    public int initWarehouse(User user, Long companyId) {
         Warehouse dto = new Warehouse();
         dto.setWhName("默认仓库");
         dto.setWhType((short)0);
