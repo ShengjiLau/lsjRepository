@@ -212,7 +212,7 @@ public class GroupApi {
      */
     @ApiOperation(value = "组员工不存在列表v1")
     @RequestMapping(value = "/groupUserNotList", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_not_list')")
+/*    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_not_list')")*/
     public GroupResultDto groupUserNotList(@ApiParam(value = "组ID", required = true) @RequestParam Long groupId,
                                            @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
                                            @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
