@@ -17,6 +17,8 @@ public class ContractApproval {
 
     private Short result;
 
+    private Short actionType;
+
     private Short status;
 
     private String content;
@@ -77,6 +79,14 @@ public class ContractApproval {
 
     public void setResult(Short result) {
         this.result = result;
+    }
+
+    public Short getActionType() {
+        return actionType;
+    }
+
+    public void setActionType(Short actionType) {
+        this.actionType = actionType;
     }
 
     public Short getStatus() {
