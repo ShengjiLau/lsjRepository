@@ -93,7 +93,6 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     }
 
     //单位名称是否被使用(-1：没有被使用、0：和原来相同没改变、1：单位名称被使用)
-    @Override
     private int isUnitNameExist(CalcUnit calcUnit) {
         List<CalcUnit> calcUnitList=calcUnitMapper.selectCalcUnitList(calcUnit);
         if(calcUnitList!=null&&calcUnitList.size()>0){
