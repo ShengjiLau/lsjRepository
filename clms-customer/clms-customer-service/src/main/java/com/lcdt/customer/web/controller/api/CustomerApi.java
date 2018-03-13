@@ -678,7 +678,8 @@ public class CustomerApi {
                   if (pageInfo.getTotal()>0) {
                       List<Customer> customers = pageInfo.getList();
                       for (Customer customer1 : customers){
-                            if (customer1.getCollectionIds().indexOf(obj.getCollectionId().toString())>0) {
+
+                            if (customer1.getCollectionIds().indexOf(obj.getCollectionId().toString())>-1) {
                                 CustomerDto customerDto = new CustomerDto();
                                 customerDto.setCustomerId(customer1.getCustomerId());
                                 customerDto.setCustomerName(customer1.getCustomerName());
