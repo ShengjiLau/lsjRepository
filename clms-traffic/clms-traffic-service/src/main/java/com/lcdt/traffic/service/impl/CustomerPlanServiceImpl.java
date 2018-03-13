@@ -595,6 +595,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
 
            attachment.setOwnerCompany(ownCompany.getFullName());
            attachment.setAppUrl(ConstantVO.APP_URL);
+           attachment.setWaybillCode(waybill.getWaybillCode());
 
            attachment.setContractCustomer(waybillPlan.getCustomerName());
            attachment.setDestinationAdress(receiveAddress);
