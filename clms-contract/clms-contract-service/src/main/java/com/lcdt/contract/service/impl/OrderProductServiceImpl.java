@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.contract.dao.NonautomaticMapper;
 import com.lcdt.contract.dao.OrderProductMapper;
 import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.service.OrderProductService;
@@ -19,33 +19,39 @@ import com.lcdt.contract.service.OrderProductService;
  */
 @Service
 @Transactional
-public class OrderProductServiceimpl implements OrderProductService {
+public class OrderProductServiceImpl implements OrderProductService {
+	
 	@Autowired
 	private OrderProductMapper orderProductMapper;
+	
+	@Autowired
+	private NonautomaticMapper nonautomaticMapper;
 
 	@Override
 	public int addOrderProduct(OrderProduct orderProduct) {
-		int i =orderProductMapper.insert(orderProduct);
-		return i;
+		return orderProductMapper.insert(orderProduct);
 	}
 
 	@Override
 	public int modOrderProduct(OrderProduct orderProduct) {
-		int i=orderProductMapper.updateByPrimaryKey(orderProduct);
-		return i;
+		return orderProductMapper.updateByPrimaryKey(orderProduct);
 	}
 
 	@Override
 	public int delOrderProduct(Long OrderProductId) {
-		int i=orderProductMapper.deleteByPrimaryKey(OrderProductId);
-		return i;
+		return orderProductMapper.deleteByPrimaryKey(OrderProductId);
 	}
 
 	@Override
 	public PageInfo<List<OrderProduct>> OrderProductList(Long orderId) {
-		 PageInfo pageInfo = new PageInfo(orderProductMapper.selectByOrderId(orderId));
+		 PageInfo<List<OrderProduct>> pageInfo = new PageInfo(nonautomaticMapper.selectByOrderId(orderId));
 	        return pageInfo;
 		
+	}
+
+	@Override
+	public int delOrderProductByOrderId(Long orderId) {
+		return orderProductMapper.deleteByOrderId(orderId);
 	}
 
 }

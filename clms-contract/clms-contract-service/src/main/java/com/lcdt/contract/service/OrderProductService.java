@@ -37,6 +37,14 @@ public interface OrderProductService {
     int delOrderProduct(Long OrderProductId);
 
     /**
+     * 删除订单商品 
+     * @param Long
+     * @return int
+     */
+    int delOrderProductByOrderId(Long OrderId);
+    
+    
+    /**
      * 获取订单商品列表
      * @return PageInfo<List<OrderProduct>>
      */

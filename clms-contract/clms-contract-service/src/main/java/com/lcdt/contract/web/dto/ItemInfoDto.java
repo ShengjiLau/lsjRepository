@@ -16,6 +16,7 @@ public class ItemInfoDto extends ItemInfo implements Serializable{
 	private static final long serialVersionUID = 96362255L;
 	private String roughName;
 	private Long companyId;
+	//创建人id
 	private Long createId;
 	
 	public String getRoughName() {

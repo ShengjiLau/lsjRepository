@@ -21,6 +21,7 @@ import com.lcdt.contract.model.Order;
 import com.lcdt.contract.service.OrderService;
 import com.lcdt.contract.web.dto.OrderDto;
 import com.lcdt.contract.web.dto.PageBaseDto;
+import com.lcdt.contract.web.utils.SerialNumAutoGenerator;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -50,20 +51,18 @@ public class PurchaseOrderApi {
 	 */
 	@ApiOperation(value="采购订单列表",notes="采购订单列表数据")
 	@GetMapping("/list")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('order_list')")
-	public PageBaseDto<List<Order>> OrderList(@RequestParam @Validated OrderDto orderDto,
-			@ApiParam(value="第几页",required=true,defaultValue="1") @RequestParam Integer pageNum,
-			@ApiParam(value="每页条目数量",required=true,defaultValue="1")@RequestParam Integer pagesize){
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_list')")
+	public PageBaseDto<List<Order>> OrderList(@RequestParam @Validated OrderDto orderDto
+//			,@ApiParam(value="第几页",required=true,defaultValue="1") @RequestParam Integer pageNum,
+//			@ApiParam(value="每页条目数量",required=true,defaultValue="6")@RequestParam Integer pagesize
+			){
 		Long UserId=SecurityInfoGetter.getUser().getUserId();
 		Long companyId=SecurityInfoGetter.getCompanyId();
-		orderDto.setPageNum(pageNum);
-		orderDto.setPageSize(pagesize);
 		orderDto.setCompanyId(companyId);
 		orderDto.setCreateUserId(UserId);
 		PageInfo<List<Order>> pageInfoList = orderService.OrderList(orderDto);
 		logger.debug("采购订单条目数"+pageInfoList.getTotal());
-		logger.debug("pageInfoList:"+pageInfoList.toString());
-		PageBaseDto pageBaseDto = new PageBaseDto(pageInfoList.getList(),pageInfoList.getTotal());
+		PageBaseDto<List<Order>> pageBaseDto = new PageBaseDto<List<Order>>(pageInfoList.getList(),pageInfoList.getTotal());
 		return pageBaseDto;
 	}
 	
@@ -74,14 +73,16 @@ public class PurchaseOrderApi {
 	 */
 	@ApiOperation("新增采购订单")
 	@PostMapping("/addOrder")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_order')")
-	public JSONObject addOrder(@Validated Order order) {
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_purchase_order')")
+	public JSONObject addOrder(@Validated OrderDto orderDto) {
 		Long UserId=SecurityInfoGetter.getUser().getUserId();
 		Long companyId=SecurityInfoGetter.getCompanyId();
-		order.setCompanyId(companyId);
-		order.setCreateUserId(UserId);
-		order.setCreateTime(new Date());
-		int result =orderService.addOrder(order);
+		String orderSerialNum =SerialNumAutoGenerator.serialNoGenerate();
+		orderDto.setCompanyId(companyId);
+		orderDto.setCreateUserId(UserId);
+		orderDto.setOrderSerialNo(orderSerialNum);
+		orderDto.setCreateTime(new Date());
+		int result =orderService.addOrder(orderDto);
 		logger.debug("新增采购订单条目数:"+result);
 		if (result > 0) {
             JSONObject jsonObject = new JSONObject();
@@ -100,9 +101,9 @@ public class PurchaseOrderApi {
 	 */
 	@ApiOperation("修改采购订单")
 	@PostMapping("/modifyOrder")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('mod_order')")
-	public JSONObject modifyOrder(@Validated Order order) {
-	int result=orderService.modOrder(order);
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('mod_purchase_order')")
+	public JSONObject modifyOrder(@Validated OrderDto orderDto) {
+	int result=orderService.modOrder(orderDto);
 	logger.debug("修改采购订单条目数:"+result);
 	if (result > 0) {
         JSONObject jsonObject = new JSONObject();
@@ -121,8 +122,8 @@ public class PurchaseOrderApi {
 	 * @return JSONObject
 	 */
 	@ApiOperation("删除采购订单")
-	@PostMapping("/delOrder")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('del_order')")
+	@PostMapping("/deleteOrder")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('del_purchase_order')")
 	public JSONObject delOrder(@ApiParam(value="采购订单id",required=true) @RequestParam Long orderId) {
 		int result =orderService.delOrder(orderId);
 		logger.debug("删除销售订单条目数:"+result);

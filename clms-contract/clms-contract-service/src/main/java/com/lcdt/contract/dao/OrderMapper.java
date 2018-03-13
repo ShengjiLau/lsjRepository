@@ -1,10 +1,6 @@
 package com.lcdt.contract.dao;
 
-import java.util.List;
-
 import com.lcdt.contract.model.Order;
-import com.lcdt.contract.web.dto.OrderDto;
-
 
 public interface OrderMapper {
     /**
@@ -54,12 +50,4 @@ public interface OrderMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(Order record);
-    
-    
-    /**
-     * 条件查询
-     * @param OrderDto
-     * @return
-     */
-    List<Order> selectByCondition(OrderDto orderDto);
 }

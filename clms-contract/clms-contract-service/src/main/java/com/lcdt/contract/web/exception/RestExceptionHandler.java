@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +19,7 @@ public class RestExceptionHandler {
 	private Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
 
 
-	@org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
+	@ExceptionHandler(Exception.class)
 	@ResponseBody
 	public JSONObject defaultErrorHandler(HttpServletRequest request,Exception e){
 		logger.error(e.getMessage(),e);
