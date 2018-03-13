@@ -65,4 +65,8 @@
     #{item.companyId,jdbcType=BIGINT})
     </foreach>
   </insert>
+  <select id="selectByDriverGroupId" resultType="java.lang.Integer">
+    select count(driver_group_id) from t_driver_group_relationship
+    where driver_group_id = #{arg0} and company_id = #{arg1}
+  </select>
 </mapper>

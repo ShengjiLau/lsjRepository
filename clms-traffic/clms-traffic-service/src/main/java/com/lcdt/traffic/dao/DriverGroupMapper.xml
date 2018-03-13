@@ -57,7 +57,7 @@
   </update>
   <select id="selectAll" resultMap="BaseResultMap">
     select driver_group_id, group_name, group_remark, company_id
-    from t_driver_group where company_id = #{companyId,jdbcType=BIGINT} and is_deleted = 0
+    from t_driver_group where company_id = #{companyId,jdbcType=BIGINT} and is_deleted = 0 order by create_date desc
   </select>
   <select id="selectByGroupName" resultType="java.lang.Integer">
     select count(driver_group_id)
