@@ -72,9 +72,14 @@ public class DriverGroupApi {
             jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
             return jsonObject;
         }
-        driverGroupService.modDriverGroup(driverGroup);
-        jsonObject.put("code", 0);
-        jsonObject.put("message", "修改成功");
+        int rows = driverGroupService.modDriverGroup(driverGroup);
+        if(rows>0){
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "修改成功");
+        }else{
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "删除失败！");
+        }
         return jsonObject;
     }
 

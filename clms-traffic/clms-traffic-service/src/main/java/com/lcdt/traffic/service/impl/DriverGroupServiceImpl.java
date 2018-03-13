@@ -3,6 +3,7 @@ package com.lcdt.traffic.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.DriverGroupMapper;
+import com.lcdt.traffic.dao.DriverGroupRelationshipMapper;
 import com.lcdt.traffic.model.DriverAndGroup;
 import com.lcdt.traffic.model.DriverGroup;
 import com.lcdt.traffic.service.DriverGroupService;
@@ -25,6 +26,9 @@ public class DriverGroupServiceImpl implements DriverGroupService {
     @Autowired
     private DriverGroupMapper driverGroupMapper;
 
+    @Autowired
+    private DriverGroupRelationshipMapper driverGroupRelationshipMapper;
+
     @Override
     public int addDriverGroup(DriverGroup driverGroup) {
         int count = driverGroupMapper.selectByGroupName(driverGroup.getCompanyId(),driverGroup.getGroupName(),null);
@@ -45,6 +49,10 @@ public class DriverGroupServiceImpl implements DriverGroupService {
 
     @Override
     public int delDriverGroup(DriverGroup driverGroup) {
+        int count = driverGroupRelationshipMapper.selectByDriverGroupId(driverGroup.getDriverGroupId(),driverGroup.getCompanyId());
+        if(count>0){
+            throw new RuntimeException("有司机属于此分组，不能删除！");
+        }
         return driverGroupMapper.deleteByUpdate(driverGroup);
     }
 
