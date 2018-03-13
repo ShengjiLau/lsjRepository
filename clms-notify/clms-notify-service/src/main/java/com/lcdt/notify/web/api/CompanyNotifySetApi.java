@@ -9,6 +9,7 @@ import com.lcdt.notify.web.PageResultDto;
 import com.lcdt.notify.web.dto.NotifySetDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,6 +30,7 @@ public class CompanyNotifySetApi {
      */
     @ApiOperation("返回设置通知列表")
     @RequestMapping("/list")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('notify_set_list')")
     public PageResultDto<NotifySetDto> alltemplateSetting(String category, Integer pageNo, Integer pageSize){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
@@ -38,6 +40,7 @@ public class CompanyNotifySetApi {
 
     @ApiOperation("短信通知开关")
     @RequestMapping("/toggersms")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('notify_set_toggle')")
     public CompanyNotifySetting customeNotifyTemplate(Long notifyId,boolean isEnable) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         CompanyNotifySetting companyNotifySetting = notifyService.setNotifyEnable(companyId, notifyId, isEnable);
