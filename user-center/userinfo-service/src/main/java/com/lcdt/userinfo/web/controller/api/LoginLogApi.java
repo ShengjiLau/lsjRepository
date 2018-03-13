@@ -26,6 +26,7 @@ public class LoginLogApi {
     LoginLogMapper dao;
 
     @RequestMapping(value = "/loginlog",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('login_log_list')")
     public PageResultDto companyUserLogs(
             @RequestParam(required = false) Date beginTime,
             @RequestParam(required = false) Date endTime,
