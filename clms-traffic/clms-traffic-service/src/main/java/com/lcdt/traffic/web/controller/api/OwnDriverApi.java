@@ -158,7 +158,7 @@ public class OwnDriverApi {
 
     @ApiOperation(value = "司机分组管理", notes = "设置司机所属的分组")
     @PostMapping("/groupset")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_setgroup')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_group')")
     public JSONObject setGroup(@Validated @RequestBody OwnDriverGroupRelationshipDto ownDriverGroupRelationshipDto, BindingResult bindingResult) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
@@ -190,7 +190,7 @@ public class OwnDriverApi {
 
     @ApiOperation(value = "获取司机所属分组", notes = "获取司机所属分组")
     @GetMapping("/drivergroup")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_drivergroup')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_group')")
     public PageBaseDto<List<DriverGroupDto>> setGroup() {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
 //        Long ownDriverId = ownDriver.getOwnDriverId();

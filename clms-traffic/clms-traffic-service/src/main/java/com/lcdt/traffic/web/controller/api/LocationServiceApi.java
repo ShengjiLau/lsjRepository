@@ -88,6 +88,7 @@ public class LocationServiceApi {
         }*/
         try {
             int row = driverService.modGpsStatus(driver);
+            GprsLocationBo.getInstance().authOpen(mobile);
             if(row>0){
                 jsonObject.put("code", 0);
                 jsonObject.put("message", "开通成功");

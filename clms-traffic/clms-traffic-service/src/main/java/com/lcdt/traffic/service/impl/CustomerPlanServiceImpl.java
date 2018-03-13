@@ -485,15 +485,12 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         if (null == waybillPlan) {throw new WaybillPlanException("计划不存在！"); }
 
-
         Map map = new HashMap();
         map.put("splitGoodsId",dto.getSplitGoodsId());
         map.put("carrierCompanyId",dto.getCompanyId());
         map.put("isDeleted",0);
         SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(map);
         if (null==splitGoods) { throw new RuntimeException("没有派单记录，不能派车！"); }
-
-
 
         SplitGoods tObj = new SplitGoods();
         tObj.setSplitGoodsId(dto.getSplitGoodsId());
@@ -554,7 +551,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             for (PlanDetail obj1 :list) {//剩余=原剩余-本次派车数
                 for (SplitGoodsDetail obj : splitGoodsDetails) {
                     if(obj1.getPlanDetailId().equals(obj.getPlanDetailId())) {
-                        obj.setRemainAmount(obj.getRemainAmount() - obj.getAllotAmount());
+                        obj.setRemainAmount(obj.getRemainAmount() - obj1.getAllotAmount());
                         splitGoodsDetailMapper.updateByPrimaryKey(obj);
                         break;
                     }
@@ -598,6 +595,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
 
            attachment.setOwnerCompany(ownCompany.getFullName());
            attachment.setAppUrl(ConstantVO.APP_URL);
+           attachment.setWaybillCode(waybill.getWaybillCode());
 
            attachment.setContractCustomer(waybillPlan.getCustomerName());
            attachment.setDestinationAdress(receiveAddress);

@@ -20,6 +20,7 @@ public class DefaultNotifyReceiver implements NotifyReceiver, Serializable {
     //司机电话
     private String driverPhoneNum;
 
+
     //接收人电话
     private String receivePhoneNum;
 
