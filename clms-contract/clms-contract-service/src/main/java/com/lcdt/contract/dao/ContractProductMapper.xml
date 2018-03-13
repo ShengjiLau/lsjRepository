@@ -79,8 +79,14 @@
     </foreach>
   </update>
 
-  <select id="selectCpIdByContractId" parameterType="java.lang.Long" resultType="java.lang.Long">
+  <select id="selectCpIdsByContractId" parameterType="java.lang.Long" resultType="java.lang.Long">
     select cp_id
     from t_contract_product where contract_id = #{contractId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectCpsByContractId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select cp_id, contract_id, product_name, product_code, sku, num, price, payment
+    from t_contract_product
+    where contract_id = #{contractId,jdbcType=BIGINT}
   </select>
 </mapper>
