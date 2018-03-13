@@ -62,5 +62,5 @@ public interface CalcUnitService {
      * @param calcUnit
      * @return
      */
-    boolean isUnitNameExist(CalcUnit calcUnit);
+    int isUnitNameExist(CalcUnit calcUnit);
 }

@@ -2,6 +2,7 @@ package com.lcdt.userinfo.web.controller.api;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
@@ -94,6 +95,7 @@ public class EmployeeApi {
     public PageResultDto employeeList(@ApiParam(required = true) Integer pageNo, @ApiParam(required = true) Integer pageSize, SearchEmployeeDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         dto.setCompanyId(companyId);
+        PageHelper.startPage(pageNo, pageSize);
         List<UserCompRel> userCompRels = employeeService.queryAllEmployee(dto);
         PageResultDto<UserCompRel> userCompRelPageResultDto = new PageResultDto<>(userCompRels);
         return userCompRelPageResultDto;
