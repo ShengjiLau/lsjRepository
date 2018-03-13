@@ -203,8 +203,6 @@ public class CustomerApi {
         customer.setCompanyId(companyId);
         customer.setCreateId(loginUser.getUserId());
         customer.setCreateName(loginUser.getRealName());
-
-
         String message = null;
         JSONObject jsonObject = new JSONObject();
         int code = -1;
@@ -274,12 +272,10 @@ public class CustomerApi {
         if (customer.getBindCpid()!=null) {
             throw new CustomerException("此客户已绑定cLMS企业，不能删除！");
         }
-
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
         int flag = customerService.customerRemove(customer);
-
         jsonObject.put("message",flag==1?"":"删除失败");
         jsonObject.put("code",flag==1?0:-1);
         return jsonObject.toString();
