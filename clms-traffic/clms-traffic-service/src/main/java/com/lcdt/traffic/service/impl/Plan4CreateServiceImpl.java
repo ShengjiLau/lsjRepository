@@ -355,6 +355,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         waybillDto.setCreateName(vo.getCreateName());
                         waybillDto.setDriverPhone(vo.getCarrierPhone());
                         waybillDto.setVechicleNum(vo.getCarrierVehicle());
+                        waybillDto.setWaybillRemark(vo.getPlanRemark());
                         if(!StringUtils.isEmpty(vo.getCarrierCollectionIds())) {
                             waybillDto.setDriverName(vo.getCarrierCollectionNames());
                             waybillDto.setDriverId(Long.valueOf(vo.getCarrierCollectionIds()));
