@@ -40,22 +40,6 @@ public class WarehouseApi {
     @Autowired
     private WarehouseService warehouseService;
 
-    public int initWarehouse(User user, Long companyId) {
-        Warehouse dto = new Warehouse();
-        dto.setWhName("默认仓库");
-        dto.setWhType((short)0);
-        dto.setPrincipal(user.getRealName());
-        dto.setMobile(user.getPhone());
-        dto.setWhStatus((short)0);
-        dto.setCreateId(user.getUserId());
-        dto.setCreateName(user.getRealName());
-        dto.setCreateDate(new Date());
-        dto.setIsDeleted((short)0);
-        dto.setCompanyId(companyId);
-        int result = warehouseService.addWarehouse(dto);
-        return result;
-    }
-
     @ApiOperation("仓库管理——列表")
     @RequestMapping(value = "/warehouseList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('warehouse_list')")
