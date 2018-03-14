@@ -666,4 +666,14 @@
     order by id desc
   </select>
 
+  <update id="updateWaybillByTransferRecord" parameterType="com.lcdt.traffic.model.Waybill">
+    update t_waybill
+    set driver_id = #{driverId,jdbcType=BIGINT},
+    driver_name = #{driverName,jdbcType=VARCHAR},
+    driver_phone = #{driverPhone,jdbcType=VARCHAR},
+    vechicle_id = #{vechicleId,jdbcType=BIGINT},
+    vechicle_num = #{vechicleNum,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
 </mapper>

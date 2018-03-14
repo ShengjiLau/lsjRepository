@@ -8,10 +8,12 @@ import com.lcdt.notify.model.DefaultNotifySender;
 import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.dao.WaybillMapper;
 import com.lcdt.traffic.dao.WaybillTransferRecordMapper;
+import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillTransferRecord;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.WaybillSenderNotify;
+import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.service.WaybillTransferRecordService;
 import com.lcdt.traffic.web.dto.WaybillTransferRecordDto;
 import com.lcdt.userinfo.model.User;
@@ -61,6 +63,13 @@ public class WaybillTransferRecordServiceImpl implements WaybillTransferRecordSe
             System.out.println("客户换车——————————————————————————————————————————————");
             waybillSenderNotify.customerTranserRecordSendNotify(dto.getWaybillId().toString(),dto.getCompanyId(),dto.getCreateId(),waybillTransferRecord);
         }
+
+        //更新主单里的司机、车辆信息
+        Waybill waybill =new Waybill();
+        BeanUtils.copyProperties(dto,waybill);
+        waybill.setId(dto.getWaybillId());
+        result+=waybillMapper.updateWaybillByTransferRecord(waybill);
+
         return result;
     }
 
