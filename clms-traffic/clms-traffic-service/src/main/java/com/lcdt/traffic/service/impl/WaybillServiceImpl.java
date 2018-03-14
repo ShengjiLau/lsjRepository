@@ -442,6 +442,7 @@ public class WaybillServiceImpl implements WaybillService {
                         waybillPlan.setUpdateTime(new Date());
                         waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED);
                         waybillPlan.setWaybillPlanId(waybill.getWaybillPlanId());
+                        waybillPlan.setFinishDate(new Date());
                         planService.updatePlanStatusByWaybill(waybillPlan);
                     }
                 }

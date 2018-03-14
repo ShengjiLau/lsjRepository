@@ -152,6 +152,7 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/updateRoleInfo",method = RequestMethod.POST)
 	@ApiOperation("修改角色信息")
+	@PreAuthorize("hasAnyAuthority('role_edit') or hasRole('ROLE_SYS_ADMIN')")
 	public Role updateRole(Long roleId,@RequestParam(required = false) String roleName,@RequestParam(required = false) Boolean valid){
 		Role role = roleService.selectById(roleId);
 

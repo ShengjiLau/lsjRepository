@@ -595,7 +595,7 @@
             and  pubdate >= #{pubdateBegin,jdbcType=TIMESTAMP}
           </if>
           <if test="pubdateEnd != null and pubdateEnd != ''">
-            and  #{pubdate,jdbcType=TIMESTAMP} >= pubdate
+            and  #{pubdateEnd,jdbcType=TIMESTAMP} >= pubdate
           </if>
           <if test="sendOrderType != null">
             and  send_order_type = #{sendOrderType,jdbcType=SMALLINT}
