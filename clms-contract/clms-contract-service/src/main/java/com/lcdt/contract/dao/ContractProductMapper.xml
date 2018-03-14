@@ -50,23 +50,23 @@
     price, payment)
     values
     <foreach item="item" collection="list" separator=",">
-      (#{cpId,jdbcType=BIGINT}, #{contractId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR},
-      #{productCode,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER},
-      #{price,jdbcType=DECIMAL}, #{payment,jdbcType=DECIMAL})
+      (#{item.cpId,jdbcType=BIGINT}, #{item.contractId,jdbcType=BIGINT}, #{item.productName,jdbcType=VARCHAR},
+      #{item.productCode,jdbcType=VARCHAR}, #{item.sku,jdbcType=VARCHAR}, #{item.num,jdbcType=INTEGER},
+      #{item.price,jdbcType=DECIMAL}, #{item.payment,jdbcType=DECIMAL})
     </foreach>
   </insert>
 
   <update id="updateBatch" parameterType="java.util.List">
     <foreach separator=";" index="index" item="item" collection="list" close="" open="">
       update t_contract_product
-      set contract_id = #{contractId,jdbcType=BIGINT},
-      product_name = #{productName,jdbcType=VARCHAR},
-      product_code = #{productCode,jdbcType=VARCHAR},
-      sku = #{sku,jdbcType=VARCHAR},
-      num = #{num,jdbcType=INTEGER},
-      price = #{price,jdbcType=DECIMAL},
-      payment = #{payment,jdbcType=DECIMAL}
-      where cp_id = #{cpId,jdbcType=BIGINT}
+      set contract_id = #{item.contractId,jdbcType=BIGINT},
+      product_name = #{item.productName,jdbcType=VARCHAR},
+      product_code = #{item.productCode,jdbcType=VARCHAR},
+      sku = #{item.sku,jdbcType=VARCHAR},
+      num = #{item.num,jdbcType=INTEGER},
+      price = #{item.price,jdbcType=DECIMAL},
+      payment = #{item.payment,jdbcType=DECIMAL}
+      where cp_id = #{item.cpId,jdbcType=BIGINT}
     </foreach>
   </update>
 
