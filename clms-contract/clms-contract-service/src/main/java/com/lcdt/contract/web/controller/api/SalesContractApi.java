@@ -36,7 +36,9 @@ public class SalesContractApi {
     @ApiOperation(value = "合同列表", notes = "合同列表数据")
     @GetMapping("/contractlist")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_list')")
-    public PageBaseDto<List<Contract>> contractList(ContractDto contractDto) {
+    public PageBaseDto<List<Contract>> contractList(@Validated ContractDto contractDto,
+                                                    @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                                    @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         contractDto.setCompanyId(companyId);
 
@@ -87,7 +89,7 @@ public class SalesContractApi {
     @RequestMapping(value = "/updateContractStatus", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('update_sales_contract_status')")
     public JSONObject updateContractStatus(@ApiParam(value = "合同ID",required = true) @RequestParam Long contractId,
-                                        @ApiParam(value = "状态",required = true) @RequestParam short contractStatus) {
+                                        @ApiParam(value = "状态 0-生效 3-失效",required = true) @RequestParam short contractStatus) {
         Contract dto = new Contract();
         dto.setContractId(contractId);
         dto.setContractStatus(contractStatus);

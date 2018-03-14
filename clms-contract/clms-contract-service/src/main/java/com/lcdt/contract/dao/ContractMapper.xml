@@ -102,8 +102,8 @@
       <if test="contractCode!=null and contractCode!=''">
         and contract_code like concat('%',#{contractCode,jdbcType=VARCHAR},'%')
       </if>
-      <if test="signBeginDate!=null and signBeginDate!=''">
-        and sign_date &gt; #{signBeginDate,jdbcType=TIMESTAMP} and sign_date &lt; #{signEndDate,jdbcType=TIMESTAMP}
+      <if test="signDate!=null and signDate!=''">
+        and sign_date &gt; #{signDate,jdbcType=TIMESTAMP} and sign_date &lt; #{signDate,jdbcType=TIMESTAMP}
       </if>
       <if test="contractStatus!=null and contractStatus!=''">
         and contract_status = #{contractStatus,jdbcType=SMALLINT}
