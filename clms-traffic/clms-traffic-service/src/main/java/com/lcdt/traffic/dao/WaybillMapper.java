@@ -155,4 +155,11 @@ public interface WaybillMapper {
      * 根据waybillIds查询运单
      */
     List<WaybillDao> selectWaybillByWaybillIds(String waybillIds);
+
+
+    /**
+     * 新增换车记录时更新运单司机信息
+     */
+
+    int updateWaybillByTransferRecord(Waybill waybill);
 }
