@@ -139,7 +139,7 @@ label{
 }
 .signin-form{
   border-top: 1px solid #f0f0f0;
-  padding: 40px 33px 0 33px;
+  padding: 40px 0 0 0;
 }
 .form-row{
   font-size: 16px;
@@ -156,7 +156,7 @@ label{
   width:120px;
 }
 .form-row>label{
-  width:100px;
+  width:85px;
   margin-right: 8px;
 }
 .form-row .tips a{
@@ -234,7 +234,7 @@ button.inline-btn.normal{
 
 .login-btn-row.form-row{
   width: 300px;
-  margin-left: 110px;
+  margin-left: 95px;
 }
 .capcha_img{
   display: inline-block;
