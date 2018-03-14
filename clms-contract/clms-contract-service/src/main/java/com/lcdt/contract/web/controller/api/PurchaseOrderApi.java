@@ -33,11 +33,11 @@ import io.swagger.annotations.ApiParam;
  * @date 2018年3月1日下午6:22:02
  * @version
  */
-@Api(value="采购订单管理Api",description="采购订单操作")
-@RestController
-@RequestMapping("/purchaseOrder")
-public class PurchaseOrderApi {
-	
+	@Api(value="采购订单管理Api",description="采购订单操作")
+	@RestController
+	@RequestMapping("/purchaseOrder")
+	public class PurchaseOrderApi {
+		
 	Logger logger = LoggerFactory.getLogger(PurchaseOrderApi.class);
 	
 	@Autowired

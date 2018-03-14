@@ -34,10 +34,10 @@ import io.swagger.annotations.ApiParam;
  * @date 2018年3月5日下午6:18:55
  * @version
  */
-@Api(value="销售订单管理Api",description="销售订单操作")
-@RestController
-@RequestMapping("/salesOrder")
-public class SalesOrderApi {
+	@Api(value="销售订单管理Api",description="销售订单操作")
+	@RestController
+	@RequestMapping("/salesOrder")
+	public class SalesOrderApi {
 	
 	Logger logger = LoggerFactory.getLogger(SalesOrderApi.class);
 	

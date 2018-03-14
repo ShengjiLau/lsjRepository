@@ -4,12 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.validator.constraints.NotBlank;
+
 
 import com.lcdt.contract.model.Order;
 import com.lcdt.contract.model.OrderProduct;
 
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author Sheng-ji Lau

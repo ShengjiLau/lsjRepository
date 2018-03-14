@@ -27,10 +27,10 @@ import io.swagger.annotations.ApiOperation;
  * @version
  */
 
-@RestController
-@Api(value="信息查询Api",description="商品与业务组")
-@RequestMapping("/getInfo")
-public class ItemInfoApi {
+	@RestController
+	@Api(value="信息查询Api",description="商品与业务组")
+	@RequestMapping("/getInfo")
+	public class ItemInfoApi {
 	
 	Logger logger = LoggerFactory.getLogger(ItemInfoApi.class);
 	
@@ -86,4 +86,4 @@ public class ItemInfoApi {
 		return pageBaseDto;
 	}
 	
-}
+	}

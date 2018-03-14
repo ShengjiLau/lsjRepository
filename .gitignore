@@ -87,3 +87,7 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+# about eclipse
+.settings/
+.classpath
+.project
