@@ -81,6 +81,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
         vo.setUpdateName(dto.getCreateName());
         vo.setUpdateTime(vo.getCreateDate());
         vo.setIsDeleted((short) 0); //未删除
+        vo.setPubdate(new Date());//发布时间
         try {
             if (!StringUtils.isEmpty(dto.getBidingStart())) { //竞价开始
                 vo.setBidingStart(DateUtility.string2Date(dto.getBidingStart(),"yyyy-MM-dd HH:mm:ss"));

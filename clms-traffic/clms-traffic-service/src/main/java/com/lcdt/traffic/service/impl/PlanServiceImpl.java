@@ -473,6 +473,8 @@ public class PlanServiceImpl implements PlanService {
         waybillPlan.setUpdateTime(dt);
         waybillPlan.setUpdateId(user.getUserId());
         waybillPlan.setUpdateName(user.getRealName());
+        waybillPlan.setCancelDate(new Date());
+        waybillPlan.setCancelMan(user.getRealName());
         waybillPlanMapper.updateByPrimaryKey(waybillPlan);
         return 1;
     }
