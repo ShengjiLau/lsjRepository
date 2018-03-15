@@ -615,7 +615,7 @@
     from t_waybill
     where(company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
     and waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT}
-    and is_deleted = 0
+    and is_deleted = 0 and waybill_status !=8
     order by id desc
   </select>
 
@@ -665,5 +665,15 @@
     and is_deleted = 0
     order by id desc
   </select>
+
+  <update id="updateWaybillByTransferRecord" parameterType="com.lcdt.traffic.model.Waybill">
+    update t_waybill
+    set driver_id = #{driverId,jdbcType=BIGINT},
+    driver_name = #{driverName,jdbcType=VARCHAR},
+    driver_phone = #{driverPhone,jdbcType=VARCHAR},
+    vechicle_id = #{vechicleId,jdbcType=BIGINT},
+    vechicle_num = #{vechicleNum,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
 
 </mapper>

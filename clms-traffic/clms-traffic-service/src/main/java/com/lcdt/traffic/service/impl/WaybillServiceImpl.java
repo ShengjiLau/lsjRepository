@@ -19,6 +19,7 @@ import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.WaybillSenderNotify;
 import com.lcdt.traffic.service.PlanService;
+import com.lcdt.traffic.service.SplitGoodsService;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.GprsLocationBo;
 import com.lcdt.traffic.vo.ConstantVO;
@@ -77,6 +78,9 @@ public class WaybillServiceImpl implements WaybillService {
     @Autowired
     private WaybillSenderNotify waybillSenderNotify;
 
+    @Autowired
+    private SplitGoodsService splitGoodsService;
+
     @Override
     public Waybill addWaybill(WaybillDto waybillDto) {
         int result = 0;
@@ -104,8 +108,11 @@ public class WaybillServiceImpl implements WaybillService {
         }
 
         //设置承运商名字
-        Company company=companyService.selectById(waybill.getCarrierCompanyId());
-        waybill.setCarrierCompanyName(company.getFullName());
+        Company carrierCompany=companyService.selectById(waybill.getCarrierCompanyId());
+        waybill.setCarrierCompanyName(carrierCompany.getFullName());
+        //设置货主的名字c
+        Company company=companyService.selectById(waybill.getCompanyId());
+        waybill.setWaybillSource(company.getFullName());
 
         //新增运单
         result += waybillMapper.insert(waybill);
@@ -411,11 +418,21 @@ public class WaybillServiceImpl implements WaybillService {
             if(list!=null&&list.size()>0){
                 for(WaybillDao dao:list){
                     List<WaybillItems> itemsList=dao.getWaybillItemsList();
+                    List<SplitGoodsDetail> splitGoodsDetailList=new ArrayList<SplitGoodsDetail>();
                     for(WaybillItems item:itemsList){
                         //根据派单货物明细id更新派单货物明细数量
+                        SplitGoodsDetail sp=new SplitGoodsDetail();
                         float amount=item.getAmount();
                         Long splitGoodsDetailId=item.getSplitGoodsDetailId();
+                        sp.setUpdateId((Long)map.get("updateId"));
+                        sp.setUpdateName((String)map.get("updateName"));
+                        sp.setUpdateTime(new Date());
+                        sp.setRemainAmount(amount);
+                        sp.setSplitGoodsDetailId(splitGoodsDetailId);
+                        splitGoodsDetailList.add(sp);
                     }
+                    splitGoodsService.waybillCancel4SplitGoods(splitGoodsDetailList);
+
                 }
 
             }

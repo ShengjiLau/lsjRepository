@@ -522,6 +522,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
     }
 
 
+
     /***
      * 派单取消更改派单数量、计划数量
      *
@@ -565,6 +566,34 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
         }
     }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Integer waybillCancel4SplitGoods(List<SplitGoodsDetail> splitGoodsDetails) {
+          int flag = -1;
+          if (splitGoodsDetails!=null && splitGoodsDetails.size()>0) {
+              List<SplitGoodsDetail> resultList = new ArrayList<SplitGoodsDetail>();
+              for (SplitGoodsDetail splitGoodsDetail :splitGoodsDetails) {
+                  SplitGoodsDetail splitGoodsDetail11 = splitGoodsDetailMapper.selectByPrimaryKey(splitGoodsDetail.getSplitGoodsDetailId());
+                  if (splitGoodsDetail11!=null) {
+                     splitGoodsDetail11.setUpdateId(splitGoodsDetail.getUpdateId());
+                     splitGoodsDetail11.setUpdateTime(splitGoodsDetail.getUpdateTime());
+                     splitGoodsDetail11.setUpdateName(splitGoodsDetail.getUpdateName());
+                     splitGoodsDetail11.setRemainAmount(splitGoodsDetail.getRemainAmount()+splitGoodsDetail11.getRemainAmount());
+                     resultList.add(splitGoodsDetail11);
+                  }
+              }
+              if (resultList.size()>0) { //
+                 flag = splitGoodsDetailMapper.batchUpdateSplitGoodsDetail(resultList);
+
+              }
+          }
+          return flag;
+    }
+
+
+
 
 
 }
