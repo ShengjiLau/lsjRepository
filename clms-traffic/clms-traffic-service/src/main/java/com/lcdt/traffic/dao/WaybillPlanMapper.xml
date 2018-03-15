@@ -830,7 +830,7 @@
         and ${companyIds}
       </if>
       <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        or ${carrierCollectionIds}
+        and ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
@@ -839,6 +839,14 @@
   <!--客户计划（已派车）
       查询条件：派单时间
        满足前提条件：计划派单关联计划，同时派单（派单当前登录人所在的企业）的货物剩余数量=0的
+
+             and sp.split_goods_id in (
+        select a.split_goods_id from t_split_goods_detail as a
+        where split_goods_detail_id = (select max(b.split_goods_detail_id)
+        from t_split_goods_detail as b
+        where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
+        and sp.company_id = a.company_id and a.is_deleted=0
+      )
    -->
   <select id="customerPlanList4VehicleHave" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
@@ -856,13 +864,7 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      and sp.split_goods_id in (
-        select a.split_goods_id from t_split_goods_detail as a
-        where split_goods_detail_id = (select max(b.split_goods_detail_id)
-        from t_split_goods_detail as b
-        where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
-        and sp.company_id = a.company_id and a.is_deleted=0
-      )
+      and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
       <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
@@ -904,6 +906,14 @@
   <!--客户计划（已完成）
          查询条件：派单时间
           满足前提条件：计划派单关联计划，派单（派单当前登录人所在的企业）的货物剩余数量=0的，并且该派单下的运单全部完成的。
+
+                and sp.split_goods_id in (
+          select a.split_goods_id from t_split_goods_detail as a
+          where split_goods_detail_id = (select max(b.split_goods_detail_id)
+          from t_split_goods_detail as b
+          where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
+          and sp.company_id = a.company_id and a.is_deleted=0
+      )
      -->
   <select id="customerPlanList4Completed" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
@@ -921,13 +931,7 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      and sp.split_goods_id in (
-          select a.split_goods_id from t_split_goods_detail as a
-          where split_goods_detail_id = (select max(b.split_goods_detail_id)
-          from t_split_goods_detail as b
-          where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
-          and sp.company_id = a.company_id and a.is_deleted=0
-      )
+      and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
       and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status!=7 )=0
       <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
@@ -961,7 +965,7 @@
         and ${companyIds}
       </if>
       <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        or ${carrierCollectionIds}
+        and ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
@@ -1026,7 +1030,7 @@
         and ${companyIds}
       </if>
       <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        or ${carrierCollectionIds}
+        and ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
