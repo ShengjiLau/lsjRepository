@@ -12,4 +12,6 @@ public interface SmsCountService {
 
     boolean checkProductCount(Long companyId,Integer num,String serviceName);
 
+    int getProductCount(Long companyId,String serviceName);
+
 }

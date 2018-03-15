@@ -229,4 +229,24 @@ public class LocationServiceApi {
         return pageBaseDto;
     }
 
+    @ApiOperation(value = "基站定位剩余条数", notes = "获取基站定位剩余条数")
+    @GetMapping("/querycount")
+    public JSONObject queryLocation() {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        JSONObject jsonObject = new JSONObject();
+        try {
+            int count = balanceCheckBo.getGmsCount(companyId);
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "请求成功");
+            JSONObject gmsCount = new JSONObject();
+            gmsCount.put("gmsCount",count);
+            jsonObject.put("data",gmsCount);
+        } catch (Exception e) {
+            e.printStackTrace();
+            jsonObject.put("code",-1);
+            jsonObject.put("message", "请求失败");
+        }
+        return jsonObject;
+    }
+
 }
