@@ -2,19 +2,18 @@ package com.lcdt.contract.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.contract.dao.*;
-import com.lcdt.contract.model.*;
+import com.lcdt.contract.dao.ContractMapper;
+import com.lcdt.contract.dao.ContractProductMapper;
+import com.lcdt.contract.model.Contract;
 
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.ContractDto;
 
 
+import com.lcdt.contract.model.ContractApproval;
+import com.lcdt.contract.model.ContractProduct;
 import com.lcdt.contract.web.dto.ContractDto;
 import com.lcdt.contract.service.ContractService;
-import com.lcdt.userinfo.model.Group;
-import com.lcdt.userinfo.model.User;
-import com.lcdt.userinfo.model.UserCompRel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,12 +32,6 @@ public class ContractServiceImpl implements ContractService {
     private ContractMapper contractMapper;
     @Autowired
     private ContractProductMapper contractProductMapper;
-    @Autowired
-    private ContractApprovalMapper contractApprovalMapper;
-    @Autowired
-    private OrderMapper orderMapper;
-    @Autowired
-    private OrderProductMapper orderProductMapper;
 
     @Override
     public int addContract(ContractDto dto) {
@@ -52,25 +45,6 @@ public class ContractServiceImpl implements ContractService {
             }
             result += contractProductMapper.insertBatch(dto.getContractProductList());  //批量插入商品
         }
-        //审批流程添加
-        if(null!=dto.getContractApprovalList() && dto.getContractApprovalList().size() > 0){
-            /*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
-            ContractApproval contractApproval = new ContractApproval();
-//            Long companyId = SecurityInfoGetter.getCompanyId();
-            User user = SecurityInfoGetter.getUser();
-            UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
-            contractApproval.setName(user.getRealName());
-            contractApproval.setUserId(user.getUserId());
-            //todo 这个地方暂时这么处理，按一般情况一个人不可能属于多个部门,不知道为什么叫DeptNames
-            contractApproval.setDeptName(userCompRel.getDeptNames());
-            contractApproval.setSort(0);    // 0 为创建着
-            dto.getContractApprovalList().add(contractApproval);
-            for(ContractApproval ca : dto.getContractApprovalList()){
-                ca.setContractId(contract.getContractId()); //设置关联合同id
-            }
-            contractApprovalMapper.insertBatch(dto.getContractApprovalList());
-
-        }
         return result;
     }
 
@@ -80,7 +54,7 @@ public class ContractServiceImpl implements ContractService {
         BeanUtils.copyProperties(dto, contract); //复制对象属性
         int result = contractMapper.updateByPrimaryKey(contract);
         //获取该合同下面的商品cpId用来匹配被删除的商品
-        List<Long> cpIdList = contractProductMapper.selectCpIdsByContractId(contract.getContractId());
+        List<Long> cpIdList = contractProductMapper.selectCpIdByContractId(contract.getContractId());
         List<ContractProduct> list1 = new ArrayList<>();
         List<ContractProduct> list2 = new ArrayList<>();
         if (dto.getContractProductList() != null && dto.getContractProductList().size() > 0) {
@@ -132,42 +106,6 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public int modContractStatus(Contract contract) {
         int result = contractMapper.updateContractStatus(contract);
-        return result;
-    }
-
-    @Override
-    public int createOrderByContract(Long contractId) {
-        int result = 0;
-        Contract contract = contractMapper.selectByPrimaryKey(contractId);
-        if(contract != null){
-            Order order = new Order();
-            order.setContractCode(contract.getContractCode());
-            order.setOrderType(contract.getType());
-            order.setPayType(contract.getPayType());
-
-            order.setGroupId(contract.getGroupId());
-            order.setCompanyId(contract.getCompanyId());
-            order.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
-            order.setCreateTime(new Date());
-            result = orderMapper.insert(order);
-
-            List<ContractProduct> cpList = contractProductMapper.selectCpsByContractId(contractId);
-            if(cpList != null && cpList.size() > 0){
-                List<OrderProduct> opList = new ArrayList<>();
-                //合同商品值赋到订单商品
-                for (ContractProduct cp : cpList) {
-                    OrderProduct op = new OrderProduct();
-                    op.setOrderId(order.getOrderId());
-                    op.setName(cp.getProductName());
-                    op.setCode(cp.getProductCode());
-                    op.setSku(cp.getSku());
-                    op.setNum(cp.getNum());
-                    op.setPrice(cp.getPrice());
-                    op.setTotal(cp.getPayment());
-                }
-//                result += orderProductMapper.insertBatch(opList);  //批量插入订单商品
-            }
-        }
         return result;
     }
 }

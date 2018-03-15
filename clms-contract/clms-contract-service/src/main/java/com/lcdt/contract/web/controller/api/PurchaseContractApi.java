@@ -91,7 +91,7 @@ public class PurchaseContractApi {
     @ApiOperation("合同终止/生效")
     @RequestMapping(value = "/updateContractStatus", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('update_purchase_contract_status')")
-    public JSONObject updateContractStatus(@ApiParam(value = "合同ID",required = true) @RequestParam Long contractId,
+    public JSONObject terminateContract(@ApiParam(value = "合同ID",required = true) @RequestParam Long contractId,
                                         @ApiParam(value = "状态 0-生效 3-失效",required = true) @RequestParam short contractStatus) {
         Contract dto = new Contract();
         dto.setContractId(contractId);
@@ -104,21 +104,6 @@ public class PurchaseContractApi {
             return jsonObject;
         } else {
             throw new RuntimeException("终止失败");
-        }
-    }
-
-    @ApiOperation("合同生成采购订单")
-    @RequestMapping(value = "/createPurchaseOrder", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('create_purchase_order')")
-    public JSONObject createPurchaseOrder(@ApiParam(value = "合同ID",required = true) @RequestParam Long contractId) {
-        int result = contractService.createOrderByContract(contractId);
-        if (result > 0) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", 0);
-            jsonObject.put("message", "采购订单创建成功");
-            return jsonObject;
-        } else {
-            throw new RuntimeException("采购订单创建失败");
         }
     }
 }

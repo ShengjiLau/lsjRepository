@@ -18,14 +18,14 @@ public interface OrderService {
      * @param Order
      * @return
      */
-    int addOrder(Order order);
+    int addOrder(OrderDto orderDto);
 
     /**
      * 修改订单
      * @param Order
      * @return
      */
-    int modOrder(Order order);
+    int modOrder(OrderDto orderDto);
 
     /**
      * 删除单个订单

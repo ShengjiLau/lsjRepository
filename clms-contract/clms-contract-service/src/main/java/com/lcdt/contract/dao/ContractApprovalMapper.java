@@ -1,7 +1,6 @@
 package com.lcdt.contract.dao;
 
 import com.lcdt.contract.model.ContractApproval;
-import com.lcdt.contract.model.ContractProduct;
 import com.lcdt.contract.web.dto.ContractApprovalDto;
 import com.lcdt.contract.web.dto.ContractDto;
 
@@ -19,6 +18,4 @@ public interface ContractApprovalMapper {
     int updateByPrimaryKey(ContractApproval record);
 
     List<ContractApprovalDto> selectContractApprovalByCondition(ContractDto contractDto);
-
-    int insertBatch(List<ContractApproval> contractApprovalList);
 }

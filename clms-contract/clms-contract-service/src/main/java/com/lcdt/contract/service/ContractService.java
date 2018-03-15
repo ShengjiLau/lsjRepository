@@ -44,11 +44,4 @@ public interface ContractService {
      * @return
      */
     int modContractStatus(Contract contract);
-
-    /**
-     * 合同生成订单
-     * @param contractId
-     * @return
-     */
-    int createOrderByContract(Long contractId);
 }

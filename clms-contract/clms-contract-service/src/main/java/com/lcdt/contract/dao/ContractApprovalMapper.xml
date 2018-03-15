@@ -8,7 +8,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
-    <result column="result" jdbcType="SMALLINT" property="result" />
+    <result column="type" jdbcType="SMALLINT" property="type" />
     <result column="status" jdbcType="SMALLINT" property="status" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="time" jdbcType="TIMESTAMP" property="time" />
@@ -20,11 +20,11 @@
   <insert id="insert" parameterType="com.lcdt.contract.model.ContractApproval">
     insert into t_contract_approval (ca_id, contract_id, user_id, 
       name, dept_name, sort, 
-      result, status, content,
+      type, status, content, 
       time)
     values (#{caId,jdbcType=BIGINT}, #{contractId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
       #{name,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, 
-      #{result,jdbcType=SMALLINT}, #{status,jdbcType=SMALLINT}, #{content,jdbcType=VARCHAR},
+      #{type,jdbcType=SMALLINT}, #{status,jdbcType=SMALLINT}, #{content,jdbcType=VARCHAR}, 
       #{time,jdbcType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.ContractApproval">
@@ -34,20 +34,20 @@
       name = #{name,jdbcType=VARCHAR},
       dept_name = #{deptName,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=INTEGER},
-      result = #{result,jdbcType=SMALLINT},
+      type = #{type,jdbcType=SMALLINT},
       status = #{status,jdbcType=SMALLINT},
       content = #{content,jdbcType=VARCHAR},
       time = #{time,jdbcType=TIMESTAMP}
     where ca_id = #{caId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select ca_id, contract_id, user_id, name, dept_name, sort, result, status, content,
+    select ca_id, contract_id, user_id, name, dept_name, sort, type, status, content, 
     time
     from t_contract_approval
     where ca_id = #{caId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select ca_id, contract_id, user_id, name, dept_name, sort, result, status, content,
+    select ca_id, contract_id, user_id, name, dept_name, sort, type, status, content, 
     time
     from t_contract_approval
   </select>
@@ -60,7 +60,7 @@
     <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="sign_date" jdbcType="TIMESTAMP" property="signDate" />
-    <result column="result" jdbcType="SMALLINT" property="result" />
+    <result column="type" jdbcType="SMALLINT" property="type" />
     <result column="contract_status" jdbcType="SMALLINT" property="contractStatus" />
     <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
     <result column="cycle" jdbcType="SMALLINT" property="cycle" />
@@ -84,7 +84,7 @@
       <result column="name" jdbcType="VARCHAR" property="name" />
       <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
       <result column="sort" jdbcType="INTEGER" property="sort" />
-      <result column="result" jdbcType="SMALLINT" property="result" />
+      <result column="type" jdbcType="SMALLINT" property="type" />
       <result column="status" jdbcType="SMALLINT" property="status" />
       <result column="content" jdbcType="VARCHAR" property="content" />
       <result column="time" jdbcType="TIMESTAMP" property="time" />
@@ -92,9 +92,9 @@
   </resultMap>
 
   <select id="selectContractApprovalByCondition" resultMap="ContractApprovalDtoMap">
-    select t1.contract_id, t1.contract_code, t1.title, t1.result, t1.contract_status,
+    select t1.contract_id, t1.contract_code, t1.title, t1.type, t1.contract_status,
     t1.approval_status,t1.approval_start_date, t1.approval_end_date, group_id,company_id,
-    t2.ca_id, t2.user_id, t2.name, t2.dept_name, t2.sort, t2.result, t2.status, t2.content,t2.time
+    t2.ca_id, t2.user_id, t2.name, t2.dept_name, t2.sort, t2.type, t2.status, t2.content,t2.time
     from t_contract t1 left join
     (select * from t_contract_approval
     <where>
@@ -114,7 +114,7 @@
     </where>
     order by time) t2 on t1.contract_id = t2.contract_id
     <where>
-      t1.result = #{result,jdbcType=VARCHAR} and t1.company_id = #{companyId,jdbcType=BIGINT}
+      t1.type = #{type,jdbcType=VARCHAR} and t1.company_id = #{companyId,jdbcType=BIGINT}
       <if test="title!=null and title!=''">
         and t1.title like concat('%',#{title,jdbcType=VARCHAR},'%') or t1.contract_code like concat('%',#{title,jdbcType=VARCHAR},'%')
       </if>
@@ -133,15 +133,6 @@
 
     </where>
   </select>
-
-  <insert id="insertBatch">
-    insert into t_contract_approval (contract_id, user_id,name, dept_name, sort)
-    values
-    <foreach item="item" collection="list" separator=",">
-    (#{item.contractId,jdbcType=BIGINT}, #{item.userId,jdbcType=BIGINT},
-    #{item.name,jdbcType=VARCHAR}, #{item.deptName,jdbcType=VARCHAR}, #{item.sort,jdbcType=INTEGER})
-    </foreach>
-  </insert>
 
 </mapper>
 

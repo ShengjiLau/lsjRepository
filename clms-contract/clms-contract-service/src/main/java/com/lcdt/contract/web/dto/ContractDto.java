@@ -14,7 +14,6 @@ import com.lcdt.contract.model.Contract;
 
 import com.lcdt.contract.model.ContractApproval;
 import com.lcdt.contract.model.ContractProduct;
-import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
@@ -22,12 +21,6 @@ import java.util.List;
  * Created by liz on 2018/3/7.
  */
 public class ContractDto extends Contract{
-
-    @ApiModelProperty(value = "合同类型 0-采购 1-销售")
-    private Short type;
-
-    @ApiModelProperty(value = "合同状态 0-生效中 1-待生效 2-创建中 3-已失效")
-    private Short contractStatus;
 
     private List<ContractApproval> contractApprovalList;
 
@@ -37,29 +30,13 @@ public class ContractDto extends Contract{
 
     private Long userId;
 
+
     private int pageNum;
 
     private int pageSize;
 
-    @Override
-    public Short getType() {
-        return type;
-    }
 
-    @Override
-    public void setType(Short type) {
-        this.type = type;
-    }
-
-    @Override
-    public Short getContractStatus() {
-        return contractStatus;
-    }
-
-    @Override
-    public void setContractStatus(Short contractStatus) {
-        this.contractStatus = contractStatus;
-    }
+   
 
     public List<ContractApproval> getContractApprovalList() {
         return contractApprovalList;

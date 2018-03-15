@@ -34,7 +34,7 @@ public interface ContractProductMapper {
      * @param contractId
      * @return
      */
-    List<Long> selectCpIdsByContractId(Long contractId);
+    List<Long> selectCpIdByContractId(Long contractId);
 
     /**
      * 根据主键批量删除
@@ -42,11 +42,4 @@ public interface ContractProductMapper {
      * @return
      */
     int deleteByBatch(Map<String, Object> map);
-
-    /**
-     * 根据合同id查询该合同下的商品
-     * @param contractId
-     * @return
-     */
-    List<ContractProduct> selectCpsByContractId(Long contractId);
 }

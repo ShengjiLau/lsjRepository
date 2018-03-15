@@ -15,7 +15,7 @@ public class ContractApproval {
 
     private Integer sort;
 
-    private Short result;
+    private Short type;
 
     private Short status;
 
@@ -71,12 +71,12 @@ public class ContractApproval {
         this.sort = sort;
     }
 
-    public Short getResult() {
-        return result;
+    public Short getType() {
+        return type;
     }
 
-    public void setResult(Short result) {
-        this.result = result;
+    public void setType(Short type) {
+        this.type = type;
     }
 
     public Short getStatus() {
