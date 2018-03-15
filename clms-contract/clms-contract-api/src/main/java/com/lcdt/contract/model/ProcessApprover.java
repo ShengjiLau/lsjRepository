@@ -13,6 +13,8 @@ public class ProcessApprover {
 
     private Integer sort;
 
+    private Short actionType;
+
     public Long getApproverId() {
         return approverId;
     }
@@ -59,5 +61,13 @@ public class ProcessApprover {
 
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    public Short getActionType() {
+        return actionType;
+    }
+
+    public void setActionType(Short actionType) {
+        this.actionType = actionType;
     }
 }

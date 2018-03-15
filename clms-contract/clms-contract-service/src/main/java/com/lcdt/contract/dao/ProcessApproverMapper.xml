@@ -8,6 +8,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="action_type" jdbcType="SMALLINT" property="actionType" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_process_approver
@@ -15,10 +16,10 @@
   </delete>
   <insert id="insert" parameterType="com.lcdt.contract.model.ProcessApprover">
     insert into t_process_approver (approver_id, process_id, user_id, 
-      name, dept_name, sort
+      name, dept_name, sort, action_type
       )
     values (#{approverId,jdbcType=BIGINT}, #{processId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
-      #{name,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}
+      #{name,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER},#{actionType,jdbcType=SMALLINT}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.ProcessApprover">
@@ -28,25 +29,27 @@
       name = #{name,jdbcType=VARCHAR},
       dept_name = #{deptName,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=INTEGER}
+      action_type = #{actionType,jdbcType=SMALLINT}
     where approver_id = #{approverId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select approver_id, process_id, user_id, name, dept_name, sort
+    select approver_id, process_id, user_id, name, dept_name, sort, action_type
     from t_process_approver
     where approver_id = #{approverId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select approver_id, process_id, user_id, name, dept_name, sort
+    select approver_id, process_id, user_id, name, dept_name, sort, action_type
     from t_process_approver
   </select>
 
   <insert id="insertBatch">
     insert into t_process_approver (process_id, user_id,
-    name, dept_name, sort
+    name, dept_name, sort, action_type
     ) values
     <foreach item="item" collection="list" separator=",">
       (#{item.processId,jdbcType=BIGINT}, #{item.userId,jdbcType=BIGINT},
-      #{item.name,jdbcType=VARCHAR}, #{item.deptName,jdbcType=VARCHAR}, #{item.sort,jdbcType=INTEGER}
+      #{item.name,jdbcType=VARCHAR}, #{item.deptName,jdbcType=VARCHAR},
+      #{item.sort,jdbcType=INTEGER},#{actionType,jdbcType=SMALLINT}
       )
     </foreach>
   </insert>

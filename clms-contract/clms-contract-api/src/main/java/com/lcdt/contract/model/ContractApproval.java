@@ -9,13 +9,15 @@ public class ContractApproval {
 
     private Long userId;
 
-    private String name;
+    private String userName;
 
     private String deptName;
 
     private Integer sort;
 
-    private Short type;
+    private Short result;
+
+    private Short actionType;
 
     private Short status;
 
@@ -47,12 +49,12 @@ public class ContractApproval {
         this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getDeptName() {
@@ -71,12 +73,20 @@ public class ContractApproval {
         this.sort = sort;
     }
 
-    public Short getType() {
-        return type;
+    public Short getResult() {
+        return result;
     }
 
-    public void setType(Short type) {
-        this.type = type;
+    public void setResult(Short result) {
+        this.result = result;
+    }
+
+    public Short getActionType() {
+        return actionType;
+    }
+
+    public void setActionType(Short actionType) {
+        this.actionType = actionType;
     }
 
     public Short getStatus() {
@@ -102,4 +112,5 @@ public class ContractApproval {
     public void setTime(Date time) {
         this.time = time;
     }
+
 }

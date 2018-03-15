@@ -2,10 +2,13 @@ package com.lcdt.contract.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.contract.dao.ContractApprovalMapper;
 import com.lcdt.contract.dao.ContractMapper;
 import com.lcdt.contract.dao.ContractProductMapper;
 import com.lcdt.contract.model.Contract;
 
+import com.lcdt.contract.model.Order;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.ContractDto;
 
@@ -14,6 +17,9 @@ import com.lcdt.contract.model.ContractApproval;
 import com.lcdt.contract.model.ContractProduct;
 import com.lcdt.contract.web.dto.ContractDto;
 import com.lcdt.contract.service.ContractService;
+import com.lcdt.userinfo.model.Group;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +38,8 @@ public class ContractServiceImpl implements ContractService {
     private ContractMapper contractMapper;
     @Autowired
     private ContractProductMapper contractProductMapper;
+    @Autowired
+    private ContractApprovalMapper contractApprovalMapper;
 
     @Override
     public int addContract(ContractDto dto) {
@@ -44,6 +52,32 @@ public class ContractServiceImpl implements ContractService {
                 contractProduct.setContractId(contract.getContractId());
             }
             result += contractProductMapper.insertBatch(dto.getContractProductList());  //批量插入商品
+        }
+        //审批流程添加
+        if(null!=dto.getContractApprovalList() && dto.getContractApprovalList().size() > 0){
+            /*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
+            ContractApproval contractApproval = new ContractApproval();
+//            Long companyId = SecurityInfoGetter.getCompanyId();
+            User user = SecurityInfoGetter.getUser();
+            UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+            contractApproval.setUserName(user.getRealName());
+            contractApproval.setUserId(user.getUserId());
+            //todo 这个地方暂时这么处理，按一般情况一个人不可能属于多个部门,不知道为什么叫DeptNames
+            contractApproval.setDeptName(userCompRel.getDeptNames());
+            contractApproval.setSort(0);    // 0 为创建着
+            dto.getContractApprovalList().add(contractApproval);
+            for(ContractApproval ca : dto.getContractApprovalList()){
+                ca.setContractId(contract.getContractId()); //设置关联合同id
+                if(ca.getSort()==1){
+                    ca.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                }
+            }
+            contractApprovalMapper.insertBatch(dto.getContractApprovalList());
+            //同时设置合同的审批状态为审批中
+            contract.setApprovalStatus(new Short("1"));
+            contractMapper.updateByPrimaryKey(contract);
+        }else{
+            // todo 没有添加审批人，则认为合同无需审批
         }
         return result;
     }
@@ -106,6 +140,25 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public int modContractStatus(Contract contract) {
         int result = contractMapper.updateContractStatus(contract);
+        return result;
+    }
+
+    @Override
+    public int createOrderByContract(Long contractId) {
+        int result = 0;
+        Contract contract = contractMapper.selectByPrimaryKey(contractId);
+        if(contract != null){
+            Order order = new Order();
+            order.setContractCode(contract.getContractCode());
+            order.setOrderType(contract.getType());
+            order.setPayType(contract.getPayType());
+
+            order.setGroupId(contract.getGroupId());
+            order.setCompanyId(contract.getCompanyId());
+            order.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
+            order.setCreateTime(new Date());
+            result = contractMapper.insert(contract);
+        }
         return result;
     }
 }
