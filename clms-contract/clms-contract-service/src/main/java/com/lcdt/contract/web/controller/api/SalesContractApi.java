@@ -1,3 +1,4 @@
+
 package com.lcdt.contract.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
@@ -36,7 +37,9 @@ public class SalesContractApi {
     @ApiOperation(value = "合同列表", notes = "合同列表数据")
     @GetMapping("/contractlist")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_list')")
-    public PageBaseDto<List<Contract>> contractList(ContractDto contractDto) {
+    public PageBaseDto<List<Contract>> contractList(@Validated ContractDto contractDto,
+                                                    @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                                    @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         contractDto.setCompanyId(companyId);
 
@@ -86,8 +89,8 @@ public class SalesContractApi {
     @ApiOperation("合同终止/生效")
     @RequestMapping(value = "/updateContractStatus", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('update_sales_contract_status')")
-    public JSONObject terminateContract(@ApiParam(value = "联系人ID",required = true) @RequestParam Long contractId,
-                                        @ApiParam(value = "状态",required = true) @RequestParam short contractStatus) {
+    public JSONObject updateContractStatus(@ApiParam(value = "合同ID",required = true) @RequestParam Long contractId,
+                                        @ApiParam(value = "状态 0-生效 3-失效",required = true) @RequestParam short contractStatus) {
         Contract dto = new Contract();
         dto.setContractId(contractId);
         dto.setContractStatus(contractStatus);
@@ -101,4 +104,22 @@ public class SalesContractApi {
             throw new RuntimeException("终止失败");
         }
     }
+
+    @ApiOperation("合同生成销售订单")
+    @RequestMapping(value = "/createSalesOrder", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('create_sales_order')")
+    public JSONObject createPurchaseOrder(@ApiParam(value = "合同ID",required = true) @RequestParam Long contractId) {
+        Contract dto = new Contract();
+        dto.setContractId(contractId);
+        int result = contractService.createOrderByContract(contractId);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "销售订单创建成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("销售订单创建失败");
+        }
+    }
 }
+

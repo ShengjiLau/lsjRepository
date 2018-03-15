@@ -39,7 +39,9 @@ public class PurchaseContractApi {
     @ApiOperation(value = "合同列表", notes = "合同列表数据")
     @GetMapping("/contractList")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_list')")
-    public PageBaseDto<List<Contract>> contractList(ContractDto contractDto) {
+    public PageBaseDto<List<Contract>> contractList(@Validated ContractDto contractDto,
+                                                    @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                                    @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         contractDto.setCompanyId(companyId);
 
@@ -47,8 +49,8 @@ public class PurchaseContractApi {
         pageInfo.setPageNum(contractDto.getPageNum());    //设置页码
         pageInfo.setPageSize(contractDto.getPageSize());  //设置每页条数
         PageInfo<List<Contract>> listPageInfo = contractService.ontractList(contractDto, pageInfo);
-        logger.debug("合同总条数：" + listPageInfo.getTotal());
-        logger.debug("listPageInfo:" + listPageInfo.toString());
+//        logger.debug("合同总条数：" + listPageInfo.getTotal());
+//        logger.debug("listPageInfo:" + listPageInfo.toString());
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         return pageBaseDto;
     }
@@ -89,8 +91,8 @@ public class PurchaseContractApi {
     @ApiOperation("合同终止/生效")
     @RequestMapping(value = "/updateContractStatus", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('update_purchase_contract_status')")
-    public JSONObject terminateContract(@ApiParam(value = "联系人ID",required = true) @RequestParam Long contractId,
-                                        @ApiParam(value = "状态",required = true) @RequestParam short contractStatus) {
+    public JSONObject updateContractStatus(@ApiParam(value = "合同ID",required = true) @RequestParam Long contractId,
+                                        @ApiParam(value = "状态 0-生效 3-失效",required = true) @RequestParam short contractStatus) {
         Contract dto = new Contract();
         dto.setContractId(contractId);
         dto.setContractStatus(contractStatus);
@@ -104,4 +106,20 @@ public class PurchaseContractApi {
             throw new RuntimeException("终止失败");
         }
     }
+
+    @ApiOperation("合同生成采购订单")
+    @RequestMapping(value = "/createPurchaseOrder", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('create_purchase_order')")
+    public JSONObject createPurchaseOrder(@ApiParam(value = "合同ID",required = true) @RequestParam Long contractId) {
+        int result = contractService.createOrderByContract(contractId);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "采购订单创建成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("采购订单创建失败");
+        }
+    }
 }
+
