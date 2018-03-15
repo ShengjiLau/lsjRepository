@@ -706,7 +706,7 @@
 
 
 
-  <!--客户计划（已错过d）
+  <!--客户计划（已错过）
      查询条件：计划发布时间
      满足前提条件：
           1、我能抢单的计划（不包括已抢的），但是该计划已经派单完成; or
@@ -771,6 +771,16 @@
   <!--客户计划（派车中）
       查询条件：计划发布时间 、派单时间
       满足前提条件：计划派单关联计划，同时派单（派单当前登录人所在的企业）的货物剩余数量>0的
+
+           AND  wp.waybill_plan_id !=''
+      and sp.split_goods_id in (
+        select a.split_goods_id from t_split_goods_detail as a
+        where split_goods_detail_id = (select max(b.split_goods_detail_id)
+        from t_split_goods_detail as b
+        where a.split_goods_id = b.split_goods_id and b.remain_amount>0)
+          and sp.company_id = a.company_id and a.is_deleted=0
+      )
+
    -->
   <select id="customerPlanList4VehicleDoing" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
@@ -789,15 +799,7 @@
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
       and wp.plan_status!='60'
-      AND  wp.waybill_plan_id !=''
-      and sp.split_goods_id in (
-        select a.split_goods_id from t_split_goods_detail as a
-        where split_goods_detail_id = (select max(b.split_goods_detail_id)
-        from t_split_goods_detail as b
-        where a.split_goods_id = b.split_goods_id and b.remain_amount>0)
-          and sp.company_id = a.company_id and a.is_deleted=0
-      )
-
+      and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)>0
       <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
