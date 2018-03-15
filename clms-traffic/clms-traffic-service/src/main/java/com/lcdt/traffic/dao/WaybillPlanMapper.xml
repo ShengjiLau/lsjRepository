@@ -711,6 +711,7 @@
      满足前提条件：
           1、我能抢单的计划（不包括已抢的），但是该计划已经派单完成; or
           2、我能抢的计划（不包括已抢的）已经超过竞价的结束时间的；
+          3、结束的没有抢单的
    -->
   <select id="customerPlanList4Pass" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
@@ -787,6 +788,7 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
+      and( wp.plan_status!='60')
       AND  wp.waybill_plan_id !=''
       and sp.split_goods_id in (
         select a.split_goods_id from t_split_goods_detail as a
@@ -795,6 +797,7 @@
         where a.split_goods_id = b.split_goods_id and b.remain_amount>0)
           and sp.company_id = a.company_id and a.is_deleted=0
       )
+
       <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
@@ -984,10 +987,11 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      sp.split_goods_id in (
+      and sp.split_goods_id in (
       SELECT sgd.split_goods_id From t_split_goods_detail sgd where wp.company_id = sgd.company_id and sgd.is_deleted=0
              and (select SUM(remain_amount+allot_amount) from t_split_goods_detail sgd1 where wp.company_id = sgd1.company_id and sgd1.is_deleted=0)=0
       )
+      OR  (wp.plan_status='60')
       <if test="isDeleted!=null">
         and sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
