@@ -108,8 +108,10 @@ public class WaybillServiceImpl implements WaybillService {
         }
 
         //设置承运商名字
-        Company company=companyService.selectById(waybill.getCarrierCompanyId());
-        waybill.setCarrierCompanyName(company.getFullName());
+        Company carrierCompany=companyService.selectById(waybill.getCarrierCompanyId());
+        waybill.setCarrierCompanyName(carrierCompany.getFullName());
+        //设置货主的名字c
+        Company company=companyService.selectById(waybill.getCompanyId());
         waybill.setWaybillSource(company.getFullName());
 
         //新增运单
