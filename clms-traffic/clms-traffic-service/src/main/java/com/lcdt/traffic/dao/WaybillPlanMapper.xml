@@ -557,7 +557,7 @@
               cancel_remark,carrier_company_name
         from t_waybill_plan
         <where>
-          <if test=" isDeleted!=null">
+          <if test="isDeleted!=null">
             and  is_deleted = #{isDeleted,jdbcType=SMALLINT}
           </if>
           <if test=" carrierCompanyId!=null">
@@ -782,7 +782,7 @@
         where a.split_goods_id = b.split_goods_id and b.remain_amount>0)
           and sp.company_id = a.company_id and a.is_deleted=0
       )
-      <if test=" isDeleted!=null">
+      <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
       <if test="serialCode!=null and serialCode!=''">
@@ -847,7 +847,7 @@
         where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
         and sp.company_id = a.company_id and a.is_deleted=0
       )
-      <if test=" isDeleted!=null">
+      <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
       <if test="serialCode!=null and serialCode!=''">
@@ -913,7 +913,7 @@
           and sp.company_id = a.company_id and a.is_deleted=0
       )
       and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status!=7 )=0
-      <if test=" isDeleted!=null">
+      <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
       <if test="serialCode!=null and serialCode!=''">
@@ -975,7 +975,7 @@
       SELECT sgd.split_goods_id From t_split_goods_detail sgd where wp.company_id = sgd.company_id and sgd.is_deleted=0
              and (select SUM(remain_amount+allot_amount) from t_split_goods_detail sgd1 where wp.company_id = sgd1.company_id and sgd1.is_deleted=0)=0
       )
-      <if test=" isDeleted!=null">
+      <if test="isDeleted!=null">
         and sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
       <if test="serialCode!=null and serialCode!=''">
