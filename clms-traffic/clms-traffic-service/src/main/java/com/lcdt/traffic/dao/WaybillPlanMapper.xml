@@ -651,7 +651,7 @@
         and ${companyIds}
       </if>
       <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        and ${carrierCollectionIds}
+        or ${carrierCollectionIds}
       </if>
    </where>
     order by waybill_plan_id desc
@@ -698,7 +698,7 @@
         and ${companyIds}
       </if>
       <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        and ${carrierCollectionIds}
+        or ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
@@ -760,7 +760,7 @@
         and ${companyIds}
       </if>
       <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        and ${carrierCollectionIds}
+        or ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
@@ -788,7 +788,7 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      and( wp.plan_status!='60')
+      and wp.plan_status!='60'
       AND  wp.waybill_plan_id !=''
       and sp.split_goods_id in (
         select a.split_goods_id from t_split_goods_detail as a
@@ -830,7 +830,7 @@
         and ${companyIds}
       </if>
       <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        and ${carrierCollectionIds}
+        or ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
@@ -895,7 +895,7 @@
         and ${companyIds}
       </if>
       <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        and ${carrierCollectionIds}
+        or ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
@@ -961,7 +961,7 @@
         and ${companyIds}
       </if>
       <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        and ${carrierCollectionIds}
+        or ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
@@ -970,6 +970,12 @@
   <!--客户计划（已取消）
          查询条件：派单时间
           满足前提条件：派单货物的原始和剩余数量都是0的
+
+         and sp.split_goods_id in (
+      SELECT sgd.split_goods_id From t_split_goods_detail sgd where wp.company_id = sgd.company_id and sgd.is_deleted=0
+             and (select SUM(remain_amount+allot_amount) from t_split_goods_detail sgd1 where wp.company_id = sgd1.company_id and sgd1.is_deleted=0)=0
+      )
+      OR
      -->
   <select id="customerPlanList4Cancel" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
@@ -987,11 +993,7 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      and sp.split_goods_id in (
-      SELECT sgd.split_goods_id From t_split_goods_detail sgd where wp.company_id = sgd.company_id and sgd.is_deleted=0
-             and (select SUM(remain_amount+allot_amount) from t_split_goods_detail sgd1 where wp.company_id = sgd1.company_id and sgd1.is_deleted=0)=0
-      )
-      OR  (wp.plan_status='60')
+       and wp.plan_status='60'
       <if test="isDeleted!=null">
         and sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
@@ -1024,7 +1026,7 @@
         and ${companyIds}
       </if>
       <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        and ${carrierCollectionIds}
+        or ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
