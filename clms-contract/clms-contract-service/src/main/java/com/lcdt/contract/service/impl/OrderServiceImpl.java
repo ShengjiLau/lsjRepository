@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.contract.dao.NonautomaticMapper;
+import com.lcdt.contract.dao.ConditionQueryMapper;
 import com.lcdt.contract.dao.OrderMapper;
 import com.lcdt.contract.model.Order;
 import com.lcdt.contract.model.OrderProduct;
@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService{
 	OrderMapper orderMapper;
 	
 	@Autowired
-	private NonautomaticMapper nonautomaticMapper;
+	private ConditionQueryMapper nonautomaticMapper;
 	
 	Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 	

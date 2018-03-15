@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
-import com.lcdt.contract.dao.NonautomaticMapper;
+import com.lcdt.contract.dao.ConditionQueryMapper;
 import com.lcdt.contract.dao.OrderProductMapper;
 import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.service.OrderProductService;
@@ -25,7 +25,7 @@ public class OrderProductServiceImpl implements OrderProductService {
 	private OrderProductMapper orderProductMapper;
 	
 	@Autowired
-	private NonautomaticMapper nonautomaticMapper;
+	private ConditionQueryMapper nonautomaticMapper;
 
 	@Override
 	public int addOrderProduct(OrderProduct orderProduct) {
