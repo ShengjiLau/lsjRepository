@@ -20,4 +20,5 @@ public interface ContractApprovalMapper {
     List<ContractApprovalDto> selectContractApprovalByCondition(ContractApprovalListDto contractApprovalListDto);
 
     int insertBatch(List<ContractApproval> contractApprovalList);
+
 }

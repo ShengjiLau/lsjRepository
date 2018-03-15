@@ -17,8 +17,6 @@ public class Contract {
 
     private Short approvalStatus;
 
-    private String approvalProcess;
-
     private Short cycle;
 
     private String payType;
@@ -103,14 +101,6 @@ public class Contract {
 
     public void setApprovalStatus(Short approvalStatus) {
         this.approvalStatus = approvalStatus;
-    }
-
-    public String getApprovalProcess() {
-        return approvalProcess;
-    }
-
-    public void setApprovalProcess(String approvalProcess) {
-        this.approvalProcess = approvalProcess;
     }
 
     public Short getCycle() {

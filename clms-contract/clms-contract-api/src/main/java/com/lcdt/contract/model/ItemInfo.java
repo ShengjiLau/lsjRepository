@@ -14,8 +14,9 @@ public class ItemInfo implements Serializable{
 	private static final long serialVersionUID = 33636L;
 	private Integer ItemId;
 	private String subject;
-	//商品编码?
+	//商品编码
 	private String code;
+	//商品规格
 	private String subItemProperty;
 	private String unitName;
 	private Float purchasePrice;

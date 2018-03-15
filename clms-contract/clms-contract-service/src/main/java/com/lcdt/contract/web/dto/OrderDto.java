@@ -2,8 +2,13 @@ package com.lcdt.contract.web.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
+
 
 import com.lcdt.contract.model.Order;
+import com.lcdt.contract.model.OrderProduct;
+
 
 /**
  * @author Sheng-ji Lau
@@ -18,9 +23,14 @@ public class OrderDto extends Order  implements Serializable{
 	private static final long serialVersionUID = 1032515L;
 	
 	private Date beginTime;
+	
 	private Date endTime;
+	
 	private int pageNum;
+	
 	private int pageSize;
+	
+	private List<OrderProduct> orderProductList;
 	
 	
 	public Date getBeginTime() {
@@ -46,6 +56,12 @@ public class OrderDto extends Order  implements Serializable{
 	}
 	public void setPageSize(int pageSize) {
 		this.pageSize = pageSize;
+	}
+	public List<OrderProduct> getOrderProductList() {
+		return orderProductList;
+	}
+	public void setOrderProductList(List<OrderProduct> orderProductList) {
+		this.orderProductList = orderProductList;
 	}
 	
 	

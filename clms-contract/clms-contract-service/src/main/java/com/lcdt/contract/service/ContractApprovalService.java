@@ -21,3 +21,4 @@ public interface ContractApprovalService {
     PageInfo<List<ContractApprovalDto>> contractApprovalList(ContractApprovalListDto contractApprovalListDto, PageInfo pageInfo);
 
 }
+
