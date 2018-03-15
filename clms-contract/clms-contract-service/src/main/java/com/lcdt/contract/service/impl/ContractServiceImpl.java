@@ -3,18 +3,13 @@ package com.lcdt.contract.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.contract.dao.ContractApprovalMapper;
-import com.lcdt.contract.dao.ContractMapper;
-import com.lcdt.contract.dao.ContractProductMapper;
-import com.lcdt.contract.model.Contract;
+import com.lcdt.contract.dao.*;
+import com.lcdt.contract.model.*;
 
-import com.lcdt.contract.model.Order;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.ContractDto;
 
 
-import com.lcdt.contract.model.ContractApproval;
-import com.lcdt.contract.model.ContractProduct;
 import com.lcdt.contract.web.dto.ContractDto;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.userinfo.model.Group;
@@ -40,6 +35,10 @@ public class ContractServiceImpl implements ContractService {
     private ContractProductMapper contractProductMapper;
     @Autowired
     private ContractApprovalMapper contractApprovalMapper;
+    @Autowired
+    private OrderMapper orderMapper;
+    @Autowired
+    private OrderProductMapper orderProductMapper;
 
     @Override
     public int addContract(ContractDto dto) {
@@ -88,7 +87,7 @@ public class ContractServiceImpl implements ContractService {
         BeanUtils.copyProperties(dto, contract); //复制对象属性
         int result = contractMapper.updateByPrimaryKey(contract);
         //获取该合同下面的商品cpId用来匹配被删除的商品
-        List<Long> cpIdList = contractProductMapper.selectCpIdByContractId(contract.getContractId());
+        List<Long> cpIdList = contractProductMapper.selectCpIdsByContractId(contract.getContractId());
         List<ContractProduct> list1 = new ArrayList<>();
         List<ContractProduct> list2 = new ArrayList<>();
         if (dto.getContractProductList() != null && dto.getContractProductList().size() > 0) {
@@ -157,7 +156,24 @@ public class ContractServiceImpl implements ContractService {
             order.setCompanyId(contract.getCompanyId());
             order.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
             order.setCreateTime(new Date());
-            result = contractMapper.insert(contract);
+            result = orderMapper.insert(order);
+
+            List<ContractProduct> cpList = contractProductMapper.selectCpsByContractId(contractId);
+            if(cpList != null && cpList.size() > 0){
+                List<OrderProduct> opList = new ArrayList<>();
+                //合同商品值赋到订单商品
+                for (ContractProduct cp : cpList) {
+                    OrderProduct op = new OrderProduct();
+                    op.setOrderId(order.getOrderId());
+                    op.setName(cp.getProductName());
+                    op.setCode(cp.getProductCode());
+                    op.setSku(cp.getSku());
+                    op.setNum(cp.getNum());
+                    op.setPrice(cp.getPrice());
+                    op.setTotal(cp.getPayment());
+                }
+//                result += orderProductMapper.insertBatch(opList);  //批量插入订单商品
+            }
         }
         return result;
     }
