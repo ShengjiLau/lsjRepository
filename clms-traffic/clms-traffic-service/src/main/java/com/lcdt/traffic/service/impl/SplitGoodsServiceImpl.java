@@ -589,9 +589,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
               }
           }
-
-
-        return flag;
+          return flag;
     }
 
 
