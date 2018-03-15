@@ -2,6 +2,7 @@ package com.lcdt.contract.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.contract.web.dto.ContractApprovalDto;
+import com.lcdt.contract.web.dto.ContractApprovalListDto;
 import com.lcdt.contract.web.dto.ContractDto;
 
 import java.util.List;
@@ -14,9 +15,9 @@ public interface ContractApprovalService {
 
     /**
      * 获取审批列表
-     * @param contractDto
+     * @param contractApprovalListDto
      * @return
      */
-    PageInfo<List<ContractApprovalDto>> contractApprovalList(ContractDto contractDto, PageInfo pageInfo);
+    PageInfo<List<ContractApprovalDto>> contractApprovalList(ContractApprovalListDto contractApprovalListDto, PageInfo pageInfo);
 
 }

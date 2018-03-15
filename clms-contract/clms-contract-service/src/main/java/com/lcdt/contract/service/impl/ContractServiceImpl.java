@@ -60,7 +60,7 @@ public class ContractServiceImpl implements ContractService {
 //            Long companyId = SecurityInfoGetter.getCompanyId();
             User user = SecurityInfoGetter.getUser();
             UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
-            contractApproval.setName(user.getRealName());
+            contractApproval.setUserName(user.getRealName());
             contractApproval.setUserId(user.getUserId());
             //todo 这个地方暂时这么处理，按一般情况一个人不可能属于多个部门,不知道为什么叫DeptNames
             contractApproval.setDeptName(userCompRel.getDeptNames());
@@ -68,9 +68,16 @@ public class ContractServiceImpl implements ContractService {
             dto.getContractApprovalList().add(contractApproval);
             for(ContractApproval ca : dto.getContractApprovalList()){
                 ca.setContractId(contract.getContractId()); //设置关联合同id
+                if(ca.getSort()==1){
+                    ca.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                }
             }
             contractApprovalMapper.insertBatch(dto.getContractApprovalList());
-
+            //同时设置合同的审批状态为审批中
+            contract.setApprovalStatus(new Short("1"));
+            contractMapper.updateByPrimaryKey(contract);
+        }else{
+            // todo 没有添加审批人，则认为合同无需审批
         }
         return result;
     }

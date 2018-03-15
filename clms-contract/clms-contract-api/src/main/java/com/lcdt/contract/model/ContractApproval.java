@@ -9,7 +9,7 @@ public class ContractApproval {
 
     private Long userId;
 
-    private String name;
+    private String userName;
 
     private String deptName;
 
@@ -49,12 +49,12 @@ public class ContractApproval {
         this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getDeptName() {
