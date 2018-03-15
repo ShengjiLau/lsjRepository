@@ -651,7 +651,7 @@
         and ${companyIds}
       </if>
       <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        or ${carrierCollectionIds}
+        and ${carrierCollectionIds}
       </if>
    </where>
     order by waybill_plan_id desc
@@ -698,7 +698,7 @@
         and ${companyIds}
       </if>
       <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        or ${carrierCollectionIds}
+        and ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
@@ -760,7 +760,7 @@
         and ${companyIds}
       </if>
       <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        or ${carrierCollectionIds}
+        and ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
