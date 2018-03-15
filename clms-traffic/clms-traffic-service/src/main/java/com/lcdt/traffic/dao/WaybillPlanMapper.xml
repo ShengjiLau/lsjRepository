@@ -708,15 +708,21 @@
 
   <!--客户计划（已错过）
      查询条件：计划发布时间
-     满足前提条件：我能抢单的计划（不包括已抢的），但是该计划已经派单完成，同时已经超过竞价的结束时间的
+     满足前提条件：
+          1、我能抢单的计划（不包括已抢的），但是该计划已经派单完成; or
+          2、我能抢的计划（不包括已抢的）已经超过竞价的结束时间的；
    -->
   <select id="customerPlanList4Pass" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
     from t_waybill_plan p1
     <where>
-      and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
-      and (SELECT SUM(remainder_amount) FROM t_plan_detail pd where pd.company_id = p1.company_id and pd.is_deleted=0)=0
-      and now() >= p1.biding_end
+      and
+      ( waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
+        and (SELECT SUM(remainder_amount) FROM t_plan_detail pd where pd.company_id = p1.company_id and pd.is_deleted=0)=0 )
+      or (
+        waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
+       and ( now() >= p1.biding_end and p1.biding_end is not NULL)
+      )
       and  is_deleted = 0
       <if test="serialCode!=null and serialCode!=''">
         and serial_code like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
