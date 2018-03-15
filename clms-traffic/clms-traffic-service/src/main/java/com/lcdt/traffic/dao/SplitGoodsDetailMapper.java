@@ -64,6 +64,12 @@ public interface SplitGoodsDetailMapper {
     List<SplitGoodsDetail> selectBySplitGoodsId(Map map);
 
 
+    /***
+     * 派单名细批量更新
+     * @param list
+     * @return
+     */
+    int batchUpdateSplitGoodsDetail(List<SplitGoodsDetail> list);
 
 
 

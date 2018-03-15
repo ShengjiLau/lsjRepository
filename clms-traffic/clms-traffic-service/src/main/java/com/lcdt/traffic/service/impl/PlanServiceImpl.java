@@ -501,7 +501,6 @@ public class PlanServiceImpl implements PlanService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int updatePlanStatusByWaybill(WaybillPlan waybillPlan) {
-
        return waybillPlanMapper.updateWaybillPlan(waybillPlan);
     }
 
