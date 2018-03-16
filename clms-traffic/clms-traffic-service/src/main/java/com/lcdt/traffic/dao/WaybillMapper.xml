@@ -505,7 +505,7 @@
         and create_date &lt;= #{endCreateDate,jdbcType=VARCHAR}
       </if>
       <if test="waybillSource!=null and waybillSource!=''">
-        and waybill_source like '%'+#{waybillSource,jdbcType=VARCHAR}+'%'
+        and waybill_source like concat('%',#{waybillSource,jdbcType=VARCHAR},'%')
       </if>
       <if test="goodsName != null and goodsName!=''">
         and id in (select waybill_id from t_waybill_items where goods_name like concat('%',#{goodsName,jdbcType=VARCHAR},'%'))
