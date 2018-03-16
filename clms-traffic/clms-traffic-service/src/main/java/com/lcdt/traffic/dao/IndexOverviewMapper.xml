@@ -46,7 +46,7 @@
             FROM
             t_waybill_plan
             WHERE
-            company_id =37 AND is_deleted = 0
+            company_id =#{companyId,jdbcType=BIGINT} AND is_deleted = 0
             <if test="date_interval!=null and date_interval!=''">
                 and date(pubdate) &lt;= CURDATE() and date(pubdate) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
             </if>
@@ -162,7 +162,7 @@
             sum(case when waybill_status=6 then 1 else 0 end) as yiqianshou,
             sum(case when waybill_status=7 then 1 else 0 end) as yiwancheng
             FROM t_waybill
-            WHERE company_id =37 AND is_deleted = 0
+            WHERE company_id = #{companyId,jdbcType=BIGINT} AND is_deleted = 0
             <if test="date_interval!=null and date_interval!=''">
                 and date(pub_date) &lt;= CURDATE() and date(pub_date) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
             </if>
