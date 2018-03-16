@@ -98,7 +98,7 @@ label{
 .signin-box{
   background:rgba(255,255,255,0.8);
   border: 1px solid #f0f0f0;
-  width: 484px;
+  width: 500px;
   box-sizing: border-box;
   margin: 0 auto;
   padding: 40px 30px 30px ;
@@ -156,7 +156,7 @@ label{
   width:120px;
 }
 .form-row>label{
-  width:85px;
+  width:100px;
   margin-right: 8px;
 }
 .form-row .tips a{
