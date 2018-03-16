@@ -47,4 +47,11 @@ public interface OwnVehicleMapper {
      */
     OwnVehicleDto selectDetail(Long ownVehicleId, Long companyId);
 
+    /**
+     * 更新我的车辆里，司机账号相关的主键信息（即将user_id更新到vehicle_driver_id字段）
+     * @param ownVehicle
+     * @return
+     */
+    int updateDriverId(OwnVehicle ownVehicle);
+
 }

@@ -1,9 +1,10 @@
 package com.lcdt.pay.utils;
 
+import org.tl.commons.util.DateUtility;
+
 import java.text.DecimalFormat;
-import java.time.LocalDate;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Date;
 
 public class OrderNoGenerator {
 
@@ -25,4 +26,14 @@ public class OrderNoGenerator {
         return String.valueOf(timestamp) + str2;
     }
 
+    //根据时间格式化生成单号
+    public static String generateDateNo(){
+        int countNo = atomicInteger.addAndGet(1);
+
+        DecimalFormat df = new DecimalFormat("00000");
+        String str2 = df.format(countNo);
+
+        String date = DateUtility.date2String(new Date(),"yyyyMMddHHmmss");
+        return String.valueOf(date) + str2;
+    }
 }

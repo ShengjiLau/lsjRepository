@@ -331,7 +331,7 @@
         and ${customerType}
       </if>
       <!---->
-      <if test="bindCpid != null">
+      <if test="bindCpid != null"><!--这块要主是查询绑定后的客户-->
         and bind_comp_id is not null and bind_comp_id != ''
       </if>
       <if test="bindCompId != null">

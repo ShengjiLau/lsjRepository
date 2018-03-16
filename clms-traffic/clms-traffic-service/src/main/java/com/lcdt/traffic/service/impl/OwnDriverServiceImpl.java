@@ -89,6 +89,9 @@ public class OwnDriverServiceImpl implements OwnDriverService {
                             driver.setCreateId(ownDriverDto.getCreateId());
                             driver.setCreateName(ownDriverDto.getCreateName());
                             driverService.addDriver(driver);    //保存司机信息
+                            /*将司机账号的user_id更新到我的司机表里*/
+                            ownDriver.setDriverId(user.getUserId());
+                            ownDriverMapper.updateDriverId(ownDriver);
                         } catch (PhoneHasRegisterException e) {
                             e.printStackTrace();
                             throw new RuntimeException("保存司机账号信息失败！");

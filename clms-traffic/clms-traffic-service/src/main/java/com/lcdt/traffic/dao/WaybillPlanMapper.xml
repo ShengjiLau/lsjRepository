@@ -711,6 +711,12 @@
      满足前提条件：
           1、我能抢单的计划（不包括已抢的），但是该计划已经派单完成; or
           2、我能抢的计划（不包括已抢的）已经超过竞价的结束时间的；
+          3、结束的没有抢单的
+
+                   or (
+            waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
+            and ( p1.plan_status='30')
+          )
    -->
   <select id="customerPlanList4Pass" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
@@ -718,17 +724,14 @@
     <where>
       and
         (
-            ( waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
-              and (SELECT SUM(remainder_amount) FROM t_plan_detail pd where pd.company_id = p1.company_id and pd.is_deleted=0)=0
-             )
-          or (
-               waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
-              and (now() >= p1.biding_end and p1.biding_end is not NULL)
-            )
-           or (
-              waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
-              and ( p1.plan_status='30')
-            )
+          ( waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
+            and (SELECT SUM(remainder_amount) FROM t_plan_detail pd where pd.company_id = p1.company_id and pd.is_deleted=0)=0
+           )
+        or (
+             waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
+            and (now() >= p1.biding_end and p1.biding_end is not NULL)
+          )
+
        )
         and  is_deleted = 0
       <if test="serialCode!=null and serialCode!=''">
@@ -770,6 +773,16 @@
   <!--客户计划（派车中）
       查询条件：计划发布时间 、派单时间
       满足前提条件：计划派单关联计划，同时派单（派单当前登录人所在的企业）的货物剩余数量>0的
+
+           AND  wp.waybill_plan_id !=''
+      and sp.split_goods_id in (
+        select a.split_goods_id from t_split_goods_detail as a
+        where split_goods_detail_id = (select max(b.split_goods_detail_id)
+        from t_split_goods_detail as b
+        where a.split_goods_id = b.split_goods_id and b.remain_amount>0)
+          and sp.company_id = a.company_id and a.is_deleted=0
+      )
+
    -->
   <select id="customerPlanList4VehicleDoing" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
@@ -787,14 +800,8 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      AND  wp.waybill_plan_id !=''
-      and sp.split_goods_id in (
-        select a.split_goods_id from t_split_goods_detail as a
-        where split_goods_detail_id = (select max(b.split_goods_detail_id)
-        from t_split_goods_detail as b
-        where a.split_goods_id = b.split_goods_id and b.remain_amount>0)
-          and sp.company_id = a.company_id and a.is_deleted=0
-      )
+      and wp.plan_status!='60'
+      and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)>0
       <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
@@ -823,12 +830,13 @@
       <if test="goodsInfo != null and goodsInfo!=''">
         and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like  concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')  and is_deleted=0)
       </if>
-      <if test="companyIds!=null and companyIds!=''">
+      <if test="companyIds!=null and companyIds!=''"> <!--创建企业-->
         and ${companyIds}
       </if>
-      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
+      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''"> <!--承运企业-->
         and ${carrierCollectionIds}
       </if>
+
     </where>
     order by waybill_plan_id desc
   </select>
@@ -836,6 +844,14 @@
   <!--客户计划（已派车）
       查询条件：派单时间
        满足前提条件：计划派单关联计划，同时派单（派单当前登录人所在的企业）的货物剩余数量=0的
+
+             and sp.split_goods_id in (
+        select a.split_goods_id from t_split_goods_detail as a
+        where split_goods_detail_id = (select max(b.split_goods_detail_id)
+        from t_split_goods_detail as b
+        where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
+        and sp.company_id = a.company_id and a.is_deleted=0
+      )
    -->
   <select id="customerPlanList4VehicleHave" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
@@ -853,13 +869,7 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      and sp.split_goods_id in (
-        select a.split_goods_id from t_split_goods_detail as a
-        where split_goods_detail_id = (select max(b.split_goods_detail_id)
-        from t_split_goods_detail as b
-        where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
-        and sp.company_id = a.company_id and a.is_deleted=0
-      )
+      and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
       <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
@@ -891,9 +901,6 @@
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
-      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        and ${carrierCollectionIds}
-      </if>
     </where>
     order by waybill_plan_id desc
   </select>
@@ -901,6 +908,14 @@
   <!--客户计划（已完成）
          查询条件：派单时间
           满足前提条件：计划派单关联计划，派单（派单当前登录人所在的企业）的货物剩余数量=0的，并且该派单下的运单全部完成的。
+
+                and sp.split_goods_id in (
+          select a.split_goods_id from t_split_goods_detail as a
+          where split_goods_detail_id = (select max(b.split_goods_detail_id)
+          from t_split_goods_detail as b
+          where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
+          and sp.company_id = a.company_id and a.is_deleted=0
+      )
      -->
   <select id="customerPlanList4Completed" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
@@ -918,13 +933,7 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      and sp.split_goods_id in (
-          select a.split_goods_id from t_split_goods_detail as a
-          where split_goods_detail_id = (select max(b.split_goods_detail_id)
-          from t_split_goods_detail as b
-          where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
-          and sp.company_id = a.company_id and a.is_deleted=0
-      )
+      and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
       and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status!=7 )=0
       <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
@@ -957,9 +966,6 @@
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
-      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        and ${carrierCollectionIds}
-      </if>
     </where>
     order by waybill_plan_id desc
   </select>
@@ -967,6 +973,12 @@
   <!--客户计划（已取消）
          查询条件：派单时间
           满足前提条件：派单货物的原始和剩余数量都是0的
+
+         and sp.split_goods_id in (
+      SELECT sgd.split_goods_id From t_split_goods_detail sgd where wp.company_id = sgd.company_id and sgd.is_deleted=0
+             and (select SUM(remain_amount+allot_amount) from t_split_goods_detail sgd1 where wp.company_id = sgd1.company_id and sgd1.is_deleted=0)=0
+      )
+      OR
      -->
   <select id="customerPlanList4Cancel" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
@@ -984,10 +996,7 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      sp.split_goods_id in (
-      SELECT sgd.split_goods_id From t_split_goods_detail sgd where wp.company_id = sgd.company_id and sgd.is_deleted=0
-             and (select SUM(remain_amount+allot_amount) from t_split_goods_detail sgd1 where wp.company_id = sgd1.company_id and sgd1.is_deleted=0)=0
-      )
+       and wp.plan_status='60'
       <if test="isDeleted!=null">
         and sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
@@ -1018,9 +1027,6 @@
       </if>
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
-      </if>
-      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        and ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc

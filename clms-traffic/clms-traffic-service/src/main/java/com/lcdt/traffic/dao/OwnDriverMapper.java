@@ -56,4 +56,11 @@ public interface OwnDriverMapper {
      */
     List<OwnDriver> selectDriverByGroupIds(Long companyId,String driverGroupId);
 
+    /**
+     * 更新我的司机里，司机相关的主键信息（即将user_id更新到driver_id字段）
+     * @param ownDriver
+     * @return
+     */
+    int updateDriverId(OwnDriver ownDriver);
+
 }
