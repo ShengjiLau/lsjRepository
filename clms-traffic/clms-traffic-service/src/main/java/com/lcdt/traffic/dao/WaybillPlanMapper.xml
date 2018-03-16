@@ -712,6 +712,11 @@
           1、我能抢单的计划（不包括已抢的），但是该计划已经派单完成; or
           2、我能抢的计划（不包括已抢的）已经超过竞价的结束时间的；
           3、结束的没有抢单的
+
+                   or (
+            waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
+            and ( p1.plan_status='30')
+          )
    -->
   <select id="customerPlanList4Pass" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
@@ -719,17 +724,14 @@
     <where>
       and
         (
-            ( waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
-              and (SELECT SUM(remainder_amount) FROM t_plan_detail pd where pd.company_id = p1.company_id and pd.is_deleted=0)=0
-             )
-          or (
-               waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
-              and (now() >= p1.biding_end and p1.biding_end is not NULL)
-            )
-           or (
-              waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
-              and ( p1.plan_status='30')
-            )
+          ( waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
+            and (SELECT SUM(remainder_amount) FROM t_plan_detail pd where pd.company_id = p1.company_id and pd.is_deleted=0)=0
+           )
+        or (
+             waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
+            and (now() >= p1.biding_end and p1.biding_end is not NULL)
+          )
+
        )
         and  is_deleted = 0
       <if test="serialCode!=null and serialCode!=''">
@@ -828,12 +830,13 @@
       <if test="goodsInfo != null and goodsInfo!=''">
         and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like  concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')  and is_deleted=0)
       </if>
-      <if test="companyIds!=null and companyIds!=''">
+      <if test="companyIds!=null and companyIds!=''"> <!--创建企业-->
         and ${companyIds}
       </if>
-      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
+      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''"> <!--承运企业-->
         and ${carrierCollectionIds}
       </if>
+
     </where>
     order by waybill_plan_id desc
   </select>
@@ -897,9 +900,6 @@
       </if>
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
-      </if>
-      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        or ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
@@ -966,9 +966,6 @@
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
-      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        and ${carrierCollectionIds}
-      </if>
     </where>
     order by waybill_plan_id desc
   </select>
@@ -1030,9 +1027,6 @@
       </if>
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
-      </if>
-      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
-        and ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
