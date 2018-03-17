@@ -200,7 +200,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
      */
     private String planSource(Long compId, List<Customer> customerList) {
         for (Customer customer: customerList) {
-            if(customer.getBindCpid()==compId) {
+            if(customer.getBindCpid().equals(compId)) {
                 return customer.getCustomerName();
             }
         }
