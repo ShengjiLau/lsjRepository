@@ -731,7 +731,10 @@
              waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
             and (now() >= p1.biding_end and p1.biding_end is not NULL)
           )
-
+          or (
+           waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
+            and p1.plan_status='30' and p1.send_order_type=2
+          )
        )
         and  is_deleted = 0
       <if test="serialCode!=null and serialCode!=''">

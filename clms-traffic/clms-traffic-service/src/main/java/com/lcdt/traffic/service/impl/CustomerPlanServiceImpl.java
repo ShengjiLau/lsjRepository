@@ -89,12 +89,9 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     private Map  customerPlanSearch4CmpIdGroup(Map map, List<Customer> customerList, int flag) {
         Map resultMap = new HashMap();
         if (customerList!=null && customerList.size()>0) { //承运人ID
-
             StringBuffer sb = new StringBuffer(); //保存创建计划企业ID
             StringBuilder sb1 = new StringBuilder(); //竞价组集合
             StringBuilder sb_customerIDS = new StringBuilder(); //客户ID
-
-
             sb.append("(");
             for (int i=0;i<customerList.size();i++) {
                 Customer tempObj = customerList.get(i);
@@ -104,8 +101,6 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 if(i!=customerList.size()-1){
                     sb.append(" or ");
                 }
-
-
                 //查询承运人在货主方建立客户关系中，所加入的所有组集合
                 map.put("companyId",ownCompanyId);
                 map.put("bindCompId",carrierCompanyId);
@@ -120,9 +115,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             sb.append(")");
             resultMap.put("companyIds",sb.toString()); //分配计划的企业(企业创建者)
 
-            if (flag==0) {
-
-                //竞价组
+            if (flag==0) { //竞价组
                 if(!StringUtils.isEmpty(sb1.toString())) {
                     String collectionIds = sb1.toString().substring(0,sb1.toString().length()-1);
                     StringBuilder sb2 = new StringBuilder();
@@ -141,7 +134,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 } else {
                     resultMap.put("carrierCollectionIds",""); //竞价组
                 }
-            } else {
+            } else { //承运组(客户ID)
                 if(!StringUtils.isEmpty(sb_customerIDS.toString())) {
                    String customerIDS = sb_customerIDS.toString().substring(0,sb_customerIDS.toString().length()-1);
                     StringBuilder sb21 = new StringBuilder();
