@@ -138,24 +138,51 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                     resultMap.put("carrierCollectionIds",""); //竞价组
                 }
             } else { //承运组(客户ID)
-                if(!StringUtils.isEmpty(sb_customerIDS.toString())) {
-                   String customerIDS = sb_customerIDS.toString().substring(0,sb_customerIDS.toString().length()-1);
-                    StringBuilder sb21 = new StringBuilder();
+
+                StringBuilder sb_20 = new StringBuilder();
+                StringBuilder sb_21 = new StringBuilder();
+                if(!StringUtils.isEmpty(sb_customerIDS.toString())) { //指派类型的
+                    String customerIDS = sb_customerIDS.toString().substring(0,sb_customerIDS.toString().length()-1);
                     if (!StringUtils.isEmpty(customerIDS)) {
-                        sb21.append("(");
-                        String[] strArrary = customerIDS.split(",");
+                         String[] strArrary = customerIDS.split(",");
                         for (int i=0; i<strArrary.length; i++) {
-                            sb21.append(" find_in_set('"+strArrary[i]+"',wp.carrier_collection_ids)"); //承运人
+                            sb_20.append(" find_in_set('"+strArrary[i]+"',wp.carrier_collection_ids) or find_in_set('"+strArrary[i]+"',sp.carrier_collection_ids)"); //承运人
                             if(i!=strArrary.length-1){
-                                sb21.append(" or ");
+                                sb_20.append(" or ");
                             }
                         }
-                        sb21.append(")");
-                        resultMap.put("carrierCollectionIds1",sb21.toString()); //竞价组
+                    }
+                 }
+                if(!StringUtils.isEmpty(sb1.toString())) { //竞价类型的
+                    String collectionIds = sb1.toString().substring(0,sb1.toString().length()-1);
+                               if (!StringUtils.isEmpty(collectionIds)) {
+                        String[] strArrary = collectionIds.split(",");
+                        for (int i=0; i<strArrary.length; i++) {
+                            sb_21.append(" find_in_set('"+strArrary[i]+"',wp.carrier_collection_ids)"); //竞价组
+                            if(i!=strArrary.length-1){
+                                sb_21.append(" or ");
+                            }
+                        }
+
+                    }
+                }
+                String rString = "";
+                if(!sb_20.toString().isEmpty()) {
+                    rString = "(" +sb_20.toString();
+                    if(!sb_21.toString().isEmpty()) {
+                        rString += " or "+sb_21.toString()+" )";
+                    } else {
+                        rString += " )";
                     }
                 } else {
-                    resultMap.put("carrierCollectionIds1",""); //竞价组
+                      if(!sb_21.toString().isEmpty()) {
+                          rString = " ( "+sb_21.toString()+" )";
+                    } else {
+                          rString = "";
+                      }
                 }
+                 resultMap.put("carrierCollectionIds1",rString); //竞价组
+
             }
 
 
