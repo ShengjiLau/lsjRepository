@@ -75,8 +75,11 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
      * 3、绑定客户条件：绑定ID不为空，客户列表中的企业ID==登录人企业ID
      */
     private List<Customer> bindCustomerList(Map map) {
-        map.put("bindCpid","111");//标识绑定企业ID不为空的企业（承运商对应的所有绑定企业）
-        List<Customer> customerList = customerRpcService.findBindCompanyIds(map);
+          HashMap map1 = new HashMap();
+         map1.put("companyId",map.get("companyId")); //企业ID
+         map1.put("groupIds",map.get("groupIds")); //客户组
+         map1.put("bindCpid","111");//标识绑定企业ID不为空的企业（承运商对应的所有绑定企业）
+        List<Customer> customerList = customerRpcService.findBindCompanyIds(map1);
         return  customerList;
     }
 
@@ -189,7 +192,6 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
 
         //查询对应在的企业组、竞价组条件
         Map cMap = customerPlanSearch4CmpIdGroup(map, customerList,0);
-
         map.put("companyIds",cMap.get("companyIds")); //分配计划的企业(企业创建者)
         map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
         int pageNo = 1;
