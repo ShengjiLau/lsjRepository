@@ -1,10 +1,12 @@
-package com.lcdt.clms.security.helper;
+package com.lcdt.clms.security.token.config;
 
+import com.lcdt.userinfo.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -12,6 +14,12 @@ import java.util.Map;
 public class JwtTokenUtil {
 
     private String secret = "clms_secret_kk";
+
+
+    public boolean validateToken(String header, User user){
+        return true;
+    }
+
 
     public String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
@@ -29,15 +37,20 @@ public class JwtTokenUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
+            e.printStackTrace();
             claims = null;
         }
         return claims;
     }
 
 
-
     private Date generateExpirationDate() {
-        return new Date();
+        Date dt = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, 1);
+        dt = c.getTime();
+        return dt;
     }
 
 
