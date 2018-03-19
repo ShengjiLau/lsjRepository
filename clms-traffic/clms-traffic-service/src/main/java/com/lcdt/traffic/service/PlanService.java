@@ -17,24 +17,7 @@ import java.util.Map;
  */
 public interface PlanService {
 
-    /***
-     * 发布计划
-     *
-     * @param dto-- 更新人、公司等信息
-     *
-     * @return
-     */
-    WaybillPlan publishWayBillPlan(WaybillParamsDto dto);
 
-
-    /***
-     * 计划审核
-     *
-     * @param dto-- 更新人、公司等信息
-     *
-     * @return
-     */
-    WaybillPlan wayBillPlanCheckPass(WaybillParamsDto dto);
 
     /***
      * 计划查询列表
