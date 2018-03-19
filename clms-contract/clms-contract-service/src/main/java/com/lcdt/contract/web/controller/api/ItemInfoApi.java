@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.model.ItemInfo;
-import com.lcdt.contract.model.WarehouseInfo;
 import com.lcdt.contract.service.ItemInfoService;
 import com.lcdt.contract.web.dto.ItemInfoDto;
 import com.lcdt.contract.web.dto.PageBaseDto;
@@ -73,17 +72,5 @@ import io.swagger.annotations.ApiOperation;
 		return pageBaseDto;
 	}
 
-	
-	
-	@ApiOperation(value="获取仓库信息",notes="仓库信息列表")
-	@GetMapping("/warehouse")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('warehouse_info')")
-	public PageBaseDto<WarehouseInfo> getWarehouList() {
-		Long companyId = SecurityInfoGetter.getCompanyId();
-		Long createId=SecurityInfoGetter.getUser().getUserId();
-		List<WarehouseInfo> warehouseList=itemInfoService.getWarehouseInfo(companyId, createId);
-		PageBaseDto<WarehouseInfo> pageBaseDto=new PageBaseDto(warehouseList);
-		return pageBaseDto;
-	}
 	
 	}

@@ -1,6 +1,7 @@
 package com.lcdt.contract.service.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.contract.dao.ConditionQueryMapper;
 import com.lcdt.contract.dao.OrderMapper;
+import com.lcdt.contract.dao.OrderProductMapper;
 import com.lcdt.contract.model.Order;
 import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.service.OrderService;
@@ -36,8 +38,9 @@ public class OrderServiceImpl implements OrderService{
 	
 	Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 	
-//	@Autowired
-//	private OrderProductService orderProductService;
+	@Autowired
+	private OrderProductMapper orderProductMapper;
+
 
 	@Override
 	public int addOrder(OrderDto orderDto) {
@@ -61,6 +64,7 @@ public class OrderServiceImpl implements OrderService{
 	BeanUtils.copyProperties(orderDto, order);	
 	int result=orderMapper.updateByPrimaryKey(order);
 	int i=0;
+	//得到数据库中商品表中orderId等于此需要修改的订单的orderId的所有商品的opId
 	List<Long> orderProductIdList=nonautomaticMapper.selectOrderProductIdByOrderId(order.getOrderId());
 	List<OrderProduct> list1=new ArrayList<OrderProduct>();
 	List<OrderProduct> list2=new ArrayList<OrderProduct>();
@@ -72,21 +76,30 @@ public class OrderServiceImpl implements OrderService{
 			}else {
 				list2.add(orderProduct);
 				if(orderProductIdList!=null&&orderProductIdList.size()!=0) {
-					for(Long opId:orderProductIdList) {
-						if(orderProduct.getOpId()==opId) {
-							orderProductIdList.remove(opId);
-						}
-					}
+					 Iterator<Long> it = orderProductIdList.iterator();
+					 while(it.hasNext()) {
+						 if(it.next()==orderProduct.getOpId()) {
+							 it.remove();
+						 }
+					 }					 
+//					for(Long opId:orderProductIdList) {
+//						if(orderProduct.getOpId()==opId) {
+//							orderProductIdList.remove(opId);
+//						}
+//					}
 				}
 			}
 		}
 	}
+	//list1为没有opId的,是新增的商品
 	if(list1.size()>0) {
 		i+= nonautomaticMapper.insertOrderProductByBatch(list1);
 	}
+	//list2为有数据库和修改订单中均有相同商品id,是修改商品
 	if(list2.size()>0) {
 		i+= nonautomaticMapper.updateOrderProductByBatch(list2);
 	}
+	//orderProductIdList剩余的商品id不存在于修改订单中,是删除商品
 	if(orderProductIdList.size()>0) {
 		i+= nonautomaticMapper.deleteOrderProducByBatch(orderProductIdList);
 	}
@@ -102,16 +115,31 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public PageInfo<List<Order>> OrderList(OrderDto orderDto) {
+	public PageInfo<List<OrderDto>> OrderList(OrderDto orderDto) {
 		if(orderDto.getPageNum()<=0) {
 			orderDto.setPageNum(1);
 		}
 		if(orderDto.getPageSize()<=0) {
 			orderDto.setPageSize(6);
+		}		 
+		List<OrderDto> orderDtoList= nonautomaticMapper.selectByCondition(orderDto);
+		for(OrderDto order:orderDtoList) {
+			//获取订单商品
+			List<OrderProduct> orderProductList=orderProductMapper.getOrderProductByOrderId(order.getOrderId());
+			order.setOrderProductList(orderProductList);
 		}
-		 PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());
-	        PageInfo<List<Order>> page = new PageInfo(nonautomaticMapper.selectByCondition(orderDto));
+	        PageInfo<List<OrderDto>> page = new PageInfo(orderDtoList);   
+		 PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());   
 	        return page;
+	}
+
+
+	@Override
+	public OrderDto selectByPrimaryKey(Long orderId) {
+		OrderDto orderDto=orderMapper.selectByPrimaryKey(orderId);
+		//获取订单下商品
+		orderDto.setOrderProductList(orderProductMapper.getOrderProductByOrderId(orderDto.getOrderId()));
+		return orderDto;
 	}
 
 	
