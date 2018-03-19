@@ -55,6 +55,9 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	@Autowired
 	UserCompRelMapper userCompRelMapper;
 
+	@Autowired
+	WarehouseService warehouseService;
+
 	private SysRole sysAdminRole;
 
 	@Transactional(rollbackFor = Exception.class)
@@ -100,6 +103,9 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	Producer producer;
 
 	public void sendCompanyInitEvent(UserCompRel compRel){
+
+		warehouseService.initWarehouse(compRel.getUser(), compRel.getCompId());
+
 		Message message = new Message();
 		message.setKey("companyinit");
 		message.setTopic("clms_user");

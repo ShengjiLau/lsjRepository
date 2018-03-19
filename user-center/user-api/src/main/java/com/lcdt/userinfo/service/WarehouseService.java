@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.Warehouse;
 import com.lcdt.userinfo.model.WarehouseLinkman;
 import com.lcdt.userinfo.model.WarehouseLoc;
@@ -11,6 +12,9 @@ import java.util.Map;
  * Created by yangbinq on 2018/1/10.
  */
 public interface WarehouseService {
+
+   int initWarehouse(User user, Long companyId);
+
     /**
      * 仓库列表查询
      * @param m
