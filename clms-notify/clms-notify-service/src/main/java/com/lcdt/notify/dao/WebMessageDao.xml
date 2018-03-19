@@ -15,6 +15,7 @@
         <if test="isread != null">
             and message_isread = #{isread}
         </if>
+        order by message_create_time DESC
     </select>
 
 
@@ -37,6 +38,7 @@
         <if test="isread != null">
             and message_isread = #{isread}
         </if>
+
     </select>
 
     <update id="readMessages" >
