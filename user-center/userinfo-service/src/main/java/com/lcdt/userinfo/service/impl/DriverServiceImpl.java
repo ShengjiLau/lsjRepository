@@ -42,7 +42,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public boolean isExistDriver(String driverPhone) {
-        if(null==driverMapper.selectByDriverPhone(driverPhone)){
+        if(null == driverMapper.selectByDriverPhone(driverPhone)){
             return false;
         }
         return true;
