@@ -234,7 +234,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 if(StringUtils.isEmpty(rString)) {
                     rString = " find_in_set('000',wp.carrier_collection_ids)";
                 }
-                resultMap.put("carrierCollectionIds1",rString); //竞价组
+                resultMap.put("carrierCollectionIds",rString); //竞价组
             }
         }
         return resultMap;
@@ -379,8 +379,8 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
-        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds1"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds1").toString());
+        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString());
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -418,8 +418,8 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
-        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds1"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds1").toString());
+        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString());
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -459,8 +459,8 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
-        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds1"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds1").toString());
+        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString());
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -497,8 +497,8 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
-        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds1"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds1").toString());
+        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString());
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
