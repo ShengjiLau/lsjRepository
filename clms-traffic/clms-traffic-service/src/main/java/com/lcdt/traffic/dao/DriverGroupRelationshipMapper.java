@@ -25,4 +25,12 @@ public interface DriverGroupRelationshipMapper {
      * @return
      */
     int selectByDriverGroupId(Long driverGroupId,Long companyId);
+
+
+    /***
+     * 根据司机ID获取相应的组关系
+     * @param arg1
+     * @return
+     */
+    List<DriverGroupRelationship> selectByDriverId(Long arg1);
 }

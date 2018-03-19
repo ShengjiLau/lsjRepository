@@ -80,6 +80,9 @@
     from t_own_driver
     where own_driver_id = #{ownDriverId,jdbcType=BIGINT}
   </select>
+
+
+
   <select id="selectAll" resultMap="BaseResultMap">
     select own_driver_id, driver_id, affiliated_company, driver_name, driver_phone, driver_category,
     driver_email, driver_sex, driver_nationality, driver_birthday, driver_license, driver_province,

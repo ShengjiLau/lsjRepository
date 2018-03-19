@@ -69,4 +69,13 @@
     select count(driver_group_id) from t_driver_group_relationship
     where driver_group_id = #{arg0} and company_id = #{arg1}
   </select>
+
+  <!--司机抢单竞价组-->
+  <select id="selectByDriverId" resultType="BaseResultMap">
+    SELECT * FROM t_driver_group_relationship where own_driver_id in (
+      SELECT own_driver_id from t_own_driver where driver_id = #{arg1}
+    )
+  </select>
+
+
 </mapper>
