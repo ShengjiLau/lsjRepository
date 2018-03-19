@@ -162,4 +162,18 @@ public interface WaybillMapper {
      */
 
     int updateWaybillByTransferRecord(Waybill waybill);
+
+    /**
+     * 司机根据条件查询运单
+     * @param map
+     * @return
+     */
+    List<WaybillDao> selectDriverByCondition(Map map);
+
+    /**
+     * 司机修改运单信息
+     * @param map
+     * @return
+     */
+    int updateWaybillByDriver(Map map);
 }

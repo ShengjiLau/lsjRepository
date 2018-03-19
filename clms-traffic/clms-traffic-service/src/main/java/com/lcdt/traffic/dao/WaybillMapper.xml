@@ -45,6 +45,7 @@
     <result column="is_urgent" jdbcType="SMALLINT" property="isUrgent" />
     <result column="pickup_way" jdbcType="VARCHAR" property="pickupWay" />
     <result column="distribution_way" jdbcType="VARCHAR" property="distributionWay" />
+    <result column="electronical_receipt" jdbcType="VARCHAR" property="electronicalReceipt" />
     <result column="attachment1" jdbcType="VARCHAR" property="attachment1" />
     <result column="attachment1_name" jdbcType="VARCHAR" property="attachment1Name" />
     <result column="attachment2" jdbcType="VARCHAR" property="attachment2" />
@@ -110,7 +111,7 @@
       receive_city, receive_county, receive_address, 
       transport_way, goods_type, start_date, 
       arrive_date, is_receipt, is_urgent, 
-      pickup_way, distribution_way, attachment1, 
+      pickup_way, distribution_way,electronical_receipt, attachment1,
       attachment1_name, attachment2, attachment2_name, 
       attachment3, attachment3_name, attachment4, 
       attachment4_name, attachment5, attachment5_name, 
@@ -140,7 +141,7 @@
       #{receiveCity,jdbcType=VARCHAR}, #{receiveCounty,jdbcType=VARCHAR}, #{receiveAddress,jdbcType=VARCHAR}, 
       #{transportWay,jdbcType=SMALLINT}, #{goodsType,jdbcType=VARCHAR}, #{startDate,jdbcType=TIMESTAMP}, 
       #{arriveDate,jdbcType=TIMESTAMP}, #{isReceipt,jdbcType=SMALLINT}, #{isUrgent,jdbcType=SMALLINT}, 
-      #{pickupWay,jdbcType=VARCHAR}, #{distributionWay,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR}, 
+      #{pickupWay,jdbcType=VARCHAR}, #{distributionWay,jdbcType=VARCHAR},  #{electronicalReceipt,jdbcType=VARCHAR},#{attachment1,jdbcType=VARCHAR},
       #{attachment1Name,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR}, #{attachment2Name,jdbcType=VARCHAR}, 
       #{attachment3,jdbcType=VARCHAR}, #{attachment3Name,jdbcType=VARCHAR}, #{attachment4,jdbcType=VARCHAR}, 
       #{attachment4Name,jdbcType=VARCHAR}, #{attachment5,jdbcType=VARCHAR}, #{attachment5Name,jdbcType=VARCHAR}, 
@@ -195,6 +196,7 @@
       is_urgent = #{isUrgent,jdbcType=SMALLINT},
       pickup_way = #{pickupWay,jdbcType=VARCHAR},
       distribution_way = #{distributionWay,jdbcType=VARCHAR},
+      electronical_receipt = #{electronicalReceipt,jdbcType=VARCHAR},
       attachment1 = #{attachment1,jdbcType=VARCHAR},
       attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
       attachment2 = #{attachment2,jdbcType=VARCHAR},
@@ -234,7 +236,7 @@
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province, 
     send_city, send_county, send_address, receive_man, receive_phone, receive_province, 
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date, 
-    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name, 
+    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,electronical_receipt, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name, 
     attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date, 
@@ -253,7 +255,7 @@
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province, 
     send_city, send_county, send_address, receive_man, receive_phone, receive_province, 
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date, 
-    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name, 
+    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,electronical_receipt, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name, 
     attachment5, attachment5_name, waybill_remark, carrier_company_id, carrier_company_name,company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date, 
@@ -298,6 +300,7 @@
     is_urgent = #{isUrgent,jdbcType=SMALLINT},
     pickup_way = #{pickupWay,jdbcType=VARCHAR},
     distribution_way = #{distributionWay,jdbcType=VARCHAR},
+    electronical_receipt = #{electronicalReceipt,jdbcType=VARCHAR},
     attachment1 = #{attachment1,jdbcType=VARCHAR},
     attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
     attachment2 = #{attachment2,jdbcType=VARCHAR},
@@ -354,6 +357,7 @@
     is_urgent = #{isUrgent,jdbcType=SMALLINT},
     pickup_way = #{pickupWay,jdbcType=VARCHAR},
     distribution_way = #{distributionWay,jdbcType=VARCHAR},
+    electronical_receipt = #{electronicalReceipt,jdbcType=VARCHAR},
     attachment1 = #{attachment1,jdbcType=VARCHAR},
     attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
     attachment2 = #{attachment2,jdbcType=VARCHAR},
@@ -379,7 +383,7 @@
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
     send_city, send_county, send_address, receive_man, receive_phone, receive_province,
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
-    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
+    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,electronical_receipt, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
     attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
@@ -394,7 +398,7 @@
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
     send_city, send_county, send_address, receive_man, receive_phone, receive_province,
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
-    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
+    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,electronical_receipt, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
     attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
@@ -409,7 +413,7 @@
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
     send_city, send_county, send_address, receive_man, receive_phone, receive_province,
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
-    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
+    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,electronical_receipt, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
     attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
@@ -470,7 +474,7 @@
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
     send_city, send_county, send_address, receive_man, receive_phone, receive_province,
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
-    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
+    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,electronical_receipt, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
     attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
@@ -550,7 +554,7 @@
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
     send_city, send_county, send_address, receive_man, receive_phone, receive_province,
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
-    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
+    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,electronical_receipt, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
     attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
@@ -581,7 +585,7 @@
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
     send_city, send_county, send_address, receive_man, receive_phone, receive_province,
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
-    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
+    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,electronical_receipt, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
     attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
@@ -607,7 +611,7 @@
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
     send_city, send_county, send_address, receive_man, receive_phone, receive_province,
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
-    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
+    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,electronical_receipt, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
     attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
@@ -655,7 +659,7 @@
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
     send_city, send_county, send_address, receive_man, receive_phone, receive_province,
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
-    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way, attachment1, attachment1_name,
+    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,electronical_receipt, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
     attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
@@ -675,5 +679,78 @@
     vechicle_num = #{vechicleNum,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectDriverByCondition" parameterType="java.util.Map" resultMap="BaseWaybillAndItems">
+    select id, waybill_plan_id, split_goods_id,waybill_code, waybill_status,waybill_source, group_id, group_name, driver_id,
+    driver_name, driver_phone, vechicle_id, vechicle_num, customer_id, customer_name,
+    customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
+    send_city, send_county, send_address, receive_man, receive_phone, receive_province,
+    receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
+    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,electronical_receipt, attachment1, attachment1_name,
+    attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
+    attachment5, attachment5_name, waybill_remark, carrier_company_id,carrier_company_name, company_id, pub_date,
+    finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
+    update_id, update_name, update_date, is_deleted
+    from t_waybill
+    <where>driver_id = #{driver_id,jdbcType=BIGINT}
+      <if test="waybillCode!=null and waybillCode!=''">
+        and waybill_code like concat('%',#{waybillCode,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="waybillStatus!=null and waybillStatus!=''">
+        and waybill_status = #{waybillStatus,jdbcType=SMALLINT}
+      </if>
+      <if test="receiveProvince!=null and receiveProvince!=''">
+        and receive_province = #{receiveProvince,jdbcType=VARCHAR}
+      </if>
+      <if test="receiveCity!=null and receiveCity!=''">
+        and receive_city = #{receiveCity,jdbcType=VARCHAR}
+      </if>
+      <if test="receiveCounty!=null and receiveCounty!=''">
+        and receive_county = #{receiveCounty,jdbcType=VARCHAR}
+      </if>
+      <if test="startCreateDate!=null and startCreateDate!=''">
+        and create_date &gt;= #{startCreateDate,jdbcType=VARCHAR}
+      </if>
+      <if test="endCreateDate!=null and endCreateDate!=''">
+        and create_date &lt;= #{endCreateDate,jdbcType=VARCHAR}
+      </if>
+      <if test="waybillSource!=null and waybillSource!=''">
+        and waybill_source like concat('%',#{waybillSource,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="goodsName != null and goodsName!=''">
+        and id in (select waybill_id from t_waybill_items where goods_name like concat('%',#{goodsName,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="driverInfo!=null and driverInfo!=''">
+        and (driver_name like concat('%',#{driverInfo,jdbcType=VARCHAR},'%') or driver_phone like concat('%',#{driverInfo,jdbcType=VARCHAR},'%') or vechicle_num like concat('%',#{driverInfo,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="startStartDate!=null and startStartDate!=''">
+        and start_date &gt;= #{startStartDate,jdbcType=VARCHAR}
+      </if>
+      <if test="endStartDate!=null and endStartDate!=''">
+        and start_date &lt;= #{endStartDate,jdbcType=VARCHAR}
+      </if>
+      <if test="isDeleted!=null and isDeleted!=''">
+        and is_deleted = #{isDeleted,jdbcType=VARCHAR}
+      </if>
+    </where>
+    order by id desc
+  </select>
+
+
+  <update id="updateWaybillByDriver" parameterType="java.util.Map">
+    update t_waybill
+    set
+    <if test="waybillStatus!=null and waybillStatus!=''">
+      waybill_status = #{waybillStatus,jdbcType=SMALLINT},
+    </if>
+    <if test="electronicalReceipt!=null and electronicalReceipt!=''">
+      electronical_receipt = #{electronicalReceipt,jdbcType=VARCHAR},
+    </if>
+    update_id = #{updateId,jdbcType=BIGINT},
+    update_name = #{updateName,jdbcType=VARCHAR},
+    update_date = CURRENT_TIMESTAMP
+    where id in ( #{waybillIds,jdbcType=VARCHAR} ) and driver_id = #{driverId,jdbcType=BIGINT}
+  </update>
+
 
 </mapper>
