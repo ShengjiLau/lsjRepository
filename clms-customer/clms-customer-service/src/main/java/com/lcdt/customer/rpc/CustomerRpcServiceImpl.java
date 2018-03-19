@@ -19,6 +19,7 @@ public class CustomerRpcServiceImpl implements CustomerRpcService {
     @Autowired
     private CustomerMapper customerMapper;
 
+
     @Override
     public Customer findCustomerById(Long customerId) {
         Customer vo = customerMapper.selectInnerByPrimaryKey(customerId);
@@ -40,5 +41,9 @@ public class CustomerRpcServiceImpl implements CustomerRpcService {
     public Map<String,Object> selectCarrierAndCustomer(Long companyId){
         return customerMapper.selectCarrierAndCustomer(companyId);
     }
+
+
+
+
 
 }

@@ -18,6 +18,7 @@ import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.NotifyUtils;
 import com.lcdt.traffic.service.CustomerPlanService;
+import com.lcdt.traffic.service.DriverGroupService;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
@@ -66,6 +67,9 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Autowired
     private ClmsNotifyProducer producer;
 
+    @Autowired
+    private DriverGroupService driverGroupService;
+
 
 
 
@@ -83,17 +87,23 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         return  customerList;
     }
 
-    /****
-     * 客户计划查询公共条件（创建企业ID条件及竞价组条件）
-     *
-     * Map(bindCompId--客户绑定企业ID,companyId--客户创建企业ID,groupIds--客户组IDs)
-          * @return
+
+    /***
+     * 查询相关权限
+     * @param map
+     * @param customerList
+     * @param flag
+     * @return
      */
-    private Map  customerPlanSearch4CmpIdGroup(Map map, List<Customer> customerList, int flag) {
+    private Map  customerPlanByCarrier4CmpIdGroup(Map map, List<Customer> customerList, int flag) {
         Map resultMap = new HashMap();
         if (customerList!=null && customerList.size()>0) { //承运人ID
+
             StringBuffer sb = new StringBuffer(); //保存创建计划企业ID
-            StringBuilder sb1 = new StringBuilder(); //竞价组集合
+
+            StringBuilder sb_carrier_ids = new StringBuilder(); //承运商业竞价组集合
+            StringBuilder sb_driver_ids = new StringBuilder(); //司机竞价组集合
+
             StringBuilder sb_customerIDS = new StringBuilder(); //客户ID
             sb.append("(");
             for (int i=0;i<customerList.size();i++) {
@@ -104,41 +114,80 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 if(i!=customerList.size()-1){
                     sb.append(" or ");
                 }
-                //查询承运人在货主方建立客户关系中，所加入的所有组集合
+
+                //查询承运人在货主方建立客户关系中，所加入的承运竞价组集合
                 map.put("companyId",ownCompanyId);
                 map.put("bindCompId",carrierCompanyId);
-                List<Customer> customer4GroupList = customerRpcService.findBindCompanyIds(map);
+                List<Customer> customer4GroupList = customerRpcService.findBindCompanyIds(map); //承运商竞价组
                 for (Customer obj1: customer4GroupList) {
                     if (!StringUtils.isEmpty(obj1.getCollectionIds())) {
-                        sb1.append(obj1.getCollectionIds()+",");
+                        sb_carrier_ids.append(obj1.getCollectionIds()+",");
                         sb_customerIDS.append(obj1.getCustomerId()+",");
+                    }
+                }
+                //查询承运人在货主建立的司机组中的，所有竞价组
+                List<DriverGroup> driverGroupList = driverGroupService.selectAll(ownCompanyId);
+                if (driverGroupList!=null && driverGroupList.size()>0) {
+                    for (DriverGroup obj1: driverGroupList) {
+                        if (!StringUtils.isEmpty(obj1.getDriverGroupId())) {
+                            sb_driver_ids.append(obj1.getDriverGroupId()+",");
+                        }
                     }
                 }
             }
             sb.append(")");
-            resultMap.put("companyIds",sb.toString()); //分配计划的企业(企业创建者)
 
-            if (flag==0) { //竞价组
-                if(!StringUtils.isEmpty(sb1.toString())) {
-                    String collectionIds = sb1.toString().substring(0,sb1.toString().length()-1);
-                    StringBuilder sb2 = new StringBuilder();
-                    if (!StringUtils.isEmpty(collectionIds)) {
-                        sb2.append("(");
-                        String[] strArrary = collectionIds.split(",");
+            /******返回结果集---分配计划的企业(企业创建者)******************/
+            resultMap.put("companyIds",sb.toString());
+            if (flag==0) {
+                StringBuilder sb_10 = new StringBuilder();
+                StringBuilder sb_11 = new StringBuilder();
+                if(!StringUtils.isEmpty(sb_carrier_ids.toString())) { //承运商组
+                    String carrierIds = sb_carrier_ids.toString().substring(0,sb_carrier_ids.toString().length()-1);
+                     if (!StringUtils.isEmpty(carrierIds)) {
+                          String[] strArrary = carrierIds.split(",");
                         for (int i=0; i<strArrary.length; i++) {
-                            sb2.append(" find_in_set('"+strArrary[i]+"',carrier_collection_ids)"); //竞价组
+                            sb_10.append(" find_in_set('"+strArrary[i]+"',carrier_collection_ids)");
                             if(i!=strArrary.length-1){
-                                sb2.append(" or ");
+                                sb_10.append(" or ");
                             }
                         }
-                        sb2.append(")");
-                        resultMap.put("carrierCollectionIds",sb2.toString()); //竞价组
                     }
                 } else {
-                    resultMap.put("carrierCollectionIds",""); //竞价组
+                    sb_10.append(" find_in_set('000',carrier_collection_ids)"); //没有承运条件的看不到
                 }
-            } else { //承运组(客户ID)
+                /*   if(!StringUtils.isEmpty(sb_driver_ids.toString())) { //司机组
+                    String driverIds = sb_driver_ids.toString().substring(0,sb_driver_ids.toString().length()-1);
+                    if (!StringUtils.isEmpty(driverIds)) {
+                        String[] strArrary = driverIds.split(",");
+                        for (int i=0; i<strArrary.length; i++) {
+                            sb_11.append(" find_in_set('"+strArrary[i]+"',carrier_driver_ids)");
+                            if(i!=strArrary.length-1){
+                                sb_11.append(" or ");
+                            }
+                        }
 
+                    }
+                }*/
+
+                String rString = "";
+                if(!sb_10.toString().isEmpty()) {
+                    rString = "(" +sb_10.toString();
+                    if(!sb_11.toString().isEmpty()) {
+                        rString += " or "+sb_11.toString()+" )";
+                    } else {
+                        rString += " )";
+                    }
+                } else {
+                    if(!sb_11.toString().isEmpty()) {
+                        rString = " ( "+sb_11.toString()+" )";
+                    } else {
+                        rString = "";
+                    }
+                }
+                resultMap.put("carrierCollectionIds",rString);
+
+            } else { //承运组(客户ID)
                 StringBuilder sb_20 = new StringBuilder();
                 StringBuilder sb_21 = new StringBuilder();
                 if(!StringUtils.isEmpty(sb_customerIDS.toString())) { //指派类型的
@@ -153,8 +202,9 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                         }
                     }
                  }
-                if(!StringUtils.isEmpty(sb1.toString())) { //竞价类型的
-                    String collectionIds = sb1.toString().substring(0,sb1.toString().length()-1);
+
+         /*        if(!StringUtils.isEmpty(sb_carrier_ids.toString())) { //承运商---竞价类型的
+                    String collectionIds = sb_carrier_ids.toString().substring(0,sb_carrier_ids.toString().length()-1);
                                if (!StringUtils.isEmpty(collectionIds)) {
                         String[] strArrary = collectionIds.split(",");
                         for (int i=0; i<strArrary.length; i++) {
@@ -163,11 +213,11 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                                 sb_21.append(" or ");
                             }
                         }
-
                     }
-                }
-                String rString = "";
-                if(!sb_20.toString().isEmpty()) {
+                }*/
+
+                 String rString = "";
+                 if(!sb_20.toString().isEmpty()) {
                     rString = "(" +sb_20.toString();
                     if(!sb_21.toString().isEmpty()) {
                         rString += " or "+sb_21.toString()+" )";
@@ -181,12 +231,11 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                           rString = "";
                       }
                 }
-                 resultMap.put("carrierCollectionIds1",rString); //竞价组
-
+                if(StringUtils.isEmpty(rString)) {
+                    rString = " find_in_set('000',wp.carrier_collection_ids)";
+                }
+                resultMap.put("carrierCollectionIds",rString); //竞价组
             }
-
-
-
         }
         return resultMap;
     }
@@ -218,7 +267,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         map.remove("groupIds");//移除
 
         //查询对应在的企业组、竞价组条件
-        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList,0);
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,0);
         map.put("companyIds",cMap.get("companyIds")); //分配计划的企业(企业创建者)
         map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
         int pageNo = 1;
@@ -253,7 +302,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         if(customerList==null || customerList.size()==0) return new PageInfo();
 
         map.remove("groupIds");//移除
-        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList,0); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,0); //查询对应在的企业组、竞价组条件
 
         map.put("companyIds",cMap.get("companyIds"));
         map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
@@ -289,7 +338,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
-        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList,0); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,0); //查询对应在的企业组、竞价组条件
 
         map.put("companyIds",cMap.get("companyIds"));
         map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
@@ -326,12 +375,12 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
-        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
-        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds1"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds1").toString());
+        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString());
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -365,12 +414,12 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
-        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
-        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds1"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds1").toString());
+        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString());
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -406,12 +455,12 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
-        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
-        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds1"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds1").toString());
+        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString());
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -444,12 +493,12 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
-        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
-        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds1"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds1").toString());
+        if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString());
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有

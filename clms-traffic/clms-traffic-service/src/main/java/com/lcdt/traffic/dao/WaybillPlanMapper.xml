@@ -15,6 +15,12 @@
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <result column="carrier_collection_ids" jdbcType="VARCHAR" property="carrierCollectionIds" />
     <result column="carrier_collection_names" jdbcType="VARCHAR" property="carrierCollectionNames" />
+
+    <result column="carrier_driver_ids" jdbcType="VARCHAR" property="carrierDriverIds" />
+    <result column="carrier_driver_names" jdbcType="VARCHAR" property="carrierDriverNames" />
+    <result column="carrier_ids" jdbcType="VARCHAR" property="carrierIds" />
+    <result column="carrier_names" jdbcType="VARCHAR" property="carrierNames" />
+
     <result column="carrier_phone" jdbcType="VARCHAR" property="carrierPhone" />
     <result column="carrier_vehicle" jdbcType="VARCHAR" property="carrierVehicle" />
     <result column="plan_source" jdbcType="VARCHAR" property="planSource" />
@@ -157,8 +163,9 @@
     insert into t_waybill_plan (plan_code, serial_code, group_id, 
       group_name, plan_source, plan_status, 
       send_card_status, send_order_type, carrier_type, carrier_collection_ids,
-    carrier_collection_names, carrier_phone, carrier_vehicle,
-    biding_start, biding_end, customer_id,
+      carrier_collection_names,carrier_driver_ids,carrier_driver_names,carrier_ids,
+      carrier_names,carrier_phone, carrier_vehicle,
+      biding_start, biding_end, customer_id,
       customer_name, customer_phone, sales_order, 
       cust_contact_man, send_wh_id, send_wh_name, 
       send_man, send_phone, send_province, 
@@ -180,8 +187,13 @@
     values (#{planCode,jdbcType=VARCHAR}, F_PLAN_SERIAL_CODE(#{transportWay,jdbcType=SMALLINT}), #{groupId,jdbcType=BIGINT},
       #{groupName,jdbcType=VARCHAR}, #{planSource,jdbcType=VARCHAR}, #{planStatus,jdbcType=VARCHAR}, 
       #{sendCardStatus,jdbcType=SMALLINT}, #{sendOrderType,jdbcType=SMALLINT}, #{carrierType,jdbcType=SMALLINT},
-      #{carrierCollectionIds,jdbcType=VARCHAR},#{carrierCollectionNames,jdbcType=VARCHAR}, #{carrierPhone,jdbcType=VARCHAR}, #{carrierVehicle,jdbcType=VARCHAR},
-    #{bidingStart,jdbcType=TIMESTAMP}, #{bidingEnd,jdbcType=TIMESTAMP}, #{customerId,jdbcType=BIGINT},
+      #{carrierCollectionIds,jdbcType=VARCHAR},#{carrierCollectionNames,jdbcType=VARCHAR},
+      #{carrierDriverIds,jdbcType=VARCHAR},
+      #{carrierDriverNames,jdbcType=VARCHAR},
+      #{carrierIds,jdbcType=VARCHAR},
+      #{carrierNames,jdbcType=VARCHAR},
+      #{carrierPhone,jdbcType=VARCHAR}, #{carrierVehicle,jdbcType=VARCHAR},
+      #{bidingStart,jdbcType=TIMESTAMP}, #{bidingEnd,jdbcType=TIMESTAMP}, #{customerId,jdbcType=BIGINT},
       #{customerName,jdbcType=VARCHAR}, #{customerPhone,jdbcType=VARCHAR}, #{salesOrder,jdbcType=VARCHAR}, 
       #{custContactMan,jdbcType=VARCHAR}, #{sendWhId,jdbcType=BIGINT}, #{sendWhName,jdbcType=VARCHAR}, 
       #{sendMan,jdbcType=VARCHAR}, #{sendPhone,jdbcType=VARCHAR}, #{sendProvince,jdbcType=VARCHAR}, 
@@ -213,6 +225,10 @@
       group_name = #{groupName,jdbcType=VARCHAR},
       carrier_collection_ids = #{carrierCollectionIds,jdbcType=VARCHAR},
       carrier_collection_names = #{carrierCollectionNames,jdbcType=VARCHAR},
+      carrier_driver_ids = #{carrierDriverIds,jdbcType=VARCHAR},
+      carrier_driver_names = #{carrierDriverNames,jdbcType=VARCHAR},
+      carrier_ids = #{carrierIds,jdbcType=VARCHAR},
+      carrier_names = #{carrierNames,jdbcType=VARCHAR},
       carrier_phone = #{carrierPhone,jdbcType=VARCHAR},
       carrier_vehicle = #{carrierVehicle,jdbcType=VARCHAR},
       plan_source = #{planSource,jdbcType=VARCHAR},
@@ -311,20 +327,30 @@
       <if test="carrierType != null">
         carrier_type = #{carrierType,jdbcType=SMALLINT},
       </if>
-
-      <if test="carrierType != null">
+      <if test="carrierCollectionIds != null">
         carrier_collection_ids = #{carrierCollectionIds,jdbcType=VARCHAR},
       </if>
-      <if test="carrierType != null">
+      <if test="carrierCollectionNames != null">
         carrier_collection_names = #{carrierCollectionNames,jdbcType=VARCHAR},
       </if>
-      <if test="carrierType != null">
+      <if test="carrierPhone != null">
         carrier_phone = #{carrierPhone,jdbcType=VARCHAR},
       </if>
-      <if test="carrierType != null">
+      <if test="carrierVehicle != null">
         carrier_vehicle = #{carrierVehicle,jdbcType=VARCHAR},
       </if>
-
+      <if test="carrierDriverIds != null">
+        carrier_driver_ids = #{carrierDriverIds,jdbcType=VARCHAR},
+      </if>
+      <if test="carrierDriverNames != null">
+        carrier_driver_names = #{carrierDriverNames,jdbcType=VARCHAR},
+      </if>
+      <if test="carrierIds != null">
+        carrier_ids = #{carrierIds,jdbcType=VARCHAR},
+      </if>
+      <if test="carrierNames != null">
+        carrier_names = #{carrierNames,jdbcType=VARCHAR},
+      </if>
       <if test="bidingStart != null">
         biding_start = #{bidingStart,jdbcType=TIMESTAMP},
       </if>
@@ -520,7 +546,8 @@
     attachment1, attachment1_name, attachment2, attachment2_name, attachment3, attachment3_name, 
     attachment4, attachment4_name, attachment5, attachment5_name, is_approval, plan_remark, 
     create_id, create_name, create_date, update_id, update_name, update_time, is_deleted, 
-    carrier_company_id, company_id, plan_days, pubdate, finish_date, cancel_date, cancel_man, 
+    carrier_company_id, company_id, plan_days, pubdate, finish_date, cancel_date, cancel_man,
+    carrier_driver_ids,carrier_driver_names,carrier_ids,carrier_names,
     cancel_remark,carrier_company_name
     from t_waybill_plan
     <where>
@@ -554,7 +581,7 @@
               attachment4, attachment4_name, attachment5, attachment5_name, is_approval, plan_remark,
               create_id, create_name, create_date, update_id, update_name, update_time, is_deleted,
               carrier_company_id, company_id, plan_days, pubdate, finish_date, cancel_date, cancel_man,
-              cancel_remark,carrier_company_name
+              cancel_remark,carrier_company_name,carrier_driver_ids,carrier_driver_names,carrier_ids,carrier_names
         from t_waybill_plan
         <where>
           <if test="isDeleted!=null">
