@@ -38,7 +38,7 @@
     insert into t_order_product (op_id, order_id, name, 
       code, sku, num, price, 
       total)
-    values (#{opId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+    values (null, #{orderId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
       #{code,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, 
       #{total,jdbcType=DECIMAL})
   </insert>

@@ -39,7 +39,7 @@ import io.swagger.annotations.ApiParam;
 	
 	@ApiOperation(value="供应商信息列表",notes="相关供应商信息")
 	@GetMapping("/delivery")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delivery_info')")
+	//@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delivery_info')")
 	public PageBaseDto<DeliveryInfo> getDeliveryInfo(@ApiParam(value="粗略名称") @RequestParam String roughName) {
 		List<DeliveryInfo> deliveryInfoList =receAndDeliv.getDeliveryInfo(roughName);
 		PageBaseDto<DeliveryInfo> pageBaseDto =new PageBaseDto<DeliveryInfo>(deliveryInfoList);
@@ -50,7 +50,7 @@ import io.swagger.annotations.ApiParam;
 	
 	@ApiOperation(value="收货人信息列表",notes="相关收货信息")
 	@GetMapping("/receiver")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receiver_info')")
+	//@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receiver_info')")
 	public ReceiverInfo getReceiverInfo(@ApiParam(value="仓库id") @RequestParam Integer whId){
 		ReceiverInfo receiverInfo=receAndDeliv.getReceiverInfo(whId);
 		logger.debug("收货联系人:"+receiverInfo.getLinkMan());

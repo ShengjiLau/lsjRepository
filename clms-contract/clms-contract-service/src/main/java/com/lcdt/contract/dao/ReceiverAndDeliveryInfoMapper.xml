@@ -5,8 +5,8 @@
  
   <select id="getDeliveryInfoList" parameterType="java.lang.String" resultType="com.lcdt.contract.model.DeliveryInfo">
   select 
-  comp_id companyId,full_name supplier,
-  link_man linkMan,link_tel linkTel,detail_address address
+  comp_id as companyId,full_name as supplier,
+  link_man as linkMan,link_tel as linkTel,detail_address as address
   from t_uc_company
   where full_name like concat('%',#{roughName,jdbcType=VARCHAR},'%');
   </select>

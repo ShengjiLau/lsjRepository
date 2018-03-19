@@ -78,7 +78,7 @@ public class AuthController {
      * @param response
      * @return
      */
-    @RequestMapping(value = {"/", ""})
+    @RequestMapping(value = {"/"})
     @ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
     public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
         boolean isLogin = LoginSessionReposity.isLogin(request);

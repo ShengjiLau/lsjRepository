@@ -52,7 +52,7 @@ import io.swagger.annotations.ApiParam;
 	@ApiOperation(value="采购订单列表",notes="采购订单列表数据")
 	@GetMapping("/list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_list')")
-	public PageBaseDto<List<Order>> OrderList(@RequestParam @Validated OrderDto orderDto
+	public PageBaseDto<List<Order>> OrderList(@RequestParam(required=false) @Validated OrderDto orderDto
 //			,@ApiParam(value="第几页",required=true,defaultValue="1") @RequestParam Integer pageNum,
 //			@ApiParam(value="每页条目数量",required=true,defaultValue="6")@RequestParam Integer pagesize
 			){

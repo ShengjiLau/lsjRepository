@@ -156,7 +156,7 @@ public class ContractServiceImpl implements ContractService {
             order.setCompanyId(contract.getCompanyId());
             order.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
             order.setCreateTime(new Date());
-            result = orderMapper.insert(order);
+            result = orderMapper.insertOrder(order);
 
             List<ContractProduct> cpList = contractProductMapper.selectCpsByContractId(contractId);
             if(cpList != null && cpList.size() > 0){
