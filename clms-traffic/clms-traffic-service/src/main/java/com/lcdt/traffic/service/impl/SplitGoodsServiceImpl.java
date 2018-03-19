@@ -122,22 +122,17 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             splitGoods.setCarrierCollectionNames(dto.getCarrierCollectionNames());
             splitGoods.setCarrierPhone(dto.getCarrierPhone());
             splitGoods.setCarrierVehicle(dto.getCarrierVehicle());
+
+
+
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
                 String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
                 Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
                 splitGoods.setCarrierCompanyId(customer.getBindCpid());
                 splitGoods.setCarrierCompanyName(customer.getBindCompany());
-/*
-
-                waybillPlan.setCarrierCompanyName(customer.getBindCompany());
-                waybillPlan.setCarrierCompanyId(customer.getBindCpid());
-*/
-
              } else {
                 splitGoods.setCarrierCompanyId(company.getCompId());
                 splitGoods.setCarrierCompanyName(company.getFullName());
-               // waybillPlan.setCarrierCompanyName(companyName);
-               // waybillPlan.setCarrierCompanyId(splitGoods.getCompanyId());
            }
             splitGoodsMapper.insert(splitGoods);
 

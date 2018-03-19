@@ -20,7 +20,6 @@ import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import com.lcdt.userinfo.model.Company;
-import com.lcdt.userinfo.model.Driver;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.BeanUtils;
@@ -115,11 +114,13 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 vo.setAttachment5Name(dto1.getAttachment5Name());
             }
         }
+
+
         //具体业务处理
         if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
-                if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
-                    String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
+                if (!StringUtils.isEmpty(dto.getCarrierIds())) {
+                    String carrierId = dto.getCarrierIds(); //承运商ID（如果是承运商只存在一个）
                     Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
                     vo.setCarrierCompanyId(customer.getBindCpid());
                     vo.setCarrierCompanyName(customer.getBindCompany()); //绑定企业
@@ -128,17 +129,17 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 }
                 planDirectProcedure(vo, dto,  flag, (short)1);
             } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
-                if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
-                    vo.setCarrierCompanyId(vo.getCompanyId()); //获取本企业司机
+                if (!StringUtils.isEmpty(dto.getCarrierIds())) {
+                    vo.setCarrierCompanyId(vo.getCompanyId());
                     vo.setCarrierCompanyName(dto.getCompanyName());
                 } else {
                     vo.setCarrierType(ConstantVO.PLAN_CARRIER_TYPE_ELSE);//没选承运人的情况下
                 }
                 planDirectProcedure(vo, dto,  flag,(short)2);
-
             } else { //其它（发布后派单）
                 onlyCreateWaybillPlan(vo,dto,flag);
             }
+
         } else  if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_JINGJIA)) { //竞价
                 if (flag==1) { //发布--操作
                     vo.setPlanStatus(ConstantVO.PLAN_STATUS_BIDDING); //竞价中
@@ -174,7 +175,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                  * 发送消息:
                  *   就是新建计划，选择竞价计划，点击发布
                  */
-                if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) {
+                if (!StringUtils.isEmpty(dto.getCarrierCollectionIds()) || !StringUtils.isEmpty(dto.getCarrierDriverIds())) {
                     Map serialCodeMap = new HashMap();
                     serialCodeMap.put("waybillPlanId",vo.getWaybillPlanId());
                     WaybillPlan tWaybillPlan = waybillPlanMapper.selectByPrimaryKey(serialCodeMap);
@@ -184,25 +185,28 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     String receiveAddress = vo.getReceiveProvince()+" "+vo.getReceiveCity()+" "+vo.getReceiveCounty()+" "+vo.getReceiveAddress();
                     DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(dto.getCompanyId(), dto.getCreateId()); //发送
 
-                    String[] ids = dto.getCarrierCollectionIds().split(","); //竞价组ID
-                    StringBuffer sb = new StringBuffer();
                     if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
-                        //竞价组内的客户->客户绑定的企业->企业的创建者
-                        if (ids!=null && ids.length>0) {
-                            sb.append("(");
-                            for(int i=0;i<ids.length;i++) {
-                                sb.append(" find_in_set('"+ids[i]+"',collection_ids)");
-                                if(i!=ids.length-1){
-                                    sb.append(" or ");
+                        String[] ids = null;
+                        StringBuffer sb = new StringBuffer();
+                        if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) {
+                            ids = dto.getCarrierCollectionIds().split(","); //竞价组ID;
+                            //承运商(获取承运商ID)
+                            //竞价组内的客户->客户绑定的企业->企业的创建者
+                            if (ids!=null && ids.length>0) {
+                                sb.append("(");
+                                for(int i=0;i<ids.length;i++) {
+                                    sb.append(" find_in_set('"+ids[i]+"',collection_ids)");
+                                    if(i!=ids.length-1){
+                                        sb.append(" or ");
+                                    }
                                 }
+                                sb.append(")");
                             }
-                            sb.append(")");
+
+                        } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) {
+                            //司机
                         }
 
-                    } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) {
-                        //司机
-                    }
-                    if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
                         Map map = new HashMap();
                         if (!sb.toString().isEmpty()) {
                             map.put("collectionIds", sb.toString());
@@ -232,7 +236,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                             }
                         }
                     } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机else
-                             List<OwnDriver> driverList = ownDriverService.driverListByGroupId(dto.getCompanyId(),dto.getCarrierCollectionIds());
+                             List<OwnDriver> driverList = ownDriverService.driverListByGroupId(dto.getCompanyId(),dto.getCarrierDriverIds());
                             if (null!=driverList && driverList.size()>0) {
                                 for (OwnDriver driver: driverList) {  //遍历客户，查询对应企业，进行发送
                                     DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyDriverReceiver(driver.getDriverPhone()); //接收
@@ -264,7 +268,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
      *
      */
     private void planDirectProcedure(WaybillPlan vo, WaybillParamsDto dto, short flag, short carrierType) {
-        if (!StringUtils.isEmpty(dto.getCarrierCollectionIds())) { //指定承运商
+        if (!StringUtils.isEmpty(dto.getCarrierIds())) { //指定承运商
             if (dto.getIsApproval()==0) { //不需要审批
                 if (flag==1) { //发布--操作
                     if(carrierType==1) { //承运商
@@ -279,8 +283,8 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     map.put("waybillPlanId",vo.getWaybillPlanId());
                     WaybillPlan tWaybillPlan = waybillPlanMapper.selectByPrimaryKey(map);
                     vo.setSerialCode(tWaybillPlan.getSerialCode());
-
                     createTransportWayItems(dto, vo);//批量创建栏目
+
                     List<PlanDetail> planDetailList = dto.getPlanDetailList();
                     StringBuffer sb_goods = new StringBuffer(); //货物发送明细
                     for (PlanDetail obj : planDetailList) {
@@ -314,8 +318,8 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     splitGoods.setCarrierCompanyName(vo.getCarrierCompanyName());
                     splitGoods.setCarrierCompanyId(vo.getCarrierCompanyId());
                     splitGoods.setIsDeleted((short)0);
-                    splitGoods.setCarrierCollectionIds(vo.getCarrierCollectionIds());
-                    splitGoods.setCarrierCollectionNames(vo.getCarrierCollectionNames());
+                    splitGoods.setCarrierCollectionIds(vo.getCarrierIds());
+                    splitGoods.setCarrierCollectionNames(vo.getCarrierNames());
                     splitGoods.setCarrierPhone(vo.getCarrierPhone());
                     splitGoods.setCarrierVehicle(vo.getCarrierVehicle());
                     splitGoodsMapper.insert(splitGoods);
@@ -352,14 +356,15 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         waybillDto.setWaybillCode(vo.getSerialCode()); //流水号
                         waybillDto.setCarrierCompanyId(vo.getCarrierCompanyId());
                         waybillDto.setCarrierCompanyName(vo.getCarrierCompanyName());
+
                         waybillDto.setCreateId(vo.getCreateId());
                         waybillDto.setCreateName(vo.getCreateName());
                         waybillDto.setDriverPhone(vo.getCarrierPhone());
                         waybillDto.setVechicleNum(vo.getCarrierVehicle());
                         waybillDto.setWaybillRemark(vo.getPlanRemark());
-                        if(!StringUtils.isEmpty(vo.getCarrierCollectionIds())) {
-                            waybillDto.setDriverName(vo.getCarrierCollectionNames());
-                            waybillDto.setDriverId(Long.valueOf(vo.getCarrierCollectionIds()));
+                        if(!StringUtils.isEmpty(vo.getCarrierIds())) {
+                            waybillDto.setDriverName(vo.getCarrierNames());
+                            waybillDto.setDriverId(Long.valueOf(vo.getCarrierIds()));
                         }
                         waybillDto.setCarrierCompanyId(vo.getCarrierCompanyId());
                         PlanBO.getInstance().toWaybillItemsDto(vo,splitGoods,waybillDto,planDetailList,splitGoodsDetailList);
@@ -453,15 +458,15 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
      * @param flag -- 操作动作(1-发布，2-暂存)
      */
     private void onlyCreateWaybillPlan(WaybillPlan vo, WaybillParamsDto dto,short flag) {
-        if (dto.getIsApproval()==0) { //不需要审批
-            if (flag==1) { //发布--操作
-                vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
-                vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
-            } else { //暂存--操作
-                vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //计划状态(待发布)
-                vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
-            }
-        } else { // 需要审批
+       // if (dto.getIsApproval()==0) { //不需要审批
+     //   if (flag==1) { //发布--操作
+            vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
+            vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
+/*        } else { //暂存--操作
+            vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //计划状态(待发布)
+            vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
+        }*/
+/*        } else { // 需要审批
             if (flag==1) { //发布--操作
                 vo.setPlanStatus(ConstantVO.PLAN_STATUS_APPROVAL); //计划状态(审批)
                 vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
@@ -469,7 +474,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //计划状态(待发布)
                 vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
             }
-        }
+        }*/
         waybillPlanMapper.insert(vo); //生成计划
         createTransportWayItems(dto, vo);//批量创建栏目
         List<PlanDetail> planDetailList = dto.getPlanDetailList();

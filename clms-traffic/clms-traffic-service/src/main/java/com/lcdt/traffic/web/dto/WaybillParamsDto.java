@@ -32,11 +32,27 @@ public class WaybillParamsDto {
     private Short sendOrderType;
 
 
-    @ApiModelProperty(value = "承运商-ID")
+    @ApiModelProperty(value = "竞价-承运商-ID")
     private String carrierCollectionIds;
 
-    @ApiModelProperty(value = "承运商-名称")
+    @ApiModelProperty(value = "竞价-承运商-名称")
     private String carrierCollectionNames;
+
+
+    @ApiModelProperty(value = "竞价-司机-ID")
+    private String carrierDriverIds;
+
+    @ApiModelProperty(value = "竞价-司机-名称")
+    private String getCarrierDriverNames;
+
+
+
+    @ApiModelProperty(value = "直派-司机/承运商-ID")
+    private String carrierIds;
+
+    @ApiModelProperty(value = "直派-司机/承运商-名称")
+    private String carrierNames;
+
 
     @ApiModelProperty(value = "承运司机-电话")
     private String carrierPhone;
@@ -687,5 +703,37 @@ public class WaybillParamsDto {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public String getCarrierDriverIds() {
+        return carrierDriverIds;
+    }
+
+    public void setCarrierDriverIds(String carrierDriverIds) {
+        this.carrierDriverIds = carrierDriverIds;
+    }
+
+    public String getGetCarrierDriverNames() {
+        return getCarrierDriverNames;
+    }
+
+    public void setGetCarrierDriverNames(String getCarrierDriverNames) {
+        this.getCarrierDriverNames = getCarrierDriverNames;
+    }
+
+    public String getCarrierIds() {
+        return carrierIds;
+    }
+
+    public void setCarrierIds(String carrierIds) {
+        this.carrierIds = carrierIds;
+    }
+
+    public String getCarrierNames() {
+        return carrierNames;
+    }
+
+    public void setCarrierNames(String carrierNames) {
+        this.carrierNames = carrierNames;
     }
 }
