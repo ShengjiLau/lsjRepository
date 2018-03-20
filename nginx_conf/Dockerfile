@@ -10,4 +10,3 @@ RUN echo -e "127.0.0.1   customer.datuodui.com " >> /etc/hosts
 RUN echo -e "127.0.0.1   items.datuodui.com " >> /etc/hosts
 RUN echo -e "127.0.0.1   traffc.datuodui.com " >> /etc/hosts
 
-EXPOSE 80
