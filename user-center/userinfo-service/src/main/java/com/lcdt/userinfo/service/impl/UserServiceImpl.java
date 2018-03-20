@@ -33,6 +33,12 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	@Override
+	public User registerDriverUser(User user) {
+		userMapper.insert(user);
+		return user;
+	}
+
 	public User updateUserWithpwd(User user) {
 		userMapper.updateByPrimaryKey(user);
 		return user;

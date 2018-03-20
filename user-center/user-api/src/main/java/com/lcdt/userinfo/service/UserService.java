@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface UserService {
 
+	User registerDriverUser(User user);
+
 	User updateUserWithpwd(User user);
 	User updateUser(User user);
 
