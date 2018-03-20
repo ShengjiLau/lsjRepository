@@ -120,7 +120,13 @@
   <update id="updateContractStatus" parameterType="com.lcdt.contract.model.Contract">
     update t_contract
     set contract_status = #{contractStatus,jdbcType=SMALLINT}
-    where contract_id = #{contractId,jdbcType=BIGINT}
+    where contract_id = #{contractId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
 
+  <update id="updateApprovalStatus" >
+    update t_contract
+    set approval_status = #{arg2},
+    approval_endt_date = CURRENT_TIMESTAMP
+    where contract_id = #{arg0} and company_id = #{arg1}
+  </update>
 </mapper>

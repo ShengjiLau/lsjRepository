@@ -1,8 +1,9 @@
 package com.lcdt.contract.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ContractApproval {
+public class ContractApproval implements Serializable{
     private Long caId;
 
     private Long contractId;

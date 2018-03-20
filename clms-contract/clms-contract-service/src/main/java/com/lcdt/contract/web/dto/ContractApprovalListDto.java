@@ -9,7 +9,11 @@ import java.util.Date;
  */
 public class ContractApprovalListDto implements Serializable{
 
+    //合同主键
     private Long contractId;
+
+    //审批人主键
+    private Long caId;
 
     /**
      * 合同类型
@@ -62,7 +66,7 @@ public class ContractApprovalListDto implements Serializable{
     /**
      * tab筛选
      * 0 - 我的申请
-     * 1 - 带我审批
+     * 1 - 待我审批
      * 2 - 我已审批
      * 3 - 抄送
      *
@@ -80,6 +84,14 @@ public class ContractApprovalListDto implements Serializable{
 
     public void setContractId(Long contractId) {
         this.contractId = contractId;
+    }
+
+    public Long getCaId() {
+        return caId;
+    }
+
+    public void setCaId(Long caId) {
+        this.caId = caId;
     }
 
     public Short getType() {

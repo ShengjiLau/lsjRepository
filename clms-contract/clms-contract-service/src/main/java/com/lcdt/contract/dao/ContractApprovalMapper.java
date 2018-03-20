@@ -21,4 +21,13 @@ public interface ContractApprovalMapper {
 
     int insertBatch(List<ContractApproval> contractApprovalList);
 
+    /**
+     * 更新审批人状态
+     * @param contractApproval
+     * @return
+     */
+    int updateStatus(ContractApproval contractApproval);
+
+    List<ContractApproval> selectByContractId(Long contractId);
+
 }

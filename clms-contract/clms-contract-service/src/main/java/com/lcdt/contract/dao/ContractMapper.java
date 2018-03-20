@@ -29,4 +29,13 @@ public interface ContractMapper {
      * @return
      */
     int updateContractStatus(Contract record);
+
+    /**
+     * 更新审批状态
+     * @param contactId
+     * @param companyId
+     * @param status
+     * @return
+     */
+    int updateApprovalStatus(Long contactId,Long companyId,Short status);
 }
