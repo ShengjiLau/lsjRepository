@@ -6,6 +6,9 @@ import com.lcdt.contract.web.dto.ContractApprovalListDto;
 
 import java.util.List;
 
+import org.mybatis.spring.annotation.MapperScan;
+
+
 public interface ContractApprovalMapper {
     int deleteByPrimaryKey(Long caId);
 
