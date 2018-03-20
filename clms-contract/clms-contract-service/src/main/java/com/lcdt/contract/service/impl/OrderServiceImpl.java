@@ -116,22 +116,25 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public PageInfo<List<OrderDto>> OrderList(OrderDto orderDto) {
-		if(orderDto.getPageNum()<=0) {
-			orderDto.setPageNum(1);
-		}
-		if(orderDto.getPageSize()<=0) {
-			orderDto.setPageSize(6);
-		}		 
+	public List<OrderDto> OrderList(OrderDto orderDto) {
+//		if(orderDto.getPageNum()<=0) {
+//			orderDto.setPageNum(1);
+//		}
+//		if(orderDto.getPageSize()<=0) {
+//			orderDto.setPageSize(6);
+//		}		 
 		List<OrderDto> orderDtoList= nonautomaticMapper.selectByCondition(orderDto);
-		for(OrderDto order:orderDtoList) {
-			//获取订单商品
-			List<OrderProduct> orderProductList=orderProductMapper.getOrderProductByOrderId(order.getOrderId());
-			order.setOrderProductList(orderProductList);
+		if(orderDtoList!=null&&orderDtoList.size()!=0) {
+			for(OrderDto order:orderDtoList) {
+				//获取订单商品
+				List<OrderProduct> orderProductList=orderProductMapper.getOrderProductByOrderId(order.getOrderId());
+				if(orderProductList!=null&&orderProductList.size()!=0) {
+					order.setOrderProductList(orderProductList);
+				}
+			}   
 		}
-	        PageInfo<List<OrderDto>> page = new PageInfo(orderDtoList);   
-		 PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());   
-	        return page;
+	//	 PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());   
+	        return orderDtoList;
 	}
 
 

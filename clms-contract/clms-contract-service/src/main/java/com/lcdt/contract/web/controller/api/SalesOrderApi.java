@@ -52,20 +52,27 @@ import io.swagger.annotations.ApiParam;
 	@ApiOperation(value="销售订单列表",notes="销售订单列表数据")
 	@GetMapping("/list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_list')")
-	public PageBaseDto<List<OrderDto>> OrderList(OrderDto orderDto
+	public JSONObject OrderList(OrderDto orderDto
 //			,@ApiParam(value="第几页",required=true,defaultValue="1") @RequestParam Integer pageNum,
 //			@ApiParam(value="每页条目数量",required=true,defaultValue="1")@RequestParam Integer pagesize
 			){
 		Long UserId=SecurityInfoGetter.getUser().getUserId();
-		Long companyId=SecurityInfoGetter.getCompanyId();
-//		orderDto.setPageNum(pageNum);
-//		orderDto.setPageSize(pagesize);
+		Long companyId=SecurityInfoGetter.getCompanyId();	
 		orderDto.setCompanyId(companyId);
 		orderDto.setCreateUserId(UserId);
-		PageInfo<List<OrderDto>> pageInfoList = orderService.OrderList(orderDto);
-		logger.debug("销售订单条目数"+pageInfoList.getTotal());
-		PageBaseDto<List<OrderDto>> pageBaseDto = new PageBaseDto<List<OrderDto>>(pageInfoList.getList(),pageInfoList.getTotal());
-		return pageBaseDto;
+		List<OrderDto> orderDtoList = orderService.OrderList(orderDto);
+		logger.debug("销售订单条目数"+orderDtoList.size());
+		JSONObject jsonObject =new JSONObject();
+		if(orderDtoList!=null&&orderDtoList.size()!=0) {
+			jsonObject.put("code","0");
+			jsonObject.put("message","销售订单列表");
+			jsonObject.put("data",orderDtoList);
+		}else {
+			jsonObject.put("code","-1");
+			jsonObject.put("message","没有相应的销售订单");
+		}
+		//PageBaseDto<List<OrderDto>> pageBaseDto = new PageBaseDto<List<OrderDto>>(pageInfoList.getList(),pageInfoList.getTotal());
+		return jsonObject;
 	}
 	
 	
@@ -77,8 +84,17 @@ import io.swagger.annotations.ApiParam;
 	@ApiOperation(value="获取单个销售订单",notes="单个销售订单")
 	@GetMapping("/selsorder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('select_purchase_order')")
-	public OrderDto selectOrder(@ApiParam(value="订单id")@RequestParam Long orderId){
-		return orderService.selectByPrimaryKey(orderId);	
+	public JSONObject selectOrder(@ApiParam(value="订单id")@RequestParam Long orderId){
+		OrderDto orderDto= orderService.selectByPrimaryKey(orderId);
+		JSONObject jsonObject=new JSONObject();
+		if(orderDto!=null) {
+			jsonObject.put("code","0");
+			jsonObject.put("message","单个采购订单");
+			jsonObject.put("data",orderDto);
+		}else {
+			throw new RuntimeException("获取失败");
+		}
+		return jsonObject;
 	}
 	
 	

@@ -19,7 +19,6 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.service.OrderService;
 import com.lcdt.contract.web.dto.OrderDto;
-import com.lcdt.contract.web.dto.PageBaseDto;
 import com.lcdt.contract.web.utils.SerialNumAutoGenerator;
 
 import io.swagger.annotations.Api;
@@ -51,7 +50,7 @@ import io.swagger.annotations.ApiParam;
 	@ApiOperation(value="采购订单列表",notes="采购订单列表数据")
 	@GetMapping("/list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_list')")
-	public PageBaseDto<List<OrderDto>> OrderList(OrderDto orderDto
+	public JSONObject OrderList(OrderDto orderDto
 //			,@ApiParam(value="第几页",required=true,defaultValue="1") @RequestParam Integer pageNum,
 //			@ApiParam(value="每页条目数量",required=true,defaultValue="6")@RequestParam Integer pagesize
 			){
@@ -59,22 +58,40 @@ import io.swagger.annotations.ApiParam;
 		Long companyId=SecurityInfoGetter.getCompanyId();	
 		orderDto.setCompanyId(companyId);
 		orderDto.setCreateUserId(UserId);
-		PageInfo<List<OrderDto>> pageInfoList = orderService.OrderList(orderDto);
-		logger.debug("采购订单条目数"+pageInfoList.getTotal());
-		PageBaseDto<List<OrderDto>> pageBaseDto = new PageBaseDto<List<OrderDto>>(pageInfoList.getList(),pageInfoList.getTotal());
-		return pageBaseDto;
+		List<OrderDto> orderDtoList = orderService.OrderList(orderDto);
+		logger.debug("采购订单条目数"+orderDtoList.size());
+		JSONObject jsonObject =new JSONObject();
+		if(orderDtoList!=null&&orderDtoList.size()!=0) {
+			jsonObject.put("code","0");
+			jsonObject.put("message","采购订单列表");
+			jsonObject.put("data",orderDtoList);
+		}else {
+			jsonObject.put("code","-1");
+			jsonObject.put("message","没有相应的采购订单");
+		}
+		//PageBaseDto<List<OrderDto>> pageBaseDto = new PageBaseDto<List<OrderDto>>(pageInfoList.getList(),pageInfoList.getTotal());
+		return jsonObject;
 	}
 	
 	/**
 	 * 查询单个订单
 	 * @param Long
-	 * @return OrderDto
+	 * @return JSONObject
 	 */
 	@ApiOperation(value="获取单个采购订单",notes="单个采购订单")
 	@GetMapping("/selporder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('select_sales_order')")
-	public OrderDto selectOrder(@ApiParam(value="订单id")@RequestParam Long orderId){
-		return orderService.selectByPrimaryKey(orderId);	
+	public  JSONObject selectOrder(@ApiParam(value="订单id")@RequestParam Long orderId){
+		OrderDto orderDto= orderService.selectByPrimaryKey(orderId);
+		JSONObject jsonObject=new JSONObject();
+		if(orderDto!=null) {
+			jsonObject.put("code","0");
+			jsonObject.put("message","单个采购订单");
+			jsonObject.put("data",orderDto);
+		}else {
+			throw new RuntimeException("获取失败");
+		}
+		return jsonObject;
 	}
 	
 	
