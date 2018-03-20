@@ -24,7 +24,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     private WaybillMapper waybillMapper;
 
     @Override
-    public PageInfo queryDriverWaybillList(DriverWaybillParamsDto dto) {
+    public PageInfo queryDriverWaybillList(DriverWaybillListParsmsDto dto) {
         List<WaybillDao> resultList = null;
         PageInfo page = null;
         int pageNo = 1;
