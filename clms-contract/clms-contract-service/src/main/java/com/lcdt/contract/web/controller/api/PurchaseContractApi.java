@@ -58,7 +58,7 @@ public class PurchaseContractApi {
     @ApiOperation("合同新建")
     @RequestMapping(value = "/addContract", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_purchase_contract')")
-    public JSONObject addContract(@Validated ContractDto dto) {
+    public JSONObject addContract(@Validated @RequestBody ContractDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         dto.setCompanyId(companyId);
 
