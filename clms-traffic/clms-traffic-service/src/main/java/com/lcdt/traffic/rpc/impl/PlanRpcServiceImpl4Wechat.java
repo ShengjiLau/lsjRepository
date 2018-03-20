@@ -259,14 +259,6 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
     @Transactional
     @Override
     public int driverOffer(SnatchOfferDto dto, SnatchGoods snatchGoods) {
-        Map tMap = new HashMap<String,String>();
-        tMap.put("waybillPlanId",dto.getWaybillPlanId());
-        tMap.put("companyId",dto.getCompanyId());
-        tMap.put("isDeleted","0");
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
-        if (null == waybillPlan) {
-            throw new WaybillPlanException("计划不存在！");
-        }
         Date dt = new Date();
         snatchGoods.setWaybillPlanId(dto.getWaybillPlanId());
         snatchGoods.setCreateDate(dt);
