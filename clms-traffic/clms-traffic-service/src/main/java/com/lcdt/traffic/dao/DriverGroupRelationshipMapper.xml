@@ -71,7 +71,7 @@
   </select>
 
   <!--司机抢单竞价组-->
-  <select id="selectByDriverId" resultType="BaseResultMap">
+  <select id="selectByDriverId" resultMap="BaseResultMap">
     SELECT * FROM t_driver_group_relationship where own_driver_id in (
       SELECT own_driver_id from t_own_driver where driver_id = #{arg1}
     )

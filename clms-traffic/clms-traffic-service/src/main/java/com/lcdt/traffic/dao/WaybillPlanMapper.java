@@ -101,13 +101,14 @@ public interface WaybillPlanMapper {
     List<CustomerPlanDto> customerPlanList4Cancel(Map map);
 
 
-
-
     /***
-     * 司机抢单
+     * 司机待抢
      */
     List<SnatchBill4WaittingRdto> wattingSnatch4Driver(Map map);
 
 
-
+    /***
+     * 司机已抢
+     */
+    List<SnatchBill4WaittingRdto> completeSnatch4Driver(Map map);
 }

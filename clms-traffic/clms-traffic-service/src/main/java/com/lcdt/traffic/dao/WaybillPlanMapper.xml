@@ -1062,9 +1062,6 @@
     order by waybill_plan_id desc
   </select>
 
-
-
-
   <resultMap id="snatchBill4WaittingMap" type="com.lcdt.traffic.dto.SnatchBill4WaittingRdto">
     <id column="waybill_plan_id" jdbcType="BIGINT" property="waybillPlanId" />
     <result column="receive_province" jdbcType="VARCHAR" property="receiveProvince" />
@@ -1076,7 +1073,7 @@
     <result column="send_county" jdbcType="VARCHAR" property="sendCounty" />
     <result column="send_address" jdbcType="VARCHAR" property="sendAddress" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
-
+    <result column="plan_status" jdbcType="VARCHAR" property="planStatus" />
     <!--计划详细-->
     <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id}"
                 ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
@@ -1086,12 +1083,11 @@
 
 
   <!--司机（待抢）
-  查询条件：计划发布时间
   满足前提条件：司机隶属于竞价计价发布时选的司机分组，并且司机未对该计划的抢单
 -->
   <select id="wattingSnatch4Driver" parameterType="java.util.Map" resultMap="snatchBill4WaittingMap">
-    select send_province,send_city,send_county,send_address,receive_province,receive_city,receive_county,receive_address,start_date,
-           arrive_date,company_id
+    select waybill_plan_id,send_province,send_city,send_county,send_address,receive_province,receive_city,receive_county,receive_address,start_date,
+           arrive_date,company_id,plan_status
     from t_waybill_plan p1
     <where>
       and p1.send_order_type='2'
@@ -1107,6 +1103,32 @@
     </where>
     order by ${orderFiled} ${orderDesc}
   </select>
+
+
+
+  <!--司机（已抢）
+  满足前提条件：司机隶属于竞价计价发布时选的司机分组，并且司机未对该计划的抢单
+  -->
+  <select id="completeSnatch4Driver" parameterType="java.util.Map" resultMap="snatchBill4WaittingMap">
+    select waybill_plan_id,send_province,send_city,send_county,send_address,receive_province,receive_city,receive_county,receive_address,start_date,
+    arrive_date,company_id,plan_status
+    from t_waybill_plan p1
+    <where>
+      and p1.send_order_type='2'
+      and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id)
+      and  is_deleted = 0
+      <if test="carrierDriverGroupIds!=null and carrierDriverGroupIds!=''">
+        and ${carrierDriverGroupIds}
+      </if>
+      <if test="ownCompanyIds!=null and ownCompanyIds!=''">
+        and ${ownCompanyIds}
+      </if>
+    </where>
+    order by ${orderFiled} ${orderDesc}
+  </select>
+
+
+
 
 
 

@@ -40,6 +40,9 @@ public class SnatchBill4WaittingRdto implements java.io.Serializable {
     //运输要求
     private String trafficReq;
 
+    //计划状态
+    private String planStatus;
+
 
 
 
@@ -174,5 +177,13 @@ public class SnatchBill4WaittingRdto implements java.io.Serializable {
 
     public void setTrafficReq(String trafficReq) {
         this.trafficReq = trafficReq;
+    }
+
+    public String getPlanStatus() {
+        return planStatus;
+    }
+
+    public void setPlanStatus(String planStatus) {
+        this.planStatus = planStatus;
     }
 }

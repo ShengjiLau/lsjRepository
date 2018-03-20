@@ -35,6 +35,15 @@ public interface IPlanRpcService4Wechat {
 
 
 
+    /***
+     * 已抢列表
+     *
+     * @param dto
+     * @return
+     */
+    PageInfo SnathBill4CompleteList(SnathBill4WaittingPdto dto);
+
+
 
 
 
