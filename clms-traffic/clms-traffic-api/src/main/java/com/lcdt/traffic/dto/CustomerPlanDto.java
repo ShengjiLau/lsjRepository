@@ -16,7 +16,7 @@ public class CustomerPlanDto implements java.io.Serializable {
     private String planCode;
     private String serialCode;
     private String planSource; //计划来源
-    private List<PlanDetail> PlanDetailList; //计划详细
+    private List<PlanDetail> planDetailList; //计划详细
     private List<Waybill> waybillList; //运单列表
     private List<SnatchGoods> snatchGoodsList; //报价列表
     private List<SplitGoods> splitGoodsList;
@@ -62,11 +62,11 @@ public class CustomerPlanDto implements java.io.Serializable {
     }
 
     public List<PlanDetail> getPlanDetailList() {
-        return PlanDetailList;
+        return planDetailList;
     }
 
     public void setPlanDetailList(List<PlanDetail> planDetailList) {
-        PlanDetailList = planDetailList;
+        this.planDetailList = planDetailList;
     }
 
     public String getReceiveProvince() {

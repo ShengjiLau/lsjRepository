@@ -6,11 +6,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.DriverGroupRelationshipMapper;
 import com.lcdt.traffic.dao.OwnDriverMapper;
+import com.lcdt.traffic.dao.SplitGoodsMapper;
 import com.lcdt.traffic.dao.WaybillPlanMapper;
 import com.lcdt.traffic.dto.OwnCompany4SnatchRdto;
 import com.lcdt.traffic.dto.SnatchBill4WaittingRdto;
 import com.lcdt.traffic.dto.SnathBill4WaittingPdto;
 import com.lcdt.traffic.model.DriverGroupRelationship;
+import com.lcdt.traffic.model.SplitGoods;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
@@ -39,6 +41,9 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
 
     @Reference
     private CompanyRpcService companyRpcService; //企业信息
+
+    @Autowired
+    private SplitGoodsMapper splitGoodsMapper;
 
 
     /***
@@ -140,6 +145,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                     Long companyId = obj1.getCompanyId();
                     Company company =  companyRpcService.findCompanyByCid(companyId);
                     if(company!=null) obj1.setCompanyName(company.getFullName());
+                    obj1.setStatus("待抢单");
                 }
                 pageInfo = new PageInfo(snatchBill4WaittingRdtos);
 
@@ -153,6 +159,69 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
 
     }
 
+    @Override
+    public PageInfo SnathBill4CompleteList(SnathBill4WaittingPdto dto) {
+        PageInfo pageInfo = null;
+        String driverGroupIds = biddingGroupByDriverId(dto.getDriverId()); //获取竞价组ID集合
+        String ownCompanyIds = ownCompanyIdsByDriverId(dto.getDriverId()); //发布计划企业ID组
+        if (!StringUtils.isEmpty(driverGroupIds) && !StringUtils.isEmpty(ownCompanyIds)) {
+            int pageNo = 1;
+            int pageSize = 0; //0表示所有
+            if (dto.getPageNo()>0) {
+                pageNo = dto.getPageNo();
+            }
+            if (dto.getPageSize()>0) {
+                pageSize = dto.getPageSize();
+            }
+            String orderField = "waybill_plan_id"; //默认排序
+            String orderDesc = "desc";
+            if(!StringUtils.isEmpty(dto.getOrderDesc())) {
+                orderDesc = dto.getOrderDesc();
+            }
+            if(StringUtils.isEmpty(dto.getOrderFiled())) {
+                orderField = dto.getOrderFiled();
+            }
+            Map map = new HashMap<String,String>();
+            map.put("orderDesc",orderDesc);
+            map.put("orderFiled",orderField);
+            map.put("carrierDriverGroupIds",driverGroupIds);
+            map.put("ownCompanyIds",ownCompanyIds);
+
+            PageHelper.startPage(pageNo, pageSize);
+            List<SnatchBill4WaittingRdto> snatchBill4WaittingRdtos = waybillPlanMapper.completeSnatch4Driver(map);
+
+            if (snatchBill4WaittingRdtos!=null && snatchBill4WaittingRdtos.size()>0) {
+                for (SnatchBill4WaittingRdto obj1: snatchBill4WaittingRdtos) {
+                    Long companyId = obj1.getCompanyId();
+                    Company company =  companyRpcService.findCompanyByCid(companyId);
+                    if(company!=null) obj1.setCompanyName(company.getFullName());
+                    if(obj1.getPlanStatus().equals("60"))  {
+                        obj1.setStatus("计划取消");
+                    } else {
+                      //检查就改口派车
+                        int splitCount = splitGoodsMapper.statCount4DriverSnatch(obj1.getWaybillPlanId(),obj1.getCompanyId());
+                        if (splitCount>0){ //已派车
+                            //抢单成功：该已抢计划已经派车给我
+                            //抢单失败：该已抢计划已经派单给别人
+                   
+
+
+                        } else {
+                            obj1.setStatus("竞价中"); //该已抢计划还未派车
+                        }
+                    }
+                }
+                pageInfo = new PageInfo(snatchBill4WaittingRdtos);
+
+            }
+        } else {
+            pageInfo = new PageInfo();
+            pageInfo.setTotal(0l);
+            pageInfo.setList(null);
+        }
+        return pageInfo;
+
+    }
 
 
 }
