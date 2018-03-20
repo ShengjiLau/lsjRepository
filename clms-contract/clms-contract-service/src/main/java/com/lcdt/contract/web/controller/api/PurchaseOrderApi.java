@@ -101,12 +101,13 @@ import io.swagger.annotations.ApiParam;
 		if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
-            jsonObject.put("message", "添加成功");
+            jsonObject.put("message", "添加成功");      
             return jsonObject;
         } else {
             throw new RuntimeException("添加失败");
         }
 	}
+	
 	
 	/**
 	 * 修改采购订单

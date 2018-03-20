@@ -26,7 +26,10 @@ public class Order implements Serializable {
 	@NotBlank
 	@ApiModelProperty(value="供应商/客户名称")
     private String supplier;
-
+	
+	@ApiModelProperty(value="供应商id/客户名称id")
+	private Long supplierId;
+	
 	@ApiModelProperty(value="采购/销售单号")
     private String orderNo;
 
@@ -132,6 +135,11 @@ public class Order implements Serializable {
 	
 	@ApiModelProperty(value="审批流程")
 	private String approvalProcess;
+	
+	@ApiModelProperty(value="是否草稿:0是/1否")
+	private Short isDraft;
+	
+	
 	
     private static final long serialVersionUID = 13333L;
 

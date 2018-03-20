@@ -8,7 +8,7 @@
     receiver_phone receiverPhone, receiver_province receiverProvince, receiver_city receiverCity, receive_district receiveDistrict, 
     receive_address receiveAddress, remarks, create_time createTime, group_id groupId,company_id companyId,receive_time receiveTime,
     approval_start_date approvalStartDate,approval_end_date approvalEndDate,create_user_id createUserId,order_serial_no orderSerialNo,
-    approval_status approvalStatus,approval_process approvalProcess
+    approval_status approvalStatus,approval_process approvalProcess,supplier_id supplierId,is_draft isDraft
     from t_order
     <where>
       <if test="supplier!=null and supplier!=''">

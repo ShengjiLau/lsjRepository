@@ -48,7 +48,8 @@
     pay_type, receive_warehouse, file_url, sender, sender_phone, send_province, send_city, 
     send_district, send_address, send_time, pack_require, receiver, receiver_phone, receiver_province, 
     receiver_city, receive_district, receive_address, remarks, create_time, approval_start_date, 
-    approval_end_date, group_id, company_id, create_user_id, order_serial_no,receive_time,approval_process
+    approval_end_date, group_id, company_id, create_user_id, order_serial_no,receive_time,approval_process,supplier_id
+    is_draft
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.lcdt.contract.web.dto.OrderDto">
     <!--
@@ -60,7 +61,7 @@
     send_district sendDistrict, send_address sendAddress, send_time sendTime, pack_require packRequire, receiver, receiver_phone receiverPhone, receiver_province receiverProvince, 
     receiver_city receiverCity, receive_district receiveDistrict, receive_address receiveAddress, remarks, create_time createTime, group_id groupId,company_id companyId,
     receive_time receiveTime,approval_start_date approvalStartDate,approval_end_date approvalEndDate,create_user_id createUserId,order_serial_no orderSerialNo,
-    approval_status approvalStatus,approval_process approvalProcess
+    approval_status approvalStatus,approval_process approvalProcess,supplier_id supplierId,is_draft isDraft
     from t_order
     where order_id = #{orderId,jdbcType=BIGINT}
   </select>
@@ -87,7 +88,7 @@
       receiver_city, receive_district, receive_address, 
       remarks, create_time, approval_start_date, 
       approval_end_date, group_id, company_id, 
-      create_user_id, order_serial_no,receive_time,approval_process)
+      create_user_id, order_serial_no,receive_time,approval_process,supplier_id,is_draft)
     values (#{orderId,jdbcType=BIGINT},#{supplier,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
       #{orderType,jdbcType=SMALLINT}, #{contractCode,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=SMALLINT}, 
       #{dispatchingType,jdbcType=SMALLINT}, #{payType,jdbcType=VARCHAR}, #{receiveWarehouse,jdbcType=VARCHAR}, 
@@ -99,7 +100,7 @@
       #{remarks,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{approvalStartDate,jdbcType=TIMESTAMP}, 
       #{approvalEndDate,jdbcType=TIMESTAMP}, #{groupId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, 
       #{createUserId,jdbcType=BIGINT}, #{orderSerialNo,jdbcType=VARCHAR},#{receiveTime,jdbcType=TIMESTAMP},
-      #{approvalProcess,jdbcType=VARCHAR})
+      #{approvalProcess,jdbcType=VARCHAR},#{supplierId,jdbcType=BIGINT},#{isDraft,jdbcType=SMALLINT})
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.contract.model.Order">
     <!--
@@ -208,7 +209,13 @@
         receive_time,
       </if>
        <if test="approvalProcess != null">
-        approval_process
+        approval_process,
+      </if>
+       <if test="supplierId != null">
+        supplier_id,
+      </if>
+      <if test="isDraft != null">
+        is_draft
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -313,6 +320,12 @@
       </if>
        <if test="approvalProcess != null">
         #{approvalProcess,jdbcType=VARCHAR},
+      </if>
+       <if test="supplierId != null">
+         #{supplierId,jdbcType=BIGINT},
+      </if>
+       <if test="isDraft != null">
+         #{isDraft,jdbcType=SMALLINT},
       </if>
     </trim>
   </insert>
@@ -422,6 +435,12 @@
        <if test="approvalProcess != null">
         approval_process = #{approvalProcess,jdbcType=VARCHAR},
       </if>
+       <if test="supplierId != null">
+        supplier_id = #{supplierId,jdbcType=BIGINT},
+      </if>
+      <if test="isDraft != null">
+        is_draft = #{isDraft,jdbcType=BIGINT},
+      </if>
     </set>
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
@@ -463,7 +482,9 @@
       create_user_id = #{createUserId,jdbcType=BIGINT},
       order_serial_no = #{orderSerialNo,jdbcType=VARCHAR},
       receive_time = #{receiveTime,jdbcType=TIMESTAMP},
-      approval_process=#{approvalProcess,jdbcType=VARCHAR}
+      approval_process=#{approvalProcess,jdbcType=VARCHAR},
+      supplier_id = #{supplierId,jdbcType=BIGINT},
+       is_draft = #{isDraft,jdbcType=BIGINT}
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
 </mapper>
