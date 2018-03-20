@@ -32,11 +32,6 @@ public class PlanApi {
    @com.alibaba.dubbo.config.annotation.Reference(check = false)
    private IPlanRpcService4Wechat iPlanRpcService4Wechat;
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 579d49b1df7f4408e2eede027b581760306fda46
    @ApiOperation("竞价--企业组")
    @RequestMapping(value = "/driver/companyGroupList", method = RequestMethod.GET)
    public List<OwnCompany4SnatchRdto>  companyGroupList() {
