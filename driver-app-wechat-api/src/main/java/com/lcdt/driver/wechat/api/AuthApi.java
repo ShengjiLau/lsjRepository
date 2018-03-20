@@ -27,24 +27,20 @@ public class AuthApi {
 
     @RequestMapping("/login")
     public String login(String phone, String validcode, WechatUserDto wechatUserDto) {
+        User user;
         try {
-
-            User user = userService.queryByPhone(phone);
-
-            HashMap<String, Object> stringStringHashMap = new HashMap<>();
-            stringStringHashMap.put("userName", user.getPhone());
-            String s = jwtTokenUtil.generateToken(stringStringHashMap);
-            return s;
+            user = userService.queryByPhone(phone);
         } catch (UserNotExistException e) {
-
-            User user = new User();
+            user = new User();
             user.setPhone(phone);
             user.setNickName(wechatUserDto.getNickName());
-
-
-
+            user.setRealName(wechatUserDto.getNickName());
+            userService.registerDriverUser(user);
         }
-        return null;
+        HashMap<String, Object> stringStringHashMap = new HashMap<>();
+        stringStringHashMap.put("userName", user.getPhone());
+        String s = jwtTokenUtil.generateToken(stringStringHashMap);
+        return s;
     }
 
 }
