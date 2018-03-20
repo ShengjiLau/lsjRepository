@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.WaybillMapper;
+import com.lcdt.traffic.dto.DriverWaybillListParsmsDto;
 import com.lcdt.traffic.dto.DriverWaybillParamsDto;
 import com.lcdt.traffic.model.WaybillDao;
 import com.lcdt.traffic.service.WaybillRpcService;
@@ -23,7 +24,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     private WaybillMapper waybillMapper;
 
     @Override
-    public PageInfo queryDriverWaybillList(DriverWaybillParamsDto dto) {
+    public PageInfo queryDriverWaybillList(DriverWaybillListParsmsDto dto) {
         List<WaybillDao> resultList = null;
         PageInfo page = null;
         int pageNo = 1;
