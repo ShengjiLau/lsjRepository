@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.contract.dao.ApprovalProcessMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.ApprovalProcess">
+    <id column="process_id" jdbcType="BIGINT" property="processId" />
+    <result column="process_name" jdbcType="VARCHAR" property="processName" />
+    <result column="process_type" jdbcType="SMALLINT" property="processType" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_approval_process
+    where process_id = #{arg0} and company_id = #{arg1}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.ApprovalProcess" useGeneratedKeys="true" keyProperty="processId">
+    insert into t_approval_process (process_name, process_type,
+      group_id, remarks, create_time,company_id
+      )
+    values (#{processName,jdbcType=VARCHAR}, #{processType,jdbcType=SMALLINT},
+      #{groupId,jdbcType=BIGINT}, #{remarks,jdbcType=VARCHAR}, CURRENT_TIMESTAMP,#{companyId,jdbcType=BIGINT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.ApprovalProcess">
+    update t_approval_process
+    set process_name = #{processName,jdbcType=VARCHAR},
+      process_type = #{processType,jdbcType=SMALLINT},
+      group_id = #{groupId,jdbcType=BIGINT},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where process_id = #{processId,jdbcType=BIGINT} and company_id=#{companyId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select process_id, process_name, process_type, group_id, remarks, create_time, company_id
+    from t_approval_process
+    where process_id = #{processId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select process_id, process_name, process_type, group_id, remarks, create_time, company_id
+    from t_approval_process
+  </select>
+
+
+  <resultMap id="ApprovalProcessDtoResultMap" type="com.lcdt.contract.model.ApprovalProcess">
+    <id column="process_id" jdbcType="BIGINT" property="processId" />
+    <result column="process_name" jdbcType="VARCHAR" property="processName" />
+    <result column="process_type" jdbcType="SMALLINT" property="processType" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <collection property="processApproverList" resultMap="ProcessApproverResultMap">
+
+    </collection>
+  </resultMap>
+
+  <resultMap id="ProcessApproverResultMap" type="com.lcdt.contract.model.ProcessApprover">
+    <id column="approver_id" jdbcType="BIGINT" property="approverId" />
+    <result column="process_id" jdbcType="BIGINT" property="processId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+  </resultMap>
+
+  <select id="selectByCondition" resultMap="BaseResultMap">
+    select t1.process_id, t1.process_name, t1.process_type, t1.group_id, t1.remarks, t1.create_time,
+    t2.approver_id, t2.user_id, t2.name, t2.dept_name, t2.sort
+    from t_approval_process t1 left join t_process_approver t2 on t1. process_id = t2. process_id
+    <where>
+      company_id = #{arg0}
+      <if test="arg1!=null and arg1!=''">
+        and t1.process_type = #{arg1}
+      </if>
+    </where>
+  </select>
+</mapper>

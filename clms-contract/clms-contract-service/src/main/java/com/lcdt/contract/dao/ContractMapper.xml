@@ -9,6 +9,7 @@
     <result column="type" jdbcType="SMALLINT" property="type" />
     <result column="contract_status" jdbcType="SMALLINT" property="contractStatus" />
     <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
+    <result column="approval_process" jdbcType="VARCHAR" property="approvalProcess" />
     <result column="cycle" jdbcType="SMALLINT" property="cycle" />
     <result column="pay_type" jdbcType="VARCHAR" property="payType" />
     <result column="party_a" jdbcType="VARCHAR" property="partyA" />
@@ -29,18 +30,19 @@
     delete from t_contract
     where contract_id = #{contractId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.lcdt.contract.model.Contract">
-    insert into t_contract (contract_id, contract_code, title, 
-      sign_date, type, contract_status, approval_status,
-      cycle, pay_type, party_a, 
-      party_a_principal, party_b, party_b_principal, 
+  <insert id="insert" parameterType="com.lcdt.contract.model.Contract" useGeneratedKeys="true" keyProperty="contractId">
+    insert into t_contract (contract_id, contract_code, title,
+      sign_date, type, contract_status, approval_status,approval_process,
+      cycle, pay_type, party_a,
+      party_a_principal, party_b, party_b_principal,
       start_date, end_date,approval_start_date, approval_end_date, summary,
       terms, file_url, group_id,company_id
       )
-    values (#{contractId,jdbcType=BIGINT}, #{contractCode,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
-      #{signDate,jdbcType=TIMESTAMP}, #{type,jdbcType=SMALLINT}, #{contractStatus,jdbcType=SMALLINT},  #{approvalStatus,jdbcType=SMALLINT},
-      #{cycle,jdbcType=SMALLINT}, #{payType,jdbcType=VARCHAR}, #{partyA,jdbcType=VARCHAR}, 
-      #{partyAPrincipal,jdbcType=VARCHAR}, #{partyB,jdbcType=VARCHAR}, #{partyBPrincipal,jdbcType=VARCHAR}, 
+    values (#{contractId,jdbcType=BIGINT}, #{contractCode,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+      #{signDate,jdbcType=TIMESTAMP}, #{type,jdbcType=SMALLINT}, #{contractStatus,jdbcType=SMALLINT},
+      #{approvalStatus,jdbcType=SMALLINT},#{approvalProcess,jdbcType=VARCHAR},
+      #{cycle,jdbcType=SMALLINT}, #{payType,jdbcType=VARCHAR}, #{partyA,jdbcType=VARCHAR},
+      #{partyAPrincipal,jdbcType=VARCHAR}, #{partyB,jdbcType=VARCHAR}, #{partyBPrincipal,jdbcType=VARCHAR},
       #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP},#{approvalStartDate,jdbcType=TIMESTAMP},
       #{approvalEndDate,jdbcType=TIMESTAMP},  #{summary,jdbcType=VARCHAR},
       #{terms,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT}
@@ -54,6 +56,7 @@
       type = #{type,jdbcType=SMALLINT},
       contract_status = #{contractStatus,jdbcType=SMALLINT},
       approval_status = #{approvalStatus,jdbcType=SMALLINT},
+      approval_process = #{approvalProcess,jdbcType=VARCHAR},
       cycle = #{cycle,jdbcType=SMALLINT},
       pay_type = #{payType,jdbcType=VARCHAR},
       party_a = #{partyA,jdbcType=VARCHAR},
@@ -72,14 +75,14 @@
     where contract_id = #{contractId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select contract_id, contract_code, title, sign_date, type, contract_status, approval_status, cycle,
+    select contract_id, contract_code, title, sign_date, type, contract_status, approval_status,approval_process, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id
     from t_contract
     where contract_id = #{contractId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select contract_id, contract_code, title, sign_date, type, contract_status,approval_status, cycle,
+    select contract_id, contract_code, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id
     from t_contract
@@ -87,7 +90,7 @@
 
 
   <select id="selectByCondition" resultMap="BaseResultMap">
-    select contract_id, contract_code, title, sign_date, type, contract_status,approval_status, cycle,
+    select contract_id, contract_code, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id
     from t_contract
@@ -99,8 +102,8 @@
       <if test="contractCode!=null and contractCode!=''">
         and contract_code like concat('%',#{contractCode,jdbcType=VARCHAR},'%')
       </if>
-      <if test="signBeginDate!=null and signBeginDate!=''">
-        and sign_date &gt; #{signBeginDate,jdbcType=TIMESTAMP} and sign_date &lt; #{signEndDate,jdbcType=TIMESTAMP}
+      <if test="signDate!=null and signDate!=''">
+        and sign_date &gt; #{signDate,jdbcType=TIMESTAMP} and sign_date &lt; #{signDate,jdbcType=TIMESTAMP}
       </if>
       <if test="contractStatus!=null and contractStatus!=''">
         and contract_status = #{contractStatus,jdbcType=SMALLINT}
@@ -113,4 +116,17 @@
       </if>
     </where>
   </select>
+
+  <update id="updateContractStatus" parameterType="com.lcdt.contract.model.Contract">
+    update t_contract
+    set contract_status = #{contractStatus,jdbcType=SMALLINT}
+    where contract_id = #{contractId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateApprovalStatus" >
+    update t_contract
+    set approval_status = #{arg2},
+    approval_endt_date = CURRENT_TIMESTAMP
+    where contract_id = #{arg0} and company_id = #{arg1}
+  </update>
 </mapper>

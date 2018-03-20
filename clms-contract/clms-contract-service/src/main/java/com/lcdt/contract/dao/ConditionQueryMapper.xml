@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcdt.contract.dao.ConditionQueryMapper" >
+<select id="selectByCondition" resultType="com.lcdt.contract.web.dto.OrderDto">
+    select order_id, supplier, order_no, order_type, contract_code, dispatching_type, 
+    pay_type, receive_warehouse, file_url, sender, sender_phone, send_province, send_city, 
+    send_district, send_address, send_time, pack_require, receiver, receiver_phone, receiver_province, 
+    receiver_city, receive_district, receive_address, remarks, create_time, group_id,company_id,receive_time
+    from t_order
+    <where>
+      <if test="supplier!=null and supplier!=''">
+         supplier like concat('%',#{supplier,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="orderNo !=null and orderNo!=''">
+    	 and order_no =#{orderNo,jdbcType=VARCHAR}
+      </if>
+      <if test="groupId !=null">
+      	and group_id=#{groupId,jdbcType=BIGINT}
+      </if>
+      <if test="contractCode!=null and contractCode!=''">
+      and contract_code =#{contractCode,jdbcType=VARCHAR}
+      </if>
+      <if test="dispatchingType!=null">
+      and dispatching_type = #{dispatchingType,jdbcType=SMALLINT}
+      </if>
+      <if test="payType!=null and payType!=''">
+      and pay_type = #{payType,jdbcType=VARCHAR}
+      </if>
+      <if test="beginTime!=null and endTime!=null">
+         and create_time &gt; #{beginTime,jdbcType=TIMESTAMP} and create_time &lt; #{endTime,jdbcType=TIMESTAMP}
+      </if>
+         and company_id = #{companyId,jdbcType=BIGINT} and order_type = #{orderType,jdbcType=SMALLINT}
+    </where>
+  </select>
+  <select id="selectByOrderId" resultType="com.lcdt.contract.model.OrderProduct" parameterType="java.lang.Long" >
+    select 
+    op_id opId, order_id orderId, name, code, sku, num, price, total,spec
+    from t_order_product
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectOrderProductIdByOrderId" resultType="java.lang.Long" parameterType="java.lang.Long" >
+    select 
+    op_id opId
+    from t_order_product
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </select>
+  
+  <insert id="insertOrderProductByBatch" parameterType="java.util.List">
+    insert into t_order_product (op_id,order_id, name, 
+      code, sku, num, price, 
+      total,spec)
+    values 
+    <foreach collection="list"  item="op" index="index" separator=",">
+      (#{op.opId,jdbcType=BIGINT},#{op.orderId,jdbcType=BIGINT}, #{op.name,jdbcType=VARCHAR}, 
+      #{op.code,jdbcType=VARCHAR}, #{op.sku,jdbcType=VARCHAR}, #{op.num,jdbcType=INTEGER}, #{op.price,jdbcType=DECIMAL}, 
+      #{op.total,jdbcType=DECIMAL},#{op.spec,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  
+  <update id="updateOrderProductByBatch" parameterType="java.util.List">
+    <foreach separator=";" index="index" item="op" collection="list" close="" open="">
+      update t_order_product
+      set 
+      order_id = #{op.orderId,jdbcType=BIGINT},
+      name = #{op.name,jdbcType=VARCHAR},
+      code= #{op.code,jdbcType=VARCHAR},
+      sku = #{op.sku,jdbcType=VARCHAR},
+      num = #{op.num,jdbcType=INTEGER},
+      price = #{op.price,jdbcType=DECIMAL},
+      total = #{op.total,jdbcType=DECIMAL},
+      spec = #{op.spec,jdbcType=VARCHAR}
+      where op_id = #{op.opId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  
+  
+  <delete id="deleteOrderProducByBatch" parameterType="java.util.List">
+  	 <foreach separator=";" index="index" item="op" collection="list" close="" open="">
+     delete 
+     from t_order_product
+     where op_id=#{op,jdbcType=BIGINT}
+    </foreach>
+  </delete>
+  	
+  	
+  	
+  	
+</mapper>

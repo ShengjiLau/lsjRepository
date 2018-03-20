@@ -5,10 +5,11 @@
     <id column="ca_id" jdbcType="BIGINT" property="caId" />
     <result column="contract_id" jdbcType="BIGINT" property="contractId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
-    <result column="type" jdbcType="SMALLINT" property="type" />
+    <result column="result" jdbcType="SMALLINT" property="result" />
+    <result column="action_type" jdbcType="SMALLINT" property="actionType" />
     <result column="status" jdbcType="SMALLINT" property="status" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="time" jdbcType="TIMESTAMP" property="time" />
@@ -18,36 +19,37 @@
     where ca_id = #{caId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lcdt.contract.model.ContractApproval">
-    insert into t_contract_approval (ca_id, contract_id, user_id, 
-      name, dept_name, sort, 
-      type, status, content, 
+    insert into t_contract_approval (contract_id, user_id,
+      user_name, dept_name, sort,
+      result, action_type, status, content,
       time)
-    values (#{caId,jdbcType=BIGINT}, #{contractId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
-      #{name,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, 
-      #{type,jdbcType=SMALLINT}, #{status,jdbcType=SMALLINT}, #{content,jdbcType=VARCHAR}, 
-      #{time,jdbcType=TIMESTAMP})
+    values (#{contractId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
+      #{userName,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER},
+      #{result,jdbcType=SMALLINT}, #{actionType,jdbcType=SMALLINT}, #{status,jdbcType=SMALLINT},
+       #{content,jdbcType=VARCHAR},#{time,jdbcType=TIMESTAMP})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.ContractApproval">
     update t_contract_approval
     set contract_id = #{contractId,jdbcType=BIGINT},
       user_id = #{userId,jdbcType=BIGINT},
-      name = #{name,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
       dept_name = #{deptName,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=INTEGER},
-      type = #{type,jdbcType=SMALLINT},
+      result = #{result,jdbcType=SMALLINT},
       status = #{status,jdbcType=SMALLINT},
+      action_type = #{actionType,jdbcType=SMALLINT},
       content = #{content,jdbcType=VARCHAR},
       time = #{time,jdbcType=TIMESTAMP}
     where ca_id = #{caId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select ca_id, contract_id, user_id, name, dept_name, sort, type, status, content, 
+    select ca_id, contract_id, user_id, user_name, dept_name, sort, result, status, content,
     time
     from t_contract_approval
     where ca_id = #{caId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select ca_id, contract_id, user_id, name, dept_name, sort, type, status, content, 
+    select ca_id, contract_id, user_id, user_name, dept_name, sort, result, action_type, status, content,
     time
     from t_contract_approval
   </select>
@@ -55,7 +57,7 @@
 
   <!-- ——————————————————————————————————————————华丽分割线—————————————————————————————————————————————— -->
 
-  <resultMap id="ContractApprovalVOMap" type="com.lcdt.contract.vo.ContractApprovalVO">
+  <resultMap id="ContractApprovalDtoMap" type="com.lcdt.contract.web.dto.ContractApprovalDto">
     <id column="contract_id" jdbcType="BIGINT" property="contractId" />
     <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
     <result column="title" jdbcType="VARCHAR" property="title" />
@@ -71,23 +73,93 @@
     <result column="party_b_principal" jdbcType="VARCHAR" property="partyBPrincipal" />
     <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
     <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="approval_start_date" jdbcType="TIMESTAMP" property="approvalStartDate" />
+    <result column="approval_end_date" jdbcType="TIMESTAMP" property="approvalEndDate" />
     <result column="summary" jdbcType="VARCHAR" property="summary" />
     <result column="terms" jdbcType="VARCHAR" property="terms" />
     <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
     <result column="group_id" jdbcType="BIGINT" property="groupId" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
-    <collection property="contractApprovalList">
-      <id column="ca_id" jdbcType="BIGINT" property="caId" />
-      <result column="user_id" jdbcType="BIGINT" property="userId" />
-      <result column="name" jdbcType="VARCHAR" property="name" />
-      <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
-      <result column="sort" jdbcType="INTEGER" property="sort" />
-      <result column="type" jdbcType="SMALLINT" property="type" />
-      <result column="status" jdbcType="SMALLINT" property="status" />
-      <result column="content" jdbcType="VARCHAR" property="content" />
-      <result column="time" jdbcType="TIMESTAMP" property="time" />
+    <collection property="contractApprovalList" select="selectContractApproval"
+                ofType="com.lcdt.contract.model.ContractApproval" column="{p1=contract_id}" >
+
     </collection>
   </resultMap>
-</mapper>
 
+  <select id="selectContractApprovalByCondition" resultMap="ContractApprovalDtoMap" parameterType="com.lcdt.contract.web.dto.ContractApprovalListDto">
+    select contract_id, contract_code, title, type, contract_status,
+    approval_status,approval_start_date, approval_end_date, group_id,company_id
+    from t_contract
+    <where>
+      type = #{type,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}
+      <if test="title!=null and title!=''">
+        and title like concat('%',#{title,jdbcType=VARCHAR},'%') or contract_code like concat('%',#{title,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="approvalStartDate!=null and approvalStartDate!=''">
+        and approval_start_date &gt; #{approvalStartDate,jdbcType=TIMESTAMP} and approval_end_date &lt; #{approvalEndDate,jdbcType=TIMESTAMP}
+      </if>
+      <if test="approvalStatus!=null and approvalStatus!=''">
+        <choose>
+          <when test="tempStatus==3">
+            and approval_status = 2
+          </when>
+          <otherwise>
+            and approval_status = #{approvalStatus,jdbcType=SMALLINT}
+          </otherwise>
+        </choose>
+      </if>
+    </where>
+  </select>
+  <select id="selectContractApproval" resultMap="BaseResultMap">
+    select ca_id, user_id, user_name, dept_name, sort, result, status, action_type, content, time from t_contract_approval
+    <where>
+      and contract_id = #{p1}
+      <if test="tempStatus!=null and tempStatus==0">
+        user_id = #{userId,jdbcType=BIGINT} and sort = 1
+      </if>
+      <if test="tempStatus!=null and tempStatus==1">
+        and user_id = #{userId,jdbcType=BIGINT} and status = 1
+      </if>
+      <if test="tempStatus!=null and tempStatus==2">
+        and user_id = #{userId,jdbcType=BIGINT} and status = 2
+      </if>
+      <if test="tempStatus!=null and tempStatus==3">
+        and user_id = #{userId,jdbcType=BIGINT} and action_type = 1
+      </if>
+    </where>
+    order by sort
+  </select>
+  <insert id="insertBatch">
+    insert into t_contract_approval (contract_id, user_id,user_name, dept_name, sort, action_type)
+    values
+    <foreach item="item" collection="list" separator=",">
+    (#{item.contractId,jdbcType=BIGINT}, #{item.userId,jdbcType=BIGINT},
+    #{item.userName,jdbcType=VARCHAR}, #{item.deptName,jdbcType=VARCHAR},
+    #{item.sort,jdbcType=INTEGER}, #{item.actionType,jdbcType=SMALLINT})
+    </foreach>
+  </insert>
+
+  <update id="updateStatus" parameterType="com.lcdt.contract.model.ContractApproval" useGeneratedKeys="true" keyProperty="caId">
+    update t_contract_approval
+    <set>
+      status = #{status,jdbcType=SMALLINT},
+      <if test="result!=null">
+        result = #{result,jdbcType=SMALLINT},
+      </if>
+      <if test="content!=null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="time!=null">
+        time = CURRENT_TIMESTAMP,
+      </if>
+    </set>
+    where ca_id = #{caId,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByContractId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select ca_id, contract_id, user_id, user_name, dept_name, sort, result, status, content,time
+    from t_contract_approval
+    where contract_id = #{arg0} and action_type = 0 and status != 5 order by sort
+  </select>
+</mapper>
 
