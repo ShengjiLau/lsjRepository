@@ -3,8 +3,10 @@ package com.lcdt.traffic.service;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dto.OwnCompany4SnatchRdto;
 import com.lcdt.traffic.dto.SnatchBill4WaittingRdto;
+import com.lcdt.traffic.dto.SnatchOfferDto;
 import com.lcdt.traffic.dto.SnathBill4WaittingPdto;
 import com.lcdt.traffic.model.OwnDriver;
+import com.lcdt.traffic.model.SnatchGoods;
 
 import java.util.List;
 
@@ -28,7 +30,7 @@ public interface IPlanRpcService4Wechat {
      * @param dto
      * @return
      */
-    PageInfo SnathBill4WaittingList(SnathBill4WaittingPdto dto);
+    PageInfo snatchBill4WaittingList(SnathBill4WaittingPdto dto);
 
 
 
@@ -38,7 +40,19 @@ public interface IPlanRpcService4Wechat {
      * @param dto
      * @return
      */
-    PageInfo SnathBill4CompleteList(SnathBill4WaittingPdto dto);
+    PageInfo snatchBill4CompleteList(SnathBill4WaittingPdto dto);
+
+
+
+
+
+    /***
+     * 抢单报价
+     * @param dto -- 外部参数
+     *@param dto -- 内部参数
+     * @return
+     */
+    int driverOffer(SnatchOfferDto dto, SnatchGoods snatchGoods);
 
 
 

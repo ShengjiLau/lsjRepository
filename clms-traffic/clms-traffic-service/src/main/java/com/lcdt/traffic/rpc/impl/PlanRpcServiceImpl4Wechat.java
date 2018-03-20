@@ -7,21 +7,19 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.OwnCompany4SnatchRdto;
 import com.lcdt.traffic.dto.SnatchBill4WaittingRdto;
+import com.lcdt.traffic.dto.SnatchOfferDto;
 import com.lcdt.traffic.dto.SnathBill4WaittingPdto;
-import com.lcdt.traffic.model.DriverGroupRelationship;
-import com.lcdt.traffic.model.SplitGoods;
-import com.lcdt.traffic.model.Waybill;
+import com.lcdt.traffic.exception.WaybillPlanException;
+import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
+import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yangbinq on 2018/3/19.
@@ -44,11 +42,14 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
     @Autowired
     private SplitGoodsMapper splitGoodsMapper;
 
+
     @Autowired
     private WaybillMapper waybillMapper;
 
     @Autowired
-    private SplitGoodsDetailMapper splitGoodsDetailMapper;
+    private SnatchGoodsMapper snatchGoodsMapper;
+    @Autowired
+    private SnatchGoodsDetailMapper snatchGoodsDetailMapper; //抢单
 
     /***
      * 根据司机ID获取用户对应的竞价组
@@ -115,7 +116,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
 
     @Transactional(readOnly = true)
     @Override
-    public PageInfo SnathBill4WaittingList(SnathBill4WaittingPdto dto) {
+    public PageInfo snatchBill4WaittingList(SnathBill4WaittingPdto dto) {
         PageInfo pageInfo = null;
         String driverGroupIds = biddingGroupByDriverId(dto.getDriverId()); //获取竞价组ID集合
         String ownCompanyIds = ownCompanyIdsByDriverId(dto.getDriverId()); //发布计划企业ID组
@@ -163,8 +164,9 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
 
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public PageInfo SnathBill4CompleteList(SnathBill4WaittingPdto dto) {
+    public PageInfo snatchBill4CompleteList(SnathBill4WaittingPdto dto) {
         PageInfo pageInfo = null;
         String driverGroupIds = biddingGroupByDriverId(dto.getDriverId()); //获取竞价组ID集合
         String ownCompanyIds = ownCompanyIdsByDriverId(dto.getDriverId()); //发布计划企业ID组
@@ -239,7 +241,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                     }
 
                     //统计总报价
-                    float offerPrice = splitGoodsDetailMapper.statSnatchTotalPrice4Driver(obj.getWaybillPlanId(),obj.getCompanyId());
+                    float offerPrice = snatchGoodsDetailMapper.statSnatchTotalPrice4Driver(obj.getWaybillPlanId(),obj.getCompanyId());
                     obj.setSnatchTotalPrice(offerPrice);
                 }
                 pageInfo = new PageInfo(snatchBill4WaittingRdtos);
@@ -254,5 +256,50 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
 
     }
 
+    @Transactional
+    @Override
+    public int driverOffer(SnatchOfferDto dto, SnatchGoods snatchGoods) {
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",dto.getWaybillPlanId());
+        tMap.put("companyId",dto.getCompanyId());
+        tMap.put("isDeleted","0");
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
+        if (null == waybillPlan) {
+            throw new WaybillPlanException("计划不存在！");
+        }
+        Date dt = new Date();
+        snatchGoods.setWaybillPlanId(dto.getWaybillPlanId());
+        snatchGoods.setCreateDate(dt);
+        snatchGoods.setUpdateTime(dt);
+        snatchGoods.setOfferDate(dt);//报价时间
+        snatchGoods.setIsDeleted((short)0);
+        snatchGoods.setOfferRemark(dto.getOfferRemark());
+        snatchGoods.setIsUsing(ConstantVO.SNATCH_GOODS_USING_DOING);
+        int flag1 = 1,flag2 =1 ;
+        flag1 = snatchGoodsMapper.insert(snatchGoods);
+        List<PlanDetail> list = dto.getPlanDetailList();
+        if (null != list  && list.size()>0) {
+            List<SnatchGoodsDetail> snatchList = new ArrayList<SnatchGoodsDetail>();
+            for (PlanDetail obj :list) {
+                SnatchGoodsDetail tempObj = new SnatchGoodsDetail();
+                tempObj.setSnatchGoodsId(snatchGoods.getSnatchGoodsId());
+                tempObj.setPlanDetailId(obj.getPlanDetailId());
+                tempObj.setCreateDate(dt);
+                tempObj.setOfferPrice(obj.getOfferPrice());
+                tempObj.setOfferTotal(obj.getOfferTotal());
+                tempObj.setOfferRemark(obj.getOfferRemark());
+                tempObj.setCreateId(snatchGoods.getCreateId());
+                tempObj.setCreateName(snatchGoods.getCreateName());
+                tempObj.setCreateDate(dt);
+                tempObj.setUpdateId(snatchGoods.getCreateId());
+                tempObj.setUpdateName(snatchGoods.getCreateName());
+                tempObj.setUpdateTime(dt);
+                tempObj.setIsDeleted((short)0);
+                snatchList.add(tempObj);
+            }
+            flag2 = snatchGoodsDetailMapper.batchAddSnatchGoodsDetail(snatchList);
+        }
+        return flag1+flag2>1?1:0;
+    }
 
 }

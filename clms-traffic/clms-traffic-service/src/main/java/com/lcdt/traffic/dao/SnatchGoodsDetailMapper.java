@@ -1,6 +1,7 @@
 package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.SnatchGoodsDetail;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -56,4 +57,12 @@ public interface SnatchGoodsDetailMapper {
      * @return
      */
     int batchAddSnatchGoodsDetail(List<SnatchGoodsDetail> snatchGoodsDetailList);
+
+    /***
+     * 司机抢单统计报价
+     * @param waybillPlanId
+     * @param planCompanyId
+     * @return
+     */
+    float statSnatchTotalPrice4Driver(@Param("waybillPlanId") Long waybillPlanId, @Param("planCompanyId") long planCompanyId);
 }

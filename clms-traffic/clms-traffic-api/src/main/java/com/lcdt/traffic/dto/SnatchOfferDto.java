@@ -26,9 +26,6 @@ public class SnatchOfferDto implements java.io.Serializable {
     }
 
 
-
-
-
     public Long getWaybillPlanId() {
         return waybillPlanId;
     }

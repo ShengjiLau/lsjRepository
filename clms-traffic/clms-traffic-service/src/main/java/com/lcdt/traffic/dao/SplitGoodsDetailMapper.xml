@@ -154,12 +154,6 @@
     </foreach>
   </update>
 
-  <!--抢单统计-->
-  <select id="statSnatchTotalPrice4Driver" resultType="java.lang.Float">
-    SELECT sum(offer_total) from t_snatch_goods_detail where snatch_goods_id in(
-    SELECT snatch_goods_id from t_snatch_goods
-    where  waybill_plan_id = #{waybillPlanId} and plan_company_id = #{planCompanyId} and is_deleted = 0
-    )
-  </select>
+
 
 </mapper>
