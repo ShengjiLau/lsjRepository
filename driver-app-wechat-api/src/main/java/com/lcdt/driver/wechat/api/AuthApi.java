@@ -36,7 +36,6 @@ public class AuthApi {
             user.setNickName(wechatUserDto.getNickName());
             user.setRealName(wechatUserDto.getNickName());
             userService.registerDriverUser(user);
-
         }
         HashMap<String, Object> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("userName", user.getPhone());
