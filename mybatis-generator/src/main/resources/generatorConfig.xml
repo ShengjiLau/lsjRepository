@@ -9,7 +9,7 @@
     <!--指定特定数据库的jdbc驱动jar包的位置 -->
    <classPathEntry location="${jdbc.driverLocation}"/>
 
-    <context id="default" targetRuntime="MyBatis3Simple">
+    <context id="default" >
 
         <commentGenerator>
             <property name="suppressAllComments" value="true"></property>
@@ -30,7 +30,7 @@
             targetPackage     指定生成的model生成所在的包名
             targetProject     指定在该项目下所在的路径
         -->
-        <javaModelGenerator targetPackage="com.lcdt." targetProject="MAVEN">
+        <javaModelGenerator targetPackage="com.lcdt.contract.model" targetProject="clms-contract-api">
             <!-- 是否对model添加 构造函数 -->
             <property name="constructorBased" value="false"/>
 
@@ -49,7 +49,11 @@
 
         <!--Mapper映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 -->
         <!--<sqlMapGenerator targetPackage="com.lcdt.userinfo.dao" targetProject="MAVEN">-->
+<<<<<<< HEAD
         <sqlMapGenerator targetPackage="com.lcdt.werehouse.dao" targetProject="MAVEN">
+=======
+        <sqlMapGenerator targetPackage="com.lcdt.contract.dao" targetProject="clms-contract-service">
+>>>>>>> dev_contract
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
@@ -60,7 +64,11 @@
                 type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
         -->
         <!--<javaClientGenerator targetPackage="com.lcdt.userinfo.dao" targetProject="MAVEN" type="XMLMAPPER">-->
+<<<<<<< HEAD
         <javaClientGenerator targetPackage="com.lcdt.werehouse.dao" targetProject="MAVEN" type="XMLMAPPER">
+=======
+        <javaClientGenerator targetPackage="com.lcdt.contract.dao" targetProject="clms-contract-service" type="XMLMAPPER">
+>>>>>>> dev_contract
 
             <!--
                     定义Maper.java 源代码中的ByExample() 方法的可视性，可选的值有：
@@ -250,12 +258,21 @@
             <!--<generatedKey column="balance_log_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
 
+<<<<<<< HEAD
         <!--<table tableName="valid_code_log" domainObjectName="ValidCodeLog">-->
             <!--<generatedKey column="valid_code_log_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
 
         <table tableName="in_house_plan" domainObjectName="InHousePlan">
             <generatedKey column="plan_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+=======
+        <!-- <table tableName="valid_code_log" domainObjectName="ValidCodeLog">
+            <generatedKey column="valid_code_log_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table> -->
+        
+        <table tableName="t_order" domainObjectName="Order">
+            <generatedKey column="order_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+>>>>>>> dev_contract
         </table>
 
 
