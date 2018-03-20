@@ -8,10 +8,6 @@ public class DriverWaybillParamsDto {
     private Long waybillIds;
     private Long driverId;//司机id
     private short waybillStatus;//运单状态
-    private int pageNo; //分页（第几页）
-    private int pageSize;//每页多少
-
-
     private String electronicalReceipt;//回单地址
     private Long updateId;//更新人id
     private String updateName;//更新人名字
@@ -41,21 +37,6 @@ public class DriverWaybillParamsDto {
         this.waybillStatus = waybillStatus;
     }
 
-    public int getPageNo() {
-        return pageNo;
-    }
-
-    public void setPageNo(int pageNo) {
-        this.pageNo = pageNo;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
 
     public String getElectronicalReceipt() {
         return electronicalReceipt;
