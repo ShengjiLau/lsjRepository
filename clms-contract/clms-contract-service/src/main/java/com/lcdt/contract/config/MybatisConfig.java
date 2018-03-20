@@ -24,6 +24,8 @@ public class MybatisConfig implements TransactionManagementConfigurer {
 
 	@Autowired
 	DataSource dataSource;
+	
+	
 
 	@Bean
 	public SqlSessionFactory sqlSessionFactory(){
@@ -47,7 +49,7 @@ public class MybatisConfig implements TransactionManagementConfigurer {
 	@Bean
 	public static MapperScannerConfigurer mapperScannerConfigurer() {
 		MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-		mapperScannerConfigurer.setBasePackage("com.lcdt.contract.dao");
+		mapperScannerConfigurer.setBasePackage("com.lcdt.contract.dao;com.lcdt.clms.permission.dao");
 		return mapperScannerConfigurer;
 	}
 

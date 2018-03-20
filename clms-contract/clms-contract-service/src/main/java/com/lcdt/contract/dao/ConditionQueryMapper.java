@@ -1,9 +1,6 @@
 package com.lcdt.contract.dao;
 
 import java.util.List;
-
-
-import com.lcdt.contract.model.Order;
 import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.web.dto.OrderDto;
 
@@ -13,6 +10,7 @@ import com.lcdt.contract.web.dto.OrderDto;
  * @date 2018年3月8日上午9:20:01
  * @version
  */
+
 public interface ConditionQueryMapper {
 	
 	 /**
@@ -20,7 +18,7 @@ public interface ConditionQueryMapper {
      * @param OrderDto
      * @return 
      */
-    List<Order> selectByCondition(OrderDto orderDto);
+    List<OrderDto> selectByCondition(OrderDto orderDto);
 	
 	
    

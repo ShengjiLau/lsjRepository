@@ -46,7 +46,6 @@ public class OrderProductServiceImpl implements OrderProductService {
 	public PageInfo<List<OrderProduct>> OrderProductList(Long orderId) {
 		 PageInfo<List<OrderProduct>> pageInfo = new PageInfo(nonautomaticMapper.selectByOrderId(orderId));
 	        return pageInfo;
-		
 	}
 
 	@Override

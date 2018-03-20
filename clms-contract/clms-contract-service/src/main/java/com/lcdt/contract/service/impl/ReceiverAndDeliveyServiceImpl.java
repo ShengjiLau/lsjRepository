@@ -22,6 +22,8 @@ public class ReceiverAndDeliveyServiceImpl implements ReceiverAndDeliveyService{
 
 	@Autowired
 	private ReceiverAndDeliveryMapper receiverAndDelivery;
+	
+	
 
 	@Override
 	public List<DeliveryInfo> getDeliveryInfo(String roughName) {

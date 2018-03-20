@@ -9,6 +9,8 @@ import java.util.List;
 import com.lcdt.contract.model.Order;
 import com.lcdt.contract.model.OrderProduct;
 
+import io.swagger.annotations.ApiModelProperty;
+
 
 /**
  * @author Sheng-ji Lau
@@ -22,12 +24,15 @@ public class OrderDto extends Order  implements Serializable{
 	 */
 	private static final long serialVersionUID = 1032515L;
 	
+	@ApiModelProperty(value="合同起始时间")
 	private Date beginTime;
 	
+	@ApiModelProperty(value="合同终止时间")
 	private Date endTime;
 	
+	@ApiModelProperty(value="页码")
 	private int pageNum;
-	
+	@ApiModelProperty(value="每页条目数")
 	private int pageSize;
 	
 	private List<OrderProduct> orderProductList;

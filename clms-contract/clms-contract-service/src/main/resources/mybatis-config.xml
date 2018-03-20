@@ -29,6 +29,7 @@
 
     <mappers>
         <package name="com.lcdt.contract.dao"></package>
+         <package name="com.lcdt.clms.permission.dao"></package>
     </mappers>
 
 </configuration>

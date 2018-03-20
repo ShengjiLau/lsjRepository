@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.contract.model.Order;
 import com.lcdt.contract.service.OrderService;
 import com.lcdt.contract.web.dto.OrderDto;
 import com.lcdt.contract.web.dto.PageBaseDto;
@@ -53,7 +52,7 @@ import io.swagger.annotations.ApiParam;
 	@ApiOperation(value="销售订单列表",notes="销售订单列表数据")
 	@GetMapping("/list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_list')")
-	public PageBaseDto<List<Order>> OrderList(@RequestParam @Validated OrderDto orderDto
+	public PageBaseDto<List<OrderDto>> OrderList(OrderDto orderDto
 //			,@ApiParam(value="第几页",required=true,defaultValue="1") @RequestParam Integer pageNum,
 //			@ApiParam(value="每页条目数量",required=true,defaultValue="1")@RequestParam Integer pagesize
 			){
@@ -63,11 +62,29 @@ import io.swagger.annotations.ApiParam;
 //		orderDto.setPageSize(pagesize);
 		orderDto.setCompanyId(companyId);
 		orderDto.setCreateUserId(UserId);
-		PageInfo<List<Order>> pageInfoList = orderService.OrderList(orderDto);
-		logger.debug("订单条目数"+pageInfoList.getTotal());
-		PageBaseDto<List<Order>> pageBaseDto = new PageBaseDto<List<Order>>(pageInfoList.getList(),pageInfoList.getTotal());
+		PageInfo<List<OrderDto>> pageInfoList = orderService.OrderList(orderDto);
+		logger.debug("销售订单条目数"+pageInfoList.getTotal());
+		PageBaseDto<List<OrderDto>> pageBaseDto = new PageBaseDto<List<OrderDto>>(pageInfoList.getList(),pageInfoList.getTotal());
 		return pageBaseDto;
 	}
+	
+	
+	/**
+	 * 查询单个订单
+	 * @param Long
+	 * @return OrderDto
+	 */
+	@ApiOperation(value="获取单个销售订单",notes="单个销售订单")
+	@GetMapping("/selsorder")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('select_purchase_order')")
+	public OrderDto selectOrder(@ApiParam(value="订单id")@RequestParam Long orderId){
+		return orderService.selectByPrimaryKey(orderId);	
+	}
+	
+	
+	
+	
+	
 	
 	
 	/**

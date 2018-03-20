@@ -38,11 +38,14 @@ public interface OrderService {
      * 获取订单列表
      * @return PageInfo<List<Order>>
      */
-    PageInfo<List<Order>> OrderList(OrderDto OrderDto);
+    PageInfo<List<OrderDto>> OrderList(OrderDto OrderDto);
 
 	
-	
-	
+    /**
+     * 获取单个订单
+     * @return OrderDto
+     */
+	OrderDto selectByPrimaryKey(Long orderId);
 	
 	
 	

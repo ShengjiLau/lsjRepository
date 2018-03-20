@@ -9,10 +9,6 @@ import com.lcdt.contract.model.*;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.ContractDto;
 
-
-import com.lcdt.contract.web.dto.ContractDto;
-import com.lcdt.contract.service.ContractService;
-import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import org.springframework.beans.BeanUtils;
@@ -38,7 +34,7 @@ public class ContractServiceImpl implements ContractService {
     @Autowired
     private OrderMapper orderMapper;
     @Autowired
-    private OrderProductMapper orderProductMapper;
+    private ConditionQueryMapper conditionQueryMapper;
 
     @Override
     public int addContract(ContractDto dto) {
@@ -156,7 +152,7 @@ public class ContractServiceImpl implements ContractService {
             order.setCompanyId(contract.getCompanyId());
             order.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
             order.setCreateTime(new Date());
-            result = orderMapper.insert(order);
+            result = orderMapper.insertOrder(order);
 
             List<ContractProduct> cpList = contractProductMapper.selectCpsByContractId(contractId);
             if(cpList != null && cpList.size() > 0){
@@ -172,7 +168,7 @@ public class ContractServiceImpl implements ContractService {
                     op.setPrice(cp.getPrice());
                     op.setTotal(cp.getPayment());
                 }
-//                result += orderProductMapper.insertBatch(opList);  //批量插入订单商品
+                result += conditionQueryMapper.insertOrderProductByBatch(opList);  //批量插入订单商品
             }
         }
         return result;

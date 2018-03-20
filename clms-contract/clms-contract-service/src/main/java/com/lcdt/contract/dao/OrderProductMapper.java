@@ -1,6 +1,8 @@
 package com.lcdt.contract.dao;
 
 
+import java.util.List;
+
 import com.lcdt.contract.model.OrderProduct;
 
 public interface OrderProductMapper {
@@ -50,8 +52,10 @@ public interface OrderProductMapper {
      */
     int deleteByOrderId(Long orderId);
     
-    
-    
+    /**
+     *获取某订单下的商品
+     */
+    List<OrderProduct> getOrderProductByOrderId(Long orderId);
     
     
     

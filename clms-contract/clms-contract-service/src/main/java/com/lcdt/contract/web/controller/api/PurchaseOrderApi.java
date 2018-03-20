@@ -52,19 +52,32 @@ import io.swagger.annotations.ApiParam;
 	@ApiOperation(value="采购订单列表",notes="采购订单列表数据")
 	@GetMapping("/list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_list')")
-	public PageBaseDto<List<Order>> OrderList(@RequestParam @Validated OrderDto orderDto
+	public PageBaseDto<List<OrderDto>> OrderList(OrderDto orderDto
 //			,@ApiParam(value="第几页",required=true,defaultValue="1") @RequestParam Integer pageNum,
 //			@ApiParam(value="每页条目数量",required=true,defaultValue="6")@RequestParam Integer pagesize
 			){
 		Long UserId=SecurityInfoGetter.getUser().getUserId();
-		Long companyId=SecurityInfoGetter.getCompanyId();
+		Long companyId=SecurityInfoGetter.getCompanyId();	
 		orderDto.setCompanyId(companyId);
 		orderDto.setCreateUserId(UserId);
-		PageInfo<List<Order>> pageInfoList = orderService.OrderList(orderDto);
+		PageInfo<List<OrderDto>> pageInfoList = orderService.OrderList(orderDto);
 		logger.debug("采购订单条目数"+pageInfoList.getTotal());
-		PageBaseDto<List<Order>> pageBaseDto = new PageBaseDto<List<Order>>(pageInfoList.getList(),pageInfoList.getTotal());
+		PageBaseDto<List<OrderDto>> pageBaseDto = new PageBaseDto<List<OrderDto>>(pageInfoList.getList(),pageInfoList.getTotal());
 		return pageBaseDto;
 	}
+	
+	/**
+	 * 查询单个订单
+	 * @param Long
+	 * @return OrderDto
+	 */
+	@ApiOperation(value="获取单个采购订单",notes="单个采购订单")
+	@GetMapping("/selporder")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('select_sales_order')")
+	public OrderDto selectOrder(@ApiParam(value="订单id")@RequestParam Long orderId){
+		return orderService.selectByPrimaryKey(orderId);	
+	}
+	
 	
 	/**
 	 * 新增采购订单
@@ -79,6 +92,8 @@ import io.swagger.annotations.ApiParam;
 		Long companyId=SecurityInfoGetter.getCompanyId();
 		String orderSerialNum =SerialNumAutoGenerator.serialNoGenerate();
 		orderDto.setCompanyId(companyId);
+		logger.debug("创建人UserId:"+UserId);
+		logger.debug("所属公司companyId:"+companyId);
 		orderDto.setCreateUserId(UserId);
 		orderDto.setOrderSerialNo(orderSerialNum);
 		orderDto.setCreateTime(new Date());
