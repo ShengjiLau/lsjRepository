@@ -227,4 +227,22 @@
     set driver_id = #{driverId,jdbcType=BIGINT}
     where own_driver_id = #{ownDriverId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
+
+
+  <!--司机企业信息-->
+  <resultMap id="DriverCompanyMap" type="com.lcdt.traffic.dto.OwnCompany4SnatchRdto">
+    <result column="affiliated_company" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+  </resultMap>
+
+
+  <select id="selectCompanyByDriverId" resultMap="DriverCompanyMap" parameterType="java.lang.Long">
+    select affiliated_company,company_id
+    from t_own_driver
+    where driver_id = #{driverId,jdbcType=BIGINT} and is_deleted !=1
+	group by company_id,affiliated_company
+  </select>
+
+
+
 </mapper>

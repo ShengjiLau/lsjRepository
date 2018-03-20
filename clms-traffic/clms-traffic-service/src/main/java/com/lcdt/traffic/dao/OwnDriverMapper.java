@@ -1,5 +1,6 @@
 package com.lcdt.traffic.dao;
 
+import com.lcdt.traffic.dto.OwnCompany4SnatchRdto;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.web.dto.OwnDriverDto;
 
@@ -62,5 +63,8 @@ public interface OwnDriverMapper {
      * @return
      */
     int updateDriverId(OwnDriver ownDriver);
+
+
+    List<OwnCompany4SnatchRdto>  selectCompanyByDriverId(Long ownDriverId);
 
 }
