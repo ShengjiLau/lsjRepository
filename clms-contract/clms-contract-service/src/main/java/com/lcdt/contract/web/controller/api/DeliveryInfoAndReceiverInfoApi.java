@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.web.dto.PageBaseDto;
-import com.lcdt.userinfo.dto.CompanyInfoDto;
-import com.lcdt.userinfo.dto.WarehouseInfoDto;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.WarehouseLinkman;
 import com.lcdt.userinfo.service.CompanyService;
