@@ -129,6 +129,13 @@ public interface WaybillMapper {
     List<Waybill> selectWaybillByPlanId(Map map);
 
     /**
+     * 根据 companyId,waybillPlanId,splitGoodsId  查询
+     * @param map
+     * @return
+     */
+    List<Waybill> selectWaybillByPlanIdAndSplitGoodsId(Map map);
+
+    /**
      * 定时用的：根据定位设置条件查询订单
      * @param map
      * @return

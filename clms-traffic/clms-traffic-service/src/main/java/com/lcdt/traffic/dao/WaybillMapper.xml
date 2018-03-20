@@ -501,6 +501,15 @@
     order by id desc
   </select>
 
+  <select id="selectWaybillByPlanIdAndSplitGoodsId" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select <include refid="base_column_list"/>
+    from t_waybill
+    where(company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
+    and waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT}
+    and split_goods_id = #{splitGoodsId,jdbcType=BIGINT}
+    and is_deleted = 0 and waybill_status !=8
+    order by id desc
+  </select>
 
   <select id="selectWaybillByPositionSetting" parameterType="java.util.Map" resultMap="BaseResultMap">
     select id,w.driver_phone
