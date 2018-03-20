@@ -12,7 +12,6 @@ import com.lcdt.traffic.model.SnatchGoods;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.ApiOperation;
-import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,14 +29,15 @@ import java.util.List;
 @RequestMapping("/plan")
 public class PlanApi {
 
-   @Reference
+   @com.alibaba.dubbo.config.annotation.Reference(check = false)
    private IPlanRpcService4Wechat iPlanRpcService4Wechat;
 
-   private User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
 
    @ApiOperation("竞价--企业组")
    @RequestMapping(value = "/driver/companyGroupList", method = RequestMethod.GET)
    public List<OwnCompany4SnatchRdto>  companyGroupList() {
+      User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
       List<OwnCompany4SnatchRdto> ownCompany4SnatchRdtoList = iPlanRpcService4Wechat.ownCompanyList(loginUser.getUserId());
       return ownCompany4SnatchRdtoList;
    }
