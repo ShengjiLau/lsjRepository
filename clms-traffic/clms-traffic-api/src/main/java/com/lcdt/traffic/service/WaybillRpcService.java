@@ -1,6 +1,7 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.traffic.dto.DriverWaybillListParsmsDto;
 import com.lcdt.traffic.dto.DriverWaybillParamsDto;
 
 import java.util.Map;
@@ -15,7 +16,7 @@ public interface WaybillRpcService {
      * @param dto
      * @return
      */
-    PageInfo queryDriverWaybillList(DriverWaybillParamsDto dto);
+    PageInfo queryDriverWaybillList(DriverWaybillListParsmsDto dto);
 
     /**
      * 根据司机id更新运单状态
