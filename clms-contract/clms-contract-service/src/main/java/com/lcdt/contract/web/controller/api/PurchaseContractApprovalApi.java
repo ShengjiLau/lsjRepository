@@ -1,8 +1,10 @@
 package com.lcdt.contract.web.controller.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.model.Contract;
+import com.lcdt.contract.model.ContractApproval;
 import com.lcdt.contract.service.ContractApprovalService;
 import com.lcdt.contract.web.dto.ContractApprovalDto;
 import com.lcdt.contract.web.dto.ContractApprovalListDto;
@@ -55,7 +57,86 @@ public class PurchaseContractApprovalApi {
         return pageBaseDto;
     }
 
+    @ApiOperation(value = "审批同意",notes = "正常通过审批操作")
+    @GetMapping(value = "/agree")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_approval_agree')")
+    public JSONObject agreeApproval(ContractApproval contractApproval) {
+        int result = contractApprovalService.agreeApproval(contractApproval);
+        JSONObject jsonObject = new JSONObject();
+        if (result > 0) {
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "操作成功");
 
+        } else {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "操作成功");
+        }
+        return jsonObject;
+    }
+
+    @ApiOperation(value = "驳回审批", notes = "驳回操作")
+    @GetMapping(value = "/reject")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_approval_reject')")
+    public JSONObject rejectApproval(ContractApproval contractApproval) {
+        int result = contractApprovalService.rejectApproval(contractApproval);
+        JSONObject jsonObject = new JSONObject();
+        if (result > 0) {
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "操作成功");
+        } else {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "操作失败");
+        }
+        return jsonObject;
+    }
+
+    @ApiOperation(value = "撤销审批", notes = "撤销操作")
+    @GetMapping(value = "/revoke")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_approval_revoke')")
+    public JSONObject revokeApproval(ContractApproval contractApproval) {
+        int result = contractApprovalService.revokeApproval(contractApproval);
+        JSONObject jsonObject = new JSONObject();
+        if (result > 0) {
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "操作成功");
+        } else {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "操作失败");
+        }
+        return jsonObject;
+    }
+
+    @ApiOperation(value = "转办审批", notes = "转办操作")
+    @GetMapping(value = "/turnDo")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_approval_turnDo')")
+    public JSONObject turnDoApproval(List<ContractApproval> contractApprovalList) {
+        int result = contractApprovalService.turnDoApproval(contractApprovalList);
+        JSONObject jsonObject = new JSONObject();
+        if (result > 0) {
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "操作成功");
+        } else {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "操作失败");
+        }
+        return jsonObject;
+    }
+
+    @ApiOperation(value = "抄送", notes = "抄送操作")
+    @GetMapping(value = "/cc")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_approval_cc')")
+    public JSONObject ccApproval(List<ContractApproval> contractApprovalList) {
+        int result = contractApprovalService.ccApproval(contractApprovalList);
+        JSONObject jsonObject = new JSONObject();
+        if (result > 0) {
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "操作成功");
+        } else {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "操作失败");
+        }
+        return jsonObject;
+    }
 
 
 }

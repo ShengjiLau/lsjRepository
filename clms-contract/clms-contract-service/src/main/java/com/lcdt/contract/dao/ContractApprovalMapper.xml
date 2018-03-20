@@ -19,11 +19,11 @@
     where ca_id = #{caId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lcdt.contract.model.ContractApproval">
-    insert into t_contract_approval (ca_id, contract_id, user_id, 
+    insert into t_contract_approval (contract_id, user_id,
       user_name, dept_name, sort,
       result, action_type, status, content,
       time)
-    values (#{caId,jdbcType=BIGINT}, #{contractId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+    values (#{contractId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT},
       #{userName,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER},
       #{result,jdbcType=SMALLINT}, #{actionType,jdbcType=SMALLINT}, #{status,jdbcType=SMALLINT},
        #{content,jdbcType=VARCHAR},#{time,jdbcType=TIMESTAMP})
@@ -99,7 +99,14 @@
         and approval_start_date &gt; #{approvalStartDate,jdbcType=TIMESTAMP} and approval_end_date &lt; #{approvalEndDate,jdbcType=TIMESTAMP}
       </if>
       <if test="approvalStatus!=null and approvalStatus!=''">
-        and approval_status = #{approvalStatus,jdbcType=SMALLINT}
+        <choose>
+          <when test="tempStatus==3">
+            and approval_status = 2
+          </when>
+          <otherwise>
+            and approval_status = #{approvalStatus,jdbcType=SMALLINT}
+          </otherwise>
+        </choose>
       </if>
     </where>
   </select>
@@ -132,5 +139,27 @@
     </foreach>
   </insert>
 
+  <update id="updateStatus" parameterType="com.lcdt.contract.model.ContractApproval" useGeneratedKeys="true" keyProperty="caId">
+    update t_contract_approval
+    <set>
+      status = #{status,jdbcType=SMALLINT},
+      <if test="result!=null">
+        result = #{result,jdbcType=SMALLINT},
+      </if>
+      <if test="content!=null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="time!=null">
+        time = CURRENT_TIMESTAMP,
+      </if>
+    </set>
+    where ca_id = #{caId,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByContractId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select ca_id, contract_id, user_id, user_name, dept_name, sort, result, status, content,time
+    from t_contract_approval
+    where contract_id = #{arg0} and action_type = 0 and status != 5 order by sort
+  </select>
 </mapper>
 
