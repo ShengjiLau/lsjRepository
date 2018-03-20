@@ -231,16 +231,15 @@
 
   <!--司机企业信息-->
   <resultMap id="DriverCompanyMap" type="com.lcdt.traffic.dto.OwnCompany4SnatchRdto">
+    <id column="company_id" property="companyId" />
     <result column="affiliated_company" jdbcType="VARCHAR" property="companyName" />
-    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
   </resultMap>
-
 
   <select id="selectCompanyByDriverId" resultMap="DriverCompanyMap" parameterType="java.lang.Long">
     select affiliated_company,company_id
     from t_own_driver
     where driver_id = #{driverId,jdbcType=BIGINT} and is_deleted !=1
-	group by company_id,affiliated_company
+	group by company_id
   </select>
 
 

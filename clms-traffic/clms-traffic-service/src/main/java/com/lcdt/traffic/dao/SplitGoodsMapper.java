@@ -68,5 +68,5 @@ public interface SplitGoodsMapper {
      * @param companyId
      * @return
      */
-    int statCount4DriverSnatch(@Param("waybillPlanId") Long waybillPlanId, @Param("companyId") Long companyId);
+    List<SplitGoods> statCount4DriverSnatch(@Param("waybillPlanId") Long waybillPlanId, @Param("companyId") Long companyId);
 }

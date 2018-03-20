@@ -1,6 +1,7 @@
 package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.SplitGoodsDetail;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -71,6 +72,14 @@ public interface SplitGoodsDetailMapper {
      */
     int batchUpdateSplitGoodsDetail(List<SplitGoodsDetail> list);
 
+
+    /***
+     * 司机抢单统计报价
+     * @param waybillPlanId
+     * @param planCompanyId
+     * @return
+     */
+    float statSnatchTotalPrice4Driver(@Param("waybillPlanId") Long waybillPlanId, @Param("planCompanyId") long planCompanyId);
 
 
 }

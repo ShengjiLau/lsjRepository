@@ -4,18 +4,17 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.traffic.dao.DriverGroupRelationshipMapper;
-import com.lcdt.traffic.dao.OwnDriverMapper;
-import com.lcdt.traffic.dao.SplitGoodsMapper;
-import com.lcdt.traffic.dao.WaybillPlanMapper;
+import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.OwnCompany4SnatchRdto;
 import com.lcdt.traffic.dto.SnatchBill4WaittingRdto;
 import com.lcdt.traffic.dto.SnathBill4WaittingPdto;
 import com.lcdt.traffic.model.DriverGroupRelationship;
 import com.lcdt.traffic.model.SplitGoods;
+import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -45,6 +44,11 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
     @Autowired
     private SplitGoodsMapper splitGoodsMapper;
 
+    @Autowired
+    private WaybillMapper waybillMapper;
+
+    @Autowired
+    private SplitGoodsDetailMapper splitGoodsDetailMapper;
 
     /***
      * 根据司机ID获取用户对应的竞价组
@@ -189,27 +193,54 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
 
             PageHelper.startPage(pageNo, pageSize);
             List<SnatchBill4WaittingRdto> snatchBill4WaittingRdtos = waybillPlanMapper.completeSnatch4Driver(map);
-
             if (snatchBill4WaittingRdtos!=null && snatchBill4WaittingRdtos.size()>0) {
-                for (SnatchBill4WaittingRdto obj1: snatchBill4WaittingRdtos) {
-                    Long companyId = obj1.getCompanyId();
+                for (SnatchBill4WaittingRdto obj: snatchBill4WaittingRdtos) {
+                    Long companyId = obj.getCompanyId();
                     Company company =  companyRpcService.findCompanyByCid(companyId);
-                    if(company!=null) obj1.setCompanyName(company.getFullName());
-                    if(obj1.getPlanStatus().equals("60"))  {
-                        obj1.setStatus("计划取消");
+                    if(company!=null) obj.setCompanyName(company.getFullName());
+                    if(obj.getPlanStatus().equals("60"))  {
+                        obj.setStatus("计划取消");
                     } else {
                       //检查就改口派车
-                        int splitCount = splitGoodsMapper.statCount4DriverSnatch(obj1.getWaybillPlanId(),obj1.getCompanyId());
-                        if (splitCount>0){ //已派车
+                        List<SplitGoods> splitGoodsList = splitGoodsMapper.statCount4DriverSnatch(obj.getWaybillPlanId(),obj.getCompanyId());
+                        if (splitGoodsList.size()>0){ //已派车
                             //抢单成功：该已抢计划已经派车给我
                             //抢单失败：该已抢计划已经派单给别人
-                   
-
-
+                            boolean flag = false;
+                            for (SplitGoods splitGoods : splitGoodsList) {
+                                 Long splitGoodsId = splitGoods.getSplitGoodsId();
+                                 Map map1 = new HashMap();
+                                 map1.put("companyId",obj.getCompanyId());
+                                 map1.put("waybillPlanId",obj.getWaybillPlanId());
+                                 map1.put("splitGoodsId",splitGoodsId);
+                                 List<Waybill> waybillList = waybillMapper.selectWaybillByPlanIdAndSplitGoodsId(map1);
+                                 boolean flag1 = false;
+                                 if(waybillList!=null && waybillList.size()>0) {
+                                     for(Waybill waybill: waybillList) {
+                                         if(waybill.getDriverId().equals(dto.getDriverId())) {
+                                             flag1 = true;
+                                             break;
+                                         }
+                                     }
+                                 }
+                                 if(flag1) {
+                                     flag = true;
+                                     break;
+                                 }
+                            }
+                            if(flag) {
+                                obj.setStatus("抢单成功");
+                            } else {
+                                obj.setStatus("抢单失败");
+                            }
                         } else {
-                            obj1.setStatus("竞价中"); //该已抢计划还未派车
+                            obj.setStatus("竞价中"); //该已抢计划还未派车
                         }
                     }
+
+                    //统计总报价
+                    float offerPrice = splitGoodsDetailMapper.statSnatchTotalPrice4Driver(obj.getWaybillPlanId(),obj.getCompanyId());
+                    obj.setSnatchTotalPrice(offerPrice);
                 }
                 pageInfo = new PageInfo(snatchBill4WaittingRdtos);
 

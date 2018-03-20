@@ -22,7 +22,6 @@ public interface IPlanRpcService4Wechat {
     List<OwnCompany4SnatchRdto> ownCompanyList(Long driverId);
 
 
-
     /***
      * 待抢列表
      *
@@ -30,8 +29,6 @@ public interface IPlanRpcService4Wechat {
      * @return
      */
     PageInfo SnathBill4WaittingList(SnathBill4WaittingPdto dto);
-
-
 
 
 

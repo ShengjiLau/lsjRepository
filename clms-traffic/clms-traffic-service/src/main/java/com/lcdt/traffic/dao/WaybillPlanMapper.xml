@@ -15,12 +15,10 @@
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <result column="carrier_collection_ids" jdbcType="VARCHAR" property="carrierCollectionIds" />
     <result column="carrier_collection_names" jdbcType="VARCHAR" property="carrierCollectionNames" />
-
     <result column="carrier_driver_ids" jdbcType="VARCHAR" property="carrierDriverIds" />
     <result column="carrier_driver_names" jdbcType="VARCHAR" property="carrierDriverNames" />
     <result column="carrier_ids" jdbcType="VARCHAR" property="carrierIds" />
     <result column="carrier_names" jdbcType="VARCHAR" property="carrierNames" />
-
     <result column="carrier_phone" jdbcType="VARCHAR" property="carrierPhone" />
     <result column="carrier_vehicle" jdbcType="VARCHAR" property="carrierVehicle" />
     <result column="plan_source" jdbcType="VARCHAR" property="planSource" />
@@ -1074,6 +1072,16 @@
     <result column="send_address" jdbcType="VARCHAR" property="sendAddress" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="plan_status" jdbcType="VARCHAR" property="planStatus" />
+    <result column="send_man" jdbcType="VARCHAR" property="sendMan" />
+    <result column="send_phone" jdbcType="VARCHAR" property="sendPhone" />
+    <result column="receive_man" jdbcType="VARCHAR" property="receiveMan" />
+    <result column="receive_phone" jdbcType="VARCHAR" property="receivePhone" />
+    <result column="transport_way" jdbcType="SMALLINT" property="transportWay" />
+    <result column="plan_remark" jdbcType="VARCHAR" property="planRemark" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="arrive_date" jdbcType="TIMESTAMP" property="arriveDate" />
+    <result column="serial_code" jdbcType="VARCHAR" property="serialCode" />
+
     <!--计划详细-->
     <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id}"
                 ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
@@ -1087,7 +1095,7 @@
 -->
   <select id="wattingSnatch4Driver" parameterType="java.util.Map" resultMap="snatchBill4WaittingMap">
     select waybill_plan_id,send_province,send_city,send_county,send_address,receive_province,receive_city,receive_county,receive_address,start_date,
-           arrive_date,company_id,plan_status
+           arrive_date,company_id,plan_status,transport_way,send_man,send_phone,receive_man,receive_phone,plan_remark,serial_code
     from t_waybill_plan p1
     <where>
       and p1.send_order_type='2'
@@ -1111,7 +1119,7 @@
   -->
   <select id="completeSnatch4Driver" parameterType="java.util.Map" resultMap="snatchBill4WaittingMap">
     select waybill_plan_id,send_province,send_city,send_county,send_address,receive_province,receive_city,receive_county,receive_address,start_date,
-    arrive_date,company_id,plan_status
+    arrive_date,company_id,plan_status,transport_way,send_man,send_phone,receive_man,receive_phone,plan_remark,serial_code
     from t_waybill_plan p1
     <where>
       and p1.send_order_type='2'
@@ -1126,10 +1134,5 @@
     </where>
     order by ${orderFiled} ${orderDesc}
   </select>
-
-
-
-
-
 
 </mapper>

@@ -12,14 +12,20 @@ import java.util.List;
 public class SnatchBill4WaittingRdto implements java.io.Serializable {
 
     private Long waybillPlanId;
+   private String serialCode;
 
     //发货地
+
+    private String sendMan;
+    private String sendPhone;
     private String sendProvince;
     private String sendCity;
     private String sendCounty;
     private String sendAddress;
 
     //接收地
+    private String receiveMan;
+    private String receivePhone;
     private String receiveProvince;
     private String receiveCity;
     private String receiveCounty;
@@ -42,14 +48,22 @@ public class SnatchBill4WaittingRdto implements java.io.Serializable {
 
     //计划状态
     private String planStatus;
+    private String planRemark;
 
-
-
+    //抢单总价
+    private float snatchTotalPrice;
 
 
     private List<PlanDetail> planDetailList;
 
 
+    public String getSerialCode() {
+        return serialCode;
+    }
+
+    public void setSerialCode(String serialCode) {
+        this.serialCode = serialCode;
+    }
 
     public String getSendProvince() {
         return sendProvince;
@@ -179,11 +193,60 @@ public class SnatchBill4WaittingRdto implements java.io.Serializable {
         this.trafficReq = trafficReq;
     }
 
+
     public String getPlanStatus() {
         return planStatus;
     }
 
     public void setPlanStatus(String planStatus) {
         this.planStatus = planStatus;
+    }
+
+    public String getSendPhone() {
+        return sendPhone;
+    }
+
+    public void setSendPhone(String sendPhone) {
+        this.sendPhone = sendPhone;
+    }
+
+    public String getReceiveMan() {
+        return receiveMan;
+    }
+
+    public void setReceiveMan(String receiveMan) {
+        this.receiveMan = receiveMan;
+    }
+
+    public String getReceivePhone() {
+        return receivePhone;
+    }
+
+    public void setReceivePhone(String receivePhone) {
+        this.receivePhone = receivePhone;
+    }
+
+    public String getSendMan() {
+        return sendMan;
+    }
+
+    public void setSendMan(String sendMan) {
+        this.sendMan = sendMan;
+    }
+
+    public String getPlanRemark() {
+        return planRemark;
+    }
+
+    public void setPlanRemark(String planRemark) {
+        this.planRemark = planRemark;
+    }
+
+    public float getSnatchTotalPrice() {
+        return snatchTotalPrice;
+    }
+
+    public void setSnatchTotalPrice(float snatchTotalPrice) {
+        this.snatchTotalPrice = snatchTotalPrice;
     }
 }
