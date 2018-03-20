@@ -30,6 +30,7 @@ import com.lcdt.contract.web.dto.OrderDto;
 @Transactional
 public class OrderServiceImpl implements OrderService{
 	
+	
 	@Autowired
 	OrderMapper orderMapper;
 	
@@ -137,6 +138,7 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public OrderDto selectByPrimaryKey(Long orderId) {
 		OrderDto orderDto=orderMapper.selectByPrimaryKey(orderId);
+		logger.debug(orderDto.getCreateTime().toString());
 		//获取订单下商品
 		orderDto.setOrderProductList(orderProductMapper.getOrderProductByOrderId(orderDto.getOrderId()));
 		return orderDto;
