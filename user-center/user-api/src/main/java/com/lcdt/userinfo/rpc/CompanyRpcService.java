@@ -18,7 +18,7 @@ public interface CompanyRpcService {
 
     /***
      * 获取企业创建者
-     * @param companyId
+     * @param compId
      * @return
      */
     User findCompanyCreate(Long compId);

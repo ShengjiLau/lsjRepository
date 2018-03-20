@@ -34,8 +34,13 @@ public class SnatchBill4WaittingRdto implements java.io.Serializable {
     //货主企业
     private Long companyId;
     private String companyName;
-
     private String status; //状态
+
+
+    //运输要求
+    private String trafficReq;
+
+
 
 
 
@@ -161,5 +166,13 @@ public class SnatchBill4WaittingRdto implements java.io.Serializable {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public String getTrafficReq() {
+        return trafficReq;
+    }
+
+    public void setTrafficReq(String trafficReq) {
+        this.trafficReq = trafficReq;
     }
 }
