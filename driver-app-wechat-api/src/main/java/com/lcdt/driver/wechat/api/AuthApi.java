@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 @RestController
@@ -23,9 +25,9 @@ public class AuthApi {
     JwtTokenUtil jwtTokenUtil;
 
     @RequestMapping("/login")
-    public String login(String phone,String pwd){
+    public String login(String phone,String validcode) {
         try {
-            User user = userService.userLogin(phone, pwd);
+            User user = userService.userLogin(phone, "");
             HashMap<String, Object> stringStringHashMap = new HashMap<>();
             stringStringHashMap.put("userName", user.getPhone());
             String s = jwtTokenUtil.generateToken(stringStringHashMap);
@@ -37,8 +39,5 @@ public class AuthApi {
         }
         return null;
     }
-
-
-
 
 }
