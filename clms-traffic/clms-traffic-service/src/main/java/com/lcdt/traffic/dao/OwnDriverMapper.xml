@@ -169,8 +169,12 @@
   <update id="deleteByUpdate" parameterType="com.lcdt.traffic.model.OwnDriver">
     update t_own_driver
     set is_deleted = 1,
-    update_id = #{updateId,jdbcType=BIGINT},
-    update_name = #{updateName,jdbcType=VARCHAR},
+    <if test="updateId != null">
+      update_id = #{updateId,jdbcType=BIGINT},
+    </if>
+    <if test="update_name != null">
+      update_name = #{updateName,jdbcType=VARCHAR},
+    </if>
     update_date = CURRENT_TIMESTAMP
     where own_driver_id = #{ownDriverId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
@@ -241,7 +245,12 @@
     where driver_id = #{driverId,jdbcType=BIGINT} and is_deleted !=1
 	group by company_id
   </select>
-
+  <select id="selectByDriverId" resultMap="DriverCompanyMap" parameterType="java.lang.Long">
+    select *
+    from t_own_driver
+    where driver_id = #{driverId,jdbcType=BIGINT} and is_deleted !=1
+    order by own_driver_id
+  </select>
 
 
 </mapper>

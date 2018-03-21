@@ -67,4 +67,6 @@ public interface OwnDriverMapper {
 
     List<OwnCompany4SnatchRdto>  selectCompanyByDriverId(Long ownDriverId);
 
+    List<OwnDriver> selectByDriverId(Long driverId);
+
 }

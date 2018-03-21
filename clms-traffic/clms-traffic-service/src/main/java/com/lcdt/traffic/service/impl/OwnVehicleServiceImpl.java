@@ -7,7 +7,7 @@ import com.lcdt.traffic.dao.OwnDriverMapper;
 import com.lcdt.traffic.dao.OwnVehicleCertificateMapper;
 import com.lcdt.traffic.dao.OwnVehicleMapper;
 import com.lcdt.traffic.model.OwnDriver;
-import com.lcdt.traffic.service.OwnDriverService;
+import com.lcdt.traffic.service.OwnDriverCompanyService;
 import com.lcdt.traffic.web.dto.OwnVehicleDto;
 import com.lcdt.traffic.model.OwnVehicle;
 import com.lcdt.traffic.model.OwnVehicleCertificate;
@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @AUTHOR liuh
@@ -42,7 +41,7 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
     private OwnVehicleMapper ownVehicleMapper;
 
     @Autowired
-    private OwnDriverService ownDriverService;
+    private OwnDriverCompanyService ownDriverService;
 
     @Autowired
     private OwnDriverMapper ownDriverMapper;

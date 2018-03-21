@@ -9,7 +9,7 @@ import com.lcdt.traffic.dao.OwnDriverMapper;
 import com.lcdt.traffic.model.DriverGroupRelationship;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.model.OwnDriverCertificate;
-import com.lcdt.traffic.service.OwnDriverService;
+import com.lcdt.traffic.service.OwnDriverCompanyService;
 import com.lcdt.traffic.util.RegisterUtils;
 import com.lcdt.traffic.web.dto.OwnDriverDto;
 import com.lcdt.userinfo.dto.RegisterDto;
@@ -33,7 +33,7 @@ import java.util.*;
  */
 @Transactional
 @Service
-public class OwnDriverServiceImpl implements OwnDriverService {
+public class OwnDriverServiceImpl implements OwnDriverCompanyService {
 
     Logger logger = LoggerFactory.getLogger(OwnDriverServiceImpl.class);
     @Autowired
