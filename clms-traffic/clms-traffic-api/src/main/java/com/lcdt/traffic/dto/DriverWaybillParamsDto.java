@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModelProperty;
  */
 
 public class DriverWaybillParamsDto {
-
     @ApiModelProperty(value = "运单id，有多个id时用 , 隔开")
     private Long waybillIds;
     @ApiModelProperty(value = "司机id",hidden = true)
