@@ -33,7 +33,7 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="采购/销售单号")
     private String orderNo;
 
-	@ApiModelProperty(value="订单类型(采购 or销售)")
+	@ApiModelProperty(value="订单类型(采购:1 or销售:0)")
 	@NotNull(message="订单类型不可为空")
     private Short orderType;
 
@@ -50,16 +50,16 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="付款方式")
     private String payType;
 
-	@ApiModelProperty(value="收货仓库")
+	@ApiModelProperty(value="采购收货仓库/销售发货仓库")
     private String receiveWarehouse;
 
 	@ApiModelProperty(value="附件url")
     private String fileUrl;
 
-	@ApiModelProperty(value="发货人")
+	@ApiModelProperty(value="采购发货人/销售收货人")
     private String sender;
 
-	@ApiModelProperty(value="发货人联系方式")
+	@ApiModelProperty(value="采购发货人/销售收货人联系方式")
     private String senderPhone;
 
 	@ApiModelProperty(value="发货省")
@@ -71,7 +71,7 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="发货区")
     private String sendDistrict;
 
-	@ApiModelProperty(value="发货详细地址")
+	@ApiModelProperty(value="采购发货/销售收货详细地址")
     private String sendAddress;
 
 	@ApiModelProperty(value="发货时间")
@@ -80,8 +80,8 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="包装要求")
     private String packRequire;
 
-	@ApiModelProperty(value="收货人")
-	@NotBlank(message="收货人不可为空")
+	@ApiModelProperty(value="采购收货人/销售发货人")
+	@NotBlank(message="采购收货人/销售发货人不可为空")
     private String receiver;
 
 	@ApiModelProperty(value="收货人联系方式")
@@ -100,6 +100,9 @@ public class Order implements Serializable {
 	@NotBlank
     private String receiveDistrict;
 
+	@ApiModelProperty(value="收货时间")
+	private Date receiveTime;
+	
 	@ApiModelProperty(value="收货详细地址")
 	@NotBlank(message="收货地址不可为空")
     private String receiveAddress;
@@ -131,8 +134,6 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="订单流水号")
     private String orderSerialNo;
 	
-	@ApiModelProperty(value="收货时间")
-	private Date receiveTime;
 	
 	@ApiModelProperty(value="审批流程")
 	private String approvalProcess;
@@ -140,6 +141,8 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="是否草稿:0是/1否")
 	private Short isDraft;
 	
+	@ApiModelProperty(value="收货要求")
+	private String receiveRequire;
 	
 	
     private static final long serialVersionUID = 13333L;
@@ -741,6 +744,16 @@ public class Order implements Serializable {
 
 	public void setIsDraft(Short isDraft) {
 		this.isDraft = isDraft;
+	}
+
+
+	public String getReceiveRequire() {
+		return receiveRequire;
+	}
+
+
+	public void setReceiveRequire(String receiveRequire) {
+		this.receiveRequire = receiveRequire;
 	}
 
  
