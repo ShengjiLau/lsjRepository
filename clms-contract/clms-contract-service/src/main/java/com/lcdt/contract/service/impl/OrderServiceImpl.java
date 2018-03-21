@@ -46,14 +46,22 @@ public class OrderServiceImpl implements OrderService{
 
 	@Override
 	public int addOrder(OrderDto orderDto) {
+		BigDecimal aTotal =new 	BigDecimal(0);
+		if(orderDto.getOrderProductList()!=null&&orderDto.getOrderProductList().size()!=0){
+			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
+				BigDecimal num=new BigDecimal(orderProduct.getNum());
+				BigDecimal price=orderProduct.getPrice();
+				BigDecimal total=num.multiply(price);
+				aTotal.add(total);
+				orderProduct.setTotal(total);
+			}
+		}
 		Order order=new Order();
 		BeanUtils.copyProperties(orderDto,order);
+		order.setSummation(aTotal);
 		int result=orderMapper.insertOrder(order);
 		if(orderDto.getOrderProductList()!=null&&orderDto.getOrderProductList().size()!=0){
 			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
-//				int num=orderProduct.getNum();
-//				BigDecimal price=orderProduct.getPrice();
-//				BigDecimal total=price*num;
 				orderProduct.setOrderId(order.getOrderId());
 			}
 			int i=nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());

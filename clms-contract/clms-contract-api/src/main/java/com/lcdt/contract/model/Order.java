@@ -1,6 +1,7 @@
 package com.lcdt.contract.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
@@ -143,6 +144,9 @@ public class Order implements Serializable {
 	
 	@ApiModelProperty(value="收货要求")
 	private String receiveRequire;
+	
+	@ApiModelProperty(value="合计金额")
+	private BigDecimal summation;
 	
 	
     private static final long serialVersionUID = 13333L;
@@ -754,6 +758,16 @@ public class Order implements Serializable {
 
 	public void setReceiveRequire(String receiveRequire) {
 		this.receiveRequire = receiveRequire;
+	}
+
+
+	public BigDecimal getSummation() {
+		return summation;
+	}
+
+
+	public void setSummation(BigDecimal summation) {
+		this.summation = summation;
 	}
 
  
