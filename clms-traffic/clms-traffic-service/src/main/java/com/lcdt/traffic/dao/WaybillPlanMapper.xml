@@ -929,6 +929,9 @@
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
+      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''"> <!--承运企业-->
+        and ${carrierCollectionIds}
+      </if>
     </where>
     order by waybill_plan_id desc
   </select>
@@ -994,6 +997,9 @@
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
+      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''"> <!--承运企业-->
+        and ${carrierCollectionIds}
+      </if>
     </where>
     order by waybill_plan_id desc
   </select>
@@ -1055,6 +1061,9 @@
       </if>
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
+      </if>
+      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''"> <!--承运企业-->
+        and ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc

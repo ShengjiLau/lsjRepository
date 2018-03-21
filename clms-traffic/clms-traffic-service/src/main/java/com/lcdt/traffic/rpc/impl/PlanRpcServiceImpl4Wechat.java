@@ -209,7 +209,6 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                         List<SplitGoods> splitGoodsList = splitGoodsMapper.statCount4DriverSnatch(obj.getWaybillPlanId(),obj.getCompanyId());
                         if (splitGoodsList.size()>0){ //已派车
                             //抢单成功：该已抢计划已经派车给我
-                            //抢单失败：该已抢计划已经派单给别人
                             boolean flag = false;
                             for (SplitGoods splitGoods : splitGoodsList) {
                                  Long splitGoodsId = splitGoods.getSplitGoodsId();
