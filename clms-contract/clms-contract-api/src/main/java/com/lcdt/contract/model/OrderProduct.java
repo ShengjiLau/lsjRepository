@@ -3,9 +3,14 @@ package com.lcdt.contract.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.validation.executable.ValidateOnExecution;
+
 import org.hibernate.validator.constraints.NotBlank;
+import org.junit.validator.ValidateWith;
+import org.springframework.validation.annotation.Validated;
 
 import io.swagger.annotations.ApiModelProperty;
+
 
 public class OrderProduct implements Serializable {
     /**

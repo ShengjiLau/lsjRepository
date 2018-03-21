@@ -1,13 +1,16 @@
 package com.lcdt.contract.web.controller.api;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,7 +52,7 @@ public class PurchaseOrderApi {
 	/**
 	 * 依据条件查询采购订单列表
 	 * @param orderDto
-	 * @return PageBaseDto
+	 * @return JSONObject
 	 */
 	@ApiOperation(value="采购订单列表",notes="采购订单列表数据")
 	@GetMapping("/list")
@@ -107,11 +110,18 @@ public class PurchaseOrderApi {
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_purchase_order')")
 	public JSONObject addOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindResult) {
 		JSONObject jsonObject = new JSONObject();
-		if(bindResult.hasErrors()) {
-			jsonObject.put("code","-1");
-			jsonObject.put("message",bindResult.getFieldError().getDefaultMessage());
-			return jsonObject;
-		}
+		 if(bindResult.hasErrors()) {
+	        	jsonObject.put("code","-1");
+	        	Map map=new HashMap();
+	        	List<FieldError> list=bindResult.getFieldErrors();
+	        	for(FieldError error:list) {
+	        		String n=error.getField();
+	        		String m=error.getDefaultMessage();
+	        		map.put(n,m);
+	        	}
+	        	jsonObject.put("message",map);
+	        	return jsonObject;
+	        }
 		Long UserId=SecurityInfoGetter.getUser().getUserId();
 		Long companyId=SecurityInfoGetter.getCompanyId();
 		String orderSerialNum =SerialNumAutoGenerator.serialNoGenerate();
