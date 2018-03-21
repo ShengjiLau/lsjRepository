@@ -65,11 +65,14 @@ public class ContractServiceImpl implements ContractService {
                 ca.setContractId(contract.getContractId()); //设置关联合同id
                 if(ca.getSort()==1){
                     ca.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                }else{
+                    ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
                 }
             }
             contractApprovalMapper.insertBatch(dto.getContractApprovalList());
             //同时设置合同的审批状态为审批中
             contract.setApprovalStatus(new Short("1"));
+            contract.setApprovalStartDate(new Date());
             contractMapper.updateByPrimaryKey(contract);
         }else{
             // todo 没有添加审批人，则认为合同无需审批

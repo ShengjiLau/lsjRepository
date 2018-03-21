@@ -70,7 +70,7 @@
       summary = #{summary,jdbcType=VARCHAR},
       terms = #{terms,jdbcType=VARCHAR},
       file_url = #{fileUrl,jdbcType=VARCHAR},
-      group_id = #{groupId,jdbcType=BIGINT}
+      group_id = #{groupId,jdbcType=BIGINT},
       company_id = #{companyId,jdbcType=BIGINT}
     where contract_id = #{contractId,jdbcType=BIGINT}
   </update>
@@ -126,7 +126,7 @@
   <update id="updateApprovalStatus" >
     update t_contract
     set approval_status = #{arg2},
-    approval_endt_date = CURRENT_TIMESTAMP
+    approval_end_date = CURRENT_TIMESTAMP
     where contract_id = #{arg0} and company_id = #{arg1}
   </update>
 </mapper>
