@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class SnatchBill4WaittingRdto implements java.io.Serializable {
 
-    private Long waybillPlanId;
+   private Long waybillPlanId;
    private String serialCode;
 
     //发货地
