@@ -31,7 +31,6 @@ public class DriverCompayApi {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", 0);
         jsonObject.put("message", "操作成功");
-
         return jsonObject.toString();
     }
 
