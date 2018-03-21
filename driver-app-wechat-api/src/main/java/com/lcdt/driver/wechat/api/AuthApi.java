@@ -1,6 +1,7 @@
 package com.lcdt.driver.wechat.api;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.token.config.JwtTokenUtil;
 import com.lcdt.driver.dto.WechatUserDto;
 import com.lcdt.userinfo.exception.PassErrorException;
@@ -27,6 +28,7 @@ public class AuthApi {
 
     @RequestMapping("/login")
     public String login(String phone, String validcode, WechatUserDto wechatUserDto) {
+        JSONObject jsonObject = new JSONObject();
         User user;
         try {
             user = userService.queryByPhone(phone);
@@ -40,7 +42,11 @@ public class AuthApi {
         HashMap<String, Object> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("userName", user.getPhone());
         String s = jwtTokenUtil.generateToken(stringStringHashMap);
-        return s;
+        jsonObject.put("token", s);
+        jsonObject.put("result", 0);
+        jsonObject.put("user", user);
+        jsonObject.put("message", "请求成功");
+        return jsonObject.toString();
     }
 
 }
