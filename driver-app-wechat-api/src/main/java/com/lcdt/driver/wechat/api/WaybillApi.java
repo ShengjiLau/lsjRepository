@@ -33,7 +33,7 @@ public class WaybillApi {
 
 
     @ApiOperation("司机运单--列表")
-    @RequestMapping(value = "/own/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/driver/list", method = RequestMethod.GET)
    // @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybill_list')")
     public PageBaseDto<List<Waybill>> driverWaybillList(DriverWaybillListParsmsDto dto) {
         User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

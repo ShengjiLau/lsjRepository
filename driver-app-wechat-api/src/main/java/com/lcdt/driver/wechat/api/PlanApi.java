@@ -31,8 +31,6 @@ public class PlanApi {
    @com.alibaba.dubbo.config.annotation.Reference(check = false)
    private IPlanRpcService4Wechat iPlanRpcService4Wechat;
 
-
-
    @ApiOperation("竞价--企业组")
    @RequestMapping(value = "/driver/companyGroupList", method = RequestMethod.GET)
    public List<OwnCompany4SnatchRdto>  companyGroupList() {
@@ -61,17 +59,16 @@ public class PlanApi {
    @ApiOperation("竞价--报价")
    @RequestMapping(value = "/driver/driverOffer", method = RequestMethod.POST)
    public JSONObject driverOffer(@RequestBody SnatchOfferDto dto) {
-      Long companyId = SecurityInfoGetter.getCompanyId();
-      User user = SecurityInfoGetter.getUser();
+      User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
       SnatchGoods snatchGoods = new SnatchGoods();
-      snatchGoods.setOfferId(user.getUserId());
-      snatchGoods.setOfferName(user.getRealName());
-      snatchGoods.setCreateId(user.getUserId());
-      snatchGoods.setCreateName(user.getRealName());
-      snatchGoods.setUpdateId(user.getUserId());
-      snatchGoods.setUpdateName(user.getRealName());
-      snatchGoods.setOfferPhone(user.getPhone()); //抢单人电话
-      snatchGoods.setCompanyId(companyId);
+      snatchGoods.setOfferId(loginUser.getUserId());
+      snatchGoods.setOfferName(loginUser.getRealName());
+      snatchGoods.setCreateId(loginUser.getUserId());
+      snatchGoods.setCreateName(loginUser.getRealName());
+      snatchGoods.setUpdateId(loginUser.getUserId());
+      snatchGoods.setUpdateName(loginUser.getRealName());
+      snatchGoods.setOfferPhone(loginUser.getPhone()); //抢单人电话
+     // snatchGoods.setCompanyId(companyId);
       snatchGoods.setPlanCompanyId(dto.getCompanyId());//计划企业ID
       int flag = iPlanRpcService4Wechat.driverOffer(dto,snatchGoods);
       JSONObject jsonObject = new JSONObject();
