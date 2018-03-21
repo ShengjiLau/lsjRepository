@@ -14,8 +14,10 @@ import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -79,7 +81,6 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
 
     /***
      * 货主企业组
-     * @param driverId
      * @return
      */
     private String ownCompanyIdsByDriverId(Long driverId) {
@@ -104,22 +105,23 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
 
     /***
      * 根据司机ID获取司机对应的企业信息
-     * @param driverId
      * @return
      */
     @Transactional(readOnly = true)
     @Override
-    public List<OwnCompany4SnatchRdto> ownCompanyList(Long driverId) {
-        return ownDriverMapper.selectCompanyByDriverId(driverId);
+    public List<OwnCompany4SnatchRdto> ownCompanyList() {
+        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ownDriverMapper.selectCompanyByDriverId(loginUser.getUserId());
     }
 
 
     @Transactional(readOnly = true)
     @Override
     public PageInfo snatchBill4WaittingList(SnathBill4WaittingPdto dto) {
+        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         PageInfo pageInfo = null;
-        String driverGroupIds = biddingGroupByDriverId(dto.getDriverId()); //获取竞价组ID集合
-        String ownCompanyIds = ownCompanyIdsByDriverId(dto.getDriverId()); //发布计划企业ID组
+        String driverGroupIds = biddingGroupByDriverId(loginUser.getUserId()); //获取竞价组ID集合
+        String ownCompanyIds = ownCompanyIdsByDriverId(loginUser.getUserId()); //发布计划企业ID组
         if (!StringUtils.isEmpty(driverGroupIds) && !StringUtils.isEmpty(ownCompanyIds)) {
             int pageNo = 1;
             int pageSize = 0; //0表示所有

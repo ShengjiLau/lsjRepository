@@ -34,8 +34,7 @@ public class PlanApi {
    @ApiOperation("竞价--企业组")
    @RequestMapping(value = "/driver/companyGroupList", method = RequestMethod.GET)
    public List<OwnCompany4SnatchRdto>  companyGroupList() {
-      User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-      List<OwnCompany4SnatchRdto> ownCompany4SnatchRdtoList = iPlanRpcService4Wechat.ownCompanyList(loginUser.getUserId());
+       List<OwnCompany4SnatchRdto> ownCompany4SnatchRdtoList = iPlanRpcService4Wechat.ownCompanyList();
       return ownCompany4SnatchRdtoList;
    }
 
