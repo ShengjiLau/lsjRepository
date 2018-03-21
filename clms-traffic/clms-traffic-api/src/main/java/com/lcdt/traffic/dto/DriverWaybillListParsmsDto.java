@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiParam;
  */
 
 public class DriverWaybillListParsmsDto {
-
     @ApiModelProperty(value = "司机id",hidden = true)
     private Long driverId;//司机id
     @ApiModelProperty(value = "运单状态")
