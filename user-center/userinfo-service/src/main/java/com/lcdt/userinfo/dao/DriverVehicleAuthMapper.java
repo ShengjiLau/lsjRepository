@@ -14,4 +14,6 @@ public interface DriverVehicleAuthMapper {
     List<DriverVehicleAuth> selectAll();
 
     int updateByPrimaryKey(DriverVehicleAuth record);
+
+    List<DriverVehicleAuth> selectByDriverId(Long driverId);
 }
