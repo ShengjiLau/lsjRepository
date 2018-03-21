@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,10 +33,10 @@ import io.swagger.annotations.ApiParam;
  * @date 2018年3月5日下午6:18:55
  * @version
  */
-	@Api(value="销售订单管理Api",description="销售订单操作")
-	@RestController
-	@RequestMapping("/salesOrder")
-	public class SalesOrderApi {
+@Api(value="销售订单管理Api",description="销售订单操作")
+@RestController
+@RequestMapping("/salesOrder")
+public class SalesOrderApi {
 	
 	Logger logger = LoggerFactory.getLogger(SalesOrderApi.class);
 	
@@ -51,9 +52,9 @@ import io.swagger.annotations.ApiParam;
 	@ApiOperation(value="销售订单列表",notes="销售订单列表数据")
 	@GetMapping("/list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_list')")
-	public JSONObject OrderList(@RequestBody OrderDto orderDto
-//			,@ApiParam(value="第几页",required=true,defaultValue="1") @RequestParam Integer pageNum,
-//			@ApiParam(value="每页条目数量",required=true,defaultValue="1")@RequestParam Integer pagesize
+	public JSONObject OrderList(OrderDto orderDto
+     //		   ,@ApiParam(value="第几页",required=true,defaultValue="1") @RequestParam Integer pageNum,
+     //			@ApiParam(value="每页条目数量",required=true,defaultValue="1")@RequestParam Integer pagesize
 			){
 		Long UserId=SecurityInfoGetter.getUser().getUserId();
 		Long companyId=SecurityInfoGetter.getCompanyId();	
@@ -110,7 +111,13 @@ import io.swagger.annotations.ApiParam;
 	@ApiOperation("新增销售订单")
 	@PostMapping("/addOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_sales_order')")
-	public JSONObject addOrder(@Validated @RequestBody OrderDto orderDto) {
+	public JSONObject addOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindResult) {
+        JSONObject jsonObject = new JSONObject();
+        if(bindResult.hasErrors()) {
+        	jsonObject.put("code","-1");
+        	jsonObject.put("message",bindResult.getFieldError().getDefaultMessage());
+        	return jsonObject;
+        }
 		Long UserId=SecurityInfoGetter.getUser().getUserId();
 		Long companyId=SecurityInfoGetter.getCompanyId();
 		String orderSerialNum =SerialNumAutoGenerator.serialNoGenerate();
@@ -121,7 +128,6 @@ import io.swagger.annotations.ApiParam;
 		int result =orderService.addOrder(orderDto);
 		logger.debug("新增销售订单条目数:"+result);
 		if (result>0) {
-            JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "添加成功");
             return jsonObject;
@@ -139,18 +145,23 @@ import io.swagger.annotations.ApiParam;
 	@ApiOperation("修改销售订单")
 	@PostMapping("/modifyOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('mod_sales_order')")
-	public JSONObject modifyOrder(@Validated @RequestBody OrderDto orderDto) {
-	int result=orderService.modOrder(orderDto);
-	logger.debug("修改销售订单条目数:"+result);
-	if (result > 0) {
+	public JSONObject modifyOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindingResult) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code", 0);
-        jsonObject.put("message", "修改成功");
-        return jsonObject;
-    } else {
-        throw new RuntimeException("修改失败");
-    }
-	}
+        if(bindingResult.hasErrors()) {
+        	jsonObject.put("code","-1");
+        	jsonObject.put("message",bindingResult.getFieldError().getDefaultMessage());
+        	return jsonObject;
+        }
+        int result=orderService.modOrder(orderDto);
+        logger.debug("修改销售订单条目数:"+result);
+        if (result > 0) {
+        	jsonObject.put("code", 0);
+        	jsonObject.put("message", "修改成功");
+        	return jsonObject;
+        } else {
+        	throw new RuntimeException("修改失败");
+        }
+		}
 	
 	
 	/**

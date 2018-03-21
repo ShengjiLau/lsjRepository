@@ -23,7 +23,7 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="订单id")
     private Long orderId;
 
-	@NotBlank(message="供应商不可为空")
+	@NotBlank(message="供应商信息不可为空")
 	@ApiModelProperty(value="供应商/客户名称")
     private String supplier;
 	

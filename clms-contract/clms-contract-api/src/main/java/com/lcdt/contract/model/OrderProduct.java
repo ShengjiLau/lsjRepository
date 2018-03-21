@@ -32,7 +32,7 @@ public class OrderProduct implements Serializable {
      *
      * @mbggenerated
      */
-    @NotBlank
+    @NotBlank(message="商品名称不可为空")
     @ApiModelProperty(value="商品名称")
     private String name;
 
@@ -42,7 +42,7 @@ public class OrderProduct implements Serializable {
      *
      * @mbggenerated
      */
-    @NotBlank
+    @NotBlank(message="商品编号不可为空")
     @ApiModelProperty(value="商品编号")
     private String code;
 
@@ -52,7 +52,7 @@ public class OrderProduct implements Serializable {
      *
      * @mbggenerated
      */
-    @NotBlank
+    @NotBlank(message="商品单位不可为空")
     @ApiModelProperty(value="商品单位")
     private String sku;
 
@@ -62,7 +62,7 @@ public class OrderProduct implements Serializable {
      *
      * @mbggenerated
      */
-    @NotBlank
+    @NotBlank(message="商品数量不可为空")
     @ApiModelProperty(value="商品数量")
     private Integer num;
 
@@ -72,7 +72,7 @@ public class OrderProduct implements Serializable {
      *
      * @mbggenerated
      */
-    @NotBlank
+    @NotBlank(message="商品单价不可为空")
     @ApiModelProperty(value="商品单价")
     private BigDecimal price;
 
@@ -86,7 +86,7 @@ public class OrderProduct implements Serializable {
     @ApiModelProperty(value="总金额")
     private BigDecimal total;
 
-    @NotBlank
+    @NotBlank(message="商品规格不可为空")
     @ApiModelProperty(value="商品规格")
     private String spec;
     
