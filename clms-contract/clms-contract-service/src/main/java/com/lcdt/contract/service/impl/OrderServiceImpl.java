@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.lcdt.contract.dao.ConditionQueryMapper;
 import com.lcdt.contract.dao.OrderMapper;
 import com.lcdt.contract.dao.OrderProductMapper;
@@ -143,7 +141,10 @@ public class OrderServiceImpl implements OrderService{
 		OrderDto orderDto=orderMapper.selectByPrimaryKey(orderId);
 		logger.debug(orderDto.getCreateTime().toString());
 		//获取订单下商品
-		orderDto.setOrderProductList(orderProductMapper.getOrderProductByOrderId(orderDto.getOrderId()));
+		List<OrderProduct> orderProductList=orderProductMapper.getOrderProductByOrderId(orderDto.getOrderId());
+		if(orderProductList!=null&&orderProductList.size()!=0) {
+			orderDto.setOrderProductList(orderProductList);
+		}
 		return orderDto;
 	}
 

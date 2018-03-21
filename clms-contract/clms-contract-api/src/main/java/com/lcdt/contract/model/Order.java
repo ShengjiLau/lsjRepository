@@ -23,7 +23,7 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="订单id")
     private Long orderId;
 
-	@NotBlank
+	@NotBlank(message="供应商不可为空")
 	@ApiModelProperty(value="供应商/客户名称")
     private String supplier;
 	
@@ -43,7 +43,7 @@ public class Order implements Serializable {
     private Short approvalStatus;
 
 	@ApiModelProperty(value="配送方式")
-	@NotNull
+	@NotNull(message="配送方式不可为空")
     private Short dispatchingType;
 
 	@ApiModelProperty(value="付款方式")
@@ -80,7 +80,7 @@ public class Order implements Serializable {
     private String packRequire;
 
 	@ApiModelProperty(value="收货人")
-	@NotBlank
+	@NotBlank(message="收货人不可为空")
     private String receiver;
 
 	@ApiModelProperty(value="收货人联系方式")
@@ -100,7 +100,7 @@ public class Order implements Serializable {
     private String receiveDistrict;
 
 	@ApiModelProperty(value="收货详细地址")
-	@NotBlank
+	@NotBlank(message="收货地址不可为空")
     private String receiveAddress;
 
 	@ApiModelProperty(value="备注")
@@ -117,7 +117,7 @@ public class Order implements Serializable {
     private Date approvalEndDate;
 
 	@ApiModelProperty(value="所属业务组")
-	@NotNull
+	@NotNull(message="业务组不可为空")
     private Long groupId;
 
 	@ApiModelProperty(value="所属公司id")
@@ -720,6 +720,26 @@ public class Order implements Serializable {
 
 	public void setApprovalProcess(String approvalProcess) {
 		this.approvalProcess = approvalProcess;
+	}
+
+
+	public Long getSupplierId() {
+		return supplierId;
+	}
+
+
+	public void setSupplierId(Long supplierId) {
+		this.supplierId = supplierId;
+	}
+
+
+	public Short getIsDraft() {
+		return isDraft;
+	}
+
+
+	public void setIsDraft(Short isDraft) {
+		this.isDraft = isDraft;
 	}
 
  

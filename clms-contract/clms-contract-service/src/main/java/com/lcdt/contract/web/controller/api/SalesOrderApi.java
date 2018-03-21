@@ -10,16 +10,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.service.OrderService;
 import com.lcdt.contract.web.dto.OrderDto;
-import com.lcdt.contract.web.dto.PageBaseDto;
 import com.lcdt.contract.web.utils.SerialNumAutoGenerator;
 
 import io.swagger.annotations.Api;
@@ -52,7 +51,7 @@ import io.swagger.annotations.ApiParam;
 	@ApiOperation(value="销售订单列表",notes="销售订单列表数据")
 	@GetMapping("/list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_list')")
-	public JSONObject OrderList(OrderDto orderDto
+	public JSONObject OrderList(@RequestBody OrderDto orderDto
 //			,@ApiParam(value="第几页",required=true,defaultValue="1") @RequestParam Integer pageNum,
 //			@ApiParam(value="每页条目数量",required=true,defaultValue="1")@RequestParam Integer pagesize
 			){
@@ -111,7 +110,7 @@ import io.swagger.annotations.ApiParam;
 	@ApiOperation("新增销售订单")
 	@PostMapping("/addOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_sales_order')")
-	public JSONObject addOrder(@Validated OrderDto orderDto) {
+	public JSONObject addOrder(@Validated @RequestBody OrderDto orderDto) {
 		Long UserId=SecurityInfoGetter.getUser().getUserId();
 		Long companyId=SecurityInfoGetter.getCompanyId();
 		String orderSerialNum =SerialNumAutoGenerator.serialNoGenerate();
@@ -140,7 +139,7 @@ import io.swagger.annotations.ApiParam;
 	@ApiOperation("修改销售订单")
 	@PostMapping("/modifyOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('mod_sales_order')")
-	public JSONObject modifyOrder(@Validated OrderDto orderDto) {
+	public JSONObject modifyOrder(@Validated @RequestBody OrderDto orderDto) {
 	int result=orderService.modOrder(orderDto);
 	logger.debug("修改销售订单条目数:"+result);
 	if (result > 0) {
