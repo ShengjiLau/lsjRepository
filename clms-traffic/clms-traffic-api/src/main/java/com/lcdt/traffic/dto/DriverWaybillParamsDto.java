@@ -10,8 +10,7 @@ public class DriverWaybillParamsDto {
 
     @ApiModelProperty(value = "运单id，有多个id时用 , 隔开")
     private Long waybillIds;
-    @ApiModelProperty(value = "司机id")
-    private Long driverId;//司机id
+
     @ApiModelProperty(value = "运单状态")
     private short waybillStatus;//运单状态
 
@@ -34,13 +33,6 @@ public class DriverWaybillParamsDto {
         this.waybillIds = waybillIds;
     }
 
-    public Long getDriverId() {
-        return driverId;
-    }
-
-    public void setDriverId(Long driverId) {
-        this.driverId = driverId;
-    }
 
     public short getWaybillStatus() {
         return waybillStatus;
