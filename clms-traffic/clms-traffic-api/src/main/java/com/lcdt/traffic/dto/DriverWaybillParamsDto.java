@@ -11,8 +11,6 @@ public class DriverWaybillParamsDto {
     private String electronicalReceipt;//回单地址
     private Long updateId;//更新人id
     private String updateName;//更新人名字
-    private int pageNo; //分页（第几页）
-    private int pageSize;//每页多少
 
 
 
@@ -64,21 +62,5 @@ public class DriverWaybillParamsDto {
 
     public void setUpdateName(String updateName) {
         this.updateName = updateName;
-    }
-
-    public int getPageNo() {
-        return pageNo;
-    }
-
-    public void setPageNo(int pageNo) {
-        this.pageNo = pageNo;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
     }
 }
