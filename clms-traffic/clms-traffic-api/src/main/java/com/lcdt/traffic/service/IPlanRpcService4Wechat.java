@@ -18,10 +18,9 @@ public interface IPlanRpcService4Wechat {
 
     /***
      * 企业信息列表（抢单查询）
-     * @param driverId
      * @return
      */
-    List<OwnCompany4SnatchRdto> ownCompanyList(Long driverId);
+    List<OwnCompany4SnatchRdto> ownCompanyList();
 
 
     /***

@@ -43,7 +43,7 @@ public class WaybillParamsDto {
     private String carrierDriverIds;
 
     @ApiModelProperty(value = "竞价-司机-名称")
-    private String getCarrierDriverNames;
+    private String carrierDriverNames;
 
 
 
@@ -713,12 +713,12 @@ public class WaybillParamsDto {
         this.carrierDriverIds = carrierDriverIds;
     }
 
-    public String getGetCarrierDriverNames() {
-        return getCarrierDriverNames;
+    public String getCarrierDriverNames() {
+        return carrierDriverNames;
     }
 
-    public void setGetCarrierDriverNames(String getCarrierDriverNames) {
-        this.getCarrierDriverNames = getCarrierDriverNames;
+    public void setCarrierDriverNames(String carrierDriverNames) {
+        this.carrierDriverNames = carrierDriverNames;
     }
 
     public String getCarrierIds() {
