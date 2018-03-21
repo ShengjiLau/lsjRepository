@@ -77,8 +77,12 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
             }
             if(null != ownVehicleDto.getVehicleDriverPhone()) {
                 String phone = ownVehicleDto.getVehicleDriverPhone().trim();
-                /**判断我的司机是否存在该手机号，没有自动创建一条*/
-
+                User user = userService.selectUserByPhone(phone);
+                /**将司机账号的user_id更新到我的车辆表里*/
+                ownVehicle.setVehicleDriverId(user.getUserId());
+                ownVehicleMapper.updateDriverId(ownVehicle);
+                //**判断我的司机是否存在该手机号，没有自动创建一条*/
+                /*
                 if(!ownDriverService.isExistDriver(phone,ownVehicleDto.getCompanyId())){    //我的司机不存在记录
                     OwnDriver ownDriver = new OwnDriver();
                     ownDriver.setCompanyId(ownVehicleDto.getCompanyId());
@@ -90,7 +94,8 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
                     ownDriver.setCreateName(ownVehicle.getCreateName());
                     ownDriverMapper.insert(ownDriver);    //保存车司机本信息
                 }
-                /**判断是否已经开通cLMS司机账号，若没有开通，则自动开通,新增一条司机账号信息*/
+                //**判断是否已经开通cLMS司机账号，若没有开通，则自动开通,新增一条司机账号信息*/
+                /*
                 if(!driverService.isExistDriver(phone)){
                     if (!userService.isPhoneBeenRegister(phone)) { //为空则保存司机账号信息
                         RegisterDto registerDto = new RegisterDto();
@@ -109,7 +114,7 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
                             driver.setCreateId(ownVehicleDto.getCreateId());
                             driver.setCreateName(ownVehicleDto.getCreateName());
                             driverService.addDriver(driver);    //保存司机信息
-                            /*将司机账号的user_id更新到我的车辆表里*/
+                            *//*将司机账号的user_id更新到我的车辆表里*//*
                             ownVehicle.setVehicleDriverId(user.getUserId());
                             ownVehicleMapper.updateDriverId(ownVehicle);
                         } catch (PhoneHasRegisterException e) {
@@ -127,7 +132,7 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
                         driver.setCreateName(ownVehicleDto.getCreateName());
                         driverService.addDriver(driver);    //保存司机信息
                     }
-                }
+                }*/
 
             }
         }
