@@ -1,15 +1,17 @@
 package com.lcdt.driver.wechat.api;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
+import com.lcdt.driver.dto.AddDriverVehicleAuthDto;
 import com.lcdt.userinfo.model.DriverVehicleAuth;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.rpc.CarAuthService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -27,7 +29,12 @@ public class CarAuthApi {
     }
 
     @RequestMapping(value = "/add",method = RequestMethod.POST)
-    public DriverVehicleAuth addAuth(DriverVehicleAuth driverVehicleAuth) {
+    public DriverVehicleAuth addAuth(AddDriverVehicleAuthDto addDriverVehicleAuthDto) {
+        User user = TokenSecurityInfoGetter.getUser();
+        DriverVehicleAuth driverVehicleAuth = new DriverVehicleAuth();
+        BeanUtils.copyProperties(addDriverVehicleAuthDto,driverVehicleAuth);
+        driverVehicleAuth.setCreateDate(new Date());
+        driverVehicleAuth.setCreateId(user.getUserId());
         DriverVehicleAuth driverVehicleAuth1 = carAuthService.addVehicleAuth(driverVehicleAuth);
         return driverVehicleAuth1;
     }

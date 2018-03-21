@@ -88,4 +88,16 @@
     create_date, create_id, update_id, update_name, update_date, is_deleted
     from t_driver_vehicle_auth
   </select>
+
+  <select id="selectByDriverId" resultMap="BaseResultMap">
+
+     select auth_id, driver_id, vehicle_num, vehicle_trailers_num, vehicle_type, vehicle_load,
+    vehicle_length, auth_status, vehicle_photo, vehicle_trailers_photo, vehicle_driving_photo,
+    vehicle_operating_photo, vehicle_trailers_operating_photo, is_default, create_name,
+    create_date, create_id, update_id, update_name, update_date, is_deleted
+    from t_driver_vehicle_auth
+    where  driver_id = #{driverId,jdbcType=BIGINT}
+
+  </select>
+
 </mapper>
