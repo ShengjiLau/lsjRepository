@@ -10,12 +10,9 @@ import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.service.WaybillRpcService;
 import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -51,6 +48,7 @@ public class WaybillApi {
 
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
+        dto.setDriverId(loginUser.getUserId());
         int result=waybillRpcService.modifyWaybillStatusByDriver(dto);
         if(result>0){
             JSONObject jsonObject=new JSONObject();
@@ -69,6 +67,7 @@ public class WaybillApi {
         User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
+        dto.setDriverId(loginUser.getUserId());
         int result=waybillRpcService.modifyWaybillReceiptByDriver(dto);
         if(result>0){
             JSONObject jsonObject=new JSONObject();
