@@ -108,6 +108,7 @@
           </otherwise>
         </choose>
       </if>
+      and approval_status != 0
     </where>
   </select>
   <select id="selectContractApproval" resultMap="BaseResultMap">
@@ -127,15 +128,15 @@
         and user_id = #{userId,jdbcType=BIGINT} and action_type = 1
       </if>
     </where>
-    order by sort
+    order by sort,ca_id
   </select>
   <insert id="insertBatch">
-    insert into t_contract_approval (contract_id, user_id,user_name, dept_name, sort, action_type)
+    insert into t_contract_approval (contract_id, user_id,user_name, dept_name, sort, action_type,status)
     values
     <foreach item="item" collection="list" separator=",">
     (#{item.contractId,jdbcType=BIGINT}, #{item.userId,jdbcType=BIGINT},
     #{item.userName,jdbcType=VARCHAR}, #{item.deptName,jdbcType=VARCHAR},
-    #{item.sort,jdbcType=INTEGER}, #{item.actionType,jdbcType=SMALLINT})
+    #{item.sort,jdbcType=INTEGER}, #{item.actionType,jdbcType=SMALLINT},#{item.status,jdbcType=SMALLINT})
     </foreach>
   </insert>
 
@@ -157,7 +158,7 @@
   </update>
 
   <select id="selectByContractId" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select ca_id, contract_id, user_id, user_name, dept_name, sort, result, status, content,time
+    select ca_id, contract_id, user_id, user_name, dept_name, sort, action_type, result, status, content,time
     from t_contract_approval
     where contract_id = #{arg0} and action_type = 0 and status != 5 order by sort
   </select>

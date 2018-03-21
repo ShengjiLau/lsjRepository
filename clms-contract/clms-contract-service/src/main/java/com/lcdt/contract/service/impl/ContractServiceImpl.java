@@ -72,6 +72,7 @@ public class ContractServiceImpl implements ContractService {
             contractApprovalMapper.insertBatch(dto.getContractApprovalList());
             //同时设置合同的审批状态为审批中
             contract.setApprovalStatus(new Short("1"));
+            contract.setApprovalStartDate(new Date());
             contractMapper.updateByPrimaryKey(contract);
         }else{
             // todo 没有添加审批人，则认为合同无需审批
