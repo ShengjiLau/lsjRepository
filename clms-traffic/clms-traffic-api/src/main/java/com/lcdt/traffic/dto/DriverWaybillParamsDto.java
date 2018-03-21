@@ -2,17 +2,19 @@ package com.lcdt.traffic.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 /**
  * Created by lyqishan on 2018/3/19
  */
 
-public class DriverWaybillParamsDto {
+public class DriverWaybillParamsDto implements Serializable{
     @ApiModelProperty(value = "运单id，有多个id时用 , 隔开")
     private Long waybillIds;
     @ApiModelProperty(value = "司机id",hidden = true)
     private Long driverId;//司机id
     @ApiModelProperty(value = "运单状态")
-    private short waybillStatus;//运单状态
+    private Short waybillStatus;//运单状态
 
     @ApiModelProperty(value = "上传回单地址，有多个时用JSONArrary和形式")
     private String electronicalReceipt;//回单地址
@@ -41,14 +43,13 @@ public class DriverWaybillParamsDto {
         this.driverId = driverId;
     }
 
-    public short getWaybillStatus() {
+    public Short getWaybillStatus() {
         return waybillStatus;
     }
 
-    public void setWaybillStatus(short waybillStatus) {
+    public void setWaybillStatus(Short waybillStatus) {
         this.waybillStatus = waybillStatus;
     }
-
 
     public String getElectronicalReceipt() {
         return electronicalReceipt;
