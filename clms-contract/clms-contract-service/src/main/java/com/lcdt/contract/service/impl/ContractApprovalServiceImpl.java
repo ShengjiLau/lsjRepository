@@ -45,22 +45,25 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
             ContractApprovalListDto cald = new ContractApprovalListDto();
             cald.setType(cad.getType());
             cald.setTitle(cad.getTitle());
+            cald.setContractId(cad.getContractId());
             cald.setContractCode(cad.getContractCode());
             cald.setApprovalStartDate(cad.getApprovalStartDate());
             for(ContractApproval contractApproval : cad.getContractApprovalList()){
-                if(contractApproval.getSort()==0){  //发起人及创建人
-                    cald.setCreateUserName(contractApproval.getUserName());
-                }
-                /**审批状态为 1 3 4 代表审批流程正在执行的状态或者已经结束（撤销/驳回），可作为列表审批关键环节的展示*/
-                if(null!= contractApproval.getStatus()){
-                    if(contractApproval.getStatus()==1 || contractApproval.getStatus() ==4){
-                        cald.setCaId(contractApproval.getCaId());
-                        cald.setApprovalStatus(contractApproval.getStatus());   //设置当前审批状态
-                        cald.setCurrentUserName(contractApproval.getUserName());    //设置当前审批人
-                    }else if(contractApproval.getStatus() == 3){    //撤销无需设置当前人员，只设置审批状态
-                        cald.setApprovalStatus(contractApproval.getStatus());
-                    }else if(cad.getApprovalStatus()==2){   //审批流程完成，无需再设置当前人
-                        cald.setApprovalStatus(new Short("2"));
+                if(null != contractApproval.getSort()) {
+                    if (contractApproval.getSort() == 0) {  //发起人及创建人
+                        cald.setCreateUserName(contractApproval.getUserName());
+                    }
+                    /**审批状态为 1 3 4 代表审批流程正在执行的状态或者已经结束（撤销/驳回），可作为列表审批关键环节的展示*/
+                    if (null != contractApproval.getStatus()) {
+                        if (contractApproval.getStatus() == 1 || contractApproval.getStatus() == 4) {
+                            cald.setCaId(contractApproval.getCaId());
+                            cald.setApprovalStatus(contractApproval.getStatus());   //设置当前审批状态
+                            cald.setCurrentUserName(contractApproval.getUserName());    //设置当前审批人
+                        } else if (contractApproval.getStatus() == 3) {    //撤销无需设置当前人员，只设置审批状态
+                            cald.setApprovalStatus(contractApproval.getStatus());
+                        } else if (cad.getApprovalStatus() == 2) {   //审批流程完成，无需再设置当前人
+                            cald.setApprovalStatus(new Short("2"));
+                        }
                     }
                 }
             }
@@ -93,12 +96,13 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
                 ContractApproval ca = caList.get(i);
                 if(ca.getCaId().equals(contractApproval.getCaId())){    //找出当前正在审核的人
                     if(ca.getSort().longValue()==caList.size()){  //如果正在审核的人为最后一人，则审批流程结束
-                        contractMapper.updateApprovalStatus(contractApproval.getContractId(),companyId,new Short("2"));
+                        rows += contractMapper.updateApprovalStatus(contractApproval.getContractId(),companyId,new Short("2"));
                         break;
                     }else{  //否则更新下一位审核人状态为审批中
                         contractApproval.setCaId(caList.get(i+1).getCaId());
                         contractApproval.setStatus(new Short("1"));
                         contractApproval.setTime(null);   //置空之前设置的值
+                        contractApproval.setContent(null);
                         rows += contractApprovalMapper.updateStatus(contractApproval);
                         break;
                     }
@@ -115,7 +119,7 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
     public int rejectApproval(ContractApproval contractApproval) {
 
         Long companyId = SecurityInfoGetter.getCompanyId();
-        contractApproval.setStatus(new Short("2"));     //审批状态
+        contractApproval.setStatus(new Short("4"));     //审批状态
         contractApproval.setTime(new Date());   //审批时间
         /**
          * 驳回的处理逻辑：即审批终止，
@@ -137,7 +141,7 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
     @Override
     public int revokeApproval(ContractApproval contractApproval) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        contractApproval.setStatus(new Short("2"));     //审批状态
+        contractApproval.setStatus(new Short("3"));     //审批状态
         contractApproval.setTime(new Date());   //审批时间
         /**
          * 撤销的处理逻辑：即审批终止，
@@ -178,7 +182,6 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
             contractApproval1.setContractId(ca.getContractId());
             contractApproval1.setStatus(new Short("1"));   //设置审批状态为审批中
             contractApproval1.setActionType(new Short("0"));    //为审批类型
-            contractApproval1.setTime(new Date());
             contractApprovalMapper.insert(contractApproval1);
         } catch (NumberFormatException e) {
             e.printStackTrace();
@@ -203,6 +206,7 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
             for(ContractApproval ca : contractApprovalList){
                 ca.setContractId(contractId);
                 ca.setActionType(new Short("1"));
+                ca.setStatus(new Short("0"));
                 ca.setTime(new Date());
             }
             row = contractApprovalMapper.insertBatch(contractApprovalList);
