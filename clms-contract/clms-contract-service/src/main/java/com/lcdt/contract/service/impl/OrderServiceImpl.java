@@ -1,5 +1,6 @@
 package com.lcdt.contract.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lcdt.contract.dao.ConditionQueryMapper;
 import com.lcdt.contract.dao.OrderMapper;
 import com.lcdt.contract.dao.OrderProductMapper;
@@ -48,6 +51,9 @@ public class OrderServiceImpl implements OrderService{
 		int result=orderMapper.insertOrder(order);
 		if(orderDto.getOrderProductList()!=null&&orderDto.getOrderProductList().size()!=0){
 			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
+//				int num=orderProduct.getNum();
+//				BigDecimal price=orderProduct.getPrice();
+//				BigDecimal total=price*num;
 				orderProduct.setOrderId(order.getOrderId());
 			}
 			int i=nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());
@@ -114,13 +120,13 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<OrderDto> OrderList(OrderDto orderDto) {
-//		if(orderDto.getPageNum()<=0) {
-//			orderDto.setPageNum(1);
-//		}
-//		if(orderDto.getPageSize()<=0) {
-//			orderDto.setPageSize(6);
-//		}		 
+	public PageInfo<OrderDto> OrderList(OrderDto orderDto) {
+		if(orderDto.getPageNum()<=0) {
+			orderDto.setPageNum(1);
+		}
+		if(orderDto.getPageSize()<=0) {
+			orderDto.setPageSize(6);
+		}		 
 		List<OrderDto> orderDtoList= nonautomaticMapper.selectByCondition(orderDto);
 		if(orderDtoList!=null&&orderDtoList.size()!=0) {
 			for(OrderDto order:orderDtoList) {
@@ -131,8 +137,9 @@ public class OrderServiceImpl implements OrderService{
 				}
 			}   
 		}
-	//	 PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());   
-	        return orderDtoList;
+		PageInfo<OrderDto> pageInfo =new PageInfo<OrderDto>(orderDtoList);
+		 PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());   
+	        return pageInfo;
 	}
 
 

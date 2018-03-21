@@ -34,6 +34,7 @@ public class Order implements Serializable {
     private String orderNo;
 
 	@ApiModelProperty(value="订单类型(采购 or销售)")
+	@NotNull(message="订单类型不可为空")
     private Short orderType;
 
 	@ApiModelProperty(value="合同编号")

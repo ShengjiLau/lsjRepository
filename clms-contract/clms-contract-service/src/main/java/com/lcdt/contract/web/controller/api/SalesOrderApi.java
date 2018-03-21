@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.service.OrderService;
 import com.lcdt.contract.web.dto.OrderDto;
+import com.lcdt.contract.web.dto.PageBaseDto;
 import com.lcdt.contract.web.utils.SerialNumAutoGenerator;
 
 import io.swagger.annotations.Api;
@@ -60,17 +62,15 @@ public class SalesOrderApi {
 		Long companyId=SecurityInfoGetter.getCompanyId();	
 		orderDto.setCompanyId(companyId);
 		orderDto.setCreateUserId(UserId);
-		List<OrderDto> orderDtoList = orderService.OrderList(orderDto);
-		logger.debug("销售订单条目数"+orderDtoList.size());
+		PageInfo<OrderDto> pageInfo = orderService.OrderList(orderDto);
+		PageBaseDto<OrderDto> pageBaseDto =new PageBaseDto<OrderDto>();
+		pageBaseDto.setList(pageInfo.getList());
+		pageBaseDto.setTotal(pageInfo.getTotal());
+		logger.debug("销售订单条目数"+pageInfo.getTotal());
 		JSONObject jsonObject =new JSONObject();
-		if(orderDtoList!=null&&orderDtoList.size()!=0) {
-			jsonObject.put("code","0");
-			jsonObject.put("message","销售订单列表");
-			jsonObject.put("data",orderDtoList);
-		}else {
-			jsonObject.put("code","-1");
-			jsonObject.put("message","没有相应的销售订单");
-		}
+		jsonObject.put("code","0");
+		jsonObject.put("message","销售订单列表");
+		jsonObject.put("data",pageBaseDto);
 		//PageBaseDto<List<OrderDto>> pageBaseDto = new PageBaseDto<List<OrderDto>>(pageInfoList.getList(),pageInfoList.getTotal());
 		return jsonObject;
 	}
@@ -96,11 +96,6 @@ public class SalesOrderApi {
 		}
 		return jsonObject;
 	}
-	
-	
-	
-	
-	
 	
 	
 	/**

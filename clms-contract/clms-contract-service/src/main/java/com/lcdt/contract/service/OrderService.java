@@ -38,7 +38,7 @@ public interface OrderService {
      * 获取订单列表
      * @return PageInfo<List<Order>>
      */
-    List<OrderDto> OrderList(OrderDto OrderDto);
+    PageInfo<OrderDto> OrderList(OrderDto OrderDto);
 
 	
     /**
