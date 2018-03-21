@@ -9,6 +9,7 @@ import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,6 +40,7 @@ public class AuthApi {
             user.setRealName(wechatUserDto.getNickName());
             userService.registerDriverUser(user);
         }
+        user.setPwd("");
         HashMap<String, Object> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("userName", user.getPhone());
         String s = jwtTokenUtil.generateToken(stringStringHashMap);
