@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.service.OwnDriverCompanyService;
+import com.lcdt.traffic.service.OwnDriverService;
 import com.lcdt.traffic.util.BalanceCheckBo;
 import com.lcdt.traffic.util.GprsLocationBo;
 import com.lcdt.traffic.web.dto.PageBaseDto;
@@ -37,7 +38,7 @@ public class LocationServiceApi {
     public DriverService driverService;
 
     @Autowired
-    private OwnDriverCompanyService ownDriverService;
+    private OwnDriverService ownDriverService;
 
     @Autowired
     private BalanceCheckBo balanceCheckBo;

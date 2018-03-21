@@ -13,6 +13,7 @@ import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.NotifyUtils;
 import com.lcdt.traffic.service.OwnDriverCompanyService;
+import com.lcdt.traffic.service.OwnDriverService;
 import com.lcdt.traffic.service.Plan4CreateService;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.PlanBO;
@@ -67,7 +68,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
     private ClmsNotifyProducer producer;
 
     @Autowired
-    private OwnDriverCompanyService ownDriverService;
+    private OwnDriverService ownDriverService;
 
 
     @Transactional(rollbackFor = Exception.class)
