@@ -52,7 +52,7 @@ public class OrderServiceImpl implements OrderService{
 				BigDecimal num=new BigDecimal(orderProduct.getNum());
 				BigDecimal price=orderProduct.getPrice();
 				BigDecimal total=num.multiply(price);
-				aTotal.add(total);
+				aTotal=aTotal.add(total);
 				orderProduct.setTotal(total);
 			}
 		}
@@ -133,7 +133,7 @@ public class OrderServiceImpl implements OrderService{
 			orderDto.setPageNum(1);
 		}
 		if(orderDto.getPageSize()<=0) {
-			orderDto.setPageSize(6);
+			orderDto.setPageSize(2);
 		}		 
 		List<OrderDto> orderDtoList= nonautomaticMapper.selectByCondition(orderDto);
 		if(orderDtoList!=null&&orderDtoList.size()!=0) {
@@ -145,8 +145,10 @@ public class OrderServiceImpl implements OrderService{
 				}
 			}   
 		}
+		logger.debug("获取的订单数量"+orderDtoList.size());
 		PageInfo<OrderDto> pageInfo =new PageInfo<OrderDto>(orderDtoList);
-		 PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());   
+		 PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize()); 
+		 logger.debug("一页订单数量"+pageInfo.getSize());
 	        return pageInfo;
 	}
 
