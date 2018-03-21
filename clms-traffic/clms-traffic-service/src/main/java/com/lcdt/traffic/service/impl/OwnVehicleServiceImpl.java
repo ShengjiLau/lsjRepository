@@ -8,6 +8,7 @@ import com.lcdt.traffic.dao.OwnVehicleCertificateMapper;
 import com.lcdt.traffic.dao.OwnVehicleMapper;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.service.OwnDriverCompanyService;
+import com.lcdt.traffic.service.OwnDriverService;
 import com.lcdt.traffic.web.dto.OwnVehicleDto;
 import com.lcdt.traffic.model.OwnVehicle;
 import com.lcdt.traffic.model.OwnVehicleCertificate;
@@ -41,7 +42,7 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
     private OwnVehicleMapper ownVehicleMapper;
 
     @Autowired
-    private OwnDriverCompanyService ownDriverService;
+    private OwnDriverService ownDriverService;
 
     @Autowired
     private OwnDriverMapper ownDriverMapper;

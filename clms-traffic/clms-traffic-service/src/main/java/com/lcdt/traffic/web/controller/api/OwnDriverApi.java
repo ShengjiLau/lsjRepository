@@ -7,6 +7,7 @@ import com.lcdt.traffic.model.DriverGroupRelationship;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.service.DriverGroupService;
 import com.lcdt.traffic.service.OwnDriverCompanyService;
+import com.lcdt.traffic.service.OwnDriverService;
 import com.lcdt.traffic.web.dto.*;
 import com.lcdt.userinfo.model.Driver;
 import io.swagger.annotations.Api;
@@ -36,7 +37,7 @@ public class OwnDriverApi {
     Logger logger = LoggerFactory.getLogger(OwnDriverApi.class);
 
     @Autowired
-    private OwnDriverCompanyService ownDriverService;
+    private OwnDriverService ownDriverService;
 
     @Autowired
     private DriverGroupService driverGroupService;
