@@ -28,7 +28,7 @@ public class AuthApi {
     JwtTokenUtil jwtTokenUtil;
 
     @RequestMapping("/login")
-    public String login(String phone, String validcode, WechatUserDto wechatUserDto) {
+    public String login(String phone, String validcode,  WechatUserDto wechatUserDto) {
         JSONObject jsonObject = new JSONObject();
         User user;
         try {
