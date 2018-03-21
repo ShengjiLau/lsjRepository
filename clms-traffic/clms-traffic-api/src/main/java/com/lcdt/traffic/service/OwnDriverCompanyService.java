@@ -8,6 +8,6 @@ public interface OwnDriverCompanyService {
 
     List<OwnDriver> driverCompanys(Long driverId,Integer pageNo,Integer pageSize);
 
-    void removeDriverCompany(Long driverId,Long companyId);
+    void removeDriverCompany(Long ownDriverId,Long companyId);
 
 }
