@@ -5,6 +5,8 @@ import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
 import io.jsonwebtoken.Claims;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +22,9 @@ import java.io.IOException;
 
 public class JwtTokenFilter extends OncePerRequestFilter{
 
-    private String tokenHeaderKey = "j_a";
+    private String tokenHeaderKey = "clmstoken";
+
+    private Logger logger = LoggerFactory.getLogger(JwtTokenFilter.class);
 
     @Autowired
     JwtTokenUtil jwtTokenUtil;
@@ -33,16 +37,16 @@ public class JwtTokenFilter extends OncePerRequestFilter{
 
         String header = request.getHeader(tokenHeaderKey);
 
+        logger.info("request token :{} ",header);
+
         if (!StringUtils.isEmpty(header)) {
             Claims claimsFromToken = jwtTokenUtil.getClaimsFromToken(header);
             String userName = (String) claimsFromToken.get("userName");
+            logger.info("request token username :{} ",userName);
 
             if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-//                UserDetails userDetails = this.userService.loadUserByUsername(userName);
                 try {
                     User user = userService.queryByPhone(userName);
-
                     if (jwtTokenUtil.validateToken(header, user)) {
                         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                                 user, null, null);
