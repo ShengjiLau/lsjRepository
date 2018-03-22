@@ -48,11 +48,12 @@ public class OrderServiceImpl implements OrderService{
 
 	@Override
 	public int addOrder(OrderDto orderDto) {
-		BigDecimal aTotal =new 	BigDecimal(0);
+		BigDecimal aTotal =new 	BigDecimal(0);// aTotal为所有商品总价格
 		if(orderDto.getOrderProductList()!=null&&orderDto.getOrderProductList().size()!=0){
 			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
 				BigDecimal num = orderProduct.getNum();
 				BigDecimal price=orderProduct.getPrice();
+				//计算单个商品总价
 				BigDecimal total=num.multiply(price);
 				aTotal=aTotal.add(total);
 				orderProduct.setTotal(total);
@@ -64,6 +65,7 @@ public class OrderServiceImpl implements OrderService{
 		int result=orderMapper.insertOrder(order);
 		if(orderDto.getOrderProductList()!=null&&orderDto.getOrderProductList().size()!=0){
 			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
+				//为每个商品添加OrderId
 				orderProduct.setOrderId(order.getOrderId());
 			}
 			int i=nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());
@@ -149,7 +151,7 @@ public class OrderServiceImpl implements OrderService{
 		if(orderDto.getPageSize()<=0) {
 			orderDto.setPageSize(0);//设置为0是全部查询
 		}	
-		PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());
+		PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());//分页
 		List<OrderDto> orderDtoList= nonautomaticMapper.selectByCondition(orderDto);
 		if(orderDtoList!=null&&orderDtoList.size()!=0) {
 			for(OrderDto order:orderDtoList) {

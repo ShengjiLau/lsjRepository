@@ -60,8 +60,8 @@ public class PurchaseOrderApi {
 	//	,@ApiParam(value="第几页",required=true,defaultValue="1") @RequestParam Integer pageNum,
    //	@ApiParam(value="每页条目数量",required=true,defaultValue="6")@RequestParam Integer pagesize
 			){
-		Long UserId=SecurityInfoGetter.getUser().getUserId();
-		Long companyId=SecurityInfoGetter.getCompanyId();	
+		Long UserId=SecurityInfoGetter.getUser().getUserId();//get 创建者
+		Long companyId=SecurityInfoGetter.getCompanyId();//get 公司id	
 		orderDto.setCompanyId(companyId);
 		orderDto.setCreateUserId(UserId);
 		PageInfo<OrderDto> pageInfo = orderService.OrderList(orderDto);
@@ -111,11 +111,11 @@ public class PurchaseOrderApi {
 		JSONObject jsonObject = new JSONObject();
 		  //Validated自动验证
 	      if(bindResult.hasErrors()) {
-	        Map<String,String> map=new HashMap<String,String>();
+	        Map<String,String> map=new HashMap<String,String>();//此map用于盛装验证时所验证的实体类各属性(Field)和验证属性反馈的error
 	        List<FieldError> list=bindResult.getFieldErrors();
 	        for(FieldError error:list) {
-	        String n=error.getField();
-	        String m=error.getDefaultMessage();
+	        String n=error.getField();//作为map的key
+	        String m=error.getDefaultMessage();//作为map的value
 	        map.put(n,m);
 	        }
 	        jsonObject.put("code",0);
