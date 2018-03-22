@@ -37,8 +37,6 @@ public class JwtTokenFilter extends OncePerRequestFilter{
 
         String header = request.getHeader(tokenHeaderKey);
 
-        logger.info("request token :{} ",header);
-
         if (!StringUtils.isEmpty(header)) {
             Claims claimsFromToken = jwtTokenUtil.getClaimsFromToken(header);
             String userName = (String) claimsFromToken.get("userName");
