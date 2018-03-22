@@ -48,7 +48,7 @@ public class ValidCodeService implements IValidCodeService {
      * @param tag
      * @param timeout
      */
-    public boolean sendValidCode(String tag, Integer timeout, String phoneNum) throws ValidCodeExistException {
+    public String sendValidCode(String tag, Integer timeout, String phoneNum) throws ValidCodeExistException {
         if (validCodeCountService.phoneTodayCount(phoneNum)) {
             ValidCodeBean attribute = getCodeBean(phoneNum, tag);
             if (attribute == null || canSendCode(attribute)) {
@@ -61,11 +61,11 @@ public class ValidCodeService implements IValidCodeService {
                 restoreCode(validCodeBean);
                 notifyService.sendSms(new String[]{phoneNum}, generateCodeString(random));
                 validCodeCountService.updateValidCodeLog(phoneNum);
-                return true;
+                return random;
             }
             throw new ValidCodeExistException();
         }
-        return false;
+        throw new ValidCodeExistException();
     }
 
     private void restoreCode(ValidCodeBean validCodeBean) {

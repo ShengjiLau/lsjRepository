@@ -70,15 +70,23 @@ public class AuthApi {
 
     @RequestMapping(value = "/sendvcode",method = RequestMethod.POST)
     public String sendVcode(String phone) {
-        try {
-            validCodeService.sendValidCode(VCODETAG, 15 * 60, phone);
-        } catch (ValidCodeExistException e) {
-            e.printStackTrace();
-        }
         JSONObject jsonObject = new JSONObject();
+        try {
+            String s = validCodeService.sendValidCode(VCODETAG, 15 * 60, phone);
+
+
+        jsonObject.put("data", s);
         jsonObject.put("result", 0);
         jsonObject.put("message", "请求成功");
+
         return jsonObject.toString();
+        } catch (ValidCodeExistException e) {
+            e.printStackTrace();
+            jsonObject.put("result", -1);
+            jsonObject.put("message", "已发送");
+        }
+        return jsonObject.toString();
+
     }
 
 }

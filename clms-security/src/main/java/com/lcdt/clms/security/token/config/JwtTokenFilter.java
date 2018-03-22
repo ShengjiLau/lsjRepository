@@ -56,7 +56,6 @@ public class JwtTokenFilter extends OncePerRequestFilter{
                 } catch (UserNotExistException e) {
                     e.printStackTrace();
                 }
-
             }
         }
 
