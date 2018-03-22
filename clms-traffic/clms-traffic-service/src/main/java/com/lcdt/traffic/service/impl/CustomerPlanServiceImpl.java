@@ -195,7 +195,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                     if (!StringUtils.isEmpty(customerIDS)) {
                          String[] strArrary = customerIDS.split(",");
                         for (int i=0; i<strArrary.length; i++) {
-                            sb_20.append(" find_in_set('"+strArrary[i]+"',wp.carrier_ids)"); //承运人
+                            sb_20.append(" find_in_set('"+strArrary[i]+"',wp.carrier_ids) or find_in_set('"+strArrary[i]+"',sp.carrier_collection_ids)"); //承运人(直接指定，录入完派单)
                             if(i!=strArrary.length-1){
                                 sb_20.append(" or ");
                             }
