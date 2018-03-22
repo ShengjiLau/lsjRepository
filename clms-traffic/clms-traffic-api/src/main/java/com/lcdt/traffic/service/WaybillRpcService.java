@@ -3,6 +3,7 @@ package com.lcdt.traffic.service;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dto.DriverWaybillListParsmsDto;
 import com.lcdt.traffic.dto.DriverWaybillParamsDto;
+import com.lcdt.traffic.model.Waybill;
 
 import java.util.Map;
 
@@ -23,12 +24,12 @@ public interface WaybillRpcService {
      * @param dto
      * @return
      */
-    int modifyWaybillStatusByDriver(DriverWaybillParamsDto dto);
+    Waybill modifyWaybillStatusByDriver(DriverWaybillParamsDto dto);
 
     /**
      * 根据司机id更新运单上传回单
      * @param dto
      * @return
      */
-    int modifyWaybillReceiptByDriver(DriverWaybillParamsDto dto);
+    Waybill modifyWaybillReceiptByDriver(DriverWaybillParamsDto dto);
 }

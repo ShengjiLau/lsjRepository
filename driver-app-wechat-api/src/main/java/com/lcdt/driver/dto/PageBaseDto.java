@@ -9,7 +9,7 @@ import java.util.List;
  * @AUTHOR liuh
  * @DATE 2017-11-28
  */
-public class PageBaseDto<T> implements ResponseData{
+public class PageBaseDto<T> implements ResponseData {
 
     private List<T> list;
     private long total;

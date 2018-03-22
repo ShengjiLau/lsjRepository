@@ -1495,11 +1495,11 @@ public class Waybill implements Serializable ,ResponseData{
     }
 
     public String getElectronicalReceipt() {
-        return electronicalReceipt;
+        return electronicalReceipt==null?"[]":electronicalReceipt;
     }
 
     public void setElectronicalReceipt(String electronicalReceipt) {
-        this.electronicalReceipt = electronicalReceipt;
+        this.electronicalReceipt = electronicalReceipt==null?null:electronicalReceipt.trim();
     }
 
     /**

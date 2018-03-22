@@ -33,14 +33,23 @@ public class PlanApi {
 
    @ApiOperation("竞价--企业组")
    @RequestMapping(value = "/driver/companyGroupList", method = RequestMethod.GET)
-   public List<OwnCompany4SnatchRdto>  companyGroupList() {
-       List<OwnCompany4SnatchRdto> ownCompany4SnatchRdtoList = iPlanRpcService4Wechat.ownCompanyList();
-      return ownCompany4SnatchRdtoList;
+   public JSONObject companyGroupList() {
+      User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      SnathBill4WaittingPdto dto = new SnathBill4WaittingPdto();
+      dto.setDriverId(loginUser.getUserId());
+      List<OwnCompany4SnatchRdto> ownCompany4SnatchRdtoList = iPlanRpcService4Wechat.ownCompanyList(dto);
+      JSONObject jsonObject = new JSONObject();
+      jsonObject.put("message","");
+      jsonObject.put("code",0);
+      jsonObject.put("data",ownCompany4SnatchRdtoList);
+      return jsonObject;
    }
 
    @ApiOperation("竞价--待抢")
    @RequestMapping(value = "/driver/waittingSnatchList", method = RequestMethod.GET)
    public PageBaseDto  waittingSnatchList(SnathBill4WaittingPdto dto) {
+      User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      dto.setDriverId(loginUser.getUserId());
       PageInfo pg = iPlanRpcService4Wechat.snatchBill4WaittingList(dto);
       PageBaseDto pageBaseDto = new PageBaseDto(pg.getList(), pg.getTotal());
       return pageBaseDto;
@@ -50,6 +59,8 @@ public class PlanApi {
    @ApiOperation("竞价--已抢")
    @RequestMapping(value = "/driver/compleateSnatchList", method = RequestMethod.GET)
    public PageBaseDto  compleateSnatchList(SnathBill4WaittingPdto dto) {
+      User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      dto.setDriverId(loginUser.getUserId());
       PageInfo pg = iPlanRpcService4Wechat.snatchBill4CompleteList(dto);
       PageBaseDto pageBaseDto = new PageBaseDto(pg.getList(), pg.getTotal());
       return pageBaseDto;

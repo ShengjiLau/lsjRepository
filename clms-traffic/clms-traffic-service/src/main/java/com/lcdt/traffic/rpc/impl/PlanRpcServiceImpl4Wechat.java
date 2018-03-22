@@ -9,15 +9,12 @@ import com.lcdt.traffic.dto.OwnCompany4SnatchRdto;
 import com.lcdt.traffic.dto.SnatchBill4WaittingRdto;
 import com.lcdt.traffic.dto.SnatchOfferDto;
 import com.lcdt.traffic.dto.SnathBill4WaittingPdto;
-import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
-import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -109,55 +106,51 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
      */
     @Transactional(readOnly = true)
     @Override
-    public List<OwnCompany4SnatchRdto> ownCompanyList() {
-        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ownDriverMapper.selectCompanyByDriverId(loginUser.getUserId());
+    public List<OwnCompany4SnatchRdto> ownCompanyList(SnathBill4WaittingPdto dto) {
+        return ownDriverMapper.selectCompanyByDriverId(dto.getDriverId());
     }
 
 
     @Transactional(readOnly = true)
     @Override
     public PageInfo snatchBill4WaittingList(SnathBill4WaittingPdto dto) {
-        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         PageInfo pageInfo = null;
-        String driverGroupIds = biddingGroupByDriverId(loginUser.getUserId()); //获取竞价组ID集合
-        String ownCompanyIds = ownCompanyIdsByDriverId(loginUser.getUserId()); //发布计划企业ID组
-        if (!StringUtils.isEmpty(driverGroupIds) && !StringUtils.isEmpty(ownCompanyIds)) {
-            int pageNo = 1;
-            int pageSize = 0; //0表示所有
-            if (dto.getPageNo()>0) {
-                pageNo = dto.getPageNo();
-            }
-            if (dto.getPageSize()>0) {
-                pageSize = dto.getPageSize();
-            }
-            String orderField = "waybill_plan_id"; //默认排序
-            String orderDesc = "desc";
-            if(!StringUtils.isEmpty(dto.getOrderDesc())) {
-                orderDesc = dto.getOrderDesc();
-            }
-            if(StringUtils.isEmpty(dto.getOrderFiled())) {
-                orderField = dto.getOrderFiled();
-            }
-            Map map = new HashMap<String,String>();
-            map.put("orderDesc",orderDesc);
-            map.put("orderFiled",orderField);
-            map.put("carrierDriverGroupIds",driverGroupIds);
-            map.put("ownCompanyIds",ownCompanyIds);
+        String driverGroupIds = biddingGroupByDriverId(dto.getDriverId()); //获取竞价组ID集合
+        String ownCompanyIds = ownCompanyIdsByDriverId(dto.getDriverId()); //发布计划企业ID组
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+        if (dto.getPageNo()>0) {
+            pageNo = dto.getPageNo();
+        }
+        if (dto.getPageSize()>0) {
+            pageSize = dto.getPageSize();
+        }
+        String orderField = "waybill_plan_id"; //默认排序
+        String orderDesc = "desc";
+        if(!StringUtils.isEmpty(dto.getOrderDesc())) {
+            orderDesc = dto.getOrderDesc();
+        }
+        if(!StringUtils.isEmpty(dto.getOrderFiled())) {
+            orderField = dto.getOrderFiled();
+        }
+        Map map = new HashMap<String,String>();
+        map.put("orderDesc",orderDesc);
+        map.put("orderFiled",orderField);
+        map.put("carrierDriverGroupIds",driverGroupIds);
+        map.put("ownCompanyIds",ownCompanyIds);
 
-            PageHelper.startPage(pageNo, pageSize);
-            List<SnatchBill4WaittingRdto> snatchBill4WaittingRdtos = waybillPlanMapper.wattingSnatch4Driver(map);
-            if (snatchBill4WaittingRdtos!=null && snatchBill4WaittingRdtos.size()>0) {
-                for (SnatchBill4WaittingRdto obj1: snatchBill4WaittingRdtos) {
-                    Long companyId = obj1.getCompanyId();
-                    Company company =  companyRpcService.findCompanyByCid(companyId);
-                    if(company!=null) obj1.setCompanyName(company.getFullName());
-                    obj1.setStatus("待抢单");
-                }
-                pageInfo = new PageInfo(snatchBill4WaittingRdtos);
-
+        PageHelper.startPage(pageNo, pageSize);
+        List<SnatchBill4WaittingRdto> snatchBill4WaittingRdtos = waybillPlanMapper.wattingSnatch4Driver(map);
+        if (snatchBill4WaittingRdtos!=null && snatchBill4WaittingRdtos.size()>0) {
+            for (SnatchBill4WaittingRdto obj1: snatchBill4WaittingRdtos) {
+                Long companyId = obj1.getCompanyId();
+                Company company =  companyRpcService.findCompanyByCid(companyId);
+                if(company!=null) obj1.setCompanyName(company.getFullName());
+                obj1.setStatus("待抢单");
             }
-        } else {
+            pageInfo = new PageInfo(snatchBill4WaittingRdtos);
+
+        }else {
             pageInfo = new PageInfo();
             pageInfo.setTotal(0l);
             pageInfo.setList(null);
@@ -172,89 +165,86 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         PageInfo pageInfo = null;
         String driverGroupIds = biddingGroupByDriverId(dto.getDriverId()); //获取竞价组ID集合
         String ownCompanyIds = ownCompanyIdsByDriverId(dto.getDriverId()); //发布计划企业ID组
-        if (!StringUtils.isEmpty(driverGroupIds) && !StringUtils.isEmpty(ownCompanyIds)) {
-            int pageNo = 1;
-            int pageSize = 0; //0表示所有
-            if (dto.getPageNo()>0) {
-                pageNo = dto.getPageNo();
-            }
-            if (dto.getPageSize()>0) {
-                pageSize = dto.getPageSize();
-            }
-            String orderField = "waybill_plan_id"; //默认排序
-            String orderDesc = "desc";
-            if(!StringUtils.isEmpty(dto.getOrderDesc())) {
-                orderDesc = dto.getOrderDesc();
-            }
-            if(StringUtils.isEmpty(dto.getOrderFiled())) {
-                orderField = dto.getOrderFiled();
-            }
-            Map map = new HashMap<String,String>();
-            map.put("orderDesc",orderDesc);
-            map.put("orderFiled",orderField);
-            map.put("carrierDriverGroupIds",driverGroupIds);
-            map.put("ownCompanyIds",ownCompanyIds);
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+        if (dto.getPageNo()>0) {
+            pageNo = dto.getPageNo();
+        }
+        if (dto.getPageSize()>0) {
+            pageSize = dto.getPageSize();
+        }
+        String orderField = "waybill_plan_id"; //默认排序
+        String orderDesc = "desc";
+        if(!StringUtils.isEmpty(dto.getOrderDesc())) {
+            orderDesc = dto.getOrderDesc();
+        }
+        if(!StringUtils.isEmpty(dto.getOrderFiled())) {
+            orderField = dto.getOrderFiled();
+        }
+        Map map = new HashMap<String,String>();
+        map.put("orderDesc",orderDesc);
+        map.put("orderFiled",orderField);
+        map.put("carrierDriverGroupIds",driverGroupIds);
+        map.put("ownCompanyIds",ownCompanyIds);
 
-            PageHelper.startPage(pageNo, pageSize);
-            List<SnatchBill4WaittingRdto> snatchBill4WaittingRdtos = waybillPlanMapper.completeSnatch4Driver(map);
-            if (snatchBill4WaittingRdtos!=null && snatchBill4WaittingRdtos.size()>0) {
-                for (SnatchBill4WaittingRdto obj: snatchBill4WaittingRdtos) {
-                    Long companyId = obj.getCompanyId();
-                    Company company =  companyRpcService.findCompanyByCid(companyId);
-                    if(company!=null) obj.setCompanyName(company.getFullName());
-                    if(obj.getPlanStatus().equals("60"))  {
-                        obj.setStatus("计划取消");
-                    } else {
-                      //检查就改口派车
-                        List<SplitGoods> splitGoodsList = splitGoodsMapper.statCount4DriverSnatch(obj.getWaybillPlanId(),obj.getCompanyId());
-                        if (splitGoodsList.size()>0){ //已派车
-                            //抢单成功：该已抢计划已经派车给我
-                            //抢单失败：该已抢计划已经派单给别人
-                            boolean flag = false;
-                            for (SplitGoods splitGoods : splitGoodsList) {
-                                 Long splitGoodsId = splitGoods.getSplitGoodsId();
-                                 Map map1 = new HashMap();
-                                 map1.put("companyId",obj.getCompanyId());
-                                 map1.put("waybillPlanId",obj.getWaybillPlanId());
-                                 map1.put("splitGoodsId",splitGoodsId);
-                                 List<Waybill> waybillList = waybillMapper.selectWaybillByPlanIdAndSplitGoodsId(map1);
-                                 boolean flag1 = false;
-                                 if(waybillList!=null && waybillList.size()>0) {
-                                     for(Waybill waybill: waybillList) {
-                                         if(waybill.getDriverId().equals(dto.getDriverId())) {
-                                             flag1 = true;
-                                             break;
-                                         }
+        PageHelper.startPage(pageNo, pageSize);
+        List<SnatchBill4WaittingRdto> snatchBill4WaittingRdtos = waybillPlanMapper.completeSnatch4Driver(map);
+        if (snatchBill4WaittingRdtos!=null && snatchBill4WaittingRdtos.size()>0) {
+            for (SnatchBill4WaittingRdto obj: snatchBill4WaittingRdtos) {
+                Long companyId = obj.getCompanyId();
+                Company company =  companyRpcService.findCompanyByCid(companyId);
+                if(company!=null) obj.setCompanyName(company.getFullName());
+                if(obj.getPlanStatus().equals("60"))  {
+                    obj.setStatus("计划取消");
+                } else {
+                  //检查就改口派车
+                    List<SplitGoods> splitGoodsList = splitGoodsMapper.statCount4DriverSnatch(obj.getWaybillPlanId(),obj.getCompanyId());
+                    if (splitGoodsList.size()>0){ //已派车
+                        //抢单成功：该已抢计划已经派车给我
+                        boolean flag = false;
+                        for (SplitGoods splitGoods : splitGoodsList) {
+                             Long splitGoodsId = splitGoods.getSplitGoodsId();
+                             Map map1 = new HashMap();
+                             map1.put("companyId",obj.getCompanyId());
+                             map1.put("waybillPlanId",obj.getWaybillPlanId());
+                             map1.put("splitGoodsId",splitGoodsId);
+                             List<Waybill> waybillList = waybillMapper.selectWaybillByPlanIdAndSplitGoodsId(map1);
+                             boolean flag1 = false;
+                             if(waybillList!=null && waybillList.size()>0) {
+                                 for(Waybill waybill: waybillList) {
+                                     if(waybill.getDriverId().equals(dto.getDriverId())) {
+                                         flag1 = true;
+                                         break;
                                      }
                                  }
-                                 if(flag1) {
-                                     flag = true;
-                                     break;
-                                 }
-                            }
-                            if(flag) {
-                                obj.setStatus("抢单成功");
-                            } else {
-                                obj.setStatus("抢单失败");
-                            }
-                        } else {
-                            obj.setStatus("竞价中"); //该已抢计划还未派车
+                             }
+                             if(flag1) {
+                                 flag = true;
+                                 break;
+                             }
                         }
+                        if(flag) {
+                            obj.setStatus("抢单成功");
+                        } else {
+                            obj.setStatus("抢单失败");
+                        }
+                    } else {
+                        obj.setStatus("竞价中"); //该已抢计划还未派车
                     }
-
-                    //统计总报价
-                    float offerPrice = snatchGoodsDetailMapper.statSnatchTotalPrice4Driver(obj.getWaybillPlanId(),obj.getCompanyId());
-                    obj.setSnatchTotalPrice(offerPrice);
                 }
-                pageInfo = new PageInfo(snatchBill4WaittingRdtos);
 
+                //统计总报价
+                float offerPrice = snatchGoodsDetailMapper.statSnatchTotalPrice4Driver(obj.getWaybillPlanId(),obj.getCompanyId());
+                obj.setSnatchTotalPrice(offerPrice);
             }
-        } else {
-            pageInfo = new PageInfo();
-            pageInfo.setTotal(0l);
-            pageInfo.setList(null);
-        }
-        return pageInfo;
+            pageInfo = new PageInfo(snatchBill4WaittingRdtos);
+
+            } else {
+                pageInfo = new PageInfo();
+                pageInfo.setTotal(0l);
+                pageInfo.setList(null);
+            }
+         return pageInfo;
 
     }
 

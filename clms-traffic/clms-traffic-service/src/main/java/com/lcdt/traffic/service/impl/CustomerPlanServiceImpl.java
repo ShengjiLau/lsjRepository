@@ -102,7 +102,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             StringBuffer sb = new StringBuffer(); //保存创建计划企业ID
 
             StringBuilder sb_carrier_ids = new StringBuilder(); //承运商业竞价组集合
-            StringBuilder sb_driver_ids = new StringBuilder(); //司机竞价组集合
+            //StringBuilder sb_driver_ids = new StringBuilder(); //司机竞价组集合
 
             StringBuilder sb_customerIDS = new StringBuilder(); //客户ID
             sb.append("(");
@@ -126,14 +126,14 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                     }
                 }
                 //查询承运人在货主建立的司机组中的，所有竞价组
-                List<DriverGroup> driverGroupList = driverGroupService.selectAll(ownCompanyId);
+/*                List<DriverGroup> driverGroupList = driverGroupService.selectAll(ownCompanyId);
                 if (driverGroupList!=null && driverGroupList.size()>0) {
                     for (DriverGroup obj1: driverGroupList) {
                         if (!StringUtils.isEmpty(obj1.getDriverGroupId())) {
                             sb_driver_ids.append(obj1.getDriverGroupId()+",");
                         }
                     }
-                }
+                }*/
             }
             sb.append(")");
 
@@ -187,34 +187,33 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 }
                 resultMap.put("carrierCollectionIds",rString);
 
-            } else { //承运组(客户ID)
+            } else if (flag==1)  { //承运组(客户ID)
                 StringBuilder sb_20 = new StringBuilder();
                 StringBuilder sb_21 = new StringBuilder();
-                if(!StringUtils.isEmpty(sb_customerIDS.toString())) { //指派类型的
+               if(!StringUtils.isEmpty(sb_customerIDS.toString())) { //直派承运商
                     String customerIDS = sb_customerIDS.toString().substring(0,sb_customerIDS.toString().length()-1);
                     if (!StringUtils.isEmpty(customerIDS)) {
                          String[] strArrary = customerIDS.split(",");
                         for (int i=0; i<strArrary.length; i++) {
-                            sb_20.append(" find_in_set('"+strArrary[i]+"',wp.carrier_collection_ids) or find_in_set('"+strArrary[i]+"',sp.carrier_collection_ids)"); //承运人
+                            sb_20.append(" find_in_set('"+strArrary[i]+"',wp.carrier_ids) or find_in_set('"+strArrary[i]+"',sp.carrier_collection_ids)"); //承运人(直接指定，录入完派单)
                             if(i!=strArrary.length-1){
                                 sb_20.append(" or ");
                             }
                         }
                     }
                  }
-
-         /*        if(!StringUtils.isEmpty(sb_carrier_ids.toString())) { //承运商---竞价类型的
+                if(!StringUtils.isEmpty(sb_carrier_ids.toString())) { //竞价承运商
                     String collectionIds = sb_carrier_ids.toString().substring(0,sb_carrier_ids.toString().length()-1);
                                if (!StringUtils.isEmpty(collectionIds)) {
                         String[] strArrary = collectionIds.split(",");
                         for (int i=0; i<strArrary.length; i++) {
-                            sb_21.append(" find_in_set('"+strArrary[i]+"',wp.carrier_collection_ids)"); //竞价组
+                            sb_21.append(" find_in_set('"+strArrary[i]+"',wp.carrier_collection_ids)"); //竞价组 or find_in_set('"+strArrary[i]+"',sp.carrier_collection_ids)
                             if(i!=strArrary.length-1){
                                 sb_21.append(" or ");
                             }
                         }
                     }
-                }*/
+                }
 
                  String rString = "";
                  if(!sb_20.toString().isEmpty()) {
@@ -235,7 +234,32 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                     rString = " find_in_set('000',wp.carrier_collection_ids)";
                 }
                 resultMap.put("carrierCollectionIds",rString); //竞价组
+            }else if (flag==2)  { //已派车
+                StringBuilder sb_20 = new StringBuilder();
+               if(!StringUtils.isEmpty(sb_customerIDS.toString())) { //指派类型的
+                    String customerIDS = sb_customerIDS.toString().substring(0,sb_customerIDS.toString().length()-1);
+                    if (!StringUtils.isEmpty(customerIDS)) {
+                        String[] strArrary = customerIDS.split(",");
+                        for (int i=0; i<strArrary.length; i++) {
+                            sb_20.append(" find_in_set('"+strArrary[i]+"',wp.carrier_ids) or find_in_set('"+strArrary[i]+"',sp.carrier_collection_ids)"); //承运人
+                            if(i!=strArrary.length-1){
+                                sb_20.append(" or ");
+                            }
+                        }
+                    }
+                }
+                String rString = "";
+                if(!sb_20.toString().isEmpty()) {
+                    rString = "(" +sb_20.toString()+" )";
+
+                }
+                if(StringUtils.isEmpty(rString)) {
+                    rString = " find_in_set('000',wp.carrier_collection_ids)";
+                }
+                resultMap.put("carrierCollectionIds",rString);
             }
+
+
         }
         return resultMap;
     }

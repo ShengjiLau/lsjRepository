@@ -27,6 +27,7 @@ public class SnathBill4WaittingPdto implements java.io.Serializable {
     private int pageSize;//每页多少
 
 
+
     public String getCompyIds() {
         return compyIds;
     }

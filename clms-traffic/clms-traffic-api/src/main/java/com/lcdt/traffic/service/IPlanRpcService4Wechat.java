@@ -20,7 +20,7 @@ public interface IPlanRpcService4Wechat {
      * 企业信息列表（抢单查询）
      * @return
      */
-    List<OwnCompany4SnatchRdto> ownCompanyList();
+    List<OwnCompany4SnatchRdto> ownCompanyList(SnathBill4WaittingPdto dto);
 
 
     /***

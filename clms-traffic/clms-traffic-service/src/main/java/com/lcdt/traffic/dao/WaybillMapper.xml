@@ -561,7 +561,7 @@
   <select id="selectDriverByCondition" parameterType="java.util.Map" resultMap="BaseWaybillAndItems">
     select <include refid="base_column_list"/>
     from t_waybill
-    <where>driver_id = #{driver_id,jdbcType=BIGINT}
+    <where>driver_id = #{driverId,jdbcType=BIGINT}
       <include refid="select_condition"/>
     </where>
     order by id desc

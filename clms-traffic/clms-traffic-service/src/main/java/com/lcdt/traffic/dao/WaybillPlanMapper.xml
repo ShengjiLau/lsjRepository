@@ -797,7 +797,6 @@
   </select>
 
 
-
   <!--客户计划（派车中）
       查询条件：计划发布时间 、派单时间
       满足前提条件：计划派单关联计划，同时派单（派单当前登录人所在的企业）的货物剩余数量>0的
@@ -929,6 +928,9 @@
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
+      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''"> <!--承运企业-->
+        and ${carrierCollectionIds}
+      </if>
     </where>
     order by waybill_plan_id desc
   </select>
@@ -994,6 +996,9 @@
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
+      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''"> <!--承运企业-->
+        and ${carrierCollectionIds}
+      </if>
     </where>
     order by waybill_plan_id desc
   </select>
@@ -1055,6 +1060,9 @@
       </if>
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
+      </if>
+      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''"> <!--承运企业-->
+        and ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
