@@ -73,13 +73,10 @@ public class AuthApi {
         JSONObject jsonObject = new JSONObject();
         try {
             String s = validCodeService.sendValidCode(VCODETAG, 15 * 60, phone);
-
-
-        jsonObject.put("data", s);
-        jsonObject.put("result", 0);
-        jsonObject.put("message", "请求成功");
-
-        return jsonObject.toString();
+            jsonObject.put("data", s);
+            jsonObject.put("result", 0);
+            jsonObject.put("message", "请求成功");
+            return jsonObject.toString();
         } catch (ValidCodeExistException e) {
             e.printStackTrace();
             jsonObject.put("result", -1);
