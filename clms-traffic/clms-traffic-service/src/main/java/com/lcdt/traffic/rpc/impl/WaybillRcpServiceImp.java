@@ -6,10 +6,12 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.WaybillMapper;
 import com.lcdt.traffic.dto.DriverWaybillListParsmsDto;
 import com.lcdt.traffic.dto.DriverWaybillParamsDto;
+import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillDao;
 import com.lcdt.traffic.service.WaybillRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,28 +50,41 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
 
     @Override
-    public int modifyWaybillStatusByDriver(DriverWaybillParamsDto dto) {
-        int reslut=0;
+    public Waybill modifyWaybillStatusByDriver(DriverWaybillParamsDto dto) {
+        Waybill waybill=null;
         Map map=new HashMap();
         map.put("driverId",dto.getDriverId());
         map.put("updateName",dto.getUpdateName());
         map.put("updateId",dto.getUpdateId());
         map.put("waybillStatus",dto.getWaybillStatus());
         map.put("waybillIds",dto.getWaybillIds());
-        reslut=waybillMapper.updateWaybillByDriver(map);
-        return reslut;
+        int result=waybillMapper.updateWaybillByDriver(map);
+        if(result>0){
+            List<WaybillDao> resultList=waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            waybill=resultList.get(0);
+        }else {
+            throw new RuntimeException("修改失败");
+        }
+        return waybill;
+
     }
 
     @Override
-    public int modifyWaybillReceiptByDriver(DriverWaybillParamsDto dto) {
-        int reslut=0;
+    public Waybill modifyWaybillReceiptByDriver(DriverWaybillParamsDto dto) {
+        Waybill waybill=null;
         Map map=new HashMap();
         map.put("driverId",dto.getDriverId());
         map.put("updateName",dto.getUpdateName());
         map.put("updateId",dto.getUpdateId());
         map.put("waybillIds",dto.getWaybillIds());
         map.put("electronicalReceipt",dto.getElectronicalReceipt());
-        reslut=waybillMapper.updateWaybillByDriver(map);
-        return reslut;
+        int result=waybillMapper.updateWaybillByDriver(map);
+        if(result>0){
+            List<WaybillDao> resultList=waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            waybill=resultList.get(0);
+        }else {
+            throw new RuntimeException("上传失败");
+        }
+        return waybill;
     }
 }

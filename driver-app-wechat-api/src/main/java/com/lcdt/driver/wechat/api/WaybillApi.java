@@ -43,40 +43,24 @@ public class WaybillApi {
     @ApiOperation("司机运单--修改状态")
     @RequestMapping(value = "/driver/modifystatus", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_modify_status')")
-    public JSONObject modifyDriverWaybillStatus(DriverWaybillParamsDto dto) {
+    public Waybill modifyDriverWaybillStatus(DriverWaybillParamsDto dto) {
         User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
         dto.setDriverId(loginUser.getUserId());
-        int result=waybillRpcService.modifyWaybillStatusByDriver(dto);
-        if(result>0){
-            JSONObject jsonObject=new JSONObject();
-            jsonObject.put("code",0);
-            jsonObject.put("message","修改成功");
-            return jsonObject;
-        }else{
-            throw new RuntimeException("修改失败");
-        }
+        return waybillRpcService.modifyWaybillStatusByDriver(dto);
+
     }
 
     @ApiOperation("司机运单--上传电子回单")
     @RequestMapping(value = "/driver/modifyreceipt", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_modify_status')")
-    public JSONObject modifyDriverWaybillReceipt(DriverWaybillParamsDto dto) {
+    public Waybill modifyDriverWaybillReceipt(DriverWaybillParamsDto dto) {
         User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
         dto.setDriverId(loginUser.getUserId());
-        int result=waybillRpcService.modifyWaybillReceiptByDriver(dto);
-        if(result>0){
-            JSONObject jsonObject=new JSONObject();
-            jsonObject.put("code",0);
-            jsonObject.put("message","上传成功");
-            return jsonObject;
-        }else{
-            throw new RuntimeException("上传失败");
-        }
+        return  waybillRpcService.modifyWaybillReceiptByDriver(dto);
     }
 
 }

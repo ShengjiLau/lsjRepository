@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 
 public class DriverWaybillParamsDto implements Serializable{
-    @ApiModelProperty(value = "运单id，有多个id时用 , 隔开")
+    @ApiModelProperty(value = "运单id")
     private Long waybillIds;
     @ApiModelProperty(value = "司机id",hidden = true)
     private Long driverId;//司机id
