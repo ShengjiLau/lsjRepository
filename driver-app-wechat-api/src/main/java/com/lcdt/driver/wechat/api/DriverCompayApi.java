@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
 import com.lcdt.driver.dto.DriverCompanyResult;
+import com.lcdt.driver.dto.PageBaseDto;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.service.OwnDriverCompanyService;
 import com.lcdt.userinfo.model.Company;
@@ -38,7 +39,7 @@ public class DriverCompayApi {
     }
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
-    public List<DriverCompanyResult> driverCompanyList(Integer pageNo,Integer pageSize){
+    public PageBaseDto<DriverCompanyResult> driverCompanyList(Integer pageNo,Integer pageSize){
         User user = TokenSecurityInfoGetter.getUser();
         ArrayList<DriverCompanyResult> driverCompanyResults = new ArrayList<>();
         List<OwnDriver> ownDrivers = ownDriverCompanyService.driverCompanys(user.getUserId(), pageNo, pageSize);
@@ -49,7 +50,7 @@ public class DriverCompayApi {
             driverCompanyResult.setOwnDriver(ownDriver);
             driverCompanyResults.add(driverCompanyResult);
         }
-        return driverCompanyResults;
+        return new PageBaseDto<DriverCompanyResult>(driverCompanyResults);
     }
 
 }

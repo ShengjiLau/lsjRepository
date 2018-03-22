@@ -16,6 +16,7 @@ public class PageBaseDto<T> implements ResponseData {
 
     public PageBaseDto(List<T> list) {
         this.list = list;
+        total = list.size();
     }
 
     public PageBaseDto(List<T> list, long total) {

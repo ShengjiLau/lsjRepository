@@ -3,6 +3,7 @@ package com.lcdt.driver.wechat.api;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
 import com.lcdt.driver.dto.AddDriverVehicleAuthDto;
+import com.lcdt.driver.dto.PageBaseDto;
 import com.lcdt.userinfo.model.DriverVehicleAuth;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.rpc.CarAuthService;
@@ -22,10 +23,10 @@ public class CarAuthApi {
     CarAuthService carAuthService;
 
     @RequestMapping(value = "/list",method = RequestMethod.POST)
-    public List<DriverVehicleAuth> authList(Integer pageNo,Integer pageSize){
+    public PageBaseDto<DriverVehicleAuth> authList(Integer pageNo,Integer pageSize){
         User user = TokenSecurityInfoGetter.getUser();
         List<DriverVehicleAuth> driverVehicleAuths = carAuthService.vehicleList(user.getUserId(), pageNo, pageSize);
-        return driverVehicleAuths;
+        return new PageBaseDto<DriverVehicleAuth>(driverVehicleAuths);
     }
 
     @RequestMapping(value = "/add",method = RequestMethod.POST)
