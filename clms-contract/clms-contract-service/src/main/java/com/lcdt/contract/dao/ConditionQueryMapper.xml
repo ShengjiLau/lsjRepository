@@ -16,22 +16,28 @@
          supplier like concat('%',#{supplier,jdbcType=VARCHAR},'%')
       </if>
       <if test="orderNo !=null and orderNo!=''">
-    	 and order_no =#{orderNo,jdbcType=VARCHAR}
+    	 and order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')                                             =
       </if>
       <if test="groupId !=null">
       	and group_id=#{groupId,jdbcType=BIGINT}
       </if>
       <if test="contractCode!=null and contractCode!=''">
-      and contract_code =#{contractCode,jdbcType=VARCHAR}
+        and contract_code =#{contractCode,jdbcType=VARCHAR}
       </if>
       <if test="dispatchingType!=null">
-      and dispatching_type = #{dispatchingType,jdbcType=SMALLINT}
+        and dispatching_type = #{dispatchingType,jdbcType=SMALLINT}
       </if>
       <if test="payType!=null and payType!=''">
-      and pay_type = #{payType,jdbcType=VARCHAR}
+        and pay_type = #{payType,jdbcType=VARCHAR}
       </if>
       <if test="beginTime!=null and endTime!=null">
          and create_time &gt; #{beginTime,jdbcType=TIMESTAMP} and create_time &lt; #{endTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="isDraft!=null">
+         and is_draft= #{isDraft,jdbcType=SMALLINT}
+      </if>
+      <if test="approvalStatus!=null">
+         and approval_status = #{approvalStatus,jdbcType=SMALLINT}
       </if>
          and company_id = #{companyId,jdbcType=BIGINT} and order_type = #{orderType,jdbcType=SMALLINT}
     </where>
