@@ -452,9 +452,8 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
         boolean opFlag = false;
         for (SplitGoodsDetail obj : splitGoodsDetailList) {
-
             if (obj.getSplitGoodsDetailId().equals(splitGoodsDetailId)) { //要取消的派单数
-                for (PlanDetail obj1: waybillPlan.getPlanDetailList()) {
+                  for (PlanDetail obj1: waybillPlan.getPlanDetailList()) {
                         if (obj.getPlanDetailId().equals(obj1.getPlanDetailId())) {
                             obj1.setRemainderAmount(obj1.getRemainderAmount() + obj.getRemainAmount());//计划剩余数量=计划现剩余数量+派单剩余数量
                             obj1.setUpdateId(user.getUserId());  //更新计划详细
