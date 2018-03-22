@@ -190,31 +190,30 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             } else if (flag==1)  { //承运组(客户ID)
                 StringBuilder sb_20 = new StringBuilder();
                 StringBuilder sb_21 = new StringBuilder();
-                if(!StringUtils.isEmpty(sb_customerIDS.toString())) { //指派类型的
+               if(!StringUtils.isEmpty(sb_customerIDS.toString())) { //直派承运商
                     String customerIDS = sb_customerIDS.toString().substring(0,sb_customerIDS.toString().length()-1);
                     if (!StringUtils.isEmpty(customerIDS)) {
                          String[] strArrary = customerIDS.split(",");
                         for (int i=0; i<strArrary.length; i++) {
-                            sb_20.append(" find_in_set('"+strArrary[i]+"',wp.carrier_collection_ids) or find_in_set('"+strArrary[i]+"',sp.carrier_collection_ids)"); //承运人
+                            sb_20.append(" find_in_set('"+strArrary[i]+"',wp.carrier_ids)"); //承运人
                             if(i!=strArrary.length-1){
                                 sb_20.append(" or ");
                             }
                         }
                     }
                  }
-
-         /*        if(!StringUtils.isEmpty(sb_carrier_ids.toString())) { //承运商---竞价类型的
+                if(!StringUtils.isEmpty(sb_carrier_ids.toString())) { //竞价承运商
                     String collectionIds = sb_carrier_ids.toString().substring(0,sb_carrier_ids.toString().length()-1);
                                if (!StringUtils.isEmpty(collectionIds)) {
                         String[] strArrary = collectionIds.split(",");
                         for (int i=0; i<strArrary.length; i++) {
-                            sb_21.append(" find_in_set('"+strArrary[i]+"',wp.carrier_collection_ids)"); //竞价组
+                            sb_21.append(" find_in_set('"+strArrary[i]+"',wp.carrier_collection_ids)"); //竞价组 or find_in_set('"+strArrary[i]+"',sp.carrier_collection_ids)
                             if(i!=strArrary.length-1){
                                 sb_21.append(" or ");
                             }
                         }
                     }
-                }*/
+                }
 
                  String rString = "";
                  if(!sb_20.toString().isEmpty()) {
@@ -439,7 +438,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
-        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,2); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
@@ -480,7 +479,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
-        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,2); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
