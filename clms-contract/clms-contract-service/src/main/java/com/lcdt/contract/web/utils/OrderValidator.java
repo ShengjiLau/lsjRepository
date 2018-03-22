@@ -22,19 +22,19 @@ public class OrderValidator {
 				map.put("sender","收货联系人不可为空");
 			}
 			if(orderDto.getSenderPhone()==null) {
-    			map.put("senderPhone","联系方式不可为空");
+    			map.put("senderPhone","收货联系方式不可为空");
     		}
 			if(orderDto.getSendProvince()==null) {
-				map.put("sendProvince","地址省不可为空");
+				map.put("sendProvince","收货地址省不可为空");
 			}
 			if(orderDto.getSendCity()==null) {
-				map.put("sendCity","地址市不可为空");
+				map.put("sendCity","收货地址市不可为空");
 			}
 			if(orderDto.getSendDistrict()==null) {
-				map.put("sendDistrict","地址区不可为空");
+				map.put("sendDistrict","收货地址区不可为空");
 			}
 			if(orderDto.getSendAddress()==null) {
-				map.put("sengAddress","详细地址不可为空");
+				map.put("sengAddress","收货详细地址不可为空");
 			}
 		} 
         if(orderDto.getOrderType()==0){
@@ -45,20 +45,20 @@ public class OrderValidator {
 				map.put("receiverPhone","收货联系方式不可为空");
 			}
 			if(orderDto.getReceiverProvince()==null) {
-				map.put("receiverProvince","地址省不可为空");
+				map.put("receiverProvince","收货地址省不可为空");
 			}
 			if(orderDto.getReceiverCity()==null) {
-				map.put("receiverCity","地址市不可为空");
+				map.put("receiverCity","收货地址市不可为空");
 			}
 			if(orderDto.getReceiveDistrict()==null) {
-				map.put("receiveDistrict","地址区不可为空");
+				map.put("receiveDistrict","收货地址区不可为空");
 			}
 			if(orderDto.getReceiveAddress()==null) {
-				map.put("receiveAddress","详细地址不可为空");
+				map.put("receiveAddress","收货详细地址不可为空");
 			}
         }
         if(orderDto.getOrderProductList()==null||orderDto.getOrderProductList().size()==0) {
-        	map.put("orderProductList","至少添加一条商品");
+        	map.put("orderProductList","请至少添加一条商品");
         }
         if(orderDto.getOrderProductList()!=null&&orderDto.getOrderProductList().size()!=0) {
         	for(OrderProduct orderProduct:orderDto.getOrderProductList()) {

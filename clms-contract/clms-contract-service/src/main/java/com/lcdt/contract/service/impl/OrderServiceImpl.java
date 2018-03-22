@@ -142,13 +142,12 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public PageInfo<OrderDto> OrderList(OrderDto orderDto) {
-		 
+	public PageInfo<OrderDto> OrderList(OrderDto orderDto) {	 
 		if(orderDto.getPageNum()<=0) {
 			orderDto.setPageNum(1);
 		}
 		if(orderDto.getPageSize()<=0) {
-			orderDto.setPageSize(2);
+			orderDto.setPageSize(0);
 		}	
 		PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());
 		List<OrderDto> orderDtoList= nonautomaticMapper.selectByCondition(orderDto);

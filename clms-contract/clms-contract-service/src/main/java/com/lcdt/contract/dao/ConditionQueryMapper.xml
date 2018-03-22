@@ -30,8 +30,11 @@
       <if test="payType!=null and payType!=''">
         and pay_type = #{payType,jdbcType=VARCHAR}
       </if>
-      <if test="beginTime!=null and endTime!=null">
-         and create_time &gt; #{beginTime,jdbcType=TIMESTAMP} and create_time &lt; #{endTime,jdbcType=TIMESTAMP}
+      <if test="beginTime != null">
+      and create_time &gt;= #{beginTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime != null">
+      and create_time &lt;=  #{endTime,jdbcType=TIMESTAMP}
       </if>
       <if test="isDraft!=null">
          and is_draft= #{isDraft,jdbcType=SMALLINT}

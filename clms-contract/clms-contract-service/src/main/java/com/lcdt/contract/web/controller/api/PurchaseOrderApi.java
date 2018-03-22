@@ -107,7 +107,7 @@ public class PurchaseOrderApi {
 	@ApiOperation("新增采购订单")
 	@PostMapping("/addOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_purchase_order')")
-	public JSONObject addOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindResult) {
+	public JSONObject addOrder(@Validated  OrderDto orderDto,BindingResult bindResult) {
 		JSONObject jsonObject = new JSONObject();
 		  //Validated自动验证
 	      if(bindResult.hasErrors()) {
