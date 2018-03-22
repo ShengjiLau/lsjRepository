@@ -23,10 +23,10 @@ public class OrderDto extends Order  implements Serializable{
 	 */
 	private static final long serialVersionUID = 1032515L;
 	
-	@ApiModelProperty(value="合同起始时间")
+	@ApiModelProperty(value="查询创建时间起点")
 	private String beginTime;
 	
-	@ApiModelProperty(value="合同终止时间")
+	@ApiModelProperty(value="查询创建时间终点")
 	private String endTime;
 	
 	@ApiModelProperty(value="页码")

@@ -147,7 +147,7 @@ public class OrderServiceImpl implements OrderService{
 			orderDto.setPageNum(1);
 		}
 		if(orderDto.getPageSize()<=0) {
-			orderDto.setPageSize(0);
+			orderDto.setPageSize(0);//设置为0是全部查询
 		}	
 		PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());
 		List<OrderDto> orderDtoList= nonautomaticMapper.selectByCondition(orderDto);

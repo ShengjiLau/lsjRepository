@@ -49,6 +49,9 @@ public class Order implements Serializable {
 
 	@ApiModelProperty(value="采购收货仓库/销售发货仓库")
     private String receiveWarehouse;
+	
+	@ApiModelProperty(value="采购收货仓库id/销售发货仓库id")
+	private Long warehouseId;
 
 	@ApiModelProperty(value="附件url")
     private String fileUrl;
@@ -769,6 +772,16 @@ public class Order implements Serializable {
 
 	public void setSummation(BigDecimal summation) {
 		this.summation = summation;
+	}
+
+
+	public Long getWarehouseId() {
+		return warehouseId;
+	}
+
+
+	public void setWarehouseId(Long warehouseId) {
+		this.warehouseId = warehouseId;
 	}
 
  

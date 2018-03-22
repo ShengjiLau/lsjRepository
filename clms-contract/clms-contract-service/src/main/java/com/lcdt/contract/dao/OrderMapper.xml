@@ -38,6 +38,7 @@
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="order_serial_no" jdbcType="VARCHAR" property="orderSerialNo" />
+    <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -49,7 +50,7 @@
     send_district, send_address, send_time, pack_require, receiver, receiver_phone, receiver_province, 
     receiver_city, receive_district, receive_address, remarks, create_time, approval_start_date, 
     approval_end_date, group_id, company_id, create_user_id, order_serial_no,receive_time,approval_process,supplier_id
-    is_draft,receive_require,summation 
+    is_draft,receive_require,summation,warehouse_id 
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.lcdt.contract.web.dto.OrderDto">
     <!--
@@ -61,7 +62,7 @@
     send_district sendDistrict, send_address sendAddress, send_time sendTime, pack_require packRequire, receiver, receiver_phone receiverPhone, receiver_province receiverProvince, 
     receiver_city receiverCity, receive_district receiveDistrict, receive_address receiveAddress, remarks, create_time createTime, group_id groupId,company_id companyId,
     receive_time receiveTime,approval_start_date approvalStartDate,approval_end_date approvalEndDate,create_user_id createUserId,order_serial_no orderSerialNo,
-    approval_status approvalStatus,approval_process approvalProcess,supplier_id supplierId,is_draft isDraft,receive_require receiveRequire,summation
+    approval_status approvalStatus,approval_process approvalProcess,supplier_id supplierId,is_draft isDraft,receive_require receiveRequire,summation,warehouse_id 
     from t_order
     where order_id = #{orderId,jdbcType=BIGINT}
   </select>
@@ -90,7 +91,7 @@
       approval_end_date, group_id, company_id, 
       create_user_id, order_serial_no,receive_time,
       approval_process,supplier_id,is_draft,receive_require,
-      summation)
+      summation,warehouse_id)
     values (#{orderId,jdbcType=BIGINT},#{supplier,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
       #{orderType,jdbcType=SMALLINT}, #{contractCode,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=SMALLINT}, 
       #{dispatchingType,jdbcType=SMALLINT}, #{payType,jdbcType=VARCHAR}, #{receiveWarehouse,jdbcType=VARCHAR}, 
@@ -103,7 +104,7 @@
       #{approvalEndDate,jdbcType=TIMESTAMP}, #{groupId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, 
       #{createUserId,jdbcType=BIGINT}, #{orderSerialNo,jdbcType=VARCHAR},#{receiveTime,jdbcType=TIMESTAMP},
       #{approvalProcess,jdbcType=VARCHAR},#{supplierId,jdbcType=BIGINT},#{isDraft,jdbcType=SMALLINT},
-      #{receiveRequire,jdbcType=VARCHAR},#{summation,jdbcType=DECIMAL})
+      #{receiveRequire,jdbcType=VARCHAR},#{summation,jdbcType=DECIMAL},#{warehouseId,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.contract.model.Order">
     <!--
@@ -224,8 +225,11 @@
          receive_require,
       </if>
        <if test="summation != null">
-          summation 
-      </if>  
+          summation,
+      </if>
+      <if test="warehouseId != null">
+         warehouse_id
+      </if>   
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="orderId != null">
@@ -340,7 +344,10 @@
          #{receiveRequire,jdbcType=VARCHAR},
       </if>
        <if test="summation != null">
-         #{summation,jdbcType=DECIMAL}
+         #{summation,jdbcType=DECIMAL},
+      </if> 
+      <if test="warehouseId != null">
+         #{warehouseId,jdbcType=BIGINT}
       </if>  
     </trim>
   </insert>
@@ -457,11 +464,14 @@
         is_draft = #{isDraft,jdbcType=BIGINT},
       </if>
       <if test="receiveRequire != null">
-         receive_require =#{receiveRequire,jdbcType=VARCHAR}
+         receive_require =#{receiveRequire,jdbcType=VARCHAR},
       </if>
       <if test="summation != null">
-          summation = #{summation,jdbcType=DECIMAL}
+          summation = #{summation,jdbcType=DECIMAL},
       </if>  
+      <if test="warehouseId != null">
+         warehouse_id = #{warehouseId,jdbcType=BIGINT}
+      </if> 
     </set>
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
@@ -507,7 +517,8 @@
       supplier_id = #{supplierId,jdbcType=BIGINT},
       is_draft = #{isDraft,jdbcType=BIGINT},
       receive_require = #{receiveRequire,jdbcType=VARCHAR},
-      summation = #{summation,jdbcType=DECIMAL}
+      summation = #{summation,jdbcType=DECIMAL},
+      warehouse_id = #{warehouseId,jdbcType=BIGINT}
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
 </mapper>
