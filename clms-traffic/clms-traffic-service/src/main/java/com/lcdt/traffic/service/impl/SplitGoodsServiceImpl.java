@@ -464,6 +464,12 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                             opFlag = true;
                             if((obj.getAllotAmount()-obj.getRemainAmount())==0) {
                                 splitGoodsDetailMapper.deleteByPrimaryKey(splitGoodsDetailId);  //先删除子明细
+                            }else{
+                                obj.setUpdateId(user.getUserId());  //更新计划详细
+                                obj.setUpdateTime(new Date());
+                                obj.setUpdateName(user.getRealName());
+                                obj.setRemainAmount(0f);
+                                splitGoodsDetailMapper.updateByPrimaryKey(obj);
                             }
                             break;
                         }
