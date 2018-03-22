@@ -13,7 +13,6 @@ public class DriverApi {
     @RequestMapping("/info")
     private String driverInfo(){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         return "this is driver info" + user.getPhone() + "userId: " + user.getUserId();
     }
 
