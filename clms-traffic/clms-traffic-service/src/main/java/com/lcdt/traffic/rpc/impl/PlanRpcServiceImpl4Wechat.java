@@ -13,10 +13,8 @@ import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
-import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 

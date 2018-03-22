@@ -33,12 +33,16 @@ public class PlanApi {
 
    @ApiOperation("竞价--企业组")
    @RequestMapping(value = "/driver/companyGroupList", method = RequestMethod.GET)
-   public List<OwnCompany4SnatchRdto>  companyGroupList() {
+   public JSONObject companyGroupList() {
       User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
       SnathBill4WaittingPdto dto = new SnathBill4WaittingPdto();
       dto.setDriverId(loginUser.getUserId());
       List<OwnCompany4SnatchRdto> ownCompany4SnatchRdtoList = iPlanRpcService4Wechat.ownCompanyList(dto);
-      return ownCompany4SnatchRdtoList;
+      JSONObject jsonObject = new JSONObject();
+      jsonObject.put("message","");
+      jsonObject.put("code",0);
+      jsonObject.put("data",ownCompany4SnatchRdtoList);
+      return jsonObject;
    }
 
    @ApiOperation("竞价--待抢")
