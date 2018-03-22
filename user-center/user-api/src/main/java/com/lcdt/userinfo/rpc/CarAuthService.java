@@ -10,4 +10,7 @@ public interface CarAuthService {
 
     List<DriverVehicleAuth> vehicleList(Long driverId,Integer pageNo,Integer pageSize);
 
+    DriverVehicleAuth selectById(Long authId);
+
+    DriverVehicleAuth updateVehicleAuth(DriverVehicleAuth auth);
 }

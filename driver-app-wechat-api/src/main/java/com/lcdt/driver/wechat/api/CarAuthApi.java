@@ -39,6 +39,17 @@ public class CarAuthApi {
         return driverVehicleAuth1;
     }
 
+    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    public DriverVehicleAuth updateAuth(Long authId,AddDriverVehicleAuthDto addDriverVehicleAuthDto) {
+        User user = TokenSecurityInfoGetter.getUser();
+        DriverVehicleAuth driverVehicleAuth = carAuthService.selectById(authId);
+        BeanUtils.copyProperties(addDriverVehicleAuthDto,driverVehicleAuth);
+        driverVehicleAuth.setCreateId(user.getUserId());
+        driverVehicleAuth.setUpdateDate(new Date());
+        driverVehicleAuth.setUpdateId(user.getUserId());
+        DriverVehicleAuth driverVehicleAuth2 = carAuthService.updateVehicleAuth(driverVehicleAuth);
+        return driverVehicleAuth2;
+    }
 
 
 }

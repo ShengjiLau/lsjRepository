@@ -36,5 +36,19 @@ public class CarAuthServiceImpl implements CarAuthService{
         return driverVehicleAuths;
     }
 
+    @Override
+    public DriverVehicleAuth selectById(Long authId) {
+        DriverVehicleAuth driverVehicleAuth = dao.selectByPrimaryKey(authId);
+//        List<DriverVehicleAuth> driverVehicleAuths = dao.selectByDriverId(authId);
+
+        return driverVehicleAuth;
+    }
+
+    @Override
+    public DriverVehicleAuth updateVehicleAuth(DriverVehicleAuth auth) {
+        dao.updateByPrimaryKey(auth);
+        return auth;
+    }
+
 
 }
