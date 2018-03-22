@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.service.OrderService;
 import com.lcdt.contract.web.dto.OrderDto;
 import com.lcdt.contract.web.dto.PageBaseDto;
@@ -71,7 +72,7 @@ public class SalesOrderApi {
 		pageBaseDto.setTotal(pageInfo.getTotal());
 		logger.debug("销售订单条目数"+pageInfo.getTotal());
 		JSONObject jsonObject =new JSONObject();
-		jsonObject.put("code","0");
+		jsonObject.put("code",0);
 		jsonObject.put("message","销售订单列表");
 		jsonObject.put("data",pageBaseDto);
 		//PageBaseDto<List<OrderDto>> pageBaseDto = new PageBaseDto<List<OrderDto>>(pageInfoList.getList(),pageInfoList.getTotal());
@@ -81,8 +82,8 @@ public class SalesOrderApi {
 	
 	/**
 	 * 查询单个订单
-	 * @param Long
-	 * @return OrderDto
+	 * @param Long(id)
+	 * @return JSONObject
 	 */
 	@ApiOperation(value="获取单个销售订单",notes="单个销售订单")
 	@GetMapping("/selsorder")
@@ -91,7 +92,7 @@ public class SalesOrderApi {
 		OrderDto orderDto= orderService.selectByPrimaryKey(orderId);
 		JSONObject jsonObject=new JSONObject();
 		if(orderDto!=null) {
-			jsonObject.put("code","0");
+			jsonObject.put("code",0);
 			jsonObject.put("message","单个采购订单");
 			jsonObject.put("data",orderDto);
 		}else {
@@ -109,19 +110,137 @@ public class SalesOrderApi {
 	@ApiOperation("新增销售订单")
 	@PostMapping("/addOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_sales_order')")
-	public JSONObject addOrder(@Validated  OrderDto orderDto,BindingResult bindResult) {
+	public JSONObject addOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindResult) {
         JSONObject jsonObject = new JSONObject();
-        if(bindResult.hasErrors()) {
-        	jsonObject.put("code","-1");
-        	Map map=new HashMap();
+        Map map=new HashMap();
+        if(bindResult.hasErrors()) {  	 
         	List<FieldError> list=bindResult.getFieldErrors();
         	for(FieldError error:list) {
         		String n=error.getField();
         		String m=error.getDefaultMessage();
         		map.put(n,m);
         	}
-        	jsonObject.put("message",map);
-        	return jsonObject;
+        	if(orderDto.getOrderType()!=null) {
+        		if(orderDto.getOrderType()==1) {
+        			if(orderDto.getSender()==null) {
+        				map.put("sender","收货联系人不可为空");
+        			}
+        			if(orderDto.getSenderPhone()==null) {
+            			map.put("senderPhone","联系方式不可为空");
+            		}
+        			if(orderDto.getSendProvince()==null) {
+        				map.put("sendProvince","地址省不可为空");
+        			}
+        			if(orderDto.getSendCity()==null) {
+        				map.put("sendCity","地址市不可为空");
+        			}
+        			if(orderDto.getSendDistrict()==null) {
+        				map.put("sendDistrict","地址区不可为空");
+        			}
+        			if(orderDto.getSendAddress()==null) {
+        				map.put("sengAddress","详细地址不可为空");
+        			}
+        		} 
+        		if(orderDto.getOrderType()==0){
+        			if(orderDto.getReceiver()==null) {
+        				map.put("receiver","收货联系人不可为空");
+        			}
+        			if(orderDto.getReceiverPhone()==null) {
+        				map.put("receiverPhone","收货联系方式不可为空");
+        			}
+        			if(orderDto.getReceiverProvince()==null) {
+        				map.put("receiverProvince","地址省不可为空");
+        			}
+        			if(orderDto.getReceiverCity()==null) {
+        				map.put("receiverCity","地址市不可为空");
+        			}
+        			if(orderDto.getReceiveDistrict()==null) {
+        				map.put("receiveDistrict","地址区不可为空");
+        			}
+        			if(orderDto.getReceiveAddress()==null) {
+        				map.put("receiveAddress","详细地址不可为空");
+        			}
+        		}
+        	}
+            jsonObject.put("code",0);
+          	jsonObject.put("message","验证信息未能通过");
+          	jsonObject.put("data",map);
+          	return jsonObject;
+        }
+        if(orderDto.getOrderType()==1) {
+			if(orderDto.getSender()==null) {
+				map.put("sender","收货联系人不可为空");
+			}
+			if(orderDto.getSenderPhone()==null) {
+    			map.put("senderPhone","联系方式不可为空");
+    		}
+			if(orderDto.getSendProvince()==null) {
+				map.put("sendProvince","地址省不可为空");
+			}
+			if(orderDto.getSendCity()==null) {
+				map.put("sendCity","地址市不可为空");
+			}
+			if(orderDto.getSendDistrict()==null) {
+				map.put("sendDistrict","地址区不可为空");
+			}
+			if(orderDto.getSendAddress()==null) {
+				map.put("sengAddress","详细地址不可为空");
+			}
+			 jsonObject.put("code",0);
+	         jsonObject.put("message","验证信息未能通过");
+	         jsonObject.put("data",map);
+	         return jsonObject;
+		} 
+        if(orderDto.getOrderType()==0){
+			if(orderDto.getReceiver()==null) {
+				map.put("receiver","收货联系人不可为空");
+			}
+			if(orderDto.getReceiverPhone()==null) {
+				map.put("receiverPhone","收货联系方式不可为空");
+			}
+			if(orderDto.getReceiverProvince()==null) {
+				map.put("receiverProvince","地址省不可为空");
+			}
+			if(orderDto.getReceiverCity()==null) {
+				map.put("receiverCity","地址市不可为空");
+			}
+			if(orderDto.getReceiveDistrict()==null) {
+				map.put("receiveDistrict","地址区不可为空");
+			}
+			if(orderDto.getReceiveAddress()==null) {
+				map.put("receiveAddress","详细地址不可为空");
+			}
+			 jsonObject.put("code",0);
+	         jsonObject.put("message","验证信息未能通过");
+	         jsonObject.put("data",map);
+	         return jsonObject;
+		}
+        if(orderDto.getOrderProductList()==null||orderDto.getOrderProductList().size()==0) {
+        	map.put("orderProductList","至少拥有一条商品");
+        	jsonObject.put("code",0);
+	        jsonObject.put("message","验证信息未能通过");
+	        jsonObject.put("data",map);
+	        return jsonObject;	
+        }
+        if(orderDto.getOrderProductList()!=null&&orderDto.getOrderProductList().size()!=0) {
+        	for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
+        		if(orderProduct.getName()==null) {
+        			map.put("name","商品名称不可为空");
+        		}
+        		if(orderProduct.getNum()==null) {
+        			map.put("num","商品数量不可为空");
+        		}
+        		if(orderProduct.getPrice()==null) {
+        			map.put("price","商品单价不可为空");
+        		}
+        		if(orderProduct.getSku()==null) {
+        			map.put("sku","商品单位不可为空");
+        		}
+        	}
+        	jsonObject.put("code",0);
+	        jsonObject.put("message","验证信息未能通过");
+	        jsonObject.put("data",map);
+	        return jsonObject;
         }
 		Long UserId=SecurityInfoGetter.getUser().getUserId();
 		Long companyId=SecurityInfoGetter.getCompanyId();
@@ -133,7 +252,7 @@ public class SalesOrderApi {
 		int result =orderService.addOrder(orderDto);
 		logger.debug("新增销售订单条目数:"+result);
 		if (result>0) {
-            jsonObject.put("code", 0);
+            jsonObject.put("code",0);
             jsonObject.put("message", "添加成功");
             return jsonObject;
         } else {
@@ -153,14 +272,22 @@ public class SalesOrderApi {
 	public JSONObject modifyOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindingResult) {
         JSONObject jsonObject = new JSONObject();
         if(bindingResult.hasErrors()) {
-        	jsonObject.put("code","-1");
-        	jsonObject.put("message",bindingResult.getFieldError().getDefaultMessage());
+        	jsonObject.put("code",0);
+        	Map map=new HashMap();
+        	List<FieldError> list=bindingResult.getFieldErrors();
+        	for(FieldError error:list) {
+        		String n=error.getField();
+        		String m=error.getDefaultMessage();
+        		map.put(n,m);
+        	}
+        	jsonObject.put("message","验证信息未能通过");
+        	jsonObject.put("data",map);
         	return jsonObject;
         }
         int result=orderService.modOrder(orderDto);
         logger.debug("修改销售订单条目数:"+result);
         if (result > 0) {
-        	jsonObject.put("code", 0);
+        	jsonObject.put("code",0);
         	jsonObject.put("message", "修改成功");
         	return jsonObject;
         } else {

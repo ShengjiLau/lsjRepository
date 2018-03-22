@@ -10,10 +10,6 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import io.swagger.annotations.ApiModelProperty;
 
-
-
-
-
 /**
  * @author Sheng-ji Lau
  * @date 2018年3月17日下午3:11:37
@@ -24,17 +20,17 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="订单id")
     private Long orderId;
 
-	@NotBlank(message="供应商信息不可为空")
+	@NotBlank(message="供应商/客户名称不可为空")
 	@ApiModelProperty(value="供应商/客户名称")
     private String supplier;
 	
-	@ApiModelProperty(value="供应商id/客户名称id")
+	@ApiModelProperty(value="供应商id/客户id")
 	private Long supplierId;
 	
 	@ApiModelProperty(value="采购/销售单号")
     private String orderNo;
 
-	@ApiModelProperty(value="订单类型(采购:1 or销售:0)")
+	@ApiModelProperty(value="订单类型(采购:1 or 销售:0)")
 	@NotNull(message="订单类型不可为空")
     private Short orderType;
 
@@ -57,56 +53,63 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="附件url")
     private String fileUrl;
 
-	@ApiModelProperty(value="采购发货人/销售收货人")
+	@ApiModelProperty(value="采购收货联系人/销售发货联系人")
     private String sender;
 
-	@ApiModelProperty(value="采购发货人/销售收货人联系方式")
+	@ApiModelProperty(value="采购收货人/销售发货人联系方式")
     private String senderPhone;
 
-	@ApiModelProperty(value="发货省")
+	@ApiModelProperty(value="采购收货/销售发货省")
+	//@NotBlank
     private String sendProvince;
 
-	@ApiModelProperty(value="发货市")
+	@ApiModelProperty(value="采购收货/销售发货市")
+	//@NotBlank
     private String sendCity;
 
-	@ApiModelProperty(value="发货区")
+	@ApiModelProperty(value="采购收货/销售发货区")
+	//@NotBlank
     private String sendDistrict;
 
-	@ApiModelProperty(value="采购发货/销售收货详细地址")
+	@ApiModelProperty(value="采购收货/销售发货详细地址")
+	//@NotBlank(message="地址不可为空")
     private String sendAddress;
 
-	@ApiModelProperty(value="发货时间")
+	@ApiModelProperty(value="采购收货/销售发货时间")
     private Date sendTime;
 
-	@ApiModelProperty(value="包装要求")
+	@ApiModelProperty(value="采购收货要求/销售包装要求")
     private String packRequire;
 
-	@ApiModelProperty(value="采购收货人/销售发货人")
-	@NotBlank(message="采购收货人/销售发货人不可为空")
+	@ApiModelProperty(value="采购发货联系人/销售收货联系人")
+	//@NotBlank(message="联系人不可为空")
     private String receiver;
 
-	@ApiModelProperty(value="收货人联系方式")
-	@NotBlank
+	@ApiModelProperty(value="采购发货/销售收货人联系方式")
+	//@NotBlank(message="联系方式不可为空")
     private String receiverPhone;
 
-	@ApiModelProperty(value="收货省")
-	@NotBlank
+	@ApiModelProperty(value="采购发货/销售收货省")
+	//@NotBlank
     private String receiverProvince;
 
-	@ApiModelProperty(value="收货市")
-	@NotBlank
+	@ApiModelProperty(value="采购发货/销售收货市")
+	//@NotBlank
     private String receiverCity;
 
-	@ApiModelProperty(value="收货区")
-	@NotBlank
+	@ApiModelProperty(value="采购发货/销售收货区")
+	//@NotBlank
     private String receiveDistrict;
 
-	@ApiModelProperty(value="收货时间")
+	@ApiModelProperty(value="采购发货/销售收货时间")
 	private Date receiveTime;
 	
-	@ApiModelProperty(value="收货详细地址")
-	@NotBlank(message="收货地址不可为空")
+	@ApiModelProperty(value="采购发货/销售收货详细地址")
+	//@NotBlank(message="地址不可为空")
     private String receiveAddress;
+	
+	@ApiModelProperty(value="采购包装要求/销售收货要求")
+	private String receiveRequire;
 
 	@ApiModelProperty(value="备注")
     private String remarks;
@@ -122,7 +125,7 @@ public class Order implements Serializable {
     private Date approvalEndDate;
 
 	@ApiModelProperty(value="所属业务组")
-	@NotNull(message="业务组不可为空")
+	@NotNull(message="所属业务组不可为空")
     private Long groupId;
 
 	@ApiModelProperty(value="所属公司id")
@@ -140,12 +143,10 @@ public class Order implements Serializable {
 	private String approvalProcess;
 	
 	@ApiModelProperty(value="是否草稿:0是/1否")
+	@NotNull(message="是否草稿不可为空")
 	private Short isDraft;
 	
-	@ApiModelProperty(value="收货要求")
-	private String receiveRequire;
-	
-	@ApiModelProperty(value="合计金额")
+	@ApiModelProperty(value="商品合计总金额")
 	private BigDecimal summation;
 	
 	

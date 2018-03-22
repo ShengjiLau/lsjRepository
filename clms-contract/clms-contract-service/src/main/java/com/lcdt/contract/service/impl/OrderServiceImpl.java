@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.Page;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.contract.dao.ConditionQueryMapper;
@@ -22,7 +22,7 @@ import com.lcdt.contract.model.Order;
 import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.service.OrderService;
 import com.lcdt.contract.web.dto.OrderDto;
-import com.lcdt.contract.web.dto.PageBaseDto;
+
 
 /**
  * @author Sheng-ji Lau
@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService{
 		BigDecimal aTotal =new 	BigDecimal(0);
 		if(orderDto.getOrderProductList()!=null&&orderDto.getOrderProductList().size()!=0){
 			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
-				BigDecimal num=new BigDecimal(orderProduct.getNum());
+				BigDecimal num = orderProduct.getNum();
 				BigDecimal price=orderProduct.getPrice();
 				BigDecimal total=num.multiply(price);
 				aTotal=aTotal.add(total);
@@ -78,7 +78,7 @@ public class OrderServiceImpl implements OrderService{
 		BigDecimal aTotal =new 	BigDecimal(0);
 		if(orderDto.getOrderProductList()!=null&&orderDto.getOrderProductList().size()!=0){
 			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
-				BigDecimal num=new BigDecimal(orderProduct.getNum());
+				BigDecimal num = orderProduct.getNum();
 				BigDecimal price=orderProduct.getPrice();
 				BigDecimal total=num.multiply(price);
 				aTotal=aTotal.add(total);
@@ -107,7 +107,8 @@ public class OrderServiceImpl implements OrderService{
 							 if(it.next()==orderProduct.getOpId()) {
 								 it.remove();
 							 }
-						 }					 
+						 }
+	// for循环效率高 , 但遍历过程不可执行remove操作					 
 	//					for(Long opId:orderProductIdList) {
 	//						if(orderProduct.getOpId()==opId) {
 	//							orderProductIdList.remove(opId);
@@ -160,7 +161,7 @@ public class OrderServiceImpl implements OrderService{
 				}
 			}   
 		}
-		PageInfo<OrderDto> pageInfo=new PageInfo(orderDtoList);
+		PageInfo<OrderDto> pageInfo=new PageInfo<OrderDto>(orderDtoList);
 		return pageInfo;
 	}
 

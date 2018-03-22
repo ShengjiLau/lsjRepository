@@ -57,7 +57,7 @@
     values 
     <foreach collection="list"  item="op" index="index" separator=",">
       (#{op.opId,jdbcType=BIGINT},#{op.orderId,jdbcType=BIGINT}, #{op.name,jdbcType=VARCHAR}, 
-      #{op.code,jdbcType=VARCHAR}, #{op.sku,jdbcType=VARCHAR}, #{op.num,jdbcType=INTEGER}, #{op.price,jdbcType=DECIMAL}, 
+      #{op.code,jdbcType=VARCHAR}, #{op.sku,jdbcType=VARCHAR}, #{op.num,jdbcType=DECIMAL}, #{op.price,jdbcType=DECIMAL}, 
       #{op.total,jdbcType=DECIMAL},#{op.spec,jdbcType=VARCHAR})
     </foreach>
   </insert>
@@ -70,7 +70,7 @@
       name = #{op.name,jdbcType=VARCHAR},
       code= #{op.code,jdbcType=VARCHAR},
       sku = #{op.sku,jdbcType=VARCHAR},
-      num = #{op.num,jdbcType=INTEGER},
+      num = #{op.num,jdbcType=DECIMAL},
       price = #{op.price,jdbcType=DECIMAL},
       total = #{op.total,jdbcType=DECIMAL},
       spec = #{op.spec,jdbcType=VARCHAR}
