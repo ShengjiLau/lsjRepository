@@ -93,9 +93,9 @@
       approval_end_date, group_id, company_id, 
       create_user_id, order_serial_no,receive_time,
       approval_process,supplier_id,is_draft,receive_require,
-      summation,warehouse_id,attachment1_name,attachment1
-      ,attachment2_name,attachment2,attachment3_name,attachment3
-      ,attachment4_name,attachment4,attachment5_name,attachment5)
+      summation,warehouse_id,attachment1_name,attachment1,
+      attachment2_name,attachment2,attachment3_name,attachment3,
+      attachment4_name,attachment4,attachment5_name,attachment5)
     values (#{orderId,jdbcType=BIGINT},#{supplier,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
       #{orderType,jdbcType=SMALLINT}, #{contractCode,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=SMALLINT}, 
       #{dispatchingType,jdbcType=SMALLINT}, #{payType,jdbcType=VARCHAR}, #{receiveWarehouse,jdbcType=VARCHAR}, 
@@ -109,11 +109,11 @@
       #{createUserId,jdbcType=BIGINT}, #{orderSerialNo,jdbcType=VARCHAR},#{receiveTime,jdbcType=TIMESTAMP},
       #{approvalProcess,jdbcType=VARCHAR},#{supplierId,jdbcType=BIGINT},#{isDraft,jdbcType=SMALLINT},
       #{receiveRequire,jdbcType=VARCHAR},#{summation,jdbcType=DECIMAL},#{warehouseId,jdbcType=BIGINT},
-      #{attachment1Name,jdbcType=VARCHAR}),#{attachment1,jdbcType=VARCHAR}),
-      #{attachment2Name,jdbcType=VARCHAR}),#{attachment2,jdbcType=VARCHAR}),
-      #{attachment3Name,jdbcType=VARCHAR}),#{attachment3,jdbcType=VARCHAR}),
-      #{attachment4Name,jdbcType=VARCHAR}),#{attachment4,jdbcType=VARCHAR}),
-      #{attachment5Name,jdbcType=VARCHAR}),#{attachment5,jdbcType=VARCHAR})
+      #{attachment1Name,jdbcType=VARCHAR},#{attachment1,jdbcType=VARCHAR},
+      #{attachment2Name,jdbcType=VARCHAR},#{attachment2,jdbcType=VARCHAR},
+      #{attachment3Name,jdbcType=VARCHAR},#{attachment3,jdbcType=VARCHAR},
+      #{attachment4Name,jdbcType=VARCHAR},#{attachment4,jdbcType=VARCHAR},
+      #{attachment5Name,jdbcType=VARCHAR},#{attachment5,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.contract.model.Order">
     <!--
@@ -527,16 +527,16 @@
       receive_require = #{receiveRequire,jdbcType=VARCHAR},
       summation = #{summation,jdbcType=DECIMAL},
       warehouse_id = #{warehouseId,jdbcType=BIGINT},
-      attachment1_name = #{attachment1Name,jdbcType=VARCHAR}),
-      attachment1 = #{attachment1,jdbcType=VARCHAR}),
-      attachment2_name = #{attachment2Name,jdbcType=VARCHAR}),
-      attachment2 = #{attachment2,jdbcType=VARCHAR}),
-      attachment3_name = #{attachment3Name,jdbcType=VARCHAR}),
-      attachment3 = #{attachment3,jdbcType=VARCHAR}),
-      attachment4_name = #{attachment4Name,jdbcType=VARCHAR}),
-      attachment4 = #{attachment4,jdbcType=VARCHAR}),
-      attachment5_name = #{attachment5Name,jdbcType=VARCHAR}),
-      attachment5 = #{attachment5,jdbcType=VARCHAR})
+      attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
+      attachment1 = #{attachment1,jdbcType=VARCHAR},
+      attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
+      attachment2 = #{attachment2,jdbcType=VARCHAR},
+      attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
+      attachment3 = #{attachment3,jdbcType=VARCHAR},
+      attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
+      attachment4 = #{attachment4,jdbcType=VARCHAR},
+      attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
+      attachment5 = #{attachment5,jdbcType=VARCHAR}
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
 </mapper>
