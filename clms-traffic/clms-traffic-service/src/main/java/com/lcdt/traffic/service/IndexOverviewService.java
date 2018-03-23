@@ -20,7 +20,7 @@ public interface IndexOverviewService {
      * @param map
      * @return
      */
-    Map waybillStatistics(Map map);
+    Map queryOwnWaybillStatistics(Map map);
 
     /**
      * 运输总概览

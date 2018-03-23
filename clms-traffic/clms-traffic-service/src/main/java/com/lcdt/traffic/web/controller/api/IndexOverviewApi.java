@@ -100,7 +100,7 @@ public class IndexOverviewApi {
         }
         JSONObject jsonObject = new JSONObject();
         try {
-            Map<String, Object> resultMap = indexOverviewService.waybillStatistics(map);
+            Map<String, Object> resultMap = indexOverviewService.queryOwnWaybillStatistics(map);
 
             JSONObject jsonResult = new JSONObject(resultMap);
             jsonObject.put("code", 0);

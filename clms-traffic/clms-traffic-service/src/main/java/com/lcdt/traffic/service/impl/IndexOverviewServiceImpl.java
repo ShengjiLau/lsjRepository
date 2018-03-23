@@ -41,8 +41,8 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
     }
 
     @Override
-    public Map waybillStatistics(Map map) {
-        Map<String,Object> map1 = indexOverviewMapper.selectWaybill(map);
+    public Map queryOwnWaybillStatistics(Map map) {
+        Map<String,Object> map1 = indexOverviewMapper.selectOwnWaybill(map);
         if (null == map1) {
             map1 = new HashMap<>();
             map1.put("daifahuo", 0);
@@ -53,7 +53,7 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
             map1.put("yiqianshou", 0);
             map1.put("yiwancheng", 0);
         }
-        List<Map<String,Object>> mapList = indexOverviewMapper.selectWaybillData(map);     //统计详情查询用来做折线的数据
+        List<Map<String,Object>> mapList = indexOverviewMapper.selectOwnWaybillData(map);     //统计详情查询用来做折线的数据
         map1.put("detail",mapList);
         return map1;
     }
