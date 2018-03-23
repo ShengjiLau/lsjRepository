@@ -22,15 +22,17 @@ public class DriverVehicleAuth implements Serializable,ResponseData {
 
     private String authStatus;
 
-    private String vehiclePhoto;
+    private String vehiclePhoto;//车头照片
 
-    private String vehicleTrailersPhoto;
+    private String vehicleTailPhoto;//车尾照片
 
-    private String vehicleDrivingPhoto;
+    private String vehicleTrailersPhoto;//挂车照片
 
-    private String vehicleOperatingPhoto;
+    private String vehicleDrivingPhoto;//行使证照片
 
-    private String vehicleTrailersOperatingPhoto;
+    private String vehicleOperatingPhoto;//主车营运证
+
+    private String vehicleTrailersOperatingPhoto;//挂车营运证
 
     private Boolean isDefault;
 
@@ -118,6 +120,14 @@ public class DriverVehicleAuth implements Serializable,ResponseData {
 
     public void setVehiclePhoto(String vehiclePhoto) {
         this.vehiclePhoto = vehiclePhoto == null ? null : vehiclePhoto.trim();
+    }
+
+    public String getVehicleTailPhoto() {
+        return vehicleTailPhoto;
+    }
+
+    public void setVehicleTailPhoto(String vehicleTailPhoto) {
+        this.vehicleTailPhoto = vehicleTailPhoto== null ? null : vehicleTailPhoto.trim();
     }
 
     public String getVehicleTrailersPhoto() {

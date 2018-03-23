@@ -11,6 +11,7 @@
     <result column="vehicle_length" jdbcType="DECIMAL" property="vehicleLength" />
     <result column="auth_status" jdbcType="VARCHAR" property="authStatus" />
     <result column="vehicle_photo" jdbcType="VARCHAR" property="vehiclePhoto" />
+    <result column="vehicle_tail_photo" jdbcType="VARCHAR" property="vehicleTailPhoto" />
     <result column="vehicle_trailers_photo" jdbcType="VARCHAR" property="vehicleTrailersPhoto" />
     <result column="vehicle_driving_photo" jdbcType="VARCHAR" property="vehicleDrivingPhoto" />
     <result column="vehicle_operating_photo" jdbcType="VARCHAR" property="vehicleOperatingPhoto" />
@@ -34,7 +35,7 @@
     </selectKey>
     insert into t_driver_vehicle_auth (driver_id, vehicle_num, vehicle_trailers_num, 
       vehicle_type, vehicle_load, vehicle_length, 
-      auth_status, vehicle_photo, vehicle_trailers_photo, 
+      auth_status, vehicle_photo, vehicle_tail_photo,vehicle_trailers_photo,
       vehicle_driving_photo, vehicle_operating_photo, 
       vehicle_trailers_operating_photo, is_default, create_name, 
       create_date, create_id, update_id, 
@@ -42,7 +43,7 @@
       )
     values (#{driverId,jdbcType=BIGINT}, #{vehicleNum,jdbcType=VARCHAR}, #{vehicleTrailersNum,jdbcType=VARCHAR}, 
       #{vehicleType,jdbcType=VARCHAR}, #{vehicleLoad,jdbcType=DECIMAL}, #{vehicleLength,jdbcType=DECIMAL}, 
-      #{authStatus,jdbcType=VARCHAR}, #{vehiclePhoto,jdbcType=VARCHAR}, #{vehicleTrailersPhoto,jdbcType=VARCHAR}, 
+      #{authStatus,jdbcType=VARCHAR}, #{vehiclePhoto,jdbcType=VARCHAR}, #{vehicleTailPhoto,jdbcType=VARCHAR}, #{vehicleTrailersPhoto,jdbcType=VARCHAR},
       #{vehicleDrivingPhoto,jdbcType=VARCHAR}, #{vehicleOperatingPhoto,jdbcType=VARCHAR}, 
       #{vehicleTrailersOperatingPhoto,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT}, #{createName,jdbcType=VARCHAR}, 
       #{createDate,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT}, #{updateId,jdbcType=BIGINT}, 
@@ -59,6 +60,7 @@
       vehicle_length = #{vehicleLength,jdbcType=DECIMAL},
       auth_status = #{authStatus,jdbcType=VARCHAR},
       vehicle_photo = #{vehiclePhoto,jdbcType=VARCHAR},
+      vehicle_tail_photo = #{vehicleTailPhoto,jdbcType=VARCHAR},
       vehicle_trailers_photo = #{vehicleTrailersPhoto,jdbcType=VARCHAR},
       vehicle_driving_photo = #{vehicleDrivingPhoto,jdbcType=VARCHAR},
       vehicle_operating_photo = #{vehicleOperatingPhoto,jdbcType=VARCHAR},
@@ -75,7 +77,7 @@
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select auth_id, driver_id, vehicle_num, vehicle_trailers_num, vehicle_type, vehicle_load, 
-    vehicle_length, auth_status, vehicle_photo, vehicle_trailers_photo, vehicle_driving_photo, 
+    vehicle_length, auth_status, vehicle_photo, vehicle_tail_photo, vehicle_trailers_photo, vehicle_driving_photo,
     vehicle_operating_photo, vehicle_trailers_operating_photo, is_default, create_name, 
     create_date, create_id, update_id, update_name, update_date, is_deleted
     from t_driver_vehicle_auth
@@ -83,7 +85,7 @@
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select auth_id, driver_id, vehicle_num, vehicle_trailers_num, vehicle_type, vehicle_load, 
-    vehicle_length, auth_status, vehicle_photo, vehicle_trailers_photo, vehicle_driving_photo, 
+    vehicle_length, auth_status, vehicle_photo,vehicle_tail_photo, vehicle_trailers_photo, vehicle_driving_photo,
     vehicle_operating_photo, vehicle_trailers_operating_photo, is_default, create_name, 
     create_date, create_id, update_id, update_name, update_date, is_deleted
     from t_driver_vehicle_auth
@@ -92,7 +94,7 @@
   <select id="selectByDriverId" resultMap="BaseResultMap">
 
      select auth_id, driver_id, vehicle_num, vehicle_trailers_num, vehicle_type, vehicle_load,
-    vehicle_length, auth_status, vehicle_photo, vehicle_trailers_photo, vehicle_driving_photo,
+    vehicle_length, auth_status, vehicle_photo,vehicle_tail_photo, vehicle_trailers_photo, vehicle_driving_photo,
     vehicle_operating_photo, vehicle_trailers_operating_photo, is_default, create_name,
     create_date, create_id, update_id, update_name, update_date, is_deleted
     from t_driver_vehicle_auth
@@ -102,7 +104,7 @@
 
   <select id="selectVehicleNumExist" parameterType="com.lcdt.userinfo.model.DriverVehicleAuth" resultMap="BaseResultMap">
     select auth_id, driver_id, vehicle_num, vehicle_trailers_num, vehicle_type, vehicle_load,
-    vehicle_length, auth_status, vehicle_photo, vehicle_trailers_photo, vehicle_driving_photo,
+    vehicle_length, auth_status, vehicle_photo,vehicle_tail_photo, vehicle_trailers_photo, vehicle_driving_photo,
     vehicle_operating_photo, vehicle_trailers_operating_photo, is_default, create_name,
     create_date, create_id, update_id, update_name, update_date, is_deleted
     from t_driver_vehicle_auth

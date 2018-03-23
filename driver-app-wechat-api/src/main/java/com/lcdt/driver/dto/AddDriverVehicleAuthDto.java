@@ -1,9 +1,10 @@
 package com.lcdt.driver.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class AddDriverVehicleAuthDto {
 
-    private Boolean isDefault;
-
+    private boolean isDefault;
 
     private String vehicleNum;
 
@@ -14,23 +15,25 @@ public class AddDriverVehicleAuthDto {
     private double vehicleLoad;
 
     private double vehicleLength;
-
+    @ApiModelProperty(value = "车头照片")
     private String vehiclePhoto;
-
+    @ApiModelProperty(value = "车尾照片")
+    private String vehicleTailPhoto;
+    @ApiModelProperty(value = "挂车照片")
     private String vehicleTrailersPhoto;
-
+    @ApiModelProperty(value = "行驶证照片")
     private String vehicleDrivingPhoto;
-
+    @ApiModelProperty(value = "主车营运证")
     private String vehicleOperatingPhoto;
-
+    @ApiModelProperty(value = "挂车营运证")
     private String vehicleTrailersOperatingPhoto;
 
-    public Boolean getDefault() {
+    public boolean getIsDefault(){
         return isDefault;
     }
 
-    public void setDefault(Boolean aDefault) {
-        isDefault = aDefault;
+    public void setIsDefault(boolean isDefault){
+        this.isDefault=isDefault;
     }
 
     public String getVehicleNum() {
@@ -79,6 +82,14 @@ public class AddDriverVehicleAuthDto {
 
     public void setVehiclePhoto(String vehiclePhoto) {
         this.vehiclePhoto = vehiclePhoto;
+    }
+
+    public String getVehicleTailPhoto() {
+        return vehicleTailPhoto;
+    }
+
+    public void setVehicleTailPhoto(String vehicleTailPhoto) {
+        this.vehicleTailPhoto = vehicleTailPhoto;
     }
 
     public String getVehicleTrailersPhoto() {

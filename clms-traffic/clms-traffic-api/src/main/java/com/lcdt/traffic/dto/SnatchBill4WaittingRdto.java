@@ -57,6 +57,9 @@ public class SnatchBill4WaittingRdto implements java.io.Serializable {
     //抢单总价
     private float snatchTotalPrice;
 
+    private Long createId; //计划创建者
+    private String ownPhone; //货主电话
+
 
     private List<PlanDetail> planDetailList;
 
@@ -262,4 +265,20 @@ public class SnatchBill4WaittingRdto implements java.io.Serializable {
         this.transportWay = transportWay;
     }
 
+
+    public String getOwnPhone() {
+        return ownPhone;
+    }
+
+    public void setOwnPhone(String ownPhone) {
+        this.ownPhone = ownPhone;
+    }
+
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Long createId) {
+        this.createId = createId;
+    }
 }
