@@ -172,7 +172,7 @@
     <if test="updateId != null">
       update_id = #{updateId,jdbcType=BIGINT},
     </if>
-    <if test="update_name != null">
+    <if test="updateName != null">
       update_name = #{updateName,jdbcType=VARCHAR},
     </if>
     update_date = CURRENT_TIMESTAMP
