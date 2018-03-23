@@ -11,12 +11,12 @@
         from t_waybill_plan
         <where>
             company_id=#{companyId,jdbcType=BIGINT} and is_deleted=0
-            <if test="planType==0">
+<!--            <if test="planType==0">
                 and carrier_company_id=company_id
             </if>
             <if test="planType==1">
                 and carrier_company_id!=company_id
-            </if>
+            </if>-->
             <if test="groupIds!=null and groupIds.size>0">
                 and group_id in
                 <foreach item="item" index="index" collection="groupIds" open="(" separator="," close=")">
@@ -31,6 +31,9 @@
             </if>
         </where>
     </select>
+
+
+
     <select id="selectPlanData" resultType="Map" parameterType="Map">
         SELECT t.dt t_date,ifnull(t1.paidanzhong,0) paidanzhong,ifnull(t1.jingjiazhong,0) jingjiazhong,ifnull(t1.yipaidan,0) yipaidan,
         ifnull(t1.yipaiche,0) yipaiche,ifnull(t1.yiwancheng,0) yiwancheng
@@ -65,7 +68,7 @@
             <if test="planType==1">
                 and carrier_company_id!=company_id
             </if>
-            group by pub_date
+            group by DATE(pub_date)
         ) t1 on t.dt= t1.pub_date
         WHERE
         1 = 1

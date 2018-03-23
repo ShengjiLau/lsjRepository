@@ -16,6 +16,16 @@ public class SnatchOfferDto implements java.io.Serializable {
     private String offerRemark; //抢单备注
 
 
+    private String planDetailStr;
+
+    public String getPlanDetailStr() {
+        return planDetailStr;
+    }
+
+    public void setPlanDetailStr(String planDetailStr) {
+        this.planDetailStr = planDetailStr;
+    }
+
 
     public String getOfferRemark() {
         return offerRemark;
