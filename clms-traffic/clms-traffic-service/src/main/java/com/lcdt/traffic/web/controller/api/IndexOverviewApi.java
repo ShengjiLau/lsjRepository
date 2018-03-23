@@ -7,6 +7,7 @@ import com.lcdt.traffic.model.DriverGroup;
 import com.lcdt.traffic.service.DriverGroupService;
 import com.lcdt.traffic.service.IndexOverviewService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
+import com.lcdt.userinfo.model.Group;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -70,10 +71,25 @@ public class IndexOverviewApi {
         Map map = (Map) JSON.parseObject(param);
         String ids = map.get("groupIds") != null && map.get("groupIds") != "" ? map.get("groupIds").toString() : "";
         map.put("companyId", companyId);
-        if(!"".equals(ids)){
-            String[] idArr = ids.split(",");
-            List groupIds = Arrays.asList(idArr);
-            map.put("groupIds", groupIds);
+        StringBuffer sb = new StringBuffer();
+        if (ids!=null&&!ids.equals("")) {//传业务组，查这个组帮定的客户
+            sb.append(" find_in_set('"+ids+"',group_id)"); //项目组id
+        } else {
+            //没传组，查这个用户所有组帮定的客户
+
+            List<Group> groupList = SecurityInfoGetter.groups();
+            if(groupList!=null&&groupList.size()>0){
+                sb.append("(");
+                for(int i=0;i<groupList.size();i++) {
+                    Group group = groupList.get(i);
+                    sb.append(" find_in_set('"+group.getGroupId()+"',group_id)"); //所有项目组ids
+                    if(i!=groupList.size()-1){
+                        sb.append(" or ");
+                    }
+                }
+                sb.append(")");
+            }
+
         }
         JSONObject jsonObject = new JSONObject();
         try {

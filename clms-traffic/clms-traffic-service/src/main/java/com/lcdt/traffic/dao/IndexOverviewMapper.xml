@@ -117,7 +117,7 @@
         GROUP BY t_date
     </select>
     -->
-    <select id="selectWaybill" resultType="Map" parameterType="Map">
+    <select id="selectOwnWaybill" resultType="Map" parameterType="Map">
         select sum(case when waybill_status=1 then 1 else 0 end) as daifahuo,
         sum(case when waybill_status=2 then 1 else 0 end) as yiruchang,
         sum(case when waybill_status=3 then 1 else 0 end) as yichuku,
@@ -127,18 +127,12 @@
         sum(case when waybill_status=7 then 1 else 0 end) as yiwancheng
         from t_waybill
         <where>
-            company_id=#{companyId,jdbcType=BIGINT} and is_deleted=0
-            <if test="waybillType==0">
-                and carrier_company_id=company_id
+            company_id = #{companyId,jdbcType=BIGINT} and is_deleted=0
+            <if test="groupIds!=null and groupIds!=''">
+                and  ${groupIds}
             </if>
-            <if test="waybillType==1">
-                and carrier_company_id!=company_id
-            </if>
-            <if test="groupIds!=null and groupIds.size>0">
-                and group_id in
-                <foreach item="item" index="index" collection="groupIds" open="(" separator="," close=")">
-                    #{item,jdbcType=BIGINT}
-                </foreach>
+            <if test="groupIds==null or groupIds==''">
+                and  group_id is null
             </if>
             <if test="date_interval!=null and date_interval!=''">
                 and pub_date &lt;= CURDATE() and pub_date &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
@@ -148,40 +142,97 @@
             </if>
         </where>
     </select>
-    <select id="selectWaybillData" resultType="Map" parameterType="Map">
+    <select id="selectOwnWaybillData" resultType="Map" parameterType="Map">
         SELECT t.dt t_date,ifnull(t1.daifahuo,0) daifahuo,ifnull(t1.yiruchang,0) yiruchang,ifnull(t1.yichuku,0) yichuku,
         ifnull(t1.yunshuzhong,0) yunshuzhong,ifnull(t1.yixiehuo,0) yixiehuo,ifnull(yiqianshou,0) yiqianshou,ifnull(yiwancheng,0) yiwancheng
         FROM t_date t LEFT JOIN
         (
-            SELECT date(pub_date) as pub_date,
-            sum(case when waybill_status=1 then 1 else 0 end) as daifahuo,
-            sum(case when waybill_status=2 then 1 else 0 end) as yiruchang,
-            sum(case when waybill_status=3 then 1 else 0 end) as yichuku,
-            sum(case when waybill_status=4 then 1 else 0 end) as yunshuzhong,
-            sum(case when waybill_status=5 then 1 else 0 end) as yixiehuo,
-            sum(case when waybill_status=6 then 1 else 0 end) as yiqianshou,
-            sum(case when waybill_status=7 then 1 else 0 end) as yiwancheng
-            FROM t_waybill
-            WHERE company_id = #{companyId,jdbcType=BIGINT} AND is_deleted = 0
+        SELECT date(pub_date) as pub_date,
+        sum(case when waybill_status=1 then 1 else 0 end) as daifahuo,
+        sum(case when waybill_status=2 then 1 else 0 end) as yiruchang,
+        sum(case when waybill_status=3 then 1 else 0 end) as yichuku,
+        sum(case when waybill_status=4 then 1 else 0 end) as yunshuzhong,
+        sum(case when waybill_status=5 then 1 else 0 end) as yixiehuo,
+        sum(case when waybill_status=6 then 1 else 0 end) as yiqianshou,
+        sum(case when waybill_status=7 then 1 else 0 end) as yiwancheng
+        FROM t_waybill
+        WHERE company_id = #{companyId,jdbcType=BIGINT} AND is_deleted = 0
+        <if test="date_interval!=null and date_interval!=''">
+            and date(pub_date) &lt;= CURDATE() and date(pub_date) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+        </if>
+        <if test="pubdate_start!=null and pubdate_start!=''">
+            and date(pub_date) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(pub_date) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+        </if>
+        <if test="groupIds!=null and groupIds!=''">
+            and  ${groupIds}
+        </if>
+        <if test="groupIds==null or groupIds==''">
+            and  group_id is null
+        </if>
+        group by date(pub_date)
+        ) t1 on t.dt= t1.pub_date
+        WHERE 1 = 1
+        <if test="date_interval!=null and date_interval!=''">
+            and date(dt) &lt;=CURDATE() and date(dt) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+        </if>
+        <if test="pubdate_start!=null and pubdate_start!=''">
+            and date(dt) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(dt) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+
+    <select id="selectCustomerWaybill" resultType="Map" parameterType="Map">
+        select sum(case when waybill_status=1 then 1 else 0 end) as daifahuo,
+        sum(case when waybill_status=2 then 1 else 0 end) as yiruchang,
+        sum(case when waybill_status=3 then 1 else 0 end) as yichuku,
+        sum(case when waybill_status=4 then 1 else 0 end) as yunshuzhong,
+        sum(case when waybill_status=5 then 1 else 0 end) as yixiehuo,
+        sum(case when waybill_status=6 then 1 else 0 end) as yiqianshou,
+        sum(case when waybill_status=7 then 1 else 0 end) as yiwancheng
+        from t_waybill
+        <where>
+            company_id = #{companyId,jdbcType=BIGINT} and is_deleted=0
+            <if test="groupIds!=null and groupIds!=''">
+                and  ${groupIds}
+            </if>
+            <if test="groupIds==null or groupIds==''">
+                and  group_id is null
+            </if>
             <if test="date_interval!=null and date_interval!=''">
-                and date(pub_date) &lt;= CURDATE() and date(pub_date) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+                and pub_date &lt;= CURDATE() and pub_date &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
             </if>
             <if test="pubdate_start!=null and pubdate_start!=''">
-                and date(pub_date) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(pub_date) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+                and pub_date &gt;= #{pubdate_start,jdbcType=TIMESTAMP} and pub_date &lt;= #{pubdate_end,jdbcType=TIMESTAMP}
             </if>
-            <if test="groupIds!=null and groupIds.size>0">
-                and group_id in
-                <foreach item="item" index="index" collection="groupIds" open="(" separator="," close=")">
-                    #{item,jdbcType=BIGINT}
-                </foreach>
-            </if>
-            <if test="waybillType==0">
-                and carrier_company_id=company_id
-            </if>
-            <if test="waybillType==1">
-                and carrier_company_id!=company_id
-            </if>
-            group by pub_date
+        </where>
+    </select>
+    <select id="selectCustomerWaybillData" resultType="Map" parameterType="Map">
+        SELECT t.dt t_date,ifnull(t1.daifahuo,0) daifahuo,ifnull(t1.yiruchang,0) yiruchang,ifnull(t1.yichuku,0) yichuku,
+        ifnull(t1.yunshuzhong,0) yunshuzhong,ifnull(t1.yixiehuo,0) yixiehuo,ifnull(yiqianshou,0) yiqianshou,ifnull(yiwancheng,0) yiwancheng
+        FROM t_date t LEFT JOIN
+        (
+        SELECT date(pub_date) as pub_date,
+        sum(case when waybill_status=1 then 1 else 0 end) as daifahuo,
+        sum(case when waybill_status=2 then 1 else 0 end) as yiruchang,
+        sum(case when waybill_status=3 then 1 else 0 end) as yichuku,
+        sum(case when waybill_status=4 then 1 else 0 end) as yunshuzhong,
+        sum(case when waybill_status=5 then 1 else 0 end) as yixiehuo,
+        sum(case when waybill_status=6 then 1 else 0 end) as yiqianshou,
+        sum(case when waybill_status=7 then 1 else 0 end) as yiwancheng
+        FROM t_waybill
+        WHERE company_id = #{companyId,jdbcType=BIGINT} AND is_deleted = 0
+        <if test="date_interval!=null and date_interval!=''">
+            and date(pub_date) &lt;= CURDATE() and date(pub_date) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+        </if>
+        <if test="pubdate_start!=null and pubdate_start!=''">
+            and date(pub_date) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(pub_date) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+        </if>
+        <if test="groupIds!=null and groupIds!=''">
+            and  ${groupIds}
+        </if>
+        <if test="groupIds==null or groupIds==''">
+            and  group_id is null
+        </if>
+        group by date(pub_date)
         ) t1 on t.dt= t1.pub_date
         WHERE 1 = 1
         <if test="date_interval!=null and date_interval!=''">
