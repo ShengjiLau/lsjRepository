@@ -193,12 +193,12 @@
         sum(case when waybill_status=7 then 1 else 0 end) as yiwancheng
         from t_waybill
         <where>
-            company_id = #{companyId,jdbcType=BIGINT} and is_deleted=0
-            <if test="groupIds!=null and groupIds!=''">
-                and  ${groupIds}
+            carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT} and is_deleted = 0
+            <if test="companyIds!=null">
+                and ${companyIds}
             </if>
-            <if test="groupIds==null or groupIds==''">
-                and  group_id is null
+            <if test="companyIds==null">
+                and company_id is null
             </if>
             <if test="date_interval!=null and date_interval!=''">
                 and pub_date &lt;= CURDATE() and pub_date &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
@@ -222,18 +222,19 @@
         sum(case when waybill_status=6 then 1 else 0 end) as yiqianshou,
         sum(case when waybill_status=7 then 1 else 0 end) as yiwancheng
         FROM t_waybill
-        WHERE company_id = #{companyId,jdbcType=BIGINT} AND is_deleted = 0
+        WHERE carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT} AND is_deleted = 0
         <if test="date_interval!=null and date_interval!=''">
             and date(pub_date) &lt;= CURDATE() and date(pub_date) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
         </if>
         <if test="pubdate_start!=null and pubdate_start!=''">
             and date(pub_date) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(pub_date) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
         </if>
-        <if test="groupIds!=null and groupIds!=''">
-            and  ${groupIds}
+
+        <if test="companyIds!=null">
+            and ${companyIds}
         </if>
-        <if test="groupIds==null or groupIds==''">
-            and  group_id is null
+        <if test="companyIds==null">
+            and company_id is null
         </if>
         group by date(pub_date)
         ) t1 on t.dt= t1.pub_date
