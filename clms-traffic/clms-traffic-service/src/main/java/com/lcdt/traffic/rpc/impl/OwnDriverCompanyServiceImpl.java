@@ -1,6 +1,7 @@
 package com.lcdt.traffic.rpc.impl;
 
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.lcdt.traffic.dao.OwnDriverMapper;
 import com.lcdt.traffic.model.OwnDriver;
@@ -8,8 +9,8 @@ import com.lcdt.traffic.service.OwnDriverCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-
-public class OwnDriverServiceImpl implements OwnDriverCompanyService{
+@Service
+public class OwnDriverCompanyServiceImpl implements OwnDriverCompanyService{
 
     @Autowired
     OwnDriverMapper dao;

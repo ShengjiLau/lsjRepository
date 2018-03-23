@@ -245,7 +245,7 @@
     where driver_id = #{driverId,jdbcType=BIGINT} and is_deleted !=1
 	group by company_id
   </select>
-  <select id="selectByDriverId" resultMap="DriverCompanyMap" parameterType="java.lang.Long">
+  <select id="selectByDriverId" resultMap="BaseResultMap" parameterType="java.lang.Long">
     select *
     from t_own_driver
     where driver_id = #{driverId,jdbcType=BIGINT} and is_deleted !=1
