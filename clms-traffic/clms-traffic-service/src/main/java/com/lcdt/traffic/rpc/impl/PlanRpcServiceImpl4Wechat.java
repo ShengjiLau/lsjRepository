@@ -153,7 +153,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         }else {
             pageInfo = new PageInfo();
             pageInfo.setTotal(0l);
-           // pageInfo.setList(null);
+            pageInfo.setList(snatchBill4WaittingRdtos);
         }
         return pageInfo;
 
@@ -242,7 +242,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             } else {
                 pageInfo = new PageInfo();
                 pageInfo.setTotal(0l);
-               // pageInfo.setList(null);
+                pageInfo.setList(snatchBill4WaittingRdtos);
             }
          return pageInfo;
 
