@@ -86,37 +86,49 @@
     </collection>
   </resultMap>
 
-  <select id="selectContractApprovalByCondition" resultMap="ContractApprovalDtoMap" parameterType="com.lcdt.contract.web.dto.ContractApprovalListDto">
-    select contract_id, contract_code, title, type, contract_status,
-    approval_status,approval_start_date, approval_end_date, group_id,company_id
-    from t_contract
+  <select id="selectContractApprovalByCondition" resultMap="ContractApprovalDtoMap" parameterType="java.util.Map">
+    select t1.contract_id, t1.contract_code, t1.title, t1.type, t1.contract_status,
+    t1.approval_status,t1.approval_start_date, t1.approval_end_date, t1.group_id,t1.company_id
+    from t_contract t1 left join t_contract_approval t2 on t1.contract_id = t2.contract_id
     <where>
-      type = #{type,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}
+      t1.type = #{type,jdbcType=VARCHAR} and t1.company_id = #{companyId,jdbcType=BIGINT}
       <if test="title!=null and title!=''">
-        and title like concat('%',#{title,jdbcType=VARCHAR},'%') or contract_code like concat('%',#{title,jdbcType=VARCHAR},'%')
+        and t1.title like concat('%',#{title,jdbcType=VARCHAR},'%') or t1.contract_code like concat('%',#{title,jdbcType=VARCHAR},'%')
       </if>
       <if test="approvalStartDate!=null and approvalStartDate!=''">
-        and approval_start_date &gt; #{approvalStartDate,jdbcType=TIMESTAMP} and approval_end_date &lt; #{approvalEndDate,jdbcType=TIMESTAMP}
+        and t1.approval_start_date &gt; #{approvalStartDate,jdbcType=TIMESTAMP} and t1.approval_end_date &lt; #{approvalEndDate,jdbcType=TIMESTAMP}
       </if>
       <if test="approvalStatus!=null and approvalStatus!=''">
         <choose>
           <when test="tempStatus==3">
-            and approval_status = 2
+            and t1.approval_status = 2
           </when>
           <otherwise>
-            and approval_status = #{approvalStatus,jdbcType=SMALLINT}
+            and t1.approval_status = #{approvalStatus,jdbcType=SMALLINT}
           </otherwise>
         </choose>
       </if>
-      and approval_status != 0
+      and t1.approval_status != 0
+      <if test="tempStatus!=null and tempStatus==0">
+        and t2.user_id = #{userId,jdbcType=BIGINT} and t2.sort = 0
+      </if>
+      <if test="tempStatus!=null and tempStatus==1">
+        and t2.user_id = #{userId,jdbcType=BIGINT} and t2.status = 1
+      </if>
+      <if test="tempStatus!=null and tempStatus==2">
+        and t2.user_id = #{userId,jdbcType=BIGINT} and t2.status in(2,3,4)
+      </if>
+      <if test="tempStatus!=null and tempStatus==3">
+        and t2.user_id = #{userId,jdbcType=BIGINT} and t2.action_type = 1
+      </if>
     </where>
   </select>
   <select id="selectContractApproval" resultMap="BaseResultMap">
     select ca_id, user_id, user_name, dept_name, sort, result, status, action_type, content, time from t_contract_approval
     <where>
       and contract_id = #{p1}
-      <if test="tempStatus!=null and tempStatus==0">
-        user_id = #{userId,jdbcType=BIGINT} and sort = 1
+      <!--<if test="tempStatus!=null and tempStatus==0">
+        and user_id = #{userId,jdbcType=BIGINT} and sort = 1
       </if>
       <if test="tempStatus!=null and tempStatus==1">
         and user_id = #{userId,jdbcType=BIGINT} and status = 1
@@ -126,7 +138,7 @@
       </if>
       <if test="tempStatus!=null and tempStatus==3">
         and user_id = #{userId,jdbcType=BIGINT} and action_type = 1
-      </if>
+      </if>-->
     </where>
     order by sort,ca_id
   </select>
