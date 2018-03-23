@@ -122,8 +122,10 @@ public class ContractServiceImpl implements ContractService {
                 contractProductMapper.deleteByBatch(params);
             }
         }
-        //审批流程添加
+        //审批流程添加 如果审批人不是空，则需先删除之前保存的审批人的信息，然后再新增审批人信息
         if(null!=dto.getContractApprovalList() && dto.getContractApprovalList().size() > 0){
+            //删除之前保存的审批人信息
+            contractApprovalMapper.deleteByContractId(dto.getContractId());
             /*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
             ContractApproval contractApproval = new ContractApproval();
 //            Long companyId = SecurityInfoGetter.getCompanyId();
