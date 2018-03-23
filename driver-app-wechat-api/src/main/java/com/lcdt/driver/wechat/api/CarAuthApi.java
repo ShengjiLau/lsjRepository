@@ -49,6 +49,7 @@ public class CarAuthApi {
         driverVehicleAuth.setCreateId(user.getUserId());
         driverVehicleAuth.setUpdateDate(new Date());
         driverVehicleAuth.setUpdateId(user.getUserId());
+        driverVehicleAuth.setUpdateName(user.getRealName());
         DriverVehicleAuth driverVehicleAuth2 = carAuthService.updateVehicleAuth(driverVehicleAuth);
         return driverVehicleAuth2;
     }
