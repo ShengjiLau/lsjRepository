@@ -36,9 +36,7 @@ public class SalesContractApi {
     @ApiOperation(value = "合同列表", notes = "合同列表数据")
     @GetMapping("/contractlist")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_list')")
-    public PageBaseDto<List<Contract>> contractList(@Validated ContractDto contractDto,
-                                                    @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
-                                                    @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
+    public PageBaseDto<List<Contract>> contractList(@Validated ContractDto contractDto) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         contractDto.setCompanyId(companyId);
 
