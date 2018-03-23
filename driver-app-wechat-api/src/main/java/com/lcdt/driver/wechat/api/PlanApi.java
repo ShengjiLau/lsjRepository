@@ -66,34 +66,34 @@ public class PlanApi {
       return pageBaseDto;
    }
 
-   @ApiOperation("竞价--报价")
-   @RequestMapping(value = "/driver/driverOffer", method = RequestMethod.POST)
-   public JSONObject driverOffer(SnatchOfferDto dto) {
-      User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-      SnatchGoods snatchGoods = new SnatchGoods();
-      snatchGoods.setOfferId(loginUser.getUserId());
-      snatchGoods.setOfferName(loginUser.getRealName());
-      snatchGoods.setCreateId(loginUser.getUserId());
-      snatchGoods.setCreateName(loginUser.getRealName());
-      snatchGoods.setUpdateId(loginUser.getUserId());
-      snatchGoods.setUpdateName(loginUser.getRealName());
-      snatchGoods.setOfferPhone(loginUser.getPhone()); //抢单人电话
-     // snatchGoods.setCompanyId(companyId);
-      snatchGoods.setPlanCompanyId(dto.getCompanyId());//计划企业ID
-      int flag = iPlanRpcService4Wechat.driverOffer(dto,snatchGoods);
-      JSONObject jsonObject = new JSONObject();
-      String message = null;
-      int code = -1;
-      if (flag>0) {
-         code = 0;
-      } else {
-         message = "操作失败，请重试！";
-      }
-      jsonObject.put("message",message);
-      jsonObject.put("code",code);
-      return jsonObject;
-   }
+@ApiOperation("竞价--报价")
+@RequestMapping(value = "/driver/driverOffer", method = RequestMethod.POST)
+public JSONObject driverOffer(SnatchOfferDto dto) {
+        User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        SnatchGoods snatchGoods = new SnatchGoods();
+        snatchGoods.setOfferId(loginUser.getUserId());
+        snatchGoods.setOfferName(loginUser.getRealName());
+        snatchGoods.setCreateId(loginUser.getUserId());
+        snatchGoods.setCreateName(loginUser.getRealName());
+        snatchGoods.setUpdateId(loginUser.getUserId());
+        snatchGoods.setUpdateName(loginUser.getRealName());
+        snatchGoods.setOfferPhone(loginUser.getPhone()); //抢单人电话
+        // snatchGoods.setCompanyId(companyId);
+        snatchGoods.setPlanCompanyId(dto.getCompanyId());//计划企业ID
+        int flag = iPlanRpcService4Wechat.driverOffer(dto,snatchGoods);
+        JSONObject jsonObject = new JSONObject();
+        String message = null;
+        int code = -1;
+        if (flag>0) {
+        code = 0;
+        } else {
+        message = "操作失败，请重试！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject;
+        }
 
 
 
-}
+        }

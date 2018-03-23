@@ -2,6 +2,7 @@ package com.lcdt.traffic.rpc.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSONArray;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.*;
@@ -266,7 +267,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         snatchGoods.setIsUsing(ConstantVO.SNATCH_GOODS_USING_DOING);
         int flag1 = 1,flag2 =1 ;
         flag1 = snatchGoodsMapper.insert(snatchGoods);
-        List<PlanDetail> list = dto.getPlanDetailList();
+        List<PlanDetail> list = JSONArray.parseArray(dto.getPlanDetailStr(), PlanDetail.class);
         if (null != list  && list.size()>0) {
             List<SnatchGoodsDetail> snatchList = new ArrayList<SnatchGoodsDetail>();
             for (PlanDetail obj :list) {
