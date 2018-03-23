@@ -61,8 +61,12 @@ public interface ConditionQueryMapper {
      */
     int deleteOrderProducByBatch(List<Long> orderProductIdList);
     
-    
-    
+    /**
+     * 通过订单id删除订单商品
+     * @param orderId
+     * @return int
+     */
+    int deleteOrderProductByOrderId(Long orderId);
     
 
 }
