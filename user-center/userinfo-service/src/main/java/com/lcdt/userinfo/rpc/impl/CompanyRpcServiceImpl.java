@@ -40,5 +40,10 @@ public class CompanyRpcServiceImpl implements CompanyRpcService {
         return userMapper.queryByUserPhone(phone);
     }
 
+    @Override
+    public User selectByPrimaryKey(Long userId) {
+        return userMapper.selectByPrimaryKey(userId);
+    }
+
 
 }

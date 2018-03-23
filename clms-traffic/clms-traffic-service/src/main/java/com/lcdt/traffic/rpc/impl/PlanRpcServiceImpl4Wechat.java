@@ -13,6 +13,7 @@ import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -146,6 +147,8 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                 Long companyId = obj1.getCompanyId();
                 Company company =  companyRpcService.findCompanyByCid(companyId);
                 if(company!=null) obj1.setCompanyName(company.getFullName());
+                User user =  companyRpcService.selectByPrimaryKey(obj1.getUserId()); //查询创建用户
+                if(user!=null) obj1.setOwnPhone(user.getPhone());
                 obj1.setStatus("待抢单");
             }
             pageInfo = new PageInfo(snatchBill4WaittingRdtos);
@@ -194,6 +197,8 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                 Long companyId = obj.getCompanyId();
                 Company company =  companyRpcService.findCompanyByCid(companyId);
                 if(company!=null) obj.setCompanyName(company.getFullName());
+                User user =  companyRpcService.selectByPrimaryKey(obj.getUserId()); //查询创建用户
+                if(user!=null) obj.setOwnPhone(user.getPhone());
                 if(obj.getPlanStatus().equals("60"))  {
                     obj.setStatus("计划取消");
                 } else {

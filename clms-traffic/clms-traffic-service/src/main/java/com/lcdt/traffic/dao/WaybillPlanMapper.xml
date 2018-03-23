@@ -1089,6 +1089,7 @@
     <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
     <result column="arrive_date" jdbcType="TIMESTAMP" property="arriveDate" />
     <result column="serial_code" jdbcType="VARCHAR" property="serialCode" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
 
     <!--计划详细-->
     <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id}"
@@ -1103,7 +1104,7 @@
 -->
   <select id="wattingSnatch4Driver" parameterType="java.util.Map" resultMap="snatchBill4WaittingMap">
     select waybill_plan_id,send_province,send_city,send_county,send_address,receive_province,receive_city,receive_county,receive_address,start_date,
-           arrive_date,company_id,plan_status,transport_way,send_man,send_phone,receive_man,receive_phone,plan_remark,serial_code
+           arrive_date,company_id,plan_status,transport_way,send_man,send_phone,receive_man,receive_phone,plan_remark,serial_code,create_id
     from t_waybill_plan p1
     <where>
       and p1.send_order_type='2'
@@ -1127,7 +1128,7 @@
   -->
   <select id="completeSnatch4Driver" parameterType="java.util.Map" resultMap="snatchBill4WaittingMap">
     select waybill_plan_id,send_province,send_city,send_county,send_address,receive_province,receive_city,receive_county,receive_address,start_date,
-    arrive_date,company_id,plan_status,transport_way,send_man,send_phone,receive_man,receive_phone,plan_remark,serial_code
+    arrive_date,company_id,plan_status,transport_way,send_man,send_phone,receive_man,receive_phone,plan_remark,serial_code,create_id
     from t_waybill_plan p1
     <where>
       and p1.send_order_type='2'

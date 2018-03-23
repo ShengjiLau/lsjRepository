@@ -32,4 +32,12 @@ public interface CompanyRpcService {
      */
     User findUserByPhone(String phone);
 
+
+    /***
+     * 根据用户ID获取用户信息
+     * @param userId
+     * @return
+     */
+    User selectByPrimaryKey(Long userId);
+
 }
