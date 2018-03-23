@@ -23,6 +23,13 @@ public interface IndexOverviewService {
     Map queryOwnWaybillStatistics(Map map);
 
     /**
+     * 运单统计
+     * @param map
+     * @return
+     */
+    Map queryCustomerWaybillStatistics(Map map);
+
+    /**
      * 运输总概览
      * @param companyId
      * @return

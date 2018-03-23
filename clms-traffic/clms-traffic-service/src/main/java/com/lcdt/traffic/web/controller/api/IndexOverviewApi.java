@@ -83,7 +83,6 @@ public class IndexOverviewApi {
             sb.append(" find_in_set('"+ids+"',group_id)"); //项目组id
         } else {
             //没传组，查这个用户所有组帮定的客户
-
             List<Group> groupList = SecurityInfoGetter.groups();
             if(groupList!=null&&groupList.size()>0){
                 sb.append("(");
@@ -98,9 +97,53 @@ public class IndexOverviewApi {
             }
 
         }
+        map.put("groupIds",sb.toString());
         JSONObject jsonObject = new JSONObject();
         try {
             Map<String, Object> resultMap = indexOverviewService.queryOwnWaybillStatistics(map);
+
+            JSONObject jsonResult = new JSONObject(resultMap);
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "查询成功");
+            jsonObject.put("data", jsonResult);
+        } catch (Exception e) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", new RuntimeException(e));
+        }
+        return jsonObject;
+    }
+
+    @ApiOperation(value = "客户运单统计", notes = "运输首页概览-运单统计")
+    @GetMapping("/customer/waybill")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
+    public JSONObject customerWaybillOverview(@RequestParam String param) {
+        Long companyId = SecurityInfoGetter.getCompanyId();      //  获取companyId
+        Map map = (Map) JSON.parseObject(param);
+        String ids = map.get("groupIds") != null && map.get("groupIds") != "" ? map.get("groupIds").toString() : "";
+        map.put("companyId", companyId);
+        StringBuffer sb = new StringBuffer();
+        if (ids!=null&&!ids.equals("")){//传业务组，查这个组帮定的客户
+            sb.append(" find_in_set('"+ids+"',group_ids)"); //客户表
+        } else {
+            //没传组，查这个用户所有组帮定的客户
+            List<Group> groupList = SecurityInfoGetter.groups();
+            if(groupList!=null&&groupList.size()>0){
+                sb.append("(");
+                for(int i=0;i<groupList.size();i++) {
+                    Group group = groupList.get(i);
+                    sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)"); //客户表
+                    if(i!=groupList.size()-1){
+                        sb.append(" or ");
+                    }
+                }
+                sb.append(")");
+            }
+
+        }
+        map.put("groupIds",sb.toString());
+        JSONObject jsonObject = new JSONObject();
+        try {
+            Map<String, Object> resultMap = indexOverviewService.queryCustomerWaybillStatistics(map);
 
             JSONObject jsonResult = new JSONObject(resultMap);
             jsonObject.put("code", 0);
