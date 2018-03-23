@@ -108,7 +108,7 @@
       #{approvalEndDate,jdbcType=TIMESTAMP}, #{groupId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, 
       #{createUserId,jdbcType=BIGINT}, #{orderSerialNo,jdbcType=VARCHAR},#{receiveTime,jdbcType=TIMESTAMP},
       #{approvalProcess,jdbcType=VARCHAR},#{supplierId,jdbcType=BIGINT},#{isDraft,jdbcType=SMALLINT},
-      #{receiveRequire,,attachment1_name,attachment1},#{summation,jdbcType=DECIMAL},#{warehouseId,jdbcType=BIGINT},
+      #{receiveRequire,jdbcType=VARCHAR},#{summation,jdbcType=DECIMAL},#{warehouseId,jdbcType=BIGINT},
       #{attachment1Name,jdbcType=VARCHAR}),#{attachment1,jdbcType=VARCHAR}),
       #{attachment2Name,jdbcType=VARCHAR}),#{attachment2,jdbcType=VARCHAR}),
       #{attachment3Name,jdbcType=VARCHAR}),#{attachment3,jdbcType=VARCHAR}),
