@@ -53,9 +53,6 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="采购收货仓库id/销售发货仓库id")
 	private Long warehouseId;
 
-	@ApiModelProperty(value="附件url")
-    private String fileUrl;
-
 	@ApiModelProperty(value="采购收货联系人/销售发货联系人")
     private String sender;
 
@@ -152,6 +149,35 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="商品合计总金额")
 	private BigDecimal summation;
 	
+	@ApiModelProperty(value="附件1名称")
+	private String attachment1Name;
+	
+	@ApiModelProperty(value="附件1地址")
+	private String attachment1;
+	
+	@ApiModelProperty(value="附件2名称")
+	private String attachment2Name;
+	
+	@ApiModelProperty(value="附件2地址")
+	private String attachment2;
+	
+	@ApiModelProperty(value="附件3名称")
+	private String attachment3Name;
+	
+	@ApiModelProperty(value="附件3地址")
+	private String attachment3;
+	
+	@ApiModelProperty(value="附件4名称")
+	private String attachment4Name;
+	
+	@ApiModelProperty(value="附件4地址")
+	private String attachment4;
+	
+	@ApiModelProperty(value="附件5名称")
+	private String attachment5Name;
+	
+	@ApiModelProperty(value="附件5地址")
+	private String attachment5;
 	
     private static final long serialVersionUID = 13333L;
 
@@ -240,14 +266,6 @@ public class Order implements Serializable {
 
     public void setReceiveWarehouse(String receiveWarehouse) {
         this.receiveWarehouse = receiveWarehouse == null ? null : receiveWarehouse.trim();
-    }
-
-    public String getFileUrl() {
-        return fileUrl;
-    }
-
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl == null ? null : fileUrl.trim();
     }
 
     public String getSender() {
@@ -782,6 +800,106 @@ public class Order implements Serializable {
 
 	public void setWarehouseId(Long warehouseId) {
 		this.warehouseId = warehouseId;
+	}
+
+
+	public String getAttachment1Name() {
+		return attachment1Name;
+	}
+
+
+	public void setAttachment1Name(String attachment1Name) {
+		this.attachment1Name = attachment1Name;
+	}
+
+
+	public String getAttachment1() {
+		return attachment1;
+	}
+
+
+	public void setAttachment1(String attachment1) {
+		this.attachment1 = attachment1;
+	}
+
+
+	public String getAttachment2Name() {
+		return attachment2Name;
+	}
+
+
+	public void setAttachment2Name(String attachment2Name) {
+		this.attachment2Name = attachment2Name;
+	}
+
+
+	public String getAttachment2() {
+		return attachment2;
+	}
+
+
+	public void setAttachment2(String attachment2) {
+		this.attachment2 = attachment2;
+	}
+
+
+	public String getAttachment3Name() {
+		return attachment3Name;
+	}
+
+
+	public void setAttachment3Name(String attachment3Name) {
+		this.attachment3Name = attachment3Name;
+	}
+
+
+	public String getAttachment3() {
+		return attachment3;
+	}
+
+
+	public void setAttachment3(String attachment3) {
+		this.attachment3 = attachment3;
+	}
+
+
+	public String getAttachment4Name() {
+		return attachment4Name;
+	}
+
+
+	public void setAttachment4Name(String attachment4Name) {
+		this.attachment4Name = attachment4Name;
+	}
+
+
+	public String getAttachment4() {
+		return attachment4;
+	}
+
+
+	public void setAttachment4(String attachment4) {
+		this.attachment4 = attachment4;
+	}
+
+
+	public String getAttachment5Name() {
+		return attachment5Name;
+	}
+
+
+	public void setAttachment5Name(String attachment5Name) {
+		this.attachment5Name = attachment5Name;
+	}
+
+
+	public String getAttachment5() {
+		return attachment5;
+	}
+
+
+	public void setAttachment5(String attachment5) {
+		this.attachment5 = attachment5;
 	}
 
  
