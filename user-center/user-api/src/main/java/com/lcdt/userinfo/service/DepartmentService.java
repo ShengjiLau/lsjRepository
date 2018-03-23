@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.userinfo.dto.DepartmentResultDto;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.model.Department;
 import com.lcdt.userinfo.model.UserCompRel;
@@ -60,6 +61,14 @@ public interface DepartmentService {
 
     String getIdsNames(String departIds);
 
+
+    /***
+     * 统计部门及子节点数
+     * @param deptPid
+     * @param companyId
+     * @return
+     */
+    List<DepartmentResultDto> deptChildStat(Long deptPid, Long companyId);
 
 
 

@@ -3,6 +3,7 @@ package com.lcdt.userinfo.web.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.userinfo.dto.DepartmentResultDto;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.model.Department;
 import com.lcdt.userinfo.model.User;
@@ -149,7 +150,6 @@ public class DepartmentApi {
         jsonObject.put("message",message);
         jsonObject.put("code",code);
         return jsonObject.toString();
-
     }
 
     /**
@@ -226,6 +226,25 @@ public class DepartmentApi {
             return null;
         }
         return childList;
+    }
+
+
+    /**
+     * 统计部门及部门下面的子节点
+     *
+     * @return
+     */
+    @ApiOperation("统计部门及部门下面的子节点")
+    @RequestMapping(value = "/deptChildStat",method = RequestMethod.GET)
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('dept_remove')")
+    public String deptChildStat(@ApiParam(value = "部门ID", required = true) @RequestParam Long deptId) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        List<DepartmentResultDto> departmentResultDtoList = departmentService.deptChildStat(deptId,companyId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("data",departmentResultDtoList);
+        jsonObject.put("message","");
+        jsonObject.put("code",0);
+        return jsonObject.toString();
     }
 
 

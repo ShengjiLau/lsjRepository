@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dao.DepartmentMapper;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
+import com.lcdt.userinfo.dto.DepartmentResultDto;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.model.Department;
 import com.lcdt.userinfo.model.UserCompRel;
@@ -169,6 +170,22 @@ public class DepartmentServiceImpl implements DepartmentService {
 		int i = sb.lastIndexOf(",");
 		sb.deleteCharAt(i);
 		return sb.toString();
+	}
+
+	@Transactional(readOnly = true)
+	@Override
+	public List<DepartmentResultDto> deptChildStat(Long deptPid, Long companyId) {
+		List<DepartmentResultDto> departmentResultDtoList = departmentMapper.deptChildStat(deptPid,companyId);
+		if (departmentResultDtoList!=null && departmentResultDtoList.size()>0) {
+			for (DepartmentResultDto obj :departmentResultDtoList) {
+				String[] ids = obj.getChildIds().split(",");
+				if (null!=ids && ids.length>0) {
+					if(ids.length<=2) obj.setChildCount(0);
+					if(ids.length>2) obj.setChildCount(ids.length-2); //减2是因为返回来的数包含了自身及$;
+				}
+			}
+		}
+		return departmentResultDtoList;
 	}
 
 }

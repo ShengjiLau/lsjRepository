@@ -138,4 +138,21 @@
       </if>
     </trim>
   </select>
+
+
+  <!--统计部门及对应的子部门数-->
+  <resultMap id="BaseResultMap2" type="com.lcdt.userinfo.dto.DepartmentResultDto">
+    <id column="dept_id" jdbcType="BIGINT" property="deptId" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="childIds" jdbcType="VARCHAR" property="childIds" />
+  </resultMap>
+
+  <select id="deptChildStat" resultMap="BaseResultMap2">
+    select t1.dept_id,t1.dept_name,F_STAT_DEPT_CHILD_COUNT(t1.dept_id) as childIds FROM t_department t1
+    where  t1.dept_pid = #{deptPid,jdbcType=BIGINT} AND company_id = #{companyId,jdbcType=BIGINT}
+  </select>
+
+
+
+
 </mapper>
