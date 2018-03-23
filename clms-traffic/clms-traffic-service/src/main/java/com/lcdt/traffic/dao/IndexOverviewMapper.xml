@@ -68,7 +68,7 @@
             <if test="planType==1">
                 and carrier_company_id!=company_id
             </if>
-            group by pub_date
+            group by DATE(pub_date)
         ) t1 on t.dt= t1.pub_date
         WHERE
         1 = 1
