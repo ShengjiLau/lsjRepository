@@ -1,8 +1,11 @@
 package com.lcdt.userinfo.model;
 
+import com.lcdt.converter.ResponseData;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class DriverVehicleAuth {
+public class DriverVehicleAuth implements Serializable,ResponseData {
     private Long authId;
 
     private Long driverId;

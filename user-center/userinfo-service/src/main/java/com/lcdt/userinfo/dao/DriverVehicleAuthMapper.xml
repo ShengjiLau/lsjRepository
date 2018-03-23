@@ -46,7 +46,7 @@
       #{vehicleDrivingPhoto,jdbcType=VARCHAR}, #{vehicleOperatingPhoto,jdbcType=VARCHAR}, 
       #{vehicleTrailersOperatingPhoto,jdbcType=VARCHAR}, #{isDefault,jdbcType=BIT}, #{createName,jdbcType=VARCHAR}, 
       #{createDate,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT}, #{updateId,jdbcType=BIGINT}, 
-      #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
+      #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 0
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.DriverVehicleAuth">
@@ -98,6 +98,15 @@
     from t_driver_vehicle_auth
     where  driver_id = #{driverId,jdbcType=BIGINT}
 
+  </select>
+
+  <select id="selectVehicleNumExist" parameterType="com.lcdt.userinfo.model.DriverVehicleAuth" resultMap="BaseResultMap">
+    select auth_id, driver_id, vehicle_num, vehicle_trailers_num, vehicle_type, vehicle_load,
+    vehicle_length, auth_status, vehicle_photo, vehicle_trailers_photo, vehicle_driving_photo,
+    vehicle_operating_photo, vehicle_trailers_operating_photo, is_default, create_name,
+    create_date, create_id, update_id, update_name, update_date, is_deleted
+    from t_driver_vehicle_auth
+    where  driver_id = #{driverId,jdbcType=BIGINT} and vehicle_num = #{vehicleNum,jdbcType=VARCHAR} and is_deleted=0
   </select>
 
 </mapper>
