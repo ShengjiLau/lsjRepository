@@ -20,6 +20,9 @@ public class CarAuthServiceImpl implements CarAuthService{
     @Override
     public DriverVehicleAuth addVehicleAuth(DriverVehicleAuth auth) {
         auth.setAuthStatus("0");
+        if(isVehicleNumExist(auth)!=-1){
+            throw new RuntimeException("车牌号已存在!");
+        }
         dao.insert(auth);
         return auth;
     }
@@ -46,9 +49,30 @@ public class CarAuthServiceImpl implements CarAuthService{
 
     @Override
     public DriverVehicleAuth updateVehicleAuth(DriverVehicleAuth auth) {
+        if(isVehicleNumExist(auth)==1){
+            throw new RuntimeException("车牌号已存在");
+        }
         dao.updateByPrimaryKey(auth);
         return auth;
     }
 
+    /**
+     * 根据 driverId 和 vehicleNum 判断这个 司机id 下车辆是否已存在，（-1；已存在、0：和原来相同没改变、1：单位名称被使用)
+     * @param auth
+     * @return
+     */
+    private int isVehicleNumExist(DriverVehicleAuth auth){
+        List<DriverVehicleAuth> list=dao.selectVehicleNumExist(auth);
+        if(list!=null&&list.size()>0){
+            //判断车牌号是否是自己
+            if((auth.getVehicleNum()!=null&&auth.getVehicleNum().equals(list.get(0).getVehicleNum()))&&(auth.getAuthId()!=null&&auth.getAuthId().equals(list.get(0).getAuthId()))){
+                return 0;
+            }else {
+                return 1;
+            }
+        }else {
+            return -1;
+        }
+    }
 
 }

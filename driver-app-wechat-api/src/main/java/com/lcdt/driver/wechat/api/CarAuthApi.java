@@ -36,6 +36,7 @@ public class CarAuthApi {
         BeanUtils.copyProperties(addDriverVehicleAuthDto,driverVehicleAuth);
         driverVehicleAuth.setCreateDate(new Date());
         driverVehicleAuth.setCreateId(user.getUserId());
+        driverVehicleAuth.setDriverId(user.getUserId());
         DriverVehicleAuth driverVehicleAuth1 = carAuthService.addVehicleAuth(driverVehicleAuth);
         return driverVehicleAuth1;
     }
