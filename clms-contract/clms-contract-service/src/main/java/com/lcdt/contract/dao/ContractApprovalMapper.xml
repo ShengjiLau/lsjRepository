@@ -174,5 +174,8 @@
     from t_contract_approval
     where contract_id = #{arg0} and action_type = 0 and status != 5 order by sort
   </select>
+  <delete id="deleteByContractId" parameterType="java.lang.Long">
+    delete from t_contract_approval
+    where contract_id = #{arg0}
+  </delete>
 </mapper>
-
