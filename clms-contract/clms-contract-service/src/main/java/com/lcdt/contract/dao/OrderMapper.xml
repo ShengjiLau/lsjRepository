@@ -62,7 +62,7 @@
     send_district sendDistrict, send_address sendAddress, send_time sendTime, pack_require packRequire, receiver, receiver_phone receiverPhone, receiver_province receiverProvince, 
     receiver_city receiverCity, receive_district receiveDistrict, receive_address receiveAddress, remarks, create_time createTime, group_id groupId,company_id companyId,
     receive_time receiveTime,approval_start_date approvalStartDate,approval_end_date approvalEndDate,create_user_id createUserId,order_serial_no orderSerialNo,
-    approval_status approvalStatus,approval_process approvalProcess,supplier_id supplierId,is_draft isDraft,receive_require receiveRequire,summation,warehouse_id 
+    approval_status approvalStatus,approval_process approvalProcess,supplier_id supplierId,is_draft isDraft,receive_require receiveRequire,summation,warehouse_id warehouseId
     from t_order
     where order_id = #{orderId,jdbcType=BIGINT}
   </select>
