@@ -50,6 +50,10 @@ public class SnatchBill4WaittingRdto implements java.io.Serializable {
     private String planStatus;
     private String planRemark;
 
+
+
+    private String transportWay;
+
     //抢单总价
     private float snatchTotalPrice;
 
@@ -249,4 +253,13 @@ public class SnatchBill4WaittingRdto implements java.io.Serializable {
     public void setSnatchTotalPrice(float snatchTotalPrice) {
         this.snatchTotalPrice = snatchTotalPrice;
     }
+
+    public String getTransportWay() {
+        return transportWay;
+    }
+
+    public void setTransportWay(String transportWay) {
+        this.transportWay = transportWay;
+    }
+
 }
