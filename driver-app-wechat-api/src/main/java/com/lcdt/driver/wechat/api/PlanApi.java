@@ -68,7 +68,7 @@ public class PlanApi {
 
    @ApiOperation("竞价--报价")
    @RequestMapping(value = "/driver/driverOffer", method = RequestMethod.POST)
-   public JSONObject driverOffer(@RequestBody SnatchOfferDto dto) {
+   public JSONObject driverOffer(SnatchOfferDto dto) {
       User loginUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
       SnatchGoods snatchGoods = new SnatchGoods();
       snatchGoods.setOfferId(loginUser.getUserId());

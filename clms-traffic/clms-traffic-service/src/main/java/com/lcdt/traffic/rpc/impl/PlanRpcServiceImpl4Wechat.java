@@ -147,7 +147,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                 Long companyId = obj1.getCompanyId();
                 Company company =  companyRpcService.findCompanyByCid(companyId);
                 if(company!=null) obj1.setCompanyName(company.getFullName());
-                User user =  companyRpcService.selectByPrimaryKey(obj1.getUserId()); //查询创建用户
+                User user =  companyRpcService.selectByPrimaryKey(obj1.getCreateId()); //查询创建用户
                 if(user!=null) obj1.setOwnPhone(user.getPhone());
                 obj1.setStatus("待抢单");
             }
@@ -197,7 +197,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                 Long companyId = obj.getCompanyId();
                 Company company =  companyRpcService.findCompanyByCid(companyId);
                 if(company!=null) obj.setCompanyName(company.getFullName());
-                User user =  companyRpcService.selectByPrimaryKey(obj.getUserId()); //查询创建用户
+                User user =  companyRpcService.selectByPrimaryKey(obj.getCreateId()); //查询创建用户
                 if(user!=null) obj.setOwnPhone(user.getPhone());
                 if(obj.getPlanStatus().equals("60"))  {
                     obj.setStatus("计划取消");
