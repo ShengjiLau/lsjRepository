@@ -31,5 +31,12 @@ public interface ContractApprovalMapper {
 
     List<ContractApproval> selectByContractId(Long contractId);
 
+    /**
+     * 根据合同主键删除审批人记录
+     * @param contract_id
+     * @return
+     */
+    int deleteByContractId(Long contract_id);
+
     
 }
