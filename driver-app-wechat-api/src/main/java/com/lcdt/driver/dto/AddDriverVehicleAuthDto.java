@@ -4,8 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class AddDriverVehicleAuthDto {
 
-    private Boolean isDefault;
-
+    private boolean isDefault;
 
     private String vehicleNum;
 
@@ -29,12 +28,12 @@ public class AddDriverVehicleAuthDto {
     @ApiModelProperty(value = "挂车营运证")
     private String vehicleTrailersOperatingPhoto;
 
-    public Boolean getDefault() {
+    public boolean getIsDefault(){
         return isDefault;
     }
 
-    public void setDefault(Boolean aDefault) {
-        isDefault = aDefault;
+    public void setIsDefault(boolean isDefault){
+        this.isDefault=isDefault;
     }
 
     public String getVehicleNum() {
