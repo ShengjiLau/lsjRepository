@@ -149,9 +149,6 @@
       <if test="receiveWarehouse != null">
         receive_warehouse,
       </if>
-      <if test="fileUrl != null">
-        file_url,
-      </if>
       <if test="sender != null">
         sender,
       </if>
@@ -267,9 +264,6 @@
       </if>
       <if test="receiveWarehouse != null">
         #{receiveWarehouse,jdbcType=VARCHAR},
-      </if>
-      <if test="fileUrl != null">
-        #{fileUrl,jdbcType=VARCHAR},
       </if>
       <if test="sender != null">
         #{sender,jdbcType=VARCHAR},
@@ -390,9 +384,6 @@
       </if>
       <if test="receiveWarehouse != null">
         receive_warehouse = #{receiveWarehouse,jdbcType=VARCHAR},
-      </if>
-      <if test="fileUrl != null">
-        file_url = #{fileUrl,jdbcType=VARCHAR},
       </if>
       <if test="sender != null">
         sender = #{sender,jdbcType=VARCHAR},

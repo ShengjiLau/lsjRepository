@@ -33,7 +33,6 @@ import com.lcdt.contract.web.dto.OrderDto;
 @Transactional
 public class OrderServiceImpl implements OrderService{
 	
-	
 	@Autowired
 	OrderMapper orderMapper;
 	
@@ -49,7 +48,7 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public int addOrder(OrderDto orderDto) {
 		BigDecimal aTotal =new 	BigDecimal(0);// aTotal为所有商品总价格
-		if(orderDto.getOrderProductList()!=null&&orderDto.getOrderProductList().size()!=0){
+		if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0){
 			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
 				BigDecimal num = orderProduct.getNum();
 				BigDecimal price=orderProduct.getPrice();
@@ -63,7 +62,7 @@ public class OrderServiceImpl implements OrderService{
 		BeanUtils.copyProperties(orderDto,order);
 		order.setSummation(aTotal);
 		int result=orderMapper.insertOrder(order);
-		if(orderDto.getOrderProductList()!=null&&orderDto.getOrderProductList().size()!=0){
+		if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0){
 			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
 				//为每个商品添加OrderId
 				orderProduct.setOrderId(order.getOrderId());
@@ -78,7 +77,7 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public int modOrder(OrderDto orderDto) {
 		BigDecimal aTotal =new 	BigDecimal(0);
-		if(orderDto.getOrderProductList()!=null&&orderDto.getOrderProductList().size()!=0){
+		if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0){
 			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
 				BigDecimal num = orderProduct.getNum();
 				BigDecimal price=orderProduct.getPrice();
@@ -96,14 +95,14 @@ public class OrderServiceImpl implements OrderService{
 		List<Long> orderProductIdList=nonautomaticMapper.selectOrderProductIdByOrderId(order.getOrderId());
 		List<OrderProduct> list1=new ArrayList<OrderProduct>();
 		List<OrderProduct> list2=new ArrayList<OrderProduct>();
-		if(orderDto.getOrderProductList()!=null&&orderDto.getOrderProductList().size()!=0) {
+		if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0) {
 			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
-				if(orderProduct.getOpId()==null) {
+				if(null!=orderProduct.getOpId()) {
 					orderProduct.setOrderId(orderDto.getOrderId());
 					list1.add(orderProduct);
 				}else {
 					list2.add(orderProduct);
-					if(orderProductIdList!=null&&orderProductIdList.size()!=0) {
+					if(null!=orderProductIdList&&orderProductIdList.size()!=0) {
 						 Iterator<Long> it = orderProductIdList.iterator();
 						 while(it.hasNext()) {
 							 if(it.next()==orderProduct.getOpId()) {
@@ -149,15 +148,15 @@ public class OrderServiceImpl implements OrderService{
 			orderDto.setPageNum(1);
 		}
 		if(orderDto.getPageSize()<=0) {
-			orderDto.setPageSize(0);//设置为0是全部查询
+			orderDto.setPageSize(0);//设置为0是查询全部
 		}	
 		PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());//分页
 		List<OrderDto> orderDtoList= nonautomaticMapper.selectByCondition(orderDto);
-		if(orderDtoList!=null&&orderDtoList.size()!=0) {
+		if(null!=orderDtoList&&orderDtoList.size()!=0) {
 			for(OrderDto order:orderDtoList) {
 				//获取订单商品
 				List<OrderProduct> orderProductList=orderProductMapper.getOrderProductByOrderId(order.getOrderId());
-				if(orderProductList!=null&&orderProductList.size()!=0) {
+				if(null!=orderProductList&&orderProductList.size()!=0) {
 					order.setOrderProductList(orderProductList);
 				}
 			}   
@@ -170,12 +169,16 @@ public class OrderServiceImpl implements OrderService{
 	@Override
 	public OrderDto selectByPrimaryKey(Long orderId) {
 		OrderDto orderDto=orderMapper.selectByPrimaryKey(orderId);
-		logger.debug(orderDto.getCreateTime().toString());
-		//获取订单下商品
-		List<OrderProduct> orderProductList=orderProductMapper.getOrderProductByOrderId(orderDto.getOrderId());
-		if(orderProductList!=null&&orderProductList.size()!=0) {
-			orderDto.setOrderProductList(orderProductList);
-		}
+		if(null!=orderDto) {
+			logger.debug("订单id为"+orderDto.getOrderId());
+			//获取订单下商品
+			List<OrderProduct> orderProductList=orderProductMapper.getOrderProductByOrderId(orderDto.getOrderId());
+			if(null!=orderProductList&&orderProductList.size()!=0) {
+				orderDto.setOrderProductList(orderProductList);
+			}
+		}	
+		
+		
 		return orderDto;
 	}
 
