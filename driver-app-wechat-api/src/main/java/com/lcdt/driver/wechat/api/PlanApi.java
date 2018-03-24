@@ -2,7 +2,6 @@ package com.lcdt.driver.wechat.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.driver.dto.PageBaseDto;
 import com.lcdt.traffic.dto.OwnCompany4SnatchRdto;
 import com.lcdt.traffic.dto.SnatchOfferDto;
@@ -12,7 +11,6 @@ import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -86,8 +84,9 @@ public JSONObject driverOffer(SnatchOfferDto dto) {
         int code = -1;
         if (flag>0) {
         code = 0;
+            message = "抢单成功！";
         } else {
-        message = "操作失败，请重试！";
+            message = "操作失败，请重试！";
         }
         jsonObject.put("message",message);
         jsonObject.put("code",code);
