@@ -22,28 +22,28 @@ public interface IndexOverviewMapper {
 
 
     /**
-     * 运单统计
+     * 我的运单统计
      * @param map
      * @return
      */
     Map<String,Object> selectOwnWaybill(Map map);
 
     /**
-     * 运单统计详情数据
+     * 我的运单统计详情数据
      * @param map
      * @return
      */
     List<Map<String,Object>> selectOwnWaybillData(Map map);
 
     /**
-     * 运单统计
+     * 客户运单统计
      * @param map
      * @return
      */
     Map<String,Object> selectCustomerWaybill(Map map);
 
     /**
-     * 运单统计详情数据
+     * 客户运单统计详情数据
      * @param map
      * @return
      */

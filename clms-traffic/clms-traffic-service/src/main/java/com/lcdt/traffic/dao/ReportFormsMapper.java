@@ -26,14 +26,27 @@ public interface ReportFormsMapper {
      * @param map
      * @return
      */
-    Map<String,Object> selectWaybill(Map map);
+    Map<String,Object> selectOwnWaybill(Map map);
 
     /**
      * 运单统计详情数据
      * @param map
      * @return
      */
-    List<Map<String,Object>> selectWaybillData(Map map);
+    List<Map<String,Object>> selectOwnWaybillData(Map map);
+/**
+     * 运单统计
+     * @param map
+     * @return
+     */
+    Map<String,Object> selectCustomerWaybill(Map map);
+
+    /**
+     * 运单统计详情数据
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> selectCustomerWaybillData(Map map);
 
     /**
      * 执行中的计划和在途运单统计

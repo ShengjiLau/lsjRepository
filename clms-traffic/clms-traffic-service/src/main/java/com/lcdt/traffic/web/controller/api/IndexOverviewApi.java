@@ -63,15 +63,8 @@ public class IndexOverviewApi {
         return jsonObject;
     }
 
-
-
-
-
-
-
-
     @ApiOperation(value = "运单统计", notes = "运输首页概览-运单统计")
-    @GetMapping("/waybill")
+    @GetMapping("/own/waybill")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
     public JSONObject waybillOverview(@RequestParam String param) {
         Long companyId = SecurityInfoGetter.getCompanyId();      //  获取companyId
