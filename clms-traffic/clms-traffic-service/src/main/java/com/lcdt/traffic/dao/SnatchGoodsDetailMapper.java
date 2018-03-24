@@ -61,8 +61,8 @@ public interface SnatchGoodsDetailMapper {
     /***
      * 司机抢单统计报价
      * @param waybillPlanId
-     * @param planCompanyId
+     * @param offerId
      * @return
      */
-    float statSnatchTotalPrice4Driver(@Param("waybillPlanId") Long waybillPlanId, @Param("planCompanyId") long planCompanyId);
+    float statSnatchTotalPrice4Driver(@Param("waybillPlanId") Long waybillPlanId, @Param("offerId") long offerId);
 }

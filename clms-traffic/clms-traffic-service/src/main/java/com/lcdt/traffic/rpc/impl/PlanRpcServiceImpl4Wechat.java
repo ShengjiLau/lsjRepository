@@ -239,7 +239,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                 }
 
                 //统计总报价
-                float offerPrice = snatchGoodsDetailMapper.statSnatchTotalPrice4Driver(obj.getWaybillPlanId(),obj.getCompanyId());
+                float offerPrice = snatchGoodsDetailMapper.statSnatchTotalPrice4Driver(obj.getWaybillPlanId(),dto.getDriverId());
                 obj.setSnatchTotalPrice(offerPrice);
             }
             pageInfo = new PageInfo(snatchBill4WaittingRdtos);
