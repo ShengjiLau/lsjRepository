@@ -189,7 +189,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         map.put("orderFiled",orderField);
         map.put("carrierDriverGroupIds",driverGroupIds);
         map.put("ownCompanyIds",ownCompanyIds);
-
+        map.put("offerId",dto.getDriverId());
         PageHelper.startPage(pageNo, pageSize);
         List<SnatchBill4WaittingRdto> snatchBill4WaittingRdtos = waybillPlanMapper.completeSnatch4Driver(map);
         if (snatchBill4WaittingRdtos!=null && snatchBill4WaittingRdtos.size()>0) {
