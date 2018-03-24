@@ -5,15 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.quartz.rpc.QuartzRpc;
+import com.lcdt.traffic.dto.WaybillCustListParamsDto;
+import com.lcdt.traffic.dto.WaybillOwnListParamsDto;
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.service.WaybillRpcService;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.GroupIdsUtil;
 import com.lcdt.traffic.web.dto.PageBaseDto;
-import com.lcdt.traffic.web.dto.WaybillCustListParamsDto;
 import com.lcdt.traffic.web.dto.WaybillDto;
-import com.lcdt.traffic.web.dto.WaybillOwnListParamsDto;
-import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.util.ClmsBeanUtil;
 import io.swagger.annotations.Api;
@@ -145,20 +144,14 @@ public class WaybillApi {
     @ApiOperation("我的运单--列表")
     @RequestMapping(value = "/own/list", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybill_list')")
-    public PageBaseDto<List<Waybill>> ownWaybillList(WaybillOwnListParamsDto dto,
-                                                     @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
-                                                     @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
+    public PageBaseDto<List<Waybill>> ownWaybillList(WaybillOwnListParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         StringBuffer sb = new StringBuffer();
-        Map map= ClmsBeanUtil.beanToMap(dto);
-
-        map.put("companyId",companyId);
-        map.put("pageNo",pageNo);
-        map.put("pageSize",pageSize);
-        map.put("isDeleted",0);
-        map.put("groupIds",GroupIdsUtil.getOwnGroupIds(dto.getGroupId()));
-        PageInfo<List<Waybill>> listPageInfo = waybillRpcService.queryOwnWaybillList(map);
+        dto.setCompanyId(companyId);
+        dto.setIsDelete((short)0);
+        dto.setGroupIds(GroupIdsUtil.getOwnGroupIds(dto.getGroupId()));
+        PageInfo<List<Waybill>> listPageInfo = waybillRpcService.queryOwnWaybillList(dto);
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         return pageBaseDto;
     }
@@ -166,9 +159,7 @@ public class WaybillApi {
     @ApiOperation("客户运单--列表")
     @RequestMapping(value = "/customer/list", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybill_list')")
-    public PageBaseDto<List<Waybill>> customerWaybilllist(WaybillCustListParamsDto dto,
-                                                          @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
-                                                          @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
+    public PageBaseDto<List<Waybill>> customerWaybilllist(WaybillCustListParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
 
@@ -176,8 +167,6 @@ public class WaybillApi {
         StringBuffer sb = new StringBuffer();
         Map map= ClmsBeanUtil.beanToMap(dto);
         map.put("companyId",companyId);
-        map.put("pageNo",pageNo);
-        map.put("pageSize",pageSize);
         map.put("isDeleted",0);
         //组权限信息
         map.put("groupIds",GroupIdsUtil.getCustomerGroupIds(dto.getGroupId()));

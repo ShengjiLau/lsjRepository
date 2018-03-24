@@ -1,14 +1,12 @@
-package com.lcdt.traffic.web.dto;
+package com.lcdt.traffic.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
-
 /**
- * Created by lyqishan on 2017/12/25
+ * Created by lyqishan on 2017/12/28
  */
 
-public class WaybillOwnListParamsDto {
+public class WaybillCustListParamsDto {
     @ApiModelProperty(value = "运单编号")
     private String waybillCode;
     @ApiModelProperty(value = "收货地省")
@@ -18,7 +16,7 @@ public class WaybillOwnListParamsDto {
     @ApiModelProperty(value = "收货地县")
     private String receiveCounty;
     @ApiModelProperty(value = "运单状态")
-    private String waybillStatus;
+    private Short waybillStatus;
     @ApiModelProperty(value = "所属项目组id")
     private Long groupId;
     @ApiModelProperty(value = "生成开始时间")
@@ -27,12 +25,20 @@ public class WaybillOwnListParamsDto {
     private String endCreateDate;
     @ApiModelProperty(value = "货物信息")
     private String goodsName;
+    @ApiModelProperty(value = "运单来源")
+    private String waybillSource;
     @ApiModelProperty(value = "司机姓名（门卫出库管理时的查询条件）")
     private String driverInfo;
     @ApiModelProperty(value = "开始计划发货时间（门卫出库管理时的查询条件）")
     private String startStartDate;
     @ApiModelProperty(value = "结束计划发货时间（门卫出库管理时的查询条件）")
     private String endStartDate;
+
+    @ApiModelProperty(value = "页码", required = true)
+    private Integer pageNo;
+    @ApiModelProperty(value = "每页显示条数", required = true)
+    private Integer pageSize;
+
 
     public String getWaybillCode() {
         return waybillCode;
@@ -66,11 +72,11 @@ public class WaybillOwnListParamsDto {
         this.receiveCounty = receiveCounty;
     }
 
-    public String getWaybillStatus() {
+    public Short getWaybillStatus() {
         return waybillStatus;
     }
 
-    public void setWaybillStatus(String waybillStatus) {
+    public void setWaybillStatus(Short waybillStatus) {
         this.waybillStatus = waybillStatus;
     }
 
@@ -106,6 +112,14 @@ public class WaybillOwnListParamsDto {
         this.goodsName = goodsName;
     }
 
+    public String getWaybillSource() {
+        return waybillSource;
+    }
+
+    public void setWaybillSource(String waybillSource) {
+        this.waybillSource = waybillSource;
+    }
+
     public String getDriverInfo() {
         return driverInfo;
     }
@@ -128,5 +142,21 @@ public class WaybillOwnListParamsDto {
 
     public void setEndStartDate(String endStartDate) {
         this.endStartDate = endStartDate;
+    }
+
+    public Integer getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(Integer pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 }
