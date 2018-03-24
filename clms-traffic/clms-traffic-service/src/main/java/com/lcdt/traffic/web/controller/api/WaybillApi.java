@@ -161,16 +161,10 @@ public class WaybillApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybill_list')")
     public PageBaseDto<List<Waybill>> customerWaybilllist(WaybillCustListParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        User loginUser = SecurityInfoGetter.getUser();
-
-
-        StringBuffer sb = new StringBuffer();
-        Map map= ClmsBeanUtil.beanToMap(dto);
-        map.put("companyId",companyId);
-        map.put("isDeleted",0);
-        //组权限信息
-        map.put("groupIds",GroupIdsUtil.getCustomerGroupIds(dto.getGroupId()));
-        PageInfo<List<Waybill>> listPageInfo = waybillRpcService.queryCustomerWaybillList(map);
+        dto.setCompanyId(companyId);
+        dto.setIsDelete((short)0);
+        dto.setGroupIds(GroupIdsUtil.getCustomerGroupIds(dto.getGroupId()));
+        PageInfo<List<Waybill>> listPageInfo = waybillRpcService.queryCustomerWaybillList(dto);
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         return pageBaseDto;
     }

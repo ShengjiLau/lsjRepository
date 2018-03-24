@@ -34,6 +34,13 @@ public class WaybillCustListParamsDto {
     @ApiModelProperty(value = "结束计划发货时间（门卫出库管理时的查询条件）")
     private String endStartDate;
 
+    @ApiModelProperty(value = "企业id",hidden = true)
+    private Long companyId;
+    @ApiModelProperty(value = "是否删除",hidden = true)
+    private Short isDelete;
+    @ApiModelProperty(value = "是否删除",hidden = true)
+    private String groupIds;
+
     @ApiModelProperty(value = "页码", required = true)
     private Integer pageNo;
     @ApiModelProperty(value = "每页显示条数", required = true)
@@ -142,6 +149,30 @@ public class WaybillCustListParamsDto {
 
     public void setEndStartDate(String endStartDate) {
         this.endStartDate = endStartDate;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public Short getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Short isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    public String getGroupIds() {
+        return groupIds;
+    }
+
+    public void setGroupIds(String groupIds) {
+        this.groupIds = groupIds;
     }
 
     public Integer getPageNo() {

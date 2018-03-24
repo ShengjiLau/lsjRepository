@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.WaybillMapper;
 import com.lcdt.traffic.dto.DriverWaybillListParsmsDto;
 import com.lcdt.traffic.dto.DriverWaybillParamsDto;
+import com.lcdt.traffic.dto.WaybillCustListParamsDto;
 import com.lcdt.traffic.dto.WaybillOwnListParamsDto;
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillDao;
@@ -52,22 +53,18 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     }
 
     @Override
-    public PageInfo queryCustomerWaybillList(Map map) {
+    public PageInfo queryCustomerWaybillList(WaybillCustListParamsDto dto) {
         List<WaybillDao> resultList = null;
         PageInfo page = null;
         int pageNo = 1;
         int pageSize = 0; //0表示所有
-        if (map.containsKey("pageNo")) {
-            if (map.get("pageNo") != null) {
-                pageNo = (Integer) map.get("pageNo");
-            }
+        if (dto.getPageNo() != null) {
+            pageNo = dto.getPageNo();
         }
-        if (map.containsKey("pageSize")) {
-            if (map.get("pageSize") != null) {
-                pageSize = (Integer) map.get("pageSize");
-            }
+        if (dto.getPageSize() != null) {
+            pageSize = dto.getPageSize();
         }
-
+        Map map= ClmsBeanUtil.beanToMap(dto);
         Map cMapIds = customerCompanyIds.getCustomerCompanyIds(map);
         map.put("companyIds", cMapIds.get("companyIds"));
         map.put("carrierCompanyId", map.get("companyId"));

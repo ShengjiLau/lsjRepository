@@ -3,6 +3,7 @@ package com.lcdt.traffic.service;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dto.DriverWaybillListParsmsDto;
 import com.lcdt.traffic.dto.DriverWaybillParamsDto;
+import com.lcdt.traffic.dto.WaybillCustListParamsDto;
 import com.lcdt.traffic.dto.WaybillOwnListParamsDto;
 import com.lcdt.traffic.model.Waybill;
 
@@ -23,10 +24,10 @@ public interface WaybillRpcService {
 
     /**
      * 查询获取客户运单列表
-     * @param map
+     * @param dto
      * @return
      */
-    PageInfo queryCustomerWaybillList(Map map);
+    PageInfo queryCustomerWaybillList(WaybillCustListParamsDto dto);
 
     /**
      * 查询司机运单列表
