@@ -9,9 +9,9 @@ import com.lcdt.traffic.dto.DriverWaybillParamsDto;
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillDao;
 import com.lcdt.traffic.service.WaybillRpcService;
+import com.lcdt.traffic.service.impl.CustomerCompanyIds;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +24,59 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
     @Autowired
     private WaybillMapper waybillMapper;
+
+    @Autowired
+    private CustomerCompanyIds customerCompanyIds;
+
+    @Override
+    public PageInfo queryOwnWaybillList(Map map) {
+        List<WaybillDao> resultList = null;
+        PageInfo page = null;
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+        if (map.containsKey("pageNo")) {
+            if (map.get("pageNo") != null) {
+                pageNo = (Integer) map.get("pageNo");
+            }
+        }
+        if (map.containsKey("pageSize")) {
+            if (map.get("pageSize") != null) {
+                pageSize = (Integer) map.get("pageSize");
+            }
+        }
+        PageHelper.startPage(pageNo, pageSize);
+        resultList = waybillMapper.selectOwnByCondition(map);
+        page = new PageInfo(resultList);
+
+        return page;
+    }
+
+    @Override
+    public PageInfo queryCustomerWaybillList(Map map) {
+        List<WaybillDao> resultList = null;
+        PageInfo page = null;
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+        if (map.containsKey("pageNo")) {
+            if (map.get("pageNo") != null) {
+                pageNo = (Integer) map.get("pageNo");
+            }
+        }
+        if (map.containsKey("pageSize")) {
+            if (map.get("pageSize") != null) {
+                pageSize = (Integer) map.get("pageSize");
+            }
+        }
+
+        Map cMapIds = customerCompanyIds.getCustomerCompanyIds(map);
+        map.put("companyIds",cMapIds.get("companyIds"));
+        map.put("carrierCompanyId",map.get("companyId"));
+        map.remove("companyId");
+        PageHelper.startPage(pageNo, pageSize);
+        resultList = waybillMapper.selectCustomerByCondition(map);
+        page = new PageInfo(resultList);
+        return page;
+    }
 
     @Override
     public PageInfo queryDriverWaybillList(DriverWaybillListParsmsDto dto) {

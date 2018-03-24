@@ -12,6 +12,21 @@ import java.util.Map;
  */
 
 public interface WaybillRpcService {
+
+    /**
+     * 查询获取我的运单列表
+     * @param map
+     * @return
+     */
+    PageInfo queryOwnWaybillList(Map map);
+
+    /**
+     * 查询获取客户运单列表
+     * @param map
+     * @return
+     */
+    PageInfo queryCustomerWaybillList(Map map);
+
     /**
      * 查询司机运单列表
      * @param dto

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.service.ReportFormsService;
+import com.lcdt.traffic.util.GroupIdsUtil;
 import com.lcdt.userinfo.model.Group;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -71,26 +72,7 @@ public class ReportFormsApi {
         Map map = (Map) JSON.parseObject(param);
         String ids = map.get("groupIds") != null && map.get("groupIds") != "" ? map.get("groupIds").toString() : "";
         map.put("companyId", companyId);
-        StringBuffer sb = new StringBuffer();
-        if (ids!=null&&!ids.equals("")) {//传业务组，查这个组帮定的客户
-            sb.append(" find_in_set('"+ids+"',group_id)"); //项目组id
-        } else {
-            //没传组，查这个用户所有组帮定的客户
-            List<Group> groupList = SecurityInfoGetter.groups();
-            if(groupList!=null&&groupList.size()>0){
-                sb.append("(");
-                for(int i=0;i<groupList.size();i++) {
-                    Group group = groupList.get(i);
-                    sb.append(" find_in_set('"+group.getGroupId()+"',group_id)"); //所有项目组ids
-                    if(i!=groupList.size()-1){
-                        sb.append(" or ");
-                    }
-                }
-                sb.append(")");
-            }
-
-        }
-        map.put("groupIds",sb.toString());
+        map.put("groupIds", GroupIdsUtil.getOwnGroupIds(ids));
         JSONObject jsonObject = new JSONObject();
         try {
             Map<String, Object> resultMap = reportFormsService.queryOwnWaybillStatistics(map);
@@ -114,26 +96,7 @@ public class ReportFormsApi {
         Map map = (Map) JSON.parseObject(param);
         String ids = map.get("groupIds") != null && map.get("groupIds") != "" ? map.get("groupIds").toString() : "";
         map.put("companyId", companyId);
-        StringBuffer sb = new StringBuffer();
-        if (ids!=null&&!ids.equals("")){//传业务组，查这个组帮定的客户
-            sb.append(" find_in_set('"+ids+"',group_ids)"); //客户表
-        } else {
-            //没传组，查这个用户所有组帮定的客户
-            List<Group> groupList = SecurityInfoGetter.groups();
-            if(groupList!=null&&groupList.size()>0){
-                sb.append("(");
-                for(int i=0;i<groupList.size();i++) {
-                    Group group = groupList.get(i);
-                    sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)"); //客户表
-                    if(i!=groupList.size()-1){
-                        sb.append(" or ");
-                    }
-                }
-                sb.append(")");
-            }
-
-        }
-        map.put("groupIds",sb.toString());
+        map.put("groupIds",GroupIdsUtil.getCustomerGroupIds(ids));
         JSONObject jsonObject = new JSONObject();
         try {
             Map<String, Object> resultMap = reportFormsService.queryCustomerWaybillStatistics(map);
