@@ -1132,7 +1132,7 @@
     from t_waybill_plan p1
     <where>
       and p1.send_order_type='2'
-      and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id)
+      and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.offer_id = ${offerId} and sn.waybill_plan_id=p1.waybill_plan_id)
       and  is_deleted = 0
       <if test="carrierDriverGroupIds!=null and carrierDriverGroupIds!=''">
         and ${carrierDriverGroupIds}
