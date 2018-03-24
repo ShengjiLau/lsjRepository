@@ -82,15 +82,14 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
      * 货主企业组
      * @return
      */
-    private String ownCompanyIdsByDriverId(Long driverId) {
-        List<OwnCompany4SnatchRdto> ownCompany4SnatchRdtoList = ownDriverMapper.selectCompanyByDriverId(driverId);
+    private String ownCompanyIdsByDriverId(String companyIds) {
+        String s[] = companyIds.split(",");
         StringBuffer sb_20 = new StringBuffer();
-        if (ownCompany4SnatchRdtoList!=null && ownCompany4SnatchRdtoList.size()>0) {
+        if (s!=null && s.length>0) {
             sb_20.append("(");
-            for(int i=0;i<ownCompany4SnatchRdtoList.size();i++) {
-                OwnCompany4SnatchRdto obj = ownCompany4SnatchRdtoList.get(i);
-                sb_20.append(" find_in_set('"+obj.getCompanyId()+"',company_id) ");
-                if(i!=ownCompany4SnatchRdtoList.size()-1){
+            for(int i=0;i<s.length;i++) {
+                sb_20.append(" find_in_set('"+s[i]+"',company_id) ");
+                if(i!=s.length-1){
                     sb_20.append(" or ");
                 }
             }
@@ -118,7 +117,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
     public PageInfo snatchBill4WaittingList(SnathBill4WaittingPdto dto) {
         PageInfo pageInfo = null;
         String driverGroupIds = biddingGroupByDriverId(dto.getDriverId()); //获取竞价组ID集合
-        String ownCompanyIds = ownCompanyIdsByDriverId(dto.getDriverId()); //发布计划企业ID组
+        String ownCompanyIds = ownCompanyIdsByDriverId(dto.getCompyIds()); //发布计划企业ID组
         int pageNo = 1;
         int pageSize = 0; //0表示所有
         if (dto.getPageNo()>0) {
@@ -140,7 +139,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         map.put("orderFiled",orderField);
         map.put("carrierDriverGroupIds",driverGroupIds);
         map.put("ownCompanyIds",ownCompanyIds);
-
+        map.put("offerId",dto.getDriverId());
         PageHelper.startPage(pageNo, pageSize);
         List<SnatchBill4WaittingRdto> snatchBill4WaittingRdtos = waybillPlanMapper.wattingSnatch4Driver(map);
         if (snatchBill4WaittingRdtos!=null && snatchBill4WaittingRdtos.size()>0) {
@@ -168,7 +167,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
     public PageInfo snatchBill4CompleteList(SnathBill4WaittingPdto dto) {
         PageInfo pageInfo = null;
         String driverGroupIds = biddingGroupByDriverId(dto.getDriverId()); //获取竞价组ID集合
-        String ownCompanyIds = ownCompanyIdsByDriverId(dto.getDriverId()); //发布计划企业ID组
+        String ownCompanyIds = ownCompanyIdsByDriverId(dto.getCompyIds()); //发布计划企业ID组
         int pageNo = 1;
         int pageSize = 0; //0表示所有
         if (dto.getPageNo()>0) {
