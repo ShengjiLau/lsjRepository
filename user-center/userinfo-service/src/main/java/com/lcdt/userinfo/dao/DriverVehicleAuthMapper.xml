@@ -110,5 +110,8 @@
     from t_driver_vehicle_auth
     where  driver_id = #{driverId,jdbcType=BIGINT} and vehicle_num = #{vehicleNum,jdbcType=VARCHAR} and is_deleted=0
   </select>
+<select id="updateDefault" parameterType="java.lang.Long" >
 
+update t_driver_vehicle_auth set is_default=0 where driver_id =#{driverId,jdbcType=BIGINT}
+</select>
 </mapper>

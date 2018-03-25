@@ -23,6 +23,10 @@ public class CarAuthServiceImpl implements CarAuthService{
         if(isVehicleNumExist(auth)!=-1){
             throw new RuntimeException("车牌号已存在!");
         }
+        if(auth.getIsDefault()){
+            //新增的如果是默认，已经存在的记录需要全部设置为非默认
+            dao.updateDefault(auth.getDriverId());
+        }
         dao.insert(auth);
         return auth;
     }
@@ -51,6 +55,10 @@ public class CarAuthServiceImpl implements CarAuthService{
     public DriverVehicleAuth updateVehicleAuth(DriverVehicleAuth auth) {
         if(isVehicleNumExist(auth)==1){
             throw new RuntimeException("车牌号已存在");
+        }
+        if(auth.getIsDefault()){
+            //新增的如果是默认，已经存在的记录需要全部设置为非默认
+            dao.updateDefault(auth.getDriverId());
         }
         dao.updateByPrimaryKey(auth);
         return auth;
