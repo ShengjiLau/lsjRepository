@@ -57,7 +57,6 @@ public class ContractServiceImpl implements ContractService {
             UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
             contractApproval.setUserName(user.getRealName());
             contractApproval.setUserId(user.getUserId());
-            //todo 这个地方暂时这么处理，按一般情况一个人不可能属于多个部门,不知道为什么叫DeptNames
             contractApproval.setDeptName(userCompRel.getDeptNames());
             contractApproval.setSort(0);    // 0 为创建着
             dto.getContractApprovalList().add(contractApproval);
@@ -65,14 +64,20 @@ public class ContractServiceImpl implements ContractService {
                 ca.setContractId(contract.getContractId()); //设置关联合同id
                 if(ca.getSort()==1){
                     ca.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                }else{
+                    ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
                 }
             }
             contractApprovalMapper.insertBatch(dto.getContractApprovalList());
             //同时设置合同的审批状态为审批中
             contract.setApprovalStatus(new Short("1"));
+            contract.setApprovalStartDate(new Date());
             contractMapper.updateByPrimaryKey(contract);
         }else{
             // todo 没有添加审批人，则认为合同无需审批
+            //同时设置合同的审批状态为审批中
+            contract.setApprovalStatus(new Short("0"));
+            contractMapper.updateByPrimaryKey(contract);
         }
         return result;
     }
@@ -116,6 +121,41 @@ public class ContractServiceImpl implements ContractService {
                 params.put("cpIds",cpIdList);
                 contractProductMapper.deleteByBatch(params);
             }
+        }
+        //审批流程添加 如果审批人不是空，则需先删除之前保存的审批人的信息，然后再新增审批人信息
+        if(null!=dto.getContractApprovalList() && dto.getContractApprovalList().size() > 0){
+            //删除之前保存的审批人信息
+            contractApprovalMapper.deleteByContractId(dto.getContractId());
+            /*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
+            ContractApproval contractApproval = new ContractApproval();
+//            Long companyId = SecurityInfoGetter.getCompanyId();
+            User user = SecurityInfoGetter.getUser();
+            UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+            contractApproval.setUserName(user.getRealName());
+            contractApproval.setUserId(user.getUserId());
+            contractApproval.setDeptName(userCompRel.getDeptNames());
+            contractApproval.setSort(0);    // 0 为创建着
+            dto.getContractApprovalList().add(contractApproval);
+            for(ContractApproval ca : dto.getContractApprovalList()){
+                ca.setContractId(contract.getContractId()); //设置关联合同id
+                if(ca.getSort()==1){
+                    ca.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                }else{
+                    ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+                }
+            }
+            contractApprovalMapper.insertBatch(dto.getContractApprovalList());
+            //同时设置合同的审批状态为审批中
+            contract.setApprovalStatus(new Short("1"));
+            contract.setApprovalStartDate(new Date());
+            contractMapper.updateByPrimaryKey(contract);
+        }else{
+            /*如果审批流程被清除，则视为改合同不需要审批。需要：1.删除之前关联的审批人信息 2.更新合同状态为无需审批 0 */
+            contractApprovalMapper.deleteByContractId(dto.getContractId());
+            //同时设置合同的审批状态为审批中
+            contract.setApprovalStatus(new Short("0"));
+            contract.setApprovalStartDate(null);
+            contractMapper.updateByPrimaryKey(contract);
         }
         return result;
     }

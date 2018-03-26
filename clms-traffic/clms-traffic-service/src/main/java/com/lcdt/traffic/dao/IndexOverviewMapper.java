@@ -21,6 +21,14 @@ public interface IndexOverviewMapper {
     List<Map<String,Object>> selectPlanData(Map map);
 
 
+    /***
+     * 客户计划统计
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> selectCustomerPlanData(Map map);
+
+
     /**
      * 我的运单统计
      * @param map

@@ -26,6 +26,9 @@ public class WaybillModifyStatusDto {
     @ApiModelProperty(value = "承运商企业id",hidden = true)
     private Long carrierCompanyId;
 
+    @ApiModelProperty(value = "上传回单地址，有多个时用JSONArrary和形式")
+    private String electronicalReceipt;//回单地址
+
 
     public String getWaybillIds() {
         return waybillIds;
@@ -73,5 +76,13 @@ public class WaybillModifyStatusDto {
 
     public void setCarrierCompanyId(Long carrierCompanyId) {
         this.carrierCompanyId = carrierCompanyId;
+    }
+
+    public String getElectronicalReceipt() {
+        return electronicalReceipt;
+    }
+
+    public void setElectronicalReceipt(String electronicalReceipt) {
+        this.electronicalReceipt = electronicalReceipt;
     }
 }
