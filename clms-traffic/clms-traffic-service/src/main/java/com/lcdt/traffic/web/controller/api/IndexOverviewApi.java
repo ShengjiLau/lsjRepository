@@ -51,7 +51,6 @@ public class IndexOverviewApi {
         JSONObject jsonObject = new JSONObject();
         try {
             Map<String, Object> resultMap = indexOverviewService.planStatistics(map);
-
             JSONObject jsonResult = new JSONObject(resultMap);
             jsonObject.put("code", 0);
             jsonObject.put("message", "查询成功");
