@@ -140,6 +140,7 @@ public class PurchaseOrderApi {
 		orderDto.setCreateUserId(UserId);
 		orderDto.setOrderSerialNo(orderSerialNum);
 		orderDto.setCreateTime(new Date());
+		orderDto.setOrderType(new Short("0"));	//设置订单类型为采购单
 		int result =orderService.addOrder(orderDto);
 		logger.debug("新增采购订单条目数:"+result);
 		if (result > 0) {
