@@ -99,7 +99,9 @@
     create_date, create_id, update_id, update_name, update_date, is_deleted
     from t_driver_vehicle_auth
     where  driver_id = #{driverId,jdbcType=BIGINT}
-
+    AND (is_deleted is null
+	or is_deleted != 1)
+	order by is_default desc
   </select>
 
   <select id="selectVehicleNumExist" parameterType="com.lcdt.userinfo.model.DriverVehicleAuth" resultMap="BaseResultMap">
