@@ -64,6 +64,11 @@ public class CustomerPlanApi {
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
             map.put("customerName",dto.getCustomerName());
         }
+
+        if (StringUtil.isNotEmpty(dto.getCustomerCids())) { //计划企业ID
+            map.put("customerCids",dto.getCustomerCids());
+        }
+
         //收货地
         if (StringUtil.isNotEmpty(dto.getReceiveProvince())) {
             map.put("receiveProvince",dto.getReceiveProvince());
@@ -130,6 +135,9 @@ public class CustomerPlanApi {
             map.put("serialCode",dto.getSerialCode());
         }
 
+        if (StringUtil.isNotEmpty(dto.getCustomerCids())) { //计划企业ID
+            map.put("customerCids",dto.getCustomerCids());
+        }
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
             map.put("customerName",dto.getCustomerName());
         }
@@ -196,6 +204,10 @@ public class CustomerPlanApi {
 
         if (StringUtil.isNotEmpty(dto.getSerialCode())) { //流水号
             map.put("serialCode",dto.getSerialCode());
+        }
+
+        if (StringUtil.isNotEmpty(dto.getCustomerCids())) { //计划企业ID
+            map.put("customerCids",dto.getCustomerCids());
         }
 
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
@@ -267,6 +279,10 @@ public class CustomerPlanApi {
             map.put("serialCode",dto.getSerialCode());
         }
 
+        if (StringUtil.isNotEmpty(dto.getCustomerCids())) { //计划企业ID
+            map.put("customerCids",dto.getCustomerCids());
+        }
+
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
             map.put("customerName",dto.getCustomerName());
         }
@@ -334,6 +350,10 @@ public class CustomerPlanApi {
             map.put("serialCode",dto.getSerialCode());
         }
 
+        if (StringUtil.isNotEmpty(dto.getCustomerCids())) { //计划企业ID
+            map.put("customerCids",dto.getCustomerCids());
+        }
+
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
             map.put("customerName",dto.getCustomerName());
         }
@@ -399,6 +419,10 @@ public class CustomerPlanApi {
 
         if (StringUtil.isNotEmpty(dto.getSerialCode())) { //流水号
             map.put("serialCode",dto.getSerialCode());
+        }
+
+        if (StringUtil.isNotEmpty(dto.getCustomerCids())) { //计划企业ID
+            map.put("customerCids",dto.getCustomerCids());
         }
 
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
@@ -469,6 +493,11 @@ public class CustomerPlanApi {
         if (StringUtil.isNotEmpty(dto.getSerialCode())) { //流水号
             map.put("serialCode",dto.getSerialCode());
         }
+
+        if (StringUtil.isNotEmpty(dto.getCustomerCids())) { //计划企业ID
+            map.put("customerCids",dto.getCustomerCids());
+        }
+
 
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
             map.put("customerName",dto.getCustomerName());
