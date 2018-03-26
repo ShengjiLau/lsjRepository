@@ -160,7 +160,7 @@ public class SalesOrderApi {
 	@ApiOperation("修改销售订单")
 	@PostMapping("/modifyOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('mod_sales_order')")
-	public JSONObject modifyOrder(@Validated  OrderDto orderDto,BindingResult bindingResult) {
+	public JSONObject modifyOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindingResult) {
 		JSONObject jsonObject = new JSONObject();
 		 //Validated自动验证
         if(bindingResult.hasErrors()) {
