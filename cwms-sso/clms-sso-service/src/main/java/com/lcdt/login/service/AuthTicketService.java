@@ -47,6 +47,7 @@ public class AuthTicketService {
 				removedCookie.setMaxAge(0);
 				removedCookie.setDomain("datuodui.com");
 				removedCookie.setPath("/");
+				removedCookie.setValue(null);
 				response.addCookie(removedCookie);
 			}
 		}

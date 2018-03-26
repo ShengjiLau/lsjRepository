@@ -62,12 +62,12 @@
                     #{item,jdbcType=BIGINT}
                 </foreach>
             </if>
-            <if test="planType==0">
-                and carrier_company_id=company_id
-            </if>
-            <if test="planType==1">
-                and carrier_company_id!=company_id
-            </if>
+ <!--           <if test="planType==0 and carrier_company_id=company_id">
+            </if>-->
+<!--
+            <if test="planType==1  and carrier_company_id!=company_id">
+
+            </if>-->
             group by DATE(pub_date)
         ) t1 on t.dt= t1.pub_date
         WHERE
@@ -79,6 +79,117 @@
             and date(t.dt) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(t.dt) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
         </if>
     </select>
+
+
+    <!--客户计划统计-->
+    <select id="selectCustomerPlanData" resultType="Map" parameterType="Map">
+        SELECT t.dt t_date,ifnull(t1.jingjiazhong,0) jingjiazhong,ifnull(t2.paidanzhong,0) paidanzhong,
+        ifnull(t3.yipaiche,0) yipaiche,ifnull(t4.yiwancheng,0) yiwancheng
+        FROM t_date t
+        LEFT JOIN (
+            SELECT
+                  date(pubdate) as pub_date, count(1) jingjiazhong
+            FROM t_waybill_plan wp
+            WHERE  is_deleted = 0
+
+        AND plan_status = '15' AND waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where plan_company_id = wp.company_id)
+            <if test="date_interval!=null and date_interval!=''">
+                and date(pubdate) &lt;= CURDATE() and date(pubdate) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+            </if>
+            <if test="pubdate_start!=null and pubdate_start!=''">
+                and date(pubdate) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(pubdate) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+            </if>
+            <if test="companyIds!=null and companyIds!=''">
+                and ${companyIds}
+            </if>
+            <if test="carrierCollectionIds1!=null and carrierCollectionIds1!=''">
+                and ${carrierCollectionIds1}
+            </if>
+            group by DATE(pub_date)
+        ) t1 on t.dt= t1.pub_date
+
+        LEFT JOIN  (
+        SELECT
+            date(wp.pubdate) as pub_date, count(1) paidanzhong
+        FROM t_split_goods sp
+        LEFT JOIN t_waybill_plan wp
+            on sp.waybill_plan_id = wp.waybill_plan_id
+        WHERE wp.is_deleted = 0 and wp.plan_status!='60'
+              and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)>0
+            <if test="date_interval!=null and date_interval!=''">
+                and date(pubdate) &lt;= CURDATE() and date(pubdate) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+            </if>
+            <if test="pubdate_start!=null and pubdate_start!=''">
+                and date(pubdate) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(pubdate) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+            </if>
+            <if test="companyIds!=null and companyIds!=''">
+                and ${companyIds}
+            </if>
+            <if test="carrierCollectionIds2!=null and carrierCollectionIds2!=''">
+                and ${carrierCollectionIds2}
+            </if>
+         group by DATE(pub_date)
+        ) t2 on t.dt= t2.pub_date
+
+        LEFT JOIN  (
+        SELECT
+        date(wp.pubdate) as pub_date, count(1) yipaiche
+        FROM t_split_goods sp
+        LEFT JOIN t_waybill_plan wp
+        on sp.waybill_plan_id = wp.waybill_plan_id
+        WHERE wp.is_deleted = 0 and wp.plan_status!='60'
+        and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
+            <if test="date_interval!=null and date_interval!=''">
+                and date(pubdate) &lt;= CURDATE() and date(pubdate) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+            </if>
+            <if test="pubdate_start!=null and pubdate_start!=''">
+                and date(pubdate) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(pubdate) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+            </if>
+            <if test="companyIds!=null and companyIds!=''">
+                and ${companyIds}
+            </if>
+            <if test="carrierCollectionIds2!=null and carrierCollectionIds2!=''">
+                and ${carrierCollectionIds2}
+            </if>
+           group by DATE(pub_date)
+        ) t3 on t.dt= t3.pub_date
+
+        LEFT JOIN  (
+            SELECT
+            date(wp.pubdate) as pub_date, count(1) yiwancheng
+            FROM t_split_goods sp
+            LEFT JOIN t_waybill_plan wp
+            on sp.waybill_plan_id = wp.waybill_plan_id
+            WHERE
+            wp.is_deleted = 0
+            <if test="date_interval!=null and date_interval!=''">
+                and date(pubdate) &lt;= CURDATE() and date(pubdate) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+            </if>
+            <if test="pubdate_start!=null and pubdate_start!=''">
+                and date(pubdate) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(pubdate) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+            </if>
+            and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
+            and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status!=7 )=0
+            <if test="companyIds!=null and companyIds!=''">
+                and ${companyIds}
+            </if>
+            <if test="carrierCollectionIds2!=null and carrierCollectionIds2!=''">
+                and ${carrierCollectionIds2}
+            </if>
+            group by DATE(pub_date)
+        ) t4 on t.dt= t4.pub_date
+        WHERE
+         1 = 1
+        <if test="date_interval!=null and date_interval!=''">
+            and date(t.dt) &lt;=CURDATE() and date(t.dt) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+        </if>
+        <if test="pubdate_start!=null and pubdate_start!=''">
+            and date(t.dt) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(t.dt) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+
+
+
     <!--
     <select id="selectPlanData" resultType="Map" parameterType="Map">
         SELECT date(dday) t_date, count(*) - 1 as count
@@ -287,6 +398,14 @@
         GROUP BY t_date
     </select>
     -->
+
+      <!--进行中的计划-排出取消、完成状态的做为货主、或承运人-->
+      <select id="selectPlan4Doing" resultType="Map" parameterType="Long">
+         select count(DISTINCT waybill_plan_id) as plan_count from t_waybill_plan where company_id=#{arg0} or
+        FIND_IN_SET(#{arg0},carrier_collection_ids) and (plan_status!='50' and plan_status!='60')  and is_deleted=0
+    </select>
+
+
     <select id="selectPlanAndWaybill" resultType="Map" parameterType="Long">
         select sum(case when (plan_status=15 or plan_status=20 or plan_status=30 or plan_status=40) then 1 else 0 end) as plan_waybill
         from t_waybill_plan where company_id=#{arg0} and is_deleted=0

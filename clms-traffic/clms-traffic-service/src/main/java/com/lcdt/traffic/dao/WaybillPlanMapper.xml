@@ -672,6 +672,9 @@
       <if test="goodsInfo != null and goodsInfo!=''">
         and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%'))
       </if>
+      <if test="customerCids!=null and customerCids!=''">
+        and company_id in(#{customerCids,jdbcType=VARCHAR})
+      </if>
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
@@ -719,6 +722,10 @@
       <if test="goodsInfo != null and goodsInfo!=''">
         and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like  concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') and is_deleted=0)
       </if>
+      <if test="customerCids!=null and customerCids!=''">
+        and company_id in(#{customerCids,jdbcType=VARCHAR})
+      </if>
+
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
@@ -906,6 +913,7 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
+      and wp.plan_status!='60'
       and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
       <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},

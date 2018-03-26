@@ -66,7 +66,7 @@ public class AuthApi {
         return jsonObject.toString();
     }
 
-    private static final String VCODETAG = "driverwechat";
+    public static final String VCODETAG = "driverwechat";
 
 
     @RequestMapping(value = "/sendvcode",method = RequestMethod.POST)

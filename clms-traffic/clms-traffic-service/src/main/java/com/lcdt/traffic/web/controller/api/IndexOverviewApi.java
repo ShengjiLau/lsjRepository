@@ -51,7 +51,6 @@ public class IndexOverviewApi {
         JSONObject jsonObject = new JSONObject();
         try {
             Map<String, Object> resultMap = indexOverviewService.planStatistics(map);
-
             JSONObject jsonResult = new JSONObject(resultMap);
             jsonObject.put("code", 0);
             jsonObject.put("message", "查询成功");
@@ -63,8 +62,6 @@ public class IndexOverviewApi {
         }
         return jsonObject;
     }
-
-
 
 
     @ApiOperation(value = "客户计划统计", notes = "运输首页概览-客户计划统计")
@@ -78,7 +75,6 @@ public class IndexOverviewApi {
         if(!"".equals(ids)){
             String[] idArr = ids.split(",");
             List groupIds = Arrays.asList(idArr);
-
             if(groupIds!=null && groupIds.size()>0) {
                 StringBuffer sb = new StringBuffer();
                 for(int i=0;i<groupIds.size();i++) {
@@ -91,6 +87,7 @@ public class IndexOverviewApi {
             List<Group> groupList = SecurityInfoGetter.groups();
             if(groupList!=null && groupList.size()>0) {
                 StringBuffer sb = new StringBuffer();
+                sb.append("(");
                 for(int i=0;i<groupList.size();i++) {
                     Group group = groupList.get(i);
                     sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)"); //客户表
@@ -100,11 +97,9 @@ public class IndexOverviewApi {
             }
         }
 
-
         JSONObject jsonObject = new JSONObject();
         try {
             Map<String, Object> resultMap = indexOverviewService.customerPlanStatistics(map);
-
             JSONObject jsonResult = new JSONObject(resultMap);
             jsonObject.put("code", 0);
             jsonObject.put("message", "查询成功");
@@ -116,11 +111,6 @@ public class IndexOverviewApi {
         }
         return jsonObject;
     }
-
-
-
-
-
 
 
     @ApiOperation(value = "运单统计", notes = "运输首页概览-运单统计")
