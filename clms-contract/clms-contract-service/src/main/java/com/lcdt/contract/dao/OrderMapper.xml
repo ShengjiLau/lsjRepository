@@ -530,4 +530,10 @@
       attachment5 = #{attachment5,jdbcType=VARCHAR}
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
+  <update id="updateApprovalStatus" >
+    update t_order
+    set approval_status = #{arg2},
+    approval_end_date = CURRENT_TIMESTAMP
+    where order_id = #{arg0} and company_id = #{arg1}
+  </update>
 </mapper>

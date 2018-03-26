@@ -2,9 +2,15 @@ package com.lcdt.contract.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.contract.dao.OrderApprovalMapper;
+import com.lcdt.contract.model.OrderApproval;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -35,6 +41,9 @@ public class OrderServiceImpl implements OrderService{
 	
 	@Autowired
 	OrderMapper orderMapper;
+
+	@Autowired
+	private OrderApprovalMapper orderApprovalMapper;
 	
 	@Autowired
 	private ConditionQueryMapper nonautomaticMapper;
@@ -69,6 +78,37 @@ public class OrderServiceImpl implements OrderService{
 			}
 			int i=nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());
 			logger.debug("新增订单商品数量:"+i);
+		}
+		//审批流程添加
+		if(null!=orderDto.getOrderApprovalList() && orderDto.getOrderApprovalList().size() > 0){
+			/*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
+			OrderApproval orderApproval = new OrderApproval();
+//            Long companyId = SecurityInfoGetter.getCompanyId();
+			User user = SecurityInfoGetter.getUser();
+			UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+			orderApproval.setUserName(user.getRealName());
+			orderApproval.setUserId(user.getUserId());
+			orderApproval.setDeptName(userCompRel.getDeptNames());
+			orderApproval.setSort(0);    // 0 为创建着
+			orderDto.getOrderApprovalList().add(orderApproval);
+			for(OrderApproval oa : orderDto.getOrderApprovalList()){
+				oa.setOrderId(order.getOrderId()); //设置关联合同id
+				if(oa.getSort()==1){
+					oa.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+				}else{
+					oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+				}
+			}
+			orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
+			//同时设置合同的审批状态为审批中
+			order.setApprovalStatus(new Short("1"));
+			order.setApprovalStartDate(new Date());
+			orderMapper.updateByPrimaryKey(order);
+		}else{
+			// todo 没有添加审批人，则认为合同无需审批
+			//同时设置合同的审批状态为审批中
+			order.setApprovalStatus(new Short("0"));
+			orderMapper.updateByPrimaryKey(order);
 		}
 		return result;
 	}
@@ -132,8 +172,44 @@ public class OrderServiceImpl implements OrderService{
 			i+= nonautomaticMapper.deleteOrderProducByBatch(orderProductIdList);
 		}
 		logger.debug("修改订单商品数量为:"+i);
-			return result;
+		//审批流程添加 如果添加了审批人，则先清楚数据库中原来保存的审批人，然后新增
+		if(null!=orderDto.getOrderApprovalList() && orderDto.getOrderApprovalList().size() > 0){
+			//删除之前数据库保存的审批人信息
+			orderApprovalMapper.deleteByOrderId(orderDto.getOrderId());
+			/*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
+			OrderApproval orderApproval = new OrderApproval();
+//            Long companyId = SecurityInfoGetter.getCompanyId();
+			User user = SecurityInfoGetter.getUser();
+			UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+			orderApproval.setUserName(user.getRealName());
+			orderApproval.setUserId(user.getUserId());
+			orderApproval.setDeptName(userCompRel.getDeptNames());
+			orderApproval.setSort(0);    // 0 为创建着
+			orderDto.getOrderApprovalList().add(orderApproval);
+			for(OrderApproval oa : orderDto.getOrderApprovalList()){
+				oa.setOrderId(order.getOrderId()); //设置关联合同id
+				if(oa.getSort()==1){
+					oa.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+				}else{
+					oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+				}
+			}
+			orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
+			//同时设置合同的审批状态为审批中
+			order.setApprovalStatus(new Short("1"));
+			order.setApprovalStartDate(new Date());
+			orderMapper.updateByPrimaryKey(order);
+		}else{
+			/*如果审批流程被清除，则视为改合同不需要审批。需要：1.删除之前关联的审批人信息 2.更新合同状态为无需审批 0 */
+			orderApprovalMapper.deleteByOrderId(orderDto.getOrderId());
+			//同时设置合同的审批状态为审批中
+			order.setApprovalStatus(new Short("0"));
+			order.setApprovalStartDate(null);
+			orderMapper.updateByPrimaryKey(order);
 		}
+
+		return result;
+	}
 
 	@Override
 	public int delOrder(Long orderId) {
