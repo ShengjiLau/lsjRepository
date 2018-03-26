@@ -52,6 +52,7 @@ public class AuthApi {
             user.setPhone(phone);
             user.setNickName(wechatUserDto.getNickName());
             user.setRealName(wechatUserDto.getNickName());
+            user.setRegisterFrom("司机宝小程序");
             userService.registerDriverUser(user);
         }
         user.setPwd("");

@@ -23,11 +23,21 @@ public class RegisterDto implements java.io.Serializable{
 	@NotBlank
 	private String name;//姓名，用户名
 
+	//注册来源
+	private String registerFrom;
 
 	private String introducer; //推荐人
 	private String ecode; //手机验证码
 
 	private String email;
+
+	public String getRegisterFrom() {
+		return registerFrom;
+	}
+
+	public void setRegisterFrom(String registerFrom) {
+		this.registerFrom = registerFrom;
+	}
 
 	public String getEmail() {
 		return email;
