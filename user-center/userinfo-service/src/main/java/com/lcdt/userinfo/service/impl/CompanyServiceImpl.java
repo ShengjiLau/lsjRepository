@@ -44,6 +44,12 @@ public class CompanyServiceImpl implements CompanyService {
 	UserService userService;
 
 	@Transactional(rollbackFor = Exception.class)
+	public UserCompRel findByUserCompRelId(Long userCompRelId) {
+		UserCompRel userCompRel = userCompRelMapper.selectByPrimaryKey(userCompRelId);
+		return userCompRel;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public CompanyCertificate getCompanyCert(Long companyId){
 		List<CompanyCertificate> companyCertificate = certificateDao.selectByCompanyId(companyId);

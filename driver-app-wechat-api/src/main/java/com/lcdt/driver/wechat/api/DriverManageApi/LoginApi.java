@@ -85,7 +85,7 @@ public class LoginApi {
         String userId = (String) claimsFromToken.get("userId");
         UserCompRel userCompRel = companyService.queryByUserIdCompanyId(Long.valueOf(userId), compId);
         HashMap<String, Object> stringStringHashMap = new HashMap<>();
-        stringStringHashMap.put("userId", userId);
+        stringStringHashMap.put("userName", userCompRel.getUser().getPhone());
         stringStringHashMap.put("userCompId", userCompRel.getUserCompRelId());
         String s = jwtTokenUtil.generateToken(stringStringHashMap);
         JSONObject jsonObject = new JSONObject();

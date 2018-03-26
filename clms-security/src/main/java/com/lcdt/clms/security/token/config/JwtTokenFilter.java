@@ -1,8 +1,11 @@
 package com.lcdt.clms.security.token.config;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.UserService;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
@@ -31,6 +34,8 @@ public class JwtTokenFilter extends OncePerRequestFilter{
 
     @Reference
     UserService userService;
+    @Reference
+    CompanyService companyService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -39,15 +44,23 @@ public class JwtTokenFilter extends OncePerRequestFilter{
 
         if (!StringUtils.isEmpty(header)) {
             Claims claimsFromToken = jwtTokenUtil.getClaimsFromToken(header);
+            if (claimsFromToken == null) {
+                filterChain.doFilter(request,response);
+            }
             String userName = (String) claimsFromToken.get("userName");
             logger.info("request token username :{} ",userName);
 
             if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 try {
+                    UserCompRel userCompRel = null;
                     User user = userService.queryByPhone(userName);
-                    if (jwtTokenUtil.validateToken(header, user)) {
+                    if (claimsFromToken.get("userCompId") != null) {
+                        Long userCompId = (Long) claimsFromToken.get("userCompId");
+                        userCompRel = companyService.findByUserCompRelId(userCompId);
+                    }
+                    if (jwtTokenUtil.validateToken(header)) {
                         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                                user, null, null);
+                                user, userCompRel, null);
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(
                                 request));
                         logger.info("authenticated user " + userName + ", setting security context");
@@ -58,7 +71,6 @@ public class JwtTokenFilter extends OncePerRequestFilter{
                 }
             }
         }
-
         filterChain.doFilter(request,response);
     }
 
