@@ -220,6 +220,11 @@ public class OrderServiceImpl implements OrderService{
 			if(null!=orderProductList&&orderProductList.size()!=0) {
 				orderDto.setOrderProductList(orderProductList);
 			}
+			//添加审批人及抄送人信息
+			List<OrderApproval> orderApprovalList = orderApprovalMapper.selectForOrderDetail(orderDto.getOrderId());
+			if(null!=orderApprovalList && orderApprovalList.size()>0){
+				orderDto.setOrderApprovalList(orderApprovalList);
+			}
 		}	
 		
 		
