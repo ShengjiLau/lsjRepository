@@ -80,4 +80,12 @@ public interface IndexOverviewMapper {
      */
     List<Map<String,Object>> selectVehicleAndDriver(Long companyId);
 
+
+    /**
+     * 执行中的计划和在途运单统计
+     * @param companyId
+     * @return
+     */
+    List<Map<String,Object>> selectInTransitWaybill(Long companyId);
+
 }
