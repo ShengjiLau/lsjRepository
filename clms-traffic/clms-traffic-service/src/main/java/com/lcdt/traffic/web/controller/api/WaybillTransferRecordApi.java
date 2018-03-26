@@ -3,10 +3,10 @@ package com.lcdt.traffic.web.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.dto.WaybillTransferRecordDto;
 import com.lcdt.traffic.model.WaybillTransferRecord;
-import com.lcdt.traffic.service.WaybillTransferRecordService;
+import com.lcdt.traffic.service.WaybillTransferRecordRpcService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
-import com.lcdt.traffic.web.dto.WaybillTransferRecordDto;
 import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +28,7 @@ import java.util.List;
 @Api(value = "运单换车记录", description = "运单换车记录接口")
 public class WaybillTransferRecordApi {
     @Autowired
-    private WaybillTransferRecordService waybillTransferRecordService;
+    private WaybillTransferRecordRpcService waybillTransferRecordService;
 
     @ApiOperation("客户运单--换车记录--新增")
     @RequestMapping(value = "/customer/add", method = RequestMethod.POST)
