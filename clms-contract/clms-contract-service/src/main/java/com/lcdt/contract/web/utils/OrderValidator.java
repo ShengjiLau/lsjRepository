@@ -57,7 +57,7 @@ public class OrderValidator {
 				map.put("receiveAddress","收货详细地址不可为空");
 			}
         }
-        if(orderDto.getOrderProductList()==null||orderDto.getOrderProductList().size()==0) {
+        if(null==orderDto.getOrderProductList()||orderDto.getOrderProductList().size()==0) {
         	map.put("orderProductList","请至少添加一条商品");
         }
         if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0) {

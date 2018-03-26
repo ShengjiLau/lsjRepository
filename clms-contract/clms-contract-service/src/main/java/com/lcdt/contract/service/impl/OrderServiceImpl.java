@@ -92,13 +92,13 @@ public class OrderServiceImpl implements OrderService{
 		order.setSummation(aTotal);
 		int result=orderMapper.updateByPrimaryKey(order);
 		int i=0;
-
+		if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0){
 		//删除订单下所有商品
 		nonautomaticMapper.deleteOrderProductByOrderId(order.getOrderId());
 		//插入新的订单商品
 		i+= nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());
-		
 		logger.debug("修改订单商品数量为:"+i);
+		}
 		return result;
 	}
 		
