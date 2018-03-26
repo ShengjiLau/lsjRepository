@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.quartz.rpc.QuartzRpc;
 import com.lcdt.traffic.dto.WaybillCustListParamsDto;
+import com.lcdt.traffic.dto.WaybillModifyStatusDto;
 import com.lcdt.traffic.dto.WaybillOwnListParamsDto;
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.service.WaybillRpcService;
@@ -54,8 +55,8 @@ public class WaybillApi {
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
-        Waybill  result = waybillService.addWaybill(dto);
-        if (result !=null) {
+        Waybill result = waybillService.addWaybill(dto);
+        if (result != null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "添加成功");
@@ -74,8 +75,8 @@ public class WaybillApi {
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCarrierCompanyId(companyId);
-        Waybill  result = waybillService.addWaybill(dto);
-        if (result !=null) {
+        Waybill result = waybillService.addWaybill(dto);
+        if (result != null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "添加成功");
@@ -149,7 +150,7 @@ public class WaybillApi {
         User loginUser = SecurityInfoGetter.getUser();
         StringBuffer sb = new StringBuffer();
         dto.setCompanyId(companyId);
-        dto.setIsDelete((short)0);
+        dto.setIsDelete((short) 0);
         dto.setGroupIds(GroupIdsUtil.getOwnGroupIds(dto.getGroupId()));
         PageInfo<List<Waybill>> listPageInfo = waybillRpcService.queryOwnWaybillList(dto);
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
@@ -162,7 +163,7 @@ public class WaybillApi {
     public PageBaseDto<List<Waybill>> customerWaybilllist(WaybillCustListParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         dto.setCompanyId(companyId);
-        dto.setIsDelete((short)0);
+        dto.setIsDelete((short) 0);
         dto.setGroupIds(GroupIdsUtil.getCustomerGroupIds(dto.getGroupId()));
         PageInfo<List<Waybill>> listPageInfo = waybillRpcService.queryCustomerWaybillList(dto);
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
@@ -172,23 +173,21 @@ public class WaybillApi {
     @ApiOperation("我的运单--修改状态")
     @RequestMapping(value = "/own/modifystatus", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_modify_status')")
-    public JSONObject modifyOwnWaybillStatus(@ApiParam(value = "状态", required = true) @RequestParam Short waybillStatus,
-                                                     @ApiParam(value = "运单id字符串，多个 id 以 , 隔开", required = true) @RequestParam String waybillIds) {
+    public JSONObject modifyOwnWaybillStatus(WaybillModifyStatusDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
-        Map<String,Object> map=new HashMap<String,Object>();
-        map.put("waybillStatus",waybillStatus);
-        map.put("waybillIds",waybillIds);
-        map.put("updateId",loginUser.getUserId());
-        map.put("updateName",loginUser.getRealName());
-        map.put("companyId",companyId);
-        int result=waybillService.modifyOwnWaybillStatus(map);
-        if(result>0){
-            JSONObject jsonObject=new JSONObject();
-            jsonObject.put("code",0);
-            jsonObject.put("message","修改成功");
+
+        dto.setUpdateId(loginUser.getUserId());
+        dto.setUpdateName(loginUser.getRealName());
+        dto.setCompanyId(companyId);
+
+        int result = waybillRpcService.modifyOwnWaybillStatus(dto);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "修改成功");
             return jsonObject;
-        }else{
+        } else {
             throw new RuntimeException("修改失败");
         }
     }
@@ -196,23 +195,21 @@ public class WaybillApi {
     @ApiOperation("客户运单--修改状态")
     @RequestMapping(value = "/customer/modifystatus", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_modify_status')")
-    public JSONObject modifyCustomerWaybillStatus(@ApiParam(value = "状态", required = true) @RequestParam Short waybillStatus,
-                                          @ApiParam(value = "运单id字符串，多个 id 以 , 隔开", required = true) @RequestParam String waybillIds) {
+    public JSONObject modifyCustomerWaybillStatus(WaybillModifyStatusDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
-        Map<String,Object> map=new HashMap<String,Object>();
-        map.put("waybillStatus",waybillStatus);
-        map.put("waybillIds",waybillIds);
-        map.put("updateId",loginUser.getUserId());
-        map.put("updateName",loginUser.getRealName());
-        map.put("carrierCompanyId",companyId);
-        int result=waybillService.modifyCustomerWaybillStatus(map);
-        if(result>0){
-            JSONObject jsonObject=new JSONObject();
-            jsonObject.put("code",0);
-            jsonObject.put("message","修改成功");
+
+        dto.setUpdateId(loginUser.getUserId());
+        dto.setUpdateName(loginUser.getRealName());
+        dto.setCarrierCompanyId(companyId);
+
+        int result = waybillRpcService.modifyCustomerWaybillStatus(dto);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "修改成功");
             return jsonObject;
-        }else{
+        } else {
             throw new RuntimeException("修改失败");
         }
     }
