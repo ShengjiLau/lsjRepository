@@ -15,6 +15,4 @@ public class DriverApi {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return "this is driver info" + user.getPhone() + "userId: " + user.getUserId();
     }
-
-
 }
