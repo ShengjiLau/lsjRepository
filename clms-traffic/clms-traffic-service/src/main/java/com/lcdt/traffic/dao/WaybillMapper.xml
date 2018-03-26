@@ -437,7 +437,13 @@
 
   <update id="updateOwnWaybillStatus" parameterType="java.util.Map">
     update t_waybill
-    set waybill_status = #{waybillStatus,jdbcType=SMALLINT},
+    set
+    <if test="waybillStatus!=null and waybillStatus!=''">
+     waybill_status = #{waybillStatus,jdbcType=SMALLINT},
+    </if>
+    <if test="electronicalReceipt!=null and electronicalReceipt!=''">
+      electronical_receipt = #{electronicalReceipt,jdbcType=VARCHAR},
+    </if>
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
       update_date = CURRENT_TIMESTAMP
@@ -446,7 +452,13 @@
 
   <update id="updateCustomerWaybillStatus" parameterType="java.util.Map">
     update t_waybill
-    set waybill_status = #{waybillStatus,jdbcType=SMALLINT},
+    set
+    <if test="waybillStatus!=null and waybillStatus!=''">
+      waybill_status = #{waybillStatus,jdbcType=SMALLINT},
+    </if>
+    <if test="electronicalReceipt!=null and electronicalReceipt!=''">
+      electronical_receipt = #{electronicalReceipt,jdbcType=VARCHAR},
+    </if>
     update_id = #{updateId,jdbcType=BIGINT},
     update_name = #{updateName,jdbcType=VARCHAR},
     update_date = CURRENT_TIMESTAMP

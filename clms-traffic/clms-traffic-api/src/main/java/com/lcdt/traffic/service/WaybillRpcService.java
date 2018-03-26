@@ -41,6 +41,21 @@ public interface WaybillRpcService {
      */
     int modifyCustomerWaybillStatus(WaybillModifyStatusDto dto);
 
+
+    /**
+     * 我的运单 上传回单
+     * @param dto
+     * @return
+     */
+    int modifyOwnWaybillReceipt(WaybillModifyReceiptDto dto);
+
+    /**
+     * 客户运单  上传回单
+     * @param dto
+     * @return
+     */
+    int modifyCustomerWaybillReceipt(WaybillModifyReceiptDto dto);
+
     /**
      * 根据计划id更新运单状态（参数：waybillStatus，updateId，updateName，waybillPlanId，companyId）
      * @param map

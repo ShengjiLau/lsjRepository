@@ -678,7 +678,7 @@ public class WaybillSenderNotify {
         }
     }
     //承运商上传电子回单发送消息通知（扣货主的消息通知费用）
-    public void customerReceiptSendNotify(String waybillIds, Long sendCompanyId, Long sendUserId){
+    public void customerReceiptSendNotify(String waybillIds, Long sendUserId){
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
@@ -703,7 +703,7 @@ public class WaybillSenderNotify {
                 commonAttachment.setCarrierCompany(carrierCompany.getFullName());
                 commonAttachment.setWebNotifyUrl(NotifyUtils.OWN_WAYBILL_WEB_NOTIFY_URL+dao.getWaybillCode());
 
-                TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("carrier_upload", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(sendCompanyId,sendUserId));
+                TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("carrier_upload", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(dao.getCompanyId(),sendUserId));
                 producer.sendNotifyEvent(shipper_event);
             }
         }
