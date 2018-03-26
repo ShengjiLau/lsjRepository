@@ -5,6 +5,9 @@ import com.lcdt.contract.web.dto.ContractDto;
 
 import java.util.List;
 
+import org.mybatis.spring.annotation.MapperScan;
+
+
 public interface ContractMapper {
     int deleteByPrimaryKey(Long contractId);
 

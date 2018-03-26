@@ -5,6 +5,10 @@ import com.lcdt.contract.web.dto.ApprovalProcessDto;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.mybatis.spring.annotation.MapperScan;
+
+
 public interface ApprovalProcessMapper {
     int deleteByPrimaryKey(Long processId,Long companyId);
 

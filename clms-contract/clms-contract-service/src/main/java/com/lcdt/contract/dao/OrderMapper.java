@@ -52,4 +52,13 @@ public interface OrderMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(Order record);
+
+    /**
+     * 更新审批状态
+     * @param orderId
+     * @param companyId
+     * @param status
+     * @return
+     */
+    int updateApprovalStatus(Long orderId,Long companyId,Short status);
 }

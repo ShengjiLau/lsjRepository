@@ -7,21 +7,21 @@ import java.util.Date;
  * @AUTHOR liuh
  * @DATE 2018-03-13
  */
-public class ContractApprovalListDto implements Serializable{
+public class OrderApprovalListDto implements Serializable{
 
-    //合同主键
-    private Long contractId;
+    //订单主键
+    private Long orderId;
 
     //审批人主键
-    private Long caId;
+    private Long oaId;
 
     /**
-     * 合同类型
+     * 订单类型
      * 0 - 其他
-     * 1 - 采购合同
-     * 2 - 销售合同
+     * 1 - 采购订单
+     * 2 - 销售订单
      */
-    private Short type;
+    private Short orderType;
 
     /**
      * 审批状态
@@ -35,11 +35,13 @@ public class ContractApprovalListDto implements Serializable{
     //审批状态内容
     private Long approvalStatusContent;
 
-    //合同流水号
+    //订单流水号
+    private String orderSerialNo;
+
+    //合同编号
     private String contractCode;
 
-    //合同标题
-    private String title;
+    private String supplier;
 
     //发起人姓名
     private String createUserName;
@@ -51,6 +53,12 @@ public class ContractApprovalListDto implements Serializable{
 
     //审批完成时间
     private Date approvalEndDate;
+
+    //货物信息
+    private String orderProduct;
+
+    //创建时间
+    private Date createTime;
 
     /**
      * 用户id 当前用户id
@@ -78,28 +86,28 @@ public class ContractApprovalListDto implements Serializable{
 
     private int pageSize;
 
-    public Long getContractId() {
-        return contractId;
+    public Long getOrderId() {
+        return orderId;
     }
 
-    public void setContractId(Long contractId) {
-        this.contractId = contractId;
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
-    public Long getCaId() {
-        return caId;
+    public Long getOaId() {
+        return oaId;
     }
 
-    public void setCaId(Long caId) {
-        this.caId = caId;
+    public void setOaId(Long oaId) {
+        this.oaId = oaId;
     }
 
-    public Short getType() {
-        return type;
+    public Short getOrderType() {
+        return orderType;
     }
 
-    public void setType(Short type) {
-        this.type = type;
+    public void setOrderType(Short orderType) {
+        this.orderType = orderType;
     }
 
     public Short getApprovalStatus() {
@@ -118,6 +126,14 @@ public class ContractApprovalListDto implements Serializable{
         this.approvalStatusContent = approvalStatusContent;
     }
 
+    public String getOrderSerialNo() {
+        return orderSerialNo;
+    }
+
+    public void setOrderSerialNo(String orderSerialNo) {
+        this.orderSerialNo = orderSerialNo;
+    }
+
     public String getContractCode() {
         return contractCode;
     }
@@ -126,12 +142,12 @@ public class ContractApprovalListDto implements Serializable{
         this.contractCode = contractCode;
     }
 
-    public String getTitle() {
-        return title;
+    public String getSupplier() {
+        return supplier;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
     }
 
     public String getCreateUserName() {
@@ -164,6 +180,22 @@ public class ContractApprovalListDto implements Serializable{
 
     public void setApprovalEndDate(Date approvalEndDate) {
         this.approvalEndDate = approvalEndDate;
+    }
+
+    public String getOrderProduct() {
+        return orderProduct;
+    }
+
+    public void setOrderProduct(String orderProduct) {
+        this.orderProduct = orderProduct;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Long getUserId() {
