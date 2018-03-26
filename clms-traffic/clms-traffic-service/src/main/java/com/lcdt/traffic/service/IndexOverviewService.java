@@ -9,11 +9,22 @@ import java.util.Map;
 public interface IndexOverviewService {
 
     /**
-     * 计划统计
+     * 我的计划统计
      * @param map
      * @return
      */
     Map planStatistics(Map map);
+
+
+
+    /**
+     * 客户计划统计
+     * @param map
+     * @return
+     */
+    Map customerPlanStatistics(Map map);
+
+
 
     /**
      * 运单统计
