@@ -32,5 +32,12 @@ public interface CustomerRpcService {
     Map<String,Object> selectCarrierAndCustomer(Long companyId);
 
 
+    /**
+     * 根据企业Id和绑定企业Id查询客户
+     * @param companyId
+     * @param bindCompanyId
+     * @return
+     */
+    Customer queryCustomer(Long companyId,Long bindCompanyId);
 
 }
