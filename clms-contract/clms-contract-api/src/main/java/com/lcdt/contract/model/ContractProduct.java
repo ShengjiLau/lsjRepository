@@ -13,7 +13,7 @@ public class ContractProduct {
 
     private String sku;
 
-    private Integer num;
+    private BigDecimal num;
 
     private BigDecimal price;
 
@@ -59,13 +59,7 @@ public class ContractProduct {
         this.sku = sku == null ? null : sku.trim();
     }
 
-    public Integer getNum() {
-        return num;
-    }
-
-    public void setNum(Integer num) {
-        this.num = num;
-    }
+  
 
     public BigDecimal getPrice() {
         return price;
@@ -82,4 +76,12 @@ public class ContractProduct {
     public void setPayment(BigDecimal payment) {
         this.payment = payment;
     }
+
+	public BigDecimal getNum() {
+		return num;
+	}
+
+	public void setNum(BigDecimal num) {
+		this.num = num;
+	}
 }

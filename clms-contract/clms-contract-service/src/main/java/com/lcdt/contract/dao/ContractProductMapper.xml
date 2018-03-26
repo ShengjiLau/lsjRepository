@@ -7,7 +7,7 @@
     <result column="product_name" jdbcType="VARCHAR" property="productName" />
     <result column="product_code" jdbcType="VARCHAR" property="productCode" />
     <result column="sku" jdbcType="VARCHAR" property="sku" />
-    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="num" jdbcType="DECIMAL" property="num" />
     <result column="price" jdbcType="DECIMAL" property="price" />
     <result column="payment" jdbcType="DECIMAL" property="payment" />
   </resultMap>
@@ -20,7 +20,7 @@
       product_code, sku, num, 
       price, payment)
     values (#{cpId,jdbcType=BIGINT}, #{contractId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR}, 
-      #{productCode,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, 
+      #{productCode,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, #{num,jdbcType=DECIMAL}, 
       #{price,jdbcType=DECIMAL}, #{payment,jdbcType=DECIMAL})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.ContractProduct">
@@ -29,7 +29,7 @@
       product_name = #{productName,jdbcType=VARCHAR},
       product_code = #{productCode,jdbcType=VARCHAR},
       sku = #{sku,jdbcType=VARCHAR},
-      num = #{num,jdbcType=INTEGER},
+      num = #{num,jdbcType=DECIMAL},
       price = #{price,jdbcType=DECIMAL},
       payment = #{payment,jdbcType=DECIMAL}
     where cp_id = #{cpId,jdbcType=BIGINT}
@@ -51,7 +51,7 @@
     values
     <foreach item="item" collection="list" separator=",">
       (#{item.cpId,jdbcType=BIGINT}, #{item.contractId,jdbcType=BIGINT}, #{item.productName,jdbcType=VARCHAR},
-      #{item.productCode,jdbcType=VARCHAR}, #{item.sku,jdbcType=VARCHAR}, #{item.num,jdbcType=INTEGER},
+      #{item.productCode,jdbcType=VARCHAR}, #{item.sku,jdbcType=VARCHAR}, #{item.num,jdbcType=DECIMAL},
       #{item.price,jdbcType=DECIMAL}, #{item.payment,jdbcType=DECIMAL})
     </foreach>
   </insert>
@@ -63,7 +63,7 @@
       product_name = #{item.productName,jdbcType=VARCHAR},
       product_code = #{item.productCode,jdbcType=VARCHAR},
       sku = #{item.sku,jdbcType=VARCHAR},
-      num = #{item.num,jdbcType=INTEGER},
+      num = #{item.num,jdbcType=DECIMAL},
       price = #{item.price,jdbcType=DECIMAL},
       payment = #{item.payment,jdbcType=DECIMAL}
       where cp_id = #{item.cpId,jdbcType=BIGINT}

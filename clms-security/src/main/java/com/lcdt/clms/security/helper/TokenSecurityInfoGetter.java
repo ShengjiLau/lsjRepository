@@ -12,8 +12,14 @@ public class TokenSecurityInfoGetter {
     }
 
     public UserCompRel getUserCompRel(){
-        UserCompRel userCompRel = (UserCompRel) SecurityContextHolder.getContext().getAuthentication().getCredentials();
-        return userCompRel;
+        Object credentials = SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        if (credentials == null) {
+            return null;
+        }else{
+            UserCompRel userCompRel = (UserCompRel) credentials;
+            return userCompRel;
+        }
+
     }
 
 }
