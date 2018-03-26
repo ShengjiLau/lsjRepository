@@ -19,7 +19,6 @@ public class TokenSecurityInfoGetter {
             UserCompRel userCompRel = (UserCompRel) credentials;
             return userCompRel;
         }
-
     }
 
 }

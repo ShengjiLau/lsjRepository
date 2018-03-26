@@ -46,7 +46,6 @@ public class UserServiceImpl implements UserService {
 		driver.setDriverPhone(user.getPhone());
 		driver.setDriverName(user.getNickName());
 		driverMapper.insert(driver);
-
 		return user;
 	}
 

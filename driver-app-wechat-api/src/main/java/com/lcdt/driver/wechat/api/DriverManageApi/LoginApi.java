@@ -4,23 +4,31 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.token.config.JwtTokenUtil;
 import com.lcdt.driver.dto.PageBaseDto;
+import com.lcdt.notify.rpcservice.IValidCodeService;
+import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.dto.RegisterDto;
+import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
+import com.lcdt.userinfo.service.CreateCompanyService;
 import com.lcdt.userinfo.service.UserService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.lcdt.driver.wechat.api.AuthApi.VCODETAG;
 
 @RestController
 @RequestMapping("/auth/api/manage/")
@@ -35,9 +43,21 @@ public class LoginApi {
     @Reference
     CompanyService companyService;
 
-    @RequestMapping("/register")
+    @Reference
+    IValidCodeService validCodeService;
+
+    @Reference
+    CreateCompanyService createCompanyService;
+
+    @RequestMapping(value = "/register",method = RequestMethod.POST)
     public User registerUser(RegisterDto registerDto) {
         try {
+            String ecode = registerDto.getEcode();
+            boolean codeCorrect = validCodeService.isCodeCorrect(ecode, VCODETAG, registerDto.getUserPhoneNum());
+            if (!codeCorrect) {
+                throw new RuntimeException("验证码错误");
+            }
+
             User user = userService.registerUser(registerDto);
             return user;
         } catch (PhoneHasRegisterException e) {
@@ -46,7 +66,7 @@ public class LoginApi {
         return null;
     }
 
-    @RequestMapping("/login")
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
     public User login(String userName, String pwd) throws UserNotExistException, PassErrorException {
         User user = userService.userLogin(userName, pwd);
         HashMap<String, Object> stringStringHashMap = new HashMap<>();
@@ -64,7 +84,7 @@ public class LoginApi {
         return user;
     }
 
-    @RequestMapping("/complist")
+    @RequestMapping(value = "/complist",method = RequestMethod.POST)
     public PageBaseDto<UserCompRel> compList(String token) throws Exception {
         Claims claimsFromToken = jwtTokenUtil.getClaimsFromToken(token);
         if (claimsFromToken == null) {
@@ -76,7 +96,7 @@ public class LoginApi {
     }
 
 
-    @RequestMapping("/choosecomp")
+    @RequestMapping(value = "/choosecomp",method = RequestMethod.POST)
     public String chooseCompany(String token,Long compId) throws Exception {
         Claims claimsFromToken = jwtTokenUtil.getClaimsFromToken(token);
         if (claimsFromToken == null) {
@@ -94,6 +114,12 @@ public class LoginApi {
         jsonObject.put("data", userCompRel);
         jsonObject.put("message", "请求成功");
         return jsonObject.toString();
+    }
+
+    @RequestMapping(value = "/createcomp", method = RequestMethod.POST)
+    public Company createCompany(CompanyDto companyDto) throws CompanyExistException {
+        Company company = createCompanyService.createCompany(companyDto);
+        return company;
     }
 
 

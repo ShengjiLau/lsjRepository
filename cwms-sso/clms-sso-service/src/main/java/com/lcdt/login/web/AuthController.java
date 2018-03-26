@@ -292,7 +292,6 @@ public class AuthController {
     public ModelAndView loginCompany(Long companyId, HttpServletRequest request, HttpServletResponse response) {
         User userInfo = LoginSessionReposity.getUserInfoInSession(request);
         UserCompRel companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);
-
         if (companyMember == null) {
             //当前用户不在所选公司之内
             throw new LoginError("用户不属于该公司");
