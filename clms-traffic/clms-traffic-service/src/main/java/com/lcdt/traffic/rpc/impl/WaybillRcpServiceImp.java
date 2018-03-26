@@ -109,6 +109,23 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         return result;
     }
 
+    @Override
+    public int modifyOwnWaybillReceipt(WaybillModifyReceiptDto dto) {
+        int result=0;
+        Map map=ClmsBeanUtil.beanToMap(dto);
+        result=waybillMapper.updateOwnWaybillStatus(map);
+        return result;
+    }
+
+    @Override
+    public int modifyCustomerWaybillReceipt(WaybillModifyReceiptDto dto) {
+        int result=0;
+        Map map=ClmsBeanUtil.beanToMap(dto);
+        result=waybillMapper.updateCustomerWaybillStatus(map);
+        //发送消息通知
+        waybillSenderNotify.customerReceiptSendNotify(dto.getWaybillIds(),dto.getUpdateId());
+        return result;
+    }
 
 
     @Override
