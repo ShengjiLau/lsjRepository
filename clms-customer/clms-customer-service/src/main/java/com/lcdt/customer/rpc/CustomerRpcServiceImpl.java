@@ -42,8 +42,11 @@ public class CustomerRpcServiceImpl implements CustomerRpcService {
         return customerMapper.selectCarrierAndCustomer(companyId);
     }
 
-
-
+    @Override
+    public Customer queryCustomer(Long companyId, Long bindCompanyId) {
+        Customer customer = customerMapper.selectByCustomerBindCompanyId(companyId, bindCompanyId);
+        return customer;
+    }
 
 
 }

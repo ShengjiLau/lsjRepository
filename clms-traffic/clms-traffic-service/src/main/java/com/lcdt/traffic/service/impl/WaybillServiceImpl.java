@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,13 +69,16 @@ public class WaybillServiceImpl implements WaybillService {
     private SplitGoodsMapper splitGoodsMapper;
 
     @Reference
-    private CompanyService companyService;
+    private CustomerRpcService customerRpcService;
 
     @Autowired
     private WaybillSenderNotify waybillSenderNotify;
 
     @Autowired
     private SplitGoodsService splitGoodsService;
+
+    @Reference
+    private CompanyService companyService;
 
     @Override
     public Waybill addWaybill(WaybillDto waybillDto) {
@@ -83,34 +87,48 @@ public class WaybillServiceImpl implements WaybillService {
         BeanUtils.copyProperties(waybillDto, waybill);
 
         //计划传过来，判断对应运单有几条数据，然后生成运单编码
-        if(waybill.getWaybillPlanId()!=null&&waybill.getWaybillPlanId()>0){
-            Map map=new HashMap();
-            map.put("companyId",waybill.getCompanyId());
-            map.put("waybillPlanId",waybill.getWaybillPlanId());
-            List<Waybill> list=waybillMapper.selectWaybillByPlanId(map);
-            if(list!=null){
-                waybill.setWaybillCode(waybill.getWaybillCode()+"-"+(list.size()+1));
-            }else {
-                waybill.setWaybillCode(waybill.getWaybillCode()+"-1");
+        if (waybill.getWaybillPlanId() != null && waybill.getWaybillPlanId() > 0) {
+            Map map = new HashMap();
+            map.put("companyId", waybill.getCompanyId());
+            map.put("waybillPlanId", waybill.getWaybillPlanId());
+            List<Waybill> list = waybillMapper.selectWaybillByPlanId(map);
+            if (list != null) {
+                waybill.setWaybillCode(waybill.getWaybillCode() + "-" + (list.size() + 1));
+            } else {
+                waybill.setWaybillCode(waybill.getWaybillCode() + "-1");
             }
         }
 
         //判断运单编码是否存在（相同企业下的运单编码不能重复）
-        if(null!=waybill.getWaybillCode()&&!("").equals(waybill.getWaybillCode())){
-            if(isExistWaybillByCodeAndCompanyId(waybill.getWaybillCode(),waybill.getCompanyId())){
+        if (null != waybill.getWaybillCode() && !("").equals(waybill.getWaybillCode())) {
+            if (isExistWaybillByCodeAndCompanyId(waybill.getWaybillCode(), waybill.getCompanyId())) {
                 throw new RuntimeException("运单编号已存在!");
             }
         }
 
-        if(waybillDto.getCarrierCompanyId()!=null){
-            //设置承运商名字
-            Company carrierCompany=companyService.selectById(waybill.getCarrierCompanyId());
-            waybill.setCarrierCompanyName(carrierCompany.getFullName());
+        if (waybill.getCarrierCompanyId() != null) {
+            if (waybill.getCompanyId().equals(waybill.getCarrierCompanyId())) {
+                Company carrierCompany = companyService.selectById(waybill.getCarrierCompanyId());
+                Company company = companyService.selectById(waybill.getCompanyId());
+                if (carrierCompany != null) {
+                    waybill.setCarrierCompanyName(carrierCompany.getFullName());
+                }
+                if (company != null) {
+                    waybill.setWaybillSource(company.getFullName());
+                }
+            } else {
+                //设置承运商名字在本企业的客户名称
+                Customer carrierCustomer = customerRpcService.queryCustomer(waybill.getCompanyId(), waybill.getCarrierCompanyId());
+                if (carrierCustomer != null && carrierCustomer.getCustomerName() != null) {
+                    waybill.setCarrierCompanyName(carrierCustomer.getCustomerName());
+                }
+                //设置货物来源
+                Customer sourceCustomer = customerRpcService.queryCustomer(waybill.getCarrierCompanyId(), waybill.getCompanyId());
+                if (sourceCustomer.getCustomerName() != null) {
+                    waybill.setWaybillSource(sourceCustomer.getCustomerName());
+                }
+            }
         }
-
-        //设置货主的名字c
-        Company company=companyService.selectById(waybill.getCompanyId());
-        waybill.setWaybillSource(company.getFullName());
 
         //新增运单
         result += waybillMapper.insert(waybill);
@@ -130,7 +148,7 @@ public class WaybillServiceImpl implements WaybillService {
             result += waybillItemsMapper.insertForBatch(waybillItemsList);
         }
 
-        waybill=waybillMapper.selectByPrimaryKey(waybill.getId());
+        waybill = waybillMapper.selectByPrimaryKey(waybill.getId());
         return waybill;
     }
 
@@ -258,12 +276,12 @@ public class WaybillServiceImpl implements WaybillService {
 
     @Override
     public void queryWaybillListToPoPosition(Map map) {
-        List<Waybill> list=waybillMapper.selectWaybillByPositionSetting(map);
-        if(list!=null&&list.size()>0){
+        List<Waybill> list = waybillMapper.selectWaybillByPositionSetting(map);
+        if (list != null && list.size() > 0) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    for(Waybill waybill:list){
+                    for (Waybill waybill : list) {
                         JSONObject result = GprsLocationBo.getInstance().queryLocation(waybill.getDriverPhone());
                         int resid = result.getInteger("resid");
                         if (resid == 0) {   //正确返回
@@ -287,14 +305,14 @@ public class WaybillServiceImpl implements WaybillService {
     }
 
 
-    private boolean isExistWaybillByCodeAndCompanyId(String waybillCode , Long companyId){
-        Map map=new HashMap();
-        map.put("waybillCode",waybillCode);
-        map.put("companyId",companyId);
-        List<Waybill> waybillList=waybillMapper.selectByCodeAndCompanyId(map);
-        if(waybillList!=null&&waybillList.size()>0){
+    private boolean isExistWaybillByCodeAndCompanyId(String waybillCode, Long companyId) {
+        Map map = new HashMap();
+        map.put("waybillCode", waybillCode);
+        map.put("companyId", companyId);
+        List<Waybill> waybillList = waybillMapper.selectByCodeAndCompanyId(map);
+        if (waybillList != null && waybillList.size() > 0) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
