@@ -7,6 +7,7 @@ import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.PlanService;
+import com.lcdt.traffic.service.WaybillRpcService;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
@@ -54,7 +55,8 @@ public class PlanServiceImpl implements PlanService {
     @Reference
     private CompanyRpcService companyRpcService; //企业信息
 
-
+    @Autowired
+    private WaybillRpcService waybillRpcService;
 
 
 
@@ -240,7 +242,7 @@ public class PlanServiceImpl implements PlanService {
             map.put("waybillStatus",ConstantVO.WAYBILL_STATUS_HAVE_CANCEL);
             map.put("updateId",user.getUserId());
             map.put("updateName",user.getRealName());
-            waybillService.modifyOwnWaybillStatusByWaybillPlanId(map);
+            waybillRpcService.modifyOwnWaybillStatusByWaybillPlanId(map);
         }
         waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_CANCEL);
         waybillPlan.setUpdateTime(dt);

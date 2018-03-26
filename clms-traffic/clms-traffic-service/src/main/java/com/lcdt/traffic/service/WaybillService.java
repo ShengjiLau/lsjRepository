@@ -63,19 +63,7 @@ public interface WaybillService {
 
 
 
-    /**
-     * 传运单的状态和运单以逗号分隔开的运单id，批量修改我的运单状态
-     * @param map
-     * @return
-     */
-    int modifyOwnWaybillStatus(Map map);
 
-    /**
-     * 传运单的状态和运单以逗号分隔开的运单id，批量修改客户的运单状态
-     * @param map
-     * @return
-     */
-    int modifyCustomerWaybillStatus(Map map);
 
     /**
      * 验证是否已经存在已卸货或者已完成的运单,返回运单列表（传companyId,waybillPlanId,isDeleted)
@@ -83,13 +71,6 @@ public interface WaybillService {
      * @return
      */
     PageInfo queryPlannedWaybillList(Map map);
-
-    /**
-     * 根据计划id更新运单状态（参数：waybillStatus，updateId，updateName，waybillPlanId，companyId）
-     * @param map
-     * @return
-     */
-    int modifyOwnWaybillStatusByWaybillPlanId(Map map);
 
     /**
      * 定时定位用，根据定位设置，获取运单司机进行定位
