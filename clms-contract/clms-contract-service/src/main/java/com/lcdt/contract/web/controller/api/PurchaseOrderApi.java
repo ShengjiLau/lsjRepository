@@ -118,7 +118,7 @@ public class PurchaseOrderApi {
 	        String m=error.getDefaultMessage();//作为map的value
 	        map.put(n,m);
 	        }
-	        jsonObject.put("code",0);
+	        jsonObject.put("code",-1);
 	        jsonObject.put("message","验证信息未能通过");
 	        jsonObject.put("data",map);
 	        return jsonObject;
@@ -126,7 +126,7 @@ public class PurchaseOrderApi {
 	    //采用OrderValidator(封装对Order各属性的验证)
 	      Map<String,String> validateMap =OrderValidator.validator(orderDto);
 	       if(!validateMap.isEmpty()) {
-	        	jsonObject.put("code",0);
+	        	jsonObject.put("code",-1);
 	           	jsonObject.put("message","验证信息未能通过");
 	           	jsonObject.put("data",validateMap);
 	           	return jsonObject;
@@ -171,7 +171,7 @@ public class PurchaseOrderApi {
 	        	String m=error.getDefaultMessage();
 	        	map.put(n,m);
 	        }
-	        jsonObject.put("code",0);
+	        jsonObject.put("code",-1);
 	        jsonObject.put("message","验证信息未能通过");
 	        jsonObject.put("data",map);
 	        return jsonObject;
@@ -179,7 +179,7 @@ public class PurchaseOrderApi {
 		    //采用OrderValidator(封装对Order各属性的验证)
 	     Map<String,String> validateMap =OrderValidator.validator(orderDto);
 	       if(!validateMap.isEmpty()) {
-	        jsonObject.put("code",0);
+	        jsonObject.put("code",-1);
 	        jsonObject.put("message","验证信息未能通过");
 	        jsonObject.put("data",validateMap);
 	        return jsonObject;

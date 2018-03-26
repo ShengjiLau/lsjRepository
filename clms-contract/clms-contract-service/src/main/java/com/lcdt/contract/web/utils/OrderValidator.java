@@ -17,7 +17,7 @@ public class OrderValidator {
 	
 	public static Map<String,String> validator(OrderDto orderDto) {
 		Map<String,String> map =new HashMap<String,String>();
-		if(orderDto.getOrderType()==1) {
+		if(orderDto.getOrderType()==0) {
 			if(null==orderDto.getSender()) {
 				map.put("sender","收货联系人不可为空");
 			}
@@ -37,7 +37,7 @@ public class OrderValidator {
 				map.put("sengAddress","收货详细地址不可为空");
 			}
 		} 
-        if(orderDto.getOrderType()==0){
+        if(orderDto.getOrderType()==1){
 			if(null==orderDto.getReceiver()) {
 				map.put("receiver","收货联系人不可为空");
 			}
