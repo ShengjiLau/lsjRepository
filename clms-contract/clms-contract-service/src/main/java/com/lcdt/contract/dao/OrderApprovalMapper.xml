@@ -54,7 +54,7 @@
       time)
     values (#{oaId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
       #{userName,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER},
-      #{result,jdbcType=SMALLINT}, #{actionType,jdbcType=SMALLINT} #{status,jdbcType=SMALLINT}, #{content,jdbcType=VARCHAR},
+      #{result,jdbcType=SMALLINT}, #{actionType,jdbcType=SMALLINT}, #{status,jdbcType=SMALLINT}, #{content,jdbcType=VARCHAR},
       #{time,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.contract.model.OrderApproval" >
@@ -189,4 +189,138 @@
       time = #{time,jdbcType=TIMESTAMP}
     where oa_id = #{oaId,jdbcType=BIGINT}
   </update>
+
+  <insert id="insertBatch">
+    insert into t_order_approval (order_id, user_id,user_name, dept_name, sort, action_type,status)
+    values
+    <foreach item="item" collection="list" separator=",">
+      (#{item.orderId,jdbcType=BIGINT}, #{item.userId,jdbcType=BIGINT},
+      #{item.userName,jdbcType=VARCHAR}, #{item.deptName,jdbcType=VARCHAR},
+      #{item.sort,jdbcType=INTEGER}, #{item.actionType,jdbcType=SMALLINT},#{item.status,jdbcType=SMALLINT})
+    </foreach>
+  </insert>
+  <delete id="deleteByOrderId" parameterType="java.lang.Long">
+    delete from t_order_approval
+    where order_id = #{arg0}
+  </delete>
+
+  <!-- ——————————————————————————————————————————华丽分割线—————————————————————————————————————————————— -->
+
+  <resultMap id="OrderApprovalDtoMap" type="com.lcdt.contract.web.dto.OrderApprovalDto">
+    <id column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="supplier" jdbcType="VARCHAR" property="supplier" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="order_type" jdbcType="SMALLINT" property="orderType" />
+    <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
+    <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
+    <result column="dispatching_type" jdbcType="SMALLINT" property="dispatchingType" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="receive_warehouse" jdbcType="VARCHAR" property="receiveWarehouse" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="sender" jdbcType="VARCHAR" property="sender" />
+    <result column="sender_phone" jdbcType="VARCHAR" property="senderPhone" />
+    <result column="send_province" jdbcType="VARCHAR" property="sendProvince" />
+    <result column="send_city" jdbcType="VARCHAR" property="sendCity" />
+    <result column="send_district" jdbcType="VARCHAR" property="sendDistrict" />
+    <result column="send_address" jdbcType="VARCHAR" property="sendAddress" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="pack_require" jdbcType="VARCHAR" property="packRequire" />
+    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+    <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone" />
+    <result column="receiver_province" jdbcType="VARCHAR" property="receiverProvince" />
+    <result column="receiver_city" jdbcType="VARCHAR" property="receiverCity" />
+    <result column="receive_district" jdbcType="VARCHAR" property="receiveDistrict" />
+    <result column="receive_address" jdbcType="VARCHAR" property="receiveAddress" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="approval_start_date" jdbcType="TIMESTAMP" property="approvalStartDate" />
+    <result column="approval_end_date" jdbcType="TIMESTAMP" property="approvalEndDate" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="order_serial_no" jdbcType="VARCHAR" property="orderSerialNo" />
+    <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
+    <collection property="orderApprovalList" select="selectOrderApproval"
+                ofType="com.lcdt.contract.model.OrderApproval" column="{p1=order_id}" >
+
+    </collection>
+  </resultMap>
+
+  <select id="selectOrderApprovalByCondition" resultMap="OrderApprovalDtoMap">
+    select t1.order_id, t1.order_no, t1.order_serial_no, t1.supplier, t1.summation, t1.approval_status,
+    t1.approval_start_date, t1.approval_end_date
+    from t_order t1 left join t_order_approval t2 on t1.order_id = t2.order_id
+    <where>
+      t1.order_type = #{orderType,jdbcType=VARCHAR} and t1.company_id = #{companyId,jdbcType=BIGINT}
+      <if test="orderSerialNo!=null and orderSerialNo!=''">
+        and t1.order_serial_no like concat('%',#{orderSerialNo,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="createTime!=null and createTime!=''">
+        and t1.create_time &gt; #{createTime,jdbcType=TIMESTAMP} and t1.create_time &lt; #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="approvalStatus!=null and approvalStatus!=''">
+        <choose>
+          <when test="tempStatus==3">
+            and t1.approval_status = 2
+          </when>
+          <otherwise>
+            and t1.approval_status = #{approvalStatus,jdbcType=SMALLINT}
+          </otherwise>
+        </choose>
+      </if>
+      and t1.approval_status != 0
+      <if test="tempStatus!=null and tempStatus==0">
+        and t2.user_id = #{userId,jdbcType=BIGINT} and t2.sort = 0
+      </if>
+      <if test="tempStatus!=null and tempStatus==1">
+        and t2.user_id = #{userId,jdbcType=BIGINT} and t2.status = 1
+      </if>
+      <if test="tempStatus!=null and tempStatus==2">
+        and t2.user_id = #{userId,jdbcType=BIGINT} and t2.status in(2,3,4)
+      </if>
+      <if test="tempStatus!=null and tempStatus==3">
+        and t2.user_id = #{userId,jdbcType=BIGINT} and t2.action_type = 1
+      </if>
+    </where>
+  </select>
+  <select id="selectOrderApproval" resultMap="BaseResultMap">
+    select oa_id, user_id, user_name, dept_name, sort, result, status, action_type, content, time from t_order_approval
+    <where>
+      and order_id = #{p1}
+      <!--<if test="tempStatus!=null and tempStatus==0">
+        and user_id = #{userId,jdbcType=BIGINT} and sort = 1
+      </if>
+      <if test="tempStatus!=null and tempStatus==1">
+        and user_id = #{userId,jdbcType=BIGINT} and status = 1
+      </if>
+      <if test="tempStatus!=null and tempStatus==2">
+        and user_id = #{userId,jdbcType=BIGINT} and status = 2
+      </if>
+      <if test="tempStatus!=null and tempStatus==3">
+        and user_id = #{userId,jdbcType=BIGINT} and action_type = 1
+      </if>-->
+    </where>
+    order by sort,oa_id
+  </select>
+  <update id="updateStatus" parameterType="com.lcdt.contract.model.OrderApproval" useGeneratedKeys="true" keyProperty="oaId">
+    update t_order_approval
+    <set>
+      status = #{status,jdbcType=SMALLINT},
+      <if test="result!=null">
+        result = #{result,jdbcType=SMALLINT},
+      </if>
+      <if test="content!=null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="time!=null">
+        time = CURRENT_TIMESTAMP,
+      </if>
+    </set>
+    where oa_id = #{oaId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select oa_id, order_id, user_id, user_name, dept_name, sort, action_type, result, status, content,time
+    from t_order_approval
+    where order_id = #{arg0} and action_type = 0 and status != 5 order by sort
+  </select>
 </mapper>

@@ -33,10 +33,10 @@ public interface ContractApprovalMapper {
 
     /**
      * 根据合同主键删除审批人记录
-     * @param contract_id
+     * @param contractId
      * @return
      */
-    int deleteByContractId(Long contract_id);
+    int deleteByContractId(Long contractId);
 
     
 }
