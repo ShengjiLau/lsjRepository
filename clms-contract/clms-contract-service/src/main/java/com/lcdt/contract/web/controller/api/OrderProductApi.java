@@ -50,7 +50,7 @@ Logger logger = LoggerFactory.getLogger(OrderProductApi.class);
 		PageInfo<List<OrderProduct>> pageInfoList =orderProductService.OrderProductList(orderId); 
 		logger.debug("订单商品条目数"+pageInfoList.getTotal());
 		logger.debug("pageInfoList:"+pageInfoList.toString());
-		PageBaseDto pageBaseDto = new PageBaseDto(pageInfoList.getList(),pageInfoList.getTotal());
+		PageBaseDto<List<OrderProduct>> pageBaseDto = new PageBaseDto<List<OrderProduct>>(pageInfoList.getList(),pageInfoList.getTotal());
 		return pageBaseDto;
 	}
 	

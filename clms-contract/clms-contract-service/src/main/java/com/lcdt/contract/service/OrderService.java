@@ -1,10 +1,12 @@
 package com.lcdt.contract.service;
 
-import java.util.List;
+
+
 
 import com.github.pagehelper.PageInfo;
-import com.lcdt.contract.model.Order;
+
 import com.lcdt.contract.web.dto.OrderDto;
+
 
 
 /**
@@ -38,7 +40,7 @@ public interface OrderService {
      * 获取订单列表
      * @return PageInfo<List<Order>>
      */
-    PageInfo<List<OrderDto>> OrderList(OrderDto OrderDto);
+    PageInfo<OrderDto> OrderList(OrderDto OrderDto);
 
 	
     /**

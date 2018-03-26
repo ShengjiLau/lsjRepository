@@ -1,6 +1,10 @@
 package com.lcdt.contract.dao;
 
 import com.lcdt.contract.model.OrderApproval;
+import com.lcdt.contract.web.dto.OrderApprovalDto;
+import com.lcdt.contract.web.dto.OrderApprovalListDto;
+
+import java.util.List;
 
 public interface OrderApprovalMapper {
     /**
@@ -50,4 +54,37 @@ public interface OrderApprovalMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(OrderApproval record);
+
+    /**
+     * 批量新增审批人信息
+     * @param orderApprovalList
+     * @return
+     */
+    int insertBatch(List<OrderApproval> orderApprovalList);
+
+
+    /**
+     * 根据orderId删除审批人信息
+     * @param orderId
+     * @return
+     */
+    int deleteByOrderId(Long orderId);
+
+
+    /**
+     * 订单审批列表
+     * @param orderApprovalListDto
+     * @return
+     */
+    List<OrderApprovalDto> selectOrderApprovalByCondition(OrderApprovalListDto orderApprovalListDto);
+
+    /**
+     * 更新审批人状态
+     * @param orderApproval
+     * @return
+     */
+    int updateStatus(OrderApproval orderApproval);
+
+    List<OrderApproval> selectByOrderId(Long orderId);
+
 }
