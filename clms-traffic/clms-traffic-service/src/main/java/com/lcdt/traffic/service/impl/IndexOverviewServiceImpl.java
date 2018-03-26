@@ -44,6 +44,37 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
         return map1;
     }
 
+
+    /**
+     * 根据用户ID及相关组，获取关联客户
+     * @param map
+     * @return
+     */
+    private List<Customer> bindCustomerList(Map map) {
+        HashMap map1 = new HashMap();
+        map1.put("companyId",map.get("companyId")); //企业ID
+        map1.put("groupIds",map.get("groupIds")); //客户组
+        map1.put("bindCpid","111");//标识绑定企业ID不为空的企业（承运商对应的所有绑定企业）
+        List<Customer> customerList = customerRpcService.findBindCompanyIds(map1);
+        return  customerList;
+    }
+
+
+
+    @Override
+    public Map customerPlanStatistics(Map map) {
+
+
+
+
+
+
+        return null;
+
+
+
+    }
+
     @Override
     public Map queryOwnWaybillStatistics(Map map) {
         Map<String,Object> map1 = indexOverviewMapper.selectOwnWaybill(map);

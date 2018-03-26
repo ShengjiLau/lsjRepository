@@ -349,7 +349,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
         splitGoods.setUpdateTime(opDate);
         splitGoods.setIsDeleted((short)0);
         splitGoods.setCompanyId(companyId);
-        splitGoods.setCarrierCompanyId(dto.getCarrierCompanyId());// 承运商企业ID
+        splitGoods.setCarrierCompanyId(dto.getCarrierCompanyId()==null?waybillPlan.getCompanyId():dto.getCarrierCompanyId());// 承运商企业ID
         splitGoodsMapper.insert(splitGoods);
 
         List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
