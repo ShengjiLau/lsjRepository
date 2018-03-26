@@ -12,6 +12,7 @@ import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.service.WaybillRpcService;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +29,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/waybill")
+@Api(value = "运单", description = "运单接口，我的运单，客户运单，司机运单")
 public class WaybillApi {
     @Reference
     WaybillRpcService waybillRpcService;
