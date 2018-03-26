@@ -51,7 +51,6 @@ public class ReportFormsApi {
         JSONObject jsonObject = new JSONObject();
         try {
             Map<String, Object> resultMap = reportFormsService.planStatistics(map);
-
             JSONObject jsonResult = new JSONObject(resultMap);
             jsonObject.put("code", 0);
             jsonObject.put("message", "查询成功");
@@ -63,6 +62,57 @@ public class ReportFormsApi {
         }
         return jsonObject;
     }
+
+
+    @ApiOperation(value = "客户计划统计", notes = "报表统计-计划统计")
+    @GetMapping("/plan")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('reportforms_plan')")
+    public JSONObject customerPlanOverview(@RequestParam String param) {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Map map = (Map) JSON.parseObject(param);
+        String ids = map.get("groupIds") != null && map.get("groupIds") != "" ? map.get("groupIds").toString() : "";
+        map.put("companyId", companyId);
+        if(!"".equals(ids)){
+            String[] idArr = ids.split(",");
+            List groupIds = Arrays.asList(idArr);
+            if(groupIds!=null && groupIds.size()>0) {
+                StringBuffer sb = new StringBuffer();
+                for(int i=0;i<groupIds.size();i++) {
+                    sb.append(" find_in_set('"+groupIds.get(i)+"',group_ids)");
+                }
+                sb.append(")");
+                map.put("groupIds", sb.toString());//客户
+            }
+        } else {
+            List<Group> groupList = SecurityInfoGetter.groups();
+            if(groupList!=null && groupList.size()>0) {
+                StringBuffer sb = new StringBuffer();
+                sb.append("(");
+                for(int i=0;i<groupList.size();i++) {
+                    Group group = groupList.get(i);
+                    sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)"); //客户表
+                }
+                sb.append(")");
+                map.put("groupIds", sb.toString());//客户
+            }
+        }
+        JSONObject jsonObject = new JSONObject();
+        try {
+            Map<String, Object> resultMap = reportFormsService.customerPlanStatistics(map);
+            JSONObject jsonResult = new JSONObject(resultMap);
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "查询成功");
+            jsonObject.put("data", jsonResult);
+        } catch (Exception e) {
+            e.printStackTrace();
+            jsonObject.put("code", -1);
+            jsonObject.put("message", new RuntimeException(e));
+        }
+        return jsonObject;
+    }
+
+
+
 
     @ApiOperation(value = "运单统计", notes = "运输首页概览-运单统计")
     @GetMapping("/own/waybill")
@@ -100,7 +150,6 @@ public class ReportFormsApi {
         JSONObject jsonObject = new JSONObject();
         try {
             Map<String, Object> resultMap = reportFormsService.queryCustomerWaybillStatistics(map);
-
             JSONObject jsonResult = new JSONObject(resultMap);
             jsonObject.put("code", 0);
             jsonObject.put("message", "查询成功");

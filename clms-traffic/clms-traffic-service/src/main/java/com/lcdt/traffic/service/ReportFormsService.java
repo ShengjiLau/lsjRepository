@@ -16,6 +16,15 @@ public interface ReportFormsService {
      */
     Map planStatistics(Map map);
 
+
+    /**
+     * 客户计划统计
+     *
+     * @param map
+     * @return
+     */
+    Map customerPlanStatistics(Map map);
+
     /**
      * 运单统计
      *
