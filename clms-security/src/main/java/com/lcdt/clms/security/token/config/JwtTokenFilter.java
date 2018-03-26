@@ -39,9 +39,7 @@ public class JwtTokenFilter extends OncePerRequestFilter{
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         String header = request.getHeader(tokenHeaderKey);
-
         if (!StringUtils.isEmpty(header)) {
             Claims claimsFromToken = jwtTokenUtil.getClaimsFromToken(header);
             if (claimsFromToken == null) {
@@ -49,7 +47,6 @@ public class JwtTokenFilter extends OncePerRequestFilter{
             }
             String userName = (String) claimsFromToken.get("userName");
             logger.info("request token username :{} ",userName);
-
             if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 try {
                     UserCompRel userCompRel = null;
