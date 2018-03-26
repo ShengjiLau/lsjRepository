@@ -64,6 +64,15 @@ public interface IndexOverviewMapper {
      */
     List<Map<String,Object>> selectPlanAndWaybill(Long companyId);
 
+    /***
+     *  执行中的计划
+     * @param companyId
+     * @return
+     */
+    List<Map<String,Object>> selectPlan4Doing(Long companyId);
+
+
+
     /**
      * 我的车辆和司机统计
      * @param companyId

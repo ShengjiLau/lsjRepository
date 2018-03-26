@@ -398,6 +398,14 @@
         GROUP BY t_date
     </select>
     -->
+
+      <!--进行中的计划-排出取消、完成状态的做为货主、或承运人-->
+      <select id="selectPlan4Doing" resultType="Map" parameterType="Long">
+         select count(DISTINCT waybill_plan_id) as plan_count from t_waybill_plan where company_id=#{arg0} or
+        FIND_IN_SET(#{arg0},carrier_collection_ids) and (plan_status!='50' and plan_status!='60')  and is_deleted=0
+    </select>
+
+
     <select id="selectPlanAndWaybill" resultType="Map" parameterType="Long">
         select sum(case when (plan_status=15 or plan_status=20 or plan_status=30 or plan_status=40) then 1 else 0 end) as plan_waybill
         from t_waybill_plan where company_id=#{arg0} and is_deleted=0

@@ -235,15 +235,25 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
             resultMap.put("carrierNum",0);     //设置运输承运商数量为0
             resultMap.put("carrierCustomNum",0);   //设置运输客户数量为0
         }
+
+        /**获取执行中的计划*/
+        List<Map<String,Object>>  mapList0 = indexOverviewMapper.selectPlan4Doing(companyId);
+        if(null!=mapList0 && mapList0.size()>0){
+            Map map = (Map)mapList0.get(0);
+            resultMap.put("planNum",new Integer(null==map?"0":map.get("plan_count")+""));     //设置执行中的计划统计数量
+        }else{
+            resultMap.put("planNum",0);      //设置执行中的计划统计数量为0
+        }
+
         /**获取执行中的计划和在途运单统计*/
         List<Map<String,Object>>  mapList = indexOverviewMapper.selectPlanAndWaybill(companyId);
         if(null!=mapList && mapList.size()>0){
             Map map = (Map)mapList.get(0);
             Map map1 = (Map)mapList.get(0);
-            resultMap.put("planNum",new Integer(null==map?"0":map.get("plan_waybill")+""));     //设置执行中的计划统计数量
+            //resultMap.put("planNum",new Integer(null==map?"0":map.get("plan_waybill")+""));     //设置执行中的计划统计数量
             resultMap.put("waybillNum",new Integer(null==map1?"0":map1.get("plan_waybill")+""));   //设置在途运单统计数量
         }else{
-            resultMap.put("planNum",0);      //设置执行中的计划统计数量为0
+           // resultMap.put("planNum",0);      //设置执行中的计划统计数量为0
             resultMap.put("waybillNum",0);   //设置在途运单统计数量为0
         }
         /**获取我的车辆和司机统计*/

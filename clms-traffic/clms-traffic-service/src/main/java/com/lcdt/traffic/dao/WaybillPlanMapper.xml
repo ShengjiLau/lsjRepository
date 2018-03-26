@@ -675,7 +675,6 @@
       <if test="customerCids!=null and customerCids!=''">
         and company_id in(#{customerCids,jdbcType=VARCHAR})
       </if>
-
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
