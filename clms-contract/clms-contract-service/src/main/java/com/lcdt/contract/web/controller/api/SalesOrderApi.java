@@ -140,6 +140,7 @@ public class SalesOrderApi {
 		orderDto.setCreateUserId(UserId);
 		orderDto.setOrderSerialNo(orderSerialNum);
 		orderDto.setCreateTime(new Date());
+		orderDto.setOrderType(new Short("1"));	//设置订单类型为销售单
 		int result =orderService.addOrder(orderDto);
 		logger.debug("新增销售订单条目数:"+result);
 		if (result>0) {

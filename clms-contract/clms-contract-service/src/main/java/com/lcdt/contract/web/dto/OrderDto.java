@@ -6,6 +6,7 @@ import java.util.List;
 
 
 import com.lcdt.contract.model.Order;
+import com.lcdt.contract.model.OrderApproval;
 import com.lcdt.contract.model.OrderProduct;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -35,6 +36,8 @@ public class OrderDto extends Order  implements Serializable{
 	private int pageSize;
 	
 	private List<OrderProduct> orderProductList;
+
+	private List<OrderApproval> orderApprovalList;
 	
 	
 
@@ -68,19 +71,12 @@ public class OrderDto extends Order  implements Serializable{
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
+	public List<OrderApproval> getOrderApprovalList() {
+		return orderApprovalList;
+	}
+
+	public void setOrderApprovalList(List<OrderApproval> orderApprovalList) {
+		this.orderApprovalList = orderApprovalList;
+	}
 }
