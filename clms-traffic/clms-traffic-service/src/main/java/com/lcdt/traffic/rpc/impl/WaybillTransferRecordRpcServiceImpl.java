@@ -1,23 +1,16 @@
-package com.lcdt.traffic.service.impl;
+package com.lcdt.traffic.rpc.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.notify.model.DefaultNotifyReceiver;
-import com.lcdt.notify.model.DefaultNotifySender;
-import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.dao.WaybillMapper;
 import com.lcdt.traffic.dao.WaybillTransferRecordMapper;
+import com.lcdt.traffic.dto.WaybillTransferRecordDto;
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillTransferRecord;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
-import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.WaybillSenderNotify;
-import com.lcdt.traffic.service.WaybillService;
-import com.lcdt.traffic.service.WaybillTransferRecordService;
-import com.lcdt.traffic.web.dto.WaybillTransferRecordDto;
-import com.lcdt.userinfo.model.User;
-import com.lcdt.userinfo.service.CompanyService;
+import com.lcdt.traffic.service.WaybillTransferRecordRpcService;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +24,7 @@ import java.util.List;
  */
 @Transactional
 @Service
-public class WaybillTransferRecordServiceImpl implements WaybillTransferRecordService {
+public class WaybillTransferRecordRpcServiceImpl implements WaybillTransferRecordRpcService {
     @Autowired
     private WaybillTransferRecordMapper waybillTransferRecordMapper;
 

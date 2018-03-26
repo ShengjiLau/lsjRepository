@@ -1,4 +1,4 @@
-package com.lcdt.traffic.web.dto;
+package com.lcdt.traffic.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -10,47 +10,46 @@ import java.util.Date;
 
 public class WaybillTransferRecordDto {
 
+    @ApiModelProperty(value = "换车记录Id，修改时用")
     private Long id;
-
+    @ApiModelProperty(value = "运单Id")
     private Long waybillId;
-
-    private Date transferDate;
-
+    @ApiModelProperty(value = "车辆ID")
     private Long vechicleId;
-
+    @ApiModelProperty(value = "车牌号")
     private String vechicleNum;
-
+    @ApiModelProperty(value = "司机Id")
     private Long driverId;
-
+    @ApiModelProperty(value = "司机名字")
     private String driverName;
-
+    @ApiModelProperty(value = "司机电话")
     private String driverPhone;
-
+    @ApiModelProperty(value = "换车人的名字", hidden = true)
     private String transferName;
-
+    @ApiModelProperty(value = "箱号", hidden = true)
     private String caseNum;
-
+    @ApiModelProperty(value = "铅封号", hidden = true)
     private String sealNum;
-
+    @ApiModelProperty(value = "企业Id,客户运单换车时需要填，我的运单换车时不需要填")
     private Long companyId;
-
+    @ApiModelProperty(value = "承运商Id，我的运单换车时需要填，客户运单换车时不需要填")
     private Long carrierCompanyId;
-    @ApiModelProperty(value = "创建人id",hidden = true)
+    @ApiModelProperty(value = "创建人id", hidden = true)
     private Long createId;
-    @ApiModelProperty(value = "创建人名字",hidden = true)
+    @ApiModelProperty(value = "创建人名字", hidden = true)
     private String createName;
-    @ApiModelProperty(value = "创建日期",hidden = true)
+    @ApiModelProperty(value = "创建日期", hidden = true)
     private Date createDate;
-    @ApiModelProperty(value = "更新人id",hidden = true)
+    @ApiModelProperty(value = "更新人id", hidden = true)
     private Long updateId;
-    @ApiModelProperty(value = "更新人名字",hidden = true)
+    @ApiModelProperty(value = "更新人名字", hidden = true)
     private String updateName;
-    @ApiModelProperty(value = "更新日期",hidden = true)
+    @ApiModelProperty(value = "更新日期", hidden = true)
     private Date updateDate;
-    @ApiModelProperty(value = "是否删除",hidden = true)
+    @ApiModelProperty(value = "是否删除", hidden = true)
     private Short isDeleted;
 
-    @ApiModelProperty(value = "1：我的运单--换车记录--新增、2：客户运单--换车记录--新增、",hidden = true)
+    @ApiModelProperty(value = "1：我的运单--换车记录--新增、2：客户运单--换车记录--新增、", hidden = true)
     private int type;
 
     public Long getId() {
@@ -67,14 +66,6 @@ public class WaybillTransferRecordDto {
 
     public void setWaybillId(Long waybillId) {
         this.waybillId = waybillId;
-    }
-
-    public Date getTransferDate() {
-        return transferDate;
-    }
-
-    public void setTransferDate(Date transferDate) {
-        this.transferDate = transferDate;
     }
 
     public Long getVechicleId() {
