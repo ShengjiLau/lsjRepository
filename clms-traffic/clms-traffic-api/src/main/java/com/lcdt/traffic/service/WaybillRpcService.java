@@ -1,10 +1,7 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
-import com.lcdt.traffic.dto.DriverWaybillListParsmsDto;
-import com.lcdt.traffic.dto.DriverWaybillParamsDto;
-import com.lcdt.traffic.dto.WaybillCustListParamsDto;
-import com.lcdt.traffic.dto.WaybillOwnListParamsDto;
+import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.model.Waybill;
 
 import java.util.Map;
@@ -28,6 +25,23 @@ public interface WaybillRpcService {
      * @return
      */
     PageInfo queryCustomerWaybillList(WaybillCustListParamsDto dto);
+
+
+    /**
+     * 传运单的状态和运单以逗号分隔开的运单id，批量修改我的运单状态
+     * @param dto
+     * @return
+     */
+    int modifyOwnWaybillStatus(WaybillModifyStatusDto dto);
+
+    /**
+     * 传运单的状态和运单以逗号分隔开的运单id，批量修改客户的运单状态
+     * @param dto
+     * @return
+     */
+    int modifyCustomerWaybillStatus(WaybillModifyStatusDto dto);
+
+    int modifyOwnWaybillStatusByWaybillPlanId(Map map);
 
     /**
      * 查询司机运单列表

@@ -537,7 +537,7 @@ public class WaybillSenderNotify {
     }
 
     //司机卸货发送消息通知（扣货主的消息通知钱）
-    public void driverUnloadinSendNotify(String waybillIds, Long sendCompanyId, Long sendUserId){
+    public void driverUnloadinSendNotify(String waybillIds,Long sendUserId){
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
@@ -545,86 +545,56 @@ public class WaybillSenderNotify {
                 Map splitGoodsMap=new HashMap();
                 splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
                 SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
-                DefaultNotifyReceiver shipperNotifyReceiver = new DefaultNotifyReceiver();
-                shipperNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
-                shipperNotifyReceiver.setUserId(splitGoods.getCreateId());
+                DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
+                defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
+                defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
                 User shipperUser= null;
                 try {
                     shipperUser = userService.queryByUserId(splitGoods.getCreateId());
                 } catch (UserNotExistException e) {
                     e.printStackTrace();
                 }
-                shipperNotifyReceiver.setPhoneNum(shipperUser.getPhone());
+                defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
 
-                CommonAttachment shipperAttachment = new CommonAttachment();
-                shipperAttachment.setWaybillCode(dao.getWaybillCode());
-                shipperAttachment.setVehicleNum(dao.getVechicleNum());
-                shipperAttachment.setDriverName(dao.getDriverName());
-                shipperAttachment.setDriverPhone(dao.getDriverPhone());
-                shipperAttachment.setWebNotifyUrl(NotifyUtils.OWN_WAYBILL_WEB_NOTIFY_URL+dao.getWaybillCode());
-
-                TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("driver_unload", shipperAttachment, shipperNotifyReceiver, NotifyUtils.notifySender(sendCompanyId,sendUserId));
-                producer.sendNotifyEvent(shipper_event);
+                CommonAttachment commonAttachment = new CommonAttachment();
+                commonAttachment.setWaybillCode(dao.getWaybillCode());
+                commonAttachment.setVehicleNum(dao.getVechicleNum());
+                commonAttachment.setDriverName(dao.getDriverName());
+                commonAttachment.setDriverPhone(dao.getDriverPhone());
+                commonAttachment.setWebNotifyUrl(NotifyUtils.OWN_WAYBILL_WEB_NOTIFY_URL+dao.getWaybillCode());
 
                 //承运商不是货主本人
-                if(dao.getCompanyId()!=dao.getCarrierCompanyId()){
-                    //发送给承运商-->派车人
-                    DefaultNotifyReceiver carrierNotifyReceiver = new DefaultNotifyReceiver();
-                    carrierNotifyReceiver.setCompanyId(dao.getCarrierCompanyId());
-                    carrierNotifyReceiver.setUserId(dao.getCreateId());
-                    User carrierCompanyUser= null;
+                if(dao.getCompanyId()!=dao.getCarrierCompanyId()) {
+                    defaultNotifyReceiver.setCarrierCompanyId(dao.getCarrierCompanyId());
+                    defaultNotifyReceiver.setCarrierUserId(dao.getCreateId());
+
+                    User carrierCompanyUser = null;
                     try {
                         carrierCompanyUser = userService.queryByUserId(dao.getCreateId());
                     } catch (UserNotExistException e) {
                         e.printStackTrace();
                     }
-                    carrierNotifyReceiver.setPhoneNum(carrierCompanyUser.getPhone());
+                    defaultNotifyReceiver.setCarrierPhoneNum(carrierCompanyUser.getPhone());
 
-                    CommonAttachment carrierAttachment = new CommonAttachment();
-                    carrierAttachment.setWaybillCode(dao.getWaybillCode());
-                    carrierAttachment.setVehicleNum(dao.getVechicleNum());
-                    carrierAttachment.setDriverName(dao.getDriverName());
-                    carrierAttachment.setDriverPhone(dao.getDriverPhone());
-                    carrierAttachment.setWebNotifyUrl(NotifyUtils.OWN_WAYBILL_WEB_NOTIFY_URL+dao.getWaybillCode());
-
-                    TrafficStatusChangeEvent carrier_event = new TrafficStatusChangeEvent("driver_unload", carrierAttachment, carrierNotifyReceiver, NotifyUtils.notifySender(sendCompanyId,sendUserId));
-                    producer.sendNotifyEvent(carrier_event);
+                    commonAttachment.setCarrierWebNotifyUrl(NotifyUtils.CUSTOMER_WAYBILL_WEB_NOTIFY_URL + dao.getWaybillCode());
                 }
 
                 //判断客户是否有客户电话，有就发送短信，没有就不发送
-                if(dao.getCustomerPhone()!=null){
-                    //发送合同客户
-                    DefaultNotifyReceiver customerNotifyReceiver = new DefaultNotifyReceiver();
-                    customerNotifyReceiver.setPhoneNum(dao.getCustomerPhone());
-
-                    CommonAttachment customerAttachment = new CommonAttachment();
-                    customerAttachment.setWaybillCode(dao.getWaybillCode());
-                    customerAttachment.setVehicleNum(dao.getVechicleNum());
-                    customerAttachment.setDriverName(dao.getDriverName());
-                    customerAttachment.setDriverPhone(dao.getDriverPhone());
-
-                    TrafficStatusChangeEvent  customer= new TrafficStatusChangeEvent("driver_unload", customerAttachment, customerNotifyReceiver, NotifyUtils.notifySender(sendCompanyId,sendUserId));
-                    producer.sendNotifyEvent(customer);
+                if(dao.getCustomerPhone()!=null) {
+                    defaultNotifyReceiver.setCustomerPhoneNum(dao.getCustomerPhone());
                 }
 
                 //发送给收货人
-                DefaultNotifyReceiver receiveNotifyReceiver = new DefaultNotifyReceiver();
-                receiveNotifyReceiver.setPhoneNum(dao.getReceivePhone());
+                defaultNotifyReceiver.setReceivePhoneNum(dao.getReceivePhone());
 
-                CommonAttachment receiveAttachment = new CommonAttachment();
-                receiveAttachment.setWaybillCode(dao.getWaybillCode());
-                receiveAttachment.setVehicleNum(dao.getVechicleNum());
-                receiveAttachment.setDriverName(dao.getDriverName());
-                receiveAttachment.setDriverPhone(dao.getDriverPhone());
-
-                TrafficStatusChangeEvent receive_event = new TrafficStatusChangeEvent("driver_unload", receiveAttachment, receiveNotifyReceiver, NotifyUtils.notifySender(sendCompanyId,sendUserId));
-                producer.sendNotifyEvent(receive_event);
+                TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("driver_unload", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(dao.getCompanyId(),sendUserId));
+                producer.sendNotifyEvent(shipper_event);
 
             }
         }
     }
     //承运商卸货发送消息通知
-    public void customerUnloadingSendNotify(String waybillIds, Long sendCompanyId, Long sendUserId){
+    public void customerUnloadingSendNotify(String waybillIds, Long sendUserId){
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
@@ -669,7 +639,7 @@ public class WaybillSenderNotify {
                 //接收者是收货人
                 defaultNotifyReceiver.setReceivePhoneNum(dao.getReceivePhone());
 
-                TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("carrier_unload", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(sendCompanyId,sendUserId));
+                TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("carrier_unload", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(dao.getCompanyId(),sendUserId));
                 producer.sendNotifyEvent(shipper_event);
 
             }
@@ -677,7 +647,7 @@ public class WaybillSenderNotify {
 
     }
     //司机上传电子回单发送消息通知（扣货主的消息通知费用）
-    public void driverReceiptSendNotify(String waybillIds, Long sendCompanyId, Long sendUserId){
+    public void driverReceiptSendNotify(String waybillIds, Long sendUserId){
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
@@ -702,7 +672,7 @@ public class WaybillSenderNotify {
                 commonAttachment.setDriverName(dao.getDriverName());
                 commonAttachment.setWebNotifyUrl(NotifyUtils.OWN_WAYBILL_WEB_NOTIFY_URL+dao.getWaybillCode());
 
-                TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("driver_upload", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(sendCompanyId,sendUserId));
+                TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("driver_upload", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(dao.getCompanyId(),sendUserId));
                 producer.sendNotifyEvent(shipper_event);
             }
         }
@@ -863,7 +833,7 @@ public class WaybillSenderNotify {
         }
     }
     //客户运单 取消 发送消息（扣货主的消息通知费用）
-    public void customerCancelSendNotify(String waybillIds, Long sendCompanyId, Long sendUserId){
+    public void customerCancelSendNotify(String waybillIds, Long sendUserId){
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
@@ -908,7 +878,7 @@ public class WaybillSenderNotify {
                 //接收者是收货人
                 defaultNotifyReceiver.setReceivePhoneNum(dao.getReceivePhone());
 
-                TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("carrier_bill_cancel", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(sendCompanyId,sendUserId));
+                TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("carrier_bill_cancel", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(dao.getCompanyId(),sendUserId));
                 producer.sendNotifyEvent(shipper_event);
 
             }
@@ -916,7 +886,7 @@ public class WaybillSenderNotify {
     }
 
     //客户运单 完成 发送消息（扣货主的消息通知费用）
-    public void customerFinishSendNotify(String waybillIds, Long sendCompanyId, Long sendUserId){
+    public void customerFinishSendNotify(String waybillIds,Long sendUserId){
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
@@ -960,7 +930,7 @@ public class WaybillSenderNotify {
                 //接收者是收货人
                 defaultNotifyReceiver.setReceivePhoneNum(dao.getReceivePhone());
 
-                TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("carrier_bill_finish", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(sendCompanyId,sendUserId));
+                TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("carrier_bill_finish", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(dao.getCompanyId(),sendUserId));
                 producer.sendNotifyEvent(shipper_event);
 
             }

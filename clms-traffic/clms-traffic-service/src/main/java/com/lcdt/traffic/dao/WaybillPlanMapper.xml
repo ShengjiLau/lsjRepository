@@ -786,6 +786,12 @@
       <if test="goodsInfo != null and goodsInfo!=''">
         and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')  and is_deleted=0)
       </if>
+
+      <if test="customerCids!=null and customerCids!=''">
+        and company_id in(#{customerCids,jdbcType=VARCHAR})
+      </if>
+
+
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
@@ -857,6 +863,10 @@
       <if test="goodsInfo != null and goodsInfo!=''">
         and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like  concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')  and is_deleted=0)
       </if>
+      <if test="customerCids!=null and customerCids!=''">
+        and wp.company_id in(#{customerCids,jdbcType=VARCHAR})
+      </if>
+
       <if test="companyIds!=null and companyIds!=''"> <!--创建企业-->
         and ${companyIds}
       </if>
@@ -924,6 +934,9 @@
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
         and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') and is_deleted=0)
+      </if>
+      <if test="customerCids!=null and customerCids!=''">
+        and wp.company_id in(#{customerCids,jdbcType=VARCHAR})
       </if>
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
@@ -993,6 +1006,9 @@
       <if test="goodsInfo != null and goodsInfo!=''">
         and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') and is_deleted=0)
       </if>
+      <if test="customerCids!=null and customerCids!=''">
+        and wp.company_id in(#{customerCids,jdbcType=VARCHAR})
+      </if>
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
@@ -1047,6 +1063,9 @@
       </if>
       <if test="receiveCounty!=null and receiveCounty!=''">
         and wp.receive_county = #{receiveCounty,jdbcType=VARCHAR}
+      </if>
+      <if test="customerCids!=null and customerCids!=''">
+        and wp.company_id in(#{customerCids,jdbcType=VARCHAR})
       </if>
       <!--派单时间-->
       <if test="disDateBegin != null and disDateBegin != ''">
