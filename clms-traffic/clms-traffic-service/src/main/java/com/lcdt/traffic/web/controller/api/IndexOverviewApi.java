@@ -3,11 +3,8 @@ package com.lcdt.traffic.web.controller.api;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.traffic.model.DriverGroup;
-import com.lcdt.traffic.service.DriverGroupService;
 import com.lcdt.traffic.service.IndexOverviewService;
 import com.lcdt.traffic.util.GroupIdsUtil;
-import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.userinfo.model.Group;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,9 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
 
