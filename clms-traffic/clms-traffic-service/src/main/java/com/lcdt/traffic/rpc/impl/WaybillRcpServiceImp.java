@@ -243,10 +243,10 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                 for(Waybill waybill:list){
                     map.put("waybillPlanId",waybill.getWaybillPlanId());
                     List<Waybill> waybillList=waybillMapper.selectWaybillByPlanId(map);
-                    boolean flag=false;
+                    boolean flag=true;
                     for(Waybill bill:waybillList){
                         if(bill.getWaybillStatus()!=ConstantVO.WAYBILL_STATUS_HAVE_FINISH){
-                            flag=true;
+                            flag=false;
                             break;
                         }
                     }
