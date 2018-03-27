@@ -91,8 +91,9 @@ public class ReportFormsServiceImpl implements ReportFormsService {
                 for (Customer obj1: customer4GroupList) {
                     if (!StringUtils.isEmpty(obj1.getCollectionIds())) {
                         sb_carrier_ids.append(obj1.getCollectionIds()+",");
-                        sb_customerIDS.append(obj1.getCustomerId()+",");
                     }
+                        sb_customerIDS.append(obj1.getCustomerId()+",");
+
                 }
             }
             sb.append(")");

@@ -122,8 +122,9 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 for (Customer obj1: customer4GroupList) {
                     if (!StringUtils.isEmpty(obj1.getCollectionIds())) {
                         sb_carrier_ids.append(obj1.getCollectionIds()+",");
-                        sb_customerIDS.append(obj1.getCustomerId()+",");
                     }
+                     sb_customerIDS.append(obj1.getCustomerId()+",");
+
                 }
                 //查询承运人在货主建立的司机组中的，所有竞价组
 /*                List<DriverGroup> driverGroupList = driverGroupService.selectAll(ownCompanyId);
