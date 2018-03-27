@@ -645,6 +645,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         }
         float splitRemainAmount = 0 ;
         List<SplitGoodsDetail> splitGoodsDetails = splitGoods.getSplitGoodsDetailList(); //因为派车是按派单来的
+
         if (null!=splitGoodsDetails && splitGoodsDetails.size()>0) {
             for(SplitGoodsDetail obj : splitGoodsDetails) {
                     splitRemainAmount = splitRemainAmount + obj.getRemainAmount();//统计派单剩余数量（国为竞价是一次派单所以这块可以循环统计，否则要取最大ID的剩余数）
@@ -655,6 +656,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 }
             }
         }
+
         boolean isComplete = false;
         if (sumAmount>splitRemainAmount) {
             throw new RuntimeException("本次派车总数量："+sumAmount+"，剩余待派数量："+splitRemainAmount+"，派车失败！");
@@ -663,6 +665,10 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 isComplete = true;
             }
         }
+
+        waybillDto.setDriverId(dto.getDriverId());
+        waybillDto.setDriverName(dto.getDriverName());
+        waybillDto.setDriverPhone(dto.getDriverPhone());
 
         waybillDto.setWaybillCode(waybillPlan.getSerialCode());   //整合运单主子关系
         waybillDto.setWaybillItemsDtoList(waybillItemsDtos);
