@@ -65,7 +65,7 @@ public class ReportFormsApi {
 
 
     @ApiOperation(value = "客户计划统计", notes = "报表统计-计划统计")
-    @GetMapping("/plan")
+    @GetMapping("/customer/plan")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('reportforms_plan')")
     public JSONObject customerPlanOverview(@RequestParam String param) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
