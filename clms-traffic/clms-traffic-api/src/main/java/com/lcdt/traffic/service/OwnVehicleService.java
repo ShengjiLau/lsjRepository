@@ -1,8 +1,8 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.traffic.dto.OwnVehicleDto;
 import com.lcdt.traffic.model.OwnVehicle;
-import com.lcdt.traffic.web.dto.OwnVehicleDto;
 import com.lcdt.userinfo.model.Driver;
 
 import java.util.List;

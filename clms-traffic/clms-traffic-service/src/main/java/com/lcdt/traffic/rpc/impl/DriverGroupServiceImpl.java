@@ -1,16 +1,17 @@
-package com.lcdt.traffic.service.impl;
+package com.lcdt.traffic.rpc.impl;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.DriverGroupMapper;
 import com.lcdt.traffic.dao.DriverGroupRelationshipMapper;
+import com.lcdt.traffic.dto.DriverGroupDto;
+import com.lcdt.traffic.dto.DriverGroupDto2;
 import com.lcdt.traffic.model.DriverAndGroup;
 import com.lcdt.traffic.model.DriverGroup;
 import com.lcdt.traffic.service.DriverGroupService;
-import com.lcdt.traffic.web.dto.DriverGroupDto;
-import com.lcdt.traffic.web.dto.DriverGroupDto2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 
 import java.util.HashMap;
 import java.util.List;

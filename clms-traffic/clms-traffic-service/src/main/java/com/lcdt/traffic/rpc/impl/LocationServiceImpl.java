@@ -1,6 +1,5 @@
-package com.lcdt.traffic.service.impl;
+package com.lcdt.traffic.rpc.impl;
 
-import com.lcdt.traffic.service.LocationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class LocationServiceImpl implements LocationService {
+public class LocationServiceImpl {
 
 }

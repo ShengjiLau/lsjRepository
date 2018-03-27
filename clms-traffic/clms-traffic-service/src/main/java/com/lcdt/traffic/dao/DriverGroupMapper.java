@@ -1,9 +1,9 @@
 package com.lcdt.traffic.dao;
 
+import com.lcdt.traffic.dto.DriverGroupDto;
+import com.lcdt.traffic.dto.DriverGroupDto2;
 import com.lcdt.traffic.model.DriverAndGroup;
 import com.lcdt.traffic.model.DriverGroup;
-import com.lcdt.traffic.web.dto.DriverGroupDto;
-import com.lcdt.traffic.web.dto.DriverGroupDto2;
 
 import java.util.List;
 import java.util.Map;

@@ -164,7 +164,7 @@
   <!-- ——————————————————————————————————————————华丽分割线—————————————————————————————————————————————— -->
 
 
-  <resultMap id="ResultMapDto" type="com.lcdt.traffic.web.dto.OwnVehicleDto">
+  <resultMap id="ResultMapDto" type="com.lcdt.traffic.dto.OwnVehicleDto">
     <id column="own_vehicle_id" jdbcType="BIGINT" property="ownVehicleId" />
     <result column="affiliated_company" jdbcType="VARCHAR" property="affiliatedCompany" />
     <result column="vehicle_num" jdbcType="VARCHAR" property="vehicleNum" />
