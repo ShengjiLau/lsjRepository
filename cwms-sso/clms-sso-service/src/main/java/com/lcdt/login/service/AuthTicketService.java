@@ -41,7 +41,6 @@ public class AuthTicketService {
 	public void removeTicketInCookie(HttpServletRequest request, HttpServletResponse response) {
 		for (Cookie cookie : request.getCookies()) {
 			if (cookie.getName().equals(ticketCookieKey)) {
-
 				cookie.setValue(null);
 				cookie.setMaxAge(0);
 				String ticket = cookie.getValue();
