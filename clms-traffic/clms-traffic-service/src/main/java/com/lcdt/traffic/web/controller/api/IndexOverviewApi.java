@@ -65,7 +65,7 @@ public class IndexOverviewApi {
 
 
     @ApiOperation(value = "客户计划统计", notes = "运输首页概览-客户计划统计")
-    @GetMapping("/cplan")
+    @GetMapping("/customer/plan")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
     public JSONObject customerPlanOverview(@RequestParam String param) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -79,6 +79,9 @@ public class IndexOverviewApi {
                 StringBuffer sb = new StringBuffer();
                 for(int i=0;i<groupIds.size();i++) {
                     sb.append(" find_in_set('"+groupIds.get(i)+"',group_ids)");
+                    if(i!=groupIds.size()-1){
+                        sb.append(" or ");
+                    }
                 }
                 sb.append(")");
                 map.put("groupIds", sb.toString());//客户
@@ -91,7 +94,11 @@ public class IndexOverviewApi {
                 for(int i=0;i<groupList.size();i++) {
                     Group group = groupList.get(i);
                     sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)"); //客户表
+                    if(i!=groupList.size()-1){
+                        sb.append(" or ");
+                    }
                 }
+
                 sb.append(")");
                 map.put("groupIds", sb.toString());//客户
             }

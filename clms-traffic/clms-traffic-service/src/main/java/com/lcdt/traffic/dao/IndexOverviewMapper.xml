@@ -33,7 +33,7 @@
 
     <select id="selectPlanData" resultType="Map" parameterType="Map">
         SELECT t.dt t_date,ifnull(t1.paidanzhong,0) paidanzhong,ifnull(t1.jingjiazhong,0) jingjiazhong,ifnull(t1.yipaidan,0) yipaidan,
-        ifnull(t1.yipaiche,0) yipaiche,ifnull(t1.yiwancheng,0) yiwancheng
+        ifnull(t1.yiwancheng,0) yiwancheng
         FROM t_date t
         LEFT JOIN (
             SELECT
@@ -179,8 +179,8 @@
         date(pubdate) as pub_date, count(1) yibaojia
         FROM t_waybill_plan wp
         WHERE  1=1
-        and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
-        and waybill_plan_id not in (SELECT waybill_plan_id FROM t_split_goods sg where sg.company_id = p1.company_id and sg.is_deleted=0)
+        and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = wp.company_id and sn.is_deleted=0)
+        and waybill_plan_id not in (SELECT waybill_plan_id FROM t_split_goods sg where sg.company_id = wp.company_id and sg.is_deleted=0)
         and plan_status != '60'
         and is_deleted = 0
         <if test="date_interval!=null and date_interval!=''">
@@ -189,8 +189,6 @@
         <if test="pubdate_start!=null and pubdate_start!=''">
             and date(pubdate) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(pubdate) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
         </if>
-        and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
-        and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status!=7 )=0
         <if test="companyIds!=null and companyIds!=''">
             and ${companyIds}
         </if>
