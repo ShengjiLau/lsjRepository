@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <title>邀请</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" href="./asset/style/iconfont.css">
+    <link rel="stylesheet" href="/asset/style/iconfont.css">
+    <link rel="shortcut icon" href="/asset/favicon.ico" >
+    <link href="https://cdn.bootcss.com/bootstrap-select/1.12.4/css/bootstrap-select.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap-select/1.12.4/js/bootstrap-select.js"></script>
+    <link href="https://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
     <style media="screen">
         html,
         body {
@@ -33,7 +39,7 @@
             border-bottom: 1px solid #f0f0f0;
         }
         .user-menu{
-            font-size: 16px;
+            font-size: 12px;
             float: right;
             line-height: 60px;
         }
@@ -46,25 +52,6 @@
         }
         button {
             border: none;
-        }
-
-        a:link {
-            text-decoration: none;
-            color: #F60;
-        }
-
-        a:visited {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        a:hover {
-            text-decoration: none;
-        }
-
-        a:active {
-            text-decoration: none;
-            font-weight: bold;
         }
 
         input {
@@ -112,26 +99,6 @@
             text-align: right;
             display: inline-block;
         }
-        /*select {*/
-        /*!*Chrome和Firefox里面的边框是不一样的，所以复写了一下*!*/
-        /*border: solid 1px #000;*/
-
-        /*!*很关键：将默认的select选择框样式清除*!*/
-        /*appearance:none;*/
-        /*-moz-appearance:none;*/
-        /*-webkit-appearance:none;*/
-
-        /*!*在选择框的最右侧中间显示小箭头图片*!*/
-        /*background: url("http://ourjs.github.io/static/2015/arrow.png") no-repeat scroll right center transparent;*/
-
-
-        /*!*为下拉小箭头留出一点位置，避免被文字覆盖*!*/
-        /*padding-right: 14px;*/
-        /*}*/
-
-
-        /*!*清除ie的默认选择框样式清除，隐藏下拉箭头*!*/
-        /*select::-ms-expand { display: none; }*/
 
         .normalText{
             font-size: 14px;
@@ -153,7 +120,7 @@
             margin-top: 11px;
         }
         .form-row label{
-            width:80px;
+            /*width:80px;*/
             margin-right: 8px;
         }
         .clms-input input{
@@ -184,26 +151,13 @@
             width: 300px;
             box-sizing:border-box;
         }
-        .clms-input span,.clms-input img{
-            position: absolute;
-        }
-        .clms-input span{
-            line-height: 21px;
-            z-index: 999;
-            margin: 10px 8px;
-            padding-right: 10px;
-            border-right: 1px solid #ccc;
-        }
+
         .page{
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%,-50%);
         }
-        .clms-input span+input{
-            padding-left: 60px;
-        }
-
         .next-btn-row.form-row{
             width: 300px;
             margin-left: 90px;
@@ -223,12 +177,23 @@
         .next-btn{
             width: 100%;
             height: 48px;
-            color: #333;
+            color: #c7c7c7;
             font-size: 16px;
             text-align: center;
             display: inline-block;
             background: #F2F2F2;
-            border: 1px solid #CCCCCC;
+            border: 1px solid #e6e6e6;
+            border-radius: 4px;
+        }
+        .next-btn-blue{
+            width: 100%;
+            height: 48px;
+            color: #333333;
+            font-size: 16px;
+            text-align: center;
+            display: inline-block;
+            background: #F2F2F2;
+            border: 1px solid #cccccc;
             border-radius: 4px;
         }
         .next-btn-row.form-row .default-btn{
@@ -253,6 +218,24 @@
         .alert-content{
             margin-top: 12px;text-align: center;
         }
+        a:link {
+            text-decoration: none;
+            color: #F60;
+        }
+
+        a:visited {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        a:active {
+            text-decoration: none;
+            font-weight: normal;
+        }
         .register{
             margin-top: 30px;
             width: 300px;
@@ -266,7 +249,55 @@
             border-radius: 4px;
             margin-left: 60px;
         }
-
+        .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default{
+            background-color: #fff;
+        }
+        .btn-group.open .dropdown-toggle{
+            box-shadow:inset 0 3px 5px rgba(0,0,0,0)
+        }
+        .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn){
+            width: 300px;
+        }
+        .btn-default{
+            color: #333;
+            background-color: #fff;
+            border-color: #ccc;
+            height: 44px;
+        }
+        .dropdown-menu>.active>a, .dropdown-menu>.active>a:hover, .dropdown-menu>.active>a:focus{
+            color: #000;
+            text-decoration: none;
+            background-color: #eee;
+            outline: 0;
+        }
+        .dropdown-menu>li>a{
+            display: block;
+            padding: 3px 20px;
+            clear: both;
+            font-weight: normal;
+            line-height: 2.28571429;
+            color: #333;
+            white-space: nowrap;
+        }
+        label{
+            font-weight: normal;
+            flood-color: #666666;
+        }
+        .bootstrap-select.btn-group .dropdown-menu.inner
+        {
+            position: static;
+            float: none;
+            border: 0;
+            padding: 0;
+            margin: 0;
+            border-radius: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            height: 200px;
+        }
+        .btn{
+            font-size: 16px;;
+        }
     </style>
 </head>
 <body>
@@ -274,48 +305,88 @@
     <nav>
         <div class="logo">
             <img src="/asset/image/logo_top.png" alt="">
+            <span class="logo-title">客户绑定</span>
         </div>
         <div class="user-menu">
-            <a href="" th:text="${username}"><i class="iconfont icon-user"></i></a>
+             <span class="ant-dropdown-link ant-dropdown-trigger" href="#" style="font-weight: 100;">
+              <div class="pic" style="width: 24px;margin-right: 5px;height: 24px;vertical-align: middle;border-radius: 13px;overflow: hidden;display: inline-block;border: 1px solid #d9d9d9">
+                  <img th:src="${headimg==''?'/img/head.png':headimg}" alt="此处有头像" style="width: 100%; vertical-align: top;">
+              </div><!-- react-text: 54 --><label th:utext="${username}"/><!-- /react-text -->
+            </span>
             <a href="http://39.107.12.215:52412/account/logout"><i class="iconfont icon-logout01" ></i>退出</a>
         </div>
     </nav>
 </div>
 <div class="content">
     <form class="" action="/api/customer/bind" id="choose-customer" method="post">
-
         <input type="hidden" th:value="${log.inviteId}" name="inviteId">
-
         <div class="form-row">
             <label >当前企业：</label>
             <div style="display:inline-block;vertical-align: top;
-            margin-top: 11px;" th:text="${currentCompanyName}">当前公司</div>
+            margin-top: 11px;;color: #000000" th:text="${currentCompanyName}">当前公司</div>
         </div>
         <div class="form-row">
-            <label for="customer">关联客户：</label>
+            <label>关联客户：</label>
             <div class="clms-input">
-                <select name="customerId">
-                    <option th:each="customer: ${list} " th:value = "${customer.customerId}"  th:text = "${customer.customerName}">Volvo</option>
+                <select name="customerId" class="selectpicker" id="customerId" onchange="check()">
+                    <option value="">请选择客户</option>
+                    <!--<option>cow</option>
+                    <option>bull</option>
+                    <option>ASD</option>
+                    <option>ASDd</option>
+                    <option>ASDdfff</option>-->
+                    <option th:each="customer: ${list} " th:value = "${customer.customerId}"  th:text = "${customer.customerName}"></option>
                 </select>
+                <label style="font-size: 12px;color: #0891fb">
+                    <a href="#" onclick="auto_bind()" style="color: #0891fb">自动创建客户并关联</a>
+                </label>
             </div>
         </div>
-        <div class="form-row next-btn-row" style="margin-top:32px;">
-            <button type="submit" class="next-btn">
+        <div class="form-row next-btn-row" style="margin-top:20px;">
+            <button type="submit" class="next-btn" id="next_btn" disabled="disabled">
                 下一步
             </button>
         </div>
-
     </form>
-
     <script type="text/javascript">
-
-
-
-
-
-
+        $(function () {
+            check();
+            $(".no-results").html("没有找到匹配");
+            $("input[role$='textbox']").attr("maxlength",15);
+            $("input[role$='textbox']").css("font-size","14px");
+            $("input[role$='textbox']").attr("placeholder","请输入客户名称检索");
+        })
+        var check = function () {
+            if($("#customerId option:selected").val()=="")
+            {
+                $("#next_btn").removeClass();
+                $("#next_btn").addClass("next-btn");
+                $("#next_btn").attr("disabled",true);
+            }
+            else {
+                $("#next_btn").attr("disabled",false);
+                $("#next_btn").removeClass();
+                $("#next_btn").addClass("next-btn-blue");
+            }
+        }
+        var auto_bind = function () {
+            alert("啥也没有");
+            return false;
+        }
+        $(".selectpicker").selectpicker({
+            liveSearch:true,
+        });
+        $("#next_btn").click(function () {
+            if($("#customerId option:selected").val()=="")
+            {
+                alert("请选择客户绑定！");
+                return false;
+            }
+        });
+        $("input[role$='textbox']").keyup(function () {
+            $(".no-results").html("没有找到匹配'"+$("input[role$='textbox']").val()+"'的客户！");
+        });
     </script>
-
 </div>
 </body>
 </html>

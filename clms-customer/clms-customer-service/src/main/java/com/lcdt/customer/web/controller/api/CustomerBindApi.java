@@ -156,6 +156,7 @@ public class CustomerBindApi {
 		modelAndView.addObject("log", customerInviteLog);
 		modelAndView.addObject("currentCompanyName", userCompRel.getCompany().getFullName());
 		modelAndView.addObject("username", userCompRel.getUser().getRealName());
+		modelAndView.addObject("headimg", userCompRel.getUser().getPictureUrl());
 		return modelAndView;
 	}
 
