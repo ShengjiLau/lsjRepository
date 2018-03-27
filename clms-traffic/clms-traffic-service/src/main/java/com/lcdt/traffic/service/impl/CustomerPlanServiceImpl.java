@@ -666,6 +666,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             }
         }
 
+        //派车给司机
         waybillDto.setDriverId(dto.getDriverId());
         waybillDto.setDriverName(dto.getDriverName());
         waybillDto.setDriverPhone(dto.getDriverPhone());
@@ -673,7 +674,6 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         waybillDto.setWaybillCode(waybillPlan.getSerialCode());   //整合运单主子关系
         waybillDto.setWaybillItemsDtoList(waybillItemsDtos);
         Waybill waybill = waybillService.addWaybill(waybillDto);
-
         if (waybill!=null) {
             for (PlanDetail obj1 :list) {//剩余=原剩余-本次派车数
                 for (SplitGoodsDetail obj : splitGoodsDetails) {
