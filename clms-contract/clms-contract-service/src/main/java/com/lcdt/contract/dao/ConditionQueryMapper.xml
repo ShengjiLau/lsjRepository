@@ -19,6 +19,9 @@
       <if test="orderNo !=null and orderNo!=''">
     	 and order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')                                             =
       </if>
+      <if test="orderSerialNo !=null and orderSerialNo!=''">
+    	 and order_serial_no like concat('%',#{orderSerialNo,jdbcType=VARCHAR},'%')                                             =
+      </if>
       <if test="groupId !=null">
       	and group_id=#{groupId,jdbcType=BIGINT}
       </if>
@@ -98,6 +101,11 @@
     </foreach>
   </delete>
   	
+  	<delete id="deleteOrderProductByOrderId"  parameterType="java.lang.Long">
+  	 delete 
+     from t_order_product
+     where order_id=#{orderId,jdbcType=BIGINT}
+  	</delete>
   	
   	
   	
