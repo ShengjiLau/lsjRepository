@@ -323,4 +323,9 @@
     from t_order_approval
     where order_id = #{arg0} and action_type = 0 and status != 5 order by sort
   </select>
+  <select id="selectForOrderDetail" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select oa_id, order_id, user_id, user_name, dept_name, sort, action_type, result, status, content,time
+    from t_order_approval
+    where order_id = #{arg0} and (sort>0 or sort is NULL) order by sort
+  </select>
 </mapper>

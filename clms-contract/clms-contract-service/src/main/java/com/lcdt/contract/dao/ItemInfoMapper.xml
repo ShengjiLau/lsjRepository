@@ -47,5 +47,7 @@
     from t_warehouse
     where  company_id = #{companyId,jdbcType=BIGINT} and create_id=#{createId,jdbcType=BIGINT}
   </select>
+  
+  
    
 </mapper>
