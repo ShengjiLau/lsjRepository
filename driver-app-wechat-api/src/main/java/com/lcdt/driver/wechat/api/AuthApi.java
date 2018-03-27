@@ -11,6 +11,7 @@ import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,16 +43,22 @@ public class AuthApi {
             jsonObject.put("message", "验证码错误");
             return jsonObject.toString();
         }
-
-
         User user;
         try {
             user = userService.queryByPhone(phone);
         } catch (UserNotExistException e) {
             user = new User();
             user.setPhone(phone);
-            user.setNickName(wechatUserDto.getNickName());
-            user.setRealName(wechatUserDto.getNickName());
+            if (wechatUserDto != null) {
+                user.setNickName(wechatUserDto.getNickName());
+                user.setRealName(wechatUserDto.getNickName());
+                user.setPictureUrl(wechatUserDto.getAvatarUrl());
+                if (StringUtils.isEmpty(wechatUserDto.getNickName())) {
+                    user.setNickName("老司机");
+                    user.setRealName(phone);
+                }
+            }
+
             user.setRegisterFrom("司机宝小程序");
             userService.registerDriverUser(user);
         }

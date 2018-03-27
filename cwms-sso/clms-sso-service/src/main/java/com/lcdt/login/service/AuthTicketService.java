@@ -41,14 +41,11 @@ public class AuthTicketService {
 	public void removeTicketInCookie(HttpServletRequest request, HttpServletResponse response) {
 		for (Cookie cookie : request.getCookies()) {
 			if (cookie.getName().equals(ticketCookieKey)) {
+				cookie.setValue(null);
+				cookie.setMaxAge(0);
 				String ticket = cookie.getValue();
 				ticketManager.removeTicketCache(ticket);
-				Cookie removedCookie = new Cookie(ticketCookieKey, null);
-				removedCookie.setMaxAge(0);
-				removedCookie.setDomain("datuodui.com");
-				removedCookie.setPath("/");
-				removedCookie.setValue(null);
-				response.addCookie(removedCookie);
+				response.addCookie(cookie);
 			}
 		}
 	}

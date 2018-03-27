@@ -1,7 +1,7 @@
 package com.lcdt.traffic.dao;
 
+import com.lcdt.traffic.dto.OwnVehicleDto;
 import com.lcdt.traffic.model.OwnVehicle;
-import com.lcdt.traffic.web.dto.OwnVehicleDto;
 
 import java.util.List;
 

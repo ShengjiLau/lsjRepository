@@ -70,7 +70,7 @@
   </select>
 
 
-  <resultMap id="BaseResultMapDto" type="com.lcdt.traffic.web.dto.DriverGroupDto">
+  <resultMap id="BaseResultMapDto" type="com.lcdt.traffic.dto.DriverGroupDto">
     <id column="driver_group_id" jdbcType="BIGINT" property="driverGroupId" />
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <result column="group_remark" jdbcType="VARCHAR" property="groupRemark" />
@@ -131,13 +131,13 @@
     where t1.driver_group_id=#{p1} and t2.company_id=#{p2} and t2.is_deleted=0
   </select>
 
-  <resultMap id="DriverGroupDto2ResultMap" type="com.lcdt.traffic.web.dto.DriverGroupDto2">
+  <resultMap id="DriverGroupDto2ResultMap" type="com.lcdt.traffic.dto.DriverGroupDto2">
     <id column="driver_group_id" jdbcType="BIGINT" property="driverGroupId" />
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <collection property="driverList" resultMap="OwnDriverDto2Dto">
     </collection>
   </resultMap>
-  <resultMap id="OwnDriverDto2Dto" type="com.lcdt.traffic.web.dto.OwnDriverDto2">
+  <resultMap id="OwnDriverDto2Dto" type="com.lcdt.traffic.dto.OwnDriverDto2">
     <id column="own_driver_id" jdbcType="BIGINT" property="ownDriverId" />
     <result column="driver_name" jdbcType="VARCHAR" property="driverName" />
   </resultMap>

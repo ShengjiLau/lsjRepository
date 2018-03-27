@@ -16,6 +16,11 @@
             <artifactId>swagger-annotations</artifactId>
             <version>1.5.13</version>
         </dependency>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>user-api</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
 

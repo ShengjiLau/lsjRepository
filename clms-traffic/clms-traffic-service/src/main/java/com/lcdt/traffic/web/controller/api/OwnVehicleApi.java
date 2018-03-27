@@ -1,13 +1,12 @@
 package com.lcdt.traffic.web.controller.api;
 
-import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.dto.OwnVehicleDto;
 import com.lcdt.traffic.model.OwnVehicle;
 import com.lcdt.traffic.service.OwnVehicleService;
 import com.lcdt.traffic.web.dto.BaseDto;
-import com.lcdt.traffic.web.dto.OwnVehicleDto;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.userinfo.model.Driver;
 import io.swagger.annotations.Api;

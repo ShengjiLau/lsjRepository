@@ -33,6 +33,9 @@ public class JdkTicketManager implements TicketManager {
 
 	@Override
 	public boolean removeTicketCache(String ticket) {
+		if (ticket == null) {
+			return true;
+		}
 		boolean contains = ticketCache.contains(ticket);
 		return contains == true ? ticketCache.remove(ticket) == null : false;
 	}
