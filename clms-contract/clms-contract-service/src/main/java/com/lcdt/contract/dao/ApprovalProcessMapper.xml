@@ -63,7 +63,7 @@
     <result column="sort" jdbcType="INTEGER" property="sort" />
   </resultMap>
 
-  <select id="selectByCondition" resultMap="BaseResultMap">
+  <select id="selectByCondition" resultMap="ApprovalProcessDtoResultMap">
     select t1.process_id, t1.process_name, t1.process_type, t1.group_id, t1.remarks, t1.create_time,
     t2.approver_id, t2.user_id, t2.name, t2.dept_name, t2.sort
     from t_approval_process t1 left join t_process_approver t2 on t1. process_id = t2. process_id

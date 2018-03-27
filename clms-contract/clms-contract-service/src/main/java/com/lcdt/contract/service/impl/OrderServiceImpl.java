@@ -1,9 +1,7 @@
 package com.lcdt.contract.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -71,12 +69,13 @@ public class OrderServiceImpl implements OrderService{
 		BeanUtils.copyProperties(orderDto,order);
 		order.setSummation(aTotal);
 		int result=orderMapper.insertOrder(order);
+		int i=0;
 		if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0){
 			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
 				//为每个商品添加OrderId
 				orderProduct.setOrderId(order.getOrderId());
 			}
-			int i=nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());
+			i+=nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());
 			logger.debug("新增订单商品数量:"+i);
 		}
 		//审批流程添加
@@ -110,7 +109,11 @@ public class OrderServiceImpl implements OrderService{
 			order.setApprovalStatus(new Short("0"));
 			orderMapper.updateByPrimaryKey(order);
 		}
-		return result;
+		if(i>0) {
+			return result;
+		}else {
+			throw new RuntimeException("订单商品添加失败");
+		}
 	}
 
 	
@@ -175,8 +178,11 @@ public class OrderServiceImpl implements OrderService{
 			order.setApprovalStartDate(null);
 			orderMapper.updateByPrimaryKey(order);
 		}
-
-		return result;
+		if(i>0) {
+			return result;
+		}else {
+			throw new RuntimeException("订单商品修改失败");
+		}
 	}
 
 	@Override
@@ -221,8 +227,6 @@ public class OrderServiceImpl implements OrderService{
 				orderDto.setOrderProductList(orderProductList);
 			}
 		}	
-		
-		
 		return orderDto;
 	}
 
