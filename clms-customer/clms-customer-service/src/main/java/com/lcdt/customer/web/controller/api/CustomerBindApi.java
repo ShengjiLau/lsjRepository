@@ -90,20 +90,29 @@ public class CustomerBindApi {
 	@ResponseBody
 	public ModelAndView bind(Long inviteId,Long customerId){
 		Long companyId = SecurityInfoGetter.getCompanyId();
-
+		User user = SecurityInfoGetter.getUser();
 		CustomerInviteLog customerInviteLog = inviteLogService.selectByInviteId(inviteId);
 		customerInviteLog.setIsValid(0);
 		Long inviteCompanyId = customerInviteLog.getInviteCompanyId();
 
+
 		if (companyId.equals(inviteCompanyId)) {
-			return new ModelAndView("/error");
+			ModelAndView errorView = new ModelAndView("/error");
+			errorView.addObject("username", user.getRealName());
+			errorView.addObject("headimg", user.getPictureUrl());
+			String successTipStr = "失败原因：同一企业内不能相互邀请绑定";
+			errorView.addObject("errortip", successTipStr);
+			return errorView;
 		}
-
-
 		//绑定被邀请的客户id
 		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
 		if (customer.getBindCpid() != null) {
-			throw new RuntimeException("客户已绑定");
+			ModelAndView errorView = new ModelAndView("/error");
+			errorView.addObject("username", user.getRealName());
+			errorView.addObject("headimg", user.getPictureUrl());
+			String successTipStr = "失败原因：客户已绑定";
+			errorView.addObject("errortip", successTipStr);
+			return errorView;
 		}
 		//帮邀请的绑定公司id是 邀请人的公司id
 		customer.setBindCpid(inviteCompanyId);
@@ -117,9 +126,10 @@ public class CustomerBindApi {
 		customer1.setBindCompany(company1.getFullName());
 		customerService.updateCustomerBindCompId(customer1);
 		inviteLogMapper.updateByPrimaryKey(customerInviteLog);
-		User user = SecurityInfoGetter.getUser();
+
 		ModelAndView successView = new ModelAndView("invite_success");
 		successView.addObject("username", user.getRealName());
+		successView.addObject("headimg", user.getPictureUrl());
 		String s = inviteCustomerService.clientTypeToString(customer.getClientTypes());
 		String successTipStr = "贵公司已成为【"+company.getFullName()+"】的" + s;
 		successView.addObject("successtip", successTipStr);
