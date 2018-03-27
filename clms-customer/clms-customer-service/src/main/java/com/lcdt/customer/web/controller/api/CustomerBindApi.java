@@ -99,15 +99,15 @@ public class CustomerBindApi {
 		stringLongHashMap.put("companyId", companyId);
 		stringLongHashMap.put("bindCompId", inviteCompanyId);
 		List<Customer> customers = mapper.selectByCondition(stringLongHashMap);
-
-		if (customers != null && !customers.isEmpty()) {
-			ModelAndView error = new ModelAndView("error");
-			Customer customer = customers.get(0);
-			error.addObject("error", "客户管理里 " + customer.getCustomerName() + "已绑定" + customer.getBindCompany());
-			return error;
-		}
-
 		User user = SecurityInfoGetter.getUser();
+		if (customers != null && !customers.isEmpty()) {
+			ModelAndView errorView = new ModelAndView("error");
+			Customer customer = customers.get(0);
+			errorView.addObject("username", user.getRealName());
+			errorView.addObject("headimg", user.getPictureUrl());
+			errorView.addObject("errortip", "客户管理里 " + customer.getCustomerName() + "已绑定" + customer.getBindCompany());
+			return errorView;
+		}
 
 		if (companyId.equals(inviteCompanyId)) {
 			ModelAndView errorView = new ModelAndView("/error");
