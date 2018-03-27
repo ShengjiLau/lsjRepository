@@ -124,6 +124,7 @@ public class OrderServiceImpl implements OrderService{
 				BigDecimal total=num.multiply(price);
 				aTotal=aTotal.add(total);
 				orderProduct.setTotal(total);
+				orderProduct.setOrderId(orderDto.getOrderId());
 			}
 		}
 		Order order =new Order();
@@ -131,47 +132,14 @@ public class OrderServiceImpl implements OrderService{
 		order.setSummation(aTotal);
 		int result=orderMapper.updateByPrimaryKey(order);
 		int i=0;
-		//得到数据库中商品表中orderId等于此需要修改的订单的orderId的所有商品的opId
-		List<Long> orderProductIdList=nonautomaticMapper.selectOrderProductIdByOrderId(order.getOrderId());
-		List<OrderProduct> list1=new ArrayList<OrderProduct>();
-		List<OrderProduct> list2=new ArrayList<OrderProduct>();
-		if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0) {
-			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
-				if(null!=orderProduct.getOpId()) {
-					orderProduct.setOrderId(orderDto.getOrderId());
-					list1.add(orderProduct);
-				}else {
-					list2.add(orderProduct);
-					if(null!=orderProductIdList&&orderProductIdList.size()!=0) {
-						 Iterator<Long> it = orderProductIdList.iterator();
-						 while(it.hasNext()) {
-							 if(it.next()==orderProduct.getOpId()) {
-								 it.remove();
-							 }
-						 }
-	// for循环效率高 , 但遍历过程不可执行remove操作					 
-	//					for(Long opId:orderProductIdList) {
-	//						if(orderProduct.getOpId()==opId) {
-	//							orderProductIdList.remove(opId);
-	//						}
-	//					}
-					}
-				}
-			}
-		}
-		//list1为没有opId的,是新增的商品
-		if(list1.size()>0) {
-			i+= nonautomaticMapper.insertOrderProductByBatch(list1);
-		}
-		//list2为有数据库和修改订单中均有相同商品id,是修改商品
-		if(list2.size()>0) {
-			i+= nonautomaticMapper.updateOrderProductByBatch(list2);
-		}
-		//orderProductIdList剩余的商品id不存在于修改订单中,是删除商品
-		if(orderProductIdList.size()>0) {
-			i+= nonautomaticMapper.deleteOrderProducByBatch(orderProductIdList);
-		}
+		if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0){
+		//删除订单下所有商品
+		nonautomaticMapper.deleteOrderProductByOrderId(order.getOrderId());
+		//插入新的订单商品
+		i+= nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());
 		logger.debug("修改订单商品数量为:"+i);
+		}
+
 		//审批流程添加 如果添加了审批人，则先清楚数据库中原来保存的审批人，然后新增
 		if(null!=orderDto.getOrderApprovalList() && orderDto.getOrderApprovalList().size() > 0){
 			//删除之前数据库保存的审批人信息
@@ -252,6 +220,11 @@ public class OrderServiceImpl implements OrderService{
 			if(null!=orderProductList&&orderProductList.size()!=0) {
 				orderDto.setOrderProductList(orderProductList);
 			}
+			//添加审批人及抄送人信息
+			List<OrderApproval> orderApprovalList = orderApprovalMapper.selectForOrderDetail(orderDto.getOrderId());
+			if(null!=orderApprovalList && orderApprovalList.size()>0){
+				orderDto.setOrderApprovalList(orderApprovalList);
+			}
 		}	
 		
 		
@@ -260,7 +233,57 @@ public class OrderServiceImpl implements OrderService{
 
 	
  
-	
+	//得到数据库中商品表中orderId等于此需要修改的订单的orderId的所有商品的opId
+//	List<Long> orderProductIdList=nonautomaticMapper.selectOrderProductIdByOrderId(order.getOrderId());
+//	List<OrderProduct> list1=new ArrayList<OrderProduct>();
+//	List<OrderProduct> list2=new ArrayList<OrderProduct>();
+//	if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0) {
+//		for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
+//			if(null==orderProduct.getOpId()) {
+//				orderProduct.setOrderId(orderDto.getOrderId());
+//				list1.add(orderProduct);
+//			}else {
+//				list2.add(orderProduct);
+//				logger.debug("测试输出list2");
+//				if(null!=orderProductIdList&&orderProductIdList.size()!=0) {
+//					 Iterator<Long> it = orderProductIdList.iterator();
+//					 logger.debug("测试输出点位a");
+//					 while(it.hasNext()) {
+//						 logger.debug("测试输出点位b");
+//						 Long ipl=it.next();
+//						 logger.debug("in.next():"+ipl);
+//						 logger.debug("orderProduct.getOpId():"+orderProduct);
+//						 if(ipl==orderProduct.getOpId().longValue()) {
+//							 logger.debug("测试输出点位c");
+//							 it.remove();
+//							 logger.debug("测试输出点位d");
+//						 }
+//					 }
+// for循环效率高 , 但遍历过程不可执行remove操作					 
+//					for(Long opId:orderProductIdList) {
+//						if(orderProduct.getOpId()==opId) {
+//							orderProductIdList.remove(opId);
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
+	//list1为没有opId的,是新增的商品
+//	if(list1.size()>0) {
+//		i+= nonautomaticMapper.insertOrderProductByBatch(list1);
+//		logger.debug("新增订单商品"+i);
+//	}
+//	//orderProductIdList剩余的商品id不存在于修改订单中,是删除商品
+//	if(orderProductIdList.size()>0) {
+//		i+= nonautomaticMapper.deleteOrderProducByBatch(orderProductIdList);
+//		logger.debug("删除订单商品"+i);
+//	}
+//	//list2为有数据库和修改订单中均有相同商品id,是修改商品
+//	if(list2.size()>0) {
+//		i+= nonautomaticMapper.updateOrderProductByBatch(list2);
+//		logger.debug("修改订单商品"+i);
+//	}
 	
 	
 	

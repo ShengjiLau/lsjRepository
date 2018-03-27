@@ -22,6 +22,17 @@ public interface ReportFormsMapper {
 
 
     /**
+     * 客户计划统计详情数据
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> selectCustomerPlanData(Map map);
+
+
+
+
+
+    /**
      * 运单统计
      * @param map
      * @return

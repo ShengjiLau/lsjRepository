@@ -103,7 +103,7 @@ public class ContractServiceImpl implements ContractService {
                         Iterator<Long> it = cpIdList.iterator();
                         while(it.hasNext()){
                             Long ovcId = it.next();
-                            if(ovcId==d.getCpId()){
+                            if(ovcId.longValue()==d.getCpId().longValue()){
                                 it.remove();
                             }
                         }
