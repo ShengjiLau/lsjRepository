@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>邀请</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-  <link rel="stylesheet" href="/asset/style/iconfont.css">
-  <link rel="shortcut icon" href="/asset/favicon.ico" >
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="./asset/style/iconfont.css">
   <link rel="stylesheet" href="./asset/style/style.css">
   <style media="screen">
     html,
@@ -37,7 +36,7 @@
       border-bottom: 1px solid #f0f0f0;
     }
     .user-menu{
-      font-size: 12px;
+      font-size: 16px;
       float: right;
       line-height: 60px;
     }
@@ -222,25 +221,16 @@
   <nav>
     <div class="logo">
       <img src="/asset/image/logo_top.png" alt="">
-      <span class="logo-title">客户绑定</span>
     </div>
-    <div class="user-menu">
-            <span class="ant-dropdown-link ant-dropdown-trigger" href="#" style="font-weight: 100;">
-              <div class="pic" style="width: 24px;margin-right: 5px;height: 24px;vertical-align: middle;border-radius: 13px;overflow: hidden;display: inline-block;border: 1px solid #d9d9d9">
-                <img th:src="${headimg==''?'/img/head.png':headimg}" alt="此处有头像" style="width: 100%; vertical-align: top;">
-              </div><!-- react-text: 54 --><label th:utext="${username}"/><!-- /react-text -->
-            </span>
-      <a href="http://39.107.12.215:52412/account/logout"><i class="iconfont icon-logout01"></i>退出</a>
-    </div>
+
   </nav>
 </div>
 
 
 <div class="content">
   <i style="font-size: 48px;color:#F48608;font-weight: lighter" class="iconfont icon-exclamation_circle"></i>
-  <div class="normalText alert-content">对不起，绑定失败</div>
-  <div class="normalText alert-content" th:text="${errortip}"></div>
-
+  <div class="normalText alert-content">对不起，操作失败</div>
+  <p>对不起，操作失败！您没有邀请绑定权限，请联系系统管理员。</p>
 </div>
 
 

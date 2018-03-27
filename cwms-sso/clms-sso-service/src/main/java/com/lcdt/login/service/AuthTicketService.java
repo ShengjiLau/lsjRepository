@@ -43,6 +43,7 @@ public class AuthTicketService {
 			if (cookie.getName().equals(ticketCookieKey)) {
 				cookie.setValue(null);
 				cookie.setMaxAge(0);
+				cookie.setPath("/");
 				String ticket = cookie.getValue();
 				ticketManager.removeTicketCache(ticket);
 				response.addCookie(cookie);
