@@ -100,7 +100,6 @@ public class CustomerBindApi {
 		}
 
 
-
 		//绑定被邀请的客户id
 		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
 		if (customer.getBindCpid() != null) {
