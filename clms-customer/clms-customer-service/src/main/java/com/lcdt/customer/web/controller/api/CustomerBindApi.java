@@ -20,6 +20,7 @@ import com.lcdt.userinfo.service.CompanyService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -88,7 +89,7 @@ public class CustomerBindApi {
 	@ApiOperation("绑定客户")
 	@RequestMapping(value = "/bind")
 	@ResponseBody
-	public ModelAndView bind(Long inviteId,Long customerId){
+	public ModelAndView bind(Long inviteId,@RequestParam(required = false) Long customerId){
 		Long companyId = SecurityInfoGetter.getCompanyId();
 
 		CustomerInviteLog customerInviteLog = inviteLogService.selectByInviteId(inviteId);
@@ -156,7 +157,8 @@ public class CustomerBindApi {
 		ModelAndView successView = new ModelAndView("invite_success");
 		successView.addObject("username", user.getRealName());
 		successView.addObject("headimg", user.getPictureUrl());
-		String s = inviteCustomerService.clientTypeToString(customer.getClientTypes());
+
+
 		String successTipStr = "贵公司已成为【"+company.getFullName()+"】的合作伙伴";
 		successView.addObject("successtip", successTipStr);
 		successView.addObject("host", "http://39.107.12.215:88");

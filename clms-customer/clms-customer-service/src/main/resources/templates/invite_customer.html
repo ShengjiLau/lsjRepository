@@ -370,8 +370,10 @@
             }
         }
         var auto_bind = function () {
-            alert("啥也没有");
-            return false;
+
+            $("#customerId").value = null;
+            $("#choose-customer").submit();
+            return true;
         }
         $(".selectpicker").selectpicker({
             liveSearch:true,
