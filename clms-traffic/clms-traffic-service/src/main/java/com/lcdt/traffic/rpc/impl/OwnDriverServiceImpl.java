@@ -1,18 +1,18 @@
-package com.lcdt.traffic.service.impl;
+package com.lcdt.traffic.rpc.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.DriverGroupRelationshipMapper;
 import com.lcdt.traffic.dao.OwnDriverCertificateMapper;
 import com.lcdt.traffic.dao.OwnDriverMapper;
+import com.lcdt.traffic.dto.OwnDriverDto;
 import com.lcdt.traffic.model.DriverGroupRelationship;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.model.OwnDriverCertificate;
-import com.lcdt.traffic.service.OwnDriverCompanyService;
 import com.lcdt.traffic.service.OwnDriverService;
 import com.lcdt.traffic.util.RegisterUtils;
-import com.lcdt.traffic.web.dto.OwnDriverDto;
 import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.model.Driver;
@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;

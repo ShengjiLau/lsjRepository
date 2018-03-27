@@ -1,10 +1,10 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.traffic.dto.DriverGroupDto;
+import com.lcdt.traffic.dto.DriverGroupDto2;
 import com.lcdt.traffic.model.DriverAndGroup;
 import com.lcdt.traffic.model.DriverGroup;
-import com.lcdt.traffic.web.dto.DriverGroupDto;
-import com.lcdt.traffic.web.dto.DriverGroupDto2;
 
 import java.util.List;
 
@@ -32,5 +32,5 @@ public interface DriverGroupService {
      * @param groupIds
      * @return
      */
-    List<DriverGroupDto2> driverListByGroupId2(Long companyId, String [] groupIds);
+    List<DriverGroupDto2> driverListByGroupId2(Long companyId, String[] groupIds);
 }

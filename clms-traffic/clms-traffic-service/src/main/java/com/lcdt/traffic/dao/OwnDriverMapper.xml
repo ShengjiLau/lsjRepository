@@ -92,7 +92,7 @@
   </select>
 
 
-  <resultMap id="ResultMapDto" type="com.lcdt.traffic.web.dto.OwnDriverDto">
+  <resultMap id="ResultMapDto" type="com.lcdt.traffic.dto.OwnDriverDto">
     <id column="own_driver_id" jdbcType="BIGINT" property="ownDriverId" />
     <result column="driver_id" jdbcType="BIGINT" property="driverId" />
     <result column="affiliated_company" jdbcType="VARCHAR" property="affiliatedCompany" />
