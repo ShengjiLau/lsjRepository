@@ -20,7 +20,6 @@ import com.lcdt.userinfo.service.CompanyService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -114,8 +113,8 @@ public class CustomerBindApi {
 			ModelAndView errorView = new ModelAndView("/error");
 			errorView.addObject("username", user.getRealName());
 			errorView.addObject("headimg", user.getPictureUrl());
-			String successTipStr = "失败原因：同一企业内不能相互邀请绑定";
-			errorView.addObject("errortip", successTipStr);
+			String errorTipStr = "失败原因：同一企业内不能相互邀请绑定";
+			errorView.addObject("errortip", errorTipStr);
 			return errorView;
 		}
 		Company company = companyService.selectById(inviteCompanyId);
@@ -131,8 +130,6 @@ public class CustomerBindApi {
 		}else{
 			customer = mapper.selectByPrimaryKey(customerId, companyId);
 		}
-
-
 		//绑定被邀请的客户id
 
 		if (customer.getBindCpid() != null) {
@@ -157,8 +154,6 @@ public class CustomerBindApi {
 		ModelAndView successView = new ModelAndView("invite_success");
 		successView.addObject("username", user.getRealName());
 		successView.addObject("headimg", user.getPictureUrl());
-
-
 		String successTipStr = "贵公司已成为【"+company.getFullName()+"】的合作伙伴";
 		successView.addObject("successtip", successTipStr);
 		successView.addObject("host", "http://39.107.12.215:88");
@@ -193,6 +188,7 @@ public class CustomerBindApi {
 		modelAndView.addObject("log", customerInviteLog);
 		modelAndView.addObject("currentCompanyName", userCompRel.getCompany().getFullName());
 		modelAndView.addObject("username", userCompRel.getUser().getRealName());
+		modelAndView.addObject("headimg", userCompRel.getUser().getPictureUrl());
 		return modelAndView;
 	}
 
