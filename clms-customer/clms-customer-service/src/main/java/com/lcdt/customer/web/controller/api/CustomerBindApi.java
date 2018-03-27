@@ -88,26 +88,53 @@ public class CustomerBindApi {
 	@ApiOperation("绑定客户")
 	@RequestMapping(value = "/bind")
 	@ResponseBody
-	public ModelAndView bind(Long inviteId,Long customerId){
+	public ModelAndView bind(Long inviteId,@RequestParam(required = false) Long customerId){
 		Long companyId = SecurityInfoGetter.getCompanyId();
 
 		CustomerInviteLog customerInviteLog = inviteLogService.selectByInviteId(inviteId);
 		customerInviteLog.setIsValid(0);
 		Long inviteCompanyId = customerInviteLog.getInviteCompanyId();
 
+		HashMap<String, Long> stringLongHashMap = new HashMap<>();
+		stringLongHashMap.put("companyId", companyId);
+		stringLongHashMap.put("bindCompId", inviteCompanyId);
+		List<Customer> customers = mapper.selectByCondition(stringLongHashMap);
+
+		if (customers != null && !customers.isEmpty()) {
+			ModelAndView error = new ModelAndView("error");
+			Customer customer = customers.get(0);
+			error.addObject("error", "客户管理里 " + customer.getCustomerName() + "已绑定" + customer.getBindCompany());
+			return error;
+		}
+
+
+
 		if (companyId.equals(inviteCompanyId)) {
 			return new ModelAndView("/error");
+		}
+		Company company = companyService.selectById(inviteCompanyId);
+		Customer customer;
+		if (customerId == null) {
+			customer = new Customer();
+			customer.setCustomerName(company.getFullName());
+			customer.setShortName(company.getShortName());
+			customer.setDetailAddress(company.getDetailAddress());
+			customer.setRegistrationAddress(company.getRegistrationAddress());
+			customer.setCompanyId(companyId);
+			mapper.insert(customer);
+		}else{
+			customer = mapper.selectByPrimaryKey(customerId, companyId);
 		}
 
 
 		//绑定被邀请的客户id
-		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
+
 		if (customer.getBindCpid() != null) {
 			throw new RuntimeException("客户已绑定");
 		}
 		//帮邀请的绑定公司id是 邀请人的公司id
 		customer.setBindCpid(inviteCompanyId);
-		Company company = companyService.selectById(inviteCompanyId);
+
 		customer.setBindCompany(company.getFullName());
 		customerService.customerUpdate(customer);
 		//绑定邀请人的公司id
@@ -121,7 +148,7 @@ public class CustomerBindApi {
 		ModelAndView successView = new ModelAndView("invite_success");
 		successView.addObject("username", user.getRealName());
 		String s = inviteCustomerService.clientTypeToString(customer.getClientTypes());
-		String successTipStr = "贵公司已成为【"+company.getFullName()+"】的" + s;
+		String successTipStr = "贵公司已成为【"+company.getFullName()+"】的合作伙伴";
 		successView.addObject("successtip", successTipStr);
 		successView.addObject("host", "http://39.107.12.215:88");
 		return successView;
@@ -171,6 +198,8 @@ public class CustomerBindApi {
 		}
 		return customer;
 	}
+
+
 
 	public boolean isTokenValid(String token){
 		return true;
