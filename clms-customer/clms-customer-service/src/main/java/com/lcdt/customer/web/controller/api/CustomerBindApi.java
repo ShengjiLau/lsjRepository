@@ -107,7 +107,7 @@ public class CustomerBindApi {
 			return error;
 		}
 
-
+		User user = SecurityInfoGetter.getUser();
 
 		if (companyId.equals(inviteCompanyId)) {
 			ModelAndView errorView = new ModelAndView("/error");
@@ -144,7 +144,6 @@ public class CustomerBindApi {
 		}
 		//帮邀请的绑定公司id是 邀请人的公司id
 		customer.setBindCpid(inviteCompanyId);
-
 		customer.setBindCompany(company.getFullName());
 		customerService.customerUpdate(customer);
 		//绑定邀请人的公司id
@@ -154,7 +153,6 @@ public class CustomerBindApi {
 		customer1.setBindCompany(company1.getFullName());
 		customerService.updateCustomerBindCompId(customer1);
 		inviteLogMapper.updateByPrimaryKey(customerInviteLog);
-		User user = SecurityInfoGetter.getUser();
 		ModelAndView successView = new ModelAndView("invite_success");
 		successView.addObject("username", user.getRealName());
 		successView.addObject("headimg", user.getPictureUrl());
