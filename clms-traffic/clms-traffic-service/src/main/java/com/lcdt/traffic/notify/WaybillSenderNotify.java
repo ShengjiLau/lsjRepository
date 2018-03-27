@@ -66,9 +66,9 @@ public class WaybillSenderNotify {
                     e.printStackTrace();
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
-
+                Company carrierCompany=companyService.selectById(dao.getCarrierCompanyId());
                 CommonAttachment commonAttachment = new CommonAttachment();
-                commonAttachment.setCarrierCompany(dao.getCarrierCompanyName());
+                commonAttachment.setCarrierCompany(carrierCompany.getFullName());
                 commonAttachment.setDriverName(dao.getDriverName());
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
                 User carrierCompanyUser= null;
@@ -182,8 +182,9 @@ public class WaybillSenderNotify {
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
                 //发送消息内容
+                Company carryerCompany=companyService.selectById(dao.getCarrierCompanyId());
                 CommonAttachment commonAttachment = new CommonAttachment();
-                commonAttachment.setCarrierCompany(dao.getCarrierCompanyName());
+                commonAttachment.setCarrierCompany(carryerCompany.getFullName());
                 commonAttachment.setDriverName(dao.getDriverName());
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
                 commonAttachment.setWebNotifyUrl(NotifyUtils.OWN_WAYBILL_WEB_NOTIFY_URL+dao.getWaybillCode());
@@ -309,8 +310,9 @@ public class WaybillSenderNotify {
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
                 //发送消息内容
+                Company carrierCompany=companyService.selectById(dao.getCarrierCompanyId());
                 CommonAttachment commonAttachment = new CommonAttachment();
-                commonAttachment.setCarrierCompany(dao.getCarrierCompanyName());
+                commonAttachment.setCarrierCompany(carrierCompany.getFullName());
                 commonAttachment.setDriverName(dao.getDriverName());
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
                 commonAttachment.setWebNotifyUrl(NotifyUtils.OWN_WAYBILL_WEB_NOTIFY_URL+dao.getWaybillCode());
@@ -335,8 +337,6 @@ public class WaybillSenderNotify {
                 if(dao.getCustomerPhone()!=null&&!dao.getCustomerPhone().equals("")){
                     defaultNotifyReceiver.setCustomerPhoneNum(dao.getCustomerPhone());
                 }
-
-                commonAttachment.setCarrierCompany(dao.getCarrierCompanyName());
                 commonAttachment.setGoodsDetail(configDoodsDetails(dao.getWaybillItemsList()));
                 commonAttachment.setDestinationAdress(dao.getReceiveProvince()+dao.getReceiveCity()+dao.getReceiveCounty()+dao.getReceiveAddress());
                 commonAttachment.setDriverPhone(dao.getDriverPhone());
@@ -616,11 +616,11 @@ public class WaybillSenderNotify {
                     e.printStackTrace();
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
-
+                Company carrierCompany=companyService.selectById(dao.getCarrierCompanyId());
                 CommonAttachment commonAttachment = new CommonAttachment();
                 commonAttachment.setPlanSerialNum(waybillPlan.getSerialCode());
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
-                commonAttachment.setCarrierCompany(dao.getCarrierCompanyName());
+                commonAttachment.setCarrierCompany(carrierCompany.getFullName());
                 User carrierUser=null;
                 try {
                     carrierUser=userService.queryByUserId(dao.getCreateId());
@@ -678,7 +678,7 @@ public class WaybillSenderNotify {
         }
     }
     //承运商上传电子回单发送消息通知（扣货主的消息通知费用）
-    public void customerReceiptSendNotify(String waybillIds, Long sendCompanyId, Long sendUserId){
+    public void customerReceiptSendNotify(String waybillIds, Long sendUserId){
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
@@ -697,13 +697,13 @@ public class WaybillSenderNotify {
                     e.printStackTrace();
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
-
+                Company carrierCompany=companyService.selectById(dao.getCarrierCompanyId());
                 CommonAttachment commonAttachment = new CommonAttachment();
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
-                commonAttachment.setCarrierCompany(dao.getCarrierCompanyName());
+                commonAttachment.setCarrierCompany(carrierCompany.getFullName());
                 commonAttachment.setWebNotifyUrl(NotifyUtils.OWN_WAYBILL_WEB_NOTIFY_URL+dao.getWaybillCode());
 
-                TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("carrier_upload", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(sendCompanyId,sendUserId));
+                TrafficStatusChangeEvent shipper_event = new TrafficStatusChangeEvent("carrier_upload", commonAttachment, defaultNotifyReceiver, NotifyUtils.notifySender(dao.getCompanyId(),sendUserId));
                 producer.sendNotifyEvent(shipper_event);
             }
         }
@@ -741,9 +741,9 @@ public class WaybillSenderNotify {
                     defaultNotifyReceiver.setCarrierUserId(dao.getCreateId());
                     defaultNotifyReceiver.setCarrierPhoneNum(carrierCompanyUser.getPhone());
                 }
-
+                Company carrierCompany=companyService.selectById(dao.getCarrierCompanyId());
                 CommonAttachment commonAttachment = new CommonAttachment();
-                commonAttachment.setCarrierCompany(dao.getCarrierCompanyName());
+                commonAttachment.setCarrierCompany(carrierCompany.getFullName());
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
                 commonAttachment.setOwnerCompany(onwCompany.getFullName());
                 commonAttachment.setOwnerPhone(shipperUser.getPhone());
@@ -753,11 +753,6 @@ public class WaybillSenderNotify {
                 if(dao.getDriverPhone()!=null&&!dao.getDriverPhone().equals("")){
                     defaultNotifyReceiver.setDriverPhoneNum(dao.getDriverPhone());
                 }
-                commonAttachment.setCarrierCompany(dao.getCarrierCompanyName());
-                commonAttachment.setWaybillCode(dao.getWaybillCode());
-                commonAttachment.setOwnerCompany(onwCompany.getFullName());
-                commonAttachment.setOwnerPhone(shipperUser.getPhone());
-
 
                 //判断客户是否有客户电话，有就发送短信，没有就不发送
                 if(dao.getCustomerPhone()!=null&&!dao.getCustomerPhone().equals("")){
@@ -851,9 +846,9 @@ public class WaybillSenderNotify {
                     e.printStackTrace();
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
-
+                Company carrierCompany=companyService.selectById(dao.getCarrierCompanyId());
                 CommonAttachment commonAttachment = new CommonAttachment();
-                commonAttachment.setCarrierCompany(dao.getCarrierCompanyName());
+                commonAttachment.setCarrierCompany(carrierCompany.getFullName());
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
                 User carrierCompanyUser= null;
                 try {
@@ -904,10 +899,10 @@ public class WaybillSenderNotify {
                     e.printStackTrace();
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
-
+                Company carrierCompany=companyService.selectById(dao.getCarrierCompanyId());
                 CommonAttachment commonAttachment = new CommonAttachment();
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
-                commonAttachment.setCarrierCompany(dao.getCarrierCompanyName());
+                commonAttachment.setCarrierCompany(carrierCompany.getFullName());
                 User carrierCompanyUser= null;
                 try {
                     carrierCompanyUser = userService.queryByUserId(dao.getCreateId());

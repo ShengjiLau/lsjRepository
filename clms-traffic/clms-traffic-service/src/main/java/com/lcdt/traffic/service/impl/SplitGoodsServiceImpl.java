@@ -337,7 +337,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             }
             transportWayItemsMapper.batchAddTransportWayItems(dto.getTransportWayItemsList());
         }
-
+        SnatchGoods snatchGoods = snatchGoodsMapper.selectByPrimaryKey(dto.getSnatchGoodsId());
         Date opDate = new Date();
         SplitGoods splitGoods = new SplitGoods(); //派单主信息
         splitGoods.setWaybillPlanId(waybillPlan.getWaybillPlanId());
@@ -349,12 +349,14 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
         splitGoods.setUpdateTime(opDate);
         splitGoods.setIsDeleted((short)0);
         splitGoods.setCompanyId(companyId);
-        splitGoods.setCarrierCompanyId(dto.getCarrierCompanyId()==null?waybillPlan.getCompanyId():dto.getCarrierCompanyId());// 承运商企业ID
+        splitGoods.setCarrierCompanyId(dto.getCarrierCompanyId() == null ? waybillPlan.getCompanyId() : dto.getCarrierCompanyId());// 承运商企业ID
+
+        if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) {
+            splitGoods.setCarrierCollectionNames(snatchGoods.getOfferName());
+            splitGoods.setCarrierCollectionIds(snatchGoods.getOfferId().toString());
+        }
         splitGoodsMapper.insert(splitGoods);
-
         List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
-
-        SnatchGoods snatchGoods = snatchGoodsMapper.selectByPrimaryKey(dto.getSnatchGoodsId());
         if (snatchGoods!=null) {
             List<SnatchGoodsDetail> list = snatchGoods.getSnatchGoodsDetailList();
             if (null != list) {
@@ -403,8 +405,10 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             waybillDto.setCarrierCompanyId(splitGoods.getCarrierCompanyId());
             waybillDto.setCreateId(splitGoods.getCreateId());
             waybillDto.setCreateName(splitGoods.getCreateName());
+
             waybillDto.setDriverPhone(splitGoods.getCarrierPhone());
             waybillDto.setVechicleNum(splitGoods.getCarrierVehicle());
+
             if(!StringUtils.isEmpty(splitGoods.getCarrierCollectionIds())) {
                 waybillDto.setDriverName(splitGoods.getCarrierCollectionNames());
                 waybillDto.setDriverId(Long.valueOf(splitGoods.getCarrierCollectionIds()));

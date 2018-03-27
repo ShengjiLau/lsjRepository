@@ -21,6 +21,14 @@ public interface IndexOverviewMapper {
     List<Map<String,Object>> selectPlanData(Map map);
 
 
+    /***
+     * 客户计划统计
+     * @param map
+     * @return
+     */
+    List<Map<String,Object>> selectCustomerPlanData(Map map);
+
+
     /**
      * 我的运单统计
      * @param map
@@ -56,11 +64,28 @@ public interface IndexOverviewMapper {
      */
     List<Map<String,Object>> selectPlanAndWaybill(Long companyId);
 
+    /***
+     *  执行中的计划
+     * @param companyId
+     * @return
+     */
+    List<Map<String,Object>> selectPlan4Doing(Long companyId);
+
+
+
     /**
      * 我的车辆和司机统计
      * @param companyId
      * @return
      */
     List<Map<String,Object>> selectVehicleAndDriver(Long companyId);
+
+
+    /**
+     * 执行中的计划和在途运单统计
+     * @param companyId
+     * @return
+     */
+    List<Map<String,Object>> selectInTransitWaybill(Long companyId);
 
 }

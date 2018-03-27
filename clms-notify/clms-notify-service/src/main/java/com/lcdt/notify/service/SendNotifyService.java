@@ -73,8 +73,9 @@ public class SendNotifyService {
                 }
                 if (receiver != null && receiver.getCompanyId() != null && receiver.getUserId() != null) {
                     if (companyNotifySetting.getEnableWeb()) {
+                        String webUrl=attachment.get("webNotifyUrl")!=null?attachment.get("webNotifyUrl").toString():"";
                         //发送web通知
-                        webNotify.sendWebNotify(notify.getCategory(), notifyContent, receiver.getCompanyId(), receiver.getUserId(), attachment.get("webNotifyUrl").toString());
+                        webNotify.sendWebNotify(notify.getCategory(), notifyContent, receiver.getCompanyId(), receiver.getUserId(),webUrl);
                     }
                 }
             }
@@ -87,8 +88,9 @@ public class SendNotifyService {
                 }
                 if (receiver != null && receiver.getCarrierCompanyId() != null && receiver.getCarrierUserId() != null) {
                     if (companyNotifySetting.getEnableWeb()) {
+                        String webUrl=attachment.get("carrierWebNotifyUrl")!=null?attachment.get("carrierWebNotifyUrl").toString():"";
                         //发送web通知
-                        webNotify.sendWebNotify(notify.getCategory(), notifyContent, receiver.getCarrierCompanyId(), receiver.getCarrierUserId(), attachment.get("carrierWebNotifyUrl").toString());
+                        webNotify.sendWebNotify(notify.getCategory(), notifyContent, receiver.getCarrierCompanyId(), receiver.getCarrierUserId(), webUrl);
                     }
                 }
             }

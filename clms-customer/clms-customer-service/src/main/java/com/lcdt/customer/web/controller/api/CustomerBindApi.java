@@ -100,7 +100,7 @@ public class CustomerBindApi {
 		}
 
 
-		inviteLogMapper.updateByPrimaryKey(customerInviteLog);
+
 		//绑定被邀请的客户id
 		Customer customer = mapper.selectByPrimaryKey(customerId, companyId);
 		if (customer.getBindCpid() != null) {
@@ -117,6 +117,7 @@ public class CustomerBindApi {
 		customer1.setBindCpid(companyId);
 		customer1.setBindCompany(company1.getFullName());
 		customerService.updateCustomerBindCompId(customer1);
+		inviteLogMapper.updateByPrimaryKey(customerInviteLog);
 		User user = SecurityInfoGetter.getUser();
 		ModelAndView successView = new ModelAndView("invite_success");
 		successView.addObject("username", user.getRealName());
