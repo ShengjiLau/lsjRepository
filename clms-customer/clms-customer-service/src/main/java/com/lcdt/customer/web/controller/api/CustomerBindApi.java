@@ -88,7 +88,7 @@ public class CustomerBindApi {
 	@ApiOperation("绑定客户")
 	@RequestMapping(value = "/bind")
 	@ResponseBody
-	public ModelAndView bind(Long inviteId,@RequestParam(required = false) Long customerId){
+	public ModelAndView bind(Long inviteId,Long customerId){
 		Long companyId = SecurityInfoGetter.getCompanyId();
 
 		CustomerInviteLog customerInviteLog = inviteLogService.selectByInviteId(inviteId);
@@ -110,7 +110,12 @@ public class CustomerBindApi {
 
 
 		if (companyId.equals(inviteCompanyId)) {
-			return new ModelAndView("/error");
+			ModelAndView errorView = new ModelAndView("/error");
+			errorView.addObject("username", user.getRealName());
+			errorView.addObject("headimg", user.getPictureUrl());
+			String successTipStr = "失败原因：同一企业内不能相互邀请绑定";
+			errorView.addObject("errortip", successTipStr);
+			return errorView;
 		}
 		Company company = companyService.selectById(inviteCompanyId);
 		Customer customer;
@@ -130,7 +135,12 @@ public class CustomerBindApi {
 		//绑定被邀请的客户id
 
 		if (customer.getBindCpid() != null) {
-			throw new RuntimeException("客户已绑定");
+			ModelAndView errorView = new ModelAndView("/error");
+			errorView.addObject("username", user.getRealName());
+			errorView.addObject("headimg", user.getPictureUrl());
+			String successTipStr = "失败原因：客户已绑定";
+			errorView.addObject("errortip", successTipStr);
+			return errorView;
 		}
 		//帮邀请的绑定公司id是 邀请人的公司id
 		customer.setBindCpid(inviteCompanyId);
@@ -147,6 +157,7 @@ public class CustomerBindApi {
 		User user = SecurityInfoGetter.getUser();
 		ModelAndView successView = new ModelAndView("invite_success");
 		successView.addObject("username", user.getRealName());
+		successView.addObject("headimg", user.getPictureUrl());
 		String s = inviteCustomerService.clientTypeToString(customer.getClientTypes());
 		String successTipStr = "贵公司已成为【"+company.getFullName()+"】的合作伙伴";
 		successView.addObject("successtip", successTipStr);
@@ -198,8 +209,6 @@ public class CustomerBindApi {
 		}
 		return customer;
 	}
-
-
 
 	public boolean isTokenValid(String token){
 		return true;

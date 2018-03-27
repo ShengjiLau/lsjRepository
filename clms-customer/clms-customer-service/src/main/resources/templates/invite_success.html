@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>邀请</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" href="/asset/style/iconfont.css">
+    <link rel="shortcut icon" href="/asset/favicon.ico" >
     <style media="screen">
         html,
         body {
@@ -33,7 +35,7 @@
             border-bottom: 1px solid #f0f0f0;
         }
         .user-menu{
-            font-size: 16px;
+            font-size: 12px;
             float: right;
             line-height: 60px;
         }
@@ -272,9 +274,14 @@
     <nav>
         <div class="logo">
             <img src="/asset/image/logo_top.png" alt="">
+            <span class="logo-title">客户绑定</span>
         </div>
         <div class="user-menu">
-            <a href="" th:text="${username}"><i class="iconfont icon-user"></i>小A专线</a>
+            <span class="ant-dropdown-link ant-dropdown-trigger" href="#" style="font-weight: 100;">
+              <div class="pic" style="width: 24px;margin-right: 5px;height: 24px;vertical-align: middle;border-radius: 13px;overflow: hidden;display: inline-block;border: 1px solid #d9d9d9">
+                  <img th:src="${headimg==''?'/img/head.png':headimg}" alt="此处有头像" style="width: 100%; vertical-align: top;">
+              </div><!-- react-text: 54 --><label th:utext="${username}"/><!-- /react-text -->
+            </span>
             <a href="http://39.107.12.215:52412/account/logout"><i class="iconfont icon-logout01"></i>退出</a>
         </div>
     </nav>
@@ -282,7 +289,7 @@
 
 
 <div class="content">
-    <i class="iconfont icon-round_check1"></i>
+    <i class="iconfont "icon-round_check1 style="font-size: 48px;color: #1DC11D"></i>
     <div class="alert-success">恭喜您!</div>
     <div class="normalText alert-content" th:text="${successtip}">贵公司已成为【联泓新材料】的合作伙伴。</div>
     <button class="register" onclick="gotoindex()">开始使用</button>
