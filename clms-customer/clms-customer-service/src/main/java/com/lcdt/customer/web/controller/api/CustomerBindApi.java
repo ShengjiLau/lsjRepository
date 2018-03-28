@@ -104,7 +104,7 @@ public class CustomerBindApi {
 		if (customers != null && !customers.isEmpty()) {
 			ModelAndView error = new ModelAndView("error");
 			Customer customer = customers.get(0);
-			error.addObject("error", "客户管理里 " + customer.getCustomerName() + "已绑定" + customer.getBindCompany());
+			error.addObject("errortip", "客户管理里 " + customer.getCustomerName() + "已绑定" + customer.getBindCompany());
 			return error;
 		}
 
