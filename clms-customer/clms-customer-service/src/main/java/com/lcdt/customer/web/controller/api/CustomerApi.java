@@ -121,7 +121,6 @@ public class CustomerApi {
             sb.append(")");
             map.put("groupIds", sb.toString());
         } else {
-            if ( userCompRel.getIsCreate()!=1) {
                 StringBuffer sb = new StringBuffer();
                 List<Group> groupList = SecurityInfoGetter.groups();
                 if(groupList!=null && groupList.size()>0) {
@@ -136,7 +135,6 @@ public class CustomerApi {
                     sb.append(")");
                 }
                 map.put("groupIds", sb.toString());
-            }
         }
         PageInfo pageInfo = customerService.customerList(map);
         CustomerListResultDto dto1 = new CustomerListResultDto();

@@ -42,6 +42,17 @@ public class IndexOverviewApi {
             String[] idArr = ids.split(",");
             List groupIds = Arrays.asList(idArr);
             map.put("groupIds", groupIds);
+        } else {
+            List<Group> groupList = SecurityInfoGetter.groups();
+            List groupIds = new ArrayList<String>();
+            if(groupList!=null && groupList.size()>0) {
+                StringBuffer sb = new StringBuffer();
+                 for(int i=0;i<groupList.size();i++) {
+                    Group group = groupList.get(i);
+                    groupIds.add(group.getGroupId()); //客户表
+                  }
+                map.put("groupIds", groupIds);
+            }
         }
         JSONObject jsonObject = new JSONObject();
         try {
