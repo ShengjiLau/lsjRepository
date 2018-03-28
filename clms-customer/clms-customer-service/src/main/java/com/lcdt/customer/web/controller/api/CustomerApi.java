@@ -14,6 +14,7 @@ import com.lcdt.customer.web.dto.*;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.model.UserGroupRelation;
 import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
@@ -55,6 +56,8 @@ public class CustomerApi {
                                               @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                               @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+
         Map map = new HashMap();
         map.put("companyId", companyId);
         map.put("page_no", pageNo);
@@ -118,20 +121,22 @@ public class CustomerApi {
             sb.append(")");
             map.put("groupIds", sb.toString());
         } else {
-            StringBuffer sb = new StringBuffer();
-            List<Group> groupList = SecurityInfoGetter.groups();
-            if(groupList!=null && groupList.size()>0) {
-                sb.append("(");
-                for(int i=0;i<groupList.size();i++) {
-                    Group group = groupList.get(i);
-                    sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)");
-                    if(i!=groupList.size()-1){
-                        sb.append(" or ");
+            if ( userCompRel.getIsCreate()!=1) {
+                StringBuffer sb = new StringBuffer();
+                List<Group> groupList = SecurityInfoGetter.groups();
+                if(groupList!=null && groupList.size()>0) {
+                    sb.append("(");
+                    for(int i=0;i<groupList.size();i++) {
+                        Group group = groupList.get(i);
+                        sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)");
+                        if(i!=groupList.size()-1){
+                            sb.append(" or ");
+                        }
                     }
+                    sb.append(")");
                 }
-                sb.append(")");
+                map.put("groupIds", sb.toString());
             }
-            map.put("groupIds", sb.toString());
         }
         PageInfo pageInfo = customerService.customerList(map);
         CustomerListResultDto dto1 = new CustomerListResultDto();
