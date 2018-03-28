@@ -12,11 +12,9 @@ import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,15 +32,18 @@ public class AuthApi {
     @Reference
     IValidCodeService validCodeService;
 
-    @RequestMapping("/login")
-    public String login(String phone, String validcode,  WechatUserDto wechatUserDto) {
+    @PostMapping("/login")
+    public String login(@Valid @RequestBody WechatUserDto wechatUserDto) {
         JSONObject jsonObject = new JSONObject();
-        boolean codeCorrect = validCodeService.isCodeCorrect(validcode, VCODETAG, phone);
-        if (!codeCorrect) {
-            jsonObject.put("result", -1);
-            jsonObject.put("message", "验证码错误");
-            return jsonObject.toString();
-        }
+        String validcode = wechatUserDto.getValidCode();
+//        boolean codeCorrect = validCodeService.isCodeCorrect(validcode, VCODETAG, phone);
+//        if (!codeCorrect) {
+//            jsonObject.put("result", -1);
+//            jsonObject.put("message", "验证码错误");
+//            return jsonObject.toString();
+//        }
+        String phone = wechatUserDto.getPhone();
+
         User user;
         try {
             user = userService.queryByPhone(phone);

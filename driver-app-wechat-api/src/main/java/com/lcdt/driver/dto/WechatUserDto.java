@@ -1,6 +1,13 @@
 package com.lcdt.driver.dto;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class WechatUserDto {
+
+    @NotEmpty
+    private String phone;
+    @NotEmpty
+    private String validCode;
 
     private String nickName;
 
@@ -13,6 +20,22 @@ public class WechatUserDto {
     private String city;
 
     private String country;
+
+    public String getValidCode() {
+        return validCode;
+    }
+
+    public void setValidCode(String validCode) {
+        this.validCode = validCode;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public String getNickName() {
         return nickName;
