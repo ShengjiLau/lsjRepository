@@ -69,7 +69,8 @@ public interface IndexOverviewMapper {
      * @param companyId
      * @return
      */
-    List<Map<String,Object>> selectPlan4Doing(Long companyId);
+    Long selectOwnPlan4Doing(Long companyId,String groupIds);
+    Long selectCustomerPlan4Doing(Map map);
 
 
 

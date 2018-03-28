@@ -38,8 +38,8 @@ public class CustomerRpcServiceImpl implements CustomerRpcService {
     }
 
     @Override
-    public Map<String,Object> selectCarrierAndCustomer(Long companyId){
-        return customerMapper.selectCarrierAndCustomer(companyId);
+    public Map<String,Object> selectCarrierAndCustomer(Long companyId,String groupIds){
+        return customerMapper.selectCarrierAndCustomer(companyId, groupIds);
     }
 
     @Override

@@ -65,11 +65,10 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
 
     /***
      * 查询相关权限
-     * @param map
      * @param customerList
      * @return
      */
-    private Map  customerPlanByCarrier4CmpIdGroup(Map map, List<Customer> customerList) {
+    private Map  customerPlanByCarrier4CmpIdGroup(List<Customer> customerList) {
         Map resultMap = new HashMap();
         if (customerList!=null && customerList.size()>0) { //承运人ID
             StringBuffer sb = new StringBuffer(); //创建计划企业ID
@@ -85,6 +84,7 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
                     sb.append(" or ");
                 }
                 //查询承运人在货主方建立客户关系中，所加入的承运竞价组集合
+                Map map = new HashMap<String,String>();
                 map.put("companyId",ownCompanyId);
                 map.put("bindCompId",carrierCompanyId);
                 List<Customer> customer4GroupList = customerRpcService.findBindCompanyIds(map); //承运商竞价组
@@ -173,7 +173,7 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
     public Map customerPlanStatistics(Map map) {
         List<Customer> customerList = bindCustomerList(map);    //根据登录人（权限组），获取对应客户列表中绑定的客户企业（货主）
         if(customerList==null || customerList.size()==0) return null;
-        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(customerList); //查询对应在的企业组、竞价组条件
         map.put("companyIds",cMap.get("companyIds"));
         map.put("carrierCollectionIds1",cMap.get("carrierCollectionIds1"));
         map.put("carrierCollectionIds2",cMap.get("carrierCollectionIds2"));
@@ -225,6 +225,10 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
         return map1;
     }
 
+
+
+
+
     @Override
     public Map transportOverview(Map parameter){
         Long companyId=(Long)parameter.get("companyId");
@@ -235,7 +239,6 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
         ownMap.put("companyId",companyId);
         ownMap.put("groupIds",ownGroupIds);
 
-
         Map cusMap=new HashMap();
         cusMap.put("companyId",companyId);
         cusMap.put("group_ids",customerGroupIds);
@@ -243,13 +246,8 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
 
 
         Map<String,Object> resultMap = new HashMap<>();
-
-
-
-
-
         /**获取运输承运商和运输客户统计*/
-        Map customerMap = customerRpcService.selectCarrierAndCustomer(companyId);
+        Map customerMap = customerRpcService.selectCarrierAndCustomer(companyId, customerGroupIds);
         if(null!=customerMap){
             resultMap.put("carrierNum",new Integer(customerMap.get("carrier_num")+""));     //设置运输承运商数量
             resultMap.put("carrierCustomNum",new Integer(customerMap.get("carrier_custom_num")+""));   //设置运输客户数量
@@ -257,27 +255,6 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
             resultMap.put("carrierNum",0);     //设置运输承运商数量为0
             resultMap.put("carrierCustomNum",0);   //设置运输客户数量为0
         }
-
-        /**获取执行中的计划*/
-        List<Map<String,Object>>  mapList0 = indexOverviewMapper.selectPlan4Doing(companyId);
-        if(null!=mapList0 && mapList0.size()>0){
-            Map planMap = (Map)mapList0.get(0);
-            resultMap.put("planNum",new Integer(null==planMap?"0":planMap.get("plan_count")+""));     //设置执行中的计划统计数量
-        }else{
-            resultMap.put("planNum",0);      //设置执行中的计划统计数量为0
-        }
-
-        /**在途运单统计*/
-
-        Map cMapIds = customerCompanyIds.getCustomerCompanyIds(cusMap);
-        Map waybillCusMap=new HashMap();
-        waybillCusMap.put("companyIds",cMapIds.get("companyIds"));
-        waybillCusMap.put("carrierCompanyId",cusMap.get("companyId"));
-
-        Integer ownWaybillNum = indexOverviewMapper.selectInTransitOwnWaybill(ownMap);
-        Integer cusWaybillNum = indexOverviewMapper.selectInTransitCustomerWaybill(waybillCusMap);
-        resultMap.put("waybillNum",(ownWaybillNum!=null?ownWaybillNum:0)+(cusWaybillNum!=null?cusWaybillNum:0));   //设置在途运单统计数量
-
 
         /**获取我的车辆和司机统计*/
         List<Map<String,Object>>  mapList1 = indexOverviewMapper.selectVehicleAndDriver(companyId);
@@ -290,6 +267,38 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
             resultMap.put("vehicleNum",0);      //设置我的车辆统计数量为0
             resultMap.put("driverNum",0);   //设置我的司机统计数量为0
         }
+
+        /**获取执行中的计划*/
+        Long ownPlanNum = indexOverviewMapper.selectOwnPlan4Doing(companyId, ownGroupIds); //我创建的
+
+        //我承运的
+        Map map = new HashMap<String,String>();
+        map.put("companyId",companyId);
+        map.put("groupIds",customerGroupIds);
+         List<Customer> customerList = bindCustomerList(map);    //根据登录人（权限组），获取对应客户列表中绑定的客户企业（货主）
+
+        Long customerPlanNum = 0l;
+        if(customerList==null || customerList.size()==0) {
+            customerPlanNum = 0l;
+        } else {
+            Map cMap = customerPlanByCarrier4CmpIdGroup(customerList); //查询对应在的企业组、竞价组条件
+            map.put("carrierCollectionIds1",cMap.get("carrierCollectionIds1"));
+            map.put("companyIds",cMap.get("companyIds"));
+            customerPlanNum = indexOverviewMapper.selectCustomerPlan4Doing(map); //指给我的
+
+        }
+        resultMap.put("planNum",(ownPlanNum+customerPlanNum));      //设置执行中的计划统计数量为0
+
+
+
+        /**在途运单统计*/
+        Map cMapIds = customerCompanyIds.getCustomerCompanyIds(cusMap);
+        Map waybillCusMap=new HashMap();
+        waybillCusMap.put("companyIds",cMapIds.get("companyIds"));
+        waybillCusMap.put("carrierCompanyId",cusMap.get("companyId"));
+        Integer ownWaybillNum = indexOverviewMapper.selectInTransitOwnWaybill(ownMap);
+        Integer cusWaybillNum = indexOverviewMapper.selectInTransitCustomerWaybill(waybillCusMap);
+        resultMap.put("waybillNum",(ownWaybillNum!=null?ownWaybillNum:0)+(cusWaybillNum!=null?cusWaybillNum:0));   //设置在途运单统计数量
         return resultMap;
     }
 
