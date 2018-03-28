@@ -68,7 +68,7 @@ public class RequestAuthRedirectStrategy {
 			if (LoginSessionReposity.getCallback(request) != null) {
 				callback = LoginSessionReposity.getCallback(request);
 			}else {
-				callback = default_callback;
+					callback = default_callback;
 			}
 		}
 
