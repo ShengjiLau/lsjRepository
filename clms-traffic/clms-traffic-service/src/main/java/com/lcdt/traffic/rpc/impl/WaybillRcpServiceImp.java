@@ -1,8 +1,11 @@
 package com.lcdt.traffic.rpc.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.customer.model.Customer;
+import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.SplitGoodsMapper;
 import com.lcdt.traffic.dao.WaybillMapper;
 import com.lcdt.traffic.dto.*;
@@ -38,6 +41,9 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
     @Autowired
     private SplitGoodsService splitGoodsService;
+
+    @Reference
+    private CustomerRpcService customerRpcService;
 
     @Override
     public PageInfo queryOwnWaybillList(WaybillOwnListParamsDto dto) {
@@ -79,6 +85,10 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         map.remove("companyId");
         PageHelper.startPage(pageNo, pageSize);
         resultList = waybillMapper.selectCustomerByCondition(map);
+        for (int i = 0; i < resultList.size(); i++) {
+            Customer customer=customerRpcService.queryCustomer(resultList.get(i).getCarrierCompanyId(),resultList.get(i).getCompanyId());
+            resultList.get(i).setWaybillSource(customer.getCustomerName());
+        }
         page = new PageInfo(resultList);
         return page;
     }

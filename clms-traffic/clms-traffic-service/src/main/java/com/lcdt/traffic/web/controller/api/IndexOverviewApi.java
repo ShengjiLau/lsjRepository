@@ -183,8 +183,14 @@ public class IndexOverviewApi {
     public JSONObject waybillOverview() {
         Long companyId = SecurityInfoGetter.getCompanyId();      //  获取companyId
         JSONObject jsonObject = new JSONObject();
+
+        Map parameter=new HashMap();
+        parameter.put("ownGroupIds",GroupIdsUtil.getOwnGroupIds(null)); //获取默认当前所有分组
+        parameter.put("customerGroupIds",GroupIdsUtil.getCustomerGroupIds(null));//获取默认当前所有分组
+        parameter.put("companyId",companyId);
+
         try {
-            Map map = indexOverviewService.transportOverview(companyId);
+            Map map = indexOverviewService.transportOverview(parameter);
             jsonObject.put("code", 0);
             jsonObject.put("message", "查询成功");
             jsonObject.put("data",new JSONObject(map));
