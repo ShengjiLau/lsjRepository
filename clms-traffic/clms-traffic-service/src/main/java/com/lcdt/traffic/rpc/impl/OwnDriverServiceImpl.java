@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dao.DriverGroupRelationshipMapper;
 import com.lcdt.traffic.dao.OwnDriverCertificateMapper;
 import com.lcdt.traffic.dao.OwnDriverMapper;
@@ -238,17 +239,23 @@ public class OwnDriverServiceImpl implements OwnDriverService {
     }
 
     @Override
-    public int addGroupInfo(List<DriverGroupRelationship> driverGroupRelationshipList) {
+    public int addGroupInfo(List<DriverGroupRelationship> driverGroupRelationshipList, Long owndriverId) {
         /**先删除之前的关系，然后重新插入关系*/
-        DriverGroupRelationship driverGroupRelationship = driverGroupRelationshipList.get(0);
         int result = 0;
-        try {
-            driverGroupRelationshipMapper.deleteByOwnDriverId(driverGroupRelationship.getOwnDriverId(), driverGroupRelationship.getCompanyId());
-            result = driverGroupRelationshipMapper.insertBatch(driverGroupRelationshipList);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("添加分组信息失败");
+        if(driverGroupRelationshipList.size()>0){
+            DriverGroupRelationship driverGroupRelationship = driverGroupRelationshipList.get(0);
+            try {
+                driverGroupRelationshipMapper.deleteByOwnDriverId(driverGroupRelationship.getOwnDriverId(), driverGroupRelationship.getCompanyId());
+                result = driverGroupRelationshipMapper.insertBatch(driverGroupRelationshipList);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("添加分组信息失败");
+            }
+        }else{  //如果分组id为空，则认为是取消所有分组设置，直接删除对应的分组关系即可
+            Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+            driverGroupRelationshipMapper.deleteByOwnDriverId(owndriverId, companyId);
         }
+
         return result;
     }
 
