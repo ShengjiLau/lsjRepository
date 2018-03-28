@@ -26,6 +26,11 @@ public class RequestAuthRedirectStrategy {
 	@Value("${login.safecallback}")
 	private static List<String> safeCallbackUrls;
 
+	public static String getAuthCallbackNodefault(HttpServletRequest request) {
+		return request.getParameter(AUTH_CALLBACK);
+	}
+
+
 	public static String getAuthCallback(HttpServletRequest request){
 		String callback = request.getParameter(AUTH_CALLBACK);
 		if (StringUtils.isEmpty(callback)) {
