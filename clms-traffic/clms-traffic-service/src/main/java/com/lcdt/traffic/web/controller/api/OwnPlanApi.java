@@ -8,6 +8,7 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.quartz.rpc.QuartzRpc;
 import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
+import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.traffic.service.Plan4CreateService;
 import com.lcdt.traffic.service.Plan4EditService;
 import com.lcdt.traffic.service.PlanService;
@@ -49,6 +50,9 @@ public class OwnPlanApi {
 
     @Autowired
     private PlanService planService;
+
+    @Autowired
+    private IPlanRpcService4Wechat iPlanRpcService4Wechat;
 
 
     @ApiOperation("创建--发布")
@@ -178,7 +182,7 @@ public class OwnPlanApi {
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
             map.put("goodsInfo",dto.getGoodsInfo());
         }
-        PageInfo pageInfo = planService.wayBillPlanList(map);
+        PageInfo pageInfo = iPlanRpcService4Wechat.wayBillPlanList(map);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }

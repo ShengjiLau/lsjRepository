@@ -291,4 +291,48 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         return flag1+flag2>1?1:0;
     }
 
+
+    @Transactional(readOnly = true)
+    @Override
+    public PageInfo wayBillPlanList(Map map) {
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+
+        if (map.containsKey("page_no")) {
+            if (map.get("page_no") != null) {
+                pageNo = (Integer) map.get("page_no");
+            }
+        }
+        if (map.containsKey("page_size")) {
+            if (map.get("page_size") != null) {
+                pageSize = (Integer) map.get("page_size");
+            }
+        }
+        PageHelper.startPage(pageNo, pageSize);
+        List<WaybillPlan> list = waybillPlanMapper.selectByCondition(map);
+
+        if(list!=null && list.size()>0) { //
+            for(WaybillPlan obj :list) {
+                List<SnatchGoods> snatchGoodsList = obj.getSnatchGoodsList();
+                if (snatchGoodsList!=null && snatchGoodsList.size()>0) {
+                    for(SnatchGoods snatchGoods :snatchGoodsList) {
+                        Long jj_company_id = snatchGoods.getCompanyId(); //竞价企业ID
+                        Company carrierCompany = companyRpcService.findCompanyByCid(jj_company_id);
+                        if (carrierCompany != null) {
+                            snatchGoods.setOfferName(carrierCompany.getFullName());
+                        }
+
+                    }
+                }
+            }
+        }
+
+
+        PageInfo pageInfo = new PageInfo(list);
+        return pageInfo;
+    }
+
+
+
+
 }
