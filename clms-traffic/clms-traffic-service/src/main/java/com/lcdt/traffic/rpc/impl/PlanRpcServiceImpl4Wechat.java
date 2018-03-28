@@ -166,7 +166,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
     @Override
     public PageInfo snatchBill4CompleteList(SnathBill4WaittingPdto dto) {
         PageInfo pageInfo = null;
-        String driverGroupIds = biddingGroupByDriverId(dto.getDriverId()); //获取竞价组ID集合
+        //String driverGroupIds = biddingGroupByDriverId(dto.getDriverId()); //获取竞价组ID集合
         String ownCompanyIds = ownCompanyIdsByDriverId(dto.getCompyIds()); //发布计划企业ID组
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -187,7 +187,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         Map map = new HashMap<String,String>();
         map.put("orderDesc",orderDesc);
         map.put("orderFiled",orderField);
-        map.put("carrierDriverGroupIds",driverGroupIds);
+        map.put("carrierDriverGroupIds",""); //driverGroupIds
         map.put("ownCompanyIds",ownCompanyIds);
         map.put("offerId",dto.getDriverId());
         PageHelper.startPage(pageNo, pageSize);
