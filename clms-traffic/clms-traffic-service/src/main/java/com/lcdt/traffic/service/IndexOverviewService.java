@@ -42,8 +42,8 @@ public interface IndexOverviewService {
 
     /**
      * 运输总概览
-     * @param companyId
+     * @param parameter
      * @return
      */
-    Map transportOverview(Long companyId);
+    Map transportOverview(Map parameter);
 }

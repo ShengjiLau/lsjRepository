@@ -1,9 +1,11 @@
 package com.lcdt.login.web;
 
+import java.io.Serializable;
+
 /**
  * Created by ss on 2017/8/10.
  */
-public class CaptchaAndTime {
+public class CaptchaAndTime implements Serializable{
 
 	private String captcha;
 	private long createTime;

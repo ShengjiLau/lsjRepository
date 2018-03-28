@@ -83,9 +83,16 @@ public interface IndexOverviewMapper {
 
     /**
      * 执行中的计划和在途运单统计
-     * @param companyId
+     * @param map
      * @return
      */
-    List<Map<String,Object>> selectInTransitWaybill(Long companyId);
+    Integer selectInTransitOwnWaybill(Map map);
+
+    /**
+     * 执行中的计划和在途运单统计
+     * @param map
+     * @return
+     */
+    Integer selectInTransitCustomerWaybill(Map map);
 
 }
