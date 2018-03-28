@@ -447,6 +447,6 @@
 
     <select id="selectInTransitWaybill" resultType="Map" parameterType="Long">
         select sum(case when (waybill_status!=7 and waybill_status!=8) then 1 else 0 end) as waybill_nums
-        from t_waybill where is_deleted=0 and (company_id=#{arg0}  and carrier_company_id=#{arg0})
+        from t_waybill where is_deleted=0 and (company_id=#{arg0}  or carrier_company_id=#{arg0})
     </select>
 </mapper>
