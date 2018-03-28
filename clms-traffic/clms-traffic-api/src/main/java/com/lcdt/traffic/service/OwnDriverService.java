@@ -61,7 +61,7 @@ public interface OwnDriverService {
      */
     List<Driver> getGpsInfo(List<String> driverPhoneList);
 
-    int addGroupInfo(List<DriverGroupRelationship> driverGroupRelationshipList);
+    int addGroupInfo(List<DriverGroupRelationship> driverGroupRelationshipList, Long ownDriverId);
 
     boolean isExistDriver(String driverPhone, Long companyId);
 
