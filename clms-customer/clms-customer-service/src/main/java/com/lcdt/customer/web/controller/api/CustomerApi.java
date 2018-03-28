@@ -131,6 +131,7 @@ public class CustomerApi {
                 }
                 sb.append(")");
             }
+            map.put("groupIds", sb.toString());
         }
         PageInfo pageInfo = customerService.customerList(map);
         CustomerListResultDto dto1 = new CustomerListResultDto();
