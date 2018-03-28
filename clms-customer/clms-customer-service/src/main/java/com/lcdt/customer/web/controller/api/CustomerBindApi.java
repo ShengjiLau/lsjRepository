@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -127,6 +128,12 @@ public class CustomerBindApi {
 			customer.setDetailAddress(company.getDetailAddress());
 			customer.setRegistrationAddress(company.getRegistrationAddress());
 			customer.setCompanyId(companyId);
+			customer.setCreateDate(new Date());
+			customer.setCreateId(user.getUserId());
+			customer.setCreateName(user.getRealName());
+//			customer.setGroupIds();
+
+
 			mapper.insert(customer);
 		}else{
 			customer = mapper.selectByPrimaryKey(customerId, companyId);
@@ -159,7 +166,7 @@ public class CustomerBindApi {
 		successView.addObject("headimg", user.getPictureUrl());
 
 
-		String successTipStr = "贵公司已成为【"+company.getFullName()+"】的合作伙伴";
+		String successTipStr = "贵公司已成为【"+company.getFullName()+"】的合作伙伴。";
 		successView.addObject("successtip", successTipStr);
 		successView.addObject("host", "http://39.107.12.215:88");
 		return successView;
@@ -170,7 +177,6 @@ public class CustomerBindApi {
 	@RequestMapping(value = "/customerlist",method = RequestMethod.GET)
 	@PreAuthorize("hasAuthority('bindCustomer') or hasRole('ROLE_SYS_ADMIN')")
 	public ModelAndView customer(@RequestParam(name = "a") Long inviteLogId,@RequestParam(name = "b") String token){
-		//TODO 检查链接上的token 有效性
 		CustomerInviteLog customerInviteLog = inviteLogService.selectByInviteId(inviteLogId);
 		if (customerInviteLog.getIsValid() != null) {
 			if (customerInviteLog.getIsValid() == 0 || !customerInviteLog.getInviteToken().equals(token)) {
