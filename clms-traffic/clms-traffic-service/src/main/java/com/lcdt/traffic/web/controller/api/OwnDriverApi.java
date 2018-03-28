@@ -184,7 +184,7 @@ public class OwnDriverApi {
             jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
             return jsonObject;
         }
-        ownDriverService.addGroupInfo(driverGroupRelationshipList);
+        ownDriverService.addGroupInfo(driverGroupRelationshipList, ownDriverGroupRelationshipDto.getOwnDriverId());
         jsonObject.put("code", 0);
         jsonObject.put("message", "设置成功");
         return jsonObject;

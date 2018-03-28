@@ -665,12 +665,6 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 isComplete = true;
             }
         }
-
-        //派车给司机
-        waybillDto.setDriverId(dto.getDriverId());
-        waybillDto.setDriverName(dto.getDriverName());
-        waybillDto.setDriverPhone(dto.getDriverPhone());
-
         waybillDto.setWaybillCode(waybillPlan.getSerialCode());   //整合运单主子关系
         waybillDto.setWaybillItemsDtoList(waybillItemsDtos);
         Waybill waybill = waybillService.addWaybill(waybillDto);
