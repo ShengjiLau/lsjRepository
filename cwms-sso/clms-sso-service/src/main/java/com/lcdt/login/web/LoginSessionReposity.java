@@ -34,7 +34,6 @@ public class LoginSessionReposity {
 		return getObjectInSession(String.class, session, AUTH_CALLBACK);
 	}
 
-
 	public static User getUserInfoInSession(HttpServletRequest request){
 		HttpSession session = request.getSession(false);
 		return getObjectInSession(User.class, session, USERINFO_SESSION);
@@ -102,8 +101,6 @@ public class LoginSessionReposity {
 			}
 			return false;
 	}
-
-
 
 
 	public static <T> T getObjectInSession(Class<T> clazz,HttpSession session, String key) {
