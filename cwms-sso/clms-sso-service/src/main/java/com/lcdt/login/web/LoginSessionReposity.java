@@ -22,7 +22,7 @@ public class LoginSessionReposity {
 	private static final String AUTH_CALLBACK = "auth_callback";
 
 	public static void setCallBackUrl(HttpServletRequest request) {
-		String authCallback = RequestAuthRedirectStrategy.getAuthCallback(request);
+		String authCallback = RequestAuthRedirectStrategy.getAuthCallbackNodefault(request);
 		if (!StringUtils.isEmpty(authCallback)) {
 			HttpSession session = request.getSession(true);
 			session.setAttribute(AUTH_CALLBACK, authCallback);
