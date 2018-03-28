@@ -100,22 +100,22 @@ public class CustomerBindApi {
 		stringLongHashMap.put("companyId", companyId);
 		stringLongHashMap.put("bindCompId", inviteCompanyId);
 		List<Customer> customers = mapper.selectByCondition(stringLongHashMap);
-
-		if (customers != null && !customers.isEmpty()) {
-			ModelAndView error = new ModelAndView("error");
-			Customer customer = customers.get(0);
-			error.addObject("errortip", "客户管理里 " + customer.getCustomerName() + "已绑定" + customer.getBindCompany());
-			return error;
-		}
-
 		User user = SecurityInfoGetter.getUser();
+		if (customers != null && !customers.isEmpty()) {
+			ModelAndView errorView = new ModelAndView("error");
+			Customer customer = customers.get(0);
+			errorView.addObject("username", user.getRealName());
+			errorView.addObject("headimg", user.getPictureUrl());
+			errorView.addObject("errortip", "客户管理里 " + customer.getCustomerName() + "已绑定" + customer.getBindCompany());
+			return errorView;
+		}
 
 		if (companyId.equals(inviteCompanyId)) {
 			ModelAndView errorView = new ModelAndView("/error");
 			errorView.addObject("username", user.getRealName());
 			errorView.addObject("headimg", user.getPictureUrl());
-			String successTipStr = "失败原因：同一企业内不能相互邀请绑定";
-			errorView.addObject("errortip", successTipStr);
+			String errorTipStr = "失败原因：同一企业内不能相互邀请绑定";
+			errorView.addObject("errortip", errorTipStr);
 			return errorView;
 		}
 		Company company = companyService.selectById(inviteCompanyId);
@@ -193,6 +193,7 @@ public class CustomerBindApi {
 		modelAndView.addObject("log", customerInviteLog);
 		modelAndView.addObject("currentCompanyName", userCompRel.getCompany().getFullName());
 		modelAndView.addObject("username", userCompRel.getUser().getRealName());
+		modelAndView.addObject("headimg", userCompRel.getUser().getPictureUrl());
 		return modelAndView;
 	}
 
