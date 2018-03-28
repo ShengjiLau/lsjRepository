@@ -1,12 +1,13 @@
-package com.lcdt.traffic.web.controller.api;
+package com.lcdt.driver.wechat.api.DriverManageApi;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
+import com.lcdt.driver.dto.PageBaseDto;
+import com.lcdt.driver.wechat.api.util.BalanceCheckBo;
+import com.lcdt.driver.wechat.api.util.GprsLocationBo;
 import com.lcdt.traffic.service.OwnDriverService;
-import com.lcdt.traffic.util.BalanceCheckBo;
-import com.lcdt.traffic.util.GprsLocationBo;
-import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.userinfo.model.Driver;
 import com.lcdt.userinfo.model.LocationCallbackModel;
 import com.lcdt.userinfo.service.DriverService;
@@ -36,7 +37,7 @@ public class LocationServiceApi {
     @Reference
     public DriverService driverService;
 
-    @Autowired
+    @Reference
     private OwnDriverService ownDriverService;
 
     @Autowired
@@ -72,35 +73,29 @@ public class LocationServiceApi {
         return jsonObject;
     }
 
-    @ApiOperation(value = "开通定位功能", notes = "发送激活短信到用手手机，成功后将数据库状态改为1等待激活")
+    @ApiOperation(value = "开通定位功能", notes = "此操作会更新本地数据库为1，待激活的状态")
     @GetMapping("/open")
     public JSONObject getGpstStatus(String mobile) {
         logger.debug("driverPhone:" + mobile);
         Driver driver = new Driver();
+        driver.setGpsStatus(new Short("1"));
         driver.setDriverPhone(mobile);
         JSONObject jsonObject = new JSONObject();
-        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId(); //  获取companyId
         /*if(!balanceCheckBo.check(companyId)){
             jsonObject.put("code", -1);
             jsonObject.put("message", "余额不足！请充值！");
             return jsonObject;
         }*/
         try {
-            //开通授权
-            JSONObject openInfo = GprsLocationBo.getInstance().authOpen(mobile);
-            if(openInfo.getIntValue("resid")==0){   //开通成功后变更数据库状态为1等待激活
-                driver.setGpsStatus(new Short("1"));
-                int row = driverService.modGpsStatus(driver);
+            int row = driverService.modGpsStatus(driver);
+            GprsLocationBo.getInstance().authOpen(mobile);
+            if(row>0){
                 jsonObject.put("code", 0);
-                jsonObject.put("message", "开通成功，请回复短信小写的y");
-            }else if(openInfo.getIntValue("resid")==1){ //如果改手机已经激活过，则变更数据库状态为已激活
-                driver.setGpsStatus(new Short("2"));
-                int row = driverService.modGpsStatus(driver);
-                jsonObject.put("code", 0);
-                jsonObject.put("message", "手机号已经激活");
+                jsonObject.put("message", "开通成功");
             }else{
-                jsonObject.put("code",-1);
-                jsonObject.put("message", "开通失败，请联系客服");
+                jsonObject.put("code", -1);
+                jsonObject.put("message", "该司机不存在");
             }
         } catch (Exception e) {
             jsonObject.put("code", -1);
@@ -114,14 +109,14 @@ public class LocationServiceApi {
     public JSONObject queryStatus(String mobile) {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
-        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId();//  获取companyId
         /*if(!balanceCheckBo.check(companyId)){
             jsonObject.put("code", -1);
             jsonObject.put("message", "余额不足！请充值！");
             return jsonObject;
         }*/
         JSONObject result = GprsLocationBo.getInstance().authStatus(mobile);
-        int resid = result.getIntValue("resid");
+        int resid = result.getInteger("resid");
         if (resid == 1) {   //白名单且已开通定位，更新本地数据库定位状态为2
             Driver driver = new Driver();
             driver.setDriverPhone(mobile);
@@ -147,25 +142,23 @@ public class LocationServiceApi {
     public JSONObject authOpen(String mobile) {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
-        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-        /*if(!balanceCheckBo.check(companyId)){
+        Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId(); //  获取companyId
+        if(!balanceCheckBo.check(companyId)){
             jsonObject.put("code", -1);
             jsonObject.put("message", "余额不足！请充值！");
             return jsonObject;
-        }*/
-        Driver driver = new Driver();
-        driver.setDriverPhone(mobile);
+        }
         JSONObject result = GprsLocationBo.getInstance().authOpen(mobile);
-        int resid = result.getIntValue("resid");
+        int resid = result.getInteger("resid");
         if (resid == 0) {   //白名单开通成功，请通知用户回复短信小写的y
-            driver.setGpsStatus(new Short("1"));
+            Driver driver = new Driver();
+            driver.setDriverPhone(mobile);
+            driver.setGpsStatus(new Short("2"));
             driverService.modGpsStatus(driver);
             jsonObject.put("code", 0);
             jsonObject.put("resid", resid);
-            jsonObject.put("message", "开通成功，请回复短信小写的y");
+            jsonObject.put("message", "白名单开通成功，请通知用户回复短信小写的y");
         } else if (resid == 1) {
-            driver.setGpsStatus(new Short("2"));
-            driverService.modGpsStatus(driver);
             jsonObject.put("code", 0);
             jsonObject.put("resid", resid);
             jsonObject.put("message", "定位已激活");
@@ -185,7 +178,7 @@ public class LocationServiceApi {
              *  -80	余额不足,请充值:请联系客服
              */
             jsonObject.put("code", -1);
-            jsonObject.put("message", "系统错误,请联系客服");  //
+            jsonObject.put("message", "系统错误");  //
         }
         return jsonObject;
     }
@@ -195,56 +188,34 @@ public class LocationServiceApi {
     public JSONObject queryLocation(String mobile) {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
-        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId(); //  获取companyId
         if(!balanceCheckBo.check(companyId)){
             jsonObject.put("code", -1);
             jsonObject.put("message", "余额不足！请充值！");
             return jsonObject;
         }
-        /**
-         * 先通过定位状态查询改手机号是否已激活，未激活提示需要开通才能定位，数据库状态变成0未开通
-         * 如果用户已激活则开始定位并把定位信息同步到数据库
-         * */
-        JSONObject openStatus = GprsLocationBo.getInstance().authStatus(mobile);
-        int resid = openStatus.getIntValue("resid");
-        if (resid == 1) {   //白名单且已开通定位，更新本地数据库定位状态为2
-            JSONObject result = GprsLocationBo.getInstance().queryLocation(mobile);
-            int resid1 = result.getIntValue("resid");
-            if (resid1 == 0) {   //已激活
-                Driver driver = new Driver();
-                driver.setDriverPhone(mobile);
-                driver.setCurrentLocation(result.getString("location"));
-                driver.setShortCurrentLocation(result.getString("street"));
-                driverService.updateLocation(driver);
-                jsonObject.put("code", resid);
-                jsonObject.put("location",result.getString("location"));
-                jsonObject.put("locationTime", DateUtility.getCurrDatetime());
-                jsonObject.put("message", "查询成功");
-            } else if (resid1 == -80) {    //	余额不足,请充值:请联系客服
-                jsonObject.put("code", resid);
-                jsonObject.put("message", "余额不足,请充值:请联系客服");
-            } else if (resid1 == -130) {    //用户可能关机
-                jsonObject.put("code", resid);
-                jsonObject.put("message", "用户可能关机");
-            } else {      //对于移动手机，定位失败时运营商返回的结果
-                jsonObject.put("code", resid);
-                jsonObject.put("message", "定位失败，请联系客服！");
-            }
-        } else if (resid == 0) {    //未激活
+        JSONObject result = GprsLocationBo.getInstance().queryLocation(mobile);
+        int resid = result.getInteger("resid");
+        if (resid == 0) {   //正确返回
             Driver driver = new Driver();
             driver.setDriverPhone(mobile);
-            driver.setGpsStatus(new Short("1"));
-            driverService.modGpsStatus(driver);
-            jsonObject.put("code", -1);
-            jsonObject.put("message", "需要先开通定位服务才能定位");
-        } else if (resid == -1) {    //手机号不存在
+            driver.setCurrentLocation(result.getString("location"));
+            driver.setShortCurrentLocation(result.getString("street"));
+            driverService.updateLocation(driver);
             jsonObject.put("code", resid);
-            jsonObject.put("message", "查找不到该手机");
-        } else {      //resid = -99  黑名单用户
+            jsonObject.put("location",result.getString("location"));
+            jsonObject.put("locationTime", DateUtility.getCurrDatetime());
+            jsonObject.put("message", "查询成功");
+        } else if (resid == -80) {    //	余额不足,请充值:请联系客服
             jsonObject.put("code", resid);
-            jsonObject.put("message", "黑名单用户");
+            jsonObject.put("message", "余额不足,请充值:请联系客服");
+        } else if (resid == -130) {    //用户可能关机
+            jsonObject.put("code", resid);
+            jsonObject.put("message", "用户可能关机");
+        } else {      //对于移动手机，定位失败时运营商返回的结果
+            jsonObject.put("code", resid);
+            jsonObject.put("message", "定位失败，请联系客服！");
         }
-
         return jsonObject;
     }
 
@@ -262,7 +233,7 @@ public class LocationServiceApi {
     @ApiOperation(value = "基站定位剩余条数", notes = "获取基站定位剩余条数")
     @GetMapping("/querycount")
     public JSONObject queryLocation() {
-        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId();//  获取companyId
         JSONObject jsonObject = new JSONObject();
         try {
             int count = balanceCheckBo.getGmsCount(companyId);

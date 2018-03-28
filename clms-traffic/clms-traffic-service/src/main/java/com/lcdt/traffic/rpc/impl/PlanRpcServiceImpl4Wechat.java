@@ -217,7 +217,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                              boolean flag1 = false;
                              if(waybillList!=null && waybillList.size()>0) {
                                  for(Waybill waybill: waybillList) {
-                                     if(waybill.getDriverId().equals(dto.getDriverId())) {
+                                     if(waybill.getDriverId()!=null&&waybill.getDriverId().equals(dto.getDriverId())) {
                                          flag1 = true;
                                          break;
                                      }
