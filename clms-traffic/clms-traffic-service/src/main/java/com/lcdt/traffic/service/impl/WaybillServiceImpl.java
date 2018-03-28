@@ -109,23 +109,14 @@ public class WaybillServiceImpl implements WaybillService {
         if (waybill.getCarrierCompanyId() != null) {
             if (waybill.getCompanyId().equals(waybill.getCarrierCompanyId())) {
                 Company carrierCompany = companyService.selectById(waybill.getCarrierCompanyId());
-                Company company = companyService.selectById(waybill.getCompanyId());
                 if (carrierCompany != null) {
                     waybill.setCarrierCompanyName(carrierCompany.getFullName());
-                }
-                if (company != null) {
-                    waybill.setWaybillSource(company.getFullName());
                 }
             } else {
                 //设置承运商名字在本企业的客户名称
                 Customer carrierCustomer = customerRpcService.queryCustomer(waybill.getCompanyId(), waybill.getCarrierCompanyId());
                 if (carrierCustomer != null && carrierCustomer.getCustomerName() != null) {
                     waybill.setCarrierCompanyName(carrierCustomer.getCustomerName());
-                }
-                //设置货物来源
-                Customer sourceCustomer = customerRpcService.queryCustomer(waybill.getCarrierCompanyId(), waybill.getCompanyId());
-                if (sourceCustomer.getCustomerName() != null) {
-                    waybill.setWaybillSource(sourceCustomer.getCustomerName());
                 }
             }
         }

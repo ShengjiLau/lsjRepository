@@ -6,6 +6,7 @@ import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.IndexOverviewMapper;
 import com.lcdt.traffic.service.IndexOverviewService;
+import com.lcdt.traffic.util.GroupIdsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -225,8 +226,28 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
     }
 
     @Override
-    public Map transportOverview(Long companyId){
+    public Map transportOverview(Map parameter){
+        Long companyId=(Long)parameter.get("companyId");
+        String ownGroupIds=parameter.get("ownGroupIds").toString(); //获取默认当前所有分组
+        String customerGroupIds=parameter.get("customerGroupIds").toString();//获取默认当前所有分组
+
+        Map ownMap=new HashMap();
+        ownMap.put("companyId",companyId);
+        ownMap.put("groupIds",ownGroupIds);
+
+
+        Map cusMap=new HashMap();
+        cusMap.put("companyId",companyId);
+        cusMap.put("group_ids",customerGroupIds);
+
+
+
         Map<String,Object> resultMap = new HashMap<>();
+
+
+
+
+
         /**获取运输承运商和运输客户统计*/
         Map customerMap = customerRpcService.selectCarrierAndCustomer(companyId);
         if(null!=customerMap){
@@ -240,26 +261,30 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
         /**获取执行中的计划*/
         List<Map<String,Object>>  mapList0 = indexOverviewMapper.selectPlan4Doing(companyId);
         if(null!=mapList0 && mapList0.size()>0){
-            Map map = (Map)mapList0.get(0);
-            resultMap.put("planNum",new Integer(null==map?"0":map.get("plan_count")+""));     //设置执行中的计划统计数量
+            Map planMap = (Map)mapList0.get(0);
+            resultMap.put("planNum",new Integer(null==planMap?"0":planMap.get("plan_count")+""));     //设置执行中的计划统计数量
         }else{
             resultMap.put("planNum",0);      //设置执行中的计划统计数量为0
         }
 
         /**在途运单统计*/
-        List<Map<String,Object>>  mapList = indexOverviewMapper.selectInTransitWaybill(companyId);
-        if(null!=mapList && mapList.size()>0){
-            Map map = (Map)mapList.get(0);
-            resultMap.put("waybillNum",new Integer(null==map?"0":map.get("waybill_nums")+""));   //设置在途运单统计数量
-        }else{
-            resultMap.put("waybillNum",0);   //设置在途运单统计数量为0
-        }
+
+        Map cMapIds = customerCompanyIds.getCustomerCompanyIds(cusMap);
+        Map waybillCusMap=new HashMap();
+        waybillCusMap.put("companyIds",cMapIds.get("companyIds"));
+        waybillCusMap.put("carrierCompanyId",cusMap.get("companyId"));
+
+        Integer ownWaybillNum = indexOverviewMapper.selectInTransitOwnWaybill(ownMap);
+        Integer cusWaybillNum = indexOverviewMapper.selectInTransitCustomerWaybill(waybillCusMap);
+        resultMap.put("waybillNum",(ownWaybillNum!=null?ownWaybillNum:0)+(cusWaybillNum!=null?cusWaybillNum:0));   //设置在途运单统计数量
+
+
         /**获取我的车辆和司机统计*/
         List<Map<String,Object>>  mapList1 = indexOverviewMapper.selectVehicleAndDriver(companyId);
         if(null!=mapList1 && mapList1.size()>0){
-            Map map = (Map)mapList1.get(0);
+            Map driverMap = (Map)mapList1.get(0);
             Map map1 = (Map)mapList1.get(1);
-            resultMap.put("vehicleNum",new Integer(map.get("vehicle_driver")+""));     //设置我的车辆统计数量
+            resultMap.put("vehicleNum",new Integer(driverMap.get("vehicle_driver")+""));     //设置我的车辆统计数量
             resultMap.put("driverNum",new Integer(map1.get("vehicle_driver")+""));   //设置我的司机统计数量
         }else{
             resultMap.put("vehicleNum",0);      //设置我的车辆统计数量为0

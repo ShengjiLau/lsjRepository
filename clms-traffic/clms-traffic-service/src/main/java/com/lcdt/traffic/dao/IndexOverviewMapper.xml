@@ -445,8 +445,24 @@
         where company_id=#{arg0} and is_deleted=0
     </select>
 
-    <select id="selectInTransitWaybill" resultType="Map" parameterType="Long">
+    <select id="selectInTransitOwnWaybill" resultType="int" parameterType="Map">
         select sum(case when (waybill_status!=7 and waybill_status!=8) then 1 else 0 end) as waybill_nums
-        from t_waybill where is_deleted=0 and (company_id=#{arg0}  or carrier_company_id=#{arg0})
+        from t_waybill where is_deleted=0 and company_id = #{companyId,jdbcType=BIGINT}
+        <if test="groupIds!=null and groupIds!=''">
+            and  ${groupIds}
+        </if>
+        <if test="groupIds==null or groupIds==''">
+            and  group_id is null
+        </if>
+    </select>
+    <select id="selectInTransitCustomerWaybill" resultType="int" parameterType="Map">
+        select sum(case when (waybill_status!=7 and waybill_status!=8) then 1 else 0 end) as waybill_nums
+        from t_waybill where is_deleted=0 and carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
+        <if test="companyIds!=null">
+            and ${companyIds}
+        </if>
+        <if test="companyIds==null">
+            and company_id is null
+        </if>
     </select>
 </mapper>
