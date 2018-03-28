@@ -213,4 +213,22 @@ public class ContractServiceImpl implements ContractService {
         }
         return result;
     }
+
+    @Override
+    public ContractDto selectByPrimaryKey(Long contractId) {
+        ContractDto dto=contractMapper.selectByPrimaryKey(contractId);
+        if(null != dto) {
+            //获取合同下商品
+            List<ContractProduct> productList = contractProductMapper.selectCpsByContractId(contractId);
+            if(null != productList && productList.size() != 0) {
+                dto.setContractProductList(productList);
+            }
+            //添加审批人及抄送人信息
+            List<ContractApproval> approvalList = contractApprovalMapper.selectByContractId(contractId);
+            if(null != approvalList && approvalList.size() > 0){
+                dto.setContractApprovalList(approvalList);
+            }
+        }
+        return dto;
+    }
 }
