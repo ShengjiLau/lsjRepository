@@ -189,7 +189,7 @@
           <span>
             <span class="ant-dropdown-link ant-dropdown-trigger" href="#" style="font-weight: 100;">
               <div class="pic" style="width: 24px;margin-right: 5px;height: 24px;vertical-align: middle;border-radius: 13px;overflow: hidden;display: inline-block;border: 1px solid #d9d9d9">
-                <img th:src="${session.userinfo.pictureUrl==''?'/img/head.png':session.userinfo.pictureUrl}" alt="此处有头像" style="width: 100%; vertical-align: top;">
+                <img th:src="${(session.userinfo.pictureUrl==null)?'/img/head.png':session.userinfo.pictureUrl}" alt="此处有头像" style="width: 100%; vertical-align: top;">
               </div><!-- react-text: 54 --><label th:utext="${session.userinfo.realName}"/><!-- /react-text -->
             </span>
             <span><a href="/account/logout"><i class="iconfont icon-logout01"></i>退出</label></span>

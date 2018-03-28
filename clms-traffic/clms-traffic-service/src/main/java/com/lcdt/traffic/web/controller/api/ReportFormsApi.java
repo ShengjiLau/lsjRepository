@@ -105,7 +105,10 @@ public class ReportFormsApi {
         JSONObject jsonObject = new JSONObject();
         try {
             Map<String, Object> resultMap = reportFormsService.customerPlanStatistics(map);
-            JSONObject jsonResult = new JSONObject(resultMap);
+            JSONObject jsonResult = null;
+            if(resultMap!=null) {
+                jsonResult = new JSONObject(resultMap);
+            }
             jsonObject.put("code", 0);
             jsonObject.put("message", "查询成功");
             jsonObject.put("data", jsonResult);
