@@ -51,8 +51,7 @@ public interface CustomerMapper {
     int updateByPrimaryKeySelective(Customer record);
     List<Customer> selectByCondition(Map map);
 
-    Map<String,Object> selectCarrierAndCustomer(@Param("companyId") Long companyId,
-                                                @Param("groupIds") String groupIds);
+    Map<String,Object> selectCarrierAndCustomer(@Param("companyId") Long companyId, @Param("groupIds") String groupIds);
 
     Customer selectByCustomerBindCompanyId(@Param("companyId") Long companyId,@Param("bindCompanyId") Long bindCompanyId);
 
