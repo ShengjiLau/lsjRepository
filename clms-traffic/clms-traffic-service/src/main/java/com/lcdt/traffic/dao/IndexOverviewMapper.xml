@@ -273,10 +273,10 @@
                 and  group_id is null
             </if>
             <if test="date_interval!=null and date_interval!=''">
-                and pub_date &lt;= CURDATE() and pub_date &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+                and date(pub_date) &lt;= SUBDATE(CURDATE(),-1) and date(pub_date) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
             </if>
             <if test="pubdate_start!=null and pubdate_start!=''">
-                and pub_date &gt;= #{pubdate_start,jdbcType=TIMESTAMP} and pub_date &lt;= #{pubdate_end,jdbcType=TIMESTAMP}
+                and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
             </if>
         </where>
     </select>
@@ -296,10 +296,10 @@
         FROM t_waybill
         WHERE company_id = #{companyId,jdbcType=BIGINT} AND is_deleted = 0
         <if test="date_interval!=null and date_interval!=''">
-            and date(pub_date) &lt;= CURDATE() and date(pub_date) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+            and date(pub_date) &lt;= SUBDATE(CURDATE(),-1) and date(pub_date) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
         </if>
         <if test="pubdate_start!=null and pubdate_start!=''">
-            and date(pub_date) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(pub_date) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+            and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
         </if>
         <if test="groupIds!=null and groupIds!=''">
             and  ${groupIds}
@@ -311,10 +311,10 @@
         ) t1 on t.dt= t1.pub_date
         WHERE 1 = 1
         <if test="date_interval!=null and date_interval!=''">
-            and date(dt) &lt;=CURDATE() and date(dt) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+            and date(dt) &lt;= SUBDATE(CURDATE(),-1) and date(dt) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
         </if>
         <if test="pubdate_start!=null and pubdate_start!=''">
-            and date(dt) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(dt) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+            and date(dt) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(dt) &gt;= CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
         </if>
     </select>
 
@@ -336,10 +336,10 @@
                 and company_id is null
             </if>
             <if test="date_interval!=null and date_interval!=''">
-                and pub_date &lt;= CURDATE() and pub_date &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+                and date(pub_date) &lt;= SUBDATE(CURDATE(),-1) and date(pub_date) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
             </if>
             <if test="pubdate_start!=null and pubdate_start!=''">
-                and pub_date &gt;= #{pubdate_start,jdbcType=TIMESTAMP} and pub_date &lt;= #{pubdate_end,jdbcType=TIMESTAMP}
+                and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
             </if>
         </where>
     </select>
@@ -359,11 +359,12 @@
         FROM t_waybill
         WHERE carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT} AND is_deleted = 0
         <if test="date_interval!=null and date_interval!=''">
-            and date(pub_date) &lt;= CURDATE() and date(pub_date) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+            and date(pub_date) &lt;= SUBDATE(CURDATE(),-1) and date(pub_date) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
         </if>
         <if test="pubdate_start!=null and pubdate_start!=''">
-            and date(pub_date) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(pub_date) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+            and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
         </if>
+
 
         <if test="companyIds!=null">
             and ${companyIds}
@@ -375,10 +376,10 @@
         ) t1 on t.dt= t1.pub_date
         WHERE 1 = 1
         <if test="date_interval!=null and date_interval!=''">
-            and date(dt) &lt;=CURDATE() and date(dt) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+            and date(dt) &lt;= SUBDATE(CURDATE(),-1) and date(dt) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
         </if>
         <if test="pubdate_start!=null and pubdate_start!=''">
-            and date(dt) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(dt) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
+            and date(dt) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(dt) &gt;= CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
         </if>
     </select>
     <!--

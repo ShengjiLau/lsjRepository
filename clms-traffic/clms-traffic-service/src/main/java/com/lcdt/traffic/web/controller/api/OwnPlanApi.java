@@ -83,7 +83,7 @@ public class OwnPlanApi {
 
     @ApiOperation("拉取计划信息-编辑")
     @RequestMapping(value = "/loadPlan",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_plan')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_plan') or hasAuthority('traffic_split_goods')")
     public WaybillPlan loadPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         WaybillParamsDto dto = new WaybillParamsDto();
@@ -174,10 +174,10 @@ public class OwnPlanApi {
             map.put("receiveCounty",dto.getReceiveCounty());
         }
         if (StringUtil.isNotEmpty(dto.getPubdateBegin())) { //发布时间
-            map.put("pubdateBegin",dto.getPubdateBegin());
+            map.put("pubdateBegin",dto.getPubdateBegin()+" 00:00:00");
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
-            map.put("pubdateEnd",dto.getPubdateEnd());
+            map.put("pubdateEnd",dto.getPubdateEnd()+" 23:59:59");
         }
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
             map.put("goodsInfo",dto.getGoodsInfo());

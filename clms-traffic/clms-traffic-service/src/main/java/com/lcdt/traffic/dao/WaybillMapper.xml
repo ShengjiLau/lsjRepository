@@ -180,10 +180,10 @@
       and receive_county = #{receiveCounty,jdbcType=VARCHAR}
     </if>
     <if test="startCreateDate!=null and startCreateDate!=''">
-      and create_date &gt;= #{startCreateDate,jdbcType=VARCHAR}
+      and create_date &gt;= CONCAT(STR_TO_DATE(#{startCreateDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
     </if>
     <if test="endCreateDate!=null and endCreateDate!=''">
-      and create_date &lt;= #{endCreateDate,jdbcType=VARCHAR}
+      and create_date &lt;= CONCAT(STR_TO_DATE(#{endCreateDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
     </if>
     <if test="waybillSource!=null and waybillSource!=''">
       and waybill_source like concat('%',#{waybillSource,jdbcType=VARCHAR},'%')
@@ -195,10 +195,10 @@
       and (driver_name like concat('%',#{driverInfo,jdbcType=VARCHAR},'%') or driver_phone like concat('%',#{driverInfo,jdbcType=VARCHAR},'%') or vechicle_num like concat('%',#{driverInfo,jdbcType=VARCHAR},'%'))
     </if>
     <if test="startStartDate!=null and startStartDate!=''">
-      and start_date &gt;= #{startStartDate,jdbcType=VARCHAR}
+      and start_date >=CONCAT(STR_TO_DATE(#{startStartDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
     </if>
     <if test="endStartDate!=null and endStartDate!=''">
-      and start_date &lt;= #{endStartDate,jdbcType=VARCHAR}
+      and start_date &lt;=CONCAT(STR_TO_DATE(#{endStartDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
     </if>
     <if test="isDeleted!=null and isDeleted!=''">
       and is_deleted = #{isDeleted,jdbcType=VARCHAR}
