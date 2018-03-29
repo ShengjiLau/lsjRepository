@@ -536,4 +536,10 @@
     approval_end_date = CURRENT_TIMESTAMP
     where order_id = #{arg0} and company_id = #{arg1}
   </update>
+  
+    <update id="updateIsDraft" parameterType="java.lang.Long">
+    update t_order
+    set is_draft = 2
+    where order_id = #{orderId,jdbcType=BIGINT} 
+  </update>
 </mapper>

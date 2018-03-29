@@ -83,6 +83,7 @@ public class IndexOverviewApi {
             List groupIds = Arrays.asList(idArr);
             if(groupIds!=null && groupIds.size()>0) {
                 StringBuffer sb = new StringBuffer();
+                sb.append("(");
                 for(int i=0;i<groupIds.size();i++) {
                     sb.append(" find_in_set('"+groupIds.get(i)+"',group_ids)");
                     if(i!=groupIds.size()-1){

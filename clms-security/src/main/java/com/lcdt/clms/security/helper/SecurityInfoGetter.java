@@ -17,6 +17,9 @@ public class SecurityInfoGetter {
 
 	public static User getUser(){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null) {
+			return null;
+		}
 		TicketAuthentication details = (TicketAuthentication) authentication.getDetails();
 		return details.getUser();
 	}
@@ -24,6 +27,9 @@ public class SecurityInfoGetter {
 
 	public static Long getCompanyId(){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null) {
+			return null;
+		}
 		TicketAuthentication details = (TicketAuthentication) authentication.getDetails();
 		UserCompRel userCompRel = details.getUserCompRel();
 		return userCompRel.getCompId();
@@ -32,6 +38,9 @@ public class SecurityInfoGetter {
 
 	public static UserCompRel geUserCompRel(){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null) {
+			return null;
+		}
 		TicketAuthentication details = (TicketAuthentication) authentication.getDetails();
 		UserCompRel userCompRel = details.getUserCompRel();
 		return userCompRel;
