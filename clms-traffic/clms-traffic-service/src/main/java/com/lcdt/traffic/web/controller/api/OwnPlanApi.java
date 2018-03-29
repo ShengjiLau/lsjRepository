@@ -174,10 +174,10 @@ public class OwnPlanApi {
             map.put("receiveCounty",dto.getReceiveCounty());
         }
         if (StringUtil.isNotEmpty(dto.getPubdateBegin())) { //发布时间
-            map.put("pubdateBegin",dto.getPubdateBegin());
+            map.put("pubdateBegin",dto.getPubdateBegin()+" 00:00:00");
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
-            map.put("pubdateEnd",dto.getPubdateEnd());
+            map.put("pubdateEnd",dto.getPubdateEnd()+" 23:59:59");
         }
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
             map.put("goodsInfo",dto.getGoodsInfo());

@@ -81,10 +81,10 @@ public class CustomerPlanApi {
         }
         //计划发布时间
         if (StringUtil.isNotEmpty(dto.getPubdateBegin())) { //计划发布时间
-            map.put("pubdateBegin",dto.getPubdateBegin());
+            map.put("pubdateBegin",dto.getPubdateBegin()+" 00:00:00");
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
-            map.put("pubdateEnd",dto.getPubdateEnd());
+            map.put("pubdateEnd",dto.getPubdateEnd()+" 23:59:59");
         }
         //货物信息
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
@@ -153,11 +153,11 @@ public class CustomerPlanApi {
         }
 
         if (StringUtil.isNotEmpty(dto.getPubdateBegin())) { //计划发布时间
-            map.put("pubdateBegin",dto.getPubdateBegin());
+            map.put("pubdateBegin",dto.getPubdateBegin()+" 00:00:00");
         }
 
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
-            map.put("pubdateEnd",dto.getPubdateEnd());
+            map.put("pubdateEnd",dto.getPubdateEnd()+" 23:59:59");
         }
 
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {//货物信息
@@ -225,10 +225,10 @@ public class CustomerPlanApi {
         }
         //计划发布时间
         if (StringUtil.isNotEmpty(dto.getPubdateBegin())) { //计划发布时间
-            map.put("pubdateBegin",dto.getPubdateBegin());
+            map.put("pubdateBegin",dto.getPubdateBegin()+" 00:00:00");
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
-            map.put("pubdateEnd",dto.getPubdateEnd());
+            map.put("pubdateEnd",dto.getPubdateEnd()+" 23:59:59");
         }
         //货物信息
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
@@ -298,10 +298,10 @@ public class CustomerPlanApi {
         }
 
         if (StringUtil.isNotEmpty(dto.getDisDateBegin())) { //派单时间-开始
-            map.put("disDateBegin",dto.getDisDateBegin());
+            map.put("disDateBegin",dto.getDisDateBegin()+" 00:00:00");
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) { //派单时间-结束
-            map.put("disDateEnd",dto.getDisDateEnd());
+            map.put("disDateEnd",dto.getDisDateEnd()+" 23:59:59");
         }
         //货物信息
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
@@ -369,10 +369,10 @@ public class CustomerPlanApi {
         }
 
         if (StringUtil.isNotEmpty(dto.getDisDateBegin())) { //派单时间-开始
-            map.put("disDateBegin",dto.getDisDateBegin());
+            map.put("disDateBegin",dto.getDisDateBegin()+" 00:00:00");
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) { //派单时间-结束
-            map.put("disDateEnd",dto.getDisDateEnd());
+            map.put("disDateEnd",dto.getDisDateEnd()+" 23:59:59");
         }
         //货物信息
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
@@ -440,10 +440,10 @@ public class CustomerPlanApi {
         }
 
         if (StringUtil.isNotEmpty(dto.getDisDateBegin())) { //派单时间-开始
-            map.put("disDateBegin",dto.getDisDateBegin());
+            map.put("disDateBegin",dto.getDisDateBegin()+" 00:00:00");
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) { //派单时间-结束
-            map.put("disDateEnd",dto.getDisDateEnd());
+            map.put("disDateEnd",dto.getDisDateEnd()+" 23:59:59");
         }
         //货物信息
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
@@ -514,10 +514,10 @@ public class CustomerPlanApi {
         }
 
         if (StringUtil.isNotEmpty(dto.getDisDateBegin())) { //派单时间-开始
-            map.put("disDateBegin",dto.getDisDateBegin());
+            map.put("disDateBegin",dto.getDisDateBegin()+" 00:00:00");
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) { //派单时间-结束
-            map.put("disDateEnd",dto.getDisDateEnd());
+            map.put("disDateEnd",dto.getDisDateEnd()+" 23:59:59");
         }
         //货物信息
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
