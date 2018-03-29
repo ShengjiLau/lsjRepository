@@ -59,11 +59,16 @@ public class ContractServiceImpl implements ContractService {
             contractApproval.setUserId(user.getUserId());
             contractApproval.setDeptName(userCompRel.getDeptNames());
             contractApproval.setSort(0);    // 0 为创建着
+            contractApproval.setActionType(new Short("0")); //默认actionType 0
             dto.getContractApprovalList().add(contractApproval);
             for(ContractApproval ca : dto.getContractApprovalList()){
                 ca.setContractId(contract.getContractId()); //设置关联合同id
-                if(ca.getSort()==1){
-                    ca.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                if(ca.getActionType().shortValue()==0){
+                    if(ca.getSort()==1){
+                        ca.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                    }else{
+                        ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+                    }
                 }else{
                     ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
                 }
@@ -135,11 +140,16 @@ public class ContractServiceImpl implements ContractService {
             contractApproval.setUserId(user.getUserId());
             contractApproval.setDeptName(userCompRel.getDeptNames());
             contractApproval.setSort(0);    // 0 为创建着
+            contractApproval.setActionType(new Short("0")); //默认actionType 0
             dto.getContractApprovalList().add(contractApproval);
             for(ContractApproval ca : dto.getContractApprovalList()){
                 ca.setContractId(contract.getContractId()); //设置关联合同id
-                if(ca.getSort()==1){
-                    ca.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                if(ca.getActionType().shortValue()==0){
+                    if(ca.getSort()==1){
+                        ca.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                    }else{
+                        ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+                    }
                 }else{
                     ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
                 }
@@ -212,5 +222,23 @@ public class ContractServiceImpl implements ContractService {
             }
         }
         return result;
+    }
+
+    @Override
+    public ContractDto selectByPrimaryKey(Long contractId) {
+        ContractDto dto=contractMapper.selectByPrimaryKey(contractId);
+        if(null != dto) {
+            //获取合同下商品
+            List<ContractProduct> productList = contractProductMapper.selectCpsByContractId(contractId);
+            if(null != productList && productList.size() != 0) {
+                dto.setContractProductList(productList);
+            }
+            //添加审批人及抄送人信息
+            List<ContractApproval> approvalList = contractApprovalMapper.selectByContractId(contractId);
+            if(null != approvalList && approvalList.size() > 0){
+                dto.setContractApprovalList(approvalList);
+            }
+        }
+        return dto;
     }
 }

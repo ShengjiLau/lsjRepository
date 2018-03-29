@@ -89,11 +89,16 @@ public class OrderServiceImpl implements OrderService{
 			orderApproval.setUserId(user.getUserId());
 			orderApproval.setDeptName(userCompRel.getDeptNames());
 			orderApproval.setSort(0);    // 0 为创建着
+			orderApproval.setActionType(new Short("0")); 	//默认actionType 0
 			orderDto.getOrderApprovalList().add(orderApproval);
 			for(OrderApproval oa : orderDto.getOrderApprovalList()){
-				oa.setOrderId(order.getOrderId()); //设置关联合同id
-				if(oa.getSort()==1){
-					oa.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+				if(oa.getActionType().shortValue()==0){
+					oa.setOrderId(order.getOrderId()); //设置关联合同id
+					if(oa.getSort()==1){
+						oa.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+					}else{
+						oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+					}
 				}else{
 					oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
 				}
@@ -156,11 +161,16 @@ public class OrderServiceImpl implements OrderService{
 			orderApproval.setUserId(user.getUserId());
 			orderApproval.setDeptName(userCompRel.getDeptNames());
 			orderApproval.setSort(0);    // 0 为创建着
+			orderApproval.setActionType(new Short("0")); 	//默认actionType 0
 			orderDto.getOrderApprovalList().add(orderApproval);
 			for(OrderApproval oa : orderDto.getOrderApprovalList()){
 				oa.setOrderId(order.getOrderId()); //设置关联合同id
-				if(oa.getSort()==1){
-					oa.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+				if(oa.getActionType().shortValue()==0){
+					if(oa.getSort()==1){
+						oa.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+					}else{
+						oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+					}
 				}else{
 					oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
 				}

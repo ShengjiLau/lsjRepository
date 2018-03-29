@@ -13,7 +13,7 @@ public interface ContractMapper {
 
     int insert(Contract record);
 
-    Contract selectByPrimaryKey(Long contractId);
+    ContractDto selectByPrimaryKey(Long contractId);
 
     List<Contract> selectAll();
 
