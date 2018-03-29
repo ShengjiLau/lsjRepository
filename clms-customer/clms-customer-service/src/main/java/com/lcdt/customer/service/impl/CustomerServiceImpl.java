@@ -110,6 +110,8 @@ public class CustomerServiceImpl implements CustomerService {
         return  pageInfo;
     }
 
+
+
     @Transactional(readOnly = true)
     @Override
     public Customer getCustomerDetail(Long customerId, Long companyId) {
