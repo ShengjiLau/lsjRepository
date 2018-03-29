@@ -118,5 +118,21 @@ public class SalesContractApi {
             throw new RuntimeException("销售订单创建失败");
         }
     }
+
+    @ApiOperation("合同详情")
+    @RequestMapping(value = "/contractDetail", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_detail')")
+    public  JSONObject contractDetail(@ApiParam(value="合同ID")@RequestParam Long contractId){
+        Contract dto= contractService.selectByPrimaryKey(contractId);
+        JSONObject jsonObject=new JSONObject();
+        if(dto!=null) {
+            jsonObject.put("code",0);
+            jsonObject.put("message","合同详情");
+            jsonObject.put("data",dto);
+            return jsonObject;
+        }else {
+            throw new RuntimeException("获取失败");
+        }
+    }
 }
 
