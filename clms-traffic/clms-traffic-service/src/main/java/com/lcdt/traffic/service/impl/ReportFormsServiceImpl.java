@@ -5,6 +5,7 @@ import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.ReportFormsMapper;
 import com.lcdt.traffic.service.ReportFormsService;
+import com.lcdt.traffic.util.GroupIdsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -234,7 +235,7 @@ public class ReportFormsServiceImpl implements ReportFormsService {
     public Map transportOverview(Long companyId){
         Map<String,Object> resultMap = new HashMap<>();
         /**获取运输承运商和运输客户统计*/
-        Map customerMap = customerRpcService.selectCarrierAndCustomer(companyId);
+        Map customerMap = customerRpcService.selectCarrierAndCustomer(companyId, GroupIdsUtil.getCustomerGroupIds(null));
         if(null!=customerMap){
             resultMap.put("carrierNum",new Integer(customerMap.get("carrier_num")+""));     //设置运输承运商数量
             resultMap.put("carrierCustomNum",new Integer(customerMap.get("carrier_custom_num")+""));   //设置运输客户数量
