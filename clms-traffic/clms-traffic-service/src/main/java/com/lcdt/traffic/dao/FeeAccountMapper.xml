@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.traffic.dao.FeeAccountMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.FeeAccount">
+    <id column="account_id" jdbcType="BIGINT" property="accountId" />
+    <result column="account_code" jdbcType="VARCHAR" property="accountCode" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="waybill_id" jdbcType="BIGINT" property="waybillId" />
+    <result column="waybill_code" jdbcType="VARCHAR" property="waybillCode" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="name_id" jdbcType="BIGINT" property="nameId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="audit_status" jdbcType="SMALLINT" property="auditStatus" />
+    <result column="audit_date" jdbcType="TIMESTAMP" property="auditDate" />
+    <result column="operator_id" jdbcType="BIGINT" property="operatorId" />
+    <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
+    <result column="reconcile_id" jdbcType="BIGINT" property="reconcileId" />
+    <result column="reconcile_code" jdbcType="VARCHAR" property="reconcileCode" />
+    <result column="is_receivable" jdbcType="SMALLINT" property="isReceivable" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    account_id, account_code, company_id, waybill_id, waybill_code, group_id, group_name, 
+    name_id, name, audit_status, audit_date, operator_id, operator_name, reconcile_id, 
+    reconcile_code, is_receivable, create_date, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_fee_account
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_fee_account
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.traffic.model.FeeAccount">
+    <selectKey keyProperty="accountId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_fee_account (account_code, company_id, waybill_id, 
+      waybill_code, group_id, group_name, 
+      name_id, name, audit_status, 
+      audit_date, operator_id, operator_name, 
+      reconcile_id, reconcile_code, is_receivable, 
+      create_date, is_deleted)
+    values (#{accountCode,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{waybillId,jdbcType=BIGINT}, 
+      #{waybillCode,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, 
+      #{nameId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{auditStatus,jdbcType=SMALLINT}, 
+      #{auditDate,jdbcType=TIMESTAMP}, #{operatorId,jdbcType=BIGINT}, #{operatorName,jdbcType=VARCHAR}, 
+      #{reconcileId,jdbcType=BIGINT}, #{reconcileCode,jdbcType=VARCHAR}, #{isReceivable,jdbcType=SMALLINT}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.FeeAccount">
+    update t_fee_account
+    set account_code = #{accountCode,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=BIGINT},
+      waybill_id = #{waybillId,jdbcType=BIGINT},
+      waybill_code = #{waybillCode,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=BIGINT},
+      group_name = #{groupName,jdbcType=VARCHAR},
+      name_id = #{nameId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      audit_status = #{auditStatus,jdbcType=SMALLINT},
+      audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      operator_id = #{operatorId,jdbcType=BIGINT},
+      operator_name = #{operatorName,jdbcType=VARCHAR},
+      reconcile_id = #{reconcileId,jdbcType=BIGINT},
+      reconcile_code = #{reconcileCode,jdbcType=VARCHAR},
+      is_receivable = #{isReceivable,jdbcType=SMALLINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </update>
+</mapper>
