@@ -83,6 +83,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         map.put("companyIds", cMapIds.get("companyIds"));
         map.put("carrierCompanyId", map.get("companyId"));
         map.remove("companyId");
+        map.remove("customerName");
         PageHelper.startPage(pageNo, pageSize);
         resultList = waybillMapper.selectCustomerByCondition(map);
         for (int i = 0; i < resultList.size(); i++) {

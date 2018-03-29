@@ -338,7 +338,7 @@
         and bind_comp_id is not null and bind_comp_id = #{bindCompId,jdbcType=BIGINT}
       </if>
       <if test="groupIds!=null and groupIds!=''">
-        and  ${groupIds}
+        and find_in_set(group_ids, ${groupIds})
       </if>
       <!--这块只限编辑查询用BEGIN-->
       <if test="customerId!=null">

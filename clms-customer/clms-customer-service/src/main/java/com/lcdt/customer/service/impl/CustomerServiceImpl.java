@@ -107,7 +107,6 @@ public class CustomerServiceImpl implements CustomerService {
         PageHelper.startPage(pageNo, pageSize);
         List<Customer> list = customerMapper.selectByCondition(m);
         PageInfo pageInfo = new PageInfo(list);
-
         return  pageInfo;
     }
 
@@ -181,18 +180,19 @@ public class CustomerServiceImpl implements CustomerService {
     public int customerUpdate(Customer customer) throws CustomerException  {
         Map map = new HashMap();
         map.put("companyId", customer.getCompanyId());
-        map.put("customerId", customer.getCustomerId());
         map.put("customerName", customer.getCustomerName());
         List<Customer> list = customerMapper.selectByCondition(map);
-        if (list.size()>0) {
-            throw new CustomerException("客户已存在，请联系管理员分配！");
+        if (list != null && list.isEmpty()) {
+            Customer customer1 = list.get(0);
+            if (!customer1.getCustomerId().equals(customer.getCustomerId())) {
+                throw new CustomerException("客户已存在，请联系管理员分配！");
+            }
         }
         int flag = customerMapper.updateByPrimaryKeySelective(customer);
 
         if (flag>0) {
              //组关系表
             if (!StringUtils.isEmpty(customer.getClientTypes())) {
-
                 String[] typeArrays = customer.getClientTypes().split(",");  //传过来的值用逗号隔开
                 if (typeArrays==null || typeArrays.length==0) { //如果不选，清楚原来的数据
                     //先清楚原来的组关系，再更新
@@ -211,8 +211,6 @@ public class CustomerServiceImpl implements CustomerService {
                         for(int i=0;i<typeList.size();i++) {
                             typeArrays1[i] = typeList.get(i).getCustomerTypeId().toString();
                         }
-
-
                         ArrayList<String> delList = new ArrayList<>();
                         ArrayList<String> addList = new ArrayList<>();
                         //算出新增的

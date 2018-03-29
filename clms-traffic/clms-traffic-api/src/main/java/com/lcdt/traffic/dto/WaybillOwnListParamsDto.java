@@ -31,7 +31,8 @@ public class WaybillOwnListParamsDto {
     private String startStartDate;
     @ApiModelProperty(value = "结束计划发货时间（门卫出库管理时的查询条件）")
     private String endStartDate;
-
+    @ApiModelProperty(value = "客户名称")
+    private String customerName;
     @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
     @ApiModelProperty(value = "是否删除",hidden = true)
@@ -140,6 +141,14 @@ public class WaybillOwnListParamsDto {
         this.endStartDate = endStartDate;
     }
 
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
     public Long getCompanyId() {
         return companyId;
     }
@@ -179,4 +188,5 @@ public class WaybillOwnListParamsDto {
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
+
 }
