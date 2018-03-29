@@ -32,7 +32,7 @@ public class IndexOverviewApi {
 
     @ApiOperation(value = "计划统计", notes = "运输首页概览-计划统计")
     @GetMapping("/plan")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
     public JSONObject planOverview(@RequestParam String param) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Map map = (Map) JSON.parseObject(param);
@@ -72,7 +72,7 @@ public class IndexOverviewApi {
 
     @ApiOperation(value = "客户计划统计", notes = "运输首页概览-客户计划统计")
     @GetMapping("/customer/plan")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
     public JSONObject customerPlanOverview(@RequestParam String param) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = (Map) JSON.parseObject(param);
@@ -131,7 +131,7 @@ public class IndexOverviewApi {
 
     @ApiOperation(value = "运单统计", notes = "运输首页概览-运单统计")
     @GetMapping("/own/waybill")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
     public JSONObject waybillOverview(@RequestParam String param) {
         Long companyId = SecurityInfoGetter.getCompanyId();      //  获取companyId
         Map map = (Map) JSON.parseObject(param);
@@ -155,7 +155,7 @@ public class IndexOverviewApi {
 
     @ApiOperation(value = "客户运单统计", notes = "运输首页概览-运单统计")
     @GetMapping("/customer/waybill")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
     public JSONObject customerWaybillOverview(@RequestParam String param) {
         Long companyId = SecurityInfoGetter.getCompanyId();      //  获取companyId
         Map map = (Map) JSON.parseObject(param);
@@ -179,7 +179,7 @@ public class IndexOverviewApi {
 
     @ApiOperation(value = "运输概览统计", notes = "运输首页概览-右侧运输概览统计")
     @GetMapping("/totaloverview")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
     public JSONObject waybillOverview() {
         Long companyId = SecurityInfoGetter.getCompanyId();      //  获取companyId
         JSONObject jsonObject = new JSONObject();

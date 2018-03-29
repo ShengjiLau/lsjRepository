@@ -1,9 +1,7 @@
 package com.lcdt.contract.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -71,12 +69,13 @@ public class OrderServiceImpl implements OrderService{
 		BeanUtils.copyProperties(orderDto,order);
 		order.setSummation(aTotal);
 		int result=orderMapper.insertOrder(order);
+		int i=0;
 		if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0){
 			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
 				//为每个商品添加OrderId
 				orderProduct.setOrderId(order.getOrderId());
 			}
-			int i=nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());
+			i+=nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());
 			logger.debug("新增订单商品数量:"+i);
 		}
 		//审批流程添加
@@ -90,11 +89,16 @@ public class OrderServiceImpl implements OrderService{
 			orderApproval.setUserId(user.getUserId());
 			orderApproval.setDeptName(userCompRel.getDeptNames());
 			orderApproval.setSort(0);    // 0 为创建着
+			orderApproval.setActionType(new Short("0")); 	//默认actionType 0
 			orderDto.getOrderApprovalList().add(orderApproval);
 			for(OrderApproval oa : orderDto.getOrderApprovalList()){
-				oa.setOrderId(order.getOrderId()); //设置关联合同id
-				if(oa.getSort()==1){
-					oa.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+				if(oa.getActionType().shortValue()==0){
+					oa.setOrderId(order.getOrderId()); //设置关联合同id
+					if(oa.getSort()==1){
+						oa.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+					}else{
+						oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+					}
 				}else{
 					oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
 				}
@@ -110,7 +114,11 @@ public class OrderServiceImpl implements OrderService{
 			order.setApprovalStatus(new Short("0"));
 			orderMapper.updateByPrimaryKey(order);
 		}
-		return result;
+		if(i>0) {
+			return result;
+		}else {
+			throw new RuntimeException("订单商品添加失败");
+		}
 	}
 
 	
@@ -153,11 +161,16 @@ public class OrderServiceImpl implements OrderService{
 			orderApproval.setUserId(user.getUserId());
 			orderApproval.setDeptName(userCompRel.getDeptNames());
 			orderApproval.setSort(0);    // 0 为创建着
+			orderApproval.setActionType(new Short("0")); 	//默认actionType 0
 			orderDto.getOrderApprovalList().add(orderApproval);
 			for(OrderApproval oa : orderDto.getOrderApprovalList()){
 				oa.setOrderId(order.getOrderId()); //设置关联合同id
-				if(oa.getSort()==1){
-					oa.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+				if(oa.getActionType().shortValue()==0){
+					if(oa.getSort()==1){
+						oa.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+					}else{
+						oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+					}
 				}else{
 					oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
 				}
@@ -175,8 +188,11 @@ public class OrderServiceImpl implements OrderService{
 			order.setApprovalStartDate(null);
 			orderMapper.updateByPrimaryKey(order);
 		}
-
-		return result;
+		if(i>0) {
+			return result;
+		}else {
+			throw new RuntimeException("订单商品修改失败");
+		}
 	}
 
 	@Override
@@ -226,8 +242,6 @@ public class OrderServiceImpl implements OrderService{
 				orderDto.setOrderApprovalList(orderApprovalList);
 			}
 		}	
-		
-		
 		return orderDto;
 	}
 
