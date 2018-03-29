@@ -424,14 +424,14 @@
     -->
 
       <!--进行中的计划-排出取消、完成状态的做为货主、或承运人-->
-      <select id="selectOwnPlan4Doing" resultType="Map" parameterType="Long">
+      <select id="selectOwnPlan4Doing" resultType="Long">
          select count(1) from t_waybill_plan where company_id=#{companyId} and is_deleted=0 and (plan_status!='50' and plan_status!='60')
           <if test="groupIds!=null and groupIds!=''">
               and  ${groupIds}
           </if>
-    </select>
-    <select id="selectCustomerPlan4Doing" resultType="Map" parameterType="Long">
-        select count(1) from t_waybill_plan sp where is_deleted=0 and (plan_status!='50' and plan_status!='60')
+      </select>
+     <select id="selectCustomerPlan4Doing" resultType="Long">
+        select count(1) from t_waybill_plan wp where is_deleted=0 and (plan_status!='50' and plan_status!='60')
         <if test="companyId!=null and companyId!=''">
             and company_id != #{companyId}
         </if>

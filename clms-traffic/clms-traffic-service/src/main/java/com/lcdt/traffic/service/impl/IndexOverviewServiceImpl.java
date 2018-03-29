@@ -248,6 +248,7 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
         Map<String,Object> resultMap = new HashMap<>();
         /**获取运输承运商和运输客户统计*/
         Map customerMap = customerRpcService.selectCarrierAndCustomer(companyId, customerGroupIds);
+
         if(null!=customerMap){
             resultMap.put("carrierNum",new Integer(customerMap.get("carrier_num")+""));     //设置运输承运商数量
             resultMap.put("carrierCustomNum",new Integer(customerMap.get("carrier_custom_num")+""));   //设置运输客户数量

@@ -1,5 +1,7 @@
 package com.lcdt.traffic.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -69,7 +71,7 @@ public interface IndexOverviewMapper {
      * @param companyId
      * @return
      */
-    Long selectOwnPlan4Doing(Long companyId,String groupIds);
+    Long selectOwnPlan4Doing(@Param("companyId") Long companyId, @Param("groupIds") String groupIds);
     Long selectCustomerPlan4Doing(Map map);
 
 
