@@ -687,12 +687,5 @@ public class CustomerApi {
         jsonObject.put("code",0);
         jsonObject.put("data",customerGoupDtoList);
         return jsonObject.toString();
-
     }
-
-
-
-
-
-
 }
