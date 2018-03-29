@@ -51,16 +51,7 @@ public class ContractServiceImpl implements ContractService {
         //审批流程添加
         if(null!=dto.getContractApprovalList() && dto.getContractApprovalList().size() > 0){
             /*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
-            ContractApproval contractApproval = new ContractApproval();
-//            Long companyId = SecurityInfoGetter.getCompanyId();
-            User user = SecurityInfoGetter.getUser();
-            UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
-            contractApproval.setUserName(user.getRealName());
-            contractApproval.setUserId(user.getUserId());
-            contractApproval.setDeptName(userCompRel.getDeptNames());
-            contractApproval.setSort(0);    // 0 为创建着
-            contractApproval.setActionType(new Short("0")); //默认actionType 0
-            dto.getContractApprovalList().add(contractApproval);
+
             for(ContractApproval ca : dto.getContractApprovalList()){
                 ca.setContractId(contract.getContractId()); //设置关联合同id
                 if(ca.getActionType().shortValue()==0){
@@ -73,6 +64,18 @@ public class ContractServiceImpl implements ContractService {
                     ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
                 }
             }
+            ContractApproval contractApproval = new ContractApproval();
+//            Long companyId = SecurityInfoGetter.getCompanyId();
+            User user = SecurityInfoGetter.getUser();
+            UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+            contractApproval.setContractId(contract.getContractId());
+            contractApproval.setUserName(user.getRealName());
+            contractApproval.setUserId(user.getUserId());
+            contractApproval.setDeptName(userCompRel.getDeptNames());
+            contractApproval.setSort(0);    // 0 为创建着
+            contractApproval.setActionType(new Short("0")); //默认actionType 0
+            contractApproval.setStatus(new Short("2"));
+            dto.getContractApprovalList().add(contractApproval);
             contractApprovalMapper.insertBatch(dto.getContractApprovalList());
             //同时设置合同的审批状态为审批中
             contract.setApprovalStatus(new Short("1"));
@@ -132,16 +135,7 @@ public class ContractServiceImpl implements ContractService {
             //删除之前保存的审批人信息
             contractApprovalMapper.deleteByContractId(dto.getContractId());
             /*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
-            ContractApproval contractApproval = new ContractApproval();
-//            Long companyId = SecurityInfoGetter.getCompanyId();
-            User user = SecurityInfoGetter.getUser();
-            UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
-            contractApproval.setUserName(user.getRealName());
-            contractApproval.setUserId(user.getUserId());
-            contractApproval.setDeptName(userCompRel.getDeptNames());
-            contractApproval.setSort(0);    // 0 为创建着
-            contractApproval.setActionType(new Short("0")); //默认actionType 0
-            dto.getContractApprovalList().add(contractApproval);
+
             for(ContractApproval ca : dto.getContractApprovalList()){
                 ca.setContractId(contract.getContractId()); //设置关联合同id
                 if(ca.getActionType().shortValue()==0){
@@ -154,6 +148,18 @@ public class ContractServiceImpl implements ContractService {
                     ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
                 }
             }
+            ContractApproval contractApproval = new ContractApproval();
+//            Long companyId = SecurityInfoGetter.getCompanyId();
+            User user = SecurityInfoGetter.getUser();
+            UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+            contractApproval.setContractId(contract.getContractId());
+            contractApproval.setUserName(user.getRealName());
+            contractApproval.setUserId(user.getUserId());
+            contractApproval.setDeptName(userCompRel.getDeptNames());
+            contractApproval.setSort(0);    // 0 为创建着
+            contractApproval.setActionType(new Short("0")); //默认actionType 0
+            contractApproval.setStatus(new Short("2"));
+            dto.getContractApprovalList().add(contractApproval);
             contractApprovalMapper.insertBatch(dto.getContractApprovalList());
             //同时设置合同的审批状态为审批中
             contract.setApprovalStatus(new Short("1"));
