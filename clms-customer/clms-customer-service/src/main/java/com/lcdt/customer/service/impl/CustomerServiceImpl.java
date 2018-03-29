@@ -1,7 +1,6 @@
 package com.lcdt.customer.service.impl;
 
 
-import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleSelectRestriction;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.dao.CustomerCollectionMapper;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.beans.Transient;
 import java.util.*;
 
 /**
@@ -110,6 +108,8 @@ public class CustomerServiceImpl implements CustomerService {
         return  pageInfo;
     }
 
+
+
     @Transactional(readOnly = true)
     @Override
     public Customer getCustomerDetail(Long customerId, Long companyId) {
@@ -182,7 +182,7 @@ public class CustomerServiceImpl implements CustomerService {
         map.put("companyId", customer.getCompanyId());
         map.put("customerName", customer.getCustomerName());
         List<Customer> list = customerMapper.selectByCondition(map);
-        if (list != null && list.isEmpty()) {
+        if (list != null && !list.isEmpty()) {
             Customer customer1 = list.get(0);
             if (!customer1.getCustomerId().equals(customer.getCustomerId())) {
                 throw new CustomerException("客户已存在，请联系管理员分配！");

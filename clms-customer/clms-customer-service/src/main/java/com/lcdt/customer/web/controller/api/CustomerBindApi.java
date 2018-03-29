@@ -213,6 +213,20 @@ public class CustomerBindApi {
 		UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
 		map.put("companyId", companyId);
 		map.put("notbind", true);
+		List<Group> groups = SecurityInfoGetter.geUserCompRel().getGroups();
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("(");
+		for (int i = 0; i <= groups.size() ;i++) {
+			Group group = groups.get(i);
+				//组ID
+			sb.append(" find_in_set('" + group.getGroupId() + "',collection_ids)");
+			if(i != groups.size() - 1){
+					sb.append(" or ");
+				}
+		}
+		sb.append(")");
+		map.put("groupIds", sb.toString());
 		PageInfo<Customer> pageInfo = customerService.customerList(map);
 		List<Customer> list = pageInfo.getList();
 		ModelAndView modelAndView = new ModelAndView();
