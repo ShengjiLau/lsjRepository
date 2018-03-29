@@ -53,58 +53,58 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="采购收货仓库id/销售发货仓库id")
 	private Long warehouseId;
 
-	@ApiModelProperty(value="采购收货联系人/销售发货联系人")
+	@ApiModelProperty(value="销售收货联系人/采购发货联系人")
     private String sender;
 
-	@ApiModelProperty(value="采购收货人/销售发货人联系方式")
+	@ApiModelProperty(value="销售收货人/采购发货人联系方式")
     private String senderPhone;
 
-	@ApiModelProperty(value="采购收货/销售发货省")
+	@ApiModelProperty(value="销售收货/采购发货省")
 	//@NotBlank
     private String sendProvince;
 
-	@ApiModelProperty(value="采购收货/销售发货市")
+	@ApiModelProperty(value="销售收货/采购发货市")
 	//@NotBlank
     private String sendCity;
 
-	@ApiModelProperty(value="采购收货/销售发货区")
+	@ApiModelProperty(value="销售收货/采购发货区")
 	//@NotBlank
     private String sendDistrict;
 
-	@ApiModelProperty(value="采购收货/销售发货详细地址")
+	@ApiModelProperty(value="销售收货/采购发货详细地址")
 	//@NotBlank(message="地址不可为空")
     private String sendAddress;
 
-	@ApiModelProperty(value="采购收货/销售发货时间")
+	@ApiModelProperty(value="销售收货/采购发货时间")
     private Date sendTime;
 
 	@ApiModelProperty(value="采购收货要求/销售包装要求")
     private String packRequire;
 
-	@ApiModelProperty(value="采购发货联系人/销售收货联系人")
+	@ApiModelProperty(value="销售发货联系人/采购收货联系人")
 	//@NotBlank(message="联系人不可为空")
     private String receiver;
 
-	@ApiModelProperty(value="采购发货/销售收货人联系方式")
+	@ApiModelProperty(value="销售发货/采购收货人联系方式")
 	//@NotBlank(message="联系方式不可为空")
     private String receiverPhone;
 
-	@ApiModelProperty(value="采购发货/销售收货省")
+	@ApiModelProperty(value="销售发货/采购收货省")
 	//@NotBlank
     private String receiverProvince;
 
-	@ApiModelProperty(value="采购发货/销售收货市")
+	@ApiModelProperty(value="销售发货/采购收货市")
 	//@NotBlank
     private String receiverCity;
 
-	@ApiModelProperty(value="采购发货/销售收货区")
+	@ApiModelProperty(value="销售发货/采购收货区")
 	//@NotBlank
     private String receiveDistrict;
 
-	@ApiModelProperty(value="采购发货/销售收货时间")
+	@ApiModelProperty(value="销售发货/采购收货时间")
 	private Date receiveTime;
 	
-	@ApiModelProperty(value="采购发货/销售收货详细地址")
+	@ApiModelProperty(value="销售发货/采购收货详细地址")
 	//@NotBlank(message="地址不可为空")
     private String receiveAddress;
 	
