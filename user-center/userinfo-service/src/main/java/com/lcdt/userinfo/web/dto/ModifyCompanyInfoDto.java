@@ -53,7 +53,7 @@ public class ModifyCompanyInfoDto {
 	public String telNo1;
 
 	@ApiModelProperty("简介")
-	@Size(max = 30)
+	@Size(max = 150)
 	public String compIntro;
 
 	@ApiModelProperty("企业logo")
