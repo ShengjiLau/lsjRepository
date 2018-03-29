@@ -840,7 +840,7 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      and wp.plan_status!='60'
+      and wp.plan_status!='60' and wp.plan_status!='50'
       and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)>0
       <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
@@ -913,7 +913,7 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      and wp.plan_status!='60'
+      and wp.plan_status!='60' and wp.plan_status!='50'
       and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
       <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
