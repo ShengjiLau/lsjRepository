@@ -198,23 +198,23 @@ public class PurchaseOrderApi {
 	
 	
 	/**
-	 * 删除采购订单
+	 * 取消采购订单
 	 * @param Long
 	 * @return JSONObject
 	 */
-	@ApiOperation("删除采购订单")
+	@ApiOperation("取消采购订单")
 	@PostMapping("/deleteOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('del_purchase_order')")
 	public JSONObject delOrder(@ApiParam(value="采购订单id",required=true) @RequestParam Long orderId) {
-		int result =orderService.delOrder(orderId);
-		logger.debug("删除销售订单条目数:"+result);
+		int result =orderService.cancelOrder(orderId);
+		logger.debug("取消销售订单条目数:"+result);
 		if (result > 0) {
 	        JSONObject jsonObject = new JSONObject();
 	        jsonObject.put("code",0);
-	        jsonObject.put("message", "删除成功");
+	        jsonObject.put("message", "取消成功");
 	        return jsonObject;
 	    } else {
-	        throw new RuntimeException("删除失败");
+	        throw new RuntimeException("取消失败");
 	    }
 	 }
 	

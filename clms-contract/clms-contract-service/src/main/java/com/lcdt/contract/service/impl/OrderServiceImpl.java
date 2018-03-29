@@ -235,6 +235,12 @@ public class OrderServiceImpl implements OrderService{
 		return orderDto;
 	}
 
+
+	@Override
+	public int cancelOrder(Long orderId) {
+		return 	orderMapper.updateIsDraft(orderId);	
+	}
+
 	
  
 	//得到数据库中商品表中orderId等于此需要修改的订单的orderId的所有商品的opId
