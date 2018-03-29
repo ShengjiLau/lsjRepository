@@ -143,6 +143,13 @@ public class CustomerBindApi {
 			customer.setCity(company.getCity());
 			customer.setCounty(company.getCounty());
 
+			customer.setFax(company.getFax());
+			customer.setPostCode(company.getPostCode());
+			customer.setTelNo(company.getTelNo());
+			customer.setTelNo1(company.getTelNo1());
+			customer.setBankNo(company.getBankNo());
+
+
 			List<Group> groups = SecurityInfoGetter.geUserCompRel().getGroups();
 			if (groups != null && !groups.isEmpty()) {
 				Group group = groups.get(0);

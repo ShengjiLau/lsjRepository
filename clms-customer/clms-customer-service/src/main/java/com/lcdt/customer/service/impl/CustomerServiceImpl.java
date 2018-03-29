@@ -193,7 +193,6 @@ public class CustomerServiceImpl implements CustomerService {
         if (flag>0) {
              //组关系表
             if (!StringUtils.isEmpty(customer.getClientTypes())) {
-
                 String[] typeArrays = customer.getClientTypes().split(",");  //传过来的值用逗号隔开
                 if (typeArrays==null || typeArrays.length==0) { //如果不选，清楚原来的数据
                     //先清楚原来的组关系，再更新
@@ -212,8 +211,6 @@ public class CustomerServiceImpl implements CustomerService {
                         for(int i=0;i<typeList.size();i++) {
                             typeArrays1[i] = typeList.get(i).getCustomerTypeId().toString();
                         }
-
-
                         ArrayList<String> delList = new ArrayList<>();
                         ArrayList<String> addList = new ArrayList<>();
                         //算出新增的
