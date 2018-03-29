@@ -2,6 +2,7 @@ package com.lcdt.userinfo.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.permission.service.UserRoleService;
 import com.lcdt.userinfo.dao.CompanyCertificateMapper;
 import com.lcdt.userinfo.dao.CompanyMapper;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
@@ -42,6 +43,12 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	UserCompRelMapper userCompanyDao;
+
+	@Autowired
+	UserRoleService roleService;
 
 	@Transactional(rollbackFor = Exception.class)
 	public UserCompRel findByUserCompRelId(Long userCompRelId) {
@@ -245,6 +252,8 @@ public class CompanyServiceImpl implements CompanyService {
 			return false;
 		}
 		userCompRelMapper.deleteByPrimaryKey(relId);
+		roleService.removeUserRole(userCompRel.getUserId(),userCompRel.getCompId());
+		groupService.deleteUserGroupRelation(userCompRel.getUserId(), userCompRel.getCompId());
 		return true;
 	}
 
