@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.traffic.dao.FeeSettlementItemMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.FeeSettlementItem">
+    <id column="item_id" jdbcType="BIGINT" property="itemId" />
+    <result column="settlement_id" jdbcType="BIGINT" property="settlementId" />
+    <result column="account_num" jdbcType="VARCHAR" property="accountNum" />
+    <result column="account_name" jdbcType="VARCHAR" property="accountName" />
+    <result column="way" jdbcType="VARCHAR" property="way" />
+    <result column="money" jdbcType="REAL" property="money" />
+    <result column="date" jdbcType="TIMESTAMP" property="date" />
+    <result column="attachment1" jdbcType="VARCHAR" property="attachment1" />
+    <result column="attachment2" jdbcType="VARCHAR" property="attachment2" />
+    <result column="attachment3" jdbcType="VARCHAR" property="attachment3" />
+    <result column="attachment4" jdbcType="VARCHAR" property="attachment4" />
+    <result column="attachment5" jdbcType="VARCHAR" property="attachment5" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    item_id, settlement_id, account_num, account_name, way, money, date, attachment1, 
+    attachment2, attachment3, attachment4, attachment5, remark, create_date, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_fee_settlement_item
+    where item_id = #{itemId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_fee_settlement_item
+    where item_id = #{itemId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.traffic.model.FeeSettlementItem">
+    insert into t_fee_settlement_item (item_id, settlement_id, account_num, 
+      account_name, way, money, 
+      date, attachment1, attachment2, 
+      attachment3, attachment4, attachment5, 
+      remark, create_date, is_deleted
+      )
+    values (#{itemId,jdbcType=BIGINT}, #{settlementId,jdbcType=BIGINT}, #{accountNum,jdbcType=VARCHAR}, 
+      #{accountName,jdbcType=VARCHAR}, #{way,jdbcType=VARCHAR}, #{money,jdbcType=REAL}, 
+      #{date,jdbcType=TIMESTAMP}, #{attachment1,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR}, 
+      #{attachment3,jdbcType=VARCHAR}, #{attachment4,jdbcType=VARCHAR}, #{attachment5,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.FeeSettlementItem">
+    update t_fee_settlement_item
+    set settlement_id = #{settlementId,jdbcType=BIGINT},
+      account_num = #{accountNum,jdbcType=VARCHAR},
+      account_name = #{accountName,jdbcType=VARCHAR},
+      way = #{way,jdbcType=VARCHAR},
+      money = #{money,jdbcType=REAL},
+      date = #{date,jdbcType=TIMESTAMP},
+      attachment1 = #{attachment1,jdbcType=VARCHAR},
+      attachment2 = #{attachment2,jdbcType=VARCHAR},
+      attachment3 = #{attachment3,jdbcType=VARCHAR},
+      attachment4 = #{attachment4,jdbcType=VARCHAR},
+      attachment5 = #{attachment5,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+    where item_id = #{itemId,jdbcType=BIGINT}
+  </update>
+</mapper>

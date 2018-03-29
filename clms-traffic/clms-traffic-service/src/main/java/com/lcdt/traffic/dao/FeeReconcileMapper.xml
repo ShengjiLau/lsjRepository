@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.traffic.dao.FeeReconcileMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.FeeReconcile">
+    <id column="reconcile_id" jdbcType="BIGINT" property="reconcileId" />
+    <result column="reconcile_code" jdbcType="VARCHAR" property="reconcileCode" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="name_id" jdbcType="BIGINT" property="nameId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="money_sum" jdbcType="REAL" property="moneySum" />
+    <result column="operator_id" jdbcType="BIGINT" property="operatorId" />
+    <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
+    <result column="is_receivable" jdbcType="BIGINT" property="isReceivable" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    reconcile_id, reconcile_code, company_id, group_id, group_name, name_id, name, money_sum, 
+    operator_id, operator_name, is_receivable, create_date, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_fee_reconcile
+    where reconcile_id = #{reconcileId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_fee_reconcile
+    where reconcile_id = #{reconcileId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.traffic.model.FeeReconcile">
+    <selectKey keyProperty="reconcileId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_fee_reconcile (reconcile_code, company_id, group_id, 
+      group_name, name_id, name, 
+      money_sum, operator_id, operator_name, 
+      is_receivable, create_date, is_deleted
+      )
+    values (#{reconcileCode,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT}, 
+      #{groupName,jdbcType=VARCHAR}, #{nameId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{moneySum,jdbcType=REAL}, #{operatorId,jdbcType=BIGINT}, #{operatorName,jdbcType=VARCHAR}, 
+      #{isReceivable,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.FeeReconcile">
+    update t_fee_reconcile
+    set reconcile_code = #{reconcileCode,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=BIGINT},
+      group_id = #{groupId,jdbcType=BIGINT},
+      group_name = #{groupName,jdbcType=VARCHAR},
+      name_id = #{nameId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      money_sum = #{moneySum,jdbcType=REAL},
+      operator_id = #{operatorId,jdbcType=BIGINT},
+      operator_name = #{operatorName,jdbcType=VARCHAR},
+      is_receivable = #{isReceivable,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+    where reconcile_id = #{reconcileId,jdbcType=BIGINT}
+  </update>
+</mapper>

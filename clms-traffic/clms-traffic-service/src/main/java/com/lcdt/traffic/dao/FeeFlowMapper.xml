@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.traffic.dao.FeeFlowMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.FeeFlow">
+    <id column="flow_id" jdbcType="BIGINT" property="flowId" />
+    <result column="flow_code" jdbcType="VARCHAR" property="flowCode" />
+    <result column="account_id" jdbcType="BIGINT" property="accountId" />
+    <result column="fee_property" jdbcType="VARCHAR" property="feeProperty" />
+    <result column="money" jdbcType="REAL" property="money" />
+    <result column="original_money" jdbcType="REAL" property="originalMoney" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    flow_id, flow_code, account_id, fee_property, money, original_money, create_date, 
+    is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_fee_flow
+    where flow_id = #{flowId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_fee_flow
+    where flow_id = #{flowId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.traffic.model.FeeFlow">
+    <selectKey keyProperty="flowId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_fee_flow (flow_code, account_id, fee_property, 
+      money, original_money, create_date, 
+      is_deleted)
+    values (#{flowCode,jdbcType=VARCHAR}, #{accountId,jdbcType=BIGINT}, #{feeProperty,jdbcType=VARCHAR}, 
+      #{money,jdbcType=REAL}, #{originalMoney,jdbcType=REAL}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{isDeleted,jdbcType=SMALLINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.FeeFlow">
+    update t_fee_flow
+    set flow_code = #{flowCode,jdbcType=VARCHAR},
+      account_id = #{accountId,jdbcType=BIGINT},
+      fee_property = #{feeProperty,jdbcType=VARCHAR},
+      money = #{money,jdbcType=REAL},
+      original_money = #{originalMoney,jdbcType=REAL},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+    where flow_id = #{flowId,jdbcType=BIGINT}
+  </update>
+</mapper>
