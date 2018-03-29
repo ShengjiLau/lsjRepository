@@ -185,8 +185,8 @@
     <if test="endCreateDate!=null and endCreateDate!=''">
       and create_date &lt;= CONCAT(STR_TO_DATE(#{endCreateDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
     </if>
-    <if test="waybillSource!=null and waybillSource!=''">
-      and waybill_source like concat('%',#{waybillSource,jdbcType=VARCHAR},'%')
+    <if test="customerName!=null and customerName!=''">
+      and customer_name like concat('%',#{customerName,jdbcType=VARCHAR},'%')
     </if>
     <if test="goodsName != null and goodsName!=''">
       and id in (select waybill_id from t_waybill_items where goods_name like concat('%',#{goodsName,jdbcType=VARCHAR},'%'))
@@ -246,7 +246,7 @@
     </choose>
       #{waybillStatus,jdbcType=SMALLINT}, #{waybillSource,jdbcType=VARCHAR},
       #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{driverId,jdbcType=BIGINT}, 
-      #{driverName,jdbcType=VARCHAR}, #{driverPhone,jdbcType=VARCHAR}, #{vechicleId,jdbcType=BIGINT}, 
+      #{driverName,jdbcType=VARCHAR}, #{driverPhone,jdbcType=VARCHAR}, #{vechicleId,jdbcType=BIGINT},
       #{vechicleNum,jdbcType=VARCHAR}, #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, 
       #{customerPhone,jdbcType=VARCHAR}, #{salesOrder,jdbcType=VARCHAR}, #{custContactMan,jdbcType=VARCHAR}, 
       #{sendMan,jdbcType=VARCHAR}, #{sendPhone,jdbcType=VARCHAR}, #{sendProvince,jdbcType=VARCHAR}, 
