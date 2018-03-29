@@ -182,7 +182,7 @@ public class CustomerServiceImpl implements CustomerService {
         map.put("companyId", customer.getCompanyId());
         map.put("customerName", customer.getCustomerName());
         List<Customer> list = customerMapper.selectByCondition(map);
-        if (list != null && list.isEmpty()) {
+        if (list != null && !list.isEmpty()) {
             Customer customer1 = list.get(0);
             if (!customer1.getCustomerId().equals(customer.getCustomerId())) {
                 throw new CustomerException("客户已存在，请联系管理员分配！");
