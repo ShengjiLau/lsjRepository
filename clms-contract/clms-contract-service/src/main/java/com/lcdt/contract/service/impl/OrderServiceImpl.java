@@ -104,6 +104,7 @@ public class OrderServiceImpl implements OrderService{
 			orderApproval.setSort(0);    // 0 为创建着
 			orderApproval.setActionType(new Short("0")); 	//默认actionType 0
 			orderApproval.setStatus(new Short("2"));	//创建人默认
+			orderApproval.setTime(new Date());
 			orderDto.getOrderApprovalList().add(orderApproval);
 			i += orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
 			//同时设置合同的审批状态为审批中
@@ -179,6 +180,7 @@ public class OrderServiceImpl implements OrderService{
 			orderApproval.setSort(0);    // 0 为创建着
 			orderApproval.setActionType(new Short("0")); 	//默认actionType 0
 			orderApproval.setStatus(new Short("2"));	//创建人默认
+			orderApproval.setTime(new Date());
 			orderDto.getOrderApprovalList().add(orderApproval);
 			i += orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
 			//同时设置合同的审批状态为审批中

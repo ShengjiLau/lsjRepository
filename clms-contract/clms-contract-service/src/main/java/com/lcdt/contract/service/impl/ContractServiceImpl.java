@@ -75,6 +75,7 @@ public class ContractServiceImpl implements ContractService {
             contractApproval.setSort(0);    // 0 为创建着
             contractApproval.setActionType(new Short("0")); //默认actionType 0
             contractApproval.setStatus(new Short("2"));
+            contractApproval.setTime(new Date());
             dto.getContractApprovalList().add(contractApproval);
             contractApprovalMapper.insertBatch(dto.getContractApprovalList());
             //同时设置合同的审批状态为审批中
@@ -159,6 +160,7 @@ public class ContractServiceImpl implements ContractService {
             contractApproval.setSort(0);    // 0 为创建着
             contractApproval.setActionType(new Short("0")); //默认actionType 0
             contractApproval.setStatus(new Short("2"));
+            contractApproval.setTime(new Date());
             dto.getContractApprovalList().add(contractApproval);
             contractApprovalMapper.insertBatch(dto.getContractApprovalList());
             //同时设置合同的审批状态为审批中
