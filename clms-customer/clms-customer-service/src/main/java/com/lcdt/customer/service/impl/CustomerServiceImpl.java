@@ -107,7 +107,6 @@ public class CustomerServiceImpl implements CustomerService {
         PageHelper.startPage(pageNo, pageSize);
         List<Customer> list = customerMapper.selectByCondition(m);
         PageInfo pageInfo = new PageInfo(list);
-
         return  pageInfo;
     }
 
@@ -181,11 +180,13 @@ public class CustomerServiceImpl implements CustomerService {
     public int customerUpdate(Customer customer) throws CustomerException  {
         Map map = new HashMap();
         map.put("companyId", customer.getCompanyId());
-        map.put("customerId", customer.getCustomerId());
         map.put("customerName", customer.getCustomerName());
         List<Customer> list = customerMapper.selectByCondition(map);
-        if (list.size()>0) {
-            throw new CustomerException("客户已存在，请联系管理员分配！");
+        if (list != null && list.isEmpty()) {
+            Customer customer1 = list.get(0);
+            if (!customer1.getCustomerId().equals(customer.getCustomerId())) {
+                throw new CustomerException("客户已存在，请联系管理员分配！");
+            }
         }
         int flag = customerMapper.updateByPrimaryKeySelective(customer);
 
