@@ -448,12 +448,13 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             }
         }
         if(remainAmount<=0) { throw new SplitGoodsException("没有剩余派单数量，不能取消！"); }
+
         Map tMap = new HashMap<String,String>();
         tMap.put("waybillPlanId",splitGoods.getWaybillPlanId());
         tMap.put("companyId",companyId);
         tMap.put("isDeleted","0");
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap); //查询对应的计划
 
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap); //查询对应的计划
         boolean opFlag = false;
         for (SplitGoodsDetail obj : splitGoodsDetailList) {
             if (obj.getSplitGoodsDetailId().equals(splitGoodsDetailId)) { //要取消的派单数
@@ -468,6 +469,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                             if((obj.getAllotAmount()-obj.getRemainAmount())==0) {
                                 splitGoodsDetailMapper.deleteByPrimaryKey(splitGoodsDetailId);  //先删除子明细
                             }else{
+                                obj.setAllotAmount(obj.getAllotAmount()-obj.getRemainAmount());
                                 obj.setUpdateId(user.getUserId());  //更新计划详细
                                 obj.setUpdateTime(new Date());
                                 obj.setUpdateName(user.getRealName());
