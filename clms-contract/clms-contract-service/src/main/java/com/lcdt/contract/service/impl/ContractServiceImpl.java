@@ -59,6 +59,7 @@ public class ContractServiceImpl implements ContractService {
             contractApproval.setUserId(user.getUserId());
             contractApproval.setDeptName(userCompRel.getDeptNames());
             contractApproval.setSort(0);    // 0 为创建着
+            contractApproval.setActionType(new Short("0")); //默认actionType 0
             dto.getContractApprovalList().add(contractApproval);
             for(ContractApproval ca : dto.getContractApprovalList()){
                 ca.setContractId(contract.getContractId()); //设置关联合同id
@@ -139,6 +140,7 @@ public class ContractServiceImpl implements ContractService {
             contractApproval.setUserId(user.getUserId());
             contractApproval.setDeptName(userCompRel.getDeptNames());
             contractApproval.setSort(0);    // 0 为创建着
+            contractApproval.setActionType(new Short("0")); //默认actionType 0
             dto.getContractApprovalList().add(contractApproval);
             for(ContractApproval ca : dto.getContractApprovalList()){
                 ca.setContractId(contract.getContractId()); //设置关联合同id

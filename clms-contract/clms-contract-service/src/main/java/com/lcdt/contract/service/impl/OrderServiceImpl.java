@@ -89,6 +89,7 @@ public class OrderServiceImpl implements OrderService{
 			orderApproval.setUserId(user.getUserId());
 			orderApproval.setDeptName(userCompRel.getDeptNames());
 			orderApproval.setSort(0);    // 0 为创建着
+			orderApproval.setActionType(new Short("0")); 	//默认actionType 0
 			orderDto.getOrderApprovalList().add(orderApproval);
 			for(OrderApproval oa : orderDto.getOrderApprovalList()){
 				if(oa.getActionType().shortValue()==0){
@@ -160,6 +161,7 @@ public class OrderServiceImpl implements OrderService{
 			orderApproval.setUserId(user.getUserId());
 			orderApproval.setDeptName(userCompRel.getDeptNames());
 			orderApproval.setSort(0);    // 0 为创建着
+			orderApproval.setActionType(new Short("0")); 	//默认actionType 0
 			orderDto.getOrderApprovalList().add(orderApproval);
 			for(OrderApproval oa : orderDto.getOrderApprovalList()){
 				oa.setOrderId(order.getOrderId()); //设置关联合同id
