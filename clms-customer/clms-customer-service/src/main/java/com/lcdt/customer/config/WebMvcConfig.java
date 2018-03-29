@@ -7,12 +7,11 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-@Order(Ordered.HIGHEST_PRECEDENCE)
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
-        registry.addResourceHandler("/asset").addResourceLocations("/asset");
+        registry.addResourceHandler("/asset").addResourceLocations("/static/asset/");
     }
 }

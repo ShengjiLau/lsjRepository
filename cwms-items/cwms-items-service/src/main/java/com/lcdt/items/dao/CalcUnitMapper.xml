@@ -74,16 +74,13 @@
   <select id="selectCalcUnitByCompanyId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     SELECT unit_id,unit_name,company_id
     FROM t_calc_unit
-    WHERE company_id=#{companyId,jdbcType=BIGINT}
+    WHERE company_id=#{companyId,jdbcType=BIGINT} order by unit_id desc
   </select>
   <select id="selectCalcUnitList" parameterType="com.lcdt.items.model.CalcUnit" resultMap="BaseResultMap">
     SELECT unit_id,unit_name,company_id
     FROM t_calc_unit
     <where>
-      1=1
-      <if test="unitId>0">and unit_id=#{unitId,jdbcType=BIGINT}</if>
-      <if test="unitName!=null">and unit_name = #{unitName,jdbcType=VARCHAR}</if>
-      <if test="companyId>0">and company_id=#{companyId,jdbcType=BIGINT}</if>
+      unit_name = #{unitName,jdbcType=VARCHAR} and company_id=#{companyId,jdbcType=BIGINT}
     </where>
   </select>
 </mapper>

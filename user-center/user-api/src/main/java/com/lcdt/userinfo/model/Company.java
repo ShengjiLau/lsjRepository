@@ -41,7 +41,7 @@ public class Company implements java.io.Serializable,ResponseData{
      *
      * @mbg.generated
      */
-    @ApiModelProperty("企业认证状态，0未认证，1认证，3未通过")
+    @ApiModelProperty("企业认证状态，0未认证，1已认证，2认证中，3未通过")
     private Short authentication;
 
     /**

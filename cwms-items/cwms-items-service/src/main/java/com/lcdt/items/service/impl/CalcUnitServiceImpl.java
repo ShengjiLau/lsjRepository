@@ -29,7 +29,7 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     @Override
     public int addCalcUnit(CalcUnit calcUnit) {
         int result = 0;
-        if (isUnitNameExist(calcUnit)) {
+        if (isUnitNameExist(calcUnit)==1) {
             throw new RuntimeException("单位名称已存在");
         }
         result = calcUnitMapper.insert(calcUnit);
@@ -39,13 +39,12 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     @Override
     public int deleteCalcUnit(Long unitId,Long companyId) {
         int result = 0;
-        List<ItemsInfo> list=itemsInfoService.queryItemsByCalUnitId(unitId,companyId);
-        if(list!=null&&list.size()>0){
-            throw new RuntimeException("删除失败，单位已被使用！");
-        }else {
-            CalcUnit calcUnit=new CalcUnit();
-            calcUnit.setUnitId(unitId);
-            calcUnit.setCompanyId(companyId);
+        CalcUnit calcUnit=new CalcUnit();
+        calcUnit.setUnitId(unitId);
+        calcUnit.setCompanyId(companyId);
+        if(isQuote(calcUnit)){
+            throw new RuntimeException("单位已被使用，不能删除");
+        }else{
             result = calcUnitMapper.deleteByUnitIdAndCompanyId(calcUnit);
         }
         return result;
@@ -54,7 +53,18 @@ public class CalcUnitServiceImpl implements CalcUnitService {
     @Override
     public int modifyByUnitIdAndCompanyId(CalcUnit calcUnit) {
         int result = 0;
-        result = calcUnitMapper.updateByUnitIdAndCompanyId(calcUnit);
+        int flag=isUnitNameExist(calcUnit);
+        if(flag==0) {
+            return result+1;
+        }else if(flag==1){
+            throw new RuntimeException("单位名称已存在！");
+        }else{
+            if(isQuote(calcUnit)){
+                throw new RuntimeException("单位已被使用，不能修改！");
+            }else{
+                result = calcUnitMapper.updateByUnitIdAndCompanyId(calcUnit);
+            }
+        }
         return result;
     }
 
@@ -82,13 +92,29 @@ public class CalcUnitServiceImpl implements CalcUnitService {
         return page;
     }
 
-    @Override
-    public boolean isUnitNameExist(CalcUnit calcUnit) {
+    //单位名称是否被使用(-1：没有被使用、0：和原来相同没改变、1：单位名称被使用)
+    private int isUnitNameExist(CalcUnit calcUnit) {
         List<CalcUnit> calcUnitList=calcUnitMapper.selectCalcUnitList(calcUnit);
         if(calcUnitList!=null&&calcUnitList.size()>0){
+            if(calcUnit.getUnitName().equals(calcUnitList.get(0).getUnitName())){
+                if(calcUnit.getUnitId()!=null&&calcUnit.getUnitId().equals(calcUnitList.get(0).getUnitId())){
+                    return 0;
+                }
+            }
+            return 1;
+        }else{
+            return -1;
+        }
+    }
+
+    //此单位是否被使用
+    private boolean isQuote(CalcUnit calcUnit){
+        List<ItemsInfo> list=itemsInfoService.queryItemsByCalUnitId(calcUnit.getUnitId(),calcUnit.getCompanyId());
+        if(list!=null&&list.size()>0){
             return true;
         }else{
             return false;
         }
     }
+
 }

@@ -92,8 +92,8 @@ public class OrderServiceImpl implements OrderService{
 			orderApproval.setActionType(new Short("0")); 	//默认actionType 0
 			orderDto.getOrderApprovalList().add(orderApproval);
 			for(OrderApproval oa : orderDto.getOrderApprovalList()){
+				oa.setOrderId(order.getOrderId()); //设置关联订单id
 				if(oa.getActionType().shortValue()==0){
-					oa.setOrderId(order.getOrderId()); //设置关联合同id
 					if(oa.getSort()==1){
 						oa.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
 					}else{
@@ -103,16 +103,16 @@ public class OrderServiceImpl implements OrderService{
 					oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
 				}
 			}
-			orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
+			i += orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
 			//同时设置合同的审批状态为审批中
 			order.setApprovalStatus(new Short("1"));
 			order.setApprovalStartDate(new Date());
-			orderMapper.updateByPrimaryKey(order);
+			i += orderMapper.updateByPrimaryKey(order);
 		}else{
 			// todo 没有添加审批人，则认为合同无需审批
 			//同时设置合同的审批状态为审批中
 			order.setApprovalStatus(new Short("0"));
-			orderMapper.updateByPrimaryKey(order);
+			i += orderMapper.updateByPrimaryKey(order);
 		}
 		if(i>0) {
 			return result;
@@ -164,7 +164,7 @@ public class OrderServiceImpl implements OrderService{
 			orderApproval.setActionType(new Short("0")); 	//默认actionType 0
 			orderDto.getOrderApprovalList().add(orderApproval);
 			for(OrderApproval oa : orderDto.getOrderApprovalList()){
-				oa.setOrderId(order.getOrderId()); //设置关联合同id
+				oa.setOrderId(order.getOrderId()); //设置关联订单id
 				if(oa.getActionType().shortValue()==0){
 					if(oa.getSort()==1){
 						oa.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
@@ -175,18 +175,18 @@ public class OrderServiceImpl implements OrderService{
 					oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
 				}
 			}
-			orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
+			i += orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
 			//同时设置合同的审批状态为审批中
 			order.setApprovalStatus(new Short("1"));
 			order.setApprovalStartDate(new Date());
-			orderMapper.updateByPrimaryKey(order);
+			i += orderMapper.updateByPrimaryKey(order);
 		}else{
 			/*如果审批流程被清除，则视为改合同不需要审批。需要：1.删除之前关联的审批人信息 2.更新合同状态为无需审批 0 */
-			orderApprovalMapper.deleteByOrderId(orderDto.getOrderId());
+			i += orderApprovalMapper.deleteByOrderId(orderDto.getOrderId());
 			//同时设置合同的审批状态为审批中
 			order.setApprovalStatus(new Short("0"));
 			order.setApprovalStartDate(null);
-			orderMapper.updateByPrimaryKey(order);
+			i += orderMapper.updateByPrimaryKey(order);
 		}
 		if(i>0) {
 			return result;

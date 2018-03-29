@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.notify.dao.ValidLogMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.notify.model.ValidLog">
+    <id column="valid_code_log_id" jdbcType="BIGINT" property="validCodeLogId" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="last_send_time" jdbcType="TIMESTAMP" property="lastSendTime" />
+    <result column="send_count" jdbcType="INTEGER" property="sendCount" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from valid_code_log
+    where valid_code_log_id = #{validCodeLogId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.notify.model.ValidLog">
+    <selectKey keyProperty="validCodeLogId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into valid_code_log (phone, last_send_time, send_count
+      )
+    values (#{phone,jdbcType=VARCHAR}, #{lastSendTime,jdbcType=TIMESTAMP}, #{sendCount,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.notify.model.ValidLog">
+    update valid_code_log
+    set phone = #{phone,jdbcType=VARCHAR},
+      last_send_time = #{lastSendTime,jdbcType=TIMESTAMP},
+      send_count = #{sendCount,jdbcType=INTEGER}
+    where valid_code_log_id = #{validCodeLogId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select valid_code_log_id, phone, last_send_time, send_count
+    from valid_code_log
+    where valid_code_log_id = #{validCodeLogId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select valid_code_log_id, phone, last_send_time, send_count
+    from valid_code_log
+  </select>
+
+  <select id="selectByPhone" resultMap="BaseResultMap">
+    select valid_code_log_id, phone, last_send_time, send_count
+    from valid_code_log
+    WHERE phone = #{phone,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

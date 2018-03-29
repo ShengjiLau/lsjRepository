@@ -15,6 +15,10 @@
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <result column="carrier_collection_ids" jdbcType="VARCHAR" property="carrierCollectionIds" />
     <result column="carrier_collection_names" jdbcType="VARCHAR" property="carrierCollectionNames" />
+    <result column="carrier_driver_ids" jdbcType="VARCHAR" property="carrierDriverIds" />
+    <result column="carrier_driver_names" jdbcType="VARCHAR" property="carrierDriverNames" />
+    <result column="carrier_ids" jdbcType="VARCHAR" property="carrierIds" />
+    <result column="carrier_names" jdbcType="VARCHAR" property="carrierNames" />
     <result column="carrier_phone" jdbcType="VARCHAR" property="carrierPhone" />
     <result column="carrier_vehicle" jdbcType="VARCHAR" property="carrierVehicle" />
     <result column="plan_source" jdbcType="VARCHAR" property="planSource" />
@@ -115,6 +119,7 @@
     <result column="receive_address" jdbcType="VARCHAR" property="receiveAddress" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="split_goods_id" jdbcType="BIGINT" property="splitGoodsId" />
    <!--计划列表-->
     <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
@@ -127,6 +132,11 @@
     <collection property="snatchGoodsList" column="{waybillPlanId=waybill_plan_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.SnatchGoods" javaType="ArrayList"
                 select="com.lcdt.traffic.dao.SnatchGoodsMapper.selectByWaybillPlanId" />
+
+      <!--派单记录-->
+      <collection property="splitGoodsList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
+                  ofType="com.lcdt.traffic.model.SplitGoods" javaType="ArrayList"
+                  select="com.lcdt.traffic.dao.SplitGoodsMapper.selectByWaybillPlanId" />
   </resultMap>
 
 
@@ -151,8 +161,9 @@
     insert into t_waybill_plan (plan_code, serial_code, group_id, 
       group_name, plan_source, plan_status, 
       send_card_status, send_order_type, carrier_type, carrier_collection_ids,
-    carrier_collection_names, carrier_phone, carrier_vehicle,
-    biding_start, biding_end, customer_id,
+      carrier_collection_names,carrier_driver_ids,carrier_driver_names,carrier_ids,
+      carrier_names,carrier_phone, carrier_vehicle,
+      biding_start, biding_end, customer_id,
       customer_name, customer_phone, sales_order, 
       cust_contact_man, send_wh_id, send_wh_name, 
       send_man, send_phone, send_province, 
@@ -174,8 +185,13 @@
     values (#{planCode,jdbcType=VARCHAR}, F_PLAN_SERIAL_CODE(#{transportWay,jdbcType=SMALLINT}), #{groupId,jdbcType=BIGINT},
       #{groupName,jdbcType=VARCHAR}, #{planSource,jdbcType=VARCHAR}, #{planStatus,jdbcType=VARCHAR}, 
       #{sendCardStatus,jdbcType=SMALLINT}, #{sendOrderType,jdbcType=SMALLINT}, #{carrierType,jdbcType=SMALLINT},
-      #{carrierCollectionIds,jdbcType=VARCHAR},#{carrierCollectionNames,jdbcType=VARCHAR}, #{carrierPhone,jdbcType=VARCHAR}, #{carrierVehicle,jdbcType=VARCHAR},
-    #{bidingStart,jdbcType=TIMESTAMP}, #{bidingEnd,jdbcType=TIMESTAMP}, #{customerId,jdbcType=BIGINT},
+      #{carrierCollectionIds,jdbcType=VARCHAR},#{carrierCollectionNames,jdbcType=VARCHAR},
+      #{carrierDriverIds,jdbcType=VARCHAR},
+      #{carrierDriverNames,jdbcType=VARCHAR},
+      #{carrierIds,jdbcType=VARCHAR},
+      #{carrierNames,jdbcType=VARCHAR},
+      #{carrierPhone,jdbcType=VARCHAR}, #{carrierVehicle,jdbcType=VARCHAR},
+      #{bidingStart,jdbcType=TIMESTAMP}, #{bidingEnd,jdbcType=TIMESTAMP}, #{customerId,jdbcType=BIGINT},
       #{customerName,jdbcType=VARCHAR}, #{customerPhone,jdbcType=VARCHAR}, #{salesOrder,jdbcType=VARCHAR}, 
       #{custContactMan,jdbcType=VARCHAR}, #{sendWhId,jdbcType=BIGINT}, #{sendWhName,jdbcType=VARCHAR}, 
       #{sendMan,jdbcType=VARCHAR}, #{sendPhone,jdbcType=VARCHAR}, #{sendProvince,jdbcType=VARCHAR}, 
@@ -207,6 +223,10 @@
       group_name = #{groupName,jdbcType=VARCHAR},
       carrier_collection_ids = #{carrierCollectionIds,jdbcType=VARCHAR},
       carrier_collection_names = #{carrierCollectionNames,jdbcType=VARCHAR},
+      carrier_driver_ids = #{carrierDriverIds,jdbcType=VARCHAR},
+      carrier_driver_names = #{carrierDriverNames,jdbcType=VARCHAR},
+      carrier_ids = #{carrierIds,jdbcType=VARCHAR},
+      carrier_names = #{carrierNames,jdbcType=VARCHAR},
       carrier_phone = #{carrierPhone,jdbcType=VARCHAR},
       carrier_vehicle = #{carrierVehicle,jdbcType=VARCHAR},
       plan_source = #{planSource,jdbcType=VARCHAR},
@@ -305,20 +325,30 @@
       <if test="carrierType != null">
         carrier_type = #{carrierType,jdbcType=SMALLINT},
       </if>
-
-      <if test="carrierType != null">
+      <if test="carrierCollectionIds != null">
         carrier_collection_ids = #{carrierCollectionIds,jdbcType=VARCHAR},
       </if>
-      <if test="carrierType != null">
+      <if test="carrierCollectionNames != null">
         carrier_collection_names = #{carrierCollectionNames,jdbcType=VARCHAR},
       </if>
-      <if test="carrierType != null">
+      <if test="carrierPhone != null">
         carrier_phone = #{carrierPhone,jdbcType=VARCHAR},
       </if>
-      <if test="carrierType != null">
+      <if test="carrierVehicle != null">
         carrier_vehicle = #{carrierVehicle,jdbcType=VARCHAR},
       </if>
-
+      <if test="carrierDriverIds != null">
+        carrier_driver_ids = #{carrierDriverIds,jdbcType=VARCHAR},
+      </if>
+      <if test="carrierDriverNames != null">
+        carrier_driver_names = #{carrierDriverNames,jdbcType=VARCHAR},
+      </if>
+      <if test="carrierIds != null">
+        carrier_ids = #{carrierIds,jdbcType=VARCHAR},
+      </if>
+      <if test="carrierNames != null">
+        carrier_names = #{carrierNames,jdbcType=VARCHAR},
+      </if>
       <if test="bidingStart != null">
         biding_start = #{bidingStart,jdbcType=TIMESTAMP},
       </if>
@@ -514,7 +544,8 @@
     attachment1, attachment1_name, attachment2, attachment2_name, attachment3, attachment3_name, 
     attachment4, attachment4_name, attachment5, attachment5_name, is_approval, plan_remark, 
     create_id, create_name, create_date, update_id, update_name, update_time, is_deleted, 
-    carrier_company_id, company_id, plan_days, pubdate, finish_date, cancel_date, cancel_man, 
+    carrier_company_id, company_id, plan_days, pubdate, finish_date, cancel_date, cancel_man,
+    carrier_driver_ids,carrier_driver_names,carrier_ids,carrier_names,
     cancel_remark,carrier_company_name
     from t_waybill_plan
     <where>
@@ -548,15 +579,19 @@
               attachment4, attachment4_name, attachment5, attachment5_name, is_approval, plan_remark,
               create_id, create_name, create_date, update_id, update_name, update_time, is_deleted,
               carrier_company_id, company_id, plan_days, pubdate, finish_date, cancel_date, cancel_man,
-              cancel_remark,carrier_company_name
+              cancel_remark,carrier_company_name,carrier_driver_ids,carrier_driver_names,carrier_ids,carrier_names
         from t_waybill_plan
         <where>
-          <if test=" isDeleted!=null">
+          <if test="isDeleted!=null">
             and  is_deleted = #{isDeleted,jdbcType=SMALLINT}
           </if>
           <if test=" carrierCompanyId!=null">
             and  carrier_company_id = #{ carrierCompanyId,jdbcType=BIGINT}
           </if>
+          <if test=" carrierCompanyId4leaveMsg!=null">
+            and (carrier_company_id = #{ carrierCompanyId4leaveMsg,jdbcType=BIGINT} or company_id = #{companyId,jdbcType=BIGINT} )
+          </if>
+
           <if test="companyId!=null">
             and  company_id = #{companyId,jdbcType=BIGINT}
           </if>
@@ -585,7 +620,7 @@
             and  pubdate >= #{pubdateBegin,jdbcType=TIMESTAMP}
           </if>
           <if test="pubdateEnd != null and pubdateEnd != ''">
-            and  #{pubdate,jdbcType=TIMESTAMP} >= pubdate
+            and  #{pubdateEnd,jdbcType=TIMESTAMP} >= pubdate
           </if>
           <if test="sendOrderType != null">
             and  send_order_type = #{sendOrderType,jdbcType=SMALLINT}
@@ -608,10 +643,10 @@
     就是自己能抢的计划，可能这个计划多家公司都能看见。如果改计划我报价了，就在已抢里面
   -->
   <select id="customerPlan4Bidding" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
+    select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
     from t_waybill_plan p1
     <where>
-      and plan_status = '15' and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.company_id = p1.company_id)
+      and plan_status = '15' and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id)
       and  is_deleted = 0
       <if test="serialCode!=null and serialCode!=''">
         and serial_code like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
@@ -632,10 +667,13 @@
         and  pubdate >= #{pubdateBegin,jdbcType=TIMESTAMP}
       </if>
       <if test="pubdateEnd != null and pubdateEnd != ''">
-        and  #{pubdate,jdbcType=TIMESTAMP} >= pubdate
+        and  #{pubdateEnd,jdbcType=TIMESTAMP} >= pubdate
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
         and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="customerCids!=null and customerCids!=''">
+        and company_id in(#{customerCids,jdbcType=VARCHAR})
       </if>
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
@@ -653,7 +691,7 @@
      理解：这个计划我参与报价了，但还没有派单给我 ,只要不是'取消'的就行
   -->
   <select id="customerPlanList4Offer" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
+    select '-1' as split_goods_id,waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
     from t_waybill_plan p1
     <where>
       and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
@@ -679,11 +717,15 @@
         and pubdate >= #{pubdateBegin,jdbcType=TIMESTAMP}
       </if>
       <if test="pubdateEnd != null and pubdateEnd != ''">
-        and #{pubdate,jdbcType=TIMESTAMP} >= pubdate
+        and #{pubdateEnd,jdbcType=TIMESTAMP} >= pubdate
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
         and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like  concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') and is_deleted=0)
       </if>
+      <if test="customerCids!=null and customerCids!=''">
+        and company_id in(#{customerCids,jdbcType=VARCHAR})
+      </if>
+
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
@@ -698,16 +740,35 @@
 
   <!--客户计划（已错过）
      查询条件：计划发布时间
-     满足前提条件：我能抢单的计划（不包括已抢的），但是该计划已经派单完成，同时已经超过竞价的结束时间的
+     满足前提条件：
+          1、我能抢单的计划（不包括已抢的），但是该计划已经派单完成; or
+          2、我能抢的计划（不包括已抢的）已经超过竞价的结束时间的；
+          3、结束的没有抢单的
+
+                   or (
+            waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
+            and ( p1.plan_status='30')
+          )
    -->
   <select id="customerPlanList4Pass" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
+    select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
     from t_waybill_plan p1
     <where>
-      and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
-      and (SELECT SUM(remainder_amount) FROM t_plan_detail pd where pd.company_id = p1.company_id and pd.is_deleted=0)=0
-      and now() >= p1.biding_end
-      and  is_deleted = 0
+      and
+        (
+          ( waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
+            and (SELECT SUM(remainder_amount) FROM t_plan_detail pd where pd.company_id = p1.company_id and pd.is_deleted=0)=0
+           )
+        or (
+             waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
+            and (now() >= p1.biding_end and p1.biding_end is not NULL)
+          )
+          or (
+           waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
+            and p1.plan_status='30' and p1.send_order_type=2
+          )
+       )
+        and  is_deleted = 0
       <if test="serialCode!=null and serialCode!=''">
         and serial_code like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
       </if>
@@ -727,11 +788,17 @@
         and  pubdate >= #{pubdateBegin,jdbcType=TIMESTAMP}
       </if>
       <if test="pubdateEnd != null and pubdateEnd != ''">
-        and  #{pubdate,jdbcType=TIMESTAMP} >= pubdate
+        and  #{pubdateEnd,jdbcType=TIMESTAMP} >= pubdate
       </if>
       <if test="goodsInfo != null and goodsInfo!=''">
         and  waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')  and is_deleted=0)
       </if>
+
+      <if test="customerCids!=null and customerCids!=''">
+        and company_id in(#{customerCids,jdbcType=VARCHAR})
+      </if>
+
+
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
@@ -743,13 +810,23 @@
   </select>
 
 
-
   <!--客户计划（派车中）
       查询条件：计划发布时间 、派单时间
       满足前提条件：计划派单关联计划，同时派单（派单当前登录人所在的企业）的货物剩余数量>0的
+
+           AND  wp.waybill_plan_id !=''
+      and sp.split_goods_id in (
+        select a.split_goods_id from t_split_goods_detail as a
+        where split_goods_detail_id = (select max(b.split_goods_detail_id)
+        from t_split_goods_detail as b
+        where a.split_goods_id = b.split_goods_id and b.remain_amount>0)
+          and sp.company_id = a.company_id and a.is_deleted=0
+      )
+
    -->
   <select id="customerPlanList4VehicleDoing" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
+    sp.split_goods_id,
     wp.waybill_plan_id,
     wp.plan_code,
     wp.serial_code,
@@ -763,14 +840,9 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      and sp.split_goods_id in (
-        select a.split_goods_id from t_split_goods_detail as a
-        where split_goods_detail_id = (select max(b.split_goods_detail_id)
-        from t_split_goods_detail as b
-        where a.split_goods_id = b.split_goods_id and b.remain_amount>0)
-          and sp.company_id = a.company_id and a.is_deleted=0
-      )
-      <if test=" isDeleted!=null">
+      and wp.plan_status!='60' and wp.plan_status!='50'
+      and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)>0
+      <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
       <if test="serialCode!=null and serialCode!=''">
@@ -798,12 +870,17 @@
       <if test="goodsInfo != null and goodsInfo!=''">
         and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like  concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')  and is_deleted=0)
       </if>
-      <if test="companyIds!=null and companyIds!=''">
+      <if test="customerCids!=null and customerCids!=''">
+        and wp.company_id in(#{customerCids,jdbcType=VARCHAR})
+      </if>
+
+      <if test="companyIds!=null and companyIds!=''"> <!--创建企业-->
         and ${companyIds}
       </if>
-      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
+      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''"> <!--承运企业-->
         and ${carrierCollectionIds}
       </if>
+
     </where>
     order by waybill_plan_id desc
   </select>
@@ -811,9 +888,18 @@
   <!--客户计划（已派车）
       查询条件：派单时间
        满足前提条件：计划派单关联计划，同时派单（派单当前登录人所在的企业）的货物剩余数量=0的
+
+             and sp.split_goods_id in (
+        select a.split_goods_id from t_split_goods_detail as a
+        where split_goods_detail_id = (select max(b.split_goods_detail_id)
+        from t_split_goods_detail as b
+        where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
+        and sp.company_id = a.company_id and a.is_deleted=0
+      )
    -->
   <select id="customerPlanList4VehicleHave" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
+    sp.split_goods_id,
     wp.waybill_plan_id,
     wp.plan_code,
     wp.serial_code,
@@ -827,14 +913,9 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      and sp.split_goods_id in (
-        select a.split_goods_id from t_split_goods_detail as a
-        where split_goods_detail_id = (select max(b.split_goods_detail_id)
-        from t_split_goods_detail as b
-        where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
-        and sp.company_id = a.company_id and a.is_deleted=0
-      )
-      <if test=" isDeleted!=null">
+      and wp.plan_status!='60' and wp.plan_status!='50'
+      and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
+      <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
       <if test="serialCode!=null and serialCode!=''">
@@ -862,10 +943,13 @@
       <if test="goodsInfo != null and goodsInfo!=''">
         and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') and is_deleted=0)
       </if>
+      <if test="customerCids!=null and customerCids!=''">
+        and wp.company_id in(#{customerCids,jdbcType=VARCHAR})
+      </if>
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
-      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
+      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''"> <!--承运企业-->
         and ${carrierCollectionIds}
       </if>
     </where>
@@ -875,9 +959,18 @@
   <!--客户计划（已完成）
          查询条件：派单时间
           满足前提条件：计划派单关联计划，派单（派单当前登录人所在的企业）的货物剩余数量=0的，并且该派单下的运单全部完成的。
+
+                and sp.split_goods_id in (
+          select a.split_goods_id from t_split_goods_detail as a
+          where split_goods_detail_id = (select max(b.split_goods_detail_id)
+          from t_split_goods_detail as b
+          where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
+          and sp.company_id = a.company_id and a.is_deleted=0
+      )
      -->
   <select id="customerPlanList4Completed" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
+    sp.split_goods_id,
     wp.waybill_plan_id,
     wp.plan_code,
     wp.serial_code,
@@ -891,15 +984,9 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      and sp.split_goods_id in (
-          select a.split_goods_id from t_split_goods_detail as a
-          where split_goods_detail_id = (select max(b.split_goods_detail_id)
-          from t_split_goods_detail as b
-          where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
-          and sp.company_id = a.company_id and a.is_deleted=0
-      )
+      and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
       and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status!=7 )=0
-      <if test=" isDeleted!=null">
+      <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
       <if test="serialCode!=null and serialCode!=''">
@@ -927,10 +1014,13 @@
       <if test="goodsInfo != null and goodsInfo!=''">
         and  wp.waybill_plan_id in (select waybill_plan_id from t_plan_detail where goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') and is_deleted=0)
       </if>
+      <if test="customerCids!=null and customerCids!=''">
+        and wp.company_id in(#{customerCids,jdbcType=VARCHAR})
+      </if>
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
-      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
+      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''"> <!--承运企业-->
         and ${carrierCollectionIds}
       </if>
     </where>
@@ -940,9 +1030,16 @@
   <!--客户计划（已取消）
          查询条件：派单时间
           满足前提条件：派单货物的原始和剩余数量都是0的
+
+         and sp.split_goods_id in (
+      SELECT sgd.split_goods_id From t_split_goods_detail sgd where wp.company_id = sgd.company_id and sgd.is_deleted=0
+             and (select SUM(remain_amount+allot_amount) from t_split_goods_detail sgd1 where wp.company_id = sgd1.company_id and sgd1.is_deleted=0)=0
+      )
+      OR
      -->
   <select id="customerPlanList4Cancel" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     SELECT
+    sp.split_goods_id,
     wp.waybill_plan_id,
     wp.plan_code,
     wp.serial_code,
@@ -956,11 +1053,8 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      sp.split_goods_id in (
-      SELECT sgd.split_goods_id From t_split_goods_detail sgd where wp.company_id = sgd.company_id and sgd.is_deleted=0
-             and (select SUM(remain_amount+allot_amount) from t_split_goods_detail sgd1 where wp.company_id = sgd1.company_id and sgd1.is_deleted=0)=0
-      )
-      <if test=" isDeleted!=null">
+       and wp.plan_status='60'
+      <if test="isDeleted!=null">
         and sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
       <if test="serialCode!=null and serialCode!=''">
@@ -978,6 +1072,9 @@
       <if test="receiveCounty!=null and receiveCounty!=''">
         and wp.receive_county = #{receiveCounty,jdbcType=VARCHAR}
       </if>
+      <if test="customerCids!=null and customerCids!=''">
+        and wp.company_id in(#{customerCids,jdbcType=VARCHAR})
+      </if>
       <!--派单时间-->
       <if test="disDateBegin != null and disDateBegin != ''">
         and  sp.create_date >= #{disDateBegin,jdbcType=TIMESTAMP}
@@ -991,11 +1088,87 @@
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
-      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
+      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''"> <!--承运企业-->
         and ${carrierCollectionIds}
       </if>
     </where>
     order by waybill_plan_id desc
+  </select>
+
+  <resultMap id="snatchBill4WaittingMap" type="com.lcdt.traffic.dto.SnatchBill4WaittingRdto">
+    <id column="waybill_plan_id" jdbcType="BIGINT" property="waybillPlanId" />
+    <result column="receive_province" jdbcType="VARCHAR" property="receiveProvince" />
+    <result column="receive_city" jdbcType="VARCHAR" property="receiveCity" />
+    <result column="receive_county" jdbcType="VARCHAR" property="receiveCounty" />
+    <result column="receive_address" jdbcType="VARCHAR" property="receiveAddress" />
+    <result column="send_province" jdbcType="VARCHAR" property="sendProvince" />
+    <result column="send_city" jdbcType="VARCHAR" property="sendCity" />
+    <result column="send_county" jdbcType="VARCHAR" property="sendCounty" />
+    <result column="send_address" jdbcType="VARCHAR" property="sendAddress" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="plan_status" jdbcType="VARCHAR" property="planStatus" />
+    <result column="send_man" jdbcType="VARCHAR" property="sendMan" />
+    <result column="send_phone" jdbcType="VARCHAR" property="sendPhone" />
+    <result column="receive_man" jdbcType="VARCHAR" property="receiveMan" />
+    <result column="receive_phone" jdbcType="VARCHAR" property="receivePhone" />
+    <result column="transport_way" jdbcType="SMALLINT" property="transportWay" />
+    <result column="plan_remark" jdbcType="VARCHAR" property="planRemark" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="arrive_date" jdbcType="TIMESTAMP" property="arriveDate" />
+    <result column="serial_code" jdbcType="VARCHAR" property="serialCode" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+
+    <!--计划详细-->
+    <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id}"
+                ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
+                select="com.lcdt.traffic.dao.PlanDetailMapper.selectByWaybillPlanId" />
+
+  </resultMap>
+
+
+  <!--司机（待抢）
+  满足前提条件：司机隶属于竞价计价发布时选的司机分组，并且司机未对该计划的抢单
+-->
+  <select id="wattingSnatch4Driver" parameterType="java.util.Map" resultMap="snatchBill4WaittingMap">
+    select waybill_plan_id,send_province,send_city,send_county,send_address,receive_province,receive_city,receive_county,receive_address,start_date,
+           arrive_date,company_id,plan_status,transport_way,send_man,send_phone,receive_man,receive_phone,plan_remark,serial_code,create_id
+    from t_waybill_plan p1
+    <where>
+      and p1.send_order_type='2'
+      and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.offer_id = ${offerId} and sn.waybill_plan_id=p1.waybill_plan_id)
+      and  is_deleted = 0
+      <if test="carrierDriverGroupIds!=null and carrierDriverGroupIds!=''">
+        and ${carrierDriverGroupIds}
+      </if>
+      <if test="ownCompanyIds!=null and ownCompanyIds!=''">
+        and ${ownCompanyIds}
+      </if>
+
+    </where>
+    order by ${orderFiled} ${orderDesc}
+  </select>
+
+
+
+  <!--司机（已抢）
+  满足前提条件：司机隶属于竞价计价发布时选的司机分组，并且司机未对该计划的抢单
+  -->
+  <select id="completeSnatch4Driver" parameterType="java.util.Map" resultMap="snatchBill4WaittingMap">
+    select waybill_plan_id,send_province,send_city,send_county,send_address,receive_province,receive_city,receive_county,receive_address,start_date,
+    arrive_date,company_id,plan_status,transport_way,send_man,send_phone,receive_man,receive_phone,plan_remark,serial_code,create_id
+    from t_waybill_plan p1
+    <where>
+      and p1.send_order_type='2'
+      and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.offer_id = ${offerId} and sn.waybill_plan_id=p1.waybill_plan_id)
+      and  is_deleted = 0
+      <if test="carrierDriverGroupIds!=null and carrierDriverGroupIds!=''">
+        and ${carrierDriverGroupIds}
+      </if>
+      <if test="ownCompanyIds!=null and ownCompanyIds!=''">
+        and ${ownCompanyIds}
+      </if>
+    </where>
+    order by ${orderFiled} ${orderDesc}
   </select>
 
 </mapper>

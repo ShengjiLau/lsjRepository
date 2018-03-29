@@ -56,11 +56,4 @@ public interface CalcUnitService {
      * @return
      */
     PageInfo<List<CalcUnit>> queryCalcUnitByCompanyId(Long companyId, PageInfo pageInfo);
-
-    /**
-     * 判断本企业内单位名称是否存在
-     * @param calcUnit
-     * @return
-     */
-    boolean isUnitNameExist(CalcUnit calcUnit);
 }

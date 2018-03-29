@@ -81,9 +81,6 @@ public class CalcUnitApi {
         calcUnit.setUnitId(unitId);
         calcUnit.setUnitName(unitName);
         calcUnit.setCompanyId(companyId);
-        if (calcUnitService.isUnitNameExist(calcUnit)) {
-            throw new RuntimeException("单位名称已存在");
-        }
         int result = calcUnitService.modifyByUnitIdAndCompanyId(calcUnit);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();

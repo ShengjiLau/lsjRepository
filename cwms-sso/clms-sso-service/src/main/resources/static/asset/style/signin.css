@@ -52,7 +52,7 @@ border-color: transparent;
   background: #fff url(../image/logo.png) no-repeat center;
 }
 .signin-form{
-  border-top: 1px solid #f0f0f0;
+ /* border-top: 1px solid #f0f0f0;*/
   padding: 40px 33px 0 33px;
 }
 .form-row{
@@ -81,7 +81,7 @@ box-sizing: border-box;
   border-radius: 4px;
   position: relative;
   display: inline-block;
-  width: 300px;
+  width: 306px;
   box-sizing:border-box;
 }
 .clms-input span,.clms-input img{
@@ -105,17 +105,19 @@ box-sizing: border-box;
 }
 
 .login-btn-row.form-row{
-  width: 300px;
+  width: 306px;
   margin-left: 90px;
+  font-size: 12px;
 }
 .capcha_img{
   display: inline-block;
-  border:1px solid #acacac;
-  padding: 2px;
-  width:90px;
+  border: 1px solid #d9d9d9;
+  /* padding: 1px; */
+  /* width: 100px; */
   vertical-align: top;
-  margin-top: 4px;
-  height:32px;
+  margin-top: 1px;
+  margin-left: 8px;
+  height: 38px;
 }
 .sms_capcha_btn{
   display: inline-block;

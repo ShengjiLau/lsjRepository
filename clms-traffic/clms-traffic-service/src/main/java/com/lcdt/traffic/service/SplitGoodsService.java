@@ -1,6 +1,7 @@
 package com.lcdt.traffic.service;
 
 import com.lcdt.traffic.dto.BindingSplitParamsDto;
+import com.lcdt.traffic.model.SplitGoodsDetail;
 import com.lcdt.traffic.web.dto.SplitGoodsParamsDto;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
@@ -41,10 +42,19 @@ public interface SplitGoodsService {
      * 派单取消
      *
      * @param splitGoodsId
+     * @param splitGoodsDetailId
      * @param user
      * @param companyId
      */
-    Integer splitGoodsCancel(Long splitGoodsId, User user, Long companyId);
+    Integer splitGoodsCancel(Long splitGoodsId, Long splitGoodsDetailId, User user, Long companyId);
+
+
+    /***
+     * 运单取消回传派单数据
+     * @param splitGoodsDetails
+     * @return
+     */
+    Integer waybillCancel4SplitGoods(List<SplitGoodsDetail> splitGoodsDetails);
 
 
 

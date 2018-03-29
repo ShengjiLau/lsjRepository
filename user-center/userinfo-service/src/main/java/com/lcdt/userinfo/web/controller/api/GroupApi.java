@@ -150,27 +150,33 @@ public class GroupApi {
      */
     @ApiOperation("用户项目组列表")
     @RequestMapping(value = "/userGroupList", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_list')")
-    public List<Group> deptUserList() {
+/*    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_list')")*/
+    public JSONObject deptUserList() {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         List<Group> groupsList = null;
-        if (userCompRel.getIsCreate() == 1 && userCompRel.getCompId() == companyId) { //企业者
-
+        GroupResultDto rDto = new GroupResultDto();
+/*        if (userCompRel.getIsCreate() == 1 ) { //企业者
             Map map = new HashMap();
             map.put("companyId", companyId);
             map.put("page_no", 1);
             map.put("page_size", 0);
             PageInfo pageInfo = groupManageService.groupList(map);
             groupsList = pageInfo.getList();
-        } else {
-            groupsList = userGroupRelationMapper.selectByUserCompany(userId, companyId);
+            rDto.setList(groupsList);
+            rDto.setTotal(pageInfo.getTotal());
+        } else { }*/
+        groupsList = userGroupRelationMapper.selectByUserCompany(userId, companyId);
+        rDto.setList(groupsList);
+        rDto.setTotal(groupsList!=null?groupsList.size():0);
 
-        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("data",rDto);
+        jsonObject.put("code", 0);
+        jsonObject.put("message","请求成功");
 
-
-        return groupsList;
+        return jsonObject;
     }
 
 
@@ -181,7 +187,7 @@ public class GroupApi {
      */
     @ApiOperation("组员工列表")
     @RequestMapping(value = "/groupUserList", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_list')")
+/*    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_list')")*/
     public GroupResultDto groupUserList(@ApiParam(value = "组ID", required = true) @RequestParam Long groupId,
                                         @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
                                         @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
@@ -206,7 +212,7 @@ public class GroupApi {
      */
     @ApiOperation(value = "组员工不存在列表v1")
     @RequestMapping(value = "/groupUserNotList", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_not_list')")
+/*    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_not_list')")*/
     public GroupResultDto groupUserNotList(@ApiParam(value = "组ID", required = true) @RequestParam Long groupId,
                                            @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
                                            @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {

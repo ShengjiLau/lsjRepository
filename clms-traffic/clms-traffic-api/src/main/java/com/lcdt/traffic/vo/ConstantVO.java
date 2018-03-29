@@ -57,4 +57,10 @@ public class ConstantVO {
     public static Short SNATCH_GOODS_USING_PASS = 1; //使用
     public static Short SNATCH_GOODS_USING_NOPASS = 2; //未采用
 
+
+
+    //计划消息中的APP_URL
+    public static String APP_URL = "";
+    public static String CANCEL_FLAG = "";
+
 }

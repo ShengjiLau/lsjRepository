@@ -1,6 +1,7 @@
 package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.SplitGoodsDetail;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,16 @@ public interface SplitGoodsDetailMapper {
      * @return
      */
     List<SplitGoodsDetail> selectBySplitGoodsId(Map map);
+
+
+    /***
+     * 派单名细批量更新
+     * @param list
+     * @return
+     */
+    int batchUpdateSplitGoodsDetail(List<SplitGoodsDetail> list);
+
+
 
 
 

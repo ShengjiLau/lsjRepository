@@ -26,7 +26,7 @@ public class ModifyContactDto {
 	@Email
 	private String contactEmail;
 
-	@Size(max = 50)
+	@Size(max = 150)
 	private String contactRemark;
 
 

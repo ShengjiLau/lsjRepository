@@ -2,6 +2,7 @@ package com.lcdt.traffic.dto;
 
 import com.lcdt.traffic.model.PlanDetail;
 import com.lcdt.traffic.model.SnatchGoods;
+import com.lcdt.traffic.model.SplitGoods;
 import com.lcdt.traffic.model.Waybill;
 
 import java.util.List;
@@ -15,9 +16,10 @@ public class CustomerPlanDto implements java.io.Serializable {
     private String planCode;
     private String serialCode;
     private String planSource; //计划来源
-    private List<PlanDetail> PlanDetailList; //计划详细
+    private List<PlanDetail> planDetailList; //计划详细
     private List<Waybill> waybillList; //运单列表
     private List<SnatchGoods> snatchGoodsList; //报价列表
+    private List<SplitGoods> splitGoodsList;
 
     private String receiveProvince;
     private String receiveCity;
@@ -25,6 +27,7 @@ public class CustomerPlanDto implements java.io.Serializable {
     private String receiveAddress;
     private Short isDeleted;
     private Long companyId;
+    private Long splitGoodsId;
 
     public Long getWaybillPlanId() {
         return waybillPlanId;
@@ -59,11 +62,11 @@ public class CustomerPlanDto implements java.io.Serializable {
     }
 
     public List<PlanDetail> getPlanDetailList() {
-        return PlanDetailList;
+        return planDetailList;
     }
 
     public void setPlanDetailList(List<PlanDetail> planDetailList) {
-        PlanDetailList = planDetailList;
+        this.planDetailList = planDetailList;
     }
 
     public String getReceiveProvince() {
@@ -128,6 +131,22 @@ public class CustomerPlanDto implements java.io.Serializable {
 
     public void setSnatchGoodsList(List<SnatchGoods> snatchGoodsList) {
         this.snatchGoodsList = snatchGoodsList;
+    }
+
+    public List<SplitGoods> getSplitGoodsList() {
+        return splitGoodsList;
+    }
+
+    public void setSplitGoodsList(List<SplitGoods> splitGoodsList) {
+        this.splitGoodsList = splitGoodsList;
+    }
+
+    public Long getSplitGoodsId() {
+        return splitGoodsId;
+    }
+
+    public void setSplitGoodsId(Long splitGoodsId) {
+        this.splitGoodsId = splitGoodsId;
     }
 }
 

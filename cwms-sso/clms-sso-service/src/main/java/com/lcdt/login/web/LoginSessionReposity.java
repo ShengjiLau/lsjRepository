@@ -22,7 +22,7 @@ public class LoginSessionReposity {
 	private static final String AUTH_CALLBACK = "auth_callback";
 
 	public static void setCallBackUrl(HttpServletRequest request) {
-		String authCallback = RequestAuthRedirectStrategy.getAuthCallback(request);
+		String authCallback = RequestAuthRedirectStrategy.getAuthCallbackNodefault(request);
 		if (!StringUtils.isEmpty(authCallback)) {
 			HttpSession session = request.getSession(true);
 			session.setAttribute(AUTH_CALLBACK, authCallback);
@@ -33,7 +33,6 @@ public class LoginSessionReposity {
 		HttpSession session = request.getSession(false);
 		return getObjectInSession(String.class, session, AUTH_CALLBACK);
 	}
-
 
 	public static User getUserInfoInSession(HttpServletRequest request){
 		HttpSession session = request.getSession(false);
@@ -102,8 +101,6 @@ public class LoginSessionReposity {
 			}
 			return false;
 	}
-
-
 
 
 	public static <T> T getObjectInSession(Class<T> clazz,HttpSession session, String key) {

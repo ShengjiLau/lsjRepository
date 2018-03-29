@@ -1,5 +1,7 @@
 package com.lcdt.traffic.model;
 
+import com.alibaba.fastjson.JSONArray;
+
 import java.util.List;
 
 /**
@@ -11,6 +13,9 @@ public class WaybillDao extends Waybill{
     List<WaybillTransferRecord> waybillTransferRecordList;
     List<WaybillPositionSetting> waybillPositionSettingList;
     List<WaybillLeaveMsg> waybillLeaveMsgList;
+
+    JSONArray electronicalReceiptJson;
+
     public List<WaybillItems> getWaybillItemsList() {
         return waybillItemsList;
     }
@@ -41,5 +46,13 @@ public class WaybillDao extends Waybill{
 
     public void setWaybillLeaveMsgList(List<WaybillLeaveMsg> waybillLeaveMsgList) {
         this.waybillLeaveMsgList = waybillLeaveMsgList;
+    }
+
+    public JSONArray getElectronicalReceiptJson() {
+        return JSONArray.parseArray(getElectronicalReceipt());
+    }
+
+    public void setElectronicalReceiptJson(JSONArray electronicalReceiptJson) {
+        this.electronicalReceiptJson = electronicalReceiptJson;
     }
 }

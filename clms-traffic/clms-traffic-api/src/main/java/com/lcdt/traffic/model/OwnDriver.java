@@ -1,9 +1,11 @@
 package com.lcdt.traffic.model;
 
+import com.lcdt.converter.ResponseData;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class OwnDriver implements Serializable{
+public class OwnDriver implements Serializable,ResponseData{
     private Long ownDriverId;
 
     private Long driverId;

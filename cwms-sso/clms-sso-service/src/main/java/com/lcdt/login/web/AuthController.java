@@ -59,7 +59,7 @@ public class AuthController {
     @Autowired
     RequestAuthRedirectStrategy strategy;
 
-    @Reference(check = false)
+    @Reference
     UserService userService;
 
     @Reference(check = false)
@@ -78,7 +78,7 @@ public class AuthController {
      * @param response
      * @return
      */
-    @RequestMapping(value = {"/"})
+    @RequestMapping(value = {"/",""})
     @ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
     public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
         boolean isLogin = LoginSessionReposity.isLogin(request);
@@ -292,20 +292,18 @@ public class AuthController {
     public ModelAndView loginCompany(Long companyId, HttpServletRequest request, HttpServletResponse response) {
         User userInfo = LoginSessionReposity.getUserInfoInSession(request);
         UserCompRel companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);
-
         if (companyMember == null) {
             //当前用户不在所选公司之内
             throw new LoginError("用户不属于该公司");
         }
 
         if (companyMember.getIsEnable() != null && companyMember.getIsEnable() == false) {
-            throw new LoginError("用户已被禁用");
+            ModelAndView modelAndView = new ModelAndView("/error");
+            modelAndView.addObject("msg", "用户已被禁用");
+            return modelAndView;
         }
-
-
         ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
         LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
-
         User userInfoInSession = LoginSessionReposity.getUserInfoInSession(request);
 
         logger.info("user session is {}",userInfoInSession.getRealName());

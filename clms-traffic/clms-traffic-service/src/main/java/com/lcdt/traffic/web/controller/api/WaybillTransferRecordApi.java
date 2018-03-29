@@ -3,10 +3,10 @@ package com.lcdt.traffic.web.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.dto.WaybillTransferRecordDto;
 import com.lcdt.traffic.model.WaybillTransferRecord;
-import com.lcdt.traffic.service.WaybillTransferRecordService;
+import com.lcdt.traffic.service.WaybillTransferRecordRpcService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
-import com.lcdt.traffic.web.dto.WaybillTransferRecordDto;
 import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,17 +28,18 @@ import java.util.List;
 @Api(value = "运单换车记录", description = "运单换车记录接口")
 public class WaybillTransferRecordApi {
     @Autowired
-    private WaybillTransferRecordService waybillTransferRecordService;
+    private WaybillTransferRecordRpcService waybillTransferRecordService;
 
     @ApiOperation("客户运单--换车记录--新增")
     @RequestMapping(value = "/customer/add", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybilltransferrecord_add')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybilltransferrecord')")
     public JSONObject addCustomerWaybillTransferRecord(WaybillTransferRecordDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User logidUser = SecurityInfoGetter.getUser();
         dto.setCarrierCompanyId(companyId);
         dto.setCreateId(logidUser.getUserId());
         dto.setCreateName(logidUser.getRealName());
+        dto.setType(2);
         int result = waybillTransferRecordService.addWaybillTransferRecord(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
@@ -52,13 +53,14 @@ public class WaybillTransferRecordApi {
 
     @ApiOperation("我的运单--换车记录--新增")
     @RequestMapping(value = "/own/add", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybilltransferrecord_add')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybilltransferrecord')")
     public JSONObject addOwnWaybillTransferRecord(WaybillTransferRecordDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User logidUser = SecurityInfoGetter.getUser();
         dto.setCompanyId(companyId);
         dto.setCreateId(logidUser.getUserId());
         dto.setCreateName(logidUser.getRealName());
+        dto.setType(1);
         int result = waybillTransferRecordService.addWaybillTransferRecord(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
@@ -72,7 +74,7 @@ public class WaybillTransferRecordApi {
 
     @ApiOperation("客户运单--换车记录--修改")
     @RequestMapping(value = "/customer/modify", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybilltransferrecord_modify')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybilltransferrecord')")
     public JSONObject modifyCustomerWaybillTransferRecord(WaybillTransferRecordDto dto){
         Long companyId=SecurityInfoGetter.getCompanyId();
         User loginUser=SecurityInfoGetter.getUser();
@@ -92,7 +94,7 @@ public class WaybillTransferRecordApi {
 
     @ApiOperation("我的运单--换车记录--修改")
     @RequestMapping(value = "/own/modify", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybilltransferrecord_modify')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybilltransferrecord')")
     public JSONObject modifyOwnWaybillTransferRecord(WaybillTransferRecordDto dto){
         Long companyId=SecurityInfoGetter.getCompanyId();
         User loginUser=SecurityInfoGetter.getUser();
@@ -112,7 +114,7 @@ public class WaybillTransferRecordApi {
 
     @ApiOperation("客户运单--换车记录--查询")
     @RequestMapping(value = "/customer/query", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybilltransferrecord_query')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybilltransferrecord')")
     public WaybillTransferRecord queryCustomerWaybillTransferRecord(@ApiParam(value = "换车记录id", required = true) @RequestParam Long recordId){
         Long companyId=SecurityInfoGetter.getCompanyId();
         WaybillTransferRecordDto waybillTransferRecordDto = new WaybillTransferRecordDto();
@@ -123,7 +125,7 @@ public class WaybillTransferRecordApi {
 
     @ApiOperation("我的运单--换车记录--查询")
     @RequestMapping(value = "/own/query", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybilltransferrecord_query')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybilltransferrecord')")
     public WaybillTransferRecord queryOwnWaybillTransferRecord(@ApiParam(value = "换车记录id", required = true) @RequestParam Long recordId){
         Long companyId=SecurityInfoGetter.getCompanyId();
         WaybillTransferRecordDto waybillTransferRecordDto = new WaybillTransferRecordDto();
@@ -134,7 +136,7 @@ public class WaybillTransferRecordApi {
 
     @ApiOperation("客户运单--换车记录--列表")
     @RequestMapping(value = "/customer/list", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybilltransferrecord_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybilltransferrecord')")
     public PageBaseDto<List<WaybillTransferRecord>> customerWaybillTransferRecordList(WaybillTransferRecordDto dto,
                                                                    @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
                                                                    @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
@@ -151,7 +153,7 @@ public class WaybillTransferRecordApi {
     }
     @ApiOperation("我的运单--换车记录--列表")
     @RequestMapping(value = "/own/list", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybilltransferrecord_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybilltransferrecord')")
     public PageBaseDto<List<WaybillTransferRecord>> ownWaybillTransferRecordList(WaybillTransferRecordDto dto,
                                                                               @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
                                                                               @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {

@@ -64,14 +64,60 @@ public class SendNotifyService {
             Long templateId = notify.getTemplateId();
             String templateContent = notifyService.templateContent(templateId, sendCompanyId);
             String notifyContent = TemplateParser.parseTemplateParams(templateContent, attachment);
-            String url = "";
-            if (companyNotifySetting.getEnableSms()) {
-                //发送短信通知
-                smsNotify.sendSmsNotify(eventMetaData,notifyContent, receiver.getPhoneNum(),user.getPhone(),sendCompanyId);
+            if (notify.getReceiveRole().equals("货主")) {
+                if (receiver != null && receiver.getPhoneNum() != null && !receiver.getPhoneNum().equals("")) {
+                    if (companyNotifySetting.getEnableSms()) {
+                        //发送短信通知
+                        smsNotify.sendSmsNotify(eventMetaData, user.getRealName(), notifyContent, receiver.getPhoneNum(), sendCompanyId);
+                    }
+                }
+                if (receiver != null && receiver.getCompanyId() != null && receiver.getUserId() != null) {
+                    if (companyNotifySetting.getEnableWeb()) {
+                        String webUrl=attachment.get("webNotifyUrl")!=null?attachment.get("webNotifyUrl").toString():"";
+                        //发送web通知
+                        webNotify.sendWebNotify(notify.getCategory(), notifyContent, receiver.getCompanyId(), receiver.getUserId(),webUrl);
+                    }
+                }
             }
-            if (companyNotifySetting.getEnableWeb()) {
-                //发送web通知
-                webNotify.sendWebNotify(notify.getCategory(),notifyContent,receiver,url);
+            if (notify.getReceiveRole().equals("承运商")) {
+                if (receiver != null && receiver.getCarrierPhoneNum() != null && !receiver.getCarrierPhoneNum().equals("")) {
+                    if (companyNotifySetting.getEnableSms()) {
+                        //发送短信通知
+                        smsNotify.sendSmsNotify(eventMetaData, user.getRealName(), notifyContent, receiver.getCarrierPhoneNum(), sendCompanyId);
+                    }
+                }
+                if (receiver != null && receiver.getCarrierCompanyId() != null && receiver.getCarrierUserId() != null) {
+                    if (companyNotifySetting.getEnableWeb()) {
+                        String webUrl=attachment.get("carrierWebNotifyUrl")!=null?attachment.get("carrierWebNotifyUrl").toString():"";
+                        //发送web通知
+                        webNotify.sendWebNotify(notify.getCategory(), notifyContent, receiver.getCarrierCompanyId(), receiver.getCarrierUserId(), webUrl);
+                    }
+                }
+            }
+            if (notify.getReceiveRole().equals("合同客户")) {
+                if (receiver != null && receiver.getCustomerPhoneNum() != null && !receiver.getCustomerPhoneNum().equals("")) {
+                    if (companyNotifySetting.getEnableSms()) {
+                        //发送短信通知
+                        smsNotify.sendSmsNotify(eventMetaData, user.getRealName(), notifyContent, receiver.getCustomerPhoneNum(), sendCompanyId);
+                    }
+                }
+            }
+
+            if (notify.getReceiveRole().equals("司机")) {
+                if (receiver != null && receiver.getDriverPhoneNum() != null && !receiver.getDriverPhoneNum().equals("")) {
+                    if (companyNotifySetting.getEnableSms()) {
+                        //发送短信通知
+                        smsNotify.sendSmsNotify(eventMetaData, user.getRealName(), notifyContent, receiver.getDriverPhoneNum(), sendCompanyId);
+                    }
+                }
+            }
+            if (notify.getReceiveRole().equals("收货人")) {
+                if (receiver != null && receiver.getReceivePhoneNum() != null && !receiver.getReceivePhoneNum().equals("")) {
+                    if (companyNotifySetting.getEnableSms()) {
+                        //发送短信通知
+                        smsNotify.sendSmsNotify(eventMetaData, user.getRealName(), notifyContent, receiver.getReceivePhoneNum(), sendCompanyId);
+                    }
+                }
             }
         }
     }

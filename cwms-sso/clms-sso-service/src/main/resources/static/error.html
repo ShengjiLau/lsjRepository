@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>邀请</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <link rel="stylesheet" href="/asset/style/iconfont.css">
+  <link rel="stylesheet" href="/asset/style/style.css">
+  <link rel="shortcut icon" href="/favicon.ico" >
+  <style media="screen">
+    html,
+    body {
+      height: 100%;
+      margin:0;
+      padding: 0;
+      background: #f9fafb;
+      color: #333;
+    }
+    nav{
+      width: 900px;
+      margin:auto;
+      height: 60px;
+      background-color: #fff;
+      border-bottom: 0;
+    }
+    nav .logo{
+      display: inline-block;
+      line-height: 59px;
+    }
+    nav .logo img{
+      vertical-align: middle;
+    }
+    .nav-head{
+      height: 60px;
+      background: #fff;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .user-menu{
+      font-size: 16px;
+      float: right;
+      line-height: 60px;
+    }
+    .user-menu a{
+      margin-left: 20px;
+    }
+    .user-menu a i{
+      font-size: 120%;
+      margin-right: 5px;
+    }
+    button {
+      border: none;
+    }
+
+    a:link {
+      text-decoration: none;
+      color: #F60;
+    }
+
+    a:visited {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    a:active {
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    input {
+      border: none;
+    }
+
+    .content {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid #f0f0f0;
+      width: 420px;
+      /*margin: 40px auto 0 auto;*/
+      padding: 40px;
+      border-radius: 12px;
+      transition: all .3s;
+      position: absolute;
+      top:50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      text-align: center;
+    }
+
+    .content:hover {
+      box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
+      border-color: transparent;
+    }
+
+    input.error:focus {
+      outline: 0;
+      border: 1px solid red;
+    }
+
+    input.error {
+      border: 1px solid red;
+    }
+
+    .form-row label.error {
+      color: red;
+      width: 100%;
+      font-size: 12px;
+      left: 0;
+      top: 48px;
+      text-align: left;
+    }
+
+    label {
+      text-align: right;
+      display: inline-block;
+    }
+    /*select {*/
+    /*!*Chrome和Firefox里面的边框是不一样的，所以复写了一下*!*/
+    /*border: solid 1px #000;*/
+
+    /*!*很关键：将默认的select选择框样式清除*!*/
+    /*appearance:none;*/
+    /*-moz-appearance:none;*/
+    /*-webkit-appearance:none;*/
+
+    /*!*在选择框的最右侧中间显示小箭头图片*!*/
+    /*background: url("http://ourjs.github.io/static/2015/arrow.png") no-repeat scroll right center transparent;*/
+
+
+    /*!*为下拉小箭头留出一点位置，避免被文字覆盖*!*/
+    /*padding-right: 14px;*/
+    /*}*/
+
+
+    /*!*清除ie的默认选择框样式清除，隐藏下拉箭头*!*/
+    /*select::-ms-expand { display: none; }*/
+
+    .normalText{
+      font-size: 14px;
+      color: #333;
+    }
+    .line{
+      height: 1px;
+      background: #e6e7eb;
+      margin-top: 40px;
+    }
+
+    .form-row{
+      font-size: 16px;
+      line-height: 21px;
+      margin-top: 20px;
+    }
+    .form-row>label {
+      vertical-align: top;
+      margin-top: 11px;
+    }
+    .form-row label{
+      width:80px;
+      margin-right: 8px;
+    }
+    .clms-input input{
+      padding: 10px;
+      border: 1px solid #ccc;
+      width: 100%;
+      line-height: 21px;
+      font-size: 16px;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .clms-input select {
+      padding: 11px 10px 12px 10px;
+      border: 1px solid #ccc;
+      width: 100%;
+      line-height: 21px;
+      height: 44px;
+      color: #333;
+      background: #fff;
+      font-size: 16px;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .clms-input span,.clms-input img{
+      position: absolute;
+    }
+    .clms-input span{
+      line-height: 21px;
+      z-index: 999;
+      margin: 10px 8px;
+      padding-right: 10px;
+      border-right: 1px solid #ccc;
+    }
+
+    .next-btn-row.form-row .default-btn{
+      float: right;
+    }
+    .next-btn-row.form-row .primary-btn{
+      color:#0891fb;
+    }
+
+    .alert-content{
+      margin-top: 12px;text-align: center;
+    }
+    .register{
+      margin-top: 30px;
+      width: 300px;
+      height: 48px;
+      color: white;
+      font-size: 16px;
+      background: #0891FB;
+      border: 1px solid #CCCCCC;
+      border-radius: 4px;
+    }
+
+  </style>
+</head>
+<body>
+<div class="nav-head">
+  <nav>
+    <div class="logo">
+      <img src="/asset/image/logo_top.png" alt="">
+    </div>
+
+  </nav>
+</div>
+
+
+<div class="content">
+  <i style="font-size: 48px;color:#F48608;font-weight: lighter" class="iconfont icon-exclamation_circle"></i>
+  <div class="normalText alert-content">对不起，操作失败</div>
+  <p th:if="${!#strings.isEmpty(msg)}" th:text="${msg}"></p>
+</div>
+
+
+</body>
+<script src="http://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+
+</html>

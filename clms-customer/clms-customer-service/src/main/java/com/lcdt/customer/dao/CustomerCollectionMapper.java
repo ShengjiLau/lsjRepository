@@ -1,6 +1,7 @@
 package com.lcdt.customer.dao;
 
 import com.lcdt.customer.model.CustomerCollection;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -46,13 +47,15 @@ public interface CustomerCollectionMapper {
      */
     int updateByPrimaryKey(CustomerCollection record);
 
-
     /***
      * 按条件查询
      * @param map
      * @return
      */
     List<CustomerCollection> selectByCondition(Map map);
+
+
+    List<CustomerCollection> selectByCollectionIds(@Param("companyId") Long companyId, @Param("ids") String ids);
 
 
 }

@@ -1,23 +1,32 @@
 package com.lcdt.traffic.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
+import com.lcdt.notify.model.DefaultNotifyReceiver;
+import com.lcdt.notify.model.DefaultNotifySender;
+import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.CustomerPlanDto;
 import com.lcdt.traffic.dto.SnatchOfferDto;
 import com.lcdt.traffic.dto.SplitVehicleDto;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
+import com.lcdt.traffic.notify.ClmsNotifyProducer;
+import com.lcdt.traffic.notify.CommonAttachment;
+import com.lcdt.traffic.notify.NotifyUtils;
 import com.lcdt.traffic.service.CustomerPlanService;
+import com.lcdt.traffic.service.DriverGroupService;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillItemsDto;
-import com.lcdt.traffic.web.dto.WaybillParamsDto;
-import net.bytebuddy.asm.Advice;
+import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,6 +61,17 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Autowired
     private WaybillService waybillService; //运单
 
+    @Reference
+    private CompanyRpcService companyRpcService; //企业信息
+
+    @Autowired
+    private ClmsNotifyProducer producer;
+
+    @Autowired
+    private DriverGroupService driverGroupService;
+
+
+
 
     /****
      * 1、登录人-指承运人，承运人登录企业ID及登录人所有的组权限；
@@ -59,25 +79,32 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
      * 3、绑定客户条件：绑定ID不为空，客户列表中的企业ID==登录人企业ID
      */
     private List<Customer> bindCustomerList(Map map) {
-        map.put("bindCpid","111");//标识绑定企业ID不为空的企业（承运商对应的所有绑定企业）
-        List<Customer> customerList = customerRpcService.findBindCompanyIds(map);
+          HashMap map1 = new HashMap();
+         map1.put("companyId",map.get("companyId")); //企业ID
+         map1.put("groupIds",map.get("groupIds")); //客户组
+         map1.put("bindCpid","111");//标识绑定企业ID不为空的企业（承运商对应的所有绑定企业）
+        List<Customer> customerList = customerRpcService.findBindCompanyIds(map1);
         return  customerList;
     }
 
-    /****
-     * 客户计划查询公共条件（创建企业ID条件及竞价组条件）
-     *
-     * Map(bindCompId--客户绑定企业ID,companyId--客户创建企业ID,groupIds--客户组IDs)
-          * @return
+
+    /***
+     * 查询相关权限
+     * @param map
+     * @param customerList
+     * @param flag
+     * @return
      */
-    private Map  customerPlanSearch4CmpIdGroup(Map map, List<Customer> customerList) {
+    private Map  customerPlanByCarrier4CmpIdGroup(Map map, List<Customer> customerList, int flag) {
         Map resultMap = new HashMap();
         if (customerList!=null && customerList.size()>0) { //承运人ID
 
-            StringBuffer sb = new StringBuffer();
-            StringBuilder sb1 = new StringBuilder();
-            StringBuilder sb2 = new StringBuilder();
-            String collectionIds = null;
+            StringBuffer sb = new StringBuffer(); //保存创建计划企业ID
+
+            StringBuilder sb_carrier_ids = new StringBuilder(); //承运商业竞价组集合
+            //StringBuilder sb_driver_ids = new StringBuilder(); //司机竞价组集合
+
+            StringBuilder sb_customerIDS = new StringBuilder(); //客户ID
             sb.append("(");
             for (int i=0;i<customerList.size();i++) {
                 Customer tempObj = customerList.get(i);
@@ -88,38 +115,149 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                     sb.append(" or ");
                 }
 
-
-                //查询承运人在货主方建立客户关系中，所加入的所有竞价组集合
+                //查询承运人在货主方建立客户关系中，所加入的承运竞价组集合
                 map.put("companyId",ownCompanyId);
                 map.put("bindCompId",carrierCompanyId);
-
-                List<Customer> customer4GroupList = customerRpcService.findBindCompanyIds(map);
+                List<Customer> customer4GroupList = customerRpcService.findBindCompanyIds(map); //承运商竞价组
                 for (Customer obj1: customer4GroupList) {
                     if (!StringUtils.isEmpty(obj1.getCollectionIds())) {
-                        sb1.append(obj1.getCollectionIds()+",");
+                        sb_carrier_ids.append(obj1.getCollectionIds()+",");
                     }
-                }
-            }
-            sb.append(")");
-            resultMap.put("companyIds",sb.toString()); //====【计划创建企业】
+                     sb_customerIDS.append(obj1.getCustomerId()+",");
 
-            //竞价组
-            if(!StringUtils.isEmpty(sb1.toString())) {
-                collectionIds = sb1.toString().substring(0,sb1.toString().length()-1);
-                if (!StringUtils.isEmpty(collectionIds)) {
-                    sb2.append("(");
-                    String[] strArrary = collectionIds.split(",");
-                    for (int i=0; i<strArrary.length; i++) {
-                        sb2.append(" find_in_set('"+strArrary[i]+"',carrier_collection_ids)"); //竞价组
-                        if(i!=customerList.size()-1){
-                            sb2.append(" or ");
+                }
+                //查询承运人在货主建立的司机组中的，所有竞价组
+/*                List<DriverGroup> driverGroupList = driverGroupService.selectAll(ownCompanyId);
+                if (driverGroupList!=null && driverGroupList.size()>0) {
+                    for (DriverGroup obj1: driverGroupList) {
+                        if (!StringUtils.isEmpty(obj1.getDriverGroupId())) {
+                            sb_driver_ids.append(obj1.getDriverGroupId()+",");
                         }
                     }
-                    sb2.append(")");
-                    resultMap.put("carrierCollectionIds",sb2.toString()); //竞价组
+                }*/
+            }
+            sb.append(")");
+
+            /******返回结果集---分配计划的企业(企业创建者)******************/
+            resultMap.put("companyIds",sb.toString());
+            if (flag==0) {
+                StringBuilder sb_10 = new StringBuilder();
+                StringBuilder sb_11 = new StringBuilder();
+                if(!StringUtils.isEmpty(sb_carrier_ids.toString())) { //承运商组
+                    String carrierIds = sb_carrier_ids.toString().substring(0,sb_carrier_ids.toString().length()-1);
+                     if (!StringUtils.isEmpty(carrierIds)) {
+                          String[] strArrary = carrierIds.split(",");
+                        for (int i=0; i<strArrary.length; i++) {
+                            sb_10.append(" find_in_set('"+strArrary[i]+"',carrier_collection_ids)");
+                            if(i!=strArrary.length-1){
+                                sb_10.append(" or ");
+                            }
+                        }
+                    }
+                } else {
+                    sb_10.append(" find_in_set('000',carrier_collection_ids)"); //没有承运条件的看不到
                 }
-            } else {
-                resultMap.put("carrierCollectionIds",""); //竞价组
+                /*   if(!StringUtils.isEmpty(sb_driver_ids.toString())) { //司机组
+                    String driverIds = sb_driver_ids.toString().substring(0,sb_driver_ids.toString().length()-1);
+                    if (!StringUtils.isEmpty(driverIds)) {
+                        String[] strArrary = driverIds.split(",");
+                        for (int i=0; i<strArrary.length; i++) {
+                            sb_11.append(" find_in_set('"+strArrary[i]+"',carrier_driver_ids)");
+                            if(i!=strArrary.length-1){
+                                sb_11.append(" or ");
+                            }
+                        }
+
+                    }
+                }*/
+
+                String rString = "";
+                if(!sb_10.toString().isEmpty()) {
+                    rString = "(" +sb_10.toString();
+                    if(!sb_11.toString().isEmpty()) {
+                        rString += " or "+sb_11.toString()+" )";
+                    } else {
+                        rString += " )";
+                    }
+                } else {
+                    if(!sb_11.toString().isEmpty()) {
+                        rString = " ( "+sb_11.toString()+" )";
+                    } else {
+                        rString = "";
+                    }
+                }
+                resultMap.put("carrierCollectionIds",rString);
+
+            } else if (flag==1)  { //承运组(客户ID)
+                StringBuilder sb_20 = new StringBuilder();
+                StringBuilder sb_21 = new StringBuilder();
+               if(!StringUtils.isEmpty(sb_customerIDS.toString())) { //直派承运商
+                    String customerIDS = sb_customerIDS.toString().substring(0,sb_customerIDS.toString().length()-1);
+                    if (!StringUtils.isEmpty(customerIDS)) {
+                         String[] strArrary = customerIDS.split(",");
+                        for (int i=0; i<strArrary.length; i++) {
+                            sb_20.append(" find_in_set('"+strArrary[i]+"',wp.carrier_ids) or find_in_set('"+strArrary[i]+"',sp.carrier_collection_ids)"); //承运人(直接指定，录入完派单)
+                            if(i!=strArrary.length-1){
+                                sb_20.append(" or ");
+                            }
+                        }
+                    }
+                 }
+                if(!StringUtils.isEmpty(sb_carrier_ids.toString())) { //竞价承运商
+                    String collectionIds = sb_carrier_ids.toString().substring(0,sb_carrier_ids.toString().length()-1);
+                               if (!StringUtils.isEmpty(collectionIds)) {
+                        String[] strArrary = collectionIds.split(",");
+                        for (int i=0; i<strArrary.length; i++) {
+                            sb_21.append(" find_in_set('"+strArrary[i]+"',wp.carrier_collection_ids)"); //竞价组 or find_in_set('"+strArrary[i]+"',sp.carrier_collection_ids)
+                            if(i!=strArrary.length-1){
+                                sb_21.append(" or ");
+                            }
+                        }
+                    }
+                }
+
+                 String rString = "";
+                 if(!sb_20.toString().isEmpty()) {
+                    rString = "(" +sb_20.toString();
+                    if(!sb_21.toString().isEmpty()) {
+                        rString += " or "+sb_21.toString()+" )";
+                    } else {
+                        rString += " )";
+                    }
+                } else {
+                      if(!sb_21.toString().isEmpty()) {
+                          rString = " ( "+sb_21.toString()+" )";
+                    } else {
+                          rString = "";
+                      }
+                }
+                if(StringUtils.isEmpty(rString)) {
+                    rString = " find_in_set('000',wp.carrier_collection_ids)";
+                }
+                resultMap.put("carrierCollectionIds",rString); //竞价组
+            }else if (flag==2)  { //已派车
+                StringBuilder sb_20 = new StringBuilder();
+               if(!StringUtils.isEmpty(sb_customerIDS.toString())) { //指派类型的
+                    String customerIDS = sb_customerIDS.toString().substring(0,sb_customerIDS.toString().length()-1);
+                    if (!StringUtils.isEmpty(customerIDS)) {
+                        String[] strArrary = customerIDS.split(",");
+                        for (int i=0; i<strArrary.length; i++) {
+                            sb_20.append(" find_in_set('"+strArrary[i]+"',wp.carrier_ids) or find_in_set('"+strArrary[i]+"',sp.carrier_collection_ids)"); //承运人
+                            if(i!=strArrary.length-1){
+                                sb_20.append(" or ");
+                            }
+                        }
+                    }
+                }
+                String rString = "";
+                if(!sb_20.toString().isEmpty()) {
+                    rString = "(" +sb_20.toString()+" )";
+
+                }
+                if(StringUtils.isEmpty(rString)) {
+                    rString = " find_in_set('000',wp.carrier_collection_ids)";
+                }
+                resultMap.put("carrierCollectionIds",rString);
             }
 
 
@@ -136,7 +274,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
      */
     private String planSource(Long compId, List<Customer> customerList) {
         for (Customer customer: customerList) {
-            if(customer.getBindCpid()==compId) {
+            if(customer.getBindCpid().equals(compId)) {
                 return customer.getCustomerName();
             }
         }
@@ -148,14 +286,14 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Bidding(Map map) {
-
         //根据登录人（权限组），获取对应客户列表中绑定的客户企业（货主）
         List<Customer> customerList = bindCustomerList(map);
+        if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");//移除
-        //查询对应在的企业组、竞价组条件
-        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList);
 
-        map.put("companyIds",cMap.get("companyIds"));
+        //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,0);
+        map.put("companyIds",cMap.get("companyIds")); //分配计划的企业(企业创建者)
         map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -185,10 +323,11 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Offer(Map map) {
-
         List<Customer> customerList = bindCustomerList(map);
+        if(customerList==null || customerList.size()==0) return new PageInfo();
+
         map.remove("groupIds");//移除
-        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,0); //查询对应在的企业组、竞价组条件
 
         map.put("companyIds",cMap.get("companyIds"));
         map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
@@ -222,8 +361,9 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Override
     public PageInfo customerPlanList4Pass(Map map) {
         List<Customer> customerList = bindCustomerList(map);
+        if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
-        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,0); //查询对应在的企业组、竞价组条件
 
         map.put("companyIds",cMap.get("companyIds"));
         map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
@@ -258,13 +398,14 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Override
     public PageInfo customerPlanList4VehicleDoing(Map map) {
         List<Customer> customerList = bindCustomerList(map);
+        if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
-        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
         if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString().replace("carrier_collection_ids", "wp.carrier_collection_ids"));
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString());
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -296,13 +437,14 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Override
     public PageInfo customerPlanList4VehicleHave(Map map) {
         List<Customer> customerList = bindCustomerList(map);
+        if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
-        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
         if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString().replace("carrier_collection_ids", "wp.carrier_collection_ids"));
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString());
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -336,13 +478,14 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Override
     public PageInfo customerPlanList4Completed(Map map) {
         List<Customer> customerList = bindCustomerList(map);
+        if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
-        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
         if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString().replace("carrier_collection_ids", "wp.carrier_collection_ids"));
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString());
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -373,13 +516,14 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Override
     public PageInfo customerPlanList4Cancel(Map map) {
         List<Customer> customerList = bindCustomerList(map);
+        if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
-        Map cMap = customerPlanSearch4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
+        Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
         if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
-            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString().replace("carrier_collection_ids", "wp.carrier_collection_ids"));
+            map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString());
         }
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -423,6 +567,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         snatchGoods.setUpdateTime(dt);
         snatchGoods.setOfferDate(dt);//报价时间
         snatchGoods.setIsDeleted((short)0);
+        snatchGoods.setOfferRemark(dto.getOfferRemark());
         snatchGoods.setIsUsing(ConstantVO.SNATCH_GOODS_USING_DOING);
         int flag1 = 1,flag2 =1 ;
         flag1 = snatchGoodsMapper.insert(snatchGoods);
@@ -449,9 +594,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             }
             flag2 = snatchGoodsDetailMapper.batchAddSnatchGoodsDetail(snatchList);
         }
-
         return flag1+flag2>1?1:0;
-
     }
 
     @Transactional
@@ -459,19 +602,24 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     public int customerPlanSplitVehicle(SplitVehicleDto dto, WaybillDto waybillDto) {
         Map tMap = new HashMap<String,String>();
         tMap.put("waybillPlanId",dto.getWaybillPlanId());
-        //tMap.put("companyId",dto.getCompanyId());
         tMap.put("isDeleted","0");
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
-        if (null == waybillPlan) {
-            throw new WaybillPlanException("计划不存在！");
-        }
+        if (null == waybillPlan) {throw new WaybillPlanException("计划不存在！"); }
+
+        Map map = new HashMap();
+        map.put("splitGoodsId",dto.getSplitGoodsId());
+        map.put("carrierCompanyId",dto.getCompanyId());
+        map.put("isDeleted",0);
+        SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(map);
+        if (null==splitGoods) { throw new RuntimeException("没有派单记录，不能派车！"); }
+
         SplitGoods tObj = new SplitGoods();
         tObj.setSplitGoodsId(dto.getSplitGoodsId());
-
         PlanBO.getInstance().converPlan2Waybill(waybillPlan,tObj, waybillDto);  //计划转为运单
         List<PlanDetail> list = dto.getPlanDetailList();
-        float sumAmount = 0; //统计本次派车重量
+        float sumAmount = 0; //统计本次派车总重量（这块本应是循环比较的，前端目前验证了派出只能派最大数量，所的这块把所有的明细派车数加在一起比较）
         List<WaybillItemsDto> waybillItemsDtos = new ArrayList<WaybillItemsDto>();
+        StringBuffer sb_goods = new StringBuffer(); //货物发送明细
         if (null != list  && list.size()>0) {
             Date dt = new Date();
             for (PlanDetail obj :list) {
@@ -492,52 +640,97 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 tempDto.setRemark(obj.getDetailRemark());//备注
                 tempDto.setPlanDetailId(obj.getPlanDetailId());//计划主ID
                 waybillItemsDtos.add(tempDto);
+                sb_goods.append(obj.getGoodsName()+":"+obj.getAllotAmount()+";"); //
             }
         }
-
-        //获取派单表中待派数量(因为竞价派单是一次生派单，但可以多次派车)
-        Map map = new HashMap();
-        map.put("splitGoodsId",dto.getSplitGoodsId());
-        map.put("carrierCompanyId",dto.getCompanyId());
-        map.put("isDeleted",0);
-        SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(map);
-        if (null==splitGoods) {
-            throw new RuntimeException("没有派单记录，不能派车！");
-        }
         float splitRemainAmount = 0 ;
-        List<SplitGoodsDetail> splitGoodsDetails = splitGoods.getSplitGoodsDetailList();
+        List<SplitGoodsDetail> splitGoodsDetails = splitGoods.getSplitGoodsDetailList(); //因为派车是按派单来的
+
         if (null!=splitGoodsDetails && splitGoodsDetails.size()>0) {
             for(SplitGoodsDetail obj : splitGoodsDetails) {
-                splitRemainAmount = splitRemainAmount + obj.getRemainAmount();//统计派单剩余数量（国为竞价是一次派单所以这块可以循环统计，否则要取最大ID的剩余数）
-                //给运单明细赋派单ID
-                for (WaybillItemsDto waybillItemsDto : waybillItemsDtos) {
-                    if(obj.getPlanDetailId()==waybillItemsDto.getPlanDetailId()) {
+                    splitRemainAmount = splitRemainAmount + obj.getRemainAmount();//统计派单剩余数量（国为竞价是一次派单所以这块可以循环统计，否则要取最大ID的剩余数）
+                   for (WaybillItemsDto waybillItemsDto : waybillItemsDtos) {//给运单明细赋派单ID
+                    if(obj.getPlanDetailId().equals(waybillItemsDto.getPlanDetailId())) {
                         waybillItemsDto.setSplitGoodsDetailId(obj.getSplitGoodsDetailId());
                     }
                 }
             }
         }
-        boolean isComplete = false; //就改口派完
+
+        boolean isComplete = false;
         if (sumAmount>splitRemainAmount) {
             throw new RuntimeException("本次派车总数量："+sumAmount+"，剩余待派数量："+splitRemainAmount+"，派车失败！");
         } else {
-            if(sumAmount-splitRemainAmount==0) {
+            if(sumAmount-splitRemainAmount==0) { //全部派完的话，更新计划状态
                 isComplete = true;
             }
-
         }
-        //整合运单主子关系
-        waybillDto.setWaybillCode(waybillPlan.getSerialCode());
+        waybillDto.setWaybillCode(waybillPlan.getSerialCode());   //整合运单主子关系
         waybillDto.setWaybillItemsDtoList(waybillItemsDtos);
-        int flag = waybillService.addWaybill(waybillDto);
-        if (flag>0) { //更新派单记录剩余派单数
-            for(SplitGoodsDetail obj : splitGoodsDetails) {
-                obj.setRemainAmount(obj.getRemainAmount() - sumAmount); //剩余=原剩余-本次派车数
-                splitGoodsDetailMapper.updateByPrimaryKey(obj);
+        Waybill waybill = waybillService.addWaybill(waybillDto);
+        if (waybill!=null) {
+            for (PlanDetail obj1 :list) {//剩余=原剩余-本次派车数
+                for (SplitGoodsDetail obj : splitGoodsDetails) {
+                    if(obj1.getPlanDetailId().equals(obj.getPlanDetailId())) {
+                        obj.setRemainAmount(obj.getRemainAmount() - obj1.getAllotAmount());
+                        splitGoodsDetailMapper.updateByPrimaryKey(obj);
+                        break;
+                    }
+                }
             }
-            if (isComplete) { //
+            if (isComplete) { //更新计划
+                waybillPlan.setUpdateId(waybillDto.getCreateId());
+                waybillPlan.setUpdateTime(new Date());
+                waybillPlan.setUpdateName(waybillDto.getCreateName());
+                waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //计划状态(已派单)
+                waybillPlan.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);
+                waybillPlanMapper.updateWaybillPlan(waybillPlan);
             }
-        }
+       }
+
+       //派车发消息
+       if (!StringUtils.isEmpty(splitGoods.getCarrierPhone())) {
+           User ownUser = companyRpcService.findCompanyCreate(waybillPlan.getCompanyId());
+           Company ownCompany = companyRpcService.findCompanyByCid(waybillPlan.getCompanyId());
+
+           String receiveAddress = waybillPlan.getReceiveProvince()+" "+waybillPlan.getReceiveCity()+" "+waybillPlan.getReceiveCounty()+" "+waybillPlan.getReceiveAddress();
+           DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(ownCompany.getCompId(), ownUser.getUserId()); //发送
+
+           /***接收对象***/
+           DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
+           // 货主
+           defaultNotifyReceiver.setCompanyId(ownCompany.getCompId());
+           defaultNotifyReceiver.setUserId(ownUser.getUserId());
+           defaultNotifyReceiver.setPhoneNum(ownUser.getPhone());
+           //司机
+           defaultNotifyReceiver.setDriverPhoneNum(dto.getDriverPhone());
+          //合同客户
+           defaultNotifyReceiver.setCustomerPhoneNum(waybillPlan.getCustomerPhone());
+          //收货人
+           defaultNotifyReceiver.setReceivePhoneNum(waybillPlan.getReceivePhone());
+           /***发送内容***/
+           CommonAttachment attachment = new CommonAttachment();
+           attachment.setPlanSerialNum(waybillPlan.getSerialCode());
+           attachment.setCarrierCompany(splitGoods.getCarrierCompanyName());
+           attachment.setCarrierPhone(splitGoods.getCarrierPhone());
+
+           attachment.setOwnerCompany(ownCompany.getFullName());
+           attachment.setAppUrl(ConstantVO.APP_URL);
+           attachment.setWaybillCode(waybill.getWaybillCode());
+
+           attachment.setContractCustomer(waybillPlan.getCustomerName());
+           attachment.setDestinationAdress(receiveAddress);
+           attachment.setDriverName(dto.getDriverName());
+           attachment.setDriverPhone(dto.getDriverPhone());
+           attachment.setGoodsDetail(sb_goods.toString());
+
+           attachment.setConsignee(waybillPlan.getReceiveMan());
+           attachment.setWebNotifyUrl(""); //我的运单列表，按流水号查询
+           TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("carrier_bill_assign", attachment, defaultNotifyReceiver, defaultNotifySender);
+           producer.sendNotifyEvent(plan_publish_event);
+
+         }
+        int flag = waybill==null?0:1;
         return flag;
     }
 

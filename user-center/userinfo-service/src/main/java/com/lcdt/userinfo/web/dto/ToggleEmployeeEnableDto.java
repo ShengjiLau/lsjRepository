@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.web.dto;
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.annotations.ApiModelProperty;
 
 public class ToggleEmployeeEnableDto {

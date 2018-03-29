@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lcdt.login.exception.ValidCodeExistException;
 import com.lcdt.login.service.impl.ValidCodeService;
 import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -72,22 +73,54 @@ public class ForgetPwdController {
 
     @RequestMapping("/checkvalidcode")
     public ModelAndView checkValidCode(HttpServletRequest request,String validcode,String phoneNum) throws UserNotExistException {
-
-        userService.queryByPhone(phoneNum);
+        ModelAndView modelAndView = new ModelAndView("/setPassWord");
+        User user = userService.queryByPhone(phoneNum);
+        if (user == null) {
+            modelAndView.setViewName("/forgetPassword");
+        }
 
         boolean codeCorrect = validCodeService.isCodeCorrect(validcode, request, validcodeTag, phoneNum);
-        ModelAndView modelAndView = new ModelAndView("/setPassWord");
+
         if (codeCorrect) {
             //如果验证码正确
             HttpSession session = request.getSession(true);
             session.setAttribute(SESSIONKEY, phoneNum);
             modelAndView.addObject("phonenum", phoneNum);
+
             return modelAndView;
         }else{
             modelAndView.setViewName("/forgetPassword");
-            modelAndView.addObject("error", "验证码错误或已过期，请重新获取！");
             return modelAndView;
         }
+    }
+
+    @RequestMapping("/checkcode")
+    @ResponseBody
+    public String checkCode(HttpServletRequest request,String validcode,String phoneNum) throws UserNotExistException {
+        JSONObject jsonObject = new JSONObject();
+        if (StringUtils.isEmpty(phoneNum)) {
+            jsonObject.put("result", false);
+            jsonObject.put("message", "手机号码不能为空");
+            return jsonObject.toString();
+        }
+        boolean phoneBeenRegister = userService.isPhoneBeenRegister(phoneNum);
+        if (!phoneBeenRegister) {
+            jsonObject.put("result", false);
+            jsonObject.put("message", "此手机号码暂未注册，请先注册！");
+            return jsonObject.toString();
+        }
+
+        boolean codeCorrect = validCodeService.isCodeCorrect(validcode, request, validcodeTag, phoneNum);
+        if (codeCorrect) {
+            //如果验证码正确
+            jsonObject.put("result", true);
+            HttpSession session = request.getSession(true);
+            session.setAttribute(SESSIONKEY, phoneNum);
+        }else{
+            jsonObject.put("result", false);
+            jsonObject.put("message", "验证码错误或已过期，请重新获取！");
+        }
+        return jsonObject.toString();
     }
 
     @RequestMapping("/setnewpwd")

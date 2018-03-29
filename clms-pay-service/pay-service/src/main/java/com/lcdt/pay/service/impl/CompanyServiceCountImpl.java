@@ -61,4 +61,15 @@ public class CompanyServiceCountImpl implements CompanyServiceCountService {
         }
     }
 
+    public int companyProductCount(Long companyId,String serviceName){
+        List<CompanyServiceCount> companyServiceCounts = countMapper.selectByCompanyId(companyId, serviceName);
+        if (CollectionUtils.isEmpty(companyServiceCounts)) {
+            log.error("额外服务超限");
+//            throw new RuntimeException(serviceName + "数量不足");
+            return 0;
+        }else{
+            return companyServiceCounts.get(0).getProductServiceNum();
+        }
+    }
+
 }

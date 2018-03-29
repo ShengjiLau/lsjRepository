@@ -5,22 +5,25 @@
     <title>选择企业 | 大驼队cLMS协同物流管理系统</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" href="/asset/style/iconfont.css">
+    <link rel="shortcut icon" href="/favicon.ico" >
     <style media="screen">
       html,body{
         padding: 0;
         margin: 0;
         color: #333;
+        background: #F9FAFB;
       }
-      a:link {text-decoration: none;color: #F60;}a:visited {text-decoration: none;color: inherit;}a:hover {text-decoration: none;}a:active {text-decoration: none;font-weight: bold;}
+      a:link {text-decoration: none;}a:visited {text-decoration: none;color: inherit;}a:hover {text-decoration: none;}a:active {text-decoration: none;font-weight: bold;}
       .nav-head{
         height: 60px;
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid #F0F0F0;
+        background: #FFF;
       }
       nav{
         width: 900px;
         margin:auto;
         height: 60px;
-        border-bottom: 1px solid #ccc;
+        /*border-bottom: 1px solid #ccc;*/
       }
         nav .logo{
           display: inline-block;
@@ -31,12 +34,13 @@
       .page{
         width: 900px;
         margin: auto;
-        padding-top: 100px;
+        padding-top: 20px;
       }
       .user-menu{
-        font-size: 16px;
+        font-size: 12px;
         float: right;
         line-height: 60px;
+        color: #333333;
       }
       .user-menu a{
         margin-left: 20px;
@@ -47,45 +51,51 @@
       }
       .com-top{
         color: #333;
-          margin-bottom: 15px;
-          font-size: 14px;
+        margin-bottom: 15px;
+        font-size: 14px;
+        margin-top:20px;
       }
       .com-top .create-btn{
         float: right;
+        color: #108EE9;
       }
       .com-list-contaner{
-      border: 1px solid #ccc;
-      padding: 0 20px;
+        border: 1px solid #F0F0F0;
+        padding: 0 20px;
+        background: #FFF;
+        border-radius: 12px;
       }
       .com-list{
         list-style: none;
         padding: 0;
         margin:0;
+        height: 112px;
       }
       .com-list li:after{
          content:"."; display:block; height:0; visibility:hidden; clear:both;
       }
       .com-list li{
-        border-bottom: 1px solid #f0f0f0;
+        border-top: 1px solid #f0f0f0;
         padding: 32px 0;
       }
-      .com-list li:last-child{
+    /*  .com-list li:last-child{
         border: none;
-      }
+      }*/
       .com-list li .com-info{
         float: left;
       }
       .com-list li .com-info .title{
+        line-height: 22px;
         font-size: 16px;
-        line-height: 18px;
-        font-weight: bold;
         margin-top: 0;
         margin-bottom: 10px;
+        color: #333333;
       }
       .com-list li .com-info .sub-title{
         line-height: 14px;
         margin:0;
         font-size: 12px;
+        color: #999999;
       }
       .com-list li .acts{
         float: right;
@@ -123,18 +133,26 @@
           <img src="/asset/image/logo_top.png" alt="">
         </div>
         <div class="user-menu">
-          <a href="#" th:utext="${session.userinfo.realName}"><i class="iconfont icon-user"></i></a>
-          <a href="/account/logout"><i class="iconfont icon-logout01"></i>退出</a>
+          <span>
+            <span class="ant-dropdown-link ant-dropdown-trigger" href="#" style="font-weight: 100;">
+              <div class="pic" style="width: 24px;margin-right: 5px;height: 24px;vertical-align: middle;border-radius: 13px;overflow: hidden;display: inline-block;border: 1px solid #d9d9d9">
+                <!--<img src="/img/head.png">-->
+                <img th:src="${(session.userinfo.pictureUrl==null||session.userinfo.pictureUrl=='')?'/img/head.png':session.userinfo.pictureUrl}" alt="此处有头像" style="width: 100%; vertical-align: top;">
+              </div><!-- react-text: 54 --><label th:utext="${session.userinfo.realName}"/><!-- /react-text -->
+            </span>
+            <span><a href="/account/logout"><i class="iconfont icon-logout01"></i>退出</label></a></span>
+          </span>
         </div>
       </nav>
     </div>
 
     <div class="page">
-      <div class="com-top">
-        <span>选择企业</span>
-        <a href="/account/createcompany" class="create-btn"> <span style="font-size:140%"> &#43;</span>创建企业</a>
-      </div>
+
       <div class="com-list-contaner">
+        <div class="com-top">
+          <span>选择企业</span>
+          <a href="/account/createcompany" class="create-btn" style="font-size: 12px"> <!--<span style="font-size:120%"> &#43;</span>-->创建企业</a>
+        </div>
         <ul class="com-list"  th:each="company : ${companyMembers}">
           <li>
             <div class="com-info">
@@ -144,7 +162,7 @@
             <div class="acts">
               <a class="go" th:href="@{/account/logincompany(companyId=${company.compId})}">进入</a>
               <span th:if="${company.isCreate}==0">
-                <a id="unbinda" onclick="clickUnbind(this)" th:href="@{/account/removecompany(usercomprelid=${company.userCompRelId},companyid=${company.compId})}" class="exit">解除关系</a>
+                <a id="unbinda" onclick="return clickUnbind(this)" th:href="@{/account/removecompany(usercomprelid=${company.userCompRelId},companyid=${company.compId})}" class="exit">解除关系</a>
               </span>
             </div>
           </li>
@@ -152,10 +170,9 @@
       </div>
     </div>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-<script type="text/javascript">
-
-
+<script type="text/javascript" th:inline="javascript">
   function clickUnbind(obj){
+
       var a = $("#unbinda");
       var truthBeTold = window.confirm("确定要解除关系吗？")
       if (truthBeTold) {

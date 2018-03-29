@@ -24,6 +24,10 @@ public class WaybillPlanListParamsDto {
     private String customerName;
 
 
+    @ApiModelProperty(value = "客户ID")
+    private String customerCids;
+
+
     @ApiModelProperty(value = "流水号")
     private String serialCode;
 
@@ -177,5 +181,13 @@ public class WaybillPlanListParamsDto {
 
     public void setDisDateEnd(String disDateEnd) {
         this.disDateEnd = disDateEnd;
+    }
+
+    public String getCustomerCids() {
+        return customerCids;
+    }
+
+    public void setCustomerCids(String customerCids) {
+        this.customerCids = customerCids;
     }
 }

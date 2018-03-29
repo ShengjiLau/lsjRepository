@@ -54,6 +54,8 @@ public class CustomerServiceImpl implements CustomerService {
 
 
         customer.setBindCpid(null);
+        customer.setBindCompany("");
+
         customerMapper.updateByPrimaryKey(customer);
 
         Customer customer1 = customerMapper.selectByCustomerBindCompanyId(bindCpid, companyId);
@@ -61,6 +63,7 @@ public class CustomerServiceImpl implements CustomerService {
             return customer;
         }else{
             customer1.setBindCpid(null);
+            customer1.setBindCompany("");
             customerMapper.updateByPrimaryKey(customer1);
         }
 

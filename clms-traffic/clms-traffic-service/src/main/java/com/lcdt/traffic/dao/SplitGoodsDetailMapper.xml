@@ -141,6 +141,19 @@
   </insert>
 
 
+  <update id="batchUpdateSplitGoodsDetail" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      update t_split_goods_detail
+      <set>
+        remain_amount = #{item.remainAmount},
+        update_id = #{item.updateId},
+        update_name = #{item.updateName},
+        update_time = #{item.updateTime}
+      </set>
+      where  split_goods_detail_id = #{item.splitGoodsDetailId}
+    </foreach>
+  </update>
+
 
 
 </mapper>

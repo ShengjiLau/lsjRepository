@@ -96,7 +96,7 @@ public class PlanBO {
             tempDto.setGoodsSpec(obj.getGoodsSpec());
             tempDto.setSubGoodsId(obj.getSubGoodsId());
             tempDto.setUnit(obj.getUnit());
-            tempDto.setAmount(obj.getPlanAmount()); //派单数量
+           // tempDto.setAmount(obj.getPlanAmount()); //派单数量
             tempDto.setFreightPrice(obj.getFreightPrice());
             tempDto.setFreightTotal(obj.getFreightTotal());
             tempDto.setRemark(obj.getDetailRemark());//备注
@@ -105,8 +105,9 @@ public class PlanBO {
         }
         for (SplitGoodsDetail obj : splitGoodsDetailList) {
             for (WaybillItemsDto waybillItemsDto : waybillItemsDtos) {
-                if(obj.getPlanDetailId()==waybillItemsDto.getPlanDetailId()) {
+                if(obj.getPlanDetailId().equals(waybillItemsDto.getPlanDetailId())) {
                     waybillItemsDto.setSplitGoodsDetailId(obj.getSplitGoodsDetailId());
+                    waybillItemsDto.setAmount(obj.getAllotAmount());//司机的话全部派完
                 }
             }
         }
