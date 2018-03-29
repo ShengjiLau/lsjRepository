@@ -14,12 +14,14 @@ import com.lcdt.customer.service.impl.InviteCustomerService;
 import com.lcdt.customer.service.impl.InviteLogService;
 import com.lcdt.customer.web.dto.InviteDto;
 import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -90,6 +92,7 @@ public class CustomerBindApi {
 	@ApiOperation("绑定客户")
 	@RequestMapping(value = "/bind")
 	@ResponseBody
+	@Transactional
 	public ModelAndView bind(Long inviteId,@RequestParam(required = false) Long customerId){
 		Long companyId = SecurityInfoGetter.getCompanyId();
 
@@ -107,7 +110,7 @@ public class CustomerBindApi {
 			Customer customer = customers.get(0);
 			errorView.addObject("username", user.getRealName());
 			errorView.addObject("headimg", user.getPictureUrl());
-			errorView.addObject("errortip", "客户管理里 " + customer.getCustomerName() + "已绑定" + customer.getBindCompany());
+			errorView.addObject("errortip", "客户管理里【" + customer.getCustomerName() + "】已绑定【" + customer.getBindCompany() + "】");
 			return errorView;
 		}
 
@@ -131,10 +134,22 @@ public class CustomerBindApi {
 			customer.setCreateDate(new Date());
 			customer.setCreateId(user.getUserId());
 			customer.setCreateName(user.getRealName());
-//			customer.setGroupIds();
 
+			customer.setLinkDuty(company.getLinkDuty());
+			customer.setLinkEmail(company.getLinkEmail());
+			customer.setLinkMan(company.getLinkMan());
+			customer.setLinkTel(company.getLinkTel());
+			customer.setProvince(company.getProvince());
+			customer.setCity(company.getCity());
+			customer.setCounty(company.getCounty());
 
-			mapper.insert(customer);
+			List<Group> groups = SecurityInfoGetter.geUserCompRel().getGroups();
+			if (groups != null && !groups.isEmpty()) {
+				Group group = groups.get(0);
+				customer.setGroupIds(String.valueOf(group.getGroupId()));
+				customer.setGroupNames(group.getGroupName());
+			}
+			customerService.customerAdd(customer);
 		}else{
 			customer = mapper.selectByPrimaryKey(customerId, companyId);
 		}
