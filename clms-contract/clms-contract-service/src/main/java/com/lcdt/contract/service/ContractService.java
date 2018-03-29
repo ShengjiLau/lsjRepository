@@ -52,4 +52,11 @@ public interface ContractService {
      * @return
      */
     int createOrderByContract(Long contractId);
+
+    /**
+     * 合同详情
+     * @param contractId
+     * @return
+     */
+    ContractDto selectByPrimaryKey(Long contractId);
 }

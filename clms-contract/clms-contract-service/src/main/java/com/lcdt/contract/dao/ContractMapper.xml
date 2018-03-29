@@ -74,7 +74,7 @@
       company_id = #{companyId,jdbcType=BIGINT}
     where contract_id = #{contractId,jdbcType=BIGINT}
   </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.lcdt.contract.web.dto.ContractDto">
     select contract_id, contract_code, title, sign_date, type, contract_status, approval_status,approval_process, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id
