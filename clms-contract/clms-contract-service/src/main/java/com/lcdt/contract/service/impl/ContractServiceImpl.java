@@ -62,8 +62,12 @@ public class ContractServiceImpl implements ContractService {
             dto.getContractApprovalList().add(contractApproval);
             for(ContractApproval ca : dto.getContractApprovalList()){
                 ca.setContractId(contract.getContractId()); //设置关联合同id
-                if(ca.getSort()==1){
-                    ca.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                if(ca.getActionType().shortValue()==0){
+                    if(ca.getSort()==1){
+                        ca.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                    }else{
+                        ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+                    }
                 }else{
                     ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
                 }
@@ -138,8 +142,12 @@ public class ContractServiceImpl implements ContractService {
             dto.getContractApprovalList().add(contractApproval);
             for(ContractApproval ca : dto.getContractApprovalList()){
                 ca.setContractId(contract.getContractId()); //设置关联合同id
-                if(ca.getSort()==1){
-                    ca.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                if(ca.getActionType().shortValue()==0){
+                    if(ca.getSort()==1){
+                        ca.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                    }else{
+                        ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+                    }
                 }else{
                     ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
                 }

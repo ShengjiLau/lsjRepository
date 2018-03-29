@@ -98,6 +98,8 @@ public class OrderServiceImpl implements OrderService{
 					}else{
 						oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
 					}
+				}else{
+					oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
 				}
 			}
 			orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
@@ -167,6 +169,8 @@ public class OrderServiceImpl implements OrderService{
 					}else{
 						oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
 					}
+				}else{
+					oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
 				}
 			}
 			orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
