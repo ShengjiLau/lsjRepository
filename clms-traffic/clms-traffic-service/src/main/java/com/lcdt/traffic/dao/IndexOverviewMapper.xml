@@ -424,10 +424,26 @@
     -->
 
       <!--进行中的计划-排出取消、完成状态的做为货主、或承运人-->
-      <select id="selectPlan4Doing" resultType="Map" parameterType="Long">
-         select count(DISTINCT waybill_plan_id) as plan_count from t_waybill_plan where company_id=#{arg0} or
-        FIND_IN_SET(#{arg0},carrier_collection_ids) and (plan_status!='50' and plan_status!='60')  and is_deleted=0
+      <select id="selectOwnPlan4Doing" resultType="Map" parameterType="Long">
+         select count(1) from t_waybill_plan where company_id=#{companyId} and is_deleted=0 and (plan_status!='50' and plan_status!='60')
+          <if test="groupIds!=null and groupIds!=''">
+              and  ${groupIds}
+          </if>
     </select>
+    <select id="selectCustomerPlan4Doing" resultType="Map" parameterType="Long">
+        select count(1) from t_waybill_plan sp where is_deleted=0 and (plan_status!='50' and plan_status!='60')
+        <if test="companyId!=null and companyId!=''">
+            and company_id != #{companyId}
+        </if>
+        <if test="companyIds!=null and companyIds!=''">
+            and ${companyIds}
+        </if>
+        <if test="carrierCollectionIds1!=null and carrierCollectionIds1!=''">
+            and ${carrierCollectionIds1}
+        </if>
+    </select>
+
+
 
 
     <select id="selectPlanAndWaybill" resultType="Map" parameterType="Long">
@@ -437,6 +453,7 @@
         select sum(case when (waybill_status!=7 and waybill_status=8) then 1 else 0 end)
         from t_waybill where company_id=#{arg0} and is_deleted=0
     </select>
+
     <select id="selectVehicleAndDriver" resultType="Map" parameterType="Long">
         select count(1) as vehicle_driver from t_own_vehicle
         where company_id=#{arg0} and is_deleted=0

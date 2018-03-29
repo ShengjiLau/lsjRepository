@@ -353,11 +353,15 @@
     </where>
     order by customer_id desc
   </select>
-  <select id="selectCarrierAndCustomer" resultType="Map" parameterType="Long">
+
+  <select id="selectCarrierAndCustomer" resultType="Map">
     select sum(case when FIND_IN_SET('5',client_types) then 1 else 0 end) as carrier_num,
     sum(case when FIND_IN_SET('3',client_types) then 1 else 0 end) as carrier_custom_num
     from t_customer
     where company_id = #{0}
+    <if test="groupIds!=null and groupIds!=''">
+      and  ${groupIds}
+    </if>
   </select>
 
   <select id="selectByCustomerBindCompanyId" resultMap="BaseResultMap">

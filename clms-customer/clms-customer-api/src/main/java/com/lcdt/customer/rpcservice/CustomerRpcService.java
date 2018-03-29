@@ -29,7 +29,7 @@ public interface CustomerRpcService {
      * @param companyId
      * @return
      */
-    Map<String,Object> selectCarrierAndCustomer(Long companyId);
+    Map<String,Object> selectCarrierAndCustomer(Long companyId,String groupIds);
 
 
     /**
