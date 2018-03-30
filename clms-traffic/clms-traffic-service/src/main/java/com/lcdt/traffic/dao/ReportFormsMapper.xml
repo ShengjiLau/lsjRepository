@@ -218,24 +218,6 @@
         </if>
     </select>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <select id="selectOwnWaybill" resultType="Map" parameterType="Map">
         select sum(case when waybill_status=1 then 1 else 0 end) as daifahuo,
         sum(case when waybill_status=2 then 1 else 0 end) as yiruchang,
