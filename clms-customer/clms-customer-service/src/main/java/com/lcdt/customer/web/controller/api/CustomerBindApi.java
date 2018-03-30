@@ -134,7 +134,6 @@ public class CustomerBindApi {
 			customer.setCreateDate(new Date());
 			customer.setCreateId(user.getUserId());
 			customer.setCreateName(user.getRealName());
-
 			customer.setLinkDuty(company.getLinkDuty());
 			customer.setLinkEmail(company.getLinkEmail());
 			customer.setLinkMan(company.getLinkMan());
@@ -148,8 +147,6 @@ public class CustomerBindApi {
 			customer.setTelNo(company.getTelNo());
 			customer.setTelNo1(company.getTelNo1());
 			customer.setBankNo(company.getBankNo());
-
-
 			List<Group> groups = SecurityInfoGetter.geUserCompRel().getGroups();
 			if (groups != null && !groups.isEmpty()) {
 				Group group = groups.get(0);
@@ -160,7 +157,6 @@ public class CustomerBindApi {
 		}else{
 			customer = mapper.selectByPrimaryKey(customerId, companyId);
 		}
-
 
 		//绑定被邀请的客户id
 
@@ -186,8 +182,6 @@ public class CustomerBindApi {
 		ModelAndView successView = new ModelAndView("invite_success");
 		successView.addObject("username", user.getRealName());
 		successView.addObject("headimg", user.getPictureUrl());
-
-
 		String successTipStr = "贵公司已成为【"+company.getFullName()+"】的合作伙伴。";
 		successView.addObject("successtip", successTipStr);
 		successView.addObject("host", "http://39.107.12.215:88");
@@ -213,6 +207,20 @@ public class CustomerBindApi {
 		UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
 		map.put("companyId", companyId);
 		map.put("notbind", true);
+		List<Group> groups = SecurityInfoGetter.geUserCompRel().getGroups();
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("(");
+		for (int i = 0; i < groups.size() ;i++) {
+			Group group = groups.get(i);
+				//组ID
+			sb.append(" find_in_set('" + group.getGroupId() + "',collection_ids)");
+			if(i != groups.size() - 1){
+					sb.append(" or ");
+				}
+		}
+		sb.append(")");
+		map.put("groupIds", sb.toString());
 		PageInfo<Customer> pageInfo = customerService.customerList(map);
 		List<Customer> list = pageInfo.getList();
 		ModelAndView modelAndView = new ModelAndView();

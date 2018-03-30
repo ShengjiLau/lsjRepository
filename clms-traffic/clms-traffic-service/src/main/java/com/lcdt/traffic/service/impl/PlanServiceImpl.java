@@ -233,7 +233,39 @@ public class PlanServiceImpl implements PlanService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int updatePlanStatusByWaybill(WaybillPlan waybillPlan) {
-       return waybillPlanMapper.updateWaybillPlan(waybillPlan);
+        //这块需要检查一下计划下的所有派单是否已完成
+        Map map = new HashMap<String,String>();
+        map.put("waybillPlanId",waybillPlan.getWaybillPlanId());
+        map.put("isDeleted",0);
+        WaybillPlan waybillPlan1 = waybillPlanMapper.selectByPrimaryKey(map);
+        boolean flag = false;
+        double remainCount = 0;
+        if(waybillPlan1!=null) { //如果计划下的所有派单剩余数量为0的话，说明完成
+
+            List<SplitGoods> splitGoodsList = waybillPlan1.getSplitGoodsList();
+            if (splitGoodsList!=null && splitGoodsList.size()>0) {
+                for (SplitGoods splitGoods: splitGoodsList) {
+                    List<SplitGoodsDetail> splitGoodsDetailList = splitGoods.getSplitGoodsDetailList();
+                    if (splitGoodsDetailList!=null && splitGoodsDetailList.size()>0) {
+                        for(SplitGoodsDetail splitGoodsDetail : splitGoodsDetailList) {
+                            remainCount += splitGoodsDetail.getRemainAmount();
+                        }
+
+                    }
+                }
+            } else {
+                //不存在
+            }
+        }
+        if(remainCount==0) {
+            waybillPlanMapper.updateWaybillPlan(waybillPlan); // 如果所有拍单剩余数量为0的话
+        }
+
+
+
+
+
+       return 0;
     }
 
 

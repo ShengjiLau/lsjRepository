@@ -218,24 +218,6 @@
         </if>
     </select>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <select id="selectOwnWaybill" resultType="Map" parameterType="Map">
         select sum(case when waybill_status=1 then 1 else 0 end) as daifahuo,
         sum(case when waybill_status=2 then 1 else 0 end) as yiruchang,
@@ -260,7 +242,7 @@
                 and date(pub_date) &lt;= SUBDATE(CURDATE(),-1) and date(pub_date) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
             </if>
             <if test="pubdate_start!=null and pubdate_start!=''">
-                and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
+                and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00')
             </if>
         </where>
     </select>
@@ -286,7 +268,7 @@
             and date(pub_date) &lt;= SUBDATE(CURDATE(),-1) and date(pub_date) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
         </if>
         <if test="pubdate_start!=null and pubdate_start!=''">
-            and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
+            and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00')
         </if>
         <if test="groupIds!=null and groupIds!=''">
             and  ${groupIds}
@@ -301,7 +283,7 @@
             and date(dt) &lt;= SUBDATE(CURDATE(),-1) and date(dt) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
         </if>
         <if test="pubdate_start!=null and pubdate_start!=''">
-            and date(dt) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(dt) &gt;= CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
+            and date(dt) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59') and date(dt) &gt;= CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00')
         </if>
     </select>
 
@@ -322,14 +304,11 @@
             <if test="companyIds==null">
                 and company_id is null
             </if>
-            <if test="customerName!=null and customerName!=''">
-                and waybill_source like concat('%',#{customerName,jdbcType=VARCHAR},'%')
-            </if>
             <if test="date_interval!=null and date_interval!=''">
                 and date(pub_date) &lt;= SUBDATE(CURDATE(),-1) and date(pub_date) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
             </if>
             <if test="pubdate_start!=null and pubdate_start!=''">
-                and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
+                and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00')
             </if>
         </where>
     </select>
@@ -352,7 +331,7 @@
             and date(pub_date) &lt;= SUBDATE(CURDATE(),-1) and date(pub_date) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
         </if>
         <if test="pubdate_start!=null and pubdate_start!=''">
-            and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
+            and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00')
         </if>
         <if test="customerName!=null and customerName!=''">
             and waybill_source like concat('%',#{customerName,jdbcType=VARCHAR},'%')
@@ -370,7 +349,7 @@
             and date(dt) &lt;= SUBDATE(CURDATE(),-1) and date(dt) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
         </if>
         <if test="pubdate_start!=null and pubdate_start!=''">
-            and date(dt) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(dt) &gt;= CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
+            and date(dt) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59') and date(dt) &gt;= CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00')
         </if>
     </select>
 

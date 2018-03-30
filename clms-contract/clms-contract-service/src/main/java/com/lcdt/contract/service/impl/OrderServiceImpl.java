@@ -81,16 +81,6 @@ public class OrderServiceImpl implements OrderService{
 		//审批流程添加
 		if(null!=orderDto.getOrderApprovalList() && orderDto.getOrderApprovalList().size() > 0){
 			/*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
-			OrderApproval orderApproval = new OrderApproval();
-//            Long companyId = SecurityInfoGetter.getCompanyId();
-			User user = SecurityInfoGetter.getUser();
-			UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
-			orderApproval.setUserName(user.getRealName());
-			orderApproval.setUserId(user.getUserId());
-			orderApproval.setDeptName(userCompRel.getDeptNames());
-			orderApproval.setSort(0);    // 0 为创建着
-			orderApproval.setActionType(new Short("0")); 	//默认actionType 0
-			orderDto.getOrderApprovalList().add(orderApproval);
 			for(OrderApproval oa : orderDto.getOrderApprovalList()){
 				oa.setOrderId(order.getOrderId()); //设置关联订单id
 				if(oa.getActionType().shortValue()==0){
@@ -103,6 +93,19 @@ public class OrderServiceImpl implements OrderService{
 					oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
 				}
 			}
+			OrderApproval orderApproval = new OrderApproval();
+//            Long companyId = SecurityInfoGetter.getCompanyId();
+			User user = SecurityInfoGetter.getUser();
+			UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+			orderApproval.setOrderId(order.getOrderId());
+			orderApproval.setUserName(user.getRealName());
+			orderApproval.setUserId(user.getUserId());
+			orderApproval.setDeptName(userCompRel.getDeptNames());
+			orderApproval.setSort(0);    // 0 为创建着
+			orderApproval.setActionType(new Short("0")); 	//默认actionType 0
+			orderApproval.setStatus(new Short("2"));	//创建人默认
+			orderApproval.setTime(new Date());
+			orderDto.getOrderApprovalList().add(orderApproval);
 			i += orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
 			//同时设置合同的审批状态为审批中
 			order.setApprovalStatus(new Short("1"));
@@ -153,16 +156,7 @@ public class OrderServiceImpl implements OrderService{
 			//删除之前数据库保存的审批人信息
 			orderApprovalMapper.deleteByOrderId(orderDto.getOrderId());
 			/*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
-			OrderApproval orderApproval = new OrderApproval();
-//            Long companyId = SecurityInfoGetter.getCompanyId();
-			User user = SecurityInfoGetter.getUser();
-			UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
-			orderApproval.setUserName(user.getRealName());
-			orderApproval.setUserId(user.getUserId());
-			orderApproval.setDeptName(userCompRel.getDeptNames());
-			orderApproval.setSort(0);    // 0 为创建着
-			orderApproval.setActionType(new Short("0")); 	//默认actionType 0
-			orderDto.getOrderApprovalList().add(orderApproval);
+
 			for(OrderApproval oa : orderDto.getOrderApprovalList()){
 				oa.setOrderId(order.getOrderId()); //设置关联订单id
 				if(oa.getActionType().shortValue()==0){
@@ -175,6 +169,19 @@ public class OrderServiceImpl implements OrderService{
 					oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
 				}
 			}
+			OrderApproval orderApproval = new OrderApproval();
+//            Long companyId = SecurityInfoGetter.getCompanyId();
+			User user = SecurityInfoGetter.getUser();
+			UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+			orderApproval.setOrderId(order.getOrderId());
+			orderApproval.setUserName(user.getRealName());
+			orderApproval.setUserId(user.getUserId());
+			orderApproval.setDeptName(userCompRel.getDeptNames());
+			orderApproval.setSort(0);    // 0 为创建着
+			orderApproval.setActionType(new Short("0")); 	//默认actionType 0
+			orderApproval.setStatus(new Short("2"));	//创建人默认
+			orderApproval.setTime(new Date());
+			orderDto.getOrderApprovalList().add(orderApproval);
 			i += orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
 			//同时设置合同的审批状态为审批中
 			order.setApprovalStatus(new Short("1"));

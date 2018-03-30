@@ -108,7 +108,7 @@
 
   </resultMap>
 
-  <!---->
+  <!--客户计划-->
   <resultMap id="CustomerPlanBaseResultMap" type="com.lcdt.traffic.dto.CustomerPlanDto">
     <id column="waybill_plan_id" jdbcType="BIGINT" property="waybillPlanId" />
     <result column="plan_code" jdbcType="VARCHAR" property="planCode" />
@@ -138,6 +138,41 @@
                   ofType="com.lcdt.traffic.model.SplitGoods" javaType="ArrayList"
                   select="com.lcdt.traffic.dao.SplitGoodsMapper.selectByWaybillPlanId" />
   </resultMap>
+
+
+  <!--客户计划-->
+  <resultMap id="CustomerPlanBaseResultMap1" type="com.lcdt.traffic.dto.CustomerPlanDto">
+    <id column="waybill_plan_id" jdbcType="BIGINT" property="waybillPlanId" />
+    <result column="plan_code" jdbcType="VARCHAR" property="planCode" />
+    <result column="serial_code" jdbcType="VARCHAR" property="serialCode" />
+    <result column="receive_province" jdbcType="VARCHAR" property="receiveProvince" />
+    <result column="receive_city" jdbcType="VARCHAR" property="receiveCity" />
+    <result column="receive_county" jdbcType="VARCHAR" property="receiveCounty" />
+    <result column="receive_address" jdbcType="VARCHAR" property="receiveAddress" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="split_goods_id" jdbcType="BIGINT" property="splitGoodsId" />
+    <!--计划列表-->
+    <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
+                ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
+                select="com.lcdt.traffic.dao.PlanDetailMapper.selectByWaybillPlanId" />
+    <!--抢单报价-->
+    <collection property="snatchGoodsList" column="{waybillPlanId=waybill_plan_id,isDeleted=is_deleted}"
+                ofType="com.lcdt.traffic.model.SnatchGoods" javaType="ArrayList"
+                select="com.lcdt.traffic.dao.SnatchGoodsMapper.selectByWaybillPlanId" />
+    <!--派单记录-->
+    <collection property="splitGoodsList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
+                ofType="com.lcdt.traffic.model.SplitGoods" javaType="ArrayList"
+                select="com.lcdt.traffic.dao.SplitGoodsMapper.selectByWaybillPlanId" />
+    <!--运单列表-->
+    <collection property="waybillList" column="{splitGoodsId=split_goods_id,companyId=company_id}"
+                ofType="com.lcdt.traffic.model.Waybill" javaType="ArrayList"
+                select="com.lcdt.traffic.dao.WaybillMapper.selectWaybillBysplitGoodsId" />
+
+  </resultMap>
+
+
+
 
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -824,7 +859,7 @@
       )
 
    -->
-  <select id="customerPlanList4VehicleDoing" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
+  <select id="customerPlanList4VehicleDoing" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap1">
     SELECT
     sp.split_goods_id,
     wp.waybill_plan_id,
@@ -897,7 +932,7 @@
         and sp.company_id = a.company_id and a.is_deleted=0
       )
    -->
-  <select id="customerPlanList4VehicleHave" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
+  <select id="customerPlanList4VehicleHave" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap1">
     SELECT
     sp.split_goods_id,
     wp.waybill_plan_id,
@@ -968,7 +1003,7 @@
           and sp.company_id = a.company_id and a.is_deleted=0
       )
      -->
-  <select id="customerPlanList4Completed" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
+  <select id="customerPlanList4Completed" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap1">
     SELECT
     sp.split_goods_id,
     wp.waybill_plan_id,
@@ -984,6 +1019,7 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
+      and wp.plan_status='50'
       and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
       and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status!=7 )=0
       <if test="isDeleted!=null">
@@ -1170,5 +1206,7 @@
     </where>
     order by ${orderFiled} ${orderDesc}
   </select>
+
+
 
 </mapper>

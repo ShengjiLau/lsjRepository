@@ -35,7 +35,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
     public PageInfo<List<OrderApprovalDto>> orderApprovalList(OrderApprovalListDto orderApprovalListDto, PageInfo pageInfo) {
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         List<OrderApprovalDto> orderApprovalDtoList = orderApprovalMapper.selectOrderApprovalByCondition(orderApprovalListDto);
-        List<OrderApprovalListDto> orderApprovalListDtoList = new ArrayList<>();
+        PageInfo page = new PageInfo(orderApprovalDtoList);
         /**
          * 整合数据，只保留一条审批人的信息，整合逻辑如下
          * 找出审批人当中审批状态为
@@ -68,9 +68,8 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                     }
                 }
             }
-            orderApprovalListDtoList.add(oald);
         }
-        PageInfo page = new PageInfo(orderApprovalListDtoList);
+
         return page;
     }
 

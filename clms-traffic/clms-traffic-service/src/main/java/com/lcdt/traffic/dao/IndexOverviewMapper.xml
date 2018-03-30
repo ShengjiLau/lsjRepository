@@ -157,7 +157,7 @@
             LEFT JOIN t_waybill_plan wp
             on sp.waybill_plan_id = wp.waybill_plan_id
             WHERE
-            wp.is_deleted = 0
+            wp.is_deleted = 0 and wp.plan_status='50'
             <if test="date_interval!=null and date_interval!=''">
                 and date(pubdate) &lt;= CURDATE() and date(pubdate) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
             </if>
@@ -276,7 +276,7 @@
                 and date(pub_date) &lt;= SUBDATE(CURDATE(),-1) and date(pub_date) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
             </if>
             <if test="pubdate_start!=null and pubdate_start!=''">
-                and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
+                and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00')
             </if>
         </where>
     </select>
@@ -299,7 +299,7 @@
             and date(pub_date) &lt;= SUBDATE(CURDATE(),-1) and date(pub_date) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
         </if>
         <if test="pubdate_start!=null and pubdate_start!=''">
-            and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
+            and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00')
         </if>
         <if test="groupIds!=null and groupIds!=''">
             and  ${groupIds}
@@ -314,7 +314,7 @@
             and date(dt) &lt;= SUBDATE(CURDATE(),-1) and date(dt) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
         </if>
         <if test="pubdate_start!=null and pubdate_start!=''">
-            and date(dt) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(dt) &gt;= CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
+            and date(dt) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59') and date(dt) &gt;= CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00')
         </if>
     </select>
 
@@ -339,7 +339,7 @@
                 and date(pub_date) &lt;= SUBDATE(CURDATE(),-1) and date(pub_date) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
             </if>
             <if test="pubdate_start!=null and pubdate_start!=''">
-                and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
+                and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00')
             </if>
         </where>
     </select>
@@ -362,10 +362,8 @@
             and date(pub_date) &lt;= SUBDATE(CURDATE(),-1) and date(pub_date) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
         </if>
         <if test="pubdate_start!=null and pubdate_start!=''">
-            and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
+            and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00')
         </if>
-
-
         <if test="companyIds!=null">
             and ${companyIds}
         </if>
@@ -379,7 +377,7 @@
             and date(dt) &lt;= SUBDATE(CURDATE(),-1) and date(dt) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
         </if>
         <if test="pubdate_start!=null and pubdate_start!=''">
-            and date(dt) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00') and date(dt) &gt;= CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59')
+            and date(dt) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59') and date(dt) &gt;= CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','')
         </if>
     </select>
     <!--

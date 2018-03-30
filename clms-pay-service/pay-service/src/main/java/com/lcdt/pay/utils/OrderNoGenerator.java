@@ -15,6 +15,7 @@ public class OrderNoGenerator {
     }
 
     private static AtomicInteger atomicInteger = new AtomicInteger(0);
+    private static AtomicInteger atomicInteger2 = new AtomicInteger(0);
 
     public static String generateTimeNo(){
         int countNo = atomicInteger.addAndGet(1);
@@ -27,9 +28,18 @@ public class OrderNoGenerator {
     }
 
     //根据时间格式化生成单号
-    public static String generateDateNo(){
-        int countNo = atomicInteger.addAndGet(1);
-
+    public static String generateDateNo(int i){
+        int countNo=0;
+        if(i==1)
+        {
+            //我的账户充值流水
+            countNo = atomicInteger.addAndGet(1);
+        }
+        else if(i==2)
+        {
+            //订单流水
+            countNo = atomicInteger2.addAndGet(1);
+        }
         DecimalFormat df = new DecimalFormat("00000");
         String str2 = df.format(countNo);
 
