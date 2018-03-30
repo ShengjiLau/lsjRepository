@@ -364,8 +364,6 @@
         <if test="pubdate_start!=null and pubdate_start!=''">
             and date(pub_date) &lt;= CONCAT(STR_TO_DATE(#{pubdate_end,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','23:59:59') and date(pub_date) &gt;=CONCAT(STR_TO_DATE(#{pubdate_start,jdbcType=TIMESTAMP},'%Y-%m-%d'),' ','00:00:00')
         </if>
-
-
         <if test="companyIds!=null">
             and ${companyIds}
         </if>
