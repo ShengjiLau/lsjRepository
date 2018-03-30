@@ -129,6 +129,13 @@ public interface WaybillMapper {
     List<Waybill> selectWaybillByPlanId(Map map);
 
     /**
+     * 根据splitGoodsId查询列表
+     * @param map
+     * @return
+     */
+    List<Waybill> selectWaybillBysplitGoodsId(Map map);
+
+    /**
      * 根据 companyId,waybillPlanId,splitGoodsId  查询
      * @param map
      * @return
