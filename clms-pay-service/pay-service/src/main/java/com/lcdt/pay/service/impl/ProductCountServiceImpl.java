@@ -60,8 +60,9 @@ public class ProductCountServiceImpl implements ProductCountService {
         public static final Integer TOPUPCOUNTTYPE = 2;
     }
 
-
+    //流水号不使用uuID
     private String uuidno() {
+
         String s = UUID.randomUUID().toString();
         return s.replace("-", "");
     }
