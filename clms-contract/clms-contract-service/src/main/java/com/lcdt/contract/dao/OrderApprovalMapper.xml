@@ -282,6 +282,7 @@
         and t2.user_id = #{userId,jdbcType=BIGINT} and t2.action_type = 1
       </if>
     </where>
+    order by t1.create_time desc
   </select>
   <select id="selectOrderApproval" resultMap="BaseResultMap">
     select oa_id, user_id, user_name, dept_name, sort, result, status, action_type, content, time from t_order_approval
