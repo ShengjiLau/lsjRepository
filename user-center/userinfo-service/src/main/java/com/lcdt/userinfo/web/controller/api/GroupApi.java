@@ -289,6 +289,7 @@ public class GroupApi {
                                             @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
+
         map.put("companyId", companyId);
         map.put("page_no", pageNo);
         if (groupId > 0) {
