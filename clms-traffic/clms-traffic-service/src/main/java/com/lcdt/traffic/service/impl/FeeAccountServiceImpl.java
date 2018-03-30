@@ -2,7 +2,6 @@ package com.lcdt.traffic.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.traffic.dto.WaybillOwnListParamsDto;
 import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.service.FeeAccountService;
 
@@ -13,8 +12,8 @@ import java.util.Map;
  */
 @Service
 public class FeeAccountServiceImpl implements FeeAccountService{
-    @Override
-    public PageInfo waybillFeeList(WaybillOwnListParamsDto dto){
+//    @Override
+//    public PageInfo waybillFeeList(WaybillOwnListParamsDto dto){
 //        List<WaybillDao> resultList = null;
 //
 //        PageInfo page = null;
@@ -32,8 +31,8 @@ public class FeeAccountServiceImpl implements FeeAccountService{
 //        page = new PageInfo(resultList);
 //
 //        return page;
-        return null;
-    }
+//        return null;
+//    }
     @Override
     public PageInfo feePropertyList(Map m) {
         return null;

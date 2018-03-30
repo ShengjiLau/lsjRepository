@@ -33,6 +33,7 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
 
     @Override
     public Map planStatistics(Map map) {
+        map=limitParams(map);
         Map<String,Object> map1 = indexOverviewMapper.selectPlan(map);  //总的统计
         if (null == map1) {
             map1 = new HashMap<>();
@@ -54,6 +55,7 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
      * @return
      */
     private List<Customer> bindCustomerList(Map map) {
+        map=limitParams(map);
         HashMap cMap = new HashMap();
         cMap.put("companyId",map.get("companyId")); //企业ID
         cMap.put("groupIds",map.get("groupIds")); //客户组
@@ -171,6 +173,7 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
 
     @Override
     public Map customerPlanStatistics(Map map) {
+        map=limitParams(map);
         List<Customer> customerList = bindCustomerList(map);    //根据登录人（权限组），获取对应客户列表中绑定的客户企业（货主）
         if(customerList==null || customerList.size()==0) return null;
         Map cMap = customerPlanByCarrier4CmpIdGroup(customerList); //查询对应在的企业组、竞价组条件
@@ -186,6 +189,7 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
 
     @Override
     public Map queryOwnWaybillStatistics(Map map) {
+        map=limitParams(map);
         Map<String,Object> map1 = indexOverviewMapper.selectOwnWaybill(map);
         if (null == map1) {
             map1 = new HashMap<>();
@@ -204,6 +208,7 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
 
     @Override
     public Map queryCustomerWaybillStatistics(Map map) {
+        map=limitParams(map);
         Map cMapIds = customerCompanyIds.getCustomerCompanyIds(map);
         map.put("companyIds",cMapIds.get("companyIds"));
         map.put("carrierCompanyId",map.get("companyId"));
@@ -303,4 +308,18 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
         return resultMap;
     }
 
+
+    private Map limitParams(Map map){
+        if(map.containsKey("date_interval") && map.containsKey("pubdate_end") && map.containsKey("pubdate_start")){
+            if(map.get("date_interval")!=null&&!map.get("date_interval").toString().equals("")||
+                    ((map.get("pubdate_start")!=null&&!map.get("pubdate_start").toString().equals(""))&&(map.get("pubdate_end")!=null&&!map.get("pubdate_end").toString().equals("")))){
+            }else {
+                 throw new RuntimeException("参数错误");
+            }
+
+        }else{
+            throw new RuntimeException("参数错误");
+        }
+        return map;
+    }
 }
