@@ -17,10 +17,10 @@
          supplier like concat('%',#{supplier,jdbcType=VARCHAR},'%')
       </if>
       <if test="orderNo !=null and orderNo!=''">
-    	 and order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')                                             =
+    	 and order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')                                             
       </if>
       <if test="orderSerialNo !=null and orderSerialNo!=''">
-    	 and order_serial_no like concat('%',#{orderSerialNo,jdbcType=VARCHAR},'%')                                             =
+    	 and order_serial_no like concat('%',#{orderSerialNo,jdbcType=VARCHAR},'%')                                             
       </if>
       <if test="groupId !=null">
       	and group_id=#{groupId,jdbcType=BIGINT}
