@@ -157,7 +157,7 @@
             LEFT JOIN t_waybill_plan wp
             on sp.waybill_plan_id = wp.waybill_plan_id
             WHERE
-            wp.is_deleted = 0
+            wp.is_deleted = 0 and wp.plan_status='50'
             <if test="date_interval!=null and date_interval!=''">
                 and date(pubdate) &lt;= CURDATE() and date(pubdate) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
             </if>
