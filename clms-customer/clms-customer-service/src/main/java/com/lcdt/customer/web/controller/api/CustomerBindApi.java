@@ -186,8 +186,6 @@ public class CustomerBindApi {
 		ModelAndView successView = new ModelAndView("invite_success");
 		successView.addObject("username", user.getRealName());
 		successView.addObject("headimg", user.getPictureUrl());
-
-
 		String successTipStr = "贵公司已成为【"+company.getFullName()+"】的合作伙伴。";
 		successView.addObject("successtip", successTipStr);
 		successView.addObject("host", "http://39.107.12.215:88");
