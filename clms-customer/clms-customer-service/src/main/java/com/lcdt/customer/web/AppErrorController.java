@@ -47,6 +47,7 @@ public class AppErrorController implements ErrorController{
             mav.addObject("username", user.getRealName());
             mav.addObject("headimg", user.getPictureUrl());
         }
+        mav.addObject("errortip", "请联系大驼队客服400-180-5656");
         return mav;
     }
     private Map<String, Object> getAttributes(HttpServletRequest request,

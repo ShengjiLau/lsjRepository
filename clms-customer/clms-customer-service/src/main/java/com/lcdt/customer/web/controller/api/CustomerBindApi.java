@@ -214,7 +214,7 @@ public class CustomerBindApi {
 		for (int i = 0; i < groups.size() ;i++) {
 			Group group = groups.get(i);
 				//组ID
-			sb.append(" find_in_set('" + group.getGroupId() + "',collection_ids)");
+			sb.append(" find_in_set('" + group.getGroupId() + "',group_ids)");
 			if(i != groups.size() - 1){
 					sb.append(" or ");
 				}
