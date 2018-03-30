@@ -74,7 +74,6 @@
         <if test="pubdate_start!=null and pubdate_start!=''">
             and date(t.dt) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(t.dt) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
         </if>
-        limit 0,31
     </select>
 
 
@@ -211,7 +210,6 @@
         <if test="pubdate_start!=null and pubdate_start!=''">
             and date(t.dt) &lt;= #{pubdate_end,jdbcType=TIMESTAMP} and date(t.dt) &gt;= #{pubdate_start,jdbcType=TIMESTAMP}
         </if>
-        limit 0,31
     </select>
 
 
