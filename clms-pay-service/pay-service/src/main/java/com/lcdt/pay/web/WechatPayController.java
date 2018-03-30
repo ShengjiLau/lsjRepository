@@ -41,10 +41,7 @@ public class WechatPayController {
     @ResponseBody
     public String wechatPay(HttpServletRequest request){
         //orderId 充值的订单编号
-
         logger.info("微信支付回调开始 ");
-
-
         JSONObject jo = new JSONObject();
         jo.put("return_code", "FAIL");
         try {
