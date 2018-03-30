@@ -36,7 +36,7 @@ public interface MsgService {
 	/**
 	 * 条件查询获取留言
 	 */
-	List<Msg> selectSomeMsg(MsgDto msgDTO);
+	List<Msg> selectSomeMsg(MsgDto msgDto);
 	
 	
 

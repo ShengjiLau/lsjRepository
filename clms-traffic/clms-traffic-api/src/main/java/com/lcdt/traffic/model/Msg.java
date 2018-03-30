@@ -3,21 +3,38 @@ package com.lcdt.traffic.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import io.swagger.annotations.ApiModelProperty;
+
 public class Msg implements Serializable {
+	
+	@ApiModelProperty("留言主键id")
     private Long msgId;
-
+    
+	@ApiModelProperty("记账/对账单id")
+    @NotNull(message="记账/对账单id不可为空")
     private Long accountId;
-
+    
+	@ApiModelProperty("留言类型:记账0/对账1")
+    @NotNull(message="留言类型不可为空")
     private Short type;
-
+    
+	@ApiModelProperty("留言内容")
+    @Size(min=3,max=100,message="留言内容3-100字")
     private String content;
-
+	
+	@ApiModelProperty("留言人id")
     private Long operatorId;
-
+	
+	@ApiModelProperty("留言人姓名")
     private String operatorName;
-
+	
+	@ApiModelProperty("创建时间")
     private Date createDate;
-
+    
+	@ApiModelProperty("是否删除:是0/否1;此参数只有在查询时才需要传")
     private Short isDeleted;
 
     private static final long serialVersionUID = -156156156154L;
