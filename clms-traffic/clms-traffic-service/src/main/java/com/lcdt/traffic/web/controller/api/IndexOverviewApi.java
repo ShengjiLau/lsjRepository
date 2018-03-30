@@ -64,7 +64,7 @@ public class IndexOverviewApi {
         } catch (Exception e) {
             e.printStackTrace();
             jsonObject.put("code", -1);
-            jsonObject.put("message", new RuntimeException(e));
+            jsonObject.put("message",e.getMessage());
         }
         return jsonObject;
     }
@@ -124,7 +124,7 @@ public class IndexOverviewApi {
         } catch (Exception e) {
             e.printStackTrace();
             jsonObject.put("code", -1);
-            jsonObject.put("message", new RuntimeException(e));
+            jsonObject.put("message",e.getMessage());
         }
         return jsonObject;
     }
@@ -149,7 +149,7 @@ public class IndexOverviewApi {
             jsonObject.put("data", jsonResult);
         } catch (Exception e) {
             jsonObject.put("code", -1);
-            jsonObject.put("message", new RuntimeException(e));
+            jsonObject.put("message",e.getMessage());
         }
         return jsonObject;
     }
@@ -173,7 +173,7 @@ public class IndexOverviewApi {
             jsonObject.put("data", jsonResult);
         } catch (Exception e) {
             jsonObject.put("code", -1);
-            jsonObject.put("message", new RuntimeException(e));
+            jsonObject.put("message",e.getMessage());
         }
         return jsonObject;
     }
@@ -198,7 +198,7 @@ public class IndexOverviewApi {
         } catch (Exception e) {
             e.printStackTrace();
             jsonObject.put("code", -1);
-            jsonObject.put("message", new RuntimeException(e));
+            jsonObject.put("message",e.getMessage());
         }
         return jsonObject;
     }
