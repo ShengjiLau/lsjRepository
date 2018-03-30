@@ -278,12 +278,11 @@ public class GroupApi {
 
     /**
      * 组-不存在客户列表
-     *
+     *@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_customer_list')")
      * @return
      */
     @ApiOperation("组-不存在客户列表")
     @RequestMapping(value = "/groupCustomerList", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_customer_list')")
     public GroupResultDto groupCustomerList(@ApiParam(value = "组ID", required = true) @RequestParam Long groupId,
                                             @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
                                             @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
