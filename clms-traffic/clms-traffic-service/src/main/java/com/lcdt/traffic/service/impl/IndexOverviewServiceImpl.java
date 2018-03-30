@@ -55,7 +55,6 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
      * @return
      */
     private List<Customer> bindCustomerList(Map map) {
-        map=limitParams(map);
         HashMap cMap = new HashMap();
         cMap.put("companyId",map.get("companyId")); //企业ID
         cMap.put("groupIds",map.get("groupIds")); //客户组
@@ -310,8 +309,8 @@ public class IndexOverviewServiceImpl implements IndexOverviewService {
 
 
     private Map limitParams(Map map){
-        if(map.containsKey("date_interval") && map.containsKey("pubdate_end") && map.containsKey("pubdate_start")){
-            if(map.get("date_interval")!=null&&!map.get("date_interval").toString().equals("")||
+        if(map.containsKey("date_interval") ||( map.containsKey("pubdate_end") && map.containsKey("pubdate_start"))){
+            if((map.get("date_interval")!=null&&!map.get("date_interval").toString().equals(""))||
                     ((map.get("pubdate_start")!=null&&!map.get("pubdate_start").toString().equals(""))&&(map.get("pubdate_end")!=null&&!map.get("pubdate_end").toString().equals("")))){
             }else {
                  throw new RuntimeException("参数错误");

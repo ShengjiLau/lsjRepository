@@ -72,7 +72,6 @@ public class ReportFormsServiceImpl implements ReportFormsService {
      * @return
      */
     private Map  customerPlanByCarrier4CmpIdGroup(Map map, List<Customer> customerList) {
-        map=limitParams(map);
         Map resultMap = new HashMap();
         if (customerList!=null && customerList.size()>0) { //承运人ID
             StringBuffer sb = new StringBuffer(); //创建计划企业ID
@@ -274,8 +273,8 @@ public class ReportFormsServiceImpl implements ReportFormsService {
     }
 
     private Map limitParams(Map map){
-        if(map.containsKey("date_interval") && map.containsKey("pubdate_end") && map.containsKey("pubdate_start")){
-            if(map.get("date_interval")!=null&&!map.get("date_interval").toString().equals("")||
+        if(map.containsKey("date_interval") ||( map.containsKey("pubdate_end") && map.containsKey("pubdate_start"))){
+            if((map.get("date_interval")!=null&&!map.get("date_interval").toString().equals(""))||
                     ((map.get("pubdate_start")!=null&&!map.get("pubdate_start").toString().equals(""))&&(map.get("pubdate_end")!=null&&!map.get("pubdate_end").toString().equals("")))){
             }else {
                 throw new RuntimeException("参数错误");
