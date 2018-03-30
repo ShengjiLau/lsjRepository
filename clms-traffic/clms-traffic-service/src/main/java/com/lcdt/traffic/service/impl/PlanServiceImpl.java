@@ -248,7 +248,7 @@ public class PlanServiceImpl implements PlanService {
                     List<SplitGoodsDetail> splitGoodsDetailList = splitGoods.getSplitGoodsDetailList();
                     if (splitGoodsDetailList!=null && splitGoodsDetailList.size()>0) {
                         for(SplitGoodsDetail splitGoodsDetail : splitGoodsDetailList) {
-                            remainCount += splitGoodsDetail.getRemainAmount();
+                                remainCount += splitGoodsDetail.getRemainAmount();
                         }
 
                     }
