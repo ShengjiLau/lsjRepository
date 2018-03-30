@@ -122,6 +122,7 @@
         and t2.user_id = #{userId,jdbcType=BIGINT} and t2.action_type = 1
       </if>
     </where>
+    order by t1.contract_id desc
   </select>
   <select id="selectContractApproval" resultMap="BaseResultMap">
     select ca_id, user_id, user_name, dept_name, sort, result, status, action_type, content, time from t_contract_approval
