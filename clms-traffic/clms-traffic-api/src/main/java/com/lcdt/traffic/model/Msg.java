@@ -6,7 +6,7 @@ import java.util.Date;
 public class Msg implements Serializable {
     private Long msgId;
 
-    private Long id;
+    private Long accountId;
 
     private Short type;
 
@@ -20,7 +20,7 @@ public class Msg implements Serializable {
 
     private Short isDeleted;
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -156156156154L;
 
     public Long getMsgId() {
         return msgId;
@@ -30,12 +30,12 @@ public class Msg implements Serializable {
         this.msgId = msgId;
     }
 
-    public Long getId() {
-        return id;
+    public Long getAccountId() {
+        return accountId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 
     public Short getType() {
@@ -99,7 +99,7 @@ public class Msg implements Serializable {
         }
         Msg other = (Msg) that;
         return (this.getMsgId() == null ? other.getMsgId() == null : this.getMsgId().equals(other.getMsgId()))
-            && (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getAccountId() == null ? other.getAccountId() == null : this.getAccountId().equals(other.getAccountId()))
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
             && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
@@ -113,7 +113,7 @@ public class Msg implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getMsgId() == null) ? 0 : getMsgId().hashCode());
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getAccountId() == null) ? 0 : getAccountId().hashCode());
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
         result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
@@ -130,7 +130,7 @@ public class Msg implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", msgId=").append(msgId);
-        sb.append(", id=").append(id);
+        sb.append(", accountId=").append(accountId);
         sb.append(", type=").append(type);
         sb.append(", content=").append(content);
         sb.append(", operatorId=").append(operatorId);
