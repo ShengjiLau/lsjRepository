@@ -25,6 +25,17 @@
     <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
     <result column="group_id" jdbcType="BIGINT" property="groupId" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="is_draft" jdbcType="TIMESTAMP" property="isDraft" />
+    <result column="attachment1_name" jdbcType="VARCHAR" property="attachment1Name" />
+    <result column="attachment1" jdbcType="VARCHAR" property="attachment1" />
+    <result column="attachment2_name" jdbcType="VARCHAR" property="attachment2Name" />
+    <result column="attachment2" jdbcType="VARCHAR" property="attachment2" />
+    <result column="attachment3_name" jdbcType="VARCHAR" property="attachment3Name" />
+    <result column="attachment3" jdbcType="VARCHAR" property="attachment3" />
+    <result column="attachment4_name" jdbcType="VARCHAR" property="attachment4Name" />
+    <result column="attachment4" jdbcType="VARCHAR" property="attachment4" />
+    <result column="attachment5_name" jdbcType="VARCHAR" property="attachment5Name" />
+    <result column="attachment5" jdbcType="VARCHAR" property="attachment5" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_contract
@@ -36,7 +47,10 @@
       cycle, pay_type, party_a,
       party_a_principal, party_b, party_b_principal,
       start_date, end_date,approval_start_date, approval_end_date, summary,
-      terms, file_url, group_id,company_id
+      terms, file_url, group_id,company_id, is_draft,
+      attachment1_name, attachment1, attachment2_name, attachment2,
+      attachment3_name, attachment3, attachment4_name, attachment4,
+      attachment5_name, attachment5
       )
     values (#{contractId,jdbcType=BIGINT}, #{contractCode,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
       #{signDate,jdbcType=TIMESTAMP}, #{type,jdbcType=SMALLINT}, #{contractStatus,jdbcType=SMALLINT},
@@ -45,7 +59,10 @@
       #{partyAPrincipal,jdbcType=VARCHAR}, #{partyB,jdbcType=VARCHAR}, #{partyBPrincipal,jdbcType=VARCHAR},
       #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP},#{approvalStartDate,jdbcType=TIMESTAMP},
       #{approvalEndDate,jdbcType=TIMESTAMP},  #{summary,jdbcType=VARCHAR},
-      #{terms,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT}
+      #{terms,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT},
+      #{isDraft,jdbcType=SMALLINT}, #{attachment1Name,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR},
+      #{attachment2Name,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR}, #{attachment3Name,jdbcType=VARCHAR}, #{attachment3,jdbcType=VARCHAR},
+      #{attachment4Name,jdbcType=VARCHAR}, #{attachment4,jdbcType=VARCHAR}, #{attachment5Name,jdbcType=VARCHAR}, #{attachment5,jdbcType=VARCHAR}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.Contract">
@@ -71,20 +88,33 @@
       terms = #{terms,jdbcType=VARCHAR},
       file_url = #{fileUrl,jdbcType=VARCHAR},
       group_id = #{groupId,jdbcType=BIGINT},
-      company_id = #{companyId,jdbcType=BIGINT}
+      company_id = #{companyId,jdbcType=BIGINT},
+      is_draft = #{isDraft,jdbcType=SMALLINT},
+      attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
+      attachment1 = #{attachment1,jdbcType=VARCHAR},
+      attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
+      attachment2 = #{attachment2,jdbcType=VARCHAR},
+      attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
+      attachment3 = #{attachment3,jdbcType=VARCHAR},
+      attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
+      attachment4 = #{attachment4,jdbcType=VARCHAR},
+      attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
+      attachment5 = #{attachment5,jdbcType=VARCHAR}
     where contract_id = #{contractId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.lcdt.contract.web.dto.ContractDto">
     select contract_id, contract_code, title, sign_date, type, contract_status, approval_status,approval_process, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, approval_start_date, approval_end_date,
-    summary, terms, file_url, group_id,company_id
+    summary, terms, file_url, group_id,company_id, is_draft, attachment1_name, attachment1, attachment2_name, attachment2,
+    attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, attachment5
     from t_contract
     where contract_id = #{contractId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select contract_id, contract_code, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
-    summary, terms, file_url, group_id,company_id
+    summary, terms, file_url, group_id,company_id, is_draft, attachment1_name, attachment1, attachment2_name, attachment2,
+    attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, attachment5
     from t_contract
   </select>
 
@@ -92,7 +122,8 @@
   <select id="selectByCondition" resultMap="BaseResultMap">
     select contract_id, contract_code, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
-    summary, terms, file_url, group_id,company_id
+    summary, terms, file_url, group_id,company_id, is_draft, attachment1_name, attachment1, attachment2_name, attachment2,
+    attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, attachment5
     from t_contract
     <where>
       type = #{type,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}

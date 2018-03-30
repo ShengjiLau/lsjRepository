@@ -19,6 +19,8 @@ public class ContractProduct {
 
     private BigDecimal payment;
 
+    private String spec;
+
     public Long getCpId() {
         return cpId;
     }
@@ -84,4 +86,12 @@ public class ContractProduct {
 	public void setNum(BigDecimal num) {
 		this.num = num;
 	}
+
+    public String getSpec() {
+        return spec;
+    }
+
+    public void setSpec(String spec) {
+        this.spec = spec;
+    }
 }

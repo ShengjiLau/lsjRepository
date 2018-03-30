@@ -49,6 +49,28 @@ public class Contract {
 
     private Long companyId;
 
+    private Short isDraft;
+
+    private String attachment1Name;
+
+    private String attachment1;
+
+    private String attachment2Name;
+
+    private String attachment2;
+
+    private String attachment3Name;
+
+    private String attachment3;
+
+    private String attachment4Name;
+
+    private String attachment4;
+
+    private String attachment5Name;
+
+    private String attachment5;
+
     public Long getContractId() {
         return contractId;
     }
@@ -231,5 +253,93 @@ public class Contract {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public Short getIsDraft() {
+        return isDraft;
+    }
+
+    public void setIsDraft(Short isDraft) {
+        this.isDraft = isDraft;
+    }
+
+    public String getAttachment1Name() {
+        return attachment1Name;
+    }
+
+    public void setAttachment1Name(String attachment1Name) {
+        this.attachment1Name = attachment1Name;
+    }
+
+    public String getAttachment1() {
+        return attachment1;
+    }
+
+    public void setAttachment1(String attachment1) {
+        this.attachment1 = attachment1;
+    }
+
+    public String getAttachment2Name() {
+        return attachment2Name;
+    }
+
+    public void setAttachment2Name(String attachment2Name) {
+        this.attachment2Name = attachment2Name;
+    }
+
+    public String getAttachment2() {
+        return attachment2;
+    }
+
+    public void setAttachment2(String attachment2) {
+        this.attachment2 = attachment2;
+    }
+
+    public String getAttachment3Name() {
+        return attachment3Name;
+    }
+
+    public void setAttachment3Name(String attachment3Name) {
+        this.attachment3Name = attachment3Name;
+    }
+
+    public String getAttachment3() {
+        return attachment3;
+    }
+
+    public void setAttachment3(String attachment3) {
+        this.attachment3 = attachment3;
+    }
+
+    public String getAttachment4Name() {
+        return attachment4Name;
+    }
+
+    public void setAttachment4Name(String attachment4Name) {
+        this.attachment4Name = attachment4Name;
+    }
+
+    public String getAttachment4() {
+        return attachment4;
+    }
+
+    public void setAttachment4(String attachment4) {
+        this.attachment4 = attachment4;
+    }
+
+    public String getAttachment5Name() {
+        return attachment5Name;
+    }
+
+    public void setAttachment5Name(String attachment5Name) {
+        this.attachment5Name = attachment5Name;
+    }
+
+    public String getAttachment5() {
+        return attachment5;
+    }
+
+    public void setAttachment5(String attachment5) {
+        this.attachment5 = attachment5;
     }
 }
