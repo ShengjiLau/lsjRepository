@@ -35,7 +35,7 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
     public PageInfo<List<ContractApprovalDto>> contractApprovalList(ContractApprovalListDto contractApprovalListDto, PageInfo pageInfo) {
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         List<ContractApprovalDto> contractApprovalDtoList = contractApprovalMapper.selectContractApprovalByCondition(contractApprovalListDto);
-        List<ContractApprovalListDto> contractApprovalListDtoList = new ArrayList<>();
+        PageInfo page = new PageInfo(contractApprovalDtoList);
         /**
          * 整合数据，只保留一条审批人的信息，整合逻辑如下
          * 找出审批人当中审批状态为
@@ -67,9 +67,8 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
                     }
                 }
             }
-            contractApprovalListDtoList.add(cald);
         }
-        PageInfo page = new PageInfo(contractApprovalListDtoList);
+
         return page;
     }
 
