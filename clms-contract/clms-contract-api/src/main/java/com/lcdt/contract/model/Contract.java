@@ -1,5 +1,6 @@
 package com.lcdt.contract.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Contract {
@@ -50,6 +51,8 @@ public class Contract {
     private Long companyId;
 
     private Short isDraft;
+
+    private BigDecimal summation;
 
     private String attachment1Name;
 
@@ -261,6 +264,14 @@ public class Contract {
 
     public void setIsDraft(Short isDraft) {
         this.isDraft = isDraft;
+    }
+
+    public BigDecimal getSummation() {
+        return summation;
+    }
+
+    public void setSummation(BigDecimal summation) {
+        this.summation = summation;
     }
 
     public String getAttachment1Name() {
