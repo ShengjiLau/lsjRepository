@@ -304,9 +304,6 @@
             <if test="companyIds==null">
                 and company_id is null
             </if>
-            <if test="customerName!=null and customerName!=''">
-                and waybill_source like concat('%',#{customerName,jdbcType=VARCHAR},'%')
-            </if>
             <if test="date_interval!=null and date_interval!=''">
                 and date(pub_date) &lt;= SUBDATE(CURDATE(),-1) and date(pub_date) &gt;= SUBDATE(CURDATE(),(#{date_interval,jdbcType=SMALLINT}-1))
             </if>
