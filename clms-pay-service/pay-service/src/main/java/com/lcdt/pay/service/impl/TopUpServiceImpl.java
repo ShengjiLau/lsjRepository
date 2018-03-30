@@ -33,7 +33,7 @@ public class TopUpServiceImpl implements TopupService{
         topUpPayOrder.setOrderPayUserId(user.getUserId());
         topUpPayOrder.setCreateUserName(user.getPhone());
         topUpPayOrder.setOrderStatus(0);
-        topUpPayOrder.setOrderNo(OrderNoGenerator.generateDateNo());
+        topUpPayOrder.setOrderNo(OrderNoGenerator.generateDateNo(1));
         topUpPayOrder.setCreateUserName(user.getPhone());
         topUpPayOrder.setOrderDes("账户余额充值"+ MoneyNumUtil.integerMoneyToString(money)+"元");
         orderMapper.insert(topUpPayOrder);

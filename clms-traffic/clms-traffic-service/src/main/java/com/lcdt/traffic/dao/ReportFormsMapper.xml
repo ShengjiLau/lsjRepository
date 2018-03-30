@@ -83,6 +83,7 @@
         date(pubdate) as pub_date, count(1) jingjiazhong
         FROM t_waybill_plan wp
         WHERE  is_deleted = 0
+        AND  wp.plan_status !='60'  AND  wp.plan_status !='50'
         AND plan_status = '15' AND waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where plan_company_id = wp.company_id)
         <if test="date_interval!=null and date_interval!=''">
             and date(pubdate) &lt;= CURDATE() and date(pubdate) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
@@ -108,7 +109,7 @@
         FROM t_split_goods sp
         LEFT JOIN t_waybill_plan wp
         on sp.waybill_plan_id = wp.waybill_plan_id
-        WHERE wp.is_deleted = 0 and wp.plan_status!='60'
+        WHERE wp.is_deleted = 0 AND  wp.plan_status !='60'  AND  wp.plan_status !='50'
         and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)>0
         <if test="date_interval!=null and date_interval!=''">
             and date(pubdate) &lt;= CURDATE() and date(pubdate) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
@@ -134,7 +135,7 @@
         FROM t_split_goods sp
         LEFT JOIN t_waybill_plan wp
         on sp.waybill_plan_id = wp.waybill_plan_id
-        WHERE wp.is_deleted = 0 and wp.plan_status!='60'
+        WHERE wp.is_deleted = 0 AND  wp.plan_status !='60'  AND  wp.plan_status !='50'
         and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
         <if test="date_interval!=null and date_interval!=''">
             and date(pubdate) &lt;= CURDATE() and date(pubdate) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
@@ -161,7 +162,7 @@
         LEFT JOIN t_waybill_plan wp
         on sp.waybill_plan_id = wp.waybill_plan_id
         WHERE
-        wp.is_deleted = 0
+        wp.is_deleted = 0 and wp.plan_status='50'
         <if test="date_interval!=null and date_interval!=''">
             and date(pubdate) &lt;= CURDATE() and date(pubdate) &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
         </if>

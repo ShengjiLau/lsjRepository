@@ -23,7 +23,7 @@ public class ProductCountServiceImpl implements ProductCountService {
         productCountLog.setServiceName(productName);
         productCountLog.setConsumeNum(countNum);
         productCountLog.setLogDes(des);
-        productCountLog.setLogNo(OrderNoGenerator.generateDateNo());
+        productCountLog.setLogNo(OrderNoGenerator.generateDateNo(2));
         productCountLog.setLogType(CountLogType.COUNSUMETYPE);
         productCountLog.setUserName(userName);
         countLogMapper.insert(productCountLog);
@@ -36,7 +36,7 @@ public class ProductCountServiceImpl implements ProductCountService {
         productCountLog.setServiceName(productName);
         productCountLog.setConsumeNum(countNum);
         productCountLog.setLogDes(des);
-        productCountLog.setLogNo(OrderNoGenerator.generateDateNo());
+        productCountLog.setLogNo(OrderNoGenerator.generateDateNo(2));
         productCountLog.setLogType(CountLogType.TOPUPCOUNTTYPE);
 
         productCountLog.setCompanyId(companyId);
