@@ -163,7 +163,7 @@ public class OrderApi {
         payOrder.setOrderStatus(OrderStatus.PENDINGPAY);
         payOrder.setOrderPayCompanyId(companyId);
         payOrder.setOrderPayUserId(userId);
-        payOrder.setOrderNo(OrderNoGenerator.generateDateNo());
+        payOrder.setOrderNo(OrderNoGenerator.generateDateNo(1));
         payOrder.setOrderType(2);
         payOrder.setOrderProductId(productId);
         payOrder.setCreateUserName(phone);

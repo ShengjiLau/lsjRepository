@@ -74,4 +74,18 @@
       is_deleted = #{isDeleted,jdbcType=SMALLINT}
     where account_id = #{accountId,jdbcType=BIGINT}
   </update>
+  <select id="selectOwnByCondition" parameterType="java.util.Map" resultMap="BaseWaybillDaoMap">
+    select <include refid="base_column_list"/>
+    from t_waybill
+    <where>company_id = #{companyId,jdbcType=BIGINT}
+      <if test="groupIds!=null and groupIds!=''">
+        and  ${groupIds}
+      </if>
+      <if test="groupIds==null or groupIds==''">
+        and  group_id is null
+      </if>
+      <include refid="select_condition"/>
+    </where>
+    order by id desc
+  </select>
 </mapper>
