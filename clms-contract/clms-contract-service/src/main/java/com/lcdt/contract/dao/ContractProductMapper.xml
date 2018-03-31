@@ -54,7 +54,7 @@
     <foreach item="item" collection="list" separator=",">
       (#{item.cpId,jdbcType=BIGINT}, #{item.contractId,jdbcType=BIGINT}, #{item.productName,jdbcType=VARCHAR},
       #{item.productCode,jdbcType=VARCHAR}, #{item.sku,jdbcType=VARCHAR}, #{item.num,jdbcType=DECIMAL},
-      #{item.price,jdbcType=DECIMAL}, #{item.total,jdbcType=DECIMAL}), #{item.spec,jdbcType=VARCHAR}
+      #{item.price,jdbcType=DECIMAL}, #{item.total,jdbcType=DECIMAL}, #{item.spec,jdbcType=VARCHAR})
     </foreach>
   </insert>
 
