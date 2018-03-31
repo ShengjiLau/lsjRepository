@@ -1154,7 +1154,7 @@
     <result column="arrive_date" jdbcType="TIMESTAMP" property="arriveDate" />
     <result column="serial_code" jdbcType="VARCHAR" property="serialCode" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
-    <result column="distribution_way" jdbcType="VARCHAR" property="planRemark" />
+    <result column="distribution_way" jdbcType="VARCHAR" property="distributionWay" />
     <!--计划详细-->
     <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id}"
                 ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
