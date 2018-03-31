@@ -4,6 +4,7 @@ package com.lcdt.contract.web.dto;
 import com.lcdt.contract.model.Contract;
 import com.lcdt.contract.model.ContractApproval;
 import com.lcdt.contract.model.ContractProduct;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
@@ -25,6 +26,11 @@ public class ContractDto extends Contract{
 
     private Long userId;
 
+    @ApiModelProperty(value="查询生效时间起点")
+    private String beginTime;
+
+    @ApiModelProperty(value="查询生效时间终点")
+    private String endTime;
 
     private int pageNum;
 
@@ -68,6 +74,22 @@ public class ContractDto extends Contract{
     public void setUserId(Long userId) {
         this.userId = userId;
 
+    }
+
+    public String getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(String beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public int getPageNum() {

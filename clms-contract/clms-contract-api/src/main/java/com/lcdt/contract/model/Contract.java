@@ -58,6 +58,8 @@ public class Contract {
 
     private Long createId;
 
+    private String createName;
+
     private Date createTime;
 
     private Date effectiveTime;
@@ -298,6 +300,14 @@ public class Contract {
 
     public void setCreateId(Long createId) {
         this.createId = createId;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
     }
 
     public Date getCreateTime() {

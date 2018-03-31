@@ -67,7 +67,7 @@
       #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP},#{approvalStartDate,jdbcType=TIMESTAMP},
       #{approvalEndDate,jdbcType=TIMESTAMP},  #{summary,jdbcType=VARCHAR},
       #{terms,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT},
-      #{isDraft,jdbcType=SMALLINT}, #{summation,jdbcType=DECIMAL}, #{createId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
+      #{isDraft,jdbcType=SMALLINT}, #{summation,jdbcType=DECIMAL}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
       #{effectiveTime,jdbcType=TIMESTAMP}, #{terminationTime,jdbcType=TIMESTAMP}, #{attachment1Name,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR},
       #{attachment2Name,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR}, #{attachment3Name,jdbcType=VARCHAR}, #{attachment3,jdbcType=VARCHAR},
       #{attachment4Name,jdbcType=VARCHAR}, #{attachment4,jdbcType=VARCHAR}, #{attachment5Name,jdbcType=VARCHAR}, #{attachment5,jdbcType=VARCHAR}
@@ -101,6 +101,7 @@
       is_draft = #{isDraft,jdbcType=SMALLINT},
       summation = #{summation,jdbcType=DECIMAL},
       create_id = #{createId,jdbcType=BIGINT},
+      create_name = #{createName,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       effective_time = #{effectiveTime,jdbcType=TIMESTAMP},
       termination_time = #{terminationTime,jdbcType=TIMESTAMP},
@@ -117,9 +118,12 @@
     where contract_id = #{contractId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.lcdt.contract.web.dto.ContractDto">
-    select contract_id contractId, contract_code contractCode, serial_no serialNo, title, sign_date signDate, type, contract_status contractStatus, approval_status approvalStatus,approval_process approvalProcess, cycle,
-    pay_type payType, party_a partyA, party_a_principal partyAPrincipal, party_b partyB, party_b_principal partyBPrincipal, start_date startDate, end_date endDate, approval_start_date approvalStartDate, approval_end_date approvalEndDate,
-    summary, terms, file_url fileUrl, group_id groupId,company_id companyId, is_draft isDraft, summation, create_id createId, create_time createTime, effective_time effectiveTime, termination_time terminationTime,
+    select contract_id contractId, contract_code contractCode, serial_no serialNo, title, sign_date signDate, type,
+    contract_status contractStatus, approval_status approvalStatus,approval_process approvalProcess, cycle,
+    pay_type payType, party_a partyA, party_a_principal partyAPrincipal, party_b partyB, party_b_principal partyBPrincipal,
+    start_date startDate, end_date endDate, approval_start_date approvalStartDate, approval_end_date approvalEndDate,
+    summary, terms, file_url fileUrl, group_id groupId,company_id companyId, is_draft isDraft, summation, create_id createId,
+    create_name createName, create_time createTime, effective_time effectiveTime, termination_time terminationTime,
     attachment1_name attachment1Name, attachment1, attachment2_name attachment2Name, attachment2,
     attachment3_name attachment3Name, attachment3, attachment4_name attachment4Name, attachment4, attachment5_name attachment5Name, attachment5
     from t_contract
@@ -128,7 +132,7 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
-    summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_time, effective_time, termination_time,
+    summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time,
     attachment1_name, attachment1, attachment2_name, attachment2,
     attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, attachment5
     from t_contract
@@ -138,7 +142,7 @@
   <select id="selectByCondition" resultMap="BaseResultMap">
     select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
-    summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_time, effective_time, termination_time,
+    summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time,
     attachment1_name, attachment1, attachment2_name, attachment2,
     attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, attachment5
     from t_contract
@@ -147,8 +151,11 @@
       <if test="title!=null and title!=''">
         and (title like concat('%',#{title,jdbcType=VARCHAR},'%') or serial_no like concat('%',#{serialNo,jdbcType=VARCHAR},'%'))
       </if>
-      <if test="effectiveTime!=null and effectiveTime!=''">
-        and effective_time &gt; #{effectiveTime,jdbcType=TIMESTAMP} and effective_time &lt; #{effectiveTime,jdbcType=TIMESTAMP}
+      <if test="beginTime != null and beginTime != ''">
+        and effective_time >= #{beginTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        and #{endTime,jdbcType=TIMESTAMP} >= effective_time
       </if>
       <if test="contractStatus!=null and contractStatus!=''">
         and contract_status = #{contractStatus,jdbcType=SMALLINT}
