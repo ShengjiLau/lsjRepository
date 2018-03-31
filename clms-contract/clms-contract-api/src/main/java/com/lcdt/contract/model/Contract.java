@@ -8,6 +8,8 @@ public class Contract {
 
     private String contractCode;
 
+    private String serialNo;
+
     private String title;
 
     private Date signDate;
@@ -54,7 +56,13 @@ public class Contract {
 
     private BigDecimal summation;
 
+    private Long createId;
+
     private Date createTime;
+
+    private Date effectiveTime;
+
+    private Date terminationTime;
 
     private String attachment1Name;
 
@@ -90,6 +98,14 @@ public class Contract {
 
     public void setContractCode(String contractCode) {
         this.contractCode = contractCode == null ? null : contractCode.trim();
+    }
+
+    public String getSerialNo() {
+        return serialNo;
+    }
+
+    public void setSerialNo(String serialNo) {
+        this.serialNo = serialNo;
     }
 
     public String getTitle() {
@@ -276,12 +292,36 @@ public class Contract {
         this.summation = summation;
     }
 
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Long createId) {
+        this.createId = createId;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Date getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(Date effectiveTime) {
+        this.effectiveTime = effectiveTime;
+    }
+
+    public Date getTerminationTime() {
+        return terminationTime;
+    }
+
+    public void setTerminationTime(Date terminationTime) {
+        this.terminationTime = terminationTime;
     }
 
     public String getAttachment1Name() {

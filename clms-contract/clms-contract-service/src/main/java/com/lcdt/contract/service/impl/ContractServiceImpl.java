@@ -9,13 +9,16 @@ import com.lcdt.contract.model.*;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.ContractDto;
 
+import com.lcdt.contract.web.utils.SerialNumAutoGenerator;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tl.commons.util.StringUtility;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -38,10 +41,28 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public int addContract(ContractDto dto) {
+        BigDecimal summation =new 	BigDecimal(0);// 为所有商品价格求和
+        if(null!=dto.getContractProductList()&&dto.getContractProductList().size()!=0){
+            for(ContractProduct contractProduct : dto.getContractProductList()) {
+                BigDecimal num = contractProduct.getNum();
+                BigDecimal price = contractProduct.getPrice();
+                //计算单个商品总价
+                BigDecimal total = num.multiply(price);
+                summation = summation.add(total);
+                contractProduct.setTotal(total);
+            }
+        }
+        dto.setSummation(summation);
         Contract contract = new Contract();
         BeanUtils.copyProperties(dto, contract); //复制对象属性
-        contract.setContractStatus((short)2);
         int result = contractMapper.insert(contract);
+        if(!StringUtility.isNotEmpty(dto.getContractCode())){
+            contract.setContractCode((contract.getType()==0?"CG":"XS")
+                    + SerialNumAutoGenerator.getSerialNoById(contract.getContractId()));
+        }
+        contract.setSerialNo((contract.getType()==0?"CG":"XS")
+                + SerialNumAutoGenerator.getSerialNoById(contract.getContractId()));
+        contractMapper.updateByPrimaryKey(contract);
         if(dto.getContractProductList() != null && dto.getContractProductList().size() > 0) {
             //设置商品的合同id
             for (ContractProduct contractProduct : dto.getContractProductList()) {

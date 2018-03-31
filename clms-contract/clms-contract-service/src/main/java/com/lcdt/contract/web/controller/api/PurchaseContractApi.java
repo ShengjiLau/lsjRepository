@@ -62,7 +62,7 @@ public class PurchaseContractApi {
         Long companyId = SecurityInfoGetter.getCompanyId();
         dto.setCompanyId(companyId);
         dto.setCreateTime(new Date());
-
+        dto.setContractStatus((short)2);
         int result = contractService.addContract(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
@@ -97,6 +97,11 @@ public class PurchaseContractApi {
         Contract dto = new Contract();
         dto.setContractId(contractId);
         dto.setContractStatus(contractStatus);
+        if(contractStatus == 0){//0生效
+            dto.setEffectiveTime(new Date());
+        }else{//3失效
+            dto.setTerminationTime(new Date());
+        }
         int result = contractService.modContractStatus(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();

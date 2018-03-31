@@ -1,5 +1,7 @@
 package com.lcdt.contract.web.utils;
 
+import org.tl.commons.util.DateUtility;
+
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -30,6 +32,7 @@ public class SerialNumAutoGenerator {
 		
 		return str.toString();
 	}
-	
-
+	public static String getSerialNoById(Long id){
+		return DateUtility.date2String(new Date(),"yyyyMMdd") + id;
+	}
 }
