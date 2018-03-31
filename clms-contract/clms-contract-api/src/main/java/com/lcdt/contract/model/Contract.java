@@ -54,6 +54,8 @@ public class Contract {
 
     private BigDecimal summation;
 
+    private Date createTime;
+
     private String attachment1Name;
 
     private String attachment1;
@@ -272,6 +274,14 @@ public class Contract {
 
     public void setSummation(BigDecimal summation) {
         this.summation = summation;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public String getAttachment1Name() {

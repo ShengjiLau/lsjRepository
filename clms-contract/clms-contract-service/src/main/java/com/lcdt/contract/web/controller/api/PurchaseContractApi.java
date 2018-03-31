@@ -2,7 +2,6 @@ package com.lcdt.contract.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-//import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.model.Contract;
 import com.lcdt.contract.service.ContractService;
@@ -14,12 +13,15 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+
+//import com.lcdt.clms.security.helper.SecurityInfoGetter;
+//import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
  * @AUTHOR liuh
@@ -59,6 +61,7 @@ public class PurchaseContractApi {
     public JSONObject addContract(@Validated @RequestBody ContractDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         dto.setCompanyId(companyId);
+        dto.setCreateTime(new Date());
 
         int result = contractService.addContract(dto);
         if (result > 0) {

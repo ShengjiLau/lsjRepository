@@ -210,6 +210,18 @@ public class ContractServiceImpl implements ContractService {
             order.setCompanyId(contract.getCompanyId());
             order.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
             order.setCreateTime(new Date());
+
+            order.setAttachment1Name(contract.getAttachment1Name());
+            order.setAttachment1(contract.getAttachment1());
+            order.setAttachment2Name(contract.getAttachment2Name());
+            order.setAttachment2(contract.getAttachment2());
+            order.setAttachment3Name(contract.getAttachment3Name());
+            order.setAttachment3(contract.getAttachment3());
+            order.setAttachment4Name(contract.getAttachment4Name());
+            order.setAttachment4(contract.getAttachment4());
+            order.setAttachment5Name(contract.getAttachment5Name());
+            order.setAttachment5(contract.getAttachment5());
+
             result = orderMapper.insertOrder(order);
 
             List<ContractProduct> cpList = contractProductMapper.selectCpsByContractId(contractId);
@@ -224,7 +236,7 @@ public class ContractServiceImpl implements ContractService {
                     op.setSku(cp.getSku());
                     op.setNum(cp.getNum());
                     op.setPrice(cp.getPrice());
-                    op.setTotal(cp.getPayment());
+                    op.setTotal(cp.getTotal());
                 }
                 result += conditionQueryMapper.insertOrderProductByBatch(opList);  //批量插入订单商品
             }
