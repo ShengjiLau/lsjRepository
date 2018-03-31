@@ -120,8 +120,8 @@
     select contract_id, contract_code, serial_no, title, sign_date, type, contract_status, approval_status,approval_process, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date, approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_time, effective_time, termination_time,
-    attachment1_name, attachment1, attachment2_name, attachment2,
-    attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, attachment5
+    attachment1_name attachment1Name, attachment1, attachment2_name attachment2Name, attachment2,
+    attachment3_name attachment3Name, attachment3, attachment4_name attachment4Name, attachment4, attachment5_name attachment5Name, attachment5
     from t_contract
     where contract_id = #{contractId,jdbcType=BIGINT}
   </select>
@@ -129,8 +129,8 @@
     select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_time, effective_time, termination_time,
-    attachment1_name, attachment1, attachment2_name, attachment2,
-    attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, attachment5
+    attachment1_name attachment1Name, attachment1, attachment2_name attachment2Name, attachment2,
+    attachment3_name attachment3Name, attachment3, attachment4_name attachment4Name, attachment4, attachment5_name attachment5Name, attachment5
     from t_contract
   </select>
 
@@ -139,8 +139,8 @@
     select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
     pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_time, effective_time, termination_time,
-    attachment1_name, attachment1, attachment2_name, attachment2,
-    attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, attachment5
+    attachment1_name attachment1Name, attachment1, attachment2_name attachment2Name, attachment2,
+    attachment3_name attachment3Name, attachment3, attachment4_name attachment4Name, attachment4, attachment5_name attachment5Name, attachment5
     from t_contract
     <where>
       type = #{type,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}
