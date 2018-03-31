@@ -40,6 +40,7 @@ public class ContractServiceImpl implements ContractService {
     public int addContract(ContractDto dto) {
         Contract contract = new Contract();
         BeanUtils.copyProperties(dto, contract); //复制对象属性
+        contract.setContractStatus((short)2);
         int result = contractMapper.insert(contract);
         if(dto.getContractProductList() != null && dto.getContractProductList().size() > 0) {
             //设置商品的合同id
