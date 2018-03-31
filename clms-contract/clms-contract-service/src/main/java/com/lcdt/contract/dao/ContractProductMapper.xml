@@ -22,7 +22,7 @@
       price, total, spec)
     values (#{cpId,jdbcType=BIGINT}, #{contractId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR}, 
       #{productCode,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, #{num,jdbcType=DECIMAL}, 
-      #{price,jdbcType=DECIMAL}, #{total,jdbcType=DECIMAL}, #{spec,jdbcType=VARCHAR})
+      #{price,jdbcType=DECIMAL}, #{total,jdbcType=DECIMAL})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.ContractProduct">
     update t_contract_product
@@ -54,7 +54,7 @@
     <foreach item="item" collection="list" separator=",">
       (#{item.cpId,jdbcType=BIGINT}, #{item.contractId,jdbcType=BIGINT}, #{item.productName,jdbcType=VARCHAR},
       #{item.productCode,jdbcType=VARCHAR}, #{item.sku,jdbcType=VARCHAR}, #{item.num,jdbcType=DECIMAL},
-      #{item.price,jdbcType=DECIMAL}, #{item.total,jdbcType=DECIMAL}, #{item.spec,jdbcType=VARCHAR})
+      #{item.price,jdbcType=DECIMAL}, #{item.total,jdbcType=DECIMAL}), #{item.spec,jdbcType=VARCHAR}
     </foreach>
   </insert>
 
