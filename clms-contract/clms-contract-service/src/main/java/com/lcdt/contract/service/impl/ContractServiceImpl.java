@@ -115,8 +115,32 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public int modContract(ContractDto dto) {
+        //修改之前的合同
+        Contract oldContract = contractMapper.selectByPrimaryKey(dto.getContractId());
+
+        BigDecimal summation =new 	BigDecimal(0);// 为所有商品价格求和
+        if(null!=dto.getContractProductList()&&dto.getContractProductList().size()!=0){
+            for(ContractProduct contractProduct : dto.getContractProductList()) {
+                BigDecimal num = contractProduct.getNum();
+                BigDecimal price = contractProduct.getPrice();
+                //计算单个商品总价
+                BigDecimal total = num.multiply(price);
+                summation = summation.add(total);
+                contractProduct.setTotal(total);
+            }
+        }
+        dto.setSummation(summation);
         Contract contract = new Contract();
         BeanUtils.copyProperties(dto, contract); //复制对象属性
+        //将修改之前的部分属性赋值
+        contract.setContractStatus(oldContract.getContractStatus());
+        contract.setCompanyId(oldContract.getCompanyId());
+        contract.setCreateId(oldContract.getCreateId());
+        contract.setCreateName(oldContract.getCreateName());
+        contract.setCreateTime(oldContract.getCreateTime());
+        contract.setEffectiveTime(oldContract.getEffectiveTime());
+        contract.setTerminationTime(oldContract.getTerminationTime());
+
         int result = contractMapper.updateByPrimaryKey(contract);
         //获取该合同下面的商品cpId用来匹配被删除的商品
         List<Long> cpIdList = contractProductMapper.selectCpIdsByContractId(contract.getContractId());
@@ -215,54 +239,6 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public int modContractStatus(Contract contract) {
         int result = contractMapper.updateContractStatus(contract);
-        return result;
-    }
-
-    @Override
-    public int createOrderByContract(Long contractId) {
-        int result = 0;
-        Contract contract = contractMapper.selectByPrimaryKey(contractId);
-        if(contract != null){
-            Order order = new Order();
-            order.setContractCode(contract.getContractCode());
-            order.setOrderType(contract.getType());
-            order.setPayType(contract.getPayType());
-
-            order.setGroupId(contract.getGroupId());
-            order.setCompanyId(contract.getCompanyId());
-            order.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
-            order.setCreateTime(new Date());
-
-            order.setAttachment1Name(contract.getAttachment1Name());
-            order.setAttachment1(contract.getAttachment1());
-            order.setAttachment2Name(contract.getAttachment2Name());
-            order.setAttachment2(contract.getAttachment2());
-            order.setAttachment3Name(contract.getAttachment3Name());
-            order.setAttachment3(contract.getAttachment3());
-            order.setAttachment4Name(contract.getAttachment4Name());
-            order.setAttachment4(contract.getAttachment4());
-            order.setAttachment5Name(contract.getAttachment5Name());
-            order.setAttachment5(contract.getAttachment5());
-
-            result = orderMapper.insertOrder(order);
-
-            List<ContractProduct> cpList = contractProductMapper.selectCpsByContractId(contractId);
-            if(cpList != null && cpList.size() > 0){
-                List<OrderProduct> opList = new ArrayList<>();
-                //合同商品值赋到订单商品
-                for (ContractProduct cp : cpList) {
-                    OrderProduct op = new OrderProduct();
-                    op.setOrderId(order.getOrderId());
-                    op.setName(cp.getProductName());
-                    op.setCode(cp.getProductCode());
-                    op.setSku(cp.getSku());
-                    op.setNum(cp.getNum());
-                    op.setPrice(cp.getPrice());
-                    op.setTotal(cp.getTotal());
-                }
-                result += conditionQueryMapper.insertOrderProductByBatch(opList);  //批量插入订单商品
-            }
-        }
         return result;
     }
 

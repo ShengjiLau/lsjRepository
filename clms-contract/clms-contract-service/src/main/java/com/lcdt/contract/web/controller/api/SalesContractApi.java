@@ -113,27 +113,10 @@ public class SalesContractApi {
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
-            jsonObject.put("message", "终止成功");
+            jsonObject.put("message", contractStatus==0?"生效成功":"终止成功");
             return jsonObject;
         } else {
-            throw new RuntimeException("终止失败");
-        }
-    }
-
-    @ApiOperation("合同生成销售订单")
-    @RequestMapping(value = "/createSalesOrder", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('create_sales_order')")
-    public JSONObject createPurchaseOrder(@ApiParam(value = "合同ID",required = true) @RequestParam Long contractId) {
-        Contract dto = new Contract();
-        dto.setContractId(contractId);
-        int result = contractService.createOrderByContract(contractId);
-        if (result > 0) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", 0);
-            jsonObject.put("message", "销售订单创建成功");
-            return jsonObject;
-        } else {
-            throw new RuntimeException("销售订单创建失败");
+            throw new RuntimeException(contractStatus==0?"生效失败":"终止失败");
         }
     }
 
