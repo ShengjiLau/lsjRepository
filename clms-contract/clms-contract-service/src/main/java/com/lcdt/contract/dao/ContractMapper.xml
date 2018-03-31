@@ -29,6 +29,7 @@
     <result column="is_draft" jdbcType="TIMESTAMP" property="isDraft" />
     <result column="summation" jdbcType="DECIMAL" property="summation" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="effective_time" jdbcType="TIMESTAMP" property="effectiveTime" />
     <result column="termination_time" jdbcType="TIMESTAMP" property="terminationTime" />
@@ -53,7 +54,7 @@
       cycle, pay_type, party_a,
       party_a_principal, party_b, party_b_principal,
       start_date, end_date,approval_start_date, approval_end_date, summary,
-      terms, file_url, group_id,company_id, is_draft, summation, create_id, create_time,
+      terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time,
       effective_time, termination_time,
       attachment1_name, attachment1, attachment2_name, attachment2,
       attachment3_name, attachment3, attachment4_name, attachment4,
