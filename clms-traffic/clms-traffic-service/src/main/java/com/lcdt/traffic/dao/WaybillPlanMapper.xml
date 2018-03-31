@@ -1168,7 +1168,7 @@
 -->
   <select id="wattingSnatch4Driver" parameterType="java.util.Map" resultMap="snatchBill4WaittingMap">
     select waybill_plan_id,send_province,send_city,send_county,send_address,receive_province,receive_city,receive_county,receive_address,start_date,
-           arrive_date,company_id,plan_status,transport_way,send_man,send_phone,receive_man,receive_phone,plan_remark,serial_code,create_id
+           arrive_date,company_id,plan_status,transport_way,send_man,send_phone,receive_man,receive_phone,plan_remark,serial_code,create_id,distribution_way
     from t_waybill_plan p1
     <where>
       and p1.send_order_type='2' and p1.plan_status!='60' and p1.plan_status!='50' and p1.plan_status='15'
@@ -1192,7 +1192,7 @@
   -->
   <select id="completeSnatch4Driver" parameterType="java.util.Map" resultMap="snatchBill4WaittingMap">
     select waybill_plan_id,send_province,send_city,send_county,send_address,receive_province,receive_city,receive_county,receive_address,start_date,
-    arrive_date,company_id,plan_status,transport_way,send_man,send_phone,receive_man,receive_phone,plan_remark,serial_code,create_id
+    arrive_date,company_id,plan_status,transport_way,send_man,send_phone,receive_man,receive_phone,plan_remark,serial_code,create_id,distribution_way
     from t_waybill_plan p1
     <where>
       and p1.send_order_type='2'
