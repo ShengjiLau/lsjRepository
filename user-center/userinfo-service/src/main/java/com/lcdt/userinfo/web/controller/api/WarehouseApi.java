@@ -132,7 +132,7 @@ public class WarehouseApi {
 
     @ApiOperation("仓库管理——启用/禁用")
     @RequestMapping(value = "/modifyWarehouseWhStatus", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_whStatus')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_whstatus')")
     public JSONObject modifyWarehouseWhStatus(@ApiParam(value = "仓库ID",required = true) @RequestParam Long whId) {
         int result = warehouseService.modifyWarehouseWhStatus(whId);
         if (result > 0) {
