@@ -156,6 +156,7 @@
     <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
                 select="com.lcdt.traffic.dao.PlanDetailMapper.selectByWaybillPlanId" />
+
     <!--抢单报价-->
     <collection property="snatchGoodsList" column="{waybillPlanId=waybill_plan_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.SnatchGoods" javaType="ArrayList"

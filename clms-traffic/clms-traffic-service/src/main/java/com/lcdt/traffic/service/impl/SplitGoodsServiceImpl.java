@@ -202,7 +202,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                         waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
                         waybillPlan.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//派车状态(派车中)
                     } else {
-                        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED); //计划状态(已派完)
+                        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //计划状态(已派单)
                         waybillPlan.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//派车状态(已派完)
                     }
 
@@ -493,13 +493,12 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             List<SplitGoodsDetail> tmp_splitGoodsDetail_list = splitGoodsDetailMapper.selectBySplitGoodsId(map1);
             if (tmp_splitGoodsDetail_list!=null && tmp_splitGoodsDetail_list.size()<=0) { //如果再没有子商品的话
                 splitGoodsMapper.deleteByPrimaryKey(splitGoodsId);
-
-                waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //从已派完变成派单中(更改计划状态)
-                waybillPlan.setUpdateId(user.getUserId());
-                waybillPlan.setUpdateName(user.getRealName());
-                waybillPlan.setUpdateTime(new Date());
-                waybillPlanMapper.updateWaybillPlan(waybillPlan);
             }
+            waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //从已派完变成派单中(更改计划状态)
+            waybillPlan.setUpdateId(user.getUserId());
+            waybillPlan.setUpdateName(user.getRealName());
+            waybillPlan.setUpdateTime(new Date());
+            waybillPlanMapper.updateWaybillPlan(waybillPlan);
             //派单取消息
             if (!StringUtils.isEmpty(splitGoods.getCarrierCompanyId())) {
                 DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(waybillPlan.getCompanyId(), user.getUserId()); //发送

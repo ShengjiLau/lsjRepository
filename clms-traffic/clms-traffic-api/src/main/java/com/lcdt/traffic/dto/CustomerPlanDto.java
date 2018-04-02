@@ -148,6 +148,8 @@ public class CustomerPlanDto implements java.io.Serializable {
     public void setSplitGoodsId(Long splitGoodsId) {
         this.splitGoodsId = splitGoodsId;
     }
+
+
 }
 
 
