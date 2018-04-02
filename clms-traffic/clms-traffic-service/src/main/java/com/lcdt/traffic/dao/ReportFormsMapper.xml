@@ -5,7 +5,7 @@
     <select id="selectPlan" resultType="Map" parameterType="Map">
         select sum(case when plan_status=30 then 1 else 0 end) as paidanzhong,
         sum(case when plan_status=15 then 1 else 0 end) as jingjiazhong,
-        sum(case when send_card_status=1 then 1 else 0 end) as yipaidan,
+        sum(case when send_card_status!=0 then 1 else 0 end) as yipaidan,
         sum(case when plan_status=50 then 1 else 0 end) as yiwancheng
         from t_waybill_plan
         <where>
@@ -36,7 +36,7 @@
             date(pubdate) as pub_date,
             sum(case when plan_status=30 then 1 else 0 end) as paidanzhong,
             sum(case when plan_status=15 then 1 else 0 end) as jingjiazhong,
-            sum(case when send_card_status=1 then 1 else 0 end) as yipaidan,
+            sum(case when send_card_status!=0 then 1 else 0 end) as yipaidan,
             sum(case when plan_status=50 then 1 else 0 end) as yiwancheng
             FROM
             t_waybill_plan
