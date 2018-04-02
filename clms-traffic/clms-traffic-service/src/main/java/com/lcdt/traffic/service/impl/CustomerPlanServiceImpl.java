@@ -286,6 +286,8 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Bidding(Map map) {
+
+        String company_denglu = map.get("companyId").toString();
         //根据登录人（权限组），获取对应客户列表中绑定的客户企业（货主）
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
@@ -307,6 +309,12 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 pageSize = (Integer) map.get("page_size");
             }
         }
+
+        //抢单企业
+        if (!StringUtils.isEmpty(company_denglu)) {
+            map.put("snatchCompanyId"," and company_id="+company_denglu);
+        }
+
         PageHelper.startPage(pageNo, pageSize);
 
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlan4Bidding(map);
@@ -323,6 +331,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Offer(Map map) {
+        String company_denglu = map.get("companyId").toString();
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
 
@@ -345,13 +354,9 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         }
 
         //抢单企业
-        if (map.containsKey("companyId") && !StringUtils.isEmpty(map.get("companyId"))) {
-
-            map.put("snatchCompanyId"," and company_id="+map.get("companyId").toString());
-
+        if (!StringUtils.isEmpty(company_denglu)) {
+            map.put("snatchCompanyId"," and company_id="+company_denglu);
         }
-
-
         PageHelper.startPage(pageNo, pageSize);
 
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Offer(map);
