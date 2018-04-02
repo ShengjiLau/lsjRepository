@@ -594,7 +594,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                      splitGoodsDetail11.setUpdateName(splitGoodsDetail.getUpdateName());
                      float remainAmount = splitGoodsDetail.getRemainAmount()+splitGoodsDetail11.getRemainAmount();
                      splitGoodsDetail11.setRemainAmount(0f);
-                     splitGoodsDetail.setAllotAmount(0f);
+                      splitGoodsDetail11.setAllotAmount(0f);
                      resultList.add(splitGoodsDetail11);
 
                      PlanDetail planDetail = planDetailMapper.selectByPrimaryKey(splitGoodsDetail11.getPlanDetailId());
