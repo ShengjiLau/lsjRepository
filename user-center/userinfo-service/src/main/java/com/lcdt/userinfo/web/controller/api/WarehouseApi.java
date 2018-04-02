@@ -231,7 +231,7 @@ public class WarehouseApi {
 
     @ApiOperation("仓库管理——设置/取消默认联系人")
     @RequestMapping(value = "/modifyWarehouseLinkmanIsDefault", method = RequestMethod.POST)
-    /** @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_linkman_isDefault')")*/
+    /** @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_linkman_isdefault')")*/
     public JSONObject modifyWarehouseLinkmanIsDefault(@ApiParam(value = "联系人ID",required = true) @RequestParam Long whLinkmanId,
                                                         @ApiParam(value = "状态(1-设置默认，0-取消默认)",required = true) @RequestParam short isDefault) {
         WarehouseLinkman linkman = new WarehouseLinkman();
