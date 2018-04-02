@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.customer.Utils.CommonUtil;
 import com.lcdt.customer.dao.CustomerInviteLogMapper;
 import com.lcdt.customer.dao.CustomerMapper;
 import com.lcdt.customer.exception.CustomerNotBindException;
@@ -99,6 +100,7 @@ public class CustomerBindApi {
 		CustomerInviteLog customerInviteLog = inviteLogService.selectByInviteId(inviteId);
 		customerInviteLog.setIsValid(0);
 		Long inviteCompanyId = customerInviteLog.getInviteCompanyId();
+		Customer inviteCustomer = mapper.selectByPrimaryKey(customerInviteLog.getInviteCustomerId(), customerInviteLog.getInviteCompanyId());
 
 		HashMap<String, Long> stringLongHashMap = new HashMap<>();
 		stringLongHashMap.put("companyId", companyId);
@@ -147,6 +149,11 @@ public class CustomerBindApi {
 			customer.setTelNo(company.getTelNo());
 			customer.setTelNo1(company.getTelNo1());
 			customer.setBankNo(company.getBankNo());
+
+			String clientTypes = inviteCustomer.getClientTypes();
+
+			customer.setClientTypes(CommonUtil.reverseCustomerTypesStr(clientTypes));
+
 			List<Group> groups = SecurityInfoGetter.geUserCompRel().getGroups();
 			if (groups != null && !groups.isEmpty()) {
 				Group group = groups.get(0);
@@ -173,11 +180,11 @@ public class CustomerBindApi {
 		customer.setBindCompany(company.getFullName());
 		customerService.customerUpdate(customer);
 		//绑定邀请人的公司id
-		Customer customer1 = mapper.selectByPrimaryKey(customerInviteLog.getInviteCustomerId(), customerInviteLog.getInviteCompanyId());
+
 		Company company1 = companyService.selectById(companyId);
-		customer1.setBindCpid(companyId);
-		customer1.setBindCompany(company1.getFullName());
-		customerService.updateCustomerBindCompId(customer1);
+		inviteCustomer.setBindCpid(companyId);
+		inviteCustomer.setBindCompany(company1.getFullName());
+		customerService.updateCustomerBindCompId(inviteCustomer);
 		inviteLogMapper.updateByPrimaryKey(customerInviteLog);
 		ModelAndView successView = new ModelAndView("invite_success");
 		successView.addObject("username", user.getRealName());
@@ -247,8 +254,7 @@ public class CustomerBindApi {
 		return customer;
 	}
 
-	public boolean isTokenValid(String token){
-		return true;
-	}
+
+
 
 }
