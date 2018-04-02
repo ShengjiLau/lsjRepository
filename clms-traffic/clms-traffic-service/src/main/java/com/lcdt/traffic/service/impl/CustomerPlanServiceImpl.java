@@ -343,6 +343,15 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                 pageSize = (Integer) map.get("page_size");
             }
         }
+
+        //抢单企业
+        if (map.containsKey("companyId") && !StringUtils.isEmpty(map.get("companyId"))) {
+
+            map.put("snatchCompanyId"," and company_id="+map.get("companyId").toString());
+
+        }
+
+
         PageHelper.startPage(pageNo, pageSize);
 
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Offer(map);
