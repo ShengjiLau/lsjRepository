@@ -11,6 +11,8 @@ public class OrderApprovalDto extends Order{
     private List<OrderProduct> orderProductList;
     private List<OrderApproval> orderApprovalList;
 
+    private String approvalCreateName;
+
     public List<OrderProduct> getOrderProductList() {
         return orderProductList;
     }
@@ -25,5 +27,13 @@ public class OrderApprovalDto extends Order{
 
     public void setOrderApprovalList(List<OrderApproval> orderApprovalList) {
         this.orderApprovalList = orderApprovalList;
+    }
+
+    public String getApprovalCreateName() {
+        return approvalCreateName;
+    }
+
+    public void setApprovalCreateName(String approvalCreateName) {
+        this.approvalCreateName = approvalCreateName;
     }
 }
