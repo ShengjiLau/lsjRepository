@@ -69,6 +69,8 @@ public class SalesContractApi {
         dto.setCreateName(user.getRealName());
         dto.setCreateTime(new Date());
         dto.setContractStatus((short)2);
+        dto.setPartyBId(user.getUserId());
+        dto.setPartyBName(user.getRealName());
 
         int result = contractService.addContract(dto);
         if (result > 0) {
@@ -85,6 +87,9 @@ public class SalesContractApi {
     @RequestMapping(value = "/modifyContract", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_sales_contract')")
     public JSONObject modifyWarehouse(@Validated ContractDto dto) {
+        User user = SecurityInfoGetter.getUser();
+        dto.setPartyBId(user.getUserId());
+        dto.setPartyBName(user.getRealName());
         int result = contractService.modContract(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();

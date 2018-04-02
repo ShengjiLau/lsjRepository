@@ -13,9 +13,11 @@
     <result column="approval_process" jdbcType="VARCHAR" property="approvalProcess" />
     <result column="cycle" jdbcType="SMALLINT" property="cycle" />
     <result column="pay_type" jdbcType="VARCHAR" property="payType" />
-    <result column="party_a" jdbcType="VARCHAR" property="partyA" />
+    <result column="party_a_id" jdbcType="BIGINT" property="partyAId" />
+    <result column="party_a_name" jdbcType="VARCHAR" property="partyAName" />
     <result column="party_a_principal" jdbcType="VARCHAR" property="partyAPrincipal" />
-    <result column="party_b" jdbcType="VARCHAR" property="partyB" />
+    <result column="party_b_id" jdbcType="BIGINT" property="partyBId" />
+    <result column="party_b_name" jdbcType="VARCHAR" property="partyBName" />
     <result column="party_b_principal" jdbcType="VARCHAR" property="partyBPrincipal" />
     <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
     <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
@@ -51,8 +53,8 @@
   <insert id="insert" parameterType="com.lcdt.contract.model.Contract" useGeneratedKeys="true" keyProperty="contractId">
     insert into t_contract (contract_id, contract_code, serial_no, title,
       sign_date, type, contract_status, approval_status,approval_process,
-      cycle, pay_type, party_a,
-      party_a_principal, party_b, party_b_principal,
+      cycle, pay_type, party_a_id, party_a_name,
+      party_a_principal, party_b_id, party_b_name, party_b_principal,
       start_date, end_date,approval_start_date, approval_end_date, summary,
       terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time,
       effective_time, termination_time,
@@ -63,8 +65,8 @@
     values (#{contractId,jdbcType=BIGINT}, #{contractCode,jdbcType=VARCHAR}, #{serialNo,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
       #{signDate,jdbcType=TIMESTAMP}, #{type,jdbcType=SMALLINT}, #{contractStatus,jdbcType=SMALLINT},
       #{approvalStatus,jdbcType=SMALLINT},#{approvalProcess,jdbcType=VARCHAR},
-      #{cycle,jdbcType=SMALLINT}, #{payType,jdbcType=VARCHAR}, #{partyA,jdbcType=VARCHAR},
-      #{partyAPrincipal,jdbcType=VARCHAR}, #{partyB,jdbcType=VARCHAR}, #{partyBPrincipal,jdbcType=VARCHAR},
+      #{cycle,jdbcType=SMALLINT}, #{payType,jdbcType=VARCHAR}, #{partyAId,jdbcType=BIGINT}, #{partyAName,jdbcType=VARCHAR},
+      #{partyAPrincipal,jdbcType=VARCHAR}, #{partyBId,jdbcType=BIGINT}, #{partyBName,jdbcType=VARCHAR}, #{partyBPrincipal,jdbcType=VARCHAR},
       #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP},#{approvalStartDate,jdbcType=TIMESTAMP},
       #{approvalEndDate,jdbcType=TIMESTAMP},  #{summary,jdbcType=VARCHAR},
       #{terms,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT},
@@ -86,9 +88,11 @@
       approval_process = #{approvalProcess,jdbcType=VARCHAR},
       cycle = #{cycle,jdbcType=SMALLINT},
       pay_type = #{payType,jdbcType=VARCHAR},
-      party_a = #{partyA,jdbcType=VARCHAR},
+      party_a_id = #{partyAId,jdbcType=BIGINT},
+      party_a_name = #{partyAName,jdbcType=VARCHAR},
       party_a_principal = #{partyAPrincipal,jdbcType=VARCHAR},
-      party_b = #{partyB,jdbcType=VARCHAR},
+      party_b_id = #{partyBId,jdbcType=BIGINT},
+      party_b_name = #{partyBName,jdbcType=VARCHAR},
       party_b_principal = #{partyBPrincipal,jdbcType=VARCHAR},
       start_date = #{startDate,jdbcType=TIMESTAMP},
       end_date = #{endDate,jdbcType=TIMESTAMP},
@@ -121,7 +125,8 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.lcdt.contract.web.dto.ContractDto">
     select contract_id contractId, contract_code contractCode, serial_no serialNo, title, sign_date signDate, type,
     contract_status contractStatus, approval_status approvalStatus,approval_process approvalProcess, cycle,
-    pay_type payType, party_a partyA, party_a_principal partyAPrincipal, party_b partyB, party_b_principal partyBPrincipal,
+    pay_type payType, party_a_id partyAId, party_a_name partyAName, party_a_principal partyAPrincipal,
+    party_b_id partyBId, party_b_name partyBName, party_b_principal partyBPrincipal,
     start_date startDate, end_date endDate, approval_start_date approvalStartDate, approval_end_date approvalEndDate,
     summary, terms, file_url fileUrl, group_id groupId,company_id companyId, is_draft isDraft, summation, create_id createId,
     create_name createName, create_time createTime, effective_time effectiveTime, termination_time terminationTime,
@@ -132,7 +137,7 @@
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
-    pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
+    pay_type, party_a_id, party_a_name, party_a_principal, party_b_id, party_b_name, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time,
     attachment1_name, attachment1, attachment2_name, attachment2,
     attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, attachment5
@@ -142,7 +147,7 @@
 
   <select id="selectByCondition" resultMap="BaseResultMap">
     select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
-    pay_type, party_a, party_a_principal, party_b, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
+    pay_type, party_a_id, party_a_name, party_a_principal, party_b_id, party_b_name, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time,
     attachment1_name, attachment1, attachment2_name, attachment2,
     attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, attachment5

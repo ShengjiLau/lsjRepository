@@ -72,6 +72,9 @@ public class PurchaseContractApi {
         dto.setCreateName(user.getRealName());
         dto.setCreateTime(new Date());
         dto.setContractStatus((short)2);
+        dto.setPartyAId(user.getUserId());
+        dto.setPartyAName(user.getRealName());
+
         int result = contractService.addContract(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
@@ -87,6 +90,9 @@ public class PurchaseContractApi {
     @RequestMapping(value = "/modifyContract", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_purchase_contract')")
     public JSONObject modifyContract(@Validated ContractDto dto) {
+        User user = SecurityInfoGetter.getUser();
+        dto.setPartyAId(user.getUserId());
+        dto.setPartyAName(user.getRealName());
         int result = contractService.modContract(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();

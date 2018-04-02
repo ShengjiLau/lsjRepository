@@ -26,11 +26,15 @@ public class Contract {
 
     private String payType;
 
-    private String partyA;
+    private Long partyAId;
+
+    private String partyAName;
 
     private String partyAPrincipal;
 
-    private String partyB;
+    private Long partyBId;
+
+    private String partyBName;
 
     private String partyBPrincipal;
 
@@ -174,12 +178,36 @@ public class Contract {
         this.payType = payType == null ? null : payType.trim();
     }
 
-    public String getPartyA() {
-        return partyA;
+    public Long getPartyAId() {
+        return partyAId;
     }
 
-    public void setPartyA(String partyA) {
-        this.partyA = partyA == null ? null : partyA.trim();
+    public void setPartyAId(Long partyAId) {
+        this.partyAId = partyAId;
+    }
+
+    public String getPartyAName() {
+        return partyAName;
+    }
+
+    public void setPartyAName(String partyAName) {
+        this.partyAName = partyAName;
+    }
+
+    public Long getPartyBId() {
+        return partyBId;
+    }
+
+    public void setPartyBId(Long partyBId) {
+        this.partyBId = partyBId;
+    }
+
+    public String getPartyBName() {
+        return partyBName;
+    }
+
+    public void setPartyBName(String partyBName) {
+        this.partyBName = partyBName;
     }
 
     public String getPartyAPrincipal() {
@@ -188,14 +216,6 @@ public class Contract {
 
     public void setPartyAPrincipal(String partyAPrincipal) {
         this.partyAPrincipal = partyAPrincipal == null ? null : partyAPrincipal.trim();
-    }
-
-    public String getPartyB() {
-        return partyB;
-    }
-
-    public void setPartyB(String partyB) {
-        this.partyB = partyB == null ? null : partyB.trim();
     }
 
     public String getPartyBPrincipal() {
