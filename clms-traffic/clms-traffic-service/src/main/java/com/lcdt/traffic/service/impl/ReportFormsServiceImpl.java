@@ -175,6 +175,7 @@ public class ReportFormsServiceImpl implements ReportFormsService {
 
     @Override
     public Map customerPlanStatistics(Map map) {
+        String dengluCompanyId = map.get("companyId").toString();
         map=limitParams(map);
         List<Customer> customerList = bindCustomerList(map);    //根据登录人（权限组），获取对应客户列表中绑定的客户企业（货主）
         if(customerList==null || customerList.size()==0) return null;
@@ -183,7 +184,14 @@ public class ReportFormsServiceImpl implements ReportFormsService {
         map.put("carrierCollectionIds1",cMap.get("carrierCollectionIds1"));
         map.put("carrierCollectionIds2",cMap.get("carrierCollectionIds2"));
         Map<String,Object> result_map = new HashMap<>();
-        List<Map<String,Object>> mapList = reportFormsMapper. selectCustomerPlanData(map);     //统计详情查询用来做折线的数据
+        if(!StringUtils.isEmpty(dengluCompanyId)) {
+
+            map.put("snatchCompanyId"," and sn.company_id = "+dengluCompanyId);
+        }
+
+
+
+        List<Map<String,Object>> mapList = reportFormsMapper.selectCustomerPlanData(map);     //统计详情查询用来做折线的数据
         result_map.put("detail",mapList);
         return result_map;
     }
