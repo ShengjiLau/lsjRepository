@@ -27,6 +27,8 @@ public class FeeProperty implements Serializable {
 
     private Short isDeleted;
 
+    private static final long serialVersionUID = 1L;
+
     public Long getProId() {
         return proId;
     }

@@ -61,6 +61,11 @@ public class SnatchBill4WaittingRdto implements java.io.Serializable {
     private String ownPhone; //货主电话
 
 
+    private String distributionWay;//运输要求
+
+
+
+
     private List<PlanDetail> planDetailList;
 
 
@@ -280,5 +285,13 @@ public class SnatchBill4WaittingRdto implements java.io.Serializable {
 
     public void setCreateId(Long createId) {
         this.createId = createId;
+    }
+
+    public String getDistributionWay() {
+        return distributionWay;
+    }
+
+    public void setDistributionWay(String distributionWay) {
+        this.distributionWay = distributionWay;
     }
 }

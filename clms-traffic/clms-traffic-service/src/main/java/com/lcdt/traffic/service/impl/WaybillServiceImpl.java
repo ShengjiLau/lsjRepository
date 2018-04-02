@@ -14,6 +14,7 @@ import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.dao.SplitGoodsMapper;
 import com.lcdt.traffic.dao.WaybillItemsMapper;
 import com.lcdt.traffic.dao.WaybillMapper;
+import com.lcdt.traffic.dao.WaybillTransferRecordMapper;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.CommonAttachment;
@@ -80,6 +81,9 @@ public class WaybillServiceImpl implements WaybillService {
     @Reference
     private CompanyService companyService;
 
+    @Autowired
+    private WaybillTransferRecordMapper waybillTransferRecordMapper;;
+
     @Override
     public Waybill addWaybill(WaybillDto waybillDto) {
         int result = 0;
@@ -137,6 +141,22 @@ public class WaybillServiceImpl implements WaybillService {
             }
             //运单货物详细批量插入
             result += waybillItemsMapper.insertForBatch(waybillItemsList);
+        }
+        //运单生成时添加一条派车记录
+        if(waybill.getId()!=null){
+            WaybillTransferRecord  waybillTransferRecord=new WaybillTransferRecord();
+            waybillTransferRecord.setWaybillId(waybill.getId());
+            waybillTransferRecord.setVechicleId(waybill.getVechicleId());
+            waybillTransferRecord.setVechicleNum(waybill.getVechicleNum());
+            waybillTransferRecord.setDriverId(waybill.getDriverId());
+            waybillTransferRecord.setDriverName(waybill.getDriverName());
+            waybillTransferRecord.setDriverPhone(waybill.getDriverPhone());
+            waybillTransferRecord.setCompanyId(waybill.getCompanyId());
+            waybillTransferRecord.setCarrierCompanyId(waybill.getCarrierCompanyId());
+            waybillTransferRecord.setCreateId(waybill.getCreateId());
+            waybillTransferRecord.setCreateName(waybill.getCreateName());
+
+            waybillTransferRecordMapper.insert(waybillTransferRecord);
         }
 
         waybill = waybillMapper.selectByPrimaryKey(waybill.getId());

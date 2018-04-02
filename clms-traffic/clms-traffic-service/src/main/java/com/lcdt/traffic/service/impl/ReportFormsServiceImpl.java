@@ -32,6 +32,7 @@ public class ReportFormsServiceImpl implements ReportFormsService {
 
     @Override
     public Map planStatistics(Map map) {
+        map=limitParams(map);
         Map<String,Object> map1 = reportFormsMapper.selectPlan(map);  //总的统计
         if (null == map1) {
             map1 = new HashMap<>();
@@ -174,6 +175,8 @@ public class ReportFormsServiceImpl implements ReportFormsService {
 
     @Override
     public Map customerPlanStatistics(Map map) {
+        String dengluCompanyId = map.get("companyId").toString();
+        map=limitParams(map);
         List<Customer> customerList = bindCustomerList(map);    //根据登录人（权限组），获取对应客户列表中绑定的客户企业（货主）
         if(customerList==null || customerList.size()==0) return null;
         Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList); //查询对应在的企业组、竞价组条件
@@ -181,7 +184,14 @@ public class ReportFormsServiceImpl implements ReportFormsService {
         map.put("carrierCollectionIds1",cMap.get("carrierCollectionIds1"));
         map.put("carrierCollectionIds2",cMap.get("carrierCollectionIds2"));
         Map<String,Object> result_map = new HashMap<>();
-        List<Map<String,Object>> mapList = reportFormsMapper. selectCustomerPlanData(map);     //统计详情查询用来做折线的数据
+        if(!StringUtils.isEmpty(dengluCompanyId)) {
+
+            map.put("snatchCompanyId"," and sn.company_id = "+dengluCompanyId);
+        }
+
+
+
+        List<Map<String,Object>> mapList = reportFormsMapper.selectCustomerPlanData(map);     //统计详情查询用来做折线的数据
         result_map.put("detail",mapList);
         return result_map;
     }
@@ -191,6 +201,7 @@ public class ReportFormsServiceImpl implements ReportFormsService {
 
     @Override
     public Map queryOwnWaybillStatistics(Map map) {
+        map=limitParams(map);
         Map<String,Object> map1 = reportFormsMapper.selectOwnWaybill(map);
         if (null == map1) {
             map1 = new HashMap<>();
@@ -209,6 +220,7 @@ public class ReportFormsServiceImpl implements ReportFormsService {
 
     @Override
     public Map queryCustomerWaybillStatistics(Map map) {
+        map=limitParams(map);
         Map cMapIds = customerCompanyIds.getCustomerCompanyIds(map);
         map.put("companyIds",cMapIds.get("companyIds"));
         map.put("carrierCompanyId",map.get("companyId"));
@@ -266,5 +278,19 @@ public class ReportFormsServiceImpl implements ReportFormsService {
             resultMap.put("driverNum",0);   //设置我的司机统计数量为0
         }
         return resultMap;
+    }
+
+    private Map limitParams(Map map){
+        if(map.containsKey("date_interval") ||( map.containsKey("pubdate_end") && map.containsKey("pubdate_start"))){
+            if((map.get("date_interval")!=null&&!map.get("date_interval").toString().equals(""))||
+                    ((map.get("pubdate_start")!=null&&!map.get("pubdate_start").toString().equals(""))&&(map.get("pubdate_end")!=null&&!map.get("pubdate_end").toString().equals("")))){
+            }else {
+                throw new RuntimeException("参数错误");
+            }
+
+        }else{
+            throw new RuntimeException("参数错误");
+        }
+        return map;
     }
 }

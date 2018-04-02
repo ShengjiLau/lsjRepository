@@ -132,7 +132,7 @@ public class WarehouseApi {
 
     @ApiOperation("仓库管理——启用/禁用")
     @RequestMapping(value = "/modifyWarehouseWhStatus", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_whStatus')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_whstatus')")
     public JSONObject modifyWarehouseWhStatus(@ApiParam(value = "仓库ID",required = true) @RequestParam Long whId) {
         int result = warehouseService.modifyWarehouseWhStatus(whId);
         if (result > 0) {
@@ -168,7 +168,7 @@ public class WarehouseApi {
 
     @ApiOperation("仓库管理——联系人新增")
     @RequestMapping(value = "/addWarehouseLinkman", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_warehouse_linkman')")
+   /* @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_warehouse_linkman')")*/
     public JSONObject addWarehouseLinkman(@Validated WarehouseLinkman dto) {
         User user = SecurityInfoGetter.getUser();
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -189,9 +189,12 @@ public class WarehouseApi {
         }
     }
 
+    /**
+     *  @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_linkman')")
+     * */
     @ApiOperation("仓库管理——联系人修改")
     @RequestMapping(value = "/modifyWarehouseLinkman", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_linkman')")
+
     public JSONObject modifyWarehouseLinkman(@Validated WarehouseLinkman dto) {
         User user = SecurityInfoGetter.getUser();
         dto.setUpdateId(user.getUserId());
@@ -211,7 +214,9 @@ public class WarehouseApi {
 
     @ApiOperation("仓库管理——联系人删除")
     @RequestMapping(value = "/deleteWarehouseLinkman", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delete_warehouse_linkman')")
+   /**
+    *  @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delete_warehouse_linkman')")
+    * */
     public JSONObject deleteWarehouseLinkman(@ApiParam(value = "联系人ID",required = true) @RequestParam Long whLinkmanId) {
         int result = warehouseService.modifyWarehouseLinkManIsDelete(whLinkmanId);
         if (result > 0) {
@@ -226,7 +231,7 @@ public class WarehouseApi {
 
     @ApiOperation("仓库管理——设置/取消默认联系人")
     @RequestMapping(value = "/modifyWarehouseLinkmanIsDefault", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_linkman_isDefault')")
+    /** @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_linkman_isdefault')")*/
     public JSONObject modifyWarehouseLinkmanIsDefault(@ApiParam(value = "联系人ID",required = true) @RequestParam Long whLinkmanId,
                                                         @ApiParam(value = "状态(1-设置默认，0-取消默认)",required = true) @RequestParam short isDefault) {
         WarehouseLinkman linkman = new WarehouseLinkman();

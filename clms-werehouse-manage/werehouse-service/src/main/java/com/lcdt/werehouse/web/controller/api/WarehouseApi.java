@@ -132,7 +132,7 @@ public class WarehouseApi {
 
     @ApiOperation("仓库管理——启用/禁用")
     @RequestMapping(value = "/modifyWarehouseWhStatus", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_whStatus')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_whstatus')")
     public JSONObject modifyWarehouseWhStatus(@ApiParam(value = "仓库ID",required = true) @RequestParam Long whId) {
         int result = warehouseService.modifyWarehouseWhStatus(whId);
         if (result > 0) {
@@ -226,7 +226,7 @@ public class WarehouseApi {
 
     @ApiOperation("仓库管理——设置/取消默认联系人")
     @RequestMapping(value = "/modifyWarehouseLinkmanIsDefault", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_linkman_isDefault')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_warehouse_linkman_isdefault')")
     public JSONObject modifyWarehouseLinkmanIsDefault(@ApiParam(value = "联系人ID",required = true) @RequestParam Long whLinkmanId,
                                                         @ApiParam(value = "状态(1-设置默认，0-取消默认)",required = true) @RequestParam short isDefault) {
         WarehouseLinkman linkman = new WarehouseLinkman();
