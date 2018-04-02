@@ -62,15 +62,12 @@ public class SmsNotifyImpl  {
 
 
     public boolean sendSms(String[] phonsNums, String message,Long productServiceLogId) {
-
         logger.info("调用短信api >>> {} >>> {}",phonsNums[0],message);
-
         if (phonsNums == null) {
             return false;
         }
 
         String seed = simpleDate();
-
         HttpPost httpPost = new HttpPost(SMS_API);
         ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("name", username));
@@ -79,8 +76,6 @@ public class SmsNotifyImpl  {
         nameValuePairs.add(new BasicNameValuePair("dest", phoneNumsValue(phonsNums)));
         nameValuePairs.add(new BasicNameValuePair("content", "【大驼队】" + message));
         nameValuePairs.add(new BasicNameValuePair("reference", String.valueOf(productServiceLogId)));
-
-
         UrlEncodedFormEntity uefEntity;
         try {
             uefEntity = new UrlEncodedFormEntity(nameValuePairs, "UTF-8");

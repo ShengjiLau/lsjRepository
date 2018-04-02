@@ -112,7 +112,7 @@ public class CustomerBindApi {
 			Customer customer = customers.get(0);
 			errorView.addObject("username", user.getRealName());
 			errorView.addObject("headimg", user.getPictureUrl());
-			errorView.addObject("errortip", "客户管理里【" + customer.getCustomerName() + "】已绑定【" + customer.getBindCompany() + "】");
+			errorView.addObject("errortip", "客户管理里【" + customer.getCustomerName() + "】已绑定企业【" + customer.getBindCompany() + "】。");
 			return errorView;
 		}
 
