@@ -95,6 +95,7 @@ public class WaybillServiceImpl implements WaybillService {
             Map map = new HashMap();
             map.put("companyId", waybill.getCompanyId());
             map.put("waybillPlanId", waybill.getWaybillPlanId());
+            map.put("noCancel","123");
             List<Waybill> list = waybillMapper.selectWaybillByPlanId(map);
             if (list != null) {
                 waybill.setWaybillCode(waybill.getWaybillCode() + "-" + (list.size() + 1));

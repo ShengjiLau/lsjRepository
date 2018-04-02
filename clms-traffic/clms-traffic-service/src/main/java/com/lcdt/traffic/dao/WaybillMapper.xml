@@ -512,7 +512,10 @@
     from t_waybill
     where(company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
     and waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT}
-    and is_deleted = 0 and waybill_status !=8
+    and is_deleted = 0
+    <if test="noCancel ==null or noCancel ==''">
+      and waybill_status !=8
+    </if>
     order by id desc
   </select>
 
