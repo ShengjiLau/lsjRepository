@@ -37,35 +37,42 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
         List<ContractApprovalDto> contractApprovalDtoList = contractApprovalMapper.selectContractApprovalByCondition(contractApprovalListDto);
         PageInfo page = new PageInfo(contractApprovalDtoList);
         /**
-         * 整合数据，只保留一条审批人的信息，整合逻辑如下
-         * 找出审批人当中审批状态为
+         * 整合数据，
+         * 审批中和已驳回的状态只保留一条审批人的信息
+         * 已完成和已撤销的只设置审批创建人
          *
          * */
         for(ContractApprovalDto cad : contractApprovalDtoList){
-            ContractApprovalListDto cald = new ContractApprovalListDto();
-            cald.setType(cad.getType());
-            cald.setTitle(cad.getTitle());
-            cald.setContractId(cad.getContractId());
-            cald.setContractCode(cad.getContractCode());
-            cald.setApprovalStartDate(cad.getApprovalStartDate());
+            ContractApproval ca = null;
             for(ContractApproval contractApproval : cad.getContractApprovalList()){
                 if(null != contractApproval.getSort()) {
                     if (contractApproval.getSort() == 0) {  //发起人及创建人
-                        cald.setCreateUserName(contractApproval.getUserName());
+                        cad.setApprovalCreateName(contractApproval.getUserName());
                     }
                     /**审批状态为 1 3 4 代表审批流程正在执行的状态或者已经结束（撤销/驳回），可作为列表审批关键环节的展示*/
                     if (null != contractApproval.getStatus()) {
-                        if (contractApproval.getStatus() == 1 || contractApproval.getStatus() == 4) {
-                            cald.setCaId(contractApproval.getCaId());
-                            cald.setApprovalStatus(contractApproval.getStatus());   //设置当前审批状态
-                            cald.setCurrentUserName(contractApproval.getUserName());    //设置当前审批人
-                        } else if (contractApproval.getStatus() == 3) {    //撤销无需设置当前人员，只设置审批状态
-                            cald.setApprovalStatus(contractApproval.getStatus());
-                        } else if (cad.getApprovalStatus() == 2) {   //审批流程完成，无需再设置当前人
-                            cald.setApprovalStatus(new Short("2"));
+                        if (cad.getApprovalStatus() == 2) {   //审批流程完成，无需再设置当前人
+                            cad.setApprovalStatus(new Short("2"));
+                        }else if (contractApproval.getStatus() == 1 || contractApproval.getStatus() == 3 || contractApproval.getStatus() == 4) {
+                            ca = new ContractApproval();
+                            ca.setCaId(contractApproval.getCaId());
+                            ca.setContractId(contractApproval.getContractId());
+                            if(null!=contractApproval.getDeptName()){
+                                ca.setDeptName(contractApproval.getDeptName());
+                            }
+                            ca.setSort(contractApproval.getSort());
+                            ca.setUserId(contractApproval.getUserId());
+                            ca.setUserName(contractApproval.getUserName());
+                            ca.setActionType(contractApproval.getActionType());
+                            ca.setStatus(contractApproval.getStatus());
+                            cad.setApprovalStatus(contractApproval.getStatus());   //设置当前审批状态
                         }
                     }
                 }
+            }
+            cad.getContractApprovalList().clear();
+            if(null!=ca){
+                cad.getContractApprovalList().add(ca);
             }
         }
 

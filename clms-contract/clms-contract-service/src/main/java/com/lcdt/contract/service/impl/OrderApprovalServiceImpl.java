@@ -37,39 +37,44 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
         List<OrderApprovalDto> orderApprovalDtoList = orderApprovalMapper.selectOrderApprovalByCondition(orderApprovalListDto);
         PageInfo page = new PageInfo(orderApprovalDtoList);
         /**
-         * 整合数据，只保留一条审批人的信息，整合逻辑如下
-         * 找出审批人当中审批状态为
+         * 整合数据，
+         * 审批中和已驳回的状态只保留一条审批人的信息
+         * 已完成和已撤销的只设置审批创建人
          *
          * */
         for(OrderApprovalDto oad : orderApprovalDtoList){
-            OrderApprovalListDto oald = new OrderApprovalListDto();
-            oald.setOrderType(oad.getOrderType());
-            oald.setSupplier(oad.getSupplier());
-            oald.setOrderId(oad.getOrderId());
-            oald.setOrderSerialNo(oad.getOrderNo());
-//            oald.setContractCode(oad.getContractCode());
-            oald.setApprovalStartDate(oad.getApprovalStartDate());
+            OrderApproval oa = null;
             for(OrderApproval orderApproval : oad.getOrderApprovalList()){
                 if(null != orderApproval.getSort()) {
                     if (orderApproval.getSort() == 0) {  //发起人及创建人
-                        oald.setCreateUserName(orderApproval.getUserName());
+                        oad.setApprovalCreateName(orderApproval.getUserName());
                     }
                     /**审批状态为 1 3 4 代表审批流程正在执行的状态或者已经结束（撤销/驳回），可作为列表审批关键环节的展示*/
                     if (null != orderApproval.getStatus()) {
-                        if (orderApproval.getStatus() == 1 || orderApproval.getStatus() == 4) {
-                            oald.setOaId(orderApproval.getOaId());
-                            oald.setApprovalStatus(orderApproval.getStatus());   //设置当前审批状态
-                            oald.setCurrentUserName(orderApproval.getUserName());    //设置当前审批人
-                        } else if (orderApproval.getStatus() == 3) {    //撤销无需设置当前人员，只设置审批状态
-                            oald.setApprovalStatus(orderApproval.getStatus());
-                        } else if (oad.getApprovalStatus() == 2) {   //审批流程完成，无需再设置当前人
-                            oald.setApprovalStatus(new Short("2"));
+                        if (orderApproval.getStatus() == 1 || orderApproval.getStatus() == 3 || orderApproval.getStatus() == 4) {
+                            oa = new OrderApproval();
+                            oa.setOaId(orderApproval.getOaId());
+                            oa.setOrderId(orderApproval.getOrderId());
+                            if(null!=orderApproval.getDeptName()){
+                                oa.setDeptName(orderApproval.getDeptName());
+                            }
+                            oa.setSort(orderApproval.getSort());
+                            oa.setUserId(orderApproval.getUserId());
+                            oa.setUserName(orderApproval.getUserName());
+                            oa.setActionType(orderApproval.getActionType());
+                            oa.setStatus(orderApproval.getStatus());
+                            oad.setApprovalStatus(orderApproval.getStatus());   //设置当前审批状态
+                        }else if (oad.getApprovalStatus() == 2) {   //审批流程完成，无需再设置当前人
+                            oad.setApprovalStatus(new Short("2"));
                         }
                     }
                 }
             }
+            oad.getOrderApprovalList().clear();
+            if(null!=oa){
+                oad.getOrderApprovalList().add(oa);
+            }
         }
-
         return page;
     }
 

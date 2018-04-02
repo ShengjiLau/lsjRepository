@@ -17,7 +17,9 @@ public class ContractProduct {
 
     private BigDecimal price;
 
-    private BigDecimal payment;
+    private BigDecimal total;
+
+    private String spec;
 
     public Long getCpId() {
         return cpId;
@@ -69,19 +71,27 @@ public class ContractProduct {
         this.price = price;
     }
 
-    public BigDecimal getPayment() {
-        return payment;
+    public BigDecimal getTotal() {
+        return total;
     }
 
-    public void setPayment(BigDecimal payment) {
-        this.payment = payment;
+    public void setTotal(BigDecimal total) {
+        this.total = total;
     }
 
-	public BigDecimal getNum() {
+    public BigDecimal getNum() {
 		return num;
 	}
 
 	public void setNum(BigDecimal num) {
 		this.num = num;
 	}
+
+    public String getSpec() {
+        return spec;
+    }
+
+    public void setSpec(String spec) {
+        this.spec = spec;
+    }
 }

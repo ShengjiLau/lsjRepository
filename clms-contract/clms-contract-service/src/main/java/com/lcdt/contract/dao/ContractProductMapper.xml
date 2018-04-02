@@ -9,7 +9,8 @@
     <result column="sku" jdbcType="VARCHAR" property="sku" />
     <result column="num" jdbcType="DECIMAL" property="num" />
     <result column="price" jdbcType="DECIMAL" property="price" />
-    <result column="payment" jdbcType="DECIMAL" property="payment" />
+    <result column="total" jdbcType="DECIMAL" property="total" />
+    <result column="spec" jdbcType="VARCHAR" property="spec" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_contract_product
@@ -18,10 +19,10 @@
   <insert id="insert" parameterType="com.lcdt.contract.model.ContractProduct">
     insert into t_contract_product (cp_id, contract_id, product_name, 
       product_code, sku, num, 
-      price, payment)
+      price, total, spec)
     values (#{cpId,jdbcType=BIGINT}, #{contractId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR}, 
       #{productCode,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, #{num,jdbcType=DECIMAL}, 
-      #{price,jdbcType=DECIMAL}, #{payment,jdbcType=DECIMAL})
+      #{price,jdbcType=DECIMAL}, #{total,jdbcType=DECIMAL}, #{spec,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.ContractProduct">
     update t_contract_product
@@ -31,28 +32,29 @@
       sku = #{sku,jdbcType=VARCHAR},
       num = #{num,jdbcType=DECIMAL},
       price = #{price,jdbcType=DECIMAL},
-      payment = #{payment,jdbcType=DECIMAL}
+      total = #{total,jdbcType=DECIMAL},
+      spec = #{spec,jdbcType=VARCHAR}
     where cp_id = #{cpId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select cp_id, contract_id, product_name, product_code, sku, num, price, payment
+    select cp_id, contract_id, product_name, product_code, sku, num, price, total, spec
     from t_contract_product
     where cp_id = #{cpId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select cp_id, contract_id, product_name, product_code, sku, num, price, payment
+    select cp_id, contract_id, product_name, product_code, sku, num, price, total, spec
     from t_contract_product
   </select>
 
   <insert id="insertBatch">
     insert into t_contract_product (cp_id, contract_id, product_name,
     product_code, sku, num,
-    price, payment)
+    price, total, spec)
     values
     <foreach item="item" collection="list" separator=",">
       (#{item.cpId,jdbcType=BIGINT}, #{item.contractId,jdbcType=BIGINT}, #{item.productName,jdbcType=VARCHAR},
       #{item.productCode,jdbcType=VARCHAR}, #{item.sku,jdbcType=VARCHAR}, #{item.num,jdbcType=DECIMAL},
-      #{item.price,jdbcType=DECIMAL}, #{item.payment,jdbcType=DECIMAL})
+      #{item.price,jdbcType=DECIMAL}, #{item.total,jdbcType=DECIMAL}, #{item.spec,jdbcType=VARCHAR})
     </foreach>
   </insert>
 
@@ -65,7 +67,8 @@
       sku = #{item.sku,jdbcType=VARCHAR},
       num = #{item.num,jdbcType=DECIMAL},
       price = #{item.price,jdbcType=DECIMAL},
-      payment = #{item.payment,jdbcType=DECIMAL}
+      total = #{item.total,jdbcType=DECIMAL},
+      spec =  #{spec,jdbcType=VARCHAR}
       where cp_id = #{item.cpId,jdbcType=BIGINT}
     </foreach>
   </update>
@@ -85,7 +88,7 @@
   </select>
 
   <select id="selectCpsByContractId" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select cp_id, contract_id, product_name, product_code, sku, num, price, payment
+    select cp_id, contract_id, product_name, product_code, sku, num, price, total, spec
     from t_contract_product
     where contract_id = #{contractId,jdbcType=BIGINT}
   </select>

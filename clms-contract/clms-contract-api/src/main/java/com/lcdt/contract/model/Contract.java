@@ -1,11 +1,14 @@
 package com.lcdt.contract.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Contract {
     private Long contractId;
 
     private String contractCode;
+
+    private String serialNo;
 
     private String title;
 
@@ -23,11 +26,15 @@ public class Contract {
 
     private String payType;
 
-    private String partyA;
+    private Long partyAId;
+
+    private String partyAName;
 
     private String partyAPrincipal;
 
-    private String partyB;
+    private Long partyBId;
+
+    private String partyBName;
 
     private String partyBPrincipal;
 
@@ -49,6 +56,40 @@ public class Contract {
 
     private Long companyId;
 
+    private Short isDraft;
+
+    private BigDecimal summation;
+
+    private Long createId;
+
+    private String createName;
+
+    private Date createTime;
+
+    private Date effectiveTime;
+
+    private Date terminationTime;
+
+    private String attachment1Name;
+
+    private String attachment1;
+
+    private String attachment2Name;
+
+    private String attachment2;
+
+    private String attachment3Name;
+
+    private String attachment3;
+
+    private String attachment4Name;
+
+    private String attachment4;
+
+    private String attachment5Name;
+
+    private String attachment5;
+
     public Long getContractId() {
         return contractId;
     }
@@ -63,6 +104,14 @@ public class Contract {
 
     public void setContractCode(String contractCode) {
         this.contractCode = contractCode == null ? null : contractCode.trim();
+    }
+
+    public String getSerialNo() {
+        return serialNo;
+    }
+
+    public void setSerialNo(String serialNo) {
+        this.serialNo = serialNo;
     }
 
     public String getTitle() {
@@ -129,12 +178,36 @@ public class Contract {
         this.payType = payType == null ? null : payType.trim();
     }
 
-    public String getPartyA() {
-        return partyA;
+    public Long getPartyAId() {
+        return partyAId;
     }
 
-    public void setPartyA(String partyA) {
-        this.partyA = partyA == null ? null : partyA.trim();
+    public void setPartyAId(Long partyAId) {
+        this.partyAId = partyAId;
+    }
+
+    public String getPartyAName() {
+        return partyAName;
+    }
+
+    public void setPartyAName(String partyAName) {
+        this.partyAName = partyAName;
+    }
+
+    public Long getPartyBId() {
+        return partyBId;
+    }
+
+    public void setPartyBId(Long partyBId) {
+        this.partyBId = partyBId;
+    }
+
+    public String getPartyBName() {
+        return partyBName;
+    }
+
+    public void setPartyBName(String partyBName) {
+        this.partyBName = partyBName;
     }
 
     public String getPartyAPrincipal() {
@@ -143,14 +216,6 @@ public class Contract {
 
     public void setPartyAPrincipal(String partyAPrincipal) {
         this.partyAPrincipal = partyAPrincipal == null ? null : partyAPrincipal.trim();
-    }
-
-    public String getPartyB() {
-        return partyB;
-    }
-
-    public void setPartyB(String partyB) {
-        this.partyB = partyB == null ? null : partyB.trim();
     }
 
     public String getPartyBPrincipal() {
@@ -231,5 +296,141 @@ public class Contract {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public Short getIsDraft() {
+        return isDraft;
+    }
+
+    public void setIsDraft(Short isDraft) {
+        this.isDraft = isDraft;
+    }
+
+    public BigDecimal getSummation() {
+        return summation;
+    }
+
+    public void setSummation(BigDecimal summation) {
+        this.summation = summation;
+    }
+
+    public Long getCreateId() {
+        return createId;
+    }
+
+    public void setCreateId(Long createId) {
+        this.createId = createId;
+    }
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getEffectiveTime() {
+        return effectiveTime;
+    }
+
+    public void setEffectiveTime(Date effectiveTime) {
+        this.effectiveTime = effectiveTime;
+    }
+
+    public Date getTerminationTime() {
+        return terminationTime;
+    }
+
+    public void setTerminationTime(Date terminationTime) {
+        this.terminationTime = terminationTime;
+    }
+
+    public String getAttachment1Name() {
+        return attachment1Name;
+    }
+
+    public void setAttachment1Name(String attachment1Name) {
+        this.attachment1Name = attachment1Name;
+    }
+
+    public String getAttachment1() {
+        return attachment1;
+    }
+
+    public void setAttachment1(String attachment1) {
+        this.attachment1 = attachment1;
+    }
+
+    public String getAttachment2Name() {
+        return attachment2Name;
+    }
+
+    public void setAttachment2Name(String attachment2Name) {
+        this.attachment2Name = attachment2Name;
+    }
+
+    public String getAttachment2() {
+        return attachment2;
+    }
+
+    public void setAttachment2(String attachment2) {
+        this.attachment2 = attachment2;
+    }
+
+    public String getAttachment3Name() {
+        return attachment3Name;
+    }
+
+    public void setAttachment3Name(String attachment3Name) {
+        this.attachment3Name = attachment3Name;
+    }
+
+    public String getAttachment3() {
+        return attachment3;
+    }
+
+    public void setAttachment3(String attachment3) {
+        this.attachment3 = attachment3;
+    }
+
+    public String getAttachment4Name() {
+        return attachment4Name;
+    }
+
+    public void setAttachment4Name(String attachment4Name) {
+        this.attachment4Name = attachment4Name;
+    }
+
+    public String getAttachment4() {
+        return attachment4;
+    }
+
+    public void setAttachment4(String attachment4) {
+        this.attachment4 = attachment4;
+    }
+
+    public String getAttachment5Name() {
+        return attachment5Name;
+    }
+
+    public void setAttachment5Name(String attachment5Name) {
+        this.attachment5Name = attachment5Name;
+    }
+
+    public String getAttachment5() {
+        return attachment5;
+    }
+
+    public void setAttachment5(String attachment5) {
+        this.attachment5 = attachment5;
     }
 }
