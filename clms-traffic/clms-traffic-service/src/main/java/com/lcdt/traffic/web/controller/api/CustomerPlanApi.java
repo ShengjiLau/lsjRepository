@@ -9,6 +9,7 @@ import com.lcdt.traffic.dto.SnatchOfferDto;
 import com.lcdt.traffic.dto.SplitVehicleDto;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.SnatchGoods;
+import com.lcdt.traffic.model.SplitGoods;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.CustomerPlanService;
 import com.lcdt.traffic.service.PlanService;
@@ -677,12 +678,23 @@ public class CustomerPlanApi {
     @ApiOperation("客户计划-派车-详细信息拉取")
     @RequestMapping(value = "/loadCustomerPlan",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_split_vehicle')")
-    public WaybillPlan loadCustomerPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+    public WaybillPlan loadCustomerPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
+                                        @ApiParam(value = "派单ID",required = true) @RequestParam Long splitGoodsId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         WaybillParamsDto dto = new WaybillParamsDto();
         dto.setCompanyId(null);
         dto.setWaybillPlanId(waybillPlanId);
         WaybillPlan waybillPlan = planService.loadWaybillPlan(dto);
+        List<SplitGoods> splitGoodsList = waybillPlan.getSplitGoodsList();
+        if (splitGoodsId!=null && null!=splitGoodsList && splitGoodsList.size()>0) { //过滤非派单记录
+            List<SplitGoods> removeList = new ArrayList<SplitGoods>();
+            for(SplitGoods splitGoods :splitGoodsList) {
+                if(!splitGoods.getSplitGoodsId().equals(splitGoodsId)) {
+                    removeList.add(splitGoods);
+                }
+            }
+            splitGoodsList.removeAll(removeList);
+        }
         return waybillPlan;
     }
 
