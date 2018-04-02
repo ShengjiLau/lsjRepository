@@ -16,6 +16,8 @@ import com.lcdt.traffic.service.SplitGoodsService;
 import com.lcdt.traffic.service.WaybillRpcService;
 import com.lcdt.traffic.service.impl.CustomerCompanyIds;
 import com.lcdt.traffic.vo.ConstantVO;
+import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.util.ClmsBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -44,6 +46,9 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
     @Reference
     private CustomerRpcService customerRpcService;
+
+    @Reference
+    private CompanyService companyService;
 
     @Override
     public PageInfo queryOwnWaybillList(WaybillOwnListParamsDto dto) {
@@ -165,6 +170,10 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         map.put("waybillStatus", dto.getWaybillStatus());
         PageHelper.startPage(pageNo, pageSize);
         resultList = waybillMapper.selectDriverByCondition(map);
+        for (int i = 0; i < resultList.size(); i++) {
+            Company  company=companyService.selectById(resultList.get(i).getCompanyId());
+            resultList.get(i).setWaybillSource(company.getFullName());
+        }
         page = new PageInfo(resultList);
         return page;
     }
