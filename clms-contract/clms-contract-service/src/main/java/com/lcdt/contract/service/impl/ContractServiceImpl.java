@@ -133,6 +133,10 @@ public class ContractServiceImpl implements ContractService {
         Contract contract = new Contract();
         BeanUtils.copyProperties(dto, contract); //复制对象属性
         //将修改之前的部分属性赋值
+        if(!StringUtility.isNotEmpty(contract.getContractCode())){
+            contract.setContractCode(oldContract.getSerialNo());
+        }
+        contract.setSerialNo(oldContract.getSerialNo());
         contract.setContractStatus(oldContract.getContractStatus());
         contract.setCompanyId(oldContract.getCompanyId());
         contract.setCreateId(oldContract.getCreateId());
