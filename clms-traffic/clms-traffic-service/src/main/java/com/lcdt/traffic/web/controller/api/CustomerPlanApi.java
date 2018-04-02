@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.dto.CustomerPlanDto;
 import com.lcdt.traffic.dto.SnatchOfferDto;
 import com.lcdt.traffic.dto.SplitVehicleDto;
 import com.lcdt.traffic.exception.WaybillPlanException;
@@ -25,6 +26,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,6 +115,7 @@ public class CustomerPlanApi {
         }
 
         PageInfo pageInfo = customerPlanService.customerPlanList4Bidding(map);
+        removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -185,6 +188,7 @@ public class CustomerPlanApi {
         }
 
         PageInfo pageInfo = customerPlanService.customerPlanList4Offer(map);
+        removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -256,11 +260,41 @@ public class CustomerPlanApi {
                 map.put("groupIds", sb.toString());//客户
             }
         }
-
         PageInfo pageInfo = customerPlanService.customerPlanList4Pass(map);
+        removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
+
+
+    /***
+     * 移除其它抢单数据
+     */
+    private void removeOtherSnatch(PageInfo pageInfo, Long companyId) {
+        if(pageInfo.getTotal()>0) {
+            List<CustomerPlanDto> customerPlanDtos = pageInfo.getList();
+            if (customerPlanDtos!=null && customerPlanDtos.size()>0) {
+
+                for (CustomerPlanDto dto : customerPlanDtos) {
+                    if(dto.getSnatchGoodsList()!=null && dto.getSnatchGoodsList().size()>0) {
+                        List<SnatchGoods> otherSnatchGoods = new ArrayList<SnatchGoods>(); //存储其它数据
+                        for (SnatchGoods obj :dto.getSnatchGoodsList()) {
+                            if(!obj.getCompanyId().equals(companyId)) {
+                                otherSnatchGoods.add(obj);
+                            }
+                        }
+                        dto.getSnatchGoodsList().removeAll(otherSnatchGoods);
+                    }
+
+                }
+            }
+        }
+    }
+
+
+
+
+
 
 
     @ApiOperation("客户计划-列表-派车中")
@@ -330,6 +364,7 @@ public class CustomerPlanApi {
         }
 
         PageInfo pageInfo = customerPlanService.customerPlanList4VehicleDoing(map);
+        removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -400,6 +435,7 @@ public class CustomerPlanApi {
             }
         }
         PageInfo pageInfo = customerPlanService.customerPlanList4VehicleHave(map);
+        removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -473,6 +509,7 @@ public class CustomerPlanApi {
         }
 
         PageInfo pageInfo = customerPlanService.customerPlanList4Completed(map);
+        removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -546,6 +583,7 @@ public class CustomerPlanApi {
         }
 
         PageInfo pageInfo = customerPlanService.customerPlanList4Cancel(map);
+        removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }

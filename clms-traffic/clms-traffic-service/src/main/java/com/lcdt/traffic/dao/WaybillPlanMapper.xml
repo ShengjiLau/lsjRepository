@@ -156,6 +156,7 @@
     <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
                 select="com.lcdt.traffic.dao.PlanDetailMapper.selectByWaybillPlanId" />
+
     <!--抢单报价-->
     <collection property="snatchGoodsList" column="{waybillPlanId=waybill_plan_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.SnatchGoods" javaType="ArrayList"
@@ -681,7 +682,7 @@
     select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
     from t_waybill_plan p1
     <where>
-      and plan_status = '15' and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id)
+      and plan_status = '15' and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id ${snatchCompanyId})
       and  is_deleted = 0  AND  p1.plan_status !='60'  AND  p1.plan_status !='50'
 
       <if test="serialCode!=null and serialCode!=''">
@@ -730,7 +731,7 @@
     select '-1' as split_goods_id,waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
     from t_waybill_plan p1
     <where>
-      and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0)
+      and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0 ${snatchCompanyId})
       and waybill_plan_id not in (SELECT waybill_plan_id FROM t_split_goods sg where sg.company_id = p1.company_id and sg.is_deleted=0)
       AND  p1.plan_status !='60'  AND  p1.plan_status !='50'
       and is_deleted = 0
