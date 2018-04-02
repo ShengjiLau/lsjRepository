@@ -202,7 +202,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                         waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
                         waybillPlan.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//派车状态(派车中)
                     } else {
-                        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //计划状态(已派单)
+                        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED); //计划状态(已派完)
                         waybillPlan.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//派车状态(已派完)
                     }
 
@@ -493,12 +493,13 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             List<SplitGoodsDetail> tmp_splitGoodsDetail_list = splitGoodsDetailMapper.selectBySplitGoodsId(map1);
             if (tmp_splitGoodsDetail_list!=null && tmp_splitGoodsDetail_list.size()<=0) { //如果再没有子商品的话
                 splitGoodsMapper.deleteByPrimaryKey(splitGoodsId);
+
+                waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //从已派完变成派单中(更改计划状态)
+                waybillPlan.setUpdateId(user.getUserId());
+                waybillPlan.setUpdateName(user.getRealName());
+                waybillPlan.setUpdateTime(new Date());
+                waybillPlanMapper.updateWaybillPlan(waybillPlan);
             }
-            waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //从已派完变成派单中(更改计划状态)
-            waybillPlan.setUpdateId(user.getUserId());
-            waybillPlan.setUpdateName(user.getRealName());
-            waybillPlan.setUpdateTime(new Date());
-            waybillPlanMapper.updateWaybillPlan(waybillPlan);
             //派单取消息
             if (!StringUtils.isEmpty(splitGoods.getCarrierCompanyId())) {
                 DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(waybillPlan.getCompanyId(), user.getUserId()); //发送
@@ -582,19 +583,35 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
           int flag = -1;
           if (splitGoodsDetails!=null && splitGoodsDetails.size()>0) {
               List<SplitGoodsDetail> resultList = new ArrayList<SplitGoodsDetail>();
+              List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
+
               for (SplitGoodsDetail splitGoodsDetail :splitGoodsDetails) {
                   SplitGoodsDetail splitGoodsDetail11 = splitGoodsDetailMapper.selectByPrimaryKey(splitGoodsDetail.getSplitGoodsDetailId());
+
                   if (splitGoodsDetail11!=null) {
                      splitGoodsDetail11.setUpdateId(splitGoodsDetail.getUpdateId());
                      splitGoodsDetail11.setUpdateTime(splitGoodsDetail.getUpdateTime());
                      splitGoodsDetail11.setUpdateName(splitGoodsDetail.getUpdateName());
-                     splitGoodsDetail11.setRemainAmount(splitGoodsDetail.getRemainAmount()+splitGoodsDetail11.getRemainAmount());
+                     float remainAmount = splitGoodsDetail.getRemainAmount()+splitGoodsDetail11.getRemainAmount();
+                     splitGoodsDetail11.setRemainAmount(0f);
+                      splitGoodsDetail11.setAllotAmount(0f);
                      resultList.add(splitGoodsDetail11);
+
+                     PlanDetail planDetail = planDetailMapper.selectByPrimaryKey(splitGoodsDetail11.getPlanDetailId());
+                     if (null!=planDetail) {
+                         planDetail.setUpdateId(splitGoodsDetail.getUpdateId());
+                         planDetail.setUpdateTime(splitGoodsDetail.getUpdateTime());
+                         planDetail.setUpdateName(splitGoodsDetail.getUpdateName());
+                         planDetail.setRemainderAmount(planDetail.getRemainderAmount() + remainAmount);
+                         planDetailList.add(planDetail);
+                      }
                   }
               }
-              if (resultList.size()>0) { //
+              if(planDetailList.size()>0) {
+                  flag =  planDetailMapper.batchUpdatePlanDetail(planDetailList);
+              }
+              if (flag >0 && resultList.size()>0) {
                  flag = splitGoodsDetailMapper.batchUpdateSplitGoodsDetail(resultList);
-
               }
           }
           return flag;

@@ -145,6 +145,7 @@
     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
       update t_split_goods_detail
       <set>
+        allot_amount = #{item.allotAmount},
         remain_amount = #{item.remainAmount},
         update_id = #{item.updateId},
         update_name = #{item.updateName},
