@@ -211,6 +211,7 @@ public class LocationServiceApi {
             JSONObject result = GprsLocationBo.getInstance().queryLocation(mobile);
             int resid1 = result.getIntValue("resid");
             if (resid1 == 0) {   //已激活
+                balanceCheckBo.deductionGms(companyId); //查询正常扣费
                 Driver driver = new Driver();
                 driver.setDriverPhone(mobile);
                 driver.setCurrentLocation(result.getString("location"));
