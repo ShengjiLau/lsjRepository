@@ -583,19 +583,35 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
           int flag = -1;
           if (splitGoodsDetails!=null && splitGoodsDetails.size()>0) {
               List<SplitGoodsDetail> resultList = new ArrayList<SplitGoodsDetail>();
+              List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
+
               for (SplitGoodsDetail splitGoodsDetail :splitGoodsDetails) {
                   SplitGoodsDetail splitGoodsDetail11 = splitGoodsDetailMapper.selectByPrimaryKey(splitGoodsDetail.getSplitGoodsDetailId());
+
                   if (splitGoodsDetail11!=null) {
                      splitGoodsDetail11.setUpdateId(splitGoodsDetail.getUpdateId());
                      splitGoodsDetail11.setUpdateTime(splitGoodsDetail.getUpdateTime());
                      splitGoodsDetail11.setUpdateName(splitGoodsDetail.getUpdateName());
-                     splitGoodsDetail11.setRemainAmount(splitGoodsDetail.getRemainAmount()+splitGoodsDetail11.getRemainAmount());
+                     float remainAmount = splitGoodsDetail.getRemainAmount()+splitGoodsDetail11.getRemainAmount();
+                     splitGoodsDetail11.setRemainAmount(0f);
+                     splitGoodsDetail.setAllotAmount(0f);
                      resultList.add(splitGoodsDetail11);
+
+                     PlanDetail planDetail = planDetailMapper.selectByPrimaryKey(splitGoodsDetail11.getPlanDetailId());
+                     if (null!=planDetail) {
+                         planDetail.setUpdateId(splitGoodsDetail.getUpdateId());
+                         planDetail.setUpdateTime(splitGoodsDetail.getUpdateTime());
+                         planDetail.setUpdateName(splitGoodsDetail.getUpdateName());
+                         planDetail.setRemainderAmount(planDetail.getRemainderAmount() + remainAmount);
+                         planDetailList.add(planDetail);
+                      }
                   }
               }
-              if (resultList.size()>0) { //
+              if(planDetailList.size()>0) {
+                  flag =  planDetailMapper.batchUpdatePlanDetail(planDetailList);
+              }
+              if (flag >0 && resultList.size()>0) {
                  flag = splitGoodsDetailMapper.batchUpdateSplitGoodsDetail(resultList);
-
               }
           }
           return flag;
