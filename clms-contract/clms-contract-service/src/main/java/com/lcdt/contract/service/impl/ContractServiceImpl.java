@@ -9,13 +9,16 @@ import com.lcdt.contract.model.*;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.ContractDto;
 
+import com.lcdt.contract.web.utils.SerialNumAutoGenerator;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tl.commons.util.StringUtility;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -38,9 +41,28 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public int addContract(ContractDto dto) {
+        BigDecimal summation =new 	BigDecimal(0);// 为所有商品价格求和
+        if(null!=dto.getContractProductList()&&dto.getContractProductList().size()!=0){
+            for(ContractProduct contractProduct : dto.getContractProductList()) {
+                BigDecimal num = contractProduct.getNum();
+                BigDecimal price = contractProduct.getPrice();
+                //计算单个商品总价
+                BigDecimal total = num.multiply(price);
+                summation = summation.add(total);
+                contractProduct.setTotal(total);
+            }
+        }
+        dto.setSummation(summation);
         Contract contract = new Contract();
         BeanUtils.copyProperties(dto, contract); //复制对象属性
         int result = contractMapper.insert(contract);
+        if(!StringUtility.isNotEmpty(dto.getContractCode())){
+            contract.setContractCode((contract.getType()==0?"CG":"XS")
+                    + SerialNumAutoGenerator.getSerialNoById(contract.getContractId()));
+        }
+        contract.setSerialNo((contract.getType()==0?"CG":"XS")
+                + SerialNumAutoGenerator.getSerialNoById(contract.getContractId()));
+        contractMapper.updateByPrimaryKey(contract);
         if(dto.getContractProductList() != null && dto.getContractProductList().size() > 0) {
             //设置商品的合同id
             for (ContractProduct contractProduct : dto.getContractProductList()) {
@@ -93,8 +115,36 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public int modContract(ContractDto dto) {
+        //修改之前的合同
+        Contract oldContract = contractMapper.selectByPrimaryKey(dto.getContractId());
+
+        BigDecimal summation =new 	BigDecimal(0);// 为所有商品价格求和
+        if(null!=dto.getContractProductList()&&dto.getContractProductList().size()!=0){
+            for(ContractProduct contractProduct : dto.getContractProductList()) {
+                BigDecimal num = contractProduct.getNum();
+                BigDecimal price = contractProduct.getPrice();
+                //计算单个商品总价
+                BigDecimal total = num.multiply(price);
+                summation = summation.add(total);
+                contractProduct.setTotal(total);
+            }
+        }
+        dto.setSummation(summation);
         Contract contract = new Contract();
         BeanUtils.copyProperties(dto, contract); //复制对象属性
+        //将修改之前的部分属性赋值
+        if(!StringUtility.isNotEmpty(contract.getContractCode())){
+            contract.setContractCode(oldContract.getSerialNo());
+        }
+        contract.setSerialNo(oldContract.getSerialNo());
+        contract.setContractStatus(oldContract.getContractStatus());
+        contract.setCompanyId(oldContract.getCompanyId());
+        contract.setCreateId(oldContract.getCreateId());
+        contract.setCreateName(oldContract.getCreateName());
+        contract.setCreateTime(oldContract.getCreateTime());
+        contract.setEffectiveTime(oldContract.getEffectiveTime());
+        contract.setTerminationTime(oldContract.getTerminationTime());
+
         int result = contractMapper.updateByPrimaryKey(contract);
         //获取该合同下面的商品cpId用来匹配被删除的商品
         List<Long> cpIdList = contractProductMapper.selectCpIdsByContractId(contract.getContractId());
@@ -193,42 +243,6 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public int modContractStatus(Contract contract) {
         int result = contractMapper.updateContractStatus(contract);
-        return result;
-    }
-
-    @Override
-    public int createOrderByContract(Long contractId) {
-        int result = 0;
-        Contract contract = contractMapper.selectByPrimaryKey(contractId);
-        if(contract != null){
-            Order order = new Order();
-            order.setContractCode(contract.getContractCode());
-            order.setOrderType(contract.getType());
-            order.setPayType(contract.getPayType());
-
-            order.setGroupId(contract.getGroupId());
-            order.setCompanyId(contract.getCompanyId());
-            order.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
-            order.setCreateTime(new Date());
-            result = orderMapper.insertOrder(order);
-
-            List<ContractProduct> cpList = contractProductMapper.selectCpsByContractId(contractId);
-            if(cpList != null && cpList.size() > 0){
-                List<OrderProduct> opList = new ArrayList<>();
-                //合同商品值赋到订单商品
-                for (ContractProduct cp : cpList) {
-                    OrderProduct op = new OrderProduct();
-                    op.setOrderId(order.getOrderId());
-                    op.setName(cp.getProductName());
-                    op.setCode(cp.getProductCode());
-                    op.setSku(cp.getSku());
-                    op.setNum(cp.getNum());
-                    op.setPrice(cp.getPrice());
-                    op.setTotal(cp.getPayment());
-                }
-                result += conditionQueryMapper.insertOrderProductByBatch(opList);  //批量插入订单商品
-            }
-        }
         return result;
     }
 

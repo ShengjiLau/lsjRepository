@@ -1,21 +1,17 @@
 package com.lcdt.contract.web.dto;
 
 
-import java.util.Date;
-
 import com.lcdt.contract.model.Contract;
+import com.lcdt.contract.model.ContractApproval;
+import com.lcdt.contract.model.ContractProduct;
+import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 /**
  * @AUTHOR liuh
  * @DATE 2018-02-28
  */
-
-
-
-import com.lcdt.contract.model.ContractApproval;
-import com.lcdt.contract.model.ContractProduct;
-
-import java.util.List;
 
 /**
  * Created by liz on 2018/3/7.
@@ -30,12 +26,21 @@ public class ContractDto extends Contract{
 
     private Long userId;
 
+    @ApiModelProperty(value="查询生效时间起点")
+    private String beginTime;
+
+    @ApiModelProperty(value="查询生效时间终点")
+    private String endTime;
 
     private int pageNum;
 
     private int pageSize;
 
-
+//    @ApiModelProperty(value = "合同类型 0-采购 1-销售")
+//    private Short type;
+//
+//    @ApiModelProperty(value = "合同状态 0-生效中 1-待生效 2-创建中 3-已失效")
+//    private Short contractStatus;
    
 
     public List<ContractApproval> getContractApprovalList() {
@@ -69,6 +74,22 @@ public class ContractDto extends Contract{
     public void setUserId(Long userId) {
         this.userId = userId;
 
+    }
+
+    public String getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(String beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public int getPageNum() {
