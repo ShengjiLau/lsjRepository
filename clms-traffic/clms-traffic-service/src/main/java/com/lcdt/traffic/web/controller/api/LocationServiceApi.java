@@ -216,18 +216,18 @@ public class LocationServiceApi {
                 driver.setCurrentLocation(result.getString("location"));
                 driver.setShortCurrentLocation(result.getString("street"));
                 driverService.updateLocation(driver);
-                jsonObject.put("code", resid);
+                jsonObject.put("code", resid1);
                 jsonObject.put("location",result.getString("location"));
                 jsonObject.put("locationTime", DateUtility.getCurrDatetime());
                 jsonObject.put("message", "查询成功");
             } else if (resid1 == -80) {    //	余额不足,请充值:请联系客服
-                jsonObject.put("code", resid);
+                jsonObject.put("code", resid1);
                 jsonObject.put("message", "余额不足,请充值:请联系客服");
             } else if (resid1 == -130) {    //用户可能关机
-                jsonObject.put("code", resid);
+                jsonObject.put("code", resid1);
                 jsonObject.put("message", "用户可能关机");
             } else {      //对于移动手机，定位失败时运营商返回的结果
-                jsonObject.put("code", resid);
+                jsonObject.put("code", resid1);
                 jsonObject.put("message", "定位失败，请联系客服！");
             }
         } else if (resid == 0) {    //未激活
