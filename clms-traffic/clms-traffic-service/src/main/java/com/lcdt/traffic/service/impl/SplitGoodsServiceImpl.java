@@ -400,14 +400,19 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
         if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
             waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //计划状态(已派完)
             waybillPlan.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//派车状态(派车中)
-        } else {//如果是司机生成派单、运单
+        } else {
+
+            //如果是司机生成派单、运单
             WaybillDto waybillDto = new WaybillDto();
             waybillDto.setCarrierCompanyId(splitGoods.getCarrierCompanyId());
             waybillDto.setCreateId(splitGoods.getCreateId());
             waybillDto.setCreateName(splitGoods.getCreateName());
-
             waybillDto.setDriverPhone(splitGoods.getCarrierPhone());
-            waybillDto.setVechicleNum(splitGoods.getCarrierVehicle());
+            if(StringUtils.isEmpty(dto.getCarrierVehicle())) {
+                waybillDto.setVechicleNum(splitGoods.getCarrierVehicle());
+            } else {
+                waybillDto.setVechicleNum(dto.getCarrierVehicle());
+            }
 
             if(!StringUtils.isEmpty(splitGoods.getCarrierCollectionIds())) {
                 waybillDto.setDriverName(splitGoods.getCarrierCollectionNames());

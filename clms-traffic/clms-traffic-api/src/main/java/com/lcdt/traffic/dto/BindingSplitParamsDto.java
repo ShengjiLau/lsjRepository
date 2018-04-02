@@ -21,6 +21,15 @@ public class BindingSplitParamsDto implements java.io.Serializable{
 
     private Long carrierCompanyId; //承运人企业ID
 
+    public String getCarrierVehicle() {
+        return carrierVehicle;
+    }
+
+    public void setCarrierVehicle(String carrierVehicle) {
+        this.carrierVehicle = carrierVehicle;
+    }
+
+    private String carrierVehicle;
 
 
 
