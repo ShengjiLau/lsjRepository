@@ -34,6 +34,9 @@ public class WaybillCustListParamsDto {
     @ApiModelProperty(value = "结束计划发货时间（门卫出库管理时的查询条件）")
     private String endStartDate;
 
+    @ApiModelProperty(value = "派单id")
+    private Long splitGoodsId;
+
     @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
     @ApiModelProperty(value = "是否删除",hidden = true)
@@ -149,6 +152,14 @@ public class WaybillCustListParamsDto {
 
     public void setEndStartDate(String endStartDate) {
         this.endStartDate = endStartDate;
+    }
+
+    public Long getSplitGoodsId() {
+        return splitGoodsId;
+    }
+
+    public void setSplitGoodsId(Long splitGoodsId) {
+        this.splitGoodsId = splitGoodsId;
     }
 
     public Long getCompanyId() {

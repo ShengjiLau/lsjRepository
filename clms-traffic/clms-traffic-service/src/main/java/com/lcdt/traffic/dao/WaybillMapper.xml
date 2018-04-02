@@ -168,7 +168,7 @@
       and waybill_status in (${waybillStatus})
     </if>
     <if test="waybillPlanId!=null and waybillPlanId!=''">
-      and waybill_plan_id = #{waybillPlanId,jdbcType=SMALLINT}
+      and waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT}
     </if>
     <if test="receiveProvince!=null and receiveProvince!=''">
       and receive_province = #{receiveProvince,jdbcType=VARCHAR}
@@ -193,6 +193,9 @@
     </if>
     <if test="driverInfo!=null and driverInfo!=''">
       and (driver_name like concat('%',#{driverInfo,jdbcType=VARCHAR},'%') or driver_phone like concat('%',#{driverInfo,jdbcType=VARCHAR},'%') or vechicle_num like concat('%',#{driverInfo,jdbcType=VARCHAR},'%'))
+    </if>
+    <if test="splitGoodsId!=null and splitGoodsId!=''">
+      and split_goods_id = #{splitGoodsId,jdbcType=BIGINT}
     </if>
     <if test="startStartDate!=null and startStartDate!=''">
       and start_date >=CONCAT(STR_TO_DATE(#{startStartDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
