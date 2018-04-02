@@ -15,7 +15,7 @@ public class ConstantVO {
     public static String PLAN_STATUS_BIDDING = "15";//竞价中
     public static String PLAN_STATUS_APPROVAL = "20";//审批中
     public static String PLAN_STATUS_SEND_ORDERS = "30";//派单中
-    public static String PLAN_STATUS_SEND_OFF = "40";//已派完
+    public static String PLAN_STATUS_SEND_OFF = "40";//已派单，原来已派完
     public static String PLAN_STATUS_COMPLETED = "50";//已完成
     public static String PLAN_STATUS_CANCEL = "60"; //已取消
 
