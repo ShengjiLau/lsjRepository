@@ -21,4 +21,8 @@ public class BalanceCheckBo {
     public int getGmsCount(Long companyId){
         return smsCountService.getProductCount(companyId,"gms_location");
     }
+
+    public void deductionGms(Long companyId){
+        smsCountService.deduction(companyId,"gms_location",1);
+    }
 }
