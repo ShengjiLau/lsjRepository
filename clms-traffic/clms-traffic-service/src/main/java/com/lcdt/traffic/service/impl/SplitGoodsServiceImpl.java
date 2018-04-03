@@ -112,6 +112,8 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                             obj1.setUpdateName(user.getRealName());
                             planDetailMapper.updateByPrimaryKey(obj1);
                             opFlag = true;
+
+
                             if((obj.getAllotAmount()-obj.getRemainAmount())==0) {
                                 splitGoodsDetailMapper.deleteByPrimaryKey(splitGoodsDetailId);  //先删除子明细
                             }else{
@@ -137,7 +139,8 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
             //再查询主下面是否存在子明细，如果有，不删除主，没有删除主
             List<SplitGoodsDetail> tmp_splitGoodsDetail_list = splitGoodsDetailMapper.selectBySplitGoodsId(map1);
-            if (tmp_splitGoodsDetail_list!=null && tmp_splitGoodsDetail_list.size()<=0) { //如果再没有子商品的话
+
+            if (tmp_splitGoodsDetail_list!=null && tmp_splitGoodsDetail_list.size()>=0) { //这种情况也对，取消派单还原于计划中，所以酒存在
                 splitGoodsMapper.deleteByPrimaryKey(splitGoodsId);
 
                 waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //从已派完变成派单中(更改计划状态)
@@ -146,6 +149,8 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                 waybillPlan.setUpdateTime(new Date());
                 waybillPlanMapper.updateWaybillPlan(waybillPlan);
             }
+
+
             //派单取消息
             if (!StringUtils.isEmpty(splitGoods.getCarrierCompanyId())) {
                 DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(waybillPlan.getCompanyId(), user.getUserId()); //发送
