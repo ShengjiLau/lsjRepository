@@ -1,5 +1,6 @@
 package com.lcdt.login.service;
 
+import com.lcdt.login.config.SsoProperties;
 import com.lcdt.login.ticket.TicketBean;
 import com.lcdt.login.web.LoginSessionReposity;
 import org.slf4j.Logger;
@@ -34,6 +35,9 @@ public class AuthTicketService {
 	@Autowired
 	CreateTicketService createTicketService;
 
+	@Autowired
+	SsoProperties ssoProperties;
+
 	public TicketBean isTicketValid(String ticket) {
 		return ticketManager.get(ticket);
 	}
@@ -44,7 +48,7 @@ public class AuthTicketService {
 				cookie.setValue(null);
 				cookie.setMaxAge(0);
 				cookie.setPath("/");
-				cookie.setDomain(cookie.getDomain());
+				cookie.setDomain(ssoProperties.getHost());
 				String ticket = cookie.getValue();
 				ticketManager.removeTicketCache(ticket);
 				response.addCookie(cookie);
