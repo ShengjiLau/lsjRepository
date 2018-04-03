@@ -1,4 +1,4 @@
-package com.lcdt.traffic.web.dto;
+package com.lcdt.traffic.dto;
 
 import com.lcdt.traffic.model.TransportWayItems;
 import io.swagger.annotations.ApiModelProperty;
@@ -10,7 +10,7 @@ import java.util.List;
  *
  * Describe 派单主单
  */
-public class SplitGoodsParamsDto {
+public class SplitGoodsParamsDto implements java.io.Serializable {
 
     @ApiModelProperty(value = "计划ID")
     private Long waybillPlanId;
