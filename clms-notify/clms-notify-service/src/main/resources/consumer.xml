@@ -2,7 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
+    <context:property-placeholder location="classpath*:jdbc.properties" />
     <import resource="common.xml"/>
     <bean id="msgListener" class="com.lcdt.notify.mqlistener.NotifyServiceListener"/> <!--Listener配置-->
 

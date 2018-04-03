@@ -1,5 +1,6 @@
 package com.lcdt.notify;
 
+import com.lcdt.aliyunmq.AliyunConfigProperties;
 import com.lcdt.clms.security.annontion.EnableClmsSecurity;
 import com.lcdt.converter.ClmsResponseConvertConfig;
 import com.lcdt.swagger.SwaggerConfig;
@@ -13,8 +14,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
-@Import({MybatisCommonConfig.class, SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class})
-@ImportResource("classpath:consumer.xml")
+@Import({AliyunConfigProperties.class,MybatisCommonConfig.class, SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class})
+//@ImportResource("classpath:consumer.xml")
 @EnableClmsSecurity
 public class NotifyServiceApp {
     public static void main(String[] args) {
