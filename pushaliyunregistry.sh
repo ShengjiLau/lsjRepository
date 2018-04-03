@@ -48,9 +48,8 @@ fi
 docker_login
 
 read -p "请输入镜像名称: " imagename
-read -p "请输入镜像tag: " imagetag
 read -p "请输入构建路径: " imagepath
-push_to_aliregistry $imagename $imagetag $imagepath
+push_to_aliregistry $imagename 1.0 $imagepath
 read -p "请输入应用名字: " appname
 update_server $appname
 
