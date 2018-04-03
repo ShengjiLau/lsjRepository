@@ -330,4 +330,12 @@
     from t_order_approval
     where order_id = #{arg0} order by sort
   </select>
+  <select id="selectCC" resultMap="BaseResultMap">
+    select oa_id, order_id, user_id, user_name, dept_name, sort, action_type, result, status, content,time
+    from t_order_approval
+    where order_id = #{arg0} and action_type=1 and user_id in
+    <foreach item="item" index="index" collection="arg1" open="(" separator="," close=")">
+      #{item.userId,jdbcType=BIGINT}
+    </foreach>
+  </select>
 </mapper>
