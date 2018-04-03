@@ -27,8 +27,8 @@ public class UnifiedorderBean implements Serializable{
 	}
 
 
-	public static UnifiedorderBean defaultOrderBean(String orderId,Integer total_fee,String ip){
-		UnifiedorderBean unifiedorderBean = new UnifiedorderBean("web", "大驼队clms账户充值", orderId, total_fee, ip, "NATIVE");
+	public static UnifiedorderBean defaultOrderBean(String orderId,Integer total_fee,String ip,String notifyUrl){
+		UnifiedorderBean unifiedorderBean = new UnifiedorderBean("web", "大驼队clms账户充值", orderId, total_fee, ip, "NATIVE",notifyUrl);
 		try {
 			String sign = Signature.getSign(unifiedorderBean);
 			unifiedorderBean.setSign(sign);
@@ -43,7 +43,7 @@ public class UnifiedorderBean implements Serializable{
 
 	public UnifiedorderBean(String device_info,
 			String body,String out_trade_no,Integer total_fee,String spbill_create_ip,
-			String trade_type){
+			String trade_type,String notifyUrl){
 		this.appid = Configure.getAppid();
 		this.mch_id = Configure.getMchid();
 		this.device_info = device_info;
@@ -52,7 +52,7 @@ public class UnifiedorderBean implements Serializable{
 		this.out_trade_no = out_trade_no;
 		this.total_fee = total_fee;
 		this.spbill_create_ip = spbill_create_ip;
-		this.notify_url = Configure.NOTIFY_URL;
+		this.notify_url = notifyUrl;
 		this.trade_type = trade_type;
 		//this.openid = out_trade_no;
 		

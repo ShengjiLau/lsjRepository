@@ -12,7 +12,11 @@
     <artifactId>pay-service</artifactId>
     <name>pay-service</name>
     <dependencies>
-
+        <dependency>
+            <groupId>com.github.wxpay</groupId>
+            <artifactId>wxpay-sdk</artifactId>
+            <version>0.0.3</version>
+        </dependency>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-pay-api</artifactId>
