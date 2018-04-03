@@ -1,10 +1,7 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
-import com.lcdt.traffic.dto.OwnCompany4SnatchRdto;
-import com.lcdt.traffic.dto.SnatchBill4WaittingRdto;
-import com.lcdt.traffic.dto.SnatchOfferDto;
-import com.lcdt.traffic.dto.SnathBill4WaittingPdto;
+import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.model.SnatchGoods;
 
