@@ -20,6 +20,9 @@ public class MQConfig {
     @Autowired
     AliyunConfigProperties aliyunConfigProperties;
 
+    @Autowired
+    NotifyServiceListener notifyServiceListener;
+
     @Bean(initMethod = "start",destroyMethod = "shutdown")
     public ConsumerBean consumerBean(){
 
@@ -33,16 +36,12 @@ public class MQConfig {
         Subscription subscription = new Subscription();
         subscription.setTopic(aliyunConfigProperties.getTopic());
         subscription.setExpression("*");
-        map.put(subscription, notifyServiceListener());
+        map.put(subscription, notifyServiceListener);
 
         consumerBean.setSubscriptionTable(map);
         return consumerBean;
     }
 
-    @Autowired
-    public NotifyServiceListener notifyServiceListener(){
-        NotifyServiceListener notifyServiceListener = new NotifyServiceListener();
-        return notifyServiceListener;
-    }
+
 
 }
