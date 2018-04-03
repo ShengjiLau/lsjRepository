@@ -1,4 +1,4 @@
-package com.lcdt.driver.wechat.api;
+package com.lcdt.driver.wechat.api.plan;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
@@ -6,10 +6,7 @@ import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
 import com.lcdt.driver.dto.PageBaseDto;
-import com.lcdt.traffic.dto.OwnCompany4SnatchRdto;
-import com.lcdt.traffic.dto.Plan4CarrierParamsDto;
-import com.lcdt.traffic.dto.SnatchOfferDto;
-import com.lcdt.traffic.dto.SnathBill4WaittingPdto;
+import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.model.SnatchGoods;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.userinfo.model.Group;
@@ -21,10 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -112,7 +106,6 @@ public class PlanApi {
     @RequestMapping(value = "/carrier/planList",method = RequestMethod.GET)
     public PageBaseDto planList(Plan4CarrierParamsDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
-
         StringBuffer sb = new StringBuffer();
         List<Group> groupList = TokenSecurityInfoGetter.getUserCompRel().getGroups();
         if(groupList!=null && groupList.size()>0) {
@@ -143,6 +136,48 @@ public class PlanApi {
         PageBaseDto pageBaseDto = new PageBaseDto(pg.getList(), pg.getTotal());
         return pageBaseDto;
     }
+
+
+
+
+    @ApiOperation("直接-派单")
+    @RequestMapping(value = "/carrier/splitGoods4Direct",method = RequestMethod.POST)
+    public JSONObject splitGoods4Direct(SplitGoodsParamsDto dto) {
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        int flag = iPlanRpcService4Wechat.splitGoods4Direct(dto,userCompRel);
+        JSONObject jsonObject = new JSONObject();
+        String message = null;
+        int code = -1;
+        if (flag==1) {
+            code = 0;
+        } else {
+            message = "操作失败，请重试！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject;
+    }
+
+
+
+    @ApiOperation("竞价-派单")
+    @RequestMapping(value = "/carrier/splitGoods4Direct",method = RequestMethod.POST)
+    public JSONObject splitGoods4Direct(BindingSplitParamsDto dto) {
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        int flag = iPlanRpcService4Wechat.splitGoods4Bidding(dto,userCompRel);
+        JSONObject jsonObject = new JSONObject();
+        String message = null;
+        int code = -1;
+        if (flag==1) {
+            code = 0;
+        } else {
+            message = "操作失败，请重试！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject;
+    }
+
 
 
 }

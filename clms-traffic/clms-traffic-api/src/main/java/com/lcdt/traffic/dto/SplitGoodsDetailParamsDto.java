@@ -1,4 +1,4 @@
-package com.lcdt.traffic.web.dto;
+package com.lcdt.traffic.dto;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import java.util.List;
  *  Describe 派单明细参数
  *
  */
-public class SplitGoodsDetailParamsDto {
+public class SplitGoodsDetailParamsDto implements java.io.Serializable{
 
 
     private Long planDetailId; //计划详细ID
