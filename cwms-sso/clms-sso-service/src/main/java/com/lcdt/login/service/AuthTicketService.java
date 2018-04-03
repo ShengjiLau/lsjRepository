@@ -44,6 +44,7 @@ public class AuthTicketService {
 				cookie.setValue(null);
 				cookie.setMaxAge(0);
 				cookie.setPath("/");
+				cookie.setDomain(cookie.getDomain());
 				String ticket = cookie.getValue();
 				ticketManager.removeTicketCache(ticket);
 				response.addCookie(cookie);
