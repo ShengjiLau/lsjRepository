@@ -13,6 +13,7 @@ import com.lcdt.traffic.model.SplitGoods;
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.CustomerPlanService;
+import com.lcdt.traffic.service.ICustomerPlanRpcService4Wechat;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.WaybillDto;
@@ -43,6 +44,9 @@ public class CustomerPlanApi {
 
     @Autowired
     private CustomerPlanService customerPlanService;
+
+    @Autowired
+    private ICustomerPlanRpcService4Wechat iCustomerPlanRpcService4Wechat;
 
     @Autowired
     private PlanService planService;
@@ -116,7 +120,7 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4Bidding(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Bidding(map);
         removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -189,7 +193,7 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4Offer(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Offer(map);
         removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -262,7 +266,7 @@ public class CustomerPlanApi {
                 map.put("groupIds", sb.toString());//客户
             }
         }
-        PageInfo pageInfo = customerPlanService.customerPlanList4Pass(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Pass(map);
         removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -359,7 +363,7 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4VehicleDoing(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4VehicleDoing(map);
         removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -430,7 +434,7 @@ public class CustomerPlanApi {
                 map.put("groupIds", sb.toString());//客户
             }
         }
-        PageInfo pageInfo = customerPlanService.customerPlanList4VehicleHave(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4VehicleHave(map);
         removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -504,7 +508,7 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4Completed(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Completed(map);
         removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -578,7 +582,7 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4Cancel(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Cancel(map);
         removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
