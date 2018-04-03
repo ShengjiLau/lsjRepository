@@ -308,9 +308,18 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                 pageSize = (Integer) map.get("page_size");
             }
         }
+
+        //默认排序
+        String orderField = "waybill_plan_id";
+        String orderDesc = "desc";
+        if (map.get("orderDesc")==null) {
+            map.put("orderDesc", "orderDesc");
+        }
+        if (map.get("orderFiled")=="") {
+            map.put("orderFiled", "orderField");
+        }
         PageHelper.startPage(pageNo, pageSize);
         List<WaybillPlan> list = waybillPlanMapper.selectByCondition(map);
-
         if(list!=null && list.size()>0) { //
             for(WaybillPlan obj :list) {
                 List<SnatchGoods> snatchGoodsList = obj.getSnatchGoodsList();
@@ -326,8 +335,6 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                 }
             }
         }
-
-
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
     }
