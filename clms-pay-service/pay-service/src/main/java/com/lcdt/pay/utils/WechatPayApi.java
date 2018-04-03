@@ -1,6 +1,7 @@
 package com.lcdt.pay.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.lcdt.pay.config.WechatPayConfig;
 import com.lcdt.pay.wechatpay.Configure;
 import com.lcdt.pay.wechatpay.HttpsRequest;
 import com.lcdt.pay.wechatpay.UnifiedorderBean;
@@ -28,12 +29,15 @@ public class WechatPayApi {
 
     Logger log = LoggerFactory.getLogger(WechatPayApi.class);
 
+    @Autowired
+    WechatPayConfig wechatPayConfig;
+
     /**
      * 返回微信支付的交易二维码
      * @return
      */
     public String createWechatOrder(String orderID,String ip,Integer totalfee){
-        UnifiedorderBean unifiedorderBean = UnifiedorderBean.defaultOrderBean(orderID, totalfee, ip);
+        UnifiedorderBean unifiedorderBean = UnifiedorderBean.defaultOrderBean(orderID, totalfee, ip,wechatPayConfig.getWechatPayUrl());
         try {
             String response = request.sendPost(Configure.UNIFIEDORDER_API, unifiedorderBean);
             Map<String, Object> responseMap = XMLParser.getMapFromXML(response);
