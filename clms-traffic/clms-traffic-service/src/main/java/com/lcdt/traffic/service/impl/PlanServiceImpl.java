@@ -257,18 +257,18 @@ public class PlanServiceImpl implements PlanService {
                 //不存在
             }
             //计划详细
-            List<PlanDetail> planDetailList = waybillPlan.getPlanDetailList();
+            List<PlanDetail> planDetailList = waybillPlan1.getPlanDetailList();
             if (planDetailList!=null && planDetailList.size()>0) {
                 for (PlanDetail splitGoods: planDetailList) {
                     remainCount+=splitGoods.getRemainderAmount();
                 }
 
             }
+            if(remainCount==0) {
+                waybillPlanMapper.updateWaybillPlan(waybillPlan); // 如果所有拍单剩余数量为0的话
+            }
+        }
 
-        }
-        if(remainCount==0) {
-            waybillPlanMapper.updateWaybillPlan(waybillPlan); // 如果所有拍单剩余数量为0的话
-        }
 
 
 

@@ -140,6 +140,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
         SplitGoods tObj = new SplitGoods();
         tObj.setSplitGoodsId(dto.getSplitGoodsId());
         PlanBO.getInstance().converPlan2Waybill(waybillPlan,tObj, waybillDto);  //计划转为运单
+
         List<PlanDetail> list = dto.getPlanDetailList();
         float sumAmount = 0; //统计本次派车总重量（这块本应是循环比较的，前端目前验证了派出只能派最大数量，所的这块把所有的明细派车数加在一起比较）
         List<WaybillItemsDto> waybillItemsDtos = new ArrayList<WaybillItemsDto>();
@@ -179,6 +180,7 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
                     }
                 }
             }
+
         }
 
         boolean isComplete = false;
@@ -186,7 +188,17 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
             throw new RuntimeException("本次派车总数量："+sumAmount+"，剩余待派数量："+splitRemainAmount+"，派车失败！");
         } else {
             if(sumAmount-splitRemainAmount==0) { //全部派完的话，更新计划状态
-                isComplete = true;
+                float remainCount = 0;
+                //如果派单完成要检查计划中剩余数量是否完成
+                List<PlanDetail> planDetailList = waybillPlan.getPlanDetailList();
+                if (planDetailList!=null && planDetailList.size()>0) {
+                    for (PlanDetail planDetail: planDetailList) {
+                        remainCount+=planDetail.getRemainderAmount();
+                    }
+                }
+                if (remainCount==0) { //这块主要是来更新计划状态用的
+                    isComplete = true;
+                }
             }
         }
         waybillDto.setWaybillCode(waybillPlan.getSerialCode());   //整合运单主子关系
