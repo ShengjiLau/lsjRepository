@@ -161,8 +161,8 @@ public class PlanApi {
 
 
     @ApiOperation("竞价-派单")
-    @RequestMapping(value = "/carrier/splitGoods4Direct",method = RequestMethod.POST)
-    public JSONObject splitGoods4Direct(BindingSplitParamsDto dto) {
+    @RequestMapping(value = "/carrier/splitGoods4Bidding",method = RequestMethod.POST)
+    public JSONObject splitGoods4Bidding(BindingSplitParamsDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         int flag = iPlanRpcService4Wechat.splitGoods4Bidding(dto,userCompRel);
         JSONObject jsonObject = new JSONObject();
