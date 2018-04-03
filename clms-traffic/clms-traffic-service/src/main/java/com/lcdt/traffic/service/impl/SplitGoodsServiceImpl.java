@@ -140,15 +140,15 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             //再查询主下面是否存在子明细，如果有，不删除主，没有删除主
             List<SplitGoodsDetail> tmp_splitGoodsDetail_list = splitGoodsDetailMapper.selectBySplitGoodsId(map1);
 
-            if (tmp_splitGoodsDetail_list!=null && tmp_splitGoodsDetail_list.size()>=0) { //这种情况也对，取消派单还原于计划中，所以酒存在
+            if (tmp_splitGoodsDetail_list==null || tmp_splitGoodsDetail_list.size()<=0) {
                 splitGoodsMapper.deleteByPrimaryKey(splitGoodsId);
-
-                waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //从已派完变成派单中(更改计划状态)
-                waybillPlan.setUpdateId(user.getUserId());
-                waybillPlan.setUpdateName(user.getRealName());
-                waybillPlan.setUpdateTime(new Date());
-                waybillPlanMapper.updateWaybillPlan(waybillPlan);
             }
+
+            waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS);
+            waybillPlan.setUpdateId(user.getUserId());
+            waybillPlan.setUpdateName(user.getRealName());
+            waybillPlan.setUpdateTime(new Date());
+            waybillPlanMapper.updateWaybillPlan(waybillPlan);
 
 
             //派单取消息
