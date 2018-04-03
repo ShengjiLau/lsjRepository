@@ -14,64 +14,6 @@ import java.util.Map;
 public interface CustomerPlanService {
 
 
-    /****
-     * 客户计划-竞价
-     * @param map
-     * @return
-     */
-    PageInfo customerPlanList4Bidding(Map map);
-
-
-    /***
-     * 客户计划-已报价
-     * @param map
-     * @return
-     */
-    PageInfo customerPlanList4Offer(Map map);
-
-
-    /***
-     * 客户计-已错过
-     * @param map
-     * @return
-     */
-    PageInfo customerPlanList4Pass(Map map);
-
-
-    /***
-     * 客户计划-派车中
-     * @param map
-     * @return
-     */
-    PageInfo customerPlanList4VehicleDoing(Map map);
-
-
-    /***
-     * 客户计划-已派车
-     * @param map
-     * @return
-     */
-    PageInfo customerPlanList4VehicleHave(Map map);
-
-
-    /***
-     * 客户计划-已完成
-     * @param map
-     * @return
-     */
-    PageInfo customerPlanList4Completed(Map map);
-
-
-
-    /***
-     * 客户计划-已取消
-     * @param map
-     * @return
-     */
-    PageInfo customerPlanList4Cancel(Map map);
-
-
-
     /***
      * 抢单报价
      * @param dto -- 外部参数
