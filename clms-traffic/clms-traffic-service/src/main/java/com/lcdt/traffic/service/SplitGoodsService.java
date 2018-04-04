@@ -30,7 +30,7 @@ public interface SplitGoodsService {
      * @param splitGoodsDetails
      * @return
      */
-    Integer waybillCancel4SplitGoods(List<SplitGoodsDetail> splitGoodsDetails);
+    Integer waybillCancel4SplitGoods(List<SplitGoodsDetail> splitGoodsDetails, Long waybillPalnId);
 
 
 
