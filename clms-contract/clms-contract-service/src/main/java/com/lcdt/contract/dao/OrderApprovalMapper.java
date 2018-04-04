@@ -94,4 +94,11 @@ public interface OrderApprovalMapper {
      */
     List<OrderApproval> selectForOrderDetail(Long orderId);
 
+    /**
+     * 查询订单审批的抄送人
+     * @param orderApprovalList
+     * @return
+     */
+    List<OrderApproval> selectCC(Long orderId,List<OrderApproval> orderApprovalList);
+
 }
