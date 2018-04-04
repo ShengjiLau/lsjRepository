@@ -2,6 +2,8 @@ package com.lcdt.userinfo.web.controller.api;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
+import com.lcdt.clms.permission.model.Role;
+import com.lcdt.clms.permission.service.UserRoleService;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.notify.rpcservice.NotifyService;
@@ -54,6 +56,9 @@ public class UserApi {
 	@Reference
 	NotifyService notifyService;
 
+	@Autowired
+	UserRoleService roleService;
+
 	@ApiOperation("手机号是否已注册")
 	@RequestMapping(value = "/isPhoneRegister",method = RequestMethod.POST)
 	public String isPhoneRegister(String phone) {
@@ -93,6 +98,8 @@ public class UserApi {
 //	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('getUserInfo')")
 	public UserCompRel userCompInfo(){
 		UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+		List<Role> userRole = roleService.getUserRole(userCompRel.getUserId(), userCompRel.getCompId());
+		userCompRel.setRoles(userRole);
 		userCompRel.getUser().setPwd("");
 		return userCompRel;
 	}
