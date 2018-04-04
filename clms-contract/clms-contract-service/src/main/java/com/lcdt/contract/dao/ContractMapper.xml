@@ -174,13 +174,13 @@
       <if test="endTime != null and endTime != ''">
         and #{endTime,jdbcType=TIMESTAMP} >= effective_time
       </if>
-      <if test="contractStatus!=null and contractStatus!=''">
+      <if test="contractStatus!=null">
         and contract_status = #{contractStatus,jdbcType=SMALLINT}
       </if>
-      <if test="groupId!=null and groupId!=''">
+      <if test="groupId!=null">
         and group_id = #{groupId,jdbcType=BIGINT}
       </if>
-      <if test="approvalStatus!=null and approvalStatus!=''">
+      <if test="approvalStatus!=null">
         and approval_status = #{approvalStatus,jdbcType=SMALLINT}
       </if>
     </where>
@@ -194,6 +194,9 @@
     </if>
     <if test="terminationTime!=null">
       ,termination_time = #{terminationTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="isDraft!=null">
+      ,is_draft = #{isDraft,jdbcType=SMALLINT}
     </if>
     where contract_id = #{contractId,jdbcType=BIGINT}
   </update>
@@ -336,4 +339,5 @@
     </set>
     where contract_id = #{contractId,jdbcType=BIGINT}
   </update>
+
 </mapper>
