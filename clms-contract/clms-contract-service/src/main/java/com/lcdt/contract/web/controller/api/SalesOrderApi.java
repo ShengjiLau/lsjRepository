@@ -135,10 +135,10 @@ public class SalesOrderApi {
         }
 		Long UserId=SecurityInfoGetter.getUser().getUserId();
 		Long companyId=SecurityInfoGetter.getCompanyId();
-		String orderSerialNum =SerialNumAutoGenerator.serialNoGenerate();
+//		String orderSerialNum =SerialNumAutoGenerator.serialNoGenerate();
 		orderDto.setCompanyId(companyId);
 		orderDto.setCreateUserId(UserId);
-		orderDto.setOrderSerialNo(orderSerialNum);
+//		orderDto.setOrderSerialNo(orderSerialNum);
 		orderDto.setCreateTime(new Date());
 		orderDto.setOrderType(new Short("1"));	//设置订单类型为销售单
 		int result =orderService.addOrder(orderDto);
@@ -205,8 +205,8 @@ public class SalesOrderApi {
 	@ApiOperation("取消销售订单")
 	@PostMapping("/deleteOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('del_sales_order')")
-	public JSONObject delOrder(@ApiParam(value="采购订单id",required=true) @RequestParam Long orderId) {
-		int result =orderService.cancelOrder(orderId);
+	public JSONObject delOrder(@ApiParam(value="销售订单id",required=true) @RequestParam Long orderId) {
+		int result =orderService.updateOrderIsDraft(orderId,(short) 2);
 		logger.debug("取消销售订单条目数:"+result);
 		if (result > 0) {
 	        JSONObject jsonObject = new JSONObject();
@@ -218,7 +218,26 @@ public class SalesOrderApi {
 	    }
 	}
 	
-	
+	/**
+	 * 发布销售订单
+	 * @param Long
+	 * @return JSONObject
+	 */
+	@ApiOperation("发布销售订单")
+	@PostMapping("/releaseOrder")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('release_sales_order')")
+	public JSONObject releaseOrder(@ApiParam(value="销售订单id",required=true) @RequestParam Long orderId) {
+		int result =orderService.updateOrderIsDraft(orderId,(short) 1);
+		logger.debug("取消销售订单条目数:"+result);
+		if (result > 0) {
+	        JSONObject jsonObject = new JSONObject();
+	        jsonObject.put("code", 0);
+	        jsonObject.put("message", "发布成功");
+	        return jsonObject;
+	    } else {
+	        throw new RuntimeException("发布失败");
+	    }
+	}
 	
 	
 	
