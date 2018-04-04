@@ -104,7 +104,7 @@ public class LoginApi {
         if (claimsFromToken == null) {
             throw new Exception("token 错误");
         }
-        String userId = (String) claimsFromToken.get("userId");
+        String userId = String.valueOf(claimsFromToken.get("userId"));
         UserCompRel userCompRel = companyService.queryByUserIdCompanyId(Long.valueOf(userId), compId);
         HashMap<String, Object> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("userName", userCompRel.getUser().getPhone());
