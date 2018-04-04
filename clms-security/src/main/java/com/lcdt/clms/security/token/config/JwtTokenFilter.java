@@ -52,8 +52,8 @@ public class JwtTokenFilter extends OncePerRequestFilter{
                     UserCompRel userCompRel = null;
                     User user = userService.queryByPhone(userName);
                     if (claimsFromToken.get("userCompId") != null) {
-                        Long userCompId = (Long) claimsFromToken.get("userCompId");
-                        userCompRel = companyService.findByUserCompRelId(userCompId);
+                        Integer userCompId = (Integer) claimsFromToken.get("userCompId");
+                        userCompRel = companyService.findByUserCompRelId(Long.valueOf(userCompId));
                     }
                     if (jwtTokenUtil.validateToken(header)) {
                         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

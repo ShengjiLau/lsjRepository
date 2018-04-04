@@ -48,9 +48,6 @@ public class EmployeeServiceImpl {
 	@Autowired
 	LoginLogService loginLogService;
 
-
-
-
 	@Transactional(rollbackFor = Exception.class)
 	public boolean removeUserCompRel(Long userCompId){
 
