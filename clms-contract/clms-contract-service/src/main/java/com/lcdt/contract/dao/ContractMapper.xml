@@ -184,6 +184,9 @@
     <if test="terminationTime!=null">
       ,termination_time = #{terminationTime,jdbcType=TIMESTAMP}
     </if>
+    <if test="isDraft!=null">
+      ,is_draft = #{isDraft,jdbcType=SMALLINT}
+    </if>
     where contract_id = #{contractId,jdbcType=BIGINT}
   </update>
 
