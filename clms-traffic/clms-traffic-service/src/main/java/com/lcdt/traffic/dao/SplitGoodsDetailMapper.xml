@@ -155,9 +155,10 @@
     </foreach>
   </update>
 
+
   <delete id="batchRemoveSplitGoodsDetail" parameterType="java.util.List">
     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
-      DELETE t_split_goods_detail
+      DELETE FROM t_split_goods_detail
       where  split_goods_detail_id = #{item.splitGoodsDetailId}
     </foreach>
   </delete>
