@@ -43,7 +43,7 @@ public class PurchaseContractApprovalApi {
         Long userId = SecurityInfoGetter.getUser().getUserId();    //获取user_id
         contractApprovalListDto.setCompanyId(companyId);
         contractApprovalListDto.setUserId(userId);
-        contractApprovalListDto.setType(new Short("1"));    //  1 - 采购单合同
+        contractApprovalListDto.setType(new Short("0"));    //  1 - 采购单合同
 
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(contractApprovalListDto.getPageNum());    //设置页码
