@@ -55,7 +55,8 @@ public class WaybillApi {
     @RequestMapping(value = "/customer/list", method = RequestMethod.GET)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybill_list')")
     public PageBaseDto<List<Waybill>> customerWaybilllist(WaybillCustListParamsDto dto) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
         dto.setCompanyId(companyId);
         dto.setIsDelete((short) 0);
         dto.setGroupIds(GroupIdsUtil.getCustomerGroupIds(dto.getGroupId()));
@@ -68,8 +69,9 @@ public class WaybillApi {
     @RequestMapping(value = "/own/modifystatus", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_modify_status')")
     public JSONObject modifyOwnWaybillStatus(WaybillModifyStatusDto dto) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        User loginUser = SecurityInfoGetter.getUser();
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
+        User loginUser = userCompRel.getUser();
 
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
@@ -90,8 +92,9 @@ public class WaybillApi {
     @RequestMapping(value = "/customer/modifystatus", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_modify_status')")
     public JSONObject modifyCustomerWaybillStatus(WaybillModifyStatusDto dto) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        User loginUser = SecurityInfoGetter.getUser();
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
+        User loginUser = userCompRel.getUser();
 
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
@@ -134,8 +137,9 @@ public class WaybillApi {
     @RequestMapping(value = "/customer/modifyreceipt", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_modify_status')")
     public JSONObject modifyCustomerReceipt(WaybillModifyReceiptDto dto) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        User loginUser = SecurityInfoGetter.getUser();
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
+        User loginUser = userCompRel.getUser();
 
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
