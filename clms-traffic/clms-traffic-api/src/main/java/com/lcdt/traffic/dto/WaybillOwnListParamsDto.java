@@ -33,12 +33,16 @@ public class WaybillOwnListParamsDto {
     private String endStartDate;
     @ApiModelProperty(value = "客户名称")
     private String customerName;
+    @ApiModelProperty(value = "收付款方")
+    private String name;
     @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
     @ApiModelProperty(value = "是否删除",hidden = true)
     private Short isDelete;
-    @ApiModelProperty(value = "是否删除",hidden = true)
+    @ApiModelProperty(value = "groupIds",hidden = true)
     private String groupIds;
+    @ApiModelProperty(value = "应收应付",hidden = true)
+    private Short isReceivable;
 
     @ApiModelProperty(value = "页码", required = true)
     private Integer pageNo;
@@ -149,6 +153,14 @@ public class WaybillOwnListParamsDto {
         this.customerName = customerName;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Long getCompanyId() {
         return companyId;
     }
@@ -171,6 +183,14 @@ public class WaybillOwnListParamsDto {
 
     public void setGroupIds(String groupIds) {
         this.groupIds = groupIds;
+    }
+
+    public Short getIsReceivable() {
+        return isReceivable;
+    }
+
+    public void setIsReceivable(Short isReceivable) {
+        this.isReceivable = isReceivable;
     }
 
     public Integer getPageNo() {
