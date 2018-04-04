@@ -66,6 +66,8 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
                             ca.setActionType(contractApproval.getActionType());
                             ca.setStatus(contractApproval.getStatus());
                             cad.setApprovalStatus(contractApproval.getStatus());   //设置当前审批状态
+                        }else if (cad.getApprovalStatus() == 2) {   //审批流程完成，无需再设置当前人
+                            cad.setApprovalStatus(new Short("2"));
                         }
                     }
                 }
