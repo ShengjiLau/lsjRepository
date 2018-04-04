@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.notify.dao.NotifySettingMapper">
+
+    <select id="selectByCompanyAndNotify" resultMap="com.lcdt.notify.dao.CompanyNotifySettingMapper.BaseResultMap">
+           select setting_id, company_id, notify_id, enable_sms, enable_web
+    from company_notify_setting
+    WHERE company_id = #{companyId}
+    and notify_id = #{notifyId}
+    </select>
+
+
+
+
+</mapper>

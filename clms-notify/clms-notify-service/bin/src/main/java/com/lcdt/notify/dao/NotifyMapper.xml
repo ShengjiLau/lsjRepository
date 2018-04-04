@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.notify.dao.NotifyMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.notify.model.Notify">
+    <id column="notify_id" jdbcType="BIGINT" property="notifyId" />
+    <result column="receive_role" jdbcType="VARCHAR" property="receiveRole" />
+    <result column="template_id" jdbcType="BIGINT" property="templateId" />
+    <result column="notify_name" jdbcType="VARCHAR" property="notifyName" />
+    <result column="event_name" jdbcType="VARCHAR" property="eventName" />
+    <result column="category" jdbcType="VARCHAR" property="category" />
+    <result column="default_enable_web" jdbcType="BIT" property="defaultEnableWeb" />
+    <result column="default_enable_sms" jdbcType="BIT" property="defaultEnableSms" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from notify
+    where notify_id = #{notifyId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.notify.model.Notify">
+    <selectKey keyProperty="notifyId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into notify (receive_role, template_id, notify_name, 
+      event_name, category, default_enable_web, 
+      default_enable_sms)
+    values (#{receiveRole,jdbcType=VARCHAR}, #{templateId,jdbcType=BIGINT}, #{notifyName,jdbcType=VARCHAR}, 
+      #{eventName,jdbcType=VARCHAR}, #{category,jdbcType=VARCHAR}, #{defaultEnableWeb,jdbcType=BIT}, 
+      #{defaultEnableSms,jdbcType=BIT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.notify.model.Notify">
+    update notify
+    set receive_role = #{receiveRole,jdbcType=VARCHAR},
+      template_id = #{templateId,jdbcType=BIGINT},
+      notify_name = #{notifyName,jdbcType=VARCHAR},
+      event_name = #{eventName,jdbcType=VARCHAR},
+      category = #{category,jdbcType=VARCHAR},
+      default_enable_web = #{defaultEnableWeb,jdbcType=BIT},
+      default_enable_sms = #{defaultEnableSms,jdbcType=BIT}
+    where notify_id = #{notifyId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select notify_id, receive_role, template_id, notify_name, event_name, category, default_enable_web, 
+    default_enable_sms
+    from notify
+    where notify_id = #{notifyId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select notify_id, receive_role, template_id, notify_name, event_name, category, default_enable_web, 
+    default_enable_sms
+    from notify
+  </select>
+
+</mapper>
