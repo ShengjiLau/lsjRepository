@@ -2,11 +2,13 @@ package com.lcdt.traffic.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 /**
  * Created by lyqishan on 2017/12/28
  */
 
-public class WaybillCustListParamsDto {
+public class WaybillCustListParamsDto implements Serializable{
     @ApiModelProperty(value = "运单编号")
     private String waybillCode;
     @ApiModelProperty(value = "收货地省")

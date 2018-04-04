@@ -13,6 +13,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.pay.config.AlipayContants;
+import com.lcdt.pay.config.WechatPayConfig;
 import com.lcdt.pay.model.AlipayTradeOrder;
 import com.lcdt.pay.model.OrderStatus;
 import com.lcdt.pay.model.PayOrder;
@@ -62,7 +63,8 @@ public class AlipayWebController {
     @Autowired
     WechatPayApi wechatPayApi;
 
-
+    @Autowired
+    WechatPayConfig wechatPayConfig;
     /**
      * 新建一个充值订单
      *
@@ -106,8 +108,8 @@ public class AlipayWebController {
         alipayTradeOrder.setSubject("大驼队clms账户充值");
         alipayTradeOrder.setBody("大驼队clms账户充值");
         alipayRequest.setBizContent(JSONObject.toJSONString(alipayTradeOrder));//填充业务参数
-        alipayRequest.setReturnUrl(AlipayContants.getReturnUrl());
-        alipayRequest.setNotifyUrl(AlipayContants.getNotifyUrl());//在公共参数中设置回跳和通知地址
+        alipayRequest.setReturnUrl(wechatPayConfig.getAlipayReturnUrl());
+        alipayRequest.setNotifyUrl(wechatPayConfig.getAlipayNotifyUrl());//在公共参数中设置回跳和通知地址
 
         logger.info("支付宝支付请求 api:{} appid :{} charset:{} bizcontent:{} ",AlipayContants.getApiGataway(),AlipayContants.getAppId(),CHARSET,JSONObject.toJSONString(alipayTradeOrder));
 
