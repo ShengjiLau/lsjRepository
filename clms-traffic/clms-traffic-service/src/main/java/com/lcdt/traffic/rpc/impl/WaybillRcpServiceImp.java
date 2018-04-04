@@ -171,7 +171,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         PageHelper.startPage(pageNo, pageSize);
         resultList = waybillMapper.selectDriverByCondition(map);
         for (int i = 0; i < resultList.size(); i++) {
-            Company  company=companyService.selectById(resultList.get(i).getCompanyId());
+            Company  company=companyService.selectById(resultList.get(i).getCarrierCompanyId());
             resultList.get(i).setWaybillSource(company.getFullName());
         }
         page = new PageInfo(resultList);
