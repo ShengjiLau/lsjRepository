@@ -38,5 +38,11 @@ public interface ContractApprovalMapper {
      */
     int deleteByContractId(Long contractId);
 
-    
+    /**
+     * 查询合同抄送的人
+     * @param contractId
+     * @param contractApprovalList
+     * @return
+     */
+    List<ContractApproval> selectCC(Long contractId, List<ContractApproval> contractApprovalList);
 }
