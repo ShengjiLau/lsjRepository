@@ -230,45 +230,88 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Integer waybillCancel4SplitGoods(List<SplitGoodsDetail> splitGoodsDetails, Long waybillPalnId) {
-          int flag = -1;
+    public Integer waybillCancel4SplitGoods(List<SplitGoodsDetail> splitGoodsDetails, Map map) {
+        Map map1 = new HashMap<String,String>(); //这块未传企业ID，程序内调用
+        map1.put("waybillPlanId",map.get("waybillPlanId"));
+        map1.put("companyId",map.get("companyId"));
+        map1.put("isDeleted",0);
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(map1);
+        if (null==waybillPlan || splitGoodsDetails==null || splitGoodsDetails.size()<=0) return -1;
+        List<PlanDetail> planDetailList = new ArrayList<PlanDetail>(); //计划详细
+        //直派- 司机 - 返回计划
+        if (waybillPlan.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI) && waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) {
+            /***
+             * 1、删除原来派单中的记录；
+             * 2、将计划还原于直派，不指定承运商这种
+             */
+                for (SplitGoodsDetail splitGoodsDetail : splitGoodsDetails) { //传过来的派单详细
+                     SplitGoodsDetail targetObj = splitGoodsDetailMapper.selectByPrimaryKey(splitGoodsDetail.getSplitGoodsDetailId());
+                     if (targetObj!=null) {
+                         float remainAmount = splitGoodsDetail.getRemainAmount(); //派单返回来的数量
+                         PlanDetail planDetail = planDetailMapper.selectByPrimaryKey(targetObj.getPlanDetailId());
+                         if (null!=planDetail) {
+                             planDetail.setUpdateId(splitGoodsDetail.getUpdateId());
+                             planDetail.setUpdateTime(splitGoodsDetail.getUpdateTime());
+                             planDetail.setUpdateName(splitGoodsDetail.getUpdateName());
+                             planDetail.setRemainderAmount(planDetail.getRemainderAmount() + remainAmount);
+                             planDetailList.add(planDetail);
+                         }
+                    }
+                }
+                if (planDetailList!=null && planDetailList.size()>0) {
+
+                    //更新计划详细（主要是运单数返还）
+                    planDetailMapper.batchUpdatePlanDetail(planDetailList);
+
+                    //更新计划（直派-不指定承运商）
+                    waybillPlan.setCarrierIds(" ");
+                    waybillPlan.setCarrierNames(" ");
+                    waybillPlan.setCarrierPhone(" ");
+                    waybillPlan.setCarrierVehicle(" ");
+                    waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //派单中
+                    waybillPlan.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //派单方式：其它
+                    waybillPlan.setUpdateTime(new Date());
+                    waybillPlan.setUpdateId((Long)map.get("updateId"));
+                    waybillPlan.setUpdateName((String)map.get("updateName"));
+                    waybillPlanMapper.updateWaybillPlan(waybillPlan);
+
+                    //移除派单
+                    Long splitGoodsId = map.get("splitGoodsId")==null?0l: Long.valueOf(map.get("splitGoodsId").toString());
+                    splitGoodsDetailMapper.batchRemoveSplitGoodsDetail(splitGoodsDetails);
+                    splitGoodsMapper.deleteByPrimaryKey(splitGoodsId);
+                }
 
 
+        } else {
+            //返回派单
+            List<SplitGoodsDetail> resultList = new ArrayList<SplitGoodsDetail>();
 
-          if (splitGoodsDetails!=null && splitGoodsDetails.size()>0) {
-              List<SplitGoodsDetail> resultList = new ArrayList<SplitGoodsDetail>();
-              List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
+            for (SplitGoodsDetail splitGoodsDetail : splitGoodsDetails) { //传过来的派单详细
+                 SplitGoodsDetail targetObj = splitGoodsDetailMapper.selectByPrimaryKey(splitGoodsDetail.getSplitGoodsDetailId());
+                 if (targetObj!=null) {
+                     float remainAmount = splitGoodsDetail.getRemainAmount(); //派单返回来的数量
+                     targetObj.setUpdateId(splitGoodsDetail.getUpdateId());
+                     targetObj.setUpdateTime(splitGoodsDetail.getUpdateTime());
+                     targetObj.setUpdateName(splitGoodsDetail.getUpdateName());
+                     remainAmount = targetObj.getRemainAmount() + remainAmount; //原来的剩余数量+返还回来的
+                     targetObj.setRemainAmount(remainAmount);
+                     resultList.add(targetObj);
+                }
+            }
+            if (resultList.size()>0) {
 
-              for (SplitGoodsDetail splitGoodsDetail :splitGoodsDetails) {
-                  SplitGoodsDetail splitGoodsDetail11 = splitGoodsDetailMapper.selectByPrimaryKey(splitGoodsDetail.getSplitGoodsDetailId());
+                splitGoodsDetailMapper.batchUpdateSplitGoodsDetail(resultList);
+                //更新计划（直派-不指定承运商）
+                waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //派单中
+                waybillPlan.setUpdateTime(new Date());
+                waybillPlan.setUpdateId((Long)map.get("updateId"));
+                waybillPlan.setUpdateName((String)map.get("updateName"));
+                waybillPlanMapper.updateWaybillPlan(waybillPlan);
+            }
 
-                  if (splitGoodsDetail11!=null) {
-                     splitGoodsDetail11.setUpdateId(splitGoodsDetail.getUpdateId());
-                     splitGoodsDetail11.setUpdateTime(splitGoodsDetail.getUpdateTime());
-                     splitGoodsDetail11.setUpdateName(splitGoodsDetail.getUpdateName());
-                     float remainAmount = splitGoodsDetail.getRemainAmount()+splitGoodsDetail11.getRemainAmount();
-                     splitGoodsDetail11.setRemainAmount(0f);
-                      splitGoodsDetail11.setAllotAmount(0f);
-                     resultList.add(splitGoodsDetail11);
+        }
 
-                     PlanDetail planDetail = planDetailMapper.selectByPrimaryKey(splitGoodsDetail11.getPlanDetailId());
-                     if (null!=planDetail) {
-                         planDetail.setUpdateId(splitGoodsDetail.getUpdateId());
-                         planDetail.setUpdateTime(splitGoodsDetail.getUpdateTime());
-                         planDetail.setUpdateName(splitGoodsDetail.getUpdateName());
-                         planDetail.setRemainderAmount(planDetail.getRemainderAmount() + remainAmount);
-                         planDetailList.add(planDetail);
-                      }
-                  }
-              }
-              if(planDetailList.size()>0) {
-                  flag =  planDetailMapper.batchUpdatePlanDetail(planDetailList);
-              }
-              if (flag >0 && resultList.size()>0) {
-                 flag = splitGoodsDetailMapper.batchUpdateSplitGoodsDetail(resultList);
-              }
-          }
-          return flag;
+        return 0;
     }
 
 
