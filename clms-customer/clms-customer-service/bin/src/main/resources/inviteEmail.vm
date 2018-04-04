@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+　<head>
+    　　<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    　　<title>HTML Email编写指南</title>
+    　　<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    　</head>
+<body>
+
+<div style="
+        width: 750px;
+        font-family: MicrosoftYaHei-Bold;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: left;
+        font-size: 14px;
+        padding:70px 94px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    ">
+    <p style="margin-bottom:22px"> Hi，${username}</p>
+    <span style="font-weight:bold">${inviteUser}</span>（${userphone}）邀请您成为<span style="font-weight:bold">${inviteCompanyName}</span>的${inviteCompanyType}，一起使用大驼队cLMS实现物流业务协同，请点击邀请链接确认：
+    <p>
+        <a style="color: #0891fb;" href="${inviteUrl}">${inviteUrl}</a>
+    </p>
+    <p>48小时内链接有效，48小时后需要重新邀请。</p>
+    <p style="margin-bottom:42px">如果点击链接无法访问，请将链接复制并粘贴至新的浏览器窗口中访问。</p>
+
+    <p style="color: #999999;">大驼队cLMS，开启协同物流新时代！</p>
+    <hr  style="background-color: #999999;"/>
+    <p style="color: #999999;">大驼队官网：<a style="color: #0891fb" href="https://www.datuodui.com">https://www.datuodui.com</a></p>
+
+</div>
+
+</body>
+
+</html>
+
