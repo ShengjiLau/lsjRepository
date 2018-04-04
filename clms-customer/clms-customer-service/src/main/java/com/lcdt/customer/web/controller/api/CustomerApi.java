@@ -3,6 +3,7 @@ package com.lcdt.customer.web.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.customer.dao.CustomerCollectionMapper;
 import com.lcdt.customer.exception.CustomerContactException;
 import com.lcdt.customer.exception.CustomerException;
@@ -11,11 +12,9 @@ import com.lcdt.customer.model.CustomerCollection;
 import com.lcdt.customer.model.CustomerContact;
 import com.lcdt.customer.service.CustomerService;
 import com.lcdt.customer.web.dto.*;
-import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
-import com.lcdt.userinfo.model.UserGroupRelation;
 import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -564,7 +563,7 @@ public class CustomerApi {
         map.put("companyId",companyId);
         int flag = customerService.customerCollectionRemove(map);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("message",flag==1?"删除成功！":"删除失败！");
+        jsonObject.put("message",flag==1?"删除成功！":flag==-1?"该分组下存在客户":"删除失败！");
         jsonObject.put("code",flag==1?0:-1);
         return jsonObject.toString();
     }
