@@ -17,9 +17,8 @@ public class ContractApprovalListDto implements Serializable{
 
     /**
      * 合同类型
-     * 0 - 其他
-     * 1 - 采购合同
-     * 2 - 销售合同
+     * 0 - 采购合同
+     * 1 - 销售合同
      */
     private Short type;
 
