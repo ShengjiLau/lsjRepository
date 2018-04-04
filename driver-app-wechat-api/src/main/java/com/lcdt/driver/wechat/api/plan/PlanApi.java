@@ -128,6 +128,8 @@ public class PlanApi {
         map.put("sendOrderType",dto.getSendOrderType());//计划类型
         map.put("customerName",dto.getCustomerName()); //客户名称
         map.put("companyId", companyId);
+        map.put("page_no", dto.getPageNo());
+        map.put("page_size", dto.getPageSize());
 
         if (!sb.toString().isEmpty()) {
             map.put("groupIds", sb.toString());
