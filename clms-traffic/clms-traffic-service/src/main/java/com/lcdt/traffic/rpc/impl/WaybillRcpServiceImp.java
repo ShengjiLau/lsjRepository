@@ -250,7 +250,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                         sp.setSplitGoodsDetailId(splitGoodsDetailId);
                         splitGoodsDetailList.add(sp);
                     }
-                    splitGoodsService.waybillCancel4SplitGoods(splitGoodsDetailList);
+                    splitGoodsService.waybillCancel4SplitGoods(splitGoodsDetailList, dao.getWaybillPlanId());
 
                 }
 

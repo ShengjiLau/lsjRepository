@@ -134,8 +134,8 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
          */
         int rows = 0;
         try {
-            rows = orderApprovalMapper.updateStatus(orderApproval);
-            orderMapper.updateApprovalStatus(orderApproval.getOrderId(),companyId,new Short("4"));
+            rows += orderApprovalMapper.updateStatus(orderApproval);
+            rows += orderMapper.updateApprovalStatus(orderApproval.getOrderId(),companyId,new Short("4"));
         } catch (NumberFormatException e) {
             e.printStackTrace();
             throw new RuntimeException("操作失败！");
@@ -156,8 +156,8 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
          */
         int rows = 0;
         try {
-            rows = orderApprovalMapper.updateStatus(orderApproval);
-            orderMapper.updateApprovalStatus(orderApproval.getOrderId(),companyId,new Short("3"));
+            rows += orderApprovalMapper.updateStatus(orderApproval);
+            rows += orderMapper.updateApprovalStatus(orderApproval.getOrderId(),companyId,new Short("3"));
         } catch (NumberFormatException e) {
             e.printStackTrace();
             throw new RuntimeException("操作失败！");
@@ -170,6 +170,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
         OrderApproval orderApproval =  orderApprovalList.get(0);    //第一个为当前审批人
         Long companyId = SecurityInfoGetter.getCompanyId();
         orderApproval.setStatus(new Short("5"));     //审批状态 5 - 转办
+        orderApproval.setActionType(new Short("0"));
         orderApproval.setTime(new Date());   //审批时间
         /**
          * 转办处理逻辑：
@@ -187,7 +188,9 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
             orderApproval1.setOrderId(oa.getOrderId());
             orderApproval1.setStatus(new Short("1"));   //设置审批状态为审批中
             orderApproval1.setActionType(new Short("0"));    //为审批类型
-            orderApprovalMapper.insert(orderApproval1);
+            if(rows>0){
+                orderApprovalMapper.insert(orderApproval1);
+            }
         } catch (NumberFormatException e) {
             e.printStackTrace();
             throw new RuntimeException("操作失败！");
@@ -204,8 +207,18 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
         /**
          * 抄送处理逻辑：
          * 1.获取抄送合同的主键信息
-         * 2.组织抄送人信息记录并批量更新
+         * 2.查询抄送人是否已经存在
+         * 3.组织抄送人信息记录并批量更新
          */
+        List<OrderApproval> ccList = orderApprovalMapper.selectCC(orderId,orderApprovalList);
+        //剔除重复的抄送人
+        for(OrderApproval oal : ccList){
+            for(int i=0; i<orderApprovalList.size(); i++){
+                if(oal.getUserId().longValue()==orderApprovalList.get(i).getUserId().longValue()){
+                    orderApprovalList.remove(i);
+                }
+            }
+        }
         int row = 0;
         try {
             for(OrderApproval oa : orderApprovalList){
@@ -214,7 +227,11 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                 oa.setStatus(new Short("0"));
                 oa.setTime(new Date());
             }
-            row = orderApprovalMapper.insertBatch(orderApprovalList);
+            if(null != orderApprovalList && orderApprovalList.size()>0){
+                row = orderApprovalMapper.insertBatch(orderApprovalList);
+            }else{
+                row = 1;
+            }
         } catch (NumberFormatException e) {
             e.printStackTrace();
             throw new RuntimeException("操作失败！");

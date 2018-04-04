@@ -230,8 +230,11 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Integer waybillCancel4SplitGoods(List<SplitGoodsDetail> splitGoodsDetails) {
+    public Integer waybillCancel4SplitGoods(List<SplitGoodsDetail> splitGoodsDetails, Long waybillPalnId) {
           int flag = -1;
+
+
+
           if (splitGoodsDetails!=null && splitGoodsDetails.size()>0) {
               List<SplitGoodsDetail> resultList = new ArrayList<SplitGoodsDetail>();
               List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
