@@ -20,6 +20,15 @@ public interface ContractMapper {
     int updateByPrimaryKey(Contract record);
 
     /**
+     * 选择性更改,避免数据被覆盖
+     * @param contractDto
+     * @return
+     */
+    int updateByPrimaryKeySelective(Contract record);
+    
+    
+    
+    /**
      * 根据条件查询
      * @param contractDto
      * @return

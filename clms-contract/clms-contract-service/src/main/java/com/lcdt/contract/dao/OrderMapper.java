@@ -67,6 +67,6 @@ public interface OrderMapper {
      * @param orderId
      * @return
      */
-    int updateIsDraft(Long orderId);
+    int updateIsDraft(Long orderId,Short isDraft);
     
 }
