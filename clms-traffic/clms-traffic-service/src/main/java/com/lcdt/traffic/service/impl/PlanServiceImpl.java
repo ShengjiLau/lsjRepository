@@ -238,10 +238,10 @@ public class PlanServiceImpl implements PlanService {
         map.put("waybillPlanId",waybillPlan.getWaybillPlanId());
         map.put("isDeleted",0);
         WaybillPlan waybillPlan1 = waybillPlanMapper.selectByPrimaryKey(map);
-        boolean flag = false;
         double remainCount = 0;
         if(waybillPlan1!=null) { //如果计划下的所有派单剩余数量为0的话，说明完成
 
+            //派单详细
             List<SplitGoods> splitGoodsList = waybillPlan1.getSplitGoodsList();
             if (splitGoodsList!=null && splitGoodsList.size()>0) {
                 for (SplitGoods splitGoods: splitGoodsList) {
@@ -256,10 +256,19 @@ public class PlanServiceImpl implements PlanService {
             } else {
                 //不存在
             }
+            //计划详细
+            List<PlanDetail> planDetailList = waybillPlan1.getPlanDetailList();
+            if (planDetailList!=null && planDetailList.size()>0) {
+                for (PlanDetail splitGoods: planDetailList) {
+                    remainCount+=splitGoods.getRemainderAmount();
+                }
+
+            }
+            if(remainCount==0) {
+                waybillPlanMapper.updateWaybillPlan(waybillPlan); // 如果所有拍单剩余数量为0的话
+            }
         }
-        if(remainCount==0) {
-            waybillPlanMapper.updateWaybillPlan(waybillPlan); // 如果所有拍单剩余数量为0的话
-        }
+
 
 
 

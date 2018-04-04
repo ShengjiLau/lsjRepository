@@ -17,7 +17,6 @@ import java.util.concurrent.CountDownLatch;
  * Created by ss on 2017/7/31.
  */
 @SpringBootApplication
-//@ImportResource("classpath:producer.xml")
 @Import({AliyunConfigProperties.class,PermissionAppConfiguration.class, ClmsResponseConvertConfig.class, DubboConfig.class})
 @EnableClmsSecurity
 public class UserServiceApp {

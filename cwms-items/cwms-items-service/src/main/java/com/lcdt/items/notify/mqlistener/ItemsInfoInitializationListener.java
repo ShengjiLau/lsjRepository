@@ -26,7 +26,6 @@ import static com.aliyun.openservices.ons.api.Action.CommitMessage;
 @Component
 public class ItemsInfoInitializationListener implements MessageListener {
 
-    Executor executor = Executors.newFixedThreadPool(4);
     private Logger logger = LoggerFactory.getLogger(ItemsInfoInitializationListener.class);
     @Autowired
     private ItemsInfoInitializationService itemsInfoInitializationService;
@@ -48,13 +47,7 @@ public class ItemsInfoInitializationListener implements MessageListener {
 
         //反序列化 转化成bean
         UserCompRel event = JSONObject.parseObject(body, UserCompRel.class, Feature.SupportNonPublicField);
-
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                itemsInfoInitializationService.itemInfoInitialization(event.getCompId(),event.getUser().getPhone(),event.getUserId());
-            }
-        });
+        itemsInfoInitializationService.itemInfoInitialization(event.getCompId(),event.getUser().getPhone(),event.getUserId());
 
         return CommitMessage;
     }

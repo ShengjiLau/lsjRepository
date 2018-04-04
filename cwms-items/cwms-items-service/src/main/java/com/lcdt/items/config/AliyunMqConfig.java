@@ -21,6 +21,8 @@ public class AliyunMqConfig {
     @Autowired
     AliyunConfigProperties aliyunMqConfig;
 
+    @Autowired
+    ItemsInfoInitializationListener listener;
 
     @Bean(initMethod = "start",destroyMethod = "shutdown")
     public ConsumerBean consumerBean(){
@@ -35,16 +37,12 @@ public class AliyunMqConfig {
         Subscription subscription = new Subscription();
         subscription.setTopic(aliyunMqConfig.getTopic());
         subscription.setExpression("*");
-        map.put(subscription, notifyServiceListener());
+        map.put(subscription, listener);
 
         consumerBean.setSubscriptionTable(map);
         return consumerBean;
     }
 
-    @Autowired
-    public ItemsInfoInitializationListener notifyServiceListener(){
-        ItemsInfoInitializationListener notifyServiceListener = new ItemsInfoInitializationListener();
-        return notifyServiceListener;
-    }
+
 
 }

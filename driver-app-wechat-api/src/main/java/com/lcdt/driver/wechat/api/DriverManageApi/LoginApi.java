@@ -67,7 +67,7 @@ public class LoginApi {
     }
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public User login(String userName, String pwd) throws UserNotExistException, PassErrorException {
+    public String login(String userName, String pwd) throws UserNotExistException, PassErrorException {
         User user = userService.userLogin(userName, pwd);
         HashMap<String, Object> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("userId", user.getUserId());
@@ -76,12 +76,14 @@ public class LoginApi {
         instance.setTime(date);
         instance.set(Calendar.HOUR_OF_DAY, instance.get(Calendar.HOUR_OF_DAY + 1));
         String s = jwtTokenUtil.generateToken(stringStringHashMap,instance.getTime());
+        List<UserCompRel> userCompRels = companyService.companyList(Long.valueOf(user.getUserId()));
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("token", s);
         jsonObject.put("result", 0);
         jsonObject.put("user", user);
+        jsonObject.put("comps", userCompRels);
         jsonObject.put("message", "请求成功");
-        return user;
+        return jsonObject.toString();
     }
 
     @RequestMapping(value = "/complist",method = RequestMethod.POST)
@@ -102,7 +104,7 @@ public class LoginApi {
         if (claimsFromToken == null) {
             throw new Exception("token 错误");
         }
-        String userId = (String) claimsFromToken.get("userId");
+        String userId = String.valueOf(claimsFromToken.get("userId"));
         UserCompRel userCompRel = companyService.queryByUserIdCompanyId(Long.valueOf(userId), compId);
         HashMap<String, Object> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("userName", userCompRel.getUser().getPhone());

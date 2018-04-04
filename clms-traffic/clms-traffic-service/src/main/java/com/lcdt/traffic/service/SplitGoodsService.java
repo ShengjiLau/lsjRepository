@@ -7,6 +7,7 @@ import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yangbinq on 2017/12/21.
@@ -30,7 +31,7 @@ public interface SplitGoodsService {
      * @param splitGoodsDetails
      * @return
      */
-    Integer waybillCancel4SplitGoods(List<SplitGoodsDetail> splitGoodsDetails);
+    Integer waybillCancel4SplitGoods(List<SplitGoodsDetail> splitGoodsDetails, Map map);
 
 
 
