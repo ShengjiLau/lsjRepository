@@ -205,8 +205,18 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
         /**
          * 抄送处理逻辑：
          * 1.获取抄送合同的主键信息
-         * 2.组织抄送人信息记录并批量更新
+         * 2.查询抄送人是否已经存在
+         * 3.组织抄送人信息记录并批量更新
          */
+        List<ContractApproval> ccList = contractApprovalMapper.selectCC(contractId,contractApprovalList);
+        //剔除重复的抄送人
+        for(ContractApproval cal : ccList){
+            for(int i=0; i<contractApprovalList.size(); i++){
+                if(cal.getUserId().longValue()==contractApprovalList.get(i).getUserId().longValue()){
+                    contractApprovalList.remove(i);
+                }
+            }
+        }
         int row = 0;
         try {
             for(ContractApproval ca : contractApprovalList){
@@ -215,7 +225,12 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
                 ca.setStatus(new Short("0"));
                 ca.setTime(new Date());
             }
-            row = contractApprovalMapper.insertBatch(contractApprovalList);
+            if(null!=contractApprovalList && contractApprovalList.size()>0){
+                row = contractApprovalMapper.insertBatch(contractApprovalList);
+            }else{
+                row = 1;
+            }
+
         } catch (NumberFormatException e) {
             e.printStackTrace();
             throw new RuntimeException("操作失败！");

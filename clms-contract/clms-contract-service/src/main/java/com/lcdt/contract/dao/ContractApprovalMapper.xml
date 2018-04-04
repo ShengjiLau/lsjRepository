@@ -179,4 +179,12 @@
     delete from t_contract_approval
     where contract_id = #{arg0}
   </delete>
+  <select id="selectCC" resultMap="BaseResultMap">
+    select ca_id, contract_id, user_id, user_name, dept_name, sort, action_type, result, status, content,time
+    from t_contract_approval
+    where contract_id = #{arg0} and action_type=1 and user_id in
+    <foreach item="item" index="index" collection="arg1" open="(" separator="," close=")">
+      #{item.userId,jdbcType=BIGINT}
+    </foreach>
+  </select>
 </mapper>
