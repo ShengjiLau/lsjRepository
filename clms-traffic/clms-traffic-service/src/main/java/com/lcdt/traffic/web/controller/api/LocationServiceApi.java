@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.tl.commons.util.DateUtility;
 
@@ -44,6 +45,7 @@ public class LocationServiceApi {
 
     @ApiOperation(value = "定位激活回调地址", notes = "用来接收基站定位第三方发送的回调信息（无任何权限控制）")
     @GetMapping("/callback")
+
     public JSONObject callbackUrl(@ModelAttribute LocationCallbackModel locationCallbackModel) {
         logger.debug("locationCallbackModel:" + locationCallbackModel.toString());
         String phone = locationCallbackModel.getMobileno();
@@ -74,6 +76,7 @@ public class LocationServiceApi {
 
     @ApiOperation(value = "开通定位功能", notes = "发送激活短信到用手手机，成功后将数据库状态改为1等待激活")
     @GetMapping("/open")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('lbs_location')")
     public JSONObject getGpstStatus(String mobile) {
         logger.debug("driverPhone:" + mobile);
         Driver driver = new Driver();
@@ -111,6 +114,7 @@ public class LocationServiceApi {
 
     @ApiOperation(value = "查询定位状态是否激活", notes = "点击等待激活按钮 （会优先查询接口，然后同步更新本地数据库）")
     @GetMapping("/locationstatus")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('lbs_location')")
     public JSONObject queryStatus(String mobile) {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
@@ -144,6 +148,7 @@ public class LocationServiceApi {
 
     @ApiOperation(value = "定位激活开通", notes = "会调用接口发送定位激活授权短信")
     @GetMapping("/authstatus")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('lbs_location')")
     public JSONObject authOpen(String mobile) {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
@@ -192,6 +197,7 @@ public class LocationServiceApi {
 
     @ApiOperation(value = "基站定位", notes = "通过接口查询定位信息，并同步到本地数据库")
     @GetMapping("/querylocation")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('lbs_location')")
     public JSONObject queryLocation(String mobile) {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.notify.dao.MsgTemplateMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.notify.model.MsgTemplate">
+    <id column="template_id" jdbcType="BIGINT" property="templateId" />
+    <result column="template_content" jdbcType="VARCHAR" property="templateContent" />
+    <result column="template_create_time" jdbcType="TIMESTAMP" property="templateCreateTime" />
+    <result column="template_parser_context_class" jdbcType="VARCHAR" property="templateParserContextClass" />
+    <result column="template_event_name" jdbcType="VARCHAR" property="templateEventName" />
+    <result column="template_name" jdbcType="VARCHAR" property="templateName" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from msg_template
+    where template_id = #{templateId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.notify.model.MsgTemplate">
+    <selectKey keyProperty="templateId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into msg_template (template_content, template_create_time, 
+      template_parser_context_class, template_event_name, 
+      template_name)
+    values (#{templateContent,jdbcType=VARCHAR}, #{templateCreateTime,jdbcType=TIMESTAMP}, 
+      #{templateParserContextClass,jdbcType=VARCHAR}, #{templateEventName,jdbcType=VARCHAR}, 
+      #{templateName,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.notify.model.MsgTemplate">
+    update msg_template
+    set template_content = #{templateContent,jdbcType=VARCHAR},
+      template_create_time = #{templateCreateTime,jdbcType=TIMESTAMP},
+      template_parser_context_class = #{templateParserContextClass,jdbcType=VARCHAR},
+      template_event_name = #{templateEventName,jdbcType=VARCHAR},
+      template_name = #{templateName,jdbcType=VARCHAR}
+    where template_id = #{templateId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select template_id, template_content, template_create_time, template_parser_context_class, 
+    template_event_name, template_name
+    from msg_template
+    where template_id = #{templateId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select template_id, template_content, template_create_time, template_parser_context_class, 
+    template_event_name, template_name
+    from msg_template
+  </select>
+
+</mapper>

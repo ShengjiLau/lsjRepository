@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.aliyun.openservices.ons.api.Message;
 import com.aliyun.openservices.ons.api.Producer;
+import com.lcdt.aliyunmq.AliyunConfigProperties;
 import com.lcdt.clms.permission.model.SysRole;
 import com.lcdt.clms.permission.service.SysRoleService;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
@@ -102,13 +103,15 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	@Autowired
 	Producer producer;
 
+	@Autowired
+	AliyunConfigProperties aliyunConfigProperties;
+
 	public void sendCompanyInitEvent(UserCompRel compRel){
 
 		warehouseService.initWarehouse(compRel.getUser(), compRel.getCompId());
-
 		Message message = new Message();
 		message.setKey("companyinit");
-		message.setTopic("clms_user");
+		message.setTopic(aliyunConfigProperties.getTopic());
 		message.setBody(JSONObject.toJSONBytes(compRel, SerializerFeature.BrowserCompatible));
 		producer.send(message);
 		return;

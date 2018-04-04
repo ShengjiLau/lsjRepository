@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 
 @Service
 public class ValidCodeService {
@@ -137,7 +138,7 @@ public class ValidCodeService {
     }
 
 
-    static class ValidCodeBean{
+    static class ValidCodeBean implements Serializable{
         String validCode;
         long createTime;
         int timeout;

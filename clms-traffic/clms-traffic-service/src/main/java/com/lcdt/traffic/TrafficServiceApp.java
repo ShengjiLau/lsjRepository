@@ -1,6 +1,7 @@
 package com.lcdt.traffic;
 
 import com.alibaba.dubbo.config.spring.context.annotation.DubboComponentScan;
+import com.lcdt.aliyunmq.AliyunConfigProperties;
 import com.lcdt.clms.security.annontion.EnableClmsSecurity;
 import com.lcdt.converter.ClmsResponseConvertConfig;
 import com.lcdt.notify.EnableClmsNotifyProducer;
@@ -17,9 +18,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @SpringBootApplication
 @EnableTransactionManagement
-@Import({com.lcdt.swagger.SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class})
+@Import({AliyunConfigProperties.class,com.lcdt.swagger.SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class})
 @EnableClmsSecurity
-@ImportResource("classpath:producer.xml")
+//@ImportResource("classpath:producer.xml")
 public class TrafficServiceApp  {
 
     public static void main(String[] args) {

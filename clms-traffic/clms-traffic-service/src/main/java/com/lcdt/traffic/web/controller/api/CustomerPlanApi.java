@@ -10,8 +10,10 @@ import com.lcdt.traffic.dto.SplitVehicleDto;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.SnatchGoods;
 import com.lcdt.traffic.model.SplitGoods;
+import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.CustomerPlanService;
+import com.lcdt.traffic.service.ICustomerPlanRpcService4Wechat;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.WaybillDto;
@@ -42,6 +44,9 @@ public class CustomerPlanApi {
 
     @Autowired
     private CustomerPlanService customerPlanService;
+
+    @Autowired
+    private ICustomerPlanRpcService4Wechat iCustomerPlanRpcService4Wechat;
 
     @Autowired
     private PlanService planService;
@@ -115,7 +120,7 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4Bidding(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Bidding(map);
         removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -188,7 +193,7 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4Offer(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Offer(map);
         removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -261,7 +266,7 @@ public class CustomerPlanApi {
                 map.put("groupIds", sb.toString());//客户
             }
         }
-        PageInfo pageInfo = customerPlanService.customerPlanList4Pass(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Pass(map);
         removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -291,12 +296,6 @@ public class CustomerPlanApi {
             }
         }
     }
-
-
-
-
-
-
 
     @ApiOperation("客户计划-列表-派车中")
     @RequestMapping(value = "/customerPlanList4VehicleDoing",method = RequestMethod.GET)
@@ -364,7 +363,7 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4VehicleDoing(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4VehicleDoing(map);
         removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -435,7 +434,7 @@ public class CustomerPlanApi {
                 map.put("groupIds", sb.toString());//客户
             }
         }
-        PageInfo pageInfo = customerPlanService.customerPlanList4VehicleHave(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4VehicleHave(map);
         removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -509,7 +508,7 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4Completed(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Completed(map);
         removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -583,7 +582,7 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4Cancel(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Cancel(map);
         removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
@@ -685,15 +684,17 @@ public class CustomerPlanApi {
         dto.setCompanyId(null);
         dto.setWaybillPlanId(waybillPlanId);
         WaybillPlan waybillPlan = planService.loadWaybillPlan(dto);
-        List<SplitGoods> splitGoodsList = waybillPlan.getSplitGoodsList();
-        if (splitGoodsId!=null && null!=splitGoodsList && splitGoodsList.size()>0) { //过滤非派单记录
-            List<SplitGoods> removeList = new ArrayList<SplitGoods>();
-            for(SplitGoods splitGoods :splitGoodsList) {
-                if(!splitGoods.getSplitGoodsId().equals(splitGoodsId)) {
-                    removeList.add(splitGoods);
+
+
+        List<Waybill> waybillLists = waybillPlan.getWaybillList();
+        if (splitGoodsId!=null && null!=waybillLists && waybillLists.size()>0) { //过滤非派单记录
+            List<Waybill> removeList = new ArrayList<Waybill>();
+            for(Waybill waybill :waybillLists) {
+                if(!waybill.getSplitGoodsId().equals(splitGoodsId)) {
+                    removeList.add(waybill);
                 }
             }
-            splitGoodsList.removeAll(removeList);
+            waybillLists.removeAll(removeList);
         }
         return waybillPlan;
     }

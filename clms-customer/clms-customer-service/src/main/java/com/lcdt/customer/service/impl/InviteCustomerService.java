@@ -104,7 +104,6 @@ public class InviteCustomerService {
 			html.setContent(s, "text/html; charset=utf-8");
 			mainPart.addBodyPart(html);
 			message.setContent(mainPart);
-
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
