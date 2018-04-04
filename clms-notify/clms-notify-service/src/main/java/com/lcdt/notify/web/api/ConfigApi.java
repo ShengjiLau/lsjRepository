@@ -51,7 +51,6 @@ public class ConfigApi {
     @RequestMapping(value = "/classisvalid",method = RequestMethod.POST)
     public String checkClass(String className){
         JSONObject jsonObject = new JSONObject();
-
         try {
             Class<?> aClass = this.getClass().forName(className);
         } catch (ClassNotFoundException e) {
