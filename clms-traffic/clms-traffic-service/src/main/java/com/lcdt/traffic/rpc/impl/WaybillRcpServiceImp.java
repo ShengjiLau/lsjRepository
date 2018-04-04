@@ -198,6 +198,9 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         //司机卸货，发送通知
         waybillSenderNotify.driverUnloadinSendNotify(dto.getWaybillIds().toString(),dto.getUpdateId());
 
+        Company  company=companyService.selectById(waybill.getCarrierCompanyId());
+        waybill.setWaybillSource(company.getFullName());
+
         return waybill;
 
     }
@@ -221,6 +224,9 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
         //上传电子回单，发消息通知
         waybillSenderNotify.driverReceiptSendNotify(dto.getWaybillIds().toString(),dto.getUpdateId());
+
+        Company  company=companyService.selectById(waybill.getCarrierCompanyId());
+        waybill.setWaybillSource(company.getFullName());
 
         return waybill;
     }
