@@ -712,17 +712,23 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             waybillDto.setCarrierCompanyId(splitGoods.getCarrierCompanyId());
             waybillDto.setCreateId(splitGoods.getCreateId());
             waybillDto.setCreateName(splitGoods.getCreateName());
-            waybillDto.setDriverPhone(splitGoods.getCarrierPhone());
+
+
             if(StringUtils.isEmpty(dto.getCarrierVehicle())) {
                 waybillDto.setVechicleNum(splitGoods.getCarrierVehicle());
             } else {
                 waybillDto.setVechicleNum(dto.getCarrierVehicle());
             }
 
-            if(!StringUtils.isEmpty(splitGoods.getCarrierCollectionIds())) {
+            waybillDto.setDriverName(snatchGoods.getOfferName());
+            waybillDto.setDriverId(snatchGoods.getOfferId());
+            waybillDto.setDriverPhone(snatchGoods.getOfferPhone());
+
+       /*     if(!StringUtils.isEmpty(splitGoods.getCarrierCollectionIds())) {
                 waybillDto.setDriverName(splitGoods.getCarrierCollectionNames());
                 waybillDto.setDriverId(Long.valueOf(splitGoods.getCarrierCollectionIds()));
-            }
+            }*/
+
             waybillDto.setWaybillCode(waybillPlan.getSerialCode()); //流水号
             PlanBO.getInstance().toWaybillItemsDto(waybillPlan,splitGoods,waybillDto,waybillPlan.getPlanDetailList(),splitGoodsDetailList);
             if (null!=waybillDto) {

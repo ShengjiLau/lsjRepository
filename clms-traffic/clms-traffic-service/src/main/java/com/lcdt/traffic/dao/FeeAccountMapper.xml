@@ -21,10 +21,25 @@
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
   </resultMap>
+  <resultMap id="BaseResultDtoMap" type="com.lcdt.traffic.web.dto.FeeAccountDto" extends="BaseResultMap">
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="freight_total" jdbcType="REAL" property="freightTotal" />
+    <result column="other_fee_total" jdbcType="REAL" property="otherFeeTotal" />
+    <result column="fee_total" jdbcType="REAL" property="feeTotal" />
+    <collection property="feeFlowList" column="account_id" ofType="com.lcdt.traffic.model.FeeFlow" select="com.lcdt.traffic.dao.FeeFlowMapper.selectByAccountId"/>
+  </resultMap>
   <sql id="Base_Column_List">
     account_id, account_code, company_id, waybill_id, waybill_code, group_id, group_name, 
     name_id, name, audit_status, audit_date, operator_id, operator_name, reconcile_id, 
     reconcile_code, is_receivable, create_date, is_deleted
+  </sql>
+  <sql id="base_property_list">
+    account_id accountId, account_code accountCode, company_id companyId, waybill_id waybillId, waybill_code waybillCode, group_id groupId, group_name groupName,
+    name_id nameId, name, audit_status auditStatus, audit_date auditDate, operator_id operatorId, operator_name operatorName, reconcile_id rececileId,
+    reconcile_code reconcileCode, is_receivable isReceivable, create_date createDate, is_deleted isDeleted,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id and ff.fee_property='运费') freightTotal,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id and ff.fee_property!='运费') otherFeeTotal,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id) feeTotal
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -74,18 +89,47 @@
       is_deleted = #{isDeleted,jdbcType=SMALLINT}
     where account_id = #{accountId,jdbcType=BIGINT}
   </update>
-  <!--<select id="selectOwnByCondition" parameterType="java.util.Map" resultMap="BaseWaybillDaoMap">-->
-    <!--select <include refid="Base_column_list"/>-->
-    <!--from t_waybill-->
-    <!--<where>company_id = #{companyId,jdbcType=BIGINT}-->
-      <!--<if test="groupIds!=null and groupIds!=''">-->
-        <!--and  ${groupIds}-->
-      <!--</if>-->
-      <!--<if test="groupIds==null or groupIds==''">-->
-        <!--and  group_id is null-->
-      <!--</if>-->
-      <!--<include refid="select_condition"/>-->
-    <!--</where>-->
-    <!--order by id desc-->
-  <!--</select>-->
+  <select id="selectByWaybillId" parameterType="java.util.Map" resultType="com.lcdt.traffic.web.dto.FeeAccountDto">
+    select <include refid="base_property_list"/>
+    from t_fee_account
+    where waybill_id = #{waybillId,jdbcType=BIGINT}
+    and is_receivable = #{isReceivable,jdbcType=SMALLINT}
+    order by account_id desc
+  </select>
+  <select id="selectFeeAccountDetail" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
+    select <include refid="Base_Column_List"/>
+    from t_fee_account
+    where waybill_id = #{waybillId,jdbcType=BIGINT}
+    and is_receivable = #{isReceivable,jdbcType=SMALLINT}
+    order by account_id desc
+  </select>
+  <select id="selectByCondition" resultMap="BaseResultMap">
+    select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
+    pay_type, party_a_id, party_a_name, party_a_principal, party_b_id, party_b_name, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
+    summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time,
+    attachment1_name, attachment1, attachment2_name, attachment2,
+    attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, attachment5
+    from t_contract
+    <where>
+      type = #{type,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}
+      <if test="title!=null and title!=''">
+        and (title like concat('%',#{title,jdbcType=VARCHAR},'%') or serial_no like concat('%',#{serialNo,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="beginTime != null and beginTime != ''">
+        and effective_time >= #{beginTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        and #{endTime,jdbcType=TIMESTAMP} >= effective_time
+      </if>
+      <if test="contractStatus!=null and contractStatus!=''">
+        and contract_status = #{contractStatus,jdbcType=SMALLINT}
+      </if>
+      <if test="groupId!=null and groupId!=''">
+        and group_id = #{groupId,jdbcType=BIGINT}
+      </if>
+      <if test="approvalStatus!=null and approvalStatus!=''">
+        and approval_status = #{approvalStatus,jdbcType=SMALLINT}
+      </if>
+    </where>
+  </select>
 </mapper>

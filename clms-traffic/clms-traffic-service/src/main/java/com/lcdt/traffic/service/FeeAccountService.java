@@ -1,7 +1,9 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.traffic.dto.WaybillOwnListParamsDto;
 import com.lcdt.traffic.model.FeeAccount;
+import com.lcdt.traffic.web.dto.FeeAccountDto;
 
 import java.util.Map;
 
@@ -9,12 +11,25 @@ import java.util.Map;
  * Created by liz on 2018/3/30.
  */
 public interface FeeAccountService {
-//    /**
-//     * 记账列表
-//     * @param dto
-//     * @return
-//     */
-//    PageInfo waybillFeeList(WaybillOwnListParamsDto dto);
+    /**
+     * 记账列表
+     * @param dto
+     * @return
+     */
+    PageInfo waybillFeeList(WaybillOwnListParamsDto dto);
+    /**
+     * 记账（进入记账页面）
+     * @param m
+     * @return
+     */
+    Map feeAccountPage(Map m);
+
+    /**
+     * 记账单列表
+     * @param dto
+     * @return
+     */
+    PageInfo feeAccountList(FeeAccountDto dto);
     /**
      * 费用类型列表查询
      * @param m

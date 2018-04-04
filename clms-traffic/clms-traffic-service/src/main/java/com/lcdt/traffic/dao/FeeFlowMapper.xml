@@ -47,4 +47,10 @@
       is_deleted = #{isDeleted,jdbcType=SMALLINT}
     where flow_id = #{flowId,jdbcType=BIGINT}
   </update>
+  <select id="selectByAccountId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from t_fee_flow
+    where account_id = #{accountId,jdbcType=BIGINT}
+    order by flow_id desc
+  </select>
 </mapper>
