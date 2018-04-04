@@ -7,8 +7,8 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class Plan4CarrierParamsDto implements java.io.Serializable{
 
-    @ApiModelProperty(value = "发布计划的企业ID集合，有多个id时用 , 隔开")
-    private String compyIds; //发布计划的企业ID集合
+/*    @ApiModelProperty(value = "发布计划的企业ID集合，有多个id时用 , 隔开")
+    private String compyIds; //发布计划的企业ID集合*/
 
     @ApiModelProperty(value = "计划状态  待发布-10\n" +
             "\n" +
@@ -49,13 +49,13 @@ public class Plan4CarrierParamsDto implements java.io.Serializable{
     private int pageSize;//每页多少
 
 
-    public String getCompyIds() {
+/*    public String getCompyIds() {
         return compyIds;
     }
 
     public void setCompyIds(String compyIds) {
         this.compyIds = compyIds;
-    }
+    }*/
 
     public String getPlanStatus() {
         return planStatus;

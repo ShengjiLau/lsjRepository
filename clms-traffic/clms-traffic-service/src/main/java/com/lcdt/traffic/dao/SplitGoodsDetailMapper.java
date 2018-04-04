@@ -73,6 +73,14 @@ public interface SplitGoodsDetailMapper {
     int batchUpdateSplitGoodsDetail(List<SplitGoodsDetail> list);
 
 
+    /***
+     * 批量移除
+     * @param list
+     * @return
+     */
+    int batchRemoveSplitGoodsDetail(List<SplitGoodsDetail> list);
+
+
 
 
 
