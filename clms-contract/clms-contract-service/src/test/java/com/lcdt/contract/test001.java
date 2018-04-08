@@ -42,6 +42,9 @@ public class test001 {
 	    
 	    @Autowired
 	    private ContractMapper cm;
+	    
+
+	
 	
 //	@Test
 //	public void testContract() {
@@ -70,20 +73,20 @@ public class test001 {
 //		orderService.addOrder(o);
 //	}
 //	
-	    @Test
-	    public void testConditionQuery() {
-	    	OrderDto od= new OrderDto();
-	    	od.setBeginTime("20180318");
-	    	od.setEndTime("20180318");
-	    	od.setOrderType((short) 1);
-	    	od.setCompanyId((long) 1);
-	    	
-	    	PageInfo<OrderDto> list= orderService.OrderList(od);
-	    	System.out.println(list.getPageSize());
-	    	
-	    	
-	    	
-	    }
+//	    @Test
+//	    public void testConditionQuery() {
+//	    	OrderDto od= new OrderDto();
+//	    	od.setBeginTime("20180318");
+//	    	od.setEndTime("20180318");
+//	    	od.setOrderType((short) 1);
+//	    	od.setCompanyId((long) 1);
+//	    	
+//	    	PageInfo<OrderDto> list= orderService.OrderList(od);
+//	    	System.out.println(list.getPageSize());
+//	    	
+//	    	
+//	    	
+//	    }
 ////	
 //	    @Test
 //	    public void testConditionQueryss() {
@@ -97,7 +100,14 @@ public class test001 {
 //	    	
 //	    }
 //	    
-	    
+	    @Test
+	    public void testConditionQueryew() {
+	    	
+	
+	    	
+	    	
+	    	
+	    }
 	    
 	
 	
