@@ -11,7 +11,7 @@ public class CustomerPlan4ParamsDto implements java.io.Serializable {
     @ApiModelProperty(value = "客户名称")
     private String customerName;
 
-    @ApiModelProperty(value = "排序字段， start_date--起运时间；arrive_date--显示到达时间")
+    @ApiModelProperty(value = "排序字段， pubdate--发布时间")
     private String orderFiled; //排序字段
 
     @ApiModelProperty(value = "排序方式desc/asc")
