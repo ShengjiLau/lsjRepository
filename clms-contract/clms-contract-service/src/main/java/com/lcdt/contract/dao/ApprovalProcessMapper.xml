@@ -6,6 +6,7 @@
     <result column="process_name" jdbcType="VARCHAR" property="processName" />
     <result column="process_type" jdbcType="SMALLINT" property="processType" />
     <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
@@ -16,10 +17,10 @@
   </delete>
   <insert id="insert" parameterType="com.lcdt.contract.model.ApprovalProcess" useGeneratedKeys="true" keyProperty="processId">
     insert into t_approval_process (process_name, process_type,
-      group_id, remarks, create_time,company_id
+      group_id, group_name, remarks, create_time,company_id
       )
     values (#{processName,jdbcType=VARCHAR}, #{processType,jdbcType=SMALLINT},
-      #{groupId,jdbcType=BIGINT}, #{remarks,jdbcType=VARCHAR}, CURRENT_TIMESTAMP,#{companyId,jdbcType=BIGINT}
+      #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, CURRENT_TIMESTAMP,#{companyId,jdbcType=BIGINT}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.ApprovalProcess">
@@ -31,12 +32,12 @@
     where process_id = #{processId,jdbcType=BIGINT} and company_id=#{companyId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select process_id, process_name, process_type, group_id, remarks, create_time, company_id
+    select process_id, process_name, process_type, group_id,group_name, remarks, create_time, company_id
     from t_approval_process
     where process_id = #{processId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select process_id, process_name, process_type, group_id, remarks, create_time, company_id
+    select process_id, process_name, process_type, group_id, group_name, remarks, create_time, company_id
     from t_approval_process
   </select>
 
@@ -46,6 +47,7 @@
     <result column="process_name" jdbcType="VARCHAR" property="processName" />
     <result column="process_type" jdbcType="SMALLINT" property="processType" />
     <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
@@ -65,7 +67,7 @@
   </resultMap>
 
   <select id="selectByCondition" resultMap="ApprovalProcessDtoResultMap">
-    select t1.process_id, t1.process_name, t1.process_type, t1.group_id, t1.remarks, t1.create_time,
+    select t1.process_id, t1.process_name, t1.process_type, t1.group_id, t1.group_name, t1.remarks, t1.create_time,
     t2.approver_id, t2.user_id, t2.user_name, t2.dept_name, t2.sort, t2.action_type
     from t_approval_process t1 left join t_process_approver t2 on t1. process_id = t2. process_id
     <where>
@@ -77,7 +79,7 @@
   </select>
 
   <select id="selectByType" resultMap="ApprovalProcessDtoResultMap">
-    select t1.process_id, t1.process_name, t1.process_type, t1.group_id, t1.remarks, t1.create_time,
+    select t1.process_id, t1.process_name, t1.process_type, t1.group_id, t1.group_name, t1.remarks, t1.create_time,
     t2.approver_id, t2.user_id, t2.user_name, t2.dept_name, t2.sort, t2.action_type
     from t_approval_process t1 left join t_process_approver t2 on t1. process_id = t2. process_id
     <where>
