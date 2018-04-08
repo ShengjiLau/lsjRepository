@@ -1,6 +1,8 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.traffic.dto.SnatchOfferDto;
+import com.lcdt.traffic.model.SnatchGoods;
 
 import java.util.Map;
 
@@ -64,5 +66,16 @@ public interface ICustomerPlanRpcService4Wechat {
      * @return
      */
     PageInfo customerPlanList4Cancel(Map map);
+
+
+
+
+    /***
+     * 抢单报价
+     * @param dto -- 外部参数
+     *@param dto -- 内部参数
+     * @return
+     */
+    int customerPlanOfferOwn(SnatchOfferDto dto, SnatchGoods snatchGoods);
 
 }

@@ -11,6 +11,7 @@
     <result column="contract_status" jdbcType="SMALLINT" property="contractStatus" />
     <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
     <result column="approval_process" jdbcType="VARCHAR" property="approvalProcess" />
+    <result column="approval_process_id" jdbcType="BIGINT" property="approvalProcessId" />
     <result column="cycle" jdbcType="SMALLINT" property="cycle" />
     <result column="pay_type" jdbcType="VARCHAR" property="payType" />
     <result column="party_a_id" jdbcType="BIGINT" property="partyAId" />
@@ -52,7 +53,7 @@
   </delete>
   <insert id="insert" parameterType="com.lcdt.contract.model.Contract" useGeneratedKeys="true" keyProperty="contractId">
     insert into t_contract (contract_id, contract_code, serial_no, title,
-      sign_date, type, contract_status, approval_status,approval_process,
+      sign_date, type, contract_status, approval_status,approval_process,approval_process_id,
       cycle, pay_type, party_a_id, party_a_name,
       party_a_principal, party_b_id, party_b_name, party_b_principal,
       start_date, end_date,approval_start_date, approval_end_date, summary,
@@ -62,9 +63,20 @@
       attachment3_name, attachment3, attachment4_name, attachment4,
       attachment5_name, attachment5
       )
-    values (#{contractId,jdbcType=BIGINT}, #{contractCode,jdbcType=VARCHAR}, #{serialNo,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR},
+    values (#{contractId,jdbcType=BIGINT}, #{contractCode,jdbcType=VARCHAR},
+    <choose>
+      <when test="type==0">
+        SERIAL_NO_CONTRACT("PC"),
+      </when>
+      <when test="type==1">
+     	SERIAL_NO_CONTRACT("SC"),
+      </when>
+      <otherwise>  
+      </otherwise>
+    </choose>
+      #{title,jdbcType=VARCHAR},
       #{signDate,jdbcType=TIMESTAMP}, #{type,jdbcType=SMALLINT}, #{contractStatus,jdbcType=SMALLINT},
-      #{approvalStatus,jdbcType=SMALLINT},#{approvalProcess,jdbcType=VARCHAR},
+      #{approvalStatus,jdbcType=SMALLINT},#{approvalProcess,jdbcType=VARCHAR},#{approvalProcessId,jdbcType=BIGINT},
       #{cycle,jdbcType=SMALLINT}, #{payType,jdbcType=VARCHAR}, #{partyAId,jdbcType=BIGINT}, #{partyAName,jdbcType=VARCHAR},
       #{partyAPrincipal,jdbcType=VARCHAR}, #{partyBId,jdbcType=BIGINT}, #{partyBName,jdbcType=VARCHAR}, #{partyBPrincipal,jdbcType=VARCHAR},
       #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP},#{approvalStartDate,jdbcType=TIMESTAMP},
@@ -124,7 +136,7 @@
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.lcdt.contract.web.dto.ContractDto">
     select contract_id contractId, contract_code contractCode, serial_no serialNo, title, sign_date signDate, type,
-    contract_status contractStatus, approval_status approvalStatus,approval_process approvalProcess, cycle,
+    contract_status contractStatus, approval_status approvalStatus,approval_process approvalProcess, approval_process_id approvalProcessId, cycle,
     pay_type payType, party_a_id partyAId, party_a_name partyAName, party_a_principal partyAPrincipal,
     party_b_id partyBId, party_b_name partyBName, party_b_principal partyBPrincipal,
     start_date startDate, end_date endDate, approval_start_date approvalStartDate, approval_end_date approvalEndDate,
@@ -136,7 +148,7 @@
     where contract_id = #{contractId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
+    select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, approval_process_id, cycle,
     pay_type, party_a_id, party_a_name, party_a_principal, party_b_id, party_b_name, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time,
     attachment1_name, attachment1, attachment2_name, attachment2,
@@ -146,7 +158,7 @@
 
 
   <select id="selectByCondition" resultMap="BaseResultMap">
-    select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
+    select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, approval_process_id, cycle,
     pay_type, party_a_id, party_a_name, party_a_principal, party_b_id, party_b_name, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time,
     attachment1_name, attachment1, attachment2_name, attachment2,
@@ -155,21 +167,21 @@
     <where>
       type = #{type,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}
       <if test="title!=null and title!=''">
-        and (title like concat('%',#{title,jdbcType=VARCHAR},'%') or serial_no like concat('%',#{serialNo,jdbcType=VARCHAR},'%'))
+        and (title like concat('%',#{title,jdbcType=VARCHAR},'%') or serial_no like concat('%',#{title,jdbcType=VARCHAR},'%'))
       </if>
       <if test="beginTime != null and beginTime != ''">
-        and effective_time >= #{beginTime,jdbcType=TIMESTAMP}
+        and effective_time <![CDATA[>=]]> #{beginTime,jdbcType=TIMESTAMP}
       </if>
       <if test="endTime != null and endTime != ''">
-        and #{endTime,jdbcType=TIMESTAMP} >= effective_time
+        and #{endTime,jdbcType=TIMESTAMP} <![CDATA[>=]]> effective_time
       </if>
-      <if test="contractStatus!=null and contractStatus!=''">
+      <if test="contractStatus!=null">
         and contract_status = #{contractStatus,jdbcType=SMALLINT}
       </if>
-      <if test="groupId!=null and groupId!=''">
+      <if test="groupId!=null">
         and group_id = #{groupId,jdbcType=BIGINT}
       </if>
-      <if test="approvalStatus!=null and approvalStatus!=''">
+      <if test="approvalStatus!=null">
         and approval_status = #{approvalStatus,jdbcType=SMALLINT}
       </if>
     </where>
@@ -184,6 +196,9 @@
     <if test="terminationTime!=null">
       ,termination_time = #{terminationTime,jdbcType=TIMESTAMP}
     </if>
+    <if test="isDraft!=null">
+      ,is_draft = #{isDraft,jdbcType=SMALLINT}
+    </if>
     where contract_id = #{contractId,jdbcType=BIGINT}
   </update>
 
@@ -193,4 +208,140 @@
     approval_end_date = CURRENT_TIMESTAMP
     where contract_id = #{arg0} and company_id = #{arg1}
   </update>
+   <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.contract.model.Contract" >
+    update t_contract
+    <set >
+      <if test="contractCode != null" >
+        contract_code = #{contractCode,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNo != null" >
+        serial_no = #{serialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="signDate != null" >
+        sign_date = #{signDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="contractStatus != null" >
+        contract_status = #{contractStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="approvalStatus != null" >
+        approval_status = #{approvalStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="approvalProcess != null" >
+        approval_process = #{approvalProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalProcessId != null" >
+        approval_process_id = #{approvalProcessId,jdbcType=VARCHAR},
+      </if>
+      <if test="cycle != null" >
+        cycle = #{cycle,jdbcType=SMALLINT},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="partyAId != null" >
+        party_a_id = #{partyAId,jdbcType=BIGINT},
+      </if>
+      <if test="partyAName != null" >
+        party_a_name = #{partyAName,jdbcType=VARCHAR},
+      </if>
+      <if test="partyAPrincipal != null" >
+        party_a_principal = #{partyAPrincipal,jdbcType=VARCHAR},
+      </if>
+      <if test="partyBId != null" >
+        party_b_id = #{partyBId,jdbcType=BIGINT},
+      </if>
+      <if test="partyBName != null" >
+        party_b_name = #{partyBName,jdbcType=VARCHAR},
+      </if>
+      <if test="partyBPrincipal != null" >
+        party_b_principal = #{partyBPrincipal,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvalStartDate != null" >
+        approval_start_date = #{approvalStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvalEndDate != null" >
+        approval_end_date = #{approvalEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="summary != null" >
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="terms != null" >
+        terms = #{terms,jdbcType=VARCHAR},
+      </if>
+      <if test="fileUrl != null" >
+        file_url = #{fileUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null" >
+        group_id = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="isDraft != null" >
+        is_draft = #{isDraft,jdbcType=SMALLINT},
+      </if>
+      <if test="summation != null" >
+        summation = #{summation,jdbcType=DECIMAL},
+      </if>
+      <if test="createId != null" >
+        create_id = #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null" >
+        create_name = #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="effectiveTime != null" >
+        effective_time = #{effectiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="terminationTime != null" >
+        termination_time = #{terminationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="attachment1Name != null" >
+        attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment1 != null" >
+        attachment1 = #{attachment1,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2Name != null" >
+        attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2 != null" >
+        attachment2 = #{attachment2,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment3Name != null" >
+        attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment3 != null" >
+        attachment3 = #{attachment3,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment4Name != null" >
+        attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment4 != null" >
+        attachment4 = #{attachment4,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment5Name != null" >
+        attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment5 != null" >
+        attachment5 = #{attachment5,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where contract_id = #{contractId,jdbcType=BIGINT}
+  </update>
+
 </mapper>

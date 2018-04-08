@@ -770,7 +770,7 @@
         and ${carrierCollectionIds}
       </if>
     </where>
-    order by waybill_plan_id desc
+    order by ${orderFiled} ${orderDesc}
   </select>
 
 
@@ -843,7 +843,7 @@
         and ${carrierCollectionIds}
       </if>
     </where>
-    order by waybill_plan_id desc
+    order by ${orderFiled} ${orderDesc}
   </select>
 
 
@@ -919,7 +919,7 @@
       </if>
 
     </where>
-    order by waybill_plan_id desc
+    order by ${orderFiled} ${orderDesc}
   </select>
 
   <!--客户计划（已派车）
@@ -990,7 +990,7 @@
         and ${carrierCollectionIds}
       </if>
     </where>
-    order by waybill_plan_id desc
+    order by ${orderFiled} ${orderDesc}
   </select>
 
   <!--客户计划（已完成）
@@ -1062,7 +1062,7 @@
         and ${carrierCollectionIds}
       </if>
     </where>
-    order by waybill_plan_id desc
+    order by ${orderFiled} ${orderDesc}
   </select>
 
   <!--客户计划（已取消）
@@ -1130,7 +1130,7 @@
         and ${carrierCollectionIds}
       </if>
     </where>
-    order by waybill_plan_id desc
+    order by ${orderFiled} ${orderDesc}
   </select>
 
   <resultMap id="snatchBill4WaittingMap" type="com.lcdt.traffic.dto.SnatchBill4WaittingRdto">

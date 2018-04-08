@@ -20,6 +20,8 @@ public class Contract {
 
     private Short approvalStatus;
 
+    private Long approvalProcessId;
+
     private String approvalProcess;
 
     private Short cycle;
@@ -152,6 +154,14 @@ public class Contract {
 
     public void setApprovalStatus(Short approvalStatus) {
         this.approvalStatus = approvalStatus;
+    }
+
+    public Long getApprovalProcessId() {
+        return approvalProcessId;
+    }
+
+    public void setApprovalProcessId(Long approvalProcessId) {
+        this.approvalProcessId = approvalProcessId;
     }
 
     public String getApprovalProcess() {

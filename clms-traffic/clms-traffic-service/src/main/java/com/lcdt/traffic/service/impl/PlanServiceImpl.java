@@ -9,20 +9,18 @@ import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.service.WaybillRpcService;
 import com.lcdt.traffic.service.WaybillService;
-import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
-import com.lcdt.traffic.web.dto.WaybillDto;
-import com.lcdt.traffic.web.dto.WaybillParamsDto;
-import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yangbinq on 2017/12/13.
@@ -58,24 +56,6 @@ public class PlanServiceImpl implements PlanService {
     @Autowired
     private WaybillRpcService waybillRpcService;
 
-
-
-
-    @Transactional(readOnly = true)
-    @Override
-    public WaybillPlan loadWaybillPlan(WaybillParamsDto dto) {
-        Map tMap = new HashMap<String,String>();
-        tMap.put("waybillPlanId",dto.getWaybillPlanId());
-        if(dto.getCompanyId()!=null) {
-            tMap.put("companyId", dto.getCompanyId());
-        }
-        tMap.put("isDeleted","0");
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
-        if (waybillPlan == null) {
-            throw new WaybillPlanException("计划不存在！");
-        }
-        return waybillPlan;
-    }
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -268,11 +248,6 @@ public class PlanServiceImpl implements PlanService {
                 waybillPlanMapper.updateWaybillPlan(waybillPlan); // 如果所有拍单剩余数量为0的话
             }
         }
-
-
-
-
-
 
        return 0;
     }

@@ -107,9 +107,44 @@
     select <include refid="base_property_list"/>
     from t_fee_account
     <where>
-      is_receivable = #{isReceivable,jdbcType=SMALLINT} and company_id = #{companyId,jdbcType=BIGINT}
-      <if test="groupId!=null and groupId!=''">
+      is_receivable = #{isReceivable,jdbcType=SMALLINT}
+        and company_id = #{companyId,jdbcType=BIGINT}
+        and is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      <if test="reconcileStatus!=null and reconcileStatus == 1">
+        and reconcile_id is null
+      </if>
+      <if test="reconcileStatus!=null and reconcileStatus == 2">
+        and reconcile_id is not null
+      </if>
+      <if test="groupId!=null">
         and group_id = #{groupId,jdbcType=BIGINT}
+      </if>
+      <if test="name!=null and name != ''">
+        and name like concat('%',#{name,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="auditStatus!=null">
+        and audit_status = #{auditStatus,jdbcType=SMALLINT}
+      </if>
+      <if test="auditBeginTime != null and auditBeginTime != ''">
+        and audit_date >= #{auditBeginTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="auditEndTime != null and auditEndTime != ''">
+        and #{auditEndTime,jdbcType=TIMESTAMP} >= audit_date
+      </if>
+      <if test="accountCode!=null and accountCode != ''">
+        and account_code = #{accountCode,jdbcType=VARCHAR}
+      </if>
+      <if test="waybillCode!=null and waybillCode != ''">
+        and waybill_code = #{waybillCode,jdbcType=VARCHAR}
+      </if>
+      <if test="reconcileCode!=null and reconcileCode != ''">
+        and reconcile_code = #{reconcileCode,jdbcType=VARCHAR}
+      </if>
+      <if test="createBeginTime != null and createBeginTime != ''">
+        and create_date >= #{createBeginTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="createEndTime != null and createEndTime != ''">
+        and #{createEndTime,jdbcType=TIMESTAMP} >= create_date
       </if>
     </where>
     order by account_id desc

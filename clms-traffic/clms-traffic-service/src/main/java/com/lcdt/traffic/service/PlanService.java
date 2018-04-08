@@ -1,30 +1,17 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
-import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
-import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import com.lcdt.userinfo.model.User;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Map;
 
 /**
  * Created by yangbinq on 2017/12/13.
  */
 public interface PlanService {
-
-
-    /***
-     * 拉取计划详细信息
-     *
-     * @param dto
-     * @return
-     */
-    WaybillPlan loadWaybillPlan(WaybillParamsDto dto);
 
 
 
