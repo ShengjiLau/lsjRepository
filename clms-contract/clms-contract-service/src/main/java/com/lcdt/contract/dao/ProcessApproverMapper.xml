@@ -49,7 +49,7 @@
     <foreach item="item" collection="list" separator=",">
       (#{item.processId,jdbcType=BIGINT}, #{item.userId,jdbcType=BIGINT},
       #{item.userName,jdbcType=VARCHAR}, #{item.deptName,jdbcType=VARCHAR},
-      #{item.sort,jdbcType=INTEGER},#{actionType,jdbcType=SMALLINT}
+      #{item.sort,jdbcType=INTEGER},#{item.actionType,jdbcType=SMALLINT}
       )
     </foreach>
   </insert>

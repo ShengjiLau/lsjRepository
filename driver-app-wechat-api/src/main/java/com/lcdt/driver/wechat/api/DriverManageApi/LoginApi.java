@@ -57,7 +57,6 @@ public class LoginApi {
             if (!codeCorrect) {
                 throw new RuntimeException("验证码错误");
             }
-
             User user = userService.registerUser(registerDto);
             return user;
         } catch (PhoneHasRegisterException e) {
@@ -74,7 +73,7 @@ public class LoginApi {
         Date date = new Date();
         Calendar instance = Calendar.getInstance();
         instance.setTime(date);
-        instance.set(Calendar.HOUR_OF_DAY, instance.get(Calendar.HOUR_OF_DAY + 300));
+        instance.set(Calendar.DAY_OF_YEAR, instance.get(Calendar.DAY_OF_YEAR + 30));
         String s = jwtTokenUtil.generateToken(stringStringHashMap,instance.getTime());
         List<UserCompRel> userCompRels = companyService.companyList(Long.valueOf(user.getUserId()));
         JSONObject jsonObject = new JSONObject();
@@ -119,7 +118,7 @@ public class LoginApi {
     }
 
     @RequestMapping(value = "/createcomp", method = RequestMethod.POST)
-    public Company createCompany(CompanyDto companyDto) throws CompanyExistException {
+    public Company createCompany(CompanyDto companyDto) throws CompanyExistException, UserNotExistException {
         Company company = createCompanyService.createCompany(companyDto);
         return company;
     }

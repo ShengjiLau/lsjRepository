@@ -11,6 +11,8 @@ public class ApprovalProcess {
 
     private Long groupId;
 
+    private String groupName;
+
     private String remarks;
 
     private Date createTime;
@@ -47,6 +49,14 @@ public class ApprovalProcess {
 
     public void setGroupId(Long groupId) {
         this.groupId = groupId;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     public String getRemarks() {
