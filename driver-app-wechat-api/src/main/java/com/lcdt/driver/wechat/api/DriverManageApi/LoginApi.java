@@ -73,7 +73,7 @@ public class LoginApi {
         Date date = new Date();
         Calendar instance = Calendar.getInstance();
         instance.setTime(date);
-        instance.set(Calendar.HOUR_OF_DAY, instance.get(Calendar.DAY_OF_YEAR + 30));
+        instance.set(Calendar.DAY_OF_YEAR, instance.get(Calendar.DAY_OF_YEAR + 30));
         String s = jwtTokenUtil.generateToken(stringStringHashMap,instance.getTime());
         List<UserCompRel> userCompRels = companyService.companyList(Long.valueOf(user.getUserId()));
         JSONObject jsonObject = new JSONObject();
