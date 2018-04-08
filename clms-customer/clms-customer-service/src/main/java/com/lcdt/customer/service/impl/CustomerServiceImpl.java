@@ -412,6 +412,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public int customerCollectionRemove(Map map) {
+        Map map_ = map;
+        map.put("collectionIds","find_in_set('"+map.get("collectionId")+"',collection_ids)");
+        List<Customer> list = customerMapper.selectByCondition(map_);
+        if(list!=null&&list.size()>0)
+        {
+            return -1;
+        }
         return customerCollectionMapper.deleteByPrimaryKey(map);
     }
 
