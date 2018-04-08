@@ -100,16 +100,23 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     }
 
     @Override
-    public int modifyOwnWaybillStatus(WaybillModifyStatusDto dto) {
-        int result=0;
+    public Waybill modifyOwnWaybillStatus(WaybillModifyStatusDto dto) {
+        Waybill waybill =null;
         Map map=ClmsBeanUtil.beanToMap(dto);
-        result=waybillMapper.updateOwnWaybillStatus(map);
+        int result=waybillMapper.updateOwnWaybillStatus(map);
 
+        if (result > 0) {
+            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            waybill = resultList.get(0);
+        } else {
+            throw new RuntimeException("修改失败");
+        }
         //发送消息通知
         modifyOwnWaybillStatusToSendNotify(map);
         //返回计划相关信息
         modifyWaybillPlanInfo(map);
-        return result;
+
+        return waybill;
     }
 
     @Override
@@ -126,11 +133,19 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     }
 
     @Override
-    public int modifyOwnWaybillReceipt(WaybillModifyReceiptDto dto) {
-        int result=0;
+    public Waybill modifyOwnWaybillReceipt(WaybillModifyReceiptDto dto) {
+        Waybill waybill=null;
         Map map=ClmsBeanUtil.beanToMap(dto);
-        result=waybillMapper.updateOwnWaybillStatus(map);
-        return result;
+        int result=waybillMapper.updateOwnWaybillStatus(map);
+
+        if (result > 0) {
+            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            waybill = resultList.get(0);
+        } else {
+            throw new RuntimeException("修改失败");
+        }
+
+        return waybill;
     }
 
     @Override
