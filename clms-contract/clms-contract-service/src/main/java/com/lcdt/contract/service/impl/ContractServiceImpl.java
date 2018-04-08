@@ -3,20 +3,20 @@ package com.lcdt.contract.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.contract.dao.*;
-import com.lcdt.contract.model.*;
-
+import com.lcdt.contract.dao.ContractApprovalMapper;
+import com.lcdt.contract.dao.ContractMapper;
+import com.lcdt.contract.dao.ContractProductMapper;
+import com.lcdt.contract.model.Contract;
+import com.lcdt.contract.model.ContractApproval;
+import com.lcdt.contract.model.ContractProduct;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.ContractDto;
-
-import com.lcdt.contract.web.utils.SerialNumAutoGenerator;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.tl.commons.util.StringUtility;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -34,10 +34,6 @@ public class ContractServiceImpl implements ContractService {
     private ContractProductMapper contractProductMapper;
     @Autowired
     private ContractApprovalMapper contractApprovalMapper;
-    @Autowired
-    private OrderMapper orderMapper;
-    @Autowired
-    private ConditionQueryMapper conditionQueryMapper;
 
     @Override
     public int addContract(ContractDto dto) {
