@@ -7,6 +7,7 @@ import com.lcdt.traffic.dto.WaybillOwnListParamsDto;
 import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.service.FeeAccountService;
 import com.lcdt.traffic.util.GroupIdsUtil;
+import com.lcdt.traffic.web.dto.FeeAccountDto;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.WaybillFeeDto;
 import com.lcdt.util.WebProduces;
@@ -124,6 +125,32 @@ public class PayableFeeAccountApi {
 //            throw new RuntimeException("删除失败");
 //        }
 
+        return null;
+    }
+    @ApiOperation("应收记账单——列表")
+    @RequestMapping(value = "/feeAccountList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_list')")
+    public PageBaseDto feeAccountList(@Validated FeeAccountDto dto) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        dto.setCompanyId(companyId);
+        dto.setIsDeleted((short)0);
+        dto.setIsReceivable((short)1);
+        PageInfo<List<FeeAccountDto>> listPageInfo = feeAccountService.feeAccountList(dto);
+        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
+        return pageBaseDto;
+    }
+
+    @ApiOperation("应收记账单——列表留言")
+    @RequestMapping(value = "/feeAccountAddMsgPage", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_add_msg')")
+    public PageBaseDto feeAccountAddMsgPage(@ApiParam(value = "记账单ID",required = true) @RequestParam Long accountId) {
+//        Long companyId = SecurityInfoGetter.getCompanyId();
+//        dto.setCompanyId(companyId);
+//        dto.setIsDeleted((short)0);
+//        dto.setIsReceivable((short)0);
+//        PageInfo<List<FeeAccountDto>> listPageInfo = feeAccountService.feeAccountList(dto);
+//        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
+//        return pageBaseDto;
         return null;
     }
 }
