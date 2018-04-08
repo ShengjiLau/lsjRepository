@@ -262,9 +262,19 @@
       <if test="vehicleCategory==0 or vehicleCategory==1">
         and vehicle_category = #{vehicleCategory,jdbcType=VARCHAR}
       </if>
+      <if test="vehicleNumOrPhone!=null and vehicleNumOrPhone!=''">
+        and (vehicle_num like concat('%',#{vehicleNumOrPhone,jdbcType=VARCHAR},'%') or vehicle_driver_phone like concat('%',#{vehicleNumOrPhone,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="vehicleType!=null and vehicleType!=''">
+        and vehicle_type = #{vehicleType,jdbcType=VARCHAR}
+      </if>
+      <if test="vehicleLength!=null and vehicleLength!=''">
+        and vehicle_length = #{vehicleLength,jdbcType=VARCHAR}
+      </if>
     </where>
     order by own_vehicle_id desc
   </select>
+
   <select id="selectDetail" resultMap="ResultMapDto">
     select t1.own_vehicle_id, t1.affiliated_company, t1.vehicle_num, t1.vehicle_trailer_num, t1.vehicle_category,
     t1.vehicle_type, t1.vehicle_length, t1.vehicle_load, t1.vehicle_driver_phone, t1.vehicle_driver_name,t1.vehicle_driver_id,
