@@ -719,7 +719,7 @@
         and ${carrierCollectionIds}
       </if>
    </where>
-    order by waybill_plan_id desc
+    order by ${orderFiled} ${orderDesc}
   </select>
 
   <!--客户计划（已报价）
