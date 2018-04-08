@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.lcdt.traffic.TrafficServiceApp;
 import com.lcdt.traffic.dao.TestMapper;
+import com.lcdt.userinfo.model.Driver;
+import com.lcdt.userinfo.service.DriverService;
 
 
 
@@ -17,13 +20,14 @@ import com.lcdt.traffic.dao.TestMapper;
  * @version
  */
 @RunWith( SpringJUnit4ClassRunner.class)
-//@SpringBootTest(classes=TrafficServiceApp.class)
-//@RunWith(SpringRunner.class)
 @SpringBootTest(classes=TrafficServiceApp.class)
 public class test002 {
 	
 	@Autowired
 	private TestMapper tm;
+	
+	 @Reference
+	 public DriverService driverService;
 
 //	public static void main(String[] args) {
 //	Float f= 123456.789f;
@@ -41,12 +45,22 @@ public class test002 {
 //	
 //	
 //	}
-   @Test
-	public void testFloat() {
-		tm.insertReconcile(1234567890.123456789);
-
-	}
-	
+//   @Test
+//	public void testFloat() {
+//		tm.insertReconcile(1234567890.123456789);
+//
+//	}
+//	
+	 @Test
+   public void testRe() {
+	   Driver d= new Driver();
+	   d.setDriverName("test002");
+	   driverService.addDriver(d) ;
+	  
+   }
+   
+   
+   
 
 
 }
