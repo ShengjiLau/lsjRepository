@@ -103,33 +103,15 @@
     and is_receivable = #{isReceivable,jdbcType=SMALLINT}
     order by account_id desc
   </select>
-  <select id="selectByCondition" resultMap="BaseResultMap">
-    select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
-    pay_type, party_a_id, party_a_name, party_a_principal, party_b_id, party_b_name, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
-    summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time,
-    attachment1_name, attachment1, attachment2_name, attachment2,
-    attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, attachment5
-    from t_contract
+  <select id="selectOwnByCondition" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
+    select <include refid="base_property_list"/>
+    from t_fee_account
     <where>
-      type = #{type,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}
-      <if test="title!=null and title!=''">
-        and (title like concat('%',#{title,jdbcType=VARCHAR},'%') or serial_no like concat('%',#{serialNo,jdbcType=VARCHAR},'%'))
-      </if>
-      <if test="beginTime != null and beginTime != ''">
-        and effective_time >= #{beginTime,jdbcType=TIMESTAMP}
-      </if>
-      <if test="endTime != null and endTime != ''">
-        and #{endTime,jdbcType=TIMESTAMP} >= effective_time
-      </if>
-      <if test="contractStatus!=null and contractStatus!=''">
-        and contract_status = #{contractStatus,jdbcType=SMALLINT}
-      </if>
+      is_receivable = #{isReceivable,jdbcType=SMALLINT} and company_id = #{companyId,jdbcType=BIGINT}
       <if test="groupId!=null and groupId!=''">
         and group_id = #{groupId,jdbcType=BIGINT}
       </if>
-      <if test="approvalStatus!=null and approvalStatus!=''">
-        and approval_status = #{approvalStatus,jdbcType=SMALLINT}
-      </if>
     </where>
+    order by account_id desc
   </select>
 </mapper>

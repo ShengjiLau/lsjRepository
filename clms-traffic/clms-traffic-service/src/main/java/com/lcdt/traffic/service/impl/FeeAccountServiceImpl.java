@@ -62,24 +62,21 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     }
     @Override
     public PageInfo feeAccountList(FeeAccountDto dto){
-//        List<FeeAccountDto> resultList = null;
-//
-//        PageInfo page = null;
-//        int pageNo = 1;
-//        int pageSize = 0; //0表示所有
-////        if (dto.getPageNum() != null) {
-////            pageNo = dto.getPageNum();
-////        }
-////        if (dto.getPageSize() != null) {
-////            pageSize = dto.getPageSize();
-////        }
-//        PageHelper.startPage(pageNo, pageSize);
-//        Map map= ClmsBeanUtil.beanToMap(dto);
-//        resultList = waybillMapper.selectWaybillFeeByCondition(map);
-//        page = new PageInfo(resultList);
-//
-//        return page;
-        return null;
+        List<FeeAccountDto> resultList = null;
+        PageInfo page = null;
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+        if (dto.getPageNum() != null) {
+            pageNo = dto.getPageNum();
+        }
+        if (dto.getPageSize() != null) {
+            pageSize = dto.getPageSize();
+        }
+        PageHelper.startPage(pageNo, pageSize);
+        Map map= ClmsBeanUtil.beanToMap(dto);
+        resultList = feeAccountMapper.selectOwnByCondition(map);
+        page = new PageInfo(resultList);
+        return page;
     }
     @Override
     public PageInfo feePropertyList(Map m) {

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.model.SnatchGoods;
+import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 
@@ -28,6 +29,14 @@ public interface IPlanRpcService4Wechat {
     PageInfo snatchBill4CompleteList(SnathBill4WaittingPdto dto);
     //抢单报价
     int driverOffer(SnatchOfferDto dto, SnatchGoods snatchGoods);
+
+    /***
+     * 拉取计划详细信息
+     * @param dto
+     * @return
+     */
+    WaybillPlan loadWaybillPlan(WaybillParamsDto dto);
+
 
 
 

@@ -13,6 +13,7 @@ import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.exception.SplitGoodsException;
+import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.CommonAttachment;
@@ -744,6 +745,23 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         return 1;
     }
 
+
+
+    @Transactional(readOnly = true)
+    @Override
+    public WaybillPlan loadWaybillPlan(WaybillParamsDto dto) {
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",dto.getWaybillPlanId());
+        if(dto.getCompanyId()!=null) {
+            tMap.put("companyId", dto.getCompanyId());
+        }
+        tMap.put("isDeleted","0");
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
+        if (waybillPlan == null) {
+            throw new WaybillPlanException("计划不存在！");
+        }
+        return waybillPlan;
+    }
 
 
 

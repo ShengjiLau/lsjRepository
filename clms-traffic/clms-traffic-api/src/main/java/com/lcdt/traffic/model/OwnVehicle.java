@@ -93,6 +93,9 @@ public class OwnVehicle implements Serializable {
 
     private Long companyId;
 
+    //参数
+    private String vehicleNumOrPhone;
+
     public Long getOwnVehicleId() {
         return ownVehicleId;
     }
@@ -459,5 +462,13 @@ public class OwnVehicle implements Serializable {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public String getVehicleNumOrPhone() {
+        return vehicleNumOrPhone;
+    }
+
+    public void setVehicleNumOrPhone(String vehicleNumOrPhone) {
+        this.vehicleNumOrPhone = vehicleNumOrPhone;
     }
 }

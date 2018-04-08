@@ -1,5 +1,6 @@
 package com.lcdt.contract.web.controller.api;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -103,6 +104,23 @@ public class ApprovalProcessApi {
         jsonObject.put("code", 0);
         jsonObject.put("message", "修改成功");
 
+        return jsonObject;
+    }
+
+    @ApiOperation(value = "流程展示", notes = "根据type获取对应企业下的所有类型")
+    @GetMapping("/show")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('approval_process_list')")
+    public JSONObject contractShow(ApprovalProcess approvalProcess) {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取userId
+        approvalProcess.setCompanyId(companyId);
+        List<ApprovalProcessDto> listPageInfo = approvalProcessService.approvalProcessShow(approvalProcess);
+        JSONObject object = new JSONObject();
+        object.put("list",listPageInfo);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("data",object);
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "获取成功");
         return jsonObject;
     }
 }

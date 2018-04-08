@@ -37,6 +37,7 @@ public class DubboConfig {
 	public ProtocolConfig protocolConfig(){
 		ProtocolConfig protocolConfig = new ProtocolConfig();
 		protocolConfig.setPort(protocolPort);
+
 		return protocolConfig;
 	}
 
@@ -45,13 +46,16 @@ public class DubboConfig {
 		RegistryConfig registryConfig = new RegistryConfig();
 		registryConfig.setAddress(zookeeperUrl);
 		registryConfig.setProtocol("zookeeper");
+		registryConfig.setTimeout(60000);
+		registryConfig.setSession(60000);
+		registryConfig.setWait(60000);
 		return registryConfig;
 	}
 
 	@Bean
 	public ConsumerConfig consumerConfig(){
 		ConsumerConfig consumerConfig = new ConsumerConfig();
-		consumerConfig.setTimeout(30000);
+		consumerConfig.setTimeout(60000);
 		return consumerConfig;
 	}
 

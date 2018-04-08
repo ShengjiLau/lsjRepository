@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
@@ -13,7 +14,6 @@ import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
-import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import com.lcdt.traffic.web.dto.WaybillPlanListParamsDto;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
@@ -87,7 +87,7 @@ public class OwnPlanApi {
         WaybillParamsDto dto = new WaybillParamsDto();
         dto.setCompanyId(companyId);
         dto.setWaybillPlanId(waybillPlanId);
-        WaybillPlan waybillPlan = planService.loadWaybillPlan(dto);
+        WaybillPlan waybillPlan = iPlanRpcService4Wechat.loadWaybillPlan(dto);
         return waybillPlan;
     }
 

@@ -96,7 +96,7 @@
         and t1.title like concat('%',#{title,jdbcType=VARCHAR},'%') or t1.contract_code like concat('%',#{title,jdbcType=VARCHAR},'%')
       </if>
       <if test="approvalStartDate!=null and approvalStartDate!=''">
-        and t1.approval_start_date &gt; #{approvalStartDate,jdbcType=TIMESTAMP} and t1.approval_end_date &lt; #{approvalEndDate,jdbcType=TIMESTAMP}
+        and t1.approval_start_date &gt; #{approvalStartDate,jdbcType=TIMESTAMP} and t1.approval_start_date &lt; #{approvalEndDate,jdbcType=TIMESTAMP}
       </if>
       <if test="approvalStatus!=null and approvalStatus!=''">
         <choose>

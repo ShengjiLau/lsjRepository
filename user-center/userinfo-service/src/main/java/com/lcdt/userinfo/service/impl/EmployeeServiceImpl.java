@@ -2,19 +2,14 @@ package com.lcdt.userinfo.service.impl;
 
 import com.lcdt.clms.permission.model.Role;
 import com.lcdt.clms.permission.service.UserRoleService;
-import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
-import com.lcdt.userinfo.model.Group;
-import com.lcdt.userinfo.model.LoginLog;
-import com.lcdt.userinfo.model.User;
-import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.userinfo.model.*;
 import com.lcdt.userinfo.service.DepartmentService;
 import com.lcdt.userinfo.service.GroupManageService;
 import com.lcdt.userinfo.service.LoginLogService;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.web.dto.*;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -124,12 +119,16 @@ public class EmployeeServiceImpl {
 			List<Role> roles = roleService.userCompanyRole(userId, compRel.getCompId());
 			compRel.setRoles(roles);
 			//获取员工所在部门
-			List<UserCompRel> ucrs = userCompanyDao.selectByUserIdCompanyId(userId,compRel.getCompId());
+			/*List<UserCompRel> ucrs = userCompanyDao.selectByUserIdCompanyId(userId,compRel.getCompId());
 
 			if(ucrs != null && ucrs.size() > 0) {
 				compRel.setDeptNames(ucrs.get(0).getDeptNames());
+			}*/
+			if(!StringUtils.isEmpty(compRel.getDeptIds()))
+			{
+				Department department = departmentService.getDepartment(Long.parseLong(compRel.getDeptIds()));
+				compRel.setDeptNames(department.getDeptName());
 			}
-
 			employeeDtos.add(employeeDto);
 			LoginLog loginLog = loginLogService.userLastLogin(userId, compRel.getCompId());
 			compRel.setLoginLog(loginLog);

@@ -31,9 +31,11 @@ public class FeeAccountDto extends FeeAccount{
 
     private List<FeeFlow> feeFlowList;
 
-    private int pageNum;
+    @ApiModelProperty(value = "页码", required = true)
+    private Integer pageNum;
 
-    private int pageSize;
+    @ApiModelProperty(value = "每页显示条数", required = true)
+    private Integer pageSize;
 
     public String getAuditBeginTime() {
         return auditBeginTime;
@@ -99,19 +101,19 @@ public class FeeAccountDto extends FeeAccount{
         this.feeFlowList = feeFlowList;
     }
 
-    public int getPageNum() {
+    public Integer getPageNum() {
         return pageNum;
     }
 
-    public void setPageNum(int pageNum) {
+    public void setPageNum(Integer pageNum) {
         this.pageNum = pageNum;
     }
 
-    public int getPageSize() {
+    public Integer getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
 }
