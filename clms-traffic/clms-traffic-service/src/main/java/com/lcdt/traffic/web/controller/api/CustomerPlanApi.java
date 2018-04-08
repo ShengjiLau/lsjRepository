@@ -7,17 +7,17 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dto.CustomerPlanDto;
 import com.lcdt.traffic.dto.SnatchOfferDto;
 import com.lcdt.traffic.dto.SplitVehicleDto;
+import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.SnatchGoods;
-import com.lcdt.traffic.model.SplitGoods;
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.CustomerPlanService;
 import com.lcdt.traffic.service.ICustomerPlanRpcService4Wechat;
+import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.WaybillDto;
-import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import com.lcdt.traffic.web.dto.WaybillPlanListParamsDto;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
@@ -50,6 +50,9 @@ public class CustomerPlanApi {
 
     @Autowired
     private PlanService planService;
+
+    @Autowired
+    private IPlanRpcService4Wechat iPlanRpcService4Wechat;
 
 
     @ApiOperation("客户计划-列表-竞价")
@@ -599,7 +602,7 @@ public class CustomerPlanApi {
         dto.setCompanyId(companyId);
         dto.setWaybillPlanId(waybillPlanId);
         try {
-            WaybillPlan waybillPlan = planService.loadWaybillPlan(dto);
+            WaybillPlan waybillPlan = iPlanRpcService4Wechat.loadWaybillPlan(dto);
             return  waybillPlan;
         } catch (WaybillPlanException e) {
             throw new WaybillPlanException(e.getMessage());
@@ -624,7 +627,7 @@ public class CustomerPlanApi {
         snatchGoods.setOfferPhone(user.getPhone()); //抢单人电话
         snatchGoods.setCompanyId(companyId);
         snatchGoods.setPlanCompanyId(dto.getCompanyId());//计划企业ID
-        int flag = customerPlanService.customerPlanOfferOwn(dto,snatchGoods);
+        int flag = iCustomerPlanRpcService4Wechat.customerPlanOfferOwn(dto,snatchGoods);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
@@ -683,7 +686,7 @@ public class CustomerPlanApi {
         WaybillParamsDto dto = new WaybillParamsDto();
         dto.setCompanyId(null);
         dto.setWaybillPlanId(waybillPlanId);
-        WaybillPlan waybillPlan = planService.loadWaybillPlan(dto);
+        WaybillPlan waybillPlan = iPlanRpcService4Wechat.loadWaybillPlan(dto);
 
 
         List<Waybill> waybillLists = waybillPlan.getWaybillList();

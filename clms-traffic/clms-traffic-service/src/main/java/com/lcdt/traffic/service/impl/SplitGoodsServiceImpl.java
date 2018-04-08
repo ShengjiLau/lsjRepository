@@ -122,6 +122,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                                 obj.setUpdateTime(new Date());
                                 obj.setUpdateName(user.getRealName());
                                 obj.setRemainAmount(0f);
+                                obj.setFreightTotal(obj.getAllotAmount()*obj.getFreightPrice());
                                 splitGoodsDetailMapper.updateByPrimaryKey(obj);
                             }
                             break;
@@ -295,6 +296,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                      targetObj.setUpdateName(splitGoodsDetail.getUpdateName());
                      remainAmount = targetObj.getRemainAmount() + remainAmount; //原来的剩余数量+返还回来的
                      targetObj.setRemainAmount(remainAmount);
+                     targetObj.setFreightTotal(targetObj.getAllotAmount()*targetObj.getAllotAmount());//重新计划总价格
                      resultList.add(targetObj);
                 }
             }

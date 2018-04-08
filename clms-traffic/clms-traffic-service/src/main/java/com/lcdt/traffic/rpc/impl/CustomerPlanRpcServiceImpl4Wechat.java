@@ -9,18 +9,23 @@ import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.CustomerPlanDto;
+import com.lcdt.traffic.dto.SnatchOfferDto;
+import com.lcdt.traffic.exception.WaybillPlanException;
+import com.lcdt.traffic.model.PlanDetail;
+import com.lcdt.traffic.model.SnatchGoods;
+import com.lcdt.traffic.model.SnatchGoodsDetail;
+import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.service.DriverGroupService;
 import com.lcdt.traffic.service.ICustomerPlanRpcService4Wechat;
 import com.lcdt.traffic.service.WaybillService;
+import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yangbinq on 2018/4/3.
@@ -353,6 +358,17 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             }
         }
 
+        //默认排序
+        String orderField = "waybill_plan_id";
+        String orderDesc = "desc";
+        if (StringUtils.isEmpty(map.get("orderDesc"))) {
+            map.put("orderDesc", orderDesc);
+        }
+        if (StringUtils.isEmpty(map.get("orderFiled"))) {
+            map.put("orderFiled", orderField);
+        }
+
+
         //抢单企业
         if (!StringUtils.isEmpty(company_denglu)) {
             map.put("snatchCompanyId"," and company_id="+company_denglu);
@@ -394,6 +410,17 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                 pageSize = (Integer) map.get("page_size");
             }
         }
+
+        //默认排序
+        String orderField = "waybill_plan_id";
+        String orderDesc = "desc";
+        if (StringUtils.isEmpty(map.get("orderDesc"))) {
+            map.put("orderDesc", orderDesc);
+        }
+        if (StringUtils.isEmpty(map.get("orderFiled"))) {
+            map.put("orderFiled", orderField);
+        }
+
         PageHelper.startPage(pageNo, pageSize);
 
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Pass(map);
@@ -433,6 +460,18 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                 pageSize = (Integer) map.get("page_size");
             }
         }
+
+        //默认排序
+        String orderField = "waybill_plan_id";
+        String orderDesc = "desc";
+        if (StringUtils.isEmpty(map.get("orderDesc"))) {
+            map.put("orderDesc", orderDesc);
+        }
+        if (StringUtils.isEmpty(map.get("orderFiled"))) {
+            map.put("orderFiled", orderField);
+        }
+
+
         PageHelper.startPage(pageNo, pageSize);
 
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4VehicleDoing(map);
@@ -472,6 +511,18 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                 pageSize = (Integer) map.get("page_size");
             }
         }
+        //默认排序
+        String orderField = "waybill_plan_id";
+        String orderDesc = "desc";
+        if (StringUtils.isEmpty(map.get("orderDesc"))) {
+            map.put("orderDesc", orderDesc);
+        }
+        if (StringUtils.isEmpty(map.get("orderFiled"))) {
+            map.put("orderFiled", orderField);
+        }
+
+
+
         PageHelper.startPage(pageNo, pageSize);
 
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4VehicleHave(map);
@@ -513,6 +564,18 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                 pageSize = (Integer) map.get("page_size");
             }
         }
+
+        //默认排序
+        String orderField = "waybill_plan_id";
+        String orderDesc = "desc";
+        if (StringUtils.isEmpty(map.get("orderDesc"))) {
+            map.put("orderDesc", orderDesc);
+        }
+        if (StringUtils.isEmpty(map.get("orderFiled"))) {
+            map.put("orderFiled", orderField);
+        }
+
+
         PageHelper.startPage(pageNo, pageSize);
 
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Completed(map);
@@ -551,6 +614,20 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                 pageSize = (Integer) map.get("page_size");
             }
         }
+
+
+        //默认排序
+        String orderField = "waybill_plan_id";
+        String orderDesc = "desc";
+        if (StringUtils.isEmpty(map.get("orderDesc"))) {
+            map.put("orderDesc", orderDesc);
+        }
+        if (StringUtils.isEmpty(map.get("orderFiled"))) {
+            map.put("orderFiled", orderField);
+        }
+
+
+
         PageHelper.startPage(pageNo, pageSize);
 
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Cancel(map);
@@ -561,5 +638,54 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         }
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
+    }
+
+
+
+    @Transactional
+    @Override
+    public int customerPlanOfferOwn(SnatchOfferDto dto, SnatchGoods snatchGoods) {
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",dto.getWaybillPlanId());
+        tMap.put("companyId",dto.getCompanyId());
+        tMap.put("isDeleted","0");
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
+        if (null == waybillPlan) {
+            throw new WaybillPlanException("计划不存在！");
+        }
+        Date dt = new Date();
+        snatchGoods.setWaybillPlanId(dto.getWaybillPlanId());
+        snatchGoods.setCreateDate(dt);
+        snatchGoods.setUpdateTime(dt);
+        snatchGoods.setOfferDate(dt);//报价时间
+        snatchGoods.setIsDeleted((short)0);
+        snatchGoods.setOfferRemark(dto.getOfferRemark());
+        snatchGoods.setIsUsing(ConstantVO.SNATCH_GOODS_USING_DOING);
+        int flag1 = 1,flag2 =1 ;
+        flag1 = snatchGoodsMapper.insert(snatchGoods);
+
+        List<PlanDetail> list = dto.getPlanDetailList();
+        if (null != list  && list.size()>0) {
+            List<SnatchGoodsDetail> snatchList = new ArrayList<SnatchGoodsDetail>();
+            for (PlanDetail obj :list) {
+                SnatchGoodsDetail tempObj = new SnatchGoodsDetail();
+                tempObj.setSnatchGoodsId(snatchGoods.getSnatchGoodsId());
+                tempObj.setPlanDetailId(obj.getPlanDetailId());
+                tempObj.setCreateDate(dt);
+                tempObj.setOfferPrice(obj.getOfferPrice());
+                tempObj.setOfferTotal(obj.getOfferTotal());
+                tempObj.setOfferRemark(obj.getOfferRemark());
+                tempObj.setCreateId(snatchGoods.getCreateId());
+                tempObj.setCreateName(snatchGoods.getCreateName());
+                tempObj.setCreateDate(dt);
+                tempObj.setUpdateId(snatchGoods.getCreateId());
+                tempObj.setUpdateName(snatchGoods.getCreateName());
+                tempObj.setUpdateTime(dt);
+                tempObj.setIsDeleted((short)0);
+                snatchList.add(tempObj);
+            }
+            flag2 = snatchGoodsDetailMapper.batchAddSnatchGoodsDetail(snatchList);
+        }
+        return flag1+flag2>1?1:0;
     }
 }
