@@ -17,9 +17,8 @@ public class ContractApprovalListDto implements Serializable{
 
     /**
      * 合同类型
-     * 0 - 其他
-     * 1 - 采购合同
-     * 2 - 销售合同
+     * 0 - 采购合同
+     * 1 - 销售合同
      */
     private Short type;
 
@@ -47,10 +46,10 @@ public class ContractApprovalListDto implements Serializable{
     private String currentUserName;
 
     //审批发起时间
-    private Date approvalStartDate;
+    private String approvalStartDate;
 
     //审批完成时间
-    private Date approvalEndDate;
+    private String approvalEndDate;
 
     /**
      * 用户id 当前用户id
@@ -150,19 +149,19 @@ public class ContractApprovalListDto implements Serializable{
         this.currentUserName = currentUserName;
     }
 
-    public Date getApprovalStartDate() {
+    public String getApprovalStartDate() {
         return approvalStartDate;
     }
 
-    public void setApprovalStartDate(Date approvalStartDate) {
+    public void setApprovalStartDate(String approvalStartDate) {
         this.approvalStartDate = approvalStartDate;
     }
 
-    public Date getApprovalEndDate() {
+    public String getApprovalEndDate() {
         return approvalEndDate;
     }
 
-    public void setApprovalEndDate(Date approvalEndDate) {
+    public void setApprovalEndDate(String approvalEndDate) {
         this.approvalEndDate = approvalEndDate;
     }
 

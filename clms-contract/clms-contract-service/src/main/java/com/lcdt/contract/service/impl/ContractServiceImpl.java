@@ -252,7 +252,7 @@ public class ContractServiceImpl implements ContractService {
                 dto.setContractProductList(productList);
             }
             //添加审批人及抄送人信息
-            List<ContractApproval> approvalList = contractApprovalMapper.selectByContractId(contractId);
+            List<ContractApproval> approvalList = contractApprovalMapper.selectForContractDetail(contractId);
             if(null != approvalList && approvalList.size() > 0){
                 dto.setContractApprovalList(approvalList);
             }

@@ -96,7 +96,7 @@
         and t1.title like concat('%',#{title,jdbcType=VARCHAR},'%') or t1.contract_code like concat('%',#{title,jdbcType=VARCHAR},'%')
       </if>
       <if test="approvalStartDate!=null and approvalStartDate!=''">
-        and t1.approval_start_date &gt; #{approvalStartDate,jdbcType=TIMESTAMP} and t1.approval_end_date &lt; #{approvalEndDate,jdbcType=TIMESTAMP}
+        and t1.approval_start_date &gt; #{approvalStartDate,jdbcType=TIMESTAMP} and t1.approval_start_date &lt; #{approvalEndDate,jdbcType=TIMESTAMP}
       </if>
       <if test="approvalStatus!=null and approvalStatus!=''">
         <choose>
@@ -175,8 +175,21 @@
     from t_contract_approval
     where contract_id = #{arg0} and action_type = 0 and status != 5 order by sort
   </select>
+  <select id="selectForContractDetail" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select ca_id, contract_id, user_id, user_name, dept_name, sort, action_type, result, status, content,time
+    from t_contract_approval
+    where contract_id = #{arg0} order by sort
+  </select>
   <delete id="deleteByContractId" parameterType="java.lang.Long">
     delete from t_contract_approval
     where contract_id = #{arg0}
   </delete>
+  <select id="selectCC" resultMap="BaseResultMap">
+    select ca_id, contract_id, user_id, user_name, dept_name, sort, action_type, result, status, content,time
+    from t_contract_approval
+    where contract_id = #{arg0} and action_type=1 and user_id in
+    <foreach item="item" index="index" collection="arg1" open="(" separator="," close=")">
+      #{item.userId,jdbcType=BIGINT}
+    </foreach>
+  </select>
 </mapper>

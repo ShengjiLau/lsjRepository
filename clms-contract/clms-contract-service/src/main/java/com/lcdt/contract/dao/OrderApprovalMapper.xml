@@ -250,8 +250,8 @@
       <if test="orderSerialNo!=null and orderSerialNo!=''">
         and t1.order_serial_no like concat('%',#{orderSerialNo,jdbcType=VARCHAR},'%')
       </if>
-      <if test="createTime!=null and createTime!=''">
-        and t1.create_time &gt; #{createTime,jdbcType=TIMESTAMP} and t1.create_time &lt; #{createTime,jdbcType=TIMESTAMP}
+      <if test="approvalStartDate!=null and approvalStartDate!=''">
+        and t1.approval_start_date &gt; #{approvalStartDate,jdbcType=TIMESTAMP} and t1.approval_start_date &lt; #{approvalEndDate,jdbcType=TIMESTAMP}
       </if>
       <if test="approvalStatus!=null and approvalStatus!=''">
         <choose>
@@ -329,5 +329,13 @@
     select oa_id, order_id, user_id, user_name, dept_name, sort, action_type, result, status, content,time
     from t_order_approval
     where order_id = #{arg0} order by sort
+  </select>
+  <select id="selectCC" resultMap="BaseResultMap">
+    select oa_id, order_id, user_id, user_name, dept_name, sort, action_type, result, status, content,time
+    from t_order_approval
+    where order_id = #{arg0} and action_type=1 and user_id in
+    <foreach item="item" index="index" collection="arg1" open="(" separator="," close=")">
+      #{item.userId,jdbcType=BIGINT}
+    </foreach>
   </select>
 </mapper>
