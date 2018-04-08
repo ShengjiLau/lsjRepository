@@ -166,13 +166,13 @@
     <where>
       type = #{type,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}
       <if test="title!=null and title!=''">
-        and (title like concat('%',#{title,jdbcType=VARCHAR},'%') or serial_no like concat('%',#{serialNo,jdbcType=VARCHAR},'%'))
+        and (title like concat('%',#{title,jdbcType=VARCHAR},'%') or serial_no like concat('%',#{title,jdbcType=VARCHAR},'%'))
       </if>
       <if test="beginTime != null and beginTime != ''">
-        and effective_time >= #{beginTime,jdbcType=TIMESTAMP}
+        and effective_time <![CDATA[>=]]> #{beginTime,jdbcType=TIMESTAMP}
       </if>
       <if test="endTime != null and endTime != ''">
-        and #{endTime,jdbcType=TIMESTAMP} >= effective_time
+        and #{endTime,jdbcType=TIMESTAMP} <![CDATA[>=]]> effective_time
       </if>
       <if test="contractStatus!=null">
         and contract_status = #{contractStatus,jdbcType=SMALLINT}
