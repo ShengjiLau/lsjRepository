@@ -8,6 +8,7 @@ import com.lcdt.contract.model.Contract;
 import com.lcdt.contract.web.dto.ContractDto;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.PageBaseDto;
+import com.lcdt.contract.web.utils.Utils;
 import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -71,6 +72,8 @@ public class SalesContractApi {
         dto.setContractStatus((short)2);
         dto.setPartyBId(user.getUserId());
         dto.setPartyBName(user.getRealName());
+        //设置合同状态
+        dto = Utils.getContractStatus(dto);
 
         int result = contractService.addContract(dto);
         if (result > 0) {
@@ -90,6 +93,8 @@ public class SalesContractApi {
         User user = SecurityInfoGetter.getUser();
         dto.setPartyBId(user.getUserId());
         dto.setPartyBName(user.getRealName());
+        //设置合同状态
+        dto = Utils.getContractStatus(dto);
         int result = contractService.modContract(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
