@@ -20,10 +20,10 @@
                 </foreach>
             </if>
             <if test="date_interval!=null and date_interval!=''">
-                and pubdate &lt;= CURDATE() and pubdate &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
+                and date(pubdate)  &lt;= CURDATE() and date(pubdate)  &gt;= DATE_SUB(CURDATE(), INTERVAL #{date_interval,jdbcType=SMALLINT} DAY)
             </if>
             <if test="pubdate_start!=null and pubdate_start!=''">
-              and pubdate &gt;= #{pubdate_start,jdbcType=TIMESTAMP} and pubdate &lt;= #{pubdate_end,jdbcType=TIMESTAMP}
+              and date(pubdate)  &gt;= #{pubdate_start,jdbcType=TIMESTAMP} and date(pubdate)  &lt;= #{pubdate_end,jdbcType=TIMESTAMP}
             </if>
         </where>
     </select>

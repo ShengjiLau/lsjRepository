@@ -1,6 +1,7 @@
 package com.lcdt.contract.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.contract.model.ApprovalProcess;
 import com.lcdt.contract.web.dto.ApprovalProcessDto;
 
 import java.util.List;
@@ -40,4 +41,11 @@ public interface ApprovalProcessService {
      * @return
      */
     int delApprovalProcess(Long processId,Long companyId);
+
+    /**
+     * 获取审批流程
+     * @param approvalProcess
+     * @return
+     */
+    List<ApprovalProcessDto> approvalProcessShow(ApprovalProcess approvalProcess);
 }

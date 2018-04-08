@@ -147,6 +147,7 @@
       <set>
         allot_amount = #{item.allotAmount},
         remain_amount = #{item.remainAmount},
+        freight_total = #{item.freightTotal},
         update_id = #{item.updateId},
         update_name = #{item.updateName},
         update_time = #{item.updateTime}

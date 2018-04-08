@@ -106,4 +106,10 @@ public class ApprovalProcessServiceImpl implements ApprovalProcessService {
         }
         return row;
     }
+
+
+    @Override
+    public List<ApprovalProcessDto> approvalProcessShow(ApprovalProcess approvalProcess) {
+        return approvalProcessMapper.selectByCondition(approvalProcess.getCompanyId(), approvalProcess.getProcessType());
+    }
 }

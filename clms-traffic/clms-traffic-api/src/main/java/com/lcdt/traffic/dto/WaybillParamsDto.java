@@ -1,4 +1,4 @@
-package com.lcdt.traffic.web.dto;
+package com.lcdt.traffic.dto;
 
 import com.lcdt.traffic.model.PlanDetail;
 import com.lcdt.traffic.model.TransportWayItems;

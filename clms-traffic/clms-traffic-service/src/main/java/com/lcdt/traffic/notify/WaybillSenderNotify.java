@@ -8,9 +8,10 @@ import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.dao.SplitGoodsMapper;
 import com.lcdt.traffic.dao.WaybillMapper;
+import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.*;
+import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.traffic.service.PlanService;
-import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
@@ -46,6 +47,9 @@ public class WaybillSenderNotify {
 
     @Autowired
     private PlanService planService;
+
+    @Autowired
+    private IPlanRpcService4Wechat iPlanRpcService4Wechat;
 
     //门卫入厂
     public void enterFactorySenderNotify(String waybillIds,Long sendCompanyId,Long sendUserId) {
@@ -604,7 +608,7 @@ public class WaybillSenderNotify {
                 SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
                 WaybillParamsDto dto=new WaybillParamsDto();
                 dto.setWaybillPlanId(splitGoods.getWaybillPlanId());
-                WaybillPlan waybillPlan=planService.loadWaybillPlan(dto);
+                WaybillPlan waybillPlan=iPlanRpcService4Wechat.loadWaybillPlan(dto);
 
                 DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
                 defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());

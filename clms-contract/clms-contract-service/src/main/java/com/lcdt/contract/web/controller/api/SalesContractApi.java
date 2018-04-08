@@ -101,27 +101,29 @@ public class SalesContractApi {
         }
     }
 
-    @ApiOperation("合同终止/生效")
+    @ApiOperation("合同终止/生效/创建中")
     @RequestMapping(value = "/updateContractStatus", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('update_sales_contract_status')")
     public JSONObject updateContractStatus(@ApiParam(value = "合同ID",required = true) @RequestParam Long contractId,
-                                        @ApiParam(value = "状态 0-生效 3-失效",required = true) @RequestParam short contractStatus) {
+                                        @ApiParam(value = "状态 0-生效 3-失效 2-创建中",required = true) @RequestParam short contractStatus) {
         Contract dto = new Contract();
         dto.setContractId(contractId);
         dto.setContractStatus(contractStatus);
         if(contractStatus == 0){//0生效
             dto.setEffectiveTime(new Date());
-        }else{//3失效
+        }else if(contractStatus == 3){//3失效
             dto.setTerminationTime(new Date());
+        }else{
+            dto.setIsDraft((short)1);
         }
         int result = contractService.modContractStatus(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
-            jsonObject.put("message", contractStatus==0?"生效成功":"终止成功");
+            jsonObject.put("message", contractStatus==0?"生效成功":contractStatus==3?"终止成功":"创建成功");
             return jsonObject;
         } else {
-            throw new RuntimeException(contractStatus==0?"生效失败":"终止失败");
+            throw new RuntimeException(contractStatus==0?"生效失败":contractStatus==3?"终止失败":"创建失败");
         }
     }
 

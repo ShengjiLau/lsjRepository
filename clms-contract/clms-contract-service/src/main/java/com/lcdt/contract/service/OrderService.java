@@ -54,7 +54,7 @@ public interface OrderService {
      * 取消订单
      * @return int
      */
-	int cancelOrder(Long orderId);
+	int updateOrderIsDraft(Long orderId,Short isDraft);
 	
 	
 	

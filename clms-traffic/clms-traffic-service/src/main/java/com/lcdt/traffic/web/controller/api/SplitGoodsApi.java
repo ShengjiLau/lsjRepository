@@ -7,13 +7,13 @@ import com.lcdt.traffic.dao.TransportWayItemsMapper;
 import com.lcdt.traffic.dto.BindingSplitDto;
 import com.lcdt.traffic.dto.BindingSplitParamsDto;
 import com.lcdt.traffic.dto.SplitGoodsParamsDto;
+import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.SnatchGoods;
 import com.lcdt.traffic.model.TransportWayItems;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.service.SplitGoodsService;
-import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import io.swagger.annotations.Api;
@@ -81,7 +81,7 @@ public class SplitGoodsApi {
         WaybillParamsDto dto = new WaybillParamsDto();
         dto.setCompanyId(companyId);
         dto.setWaybillPlanId(waybillPlanId);
-        WaybillPlan waybillPlan = planService.loadWaybillPlan(dto);
+        WaybillPlan waybillPlan = iPlanRpcService4Wechat.loadWaybillPlan(dto);
         BindingSplitDto rdto = new BindingSplitDto();
         rdto.setWaybillPlan(waybillPlan);//计划划
         Map map = new HashMap<String,Long>();

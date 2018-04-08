@@ -69,58 +69,6 @@ public class CustomerPlanServiceImpl implements CustomerPlanService {
 
 
 
-
-
-
-
-
-    @Transactional
-    @Override
-    public int customerPlanOfferOwn(SnatchOfferDto dto, SnatchGoods snatchGoods) {
-        Map tMap = new HashMap<String,String>();
-        tMap.put("waybillPlanId",dto.getWaybillPlanId());
-        tMap.put("companyId",dto.getCompanyId());
-        tMap.put("isDeleted","0");
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
-        if (null == waybillPlan) {
-            throw new WaybillPlanException("计划不存在！");
-        }
-        Date dt = new Date();
-        snatchGoods.setWaybillPlanId(dto.getWaybillPlanId());
-        snatchGoods.setCreateDate(dt);
-        snatchGoods.setUpdateTime(dt);
-        snatchGoods.setOfferDate(dt);//报价时间
-        snatchGoods.setIsDeleted((short)0);
-        snatchGoods.setOfferRemark(dto.getOfferRemark());
-        snatchGoods.setIsUsing(ConstantVO.SNATCH_GOODS_USING_DOING);
-        int flag1 = 1,flag2 =1 ;
-        flag1 = snatchGoodsMapper.insert(snatchGoods);
-
-        List<PlanDetail> list = dto.getPlanDetailList();
-        if (null != list  && list.size()>0) {
-            List<SnatchGoodsDetail> snatchList = new ArrayList<SnatchGoodsDetail>();
-            for (PlanDetail obj :list) {
-                SnatchGoodsDetail tempObj = new SnatchGoodsDetail();
-                tempObj.setSnatchGoodsId(snatchGoods.getSnatchGoodsId());
-                tempObj.setPlanDetailId(obj.getPlanDetailId());
-                tempObj.setCreateDate(dt);
-                tempObj.setOfferPrice(obj.getOfferPrice());
-                tempObj.setOfferTotal(obj.getOfferTotal());
-                tempObj.setOfferRemark(obj.getOfferRemark());
-                tempObj.setCreateId(snatchGoods.getCreateId());
-                tempObj.setCreateName(snatchGoods.getCreateName());
-                tempObj.setCreateDate(dt);
-                tempObj.setUpdateId(snatchGoods.getCreateId());
-                tempObj.setUpdateName(snatchGoods.getCreateName());
-                tempObj.setUpdateTime(dt);
-                tempObj.setIsDeleted((short)0);
-                snatchList.add(tempObj);
-            }
-            flag2 = snatchGoodsDetailMapper.batchAddSnatchGoodsDetail(snatchList);
-        }
-        return flag1+flag2>1?1:0;
-    }
-
     @Transactional
     @Override
     public int customerPlanSplitVehicle(SplitVehicleDto dto, WaybillDto waybillDto) {
