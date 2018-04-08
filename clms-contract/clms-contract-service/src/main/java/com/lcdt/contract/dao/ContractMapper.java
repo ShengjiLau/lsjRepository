@@ -5,8 +5,6 @@ import com.lcdt.contract.web.dto.ContractDto;
 
 import java.util.List;
 
-import org.mybatis.spring.annotation.MapperScan;
-
 
 public interface ContractMapper {
     int deleteByPrimaryKey(Long contractId);
@@ -21,7 +19,7 @@ public interface ContractMapper {
 
     /**
      * 选择性更改,避免数据被覆盖
-     * @param contractDto
+     * @param record
      * @return
      */
     int updateByPrimaryKeySelective(Contract record);
