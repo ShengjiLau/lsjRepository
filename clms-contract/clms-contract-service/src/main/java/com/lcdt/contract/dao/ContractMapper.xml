@@ -11,6 +11,7 @@
     <result column="contract_status" jdbcType="SMALLINT" property="contractStatus" />
     <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
     <result column="approval_process" jdbcType="VARCHAR" property="approvalProcess" />
+    <result column="approval_process_id" jdbcType="BIGINT" property="approvalProcessId" />
     <result column="cycle" jdbcType="SMALLINT" property="cycle" />
     <result column="pay_type" jdbcType="VARCHAR" property="payType" />
     <result column="party_a_id" jdbcType="BIGINT" property="partyAId" />
@@ -52,7 +53,7 @@
   </delete>
   <insert id="insert" parameterType="com.lcdt.contract.model.Contract" useGeneratedKeys="true" keyProperty="contractId">
     insert into t_contract (contract_id, contract_code, serial_no, title,
-      sign_date, type, contract_status, approval_status,approval_process,
+      sign_date, type, contract_status, approval_status,approval_process,approval_process_id,
       cycle, pay_type, party_a_id, party_a_name,
       party_a_principal, party_b_id, party_b_name, party_b_principal,
       start_date, end_date,approval_start_date, approval_end_date, summary,
@@ -75,7 +76,7 @@
     </choose>
       #{title,jdbcType=VARCHAR},
       #{signDate,jdbcType=TIMESTAMP}, #{type,jdbcType=SMALLINT}, #{contractStatus,jdbcType=SMALLINT},
-      #{approvalStatus,jdbcType=SMALLINT},#{approvalProcess,jdbcType=VARCHAR},
+      #{approvalStatus,jdbcType=SMALLINT},#{approvalProcess,jdbcType=VARCHAR},#{approvalProcessId,jdbcType=BIGINT},
       #{cycle,jdbcType=SMALLINT}, #{payType,jdbcType=VARCHAR}, #{partyAId,jdbcType=BIGINT}, #{partyAName,jdbcType=VARCHAR},
       #{partyAPrincipal,jdbcType=VARCHAR}, #{partyBId,jdbcType=BIGINT}, #{partyBName,jdbcType=VARCHAR}, #{partyBPrincipal,jdbcType=VARCHAR},
       #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP},#{approvalStartDate,jdbcType=TIMESTAMP},
@@ -135,7 +136,7 @@
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.lcdt.contract.web.dto.ContractDto">
     select contract_id contractId, contract_code contractCode, serial_no serialNo, title, sign_date signDate, type,
-    contract_status contractStatus, approval_status approvalStatus,approval_process approvalProcess, cycle,
+    contract_status contractStatus, approval_status approvalStatus,approval_process approvalProcess, approval_process_id approvalProcessId, cycle,
     pay_type payType, party_a_id partyAId, party_a_name partyAName, party_a_principal partyAPrincipal,
     party_b_id partyBId, party_b_name partyBName, party_b_principal partyBPrincipal,
     start_date startDate, end_date endDate, approval_start_date approvalStartDate, approval_end_date approvalEndDate,
@@ -147,7 +148,7 @@
     where contract_id = #{contractId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
+    select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, approval_process_id, cycle,
     pay_type, party_a_id, party_a_name, party_a_principal, party_b_id, party_b_name, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time,
     attachment1_name, attachment1, attachment2_name, attachment2,
@@ -157,7 +158,7 @@
 
 
   <select id="selectByCondition" resultMap="BaseResultMap">
-    select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, cycle,
+    select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, approval_process_id, cycle,
     pay_type, party_a_id, party_a_name, party_a_principal, party_b_id, party_b_name, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time,
     attachment1_name, attachment1, attachment2_name, attachment2,
@@ -233,6 +234,9 @@
       </if>
       <if test="approvalProcess != null" >
         approval_process = #{approvalProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalProcessId != null" >
+        approval_process_id = #{approvalProcessId,jdbcType=VARCHAR},
       </if>
       <if test="cycle != null" >
         cycle = #{cycle,jdbcType=SMALLINT},
