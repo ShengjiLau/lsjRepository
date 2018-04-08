@@ -103,7 +103,7 @@
     and is_receivable = #{isReceivable,jdbcType=SMALLINT}
     order by account_id desc
   </select>
-  <select id="selectOwnByCondition" parameterType="java.util.Map" resultMap="BaseWaybillDaoMap">
+  <select id="selectOwnByCondition" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
     select <include refid="base_property_list"/>
     from t_fee_account
     <where>
