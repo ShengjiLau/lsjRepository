@@ -303,6 +303,18 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             map.put("snatchCompanyId"," and company_id="+company_denglu);
         }
 
+        //默认排序
+        String orderField = "waybill_plan_id";
+        String orderDesc = "desc";
+        if (StringUtils.isEmpty(map.get("orderDesc"))) {
+            map.put("orderDesc", orderDesc);
+        }
+        if (StringUtils.isEmpty(map.get("orderFiled"))) {
+            map.put("orderFiled", orderField);
+        }
+
+
+
         PageHelper.startPage(pageNo, pageSize);
 
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlan4Bidding(map);
