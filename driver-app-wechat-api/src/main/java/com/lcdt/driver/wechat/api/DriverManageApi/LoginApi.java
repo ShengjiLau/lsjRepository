@@ -57,7 +57,6 @@ public class LoginApi {
             if (!codeCorrect) {
                 throw new RuntimeException("验证码错误");
             }
-
             User user = userService.registerUser(registerDto);
             return user;
         } catch (PhoneHasRegisterException e) {
@@ -119,7 +118,7 @@ public class LoginApi {
     }
 
     @RequestMapping(value = "/createcomp", method = RequestMethod.POST)
-    public Company createCompany(CompanyDto companyDto) throws CompanyExistException {
+    public Company createCompany(CompanyDto companyDto) throws CompanyExistException, UserNotExistException {
         Company company = createCompanyService.createCompany(companyDto);
         return company;
     }

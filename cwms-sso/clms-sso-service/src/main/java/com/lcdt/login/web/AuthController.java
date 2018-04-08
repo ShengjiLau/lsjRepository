@@ -115,7 +115,6 @@ public class AuthController {
     @RequestMapping("/login")
     @ResponseBody
     public String login(String username, String password, String captchacode, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
         JSONObject jsonObject = new JSONObject();
         boolean captchaIsOk = LoginSessionReposity.captchaIsOk(request, captchacode);
         if (!captchaIsOk) {
@@ -226,7 +225,7 @@ public class AuthController {
     @ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
     @RequestMapping("/initcompany")
     @ResponseBody
-    public String initCompany(String fullname, String industry, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public String initCompany(String fullname, String industry, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws UserNotExistException {
         JSONObject jsonObject = new JSONObject();
         User userInfo = LoginSessionReposity.getUserInfoInSession(request);
         CompanyDto dtoVo = new CompanyDto();
