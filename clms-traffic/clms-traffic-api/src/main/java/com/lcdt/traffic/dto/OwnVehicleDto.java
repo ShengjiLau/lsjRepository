@@ -13,8 +13,6 @@ public class OwnVehicleDto extends OwnVehicle {
 
     private List<OwnVehicleCertificate> ownVehicleCertificateList;
 
-    private String vehicleNumOrPhone;
-
     private int pageNum;
 
     private int pageSize;
@@ -25,14 +23,6 @@ public class OwnVehicleDto extends OwnVehicle {
 
     public void setOwnVehicleCertificateList(List<OwnVehicleCertificate> ownVehicleCertificateList) {
         this.ownVehicleCertificateList = ownVehicleCertificateList;
-    }
-
-    public String getVehicleNumOrPhone() {
-        return vehicleNumOrPhone;
-    }
-
-    public void setVehicleNumOrPhone(String vehicleNumOrPhone) {
-        this.vehicleNumOrPhone = vehicleNumOrPhone;
     }
 
     public int getPageNum() {
