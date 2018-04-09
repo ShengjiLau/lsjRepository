@@ -32,7 +32,7 @@ public interface WaybillRpcService {
      * @param dto
      * @return
      */
-    int modifyOwnWaybillStatus(WaybillModifyStatusDto dto);
+    Waybill modifyOwnWaybillStatus(WaybillModifyStatusDto dto);
 
     /**
      * 传运单的状态和运单以逗号分隔开的运单id，批量修改客户的运单状态
@@ -47,7 +47,7 @@ public interface WaybillRpcService {
      * @param dto
      * @return
      */
-    int modifyOwnWaybillReceipt(WaybillModifyReceiptDto dto);
+    Waybill modifyOwnWaybillReceipt(WaybillModifyReceiptDto dto);
 
     /**
      * 客户运单  上传回单

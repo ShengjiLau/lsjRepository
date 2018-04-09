@@ -15,7 +15,6 @@ import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.*;
 import com.lcdt.userinfo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
@@ -71,7 +70,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		Group defaultCompanyGroup = createDefaultCompanyGroup(company);
 		//创建者加入默认新建组
 		addToGroup(defaultCompanyGroup, company);
-		User user = userService.queryByUserId(companyDto.getCreateId());
+		User user = userService.queryByUserId(company.getCreateId());
 		List<UserCompRel> userCompRels = userCompRelMapper.selectByUserIdCompanyId(company.getCreateId(), company.getCompId());
 		Department department = setUpDepartMent(company);
 		UserCompRel userCompRel;

@@ -68,7 +68,7 @@ public class WaybillApi {
     @ApiOperation("我的运单--修改状态")
     @RequestMapping(value = "/own/modifystatus", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_modify_status')")
-    public JSONObject modifyOwnWaybillStatus(WaybillModifyStatusDto dto) {
+    public Waybill modifyOwnWaybillStatus(WaybillModifyStatusDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         Long companyId = userCompRel.getCompany().getCompId();
         User loginUser = userCompRel.getUser();
@@ -77,15 +77,8 @@ public class WaybillApi {
         dto.setUpdateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
 
-        int result = waybillRpcService.modifyOwnWaybillStatus(dto);
-        if (result > 0) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", 0);
-            jsonObject.put("message", "修改成功");
-            return jsonObject;
-        } else {
-            throw new RuntimeException("修改失败");
-        }
+       return waybillRpcService.modifyOwnWaybillStatus(dto);
+
     }
 
     @ApiOperation("客户运单--修改状态")
@@ -111,27 +104,21 @@ public class WaybillApi {
         }
     }
 
-//    @ApiOperation("我的运单--修改状态")
-//    @RequestMapping(value = "/own/modifyreceipt", method = RequestMethod.POST)
-//    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_modify_status')")
-//    public JSONObject modifyOwnWaybillReceipt(WaybillModifyReceiptDto dto) {
-//        Long companyId = SecurityInfoGetter.getCompanyId();
-//        User loginUser = SecurityInfoGetter.getUser();
-//
-//        dto.setUpdateId(loginUser.getUserId());
-//        dto.setUpdateName(loginUser.getRealName());
-//        dto.setCompanyId(companyId);
-//
-//        int result = waybillRpcService.modifyOwnWaybillReceipt(dto);
-//        if (result > 0) {
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("code", 0);
-//            jsonObject.put("message", "修改成功");
-//            return jsonObject;
-//        } else {
-//            throw new RuntimeException("修改失败");
-//        }
-//    }
+    @ApiOperation("我的运单--上传回单")
+    @RequestMapping(value = "/own/modifyreceipt", method = RequestMethod.POST)
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_modify_status')")
+    public Waybill modifyOwnWaybillReceipt(WaybillModifyReceiptDto dto) {
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
+        User loginUser = userCompRel.getUser();
+
+        dto.setUpdateId(loginUser.getUserId());
+        dto.setUpdateName(loginUser.getRealName());
+        dto.setCompanyId(companyId);
+
+        return waybillRpcService.modifyOwnWaybillReceipt(dto);
+
+    }
 
     @ApiOperation("客户运单--上传回单")
     @RequestMapping(value = "/customer/modifyreceipt", method = RequestMethod.POST)

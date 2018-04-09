@@ -91,7 +91,7 @@ public class PurchaseContractApi {
     @ApiOperation("合同编辑")
     @RequestMapping(value = "/modifyContract", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_purchase_contract')")
-    public JSONObject modifyContract(@Validated ContractDto dto) {
+    public JSONObject modifyContract(@Validated @RequestBody ContractDto dto) {
         User user = SecurityInfoGetter.getUser();
         dto.setPartyAId(user.getUserId());
         dto.setPartyAName(user.getRealName());

@@ -2,11 +2,13 @@ package com.lcdt.traffic.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 /**
  * Created by lyqishan on 2018/3/26
  */
 
-public class WaybillModifyStatusDto {
+public class WaybillModifyStatusDto implements Serializable{
 
     @ApiModelProperty(value = "运单id字符串，批量修改时传多个 id 以 , 隔开",required = true)
     private String waybillIds;
