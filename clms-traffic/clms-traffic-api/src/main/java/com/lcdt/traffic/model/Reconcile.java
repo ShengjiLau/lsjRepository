@@ -30,6 +30,7 @@ public class Reconcile implements Serializable {
     private Long accountId;
 
     private Long waybillId;
+    
 
     private static final long serialVersionUID = 1L;
 

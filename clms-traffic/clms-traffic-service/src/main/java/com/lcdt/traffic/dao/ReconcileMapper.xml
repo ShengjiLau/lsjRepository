@@ -174,4 +174,52 @@
       waybill_id = #{waybillId,jdbcType=BIGINT}
     where reconcile_id = #{reconcileId,jdbcType=BIGINT}
   </update>
+  
+  <insert id="insertByBatch" useGeneratedKeys="true" keyProperty="reconcileId">
+  <foreach collection="list" item="rec"  index="index" open="(" separator="," close=")">
+   insert into t_fee_reconcile (reconcile_id, reconcile_code, company_id, 
+      group_id, account_amount, operator_id, 
+      operator_name, is_receivable, create_time, 
+      cancel_ok, account_id, waybill_id
+      )
+    values (#{rec.reconcileId,jdbcType=BIGINT}, #{rec.reconcileCode,jdbcType=VARCHAR}, #{rec.companyId,jdbcType=BIGINT}, 
+      #{rec.groupId,jdbcType=BIGINT}, #{rec.accountAmount,jdbcType=DOUBLE}, #{rec.operatorId,jdbcType=BIGINT}, 
+      #{rec.operatorName,jdbcType=VARCHAR}, #{rec.isReceivable,jdbcType=BIGINT}, #{rec.createTime,jdbcType=TIMESTAMP}, 
+      #{rec.cancelOk,jdbcType=SMALLINT}, #{rec.accountId,jdbcType=BIGINT}, #{rec.waybillId,jdbcType=BIGINT}
+      )
+  </foreach>
+  </insert>
+  
+  <update id="cancelByBatch">
+  <foreach collection="list" item="id"  index="index" open="(" separator="," close=")"></foreach>
+  update t_fee_reconcile
+  set cancel_ok = 1
+  where reconcile_id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="com.lcdt.traffic.web.dto.ReconcileDto">
+  	select 
+    <include refid="Base_Column_List"/>
+    from t_fee_reconcile
+    <where>
+    cancel_ok =#{cancelOk,jdbcType=SMALLINT} and company_id =#{companyId,jdbcType=BIGINT}
+    <if test="groupId!=null and groupId !=''">
+    and group_id = #{groupId,jdbcType=BIGINT}
+    </if>
+    <if test="beginTime !=null and beginTime !=''">
+    and   create_time &gt;  concat (#{beginTime,jdbcType=VARCHAR},'000000')    
+    </if>
+    <if test="endTime !=null and endTime !=''">
+    and   create_time &lt; concat (#{endTime,jdbcType=VARCHAR},'235959')
+    </if>
+    <if test="reconcileCode != null and reconcileCode!=''">
+    and reconcile_code like concat('%',#{reconcileCode,jdbcType=VARCHAR},'%')
+    </if>
+    </where>
+  
+  
+  </select>
+  
+  
+  
 </mapper>

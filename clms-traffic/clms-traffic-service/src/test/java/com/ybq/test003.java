@@ -28,8 +28,7 @@ public class test003 {
 	
 	System.out.println(tm.toString());
 	
-	PlanBO.getInstance();
-//
+
 	
 }
 

@@ -90,4 +90,16 @@
       reconcile_id = #{reconcileId,jdbcType=BIGINT}
     where payee_id = #{payeeId,jdbcType=BIGINT}
   </update>
+  
+  <insert id="insertPayeeByBatch">
+  	<foreach collection="list" item="payee"  index="index" open="(" separator="," close=")">
+  	insert into t_fee_payee (payee_id, payee_type, payer_id, 
+      payer_name, reconcile_id)
+      values (#{payee.payeeId,jdbcType=BIGINT}, #{payee.payeeType,jdbcType=SMALLINT}, #{payee.payerId,jdbcType=BIGINT}, 
+      #{payee.payerName,jdbcType=VARCHAR}, #{payee.reconcileId,jdbcType=BIGINT})
+  	</foreach>
+  </insert>
+  
+  
+  
 </mapper>

@@ -1,5 +1,7 @@
 package com.lcdt.traffic.dao;
 
+import java.util.List;
+
 import com.lcdt.traffic.model.Payee;
 
 public interface PayeeMapper {
@@ -14,4 +16,6 @@ public interface PayeeMapper {
     int updateByPrimaryKeySelective(Payee record);
 
     int updateByPrimaryKey(Payee record);
+    
+    int insertPayeeByBatch(List<Payee> payeeList);
 }

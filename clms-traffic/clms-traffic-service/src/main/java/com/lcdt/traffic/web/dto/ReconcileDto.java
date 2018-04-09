@@ -3,43 +3,63 @@ package com.lcdt.traffic.web.dto;
 import java.io.Serializable;
 import java.util.List;
 
+import com.lcdt.traffic.model.Payee;
 import com.lcdt.traffic.model.Reconcile;
-
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author Sheng-ji Lau
- * @date 2018年4月9日上午10:24:07
+ * @date 2018年4月9日下午4:02:18
  * @version
  */
-public class ReconcileDto implements Serializable{
+public class ReconcileDto extends Reconcile implements Serializable{
+	
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -749151515156L;
-
-	@ApiModelProperty("批量对账单")
-	private List<Reconcile> reconcileList;
+	private static final long serialVersionUID = -4584651511515L;
 	
-	@ApiModelProperty()
-	private Double sumAmount;
+	
+	private List<Payee> payeeList;
+	
+	private String beginTime;
+	
+	private String endTime;
 
-	public List<Reconcile> getReconcileList() {
-		return reconcileList;
+	
+	public List<Payee> getPayeeList() {
+		return payeeList;
 	}
 
-	public void setReconcileList(List<Reconcile> reconcileList) {
-		this.reconcileList = reconcileList;
+
+	public void setPayeeList(List<Payee> payeeList) {
+		this.payeeList = payeeList;
 	}
 
-	public Double getSumAmount() {
-		return sumAmount;
+
+	public String getBeginTime() {
+		return beginTime;
 	}
 
-	public void setSumAmount(Double sumAmount) {
-		this.sumAmount = sumAmount;
+
+	public void setBeginTime(String beginTime) {
+		this.beginTime = beginTime;
 	}
+
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+	
+	
+	
+	
+	
 	
 	
 	
