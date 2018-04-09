@@ -39,7 +39,7 @@ public interface WaybillRpcService {
      * @param dto
      * @return
      */
-    int modifyCustomerWaybillStatus(WaybillModifyStatusDto dto);
+    Waybill modifyCustomerWaybillStatus(WaybillModifyStatusDto dto);
 
 
     /**
@@ -54,7 +54,7 @@ public interface WaybillRpcService {
      * @param dto
      * @return
      */
-    int modifyCustomerWaybillReceipt(WaybillModifyReceiptDto dto);
+    Waybill modifyCustomerWaybillReceipt(WaybillModifyReceiptDto dto);
 
     /**
      * 根据计划id更新运单状态（参数：waybillStatus，updateId，updateName，waybillPlanId，companyId）
