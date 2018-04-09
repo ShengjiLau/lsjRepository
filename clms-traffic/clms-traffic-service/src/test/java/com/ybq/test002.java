@@ -29,28 +29,6 @@ public class test002 {
 	 @Reference
 	 public DriverService driverService;
 
-//	public static void main(String[] args) {
-//	Float f= 123456.789f;
-//	System.out.println(f);
-//	
-//	Float f2 =123456.78901f;
-//	System.out.println(f2);
-//	
-//	Double d1 =456789.123;
-//	System.out.println(d1);
-//	
-//	
-//	Float f3 =123456789f;
-//	System.out.println(f3);
-//	
-//	
-//	}
-//   @Test
-//	public void testFloat() {
-//		tm.insertReconcile(1234567890.123456789);
-//
-//	}
-//	
 	 @Test
    public void testRe() {
 	   Driver d= new Driver();

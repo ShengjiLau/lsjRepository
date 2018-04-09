@@ -6,8 +6,10 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel("留言entity")
 public class Msg implements Serializable {
 	
 	@ApiModelProperty("留言主键id")
