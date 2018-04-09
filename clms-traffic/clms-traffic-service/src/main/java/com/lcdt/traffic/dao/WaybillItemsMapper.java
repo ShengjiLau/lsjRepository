@@ -58,4 +58,11 @@ public interface WaybillItemsMapper {
      * @return
      */
     int updateForBatch(List<WaybillItems> list);
+
+    /**
+     * 获取单个运单货物详情
+     * @param waybillId
+     * @return
+     */
+    List<WaybillItems> selectByWaybillId(Long waybillId);
 }
