@@ -2,6 +2,9 @@ package com.lcdt.traffic.model;
 
 import java.io.Serializable;
 
+import io.swagger.annotations.ApiModel;
+
+@ApiModel("收付款方entity")
 public class Payee implements Serializable {
     private Long payeeId;
 

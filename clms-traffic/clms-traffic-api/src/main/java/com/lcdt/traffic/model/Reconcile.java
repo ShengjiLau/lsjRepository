@@ -3,6 +3,9 @@ package com.lcdt.traffic.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import io.swagger.annotations.ApiModel;
+
+@ApiModel("对账单entity")
 public class Reconcile implements Serializable {
     private Long reconcileId;
 
