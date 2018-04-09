@@ -34,6 +34,7 @@ public class CustomerApi {
 
     Logger logger = LoggerFactory.getLogger(CustomerApi.class);
     @GetMapping(value = "/list")
+
     private PageBaseDto<Customer> carrierCustomer(){
         Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId();//  获取companyId
         Long userId = TokenSecurityInfoGetter.getUser().getUserId();//  获取companyId

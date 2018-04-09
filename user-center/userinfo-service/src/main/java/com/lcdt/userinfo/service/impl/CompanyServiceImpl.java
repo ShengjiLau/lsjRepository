@@ -50,9 +50,14 @@ public class CompanyServiceImpl implements CompanyService {
 	@Autowired
 	UserRoleService roleService;
 
+	@Autowired
+	UserGroupService userGroupService;
+
 	@Transactional(rollbackFor = Exception.class)
 	public UserCompRel findByUserCompRelId(Long userCompRelId) {
 		UserCompRel userCompRel = userCompRelMapper.selectByPrimaryKey(userCompRelId);
+		List<Group> groups = userGroupService.userGroups(userCompRel.getUserId(), userCompRel.getCompId());
+		userCompRel.setGroups(groups);
 		return userCompRel;
 	}
 
