@@ -86,7 +86,7 @@ public class SalesOrderApi {
 	 */
 	@ApiOperation(value="获取单个销售订单",notes="单个销售订单")
 	@GetMapping("/selsorder")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('select_purchase_order')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_select')")
 	public JSONObject selectOrder(@ApiParam(value="订单id")@RequestParam Long orderId){
 		OrderDto orderDto= orderService.selectByPrimaryKey(orderId);
 		JSONObject jsonObject=new JSONObject();
@@ -108,7 +108,7 @@ public class SalesOrderApi {
 	 */
 	@ApiOperation("新增销售订单")
 	@PostMapping("/addOrder")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_sales_order')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_add')")
 	public JSONObject addOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindResult) {
         JSONObject jsonObject = new JSONObject();
         //Validated自动验证
@@ -160,7 +160,7 @@ public class SalesOrderApi {
 	 */
 	@ApiOperation("修改销售订单")
 	@PostMapping("/modifyOrder")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('mod_sales_order')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_modify')")
 	public JSONObject modifyOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindingResult) {
 		JSONObject jsonObject = new JSONObject();
 		 //Validated自动验证
@@ -204,7 +204,7 @@ public class SalesOrderApi {
 	 */
 	@ApiOperation("取消销售订单")
 	@PostMapping("/deleteOrder")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('del_sales_order')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_delete')")
 	public JSONObject delOrder(@ApiParam(value="销售订单id",required=true) @RequestParam Long orderId) {
 		int result =orderService.updateOrderIsDraft(orderId,(short) 2);
 		logger.debug("取消销售订单条目数:"+result);
@@ -225,7 +225,7 @@ public class SalesOrderApi {
 	 */
 	@ApiOperation("发布销售订单")
 	@PostMapping("/releaseOrder")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('release_sales_order')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_release')")
 	public JSONObject releaseOrder(@ApiParam(value="销售订单id",required=true) @RequestParam Long orderId) {
 		int result =orderService.updateOrderIsDraft(orderId,(short) 1);
 		logger.debug("取消销售订单条目数:"+result);
