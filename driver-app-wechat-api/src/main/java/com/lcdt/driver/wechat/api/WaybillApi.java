@@ -84,7 +84,7 @@ public class WaybillApi {
     @ApiOperation("客户运单--修改状态")
     @RequestMapping(value = "/customer/modifystatus", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_modify_status')")
-    public JSONObject modifyCustomerWaybillStatus(WaybillModifyStatusDto dto) {
+    public Waybill modifyCustomerWaybillStatus(WaybillModifyStatusDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         Long companyId = userCompRel.getCompany().getCompId();
         User loginUser = userCompRel.getUser();
@@ -93,15 +93,7 @@ public class WaybillApi {
         dto.setUpdateName(loginUser.getRealName());
         dto.setCarrierCompanyId(companyId);
 
-        int result = waybillRpcService.modifyCustomerWaybillStatus(dto);
-        if (result > 0) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", 0);
-            jsonObject.put("message", "修改成功");
-            return jsonObject;
-        } else {
-            throw new RuntimeException("修改失败");
-        }
+        return waybillRpcService.modifyCustomerWaybillStatus(dto);
     }
 
     @ApiOperation("我的运单--上传回单")
@@ -123,7 +115,7 @@ public class WaybillApi {
     @ApiOperation("客户运单--上传回单")
     @RequestMapping(value = "/customer/modifyreceipt", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_modify_status')")
-    public JSONObject modifyCustomerReceipt(WaybillModifyReceiptDto dto) {
+    public Waybill modifyCustomerReceipt(WaybillModifyReceiptDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         Long companyId = userCompRel.getCompany().getCompId();
         User loginUser = userCompRel.getUser();
@@ -132,15 +124,8 @@ public class WaybillApi {
         dto.setUpdateName(loginUser.getRealName());
         dto.setCarrierCompanyId(companyId);
 
-        int result = waybillRpcService.modifyCustomerWaybillReceipt(dto);
-        if (result > 0) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", 0);
-            jsonObject.put("message", "修改成功");
-            return jsonObject;
-        } else {
-            throw new RuntimeException("修改失败");
-        }
+        return waybillRpcService.modifyCustomerWaybillReceipt(dto);
+
     }
 
     @ApiOperation("司机运单--列表")
