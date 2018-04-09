@@ -57,7 +57,7 @@ public class SalesOrderApprovalApi {
 
     @ApiOperation(value = "审批同意",notes = "正常通过审批操作")
     @PostMapping(value = "/agree")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_approval_agree')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_approval_operate')")
     public JSONObject agreeApproval(@RequestBody OrderApproval orderApproval) {
         int result = orderApprovalService.agreeApproval(orderApproval);
         JSONObject jsonObject = new JSONObject();
@@ -74,7 +74,7 @@ public class SalesOrderApprovalApi {
 
     @ApiOperation(value = "驳回审批", notes = "驳回操作")
     @PostMapping(value = "/reject")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_approval_reject')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_approval_operate')")
     public JSONObject rejectApproval(@RequestBody OrderApproval orderApproval) {
         int result = orderApprovalService.rejectApproval(orderApproval);
         JSONObject jsonObject = new JSONObject();
@@ -90,7 +90,7 @@ public class SalesOrderApprovalApi {
 
     @ApiOperation(value = "撤销审批", notes = "撤销操作")
     @PostMapping(value = "/revoke")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_approval_revoke')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_approval_operate')")
     public JSONObject revokeApproval(@RequestBody OrderApproval orderApproval) {
         int result = orderApprovalService.revokeApproval(orderApproval);
         JSONObject jsonObject = new JSONObject();
@@ -106,7 +106,7 @@ public class SalesOrderApprovalApi {
 
     @ApiOperation(value = "转办审批", notes = "转办操作")
     @PostMapping(value = "/turnDo")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_approval_turnDo')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_approval_operate')")
     public JSONObject turnDoApproval(@RequestBody List<OrderApproval> orderApprovalList) {
         int result = orderApprovalService.turnDoApproval(orderApprovalList);
         JSONObject jsonObject = new JSONObject();
@@ -122,7 +122,7 @@ public class SalesOrderApprovalApi {
 
     @ApiOperation(value = "抄送", notes = "抄送操作")
     @PostMapping(value = "/cc")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_approval_cc')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_approval_operate')")
     public JSONObject ccApproval(@RequestBody List<OrderApproval> orderApprovalList) {
         int result = orderApprovalService.ccApproval(orderApprovalList);
         JSONObject jsonObject = new JSONObject();
