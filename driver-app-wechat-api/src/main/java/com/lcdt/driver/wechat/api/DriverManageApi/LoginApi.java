@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.tl.commons.util.DateUtility;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -72,8 +73,7 @@ public class LoginApi {
         stringStringHashMap.put("userId", user.getUserId());
         Date date = new Date();
         Calendar instance = Calendar.getInstance();
-        instance.setTime(date);
-        instance.set(Calendar.DAY_OF_YEAR, instance.get(Calendar.DAY_OF_YEAR + 30));
+        instance.setTime(DateUtility.getDateAfterDays(date,10000));
         String s = jwtTokenUtil.generateToken(stringStringHashMap,instance.getTime());
         List<UserCompRel> userCompRels = companyService.companyList(Long.valueOf(user.getUserId()));
         JSONObject jsonObject = new JSONObject();

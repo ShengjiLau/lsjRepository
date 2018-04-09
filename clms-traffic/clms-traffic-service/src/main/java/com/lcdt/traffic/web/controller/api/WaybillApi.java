@@ -181,8 +181,8 @@ public class WaybillApi {
         dto.setUpdateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
 
-        int result = waybillRpcService.modifyOwnWaybillStatus(dto);
-        if (result > 0) {
+        Waybill waybill = waybillRpcService.modifyOwnWaybillStatus(dto);
+        if (waybill != null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "修改成功");

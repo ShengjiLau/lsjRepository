@@ -5,6 +5,7 @@ import com.lcdt.clms.permission.service.SysRoleService;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.exception.DeptmentExistException;
+import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.service.CompanyService;
@@ -76,7 +77,7 @@ public class CreateCompanyTest {
 	}
 
 	@Test
-	public void testCreateCompany(){
+	public void testCreateCompany() throws UserNotExistException {
 
 		try {
 			createCompanyService.createCompany(companyDto);

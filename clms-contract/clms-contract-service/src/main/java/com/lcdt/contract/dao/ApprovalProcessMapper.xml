@@ -51,7 +51,7 @@
     <result column="remarks" jdbcType="VARCHAR" property="remarks" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
-    <collection property="processApproverList" resultMap="ProcessApproverResultMap">
+    <collection property="processApproverList" select="selectProcessApprover" column="p1=process_id">
 
     </collection>
   </resultMap>
@@ -67,27 +67,40 @@
   </resultMap>
 
   <select id="selectByCondition" resultMap="ApprovalProcessDtoResultMap">
-    select t1.process_id, t1.process_name, t1.process_type, t1.group_id, t1.group_name, t1.remarks, t1.create_time,
-    t2.approver_id, t2.user_id, t2.user_name, t2.dept_name, t2.sort, t2.action_type
-    from t_approval_process t1 left join t_process_approver t2 on t1. process_id = t2. process_id
+    select process_id, process_name, process_type, group_id, group_name, remarks, create_time
+    from t_approval_process
     <where>
       company_id = #{arg0}
       <if test="arg1!=null and arg1!=''">
-        and t1.process_type = #{arg1}
+        and process_type = #{arg1}
       </if>
     </where>
   </select>
+  <select id="selectProcessApprover" resultMap="ProcessApproverResultMap">
+    select approver_id, user_id, user_name, dept_name, sort, action_type
+    from t_process_approver
+    where process_id = #{p1}
+  </select>
 
-  <select id="selectByType" resultMap="ApprovalProcessDtoResultMap">
+  <resultMap id="DetailResultMap" type="com.lcdt.contract.web.dto.ApprovalProcessDto">
+    <id column="process_id" jdbcType="BIGINT" property="processId" />
+    <result column="process_name" jdbcType="VARCHAR" property="processName" />
+    <result column="process_type" jdbcType="SMALLINT" property="processType" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <collection property="processApproverList" resultMap="ProcessApproverResultMap">
+
+    </collection>
+  </resultMap>
+
+  <select id="selectDetail" resultMap="DetailResultMap">
     select t1.process_id, t1.process_name, t1.process_type, t1.group_id, t1.group_name, t1.remarks, t1.create_time,
     t2.approver_id, t2.user_id, t2.user_name, t2.dept_name, t2.sort, t2.action_type
     from t_approval_process t1 left join t_process_approver t2 on t1. process_id = t2. process_id
-    <where>
-      company_id = #{arg0}
-      <if test="arg1!=null and arg1!=''">
-        and t1.process_type = #{arg1}
-      </if>
-    </where>
+    where t1.company_id = #{arg0} and t1.process_id = #{arg1}
   </select>
 
 </mapper>

@@ -79,7 +79,7 @@ public class CustomerPlanApi {
 
 
 
-    @ApiOperation("客户计划-列表-派车中")
+    @ApiOperation("派车中")
     @RequestMapping(value = "/customerPlanList4VehicleDoing",method = RequestMethod.GET)
     public PageBaseDto customerPlanList4VehicleDoing(CustomerPlan4ParamsDto customerPlan4ParamsDto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
@@ -92,7 +92,7 @@ public class CustomerPlanApi {
 
 
 
-    @ApiOperation("客户计划-列表-已派车")
+    @ApiOperation("已派车")
     @RequestMapping(value = "/customerPlanList4VehicleHave",method = RequestMethod.GET)
     public PageBaseDto customerPlanList4VehicleHave(CustomerPlan4ParamsDto customerPlan4ParamsDto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
@@ -104,7 +104,7 @@ public class CustomerPlanApi {
     }
 
 
-    @ApiOperation("客户计划-列表-已完成")
+    @ApiOperation("已完成")
     @RequestMapping(value = "/customerPlanList4Completed",method = RequestMethod.GET)
     public PageBaseDto customerPlanList4Completed(CustomerPlan4ParamsDto customerPlan4ParamsDto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
@@ -115,7 +115,7 @@ public class CustomerPlanApi {
         return dto;
     }
 
-    @ApiOperation("客户计划-列表-已取消")
+    @ApiOperation("已取消")
     @RequestMapping(value = "/customerPlanList4Cancel",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_vehicle_cancel') or hasAuthority('traffic_customer_plan_list')")
     public PageBaseDto customerPlanList4Cancel(CustomerPlan4ParamsDto customerPlan4ParamsDto) {
