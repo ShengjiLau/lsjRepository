@@ -68,7 +68,7 @@
       num = #{item.num,jdbcType=DECIMAL},
       price = #{item.price,jdbcType=DECIMAL},
       total = #{item.total,jdbcType=DECIMAL},
-      spec =  #{spec,jdbcType=VARCHAR}
+      spec =  #{item.spec,jdbcType=VARCHAR}
       where cp_id = #{item.cpId,jdbcType=BIGINT}
     </foreach>
   </update>
