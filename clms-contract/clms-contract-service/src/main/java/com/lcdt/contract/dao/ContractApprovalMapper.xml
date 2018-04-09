@@ -174,7 +174,7 @@
   <select id="selectByContractId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select ca_id, contract_id, user_id, user_name, dept_name, sort, action_type, result, status, content,time
     from t_contract_approval
-    where contract_id = #{arg0} and action_type = 0 and status != 5 order by sort
+    where contract_id = #{arg0} and action_type = 0 and status != 5 and sort &gt; 0 order by sort
   </select>
   <select id="selectForContractDetail" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select ca_id, contract_id, user_id, user_name, dept_name, sort, action_type, result, status, content,time
