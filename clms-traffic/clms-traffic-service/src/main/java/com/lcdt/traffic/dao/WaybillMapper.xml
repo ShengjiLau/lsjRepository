@@ -85,14 +85,6 @@
     <collection property="waybillItemsList" column="id" ofType="com.lcdt.traffic.model.WaybillItems" select="com.lcdt.traffic.dao.WaybillItemsMapper.selectByWaybillId"/>
   </resultMap>
 
-  <resultMap id="BaseWaybillFeeMap" type="com.lcdt.traffic.web.dto.WaybillFeeDto" extends="BaseResultMap">
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="freight_total" jdbcType="REAL" property="freightTotal" />
-    <result column="other_fee_total" jdbcType="REAL" property="otherFeeTotal" />
-    <result column="fee_total" jdbcType="REAL" property="feeTotal" />
-    <collection property="waybillItemsList" column="id" ofType="com.lcdt.traffic.model.WaybillItems" select="com.lcdt.traffic.dao.WaybillItemsMapper.selectByWaybillId"/>
-  </resultMap>
-
   <sql id="base_column_list">id, waybill_plan_id,split_goods_id, waybill_code, waybill_status, waybill_source,group_id, group_name, driver_id,
     driver_name, driver_phone, vechicle_id, vechicle_num, customer_id, customer_name,
     customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
@@ -620,28 +612,4 @@
     update_date = CURRENT_TIMESTAMP
     where id in ( #{waybillIds,jdbcType=VARCHAR} ) and driver_id = #{driverId,jdbcType=BIGINT}
   </update>
-
-  <select id="selectWaybillFeeByCondition" parameterType="java.util.Map" resultMap="BaseWaybillFeeMap">
-    select <include refid="base_column_list"/>,
-    (select concat(fa.name,'、') from t_fee_account fa
-      where fa.waybill_id=id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) name,
-    (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
-    (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property!='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) other_fee_total,
-    (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-      where fa.waybill_id=id and ff.account_id=fa.account_id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total
-    from t_waybill
-    <where>company_id = #{companyId,jdbcType=BIGINT}
-      <if test="groupIds!=null and groupIds!=''">
-        and  ${groupIds}
-      </if>
-      <if test="groupIds==null or groupIds==''">
-        and  group_id is null
-      </if>
-      <include refid="select_condition"/>
-    </where>
-    order by id desc
-  </select>
-
 </mapper>

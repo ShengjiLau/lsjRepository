@@ -35,16 +35,12 @@ public class WaybillOwnListParamsDto implements Serializable{
     private String endStartDate;
     @ApiModelProperty(value = "客户名称")
     private String customerName;
-    @ApiModelProperty(value = "收付款方")
-    private String name;
     @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
     @ApiModelProperty(value = "是否删除",hidden = true)
     private Short isDelete;
     @ApiModelProperty(value = "groupIds",hidden = true)
     private String groupIds;
-    @ApiModelProperty(value = "应收应付",hidden = true)
-    private Short isReceivable;
     @ApiModelProperty(value = "小程序运单顶部输入框内容")
     private String waybillCondition;
 
@@ -157,14 +153,6 @@ public class WaybillOwnListParamsDto implements Serializable{
         this.customerName = customerName;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Long getCompanyId() {
         return companyId;
     }
@@ -187,14 +175,6 @@ public class WaybillOwnListParamsDto implements Serializable{
 
     public void setGroupIds(String groupIds) {
         this.groupIds = groupIds;
-    }
-
-    public Short getIsReceivable() {
-        return isReceivable;
-    }
-
-    public void setIsReceivable(Short isReceivable) {
-        this.isReceivable = isReceivable;
     }
 
     public Integer getPageNo() {
