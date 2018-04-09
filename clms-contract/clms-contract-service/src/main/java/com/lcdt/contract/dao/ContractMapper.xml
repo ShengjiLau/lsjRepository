@@ -185,6 +185,20 @@
         and approval_status = #{approvalStatus,jdbcType=SMALLINT}
       </if>
     </where>
+    order by
+    <if test="contractStatus==null or contractStatus==2">
+      create_time
+    </if>
+    <if test="contractStatus==0">
+      effective_time,start_date
+    </if>
+    <if test="contractStatus==1">
+      start_date
+    </if>
+    <if test="contractStatus==3">
+      termination_time,end_date
+    </if>
+    desc
   </select>
 
   <update id="updateContractStatus" parameterType="com.lcdt.contract.model.Contract">
