@@ -2,8 +2,6 @@ package com.lcdt.traffic.web.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
-
 /**
  * Created by lyqishan on 2017/12/25
  */
@@ -33,6 +31,13 @@ public class WaybillOwnListParamsDto {
     private String startStartDate;
     @ApiModelProperty(value = "结束计划发货时间（门卫出库管理时的查询条件）")
     private String endStartDate;
+
+    @ApiModelProperty(value = "企业id",hidden = true)
+    private Long companyId;
+    @ApiModelProperty(value = "0-未删除，1-已删除",hidden = true)
+    private short isDeleted;
+    @ApiModelProperty(value = "0-应付，1-应收",hidden = true)
+    private short isReceivable;
 
     public String getWaybillCode() {
         return waybillCode;
@@ -128,5 +133,29 @@ public class WaybillOwnListParamsDto {
 
     public void setEndStartDate(String endStartDate) {
         this.endStartDate = endStartDate;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public short getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(short isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public short getIsReceivable() {
+        return isReceivable;
+    }
+
+    public void setIsReceivable(short isReceivable) {
+        this.isReceivable = isReceivable;
     }
 }

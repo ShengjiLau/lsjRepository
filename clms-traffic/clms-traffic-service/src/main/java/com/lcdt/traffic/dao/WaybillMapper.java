@@ -2,6 +2,7 @@ package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillDao;
+import com.lcdt.traffic.web.dto.WaybillFeeDto;
 
 import java.util.List;
 import java.util.Map;
@@ -149,4 +150,10 @@ public interface WaybillMapper {
      * @return
      */
     List<Waybill> selectByCodeAndCompanyId(Map map);
+    /**
+     * 记账列表
+     * @param map
+     * @return
+     */
+    List<WaybillFeeDto> selectWaybillFeeByCondition(Map map);
 }
