@@ -304,7 +304,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
 
                 splitGoodsDetailMapper.batchUpdateSplitGoodsDetail(resultList);
                 //更新计划（直派-不指定承运商）
-                waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //派单中
+               // waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //派单中
                 waybillPlan.setUpdateTime(new Date());
                 waybillPlan.setUpdateId((Long)map.get("updateId"));
                 waybillPlan.setUpdateName((String)map.get("updateName"));

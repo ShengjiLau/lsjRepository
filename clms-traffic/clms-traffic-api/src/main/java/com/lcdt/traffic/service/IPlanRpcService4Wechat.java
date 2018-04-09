@@ -37,6 +37,15 @@ public interface IPlanRpcService4Wechat {
      */
     WaybillPlan loadWaybillPlan(WaybillParamsDto dto);
 
+      /**
+     *  竞价结束
+     * @param waybillPlanId
+     * @param userCompRel
+     * @return
+     */
+    WaybillPlan biddingFinish(Long waybillPlanId, UserCompRel userCompRel);
+
+
 
 
 

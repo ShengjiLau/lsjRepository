@@ -191,23 +191,6 @@ public class PlanServiceImpl implements PlanService {
         return 1;
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public WaybillPlan biddingFinish(Long waybillPlanId, Long companyId, User user) {
-        Map tMap = new HashMap<String,String>();
-        tMap.put("waybillPlanId",waybillPlanId);
-        tMap.put("companyId",companyId);
-        tMap.put("isDeleted","0");
-        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
-        if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
-        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //竞价结束派单中
-       // waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_CANCEL);
-        waybillPlan.setUpdateTime(new Date());
-        waybillPlan.setUpdateId(user.getUserId());
-        waybillPlan.setUpdateName(user.getRealName());
-        waybillPlanMapper.updateByPrimaryKey(waybillPlan);
-        return waybillPlan;
-    }
 
 
     @Transactional(rollbackFor = Exception.class)

@@ -8,6 +8,7 @@ import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
 import com.lcdt.driver.dto.PageBaseDto;
 import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.model.SnatchGoods;
+import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
@@ -180,6 +181,24 @@ public class PlanApi {
         return jsonObject;
     }
 
+
+    @ApiOperation("竞价--结束")
+    @RequestMapping(value = "/carrier/biddingFinish",method = RequestMethod.GET)
+    public String biddingFinish(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        WaybillPlan waybillPlan = iPlanRpcService4Wechat.biddingFinish(waybillPlanId,userCompRel);
+        JSONObject jsonObject = new JSONObject();
+        String message = "操作成功！";
+        int code = -1;
+        if (waybillPlan!=null) {
+            code = 0;
+        } else {
+            message = "操作失败！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
+    }
 
 
 }
