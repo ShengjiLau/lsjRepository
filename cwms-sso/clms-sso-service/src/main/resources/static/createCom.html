@@ -193,7 +193,7 @@
                 <img th:src="${(session.userinfo.pictureUrl==null||session.userinfo.pictureUrl=='')?'/img/head.png':session.userinfo.pictureUrl}" alt="此处有头像" style="width: 100%; vertical-align: top;">
               </div><!-- react-text: 54 --><label th:utext="${session.userinfo.realName}"/><!-- /react-text -->
             </span>
-            <span><a href="/account/logout"><i class="iconfont icon-logout01"></i>退出</label></span>
+            <span><a href="/account/logout"><i class="iconfont icon-logout01"></i>退出</label></a></span>
           </span>
     </div>
   </nav>

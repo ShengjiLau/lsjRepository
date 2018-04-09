@@ -120,16 +120,27 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     }
 
     @Override
-    public int modifyCustomerWaybillStatus(WaybillModifyStatusDto dto) {
-        int result=0;
+    public Waybill modifyCustomerWaybillStatus(WaybillModifyStatusDto dto) {
+        Waybill waybill=null;
         Map map=ClmsBeanUtil.beanToMap(dto);
-        result=waybillMapper.updateCustomerWaybillStatus(map);
+        int result=waybillMapper.updateCustomerWaybillStatus(map);
 
         //发送消息通知
         modifyCustomerWaybillStatusToSendNotify(map);
         //返回计划相关信息
         modifyWaybillPlanInfo(map);
-        return result;
+
+        if (result > 0) {
+            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            waybill = resultList.get(0);
+        } else {
+            throw new RuntimeException("修改失败");
+        }
+
+        Customer customer=customerRpcService.queryCustomer(waybill.getCarrierCompanyId(),waybill.getCompanyId());
+        waybill.setWaybillSource(customer.getCustomerName());
+
+        return waybill;
     }
 
     @Override
@@ -149,13 +160,24 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     }
 
     @Override
-    public int modifyCustomerWaybillReceipt(WaybillModifyReceiptDto dto) {
-        int result=0;
+    public Waybill modifyCustomerWaybillReceipt(WaybillModifyReceiptDto dto) {
+        Waybill waybill=null;
         Map map=ClmsBeanUtil.beanToMap(dto);
-        result=waybillMapper.updateCustomerWaybillStatus(map);
+        int result=waybillMapper.updateCustomerWaybillStatus(map);
         //发送消息通知
         waybillSenderNotify.customerReceiptSendNotify(dto.getWaybillIds(),dto.getUpdateId());
-        return result;
+
+        if (result > 0) {
+            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            waybill = resultList.get(0);
+        } else {
+            throw new RuntimeException("修改失败");
+        }
+
+        Customer customer=customerRpcService.queryCustomer(waybill.getCarrierCompanyId(),waybill.getCompanyId());
+        waybill.setWaybillSource(customer.getCustomerName());
+
+        return waybill;
     }
 
 
