@@ -3,20 +3,20 @@ package com.lcdt.contract.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.contract.dao.*;
-import com.lcdt.contract.model.*;
-
+import com.lcdt.contract.dao.ContractApprovalMapper;
+import com.lcdt.contract.dao.ContractMapper;
+import com.lcdt.contract.dao.ContractProductMapper;
+import com.lcdt.contract.model.Contract;
+import com.lcdt.contract.model.ContractApproval;
+import com.lcdt.contract.model.ContractProduct;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.ContractDto;
-
-import com.lcdt.contract.web.utils.SerialNumAutoGenerator;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.tl.commons.util.StringUtility;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -34,10 +34,6 @@ public class ContractServiceImpl implements ContractService {
     private ContractProductMapper contractProductMapper;
     @Autowired
     private ContractApprovalMapper contractApprovalMapper;
-    @Autowired
-    private OrderMapper orderMapper;
-    @Autowired
-    private ConditionQueryMapper conditionQueryMapper;
 
     @Override
     public int addContract(ContractDto dto) {
@@ -56,13 +52,13 @@ public class ContractServiceImpl implements ContractService {
         Contract contract = new Contract();
         BeanUtils.copyProperties(dto, contract); //复制对象属性
         int result = contractMapper.insert(contract);
-        if(!StringUtility.isNotEmpty(dto.getContractCode())){
-            contract.setContractCode((contract.getType()==0?"CG":"XS")
-                    + SerialNumAutoGenerator.getSerialNoById(contract.getContractId()));
-        }
-        contract.setSerialNo((contract.getType()==0?"CG":"XS")
-                + SerialNumAutoGenerator.getSerialNoById(contract.getContractId()));
-        contractMapper.updateByPrimaryKey(contract);
+//        if(!StringUtility.isNotEmpty(dto.getContractCode())){
+//            contract.setContractCode((contract.getType()==0?"CG":"XS")
+//                    + SerialNumAutoGenerator.getSerialNoById(contract.getContractId()));
+//        }
+//        contract.setSerialNo((contract.getType()==0?"CG":"XS")
+//                + SerialNumAutoGenerator.getSerialNoById(contract.getContractId()));
+//        contractMapper.updateByPrimaryKey(contract);
         if(dto.getContractProductList() != null && dto.getContractProductList().size() > 0) {
             //设置商品的合同id
             for (ContractProduct contractProduct : dto.getContractProductList()) {
@@ -103,12 +99,12 @@ public class ContractServiceImpl implements ContractService {
             //同时设置合同的审批状态为审批中
             contract.setApprovalStatus(new Short("1"));
             contract.setApprovalStartDate(new Date());
-            contractMapper.updateByPrimaryKey(contract);
+            contractMapper.updateByPrimaryKeySelective(contract);
         }else{
             // todo 没有添加审批人，则认为合同无需审批
             //同时设置合同的审批状态为审批中
             contract.setApprovalStatus(new Short("0"));
-            contractMapper.updateByPrimaryKey(contract);
+            contractMapper.updateByPrimaryKeySelective(contract);
         }
         return result;
     }
@@ -116,7 +112,7 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public int modContract(ContractDto dto) {
         //修改之前的合同
-        Contract oldContract = contractMapper.selectByPrimaryKey(dto.getContractId());
+  //      Contract oldContract = contractMapper.selectByPrimaryKey(dto.getContractId());
 
         BigDecimal summation =new 	BigDecimal(0);// 为所有商品价格求和
         if(null!=dto.getContractProductList()&&dto.getContractProductList().size()!=0){
@@ -133,19 +129,19 @@ public class ContractServiceImpl implements ContractService {
         Contract contract = new Contract();
         BeanUtils.copyProperties(dto, contract); //复制对象属性
         //将修改之前的部分属性赋值
-        if(!StringUtility.isNotEmpty(contract.getContractCode())){
-            contract.setContractCode(oldContract.getSerialNo());
-        }
-        contract.setSerialNo(oldContract.getSerialNo());
-        contract.setContractStatus(oldContract.getContractStatus());
-        contract.setCompanyId(oldContract.getCompanyId());
-        contract.setCreateId(oldContract.getCreateId());
-        contract.setCreateName(oldContract.getCreateName());
-        contract.setCreateTime(oldContract.getCreateTime());
-        contract.setEffectiveTime(oldContract.getEffectiveTime());
-        contract.setTerminationTime(oldContract.getTerminationTime());
+//        if(!StringUtility.isNotEmpty(contract.getContractCode())){
+//            contract.setContractCode(oldContract.getSerialNo());
+//        }
+//        contract.setSerialNo(oldContract.getSerialNo());
+//        contract.setContractStatus(oldContract.getContractStatus());
+//        contract.setCompanyId(oldContract.getCompanyId());
+//        contract.setCreateId(oldContract.getCreateId());
+//        contract.setCreateName(oldContract.getCreateName());
+//        contract.setCreateTime(oldContract.getCreateTime());
+//        contract.setEffectiveTime(oldContract.getEffectiveTime());
+//        contract.setTerminationTime(oldContract.getTerminationTime());
 
-        int result = contractMapper.updateByPrimaryKey(contract);
+        int result = contractMapper.updateByPrimaryKeySelective(contract);
         //获取该合同下面的商品cpId用来匹配被删除的商品
         List<Long> cpIdList = contractProductMapper.selectCpIdsByContractId(contract.getContractId());
         List<ContractProduct> list1 = new ArrayList<>();
@@ -216,14 +212,14 @@ public class ContractServiceImpl implements ContractService {
             //同时设置合同的审批状态为审批中
             contract.setApprovalStatus(new Short("1"));
             contract.setApprovalStartDate(new Date());
-            contractMapper.updateByPrimaryKey(contract);
+            contractMapper.updateByPrimaryKeySelective(contract);
         }else{
             /*如果审批流程被清除，则视为改合同不需要审批。需要：1.删除之前关联的审批人信息 2.更新合同状态为无需审批 0 */
             contractApprovalMapper.deleteByContractId(dto.getContractId());
             //同时设置合同的审批状态为审批中
             contract.setApprovalStatus(new Short("0"));
             contract.setApprovalStartDate(null);
-            contractMapper.updateByPrimaryKey(contract);
+            contractMapper.updateByPrimaryKeySelective(contract);
         }
         return result;
     }

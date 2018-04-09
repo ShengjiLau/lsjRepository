@@ -45,6 +45,8 @@ public class WaybillOwnListParamsDto implements Serializable{
     private String groupIds;
     @ApiModelProperty(value = "应收应付",hidden = true)
     private Short isReceivable;
+    @ApiModelProperty(value = "小程序运单顶部输入框内容")
+    private String waybillCondition;
 
     @ApiModelProperty(value = "页码", required = true)
     private Integer pageNo;
@@ -211,4 +213,11 @@ public class WaybillOwnListParamsDto implements Serializable{
         this.pageSize = pageSize;
     }
 
+    public String getWaybillCondition() {
+        return waybillCondition;
+    }
+
+    public void setWaybillCondition(String waybillCondition) {
+        this.waybillCondition = waybillCondition;
+    }
 }

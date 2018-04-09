@@ -70,6 +70,7 @@ public class OrderServiceImpl implements OrderService{
 		order.setSummation(aTotal);
 		int result=orderMapper.insertOrder(order);
 		int i=0;
+		int j=0;
 		if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0){
 			for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
 				//为每个商品添加OrderId
@@ -106,16 +107,16 @@ public class OrderServiceImpl implements OrderService{
 			orderApproval.setStatus(new Short("2"));	//创建人默认
 			orderApproval.setTime(new Date());
 			orderDto.getOrderApprovalList().add(orderApproval);
-			i += orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
+			j+=orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
 			//同时设置合同的审批状态为审批中
 			order.setApprovalStatus(new Short("1"));
 			order.setApprovalStartDate(new Date());
-			i += orderMapper.updateByPrimaryKey(order);
+			j+=orderMapper.updateByPrimaryKeySelective(order);
 		}else{
 			// todo 没有添加审批人，则认为合同无需审批
 			//同时设置合同的审批状态为审批中
 			order.setApprovalStatus(new Short("0"));
-			i += orderMapper.updateByPrimaryKey(order);
+			j+=orderMapper.updateByPrimaryKeySelective(order);
 		}
 		if(i>0) {
 			return result;
@@ -141,8 +142,9 @@ public class OrderServiceImpl implements OrderService{
 		Order order =new Order();
 		BeanUtils.copyProperties(orderDto, order);
 		order.setSummation(aTotal);
-		int result=orderMapper.updateByPrimaryKey(order);
+		int result=orderMapper.updateByPrimaryKeySelective(order);
 		int i=0;
+		int j=0;
 		if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0){
 		//删除订单下所有商品
 		nonautomaticMapper.deleteOrderProductByOrderId(order.getOrderId());
@@ -182,18 +184,18 @@ public class OrderServiceImpl implements OrderService{
 			orderApproval.setStatus(new Short("2"));	//创建人默认
 			orderApproval.setTime(new Date());
 			orderDto.getOrderApprovalList().add(orderApproval);
-			i += orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
+			j+=orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
 			//同时设置合同的审批状态为审批中
 			order.setApprovalStatus(new Short("1"));
 			order.setApprovalStartDate(new Date());
-			i += orderMapper.updateByPrimaryKey(order);
+			orderMapper.updateByPrimaryKeySelective(order);
 		}else{
 			/*如果审批流程被清除，则视为改合同不需要审批。需要：1.删除之前关联的审批人信息 2.更新合同状态为无需审批 0 */
-			i += orderApprovalMapper.deleteByOrderId(orderDto.getOrderId());
+			orderApprovalMapper.deleteByOrderId(orderDto.getOrderId());
 			//同时设置合同的审批状态为审批中
 			order.setApprovalStatus(new Short("0"));
 			order.setApprovalStartDate(null);
-			i += orderMapper.updateByPrimaryKey(order);
+			j+=orderMapper.updateByPrimaryKeySelective(order);
 		}
 		if(i>0) {
 			return result;
@@ -254,8 +256,8 @@ public class OrderServiceImpl implements OrderService{
 
 
 	@Override
-	public int cancelOrder(Long orderId) {
-		return 	orderMapper.updateIsDraft(orderId);	
+	public int updateOrderIsDraft(Long orderId,Short isDraft) {
+		return 	orderMapper.updateIsDraft(orderId,isDraft);	
 	}
 
 	

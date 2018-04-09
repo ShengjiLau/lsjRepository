@@ -23,6 +23,9 @@ public class FeeAccountDto extends FeeAccount{
     @ApiModelProperty(value="查询记账日期终点")
     private String createEndTime;
 
+    @ApiModelProperty(value="查询tab：0-全部 1-未对账 2-已对账", required = true)
+    private Integer reconcileStatus;
+
     private Float freightTotal;
 
     private Float otherFeeTotal;
@@ -67,6 +70,14 @@ public class FeeAccountDto extends FeeAccount{
 
     public void setCreateEndTime(String createEndTime) {
         this.createEndTime = createEndTime;
+    }
+
+    public Integer getReconcileStatus() {
+        return reconcileStatus;
+    }
+
+    public void setReconcileStatus(Integer reconcileStatus) {
+        this.reconcileStatus = reconcileStatus;
     }
 
     public Float getFreightTotal() {

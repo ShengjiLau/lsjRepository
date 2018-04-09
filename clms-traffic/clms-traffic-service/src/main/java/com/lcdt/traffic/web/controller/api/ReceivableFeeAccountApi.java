@@ -138,4 +138,18 @@ public class ReceivableFeeAccountApi {
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         return pageBaseDto;
     }
+
+    @ApiOperation("应收记账单——列表留言")
+    @RequestMapping(value = "/feeAccountAddMsgPage", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receivable_fee_account_add_msg')")
+    public PageBaseDto feeAccountAddMsgPage(@ApiParam(value = "记账单ID",required = true) @RequestParam Long accountId) {
+//        Long companyId = SecurityInfoGetter.getCompanyId();
+//        dto.setCompanyId(companyId);
+//        dto.setIsDeleted((short)0);
+//        dto.setIsReceivable((short)0);
+//        PageInfo<List<FeeAccountDto>> listPageInfo = feeAccountService.feeAccountList(dto);
+//        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
+//        return pageBaseDto;
+        return null;
+    }
 }

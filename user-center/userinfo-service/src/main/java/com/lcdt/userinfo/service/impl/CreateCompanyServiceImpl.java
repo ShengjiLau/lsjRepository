@@ -63,7 +63,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public Company createCompany(CompanyDto companyDto) throws CompanyExistException, DeptmentExistException {
+	public Company createCompany(CompanyDto companyDto) throws CompanyExistException, DeptmentExistException, UserNotExistException {
 		Company company = companyService.createCompany(companyDto);
 
 		//默认添加创建者为管理员权限
@@ -71,7 +71,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		Group defaultCompanyGroup = createDefaultCompanyGroup(company);
 		//创建者加入默认新建组
 		addToGroup(defaultCompanyGroup, company);
-
+		User user = userService.queryByUserId(companyDto.getCreateId());
 		List<UserCompRel> userCompRels = userCompRelMapper.selectByUserIdCompanyId(company.getCreateId(), company.getCompId());
 		Department department = setUpDepartMent(company);
 		UserCompRel userCompRel;
@@ -82,7 +82,8 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 			userCompRel1.setUserId(company.getCreateId());
 			userCompRel1.setIsCreate((short) 1);
 			userCompRel1.setDeptIds(String.valueOf(department.getDeptId()));
-
+			userCompRel1.setName(user.getRealName());
+			userCompRel1.setNickName(user.getNickName());
 			userCompRelMapper.insert(userCompRel1);
 			userCompRel = userCompRel1;
 		}else{
@@ -91,6 +92,8 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 			userCompRel2.setDeptNames(department.getDeptName());
 			userCompRel2.setIsEnable(true);
 			userCompRel2.setIsCreate((short) 1);
+			userCompRel2.setName(user.getRealName());
+			userCompRel2.setNickName(user.getNickName());
 			userCompRelMapper.updateByPrimaryKey(userCompRel2);
 			userCompRel = userCompRel2;
 		}
