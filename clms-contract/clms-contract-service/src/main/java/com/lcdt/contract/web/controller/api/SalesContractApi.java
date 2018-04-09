@@ -74,7 +74,11 @@ public class SalesContractApi {
         dto.setPartyBId(user.getUserId());
         dto.setPartyBName(user.getRealName());
         //设置合同状态
-        dto = Utils.getContractStatus(dto);
+        if(dto.getIsDraft() == 0){//存为草稿
+            dto.setContractStatus((short)2);
+        }else{
+            dto = Utils.getContractStatus(dto);
+        }
 
         int result = contractService.addContract(dto);
         if (result > 0) {
@@ -95,7 +99,11 @@ public class SalesContractApi {
         dto.setPartyBId(user.getUserId());
         dto.setPartyBName(user.getRealName());
         //设置合同状态
-        dto = Utils.getContractStatus(dto);
+        if(dto.getIsDraft() == 0){//存为草稿
+            dto.setContractStatus((short)2);
+        }else{
+            dto = Utils.getContractStatus(dto);
+        }
         int result = contractService.modContract(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
