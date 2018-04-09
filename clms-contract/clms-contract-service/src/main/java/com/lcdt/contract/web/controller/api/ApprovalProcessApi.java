@@ -40,7 +40,7 @@ public class ApprovalProcessApi {
     @ApiOperation(value = "流程列表", notes = "审批流程列表数据")
     @GetMapping("/list")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('approval_process_list')")
-    public PageBaseDto<List<ApprovalProcessDto>> contractList(ApprovalProcessDto approvalProcessDto) {
+    public PageBaseDto<List<ApprovalProcessDto>> approvalList(ApprovalProcessDto approvalProcessDto) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取userId
         approvalProcessDto.setCompanyId(companyId);
@@ -107,12 +107,28 @@ public class ApprovalProcessApi {
         return jsonObject;
     }
 
+    @ApiOperation(value = "审批详情", notes = "审批流程详情包含审批人信息")
+    @GetMapping("/detail")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('approval_process_list')")
+    public JSONObject approvalDetail(ApprovalProcess approvalProcess) {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+//        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取userId
+        approvalProcess.setCompanyId(companyId);
+        List<ApprovalProcessDto> listPageInfo = approvalProcessService.approvalProcessDetail(approvalProcess);
+        JSONObject object = new JSONObject();
+        object.put("detail",listPageInfo);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("data",object);
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "获取成功");
+        return jsonObject;
+    }
+
     @ApiOperation(value = "流程展示", notes = "根据type获取对应企业下的所有类型")
     @GetMapping("/show")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('approval_process_list')")
-    public JSONObject contractShow(ApprovalProcess approvalProcess) {
+//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('approval_process_list')")
+    public JSONObject approvalShow(ApprovalProcess approvalProcess) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取userId
         approvalProcess.setCompanyId(companyId);
         List<ApprovalProcessDto> listPageInfo = approvalProcessService.approvalProcessShow(approvalProcess);
         JSONObject object = new JSONObject();

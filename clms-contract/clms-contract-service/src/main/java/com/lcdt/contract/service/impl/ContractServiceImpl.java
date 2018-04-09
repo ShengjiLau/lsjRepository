@@ -148,8 +148,8 @@ public class ContractServiceImpl implements ContractService {
         List<ContractProduct> list2 = new ArrayList<>();
         if (dto.getContractProductList() != null && dto.getContractProductList().size() > 0) {
             for (ContractProduct d : dto.getContractProductList()) {  //迭代根据contractId来区分是新增还是插入
+                d.setContractId(dto.getContractId());    //设置contractId
                 if (d.getCpId() == null) {   //没有主键的则为新增
-                    d.setContractId(dto.getContractId());    //设置contractId
                     list1.add(d);
                 } else {
                     list2.add(d);

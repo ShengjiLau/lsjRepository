@@ -62,7 +62,7 @@ public class SalesContractApi {
 
     @ApiOperation("合同新建")
     @RequestMapping(value = "/addContract", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_sales_contract')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_add')")
     public JSONObject addWarehouse(@Validated @RequestBody ContractDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User user = SecurityInfoGetter.getUser();
@@ -74,7 +74,11 @@ public class SalesContractApi {
         dto.setPartyBId(user.getUserId());
         dto.setPartyBName(user.getRealName());
         //设置合同状态
-        dto = Utils.getContractStatus(dto);
+        if(dto.getIsDraft() == 0){//存为草稿
+            dto.setContractStatus((short)2);
+        }else{
+            dto = Utils.getContractStatus(dto);
+        }
 
         int result = contractService.addContract(dto);
         if (result > 0) {
@@ -89,13 +93,17 @@ public class SalesContractApi {
 
     @ApiOperation("合同编辑")
     @RequestMapping(value = "/modifyContract", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_sales_contract')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_modify')")
     public JSONObject modifyWarehouse(@Validated @RequestBody ContractDto dto) {
         User user = SecurityInfoGetter.getUser();
         dto.setPartyBId(user.getUserId());
         dto.setPartyBName(user.getRealName());
         //设置合同状态
-        dto = Utils.getContractStatus(dto);
+        if(dto.getIsDraft() == 0){//存为草稿
+            dto.setContractStatus((short)2);
+        }else{
+            dto = Utils.getContractStatus(dto);
+        }
         int result = contractService.modContract(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
@@ -109,7 +117,7 @@ public class SalesContractApi {
 
     @ApiOperation("合同终止/生效/创建中")
     @RequestMapping(value = "/updateContractStatus", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('update_sales_contract_status')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_status_update')")
     public JSONObject updateContractStatus(@ApiParam(value = "合同ID",required = true) @RequestParam Long contractId,
                                         @ApiParam(value = "状态 0-生效 3-失效 2-创建中",required = true) @RequestParam short contractStatus) {
         Contract dto = new Contract();

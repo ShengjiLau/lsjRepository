@@ -48,4 +48,11 @@ public interface ApprovalProcessService {
      * @return
      */
     List<ApprovalProcessDto> approvalProcessShow(ApprovalProcess approvalProcess);
+
+    /**
+     * 获取审批流程
+     * @param approvalProcess
+     * @return
+     */
+    List<ApprovalProcessDto> approvalProcessDetail(ApprovalProcess approvalProcess);
 }
