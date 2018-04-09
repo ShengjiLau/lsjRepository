@@ -75,7 +75,7 @@
         and process_type = #{arg1}
       </if>
     </where>
-    order process_id desc
+    order by process_id desc
   </select>
   <select id="selectProcessApprover" resultMap="ProcessApproverResultMap">
     select approver_id, user_id, user_name, dept_name, sort, action_type
