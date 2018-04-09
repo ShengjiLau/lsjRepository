@@ -210,6 +210,7 @@
     <id column="order_id" jdbcType="BIGINT" property="orderId" />
     <result column="supplier" jdbcType="VARCHAR" property="supplier" />
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="order_serial_no" jdbcType="VARCHAR" property="orderSerialNo" />
     <result column="order_type" jdbcType="SMALLINT" property="orderType" />
     <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
     <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
