@@ -75,7 +75,6 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		Department department = setUpDepartMent(company);
 		UserCompRel userCompRel;
 		if (CollectionUtils.isEmpty(userCompRels)) {
-
 			UserCompRel userCompRel1 = new UserCompRel();
 			userCompRel1.setCompId(company.getCompId());
 			userCompRel1.setUserId(company.getCreateId());
@@ -83,6 +82,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 			userCompRel1.setDeptIds(String.valueOf(department.getDeptId()));
 			userCompRel1.setName(user.getRealName());
 			userCompRel1.setNickName(user.getNickName());
+			userCompRel1.setEmail(user.getEmail());
 			userCompRelMapper.insert(userCompRel1);
 			userCompRel = userCompRel1;
 		}else{
@@ -93,6 +93,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 			userCompRel2.setIsCreate((short) 1);
 			userCompRel2.setName(user.getRealName());
 			userCompRel2.setNickName(user.getNickName());
+			userCompRel2.setEmail(user.getEmail());
 			userCompRelMapper.updateByPrimaryKey(userCompRel2);
 			userCompRel = userCompRel2;
 		}

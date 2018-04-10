@@ -7,7 +7,9 @@ import com.lcdt.clms.permission.service.UserRoleService;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.notify.rpcservice.NotifyService;
+import com.lcdt.userinfo.dao.DepartmentMapper;
 import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.Department;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
@@ -24,18 +26,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,6 +57,9 @@ public class UserApi {
 
 	@Autowired
 	UserRoleService roleService;
+
+	@Autowired
+	DepartmentMapper departmentMapper;
 
 	@ApiOperation("手机号是否已注册")
 	@RequestMapping(value = "/isPhoneRegister",method = RequestMethod.POST)
@@ -101,6 +103,14 @@ public class UserApi {
 		List<Role> userRole = roleService.getUserRole(userCompRel.getUserId(), userCompRel.getCompId());
 		userCompRel.setRoles(userRole);
 		userCompRel.getUser().setPwd("");
+		if(!StringUtils.isEmpty(userCompRel.getDeptIds()))
+		{
+			Department department = departmentMapper.selectByPrimaryKey(Long.parseLong(userCompRel.getDeptIds()));
+			if(department!=null)
+			{
+				userCompRel.setDeptNames(department.getDeptName());
+			}
+		}
 		return userCompRel;
 	}
 
