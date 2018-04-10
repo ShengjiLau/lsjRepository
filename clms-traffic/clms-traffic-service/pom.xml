@@ -11,12 +11,6 @@
 
     <artifactId>clms-traffic-service</artifactId>
     <dependencies>
-
-        <dependency>
-            <groupId>com.lcdt.cloud</groupId>
-            <artifactId>AliyunMqConfig</artifactId>
-            <version>1.0</version>
-        </dependency>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-traffic-api</artifactId>
@@ -36,6 +30,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+
 
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
@@ -93,7 +94,11 @@
             <artifactId>clms-customer-api</artifactId>
             <version>1.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-customer-api</artifactId>
+            <version>1.0</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
@@ -104,13 +109,16 @@
             <artifactId>clms-quartz-api</artifactId>
             <version>1.0</version>
         </dependency>
-
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>clms-notify-producer-config</artifactId>
+            <artifactId>AliyunMqConfig</artifactId>
             <version>1.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-notify-api</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>

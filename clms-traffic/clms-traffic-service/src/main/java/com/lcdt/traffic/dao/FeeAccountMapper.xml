@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.traffic.dao.FeeAccountMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.FeeAccount">
+    <id column="account_id" jdbcType="BIGINT" property="accountId" />
+    <result column="account_code" jdbcType="VARCHAR" property="accountCode" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="waybill_id" jdbcType="BIGINT" property="waybillId" />
+    <result column="waybill_code" jdbcType="VARCHAR" property="waybillCode" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="name_id" jdbcType="BIGINT" property="nameId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="audit_status" jdbcType="SMALLINT" property="auditStatus" />
+    <result column="audit_date" jdbcType="TIMESTAMP" property="auditDate" />
+    <result column="operator_id" jdbcType="BIGINT" property="operatorId" />
+    <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
+    <result column="reconcile_id" jdbcType="BIGINT" property="reconcileId" />
+    <result column="reconcile_code" jdbcType="VARCHAR" property="reconcileCode" />
+    <result column="is_receivable" jdbcType="SMALLINT" property="isReceivable" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+  </resultMap>
+  <resultMap id="BaseResultDtoMap" type="com.lcdt.traffic.web.dto.FeeAccountDto" extends="BaseResultMap">
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="freight_total" jdbcType="REAL" property="freightTotal" />
+    <result column="other_fee_total" jdbcType="REAL" property="otherFeeTotal" />
+    <result column="fee_total" jdbcType="REAL" property="feeTotal" />
+    <collection property="feeFlowList" column="account_id" ofType="com.lcdt.traffic.model.FeeFlow" select="com.lcdt.traffic.dao.FeeFlowMapper.selectByAccountId"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    account_id, account_code, company_id, waybill_id, waybill_code, group_id, group_name, 
+    name_id, name, audit_status, audit_date, operator_id, operator_name, reconcile_id, 
+    reconcile_code, is_receivable, create_date, is_deleted
+  </sql>
+  <sql id="base_property_list">
+    account_id accountId, account_code accountCode, company_id companyId, waybill_id waybillId, waybill_code waybillCode, group_id groupId, group_name groupName,
+    name_id nameId, name, audit_status auditStatus, audit_date auditDate, operator_id operatorId, operator_name operatorName, reconcile_id rececileId,
+    reconcile_code reconcileCode, is_receivable isReceivable, create_date createDate, is_deleted isDeleted,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id and ff.fee_property='运费') freightTotal,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id and ff.fee_property!='运费') otherFeeTotal,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id) feeTotal
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_fee_account
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_fee_account
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.traffic.model.FeeAccount">
+    <selectKey keyProperty="accountId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_fee_account (account_code, company_id, waybill_id, 
+      waybill_code, group_id, group_name, 
+      name_id, name, audit_status, 
+      audit_date, operator_id, operator_name, 
+      reconcile_id, reconcile_code, is_receivable, 
+      create_date, is_deleted)
+    values (#{accountCode,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{waybillId,jdbcType=BIGINT}, 
+      #{waybillCode,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, 
+      #{nameId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{auditStatus,jdbcType=SMALLINT}, 
+      #{auditDate,jdbcType=TIMESTAMP}, #{operatorId,jdbcType=BIGINT}, #{operatorName,jdbcType=VARCHAR}, 
+      #{reconcileId,jdbcType=BIGINT}, #{reconcileCode,jdbcType=VARCHAR}, #{isReceivable,jdbcType=SMALLINT}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lcdt.traffic.model.FeeAccount">
+    <selectKey keyProperty="accountId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_fee_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="accountCode != null">
+        account_code,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="waybillId != null">
+        waybill_id,
+      </if>
+      <if test="waybillCode != null">
+        waybill_code,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="groupName != null">
+        group_name,
+      </if>
+      <if test="nameId != null">
+        name_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="auditStatus != null">
+        audit_status,
+      </if>
+      <if test="auditDate != null">
+        audit_date,
+      </if>
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+      <if test="operatorName != null">
+        operator_name,
+      </if>
+      <if test="reconcileId != null">
+        reconcile_id,
+      </if>
+      <if test="reconcileCode != null">
+        reconcile_code,
+      </if>
+      <if test="isReceivable != null">
+        is_receivable,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="accountCode != null">
+        #{accountCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="waybillId != null">
+        #{waybillId,jdbcType=BIGINT},
+      </if>
+      <if test="waybillCode != null">
+        #{waybillCode,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="groupName != null">
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="nameId != null">
+        #{nameId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null">
+        #{auditStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="auditDate != null">
+        #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="operatorName != null">
+        #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="reconcileId != null">
+        #{reconcileId,jdbcType=BIGINT},
+      </if>
+      <if test="reconcileCode != null">
+        #{reconcileCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isReceivable != null">
+        #{isReceivable,jdbcType=SMALLINT},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.traffic.model.FeeAccount">
+    update t_fee_account
+    <set>
+      <if test="accountCode != null">
+        account_code = #{accountCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="waybillId != null">
+        waybill_id = #{waybillId,jdbcType=BIGINT},
+      </if>
+      <if test="waybillCode != null">
+        waybill_code = #{waybillCode,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="groupName != null">
+        group_name = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="nameId != null">
+        name_id = #{nameId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="auditStatus != null">
+        audit_status = #{auditStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="auditDate != null">
+        audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="operatorName != null">
+        operator_name = #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="reconcileId != null">
+        reconcile_id = #{reconcileId,jdbcType=BIGINT},
+      </if>
+      <if test="reconcileCode != null">
+        reconcile_code = #{reconcileCode,jdbcType=VARCHAR},
+      </if>
+      <if test="isReceivable != null">
+        is_receivable = #{isReceivable,jdbcType=SMALLINT},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.FeeAccount">
+    update t_fee_account
+    set account_code = #{accountCode,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=BIGINT},
+      waybill_id = #{waybillId,jdbcType=BIGINT},
+      waybill_code = #{waybillCode,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=BIGINT},
+      group_name = #{groupName,jdbcType=VARCHAR},
+      name_id = #{nameId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      audit_status = #{auditStatus,jdbcType=SMALLINT},
+      audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      operator_id = #{operatorId,jdbcType=BIGINT},
+      operator_name = #{operatorName,jdbcType=VARCHAR},
+      reconcile_id = #{reconcileId,jdbcType=BIGINT},
+      reconcile_code = #{reconcileCode,jdbcType=VARCHAR},
+      is_receivable = #{isReceivable,jdbcType=SMALLINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+    where account_id = #{accountId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByWaybillId" parameterType="java.util.Map" resultType="com.lcdt.traffic.web.dto.FeeAccountDto">
+    select <include refid="base_property_list"/>
+    from t_fee_account
+    where waybill_id = #{waybillId,jdbcType=BIGINT}
+    and is_receivable = #{isReceivable,jdbcType=SMALLINT}
+    order by account_id desc
+  </select>
+  <select id="selectFeeAccountDetail" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
+    select <include refid="Base_Column_List"/>
+    from t_fee_account
+    where waybill_id = #{waybillId,jdbcType=BIGINT}
+    and is_receivable = #{isReceivable,jdbcType=SMALLINT}
+    order by account_id desc
+  </select>
+  <select id="selectOwnByCondition" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
+    select <include refid="base_property_list"/>
+    from t_fee_account
+    <where>
+      is_receivable = #{isReceivable,jdbcType=SMALLINT}
+      and company_id = #{companyId,jdbcType=BIGINT}
+      and is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      <if test="reconcileStatus!=null and reconcileStatus == 1">
+        and reconcile_id is null
+      </if>
+      <if test="reconcileStatus!=null and reconcileStatus == 2">
+        and reconcile_id is not null
+      </if>
+      <if test="groupId!=null">
+        and group_id = #{groupId,jdbcType=BIGINT}
+      </if>
+      <if test="name!=null and name != ''">
+        and name like concat('%',#{name,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="auditStatus!=null">
+        and audit_status = #{auditStatus,jdbcType=SMALLINT}
+      </if>
+      <if test="auditBeginTime != null and auditBeginTime != ''">
+        and audit_date >= #{auditBeginTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="auditEndTime != null and auditEndTime != ''">
+        and #{auditEndTime,jdbcType=TIMESTAMP} >= audit_date
+      </if>
+      <if test="accountCode!=null and accountCode != ''">
+        and account_code = #{accountCode,jdbcType=VARCHAR}
+      </if>
+      <if test="waybillCode!=null and waybillCode != ''">
+        and waybill_code = #{waybillCode,jdbcType=VARCHAR}
+      </if>
+      <if test="reconcileCode!=null and reconcileCode != ''">
+        and reconcile_code = #{reconcileCode,jdbcType=VARCHAR}
+      </if>
+      <if test="createBeginTime != null and createBeginTime != ''">
+        and create_date >= #{createBeginTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="createEndTime != null and createEndTime != ''">
+        and #{createEndTime,jdbcType=TIMESTAMP} >= create_date
+      </if>
+    </where>
+    order by account_id desc
+  </select>
+</mapper>

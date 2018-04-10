@@ -2,6 +2,7 @@ package com.lcdt.traffic.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
+
 import java.io.Serializable;
 
 /**
@@ -48,6 +49,11 @@ public class WaybillOwnListParamsDto implements Serializable{
     private Integer pageNo;
     @ApiModelProperty(value = "每页显示条数", required = true)
     private Integer pageSize;
+
+    @ApiModelProperty(value = "0-未删除，1-已删除",hidden = true)
+    private short isDeleted;
+    @ApiModelProperty(value = "0-应付，1-应收",hidden = true)
+    private short isReceivable;
 
     public String getWaybillCode() {
         return waybillCode;
@@ -199,5 +205,20 @@ public class WaybillOwnListParamsDto implements Serializable{
 
     public void setWaybillCondition(String waybillCondition) {
         this.waybillCondition = waybillCondition;
+    }
+    public short getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(short isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public short getIsReceivable() {
+        return isReceivable;
+    }
+
+    public void setIsReceivable(short isReceivable) {
+        this.isReceivable = isReceivable;
     }
 }
