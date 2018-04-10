@@ -22,7 +22,6 @@
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
   </resultMap>
   <resultMap id="BaseResultDtoMap" type="com.lcdt.traffic.web.dto.FeeAccountDto" extends="BaseResultMap">
-    <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="freight_total" jdbcType="REAL" property="freightTotal" />
     <result column="other_fee_total" jdbcType="REAL" property="otherFeeTotal" />
     <result column="fee_total" jdbcType="REAL" property="feeTotal" />
@@ -317,5 +316,23 @@
       </if>
     </where>
     order by account_id desc
+  </select>
+  <update id="auditByAccountIds" parameterType="java.util.Map">
+    update t_fee_account
+    set audit_status = #{auditStatus,jdbcType=SMALLINT},
+      audit_date = #{auditDate,jdbcType=TIMESTAMP}
+    where account_id in
+    <foreach separator=";" index="index" item="item" collection="accountIds" close="" open="">
+      #{item}
+    </foreach>
+  </update>
+  <select id="reconcileByAccountIds" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
+    select count(a.waybill_id) waybillCount, a.name, sum(f.money)
+    from t_fee_account a,t_fee_flow f
+    where a.account_id=f.account_id and f.account_id in
+    <foreach separator=";" index="index" item="item" collection="accountIds" close="" open="">
+      #{item}
+    </foreach>
+    group by a.name
   </select>
 </mapper>

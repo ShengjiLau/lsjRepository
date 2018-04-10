@@ -6,12 +6,11 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.FeeAccountMapper;
 import com.lcdt.traffic.dao.WaybillItemsMapper;
 import com.lcdt.traffic.dao.WaybillMapper;
-import com.lcdt.traffic.dto.WaybillOwnListParamsDto;
 import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.model.WaybillItems;
 import com.lcdt.traffic.service.FeeAccountService;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
-import com.lcdt.traffic.web.dto.WaybillFeeDto;
+import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
 import com.lcdt.util.ClmsBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,21 +33,24 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     private FeeAccountMapper feeAccountMapper;
 
     @Override
-    public PageInfo waybillFeeList(WaybillOwnListParamsDto dto){
-        List<WaybillFeeDto> resultList = null;
+    public PageInfo feeAccountWaybillList(Map map){
+        List<FeeAccountWaybillDto> resultList = null;
 
         PageInfo page = null;
         int pageNo = 1;
         int pageSize = 0; //0表示所有
-//        if (dto.getPageNo() != null) {
-//            pageNo = dto.getPageNo();
-//        }
-//        if (dto.getPageSize() != null) {
-//            pageSize = dto.getPageSize();
-//        }
+        if (map.containsKey("pageNo")) {
+            if (map.get("pageNo") != null) {
+                pageNo = (Integer) map.get("pageNo");
+            }
+        }
+        if (map.containsKey("pageSize")) {
+            if (map.get("pageSize") != null) {
+                pageSize = (Integer) map.get("pageSize");
+            }
+        }
         PageHelper.startPage(pageNo, pageSize);
-        Map map= ClmsBeanUtil.beanToMap(dto);
-        resultList = waybillMapper.selectWaybillFeeByCondition(map);
+        resultList = waybillMapper.selectFeeAccountWaybillByCondition(map);
         page = new PageInfo(resultList);
 
         return page;
@@ -99,4 +101,16 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     public int modifyFeePropertyIsDelete(Long accountId) {
         return 0;
     }
+
+    @Override
+    public int feeAccountAudit(Map map) {
+        int result = feeAccountMapper.auditByAccountIds(map);
+        return result;
+    }
+
+//    @Override
+//    public List feeAccountReconcileGroup(Map map) {
+//        List list = feeAccountMapper.reconcileByAccountIds(map);
+//        return list;
+//    }
 }

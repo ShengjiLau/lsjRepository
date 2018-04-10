@@ -1,6 +1,7 @@
 package com.lcdt.traffic.rpc.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.WaybillMapper;
@@ -14,7 +15,6 @@ import com.lcdt.traffic.service.WaybillTransferRecordRpcService;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

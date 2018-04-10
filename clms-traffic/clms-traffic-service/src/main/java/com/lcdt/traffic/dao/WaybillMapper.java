@@ -2,7 +2,7 @@ package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillDao;
-import com.lcdt.traffic.web.dto.WaybillFeeDto;
+import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
 
 import java.util.List;
 import java.util.Map;
@@ -169,6 +169,7 @@ public interface WaybillMapper {
 
     int updateWaybillByTransferRecord(Waybill waybill);
 
+
     /**
      * 司机根据条件查询运单
      * @param map
@@ -187,5 +188,5 @@ public interface WaybillMapper {
      * @param map
      * @return
      */
-    List<WaybillFeeDto> selectWaybillFeeByCondition(Map map);
+    List<FeeAccountWaybillDto> selectFeeAccountWaybillByCondition(Map map);
 }
