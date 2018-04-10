@@ -63,4 +63,12 @@ public interface UserMapper {
      */
     List<User> selectUser4Group(Map m);
 
+    /***
+     * 根据企业ID获取企业创建者
+     * @param compId
+     * @return
+     */
+    User compCreateUserByCompId(Long compId);
+
+
 }

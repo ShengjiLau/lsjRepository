@@ -8,4 +8,5 @@ import java.util.Map;
 public interface TrafficRpc {
 
     void waybillPositionTimer(Map map);
+
 }

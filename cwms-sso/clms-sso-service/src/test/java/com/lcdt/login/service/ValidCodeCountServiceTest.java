@@ -1,6 +1,8 @@
 package com.lcdt.login.service;
 
 import com.lcdt.login.CwmsLoginApp;
+import com.lcdt.login.config.SsoProperties;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

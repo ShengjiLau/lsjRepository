@@ -8,4 +8,15 @@ public interface NotifyReceiver {
 
     Long getCompanyId();
 
+    Long getCarrierCompanyId();
+
+    Long getCarrierUserId();
+
+    String getCarrierPhoneNum();
+
+    String getCustomerPhoneNum();
+
+    String getDriverPhoneNum();
+
+    String getReceivePhoneNum();
 }

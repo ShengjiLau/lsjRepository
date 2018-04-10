@@ -41,10 +41,7 @@ public class WechatPayController {
     @ResponseBody
     public String wechatPay(HttpServletRequest request){
         //orderId 充值的订单编号
-
         logger.info("微信支付回调开始 ");
-
-
         JSONObject jo = new JSONObject();
         jo.put("return_code", "FAIL");
         try {
@@ -91,6 +88,9 @@ public class WechatPayController {
             outSteam.close();
             inStream.close();
             String result = new String(outSteam.toByteArray(), "utf-8");
+
+            logger.info("微信支付回调内容：{}",result);
+
             boolean usedflag = Signature.checkIsSignValidFromResponseString(result);
             if(!usedflag){//可能被第三方篡改过
                 return null;

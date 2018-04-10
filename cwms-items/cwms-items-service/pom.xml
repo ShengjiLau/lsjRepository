@@ -15,6 +15,13 @@
     <name>item-service</name>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>AliyunMqConfig</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>common-config</artifactId>

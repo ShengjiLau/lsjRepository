@@ -1,7 +1,8 @@
 package com.lcdt.traffic.dao;
 
+import com.lcdt.traffic.dto.OwnCompany4SnatchRdto;
+import com.lcdt.traffic.dto.OwnDriverDto;
 import com.lcdt.traffic.model.OwnDriver;
-import com.lcdt.traffic.web.dto.OwnDriverDto;
 
 import java.util.List;
 
@@ -47,4 +48,25 @@ public interface OwnDriverMapper {
      * @return
      */
     OwnDriverDto selectDetail(Long ownDriverId, Long companyId);
+
+    /**
+     * 根据groupIds获取司机信息
+     * @param companyId
+     * @param driverGroupId
+     * @return
+     */
+    List<OwnDriver> selectDriverByGroupIds(Long companyId,String driverGroupId);
+
+    /**
+     * 更新我的司机里，司机相关的主键信息（即将user_id更新到driver_id字段）
+     * @param ownDriver
+     * @return
+     */
+    int updateDriverId(OwnDriver ownDriver);
+
+
+    List<OwnCompany4SnatchRdto>  selectCompanyByDriverId(Long ownDriverId);
+
+    List<OwnDriver> selectByDriverId(Long driverId);
+
 }

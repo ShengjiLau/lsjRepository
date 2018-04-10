@@ -109,6 +109,16 @@
             <artifactId>clms-quartz-api</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>AliyunMqConfig</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-notify-api</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
     <build>

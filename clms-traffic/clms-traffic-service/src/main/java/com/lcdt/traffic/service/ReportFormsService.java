@@ -10,20 +10,40 @@ public interface ReportFormsService {
 
     /**
      * 计划统计
+     *
      * @param map
      * @return
      */
     Map planStatistics(Map map);
 
+
     /**
-     * 运单统计
+     * 客户计划统计
+     *
      * @param map
      * @return
      */
-    Map waybillStatistics(Map map);
+    Map customerPlanStatistics(Map map);
+
+    /**
+     * 运单统计
+     *
+     * @param map
+     * @return
+     */
+    Map queryOwnWaybillStatistics(Map map);
+
+    /**
+     * 运单统计
+     *
+     * @param map
+     * @return
+     */
+    Map queryCustomerWaybillStatistics(Map map);
 
     /**
      * 运输总概览
+     *
      * @param companyId
      * @return
      */

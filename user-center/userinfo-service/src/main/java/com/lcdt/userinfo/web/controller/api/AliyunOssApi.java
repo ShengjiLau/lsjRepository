@@ -21,12 +21,12 @@ public class AliyunOssApi {
 	@RequestMapping("/oss")
 	public String getPolicy() {
 		String endPointWithoutProtocol = "oss-cn-beijing.aliyuncs.com";
-		String endpoint = "http://oss-cn-beijing.aliyuncs.com";
+		String endpoint = "https://oss-cn-beijing.aliyuncs.com";
 		String accessId = "89nsjzR8irwKjep7";
 		String accessKey = "F8d08IUID5tFtWI9c88e8qfgbko62s";
 		String bucket = "clms-dtd";
 		String dir = "clms-web";
-		String host = "http://" + bucket + "." + endPointWithoutProtocol;
+		String host = "https://" + bucket + "." + endPointWithoutProtocol;
 		OSSClient client = new OSSClient(endpoint, accessId, accessKey);
 		try {
 			long expireTime = 300;
@@ -34,8 +34,6 @@ public class AliyunOssApi {
 			Date expiration = new Date(expireEndTime);
 			PolicyConditions policyConds = new PolicyConditions();
 			policyConds.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, 1048576000);
-//			policyConds.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, dir);
-
 			String postPolicy = client.generatePostPolicy(expiration, policyConds);
 			byte[] binaryData = postPolicy.getBytes("utf-8");
 			String encodedPolicy = BinaryUtil.toBase64String(binaryData);

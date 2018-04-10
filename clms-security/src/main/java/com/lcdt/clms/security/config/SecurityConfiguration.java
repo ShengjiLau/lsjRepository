@@ -43,7 +43,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());
 		http.exceptionHandling().authenticationEntryPoint(entryPoint());
-
 		http.addFilterAt(ticketAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests().antMatchers("/auth/**").permitAll()
 				.antMatchers("/register/**","/wechatpaynotify","/alipay/notify","/alipay/returnurl").permitAll()
@@ -62,7 +61,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public TicketLogoutSuccessHandler ticketLogoutSuccessHandler(){
 		return new TicketLogoutSuccessHandler();
 	}
-
 
 	@Bean
 	public CasLoginEntryPoint entryPoint() {

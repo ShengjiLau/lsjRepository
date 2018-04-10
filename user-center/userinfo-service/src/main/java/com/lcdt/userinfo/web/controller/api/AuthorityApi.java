@@ -129,7 +129,7 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/addRolePermission", method = RequestMethod.POST)
 	@ApiOperation("增加角色权限")
-	@PreAuthorize("hasAnyAuthority('role_addpermission') or hasRole('ROLE_SYS_ADMIN')")
+	@PreAuthorize("hasAnyAuthority('role_update_permission') or hasRole('ROLE_SYS_ADMIN')")
 	public EmptyResponseDate addPermissionForRole(Long roleId, Long permissionId) {
 		User loginUser = SecurityInfoGetter.getUser();
 		roleService.addRolePermission(roleId, permissionId,loginUser.getUserId(),loginUser.getRealName());
@@ -139,6 +139,7 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/updateRolePermission", method = RequestMethod.POST)
 	@ApiOperation("批量编辑角色权限")
+	@PreAuthorize("hasAnyAuthority('role_update_permission') or hasRole('ROLE_SYS_ADMIN')")
 	public String addPermissionsForRole(Long roleId, HttpServletRequest request) {
 		String permissions = request.getParameter("permissions");
 		List<Long> permissionlist = JSONArray.parseArray(permissions, Long.class);
@@ -151,6 +152,7 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/updateRoleInfo",method = RequestMethod.POST)
 	@ApiOperation("修改角色信息")
+	@PreAuthorize("hasAnyAuthority('role_edit') or hasRole('ROLE_SYS_ADMIN')")
 	public Role updateRole(Long roleId,@RequestParam(required = false) String roleName,@RequestParam(required = false) Boolean valid){
 		Role role = roleService.selectById(roleId);
 
@@ -178,7 +180,7 @@ public class AuthorityApi {
 
 	@RequestMapping(value = "/removeRolePermission", method = RequestMethod.POST)
 	@ApiOperation("删除角色权限")
-	@PreAuthorize("hasAnyAuthority('role_removepermission') or hasRole('ROLE_SYS_ADMIN')")
+	@PreAuthorize("hasAnyAuthority('role_update_permission') or hasRole('ROLE_SYS_ADMIN')")
 	public EmptyResponseDate removePermissionRole(Long roleId, Long permissionId) {
 		roleService.removeRolePermission(roleId, permissionId);
 		return emptyResponseData;

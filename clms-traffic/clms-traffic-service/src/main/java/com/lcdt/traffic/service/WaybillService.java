@@ -3,11 +3,8 @@ package com.lcdt.traffic.service;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillDao;
-import com.lcdt.traffic.web.dto.WaybillCustListParamsDto;
 import com.lcdt.traffic.web.dto.WaybillDto;
-import com.lcdt.traffic.web.dto.WaybillOwnListParamsDto;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,7 +18,7 @@ public interface WaybillService {
      * @param waybillDto
      * @return
      */
-    int addWaybill(WaybillDto waybillDto);
+    Waybill addWaybill(WaybillDto waybillDto);
 
     /**
      * 运单删除
@@ -64,33 +61,9 @@ public interface WaybillService {
      */
     WaybillDao queryCustomerWaybill(Long waybillId, Long carrierCompanyId);
 
-    /**
-     * 查询获取我的运单列表
-     * @param map
-     * @return
-     */
-    PageInfo queryOwnWaybillList(Map map);
 
-    /**
-     * 查询获取客户运单列表
-     * @param map
-     * @return
-     */
-    PageInfo queryCustomerWaybillList(Map map);
 
-    /**
-     * 传运单的状态和运单以逗号分隔开的运单id，批量修改我的运单状态
-     * @param map
-     * @return
-     */
-    int modifyOwnWaybillStatus(Map map);
 
-    /**
-     * 传运单的状态和运单以逗号分隔开的运单id，批量修改客户的运单状态
-     * @param map
-     * @return
-     */
-    int modifyCustomerWaybillStatus(Map map);
 
     /**
      * 验证是否已经存在已卸货或者已完成的运单,返回运单列表（传companyId,waybillPlanId,isDeleted)
@@ -98,13 +71,6 @@ public interface WaybillService {
      * @return
      */
     PageInfo queryPlannedWaybillList(Map map);
-
-    /**
-     * 根据计划id更新运单状态（参数：waybillStatus，updateId，updateName，waybillPlanId，companyId）
-     * @param map
-     * @return
-     */
-    int modifyOwnWaybillStatusByWaybillPlanId(Map map);
 
     /**
      * 定时定位用，根据定位设置，获取运单司机进行定位

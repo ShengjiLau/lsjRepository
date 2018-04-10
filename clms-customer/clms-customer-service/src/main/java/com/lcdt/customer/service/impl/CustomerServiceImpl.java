@@ -1,7 +1,6 @@
 package com.lcdt.customer.service.impl;
 
 
-import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleSelectRestriction;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.dao.CustomerCollectionMapper;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.beans.Transient;
 import java.util.*;
 
 /**
@@ -54,6 +52,8 @@ public class CustomerServiceImpl implements CustomerService {
 
 
         customer.setBindCpid(null);
+        customer.setBindCompany("");
+
         customerMapper.updateByPrimaryKey(customer);
 
         Customer customer1 = customerMapper.selectByCustomerBindCompanyId(bindCpid, companyId);
@@ -61,6 +61,7 @@ public class CustomerServiceImpl implements CustomerService {
             return customer;
         }else{
             customer1.setBindCpid(null);
+            customer1.setBindCompany("");
             customerMapper.updateByPrimaryKey(customer1);
         }
 
@@ -104,9 +105,10 @@ public class CustomerServiceImpl implements CustomerService {
         PageHelper.startPage(pageNo, pageSize);
         List<Customer> list = customerMapper.selectByCondition(m);
         PageInfo pageInfo = new PageInfo(list);
-
         return  pageInfo;
     }
+
+
 
     @Transactional(readOnly = true)
     @Override
@@ -178,18 +180,19 @@ public class CustomerServiceImpl implements CustomerService {
     public int customerUpdate(Customer customer) throws CustomerException  {
         Map map = new HashMap();
         map.put("companyId", customer.getCompanyId());
-        map.put("customerId", customer.getCustomerId());
         map.put("customerName", customer.getCustomerName());
         List<Customer> list = customerMapper.selectByCondition(map);
-        if (list.size()>0) {
-            throw new CustomerException("客户已存在，请联系管理员分配！");
+        if (list != null && !list.isEmpty()) {
+            Customer customer1 = list.get(0);
+            if (!customer1.getCustomerId().equals(customer.getCustomerId())) {
+                throw new CustomerException("客户已存在，请联系管理员分配！");
+            }
         }
         int flag = customerMapper.updateByPrimaryKeySelective(customer);
 
         if (flag>0) {
              //组关系表
             if (!StringUtils.isEmpty(customer.getClientTypes())) {
-
                 String[] typeArrays = customer.getClientTypes().split(",");  //传过来的值用逗号隔开
                 if (typeArrays==null || typeArrays.length==0) { //如果不选，清楚原来的数据
                     //先清楚原来的组关系，再更新
@@ -208,8 +211,6 @@ public class CustomerServiceImpl implements CustomerService {
                         for(int i=0;i<typeList.size();i++) {
                             typeArrays1[i] = typeList.get(i).getCustomerTypeId().toString();
                         }
-
-
                         ArrayList<String> delList = new ArrayList<>();
                         ArrayList<String> addList = new ArrayList<>();
                         //算出新增的
@@ -411,6 +412,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public int customerCollectionRemove(Map map) {
+        Map map_ = map;
+        map.put("collectionIds","find_in_set('"+map.get("collectionId")+"',collection_ids)");
+        List<Customer> list = customerMapper.selectByCondition(map_);
+        if(list!=null&&list.size()>0)
+        {
+            return -1;
+        }
         return customerCollectionMapper.deleteByPrimaryKey(map);
     }
 

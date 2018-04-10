@@ -12,4 +12,14 @@ public interface SmsCountService {
 
     boolean checkProductCount(Long companyId,Integer num,String serviceName);
 
+    int getProductCount(Long companyId,String serviceName);
+
+    /**
+     * 扣费
+     * @param companyId
+     * @param serviceName
+     * @param num
+     */
+    void deduction(Long companyId, String serviceName, Integer num);
+
 }

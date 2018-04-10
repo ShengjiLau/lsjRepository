@@ -38,4 +38,13 @@ public class SmsCountServiceImpl implements SmsCountService {
         return countService.checkCompanyProductCount(companyId, serviceName, num);
     }
 
+    @Override
+    public int getProductCount(Long companyId,String serviceName){
+        return countService.companyProductCount(companyId,serviceName);
+    }
+
+    @Override
+    public void deduction(Long companyId, String serviceName, Integer num) {
+        countService.reduceCompanyProductCount(companyId,serviceName,num);
+    }
 }

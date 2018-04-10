@@ -3,20 +3,18 @@ package com.lcdt.customer.web.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.customer.dao.CustomerCollectionMapper;
 import com.lcdt.customer.exception.CustomerContactException;
 import com.lcdt.customer.exception.CustomerException;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.model.CustomerCollection;
 import com.lcdt.customer.model.CustomerContact;
 import com.lcdt.customer.service.CustomerService;
-import com.lcdt.customer.web.dto.CustomerParamsDto;
-import com.lcdt.customer.web.dto.CustomerContactParamsDto;
-import com.lcdt.customer.web.dto.CustomerListResultDto;
-import com.lcdt.customer.web.dto.CustomerListParamsDto;
-import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.customer.web.dto.*;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
-import com.lcdt.userinfo.model.UserGroupRelation;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,10 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.tl.commons.util.DateUtility;
 
 import java.text.ParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yangbinq on 2017/11/20.
@@ -49,6 +44,10 @@ public class CustomerApi {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private CustomerCollectionMapper customerCollectionMapper;
+
+
     @ApiOperation("我的客户列表")
     @RequestMapping(value = "/customerList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_list')")
@@ -56,6 +55,8 @@ public class CustomerApi {
                                               @ApiParam(value = "页码",required = true) @RequestParam Integer pageNo,
                                               @ApiParam(value = "每页显示条数",required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+
         Map map = new HashMap();
         map.put("companyId", companyId);
         map.put("page_no", pageNo);
@@ -90,7 +91,6 @@ public class CustomerApi {
             sb.append(")");
             map.put("customerType", sb.toString());
         }
-
         //竞价(抢单用)
         if (StringUtil.isNotEmpty(dto.getCollectionIds())) {
             String[] collectionIds = dto.getCollectionIds().split(",");
@@ -106,8 +106,6 @@ public class CustomerApi {
 
            map.put("collectionIds", sb.toString());
         }
-
-
         //项目分组
         if (StringUtil.isNotEmpty(dto.getGroupIds())) {
             String[] groupIdArray = dto.getGroupIds().split(",");
@@ -122,26 +120,21 @@ public class CustomerApi {
             sb.append(")");
             map.put("groupIds", sb.toString());
         } else {
-            StringBuffer sb = new StringBuffer();
-            List<Group> groupList = SecurityInfoGetter.groups();
-            if(groupList!=null && groupList.size()>0) {
-                sb.append("(");
-                for(int i=0;i<groupList.size();i++) {
-                    Group group = groupList.get(i);
-                    sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)");
-                    if(i!=groupList.size()-1){
-                        sb.append(" or ");
+                StringBuffer sb = new StringBuffer();
+                List<Group> groupList = SecurityInfoGetter.groups();
+                if(groupList!=null && groupList.size()>0) {
+                    sb.append("(");
+                    for(int i=0;i<groupList.size();i++) {
+                        Group group = groupList.get(i);
+                        sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)");
+                        if(i!=groupList.size()-1){
+                            sb.append(" or ");
+                        }
                     }
+                    sb.append(")");
                 }
-
-                sb.append(")");
-
-
-            }
-
-
+                map.put("groupIds", sb.toString());
         }
-
         PageInfo pageInfo = customerService.customerList(map);
         CustomerListResultDto dto1 = new CustomerListResultDto();
         dto1.setList(pageInfo.getList());
@@ -171,7 +164,7 @@ public class CustomerApi {
     @ApiOperation("新增客户")
     @RequestMapping(value = "/customerAdd",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_add')")
-    public Customer customerAdd(@Validated CustomerParamsDto dto) {
+    public String customerAdd(@Validated CustomerParamsDto dto) {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -181,12 +174,18 @@ public class CustomerApi {
         customer.setCreateName(loginUser.getRealName());
         customer.setCreateDate(new Date());
         customer.setCompanyId(companyId);
+        String message = null;
+        JSONObject jsonObject = new JSONObject();
+        int code = -1;
         try {
             customerService.customerAdd(customer);
+            code=0;
         } catch (CustomerException e) {
-            throw new CustomerException(e.getMessage());
+            message = e.getMessage();
         }
-        return customer;
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
     }
 
 
@@ -198,7 +197,7 @@ public class CustomerApi {
     @ApiOperation("客户编辑")
     @RequestMapping(value = "/customerUpdate",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_update')")
-    public Customer customerUpdate(@Validated CustomerParamsDto dto) {
+    public String customerUpdate(@Validated CustomerParamsDto dto) {
         //客户主表、联系人表、客户类型关系部分
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -207,16 +206,19 @@ public class CustomerApi {
         customer.setCompanyId(companyId);
         customer.setCreateId(loginUser.getUserId());
         customer.setCreateName(loginUser.getRealName());
+        String message = null;
+        JSONObject jsonObject = new JSONObject();
+        int code = -1;
         try {
             customerService.customerUpdate(customer);
+            code=0;
         } catch (CustomerException e) {
-            throw new CustomerException(e.getMessage());
+            message = e.getMessage();
         }
-        return customer;
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
     }
-
-
-
 
 
 
@@ -273,12 +275,10 @@ public class CustomerApi {
         if (customer.getBindCpid()!=null) {
             throw new CustomerException("此客户已绑定cLMS企业，不能删除！");
         }
-
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
         int flag = customerService.customerRemove(customer);
-
         jsonObject.put("message",flag==1?"":"删除失败");
         jsonObject.put("code",flag==1?0:-1);
         return jsonObject.toString();
@@ -487,7 +487,7 @@ public class CustomerApi {
     @ApiOperation("新增客户组(竞价)")
     @RequestMapping(value = "/customerCollectionAdd",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
-    public Object customerCollectionAdd(@ApiParam(value = "组名称",required = true) @RequestParam String collectionName,
+    public String customerCollectionAdd(@ApiParam(value = "组名称",required = true) @RequestParam String collectionName,
                                                  @ApiParam(value = "备注") @RequestParam String remark) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
@@ -498,16 +498,18 @@ public class CustomerApi {
         vo.setCreateDate(new Date());
         vo.setCollectionName(collectionName);
         vo.setRemark(remark);
+        JSONObject jsonObject = new JSONObject();
+        String message = null;
+        int code = -1;
         try {
             customerService.customerCollectionAdd(vo);
-            return vo;
+            code=0;
         } catch (CustomerException e) {
-            JSONObject jsonObject = new JSONObject();
-            int code = -1;
-            jsonObject.put("message",e.getMessage());
-            jsonObject.put("code",code);
-            return jsonObject.toString();
+            message=e.getMessage();
         }
+        jsonObject.put("code",code);
+        jsonObject.put("message",message);
+        return jsonObject.toString();
     }
 
 
@@ -519,7 +521,7 @@ public class CustomerApi {
     @ApiOperation("编辑客户组(竞价)")
     @RequestMapping(value = "/customerCollectionUpdate",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
-    public Object customerCollectionUpdate(@ApiParam(value = "组名ID",required = true) @RequestParam Long collectionId,
+    public String customerCollectionUpdate(@ApiParam(value = "组名ID",required = true) @RequestParam Long collectionId,
                                                     @ApiParam(value = "组名称",required = true) @RequestParam String collectionName,
                                                     @ApiParam(value = "备注") @RequestParam String remark) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -529,16 +531,19 @@ public class CustomerApi {
         vo.setCollectionId(collectionId);
         vo.setCollectionName(collectionName);
         vo.setRemark(remark);
+
+        JSONObject jsonObject = new JSONObject();
+        String message = null;
+        int code = -1;
         try {
             customerService.customerCollectionUpdate(vo);
-            return vo;
+            code=0;
         } catch (CustomerException e) {
-            JSONObject jsonObject = new JSONObject();
-            int code = -1;
-            jsonObject.put("message",e.getMessage());
-            jsonObject.put("code",code);
-            return jsonObject.toString();
+            message=e.getMessage();
         }
+        jsonObject.put("code",code);
+        jsonObject.put("message",message);
+        return jsonObject.toString();
     }
 
 
@@ -558,7 +563,7 @@ public class CustomerApi {
         map.put("companyId",companyId);
         int flag = customerService.customerCollectionRemove(map);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("message",flag==1?"删除成功！":"删除失败！");
+        jsonObject.put("message",flag==1?"删除成功！":flag==-1?"该分组下存在客户":"删除失败！");
         jsonObject.put("code",flag==1?0:-1);
         return jsonObject.toString();
     }
@@ -625,7 +630,61 @@ public class CustomerApi {
 
 
 
+    @ApiOperation("客户组成员列表")
+    @RequestMapping(value = "/collectionMemberList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('customer_collection')")
+    public String collectionMemberList(@ApiParam(value = "组ID串" ,required = true) @RequestParam String collectionIds) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        String[] collectArray = collectionIds.split(",");
+        StringBuffer sb = new StringBuffer();
 
+        List<CustomerGoupDto> customerGoupDtoList = new ArrayList<CustomerGoupDto>();
+        if(collectArray!=null && collectArray.length>0) {
+            sb.append("(");
+            for(int i=0;i<collectArray.length;i++) {
+                //组ID
+                sb.append(" find_in_set('"+collectArray[i]+"',collection_ids)");
+                if(i!=collectArray.length-1){
+                    sb.append(" or ");
+                }
 
+            }
+            sb.append(")");
+        }
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", 1);
+        map.put("page_size", 0);
+        map.put("collectionIds", sb.toString());
+        PageInfo pageInfo = customerService.customerList(map);
+        List<CustomerCollection> customerCollections = customerCollectionMapper.selectByCollectionIds(companyId,collectionIds);
+        if (customerCollections!=null && customerCollections.size()>0) {
+            for (CustomerCollection obj : customerCollections) {
+                CustomerGoupDto customerGoupDto = new CustomerGoupDto();
+                customerGoupDto.setCollectionId(obj.getCollectionId());
+                customerGoupDto.setCollectionName(obj.getCollectionName());
+                List<CustomerDto> customerDtoList = new ArrayList<CustomerDto>();
 
+                  if (pageInfo.getTotal()>0) {
+                      List<Customer> customers = pageInfo.getList();
+                      for (Customer customer1 : customers){
+
+                            if (customer1.getCollectionIds().indexOf(obj.getCollectionId().toString())>-1) {
+                                CustomerDto customerDto = new CustomerDto();
+                                customerDto.setCustomerId(customer1.getCustomerId());
+                                customerDto.setCustomerName(customer1.getCustomerName());
+                                customerDtoList.add(customerDto);
+                            }
+                      }
+                  }
+                customerGoupDto.setCustomerDtoList(customerDtoList);
+                customerGoupDtoList.add(customerGoupDto);
+            }
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message","");
+        jsonObject.put("code",0);
+        jsonObject.put("data",customerGoupDtoList);
+        return jsonObject.toString();
+    }
 }

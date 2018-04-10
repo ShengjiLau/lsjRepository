@@ -22,6 +22,10 @@ docker tag $imageid $imagenamewithtag
 docker push $imagenamewithtag
 }
 
+update_server(){
+    curl --insecure --cert ~/.docker/aliyun/clms-c/cert.pem --key ~/.docker/aliyun/clms-c/key.pem -X POST https://master2g5.cs-cn-beijing.aliyun.com:20017/projects/$1/redeploy
+}
+
 maven_build(){
 mvn clean install package -Dmaven.test.skip=true
 STATUS=$?
@@ -44,8 +48,8 @@ fi
 docker_login
 
 read -p "请输入镜像名称: " imagename
-read -p "请输入镜像tag: " imagetag
 read -p "请输入构建路径: " imagepath
-push_to_aliregistry $imagename $imagetag $imagepath
-
+push_to_aliregistry $imagename 1.0 $imagepath
+read -p "请输入应用名字: " appname
+update_server $appname
 

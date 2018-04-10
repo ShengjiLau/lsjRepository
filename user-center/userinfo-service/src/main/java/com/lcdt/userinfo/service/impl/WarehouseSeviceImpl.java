@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dao.WarehousseLinkmanMapper;
 import com.lcdt.userinfo.dao.WarehousseLocMapper;
 import com.lcdt.userinfo.dao.WarehousseMapper;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.Warehouse;
 import com.lcdt.userinfo.model.WarehouseLinkman;
 import com.lcdt.userinfo.model.WarehouseLoc;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +33,36 @@ public class WarehouseSeviceImpl implements WarehouseService {
     @Autowired
     private WarehousseLocMapper warehousseLocMapper;
 
+
+    @Override
+    public int initWarehouse(User user, Long companyId) {
+        //添加仓库
+        Warehouse warehouse = new Warehouse();
+        warehouse.setWhName("默认仓库");
+        warehouse.setWhType((short)0);
+        warehouse.setPrincipal(user.getRealName());
+        warehouse.setMobile(user.getPhone());
+        warehouse.setWhStatus((short)0);
+        warehouse.setCreateId(user.getUserId());
+        warehouse.setCreateName(user.getRealName());
+        warehouse.setCreateDate(new Date());
+        warehouse.setIsDeleted((short)0);
+        warehouse.setCompanyId(companyId);
+        int result = warehousseMapper.insert(warehouse);
+        //添加仓库默认联系人
+        WarehouseLinkman linkman = new WarehouseLinkman();
+        linkman.setWhId(warehouse.getWhId());
+        linkman.setName(warehouse.getPrincipal());
+        linkman.setMobile(warehouse.getMobile());
+        linkman.setCreateId(warehouse.getCreateId());
+        linkman.setCreateName(warehouse.getCreateName());
+        linkman.setCreateDate(new Date());
+        linkman.setIsDefault((short)1);
+        linkman.setIsDeleted((short)0);
+        linkman.setCompanyId(warehouse.getCompanyId());
+        result += addWarehouseLinkMan(linkman);
+        return result;
+    }
 
     @Transactional(readOnly = true)
     @Override
@@ -58,6 +90,22 @@ public class WarehouseSeviceImpl implements WarehouseService {
     @Override
     public int addWarehouse(Warehouse warehouse) {
         int result = warehousseMapper.insert(warehouse);
+        WarehouseLinkman linkman = new WarehouseLinkman();
+        linkman.setWhId(warehouse.getWhId());
+        linkman.setName(warehouse.getPrincipal());
+        linkman.setMobile(warehouse.getMobile());
+        linkman.setMail(warehouse.getMail());
+        linkman.setProvince(warehouse.getProvince());
+        linkman.setCity(warehouse.getCity());
+        linkman.setCounty(warehouse.getCounty());
+        linkman.setDetailAddress(warehouse.getDetailAddress());
+        linkman.setCreateId(warehouse.getCreateId());
+        linkman.setCreateName(warehouse.getCreateName());
+        linkman.setCreateDate(new Date());
+        linkman.setIsDefault((short)1);
+        linkman.setIsDeleted((short)0);
+        linkman.setCompanyId(warehouse.getCompanyId());
+        result += addWarehouseLinkMan(linkman);
         return result;
     }
 

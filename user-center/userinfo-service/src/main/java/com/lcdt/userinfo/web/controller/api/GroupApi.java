@@ -20,7 +20,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.Version;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -150,7 +149,7 @@ public class GroupApi {
      */
     @ApiOperation("用户项目组列表")
     @RequestMapping(value = "/userGroupList", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_list')")
+/*    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_list')")*/
     public JSONObject deptUserList() {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long userId = SecurityInfoGetter.getUser().getUserId();
@@ -207,12 +206,13 @@ public class GroupApi {
 
     /**
      * 组员工不存在列表
+     * 组员工不存在，权限合并到组员工已存在的里面
      *
      * @return
      */
     @ApiOperation(value = "组员工不存在列表v1")
     @RequestMapping(value = "/groupUserNotList", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_not_list')")
+/*    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_not_list')")*/
     public GroupResultDto groupUserNotList(@ApiParam(value = "组ID", required = true) @RequestParam Long groupId,
                                            @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
                                            @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
@@ -232,12 +232,12 @@ public class GroupApi {
 
     /**
      * 组成员添加
-     *
+     *@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_add')")
      * @return
      */
     @ApiOperation("组成员添加")
     @RequestMapping(value = "/groupUserAdd", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_add')")
+
     public String groupUserAdd(@ApiParam(value = "员工ID", required = true) @RequestParam Long userId,
                                @ApiParam(value = "组ID", required = true) @RequestParam Long groupId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -255,12 +255,12 @@ public class GroupApi {
 
     /**
      * 组成员删除
-     *
+     *@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_delete')")
      * @return
      */
     @ApiOperation("组成员删除")
     @RequestMapping(value = "/groupUserdelete", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_user_delete')")
+
     public String groupUserdelete(@ApiParam(value = "员工ID", required = true) @RequestParam Long userId,
                                   @ApiParam(value = "组ID", required = true) @RequestParam Long groupId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -278,10 +278,10 @@ public class GroupApi {
 
     /**
      * 组-不存在客户列表
-     *
+     * groupId>0是已存在客户列表，包含未添加的客户列表权限
      * @return
      */
-    @ApiOperation("组-不存在客户列表")
+    @ApiOperation("组-存在客户列表")
     @RequestMapping(value = "/groupCustomerList", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_customer_list')")
     public GroupResultDto groupCustomerList(@ApiParam(value = "组ID", required = true) @RequestParam Long groupId,
@@ -289,6 +289,7 @@ public class GroupApi {
                                             @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
+
         map.put("companyId", companyId);
         map.put("page_no", pageNo);
         if (groupId > 0) {
@@ -308,12 +309,12 @@ public class GroupApi {
 
     /**
      * 组客户添加
-     *
+     * @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_customer_add')")
      * @return
      */
     @ApiOperation("组客户添加")
     @RequestMapping(value = "/groupCustomerAdd", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_customer_add')")
+
     public String groupCustomerAdd(@ApiParam(value = "客户ID", required = true) @RequestParam Long customerId,
                                    @ApiParam(value = "组ID", required = true) @RequestParam Long groupId,
                                    @ApiParam(value = "组名", required = true) @RequestParam String groupName) {
@@ -334,12 +335,12 @@ public class GroupApi {
 
     /**
      * 组客户删除
-     *
+     * @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_customer_delete')")
      * @return
      */
     @ApiOperation("组客户删除")
     @RequestMapping(value = "/groupCustomerDelete", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_customer_delete')")
+
     public String groupCustomerDelete(@ApiParam(value = "客户ID", required = true) @RequestParam Long customerId,
                                       @ApiParam(value = "组ID", required = true) @RequestParam Long groupId,
                                       @ApiParam(value = "组名", required = true) @RequestParam String groupName) {

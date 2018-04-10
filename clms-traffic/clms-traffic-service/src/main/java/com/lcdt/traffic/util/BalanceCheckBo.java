@@ -17,4 +17,12 @@ public class BalanceCheckBo {
     public boolean check(Long companyId){
         return smsCountService.checkProductCount(companyId,1,"gms_location");
     }
+
+    public int getGmsCount(Long companyId){
+        return smsCountService.getProductCount(companyId,"gms_location");
+    }
+
+    public void deductionGms(Long companyId){
+        smsCountService.deduction(companyId,"gms_location",1);
+    }
 }

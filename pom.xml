@@ -26,6 +26,9 @@
         <module>clms-traffic</module>
         <module>mybatis-generator</module>
         <module>clms-contract</module>
+        <module>clms-werehouse-manage</module>
+        <module>driver-app-wechat-api</module>
+        <module>Aliyun-Mq-Config</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>
@@ -109,7 +112,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
-                <version>1.0.18</version>
+                <version>1.1.9</version>
             </dependency>
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>

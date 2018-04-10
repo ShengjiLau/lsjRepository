@@ -3,6 +3,8 @@ package com.lcdt.traffic.web.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.dto.DriverGroupDto;
+import com.lcdt.traffic.dto.OwnDriverDto;
 import com.lcdt.traffic.model.DriverGroupRelationship;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.service.DriverGroupService;
@@ -158,7 +160,7 @@ public class OwnDriverApi {
 
     @ApiOperation(value = "司机分组管理", notes = "设置司机所属的分组")
     @PostMapping("/groupset")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_setgroup')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_group')")
     public JSONObject setGroup(@Validated @RequestBody OwnDriverGroupRelationshipDto ownDriverGroupRelationshipDto, BindingResult bindingResult) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
@@ -182,24 +184,20 @@ public class OwnDriverApi {
             jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
             return jsonObject;
         }
-        ownDriverService.addGroupInfo(driverGroupRelationshipList);
+        ownDriverService.addGroupInfo(driverGroupRelationshipList, ownDriverGroupRelationshipDto.getOwnDriverId());
         jsonObject.put("code", 0);
         jsonObject.put("message", "设置成功");
         return jsonObject;
     }
 
-    @ApiOperation(value = "获取司机所属分组", notes = "设置司机所属的分组")
+    @ApiOperation(value = "获取司机所属分组", notes = "获取司机所属分组")
     @GetMapping("/drivergroup")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_drivergroup')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_group')")
     public PageBaseDto<List<DriverGroupDto>> setGroup() {
-        Long t1 = System.currentTimeMillis();
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
 //        Long ownDriverId = ownDriver.getOwnDriverId();
         List<DriverGroupDto> driverGroupDtoList = driverGroupService.selectRelationship(companyId);
         PageBaseDto pageBaseDto = new PageBaseDto(driverGroupDtoList, driverGroupDtoList.size());
-        Long t2 = System.currentTimeMillis();
-        System.out.println("获取分组列表耗时："+(t2-t1)+"ms");
         return pageBaseDto;
     }
-
 }

@@ -4,16 +4,20 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.dto.CustomerPlanDto;
 import com.lcdt.traffic.dto.SnatchOfferDto;
 import com.lcdt.traffic.dto.SplitVehicleDto;
+import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.SnatchGoods;
+import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.CustomerPlanService;
+import com.lcdt.traffic.service.ICustomerPlanRpcService4Wechat;
+import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.WaybillDto;
-import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import com.lcdt.traffic.web.dto.WaybillPlanListParamsDto;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
@@ -25,6 +29,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +46,13 @@ public class CustomerPlanApi {
     private CustomerPlanService customerPlanService;
 
     @Autowired
+    private ICustomerPlanRpcService4Wechat iCustomerPlanRpcService4Wechat;
+
+    @Autowired
     private PlanService planService;
+
+    @Autowired
+    private IPlanRpcService4Wechat iPlanRpcService4Wechat;
 
 
     @ApiOperation("客户计划-列表-竞价")
@@ -64,6 +75,11 @@ public class CustomerPlanApi {
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
             map.put("customerName",dto.getCustomerName());
         }
+
+        if (StringUtil.isNotEmpty(dto.getCustomerCids())) { //计划企业ID
+            map.put("customerCids",dto.getCustomerCids());
+        }
+
         //收货地
         if (StringUtil.isNotEmpty(dto.getReceiveProvince())) {
             map.put("receiveProvince",dto.getReceiveProvince());
@@ -76,10 +92,10 @@ public class CustomerPlanApi {
         }
         //计划发布时间
         if (StringUtil.isNotEmpty(dto.getPubdateBegin())) { //计划发布时间
-            map.put("pubdateBegin",dto.getPubdateBegin());
+            map.put("pubdateBegin",dto.getPubdateBegin()+" 00:00:00");
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
-            map.put("pubdateEnd",dto.getPubdateEnd());
+            map.put("pubdateEnd",dto.getPubdateEnd()+" 23:59:59");
         }
         //货物信息
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
@@ -107,7 +123,8 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4Bidding(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Bidding(map);
+        removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -130,6 +147,9 @@ public class CustomerPlanApi {
             map.put("serialCode",dto.getSerialCode());
         }
 
+        if (StringUtil.isNotEmpty(dto.getCustomerCids())) { //计划企业ID
+            map.put("customerCids",dto.getCustomerCids());
+        }
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
             map.put("customerName",dto.getCustomerName());
         }
@@ -145,11 +165,11 @@ public class CustomerPlanApi {
         }
 
         if (StringUtil.isNotEmpty(dto.getPubdateBegin())) { //计划发布时间
-            map.put("pubdateBegin",dto.getPubdateBegin());
+            map.put("pubdateBegin",dto.getPubdateBegin()+" 00:00:00");
         }
 
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
-            map.put("pubdateEnd",dto.getPubdateEnd());
+            map.put("pubdateEnd",dto.getPubdateEnd()+" 23:59:59");
         }
 
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {//货物信息
@@ -176,7 +196,8 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4Offer(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Offer(map);
+        removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -198,6 +219,10 @@ public class CustomerPlanApi {
             map.put("serialCode",dto.getSerialCode());
         }
 
+        if (StringUtil.isNotEmpty(dto.getCustomerCids())) { //计划企业ID
+            map.put("customerCids",dto.getCustomerCids());
+        }
+
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
             map.put("customerName",dto.getCustomerName());
         }
@@ -213,10 +238,10 @@ public class CustomerPlanApi {
         }
         //计划发布时间
         if (StringUtil.isNotEmpty(dto.getPubdateBegin())) { //计划发布时间
-            map.put("pubdateBegin",dto.getPubdateBegin());
+            map.put("pubdateBegin",dto.getPubdateBegin()+" 00:00:00");
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
-            map.put("pubdateEnd",dto.getPubdateEnd());
+            map.put("pubdateEnd",dto.getPubdateEnd()+" 23:59:59");
         }
         //货物信息
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
@@ -244,12 +269,36 @@ public class CustomerPlanApi {
                 map.put("groupIds", sb.toString());//客户
             }
         }
-
-        PageInfo pageInfo = customerPlanService.customerPlanList4Pass(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Pass(map);
+        removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
 
+
+    /***
+     * 移除其它抢单数据
+     */
+    private void removeOtherSnatch(PageInfo pageInfo, Long companyId) {
+        if(pageInfo.getTotal()>0) {
+            List<CustomerPlanDto> customerPlanDtos = pageInfo.getList();
+            if (customerPlanDtos!=null && customerPlanDtos.size()>0) {
+
+                for (CustomerPlanDto dto : customerPlanDtos) {
+                    if(dto.getSnatchGoodsList()!=null && dto.getSnatchGoodsList().size()>0) {
+                        List<SnatchGoods> otherSnatchGoods = new ArrayList<SnatchGoods>(); //存储其它数据
+                        for (SnatchGoods obj :dto.getSnatchGoodsList()) {
+                            if(!obj.getCompanyId().equals(companyId)) {
+                                otherSnatchGoods.add(obj);
+                            }
+                        }
+                        dto.getSnatchGoodsList().removeAll(otherSnatchGoods);
+                    }
+
+                }
+            }
+        }
+    }
 
     @ApiOperation("客户计划-列表-派车中")
     @RequestMapping(value = "/customerPlanList4VehicleDoing",method = RequestMethod.GET)
@@ -267,6 +316,10 @@ public class CustomerPlanApi {
             map.put("serialCode",dto.getSerialCode());
         }
 
+        if (StringUtil.isNotEmpty(dto.getCustomerCids())) { //计划企业ID
+            map.put("customerCids",dto.getCustomerCids());
+        }
+
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
             map.put("customerName",dto.getCustomerName());
         }
@@ -282,10 +335,10 @@ public class CustomerPlanApi {
         }
 
         if (StringUtil.isNotEmpty(dto.getDisDateBegin())) { //派单时间-开始
-            map.put("disDateBegin",dto.getDisDateBegin());
+            map.put("disDateBegin",dto.getDisDateBegin()+" 00:00:00");
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) { //派单时间-结束
-            map.put("disDateEnd",dto.getDisDateEnd());
+            map.put("disDateEnd",dto.getDisDateEnd()+" 23:59:59");
         }
         //货物信息
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
@@ -313,7 +366,8 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4VehicleDoing(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4VehicleDoing(map);
+        removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -334,6 +388,10 @@ public class CustomerPlanApi {
             map.put("serialCode",dto.getSerialCode());
         }
 
+        if (StringUtil.isNotEmpty(dto.getCustomerCids())) { //计划企业ID
+            map.put("customerCids",dto.getCustomerCids());
+        }
+
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
             map.put("customerName",dto.getCustomerName());
         }
@@ -349,10 +407,10 @@ public class CustomerPlanApi {
         }
 
         if (StringUtil.isNotEmpty(dto.getDisDateBegin())) { //派单时间-开始
-            map.put("disDateBegin",dto.getDisDateBegin());
+            map.put("disDateBegin",dto.getDisDateBegin()+" 00:00:00");
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) { //派单时间-结束
-            map.put("disDateEnd",dto.getDisDateEnd());
+            map.put("disDateEnd",dto.getDisDateEnd()+" 23:59:59");
         }
         //货物信息
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
@@ -379,7 +437,8 @@ public class CustomerPlanApi {
                 map.put("groupIds", sb.toString());//客户
             }
         }
-        PageInfo pageInfo = customerPlanService.customerPlanList4VehicleHave(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4VehicleHave(map);
+        removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -401,6 +460,10 @@ public class CustomerPlanApi {
             map.put("serialCode",dto.getSerialCode());
         }
 
+        if (StringUtil.isNotEmpty(dto.getCustomerCids())) { //计划企业ID
+            map.put("customerCids",dto.getCustomerCids());
+        }
+
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
             map.put("customerName",dto.getCustomerName());
         }
@@ -416,10 +479,10 @@ public class CustomerPlanApi {
         }
 
         if (StringUtil.isNotEmpty(dto.getDisDateBegin())) { //派单时间-开始
-            map.put("disDateBegin",dto.getDisDateBegin());
+            map.put("disDateBegin",dto.getDisDateBegin()+" 00:00:00");
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) { //派单时间-结束
-            map.put("disDateEnd",dto.getDisDateEnd());
+            map.put("disDateEnd",dto.getDisDateEnd()+" 23:59:59");
         }
         //货物信息
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
@@ -448,7 +511,8 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4Completed(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Completed(map);
+        removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -470,6 +534,11 @@ public class CustomerPlanApi {
             map.put("serialCode",dto.getSerialCode());
         }
 
+        if (StringUtil.isNotEmpty(dto.getCustomerCids())) { //计划企业ID
+            map.put("customerCids",dto.getCustomerCids());
+        }
+
+
         if (StringUtil.isNotEmpty(dto.getCustomerName())) { //客户名称
             map.put("customerName",dto.getCustomerName());
         }
@@ -485,10 +554,10 @@ public class CustomerPlanApi {
         }
 
         if (StringUtil.isNotEmpty(dto.getDisDateBegin())) { //派单时间-开始
-            map.put("disDateBegin",dto.getDisDateBegin());
+            map.put("disDateBegin",dto.getDisDateBegin()+" 00:00:00");
         }
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) { //派单时间-结束
-            map.put("disDateEnd",dto.getDisDateEnd());
+            map.put("disDateEnd",dto.getDisDateEnd()+" 23:59:59");
         }
         //货物信息
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
@@ -516,7 +585,8 @@ public class CustomerPlanApi {
             }
         }
 
-        PageInfo pageInfo = customerPlanService.customerPlanList4Cancel(map);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Cancel(map);
+        removeOtherSnatch(pageInfo, companyId);
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -532,7 +602,7 @@ public class CustomerPlanApi {
         dto.setCompanyId(companyId);
         dto.setWaybillPlanId(waybillPlanId);
         try {
-            WaybillPlan waybillPlan = planService.loadWaybillPlan(dto);
+            WaybillPlan waybillPlan = iPlanRpcService4Wechat.loadWaybillPlan(dto);
             return  waybillPlan;
         } catch (WaybillPlanException e) {
             throw new WaybillPlanException(e.getMessage());
@@ -557,7 +627,7 @@ public class CustomerPlanApi {
         snatchGoods.setOfferPhone(user.getPhone()); //抢单人电话
         snatchGoods.setCompanyId(companyId);
         snatchGoods.setPlanCompanyId(dto.getCompanyId());//计划企业ID
-        int flag = customerPlanService.customerPlanOfferOwn(dto,snatchGoods);
+        int flag = iCustomerPlanRpcService4Wechat.customerPlanOfferOwn(dto,snatchGoods);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
@@ -610,12 +680,25 @@ public class CustomerPlanApi {
     @ApiOperation("客户计划-派车-详细信息拉取")
     @RequestMapping(value = "/loadCustomerPlan",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_split_vehicle')")
-    public WaybillPlan loadCustomerPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+    public WaybillPlan loadCustomerPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
+                                        @ApiParam(value = "派单ID",required = true) @RequestParam Long splitGoodsId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         WaybillParamsDto dto = new WaybillParamsDto();
         dto.setCompanyId(null);
         dto.setWaybillPlanId(waybillPlanId);
-        WaybillPlan waybillPlan = planService.loadWaybillPlan(dto);
+        WaybillPlan waybillPlan = iPlanRpcService4Wechat.loadWaybillPlan(dto);
+
+
+        List<Waybill> waybillLists = waybillPlan.getWaybillList();
+        if (splitGoodsId!=null && null!=waybillLists && waybillLists.size()>0) { //过滤非派单记录
+            List<Waybill> removeList = new ArrayList<Waybill>();
+            for(Waybill waybill :waybillLists) {
+                if(!waybill.getSplitGoodsId().equals(splitGoodsId)) {
+                    removeList.add(waybill);
+                }
+            }
+            waybillLists.removeAll(removeList);
+        }
         return waybillPlan;
     }
 

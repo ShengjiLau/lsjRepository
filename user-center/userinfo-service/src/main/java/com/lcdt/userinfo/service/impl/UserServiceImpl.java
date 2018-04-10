@@ -1,10 +1,12 @@
 package com.lcdt.userinfo.service.impl;
 
+import com.lcdt.userinfo.dao.DriverMapper;
 import com.lcdt.userinfo.dao.UserMapper;
 import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.Driver;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.utils.RegisterUtils;
@@ -27,9 +29,23 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserMapper userMapper;
 
+	@Autowired
+	private DriverMapper driverMapper;
+
 	@Override
 	public User updateUser(User user) {
 		userMapper.updateByPrimaryKeyWithoutPwd(user);
+		return user;
+	}
+
+	@Override
+	public User registerDriverUser(User user) {
+		userMapper.insert(user);
+		Driver driver = new Driver();
+		driver.setUserId(user.getUserId());
+		driver.setDriverPhone(user.getPhone());
+		driver.setDriverName(user.getNickName());
+		driverMapper.insert(driver);
 		return user;
 	}
 
@@ -77,6 +93,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User userLogin(String username, String pwd) throws UserNotExistException, PassErrorException {
 		User user = queryByPhone(username);
+		if (user.getPwd() == null) {
+			throw new PassErrorException();
+		}
 		if (user.getPwd().toUpperCase().equals(RegisterUtils.md5Encrypt(pwd).toUpperCase())){
 			user.setLastLoginTime(new Date()); //更新登录时间
 			userMapper.updateByPrimaryKey(user);

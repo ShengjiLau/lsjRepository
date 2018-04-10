@@ -12,6 +12,7 @@
     <result column="vehicle_load" jdbcType="DECIMAL" property="vehicleLoad" />
     <result column="vehicle_driver_phone" jdbcType="VARCHAR" property="vehicleDriverPhone" />
     <result column="vehicle_driver_name" jdbcType="VARCHAR" property="vehicleDriverName" />
+    <result column="vehicle_driver_id" jdbcType="BIGINT" property="vehicleDriverId" />
     <result column="vehicle_brand" jdbcType="VARCHAR" property="vehicleBrand" />
     <result column="vehicle_specifications" jdbcType="VARCHAR" property="vehicleSpecifications" />
     <result column="vehicle_remark" jdbcType="VARCHAR" property="vehicleRemark" />
@@ -98,6 +99,7 @@
       vehicle_load = #{vehicleLoad,jdbcType=DECIMAL},
       vehicle_driver_phone = #{vehicleDriverPhone,jdbcType=VARCHAR},
       vehicle_driver_name = #{vehicleDriverName,jdbcType=VARCHAR},
+      vehicle_driver_id = #{vehicleDriverId,jdbcType=BIGINT},
       vehicle_brand = #{vehicleBrand,jdbcType=VARCHAR},
       vehicle_specifications = #{vehicleSpecifications,jdbcType=VARCHAR},
       vehicle_remark = #{vehicleRemark,jdbcType=VARCHAR},
@@ -132,7 +134,7 @@
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select own_vehicle_id, affiliated_company, vehicle_num, vehicle_trailer_num, vehicle_category, 
-    vehicle_type, vehicle_length, vehicle_load, vehicle_driver_phone, vehicle_driver_name, 
+    vehicle_type, vehicle_length, vehicle_load, vehicle_driver_phone, vehicle_driver_name, vehicle_driver_id,
     vehicle_brand, vehicle_specifications, vehicle_remark, vehicle_vin, vehicle_engine_number, 
     chassis_number, vehicle_axle_number, vehicle_wheelbase, vehicle_tyre_amount, energy_type, 
     swept_volume, vehicle_color, vehicle_factory_date, vehicle_buying_date, vehicle_annual_date, 
@@ -146,7 +148,7 @@
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select own_vehicle_id, affiliated_company, vehicle_num, vehicle_trailer_num, vehicle_category, 
-    vehicle_type, vehicle_length, vehicle_load, vehicle_driver_phone, vehicle_driver_name, 
+    vehicle_type, vehicle_length, vehicle_load, vehicle_driver_phone, vehicle_driver_name, vehicle_driver_id,
     vehicle_brand, vehicle_specifications, vehicle_remark, vehicle_vin, vehicle_engine_number, 
     chassis_number, vehicle_axle_number, vehicle_wheelbase, vehicle_tyre_amount, energy_type, 
     swept_volume, vehicle_color, vehicle_factory_date, vehicle_buying_date, vehicle_annual_date, 
@@ -162,7 +164,7 @@
   <!-- ——————————————————————————————————————————华丽分割线—————————————————————————————————————————————— -->
 
 
-  <resultMap id="ResultMapDto" type="com.lcdt.traffic.web.dto.OwnVehicleDto">
+  <resultMap id="ResultMapDto" type="com.lcdt.traffic.dto.OwnVehicleDto">
     <id column="own_vehicle_id" jdbcType="BIGINT" property="ownVehicleId" />
     <result column="affiliated_company" jdbcType="VARCHAR" property="affiliatedCompany" />
     <result column="vehicle_num" jdbcType="VARCHAR" property="vehicleNum" />
@@ -173,6 +175,7 @@
     <result column="vehicle_load" jdbcType="DECIMAL" property="vehicleLoad" />
     <result column="vehicle_driver_phone" jdbcType="VARCHAR" property="vehicleDriverPhone" />
     <result column="vehicle_driver_name" jdbcType="VARCHAR" property="vehicleDriverName" />
+    <result column="vehicle_driver_id" jdbcType="BIGINT" property="vehicleDriverId" />
     <result column="vehicle_brand" jdbcType="VARCHAR" property="vehicleBrand" />
     <result column="vehicle_specifications" jdbcType="VARCHAR" property="vehicleSpecifications" />
     <result column="vehicle_remark" jdbcType="VARCHAR" property="vehicleRemark" />
@@ -237,7 +240,7 @@
   </update>
   <select id="selectByCondition" parameterType="com.lcdt.traffic.model.OwnVehicle" resultMap="BaseResultMap">
     select own_vehicle_id, affiliated_company, vehicle_num, vehicle_trailer_num, vehicle_category,
-    vehicle_type, vehicle_length, vehicle_load, vehicle_driver_phone, vehicle_driver_name,
+    vehicle_type, vehicle_length, vehicle_load, vehicle_driver_phone, vehicle_driver_name,vehicle_driver_id,
     vehicle_brand, vehicle_specifications, vehicle_remark, vehicle_vin, vehicle_engine_number,
     chassis_number, vehicle_axle_number, vehicle_wheelbase, vehicle_tyre_amount, energy_type,
     swept_volume, vehicle_color, vehicle_factory_date, vehicle_buying_date, vehicle_annual_date,
@@ -259,12 +262,22 @@
       <if test="vehicleCategory==0 or vehicleCategory==1">
         and vehicle_category = #{vehicleCategory,jdbcType=VARCHAR}
       </if>
+      <if test="vehicleNumOrPhone!=null and vehicleNumOrPhone!=''">
+        and (vehicle_num like concat('%',#{vehicleNumOrPhone,jdbcType=VARCHAR},'%') or vehicle_driver_phone like concat('%',#{vehicleNumOrPhone,jdbcType=VARCHAR},'%'))
+      </if>
+      <if test="vehicleType!=null and vehicleType!=''">
+        and vehicle_type = #{vehicleType,jdbcType=VARCHAR}
+      </if>
+      <if test="vehicleLength!=null and vehicleLength!=''">
+        and vehicle_length = #{vehicleLength,jdbcType=VARCHAR}
+      </if>
     </where>
     order by own_vehicle_id desc
   </select>
+
   <select id="selectDetail" resultMap="ResultMapDto">
     select t1.own_vehicle_id, t1.affiliated_company, t1.vehicle_num, t1.vehicle_trailer_num, t1.vehicle_category,
-    t1.vehicle_type, t1.vehicle_length, t1.vehicle_load, t1.vehicle_driver_phone, t1.vehicle_driver_name,
+    t1.vehicle_type, t1.vehicle_length, t1.vehicle_load, t1.vehicle_driver_phone, t1.vehicle_driver_name,t1.vehicle_driver_id,
     t1.vehicle_brand, t1.vehicle_specifications, t1.vehicle_remark, t1.vehicle_vin, t1.vehicle_engine_number,
     t1.chassis_number, t1.vehicle_axle_number, t1.vehicle_wheelbase, t1.vehicle_tyre_amount, t1.energy_type,
     t1.swept_volume, t1.vehicle_color, t1.vehicle_factory_date, t1.vehicle_buying_date, t1.vehicle_annual_date,
@@ -277,4 +290,9 @@
     from t_own_vehicle t1 left join t_own_vehicle_certificate t2 on t1.own_vehicle_id = t2.own_vehicle_id and t2.is_deleted=0
     where t1.own_vehicle_id = #{arg0} and t1.company_id = #{arg1}
   </select>
+  <update id="updateDriverId" parameterType="com.lcdt.traffic.model.OwnVehicle" >
+    update t_own_vehicle
+    set vehicle_driver_id = #{vehicleDriverId,jdbcType=BIGINT}
+    where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </update>
 </mapper>

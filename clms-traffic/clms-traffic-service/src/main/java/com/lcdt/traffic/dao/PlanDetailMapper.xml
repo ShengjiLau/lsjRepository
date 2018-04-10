@@ -118,7 +118,17 @@
     remainder_amount, freight_price, freight_total, create_id, create_name, create_date,
     update_id, update_name, update_time, is_deleted, detail_remark, company_id
     from t_plan_detail
-    where waybill_plan_id = #{waybillPlanId} and company_id = #{companyId} and is_deleted = #{isDeleted}
+    <where>
+      <if test=" isDeleted!=null">
+        and  is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      </if>
+      <if test="companyId!=null">
+        and  company_id = #{companyId,jdbcType=BIGINT}
+      </if>
+      <if test="waybillPlanId!=null">
+        and  waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT}
+      </if>
+    </where>
   </select>
 
 
@@ -196,15 +206,15 @@
     update_id, update_name, update_time, is_deleted, detail_remark, company_id
     from t_plan_detail
     <where>
-      <if test=" isDeleted!=null">
-        and  is_deleted = #{isDeleted,jdbcType=SMALLINT},
-      </if>
-      <if test="companyId!=null">
-        and  company_id = #{companyId,jdbcType=BIGINT}
-      </if>
-      <if test="waybillPlanId!=null">
-        and  waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT}
-      </if>
+    <if test=" isDeleted!=null">
+      and  is_deleted = #{isDeleted,jdbcType=SMALLINT},
+    </if>
+    <if test="companyId!=null">
+      and  company_id = #{companyId,jdbcType=BIGINT}
+    </if>
+    <if test="waybillPlanId!=null">
+      and  waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT}
+    </if>
     </where>
   </select>
 

@@ -12,7 +12,7 @@ public class ModifyCompanyInfoDto {
 
 	@ApiModelProperty(required = true)
 	@NotBlank
-	@Size(min = 1,max = 30)
+	@Size(min = 2,max = 30,message = "企业名称为2到30个字")
 	public String fullName;
 
 	@ApiModelProperty(required = true)
@@ -53,7 +53,7 @@ public class ModifyCompanyInfoDto {
 	public String telNo1;
 
 	@ApiModelProperty("简介")
-	@Size(max = 30)
+	@Size(max = 150)
 	public String compIntro;
 
 	@ApiModelProperty("企业logo")
@@ -66,7 +66,7 @@ public class ModifyCompanyInfoDto {
 
 	@NotBlank
 	@ApiModelProperty(value = "详细地址",required = true)
-	@Size(max = 30)
+	@Size(max = 100,message = "详细地址最长100个字")
 	public String detailAddress;
 
 

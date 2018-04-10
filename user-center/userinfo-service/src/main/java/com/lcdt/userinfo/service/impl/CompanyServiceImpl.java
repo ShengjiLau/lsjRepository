@@ -2,6 +2,7 @@ package com.lcdt.userinfo.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.permission.service.UserRoleService;
 import com.lcdt.userinfo.dao.CompanyCertificateMapper;
 import com.lcdt.userinfo.dao.CompanyMapper;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
@@ -42,6 +43,23 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	UserService userService;
+
+	@Autowired
+	UserCompRelMapper userCompanyDao;
+
+	@Autowired
+	UserRoleService roleService;
+
+	@Autowired
+	UserGroupService userGroupService;
+
+	@Transactional(rollbackFor = Exception.class)
+	public UserCompRel findByUserCompRelId(Long userCompRelId) {
+		UserCompRel userCompRel = userCompRelMapper.selectByPrimaryKey(userCompRelId);
+		List<Group> groups = userGroupService.userGroups(userCompRel.getUserId(), userCompRel.getCompId());
+		userCompRel.setGroups(groups);
+		return userCompRel;
+	}
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -239,6 +257,8 @@ public class CompanyServiceImpl implements CompanyService {
 			return false;
 		}
 		userCompRelMapper.deleteByPrimaryKey(relId);
+		roleService.removeUserRole(userCompRel.getUserId(),userCompRel.getCompId());
+		groupService.deleteUserGroupRelation(userCompRel.getUserId(), userCompRel.getCompId());
 		return true;
 	}
 
@@ -250,6 +270,11 @@ public class CompanyServiceImpl implements CompanyService {
 		}else{
 			certificateDao.updateByPrimaryKey(companyCertificate);
 		}
+		Long compId = companyCertificate.getCompId();
+		Company company = companyMapper.selectByPrimaryKey(compId);
+		company.setAuthentication((short) 2);
+		companyMapper.updateByPrimaryKey(company);
+
 		return companyCertificate;
 	}
 

@@ -15,7 +15,7 @@ public class ConstantVO {
     public static String PLAN_STATUS_BIDDING = "15";//竞价中
     public static String PLAN_STATUS_APPROVAL = "20";//审批中
     public static String PLAN_STATUS_SEND_ORDERS = "30";//派单中
-    public static String PLAN_STATUS_SEND_OFF = "40";//已派完
+    public static String PLAN_STATUS_SEND_OFF = "40";//已派单，原来已派完
     public static String PLAN_STATUS_COMPLETED = "50";//已完成
     public static String PLAN_STATUS_CANCEL = "60"; //已取消
 
@@ -56,5 +56,11 @@ public class ConstantVO {
     public static Short SNATCH_GOODS_USING_DOING = 0; //处理中
     public static Short SNATCH_GOODS_USING_PASS = 1; //使用
     public static Short SNATCH_GOODS_USING_NOPASS = 2; //未采用
+
+
+
+    //计划消息中的APP_URL
+    public static String APP_URL = "";
+    public static String CANCEL_FLAG = "";
 
 }

@@ -633,6 +633,43 @@ public class WaybillPlan implements java.io.Serializable,ResponseData {
     private String carrierVehicle;
 
 
+    private String carrierDriverIds;
+    private String carrierDriverNames;
+    private String carrierIds;
+    private String carrierNames;
+
+
+    public String getCarrierDriverIds() {
+        return carrierDriverIds;
+    }
+
+    public void setCarrierDriverIds(String carrierDriverIds) {
+        this.carrierDriverIds = carrierDriverIds;
+    }
+
+    public String getCarrierDriverNames() {
+        return carrierDriverNames;
+    }
+
+    public void setCarrierDriverNames(String carrierDriverNames) {
+        this.carrierDriverNames = carrierDriverNames;
+    }
+
+    public String getCarrierIds() {
+        return carrierIds;
+    }
+
+    public void setCarrierIds(String carrierIds) {
+        this.carrierIds = carrierIds;
+    }
+
+    public String getCarrierNames() {
+        return carrierNames;
+    }
+
+    public void setCarrierNames(String carrierNames) {
+        this.carrierNames = carrierNames;
+    }
 
     /***
      * 计划详细

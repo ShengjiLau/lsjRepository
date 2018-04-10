@@ -6,15 +6,14 @@ import com.lcdt.traffic.dao.SnatchGoodsMapper;
 import com.lcdt.traffic.dao.TransportWayItemsMapper;
 import com.lcdt.traffic.dto.BindingSplitDto;
 import com.lcdt.traffic.dto.BindingSplitParamsDto;
-import com.lcdt.traffic.exception.WaybillPlanException;
+import com.lcdt.traffic.dto.SplitGoodsParamsDto;
+import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.SnatchGoods;
-import com.lcdt.traffic.model.SplitGoods;
 import com.lcdt.traffic.model.TransportWayItems;
 import com.lcdt.traffic.model.WaybillPlan;
+import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.service.SplitGoodsService;
-import com.lcdt.traffic.web.dto.SplitGoodsParamsDto;
-import com.lcdt.traffic.web.dto.WaybillParamsDto;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import io.swagger.annotations.Api;
@@ -48,17 +47,17 @@ public class SplitGoodsApi {
 
     @Autowired
     private TransportWayItemsMapper transportWayItemsMapper; //运输项目
-
+    @Autowired
+    private IPlanRpcService4Wechat iPlanRpcService4Wechat;
 
 
 
     @ApiOperation(value = "派单-直派")
     @RequestMapping(value = "/splitGoods4Direct",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_4_direct') or hasAuthority('traffic_split_goods')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods')")
     public String splitGoods4Direct(@ApiParam(value = "派单详细信息", required = true) @RequestBody SplitGoodsParamsDto dto) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
-         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
-        int flag = splitGoodsService.splitGoods4Direct(dto,userCompRel,companyId);
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        int flag = iPlanRpcService4Wechat.splitGoods4Direct(dto,userCompRel);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
@@ -76,13 +75,13 @@ public class SplitGoodsApi {
 
     @ApiOperation("派单-竞价-信息拉取")
     @RequestMapping(value = "/splitGoodsLoad4Binding",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_load_4_binding') or hasAuthority('traffic_split_goods')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods')")
     public BindingSplitDto splitGoodsLoad4Binding(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         WaybillParamsDto dto = new WaybillParamsDto();
         dto.setCompanyId(companyId);
         dto.setWaybillPlanId(waybillPlanId);
-        WaybillPlan waybillPlan = planService.loadWaybillPlan(dto);
+        WaybillPlan waybillPlan = iPlanRpcService4Wechat.loadWaybillPlan(dto);
         BindingSplitDto rdto = new BindingSplitDto();
         rdto.setWaybillPlan(waybillPlan);//计划划
         Map map = new HashMap<String,Long>();
@@ -100,11 +99,10 @@ public class SplitGoodsApi {
 
     @ApiOperation(value = "派单-竞价")
     @RequestMapping(value = "/splitGoods4Bidding",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_4_bidding') or hasAuthority('traffic_split_goods')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods')")
     public String splitGoods4Bidding(@RequestBody BindingSplitParamsDto dto) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        User loginUser = SecurityInfoGetter.getUser();
-        int flag = splitGoodsService.splitGoods4Bidding(dto, loginUser, companyId);
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        int flag = iPlanRpcService4Wechat.splitGoods4Bidding(dto,userCompRel);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
@@ -122,11 +120,14 @@ public class SplitGoodsApi {
 
     @ApiOperation(value = "派单-取消")
     @RequestMapping(value = "/splitGoodsCancel",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods_cancel') or hasAuthority('traffic_split_goods')")
-    public String splitGoodsCancel(@ApiParam(value = "计划ID",required = true) @RequestParam Long splitGoodsId) {
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods')")
+    public String splitGoodsCancel(@ApiParam(value = "派单主ID",required = true) @RequestParam Long splitGoodsId,
+                                   @ApiParam(value = "派单明细ID",required = true) @RequestParam Long splitGoodsDetailId
+
+                                    ) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
-        int flag = splitGoodsService.splitGoodsCancel(splitGoodsId, loginUser, companyId);
+        int flag = splitGoodsService.splitGoodsCancel(splitGoodsId, splitGoodsDetailId,loginUser, companyId);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;

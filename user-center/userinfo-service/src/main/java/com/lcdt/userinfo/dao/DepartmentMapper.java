@@ -1,6 +1,8 @@
 package com.lcdt.userinfo.dao;
 
+import com.lcdt.userinfo.dto.DepartmentResultDto;
 import com.lcdt.userinfo.model.Department;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -62,4 +64,17 @@ public interface DepartmentMapper {
      * @return
      */
     Long getMaxIndex(Map map);
+
+
+    /***
+     * 部门及部门子节点统计
+     * @param deptPid
+     * @param companyId
+     * @return
+     */
+    List<DepartmentResultDto> deptChildStat(@Param("deptPid") Long deptPid, @Param("companyId") Long companyId);
+
+
+
+
 }

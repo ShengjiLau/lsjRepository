@@ -14,7 +14,7 @@ import java.util.Map;
  * Created by ybq on 2017/8/15.
  */
 public interface CompanyService {
-
+	UserCompRel findByUserCompRelId(Long userCompRelId);
 
 	CompanyCertificate getCompanyCert(Long companyId);
 

@@ -1,8 +1,9 @@
 package com.lcdt.pay.rpc;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class ProductCountLog {
+public class ProductCountLog implements Serializable{
     private Long serviceCountLogId;
 
     private String logNo;

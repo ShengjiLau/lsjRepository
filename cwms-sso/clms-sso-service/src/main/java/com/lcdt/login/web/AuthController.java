@@ -59,7 +59,7 @@ public class AuthController {
     @Autowired
     RequestAuthRedirectStrategy strategy;
 
-    @Reference(check = false)
+    @Reference()
     UserService userService;
 
     @Reference(check = false)
@@ -78,7 +78,7 @@ public class AuthController {
      * @param response
      * @return
      */
-    @RequestMapping(value = {"/", ""})
+    @RequestMapping(value = {"/",""})
     @ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
     public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
         boolean isLogin = LoginSessionReposity.isLogin(request);
@@ -115,7 +115,6 @@ public class AuthController {
     @RequestMapping("/login")
     @ResponseBody
     public String login(String username, String password, String captchacode, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
         JSONObject jsonObject = new JSONObject();
         boolean captchaIsOk = LoginSessionReposity.captchaIsOk(request, captchacode);
         if (!captchaIsOk) {
@@ -226,7 +225,7 @@ public class AuthController {
     @ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
     @RequestMapping("/initcompany")
     @ResponseBody
-    public String initCompany(String fullname, String industry, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public String initCompany(String fullname, String industry, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws UserNotExistException {
         JSONObject jsonObject = new JSONObject();
         User userInfo = LoginSessionReposity.getUserInfoInSession(request);
         CompanyDto dtoVo = new CompanyDto();
@@ -292,7 +291,6 @@ public class AuthController {
     public ModelAndView loginCompany(Long companyId, HttpServletRequest request, HttpServletResponse response) {
         User userInfo = LoginSessionReposity.getUserInfoInSession(request);
         UserCompRel companyMember = companyService.queryByUserIdCompanyId(userInfo.getUserId(), companyId);
-
         if (companyMember == null) {
             //当前用户不在所选公司之内
             throw new LoginError("用户不属于该公司");

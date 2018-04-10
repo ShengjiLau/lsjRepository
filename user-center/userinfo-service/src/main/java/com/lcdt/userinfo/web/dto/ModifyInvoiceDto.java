@@ -3,36 +3,39 @@ package com.lcdt.userinfo.web.dto;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Size;
+
 /**
  * Created by ss on 2017/11/6.
  */
 public class ModifyInvoiceDto {
 
 	@ApiModelProperty(required = true,value = "开票抬头",name = "开票抬头")
-	@NotBlank
+	@Size(max = 50)
 	private String invoiceTitle;
 
-	@NotBlank
 	@ApiModelProperty(required = true,value = "税号")
+	@Size(max = 50)
 	private String registrationNo;
 
-	@NotBlank
 	@ApiModelProperty(required = true,value = "开户银行")
+	@Size(max = 50)
 	private String bankName;
 
-	@NotBlank
 	@ApiModelProperty(required = true,value = "银行账号")
+	@Size(max = 50)
 	private String bankNo;
 
-	@NotBlank
 	@ApiModelProperty(required = true,value = "电话号码")
+	@Size(max = 50)
 	public String telNo1;
 
 	@ApiModelProperty(required = true,value = "注册地址")
-	@NotBlank
+	@Size(max = 50)
 	public String registrationAddress;
 
 	@ApiModelProperty(required = true,value = "备注")
+	@Size(max = 100)
 	public String invoiceRemark;
 
 	public String getInvoiceTitle() {

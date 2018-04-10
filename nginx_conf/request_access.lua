@@ -5,5 +5,5 @@ if ngx.var.cookie_cwms_ticket == nil then
     ngx.redirect("http://39.107.12.215:52412/account/?auth_callback=" .. backurl, 302)
 end
 ngx.exit(ngx.OK)
-return      
+return
 

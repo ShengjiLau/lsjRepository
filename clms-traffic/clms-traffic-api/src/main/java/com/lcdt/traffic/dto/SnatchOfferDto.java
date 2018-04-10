@@ -13,6 +13,27 @@ public class SnatchOfferDto implements java.io.Serializable {
     private Long waybillPlanId;
     private List<PlanDetail> PlanDetailList; //计划详细
     private Long companyId; //获取(计划)企业ID
+    private String offerRemark; //抢单备注
+
+
+    private String planDetailStr;
+
+    public String getPlanDetailStr() {
+        return planDetailStr;
+    }
+
+    public void setPlanDetailStr(String planDetailStr) {
+        this.planDetailStr = planDetailStr;
+    }
+
+
+    public String getOfferRemark() {
+        return offerRemark;
+    }
+
+    public void setOfferRemark(String offerRemark) {
+        this.offerRemark = offerRemark;
+    }
 
 
     public Long getWaybillPlanId() {

@@ -25,6 +25,8 @@ public class OwnVehicle implements Serializable {
 
     private String vehicleDriverName;
 
+    private Long vehicleDriverId;
+
     private String vehicleBrand;
 
     private String vehicleSpecifications;
@@ -90,6 +92,9 @@ public class OwnVehicle implements Serializable {
     private Short isDeleted;
 
     private Long companyId;
+
+    //参数
+    private String vehicleNumOrPhone;
 
     public Long getOwnVehicleId() {
         return ownVehicleId;
@@ -169,6 +174,14 @@ public class OwnVehicle implements Serializable {
 
     public void setVehicleDriverName(String vehicleDriverName) {
         this.vehicleDriverName = vehicleDriverName == null ? null : vehicleDriverName.trim();
+    }
+
+    public Long getVehicleDriverId() {
+        return vehicleDriverId;
+    }
+
+    public void setVehicleDriverId(Long vehicleDriverId) {
+        this.vehicleDriverId = vehicleDriverId;
     }
 
     public String getVehicleBrand() {
@@ -449,5 +462,13 @@ public class OwnVehicle implements Serializable {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public String getVehicleNumOrPhone() {
+        return vehicleNumOrPhone;
+    }
+
+    public void setVehicleNumOrPhone(String vehicleNumOrPhone) {
+        this.vehicleNumOrPhone = vehicleNumOrPhone;
     }
 }

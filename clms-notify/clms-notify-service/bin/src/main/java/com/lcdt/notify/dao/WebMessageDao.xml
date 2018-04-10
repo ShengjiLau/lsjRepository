@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.notify.dao.WebMessageDao">
+
+    <select id="selectUnReadMessage" resultMap="com.lcdt.notify.dao.WebMessageMapper.BaseResultMap">
+      select message_id, message_content, message_create_time, message_receive_user_id,
+        message_receive_company_id, message_isread
+    from web_message
+    WHERE
+     message_receive_company_id = #{companyId}
+    and message_receive_user_id = #{userId}
+        <if test="messageCategory != null and messageCategory != '' ">
+            and message_category = #{messageCategory}
+        </if>
+        <if test="isread != null">
+            and message_isread = #{isread}
+        </if>
+    </select>
+
+
+    <update id="setReadMessage">
+      update web_message
+      set message_isread = 1
+      where message_receive_company_id = #{companyId,jdbcType=BIGINT}
+      and message_receive_user_id = #{userId,jdbcType = BIGINT}
+      and message_id = #{messageId,jdbcType=BIGINT}
+    </update>
+
+    <select id="unreadMessageCount" resultType="Integer">
+        select count(*) from web_message
+        WHERE
+        message_receive_company_id = #{companyId,jdbcType=BIGINT}
+      and message_receive_user_id = #{userId,jdbcType = BIGINT}
+      <if test="messageCategory != null and messageCategory != '' ">
+          and message_category = #{messageCategory}
+      </if>
+        <if test="isread != null">
+            and message_isread = #{isread}
+        </if>
+    </select>
+
+    <update id="readMessages" >
+         update web_message
+      set message_isread = 1
+      where message_receive_company_id = #{companyId,jdbcType=BIGINT}
+      and message_receive_user_id = #{userId,jdbcType = BIGINT}
+      <if test="messageids != null">
+          and message_id in
+          <foreach item="item" index="index" collection="messageids" open="(" separator="," close=")">
+              #{item}
+          </foreach>
+      </if>
+    </update>
+
+
+    <delete id="removeMessage" >
+
+        DELETE from web_message
+
+        where message_receive_company_id = #{companyId,jdbcType=BIGINT}
+      and message_receive_user_id = #{userId,jdbcType = BIGINT}
+      and message_id = #{messageId,jdbcType=BIGINT}
+
+    </delete>
+
+</mapper>

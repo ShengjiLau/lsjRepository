@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.contract.dao.ContractProductMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.ContractProduct">
+    <id column="cp_id" jdbcType="BIGINT" property="cpId" />
+    <result column="contract_id" jdbcType="BIGINT" property="contractId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="num" jdbcType="DECIMAL" property="num" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="total" jdbcType="DECIMAL" property="total" />
+    <result column="spec" jdbcType="VARCHAR" property="spec" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_contract_product
+    where cp_id = #{cpId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.ContractProduct">
+    insert into t_contract_product (cp_id, contract_id, product_name, 
+      product_code, sku, num, 
+      price, total, spec)
+    values (#{cpId,jdbcType=BIGINT}, #{contractId,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR}, 
+      #{productCode,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, #{num,jdbcType=DECIMAL}, 
+      #{price,jdbcType=DECIMAL}, #{total,jdbcType=DECIMAL}, #{spec,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.ContractProduct">
+    update t_contract_product
+    set contract_id = #{contractId,jdbcType=BIGINT},
+      product_name = #{productName,jdbcType=VARCHAR},
+      product_code = #{productCode,jdbcType=VARCHAR},
+      sku = #{sku,jdbcType=VARCHAR},
+      num = #{num,jdbcType=DECIMAL},
+      price = #{price,jdbcType=DECIMAL},
+      total = #{total,jdbcType=DECIMAL},
+      spec = #{spec,jdbcType=VARCHAR}
+    where cp_id = #{cpId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select cp_id, contract_id, product_name, product_code, sku, num, price, total, spec
+    from t_contract_product
+    where cp_id = #{cpId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select cp_id, contract_id, product_name, product_code, sku, num, price, total, spec
+    from t_contract_product
+  </select>
+
+  <insert id="insertBatch">
+    insert into t_contract_product (cp_id, contract_id, product_name,
+    product_code, sku, num,
+    price, total, spec)
+    values
+    <foreach item="item" collection="list" separator=",">
+      (#{item.cpId,jdbcType=BIGINT}, #{item.contractId,jdbcType=BIGINT}, #{item.productName,jdbcType=VARCHAR},
+      #{item.productCode,jdbcType=VARCHAR}, #{item.sku,jdbcType=VARCHAR}, #{item.num,jdbcType=DECIMAL},
+      #{item.price,jdbcType=DECIMAL}, #{item.total,jdbcType=DECIMAL}, #{item.spec,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach separator=";" index="index" item="item" collection="list" close="" open="">
+      update t_contract_product
+      set contract_id = #{item.contractId,jdbcType=BIGINT},
+      product_name = #{item.productName,jdbcType=VARCHAR},
+      product_code = #{item.productCode,jdbcType=VARCHAR},
+      sku = #{item.sku,jdbcType=VARCHAR},
+      num = #{item.num,jdbcType=DECIMAL},
+      price = #{item.price,jdbcType=DECIMAL},
+      total = #{item.total,jdbcType=DECIMAL},
+      spec =  #{item.spec,jdbcType=VARCHAR}
+      where cp_id = #{item.cpId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <update id="deleteByBatch" parameterType="Map">
+    update t_own_driver_certificate
+    set is_deleted = 1
+    where cp_id in
+    <foreach item="item" index="index" collection="cpIds" open="(" separator="," close=")">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <select id="selectCpIdsByContractId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select cp_id
+    from t_contract_product where contract_id = #{contractId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectCpsByContractId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select cp_id, contract_id, product_name, product_code, sku, num, price, total, spec
+    from t_contract_product
+    where contract_id = #{contractId,jdbcType=BIGINT}
+  </select>
+
+</mapper>

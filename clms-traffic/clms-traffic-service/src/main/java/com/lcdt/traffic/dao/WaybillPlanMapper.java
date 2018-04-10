@@ -1,6 +1,8 @@
 package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.dto.CustomerPlanDto;
+import com.lcdt.traffic.dto.SnatchBill4WaittingRdto;
+import com.lcdt.traffic.dto.SnathBill4WaittingPdto;
 import com.lcdt.traffic.model.WaybillPlan;
 
 import java.util.List;
@@ -99,4 +101,14 @@ public interface WaybillPlanMapper {
     List<CustomerPlanDto> customerPlanList4Cancel(Map map);
 
 
+    /***
+     * 司机待抢
+     */
+    List<SnatchBill4WaittingRdto> wattingSnatch4Driver(Map map);
+
+
+    /***
+     * 司机已抢
+     */
+    List<SnatchBill4WaittingRdto> completeSnatch4Driver(Map map);
 }
