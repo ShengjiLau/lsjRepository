@@ -38,6 +38,8 @@ public class WaybillCustListParamsDto implements Serializable{
 
     @ApiModelProperty(value = "派单id")
     private Long splitGoodsId;
+    @ApiModelProperty(value = "货物来源客户ids")
+    private String customerIds;
 
     @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
@@ -202,5 +204,13 @@ public class WaybillCustListParamsDto implements Serializable{
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public String getCustomerIds() {
+        return customerIds;
+    }
+
+    public void setCustomerIds(String customerIds) {
+        this.customerIds = customerIds;
     }
 }

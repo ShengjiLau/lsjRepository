@@ -83,6 +83,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         if (dto.getPageSize() != null) {
             pageSize = dto.getPageSize();
         }
+        String customerIds=dto.getCustomerIds();
         Map map= ClmsBeanUtil.beanToMap(dto);
         Map cMapIds = customerCompanyIds.getCustomerCompanyIds(map);
         map.put("companyIds", cMapIds.get("companyIds"));
