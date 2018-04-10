@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcdt.traffic.dao.PayeeMapper" >
+  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.Payee" >
+    <id column="payee_id" property="payeeId" jdbcType="BIGINT" />
+    <result column="payee_type" property="payeeType" jdbcType="SMALLINT" />
+    <result column="payer_id" property="payerId" jdbcType="BIGINT" />
+    <result column="payer_name" property="payerName" jdbcType="VARCHAR" />
+    <result column="reconcile_id" property="reconcileId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    payee_id, payee_type, payer_id, payer_name, reconcile_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_fee_payee
+    where payee_id = #{payeeId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_fee_payee
+    where payee_id = #{payeeId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.traffic.model.Payee" >
+    insert into t_fee_payee (payee_id, payee_type, payer_id, 
+      payer_name, reconcile_id)
+    values (#{payeeId,jdbcType=BIGINT}, #{payeeType,jdbcType=SMALLINT}, #{payerId,jdbcType=BIGINT}, 
+      #{payerName,jdbcType=VARCHAR}, #{reconcileId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lcdt.traffic.model.Payee" >
+    insert into t_fee_payee
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="payeeId != null" >
+        payee_id,
+      </if>
+      <if test="payeeType != null" >
+        payee_type,
+      </if>
+      <if test="payerId != null" >
+        payer_id,
+      </if>
+      <if test="payerName != null" >
+        payer_name,
+      </if>
+      <if test="reconcileId != null" >
+        reconcile_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="payeeId != null" >
+        #{payeeId,jdbcType=BIGINT},
+      </if>
+      <if test="payeeType != null" >
+        #{payeeType,jdbcType=SMALLINT},
+      </if>
+      <if test="payerId != null" >
+        #{payerId,jdbcType=BIGINT},
+      </if>
+      <if test="payerName != null" >
+        #{payerName,jdbcType=VARCHAR},
+      </if>
+      <if test="reconcileId != null" >
+        #{reconcileId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.traffic.model.Payee" >
+    update t_fee_payee
+    <set >
+      <if test="payeeType != null" >
+        payee_type = #{payeeType,jdbcType=SMALLINT},
+      </if>
+      <if test="payerId != null" >
+        payer_id = #{payerId,jdbcType=BIGINT},
+      </if>
+      <if test="payerName != null" >
+        payer_name = #{payerName,jdbcType=VARCHAR},
+      </if>
+      <if test="reconcileId != null" >
+        reconcile_id = #{reconcileId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where payee_id = #{payeeId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.Payee" >
+    update t_fee_payee
+    set payee_type = #{payeeType,jdbcType=SMALLINT},
+      payer_id = #{payerId,jdbcType=BIGINT},
+      payer_name = #{payerName,jdbcType=VARCHAR},
+      reconcile_id = #{reconcileId,jdbcType=BIGINT}
+    where payee_id = #{payeeId,jdbcType=BIGINT}
+  </update>
+  
+  <insert id="insertPayeeByBatch">
+  	<foreach collection="list" item="payee"  index="index" open="(" separator="," close=")">
+  	insert into t_fee_payee (payee_id, payee_type, payer_id, 
+      payer_name, reconcile_id)
+      values (#{payee.payeeId,jdbcType=BIGINT}, #{payee.payeeType,jdbcType=SMALLINT}, #{payee.payerId,jdbcType=BIGINT}, 
+      #{payee.payerName,jdbcType=VARCHAR}, #{payee.reconcileId,jdbcType=BIGINT})
+  	</foreach>
+  </insert>
+  
+  
+  
+</mapper>
