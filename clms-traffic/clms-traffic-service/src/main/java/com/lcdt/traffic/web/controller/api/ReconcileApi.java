@@ -3,10 +3,11 @@ package com.lcdt.traffic.web.controller.api;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,23 +37,19 @@ public class ReconcileApi {
 	@Autowired
 	private ReconcileService reconcileService;
 	
+	Logger logger = LoggerFactory.getLogger(ReconcileApi.class);
+	
 	@ApiOperation(value = "添加对账单")
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_add')")
 	public JSONObject addReconcile(@Validated @RequestBody ReconcileListDto reconcileListDto,BindingResult bindingResult) {
-
 		JSONObject jsonObject =new JSONObject();
-		JSONArray jsonArray =new JSONArray();
-		if(bindingResult.hasErrors()) {
-			jsonObject.put("code",-1);
-			jsonObject.put("msg","验证信息未能通过");
-			for(ObjectError objectError:bindingResult.getAllErrors()) {
-				jsonArray.add(objectError);
-			}
-			jsonObject.put("data",jsonArray);
+		
+		jsonObject=validResponse(bindingResult);
+		if(!jsonObject.isEmpty()) {
 			return jsonObject;
 		}
-
+		
 		int i= reconcileListDto.getReconcileList().size();
 		int result =reconcileService.insertReconcileBatch(reconcileListDto);
 		if(result==i) {
@@ -78,13 +75,29 @@ public class ReconcileApi {
 		}else {
 			throw new RuntimeException("取消对账单出现异常");
 		}
-		
-		
-		
-		
-		
-		
 	}
+	
+	
+	
+	
+	
+	/**
+	 * 验证传入信息
+	 * @param bindingResult
+	 * @return
+	 */
+	public JSONObject validResponse(BindingResult bindingResult) {
+		JSONObject jsonObject =new JSONObject();
+		JSONArray jsonArray =new JSONArray();
+		if(bindingResult.hasErrors()) {
+			jsonObject.put("code",-1);
+			jsonObject.put("msg","验证信息未能通过");
+			bindingResult.getAllErrors().forEach(x->jsonArray.add(x.getDefaultMessage()));
+			jsonObject.put("data",jsonArray);
+		}
+		return jsonObject;
+	}
+	
 	
 	
 	
