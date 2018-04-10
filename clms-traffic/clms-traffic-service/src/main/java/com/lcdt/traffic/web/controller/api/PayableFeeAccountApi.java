@@ -8,7 +8,6 @@ import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.service.FeeAccountService;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
 import com.lcdt.traffic.web.dto.PageBaseDto;
-import com.lcdt.traffic.web.dto.WaybillFeeDto;
 import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,13 +40,14 @@ public class PayableFeeAccountApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_waybill_fee_list')")
     public PageBaseDto feePropertyList(@Validated WaybillOwnListParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        dto.setCompanyId(companyId);
-        dto.setIsDeleted((short) 0);
+//        dto.setCompanyId(companyId);
+//        dto.setIsDeleted((short) 0);
 //        dto.setGroupIds(GroupIdsUtil.getOwnGroupIds(dto.getGroupId()));
-        dto.setIsReceivable((short)1);
-        PageInfo<List<WaybillFeeDto>> listPageInfo = feeAccountService.waybillFeeList(dto);
-        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
-        return pageBaseDto;
+//        dto.setIsReceivable((short)1);
+//        PageInfo<List<FeeAccountWaybillDto>> listPageInfo = feeAccountService.waybillFeeList(dto);
+//        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
+//        return pageBaseDto;
+        return null;
     }
 
     @ApiOperation("应付记账——记账(进入记账页面)")
@@ -151,5 +152,29 @@ public class PayableFeeAccountApi {
 //        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
 //        return pageBaseDto;
         return null;
+    }
+
+    @ApiOperation("应付记账单——审核/取消审核")
+    @RequestMapping(value = "/feeAccountAudit", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_audit')")
+    public JSONObject feeAccountAudit(@ApiParam(value = "0-取消审核，1-审核",required = true) @RequestParam short auditStatus,
+                                      @ApiParam(value = "记账单IDs",required = true) @RequestParam List<Long> accountIds) {
+        Map map = new HashMap();
+        map.put("auditStatus", auditStatus);
+        if(auditStatus == 1) {
+            map.put("auditDate", new Date());
+        }else{
+            map.put("auditDate", null);
+        }
+        map.put("accountIds", accountIds);
+        int result = feeAccountService.feeAccountAudit(map);
+        if (result == accountIds.size()) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "删除成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("删除失败");
+        }
     }
 }

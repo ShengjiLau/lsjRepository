@@ -84,6 +84,8 @@
   <resultMap id="BaseWaybillAndItems" type="com.lcdt.traffic.model.WaybillDao" extends="BaseResultMap">
     <collection property="waybillItemsList" column="id" ofType="com.lcdt.traffic.model.WaybillItems" select="com.lcdt.traffic.dao.WaybillItemsMapper.selectByWaybillId"/>
   </resultMap>
+  <resultMap id="BaseFeeAccountWaybillMap" type="com.lcdt.traffic.web.dto.FeeAccountWaybillDto" extends="BaseResultMap">
+    <result column="receiv_and_pay_name" jdbcType="VARCHAR" property="receivAndPayName" />
 
   <sql id="base_column_list">id, waybill_plan_id,split_goods_id, waybill_code, waybill_status, waybill_source,group_id, group_name, driver_id,
     driver_name, driver_phone, vechicle_id, vechicle_num, customer_id, customer_name,
@@ -576,6 +578,35 @@
     and is_deleted = 0
     order by id desc
   </select>
+
+  <select id="selectFeeAccountWaybillByCondition" parameterType="java.util.Map" resultMap="BaseFeeAccountWaybillMap">
+    select <include refid="base_column_list"/>,
+    (select concat(fa.name,'、') from t_fee_account fa
+      where fa.waybill_id=id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
+      <if test="receivAndPayName!=null and receivAndPayName!=''">
+        and fa.name=#{receivAndPayName,jdbc=VARCHAR}
+      </if>
+      ) receiv_and_pay_name,
+    (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
+      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
+    (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
+      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property!='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) other_fee_total,
+    (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
+      where fa.waybill_id=id and ff.account_id=fa.account_id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total
+    from t_waybill
+    <where>
+      company_id = #{companyId,jdbcType=BIGINT}
+      <if test="isDeleted!=null">
+        and is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      </if>
+      <if test="groupIds!=null and groupIds!=''">
+        and ${groupIds}
+      </if>
+      <if test="groupIds==null or groupIds==''">
+        and group_id is null
+      </if>
+      <include refid="select_condition"/>
+    </where>
 
   <select id="selectWaybillByWaybillIds" parameterType="java.lang.String" resultMap="BaseWaybillAndItems">
     select <include refid="base_column_list"/>

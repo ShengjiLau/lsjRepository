@@ -27,14 +27,18 @@ public class WaybillCustListParamsDto implements Serializable{
     private String endCreateDate;
     @ApiModelProperty(value = "货物信息")
     private String goodsName;
+    @ApiModelProperty(value = "运单来源")
+    private String waybillSource;
     @ApiModelProperty(value = "运单来源，选择客户时传的客户名称")
     private String customerName;
-    @ApiModelProperty(value = "司机姓名（门卫出库管理时的查询条件）")
+    @ApiModelProperty(value = "司机姓名（门卫出库管理时的查询条件）、司机姓名/联系方式（财务记账列表）")
     private String driverInfo;
     @ApiModelProperty(value = "开始计划发货时间（门卫出库管理时的查询条件）")
     private String startStartDate;
     @ApiModelProperty(value = "结束计划发货时间（门卫出库管理时的查询条件）")
     private String endStartDate;
+    @ApiModelProperty(value = "收付款方（财务记账列表）")
+    private String receivAndPayName;
 
     @ApiModelProperty(value = "派单id")
     private Long splitGoodsId;
@@ -156,6 +160,14 @@ public class WaybillCustListParamsDto implements Serializable{
 
     public void setEndStartDate(String endStartDate) {
         this.endStartDate = endStartDate;
+    }
+
+    public String getReceivAndPayName() {
+        return receivAndPayName;
+    }
+
+    public void setReceivAndPayName(String receivAndPayName) {
+        this.receivAndPayName = receivAndPayName;
     }
 
     public Long getSplitGoodsId() {

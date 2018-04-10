@@ -318,4 +318,22 @@
     </where>
     order by account_id desc
   </select>
+  <update id="auditByAccountIds" parameterType="java.util.Map">
+    update t_fee_account
+    set audit_status = #{auditStatus,jdbcType=SMALLINT},
+      audit_date = #{auditDate,jdbcType=TIMESTAMP}
+    where account_id in
+    <foreach separator=";" index="index" item="item" collection="accountIds" close="" open="">
+      #{item}
+    </foreach>
+  </update>
+  <select id="reconcileByAccountIds" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
+    select count(a.waybill_id) waybillCount, a.name, sum(f.money)
+    from t_fee_account a,t_fee_flow f
+    where a.account_id=f.account_id and f.account_id in
+    <foreach separator=";" index="index" item="item" collection="accountIds" close="" open="">
+      #{item}
+    </foreach>
+    group by a.name
+  </select>
 </mapper>

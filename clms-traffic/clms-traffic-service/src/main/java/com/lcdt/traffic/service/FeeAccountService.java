@@ -12,11 +12,11 @@ import java.util.Map;
  */
 public interface FeeAccountService {
     /**
-     * 记账列表
-     * @param dto
+     * 记账运单列表
+     * @param map
      * @return
      */
-    PageInfo waybillFeeList(WaybillOwnListParamsDto dto);
+    PageInfo feeAccountWaybillList(Map map);
     /**
      * 记账（进入记账页面）
      * @param m
@@ -54,4 +54,18 @@ public interface FeeAccountService {
      * @return
      */
     int modifyFeePropertyIsDelete(Long accountId);
+
+    /**
+     * 记账单审核
+     * @param map
+     * @return
+     */
+    int feeAccountAudit(Map map);
+
+    /**
+     * 记账单对账
+     * @param map
+     * @return
+     */
+//    List feeAccountWaybillList(Map map);
 }

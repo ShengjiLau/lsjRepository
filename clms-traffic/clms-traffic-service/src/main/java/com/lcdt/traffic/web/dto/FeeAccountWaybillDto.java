@@ -3,9 +3,9 @@ package com.lcdt.traffic.web.dto;
 /**
  * Created by liz on 2018/4/3.
  */
-public class WaybillFeeDto extends WaybillDto{
+public class FeeAccountWaybillDto extends WaybillDto{
 
-    private String name;
+    private String receivAndPayName;
 
     private Float freightTotal;
 
@@ -13,12 +13,12 @@ public class WaybillFeeDto extends WaybillDto{
 
     private Float feeTotal;
 
-    public String getName() {
-        return name;
+    public String getReceivAndPayName() {
+        return receivAndPayName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setReceivAndPayName(String receivAndPayName) {
+        this.receivAndPayName = receivAndPayName;
     }
 
     public Float getFreightTotal() {
