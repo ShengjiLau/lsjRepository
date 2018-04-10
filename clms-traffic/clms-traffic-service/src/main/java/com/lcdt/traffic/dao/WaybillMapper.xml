@@ -86,135 +86,6 @@
   </resultMap>
   <resultMap id="BaseFeeAccountWaybillMap" type="com.lcdt.traffic.web.dto.FeeAccountWaybillDto" extends="BaseResultMap">
     <result column="receiv_and_pay_name" jdbcType="VARCHAR" property="receivAndPayName" />
-
-  <sql id="base_column_list">id, waybill_plan_id,split_goods_id, waybill_code, waybill_status, waybill_source,group_id, group_name, driver_id,
-    driver_name, driver_phone, vechicle_id, vechicle_num, customer_id, customer_name,
-    customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
-    send_city, send_county, send_address, receive_man, receive_phone, receive_province,
-    receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
-    arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,electronical_receipt, attachment1, attachment1_name,
-    attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
-    attachment5, attachment5_name, waybill_remark, carrier_company_id, carrier_company_name,company_id, pub_date,
-    finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
-    update_id, update_name, update_date, is_deleted</sql>
-
-  <sql id="update_column_list">
-      waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT},
-      split_goods_id = #{splitGoodsId,jdbcType=BIGINT},
-      waybill_code = #{waybillCode,jdbcType=VARCHAR},
-      waybill_status = #{waybillStatus,jdbcType=SMALLINT},
-      waybill_source = #{waybillSource,jdbcType=VARCHAR},
-      group_id = #{groupId,jdbcType=BIGINT},
-      group_name = #{groupName,jdbcType=VARCHAR},
-      driver_id = #{driverId,jdbcType=BIGINT},
-      driver_name = #{driverName,jdbcType=VARCHAR},
-      driver_phone = #{driverPhone,jdbcType=VARCHAR},
-      vechicle_id = #{vechicleId,jdbcType=BIGINT},
-      vechicle_num = #{vechicleNum,jdbcType=VARCHAR},
-      customer_id = #{customerId,jdbcType=BIGINT},
-      customer_name = #{customerName,jdbcType=VARCHAR},
-      customer_phone = #{customerPhone,jdbcType=VARCHAR},
-      sales_order = #{salesOrder,jdbcType=VARCHAR},
-      cust_contact_man = #{custContactMan,jdbcType=VARCHAR},
-      send_man = #{sendMan,jdbcType=VARCHAR},
-      send_phone = #{sendPhone,jdbcType=VARCHAR},
-      send_province = #{sendProvince,jdbcType=VARCHAR},
-      send_city = #{sendCity,jdbcType=VARCHAR},
-      send_county = #{sendCounty,jdbcType=VARCHAR},
-      send_address = #{sendAddress,jdbcType=VARCHAR},
-      receive_man = #{receiveMan,jdbcType=VARCHAR},
-      receive_phone = #{receivePhone,jdbcType=VARCHAR},
-      receive_province = #{receiveProvince,jdbcType=VARCHAR},
-      receive_city = #{receiveCity,jdbcType=VARCHAR},
-      receive_county = #{receiveCounty,jdbcType=VARCHAR},
-      receive_address = #{receiveAddress,jdbcType=VARCHAR},
-      transport_way = #{transportWay,jdbcType=SMALLINT},
-      goods_type = #{goodsType,jdbcType=VARCHAR},
-      start_date = #{startDate,jdbcType=TIMESTAMP},
-      arrive_date = #{arriveDate,jdbcType=TIMESTAMP},
-      is_receipt = #{isReceipt,jdbcType=SMALLINT},
-      is_urgent = #{isUrgent,jdbcType=SMALLINT},
-      pickup_way = #{pickupWay,jdbcType=VARCHAR},
-      distribution_way = #{distributionWay,jdbcType=VARCHAR},
-      electronical_receipt = #{electronicalReceipt,jdbcType=VARCHAR},
-      attachment1 = #{attachment1,jdbcType=VARCHAR},
-      attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
-      attachment2 = #{attachment2,jdbcType=VARCHAR},
-      attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
-      attachment3 = #{attachment3,jdbcType=VARCHAR},
-      attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
-      attachment4 = #{attachment4,jdbcType=VARCHAR},
-      attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
-      attachment5 = #{attachment5,jdbcType=VARCHAR},
-      attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
-      waybill_remark = #{waybillRemark,jdbcType=VARCHAR},
-      carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
-      carrier_company_name = #{carrierCompanyName,jdbcType=VARCHAR},
-      company_id = #{companyId,jdbcType=BIGINT},
-      pub_date = #{pubDate,jdbcType=TIMESTAMP},
-      finish_date = #{finishDate,jdbcType=TIMESTAMP},
-      cancel_date = #{cancelDate,jdbcType=TIMESTAMP},
-      cancel_man = #{cancelMan,jdbcType=VARCHAR},
-      cancel_remark = #{cancelRemark,jdbcType=VARCHAR},
-      update_id = #{updateId,jdbcType=BIGINT},
-      update_name = #{updateName,jdbcType=VARCHAR},
-      update_date = CURRENT_TIMESTAMP,
-      is_deleted = #{isDeleted,jdbcType=SMALLINT}
-  </sql>
-
-  <sql id="select_condition">
-    <if test="waybillCode!=null and waybillCode!=''">
-      and waybill_code like concat('%',#{waybillCode,jdbcType=VARCHAR},'%')
-    </if>
-    <if test="waybillStatus!=null and waybillStatus!=''">
-      and waybill_status in (${waybillStatus})
-    </if>
-    <if test="waybillPlanId!=null and waybillPlanId!=''">
-      and waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT}
-    </if>
-    <if test="receiveProvince!=null and receiveProvince!=''">
-      and receive_province = #{receiveProvince,jdbcType=VARCHAR}
-    </if>
-    <if test="receiveCity!=null and receiveCity!=''">
-      and receive_city = #{receiveCity,jdbcType=VARCHAR}
-    </if>
-    <if test="receiveCounty!=null and receiveCounty!=''">
-      and receive_county = #{receiveCounty,jdbcType=VARCHAR}
-    </if>
-    <if test="startCreateDate!=null and startCreateDate!=''">
-      and create_date &gt;= CONCAT(STR_TO_DATE(#{startCreateDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
-    </if>
-    <if test="endCreateDate!=null and endCreateDate!=''">
-      and create_date &lt;= CONCAT(STR_TO_DATE(#{endCreateDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
-    </if>
-    <if test="customerName!=null and customerName!=''">
-      and customer_name like concat('%',#{customerName,jdbcType=VARCHAR},'%')
-    </if>
-    <if test="goodsName != null and goodsName!=''">
-      and id in (select waybill_id from t_waybill_items where goods_name like concat('%',#{goodsName,jdbcType=VARCHAR},'%'))
-    </if>
-    <if test="driverInfo!=null and driverInfo!=''">
-      and (driver_name like concat('%',#{driverInfo,jdbcType=VARCHAR},'%') or driver_phone like concat('%',#{driverInfo,jdbcType=VARCHAR},'%') or vechicle_num like concat('%',#{driverInfo,jdbcType=VARCHAR},'%'))
-    </if>
-    <if test="splitGoodsId!=null and splitGoodsId!=''">
-      and split_goods_id = #{splitGoodsId,jdbcType=BIGINT}
-    </if>
-    <if test="waybillCondition!=null and waybillCondition!=''">
-      and ( waybill_code like concat('%',#{waybillCondition,jdbcType=VARCHAR},'%') or customer_name like concat('%',#{waybillCondition,jdbcType=VARCHAR},'%') )
-    </if>
-    <if test="startStartDate!=null and startStartDate!=''">
-      and start_date >=CONCAT(STR_TO_DATE(#{startStartDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
-    </if>
-    <if test="endStartDate!=null and endStartDate!=''">
-      and start_date &lt;=CONCAT(STR_TO_DATE(#{endStartDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
-    </if>
-    <if test="isDeleted!=null and isDeleted!=''">
-      and is_deleted = #{isDeleted,jdbcType=VARCHAR}
-    </if>
-  </sql>
-
-  <resultMap id="BaseWaybillFeeMap" type="com.lcdt.traffic.web.dto.WaybillFeeDto" extends="BaseResultMap">
-    <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="freight_total" jdbcType="REAL" property="freightTotal" />
     <result column="other_fee_total" jdbcType="REAL" property="otherFeeTotal" />
     <result column="fee_total" jdbcType="REAL" property="feeTotal" />
@@ -607,7 +478,7 @@
       </if>
       <include refid="select_condition"/>
     </where>
-
+  </select>
   <select id="selectWaybillByWaybillIds" parameterType="java.lang.String" resultMap="BaseWaybillAndItems">
     select <include refid="base_column_list"/>
     from t_waybill
