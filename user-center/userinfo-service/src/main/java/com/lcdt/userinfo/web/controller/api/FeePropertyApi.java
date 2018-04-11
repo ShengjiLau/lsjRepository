@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.tl.commons.util.StringUtility;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -57,42 +58,46 @@ public class FeePropertyApi {
     @RequestMapping(value = "/addFeeProperty", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_fee_property')")
     public JSONObject addFeeProperty(@Validated FeeProperty dto) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
+        if(StringUtility.isNotEmpty(dto.getName()) && !"运费".equals(dto.getName())) {
+            Long companyId = SecurityInfoGetter.getCompanyId();
 
-        Map map = new HashMap();
-        map.put("companyId", companyId);
-        map.put("isDeleted", (short)0);
+            Map map = new HashMap();
+            map.put("companyId", companyId);
+            map.put("isDeleted", (short) 0);
 
-        if (dto.getType()!=null) {
-            map.put("type",dto.getType());
-        }
-        if (dto.getIsReceivable()!=null) {
-            map.put("isReceivable",dto.getIsReceivable());
-        }
-        if (dto.getName()!=null) {
-            map.put("name",dto.getName());
-        }
-        PageInfo pageInfo = feePropertyService.feePropertyList(map);
-
-        if(pageInfo.getTotal() > 0){
-            throw new RuntimeException("该所属款项下的费用类型已存在");
-        }else {
-            User user = SecurityInfoGetter.getUser();
-            dto.setCompanyId(companyId);
-            dto.setOperatorId(user.getUserId());
-            dto.setOperatorName(user.getRealName());
-            dto.setCreateDate(new Date());
-            dto.setIsDeleted((short) 0);
-
-            int result = feePropertyService.addFeeProperty(dto);
-            if (result > 0) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("code", 0);
-                jsonObject.put("message", "添加成功");
-                return jsonObject;
-            } else {
-                throw new RuntimeException("添加失败");
+            if (dto.getType() != null) {
+                map.put("type", dto.getType());
             }
+            if (dto.getIsReceivable() != null) {
+                map.put("isReceivable", dto.getIsReceivable());
+            }
+            if (dto.getName() != null) {
+                map.put("name", dto.getName());
+            }
+            PageInfo pageInfo = feePropertyService.feePropertyList(map);
+
+            if (pageInfo.getTotal() > 0) {
+                throw new RuntimeException("该所属款项下的费用类型已存在");
+            } else {
+                User user = SecurityInfoGetter.getUser();
+                dto.setCompanyId(companyId);
+                dto.setOperatorId(user.getUserId());
+                dto.setOperatorName(user.getRealName());
+                dto.setCreateDate(new Date());
+                dto.setIsDeleted((short) 0);
+
+                int result = feePropertyService.addFeeProperty(dto);
+                if (result > 0) {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("code", 0);
+                    jsonObject.put("message", "添加成功");
+                    return jsonObject;
+                } else {
+                    throw new RuntimeException("添加失败");
+                }
+            }
+        }else{
+            throw new RuntimeException("费用类型不能为‘运费’");
         }
     }
 
@@ -100,37 +105,41 @@ public class FeePropertyApi {
     @RequestMapping(value = "/modifyFeeProperty", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_fee_property')")
     public JSONObject modifyFeeProperty(@Validated FeeProperty dto) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        Map map = new HashMap();
-        map.put("companyId", companyId);
-        map.put("isDeleted", (short)0);
+        if(StringUtility.isNotEmpty(dto.getName()) && !"运费".equals(dto.getName())) {
+            Long companyId = SecurityInfoGetter.getCompanyId();
+            Map map = new HashMap();
+            map.put("companyId", companyId);
+            map.put("isDeleted", (short)0);
 
-        if (dto.getType()!=null) {
-            map.put("type",dto.getType());
-        }
-        if (dto.getIsReceivable()!=null) {
-            map.put("isReceivable",dto.getIsReceivable());
-        }
-        if (dto.getName()!=null) {
-            map.put("name",dto.getName());
-        }
-        if(dto.getProId()!=null){
-            map.put("proId",dto.getProId());
-        }
-        PageInfo pageInfo = feePropertyService.feePropertyList(map);
-
-        if(pageInfo.getTotal() > 0){
-            throw new RuntimeException("该所属款项下的费用类型已存在");
-        }else {
-            int result = feePropertyService.modifyFeeProperty(dto);
-            if (result > 0) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("code", 0);
-                jsonObject.put("message", "修改成功");
-                return jsonObject;
-            } else {
-                throw new RuntimeException("修改失败");
+            if (dto.getType()!=null) {
+                map.put("type",dto.getType());
             }
+            if (dto.getIsReceivable()!=null) {
+                map.put("isReceivable",dto.getIsReceivable());
+            }
+            if (dto.getName()!=null) {
+                map.put("name",dto.getName());
+            }
+            if(dto.getProId()!=null){
+                map.put("proId",dto.getProId());
+            }
+            PageInfo pageInfo = feePropertyService.feePropertyList(map);
+
+            if(pageInfo.getTotal() > 0){
+                throw new RuntimeException("该所属款项下的费用类型已存在");
+            }else {
+                int result = feePropertyService.modifyFeeProperty(dto);
+                if (result > 0) {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("code", 0);
+                    jsonObject.put("message", "修改成功");
+                    return jsonObject;
+                } else {
+                    throw new RuntimeException("修改失败");
+                }
+            }
+        }else{
+            throw new RuntimeException("费用类型不能为‘运费’");
         }
     }
 
