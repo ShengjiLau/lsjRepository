@@ -1,8 +1,9 @@
 package com.lcdt.traffic.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class OwnDriverCertificate {
+public class OwnDriverCertificate implements Serializable{
     private Long odcId;
 
     private Long ownDriverId;

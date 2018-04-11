@@ -765,4 +765,22 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
 
 
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public WaybillPlan biddingFinish(Long waybillPlanId, UserCompRel userCompRel) {
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",waybillPlanId);
+        tMap.put("companyId",userCompRel.getCompany().getCompId());
+        tMap.put("isDeleted","0");
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
+        if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
+        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //竞价结束派单中
+        waybillPlan.setUpdateTime(new Date());
+        waybillPlan.setUpdateId(userCompRel.getUser().getUserId());
+        waybillPlan.setUpdateName(userCompRel.getUser().getRealName());
+        waybillPlanMapper.updateByPrimaryKey(waybillPlan);
+        return waybillPlan;
+    }
+
+
 }

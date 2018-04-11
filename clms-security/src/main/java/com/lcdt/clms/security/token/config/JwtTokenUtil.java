@@ -1,7 +1,8 @@
 package com.lcdt.clms.security.token.config;
 
-import com.lcdt.userinfo.model.User;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
@@ -15,13 +16,8 @@ public class JwtTokenUtil {
 
 
     public boolean validateToken(String jwts){
-        try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(jwts);
-            //OK, we can trust this JWT
-        } catch (SignatureException e) {
-            return false;
-            //don't trust the JWT!
-        }
+        Jwts.parser().setSigningKey(secret).parseClaimsJws(jwts);
+        //OK, we can trust this JWT
         return true;
     }
 

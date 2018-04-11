@@ -1,7 +1,6 @@
 package com.lcdt.clms.security.token.config;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;

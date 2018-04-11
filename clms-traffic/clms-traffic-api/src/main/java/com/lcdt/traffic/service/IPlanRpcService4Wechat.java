@@ -2,10 +2,8 @@ package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dto.*;
-import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.model.SnatchGoods;
 import com.lcdt.traffic.model.WaybillPlan;
-import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 
 import java.util.List;
@@ -36,6 +34,15 @@ public interface IPlanRpcService4Wechat {
      * @return
      */
     WaybillPlan loadWaybillPlan(WaybillParamsDto dto);
+
+      /**
+     *  竞价结束
+     * @param waybillPlanId
+     * @param userCompRel
+     * @return
+     */
+    WaybillPlan biddingFinish(Long waybillPlanId, UserCompRel userCompRel);
+
 
 
 
