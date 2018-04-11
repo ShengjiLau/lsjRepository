@@ -145,7 +145,7 @@ public class PlanApi {
 
     @ApiOperation("直接-派单")
     @RequestMapping(value = "/carrier/splitGoods4Direct",method = RequestMethod.POST)
-    public JSONObject splitGoods4Direct(SplitGoodsParamsDto dto) {
+    public JSONObject splitGoods4Direct(@RequestBody SplitGoodsParamsDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         WaybillPlan waybillPlan = iPlanRpcService4Wechat.splitGoods4Direct(dto,userCompRel);
         JSONObject jsonObject = new JSONObject();
@@ -165,7 +165,7 @@ public class PlanApi {
 
     @ApiOperation("竞价-派单")
     @RequestMapping(value = "/carrier/splitGoods4Bidding",method = RequestMethod.POST)
-    public JSONObject splitGoods4Bidding(BindingSplitParamsDto dto) {
+    public JSONObject splitGoods4Bidding(@RequestBody BindingSplitParamsDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         WaybillPlan plan = iPlanRpcService4Wechat.splitGoods4Bidding(dto,userCompRel);
         JSONObject jsonObject = new JSONObject();
