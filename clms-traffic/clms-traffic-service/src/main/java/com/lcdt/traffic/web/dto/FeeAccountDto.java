@@ -2,7 +2,7 @@ package com.lcdt.traffic.web.dto;
 
 import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.model.FeeFlow;
-import com.lcdt.traffic.model.FeeProperty;
+import com.lcdt.userinfo.model.FeeProperty;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
