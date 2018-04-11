@@ -14,7 +14,7 @@ import com.lcdt.traffic.web.dto.MsgDto;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.userinfo.model.Group;
-import com.lcdt.userinfo.service.FeePropertyService;
+import com.lcdt.userinfo.rpc.FinanceRpcService;
 import com.lcdt.util.ClmsBeanUtil;
 import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
@@ -42,7 +42,7 @@ public class ReceivableFeeAccountApi {
     @Autowired
     private FeeAccountService feeAccountService;
     @Reference
-    private FeePropertyService feePropertyService;
+    private FinanceRpcService financeRpcService;
     @Autowired
     private MsgService msgService;
 
@@ -113,9 +113,9 @@ public class ReceivableFeeAccountApi {
                         m.put("proIds", proIds);
                     }
                     m.put("isShow", (short)0);
-                    showPropertyList = feePropertyService.getFeePropertyList(m);
+                    showPropertyList = financeRpcService.getFeePropertyList(m);
                     m.put("isShow", (short)1);
-                    hidePropertyList = feePropertyService.getFeePropertyList(m);
+                    hidePropertyList = financeRpcService.getFeePropertyList(m);
                     dto.setShowPropertyList(showPropertyList);
                     dto.setHidePropertyList(hidePropertyList);
                 }

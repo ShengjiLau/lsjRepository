@@ -11,8 +11,8 @@ import com.lcdt.traffic.model.WaybillItems;
 import com.lcdt.traffic.service.FeeAccountService;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
 import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
-import com.lcdt.userinfo.dao.FeePropertyMapper;
 import com.lcdt.userinfo.model.FeeProperty;
+import com.lcdt.userinfo.rpc.FinanceRpcService;
 import com.lcdt.util.ClmsBeanUtil;
 import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     @Autowired
     private FeeAccountMapper feeAccountMapper;
     @Reference
-    private FeePropertyMapper feePropertyMapper;
+    private FinanceRpcService financeRpcService;
 
     @Override
     public PageInfo feeAccountWaybillList(Map map){
@@ -65,9 +65,9 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         List<WaybillItems> waybillItemsList = waybillItemsMapper.selectByWaybillId(Long.parseLong(m.get("waybillId").toString()));
         List<FeeAccountDto> feeAccountDtoList = feeAccountMapper.selectFeeAccountDetail(m);
         m.put("isShow", (short)0);
-        List<FeeProperty> showPropertyList = feePropertyMapper.selectByCondition(m);
+        List<FeeProperty> showPropertyList = financeRpcService.selectByCondition(m);
         m.put("isShow", (short)1);
-        List<FeeProperty> hidePropertyList = feePropertyMapper.selectByCondition(m);
+        List<FeeProperty> hidePropertyList = financeRpcService.selectByCondition(m);
         Map map = new HashMap();
         map.put("waybillItemsList", waybillItemsList);
         map.put("feeAccountDtoList", feeAccountDtoList);
