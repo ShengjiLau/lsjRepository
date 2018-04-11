@@ -199,10 +199,12 @@
   
   <select id="selectByCondition" resultMap="BaseResultMap" parameterType="com.lcdt.traffic.web.dto.ReconcileDto">
   	select 
-    <include refid="Base_Column_List"/>
-    from t_fee_reconcile
+    t1.reconcile_id, t1.reconcile_code, t1.company_id, t1.group_id, t1.account_amount, t1.operator_id, 
+    t1.operator_name, t1.is_receivable, t1.create_time, t1.cancel_ok, t1.account_id, t1.waybill_id
+    from t_fee_reconcile t1 left join t_fee_payee
     <where>
-    cancel_ok =#{cancelOk,jdbcType=SMALLINT} and company_id =#{companyId,jdbcType=BIGINT}
+    cancel_ok =#{cancelOk,jdbcType=SMALLINT} and company_id =#{companyId,jdbcType=BIGINT} and
+    t1.reconcile_id =t2.reconcile_id
     <if test="groupId!=null and groupId !=''">
     and group_id = #{groupId,jdbcType=BIGINT}
     </if>
@@ -214,6 +216,9 @@
     </if>
     <if test="reconcileCode != null and reconcileCode!=''">
     and reconcile_code like concat('%',#{reconcileCode,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="payerName!=null and payerName !=''">
+    and payer_name like concat('%',#{payerName,jdbcType=VARCHAR},'%')
     </if>
     </where>
   

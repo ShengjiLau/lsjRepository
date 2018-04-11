@@ -25,6 +25,8 @@ public class ReconcileDto extends Reconcile implements Serializable{
 	private String beginTime;
 	
 	private String endTime;
+	
+	private String payerName;
 
 	
 	public List<Payee> getPayeeList() {
@@ -54,6 +56,16 @@ public class ReconcileDto extends Reconcile implements Serializable{
 
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
+	}
+
+
+	public String getPayerName() {
+		return payerName;
+	}
+
+
+	public void setPayerName(String payerName) {
+		this.payerName = payerName;
 	}
 	
 	
