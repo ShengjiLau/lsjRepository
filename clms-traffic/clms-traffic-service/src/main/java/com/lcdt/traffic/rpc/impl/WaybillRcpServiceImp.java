@@ -65,6 +65,9 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         }
         PageHelper.startPage(pageNo, pageSize);
         Map map= ClmsBeanUtil.beanToMap(dto);
+        if(map.containsKey("waybillStatus")&&map.get("waybillStatus")!=null&&!map.get("waybillStatus").equals("")){
+            map.put("waybillStatus",map.get("waybillStatus").toString().split(","));
+        }
         resultList = waybillMapper.selectOwnByCondition(map);
         page = new PageInfo(resultList);
 
@@ -91,6 +94,9 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         map.remove("companyId");
         map.remove("customerName");
         PageHelper.startPage(pageNo, pageSize);
+        if(map.containsKey("waybillStatus")&&map.get("waybillStatus")!=null&&!map.get("waybillStatus").equals("")){
+            map.put("waybillStatus",map.get("waybillStatus").toString().split(","));
+        }
         resultList = waybillMapper.selectCustomerByCondition(map);
         for (int i = 0; i < resultList.size(); i++) {
             Customer customer=customerRpcService.queryCustomer(resultList.get(i).getCarrierCompanyId(),resultList.get(i).getCompanyId());
