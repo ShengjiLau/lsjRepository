@@ -1,5 +1,6 @@
 package com.lcdt.userinfo.rpc.impl;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.lcdt.userinfo.dao.FeePropertyMapper;
 import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.userinfo.rpc.FinanceRpcService;
@@ -11,6 +12,7 @@ import java.util.Map;
 /**
  * Created by liz on 2018/4/11.
  */
+@Service(timeout = 5000)
 public class FinanceRpcServiceImpl implements FinanceRpcService {
     @Autowired
     private FeePropertyMapper feePropertyMapper;
