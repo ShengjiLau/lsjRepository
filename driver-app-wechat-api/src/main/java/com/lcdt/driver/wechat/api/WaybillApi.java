@@ -1,9 +1,7 @@
 package com.lcdt.driver.wechat.api;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
 import com.lcdt.driver.dto.PageBaseDto;
 import com.lcdt.driver.wechat.api.util.GroupIdsUtil;
@@ -14,15 +12,12 @@ import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by lyqishan on 2018/3/19
@@ -36,7 +31,7 @@ public class WaybillApi {
 
 
     @ApiOperation("我的运单--列表")
-    @RequestMapping(value = "/own/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/v1/own", method = RequestMethod.GET)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybill_list')")
     public PageBaseDto<List<Waybill>> ownWaybillList(WaybillOwnListParamsDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
@@ -51,53 +46,8 @@ public class WaybillApi {
         return pageBaseDto;
     }
 
-    @ApiOperation("客户运单--列表")
-    @RequestMapping(value = "/customer/list", method = RequestMethod.GET)
-    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybill_list')")
-    public PageBaseDto<List<Waybill>> customerWaybilllist(WaybillCustListParamsDto dto) {
-        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
-        Long companyId = userCompRel.getCompany().getCompId();
-        dto.setCompanyId(companyId);
-        dto.setIsDelete((short) 0);
-        dto.setGroupIds(GroupIdsUtil.getCustomerGroupIds(dto.getGroupId()));
-        PageInfo<List<Waybill>> listPageInfo = waybillRpcService.queryCustomerWaybillList(dto);
-        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
-        return pageBaseDto;
-    }
-
-    @ApiOperation("我的运单--修改状态")
-    @RequestMapping(value = "/own/modifystatus", method = RequestMethod.POST)
-    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_modify_status')")
-    public Waybill modifyOwnWaybillStatus(WaybillModifyStatusDto dto) {
-        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
-        Long companyId = userCompRel.getCompany().getCompId();
-        User loginUser = userCompRel.getUser();
-
-        dto.setUpdateId(loginUser.getUserId());
-        dto.setUpdateName(loginUser.getRealName());
-        dto.setCompanyId(companyId);
-
-       return waybillRpcService.modifyOwnWaybillStatus(dto);
-
-    }
-
-    @ApiOperation("客户运单--修改状态")
-    @RequestMapping(value = "/customer/modifystatus", method = RequestMethod.POST)
-    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_modify_status')")
-    public Waybill modifyCustomerWaybillStatus(WaybillModifyStatusDto dto) {
-        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
-        Long companyId = userCompRel.getCompany().getCompId();
-        User loginUser = userCompRel.getUser();
-
-        dto.setUpdateId(loginUser.getUserId());
-        dto.setUpdateName(loginUser.getRealName());
-        dto.setCarrierCompanyId(companyId);
-
-        return waybillRpcService.modifyCustomerWaybillStatus(dto);
-    }
-
     @ApiOperation("我的运单--上传回单")
-    @RequestMapping(value = "/own/modifyreceipt", method = RequestMethod.POST)
+    @RequestMapping(value = "/v1/own/receipt", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_modify_status')")
     public Waybill modifyOwnWaybillReceipt(WaybillModifyReceiptDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
@@ -112,8 +62,53 @@ public class WaybillApi {
 
     }
 
+    @ApiOperation("我的运单--修改状态")
+    @RequestMapping(value = "/v1/own/status", method = RequestMethod.POST)
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_modify_status')")
+    public Waybill modifyOwnWaybillStatus(WaybillModifyStatusDto dto) {
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
+        User loginUser = userCompRel.getUser();
+
+        dto.setUpdateId(loginUser.getUserId());
+        dto.setUpdateName(loginUser.getRealName());
+        dto.setCompanyId(companyId);
+
+        return waybillRpcService.modifyOwnWaybillStatus(dto);
+
+    }
+
+    @ApiOperation("客户运单--列表")
+    @RequestMapping(value = "/v1/customer", method = RequestMethod.GET)
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybill_list')")
+    public PageBaseDto<List<Waybill>> customerWaybilllist(WaybillCustListParamsDto dto) {
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
+        dto.setCompanyId(companyId);
+        dto.setIsDelete((short) 0);
+        dto.setGroupIds(GroupIdsUtil.getCustomerGroupIds(dto.getGroupId()));
+        PageInfo<List<Waybill>> listPageInfo = waybillRpcService.queryCustomerWaybillList(dto);
+        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
+        return pageBaseDto;
+    }
+
+    @ApiOperation("客户运单--修改状态")
+    @RequestMapping(value = "/v1/customer/status", method = RequestMethod.POST)
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_modify_status')")
+    public Waybill modifyCustomerWaybillStatus(WaybillModifyStatusDto dto) {
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
+        User loginUser = userCompRel.getUser();
+
+        dto.setUpdateId(loginUser.getUserId());
+        dto.setUpdateName(loginUser.getRealName());
+        dto.setCarrierCompanyId(companyId);
+
+        return waybillRpcService.modifyCustomerWaybillStatus(dto);
+    }
+
     @ApiOperation("客户运单--上传回单")
-    @RequestMapping(value = "/customer/modifyreceipt", method = RequestMethod.POST)
+    @RequestMapping(value = "/v1/customer/receipt", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_modify_status')")
     public Waybill modifyCustomerReceipt(WaybillModifyReceiptDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();

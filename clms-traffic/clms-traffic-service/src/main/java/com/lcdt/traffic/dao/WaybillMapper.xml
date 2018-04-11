@@ -84,9 +84,8 @@
   <resultMap id="BaseWaybillAndItems" type="com.lcdt.traffic.model.WaybillDao" extends="BaseResultMap">
     <collection property="waybillItemsList" column="id" ofType="com.lcdt.traffic.model.WaybillItems" select="com.lcdt.traffic.dao.WaybillItemsMapper.selectByWaybillId"/>
   </resultMap>
-
-  <resultMap id="BaseWaybillFeeMap" type="com.lcdt.traffic.web.dto.WaybillFeeDto" extends="BaseResultMap">
-    <result column="name" jdbcType="VARCHAR" property="name" />
+  <resultMap id="BaseFeeAccountWaybillMap" type="com.lcdt.traffic.web.dto.FeeAccountWaybillDto" extends="BaseResultMap">
+    <result column="receiv_and_pay_name" jdbcType="VARCHAR" property="receivAndPayName" />
     <result column="freight_total" jdbcType="REAL" property="freightTotal" />
     <result column="other_fee_total" jdbcType="REAL" property="otherFeeTotal" />
     <result column="fee_total" jdbcType="REAL" property="feeTotal" />
@@ -105,67 +104,67 @@
     update_id, update_name, update_date, is_deleted</sql>
 
   <sql id="update_column_list">
-      waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT},
-      split_goods_id = #{splitGoodsId,jdbcType=BIGINT},
-      waybill_code = #{waybillCode,jdbcType=VARCHAR},
-      waybill_status = #{waybillStatus,jdbcType=SMALLINT},
-      waybill_source = #{waybillSource,jdbcType=VARCHAR},
-      group_id = #{groupId,jdbcType=BIGINT},
-      group_name = #{groupName,jdbcType=VARCHAR},
-      driver_id = #{driverId,jdbcType=BIGINT},
-      driver_name = #{driverName,jdbcType=VARCHAR},
-      driver_phone = #{driverPhone,jdbcType=VARCHAR},
-      vechicle_id = #{vechicleId,jdbcType=BIGINT},
-      vechicle_num = #{vechicleNum,jdbcType=VARCHAR},
-      customer_id = #{customerId,jdbcType=BIGINT},
-      customer_name = #{customerName,jdbcType=VARCHAR},
-      customer_phone = #{customerPhone,jdbcType=VARCHAR},
-      sales_order = #{salesOrder,jdbcType=VARCHAR},
-      cust_contact_man = #{custContactMan,jdbcType=VARCHAR},
-      send_man = #{sendMan,jdbcType=VARCHAR},
-      send_phone = #{sendPhone,jdbcType=VARCHAR},
-      send_province = #{sendProvince,jdbcType=VARCHAR},
-      send_city = #{sendCity,jdbcType=VARCHAR},
-      send_county = #{sendCounty,jdbcType=VARCHAR},
-      send_address = #{sendAddress,jdbcType=VARCHAR},
-      receive_man = #{receiveMan,jdbcType=VARCHAR},
-      receive_phone = #{receivePhone,jdbcType=VARCHAR},
-      receive_province = #{receiveProvince,jdbcType=VARCHAR},
-      receive_city = #{receiveCity,jdbcType=VARCHAR},
-      receive_county = #{receiveCounty,jdbcType=VARCHAR},
-      receive_address = #{receiveAddress,jdbcType=VARCHAR},
-      transport_way = #{transportWay,jdbcType=SMALLINT},
-      goods_type = #{goodsType,jdbcType=VARCHAR},
-      start_date = #{startDate,jdbcType=TIMESTAMP},
-      arrive_date = #{arriveDate,jdbcType=TIMESTAMP},
-      is_receipt = #{isReceipt,jdbcType=SMALLINT},
-      is_urgent = #{isUrgent,jdbcType=SMALLINT},
-      pickup_way = #{pickupWay,jdbcType=VARCHAR},
-      distribution_way = #{distributionWay,jdbcType=VARCHAR},
-      electronical_receipt = #{electronicalReceipt,jdbcType=VARCHAR},
-      attachment1 = #{attachment1,jdbcType=VARCHAR},
-      attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
-      attachment2 = #{attachment2,jdbcType=VARCHAR},
-      attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
-      attachment3 = #{attachment3,jdbcType=VARCHAR},
-      attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
-      attachment4 = #{attachment4,jdbcType=VARCHAR},
-      attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
-      attachment5 = #{attachment5,jdbcType=VARCHAR},
-      attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
-      waybill_remark = #{waybillRemark,jdbcType=VARCHAR},
-      carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
-      carrier_company_name = #{carrierCompanyName,jdbcType=VARCHAR},
-      company_id = #{companyId,jdbcType=BIGINT},
-      pub_date = #{pubDate,jdbcType=TIMESTAMP},
-      finish_date = #{finishDate,jdbcType=TIMESTAMP},
-      cancel_date = #{cancelDate,jdbcType=TIMESTAMP},
-      cancel_man = #{cancelMan,jdbcType=VARCHAR},
-      cancel_remark = #{cancelRemark,jdbcType=VARCHAR},
-      update_id = #{updateId,jdbcType=BIGINT},
-      update_name = #{updateName,jdbcType=VARCHAR},
-      update_date = CURRENT_TIMESTAMP,
-      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+    waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT},
+    split_goods_id = #{splitGoodsId,jdbcType=BIGINT},
+    waybill_code = #{waybillCode,jdbcType=VARCHAR},
+    waybill_status = #{waybillStatus,jdbcType=SMALLINT},
+    waybill_source = #{waybillSource,jdbcType=VARCHAR},
+    group_id = #{groupId,jdbcType=BIGINT},
+    group_name = #{groupName,jdbcType=VARCHAR},
+    driver_id = #{driverId,jdbcType=BIGINT},
+    driver_name = #{driverName,jdbcType=VARCHAR},
+    driver_phone = #{driverPhone,jdbcType=VARCHAR},
+    vechicle_id = #{vechicleId,jdbcType=BIGINT},
+    vechicle_num = #{vechicleNum,jdbcType=VARCHAR},
+    customer_id = #{customerId,jdbcType=BIGINT},
+    customer_name = #{customerName,jdbcType=VARCHAR},
+    customer_phone = #{customerPhone,jdbcType=VARCHAR},
+    sales_order = #{salesOrder,jdbcType=VARCHAR},
+    cust_contact_man = #{custContactMan,jdbcType=VARCHAR},
+    send_man = #{sendMan,jdbcType=VARCHAR},
+    send_phone = #{sendPhone,jdbcType=VARCHAR},
+    send_province = #{sendProvince,jdbcType=VARCHAR},
+    send_city = #{sendCity,jdbcType=VARCHAR},
+    send_county = #{sendCounty,jdbcType=VARCHAR},
+    send_address = #{sendAddress,jdbcType=VARCHAR},
+    receive_man = #{receiveMan,jdbcType=VARCHAR},
+    receive_phone = #{receivePhone,jdbcType=VARCHAR},
+    receive_province = #{receiveProvince,jdbcType=VARCHAR},
+    receive_city = #{receiveCity,jdbcType=VARCHAR},
+    receive_county = #{receiveCounty,jdbcType=VARCHAR},
+    receive_address = #{receiveAddress,jdbcType=VARCHAR},
+    transport_way = #{transportWay,jdbcType=SMALLINT},
+    goods_type = #{goodsType,jdbcType=VARCHAR},
+    start_date = #{startDate,jdbcType=TIMESTAMP},
+    arrive_date = #{arriveDate,jdbcType=TIMESTAMP},
+    is_receipt = #{isReceipt,jdbcType=SMALLINT},
+    is_urgent = #{isUrgent,jdbcType=SMALLINT},
+    pickup_way = #{pickupWay,jdbcType=VARCHAR},
+    distribution_way = #{distributionWay,jdbcType=VARCHAR},
+    electronical_receipt = #{electronicalReceipt,jdbcType=VARCHAR},
+    attachment1 = #{attachment1,jdbcType=VARCHAR},
+    attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
+    attachment2 = #{attachment2,jdbcType=VARCHAR},
+    attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
+    attachment3 = #{attachment3,jdbcType=VARCHAR},
+    attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
+    attachment4 = #{attachment4,jdbcType=VARCHAR},
+    attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
+    attachment5 = #{attachment5,jdbcType=VARCHAR},
+    attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
+    waybill_remark = #{waybillRemark,jdbcType=VARCHAR},
+    carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
+    carrier_company_name = #{carrierCompanyName,jdbcType=VARCHAR},
+    company_id = #{companyId,jdbcType=BIGINT},
+    pub_date = #{pubDate,jdbcType=TIMESTAMP},
+    finish_date = #{finishDate,jdbcType=TIMESTAMP},
+    cancel_date = #{cancelDate,jdbcType=TIMESTAMP},
+    cancel_man = #{cancelMan,jdbcType=VARCHAR},
+    cancel_remark = #{cancelRemark,jdbcType=VARCHAR},
+    update_id = #{updateId,jdbcType=BIGINT},
+    update_name = #{updateName,jdbcType=VARCHAR},
+    update_date = CURRENT_TIMESTAMP,
+    is_deleted = #{isDeleted,jdbcType=SMALLINT}
   </sql>
 
   <sql id="select_condition">
@@ -292,6 +291,8 @@
     from t_waybill
     where id = #{id,jdbcType=BIGINT}
   </select>
+
+
 
   <update id="updateByPrimaryKeyAndCompanyId" parameterType="com.lcdt.traffic.model.Waybill">
     update t_waybill
@@ -578,6 +579,35 @@
     order by id desc
   </select>
 
+  <select id="selectFeeAccountWaybillByCondition" parameterType="java.util.Map" resultMap="BaseFeeAccountWaybillMap">
+    select <include refid="base_column_list"/>,
+    (select concat(fa.name,'、') from t_fee_account fa
+      where fa.waybill_id=id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
+      <!--<if test="receivAndPayName!=null and receivAndPayName!=''">
+        and fa.name=#{receivAndPayName,jdbc=VARCHAR}
+      </if>-->
+      ) receiv_and_pay_name,
+    (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
+      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
+    (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
+      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property!='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) other_fee_total,
+    (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
+      where fa.waybill_id=id and ff.account_id=fa.account_id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total
+    from t_waybill
+    <where>
+      company_id = #{companyId,jdbcType=BIGINT}
+      <if test="isDeleted!=null">
+        and is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      </if>
+      <if test="groupIds!=null and groupIds!=''">
+        and ${groupIds}
+      </if>
+      <if test="groupIds==null or groupIds==''">
+        and group_id is null
+      </if>
+      <include refid="select_condition"/>
+    </where>
+  </select>
   <select id="selectWaybillByWaybillIds" parameterType="java.lang.String" resultMap="BaseWaybillAndItems">
     select <include refid="base_column_list"/>
     from t_waybill
@@ -600,11 +630,11 @@
     select <include refid="base_column_list"/>
     from t_waybill
     <where>driver_id = #{driverId,jdbcType=BIGINT}
+
       <include refid="select_condition"/>
     </where>
     order by id desc
   </select>
-
 
   <update id="updateWaybillByDriver" parameterType="java.util.Map">
     update t_waybill
@@ -620,28 +650,4 @@
     update_date = CURRENT_TIMESTAMP
     where id in ( #{waybillIds,jdbcType=VARCHAR} ) and driver_id = #{driverId,jdbcType=BIGINT}
   </update>
-
-  <select id="selectWaybillFeeByCondition" parameterType="java.util.Map" resultMap="BaseWaybillFeeMap">
-    select <include refid="base_column_list"/>,
-    (select concat(fa.name,'、') from t_fee_account fa
-      where fa.waybill_id=id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) name,
-    (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
-    (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property!='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) other_fee_total,
-    (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-      where fa.waybill_id=id and ff.account_id=fa.account_id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total
-    from t_waybill
-    <where>company_id = #{companyId,jdbcType=BIGINT}
-      <if test="groupIds!=null and groupIds!=''">
-        and  ${groupIds}
-      </if>
-      <if test="groupIds==null or groupIds==''">
-        and  group_id is null
-      </if>
-      <include refid="select_condition"/>
-    </where>
-    order by id desc
-  </select>
-
 </mapper>

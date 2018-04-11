@@ -8,6 +8,7 @@ import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
 import com.lcdt.driver.dto.PageBaseDto;
 import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.model.SnatchGoods;
+import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
@@ -144,13 +145,13 @@ public class PlanApi {
 
     @ApiOperation("直接-派单")
     @RequestMapping(value = "/carrier/splitGoods4Direct",method = RequestMethod.POST)
-    public JSONObject splitGoods4Direct(SplitGoodsParamsDto dto) {
+    public JSONObject splitGoods4Direct(@RequestBody SplitGoodsParamsDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
-        int flag = iPlanRpcService4Wechat.splitGoods4Direct(dto,userCompRel);
+        WaybillPlan waybillPlan = iPlanRpcService4Wechat.splitGoods4Direct(dto,userCompRel);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
-        if (flag==1) {
+        if (waybillPlan!=null) {
             code = 0;
         } else {
             message = "操作失败，请重试！";
@@ -164,22 +165,41 @@ public class PlanApi {
 
     @ApiOperation("竞价-派单")
     @RequestMapping(value = "/carrier/splitGoods4Bidding",method = RequestMethod.POST)
-    public JSONObject splitGoods4Bidding(BindingSplitParamsDto dto) {
+    public JSONObject splitGoods4Bidding(@RequestBody BindingSplitParamsDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
-        int flag = iPlanRpcService4Wechat.splitGoods4Bidding(dto,userCompRel);
+        WaybillPlan plan = iPlanRpcService4Wechat.splitGoods4Bidding(dto,userCompRel);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
-        if (flag==1) {
+        if (plan!=null) {
             code = 0;
         } else {
             message = "操作失败，请重试！";
         }
         jsonObject.put("message",message);
         jsonObject.put("code",code);
+        jsonObject.put("data",plan);
         return jsonObject;
     }
 
+
+    @ApiOperation("竞价--结束")
+    @RequestMapping(value = "/carrier/biddingFinish",method = RequestMethod.GET)
+    public String biddingFinish(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        WaybillPlan waybillPlan = iPlanRpcService4Wechat.biddingFinish(waybillPlanId,userCompRel);
+        JSONObject jsonObject = new JSONObject();
+        String message = "操作成功！";
+        int code = -1;
+        if (waybillPlan!=null) {
+            code = 0;
+        } else {
+            message = "操作失败！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
+    }
 
 
 }

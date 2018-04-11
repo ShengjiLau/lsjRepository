@@ -1,6 +1,7 @@
 package com.lcdt.traffic.rpc.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.lcdt.traffic.dao.FeeFlowMapper;
 import com.lcdt.traffic.service.TrafficRpc;
 import com.lcdt.traffic.service.WaybillService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,4 @@ public class TrafficRpcImpl implements TrafficRpc {
     public void waybillPositionTimer(Map map) {
         waybillService.queryWaybillListToPoPosition(map);
     }
-
-
 }

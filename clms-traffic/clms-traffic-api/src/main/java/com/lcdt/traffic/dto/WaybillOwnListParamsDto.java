@@ -2,6 +2,7 @@ package com.lcdt.traffic.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
+
 import java.io.Serializable;
 
 /**
@@ -33,18 +34,15 @@ public class WaybillOwnListParamsDto implements Serializable{
     private String startStartDate;
     @ApiModelProperty(value = "结束计划发货时间（门卫出库管理时的查询条件）")
     private String endStartDate;
+
     @ApiModelProperty(value = "客户名称")
     private String customerName;
-    @ApiModelProperty(value = "收付款方")
-    private String name;
     @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
     @ApiModelProperty(value = "是否删除",hidden = true)
     private Short isDelete;
     @ApiModelProperty(value = "groupIds",hidden = true)
     private String groupIds;
-    @ApiModelProperty(value = "应收应付",hidden = true)
-    private Short isReceivable;
     @ApiModelProperty(value = "小程序运单顶部输入框内容")
     private String waybillCondition;
 
@@ -52,6 +50,11 @@ public class WaybillOwnListParamsDto implements Serializable{
     private Integer pageNo;
     @ApiModelProperty(value = "每页显示条数", required = true)
     private Integer pageSize;
+
+    @ApiModelProperty(value = "0-未删除，1-已删除",hidden = true)
+    private short isDeleted;
+    @ApiModelProperty(value = "0-应付，1-应收",hidden = true)
+    private short isReceivable;
 
     public String getWaybillCode() {
         return waybillCode;
@@ -157,14 +160,6 @@ public class WaybillOwnListParamsDto implements Serializable{
         this.customerName = customerName;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Long getCompanyId() {
         return companyId;
     }
@@ -189,14 +184,6 @@ public class WaybillOwnListParamsDto implements Serializable{
         this.groupIds = groupIds;
     }
 
-    public Short getIsReceivable() {
-        return isReceivable;
-    }
-
-    public void setIsReceivable(Short isReceivable) {
-        this.isReceivable = isReceivable;
-    }
-
     public Integer getPageNo() {
         return pageNo;
     }
@@ -219,5 +206,20 @@ public class WaybillOwnListParamsDto implements Serializable{
 
     public void setWaybillCondition(String waybillCondition) {
         this.waybillCondition = waybillCondition;
+    }
+    public short getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(short isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+
+    public short getIsReceivable() {
+        return isReceivable;
+    }
+
+    public void setIsReceivable(short isReceivable) {
+        this.isReceivable = isReceivable;
     }
 }

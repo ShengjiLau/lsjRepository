@@ -1,4 +1,4 @@
-package com.lcdt.traffic.model;
+package com.lcdt.userinfo.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,14 +6,18 @@ import java.util.Date;
 /**
  * @author 
  */
-public class FeeMsg implements Serializable {
-    private Long msgId;
-
-    private Long id;
+public class FeeProperty implements Serializable {
+    private Long proId;
 
     private Short type;
 
-    private String content;
+    private String name;
+
+    private Short isReceivable;
+
+    private Short isShow;
+
+    private Long companyId;
 
     private Long operatorId;
 
@@ -25,20 +29,12 @@ public class FeeMsg implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Long getMsgId() {
-        return msgId;
+    public Long getProId() {
+        return proId;
     }
 
-    public void setMsgId(Long msgId) {
-        this.msgId = msgId;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setProId(Long proId) {
+        this.proId = proId;
     }
 
     public Short getType() {
@@ -49,12 +45,36 @@ public class FeeMsg implements Serializable {
         this.type = type;
     }
 
-    public String getContent() {
-        return content;
+    public String getName() {
+        return name;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Short getIsReceivable() {
+        return isReceivable;
+    }
+
+    public void setIsReceivable(Short isReceivable) {
+        this.isReceivable = isReceivable;
+    }
+
+    public Short getIsShow() {
+        return isShow;
+    }
+
+    public void setIsShow(Short isShow) {
+        this.isShow = isShow;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public Long getOperatorId() {

@@ -327,6 +327,10 @@
       <if test="complexContition!=null and complexContition!=''">
         and (customer_name like CONCAT(#{complexContition,jdbcType=VARCHAR}, '%', '%') or short_name like CONCAT(#{complexContition,jdbcType=VARCHAR}, '%', '%')  or customer_code like CONCAT(#{complexContition,jdbcType=VARCHAR}, '%', '%') )
       </if>
+      <!--运单来源查询时用-->
+      <if test="customerIds!=null and customerIds!=''">
+        and customer_id in (${customerIds})
+      </if>
       <if test="customerType!=null">
         and ${customerType}
       </if>

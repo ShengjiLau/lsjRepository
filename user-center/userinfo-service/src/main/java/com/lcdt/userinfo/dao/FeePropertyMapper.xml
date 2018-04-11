@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lcdt.traffic.dao.FeePropertyMapper">
-  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.FeeProperty">
+<mapper namespace="com.lcdt.userinfo.dao.FeePropertyMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.userinfo.model.FeeProperty">
     <id column="pro_id" jdbcType="BIGINT" property="proId" />
     <result column="type" jdbcType="SMALLINT" property="type" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -27,7 +27,7 @@
     delete from t_fee_property
     where pro_id = #{proId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.lcdt.traffic.model.FeeProperty">
+  <insert id="insert" parameterType="com.lcdt.userinfo.model.FeeProperty">
     <selectKey keyProperty="proId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -40,7 +40,104 @@
       #{operatorName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}
       )
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.FeeProperty">
+  <insert id="insertSelective" parameterType="com.lcdt.userinfo.model.FeeProperty">
+    <selectKey keyProperty="proId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_fee_property
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        type,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="isReceivable != null">
+        is_receivable,
+      </if>
+      <if test="isShow != null">
+        is_show,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="operatorId != null">
+        operator_id,
+      </if>
+      <if test="operatorName != null">
+        operator_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="type != null">
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isReceivable != null">
+        #{isReceivable,jdbcType=SMALLINT},
+      </if>
+      <if test="isShow != null">
+        #{isShow,jdbcType=SMALLINT},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="operatorId != null">
+        #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="operatorName != null">
+        #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.userinfo.model.FeeProperty">
+    update t_fee_property
+    <set>
+      <if test="type != null">
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="isReceivable != null">
+        is_receivable = #{isReceivable,jdbcType=SMALLINT},
+      </if>
+      <if test="isShow != null">
+        is_show = #{isShow,jdbcType=SMALLINT},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="operatorId != null">
+        operator_id = #{operatorId,jdbcType=BIGINT},
+      </if>
+      <if test="operatorName != null">
+        operator_name = #{operatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where pro_id = #{proId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.FeeProperty">
     update t_fee_property
     set type = #{type,jdbcType=SMALLINT},
       name = #{name,jdbcType=VARCHAR},
@@ -68,11 +165,20 @@
       <if test="isReceivable!=null">
         and is_receivable = #{isReceivable,jdbcType=SMALLINT}
       </if>
+      <if test="isShow!=null">
+        and is_show = #{isShow,jdbcType=SMALLINT}
+      </if>
       <if test="name!=null">
         and name = #{name,jdbcType=VARCHAR}
       </if>
       <if test="proId!=null">
         and pro_id != #{proId,jdbcType=BIGINT}
+      </if>
+      <if test="proIds!=null and proIds.size>0">
+        and pro_id not in
+        <foreach separator=";" index="index" item="item" collection="proIds" close="" open="">
+          #{item}
+        </foreach>
       </if>
     </where>
     order by pro_id desc

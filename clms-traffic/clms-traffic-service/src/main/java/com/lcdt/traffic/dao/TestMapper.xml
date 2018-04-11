@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.traffic.dao.TestMapper">
+  <insert id="insertReconcile">
+  update t_fee_reconcile set
+  account_amount =#{amount,jdbcType=FLOAT}
+  where reconcile_id =128
+  </insert>
+  
+  
+  
+  
+  
+</mapper>

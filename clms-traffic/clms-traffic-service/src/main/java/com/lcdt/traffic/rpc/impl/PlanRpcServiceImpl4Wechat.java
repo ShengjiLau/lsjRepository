@@ -376,7 +376,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Integer splitGoods4Direct(SplitGoodsParamsDto dto, UserCompRel userCompRel) {
+    public WaybillPlan splitGoods4Direct(SplitGoodsParamsDto dto, UserCompRel userCompRel) {
         User user = userCompRel.getUser();
         Company company = userCompRel.getCompany();
         Long companyId = company.getCompId();
@@ -453,26 +453,30 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                     //插入分配明细
                     SplitGoodsDetail splitGoodsDetail = new SplitGoodsDetail();
                     SplitGoodsDetailParamsDto splitGoodsDetailParamsDto =  (SplitGoodsDetailParamsDto)planDetail.getSplitGoodsDetailObj();
-                    BeanUtils.copyProperties(splitGoodsDetailParamsDto, splitGoodsDetail);
+                    if (splitGoodsDetailParamsDto != null) {
+                        BeanUtils.copyProperties(splitGoodsDetailParamsDto, splitGoodsDetail);
 
-                    if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //如果承运商
-                        splitGoodsDetail.setRemainAmount(splitGoodsDetail.getAllotAmount());
-                    } else {
-                        splitGoodsDetail.setRemainAmount(0f);
+                        if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //如果承运商
+                            splitGoodsDetail.setRemainAmount(splitGoodsDetail.getAllotAmount());
+                        } else {
+                            splitGoodsDetail.setRemainAmount(0f);
+                        }
+                        sb_goods.append(planDetail.getGoodsName()+":"+splitGoodsDetail.getAllotAmount()+";"); //发送消息
+
+                        splitGoodsDetail.setCreateId(user.getUserId());
+                        splitGoodsDetail.setCreateName(user.getRealName());
+                        splitGoodsDetail.setCreateDate(opDate);
+                        splitGoodsDetail.setUpdateId(user.getUserId());
+                        splitGoodsDetail.setUpdateName(user.getRealName());
+                        splitGoodsDetail.setUpdateTime(opDate);
+                        splitGoodsDetail.setIsDeleted((short)0);
+                        splitGoodsDetail.setCompanyId(companyId);
+                        splitGoodsDetail.setSplitGoodsId(splitGoods.getSplitGoodsId());
+                        splitGoodsDetailMapper.insert(splitGoodsDetail);
+                        splitGoodsDetailList.add(splitGoodsDetail);
+
                     }
-                    sb_goods.append(planDetail.getGoodsName()+":"+splitGoodsDetail.getAllotAmount()+";"); //发送消息
 
-                    splitGoodsDetail.setCreateId(user.getUserId());
-                    splitGoodsDetail.setCreateName(user.getRealName());
-                    splitGoodsDetail.setCreateDate(opDate);
-                    splitGoodsDetail.setUpdateId(user.getUserId());
-                    splitGoodsDetail.setUpdateName(user.getRealName());
-                    splitGoodsDetail.setUpdateTime(opDate);
-                    splitGoodsDetail.setIsDeleted((short)0);
-                    splitGoodsDetail.setCompanyId(companyId);
-                    splitGoodsDetail.setSplitGoodsId(splitGoods.getSplitGoodsId());
-                    splitGoodsDetailMapper.insert(splitGoodsDetail);
-                    splitGoodsDetailList.add(splitGoodsDetail);
                 }
             }
 
@@ -519,7 +523,8 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                         waybillDto.setVechicleNum(splitGoods.getCarrierVehicle());
                         if(!StringUtils.isEmpty(splitGoods.getCarrierCollectionIds())) {
                             waybillDto.setDriverName(splitGoods.getCarrierCollectionNames());
-                            waybillDto.setDriverId(Long.valueOf(splitGoods.getCarrierCollectionIds()));
+                            String driverId = splitGoods.getCarrierCollectionIds();
+                            waybillDto.setDriverId(Long.valueOf(driverId));
                         }
                         waybillDto.setWaybillCode(waybillPlan.getSerialCode()); //流水号
                         waybillDto.setWaybillRemark(splitGoods.getSplitRemark());//这块需要传  计划→派单→运单，显示派单时的派单备注
@@ -586,7 +591,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         } else {
             throw new SplitGoodsException("计划详细为空！");
         }
-        return 1;
+        return waybillPlan;
     }
 
 
@@ -626,7 +631,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Integer splitGoods4Bidding(BindingSplitParamsDto dto, UserCompRel userCompRel) {
+    public WaybillPlan splitGoods4Bidding(BindingSplitParamsDto dto, UserCompRel userCompRel) {
         User user = userCompRel.getUser();
         Long companyId = userCompRel.getCompany().getCompId();
         Map tMap = new HashMap<String,String>();
@@ -742,7 +747,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         waybillPlan.setUpdateName(user.getRealName());
         waybillPlan.setUpdateTime(new Date());
         waybillPlanMapper.updateWaybillPlan(waybillPlan);
-        return 1;
+        return waybillPlan;
     }
 
 
@@ -763,6 +768,24 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         return waybillPlan;
     }
 
+
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public WaybillPlan biddingFinish(Long waybillPlanId, UserCompRel userCompRel) {
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",waybillPlanId);
+        tMap.put("companyId",userCompRel.getCompany().getCompId());
+        tMap.put("isDeleted","0");
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
+        if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
+        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //竞价结束派单中
+        waybillPlan.setUpdateTime(new Date());
+        waybillPlan.setUpdateId(userCompRel.getUser().getUserId());
+        waybillPlan.setUpdateName(userCompRel.getUser().getRealName());
+        waybillPlanMapper.updateByPrimaryKey(waybillPlan);
+        return waybillPlan;
+    }
 
 
 }

@@ -60,6 +60,7 @@
   <resultMap id="ContractApprovalDtoMap" type="com.lcdt.contract.web.dto.ContractApprovalDto">
     <id column="contract_id" jdbcType="BIGINT" property="contractId" />
     <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
+    <result column="serial_no" jdbcType="VARCHAR" property="serialNo" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="sign_date" jdbcType="TIMESTAMP" property="signDate" />
     <result column="type" jdbcType="SMALLINT" property="type" />
@@ -86,8 +87,8 @@
     </collection>
   </resultMap>
 
-  <select id="selectContractApprovalByCondition" resultMap="ContractApprovalDtoMap" parameterType="java.util.Map">
-    select t1.contract_id, t1.contract_code, t1.title, t1.type, t1.contract_status,
+  <select id="selectContractApprovalByCondition" resultMap="ContractApprovalDtoMap">
+    select t1.contract_id, t1.contract_code, t1.serial_no,t1.title, t1.type, t1.contract_status,
     t1.approval_status,t1.approval_start_date, t1.approval_end_date, t1.group_id,t1.company_id
     from t_contract t1 left join t_contract_approval t2 on t1.contract_id = t2.contract_id
     <where>
@@ -173,7 +174,7 @@
   <select id="selectByContractId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select ca_id, contract_id, user_id, user_name, dept_name, sort, action_type, result, status, content,time
     from t_contract_approval
-    where contract_id = #{arg0} and action_type = 0 and status != 5 order by sort
+    where contract_id = #{arg0} and action_type = 0 and status != 5 and sort &gt; 0 order by sort
   </select>
   <select id="selectForContractDetail" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select ca_id, contract_id, user_id, user_name, dept_name, sort, action_type, result, status, content,time

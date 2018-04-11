@@ -272,9 +272,9 @@ public class OwnPlanApi {
     @RequestMapping(value = "/biddingFinish",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_bidding_finish') or hasAuthority('traffic_customer_plan_offer')")
     public String biddingFinish(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
-        User loginUser = SecurityInfoGetter.getUser();
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        WaybillPlan waybillPlan = planService.biddingFinish(waybillPlanId,companyId,loginUser);
+        UserCompRel loginUser = SecurityInfoGetter.geUserCompRel();
+
+        WaybillPlan waybillPlan = iPlanRpcService4Wechat.biddingFinish(waybillPlanId,loginUser);
         JSONObject jsonObject = new JSONObject();
         String message = "操作成功！";
         int code = -1;

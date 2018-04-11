@@ -10,6 +10,7 @@ import com.lcdt.traffic.dto.SplitGoodsParamsDto;
 import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.SnatchGoods;
 import com.lcdt.traffic.model.TransportWayItems;
+import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.traffic.service.PlanService;
@@ -57,11 +58,11 @@ public class SplitGoodsApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods')")
     public String splitGoods4Direct(@ApiParam(value = "派单详细信息", required = true) @RequestBody SplitGoodsParamsDto dto) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
-        int flag = iPlanRpcService4Wechat.splitGoods4Direct(dto,userCompRel);
+        WaybillPlan waybillPlan = iPlanRpcService4Wechat.splitGoods4Direct(dto,userCompRel);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
-        if (flag==1) {
+        if (waybillPlan!=null) {
             code = 0;
         } else {
             message = "操作失败，请重试！";
@@ -102,11 +103,11 @@ public class SplitGoodsApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods')")
     public String splitGoods4Bidding(@RequestBody BindingSplitParamsDto dto) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
-        int flag = iPlanRpcService4Wechat.splitGoods4Bidding(dto,userCompRel);
+        WaybillPlan waybillPlan = iPlanRpcService4Wechat.splitGoods4Bidding(dto,userCompRel);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
-        if (flag==1) {
+        if (waybillPlan!=null) {
             code = 0;
         } else {
             message = "操作失败，请重试！";

@@ -2,13 +2,14 @@ package com.lcdt.traffic.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by lyqishan on 2017/12/28
  */
 
-public class WaybillTransferRecordDto {
+public class WaybillTransferRecordDto implements Serializable{
 
     @ApiModelProperty(value = "换车记录Id，修改时用")
     private Long id;
