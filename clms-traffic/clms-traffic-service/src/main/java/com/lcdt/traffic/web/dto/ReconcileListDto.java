@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-
+import com.lcdt.traffic.model.Reconcile;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -23,7 +23,7 @@ public class ReconcileListDto implements Serializable{
 
 	@ApiModelProperty("批量对账单")
 	@NotEmpty
-	private List<ReconcileDto> reconcileList;
+	private List<Reconcile> reconcileList;
 	
 	@ApiModelProperty()
 	private Double sumAmount;
@@ -38,11 +38,11 @@ public class ReconcileListDto implements Serializable{
 		this.sumAmount = sumAmount;
 	}
 
-	public List<ReconcileDto> getReconcileList() {
+	public List<Reconcile> getReconcileList() {
 		return reconcileList;
 	}
 
-	public void setReconcileList(List<ReconcileDto> reconcileList) {
+	public void setReconcileList(List<Reconcile> reconcileList) {
 		this.reconcileList = reconcileList;
 	}
 	

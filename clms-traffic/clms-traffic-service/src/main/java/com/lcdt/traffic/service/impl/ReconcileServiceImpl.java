@@ -2,16 +2,16 @@ package com.lcdt.traffic.service.impl;
 
 
 
-import java.util.ArrayList;
+
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lcdt.traffic.dao.PayeeMapper;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dao.ReconcileMapper;
-import com.lcdt.traffic.model.Payee;
 import com.lcdt.traffic.model.Reconcile;
 import com.lcdt.traffic.service.ReconcileService;
 import com.lcdt.traffic.web.dto.ReconcileDto;
@@ -28,49 +28,57 @@ public class ReconcileServiceImpl implements ReconcileService {
 	@Autowired
 	private ReconcileMapper reconcileMapper;
 	
-	@Autowired
-	private PayeeMapper payeeMapper;
-
+	/**
+	 * 插入对账单
+	 */
 	@Override
 	public int insertReconcileBatch(ReconcileListDto reconcileListDto) {
 		
-	List<ReconcileDto> reconcileDtoList=reconcileListDto.getReconcileList();
-//	List<Reconcile> reconcileList =new ArrayList<Reconcile>();
-	List<Payee> payeeLists =new ArrayList<Payee>();
-//		for(ReconcileDto reconcileDto:reconcileDtoList) {
-//			Reconcile reconcile =new Reconcile();
-//			BeanUtils.copyProperties(reconcileDto, reconcile);
-//			reconcileList.add(reconcile);		
-//		}	
-		int result=reconcileMapper.insertByBatch(reconcileDtoList);
-		int i=0;
-		for(ReconcileDto reconcileDto:reconcileDtoList) {
-			List<Payee> payeeList =reconcileDto.getPayeeList();
-			for(Payee payee :payeeList) {
-				payee.setReconcileId(reconcileDto.getReconcileId());
-			}
-			payeeLists.addAll(payeeList);
-		}
-		i+=payeeLists.size();
-		int j=payeeMapper.insertPayeeByBatch(payeeLists);
-		if(i==j) {
-			return result;
-		}else {
-			return -1;
-		}
+	List<Reconcile> reconcileDtoList=reconcileListDto.getReconcileList();
+	
+//	reconcileDtoList.forEach(x->x.setCompanyId(SecurityInfoGetter.getCompanyId()));
+//	reconcileDtoList.forEach(x->x.setOperatorName(SecurityInfoGetter.getUser().getRealName()));
+//	reconcileDtoList.forEach(x->x.setOperatorId(SecurityInfoGetter.getUser().getUserId()));
+	//添加创建人id,创建人名字,公司id
+	for(Reconcile reconcile:reconcileDtoList) {
+		reconcile.setCompanyId(SecurityInfoGetter.getCompanyId());
+		reconcile.setOperatorName(SecurityInfoGetter.getUser().getRealName());
+		reconcile.setOperatorId(SecurityInfoGetter.getUser().getUserId());
+	}
+	int result=reconcileMapper.insertByBatch(reconcileDtoList);
 		
-		
+	return result;	
 	}
 
+	
+	
+	
+	/**
+	 * 取消对账单
+	 */
 	@Override
-	public int setCancelOk(List<Long> reconcileIdList) {
+	public int setCancelOk(Long[] reconcileIdList) {
 		
 		return reconcileMapper.cancelByBatch(reconcileIdList);
 	}
 	
 	
-	
-	
+	/**
+	 * 查询对账单列表
+	 */
+	public PageInfo<Reconcile> getReconcileList(ReconcileDto reconcileDto){
+		if(reconcileDto.getPageNum()<1) {
+			reconcileDto.setPageNum(1);
+		}
+		if(reconcileDto.getPageSize()<0) {
+			reconcileDto.setPageSize(0);
+		}
+		reconcileDto.setCompanyId(SecurityInfoGetter.getCompanyId());
+		PageHelper.startPage(reconcileDto.getPageNum(),reconcileDto.getPageSize());
+		List<Reconcile> reconcileList= reconcileMapper.getReconcileList(reconcileDto);
+		PageInfo<Reconcile> page =new PageInfo<Reconcile>(reconcileList);
+		return page;
+	}
 	
 	
 	

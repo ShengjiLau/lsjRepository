@@ -1,10 +1,10 @@
 package com.lcdt.traffic.web.dto;
 
 import java.io.Serializable;
-import java.util.List;
 
-import com.lcdt.traffic.model.Payee;
 import com.lcdt.traffic.model.Reconcile;
+
+
 
 /**
  * @author Sheng-ji Lau
@@ -19,26 +19,17 @@ public class ReconcileDto extends Reconcile implements Serializable{
 	 */
 	private static final long serialVersionUID = -4584651511515L;
 	
-	
-	private List<Payee> payeeList;
-	
 	private String beginTime;
 	
 	private String endTime;
 	
-	private String payerName;
-
+	private int pageSize;
 	
-	public List<Payee> getPayeeList() {
-		return payeeList;
-	}
+	private int pageNum;
 
-
-	public void setPayeeList(List<Payee> payeeList) {
-		this.payeeList = payeeList;
-	}
-
-
+	private Long group;
+	
+	
 	public String getBeginTime() {
 		return beginTime;
 	}
@@ -59,15 +50,38 @@ public class ReconcileDto extends Reconcile implements Serializable{
 	}
 
 
-	public String getPayerName() {
-		return payerName;
+	public int getPageSize() {
+		return pageSize;
 	}
 
 
-	public void setPayerName(String payerName) {
-		this.payerName = payerName;
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
 	}
+
+
+	public int getPageNum() {
+		return pageNum;
+	}
+
+
+	public void setPageNum(int pageNum) {
+		this.pageNum = pageNum;
+	}
+
+
+	public Long getGroup() {
+		return group;
+	}
+
+
+	public void setGroup(Long group) {
+		this.group = group;
+	}
+
+
 	
+
 	
 	
 	
