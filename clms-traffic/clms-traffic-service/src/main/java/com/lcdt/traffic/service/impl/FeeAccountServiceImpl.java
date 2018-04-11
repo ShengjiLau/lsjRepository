@@ -11,7 +11,10 @@ import com.lcdt.traffic.model.WaybillItems;
 import com.lcdt.traffic.service.FeeAccountService;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
 import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
+import com.lcdt.userinfo.dao.FeePropertyMapper;
+import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.util.ClmsBeanUtil;
+import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -31,6 +34,8 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     private WaybillItemsMapper waybillItemsMapper;
     @Autowired
     private FeeAccountMapper feeAccountMapper;
+    @Reference
+    private FeePropertyMapper feePropertyMapper;
 
     @Override
     public PageInfo feeAccountWaybillList(Map map){
@@ -57,12 +62,28 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     }
     @Override
     public Map feeAccountPage(Map m){
-        List<FeeAccountDto> feeAccountDtoList = feeAccountMapper.selectFeeAccountDetail(m);
         List<WaybillItems> waybillItemsList = waybillItemsMapper.selectByWaybillId(Long.parseLong(m.get("waybillId").toString()));
+        List<FeeAccountDto> feeAccountDtoList = feeAccountMapper.selectFeeAccountDetail(m);
+        m.put("isShow", (short)0);
+        List<FeeProperty> showPropertyList = feePropertyMapper.selectByCondition(m);
+        m.put("isShow", (short)1);
+        List<FeeProperty> hidePropertyList = feePropertyMapper.selectByCondition(m);
         Map map = new HashMap();
-        map.put("feeAccountDtoList", feeAccountDtoList);
         map.put("waybillItemsList", waybillItemsList);
+        map.put("feeAccountDtoList", feeAccountDtoList);
+        map.put("showPropertyList", showPropertyList);
+        map.put("hidePropertyList", hidePropertyList);
         return m;
+    }
+    @Override
+    public int feeAccountSave(Map map){
+
+        return 0;
+    }
+    @Override
+    public List<FeeAccountDto> selectFlowByWaybillId(Map m){
+        List<FeeAccountDto> list = feeAccountMapper.selectFlowByWaybillId(m);
+        return list;
     }
     @Override
     public PageInfo feeAccountList(FeeAccountDto dto){
