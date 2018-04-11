@@ -29,9 +29,24 @@ public class CustomerPlanDto implements java.io.Serializable {
     private Short isDeleted;
     private Long companyId;
     private Long splitGoodsId;
-    private Date pubDate;
+    private Date pubdate;
     private Date splitDate;
 
+    public Date getPubdate() {
+        return pubdate;
+    }
+
+    public void setPubdate(Date pubdate) {
+        this.pubdate = pubdate;
+    }
+
+    public Date getSplitDate() {
+        return splitDate;
+    }
+
+    public void setSplitDate(Date splitDate) {
+        this.splitDate = splitDate;
+    }
 
     public Long getWaybillPlanId() {
         return waybillPlanId;
@@ -153,21 +168,7 @@ public class CustomerPlanDto implements java.io.Serializable {
         this.splitGoodsId = splitGoodsId;
     }
 
-    public Date getPubDate() {
-        return pubDate;
-    }
 
-    public void setPubDate(Date pubDate) {
-        this.pubDate = pubDate;
-    }
-
-    public Date getSplitDate() {
-        return splitDate;
-    }
-
-    public void setSplitDate(Date splitDate) {
-        this.splitDate = splitDate;
-    }
 }
 
 
