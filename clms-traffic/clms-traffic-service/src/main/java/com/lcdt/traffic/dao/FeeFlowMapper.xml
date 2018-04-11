@@ -59,6 +59,15 @@
     is_deleted = #{isDeleted,jdbcType=SMALLINT}
     where flow_id = #{flowId,jdbcType=BIGINT}
   </update>
+
+  <sql id="Base_Column_List">
+   flow_id,flow_code, account_id, pro_id,
+    fee_property, money, original_money,
+    group_id, create_id, create_name,
+    create_date, update_id, update_name,
+    update_time, company_id, is_deleted
+  </sql>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select flow_id, flow_code, account_id, pro_id, fee_property, money, original_money,
     group_id, create_id, create_name, create_date, update_id, update_name, update_time,
