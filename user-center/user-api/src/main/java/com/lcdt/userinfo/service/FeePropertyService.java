@@ -1,8 +1,9 @@
-package com.lcdt.traffic.service;
+package com.lcdt.userinfo.service;
 
 import com.github.pagehelper.PageInfo;
-import com.lcdt.traffic.model.FeeProperty;
+import com.lcdt.userinfo.model.FeeProperty;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,4 +34,10 @@ public interface FeePropertyService {
      * @return
      */
     int modifyFeePropertyIsDelete(Long proId);
+    /**
+     * 费用类型list
+     * @param m
+     * @return
+     */
+    List<FeeProperty> getFeePropertyList(Map m);
 }

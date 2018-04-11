@@ -1,12 +1,12 @@
-package com.lcdt.traffic.web.controller.api;
+package com.lcdt.userinfo.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.traffic.model.FeeProperty;
-import com.lcdt.traffic.service.FeePropertyService;
-import com.lcdt.traffic.web.dto.PageBaseDto;
+import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.service.FeePropertyService;
+import com.lcdt.userinfo.web.dto.PageBaseDto;
 import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -139,11 +139,13 @@ public class FeePropertyApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delete_fee_property')")
     public JSONObject deleteFeeProperty(@ApiParam(value = "费用类型ID",required = true) @RequestParam Long proId) {
         int result = feePropertyService.modifyFeePropertyIsDelete(proId);
-        if (result > 0) {
+        if (result == 1) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "删除成功");
             return jsonObject;
+        } else if (result == 2) {
+            throw new RuntimeException("此费用类型已经产生流水，不可删除");
         } else {
             throw new RuntimeException("删除失败");
         }

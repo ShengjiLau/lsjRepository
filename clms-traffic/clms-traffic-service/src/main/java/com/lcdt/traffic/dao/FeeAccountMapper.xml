@@ -32,14 +32,6 @@
     name_id, name, audit_status, audit_date, operator_id, operator_name, reconcile_id, 
     reconcile_code, is_receivable, create_date, is_deleted
   </sql>
-  <sql id="base_property_list">
-    account_id accountId, account_code accountCode, company_id companyId, waybill_id waybillId, waybill_code waybillCode, group_id groupId, group_name groupName,
-    name_id nameId, name, audit_status auditStatus, audit_date auditDate, operator_id operatorId, operator_name operatorName, reconcile_id rececileId,
-    reconcile_code reconcileCode, is_receivable isReceivable, create_date createDate, is_deleted isDeleted,
-    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id and ff.fee_property='运费') freightTotal,
-    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id and ff.fee_property!='运费') otherFeeTotal,
-    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id) feeTotal
-  </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -257,8 +249,18 @@
       is_deleted = #{isDeleted,jdbcType=SMALLINT}
     where account_id = #{accountId,jdbcType=BIGINT}
   </update>
-  <select id="selectByWaybillId" parameterType="java.util.Map" resultType="com.lcdt.traffic.web.dto.FeeAccountDto">
-    select <include refid="base_property_list"/>
+  <select id="selectByWaybillId" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
+    select <include refid="Base_Column_List"/>,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id and ff.fee_property='运费') freight_total,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id and ff.fee_property!='运费') other_fee_total,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id) fee_total
+    from t_fee_account
+    where waybill_id = #{waybillId,jdbcType=BIGINT}
+    and is_receivable = #{isReceivable,jdbcType=SMALLINT}
+    order by account_id desc
+  </select>
+  <select id="selectFlowByWaybillId" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
+    select <include refid="Base_Column_List"/>
     from t_fee_account
     where waybill_id = #{waybillId,jdbcType=BIGINT}
     and is_receivable = #{isReceivable,jdbcType=SMALLINT}
@@ -272,7 +274,10 @@
     order by account_id desc
   </select>
   <select id="selectOwnByCondition" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
-    select <include refid="base_property_list"/>
+    select <include refid="Base_Column_List"/>,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id and ff.fee_property='运费') freight_total,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id and ff.fee_property!='运费') other_fee_total,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id) fee_total
     from t_fee_account
     <where>
       is_receivable = #{isReceivable,jdbcType=SMALLINT}

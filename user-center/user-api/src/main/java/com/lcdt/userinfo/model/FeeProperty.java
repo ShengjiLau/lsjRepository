@@ -1,4 +1,4 @@
-package com.lcdt.traffic.model;
+package com.lcdt.userinfo.model;
 
 import java.io.Serializable;
 import java.util.Date;

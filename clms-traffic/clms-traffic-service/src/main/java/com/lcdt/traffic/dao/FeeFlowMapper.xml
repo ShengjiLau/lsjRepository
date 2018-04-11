@@ -5,22 +5,20 @@
     <id column="flow_id" jdbcType="BIGINT" property="flowId" />
     <result column="flow_code" jdbcType="VARCHAR" property="flowCode" />
     <result column="account_id" jdbcType="BIGINT" property="accountId" />
+    <result column="pro_id" jdbcType="BIGINT" property="proId" />
     <result column="fee_property" jdbcType="VARCHAR" property="feeProperty" />
     <result column="money" jdbcType="REAL" property="money" />
     <result column="original_money" jdbcType="REAL" property="originalMoney" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_id" jdbcType="BIGINT" property="updateId" />
+    <result column="update_name" jdbcType="VARCHAR" property="updateName" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
   </resultMap>
-  <sql id="Base_Column_List">
-    flow_id, flow_code, account_id, fee_property, money, original_money, create_date, 
-    is_deleted
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from t_fee_flow
-    where flow_id = #{flowId,jdbcType=BIGINT}
-  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_fee_flow
     where flow_id = #{flowId,jdbcType=BIGINT}
@@ -29,107 +27,61 @@
     <selectKey keyProperty="flowId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_fee_flow (flow_code, account_id, fee_property, 
-      money, original_money, create_date, 
-      is_deleted)
-    values (#{flowCode,jdbcType=VARCHAR}, #{accountId,jdbcType=BIGINT}, #{feeProperty,jdbcType=VARCHAR}, 
-      #{money,jdbcType=REAL}, #{originalMoney,jdbcType=REAL}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{isDeleted,jdbcType=SMALLINT})
+    insert into t_fee_flow (flow_code, account_id, pro_id,
+    fee_property, money, original_money,
+    group_id, create_id, create_name,
+    create_date, update_id, update_name,
+    update_time, company_id, is_deleted
+    )
+    values (#{flowCode,jdbcType=VARCHAR}, #{accountId,jdbcType=BIGINT}, #{proId,jdbcType=BIGINT},
+    #{feeProperty,jdbcType=VARCHAR}, #{money,jdbcType=REAL}, #{originalMoney,jdbcType=REAL},
+    #{groupId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR},
+    #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR},
+    #{updateTime,jdbcType=TIMESTAMP}, #{companyId,jdbcType=BIGINT}, #{isDeleted,jdbcType=SMALLINT}
+    )
   </insert>
-  <insert id="insertSelective" parameterType="com.lcdt.traffic.model.FeeFlow">
-    <selectKey keyProperty="flowId" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into t_fee_flow
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="flowCode != null">
-        flow_code,
-      </if>
-      <if test="accountId != null">
-        account_id,
-      </if>
-      <if test="feeProperty != null">
-        fee_property,
-      </if>
-      <if test="money != null">
-        money,
-      </if>
-      <if test="originalMoney != null">
-        original_money,
-      </if>
-      <if test="createDate != null">
-        create_date,
-      </if>
-      <if test="isDeleted != null">
-        is_deleted,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="flowCode != null">
-        #{flowCode,jdbcType=VARCHAR},
-      </if>
-      <if test="accountId != null">
-        #{accountId,jdbcType=BIGINT},
-      </if>
-      <if test="feeProperty != null">
-        #{feeProperty,jdbcType=VARCHAR},
-      </if>
-      <if test="money != null">
-        #{money,jdbcType=REAL},
-      </if>
-      <if test="originalMoney != null">
-        #{originalMoney,jdbcType=REAL},
-      </if>
-      <if test="createDate != null">
-        #{createDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDeleted != null">
-        #{isDeleted,jdbcType=SMALLINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.traffic.model.FeeFlow">
-    update t_fee_flow
-    <set>
-      <if test="flowCode != null">
-        flow_code = #{flowCode,jdbcType=VARCHAR},
-      </if>
-      <if test="accountId != null">
-        account_id = #{accountId,jdbcType=BIGINT},
-      </if>
-      <if test="feeProperty != null">
-        fee_property = #{feeProperty,jdbcType=VARCHAR},
-      </if>
-      <if test="money != null">
-        money = #{money,jdbcType=REAL},
-      </if>
-      <if test="originalMoney != null">
-        original_money = #{originalMoney,jdbcType=REAL},
-      </if>
-      <if test="createDate != null">
-        create_date = #{createDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="isDeleted != null">
-        is_deleted = #{isDeleted,jdbcType=SMALLINT},
-      </if>
-    </set>
-    where flow_id = #{flowId,jdbcType=BIGINT}
-  </update>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.FeeFlow">
     update t_fee_flow
     set flow_code = #{flowCode,jdbcType=VARCHAR},
-      account_id = #{accountId,jdbcType=BIGINT},
-      fee_property = #{feeProperty,jdbcType=VARCHAR},
-      money = #{money,jdbcType=REAL},
-      original_money = #{originalMoney,jdbcType=REAL},
-      create_date = #{createDate,jdbcType=TIMESTAMP},
-      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+    account_id = #{accountId,jdbcType=BIGINT},
+    pro_id = #{proId,jdbcType=BIGINT},
+    fee_property = #{feeProperty,jdbcType=VARCHAR},
+    money = #{money,jdbcType=REAL},
+    original_money = #{originalMoney,jdbcType=REAL},
+    group_id = #{groupId,jdbcType=BIGINT},
+    create_id = #{createId,jdbcType=BIGINT},
+    create_name = #{createName,jdbcType=VARCHAR},
+    create_date = #{createDate,jdbcType=TIMESTAMP},
+    update_id = #{updateId,jdbcType=BIGINT},
+    update_name = #{updateName,jdbcType=VARCHAR},
+    update_time = #{updateTime,jdbcType=TIMESTAMP},
+    company_id = #{companyId,jdbcType=BIGINT},
+    is_deleted = #{isDeleted,jdbcType=SMALLINT}
     where flow_id = #{flowId,jdbcType=BIGINT}
   </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select flow_id, flow_code, account_id, pro_id, fee_property, money, original_money,
+    group_id, create_id, create_name, create_date, update_id, update_name, update_time,
+    company_id, is_deleted
+    from t_fee_flow
+    where flow_id = #{flowId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select flow_id, flow_code, account_id, pro_id, fee_property, money, original_money,
+    group_id, create_id, create_name, create_date, update_id, update_name, update_time,
+    company_id, is_deleted
+    from t_fee_flow
+  </select>
   <select id="selectByAccountId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/>
     from t_fee_flow
     where account_id = #{accountId,jdbcType=BIGINT}
+    order by flow_id desc
+  </select>
+  <select id="selectByProId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from t_fee_flow
+    where pro_id = #{proId,jdbcType=BIGINT}
     order by flow_id desc
   </select>
 </mapper>
