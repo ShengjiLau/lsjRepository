@@ -4,16 +4,17 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.FeeAccountMapper;
-import com.lcdt.traffic.dao.FeePropertyMapper;
 import com.lcdt.traffic.dao.WaybillItemsMapper;
 import com.lcdt.traffic.dao.WaybillMapper;
 import com.lcdt.traffic.model.FeeAccount;
-import com.lcdt.traffic.model.FeeProperty;
 import com.lcdt.traffic.model.WaybillItems;
 import com.lcdt.traffic.service.FeeAccountService;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
 import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
+import com.lcdt.userinfo.dao.FeePropertyMapper;
+import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.util.ClmsBeanUtil;
+import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
@@ -33,7 +34,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     private WaybillItemsMapper waybillItemsMapper;
     @Autowired
     private FeeAccountMapper feeAccountMapper;
-    @Autowired
+    @Reference
     private FeePropertyMapper feePropertyMapper;
 
     @Override

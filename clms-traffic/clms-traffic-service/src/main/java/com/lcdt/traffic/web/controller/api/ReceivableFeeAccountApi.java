@@ -20,6 +20,7 @@ import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import jdk.nashorn.internal.ir.annotations.Reference;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,7 +41,7 @@ import java.util.*;
 public class ReceivableFeeAccountApi {
     @Autowired
     private FeeAccountService feeAccountService;
-    @Autowired
+    @Reference
     private FeePropertyService feePropertyService;
     @Autowired
     private MsgService msgService;

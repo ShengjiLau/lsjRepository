@@ -5,21 +5,22 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dto.WaybillCustListParamsDto;
 import com.lcdt.traffic.model.FeeFlow;
-import com.lcdt.traffic.model.FeeProperty;
 import com.lcdt.traffic.model.Msg;
 import com.lcdt.traffic.service.FeeAccountService;
-import com.lcdt.traffic.service.FeePropertyService;
 import com.lcdt.traffic.service.MsgService;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
 import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
 import com.lcdt.traffic.web.dto.MsgDto;
 import com.lcdt.traffic.web.dto.PageBaseDto;
+import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.userinfo.model.Group;
+import com.lcdt.userinfo.service.FeePropertyService;
 import com.lcdt.util.ClmsBeanUtil;
 import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import jdk.nashorn.internal.ir.annotations.Reference;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,7 +41,7 @@ import java.util.*;
 public class PayableFeeAccountApi {
     @Autowired
     private FeeAccountService feeAccountService;
-    @Autowired
+    @Reference
     private FeePropertyService feePropertyService;
     @Autowired
     private MsgService msgService;
