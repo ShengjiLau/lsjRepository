@@ -197,6 +197,9 @@
       <if test="driverCategory==0 or driverCategory==1">
         and driver_category = #{driverCategory,jdbcType=VARCHAR}
       </if>
+      <if test="driverInfo!=null and driverInfo!=''">
+        and ( driver_name like concat('%',#{driverInfo,jdbcType=VARCHAR},'%') or driver_phone like concat('%',#{driverInfo,jdbcType=VARCHAR},'%') )
+      </if>
       <if test="driverGroupId!=null and driverGroupId!=''">
         and own_driver_id in(select own_driver_id from t_driver_group_relationship where driver_group_id=#{driverGroupId,jdbcType=VARCHAR})
       </if>

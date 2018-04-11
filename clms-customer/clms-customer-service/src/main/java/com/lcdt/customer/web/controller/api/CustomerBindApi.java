@@ -23,7 +23,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -149,6 +148,10 @@ public class CustomerBindApi {
 			customer.setTelNo(company.getTelNo());
 			customer.setTelNo1(company.getTelNo1());
 			customer.setBankNo(company.getBankNo());
+
+			customer.setInvoiceTitle(company.getInvoiceTitle());
+			customer.setRegistrationNo(company.getRegistrationNo());
+			customer.setBankName(company.getBankName());
 
 			String clientTypes = inviteCustomer.getClientTypes();
 
