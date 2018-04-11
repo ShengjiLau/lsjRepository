@@ -5,6 +5,7 @@ import com.lcdt.traffic.model.SnatchGoods;
 import com.lcdt.traffic.model.SplitGoods;
 import com.lcdt.traffic.model.Waybill;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +29,9 @@ public class CustomerPlanDto implements java.io.Serializable {
     private Short isDeleted;
     private Long companyId;
     private Long splitGoodsId;
+    private Date pubDate;
+    private Date splitDate;
+
 
     public Long getWaybillPlanId() {
         return waybillPlanId;
@@ -149,7 +153,21 @@ public class CustomerPlanDto implements java.io.Serializable {
         this.splitGoodsId = splitGoodsId;
     }
 
+    public Date getPubDate() {
+        return pubDate;
+    }
 
+    public void setPubDate(Date pubDate) {
+        this.pubDate = pubDate;
+    }
+
+    public Date getSplitDate() {
+        return splitDate;
+    }
+
+    public void setSplitDate(Date splitDate) {
+        this.splitDate = splitDate;
+    }
 }
 
 
