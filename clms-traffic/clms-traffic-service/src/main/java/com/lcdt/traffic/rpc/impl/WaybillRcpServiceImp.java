@@ -63,11 +63,11 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         if (dto.getPageSize() != null) {
             pageSize = dto.getPageSize();
         }
-        PageHelper.startPage(pageNo, pageSize);
+
         Map map= ClmsBeanUtil.beanToMap(dto);
-        if(map.containsKey("waybillStatus")&&map.get("waybillStatus")!=null&&!map.get("waybillStatus").equals("")){
-            map.put("waybillStatus",map.get("waybillStatus").toString().split(","));
-        }
+        map=packageWaybillStatus(map);
+
+        PageHelper.startPage(pageNo, pageSize);
         resultList = waybillMapper.selectOwnByCondition(map);
         page = new PageInfo(resultList);
 
@@ -93,10 +93,10 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         map.put("carrierCompanyId", map.get("companyId"));
         map.remove("companyId");
         map.remove("customerName");
+        //将前端传过来的waybillStatus转成数组
+        map=packageWaybillStatus(map);
+
         PageHelper.startPage(pageNo, pageSize);
-        if(map.containsKey("waybillStatus")&&map.get("waybillStatus")!=null&&!map.get("waybillStatus").equals("")){
-            map.put("waybillStatus",map.get("waybillStatus").toString().split(","));
-        }
         resultList = waybillMapper.selectCustomerByCondition(map);
         for (int i = 0; i < resultList.size(); i++) {
             Customer customer=customerRpcService.queryCustomer(resultList.get(i).getCarrierCompanyId(),resultList.get(i).getCompanyId());
@@ -392,6 +392,14 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             waybillSenderNotify.customerCancelSendNotify(waybillIds,userId);
         }
 
+    }
+
+    //将前端传过来的waybillStatus转成数组
+    private Map packageWaybillStatus(Map map){
+        if(map.containsKey("waybillStatus")&&map.get("waybillStatus")!=null&&!map.get("waybillStatus").equals("")){
+            map.put("waybillStatus",map.get("waybillStatus").toString().split(","));
+        }
+        return map;
     }
 
 }
