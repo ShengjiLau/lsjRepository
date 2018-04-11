@@ -149,30 +149,40 @@
       create_date = #{createDate,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=SMALLINT}
     where pro_id = #{proId,jdbcType=BIGINT}
-  </update><select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
-  select
-  <include refid="Base_Column_List" />
-  from t_fee_property
-  <where>
-    company_id = #{companyId,jdbcType=BIGINT}
-    <if test="isDeleted!=null">
-      and is_deleted = #{isDeleted,jdbcType=SMALLINT}
-    </if>
-    <if test="type!=null">
-      and type = #{type,jdbcType=SMALLINT}
-    </if>
-    <if test="isReceivable!=null">
-      and is_receivable = #{isReceivable,jdbcType=SMALLINT}
-    </if>
-    <if test="name!=null">
-      and name = #{name,jdbcType=VARCHAR}
-    </if>
-    <if test="proId!=null">
-      and pro_id != #{proId,jdbcType=BIGINT}
-    </if>
-  </where>
-  order by pro_id desc
-</select>
+  </update>
+  <select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_fee_property
+    <where>
+      company_id = #{companyId,jdbcType=BIGINT}
+      <if test="isDeleted!=null">
+        and is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      </if>
+      <if test="type!=null">
+        and type = #{type,jdbcType=SMALLINT}
+      </if>
+      <if test="isReceivable!=null">
+        and is_receivable = #{isReceivable,jdbcType=SMALLINT}
+      </if>
+      <if test="isShow!=null">
+        and is_show = #{isShow,jdbcType=SMALLINT}
+      </if>
+      <if test="name!=null">
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="proId!=null">
+        and pro_id != #{proId,jdbcType=BIGINT}
+      </if>
+      <if test="proIds!=null and proIds.size>0">
+        and pro_id not in
+        <foreach separator=";" index="index" item="item" collection="proIds" close="" open="">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+    order by pro_id desc
+  </select>
   <update id="updateIsDeleteByPrimaryKey" parameterType="java.lang.Long">
     update t_fee_property
     set is_deleted = 1

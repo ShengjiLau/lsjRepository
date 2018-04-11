@@ -2,6 +2,7 @@ package com.lcdt.traffic.web.dto;
 
 import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.model.FeeFlow;
+import com.lcdt.traffic.model.FeeProperty;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
@@ -33,6 +34,10 @@ public class FeeAccountDto extends FeeAccount{
     private Float feeTotal;
 
     private List<FeeFlow> feeFlowList;
+
+    private List<FeeProperty> showPropertyList;
+
+    private List<FeeProperty> hidePropertyList;
 
     @ApiModelProperty(value = "页码", required = true)
     private Integer pageNum;
@@ -126,5 +131,21 @@ public class FeeAccountDto extends FeeAccount{
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public List<FeeProperty> getShowPropertyList() {
+        return showPropertyList;
+    }
+
+    public void setShowPropertyList(List<FeeProperty> showPropertyList) {
+        this.showPropertyList = showPropertyList;
+    }
+
+    public List<FeeProperty> getHidePropertyList() {
+        return hidePropertyList;
+    }
+
+    public void setHidePropertyList(List<FeeProperty> hidePropertyList) {
+        this.hidePropertyList = hidePropertyList;
     }
 }
