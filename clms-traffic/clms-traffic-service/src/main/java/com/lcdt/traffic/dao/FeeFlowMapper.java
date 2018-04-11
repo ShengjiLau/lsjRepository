@@ -9,11 +9,9 @@ public interface FeeFlowMapper {
 
     int insert(FeeFlow record);
 
-    int insertSelective(FeeFlow record);
-
     FeeFlow selectByPrimaryKey(Long flowId);
 
-    int updateByPrimaryKeySelective(FeeFlow record);
+    List<FeeFlow> selectAll();
 
     int updateByPrimaryKey(FeeFlow record);
 

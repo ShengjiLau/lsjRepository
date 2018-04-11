@@ -55,9 +55,9 @@ public interface IPlanRpcService4Wechat {
     PageInfo wayBillPlanList(Map map);
 
     //直派逻辑(PC_复用)
-    Integer splitGoods4Direct(SplitGoodsParamsDto dto, UserCompRel userCompRel);
+    WaybillPlan splitGoods4Direct(SplitGoodsParamsDto dto, UserCompRel userCompRel);
     //竞价派单(PC_复用)
-    Integer splitGoods4Bidding(BindingSplitParamsDto dto, UserCompRel userCompRel);
+    WaybillPlan splitGoods4Bidding(BindingSplitParamsDto dto, UserCompRel userCompRel);
 
 
 

@@ -147,11 +147,11 @@ public class PlanApi {
     @RequestMapping(value = "/carrier/splitGoods4Direct",method = RequestMethod.POST)
     public JSONObject splitGoods4Direct(SplitGoodsParamsDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
-        int flag = iPlanRpcService4Wechat.splitGoods4Direct(dto,userCompRel);
+        WaybillPlan waybillPlan = iPlanRpcService4Wechat.splitGoods4Direct(dto,userCompRel);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
-        if (flag==1) {
+        if (waybillPlan!=null) {
             code = 0;
         } else {
             message = "操作失败，请重试！";
@@ -167,17 +167,18 @@ public class PlanApi {
     @RequestMapping(value = "/carrier/splitGoods4Bidding",method = RequestMethod.POST)
     public JSONObject splitGoods4Bidding(BindingSplitParamsDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
-        int flag = iPlanRpcService4Wechat.splitGoods4Bidding(dto,userCompRel);
+        WaybillPlan plan = iPlanRpcService4Wechat.splitGoods4Bidding(dto,userCompRel);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
-        if (flag==1) {
+        if (plan!=null) {
             code = 0;
         } else {
             message = "操作失败，请重试！";
         }
         jsonObject.put("message",message);
         jsonObject.put("code",code);
+        jsonObject.put("data",plan);
         return jsonObject;
     }
 
