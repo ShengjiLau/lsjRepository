@@ -132,4 +132,10 @@
     where account_id = #{accountId,jdbcType=BIGINT}
     order by flow_id desc
   </select>
+  <select id="selectByProId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from t_fee_flow
+    where pro_id = #{proId,jdbcType=BIGINT}
+    order by flow_id desc
+  </select>
 </mapper>

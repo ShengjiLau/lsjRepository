@@ -18,4 +18,6 @@ public interface FeeFlowMapper {
     int updateByPrimaryKey(FeeFlow record);
 
     List<FeeFlow> selectByAccountId(Long accountId);
+
+    List<FeeFlow> selectByProId(Long proId);
 }
