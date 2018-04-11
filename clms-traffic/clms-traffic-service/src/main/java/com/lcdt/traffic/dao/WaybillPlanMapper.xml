@@ -880,7 +880,6 @@
     wp.is_deleted,
     wp.pubdate,
     sp.create_date as splitDate
-
     FROM t_split_goods sp
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
@@ -888,7 +887,7 @@
       and wp.plan_status!='60' and wp.plan_status!='50'
       and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)>0
       <if test="isDeleted!=null">
-        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
+        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
       <if test="serialCode!=null and serialCode!=''">
         and wp.serial_code like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
@@ -963,7 +962,7 @@
       and wp.plan_status!='60' and wp.plan_status!='50'
       and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
       <if test="isDeleted!=null">
-        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
+        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
       <if test="serialCode!=null and serialCode!=''">
         and wp.serial_code like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
@@ -1037,7 +1036,7 @@
       and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
       and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status!=7 )=0
       <if test="isDeleted!=null">
-        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
+        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
       <if test="serialCode!=null and serialCode!=''">
         and wp.serial_code like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
@@ -1107,7 +1106,7 @@
     <where>
        and wp.plan_status='60'
       <if test="isDeleted!=null">
-        and sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
+        and sp.is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
       <if test="serialCode!=null and serialCode!=''">
         and wp.serial_code like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
