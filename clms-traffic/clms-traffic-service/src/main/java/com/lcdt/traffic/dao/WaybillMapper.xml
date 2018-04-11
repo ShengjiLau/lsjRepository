@@ -177,7 +177,6 @@
         #{item}
       </foreach>
     </if>
-    
     <if test="waybillPlanId!=null and waybillPlanId!=''">
       and waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT}
     </if>
