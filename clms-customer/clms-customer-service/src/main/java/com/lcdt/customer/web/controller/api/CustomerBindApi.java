@@ -54,6 +54,10 @@ public class CustomerBindApi {
 	@Autowired
 	CustomerInviteLogMapper inviteLogMapper;
 
+	@RequestMapping("/testurl")
+	public ModelAndView testLogoutUrl(){
+		return new ModelAndView("error");
+	}
 
 	@ApiOperation("获取邀请邮件内容")
 	@RequestMapping(value = "/invitecustomer",method = RequestMethod.POST)
