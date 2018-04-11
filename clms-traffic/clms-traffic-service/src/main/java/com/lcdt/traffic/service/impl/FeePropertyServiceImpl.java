@@ -43,4 +43,9 @@ public class FeePropertyServiceImpl implements FeePropertyService {
         int result = feePropertyMapper.updateIsDeleteByPrimaryKey(proId);
         return result;
     }
+    @Override
+    public List<FeeProperty> getFeePropertyList(Map m){
+        List<FeeProperty> list = feePropertyMapper.selectByCondition(m);
+        return list;
+    }
 }

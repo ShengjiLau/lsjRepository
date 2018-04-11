@@ -13,6 +13,8 @@ public class FeeFlow implements Serializable {
 
     private Long accountId;
 
+    private Long proId;
+
     private String feeProperty;
 
     private Float money;
@@ -47,6 +49,14 @@ public class FeeFlow implements Serializable {
 
     public void setAccountId(Long accountId) {
         this.accountId = accountId;
+    }
+
+    public Long getProId() {
+        return proId;
+    }
+
+    public void setProId(Long proId) {
+        this.proId = proId;
     }
 
     public String getFeeProperty() {

@@ -1,10 +1,10 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
-import com.lcdt.traffic.dto.WaybillOwnListParamsDto;
 import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,11 +23,21 @@ public interface FeeAccountService {
      * @return
      */
     Map feeAccountPage(Map m);
-
+    /**
+     * 保存/修改记账单及流水
+     * @param map
+     * @return
+     */
+    int feeAccountSave(Map map);
+    /**
+     * 查询单个运单费用明细
+     * @return
+     */
+    List<FeeAccountDto> selectFlowByWaybillId(Map m);
     /**
      * 记账单列表
      * @param dto
-     * @return
+ * @return
      */
     PageInfo feeAccountList(FeeAccountDto dto);
     /**

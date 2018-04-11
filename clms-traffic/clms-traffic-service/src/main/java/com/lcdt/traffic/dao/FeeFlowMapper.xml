@@ -5,6 +5,7 @@
     <id column="flow_id" jdbcType="BIGINT" property="flowId" />
     <result column="flow_code" jdbcType="VARCHAR" property="flowCode" />
     <result column="account_id" jdbcType="BIGINT" property="accountId" />
+    <result column="pro_id" jdbcType="BIGINT" property="proId" />
     <result column="fee_property" jdbcType="VARCHAR" property="feeProperty" />
     <result column="money" jdbcType="REAL" property="money" />
     <result column="original_money" jdbcType="REAL" property="originalMoney" />
@@ -12,7 +13,7 @@
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
   </resultMap>
   <sql id="Base_Column_List">
-    flow_id, flow_code, account_id, fee_property, money, original_money, create_date, 
+    flow_id, flow_code, account_id, pro_id, fee_property, money, original_money, create_date,
     is_deleted
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -29,10 +30,10 @@
     <selectKey keyProperty="flowId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_fee_flow (flow_code, account_id, fee_property, 
+    insert into t_fee_flow (flow_code, account_id, pro_id, fee_property,
       money, original_money, create_date, 
       is_deleted)
-    values (#{flowCode,jdbcType=VARCHAR}, #{accountId,jdbcType=BIGINT}, #{feeProperty,jdbcType=VARCHAR}, 
+    values (#{flowCode,jdbcType=VARCHAR}, #{accountId,jdbcType=BIGINT}, #{proId,jdbcType=BIGINT}, #{feeProperty,jdbcType=VARCHAR},
       #{money,jdbcType=REAL}, #{originalMoney,jdbcType=REAL}, #{createDate,jdbcType=TIMESTAMP}, 
       #{isDeleted,jdbcType=SMALLINT})
   </insert>
@@ -47,6 +48,9 @@
       </if>
       <if test="accountId != null">
         account_id,
+      </if>
+      <if test="proId != null">
+        pro_id,
       </if>
       <if test="feeProperty != null">
         fee_property,
@@ -70,6 +74,9 @@
       </if>
       <if test="accountId != null">
         #{accountId,jdbcType=BIGINT},
+      </if>
+      <if test="proId != null">
+        #{proId,jdbcType=BIGINT},
       </if>
       <if test="feeProperty != null">
         #{feeProperty,jdbcType=VARCHAR},
@@ -97,6 +104,9 @@
       <if test="accountId != null">
         account_id = #{accountId,jdbcType=BIGINT},
       </if>
+      <if test="proId != null">
+        pro_id = #{proId,jdbcType=BIGINT},
+      </if>
       <if test="feeProperty != null">
         fee_property = #{feeProperty,jdbcType=VARCHAR},
       </if>
@@ -119,6 +129,7 @@
     update t_fee_flow
     set flow_code = #{flowCode,jdbcType=VARCHAR},
       account_id = #{accountId,jdbcType=BIGINT},
+      pro_id = #{proId,jdbcType=BIGINT},
       fee_property = #{feeProperty,jdbcType=VARCHAR},
       money = #{money,jdbcType=REAL},
       original_money = #{originalMoney,jdbcType=REAL},

@@ -4,9 +4,11 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.FeeAccountMapper;
+import com.lcdt.traffic.dao.FeePropertyMapper;
 import com.lcdt.traffic.dao.WaybillItemsMapper;
 import com.lcdt.traffic.dao.WaybillMapper;
 import com.lcdt.traffic.model.FeeAccount;
+import com.lcdt.traffic.model.FeeProperty;
 import com.lcdt.traffic.model.WaybillItems;
 import com.lcdt.traffic.service.FeeAccountService;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
@@ -31,6 +33,8 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     private WaybillItemsMapper waybillItemsMapper;
     @Autowired
     private FeeAccountMapper feeAccountMapper;
+    @Autowired
+    private FeePropertyMapper feePropertyMapper;
 
     @Override
     public PageInfo feeAccountWaybillList(Map map){
@@ -57,12 +61,28 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     }
     @Override
     public Map feeAccountPage(Map m){
-        List<FeeAccountDto> feeAccountDtoList = feeAccountMapper.selectFeeAccountDetail(m);
         List<WaybillItems> waybillItemsList = waybillItemsMapper.selectByWaybillId(Long.parseLong(m.get("waybillId").toString()));
+        List<FeeAccountDto> feeAccountDtoList = feeAccountMapper.selectFeeAccountDetail(m);
+        m.put("isShow", (short)0);
+        List<FeeProperty> showPropertyList = feePropertyMapper.selectByCondition(m);
+        m.put("isShow", (short)1);
+        List<FeeProperty> hidePropertyList = feePropertyMapper.selectByCondition(m);
         Map map = new HashMap();
-        map.put("feeAccountDtoList", feeAccountDtoList);
         map.put("waybillItemsList", waybillItemsList);
+        map.put("feeAccountDtoList", feeAccountDtoList);
+        map.put("showPropertyList", showPropertyList);
+        map.put("hidePropertyList", hidePropertyList);
         return m;
+    }
+    @Override
+    public int feeAccountSave(Map map){
+
+        return 0;
+    }
+    @Override
+    public List<FeeAccountDto> selectFlowByWaybillId(Map m){
+        List<FeeAccountDto> list = feeAccountMapper.selectFlowByWaybillId(m);
+        return list;
     }
     @Override
     public PageInfo feeAccountList(FeeAccountDto dto){
