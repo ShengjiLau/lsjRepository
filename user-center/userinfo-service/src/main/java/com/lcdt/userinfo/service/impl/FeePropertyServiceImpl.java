@@ -39,7 +39,7 @@ public class FeePropertyServiceImpl implements FeePropertyService {
 
     @Override
     public int modifyFeeProperty(FeeProperty feeProperty) {
-        int result = feePropertyMapper.updateByPrimaryKey(feeProperty);
+        int result = feePropertyMapper.updateByPrimaryKeySelective(feeProperty);
         return result;
     }
 

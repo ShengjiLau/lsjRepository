@@ -17,6 +17,7 @@ import com.lcdt.util.ClmsBeanUtil;
 import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,12 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     }
     @Override
     public int feeAccountSave(Map map){
-
+        List<FeeAccountDto> dtoList = (List<FeeAccountDto>) map.get("dtoList");
+//        BeanUtils.copyProperties(dto, contract); //复制对象属性
+        if(dtoList != null && dtoList.size() > 0){
+            List<FeeAccount> feeAccountList = new ArrayList<>();
+//            for()
+        }
         return 0;
     }
     @Override
