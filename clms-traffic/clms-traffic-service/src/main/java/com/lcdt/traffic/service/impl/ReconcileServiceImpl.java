@@ -3,15 +3,19 @@ package com.lcdt.traffic.service.impl;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.dao.FeeAccountMapper;
 import com.lcdt.traffic.dao.ReconcileMapper;
+import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.model.Reconcile;
 import com.lcdt.traffic.service.ReconcileService;
 import com.lcdt.traffic.web.dto.ReconcileDto;
@@ -28,26 +32,53 @@ public class ReconcileServiceImpl implements ReconcileService {
 	@Autowired
 	private ReconcileMapper reconcileMapper;
 	
+	@Autowired
+	private FeeAccountMapper feeAccountMapper;
+	
 	/**
 	 * 插入对账单
+	 * 前端Api传入的参数为ReconcileListDto,包含多条ReconcileDto,
+	 * ReconcileDto包含记账单id数组,业务组id数组,运单id数组.
+	 * 此处的业务逻辑需要将这些id数组转化为字符串并赋值到Reconcile相对应的属性上.
+	 * 在批量插入Reconcile后,还需要获取相应的Reconcile的主键id和reconcileCode并将其添加到对应的记账单中
 	 */
 	@Override
 	public int insertReconcileBatch(ReconcileListDto reconcileListDto) {
 		
-	List<Reconcile> reconcileDtoList=reconcileListDto.getReconcileList();
-	
-//	reconcileDtoList.forEach(x->x.setCompanyId(SecurityInfoGetter.getCompanyId()));
-//	reconcileDtoList.forEach(x->x.setOperatorName(SecurityInfoGetter.getUser().getRealName()));
-//	reconcileDtoList.forEach(x->x.setOperatorId(SecurityInfoGetter.getUser().getUserId()));
-	//添加创建人id,创建人名字,公司id
-	for(Reconcile reconcile:reconcileDtoList) {
-		reconcile.setCompanyId(SecurityInfoGetter.getCompanyId());
-		reconcile.setOperatorName(SecurityInfoGetter.getUser().getRealName());
-		reconcile.setOperatorId(SecurityInfoGetter.getUser().getUserId());
+	List<ReconcileDto> reconcileDtoList=reconcileListDto.getReconcileList();
+	List<Reconcile> reconcileLists =new ArrayList<Reconcile>();
+	List<FeeAccount> feeAccountList=new ArrayList<FeeAccount>();
+	//添加创建人id,创建人名字,公司id,将传入的记账单id数组,业务组id数组,运单id数组转化为字符串存入Reconcile
+	for(ReconcileDto reconcileDto:reconcileDtoList) {
+		Reconcile r= new Reconcile();
+		BeanUtils.copyProperties(reconcileDto, r);		
+		r.setCompanyId(SecurityInfoGetter.getCompanyId());
+		r.setOperatorName(SecurityInfoGetter.getUser().getRealName());
+		r.setOperatorId(SecurityInfoGetter.getUser().getUserId());
+		r.setGroupId(convertLoToStr(reconcileDto.getGroupIds()));
+		r.setAccountId(convertLoToStr(reconcileDto.getAccountIds()));
+		r.setWaybillId(convertLoToStr(reconcileDto.getWaybillIds()));
+		reconcileLists.add(r);
 	}
-	int result=reconcileMapper.insertByBatch(reconcileDtoList);
-		
-	return result;	
+	int result=reconcileMapper.insertByBatch(reconcileLists);
+	for(ReconcileDto reconcileDto:reconcileDtoList) {
+		Reconcile reconcile =reconcileMapper.selectByPrimaryKey(reconcileDto.getReconcileId());
+		Long[] acLongId=reconcileDto.getAccountIds();
+		for(Long l:acLongId) {		
+			FeeAccount fa = new FeeAccount();
+			fa.setAccountId(l);
+			fa.setReconcileId(reconcile.getReconcileId());
+			fa.setReconcileCode(reconcile.getReconcileCode());
+			feeAccountList.add(fa);
+		}	
+	}
+	int i=feeAccountList.size();
+	int j=feeAccountMapper.updateReconcileByBatch(feeAccountList);
+	if(i==j) {
+		return result;
+	}else {
+		return -1;
+	}	
 	}
 
 	
@@ -82,6 +113,27 @@ public class ReconcileServiceImpl implements ReconcileService {
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * 这个方法用于将Long类型数组转化为规定格式的String字符串
+	 * @param longId
+	 * @return
+	 */
+	public String convertLoToStr(Long[] longId) {
+		StringBuilder sbd =new StringBuilder();
+		for(Long l:longId) {
+			sbd.append(l);sbd.append(",");
+		}
+		sbd.substring(0,sbd.length()-1);
+		
+		return sbd.toString();
+	}
 	
 	
 	

@@ -96,6 +96,76 @@
     order by flow_id desc
   </select>
 
+  <insert id="insertBatch">
+    insert into t_fee_flow (flow_code, account_id, pro_id,
+    fee_property, money, original_money,
+    group_id, create_id, create_name,
+    create_date, update_id, update_name,
+    update_time, company_id, is_deleted
+    )
+    <foreach item="item" collection="list" separator=",">
+      values (#{flowCode,jdbcType=VARCHAR}, #{accountId,jdbcType=BIGINT}, #{proId,jdbcType=BIGINT},
+      #{feeProperty,jdbcType=VARCHAR}, #{money,jdbcType=REAL}, #{originalMoney,jdbcType=REAL},
+      #{groupId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR},
+      #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR},
+      #{updateTime,jdbcType=TIMESTAMP}, #{companyId,jdbcType=BIGINT}, #{isDeleted,jdbcType=SMALLINT}
+      )
+    </foreach>
+  </insert>
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach separator=";" index="index" item="item" collection="list" close="" open="">
+      update t_fee_flow
+      <set>
+        <if test="item.flowCode != null">
+          flow_code = #{item.flowCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.accountId != null">
+          account_id = #{item.accountId,jdbcType=BIGINT},
+        </if>
+        <if test="item.proId != null">
+          pro_id = #{item.proId,jdbcType=BIGINT},
+        </if>
+        <if test="item.feeProperty != null">
+          fee_property = #{item.feeProperty,jdbcType=VARCHAR},
+        </if>
+        <if test="item.money != null">
+          money = #{item.money,jdbcType=REAL},
+        </if>
+        <if test="item.originalMoney != null">
+          original_money = #{item.originalMoney,jdbcType=REAL},
+        </if>
+        <if test="item.groupId != null">
+          group_id = #{item.groupId,jdbcType=BIGINT},
+        </if>
+        <if test="item.createId != null">
+          create_id = #{item.createId,jdbcType=BIGINT},
+        </if>
+        <if test="item.createName != null">
+          create_name = #{item.createName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.createDate != null">
+          create_date = #{item.createDate,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.updateId != null">
+          update_id = #{item.updateId,jdbcType=BIGINT},
+        </if>
+        <if test="item.updateName != null">
+          update_name = #{item.updateName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.updateTime != null">
+          update_time = #{item.updateTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.companyId != null">
+          company_id = #{item.companyId,jdbcType=BIGINT},
+        </if>
+        <if test="item.isDeleted != null">
+          is_deleted = #{item.isDeleted,jdbcType=SMALLINT},
+        </if>
+      </set>
+      where account_id = #{item.accountId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
   <resultMap id="searchMap" type="com.lcdt.traffic.dto.FeeFlow4SearchResultDto">
     <id column="flow_code" jdbcType="VARCHAR" property="flowCode" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
