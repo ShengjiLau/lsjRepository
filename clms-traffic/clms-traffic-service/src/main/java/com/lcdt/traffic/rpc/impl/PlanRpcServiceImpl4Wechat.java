@@ -22,7 +22,6 @@ import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
-import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;

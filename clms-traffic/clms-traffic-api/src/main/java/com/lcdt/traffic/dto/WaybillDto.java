@@ -1,4 +1,4 @@
-package com.lcdt.traffic.web.dto;
+package com.lcdt.traffic.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
