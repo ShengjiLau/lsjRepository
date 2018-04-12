@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import com.lcdt.traffic.model.Reconcile;
 
+import io.swagger.annotations.ApiModelProperty;
+
 
 
 /**
@@ -29,6 +31,14 @@ public class ReconcileDto extends Reconcile implements Serializable{
 
 	private Long group;
 	
+	@ApiModelProperty("业务组id数组")
+	private Long[] groupIds;
+	
+	@ApiModelProperty("记账单id数组")
+	private Long[] accountIds;
+	
+	@ApiModelProperty("运单id数组")
+	private Long[] waybillIds;
 	
 	public String getBeginTime() {
 		return beginTime;
@@ -77,6 +87,36 @@ public class ReconcileDto extends Reconcile implements Serializable{
 
 	public void setGroup(Long group) {
 		this.group = group;
+	}
+
+
+	public Long[] getGroupIds() {
+		return groupIds;
+	}
+
+
+	public void setGroupIds(Long[] groupIds) {
+		this.groupIds = groupIds;
+	}
+
+
+	public Long[] getAccountIds() {
+		return accountIds;
+	}
+
+
+	public void setAccountIds(Long[] accountIds) {
+		this.accountIds = accountIds;
+	}
+
+
+	public Long[] getWaybillIds() {
+		return waybillIds;
+	}
+
+
+	public void setWaybillIds(Long[] waybillIds) {
+		this.waybillIds = waybillIds;
 	}
 
 

@@ -21,7 +21,7 @@ import com.lcdt.userinfo.service.DriverService;
  */
 @RunWith( SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes=TrafficServiceApp.class)
-public class test002 {
+public class Test02 {
 	
 	@Autowired
 	private TestMapper tm;

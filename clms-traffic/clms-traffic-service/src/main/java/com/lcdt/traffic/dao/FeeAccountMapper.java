@@ -30,4 +30,9 @@ public interface FeeAccountMapper {
     int auditByAccountIds(Map map);
 
     List reconcileByAccountIds(Map map);
+    
+    int updateReconcileByBatch(List<FeeAccount> feeAccountList);
+    
+    
+    
 }

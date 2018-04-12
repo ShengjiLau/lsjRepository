@@ -3,7 +3,7 @@ package com.lsj;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-public class test004 {
+public class Test04 {
 
 	public static void main(String[] args) {
 		JSONObject job =new JSONObject();
