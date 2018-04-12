@@ -166,13 +166,59 @@
     </foreach>
   </update>
 
+  <resultMap id="searchMap" type="com.lcdt.traffic.dto.FeeFlow4SearchResultDto">
+    <id column="flow_code" jdbcType="VARCHAR" property="flowCode" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="waybill_code" jdbcType="VARCHAR" property="waybillCode" />
+    <result column="reconcile_code" jdbcType="VARCHAR" property="reconcileCode" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="fee_property" jdbcType="VARCHAR" property="feeProperty" />
+    <result column="money" jdbcType="REAL" property="money" />
+    <result column="original_money" jdbcType="REAL" property="originalMoney" />
+  </resultMap>
 
+  <select id="searchCondition" parameterType="com.lcdt.traffic.dto.FeeFlow4SearchParamsDto" resultMap="searchMap">
+    select f.flow_code,f.create_date,a.group_name,a.waybill_code,a.reconcile_code,a.name,f.fee_property,f.money,f.original_money
+    from t_fee_flow f
+    LEFT JOIN t_fee_account a  ON  f.account_id = a.account_id
+    <where>
+      <if test="isDeleted!=null">
+        and  f.is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      </if>
+      <if test="groupIds!=null and groupIds!=''">
+        and  f.group_id in (#{groupIds,jdbcType=VARCHAR})
+      </if>
+      <if test="companyId!=null">
+        and  f.company_id = #{companyId,jdbcType=BIGINT}
+      </if>
+      <if test="isReceivable!=null">
+        and  f.is_receivable = #{isReceivable,jdbcType=SMALLINT}
+      </if>
+      <if test="nameId!=null and nameId>0">
+        and  a.name_id = #{nameId,jdbcType=BIGINT}
+      </if>
+      <if test="proId!=null and proId>0">
+        and  f.pro_id = #{proId,jdbcType=SMALLINT}
+      </if>
+      <if test="flowCode!=null and flowCode!=''">
+        and f.flow_code like concat('%',#{flowCode,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="waybillCode!=null and waybillCode!=''">
+        and a.waybill_code like concat('%',#{waybillCode,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="reconcileCode!=null and waybillCode!=''">
+        and a.reconcile_code like concat('%',#{reconcileCode,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="createBegin!=null and createBegin!=''">
+        and  f.create_date >= #{createBegin,jdbcType=TIMESTAMP}
+      </if>
+      <if test="createEnd!=null and createEnd!=''">
+        and  #{createEnd,jdbcType=TIMESTAMP} >= f.create_date
+      </if>
+    </where>
 
-  <select id="searchCondition" parameterType="com.lcdt.traffic.dto.FeeFlow4SearchParamsDto" resultMap="BaseResultMap">
-    select <include refid="Base_Column_List"/>
-    from t_fee_flow
-    where pro_id = #{proId,jdbcType=BIGINT} and is_deleted = #{isDeleted,jdbcType=SMALLINT}
-    order by flow_id desc
+    order by flow_code desc
   </select>
 
 </mapper>
