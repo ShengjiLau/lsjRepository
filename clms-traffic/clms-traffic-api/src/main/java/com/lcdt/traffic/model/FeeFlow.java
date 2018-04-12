@@ -1,8 +1,9 @@
 package com.lcdt.traffic.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class FeeFlow {
+public class FeeFlow  implements Serializable {
     private Long flowId;
 
     private String flowCode;
@@ -37,6 +38,7 @@ public class FeeFlow {
 
     private Short isReceivable;
 
+    private static final long serialVersionUID = 1L;
 
     public Short getIsReceivable() {
         return isReceivable;

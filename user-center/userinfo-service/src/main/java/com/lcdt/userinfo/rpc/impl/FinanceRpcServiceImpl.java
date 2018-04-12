@@ -16,11 +16,6 @@ import java.util.Map;
 public class FinanceRpcServiceImpl implements FinanceRpcService {
     @Autowired
     private FeePropertyMapper feePropertyMapper;
-    @Override
-    public List<FeeProperty> getFeePropertyList(Map m){
-        List<FeeProperty> list = feePropertyMapper.selectByCondition(m);
-        return list;
-    }
 
     @Override
     public List<FeeProperty> selectByCondition(Map m) {
