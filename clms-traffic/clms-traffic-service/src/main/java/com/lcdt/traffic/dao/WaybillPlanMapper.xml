@@ -1069,7 +1069,7 @@
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
-      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''"> <!--承运企业-->
+      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
         and ${carrierCollectionIds}
       </if>
     </where>
