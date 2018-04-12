@@ -3,23 +3,24 @@ package com.lcdt.traffic.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.traffic.dao.FeeAccountMapper;
-import com.lcdt.traffic.dao.WaybillItemsMapper;
-import com.lcdt.traffic.dao.WaybillMapper;
+import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.model.FeeAccount;
+import com.lcdt.traffic.model.FeeFlow;
+import com.lcdt.traffic.model.FeeFlowLog;
 import com.lcdt.traffic.model.WaybillItems;
 import com.lcdt.traffic.service.FeeAccountService;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
+import com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto;
 import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
 import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.userinfo.rpc.FinanceRpcService;
 import com.lcdt.util.ClmsBeanUtil;
 import jdk.nashorn.internal.ir.annotations.Reference;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.tl.commons.util.DateUtility;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 //import com.lcdt.traffic.dto.WaybillOwnListParamsDto;
 
@@ -34,8 +35,12 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     private WaybillItemsMapper waybillItemsMapper;
     @Autowired
     private FeeAccountMapper feeAccountMapper;
+    @Autowired
+    private FeeFlowMapper feeFlowMapper;
+    @Autowired
+    private FeeFlowLogMapper feeFlowLogMapper;
     @Reference
-    private FinanceRpcService financeRpcService;
+    FinanceRpcService financeRpcService;
 
     @Override
     public PageInfo feeAccountWaybillList(Map map){
@@ -76,9 +81,108 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         return m;
     }
     @Override
-    public int feeAccountSave(Map map){
+    public boolean feeAccountSave(FeeAccountSaveParamsDto saveParamsDto){
+        try{
+            List<FeeAccountDto> dtoList = saveParamsDto.getDtoList();//所有记账单（包含流水)
 
-        return 0;
+            if(dtoList != null && dtoList.size() > 0){
+                List<FeeAccount> updateFeeAccountList = new ArrayList<>();//修改已存在的记账单
+                List<FeeFlow> updateFeeFlowList = new ArrayList<>();//修改已存在的流水
+                List<FeeFlowLog> insertFeeFlowLogList = new ArrayList<>();//已存在流水修改日志
+
+                for(FeeAccountDto dto : dtoList){
+                    FeeAccount account = new FeeAccount();
+                    BeanUtils.copyProperties(dto, account); //记账单复制对象属性
+                    if(account.getAccountId() != null) {
+                        updateFeeAccountList.add(account);
+
+                        if(dto.getFeeFlowList() != null && dto.getFeeFlowList().size() > 0){
+                            for(FeeFlow flow : dto.getFeeFlowList()){
+                                if(flow.getFlowId() != null){
+                                    flow.setUpdateId(saveParamsDto.getUserId());
+                                    flow.setUpdateName(saveParamsDto.getRealName());
+                                    flow.setUpdateTime(new Date());
+                                    updateFeeFlowList.add(flow);
+
+                                    //对修改过的流水添加修改日志
+                                    FeeFlowLog log = new FeeFlowLog();
+                                    log.setFlowId(flow.getFlowId());
+                                    log.setMoney(flow.getMoney());
+                                    log.setOldMoney(feeFlowMapper.selectByPrimaryKey(flow.getFlowId()).getMoney());
+                                    log.setOperatorId(flow.getUpdateId());
+                                    log.setOperatorName(flow.getUpdateName());
+                                    log.setCreateDate(new Date());
+                                    log.setIsDeleted((short)0);
+                                    insertFeeFlowLogList.add(log);
+                                }else{
+                                    flow.setAccountId(account.getAccountId());
+                                    flow.setOriginalMoney(flow.getMoney());
+                                    flow.setGroupId(saveParamsDto.getGroupId());
+                                    flow.setCreateId(saveParamsDto.getUserId());
+                                    flow.setCreateName(saveParamsDto.getRealName());
+                                    flow.setCreateDate(new Date());
+                                    flow.setIsReceivable(saveParamsDto.getIsReceivable());
+                                    flow.setCompanyId(saveParamsDto.getCompanyId());
+                                    flow.setIsDeleted((short)0);
+                                    feeFlowMapper.insert(flow);
+                                    flow.setFlowCode("LS" + DateUtility.date2String(new Date(),
+                                            "yyyyMMdd") + flow.getFlowId());
+                                    feeFlowMapper.updateByPrimaryKey(flow);
+                                }
+                            }
+                        }
+                    }else{
+                        account.setCompanyId(saveParamsDto.getCompanyId());
+                        account.setWaybillId(saveParamsDto.getWaybillId());
+                        account.setWaybillCode(saveParamsDto.getWaybillCode());
+                        account.setGroupId(saveParamsDto.getGroupId());
+                        account.setGroupName(saveParamsDto.getGroupName());
+                        account.setOperatorId(saveParamsDto.getUserId());
+                        account.setOperatorName(saveParamsDto.getRealName());
+                        account.setIsReceivable(saveParamsDto.getIsReceivable());
+                        account.setCreateDate(new Date());
+                        account.setIsDeleted((short)0);
+                        feeAccountMapper.insert(account);
+                        account.setAccountCode("JZ" + DateUtility.date2String(new Date(),
+                                "yyyyMMdd") + account.getAccountId());
+                        feeAccountMapper.updateByPrimaryKey(account);
+
+                        if(dto.getFeeFlowList() != null && dto.getFeeFlowList().size() > 0){
+                            for(FeeFlow flow : dto.getFeeFlowList()) {
+                                if(flow.getFlowId() == null) {
+                                    flow.setAccountId(account.getAccountId());
+                                    flow.setOriginalMoney(flow.getMoney());
+                                    flow.setGroupId(saveParamsDto.getGroupId());
+                                    flow.setCreateId(saveParamsDto.getUserId());
+                                    flow.setCreateName(saveParamsDto.getRealName());
+                                    flow.setCreateDate(new Date());
+                                    flow.setIsReceivable(saveParamsDto.getIsReceivable());
+                                    flow.setCompanyId(saveParamsDto.getCompanyId());
+                                    flow.setIsDeleted((short)0);
+                                    feeFlowMapper.insert(flow);
+                                    flow.setFlowCode("LS" + DateUtility.date2String(new Date(),
+                                            "yyyyMMdd") + flow.getFlowId());
+                                    feeFlowMapper.updateByPrimaryKey(flow);
+                                }
+                            }
+                        }
+                    }
+                }
+                if(updateFeeAccountList.size() > 0){
+                    feeAccountMapper.updateBatch(updateFeeAccountList);
+                }
+                if(updateFeeFlowList.size() > 0){
+                    feeFlowMapper.updateBatch(updateFeeFlowList);
+                }
+                if(insertFeeFlowLogList.size() > 0){
+                    feeFlowLogMapper.insertBatch(insertFeeFlowLogList);
+                }
+            }
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
     @Override
     public List<FeeAccountDto> selectFlowByWaybillId(Map m){

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.traffic.dao.WaybillPositionSettingMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.WaybillPositionSetting">
+    <id column="wps_id" jdbcType="BIGINT" property="wpsId" />
+    <result column="waybill_id" jdbcType="BIGINT" property="waybillId" />
+    <result column="driver_phone" jdbcType="VARCHAR" property="driverPhone" />
+    <result column="wps_type" jdbcType="SMALLINT" property="wpsType" />
+    <result column="frequency_type" jdbcType="SMALLINT" property="frequencyType" />
+    <result column="fixed_interval" jdbcType="INTEGER" property="fixedInterval" />
+    <result column="fixed_time" jdbcType="VARCHAR" property="fixedTime" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="carrier_company_id" jdbcType="BIGINT" property="carrierCompanyId" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_id" jdbcType="BIGINT" property="updateId" />
+    <result column="update_name" jdbcType="VARCHAR" property="updateName" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_waybill_position_setting
+    where wps_id = #{wpsId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.traffic.model.WaybillPositionSetting">
+    <selectKey keyProperty="wpsId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_waybill_position_setting (waybill_id, driver_phone, wps_type, 
+      frequency_type, fixed_interval, fixed_time, 
+      company_id, carrier_company_id, create_id, 
+      create_name, create_date, update_id, 
+      update_name, update_date, is_deleted
+      )
+    values (#{waybillId,jdbcType=BIGINT}, #{driverPhone,jdbcType=VARCHAR}, #{wpsType,jdbcType=SMALLINT}, 
+      #{frequencyType,jdbcType=SMALLINT}, #{fixedInterval,jdbcType=INTEGER}, #{fixedTime,jdbcType=VARCHAR}, 
+      #{companyId,jdbcType=BIGINT}, #{carrierCompanyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, 
+      #{createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{updateId,jdbcType=BIGINT},
+      #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 0
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.WaybillPositionSetting">
+    update t_waybill_position_setting
+    set waybill_id = #{waybillId,jdbcType=BIGINT},
+      driver_phone = #{driverPhone,jdbcType=VARCHAR},
+      wps_type = #{wpsType,jdbcType=SMALLINT},
+      frequency_type = #{frequencyType,jdbcType=SMALLINT},
+      fixed_interval = #{fixedInterval,jdbcType=INTEGER},
+      fixed_time = #{fixedTime,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=BIGINT},
+      carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
+      create_id = #{createId,jdbcType=BIGINT},
+      create_name = #{createName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_id = #{updateId,jdbcType=BIGINT},
+      update_name = #{updateName,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+    where wps_id = #{wpsId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select wps_id, waybill_id, driver_phone, wps_type, frequency_type, fixed_interval, 
+    fixed_time, company_id, carrier_company_id, create_id, create_name, create_date, 
+    update_id, update_name, update_date, is_deleted
+    from t_waybill_position_setting
+    where wps_id = #{wpsId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select wps_id, waybill_id, driver_phone, wps_type, frequency_type, fixed_interval, 
+    fixed_time, company_id, carrier_company_id, create_id, create_name, create_date, 
+    update_id, update_name, update_date, is_deleted
+    from t_waybill_position_setting
+  </select>
+  <update id="updateByWpsIdAndXCompanyId" parameterType="com.lcdt.traffic.model.WaybillPositionSetting">
+    update t_waybill_position_setting
+    set waybill_id = #{waybillId,jdbcType=BIGINT},
+    driver_phone = #{driverPhone,jdbcType=VARCHAR},
+    wps_type = #{wpsType,jdbcType=SMALLINT},
+    frequency_type = #{frequencyType,jdbcType=SMALLINT},
+    fixed_interval = #{fixedInterval,jdbcType=INTEGER},
+    fixed_time = #{fixedTime,jdbcType=VARCHAR},
+    update_id = #{updateId,jdbcType=BIGINT},
+    update_name = #{updateName,jdbcType=VARCHAR},
+    update_date = CURRENT_TIMESTAMP
+    where wps_id = #{wpsId,jdbcType=BIGINT} and (company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
+  </update>
+  <select id="selectByWpsIdAndXCompanyId" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select wps_id, waybill_id, driver_phone, wps_type, frequency_type, fixed_interval,
+    fixed_time, company_id, carrier_company_id, create_id, create_name, create_date,
+    update_id, update_name, update_date, is_deleted
+    from t_waybill_position_setting
+    where wps_id = #{wpsId,jdbcType=BIGINT} and (company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
+  </select>
+  <select id="selectByWaybillIdAndXCompanyId" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select wps_id, waybill_id, driver_phone, wps_type, frequency_type, fixed_interval,
+    fixed_time, company_id, carrier_company_id, create_id, create_name, create_date,
+    update_id, update_name, update_date, is_deleted
+    from t_waybill_position_setting
+    where waybill_id = #{waybillId,jdbcType=BIGINT} and (company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
+  </select>
+  <select id="selectByWaybillId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select wps_id, waybill_id, driver_phone, wps_type, frequency_type, fixed_interval,
+    fixed_time, company_id, carrier_company_id, create_id, create_name, create_date,
+    update_id, update_name, update_date, is_deleted
+    from t_waybill_position_setting
+    where waybill_id = #{waybillId,jdbcType=BIGINT}
+  </select>
+</mapper>

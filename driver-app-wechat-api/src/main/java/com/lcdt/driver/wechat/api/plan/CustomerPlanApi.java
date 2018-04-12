@@ -44,9 +44,11 @@ public class CustomerPlanApi {
     @ApiOperation("竞价")
     @RequestMapping(value = "/customerPlanList4Bidding", method = RequestMethod.GET)
     public PageBaseDto customerPlanList4Bidding(CustomerPlan4ParamsDto customerPlan4ParamsDto) {
-          Map map = searchCondition4Map(customerPlan4ParamsDto);
-          PageInfo pg =iCustomerPlanRpcService4Wechat.customerPlanList4Bidding(map);
-          PageBaseDto pageBaseDto = new PageBaseDto(pg.getList(), pg.getTotal());
+           UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+           Map map = searchCondition4Map(customerPlan4ParamsDto);
+           PageInfo pg =iCustomerPlanRpcService4Wechat.customerPlanList4Bidding(map);
+           removeOtherSnatch(pg, userCompRel.getCompany().getCompId());
+           PageBaseDto pageBaseDto = new PageBaseDto(pg.getList(), pg.getTotal());
           return pageBaseDto;
     }
 
@@ -232,6 +234,39 @@ public class CustomerPlanApi {
     }
 
 
+
+    @ApiOperation("客户计划-派车")
+    @RequestMapping(value = "/customerPlanSplitVehicle",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_split_vehicle')")
+    public String customerPlanSplitVehicle(@RequestBody SplitVehicleDto dto) {
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        User user = SecurityInfoGetter.getUser();
+        WaybillDto waybillDto = new WaybillDto();
+        waybillDto.setCreateId(user.getUserId());
+        waybillDto.setCreateName(user.getRealName());
+        waybillDto.setCarrierCompanyId(userCompRel.getCompany().getCompId());
+        waybillDto.setDriverId(dto.getDriverId());//司机ID
+        waybillDto.setDriverName(dto.getDriverName());
+        waybillDto.setDriverPhone(dto.getDriverPhone());
+        waybillDto.setVechicleId(dto.getVehicleId());
+        waybillDto.setVechicleNum(dto.getVechicleNum());//车牌
+        waybillDto.setWaybillRemark(dto.getWaybillRemark());
+        dto.setCompanyId(userCompRel.getCompany().getCompId());
+
+        WaybillPlan waybillPlan = iCustomerPlanRpcService4Wechat.customerPlanSplitVehicle(dto, waybillDto);
+        JSONObject jsonObject = new JSONObject();
+        String message = null;
+        int code = -1;
+        if (waybillPlan!=null) {
+            code = 0;
+        } else {
+            message = "操作失败，请重试！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        jsonObject.put("data",waybillPlan);
+        return jsonObject.toString();
+    }
 
 
 }

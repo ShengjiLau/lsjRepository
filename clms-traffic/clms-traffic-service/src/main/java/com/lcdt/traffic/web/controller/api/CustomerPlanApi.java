@@ -4,20 +4,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.traffic.dto.CustomerPlanDto;
-import com.lcdt.traffic.dto.SnatchOfferDto;
-import com.lcdt.traffic.dto.SplitVehicleDto;
-import com.lcdt.traffic.dto.WaybillParamsDto;
+import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.SnatchGoods;
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.model.WaybillPlan;
-import com.lcdt.traffic.service.CustomerPlanService;
 import com.lcdt.traffic.service.ICustomerPlanRpcService4Wechat;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
-import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.traffic.web.dto.WaybillPlanListParamsDto;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
@@ -42,8 +37,6 @@ import java.util.Map;
 @Api(value = "客户计划",description = "客户计划接口")
 public class CustomerPlanApi {
 
-    @Autowired
-    private CustomerPlanService customerPlanService;
 
     @Autowired
     private ICustomerPlanRpcService4Wechat iCustomerPlanRpcService4Wechat;
@@ -661,11 +654,11 @@ public class CustomerPlanApi {
         waybillDto.setWaybillRemark(dto.getWaybillRemark());
         dto.setCompanyId(companyId);
 
-        int flag = customerPlanService.customerPlanSplitVehicle(dto, waybillDto);
+        WaybillPlan waybillPlan = iCustomerPlanRpcService4Wechat.customerPlanSplitVehicle(dto, waybillDto);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
-        if (flag>0) {
+        if (waybillPlan!=null) {
             code = 0;
         } else {
             message = "操作失败，请重试！";

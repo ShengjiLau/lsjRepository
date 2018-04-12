@@ -1,12 +1,12 @@
 package com.lcdt.traffic.util;
 
+import com.lcdt.traffic.dto.WaybillDto;
+import com.lcdt.traffic.dto.WaybillItemsDto;
 import com.lcdt.traffic.model.PlanDetail;
 import com.lcdt.traffic.model.SplitGoods;
 import com.lcdt.traffic.model.SplitGoodsDetail;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.vo.ConstantVO;
-import com.lcdt.traffic.web.dto.WaybillDto;
-import com.lcdt.traffic.web.dto.WaybillItemsDto;
 
 import java.util.ArrayList;
 import java.util.Date;

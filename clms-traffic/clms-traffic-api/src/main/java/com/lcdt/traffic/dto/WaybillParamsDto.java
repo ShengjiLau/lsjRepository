@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by yangbinq on 2017/12/13.
  */
-public class WaybillParamsDto {
+public class WaybillParamsDto implements java.io.Serializable{
 
 
     @ApiModelProperty(value = "计划主键ID")

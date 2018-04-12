@@ -8,10 +8,7 @@ import com.lcdt.traffic.model.FeeFlow;
 import com.lcdt.traffic.model.Msg;
 import com.lcdt.traffic.service.FeeAccountService;
 import com.lcdt.traffic.service.MsgService;
-import com.lcdt.traffic.web.dto.FeeAccountDto;
-import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
-import com.lcdt.traffic.web.dto.MsgDto;
-import com.lcdt.traffic.web.dto.PageBaseDto;
+import com.lcdt.traffic.web.dto.*;
 import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.rpc.FinanceRpcService;
@@ -21,7 +18,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import jdk.nashorn.internal.ir.annotations.Reference;
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -113,9 +109,9 @@ public class PayableFeeAccountApi {
                         m.put("proIds", proIds);
                     }
                     m.put("isShow", (short)0);
-                    showPropertyList = financeRpcService.getFeePropertyList(m);
+                    showPropertyList = financeRpcService.selectByCondition(m);
                     m.put("isShow", (short)1);
-                    hidePropertyList = financeRpcService.getFeePropertyList(m);
+                    hidePropertyList = financeRpcService.selectByCondition(m);
                     dto.setShowPropertyList(showPropertyList);
                     dto.setHidePropertyList(hidePropertyList);
                 }
@@ -133,13 +129,13 @@ public class PayableFeeAccountApi {
     @ApiOperation("应付记账——保存记账")
     @RequestMapping(value = "/feeAccountSave", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_save')")
-    public JSONObject feeAccountSave(@Validated List<FeeAccountDto> dtoList) {
-        Map<String,Object> map = new HashedMap();
-        map.put("companyId", SecurityInfoGetter.getCompanyId());
-        map.put("userId", SecurityInfoGetter.getUser().getUserId());
-        map.put("realName", SecurityInfoGetter.getUser().getRealName());
-        int result = feeAccountService.feeAccountSave(map);
-        if (result > 0) {
+    public JSONObject feeAccountSave(@Validated FeeAccountSaveParamsDto dto) {
+        dto.setCompanyId(SecurityInfoGetter.getCompanyId());
+        dto.setUserId(SecurityInfoGetter.getUser().getUserId());
+        dto.setRealName(SecurityInfoGetter.getUser().getRealName());
+        dto.setIsReceivable((short)1);
+        boolean result = feeAccountService.feeAccountSave(dto);
+        if (result) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "记账成功");

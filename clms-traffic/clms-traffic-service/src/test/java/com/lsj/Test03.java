@@ -1,4 +1,4 @@
-package com.ybq;
+package com.lsj;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -9,7 +9,7 @@ import java.util.TreeMap;
 import com.lcdt.traffic.util.PlanBO;
 
 
-public class test003 {
+public class Test03 {
 
 	public static void main(String[] args) {
 		Map<String,String> m = new HashMap<String,String>(32,(float) 0.75);

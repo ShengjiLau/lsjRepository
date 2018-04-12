@@ -1,7 +1,6 @@
 package com.lcdt.userinfo.service.impl;
 
 import com.github.pagehelper.PageInfo;
-import com.lcdt.traffic.model.FeeFlow;
 import com.lcdt.traffic.service.FeePropertyRpcService;
 import com.lcdt.userinfo.dao.FeePropertyMapper;
 import com.lcdt.userinfo.model.FeeProperty;
@@ -39,19 +38,13 @@ public class FeePropertyServiceImpl implements FeePropertyService {
 
     @Override
     public int modifyFeeProperty(FeeProperty feeProperty) {
-        int result = feePropertyMapper.updateByPrimaryKey(feeProperty);
+        int result = feePropertyMapper.updateByPrimaryKeySelective(feeProperty);
         return result;
     }
 
     @Override
     public int modifyFeePropertyIsDelete(Long proId) {
-        List<FeeFlow> feeFlowList = feePropertyRpcService.selectFlowsByProId(proId);
-        int result = 0;
-        if(feeFlowList != null && feeFlowList.size() > 0){
-             result = 2;
-        }else {
-            result = feePropertyMapper.updateIsDeleteByPrimaryKey(proId);//=1
-        }
+        int result =  feePropertyMapper.updateIsDeleteByPrimaryKey(proId);//=1
         return result;
     }
     @Override

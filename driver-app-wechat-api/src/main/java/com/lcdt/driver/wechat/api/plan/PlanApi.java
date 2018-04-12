@@ -156,6 +156,7 @@ public class PlanApi {
         } else {
             message = "操作失败，请重试！";
         }
+        jsonObject.put("data",waybillPlan);
         jsonObject.put("message",message);
         jsonObject.put("code",code);
         return jsonObject;

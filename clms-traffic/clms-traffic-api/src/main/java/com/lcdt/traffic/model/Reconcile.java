@@ -3,9 +3,6 @@ package com.lcdt.traffic.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import io.swagger.annotations.ApiModel;
-
-@ApiModel("对账单entity")
 public class Reconcile implements Serializable {
     private Long reconcileId;
 
@@ -13,7 +10,7 @@ public class Reconcile implements Serializable {
 
     private Long companyId;
 
-    private Long groupId;
+    private String groupId;
 
     private Double accountAmount;
 
@@ -27,10 +24,15 @@ public class Reconcile implements Serializable {
 
     private Short cancelOk;
 
-    private Long accountId;
+    private String accountId;
 
-    private Long waybillId;
-    
+    private String waybillId;
+
+    private Short payeeType;
+
+    private Long payerId;
+
+    private String payerName;
 
     private static final long serialVersionUID = 1L;
 
@@ -58,12 +60,12 @@ public class Reconcile implements Serializable {
         this.companyId = companyId;
     }
 
-    public Long getGroupId() {
+    public String getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId == null ? null : groupId.trim();
     }
 
     public Double getAccountAmount() {
@@ -114,20 +116,44 @@ public class Reconcile implements Serializable {
         this.cancelOk = cancelOk;
     }
 
-    public Long getAccountId() {
+    public String getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
+    public void setAccountId(String accountId) {
+        this.accountId = accountId == null ? null : accountId.trim();
     }
 
-    public Long getWaybillId() {
+    public String getWaybillId() {
         return waybillId;
     }
 
-    public void setWaybillId(Long waybillId) {
-        this.waybillId = waybillId;
+    public void setWaybillId(String waybillId) {
+        this.waybillId = waybillId == null ? null : waybillId.trim();
+    }
+
+    public Short getPayeeType() {
+        return payeeType;
+    }
+
+    public void setPayeeType(Short payeeType) {
+        this.payeeType = payeeType;
+    }
+
+    public Long getPayerId() {
+        return payerId;
+    }
+
+    public void setPayerId(Long payerId) {
+        this.payerId = payerId;
+    }
+
+    public String getPayerName() {
+        return payerName;
+    }
+
+    public void setPayerName(String payerName) {
+        this.payerName = payerName == null ? null : payerName.trim();
     }
 
     @Override
@@ -153,7 +179,10 @@ public class Reconcile implements Serializable {
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getCancelOk() == null ? other.getCancelOk() == null : this.getCancelOk().equals(other.getCancelOk()))
             && (this.getAccountId() == null ? other.getAccountId() == null : this.getAccountId().equals(other.getAccountId()))
-            && (this.getWaybillId() == null ? other.getWaybillId() == null : this.getWaybillId().equals(other.getWaybillId()));
+            && (this.getWaybillId() == null ? other.getWaybillId() == null : this.getWaybillId().equals(other.getWaybillId()))
+            && (this.getPayeeType() == null ? other.getPayeeType() == null : this.getPayeeType().equals(other.getPayeeType()))
+            && (this.getPayerId() == null ? other.getPayerId() == null : this.getPayerId().equals(other.getPayerId()))
+            && (this.getPayerName() == null ? other.getPayerName() == null : this.getPayerName().equals(other.getPayerName()));
     }
 
     @Override
@@ -172,6 +201,9 @@ public class Reconcile implements Serializable {
         result = prime * result + ((getCancelOk() == null) ? 0 : getCancelOk().hashCode());
         result = prime * result + ((getAccountId() == null) ? 0 : getAccountId().hashCode());
         result = prime * result + ((getWaybillId() == null) ? 0 : getWaybillId().hashCode());
+        result = prime * result + ((getPayeeType() == null) ? 0 : getPayeeType().hashCode());
+        result = prime * result + ((getPayerId() == null) ? 0 : getPayerId().hashCode());
+        result = prime * result + ((getPayerName() == null) ? 0 : getPayerName().hashCode());
         return result;
     }
 
@@ -193,6 +225,9 @@ public class Reconcile implements Serializable {
         sb.append(", cancelOk=").append(cancelOk);
         sb.append(", accountId=").append(accountId);
         sb.append(", waybillId=").append(waybillId);
+        sb.append(", payeeType=").append(payeeType);
+        sb.append(", payerId=").append(payerId);
+        sb.append(", payerName=").append(payerName);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

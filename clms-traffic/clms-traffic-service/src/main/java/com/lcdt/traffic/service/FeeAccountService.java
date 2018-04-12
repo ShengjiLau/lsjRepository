@@ -3,6 +3,7 @@ package com.lcdt.traffic.service;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
+import com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto;
 
 import java.util.List;
 import java.util.Map;
@@ -25,10 +26,10 @@ public interface FeeAccountService {
     Map feeAccountPage(Map m);
     /**
      * 保存/修改记账单及流水
-     * @param map
+     * @param dto
      * @return
      */
-    int feeAccountSave(Map map);
+    boolean feeAccountSave(FeeAccountSaveParamsDto dto);
     /**
      * 查询单个运单费用明细
      * @return

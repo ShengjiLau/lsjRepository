@@ -340,4 +340,79 @@
     </foreach>
     group by a.name
   </select>
+  <insert id="insertBatch">
+    insert into t_fee_account (account_code, company_id, waybill_id,
+    waybill_code, group_id, group_name,
+    name_id, name, audit_status,
+    audit_date, operator_id, operator_name,
+    reconcile_id, reconcile_code, is_receivable,
+    create_date, is_deleted)
+    <foreach item="item" collection="list" separator=",">
+      values (#{item.accountCode,jdbcType=VARCHAR}, #{item.companyId,jdbcType=BIGINT}, #{item.waybillId,jdbcType=BIGINT},
+      #{item.waybillCode,jdbcType=VARCHAR}, #{item.groupId,jdbcType=BIGINT}, #{item.groupName,jdbcType=VARCHAR},
+      #{item.nameId,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, #{item.auditStatus,jdbcType=SMALLINT},
+      #{item.auditDate,jdbcType=TIMESTAMP}, #{item.operatorId,jdbcType=BIGINT}, #{item.operatorName,jdbcType=VARCHAR},
+      #{item.reconcileId,jdbcType=BIGINT}, #{item.reconcileCode,jdbcType=VARCHAR}, #{item.isReceivable,jdbcType=SMALLINT},
+      #{item.createDate,jdbcType=TIMESTAMP}, #{item.isDeleted,jdbcType=SMALLINT})
+    </foreach>
+  </insert>
+  <update id="updateBatch" parameterType="java.util.List">
+    <foreach separator=";" index="index" item="item" collection="list" close="" open="">
+      update t_fee_account
+      <set>
+        <if test="item.accountCode != null">
+          account_code = #{item.accountCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.companyId != null">
+          company_id = #{item.companyId,jdbcType=BIGINT},
+        </if>
+        <if test="item.waybillId != null">
+          waybill_id = #{item.waybillId,jdbcType=BIGINT},
+        </if>
+        <if test="item.waybillCode != null">
+          waybill_code = #{item.waybillCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.groupId != null">
+          group_id = #{item.groupId,jdbcType=BIGINT},
+        </if>
+        <if test="item.groupName != null">
+          group_name = #{item.groupName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.nameId != null">
+          name_id = #{item.nameId,jdbcType=BIGINT},
+        </if>
+        <if test="item.name != null">
+          name = #{item.name,jdbcType=VARCHAR},
+        </if>
+        <if test="item.auditStatus != null">
+          audit_status = #{item.auditStatus,jdbcType=SMALLINT},
+        </if>
+        <if test="item.auditDate != null">
+          audit_date = #{item.auditDate,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.operatorId != null">
+          operator_id = #{item.operatorId,jdbcType=BIGINT},
+        </if>
+        <if test="item.operatorName != null">
+          operator_name = #{item.operatorName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.reconcileId != null">
+          reconcile_id = #{item.reconcileId,jdbcType=BIGINT},
+        </if>
+        <if test="item.reconcileCode != null">
+          reconcile_code = #{item.reconcileCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.isReceivable != null">
+          is_receivable = #{item.isReceivable,jdbcType=SMALLINT},
+        </if>
+        <if test="item.createDate != null">
+          create_date = #{item.createDate,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.isDeleted != null">
+          is_deleted = #{item.isDeleted,jdbcType=SMALLINT},
+        </if>
+      </set>
+      where account_id = #{item.accountId,jdbcType=BIGINT}
+    </foreach>
+  </update>
 </mapper>
