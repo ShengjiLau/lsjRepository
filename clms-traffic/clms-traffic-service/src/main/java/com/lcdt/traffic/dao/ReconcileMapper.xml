@@ -211,13 +211,13 @@
     where reconcile_id = #{reconcileId,jdbcType=BIGINT}
   </update>
   <insert id="insertByBatch" useGeneratedKeys="true" keyProperty="reconcileId" keyColumn="reconcile_id">
-  <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
   	insert into t_fee_reconcile (reconcile_id, reconcile_code, company_id, 
       group_id, account_amount, operator_id, 
       operator_name, is_receivable, create_time, 
       cancel_ok, account_id, waybill_id, 
       payee_type, payer_id, payer_name
       )
+  <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
     values (#{item.reconcileId,jdbcType=BIGINT}, #{item.reconcileCode,jdbcType=VARCHAR}, #{item.companyId,jdbcType=BIGINT}, 
       #{item.groupId,jdbcType=VARCHAR}, #{item.accountAmount,jdbcType=DOUBLE}, #{item.operatorId,jdbcType=BIGINT}, 
       #{item.operatorName,jdbcType=VARCHAR}, #{item.isReceivable,jdbcType=BIGINT}, #{item.createTime,jdbcType=TIMESTAMP}, 
@@ -228,11 +228,11 @@
   </insert>
   
   <update id="cancelByBatch">
-  	<foreach collection="array" index="index" item="reconcileId" open="(" separator="," close=")">
-  	update t_fee_reconcile
+    update t_fee_reconcile
     <set>
     cancel_ok = 1
     </set>
+  	<foreach collection="array" index="index" item="reconcileId" open="(" separator="," close=")">	
   	<where>
   	reconcile_id = #{reconcileId,jdbcType=BIGINT}
   	</where>
@@ -262,6 +262,17 @@
     </if>
     </where>
   </select>
+  
+  <select id="getReconcileListByPk" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_fee_reconcile
+    <foreach collection="array" index="index" item="reconcileId" open="(" separator="," close=")">
+    <where>
+ 	reconcile_id = #{reconcileId,jdbcType=BIGINT}
+  	</where>
+    </foreach>
+   </select>
   
   
 </mapper>
