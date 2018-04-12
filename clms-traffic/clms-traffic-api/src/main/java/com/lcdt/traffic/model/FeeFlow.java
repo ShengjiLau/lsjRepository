@@ -35,6 +35,17 @@ public class FeeFlow {
 
     private Short isDeleted;
 
+    private Short isReceivable;
+
+
+    public Short getIsReceivable() {
+        return isReceivable;
+    }
+
+    public void setIsReceivable(Short isReceivable) {
+        this.isReceivable = isReceivable;
+    }
+
     public Long getFlowId() {
         return flowId;
     }

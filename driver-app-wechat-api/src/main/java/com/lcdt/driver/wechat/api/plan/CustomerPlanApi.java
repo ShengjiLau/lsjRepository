@@ -188,10 +188,10 @@ public class CustomerPlanApi {
 
     @ApiOperation("报价-信息拉取")
     @RequestMapping(value = "/customerPlanOfferLoadData",method = RequestMethod.GET)
-     public WaybillPlan customerPlanOfferOwner(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
-                                               @ApiParam(value = "创建计划企业ID",required = true) @RequestParam Long companyId) {
+     public WaybillPlan customerPlanOfferOwner(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
         WaybillParamsDto dto = new WaybillParamsDto();
-        dto.setCompanyId(companyId);
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        dto.setCompanyId(userCompRel.getCompany().getCompId());
         dto.setWaybillPlanId(waybillPlanId);
         try {
             WaybillPlan waybillPlan = iPlanRpcService4Wechat.loadWaybillPlan(dto);
