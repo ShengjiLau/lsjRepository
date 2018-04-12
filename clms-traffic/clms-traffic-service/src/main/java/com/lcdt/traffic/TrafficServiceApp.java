@@ -1,16 +1,13 @@
 package com.lcdt.traffic;
 
-import com.alibaba.dubbo.config.spring.context.annotation.DubboComponentScan;
 import com.lcdt.aliyunmq.AliyunConfigProperties;
 import com.lcdt.clms.security.annontion.EnableClmsSecurity;
 import com.lcdt.converter.ClmsResponseConvertConfig;
-import com.lcdt.notify.EnableClmsNotifyProducer;
 import com.lcdt.wms.config.DubboConfig;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**

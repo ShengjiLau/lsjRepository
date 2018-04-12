@@ -91,7 +91,7 @@ public class LoginApi {
         if (claimsFromToken == null) {
             throw new Exception("token 错误");
         }
-        String userId = (String) claimsFromToken.get("userId");
+        String userId = String.valueOf(claimsFromToken.get("userId"));
         List<UserCompRel> userCompRels = companyService.companyList(Long.valueOf(userId));
         return new PageBaseDto<UserCompRel>(userCompRels);
     }
@@ -108,6 +108,7 @@ public class LoginApi {
         HashMap<String, Object> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("userName", userCompRel.getUser().getPhone());
         stringStringHashMap.put("userCompId", userCompRel.getUserCompRelId());
+        stringStringHashMap.put("userId", userCompRel.getUserId());
         String s = jwtTokenUtil.generateToken(stringStringHashMap);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("token", s);

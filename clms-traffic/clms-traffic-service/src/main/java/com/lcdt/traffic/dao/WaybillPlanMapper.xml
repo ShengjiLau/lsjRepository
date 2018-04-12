@@ -118,6 +118,8 @@
     <result column="receive_county" jdbcType="VARCHAR" property="receiveCounty" />
     <result column="receive_address" jdbcType="VARCHAR" property="receiveAddress" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+    <result column="pubdate" jdbcType="TIMESTAMP" property="pubdate" />
+    <result column="splitDate" jdbcType="TIMESTAMP" property="splitDate" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="split_goods_id" jdbcType="BIGINT" property="splitGoodsId" />
    <!--计划列表-->
@@ -679,7 +681,8 @@
     就是自己能抢的计划，可能这个计划多家公司都能看见。如果改计划我报价了，就在已抢里面
   -->
   <select id="customerPlan4Bidding" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
+    select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted,
+    pubdate,null as splitDate
     from t_waybill_plan p1
     <where>
       and plan_status = '15' and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id ${snatchCompanyId})
@@ -728,7 +731,8 @@
      理解：这个计划我参与报价了，但还没有派单给我 ,只要不是'取消'的就行
   -->
   <select id="customerPlanList4Offer" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select '-1' as split_goods_id,waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
+    select '-1' as split_goods_id,waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted,
+    pubdate,null as splitDate
     from t_waybill_plan p1
     <where>
       and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0 ${snatchCompanyId})
@@ -788,7 +792,8 @@
           )
    -->
   <select id="customerPlanList4Pass" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted
+    select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted,
+    pubdate,null as splitDate
     from t_waybill_plan p1
     <where>
       and
@@ -872,7 +877,9 @@
     wp.receive_county,
     wp.receive_address,
     wp.company_id,
-    wp.is_deleted
+    wp.is_deleted,
+    wp.pubdate,
+    sp.create_date as splitDate
     FROM t_split_goods sp
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
@@ -880,7 +887,7 @@
       and wp.plan_status!='60' and wp.plan_status!='50'
       and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)>0
       <if test="isDeleted!=null">
-        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
+        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
       <if test="serialCode!=null and serialCode!=''">
         and wp.serial_code like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
@@ -945,7 +952,9 @@
     wp.receive_county,
     wp.receive_address,
     wp.company_id,
-    wp.is_deleted
+    wp.is_deleted,
+    wp.pubdate,
+    sp.create_date as splitDate
     FROM t_split_goods sp
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
@@ -953,7 +962,7 @@
       and wp.plan_status!='60' and wp.plan_status!='50'
       and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
       <if test="isDeleted!=null">
-        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
+        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
       <if test="serialCode!=null and serialCode!=''">
         and wp.serial_code like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
@@ -1016,7 +1025,9 @@
     wp.receive_county,
     wp.receive_address,
     wp.company_id,
-    wp.is_deleted
+    wp.is_deleted,
+    wp.pubdate,
+    sp.create_date as splitDate
     FROM t_split_goods sp
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
@@ -1025,7 +1036,7 @@
       and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
       and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status!=7 )=0
       <if test="isDeleted!=null">
-        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
+        and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
       <if test="serialCode!=null and serialCode!=''">
         and wp.serial_code like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
@@ -1058,7 +1069,7 @@
       <if test="companyIds!=null and companyIds!=''">
         and ${companyIds}
       </if>
-      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''"> <!--承运企业-->
+      <if test="carrierCollectionIds!=null and carrierCollectionIds!=''">
         and ${carrierCollectionIds}
       </if>
     </where>
@@ -1086,14 +1097,16 @@
     wp.receive_county,
     wp.receive_address,
     wp.company_id,
-    wp.is_deleted
+    wp.is_deleted,
+    wp.pubdate,
+    sp.create_date as splitDate
     FROM t_split_goods sp
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
        and wp.plan_status='60'
       <if test="isDeleted!=null">
-        and sp.is_deleted = #{isDeleted,jdbcType=SMALLINT},
+        and sp.is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
       <if test="serialCode!=null and serialCode!=''">
         and wp.serial_code like concat('%',#{serialCode,jdbcType=VARCHAR},'%')
