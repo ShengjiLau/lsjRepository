@@ -1,5 +1,7 @@
 package com.lcdt.traffic.dao;
 
+import com.lcdt.traffic.dto.FeeFlow4SearchParamsDto;
+import com.lcdt.traffic.dto.FeeFlow4SearchResultDto;
 import com.lcdt.traffic.model.FeeFlow;
 
 import java.util.List;
@@ -18,4 +20,16 @@ public interface FeeFlowMapper {
     List<FeeFlow> selectByAccountId(Long accountId);
 
     List<FeeFlow> selectByProId(Long proId);
+
+    int insertBatch(List<FeeFlow> list);
+
+    int updateBatch(List<FeeFlow> list);
+
+
+    /***
+     * 查询列表
+     * @param dto
+     * @return
+     */
+    List<FeeFlow4SearchResultDto> searchCondition(FeeFlow4SearchParamsDto dto);
 }

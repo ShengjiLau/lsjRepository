@@ -2,6 +2,8 @@ package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.FeeFlowLog;
 
+import java.util.List;
+
 public interface FeeFlowLogMapper {
     int deleteByPrimaryKey(Long logId);
 
@@ -14,4 +16,6 @@ public interface FeeFlowLogMapper {
     int updateByPrimaryKeySelective(FeeFlowLog record);
 
     int updateByPrimaryKey(FeeFlowLog record);
+
+    int insertBatch(List<FeeFlowLog> list);
 }
