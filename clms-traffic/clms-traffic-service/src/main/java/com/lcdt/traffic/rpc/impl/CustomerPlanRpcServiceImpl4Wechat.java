@@ -285,12 +285,15 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");//移除
-
         //查询对应在的企业组、竞价组条件
         Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,0);
+
+
         map.put("companyIds",cMap.get("companyIds")); //分配计划的企业(企业创建者)
         map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
+
         int pageNo = 1;
+
         int pageSize = 0; //0表示所有
         if (map.containsKey("page_no")) {
             if (map.get("page_no") != null) {
@@ -345,6 +348,8 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
 
         map.put("companyIds",cMap.get("companyIds"));
         map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
+
+
         int pageNo = 1;
         int pageSize = 0; //0表示所有
         if (map.containsKey("page_no")) {
@@ -442,12 +447,15 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
         Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,1); //查询对应在的企业组、竞价组条件
+
         if(!StringUtils.isEmpty(cMap.get("companyIds"))) {
             map.put("companyIds", cMap.get("companyIds").toString().replace("company_id", "wp.company_id"));
         }
         if (!StringUtils.isEmpty(cMap.get("carrierCollectionIds"))) {
             map.put("carrierCollectionIds", cMap.get("carrierCollectionIds").toString());
         }
+
+
         int pageNo = 1;
         int pageSize = 0; //0表示所有
         if (map.containsKey("page_no")) {
