@@ -21,6 +21,10 @@ public interface FeeFlowMapper {
 
     List<FeeFlow> selectByProId(Long proId);
 
+    int insertBatch(List<FeeFlow> list);
+
+    int updateBatch(List<FeeFlow> list);
+
 
     /***
      * 查询列表
