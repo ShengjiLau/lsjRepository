@@ -706,7 +706,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
 
     @Transactional
     @Override
-    public int customerPlanSplitVehicle(SplitVehicleDto dto, WaybillDto waybillDto) {
+    public WaybillPlan customerPlanSplitVehicle(SplitVehicleDto dto, WaybillDto waybillDto) {
         Map tMap = new HashMap<String,String>();
         tMap.put("waybillPlanId",dto.getWaybillPlanId());
         tMap.put("isDeleted","0");
@@ -849,7 +849,6 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             producer.sendNotifyEvent(plan_publish_event);
 
         }
-        int flag = waybill==null?0:1;
-        return flag;
+        return waybillPlan;
     }
 }
