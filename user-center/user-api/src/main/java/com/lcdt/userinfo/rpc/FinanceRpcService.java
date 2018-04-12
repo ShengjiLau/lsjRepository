@@ -9,6 +9,5 @@ import java.util.Map;
  * Created by Administrator on 2018/4/11.
  */
 public interface FinanceRpcService {
-    List<FeeProperty> getFeePropertyList(Map m);
     List<FeeProperty> selectByCondition(Map m);
 }
