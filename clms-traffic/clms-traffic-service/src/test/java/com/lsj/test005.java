@@ -1,4 +1,4 @@
-package com.ybq;
+package com.lsj;
 
 public class test005 {
 
