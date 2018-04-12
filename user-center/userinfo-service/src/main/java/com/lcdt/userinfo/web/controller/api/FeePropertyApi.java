@@ -161,6 +161,7 @@ public class FeePropertyApi {
         }
         else
         {
+            //标记删除
             int result = feePropertyService.modifyFeePropertyIsDelete(proId);
             if(result==1)
             {
