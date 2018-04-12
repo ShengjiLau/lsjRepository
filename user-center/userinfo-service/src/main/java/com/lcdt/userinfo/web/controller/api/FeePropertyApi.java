@@ -1,8 +1,11 @@
 package com.lcdt.userinfo.web.controller.api;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.model.FeeFlow;
+import com.lcdt.traffic.service.FeePropertyRpcService;
 import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.FeePropertyService;
@@ -22,6 +25,7 @@ import org.tl.commons.util.StringUtility;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,6 +38,9 @@ public class FeePropertyApi {
 
     @Autowired
     private FeePropertyService feePropertyService;
+
+    @Reference
+    FeePropertyRpcService feePropertyRpcService;
 
     @ApiOperation("费用类型——列表")
     @RequestMapping(value = "/feePropertyList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
@@ -147,16 +154,25 @@ public class FeePropertyApi {
     @RequestMapping(value = "/deleteFeeProperty", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delete_fee_property')")
     public JSONObject deleteFeeProperty(@ApiParam(value = "费用类型ID",required = true) @RequestParam Long proId) {
-        int result = feePropertyService.modifyFeePropertyIsDelete(proId);
-        if (result == 1) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", 0);
-            jsonObject.put("message", "删除成功");
-            return jsonObject;
-        } else if (result == 2) {
+        List<FeeFlow> feeFlowList =  feePropertyRpcService.selectFlowsByProId(proId);
+        if(feeFlowList!=null&&feeFlowList.size()>0)
+        {
             throw new RuntimeException("此费用类型已经产生流水，不可删除");
-        } else {
-            throw new RuntimeException("删除失败");
+        }
+        else
+        {
+            //标记删除
+            int result = feePropertyService.modifyFeePropertyIsDelete(proId);
+            if(result==1)
+            {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("code", 0);
+                jsonObject.put("message", "删除成功");
+                return jsonObject;
+            }
+            else {
+                throw new RuntimeException("删除失败");
+            }
         }
     }
 }

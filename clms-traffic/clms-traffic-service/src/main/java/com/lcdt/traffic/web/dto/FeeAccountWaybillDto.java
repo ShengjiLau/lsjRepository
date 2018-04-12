@@ -1,9 +1,11 @@
 package com.lcdt.traffic.web.dto;
 
+import com.lcdt.traffic.dto.WaybillDto;
+
 /**
  * Created by liz on 2018/4/3.
  */
-public class FeeAccountWaybillDto extends WaybillDto{
+public class FeeAccountWaybillDto extends WaybillDto {
 
     private String receivAndPayName;
 

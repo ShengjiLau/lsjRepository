@@ -2,6 +2,8 @@ package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dto.SnatchOfferDto;
+import com.lcdt.traffic.dto.SplitVehicleDto;
+import com.lcdt.traffic.dto.WaybillDto;
 import com.lcdt.traffic.model.SnatchGoods;
 
 import java.util.Map;
@@ -77,5 +79,17 @@ public interface ICustomerPlanRpcService4Wechat {
      * @return
      */
     int customerPlanOfferOwn(SnatchOfferDto dto, SnatchGoods snatchGoods);
+
+
+
+
+
+    /***
+     * 派车
+     * @param dto -- 派车主单信息
+     * @param waybillDto--内部参数
+     * @return
+     */
+    int customerPlanSplitVehicle(SplitVehicleDto dto, WaybillDto waybillDto);
 
 }

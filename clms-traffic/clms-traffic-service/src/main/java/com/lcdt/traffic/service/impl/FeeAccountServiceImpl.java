@@ -40,7 +40,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     @Autowired
     private FeeFlowLogMapper feeFlowLogMapper;
     @Reference
-    private FinanceRpcService financeRpcService;
+    FinanceRpcService financeRpcService;
 
     @Override
     public PageInfo feeAccountWaybillList(Map map){
@@ -121,7 +121,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                                     flow.setCreateId(saveParamsDto.getUserId());
                                     flow.setCreateName(saveParamsDto.getRealName());
                                     flow.setCreateDate(new Date());
-//                                flow.setIsReceivable(saveParamsDto.getIsReceivable());
+                                    flow.setIsReceivable(saveParamsDto.getIsReceivable());
                                     flow.setCompanyId(saveParamsDto.getCompanyId());
                                     flow.setIsDeleted((short)0);
                                     feeFlowMapper.insert(flow);
@@ -156,7 +156,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                                     flow.setCreateId(saveParamsDto.getUserId());
                                     flow.setCreateName(saveParamsDto.getRealName());
                                     flow.setCreateDate(new Date());
-//                                flow.setIsReceivable(saveParamsDto.getIsReceivable());
+                                    flow.setIsReceivable(saveParamsDto.getIsReceivable());
                                     flow.setCompanyId(saveParamsDto.getCompanyId());
                                     flow.setIsDeleted((short)0);
                                     feeFlowMapper.insert(flow);
