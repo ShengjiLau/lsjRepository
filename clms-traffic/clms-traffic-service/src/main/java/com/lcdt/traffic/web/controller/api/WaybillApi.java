@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.quartz.rpc.QuartzRpc;
 import com.lcdt.traffic.dto.WaybillCustListParamsDto;
+import com.lcdt.traffic.dto.WaybillDto;
 import com.lcdt.traffic.dto.WaybillModifyStatusDto;
 import com.lcdt.traffic.dto.WaybillOwnListParamsDto;
 import com.lcdt.traffic.model.Waybill;
@@ -13,9 +14,7 @@ import com.lcdt.traffic.service.WaybillRpcService;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.GroupIdsUtil;
 import com.lcdt.traffic.web.dto.PageBaseDto;
-import com.lcdt.traffic.web.dto.WaybillDto;
 import com.lcdt.userinfo.model.User;
-import com.lcdt.util.ClmsBeanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -25,10 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by lyqishan on 2017/12/21

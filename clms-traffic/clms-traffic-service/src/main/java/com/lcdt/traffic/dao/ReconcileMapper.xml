@@ -210,7 +210,7 @@
       payer_name = #{payerName,jdbcType=VARCHAR}
     where reconcile_id = #{reconcileId,jdbcType=BIGINT}
   </update>
-  <insert id="insertByBatch" useGeneratedKeys="true" keyProperty="reconcileId">
+  <insert id="insertByBatch" useGeneratedKeys="true" keyProperty="reconcileId" keyColumn="reconcile_id">
   <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
   	insert into t_fee_reconcile (reconcile_id, reconcile_code, company_id, 
       group_id, account_amount, operator_id, 
