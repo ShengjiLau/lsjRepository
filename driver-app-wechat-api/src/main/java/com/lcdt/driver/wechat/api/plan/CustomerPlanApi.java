@@ -240,7 +240,7 @@ public class CustomerPlanApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_split_vehicle')")
     public String customerPlanSplitVehicle(@RequestBody SplitVehicleDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
-        User user = SecurityInfoGetter.getUser();
+        User user = TokenSecurityInfoGetter.getUser();
         WaybillDto waybillDto = new WaybillDto();
         waybillDto.setCreateId(user.getUserId());
         waybillDto.setCreateName(user.getRealName());
