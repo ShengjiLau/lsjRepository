@@ -21,8 +21,20 @@ public class ReceivePayParamsDto implements java.io.Serializable {
     private String createEnd;
 
 
-    @ApiModelProperty(value = "组ID-后台处理，必须要传")
+    @ApiModelProperty(value = "组ID-后台处理")
     private String groupIds;
+
+    @ApiModelProperty(value = "费用列-后台处理")
+    private String propertyCols;
+
+
+    public String getPropertyCols() {
+        return propertyCols;
+    }
+
+    public void setPropertyCols(String propertyCols) {
+        this.propertyCols = propertyCols;
+    }
 
     public Long getGroupId() {
         return groupId;
