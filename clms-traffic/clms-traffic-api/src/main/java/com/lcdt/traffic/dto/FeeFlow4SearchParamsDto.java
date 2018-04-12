@@ -13,6 +13,18 @@ public class FeeFlow4SearchParamsDto implements java.io.Serializable {
     @ApiModelProperty(value = "流水类型-0应收、1-应付")
     private Short isReceivable;
 
+    @ApiModelProperty(value = "业务组ID，全部为0")
+    private Long groupId;
+
+
+    @ApiModelProperty(value = "记录日期始")
+    private String createBegin;
+
+    @ApiModelProperty(value = "记录日期止")
+    private String createEnd;
+
+
+
 
     public Short getIsReceivable() {
         return isReceivable;
