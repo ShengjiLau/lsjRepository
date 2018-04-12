@@ -1,9 +1,12 @@
-package com.lcdt.traffic.service.impl;
+package com.lcdt.userinfo.service.impl;
 
 import com.github.pagehelper.PageInfo;
-import com.lcdt.traffic.dao.FeePropertyMapper;
-import com.lcdt.traffic.model.FeeProperty;
-import com.lcdt.traffic.service.FeePropertyService;
+import com.lcdt.traffic.model.FeeFlow;
+import com.lcdt.traffic.service.FeePropertyRpcService;
+import com.lcdt.userinfo.dao.FeePropertyMapper;
+import com.lcdt.userinfo.model.FeeProperty;
+import com.lcdt.userinfo.service.FeePropertyService;
+import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,8 @@ public class FeePropertyServiceImpl implements FeePropertyService {
 
     @Autowired
     private FeePropertyMapper feePropertyMapper;
+    @Reference
+    private FeePropertyRpcService feePropertyRpcService;
 
     @Override
     public PageInfo feePropertyList(Map m) {
@@ -34,13 +39,24 @@ public class FeePropertyServiceImpl implements FeePropertyService {
 
     @Override
     public int modifyFeeProperty(FeeProperty feeProperty) {
-        int result = feePropertyMapper.updateByPrimaryKey(feeProperty);
+        int result = feePropertyMapper.updateByPrimaryKeySelective(feeProperty);
         return result;
     }
 
     @Override
     public int modifyFeePropertyIsDelete(Long proId) {
-        int result = feePropertyMapper.updateIsDeleteByPrimaryKey(proId);
+        List<FeeFlow> feeFlowList = feePropertyRpcService.selectFlowsByProId(proId);
+        int result = 0;
+        if(feeFlowList != null && feeFlowList.size() > 0){
+             result = 2;
+        }else {
+            result = feePropertyMapper.updateIsDeleteByPrimaryKey(proId);//=1
+        }
         return result;
+    }
+    @Override
+    public List<FeeProperty> getFeePropertyList(Map m){
+        List<FeeProperty> list = feePropertyMapper.selectByCondition(m);
+        return list;
     }
 }

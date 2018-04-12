@@ -1,6 +1,7 @@
-package com.lcdt.traffic.dao;
+package com.lcdt.userinfo.dao;
 
-import com.lcdt.traffic.model.FeeProperty;
+
+import com.lcdt.userinfo.model.FeeProperty;
 
 import java.util.List;
 import java.util.Map;

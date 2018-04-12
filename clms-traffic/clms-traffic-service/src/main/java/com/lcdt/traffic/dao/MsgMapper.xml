@@ -146,15 +146,18 @@
     <include refid="Base_Column_List" />
     from t_fee_msg
   	<where>
-  	<if test=" type !=null and type !='' ">
-  	type = #{type,jdbcType=SMALLINT}
-  	</if>
-  	<if test="operator_id !=null and operator_id !='' ">
-  	and operator_id = #{operatorId,jdbcType=BIGINT}
-  	</if>
-  	<if test="is_deleted !=null and is_deleted !='' ">
-  	and is_deleted = #{isDeleted,jdbcType=SMALLINT}
-  	</if>
+      <if test=" type !=null and type !='' ">
+        type = #{type,jdbcType=SMALLINT}
+      </if>
+      <if test=" accountId !=null">
+        and account_id = #{accountId,jdbcType=BIGINT}
+      </if>
+      <if test="operator_id !=null and operator_id !='' ">
+        and operator_id = #{operatorId,jdbcType=BIGINT}
+      </if>
+      <if test="is_deleted !=null and is_deleted !='' ">
+        and is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      </if>
   	</where>
   </select>
   

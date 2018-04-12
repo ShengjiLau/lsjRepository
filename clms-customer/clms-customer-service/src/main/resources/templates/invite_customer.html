@@ -313,7 +313,7 @@
                   <img th:src="${headimg==null?'/asset/image/head.png':headimg}" alt="此处有头像" style="width: 100%; vertical-align: top;">
               </div><!-- react-text: 54 --><label th:utext="${username}"/><!-- /react-text -->
             </span>
-            <a href="http://39.107.12.215:52412/account/logout"><i class="iconfont icon-logout01" ></i>退出</a>
+            <a th:href="@{${logouturl}}"><i class="iconfont icon-logout01" ></i>退出</a>
         </div>
     </nav>
 </div>

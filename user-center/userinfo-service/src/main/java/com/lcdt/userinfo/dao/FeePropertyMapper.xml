@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lcdt.traffic.dao.FeePropertyMapper">
-  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.FeeProperty">
+<mapper namespace="com.lcdt.userinfo.dao.FeePropertyMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.userinfo.model.FeeProperty">
     <id column="pro_id" jdbcType="BIGINT" property="proId" />
     <result column="type" jdbcType="SMALLINT" property="type" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -27,7 +27,7 @@
     delete from t_fee_property
     where pro_id = #{proId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.lcdt.traffic.model.FeeProperty">
+  <insert id="insert" parameterType="com.lcdt.userinfo.model.FeeProperty">
     <selectKey keyProperty="proId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -40,7 +40,7 @@
       #{operatorName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.lcdt.traffic.model.FeeProperty">
+  <insert id="insertSelective" parameterType="com.lcdt.userinfo.model.FeeProperty">
     <selectKey keyProperty="proId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -104,7 +104,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.traffic.model.FeeProperty">
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.userinfo.model.FeeProperty">
     update t_fee_property
     <set>
       <if test="type != null">
@@ -137,7 +137,7 @@
     </set>
     where pro_id = #{proId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.FeeProperty">
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.FeeProperty">
     update t_fee_property
     set type = #{type,jdbcType=SMALLINT},
       name = #{name,jdbcType=VARCHAR},
@@ -149,30 +149,40 @@
       create_date = #{createDate,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=SMALLINT}
     where pro_id = #{proId,jdbcType=BIGINT}
-  </update><select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
-  select
-  <include refid="Base_Column_List" />
-  from t_fee_property
-  <where>
-    company_id = #{companyId,jdbcType=BIGINT}
-    <if test="isDeleted!=null">
-      and is_deleted = #{isDeleted,jdbcType=SMALLINT}
-    </if>
-    <if test="type!=null">
-      and type = #{type,jdbcType=SMALLINT}
-    </if>
-    <if test="isReceivable!=null">
-      and is_receivable = #{isReceivable,jdbcType=SMALLINT}
-    </if>
-    <if test="name!=null">
-      and name = #{name,jdbcType=VARCHAR}
-    </if>
-    <if test="proId!=null">
-      and pro_id != #{proId,jdbcType=BIGINT}
-    </if>
-  </where>
-  order by pro_id desc
-</select>
+  </update>
+  <select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_fee_property
+    <where>
+      company_id = #{companyId,jdbcType=BIGINT}
+      <if test="isDeleted!=null">
+        and is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      </if>
+      <if test="type!=null">
+        and type = #{type,jdbcType=SMALLINT}
+      </if>
+      <if test="isReceivable!=null">
+        and is_receivable = #{isReceivable,jdbcType=SMALLINT}
+      </if>
+      <if test="isShow!=null">
+        and is_show = #{isShow,jdbcType=SMALLINT}
+      </if>
+      <if test="name!=null">
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="proId!=null">
+        and pro_id != #{proId,jdbcType=BIGINT}
+      </if>
+      <if test="proIds!=null and proIds.size>0">
+        and pro_id not in
+        <foreach separator=";" index="index" item="item" collection="proIds" close="" open="">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+    order by pro_id desc
+  </select>
   <update id="updateIsDeleteByPrimaryKey" parameterType="java.lang.Long">
     update t_fee_property
     set is_deleted = 1

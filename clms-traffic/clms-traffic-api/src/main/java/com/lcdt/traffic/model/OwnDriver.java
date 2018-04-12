@@ -57,6 +57,8 @@ public class OwnDriver implements Serializable,ResponseData{
     /**扩展字段*/
     private Long driverGroupId;
 
+    private String driverInfo;
+
     public Long getOwnDriverId() {
         return ownDriverId;
     }
@@ -255,5 +257,13 @@ public class OwnDriver implements Serializable,ResponseData{
 
     public void setDriverGroupId(Long driverGroupId) {
         this.driverGroupId = driverGroupId;
+    }
+
+    public String getDriverInfo() {
+        return driverInfo;
+    }
+
+    public void setDriverInfo(String driverInfo) {
+        this.driverInfo = driverInfo;
     }
 }
