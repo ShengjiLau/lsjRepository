@@ -8,10 +8,10 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class ReceivePayParamsDto implements java.io.Serializable {
 
-    @ApiModelProperty(value = "业务组ID，全部为0",required = true)
+    @ApiModelProperty(value = "业务组ID，全部为0")
     private Long groupId;
 
-    @ApiModelProperty(value = "收付款方ID，全部为0",required = true)
+    @ApiModelProperty(value = "收付款方ID，全部为0")
     private Long nameId;
 
     @ApiModelProperty(value = "日期始")
@@ -40,6 +40,12 @@ public class ReceivePayParamsDto implements java.io.Serializable {
 
     @ApiModelProperty(value = "登录企业ID-后台处理，必须要传")
     private Long companyId;
+
+    @ApiModelProperty(value = "运单编号")
+    private String waybillCode;
+
+    @ApiModelProperty(value = "客户名称")
+    private String customerName;
 
 
     public String getStatCols() {
@@ -100,5 +106,21 @@ public class ReceivePayParamsDto implements java.io.Serializable {
 
     public void setIsReceivable(short isReceivable) {
         this.isReceivable = isReceivable;
+    }
+
+    public String getWaybillCode() {
+        return waybillCode;
+    }
+
+    public void setWaybillCode(String waybillCode) {
+        this.waybillCode = waybillCode;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 }
