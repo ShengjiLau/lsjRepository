@@ -10,6 +10,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -44,6 +45,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 	 * 在批量插入Reconcile后,还需要获取相应的Reconcile的主键id和reconcileCode并将其添加到对应的记账单中
 	 */
 	@Override
+	@Transactional
 	public int insertReconcileBatch(ReconcileListDto reconcileListDto) {
 		
 	List<ReconcileDto> reconcileDtoList=reconcileListDto.getReconcileList();
@@ -56,7 +58,6 @@ public class ReconcileServiceImpl implements ReconcileService {
 		r.setCompanyId(SecurityInfoGetter.getCompanyId());
 		r.setOperatorName(SecurityInfoGetter.getUser().getRealName());
 		r.setOperatorId(SecurityInfoGetter.getUser().getUserId());
-		r.setGroupId(convertLoToStr(reconcileDto.getGroupIds()));
 		r.setAccountId(convertLoToStr(reconcileDto.getAccountIds()));
 		r.setWaybillId(convertLoToStr(reconcileDto.getWaybillIds()));
 		reconcileLists.add(r);
@@ -90,6 +91,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 	 * 批量取消对账单时也要批量修改相关记账单中的对账单id和reconcileCode,将其设置为空
 	 */
 	@Override
+	@Transactional
 	public int setCancelOk(Long[] reconcileIdList) {
 		int result = reconcileMapper.cancelByBatch(reconcileIdList);
 		List<Reconcile> reconcileList= reconcileMapper.getReconcileListByPk(reconcileIdList);
@@ -126,6 +128,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 	/**
 	 * 查询对账单列表
 	 */
+	@Override
 	public PageInfo<Reconcile> getReconcileList(ReconcileDto reconcileDto){
 		if(reconcileDto.getPageNum()<1) {
 			reconcileDto.setPageNum(1);
@@ -139,6 +142,18 @@ public class ReconcileServiceImpl implements ReconcileService {
 		PageInfo<Reconcile> page =new PageInfo<Reconcile>(reconcileList);
 		return page;
 	}
+	
+	
+	
+	@Override
+	public Reconcile selectReconcileByPk(Long pk) {
+		
+		return reconcileMapper.selectByPrimaryKey(pk);
+	}
+	
+	
+	
+	
 	
 	
 	
@@ -163,9 +178,11 @@ public class ReconcileServiceImpl implements ReconcileService {
 		
 		return sbd.toString();
 	}
-	
-	
-	
+
+
+
+
+
 	
 	
 	

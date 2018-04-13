@@ -20,5 +20,7 @@ public interface ReconcileService {
 	
 	PageInfo<Reconcile> getReconcileList(ReconcileDto reconcileDto);
 	
+	Reconcile selectReconcileByPk(Long pk);
+	
 
 }

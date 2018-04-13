@@ -1,12 +1,17 @@
 package com.lcdt.traffic.web.dto;
 
 import com.lcdt.traffic.dto.WaybillDto;
+import com.lcdt.traffic.model.WaybillItems;
+
+import java.util.List;
 
 /**
  * Created by liz on 2018/4/3.
  */
 public class FeeAccountWaybillDto extends WaybillDto {
 
+
+    private   List<WaybillItems> waybillItemsList;
     private String receivAndPayName;
 
     private Float freightTotal;
@@ -45,5 +50,13 @@ public class FeeAccountWaybillDto extends WaybillDto {
 
     public void setFeeTotal(Float feeTotal) {
         this.feeTotal = feeTotal;
+    }
+
+    public List<WaybillItems> getWaybillItemsList() {
+        return waybillItemsList;
+    }
+
+    public void setWaybillItemsList(List<WaybillItems> waybillItemsList) {
+        this.waybillItemsList = waybillItemsList;
     }
 }
