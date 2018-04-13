@@ -41,11 +41,11 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     private FeeFlowLogMapper feeFlowLogMapper;
     @Reference
     FinanceRpcService financeRpcService;
-
+    @Autowired
+    private CustomerCompanyIds customerCompanyIds;
     @Override
     public PageInfo feeAccountWaybillList(Map map){
         List<FeeAccountWaybillDto> resultList = null;
-
         PageInfo page = null;
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -62,7 +62,33 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         PageHelper.startPage(pageNo, pageSize);
         resultList = waybillMapper.selectFeeAccountWaybillByCondition(map);
         page = new PageInfo(resultList);
+        return page;
+    }
+    @Override
+    public PageInfo<List<FeeAccountWaybillDto>> feeAccountCustomerWaybillList(Map map) {
+        List<FeeAccountWaybillDto> resultList = null;
 
+        PageInfo page = null;
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+        if (map.containsKey("pageNo")) {
+            if (map.get("pageNo") != null) {
+                pageNo = (Integer) map.get("pageNo");
+            }
+        }
+        if (map.containsKey("pageSize")) {
+            if (map.get("pageSize") != null) {
+                pageSize = (Integer) map.get("pageSize");
+            }
+        }
+        Map cMapIds = customerCompanyIds.getCustomerCompanyIds(map);
+        map.put("companyIds", cMapIds.get("companyIds"));
+        map.put("carrierCompanyId", map.get("companyId"));
+        map.remove("companyId");
+        map.remove("customerName");
+        PageHelper.startPage(pageNo, pageSize);
+        resultList = waybillMapper.selectFeeAccountCustomerWaybillByCondition(map);
+        page = new PageInfo(resultList);
         return page;
     }
     @Override
@@ -232,6 +258,8 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         int result = feeAccountMapper.auditByAccountIds(map);
         return result;
     }
+
+
 
 //    @Override
 //    public List feeAccountReconcileGroup(Map map) {
