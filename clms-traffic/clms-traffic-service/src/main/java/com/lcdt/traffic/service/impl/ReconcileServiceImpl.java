@@ -6,6 +6,7 @@ package com.lcdt.traffic.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,12 +87,40 @@ public class ReconcileServiceImpl implements ReconcileService {
 	
 	/**
 	 * 取消对账单
+	 * 批量取消对账单时也要批量修改相关记账单中的对账单id和reconcileCode,将其设置为空
 	 */
 	@Override
 	public int setCancelOk(Long[] reconcileIdList) {
+		int result = reconcileMapper.cancelByBatch(reconcileIdList);
+		List<Reconcile> reconcileList= reconcileMapper.getReconcileListByPk(reconcileIdList);
+		Long[] acclids=null;
+		for(Reconcile reconcile:reconcileList) {
+			String s=reconcile.getAccountId();
+			String[] ss=s.split(",");
+			Long[] accIds=new Long[ss.length];
+			for(int i=0;i<ss.length;i++) {
+				accIds[i]=Long.parseLong(ss[i]);
+			}
+			acclids=(Long[]) ArrayUtils.addAll(acclids,accIds);
+		}
+		List<FeeAccount> feeAccountList =new ArrayList<FeeAccount>();
+		for(Long l:acclids) {
+			FeeAccount fa= new FeeAccount();
+			fa.setAccountId(l);
+			fa.setReconcileId(null);
+			fa.setReconcileCode(null);
+		}
+		int i=acclids.length;
+		int j=feeAccountMapper.updateReconcileByBatch(feeAccountList);
+		if(i==j) {
+			return result;
+		}else {
+			return -1;
+		}
 		
-		return reconcileMapper.cancelByBatch(reconcileIdList);
 	}
+	
+	
 	
 	
 	/**

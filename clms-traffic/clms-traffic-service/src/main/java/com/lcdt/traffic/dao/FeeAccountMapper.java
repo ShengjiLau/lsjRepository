@@ -30,13 +30,14 @@ public interface FeeAccountMapper {
     int auditByAccountIds(Map map);
 
     List reconcileByAccountIds(Map map);
-
-    
+   
+    /**
+     * 此方法用于生成对账单或者取消对账单时批量修改FeeAccount中对账单的id和code
+     * @param feeAccountList
+     * @return
+     */
     int updateReconcileByBatch(List<FeeAccount> feeAccountList);
     
-    
-    
-
     int insertBatch(List<FeeAccount> list);
 
     int updateBatch(List<FeeAccount> list);
