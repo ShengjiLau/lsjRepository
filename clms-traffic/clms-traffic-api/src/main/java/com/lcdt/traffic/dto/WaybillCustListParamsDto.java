@@ -52,6 +52,9 @@ public class WaybillCustListParamsDto implements Serializable{
     @ApiModelProperty(value = "是否删除",hidden = true)
     private String groupIds;
 
+    @ApiModelProperty(value = "是否不包含取消，true：不包含,应用于费用模块，不包含取消的")
+    private boolean noCancel;
+
     @ApiModelProperty(value = "页码", required = true)
     private Integer pageNo;
     @ApiModelProperty(value = "每页显示条数", required = true)
@@ -224,5 +227,13 @@ public class WaybillCustListParamsDto implements Serializable{
 
     public void setCustomerIds(String customerIds) {
         this.customerIds = customerIds;
+    }
+
+    public boolean getNoCancel() {
+        return noCancel;
+    }
+
+    public void setNoCancel(boolean noCancel) {
+        this.noCancel = noCancel;
     }
 }
