@@ -34,6 +34,79 @@ public class CustomerPlanDto implements java.io.Serializable {
     private short sendOrderType;
 
 
+    //发货人 发货省市区 地址  起运时间 收货人 送达时间
+    private String sendMan;
+    private String sendProvince;
+    private String sendCity;
+    private String sendCounty;
+    private String sendAddress;
+    private Date startDate;
+    private Date arriveDate;
+    private String receiveMan;
+
+    public String getSendMan() {
+        return sendMan;
+    }
+
+    public void setSendMan(String sendMan) {
+        this.sendMan = sendMan;
+    }
+
+    public String getSendProvince() {
+        return sendProvince;
+    }
+
+    public void setSendProvince(String sendProvince) {
+        this.sendProvince = sendProvince;
+    }
+
+    public String getSendCity() {
+        return sendCity;
+    }
+
+    public void setSendCity(String sendCity) {
+        this.sendCity = sendCity;
+    }
+
+    public String getSendCounty() {
+        return sendCounty;
+    }
+
+    public void setSendCounty(String sendCounty) {
+        this.sendCounty = sendCounty;
+    }
+
+    public String getSendAddress() {
+        return sendAddress;
+    }
+
+    public void setSendAddress(String sendAddress) {
+        this.sendAddress = sendAddress;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getArriveDate() {
+        return arriveDate;
+    }
+
+    public void setArriveDate(Date arriveDate) {
+        this.arriveDate = arriveDate;
+    }
+
+    public String getReceiveMan() {
+        return receiveMan;
+    }
+
+    public void setReceiveMan(String receiveMan) {
+        this.receiveMan = receiveMan;
+    }
 
     public short getSendOrderType() {
         return sendOrderType;
