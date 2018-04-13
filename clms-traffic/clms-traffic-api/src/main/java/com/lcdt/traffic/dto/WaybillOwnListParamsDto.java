@@ -46,6 +46,9 @@ public class WaybillOwnListParamsDto implements Serializable{
     @ApiModelProperty(value = "小程序运单顶部输入框内容")
     private String waybillCondition;
 
+    @ApiModelProperty(value = "是否不包含取消，true：不包含，false:包含")
+    private boolean noCancel;
+
     @ApiModelProperty(value = "页码", required = true)
     private Integer pageNo;
     @ApiModelProperty(value = "每页显示条数", required = true)
@@ -221,5 +224,13 @@ public class WaybillOwnListParamsDto implements Serializable{
 
     public void setIsReceivable(short isReceivable) {
         this.isReceivable = isReceivable;
+    }
+
+    public void setNoCancel(boolean noCancel){
+        this.noCancel=noCancel;
+    }
+
+    public boolean getNoCancel(){
+        return this.noCancel;
     }
 }

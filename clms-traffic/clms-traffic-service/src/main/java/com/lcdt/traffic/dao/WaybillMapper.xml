@@ -216,6 +216,9 @@
     <if test="endStartDate!=null and endStartDate!=''">
       and start_date &lt;=CONCAT(STR_TO_DATE(#{endStartDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
     </if>
+    <if test="noCancel!=null and noCancel!='' and noCancel ">
+      and waybill_status != 8
+    </if>
     <if test="isDeleted!=null and isDeleted!=''">
       and is_deleted = #{isDeleted,jdbcType=VARCHAR}
     </if>
