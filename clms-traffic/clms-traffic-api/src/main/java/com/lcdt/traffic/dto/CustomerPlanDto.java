@@ -31,6 +31,19 @@ public class CustomerPlanDto implements java.io.Serializable {
     private Long splitGoodsId;
     private Date pubdate;
     private Date splitDate;
+    private short sendOrderType;
+
+
+
+    public short getSendOrderType() {
+        return sendOrderType;
+    }
+
+    public void setSendOrderType(short sendOrderType) {
+        this.sendOrderType = sendOrderType;
+    }
+
+
 
     public Date getPubdate() {
         return pubdate;

@@ -5,6 +5,7 @@ import com.lcdt.traffic.dto.SnatchOfferDto;
 import com.lcdt.traffic.dto.SplitVehicleDto;
 import com.lcdt.traffic.dto.WaybillDto;
 import com.lcdt.traffic.model.SnatchGoods;
+import com.lcdt.traffic.model.WaybillPlan;
 
 import java.util.Map;
 
@@ -90,6 +91,6 @@ public interface ICustomerPlanRpcService4Wechat {
      * @param waybillDto--内部参数
      * @return
      */
-    int customerPlanSplitVehicle(SplitVehicleDto dto, WaybillDto waybillDto);
+    WaybillPlan customerPlanSplitVehicle(SplitVehicleDto dto, WaybillDto waybillDto);
 
 }

@@ -654,11 +654,11 @@ public class CustomerPlanApi {
         waybillDto.setWaybillRemark(dto.getWaybillRemark());
         dto.setCompanyId(companyId);
 
-        int flag = iCustomerPlanRpcService4Wechat.customerPlanSplitVehicle(dto, waybillDto);
+        WaybillPlan waybillPlan = iCustomerPlanRpcService4Wechat.customerPlanSplitVehicle(dto, waybillDto);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
-        if (flag>0) {
+        if (waybillPlan!=null) {
             code = 0;
         } else {
             message = "操作失败，请重试！";
