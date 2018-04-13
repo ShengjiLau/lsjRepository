@@ -72,7 +72,8 @@ public class CustomerPlanApi {
     @RequestMapping(value = "/customerPlanList4Pass",method = RequestMethod.GET)
     public PageBaseDto customerPlanList4Pass(CustomerPlan4ParamsDto customerPlan4ParamsDto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
-        Map map = searchCondition4Map(customerPlan4ParamsDto);        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Pass(map);
+        Map map = searchCondition4Map(customerPlan4ParamsDto);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Pass(map);
         removeOtherSnatch(pageInfo, userCompRel.getCompany().getCompId());
         PageBaseDto dto = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto;

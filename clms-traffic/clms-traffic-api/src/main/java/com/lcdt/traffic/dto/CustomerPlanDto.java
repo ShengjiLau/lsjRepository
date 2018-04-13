@@ -43,6 +43,24 @@ public class CustomerPlanDto implements java.io.Serializable {
     private Date startDate;
     private Date arriveDate;
     private String receiveMan;
+    private String distributionWay;
+    private String planRemark;
+
+    public String getDistributionWay() {
+        return distributionWay;
+    }
+
+    public void setDistributionWay(String distributionWay) {
+        this.distributionWay = distributionWay;
+    }
+
+    public String getPlanRemark() {
+        return planRemark;
+    }
+
+    public void setPlanRemark(String planRemark) {
+        this.planRemark = planRemark;
+    }
 
     public String getSendMan() {
         return sendMan;
