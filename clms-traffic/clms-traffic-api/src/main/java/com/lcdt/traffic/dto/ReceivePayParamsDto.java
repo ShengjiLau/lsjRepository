@@ -14,10 +14,10 @@ public class ReceivePayParamsDto implements java.io.Serializable {
     @ApiModelProperty(value = "收付款方ID，全部为0",required = true)
     private Long nameId;
 
-    @ApiModelProperty(value = "日期始")
+    @ApiModelProperty(value = "日期始,格式：2018-01-02")
     private String createBegin;
 
-    @ApiModelProperty(value = "日期止")
+    @ApiModelProperty(value = "日期止,格式：2018-01-02")
     private String createEnd;
 
 
