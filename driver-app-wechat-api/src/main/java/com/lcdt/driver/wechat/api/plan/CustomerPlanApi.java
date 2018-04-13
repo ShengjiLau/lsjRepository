@@ -240,7 +240,7 @@ public class CustomerPlanApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_split_vehicle')")
     public String customerPlanSplitVehicle(@RequestBody SplitVehicleDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
-        User user = SecurityInfoGetter.getUser();
+        User user = TokenSecurityInfoGetter.getUser();
         WaybillDto waybillDto = new WaybillDto();
         waybillDto.setCreateId(user.getUserId());
         waybillDto.setCreateName(user.getRealName());
@@ -253,17 +253,18 @@ public class CustomerPlanApi {
         waybillDto.setWaybillRemark(dto.getWaybillRemark());
         dto.setCompanyId(userCompRel.getCompany().getCompId());
 
-        int flag = iCustomerPlanRpcService4Wechat.customerPlanSplitVehicle(dto, waybillDto);
+        WaybillPlan waybillPlan = iCustomerPlanRpcService4Wechat.customerPlanSplitVehicle(dto, waybillDto);
         JSONObject jsonObject = new JSONObject();
         String message = null;
         int code = -1;
-        if (flag>0) {
+        if (waybillPlan!=null) {
             code = 0;
         } else {
             message = "操作失败，请重试！";
         }
         jsonObject.put("message",message);
         jsonObject.put("code",code);
+        jsonObject.put("data",waybillPlan);
         return jsonObject.toString();
     }
 

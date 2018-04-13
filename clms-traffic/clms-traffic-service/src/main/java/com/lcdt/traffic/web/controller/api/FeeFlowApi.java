@@ -1,10 +1,13 @@
 package com.lcdt.traffic.web.controller.api;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dto.FeeFlow4SearchParamsDto;
 import com.lcdt.traffic.service.IFeeFlowService;
+import com.lcdt.traffic.util.GroupIdsUtil;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.userinfo.model.Group;
 import io.swagger.annotations.Api;
@@ -16,6 +19,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yangbinq on 2018/4/12.
@@ -52,12 +56,18 @@ public class FeeFlowApi {
         if (!StringUtils.isEmpty(dto.getCreateEnd())) {
             dto.setCreateEnd(dto.getCreateEnd()+" 23:59:59");
         }
-        dto.setCompanyId(SecurityInfoGetter.getCompanyId());
+        dto.setCompanyId(SecurityInfoGetter.geUserCompRel().getCompany().getCompId());
         dto.setIsDeleted((short)0);
         PageInfo pg = iFeeFlowService.feeFlowList(dto);
         PageBaseDto pg_result = new PageBaseDto(pg.getList(), pg.getTotal());
         return pg_result;
     }
+
+
+
+
+
+
 
 
 }
