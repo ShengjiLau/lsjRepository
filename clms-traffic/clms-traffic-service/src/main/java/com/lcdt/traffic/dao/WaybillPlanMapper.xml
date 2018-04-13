@@ -133,6 +133,8 @@
     <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
     <result column="receive_man" jdbcType="VARCHAR" property="receiveMan" />
     <result column="arrive_date" jdbcType="TIMESTAMP" property="arriveDate" />
+    <result column="distribution_way" jdbcType="VARCHAR" property="distributionWay" />
+    <result column="plan_remark" jdbcType="VARCHAR" property="planRemark" />
 
    <!--计划列表-->
     <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
@@ -176,6 +178,8 @@
     <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
     <result column="receive_man" jdbcType="VARCHAR" property="receiveMan" />
     <result column="arrive_date" jdbcType="TIMESTAMP" property="arriveDate" />
+    <result column="distribution_way" jdbcType="VARCHAR" property="distributionWay" />
+    <result column="plan_remark" jdbcType="VARCHAR" property="planRemark" />
 
 
 
@@ -707,7 +711,7 @@
   -->
   <select id="customerPlan4Bidding" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted,
-    pubdate,null as splitDate,send_order_type,send_man,send_province,send_city,send_county,send_address,start_date,receive_man,arrive_date
+    pubdate,null as splitDate,send_order_type,send_man,send_province,send_city,send_county,send_address,start_date,receive_man,arrive_date,distribution_way,plan_remark
     from t_waybill_plan p1
     <where>
       and plan_status = '15' and waybill_plan_id not in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id ${snatchCompanyId})
@@ -757,7 +761,7 @@
   -->
   <select id="customerPlanList4Offer" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     select '-1' as split_goods_id,waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted,
-    pubdate,null as splitDate,send_order_type,send_man,send_province,send_city,send_county,send_address,start_date,receive_man,arrive_date
+    pubdate,null as splitDate,send_order_type,send_man,send_province,send_city,send_county,send_address,start_date,receive_man,arrive_date,distribution_way,plan_remark
     from t_waybill_plan p1
     <where>
       and waybill_plan_id in (SELECT waybill_plan_id FROM t_snatch_goods sn where sn.plan_company_id = p1.company_id and sn.is_deleted=0 ${snatchCompanyId})
@@ -818,7 +822,7 @@
    -->
   <select id="customerPlanList4Pass" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
     select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted,
-    pubdate,null as splitDate,send_order_type,send_man,send_province,send_city,send_county,send_address,start_date,receive_man,arrive_date
+    pubdate,null as splitDate,send_order_type,send_man,send_province,send_city,send_county,send_address,start_date,receive_man,arrive_date,distribution_way,plan_remark
     from t_waybill_plan p1
     <where>
       and
@@ -905,7 +909,8 @@
     wp.is_deleted,
     wp.pubdate,
     sp.create_date as splitDate,wp.send_order_type,
-    wp.send_man,wp.send_province,wp.send_city,wp.send_county,wp.send_address,wp.start_date,wp.receive_man,wp.arrive_date
+    wp.send_man,wp.send_province,wp.send_city,wp.send_county,wp.send_address,wp.start_date,wp.receive_man,wp.arrive_date,
+    wp.distribution_way,wp.plan_remark
     FROM t_split_goods sp
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
@@ -981,7 +986,8 @@
     wp.is_deleted,
     wp.pubdate,
     sp.create_date as splitDate,wp.send_order_type,
-    wp.send_man,wp.send_province,wp.send_city,wp.send_county,wp.send_address,wp.start_date,wp.receive_man,wp.arrive_date
+    wp.send_man,wp.send_province,wp.send_city,wp.send_county,wp.send_address,wp.start_date,wp.receive_man,wp.arrive_date,
+    wp.distribution_way,wp.plan_remark
     FROM t_split_goods sp
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
@@ -1055,7 +1061,8 @@
     wp.is_deleted,
     wp.pubdate,
     sp.create_date as splitDate,wp.send_order_type,
-    wp.send_man,wp.send_province,wp.send_city,wp.send_county,wp.send_address,wp.start_date,wp.receive_man,wp.arrive_date
+    wp.send_man,wp.send_province,wp.send_city,wp.send_county,wp.send_address,wp.start_date,wp.receive_man,wp.arrive_date,
+    wp.distribution_way,wp.plan_remark
     FROM t_split_goods sp
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
@@ -1128,7 +1135,8 @@
     wp.is_deleted,
     wp.pubdate,
     sp.create_date as splitDate,wp.send_order_type,
-    wp.send_man,wp.send_province,wp.send_city,wp.send_county,wp.send_address,wp.start_date,wp.receive_man,wp.arrive_date
+    wp.send_man,wp.send_province,wp.send_city,wp.send_county,wp.send_address,wp.start_date,wp.receive_man,wp.arrive_date,
+    wp.distribution_way,wp.plan_remark
     FROM t_split_goods sp
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
