@@ -234,7 +234,23 @@
       and is_deleted = #{isDeleted,jdbcType=VARCHAR}
     </if>
   </sql>
-
+  <sql id="select_finance_condition">
+    <if test="waybillCode!=null and waybillCode!=''">
+      and waybill_code like concat('%',#{waybillCode,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="createBegin!=null and createBegin!=''">
+      and create_date &gt;= CONCAT(STR_TO_DATE(#{createBegin,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+    </if>
+    <if test="createEnd!=null and createEnd!=''">
+      and create_date &lt;= CONCAT(STR_TO_DATE(#{createEnd,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
+    </if>
+    <if test="customerName!=null and customerName!=''">
+      and customer_name like concat('%',#{customerName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="isDeleted!=null and isDeleted!=''">
+      and is_deleted = #{isDeleted,jdbcType=VARCHAR}
+    </if>
+  </sql>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_waybill
     where id = #{id,jdbcType=BIGINT}
@@ -608,16 +624,10 @@
     <where>
       waybill_status!=8 AND
       company_id = #{companyId,jdbcType=BIGINT}
-      <if test="isDeleted!=null">
-        and is_deleted = #{isDeleted,jdbcType=SMALLINT}
-      </if>
       <if test="groupIds!=null and groupIds!=''">
         and ${groupIds}
       </if>
-      <if test="customerName!=null and customerName!=''">
-        and customer_name like concat('%',#{customerName,jdbcType=VARCHAR},'%')
-      </if>
-      <include refid="select_condition"/>
+      <include refid="select_finance_condition"/>
     </where>
   </select>
 
@@ -639,16 +649,10 @@
       <if test="companyIds==null">
         and company_id is null
       </if>
-      <if test="isDeleted!=null">
-        and is_deleted = #{isDeleted,jdbcType=SMALLINT}
-      </if>
       <if test="groupIds!=null and groupIds!=''">
         and ${groupIds}
       </if>
-      <if test="customerName!=null and customerName!=''">
-        and customer_name like concat('%',#{customerName,jdbcType=VARCHAR},'%')
-      </if>
-      <include refid="select_condition"/>
+      <include refid="select_finance_condition"/>
     </where>
   </select>
 
