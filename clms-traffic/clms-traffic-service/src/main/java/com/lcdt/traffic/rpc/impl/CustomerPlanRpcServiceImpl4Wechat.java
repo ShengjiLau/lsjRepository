@@ -849,6 +849,8 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             producer.sendNotifyEvent(plan_publish_event);
 
         }
+
+        waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         return waybillPlan;
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
  * Created by lyqishan on 2017/12/21
  */
 
-public class WaybillDto {
+public class WaybillDto implements java.io.Serializable {
     private Long id;
 
     private Long waybillPlanId;
