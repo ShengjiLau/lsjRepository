@@ -9,12 +9,12 @@ import com.lcdt.driver.wechat.api.util.GprsLocationBo;
 import com.lcdt.traffic.service.OwnDriverService;
 import com.lcdt.userinfo.model.Driver;
 import com.lcdt.userinfo.model.LocationCallbackModel;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.DriverService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.tl.commons.util.DateUtility;
 
@@ -39,11 +39,12 @@ public class LocationServiceApi {
     @Reference
     private OwnDriverService ownDriverService;
 
-    @Autowired
+    @Reference
     private BalanceCheckBo balanceCheckBo;
 
     @ApiOperation(value = "定位激活回调地址", notes = "用来接收基站定位第三方发送的回调信息（无任何权限控制）")
     @GetMapping("/callback")
+
     public JSONObject callbackUrl(@ModelAttribute LocationCallbackModel locationCallbackModel) {
         logger.debug("locationCallbackModel:" + locationCallbackModel.toString());
         String phone = locationCallbackModel.getMobileno();
@@ -74,12 +75,14 @@ public class LocationServiceApi {
 
     @ApiOperation(value = "开通定位功能", notes = "发送激活短信到用手手机，成功后将数据库状态改为1等待激活")
     @GetMapping("/open")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('lbs_location')")
     public JSONObject getGpstStatus(String mobile) {
         logger.debug("driverPhone:" + mobile);
         Driver driver = new Driver();
         driver.setDriverPhone(mobile);
         JSONObject jsonObject = new JSONObject();
-        Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId(); //  获取companyId
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
         /*if(!balanceCheckBo.check(companyId)){
             jsonObject.put("code", -1);
             jsonObject.put("message", "余额不足！请充值！");
@@ -111,10 +114,12 @@ public class LocationServiceApi {
 
     @ApiOperation(value = "查询定位状态是否激活", notes = "点击等待激活按钮 （会优先查询接口，然后同步更新本地数据库）")
     @GetMapping("/locationstatus")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('lbs_location')")
     public JSONObject queryStatus(String mobile) {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
-        Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId(); //  获取companyId
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
         /*if(!balanceCheckBo.check(companyId)){
             jsonObject.put("code", -1);
             jsonObject.put("message", "余额不足！请充值！");
@@ -144,10 +149,12 @@ public class LocationServiceApi {
 
     @ApiOperation(value = "定位激活开通", notes = "会调用接口发送定位激活授权短信")
     @GetMapping("/authstatus")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('lbs_location')")
     public JSONObject authOpen(String mobile) {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
-        Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId(); //  获取companyId
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
         /*if(!balanceCheckBo.check(companyId)){
             jsonObject.put("code", -1);
             jsonObject.put("message", "余额不足！请充值！");
@@ -192,10 +199,12 @@ public class LocationServiceApi {
 
     @ApiOperation(value = "基站定位", notes = "通过接口查询定位信息，并同步到本地数据库")
     @GetMapping("/querylocation")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('lbs_location')")
     public JSONObject queryLocation(String mobile) {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
-        Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId(); //  获取companyId
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
         if(!balanceCheckBo.check(companyId)){
             jsonObject.put("code", -1);
             jsonObject.put("message", "余额不足！请充值！");
@@ -211,23 +220,24 @@ public class LocationServiceApi {
             JSONObject result = GprsLocationBo.getInstance().queryLocation(mobile);
             int resid1 = result.getIntValue("resid");
             if (resid1 == 0) {   //已激活
+                balanceCheckBo.deductionGms(companyId); //查询正常扣费
                 Driver driver = new Driver();
                 driver.setDriverPhone(mobile);
                 driver.setCurrentLocation(result.getString("location"));
                 driver.setShortCurrentLocation(result.getString("street"));
                 driverService.updateLocation(driver);
-                jsonObject.put("code", resid);
+                jsonObject.put("code", resid1);
                 jsonObject.put("location",result.getString("location"));
                 jsonObject.put("locationTime", DateUtility.getCurrDatetime());
                 jsonObject.put("message", "查询成功");
             } else if (resid1 == -80) {    //	余额不足,请充值:请联系客服
-                jsonObject.put("code", resid);
+                jsonObject.put("code", resid1);
                 jsonObject.put("message", "余额不足,请充值:请联系客服");
             } else if (resid1 == -130) {    //用户可能关机
-                jsonObject.put("code", resid);
+                jsonObject.put("code", resid1);
                 jsonObject.put("message", "用户可能关机");
             } else {      //对于移动手机，定位失败时运营商返回的结果
-                jsonObject.put("code", resid);
+                jsonObject.put("code", resid1);
                 jsonObject.put("message", "定位失败，请联系客服！");
             }
         } else if (resid == 0) {    //未激活
@@ -262,7 +272,8 @@ public class LocationServiceApi {
     @ApiOperation(value = "基站定位剩余条数", notes = "获取基站定位剩余条数")
     @GetMapping("/querycount")
     public JSONObject queryLocation() {
-        Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId();//  获取companyId
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
         JSONObject jsonObject = new JSONObject();
         try {
             int count = balanceCheckBo.getGmsCount(companyId);
@@ -278,6 +289,5 @@ public class LocationServiceApi {
         }
         return jsonObject;
     }
-
 
 }
