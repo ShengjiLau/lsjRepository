@@ -15,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.tl.commons.util.DateUtility;
 
@@ -39,7 +40,7 @@ public class LocationServiceApi {
     @Reference
     private OwnDriverService ownDriverService;
 
-    @Reference
+    @Autowired
     private BalanceCheckBo balanceCheckBo;
 
     @ApiOperation(value = "定位激活回调地址", notes = "用来接收基站定位第三方发送的回调信息（无任何权限控制）")
