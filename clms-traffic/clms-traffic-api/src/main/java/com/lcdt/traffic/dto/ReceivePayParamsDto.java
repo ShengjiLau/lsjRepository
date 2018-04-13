@@ -23,19 +23,37 @@ public class ReceivePayParamsDto implements java.io.Serializable {
 
     @ApiModelProperty(value = "组ID-后台处理")
     private String groupIds;
+    @ApiModelProperty(value = "是否删除-后台处理")
+    private short isDeleted;
+    @ApiModelProperty(value = "0-应收，1-应付-后台处理")
+    private short isReceivable;
+    @ApiModelProperty(value = "统计列,后台处理")
+    private String statCols;
 
-    @ApiModelProperty(value = "费用列-后台处理")
-    private String propertyCols;
-
-
-    public String getPropertyCols() {
-        return propertyCols;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setPropertyCols(String propertyCols) {
-        this.propertyCols = propertyCols;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
+    @ApiModelProperty(value = "登录企业ID-后台处理，必须要传")
+    private Long companyId;
+
+
+    public String getStatCols() {
+        return statCols;
+    }
+    public void setStatCols(String statCols) {
+        this.statCols = statCols;
+    }
+    public short getIsDeleted() {
+        return isDeleted;
+    }
+    public void setIsDeleted(short isDeleted) {
+        this.isDeleted = isDeleted;
+   }
     public Long getGroupId() {
         return groupId;
     }
@@ -74,5 +92,13 @@ public class ReceivePayParamsDto implements java.io.Serializable {
 
     public void setGroupIds(String groupIds) {
         this.groupIds = groupIds;
+    }
+
+    public short getIsReceivable() {
+        return isReceivable;
+    }
+
+    public void setIsReceivable(short isReceivable) {
+        this.isReceivable = isReceivable;
     }
 }
