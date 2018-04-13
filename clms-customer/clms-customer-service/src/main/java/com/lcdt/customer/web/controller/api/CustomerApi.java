@@ -135,6 +135,7 @@ public class CustomerApi {
                 }
                 map.put("groupIds", sb.toString());
         }
+        map.remove("customerType");//去掉客户类型查询条件
         PageInfo pageInfo = customerService.customerList(map);
         CustomerListResultDto dto1 = new CustomerListResultDto();
         dto1.setList(pageInfo.getList());

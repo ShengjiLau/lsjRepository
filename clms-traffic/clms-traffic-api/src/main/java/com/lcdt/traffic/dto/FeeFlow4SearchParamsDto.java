@@ -18,10 +18,10 @@ public class FeeFlow4SearchParamsDto implements java.io.Serializable {
     @ApiModelProperty(value = "收付款方ID，全部为0",required = true)
     private Long nameId;
 
-    @ApiModelProperty(value = "记录日期始")
+    @ApiModelProperty(value = "记录日期始,格式：2018-01-02")
     private String createBegin;
 
-    @ApiModelProperty(value = "记录日期止")
+    @ApiModelProperty(value = "记录日期止,格式：2018-01-02")
     private String createEnd;
 
     @ApiModelProperty(value = "业务流水号")

@@ -2,9 +2,11 @@ package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.dto.FeeFlow4SearchParamsDto;
 import com.lcdt.traffic.dto.FeeFlow4SearchResultDto;
+import com.lcdt.traffic.dto.ReceivePayParamsDto;
 import com.lcdt.traffic.model.FeeFlow;
 
 import java.util.List;
+import java.util.Map;
 
 public interface FeeFlowMapper {
     int deleteByPrimaryKey(Long flowId);
@@ -32,4 +34,11 @@ public interface FeeFlowMapper {
      * @return
      */
     List<FeeFlow4SearchResultDto> searchCondition(FeeFlow4SearchParamsDto dto);
+
+
+    /***
+     * 应收应付统计
+     * @param dto
+     */
+    List<Map<String,Object>> receivePayStat(ReceivePayParamsDto dto);
 }

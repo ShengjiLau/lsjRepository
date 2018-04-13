@@ -590,6 +590,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         } else {
             throw new SplitGoodsException("计划详细为空！");
         }
+        waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap); //查询对应的计划
         return waybillPlan;
     }
 

@@ -1,9 +1,11 @@
 package com.lcdt.traffic.web.controller.api;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dto.ReceivePayParamsDto;
+import com.lcdt.traffic.service.IFeeFlowService;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.userinfo.model.Group;
@@ -11,6 +13,7 @@ import com.lcdt.userinfo.rpc.FinanceRpcService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,15 +37,47 @@ public class FinanceApi {
     private FinanceRpcService financeRpcService;
 
 
+    @Autowired
+    private IFeeFlowService iFeeFlowService;
+
+
     @ApiOperation("应收统计")
     @RequestMapping(value = "/receive/stat",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
     public JSONObject receiveStat(ReceivePayParamsDto dto) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            List<Map<String, Object>> mapList = statData(dto, (short)0);
 
-        statData(dto, (short)0);
-
-        return null;
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "");
+            jsonObject.put("data", JSONArray.toJSON(mapList==null?new Object():mapList));
+        } catch (Exception e) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message",e.getMessage());
+        }
+        return jsonObject;
     }
+
+
+
+    @ApiOperation("应付统计")
+    @RequestMapping(value = "/pay/stat",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject payStat(ReceivePayParamsDto dto) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            List<Map<String, Object>> mapList = statData(dto, (short)1);
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "");
+            jsonObject.put("data", JSONArray.toJSON(mapList==null?new Object():mapList));
+        } catch (Exception e) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message",e.getMessage());
+        }
+        return jsonObject;
+    }
+
 
 
     /***
@@ -71,19 +106,19 @@ public class FinanceApi {
                 dto.setGroupIds(sb_1.toString());
             }
             StringBuffer sb_2 = new StringBuffer();
-            for(int i=0;i<feePropertyList.size();i++) {
+            for (int i=0; i<feePropertyList.size();i++) {
                 FeeProperty feeProperty = feePropertyList.get(i);
-                sb_2.append(feeProperty.getProId());
+                sb_2.append("IFNULL(sum(case pro_id when "+feeProperty.getProId()+" then money end),0) as '"+feeProperty.getName()+"' ");
                 if(i!=feePropertyList.size()-1){
                     sb_2.append(",");
                 }
             }
-            dto.setPropertyCols(sb_2.toString());
+            dto.setStatCols(sb_2.toString());
+            dto.setIsDeleted((short)0);
+            dto.setCompanyId(company.getCompId());
+            return iFeeFlowService.receivePayStat(dto);
         }
-
-
         return null;
-
     }
 
 }

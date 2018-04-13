@@ -217,8 +217,58 @@
         and  #{createEnd,jdbcType=TIMESTAMP} >= f.create_date
       </if>
     </where>
-
     order by flow_code desc
   </select>
+
+
+  <!--应收应付统计-->
+  <select id="receivePayStat" parameterType="com.lcdt.traffic.dto.ReceivePayParamsDto" resultType="Map">
+    SELECT
+    dt,
+    ${statCols}
+    FROM
+    (SELECT pro_id,money,dt FROM t_date t
+        LEFT JOIN (SELECT pro_id, sum(money) as money,date(f.create_date) as create_date
+        FROM t_fee_flow f
+        LEFT JOIN t_fee_account a ON f.account_id = a.account_id
+          <where>
+                    <if test="isDeleted!=null">
+                      and  f.is_deleted = #{isDeleted,jdbcType=SMALLINT}
+                    </if>
+                    <if test="groupIds!=null and groupIds!=''">
+                      and  f.group_id in (#{groupIds,jdbcType=VARCHAR})
+                    </if>
+                    <if test="companyId!=null">
+                      and  f.company_id = #{companyId,jdbcType=BIGINT}
+                    </if>
+                    <if test="isReceivable!=null">
+                      and  f.is_receivable = #{isReceivable,jdbcType=SMALLINT}
+                    </if>
+                    <if test="nameId!=null and nameId>0">
+                      and  a.name_id = #{nameId,jdbcType=BIGINT}
+                    </if>
+                     <if test="createBegin!=null and createBegin!=''">
+                      and  date(f.create_date) >= #{createBegin,jdbcType=TIMESTAMP}
+                    </if>
+                    <if test="createEnd!=null and createEnd!=''">
+                      and  #{createEnd,jdbcType=TIMESTAMP} >= date(f.create_date)
+                    </if>
+                  </where>
+                 group by pro_id ) t1 on t.dt= t1.create_date
+        <where>
+          <if test="createBegin!=null and createBegin!=''">
+            and date(dt) >= #{createBegin,jdbcType=TIMESTAMP}
+          </if>
+          <if test="createEnd!=null and createEnd!=''">
+            and  #{createEnd,jdbcType=TIMESTAMP} >= date(dt)
+          </if>
+        </where>
+       order by dt ASC
+    ) t_view
+    group by t_view.dt
+
+  </select>
+
+
 
 </mapper>
