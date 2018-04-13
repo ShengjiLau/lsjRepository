@@ -10,15 +10,11 @@ public class Reconcile implements Serializable {
 
     private Long companyId;
 
-    private String groupId;
-
     private Double accountAmount;
 
     private Long operatorId;
 
     private String operatorName;
-
-    private Long isReceivable;
 
     private Date createTime;
 
@@ -60,14 +56,6 @@ public class Reconcile implements Serializable {
         this.companyId = companyId;
     }
 
-    public String getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(String groupId) {
-        this.groupId = groupId == null ? null : groupId.trim();
-    }
-
     public Double getAccountAmount() {
         return accountAmount;
     }
@@ -90,14 +78,6 @@ public class Reconcile implements Serializable {
 
     public void setOperatorName(String operatorName) {
         this.operatorName = operatorName == null ? null : operatorName.trim();
-    }
-
-    public Long getIsReceivable() {
-        return isReceivable;
-    }
-
-    public void setIsReceivable(Long isReceivable) {
-        this.isReceivable = isReceivable;
     }
 
     public Date getCreateTime() {
@@ -171,11 +151,9 @@ public class Reconcile implements Serializable {
         return (this.getReconcileId() == null ? other.getReconcileId() == null : this.getReconcileId().equals(other.getReconcileId()))
             && (this.getReconcileCode() == null ? other.getReconcileCode() == null : this.getReconcileCode().equals(other.getReconcileCode()))
             && (this.getCompanyId() == null ? other.getCompanyId() == null : this.getCompanyId().equals(other.getCompanyId()))
-            && (this.getGroupId() == null ? other.getGroupId() == null : this.getGroupId().equals(other.getGroupId()))
             && (this.getAccountAmount() == null ? other.getAccountAmount() == null : this.getAccountAmount().equals(other.getAccountAmount()))
             && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
             && (this.getOperatorName() == null ? other.getOperatorName() == null : this.getOperatorName().equals(other.getOperatorName()))
-            && (this.getIsReceivable() == null ? other.getIsReceivable() == null : this.getIsReceivable().equals(other.getIsReceivable()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getCancelOk() == null ? other.getCancelOk() == null : this.getCancelOk().equals(other.getCancelOk()))
             && (this.getAccountId() == null ? other.getAccountId() == null : this.getAccountId().equals(other.getAccountId()))
@@ -192,11 +170,9 @@ public class Reconcile implements Serializable {
         result = prime * result + ((getReconcileId() == null) ? 0 : getReconcileId().hashCode());
         result = prime * result + ((getReconcileCode() == null) ? 0 : getReconcileCode().hashCode());
         result = prime * result + ((getCompanyId() == null) ? 0 : getCompanyId().hashCode());
-        result = prime * result + ((getGroupId() == null) ? 0 : getGroupId().hashCode());
         result = prime * result + ((getAccountAmount() == null) ? 0 : getAccountAmount().hashCode());
         result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
         result = prime * result + ((getOperatorName() == null) ? 0 : getOperatorName().hashCode());
-        result = prime * result + ((getIsReceivable() == null) ? 0 : getIsReceivable().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getCancelOk() == null) ? 0 : getCancelOk().hashCode());
         result = prime * result + ((getAccountId() == null) ? 0 : getAccountId().hashCode());
@@ -216,11 +192,9 @@ public class Reconcile implements Serializable {
         sb.append(", reconcileId=").append(reconcileId);
         sb.append(", reconcileCode=").append(reconcileCode);
         sb.append(", companyId=").append(companyId);
-        sb.append(", groupId=").append(groupId);
         sb.append(", accountAmount=").append(accountAmount);
         sb.append(", operatorId=").append(operatorId);
         sb.append(", operatorName=").append(operatorName);
-        sb.append(", isReceivable=").append(isReceivable);
         sb.append(", createTime=").append(createTime);
         sb.append(", cancelOk=").append(cancelOk);
         sb.append(", accountId=").append(accountId);
