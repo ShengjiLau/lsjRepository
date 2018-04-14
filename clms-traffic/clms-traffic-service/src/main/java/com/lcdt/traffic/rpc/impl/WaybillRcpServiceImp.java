@@ -65,7 +65,6 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         }
 
         Map map= ClmsBeanUtil.beanToMap(dto);
-        map=packageWaybillStatus(map);
 
         PageHelper.startPage(pageNo, pageSize);
         resultList = waybillMapper.selectOwnByCondition(map);
@@ -94,7 +93,6 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         map.remove("companyId");
         map.remove("customerName");
         //将前端传过来的waybillStatus转成数组
-        map=packageWaybillStatus(map);
 
         PageHelper.startPage(pageNo, pageSize);
         resultList = waybillMapper.selectCustomerByCondition(map);
@@ -392,14 +390,6 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             waybillSenderNotify.customerCancelSendNotify(waybillIds,userId);
         }
 
-    }
-
-    //将前端传过来的waybillStatus转成数组
-    private Map packageWaybillStatus(Map map){
-        if(map.containsKey("waybillStatus")&&map.get("waybillStatus")!=null&&!map.get("waybillStatus").equals("")){
-            map.put("waybillStatus",map.get("waybillStatus").toString().split(","));
-        }
-        return map;
     }
 
 }

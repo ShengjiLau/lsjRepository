@@ -203,6 +203,13 @@
       <if test="driverGroupId!=null and driverGroupId!=''">
         and own_driver_id in(select own_driver_id from t_driver_group_relationship where driver_group_id=#{driverGroupId,jdbcType=VARCHAR})
       </if>
+      <if test="driverGroupIds!=null and driverGroupIds!='' and driverGroupIds.length>0">
+        and own_driver_id in(select own_driver_id from t_driver_group_relationship where driver_group_id in
+        <foreach collection="driverGroupIds" index="index" item="item" open="(" close=")" separator=",">
+          #{item}
+        </foreach>
+        )
+      </if>
       group by own_driver_id desc
     </where>
   </select>
