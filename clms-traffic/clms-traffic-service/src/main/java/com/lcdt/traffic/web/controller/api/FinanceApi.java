@@ -61,7 +61,7 @@ public class FinanceApi {
 
 
 
-    @ApiOperation("应付统计")
+    @ApiOperation("应付统计 ")
     @RequestMapping(value = "/pay/stat",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
     public JSONObject payStat(ReceivePayParamsDto dto) {
