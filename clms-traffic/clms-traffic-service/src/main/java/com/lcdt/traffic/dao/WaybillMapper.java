@@ -184,9 +184,17 @@ public interface WaybillMapper {
      */
     int updateWaybillByDriver(Map map);
     /**
-     * 记账列表
+     * 我的运单
      * @param map
      * @return
      */
     List<FeeAccountWaybillDto> selectFeeAccountWaybillByCondition(Map map);
+
+
+    /**
+     * 记账列表-客户运单
+     * @param map
+     * @return
+     */
+    List<FeeAccountWaybillDto> selectFeeAccountCustomerWaybillByCondition(Map map);
 }

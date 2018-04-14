@@ -49,7 +49,6 @@ public class OwnDriverApi {
         OwnDriver ownDriver = new OwnDriver();
         BeanUtils.copyProperties(ownDriverDto, ownDriver);
         ownDriver.setCompanyId(companyId);
-
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(ownDriverDto.getPageNum());    //设置页码
         pageInfo.setPageSize(ownDriverDto.getPageSize());  //设置每页条数

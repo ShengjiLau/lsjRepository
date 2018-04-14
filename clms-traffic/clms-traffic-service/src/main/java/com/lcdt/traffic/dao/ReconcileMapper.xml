@@ -5,11 +5,9 @@
     <id column="reconcile_id" property="reconcileId" jdbcType="BIGINT" />
     <result column="reconcile_code" property="reconcileCode" jdbcType="VARCHAR" />
     <result column="company_id" property="companyId" jdbcType="BIGINT" />
-    <result column="group_id" property="groupId" jdbcType="VARCHAR" />
     <result column="account_amount" property="accountAmount" jdbcType="DOUBLE" />
     <result column="operator_id" property="operatorId" jdbcType="BIGINT" />
     <result column="operator_name" property="operatorName" jdbcType="VARCHAR" />
-    <result column="is_receivable" property="isReceivable" jdbcType="BIGINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="cancel_ok" property="cancelOk" jdbcType="SMALLINT" />
     <result column="account_id" property="accountId" jdbcType="VARCHAR" />
@@ -18,10 +16,9 @@
     <result column="payer_id" property="payerId" jdbcType="BIGINT" />
     <result column="payer_name" property="payerName" jdbcType="VARCHAR" />
   </resultMap>
-  <sql id="Base_Column_List" >
-    reconcile_id, reconcile_code, company_id, group_id, account_amount, operator_id, 
-    operator_name, is_receivable, create_time, cancel_ok, account_id, waybill_id, payee_type, 
-    payer_id, payer_name
+ <sql id="Base_Column_List" >
+    reconcile_id, reconcile_code, company_id, account_amount, operator_id, operator_name, 
+    create_time, cancel_ok, account_id, waybill_id, payee_type, payer_id, payer_name
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -33,21 +30,20 @@
     delete from t_fee_reconcile
     where reconcile_id = #{reconcileId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.lcdt.traffic.model.Reconcile" >
+ <insert id="insert" parameterType="com.lcdt.traffic.model.Reconcile" >
     insert into t_fee_reconcile (reconcile_id, reconcile_code, company_id, 
-      group_id, account_amount, operator_id, 
-      operator_name, is_receivable, create_time, 
-      cancel_ok, account_id, waybill_id, 
-      payee_type, payer_id, payer_name
-      )
+      account_amount, operator_id, operator_name, 
+      create_time, cancel_ok, account_id, 
+      waybill_id, payee_type, payer_id, 
+      payer_name)
     values (#{reconcileId,jdbcType=BIGINT}, #{reconcileCode,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, 
-      #{groupId,jdbcType=VARCHAR}, #{accountAmount,jdbcType=DOUBLE}, #{operatorId,jdbcType=BIGINT}, 
-      #{operatorName,jdbcType=VARCHAR}, #{isReceivable,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{cancelOk,jdbcType=SMALLINT}, #{accountId,jdbcType=VARCHAR}, #{waybillId,jdbcType=VARCHAR}, 
-      #{payeeType,jdbcType=SMALLINT}, #{payerId,jdbcType=BIGINT}, #{payerName,jdbcType=VARCHAR}
-      )
+      #{accountAmount,jdbcType=DOUBLE}, #{operatorId,jdbcType=BIGINT}, #{operatorName,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{cancelOk,jdbcType=SMALLINT}, #{accountId,jdbcType=VARCHAR}, 
+      #{waybillId,jdbcType=VARCHAR}, #{payeeType,jdbcType=SMALLINT}, #{payerId,jdbcType=BIGINT}, 
+      #{payerName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.lcdt.traffic.model.Reconcile" >
+  
+   <insert id="insertSelective" parameterType="com.lcdt.traffic.model.Reconcile" >
     insert into t_fee_reconcile
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="reconcileId != null" >
@@ -59,9 +55,6 @@
       <if test="companyId != null" >
         company_id,
       </if>
-      <if test="groupId != null" >
-        group_id,
-      </if>
       <if test="accountAmount != null" >
         account_amount,
       </if>
@@ -70,9 +63,6 @@
       </if>
       <if test="operatorName != null" >
         operator_name,
-      </if>
-      <if test="isReceivable != null" >
-        is_receivable,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -106,9 +96,6 @@
       <if test="companyId != null" >
         #{companyId,jdbcType=BIGINT},
       </if>
-      <if test="groupId != null" >
-        #{groupId,jdbcType=VARCHAR},
-      </if>
       <if test="accountAmount != null" >
         #{accountAmount,jdbcType=DOUBLE},
       </if>
@@ -117,9 +104,6 @@
       </if>
       <if test="operatorName != null" >
         #{operatorName,jdbcType=VARCHAR},
-      </if>
-      <if test="isReceivable != null" >
-        #{isReceivable,jdbcType=BIGINT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -144,7 +128,8 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.traffic.model.Reconcile" >
+  
+ <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.traffic.model.Reconcile" >
     update t_fee_reconcile
     <set >
       <if test="reconcileCode != null" >
@@ -152,9 +137,6 @@
       </if>
       <if test="companyId != null" >
         company_id = #{companyId,jdbcType=BIGINT},
-      </if>
-      <if test="groupId != null" >
-        group_id = #{groupId,jdbcType=VARCHAR},
       </if>
       <if test="accountAmount != null" >
         account_amount = #{accountAmount,jdbcType=DOUBLE},
@@ -164,9 +146,6 @@
       </if>
       <if test="operatorName != null" >
         operator_name = #{operatorName,jdbcType=VARCHAR},
-      </if>
-      <if test="isReceivable != null" >
-        is_receivable = #{isReceivable,jdbcType=BIGINT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -192,15 +171,14 @@
     </set>
     where reconcile_id = #{reconcileId,jdbcType=BIGINT}
   </update>
+  
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.Reconcile" >
     update t_fee_reconcile
     set reconcile_code = #{reconcileCode,jdbcType=VARCHAR},
       company_id = #{companyId,jdbcType=BIGINT},
-      group_id = #{groupId,jdbcType=VARCHAR},
       account_amount = #{accountAmount,jdbcType=DOUBLE},
       operator_id = #{operatorId,jdbcType=BIGINT},
       operator_name = #{operatorName,jdbcType=VARCHAR},
-      is_receivable = #{isReceivable,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       cancel_ok = #{cancelOk,jdbcType=SMALLINT},
       account_id = #{accountId,jdbcType=VARCHAR},
@@ -210,17 +188,18 @@
       payer_name = #{payerName,jdbcType=VARCHAR}
     where reconcile_id = #{reconcileId,jdbcType=BIGINT}
   </update>
+  
   <insert id="insertByBatch" useGeneratedKeys="true" keyProperty="reconcileId" keyColumn="reconcile_id">
   	insert into t_fee_reconcile (reconcile_id, reconcile_code, company_id, 
-      group_id, account_amount, operator_id, 
-      operator_name, is_receivable, create_time, 
+      account_amount, operator_id, 
+      operator_name, create_time, 
       cancel_ok, account_id, waybill_id, 
       payee_type, payer_id, payer_name
       )
   <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
     values (#{item.reconcileId,jdbcType=BIGINT}, #{item.reconcileCode,jdbcType=VARCHAR}, #{item.companyId,jdbcType=BIGINT}, 
-      #{item.groupId,jdbcType=VARCHAR}, #{item.accountAmount,jdbcType=DOUBLE}, #{item.operatorId,jdbcType=BIGINT}, 
-      #{item.operatorName,jdbcType=VARCHAR}, #{item.isReceivable,jdbcType=BIGINT}, #{item.createTime,jdbcType=TIMESTAMP}, 
+      #{item.accountAmount,jdbcType=DOUBLE}, #{item.operatorId,jdbcType=BIGINT}, 
+      #{item.operatorName,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
       #{item.cancelOk,jdbcType=SMALLINT}, #{item.accountId,jdbcType=VARCHAR}, #{item.waybillId,jdbcType=VARCHAR}, 
       #{item.payeeType,jdbcType=SMALLINT}, #{item.payerId,jdbcType=BIGINT}, #{item.payerName,jdbcType=VARCHAR}
       )
@@ -234,7 +213,7 @@
     </set>
   	<foreach collection="array" index="index" item="reconcileId" open="(" separator="," close=")">	
   	<where>
-  	reconcile_id = #{reconcileId,jdbcType=BIGINT}
+  	reconcile_id = #{reconcileId,jdbcType=BIGINT} 
   	</where>
   	</foreach>
   </update>
@@ -244,7 +223,7 @@
     <include refid="Base_Column_List" />
     from t_fee_reconcile
     <where>
-    cancel_ok=1 and company_id =#{companyId,jdbcType=BIGINT} and is_receivable =#{isReceivable,jdbcType=BIGINT}
+    cancel_ok=1 and company_id =#{companyId,jdbcType=BIGINT} and  payee_type = #{payeeType,jdbcType=SMALLINT}
     <if test="beginTime!=null and beginTime!=''">
     and create_time &gt; concat(#{beginTime,jdbcType=VARCHAR},'000000')
     </if>
@@ -254,13 +233,11 @@
     <if test="payerName!=null and payerName!=''">
     and payer_name like concat('%',#{payerName,jdbcType=VARCHAR},'%')
     </if>
-    <if test="groupId!=null and groupId!=''">
-    and FIND_IN_SET(#{groupId,jdbcType=VARCHAR},group_id)
-    </if>
     <if test="reconcileCode!=null and reconcileCode!=''">
     and reconcile_code like concat('%',#{reconcileCode,jdbcType=VARCHAR},'%')
     </if>
     </where>
+    order by create_time desc
   </select>
   
   <select id="getReconcileListByPk" resultMap="BaseResultMap">

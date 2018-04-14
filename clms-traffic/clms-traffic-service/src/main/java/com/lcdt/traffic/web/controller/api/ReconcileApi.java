@@ -25,6 +25,7 @@ import com.lcdt.traffic.web.dto.ReconcileListDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 
 /**
@@ -44,8 +45,7 @@ public class ReconcileApi {
 	
 	Logger logger = LoggerFactory.getLogger(ReconcileApi.class);
 	
-	
-	
+
 	@ApiOperation(value = "添加对账单,fee_reconcile_add")
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_add')")
@@ -69,7 +69,7 @@ public class ReconcileApi {
 	@PostMapping("/cancel")
 	@ApiOperation("取消订单,fee_reconcile_cancel")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_cancel')")
-	public JSONObject cancelReconcile(Long[] reconcileIdList) {
+	public JSONObject cancelReconcile(@ApiParam(value="一个或多个对账单id") Long[] reconcileIdList) {
 		JSONObject jsonObject =new JSONObject();
 		int i= reconcileIdList.length;
 		int result=reconcileService.setCancelOk(reconcileIdList);
@@ -100,9 +100,23 @@ public class ReconcileApi {
 	}
 	
 	
-	
-	
-	
+	@GetMapping("/select")
+	@ApiOperation("查询对账单详情,fee_reconcile_select")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_select')")
+	public JSONObject selectReconcile(@ApiParam("对账单id") Long reconcileId) {
+		JSONObject jsonObject =new JSONObject();		
+		Reconcile reconcile=reconcileService.selectReconcileByPk(reconcileId);
+		if(reconcile!=null) {
+			jsonObject.put("code",0);
+			jsonObject.put("msg","对账单详细信息");
+			jsonObject.put("data",reconcile);
+			return jsonObject;
+		}else {
+			throw new RuntimeException("获取对账单详细信息失败");
+		}
+		
+		
+	}
 	
 	
 	

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
 import com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto;
+import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
 
 import java.util.List;
 import java.util.Map;
@@ -72,6 +73,12 @@ public interface FeeAccountService {
      * @return
      */
     int feeAccountAudit(Map map);
+
+    /**
+     *
+     * 客户运单记账列表
+     * */
+    PageInfo<List<FeeAccountWaybillDto>> feeAccountCustomerWaybillList(Map map);
 
     /**
      * 记账单对账
