@@ -78,8 +78,8 @@ public class CustomerApi {
             map.put("county",dto.getCounty());
         }
 
-        if (StringUtil.isNotEmpty(dto.getCustomerType())) { //1-销售客户2-仓储客户3-运输客户4-仓储服务商5-运输服务商6-供应商7-其他
-            String[] customTypeArray = dto.getCustomerType().split(",");
+        if (StringUtil.isNotEmpty(dto.getCustomerTypes())) { //1-销售客户2-仓储客户3-运输客户4-仓储服务商5-运输服务商6-供应商7-其他
+            String[] customTypeArray = dto.getCustomerTypes().split(",");
             StringBuffer sb = new StringBuffer();
             sb.append("(");
             for (int i=0;i<customTypeArray.length;i++) {
@@ -135,7 +135,7 @@ public class CustomerApi {
                 }
                 map.put("groupIds", sb.toString());
         }
-        map.remove("customerType");//去掉客户类型查询条件
+       // map.remove("customerType");//去掉客户类型查询条件
         PageInfo pageInfo = customerService.customerList(map);
         CustomerListResultDto dto1 = new CustomerListResultDto();
         dto1.setList(pageInfo.getList());
