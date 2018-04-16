@@ -22,6 +22,14 @@ public interface OrderApprovalService {
     PageInfo<List<OrderApprovalDto>> orderApprovalList(OrderApprovalListDto orderApprovalListDto, PageInfo pageInfo);
 
     /**
+     * 获取待审批订单数量
+     * @param userId
+     * @param companyId
+     * @return
+     */
+    int pendingApprovalNum(Long userId, Long companyId);
+
+    /**
      * 同意审批
      *
      * @param orderApproval

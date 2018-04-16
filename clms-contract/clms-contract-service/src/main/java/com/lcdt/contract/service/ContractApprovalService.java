@@ -23,6 +23,14 @@ public interface ContractApprovalService {
     PageInfo<List<ContractApprovalDto>> contractApprovalList(ContractApprovalListDto contractApprovalListDto, PageInfo pageInfo);
 
     /**
+     * 获取待审批合同数量
+     * @param userId
+     * @param companyId
+     * @return
+     */
+    int pendingApprovalNum(Long userId, Long companyId);
+
+    /**
      * 同意审批
      *
      * @param contractApproval
