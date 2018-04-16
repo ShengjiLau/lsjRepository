@@ -32,7 +32,6 @@ import java.util.Map;
 @Api(value = "财务统计",description = "财务统计")
 public class FinanceApi {
 
-
     @Reference
     private FinanceRpcService financeRpcService;
 
@@ -48,7 +47,6 @@ public class FinanceApi {
         JSONObject jsonObject = new JSONObject();
         try {
             List<Map<String, Object>> mapList = statData(dto, (short)0);
-
             jsonObject.put("code", 0);
             jsonObject.put("message", "");
             jsonObject.put("data", JSONArray.toJSON(mapList==null?new Object():mapList));
