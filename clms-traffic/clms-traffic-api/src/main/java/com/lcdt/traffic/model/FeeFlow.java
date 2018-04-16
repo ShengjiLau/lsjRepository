@@ -8,6 +8,12 @@ public class FeeFlow  implements Serializable {
 
     private String flowCode;
 
+    private Long waybillId;
+
+    private String waybillCode;
+
+    private Date waybillDate;
+
     private Long accountId;
 
     private Long proId;
@@ -54,6 +60,30 @@ public class FeeFlow  implements Serializable {
 
     public void setFlowId(Long flowId) {
         this.flowId = flowId;
+    }
+
+    public Long getWaybillId() {
+        return waybillId;
+    }
+
+    public void setWaybillId(Long waybillId) {
+        this.waybillId = waybillId;
+    }
+
+    public String getWaybillCode() {
+        return waybillCode;
+    }
+
+    public void setWaybillCode(String waybillCode) {
+        this.waybillCode = waybillCode;
+    }
+
+    public Date getWaybillDate() {
+        return waybillDate;
+    }
+
+    public void setWaybillDate(Date waybillDate) {
+        this.waybillDate = waybillDate;
     }
 
     public String getFlowCode() {

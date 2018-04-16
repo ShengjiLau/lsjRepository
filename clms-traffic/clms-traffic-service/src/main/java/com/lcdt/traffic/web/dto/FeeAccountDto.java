@@ -24,7 +24,7 @@ public class FeeAccountDto extends FeeAccount{
     @ApiModelProperty(value="查询记账日期终点")
     private String createEndTime;
 
-    @ApiModelProperty(value="查询tab：0-全部 1-未对账 2-已对账", required = true)
+    @ApiModelProperty(value="查询tab：0-全部 1-未对账 2-已对账")
     private Integer reconcileStatus;
 
     private Float freightTotal;
@@ -39,10 +39,10 @@ public class FeeAccountDto extends FeeAccount{
 
     private List<FeeProperty> hidePropertyList;
 
-    @ApiModelProperty(value = "页码", required = true)
+    @ApiModelProperty(value = "页码")
     private Integer pageNum;
 
-    @ApiModelProperty(value = "每页显示条数", required = true)
+    @ApiModelProperty(value = "每页显示条数")
     private Integer pageSize;
 
     public String getAuditBeginTime() {
