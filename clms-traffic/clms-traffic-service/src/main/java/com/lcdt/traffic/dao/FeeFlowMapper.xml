@@ -287,7 +287,44 @@
        order by dt ASC
     ) t_view
     group by t_view.dt
+  </select>
 
+
+  <resultMap id="profitStatMap" type="com.lcdt.traffic.dto.ProfitStatResultDto">
+    <id column="waybill_code" jdbcType="VARCHAR" property="waybillCode" />
+    <result column="waybill_code" jdbcType="VARCHAR" property="waybillCode" />
+    <result column="waybill_date" jdbcType="TIMESTAMP" property="waybillDate" />
+    <result column="receiveMoney" jdbcType="REAL" property="receiveMoney" />
+    <result column="payMoney" jdbcType="REAL" property="payMoney" />
+  </resultMap>
+
+  <!--财务统计-->
+  <select id="profitStat" parameterType="com.lcdt.traffic.dto.ProfitStatParamsDto"  resultMap="profitStatMap">
+      SELECT waybill_code,waybill_date,
+              sum(case when is_receivable=0 then money else 0 end) as receiveMoney,
+              sum(case when is_receivable=1 then money else 0 end) as payMoney
+      from t_fee_flow
+      <where>
+        <if test="isDeleted!=null">
+          and  is_deleted = #{isDeleted,jdbcType=SMALLINT}
+        </if>
+        <if test="groupIds!=null and groupIds!=''">
+          and  group_id in (#{groupIds,jdbcType=VARCHAR})
+        </if>
+        <if test="companyId!=null">
+          and  company_id = #{companyId,jdbcType=BIGINT}
+        </if>
+        <if test="waybillCode!=null and waybillCode!=''">
+          and waybill_code like concat('%',#{waybillCode,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="createBegin!=null and createBegin!=''">
+          and  date(waybill_date) >= #{createBegin,jdbcType=TIMESTAMP}
+        </if>
+        <if test="createEnd!=null and createEnd!=''">
+          and  #{createEnd,jdbcType=TIMESTAMP} >= date(waybill_date)
+        </if>
+      </where>
+     GROUP BY waybill_code DESC
   </select>
 
 

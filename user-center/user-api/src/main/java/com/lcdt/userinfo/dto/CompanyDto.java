@@ -56,7 +56,6 @@ public class CompanyDto implements java.io.Serializable {
         this.createId = createId;
     }
 
-
     public Date getCreateDt() {
         return createDt;
     }
