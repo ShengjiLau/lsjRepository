@@ -52,7 +52,7 @@
    <!--    <if test="approvalStatus!=null ">
          and approval_status = #{approvalStatus,jdbcType=SMALLINT}
       </if> -->
-         and company_id = #{companyId,jdbcType=BIGINT} and order_type = #{orderType,jdbcType=SMALLINT} and approval_status!=1
+         and company_id = #{companyId,jdbcType=BIGINT} and order_type = #{orderType,jdbcType=SMALLINT} 
     </where>
     	order by create_time desc
   </select>
