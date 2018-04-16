@@ -5,15 +5,16 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.dao.ContractApprovalMapper;
 import com.lcdt.contract.dao.ContractMapper;
+import com.lcdt.contract.model.Contract;
 import com.lcdt.contract.model.ContractApproval;
 import com.lcdt.contract.service.ContractApprovalService;
 import com.lcdt.contract.web.dto.ContractApprovalDto;
 import com.lcdt.contract.web.dto.ContractApprovalListDto;
+import com.lcdt.contract.web.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -105,6 +106,9 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
                 if(ca.getCaId().equals(contractApproval.getCaId())){    //找出当前正在审核的人
                     if(ca.getSort().longValue()==caList.size()){  //如果正在审核的人为最后一人，则审批流程结束
                         rows += contractMapper.updateApprovalStatus(contractApproval.getContractId(),companyId,new Short("2"));
+                        Contract contract = contractMapper.selectByPrimaryKey(contractApproval.getContractId());
+                        contract = Utils.getContractStatus(contract);
+                        rows += contractMapper.updateByPrimaryKey(contract);
                         break;
                     }else{  //否则更新下一位审核人状态为审批中
                         contractApproval.setCaId(caList.get(i+1).getCaId());
