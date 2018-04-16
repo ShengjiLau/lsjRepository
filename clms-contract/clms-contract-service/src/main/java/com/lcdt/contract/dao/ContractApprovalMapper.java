@@ -20,6 +20,8 @@ public interface ContractApprovalMapper {
 
     List<ContractApprovalDto> selectContractApprovalByCondition(ContractApprovalListDto contractApprovalListDto);
 
+    int selectPendingNum(Long userId, Long companyId);
+
     int insertBatch(List<ContractApproval> contractApprovalList);
 
     /**

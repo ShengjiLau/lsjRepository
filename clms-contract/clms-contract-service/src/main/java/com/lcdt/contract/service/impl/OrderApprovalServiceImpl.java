@@ -33,6 +33,10 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
 
     @Override
     public PageInfo<List<OrderApprovalDto>> orderApprovalList(OrderApprovalListDto orderApprovalListDto, PageInfo pageInfo) {
+        if(null!=orderApprovalListDto){
+            orderApprovalListDto.setApprovalStartDate(orderApprovalListDto.getApprovalStartDate()+" 00:00:00");
+            orderApprovalListDto.setApprovalEndDate(orderApprovalListDto.getApprovalEndDate()+" 23:59:59");
+        }
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         List<OrderApprovalDto> orderApprovalDtoList = orderApprovalMapper.selectOrderApprovalByCondition(orderApprovalListDto);
         PageInfo page = new PageInfo(orderApprovalDtoList);
@@ -76,6 +80,11 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
             }
         }
         return page;
+    }
+
+    @Override
+    public int pendingApprovalNum(Long userId, Long companyId){
+        return orderApprovalMapper.selectPendingNum(userId,companyId);
     }
 
     @Override

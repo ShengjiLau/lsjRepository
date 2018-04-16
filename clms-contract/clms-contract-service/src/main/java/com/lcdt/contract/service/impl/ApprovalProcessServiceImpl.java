@@ -112,4 +112,9 @@ public class ApprovalProcessServiceImpl implements ApprovalProcessService {
     public List<ApprovalProcessDto> approvalProcessShow(ApprovalProcess approvalProcess) {
         return approvalProcessMapper.selectByCondition(approvalProcess.getCompanyId(), approvalProcess.getProcessType());
     }
+
+    @Override
+    public List<ApprovalProcessDto> approvalProcessDetail(ApprovalProcess approvalProcess){
+        return  approvalProcessMapper.selectDetail(approvalProcess.getCompanyId(),approvalProcess.getProcessId());
+    }
 }

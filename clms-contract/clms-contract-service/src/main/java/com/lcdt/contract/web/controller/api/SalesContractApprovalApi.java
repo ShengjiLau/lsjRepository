@@ -55,9 +55,24 @@ public class SalesContractApprovalApi {
         return pageBaseDto;
     }
 
+    @ApiOperation(value = "待审批数量",notes = "返回我待审批的总数量")
+    @GetMapping(value = "/pending_num")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_approval_list')")
+    public JSONObject pendingNum() {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long userId = SecurityInfoGetter.getUser().getUserId();    //获取user_id
+        int total = contractApprovalService.pendingApprovalNum(userId,companyId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "查询成功!");
+        jsonObject.put("pendingNum", total);
+
+        return jsonObject;
+    }
+
     @ApiOperation(value = "审批同意",notes = "正常通过审批操作")
     @PostMapping(value = "/agree")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_approval_agree')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_approval_operate')")
     public JSONObject agreeApproval(@RequestBody ContractApproval contractApproval) {
         int result = contractApprovalService.agreeApproval(contractApproval);
         JSONObject jsonObject = new JSONObject();
@@ -74,7 +89,7 @@ public class SalesContractApprovalApi {
 
     @ApiOperation(value = "驳回审批", notes = "驳回操作")
     @PostMapping(value = "/reject")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_approval_reject')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_approval_operate')")
     public JSONObject rejectApproval(@RequestBody ContractApproval contractApproval) {
         int result = contractApprovalService.rejectApproval(contractApproval);
         JSONObject jsonObject = new JSONObject();
@@ -90,7 +105,7 @@ public class SalesContractApprovalApi {
 
     @ApiOperation(value = "撤销审批", notes = "撤销操作")
     @PostMapping(value = "/revoke")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_approval_revoke')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_approval_operate')")
     public JSONObject revokeApproval(@RequestBody ContractApproval contractApproval) {
         int result = contractApprovalService.revokeApproval(contractApproval);
         JSONObject jsonObject = new JSONObject();
@@ -106,7 +121,7 @@ public class SalesContractApprovalApi {
 
     @ApiOperation(value = "转办审批", notes = "转办操作")
     @PostMapping(value = "/turnDo")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_approval_turnDo')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_approval_operate')")
     public JSONObject turnDoApproval(@RequestBody List<ContractApproval> contractApprovalList) {
         int result = contractApprovalService.turnDoApproval(contractApprovalList);
         JSONObject jsonObject = new JSONObject();
@@ -122,7 +137,7 @@ public class SalesContractApprovalApi {
 
     @ApiOperation(value = "抄送", notes = "抄送操作")
     @PostMapping(value = "/cc")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_approval_cc')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_approval_operate')")
     public JSONObject ccApproval(@RequestBody List<ContractApproval> contractApprovalList) {
         int result = contractApprovalService.ccApproval(contractApprovalList);
         JSONObject jsonObject = new JSONObject();

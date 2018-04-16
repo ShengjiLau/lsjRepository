@@ -9,6 +9,7 @@ import com.lcdt.contract.model.ContractApproval;
 import com.lcdt.contract.service.ContractApprovalService;
 import com.lcdt.contract.web.dto.ContractApprovalDto;
 import com.lcdt.contract.web.dto.ContractApprovalListDto;
+import org.apache.commons.lang.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,11 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
 
     @Override
     public PageInfo<List<ContractApprovalDto>> contractApprovalList(ContractApprovalListDto contractApprovalListDto, PageInfo pageInfo) {
+        //根据需求审批创建起始时间加上时间
+        if(null!=contractApprovalListDto.getApprovalStartDate()){
+            contractApprovalListDto.setApprovalStartDate(contractApprovalListDto.getApprovalStartDate()+" 00:00:00");
+            contractApprovalListDto.setApprovalEndDate(contractApprovalListDto.getApprovalEndDate()+" 23:59:59");
+        }
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         List<ContractApprovalDto> contractApprovalDtoList = contractApprovalMapper.selectContractApprovalByCondition(contractApprovalListDto);
         PageInfo page = new PageInfo(contractApprovalDtoList);
@@ -79,6 +85,11 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
         }
 
         return page;
+    }
+
+    @Override
+    public int pendingApprovalNum(Long userId, Long companyId){
+        return contractApprovalMapper.selectPendingNum(userId,companyId);
     }
 
     @Override
