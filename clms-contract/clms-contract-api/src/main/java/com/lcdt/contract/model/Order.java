@@ -37,7 +37,7 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="合同编号")
     private String contractCode;
 
-	@ApiModelProperty(value="审批状态")
+	@ApiModelProperty(value="审批状态,0为无需审批,1为审批中,2为审批完成")
     private Short approvalStatus;
 
 	@ApiModelProperty(value="配送方式")
