@@ -78,6 +78,8 @@ public interface OrderApprovalMapper {
      */
     List<OrderApprovalDto> selectOrderApprovalByCondition(OrderApprovalListDto orderApprovalListDto);
 
+    int selectPendingNum(Long userId, Long companyId);
+
     /**
      * 更新审批人状态
      * @param orderApproval
