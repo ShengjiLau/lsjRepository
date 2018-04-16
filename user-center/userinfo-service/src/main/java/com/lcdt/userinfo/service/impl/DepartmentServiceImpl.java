@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,18 +175,36 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<DepartmentResultDto> deptChildStat(Long deptPid, Long companyId) {
+	public Map deptChildStat(Long deptPid, Long companyId) {
+		Map<String,Object> resultMap = new HashMap<String,Object>();
 		List<DepartmentResultDto> departmentResultDtoList = departmentMapper.deptChildStat(deptPid,companyId);
 		if (departmentResultDtoList!=null && departmentResultDtoList.size()>0) {
 			for (DepartmentResultDto obj :departmentResultDtoList) {
+				int empCount = 0;
 				String[] ids = obj.getChildIds().split(",");
 				if (null!=ids && ids.length>0) {
-					if(ids.length<=2) obj.setChildCount(0);
-					if(ids.length>2) obj.setChildCount(ids.length-2); //减2是因为返回来的数包含了自身及$;
+
+					//if(ids.length<=2) obj.setChildCount(0);
+					//if(ids.length>2) obj.setChildCount(ids.length-2); //减2是因为返回来的数包含了自身及$;
+					for (int i=0;i<ids.length;i++) {
+						if(ids[i].equals("$")) {
+							continue;
+						}
+						List<UserCompRel>  userCompRelList1 = userCompRelMapper.selectByCompanyIdDepIds(companyId,ids[i]);
+						if(userCompRelList1!=null && userCompRelList1.size()>0) {
+							empCount += userCompRelList1.size();
+						}
+
+					}
+					obj.setEmpCount(empCount);
 				}
 			}
 		}
-		return departmentResultDtoList;
+
+		List<UserCompRel>  userCompRelList = userCompRelMapper.selectByCompanyIdDepIds(companyId,deptPid.toString());
+    	resultMap.put("depts",departmentResultDtoList);
+		resultMap.put("emps",userCompRelList);
+		return resultMap;
 	}
 
 }
