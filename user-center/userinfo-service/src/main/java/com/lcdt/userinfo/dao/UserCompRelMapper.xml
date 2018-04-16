@@ -163,4 +163,12 @@
     and comp.comp_id = #{companyId}
   </select>
 
+
+  <select id="selectByCompanyIdDepIds" resultMap="BaseResultMap">
+    select user_comp_rel_id, comp.user_id, comp_id,full_name,create_date,is_create,dept_ids,duty,dept_names,comment
+    ,comp.nick_name,comp.email,comp.name
+    from t_uc_user_comp_rel  comp
+    WHERE comp.comp_id = #{companyId} and  FIND_IN_SET(comp.dept_ids,#{deptIds})
+  </select>
+
 </mapper>

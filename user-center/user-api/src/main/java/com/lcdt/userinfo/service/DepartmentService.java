@@ -63,12 +63,12 @@ public interface DepartmentService {
 
 
     /***
-     * 统计部门及子节点数
+     * 统计当前部门及子部门
      * @param deptPid
      * @param companyId
      * @return
      */
-    List<DepartmentResultDto> deptChildStat(Long deptPid, Long companyId);
+    Map deptChildStat(Long deptPid, Long companyId);
 
 
 
