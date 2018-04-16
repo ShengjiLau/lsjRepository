@@ -88,6 +88,11 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
     }
 
     @Override
+    public int pendingApprovalNum(Long userId, Long companyId){
+        return contractApprovalMapper.selectPendingNum(userId,companyId);
+    }
+
+    @Override
     public int agreeApproval(ContractApproval contractApproval) {
 
         Long companyId = SecurityInfoGetter.getCompanyId();

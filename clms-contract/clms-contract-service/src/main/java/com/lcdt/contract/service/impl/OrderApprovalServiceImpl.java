@@ -83,6 +83,11 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
     }
 
     @Override
+    public int pendingApprovalNum(Long userId, Long companyId){
+        return orderApprovalMapper.selectPendingNum(userId,companyId);
+    }
+
+    @Override
     public int agreeApproval(OrderApproval orderApproval) {
 
         Long companyId = SecurityInfoGetter.getCompanyId();
