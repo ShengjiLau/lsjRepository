@@ -16,6 +16,9 @@
       <if test="supplier!=null and supplier!=''">
          supplier like concat('%',#{supplier,jdbcType=VARCHAR},'%')
       </if>
+      <if test="supplierId !=null">
+         and supplier_id =#{supplierId,jdbcType=BIGINT}
+      </if>
       <if test="orderNo !=null and orderNo!=''">
     	 and order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')                                             
       </if>
