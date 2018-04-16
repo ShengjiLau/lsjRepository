@@ -20,6 +20,12 @@ public interface FeeAccountService {
      */
     PageInfo feeAccountWaybillList(Map map);
     /**
+     * 记账运单列表费用合计
+     * @param map
+     * @return
+     */
+    FeeAccountWaybillDto feeAccountWaybillFeeTotal(Map map);
+    /**
      * 记账（进入记账页面）
      * @param m
      * @return

@@ -33,7 +33,7 @@ public class FeeAccountSaveParamsDto {
     private String groupName;
 
     @ApiModelProperty(value="记账单list（包含流水list）", required = true)
-    private List<FeeAccountDto> dtoList;
+    private List<FeeAccountDto> feeAccountDtoList;
 
     public Long getCompanyId() {
         return companyId;
@@ -99,11 +99,11 @@ public class FeeAccountSaveParamsDto {
         this.groupName = groupName;
     }
 
-    public List<FeeAccountDto> getDtoList() {
-        return dtoList;
+    public List<FeeAccountDto> getFeeAccountDtoList() {
+        return feeAccountDtoList;
     }
 
-    public void setDtoList(List<FeeAccountDto> dtoList) {
-        this.dtoList = dtoList;
+    public void setFeeAccountDtoList(List<FeeAccountDto> feeAccountDtoList) {
+        this.feeAccountDtoList = feeAccountDtoList;
     }
 }

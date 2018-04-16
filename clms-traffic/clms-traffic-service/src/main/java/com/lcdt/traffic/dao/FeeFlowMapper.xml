@@ -4,6 +4,9 @@
   <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.FeeFlow">
     <id column="flow_id" jdbcType="BIGINT" property="flowId" />
     <result column="flow_code" jdbcType="VARCHAR" property="flowCode" />
+    <result column="waybill_id" jdbcType="BIGINT" property="waybillId" />
+    <result column="waybill_code" jdbcType="VARCHAR" property="waybillCode" />
+    <result column="waybill_date" jdbcType="TIMESTAMP" property="waybillDate" />
     <result column="account_id" jdbcType="BIGINT" property="accountId" />
     <result column="pro_id" jdbcType="BIGINT" property="proId" />
     <result column="fee_property" jdbcType="VARCHAR" property="feeProperty" />
@@ -29,12 +32,14 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_fee_flow (flow_code, account_id, pro_id,
+    waybill_id, waybill_code, waybill_date,
     fee_property, money, original_money,
     group_id, create_id, create_name,
     create_date, update_id, update_name,
     update_time, company_id, is_deleted,is_receivable
     )
     values (#{flowCode,jdbcType=VARCHAR}, #{accountId,jdbcType=BIGINT}, #{proId,jdbcType=BIGINT},
+    #{waybillId,jdbcType=BIGINT}, #{waybillCode,jdbcType=VARCHAR}, #{waybillDate,jdbcType=TIMESTAMP},
     #{feeProperty,jdbcType=VARCHAR}, #{money,jdbcType=REAL}, #{originalMoney,jdbcType=REAL},
     #{groupId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR},
     #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR},
@@ -44,6 +49,9 @@
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.FeeFlow">
     update t_fee_flow
     set flow_code = #{flowCode,jdbcType=VARCHAR},
+    waybill_id = #{waybillId,jdbcType=BIGINT},
+    waybill_code = #{waybillCode,jdbcType=VARCHAR},
+    waybill_date = #{waybillDate,jdbcType=TIMESTAMP},
     account_id = #{accountId,jdbcType=BIGINT},
     pro_id = #{proId,jdbcType=BIGINT},
     fee_property = #{feeProperty,jdbcType=VARCHAR},
@@ -64,6 +72,7 @@
 
   <sql id="Base_Column_List">
    flow_id,flow_code, account_id, pro_id,
+   waybill_id, waybill_code, waybill_date,
     fee_property, money, original_money,
     group_id, create_id, create_name,
     create_date, update_id, update_name,
@@ -73,14 +82,14 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select flow_id, flow_code, account_id, pro_id, fee_property, money, original_money,
     group_id, create_id, create_name, create_date, update_id, update_name, update_time,
-    company_id, is_deleted,is_receivable
+    company_id, is_deleted,is_receivable, waybill_id, waybill_code, waybill_date
     from t_fee_flow
     where flow_id = #{flowId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select flow_id, flow_code, account_id, pro_id, fee_property, money, original_money,
     group_id, create_id, create_name, create_date, update_id, update_name, update_time,
-    company_id, is_deleted,is_receivable
+    company_id, is_deleted,is_receivable, waybill_id, waybill_code, waybill_date
     from t_fee_flow
   </select>
   <select id="selectByAccountId" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -98,6 +107,7 @@
 
   <insert id="insertBatch">
     insert into t_fee_flow (flow_code, account_id, pro_id,
+    waybill_id, waybill_code, waybill_date,
     fee_property, money, original_money,
     group_id, create_id, create_name,
     create_date, update_id, update_name,
@@ -105,6 +115,7 @@
     )
     <foreach item="item" collection="list" separator=",">
       values (#{flowCode,jdbcType=VARCHAR}, #{accountId,jdbcType=BIGINT}, #{proId,jdbcType=BIGINT},
+      #{waybillId,jdbcType=BIGINT}, #{waybillCode,jdbcType=VARCHAR}, #{waybillDate,jdbcType=TIMESTAMP},
       #{feeProperty,jdbcType=VARCHAR}, #{money,jdbcType=REAL}, #{originalMoney,jdbcType=REAL},
       #{groupId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR},
       #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR},
@@ -118,6 +129,15 @@
       <set>
         <if test="item.flowCode != null">
           flow_code = #{item.flowCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.waybillId != null">
+          waybill_id = #{item.waybillId,jdbcType=BIGINT},
+        </if>
+        <if test="item.waybillCode != null">
+          waybill_code = #{item.waybillCode,jdbcType=VARCHAR},
+        </if>
+        <if test="item.waybillDate != null">
+          waybill_date = #{item.waybillDate,jdbcType=TIMESTAMP},
         </if>
         <if test="item.accountId != null">
           account_id = #{item.accountId,jdbcType=BIGINT},
@@ -179,7 +199,8 @@
   </resultMap>
 
   <select id="searchCondition" parameterType="com.lcdt.traffic.dto.FeeFlow4SearchParamsDto" resultMap="searchMap">
-    select f.flow_code,f.create_date,a.group_name,a.waybill_code,a.reconcile_code,a.name,f.fee_property,f.money,f.original_money
+    select f.flow_code,f.create_date,a.group_name,a.waybill_code,a.reconcile_code,a.name,f.fee_property,f.money,f.original_money,
+    waybill_id,waybill_code, waybill_date
     from t_fee_flow f
     LEFT JOIN t_fee_account a  ON  f.account_id = a.account_id
     <where>
