@@ -12,8 +12,8 @@ public class ProfitStatResultDto implements java.io.Serializable {
     @ApiModelProperty("运单号")
     private String wayBillCode;
 
-    @ApiModelProperty("创建日期")
-    private Date createDate;
+    @ApiModelProperty("运单日期")
+    private Date waybillDate;
 
     @ApiModelProperty("应收费用")
     private Float receiveMoney;
@@ -33,13 +33,7 @@ public class ProfitStatResultDto implements java.io.Serializable {
         this.wayBillCode = wayBillCode;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
 
     public Float getReceiveMoney() {
         return receiveMoney;

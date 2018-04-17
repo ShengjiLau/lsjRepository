@@ -251,6 +251,23 @@
       and is_deleted = #{isDeleted,jdbcType=VARCHAR}
     </if>
   </sql>
+  <sql id="select_finance_condition_fee_total">
+    <if test="waybillCode!=null and waybillCode!=''">
+      and w.waybill_code like concat('%',#{waybillCode,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="createBegin!=null and createBegin!=''">
+      and w.create_date &gt;= CONCAT(STR_TO_DATE(#{createBegin,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+    </if>
+    <if test="createEnd!=null and createEnd!=''">
+      and w.create_date &lt;= CONCAT(STR_TO_DATE(#{createEnd,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
+    </if>
+    <if test="customerName!=null and customerName!=''">
+      and w.customer_name like concat('%',#{customerName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="isDeleted!=null and isDeleted!=''">
+      and w.is_deleted = #{isDeleted,jdbcType=VARCHAR}
+    </if>
+  </sql>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_waybill
     where id = #{id,jdbcType=BIGINT}
@@ -612,37 +629,51 @@
     order by id desc
   </select>
 
+  <!--<if test="receivAndPayName!=null and receivAndPayName!=''">
+    and fa.name=#{receivAndPayName,jdbc=VARCHAR}
+  </if>-->
   <select id="selectFeeAccountWaybillByCondition" parameterType="java.util.Map" resultMap="BaseFeeAccountWaybillMap">
     select <include refid="finance_column_list"/>,
+    (select concat(fa.name,'、') from t_fee_account fa
+      where fa.waybill_id=id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
+      ) receiv_and_pay_name,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
+      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费'
+        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property!='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) other_fee_total,
+      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property!='运费'
+        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) other_fee_total,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-      where fa.waybill_id=id and ff.account_id=fa.account_id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total
+      where fa.waybill_id=id and ff.account_id=fa.account_id
+        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total
     from t_waybill
     <where>
-      waybill_status!=8 AND
-      company_id = #{companyId,jdbcType=BIGINT}
+      waybill_status!=8
+      and company_id = #{companyId,jdbcType=BIGINT}
       <if test="groupIds!=null and groupIds!=''">
         and ${groupIds}
       </if>
       <include refid="select_finance_condition"/>
     </where>
   </select>
-
   <select id="selectFeeAccountCustomerWaybillByCondition" parameterType="java.util.Map" resultMap="BaseFeeAccountWaybillMap">
     select <include refid="finance_column_list"/>,
+    (select concat(fa.name,'、') from t_fee_account fa
+      where fa.waybill_id=id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
+      ) receiv_and_pay_name,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-    where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
+      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费'
+        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-    where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property!='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) other_fee_total,
+      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property!='运费'
+        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) other_fee_total,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-    where fa.waybill_id=id and ff.account_id=fa.account_id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total
+      where fa.waybill_id=id and ff.account_id=fa.account_id
+        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total
     from t_waybill
     <where>
-      waybill_status!=8 AND
-      carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
+      waybill_status!=8
+      and carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
       <if test="companyIds!=null">
         and ${companyIds}
       </if>
@@ -656,6 +687,49 @@
     </where>
   </select>
 
+  <select id="selectFeeAccountMyWaybillFeeTotalByCondition" parameterType="java.util.Map" resultMap="BaseFeeAccountWaybillMap">
+    select sum(case when ff.fee_property='运费' then ff.money else 0 end) freight_total,
+    sum(case when ff.fee_property!='运费' then ff.money else 0 end) other_fee_total,
+    sum(ff.money) fee_total
+    from t_waybill w,t_fee_account fa,t_fee_flow ff
+    <where>
+      fa.waybill_id=id
+      and ff.account_id=fa.account_id
+      and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
+      and w.waybill_status!=8
+      and w.company_id = #{companyId,jdbcType=BIGINT}
+      and fa.is_deleted=0 and ff.is_deleted=0
+      <if test="groupIds!=null and groupIds!=''">
+        and ${groupIds}
+      </if>
+      <include refid="select_finance_condition_fee_total"/>
+    </where>
+  </select>
+
+  <select id="selectFeeAccountCustomerWaybillFeeTotalByCondition" parameterType="java.util.Map" resultMap="BaseFeeAccountWaybillMap">
+    select sum(case when ff.fee_property='运费' then ff.money else 0 end) freight_total,
+    sum(case when ff.fee_property!='运费' then ff.money else 0 end) other_fee_total,
+    sum(ff.money) fee_total
+    from t_waybill w,t_fee_account fa,t_fee_flow ff
+    <where>
+      fa.waybill_id=id
+      and ff.account_id=fa.account_id
+      and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
+      and w.waybill_status!=8
+      and w.carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
+      and fa.is_deleted=0 and ff.is_deleted=0
+      <if test="companyIds!=null">
+        and ${companyIds}
+      </if>
+      <if test="companyIds==null">
+        and w.company_id is null
+      </if>
+      <if test="groupIds!=null and groupIds!=''">
+        and ${groupIds}
+      </if>
+      <include refid="select_finance_condition_fee_total"/>
+    </where>
+  </select>
   <select id="selectWaybillByWaybillIds" parameterType="java.lang.String" resultMap="BaseWaybillAndItems">
     select <include refid="base_column_list"/>
     from t_waybill

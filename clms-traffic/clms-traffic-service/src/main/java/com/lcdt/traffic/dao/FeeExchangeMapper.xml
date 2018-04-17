@@ -352,4 +352,69 @@
       exchange_name = #{exchangeName,jdbcType=VARCHAR}
     where exchange_id = #{exchangeId,jdbcType=BIGINT}
   </update>
+  
+  <insert id="insertByBatch">
+   insert into t_fee_exchange (exchange_id, reconcile_id, reconcile_code, 
+      payer_name, type, account_amount, 
+      this_amount, attachment1_name, attachment1, 
+      attachment2_name, attachment2, attachment3_name, 
+      attachment3, attachment4_name, attachment4, 
+      attachment5_name, attachment5, cancel_ok, 
+      create_time, operate_time, exchange_type, 
+      exchange_account, company_id, operate_name, 
+      operate_id, remark, exchange_name
+      )
+      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+      values (#{item.exchangeId,jdbcType=BIGINT}, #{item.reconcileId,jdbcType=BIGINT}, #{item.reconcileCode,jdbcType=VARCHAR}, 
+      #{item.payerName,jdbcType=VARCHAR}, #{item.type,jdbcType=SMALLINT}, #{item.accountAmount,jdbcType=DOUBLE}, 
+      #{item.thisAmount,jdbcType=DOUBLE}, #{item.attachment1Name,jdbcType=VARCHAR}, #{item.attachment1,jdbcType=VARCHAR}, 
+      #{item.attachment2Name,jdbcType=VARCHAR}, #{item.attachment2,jdbcType=VARCHAR}, #{item.attachment3Name,jdbcType=VARCHAR}, 
+      #{item.attachment3,jdbcType=VARCHAR}, #{item.attachment4Name,jdbcType=VARCHAR}, #{item.attachment4,jdbcType=VARCHAR}, 
+      #{item.attachment5Name,jdbcType=VARCHAR}, #{item.attachment5,jdbcType=VARCHAR}, #{item.cancelOk,jdbcType=SMALLINT}, 
+      #{item.createTime,jdbcType=TIMESTAMP}, #{item.operateTime,jdbcType=TIMESTAMP}, #{item.exchangeType,jdbcType=VARCHAR}, 
+      #{item.exchangeAccount,jdbcType=VARCHAR}, #{item.companyId,jdbcType=BIGINT}, #{item.operateName,jdbcType=VARCHAR}, 
+      #{item.operateId,jdbcType=BIGINT}, #{item.remark,jdbcType=VARCHAR}, #{item.exchangeName,jdbcType=VARCHAR}
+      )
+      </foreach>
+  </insert>
+  
+  <select id="getFeeExchangeListByCondition">
+  	 select 
+    <include refid="Base_Column_List" />
+    from t_fee_exchange
+  	<where>
+  	<if test="payerName !=null and payerName!=''">
+  	 payer_name like concat('%',#{payerName,jdbcType=VARCHAR},'%')
+  	</if>
+  	<if test="reconcileCode!=null and reconcileCode!=''">
+  	reconcileCode like concat('%',#{reconcileCode,jdbcType=VARCHAR},'%')
+  	</if>
+  	<if test="operateName!=null and operateName!=''">
+  	operate_name like concat('%',#{operateName,jdbcType=VARCHAR},'%')
+  	</if>
+  	<if test="beginTime !=null and beginTime!=''"></if>
+  	create_time &lt; concat(#{beginTime,jdbcType=VARCHAR},'000000')
+  	</where>
+  	<if test="endTime !=null and endTime !=''">
+  	create_time &gt; concat(#{endTime,jdbcType=VARCHAR},'235959')
+  	</if>
+  </select>
+  
+  <update id="updateCancelOkByBatch">
+  	update t_fee_exchange
+  	<set>
+  	cancel_ok =1 
+  	</set>
+  	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+  	<where>
+  	exchange_id = #{item,jdbcType=BIGINT}
+  	</where>
+  	</foreach>
+  	
+  
+  
+  
+  
+  </update>
+  
 </mapper>

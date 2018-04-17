@@ -54,6 +54,15 @@ public class FeePropertyApi {
         if (dto.getType()!=null) {
             map.put("type",dto.getType());
         }
+        if(dto.getIsReceivable() != null){
+            map.put("isReceivable",dto.getIsReceivable());
+        }
+        if(dto.getIsShow() != null){
+            map.put("isShow",dto.getIsShow());
+        }
+        if(dto.getName() != null){
+            map.put("name",dto.getName());
+        }
         PageInfo pageInfo = feePropertyService.feePropertyList(map);
         PageBaseDto baseDto = new PageBaseDto();
         baseDto.setList(pageInfo.getList());

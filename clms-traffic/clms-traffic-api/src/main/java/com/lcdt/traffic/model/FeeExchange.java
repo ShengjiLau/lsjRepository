@@ -58,7 +58,7 @@ public class FeeExchange implements Serializable {
 
     private String exchangeName;
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 14842121545841525L;
 
     public Long getExchangeId() {
         return exchangeId;

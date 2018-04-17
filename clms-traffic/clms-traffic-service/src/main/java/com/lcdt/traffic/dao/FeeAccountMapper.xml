@@ -264,6 +264,7 @@
     from t_fee_account
     where waybill_id = #{waybillId,jdbcType=BIGINT}
     and is_receivable = #{isReceivable,jdbcType=SMALLINT}
+    and is_deleted = 0
     order by account_id desc
   </select>
   <select id="selectFeeAccountDetail" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
@@ -271,56 +272,75 @@
     from t_fee_account
     where waybill_id = #{waybillId,jdbcType=BIGINT}
     and is_receivable = #{isReceivable,jdbcType=SMALLINT}
+    and is_deleted = 0
     order by account_id desc
   </select>
-  <select id="selectOwnByCondition" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
+  <sql id="select_finance_condition">
+    <if test="reconcileStatus!=null and reconcileStatus == 1">
+      and fa.reconcile_id is null
+    </if>
+    <if test="reconcileStatus!=null and reconcileStatus == 2">
+      and fa.reconcile_id is not null
+    </if>
+    <if test="groupId!=null and groupId != ''">
+      and fa.group_id = #{groupId,jdbcType=BIGINT}
+    </if>
+    <if test="name!=null and name != ''">
+      and fa.name like concat('%',#{name,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="auditStatus!=null and auditStatus!=''">
+      and fa.audit_status = #{auditStatus,jdbcType=SMALLINT}
+    </if>
+    <if test="auditBeginTime != null and auditBeginTime != ''">
+      and fa.audit_date >= #{auditBeginTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="auditEndTime != null and auditEndTime != ''">
+      and #{auditEndTime,jdbcType=TIMESTAMP} >= fa.audit_date
+    </if>
+    <if test="accountCode!=null and accountCode != ''">
+      and fa.account_code = #{accountCode,jdbcType=VARCHAR}
+    </if>
+    <if test="waybillCode!=null and waybillCode != ''">
+      and fa.waybill_code = #{waybillCode,jdbcType=VARCHAR}
+    </if>
+    <if test="reconcileCode!=null and reconcileCode != ''">
+      and fa.reconcile_code = #{reconcileCode,jdbcType=VARCHAR}
+    </if>
+    <if test="createBeginTime != null and createBeginTime != ''">
+      and fa.create_date >= #{createBeginTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="createEndTime != null and createEndTime != ''">
+      and #{createEndTime,jdbcType=TIMESTAMP} >= fa.create_date
+    </if>
+  </sql>
+  <select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
     select <include refid="Base_Column_List"/>,
-    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id and ff.fee_property='运费') freight_total,
-    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id and ff.fee_property!='运费') other_fee_total,
-    (select sum(ff.money) from t_fee_flow ff where ff.account_id=account_id) fee_total
-    from t_fee_account
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.fee_property='运费' and ff.is_deleted=0) freight_total,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.fee_property!='运费' and ff.is_deleted=0) other_fee_total,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.is_deleted=0) fee_total
+    from t_fee_account fa
     <where>
-      is_receivable = #{isReceivable,jdbcType=SMALLINT}
-      and company_id = #{companyId,jdbcType=BIGINT}
-      and is_deleted = #{isDeleted,jdbcType=SMALLINT}
-      <if test="reconcileStatus!=null and reconcileStatus == 1">
-        and reconcile_id is null
-      </if>
-      <if test="reconcileStatus!=null and reconcileStatus == 2">
-        and reconcile_id is not null
-      </if>
-      <if test="groupId!=null">
-        and group_id = #{groupId,jdbcType=BIGINT}
-      </if>
-      <if test="name!=null and name != ''">
-        and name like concat('%',#{name,jdbcType=VARCHAR},'%')
-      </if>
-      <if test="auditStatus!=null">
-        and audit_status = #{auditStatus,jdbcType=SMALLINT}
-      </if>
-      <if test="auditBeginTime != null and auditBeginTime != ''">
-        and audit_date >= #{auditBeginTime,jdbcType=TIMESTAMP}
-      </if>
-      <if test="auditEndTime != null and auditEndTime != ''">
-        and #{auditEndTime,jdbcType=TIMESTAMP} >= audit_date
-      </if>
-      <if test="accountCode!=null and accountCode != ''">
-        and account_code = #{accountCode,jdbcType=VARCHAR}
-      </if>
-      <if test="waybillCode!=null and waybillCode != ''">
-        and waybill_code = #{waybillCode,jdbcType=VARCHAR}
-      </if>
-      <if test="reconcileCode!=null and reconcileCode != ''">
-        and reconcile_code = #{reconcileCode,jdbcType=VARCHAR}
-      </if>
-      <if test="createBeginTime != null and createBeginTime != ''">
-        and create_date >= #{createBeginTime,jdbcType=TIMESTAMP}
-      </if>
-      <if test="createEndTime != null and createEndTime != ''">
-        and #{createEndTime,jdbcType=TIMESTAMP} >= create_date
-      </if>
+      fa.is_receivable = #{isReceivable,jdbcType=SMALLINT}
+      and fa.company_id = #{companyId,jdbcType=BIGINT}
+      and fa.is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      <include refid="select_finance_condition"/>
     </where>
-    order by account_id desc
+    order by fa.account_id desc
+  </select>
+  <select id="selectByConditionFeeTotal" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
+    select
+    sum(case when ff.fee_property='运费' then ff.money else 0 end) freight_total,
+    sum(case when ff.fee_property!='运费' then ff.money else 0 end) other_fee_total,
+    sum(ff.money) fee_total
+    from t_fee_account fa,t_fee_flow ff
+    <where>
+      fa.account_id=ff.account_id
+      and fa.is_receivable = #{isReceivable,jdbcType=SMALLINT}
+      and fa.company_id = #{companyId,jdbcType=BIGINT}
+      and fa.is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      and ff.is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      <include refid="select_finance_condition"/>
+    </where>
   </select>
   <update id="auditByAccountIds" parameterType="java.util.Map">
     update t_fee_account

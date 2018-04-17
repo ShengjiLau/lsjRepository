@@ -189,7 +189,12 @@ public interface WaybillMapper {
      * @return
      */
     List<FeeAccountWaybillDto> selectFeeAccountWaybillByCondition(Map map);
-
+    /**
+     * 我的运单列表费用统计
+     * @param map
+     * @return
+     */
+    FeeAccountWaybillDto selectFeeAccountMyWaybillFeeTotalByCondition(Map map);
 
     /**
      * 记账列表-客户运单
@@ -197,4 +202,10 @@ public interface WaybillMapper {
      * @return
      */
     List<FeeAccountWaybillDto> selectFeeAccountCustomerWaybillByCondition(Map map);
+    /**
+     * 客户运单列表费用统计
+     * @param map
+     * @return
+     */
+    FeeAccountWaybillDto selectFeeAccountCustomerWaybillFeeTotalByCondition(Map map);
 }

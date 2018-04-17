@@ -2,6 +2,8 @@ package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dto.FeeFlow4SearchParamsDto;
+import com.lcdt.traffic.dto.ProfitStatParamsDto;
+import com.lcdt.traffic.dto.ProfitStatResultDto;
 import com.lcdt.traffic.dto.ReceivePayParamsDto;
 
 import java.util.List;
@@ -26,4 +28,13 @@ public interface IFeeFlowService {
      * @param dto
      */
     List<Map<String,Object>> receivePayStat(ReceivePayParamsDto dto);
+
+
+    /***
+     * 利润统计
+     * @param profitStatParamsDto
+     * @return
+     */
+    PageInfo profitStat(ProfitStatParamsDto profitStatParamsDto);
 }
+
