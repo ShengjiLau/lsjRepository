@@ -142,6 +142,4 @@ public class LoginApi {
         Company company = createCompanyService.createCompany(companyDto);
         return company;
     }
-
-
 }
