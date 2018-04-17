@@ -230,18 +230,18 @@ public class DepartmentApi {
 
 
     /**
-     * 统计部门及部门下面的子节点
+     * 统计部门及部门下面的员工数
      *
      * @return
      */
-    @ApiOperation("统计部门及部门下面的子节点")
+    @ApiOperation("统计部门及部门下面的员工数")
     @RequestMapping(value = "/deptChildStat",method = RequestMethod.GET)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('dept_remove')")
     public String deptChildStat(@ApiParam(value = "部门ID", required = true) @RequestParam Long deptId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        List<DepartmentResultDto> departmentResultDtoList = departmentService.deptChildStat(deptId,companyId);
+        Map map  = departmentService.deptChildStat(deptId,companyId);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("data",departmentResultDtoList);
+        jsonObject.put("data",map);
         jsonObject.put("message","");
         jsonObject.put("code",0);
         return jsonObject.toString();

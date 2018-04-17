@@ -24,7 +24,7 @@ public class Contract {
 
     private String approvalProcess;
 
-    private Short cycle;
+    private String cycle;
 
     private String payType;
 
@@ -172,11 +172,11 @@ public class Contract {
         this.approvalProcess = approvalProcess;
     }
 
-    public Short getCycle() {
+    public String getCycle() {
         return cycle;
     }
 
-    public void setCycle(Short cycle) {
+    public void setCycle(String cycle) {
         this.cycle = cycle;
     }
 

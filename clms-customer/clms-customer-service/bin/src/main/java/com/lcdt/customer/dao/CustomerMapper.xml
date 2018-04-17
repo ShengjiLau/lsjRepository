@@ -327,9 +327,12 @@
       <if test="complexContition!=null and complexContition!=''">
         and (customer_name like CONCAT(#{complexContition,jdbcType=VARCHAR}, '%', '%') or short_name like CONCAT(#{complexContition,jdbcType=VARCHAR}, '%', '%')  or customer_code like CONCAT(#{complexContition,jdbcType=VARCHAR}, '%', '%') )
       </if>
-      <if test="customerType!=null">
+      <if test="customerType!=null  and customerType!='' ">
         and ${customerType}
       </if>
+   <!--   <if test="customerType!=null">
+        and ${customerType}
+      </if>-->
       <!---->
       <if test="bindCpid != null">
         and bind_comp_id is not null and bind_comp_id != ''

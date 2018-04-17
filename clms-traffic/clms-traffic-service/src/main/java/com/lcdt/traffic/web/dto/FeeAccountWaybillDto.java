@@ -1,18 +1,28 @@
 package com.lcdt.traffic.web.dto;
 
 import com.lcdt.traffic.dto.WaybillDto;
+import com.lcdt.traffic.model.WaybillItems;
+import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 /**
  * Created by liz on 2018/4/3.
  */
 public class FeeAccountWaybillDto extends WaybillDto {
+    @ApiModelProperty(value="货物明细list")
+    private List<WaybillItems> waybillItemsList;
 
+    @ApiModelProperty(value="收付款方名称")
     private String receivAndPayName;
 
+    @ApiModelProperty(value="运费")
     private Float freightTotal;
 
+    @ApiModelProperty(value="其他费用")
     private Float otherFeeTotal;
 
+    @ApiModelProperty(value="费用总计")
     private Float feeTotal;
 
     public String getReceivAndPayName() {
@@ -45,5 +55,13 @@ public class FeeAccountWaybillDto extends WaybillDto {
 
     public void setFeeTotal(Float feeTotal) {
         this.feeTotal = feeTotal;
+    }
+
+    public List<WaybillItems> getWaybillItemsList() {
+        return waybillItemsList;
+    }
+
+    public void setWaybillItemsList(List<WaybillItems> waybillItemsList) {
+        this.waybillItemsList = waybillItemsList;
     }
 }

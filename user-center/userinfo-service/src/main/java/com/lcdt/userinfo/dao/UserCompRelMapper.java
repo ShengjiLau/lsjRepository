@@ -60,4 +60,7 @@ public interface UserCompRelMapper {
 
     List<UserCompRel> selectBySearchDto(SearchEmployeeDto dto);
 
+
+    List<UserCompRel> selectByCompanyIdDepIds(@Param("companyId") Long companyId,@Param("deptIds") String deptIds);
+
 }

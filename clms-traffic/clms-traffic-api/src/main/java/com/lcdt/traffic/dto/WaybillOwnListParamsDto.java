@@ -19,7 +19,7 @@ public class WaybillOwnListParamsDto implements Serializable{
     @ApiModelProperty(value = "收货地县")
     private String receiveCounty;
     @ApiModelProperty(value = "运单状态")
-    private String waybillStatus;
+    private String[] waybillStatus;
     @ApiModelProperty(value = "所属项目组id")
     private Long groupId;
     @ApiModelProperty(value = "生成开始时间")
@@ -45,6 +45,9 @@ public class WaybillOwnListParamsDto implements Serializable{
     private String groupIds;
     @ApiModelProperty(value = "小程序运单顶部输入框内容")
     private String waybillCondition;
+
+    @ApiModelProperty(value = "是否不包含取消，true：不包含，false:包含")
+    private boolean noCancel;
 
     @ApiModelProperty(value = "页码", required = true)
     private Integer pageNo;
@@ -88,11 +91,11 @@ public class WaybillOwnListParamsDto implements Serializable{
         this.receiveCounty = receiveCounty;
     }
 
-    public String getWaybillStatus() {
+    public String[] getWaybillStatus() {
         return waybillStatus;
     }
 
-    public void setWaybillStatus(String waybillStatus) {
+    public void setWaybillStatus(String[] waybillStatus) {
         this.waybillStatus = waybillStatus;
     }
 
@@ -221,5 +224,13 @@ public class WaybillOwnListParamsDto implements Serializable{
 
     public void setIsReceivable(short isReceivable) {
         this.isReceivable = isReceivable;
+    }
+
+    public void setNoCancel(boolean noCancel){
+        this.noCancel=noCancel;
+    }
+
+    public boolean getNoCancel(){
+        return this.noCancel;
     }
 }

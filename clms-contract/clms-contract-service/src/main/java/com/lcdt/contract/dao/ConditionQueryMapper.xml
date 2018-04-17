@@ -16,6 +16,9 @@
       <if test="supplier!=null and supplier!=''">
          supplier like concat('%',#{supplier,jdbcType=VARCHAR},'%')
       </if>
+      <if test="supplierId !=null">
+         and supplier_id =#{supplierId,jdbcType=BIGINT}
+      </if>
       <if test="orderNo !=null and orderNo!=''">
     	 and order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')                                             
       </if>
@@ -46,10 +49,10 @@
       <if test="isDraft!=null">
          and is_draft= #{isDraft,jdbcType=SMALLINT}
       </if>
-      <if test="approvalStatus!=null">
+   <!--  <if test="approvalStatus!=null ">
          and approval_status = #{approvalStatus,jdbcType=SMALLINT}
-      </if>
-         and company_id = #{companyId,jdbcType=BIGINT} and order_type = #{orderType,jdbcType=SMALLINT}
+      </if>  -->
+         and company_id = #{companyId,jdbcType=BIGINT} and order_type = #{orderType,jdbcType=SMALLINT} and approval_status!=1 
     </where>
     	order by create_time desc
   </select>

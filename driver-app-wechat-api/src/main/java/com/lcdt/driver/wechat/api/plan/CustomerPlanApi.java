@@ -72,7 +72,8 @@ public class CustomerPlanApi {
     @RequestMapping(value = "/customerPlanList4Pass",method = RequestMethod.GET)
     public PageBaseDto customerPlanList4Pass(CustomerPlan4ParamsDto customerPlan4ParamsDto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
-        Map map = searchCondition4Map(customerPlan4ParamsDto);        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Pass(map);
+        Map map = searchCondition4Map(customerPlan4ParamsDto);
+        PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Pass(map);
         removeOtherSnatch(pageInfo, userCompRel.getCompany().getCompId());
         PageBaseDto dto = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto;
@@ -195,8 +196,20 @@ public class CustomerPlanApi {
         WaybillParamsDto dto = new WaybillParamsDto();
         dto.setCompanyId(companyId);
         dto.setWaybillPlanId(waybillPlanId);
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         try {
             WaybillPlan waybillPlan = iPlanRpcService4Wechat.loadWaybillPlan(dto);
+            List<SnatchGoods> snatchGoodsList = waybillPlan.getSnatchGoodsList();
+
+            if (snatchGoodsList!=null && snatchGoodsList.size()>0) {
+                List<SnatchGoods> otherSnatchGoods = new ArrayList<SnatchGoods>(); //存储其它数据
+                for (SnatchGoods obj :snatchGoodsList) {
+                    if(!obj.getOfferId().equals(userCompRel.getUser().getUserId())) {
+                        otherSnatchGoods.add(obj);
+                    }
+                }
+                snatchGoodsList.removeAll(otherSnatchGoods);
+            }
             return  waybillPlan;
         } catch (WaybillPlanException e) {
             throw new WaybillPlanException(e.getMessage());
@@ -240,7 +253,7 @@ public class CustomerPlanApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_split_vehicle')")
     public String customerPlanSplitVehicle(@RequestBody SplitVehicleDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
-        User user = SecurityInfoGetter.getUser();
+        User user = TokenSecurityInfoGetter.getUser();
         WaybillDto waybillDto = new WaybillDto();
         waybillDto.setCreateId(user.getUserId());
         waybillDto.setCreateName(user.getRealName());

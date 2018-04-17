@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
 import com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto;
+import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,12 @@ public interface FeeAccountService {
      * @return
      */
     PageInfo feeAccountWaybillList(Map map);
+    /**
+     * 记账运单列表费用合计
+     * @param map
+     * @return
+     */
+    FeeAccountWaybillDto feeAccountWaybillFeeTotal(Map map);
     /**
      * 记账（进入记账页面）
      * @param m
@@ -41,6 +48,12 @@ public interface FeeAccountService {
  * @return
      */
     PageInfo feeAccountList(FeeAccountDto dto);
+    /**
+     * 记账单列表费用合计
+     * @param dto
+     * @return
+     */
+    FeeAccountDto feeAccountFeeTotal(FeeAccountDto dto);
     /**
      * 费用类型列表查询
      * @param m
@@ -72,6 +85,12 @@ public interface FeeAccountService {
      * @return
      */
     int feeAccountAudit(Map map);
+
+    /**
+     *
+     * 客户运单记账列表
+     * */
+    PageInfo<List<FeeAccountWaybillDto>> feeAccountCustomerWaybillList(Map map);
 
     /**
      * 记账单对账

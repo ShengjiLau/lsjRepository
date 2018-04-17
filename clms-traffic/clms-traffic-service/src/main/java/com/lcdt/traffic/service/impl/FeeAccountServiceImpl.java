@@ -4,15 +4,11 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.*;
-import com.lcdt.traffic.model.FeeAccount;
-import com.lcdt.traffic.model.FeeFlow;
-import com.lcdt.traffic.model.FeeFlowLog;
-import com.lcdt.traffic.model.WaybillItems;
+import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.FeeAccountService;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
 import com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto;
 import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
-import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.userinfo.rpc.FinanceRpcService;
 import com.lcdt.util.ClmsBeanUtil;
 import jdk.nashorn.internal.ir.annotations.Reference;
@@ -41,11 +37,11 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     private FeeFlowLogMapper feeFlowLogMapper;
     @Reference
     FinanceRpcService financeRpcService;
-
+    @Autowired
+    private CustomerCompanyIds customerCompanyIds;
     @Override
     public PageInfo feeAccountWaybillList(Map map){
         List<FeeAccountWaybillDto> resultList = null;
-
         PageInfo page = null;
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -62,28 +58,73 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         PageHelper.startPage(pageNo, pageSize);
         resultList = waybillMapper.selectFeeAccountWaybillByCondition(map);
         page = new PageInfo(resultList);
+        return page;
+    }
 
+    @Override
+    public FeeAccountWaybillDto feeAccountWaybillFeeTotal(Map map){
+        FeeAccountWaybillDto dto;
+        if(Integer.parseInt(map.get("waybillType").toString()) == 0){
+            dto = waybillMapper.selectFeeAccountMyWaybillFeeTotalByCondition(map);
+        }else {
+            Map cMapIds = customerCompanyIds.getCustomerCompanyIds(map);
+            map.put("companyIds", cMapIds.get("companyIds") != null ?
+                                    cMapIds.get("companyIds").toString().replaceAll("company_id", "w.company_id") :
+                                    cMapIds.get("companyIds"));
+            map.put("carrierCompanyId", map.get("companyId"));
+            map.remove("companyId");
+            map.remove("customerName");
+            dto = waybillMapper.selectFeeAccountCustomerWaybillFeeTotalByCondition(map);
+        }
+        return dto;
+    }
+    @Override
+    public PageInfo<List<FeeAccountWaybillDto>> feeAccountCustomerWaybillList(Map map) {
+        List<FeeAccountWaybillDto> resultList = null;
+
+        PageInfo page = null;
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+        if (map.containsKey("pageNo")) {
+            if (map.get("pageNo") != null) {
+                pageNo = (Integer) map.get("pageNo");
+            }
+        }
+        if (map.containsKey("pageSize")) {
+            if (map.get("pageSize") != null) {
+                pageSize = (Integer) map.get("pageSize");
+            }
+        }
+        Map cMapIds = customerCompanyIds.getCustomerCompanyIds(map);
+        map.put("companyIds", cMapIds.get("companyIds"));
+        map.put("carrierCompanyId", map.get("companyId"));
+        map.remove("companyId");
+        map.remove("customerName");
+        PageHelper.startPage(pageNo, pageSize);
+        resultList = waybillMapper.selectFeeAccountCustomerWaybillByCondition(map);
+        page = new PageInfo(resultList);
         return page;
     }
     @Override
     public Map feeAccountPage(Map m){
         List<WaybillItems> waybillItemsList = waybillItemsMapper.selectByWaybillId(Long.parseLong(m.get("waybillId").toString()));
         List<FeeAccountDto> feeAccountDtoList = feeAccountMapper.selectFeeAccountDetail(m);
-        m.put("isShow", (short)0);
-        List<FeeProperty> showPropertyList = financeRpcService.selectByCondition(m);
-        m.put("isShow", (short)1);
-        List<FeeProperty> hidePropertyList = financeRpcService.selectByCondition(m);
+//        m.put("isShow", (short)0);
+//        List<FeeProperty> showPropertyList = financeRpcService.selectByCondition(m);
+//        m.put("isShow", (short)1);
+//        List<FeeProperty> hidePropertyList = financeRpcService.selectByCondition(m);
         Map map = new HashMap();
         map.put("waybillItemsList", waybillItemsList);
         map.put("feeAccountDtoList", feeAccountDtoList);
-        map.put("showPropertyList", showPropertyList);
-        map.put("hidePropertyList", hidePropertyList);
-        return m;
+//        map.put("showPropertyList", showPropertyList);
+//        map.put("hidePropertyList", hidePropertyList);
+        return map;
     }
     @Override
     public boolean feeAccountSave(FeeAccountSaveParamsDto saveParamsDto){
         try{
-            List<FeeAccountDto> dtoList = saveParamsDto.getDtoList();//所有记账单（包含流水)
+            Waybill waybill = waybillMapper.selectByPrimaryKey(saveParamsDto.getWaybillId());
+            List<FeeAccountDto> dtoList = saveParamsDto.getFeeAccountDtoList();//所有记账单（包含流水)
 
             if(dtoList != null && dtoList.size() > 0){
                 List<FeeAccount> updateFeeAccountList = new ArrayList<>();//修改已存在的记账单
@@ -116,6 +157,9 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                                     insertFeeFlowLogList.add(log);
                                 }else{
                                     flow.setAccountId(account.getAccountId());
+                                    flow.setWaybillId(saveParamsDto.getWaybillId());
+                                    flow.setWaybillCode(saveParamsDto.getWaybillCode());
+                                    flow.setWaybillDate(waybill.getCreateDate());
                                     flow.setOriginalMoney(flow.getMoney());
                                     flow.setGroupId(saveParamsDto.getGroupId());
                                     flow.setCreateId(saveParamsDto.getUserId());
@@ -151,6 +195,9 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                             for(FeeFlow flow : dto.getFeeFlowList()) {
                                 if(flow.getFlowId() == null) {
                                     flow.setAccountId(account.getAccountId());
+                                    flow.setWaybillId(saveParamsDto.getWaybillId());
+                                    flow.setWaybillCode(saveParamsDto.getWaybillCode());
+                                    flow.setWaybillDate(waybill.getCreateDate());
                                     flow.setOriginalMoney(flow.getMoney());
                                     flow.setGroupId(saveParamsDto.getGroupId());
                                     flow.setCreateId(saveParamsDto.getUserId());
@@ -203,9 +250,15 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         }
         PageHelper.startPage(pageNo, pageSize);
         Map map= ClmsBeanUtil.beanToMap(dto);
-        resultList = feeAccountMapper.selectOwnByCondition(map);
+        resultList = feeAccountMapper.selectByCondition(map);
         page = new PageInfo(resultList);
         return page;
+    }
+    @Override
+    public FeeAccountDto feeAccountFeeTotal(FeeAccountDto dto){
+        Map map= ClmsBeanUtil.beanToMap(dto);
+        FeeAccountDto resultDto = feeAccountMapper.selectByConditionFeeTotal(map);
+        return resultDto;
     }
     @Override
     public PageInfo feePropertyList(Map m) {

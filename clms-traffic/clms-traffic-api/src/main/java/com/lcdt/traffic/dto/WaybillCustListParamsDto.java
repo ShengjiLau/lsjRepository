@@ -18,7 +18,7 @@ public class WaybillCustListParamsDto implements Serializable{
     @ApiModelProperty(value = "收货地县")
     private String receiveCounty;
     @ApiModelProperty(value = "运单状态")
-    private Short waybillStatus;
+    private String[] waybillStatus;
     @ApiModelProperty(value = "所属项目组id")
     private Long groupId;
     @ApiModelProperty(value = "生成开始时间")
@@ -51,6 +51,9 @@ public class WaybillCustListParamsDto implements Serializable{
     private Short isDelete;
     @ApiModelProperty(value = "是否删除",hidden = true)
     private String groupIds;
+
+    @ApiModelProperty(value = "是否不包含取消，true：不包含,应用于费用模块，不包含取消的")
+    private boolean noCancel;
 
     @ApiModelProperty(value = "页码", required = true)
     private Integer pageNo;
@@ -90,11 +93,11 @@ public class WaybillCustListParamsDto implements Serializable{
         this.receiveCounty = receiveCounty;
     }
 
-    public Short getWaybillStatus() {
+    public String[] getWaybillStatus() {
         return waybillStatus;
     }
 
-    public void setWaybillStatus(Short waybillStatus) {
+    public void setWaybillStatus(String[] waybillStatus) {
         this.waybillStatus = waybillStatus;
     }
 
@@ -224,5 +227,13 @@ public class WaybillCustListParamsDto implements Serializable{
 
     public void setCustomerIds(String customerIds) {
         this.customerIds = customerIds;
+    }
+
+    public boolean getNoCancel() {
+        return noCancel;
+    }
+
+    public void setNoCancel(boolean noCancel) {
+        this.noCancel = noCancel;
     }
 }

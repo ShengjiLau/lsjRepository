@@ -424,8 +424,6 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             splitGoods.setCarrierPhone(dto.getCarrierPhone());
             splitGoods.setCarrierVehicle(dto.getCarrierVehicle());
 
-
-
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
                 String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
                 Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
@@ -489,9 +487,12 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             Waybill waybill = null;
             if (list!=null && list.size()>0) {
                 float remainAmount  = 0; //剩余
+
                 for (PlanDetail tobj : list) {
                     remainAmount += tobj.getRemainderAmount(); //所有剩余合计
                 }
+
+
                 if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
                     if (remainAmount>0) { //还未派完
                         waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
@@ -507,7 +508,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                         waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
                         waybillPlan.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_DOING);//派车状态(派车中)
                     } else {
-                        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED); //计划状态(已派完)
+                        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //已派单，原来已派完
                         waybillPlan.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);//派车状态(已派完)
                     }
 
@@ -590,6 +591,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         } else {
             throw new SplitGoodsException("计划详细为空！");
         }
+        waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap); //查询对应的计划
         return waybillPlan;
     }
 

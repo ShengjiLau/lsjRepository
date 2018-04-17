@@ -772,11 +772,26 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         } else {
             if(sumAmount-splitRemainAmount==0) { //全部派完的话，更新计划状态
                 float remainCount = 0;
+
                 //如果派单完成要检查计划中剩余数量是否完成
                 List<PlanDetail> planDetailList = waybillPlan.getPlanDetailList();
                 if (planDetailList!=null && planDetailList.size()>0) {
                     for (PlanDetail planDetail: planDetailList) {
                         remainCount+=planDetail.getRemainderAmount();
+                    }
+                }
+                //同时也要检查计划中本次派单外的派单记录是否完成
+                List<SplitGoods> splitGoodsList = waybillPlan.getSplitGoodsList();
+                if (null != splitGoodsList && splitGoodsList.size()>0) {
+                    splitGoodsList.remove(splitGoods);
+                    for (int i=0; i<splitGoodsList.size(); i++) {//先移上面的派单
+                        SplitGoods splitGoods1 = splitGoodsList.get(i);
+                        List<SplitGoodsDetail> splitGoodsDetailList = splitGoods1.getSplitGoodsDetailList();
+                        if (null != splitGoodsDetailList) {
+                            for (SplitGoodsDetail obj1 : splitGoodsDetailList ) {
+                                remainCount += obj1.getRemainAmount();
+                            }
+                        }
                     }
                 }
                 if (remainCount==0) { //这块主要是来更新计划状态用的
@@ -849,6 +864,8 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             producer.sendNotifyEvent(plan_publish_event);
 
         }
+
+        waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         return waybillPlan;
     }
 }

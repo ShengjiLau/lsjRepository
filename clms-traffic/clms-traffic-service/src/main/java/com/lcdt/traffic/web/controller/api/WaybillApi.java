@@ -20,10 +20,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -45,31 +44,12 @@ public class WaybillApi {
     @ApiOperation("我的运单--新增")
     @RequestMapping(value = "/own/add", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_add')")
-    public JSONObject addOwnWaybill(WaybillDto dto) {
+    public JSONObject addOwnWaybill(@RequestBody WaybillDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
-        Waybill result = waybillService.addWaybill(dto);
-        if (result != null) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", 0);
-            jsonObject.put("message", "添加成功");
-            return jsonObject;
-        } else {
-            throw new RuntimeException("添加失败");
-        }
-    }
-
-    @ApiOperation("客户运单--新增")
-    @RequestMapping(value = "/customer/add", method = RequestMethod.POST)
-    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_add')")
-    public JSONObject addCustomerWaybill(WaybillDto dto) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        User loginUser = SecurityInfoGetter.getUser();
-        dto.setCreateId(loginUser.getUserId());
-        dto.setCreateName(loginUser.getRealName());
         dto.setCarrierCompanyId(companyId);
         Waybill result = waybillService.addWaybill(dto);
         if (result != null) {
@@ -81,6 +61,26 @@ public class WaybillApi {
             throw new RuntimeException("添加失败");
         }
     }
+
+//    @ApiOperation("客户运单--新增")
+//    @RequestMapping(value = "/customer/add", method = RequestMethod.POST)
+//    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_add')")
+//    public JSONObject addCustomerWaybill(WaybillDto dto) {
+//        Long companyId = SecurityInfoGetter.getCompanyId();
+//        User loginUser = SecurityInfoGetter.getUser();
+//        dto.setCreateId(loginUser.getUserId());
+//        dto.setCreateName(loginUser.getRealName());
+//        dto.setCarrierCompanyId(companyId);
+//        Waybill result = waybillService.addWaybill(dto);
+//        if (result != null) {
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put("code", 0);
+//            jsonObject.put("message", "添加成功");
+//            return jsonObject;
+//        } else {
+//            throw new RuntimeException("添加失败");
+//        }
+//    }
 
     @ApiOperation("我的运单--修改")
     @RequestMapping(value = "/own/modify", method = RequestMethod.POST)
