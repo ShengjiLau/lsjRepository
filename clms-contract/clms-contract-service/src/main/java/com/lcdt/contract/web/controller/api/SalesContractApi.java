@@ -129,6 +129,8 @@ public class SalesContractApi {
             dto.setTerminationTime(new Date());
         }else{
             dto.setIsDraft((short)1);
+            ContractDto oldDto = contractService.selectByPrimaryKey(contractId);
+            dto = Utils.getContractStatus(oldDto);
         }
         int result = contractService.modContractStatus(dto);
         if (result > 0) {

@@ -81,7 +81,7 @@ public class OwnPlanApi {
 
     @ApiOperation("拉取计划信息-编辑")
     @RequestMapping(value = "/loadPlan",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_load_plan') or hasAuthority('traffic_split_goods')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_plan_list') or hasAuthority('traffic_split_goods')")
     public WaybillPlan loadPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         WaybillParamsDto dto = new WaybillParamsDto();
