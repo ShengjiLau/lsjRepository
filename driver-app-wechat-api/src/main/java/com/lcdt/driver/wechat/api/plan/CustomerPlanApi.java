@@ -9,6 +9,7 @@ import com.lcdt.driver.dto.PageBaseDto;
 import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.SnatchGoods;
+import com.lcdt.traffic.model.SplitGoods;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.ICustomerPlanRpcService4Wechat;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
@@ -172,7 +173,6 @@ public class CustomerPlanApi {
         if(pageInfo.getTotal()>0) {
             List<CustomerPlanDto> customerPlanDtos = pageInfo.getList();
             if (customerPlanDtos!=null && customerPlanDtos.size()>0) {
-
                 for (CustomerPlanDto dto : customerPlanDtos) {
                     if(dto.getSnatchGoodsList()!=null && dto.getSnatchGoodsList().size()>0) {
                         List<SnatchGoods> otherSnatchGoods = new ArrayList<SnatchGoods>(); //存储其它数据
@@ -183,6 +183,16 @@ public class CustomerPlanApi {
                         }
                         dto.getSnatchGoodsList().removeAll(otherSnatchGoods);
                     }
+                    if (dto.getSplitGoodsList()!=null && dto.getSplitGoodsList().size()>0) {
+                        List<SplitGoods> splitGoodsList = new ArrayList<SplitGoods>(); //存储其它数据
+                        for (SplitGoods obj1 :dto.getSplitGoodsList()) {
+                            if(!obj1.getCompanyId().equals(companyId)) {
+                                splitGoodsList.add(obj1);
+                            }
+                        }
+                        dto.getSplitGoodsList().removeAll(splitGoodsList);
+                    }
+
 
                 }
             }
