@@ -1,5 +1,6 @@
 package com.lcdt.contract.web.utils;
 
+import com.lcdt.contract.model.Contract;
 import com.lcdt.contract.web.dto.ContractDto;
 
 import java.text.SimpleDateFormat;
@@ -47,6 +48,46 @@ public class Utils {
                 }
             }else{
                 dto.setContractStatus(isApproval==0?(short)1:(short)2);//没有生效时间，不需要审批为待生效
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return dto;
+    }
+    //审核完成后根据生效时间判断合同状态（待生效/生效中）
+    public static Contract getContractStatus(Contract dto){
+        try{
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            Date nowDate = sdf.parse(sdf.format(new Date()));//当前日期
+            if(dto.getStartDate() != null && dto.getEndDate() != null){
+                Date startDate = sdf.parse(sdf.format(dto.getStartDate()));
+                Date endDate = sdf.parse(sdf.format(dto.getEndDate()));
+                if(startDate.getTime() <= nowDate.getTime() && nowDate.getTime() <= endDate.getTime()){
+                    dto.setContractStatus((short)0);
+                }else{
+                    if(startDate.getTime() > nowDate.getTime()) {
+                        dto.setContractStatus((short)1);
+                    }
+                    if(nowDate.getTime() > endDate.getTime()) {
+                        dto.setContractStatus((short)3);
+                    }
+                }
+            }else if(dto.getStartDate() != null && dto.getEndDate() == null){
+                Date startDate = sdf.parse(sdf.format(dto.getStartDate()));
+                if(startDate.getTime() > nowDate.getTime()){
+                    dto.setContractStatus((short)1);
+                }else{
+                    dto.setContractStatus((short)0);
+                }
+            }else if(dto.getStartDate() == null && dto.getEndDate() != null){
+                Date endDate = sdf.parse(sdf.format(dto.getEndDate()));
+                if(nowDate.getTime() > endDate.getTime()){
+                    dto.setContractStatus((short)3);
+                }else{
+                    dto.setContractStatus((short)0);
+                }
+            }else{
+                dto.setContractStatus((short)1);//没有生效时间，为待生效
             }
         }catch (Exception e){
             e.printStackTrace();

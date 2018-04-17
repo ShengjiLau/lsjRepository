@@ -63,7 +63,7 @@ public interface OrderMapper {
     int updateApprovalStatus(Long orderId,Long companyId,Short status);
     
     /**
-     * 取消订单 将is_draft 设置为2
+     * 修改is_draft 状态
      * @param orderId
      * @return
      */

@@ -3,6 +3,7 @@ package com.lcdt.traffic.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -18,6 +19,7 @@ import com.lcdt.traffic.web.dto.FeeExchangeDto;
  * @version
  * @Description: TODO 
  */
+@Service
 public class FeeExchangeImpl implements FeeExchangeService {
 
 	@Autowired
