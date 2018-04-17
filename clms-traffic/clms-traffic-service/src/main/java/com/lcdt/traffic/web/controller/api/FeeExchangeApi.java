@@ -87,7 +87,21 @@ public class FeeExchangeApi {
 	}
 	
 	
-	
+	@GetMapping("/select")
+	@ApiOperation("单个收付款记录详情")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_exchange_select')")
+	public JSONObject selectFeeExchange(Long feeExchangeId) {
+		JSONObject jsonObject =new JSONObject();
+		FeeExchange fe=feeExchangeService.selectFeeExchangeById(feeExchangeId);
+		if(null!=fe) {
+			jsonObject.put("code",0);
+			jsonObject.put("msg","收付款详情");
+			jsonObject.put("data",fe);
+		}else {
+			throw new RuntimeException("查询出现异常");
+		}
+		return jsonObject;
+	}
 	
 	
 	

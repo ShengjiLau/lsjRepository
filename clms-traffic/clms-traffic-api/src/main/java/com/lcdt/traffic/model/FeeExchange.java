@@ -58,7 +58,9 @@ public class FeeExchange implements Serializable {
 
     private String exchangeName;
 
-    private static final long serialVersionUID = 14842121545841525L;
+    private Long groupId;
+
+    private static final long serialVersionUID = 1195622612561256L;
 
     public Long getExchangeId() {
         return exchangeId;
@@ -276,6 +278,14 @@ public class FeeExchange implements Serializable {
         this.exchangeName = exchangeName == null ? null : exchangeName.trim();
     }
 
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -314,7 +324,8 @@ public class FeeExchange implements Serializable {
             && (this.getOperateName() == null ? other.getOperateName() == null : this.getOperateName().equals(other.getOperateName()))
             && (this.getOperateId() == null ? other.getOperateId() == null : this.getOperateId().equals(other.getOperateId()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
-            && (this.getExchangeName() == null ? other.getExchangeName() == null : this.getExchangeName().equals(other.getExchangeName()));
+            && (this.getExchangeName() == null ? other.getExchangeName() == null : this.getExchangeName().equals(other.getExchangeName()))
+            && (this.getGroupId() == null ? other.getGroupId() == null : this.getGroupId().equals(other.getGroupId()));
     }
 
     @Override
@@ -348,6 +359,7 @@ public class FeeExchange implements Serializable {
         result = prime * result + ((getOperateId() == null) ? 0 : getOperateId().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getExchangeName() == null) ? 0 : getExchangeName().hashCode());
+        result = prime * result + ((getGroupId() == null) ? 0 : getGroupId().hashCode());
         return result;
     }
 
@@ -384,6 +396,7 @@ public class FeeExchange implements Serializable {
         sb.append(", operateId=").append(operateId);
         sb.append(", remark=").append(remark);
         sb.append(", exchangeName=").append(exchangeName);
+        sb.append(", groupId=").append(groupId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

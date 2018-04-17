@@ -30,6 +30,8 @@ public class Reconcile implements Serializable {
 
     private String payerName;
 
+    private Long groupId;
+
     private static final long serialVersionUID = 1L;
 
     public Long getReconcileId() {
@@ -136,6 +138,14 @@ public class Reconcile implements Serializable {
         this.payerName = payerName == null ? null : payerName.trim();
     }
 
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -160,7 +170,8 @@ public class Reconcile implements Serializable {
             && (this.getWaybillId() == null ? other.getWaybillId() == null : this.getWaybillId().equals(other.getWaybillId()))
             && (this.getPayeeType() == null ? other.getPayeeType() == null : this.getPayeeType().equals(other.getPayeeType()))
             && (this.getPayerId() == null ? other.getPayerId() == null : this.getPayerId().equals(other.getPayerId()))
-            && (this.getPayerName() == null ? other.getPayerName() == null : this.getPayerName().equals(other.getPayerName()));
+            && (this.getPayerName() == null ? other.getPayerName() == null : this.getPayerName().equals(other.getPayerName()))
+            && (this.getGroupId() == null ? other.getGroupId() == null : this.getGroupId().equals(other.getGroupId()));
     }
 
     @Override
@@ -180,6 +191,7 @@ public class Reconcile implements Serializable {
         result = prime * result + ((getPayeeType() == null) ? 0 : getPayeeType().hashCode());
         result = prime * result + ((getPayerId() == null) ? 0 : getPayerId().hashCode());
         result = prime * result + ((getPayerName() == null) ? 0 : getPayerName().hashCode());
+        result = prime * result + ((getGroupId() == null) ? 0 : getGroupId().hashCode());
         return result;
     }
 
@@ -202,6 +214,7 @@ public class Reconcile implements Serializable {
         sb.append(", payeeType=").append(payeeType);
         sb.append(", payerId=").append(payerId);
         sb.append(", payerName=").append(payerName);
+        sb.append(", groupId=").append(groupId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

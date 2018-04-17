@@ -20,7 +20,7 @@ public interface FeeExchangeService {
 	
 	int updateSetCancelOk(Long [] feeExchangeIds);
 	
-	
+	FeeExchange selectFeeExchangeById(Long feeExchangeId);
 	
 	
 

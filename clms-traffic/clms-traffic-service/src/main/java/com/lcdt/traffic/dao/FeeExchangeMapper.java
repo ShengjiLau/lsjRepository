@@ -39,12 +39,7 @@ public interface FeeExchangeMapper {
      */
     int updateCancelOkByBatch(Long [] feeExchangeIds);
     
-    /**
-     * 收付款记录详情
-     * @param feeExchangeId
-     * @return
-     */
-    FeeExchange selectFeeExchange(Long feeExchangeId);
+
     
     
     

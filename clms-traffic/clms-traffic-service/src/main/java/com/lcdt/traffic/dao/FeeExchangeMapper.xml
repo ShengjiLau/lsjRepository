@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lcdt.traffic.dao.FeeExchangeMapper" >
-  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.FeeExchange" >
+ <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.FeeExchange" >
     <id column="exchange_id" property="exchangeId" jdbcType="BIGINT" />
     <result column="reconcile_id" property="reconcileId" jdbcType="BIGINT" />
     <result column="reconcile_code" property="reconcileCode" jdbcType="VARCHAR" />
@@ -29,13 +29,14 @@
     <result column="operate_id" property="operateId" jdbcType="BIGINT" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="exchange_name" property="exchangeName" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Base_Column_List" >
     exchange_id, reconcile_id, reconcile_code, payer_name, type, account_amount, this_amount, 
     attachment1_name, attachment1, attachment2_name, attachment2, attachment3_name, attachment3, 
     attachment4_name, attachment4, attachment5_name, attachment5, cancel_ok, create_time, 
     operate_time, exchange_type, exchange_account, company_id, operate_name, operate_id, 
-    remark, exchange_name
+    remark, exchange_name, group_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -48,7 +49,7 @@
     where exchange_id = #{exchangeId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lcdt.traffic.model.FeeExchange" >
-    insert into t_fee_exchange (exchange_id, reconcile_id, reconcile_code, 
+     insert into t_fee_exchange (exchange_id, reconcile_id, reconcile_code, 
       payer_name, type, account_amount, 
       this_amount, attachment1_name, attachment1, 
       attachment2_name, attachment2, attachment3_name, 
@@ -56,8 +57,8 @@
       attachment5_name, attachment5, cancel_ok, 
       create_time, operate_time, exchange_type, 
       exchange_account, company_id, operate_name, 
-      operate_id, remark, exchange_name
-      )
+      operate_id, remark, exchange_name, 
+      group_id)
     values (#{exchangeId,jdbcType=BIGINT}, #{reconcileId,jdbcType=BIGINT}, #{reconcileCode,jdbcType=VARCHAR}, 
       #{payerName,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, #{accountAmount,jdbcType=DOUBLE}, 
       #{thisAmount,jdbcType=DOUBLE}, #{attachment1Name,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR}, 
@@ -66,8 +67,8 @@
       #{attachment5Name,jdbcType=VARCHAR}, #{attachment5,jdbcType=VARCHAR}, #{cancelOk,jdbcType=SMALLINT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{operateTime,jdbcType=TIMESTAMP}, #{exchangeType,jdbcType=VARCHAR}, 
       #{exchangeAccount,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{operateName,jdbcType=VARCHAR}, 
-      #{operateId,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, #{exchangeName,jdbcType=VARCHAR}
-      )
+      #{operateId,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, #{exchangeName,jdbcType=VARCHAR}, 
+      #{groupId,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.traffic.model.FeeExchange" >
     insert into t_fee_exchange
@@ -153,6 +154,9 @@
       <if test="exchangeName != null" >
         exchange_name,
       </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="exchangeId != null" >
@@ -236,10 +240,13 @@
       <if test="exchangeName != null" >
         #{exchangeName,jdbcType=VARCHAR},
       </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=BIGINT},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.traffic.model.FeeExchange" >
-    update t_fee_exchange
+   update t_fee_exchange
     <set >
       <if test="reconcileId != null" >
         reconcile_id = #{reconcileId,jdbcType=BIGINT},
@@ -319,11 +326,14 @@
       <if test="exchangeName != null" >
         exchange_name = #{exchangeName,jdbcType=VARCHAR},
       </if>
+      <if test="groupId != null" >
+        group_id = #{groupId,jdbcType=BIGINT},
+      </if>
     </set>
     where exchange_id = #{exchangeId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.FeeExchange" >
-    update t_fee_exchange
+     update t_fee_exchange
     set reconcile_id = #{reconcileId,jdbcType=BIGINT},
       reconcile_code = #{reconcileCode,jdbcType=VARCHAR},
       payer_name = #{payerName,jdbcType=VARCHAR},
@@ -349,12 +359,13 @@
       operate_name = #{operateName,jdbcType=VARCHAR},
       operate_id = #{operateId,jdbcType=BIGINT},
       remark = #{remark,jdbcType=VARCHAR},
-      exchange_name = #{exchangeName,jdbcType=VARCHAR}
+      exchange_name = #{exchangeName,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=BIGINT}
     where exchange_id = #{exchangeId,jdbcType=BIGINT}
   </update>
   
   <insert id="insertByBatch">
-   insert into t_fee_exchange (exchange_id, reconcile_id, reconcile_code, 
+    insert into t_fee_exchange (exchange_id, reconcile_id, reconcile_code, 
       payer_name, type, account_amount, 
       this_amount, attachment1_name, attachment1, 
       attachment2_name, attachment2, attachment3_name, 
@@ -362,8 +373,8 @@
       attachment5_name, attachment5, cancel_ok, 
       create_time, operate_time, exchange_type, 
       exchange_account, company_id, operate_name, 
-      operate_id, remark, exchange_name
-      )
+      operate_id, remark, exchange_name, 
+      group_id)
       <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
       values (#{item.exchangeId,jdbcType=BIGINT}, #{item.reconcileId,jdbcType=BIGINT}, #{item.reconcileCode,jdbcType=VARCHAR}, 
       #{item.payerName,jdbcType=VARCHAR}, #{item.type,jdbcType=SMALLINT}, #{item.accountAmount,jdbcType=DOUBLE}, 
@@ -373,7 +384,7 @@
       #{item.attachment5Name,jdbcType=VARCHAR}, #{item.attachment5,jdbcType=VARCHAR}, #{item.cancelOk,jdbcType=SMALLINT}, 
       #{item.createTime,jdbcType=TIMESTAMP}, #{item.operateTime,jdbcType=TIMESTAMP}, #{item.exchangeType,jdbcType=VARCHAR}, 
       #{item.exchangeAccount,jdbcType=VARCHAR}, #{item.companyId,jdbcType=BIGINT}, #{item.operateName,jdbcType=VARCHAR}, 
-      #{item.operateId,jdbcType=BIGINT}, #{item.remark,jdbcType=VARCHAR}, #{item.exchangeName,jdbcType=VARCHAR}
+      #{item.operateId,jdbcType=BIGINT}, #{item.remark,jdbcType=VARCHAR}, #{item.exchangeName,jdbcType=VARCHAR}, #{item.groupId,jdbcType=BIGINT}
       )
       </foreach>
   </insert>

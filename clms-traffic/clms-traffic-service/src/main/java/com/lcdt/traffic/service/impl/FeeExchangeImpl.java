@@ -61,4 +61,10 @@ public class FeeExchangeImpl implements FeeExchangeService {
 		}
 		 return -1;
 	}
+
+
+	@Override
+	public FeeExchange selectFeeExchangeById(Long feeExchangeId) {		
+		return feeExchangeMapper.selectByPrimaryKey(feeExchangeId);
+	}
 }
