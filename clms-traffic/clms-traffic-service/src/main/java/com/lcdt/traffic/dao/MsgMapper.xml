@@ -152,7 +152,7 @@
       <if test=" accountId !=null">
         and account_id = #{accountId,jdbcType=BIGINT}
       </if>
-      <if test="operator_id !=null and operator_id !='' ">
+      <if test="operatorId !=null and operatorId !='' ">
         and operator_id = #{operatorId,jdbcType=BIGINT}
       </if>
       <if test="is_deleted !=null and is_deleted !='' ">
