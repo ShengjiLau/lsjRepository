@@ -1,6 +1,7 @@
 package com.lcdt.contract.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -79,6 +80,7 @@ public class OrderServiceImpl implements OrderService{
 			i+=nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());
 			logger.debug("新增订单商品数量:"+i);
 		}
+
 		//审批流程添加
 		if(null!=orderDto.getOrderApprovalList() && orderDto.getOrderApprovalList().size() > 0){
 			/*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
@@ -117,7 +119,8 @@ public class OrderServiceImpl implements OrderService{
 			//同时设置合同的审批状态为审批中
 			order.setApprovalStatus(new Short("0"));
 			j+=orderMapper.updateByPrimaryKeySelective(order);
-		}
+		}		
+
 		if(i>0) {
 			return result;
 		}else {
@@ -221,14 +224,22 @@ public class OrderServiceImpl implements OrderService{
 		}	
 		PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());//分页
 		List<OrderDto> orderDtoList= nonautomaticMapper.selectByCondition(orderDto);
+		List<OrderDto> orderDtoList2=new ArrayList<OrderDto>();
 		if(null!=orderDtoList&&orderDtoList.size()!=0) {
-			for(OrderDto order:orderDtoList) {
+			for(OrderDto ord:orderDtoList) {
 				//获取订单商品
-				List<OrderProduct> orderProductList=orderProductMapper.getOrderProductByOrderId(order.getOrderId());
+				List<OrderProduct> orderProductList=orderProductMapper.getOrderProductByOrderId(ord.getOrderId());
 				if(null!=orderProductList&&orderProductList.size()!=0) {
-					order.setOrderProductList(orderProductList);
+					ord.setOrderProductList(orderProductList);
 				}
-			}   
+				//去掉处于审批状态的不为草稿和被取消的订单
+				if(1==ord.getApprovalStatus()&&1==ord.getIsDraft()) {			
+						orderDtoList2.add(ord);	
+				}
+			}	
+		}
+		if(null!=orderDtoList2) {
+		orderDtoList.removeAll(orderDtoList2);
 		}
 		PageInfo<OrderDto> pageInfo=new PageInfo<OrderDto>(orderDtoList);
 		return pageInfo;

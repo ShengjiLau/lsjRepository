@@ -234,6 +234,7 @@
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="order_serial_no" jdbcType="VARCHAR" property="orderSerialNo" />
     <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
     <collection property="orderProductList" select="selectProductApproval"
                 ofType="com.lcdt.contract.model.OrderProduct" column="{p1=order_id}" >
     </collection>
@@ -264,7 +265,7 @@
           </otherwise>
         </choose>
       </if>
-      and t1.approval_status != 0
+      and t1.approval_status != 0 and t1.is_draft = 1
       <if test="tempStatus!=null and tempStatus==0">
         and t2.user_id = #{userId,jdbcType=BIGINT} and t2.sort = 0
       </if>
@@ -276,6 +277,9 @@
       </if>
       <if test="tempStatus!=null and tempStatus==3">
         and t2.user_id = #{userId,jdbcType=BIGINT} and t2.action_type = 1 and t1.approval_status=2
+      </if>
+      <if test="supplierId!=null and supplierId!=''">
+        and t1.supplier_id = #{supplierId,jdbcType=BIGINT}
       </if>
     </where>
     order by t1.order_id desc

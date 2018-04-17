@@ -4,6 +4,14 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.driver.dto.ForgetPwdDto;
 import com.lcdt.notify.rpcservice.IValidCodeService;
+import com.lcdt.userinfo.dto.CompanyDto;
+import com.lcdt.userinfo.dto.RegisterDto;
+import com.lcdt.userinfo.exception.CompanyExistException;
+import com.lcdt.userinfo.exception.PhoneHasRegisterException;
+import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +25,9 @@ public class UserApi {
 
     @Reference
     UserService userService;
+
+    @Reference
+    CompanyService companyService;
 
     @RequestMapping("/forgetpwd")
     public String forgetPwd(ForgetPwdDto forgetPwdDto){
@@ -32,5 +43,19 @@ public class UserApi {
         }
         return jsonObject.toString();
     }
+
+    @RequestMapping("/register")
+    public User register(RegisterDto registerDto) throws PhoneHasRegisterException {
+        registerDto.setRegisterFrom("管车宝小程序");
+        User user = userService.registerUser(registerDto);
+        return user;
+    }
+
+    @RequestMapping("/createCompany")
+    public Company createCompany(CompanyDto companyDto) throws CompanyExistException {
+        Company company = companyService.createCompany(companyDto);
+        return company;
+    }
+
 
 }
