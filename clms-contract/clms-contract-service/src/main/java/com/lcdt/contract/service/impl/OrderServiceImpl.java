@@ -79,7 +79,7 @@ public class OrderServiceImpl implements OrderService{
 			i+=nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());
 			logger.debug("新增订单商品数量:"+i);
 		}
-		if(0!=orderDto.getIsDraft()) {	//判断不为草稿,然后添加审批状态
+
 		//审批流程添加
 		if(null!=orderDto.getOrderApprovalList() && orderDto.getOrderApprovalList().size() > 0){
 			/*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
@@ -119,7 +119,7 @@ public class OrderServiceImpl implements OrderService{
 			order.setApprovalStatus(new Short("0"));
 			j+=orderMapper.updateByPrimaryKeySelective(order);
 		}		
-		}
+
 		if(i>0) {
 			return result;
 		}else {
@@ -223,6 +223,18 @@ public class OrderServiceImpl implements OrderService{
 		}	
 		PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());//分页
 		List<OrderDto> orderDtoList= nonautomaticMapper.selectByCondition(orderDto);
+		if(null!=orderDtoList&&orderDtoList.size()!=0) {
+			for(OrderDto ord:orderDtoList) {
+				if(ord.getApprovalStatus()) {
+					
+				}
+				
+				
+				
+			}	
+		}
+		
+		
 		if(null!=orderDtoList&&orderDtoList.size()!=0) {
 			for(OrderDto order:orderDtoList) {
 				//获取订单商品
