@@ -42,6 +42,8 @@ public class OrderApprovalListDto implements Serializable{
 
     private String supplier;
 
+    private Long supplierId;
+
     //发起人姓名
     private String createUserName;
 
@@ -147,6 +149,14 @@ public class OrderApprovalListDto implements Serializable{
 
     public void setSupplier(String supplier) {
         this.supplier = supplier;
+    }
+
+    public Long getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
     }
 
     public String getCreateUserName() {
