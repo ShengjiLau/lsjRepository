@@ -49,6 +49,12 @@ public interface FeeAccountService {
      */
     PageInfo feeAccountList(FeeAccountDto dto);
     /**
+     * 记账单列表费用合计
+     * @param dto
+     * @return
+     */
+    FeeAccountDto feeAccountFeeTotal(FeeAccountDto dto);
+    /**
      * 费用类型列表查询
      * @param m
      * @return
