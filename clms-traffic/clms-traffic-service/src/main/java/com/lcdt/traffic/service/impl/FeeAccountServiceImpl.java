@@ -1,5 +1,6 @@
 package com.lcdt.traffic.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -9,9 +10,9 @@ import com.lcdt.traffic.service.FeeAccountService;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
 import com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto;
 import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
+import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.userinfo.rpc.FinanceRpcService;
 import com.lcdt.util.ClmsBeanUtil;
-import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tl.commons.util.DateUtility;
@@ -109,15 +110,15 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     public Map feeAccountPage(Map m){
         List<WaybillItems> waybillItemsList = waybillItemsMapper.selectByWaybillId(Long.parseLong(m.get("waybillId").toString()));
         List<FeeAccountDto> feeAccountDtoList = feeAccountMapper.selectFeeAccountDetail(m);
-//        m.put("isShow", (short)0);
-//        List<FeeProperty> showPropertyList = financeRpcService.selectByCondition(m);
-//        m.put("isShow", (short)1);
-//        List<FeeProperty> hidePropertyList = financeRpcService.selectByCondition(m);
+        m.put("isShow", (short)0);
+        List<FeeProperty> showPropertyList = financeRpcService.selectByCondition(m);
+        m.put("isShow", (short)1);
+        List<FeeProperty> hidePropertyList = financeRpcService.selectByCondition(m);
         Map map = new HashMap();
         map.put("waybillItemsList", waybillItemsList);
         map.put("feeAccountDtoList", feeAccountDtoList);
-//        map.put("showPropertyList", showPropertyList);
-//        map.put("hidePropertyList", hidePropertyList);
+        map.put("showPropertyList", showPropertyList);
+        map.put("hidePropertyList", hidePropertyList);
         return map;
     }
     @Override
@@ -184,6 +185,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                         account.setOperatorId(saveParamsDto.getUserId());
                         account.setOperatorName(saveParamsDto.getRealName());
                         account.setIsReceivable(saveParamsDto.getIsReceivable());
+                        account.setAuditStatus((short)0);
                         account.setCreateDate(new Date());
                         account.setIsDeleted((short)0);
                         feeAccountMapper.insert(account);
