@@ -36,7 +36,7 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
     @Override
     public PageInfo<List<ContractApprovalDto>> contractApprovalList(ContractApprovalListDto contractApprovalListDto, PageInfo pageInfo) {
         //根据需求审批创建起始时间加上时间
-        if(null!=contractApprovalListDto.getApprovalStartDate()){
+        if(null!=contractApprovalListDto.getApprovalStartDate() && !"".equals(contractApprovalListDto.getApprovalStartDate())){
             contractApprovalListDto.setApprovalStartDate(contractApprovalListDto.getApprovalStartDate()+" 00:00:00");
             contractApprovalListDto.setApprovalEndDate(contractApprovalListDto.getApprovalEndDate()+" 23:59:59");
         }
