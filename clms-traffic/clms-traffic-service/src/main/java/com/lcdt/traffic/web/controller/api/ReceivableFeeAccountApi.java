@@ -179,10 +179,10 @@ public class ReceivableFeeAccountApi {
                         }
                         m.put("proIds", proIds);
                     }
-//                    m.put("isShow", (short)0);
-//                    showPropertyList = financeRpcService.selectByCondition(m);
-//                    m.put("isShow", (short)1);
-//                    hidePropertyList = financeRpcService.selectByCondition(m);
+                    m.put("isShow", (short)0);
+                    showPropertyList = financeRpcService.selectByCondition(m);
+                    m.put("isShow", (short)1);
+                    hidePropertyList = financeRpcService.selectByCondition(m);
                     dto.setShowPropertyList(showPropertyList);
                     dto.setHidePropertyList(hidePropertyList);
                 }
