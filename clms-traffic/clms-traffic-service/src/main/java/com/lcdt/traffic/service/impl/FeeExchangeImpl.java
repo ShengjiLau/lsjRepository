@@ -28,8 +28,7 @@ public class FeeExchangeImpl implements FeeExchangeService {
 	
 	
 	@Override
-	public int insertFeeExchangeByBatch(List<FeeExchange> feeExchangeList) {
-		
+	public int insertFeeExchangeByBatch(List<FeeExchange> feeExchangeList) {		
 		return feeExchangeMapper.insertByBatch(feeExchangeList);
 	}
 
@@ -51,9 +50,15 @@ public class FeeExchangeImpl implements FeeExchangeService {
 			
 		return page;
 	}
-	
-	
-	
-	
 
+
+	@Override
+	public int updateSetCancelOk(Long[] feeExchangeIds) {
+		int j = feeExchangeIds.length;
+		int i= feeExchangeMapper.updateCancelOkByBatch(feeExchangeIds);
+		if(j==i) {
+			return i;
+		}
+		 return -1;
+	}
 }

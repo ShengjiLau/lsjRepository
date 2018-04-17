@@ -18,6 +18,7 @@ import com.lcdt.traffic.web.dto.FeeExchangeDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 /**
  * @author Sheng-ji Lau
@@ -69,16 +70,20 @@ public class FeeExchangeApi {
 	}
 	
 	
+	
 	@PostMapping("/cancel")
 	@ApiOperation("批量取消收付款记录")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_exchange_cancel')")
-	public JSONObject cancelFeeExchange(Long[] feeExchanges) {
+	public JSONObject cancelFeeExchange(@ApiParam("收付款记录id数组") Long[] feeExchanges) {
 		JSONObject jsonObject =new JSONObject();
-		
-		
-		
-		
-		return jsonObject;
+		int result=feeExchangeService.updateSetCancelOk(feeExchanges);
+		if(result>0) {
+			jsonObject.put("code",0);
+			jsonObject.put("msg","取消成功");
+			return jsonObject;
+		}else {
+			throw new RuntimeException("取消收付款记录出现异常");
+		}	
 	}
 	
 	
