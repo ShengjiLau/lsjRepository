@@ -1,5 +1,6 @@
 package com.lcdt.traffic.web.controller.api;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -18,7 +19,6 @@ import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -39,7 +39,7 @@ public class ReceivableFeeAccountApi {
     @Autowired
     private FeeAccountService feeAccountService;
     @Reference
-    FinanceRpcService financeRpcService;
+    private FinanceRpcService financeRpcService;
     @Autowired
     private MsgService msgService;
 
