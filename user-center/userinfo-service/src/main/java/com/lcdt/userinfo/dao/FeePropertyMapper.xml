@@ -14,11 +14,11 @@
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
   </resultMap>
   <sql id="Base_Column_List">
-    pro_id, type, name, is_receivable, is_show, company_id, operator_id, operator_name, 
+    pro_id, type, name, is_receivable, is_show, company_id, operator_id, operator_name,
     create_date, is_deleted
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_fee_property
     where pro_id = #{proId,jdbcType=BIGINT}
@@ -31,12 +31,12 @@
     <selectKey keyProperty="proId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_fee_property (type, name, is_receivable, 
-      is_show, company_id, operator_id, 
+    insert into t_fee_property (type, name, is_receivable,
+      is_show, company_id, operator_id,
       operator_name, create_date, is_deleted
       )
-    values (#{type,jdbcType=SMALLINT}, #{name,jdbcType=VARCHAR}, #{isReceivable,jdbcType=SMALLINT}, 
-      #{isShow,jdbcType=SMALLINT}, #{companyId,jdbcType=BIGINT}, #{operatorId,jdbcType=BIGINT}, 
+    values (#{type,jdbcType=SMALLINT}, #{name,jdbcType=VARCHAR}, #{isReceivable,jdbcType=SMALLINT},
+      #{isShow,jdbcType=SMALLINT}, #{companyId,jdbcType=BIGINT}, #{operatorId,jdbcType=BIGINT},
       #{operatorName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}
       )
   </insert>
@@ -175,10 +175,11 @@
         and pro_id != #{proId,jdbcType=BIGINT}
       </if>
       <if test="proIds!=null and proIds.size>0">
-        and pro_id not in
+        and pro_id not in(
         <foreach separator=";" index="index" item="item" collection="proIds" close="" open="">
           #{item}
         </foreach>
+        )
       </if>
     </where>
     order by pro_id desc
