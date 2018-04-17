@@ -33,7 +33,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
 
     @Override
     public PageInfo<List<OrderApprovalDto>> orderApprovalList(OrderApprovalListDto orderApprovalListDto, PageInfo pageInfo) {
-        if(null!=orderApprovalListDto){
+        if(null!=orderApprovalListDto.getApprovalStartDate() && !"".equals(orderApprovalListDto.getApprovalStartDate())){
             orderApprovalListDto.setApprovalStartDate(orderApprovalListDto.getApprovalStartDate()+" 00:00:00");
             orderApprovalListDto.setApprovalEndDate(orderApprovalListDto.getApprovalEndDate()+" 23:59:59");
         }
