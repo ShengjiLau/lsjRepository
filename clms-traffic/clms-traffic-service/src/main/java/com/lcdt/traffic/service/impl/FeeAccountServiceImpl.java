@@ -250,9 +250,15 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         }
         PageHelper.startPage(pageNo, pageSize);
         Map map= ClmsBeanUtil.beanToMap(dto);
-        resultList = feeAccountMapper.selectOwnByCondition(map);
+        resultList = feeAccountMapper.selectByCondition(map);
         page = new PageInfo(resultList);
         return page;
+    }
+    @Override
+    public FeeAccountDto feeAccountFeeTotal(FeeAccountDto dto){
+        Map map= ClmsBeanUtil.beanToMap(dto);
+        FeeAccountDto resultDto = feeAccountMapper.selectByConditionFeeTotal(map);
+        return resultDto;
     }
     @Override
     public PageInfo feePropertyList(Map m) {
@@ -279,8 +285,6 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         int result = feeAccountMapper.auditByAccountIds(map);
         return result;
     }
-
-
 
 //    @Override
 //    public List feeAccountReconcileGroup(Map map) {

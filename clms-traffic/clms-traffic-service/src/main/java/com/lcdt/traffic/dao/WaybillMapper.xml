@@ -638,15 +638,18 @@
       where fa.waybill_id=id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
       ) receiv_and_pay_name,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
+      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费'
+        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property!='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) other_fee_total,
+      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property!='运费'
+        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) other_fee_total,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-      where fa.waybill_id=id and ff.account_id=fa.account_id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total
+      where fa.waybill_id=id and ff.account_id=fa.account_id
+        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total
     from t_waybill
     <where>
-      waybill_status!=8 AND
-      company_id = #{companyId,jdbcType=BIGINT}
+      waybill_status!=8
+      and company_id = #{companyId,jdbcType=BIGINT}
       <if test="groupIds!=null and groupIds!=''">
         and ${groupIds}
       </if>
@@ -659,15 +662,18 @@
       where fa.waybill_id=id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
       ) receiv_and_pay_name,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-    where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
+      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费'
+        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-    where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property!='运费' and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) other_fee_total,
+      where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property!='运费'
+        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) other_fee_total,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
-    where fa.waybill_id=id and ff.account_id=fa.account_id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total
+      where fa.waybill_id=id and ff.account_id=fa.account_id
+        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total
     from t_waybill
     <where>
-      waybill_status!=8 AND
-      carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
+      waybill_status!=8
+      and carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
       <if test="companyIds!=null">
         and ${companyIds}
       </if>
@@ -687,10 +693,12 @@
     sum(ff.money) fee_total
     from t_waybill w,t_fee_account fa,t_fee_flow ff
     <where>
-      fa.waybill_id=id and ff.account_id=fa.account_id and
-      fa.is_receivable=#{isReceivable,jdbcType=SMALLINT} AND
-      w.waybill_status!=8 AND
-      w.company_id = #{companyId,jdbcType=BIGINT}
+      fa.waybill_id=id
+      and ff.account_id=fa.account_id
+      and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
+      and w.waybill_status!=8
+      and w.company_id = #{companyId,jdbcType=BIGINT}
+      and fa.is_deleted=0 and ff.is_deleted=0
       <if test="groupIds!=null and groupIds!=''">
         and ${groupIds}
       </if>
@@ -704,10 +712,12 @@
     sum(ff.money) fee_total
     from t_waybill w,t_fee_account fa,t_fee_flow ff
     <where>
-      fa.waybill_id=id and ff.account_id=fa.account_id and
-      fa.is_receivable=#{isReceivable,jdbcType=SMALLINT} AND
-      w.waybill_status!=8 AND
-      w.carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
+      fa.waybill_id=id
+      and ff.account_id=fa.account_id
+      and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
+      and w.waybill_status!=8
+      and w.carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
+      and fa.is_deleted=0 and ff.is_deleted=0
       <if test="companyIds!=null">
         and ${companyIds}
       </if>

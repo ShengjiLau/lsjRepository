@@ -130,6 +130,7 @@
     select <include refid="Base_Column_List"/>
     from t_fee_flow
     where account_id = #{accountId,jdbcType=BIGINT}
+    and is_deleted = 0
     order by flow_id desc
   </select>
 </mapper>

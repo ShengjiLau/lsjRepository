@@ -25,7 +25,9 @@ public interface FeeAccountMapper {
 
     List<FeeAccountDto> selectFeeAccountDetail(Map m);
 
-    List<FeeAccountDto> selectOwnByCondition(Map m);
+    List<FeeAccountDto> selectByCondition(Map m);
+
+    FeeAccountDto selectByConditionFeeTotal(Map m);
 
     int auditByAccountIds(Map map);
 
