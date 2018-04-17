@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -39,6 +40,13 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
         }
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         List<OrderApprovalDto> orderApprovalDtoList = orderApprovalMapper.selectOrderApprovalByCondition(orderApprovalListDto);
+        Iterator<OrderApprovalDto> it =orderApprovalDtoList.iterator();
+        while(it.hasNext()) {
+        	OrderApprovalDto oad=it.next();
+        	if(1!=oad.getIsDraft()) {
+        		orderApprovalDtoList.remove(oad);
+        	}
+        }
         PageInfo page = new PageInfo(orderApprovalDtoList);
         /**
          * 整合数据，
