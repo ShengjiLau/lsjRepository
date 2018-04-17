@@ -13,7 +13,7 @@ public class DriverWaybillListParsmsDto implements Serializable{
     @ApiModelProperty(value = "司机id",hidden = true)
     private Long driverId;//司机id
     @ApiModelProperty(value = "运单状态")
-    private Short waybillStatus;//运单状态
+    private String[] waybillStatus;//运单状态
     @ApiModelProperty(value = "页码", required = true)
     private int pageNo; //分页（第几页）
     @ApiModelProperty(value = "每页显示条", required = true)
@@ -27,11 +27,11 @@ public class DriverWaybillListParsmsDto implements Serializable{
         this.driverId = driverId;
     }
 
-    public Short getWaybillStatus() {
+    public String[] getWaybillStatus() {
         return waybillStatus;
     }
 
-    public void setWaybillStatus(Short waybillStatus) {
+    public void setWaybillStatus(String[] waybillStatus) {
         this.waybillStatus = waybillStatus;
     }
 
