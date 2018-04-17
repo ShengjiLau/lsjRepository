@@ -91,8 +91,8 @@ public class ReconcileApi {
 		JSONObject jsonObject =new JSONObject();
 		JSONArray jsonArray =new JSONArray();
 		PageInfo<Reconcile> page=reconcileService.getReconcileList(reconcileDto);
-		jsonArray.add(page.getSize());
-		jsonArray.add(page);
+		jsonArray.add(page.getTotal());
+		jsonArray.add(page.getList());
 		jsonObject.put("code",0);
 		jsonObject.put("msg","对账单列表信息");
 		jsonObject.put("data",jsonArray);
