@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.token.config.JwtTokenUtil;
 import com.lcdt.driver.dto.PageBaseDto;
+import com.lcdt.driver.dto.WechatCreateCompanyDto;
 import com.lcdt.notify.rpcservice.IValidCodeService;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.dto.RegisterDto;
@@ -19,6 +20,7 @@ import com.lcdt.userinfo.service.CreateCompanyService;
 import com.lcdt.userinfo.service.UserService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,19 +53,23 @@ public class LoginApi {
     CreateCompanyService createCompanyService;
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
-    public User registerUser(RegisterDto registerDto) {
-        try {
+    public String registerUser(RegisterDto registerDto) throws PhoneHasRegisterException {
             String ecode = registerDto.getEcode();
             boolean codeCorrect = validCodeService.isCodeCorrect(ecode, VCODETAG, registerDto.getUserPhoneNum());
             if (!codeCorrect) {
                 throw new RuntimeException("验证码错误");
             }
             User user = userService.registerUser(registerDto);
-            return user;
-        } catch (PhoneHasRegisterException e) {
-            e.printStackTrace();
-        }
-        return null;
+            HashMap<String, Object> stringStringHashMap = new HashMap<>();
+            stringStringHashMap.put("userId", user.getUserId());
+
+            String s = jwtTokenUtil.generateToken(stringStringHashMap);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("data", user);
+            jsonObject.put("code", 0);
+            jsonObject.put("toekn", s);
+            return jsonObject.toString();
+
     }
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
@@ -119,7 +125,20 @@ public class LoginApi {
     }
 
     @RequestMapping(value = "/createcomp", method = RequestMethod.POST)
-    public Company createCompany(CompanyDto companyDto) throws CompanyExistException, UserNotExistException {
+    public Company createCompany(WechatCreateCompanyDto companyDto) throws CompanyExistException, UserNotExistException {
+        String token = companyDto.getToken();
+        Claims claimsFromToken = jwtTokenUtil.getClaimsFromToken(token);
+        if (claimsFromToken != null) {
+            String userId = String.valueOf(claimsFromToken.get("userId"));
+            if (StringUtils.isEmpty(userId)) {
+                throw new RuntimeException("token错误");
+            }
+            companyDto.setCreateDt(new Date());
+            companyDto.setCreateId(Long.valueOf(userId));
+        }else{
+            throw new RuntimeException("token错误");
+        }
+
         Company company = createCompanyService.createCompany(companyDto);
         return company;
     }
