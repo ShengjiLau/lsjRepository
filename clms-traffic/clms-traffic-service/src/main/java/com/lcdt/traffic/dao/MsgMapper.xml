@@ -155,7 +155,7 @@
       <if test="operatorId !=null and operatorId !='' ">
         and operator_id = #{operatorId,jdbcType=BIGINT}
       </if>
-      <if test="is_deleted !=null and is_deleted !='' ">
+      <if test="isDeleted !=null and isDeleted !='' ">
         and is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
   	</where>
