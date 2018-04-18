@@ -39,7 +39,7 @@ public class ReceivableFeeAccountApi {
     @Autowired
     private FeeAccountService feeAccountService;
     @Reference
-    private FinanceRpcService financeRpcService;
+    FinanceRpcService financeRpcService;
     @Autowired
     private MsgService msgService;
 
@@ -272,7 +272,7 @@ public class ReceivableFeeAccountApi {
         dto.setIsDeleted((short)0);
         dto.setAccountId(accountId);
         List<Msg> list = msgService.selectSomeMsg(dto);
-        if (list != null && list.size() > 0) {
+        if (list != null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "留言列表");
@@ -300,10 +300,10 @@ public class ReceivableFeeAccountApi {
         if (result == accountIds.size()) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
-            jsonObject.put("message", "删除成功");
+            jsonObject.put("message", auditStatus==0?"取消审核成功":"审核成功");
             return jsonObject;
         } else {
-            throw new RuntimeException("删除失败");
+            throw new RuntimeException( auditStatus==0?"取消审核失败":"审核失败");
         }
     }
 
