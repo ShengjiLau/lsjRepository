@@ -67,4 +67,11 @@ public class FeeExchangeImpl implements FeeExchangeService {
 	public FeeExchange selectFeeExchangeById(Long feeExchangeId) {		
 		return feeExchangeMapper.selectByPrimaryKey(feeExchangeId);
 	}
+
+
+	@Override
+	public int querySumFeeExchangeByReconcileId(Long reconcileId) {
+		
+		return feeExchangeMapper.selectCountFeeExchangeByReconcileId(reconcileId);
+	}
 }

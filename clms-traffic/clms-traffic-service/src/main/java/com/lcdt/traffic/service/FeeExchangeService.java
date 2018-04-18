@@ -22,6 +22,6 @@ public interface FeeExchangeService {
 	
 	FeeExchange selectFeeExchangeById(Long feeExchangeId);
 	
-	
+	int querySumFeeExchangeByReconcileId(Long rreconcileId);
 
 }

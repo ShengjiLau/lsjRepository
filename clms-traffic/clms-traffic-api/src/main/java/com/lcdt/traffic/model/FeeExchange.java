@@ -3,61 +3,101 @@ package com.lcdt.traffic.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+/**
+ * @author Sheng-ji Lau
+ * @date 2018年4月18日
+ * @version
+ * @Description: TODO 
+ */
+@ApiModel("收付款记录entity")
 public class FeeExchange implements Serializable {
+	
+	@ApiModelProperty("收付款记录id")
     private Long exchangeId;
-
+	
+	@ApiModelProperty("对账单id")
     private Long reconcileId;
-
+	
+	@ApiModelProperty("对账单单号")
     private String reconcileCode;
-
+	
+	@ApiModelProperty("收付款方姓名")
     private String payerName;
 
+	@ApiModelProperty("应收应付类型:0收款/1付款")
     private Short type;
 
+	@ApiModelProperty("应收总金额")
     private Double accountAmount;
 
+	@ApiModelProperty("此次收款金额")
     private Double thisAmount;
 
+	@ApiModelProperty("附件1名称")
     private String attachment1Name;
 
+	@ApiModelProperty("附件1地址")
     private String attachment1;
 
+	@ApiModelProperty("附件2名称")
     private String attachment2Name;
 
+	@ApiModelProperty("附件2地址")
     private String attachment2;
 
+	@ApiModelProperty("附件3名称")
     private String attachment3Name;
 
+	@ApiModelProperty("附件3地址")
     private String attachment3;
 
+	@ApiModelProperty("附件4名称")
     private String attachment4Name;
 
+	@ApiModelProperty("附件4地址")
     private String attachment4;
 
+	@ApiModelProperty("附件5名称")
     private String attachment5Name;
 
+	@ApiModelProperty("附件5地址")
     private String attachment5;
 
+	@ApiModelProperty("作废收付款记录,此参数前端任何时候都不需要传")
     private Short cancelOk;
 
+	@ApiModelProperty("创建时间,后端生成")
     private Date createTime;
 
+	@ApiModelProperty("实际收付款时间")
     private Date operateTime;
 
+	@ApiModelProperty("支付方式,如支付宝等")
     private String exchangeType;
 
+	@ApiModelProperty("收付款账户")
     private String exchangeAccount;
 
+	@ApiModelProperty("所属公司id")
     private Long companyId;
 
+	@ApiModelProperty("操作人姓名")
     private String operateName;
 
+	@ApiModelProperty("操作人id")
     private Long operateId;
 
+	@ApiModelProperty("备注")
     private String remark;
 
+	@ApiModelProperty("收付款账户名")
     private String exchangeName;
 
+	@ApiModelProperty("业务组id")
     private Long groupId;
 
     private static final long serialVersionUID = 1195622612561256L;

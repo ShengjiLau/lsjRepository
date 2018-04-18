@@ -3,6 +3,7 @@ package com.lcdt.traffic.web.controller.api;
 
 
 
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.Reconcile;
+import com.lcdt.traffic.service.FeeExchangeService;
 import com.lcdt.traffic.service.ReconcileService;
 import com.lcdt.traffic.web.dto.ReconcileDto;
 import com.lcdt.traffic.web.dto.ReconcileListDto;
@@ -42,6 +44,9 @@ public class ReconcileApi {
 	
 	@Autowired
 	private ReconcileService reconcileService;
+	
+	@Autowired
+	private FeeExchangeService feeExchangeService;
 	
 	Logger logger = LoggerFactory.getLogger(ReconcileApi.class);
 	
@@ -71,6 +76,24 @@ public class ReconcileApi {
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_cancel')")
 	public JSONObject cancelReconcile(@ApiParam(value="一个或多个对账单id") Long[] reconcileIdList) {
 		JSONObject jsonObject =new JSONObject();
+		//查询对账单是否生成过收付款记录,如果对账单存在收付款记录,则不能取消,如果不存在收付款记录,则执行取消操作
+		Long[] temp = null;
+		int a=0;
+		for(int i=0;i<reconcileIdList.length;i++) {
+			int j=feeExchangeService.querySumFeeExchangeByReconcileId(reconcileIdList[i]);
+			if(j>0) {
+			temp[a]=reconcileIdList[i];
+			a+=1;
+			}else {
+				
+			}
+		}
+		if(temp.length>0) {
+			jsonObject.put("code",0);
+			jsonObject.put("msg","已存在收付款记录的对账单不可以取消");
+			jsonObject.put("data",temp);
+			return jsonObject;
+		}			
 		int i= reconcileIdList.length;
 		int result=reconcileService.setCancelOk(reconcileIdList);
 		if(i==result) {

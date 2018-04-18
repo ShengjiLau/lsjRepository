@@ -40,7 +40,11 @@ public interface FeeExchangeMapper {
     int updateCancelOkByBatch(Long [] feeExchangeIds);
     
 
-    
-    
+    /**
+     * 查询对应对账单下收付款记录数量
+     * @param reconcileId
+     * @return
+     */
+    int selectCountFeeExchangeByReconcileId(Long reconcileId);
     
 }
