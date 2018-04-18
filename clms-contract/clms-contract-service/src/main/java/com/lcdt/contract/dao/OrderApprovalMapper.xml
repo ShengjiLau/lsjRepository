@@ -265,7 +265,7 @@
           </otherwise>
         </choose>
       </if>
-      and t1.approval_status != 0
+      and t1.approval_status != 0 and t1.is_draft = 1
       <if test="tempStatus!=null and tempStatus==0">
         and t2.user_id = #{userId,jdbcType=BIGINT} and t2.sort = 0
       </if>

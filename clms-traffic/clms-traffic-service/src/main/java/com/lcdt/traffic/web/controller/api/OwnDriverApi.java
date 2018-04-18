@@ -195,7 +195,6 @@ public class OwnDriverApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_group')")
     public PageBaseDto<List<DriverGroupDto>> setGroup() {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-//        Long ownDriverId = ownDriver.getOwnDriverId();
         List<DriverGroupDto> driverGroupDtoList = driverGroupService.selectRelationship(companyId);
         PageBaseDto pageBaseDto = new PageBaseDto(driverGroupDtoList, driverGroupDtoList.size());
         return pageBaseDto;
