@@ -324,11 +324,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         if (StringUtils.isEmpty(map.get("orderFiled"))) {
             map.put("orderFiled", orderField);
         }
-
-
-
         PageHelper.startPage(pageNo, pageSize);
-
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlan4Bidding(map);
         if (list!=null && list.size()>0) {
             for(CustomerPlanDto dto :list){
@@ -336,6 +332,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             }
         }
         PageInfo pageInfo = new PageInfo(list);
+        removeOtherSnatch(pageInfo, Long.valueOf(company_denglu));
         return pageInfo;
     }
 
@@ -344,6 +341,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     @Override
     public PageInfo customerPlanList4Offer(Map map) {
         String company_denglu = map.get("companyId").toString();
+
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
 
@@ -392,6 +390,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         }
 
         PageInfo pageInfo = new PageInfo(list);
+        removeOtherSnatch(pageInfo, Long.valueOf(company_denglu));
         return pageInfo;
     }
 
@@ -399,6 +398,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Pass(Map map) {
+        String company_denglu = map.get("companyId").toString();
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
@@ -438,8 +438,8 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                 dto.setPlanSource(planSource(dto.getCompanyId(),customerList));
             }
         }
-
         PageInfo pageInfo = new PageInfo(list);
+        removeOtherSnatch(pageInfo, Long.valueOf(company_denglu));
         return pageInfo;
     }
 
@@ -447,6 +447,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4VehicleDoing(Map map) {
+        String company_denglu = map.get("companyId").toString();
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
@@ -482,18 +483,15 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         if (StringUtils.isEmpty(map.get("orderFiled"))) {
             map.put("orderFiled", orderField);
         }
-
-
         PageHelper.startPage(pageNo, pageSize);
-
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4VehicleDoing(map);
         if (list!=null && list.size()>0) {
             for(CustomerPlanDto dto :list){
                 dto.setPlanSource(planSource(dto.getCompanyId(),customerList));
             }
         }
-
         PageInfo pageInfo = new PageInfo(list);
+        removeOtherSnatch(pageInfo, Long.valueOf(company_denglu));
         return pageInfo;
     }
 
@@ -501,6 +499,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4VehicleHave(Map map) {
+        String company_denglu = map.get("companyId").toString();
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
@@ -532,11 +531,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         if (StringUtils.isEmpty(map.get("orderFiled"))) {
             map.put("orderFiled", orderField);
         }
-
-
-
         PageHelper.startPage(pageNo, pageSize);
-
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4VehicleHave(map);
         if (list!=null && list.size()>0) {
             System.out.println(list.size());
@@ -547,6 +542,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         }
 
         PageInfo pageInfo = new PageInfo(list);
+        removeOtherSnatch(pageInfo, Long.valueOf(company_denglu));
         return pageInfo;
     }
 
@@ -554,6 +550,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Completed(Map map) {
+        String company_denglu = map.get("companyId").toString();
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
@@ -597,6 +594,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             }
         }
         PageInfo pageInfo = new PageInfo(list);
+        removeOtherSnatch(pageInfo, Long.valueOf(company_denglu));
         return pageInfo;
     }
 
@@ -604,6 +602,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Cancel(Map map) {
+        String company_denglu = map.get("companyId").toString();
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
@@ -637,11 +636,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         if (StringUtils.isEmpty(map.get("orderFiled"))) {
             map.put("orderFiled", orderField);
         }
-
-
-
         PageHelper.startPage(pageNo, pageSize);
-
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Cancel(map);
         if (list!=null && list.size()>0) {
             for(CustomerPlanDto dto :list){
@@ -649,6 +644,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             }
         }
         PageInfo pageInfo = new PageInfo(list);
+        removeOtherSnatch(pageInfo, Long.valueOf(company_denglu));
         return pageInfo;
     }
 
@@ -867,5 +863,39 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
 
         waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         return waybillPlan;
+    }
+
+
+    /***
+     * 移除其它抢单数据
+     */
+    private void removeOtherSnatch(PageInfo pageInfo, Long companyId) {
+        if(pageInfo.getTotal()>0) {
+            List<CustomerPlanDto> customerPlanDtos = pageInfo.getList();
+            if (customerPlanDtos!=null && customerPlanDtos.size()>0) {
+                for (CustomerPlanDto dto : customerPlanDtos) {
+                    if(dto.getSnatchGoodsList()!=null && dto.getSnatchGoodsList().size()>0) {
+                        List<SnatchGoods> otherSnatchGoods = new ArrayList<SnatchGoods>(); //存储其它数据
+                        for (SnatchGoods obj :dto.getSnatchGoodsList()) {
+                            if(!obj.getCompanyId().equals(companyId)) {
+                                otherSnatchGoods.add(obj);
+                            }
+                        }
+                        dto.getSnatchGoodsList().removeAll(otherSnatchGoods);
+                    }
+                    if (dto.getSplitGoodsList()!=null && dto.getSplitGoodsList().size()>0) {
+                        List<SplitGoods> splitGoodsList = new ArrayList<SplitGoods>(); //存储其它数据
+                        for (SplitGoods obj1 :dto.getSplitGoodsList()) {
+                            if(!obj1.getCompanyId().equals(companyId)) {
+                                splitGoodsList.add(obj1);
+                            }
+                        }
+                        dto.getSplitGoodsList().removeAll(splitGoodsList);
+                    }
+
+
+                }
+            }
+        }
     }
 }
