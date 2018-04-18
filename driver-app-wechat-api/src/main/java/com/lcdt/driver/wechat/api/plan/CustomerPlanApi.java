@@ -9,6 +9,7 @@ import com.lcdt.driver.dto.PageBaseDto;
 import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.SnatchGoods;
+import com.lcdt.traffic.model.SplitGoods;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.ICustomerPlanRpcService4Wechat;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
@@ -44,10 +45,8 @@ public class CustomerPlanApi {
     @ApiOperation("竞价")
     @RequestMapping(value = "/customerPlanList4Bidding", method = RequestMethod.GET)
     public PageBaseDto customerPlanList4Bidding(CustomerPlan4ParamsDto customerPlan4ParamsDto) {
-           UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
            Map map = searchCondition4Map(customerPlan4ParamsDto);
            PageInfo pg =iCustomerPlanRpcService4Wechat.customerPlanList4Bidding(map);
-           removeOtherSnatch(pg, userCompRel.getCompany().getCompId());
            PageBaseDto pageBaseDto = new PageBaseDto(pg.getList(), pg.getTotal());
           return pageBaseDto;
     }
@@ -57,10 +56,8 @@ public class CustomerPlanApi {
     @ApiOperation("已报价")
     @RequestMapping(value = "/customerPlanList4Offer",method = RequestMethod.GET)
      public PageBaseDto customerPlanList4Offer(CustomerPlan4ParamsDto customerPlan4ParamsDto) {
-        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         Map map = searchCondition4Map(customerPlan4ParamsDto);
         PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Offer(map);
-        removeOtherSnatch(pageInfo, userCompRel.getCompany().getCompId());
         PageBaseDto dto = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto;
     }
@@ -71,10 +68,8 @@ public class CustomerPlanApi {
     @ApiOperation("已错过")
     @RequestMapping(value = "/customerPlanList4Pass",method = RequestMethod.GET)
     public PageBaseDto customerPlanList4Pass(CustomerPlan4ParamsDto customerPlan4ParamsDto) {
-        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         Map map = searchCondition4Map(customerPlan4ParamsDto);
         PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Pass(map);
-        removeOtherSnatch(pageInfo, userCompRel.getCompany().getCompId());
         PageBaseDto dto = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto;
     }
@@ -85,10 +80,8 @@ public class CustomerPlanApi {
     @ApiOperation("派车中")
     @RequestMapping(value = "/customerPlanList4VehicleDoing",method = RequestMethod.GET)
     public PageBaseDto customerPlanList4VehicleDoing(CustomerPlan4ParamsDto customerPlan4ParamsDto) {
-        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         Map map = searchCondition4Map(customerPlan4ParamsDto);
         PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4VehicleDoing(map);
-        removeOtherSnatch(pageInfo, userCompRel.getCompany().getCompId());
         PageBaseDto dto = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto;
     }
@@ -98,10 +91,8 @@ public class CustomerPlanApi {
     @ApiOperation("已派车")
     @RequestMapping(value = "/customerPlanList4VehicleHave",method = RequestMethod.GET)
     public PageBaseDto customerPlanList4VehicleHave(CustomerPlan4ParamsDto customerPlan4ParamsDto) {
-        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         Map map = searchCondition4Map(customerPlan4ParamsDto);
         PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4VehicleHave(map);
-        removeOtherSnatch(pageInfo, userCompRel.getCompany().getCompId());
         PageBaseDto dto = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto;
     }
@@ -110,10 +101,8 @@ public class CustomerPlanApi {
     @ApiOperation("已完成")
     @RequestMapping(value = "/customerPlanList4Completed",method = RequestMethod.GET)
     public PageBaseDto customerPlanList4Completed(CustomerPlan4ParamsDto customerPlan4ParamsDto) {
-        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         Map map = searchCondition4Map(customerPlan4ParamsDto);
         PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Completed(map);
-        removeOtherSnatch(pageInfo, userCompRel.getCompany().getCompId());
         PageBaseDto dto = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto;
     }
@@ -122,10 +111,8 @@ public class CustomerPlanApi {
     @RequestMapping(value = "/customerPlanList4Cancel",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_list_4_vehicle_cancel') or hasAuthority('traffic_customer_plan_list')")
     public PageBaseDto customerPlanList4Cancel(CustomerPlan4ParamsDto customerPlan4ParamsDto) {
-        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         Map map = searchCondition4Map(customerPlan4ParamsDto);
         PageInfo pageInfo = iCustomerPlanRpcService4Wechat.customerPlanList4Cancel(map);
-        removeOtherSnatch(pageInfo, userCompRel.getCompany().getCompId());
         PageBaseDto dto1 = new PageBaseDto(pageInfo.getList(), pageInfo.getTotal());
         return dto1;
     }
@@ -165,29 +152,7 @@ public class CustomerPlanApi {
     }
 
 
-    /***
-     * 移除其它抢单数据
-     */
-    private void removeOtherSnatch(PageInfo pageInfo, Long companyId) {
-        if(pageInfo.getTotal()>0) {
-            List<CustomerPlanDto> customerPlanDtos = pageInfo.getList();
-            if (customerPlanDtos!=null && customerPlanDtos.size()>0) {
 
-                for (CustomerPlanDto dto : customerPlanDtos) {
-                    if(dto.getSnatchGoodsList()!=null && dto.getSnatchGoodsList().size()>0) {
-                        List<SnatchGoods> otherSnatchGoods = new ArrayList<SnatchGoods>(); //存储其它数据
-                        for (SnatchGoods obj :dto.getSnatchGoodsList()) {
-                            if(!obj.getCompanyId().equals(companyId)) {
-                                otherSnatchGoods.add(obj);
-                            }
-                        }
-                        dto.getSnatchGoodsList().removeAll(otherSnatchGoods);
-                    }
-
-                }
-            }
-        }
-    }
 
     @ApiOperation("报价-信息拉取")
     @RequestMapping(value = "/customerPlanOfferLoadData",method = RequestMethod.GET)

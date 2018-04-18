@@ -20,6 +20,7 @@
     <result column="update_name" jdbcType="VARCHAR" property="updateName" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+    <result column="last_offer" jdbcType="REAL" property="lastOffer" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
@@ -42,12 +43,12 @@
     insert into t_snatch_goods_detail (snatch_goods_id, plan_detail_id, offer_price, 
       offer_total, offer_remark, create_id, 
       create_name, create_date, update_id, 
-      update_name, update_time, is_deleted
+      update_name, update_time, is_deleted,last_offer
       )
     values (#{snatchGoodsId,jdbcType=BIGINT}, #{planDetailId,jdbcType=BIGINT}, #{offerPrice,jdbcType=REAL}, 
       #{offerTotal,jdbcType=REAL}, #{offerRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
       #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, 
-      #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}
+      #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT},#{lastOffer,jdbcType=REAL}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.SnatchGoodsDetail">
@@ -62,9 +63,6 @@
       offer_price = #{offerPrice,jdbcType=REAL},
       offer_total = #{offerTotal,jdbcType=REAL},
       offer_remark = #{offerRemark,jdbcType=VARCHAR},
-      create_id = #{createId,jdbcType=BIGINT},
-      create_name = #{createName,jdbcType=VARCHAR},
-      create_date = #{createDate,jdbcType=TIMESTAMP},
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -79,7 +77,7 @@
     -->
     select snatch_goods_detail_id, snatch_goods_id, plan_detail_id, offer_price, offer_total, 
     offer_remark, create_id, create_name, create_date, update_id, update_name, update_time, 
-    is_deleted
+    is_deleted,last_offer
     from t_snatch_goods_detail
     where snatch_goods_detail_id = #{snatchGoodsDetailId,jdbcType=BIGINT}
   </select>
@@ -91,7 +89,7 @@
     -->
     select snatch_goods_detail_id, snatch_goods_id, plan_detail_id, offer_price, offer_total, 
     offer_remark, create_id, create_name, create_date, update_id, update_name, update_time, 
-    is_deleted
+    is_deleted,last_offer
     from t_snatch_goods_detail
   </select>
 
@@ -100,14 +98,14 @@
     insert into t_snatch_goods_detail (snatch_goods_id, plan_detail_id, offer_price,
     offer_total, offer_remark, create_id,
     create_name, create_date, update_id,
-    update_name, update_time, is_deleted
+    update_name, update_time, is_deleted,last_offer
     )
     values
     <foreach collection="list" item="snatch" index="index" separator="," >
       (#{snatch.snatchGoodsId}, #{snatch.planDetailId}, #{snatch.offerPrice},
       #{snatch.offerTotal}, #{snatch.offerRemark}, #{snatch.createId},
       #{snatch.createName}, #{snatch.createDate}, #{snatch.updateId},
-      #{snatch.updateName}, #{snatch.updateTime}, #{snatch.isDeleted}
+      #{snatch.updateName}, #{snatch.updateTime}, #{snatch.isDeleted},#{snatch.lastOffer}
       )
     </foreach>
   </insert>
@@ -122,7 +120,7 @@
     -->
     select snatch_goods_detail_id, snatch_goods_id, plan_detail_id, offer_price, offer_total,
     offer_remark, create_id, create_name, create_date, update_id, update_name, update_time,
-    is_deleted
+    is_deleted,last_offer
     from t_snatch_goods_detail
     where snatch_goods_id = #{snatchGoodsId} and is_deleted = #{isDeleted}
   </select>
