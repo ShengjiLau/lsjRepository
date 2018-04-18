@@ -358,14 +358,19 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             for(WaybillPlan obj :list) {
                 List<SnatchGoods> snatchGoodsList = obj.getSnatchGoodsList();
                 if (snatchGoodsList!=null && snatchGoodsList.size()>0) {
+                    List<SnatchGoods> otherSnatchGoods = new ArrayList<SnatchGoods>(); //存储其它数据
                     for(SnatchGoods snatchGoods :snatchGoodsList) {
+                        if(snatchGoods.getIsUsing().equals(ConstantVO.SNATCH_GOODS_USING_NOPASS)) { //驳回胡
+                            otherSnatchGoods.add(snatchGoods);
+                            continue;
+                       }
                         Long jj_company_id = snatchGoods.getCompanyId(); //竞价企业ID
                         Company carrierCompany = companyRpcService.findCompanyByCid(jj_company_id);
                         if (carrierCompany != null) {
                             snatchGoods.setOfferName(carrierCompany.getFullName());
                         }
-
                     }
+                    snatchGoodsList.removeAll(otherSnatchGoods);
                 }
             }
         }
