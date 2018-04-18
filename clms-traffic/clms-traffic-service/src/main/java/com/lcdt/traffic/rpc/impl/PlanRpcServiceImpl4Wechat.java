@@ -105,9 +105,9 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             }
             sb_20.append(")");
           }else {
-            sb_20.append(" find_in_set('000',carrier_driver_ids) ");
+            sb_20.append(" find_in_set('000',carrier_driver_ids)");
         }
-        return sb_20.toString();
+        return "("+ sb_20.toString()+ " or carrier_all_ids=2 )";
 
       }
 
