@@ -834,7 +834,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                     if(dto.getSnatchGoodsList()!=null && dto.getSnatchGoodsList().size()>0) {
                         List<SnatchGoods> otherSnatchGoods = new ArrayList<SnatchGoods>(); //存储其它数据
                         for (SnatchGoods obj :dto.getSnatchGoodsList()) {
-                            if(!obj.getCompanyId().equals(companyId)) {
+                            if(!obj.getCompanyId().equals(companyId) || obj.getIsUsing().equals(2)) { //不是本企业或是未采用的不要
                                 otherSnatchGoods.add(obj);
                             }
                         }
