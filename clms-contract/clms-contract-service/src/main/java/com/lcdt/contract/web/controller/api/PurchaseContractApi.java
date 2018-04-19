@@ -129,11 +129,9 @@ public class PurchaseContractApi {
         }else if(contractStatus == 3){//3失效
             dto.setTerminationTime(new Date());
         }else{
-            dto.setIsDraft((short)1);
             ContractDto oldDto = contractService.selectByPrimaryKey(contractId);
-            dto.setStartDate(oldDto.getStartDate());
-            dto.setEndDate(oldDto.getEndDate());
-            dto = Utils.getContractStatus(dto);
+            oldDto.setIsDraft((short)1);
+            dto = Utils.getContractStatus(oldDto);
         }
         int result = contractService.modContractStatus(dto);
         if (result > 0) {
