@@ -195,6 +195,19 @@ public class WaybillParamsDto implements java.io.Serializable{
     private Date updateTime;
 
 
+    @ApiModelProperty(value = "0-其它1-承运商2-司机")
+    private Short carrierAllIds; //0-其它1-承运商2-司机
+
+    public Short getCarrierAllIds() {
+        return carrierAllIds;
+    }
+
+    public void setCarrierAllIds(Short carrierAllIds) {
+        this.carrierAllIds = carrierAllIds;
+    }
+
+
+
     public String getAttachement() {
         return attachement;
     }
