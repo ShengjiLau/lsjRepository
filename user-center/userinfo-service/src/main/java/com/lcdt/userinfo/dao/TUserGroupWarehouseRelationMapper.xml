@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.userinfo.dao.TUserGroupWarehouseRelationMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.userinfo.model.TUserGroupWarehouseRelation">
+    <id column="relation_id" jdbcType="BIGINT" property="relationId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="ware_house_id" jdbcType="BIGINT" property="wareHouseId" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+<!--    内嵌关联结果 仓库数据 必须添加 column 和 id 属性 否则会有性能问题 -->
+    <association property="wareHouse" javaType="com.lcdt.userinfo.model.Warehouse" autoMapping="true" column="ware_house_id"
+    >
+      <id property="whId" column="wh_id" />
+    </association>
+
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_user_group_warehouse_relation
+    where relation_id = #{relationId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.userinfo.model.TUserGroupWarehouseRelation">
+    <selectKey keyProperty="relationId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_user_group_warehouse_relation (user_id, ware_house_id, create_date, 
+      version)
+    values (#{userId,jdbcType=BIGINT}, #{wareHouseId,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{version,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.TUserGroupWarehouseRelation">
+    update t_user_group_warehouse_relation
+    set user_id = #{userId,jdbcType=BIGINT},
+      ware_house_id = #{wareHouseId,jdbcType=BIGINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      version = #{version,jdbcType=INTEGER}
+    where relation_id = #{relationId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select relation_id, user_id, ware_house_id, create_date, version
+    from t_user_group_warehouse_relation
+    where relation_id = #{relationId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select relation_id, user_id, ware_house_id, create_date, version
+    from t_user_group_warehouse_relation
+  </select>
+
+  <select id="selectAddedUserGroupWareHouse" resultMap="BaseResultMap">
+     select r.relation_id, r.user_id, r.ware_house_id, r.create_date, r.version,r.group_id,r.company_id, w.*
+    from t_user_group_warehouse_relation r
+    left join t_warehouse w
+    on r.ware_house_id = w.wh_id
+    where r.group_id = #{groupId} and r.company_id = #{companyId}
+</select>
+
+  <select id="selectNotAddUserGroupWareHouse" resultMap="BaseResultMap">
+
+
+
+  </select>
+
+
+
+</mapper>

@@ -93,6 +93,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User userLogin(String username, String pwd) throws UserNotExistException, PassErrorException {
 		User user = queryByPhone(username);
+
 		if (user.getPwd() == null) {
 			throw new PassErrorException();
 		}
