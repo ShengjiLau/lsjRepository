@@ -389,7 +389,7 @@
       </foreach>
   </insert>
   
-  <select id="getFeeExchangeListByCondition">
+  <select id="getFeeExchangeListByCondition" resultMap="BaseResultMap">
   	 select 
     <include refid="Base_Column_List" />
     from t_fee_exchange
@@ -421,11 +421,13 @@
   	exchange_id = #{item,jdbcType=BIGINT}
   	</where>
   	</foreach>
-  	
-  
-  
-  
-  
   </update>
+  
+  <select id="selectCountFeeExchangeByReconcileId">
+  select count(*) from t_fee_exchange
+  <where>
+  reconcile_id = #{reconcileId,jdbcType=BIGINT}
+  </where>
+  </select>
   
 </mapper>

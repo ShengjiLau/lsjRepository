@@ -3,33 +3,58 @@ package com.lcdt.traffic.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Reconcile implements Serializable {
-    private Long reconcileId;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+/**
+ * @author Sheng-ji Lau
+ * @date 2018年4月18日
+ * @version
+ * @Description: TODO 
+ */
+@ApiModel("对账单")
+public class Reconcile implements Serializable {
+
+	@ApiModelProperty("对账单id")
+    private Long reconcileId;
+	
+	@ApiModelProperty("对账单单号")
     private String reconcileCode;
 
+	@ApiModelProperty("所属公司id")
     private Long companyId;
 
+	@ApiModelProperty("对账金额")
     private Double accountAmount;
 
+	@ApiModelProperty("操作人id")
     private Long operatorId;
 
+	@ApiModelProperty("操作人姓名")
     private String operatorName;
 
+	@ApiModelProperty("对账单生成时间")
     private Date createTime;
 
+	@ApiModelProperty("取消对账单")
     private Short cancelOk;
 
+	@ApiModelProperty("记账单id,可能为多个")
     private String accountId;
 
+	@ApiModelProperty("运单id,可能为多个")
     private String waybillId;
 
+	@ApiModelProperty("对账类型:0应收/1应付")
     private Short payeeType;
 
+	@ApiModelProperty("收付款方id")
     private Long payerId;
 
+	@ApiModelProperty("收付款方名称")
     private String payerName;
 
+	@ApiModelProperty("业务组id")
     private Long groupId;
 
     private static final long serialVersionUID = 1L;
