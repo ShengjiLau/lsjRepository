@@ -93,9 +93,9 @@ public interface FeeAccountService {
     PageInfo<List<FeeAccountWaybillDto>> feeAccountCustomerWaybillList(Map map);
 
     /**
-     * 记账单对账
+     * 记账单对账页面
      * @param map
      * @return
      */
-//    List feeAccountWaybillList(Map map);
+    List feeAccountReconcilePage(Map map);
 }
