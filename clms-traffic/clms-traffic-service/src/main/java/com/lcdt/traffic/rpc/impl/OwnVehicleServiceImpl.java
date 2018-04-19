@@ -283,4 +283,14 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
     public List<Driver> getGpsInfo(List<String> driverPhoneList) {
         return driverService.getGpsInfo(driverPhoneList);
     }
+
+    @Override
+    public int syncVehicleInfo(OwnVehicle ownVehicle){
+        int result = 0;
+        int row = ownVehicleMapper.selectVehicleNum(ownVehicle);
+        if(row==0){ //如果该车辆不在里面，则创建一条记录
+            result = ownVehicleMapper.insert(ownVehicle);
+        }
+        return result;
+    }
 }
