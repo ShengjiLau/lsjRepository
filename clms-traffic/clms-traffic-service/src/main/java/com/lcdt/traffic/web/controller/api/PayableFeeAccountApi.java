@@ -92,24 +92,24 @@ public class PayableFeeAccountApi {
         {
             map.put("groupIds", GroupIdsUtil.getOwnGroupIds(dto.getGroupId()));
         }
-        map.put("isReceivable",(short)0);
+        map.put("isReceivable",(short)1);
         PageInfo<List<FeeAccountWaybillDto>> listPageInfo = feeAccountService.feeAccountWaybillList(map);
+        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code",0);
         jsonObject.put("message","请求成功");
 
         Map data = new HashMap();
-        data.put("list", listPageInfo.getList());
-        data.put("total", listPageInfo.getTotal());
+        data.put("list", pageBaseDto.getList());
+        data.put("total", pageBaseDto.getTotal());
 
         map.put("waybillType", 0);//我的运单
         FeeAccountWaybillDto feeTotalDto = feeAccountService.feeAccountWaybillFeeTotal(map);
-        data.put("feeTotal", FinanceUtil.getFeeTotalDto(feeTotalDto));
+        data.put("feeTotal", FinanceUtil.getFeeTotalDto(pageBaseDto.getTotal(), feeTotalDto));
 
         jsonObject.put("data",data);
 
         return jsonObject;
-//        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
 //        return pageBaseDto;
     }
 
@@ -129,24 +129,24 @@ public class PayableFeeAccountApi {
         {
             map.put("groupIds",GroupIdsUtil.getCustomerGroupIds(dto.getGroupId()));
         }
-        map.put("isReceivable",(short)0);
+        map.put("isReceivable",(short)1);
         PageInfo<List<FeeAccountWaybillDto>> listPageInfo = feeAccountService.feeAccountCustomerWaybillList(map);
+        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code",0);
         jsonObject.put("message","请求成功");
 
         Map data = new HashMap();
-        data.put("list", listPageInfo.getList());
-        data.put("total", listPageInfo.getTotal());
+        data.put("list", pageBaseDto.getList());
+        data.put("total", pageBaseDto.getTotal());
 
         map.put("waybillType", 1);//客户运单
         FeeAccountWaybillDto feeTotalDto = feeAccountService.feeAccountWaybillFeeTotal(map);
-        data.put("feeTotal", FinanceUtil.getFeeTotalDto(feeTotalDto));
+        data.put("feeTotal", FinanceUtil.getFeeTotalDto(pageBaseDto.getTotal(), feeTotalDto));
 
         jsonObject.put("data",data);
 
         return jsonObject;
-//        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
 //        return pageBaseDto;
     }
     @ApiOperation("应付记账——记账(进入记账页面)")
@@ -222,7 +222,7 @@ public class PayableFeeAccountApi {
         map.put("waybillId", waybillId);
         map.put("isReceivable", (short)1);
         List<FeeAccountDto> list = feeAccountService.selectFlowByWaybillId(map);
-        if (list != null && list.size() > 0) {
+        if (list != null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "流水详情");
@@ -236,14 +236,28 @@ public class PayableFeeAccountApi {
     @ApiOperation("应付记账单——列表")
     @RequestMapping(value = "/feeAccountList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_list')")
-    public PageBaseDto feeAccountList(@Validated FeeAccountDto dto) {
+    public JSONObject feeAccountList(@Validated FeeAccountDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         dto.setCompanyId(companyId);
         dto.setIsDeleted((short)0);
         dto.setIsReceivable((short)1);
         PageInfo<List<FeeAccountDto>> listPageInfo = feeAccountService.feeAccountList(dto);
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
-        return pageBaseDto;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code",0);
+        jsonObject.put("message","请求成功");
+
+        Map data = new HashMap();
+        data.put("list", pageBaseDto.getList());
+        data.put("total", pageBaseDto.getTotal());
+
+        FeeAccountDto feeTotalDto = feeAccountService.feeAccountFeeTotal(dto);
+        data.put("feeTotal", FinanceUtil.getFeeAccountFeeTotalDto(pageBaseDto.getTotal(), feeTotalDto));
+
+        jsonObject.put("data",data);
+
+        return jsonObject;
+//        return pageBaseDto;
     }
 
     @ApiOperation("应付记账单——列表留言")

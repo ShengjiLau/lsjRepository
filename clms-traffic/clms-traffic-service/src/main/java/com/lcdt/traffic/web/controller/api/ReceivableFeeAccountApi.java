@@ -106,7 +106,7 @@ public class ReceivableFeeAccountApi {
 
         map.put("waybillType", 0);//我的运单
         FeeAccountWaybillDto feeTotalDto = feeAccountService.feeAccountWaybillFeeTotal(map);
-        data.put("feeTotal", FinanceUtil.getFeeTotalDto(feeTotalDto));
+        data.put("feeTotal", FinanceUtil.getFeeTotalDto(pageBaseDto.getTotal(), feeTotalDto));
 
         jsonObject.put("data",data);
 
@@ -143,7 +143,7 @@ public class ReceivableFeeAccountApi {
 
         map.put("waybillType", 1);//客户运单
         FeeAccountWaybillDto feeTotalDto = feeAccountService.feeAccountWaybillFeeTotal(map);
-        data.put("feeTotal", FinanceUtil.getFeeTotalDto(feeTotalDto));
+        data.put("feeTotal", FinanceUtil.getFeeTotalDto(pageBaseDto.getTotal(), feeTotalDto));
 
         jsonObject.put("data",data);
 
@@ -224,7 +224,7 @@ public class ReceivableFeeAccountApi {
         map.put("waybillId", waybillId);
         map.put("isReceivable", (short)0);
         List<FeeAccountDto> list = feeAccountService.selectFlowByWaybillId(map);
-        if (list != null && list.size() > 0) {
+        if (list != null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "流水详情");
@@ -254,7 +254,7 @@ public class ReceivableFeeAccountApi {
         data.put("total", pageBaseDto.getTotal());
 
         FeeAccountDto feeTotalDto = feeAccountService.feeAccountFeeTotal(dto);
-        data.put("feeTotal", FinanceUtil.getFeeAccountFeeTotalDto(feeTotalDto));
+        data.put("feeTotal", FinanceUtil.getFeeAccountFeeTotalDto(pageBaseDto.getTotal(), feeTotalDto));
 
         jsonObject.put("data",data);
 

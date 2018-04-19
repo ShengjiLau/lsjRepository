@@ -108,17 +108,19 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     }
     @Override
     public Map feeAccountPage(Map m){
-        List<WaybillItems> waybillItemsList = waybillItemsMapper.selectByWaybillId(Long.parseLong(m.get("waybillId").toString()));
-        List<FeeAccountDto> feeAccountDtoList = feeAccountMapper.selectFeeAccountDetail(m);
-        m.put("isShow", (short)0);
-        List<FeeProperty> showPropertyList = financeRpcService.selectByCondition(m);
-        m.put("isShow", (short)1);
-        List<FeeProperty> hidePropertyList = financeRpcService.selectByCondition(m);
         Map map = new HashMap();
-        map.put("waybillItemsList", waybillItemsList);
-        map.put("feeAccountDtoList", feeAccountDtoList);
-        map.put("showPropertyList", showPropertyList);
-        map.put("hidePropertyList", hidePropertyList);
+        List<FeeAccountDto> feeAccountDtoList = feeAccountMapper.selectFeeAccountDetail(m);
+        if(feeAccountDtoList != null && feeAccountDtoList.size() > 0){
+            List<WaybillItems> waybillItemsList = waybillItemsMapper.selectByWaybillId(Long.parseLong(m.get("waybillId").toString()));
+            m.put("isShow", (short)0);
+            List<FeeProperty> showPropertyList = financeRpcService.selectByCondition(m);
+            m.put("isShow", (short)1);
+            List<FeeProperty> hidePropertyList = financeRpcService.selectByCondition(m);
+            map.put("waybillItemsList", waybillItemsList);
+            map.put("feeAccountDtoList", feeAccountDtoList);
+            map.put("showPropertyList", showPropertyList);
+            map.put("hidePropertyList", hidePropertyList);
+        }
         return map;
     }
     @Override
