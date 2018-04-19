@@ -290,9 +290,9 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         return result;
     }
 
-//    @Override
-//    public List feeAccountReconcileGroup(Map map) {
-//        List list = feeAccountMapper.reconcileByAccountIds(map);
-//        return list;
-//    }
+    @Override
+    public List feeAccountReconcilePage(Map map) {
+        List list = feeAccountMapper.feeAccountGroupByReceivPayName(map);
+        return list;
+    }
 }

@@ -307,51 +307,54 @@ public class ReceivableFeeAccountApi {
         }
     }
 
-    @ApiOperation("应收记账单——对账")
+    @ApiOperation("应收记账单——对账（进入对账页面）")
     @RequestMapping(value = "/feeAccountReconcilePage", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receivable_fee_account_reconcile_page')")
-    public JSONObject feeAccountReconcilePage(@ApiParam(value = "0-取消审核，1-审核",required = true) @RequestParam short auditStatus,
-                                              @ApiParam(value = "记账单IDs",required = true) @RequestParam List<Long> accountIds) {
-//        Map map = new HashMap();
-//        map.put("accountIds", accountIds);
-//        List list = feeAccountService.feeAccountReconcileGroup(map);
-//        if (list != null && list.size() > 0) {
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("data", list);
-//            jsonObject.put("code", 0);
-//            jsonObject.put("message", "对账详情");
-//            return jsonObject;
-//        } else {
-        throw new RuntimeException("无数据");
-//        }
+    public JSONObject feeAccountReconcilePage(@ApiParam(value = "记账单IDs",required = true) @RequestParam List<Long> accountIds) {
+        Map map = new HashMap();
+        map.put("accountIds", accountIds);
+        List list = feeAccountService.feeAccountReconcilePage(map);
+        if (list != null) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("data", list);
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "对账详情");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("获取失败");
+        }
     }
 
     @ApiOperation("应收记账单——对账单保存")
     @RequestMapping(value = "/feeAccountReconcileSave", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receivable_fee_account_reconcile_save')")
-    public JSONObject feeAccountReconcileSave(@ApiParam(value = "0-取消审核，1-审核",required = true) @RequestParam short auditStatus,
-                                              @ApiParam(value = "记账单IDs",required = true) @RequestParam List<Long> accountIds) {
-//        Map map = new HashMap();
-//        map.put("accountIds", accountIds);
-//        List<Map<String,Object>> list = feeAccountService.feeAccountReconcileGroup(map);
-//        if (list != null && list.size() > 0) {
-//            for(Map<String,Object> m : list){
-//                m.put("reconcileCode",1);
-//                m.put("companyId",SecurityInfoGetter.getCompanyId());
-//                m.put("groupId",1);
-//                m.put("account_amount",m.get("money"));
-//                m.put("operatorId",SecurityInfoGetter.getUser().getUserId());
-//                m.put("operatorName",SecurityInfoGetter.getUser().getRealName());
-//                m.put("isReceivable",0);
-//                m.put("createTime",new Date());
-//            }
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("data", list);
-//            jsonObject.put("code", 0);
-//            jsonObject.put("message", "对账详情");
-//            return jsonObject;
-//        } else {
-        throw new RuntimeException("无数据");
-//        }
+    public JSONObject feeAccountReconcileSave(@ApiParam(value = "记账单IDs",required = true) @RequestParam List<Long> accountIds) {
+        Map map = new HashMap();
+        map.put("accountIds", accountIds);
+        List<Map<String,Object>> list = feeAccountService.feeAccountReconcilePage(map);
+        if (list != null && list.size() > 0) {
+            Date createTime = new Date();
+            for(Map<String,Object> m : list){
+                m.put("companyId",SecurityInfoGetter.getCompanyId());
+                m.put("accountAmount",m.get("moneySum"));
+                m.put("operatorId",SecurityInfoGetter.getUser().getUserId());
+                m.put("operatorName",SecurityInfoGetter.getUser().getRealName());
+                m.put("createTime",createTime);
+                m.put("cancelOk",0);
+                m.put("waybillId",m.get("waybillIds"));
+                m.put("accountId",m.get("accountId"));
+                m.put("payeeType",0);
+                m.put("payerId",m.get("nameId"));
+                m.put("payerName",m.get("name"));
+                m.put("groupId",SecurityInfoGetter.groups());
+            }
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("data", list);
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "对账详情");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("无数据");
+        }
     }
 }
