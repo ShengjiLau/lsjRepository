@@ -8,7 +8,7 @@ public interface GroupWareHouseService {
 
     List<TUserGroupWarehouseRelation> addedUserGroupWareHouse(Long companyId,Long groupId);
 
-    List<TUserGroupWarehouseRelation> notAddUserGroupWareHouse();
+    List<TUserGroupWarehouseRelation> notAddUserGroupWareHouse(Long companyId,Long groupId);
 
-
+    TUserGroupWarehouseRelation addWareHouseRelation(Long groupId,Long companyId,Long wareHouseId);
 }

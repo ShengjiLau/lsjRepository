@@ -55,9 +55,13 @@
     where r.group_id = #{groupId} and r.company_id = #{companyId}
 </select>
 
+  <!--查询所有没有和group关联的 仓库-->
   <select id="selectNotAddUserGroupWareHouse" resultMap="BaseResultMap">
-
-
+SELECT w.* ,re.*  from t_warehouse w
+  left join t_user_group_warehouse_relation re on w.wh_id = re.ware_house_id
+where w.wh_id not in (SELECT r.ware_house_id from t_user_group_warehouse_relation r
+  WHERE r.company_id = #{companyId} and r.group_id = #{groupId}
+)
 
   </select>
 
