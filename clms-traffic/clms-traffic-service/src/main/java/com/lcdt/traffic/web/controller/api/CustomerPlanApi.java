@@ -560,7 +560,6 @@ public class CustomerPlanApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_offer_load_data') or hasAuthority('traffic_customer_plan_offer') or hasAuthority('traffic_customer_plan_offer_1')")
     public WaybillPlan customerPlanOfferOwner(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId,
                                             @ApiParam(value = "创建计划企业ID",required = true) @RequestParam Long companyId) {
-
         WaybillParamsDto dto = new WaybillParamsDto();
         dto.setCompanyId(companyId);
         dto.setWaybillPlanId(waybillPlanId);
@@ -650,8 +649,6 @@ public class CustomerPlanApi {
         dto.setCompanyId(null);
         dto.setWaybillPlanId(waybillPlanId);
         WaybillPlan waybillPlan = iPlanRpcService4Wechat.loadWaybillPlan(dto);
-
-
         List<Waybill> waybillLists = waybillPlan.getWaybillList();
         if (splitGoodsId!=null && null!=waybillLists && waybillLists.size()>0) { //过滤非派单记录
             List<Waybill> removeList = new ArrayList<Waybill>();
