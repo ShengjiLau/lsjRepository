@@ -85,4 +85,23 @@ public class OwnVehicleApi {
 
     }
 
+    @ApiOperation(value = "车辆同步", notes = "小程序报价，如果车辆信息在承运商里没有则创建")
+    @GetMapping("/current_location")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_list')")
+    public JSONObject syncVehicle(@RequestBody OwnVehicle ownVehicle) {
+        Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId(); //  获取companyId
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("code",0);
+            jsonObject.put("messages","同步成功!");
+            ownVehicleService.syncVehicleInfo(ownVehicle);
+        } catch (Exception e){
+            jsonObject.put("code",-1);
+            jsonObject.put("messages","同步失败!");
+        }
+
+        return jsonObject;
+    }
+
+
 }
