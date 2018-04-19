@@ -105,7 +105,7 @@ public class PurchaseContractApprovalApi {
 
     @ApiOperation(value = "撤销审批", notes = "撤销操作")
     @PostMapping(value = "/revoke")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_approval_operate')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_approval_revoke')")
     public JSONObject revokeApproval(@RequestBody ContractApproval contractApproval) {
         int result = contractApprovalService.revokeApproval(contractApproval);
         JSONObject jsonObject = new JSONObject();
@@ -137,7 +137,7 @@ public class PurchaseContractApprovalApi {
 
     @ApiOperation(value = "抄送", notes = "抄送操作")
     @PostMapping(value = "/cc")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_approval_operate')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_approval_cc')")
     public JSONObject ccApproval(@RequestBody List<ContractApproval> contractApprovalList) {
         int result = contractApprovalService.ccApproval(contractApprovalList);
         JSONObject jsonObject = new JSONObject();

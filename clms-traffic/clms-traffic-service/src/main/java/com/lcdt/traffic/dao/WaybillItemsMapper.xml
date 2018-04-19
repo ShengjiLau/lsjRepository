@@ -20,6 +20,8 @@
     <result column="receipt_amount" jdbcType="REAL" property="receiptAmount" />
     <result column="freight_price" jdbcType="REAL" property="freightPrice" />
     <result column="freight_total" jdbcType="REAL" property="freightTotal" />
+    <result column="pay_price" jdbcType="REAL" property="payPrice" />
+    <result column="pay_total" jdbcType="REAL" property="payTotal" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
@@ -51,14 +53,14 @@
     insert into t_waybill_items (split_goods_detail_id,plan_detail_id,waybill_id, goods_id, goods_name,
       sub_goods_id, goods_spec, unit, 
       amount, receipt_amount, freight_price, 
-      freight_total, remark, create_id, 
+      freight_total,pay_price, pay_total, remark, create_id,
       create_name, create_date, update_id, 
       update_name, update_date, is_deleted,
       company_id)
     values (#{splitGoodsDetailId,jdbcType=BIGINT},#{planDetailId,jdbcType=BIGINT},#{waybillId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{goodsName,jdbcType=VARCHAR},
       #{subGoodsId,jdbcType=BIGINT}, #{goodsSpec,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
       #{amount,jdbcType=REAL}, #{receiptAmount,jdbcType=REAL}, #{freightPrice,jdbcType=REAL}, 
-      #{freightTotal,jdbcType=REAL}, #{remark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
+      #{freightTotal,jdbcType=REAL}, #{payPrice,jdbcType=REAL},#{payTotal,jdbcType=REAL}, #{remark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT},
       #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, 
       #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP},0,
       #{companyId,jdbcType=BIGINT})
@@ -82,6 +84,8 @@
       receipt_amount = #{receiptAmount,jdbcType=REAL},
       freight_price = #{freightPrice,jdbcType=REAL},
       freight_total = #{freightTotal,jdbcType=REAL},
+      pay_price = #{payPrice,jdbcType=REAL},
+      pay_total = #{payTotal,jdbcType=REAL},
       remark = #{remark,jdbcType=VARCHAR},
       create_id = #{createId,jdbcType=BIGINT},
       create_name = #{createName,jdbcType=VARCHAR},
@@ -100,7 +104,7 @@
       This element was generated on Wed Dec 20 17:19:52 CST 2017.
     -->
     select id,split_goods_detail_id,plan_detail_id, waybill_id, goods_id, goods_name, sub_goods_id, goods_spec, unit, amount,
-    receipt_amount, freight_price, freight_total, remark, create_id, create_name, create_date, 
+    receipt_amount, freight_price, freight_total, pay_price, pay_total,remark, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted, company_id
     from t_waybill_items
     where id = #{id,jdbcType=BIGINT}
@@ -112,7 +116,7 @@
       This element was generated on Wed Dec 20 17:19:52 CST 2017.
     -->
     select id,split_goods_detail_id,plan_detail_id,  waybill_id, goods_id, goods_name, sub_goods_id, goods_spec, unit, amount,
-    receipt_amount, freight_price, freight_total, remark, create_id, create_name, create_date, 
+    receipt_amount, freight_price, freight_total,pay_price, pay_total, remark, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted, company_id
     from t_waybill_items
   </select>
@@ -121,7 +125,7 @@
     insert into t_waybill_items (split_goods_detail_id,plan_detail_id, waybill_id, goods_id, goods_name,
     sub_goods_id, goods_spec, unit,
     amount, receipt_amount, freight_price,
-    freight_total, remark, create_id,
+    freight_total,pay_price, pay_total, remark, create_id,
     create_name, create_date, update_id,
     update_name, update_date, is_deleted,
     company_id)
@@ -131,7 +135,7 @@
       #{item.waybillId,jdbcType=BIGINT}, #{item.goodsId,jdbcType=BIGINT}, #{item.goodsName,jdbcType=VARCHAR},
       #{item.subGoodsId,jdbcType=BIGINT}, #{item.goodsSpec,jdbcType=VARCHAR}, #{item.unit,jdbcType=VARCHAR},
       #{item.amount,jdbcType=REAL}, #{item.receiptAmount,jdbcType=REAL}, #{item.freightPrice,jdbcType=REAL},
-      #{item.freightTotal,jdbcType=REAL}, #{item.remark,jdbcType=VARCHAR}, #{item.createId,jdbcType=BIGINT},
+      #{item.freightTotal,jdbcType=REAL}, #{item.payPrice,jdbcType=REAL},#{item.payTotal,jdbcType=REAL},#{item.remark,jdbcType=VARCHAR}, #{item.createId,jdbcType=BIGINT},
       #{item.createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{item.updateId,jdbcType=BIGINT},
       #{item.updateName,jdbcType=VARCHAR}, #{item.updateDate,jdbcType=TIMESTAMP}, 0,
       #{item.companyId,jdbcType=BIGINT})
@@ -145,6 +149,8 @@
       receipt_amount = #{tem.receiptAmount,jdbcType=REAL},
       freight_price = #{tem.freightPrice,jdbcType=REAL},
       freight_total = #{tem.freightTotal,jdbcType=REAL},
+      pay_price = #{tem.payPrice,jdbcType=REAL},
+      pay_total = #{tem.payTotal,jdbcType=REAL},
       remark = #{tem.remark,jdbcType=VARCHAR},
       update_id = #{tem.updateId,jdbcType=BIGINT},
       update_name = #{tem.updateName,jdbcType=VARCHAR},
@@ -155,7 +161,7 @@
 
   <select id="selectByWaybillId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select id, split_goods_detail_id,plan_detail_id,waybill_id, goods_id, goods_name, sub_goods_id, goods_spec, unit, amount,
-    receipt_amount, freight_price, freight_total, remark, create_id, create_name, create_date,
+    receipt_amount, freight_price, freight_total,pay_price, pay_total, remark, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted, company_id
     from t_waybill_items
     where waybill_id=#{id,jdbcType=BIGINT}

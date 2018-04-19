@@ -638,6 +638,15 @@ public class WaybillPlan implements java.io.Serializable,ResponseData {
     private String carrierIds;
     private String carrierNames;
 
+    private Short carrierAllIds; //0-其它1-承运商2-司机
+
+    public Short getCarrierAllIds() {
+        return carrierAllIds;
+    }
+
+    public void setCarrierAllIds(Short carrierAllIds) {
+        this.carrierAllIds = carrierAllIds;
+    }
 
     public String getCarrierDriverIds() {
         return carrierDriverIds;
