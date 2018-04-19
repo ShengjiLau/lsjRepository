@@ -59,4 +59,11 @@ public interface OwnVehicleService {
      * @return
      */
     List<Driver> getGpsInfo(List<String> driverPhoneList);
+
+
+    /**
+     * 同步车辆信息
+     * @return
+     */
+    int syncVehicleInfo(OwnVehicle ownVehicle);
 }
