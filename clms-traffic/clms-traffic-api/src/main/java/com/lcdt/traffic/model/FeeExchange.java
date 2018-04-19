@@ -3,6 +3,11 @@ package com.lcdt.traffic.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,21 +24,27 @@ public class FeeExchange implements Serializable {
 	@ApiModelProperty("收付款记录id")
     private Long exchangeId;
 	
+	@NotNull(message="对账单id不可为空")
 	@ApiModelProperty("对账单id")
     private Long reconcileId;
 	
+	@NotEmpty(message="对账单号不可为空")
 	@ApiModelProperty("对账单单号")
     private String reconcileCode;
 	
+	@NotEmpty(message="收付款姓名不可为空")
 	@ApiModelProperty("收付款方姓名")
     private String payerName;
-
+	
+	@NotNull(message="收付款类型不可为空")
 	@ApiModelProperty("应收应付类型:0收款/1付款")
     private Short type;
-
+	
+	@NotNull(message="应收总金额不可为空")
 	@ApiModelProperty("应收总金额")
     private Double accountAmount;
-
+	
+	@NotNull(message="此次收付款金额不可为空")
 	@ApiModelProperty("此次收款金额")
     private Double thisAmount;
 
@@ -67,21 +78,23 @@ public class FeeExchange implements Serializable {
 	@ApiModelProperty("附件5地址")
     private String attachment5;
 
-	@ApiModelProperty("作废收付款记录,此参数前端任何时候都不需要传")
+	@ApiModelProperty("作废收付款记录,此参数前端任何时候都不需要传,0为不作废/1为作废")
     private Short cancelOk;
 
 	@ApiModelProperty("创建时间,后端生成")
     private Date createTime;
 
+	@NotBlank(message="实际收款时间")
 	@ApiModelProperty("实际收付款时间")
     private Date operateTime;
-
-	@ApiModelProperty("支付方式,如支付宝等")
+	
+	@NotBlank(message="收付款方式")
+	@ApiModelProperty("收付款方式,如支付宝等")
     private String exchangeType;
 
 	@ApiModelProperty("收付款账户")
     private String exchangeAccount;
-
+	
 	@ApiModelProperty("所属公司id")
     private Long companyId;
 
@@ -93,10 +106,12 @@ public class FeeExchange implements Serializable {
 
 	@ApiModelProperty("备注")
     private String remark;
-
+	
+	@NotBlank(message="收付款账户名不可为空")
 	@ApiModelProperty("收付款账户名")
     private String exchangeName;
-
+	
+	@NotNull(message="业务组id不可为空")
 	@ApiModelProperty("业务组id")
     private Long groupId;
 

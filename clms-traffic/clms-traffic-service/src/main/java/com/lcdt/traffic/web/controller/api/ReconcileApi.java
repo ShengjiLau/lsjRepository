@@ -3,10 +3,10 @@ package com.lcdt.traffic.web.controller.api;
 
 
 
-import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONArray;
@@ -37,7 +38,7 @@ import io.swagger.annotations.ApiParam;
  */
 
 @RestController
-@Api("对账单api")
+@Api(description="对账单api")
 @RequestMapping("/fee/reconcile")
 public class ReconcileApi {
 	
@@ -54,7 +55,7 @@ public class ReconcileApi {
 	@ApiOperation(value = "添加对账单,fee_reconcile_add")
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_add')")
-	public JSONObject addReconcile(@Validated @RequestBody ReconcileListDto reconcileListDto,BindingResult bindingResult) {	 		
+	public JSONObject addReconcile(@Validated ReconcileListDto reconcileListDto,BindingResult bindingResult) {	 		
 		JSONObject jsonObject=validResponse(bindingResult);
 		if(!jsonObject.isEmpty()) {
 			return jsonObject;
@@ -71,40 +72,46 @@ public class ReconcileApi {
 		return jsonObject;
 	}
 	
+	
 	@PostMapping("/cancel")
 	@ApiOperation("取消订单,fee_reconcile_cancel")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_cancel')")
-	public JSONObject cancelReconcile(@ApiParam(value="一个或多个对账单id") Long[] reconcileIdList) {
-		JSONObject jsonObject =new JSONObject();
-		//查询对账单是否生成过收付款记录,如果对账单存在收付款记录,则不能取消,如果不存在收付款记录,则执行取消操作
-		Long[] temp = null;
-		int a=0;
+	public JSONObject cancelReconcile(@ApiParam(value="一个或多个对账单id,多个时用','隔开")@Param(value = "reconcileIds") String reconcileIds) {
+		logger.debug("?"+reconcileIds);
+		Long[] reconcileIdList =new Long[reconcileIds.length()];
+		String [] ss=reconcileIds.split(",");
+		for(int i=0;i<ss.length;i++) {
+			reconcileIdList[i]=Long.valueOf(ss[i]);
+		}
+		JSONObject jsonObject=new JSONObject();
+		jsonObject.put("code",0);
+		JSONArray jsonArray1=new JSONArray();//存取数组中存在收付款记录的reconcileId
+		JSONArray jsonArray2=new JSONArray();//存取数组中不存在收付款记录的reconcileId
+		//查询对账单是否生成过收付款记录,如果对账单存在收付款记录,则不能取消,如果不存在收付款记录,则执行取消操作		
 		for(int i=0;i<reconcileIdList.length;i++) {
 			int j=feeExchangeService.querySumFeeExchangeByReconcileId(reconcileIdList[i]);
 			if(j>0) {
-			temp[a]=reconcileIdList[i];
-			a+=1;
+				jsonArray1.add(reconcileIdList[i]);
 			}else {
-				
+				jsonArray2.add(reconcileIdList[i]);
 			}
 		}
-		if(temp.length>0) {
-			jsonObject.put("code",0);
-			jsonObject.put("msg","已存在收付款记录的对账单不可以取消");
-			jsonObject.put("data",temp);
-			return jsonObject;
-		}			
-		int i= reconcileIdList.length;
-		int result=reconcileService.setCancelOk(reconcileIdList);
-		if(i==result) {
-			jsonObject.put("code",0);
-			jsonObject.put("msg","取消成功");
-			return jsonObject;
+		if(jsonArray1.size()>0) {			
+			jsonObject.put("msg1","存在收付款记录的对账单不能取消");
+			jsonObject.put("data:无法取消的对账单id",jsonArray1);
+		}
+		if(jsonArray2.size()>0) {
+			int i= jsonArray2.size();
+			int result=reconcileService.setCancelOk((Long[]) jsonArray2.toArray());
+			if(i==result) {
+				jsonObject.put("msg","取消成功");
+				return jsonObject;
 		}else {
 			throw new RuntimeException("取消对账单时出现异常");
 		}
+		}
+		return jsonObject;			
 	}
-	
 	
 	
 	@GetMapping("/list")

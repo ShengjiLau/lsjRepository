@@ -3,6 +3,10 @@ package com.lcdt.traffic.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -36,24 +40,28 @@ public class Reconcile implements Serializable {
 	@ApiModelProperty("对账单生成时间")
     private Date createTime;
 
-	@ApiModelProperty("取消对账单")
+	@ApiModelProperty("取消对账单,生成和取消对账单时不需要传入参数,查询时需传入;0不取消/1取消")
     private Short cancelOk;
 
-	@ApiModelProperty("记账单id,可能为多个")
+	@ApiModelProperty("记账单id,可能为多个,生成对账单时,前端将参数accountId放入accountIds中,此参数不必传")
     private String accountId;
 
-	@ApiModelProperty("运单id,可能为多个")
+	@ApiModelProperty("运单id,可能为多个,生成对账单时前端将参数waybillId放入waybillIds数组中,此参数不需要传")
     private String waybillId;
 
 	@ApiModelProperty("对账类型:0应收/1应付")
+	@NotNull(message="对账类型不可为空")
     private Short payeeType;
-
+	
+	@NotNull(message="收付款方id不可为空")
 	@ApiModelProperty("收付款方id")
     private Long payerId;
-
+	
+	@NotBlank(message="收付款名称不可为空")
 	@ApiModelProperty("收付款方名称")
     private String payerName;
-
+	
+	@NotNull(message="业务组id不可为空")
 	@ApiModelProperty("业务组id")
     private Long groupId;
 

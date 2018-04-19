@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,8 +39,11 @@ public class FeeExchangeApi {
 	@PostMapping("/add")
 	@ApiOperation("新增收付款记录")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_exchange_add')")
-	public JSONObject addFeeExchange(List<FeeExchange> feeExchangeList) {
-		JSONObject jsonObject =new JSONObject();
+	public JSONObject addFeeExchange(@Validated List<FeeExchange> feeExchangeList,BindingResult bindingResult) {
+		JSONObject jsonObject =validResponse(bindingResult);
+		if(!jsonObject.isEmpty()) {
+			return jsonObject;
+		}
 		int i=feeExchangeList.size();		
 		int j=feeExchangeService.insertFeeExchangeByBatch(feeExchangeList);
 		if(i==j) {
@@ -104,7 +109,22 @@ public class FeeExchangeApi {
 	}
 	
 	
-	
+	/**
+	 * 验证传入信息
+	 * @param bindingResult
+	 * @return
+	 */
+	public JSONObject validResponse(BindingResult bindingResult) {
+		JSONObject jsonObject =new JSONObject();
+		JSONArray jsonArray =new JSONArray();
+		if(bindingResult.hasErrors()) {
+			jsonObject.put("code",-1);
+			jsonObject.put("msg","验证信息未能通过");
+			bindingResult.getAllErrors().forEach(x->jsonArray.add(x.getDefaultMessage()));
+			jsonObject.put("data",jsonArray);
+		}
+		return jsonObject;
+	}
 	
 	
 

@@ -2,6 +2,8 @@ package com.lcdt.traffic.web.dto;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.lcdt.traffic.model.Reconcile;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -21,22 +23,23 @@ public class ReconcileDto extends Reconcile implements Serializable{
 	 */
 	private static final long serialVersionUID = -4584651511515L;
 	
+	@ApiModelProperty("查询起点时间")
 	private String beginTime;
 	
+	@ApiModelProperty("查询终点时间")
 	private String endTime;
 	
+	@ApiModelProperty("每页条目数")
 	private int pageSize;
 	
+	@ApiModelProperty("页码,第几页")
 	private int pageNum;
-
-	private Long group;
-	
-	@ApiModelProperty("业务组id数组")
-	private Long[] groupIds;
 	
 	@ApiModelProperty("记账单id数组")
+	@NotEmpty
 	private Long[] accountIds;
 	
+	@NotEmpty
 	@ApiModelProperty("运单id数组")
 	private Long[] waybillIds;
 	
@@ -77,26 +80,6 @@ public class ReconcileDto extends Reconcile implements Serializable{
 
 	public void setPageNum(int pageNum) {
 		this.pageNum = pageNum;
-	}
-
-
-	public Long getGroup() {
-		return group;
-	}
-
-
-	public void setGroup(Long group) {
-		this.group = group;
-	}
-
-
-	public Long[] getGroupIds() {
-		return groupIds;
-	}
-
-
-	public void setGroupIds(Long[] groupIds) {
-		this.groupIds = groupIds;
 	}
 
 

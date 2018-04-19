@@ -60,12 +60,18 @@ public class ReconcileServiceImpl implements ReconcileService {
 		r.setOperatorId(SecurityInfoGetter.getUser().getUserId());
 		r.setAccountId(convertLoToStr(reconcileDto.getAccountIds()));
 		r.setWaybillId(convertLoToStr(reconcileDto.getWaybillIds()));
+		r.setCancelOk((short) 0);
 		reconcileLists.add(r);
 	}
 	int result=reconcileMapper.insertByBatch(reconcileLists);
-	for(ReconcileDto reconcileDto:reconcileDtoList) {
-		Reconcile reconcile =reconcileMapper.selectByPrimaryKey(reconcileDto.getReconcileId());
-		Long[] acLongId=reconcileDto.getAccountIds();
+	for(Reconcile reconcile:reconcileLists) {
+		Reconcile rec =reconcileMapper.selectByPrimaryKey(reconcile.getReconcileId());
+		String str=rec.getAccountId();
+		String[] ss=str.split(",");	
+		Long[] acLongId=new Long[ss.length];
+		for(int i=0;i<ss.length;i++) {
+			acLongId[i]=Long.valueOf(ss[i]);
+		}
 		for(Long l:acLongId) {		
 			FeeAccount fa = new FeeAccount();
 			fa.setAccountId(l);
