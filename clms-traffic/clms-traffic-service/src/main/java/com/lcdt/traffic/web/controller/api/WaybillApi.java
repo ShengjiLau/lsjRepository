@@ -51,7 +51,7 @@ public class WaybillApi {
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
         dto.setCarrierCompanyId(companyId);
-        Waybill result = null;
+        Waybill result = waybillService.addWaybill(dto);
         if (result != null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
