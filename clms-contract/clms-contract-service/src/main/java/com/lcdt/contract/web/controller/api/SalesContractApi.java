@@ -128,8 +128,8 @@ public class SalesContractApi {
         }else if(contractStatus == 3){//3失效
             dto.setTerminationTime(new Date());
         }else{
-            dto.setIsDraft((short)1);
             ContractDto oldDto = contractService.selectByPrimaryKey(contractId);
+            oldDto.setIsDraft((short)1);
             dto = Utils.getContractStatus(oldDto);
         }
         int result = contractService.modContractStatus(dto);
