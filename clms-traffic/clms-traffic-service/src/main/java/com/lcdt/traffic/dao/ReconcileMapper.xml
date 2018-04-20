@@ -201,21 +201,29 @@
     where reconcile_id = #{reconcileId,jdbcType=BIGINT}
   </update>
   
-  <insert id="insertByBatch" useGeneratedKeys="true" keyProperty="reconcileId" keyColumn="reconcile_id">
-  	 insert into t_fee_reconcile (reconcile_id, reconcile_code, company_id, 
+  <insert id="insertByBatch" useGeneratedKeys="true" keyProperty="reconcileId" keyColumn="">
+   insert into t_fee_reconcile (reconcile_id, reconcile_code, company_id,
       account_amount, operator_id, operator_name, 
       create_time, cancel_ok, account_id, 
       waybill_id, payee_type, payer_id, 
       payer_name, group_id)
-      values
-  <foreach collection="list" item="item" separator=",">
-     (#{item.reconcileId,jdbcType=BIGINT}, #{item.reconcileCode,jdbcType=VARCHAR}, #{item.companyId,jdbcType=BIGINT},
-      #{item.accountAmount,jdbcType=DOUBLE}, #{item.operatorId,jdbcType=BIGINT}, 
-      #{item.operatorName,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
-      #{item.cancelOk,jdbcType=SMALLINT}, #{item.accountId,jdbcType=VARCHAR}, #{item.waybillId,jdbcType=VARCHAR}, 
-      #{item.payeeType,jdbcType=SMALLINT}, #{item.payerId,jdbcType=BIGINT}, #{item.payerName,jdbcType=VARCHAR}, 
-      #{item.groupId,jdbcType=BIGINT}
-      )
+  <foreach collection="list" index="index" item="rec">
+    values (#{rec.reconcileId,jdbcType=BIGINT},
+    <choose>
+    <when test="rec.payeeType==0">
+    RECONCILE_CODE('YS'),
+    </when>
+    <when test="rec.payeeType==1">
+    RECONCILE_CODE('YF'),
+    </when>
+    <otherwise></otherwise>
+    </choose>
+      #{rec.companyId,jdbcType=BIGINT},
+      #{rec.accountAmount,jdbcType=DOUBLE}, #{rec.operatorId,jdbcType=BIGINT}, #{rec.operatorName,jdbcType=VARCHAR},
+      CURRENT_TIMESTAMP,
+       #{rec.cancelOk,jdbcType=SMALLINT}, #{rec.accountId,jdbcType=VARCHAR},
+      #{rec.waybillId,jdbcType=VARCHAR}, #{rec.payeeType,jdbcType=SMALLINT}, #{rec.payerId,jdbcType=BIGINT},
+      #{rec.payerName,jdbcType=VARCHAR}, #{rec.groupId,jdbcType=BIGINT})
   </foreach>
   </insert>
   

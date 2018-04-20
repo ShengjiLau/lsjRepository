@@ -443,7 +443,7 @@
   
   <update id="updateReconcileByBatch">
     update t_fee_account
-  	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+  	<foreach collection="list" index="index" item="item">
   	<set>
   	 reconcile_id = #{item.reconcileId,jdbcType=BIGINT},reconcile_code = #{item.reconcileCode,jdbcType=VARCHAR}
   	</set>
