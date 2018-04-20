@@ -3,16 +3,16 @@ package com.lcdt.traffic.web.controller.api;
 
 
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +23,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.Reconcile;
 import com.lcdt.traffic.service.FeeExchangeService;
 import com.lcdt.traffic.service.ReconcileService;
+import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.ReconcileDto;
 import com.lcdt.traffic.web.dto.ReconcileListDto;
 
@@ -55,14 +56,16 @@ public class ReconcileApi {
 	@ApiOperation(value = "添加对账单,fee_reconcile_add")
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_add')")
-	public JSONObject addReconcile(@Validated ReconcileListDto reconcileListDto,BindingResult bindingResult) {	 		
+	public JSONObject addReconcile(@Validated ReconcileListDto reconcileListDto,BindingResult bindingResult) {			
 		JSONObject jsonObject=validResponse(bindingResult);
 		if(!jsonObject.isEmpty()) {
 			return jsonObject;
 		}
 		
-		int i= reconcileListDto.getReconcileList().size();
-		int result =reconcileService.insertReconcileBatch(reconcileListDto);
+		List<Reconcile> reconcileList=reconcileListDto.getReconcileList();
+		int i= reconcileList.size();
+		int result =reconcileService.insertReconcileBatch(reconcileList);
+		logger.debug("插入对账单数量:"+result);
 		if(result==i) {
 			jsonObject.put("code",0);
 			jsonObject.put("msg","添加成功");
@@ -76,10 +79,9 @@ public class ReconcileApi {
 	@PostMapping("/cancel")
 	@ApiOperation("取消订单,fee_reconcile_cancel")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_cancel')")
-	public JSONObject cancelReconcile(@ApiParam(value="一个或多个对账单id,多个时用','隔开")@Param(value = "reconcileIds") String reconcileIds) {
-		logger.debug("?"+reconcileIds);
-		Long[] reconcileIdList =new Long[reconcileIds.length()];
+	public JSONObject cancelReconcile(@ApiParam(value="一个或多个对账单id,多个时用','隔开",required=true)@RequestParam String reconcileIds) {
 		String [] ss=reconcileIds.split(",");
+		Long[] reconcileIdList =new Long[ss.length];	
 		for(int i=0;i<ss.length;i++) {
 			reconcileIdList[i]=Long.valueOf(ss[i]);
 		}
@@ -97,14 +99,18 @@ public class ReconcileApi {
 			}
 		}
 		if(jsonArray1.size()>0) {			
-			jsonObject.put("msg1","存在收付款记录的对账单不能取消");
+			jsonObject.put("message1","存在收付款记录的对账单不能取消");
 			jsonObject.put("data:无法取消的对账单id",jsonArray1);
 		}
 		if(jsonArray2.size()>0) {
-			int i= jsonArray2.size();
-			int result=reconcileService.setCancelOk((Long[]) jsonArray2.toArray());
-			if(i==result) {
-				jsonObject.put("msg","取消成功");
+			Long[] reconIds=new Long[jsonArray2.size()];
+			for(int i=0;i<jsonArray2.size();i++) {
+				reconIds[i]=(Long) jsonArray2.get(i);
+			}
+			
+			int result=reconcileService.setCancelOk(reconIds);
+			if(jsonArray2.size()==result) {
+				jsonObject.put("message2","取消成功");
 				return jsonObject;
 		}else {
 			throw new RuntimeException("取消对账单时出现异常");
@@ -119,13 +125,13 @@ public class ReconcileApi {
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_list')")
 	public JSONObject getReconcileList(ReconcileDto reconcileDto) {
 		JSONObject jsonObject =new JSONObject();
-		JSONArray jsonArray =new JSONArray();
 		PageInfo<Reconcile> page=reconcileService.getReconcileList(reconcileDto);
-		jsonArray.add(page.getTotal());
-		jsonArray.add(page.getList());
+		PageBaseDto<Reconcile> pagebase=new PageBaseDto<Reconcile>();
+		pagebase.setTotal(page.getTotal());
+		pagebase.setList(page.getList());
 		jsonObject.put("code",0);
-		jsonObject.put("msg","对账单列表信息");
-		jsonObject.put("data",jsonArray);
+		jsonObject.put("message","请求成功");
+		jsonObject.put("data",pagebase);
 		return jsonObject;
 	}
 	
@@ -133,12 +139,12 @@ public class ReconcileApi {
 	@GetMapping("/select")
 	@ApiOperation("查询对账单详情,fee_reconcile_select")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_select')")
-	public JSONObject selectReconcile(@ApiParam("对账单id") Long reconcileId) {
+	public JSONObject selectReconcile(@ApiParam(value="对账单id",required=true)@RequestParam Long reconcileId) {
 		JSONObject jsonObject =new JSONObject();		
 		Reconcile reconcile=reconcileService.selectReconcileByPk(reconcileId);
 		if(reconcile!=null) {
 			jsonObject.put("code",0);
-			jsonObject.put("msg","对账单详细信息");
+			jsonObject.put("message","请求成功");
 			jsonObject.put("data",reconcile);
 			return jsonObject;
 		}else {
@@ -159,7 +165,7 @@ public class ReconcileApi {
 		JSONArray jsonArray =new JSONArray();
 		if(bindingResult.hasErrors()) {
 			jsonObject.put("code",-1);
-			jsonObject.put("msg","验证信息未能通过");
+			jsonObject.put("message","验证信息未能通过");
 			bindingResult.getAllErrors().forEach(x->jsonArray.add(x.getDefaultMessage()));
 			jsonObject.put("data",jsonArray);
 		}

@@ -23,28 +23,17 @@ public class ReconcileListDto implements Serializable{
 
 	@ApiModelProperty("批量对账单")
 	@NotEmpty
-	private List<ReconcileDto> reconcileList;
-	
-	@ApiModelProperty()
-	private Double sumAmount;
+	private List<Reconcile> reconcileList;
 
-
-	public Double getSumAmount() {
-		return sumAmount;
-	}
-
-	public void setSumAmount(Double sumAmount) {
-		this.sumAmount = sumAmount;
-	}
-
-	public List<ReconcileDto> getReconcileList() {
+	public List<Reconcile> getReconcileList() {
 		return reconcileList;
 	}
 
-	public void setReconcileList(List<ReconcileDto> reconcileList) {
+	public void setReconcileList(List<Reconcile> reconcileList) {
 		this.reconcileList = reconcileList;
 	}
-
+	
+	
 	
 	
 	

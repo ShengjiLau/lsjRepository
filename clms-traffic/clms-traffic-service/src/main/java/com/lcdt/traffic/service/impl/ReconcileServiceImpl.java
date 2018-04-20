@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.springframework.beans.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,6 @@ import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.model.Reconcile;
 import com.lcdt.traffic.service.ReconcileService;
 import com.lcdt.traffic.web.dto.ReconcileDto;
-import com.lcdt.traffic.web.dto.ReconcileListDto;
 
 /**
  * @author Sheng-ji Lau
@@ -31,6 +31,8 @@ import com.lcdt.traffic.web.dto.ReconcileListDto;
 @Service
 public class ReconcileServiceImpl implements ReconcileService {
 	
+	Logger logger = LoggerFactory.getLogger(ReconcileServiceImpl.class);
+	
 	@Autowired
 	private ReconcileMapper reconcileMapper;
 	
@@ -39,32 +41,24 @@ public class ReconcileServiceImpl implements ReconcileService {
 	
 	/**
 	 * 插入对账单
-	 * 前端Api传入的参数为ReconcileListDto,包含多条ReconcileDto,
-	 * ReconcileDto包含记账单id数组,业务组id数组,运单id数组.
-	 * 此处的业务逻辑需要将这些id数组转化为字符串并赋值到Reconcile相对应的属性上.
-	 * 在批量插入Reconcile后,还需要获取相应的Reconcile的主键id和reconcileCode并将其添加到对应的记账单中
+	 * 先将对账单的集合执行批量插入操作
+	 * 再获取到插入后数据库生成的对账单ReconcileId和ReconcileCode
+	 * 将相应的Reconcile的主键id和reconcileCode并将其添加到对应的记账单中
 	 */
 	@Override
 	@Transactional
-	public int insertReconcileBatch(ReconcileListDto reconcileListDto) {
+	public int insertReconcileBatch(List<Reconcile> reconcileList) {
 		
-	List<ReconcileDto> reconcileDtoList=reconcileListDto.getReconcileList();
-	List<Reconcile> reconcileLists =new ArrayList<Reconcile>();
 	List<FeeAccount> feeAccountList=new ArrayList<FeeAccount>();
-	//添加创建人id,创建人名字,公司id,将传入的记账单id数组,业务组id数组,运单id数组转化为字符串存入Reconcile
-	for(ReconcileDto reconcileDto:reconcileDtoList) {
-		Reconcile r= new Reconcile();
-		BeanUtils.copyProperties(reconcileDto, r);		
-		r.setCompanyId(SecurityInfoGetter.getCompanyId());
-		r.setOperatorName(SecurityInfoGetter.getUser().getRealName());
-		r.setOperatorId(SecurityInfoGetter.getUser().getUserId());
-		r.setAccountId(convertLoToStr(reconcileDto.getAccountIds()));
-		r.setWaybillId(convertLoToStr(reconcileDto.getWaybillIds()));
-		r.setCancelOk((short) 0);
-		reconcileLists.add(r);
+	for(Reconcile fa:reconcileList) {
+		fa.setCompanyId(SecurityInfoGetter.getCompanyId());
+		fa.setOperatorId(SecurityInfoGetter.getUser().getUserId());
+		fa.setOperatorName(SecurityInfoGetter.getUser().getRealName());
+		fa.setCancelOk((short) 0);//生成对账单时取消状态设置为0不取消
 	}
-	int result=reconcileMapper.insertByBatch(reconcileLists);
-	for(Reconcile reconcile:reconcileLists) {
+	int result=reconcileMapper.insertByBatch(reconcileList);
+	
+	for(Reconcile reconcile:reconcileList) {
 		Reconcile rec =reconcileMapper.selectByPrimaryKey(reconcile.getReconcileId());
 		String str=rec.getAccountId();
 		String[] ss=str.split(",");	
@@ -75,18 +69,18 @@ public class ReconcileServiceImpl implements ReconcileService {
 		for(Long l:acLongId) {		
 			FeeAccount fa = new FeeAccount();
 			fa.setAccountId(l);
-			fa.setReconcileId(reconcile.getReconcileId());
-			fa.setReconcileCode(reconcile.getReconcileCode());
+			fa.setReconcileId(rec.getReconcileId());
+			fa.setReconcileCode(rec.getReconcileCode());
 			feeAccountList.add(fa);
 		}	
 	}
 	int i=feeAccountList.size();
+	logger.debug("应添加记账单ReconcileId数量:"+feeAccountList.size());
 	int j=feeAccountMapper.updateReconcileByBatch(feeAccountList);
-	if(i==j) {
-		return result;
-	}else {
-		return -1;
-	}	
+	logger.debug("实际添加记账单ReconcileId数量:"+j);
+	logger.debug("插入对账单数量为:"+result);	
+	
+	return result;	
 	}
 
 	
@@ -117,14 +111,16 @@ public class ReconcileServiceImpl implements ReconcileService {
 			fa.setAccountId(l);
 			fa.setReconcileId(null);
 			fa.setReconcileCode(null);
+			feeAccountList.add(fa);
 		}
-		int i=acclids.length;
-		int j=feeAccountMapper.updateReconcileByBatch(feeAccountList);
-		if(i==j) {
-			return result;
+		int i=acclids.length;int j;
+		if(0!=feeAccountList.size()) {
+			 j=feeAccountMapper.updateReconcileByBatch(feeAccountList);
 		}else {
-			return -1;
+			 j=0;
 		}
+			return result;
+		
 		
 	}
 	

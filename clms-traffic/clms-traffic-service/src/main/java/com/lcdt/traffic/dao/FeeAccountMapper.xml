@@ -442,15 +442,13 @@
     </foreach>
   </update>
   
-  <update id="updateReconcileByBatch">
-    update t_fee_account
-  	<foreach collection="list" index="index" item="item">
-  	<set>
-  	 reconcile_id = #{item.reconcileId,jdbcType=BIGINT},reconcile_code = #{item.reconcileCode,jdbcType=VARCHAR}
-  	</set>
-  	<where>
-  	account_id = #{item.accountId,jdbcType=BIGINT}
-  	</where>
+  <update id="updateReconcileByBatch" parameterType="java.util.List"> 
+  <foreach collection="list" index="index" item="item" separator=";" close="" open="">
+   update t_fee_account
+  	  set
+  	  reconcile_id = #{item.reconcileId,jdbcType=BIGINT},reconcile_code = #{item.reconcileCode,jdbcType=VARCHAR}
+  	  where
+  	  account_id = #{item.accountId,jdbcType=BIGINT}
   	</foreach>
   </update>
   

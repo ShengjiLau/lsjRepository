@@ -423,11 +423,12 @@
   	</foreach>
   </update>
   
-  <select id="selectCountFeeExchangeByReconcileId">
+  <select id="selectCountFeeExchangeByReconcileId" resultType="java.lang.Integer">
   select count(*) from t_fee_exchange
   <where>
   reconcile_id = #{reconcileId,jdbcType=BIGINT}
   </where>
   </select>
+  
   
 </mapper>

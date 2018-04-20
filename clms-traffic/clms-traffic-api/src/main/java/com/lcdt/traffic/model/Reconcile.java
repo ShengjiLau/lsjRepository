@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotBlank;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -42,30 +39,32 @@ public class Reconcile implements Serializable {
 
 	@ApiModelProperty("取消对账单,生成和取消对账单时不需要传入参数,查询时需传入;0不取消/1取消")
     private Short cancelOk;
-
-	@ApiModelProperty("记账单id,可能为多个,生成对账单时,前端将参数accountId放入accountIds中,此参数不必传")
+	
+	//@NotBlank(message="记账单id不可为空")
+	@ApiModelProperty("记账单id可能为多个,如果为多个用','隔开")
     private String accountId;
-
-	@ApiModelProperty("运单id,可能为多个,生成对账单时前端将参数waybillId放入waybillIds数组中,此参数不需要传")
+	
+	//@NotBlank(message="运单id不可为空")
+	@ApiModelProperty("运单id可能为多个,如果为多个用','隔开")
     private String waybillId;
 
 	@ApiModelProperty("对账类型:0应收/1应付")
 	@NotNull(message="对账类型不可为空")
     private Short payeeType;
 	
-	@NotNull(message="收付款方id不可为空")
+	//@NotNull(message="收付款方id不可为空")
 	@ApiModelProperty("收付款方id")
     private Long payerId;
 	
-	@NotBlank(message="收付款名称不可为空")
+	//@NotBlank(message="收付款名称不可为空")
 	@ApiModelProperty("收付款方名称")
     private String payerName;
 	
-	@NotNull(message="业务组id不可为空")
+	//@NotNull(message="业务组id不可为空")
 	@ApiModelProperty("业务组id")
     private Long groupId;
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1255802514514L;
 
     public Long getReconcileId() {
         return reconcileId;

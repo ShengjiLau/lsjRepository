@@ -231,12 +231,13 @@
     update t_fee_reconcile
     <set>
     cancel_ok = 1
-    </set>
-  	<foreach collection="array" index="index" item="reconcileId" open="(" separator="," close=")">	
+    </set>	
   	<where>
-  	reconcile_id = #{reconcileId,jdbcType=BIGINT} 
+  	reconcile_id in
+  	<foreach collection="array" index="index" item="reconcileId"  open="(" separator="," close=")">	
+  	#{reconcileId,jdbcType=BIGINT} 
+    </foreach>
   	</where>
-  	</foreach>
   </update>
   
   <select id="getReconcileList" resultMap="BaseResultMap" parameterType="com.lcdt.traffic.web.dto.ReconcileDto">
@@ -244,7 +245,7 @@
     <include refid="Base_Column_List" />
     from t_fee_reconcile
     <where>
-    cancel_ok=1 and company_id =#{companyId,jdbcType=BIGINT} and  payee_type = #{payeeType,jdbcType=SMALLINT}
+    cancel_ok=0 and company_id =#{companyId,jdbcType=BIGINT} and  payee_type = #{payeeType,jdbcType=SMALLINT}
     <if test="beginTime!=null and beginTime!=''">
     and create_time &gt; concat(#{beginTime,jdbcType=VARCHAR},'000000')
     </if>
@@ -268,11 +269,12 @@
     select 
     <include refid="Base_Column_List" />
     from t_fee_reconcile
-    <foreach collection="array" index="index" item="reconcileId" open="(" separator="," close=")">
     <where>
- 	reconcile_id = #{reconcileId,jdbcType=BIGINT}
+    reconcile_id in
+    <foreach collection="array" index="index" item="reconcileId" open="(" separator="," close=")">
+ 	#{reconcileId,jdbcType=BIGINT}
+ 	</foreach>
   	</where>
-    </foreach>
    </select>
   
   
