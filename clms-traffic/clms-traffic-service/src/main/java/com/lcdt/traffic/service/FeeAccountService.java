@@ -98,4 +98,11 @@ public interface FeeAccountService {
      * @return
      */
     List feeAccountReconcilePage(Map map);
+
+    /**
+     * 保存对账单
+     * @param list
+     * @return
+     */
+    int feeAccountReconcileSave(List<Map<String,Object>> list, short payeeType);
 }

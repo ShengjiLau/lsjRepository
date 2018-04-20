@@ -332,29 +332,15 @@ public class ReceivableFeeAccountApi {
         Map map = new HashMap();
         map.put("accountIds", accountIds);
         List<Map<String,Object>> list = feeAccountService.feeAccountReconcilePage(map);
-        if (list != null && list.size() > 0) {
-            Date createTime = new Date();
-            for(Map<String,Object> m : list){
-                m.put("companyId",SecurityInfoGetter.getCompanyId());
-                m.put("accountAmount",m.get("moneySum"));
-                m.put("operatorId",SecurityInfoGetter.getUser().getUserId());
-                m.put("operatorName",SecurityInfoGetter.getUser().getRealName());
-                m.put("createTime",createTime);
-                m.put("cancelOk",0);
-                m.put("waybillId",m.get("waybillIds"));
-                m.put("accountId",m.get("accountId"));
-                m.put("payeeType",0);
-                m.put("payerId",m.get("nameId"));
-                m.put("payerName",m.get("name"));
-                m.put("groupId",SecurityInfoGetter.groups());
-            }
+        int result = feeAccountService.feeAccountReconcileSave(list, (short)0);
+        int listSize = list != null ? list.size() : 0;
+        if (result == (listSize * 2 + accountIds.size())) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", list);
             jsonObject.put("code", 0);
-            jsonObject.put("message", "对账详情");
+            jsonObject.put("message", "对账成功");
             return jsonObject;
         } else {
-            throw new RuntimeException("无数据");
+            throw new RuntimeException("对账失败");
         }
     }
 }

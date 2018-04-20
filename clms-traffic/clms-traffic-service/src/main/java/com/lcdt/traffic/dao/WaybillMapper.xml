@@ -634,9 +634,9 @@
   </if>-->
   <select id="selectFeeAccountWaybillByCondition" parameterType="java.util.Map" resultMap="BaseFeeAccountWaybillMap">
     select <include refid="finance_column_list"/>,
-    (select concat(fa.name,'、') from t_fee_account fa
-      where fa.waybill_id=id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
-      ) receiv_and_pay_name,
+    (select group_concat(distinct fa.name) from t_fee_account fa
+      where fa.waybill_id=id and fa.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
+      group by id) receiv_and_pay_name,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
       where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费'
         and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
@@ -658,9 +658,9 @@
   </select>
   <select id="selectFeeAccountCustomerWaybillByCondition" parameterType="java.util.Map" resultMap="BaseFeeAccountWaybillMap">
     select <include refid="finance_column_list"/>,
-    (select concat(fa.name,'、') from t_fee_account fa
-      where fa.waybill_id=id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
-      ) receiv_and_pay_name,
+    (select group_concat(distinct fa.name) from t_fee_account fa
+      where fa.waybill_id=id and fa.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
+      group by id) receiv_and_pay_name,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
       where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费'
         and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
