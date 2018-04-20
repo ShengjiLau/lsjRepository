@@ -843,7 +843,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                     if (dto.getSplitGoodsList()!=null && dto.getSplitGoodsList().size()>0) {
                         List<SplitGoods> splitGoodsList = new ArrayList<SplitGoods>(); //存储其它数据
                         for (SplitGoods obj1 :dto.getSplitGoodsList()) {
-                            if(!obj1.getCarrierCompanyId().equals(companyId)) {
+                            if(obj1.getCarrierCompanyId()!=null && !obj1.getCarrierCompanyId().equals(companyId)) {
                                 splitGoodsList.add(obj1);
                             }
                         }
