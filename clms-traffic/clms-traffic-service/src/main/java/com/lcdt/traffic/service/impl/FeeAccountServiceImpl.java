@@ -303,7 +303,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         int result = 0;
         if (list != null && list.size() > 0) {
             ReconcileDto dto = new ReconcileDto();
-            Date createTime = new Date();
+//            Date createTime = new Date();
             List<Reconcile> reconcileList = new ArrayList<>();
             for (Map<String, Object> m : list) {
                 Reconcile reconcile = new Reconcile();
@@ -311,7 +311,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                 reconcile.setAccountAmount(Double.parseDouble(m.get("moneySum").toString()));
                 reconcile.setOperatorId(SecurityInfoGetter.getUser().getUserId());
                 reconcile.setOperatorName(SecurityInfoGetter.getUser().getRealName());
-                reconcile.setCreateTime(createTime);
+//                reconcile.setCreateTime(createTime);
                 reconcile.setCancelOk((short) 0);
                 reconcile.setWaybillId(m.get("waybillIds").toString());
                 reconcile.setAccountId(m.get("accountIds").toString());
@@ -324,13 +324,13 @@ public class FeeAccountServiceImpl implements FeeAccountService{
             result = reconcileMapper.insertByBatch(reconcileList);
             if(result == reconcileList.size()){
                 for(Reconcile reconcile : reconcileList){
-                    reconcile.setReconcileCode("DZ" + DateUtility.date2String(new Date(),
-                            "yyyyMMdd") + reconcile.getReconcileId());
-                    //修改对账单号
-                    result += reconcileMapper.updateByPrimaryKeySelective(reconcile);
+//                    reconcile.setReconcileCode("DZ" + DateUtility.date2String(new Date(),
+//                            "yyyyMMdd") + reconcile.getReconcileId());
+//                    //修改对账单号
+//                    result += reconcileMapper.updateByPrimaryKeySelective(reconcile);
                     //修改每个对账单对应的记账单对账信息
                     dto.setReconcileId(reconcile.getReconcileId());
-                    dto.setReconcileCode(reconcile.getReconcileCode());
+                    dto.setReconcileCode(reconcileMapper.selectByPrimaryKey(reconcile.getReconcileId()).getReconcileCode());
                     String[] accountIdStrArr = reconcile.getAccountId().split(",");
                     Long[] accountIds = new Long[accountIdStrArr.length];
                     for(int i=0; i<accountIdStrArr.length; i++){

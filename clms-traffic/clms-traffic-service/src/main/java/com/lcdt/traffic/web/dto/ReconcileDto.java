@@ -1,10 +1,9 @@
 package com.lcdt.traffic.web.dto;
 
-import java.io.Serializable;
-
 import com.lcdt.traffic.model.Reconcile;
-
 import io.swagger.annotations.ApiModelProperty;
+
+import java.io.Serializable;
 
 
 
@@ -32,6 +31,9 @@ public class ReconcileDto extends Reconcile implements Serializable{
 	
 	@ApiModelProperty("页码,第几页")
 	private int pageNum;
+
+	@ApiModelProperty(hidden = true)
+	private Long[] accountIds;
 	
 	public String getBeginTime() {
 		return beginTime;
@@ -72,21 +74,11 @@ public class ReconcileDto extends Reconcile implements Serializable{
 		this.pageNum = pageNum;
 	}
 
+	public Long[] getAccountIds() {
+		return accountIds;
+	}
 
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
+	public void setAccountIds(Long[] accountIds) {
+		this.accountIds = accountIds;
+	}
 }

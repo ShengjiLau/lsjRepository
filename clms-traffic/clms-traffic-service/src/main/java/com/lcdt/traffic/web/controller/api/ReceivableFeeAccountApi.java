@@ -334,7 +334,7 @@ public class ReceivableFeeAccountApi {
         List<Map<String,Object>> list = feeAccountService.feeAccountReconcilePage(map);
         int result = feeAccountService.feeAccountReconcileSave(list, (short)0);
         int listSize = list != null ? list.size() : 0;
-        if (result == (listSize * 2 + accountIds.size())) {
+        if (result == (listSize + accountIds.size())) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "对账成功");

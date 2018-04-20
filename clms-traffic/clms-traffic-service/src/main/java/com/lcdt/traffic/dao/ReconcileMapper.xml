@@ -207,8 +207,9 @@
       create_time, cancel_ok, account_id, 
       waybill_id, payee_type, payer_id, 
       payer_name, group_id)
-  <foreach collection="list" index="index" item="rec">
-    values (#{rec.reconcileId,jdbcType=BIGINT},
+      values
+      <foreach collection="list" index="index" item="rec">
+    (#{rec.reconcileId,jdbcType=BIGINT},
     <choose>
     <when test="rec.payeeType==0">
     RECONCILE_CODE('YS'),
