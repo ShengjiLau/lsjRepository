@@ -38,9 +38,9 @@ public class TokenBaseSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // 对于获取token的rest api要允许匿名访问
                 .antMatchers("/auth/**","/swagger-ui.html","/swagger-ui/**","/swagger-resources/**","/v2/**").permitAll()
-
-                // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
+                // 除上面外的所有请求全部需要鉴权认证
+
 
         // 禁用缓存
         httpSecurity.headers().cacheControl();

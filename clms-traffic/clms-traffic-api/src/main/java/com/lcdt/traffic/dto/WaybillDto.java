@@ -1,5 +1,6 @@
 package com.lcdt.traffic.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
@@ -74,8 +75,10 @@ public class WaybillDto implements java.io.Serializable {
 
     private String goodsType;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date startDate;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date arriveDate;
 
     private Short isReceipt;
