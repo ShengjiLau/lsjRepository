@@ -207,10 +207,9 @@
       create_time, cancel_ok, account_id, 
       waybill_id, payee_type, payer_id, 
       payer_name, group_id)
-
       values 
-  <foreach collection="list" index="index" item="rec" open="(" separator="," close=")">  
-    #{rec.reconcileId,jdbcType=BIGINT},
+  <foreach collection="list" index="index" item="rec" separator=",">  
+    (#{rec.reconcileId,jdbcType=BIGINT},
     <choose>
     <when test="rec.payeeType==0">
     RECONCILE_CODE('YS'),
@@ -225,7 +224,7 @@
       CURRENT_TIMESTAMP,
        #{rec.cancelOk,jdbcType=SMALLINT}, #{rec.accountId,jdbcType=VARCHAR},
       #{rec.waybillId,jdbcType=VARCHAR}, #{rec.payeeType,jdbcType=SMALLINT}, #{rec.payerId,jdbcType=BIGINT},
-      #{rec.payerName,jdbcType=VARCHAR}, #{rec.groupId,jdbcType=BIGINT}
+      #{rec.payerName,jdbcType=VARCHAR}, #{rec.groupId,jdbcType=BIGINT})
   </foreach>
   </insert>
   

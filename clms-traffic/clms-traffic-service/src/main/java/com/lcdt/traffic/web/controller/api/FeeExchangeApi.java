@@ -17,6 +17,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.FeeExchange;
 import com.lcdt.traffic.service.FeeExchangeService;
 import com.lcdt.traffic.web.dto.FeeExchangeDto;
+import com.lcdt.traffic.web.dto.FeeExchangeListDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,7 +40,8 @@ public class FeeExchangeApi {
 	@PostMapping("/add")
 	@ApiOperation("新增收付款记录")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_exchange_add')")
-	public JSONObject addFeeExchange(@Validated List<FeeExchange> feeExchangeList,BindingResult bindingResult) {
+	public JSONObject addFeeExchange(@Validated FeeExchangeListDto feeExchangeListDto,BindingResult bindingResult) {
+		List<FeeExchange> feeExchangeList =feeExchangeListDto.getFeeExchangeList();
 		JSONObject jsonObject =validResponse(bindingResult);
 		if(!jsonObject.isEmpty()) {
 			return jsonObject;
