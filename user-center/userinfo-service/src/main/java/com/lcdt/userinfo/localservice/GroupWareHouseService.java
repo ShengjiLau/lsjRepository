@@ -12,5 +12,5 @@ public interface GroupWareHouseService {
 
     TUserGroupWarehouseRelation addWareHouseRelation(Long groupId,Long companyId,Long wareHouseId);
 
-
+    void removeWareHouseGroupRelation(Long relationId);
 }
