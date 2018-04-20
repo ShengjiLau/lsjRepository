@@ -2,6 +2,7 @@ package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
+import com.lcdt.traffic.web.dto.ReconcileDto;
 
 import java.util.List;
 import java.util.Map;
@@ -43,5 +44,12 @@ public interface FeeAccountMapper {
     int insertBatch(List<FeeAccount> list);
 
     int updateBatch(List<FeeAccount> list);
+
+    /**
+     * 对账和取消对账修改记账单对账信息
+     * @param dto
+     * @return
+     */
+    int updateReconcileCodeAndId(ReconcileDto dto);
 
 }

@@ -113,8 +113,9 @@
     create_date, update_id, update_name,
     update_time, company_id, is_deleted
     )
+    values
     <foreach item="item" collection="list" separator=",">
-      values (#{flowCode,jdbcType=VARCHAR}, #{accountId,jdbcType=BIGINT}, #{proId,jdbcType=BIGINT},
+      (#{flowCode,jdbcType=VARCHAR}, #{accountId,jdbcType=BIGINT}, #{proId,jdbcType=BIGINT},
       #{waybillId,jdbcType=BIGINT}, #{waybillCode,jdbcType=VARCHAR}, #{waybillDate,jdbcType=TIMESTAMP},
       #{feeProperty,jdbcType=VARCHAR}, #{money,jdbcType=REAL}, #{originalMoney,jdbcType=REAL},
       #{groupId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR},

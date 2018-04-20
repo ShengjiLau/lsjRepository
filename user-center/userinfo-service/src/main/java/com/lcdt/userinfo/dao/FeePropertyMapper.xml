@@ -175,11 +175,10 @@
         and pro_id != #{proId,jdbcType=BIGINT}
       </if>
       <if test="proIds!=null and proIds.size>0">
-        and pro_id not in(
-        <foreach separator=";" index="index" item="item" collection="proIds" close="" open="">
+        and pro_id not in
+        <foreach separator="," index="index" item="item" collection="proIds" close=")" open="(">
           #{item}
         </foreach>
-        )
       </if>
     </where>
     order by pro_id desc

@@ -1,5 +1,6 @@
 package com.lcdt.traffic.web.controller.api;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -18,7 +19,6 @@ import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -330,29 +330,15 @@ public class PayableFeeAccountApi {
         Map map = new HashMap();
         map.put("accountIds", accountIds);
         List<Map<String,Object>> list = feeAccountService.feeAccountReconcilePage(map);
-        if (list != null && list.size() > 0) {
-            Date createTime = new Date();
-            for(Map<String,Object> m : list){
-                m.put("companyId",SecurityInfoGetter.getCompanyId());
-                m.put("accountAmount",m.get("moneySum"));
-                m.put("operatorId",SecurityInfoGetter.getUser().getUserId());
-                m.put("operatorName",SecurityInfoGetter.getUser().getRealName());
-                m.put("createTime",createTime);
-                m.put("cancelOk",0);
-                m.put("waybillId",m.get("waybillIds"));
-                m.put("accountId",m.get("accountId"));
-                m.put("payeeType",0);
-                m.put("payerId",m.get("nameId"));
-                m.put("payerName",m.get("name"));
-                m.put("groupId",SecurityInfoGetter.groups());
-            }
+        int result = feeAccountService.feeAccountReconcileSave(list, (short)1);
+        int listSize = list != null ? list.size() : 0;
+        if (result == (listSize * 2 + accountIds.size())) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("data", list);
             jsonObject.put("code", 0);
-            jsonObject.put("message", "对账详情");
+            jsonObject.put("message", "对账成功");
             return jsonObject;
         } else {
-            throw new RuntimeException("无数据");
+            throw new RuntimeException("对账失败");
         }
     }
 }

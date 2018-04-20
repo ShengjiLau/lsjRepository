@@ -3,15 +3,6 @@ package com.lcdt.traffic.service.impl;
 
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -22,6 +13,14 @@ import com.lcdt.traffic.model.Reconcile;
 import com.lcdt.traffic.service.ReconcileService;
 import com.lcdt.traffic.web.dto.ReconcileDto;
 import com.lcdt.traffic.web.dto.ReconcileListDto;
+import org.apache.commons.lang.ArrayUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Sheng-ji Lau
@@ -111,6 +110,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 			fa.setAccountId(l);
 			fa.setReconcileId(null);
 			fa.setReconcileCode(null);
+			feeAccountList.add(fa);
 		}
 		int i=acclids.length;
 		int j=feeAccountMapper.updateReconcileByBatch(feeAccountList);

@@ -207,8 +207,9 @@
       create_time, cancel_ok, account_id, 
       waybill_id, payee_type, payer_id, 
       payer_name, group_id)
-  <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-    values (#{item.reconcileId,jdbcType=BIGINT}, #{item.reconcileCode,jdbcType=VARCHAR}, #{item.companyId,jdbcType=BIGINT}, 
+      values
+  <foreach collection="list" item="item" separator=",">
+     (#{item.reconcileId,jdbcType=BIGINT}, #{item.reconcileCode,jdbcType=VARCHAR}, #{item.companyId,jdbcType=BIGINT},
       #{item.accountAmount,jdbcType=DOUBLE}, #{item.operatorId,jdbcType=BIGINT}, 
       #{item.operatorName,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
       #{item.cancelOk,jdbcType=SMALLINT}, #{item.accountId,jdbcType=VARCHAR}, #{item.waybillId,jdbcType=VARCHAR}, 
@@ -265,6 +266,6 @@
   	</where>
     </foreach>
    </select>
-  
+
   
 </mapper>
