@@ -1,8 +1,10 @@
 package com.lcdt.userinfo.model;
 
+import com.lcdt.converter.ResponseData;
+
 import java.util.Date;
 
-public class TUserGroupWarehouseRelation {
+public class TUserGroupWarehouseRelation implements ResponseData{
 
     private Warehouse wareHouse;
 

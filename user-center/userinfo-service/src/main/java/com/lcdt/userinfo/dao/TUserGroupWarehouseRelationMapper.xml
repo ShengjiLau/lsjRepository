@@ -61,7 +61,7 @@ SELECT w.* ,re.*  from t_warehouse w
   left join t_user_group_warehouse_relation re on w.wh_id = re.ware_house_id
 where w.wh_id not in (SELECT r.ware_house_id from t_user_group_warehouse_relation r
   WHERE r.company_id = #{companyId} and r.group_id = #{groupId}
-)
+) and w.company_id =#{companyId}
 
   </select>
 

@@ -50,8 +50,6 @@ public class GroupWareHouseServiceImpl implements GroupWareHouseService{
     UserGroupService userGroupService;
 
     public TUserGroupWarehouseRelation addWareHouseRelation(Long groupId,Long companyId,Long wareHouseId){
-//        warehouseService.warehouseList()
-//        warehouseService.sele
         Warehouse warehouse = warehousseMapper.selectByPrimaryKey(wareHouseId);
         if (!warehouse.getCompanyId().equals(companyId)) {
             return null;
@@ -67,5 +65,11 @@ public class GroupWareHouseServiceImpl implements GroupWareHouseService{
         return relation;
     }
 
+    /**
+     * 移除 仓库 组关系
+     */
+    public void removeWareHouseGroupRelation(){
+
+    }
 
 }
