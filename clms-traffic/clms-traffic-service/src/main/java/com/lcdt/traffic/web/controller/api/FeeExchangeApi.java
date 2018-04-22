@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONArray;
@@ -45,12 +46,11 @@ public class FeeExchangeApi {
 		JSONObject jsonObject =validResponse(bindingResult);
 		if(!jsonObject.isEmpty()) {
 			return jsonObject;
-		}
-		int i=feeExchangeList.size();		
-		int j=feeExchangeService.insertFeeExchangeByBatch(feeExchangeList);
-		if(i==j) {
+		}		
+		int result=feeExchangeService.insertFeeExchangeByBatch(feeExchangeList);
+		if(result>0) {
 			jsonObject.put("code",0);
-			jsonObject.put("msg","新增收付款记录成功");
+			jsonObject.put("message","新增收付款记录成功");
 			return jsonObject;
 		}else {
 			throw new RuntimeException("插入收付款记录出现异常");
@@ -81,7 +81,7 @@ public class FeeExchangeApi {
 	@PostMapping("/cancel")
 	@ApiOperation("批量取消收付款记录")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_exchange_cancel')")
-	public JSONObject cancelFeeExchange(@ApiParam("收付款记录id数组") Long[] feeExchanges) {
+	public JSONObject cancelFeeExchange(@ApiParam(value="收付款记录id数组",required=true)@RequestParam Long[] feeExchanges) {
 		JSONObject jsonObject =new JSONObject();
 		int result=feeExchangeService.updateSetCancelOk(feeExchanges);
 		if(result>0) {

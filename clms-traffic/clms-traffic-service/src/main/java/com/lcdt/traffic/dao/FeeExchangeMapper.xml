@@ -375,8 +375,9 @@
       exchange_account, company_id, operate_name, 
       operate_id, remark, exchange_name, 
       group_id)
-      <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-      values (#{item.exchangeId,jdbcType=BIGINT}, #{item.reconcileId,jdbcType=BIGINT}, #{item.reconcileCode,jdbcType=VARCHAR}, 
+      values 
+      <foreach collection="list" index="index" item="item" separator=",">
+      (#{item.exchangeId,jdbcType=BIGINT}, #{item.reconcileId,jdbcType=BIGINT}, #{item.reconcileCode,jdbcType=VARCHAR}, 
       #{item.payerName,jdbcType=VARCHAR}, #{item.type,jdbcType=SMALLINT}, #{item.accountAmount,jdbcType=DOUBLE}, 
       #{item.thisAmount,jdbcType=DOUBLE}, #{item.attachment1Name,jdbcType=VARCHAR}, #{item.attachment1,jdbcType=VARCHAR}, 
       #{item.attachment2Name,jdbcType=VARCHAR}, #{item.attachment2,jdbcType=VARCHAR}, #{item.attachment3Name,jdbcType=VARCHAR}, 
@@ -389,25 +390,26 @@
       </foreach>
   </insert>
   
-  <select id="getFeeExchangeListByCondition" resultMap="BaseResultMap">
+  <select id="getFeeExchangeListByCondition" resultMap="BaseResultMap" parameterType="com.lcdt.traffic.web.dto.FeeExchangeDto">
   	 select 
     <include refid="Base_Column_List" />
     from t_fee_exchange
   	<where>
+  	type = #{type,jdbcType=SMALLINT} and company_id = #{companyId,jdbcType=BIGINT} and cancel_ok = #{cancelOk,jdbcType=SMALLINT}
   	<if test="payerName !=null and payerName!=''">
-  	 payer_name like concat('%',#{payerName,jdbcType=VARCHAR},'%')
+  	and payer_name like concat('%',#{payerName,jdbcType=VARCHAR},'%')
   	</if>
   	<if test="reconcileCode!=null and reconcileCode!=''">
-  	reconcileCode like concat('%',#{reconcileCode,jdbcType=VARCHAR},'%')
+  	and reconcileCode like concat('%',#{reconcileCode,jdbcType=VARCHAR},'%')
   	</if>
   	<if test="operateName!=null and operateName!=''">
-  	operate_name like concat('%',#{operateName,jdbcType=VARCHAR},'%')
+  	and operate_name like concat('%',#{operateName,jdbcType=VARCHAR},'%')
   	</if>
   	<if test="beginTime !=null and beginTime!=''"></if>
-  	create_time &lt; concat(#{beginTime,jdbcType=VARCHAR},'000000')
+  	and create_time &lt; concat(#{beginTime,jdbcType=VARCHAR},'000000')
   	</where>
   	<if test="endTime !=null and endTime !=''">
-  	create_time &gt; concat(#{endTime,jdbcType=VARCHAR},'235959')
+  	and create_time &gt; concat(#{endTime,jdbcType=VARCHAR},'235959')
   	</if>
   </select>
   
@@ -416,11 +418,12 @@
   	<set>
   	cancel_ok =1 
   	</set>
-  	<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
   	<where>
-  	exchange_id = #{item,jdbcType=BIGINT}
+  	exchange_id in
+  	<foreach collection="array" index="index" item="item" close=")" open="(" separator=",">
+  	 #{item,jdbcType=BIGINT}
+  	 </foreach>
   	</where>
-  	</foreach>
   </update>
   
   <select id="selectCountFeeExchangeByReconcileId" resultType="java.lang.Integer">
