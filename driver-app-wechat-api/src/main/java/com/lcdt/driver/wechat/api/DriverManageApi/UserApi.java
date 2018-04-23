@@ -31,7 +31,7 @@ public class UserApi {
 
     @RequestMapping("/forgetpwd")
     public String forgetPwd(ForgetPwdDto forgetPwdDto){
-        boolean codeCorrect = validCodeService.isCodeCorrect(forgetPwdDto.getValidCode(), "", forgetPwdDto.getUserName());
+        boolean codeCorrect = validCodeService.isCodeCorrect(forgetPwdDto.getValidCode(), "driverwechat", forgetPwdDto.getUserName());
         JSONObject jsonObject = new JSONObject();
         if (codeCorrect) {
             userService.resetPwd(forgetPwdDto.getUserName(), forgetPwdDto.getPwd());

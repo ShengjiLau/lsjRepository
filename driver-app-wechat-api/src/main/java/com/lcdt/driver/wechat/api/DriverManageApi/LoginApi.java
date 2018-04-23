@@ -6,7 +6,6 @@ import com.lcdt.clms.security.token.config.JwtTokenUtil;
 import com.lcdt.driver.dto.PageBaseDto;
 import com.lcdt.driver.dto.WechatCreateCompanyDto;
 import com.lcdt.notify.rpcservice.IValidCodeService;
-import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.exception.PassErrorException;
