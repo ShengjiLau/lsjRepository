@@ -99,14 +99,14 @@ public class UserServiceImpl implements UserService {
 		}
 
 		if (user.getPwd() == null) {
-			throw new PassErrorException();
+			throw new PassErrorException("密码未设置");
 		}
 		if (user.getPwd().toUpperCase().equals(RegisterUtils.md5Encrypt(pwd).toUpperCase())){
 			user.setLastLoginTime(new Date()); //更新登录时间
 			userMapper.updateByPrimaryKey(user);
 			return user;
 		}else{
-			throw new PassErrorException();
+			throw new PassErrorException("密码错误");
 		}
 	}
 
