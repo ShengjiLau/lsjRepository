@@ -152,15 +152,29 @@
       <if test=" accountId !=null">
         and account_id = #{accountId,jdbcType=BIGINT}
       </if>
-      <if test="operator_id !=null and operator_id !='' ">
+      <if test="operatorId !=null and operatorId !='' ">
         and operator_id = #{operatorId,jdbcType=BIGINT}
       </if>
-      <if test="is_deleted !=null and is_deleted !='' ">
+      <if test="isDeleted !=null and isDeleted !='' ">
         and is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
   	</where>
   </select>
   
+  <insert id="insertByBatch" useGeneratedKeys="true" keyProperty="msgId" keyColumn="msg_id">
+   insert into t_fee_msg (msg_id, account_id, type, 
+      content, operator_id, operator_name, 
+      create_date, is_deleted)
+    values 
+  <foreach collection="list" item="m" open="" separator="," close="" index="index">
+  (#{m.msgId,jdbcType=BIGINT}, #{m.accountId,jdbcType=BIGINT}, #{m.type,jdbcType=SMALLINT}, 
+      #{m.content,jdbcType=VARCHAR}, #{m.operatorId,jdbcType=BIGINT}, #{m.operatorName,jdbcType=VARCHAR}, 
+      CURRENT_TIMESTAMP, #{m.isDeleted,jdbcType=SMALLINT})
+  </foreach>
+  
+  
+  
+  </insert>
   
   
   

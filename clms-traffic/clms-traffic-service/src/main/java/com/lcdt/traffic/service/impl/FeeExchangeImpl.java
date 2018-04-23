@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dao.FeeExchangeMapper;
 import com.lcdt.traffic.model.FeeExchange;
 import com.lcdt.traffic.service.FeeExchangeService;
@@ -29,7 +30,12 @@ public class FeeExchangeImpl implements FeeExchangeService {
 	
 	@Override
 	public int insertFeeExchangeByBatch(List<FeeExchange> feeExchangeList) {
-		
+		for(FeeExchange fe:feeExchangeList) {
+			fe.setCompanyId(SecurityInfoGetter.getCompanyId());
+			fe.setOperateId(SecurityInfoGetter.getUser().getUserId());
+			fe.setOperateName(SecurityInfoGetter.getUser().getRealName());
+			fe.setCancelOk((short) 0);//生成对账单时取消状态设置为0不取消
+		}
 		return feeExchangeMapper.insertByBatch(feeExchangeList);
 	}
 
@@ -45,15 +51,37 @@ public class FeeExchangeImpl implements FeeExchangeService {
 		if(feeExchangeDto.getPageSize()<0) {
 			feeExchangeDto.setPageSize(0);
 		}
+		feeExchangeDto.setCompanyId(SecurityInfoGetter.getCompanyId());
+		feeExchangeDto.setCancelOk((short) 0);
 		PageHelper.startPage(feeExchangeDto.getPageNo(),feeExchangeDto.getPageSize());
 		List<FeeExchange> feeExchangeList =feeExchangeMapper.getFeeExchangeListByCondition(feeExchangeDto);
 		PageInfo<FeeExchange> page =new PageInfo<FeeExchange>(feeExchangeList);	
 			
 		return page;
 	}
-	
-	
-	
-	
 
+
+	@Override
+	public int updateSetCancelOk(String feeExchangeIds) {
+		String[] ss =feeExchangeIds.split(",");		
+		int j = ss.length;
+		int i= feeExchangeMapper.updateCancelOkByBatch(feeExchangeIds);
+		if(j==i) {
+			return i;
+		}
+		 return -1;
+	}
+
+
+	@Override
+	public FeeExchange selectFeeExchangeById(Long feeExchangeId) {		
+		return feeExchangeMapper.selectByPrimaryKey(feeExchangeId);
+	}
+
+
+	@Override
+	public int querySumFeeExchangeByReconcileId(Long reconcileId) {
+		
+		return feeExchangeMapper.selectCountFeeExchangeByReconcileId(reconcileId);
+	}
 }

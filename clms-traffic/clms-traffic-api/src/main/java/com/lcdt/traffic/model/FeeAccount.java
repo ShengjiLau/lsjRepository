@@ -1,5 +1,7 @@
 package com.lcdt.traffic.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -7,40 +9,58 @@ import java.util.Date;
  * @author 
  */
 public class FeeAccount implements Serializable {
+    @ApiModelProperty(value="主键id")
     private Long accountId;
 
+    @ApiModelProperty(value="记账单号")
     private String accountCode;
 
+    @ApiModelProperty(value="企业id")
     private Long companyId;
 
+    @ApiModelProperty(value="运单id")
     private Long waybillId;
 
+    @ApiModelProperty(value="运单编号")
     private String waybillCode;
 
+    @ApiModelProperty(value="业务组id")
     private Long groupId;
 
+    @ApiModelProperty(value="业务组名称")
     private String groupName;
 
+    @ApiModelProperty(value="收付款方id")
     private Long nameId;
 
+    @ApiModelProperty(value="收付款方名称")
     private String name;
 
+    @ApiModelProperty(value="审核状态 0-未审核，1-已审核")
     private Short auditStatus;
 
+    @ApiModelProperty(value="审核日期")
     private Date auditDate;
 
+    @ApiModelProperty(value="记账人id")
     private Long operatorId;
 
+    @ApiModelProperty(value="记账人姓名")
     private String operatorName;
 
+    @ApiModelProperty(value="对账单id")
     private Long reconcileId;
 
+    @ApiModelProperty(value="对账单号")
     private String reconcileCode;
 
+    @ApiModelProperty(value="0-应收，1-应付")
     private Short isReceivable;
 
+    @ApiModelProperty(value="创建日期")
     private Date createDate;
 
+    @ApiModelProperty(value="0-未删除，1-已删除")
     private Short isDeleted;
 
     private static final long serialVersionUID = 1L;

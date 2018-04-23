@@ -1,47 +1,69 @@
 package com.lcdt.traffic.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.Date;
 
 public class FeeFlow  implements Serializable {
+    @ApiModelProperty(value="主键id")
     private Long flowId;
 
+    @ApiModelProperty(value="流水编号")
     private String flowCode;
 
+    @ApiModelProperty(value="运单id")
     private Long waybillId;
 
+    @ApiModelProperty(value="运单编号")
     private String waybillCode;
 
+    @ApiModelProperty(value="运单创建时间")
     private Date waybillDate;
 
+    @ApiModelProperty(value="记账单id")
     private Long accountId;
 
+    @ApiModelProperty(value="费用类型id")
     private Long proId;
 
+    @ApiModelProperty(value="费用类型名称")
     private String feeProperty;
 
+    @ApiModelProperty(value="金额")
     private Float money;
 
+    @ApiModelProperty(value="原始金额")
     private Float originalMoney;
 
+    @ApiModelProperty(value="业务组id")
     private Long groupId;
 
+    @ApiModelProperty(value="创建人id")
     private Long createId;
 
+    @ApiModelProperty(value="创建人姓名")
     private String createName;
 
+    @ApiModelProperty(value="创建时间")
     private Date createDate;
 
+    @ApiModelProperty(value="修改人id")
     private Long updateId;
 
+    @ApiModelProperty(value="修改了姓名")
     private String updateName;
 
+    @ApiModelProperty(value="修改时间")
     private Date updateTime;
 
+    @ApiModelProperty(value="企业id")
     private Long companyId;
 
+    @ApiModelProperty(value="0-未删除，1-已删除")
     private Short isDeleted;
 
+    @ApiModelProperty(value="0-应收，1-应付")
     private Short isReceivable;
 
     private static final long serialVersionUID = 1L;

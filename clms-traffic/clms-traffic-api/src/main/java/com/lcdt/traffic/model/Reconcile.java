@@ -3,34 +3,68 @@ package com.lcdt.traffic.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Reconcile implements Serializable {
-    private Long reconcileId;
+import javax.validation.constraints.NotNull;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+/**
+ * @author Sheng-ji Lau
+ * @date 2018年4月18日
+ * @version
+ * @Description: TODO 
+ */
+@ApiModel("对账单")
+public class Reconcile implements Serializable {
+
+	@ApiModelProperty("对账单id")
+    private Long reconcileId;
+	
+	@ApiModelProperty("对账单单号")
     private String reconcileCode;
 
+	@ApiModelProperty("所属公司id")
     private Long companyId;
 
+	@ApiModelProperty("对账金额")
     private Double accountAmount;
 
+	@ApiModelProperty("操作人id")
     private Long operatorId;
 
+	@ApiModelProperty("操作人姓名")
     private String operatorName;
 
+	@ApiModelProperty("对账单生成时间")
     private Date createTime;
 
+	@ApiModelProperty("取消对账单,生成和取消对账单时不需要传入参数,查询时需传入;0不取消/1取消")
     private Short cancelOk;
-
+	
+	//@NotBlank(message="记账单id不可为空")
+	@ApiModelProperty("记账单id可能为多个,如果为多个用','隔开")
     private String accountId;
-
+	
+	//@NotBlank(message="运单id不可为空")
+	@ApiModelProperty("运单id可能为多个,如果为多个用','隔开")
     private String waybillId;
 
+	@ApiModelProperty("对账类型:0应收/1应付")
+	@NotNull(message="对账类型不可为空")
     private Short payeeType;
-
+	
+	//@NotNull(message="收付款方id不可为空")
+	@ApiModelProperty("收付款方id")
     private Long payerId;
-
+	
+	//@NotBlank(message="收付款名称不可为空")
+	@ApiModelProperty("收付款方名称")
     private String payerName;
+	
+	//@NotNull(message="业务组id不可为空")
+	@ApiModelProperty("业务组id")
+    private Long groupId;
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1255802514514L;
 
     public Long getReconcileId() {
         return reconcileId;
@@ -136,6 +170,14 @@ public class Reconcile implements Serializable {
         this.payerName = payerName == null ? null : payerName.trim();
     }
 
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -160,7 +202,8 @@ public class Reconcile implements Serializable {
             && (this.getWaybillId() == null ? other.getWaybillId() == null : this.getWaybillId().equals(other.getWaybillId()))
             && (this.getPayeeType() == null ? other.getPayeeType() == null : this.getPayeeType().equals(other.getPayeeType()))
             && (this.getPayerId() == null ? other.getPayerId() == null : this.getPayerId().equals(other.getPayerId()))
-            && (this.getPayerName() == null ? other.getPayerName() == null : this.getPayerName().equals(other.getPayerName()));
+            && (this.getPayerName() == null ? other.getPayerName() == null : this.getPayerName().equals(other.getPayerName()))
+            && (this.getGroupId() == null ? other.getGroupId() == null : this.getGroupId().equals(other.getGroupId()));
     }
 
     @Override
@@ -180,6 +223,7 @@ public class Reconcile implements Serializable {
         result = prime * result + ((getPayeeType() == null) ? 0 : getPayeeType().hashCode());
         result = prime * result + ((getPayerId() == null) ? 0 : getPayerId().hashCode());
         result = prime * result + ((getPayerName() == null) ? 0 : getPayerName().hashCode());
+        result = prime * result + ((getGroupId() == null) ? 0 : getGroupId().hashCode());
         return result;
     }
 
@@ -202,6 +246,7 @@ public class Reconcile implements Serializable {
         sb.append(", payeeType=").append(payeeType);
         sb.append(", payerId=").append(payerId);
         sb.append(", payerName=").append(payerName);
+        sb.append(", groupId=").append(groupId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
