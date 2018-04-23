@@ -56,18 +56,31 @@ public class WaybillSenderNotify {
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
-                //发送给货主-->派单人
-                Map splitGoodsMap=new HashMap();
-                splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
-                SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
                 DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
-                defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
-                defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
                 User shipperUser= null;
-                try {
-                    shipperUser = userService.queryByUserId(splitGoods.getCreateId());
-                } catch (UserNotExistException e) {
-                    e.printStackTrace();
+                Company company=null;
+                if(dao.getSplitGoodsId()!=null&&!dao.getSplitGoodsId().equals("")){
+                    //发送给货主-->派单人
+                    Map splitGoodsMap=new HashMap();
+                    splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
+                    SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
+                    defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
+                    defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(splitGoods.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                    company=companyService.selectById(splitGoods.getCompanyId());
+                }else{
+                    defaultNotifyReceiver.setCompanyId(dao.getCompanyId());
+                    defaultNotifyReceiver.setUserId(dao.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(dao.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                    company=companyService.selectById(dao.getCompanyId());
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
                 Company carrierCompany=companyService.selectById(dao.getCarrierCompanyId());
@@ -105,7 +118,6 @@ public class WaybillSenderNotify {
                 //司机
                 defaultNotifyReceiver.setReceivePhoneNum(dao.getDriverPhone());
 
-                Company company=companyService.selectById(splitGoods.getCompanyId());
                 commonAttachment.setOwnerCompany(company.getFullName());
                 commonAttachment.setDriverPhone(dao.getDriverPhone());
 
@@ -168,21 +180,31 @@ public class WaybillSenderNotify {
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0) {
             for (WaybillDao dao : list) {
-                //发送给货主-->派单人
-                //获取派单
-                Map splitGoodsMap=new HashMap();
-                splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
-                SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
-                //货主，派单接收通知
                 DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
-                defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
-                defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
-                //获取派单人的电话
                 User shipperUser= null;
-                try {
-                    shipperUser = userService.queryByUserId(splitGoods.getCreateId());
-                } catch (UserNotExistException e) {
-                    e.printStackTrace();
+                Company company=null;
+                if(dao.getSplitGoodsId()!=null&&!dao.getSplitGoodsId().equals("")){
+                    //发送给货主-->派单人
+                    Map splitGoodsMap=new HashMap();
+                    splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
+                    SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
+                    defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
+                    defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(splitGoods.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                    company=companyService.selectById(splitGoods.getCompanyId());
+                }else{
+                    defaultNotifyReceiver.setCompanyId(dao.getCompanyId());
+                    defaultNotifyReceiver.setUserId(dao.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(dao.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                    company=companyService.selectById(dao.getCompanyId());
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
                 //发送消息内容
@@ -219,7 +241,6 @@ public class WaybillSenderNotify {
                 //收货人
                 defaultNotifyReceiver.setReceivePhoneNum(dao.getReceivePhone());
 
-                Company company=companyService.selectById(splitGoods.getCompanyId());
                 commonAttachment.setOwnerCompany(company.getFullName());
                 commonAttachment.setDestinationAdress(dao.getReceiveProvince()+dao.getReceiveCity()+dao.getReceiveCounty()+dao.getReceiveAddress());
                 commonAttachment.setGoodsDetail(configDoodsDetails(dao.getWaybillItemsList()));
@@ -296,21 +317,31 @@ public class WaybillSenderNotify {
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0) {
             for (WaybillDao dao : list) {
-                //发送给货主-->派单人
-                //获取派单
-                Map splitGoodsMap=new HashMap();
-                splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
-                SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
-                //货主，派单接收通知
                 DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
-                defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
-                defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
-                //获取派单人的电话
                 User shipperUser= null;
-                try {
-                    shipperUser = userService.queryByUserId(splitGoods.getCreateId());
-                } catch (UserNotExistException e) {
-                    e.printStackTrace();
+                Company company=null;
+                if(dao.getSplitGoodsId()!=null&&!dao.getSplitGoodsId().equals("")){
+                    //发送给货主-->派单人
+                    Map splitGoodsMap=new HashMap();
+                    splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
+                    SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
+                    defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
+                    defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(splitGoods.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                    company=companyService.selectById(splitGoods.getCompanyId());
+                }else{
+                    defaultNotifyReceiver.setCompanyId(dao.getCompanyId());
+                    defaultNotifyReceiver.setUserId(dao.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(dao.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                    company=companyService.selectById(dao.getCompanyId());
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
                 //发送消息内容
@@ -416,21 +447,28 @@ public class WaybillSenderNotify {
         List<WaybillDao> list = waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if (list != null && list.size() > 0) {
             for (WaybillDao dao : list) {
-                //发送给货主-->派单人
-                //获取派单
-                Map splitGoodsMap = new HashMap();
-                splitGoodsMap.put("splitGoodsId", dao.getSplitGoodsId());
-                SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
-                //货主，派单接收通知
                 DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
-                defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
-                defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
-                //获取派单人的电话
-                User shipperUser = null;
-                try {
-                    shipperUser = userService.queryByUserId(splitGoods.getCreateId());
-                } catch (UserNotExistException e) {
-                    e.printStackTrace();
+                User shipperUser= null;
+                if(dao.getSplitGoodsId()!=null&&!dao.getSplitGoodsId().equals("")){
+                    //发送给货主-->派单人
+                    Map splitGoodsMap=new HashMap();
+                    splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
+                    SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
+                    defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
+                    defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(splitGoods.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    defaultNotifyReceiver.setCompanyId(dao.getCompanyId());
+                    defaultNotifyReceiver.setUserId(dao.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(dao.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
 
@@ -545,18 +583,28 @@ public class WaybillSenderNotify {
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
-                //发送给货主-->派单人
-                Map splitGoodsMap=new HashMap();
-                splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
-                SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
                 DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
-                defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
-                defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
                 User shipperUser= null;
-                try {
-                    shipperUser = userService.queryByUserId(splitGoods.getCreateId());
-                } catch (UserNotExistException e) {
-                    e.printStackTrace();
+                if(dao.getSplitGoodsId()!=null&&!dao.getSplitGoodsId().equals("")){
+                    //发送给货主-->派单人
+                    Map splitGoodsMap=new HashMap();
+                    splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
+                    SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
+                    defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
+                    defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(splitGoods.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    defaultNotifyReceiver.setCompanyId(dao.getCompanyId());
+                    defaultNotifyReceiver.setUserId(dao.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(dao.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
 
@@ -602,27 +650,40 @@ public class WaybillSenderNotify {
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
-                //发送给货主-->派单人
-                Map splitGoodsMap=new HashMap();
-                splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
-                SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
-                WaybillParamsDto dto=new WaybillParamsDto();
-                dto.setWaybillPlanId(splitGoods.getWaybillPlanId());
-                WaybillPlan waybillPlan=iPlanRpcService4Wechat.loadWaybillPlan(dto);
-
                 DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
-                defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
-                defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
+                CommonAttachment commonAttachment = new CommonAttachment();
                 User shipperUser= null;
-                try {
-                    shipperUser = userService.queryByUserId(splitGoods.getCreateId());
-                } catch (UserNotExistException e) {
-                    e.printStackTrace();
+                if(dao.getSplitGoodsId()!=null&&!dao.getSplitGoodsId().equals("")){
+                    //发送给货主-->派单人
+                    Map splitGoodsMap=new HashMap();
+                    splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
+                    SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
+                    defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
+                    defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
+                    WaybillParamsDto dto=new WaybillParamsDto();
+                    dto.setWaybillPlanId(splitGoods.getWaybillPlanId());
+                    WaybillPlan waybillPlan=iPlanRpcService4Wechat.loadWaybillPlan(dto);
+                    commonAttachment.setPlanSerialNum(waybillPlan.getSerialCode());
+                    try {
+                        shipperUser = userService.queryByUserId(splitGoods.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    defaultNotifyReceiver.setCompanyId(dao.getCompanyId());
+                    defaultNotifyReceiver.setUserId(dao.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(dao.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                    commonAttachment.setPlanSerialNum(dao.getWaybillCode());
                 }
+
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
                 Company carrierCompany=companyService.selectById(dao.getCarrierCompanyId());
-                CommonAttachment commonAttachment = new CommonAttachment();
-                commonAttachment.setPlanSerialNum(waybillPlan.getSerialCode());
+
+
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
                 commonAttachment.setCarrierCompany(carrierCompany.getFullName());
                 User carrierUser=null;
@@ -655,19 +716,28 @@ public class WaybillSenderNotify {
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
-                //发送给货主-->派单人
-                Map splitGoodsMap=new HashMap();
-                splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
-                SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
-
                 DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
-                defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
-                defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
                 User shipperUser= null;
-                try {
-                    shipperUser = userService.queryByUserId(splitGoods.getCreateId());
-                } catch (UserNotExistException e) {
-                    e.printStackTrace();
+                if(dao.getSplitGoodsId()!=null&&!dao.getSplitGoodsId().equals("")){
+                    //发送给货主-->派单人
+                    Map splitGoodsMap=new HashMap();
+                    splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
+                    SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
+                    defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
+                    defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(splitGoods.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    defaultNotifyReceiver.setCompanyId(dao.getCompanyId());
+                    defaultNotifyReceiver.setUserId(dao.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(dao.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
 
@@ -686,19 +756,28 @@ public class WaybillSenderNotify {
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
-                //发送给货主-->派单人
-                Map splitGoodsMap=new HashMap();
-                splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
-                SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
-
                 DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
-                defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
-                defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
                 User shipperUser= null;
-                try {
-                    shipperUser = userService.queryByUserId(splitGoods.getCreateId());
-                } catch (UserNotExistException e) {
-                    e.printStackTrace();
+                if(dao.getSplitGoodsId()!=null&&!dao.getSplitGoodsId().equals("")){
+                    //发送给货主-->派单人
+                    Map splitGoodsMap=new HashMap();
+                    splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
+                    SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
+                    defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
+                    defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(splitGoods.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    defaultNotifyReceiver.setCompanyId(dao.getCompanyId());
+                    defaultNotifyReceiver.setUserId(dao.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(dao.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
                 Company carrierCompany=companyService.selectById(dao.getCarrierCompanyId());
@@ -717,15 +796,31 @@ public class WaybillSenderNotify {
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
-                //发送给货主-->派单人
-                Map splitGoodsMap=new HashMap();
-                splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
-                SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
+                DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
                 User shipperUser= null;
-                try {
-                    shipperUser = userService.queryByUserId(splitGoods.getCreateId());
-                } catch (UserNotExistException e) {
-                    e.printStackTrace();
+                Company company=null;
+                if(dao.getSplitGoodsId()!=null&&!dao.getSplitGoodsId().equals("")){
+                    //发送给货主-->派单人
+                    Map splitGoodsMap=new HashMap();
+                    splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
+                    SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
+                    defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
+                    defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(splitGoods.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                    company=companyService.selectById(splitGoods.getCompanyId());
+                }else{
+                    defaultNotifyReceiver.setCompanyId(dao.getCompanyId());
+                    defaultNotifyReceiver.setUserId(dao.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(dao.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                    company=companyService.selectById(dao.getCompanyId());
                 }
                 User carrierCompanyUser= null;
                 try {
@@ -733,11 +828,6 @@ public class WaybillSenderNotify {
                 } catch (UserNotExistException e) {
                     e.printStackTrace();
                 }
-
-                Company onwCompany=companyService.selectById(splitGoods.getCompanyId());
-
-
-                DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
                 //发送给承运商-->派车人
                 //承运商不是货主本人
                 if(dao.getCompanyId()!=dao.getCarrierCompanyId()){
@@ -749,7 +839,7 @@ public class WaybillSenderNotify {
                 CommonAttachment commonAttachment = new CommonAttachment();
                 commonAttachment.setCarrierCompany(carrierCompany.getFullName());
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
-                commonAttachment.setOwnerCompany(onwCompany.getFullName());
+                commonAttachment.setOwnerCompany(company.getFullName());
                 commonAttachment.setOwnerPhone(shipperUser.getPhone());
                 commonAttachment.setCarrierWebNotifyUrl(NotifyUtils.CUSTOMER_WAYBILL_WEB_NOTIFY_URL+dao.getWaybillCode());
 
@@ -778,27 +868,38 @@ public class WaybillSenderNotify {
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
-                //发送给货主-->派单人
-                Map splitGoodsMap=new HashMap();
-                splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
-                SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
+                DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
+                User shipperUser= null;
+                Company company=null;
+                if(dao.getSplitGoodsId()!=null&&!dao.getSplitGoodsId().equals("")){
+                    //发送给货主-->派单人
+                    Map splitGoodsMap=new HashMap();
+                    splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
+                    SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
+                    defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
+                    defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(splitGoods.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                    company=companyService.selectById(splitGoods.getCompanyId());
+                }else{
+                    defaultNotifyReceiver.setCompanyId(dao.getCompanyId());
+                    defaultNotifyReceiver.setUserId(dao.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(dao.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                    company=companyService.selectById(dao.getCompanyId());
+                }
                 User carrierCompanyUser= null;
                 try {
                     carrierCompanyUser = userService.queryByUserId(dao.getCreateId());
                 } catch (UserNotExistException e) {
                     e.printStackTrace();
                 }
-
-                User shipperUser= null;
-                try {
-                    shipperUser = userService.queryByUserId(splitGoods.getCreateId());
-                } catch (UserNotExistException e) {
-                    e.printStackTrace();
-                }
-                Company onwCompany=companyService.selectById(splitGoods.getCompanyId());
-
-                //发送给承运商-->派车人
-                DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
 
                 //承运商不是货主本人
                 if(dao.getCompanyId()!=dao.getCarrierCompanyId()){
@@ -809,7 +910,7 @@ public class WaybillSenderNotify {
                 }
 
                 CommonAttachment commonAttachment = new CommonAttachment();
-                commonAttachment.setOwnerCompany(onwCompany.getFullName());
+                commonAttachment.setOwnerCompany(company.getFullName());
                 commonAttachment.setWaybillCode(dao.getWaybillCode());
                 commonAttachment.setOwnerPhone(shipperUser.getPhone());
                 commonAttachment.setCarrierWebNotifyUrl(NotifyUtils.CUSTOMER_WAYBILL_WEB_NOTIFY_URL+dao.getWaybillCode());
@@ -836,20 +937,18 @@ public class WaybillSenderNotify {
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
-                //发送给货主-->派单人
-                Map splitGoodsMap=new HashMap();
-                splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
-                SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
                 DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
-                defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
-                defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
-                User shipperUser= null;
-                try {
-                    shipperUser = userService.queryByUserId(splitGoods.getCreateId());
-                } catch (UserNotExistException e) {
-                    e.printStackTrace();
+                if(dao.getSplitGoodsId()!=null&&!dao.getSplitGoodsId().equals("")){
+                    //发送给货主-->派单人
+                    Map splitGoodsMap=new HashMap();
+                    splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
+                    SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
+                    defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
+                    defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
+                }else{
+                    defaultNotifyReceiver.setCompanyId(dao.getCompanyId());
+                    defaultNotifyReceiver.setUserId(dao.getCreateId());
                 }
-                defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
                 Company carrierCompany=companyService.selectById(dao.getCarrierCompanyId());
                 CommonAttachment commonAttachment = new CommonAttachment();
                 commonAttachment.setCarrierCompany(carrierCompany.getFullName());
@@ -889,18 +988,28 @@ public class WaybillSenderNotify {
         List<WaybillDao> list=waybillMapper.selectWaybillByWaybillIds(waybillIds);
         if(list!=null&&list.size()>0){
             for(WaybillDao dao:list){
-                //发送给货主-->派单人
-                Map splitGoodsMap=new HashMap();
-                splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
-                SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
                 DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
-                defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
-                defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
                 User shipperUser= null;
-                try {
-                    shipperUser = userService.queryByUserId(splitGoods.getCreateId());
-                } catch (UserNotExistException e) {
-                    e.printStackTrace();
+                if(dao.getSplitGoodsId()!=null&&!dao.getSplitGoodsId().equals("")){
+                    //发送给货主-->派单人
+                    Map splitGoodsMap=new HashMap();
+                    splitGoodsMap.put("splitGoodsId",dao.getSplitGoodsId());
+                    SplitGoods splitGoods=splitGoodsMapper.selectByPrimaryKey(splitGoodsMap);
+                    defaultNotifyReceiver.setCompanyId(splitGoods.getCompanyId());
+                    defaultNotifyReceiver.setUserId(splitGoods.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(splitGoods.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    defaultNotifyReceiver.setCompanyId(dao.getCompanyId());
+                    defaultNotifyReceiver.setUserId(dao.getCreateId());
+                    try {
+                        shipperUser = userService.queryByUserId(dao.getCreateId());
+                    } catch (UserNotExistException e) {
+                        e.printStackTrace();
+                    }
                 }
                 defaultNotifyReceiver.setPhoneNum(shipperUser.getPhone());
                 Company carrierCompany=companyService.selectById(dao.getCarrierCompanyId());
