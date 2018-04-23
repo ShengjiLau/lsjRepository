@@ -181,8 +181,11 @@
       <if test="groupId!=null">
         and group_id = #{groupId,jdbcType=BIGINT}
       </if>
-      <if test="approvalStatus!=null">
+      <if test="approvalStatus!=null and approvalStatus!=-1">
         and approval_status = #{approvalStatus,jdbcType=SMALLINT}
+      </if>
+      <if test="approvalStatus!=null and approvalStatus==-1">
+        and is_draft==0
       </if>
     </where>
     order by
