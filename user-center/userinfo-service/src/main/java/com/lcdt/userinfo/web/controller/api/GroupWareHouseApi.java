@@ -10,6 +10,7 @@ import com.lcdt.userinfo.model.TUserGroupWarehouseRelation;
 import com.lcdt.userinfo.web.dto.PageResultDto;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +32,7 @@ public class GroupWareHouseApi {
      * 已添加的仓库列表
      */
     @PostMapping("/addedwarehouse")
+    @PreAuthorize("hasAnyAuthority('group_warehouse') or hasRole('ROLE_SYS_ADMIN')")
     public PageResultDto AddedWareHouse(Long groupId, Integer pageSize, Integer pageNo){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
@@ -39,6 +41,7 @@ public class GroupWareHouseApi {
     }
 
     @PostMapping("/notaddwarehouse")
+    @PreAuthorize("hasAnyAuthority('group_warehouse') or hasRole('ROLE_SYS_ADMIN')")
     public PageResultDto<TUserGroupWarehouseRelation> notAddWareHouse(Long groupId, Integer pageSize, Integer pageNo) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
@@ -47,6 +50,7 @@ public class GroupWareHouseApi {
     }
 
     @PostMapping("/addwareHouse")
+    @PreAuthorize("hasAnyAuthority('group_warehouse') or hasRole('ROLE_SYS_ADMIN')")
     public TUserGroupWarehouseRelation addWareHouse(Long wareHouseId, Long groupId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         TUserGroupWarehouseRelation relation = service.addWareHouseRelation(groupId, companyId, wareHouseId);

@@ -98,7 +98,10 @@ public class PlanBO {
             tempDto.setUnit(obj.getUnit());
            // tempDto.setAmount(obj.getPlanAmount()); //派单数量
             tempDto.setFreightPrice(obj.getFreightPrice());
-            tempDto.setFreightTotal(obj.getFreightTotal());
+            tempDto.setFreightTotal(obj.getFreightTotal()); //应收
+            tempDto.setPayPrice(obj.getPayPrice());
+            tempDto.setPayTotal(obj.getPayTotal()); //应付
+
             tempDto.setRemark(obj.getDetailRemark());//备注
             tempDto.setPlanDetailId(obj.getPlanDetailId());//计划主ID
             waybillItemsDtos.add(tempDto);

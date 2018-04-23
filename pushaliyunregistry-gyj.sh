@@ -139,3 +139,6 @@ echo $app_name
 
 #更新应用名字
 update_server $app_name
+
+#清空虚悬镜像
+echo y | docker image prune
