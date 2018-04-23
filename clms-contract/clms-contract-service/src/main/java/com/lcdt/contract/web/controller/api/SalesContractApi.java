@@ -124,9 +124,9 @@ public class SalesContractApi {
         dto.setContractId(contractId);
         dto.setContractStatus(contractStatus);
         if(contractStatus == 0){//0生效
-            dto.setEffectiveTime(new Date());
+            dto.setStartDate(new Date());
         }else if(contractStatus == 3){//3失效
-            dto.setTerminationTime(new Date());
+            dto.setEndDate(new Date());
         }else{
             ContractDto oldDto = contractService.selectByPrimaryKey(contractId);
             oldDto.setIsDraft((short)1);
