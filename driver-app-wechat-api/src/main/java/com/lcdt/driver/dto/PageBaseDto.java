@@ -2,6 +2,7 @@ package com.lcdt.driver.dto;
 
 import com.lcdt.converter.ResponseData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public class PageBaseDto<T> implements ResponseData {
     }
 
     public PageBaseDto(List<T> list, long total) {
-        this.list = list==null? (List<T>) new Object() :list;
+        this.list = list==null? (List<T>) new ArrayList<T>() :list;
         this.total = total;
     }
 
