@@ -86,7 +86,7 @@ public class OwnVehicleApi {
     }
 
     @ApiOperation(value = "车辆同步", notes = "小程序报价，如果车辆信息在承运商里没有则创建")
-    @GetMapping("/current_location")
+    @GetMapping("/syncVehicle")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_list')")
     public JSONObject syncVehicle(@RequestBody OwnVehicle ownVehicle) {
         Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId(); //  获取companyId
