@@ -11,4 +11,6 @@ public interface GroupWareHouseService {
     List<TUserGroupWarehouseRelation> notAddUserGroupWareHouse(Long companyId,Long groupId);
 
     TUserGroupWarehouseRelation addWareHouseRelation(Long groupId,Long companyId,Long wareHouseId);
+
+    void removeWareHouseGroupRelation(Long relationId);
 }
