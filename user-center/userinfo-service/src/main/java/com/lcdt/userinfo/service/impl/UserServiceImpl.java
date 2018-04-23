@@ -94,6 +94,10 @@ public class UserServiceImpl implements UserService {
 	public User userLogin(String username, String pwd) throws UserNotExistException, PassErrorException {
 		User user = queryByPhone(username);
 
+		if (user == null) {
+			throw new RuntimeException();
+		}
+
 		if (user.getPwd() == null) {
 			throw new PassErrorException();
 		}
