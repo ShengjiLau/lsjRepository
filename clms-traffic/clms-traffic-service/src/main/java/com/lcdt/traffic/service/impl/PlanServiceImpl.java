@@ -203,7 +203,6 @@ public class PlanServiceImpl implements PlanService {
         WaybillPlan waybillPlan1 = waybillPlanMapper.selectByPrimaryKey(map);
         double remainCount = 0;
         if(waybillPlan1!=null) { //如果计划下的所有派单剩余数量为0的话，说明完成
-
             //派单详细
             List<SplitGoods> splitGoodsList = waybillPlan1.getSplitGoodsList();
             if (splitGoodsList!=null && splitGoodsList.size()>0) {
