@@ -106,7 +106,31 @@ public class ReconcileServiceImpl implements ReconcileService {
 	 */
 	@Override
 	@Transactional
-	public int setCancelOk(Long[] reconcileIdList) {
+	public int setCancelOk(String reconcileIdList) {
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		int result = reconcileMapper.cancelByBatch(reconcileIdList);
 		List<Reconcile> reconcileList= reconcileMapper.getReconcileListByPk(reconcileIdList);
 		Long[] acclids=null;

@@ -79,6 +79,35 @@ public class ReconcileApi {
 	@ApiOperation("取消订单,fee_reconcile_cancel")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_cancel')")
 	public JSONObject cancelReconcile(@ApiParam(value="一个或多个对账单id,多个时用','隔开",required=true)@RequestParam String reconcileIds) {
+		
+		reconcileService.setCancelOk(reconcileIds);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		String [] ss=reconcileIds.split(",");
 		Long[] reconcileIdList =new Long[ss.length];	
 		for(int i=0;i<ss.length;i++) {

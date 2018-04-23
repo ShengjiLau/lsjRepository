@@ -3,6 +3,7 @@ package com.lcdt.traffic.service;
 
 
 import java.util.List;
+import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.Reconcile;
@@ -17,7 +18,7 @@ public interface ReconcileService {
 	
 	public int insertReconcileBatch(List<Reconcile> reconcileList);
 	
-	public int setCancelOk(Long[] reconcileIdList);
+	public Map setCancelOk(String reconcileIdList);
 	
 	PageInfo<Reconcile> getReconcileList(ReconcileDto reconcileDto);
 	
