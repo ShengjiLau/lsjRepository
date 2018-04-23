@@ -170,10 +170,10 @@
         and (title like concat('%',#{title,jdbcType=VARCHAR},'%') or serial_no like concat('%',#{title,jdbcType=VARCHAR},'%'))
       </if>
       <if test="beginTime != null and beginTime != ''">
-        and effective_time <![CDATA[>=]]> #{beginTime,jdbcType=TIMESTAMP}
+        and start_date <![CDATA[>=]]> #{beginTime,jdbcType=TIMESTAMP}
       </if>
       <if test="endTime != null and endTime != ''">
-        and #{endTime,jdbcType=TIMESTAMP} <![CDATA[>=]]> effective_time
+        and #{endTime,jdbcType=TIMESTAMP} <![CDATA[>=]]> start_date
       </if>
       <if test="contractStatus!=null">
         and contract_status = #{contractStatus,jdbcType=SMALLINT}
@@ -189,14 +189,11 @@
     <if test="contractStatus==null or contractStatus==2">
       create_time
     </if>
-    <if test="contractStatus==0">
-      effective_time,start_date
-    </if>
-    <if test="contractStatus==1">
+    <if test="contractStatus==0 or contractStatus==1">
       start_date
     </if>
     <if test="contractStatus==3">
-      termination_time,end_date
+      end_date
     </if>
     desc
   </select>
@@ -204,11 +201,11 @@
   <update id="updateContractStatus" parameterType="com.lcdt.contract.model.Contract">
     update t_contract
     set contract_status = #{contractStatus,jdbcType=SMALLINT}
-    <if test="effectiveTime!=null">
-      ,effective_time = #{effectiveTime,jdbcType=TIMESTAMP}
+    <if test="startDate!=null">
+      ,start_date = #{startDate,jdbcType=TIMESTAMP}
     </if>
-    <if test="terminationTime!=null">
-      ,termination_time = #{terminationTime,jdbcType=TIMESTAMP}
+    <if test="endDate!=null">
+      ,end_date = #{endDate,jdbcType=TIMESTAMP}
     </if>
     <if test="isDraft!=null">
       ,is_draft = #{isDraft,jdbcType=SMALLINT}
