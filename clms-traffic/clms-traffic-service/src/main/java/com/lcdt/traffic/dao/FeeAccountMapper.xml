@@ -441,15 +441,31 @@
     </foreach>
   </update>
   
-  <update id="updateReconcileByBatch" parameterType="java.util.List"> 
-  <foreach collection="list" index="index" item="item" separator=";" close="" open="">
-   update t_fee_account
-  	  set
-  	  reconcile_id = #{item.reconcileId,jdbcType=BIGINT},reconcile_code = #{item.reconcileCode,jdbcType=VARCHAR}
-  	  where
-  	  account_id = #{item.accountId,jdbcType=BIGINT}
+  
+  <update id="updateReconcileByBatch" parameterType="java.util.List">
+      update t_fee_account 
+      set
+      reconcile_id = case account_id 
+  <foreach collection="list" index="index" item="item"> 
+  	WHEN #{item.accountId,jdbcType=BIGINT} THEN #{item.reconcileId,jdbcType=BIGINT}
   	</foreach>
+  	END 
+  	, 
+  	reconcile_code = case account_id
+  	<foreach collection="list" index="index" item="item"> 
+  	WHEN #{item.accountId,jdbcType=BIGINT} THEN #{item.reconcileCode,jdbcType=VARCHAR}
+  	</foreach>
+  	END 
+  	<where>
+  	account_id in
+  	 <foreach collection="list" index="index" item="item" separator="," close=")" open="(">
+  	 #{item.accountId,jdbcType=BIGINT}
+  	 </foreach>
+  	</where>
   </update>
+  
+  
+  
   <update id="updateReconcileCodeAndId" parameterType="com.lcdt.traffic.web.dto.ReconcileDto">
     update t_fee_account
     set reconcile_id = #{reconcileId,jdbcType=BIGINT},reconcile_code = #{reconcileCode,jdbcType=VARCHAR}

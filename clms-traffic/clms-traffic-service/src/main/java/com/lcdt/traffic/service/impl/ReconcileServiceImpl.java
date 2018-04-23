@@ -56,22 +56,26 @@ public class ReconcileServiceImpl implements ReconcileService {
 		
 	List<FeeAccount> feeAccountList=new ArrayList<FeeAccount>();
 	for(Reconcile fa:reconcileList) {
+		//添加对账单的所属公司id 操作人id 操作人姓名 默认状态
 		fa.setCompanyId(SecurityInfoGetter.getCompanyId());
 		fa.setOperatorId(SecurityInfoGetter.getUser().getUserId());
 		fa.setOperatorName(SecurityInfoGetter.getUser().getRealName());
 		fa.setCancelOk((short) 0);//生成对账单时取消状态设置为0不取消
 	}
+	//批量插入
 	int result=reconcileMapper.insertByBatch(reconcileList);
 	
 	for(Reconcile reconcile:reconcileList) {
 		Reconcile rec =reconcileMapper.selectByPrimaryKey(reconcile.getReconcileId());
+		//得到记账单id
 		String str=rec.getAccountId();
 		String[] ss=str.split(",");	
 		Long[] acLongId=new Long[ss.length];
 		for(int i=0;i<ss.length;i++) {
 			acLongId[i]=Long.valueOf(ss[i]);
 		}
-		for(Long l:acLongId) {		
+		for(Long l:acLongId) {
+			//创建一个记账单 依次放入每条记账单id以及对应的对账单id和对账单号
 			FeeAccount fa = new FeeAccount();
 			fa.setAccountId(l);
 			fa.setReconcileId(rec.getReconcileId());
@@ -81,11 +85,16 @@ public class ReconcileServiceImpl implements ReconcileService {
 	}
 	int i=feeAccountList.size();
 	logger.debug("应添加记账单ReconcileId数量:"+feeAccountList.size());
+	//批量修改记账单对应的对账单id 和 对账单单号
 	int j=feeAccountMapper.updateReconcileByBatch(feeAccountList);
 	logger.debug("实际添加记账单ReconcileId数量:"+j);
-	logger.debug("插入对账单数量为:"+result);	
-	
-	return result;	
+	logger.debug("插入对账单数量为:"+result);
+	//一下判断既可判断对应的记账单是否全部被修改,又可判断是否存在对应的记账单id
+	if(i==j) {
+		return result;	
+	}else {
+		return -1;
+	}
 	}
 
 	

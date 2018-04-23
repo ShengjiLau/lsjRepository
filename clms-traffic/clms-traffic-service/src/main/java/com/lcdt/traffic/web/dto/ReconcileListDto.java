@@ -22,7 +22,7 @@ public class ReconcileListDto implements Serializable{
 	private static final long serialVersionUID = -749151515156L;
 
 	@ApiModelProperty("批量对账单")
-	@NotEmpty
+	@NotEmpty(message="请添加至少一条对账单信息")
 	private List<Reconcile> reconcileList;
 
 	public List<Reconcile> getReconcileList() {

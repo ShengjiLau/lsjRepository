@@ -72,7 +72,6 @@ public class FeeExchangeApi {
 		jsonObject.put("msg","收付款记录列表");
 		jsonObject.put("data",jsonArray);
 		
-		
 		return jsonObject;
 	}
 	
@@ -81,7 +80,7 @@ public class FeeExchangeApi {
 	@PostMapping("/cancel")
 	@ApiOperation("批量取消收付款记录")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_exchange_cancel')")
-	public JSONObject cancelFeeExchange(@ApiParam(value="收付款记录id数组",required=true)@RequestParam Long[] feeExchanges) {
+	public JSONObject cancelFeeExchange(@ApiParam(value="收付款记录id数组",required=true)@RequestParam String feeExchanges) {
 		JSONObject jsonObject =new JSONObject();
 		int result=feeExchangeService.updateSetCancelOk(feeExchanges);
 		if(result>0) {
@@ -102,7 +101,7 @@ public class FeeExchangeApi {
 		FeeExchange fe=feeExchangeService.selectFeeExchangeById(feeExchangeId);
 		if(null!=fe) {
 			jsonObject.put("code",0);
-			jsonObject.put("msg","收付款详情");
+			jsonObject.put("message","收付款详情");
 			jsonObject.put("data",fe);
 		}else {
 			throw new RuntimeException("查询出现异常");

@@ -18,7 +18,7 @@ public interface FeeExchangeService {
 	
 	PageInfo<FeeExchange> getFeeExchangeList(FeeExchangeDto feeExchangeDto);
 	
-	int updateSetCancelOk(Long [] feeExchangeIds);
+	int updateSetCancelOk(String feeExchangeIds);
 	
 	FeeExchange selectFeeExchangeById(Long feeExchangeId);
 	

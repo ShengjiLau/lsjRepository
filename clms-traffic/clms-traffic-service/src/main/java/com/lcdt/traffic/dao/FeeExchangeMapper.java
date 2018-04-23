@@ -37,7 +37,7 @@ public interface FeeExchangeMapper {
      * @param feeExchangeIds
      * @return
      */
-    int updateCancelOkByBatch(Long [] feeExchangeIds);
+    int updateCancelOkByBatch(String feeExchangeIds);
     
 
     /**

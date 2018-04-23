@@ -23,4 +23,8 @@ public interface MsgMapper {
     Msg selectByAccountId(Long accountId,Short type);
     
     List<Msg> selectSomeMsg(MsgDto msgDto);
+    
+    int insertByBatch(List<Msg> msgList);
+    
+    
 }
