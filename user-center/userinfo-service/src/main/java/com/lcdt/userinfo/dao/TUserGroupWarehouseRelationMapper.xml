@@ -10,9 +10,33 @@
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="group_id" jdbcType="BIGINT" property="groupId" />
 <!--    内嵌关联结果 仓库数据 必须添加 column 和 id 属性 否则会有性能问题 -->
-    <association property="wareHouse" javaType="com.lcdt.userinfo.model.Warehouse" autoMapping="true" column="ware_house_id"
-    >
-      <id property="whId" column="wh_id" />
+    <association property="wareHouse" javaType="com.lcdt.userinfo.model.Warehouse" autoMapping="true" column="ware_house_id"   >
+      <id column="wh_id" jdbcType="BIGINT" property="whId" />
+      <result column="wh_name" jdbcType="VARCHAR" property="whName" />
+      <result column="wh_code" jdbcType="VARCHAR" property="whCode" />
+      <result column="wh_type" jdbcType="SMALLINT" property="whType" />
+      <result column="wh_status" jdbcType="SMALLINT" property="whStatus" />
+      <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+      <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+      <result column="principal" jdbcType="VARCHAR" property="principal" />
+      <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+      <result column="mail" jdbcType="VARCHAR" property="mail" />
+      <result column="tel_num" jdbcType="VARCHAR" property="telNum" />
+      <result column="fax" jdbcType="VARCHAR" property="fax" />
+      <result column="province" jdbcType="VARCHAR" property="province" />
+      <result column="city" jdbcType="VARCHAR" property="city" />
+      <result column="county" jdbcType="VARCHAR" property="county" />
+      <result column="detail_address" jdbcType="VARCHAR" property="detailAddress" />
+      <result column="post_code" jdbcType="VARCHAR" property="postCode" />
+      <result column="remark" jdbcType="VARCHAR" property="remark" />
+      <result column="create_id" jdbcType="BIGINT" property="createId" />
+      <result column="create_name" jdbcType="VARCHAR" property="createName" />
+      <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+      <result column="update_id" jdbcType="BIGINT" property="updateId" />
+      <result column="update_name" jdbcType="VARCHAR" property="updateName" />
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+      <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+      <result column="company_id" jdbcType="BIGINT" property="companyId" />
     </association>
 
   </resultMap>
@@ -25,9 +49,9 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_user_group_warehouse_relation (user_id, ware_house_id, create_date, 
-      version)
+      version,company_id,group_id)
     values (#{userId,jdbcType=BIGINT}, #{wareHouseId,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{version,jdbcType=INTEGER})
+      #{version,jdbcType=INTEGER},#{companyId,jdbcType=INTEGER},#{groupId,jdbcType=INTEGER})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.TUserGroupWarehouseRelation">
     update t_user_group_warehouse_relation

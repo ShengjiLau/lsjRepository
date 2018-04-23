@@ -68,8 +68,8 @@ public class GroupWareHouseServiceImpl implements GroupWareHouseService{
     /**
      * 移除 仓库 组关系
      */
-    public void removeWareHouseGroupRelation(){
-
+    public void removeWareHouseGroupRelation(Long relationId){
+        dao.deleteByPrimaryKey(relationId);
     }
 
 }

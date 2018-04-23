@@ -54,8 +54,9 @@ public class GroupWareHouseApi {
     }
 
     @PostMapping("/removeWareHouseRelation")
-    public String removeWareHouse(Long wareHouseId, Long groupId) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
+    public String removeWareHouse(Long relationId) {
+        service.removeWareHouseGroupRelation(relationId);
+//        Long companyId = SecurityInfoGetter.getCompanyId();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("message", "删除成功");
         jsonObject.put("code", 0);
