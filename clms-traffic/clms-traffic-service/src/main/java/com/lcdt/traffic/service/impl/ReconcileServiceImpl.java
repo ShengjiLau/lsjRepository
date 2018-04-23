@@ -5,7 +5,9 @@ package com.lcdt.traffic.service.impl;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
@@ -106,7 +108,9 @@ public class ReconcileServiceImpl implements ReconcileService {
 	 */
 	@Override
 	@Transactional
-	public int setCancelOk(String reconcileIdList) {
+	public Map setCancelOk(String reconcileIdList) {
+		
+		Map map =new HashMap();
 		
 		
 		
@@ -129,36 +133,34 @@ public class ReconcileServiceImpl implements ReconcileService {
 		
 		
 		
-		
-		
-		int result = reconcileMapper.cancelByBatch(reconcileIdList);
-		List<Reconcile> reconcileList= reconcileMapper.getReconcileListByPk(reconcileIdList);
-		Long[] acclids=null;
-		for(Reconcile reconcile:reconcileList) {
-			String s=reconcile.getAccountId();
-			String[] ss=s.split(",");
-			Long[] accIds=new Long[ss.length];
-			for(int i=0;i<ss.length;i++) {
-				accIds[i]=Long.parseLong(ss[i]);
-			}
-			acclids=(Long[]) ArrayUtils.addAll(acclids,accIds);
-		}
-		List<FeeAccount> feeAccountList =new ArrayList<FeeAccount>();
-		for(Long l:acclids) {
-			FeeAccount fa= new FeeAccount();
-			fa.setAccountId(l);
-			fa.setReconcileId(null);
-			fa.setReconcileCode(null);
-			feeAccountList.add(fa);
-		}
-		int i=acclids.length;int j;
-		if(0!=feeAccountList.size()) {
-			 j=feeAccountMapper.updateReconcileByBatch(feeAccountList);
-		}else {
-			 j=0;
-		}
-			return result;
-		
+//		int result = reconcileMapper.cancelByBatch(reconcileIdList);
+//		List<Reconcile> reconcileList= reconcileMapper.getReconcileListByPk(reconcileIdList);
+//		Long[] acclids=null;
+//		for(Reconcile reconcile:reconcileList) {
+//			String s=reconcile.getAccountId();
+//			String[] ss=s.split(",");
+//			Long[] accIds=new Long[ss.length];
+//			for(int i=0;i<ss.length;i++) {
+//				accIds[i]=Long.parseLong(ss[i]);
+//			}
+//			acclids=(Long[]) ArrayUtils.addAll(acclids,accIds);
+//		}
+//		List<FeeAccount> feeAccountList =new ArrayList<FeeAccount>();
+//		for(Long l:acclids) {
+//			FeeAccount fa= new FeeAccount();
+//			fa.setAccountId(l);
+//			fa.setReconcileId(null);
+//			fa.setReconcileCode(null);
+//			feeAccountList.add(fa);
+//		}
+//		int i=acclids.length;int j;
+//		if(0!=feeAccountList.size()) {
+//			 j=feeAccountMapper.updateReconcileByBatch(feeAccountList);
+//		}else {
+//			 j=0;
+//		}
+//			return result;
+		return map;
 		
 	}
 	

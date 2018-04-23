@@ -136,14 +136,14 @@ public class ReconcileApi {
 				reconIds[i]=(Long) jsonArray2.get(i);
 			}
 			
-			int result=reconcileService.setCancelOk(reconIds);
-			if(jsonArray2.size()==result) {
-				jsonObject.put("message2","取消成功");
-				return jsonObject;
-		}else {
-			throw new RuntimeException("取消对账单时出现异常");
-		}
-		}
+		//	int result=reconcileService.setCancelOk(reconIds);
+//			if(jsonArray2.size()==result) {
+//				jsonObject.put("message2","取消成功");
+//				return jsonObject;
+//		}else {
+//			throw new RuntimeException("取消对账单时出现异常");
+//		}
+	    }
 		return jsonObject;			
 	}
 	
