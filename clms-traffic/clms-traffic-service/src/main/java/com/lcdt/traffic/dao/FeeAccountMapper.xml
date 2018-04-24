@@ -365,7 +365,7 @@
     group by a.name
   </select>
   <insert id="insertBatch" useGeneratedKeys="true" keyProperty="accountId" keyColumn="account_id">
-    insert into t_fee_account (account_id, account_code, company_id, waybill_id,
+    insert into t_fee_account (account_code, company_id, waybill_id,
     waybill_code, group_id, group_name,
     name_id, name, audit_status,
     audit_date, operator_id, operator_name,
@@ -373,7 +373,7 @@
     create_date, is_deleted)
     values
     <foreach item="item" collection="list" separator=",">
-      (#{item.accountId,jdbcType=BIGINT}, ACCOUNT_CODE('JZ'), #{item.companyId,jdbcType=BIGINT}, #{item.waybillId,jdbcType=BIGINT},
+      (#{ACCOUNT_CODE('JZ'), #{item.companyId,jdbcType=BIGINT}, #{item.waybillId,jdbcType=BIGINT},
       #{item.waybillCode,jdbcType=VARCHAR}, #{item.groupId,jdbcType=BIGINT}, #{item.groupName,jdbcType=VARCHAR},
       #{item.nameId,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, #{item.auditStatus,jdbcType=SMALLINT},
       #{item.auditDate,jdbcType=TIMESTAMP}, #{item.operatorId,jdbcType=BIGINT}, #{item.operatorName,jdbcType=VARCHAR},
