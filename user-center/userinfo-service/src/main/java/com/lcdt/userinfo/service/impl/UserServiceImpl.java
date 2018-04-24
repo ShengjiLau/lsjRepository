@@ -93,15 +93,16 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User userLogin(String username, String pwd) throws UserNotExistException, PassErrorException {
 		User user = queryByPhone(username);
+
 		if (user.getPwd() == null) {
-			throw new PassErrorException();
+			throw new PassErrorException("密码未设置");
 		}
 		if (user.getPwd().toUpperCase().equals(RegisterUtils.md5Encrypt(pwd).toUpperCase())){
 			user.setLastLoginTime(new Date()); //更新登录时间
 			userMapper.updateByPrimaryKey(user);
 			return user;
 		}else{
-			throw new PassErrorException();
+			throw new PassErrorException("手机号或者密码错误，请重新输入");
 		}
 	}
 
@@ -141,7 +142,7 @@ public class UserServiceImpl implements UserService {
 	public User queryByPhone(String phone) throws UserNotExistException {
 		User user = userMapper.queryByUserPhone(phone);
 		if (user == null) {
-			throw new UserNotExistException();
+			throw new UserNotExistException("手机号码未注册，请重新输入");
 		}
 		return user;
 	}

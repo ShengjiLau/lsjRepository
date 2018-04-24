@@ -95,7 +95,7 @@ public class PurchaseContractApi {
     @ApiOperation("合同编辑")
     @RequestMapping(value = "/modifyContract", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_modify')")
-    public JSONObject modifyContract(@Validated ContractDto dto) {
+    public JSONObject modifyContract(@Validated @RequestBody ContractDto dto) {
         User user = SecurityInfoGetter.getUser();
         dto.setPartyAId(user.getUserId());
         dto.setPartyAName(user.getRealName());
@@ -125,12 +125,12 @@ public class PurchaseContractApi {
         dto.setContractId(contractId);
         dto.setContractStatus(contractStatus);
         if(contractStatus == 0){//0生效
-            dto.setEffectiveTime(new Date());
+            dto.setStartDate(new Date());
         }else if(contractStatus == 3){//3失效
-            dto.setTerminationTime(new Date());
+            dto.setEndDate(new Date());
         }else{
-            dto.setIsDraft((short)1);
             ContractDto oldDto = contractService.selectByPrimaryKey(contractId);
+            oldDto.setIsDraft((short)1);
             dto = Utils.getContractStatus(oldDto);
         }
         int result = contractService.modContractStatus(dto);

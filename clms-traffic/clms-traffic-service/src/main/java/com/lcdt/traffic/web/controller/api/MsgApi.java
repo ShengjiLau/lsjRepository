@@ -44,7 +44,7 @@ public class MsgApi {
 	@ApiOperation(value="添加留言")
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('account_msg_add')")
-	public JSONObject addMsg(@Validated @RequestBody Msg msg,BindingResult bindingResult) {
+	public JSONObject addMsg(@Validated Msg msg,BindingResult bindingResult) {
 		JSONObject jsonObject = new JSONObject();
 		if(bindingResult.hasErrors()) {
 			Map<String,String> map =new HashMap<String, String>();
@@ -73,7 +73,7 @@ public class MsgApi {
 	@ApiOperation(value="修改留言")
 	@PostMapping("/modify")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('account_msg_modify')")
-	public JSONObject modifyMsg(@Validated @RequestBody Msg msg,BindingResult bindingResult) {
+	public JSONObject modifyMsg(@Validated Msg msg,BindingResult bindingResult) {
 		JSONObject jsonObject = new JSONObject();
 		if(bindingResult.hasErrors()) {
 			Map<String,String> map =new HashMap<String, String>();
@@ -86,7 +86,6 @@ public class MsgApi {
 			return jsonObject;
 		}
 		msg.setCreateDate(new Date());
-		msg.setIsDeleted((short) 0);
 		msg.setOperatorId(SecurityInfoGetter.getUser().getUserId());
 		msg.setOperatorName(SecurityInfoGetter.getUser().getRealName());
 		int result =msgService.updateMsg(msg);

@@ -92,7 +92,6 @@ public class AuthApi {
             jsonObject.put("message", "已发送");
         }
         return jsonObject.toString();
-
     }
 
 }

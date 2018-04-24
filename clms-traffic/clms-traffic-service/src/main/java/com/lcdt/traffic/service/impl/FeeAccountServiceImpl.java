@@ -4,18 +4,19 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.FeeAccountService;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
 import com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto;
 import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
+import com.lcdt.traffic.web.dto.ReconcileDto;
 import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.userinfo.rpc.FinanceRpcService;
 import com.lcdt.util.ClmsBeanUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.tl.commons.util.DateUtility;
 
 import java.util.*;
 
@@ -40,6 +41,9 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     FinanceRpcService financeRpcService;
     @Autowired
     private CustomerCompanyIds customerCompanyIds;
+    @Autowired
+    private ReconcileMapper reconcileMapper;
+
     @Override
     public PageInfo feeAccountWaybillList(Map map){
         List<FeeAccountWaybillDto> resultList = null;
@@ -108,13 +112,13 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     }
     @Override
     public Map feeAccountPage(Map m){
-        List<WaybillItems> waybillItemsList = waybillItemsMapper.selectByWaybillId(Long.parseLong(m.get("waybillId").toString()));
+        Map map = new HashMap();
         List<FeeAccountDto> feeAccountDtoList = feeAccountMapper.selectFeeAccountDetail(m);
+        List<WaybillItems> waybillItemsList = waybillItemsMapper.selectByWaybillId(Long.parseLong(m.get("waybillId").toString()));
         m.put("isShow", (short)0);
         List<FeeProperty> showPropertyList = financeRpcService.selectByCondition(m);
         m.put("isShow", (short)1);
         List<FeeProperty> hidePropertyList = financeRpcService.selectByCondition(m);
-        Map map = new HashMap();
         map.put("waybillItemsList", waybillItemsList);
         map.put("feeAccountDtoList", feeAccountDtoList);
         map.put("showPropertyList", showPropertyList);
@@ -129,6 +133,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
 
             if(dtoList != null && dtoList.size() > 0){
                 List<FeeAccount> updateFeeAccountList = new ArrayList<>();//修改已存在的记账单
+                List<FeeFlow> insertFeeFlowList = new ArrayList<>();//新增的流水
                 List<FeeFlow> updateFeeFlowList = new ArrayList<>();//修改已存在的流水
                 List<FeeFlowLog> insertFeeFlowLogList = new ArrayList<>();//已存在流水修改日志
 
@@ -169,10 +174,11 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                                     flow.setIsReceivable(saveParamsDto.getIsReceivable());
                                     flow.setCompanyId(saveParamsDto.getCompanyId());
                                     flow.setIsDeleted((short)0);
-                                    feeFlowMapper.insert(flow);
-                                    flow.setFlowCode("LS" + DateUtility.date2String(new Date(),
-                                            "yyyyMMdd") + flow.getFlowId());
-                                    feeFlowMapper.updateByPrimaryKey(flow);
+                                    insertFeeFlowList.add(flow);
+//                                    feeFlowMapper.insert(flow);
+//                                    flow.setFlowCode("LS" + DateUtility.date2String(new Date(),
+//                                            "yyyyMMdd") + flow.getFlowId());
+//                                    feeFlowMapper.updateByPrimaryKey(flow);
                                 }
                             }
                         }
@@ -189,9 +195,9 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                         account.setCreateDate(new Date());
                         account.setIsDeleted((short)0);
                         feeAccountMapper.insert(account);
-                        account.setAccountCode("JZ" + DateUtility.date2String(new Date(),
-                                "yyyyMMdd") + account.getAccountId());
-                        feeAccountMapper.updateByPrimaryKey(account);
+//                        account.setAccountCode("JZ" + DateUtility.date2String(new Date(),
+//                                "yyyyMMdd") + account.getAccountId());
+//                        feeAccountMapper.updateByPrimaryKey(account);
 
                         if(dto.getFeeFlowList() != null && dto.getFeeFlowList().size() > 0){
                             for(FeeFlow flow : dto.getFeeFlowList()) {
@@ -208,10 +214,11 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                                     flow.setIsReceivable(saveParamsDto.getIsReceivable());
                                     flow.setCompanyId(saveParamsDto.getCompanyId());
                                     flow.setIsDeleted((short)0);
-                                    feeFlowMapper.insert(flow);
-                                    flow.setFlowCode("LS" + DateUtility.date2String(new Date(),
-                                            "yyyyMMdd") + flow.getFlowId());
-                                    feeFlowMapper.updateByPrimaryKey(flow);
+                                    insertFeeFlowList.add(flow);
+//                                    feeFlowMapper.insert(flow);
+//                                    flow.setFlowCode("LS" + DateUtility.date2String(new Date(),
+//                                            "yyyyMMdd") + flow.getFlowId());
+//                                    feeFlowMapper.updateByPrimaryKey(flow);
                                 }
                             }
                         }
@@ -219,6 +226,9 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                 }
                 if(updateFeeAccountList.size() > 0){
                     feeAccountMapper.updateBatch(updateFeeAccountList);
+                }
+                if(insertFeeFlowList.size() > 0){
+                    feeFlowMapper.insertBatch(insertFeeFlowList);
                 }
                 if(updateFeeFlowList.size() > 0){
                     feeFlowMapper.updateBatch(updateFeeFlowList);
@@ -288,9 +298,54 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         return result;
     }
 
-//    @Override
-//    public List feeAccountReconcileGroup(Map map) {
-//        List list = feeAccountMapper.reconcileByAccountIds(map);
-//        return list;
-//    }
+    @Override
+    public List feeAccountReconcilePage(Map map) {
+        List list = feeAccountMapper.feeAccountGroupByReceivPayName(map);
+        return list;
+    }
+    @Override
+    public int feeAccountReconcileSave(List<Map<String,Object>> list, short payeeType) {
+        int result = 0;
+        if (list != null && list.size() > 0) {
+            ReconcileDto dto = new ReconcileDto();
+//            Date createTime = new Date();
+            List<Reconcile> reconcileList = new ArrayList<>();
+            for (Map<String, Object> m : list) {
+                Reconcile reconcile = new Reconcile();
+                reconcile.setCompanyId(SecurityInfoGetter.getCompanyId());
+                reconcile.setAccountAmount(Double.parseDouble(m.get("moneySum").toString()));
+                reconcile.setOperatorId(SecurityInfoGetter.getUser().getUserId());
+                reconcile.setOperatorName(SecurityInfoGetter.getUser().getRealName());
+//                reconcile.setCreateTime(createTime);
+                reconcile.setCancelOk((short) 0);
+                reconcile.setWaybillId(m.get("waybillIds").toString());
+                reconcile.setAccountId(m.get("accountIds").toString());
+                reconcile.setPayeeType(payeeType);
+                reconcile.setPayerId(Long.parseLong(m.get("nameId").toString()));
+                reconcile.setPayerName(m.get("name").toString());
+                reconcile.setGroupId(SecurityInfoGetter.groups().get(0).getGroupId());
+                reconcileList.add(reconcile);
+            }
+            result = reconcileMapper.insertByBatch(reconcileList);
+            if(result == reconcileList.size()){
+                for(Reconcile reconcile : reconcileList){
+//                    reconcile.setReconcileCode("DZ" + DateUtility.date2String(new Date(),
+//                            "yyyyMMdd") + reconcile.getReconcileId());
+//                    //修改对账单号
+//                    result += reconcileMapper.updateByPrimaryKeySelective(reconcile);
+                    //修改每个对账单对应的记账单对账信息
+                    dto.setReconcileId(reconcile.getReconcileId());
+                    dto.setReconcileCode(reconcileMapper.selectByPrimaryKey(reconcile.getReconcileId()).getReconcileCode());
+                    String[] accountIdStrArr = reconcile.getAccountId().split(",");
+                    Long[] accountIds = new Long[accountIdStrArr.length];
+                    for(int i=0; i<accountIdStrArr.length; i++){
+                        accountIds[i] = Long.parseLong(accountIdStrArr[i]);
+                    }
+                    dto.setAccountIds(accountIds);
+                    result += feeAccountMapper.updateReconcileCodeAndId(dto);
+                }
+            }
+        }
+        return result;
+    }
 }

@@ -14,6 +14,8 @@
     <result column="remain_amount" jdbcType="REAL" property="remainAmount" />
     <result column="freight_price" jdbcType="REAL" property="freightPrice" />
     <result column="freight_total" jdbcType="REAL" property="freightTotal" />
+    <result column="pay_price" jdbcType="REAL" property="payPrice" />
+    <result column="pay_total" jdbcType="REAL" property="payTotal" />
     <result column="detail_remark" jdbcType="VARCHAR" property="detailRemark" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
@@ -33,7 +35,7 @@
     -->
     select split_goods_detail_id, split_goods_id, plan_detail_id, allot_amount, remain_amount,
     freight_price, freight_total, detail_remark, create_id, create_name, create_date,
-    update_id, update_name, update_time, is_deleted, company_id
+    update_id, update_name, update_time, is_deleted, company_id,pay_price,pay_total
     from t_split_goods_detail
     where split_goods_id = #{splitGoodsId} and company_id = #{companyId} and is_deleted = #{isDeleted}
   </select>
@@ -62,13 +64,15 @@
      remain_amount, freight_price, freight_total,
       detail_remark, create_id, create_name, 
       create_date, update_id, update_name, 
-      update_time, is_deleted, company_id
+      update_time, is_deleted, company_id,pay_price,pay_total
       )
     values (#{splitGoodsId,jdbcType=BIGINT}, #{planDetailId,jdbcType=BIGINT}, #{allotAmount,jdbcType=REAL}, 
       #{remainAmount,jdbcType=REAL}, #{freightPrice,jdbcType=REAL}, #{freightTotal,jdbcType=REAL},
       #{detailRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, 
       #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, #{companyId,jdbcType=BIGINT}
+      #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, #{companyId,jdbcType=BIGINT},
+      #{payPrice,jdbcType=REAL}, #{payTotal,jdbcType=REAL}
+
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.SplitGoodsDetail">
@@ -103,7 +107,7 @@
     -->
     select split_goods_detail_id, split_goods_id, plan_detail_id, allot_amount, remain_amount,
     freight_price, freight_total, detail_remark, create_id, create_name, create_date, 
-    update_id, update_name, update_time, is_deleted, company_id
+    update_id, update_name, update_time, is_deleted, company_id,pay_price,pay_total
     from t_split_goods_detail
     where split_goods_detail_id = #{splitGoodsDetailId,jdbcType=BIGINT}
   </select>
@@ -118,7 +122,7 @@
     -->
     select split_goods_detail_id, split_goods_id, plan_detail_id, allot_amount, remain_amount,
     freight_price, freight_total, detail_remark, create_id, create_name, create_date,
-    update_id, update_name, update_time, is_deleted, company_id
+    update_id, update_name, update_time, is_deleted, company_id,pay_price,pay_total
     from t_split_goods_detail
   </select>
 
@@ -127,7 +131,7 @@
     remain_amount, freight_price, freight_total,
     detail_remark, create_id, create_name,
     create_date, update_id, update_name,
-    update_time, is_deleted, company_id
+    update_time, is_deleted, company_id,pay_price,pay_total
     )
     values
     <foreach collection="list" item="splitGoods" index="index" separator="," >
@@ -135,7 +139,8 @@
       #{splitGoods.remainAmount}, #{splitGoods.freightPrice}, #{splitGoods.freightTotal},
       #{splitGoods.detailRemark}, #{splitGoods.createId}, #{splitGoods.createName},
       #{splitGoods.createDate}, #{splitGoods.updateId}, #{splitGoods.updateName},
-      #{splitGoods.updateTime}, #{splitGoods.isDeleted}, #{splitGoods.companyId}
+      #{splitGoods.updateTime}, #{splitGoods.isDeleted}, #{splitGoods.companyId},
+      #{splitGoods.payPrice}, #{splitGoods.payTotal}
       )
     </foreach>
   </insert>

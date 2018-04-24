@@ -11,6 +11,6 @@
         <package name="com.lcdt.userinfo.dao"></package>
         <package name="com.lcdt.clms.permission.dao"></package>
     </mappers>
-
+    
 </configuration>
 

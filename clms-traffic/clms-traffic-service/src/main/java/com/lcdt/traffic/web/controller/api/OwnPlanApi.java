@@ -273,7 +273,6 @@ public class OwnPlanApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_bidding_finish') or hasAuthority('traffic_customer_plan_offer')")
     public String biddingFinish(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
         UserCompRel loginUser = SecurityInfoGetter.geUserCompRel();
-
         WaybillPlan waybillPlan = iPlanRpcService4Wechat.biddingFinish(waybillPlanId,loginUser);
         JSONObject jsonObject = new JSONObject();
         String message = "操作成功！";
@@ -287,6 +286,33 @@ public class OwnPlanApi {
         jsonObject.put("code",code);
         return jsonObject.toString();
     }
+
+
+
+    @ApiOperation("编辑--发布")
+    @RequestMapping(value = "/planEdit4Publish",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_create_plan') or hasAuthority('traffic_create_plan_1')")
+    public JSONObject planEdit4Publish(@RequestBody WaybillParamsDto dto, BindingResult bindingResult) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+        dto.setUpdateId(loginUser.getUserId());
+        dto.setUpdateName(loginUser.getRealName());
+        dto.setCompanyId(companyId);
+        dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
+        dto.setCompanyName(userCompRel.getCompany().getFullName()); //企业名称
+        JSONObject jsonObject = new JSONObject();
+        if (bindingResult.hasErrors()) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
+            return jsonObject;
+        }
+        plan4EditService.waybillPlanEdit(dto, (short) 1);
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "发布成功！");
+        return jsonObject;
+    }
+
 
 
 

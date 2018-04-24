@@ -27,16 +27,22 @@ public class FeeAccountDto extends FeeAccount{
     @ApiModelProperty(value="查询tab：0-全部 1-未对账 2-已对账")
     private Integer reconcileStatus;
 
+    @ApiModelProperty(value="运费")
     private Float freightTotal;
 
+    @ApiModelProperty(value="其他费用")
     private Float otherFeeTotal;
 
+    @ApiModelProperty(value="费用总计")
     private Float feeTotal;
 
+    @ApiModelProperty(value="流水集合")
     private List<FeeFlow> feeFlowList;
 
+    @ApiModelProperty(value="默认显示费用类型")
     private List<FeeProperty> showPropertyList;
 
+    @ApiModelProperty(value="默认隐藏费用类型")
     private List<FeeProperty> hidePropertyList;
 
     @ApiModelProperty(value = "页码")

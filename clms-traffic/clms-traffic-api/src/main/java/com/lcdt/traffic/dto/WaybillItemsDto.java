@@ -36,6 +36,10 @@ public class WaybillItemsDto {
 
     private Float freightTotal;
 
+    private Float payPrice;
+
+    private Float payTotal;
+
     private String remark;
     @ApiModelProperty(value = "创建人id",hidden = true)
     private Long createId;
@@ -159,6 +163,22 @@ public class WaybillItemsDto {
         this.freightTotal = freightTotal;
     }
 
+    public Float getPayPrice() {
+        return payPrice;
+    }
+
+    public void setPayPrice(Float payPrice) {
+        this.payPrice = payPrice;
+    }
+
+    public Float getPayTotal() {
+        return payTotal;
+    }
+
+    public void setPayTotal(Float payTotal) {
+        this.payTotal = payTotal;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -230,4 +250,6 @@ public class WaybillItemsDto {
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
+
+
 }

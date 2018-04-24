@@ -82,7 +82,7 @@
     <result column="cancel_date" jdbcType="TIMESTAMP" property="cancelDate" />
     <result column="cancel_man" jdbcType="VARCHAR" property="cancelMan" />
     <result column="cancel_remark" jdbcType="VARCHAR" property="cancelRemark" />
-
+    <result column="carrier_all_ids" jdbcType="SMALLINT" property="carrierAllIds" />
     <!--计划详细-->
     <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.PlanDetail" javaType="ArrayList"
@@ -105,7 +105,6 @@
     <collection property="transportWayItemsList" column="{waybillPlanId=waybill_plan_id}"
                 ofType="com.lcdt.traffic.model.TransportWayItems" javaType="ArrayList"
                 select="com.lcdt.traffic.dao.TransportWayItemsMapper.selectByWaybillPlanId" />
-
   </resultMap>
 
   <!--客户计划-->
@@ -123,8 +122,6 @@
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="split_goods_id" jdbcType="BIGINT" property="splitGoodsId" />
     <result column="send_order_type" jdbcType="SMALLINT" property="sendOrderType" />
-
-
     <result column="send_man" jdbcType="VARCHAR" property="sendMan" />
     <result column="send_province" jdbcType="VARCHAR" property="sendProvince" />
     <result column="send_city" jdbcType="VARCHAR" property="sendCity" />
@@ -169,7 +166,6 @@
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="split_goods_id" jdbcType="BIGINT" property="splitGoodsId" />
     <result column="send_order_type" jdbcType="SMALLINT" property="sendOrderType" />
-
     <result column="send_man" jdbcType="VARCHAR" property="sendMan" />
     <result column="send_province" jdbcType="VARCHAR" property="sendProvince" />
     <result column="send_city" jdbcType="VARCHAR" property="sendCity" />
@@ -180,8 +176,6 @@
     <result column="arrive_date" jdbcType="TIMESTAMP" property="arriveDate" />
     <result column="distribution_way" jdbcType="VARCHAR" property="distributionWay" />
     <result column="plan_remark" jdbcType="VARCHAR" property="planRemark" />
-
-
 
     <!--计划列表-->
     <collection property="planDetailList" column="{waybillPlanId=waybill_plan_id,companyId=company_id,isDeleted=is_deleted}"
@@ -248,7 +242,7 @@
       update_time, is_deleted, carrier_company_id, 
       company_id, plan_days, pubdate, 
       finish_date, cancel_date, cancel_man, 
-      cancel_remark,carrier_company_name)
+      cancel_remark,carrier_company_name,carrier_all_ids)
     values (#{planCode,jdbcType=VARCHAR}, F_PLAN_SERIAL_CODE(#{transportWay,jdbcType=SMALLINT}), #{groupId,jdbcType=BIGINT},
       #{groupName,jdbcType=VARCHAR}, #{planSource,jdbcType=VARCHAR}, #{planStatus,jdbcType=VARCHAR}, 
       #{sendCardStatus,jdbcType=SMALLINT}, #{sendOrderType,jdbcType=SMALLINT}, #{carrierType,jdbcType=SMALLINT},
@@ -276,7 +270,7 @@
       #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, #{carrierCompanyId,jdbcType=BIGINT}, 
       #{companyId,jdbcType=BIGINT}, #{planDays,jdbcType=INTEGER}, #{pubdate,jdbcType=TIMESTAMP}, 
       #{finishDate,jdbcType=TIMESTAMP}, #{cancelDate,jdbcType=TIMESTAMP}, #{cancelMan,jdbcType=VARCHAR}, 
-      #{cancelRemark,jdbcType=VARCHAR},#{carrierCompanyName,jdbcType=VARCHAR})
+      #{cancelRemark,jdbcType=VARCHAR},#{carrierCompanyName,jdbcType=VARCHAR},#{carrierAllIds,jdbcType=SMALLINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.WaybillPlan">
     <!--
@@ -588,7 +582,6 @@
       <if test="cancelRemark != null">
         cancel_remark = #{cancelRemark,jdbcType=VARCHAR}
       </if>
-
     </set>
     where waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT}
   </update>
@@ -613,7 +606,7 @@
     create_id, create_name, create_date, update_id, update_name, update_time, is_deleted, 
     carrier_company_id, company_id, plan_days, pubdate, finish_date, cancel_date, cancel_man,
     carrier_driver_ids,carrier_driver_names,carrier_ids,carrier_names,
-    cancel_remark,carrier_company_name
+    cancel_remark,carrier_company_name,carrier_all_ids
     from t_waybill_plan
     <where>
         <if test="waybillPlanId!=null">
@@ -646,7 +639,7 @@
               attachment4, attachment4_name, attachment5, attachment5_name, is_approval, plan_remark,
               create_id, create_name, create_date, update_id, update_name, update_time, is_deleted,
               carrier_company_id, company_id, plan_days, pubdate, finish_date, cancel_date, cancel_man,
-              cancel_remark,carrier_company_name,carrier_driver_ids,carrier_driver_names,carrier_ids,carrier_names
+              cancel_remark,carrier_company_name,carrier_driver_ids,carrier_driver_names,carrier_ids,carrier_names,carrier_all_ids
         from t_waybill_plan
         <where>
           <if test="isDeleted!=null">

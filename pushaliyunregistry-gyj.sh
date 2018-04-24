@@ -48,16 +48,16 @@ fi
 docker_login
 
 #要更新的 服务名 版本号 路径，新增的服务需要添加
-user_service="user-service 1.0 user-center/userinfo-service"
-sso_service="sso_service 1.0 cwms-sso/clms-sso-service"
-notify_service="notify-service 1.0 clms-notify/clms-notify-service"
-pay_service="pay-service 1.0 clms-pay-service/pay-service"
-items_service="items-service 1.0 cwms-items/cwms-items-service"
-customer_service="customer-service 1.0 clms-customer/clms-customer-service"
-quartz_service="quartz-service 1.0 common-quartz/clms-quartz-service"
-traffic_service="traffic-service 1.0 clms-traffic/clms-traffic-service"
-contract_service="contract-service 1.0 cwms-contract/cwms-contract-service"
-driver_wechat_api="driver-wechat-api 1.0 driver-app-wechat-api"
+readonly USER_SERVICE="user-service 1.0 user-center/userinfo-service"
+readonly SSO_SERVICE="sso_service 1.0 cwms-sso/clms-sso-service"
+readonly NOTIFY_SERVICE="notify-service 1.0 clms-notify/clms-notify-service"
+readonly PAY_SERVICE="pay-service 1.0 clms-pay-service/pay-service"
+readonly ITEMS_SERVICE="items-service 1.0 cwms-items/cwms-items-service"
+readonly CUSTOMER_SERVICE="customer-service 1.0 clms-customer/clms-customer-service"
+readonly QUARTZ_SERVICE="quartz-service 1.0 common-quartz/clms-quartz-service"
+readonly TRAFFIC_SERVICE="traffic-service 1.0 clms-traffic/clms-traffic-service"
+readonly CONTRACT_SERVICE="contract-service 1.0 cwms-contract/cwms-contract-service"
+readonly DRIVER_WECHAT_API="driver-wechat-api 1.0 driver-app-wechat-api"
 
 echo "请选择要更新的应用：
 1)、user-service
@@ -77,43 +77,45 @@ service_name=""
 
 case $NUM in
 "1")
-service_name=$user_service
+service_name=$USER_SERVICE
 ;;
 "2")
-service_name=$sso_service
+service_name=$SSO_SERVICE
 ;;
 "3")
-service_name=$notify_service
+service_name=$NOTIFY_SERVICE
 ;;
 "4")
-service_name=$pay_service
+service_name=$PAY_SERVICE
 ;;
 "5")
-service_name=$items_service
+service_name=$ITEMS_SERVICE
 ;;
 "6")
-service_name=$customer_service
+service_name=$CUSTOMER_SERVICE
 ;;
 "7")
-service_name=$quartz_service
+service_name=$QUARTZ_SERVICE
 ;;
 "8")
-service_name=$traffic_service
+service_name=$TRAFFIC_SERVICE
 ;;
 "9")
-service_name=$contract_service
+service_name=$CONTRACT_SERVICE
 ;;
 "10")
-service_name=$driver_wechat_api
+service_name=$DRIVER_WECHAT_API
 ;;
 esac
+
+echo $service_name
 
 #上传
 push_to_aliregistry $service_name
 
 
-test_clms="clms"
-test_driver_wechat_api="driver-wechat-api"
+readonly TEST_CLMS="clms"
+readonly TEST_DRIVER_WECHAT_API="driver-wechat-api"
 
 
 echo "请选择应用名字：
@@ -126,10 +128,10 @@ app_name=""
 
 case $APP_NUM in
 "1")
-app_name=$test_clms
+app_name=$TEST_CLMS
 ;;
 "2")
-app_name=$test_driver_wechat_api
+app_name=$TEST_DRIVER_WECHAT_API
 ;;
 esac
 
@@ -137,3 +139,6 @@ echo $app_name
 
 #更新应用名字
 update_server $app_name
+
+#清空虚悬镜像
+echo y | docker image prune

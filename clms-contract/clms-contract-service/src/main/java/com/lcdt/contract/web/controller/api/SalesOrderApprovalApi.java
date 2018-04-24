@@ -105,7 +105,7 @@ public class SalesOrderApprovalApi {
 
     @ApiOperation(value = "撤销审批", notes = "撤销操作")
     @PostMapping(value = "/revoke")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_approval_operate')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_approval_revoke')")
     public JSONObject revokeApproval(@RequestBody OrderApproval orderApproval) {
         int result = orderApprovalService.revokeApproval(orderApproval);
         JSONObject jsonObject = new JSONObject();
@@ -137,7 +137,7 @@ public class SalesOrderApprovalApi {
 
     @ApiOperation(value = "抄送", notes = "抄送操作")
     @PostMapping(value = "/cc")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_approval_operate')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_approval_cc')")
     public JSONObject ccApproval(@RequestBody List<OrderApproval> orderApprovalList) {
         int result = orderApprovalService.ccApproval(orderApprovalList);
         JSONObject jsonObject = new JSONObject();

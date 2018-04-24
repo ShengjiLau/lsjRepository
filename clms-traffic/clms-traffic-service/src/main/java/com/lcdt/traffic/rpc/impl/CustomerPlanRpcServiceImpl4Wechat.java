@@ -37,7 +37,6 @@ import java.util.*;
 @Service
 public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcService4Wechat {
 
-
     @com.alibaba.dubbo.config.annotation.Reference
     private CustomerRpcService customerRpcService;  //客户信息
 
@@ -95,12 +94,8 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     private Map  customerPlanByCarrier4CmpIdGroup(Map map, List<Customer> customerList, int flag) {
         Map resultMap = new HashMap();
         if (customerList!=null && customerList.size()>0) { //承运人ID
-
             StringBuffer sb = new StringBuffer(); //保存创建计划企业ID
-
             StringBuilder sb_carrier_ids = new StringBuilder(); //承运商业竞价组集合
-            //StringBuilder sb_driver_ids = new StringBuilder(); //司机竞价组集合
-
             StringBuilder sb_customerIDS = new StringBuilder(); //客户ID
             sb.append("(");
             for (int i=0;i<customerList.size();i++) {
@@ -123,23 +118,13 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                     sb_customerIDS.append(obj1.getCustomerId()+",");
 
                 }
-                //查询承运人在货主建立的司机组中的，所有竞价组
-/*                List<DriverGroup> driverGroupList = driverGroupService.selectAll(ownCompanyId);
-                if (driverGroupList!=null && driverGroupList.size()>0) {
-                    for (DriverGroup obj1: driverGroupList) {
-                        if (!StringUtils.isEmpty(obj1.getDriverGroupId())) {
-                            sb_driver_ids.append(obj1.getDriverGroupId()+",");
-                        }
-                    }
-                }*/
             }
             sb.append(")");
 
             /******返回结果集---分配计划的企业(企业创建者)******************/
             resultMap.put("companyIds",sb.toString());
-            if (flag==0) {
+            if (flag == 0) {
                 StringBuilder sb_10 = new StringBuilder();
-                StringBuilder sb_11 = new StringBuilder();
                 if(!StringUtils.isEmpty(sb_carrier_ids.toString())) { //承运商组
                     String carrierIds = sb_carrier_ids.toString().substring(0,sb_carrier_ids.toString().length()-1);
                     if (!StringUtils.isEmpty(carrierIds)) {
@@ -154,34 +139,9 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                 } else {
                     sb_10.append(" find_in_set('000',carrier_collection_ids)"); //没有承运条件的看不到
                 }
-                /*   if(!StringUtils.isEmpty(sb_driver_ids.toString())) { //司机组
-                    String driverIds = sb_driver_ids.toString().substring(0,sb_driver_ids.toString().length()-1);
-                    if (!StringUtils.isEmpty(driverIds)) {
-                        String[] strArrary = driverIds.split(",");
-                        for (int i=0; i<strArrary.length; i++) {
-                            sb_11.append(" find_in_set('"+strArrary[i]+"',carrier_driver_ids)");
-                            if(i!=strArrary.length-1){
-                                sb_11.append(" or ");
-                            }
-                        }
-
-                    }
-                }*/
-
                 String rString = "";
                 if(!sb_10.toString().isEmpty()) {
-                    rString = "(" +sb_10.toString();
-                    if(!sb_11.toString().isEmpty()) {
-                        rString += " or "+sb_11.toString()+" )";
-                    } else {
-                        rString += " )";
-                    }
-                } else {
-                    if(!sb_11.toString().isEmpty()) {
-                        rString = " ( "+sb_11.toString()+" )";
-                    } else {
-                        rString = "";
-                    }
+                    rString = "(" +sb_10.toString()+" or carrier_all_ids=1)";
                 }
                 resultMap.put("carrierCollectionIds",rString);
 
@@ -217,19 +177,19 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                 if(!sb_20.toString().isEmpty()) {
                     rString = "(" +sb_20.toString();
                     if(!sb_21.toString().isEmpty()) {
-                        rString += " or "+sb_21.toString()+" )";
+                        rString += " or "+sb_21.toString()+" or wp.carrier_all_ids=1 )";
                     } else {
                         rString += " )";
                     }
                 } else {
                     if(!sb_21.toString().isEmpty()) {
-                        rString = " ( "+sb_21.toString()+" )";
+                        rString = " ( "+sb_21.toString()+"  or wp.carrier_all_ids=1 )";
                     } else {
                         rString = "";
                     }
                 }
                 if(StringUtils.isEmpty(rString)) {
-                    rString = " find_in_set('000',wp.carrier_collection_ids)";
+                    rString = " ( find_in_set('000',wp.carrier_collection_ids) or wp.carrier_all_ids=1 )";
                 }
                 resultMap.put("carrierCollectionIds",rString); //竞价组
             }else if (flag==2)  { //已派车
@@ -248,11 +208,11 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                 }
                 String rString = "";
                 if(!sb_20.toString().isEmpty()) {
-                    rString = "(" +sb_20.toString()+" )";
+                    rString = "(" +sb_20.toString()+"  or wp.carrier_all_ids=1 )";
 
                 }
                 if(StringUtils.isEmpty(rString)) {
-                    rString = " find_in_set('000',wp.carrier_collection_ids)";
+                    rString = " ( find_in_set('000',wp.carrier_collection_ids) or wp.carrier_all_ids=1)";
                 }
                 resultMap.put("carrierCollectionIds",rString);
             }
@@ -283,21 +243,18 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Bidding(Map map) {
-
         String company_denglu = map.get("companyId").toString();
-        //根据登录人（权限组），获取对应客户列表中绑定的客户企业（货主）
-        List<Customer> customerList = bindCustomerList(map);
-        if(customerList==null || customerList.size()==0) return new PageInfo();
+
+        List<Customer> customerList = bindCustomerList(map); //根据登录人（权限组），获取对应客户列表中绑定的客户企业（货主）
+        if (customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");//移除
+
         //查询对应在的企业组、竞价组条件
         Map cMap = customerPlanByCarrier4CmpIdGroup(map, customerList,0);
-
-
         map.put("companyIds",cMap.get("companyIds")); //分配计划的企业(企业创建者)
         map.put("carrierCollectionIds",cMap.get("carrierCollectionIds"));
 
         int pageNo = 1;
-
         int pageSize = 0; //0表示所有
         if (map.containsKey("page_no")) {
             if (map.get("page_no") != null) {
@@ -324,11 +281,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         if (StringUtils.isEmpty(map.get("orderFiled"))) {
             map.put("orderFiled", orderField);
         }
-
-
-
         PageHelper.startPage(pageNo, pageSize);
-
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlan4Bidding(map);
         if (list!=null && list.size()>0) {
             for(CustomerPlanDto dto :list){
@@ -336,6 +289,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             }
         }
         PageInfo pageInfo = new PageInfo(list);
+        removeOtherSnatch(pageInfo, Long.valueOf(company_denglu));
         return pageInfo;
     }
 
@@ -344,6 +298,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     @Override
     public PageInfo customerPlanList4Offer(Map map) {
         String company_denglu = map.get("companyId").toString();
+
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
 
@@ -392,6 +347,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         }
 
         PageInfo pageInfo = new PageInfo(list);
+        removeOtherSnatch(pageInfo, Long.valueOf(company_denglu));
         return pageInfo;
     }
 
@@ -399,6 +355,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Pass(Map map) {
+        String company_denglu = map.get("companyId").toString();
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
@@ -438,8 +395,8 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                 dto.setPlanSource(planSource(dto.getCompanyId(),customerList));
             }
         }
-
         PageInfo pageInfo = new PageInfo(list);
+        removeOtherSnatch(pageInfo, Long.valueOf(company_denglu));
         return pageInfo;
     }
 
@@ -447,6 +404,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4VehicleDoing(Map map) {
+        String company_denglu = map.get("companyId").toString();
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
@@ -482,18 +440,15 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         if (StringUtils.isEmpty(map.get("orderFiled"))) {
             map.put("orderFiled", orderField);
         }
-
-
         PageHelper.startPage(pageNo, pageSize);
-
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4VehicleDoing(map);
         if (list!=null && list.size()>0) {
             for(CustomerPlanDto dto :list){
                 dto.setPlanSource(planSource(dto.getCompanyId(),customerList));
             }
         }
-
         PageInfo pageInfo = new PageInfo(list);
+        removeOtherSnatch(pageInfo, Long.valueOf(company_denglu));
         return pageInfo;
     }
 
@@ -501,6 +456,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4VehicleHave(Map map) {
+        String company_denglu = map.get("companyId").toString();
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
@@ -532,11 +488,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         if (StringUtils.isEmpty(map.get("orderFiled"))) {
             map.put("orderFiled", orderField);
         }
-
-
-
         PageHelper.startPage(pageNo, pageSize);
-
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4VehicleHave(map);
         if (list!=null && list.size()>0) {
             System.out.println(list.size());
@@ -547,6 +499,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         }
 
         PageInfo pageInfo = new PageInfo(list);
+        removeOtherSnatch(pageInfo, Long.valueOf(company_denglu));
         return pageInfo;
     }
 
@@ -554,6 +507,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Completed(Map map) {
+        String company_denglu = map.get("companyId").toString();
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
@@ -597,6 +551,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             }
         }
         PageInfo pageInfo = new PageInfo(list);
+        removeOtherSnatch(pageInfo, Long.valueOf(company_denglu));
         return pageInfo;
     }
 
@@ -604,6 +559,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     @Transactional(readOnly = true)
     @Override
     public PageInfo customerPlanList4Cancel(Map map) {
+        String company_denglu = map.get("companyId").toString();
         List<Customer> customerList = bindCustomerList(map);
         if(customerList==null || customerList.size()==0) return new PageInfo();
         map.remove("groupIds");
@@ -637,11 +593,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         if (StringUtils.isEmpty(map.get("orderFiled"))) {
             map.put("orderFiled", orderField);
         }
-
-
-
         PageHelper.startPage(pageNo, pageSize);
-
         List<CustomerPlanDto> list = waybillPlanMapper.customerPlanList4Cancel(map);
         if (list!=null && list.size()>0) {
             for(CustomerPlanDto dto :list){
@@ -649,6 +601,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             }
         }
         PageInfo pageInfo = new PageInfo(list);
+        removeOtherSnatch(pageInfo, Long.valueOf(company_denglu));
         return pageInfo;
     }
 
@@ -867,5 +820,39 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
 
         waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         return waybillPlan;
+    }
+
+
+    /***
+     * 移除其它抢单数据
+     */
+    private void removeOtherSnatch(PageInfo pageInfo, Long companyId) {
+        if(pageInfo.getTotal()>0) {
+            List<CustomerPlanDto> customerPlanDtos = pageInfo.getList();
+            if (customerPlanDtos!=null && customerPlanDtos.size()>0) {
+                for (CustomerPlanDto dto : customerPlanDtos) {
+                    if(dto.getSnatchGoodsList()!=null && dto.getSnatchGoodsList().size()>0) {
+                        List<SnatchGoods> otherSnatchGoods = new ArrayList<SnatchGoods>(); //存储其它数据
+                        for (SnatchGoods obj :dto.getSnatchGoodsList()) {
+                            if(!obj.getCompanyId().equals(companyId)) { //不是本企业或是未采用的不要
+                                otherSnatchGoods.add(obj);
+                            }
+                        }
+                        dto.getSnatchGoodsList().removeAll(otherSnatchGoods);
+                    }
+                    if (dto.getSplitGoodsList()!=null && dto.getSplitGoodsList().size()>0) {
+                        List<SplitGoods> splitGoodsList = new ArrayList<SplitGoods>(); //存储其它数据
+                        for (SplitGoods obj1 :dto.getSplitGoodsList()) {
+                            if(obj1.getCarrierCompanyId()!=null && !obj1.getCarrierCompanyId().equals(companyId)) {
+                                splitGoodsList.add(obj1);
+                            }
+                        }
+                        dto.getSplitGoodsList().removeAll(splitGoodsList);
+                    }
+
+
+                }
+            }
+        }
     }
 }

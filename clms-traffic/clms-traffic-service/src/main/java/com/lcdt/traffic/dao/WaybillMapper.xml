@@ -25,6 +25,8 @@
     <result column="customer_phone" jdbcType="VARCHAR" property="customerPhone" />
     <result column="sales_order" jdbcType="VARCHAR" property="salesOrder" />
     <result column="cust_contact_man" jdbcType="VARCHAR" property="custContactMan" />
+    <result column="send_wh_id" jdbcType="BIGINT" property="sendWhId" />
+    <result column="send_wh_name" jdbcType="VARCHAR" property="sendWhName" />
     <result column="send_man" jdbcType="VARCHAR" property="sendMan" />
     <result column="send_phone" jdbcType="VARCHAR" property="sendPhone" />
     <result column="send_province" jdbcType="VARCHAR" property="sendProvince" />
@@ -94,7 +96,7 @@
 
   <sql id="base_column_list">id, waybill_plan_id,split_goods_id, waybill_code, waybill_status, waybill_source,group_id, group_name, driver_id,
     driver_name, driver_phone, vechicle_id, vechicle_num, customer_id, customer_name,
-    customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
+    customer_phone, sales_order, cust_contact_man, send_wh_id, send_wh_name, send_man, send_phone, send_province,
     send_city, send_county, send_address, receive_man, receive_phone, receive_province,
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
     arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,electronical_receipt, attachment1, attachment1_name,
@@ -106,7 +108,7 @@
 
   <sql id="finance_column_list">id, waybill_plan_id,waybill_code, waybill_status, waybill_source,group_id, group_name, driver_id,
     driver_name, driver_phone, vechicle_id, vechicle_num, customer_id, customer_name,
-    customer_phone, sales_order, cust_contact_man, send_man, send_phone, send_province,
+    customer_phone, sales_order, cust_contact_man,send_wh_id, send_wh_name,  send_man, send_phone, send_province,
     send_city, send_county, send_address, receive_man, receive_phone, receive_province,
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
     arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,
@@ -132,6 +134,8 @@
     customer_phone = #{customerPhone,jdbcType=VARCHAR},
     sales_order = #{salesOrder,jdbcType=VARCHAR},
     cust_contact_man = #{custContactMan,jdbcType=VARCHAR},
+    send_wh_id = #{sendWhId,jdbcType=BIGINT},
+    send_wh_name = #{sendWhName,jdbcType=VARCHAR},
     send_man = #{sendMan,jdbcType=VARCHAR},
     send_phone = #{sendPhone,jdbcType=VARCHAR},
     send_province = #{sendProvince,jdbcType=VARCHAR},
@@ -281,7 +285,7 @@
       group_id, group_name, driver_id, 
       driver_name, driver_phone, vechicle_id, 
       vechicle_num, customer_id, customer_name, 
-      customer_phone, sales_order, cust_contact_man, 
+      customer_phone, sales_order, cust_contact_man, send_wh_id, send_wh_name,
       send_man, send_phone, send_province, 
       send_city, send_county, send_address, 
       receive_man, receive_phone, receive_province, 
@@ -311,8 +315,8 @@
       #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{driverId,jdbcType=BIGINT}, 
       #{driverName,jdbcType=VARCHAR}, #{driverPhone,jdbcType=VARCHAR}, #{vechicleId,jdbcType=BIGINT},
       #{vechicleNum,jdbcType=VARCHAR}, #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, 
-      #{customerPhone,jdbcType=VARCHAR}, #{salesOrder,jdbcType=VARCHAR}, #{custContactMan,jdbcType=VARCHAR}, 
-      #{sendMan,jdbcType=VARCHAR}, #{sendPhone,jdbcType=VARCHAR}, #{sendProvince,jdbcType=VARCHAR}, 
+      #{customerPhone,jdbcType=VARCHAR}, #{salesOrder,jdbcType=VARCHAR}, #{custContactMan,jdbcType=VARCHAR}, #{sendWhId,jdbcType=BIGINT}, #{sendWhName,jdbcType=VARCHAR},
+    #{sendMan,jdbcType=VARCHAR}, #{sendPhone,jdbcType=VARCHAR}, #{sendProvince,jdbcType=VARCHAR},
       #{sendCity,jdbcType=VARCHAR}, #{sendCounty,jdbcType=VARCHAR}, #{sendAddress,jdbcType=VARCHAR}, 
       #{receiveMan,jdbcType=VARCHAR}, #{receivePhone,jdbcType=VARCHAR}, #{receiveProvince,jdbcType=VARCHAR}, 
       #{receiveCity,jdbcType=VARCHAR}, #{receiveCounty,jdbcType=VARCHAR}, #{receiveAddress,jdbcType=VARCHAR}, 
@@ -361,6 +365,8 @@
     customer_phone = #{customerPhone,jdbcType=VARCHAR},
     sales_order = #{salesOrder,jdbcType=VARCHAR},
     cust_contact_man = #{custContactMan,jdbcType=VARCHAR},
+    send_wh_id = #{sendWhId,jdbcType=BIGINT},
+    send_wh_name = #{sendWhName,jdbcType=VARCHAR},
     send_man = #{sendMan,jdbcType=VARCHAR},
     send_phone = #{sendPhone,jdbcType=VARCHAR},
     send_province = #{sendProvince,jdbcType=VARCHAR},
@@ -418,6 +424,8 @@
     customer_phone = #{customerPhone,jdbcType=VARCHAR},
     sales_order = #{salesOrder,jdbcType=VARCHAR},
     cust_contact_man = #{custContactMan,jdbcType=VARCHAR},
+    send_wh_id = #{sendWhId,jdbcType=BIGINT},
+    send_wh_name = #{sendWhName,jdbcType=VARCHAR},
     send_man = #{sendMan,jdbcType=VARCHAR},
     send_phone = #{sendPhone,jdbcType=VARCHAR},
     send_province = #{sendProvince,jdbcType=VARCHAR},
@@ -634,9 +642,9 @@
   </if>-->
   <select id="selectFeeAccountWaybillByCondition" parameterType="java.util.Map" resultMap="BaseFeeAccountWaybillMap">
     select <include refid="finance_column_list"/>,
-    (select concat(fa.name,'、') from t_fee_account fa
-      where fa.waybill_id=id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
-      ) receiv_and_pay_name,
+    (select group_concat(distinct fa.name) from t_fee_account fa
+      where fa.waybill_id=id and fa.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
+      group by id) receiv_and_pay_name,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
       where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费'
         and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
@@ -658,9 +666,9 @@
   </select>
   <select id="selectFeeAccountCustomerWaybillByCondition" parameterType="java.util.Map" resultMap="BaseFeeAccountWaybillMap">
     select <include refid="finance_column_list"/>,
-    (select concat(fa.name,'、') from t_fee_account fa
-      where fa.waybill_id=id and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
-      ) receiv_and_pay_name,
+    (select group_concat(distinct fa.name) from t_fee_account fa
+      where fa.waybill_id=id and fa.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
+      group by id) receiv_and_pay_name,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
       where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费'
         and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,

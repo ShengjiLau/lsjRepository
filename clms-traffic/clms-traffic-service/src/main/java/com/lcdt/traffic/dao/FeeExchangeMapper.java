@@ -25,12 +25,26 @@ public interface FeeExchangeMapper {
      */
     int insertByBatch(List<FeeExchange> feeExchangeList);
     
+    /**
+     * 条件查询收付款记录列表
+     * @param feeExchangeDto
+     * @return
+     */
     List<FeeExchange> getFeeExchangeListByCondition(FeeExchangeDto feeExchangeDto);
     
-    int updateCancelOkByBatch(Long [] feeExchangeIds);
+    /**
+     * 收付款记录作废
+     * @param feeExchangeIds
+     * @return
+     */
+    int updateCancelOkByBatch(String feeExchangeIds);
     
-    
-    
-    
+
+    /**
+     * 查询对应对账单下收付款记录数量
+     * @param reconcileId
+     * @return
+     */
+    int selectCountFeeExchangeByReconcileId(Long reconcileId);
     
 }

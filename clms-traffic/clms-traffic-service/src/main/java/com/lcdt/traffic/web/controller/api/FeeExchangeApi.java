@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONArray;
@@ -15,9 +18,11 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.FeeExchange;
 import com.lcdt.traffic.service.FeeExchangeService;
 import com.lcdt.traffic.web.dto.FeeExchangeDto;
+import com.lcdt.traffic.web.dto.FeeExchangeListDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 /**
  * @author Sheng-ji Lau
@@ -36,13 +41,16 @@ public class FeeExchangeApi {
 	@PostMapping("/add")
 	@ApiOperation("新增收付款记录")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_exchange_add')")
-	public JSONObject addFeeExchange(List<FeeExchange> feeExchangeList) {
-		JSONObject jsonObject =new JSONObject();
-		int i=feeExchangeList.size();		
-		int j=feeExchangeService.insertFeeExchangeByBatch(feeExchangeList);
-		if(i==j) {
+	public JSONObject addFeeExchange(@Validated FeeExchangeListDto feeExchangeListDto,BindingResult bindingResult) {
+		List<FeeExchange> feeExchangeList =feeExchangeListDto.getFeeExchangeList();
+		JSONObject jsonObject =validResponse(bindingResult);
+		if(!jsonObject.isEmpty()) {
+			return jsonObject;
+		}		
+		int result=feeExchangeService.insertFeeExchangeByBatch(feeExchangeList);
+		if(result>0) {
 			jsonObject.put("code",0);
-			jsonObject.put("msg","新增收付款记录成功");
+			jsonObject.put("message","新增收付款记录成功");
 			return jsonObject;
 		}else {
 			throw new RuntimeException("插入收付款记录出现异常");
@@ -64,28 +72,60 @@ public class FeeExchangeApi {
 		jsonObject.put("msg","收付款记录列表");
 		jsonObject.put("data",jsonArray);
 		
-		
 		return jsonObject;
 	}
+	
 	
 	
 	@PostMapping("/cancel")
 	@ApiOperation("批量取消收付款记录")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_exchange_cancel')")
-	public JSONObject cancelFeeExchange(Long[] feeExchanges) {
+	public JSONObject cancelFeeExchange(@ApiParam(value="收付款记录id数组",required=true)@RequestParam String feeExchanges) {
 		JSONObject jsonObject =new JSONObject();
-		
-		
-		
-		
+		int result=feeExchangeService.updateSetCancelOk(feeExchanges);
+		if(result>0) {
+			jsonObject.put("code",0);
+			jsonObject.put("msg","取消成功");
+			return jsonObject;
+		}else {
+			throw new RuntimeException("取消收付款记录出现异常");
+		}	
+	}
+	
+	
+	@GetMapping("/select")
+	@ApiOperation("单个收付款记录详情")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_exchange_select')")
+	public JSONObject selectFeeExchange(Long feeExchangeId) {
+		JSONObject jsonObject =new JSONObject();
+		FeeExchange fe=feeExchangeService.selectFeeExchangeById(feeExchangeId);
+		if(null!=fe) {
+			jsonObject.put("code",0);
+			jsonObject.put("message","收付款详情");
+			jsonObject.put("data",fe);
+		}else {
+			throw new RuntimeException("查询出现异常");
+		}
 		return jsonObject;
 	}
 	
 	
-	
-	
-	
-	
+	/**
+	 * 验证传入信息
+	 * @param bindingResult
+	 * @return
+	 */
+	public JSONObject validResponse(BindingResult bindingResult) {
+		JSONObject jsonObject =new JSONObject();
+		JSONArray jsonArray =new JSONArray();
+		if(bindingResult.hasErrors()) {
+			jsonObject.put("code",-1);
+			jsonObject.put("msg","验证信息未能通过");
+			bindingResult.getAllErrors().forEach(x->jsonArray.add(x.getDefaultMessage()));
+			jsonObject.put("data",jsonArray);
+		}
+		return jsonObject;
+	}
 	
 	
 

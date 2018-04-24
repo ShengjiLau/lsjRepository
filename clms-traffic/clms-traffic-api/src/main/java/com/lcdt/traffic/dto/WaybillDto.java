@@ -1,5 +1,6 @@
 package com.lcdt.traffic.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
@@ -46,6 +47,10 @@ public class WaybillDto implements java.io.Serializable {
 
     private String custContactMan;
 
+    private Long sendWhId;
+
+    private String sendWhName;
+
     private String sendMan;
 
     private String sendPhone;
@@ -74,8 +79,10 @@ public class WaybillDto implements java.io.Serializable {
 
     private String goodsType;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date startDate;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date arriveDate;
 
     private Short isReceipt;
@@ -282,6 +289,22 @@ public class WaybillDto implements java.io.Serializable {
 
     public void setCustContactMan(String custContactMan) {
         this.custContactMan = custContactMan;
+    }
+
+    public Long getSendWhId() {
+        return sendWhId;
+    }
+
+    public void setSendWhId(Long sendWhId) {
+        this.sendWhId = sendWhId;
+    }
+
+    public String getSendWhName() {
+        return sendWhName;
+    }
+
+    public void setSendWhName(String sendWhName) {
+        this.sendWhName = sendWhName;
     }
 
     public String getSendMan() {
