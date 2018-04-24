@@ -51,5 +51,11 @@ public interface FeeAccountMapper {
      * @return
      */
     int updateReconcileWhenCancel(String feeAccountIds);
+    /**
+     * 对账和取消对账修改记账单对账信息
+     * @param dto
+     * @return
+     */
+    int updateReconcileCodeAndId(ReconcileDto dto);
 
 }
