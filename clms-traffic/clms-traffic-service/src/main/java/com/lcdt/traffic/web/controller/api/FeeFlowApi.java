@@ -38,7 +38,7 @@ public class FeeFlowApi {
     public PageBaseDto searchList(FeeFlow4SearchParamsDto dto) {
          StringBuffer sb = new StringBuffer();
          if (dto.getGroupId()>0) {//业务组
-            dto.setGroupIds(dto.getGroupIds());
+            dto.setGroupIds(dto.getGroupId().toString());
         } else {
             List<Group> groupList = SecurityInfoGetter.groups();
              for(int i=0;i<groupList.size();i++) {

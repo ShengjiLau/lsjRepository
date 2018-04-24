@@ -1,6 +1,8 @@
 package com.lcdt.traffic.web.controller.api;
 
-import java.util.List;
+
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.Reconcile;
-import com.lcdt.traffic.service.FeeExchangeService;
 import com.lcdt.traffic.service.ReconcileService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.ReconcileDto;
@@ -43,8 +44,8 @@ public class ReconcileApi {
 	@Autowired
 	private ReconcileService reconcileService;
 	
-	@Autowired
-	private FeeExchangeService feeExchangeService;
+//	@Autowired
+//	private FeeExchangeService feeExchangeService;
 	
 	Logger logger = LoggerFactory.getLogger(ReconcileApi.class);
 	
@@ -79,71 +80,18 @@ public class ReconcileApi {
 	@ApiOperation("取消订单,fee_reconcile_cancel")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_cancel')")
 	public JSONObject cancelReconcile(@ApiParam(value="一个或多个对账单id,多个时用','隔开",required=true)@RequestParam String reconcileIds) {
-		
-		reconcileService.setCancelOk(reconcileIds);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		String [] ss=reconcileIds.split(",");
-		Long[] reconcileIdList =new Long[ss.length];	
-		for(int i=0;i<ss.length;i++) {
-			reconcileIdList[i]=Long.valueOf(ss[i]);
+		JSONObject jsonObject =new JSONObject();	
+		Map<Integer,String> map=reconcileService.setCancelOk(reconcileIds);
+		StringBuilder sb = new StringBuilder();
+		if(map.containsKey(1)) {
+			sb.append("存在收付款记录的对账单不能取消,对账单id:"+map.get(1));
+			sb.append(";");
 		}
-		JSONObject jsonObject=new JSONObject();
+		if(map.containsKey(2)) {
+			sb.append("取消成功");
+		}
 		jsonObject.put("code",0);
-		JSONArray jsonArray1=new JSONArray();//存取数组中存在收付款记录的reconcileId
-		JSONArray jsonArray2=new JSONArray();//存取数组中不存在收付款记录的reconcileId
-		//查询对账单是否生成过收付款记录,如果对账单存在收付款记录,则不能取消,如果不存在收付款记录,则执行取消操作		
-		for(int i=0;i<reconcileIdList.length;i++) {
-			int j=feeExchangeService.querySumFeeExchangeByReconcileId(reconcileIdList[i]);
-			if(j>0) {
-				jsonArray1.add(reconcileIdList[i]);
-			}else {
-				jsonArray2.add(reconcileIdList[i]);
-			}
-		}
-		if(jsonArray1.size()>0) {			
-			jsonObject.put("message1","存在收付款记录的对账单不能取消");
-			jsonObject.put("data","无法取消的对账单id"+jsonArray1);
-		}
-		if(jsonArray2.size()>0) {
-			Long[] reconIds=new Long[jsonArray2.size()];
-			for(int i=0;i<jsonArray2.size();i++) {
-				reconIds[i]=(Long) jsonArray2.get(i);
-			}
-			
-		//	int result=reconcileService.setCancelOk(reconIds);
-//			if(jsonArray2.size()==result) {
-//				jsonObject.put("message2","取消成功");
-//				return jsonObject;
-//		}else {
-//			throw new RuntimeException("取消对账单时出现异常");
-//		}
-	    }
+		jsonObject.put("message",sb.toString());	    
 		return jsonObject;			
 	}
 	

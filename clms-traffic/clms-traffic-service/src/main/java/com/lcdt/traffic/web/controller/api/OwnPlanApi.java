@@ -273,7 +273,6 @@ public class OwnPlanApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_bidding_finish') or hasAuthority('traffic_customer_plan_offer')")
     public String biddingFinish(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
         UserCompRel loginUser = SecurityInfoGetter.geUserCompRel();
-
         WaybillPlan waybillPlan = iPlanRpcService4Wechat.biddingFinish(waybillPlanId,loginUser);
         JSONObject jsonObject = new JSONObject();
         String message = "操作成功！";
@@ -312,8 +311,10 @@ public class OwnPlanApi {
         jsonObject.put("code", 0);
         jsonObject.put("message", "发布成功！");
         return jsonObject;
-
     }
+
+
+
 
 
 }

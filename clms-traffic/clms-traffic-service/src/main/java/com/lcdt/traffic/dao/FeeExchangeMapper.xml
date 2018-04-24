@@ -409,12 +409,13 @@
   	<if test="operateName!=null and operateName!=''">
   	and operate_name like concat('%',#{operateName,jdbcType=VARCHAR},'%')
   	</if>
-  	<if test="beginTime !=null and beginTime!=''"></if>
-  	and create_time &lt; concat(#{beginTime,jdbcType=VARCHAR},'000000')
-  	</where>
-  	<if test="endTime !=null and endTime !=''">
-  	and create_time &gt; concat(#{endTime,jdbcType=VARCHAR},'235959')
+  	<if test="beginTime !=null and beginTime!=''">
+  	and operate_time &gt; concat(#{beginTime,jdbcType=VARCHAR})
   	</if>
+  	<if test="endTime !=null and endTime !=''">
+  	and operate_time &lt; concat(#{endTime,jdbcType=VARCHAR})
+  	</if>
+  	</where>
   </select>
   
   <update id="updateCancelOkByBatch" parameterType="java.lang.String">
