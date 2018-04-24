@@ -18,7 +18,7 @@ public interface ReconcileService {
 	
 	public int insertReconcileBatch(List<Reconcile> reconcileList);
 	
-	public Map setCancelOk(String reconcileIdList);
+	public Map<Integer,String> setCancelOk(String reconcileIdList);
 	
 	PageInfo<Reconcile> getReconcileList(ReconcileDto reconcileDto);
 	

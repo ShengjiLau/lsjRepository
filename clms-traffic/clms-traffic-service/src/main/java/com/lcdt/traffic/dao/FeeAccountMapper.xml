@@ -463,16 +463,12 @@
   	 </foreach>
   	</where>
   </update>
-  
-  
-  
-  <update id="updateReconcileCodeAndId" parameterType="com.lcdt.traffic.web.dto.ReconcileDto">
+
+  <update id="updateReconcileWhenCancel" parameterType="java.lang.String">
     update t_fee_account
-    set reconcile_id = #{reconcileId,jdbcType=BIGINT},reconcile_code = #{reconcileCode,jdbcType=VARCHAR}
+    set reconcile_id = null,reconcile_code = null
     where account_id in
-    <foreach collection="accountIds" index="index" item="item" open="(" separator="," close=")">
-      #{item}
-    </foreach>
+  	concat('(',#{feeAccount,jdbcType=VARCHAR},')')
   </update>
   
 </mapper>

@@ -112,43 +112,65 @@ public class ReconcileServiceImpl implements ReconcileService {
 	 */
 	@Override
 	@Transactional
-	public Map setCancelOk(String reconcileIds) {
+	public Map<Integer, String> setCancelOk(String reconcileIds) {
 		StringBuilder sb = new StringBuilder();
-		Map map =new HashMap();
-		List<Long> list= new ArrayList<Long>();
+		Map<Integer, String> map =new HashMap<Integer, String>();
+		StringBuilder sbs = new StringBuilder();
+		StringBuilder sb3 = new StringBuilder();
 		String [] ss=reconcileIds.split(",");
-		Long[] reconcileIdList =new Long[ss.length];	
+		Long[] reconcileIdArray =new Long[ss.length];	
 		for(int i=0;i<ss.length;i++) {
-			reconcileIdList[i]=Long.valueOf(ss[i]);
+			reconcileIdArray[i]=Long.valueOf(ss[i]);
 		}
-		
-		for(int i=0;i<reconcileIdList.length;i++) {
-			int j=feeExchangeMapper.selectCountFeeExchangeByReconcileId(reconcileIdList[i]);
-			if(j>0) {
-				sb.append(j);sb.append(",");
+		int q1=0;
+		int q2=0;
+		int w1=0;
+		int w2=0;
+		for(int i=0;i<reconcileIdArray.length;i++) {
+			int a=feeExchangeMapper.selectCountFeeExchangeByReconcileId(reconcileIdArray[i]);
+			if(a>0) {
+				//将已存在收付款记录的对账单id拼接成字符串
+				sb.append(reconcileIdArray[i]);sb.append(",");
 			}else {
-				list.add(reconcileIdList[i]);
+				q2++;
+				//将不存在收付款记录的对账单id拼接成字符串,dao层执行update set in操作
+				sbs.append(reconcileIdArray[i]);sbs.append(",");
 			}
 		}
-		Long[] reconcileIdls=new Long[list.size()];
-		for(int i=0;i<list.size();i++) {
-			reconcileIdls[i]=list.get(i);
-		}
-		int j=reconcileIdls.length;
-		if(j>0) {
-			int i=reconcileMapper.cancelByBatch(reconcileIdls);
-			if(j==i) {
-				map.put(2,"取消成功");
+			
+		if(q2>0) {
+			String str1 =sbs.substring(0,sbs.length()-1);
+			q1=reconcileMapper.cancelByBatch(str1);
+			//获取不存在收付款记录的对账单信息列表
+			List<Reconcile> reconcileList=reconcileMapper.getReconcileListByPk(str1);
+			for(Reconcile reconcile:reconcileList) {
+				//得到所有需要修改的被取消的对账当单对应的记账单进行拼接
+				sb3.append(reconcile.getAccountId());sb3.append(",");
+				if(reconcile.getAccountId().length()>1) {
+					w1+=reconcile.getAccountId().length()/2+1;
+				}else {
+					w1+=reconcile.getAccountId().length();
+				}
 			}
 		}
-		
-		
+				
 		if(sb.length()>0) {
-		String str=	sb.substring(0,sb.length()-1);
-			map.put(1,str);
+			//去掉字符串末尾的","
+		String str2=sb.substring(0,sb.length()-1);
+			map.put(1,str2);
 		}
-		return map;
 		
+		if(sb3.length()>0) {
+			String str3 =sb3.substring(0,sb3.length()-1);
+			w2=feeAccountMapper.updateReconcileCodeAndId(str3);
+		}
+			
+		if(q2==q1&&w1==w2) {
+			map.put(2,"取消成功");
+		}
+		
+		
+		return map;	
 	}
 	
 	

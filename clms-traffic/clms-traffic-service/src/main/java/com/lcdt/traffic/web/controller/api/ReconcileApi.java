@@ -1,6 +1,6 @@
 package com.lcdt.traffic.web.controller.api;
 
-import java.util.List;
+
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -19,7 +19,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.Reconcile;
-import com.lcdt.traffic.service.FeeExchangeService;
 import com.lcdt.traffic.service.ReconcileService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.ReconcileDto;
@@ -45,8 +44,8 @@ public class ReconcileApi {
 	@Autowired
 	private ReconcileService reconcileService;
 	
-	@Autowired
-	private FeeExchangeService feeExchangeService;
+//	@Autowired
+//	private FeeExchangeService feeExchangeService;
 	
 	Logger logger = LoggerFactory.getLogger(ReconcileApi.class);
 	
@@ -82,7 +81,7 @@ public class ReconcileApi {
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_cancel')")
 	public JSONObject cancelReconcile(@ApiParam(value="一个或多个对账单id,多个时用','隔开",required=true)@RequestParam String reconcileIds) {
 		JSONObject jsonObject =new JSONObject();	
-		Map map=reconcileService.setCancelOk(reconcileIds);
+		Map<Integer,String> map=reconcileService.setCancelOk(reconcileIds);
 		StringBuilder sb = new StringBuilder();
 		if(map.containsKey(1)) {
 			sb.append("存在收付款记录的对账单不能取消,对账单id:"+map.get(1));
