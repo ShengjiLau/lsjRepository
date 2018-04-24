@@ -53,7 +53,7 @@
    <!--  <if test="approvalStatus!=null ">
          and approval_status = #{approvalStatus,jdbcType=SMALLINT}
       </if>  -->
-      and order_id not in(select order_id from t_order where is_draft=1 and approval_status!=2))
+      and order_id not in(select order_id from t_order where is_draft=1 and approval_status in(1,3,4)))
     	order by create_time desc
   </select>
   <select id="selectByOrderId" resultType="com.lcdt.contract.model.OrderProduct" parameterType="java.lang.Long" >
