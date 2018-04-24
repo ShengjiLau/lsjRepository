@@ -162,7 +162,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 		
 		if(sb3.length()>0) {
 			String str3 =sb3.substring(0,sb3.length()-1);
-			w2=feeAccountMapper.updateReconcileCodeAndId(str3);
+			w2=feeAccountMapper.updateReconcileWhenCancel(str3);
 		}
 			
 		if(q2==q1&&w1==w2) {
