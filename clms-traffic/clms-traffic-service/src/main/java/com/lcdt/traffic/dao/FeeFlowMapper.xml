@@ -105,8 +105,8 @@
     order by flow_id desc
   </select>
 
-  <insert id="insertBatch">
-    insert into t_fee_flow (flow_code, account_id, pro_id,
+  <insert id="insertBatch" useGeneratedKeys="true" keyProperty="flowId" keyColumn="flow_id">
+    insert into t_fee_flow (flow_id, flow_code, account_id, pro_id,
     waybill_id, waybill_code, waybill_date,
     fee_property, money, original_money,
     group_id, create_id, create_name,
@@ -115,12 +115,13 @@
     )
     values
     <foreach item="item" collection="list" separator=",">
-      (#{flowCode,jdbcType=VARCHAR}, #{accountId,jdbcType=BIGINT}, #{proId,jdbcType=BIGINT},
-      #{waybillId,jdbcType=BIGINT}, #{waybillCode,jdbcType=VARCHAR}, #{waybillDate,jdbcType=TIMESTAMP},
-      #{feeProperty,jdbcType=VARCHAR}, #{money,jdbcType=REAL}, #{originalMoney,jdbcType=REAL},
-      #{groupId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR},
-      #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR},
-      #{updateTime,jdbcType=TIMESTAMP}, #{companyId,jdbcType=BIGINT}, #{isDeleted,jdbcType=SMALLINT}
+      (#{item.flowId,jdbcType=BIGINT},
+      FLOW_CODE('LS'), #{item.accountId,jdbcType=BIGINT}, #{item.proId,jdbcType=BIGINT},
+      #{item.waybillId,jdbcType=BIGINT}, #{item.waybillCode,jdbcType=VARCHAR}, #{item.waybillDate,jdbcType=TIMESTAMP},
+      #{item.feeProperty,jdbcType=VARCHAR}, #{item.money,jdbcType=REAL}, #{item.originalMoney,jdbcType=REAL},
+      #{item.groupId,jdbcType=BIGINT}, #{item.createId,jdbcType=BIGINT}, #{item.createName,jdbcType=VARCHAR},
+      #{item.createDate,jdbcType=TIMESTAMP}, #{item.updateId,jdbcType=BIGINT}, #{item.updateName,jdbcType=VARCHAR},
+      #{item.updateTime,jdbcType=TIMESTAMP}, #{item.companyId,jdbcType=BIGINT}, #{item.isDeleted,jdbcType=SMALLINT}
       )
     </foreach>
   </insert>
