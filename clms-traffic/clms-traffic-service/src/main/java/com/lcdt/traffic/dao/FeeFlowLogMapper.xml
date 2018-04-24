@@ -129,8 +129,9 @@
     insert into t_fee_flow_log (flow_id, money, old_money,
     operator_id, operator_name, create_date,
     is_deleted)
+    values
     <foreach item="item" collection="list" separator=",">
-      values (#{flowId,jdbcType=BIGINT}, #{money,jdbcType=REAL}, #{oldMoney,jdbcType=REAL},
+      (#{flowId,jdbcType=BIGINT}, #{money,jdbcType=REAL}, #{oldMoney,jdbcType=REAL},
       #{operatorId,jdbcType=BIGINT}, #{operatorName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP},
       #{isDeleted,jdbcType=SMALLINT})
     </foreach>

@@ -94,10 +94,6 @@ public class UserServiceImpl implements UserService {
 	public User userLogin(String username, String pwd) throws UserNotExistException, PassErrorException {
 		User user = queryByPhone(username);
 
-		if (user == null) {
-			throw new RuntimeException();
-		}
-
 		if (user.getPwd() == null) {
 			throw new PassErrorException("密码未设置");
 		}
@@ -106,7 +102,7 @@ public class UserServiceImpl implements UserService {
 			userMapper.updateByPrimaryKey(user);
 			return user;
 		}else{
-			throw new PassErrorException("密码错误");
+			throw new PassErrorException("手机号或者密码错误，请重新输入");
 		}
 	}
 
@@ -146,7 +142,7 @@ public class UserServiceImpl implements UserService {
 	public User queryByPhone(String phone) throws UserNotExistException {
 		User user = userMapper.queryByUserPhone(phone);
 		if (user == null) {
-			throw new UserNotExistException();
+			throw new UserNotExistException("手机号码未注册，请重新输入");
 		}
 		return user;
 	}

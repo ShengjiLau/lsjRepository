@@ -72,7 +72,7 @@ public class FeePropertyApi {
 
     @ApiOperation("费用类型——新增")
     @RequestMapping(value = "/addFeeProperty", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('add_fee_property')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_property_add')")
     public JSONObject addFeeProperty(@Validated FeeProperty dto) {
         if(StringUtility.isNotEmpty(dto.getName()) && !"运费".equals(dto.getName())) {
             Long companyId = SecurityInfoGetter.getCompanyId();
@@ -119,7 +119,7 @@ public class FeePropertyApi {
 
     @ApiOperation("费用类型——修改")
     @RequestMapping(value = "/modifyFeeProperty", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('modify_fee_property')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_property_modify')")
     public JSONObject modifyFeeProperty(@Validated FeeProperty dto) {
         if(StringUtility.isNotEmpty(dto.getName()) && !"运费".equals(dto.getName())) {
             Long companyId = SecurityInfoGetter.getCompanyId();
@@ -161,7 +161,7 @@ public class FeePropertyApi {
 
     @ApiOperation("费用类型——删除")
     @RequestMapping(value = "/deleteFeeProperty", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delete_fee_property')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_property_delete')")
     public JSONObject deleteFeeProperty(@ApiParam(value = "费用类型ID",required = true) @RequestParam Long proId) {
         List<FeeFlow> feeFlowList =  feePropertyRpcService.selectFlowsByProId(proId);
         if(feeFlowList!=null&&feeFlowList.size()>0)

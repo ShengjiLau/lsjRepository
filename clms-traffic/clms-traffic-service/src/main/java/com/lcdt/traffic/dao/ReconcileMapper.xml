@@ -15,10 +15,12 @@
     <result column="payee_type" property="payeeType" jdbcType="SMALLINT" />
     <result column="payer_id" property="payerId" jdbcType="BIGINT" />
     <result column="payer_name" property="payerName" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" jdbcType="BIGINT" />
   </resultMap>
- <sql id="Base_Column_List" >
+  <sql id="Base_Column_List" >
     reconcile_id, reconcile_code, company_id, account_amount, operator_id, operator_name, 
-    create_time, cancel_ok, account_id, waybill_id, payee_type, payer_id, payer_name
+    create_time, cancel_ok, account_id, waybill_id, payee_type, payer_id, payer_name, 
+    group_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -35,12 +37,12 @@
       account_amount, operator_id, operator_name, 
       create_time, cancel_ok, account_id, 
       waybill_id, payee_type, payer_id, 
-      payer_name)
+      payer_name, group_id)
     values (#{reconcileId,jdbcType=BIGINT}, #{reconcileCode,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, 
       #{accountAmount,jdbcType=DOUBLE}, #{operatorId,jdbcType=BIGINT}, #{operatorName,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{cancelOk,jdbcType=SMALLINT}, #{accountId,jdbcType=VARCHAR}, 
       #{waybillId,jdbcType=VARCHAR}, #{payeeType,jdbcType=SMALLINT}, #{payerId,jdbcType=BIGINT}, 
-      #{payerName,jdbcType=VARCHAR})
+      #{payerName,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT})
   </insert>
   
    <insert id="insertSelective" parameterType="com.lcdt.traffic.model.Reconcile" >
@@ -85,6 +87,9 @@
       <if test="payerName != null" >
         payer_name,
       </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="reconcileId != null" >
@@ -126,11 +131,14 @@
       <if test="payerName != null" >
         #{payerName,jdbcType=VARCHAR},
       </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=BIGINT},
+      </if>
     </trim>
   </insert>
   
  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.traffic.model.Reconcile" >
-    update t_fee_reconcile
+     update t_fee_reconcile
     <set >
       <if test="reconcileCode != null" >
         reconcile_code = #{reconcileCode,jdbcType=VARCHAR},
@@ -168,6 +176,9 @@
       <if test="payerName != null" >
         payer_name = #{payerName,jdbcType=VARCHAR},
       </if>
+      <if test="groupId != null" >
+        group_id = #{groupId,jdbcType=BIGINT},
+      </if>
     </set>
     where reconcile_id = #{reconcileId,jdbcType=BIGINT}
   </update>
@@ -185,24 +196,36 @@
       waybill_id = #{waybillId,jdbcType=VARCHAR},
       payee_type = #{payeeType,jdbcType=SMALLINT},
       payer_id = #{payerId,jdbcType=BIGINT},
-      payer_name = #{payerName,jdbcType=VARCHAR}
+      payer_name = #{payerName,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=BIGINT}
     where reconcile_id = #{reconcileId,jdbcType=BIGINT}
   </update>
   
   <insert id="insertByBatch" useGeneratedKeys="true" keyProperty="reconcileId" keyColumn="reconcile_id">
-  	insert into t_fee_reconcile (reconcile_id, reconcile_code, company_id, 
-      account_amount, operator_id, 
-      operator_name, create_time, 
-      cancel_ok, account_id, waybill_id, 
-      payee_type, payer_id, payer_name
-      )
-  <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-    values (#{item.reconcileId,jdbcType=BIGINT}, #{item.reconcileCode,jdbcType=VARCHAR}, #{item.companyId,jdbcType=BIGINT}, 
-      #{item.accountAmount,jdbcType=DOUBLE}, #{item.operatorId,jdbcType=BIGINT}, 
-      #{item.operatorName,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
-      #{item.cancelOk,jdbcType=SMALLINT}, #{item.accountId,jdbcType=VARCHAR}, #{item.waybillId,jdbcType=VARCHAR}, 
-      #{item.payeeType,jdbcType=SMALLINT}, #{item.payerId,jdbcType=BIGINT}, #{item.payerName,jdbcType=VARCHAR}
-      )
+   insert into t_fee_reconcile (reconcile_id, reconcile_code, company_id, 
+      account_amount, operator_id, operator_name, 
+      create_time, cancel_ok, account_id, 
+      waybill_id, payee_type, payer_id, 
+      payer_name, group_id)
+    values 
+  <foreach collection="list" index="index" item="rec" open="" separator="," close="">  
+  (#{rec.reconcileId,jdbcType=BIGINT}, 
+  <choose>
+    <when test="rec.payeeType==0">
+    RECONCILE_CODE('YS'),
+    </when>
+    <when test="rec.payeeType==1">
+    RECONCILE_CODE('YF'),
+    </when>
+    <otherwise>
+    'null',
+    </otherwise>
+    </choose>
+      #{rec.companyId,jdbcType=BIGINT}, 
+      #{rec.accountAmount,jdbcType=DOUBLE}, #{rec.operatorId,jdbcType=BIGINT}, #{rec.operatorName,jdbcType=VARCHAR}, 
+      CURRENT_TIMESTAMP, #{rec.cancelOk,jdbcType=SMALLINT}, #{rec.accountId,jdbcType=VARCHAR}, 
+      #{rec.waybillId,jdbcType=VARCHAR}, #{rec.payeeType,jdbcType=SMALLINT}, #{rec.payerId,jdbcType=BIGINT}, 
+      #{rec.payerName,jdbcType=VARCHAR}, #{rec.groupId,jdbcType=BIGINT})
   </foreach>
   </insert>
   
@@ -210,12 +233,13 @@
     update t_fee_reconcile
     <set>
     cancel_ok = 1
-    </set>
-  	<foreach collection="array" index="index" item="reconcileId" open="(" separator="," close=")">	
+    </set>	
   	<where>
-  	reconcile_id = #{reconcileId,jdbcType=BIGINT} 
+  	reconcile_id in
+  	<foreach collection="array" index="index" item="reconcileId"  open="(" separator="," close=")">	
+  	#{reconcileId,jdbcType=BIGINT} 
+    </foreach>
   	</where>
-  	</foreach>
   </update>
   
   <select id="getReconcileList" resultMap="BaseResultMap" parameterType="com.lcdt.traffic.web.dto.ReconcileDto">
@@ -223,7 +247,7 @@
     <include refid="Base_Column_List" />
     from t_fee_reconcile
     <where>
-    cancel_ok=1 and company_id =#{companyId,jdbcType=BIGINT} and  payee_type = #{payeeType,jdbcType=SMALLINT}
+    cancel_ok=0 and company_id =#{companyId,jdbcType=BIGINT} and  payee_type = #{payeeType,jdbcType=SMALLINT}
     <if test="beginTime!=null and beginTime!=''">
     and create_time &gt; concat(#{beginTime,jdbcType=VARCHAR},'000000')
     </if>
@@ -236,6 +260,9 @@
     <if test="reconcileCode!=null and reconcileCode!=''">
     and reconcile_code like concat('%',#{reconcileCode,jdbcType=VARCHAR},'%')
     </if>
+    <if test="groupId !=null">
+    and group_id =#{groupId,jdbcType=BIGINT}
+    </if>
     </where>
     order by create_time desc
   </select>
@@ -244,12 +271,13 @@
     select 
     <include refid="Base_Column_List" />
     from t_fee_reconcile
-    <foreach collection="array" index="index" item="reconcileId" open="(" separator="," close=")">
     <where>
- 	reconcile_id = #{reconcileId,jdbcType=BIGINT}
+    reconcile_id in
+    <foreach collection="array" index="index" item="reconcileId" open="(" separator="," close=")">
+ 	#{reconcileId,jdbcType=BIGINT}
+ 	</foreach>
   	</where>
-    </foreach>
    </select>
-  
+
   
 </mapper>

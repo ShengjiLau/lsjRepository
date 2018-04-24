@@ -1,5 +1,6 @@
 package com.lcdt.traffic.web.controller.api;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -18,7 +19,6 @@ import com.lcdt.util.WebProduces;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -92,24 +92,24 @@ public class PayableFeeAccountApi {
         {
             map.put("groupIds", GroupIdsUtil.getOwnGroupIds(dto.getGroupId()));
         }
-        map.put("isReceivable",(short)0);
+        map.put("isReceivable",(short)1);
         PageInfo<List<FeeAccountWaybillDto>> listPageInfo = feeAccountService.feeAccountWaybillList(map);
+        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code",0);
         jsonObject.put("message","请求成功");
 
         Map data = new HashMap();
-        data.put("list", listPageInfo.getList());
-        data.put("total", listPageInfo.getTotal());
+        data.put("list", pageBaseDto.getList());
+        data.put("total", pageBaseDto.getTotal());
 
         map.put("waybillType", 0);//我的运单
         FeeAccountWaybillDto feeTotalDto = feeAccountService.feeAccountWaybillFeeTotal(map);
-        data.put("feeTotal", FinanceUtil.getFeeTotalDto(feeTotalDto));
+        data.put("feeTotal", FinanceUtil.getFeeTotalDto(pageBaseDto.getTotal(), feeTotalDto));
 
         jsonObject.put("data",data);
 
         return jsonObject;
-//        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
 //        return pageBaseDto;
     }
 
@@ -129,24 +129,24 @@ public class PayableFeeAccountApi {
         {
             map.put("groupIds",GroupIdsUtil.getCustomerGroupIds(dto.getGroupId()));
         }
-        map.put("isReceivable",(short)0);
+        map.put("isReceivable",(short)1);
         PageInfo<List<FeeAccountWaybillDto>> listPageInfo = feeAccountService.feeAccountCustomerWaybillList(map);
+        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code",0);
         jsonObject.put("message","请求成功");
 
         Map data = new HashMap();
-        data.put("list", listPageInfo.getList());
-        data.put("total", listPageInfo.getTotal());
+        data.put("list", pageBaseDto.getList());
+        data.put("total", pageBaseDto.getTotal());
 
         map.put("waybillType", 1);//客户运单
         FeeAccountWaybillDto feeTotalDto = feeAccountService.feeAccountWaybillFeeTotal(map);
-        data.put("feeTotal", FinanceUtil.getFeeTotalDto(feeTotalDto));
+        data.put("feeTotal", FinanceUtil.getFeeTotalDto(pageBaseDto.getTotal(), feeTotalDto));
 
         jsonObject.put("data",data);
 
         return jsonObject;
-//        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
 //        return pageBaseDto;
     }
     @ApiOperation("应付记账——记账(进入记账页面)")
@@ -177,10 +177,10 @@ public class PayableFeeAccountApi {
                         }
                         m.put("proIds", proIds);
                     }
-//                    m.put("isShow", (short)0);
-//                    showPropertyList = financeRpcService.selectByCondition(m);
-//                    m.put("isShow", (short)1);
-//                    hidePropertyList = financeRpcService.selectByCondition(m);
+                    m.put("isShow", (short)0);
+                    showPropertyList = financeRpcService.selectByCondition(m);
+                    m.put("isShow", (short)1);
+                    hidePropertyList = financeRpcService.selectByCondition(m);
                     dto.setShowPropertyList(showPropertyList);
                     dto.setHidePropertyList(hidePropertyList);
                 }
@@ -222,7 +222,7 @@ public class PayableFeeAccountApi {
         map.put("waybillId", waybillId);
         map.put("isReceivable", (short)1);
         List<FeeAccountDto> list = feeAccountService.selectFlowByWaybillId(map);
-        if (list != null && list.size() > 0) {
+        if (list != null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "流水详情");
@@ -236,14 +236,28 @@ public class PayableFeeAccountApi {
     @ApiOperation("应付记账单——列表")
     @RequestMapping(value = "/feeAccountList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_list')")
-    public PageBaseDto feeAccountList(@Validated FeeAccountDto dto) {
+    public JSONObject feeAccountList(@Validated FeeAccountDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         dto.setCompanyId(companyId);
         dto.setIsDeleted((short)0);
         dto.setIsReceivable((short)1);
         PageInfo<List<FeeAccountDto>> listPageInfo = feeAccountService.feeAccountList(dto);
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
-        return pageBaseDto;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code",0);
+        jsonObject.put("message","请求成功");
+
+        Map data = new HashMap();
+        data.put("list", pageBaseDto.getList());
+        data.put("total", pageBaseDto.getTotal());
+
+        FeeAccountDto feeTotalDto = feeAccountService.feeAccountFeeTotal(dto);
+        data.put("feeTotal", FinanceUtil.getFeeAccountFeeTotalDto(pageBaseDto.getTotal(), feeTotalDto));
+
+        jsonObject.put("data",data);
+
+        return jsonObject;
+//        return pageBaseDto;
     }
 
     @ApiOperation("应付记账单——列表留言")
@@ -256,7 +270,7 @@ public class PayableFeeAccountApi {
         dto.setIsDeleted((short)0);
         dto.setAccountId(accountId);
         List<Msg> list = msgService.selectSomeMsg(dto);
-        if (list != null && list.size() > 0) {
+        if (list != null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "留言列表");
@@ -284,58 +298,47 @@ public class PayableFeeAccountApi {
         if (result == accountIds.size()) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
-            jsonObject.put("message", "删除成功");
+            jsonObject.put("message", auditStatus==0?"取消审核成功":"审核成功");
             return jsonObject;
         } else {
-            throw new RuntimeException("删除失败");
+            throw new RuntimeException( auditStatus==0?"取消审核失败":"审核失败");
         }
     }
 
-    @ApiOperation("应付记账单——对账")
+    @ApiOperation("应付记账单——对账（进入对账页面）")
     @RequestMapping(value = "/feeAccountReconcilePage", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_reconcile_page')")
-    public JSONObject feeAccountReconcilePage(@ApiParam(value = "0-取消审核，1-审核",required = true) @RequestParam short auditStatus,
-                                              @ApiParam(value = "记账单IDs",required = true) @RequestParam List<Long> accountIds) {
-//        Map map = new HashMap();
-//        map.put("accountIds", accountIds);
-//        List list = feeAccountService.feeAccountReconcileGroup(map);
-//        if (list != null && list.size() > 0) {
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("data", list);
-//            jsonObject.put("code", 0);
-//            jsonObject.put("message", "对账详情");
-//            return jsonObject;
-//        } else {
-        throw new RuntimeException("无数据");
-//        }
+    public JSONObject feeAccountReconcilePage(@ApiParam(value = "记账单IDs",required = true) @RequestParam List<Long> accountIds) {
+        Map map = new HashMap();
+        map.put("accountIds", accountIds);
+        List list = feeAccountService.feeAccountReconcilePage(map);
+        if (list != null) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("data", list);
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "对账详情");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("获取失败");
+        }
     }
 
     @ApiOperation("应付记账单——对账单保存")
     @RequestMapping(value = "/feeAccountReconcileSave", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_reconcile_save')")
-    public JSONObject feeAccountReconcileSave(@ApiParam(value = "0-取消审核，1-审核",required = true) @RequestParam short auditStatus,
-                                              @ApiParam(value = "记账单IDs",required = true) @RequestParam List<Long> accountIds) {
-//        Map map = new HashMap();
-//        map.put("accountIds", accountIds);
-//        List<Map<String,Object>> list = feeAccountService.feeAccountReconcileGroup(map);
-//        if (list != null && list.size() > 0) {
-//            for(Map<String,Object> m : list){
-//                m.put("reconcileCode",1);
-//                m.put("companyId",SecurityInfoGetter.getCompanyId());
-//                m.put("groupId",1);
-//                m.put("account_amount",m.get("money"));
-//                m.put("operatorId",SecurityInfoGetter.getUser().getUserId());
-//                m.put("operatorName",SecurityInfoGetter.getUser().getRealName());
-//                m.put("isReceivable",0);
-//                m.put("createTime",new Date());
-//            }
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("data", list);
-//            jsonObject.put("code", 0);
-//            jsonObject.put("message", "对账详情");
-//            return jsonObject;
-//        } else {
-        throw new RuntimeException("无数据");
-//        }
+    public JSONObject feeAccountReconcileSave(@ApiParam(value = "记账单IDs",required = true) @RequestParam List<Long> accountIds) {
+        Map map = new HashMap();
+        map.put("accountIds", accountIds);
+        List<Map<String,Object>> list = feeAccountService.feeAccountReconcilePage(map);
+        int result = feeAccountService.feeAccountReconcileSave(list, (short)1);
+        int listSize = list != null ? list.size() : 0;
+        if (result == (listSize + accountIds.size())) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "对账成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("对账失败");
+        }
     }
 }
