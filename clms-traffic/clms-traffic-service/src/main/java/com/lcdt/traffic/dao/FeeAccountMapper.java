@@ -35,7 +35,7 @@ public interface FeeAccountMapper {
     List feeAccountGroupByReceivPayName(Map map);
    
     /**
-     * 此方法用于生成对账单或者取消对账单时批量修改FeeAccount中对账单的id和code
+     * 此方法用于生成对账单批量修改FeeAccount中对账单的id和code
      * @param feeAccountList
      * @return
      */
@@ -46,10 +46,10 @@ public interface FeeAccountMapper {
     int updateBatch(List<FeeAccount> list);
 
     /**
-     * 对账和取消对账修改记账单对账信息
-     * @param dto
+     * 取消对账修改记账单对账信息
+     * @param String feeAccountIds
      * @return
      */
-    int updateReconcileCodeAndId(ReconcileDto dto);
+    int updateReconcileWhenCancel(String feeAccountIds);
 
 }

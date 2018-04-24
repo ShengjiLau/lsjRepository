@@ -37,7 +37,7 @@ public interface ReconcileMapper {
      * @param reconcileIdList
      * @return
      */
-    int cancelByBatch(Long[] reconcileIdList);
+    int cancelByBatch(String reconcileIdList);
     
     /**
      * 查询对账单列表
@@ -51,7 +51,7 @@ public interface ReconcileMapper {
      * @param reconcileIdList
      * @return
      */
-    List<Reconcile> getReconcileListByPk(Long[] reconcileIdList);
+    List<Reconcile> getReconcileListByPk(String reconcileIds);
     
     
     

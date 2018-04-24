@@ -236,9 +236,7 @@
     </set>	
   	<where>
   	reconcile_id in
-  	<foreach collection="array" index="index" item="reconcileId"  open="(" separator="," close=")">	
-  	#{reconcileId,jdbcType=BIGINT} 
-    </foreach>
+  	concat('(',#{reconcileIdList,jdbcType=VARCHAR},')')
   	</where>
   </update>
   
@@ -273,9 +271,7 @@
     from t_fee_reconcile
     <where>
     reconcile_id in
-    <foreach collection="array" index="index" item="reconcileId" open="(" separator="," close=")">
- 	#{reconcileId,jdbcType=BIGINT}
- 	</foreach>
+    concat('(',#{reconcileIds,jdbcType=VARCHAR},')')
   	</where>
    </select>
 

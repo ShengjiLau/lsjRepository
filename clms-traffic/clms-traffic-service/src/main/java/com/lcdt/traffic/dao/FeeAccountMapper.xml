@@ -52,7 +52,7 @@
       audit_date, operator_id, operator_name, 
       reconcile_id, reconcile_code, is_receivable, 
       create_date, is_deleted)
-    values (#{accountCode,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{waybillId,jdbcType=BIGINT}, 
+    values (ACCOUNT_CODE('JZ'), #{companyId,jdbcType=BIGINT}, #{waybillId,jdbcType=BIGINT}, 
       #{waybillCode,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, 
       #{nameId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{auditStatus,jdbcType=SMALLINT}, 
       #{auditDate,jdbcType=TIMESTAMP}, #{operatorId,jdbcType=BIGINT}, #{operatorName,jdbcType=VARCHAR}, 
@@ -364,7 +364,7 @@
     </foreach>
     group by a.name
   </select>
-  <insert id="insertBatch">
+  <insert id="insertBatch" useGeneratedKeys="true" keyProperty="accountId" keyColumn="account_id">
     insert into t_fee_account (account_code, company_id, waybill_id,
     waybill_code, group_id, group_name,
     name_id, name, audit_status,
@@ -373,7 +373,7 @@
     create_date, is_deleted)
     values
     <foreach item="item" collection="list" separator=",">
-      (#{item.accountCode,jdbcType=VARCHAR}, #{item.companyId,jdbcType=BIGINT}, #{item.waybillId,jdbcType=BIGINT},
+      (#{ACCOUNT_CODE('JZ'), #{item.companyId,jdbcType=BIGINT}, #{item.waybillId,jdbcType=BIGINT},
       #{item.waybillCode,jdbcType=VARCHAR}, #{item.groupId,jdbcType=BIGINT}, #{item.groupName,jdbcType=VARCHAR},
       #{item.nameId,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, #{item.auditStatus,jdbcType=SMALLINT},
       #{item.auditDate,jdbcType=TIMESTAMP}, #{item.operatorId,jdbcType=BIGINT}, #{item.operatorName,jdbcType=VARCHAR},
@@ -463,16 +463,12 @@
   	 </foreach>
   	</where>
   </update>
-  
-  
-  
-  <update id="updateReconcileCodeAndId" parameterType="com.lcdt.traffic.web.dto.ReconcileDto">
+
+  <update id="updateReconcileWhenCancel" parameterType="java.lang.String">
     update t_fee_account
-    set reconcile_id = #{reconcileId,jdbcType=BIGINT},reconcile_code = #{reconcileCode,jdbcType=VARCHAR}
+    set reconcile_id = null,reconcile_code = null
     where account_id in
-    <foreach collection="accountIds" index="index" item="item" open="(" separator="," close=")">
-      #{item}
-    </foreach>
+  	concat('(',#{feeAccount,jdbcType=VARCHAR},')')
   </update>
   
 </mapper>
