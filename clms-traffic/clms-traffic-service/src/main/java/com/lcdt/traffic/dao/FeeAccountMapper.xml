@@ -52,7 +52,7 @@
       audit_date, operator_id, operator_name, 
       reconcile_id, reconcile_code, is_receivable, 
       create_date, is_deleted)
-    values (#{accountCode,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{waybillId,jdbcType=BIGINT}, 
+    values (ACCOUNT_CODE('JZ'), #{companyId,jdbcType=BIGINT}, #{waybillId,jdbcType=BIGINT}, 
       #{waybillCode,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, 
       #{nameId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{auditStatus,jdbcType=SMALLINT}, 
       #{auditDate,jdbcType=TIMESTAMP}, #{operatorId,jdbcType=BIGINT}, #{operatorName,jdbcType=VARCHAR}, 
