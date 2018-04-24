@@ -470,5 +470,13 @@
     where account_id in
   	concat('(',#{feeAccount,jdbcType=VARCHAR},')')
   </update>
-  
+
+  <update id="updateReconcileCodeAndId" parameterType="com.lcdt.traffic.web.dto.ReconcileDto">
+    update t_fee_account
+    set reconcile_id = #{reconcileId,jdbcType=BIGINT},reconcile_code = #{reconcileCode,jdbcType=VARCHAR}
+    where account_id in
+    <foreach collection="accountIds" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
 </mapper>
