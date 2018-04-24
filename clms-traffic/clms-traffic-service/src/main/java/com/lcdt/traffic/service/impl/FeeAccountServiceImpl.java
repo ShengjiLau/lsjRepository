@@ -17,7 +17,6 @@ import com.lcdt.userinfo.rpc.FinanceRpcService;
 import com.lcdt.util.ClmsBeanUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.tl.commons.util.DateUtility;
 
 import java.util.*;
 
@@ -134,6 +133,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
 
             if(dtoList != null && dtoList.size() > 0){
                 List<FeeAccount> updateFeeAccountList = new ArrayList<>();//修改已存在的记账单
+                List<FeeFlow> insertFeeFlowList = new ArrayList<>();//新增的流水
                 List<FeeFlow> updateFeeFlowList = new ArrayList<>();//修改已存在的流水
                 List<FeeFlowLog> insertFeeFlowLogList = new ArrayList<>();//已存在流水修改日志
 
@@ -174,10 +174,11 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                                     flow.setIsReceivable(saveParamsDto.getIsReceivable());
                                     flow.setCompanyId(saveParamsDto.getCompanyId());
                                     flow.setIsDeleted((short)0);
-                                    feeFlowMapper.insert(flow);
-                                    flow.setFlowCode("LS" + DateUtility.date2String(new Date(),
-                                            "yyyyMMdd") + flow.getFlowId());
-                                    feeFlowMapper.updateByPrimaryKey(flow);
+                                    insertFeeFlowList.add(flow);
+//                                    feeFlowMapper.insert(flow);
+//                                    flow.setFlowCode("LS" + DateUtility.date2String(new Date(),
+//                                            "yyyyMMdd") + flow.getFlowId());
+//                                    feeFlowMapper.updateByPrimaryKey(flow);
                                 }
                             }
                         }
@@ -194,9 +195,9 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                         account.setCreateDate(new Date());
                         account.setIsDeleted((short)0);
                         feeAccountMapper.insert(account);
-                        account.setAccountCode("JZ" + DateUtility.date2String(new Date(),
-                                "yyyyMMdd") + account.getAccountId());
-                        feeAccountMapper.updateByPrimaryKey(account);
+//                        account.setAccountCode("JZ" + DateUtility.date2String(new Date(),
+//                                "yyyyMMdd") + account.getAccountId());
+//                        feeAccountMapper.updateByPrimaryKey(account);
 
                         if(dto.getFeeFlowList() != null && dto.getFeeFlowList().size() > 0){
                             for(FeeFlow flow : dto.getFeeFlowList()) {
@@ -213,10 +214,11 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                                     flow.setIsReceivable(saveParamsDto.getIsReceivable());
                                     flow.setCompanyId(saveParamsDto.getCompanyId());
                                     flow.setIsDeleted((short)0);
-                                    feeFlowMapper.insert(flow);
-                                    flow.setFlowCode("LS" + DateUtility.date2String(new Date(),
-                                            "yyyyMMdd") + flow.getFlowId());
-                                    feeFlowMapper.updateByPrimaryKey(flow);
+                                    insertFeeFlowList.add(flow);
+//                                    feeFlowMapper.insert(flow);
+//                                    flow.setFlowCode("LS" + DateUtility.date2String(new Date(),
+//                                            "yyyyMMdd") + flow.getFlowId());
+//                                    feeFlowMapper.updateByPrimaryKey(flow);
                                 }
                             }
                         }
@@ -224,6 +226,9 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                 }
                 if(updateFeeAccountList.size() > 0){
                     feeAccountMapper.updateBatch(updateFeeAccountList);
+                }
+                if(insertFeeFlowList.size() > 0){
+                    feeFlowMapper.insertBatch(insertFeeFlowList);
                 }
                 if(updateFeeFlowList.size() > 0){
                     feeFlowMapper.updateBatch(updateFeeFlowList);
