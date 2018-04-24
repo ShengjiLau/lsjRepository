@@ -53,6 +53,7 @@
          and approval_status = #{approvalStatus,jdbcType=SMALLINT}
       </if>  -->
          and company_id = #{companyId,jdbcType=BIGINT} and order_type = #{orderType,jdbcType=SMALLINT} 
+         and not exist(select * from t_order where isDraft=1 and approval_status!=2)
     </where>
     	order by create_time desc
   </select>
