@@ -31,7 +31,9 @@ public interface PlanDetailMapper {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    PlanDetail selectByPrimaryKey(@Param("planDetailId") Long planDetailId, @Param("companyId") Long companyId);
+    PlanDetail selectByPrimaryKey(@Param("planDetailId") Long planDetailId);
+
+    PlanDetail selectByPrimaryKey1(@Param("planDetailId") Long planDetailId, @Param("companyId") Long companyId);
 
     /***
      * Long waybillPlanId, Long companyId, Short isDeleted

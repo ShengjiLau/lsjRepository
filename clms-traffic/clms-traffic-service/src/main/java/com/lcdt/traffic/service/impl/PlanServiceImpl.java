@@ -246,7 +246,7 @@ public class PlanServiceImpl implements PlanService {
             List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
             Date date = new Date();
             for (PlanDetailParamsDto dto : dtoList) {
-                PlanDetail planDetail = planDetailMapper.selectByPrimaryKey(dto.getPlanDetailId(),company.getCompId());
+                PlanDetail planDetail = planDetailMapper.selectByPrimaryKey1(dto.getPlanDetailId(),company.getCompId());
                 if (planDetail!=null) {
                     planDetail.setUpdateName(user.getRealName());
                     planDetail.setUpdateId(user.getUserId());
