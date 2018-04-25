@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -115,50 +114,22 @@ public class CompanyServiceImpl implements CompanyService {
 		if (isRegister) {
 			throw new RuntimeException("公司名已被注册");
 		}
-
-		Company company = new Company();
-		company.setFullName(dto.getCompanyName());
-		company.setIndustry(dto.getIndustry());
-		//未认证
-		company.setAuthentication((short)0);
-		company.setCreateId(dto.getUserId());
-		company.setCreateName(dto.getCreateName());
-		company.setCreateDate(new Date());
-		if (!StringUtils.isEmpty(dto.getCompanyName())) {
-			//企业简称默认取企业全称的前六位
-			if (dto.getCompanyName().length() <= 6) {
-				dto.setShortName(dto.getCompanyName());
-			}
-			else{
-				dto.setShortName(dto.getCompanyName().substring(0,6));
-			}
-		}
-
-		if (StringUtils.isEmpty(dto.getShortName())) {
-			if (company.getFullName().length() <= 4) {
-				company.setShortName(company.getFullName());
-			}else{
-				company.setShortName(company.getFullName().substring(0,4));
-			}
-		}else{
-			company.setShortName(dto.getShortName());
-		}
+		Company registerCompany = Company.createCompanyFromCompanyDto(dto);
 
 		try {
-			User user = userService.queryByUserId(company.getCreateId());
-			company.setLinkMan(user.getRealName());
-			company.setLinkTel(user.getPhone());
-			company.setLinkEmail(user.getEmail());
+			User user = userService.queryByUserId(registerCompany.getCreateId());
+			registerCompany.setLinkMan(user.getRealName());
+			registerCompany.setLinkTel(user.getPhone());
+			registerCompany.setLinkEmail(user.getEmail());
 		} catch (UserNotExistException e) {
 			e.printStackTrace();
 		}
 
-
-		companyMapper.insert(company);
+		companyMapper.insert(registerCompany);
 		//创建关系
-		createUserCompRel(dto, company);
+		createUserCompRel(dto, registerCompany);
 
-		return company;
+		return registerCompany;
 	}
 
 	/**
