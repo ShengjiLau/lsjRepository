@@ -146,7 +146,7 @@
   </select>
   <select id="selectPendingNum" resultType="int">
     select count(t1.contract_id) num from t_contract t1 left join t_contract_approval t2 on t1.contract_id = t2.contract_id
-    where t2.user_id = #{arg0} and t2.status = 1 and t1.company_id = #{arg1}
+    where t2.user_id = #{arg0} and t2.status = 1 and t1.company_id = #{arg1} and t1.type = #{arg2} and t1.approval_status != 0  and t1.is_draft = 1
   </select>
   <insert id="insertBatch">
     insert into t_contract_approval (contract_id, user_id,user_name, dept_name, sort, action_type,status)
