@@ -134,15 +134,15 @@ public class CompanyServiceImpl implements CompanyService {
 			}
 		}
 
-		company.setShortName(dto.getShortName());
 		if (StringUtils.isEmpty(dto.getShortName())) {
 			if (company.getFullName().length() <= 4) {
 				company.setShortName(company.getFullName());
 			}else{
 				company.setShortName(company.getFullName().substring(0,4));
 			}
+		}else{
+			company.setShortName(dto.getShortName());
 		}
-
 
 		try {
 			User user = userService.queryByUserId(company.getCreateId());
@@ -155,7 +155,6 @@ public class CompanyServiceImpl implements CompanyService {
 
 
 		companyMapper.insert(company);
-
 		//创建关系
 		createUserCompRel(dto, company);
 
