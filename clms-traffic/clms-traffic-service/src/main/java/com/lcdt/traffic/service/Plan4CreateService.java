@@ -1,7 +1,11 @@
 package com.lcdt.traffic.service;
 
+import com.lcdt.traffic.dto.PlanDetailParamsDto;
 import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.WaybillPlan;
+import com.lcdt.userinfo.model.UserCompRel;
+
+import java.util.List;
 
 /**
  * Created by yangbinq on 2017/12/13.
@@ -16,5 +20,7 @@ public interface Plan4CreateService {
      * @return
      */
     WaybillPlan createWaybillPlan(WaybillParamsDto dto, short flag);
+
+
 
 }

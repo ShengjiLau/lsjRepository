@@ -21,6 +21,8 @@ public class ContractProduct {
 
     private String spec;
 
+    private String remark;
+
     public Long getCpId() {
         return cpId;
     }
@@ -93,5 +95,13 @@ public class ContractProduct {
 
     public void setSpec(String spec) {
         this.spec = spec;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

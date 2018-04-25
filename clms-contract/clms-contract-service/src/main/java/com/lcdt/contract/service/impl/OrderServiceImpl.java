@@ -224,23 +224,16 @@ public class OrderServiceImpl implements OrderService{
 		}	
 		PageHelper.startPage(orderDto.getPageNum(),orderDto.getPageSize());//分页
 		List<OrderDto> orderDtoList= nonautomaticMapper.selectByCondition(orderDto);
-		List<OrderDto> orderDtoList2=new ArrayList<OrderDto>();
 		if(null!=orderDtoList&&orderDtoList.size()!=0) {
 			for(OrderDto ord:orderDtoList) {
 				//获取订单商品
 				List<OrderProduct> orderProductList=orderProductMapper.getOrderProductByOrderId(ord.getOrderId());
-				if(null!=orderProductList&&orderProductList.size()!=0) {
+				if(null!=orderProductList&&orderProductList.size()>0) {
 					ord.setOrderProductList(orderProductList);
-				}
-				//去掉处于审批状态的不为草稿和被取消的订单
-				if(1==ord.getApprovalStatus()&&1==ord.getIsDraft()) {			
-						orderDtoList2.add(ord);	
 				}
 			}	
 		}
-		if(null!=orderDtoList2) {
-		orderDtoList.removeAll(orderDtoList2);
-		}
+
 		PageInfo<OrderDto> pageInfo=new PageInfo<OrderDto>(orderDtoList);
 		return pageInfo;
 	}

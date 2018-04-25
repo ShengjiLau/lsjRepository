@@ -18,10 +18,10 @@ public interface FeeExchangeService {
 	
 	PageInfo<FeeExchange> getFeeExchangeList(FeeExchangeDto feeExchangeDto);
 	
+	int updateSetCancelOk(String feeExchangeIds);
 	
+	FeeExchange selectFeeExchangeById(Long feeExchangeId);
 	
-	
-	
-	
+	int querySumFeeExchangeByReconcileId(Long rreconcileId);
 
 }

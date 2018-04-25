@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.dto.PlanDetailParamsDto;
 import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
@@ -273,7 +274,6 @@ public class OwnPlanApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_bidding_finish') or hasAuthority('traffic_customer_plan_offer')")
     public String biddingFinish(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
         UserCompRel loginUser = SecurityInfoGetter.geUserCompRel();
-
         WaybillPlan waybillPlan = iPlanRpcService4Wechat.biddingFinish(waybillPlanId,loginUser);
         JSONObject jsonObject = new JSONObject();
         String message = "操作成功！";
@@ -286,6 +286,59 @@ public class OwnPlanApi {
         jsonObject.put("message",message);
         jsonObject.put("code",code);
         return jsonObject.toString();
+    }
+
+
+
+    @ApiOperation("编辑--发布")
+    @RequestMapping(value = "/planEdit4Publish",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_create_plan') or hasAuthority('traffic_create_plan_1')")
+    public JSONObject planEdit4Publish(@RequestBody WaybillParamsDto dto, BindingResult bindingResult) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+        dto.setUpdateId(loginUser.getUserId());
+        dto.setUpdateName(loginUser.getRealName());
+        dto.setCompanyId(companyId);
+        dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
+        dto.setCompanyName(userCompRel.getCompany().getFullName()); //企业名称
+        JSONObject jsonObject = new JSONObject();
+        if (bindingResult.hasErrors()) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
+            return jsonObject;
+        }
+        plan4EditService.waybillPlanEdit(dto, (short) 1);
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "发布成功！");
+        return jsonObject;
+    }
+
+
+
+    @ApiOperation("调整计划剩余数量")
+    @RequestMapping(value = "/adjustPlanRemainAmount",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_plan_list')")
+    public JSONObject adjustPlanRemainAmount(@RequestBody List<PlanDetailParamsDto> dtoList, BindingResult bindingResult) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        JSONObject jsonObject = new JSONObject();
+        if (bindingResult.hasErrors()) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
+            return jsonObject;
+        }
+        int flag = planService.adjustPlanRemainAmount(dtoList, userCompRel);
+        String msg = "";
+        if(flag>0) {
+            flag = 0;
+            msg = "调整成功！";
+        } else {
+            flag = -1;
+            msg = "调整失败！";
+        }
+        jsonObject.put("code", flag);
+        jsonObject.put("message", msg);
+        return jsonObject;
     }
 
 
