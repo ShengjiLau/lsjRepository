@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 	public User registerUser(RegisterDto registerDto) throws PhoneHasRegisterException {
 		boolean phoneBeenRegester = isPhoneBeenRegister(registerDto.getUserPhoneNum());
 		if (phoneBeenRegester) {
-			throw new PhoneHasRegisterException();
+			throw new PhoneHasRegisterException("手机号已被注册");
 		}
 		User registerUser = new User();
 		registerUser.setPhone(registerDto.getUserPhoneNum());
