@@ -28,7 +28,7 @@ public interface ContractApprovalService {
      * @param companyId
      * @return
      */
-    int pendingApprovalNum(Long userId, Long companyId);
+    int pendingApprovalNum(Long userId, Long companyId, Short type);
 
     /**
      * 同意审批

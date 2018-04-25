@@ -43,7 +43,7 @@ public class PurchaseOrderApprovalApi {
         Long userId = SecurityInfoGetter.getUser().getUserId();    //获取user_id
         orderApprovalListDto.setCompanyId(companyId);
         orderApprovalListDto.setUserId(userId);
-        orderApprovalListDto.setOrderType(new Short("0"));    //  1 - 采购单
+        orderApprovalListDto.setOrderType(new Short("0"));    //  0 - 采购单
 
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(orderApprovalListDto.getPageNum());    //设置页码
@@ -61,7 +61,7 @@ public class PurchaseOrderApprovalApi {
     public JSONObject pendingNum() {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId();    //获取user_id
-        int total = orderApprovalService.pendingApprovalNum(userId,companyId);
+        int total = orderApprovalService.pendingApprovalNum(userId,companyId,new Short("0"));
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", 0);
         jsonObject.put("message", "查询成功!");
