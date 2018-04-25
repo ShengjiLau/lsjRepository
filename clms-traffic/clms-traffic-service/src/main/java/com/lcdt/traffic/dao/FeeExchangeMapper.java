@@ -47,4 +47,11 @@ public interface FeeExchangeMapper {
      */
     int selectCountFeeExchangeByReconcileId(Long reconcileId);
     
+    /**
+     * 查询对应对账单下收付款记录列表
+     * @param reconcileId
+     * @return
+     */
+    List<FeeExchange> getFeeExchangeListByReconcileId(Long reconcileId);
+    
 }

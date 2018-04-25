@@ -1,5 +1,6 @@
 package com.lcdt.traffic.service.impl;
 
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dao.MsgMapper;
 import com.lcdt.traffic.model.Msg;
 import com.lcdt.traffic.service.MsgService;
@@ -7,6 +8,7 @@ import com.lcdt.traffic.web.dto.MsgDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,14 +24,20 @@ public class MsgServiceImpl implements MsgService {
 
 	@Override
 	public int addMsg(Msg msg) {
+		msg.setCreateDate(new Date());
+		msg.setIsDeleted((short) 0);
+		msg.setOperatorId(SecurityInfoGetter.getUser().getUserId());
+		msg.setOperatorName(SecurityInfoGetter.getUser().getRealName());
 
 		return msgMapper.insert(msg);
 	}
 
 	@Override
 	public int updateMsg(Msg msg) {
-
-		return msgMapper.updateByPrimaryKey(msg);
+		msg.setCreateDate(new Date());
+		msg.setOperatorId(SecurityInfoGetter.getUser().getUserId());
+		msg.setOperatorName(SecurityInfoGetter.getUser().getRealName());
+		return msgMapper.updateByPrimaryKeySelective(msg);
 	}
 
 	@Override

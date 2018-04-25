@@ -468,7 +468,7 @@
     update t_fee_account
     set reconcile_id = null,reconcile_code = null
     where account_id in
-  	concat('(',#{feeAccount,jdbcType=VARCHAR},')')
+  	(#{feeAccount,jdbcType=VARCHAR})
   </update>
 
   <update id="updateReconcileCodeAndId" parameterType="com.lcdt.traffic.web.dto.ReconcileDto">

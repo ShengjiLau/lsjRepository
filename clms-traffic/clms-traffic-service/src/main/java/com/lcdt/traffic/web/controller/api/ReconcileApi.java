@@ -101,8 +101,8 @@ public class ReconcileApi {
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_list')")
 	public JSONObject getReconcileList(ReconcileDto reconcileDto) {
 		JSONObject jsonObject =new JSONObject();
-		PageInfo<Reconcile> page=reconcileService.getReconcileList(reconcileDto);
-		PageBaseDto<Reconcile> pagebase=new PageBaseDto<Reconcile>();
+		PageInfo<ReconcileDto> page=reconcileService.getReconcileList(reconcileDto);
+		PageBaseDto<ReconcileDto> pagebase=new PageBaseDto<ReconcileDto>();
 		pagebase.setTotal(page.getTotal());
 		pagebase.setList(page.getList());
 		jsonObject.put("code",0);

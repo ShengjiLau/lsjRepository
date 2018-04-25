@@ -1,15 +1,10 @@
 package com.lcdt.traffic.service.impl;
 
-
-
-
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +19,7 @@ import com.lcdt.traffic.dao.FeeAccountMapper;
 import com.lcdt.traffic.dao.FeeExchangeMapper;
 import com.lcdt.traffic.dao.ReconcileMapper;
 import com.lcdt.traffic.model.FeeAccount;
+import com.lcdt.traffic.model.FeeExchange;
 import com.lcdt.traffic.model.Reconcile;
 import com.lcdt.traffic.service.ReconcileService;
 import com.lcdt.traffic.web.dto.ReconcileDto;
@@ -164,8 +160,10 @@ public class ReconcileServiceImpl implements ReconcileService {
 			String str3 =sb3.substring(0,sb3.length()-1);
 			w2=feeAccountMapper.updateReconcileWhenCancel(str3);
 		}
-			
-		if(q2==q1&&w1==w2) {
+		logger.debug("不存在收付款记录的对账单数量为:"+q2);
+		logger.debug("应该修改的记账单数量为:"+w1);
+
+		if(q1>0) {
 			map.put(2,"取消成功");
 		}
 		
@@ -180,7 +178,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 	 * 查询对账单列表
 	 */
 	@Override
-	public PageInfo<Reconcile> getReconcileList(ReconcileDto reconcileDto){
+	public PageInfo<ReconcileDto> getReconcileList(ReconcileDto reconcileDto){
 		if(reconcileDto.getPageNum()<1) {
 			reconcileDto.setPageNum(1);
 		}
@@ -189,8 +187,22 @@ public class ReconcileServiceImpl implements ReconcileService {
 		}
 		reconcileDto.setCompanyId(SecurityInfoGetter.getCompanyId());
 		PageHelper.startPage(reconcileDto.getPageNum(),reconcileDto.getPageSize());
-		List<Reconcile> reconcileList= reconcileMapper.getReconcileList(reconcileDto);
-		PageInfo<Reconcile> page =new PageInfo<Reconcile>(reconcileList);
+		List<ReconcileDto> reconcileList= reconcileMapper.getReconcileList(reconcileDto);
+		if(null!=reconcileList&&reconcileList.size()>0) {
+			for(ReconcileDto rd:reconcileList) {
+				double j=0.0d;
+				List<FeeExchange> feeExchangelist= feeExchangeMapper.getFeeExchangeListByReconcileId(rd.getReconcileId());
+				if(null!=feeExchangelist&&feeExchangelist.size()>0) {
+					for(FeeExchange fe:feeExchangelist) {
+						j+=fe.getAccountAmount();
+					}
+				}
+				rd.setSumAmountNum(feeExchangelist.size());
+				rd.setSumAmount(j);
+			}
+		}
+		
+		PageInfo<ReconcileDto> page =new PageInfo<ReconcileDto>(reconcileList);
 		return page;
 	}
 	

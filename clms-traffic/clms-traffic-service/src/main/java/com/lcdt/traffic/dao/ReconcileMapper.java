@@ -44,7 +44,7 @@ public interface ReconcileMapper {
      * @param reconcileDto
      * @return
      */
-    List<Reconcile> getReconcileList(ReconcileDto reconcileDto);
+    List<ReconcileDto> getReconcileList(ReconcileDto reconcileDto);
      
     /**
      * 依据主键批量查询对账单

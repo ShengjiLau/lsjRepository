@@ -31,9 +31,14 @@ public class ReconcileDto extends Reconcile implements Serializable{
 	
 	@ApiModelProperty("页码,第几页")
 	private int pageNum;
-
-	@ApiModelProperty(hidden = true)
-	private Long[] accountIds;
+	
+	@ApiModelProperty("已收款/付款额")
+	private Double sumAmount;
+	
+	@ApiModelProperty("已收款/付款次数")
+	private int sumAmountNum;
+	
+	private  Long[] accountIds;
 	
 	public String getBeginTime() {
 		return beginTime;
@@ -74,11 +79,34 @@ public class ReconcileDto extends Reconcile implements Serializable{
 		this.pageNum = pageNum;
 	}
 
+
+	public Double getSumAmount() {
+		return sumAmount;
+	}
+
+
+	public void setSumAmount(Double sumAmount) {
+		this.sumAmount = sumAmount;
+	}
+
+
+	public int getSumAmountNum() {
+		return sumAmountNum;
+	}
+
+
+	public void setSumAmountNum(int sumAmountNum) {
+		this.sumAmountNum = sumAmountNum;
+	}
+
+
 	public Long[] getAccountIds() {
 		return accountIds;
 	}
 
+
 	public void setAccountIds(Long[] accountIds) {
 		this.accountIds = accountIds;
 	}
+
 }
