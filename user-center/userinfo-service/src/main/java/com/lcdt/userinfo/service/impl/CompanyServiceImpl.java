@@ -15,8 +15,8 @@ import com.lcdt.userinfo.service.GroupManageService;
 import com.lcdt.userinfo.service.UserGroupService;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -55,10 +55,14 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Transactional(rollbackFor = Exception.class)
 	public UserCompRel findByUserCompRelId(Long userCompRelId) {
-		UserCompRel userCompRel = userCompRelMapper.selectByPrimaryKey(userCompRelId);
-		List<Group> groups = userGroupService.userGroups(userCompRel.getUserId(), userCompRel.getCompId());
-		userCompRel.setGroups(groups);
+		UserCompRel userCompRel = getUserCompRelById(userCompRelId);
+		userCompRel.setGroups(userGroupService.userGroups(userCompRel.getUserId(), userCompRel.getCompId()));
 		return userCompRel;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public UserCompRel getUserCompRelById(Long userCompRelId) {
+		return userCompRelMapper.selectByPrimaryKey(userCompRelId);
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -85,37 +89,42 @@ public class CompanyServiceImpl implements CompanyService {
 		Company result = companyMapper.selectByCondition(company);
 
 		if (result != null) {
-			if (!result.getCompId().equals(company.getCompId())) {
+			boolean isCompanyNameExist = !result.getCompId().equals(company.getCompId());
+			if ( isCompanyNameExist ){
 				throw new RuntimeException("公司名已存在");
 			}
 		}
 
-		int i = companyMapper.updateByPrimaryKey(company);
+		companyMapper.updateByPrimaryKey(company);
 		return company;
 	}
 
+
+	/**
+	 * 创建公司
+	 * @param dto
+	 * @return
+	 * @throws CompanyExistException
+	 */
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Company createCompany(CompanyDto dto) throws CompanyExistException {
-		Map map = new HashMap<String, Object>(2);
-		map.put("userId", dto.getUserId());
-		map.put("fullName", dto.getCompanyName());
-		List<UserCompRel> memberList = userCompRelMapper.selectByCondition(map);
-		if (memberList != null && memberList.size() > 0) {
-			throw new CompanyExistException();
-		}
-		Date dt = new Date();
+		checkCompanyExist(dto);
 		//创建企业
+		boolean isRegister = isCompanyNameRegister(dto.getCompanyName());
+		if (isRegister) {
+			throw new RuntimeException("公司名已被注册");
+		}
+
 		Company company = new Company();
 		company.setFullName(dto.getCompanyName());
-		Company company1 = companyMapper.selectByCondition(company);
-		if (company1 != null) {
-			throw new RuntimeException("公司名称已被注册");
-		}
-
-
-
-		if (!StringUtils.isEmpty(dto.getShortName())) {
+		company.setIndustry(dto.getIndustry());
+		//未认证
+		company.setAuthentication((short)0);
+		company.setCreateId(dto.getUserId());
+		company.setCreateName(dto.getCreateName());
+		company.setCreateDate(new Date());
+		if (!StringUtils.isEmpty(dto.getCompanyName())) {
 			//企业简称默认取企业全称的前六位
 			if (dto.getCompanyName().length() <= 6) {
 				dto.setShortName(dto.getCompanyName());
@@ -125,7 +134,6 @@ public class CompanyServiceImpl implements CompanyService {
 			}
 		}
 
-		company.setIndustry(dto.getIndustry());
 		company.setShortName(dto.getShortName());
 		if (StringUtils.isEmpty(dto.getShortName())) {
 			if (company.getFullName().length() <= 4) {
@@ -135,12 +143,6 @@ public class CompanyServiceImpl implements CompanyService {
 			}
 		}
 
-
-		//未认证
-		company.setAuthentication((short)0);
-		company.setCreateId(dto.getUserId());
-		company.setCreateName(dto.getCreateName());
-		company.setCreateDate(dt);
 
 		try {
 			User user = userService.queryByUserId(company.getCreateId());
@@ -154,19 +156,52 @@ public class CompanyServiceImpl implements CompanyService {
 
 		companyMapper.insert(company);
 
-
 		//创建关系
+		createUserCompRel(dto, company);
+
+		return company;
+	}
+
+	/**
+	 * 保存用户公司关系
+	 * @param dto
+	 * @param company
+	 */
+	private void createUserCompRel(CompanyDto dto, Company company) {
 		if (company != null && company.getCompId() != null) {
 			UserCompRel companyMember = new UserCompRel();
 			companyMember.setFullName(company.getFullName());
 			companyMember.setUserId(dto.getUserId());
 			companyMember.setCompId(company.getCompId());
 			companyMember.setIsCreate((short)1); //企业创建者
-			companyMember.setCreateDate(dt);
-
+			companyMember.setCreateDate(new Date());
 			userCompRelMapper.insert(companyMember);
 		}
-		return company;
+	}
+
+
+	/**
+	 * 公司名被注册返回true 否则返回false
+	 * @param companyName
+	 * @return
+	 */
+	private boolean isCompanyNameRegister(String companyName) {
+		Assert.notNull(companyName,"company name 不能为空");
+		Company company = new Company();
+		company.setFullName(companyName);
+		Company nameCompany = companyMapper.selectByCondition(company);
+		return nameCompany != null;
+	}
+
+	private void checkCompanyExist(CompanyDto dto) throws CompanyExistException {
+		Assert.notNull(dto,"dto 不应该为空");
+		Map map = new HashMap<String, Object>(2);
+		map.put("userId", dto.getUserId());
+		map.put("fullName", dto.getCompanyName());
+		List<UserCompRel> memberList = userCompRelMapper.selectByCondition(map);
+		if (memberList != null && memberList.size() > 0) {
+			throw new CompanyExistException();
+		}
 	}
 
 
