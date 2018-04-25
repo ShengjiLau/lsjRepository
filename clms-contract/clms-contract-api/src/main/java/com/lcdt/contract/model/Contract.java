@@ -72,6 +72,8 @@ public class Contract {
 
     private Date terminationTime;
 
+    private String signPlace;
+
     private String attachment1Name;
 
     private String attachment1;
@@ -362,6 +364,14 @@ public class Contract {
 
     public void setTerminationTime(Date terminationTime) {
         this.terminationTime = terminationTime;
+    }
+
+    public String getSignPlace() {
+        return signPlace;
+    }
+
+    public void setSignPlace(String signPlace) {
+        this.signPlace = signPlace;
     }
 
     public String getAttachment1Name() {
