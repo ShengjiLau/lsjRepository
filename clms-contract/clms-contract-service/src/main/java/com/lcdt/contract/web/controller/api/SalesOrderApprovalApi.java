@@ -61,7 +61,7 @@ public class SalesOrderApprovalApi {
     public JSONObject pendingNum() {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId();    //获取user_id
-        int total = orderApprovalService.pendingApprovalNum(userId,companyId);
+        int total = orderApprovalService.pendingApprovalNum(userId,companyId,new Short("1"));
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", 0);
         jsonObject.put("message", "查询成功!");
