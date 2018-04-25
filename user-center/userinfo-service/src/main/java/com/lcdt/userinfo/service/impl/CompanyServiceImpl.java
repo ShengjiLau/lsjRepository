@@ -115,16 +115,10 @@ public class CompanyServiceImpl implements CompanyService {
 			throw new RuntimeException("公司名已被注册");
 		}
 		Company registerCompany = Company.createCompanyFromCompanyDto(dto);
-
-		try {
-			User user = userService.queryByUserId(registerCompany.getCreateId());
-			registerCompany.setLinkMan(user.getRealName());
-			registerCompany.setLinkTel(user.getPhone());
-			registerCompany.setLinkEmail(user.getEmail());
-		} catch (UserNotExistException e) {
-			e.printStackTrace();
-		}
-
+		User user = userService.queryByUserId(registerCompany.getCreateId());
+		registerCompany.setLinkMan(user.getRealName());
+		registerCompany.setLinkTel(user.getPhone());
+		registerCompany.setLinkEmail(user.getEmail());
 		companyMapper.insert(registerCompany);
 		//创建关系
 		createUserCompRel(dto, registerCompany);
