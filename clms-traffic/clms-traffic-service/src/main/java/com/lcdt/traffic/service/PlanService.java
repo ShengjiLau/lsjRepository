@@ -1,11 +1,14 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.traffic.dto.PlanDetailParamsDto;
 import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,5 +62,12 @@ public interface PlanService {
 
 
 
+    /***
+     * 调整计划剩余数量
+     * @param dtoList
+     * @param userCompRel
+     * @return
+     */
+    int adjustPlanRemainAmount(List<PlanDetailParamsDto> dtoList, UserCompRel userCompRel);
 
 }

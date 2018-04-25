@@ -1,6 +1,7 @@
 package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.PlanDetail;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public interface PlanDetailMapper {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    PlanDetail selectByPrimaryKey(Long planDetailId);
+    PlanDetail selectByPrimaryKey(@Param("planDetailId") Long planDetailId, @Param("companyId") Long companyId);
 
     /***
      * Long waybillPlanId, Long companyId, Short isDeleted
@@ -71,6 +72,8 @@ public interface PlanDetailMapper {
      * @return
      */
     int batchUpdatePlanDetail(List<PlanDetail> planDetailList);
+
+
 
 
     /***

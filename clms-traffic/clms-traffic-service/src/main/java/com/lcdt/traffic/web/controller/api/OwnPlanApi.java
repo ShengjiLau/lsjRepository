@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.dto.PlanDetailParamsDto;
 import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillPlan;
@@ -313,6 +314,32 @@ public class OwnPlanApi {
         return jsonObject;
     }
 
+
+
+    @ApiOperation("调整计划剩余数量")
+    @RequestMapping(value = "/adjustPlanRemainAmount",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_plan_list')")
+    public JSONObject adjustPlanRemainAmount(@RequestBody List<PlanDetailParamsDto> dtoList, BindingResult bindingResult) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        JSONObject jsonObject = new JSONObject();
+        if (bindingResult.hasErrors()) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
+            return jsonObject;
+        }
+        int flag = planService.adjustPlanRemainAmount(dtoList, userCompRel);
+        String msg = "";
+        if(flag>0) {
+            flag = 0;
+            msg = "调整成功！";
+        } else {
+            flag = -1;
+            msg = "调整失败！";
+        }
+        jsonObject.put("code", flag);
+        jsonObject.put("message", msg);
+        return jsonObject;
+    }
 
 
 
