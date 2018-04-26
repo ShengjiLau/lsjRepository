@@ -9,13 +9,13 @@ import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.exception.DeptmentExistException;
-import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.*;
 import com.lcdt.userinfo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -84,14 +84,12 @@ public class CompanyServiceImpl implements CompanyService {
     public Company updateCompany(Company company) {
 
         Company result = companyMapper.selectByCondition(company);
-
         if (result != null) {
             boolean isCompanyNameExist = !result.getCompId().equals(company.getCompId());
             if (isCompanyNameExist) {
                 throw new RuntimeException("公司名已存在");
             }
         }
-
         companyMapper.updateByPrimaryKey(company);
         return company;
     }
@@ -112,19 +110,57 @@ public class CompanyServiceImpl implements CompanyService {
         if (isCompanyNameRegister(dto.getCompanyName())) {
             throw new RuntimeException("公司名已被注册");
         }
-        Company registerComp = Company.createCompanyFromCompanyDto(dto);
-        fillLinkManData(registerComp);
+        Company registerComp = fillCompanyDataFromCompanyDto(dto);
         companyMapper.insert(registerComp);
-        //创建关系
+        //创建关系yd
         createUserCompRel(dto, registerComp);
         return registerComp;
+    }
+
+    /**
+     * 创建要注册的company
+     * @param dto
+     * @return
+     */
+    private final  Company fillCompanyDataFromCompanyDto(CompanyDto dto){
+        assert dto != null;
+        Company company = new Company();
+
+        company.setFullName(dto.getCompanyName());
+        company.setIndustry(dto.getIndustry());
+        //未认证
+        company.setAuthentication((short)0);
+        company.setCreateId(dto.getUserId());
+        company.setCreateName(dto.getCreateName());
+        company.setCreateDate(new Date());
+        if (!StringUtils.isEmpty(dto.getCompanyName())) {
+            //企业简称默认取企业全称的前六位
+            if (dto.getCompanyName().length() <= 6) {
+                dto.setShortName(dto.getCompanyName());
+            }
+            else{
+                dto.setShortName(dto.getCompanyName().substring(0,6));
+            }
+        }
+
+        if (StringUtils.isEmpty(dto.getShortName())) {
+            if (company.getFullName().length() <= 4) {
+                company.setShortName(company.getFullName());
+            }else{
+                company.setShortName(company.getFullName().substring(0,4));
+            }
+        }else{
+            company.setShortName(dto.getShortName());
+        }
+        fillLinkManData(company);
+        return company;
     }
 
     /**
      * 设置公司的联系人信息数据
      * @param waitRegisterComp
      */
-    private void fillLinkManData(Company waitRegisterComp) {
+    private final void fillLinkManData(Company waitRegisterComp) {
         User user = userService.queryByUserId(waitRegisterComp.getCreateId());
         waitRegisterComp.setLinkMan(user.getRealName());
         waitRegisterComp.setLinkTel(user.getPhone());
@@ -138,27 +174,33 @@ public class CompanyServiceImpl implements CompanyService {
      * @param company
      */
     private void createUserCompRel(CompanyDto dto, Company company) {
-        if (company == null || company.getCompId() == null) {
-            return;
-        }
+        assert company != null;
         UserCompRel companyMember = new UserCompRel();
         companyMember.setFullName(company.getFullName());
         companyMember.setUserId(dto.getUserId());
         companyMember.setCompId(company.getCompId());
         companyMember.setIsCreate((short) 1); //企业创建者
         companyMember.setCreateDate(new Date());
-
-        Department department = setUpDepartMent(company);
-        companyMember.setDeptIds(String.valueOf(department.getDeptId()));
-        companyMember.setDeptNames(department.getDeptName());
         companyMember.setIsEnable(true);
-        companyMember.setIsCreate((short) 1);
+
+        addDepartMent(company, companyMember);
+
+        addUserData(company, companyMember);
+
+        userCompRelMapper.insert(companyMember);
+    }
+
+    private void addUserData(Company company, UserCompRel companyMember) {
         User user = userService.queryByUserId(company.getCreateId());
         companyMember.setName(user.getRealName());
         companyMember.setNickName(user.getNickName());
         companyMember.setEmail(user.getEmail());
+    }
 
-        userCompRelMapper.insert(companyMember);
+    private void addDepartMent(Company company, UserCompRel companyMember) {
+        Department department = setUpDepartMent(company);
+        companyMember.setDeptIds(String.valueOf(department.getDeptId()));
+        companyMember.setDeptNames(department.getDeptName());
     }
 
     @Autowired
@@ -198,7 +240,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     private void checkCompanyExist(CompanyDto dto) throws CompanyExistException {
-        Assert.notNull(dto, "dto 不应该为空");
+        Assert.notNull(dto, "新建公司 dto 不应该为空");
         Map map = new HashMap<String, Object>(2);
         map.put("userId", dto.getUserId());
         map.put("fullName", dto.getCompanyName());
