@@ -1,9 +1,12 @@
 package com.lcdt.traffic.web.dto;
 
+import com.lcdt.traffic.model.FeeAccount;
+import com.lcdt.traffic.model.FeeExchange;
 import com.lcdt.traffic.model.Reconcile;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 
 
@@ -31,9 +34,21 @@ public class ReconcileDto extends Reconcile implements Serializable{
 	
 	@ApiModelProperty("页码,第几页")
 	private int pageNum;
-
-	@ApiModelProperty(hidden = true)
-	private Long[] accountIds;
+	
+	@ApiModelProperty("已收款/付款额")
+	private Double sumAmount;
+	
+	@ApiModelProperty("已收款/付款次数")
+	private int sumAmountNum;
+	
+	private  Long[] accountIds;
+	
+	@ApiModelProperty("对账当相关收付款记录")
+	private List<FeeExchange> feeExchangeList;
+	
+	@ApiModelProperty("对账单相关记账单")
+	private List<FeeAccount> feeAccountList;
+	
 	
 	public String getBeginTime() {
 		return beginTime;
@@ -74,11 +89,54 @@ public class ReconcileDto extends Reconcile implements Serializable{
 		this.pageNum = pageNum;
 	}
 
+
+	public Double getSumAmount() {
+		return sumAmount;
+	}
+
+
+	public void setSumAmount(Double sumAmount) {
+		this.sumAmount = sumAmount;
+	}
+
+
+	public int getSumAmountNum() {
+		return sumAmountNum;
+	}
+
+
+	public void setSumAmountNum(int sumAmountNum) {
+		this.sumAmountNum = sumAmountNum;
+	}
+
+
 	public Long[] getAccountIds() {
 		return accountIds;
 	}
 
+
 	public void setAccountIds(Long[] accountIds) {
 		this.accountIds = accountIds;
 	}
+
+
+	public List<FeeExchange> getFeeExchangeList() {
+		return feeExchangeList;
+	}
+
+
+	public void setFeeExchangeList(List<FeeExchange> feeExchangeList) {
+		this.feeExchangeList = feeExchangeList;
+	}
+
+
+	public List<FeeAccount> getFeeAccountList() {
+		return feeAccountList;
+	}
+
+
+	public void setFeeAccountList(List<FeeAccount> feeAccountList) {
+		this.feeAccountList = feeAccountList;
+	}
+
 }

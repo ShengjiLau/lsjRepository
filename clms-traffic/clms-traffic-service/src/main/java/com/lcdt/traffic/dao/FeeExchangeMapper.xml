@@ -436,5 +436,14 @@
   </where>
   </select>
   
+  <select id="getFeeExchangeListByReconcileId" resultMap="BaseResultMap">
+  select 
+   <include refid="Base_Column_List" />
+   from t_fee_exchange
+  <where>
+  reconcile_id = #{reconcileId,jdbcType=BIGINT}
+  </where>
+  </select>
+  
   
 </mapper>
