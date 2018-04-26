@@ -96,13 +96,13 @@
       <if test="type != null">
         type = #{type,jdbcType=SMALLINT},
       </if>
-      <if test="content != null">
+      <if test="content != null and content!=''">
         content = #{content,jdbcType=VARCHAR},
       </if>
       <if test="operatorId != null">
         operator_id = #{operatorId,jdbcType=BIGINT},
       </if>
-      <if test="operatorName != null">
+      <if test="operatorName != null and operatorName!=''">
         operator_name = #{operatorName,jdbcType=VARCHAR},
       </if>
       <if test="createDate != null">
@@ -137,8 +137,8 @@
   select 
     <include refid="Base_Column_List" />
     from t_fee_msg
-    where account_id = #{accountId,jdbcType=BIGINT} and
-    type = #{type,jdbcType=SMALLINT}
+    where account_id = #{arg0,jdbcType=BIGINT} and
+    type = #{arg1,jdbcType=SMALLINT}
   </select>
   
   <select id="selectSomeMsg" parameterType="com.lcdt.traffic.web.dto.MsgDto" resultMap="BaseResultMap">
@@ -152,10 +152,10 @@
       <if test=" accountId !=null">
         and account_id = #{accountId,jdbcType=BIGINT}
       </if>
-      <if test="operatorId !=null and operatorId !='' ">
+      <if test="operatorId !=null">
         and operator_id = #{operatorId,jdbcType=BIGINT}
       </if>
-      <if test="isDeleted !=null and isDeleted !='' ">
+      <if test="isDeleted !=null">
         and is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
   	</where>
@@ -171,9 +171,6 @@
       #{m.content,jdbcType=VARCHAR}, #{m.operatorId,jdbcType=BIGINT}, #{m.operatorName,jdbcType=VARCHAR}, 
       CURRENT_TIMESTAMP, #{m.isDeleted,jdbcType=SMALLINT})
   </foreach>
-  
-  
-  
   </insert>
   
   

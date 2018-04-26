@@ -101,8 +101,8 @@ public class ReconcileApi {
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_list')")
 	public JSONObject getReconcileList(ReconcileDto reconcileDto) {
 		JSONObject jsonObject =new JSONObject();
-		PageInfo<Reconcile> page=reconcileService.getReconcileList(reconcileDto);
-		PageBaseDto<Reconcile> pagebase=new PageBaseDto<Reconcile>();
+		PageInfo<ReconcileDto> page=reconcileService.getReconcileList(reconcileDto);
+		PageBaseDto<ReconcileDto> pagebase=new PageBaseDto<ReconcileDto>();
 		pagebase.setTotal(page.getTotal());
 		pagebase.setList(page.getList());
 		jsonObject.put("code",0);
@@ -117,11 +117,11 @@ public class ReconcileApi {
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_reconcile_select')")
 	public JSONObject selectReconcile(@ApiParam(value="对账单id",required=true)@RequestParam Long reconcileId) {
 		JSONObject jsonObject =new JSONObject();		
-		Reconcile reconcile=reconcileService.selectReconcileByPk(reconcileId);
-		if(reconcile!=null) {
+		ReconcileDto reconcileDto=reconcileService.selectReconcileByPk(reconcileId);
+		if(reconcileDto!=null) {
 			jsonObject.put("code",0);
 			jsonObject.put("message","请求成功");
-			jsonObject.put("data",reconcile);
+			jsonObject.put("data",reconcileDto);
 			return jsonObject;
 		}else {
 			throw new RuntimeException("获取对账单详细信息失败");

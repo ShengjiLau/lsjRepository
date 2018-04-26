@@ -50,12 +50,15 @@ public interface FeeAccountMapper {
      * @param String feeAccountIds
      * @return
      */
-    int updateReconcileWhenCancel(String feeAccountIds);
+    int updateReconcileWhenCancel(Long[] feeAccountIds);
     /**
      * 对账和取消对账修改记账单对账信息
      * @param dto
      * @return
      */
     int updateReconcileCodeAndId(ReconcileDto dto);
+    
+    
+    List<FeeAccount> selectFeeAccountListByReconcileId(Long[] accountIds);
 
 }

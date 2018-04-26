@@ -1,6 +1,5 @@
 package com.lcdt.traffic.web.controller.api;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.model.Msg;
 import com.lcdt.traffic.service.MsgService;
 import com.lcdt.traffic.web.dto.MsgDto;
@@ -35,8 +33,8 @@ import io.swagger.annotations.ApiParam;
  */
 @RestController
 @RequestMapping("/account/msg")
-@Api(value="MsgApi",description="留言接口")
-public class MsgApi {
+@Api(value="AccountAndReconcileMsgApi",description="记账对账留言接口")
+public class AccountAndReconcileMsgApi {
 	
 	@Autowired
 	private MsgService msgService;
@@ -44,22 +42,12 @@ public class MsgApi {
 	@ApiOperation(value="添加留言")
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('account_msg_add')")
-	public JSONObject addMsg(@Validated Msg msg,BindingResult bindingResult) {
-		JSONObject jsonObject = new JSONObject();
-		if(bindingResult.hasErrors()) {
-			Map<String,String> map =new HashMap<String, String>();
-			for(FieldError fieldError: bindingResult.getFieldErrors()) {
-				map.put(fieldError.getField(),fieldError.getDefaultMessage());
-			}
-			jsonObject.put("code",-1);
-			jsonObject.put("message","验证信息未能通过");
-			jsonObject.put("data",map);
+	public JSONObject addMsg(@Validated @RequestBody Msg msg,BindingResult bindingResult) {
+		JSONObject jsonObject = validRequestBody(bindingResult);
+		if(!jsonObject.isEmpty()) {
 			return jsonObject;
-		}		
-		msg.setCreateDate(new Date());
-		msg.setIsDeleted((short) 0);
-		msg.setOperatorId(SecurityInfoGetter.getUser().getUserId());
-		msg.setOperatorName(SecurityInfoGetter.getUser().getRealName());
+		}
+		
 		int result =msgService.addMsg(msg);
 		if(result>0) {
 			jsonObject.put("code",0);
@@ -73,21 +61,12 @@ public class MsgApi {
 	@ApiOperation(value="修改留言")
 	@PostMapping("/modify")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('account_msg_modify')")
-	public JSONObject modifyMsg(@Validated Msg msg,BindingResult bindingResult) {
-		JSONObject jsonObject = new JSONObject();
-		if(bindingResult.hasErrors()) {
-			Map<String,String> map =new HashMap<String, String>();
-			for(FieldError fieldError: bindingResult.getFieldErrors()) {
-				map.put(fieldError.getField(),fieldError.getDefaultMessage());
-			}
-			jsonObject.put("code",-1);
-			jsonObject.put("message","验证信息未能通过");
-			jsonObject.put("data",map);
+	public JSONObject modifyMsg(@Validated @RequestBody Msg msg,BindingResult bindingResult) {
+		JSONObject jsonObject = validRequestBody(bindingResult);
+		if(!jsonObject.isEmpty()) {
 			return jsonObject;
 		}
-		msg.setCreateDate(new Date());
-		msg.setOperatorId(SecurityInfoGetter.getUser().getUserId());
-		msg.setOperatorName(SecurityInfoGetter.getUser().getRealName());
+	
 		int result =msgService.updateMsg(msg);
 		if(result>0) {
 			jsonObject.put("code",0);
@@ -131,8 +110,25 @@ public class MsgApi {
 	
 	
 	
-	
-	
+	/**
+	 * 验证传入信息
+	 * @param bindingResult
+	 * @return
+	 */
+	public JSONObject validRequestBody(BindingResult bindingResult) {
+		JSONObject jsonObject = new JSONObject();
+		if(bindingResult.hasErrors()) {
+			Map<String,String> map =new HashMap<String, String>();
+			for(FieldError fieldError: bindingResult.getFieldErrors()) {
+				map.put(fieldError.getField(),fieldError.getDefaultMessage());
+			}
+			jsonObject.put("code",-1);
+			jsonObject.put("message","验证信息未能通过");
+			jsonObject.put("data",map);
+		}
+		
+		return jsonObject;
+	}
 	
 	
 	
