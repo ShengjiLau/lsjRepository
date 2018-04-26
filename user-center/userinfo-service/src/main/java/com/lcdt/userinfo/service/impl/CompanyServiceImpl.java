@@ -8,12 +8,10 @@ import com.lcdt.userinfo.dao.CompanyMapper;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
+import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.*;
-import com.lcdt.userinfo.service.CompanyService;
-import com.lcdt.userinfo.service.GroupManageService;
-import com.lcdt.userinfo.service.UserGroupService;
-import com.lcdt.userinfo.service.UserService;
+import com.lcdt.userinfo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -108,23 +106,29 @@ public class CompanyServiceImpl implements CompanyService {
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Company createCompany(CompanyDto dto) throws CompanyExistException {
+    public Company saveCompanyMetaData(CompanyDto dto) throws CompanyExistException {
         checkCompanyExist(dto);
         //创建企业
-        boolean isRegister = isCompanyNameRegister(dto.getCompanyName());
-        if (isRegister) {
+        if (isCompanyNameRegister(dto.getCompanyName())) {
             throw new RuntimeException("公司名已被注册");
         }
-        Company waitRegisterComp = Company.createCompanyFromCompanyDto(dto);
+        Company registerComp = Company.createCompanyFromCompanyDto(dto);
+        fillLinkManData(registerComp);
+        companyMapper.insert(registerComp);
+        //创建关系
+        createUserCompRel(dto, registerComp);
+        return registerComp;
+    }
+
+    /**
+     * 设置公司的联系人信息数据
+     * @param waitRegisterComp
+     */
+    private void fillLinkManData(Company waitRegisterComp) {
         User user = userService.queryByUserId(waitRegisterComp.getCreateId());
         waitRegisterComp.setLinkMan(user.getRealName());
         waitRegisterComp.setLinkTel(user.getPhone());
         waitRegisterComp.setLinkEmail(user.getEmail());
-        companyMapper.insert(waitRegisterComp);
-        //创建关系
-        createUserCompRel(dto, waitRegisterComp);
-
-        return waitRegisterComp;
     }
 
     /**
@@ -143,7 +147,40 @@ public class CompanyServiceImpl implements CompanyService {
         companyMember.setCompId(company.getCompId());
         companyMember.setIsCreate((short) 1); //企业创建者
         companyMember.setCreateDate(new Date());
+
+        Department department = setUpDepartMent(company);
+        companyMember.setDeptIds(String.valueOf(department.getDeptId()));
+        companyMember.setDeptNames(department.getDeptName());
+        companyMember.setIsEnable(true);
+        companyMember.setIsCreate((short) 1);
+        User user = userService.queryByUserId(company.getCreateId());
+        companyMember.setName(user.getRealName());
+        companyMember.setNickName(user.getNickName());
+        companyMember.setEmail(user.getEmail());
+
+
         userCompRelMapper.insert(companyMember);
+    }
+
+    @Autowired
+    DepartmentService departmentService;
+
+    @Transactional(rollbackFor = Exception.class)
+    public Department setUpDepartMent(Company company) throws DeptmentExistException {
+        Department department = new Department();
+        department.setCompanyId(company.getCompId());
+        department.setDeptName(company.getFullName());
+        department.setCreateId(company.getCreateId());
+        department.setCreateName(company.getCreateName());
+        department.setDeptPid(0L);
+        department.setCreatDate(new Date());
+        department.setIsDefault((short)1);
+        departmentService.createDepartment(department);
+
+        Map map = new HashMap();
+        map.put("companyId",company.getCompId());
+        department.setDeptOrder(departmentService.getMaxIndex(map));
+        return department;
     }
 
 

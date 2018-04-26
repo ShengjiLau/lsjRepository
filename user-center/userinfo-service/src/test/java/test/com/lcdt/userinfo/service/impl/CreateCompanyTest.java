@@ -70,7 +70,7 @@ public class CreateCompanyTest {
 			company = new Company();
 			company.setCompId(3L);
 			company.setCreateId(companyDto.getCreateId());
-			Mockito.when(companyService.createCompany(Mockito.any())).thenReturn(company);
+			Mockito.when(companyService.saveCompanyMetaData(Mockito.any())).thenReturn(company);
 		} catch (CompanyExistException e) {
 			e.printStackTrace();
 		}
@@ -82,7 +82,7 @@ public class CreateCompanyTest {
 		try {
 			createCompanyService.createCompany(companyDto);
 			//创建公司
-			Mockito.verify(companyService).createCompany(companyDto);
+			Mockito.verify(companyService).saveCompanyMetaData(companyDto);
 			//设置创建者添加系统权限
 			Mockito.verify(sysRoleService).addUserSysRole(sysRole, 2L, company.getCompId());
 			//设置默认用户组

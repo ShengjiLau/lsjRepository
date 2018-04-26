@@ -63,46 +63,25 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Company createCompany(CompanyDto companyDto) throws CompanyExistException, DeptmentExistException, UserNotExistException {
-		Company company = companyService.createCompany(companyDto);
-
+		Company company = companyService.saveCompanyMetaData(companyDto);
+		assert company.getCreateId() != null;
 		//默认添加创建者为管理员权限
-		sysRoleService.addUserSysRole(getSysAdminRole(), company.getCreateId(), company.getCompId());
-		Group defaultCompanyGroup = createDefaultCompanyGroup(company);
+		addAdminRole(company);
 		//创建者加入默认新建组
-		addToGroup(defaultCompanyGroup, company);
-		User user = userService.queryByUserId(company.getCreateId());
+		addDefaultGroup(company);
+
 		List<UserCompRel> userCompRels = userCompRelMapper.selectByUserIdCompanyId(company.getCreateId(), company.getCompId());
-		Department department = setUpDepartMent(company);
-		UserCompRel userCompRel;
-
-		boolean isUserAttachCompany = CollectionUtils.isEmpty(userCompRels);
-		if (isUserAttachCompany) {
-			UserCompRel userCompRel1 = new UserCompRel();
-			userCompRel1.setCompId(company.getCompId());
-			userCompRel1.setUserId(company.getCreateId());
-			userCompRel1.setIsCreate((short) 1);
-			userCompRel1.setDeptIds(String.valueOf(department.getDeptId()));
-			userCompRel1.setName(user.getRealName());
-			userCompRel1.setNickName(user.getNickName());
-			userCompRel1.setEmail(user.getEmail());
-			userCompRelMapper.insert(userCompRel1);
-			userCompRel = userCompRel1;
-		}else{
-			UserCompRel userCompRel2 = userCompRels.get(0);
-			userCompRel2.setDeptIds(String.valueOf(department.getDeptId()));
-			userCompRel2.setDeptNames(department.getDeptName());
-			userCompRel2.setIsEnable(true);
-			userCompRel2.setIsCreate((short) 1);
-			userCompRel2.setName(user.getRealName());
-			userCompRel2.setNickName(user.getNickName());
-			userCompRel2.setEmail(user.getEmail());
-			userCompRelMapper.updateByPrimaryKey(userCompRel2);
-			userCompRel = userCompRel2;
-		}
-
 		//发送公司初始化事件
-		sendCompanyInitEvent(userCompRel);
+		sendCompanyInitEvent(userCompRels.get(0));
 		return company;
+	}
+
+	/**
+	 * 为公司创建者添加管理员权限
+	 * @param company
+	 */
+	private void addAdminRole(Company company) {
+		sysRoleService.addUserSysRole(getSysAdminRole(), company.getCreateId(), company.getCompId());
 	}
 
 	@Autowired
@@ -112,7 +91,9 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	AliyunConfigProperties aliyunConfigProperties;
 
 	public void sendCompanyInitEvent(UserCompRel compRel){
-
+		if (compRel == null) {
+			return;
+		}
 		warehouseService.initWarehouse(compRel.getUser(), compRel.getCompId());
 		Message message = new Message();
 		message.setKey("companyinit");
@@ -136,34 +117,10 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	}
 
 
-	/**
-	 * 设置初始部门
-	 * @return
-	 */
 	@Transactional(rollbackFor = Exception.class)
-	public Department setUpDepartMent(Company company) throws DeptmentExistException {
-		Department department = new Department();
-		department.setCompanyId(company.getCompId());
-		department.setDeptName(company.getFullName());
-		department.setCreateId(company.getCreateId());
-		department.setCreateName(company.getCreateName());
-		department.setDeptPid(0L);
-		department.setCreatDate(new Date());
-		department.setIsDefault((short)1);
-		departmentService.createDepartment(department);
-
-		Map map = new HashMap();
-		map.put("companyId",company.getCompId());
-		department.setDeptOrder(departmentService.getMaxIndex(map));
-
-
-		return department;
-	}
-
-
-	@Transactional(rollbackFor = Exception.class)
-	public void addToGroup(Group group, Company company) {
-		UserGroupRelation userGroupRelation = userGroupService.addUserToGroup(company.getCompId(), company.getCreateId(), group);
+	public void addDefaultGroup(Company company) {
+		Group group = createDefaultCompanyGroup(company);
+		userGroupService.addUserToGroup(company.getCompId(), company.getCreateId(), group);
 	}
 
 

@@ -30,7 +30,7 @@ public interface CompanyService {
 	 * @return
 	 * @throws CompanyExistException
 	 */
-	Company createCompany(CompanyDto dto) throws CompanyExistException;
+	Company saveCompanyMetaData(CompanyDto dto) throws CompanyExistException;
 
 	/***
 	 * 加入企业
