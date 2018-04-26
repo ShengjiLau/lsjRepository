@@ -69,7 +69,6 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		addAdminRole(company);
 		//创建者加入默认新建组
 		addDefaultGroup(company);
-
 		List<UserCompRel> userCompRels = userCompRelMapper.selectByUserIdCompanyId(company.getCreateId(), company.getCompId());
 		//发送公司初始化事件
 		sendCompanyInitEvent(userCompRels.get(0));

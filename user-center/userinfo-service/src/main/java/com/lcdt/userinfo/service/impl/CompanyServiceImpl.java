@@ -125,7 +125,6 @@ public class CompanyServiceImpl implements CompanyService {
     private final  Company fillCompanyDataFromCompanyDto(CompanyDto dto){
         assert dto != null;
         Company company = new Company();
-
         company.setFullName(dto.getCompanyName());
         company.setIndustry(dto.getIndustry());
         //未认证
