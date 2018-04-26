@@ -62,7 +62,7 @@ public class RequestAuthRedirectStrategy {
 		}
 	}
 
-	public void hasAuthRedirect(HttpServletRequest request, HttpServletResponse response) {
+	public void redirectToCallbackUrl(HttpServletRequest request, HttpServletResponse response) {
 		String callback = request.getParameter(AUTH_CALLBACK);
 		if (StringUtils.isEmpty(callback) || !isCallBackSafe(callback)) {
 			if (LoginSessionReposity.getCallback(request) != null) {
