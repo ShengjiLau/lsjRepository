@@ -158,7 +158,6 @@ public class CompanyServiceImpl implements CompanyService {
         companyMember.setNickName(user.getNickName());
         companyMember.setEmail(user.getEmail());
 
-
         userCompRelMapper.insert(companyMember);
     }
 
