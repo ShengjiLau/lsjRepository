@@ -136,9 +136,9 @@ public class ReconcileServiceImpl implements ReconcileService {
 			
 		if(q2>0) {
 			String str1 =sbs.substring(0,sbs.length()-1);
-			q1=reconcileMapper.cancelByBatch(str1);
+			q1=reconcileMapper.cancelByBatch(convertStrToLong(str1));
 			//获取不存在收付款记录的对账单信息列表
-			List<Reconcile> reconcileList=reconcileMapper.getReconcileListByPk(str1);
+			List<Reconcile> reconcileList=reconcileMapper.getReconcileListByPk(convertStrToLong(str1));
 			for(Reconcile reconcile:reconcileList) {
 				//得到所有需要修改的被取消的对账当单对应的记账单进行拼接
 				sb3.append(reconcile.getAccountId());sb3.append(",");
@@ -158,7 +158,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 		
 		if(sb3.length()>0) {
 			String str3 =sb3.substring(0,sb3.length()-1);
-			w2=feeAccountMapper.updateReconcileWhenCancel(str3);
+			w2=feeAccountMapper.updateReconcileWhenCancel(convertStrToLong(str3));
 		}
 		logger.debug("不存在收付款记录的对账单数量为:"+q2);
 		logger.debug("应该修改的记账单数量为:"+w1);
@@ -176,6 +176,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 	
 	/**
 	 * 查询对账单列表
+	 * 查询到符合条件的对账单列表时还需要查询对账单下的收付款信息
 	 */
 	@Override
 	public PageInfo<ReconcileDto> getReconcileList(ReconcileDto reconcileDto){
@@ -209,28 +210,40 @@ public class ReconcileServiceImpl implements ReconcileService {
 	
 	
 	@Override
-	public Reconcile selectReconcileByPk(Long pk) {
+	public ReconcileDto selectReconcileByPk(Long pk) {
 		
-		return reconcileMapper.selectByPrimaryKey(pk);
+		ReconcileDto reconcileDto=reconcileMapper.selectReconcileByPrimaryKey(pk);
+		//获取对账单下的收付款记录List
+		List<FeeExchange> feeExchangeList=feeExchangeMapper.getFeeExchangeListByReconcileId(pk);
+		//获取对账单下的记账单List
+		List<FeeAccount> feeAccountList=feeAccountMapper.selectFeeAccountListByReconcileId(convertStrToLong(reconcileDto.getAccountId()));
+		reconcileDto.setFeeAccountList(feeAccountList);
+		reconcileDto.setFeeExchangeList(feeExchangeList);
+		return reconcileDto;
 	}
 	
 	
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 此方法用于将一定格式的String字符串转化为规定格式的Long类型数组
+	 * @param String
+	 * @return longId
+	 */
+	public Long[] convertStrToLong(String str) {
+		String [] ss= str.split(",");
+		Long [] lids=new Long[ss.length];
+		for(int i=0;i<ss.length;i++) {
+			lids[i]=Long.valueOf(ss[i]);
+		}
+		return lids;	
+	}
 	
 	/**
 	 * 这个方法用于将Long类型数组转化为规定格式的String字符串
 	 * @param longId
-	 * @return
+	 * @return String
 	 */
 	public String convertLoToStr(Long[] longId) {
 		StringBuilder sbd =new StringBuilder();

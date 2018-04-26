@@ -19,6 +19,7 @@ import com.lcdt.traffic.model.FeeExchange;
 import com.lcdt.traffic.service.FeeExchangeService;
 import com.lcdt.traffic.web.dto.FeeExchangeDto;
 import com.lcdt.traffic.web.dto.FeeExchangeListDto;
+import com.lcdt.traffic.web.dto.PageBaseDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -64,13 +65,13 @@ public class FeeExchangeApi {
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_exchange_list')")
 	public JSONObject getFeeExchange(FeeExchangeDto feeExchangeDto) {
 		JSONObject jsonObject =new JSONObject();
-		JSONArray jsonArray =new JSONArray();
 		PageInfo<FeeExchange> page=feeExchangeService.getFeeExchangeList(feeExchangeDto);
-		jsonArray.add(page.getTotal());
-		jsonArray.add(page.getList());
+		PageBaseDto<FeeExchange> pageBase=new PageBaseDto<FeeExchange>();
+		pageBase.setTotal(page.getTotal());
+		pageBase.setList(page.getList());
 		jsonObject.put("code",0);
 		jsonObject.put("msg","收付款记录列表");
-		jsonObject.put("data",jsonArray);
+		jsonObject.put("data",pageBase);
 		
 		return jsonObject;
 	}

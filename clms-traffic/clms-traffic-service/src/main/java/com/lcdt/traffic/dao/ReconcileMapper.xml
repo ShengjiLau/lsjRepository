@@ -249,7 +249,9 @@
     </set>	
   	<where>
   	reconcile_id in
-  	(#{reconcileIdList,jdbcType=VARCHAR})
+  	<foreach collection="array" open="(" close=")" item="id" separator=",">
+    #{id,jdbcType=BIGINT}
+    </foreach>
   	</where>
   </update>
   
@@ -288,9 +290,21 @@
     from t_fee_reconcile
     <where>
     reconcile_id in
-    (#{reconcileIds,jdbcType=VARCHAR})
+   <foreach collection="array" open="(" close=")" item="id" separator=",">
+   #{id,jdbcType=BIGINT}
+   </foreach>
   	</where>
    </select>
 
+ <select id="selectReconcileByPrimaryKey" resultType="com.lcdt.traffic.web.dto.ReconcileDto" parameterType="java.lang.Long" >
+    select 
+    reconcile_id reconcileId, reconcile_code reconcileCode, company_id companyId, account_amount accountAmount, operator_id operatorId, 
+    operator_name operatorName, 
+    create_time createTime, cancel_ok cancelOk, account_id accountId, waybill_id waybillId, payee_type payeeType, 
+    payer_id payerId, payer_name payerName, 
+    group_id groupId, group_name groupName
+    from t_fee_reconcile
+    where reconcile_id = #{reconcileId,jdbcType=BIGINT}
+  </select>
   
 </mapper>
