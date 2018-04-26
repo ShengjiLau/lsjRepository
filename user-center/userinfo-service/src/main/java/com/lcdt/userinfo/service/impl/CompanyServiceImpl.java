@@ -28,264 +28,267 @@ import java.util.*;
 @com.alibaba.dubbo.config.annotation.Service
 public class CompanyServiceImpl implements CompanyService {
 
-	@Autowired
-	private CompanyMapper companyMapper;
+    @Autowired
+    private CompanyMapper companyMapper;
 
-	@Autowired
-	private UserCompRelMapper userCompRelMapper;
+    @Autowired
+    private UserCompRelMapper userCompRelMapper;
 
-	@Autowired
-	public CompanyCertificateMapper certificateDao;
+    @Autowired
+    public CompanyCertificateMapper certificateDao;
 
-	@Autowired
-	public GroupManageService groupService;
+    @Autowired
+    public GroupManageService groupService;
 
-	@Autowired
-	UserService userService;
+    @Autowired
+    UserService userService;
 
-	@Autowired
-	UserCompRelMapper userCompanyDao;
+    @Autowired
+    UserCompRelMapper userCompanyDao;
 
-	@Autowired
-	UserRoleService roleService;
+    @Autowired
+    UserRoleService roleService;
 
-	@Autowired
-	UserGroupService userGroupService;
+    @Autowired
+    UserGroupService userGroupService;
 
-	@Transactional(rollbackFor = Exception.class)
-	public UserCompRel findByUserCompRelId(Long userCompRelId) {
-		UserCompRel userCompRel = getUserCompRelById(userCompRelId);
-		userCompRel.setGroups(userGroupService.userGroups(userCompRel.getUserId(), userCompRel.getCompId()));
-		return userCompRel;
-	}
+    @Transactional(rollbackFor = Exception.class)
+    public UserCompRel findByUserCompRelId(Long userCompRelId) {
+        UserCompRel userCompRel = getUserCompRelById(userCompRelId);
+        userCompRel.setGroups(userGroupService.userGroups(userCompRel.getUserId(), userCompRel.getCompId()));
+        return userCompRel;
+    }
 
-	@Transactional(rollbackFor = Exception.class)
-	public UserCompRel getUserCompRelById(Long userCompRelId) {
-		return userCompRelMapper.selectByPrimaryKey(userCompRelId);
-	}
+    @Transactional(rollbackFor = Exception.class)
+    public UserCompRel getUserCompRelById(Long userCompRelId) {
+        return userCompRelMapper.selectByPrimaryKey(userCompRelId);
+    }
 
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public CompanyCertificate getCompanyCert(Long companyId){
-		List<CompanyCertificate> companyCertificate = certificateDao.selectByCompanyId(companyId);
-		if (companyCertificate != null && !companyCertificate.isEmpty()) {
-			return companyCertificate.get(0);
-		}else{
-			return new CompanyCertificate();
-		}
-	}
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public CompanyCertificate getCompanyCert(Long companyId) {
+        List<CompanyCertificate> companyCertificate = certificateDao.selectByCompanyId(companyId);
+        if (companyCertificate != null && !companyCertificate.isEmpty()) {
+            return companyCertificate.get(0);
+        } else {
+            return new CompanyCertificate();
+        }
+    }
 
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public Company selectById(Long companyId){
-		return companyMapper.selectByPrimaryKey(companyId);
-	}
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Company selectById(Long companyId) {
+        return companyMapper.selectByPrimaryKey(companyId);
+    }
 
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public Company updateCompany(Company company) {
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Company updateCompany(Company company) {
 
-		Company result = companyMapper.selectByCondition(company);
+        Company result = companyMapper.selectByCondition(company);
 
-		if (result != null) {
-			boolean isCompanyNameExist = !result.getCompId().equals(company.getCompId());
-			if ( isCompanyNameExist ){
-				throw new RuntimeException("公司名已存在");
-			}
-		}
+        if (result != null) {
+            boolean isCompanyNameExist = !result.getCompId().equals(company.getCompId());
+            if (isCompanyNameExist) {
+                throw new RuntimeException("公司名已存在");
+            }
+        }
 
-		companyMapper.updateByPrimaryKey(company);
-		return company;
-	}
-
-
-	/**
-	 * 创建公司
-	 * @param dto
-	 * @return
-	 * @throws CompanyExistException
-	 */
-	@Transactional(rollbackFor = Exception.class)
-	@Override
-	public Company createCompany(CompanyDto dto) throws CompanyExistException {
-		checkCompanyExist(dto);
-		//创建企业
-		boolean isRegister = isCompanyNameRegister(dto.getCompanyName());
-		if (isRegister) {
-			throw new RuntimeException("公司名已被注册");
-		}
-		Company registerCompany = Company.createCompanyFromCompanyDto(dto);
-		User user = userService.queryByUserId(registerCompany.getCreateId());
-		registerCompany.setLinkMan(user.getRealName());
-		registerCompany.setLinkTel(user.getPhone());
-		registerCompany.setLinkEmail(user.getEmail());
-		companyMapper.insert(registerCompany);
-		//创建关系
-		createUserCompRel(dto, registerCompany);
-
-		return registerCompany;
-	}
-
-	/**
-	 * 保存用户公司关系
-	 * @param dto
-	 * @param company
-	 */
-	private void createUserCompRel(CompanyDto dto, Company company) {
-		if (company != null && company.getCompId() != null) {
-			UserCompRel companyMember = new UserCompRel();
-			companyMember.setFullName(company.getFullName());
-			companyMember.setUserId(dto.getUserId());
-			companyMember.setCompId(company.getCompId());
-			companyMember.setIsCreate((short)1); //企业创建者
-			companyMember.setCreateDate(new Date());
-			userCompRelMapper.insert(companyMember);
-		}
-	}
+        companyMapper.updateByPrimaryKey(company);
+        return company;
+    }
 
 
-	/**
-	 * 公司名被注册返回true 否则返回false
-	 * @param companyName
-	 * @return
-	 */
-	private boolean isCompanyNameRegister(String companyName) {
-		Assert.notNull(companyName,"company name 不能为空");
-		Company company = new Company();
-		company.setFullName(companyName);
-		Company nameCompany = companyMapper.selectByCondition(company);
-		return nameCompany != null;
-	}
+    /**
+     * 创建公司
+     *
+     * @param dto
+     * @return
+     * @throws CompanyExistException
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Company createCompany(CompanyDto dto) throws CompanyExistException {
+        checkCompanyExist(dto);
+        //创建企业
+        boolean isRegister = isCompanyNameRegister(dto.getCompanyName());
+        if (isRegister) {
+            throw new RuntimeException("公司名已被注册");
+        }
+        Company waitRegisterComp = Company.createCompanyFromCompanyDto(dto);
+        User user = userService.queryByUserId(waitRegisterComp.getCreateId());
+        waitRegisterComp.setLinkMan(user.getRealName());
+        waitRegisterComp.setLinkTel(user.getPhone());
+        waitRegisterComp.setLinkEmail(user.getEmail());
+        companyMapper.insert(waitRegisterComp);
+        //创建关系
+        createUserCompRel(dto, waitRegisterComp);
 
-	private void checkCompanyExist(CompanyDto dto) throws CompanyExistException {
-		Assert.notNull(dto,"dto 不应该为空");
-		Map map = new HashMap<String, Object>(2);
-		map.put("userId", dto.getUserId());
-		map.put("fullName", dto.getCompanyName());
-		List<UserCompRel> memberList = userCompRelMapper.selectByCondition(map);
-		if (memberList != null && memberList.size() > 0) {
-			throw new CompanyExistException();
-		}
-	}
+        return waitRegisterComp;
+    }
 
-
-	@Transactional(readOnly = true,rollbackFor = Exception.class)
-	@Override
-	public UserCompRel joinCompany(CompanyDto dto) throws CompanyExistException {
-		Map map = new HashMap<String, Object>();
-		map.put("userId", dto.getUserId());
-		map.put("fullName", dto.getCompanyName());
-		List<UserCompRel> memberList = userCompRelMapper.selectByCondition(map);
-		if (memberList != null && memberList.size() > 0) {
-			throw new CompanyExistException();
-		}
-		UserCompRel companyMember = new UserCompRel();
-		companyMember.setFullName(dto.getCompanyName());
-		companyMember.setUserId(dto.getUserId());
-		companyMember.setCompId(dto.getCompanyId());
-		companyMember.setCreateDate(new Date());
-		companyMember.setIsCreate((short)1); //加入者
-		userCompRelMapper.insert(companyMember);
-		return companyMember;
-	}
-
-
-	@Transactional(readOnly = true)
-	@Override
-	public List<UserCompRel> companyList(Long userId){
-		HashMap conditions = new HashMap(2);
-		conditions.put("userId", userId);
-		return userCompRelMapper.selectByCondition(conditions);
-	}
-
-	@Transactional(readOnly = true)
-	@Override
-	public UserCompRel queryByUserIdCompanyId(Long userId, Long companyId) {
-		HashMap hashMap = new HashMap();
-		hashMap.put("userId", userId);
-		hashMap.put("compId", companyId);
-		List<UserCompRel> members = userCompRelMapper.selectByCondition(hashMap);
-		if (members == null || members.isEmpty()) {
-			return null;
-		}else{
-			UserCompRel compRel = members.get(0);
-			List<Group> groups = groupService.userCompanyGroups(compRel.getUserId(), compRel.getCompId());
-			compRel.setGroups(groups);
-			return compRel;
-		}
-	}
+    /**
+     * 保存用户公司关系
+     *
+     * @param dto
+     * @param company
+     */
+    private void createUserCompRel(CompanyDto dto, Company company) {
+        if (company == null || company.getCompId() == null) {
+            return;
+        }
+        UserCompRel companyMember = new UserCompRel();
+        companyMember.setFullName(company.getFullName());
+        companyMember.setUserId(dto.getUserId());
+        companyMember.setCompId(company.getCompId());
+        companyMember.setIsCreate((short) 1); //企业创建者
+        companyMember.setCreateDate(new Date());
+        userCompRelMapper.insert(companyMember);
+    }
 
 
-	@Transactional(readOnly = true)
-	@Override
-	public PageInfo companyList(Map m) {
-		int pageNo = 1;
-		int pageSize = 0; //0表示所有
+    /**
+     * 公司名被注册返回true 否则返回false
+     *
+     * @param companyName
+     * @return
+     */
+    private boolean isCompanyNameRegister(String companyName) {
+        Assert.notNull(companyName, "company name 不能为空");
+        Company company = new Company();
+        company.setFullName(companyName);
+        Company nameCompany = companyMapper.selectByCondition(company);
+        return nameCompany != null;
+    }
 
-		if (m.containsKey("page_no")) {
-			if (m.get("page_no") != null) {
-				pageNo = (Integer) m.get("page_no");
-			}
-		}
-		if (m.containsKey("page_size")) {
-			if (m.get("page_size") != null) {
-				pageSize = (Integer) m.get("page_size");
-			}
-		}
-		PageHelper.startPage(pageNo, pageSize);
-		List<UserCompRel> list = userCompRelMapper.selectByCondition(m);
-		PageInfo pageInfo = new PageInfo(list);
-		return pageInfo;
-	}
-
-
-
-	@Transactional(readOnly = true)
-	@Override
-	public Company findCompany(CompanyDto dto) {
-		Company vo = new Company();
-		vo.setFullName(dto.getCompanyName());
-		return companyMapper.selectByCondition(vo);
-	}
-
-	@Override
-	public boolean removeCompanyRel(Long relId) {
-		UserCompRel userCompRel = userCompRelMapper.selectByPrimaryKey(relId);
-		short isCreate = userCompRel.getIsCreate();
-		if (isCreate == 1) {
-			return false;
-		}
-		userCompRelMapper.deleteByPrimaryKey(relId);
-		roleService.removeUserRole(userCompRel.getUserId(),userCompRel.getCompId());
-		groupService.deleteUserGroupRelation(userCompRel.getUserId(), userCompRel.getCompId());
-		return true;
-	}
+    private void checkCompanyExist(CompanyDto dto) throws CompanyExistException {
+        Assert.notNull(dto, "dto 不应该为空");
+        Map map = new HashMap<String, Object>(2);
+        map.put("userId", dto.getUserId());
+        map.put("fullName", dto.getCompanyName());
+        List<UserCompRel> memberList = userCompRelMapper.selectByCondition(map);
+        if (memberList != null && memberList.size() > 0) {
+            throw new CompanyExistException();
+        }
+    }
 
 
-	@Override
-	public CompanyCertificate updateCompanyCert(CompanyCertificate companyCertificate){
-		if (companyCertificate.getCertiId() == null) {
-			certificateDao.insert(companyCertificate);
-		}else{
-			certificateDao.updateByPrimaryKey(companyCertificate);
-		}
-		Long compId = companyCertificate.getCompId();
-		Company company = companyMapper.selectByPrimaryKey(compId);
-		company.setAuthentication((short) 2);
-		companyMapper.updateByPrimaryKey(company);
+    @Transactional(readOnly = true, rollbackFor = Exception.class)
+    @Override
+    public UserCompRel joinCompany(CompanyDto dto) throws CompanyExistException {
+        Map map = new HashMap<String, Object>();
+        map.put("userId", dto.getUserId());
+        map.put("fullName", dto.getCompanyName());
+        List<UserCompRel> memberList = userCompRelMapper.selectByCondition(map);
+        if (memberList != null && memberList.size() > 0) {
+            throw new CompanyExistException();
+        }
+        UserCompRel companyMember = new UserCompRel();
+        companyMember.setFullName(dto.getCompanyName());
+        companyMember.setUserId(dto.getUserId());
+        companyMember.setCompId(dto.getCompanyId());
+        companyMember.setCreateDate(new Date());
+        companyMember.setIsCreate((short) 1); //加入者
+        userCompRelMapper.insert(companyMember);
+        return companyMember;
+    }
 
-		return companyCertificate;
-	}
 
-	@Override
-	public CompanyCertificate queryCertByCompanyId(Long companyId) {
-		List<CompanyCertificate> companyCertificates = certificateDao.selectByCompanyId(companyId);
-		if (!CollectionUtils.isEmpty(companyCertificates)) {
-			return companyCertificates.get(0);
-		}else {
-			return null;
-		}
-	}
+    @Transactional(readOnly = true)
+    @Override
+    public List<UserCompRel> companyList(Long userId) {
+        HashMap conditions = new HashMap(2);
+        conditions.put("userId", userId);
+        return userCompRelMapper.selectByCondition(conditions);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public UserCompRel queryByUserIdCompanyId(Long userId, Long companyId) {
+        HashMap hashMap = new HashMap();
+        hashMap.put("userId", userId);
+        hashMap.put("compId", companyId);
+        List<UserCompRel> members = userCompRelMapper.selectByCondition(hashMap);
+        if (members == null || members.isEmpty()) {
+            return null;
+        } else {
+            UserCompRel compRel = members.get(0);
+            List<Group> groups = groupService.userCompanyGroups(compRel.getUserId(), compRel.getCompId());
+            compRel.setGroups(groups);
+            return compRel;
+        }
+    }
+
+
+    @Transactional(readOnly = true)
+    @Override
+    public PageInfo companyList(Map m) {
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+
+        if (m.containsKey("page_no")) {
+            if (m.get("page_no") != null) {
+                pageNo = (Integer) m.get("page_no");
+            }
+        }
+        if (m.containsKey("page_size")) {
+            if (m.get("page_size") != null) {
+                pageSize = (Integer) m.get("page_size");
+            }
+        }
+        PageHelper.startPage(pageNo, pageSize);
+        List<UserCompRel> list = userCompRelMapper.selectByCondition(m);
+        PageInfo pageInfo = new PageInfo(list);
+        return pageInfo;
+    }
+
+
+    @Transactional(readOnly = true)
+    @Override
+    public Company findCompany(CompanyDto dto) {
+        Company vo = new Company();
+        vo.setFullName(dto.getCompanyName());
+        return companyMapper.selectByCondition(vo);
+    }
+
+    @Override
+    public boolean removeCompanyRel(Long relId) {
+        UserCompRel userCompRel = userCompRelMapper.selectByPrimaryKey(relId);
+        short isCreate = userCompRel.getIsCreate();
+        if (isCreate == 1) {
+            return false;
+        }
+        userCompRelMapper.deleteByPrimaryKey(relId);
+        roleService.removeUserRole(userCompRel.getUserId(), userCompRel.getCompId());
+        groupService.deleteUserGroupRelation(userCompRel.getUserId(), userCompRel.getCompId());
+        return true;
+    }
+
+
+    @Override
+    public CompanyCertificate updateCompanyCert(CompanyCertificate companyCertificate) {
+        if (companyCertificate.getCertiId() == null) {
+            certificateDao.insert(companyCertificate);
+        } else {
+            certificateDao.updateByPrimaryKey(companyCertificate);
+        }
+        Long compId = companyCertificate.getCompId();
+        Company company = companyMapper.selectByPrimaryKey(compId);
+        company.setAuthentication((short) 2);
+        companyMapper.updateByPrimaryKey(company);
+
+        return companyCertificate;
+    }
+
+    @Override
+    public CompanyCertificate queryCertByCompanyId(Long companyId) {
+        List<CompanyCertificate> companyCertificates = certificateDao.selectByCompanyId(companyId);
+        if (!CollectionUtils.isEmpty(companyCertificates)) {
+            return companyCertificates.get(0);
+        } else {
+            return null;
+        }
+    }
 
 
 }

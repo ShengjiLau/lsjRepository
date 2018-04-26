@@ -74,7 +74,9 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		List<UserCompRel> userCompRels = userCompRelMapper.selectByUserIdCompanyId(company.getCreateId(), company.getCompId());
 		Department department = setUpDepartMent(company);
 		UserCompRel userCompRel;
-		if (CollectionUtils.isEmpty(userCompRels)) {
+
+		boolean isUserAttachCompany = CollectionUtils.isEmpty(userCompRels);
+		if (isUserAttachCompany) {
 			UserCompRel userCompRel1 = new UserCompRel();
 			userCompRel1.setCompId(company.getCompId());
 			userCompRel1.setUserId(company.getCreateId());
