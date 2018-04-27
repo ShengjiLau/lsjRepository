@@ -238,7 +238,7 @@ public class ReceivableFeeAccountApi {
     @ApiOperation("应收记账单——列表")
     @RequestMapping(value = "/feeAccountList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receivable_fee_account_list')")
-    public JSONObject feeAccountList(@Validated FeeAccountDto dto) {
+    public JSONObject feeAccountList(@Validated FeeAccountListParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         dto.setCompanyId(companyId);
         dto.setIsDeleted((short)0);
@@ -341,6 +341,22 @@ public class ReceivableFeeAccountApi {
             return jsonObject;
         } else {
             throw new RuntimeException("对账失败");
+        }
+    }
+
+    @ApiOperation("对账单——对账单详情")
+    @RequestMapping(value = "/feeAccountReconcileDetail", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receivable_fee_account_reconcile_detail')")
+    public JSONObject feeAccountReconcileDetail(@ApiParam(value = "对账单id",required = true) @RequestParam Long reconcileId) {
+        List<FeeAccountDto> list = feeAccountService.feeAccountReconcileDetail(reconcileId);
+        if (list != null) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("data", list);
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "对账单详情");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("获取失败");
         }
     }
 }
