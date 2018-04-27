@@ -171,7 +171,7 @@
     <if test="waybillCode!=null and waybillCode!=''">
       and waybill_code like concat('%',#{waybillCode,jdbcType=VARCHAR},'%')
     </if>
-    <if test="waybillStatus!=null and waybillStatus!=''">
+    <if test="waybillStatus!=null and waybillStatus!='' and waybillStatus>0">
       and waybill_status in (${waybillStatus})
     </if>
     <if test="waybillPlanId!=null and waybillPlanId!=''">
