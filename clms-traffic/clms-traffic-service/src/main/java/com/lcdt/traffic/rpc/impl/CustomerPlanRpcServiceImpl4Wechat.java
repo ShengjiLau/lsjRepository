@@ -663,10 +663,9 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     public int customerPlanOfferOwn(Long snatchGoodsId, UserCompRel userCompRel) {
         SnatchGoods snatchGoods = snatchGoodsMapper.selectByPrimaryKey(snatchGoodsId);
         if(snatchGoods!=null) {
-            if (snatchGoods.getPlanCompanyId().equals(userCompRel.getCompId())) { //如果创建的企业ID与计划当前ID  不一样的话
+            if (!snatchGoods.getPlanCompanyId().equals(userCompRel.getCompId())) { //如果创建的企业ID与计划当前ID  不一样的话
                return 0;
             }
-
             User user = userCompRel.getUser();
             snatchGoods.setUpdateTime(new Date());
             snatchGoods.setUpdateName(user.getRealName());
