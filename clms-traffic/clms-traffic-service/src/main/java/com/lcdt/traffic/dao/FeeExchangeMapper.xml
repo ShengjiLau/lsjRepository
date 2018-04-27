@@ -302,7 +302,7 @@
   </where>
   </select>
   
-  <select id="getFeeExchangesByBatch">
+  <select id="getFeeExchangesByBatch" resultMap="BaseResultMap">
   select 
    <include refid="Base_Column_List" />
    from t_fee_exchange
@@ -312,8 +312,6 @@
   	 #{item,jdbcType=BIGINT}
    </foreach>
   </where>
-  
-  
   </select>
   
   
