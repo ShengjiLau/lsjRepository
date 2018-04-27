@@ -312,7 +312,8 @@ public class FeeAccountServiceImpl implements FeeAccountService{
             for (Map<String, Object> m : list) {
                 Reconcile reconcile = new Reconcile();
                 reconcile.setCompanyId(SecurityInfoGetter.getCompanyId());
-   //待更改             reconcile.setAccountAmount(Double.parseDouble(m.get("moneySum").toString()));
+                reconcile.setTransportationExpenses(Double.parseDouble(m.get("freightTotal").toString()));//运费
+                reconcile.setOtherExpenses(Double.parseDouble(m.get("otherFeeTaotal").toString()));//其他费用
                 reconcile.setOperatorId(SecurityInfoGetter.getUser().getUserId());
                 reconcile.setOperatorName(SecurityInfoGetter.getUser().getRealName());
 //                reconcile.setCreateTime(createTime);
