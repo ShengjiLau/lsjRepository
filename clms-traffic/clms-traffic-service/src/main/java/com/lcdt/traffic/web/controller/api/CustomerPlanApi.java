@@ -17,6 +17,7 @@ import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.WaybillPlanListParamsDto;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -662,6 +663,28 @@ public class CustomerPlanApi {
         return waybillPlan;
     }
 
+
+
+
+
+    @ApiOperation("报价-驳回")
+    @RequestMapping(value = "/offerBack",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_offer_own')  or hasAuthority('traffic_customer_plan_offer_1')")
+    public JSONObject offerBack(@ApiParam(value = "抢单ID",required = true) @RequestParam Long snatchGoodsId) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        int flag = iCustomerPlanRpcService4Wechat.customerPlanOfferOwn(snatchGoodsId,userCompRel);
+        JSONObject jsonObject = new JSONObject();
+        String message = null;
+        int code = -1;
+        if (flag>0) {
+            code = 0;
+        } else {
+            message = "操作失败，请重试！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject;
+    }
 
 
 

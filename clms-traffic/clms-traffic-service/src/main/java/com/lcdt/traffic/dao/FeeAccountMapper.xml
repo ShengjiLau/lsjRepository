@@ -352,8 +352,14 @@
     </foreach>
   </update>
   <select id="feeAccountGroupByReceivPayName" parameterType="java.util.Map" resultType="java.util.Map">
-    select count(distinct a.waybill_id) waybillCount, a.name_id nameId, a.name, sum(f.money) moneySum,
-    group_concat(distinct a.waybill_id) waybillIds, group_concat(a.account_id) accountIds
+    select count(distinct a.waybill_id) waybillCount,
+      a.name_id nameId,
+      a.name,
+      sum(case when f.fee_property='运费' then f.money else 0 end) freightTotal,
+      sum(case when f.fee_property!='运费' then f.money else 0 end) otherFeeTaotal,
+      sum(f.money) feeTotal,
+      group_concat(distinct a.waybill_id) waybillIds,
+      group_concat(a.account_id) accountIds
     from t_fee_account a,t_fee_flow f
     where a.account_id=f.account_id
     and a.is_deleted=0
