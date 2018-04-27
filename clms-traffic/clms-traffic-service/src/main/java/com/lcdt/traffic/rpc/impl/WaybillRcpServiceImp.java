@@ -6,7 +6,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
-import com.lcdt.traffic.dao.SplitGoodsMapper;
 import com.lcdt.traffic.dao.WaybillMapper;
 import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.model.*;
@@ -66,10 +65,17 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
         Map map = ClmsBeanUtil.beanToMap(dto);
 
+        if(dto.getWaybillStatus()!=null)
+        {
+            //将状态值里的0替换为空
+            for (int i = 0; i < dto.getWaybillStatus().length;i++ )
+            {
+                dto.getWaybillStatus()[i] = dto.getWaybillStatus()[i].replace("0","");
+            }
+        }
         PageHelper.startPage(pageNo, pageSize);
         resultList = waybillMapper.selectOwnByCondition(map);
         page = new PageInfo(resultList);
-
         return page;
     }
 
