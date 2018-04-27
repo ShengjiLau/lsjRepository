@@ -24,11 +24,9 @@ import com.lcdt.userinfo.service.CreateCompanyService;
 import com.lcdt.userinfo.service.LoginLogService;
 import com.lcdt.userinfo.service.UserService;
 import com.lcdt.util.HttpUtils;
-import org.apache.catalina.manager.util.SessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -81,15 +79,14 @@ public class AuthController {
     @RequestMapping(value = {"/",""})
     @ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
     public ModelAndView loginPage(HttpServletRequest request, HttpServletResponse response) {
-        boolean isLogin = LoginSessionReposity.isLogin(request);
         LoginSessionReposity.setCallBackUrl(request);
-        if (!isLogin) {
+        if (!LoginSessionReposity.isLogin(request)) {
             ModelAndView view = new ModelAndView(LOGIN_PAGE);
             return view;
         }
 
         if (LoginSessionReposity.loginCompany(request)) {
-            strategy.hasAuthRedirect(request, response);
+            strategy.redirectToCallbackUrl(request, response);
         } else {
             try {
                 response.sendRedirect("/account/company");
@@ -307,7 +304,7 @@ public class AuthController {
 
         logger.info("user session is {}",userInfoInSession.getRealName());
 
-        strategy.hasAuthRedirect(request, response);
+        strategy.redirectToCallbackUrl(request, response);
         LoginLog loginLog = new LoginLog();
         loginLog.setUserId(userInfo.getUserId());
         loginLog.setLoginCompanyId(companyId);
