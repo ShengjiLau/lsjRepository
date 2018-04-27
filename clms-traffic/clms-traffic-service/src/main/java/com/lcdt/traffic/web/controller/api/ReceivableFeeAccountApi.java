@@ -105,8 +105,11 @@ public class ReceivableFeeAccountApi {
         data.put("total", pageBaseDto.getTotal());
 
         map.put("waybillType", 0);//我的运单
+        if(dto.getGroupId()!=null&&dto.getGroupId()>0) {
+            map.put("groupIds",GroupIdsUtil.getOwnGroupIds(dto.getGroupId()).replaceAll("group_id","fa.group_id"));
+        }
         FeeAccountWaybillDto feeTotalDto = feeAccountService.feeAccountWaybillFeeTotal(map);
-        data.put("feeTotal", FinanceUtil.getFeeTotalDto(pageBaseDto.getTotal(), feeTotalDto));
+        data.put("feeTotal", FinanceUtil.getFeeTotalDto(feeTotalDto));
 
         jsonObject.put("data",data);
 
@@ -142,8 +145,11 @@ public class ReceivableFeeAccountApi {
         data.put("total", pageBaseDto.getTotal());
 
         map.put("waybillType", 1);//客户运单
+        if(dto.getGroupId()!=null&&dto.getGroupId()>0) {
+            map.put("groupIds",GroupIdsUtil.getOwnGroupIds(dto.getGroupId()).replaceAll("group_id","fa.group_id"));
+        }
         FeeAccountWaybillDto feeTotalDto = feeAccountService.feeAccountWaybillFeeTotal(map);
-        data.put("feeTotal", FinanceUtil.getFeeTotalDto(pageBaseDto.getTotal(), feeTotalDto));
+        data.put("feeTotal", FinanceUtil.getFeeTotalDto(feeTotalDto));
 
         jsonObject.put("data",data);
 
@@ -243,6 +249,7 @@ public class ReceivableFeeAccountApi {
         dto.setCompanyId(companyId);
         dto.setIsDeleted((short)0);
         dto.setIsReceivable((short)0);
+
         PageInfo<List<FeeAccountDto>> listPageInfo = feeAccountService.feeAccountList(dto);
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         JSONObject jsonObject = new JSONObject();
@@ -254,7 +261,7 @@ public class ReceivableFeeAccountApi {
         data.put("total", pageBaseDto.getTotal());
 
         FeeAccountDto feeTotalDto = feeAccountService.feeAccountFeeTotal(dto);
-        data.put("feeTotal", FinanceUtil.getFeeAccountFeeTotalDto(pageBaseDto.getTotal(), feeTotalDto));
+        data.put("feeTotal", FinanceUtil.getFeeAccountFeeTotalDto(feeTotalDto));
 
         jsonObject.put("data",data);
 

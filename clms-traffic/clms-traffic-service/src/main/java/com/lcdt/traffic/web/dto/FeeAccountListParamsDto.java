@@ -8,6 +8,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class FeeAccountListParamsDto extends FeeAccount{
 
+    @ApiModelProperty(value="业务组",hidden = true)
+    private String groupIds;
+
     @ApiModelProperty(value="查询审核日期终点")
     private String auditBeginTime;
 
@@ -28,6 +31,14 @@ public class FeeAccountListParamsDto extends FeeAccount{
 
     @ApiModelProperty(value = "每页显示条数", required = true)
     private Integer pageSize;
+
+    public String getGroupIds() {
+        return groupIds;
+    }
+
+    public void setGroupIds(String groupIds) {
+        this.groupIds = groupIds;
+    }
 
     public String getAuditBeginTime() {
         return auditBeginTime;

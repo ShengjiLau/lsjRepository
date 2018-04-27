@@ -323,7 +323,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                 reconcile.setPayeeType(payeeType);
                 reconcile.setPayerId(Long.parseLong(m.get("nameId").toString()));
                 reconcile.setPayerName(m.get("name").toString());
-                reconcile.setGroupId(SecurityInfoGetter.groups().get(0).getGroupId());
+                reconcile.setGroupId(Long.parseLong(m.get("groupId").toString()));
                 reconcileList.add(reconcile);
             }
             result = reconcileMapper.insertByBatch(reconcileList);
