@@ -190,7 +190,7 @@
     group_id groupId, group_name groupName,other_expenses otherExpenses
     from t_fee_reconcile
     <where>
-    cancel_ok=0 and company_id =#{companyId,jdbcType=BIGINT} and  payee_type = #{payeeType,jdbcType=SMALLINT}
+    cancel_ok=0 and company_id =#{companyId,jdbcType=BIGINT} and payee_type = #{payeeType,jdbcType=SMALLINT}
     <if test="beginTime!=null and beginTime!=''">
     and create_time &gt; concat(#{beginTime,jdbcType=VARCHAR},'000000')
     </if>
