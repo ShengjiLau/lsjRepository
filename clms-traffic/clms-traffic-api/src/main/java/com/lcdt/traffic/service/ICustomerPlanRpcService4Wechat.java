@@ -6,6 +6,7 @@ import com.lcdt.traffic.dto.SplitVehicleDto;
 import com.lcdt.traffic.dto.WaybillDto;
 import com.lcdt.traffic.model.SnatchGoods;
 import com.lcdt.traffic.model.WaybillPlan;
+import com.lcdt.userinfo.model.UserCompRel;
 
 import java.util.Map;
 
@@ -82,7 +83,12 @@ public interface ICustomerPlanRpcService4Wechat {
     int customerPlanOfferOwn(SnatchOfferDto dto, SnatchGoods snatchGoods);
 
 
-
+    /***
+     * 报价驳回
+     * @param snatchGoodsId
+     * @return
+     */
+    int customerPlanOfferOwn( Long snatchGoodsId, UserCompRel userCompRel);
 
 
     /***

@@ -24,6 +24,7 @@ import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -655,6 +656,23 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
     }
 
 
+
+
+    @Transactional
+    @Override
+    public int customerPlanOfferOwn(Long snatchGoodsId, UserCompRel userCompRel) {
+        SnatchGoods snatchGoods = snatchGoodsMapper.selectByPrimaryKey(snatchGoodsId);
+        if(snatchGoods!=null) {
+            User user = userCompRel.getUser();
+            snatchGoods.setUpdateTime(new Date());
+            snatchGoods.setUpdateName(user.getRealName());
+            snatchGoods.setUpdateId(user.getUserId());
+            snatchGoods.setIsUsing(ConstantVO.SNATCH_GOODS_USING_NOPASS);
+            return snatchGoodsMapper.updateByPrimaryKey(snatchGoods);
+        }
+
+       return 0;
+    }
 
 
     @Transactional
