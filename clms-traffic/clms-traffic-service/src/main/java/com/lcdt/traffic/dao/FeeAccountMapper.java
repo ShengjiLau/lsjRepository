@@ -61,4 +61,6 @@ public interface FeeAccountMapper {
     
     List<FeeAccount> selectFeeAccountListByReconcileId(Long[] accountIds);
 
+    List<FeeAccountDto> selectByReconcileId(Long reconcileId);
+
 }

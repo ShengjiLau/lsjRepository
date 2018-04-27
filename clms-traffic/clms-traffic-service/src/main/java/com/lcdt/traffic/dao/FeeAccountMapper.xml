@@ -491,7 +491,13 @@
    #{id,jdbcType=BIGINT}
    </foreach>
   </select>
-  
-  
+
+  <select id="selectByReconcileId" parameterType="java.lang.Long" resultMap="BaseResultDtoMap">
+    select <include refid="Base_Column_List"/>
+    from t_fee_account
+    where reconcile_id = #{reconcileId,jdbcType=BIGINT}
+    and is_deleted = 0
+    order by reconcile_id desc
+  </select>
   
 </mapper>
