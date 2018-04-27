@@ -258,7 +258,7 @@ public class PayableFeeAccountApi {
         data.put("total", pageBaseDto.getTotal());
 
         FeeAccountDto feeTotalDto = feeAccountService.feeAccountFeeTotal(dto);
-        data.put("feeTotal", FinanceUtil.getFeeAccountFeeTotalDto(pageBaseDto.getTotal(), feeTotalDto));
+        data.put("feeTotal", FinanceUtil.getFeeAccountFeeTotalDto(feeTotalDto));
 
         jsonObject.put("data",data);
 

@@ -31,22 +31,19 @@ public class FinanceUtil {
 
     /**
      * 记账单列表费用统计
-     * @param total
      * @param feeTotalDto
      * @return
      */
-    public static Map getFeeAccountFeeTotalDto(Long total, FeeAccountDto feeTotalDto){
+    public static Map getFeeAccountFeeTotalDto(FeeAccountDto feeTotalDto){
         Map feeTotal = new HashMap();
         if(feeTotalDto != null){
             feeTotal.put("freightTotalSum", feeTotalDto.getFreightTotal());
             feeTotal.put("otherFeeTotalSum", feeTotalDto.getOtherFeeTotal());
             feeTotal.put("feeTotalSum", feeTotalDto.getFeeTotal());
         }else {
-            if(total > 0){
-                feeTotal.put("freightTotalSum", 0);
-                feeTotal.put("otherFeeTotalSum", 0);
-                feeTotal.put("feeTotalSum", 0);
-            }
+            feeTotal.put("freightTotalSum", 0);
+            feeTotal.put("otherFeeTotalSum", 0);
+            feeTotal.put("feeTotalSum", 0);
         }
         return feeTotal;
     }
