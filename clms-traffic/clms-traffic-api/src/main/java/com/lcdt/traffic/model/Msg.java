@@ -36,7 +36,7 @@ public class Msg implements Serializable {
 	@ApiModelProperty("创建时间")
     private Date createDate;
     
-	@ApiModelProperty("是否删除:是0/否1;此参数只有在查询时才需要传")
+	@ApiModelProperty("是否删除:是0/否1")
     private Short isDeleted;
 
     private static final long serialVersionUID = -156156156154L;

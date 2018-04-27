@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dao.*;
+import com.lcdt.traffic.dto.PlanDetailParamsDto;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.PlanService;
@@ -11,16 +12,15 @@ import com.lcdt.traffic.service.WaybillRpcService;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
+import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yangbinq on 2017/12/13.
@@ -233,6 +233,41 @@ public class PlanServiceImpl implements PlanService {
 
        return 0;
     }
+
+
+
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int adjustPlanRemainAmount(List<PlanDetailParamsDto> dtoList, UserCompRel userCompRel) {
+        if (dtoList!=null && dtoList.size()>0) {
+            Company company = userCompRel.getCompany();
+            User user = userCompRel.getUser();
+            List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
+            Date date = new Date();
+            for (PlanDetailParamsDto dto : dtoList) {
+                PlanDetail planDetail = planDetailMapper.selectByPrimaryKey1(dto.getPlanDetailId(),company.getCompId());
+                if (planDetail!=null) {
+                    planDetail.setUpdateName(user.getRealName());
+                    planDetail.setUpdateId(user.getUserId());
+                    planDetail.setUpdateTime(date);
+                    Float amount = planDetail.getPlanAmount()+dto.getAdjustAmount(); //计划量+调整量
+                    planDetail.setPlanAmount(amount);
+                    planDetail.setRemainderAmount(planDetail.getRemainderAmount()+dto.getAdjustAmount()); //剩余数量+调整量
+                    planDetail.setFreightTotal(amount*planDetail.getFreightPrice());
+                    planDetailList.add(planDetail);
+                }
+            }
+            if(planDetailList!=null && planDetailList.size()>0) {
+                return planDetailMapper.batchUpdatePlanDetail(planDetailList);
+            }
+
+
+        }
+
+        return 0;
+    }
+
 
 
 }

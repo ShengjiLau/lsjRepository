@@ -12,6 +12,7 @@ import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
+import com.lcdt.userinfo.service.CreateCompanyService;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,7 @@ public class UserApi {
     UserService userService;
 
     @Reference
-    CompanyService companyService;
+    CreateCompanyService companyService;
 
     @RequestMapping("/forgetpwd")
     public String forgetPwd(ForgetPwdDto forgetPwdDto){

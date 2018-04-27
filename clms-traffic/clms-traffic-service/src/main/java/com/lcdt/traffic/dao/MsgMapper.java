@@ -24,7 +24,6 @@ public interface MsgMapper {
     
     List<Msg> selectSomeMsg(MsgDto msgDto);
     
-    int insertByBatch(List<Msg> msgList);
-    
+    int insertByBatch(List<Msg> msgList);    
     
 }

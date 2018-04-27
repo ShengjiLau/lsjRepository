@@ -61,7 +61,7 @@ public class PurchaseContractApprovalApi {
     public JSONObject pendingNum() {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId();    //获取user_id
-        int total = contractApprovalService.pendingApprovalNum(userId,companyId);
+        int total = contractApprovalService.pendingApprovalNum(userId,companyId,new Short("0"));
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", 0);
         jsonObject.put("message", "查询成功!");

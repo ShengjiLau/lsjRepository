@@ -36,6 +36,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="effective_time" jdbcType="TIMESTAMP" property="effectiveTime" />
     <result column="termination_time" jdbcType="TIMESTAMP" property="terminationTime" />
+    <result column="sign_place" jdbcType="VARCHAR" property="signPlace" />
     <result column="attachment1_name" jdbcType="VARCHAR" property="attachment1Name" />
     <result column="attachment1" jdbcType="VARCHAR" property="attachment1" />
     <result column="attachment2_name" jdbcType="VARCHAR" property="attachment2Name" />
@@ -58,7 +59,7 @@
       party_a_principal, party_b_id, party_b_name, party_b_principal,
       start_date, end_date,approval_start_date, approval_end_date, summary,
       terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time,
-      effective_time, termination_time,
+      effective_time, termination_time, sign_place,
       attachment1_name, attachment1, attachment2_name, attachment2,
       attachment3_name, attachment3, attachment4_name, attachment4,
       attachment5_name, attachment5
@@ -83,7 +84,7 @@
       #{approvalEndDate,jdbcType=TIMESTAMP},  #{summary,jdbcType=VARCHAR},
       #{terms,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT},#{companyId,jdbcType=BIGINT},
       #{isDraft,jdbcType=SMALLINT}, #{summation,jdbcType=DECIMAL}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-      #{effectiveTime,jdbcType=TIMESTAMP}, #{terminationTime,jdbcType=TIMESTAMP}, #{attachment1Name,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR},
+      #{effectiveTime,jdbcType=TIMESTAMP}, #{terminationTime,jdbcType=TIMESTAMP}, #{signPlace,jdbcType=VARCHAR}, #{attachment1Name,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR},
       #{attachment2Name,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR}, #{attachment3Name,jdbcType=VARCHAR}, #{attachment3,jdbcType=VARCHAR},
       #{attachment4Name,jdbcType=VARCHAR}, #{attachment4,jdbcType=VARCHAR}, #{attachment5Name,jdbcType=VARCHAR}, #{attachment5,jdbcType=VARCHAR}
       )
@@ -122,6 +123,7 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       effective_time = #{effectiveTime,jdbcType=TIMESTAMP},
       termination_time = #{terminationTime,jdbcType=TIMESTAMP},
+      sign_place = #{signPlace,jdbcType=VARCHAR},
       attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
       attachment1 = #{attachment1,jdbcType=VARCHAR},
       attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
@@ -141,7 +143,7 @@
     party_b_id partyBId, party_b_name partyBName, party_b_principal partyBPrincipal,
     start_date startDate, end_date endDate, approval_start_date approvalStartDate, approval_end_date approvalEndDate,
     summary, terms, file_url fileUrl, group_id groupId,company_id companyId, is_draft isDraft, summation, create_id createId,
-    create_name createName, create_time createTime, effective_time effectiveTime, termination_time terminationTime,
+    create_name createName, create_time createTime, effective_time effectiveTime, termination_time terminationTime, sign_place signPlace,
     attachment1_name attachment1Name, attachment1, attachment2_name attachment2Name, attachment2,
     attachment3_name attachment3Name, attachment3, attachment4_name attachment4Name, attachment4, attachment5_name attachment5Name, attachment5
     from t_contract
@@ -150,7 +152,7 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, approval_process_id, cycle,
     pay_type, party_a_id, party_a_name, party_a_principal, party_b_id, party_b_name, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
-    summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time,
+    summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time, sign_place,
     attachment1_name, attachment1, attachment2_name, attachment2,
     attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, attachment5
     from t_contract
@@ -160,7 +162,7 @@
   <select id="selectByCondition" resultMap="BaseResultMap">
     select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, approval_process_id, cycle,
     pay_type, party_a_id, party_a_name, party_a_principal, party_b_id, party_b_name, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
-    summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time,
+    summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time, sign_place,
     attachment1_name, attachment1, attachment2_name, attachment2,
     attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, attachment5
     from t_contract
@@ -183,6 +185,7 @@
       </if>
       <if test="approvalStatus!=null and approvalStatus!=-1">
         and approval_status = #{approvalStatus,jdbcType=SMALLINT}
+        and is_draft=1
       </if>
       <if test="approvalStatus!=null and approvalStatus==-1">
         and is_draft=0
@@ -323,6 +326,9 @@
       </if>
       <if test="terminationTime != null" >
         termination_time = #{terminationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signPlace != null" >
+        sign_place = #{signPlace,jdbcType=VARCHAR},
       </if>
       <if test="attachment1Name != null" >
         attachment1_name = #{attachment1Name,jdbcType=VARCHAR},

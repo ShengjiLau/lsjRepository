@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lcdt.traffic.dao.FeeExchangeMapper" >
- <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.FeeExchange">
+  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.FeeExchange">
     <id column="exchange_id" jdbcType="BIGINT" property="exchangeId" />
     <result column="reconcile_id" jdbcType="BIGINT" property="reconcileId" />
     <result column="reconcile_code" jdbcType="VARCHAR" property="reconcileCode" />
     <result column="payer_name" jdbcType="VARCHAR" property="payerName" />
     <result column="type" jdbcType="SMALLINT" property="type" />
-    <result column="account_amount" jdbcType="DOUBLE" property="accountAmount" />
-    <result column="this_amount" jdbcType="DOUBLE" property="thisAmount" />
+    <result column="transportation_expenses" jdbcType="DOUBLE" property="transportationExpenses" />
+    <result column="other_expenses" jdbcType="DOUBLE" property="otherExpenses" />
     <result column="attachment1_name" jdbcType="VARCHAR" property="attachment1Name" />
     <result column="attachment1" jdbcType="VARCHAR" property="attachment1" />
     <result column="attachment2_name" jdbcType="VARCHAR" property="attachment2Name" />
@@ -30,13 +30,14 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="exchange_name" jdbcType="VARCHAR" property="exchangeName" />
     <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="exchange_code" jdbcType="VARCHAR" property="exchangeCode" />
   </resultMap>
   <sql id="Base_Column_List">
-    exchange_id, reconcile_id, reconcile_code, payer_name, type, account_amount, this_amount, 
-    attachment1_name, attachment1, attachment2_name, attachment2, attachment3_name, attachment3, 
-    attachment4_name, attachment4, attachment5_name, attachment5, cancel_ok, create_time, 
-    operate_time, exchange_type, exchange_account, company_id, operate_name, operate_id, 
-    remark, exchange_name, group_id
+    exchange_id, reconcile_id, reconcile_code, payer_name, type, transportation_expenses, 
+    other_expenses, attachment1_name, attachment1, attachment2_name, attachment2, attachment3_name, 
+    attachment3, attachment4_name, attachment4, attachment5_name, attachment5, cancel_ok, 
+    create_time, operate_time, exchange_type, exchange_account, company_id, operate_name, 
+    operate_id, remark, exchange_name, group_id, exchange_code
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -52,298 +53,139 @@
   </delete>
   
   <insert id="insert" parameterType="com.lcdt.traffic.model.FeeExchange" >
-   insert into t_fee_exchange (exchange_id, reconcile_id, reconcile_code, 
-      payer_name, type, account_amount, 
-      this_amount, attachment1_name, attachment1, 
+    insert into t_fee_exchange (exchange_id, reconcile_id, reconcile_code, 
+      payer_name, type, transportation_expenses, 
+      other_expenses, attachment1_name, attachment1, 
       attachment2_name, attachment2, attachment3_name, 
       attachment3, attachment4_name, attachment4, 
       attachment5_name, attachment5, cancel_ok, 
       create_time, operate_time, exchange_type, 
       exchange_account, company_id, operate_name, 
       operate_id, remark, exchange_name, 
-      group_id)
+      group_id, exchange_code)
     values (#{exchangeId,jdbcType=BIGINT}, #{reconcileId,jdbcType=BIGINT}, #{reconcileCode,jdbcType=VARCHAR}, 
-      #{payerName,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, #{accountAmount,jdbcType=DOUBLE}, 
-      #{thisAmount,jdbcType=DOUBLE}, #{attachment1Name,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR}, 
+      #{payerName,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, #{transportationExpenses,jdbcType=DOUBLE}, 
+      #{otherExpenses,jdbcType=DOUBLE}, #{attachment1Name,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR}, 
       #{attachment2Name,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR}, #{attachment3Name,jdbcType=VARCHAR}, 
       #{attachment3,jdbcType=VARCHAR}, #{attachment4Name,jdbcType=VARCHAR}, #{attachment4,jdbcType=VARCHAR}, 
       #{attachment5Name,jdbcType=VARCHAR}, #{attachment5,jdbcType=VARCHAR}, #{cancelOk,jdbcType=SMALLINT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{operateTime,jdbcType=VARCHAR}, #{exchangeType,jdbcType=VARCHAR}, 
       #{exchangeAccount,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{operateName,jdbcType=VARCHAR}, 
       #{operateId,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, #{exchangeName,jdbcType=VARCHAR}, 
-      #{groupId,jdbcType=BIGINT})
+      #{groupId,jdbcType=BIGINT},
+    <choose>
+    <when test="type==0">
+    EXCHANGE_CODE('YK')
+    </when>
+    <when test="type==1">
+    EXCHANGE_CODE('FK')
+    </when>
+    <otherwise>
+    'null'
+    </otherwise>
+    </choose>
+      )
   </insert>
   
-  <insert id="insertSelective" parameterType="com.lcdt.traffic.model.FeeExchange" >
-    insert into t_fee_exchange
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="exchangeId != null" >
-        exchange_id,
-      </if>
-      <if test="reconcileId != null" >
-        reconcile_id,
-      </if>
-      <if test="reconcileCode != null" >
-        reconcile_code,
-      </if>
-      <if test="payerName != null" >
-        payer_name,
-      </if>
-      <if test="type != null" >
-        type,
-      </if>
-      <if test="accountAmount != null" >
-        account_amount,
-      </if>
-      <if test="thisAmount != null" >
-        this_amount,
-      </if>
-      <if test="attachment1Name != null" >
-        attachment1_name,
-      </if>
-      <if test="attachment1 != null" >
-        attachment1,
-      </if>
-      <if test="attachment2Name != null" >
-        attachment2_name,
-      </if>
-      <if test="attachment2 != null" >
-        attachment2,
-      </if>
-      <if test="attachment3Name != null" >
-        attachment3_name,
-      </if>
-      <if test="attachment3 != null" >
-        attachment3,
-      </if>
-      <if test="attachment4Name != null" >
-        attachment4_name,
-      </if>
-      <if test="attachment4 != null" >
-        attachment4,
-      </if>
-      <if test="attachment5Name != null" >
-        attachment5_name,
-      </if>
-      <if test="attachment5 != null" >
-        attachment5,
-      </if>
-      <if test="cancelOk != null" >
-        cancel_ok,
-      </if>
-      <if test="createTime != null" >
-        create_time,
-      </if>
-      <if test="operateTime != null" >
-        operate_time,
-      </if>
-      <if test="exchangeType != null" >
-        exchange_type,
-      </if>
-      <if test="exchangeAccount != null" >
-        exchange_account,
-      </if>
-      <if test="companyId != null" >
-        company_id,
-      </if>
-      <if test="operateName != null" >
-        operate_name,
-      </if>
-      <if test="operateId != null" >
-        operate_id,
-      </if>
-      <if test="remark != null" >
-        remark,
-      </if>
-      <if test="exchangeName != null" >
-        exchange_name,
-      </if>
-      <if test="groupId != null" >
-        group_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="exchangeId != null" >
-        #{exchangeId,jdbcType=BIGINT},
-      </if>
-      <if test="reconcileId != null" >
-        #{reconcileId,jdbcType=BIGINT},
-      </if>
-      <if test="reconcileCode != null" >
-        #{reconcileCode,jdbcType=VARCHAR},
-      </if>
-      <if test="payerName != null" >
-        #{payerName,jdbcType=VARCHAR},
-      </if>
-      <if test="type != null" >
-        #{type,jdbcType=SMALLINT},
-      </if>
-      <if test="accountAmount != null" >
-        #{accountAmount,jdbcType=DOUBLE},
-      </if>
-      <if test="thisAmount != null" >
-        #{thisAmount,jdbcType=DOUBLE},
-      </if>
-      <if test="attachment1Name != null" >
-        #{attachment1Name,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment1 != null" >
-        #{attachment1,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment2Name != null" >
-        #{attachment2Name,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment2 != null" >
-        #{attachment2,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment3Name != null" >
-        #{attachment3Name,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment3 != null" >
-        #{attachment3,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment4Name != null" >
-        #{attachment4Name,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment4 != null" >
-        #{attachment4,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment5Name != null" >
-        #{attachment5Name,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment5 != null" >
-        #{attachment5,jdbcType=VARCHAR},
-      </if>
-      <if test="cancelOk != null" >
-        #{cancelOk,jdbcType=SMALLINT},
-      </if>
-      <if test="createTime != null" >
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="operateTime != null" >
-       #{operateTime,jdbcType=VARCHAR},
-      </if>
-      <if test="exchangeType != null" >
-        #{exchangeType,jdbcType=VARCHAR},
-      </if>
-      <if test="exchangeAccount != null" >
-        #{exchangeAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="companyId != null" >
-        #{companyId,jdbcType=BIGINT},
-      </if>
-      <if test="operateName != null" >
-        #{operateName,jdbcType=VARCHAR},
-      </if>
-      <if test="operateId != null" >
-        #{operateId,jdbcType=BIGINT},
-      </if>
-      <if test="remark != null" >
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="exchangeName != null" >
-        #{exchangeName,jdbcType=VARCHAR},
-      </if>
-      <if test="groupId != null" >
-        #{groupId,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.traffic.model.FeeExchange" >
-   update t_fee_exchange
-    <set >
-      <if test="reconcileId != null" >
+   <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.traffic.model.FeeExchange">
+    update t_fee_exchange
+    <set>
+      <if test="reconcileId != null">
         reconcile_id = #{reconcileId,jdbcType=BIGINT},
       </if>
-      <if test="reconcileCode != null" >
+      <if test="reconcileCode != null">
         reconcile_code = #{reconcileCode,jdbcType=VARCHAR},
       </if>
-      <if test="payerName != null" >
+      <if test="payerName != null">
         payer_name = #{payerName,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         type = #{type,jdbcType=SMALLINT},
       </if>
-      <if test="accountAmount != null" >
-        account_amount = #{accountAmount,jdbcType=DOUBLE},
+      <if test="transportationExpenses != null">
+        transportation_expenses = #{transportationExpenses,jdbcType=DOUBLE},
       </if>
-      <if test="thisAmount != null" >
-        this_amount = #{thisAmount,jdbcType=DOUBLE},
+      <if test="otherExpenses != null">
+        other_expenses = #{otherExpenses,jdbcType=DOUBLE},
       </if>
-      <if test="attachment1Name != null" >
+      <if test="attachment1Name != null">
         attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
       </if>
-      <if test="attachment1 != null" >
+      <if test="attachment1 != null">
         attachment1 = #{attachment1,jdbcType=VARCHAR},
       </if>
-      <if test="attachment2Name != null" >
+      <if test="attachment2Name != null">
         attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
       </if>
-      <if test="attachment2 != null" >
+      <if test="attachment2 != null">
         attachment2 = #{attachment2,jdbcType=VARCHAR},
       </if>
-      <if test="attachment3Name != null" >
+      <if test="attachment3Name != null">
         attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
       </if>
-      <if test="attachment3 != null" >
+      <if test="attachment3 != null">
         attachment3 = #{attachment3,jdbcType=VARCHAR},
       </if>
-      <if test="attachment4Name != null" >
+      <if test="attachment4Name != null">
         attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
       </if>
-      <if test="attachment4 != null" >
+      <if test="attachment4 != null">
         attachment4 = #{attachment4,jdbcType=VARCHAR},
       </if>
-      <if test="attachment5Name != null" >
+      <if test="attachment5Name != null">
         attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
       </if>
-      <if test="attachment5 != null" >
+      <if test="attachment5 != null">
         attachment5 = #{attachment5,jdbcType=VARCHAR},
       </if>
-      <if test="cancelOk != null" >
+      <if test="cancelOk != null">
         cancel_ok = #{cancelOk,jdbcType=SMALLINT},
       </if>
-      <if test="createTime != null" >
+      <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="operateTime != null" >
+      <if test="operateTime != null">
         operate_time = #{operateTime,jdbcType=VARCHAR},
       </if>
-      <if test="exchangeType != null" >
+      <if test="exchangeType != null">
         exchange_type = #{exchangeType,jdbcType=VARCHAR},
       </if>
-      <if test="exchangeAccount != null" >
+      <if test="exchangeAccount != null">
         exchange_account = #{exchangeAccount,jdbcType=VARCHAR},
       </if>
-      <if test="companyId != null" >
+      <if test="companyId != null">
         company_id = #{companyId,jdbcType=BIGINT},
       </if>
-      <if test="operateName != null" >
+      <if test="operateName != null">
         operate_name = #{operateName,jdbcType=VARCHAR},
       </if>
-      <if test="operateId != null" >
+      <if test="operateId != null">
         operate_id = #{operateId,jdbcType=BIGINT},
       </if>
-      <if test="remark != null" >
+      <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="exchangeName != null" >
+      <if test="exchangeName != null">
         exchange_name = #{exchangeName,jdbcType=VARCHAR},
       </if>
-      <if test="groupId != null" >
+      <if test="groupId != null">
         group_id = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="exchangeCode != null">
+        exchange_code = #{exchangeCode,jdbcType=VARCHAR},
       </if>
     </set>
     where exchange_id = #{exchangeId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.FeeExchange" >
-     update t_fee_exchange
+  
+ <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.FeeExchange">
+    update t_fee_exchange
     set reconcile_id = #{reconcileId,jdbcType=BIGINT},
       reconcile_code = #{reconcileCode,jdbcType=VARCHAR},
       payer_name = #{payerName,jdbcType=VARCHAR},
       type = #{type,jdbcType=SMALLINT},
-      account_amount = #{accountAmount,jdbcType=DOUBLE},
-      this_amount = #{thisAmount,jdbcType=DOUBLE},
+      transportation_expenses = #{transportationExpenses,jdbcType=DOUBLE},
+      other_expenses = #{otherExpenses,jdbcType=DOUBLE},
       attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
       attachment1 = #{attachment1,jdbcType=VARCHAR},
       attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
@@ -364,32 +206,45 @@
       operate_id = #{operateId,jdbcType=BIGINT},
       remark = #{remark,jdbcType=VARCHAR},
       exchange_name = #{exchangeName,jdbcType=VARCHAR},
-      group_id = #{groupId,jdbcType=BIGINT}
+      group_id = #{groupId,jdbcType=BIGINT},
+      exchange_code = #{exchangeCode,jdbcType=VARCHAR}
     where exchange_id = #{exchangeId,jdbcType=BIGINT}
   </update>
   
   <insert id="insertByBatch">
-    insert into t_fee_exchange (exchange_id, reconcile_id, reconcile_code, 
-      payer_name, type, account_amount, 
-      this_amount, attachment1_name, attachment1, 
+     insert into t_fee_exchange (exchange_id, reconcile_id, reconcile_code, 
+      payer_name, type, transportation_expenses, 
+      other_expenses, attachment1_name, attachment1, 
       attachment2_name, attachment2, attachment3_name, 
       attachment3, attachment4_name, attachment4, 
       attachment5_name, attachment5, cancel_ok, 
       create_time, operate_time, exchange_type, 
       exchange_account, company_id, operate_name, 
       operate_id, remark, exchange_name, 
-      group_id)
-      values 
+      group_id, exchange_code)
+    values 
       <foreach collection="list" index="index" item="item" separator=",">
       (#{item.exchangeId,jdbcType=BIGINT}, #{item.reconcileId,jdbcType=BIGINT}, #{item.reconcileCode,jdbcType=VARCHAR}, 
-      #{item.payerName,jdbcType=VARCHAR}, #{item.type,jdbcType=SMALLINT}, #{item.accountAmount,jdbcType=DOUBLE}, 
-      #{item.thisAmount,jdbcType=DOUBLE}, #{item.attachment1Name,jdbcType=VARCHAR}, #{item.attachment1,jdbcType=VARCHAR}, 
+      #{item.payerName,jdbcType=VARCHAR}, #{item.type,jdbcType=SMALLINT}, #{item.transportationExpenses,jdbcType=DOUBLE}, 
+      #{item.otherExpenses,jdbcType=DOUBLE}, #{item.attachment1Name,jdbcType=VARCHAR}, #{item.attachment1,jdbcType=VARCHAR}, 
       #{item.attachment2Name,jdbcType=VARCHAR}, #{item.attachment2,jdbcType=VARCHAR}, #{item.attachment3Name,jdbcType=VARCHAR}, 
       #{item.attachment3,jdbcType=VARCHAR}, #{item.attachment4Name,jdbcType=VARCHAR}, #{item.attachment4,jdbcType=VARCHAR}, 
       #{item.attachment5Name,jdbcType=VARCHAR}, #{item.attachment5,jdbcType=VARCHAR}, #{item.cancelOk,jdbcType=SMALLINT}, 
       #{item.createTime,jdbcType=TIMESTAMP}, #{item.operateTime,jdbcType=VARCHAR}, #{item.exchangeType,jdbcType=VARCHAR}, 
       #{item.exchangeAccount,jdbcType=VARCHAR}, #{item.companyId,jdbcType=BIGINT}, #{item.operateName,jdbcType=VARCHAR}, 
-      #{item.operateId,jdbcType=BIGINT}, #{item.remark,jdbcType=VARCHAR}, #{item.exchangeName,jdbcType=VARCHAR}, #{item.groupId,jdbcType=BIGINT}
+      #{item.operateId,jdbcType=BIGINT}, #{item.remark,jdbcType=VARCHAR}, #{item.exchangeName,jdbcType=VARCHAR}, 
+      #{item.groupId,jdbcType=BIGINT},
+      <choose>
+    <when test="item.type==0">
+    EXCHANGE_CODE('YK')
+    </when>
+    <when test="item.type==1">
+    EXCHANGE_CODE('FK')
+    </when>
+    <otherwise>
+    'null'
+    </otherwise>
+    </choose>
       )
       </foreach>
   </insert>
@@ -404,7 +259,7 @@
   	and payer_name like concat('%',#{payerName,jdbcType=VARCHAR},'%')
   	</if>
   	<if test="reconcileCode!=null and reconcileCode!=''">
-  	and reconcileCode like concat('%',#{reconcileCode,jdbcType=VARCHAR},'%')
+  	and reconcile_code like concat('%',#{reconcileCode,jdbcType=VARCHAR},'%')
   	</if>
   	<if test="operateName!=null and operateName!=''">
   	and operate_name like concat('%',#{operateName,jdbcType=VARCHAR},'%')
@@ -418,14 +273,16 @@
   	</where>
   </select>
   
-  <update id="updateCancelOkByBatch" parameterType="java.lang.String">
+  <update id="updateCancelOkByBatch">
   	update t_fee_exchange
   	<set>
   	cancel_ok =1 
   	</set>
   	<where>
   	exchange_id in
-  	concat ('(',#{feeExchangeIds,jdbcType=VARCHAR},')')
+  	 <foreach collection="array" index="index" item="item" separator="," close=")" open="(">
+  	 #{item,jdbcType=BIGINT}
+  	 </foreach>
   	</where>
   </update>
   
@@ -434,6 +291,29 @@
   <where>
   reconcile_id = #{reconcileId,jdbcType=BIGINT}
   </where>
+  </select>
+  
+  <select id="getFeeExchangeListByReconcileId" resultMap="BaseResultMap">
+  select 
+   <include refid="Base_Column_List" />
+   from t_fee_exchange
+  <where>
+  reconcile_id = #{reconcileId,jdbcType=BIGINT}
+  </where>
+  </select>
+  
+  <select id="getFeeExchangesByBatch">
+  select 
+   <include refid="Base_Column_List" />
+   from t_fee_exchange
+  <where>
+  reconcile_id in
+   <foreach collection="array" index="index" item="item" separator="," close=")" open="(">
+  	 #{item,jdbcType=BIGINT}
+   </foreach>
+  </where>
+  
+  
   </select>
   
   
