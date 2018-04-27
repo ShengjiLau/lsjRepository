@@ -670,7 +670,7 @@ public class CustomerPlanApi {
     @ApiOperation("报价-驳回")
     @RequestMapping(value = "/offerBack",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_offer_own')  or hasAuthority('traffic_customer_plan_offer_1')")
-    public String offerBack(@RequestBody  Long snatchGoodsId) {
+    public String offerBack(@RequestBody Long snatchGoodsId) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         int flag = iCustomerPlanRpcService4Wechat.customerPlanOfferOwn(snatchGoodsId,userCompRel);
         JSONObject jsonObject = new JSONObject();
