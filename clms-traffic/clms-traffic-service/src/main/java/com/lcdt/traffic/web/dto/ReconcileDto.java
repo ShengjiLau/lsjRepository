@@ -46,10 +46,6 @@ public class ReconcileDto extends Reconcile implements Serializable{
 	@ApiModelProperty("对账当相关收付款记录")
 	private List<FeeExchange> feeExchangeList;
 	
-	@ApiModelProperty("对账单相关记账单")
-	private List<FeeAccount> feeAccountList;
-	
-	
 	public String getBeginTime() {
 		return beginTime;
 	}
@@ -129,14 +125,5 @@ public class ReconcileDto extends Reconcile implements Serializable{
 		this.feeExchangeList = feeExchangeList;
 	}
 
-
-	public List<FeeAccount> getFeeAccountList() {
-		return feeAccountList;
-	}
-
-
-	public void setFeeAccountList(List<FeeAccount> feeAccountList) {
-		this.feeAccountList = feeAccountList;
-	}
 
 }

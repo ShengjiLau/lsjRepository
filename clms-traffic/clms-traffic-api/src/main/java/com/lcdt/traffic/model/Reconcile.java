@@ -25,8 +25,11 @@ public class Reconcile implements Serializable {
 	@ApiModelProperty("所属公司id")
     private Long companyId;
 
-	@ApiModelProperty("对账金额")
-    private Double accountAmount;
+	@ApiModelProperty("运费金额")
+	private Double transportationExpenses;
+	
+	@ApiModelProperty("其他费用金额")
+	private Double otherExpenses;
 
 	@ApiModelProperty("操作人id")
     private Long operatorId;
@@ -66,7 +69,8 @@ public class Reconcile implements Serializable {
 	
 	@ApiModelProperty("业务组名称")
 	private String groupName;
-
+	
+	
     private static final long serialVersionUID = 1255802514514L;
 
     public Long getReconcileId() {
@@ -91,14 +95,6 @@ public class Reconcile implements Serializable {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
-    }
-
-    public Double getAccountAmount() {
-        return accountAmount;
-    }
-
-    public void setAccountAmount(Double accountAmount) {
-        this.accountAmount = accountAmount;
     }
 
     public Long getOperatorId() {
@@ -188,4 +184,22 @@ public class Reconcile implements Serializable {
 	public void setGroupName(String groupName) {
 		this.groupName = groupName;
 	}
+
+	public Double getTransportationExpenses() {
+		return transportationExpenses;
+	}
+
+	public void setTransportationExpenses(Double transportationExpenses) {
+		this.transportationExpenses = transportationExpenses;
+	}
+
+	public Double getOtherExpenses() {
+		return otherExpenses;
+	}
+
+	public void setOtherExpenses(Double otherExpenses) {
+		this.otherExpenses = otherExpenses;
+	}
+	
+	
 }

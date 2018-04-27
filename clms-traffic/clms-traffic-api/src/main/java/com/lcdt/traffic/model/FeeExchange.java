@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -40,13 +39,13 @@ public class FeeExchange implements Serializable {
 	@ApiModelProperty("应收应付类型:0收款/1付款")
     private Short type;
 	
-	@NotNull(message="应收总金额不可为空")
-	@ApiModelProperty("应收总金额")
-    private Double accountAmount;
+	//@NotNull(message="应收总金额不可为空")
+	@ApiModelProperty("运费金额")
+    private Double transportationExpenses;
 	
-	@NotNull(message="此次收付款金额不可为空")
-	@ApiModelProperty("此次收款金额")
-    private Double thisAmount;
+	//@NotNull(message="此次收付款金额不可为空")
+	@ApiModelProperty("其他费用金额")
+    private Double otherExpenses;
 
 	@ApiModelProperty("附件1名称")
     private String attachment1Name;
@@ -114,6 +113,9 @@ public class FeeExchange implements Serializable {
 	@NotNull(message="业务组id不可为空")
 	@ApiModelProperty("业务组id")
     private Long groupId;
+	
+	@ApiModelProperty("收付款记录单号")
+	private String exchangeCode;
 
     private static final long serialVersionUID = 1195622612561256L;
 
@@ -157,21 +159,7 @@ public class FeeExchange implements Serializable {
         this.type = type;
     }
 
-    public Double getAccountAmount() {
-        return accountAmount;
-    }
-
-    public void setAccountAmount(Double accountAmount) {
-        this.accountAmount = accountAmount;
-    }
-
-    public Double getThisAmount() {
-        return thisAmount;
-    }
-
-    public void setThisAmount(Double thisAmount) {
-        this.thisAmount = thisAmount;
-    }
+  
 
     public String getAttachment1Name() {
         return attachment1Name;
@@ -343,206 +331,31 @@ public class FeeExchange implements Serializable {
 		this.operateTime = operateTime;
 	}
 
-	@Override
-	public String toString() {
-		return "FeeExchange [exchangeId=" + exchangeId + ", reconcileId=" + reconcileId + ", reconcileCode="
-				+ reconcileCode + ", payerName=" + payerName + ", type=" + type + ", accountAmount=" + accountAmount
-				+ ", thisAmount=" + thisAmount + ", attachment1Name=" + attachment1Name + ", attachment1=" + attachment1
-				+ ", attachment2Name=" + attachment2Name + ", attachment2=" + attachment2 + ", attachment3Name="
-				+ attachment3Name + ", attachment3=" + attachment3 + ", attachment4Name=" + attachment4Name
-				+ ", attachment4=" + attachment4 + ", attachment5Name=" + attachment5Name + ", attachment5="
-				+ attachment5 + ", cancelOk=" + cancelOk + ", createTime=" + createTime + ", operateTime=" + operateTime
-				+ ", exchangeType=" + exchangeType + ", exchangeAccount=" + exchangeAccount + ", companyId=" + companyId
-				+ ", operateName=" + operateName + ", operateId=" + operateId + ", remark=" + remark + ", exchangeName="
-				+ exchangeName + ", groupId=" + groupId + "]";
+	public Double getTransportationExpenses() {
+		return transportationExpenses;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((accountAmount == null) ? 0 : accountAmount.hashCode());
-		result = prime * result + ((attachment1 == null) ? 0 : attachment1.hashCode());
-		result = prime * result + ((attachment1Name == null) ? 0 : attachment1Name.hashCode());
-		result = prime * result + ((attachment2 == null) ? 0 : attachment2.hashCode());
-		result = prime * result + ((attachment2Name == null) ? 0 : attachment2Name.hashCode());
-		result = prime * result + ((attachment3 == null) ? 0 : attachment3.hashCode());
-		result = prime * result + ((attachment3Name == null) ? 0 : attachment3Name.hashCode());
-		result = prime * result + ((attachment4 == null) ? 0 : attachment4.hashCode());
-		result = prime * result + ((attachment4Name == null) ? 0 : attachment4Name.hashCode());
-		result = prime * result + ((attachment5 == null) ? 0 : attachment5.hashCode());
-		result = prime * result + ((attachment5Name == null) ? 0 : attachment5Name.hashCode());
-		result = prime * result + ((cancelOk == null) ? 0 : cancelOk.hashCode());
-		result = prime * result + ((companyId == null) ? 0 : companyId.hashCode());
-		result = prime * result + ((createTime == null) ? 0 : createTime.hashCode());
-		result = prime * result + ((exchangeAccount == null) ? 0 : exchangeAccount.hashCode());
-		result = prime * result + ((exchangeId == null) ? 0 : exchangeId.hashCode());
-		result = prime * result + ((exchangeName == null) ? 0 : exchangeName.hashCode());
-		result = prime * result + ((exchangeType == null) ? 0 : exchangeType.hashCode());
-		result = prime * result + ((groupId == null) ? 0 : groupId.hashCode());
-		result = prime * result + ((operateId == null) ? 0 : operateId.hashCode());
-		result = prime * result + ((operateName == null) ? 0 : operateName.hashCode());
-		result = prime * result + ((operateTime == null) ? 0 : operateTime.hashCode());
-		result = prime * result + ((payerName == null) ? 0 : payerName.hashCode());
-		result = prime * result + ((reconcileCode == null) ? 0 : reconcileCode.hashCode());
-		result = prime * result + ((reconcileId == null) ? 0 : reconcileId.hashCode());
-		result = prime * result + ((remark == null) ? 0 : remark.hashCode());
-		result = prime * result + ((thisAmount == null) ? 0 : thisAmount.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		return result;
+	public void setTransportationExpenses(Double transportationExpenses) {
+		this.transportationExpenses = transportationExpenses;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		FeeExchange other = (FeeExchange) obj;
-		if (accountAmount == null) {
-			if (other.accountAmount != null)
-				return false;
-		} else if (!accountAmount.equals(other.accountAmount))
-			return false;
-		if (attachment1 == null) {
-			if (other.attachment1 != null)
-				return false;
-		} else if (!attachment1.equals(other.attachment1))
-			return false;
-		if (attachment1Name == null) {
-			if (other.attachment1Name != null)
-				return false;
-		} else if (!attachment1Name.equals(other.attachment1Name))
-			return false;
-		if (attachment2 == null) {
-			if (other.attachment2 != null)
-				return false;
-		} else if (!attachment2.equals(other.attachment2))
-			return false;
-		if (attachment2Name == null) {
-			if (other.attachment2Name != null)
-				return false;
-		} else if (!attachment2Name.equals(other.attachment2Name))
-			return false;
-		if (attachment3 == null) {
-			if (other.attachment3 != null)
-				return false;
-		} else if (!attachment3.equals(other.attachment3))
-			return false;
-		if (attachment3Name == null) {
-			if (other.attachment3Name != null)
-				return false;
-		} else if (!attachment3Name.equals(other.attachment3Name))
-			return false;
-		if (attachment4 == null) {
-			if (other.attachment4 != null)
-				return false;
-		} else if (!attachment4.equals(other.attachment4))
-			return false;
-		if (attachment4Name == null) {
-			if (other.attachment4Name != null)
-				return false;
-		} else if (!attachment4Name.equals(other.attachment4Name))
-			return false;
-		if (attachment5 == null) {
-			if (other.attachment5 != null)
-				return false;
-		} else if (!attachment5.equals(other.attachment5))
-			return false;
-		if (attachment5Name == null) {
-			if (other.attachment5Name != null)
-				return false;
-		} else if (!attachment5Name.equals(other.attachment5Name))
-			return false;
-		if (cancelOk == null) {
-			if (other.cancelOk != null)
-				return false;
-		} else if (!cancelOk.equals(other.cancelOk))
-			return false;
-		if (companyId == null) {
-			if (other.companyId != null)
-				return false;
-		} else if (!companyId.equals(other.companyId))
-			return false;
-		if (createTime == null) {
-			if (other.createTime != null)
-				return false;
-		} else if (!createTime.equals(other.createTime))
-			return false;
-		if (exchangeAccount == null) {
-			if (other.exchangeAccount != null)
-				return false;
-		} else if (!exchangeAccount.equals(other.exchangeAccount))
-			return false;
-		if (exchangeId == null) {
-			if (other.exchangeId != null)
-				return false;
-		} else if (!exchangeId.equals(other.exchangeId))
-			return false;
-		if (exchangeName == null) {
-			if (other.exchangeName != null)
-				return false;
-		} else if (!exchangeName.equals(other.exchangeName))
-			return false;
-		if (exchangeType == null) {
-			if (other.exchangeType != null)
-				return false;
-		} else if (!exchangeType.equals(other.exchangeType))
-			return false;
-		if (groupId == null) {
-			if (other.groupId != null)
-				return false;
-		} else if (!groupId.equals(other.groupId))
-			return false;
-		if (operateId == null) {
-			if (other.operateId != null)
-				return false;
-		} else if (!operateId.equals(other.operateId))
-			return false;
-		if (operateName == null) {
-			if (other.operateName != null)
-				return false;
-		} else if (!operateName.equals(other.operateName))
-			return false;
-		if (operateTime == null) {
-			if (other.operateTime != null)
-				return false;
-		} else if (!operateTime.equals(other.operateTime))
-			return false;
-		if (payerName == null) {
-			if (other.payerName != null)
-				return false;
-		} else if (!payerName.equals(other.payerName))
-			return false;
-		if (reconcileCode == null) {
-			if (other.reconcileCode != null)
-				return false;
-		} else if (!reconcileCode.equals(other.reconcileCode))
-			return false;
-		if (reconcileId == null) {
-			if (other.reconcileId != null)
-				return false;
-		} else if (!reconcileId.equals(other.reconcileId))
-			return false;
-		if (remark == null) {
-			if (other.remark != null)
-				return false;
-		} else if (!remark.equals(other.remark))
-			return false;
-		if (thisAmount == null) {
-			if (other.thisAmount != null)
-				return false;
-		} else if (!thisAmount.equals(other.thisAmount))
-			return false;
-		if (type == null) {
-			if (other.type != null)
-				return false;
-		} else if (!type.equals(other.type))
-			return false;
-		return true;
+	public Double getOtherExpenses() {
+		return otherExpenses;
 	}
+
+	public void setOtherExpenses(Double otherExpenses) {
+		this.otherExpenses = otherExpenses;
+	}
+
+	public String getExchangeCode() {
+		return exchangeCode;
+	}
+
+	public void setExchangeCode(String exchangeCode) {
+		this.exchangeCode = exchangeCode;
+	}
+
+	
 	
 	
 	

@@ -313,7 +313,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
             for (Map<String, Object> m : list) {
                 Reconcile reconcile = new Reconcile();
                 reconcile.setCompanyId(SecurityInfoGetter.getCompanyId());
-                reconcile.setAccountAmount(Double.parseDouble(m.get("moneySum").toString()));
+//                reconcile.setAccountAmount(Double.parseDouble(m.get("moneySum").toString()));
                 reconcile.setOperatorId(SecurityInfoGetter.getUser().getUserId());
                 reconcile.setOperatorName(SecurityInfoGetter.getUser().getRealName());
 //                reconcile.setCreateTime(createTime);
