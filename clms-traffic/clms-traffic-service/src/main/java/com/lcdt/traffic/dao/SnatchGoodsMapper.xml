@@ -120,7 +120,8 @@
     offer_id, offer_name, offer_phone, is_using, company_id, create_id, create_name,
     create_date, update_id, update_name, update_time, is_deleted,plan_company_id,offer_remark
     from t_snatch_goods
-    where waybill_plan_id = #{waybillPlanId} and is_deleted=#{isDeleted} and is_using=0
+    where waybill_plan_id = #{waybillPlanId} and is_deleted=#{isDeleted}
+    order by offer_date desc
   </select>
 
 
