@@ -657,6 +657,38 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
 
 
 
+    @Transactional
+    @Override
+    public int customerPlanOfferAgain(SnatchOfferDto dto, UserCompRel userCompRel) {
+        SnatchGoods snatchGoods = snatchGoodsMapper.selectByPrimaryKey(dto.getSnatchGoodsId());
+        if(snatchGoods!=null) {
+            if (!snatchGoods.getPlanCompanyId().equals(userCompRel.getCompId())) { //如果创建的企业ID与计划当前ID  不一样的话
+                return 0;
+            }
+            Date date = new Date();
+            User user = userCompRel.getUser();
+            snatchGoods.setOfferRemark(dto.getOfferRemark());
+            snatchGoods.setUpdateId(user.getUserId());
+            snatchGoods.setUpdateName(user.getRealName());
+            snatchGoods.setUpdateTime(date);
+            if (dto.getSnatchGoodsDetailList()!=null && dto.getSnatchGoodsDetailList().size()>0) {
+                for(SnatchGoodsDetail obj : dto.getSnatchGoodsDetailList()) {
+                    obj.setOfferRemark(dto.getOfferRemark());
+                    obj.setUpdateId(user.getUserId());
+                    obj.setUpdateName(user.getRealName());
+                    obj.setUpdateTime(date);
+                    obj.setOfferTotal(obj.getAmount()*obj.getOfferPrice());
+                }
+               snatchGoodsDetailMapper. batchUpdateSnatchGoodsDetail(dto.getSnatchGoodsDetailList());
+            }
+            snatchGoodsMapper.updateByPrimaryKey(snatchGoods);
+        }
+
+        return 1;
+    }
+
+
+
 
     @Transactional
     @Override
@@ -664,7 +696,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         SnatchGoods snatchGoods = snatchGoodsMapper.selectByPrimaryKey(snatchGoodsId);
         if(snatchGoods!=null) {
             if (!snatchGoods.getPlanCompanyId().equals(userCompRel.getCompId())) { //如果创建的企业ID与计划当前ID  不一样的话
-               return 0;
+                return 0;
             }
             User user = userCompRel.getUser();
             snatchGoods.setUpdateTime(new Date());

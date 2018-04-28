@@ -1,6 +1,7 @@
 package com.lcdt.traffic.dto;
 
 import com.lcdt.traffic.model.PlanDetail;
+import com.lcdt.traffic.model.SnatchGoodsDetail;
 
 import java.util.List;
 
@@ -15,6 +16,28 @@ public class SnatchOfferDto implements java.io.Serializable {
     private Long companyId; //获取(计划)企业ID
     private String offerRemark; //抢单备注
 
+
+    /***
+     * 重新报价用
+     */
+    private Long snatchGoodsId;
+    private List<SnatchGoodsDetail> snatchGoodsDetailList;
+
+    public Long getSnatchGoodsId() {
+        return snatchGoodsId;
+    }
+
+    public void setSnatchGoodsId(Long snatchGoodsId) {
+        this.snatchGoodsId = snatchGoodsId;
+    }
+
+    public List<SnatchGoodsDetail> getSnatchGoodsDetailList() {
+        return snatchGoodsDetailList;
+    }
+
+    public void setSnatchGoodsDetailList(List<SnatchGoodsDetail> snatchGoodsDetailList) {
+        this.snatchGoodsDetailList = snatchGoodsDetailList;
+    }
 
     private String planDetailStr;
 

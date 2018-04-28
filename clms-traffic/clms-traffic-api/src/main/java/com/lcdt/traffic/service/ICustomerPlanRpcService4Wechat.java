@@ -83,12 +83,27 @@ public interface ICustomerPlanRpcService4Wechat {
     int customerPlanOfferOwn(SnatchOfferDto dto, SnatchGoods snatchGoods);
 
 
+
+    /***
+     * 重新报价
+     * @param dto -- 外部参数
+     *@param dto -- 内部参数
+     * @return
+     */
+    int customerPlanOfferAgain(SnatchOfferDto dto, UserCompRel userCompRel);
+
+
     /***
      * 报价驳回
      * @param snatchGoodsId
      * @return
      */
     int customerPlanOfferOwn( Long snatchGoodsId, UserCompRel userCompRel);
+
+
+
+
+
 
 
     /***
