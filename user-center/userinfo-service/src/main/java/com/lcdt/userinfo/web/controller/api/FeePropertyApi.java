@@ -46,7 +46,6 @@ public class FeePropertyApi {
     @RequestMapping(value = "/feePropertyList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_property_list')")
     public PageBaseDto feePropertyList(@Validated FeeProperty dto) {
-        feePropertyService.initFeeProperty(SecurityInfoGetter.getUser(),SecurityInfoGetter.getCompanyId());
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);
