@@ -2,6 +2,7 @@ package com.lcdt.userinfo.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.model.FeeProperty;
+import com.lcdt.userinfo.model.User;
 
 import java.util.List;
 import java.util.Map;
@@ -40,4 +41,8 @@ public interface FeePropertyService {
      * @return
      */
     List<FeeProperty> getFeePropertyList(Map m);
+    /**
+     * 初始化运费费用类型
+     */
+    int initFeeProperty(User user, Long companyId);
 }
