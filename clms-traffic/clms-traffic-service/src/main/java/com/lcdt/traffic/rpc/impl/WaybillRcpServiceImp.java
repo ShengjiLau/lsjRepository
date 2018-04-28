@@ -295,25 +295,27 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             List<WaybillDao> list = waybillMapper.selectWaybillByIdOrPlanId(map);
             if (list != null && list.size() > 0) {
                 for (WaybillDao dao : list) {
-                    List<WaybillItems> itemsList = dao.getWaybillItemsList();
-                    List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
-                    for (WaybillItems item : itemsList) {
-                        //根据派单货物明细id更新派单货物明细数量
-                        SplitGoodsDetail sp = new SplitGoodsDetail();
-                        float amount = item.getAmount();
-                        Long splitGoodsDetailId = item.getSplitGoodsDetailId();
-                        sp.setUpdateId((Long) map.get("updateId"));
-                        sp.setUpdateName((String) map.get("updateName"));
-                        sp.setUpdateTime(new Date());
-                        sp.setRemainAmount(amount);
-                        sp.setSplitGoodsDetailId(splitGoodsDetailId);
-                        splitGoodsDetailList.add(sp);
+                    if(dao.getWaybillPlanId()!=null&&!dao.getWaybillPlanId().equals("")){
+                        List<WaybillItems> itemsList = dao.getWaybillItemsList();
+                        List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
+                        for (WaybillItems item : itemsList) {
+                            //根据派单货物明细id更新派单货物明细数量
+                            SplitGoodsDetail sp = new SplitGoodsDetail();
+                            float amount = item.getAmount();
+                            Long splitGoodsDetailId = item.getSplitGoodsDetailId();
+                            sp.setUpdateId((Long) map.get("updateId"));
+                            sp.setUpdateName((String) map.get("updateName"));
+                            sp.setUpdateTime(new Date());
+                            sp.setRemainAmount(amount);
+                            sp.setSplitGoodsDetailId(splitGoodsDetailId);
+                            splitGoodsDetailList.add(sp);
+                        }
+                        //压入派单ID
+                        map.put("waybillPlanId", dao.getWaybillPlanId());
+                        map.put("splitGoodsId", dao.getSplitGoodsId());
+                        map.put("companyId", dao.getCompanyId());
+                        splitGoodsService.waybillCancel4SplitGoods(splitGoodsDetailList, map);
                     }
-                    //压入派单ID
-                    map.put("waybillPlanId", dao.getWaybillPlanId());
-                    map.put("splitGoodsId", dao.getSplitGoodsId());
-                    map.put("companyId", dao.getCompanyId());
-                    splitGoodsService.waybillCancel4SplitGoods(splitGoodsDetailList, map);
 
                 }
 
@@ -325,25 +327,27 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             List<Waybill> list = waybillMapper.selectWaybillPlanId(map);
             if (list != null && list.size() > 0) {
                 for (Waybill waybill : list) {
-                    map.put("waybillPlanId", waybill.getWaybillPlanId());
-                    List<Waybill> waybillList = waybillMapper.selectWaybillByPlanId(map);
-                    boolean flag = true;
-                    for (Waybill bill : waybillList) {
-                        if (bill.getWaybillStatus() != ConstantVO.WAYBILL_STATUS_HAVE_FINISH) {
-                            flag = false;
-                            break;
+                    if(waybill.getWaybillPlanId()!=null&&!waybill.getWaybillPlanId().equals("")){
+                        map.put("waybillPlanId", waybill.getWaybillPlanId());
+                        List<Waybill> waybillList = waybillMapper.selectWaybillByPlanId(map);
+                        boolean flag = true;
+                        for (Waybill bill : waybillList) {
+                            if (bill.getWaybillStatus() != ConstantVO.WAYBILL_STATUS_HAVE_FINISH) {
+                                flag = false;
+                                break;
+                            }
                         }
-                    }
-                    if (flag) {
-                        //此计划下的运单全部完成，根据计划id 更新计划状态为完成
-                        WaybillPlan waybillPlan = new WaybillPlan();
-                        waybillPlan.setUpdateId((Long) map.get("updateId"));
-                        waybillPlan.setUpdateName((String) map.get("updateName"));
-                        waybillPlan.setUpdateTime(new Date());
-                        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED);
-                        waybillPlan.setWaybillPlanId(waybill.getWaybillPlanId());
-                        waybillPlan.setFinishDate(new Date());
-                        planService.updatePlanStatusByWaybill(waybillPlan);
+                        if (flag) {
+                            //此计划下的运单全部完成，根据计划id 更新计划状态为完成
+                            WaybillPlan waybillPlan = new WaybillPlan();
+                            waybillPlan.setUpdateId((Long) map.get("updateId"));
+                            waybillPlan.setUpdateName((String) map.get("updateName"));
+                            waybillPlan.setUpdateTime(new Date());
+                            waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED);
+                            waybillPlan.setWaybillPlanId(waybill.getWaybillPlanId());
+                            waybillPlan.setFinishDate(new Date());
+                            planService.updatePlanStatusByWaybill(waybillPlan);
+                        }
                     }
                 }
             }
