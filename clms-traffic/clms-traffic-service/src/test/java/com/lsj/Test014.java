@@ -54,8 +54,8 @@ public class Test014 {
 		r1.setAccountId("1,2,3");
 		r2.setAccountId("12,23,15");
 		
-		r1.setAccountAmount((double) 2000);
-		r2.setAccountAmount((double) 3000);
+//		r1.setAccountAmount((double) 2000);
+//		r2.setAccountAmount((double) 3000);
 		
 		r1.setCancelOk((short) 0);
 		r1.setCancelOk((short) 0);

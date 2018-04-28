@@ -1,3 +1,5 @@
+
+
 package com.lcdt.traffic.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
@@ -8,10 +10,7 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.FeeAccountService;
-import com.lcdt.traffic.web.dto.FeeAccountDto;
-import com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto;
-import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
-import com.lcdt.traffic.web.dto.ReconcileDto;
+import com.lcdt.traffic.web.dto.*;
 import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.userinfo.rpc.FinanceRpcService;
 import com.lcdt.util.ClmsBeanUtil;
@@ -249,7 +248,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         return list;
     }
     @Override
-    public PageInfo feeAccountList(FeeAccountDto dto){
+    public PageInfo feeAccountList(FeeAccountListParamsDto dto){
         List<FeeAccountDto> resultList = null;
         PageInfo page = null;
         int pageNo = 1;
@@ -267,7 +266,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         return page;
     }
     @Override
-    public FeeAccountDto feeAccountFeeTotal(FeeAccountDto dto){
+    public FeeAccountDto feeAccountFeeTotal(FeeAccountListParamsDto dto){
         Map map= ClmsBeanUtil.beanToMap(dto);
         FeeAccountDto resultDto = feeAccountMapper.selectByConditionFeeTotal(map);
         return resultDto;
@@ -313,7 +312,8 @@ public class FeeAccountServiceImpl implements FeeAccountService{
             for (Map<String, Object> m : list) {
                 Reconcile reconcile = new Reconcile();
                 reconcile.setCompanyId(SecurityInfoGetter.getCompanyId());
-                reconcile.setAccountAmount(Double.parseDouble(m.get("moneySum").toString()));
+                reconcile.setTransportationExpenses(Double.parseDouble(m.get("freightTotal").toString()));//运费
+                reconcile.setOtherExpenses(Double.parseDouble(m.get("otherFeeTaotal").toString()));//其他费用
                 reconcile.setOperatorId(SecurityInfoGetter.getUser().getUserId());
                 reconcile.setOperatorName(SecurityInfoGetter.getUser().getRealName());
 //                reconcile.setCreateTime(createTime);
@@ -323,7 +323,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                 reconcile.setPayeeType(payeeType);
                 reconcile.setPayerId(Long.parseLong(m.get("nameId").toString()));
                 reconcile.setPayerName(m.get("name").toString());
-                reconcile.setGroupId(SecurityInfoGetter.groups().get(0).getGroupId());
+                reconcile.setGroupId(Long.parseLong(m.get("groupId").toString()));
                 reconcileList.add(reconcile);
             }
             result = reconcileMapper.insertByBatch(reconcileList);
@@ -348,4 +348,11 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         }
         return result;
     }
+
+    @Override
+    public List<FeeAccountDto> feeAccountReconcileDetail(Long reconcileId) {
+        List<FeeAccountDto> list = feeAccountMapper.selectByReconcileId(reconcileId);
+        return list;
+    }
 }
+

@@ -20,9 +20,9 @@ public interface ReconcileService {
 	
 	public Map<Integer,String> setCancelOk(String reconcileIdList);
 	
-	PageInfo<Reconcile> getReconcileList(ReconcileDto reconcileDto);
+	PageInfo<ReconcileDto> getReconcileList(ReconcileDto reconcileDto);
 	
-	Reconcile selectReconcileByPk(Long pk);
+	ReconcileDto selectReconcileByPk(Long pk);
 	
 
 }

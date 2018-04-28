@@ -2,6 +2,7 @@ package com.lcdt.driver.wechat.api.DriverManageApi;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
+import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
 import com.lcdt.clms.security.token.config.JwtTokenUtil;
 import com.lcdt.driver.dto.PageBaseDto;
 import com.lcdt.driver.dto.WechatCreateCompanyDto;
@@ -53,22 +54,19 @@ public class LoginApi {
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
     public String registerUser(RegisterDto registerDto) throws PhoneHasRegisterException {
-            String ecode = registerDto.getEcode();
-            boolean codeCorrect = validCodeService.isCodeCorrect(ecode, VCODETAG, registerDto.getUserPhoneNum());
+
+            boolean codeCorrect = validCodeService.isCodeCorrect(registerDto.getEcode(), VCODETAG, registerDto.getUserPhoneNum());
             if (!codeCorrect) {
                 throw new RuntimeException("验证码错误");
             }
             User user = userService.registerUser(registerDto);
             HashMap<String, Object> stringStringHashMap = new HashMap<>();
             stringStringHashMap.put("userId", user.getUserId());
-
-            String s = jwtTokenUtil.generateToken(stringStringHashMap);
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("data", user);
             jsonObject.put("code", 0);
-            jsonObject.put("toekn", s);
+            jsonObject.put("token", jwtTokenUtil.generateToken(stringStringHashMap));
             return jsonObject.toString();
-
     }
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
@@ -134,10 +132,10 @@ public class LoginApi {
             }
             companyDto.setCreateDt(new Date());
             companyDto.setCreateId(Long.valueOf(userId));
+            companyDto.setUserId(Long.valueOf(userId));
         }else{
             throw new RuntimeException("token错误");
         }
-
         Company company = createCompanyService.createCompany(companyDto);
         return company;
     }

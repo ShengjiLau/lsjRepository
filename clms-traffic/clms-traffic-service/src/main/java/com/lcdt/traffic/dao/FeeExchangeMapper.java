@@ -37,7 +37,7 @@ public interface FeeExchangeMapper {
      * @param feeExchangeIds
      * @return
      */
-    int updateCancelOkByBatch(String feeExchangeIds);
+    int updateCancelOkByBatch(Long[] feeExchangeIds);
     
 
     /**
@@ -46,5 +46,23 @@ public interface FeeExchangeMapper {
      * @return
      */
     int selectCountFeeExchangeByReconcileId(Long reconcileId);
+    
+    /**
+     * 查询对应对账单下收付款记录列表
+     * @param reconcileId
+     * @return
+     */
+    List<FeeExchange> getFeeExchangeListByReconcileId(Long reconcileId);
+    
+    
+    /**
+     * 批量查询对应对账单下收付款记录列表
+     * @param reconcileIds
+     * @return
+     */
+    List<FeeExchange> getFeeExchangesByBatch(Long[] reconcileIds);
+ 
+    
+    
     
 }

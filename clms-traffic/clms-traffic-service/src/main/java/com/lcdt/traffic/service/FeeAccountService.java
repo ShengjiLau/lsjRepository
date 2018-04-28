@@ -3,6 +3,7 @@ package com.lcdt.traffic.service;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
+import com.lcdt.traffic.web.dto.FeeAccountListParamsDto;
 import com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto;
 import com.lcdt.traffic.web.dto.FeeAccountWaybillDto;
 
@@ -47,13 +48,13 @@ public interface FeeAccountService {
      * @param dto
  * @return
      */
-    PageInfo feeAccountList(FeeAccountDto dto);
+    PageInfo feeAccountList(FeeAccountListParamsDto dto);
     /**
      * 记账单列表费用合计
      * @param dto
      * @return
      */
-    FeeAccountDto feeAccountFeeTotal(FeeAccountDto dto);
+    FeeAccountDto feeAccountFeeTotal(FeeAccountListParamsDto dto);
     /**
      * 费用类型列表查询
      * @param m
@@ -105,4 +106,11 @@ public interface FeeAccountService {
      * @return
      */
     int feeAccountReconcileSave(List<Map<String,Object>> list, short payeeType);
+
+    /**
+     * 对账单详情
+     * @param reconcileId
+     * @return
+     */
+    List<FeeAccountDto> feeAccountReconcileDetail(Long reconcileId);
 }

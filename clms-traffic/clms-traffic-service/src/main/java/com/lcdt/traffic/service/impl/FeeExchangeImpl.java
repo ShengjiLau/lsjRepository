@@ -65,7 +65,11 @@ public class FeeExchangeImpl implements FeeExchangeService {
 	public int updateSetCancelOk(String feeExchangeIds) {
 		String[] ss =feeExchangeIds.split(",");		
 		int j = ss.length;
-		int i= feeExchangeMapper.updateCancelOkByBatch(feeExchangeIds);
+		Long [] Ids=new Long[ss.length];
+		for(int i=0;i<ss.length;i++) {
+			Ids[i]=Long.valueOf(ss[i]);
+		}
+		int i= feeExchangeMapper.updateCancelOkByBatch(Ids);
 		if(j==i) {
 			return i;
 		}

@@ -59,7 +59,6 @@ public class AuthApi {
                     user.setRealName(phone);
                 }
             }
-
             user.setRegisterFrom("司机宝小程序");
             userService.registerDriverUser(user);
         }

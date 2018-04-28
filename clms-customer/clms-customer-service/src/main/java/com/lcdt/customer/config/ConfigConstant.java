@@ -12,4 +12,7 @@ public class ConfigConstant {
 
     @Value("${logouthost}")
     public String logoutHost;
+
+    @Value("${mainindex}")
+    public String mainindex;
 }

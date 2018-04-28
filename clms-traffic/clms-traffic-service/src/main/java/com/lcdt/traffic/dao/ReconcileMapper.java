@@ -37,23 +37,26 @@ public interface ReconcileMapper {
      * @param reconcileIdList
      * @return
      */
-    int cancelByBatch(String reconcileIdList);
+    int cancelByBatch(Long[] reconcileIdList);
     
     /**
      * 查询对账单列表
      * @param reconcileDto
      * @return
      */
-    List<Reconcile> getReconcileList(ReconcileDto reconcileDto);
+    List<ReconcileDto> getReconcileList(ReconcileDto reconcileDto);
      
     /**
      * 依据主键批量查询对账单
      * @param reconcileIdList
      * @return
      */
-    List<Reconcile> getReconcileListByPk(String reconcileIds);
+    List<Reconcile> getReconcileListByPk(Long[] reconcileIds);
     
-    
+    /**
+     * 通过主键查询对账单详情
+     */
+    ReconcileDto selectReconcileByPrimaryKey(Long reconcileId);
     
    
     
