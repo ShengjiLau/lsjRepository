@@ -58,6 +58,9 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	@Autowired
 	WarehouseService warehouseService;
 
+	@Autowired
+	FeePropertyService feePropertyService;
+
 	private SysRole sysAdminRole;
 
 	@Transactional(rollbackFor = Exception.class)
@@ -70,8 +73,14 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		//创建者加入默认新建组
 		addDefaultGroup(company);
 		List<UserCompRel> userCompRels = userCompRelMapper.selectByUserIdCompanyId(company.getCreateId(), company.getCompId());
+		UserCompRel userCompRel = userCompRels.get(0);
+		User user = userCompRel.getUser();
+
+		feePropertyService.initFeeProperty(user,company.getCompId());
+
 		//发送公司初始化事件
 		sendCompanyInitEvent(userCompRels.get(0));
+
 		return company;
 	}
 

@@ -58,6 +58,11 @@ public class FeePropertyServiceImpl implements FeePropertyService {
     }
     @Override
     public int initFeeProperty(User user, Long companyId) {
+
+        if (user == null) {
+            return -1;
+        }
+
         List<FeeProperty> feePropertyList = new ArrayList<>();
 
         //运输'运费'应收默认显示
