@@ -24,4 +24,6 @@ public interface FeePropertyMapper {
     int updateIsDeleteByPrimaryKey(Long proId);
 
     int getFeePropertyInfo(Map m);
+
+    int insertBatch(List<FeeProperty> list);
 }
