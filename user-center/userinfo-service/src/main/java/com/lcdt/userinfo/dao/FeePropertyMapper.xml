@@ -188,4 +188,17 @@
     set is_deleted = 1
     where pro_id = #{proId,jdbcType=BIGINT}
   </update>
+  <insert id="insertBatch">
+    insert into t_fee_property (type, name, is_receivable,
+    is_show, company_id, operator_id,
+    operator_name, create_date, is_deleted
+    )
+    values
+    <foreach item="item" collection="list" separator=",">
+      (#{item.type,jdbcType=SMALLINT}, #{item.name,jdbcType=VARCHAR}, #{item.isReceivable,jdbcType=SMALLINT},
+      #{item.isShow,jdbcType=SMALLINT}, #{item.companyId,jdbcType=BIGINT}, #{item.operatorId,jdbcType=BIGINT},
+      #{item.operatorName,jdbcType=VARCHAR}, #{item.createDate,jdbcType=TIMESTAMP}, #{item.isDeleted,jdbcType=SMALLINT}
+      )
+    </foreach>
+  </insert>
 </mapper>

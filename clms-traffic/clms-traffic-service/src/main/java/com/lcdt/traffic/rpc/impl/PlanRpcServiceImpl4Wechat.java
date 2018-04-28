@@ -424,10 +424,13 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             splitGoods.setUpdateTime(opDate);
             splitGoods.setIsDeleted((short)0);
             splitGoods.setCompanyId(companyId);
+
+
             splitGoods.setCarrierCollectionIds(dto.getCarrierCollectionIds());
             splitGoods.setCarrierCollectionNames(dto.getCarrierCollectionNames());
             splitGoods.setCarrierPhone(dto.getCarrierPhone());
             splitGoods.setCarrierVehicle(dto.getCarrierVehicle());
+
 
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
                 String carrierId = dto.getCarrierCollectionIds(); //承运商ID（如果是承运商只存在一个）
@@ -492,12 +495,9 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             Waybill waybill = null;
             if (list!=null && list.size()>0) {
                 float remainAmount  = 0; //剩余
-
                 for (PlanDetail tobj : list) {
                     remainAmount += tobj.getRemainderAmount(); //所有剩余合计
                 }
-
-
                 if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
                     if (remainAmount>0) { //还未派完
                         waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
