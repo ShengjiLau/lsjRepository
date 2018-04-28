@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dto.ProfitStatParamsDto;
+import com.lcdt.traffic.dto.ProfitStatResult1Dto;
+import com.lcdt.traffic.dto.ProfitStatResultDto;
 import com.lcdt.traffic.dto.ReceivePayParamsDto;
 import com.lcdt.traffic.service.IFeeFlowService;
 import com.lcdt.traffic.web.dto.PageBaseDto;
@@ -144,6 +146,42 @@ public class FinanceApi {
         PageInfo pg = iFeeFlowService.profitStat(dto);
         PageBaseDto pg_result = new PageBaseDto(pg.getList(), pg.getTotal());
         return pg_result;
+    }
+
+
+    @ApiOperation("利润统计")
+    @RequestMapping(value = "g",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public ProfitStatResult1Dto profitStatTotal(ProfitStatParamsDto dto) {
+        Company company = SecurityInfoGetter.geUserCompRel().getCompany();
+        List<Group> groupList = SecurityInfoGetter.groups();
+        StringBuffer sb_1 = new StringBuffer();
+        for(int i=0;i<groupList.size();i++) {
+            Group group = groupList.get(i);
+            sb_1.append(group.getGroupId());
+            if(i!=groupList.size()-1){
+                sb_1.append(",");
+            }
+        }
+        dto.setPageNo(1);
+        dto.setPageSize(0);
+        dto.setCompanyId(company.getCompId());
+        dto.setIsDeleted((short)0);
+        dto.setGroupIds(sb_1.toString());
+        PageInfo pg = iFeeFlowService.profitStat(dto);
+        ProfitStatResult1Dto dto1 = new ProfitStatResult1Dto();
+        if(pg.getTotal()>0) {
+            List<ProfitStatResultDto> list = pg.getList();
+            float receiveMoneyTotal = 0,payMoneyTotal=0,profitMoneyTotal=0;
+            for(ProfitStatResultDto obj :list) {
+                if(obj.getPayMoney()!=null) payMoneyTotal+=obj.getPayMoney();
+                if(obj.getReceiveMoney()!=null) receiveMoneyTotal+=obj.getReceiveMoney();
+            }
+            dto1.setPayMoneyTotal(payMoneyTotal);
+            dto1.setReceiveMoneyTotal(receiveMoneyTotal);
+            dto1.setProfitMoneyTotal(receiveMoneyTotal-payMoneyTotal);
+        }
+        return dto1;
     }
 
 

@@ -58,6 +58,16 @@ public interface SnatchGoodsDetailMapper {
      */
     int batchAddSnatchGoodsDetail(List<SnatchGoodsDetail> snatchGoodsDetailList);
 
+
+    /***
+     * 批量更新
+     * @param snatchGoodsDetailList
+     * @return
+     */
+    int batchUpdateSnatchGoodsDetail(List<SnatchGoodsDetail> snatchGoodsDetailList);
+
+
+
     /***
      * 司机抢单统计报价
      * @param waybillPlanId

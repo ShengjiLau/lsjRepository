@@ -665,8 +665,6 @@ public class CustomerPlanApi {
 
 
 
-
-
     @ApiOperation("报价-驳回")
     @RequestMapping(value = "/offerBack",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_offer_own')  or hasAuthority('traffic_customer_plan_offer_1')")
@@ -687,6 +685,34 @@ public class CustomerPlanApi {
     }
 
 
-
+    @ApiOperation("客户计划-重新报价")
+    @RequestMapping(value = "/customerPlanOfferAgain",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_plan_offer_own')  or hasAuthority('traffic_customer_plan_offer_1')")
+    public String customerPlanOfferAgain(@RequestBody SnatchOfferDto dto) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User user = SecurityInfoGetter.getUser();
+        SnatchGoods snatchGoods = new SnatchGoods();
+        snatchGoods.setOfferId(user.getUserId());
+        snatchGoods.setOfferName(user.getRealName());
+        snatchGoods.setCreateId(user.getUserId());
+        snatchGoods.setCreateName(user.getRealName());
+        snatchGoods.setUpdateId(user.getUserId());
+        snatchGoods.setUpdateName(user.getRealName());
+        snatchGoods.setOfferPhone(user.getPhone()); //抢单人电话
+        snatchGoods.setCompanyId(companyId);
+        snatchGoods.setPlanCompanyId(dto.getCompanyId());//计划企业ID
+        int flag = iCustomerPlanRpcService4Wechat.customerPlanOfferOwn(dto,snatchGoods);
+        JSONObject jsonObject = new JSONObject();
+        String message = null;
+        int code = -1;
+        if (flag>0) {
+            code = 0;
+        } else {
+            message = "操作失败，请重试！";
+        }
+        jsonObject.put("message",message);
+        jsonObject.put("code",code);
+        return jsonObject.toString();
+    }
 
 }

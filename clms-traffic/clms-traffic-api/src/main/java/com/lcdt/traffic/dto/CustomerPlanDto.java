@@ -32,6 +32,7 @@ public class CustomerPlanDto implements java.io.Serializable {
     private Date pubdate;
     private Date splitDate;
     private short sendOrderType;
+    private String planStatus;
 
 
     //发货人 发货省市区 地址  起运时间 收货人 送达时间
@@ -272,7 +273,13 @@ public class CustomerPlanDto implements java.io.Serializable {
         this.splitGoodsId = splitGoodsId;
     }
 
+    public String getPlanStatus() {
+        return planStatus;
+    }
 
+    public void setPlanStatus(String planStatus) {
+        this.planStatus = planStatus;
+    }
 }
 
 

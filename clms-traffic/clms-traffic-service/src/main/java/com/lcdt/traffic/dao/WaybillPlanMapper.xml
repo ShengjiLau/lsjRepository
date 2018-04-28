@@ -131,6 +131,7 @@
     <result column="receive_man" jdbcType="VARCHAR" property="receiveMan" />
     <result column="arrive_date" jdbcType="TIMESTAMP" property="arriveDate" />
     <result column="distribution_way" jdbcType="VARCHAR" property="distributionWay" />
+    <result column="plan_status" jdbcType="VARCHAR" property="planStatus" />
     <result column="plan_remark" jdbcType="VARCHAR" property="planRemark" />
 
    <!--计划列表-->
@@ -703,7 +704,7 @@
     就是自己能抢的计划，可能这个计划多家公司都能看见。如果改计划我报价了，就在已抢里面
   -->
   <select id="customerPlan4Bidding" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted,
+    select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, plan_status,receive_province, receive_city, receive_county,receive_address,company_id,is_deleted,
     pubdate,null as splitDate,send_order_type,send_man,send_province,send_city,send_county,send_address,start_date,receive_man,arrive_date,distribution_way,plan_remark
     from t_waybill_plan p1
     <where>
@@ -753,7 +754,7 @@
      理解：这个计划我参与报价了，但还没有派单给我 ,只要不是'取消'的就行
   -->
   <select id="customerPlanList4Offer" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select '-1' as split_goods_id,waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted,
+    select '-1' as split_goods_id,waybill_plan_id, plan_code,plan_status, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted,
     pubdate,null as splitDate,send_order_type,send_man,send_province,send_city,send_county,send_address,start_date,receive_man,arrive_date,distribution_way,plan_remark
     from t_waybill_plan p1
     <where>
@@ -814,7 +815,7 @@
           )
    -->
   <select id="customerPlanList4Pass" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap">
-    select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, receive_province, receive_city, receive_county,receive_address,company_id,is_deleted,
+    select '-1' as split_goods_id, waybill_plan_id, plan_code, serial_code, plan_status,receive_province, receive_city, receive_county,receive_address,company_id,is_deleted,
     pubdate,null as splitDate,send_order_type,send_man,send_province,send_city,send_county,send_address,start_date,receive_man,arrive_date,distribution_way,plan_remark
     from t_waybill_plan p1
     <where>
@@ -1119,6 +1120,7 @@
     sp.split_goods_id,
     wp.waybill_plan_id,
     wp.plan_code,
+    wp.plan_status,
     wp.serial_code,
     wp.receive_province,
     wp.receive_city,
