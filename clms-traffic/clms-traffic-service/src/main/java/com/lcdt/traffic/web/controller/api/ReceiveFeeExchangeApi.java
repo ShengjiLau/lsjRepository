@@ -1,6 +1,8 @@
 package com.lcdt.traffic.web.controller.api;
 
 
+import java.util.regex.Pattern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -154,6 +156,11 @@ public class ReceiveFeeExchangeApi {
 				}
 				if(null==fe.getOperateTime()) {
 					sd.append("收款时间不可为空,");
+				}else {
+					String pattern ="^([0-9]{4})-([0-9]{2})-([0-9]{2})";
+					if(!Pattern.matches(pattern,fe.getOperateTime())) {
+						sd.append("时间格式为:yyyy-MM-dd");
+					}
 				}
 				if(null==fe.getTransportationExpenses()&&null==fe.getOtherExpenses()) {
 					sd.append("收款金额不可为空");
