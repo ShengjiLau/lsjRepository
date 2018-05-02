@@ -251,6 +251,11 @@
       </if>
       <if test="approvalStatus != null" >
         approval_status = #{approvalStatus,jdbcType=SMALLINT},
+        <if test="approvalStatus == 0">
+          approval_process = null,
+          approval_process_id = null,
+          approval_start_date = null,
+        </if>
       </if>
       <if test="approvalProcess != null" >
         approval_process = #{approvalProcess,jdbcType=VARCHAR},
