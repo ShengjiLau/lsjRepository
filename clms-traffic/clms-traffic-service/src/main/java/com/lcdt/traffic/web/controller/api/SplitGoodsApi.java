@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +90,17 @@ public class SplitGoodsApi {
         map.put("waybillPlanId",waybillPlanId);
         map.put("isDeleted",0);
         List<SnatchGoods> list = snatchGoodsMapper.selectByWaybillPlanId(map);
+        List<SnatchGoods> list1 = new ArrayList<SnatchGoods>();
+        if(list!=null && list.size()>0) { //剔除驳回记录
+            for(SnatchGoods obj :list) {
+                if(obj.getIsUsing()!=null && obj.getIsUsing().equals(2)) {
+                    list1.add(obj);
+                }
+                list.removeAll(list1);
+            }
+        }
+
+
         rdto.setSnatchGoodsList(list);//抢单
         Map map1 = new HashMap<String,Long>();
         map1.put("waybillPlanId",waybillPlanId);
