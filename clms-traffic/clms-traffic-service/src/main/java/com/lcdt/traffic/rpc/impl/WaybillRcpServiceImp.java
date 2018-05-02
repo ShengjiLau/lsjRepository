@@ -206,24 +206,18 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         Map map = new HashMap();
 
         map.put("driverId", dto.getDriverId());
-        ArrayList status=new ArrayList();
-        if(dto.getWaybillStatus()!=null)
-        {
+        ArrayList status = new ArrayList();
+        if (dto.getWaybillStatus() != null) {
             //将状态值里的0替换为空
-            for (int i = 0; i < dto.getWaybillStatus().length;i++ )
-            {
-                if(dto.getWaybillStatus()[i].equals("0"))
-                {
+            for (int i = 0; i < dto.getWaybillStatus().length; i++) {
+                if (dto.getWaybillStatus()[i].equals("0")) {
                     break;
-                }
-                else
-                {
+                } else {
                     status.add(dto.getWaybillStatus()[i]);
                 }
             }
         }
-        if(status!=null)
-        {
+        if (status != null) {
             map.put("waybillStatus", status.toArray());
         }
         PageHelper.startPage(pageNo, pageSize);
@@ -296,12 +290,12 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
      * @return
      */
     private void modifyWaybillPlanInfo(Map map) {
-        if (map.containsKey("waybillPlanId") && map.get("waybillPlanId") != null && !map.get("waybillPlanId").equals("")) {
-            short waybillStatus = (short) map.get("waybillStatus");
-            if (waybillStatus == ConstantVO.WAYBILL_STATUS_HAVE_CANCEL) {
-                List<WaybillDao> list = waybillMapper.selectWaybillByIdOrPlanId(map);
-                if (list != null && list.size() > 0) {
-                    for (WaybillDao dao : list) {
+        short waybillStatus = (short) map.get("waybillStatus");
+        if (waybillStatus == ConstantVO.WAYBILL_STATUS_HAVE_CANCEL) {
+            List<WaybillDao> list = waybillMapper.selectWaybillByIdOrPlanId(map);
+            if (list != null && list.size() > 0) {
+                for (WaybillDao dao : list) {
+                    if(dao.getWaybillPlanId()!=null&&!dao.getWaybillPlanId().equals("")){
                         List<WaybillItems> itemsList = dao.getWaybillItemsList();
                         List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
                         for (WaybillItems item : itemsList) {
@@ -321,17 +315,19 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                         map.put("splitGoodsId", dao.getSplitGoodsId());
                         map.put("companyId", dao.getCompanyId());
                         splitGoodsService.waybillCancel4SplitGoods(splitGoodsDetailList, map);
-
                     }
 
                 }
 
             }
-            if (waybillStatus == ConstantVO.WAYBILL_STATUS_HAVE_FINISH) {
 
-                List<Waybill> list = waybillMapper.selectWaybillPlanId(map);
-                if (list != null && list.size() > 0) {
-                    for (Waybill waybill : list) {
+        }
+        if (waybillStatus == ConstantVO.WAYBILL_STATUS_HAVE_FINISH) {
+
+            List<Waybill> list = waybillMapper.selectWaybillPlanId(map);
+            if (list != null && list.size() > 0) {
+                for (Waybill waybill : list) {
+                    if(waybill.getWaybillPlanId()!=null&&!waybill.getWaybillPlanId().equals("")){
                         map.put("waybillPlanId", waybill.getWaybillPlanId());
                         List<Waybill> waybillList = waybillMapper.selectWaybillByPlanId(map);
                         boolean flag = true;
