@@ -223,9 +223,10 @@ public class ReconcileServiceImpl implements ReconcileService {
 		ReconcileDto reconcileDto=reconcileMapper.selectReconcileByPrimaryKey(pk);
 		//获取对账单下的收付款记录List
 		List<FeeExchange> feeExchangeList=feeExchangeMapper.getFeeExchangeListByReconcileId(pk);
-		//获取对账单下的记账单List
-		//List<FeeAccount> feeAccountList=feeAccountMapper.selectFeeAccountListByReconcileId(convertStrToLong(reconcileDto.getAccountId()));
-		reconcileDto.setFeeExchangeList(feeExchangeList);
+		if(null!=feeExchangeList) {
+			reconcileDto.setFeeExchangeList(feeExchangeList);	
+		}	
+		
 		return reconcileDto;
 	}
 	
