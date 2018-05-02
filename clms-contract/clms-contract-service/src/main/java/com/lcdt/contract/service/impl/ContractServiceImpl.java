@@ -178,9 +178,9 @@ public class ContractServiceImpl implements ContractService {
             }
         }
         //审批流程添加 如果审批人不是空，则需先删除之前保存的审批人的信息，然后再新增审批人信息
-        //删除之前保存的审批人信息
-        contractApprovalMapper.deleteByContractId(dto.getContractId());
         if(null!=dto.getContractApprovalList() && dto.getContractApprovalList().size() > 0){
+            //删除之前保存的审批人信息
+            contractApprovalMapper.deleteByContractId(dto.getContractId());
             /*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
 
             for(ContractApproval ca : dto.getContractApprovalList()){
@@ -219,6 +219,8 @@ public class ContractServiceImpl implements ContractService {
             //同时设置合同的审批状态为审批中
             contract.setApprovalStatus(new Short("0"));
             contract.setApprovalStartDate(null);
+            contract.setApprovalProcess(null);
+            contract.setApprovalProcessId(null);
             contractMapper.updateByPrimaryKeySelective(contract);
         }
         return result;
