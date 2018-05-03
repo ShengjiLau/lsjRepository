@@ -95,11 +95,11 @@ public class OwnPlanApi {
         List<SnatchGoods> list1 = new ArrayList<SnatchGoods>();
         if(list!=null && list.size()>0) { //剔除驳回记录
             for(SnatchGoods obj :list) {
-                if(obj.getIsUsing()!=null && obj.getIsUsing().equals(2)) {
+                if(obj.getIsUsing()!=null && obj.getIsUsing()==2) {
                     list1.add(obj);
                 }
-                list.removeAll(list1);
             }
+            list.removeAll(list1);
         }
 
 
