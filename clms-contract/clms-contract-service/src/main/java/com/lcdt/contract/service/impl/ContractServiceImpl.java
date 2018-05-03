@@ -4,10 +4,12 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.dao.ContractApprovalMapper;
+import com.lcdt.contract.dao.ContractLogMapper;
 import com.lcdt.contract.dao.ContractMapper;
 import com.lcdt.contract.dao.ContractProductMapper;
 import com.lcdt.contract.model.Contract;
 import com.lcdt.contract.model.ContractApproval;
+import com.lcdt.contract.model.ContractLog;
 import com.lcdt.contract.model.ContractProduct;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.ContractDto;
@@ -17,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tl.commons.util.StringUtility;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -34,6 +37,8 @@ public class ContractServiceImpl implements ContractService {
     private ContractProductMapper contractProductMapper;
     @Autowired
     private ContractApprovalMapper contractApprovalMapper;
+    @Autowired
+    private ContractLogMapper contractLogMapper;
 
     @Override
     public int addContract(ContractDto dto) {
@@ -52,13 +57,6 @@ public class ContractServiceImpl implements ContractService {
         Contract contract = new Contract();
         BeanUtils.copyProperties(dto, contract); //复制对象属性
         int result = contractMapper.insert(contract);
-//        if(!StringUtility.isNotEmpty(dto.getContractCode())){
-//            contract.setContractCode((contract.getType()==0?"CG":"XS")
-//                    + SerialNumAutoGenerator.getSerialNoById(contract.getContractId()));
-//        }
-//        contract.setSerialNo((contract.getType()==0?"CG":"XS")
-//                + SerialNumAutoGenerator.getSerialNoById(contract.getContractId()));
-//        contractMapper.updateByPrimaryKey(contract);
         if(dto.getContractProductList() != null && dto.getContractProductList().size() > 0) {
             //设置商品的合同id
             for (ContractProduct contractProduct : dto.getContractProductList()) {
@@ -106,6 +104,19 @@ public class ContractServiceImpl implements ContractService {
             contract.setApprovalStatus(new Short("0"));
             contractMapper.updateByPrimaryKeySelective(contract);
         }
+        ContractLog log = new ContractLog();
+        log.setContractId(contract.getContractId());
+        log.setLogName("新增");
+        log.setLogContent("新增合同，"+(contract.getIsDraft()==0?"存草稿":"发布合同"));
+        saveContractLog(log);
+        if(StringUtility.isNotEmpty(contract.getAttachment1Name())){
+            ContractLog log1 = new ContractLog();
+            log1.setContractId(contract.getContractId());
+            log1.setLogName("上传附件");
+            log1.setLogContent("上传附件"+contract.getAttachment1Name());
+//        log.setAttachmentClassify("");
+            saveContractLog(log1);
+        }
         return result;
     }
 
@@ -128,18 +139,6 @@ public class ContractServiceImpl implements ContractService {
         dto.setSummation(summation);
         Contract contract = new Contract();
         BeanUtils.copyProperties(dto, contract); //复制对象属性
-        //将修改之前的部分属性赋值
-//        if(!StringUtility.isNotEmpty(contract.getContractCode())){
-//            contract.setContractCode(oldContract.getSerialNo());
-//        }
-//        contract.setSerialNo(oldContract.getSerialNo());
-//        contract.setContractStatus(oldContract.getContractStatus());
-//        contract.setCompanyId(oldContract.getCompanyId());
-//        contract.setCreateId(oldContract.getCreateId());
-//        contract.setCreateName(oldContract.getCreateName());
-//        contract.setCreateTime(oldContract.getCreateTime());
-//        contract.setEffectiveTime(oldContract.getEffectiveTime());
-//        contract.setTerminationTime(oldContract.getTerminationTime());
 
         int result = contractMapper.updateByPrimaryKeySelective(contract);
         //获取该合同下面的商品cpId用来匹配被删除的商品
@@ -223,6 +222,12 @@ public class ContractServiceImpl implements ContractService {
             contract.setApprovalProcessId(null);
             contractMapper.updateByPrimaryKeySelective(contract);
         }
+        ContractLog log = new ContractLog();
+        log.setContractId(contract.getContractId());
+        log.setLogName("编辑");
+        log.setLogContent("编辑合同内容");
+//        log.setAttachmentClassify("");
+        saveContractLog(log);
         return result;
     }
 
@@ -241,6 +246,12 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public int modContractStatus(Contract contract) {
         int result = contractMapper.updateContractStatus(contract);
+        ContractLog log = new ContractLog();//0-生效 3-失效 2-草稿发布
+        log.setContractId(contract.getContractId());
+        log.setLogName(contract.getContractStatus()==0?"生效":contract.getContractStatus()==3?"终止":"发布");
+        log.setLogContent(contract.getContractStatus()==0?"合同生效":contract.getContractStatus()==3?"合同终止":"发布草稿");
+//        log.setAttachmentClassify("");
+        saveContractLog(log);
         return result;
     }
 
@@ -259,6 +270,22 @@ public class ContractServiceImpl implements ContractService {
                 dto.setContractApprovalList(approvalList);
             }
         }
+        ContractLog log = new ContractLog();//0-生效 3-失效 2-草稿发布
+        log.setContractId(contractId);
+        log.setLogName("详情");
+        log.setLogContent("查看详情");
+//        log.setAttachmentClassify("");
+        saveContractLog(log);
         return dto;
+    }
+    public int saveContractLog(ContractLog log){
+        log.setOperatorId(SecurityInfoGetter.getUser().getUserId());
+        log.setOperatorName(SecurityInfoGetter.getUser().getRealName());
+        log.setOperatorDeptIds(SecurityInfoGetter.geUserCompRel().getDeptIds());
+        log.setOperatorDeptNames(SecurityInfoGetter.geUserCompRel().getDeptNames());
+        log.setCreateTime(new Date());
+        log.setIsDeleted((short)0);
+        int result = contractLogMapper.insert(log);
+        return result;
     }
 }
