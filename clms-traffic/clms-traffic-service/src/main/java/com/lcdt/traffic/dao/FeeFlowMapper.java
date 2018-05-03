@@ -2,6 +2,7 @@ package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.model.FeeFlow;
+import com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto;
 
 import java.util.List;
 import java.util.Map;
@@ -48,4 +49,5 @@ public interface FeeFlowMapper {
      */
     List<ProfitStatResultDto> profitStat(ProfitStatParamsDto profitStatParamsDto);
 
+    int updateIsDeleteByCondition(FeeAccountSaveParamsDto saveParamsDto);
 }
