@@ -2,6 +2,7 @@ package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.web.dto.FeeAccountDto;
+import com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto;
 import com.lcdt.traffic.web.dto.ReconcileDto;
 
 import java.util.List;
@@ -62,5 +63,7 @@ public interface FeeAccountMapper {
     List<FeeAccount> selectFeeAccountListByReconcileId(Long[] accountIds);
 
     List<FeeAccountDto> selectByReconcileId(Long reconcileId);
+
+    int updateIsDeleteByCondition(FeeAccountSaveParamsDto saveParamsDto);
 
 }

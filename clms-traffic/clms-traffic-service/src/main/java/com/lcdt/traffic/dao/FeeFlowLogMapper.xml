@@ -136,4 +136,10 @@
       #{isDeleted,jdbcType=SMALLINT})
     </foreach>
   </insert>
+  <update id="updateIsDeleteByCondition" parameterType="com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto">
+    update t_fee_flow_log
+    set is_deleted = 1
+    where flow_id in
+    (select flow_id from t_fee_flow where waybill_id = #{waybillId,jdbcType=BIGINT} and is_receivable = #{isReceivable,jdbcType=SMALLINT})
+  </update>
 </mapper>
