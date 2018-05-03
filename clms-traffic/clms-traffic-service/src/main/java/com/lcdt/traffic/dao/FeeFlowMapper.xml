@@ -328,6 +328,12 @@
      GROUP BY waybill_code DESC
   </select>
 
+  <update id="updateIsDeleteByCondition" parameterType="com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto">
+    update t_fee_flow
+    set is_deleted = 1
+    where waybill_id = #{waybillId,jdbcType=BIGINT}
+    and is_receivable = #{isReceivable,jdbcType=SMALLINT}
+  </update>
 
 
 </mapper>

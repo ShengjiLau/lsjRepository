@@ -90,15 +90,15 @@ public class SplitGoodsApi {
         map.put("waybillPlanId",waybillPlanId);
         map.put("isDeleted",0);
         List<SnatchGoods> list = snatchGoodsMapper.selectByWaybillPlanId(map);
-        List<SnatchGoods> list1 = new ArrayList<SnatchGoods>();
+/*        List<SnatchGoods> list1 = new ArrayList<SnatchGoods>();
         if(list!=null && list.size()>0) { //剔除驳回记录
             for(SnatchGoods obj :list) {
-                if(obj.getIsUsing()!=null && obj.getIsUsing().equals(2)) {
+                if(obj.getIsUsing()!=null && obj.getIsUsing()==2) {
                     list1.add(obj);
                 }
-                list.removeAll(list1);
             }
-        }
+            list.removeAll(list1);
+        }*/
 
 
         rdto.setSnatchGoodsList(list);//抢单

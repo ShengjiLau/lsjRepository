@@ -7,6 +7,7 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dto.PlanDetailParamsDto;
 import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.PlanLeaveMsg;
+import com.lcdt.traffic.model.SnatchGoods;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
 import com.lcdt.traffic.service.Plan4CreateService;
@@ -28,6 +29,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +91,18 @@ public class OwnPlanApi {
         dto.setCompanyId(companyId);
         dto.setWaybillPlanId(waybillPlanId);
         WaybillPlan waybillPlan = iPlanRpcService4Wechat.loadWaybillPlan(dto);
+        List<SnatchGoods> list = waybillPlan.getSnatchGoodsList();
+        List<SnatchGoods> list1 = new ArrayList<SnatchGoods>();
+        if(list!=null && list.size()>0) { //剔除驳回记录
+            for(SnatchGoods obj :list) {
+                if(obj.getIsUsing()!=null && obj.getIsUsing()==2) {
+                    list1.add(obj);
+                }
+            }
+            list.removeAll(list1);
+        }
+
+
         return waybillPlan;
     }
 

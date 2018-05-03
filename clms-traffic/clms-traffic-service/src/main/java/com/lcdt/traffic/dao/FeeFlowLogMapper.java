@@ -1,6 +1,7 @@
 package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.FeeFlowLog;
+import com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface FeeFlowLogMapper {
     int updateByPrimaryKey(FeeFlowLog record);
 
     int insertBatch(List<FeeFlowLog> list);
+
+    int updateIsDeleteByCondition(FeeAccountSaveParamsDto saveParamsDto);
 }
