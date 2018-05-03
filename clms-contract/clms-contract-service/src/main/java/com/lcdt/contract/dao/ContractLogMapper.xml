@@ -6,7 +6,8 @@
     <result column="contract_id" jdbcType="BIGINT" property="contractId" />
     <result column="log_name" jdbcType="VARCHAR" property="logName" />
     <result column="log_content" jdbcType="VARCHAR" property="logContent" />
-    <result column="attachment_classify" jdbcType="VARCHAR" property="attachmentClassify" />
+    <result column="attachment_classify_id" jdbcType="BIGINT" property="attachmentClassifyId" />
+    <result column="attachment_classify_name" jdbcType="VARCHAR" property="attachmentClassifyName" />
     <result column="operator_id" jdbcType="BIGINT" property="operatorId" />
     <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
     <result column="operator_dept_ids" jdbcType="BIGINT" property="operatorDeptIds" />
@@ -15,7 +16,7 @@
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
   </resultMap>
   <sql id="Base_Column_List">
-    log_id, contract_id, log_name, log_content, attachment_classify, operator_id, operator_name, 
+    log_id, contract_id, log_name, log_content, attachment_classify_id, attachment_classify_name, operator_id, operator_name,
     operator_dept_ids, operator_dept_names, create_time, is_deleted
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -33,13 +34,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_contract_log (contract_id, log_name, log_content, 
-      attachment_classify, operator_id, operator_name, 
+      attachment_classify_id, attachment_classify_name, operator_id, operator_name,
       operator_dept_ids, operator_dept_names, create_time, is_deleted
       )
     values (#{contractId,jdbcType=BIGINT}, #{logName,jdbcType=VARCHAR}, #{logContent,jdbcType=VARCHAR}, 
-      #{attachmentClassify,jdbcType=VARCHAR}, #{operatorId,jdbcType=BIGINT}, #{operatorName,jdbcType=VARCHAR}, 
+      #{attachmentClassifyId,jdbcType=BIGINT}, #{attachmentClassifyName,jdbcType=VARCHAR}, #{operatorId,jdbcType=BIGINT}, #{operatorName,jdbcType=VARCHAR},
       #{operatorDeptIds,jdbcType=BIGINT}, #{operatorDeptNames,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-      #{isDeleted,jdbc=SMALLINT}
+      #{isDeleted,jdbcType=SMALLINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.contract.model.ContractLog">
@@ -57,8 +58,11 @@
       <if test="logContent != null">
         log_content,
       </if>
-      <if test="attachmentClassify != null">
-        attachment_classify,
+      <if test="attachmentClassifyId != null">
+        attachment_classify_id,
+      </if>
+      <if test="attachmentClassifyName != null">
+        attachment_classify_name,
       </if>
       <if test="operatorId != null">
         operator_id,
@@ -89,8 +93,11 @@
       <if test="logContent != null">
         #{logContent,jdbcType=VARCHAR},
       </if>
-      <if test="attachmentClassify != null">
-        #{attachmentClassify,jdbcType=VARCHAR},
+      <if test="attachmentClassifyId != null">
+        #{attachmentClassifyId,jdbcType=BIGINT},
+      </if>
+      <if test="attachmentClassifyName != null">
+        #{attachmentClassifyName,jdbcType=VARCHAR},
       </if>
       <if test="operatorId != null">
         #{operatorId,jdbcType=BIGINT},
@@ -124,8 +131,11 @@
       <if test="logContent != null">
         log_content = #{logContent,jdbcType=VARCHAR},
       </if>
-      <if test="attachmentClassify != null">
-        attachment_classify = #{attachmentClassify,jdbcType=VARCHAR},
+      <if test="attachmentClassifyId != null">
+        attachment_classify_id = #{attachmentClassifyId,jdbcType=BIGINT},
+      </if>
+      <if test="attachmentClassifyName != null">
+        attachment_classify_name = #{attachmentClassifyName,jdbcType=VARCHAR},
       </if>
       <if test="operatorId != null">
         operator_id = #{operatorId,jdbcType=BIGINT},
@@ -153,7 +163,8 @@
     set contract_id = #{contractId,jdbcType=BIGINT},
       log_name = #{logName,jdbcType=VARCHAR},
       log_content = #{logContent,jdbcType=VARCHAR},
-      attachment_classify = #{attachmentClassify,jdbcType=VARCHAR},
+      attachment_classify_id = #{attachmentClassifyId,jdbcType=BIGINT},
+      attachment_classify_name = #{attachmentClassifyName,jdbcType=VARCHAR},
       operator_id = #{operatorId,jdbcType=BIGINT},
       operator_name = #{operatorName,jdbcType=VARCHAR},
       operator_dept_ids = #{operatorDeptIds,jdbcType=BIGINT},

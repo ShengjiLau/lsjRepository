@@ -15,7 +15,9 @@ public class ContractLog implements Serializable {
 
     private String logContent;
 
-    private String attachmentClassify;
+    private Long attachmentClassifyId;
+
+    private String attachmentClassifyName;
 
     private Long operatorId;
 
@@ -63,12 +65,20 @@ public class ContractLog implements Serializable {
         this.logContent = logContent;
     }
 
-    public String getAttachmentClassify() {
-        return attachmentClassify;
+    public Long getAttachmentClassifyId() {
+        return attachmentClassifyId;
     }
 
-    public void setAttachmentClassify(String attachmentClassify) {
-        this.attachmentClassify = attachmentClassify;
+    public void setAttachmentClassifyId(Long attachmentClassifyId) {
+        this.attachmentClassifyId = attachmentClassifyId;
+    }
+
+    public String getAttachmentClassifyName() {
+        return attachmentClassifyName;
+    }
+
+    public void setAttachmentClassifyName(String attachmentClassifyName) {
+        this.attachmentClassifyName = attachmentClassifyName;
     }
 
     public Long getOperatorId() {

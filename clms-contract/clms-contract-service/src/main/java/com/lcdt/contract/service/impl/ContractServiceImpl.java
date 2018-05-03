@@ -114,7 +114,8 @@ public class ContractServiceImpl implements ContractService {
             log1.setContractId(contract.getContractId());
             log1.setLogName("上传附件");
             log1.setLogContent("上传附件"+contract.getAttachment1Name());
-//        log.setAttachmentClassify("");
+//            log.setAttachmentClassifyId(null);
+//            log.setAttachmentClassifyName(null);
             saveContractLog(log1);
         }
         return result;
@@ -226,8 +227,16 @@ public class ContractServiceImpl implements ContractService {
         log.setContractId(contract.getContractId());
         log.setLogName("编辑");
         log.setLogContent("编辑合同内容");
-//        log.setAttachmentClassify("");
         saveContractLog(log);
+        if(StringUtility.isNotEmpty(contract.getAttachment1Name())){
+            ContractLog log1 = new ContractLog();
+            log1.setContractId(contract.getContractId());
+            log1.setLogName("上传附件");
+            log1.setLogContent("上传附件"+contract.getAttachment1Name());
+//            log.setAttachmentClassifyId(null);
+//            log.setAttachmentClassifyName(null);
+            saveContractLog(log1);
+        }
         return result;
     }
 
