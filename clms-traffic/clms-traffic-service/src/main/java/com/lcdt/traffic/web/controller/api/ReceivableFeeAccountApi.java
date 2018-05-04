@@ -161,7 +161,7 @@ public class ReceivableFeeAccountApi {
     @RequestMapping(value = "/feeAccountPage", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receivable_fee_account_page')")
     public JSONObject feeAccountPage(@ApiParam(value = "运单ID",required = true) @RequestParam Long waybillId,
-                                     @ApiParam(value = "0-我的运单，1-客户运单",required = true) @RequestParam Integer isOwn) {
+                                     @ApiParam(value = "1-我的运单，0-客户运单",required = true) @RequestParam Integer isOwn) {
         Map m = new HashMap<>();
         m.put("companyId", SecurityInfoGetter.getCompanyId());
         //费用类型
