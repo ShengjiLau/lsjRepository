@@ -259,7 +259,6 @@ public class ContractServiceImpl implements ContractService {
         log.setContractId(contract.getContractId());
         log.setLogName(contract.getContractStatus()==0?"生效":contract.getContractStatus()==3?"终止":"发布");
         log.setLogContent(contract.getContractStatus()==0?"合同生效":contract.getContractStatus()==3?"合同终止":"发布草稿");
-//        log.setAttachmentClassify("");
         saveContractLog(log);
         return result;
     }
@@ -279,12 +278,6 @@ public class ContractServiceImpl implements ContractService {
                 dto.setContractApprovalList(approvalList);
             }
         }
-        ContractLog log = new ContractLog();//0-生效 3-失效 2-草稿发布
-        log.setContractId(contractId);
-        log.setLogName("详情");
-        log.setLogContent("查看详情");
-//        log.setAttachmentClassify("");
-        saveContractLog(log);
         return dto;
     }
     public int saveContractLog(ContractLog log){
