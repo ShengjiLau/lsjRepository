@@ -74,8 +74,8 @@ public class SalesContractApi {
         dto.setCreateName(user.getRealName());
         dto.setCreateTime(new Date());
         dto.setContractStatus((short)2);
-        dto.setPartyBId(user.getUserId());
-        dto.setPartyBName(user.getRealName());
+//        dto.setPartyBId(user.getUserId());
+//        dto.setPartyBName(user.getRealName());
         //设置合同状态
         if(dto.getIsDraft() == 0){//存为草稿
             dto.setContractStatus((short)2);
@@ -99,8 +99,8 @@ public class SalesContractApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_modify')")
     public JSONObject modifyWarehouse(@Validated @RequestBody ContractDto dto) {
         User user = SecurityInfoGetter.getUser();
-        dto.setPartyBId(user.getUserId());
-        dto.setPartyBName(user.getRealName());
+//        dto.setPartyBId(user.getUserId());
+//        dto.setPartyBName(user.getRealName());
         //设置合同状态
         if(dto.getIsDraft() == 0){//存为草稿
             dto.setContractStatus((short)2);

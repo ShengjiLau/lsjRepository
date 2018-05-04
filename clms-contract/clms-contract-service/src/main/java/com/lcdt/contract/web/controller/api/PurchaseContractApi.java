@@ -75,8 +75,8 @@ public class PurchaseContractApi {
         dto.setCreateId(user.getUserId());
         dto.setCreateName(user.getRealName());
         dto.setCreateTime(new Date());
-        dto.setPartyAId(user.getUserId());
-        dto.setPartyAName(user.getRealName());
+//        dto.setPartyAId(user.getUserId());
+//        dto.setPartyAName(user.getRealName());
         //设置合同状态
         if(dto.getIsDraft() == 0){//存为草稿
             dto.setContractStatus((short)2);
@@ -100,8 +100,8 @@ public class PurchaseContractApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_modify')")
     public JSONObject modifyContract(@Validated @RequestBody ContractDto dto) {
         User user = SecurityInfoGetter.getUser();
-        dto.setPartyAId(user.getUserId());
-        dto.setPartyAName(user.getRealName());
+//        dto.setPartyAId(user.getUserId());
+//        dto.setPartyAName(user.getRealName());
         //设置合同状态
         if(dto.getIsDraft() == 0){//存为草稿
             dto.setContractStatus((short)2);
