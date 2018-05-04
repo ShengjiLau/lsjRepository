@@ -51,4 +51,7 @@ public interface PermissionMapper {
 
     List<Permission> selectByPermissionValue(String permissionValue);
 
+    List<Permission> selectByPrefix(String permissionPrefix);
+
+
 }

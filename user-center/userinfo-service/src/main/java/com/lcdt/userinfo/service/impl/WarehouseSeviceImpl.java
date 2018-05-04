@@ -2,20 +2,17 @@ package com.lcdt.userinfo.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.userinfo.dao.TUserGroupWarehouseRelationMapper;
 import com.lcdt.userinfo.dao.WarehousseLinkmanMapper;
 import com.lcdt.userinfo.dao.WarehousseLocMapper;
 import com.lcdt.userinfo.dao.WarehousseMapper;
-import com.lcdt.userinfo.model.User;
-import com.lcdt.userinfo.model.Warehouse;
-import com.lcdt.userinfo.model.WarehouseLinkman;
-import com.lcdt.userinfo.model.WarehouseLoc;
+import com.lcdt.userinfo.localservice.GroupWareHouseService;
+import com.lcdt.userinfo.model.*;
 import com.lcdt.userinfo.service.WarehouseService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -33,21 +30,28 @@ public class WarehouseSeviceImpl implements WarehouseService {
     @Autowired
     private WarehousseLocMapper warehousseLocMapper;
 
+    @Autowired
+    TUserGroupWarehouseRelationMapper tUserGroupWarehouseRelationMapper;
 
+    @Autowired
+    GroupWareHouseService groupWareHouseService;
+
+    @Autowired
+    WarehouseService warehouseService;
     @Override
-    public int initWarehouse(User user, Long companyId) {
+    public int initWarehouse(UserCompRel userCompRel, Group group) {
         //添加仓库
         Warehouse warehouse = new Warehouse();
         warehouse.setWhName("默认仓库");
         warehouse.setWhType((short)0);
-        warehouse.setPrincipal(user.getRealName());
-        warehouse.setMobile(user.getPhone());
+        warehouse.setPrincipal(userCompRel.getUser().getRealName());
+        warehouse.setMobile(userCompRel.getUser().getPhone());
         warehouse.setWhStatus((short)0);
-        warehouse.setCreateId(user.getUserId());
-        warehouse.setCreateName(user.getRealName());
+        warehouse.setCreateId(userCompRel.getUserId());
+        warehouse.setCreateName(userCompRel.getUser().getRealName());
         warehouse.setCreateDate(new Date());
         warehouse.setIsDeleted((short)0);
-        warehouse.setCompanyId(companyId);
+        warehouse.setCompanyId(userCompRel.getCompId());
         int result = warehousseMapper.insert(warehouse);
         //添加仓库默认联系人
         WarehouseLinkman linkman = new WarehouseLinkman();
@@ -61,6 +65,22 @@ public class WarehouseSeviceImpl implements WarehouseService {
         linkman.setIsDeleted((short)0);
         linkman.setCompanyId(warehouse.getCompanyId());
         result += addWarehouseLinkMan(linkman);
+
+        //添加仓库与业务组关系
+
+        groupWareHouseService.addWareHouseRelation(group.getGroupId(),userCompRel.getCompId(),warehouse.getWhId());
+
+        //初始化库位信息
+        WarehouseLoc loc = new WarehouseLoc();
+        loc.setCreateDate(new Date());
+        loc.setCreateId(userCompRel.getUserId());
+        loc.setCompanyId(userCompRel.getCompId());
+        loc.setCreateName(userCompRel.getName());
+        loc.setName("默认库位");
+        loc.setWhId(warehouse.getWhId());
+        loc.setCode("MOREN");
+        loc.setStatus((short) 1);
+        result+=warehouseService.addWarehouseLoc(loc);
         return result;
     }
 

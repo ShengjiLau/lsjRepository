@@ -38,4 +38,5 @@ public interface UserRoleService {
 
 	boolean isRoleNameExist(String roleName,Long companyId);
 
+	void addInitRole(Long compId);
 }
