@@ -22,10 +22,7 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -206,7 +203,7 @@ public class PayableFeeAccountApi {
     @ApiOperation("应付记账——保存记账")
     @RequestMapping(value = "/feeAccountSave", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_save')")
-    public JSONObject feeAccountSave(@Validated FeeAccountSaveParamsDto dto) {
+    public JSONObject feeAccountSave(@Validated @RequestBody FeeAccountSaveParamsDto dto) {
         dto.setCompanyId(SecurityInfoGetter.getCompanyId());
         dto.setUserId(SecurityInfoGetter.getUser().getUserId());
         dto.setRealName(SecurityInfoGetter.getUser().getRealName());
