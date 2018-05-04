@@ -122,6 +122,18 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         map.put("feeAccountDtoList", feeAccountDtoList);
         map.put("showPropertyList", showPropertyList);
         map.put("hidePropertyList", hidePropertyList);
+        Waybill waybill = waybillMapper.selectByPrimaryKey(Long.parseLong(m.get("waybillId").toString()));
+        if(waybill != null){
+            map.put("waybillId", waybill.getId());
+            map.put("waybillCode", waybill.getWaybillCode());
+            map.put("groupId",(Integer)m.get("isOwn")==0?waybill.getGroupId():null);
+            map.put("groupName",(Integer)m.get("isOwn")==0?waybill.getGroupName():null);
+        }else{
+            map.put("waybillId", null);
+            map.put("waybillCode", null);
+            map.put("groupId", null);
+            map.put("groupName", null);
+        }
         return map;
     }
     @Override

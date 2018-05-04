@@ -219,6 +219,8 @@ public class ContractServiceImpl implements ContractService {
             //同时设置合同的审批状态为审批中
             contract.setApprovalStatus(new Short("0"));
             contract.setApprovalStartDate(null);
+            contract.setApprovalProcess(null);
+            contract.setApprovalProcessId(null);
             contractMapper.updateByPrimaryKeySelective(contract);
         }
         return result;

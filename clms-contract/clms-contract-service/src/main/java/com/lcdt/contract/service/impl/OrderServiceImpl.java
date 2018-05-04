@@ -197,7 +197,7 @@ public class OrderServiceImpl implements OrderService{
 			orderApprovalMapper.deleteByOrderId(orderDto.getOrderId());
 			//同时设置合同的审批状态为审批中
 			order.setApprovalStatus(new Short("0"));
-			order.setApprovalStartDate(null);
+		//	order.setApprovalStartDate(null);
 			j+=orderMapper.updateByPrimaryKeySelective(order);
 		}
 		if(i>0) {
