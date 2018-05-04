@@ -15,17 +15,21 @@ public class ContractLog implements Serializable {
 
     private String logContent;
 
-    private String attachmentClassify;
+    private Long attachmentClassifyId;
+
+    private String attachmentClassifyName;
 
     private Long operatorId;
 
     private String operatorName;
 
-    private Long operatorDeptId;
+    private String operatorDeptIds;
 
-    private String operatorDeptName;
+    private String operatorDeptNames;
 
     private Date createTime;
+
+    private Short isDeleted;
 
     private static final long serialVersionUID = 1L;
 
@@ -61,12 +65,20 @@ public class ContractLog implements Serializable {
         this.logContent = logContent;
     }
 
-    public String getAttachmentClassify() {
-        return attachmentClassify;
+    public Long getAttachmentClassifyId() {
+        return attachmentClassifyId;
     }
 
-    public void setAttachmentClassify(String attachmentClassify) {
-        this.attachmentClassify = attachmentClassify;
+    public void setAttachmentClassifyId(Long attachmentClassifyId) {
+        this.attachmentClassifyId = attachmentClassifyId;
+    }
+
+    public String getAttachmentClassifyName() {
+        return attachmentClassifyName;
+    }
+
+    public void setAttachmentClassifyName(String attachmentClassifyName) {
+        this.attachmentClassifyName = attachmentClassifyName;
     }
 
     public Long getOperatorId() {
@@ -85,20 +97,20 @@ public class ContractLog implements Serializable {
         this.operatorName = operatorName;
     }
 
-    public Long getOperatorDeptId() {
-        return operatorDeptId;
+    public String getOperatorDeptIds() {
+        return operatorDeptIds;
     }
 
-    public void setOperatorDeptId(Long operatorDeptId) {
-        this.operatorDeptId = operatorDeptId;
+    public void setOperatorDeptIds(String operatorDeptIds) {
+        this.operatorDeptIds = operatorDeptIds;
     }
 
-    public String getOperatorDeptName() {
-        return operatorDeptName;
+    public String getOperatorDeptNames() {
+        return operatorDeptNames;
     }
 
-    public void setOperatorDeptName(String operatorDeptName) {
-        this.operatorDeptName = operatorDeptName;
+    public void setOperatorDeptNames(String operatorDeptNames) {
+        this.operatorDeptNames = operatorDeptNames;
     }
 
     public Date getCreateTime() {
@@ -107,5 +119,13 @@ public class ContractLog implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Short getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Short isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }

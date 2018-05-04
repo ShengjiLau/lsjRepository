@@ -3,9 +3,11 @@ package com.lcdt.contract.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.contract.model.Contract;
+import com.lcdt.contract.model.ContractLog;
 import com.lcdt.contract.web.dto.ContractDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @AUTHOR liuh
@@ -52,4 +54,9 @@ public interface ContractService {
      * @return
      */
     ContractDto selectByPrimaryKey(Long contractId);
+    /**
+     * 获取单个合同日志列表
+     * @return
+     */
+    PageInfo<List<ContractLog>> ontractLogList(Map map);
 }
