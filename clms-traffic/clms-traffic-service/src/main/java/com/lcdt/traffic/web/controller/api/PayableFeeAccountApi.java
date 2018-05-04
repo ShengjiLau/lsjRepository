@@ -158,7 +158,8 @@ public class PayableFeeAccountApi {
     @ApiOperation("应付记账——记账(进入记账页面)")
     @RequestMapping(value = "/feeAccountPage", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_page')")
-    public JSONObject feeAccountPage(@ApiParam(value = "运单ID",required = true) @RequestParam Long waybillId) {
+    public JSONObject feeAccountPage(@ApiParam(value = "运单ID",required = true) @RequestParam Long waybillId,
+                                     @ApiParam(value = "0-我的运单，1-客户运单",required = true) @RequestParam Integer isOwn) {
         Map m = new HashMap<>();
         m.put("companyId", SecurityInfoGetter.getCompanyId());
         //费用类型
@@ -167,6 +168,7 @@ public class PayableFeeAccountApi {
         //记账单/运单货物明细
         m.put("waybillId", waybillId);
         m.put("isReceivable", (short)1);
+        m.put("isOwn", isOwn);
 
         Map map = feeAccountService.feeAccountPage(m);
         if(map!=null) {
