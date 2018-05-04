@@ -2,6 +2,7 @@ package com.lcdt.userinfo.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.TAttachmentClassify;
 import com.lcdt.userinfo.service.AttachmentService;
 import com.lcdt.userinfo.web.dto.PageBaseDto;
@@ -54,6 +55,7 @@ public class AttachmentApi {
         map.put("pageNo", pageNo);
         map.put("pageSize", pageSize);
         map.put("tAttachmentFileType", attachmentClassify.gettAttachmentFileType());
+        map.put("companyId", SecurityInfoGetter.getCompanyId());
         PageInfo pageInfo = attachmentService.attachmentClassifyList(map);
 
         pageBaseDto.setList(pageInfo.getList());
@@ -68,6 +70,7 @@ public class AttachmentApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('attachmentClassify_add')")
     public JSONObject addTAttachmentClassify(@RequestBody TAttachmentClassify attachmentClassify){
         JSONObject jo = new JSONObject();
+        attachmentClassify.setCompanyId(SecurityInfoGetter.getCompanyId().intValue());
 
         int code = -1;
         String message = "添加失败！";
