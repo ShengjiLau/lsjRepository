@@ -1,5 +1,7 @@
 package com.lcdt.contract.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -113,9 +115,7 @@ public class ContractServiceImpl implements ContractService {
             ContractLog log1 = new ContractLog();
             log1.setContractId(contract.getContractId());
             log1.setLogName("上传附件");
-            log1.setLogContent("上传附件"+contract.getAttachment1Name());
-//            log.setAttachmentClassifyId(null);
-//            log.setAttachmentClassifyName(null);
+            log1.setLogContent(contract.getAttachment1Name());
             saveContractLog(log1);
         }
         return result;
@@ -140,6 +140,9 @@ public class ContractServiceImpl implements ContractService {
         dto.setSummation(summation);
         Contract contract = new Contract();
         BeanUtils.copyProperties(dto, contract); //复制对象属性
+
+        //得到修改之前合同
+        Contract oldContract = contractMapper.selectByPrimaryKey(contract.getContractId());
 
         int result = contractMapper.updateByPrimaryKeySelective(contract);
         //获取该合同下面的商品cpId用来匹配被删除的商品
@@ -226,15 +229,17 @@ public class ContractServiceImpl implements ContractService {
         ContractLog log = new ContractLog();
         log.setContractId(contract.getContractId());
         log.setLogName("编辑");
-        log.setLogContent("编辑合同内容");
+        if(oldContract.getIsDraft() != contract.getIsDraft()){//草稿改为发布
+            log.setLogContent("编辑合同内容，并发布草稿");
+        }else{
+            log.setLogContent("编辑合同内容");
+        }
         saveContractLog(log);
         if(StringUtility.isNotEmpty(contract.getAttachment1Name())){
             ContractLog log1 = new ContractLog();
             log1.setContractId(contract.getContractId());
             log1.setLogName("上传附件");
-            log1.setLogContent("上传附件"+contract.getAttachment1Name());
-//            log.setAttachmentClassifyId(null);
-//            log.setAttachmentClassifyName(null);
+            log1.setLogContent(contract.getAttachment1Name());
             saveContractLog(log1);
         }
         return result;
@@ -281,6 +286,30 @@ public class ContractServiceImpl implements ContractService {
         return dto;
     }
     public int saveContractLog(ContractLog log){
+//        String str = "{\"附件分类1\":[{\"name\":\"附件1name\",\"url\":\"附件1url\"},{\"name\":\"附件2name\",\"url\":\"附件2url\"}],"
+//                +"\"附件分类2\":[{\"name\":\"附件3name\",\"url\":\"附件3url\"},{\"name\":\"附件4name\",\"url\":\"附件4url\"}]}";
+        if("上传附件".equals(log.getLogName())){
+            StringBuffer logContent = new StringBuffer();
+            JSONObject jsonObject = JSONObject.parseObject(log.getLogContent());
+            Set<String> keys = jsonObject.keySet();
+            if(keys != null && keys.size() > 0){
+                logContent.append("上传附件为：");
+                for(String key : keys) {
+                    JSONArray jsonArray = jsonObject.getJSONArray(key);
+                    if(jsonArray != null && jsonArray.size() > 0){
+                        logContent.append(key+"——");
+                        for(int i=0; i<jsonArray.size(); i++){
+                            if(i > 0){
+                                logContent.append("，");
+                            }
+                            logContent.append(jsonArray.getJSONObject(i).get("name"));
+                        }
+                        logContent.append("；");
+                    }
+                }
+            }
+            log.setLogContent(logContent.toString());
+        }
         log.setOperatorId(SecurityInfoGetter.getUser().getUserId());
         log.setOperatorName(SecurityInfoGetter.getUser().getRealName());
         log.setOperatorDeptIds(SecurityInfoGetter.geUserCompRel().getDeptIds());
