@@ -173,4 +173,10 @@
       is_deleted = #{isDeleted,jdbcType=SMALLINT}
     where log_id = #{logId,jdbcType=BIGINT}
   </update>
+  <select id="selectByContractId" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from t_contract_log
+    where contract_id = #{contractId,jdbcType=BIGINT}
+    order by create_time
+  </select>
 </mapper>

@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.model.Contract;
+import com.lcdt.contract.model.ContractLog;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.ContractDto;
 import com.lcdt.contract.web.dto.PageBaseDto;
@@ -21,7 +22,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //import com.lcdt.clms.security.helper.SecurityInfoGetter;
 //import org.springframework.security.access.prepost.PreAuthorize;
@@ -158,6 +161,21 @@ public class PurchaseContractApi {
         }else {
             throw new RuntimeException("获取失败");
         }
+    }
+
+    @ApiOperation("合同日志")
+    @GetMapping("/contractLogList")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_log_list')")
+    public PageBaseDto<List<ContractLog>> contractLogList(@ApiParam(value = "合同id",required = true) @RequestParam Long contractId,
+                                                          @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                                          @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
+        Map map = new HashMap();
+        map.put("pageNo", pageNo);
+        map.put("pageSize", pageSize);
+        map.put("contractId", contractId);
+        PageInfo<List<ContractLog>> listPageInfo = contractService.ontractLogList(map);
+        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
+        return pageBaseDto;
     }
 }
 
