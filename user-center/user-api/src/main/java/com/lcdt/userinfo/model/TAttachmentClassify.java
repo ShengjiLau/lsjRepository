@@ -11,7 +11,7 @@ public class TAttachmentClassify {
 
     private Integer tAttachmentClassifyMaxnum;
 
-    private Integer tAttachmentFileType;
+    private Integer companyId;
 
     public Integer gettAttachmentFileType() {
         return tAttachmentFileType;
@@ -20,6 +20,8 @@ public class TAttachmentClassify {
     public void settAttachmentFileType(Integer tAttachmentFileType) {
         this.tAttachmentFileType = tAttachmentFileType;
     }
+
+    private Integer tAttachmentFileType;
 
     public Integer gettAttachmentClassifyId() {
         return tAttachmentClassifyId;
@@ -59,5 +61,13 @@ public class TAttachmentClassify {
 
     public void settAttachmentClassifyMaxnum(Integer tAttachmentClassifyMaxnum) {
         this.tAttachmentClassifyMaxnum = tAttachmentClassifyMaxnum;
+    }
+
+    public Integer getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Integer companyId) {
+        this.companyId = companyId;
     }
 }

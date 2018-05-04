@@ -6,16 +6,18 @@
     <result column="contract_id" jdbcType="BIGINT" property="contractId" />
     <result column="log_name" jdbcType="VARCHAR" property="logName" />
     <result column="log_content" jdbcType="VARCHAR" property="logContent" />
-    <result column="attachment_classify" jdbcType="VARCHAR" property="attachmentClassify" />
+    <result column="attachment_classify_id" jdbcType="BIGINT" property="attachmentClassifyId" />
+    <result column="attachment_classify_name" jdbcType="VARCHAR" property="attachmentClassifyName" />
     <result column="operator_id" jdbcType="BIGINT" property="operatorId" />
     <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
-    <result column="operator_dept_id" jdbcType="BIGINT" property="operatorDeptId" />
-    <result column="operator_dept_name" jdbcType="VARCHAR" property="operatorDeptName" />
+    <result column="operator_dept_ids" jdbcType="BIGINT" property="operatorDeptIds" />
+    <result column="operator_dept_names" jdbcType="VARCHAR" property="operatorDeptNames" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
   </resultMap>
   <sql id="Base_Column_List">
-    log_id, contract_id, log_name, log_content, attachment_classify, operator_id, operator_name, 
-    operator_dept_id, operator_dept_name, create_time
+    log_id, contract_id, log_name, log_content, attachment_classify_id, attachment_classify_name, operator_id, operator_name,
+    operator_dept_ids, operator_dept_names, create_time, is_deleted
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -32,12 +34,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_contract_log (contract_id, log_name, log_content, 
-      attachment_classify, operator_id, operator_name, 
-      operator_dept_id, operator_dept_name, create_time
+      attachment_classify_id, attachment_classify_name, operator_id, operator_name,
+      operator_dept_ids, operator_dept_names, create_time, is_deleted
       )
     values (#{contractId,jdbcType=BIGINT}, #{logName,jdbcType=VARCHAR}, #{logContent,jdbcType=VARCHAR}, 
-      #{attachmentClassify,jdbcType=VARCHAR}, #{operatorId,jdbcType=BIGINT}, #{operatorName,jdbcType=VARCHAR}, 
-      #{operatorDeptId,jdbcType=BIGINT}, #{operatorDeptName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      #{attachmentClassifyId,jdbcType=BIGINT}, #{attachmentClassifyName,jdbcType=VARCHAR}, #{operatorId,jdbcType=BIGINT}, #{operatorName,jdbcType=VARCHAR},
+      #{operatorDeptIds,jdbcType=BIGINT}, #{operatorDeptNames,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{isDeleted,jdbcType=SMALLINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.contract.model.ContractLog">
@@ -55,8 +58,11 @@
       <if test="logContent != null">
         log_content,
       </if>
-      <if test="attachmentClassify != null">
-        attachment_classify,
+      <if test="attachmentClassifyId != null">
+        attachment_classify_id,
+      </if>
+      <if test="attachmentClassifyName != null">
+        attachment_classify_name,
       </if>
       <if test="operatorId != null">
         operator_id,
@@ -64,14 +70,17 @@
       <if test="operatorName != null">
         operator_name,
       </if>
-      <if test="operatorDeptId != null">
-        operator_dept_id,
+      <if test="operatorDeptIds != null">
+        operator_dept_ids,
       </if>
-      <if test="operatorDeptName != null">
-        operator_dept_name,
+      <if test="operatorDeptNames != null">
+        operator_dept_names,
       </if>
       <if test="createTime != null">
         create_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -84,8 +93,11 @@
       <if test="logContent != null">
         #{logContent,jdbcType=VARCHAR},
       </if>
-      <if test="attachmentClassify != null">
-        #{attachmentClassify,jdbcType=VARCHAR},
+      <if test="attachmentClassifyId != null">
+        #{attachmentClassifyId,jdbcType=BIGINT},
+      </if>
+      <if test="attachmentClassifyName != null">
+        #{attachmentClassifyName,jdbcType=VARCHAR},
       </if>
       <if test="operatorId != null">
         #{operatorId,jdbcType=BIGINT},
@@ -93,14 +105,17 @@
       <if test="operatorName != null">
         #{operatorName,jdbcType=VARCHAR},
       </if>
-      <if test="operatorDeptId != null">
-        #{operatorDeptId,jdbcType=BIGINT},
+      <if test="operatorDeptIds != null">
+        #{operatorDeptIds,jdbcType=BIGINT},
       </if>
-      <if test="operatorDeptName != null">
-        #{operatorDeptName,jdbcType=VARCHAR},
+      <if test="operatorDeptNames != null">
+        #{operatorDeptNames,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=SMALLINT},
       </if>
     </trim>
   </insert>
@@ -116,8 +131,11 @@
       <if test="logContent != null">
         log_content = #{logContent,jdbcType=VARCHAR},
       </if>
-      <if test="attachmentClassify != null">
-        attachment_classify = #{attachmentClassify,jdbcType=VARCHAR},
+      <if test="attachmentClassifyId != null">
+        attachment_classify_id = #{attachmentClassifyId,jdbcType=BIGINT},
+      </if>
+      <if test="attachmentClassifyName != null">
+        attachment_classify_name = #{attachmentClassifyName,jdbcType=VARCHAR},
       </if>
       <if test="operatorId != null">
         operator_id = #{operatorId,jdbcType=BIGINT},
@@ -125,14 +143,17 @@
       <if test="operatorName != null">
         operator_name = #{operatorName,jdbcType=VARCHAR},
       </if>
-      <if test="operatorDeptId != null">
-        operator_dept_id = #{operatorDeptId,jdbcType=BIGINT},
+      <if test="operatorDeptIds != null">
+        operator_dept_ids = #{operatorDeptIds,jdbcType=BIGINT},
       </if>
-      <if test="operatorDeptName != null">
-        operator_dept_name = #{operatorDeptName,jdbcType=VARCHAR},
+      <if test="operatorDeptNames != null">
+        operator_dept_names = #{operatorDeptNames,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
     </set>
     where log_id = #{logId,jdbcType=BIGINT}
@@ -142,12 +163,20 @@
     set contract_id = #{contractId,jdbcType=BIGINT},
       log_name = #{logName,jdbcType=VARCHAR},
       log_content = #{logContent,jdbcType=VARCHAR},
-      attachment_classify = #{attachmentClassify,jdbcType=VARCHAR},
+      attachment_classify_id = #{attachmentClassifyId,jdbcType=BIGINT},
+      attachment_classify_name = #{attachmentClassifyName,jdbcType=VARCHAR},
       operator_id = #{operatorId,jdbcType=BIGINT},
       operator_name = #{operatorName,jdbcType=VARCHAR},
-      operator_dept_id = #{operatorDeptId,jdbcType=BIGINT},
-      operator_dept_name = #{operatorDeptName,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      operator_dept_ids = #{operatorDeptIds,jdbcType=BIGINT},
+      operator_dept_names = #{operatorDeptNames,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT}
     where log_id = #{logId,jdbcType=BIGINT}
   </update>
+  <select id="selectByContractId" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from t_contract_log
+    where contract_id = #{contractId,jdbcType=BIGINT}
+    order by create_time
+  </select>
 </mapper>
