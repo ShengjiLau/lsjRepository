@@ -45,7 +45,7 @@ public class ModifyCompanyInfoDto {
 	public String phone;*/
 
 	@ApiModelProperty("公司电话")
-	@Size(max = 15)
+	@Size(max = 30)
 	public String telNo;
 
 	@ApiModelProperty("财务电话")
