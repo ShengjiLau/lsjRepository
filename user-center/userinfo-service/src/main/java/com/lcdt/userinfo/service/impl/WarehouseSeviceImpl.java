@@ -72,14 +72,15 @@ public class WarehouseSeviceImpl implements WarehouseService {
 
         //初始化库位信息
         WarehouseLoc loc = new WarehouseLoc();
+        loc.setWhId(warehouse.getWhId());
+        loc.setCode("MOREN");
+        loc.setName("默认库位");
+        loc.setStatus((short) 0);
         loc.setCreateDate(new Date());
         loc.setCreateId(userCompRel.getUserId());
         loc.setCompanyId(userCompRel.getCompId());
         loc.setCreateName(userCompRel.getName());
-        loc.setName("默认库位");
-        loc.setWhId(warehouse.getWhId());
-        loc.setCode("MOREN");
-        loc.setStatus((short) 1);
+        loc.setIsDeleted((short)0);
         result+=warehouseService.addWarehouseLoc(loc);
         return result;
     }
@@ -223,6 +224,13 @@ public class WarehouseSeviceImpl implements WarehouseService {
 
     @Override
     public int modifyWarehouseLoc(WarehouseLoc loc) {
+        WarehouseLoc oldLoc = warehousseLocMapper.selectByPrimaryKey(loc.getWhLocId());
+        loc.setStatus(oldLoc.getStatus());
+        loc.setCreateId(oldLoc.getCreateId());
+        loc.setCreateName(oldLoc.getCreateName());
+        loc.setCreateDate(oldLoc.getCreateDate());
+        loc.setCompanyId(oldLoc.getCompanyId());
+        loc.setIsDeleted(oldLoc.getIsDeleted());
         int result = warehousseLocMapper.updateByPrimaryKey(loc);
         return result;
     }
