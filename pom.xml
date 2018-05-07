@@ -26,7 +26,7 @@
         <module>clms-traffic</module>
         <module>mybatis-generator</module>
         <module>clms-contract</module>
-        <module>clms-werehouse-manage</module>
+        <module>clms-warehouse-manage</module>
         <module>driver-app-wechat-api</module>
         <module>Aliyun-Mq-Config</module>
     </modules>
