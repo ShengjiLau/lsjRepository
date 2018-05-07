@@ -1,6 +1,7 @@
 package com.lcdt.clms.security.token.config;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.lcdt.userinfo.exception.TokenFailureException;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
@@ -42,7 +43,8 @@ public class JwtTokenFilter extends OncePerRequestFilter{
         if (!StringUtils.isEmpty(header)) {
             Claims claimsFromToken = jwtTokenUtil.getClaimsFromToken(header);
             if (claimsFromToken == null) {
-                filterChain.doFilter(request,response);
+               //filterChain.doFilter(request,response);
+                throw new TokenFailureException("登录失效，请重新登录！");
             }
             String userName = (String) claimsFromToken.get("userName");
             logger.info("request token username :{} ",userName);
@@ -63,11 +65,11 @@ public class JwtTokenFilter extends OncePerRequestFilter{
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 } catch (UserNotExistException e) {
-                    e.printStackTrace();
+                  e.printStackTrace();
                 }
             }
         }
-        filterChain.doFilter(request,response);
+       // filterChain.doFilter(request,response);
     }
 
     static class TokenAuthencation{
