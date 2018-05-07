@@ -175,6 +175,24 @@ public class SalesContractApi {
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         return pageBaseDto;
     }
+
+
+    //增加合同列表直接上传附件功能
+    @ApiOperation("上传附件")
+    @RequestMapping(value = "/uploadAttachment", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_modify')")
+    public JSONObject uploadAttachment(@Validated @RequestBody ContractDto dto) {
+        //设置合同状态
+        boolean result = contractService.uploadAttachment(dto);
+        if (result) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "上传成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("上传失败");
+        }
+    }
 }
 
 

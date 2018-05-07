@@ -341,4 +341,18 @@ public class ContractServiceImpl implements ContractService {
 
         return pageInfo;
     }
+
+    public boolean uploadAttachment(ContractDto contract){
+        if(contract.getContractId() == null){
+            return false;
+        }
+        ContractLog log1 = new ContractLog();
+        log1.setContractId(contract.getContractId());
+        log1.setLogName("上传附件");
+        log1.setLogContent(contract.getAttachment1());
+        saveContractLog(log1);
+        contractMapper.updateByPrimaryKeySelective(contract);
+
+        return true;
+    }
 }
