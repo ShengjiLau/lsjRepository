@@ -1,7 +1,9 @@
 package com.lcdt.pay.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.lcdt.pay.dao.CompanyServiceCountMapper;
 import com.lcdt.pay.dao.ProductCountLogMapper;
+import com.lcdt.pay.model.CompanyServiceCount;
 import com.lcdt.pay.rpc.ProductCountLog;
 import com.lcdt.pay.rpc.ProductCountService;
 import com.lcdt.pay.utils.OrderNoGenerator;
@@ -16,6 +18,9 @@ public class ProductCountServiceImpl implements ProductCountService {
 
     @Autowired
     ProductCountLogMapper countLogMapper;
+
+    @Autowired
+    CompanyServiceCountMapper companyServiceCountMapper;
 
     @Override
     public ProductCountLog reduceProductCount(String productName, String des, Integer countNum, String userName,Long companyId,Integer remainCounts) {
@@ -52,6 +57,29 @@ public class ProductCountServiceImpl implements ProductCountService {
     }
 
 
+    public ProductCountLog logAddProductCountAndCompanyCount(String productName,String des,Integer countNum,String userName,Long companyId,Integer remainCounts){
+        ProductCountLog productCountLog = new ProductCountLog();
+        productCountLog.setServiceName(productName);
+        productCountLog.setConsumeNum(countNum);
+        productCountLog.setLogDes(des);
+        productCountLog.setLogNo(OrderNoGenerator.generateDateNo(2));
+        productCountLog.setLogType(CountLogType.TOPUPCOUNTTYPE);
+
+        productCountLog.setCompanyId(companyId);
+        productCountLog.setUserName(userName);
+        productCountLog.setRemainNum(remainCounts);
+        productCountLog.setLogTime(new Date());
+        countLogMapper.insert(productCountLog);
+
+        CompanyServiceCount companyServiceCount1 = new CompanyServiceCount();
+        companyServiceCount1.setCompanyId(companyId);
+        companyServiceCount1.setProductName(productName);
+        companyServiceCount1.setProductServiceNum(remainCounts);
+
+        companyServiceCountMapper.insert(companyServiceCount1);
+
+        return productCountLog;
+    }
 
 
     static final class CountLogType {
