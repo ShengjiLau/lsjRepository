@@ -1,13 +1,14 @@
 #spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
 spring:
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://rm-2ze35w2s039360x3w7o.mysql.rds.aliyuncs.com:3306/clms_werehouse_db?characterEncoding=utf-8&useSSL=false
     username: clms_root
     password: clMs201801#@01&
     druid:
       initial-size: 6
+      db-type: mysql
+    type: com.alibaba.druid.pool.DruidDataSource
 mybatis-plus:
   mapper-locations: classpath:/com/lcdt/warehouse/mapper/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
