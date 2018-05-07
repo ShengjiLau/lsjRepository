@@ -2,7 +2,6 @@ package com.lcdt.driver.wechat.api.DriverManageApi;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
-import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
 import com.lcdt.clms.security.token.config.JwtTokenUtil;
 import com.lcdt.driver.dto.PageBaseDto;
 import com.lcdt.driver.dto.WechatCreateCompanyDto;
@@ -76,7 +75,7 @@ public class LoginApi {
         stringStringHashMap.put("userId", user.getUserId());
         Date date = new Date();
         Calendar instance = Calendar.getInstance();
-        instance.setTime(DateUtility.getDateAfterDays(date,10000));
+        instance.setTime(DateUtility.getDateAfterDays(date,36500));
         String s = jwtTokenUtil.generateToken(stringStringHashMap,instance.getTime());
         List<UserCompRel> userCompRels = companyService.companyList(Long.valueOf(user.getUserId()));
         JSONObject jsonObject = new JSONObject();
