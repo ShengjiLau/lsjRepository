@@ -14,6 +14,7 @@
     <modules>
         <module>werehouse-service</module>
         <module>werehouse-api</module>
+        <module>mybatis-plus-generate</module>
     </modules>
 
 
