@@ -86,4 +86,11 @@ on rp.permission_id = p.permission_id WHERE rp.role_id = #{roleId,jdbcType = BIG
     </foreach>
   </insert>
 
+  <insert id="insertInitRole" parameterType="java.util.Map">
+  insert into role_permission(role_id,permission_id)
+  values
+  <foreach collection="permissions" item="permissions" separator=",">
+    (#{role},#{permissions.permissionId})
+  </foreach>
+  </insert>
 </mapper>

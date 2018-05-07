@@ -36,7 +36,7 @@
       create_id, create_name, create_date, 
       update_id, update_name, update_time, 
       is_deleted, company_id)
-    values (#{whId,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, #{locType,jdbcType=SMALLINT}, 
+    values (#{whId,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, #{locType,jdbcType=SMALLINT},
       #{name,jdbcType=VARCHAR}, #{status,jdbcType=SMALLINT}, #{remark,jdbcType=VARCHAR}, 
       #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
       #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
@@ -93,4 +93,9 @@
     </where>
     order by wh_id desc
   </select>
+  <update id="updateIsDeleteByPrimaryKey" parameterType="java.lang.Long">
+    update t_warehouse_loc
+    set is_deleted = 1
+    where wh_loc_id = #{whLocId,jdbcType=BIGINT}
+  </update>
 </mapper>

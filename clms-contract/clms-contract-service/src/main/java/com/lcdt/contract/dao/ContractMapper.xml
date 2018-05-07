@@ -171,6 +171,9 @@
       <if test="title!=null and title!=''">
         and (title like concat('%',#{title,jdbcType=VARCHAR},'%') or serial_no like concat('%',#{title,jdbcType=VARCHAR},'%'))
       </if>
+      <if test="contractCode!=null and contractCode!=''">
+        and contract_code like concat('%',#{contractCode,jdbcType=VARCHAR},'%')
+      </if>
       <if test="beginTime != null and beginTime != ''">
         and start_date <![CDATA[>=]]> #{beginTime,jdbcType=TIMESTAMP}
       </if>
@@ -248,6 +251,11 @@
       </if>
       <if test="approvalStatus != null" >
         approval_status = #{approvalStatus,jdbcType=SMALLINT},
+        <if test="approvalStatus == 0">
+          approval_process = null,
+          approval_process_id = null,
+          approval_start_date = null,
+        </if>
       </if>
       <if test="approvalProcess != null" >
         approval_process = #{approvalProcess,jdbcType=VARCHAR},

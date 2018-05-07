@@ -1,11 +1,11 @@
 package com.lcdt.clms.permission.dao;
 
 import com.lcdt.clms.permission.model.Permission;
-import com.lcdt.clms.permission.model.Role;
 import com.lcdt.clms.permission.model.RolePermission;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RolePermissionMapper {
     /**
@@ -58,5 +58,8 @@ public interface RolePermissionMapper {
 
     void insertRolePermission(@Param("roleId")Long roleId,@Param("permissions") List<Long> permissions);
 
+    List<RolePermission> selectByRolePermissionName(@Param(("permissionPrefix")) String permissionPrefix);
+
+    void insertInitRole(Map map);
 
 }

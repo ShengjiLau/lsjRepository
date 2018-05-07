@@ -1,5 +1,6 @@
 package com.lcdt.clms.permission.service.impl;
 
+import com.lcdt.clms.permission.dao.PermissionMapper;
 import com.lcdt.clms.permission.dao.RoleMapper;
 import com.lcdt.clms.permission.dao.RolePermissionMapper;
 import com.lcdt.clms.permission.dao.RoleUserRelationMapper;
@@ -10,7 +11,6 @@ import com.lcdt.clms.permission.model.RolePermission;
 import com.lcdt.clms.permission.model.RoleUserRelation;
 import com.lcdt.clms.permission.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -31,6 +31,9 @@ public class UserRoleServiceImpl implements UserRoleService {
 
 	@Autowired
 	RolePermissionMapper rolePermissionDao;
+
+	@Autowired
+	PermissionMapper permissionMapper;
 
 	@Transactional(rollbackFor = Exception.class)
 	public void removeUserRole(Long userId,Long companyId){
@@ -133,6 +136,62 @@ public class UserRoleServiceImpl implements UserRoleService {
 	public boolean isRoleNameExist(String roleName,Long companyId) {
 		List<Role> roles = userRoleDao.selectByRoleName(roleName, companyId);
 		return !CollectionUtils.isEmpty(roles);
+	}
+
+	@Override
+	public void addInitRole(Long compId) {
+		Role cgRole = new Role();
+		cgRole.setRoleName("采购经理");
+		cgRole.setRoleCompanyId(compId);
+		cgRole.setValid(true);
+		userRoleDao.insert(cgRole);
+		Role xsRole = new Role();
+		xsRole.setRoleName("销售经理");
+		xsRole.setRoleCompanyId(compId);
+		xsRole.setValid(true);
+		userRoleDao.insert(xsRole);
+		Role ysRole = new Role();
+		ysRole.setRoleName("运输经理");
+		ysRole.setRoleCompanyId(compId);
+		ysRole.setValid(true);
+		userRoleDao.insert(ysRole);
+		/*Role ccRole = new Role();
+		ccRole.setRoleName("仓储经理");
+		ccRole.setRoleCompanyId(compId);
+		ccRole.setValid(true);
+		userRoleDao.insert(ccRole);*/
+		List<Permission> cgPermissions = permissionMapper.selectByPrefix("purchase_");
+		if(cgPermissions!=null&&cgPermissions.size()>0)
+		{
+			Map map = new HashMap<>();
+			map.put("role",cgRole.getRoleId());
+			map.put("permissions",cgPermissions);
+			rolePermissionDao.insertInitRole(map);
+		}
+		List<Permission> xsPermissions = permissionMapper.selectByPrefix("sales_");
+		if(xsPermissions!=null&&xsPermissions.size()>0)
+		{
+			Map map = new HashMap<>();
+			map.put("role",xsRole.getRoleId());
+			map.put("permissions",xsPermissions);
+			rolePermissionDao.insertInitRole(map);
+		}
+		List<Permission> ysPermissions = permissionMapper.selectByCategory("tms");
+		if(ysPermissions!=null&&ysPermissions.size()>0)
+		{
+			Map map = new HashMap<>();
+			map.put("role",ysRole.getRoleId());
+			map.put("permissions",ysPermissions);
+			rolePermissionDao.insertInitRole(map);
+		}
+		/*List<Permission> ccPermissions = permissionMapper.selectByPrefix("purchase_");
+		if(ccPermissions!=null&&ccPermissions.size()>0)
+		{
+			Map map = new HashMap<>();
+			map.put("role",ccRole.getRoleId());
+			map.put("permissions",ccPermissions);
+			rolePermissionDao.insertInitRole(map);
+		}*/
 	}
 
 	@Transactional(rollbackFor = Exception.class)

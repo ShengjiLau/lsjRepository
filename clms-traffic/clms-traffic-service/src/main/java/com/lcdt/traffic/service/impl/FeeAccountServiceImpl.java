@@ -122,6 +122,18 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         map.put("feeAccountDtoList", feeAccountDtoList);
         map.put("showPropertyList", showPropertyList);
         map.put("hidePropertyList", hidePropertyList);
+        Waybill waybill = waybillMapper.selectByPrimaryKey(Long.parseLong(m.get("waybillId").toString()));
+        if(waybill != null){
+            map.put("waybillId", waybill.getId());
+            map.put("waybillCode", waybill.getWaybillCode());
+            map.put("groupId",(Integer)m.get("isOwn")==1?waybill.getGroupId():null);
+            map.put("groupName",(Integer)m.get("isOwn")==1?waybill.getGroupName():null);
+        }else{
+            map.put("waybillId", null);
+            map.put("waybillCode", null);
+            map.put("groupId", null);
+            map.put("groupName", null);
+        }
         return map;
     }
     @Override
@@ -129,111 +141,51 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         try{
             Waybill waybill = waybillMapper.selectByPrimaryKey(saveParamsDto.getWaybillId());
             List<FeeAccountDto> dtoList = saveParamsDto.getFeeAccountDtoList();//所有记账单（包含流水)
+            //删除已有的对账单、流水及流水修改日志信息（is_delete=1）
+            feeAccountMapper.updateIsDeleteByCondition(saveParamsDto);
+            feeFlowMapper.updateIsDeleteByCondition(saveParamsDto);
+            feeFlowLogMapper.updateIsDeleteByCondition(saveParamsDto);
 
             if(dtoList != null && dtoList.size() > 0){
-                List<FeeAccount> updateFeeAccountList = new ArrayList<>();//修改已存在的记账单
-                List<FeeFlow> insertFeeFlowList = new ArrayList<>();//新增的流水
-                List<FeeFlow> updateFeeFlowList = new ArrayList<>();//修改已存在的流水
-                List<FeeFlowLog> insertFeeFlowLogList = new ArrayList<>();//已存在流水修改日志
-
                 for(FeeAccountDto dto : dtoList){
                     FeeAccount account = new FeeAccount();
                     BeanUtils.copyProperties(dto, account); //记账单复制对象属性
-                    if(account.getAccountId() != null) {
-                        updateFeeAccountList.add(account);
+                    account.setCompanyId(saveParamsDto.getCompanyId());
+                    account.setWaybillId(saveParamsDto.getWaybillId());
+                    account.setWaybillCode(saveParamsDto.getWaybillCode());
+                    account.setGroupId(saveParamsDto.getGroupId());
+                    account.setGroupName(saveParamsDto.getGroupName());
+                    account.setOperatorId(saveParamsDto.getUserId());
+                    account.setOperatorName(saveParamsDto.getRealName());
+                    account.setIsReceivable(saveParamsDto.getIsReceivable());
+                    account.setAuditStatus((short)0);
+                    account.setCreateDate(new Date());
+                    account.setIsDeleted((short)0);
+                    feeAccountMapper.insert(account);
 
-                        if(dto.getFeeFlowList() != null && dto.getFeeFlowList().size() > 0){
-                            for(FeeFlow flow : dto.getFeeFlowList()){
-                                if(flow.getFlowId() != null){
-                                    flow.setUpdateId(saveParamsDto.getUserId());
-                                    flow.setUpdateName(saveParamsDto.getRealName());
-                                    flow.setUpdateTime(new Date());
-                                    updateFeeFlowList.add(flow);
-
-                                    //对修改过的流水添加修改日志
-                                    FeeFlowLog log = new FeeFlowLog();
-                                    log.setFlowId(flow.getFlowId());
-                                    log.setMoney(flow.getMoney());
-                                    log.setOldMoney(feeFlowMapper.selectByPrimaryKey(flow.getFlowId()).getMoney());
-                                    log.setOperatorId(flow.getUpdateId());
-                                    log.setOperatorName(flow.getUpdateName());
-                                    log.setCreateDate(new Date());
-                                    log.setIsDeleted((short)0);
-                                    insertFeeFlowLogList.add(log);
-                                }else{
-                                    flow.setAccountId(account.getAccountId());
-                                    flow.setWaybillId(saveParamsDto.getWaybillId());
-                                    flow.setWaybillCode(saveParamsDto.getWaybillCode());
-                                    flow.setWaybillDate(waybill.getCreateDate());
-                                    flow.setOriginalMoney(flow.getMoney());
-                                    flow.setGroupId(saveParamsDto.getGroupId());
-                                    flow.setCreateId(saveParamsDto.getUserId());
-                                    flow.setCreateName(saveParamsDto.getRealName());
-                                    flow.setCreateDate(new Date());
-                                    flow.setIsReceivable(saveParamsDto.getIsReceivable());
-                                    flow.setCompanyId(saveParamsDto.getCompanyId());
-                                    flow.setIsDeleted((short)0);
-                                    insertFeeFlowList.add(flow);
-//                                    feeFlowMapper.insert(flow);
-//                                    flow.setFlowCode("LS" + DateUtility.date2String(new Date(),
-//                                            "yyyyMMdd") + flow.getFlowId());
-//                                    feeFlowMapper.updateByPrimaryKey(flow);
-                                }
+                    if(dto.getFeeFlowList() != null && dto.getFeeFlowList().size() > 0){
+                        List<FeeFlow> insertFeeFlowList = new ArrayList<>();//新增的流水
+                        for(FeeFlow flow : dto.getFeeFlowList()) {
+                            if(flow.getFlowId() == null) {
+                                flow.setAccountId(account.getAccountId());
+                                flow.setWaybillId(saveParamsDto.getWaybillId());
+                                flow.setWaybillCode(saveParamsDto.getWaybillCode());
+                                flow.setWaybillDate(waybill.getCreateDate());
+                                flow.setOriginalMoney(flow.getMoney());
+                                flow.setGroupId(saveParamsDto.getGroupId());
+                                flow.setCreateId(saveParamsDto.getUserId());
+                                flow.setCreateName(saveParamsDto.getRealName());
+                                flow.setCreateDate(new Date());
+                                flow.setIsReceivable(saveParamsDto.getIsReceivable());
+                                flow.setCompanyId(saveParamsDto.getCompanyId());
+                                flow.setIsDeleted((short)0);
+                                insertFeeFlowList.add(flow);
                             }
                         }
-                    }else{
-                        account.setCompanyId(saveParamsDto.getCompanyId());
-                        account.setWaybillId(saveParamsDto.getWaybillId());
-                        account.setWaybillCode(saveParamsDto.getWaybillCode());
-                        account.setGroupId(saveParamsDto.getGroupId());
-                        account.setGroupName(saveParamsDto.getGroupName());
-                        account.setOperatorId(saveParamsDto.getUserId());
-                        account.setOperatorName(saveParamsDto.getRealName());
-                        account.setIsReceivable(saveParamsDto.getIsReceivable());
-                        account.setAuditStatus((short)0);
-                        account.setCreateDate(new Date());
-                        account.setIsDeleted((short)0);
-                        feeAccountMapper.insert(account);
-//                        account.setAccountCode("JZ" + DateUtility.date2String(new Date(),
-//                                "yyyyMMdd") + account.getAccountId());
-//                        feeAccountMapper.updateByPrimaryKey(account);
-
-                        if(dto.getFeeFlowList() != null && dto.getFeeFlowList().size() > 0){
-                            for(FeeFlow flow : dto.getFeeFlowList()) {
-                                if(flow.getFlowId() == null) {
-                                    flow.setAccountId(account.getAccountId());
-                                    flow.setWaybillId(saveParamsDto.getWaybillId());
-                                    flow.setWaybillCode(saveParamsDto.getWaybillCode());
-                                    flow.setWaybillDate(waybill.getCreateDate());
-                                    flow.setOriginalMoney(flow.getMoney());
-                                    flow.setGroupId(saveParamsDto.getGroupId());
-                                    flow.setCreateId(saveParamsDto.getUserId());
-                                    flow.setCreateName(saveParamsDto.getRealName());
-                                    flow.setCreateDate(new Date());
-                                    flow.setIsReceivable(saveParamsDto.getIsReceivable());
-                                    flow.setCompanyId(saveParamsDto.getCompanyId());
-                                    flow.setIsDeleted((short)0);
-                                    insertFeeFlowList.add(flow);
-//                                    feeFlowMapper.insert(flow);
-//                                    flow.setFlowCode("LS" + DateUtility.date2String(new Date(),
-//                                            "yyyyMMdd") + flow.getFlowId());
-//                                    feeFlowMapper.updateByPrimaryKey(flow);
-                                }
-                            }
+                        if(insertFeeFlowList.size() > 0){
+                            feeFlowMapper.insertBatch(insertFeeFlowList);
                         }
                     }
-                }
-                if(updateFeeAccountList.size() > 0){
-                    feeAccountMapper.updateBatch(updateFeeAccountList);
-                }
-                if(insertFeeFlowList.size() > 0){
-                    feeFlowMapper.insertBatch(insertFeeFlowList);
-                }
-                if(updateFeeFlowList.size() > 0){
-                    feeFlowMapper.updateBatch(updateFeeFlowList);
-                }
-                if(insertFeeFlowLogList.size() > 0){
-                    feeFlowLogMapper.insertBatch(insertFeeFlowLogList);
                 }
             }
             return true;

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.userinfo.dao.TAttachmentClassifyMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.userinfo.model.TAttachmentClassify">
+    <id column="t_attachment_classify_id" jdbcType="INTEGER" property="tAttachmentClassifyId" />
+    <result column="t_attachment_classify_name" jdbcType="VARCHAR" property="tAttachmentClassifyName" />
+    <result column="t_attachment_classify_order" jdbcType="INTEGER" property="tAttachmentClassifyOrder" />
+    <result column="t_attachment_file_code" jdbcType="VARCHAR" property="tAttachmentFileCode" />
+    <result column="t_attachment_classify_maxnum" jdbcType="INTEGER" property="tAttachmentClassifyMaxnum" />
+    <result column="company_id" jdbcType="INTEGER" property="companyId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_attachment_classify
+    where t_attachment_classify_id = #{tAttachmentClassifyId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.userinfo.model.TAttachmentClassify">
+    <selectKey keyProperty="tAttachmentClassifyId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_attachment_classify (t_attachment_classify_name, t_attachment_classify_order, 
+      t_attachment_file_code, t_attachment_classify_maxnum,
+      company_id)
+    values (#{tAttachmentClassifyName,jdbcType=VARCHAR}, #{tAttachmentClassifyOrder,jdbcType=INTEGER},
+      #{tAttachmentFileCode,jdbcType=VARCHAR}, #{tAttachmentClassifyMaxnum,jdbcType=INTEGER},
+      #{companyId,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.TAttachmentClassify">
+    update t_attachment_classify
+    set t_attachment_classify_name = #{tAttachmentClassifyName,jdbcType=VARCHAR},
+      t_attachment_classify_order = #{tAttachmentClassifyOrder,jdbcType=INTEGER},
+      t_attachment_file_code = #{tAttachmentFileCode,jdbcType=VARCHAR},
+      t_attachment_classify_maxnum = #{tAttachmentClassifyMaxnum,jdbcType=INTEGER},
+      company_id = #{companyId,jdbcType=INTEGER}
+    where t_attachment_classify_id = #{tAttachmentClassifyId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select t_attachment_classify_id, t_attachment_classify_name, t_attachment_classify_order, 
+    t_attachment_file_code, t_attachment_classify_maxnum, company_id
+    from t_attachment_classify
+    where t_attachment_classify_id = #{tAttachmentClassifyId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select t_attachment_classify_id, t_attachment_classify_name, t_attachment_classify_order,
+    tac.t_attachment_file_code, t_attachment_classify_maxnum, company_id
+    from t_attachment_classify tac join t_attachment_file taf on tac.t_attachment_file_code = taf.t_attachment_file_code  where 1=1
+    <if test="tAttachmentClassifyName != null and tAttachmentClassifyName.length > 0">
+      and t_attachment_classify_name = #{tAttachmentClassifyName}
+    </if>
+    <if test="tAttachmentFileCode != null and tAttachmentFileCode.length > 0">
+      and tac.t_attachment_file_code = #{tAttachmentFileCode}
+    </if>
+    <if test="tAttachmentFileType != null">
+      and taf.t_attachment_file_type = #{tAttachmentFileType}
+    </if>
+    <if test="companyId != null">
+      and tac.company_id = #{companyId}
+    </if>
+  </select>
+</mapper>
