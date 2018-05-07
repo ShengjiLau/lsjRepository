@@ -12,4 +12,7 @@ public interface OrderService {
     PayOrder changeToPayFinish(PayOrder payOrder,Integer payType);
 
     void buyServiceProduct(Long orderId,Long companyId, Integer productPackageId);
+
+
+
 }

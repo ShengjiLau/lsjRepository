@@ -126,8 +126,8 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         if(waybill != null){
             map.put("waybillId", waybill.getId());
             map.put("waybillCode", waybill.getWaybillCode());
-            map.put("groupId",(Integer)m.get("isOwn")==0?waybill.getGroupId():null);
-            map.put("groupName",(Integer)m.get("isOwn")==0?waybill.getGroupName():null);
+            map.put("groupId",(Integer)m.get("isOwn")==1?waybill.getGroupId():null);
+            map.put("groupName",(Integer)m.get("isOwn")==1?waybill.getGroupName():null);
         }else{
             map.put("waybillId", null);
             map.put("waybillCode", null);

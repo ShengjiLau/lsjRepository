@@ -43,6 +43,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 
         map.put("tAttachmentClassifyName", attachmentClassify.gettAttachmentClassifyName());
         map.put("tAttachmentFileCode", attachmentClassify.gettAttachmentFileCode());
+        map.put("companyId", attachmentClassify.getCompanyId());
 
         List list = attachmentClassifyMapper.selectAll(map);
 

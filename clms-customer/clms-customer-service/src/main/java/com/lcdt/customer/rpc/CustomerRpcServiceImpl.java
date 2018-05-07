@@ -5,6 +5,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.lcdt.customer.dao.CustomerMapper;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
+import com.lcdt.customer.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public class CustomerRpcServiceImpl implements CustomerRpcService {
     @Autowired
     private CustomerMapper customerMapper;
 
+    @Autowired
+    CustomerService customerService;
 
     @Override
     public Customer findCustomerById(Long customerId) {
@@ -48,5 +51,8 @@ public class CustomerRpcServiceImpl implements CustomerRpcService {
         return customer;
     }
 
-
+    @Override
+    public int customerAdd(Customer customer) {
+        return  customerService.customerAdd(customer);
+    }
 }

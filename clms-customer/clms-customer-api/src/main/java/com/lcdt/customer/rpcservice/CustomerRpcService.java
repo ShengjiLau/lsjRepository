@@ -40,4 +40,9 @@ public interface CustomerRpcService {
      */
     Customer queryCustomer(Long companyId,Long bindCompanyId);
 
+    /**
+     * 企业初始化增加客户接口
+     * */
+    int customerAdd(Customer customer) ;
+
 }
