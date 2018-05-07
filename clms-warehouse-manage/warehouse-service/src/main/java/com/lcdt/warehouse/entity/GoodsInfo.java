@@ -36,6 +36,15 @@ public class GoodsInfo implements Serializable {
     private String goodsBatch;
     private Long subItemId;
 
+    /**
+     * 最小单位
+     */
+    private String minUnit;
+    /**
+     * 多单位json串
+     */
+    private String multiUnit;
+
 
     public Long getGoodsId() {
         return goodsId;
@@ -109,18 +118,36 @@ public class GoodsInfo implements Serializable {
         this.subItemId = subItemId;
     }
 
+    public String getMinUnit() {
+        return minUnit;
+    }
+
+    public void setMinUnit(String minUnit) {
+        this.minUnit = minUnit;
+    }
+
+    public String getMultiUnit() {
+        return multiUnit;
+    }
+
+    public void setMultiUnit(String multiUnit) {
+        this.multiUnit = multiUnit;
+    }
+
     @Override
     public String toString() {
         return "GoodsInfo{" +
-        ", goodsId=" + goodsId +
-        ", goodsName=" + goodsName +
-        ", goodsClassify=" + goodsClassify +
-        ", goodsSpec=" + goodsSpec +
-        ", goodsCode=" + goodsCode +
-        ", goodsBarcode=" + goodsBarcode +
-        ", goodsPrice=" + goodsPrice +
-        ", goodsBatch=" + goodsBatch +
-        ", subItemId=" + subItemId +
-        "}";
+                "goodsId=" + goodsId +
+                ", goodsName='" + goodsName + '\'' +
+                ", goodsClassify='" + goodsClassify + '\'' +
+                ", goodsSpec='" + goodsSpec + '\'' +
+                ", goodsCode='" + goodsCode + '\'' +
+                ", goodsBarcode='" + goodsBarcode + '\'' +
+                ", goodsPrice=" + goodsPrice +
+                ", goodsBatch='" + goodsBatch + '\'' +
+                ", subItemId=" + subItemId +
+                ", minUnit='" + minUnit + '\'' +
+                ", multiUnit='" + multiUnit + '\'' +
+                '}';
     }
 }

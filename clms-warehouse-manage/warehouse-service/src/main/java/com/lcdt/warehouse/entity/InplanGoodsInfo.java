@@ -36,6 +36,15 @@ public class InplanGoodsInfo implements Serializable {
     private Integer inHousePrice;
     private Long planId;
 
+    /**
+     * 单位
+     */
+    private String unit;
+    /**
+     * 换算关系
+     */
+    private int unitData;
+
 
     public Long getRelationId() {
         return relationId;
@@ -85,15 +94,33 @@ public class InplanGoodsInfo implements Serializable {
         this.planId = planId;
     }
 
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public int getUnitData() {
+        return unitData;
+    }
+
+    public void setUnitData(int unitData) {
+        this.unitData = unitData;
+    }
+
     @Override
     public String toString() {
         return "InplanGoodsInfo{" +
-        ", relationId=" + relationId +
-        ", goodsId=" + goodsId +
-        ", planGoodsNum=" + planGoodsNum +
-        ", remark=" + remark +
-        ", inHousePrice=" + inHousePrice +
-        ", planId=" + planId +
-        "}";
+                "relationId=" + relationId +
+                ", goodsId=" + goodsId +
+                ", planGoodsNum=" + planGoodsNum +
+                ", remark='" + remark + '\'' +
+                ", inHousePrice=" + inHousePrice +
+                ", planId=" + planId +
+                ", unit='" + unit + '\'' +
+                ", unitData=" + unitData +
+                '}';
     }
 }
