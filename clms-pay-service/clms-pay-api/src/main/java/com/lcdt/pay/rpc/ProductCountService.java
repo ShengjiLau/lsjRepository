@@ -9,6 +9,8 @@ public interface ProductCountService {
 
     ProductCountLog logAddProductCount(String productName, String des, Integer countNum, String userName,Long companyId,Integer remainCounts);
 
+    ProductCountLog logAddProductCountAndCompanyCount(String productName,String des,Integer countNum,String userName,Long companyId,Integer remainCounts);
+
     List<ProductCountLog> countLogs(Long companyId, String productName, Date startTime, Date endTime,Integer logType);
 
 

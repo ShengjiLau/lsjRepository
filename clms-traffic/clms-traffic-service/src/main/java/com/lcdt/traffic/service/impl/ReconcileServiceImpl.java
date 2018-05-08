@@ -56,43 +56,43 @@ public class ReconcileServiceImpl implements ReconcileService {
 	@Transactional
 	public int insertReconcileBatch(List<Reconcile> reconcileList) {
 		
-	List<FeeAccount> feeAccountList=new ArrayList<FeeAccount>();
-	for(Reconcile fa:reconcileList) {
+	    List<FeeAccount> feeAccountList = new ArrayList<FeeAccount>();
+	    for(Reconcile fa:reconcileList) {
 		//添加对账单的所属公司id 操作人id 操作人姓名 默认状态
-		fa.setCompanyId(SecurityInfoGetter.getCompanyId());
-		fa.setOperatorId(SecurityInfoGetter.getUser().getUserId());
-		fa.setOperatorName(SecurityInfoGetter.getUser().getRealName());
-		fa.setCancelOk((short) 0);//生成对账单时取消状态设置为0不取消
-	}
-	//批量插入
-	int result=reconcileMapper.insertByBatch(reconcileList);
+		    fa.setCompanyId(SecurityInfoGetter.getCompanyId());
+		    fa.setOperatorId(SecurityInfoGetter.getUser().getUserId());
+		    fa.setOperatorName(SecurityInfoGetter.getUser().getRealName());
+		    fa.setCancelOk((short) 0);//生成对账单时取消状态设置为0不取消
+	    }
+	    //批量插入
+	    int result = reconcileMapper.insertByBatch(reconcileList);
 	
-	for(Reconcile reconcile:reconcileList) {
-		Reconcile rec =reconcileMapper.selectByPrimaryKey(reconcile.getReconcileId());
-		//得到记账单id
-		Long[] acLongId=convertStrToLong(rec.getAccountId());
-		for(Long l:acLongId) {
+	    for(Reconcile reconcile:reconcileList) {
+		    Reconcile rec = reconcileMapper.selectByPrimaryKey(reconcile.getReconcileId());
+		    //得到记账单id
+		    Long[] acLongId = convertStrToLong(rec.getAccountId());
+		    for(Long l:acLongId) {
 			//创建一个记账单 依次放入每条记账单id以及对应的对账单id和对账单号
-			FeeAccount fa = new FeeAccount();
-			fa.setAccountId(l);
-			fa.setReconcileId(rec.getReconcileId());
-			fa.setReconcileCode(rec.getReconcileCode());
-			feeAccountList.add(fa);
-		}	
-	}
-	int i=feeAccountList.size();
-	logger.debug("应添加记账单ReconcileId数量:"+feeAccountList.size());
-	//批量修改记账单对应的对账单id 和 对账单单号
-	int j=feeAccountMapper.updateReconcileByBatch(feeAccountList);
-	logger.debug("实际添加记账单ReconcileId数量:"+j);
-	logger.debug("插入对账单数量为:"+result);
-	//一下判断既可判断对应的记账单是否全部被修改,又可判断是否存在对应的记账单id
-	if(i==j) {
-		return result;	
-	}else {
-		return -1;
-	}
-	}
+			    FeeAccount fa = new FeeAccount();
+			    fa.setAccountId(l);
+			    fa.setReconcileId(rec.getReconcileId());
+			    fa.setReconcileCode(rec.getReconcileCode());
+			    feeAccountList.add(fa);
+		    }	
+	    }
+	    int i = feeAccountList.size();
+	    logger.debug("应添加记账单ReconcileId数量:"+feeAccountList.size());
+	    //批量修改记账单对应的对账单id 和 对账单单号
+	    int j = feeAccountMapper.updateReconcileByBatch(feeAccountList);
+	    logger.debug("实际添加记账单ReconcileId数量:"+j);
+	    logger.debug("插入对账单数量为:"+result);
+	    //一下判断既可判断对应的记账单是否全部被修改,又可判断是否存在对应的记账单id
+	    if (i == j) {
+	    	return result;	
+	    }else {
+	    	return -1;
+	    }
+		}
 
 	
 	
@@ -105,55 +105,55 @@ public class ReconcileServiceImpl implements ReconcileService {
 	@Transactional
 	public Map<Integer, String> setCancelOk(String reconcileIds) {
 		StringBuilder sb = new StringBuilder();
-		Map<Integer, String> map =new HashMap<Integer, String>();
+		Map<Integer, String> map = new HashMap<Integer, String>();
 		StringBuilder sbs = new StringBuilder();
 		StringBuilder sb3 = new StringBuilder();
 		
-		Long[] reconcileIdArray =convertStrToLong(reconcileIds);
-		int q1=0;
-		int q2=0;
-		int w1=0;
-		int w2=0;
-		for(int i=0;i<reconcileIdArray.length;i++) {
-			int a=feeExchangeMapper.selectCountFeeExchangeByReconcileId(reconcileIdArray[i]);
-			if(a>0) {
+		Long[] reconcileIdArray = convertStrToLong(reconcileIds);
+		int q1 = 0;
+		int q2 = 0;
+		int w1 = 0;
+		int w2 = 0;
+		for(int i = 0;i < reconcileIdArray.length;i++) {
+			int a = feeExchangeMapper.selectCountFeeExchangeByReconcileId(reconcileIdArray[i]);
+			if (a > 0) {
 				//将已存在收付款记录的对账单id拼接成字符串
 				sb.append(reconcileIdArray[i]);sb.append(",");
 			}else {
-				q2++;
+				q2 ++;
 				//将不存在收付款记录的对账单id拼接成字符串,dao层执行update set in操作
 				sbs.append(reconcileIdArray[i]);sbs.append(",");
 			}
 		}
 			
 		if(q2>0) {
-			q1=reconcileMapper.cancelByBatch(convertStrToLong(sbs.toString()));
+			q1 = reconcileMapper.cancelByBatch(convertStrToLong(sbs.toString()));
 			//获取不存在收付款记录的对账单信息列表
-			List<Reconcile> reconcileList=reconcileMapper.getReconcileListByPk(convertStrToLong(sbs.toString()));
+			List<Reconcile> reconcileList = reconcileMapper.getReconcileListByPk(convertStrToLong(sbs.toString()));
 			for(Reconcile reconcile:reconcileList) {
 				//得到所有需要修改的被取消的对账当单对应的记账单进行拼接
 				sb3.append(reconcile.getAccountId());sb3.append(",");
-				if(reconcile.getAccountId().length()>1) {
-					w1+=reconcile.getAccountId().length()/2+1;
+				if (reconcile.getAccountId().length()>1) {
+					w1 += reconcile.getAccountId().length()/2+1;
 				}else {
-					w1+=reconcile.getAccountId().length();
+					w1 += reconcile.getAccountId().length();
 				}
 			}
 		}
 				
-		if(sb.length()>0) {
+		if (sb.length()>0) {
 			//去掉字符串末尾的","
-		String str2=sb.substring(0,sb.length()-1);
+		String str2 = sb.substring(0,sb.length()-1);
 			map.put(1,str2);
 		}
 		
-		if(sb3.length()>0) {
+		if (sb3.length()>0) {
 			w2=feeAccountMapper.updateReconcileWhenCancel(convertStrToLong(sb3.toString()));
 		}
 		logger.debug("不存在收付款记录的对账单数量为:"+q2);
 		logger.debug("应该修改的记账单数量为:"+w1);
 
-		if(q1>0) {
+		if (q1 > 0) {
 			map.put(2,"取消成功");
 		}
 		
@@ -170,48 +170,48 @@ public class ReconcileServiceImpl implements ReconcileService {
 	 */
 	@Override
 	public PageInfo<ReconcileDto> getReconcileList(ReconcileDto reconcileDto){
-		if(reconcileDto.getPageNum()<1) {
+		if (reconcileDto.getPageNum() < 1) {
 			reconcileDto.setPageNum(1);
 		}
-		if(reconcileDto.getPageSize()<0) {
+		if (reconcileDto.getPageSize() < 0) {
 			reconcileDto.setPageSize(0);
 		}
-		StringBuilder sbd=new StringBuilder();
+		StringBuilder sbd = new StringBuilder();
 		reconcileDto.setCompanyId(SecurityInfoGetter.getCompanyId());
 		PageHelper.startPage(reconcileDto.getPageNum(),reconcileDto.getPageSize());
-		List<ReconcileDto> reconcileList= reconcileMapper.getReconcileList(reconcileDto);
-		if(null!=reconcileList&&reconcileList.size()>0) {
+		List<ReconcileDto> reconcileList = reconcileMapper.getReconcileList(reconcileDto);
+		if (null != reconcileList && reconcileList.size() > 0) {
 			for(ReconcileDto rd:reconcileList) {
-				sbd.append( rd.getReconcileId());sbd.append(",");
+				sbd.append(rd.getReconcileId());sbd.append(",");
 			}	
 		}else {
-			PageInfo<ReconcileDto> page =new PageInfo<ReconcileDto>(reconcileList);
+			PageInfo<ReconcileDto> page = new PageInfo<ReconcileDto>(reconcileList);
 			return page;
 		}
 		
 		
-		List<FeeExchange> feeExchangelist=new ArrayList<FeeExchange>();
+		List<FeeExchange> feeExchangelist = new ArrayList<FeeExchange>();
 		//批量获取一篮子对账单下的一篮子收付款记录
-		if(sbd.length()>0) {
-			Long[] reconcileIds=convertStrToLong(sbd.toString());
-			feeExchangelist= feeExchangeMapper.getFeeExchangesByBatch(reconcileIds);
+		if (sbd.length() > 0) {
+			Long[] reconcileIds = convertStrToLong(sbd.toString());
+			feeExchangelist = feeExchangeMapper.getFeeExchangesByBatch(reconcileIds);
 		}
-		if(null!=feeExchangelist&&feeExchangelist.size()>0) {
+		if (null != feeExchangelist && feeExchangelist.size() > 0) {
 		for(ReconcileDto rdto:reconcileList) {
-			double j=0.0d;
-			int i=0;
+			double j = 0.0d;
+			int i = 0;
 			for(FeeExchange fe:feeExchangelist) {
-				if(rdto.getReconcileId().longValue()==fe.getReconcileId().longValue()) {
+				if (rdto.getReconcileId().longValue() == fe.getReconcileId().longValue()) {
 					i++;
-					j+=fe.getTransportationExpenses();
-					j+=fe.getOtherExpenses();
+					j += fe.getTransportationExpenses();
+					j += fe.getOtherExpenses();
 				}
 			}
 			rdto.setSumAmount(j);
 			rdto.setSumAmountNum(i);
 		}
 		}
-		PageInfo<ReconcileDto> page =new PageInfo<ReconcileDto>(reconcileList);
+		PageInfo<ReconcileDto> page = new PageInfo<ReconcileDto>(reconcileList);
 		return page;
 	}
 	
@@ -220,10 +220,10 @@ public class ReconcileServiceImpl implements ReconcileService {
 	@Override
 	public ReconcileDto selectReconcileByPk(Long pk) {
 		
-		ReconcileDto reconcileDto=reconcileMapper.selectReconcileByPrimaryKey(pk);
+		ReconcileDto reconcileDto = reconcileMapper.selectReconcileByPrimaryKey(pk);
 		//获取对账单下的收付款记录List
-		List<FeeExchange> feeExchangeList=feeExchangeMapper.getFeeExchangeListByReconcileId(pk);
-		if(null!=feeExchangeList) {
+		List<FeeExchange> feeExchangeList = feeExchangeMapper.getFeeExchangeListByReconcileId(pk);
+		if (null != feeExchangeList) {
 			reconcileDto.setFeeExchangeList(feeExchangeList);	
 		}	
 		
@@ -240,10 +240,10 @@ public class ReconcileServiceImpl implements ReconcileService {
 	 * @return longId
 	 */
 	public Long[] convertStrToLong(String str) {
-		String [] ss= str.split(",");
-		Long [] lids=new Long[ss.length];
-		for(int i=0;i<ss.length;i++) {
-			lids[i]=Long.valueOf(ss[i]);
+		String [] ss = str.split(",");
+		Long [] lids = new Long[ss.length];
+		for(int i = 0;i < ss.length;i++) {
+			lids[i] = Long.valueOf(ss[i]);
 		}
 		return lids;	
 	}
@@ -254,11 +254,11 @@ public class ReconcileServiceImpl implements ReconcileService {
 	 * @return String
 	 */
 	public String convertLoToStr(Long[] longId) {
-		StringBuilder sbd =new StringBuilder();
+		StringBuilder sbd = new StringBuilder();
 		for(Long l:longId) {
 			sbd.append(l);sbd.append(",");
 		}
-		sbd.substring(0,sbd.length()-1);
+		sbd.substring(0,sbd.length() - 1);
 		
 		return sbd.toString();
 	}
