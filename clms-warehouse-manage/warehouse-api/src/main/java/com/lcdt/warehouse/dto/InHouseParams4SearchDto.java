@@ -13,7 +13,9 @@ public class InHouseParams4SearchDto implements Serializable {
 
     //计划创建时间
     private Long createBegin;
+    private String createBeginStr;
     private Long createEnd;
+    private String createEndStr;
 
     private Long wareHouseId;//仓库ID
     private String createUserName; // 制单人
@@ -24,6 +26,9 @@ public class InHouseParams4SearchDto implements Serializable {
     private Integer groupId; //项目组ID
     private String customerPurchaseNo; //采购单号
     private String contractNo; //合同编码
+    private Long companyId;
+
+
 
     private Integer pageNo;
     private Integer pageSize;
@@ -130,5 +135,29 @@ public class InHouseParams4SearchDto implements Serializable {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCreateBeginStr() {
+        return createBeginStr;
+    }
+
+    public void setCreateBeginStr(String createBeginStr) {
+        this.createBeginStr = createBeginStr;
+    }
+
+    public String getCreateEndStr() {
+        return createEndStr;
+    }
+
+    public void setCreateEndStr(String createEndStr) {
+        this.createEndStr = createEndStr;
     }
 }
