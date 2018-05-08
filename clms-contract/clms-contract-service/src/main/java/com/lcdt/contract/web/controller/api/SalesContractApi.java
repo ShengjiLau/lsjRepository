@@ -148,7 +148,7 @@ public class SalesContractApi {
 
     @ApiOperation("合同详情")
     @RequestMapping(value = "/contractDetail", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_detail')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_list')")
     public  JSONObject contractDetail(@ApiParam(value="合同ID")@RequestParam Long contractId){
         Contract dto= contractService.selectByPrimaryKey(contractId);
         JSONObject jsonObject=new JSONObject();
