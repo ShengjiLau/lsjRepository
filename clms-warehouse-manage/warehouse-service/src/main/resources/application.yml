@@ -8,6 +8,8 @@ spring:
     druid:
       initial-size: 6
       db-type: mysql
+      driver-class-name: com.mysql.jdbc.Driver
+    name: warehouse-db
     type: com.alibaba.druid.pool.DruidDataSource
 mybatis-plus:
   mapper-locations: classpath:/com/lcdt/warehouse/mapper/*Mapper.xml
