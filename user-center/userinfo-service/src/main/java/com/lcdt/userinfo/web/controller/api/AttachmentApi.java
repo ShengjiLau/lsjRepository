@@ -55,6 +55,7 @@ public class AttachmentApi {
         map.put("pageNo", pageNo);
         map.put("pageSize", pageSize);
         map.put("tAttachmentFileType", attachmentClassify.gettAttachmentFileType());
+        map.put("tAttachmentFileCode", attachmentClassify.gettAttachmentFileCode());
         map.put("companyId", SecurityInfoGetter.getCompanyId());
         PageInfo pageInfo = attachmentService.attachmentClassifyList(map);
 
