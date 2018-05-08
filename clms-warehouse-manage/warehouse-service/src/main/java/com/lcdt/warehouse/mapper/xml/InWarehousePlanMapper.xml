@@ -5,4 +5,9 @@
     <!-- 开启二级缓存 -->
     <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
 
+    <select id="inWarehousePlanList" resultType="com.lcdt.warehouse.entity.InWarehousePlan">
+        SELECT * FROM in_warehouse_plan
+
+    </select>
+
 </mapper>

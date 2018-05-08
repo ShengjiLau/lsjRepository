@@ -26,6 +26,8 @@ public class DemoTest extends BaseIntegrationContext{
         inWarehousePlan.setWarehouseName("asd");
         inWarehousePlan.setWareHouseId(1L);
         mapper.insert(inWarehousePlan);
+
+        mapper.inWarehousePlanList();
     }
 
 }
