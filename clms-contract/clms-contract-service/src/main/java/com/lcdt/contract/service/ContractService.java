@@ -59,4 +59,11 @@ public interface ContractService {
      * @return
      */
     PageInfo<List<ContractLog>> ontractLogList(Map map);
+
+    /**
+     * 上传附件
+     * @param contract
+     * @return
+     */
+    public boolean uploadAttachment(ContractDto contract);
 }

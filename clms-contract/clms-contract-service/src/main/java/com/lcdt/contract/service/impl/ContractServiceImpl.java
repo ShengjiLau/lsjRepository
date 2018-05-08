@@ -111,11 +111,11 @@ public class ContractServiceImpl implements ContractService {
         log.setLogName("新增");
         log.setLogContent("新增合同，"+(contract.getIsDraft()==0?"存草稿":"发布合同"));
         saveContractLog(log);
-        if(StringUtility.isNotEmpty(contract.getAttachment1Name())){
+        if(StringUtility.isNotEmpty(contract.getAttachment1())){
             ContractLog log1 = new ContractLog();
             log1.setContractId(contract.getContractId());
             log1.setLogName("上传附件");
-            log1.setLogContent(contract.getAttachment1Name());
+            log1.setLogContent(contract.getAttachment1());
             saveContractLog(log1);
         }
         return result;
@@ -235,11 +235,12 @@ public class ContractServiceImpl implements ContractService {
             log.setLogContent("编辑合同内容");
         }
         saveContractLog(log);
-        if(StringUtility.isNotEmpty(contract.getAttachment1Name())){
+        if(StringUtility.isNotEmpty(contract.getAttachment1())
+                && !contract.getAttachment1().equals(oldContract.getAttachment1())){
             ContractLog log1 = new ContractLog();
             log1.setContractId(contract.getContractId());
             log1.setLogName("上传附件");
-            log1.setLogContent(contract.getAttachment1Name());
+            log1.setLogContent(contract.getAttachment1());
             saveContractLog(log1);
         }
         return result;
@@ -340,5 +341,19 @@ public class ContractServiceImpl implements ContractService {
         PageInfo pageInfo = new PageInfo(list);
 
         return pageInfo;
+    }
+
+    public boolean uploadAttachment(ContractDto contract){
+        if(contract.getContractId() == null){
+            return false;
+        }
+        ContractLog log1 = new ContractLog();
+        log1.setContractId(contract.getContractId());
+        log1.setLogName("上传附件");
+        log1.setLogContent(contract.getAttachment1());
+        saveContractLog(log1);
+        contractMapper.updateByPrimaryKeySelective(contract);
+
+        return true;
     }
 }
