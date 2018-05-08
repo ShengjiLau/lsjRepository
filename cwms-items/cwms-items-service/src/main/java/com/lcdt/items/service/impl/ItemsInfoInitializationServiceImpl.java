@@ -66,7 +66,6 @@ public class ItemsInfoInitializationServiceImpl implements ItemsInfoInitializati
         calcUnit2.setUnitName("方");
         result+=calcUnitService.addCalcUnit(calcUnit2);
 
-        //多单位初始化
         ConversionRel conversionRel=new ConversionRel();
         conversionRel.setCompanyId(companyId);
         conversionRel.setCreateId(userId);
@@ -79,7 +78,6 @@ public class ItemsInfoInitializationServiceImpl implements ItemsInfoInitializati
         conversionRel.setUnitId2(calcUnit2.getUnitId());
         conversionRel.setUnitName2(calcUnit2.getUnitName());
         conversionRel.setData2(1);
-        conversionRelService.addConversionRel(conversionRel);
 
         ItemsInfoDao itemsInfoDao=new ItemsInfoDao();
         itemsInfoDao.setCompanyId(companyId);
@@ -90,8 +88,9 @@ public class ItemsInfoInitializationServiceImpl implements ItemsInfoInitializati
         itemsInfoDao.setClassifyName(itemClassify.getClassifyName());
         itemsInfoDao.setUnitId(calcUnit.getUnitId());
         itemsInfoDao.setUnitName(calcUnit.getUnitName());
-        itemsInfoDao.setConverId(conversionRel.getConverId());
         itemsInfoDao.setTradeType((short)3);
+        itemsInfoDao.setConversionRel(conversionRel);
+        itemsInfoDao.setItemType((short)1);
 
         SubItemsInfoDao subItemsInfoDao=new SubItemsInfoDao();
         subItemsInfoDao.setCode("P"+System.currentTimeMillis()+(10+(int)(Math.random()*90)));
@@ -100,7 +99,6 @@ public class ItemsInfoInitializationServiceImpl implements ItemsInfoInitializati
         itemsInfoDao.setSubItemsInfoDaoList(subItemsInfoDaoList);
 
         itemsInfoService.addItemsInfo(itemsInfoDao);
-
         return result;
     }
 }
