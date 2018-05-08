@@ -88,7 +88,7 @@
                 <directory>src/main/java</directory>
                 <filtering>false</filtering>
                 <includes>
-                    <include>**/mapper/*.xml</include>
+                    <include>**/mapper/xml/*.xml</include>
                 </includes>
             </resource>
         </resources>
