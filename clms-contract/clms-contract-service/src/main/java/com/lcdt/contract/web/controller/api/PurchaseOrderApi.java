@@ -26,7 +26,6 @@ import com.lcdt.contract.service.OrderService;
 import com.lcdt.contract.web.dto.OrderDto;
 import com.lcdt.contract.web.dto.PageBaseDto;
 import com.lcdt.contract.web.utils.OrderValidator;
-import com.lcdt.contract.web.utils.SerialNumAutoGenerator;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,21 +54,24 @@ public class PurchaseOrderApi {
 	 */
 	@ApiOperation(value="采购订单列表",notes="采购订单列表数据")
 	@GetMapping("/list")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_list')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_get')")
 	public JSONObject OrderList(OrderDto orderDto
 	//	,@ApiParam(value="第几页",required=true,defaultValue="1") @RequestParam Integer pageNum,
    //	@ApiParam(value="每页条目数量",required=true,defaultValue="6")@RequestParam Integer pagesize
 			){
-		Long UserId=SecurityInfoGetter.getUser().getUserId();//get 创建者
-		Long companyId=SecurityInfoGetter.getCompanyId();//get 公司id	
+		Long UserId = SecurityInfoGetter.getUser().getUserId();//get 创建者
+		Long companyId = SecurityInfoGetter.getCompanyId();//get 公司id	
 		orderDto.setCompanyId(companyId);
 		orderDto.setCreateUserId(UserId);
+		
 		PageInfo<OrderDto> pageInfo = orderService.OrderList(orderDto);
-		PageBaseDto<OrderDto> pageBaseDto =new PageBaseDto<OrderDto>();
+		PageBaseDto<OrderDto> pageBaseDto = new PageBaseDto<OrderDto>();
 		pageBaseDto.setList(pageInfo.getList());
 		pageBaseDto.setTotal(pageInfo.getTotal());
+		
 		logger.debug("采购订单条目数"+pageInfo.getTotal());
-		JSONObject jsonObject =new JSONObject();
+		
+		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("code",0);
 		jsonObject.put("message","采购订单列表");
 		jsonObject.put("data",pageBaseDto);
@@ -84,11 +86,11 @@ public class PurchaseOrderApi {
 	 */
 	@ApiOperation(value="获取单个采购订单",notes="单个采购订单")
 	@GetMapping("/selporder")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_select')")
-	public  JSONObject selectOrder(@ApiParam(value="订单id")@RequestParam Long orderId){
-		OrderDto orderDto= orderService.selectByPrimaryKey(orderId);
-		JSONObject jsonObject=new JSONObject();
-		if(orderDto!=null) {
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_get')")
+	public  JSONObject selectOrder(@ApiParam(value = "订单id")@RequestParam Long orderId){
+		OrderDto orderDto = orderService.selectByPrimaryKey(orderId);
+		JSONObject jsonObject = new JSONObject();
+		if (orderDto != null) {
 			jsonObject.put("code",0);
 			jsonObject.put("message","单个采购订单");
 			jsonObject.put("data",orderDto);
@@ -110,12 +112,12 @@ public class PurchaseOrderApi {
 	public JSONObject addOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindResult) {
 		JSONObject jsonObject = new JSONObject();
 		  //Validated自动验证
-	      if(bindResult.hasErrors()) {
-	        Map<String,String> map=new HashMap<String,String>();//此map用于盛装验证时所验证的实体类各属性(Field)和验证属性反馈的error
-	        List<FieldError> list=bindResult.getFieldErrors();
+	      if (bindResult.hasErrors()) {
+	        Map<String,String> map = new HashMap<String,String>();//此map用于盛装验证时所验证的实体类各属性(Field)和验证属性反馈的error
+	        List<FieldError> list = bindResult.getFieldErrors();
 	        for(FieldError error:list) {
-	        String n=error.getField();//作为map的key
-	        String m=error.getDefaultMessage();//作为map的value
+	        String n = error.getField();//作为map的key
+	        String m = error.getDefaultMessage();//作为map的value
 	        map.put(n,m);
 	        }
 	        jsonObject.put("code",-1);
@@ -124,24 +126,24 @@ public class PurchaseOrderApi {
 	        return jsonObject;
 	      }
 	    //采用OrderValidator(封装对Order各属性的验证)
-	      Map<String,String> validateMap =OrderValidator.validator(orderDto);
-	       if(!validateMap.isEmpty()) {
+	      Map<String,String> validateMap = OrderValidator.validator(orderDto);
+	       if (!validateMap.isEmpty()) {
 	        	jsonObject.put("code",-1);
 	           	jsonObject.put("message","验证信息未能通过");
 	           	jsonObject.put("data",validateMap);
 	           	return jsonObject;
 	      }
-		Long UserId=SecurityInfoGetter.getUser().getUserId();
-		Long companyId=SecurityInfoGetter.getCompanyId();
+		Long UserId = SecurityInfoGetter.getUser().getUserId();
+		Long companyId = SecurityInfoGetter.getCompanyId();
 //		String orderSerialNum =SerialNumAutoGenerator.serialNoGenerate();
 		orderDto.setCompanyId(companyId);
-		logger.debug("创建人UserId:"+UserId);
-		logger.debug("所属公司companyId:"+companyId);
+		logger.debug("创建人UserId:" + UserId);
+		logger.debug("所属公司companyId:" + companyId);
 		orderDto.setCreateUserId(UserId);
 //		orderDto.setOrderSerialNo(orderSerialNum);
 		orderDto.setCreateTime(new Date());
 		orderDto.setOrderType(new Short("0"));	//设置订单类型为采购单
-		int result =orderService.addOrder(orderDto);
+		int result = orderService.addOrder(orderDto);
 		logger.debug("新增采购订单条目数:"+result);
 		if (result > 0) {
             jsonObject.put("code", 0);
@@ -158,18 +160,18 @@ public class PurchaseOrderApi {
 	 * @param Order
 	 * @return JSONObject
 	 */
-	@ApiOperation("修改编辑采购订单")
+	@ApiOperation("编辑采购订单")
 	@PostMapping("/modifyOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_modify')")
 	public JSONObject modifyOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindResult) {
 		JSONObject jsonObject = new JSONObject();
 		//Validated自动验证
-	      if(bindResult.hasErrors()) {
-	        Map<String,String> map=new HashMap<String,String>();
-	        List<FieldError> list=bindResult.getFieldErrors();
+	      if (bindResult.hasErrors()) {
+	        Map<String,String> map = new HashMap<String,String>();
+	        List<FieldError> list = bindResult.getFieldErrors();
 	        for(FieldError error:list) {
-	        	String n=error.getField();
-	        	String m=error.getDefaultMessage();
+	        	String n = error.getField();
+	        	String m = error.getDefaultMessage();
 	        	map.put(n,m);
 	        }
 	        jsonObject.put("code",-1);
@@ -178,14 +180,14 @@ public class PurchaseOrderApi {
 	        return jsonObject;
 	        }
 		    //采用OrderValidator(封装对Order各属性的验证)
-	     Map<String,String> validateMap =OrderValidator.validator(orderDto);
-	       if(!validateMap.isEmpty()) {
+	     Map<String,String> validateMap = OrderValidator.validator(orderDto);
+	       if (!validateMap.isEmpty()) {
 	        jsonObject.put("code",-1);
 	        jsonObject.put("message","验证信息未能通过");
 	        jsonObject.put("data",validateMap);
 	        return jsonObject;
 	        }
-	    int result=orderService.modOrder(orderDto);
+	    int result = orderService.modOrder(orderDto);
 	    logger.debug("修改采购订单条目数:"+result);
 	    if (result > 0) {
            jsonObject.put("code", 0);
@@ -205,8 +207,8 @@ public class PurchaseOrderApi {
 	@ApiOperation("取消采购订单")
 	@PostMapping("/deleteOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_delete')")
-	public JSONObject delOrder(@ApiParam(value="采购订单id",required=true) @RequestParam Long orderId) {
-		int result =orderService.updateOrderIsDraft(orderId,(short) 2);
+	public JSONObject delOrder(@ApiParam(value = "采购订单id",required = true) @RequestParam Long orderId) {
+		int result = orderService.updateOrderIsDraft(orderId,(short) 2);
 		logger.debug("取消销售订单条目数:"+result);
 		if (result > 0) {
 	        JSONObject jsonObject = new JSONObject();
@@ -227,8 +229,8 @@ public class PurchaseOrderApi {
 	@ApiOperation("发布采购订单")
 	@PostMapping("/releaseOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_release')")
-	public JSONObject releaseOrder(@ApiParam(value="采购订单id",required=true) @RequestParam Long orderId) {
-		int result =orderService.updateOrderIsDraft(orderId,(short) 1);
+	public JSONObject releaseOrder(@ApiParam(value = "采购订单id",required = true) @RequestParam Long orderId) {
+		int result = orderService.updateOrderIsDraft(orderId,(short) 1);
 		logger.debug("取消销售订单条目数:"+result);
 		if (result > 0) {
 	        JSONObject jsonObject = new JSONObject();

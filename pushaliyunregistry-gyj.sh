@@ -56,7 +56,7 @@ readonly ITEMS_SERVICE="items-service 1.0 cwms-items/cwms-items-service"
 readonly CUSTOMER_SERVICE="customer-service 1.0 clms-customer/clms-customer-service"
 readonly QUARTZ_SERVICE="quartz-service 1.0 common-quartz/clms-quartz-service"
 readonly TRAFFIC_SERVICE="traffic-service 1.0 clms-traffic/clms-traffic-service"
-readonly CONTRACT_SERVICE="contract-service 1.0 cwms-contract/cwms-contract-service"
+readonly CONTRACT_SERVICE="contract-service 1.0 clms-contract/clms-contract-service"
 readonly DRIVER_WECHAT_API="driver-wechat-api 1.0 driver-app-wechat-api"
 
 echo "请选择要更新的应用：
