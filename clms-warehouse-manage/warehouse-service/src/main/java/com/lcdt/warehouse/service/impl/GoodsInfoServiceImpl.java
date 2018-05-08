@@ -1,0 +1,20 @@
+package com.lcdt.warehouse.service.impl;
+
+import com.lcdt.warehouse.entity.GoodsInfo;
+import com.lcdt.warehouse.mapper.GoodsInfoMapper;
+import com.lcdt.warehouse.service.GoodsInfoService;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
+
+/**
+ * <p>
+ *  服务实现类
+ * </p>
+ *
+ * @author code generate
+ * @since 2018-05-07
+ */
+@Service
+public class GoodsInfoServiceImpl extends ServiceImpl<GoodsInfoMapper, GoodsInfo> implements GoodsInfoService {
+
+}
