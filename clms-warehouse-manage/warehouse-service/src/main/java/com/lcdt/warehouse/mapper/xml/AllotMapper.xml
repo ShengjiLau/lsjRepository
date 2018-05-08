@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.warehouse.mapper.AllotMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.Allot">
+    <id column="allot_id" jdbcType="BIGINT" property="allotId" />
+    <result column="allot_status" jdbcType="SMALLINT" property="allotStatus" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="allot_code" jdbcType="VARCHAR" property="allotCode" />
+    <result column="ownership_of_goods" jdbcType="SMALLINT" property="ownershipOfGoods" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phoneNum" />
+    <result column="warehouse_out_id" jdbcType="BIGINT" property="warehouseOutId" />
+    <result column="warehouse_in_id" jdbcType="BIGINT" property="warehouseInId" />
+    <result column="allot_out_time" jdbcType="TIMESTAMP" property="allotOutTime" />
+    <result column="allot_in_time" jdbcType="TIMESTAMP" property="allotInTime" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="attachments" jdbcType="LONGVARCHAR" property="attachments" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+  </resultMap>
+  <resultMap id="BaseResultMapDto" type="com.lcdt.userinfo.web.dto.WarehouseDto" extends="BaseResultMap">
+    <!--仓库联系人-->
+    <collection property="allotProductList" column="{allotId=allot_id,isDeleted=is_deleted}"
+                ofType="com.lcdt.warehouse.entity.AllotProduct" javaType="ArrayList"
+                select="com.lcdt.warehouse.mapper.xml.AllotProductMapper.selectByAllotId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    allot_id, allot_status, group_id, allot_code, customer_id, customer_name,
+    contact_name, phone_num, warehouse_out_id, warehouse_in_id, allot_out_time, allot_in_time, operator,
+    remark, attachments, company_id, create_id, create_name, create_time, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_allot
+    where allot_id = #{allotId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_allot
+    where allot_id = #{allotId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.warehouse.entity.Allot">
+    <selectKey keyProperty="allotId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_allot (allot_status, group_id, allot_code,
+      customer_id, customer_name, contact_name, 
+      phone_num, warehouse_out_id, warehouse_in_id, 
+      allot_out_time, allot_in_time, operator, remark,
+      attachments, company_id, create_id,
+      create_name, create_time, is_deleted)
+    values (#{allotStatus,jdbcType=SMALLINT}, #{groupId,jdbcType=BIGINT}, #{allotCode,jdbcType=VARCHAR},
+      #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR},
+      #{phoneNum,jdbcType=VARCHAR}, #{warehouseOutId,jdbcType=BIGINT}, #{warehouseInId,jdbcType=BIGINT}, 
+      #{allotOutTime,jdbcType=TIMESTAMP}, #{allotInTime,jdbcType=TIMESTAMP}, #{operator,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+      #{attachments,jdbcType=LONGVARCHAR}, #{companyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT},
+      #{createName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lcdt.warehouse.entity.Allot">
+    <selectKey keyProperty="allotId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_allot
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="allotStatus != null">
+        allot_status,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="allotCode != null">
+        allot_code,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="customerName != null">
+        customer_name,
+      </if>
+      <if test="contactName != null">
+        contact_name,
+      </if>
+      <if test="phoneNum != null">
+        phone_num,
+      </if>
+      <if test="warehouseOutId != null">
+        warehouse_out_id,
+      </if>
+      <if test="warehouseInId != null">
+        warehouse_in_id,
+      </if>
+      <if test="allotOutTime != null">
+        allot_out_time,
+      </if>
+      <if test="allotInTime != null">
+        allot_in_time,
+      </if>
+      <if test="operator != null">
+        operator,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="createId != null" >
+        create_id,
+      </if>
+      <if test="createName != null" >
+        create_name,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="attachments != null">
+        attachments,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="allotStatus != null">
+        #{allotStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="allotCode != null">
+        #{allotCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null">
+        #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNum != null">
+        #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseOutId != null">
+        #{warehouseOutId,jdbcType=BIGINT},
+      </if>
+      <if test="warehouseInId != null">
+        #{warehouseInId,jdbcType=BIGINT},
+      </if>
+      <if test="allotOutTime != null">
+        #{allotOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="allotInTime != null">
+        #{allotInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operator != null">
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="attachments != null">
+        #{attachments,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="createId != null" >
+        create_id = #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null" >
+        create_name = #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.warehouse.entity.Allot">
+    update t_allot
+    <set>
+      <if test="allotStatus != null">
+        allot_status = #{allotStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="allotCode != null">
+        allot_code = #{allotCode,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="customerName != null">
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactName != null">
+        contact_name = #{contactName,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNum != null">
+        phone_num = #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseOutId != null">
+        warehouse_out_id = #{warehouseOutId,jdbcType=BIGINT},
+      </if>
+      <if test="warehouseInId != null">
+        warehouse_in_id = #{warehouseInId,jdbcType=BIGINT},
+      </if>
+      <if test="allotOutTime != null">
+        allot_out_time = #{allotOutTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="allotInTime != null">
+        allot_in_time = #{allotInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operator != null">
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="attachments != null">
+        attachments = #{attachments,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="createId != null" >
+        create_id = #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null" >
+        create_name = #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where allot_id = #{allotId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.warehouse.entity.Allot">
+    update t_allot
+    set allot_status = #{allotStatus,jdbcType=SMALLINT},
+      group_id = #{groupId,jdbcType=BIGINT},
+      allot_code = #{allotCode,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=BIGINT},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      contact_name = #{contactName,jdbcType=VARCHAR},
+      phone_num = #{phoneNum,jdbcType=VARCHAR},
+      warehouse_out_id = #{warehouseOutId,jdbcType=BIGINT},
+      warehouse_in_id = #{warehouseInId,jdbcType=BIGINT},
+      allot_out_time = #{allotOutTime,jdbcType=TIMESTAMP},
+      allot_in_time = #{allotInTime,jdbcType=TIMESTAMP},
+      operator = #{operator,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      attachments = #{attachments,jdbcType=LONGVARCHAR},
+      company_id = #{companyId,jdbcType=BIGINT},
+      create_id = #{createId,jdbcType=BIGINT},
+      create_name = #{createName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+    where allot_id = #{allotId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMapDto">
+    select
+    <include refid="Base_Column_List" />
+    from t_allot
+    <where>
+      company_id = #{companyId,jdbcType=BIGINT}
+      <if test="isDeleted!=null">
+        and is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      </if>
+      <if test="allotCode!=null and allotCode!=''">
+        and allot_code like concat('%',#{allotCode,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="allotOutBeginTime!=null and allotOutBeginTime!=''">
+        and allot_out_time &gt;= CONCAT(STR_TO_DATE(#{allotOutBeginTime,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+      </if>
+      <if test="allotOutEndTime!=null and allotOutEndTime!=''">
+        and allot_out_time &lt;= CONCAT(STR_TO_DATE(#{allotOutEndTime,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
+      </if>
+      <if test="warehouseOutId!=null and warehouseOutId!=''">
+        and warehouse_out_id = #{warehouseOutId,jdbcType=BIGINT}
+      </if>
+      <if test="operator!=null and operator!=''">
+        and operator like concat('%',#{operator,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="allotInBeginTime!=null and allotInBeginTime!=''">
+        and allot_in_time &gt;= CONCAT(STR_TO_DATE(#{allotInBeginTime,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+      </if>
+      <if test="allotInEndTime!=null and allotInEndTime!=''">
+        and allot_in_time &lt;= CONCAT(STR_TO_DATE(#{allotInEndTime,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
+      </if>
+      <if test="warehouseInId!=null and warehouseInId!=''">
+        and warehouse_in_id = #{warehouseInId,jdbcType=BIGINT}
+      </if>
+      <if test="customerName!=null and customerName!=''">
+        and customer_name like concat('%',#{customerName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="groupId==null or groupId==''">
+        and group_id = #{groupId,jdbcType=BIGINT}
+      </if>
+    </where>
+    order by create_time desc
+  </select>
+</mapper>
