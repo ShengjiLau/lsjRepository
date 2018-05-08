@@ -54,7 +54,7 @@ public class JwtTokenUtil {
         Date dt = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(dt);
-        c.add(Calendar.DATE, 1);
+        c.add(Calendar.DATE,36500);
         dt = c.getTime();
         return dt;
     }

@@ -23,6 +23,16 @@ public class InorderGoodsInfo implements Serializable {
      * 货物id
      */
     private Long goodsId;
+
+    /**
+     * 单位
+     */
+    private String unit;
+    /**
+     * 换算关系
+     */
+    private int unitData;
+
     /**
      * 应收数量
      */
@@ -79,6 +89,22 @@ public class InorderGoodsInfo implements Serializable {
 
     public void setGoodsId(Long goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public int getUnitData() {
+        return unitData;
+    }
+
+    public void setUnitData(int unitData) {
+        this.unitData = unitData;
     }
 
     public Float getReceivalbeAmount() {
@@ -148,17 +174,19 @@ public class InorderGoodsInfo implements Serializable {
     @Override
     public String toString() {
         return "InorderGoodsInfo{" +
-        ", relationId=" + relationId +
-        ", inorderId=" + inorderId +
-        ", goodsId=" + goodsId +
-        ", receivalbeAmount=" + receivalbeAmount +
-        ", batch=" + batch +
-        ", inHouseAmount=" + inHouseAmount +
-        ", inHousePrice=" + inHousePrice +
-        ", damage=" + damage +
-        ", remark=" + remark +
-        ", strogeLocationId=" + strogeLocationId +
-        ", strogeLocationCode=" + strogeLocationCode +
-        "}";
+                "relationId=" + relationId +
+                ", inorderId=" + inorderId +
+                ", goodsId=" + goodsId +
+                ", unit='" + unit + '\'' +
+                ", unitData=" + unitData +
+                ", receivalbeAmount=" + receivalbeAmount +
+                ", batch='" + batch + '\'' +
+                ", inHouseAmount=" + inHouseAmount +
+                ", inHousePrice=" + inHousePrice +
+                ", damage=" + damage +
+                ", remark='" + remark + '\'' +
+                ", strogeLocationId=" + strogeLocationId +
+                ", strogeLocationCode='" + strogeLocationCode + '\'' +
+                '}';
     }
 }
