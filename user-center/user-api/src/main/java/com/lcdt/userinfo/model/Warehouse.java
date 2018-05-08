@@ -1,60 +1,91 @@
 package com.lcdt.userinfo.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 import java.util.List;
 
 public class Warehouse {
+    @ApiModelProperty(value = "主键id")
     private Long whId;
 
+    @ApiModelProperty(value = "仓库名称")
     private String whName;
 
+    @ApiModelProperty(value = "仓库编码")
     private String whCode;
 
+    @ApiModelProperty(value = "仓库类型 0-自营，1-外协")
     private Short whType;
 
+    @ApiModelProperty(value = "仓库状态 0-启用，1-停用")
     private Short whStatus;
 
+    @ApiModelProperty(value = "所属服务商id")
     private Long customerId;
 
+    @ApiModelProperty(value = "所属服务商名称")
     private String customerName;
 
+    @ApiModelProperty(value = "负责人")
     private String principal;
 
+    @ApiModelProperty(value = "手机")
     private String mobile;
 
+    @ApiModelProperty(value = "邮箱")
     private String mail;
 
+    @ApiModelProperty(value = "电话")
     private String telNum;
 
+    @ApiModelProperty(value = "传真")
     private String fax;
 
+    @ApiModelProperty(value = "所在地-省")
     private String province;
 
+    @ApiModelProperty(value = "所在地-市")
     private String city;
 
+    @ApiModelProperty(value = "所在地-县")
     private String county;
 
+    @ApiModelProperty(value = "详细地址")
     private String detailAddress;
 
+    @ApiModelProperty(value = "邮编")
     private String postCode;
 
+    @ApiModelProperty(value = "备注")
     private String remark;
 
+    @ApiModelProperty(value = "创建人id")
     private Long createId;
 
+    @ApiModelProperty(value = "创建人姓名")
     private String createName;
 
+    @ApiModelProperty(value = "创建时间")
     private Date createDate;
 
+    @ApiModelProperty(value = "修改人id")
     private Long updateId;
 
+    @ApiModelProperty(value = "修改人姓名")
     private String updateName;
 
+    @ApiModelProperty(value = "修改时间")
     private Date updateTime;
 
+    @ApiModelProperty(value = "0-未删除，1-已删除")
     private Short isDeleted;
 
+    @ApiModelProperty(value = "企业id")
     private Long companyId;
+
+    @ApiModelProperty(value = "所属项目组IDS")
+    private String groupIds;
 
     /***
      * 仓库联系人
@@ -275,5 +306,13 @@ public class Warehouse {
 
     public void setLinkmanList(List<WarehouseLinkman> linkmanList) {
         this.linkmanList = linkmanList;
+    }
+
+    public String getGroupIds() {
+        return groupIds;
+    }
+
+    public void setGroupIds(String groupIds) {
+        this.groupIds = groupIds;
     }
 }

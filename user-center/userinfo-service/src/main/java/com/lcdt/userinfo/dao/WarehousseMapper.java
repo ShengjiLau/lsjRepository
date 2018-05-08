@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.dao;
 
 import com.lcdt.userinfo.model.Warehouse;
+import com.lcdt.userinfo.web.dto.WarehouseDto;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,6 @@ public interface WarehousseMapper {
 
     int updateByPrimaryKey(Warehouse record);
 
-    List<Warehouse> selectByCondition(Map map);
+    List<WarehouseDto> selectByCondition(Map map);
 
 }

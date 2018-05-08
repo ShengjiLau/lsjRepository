@@ -9,6 +9,7 @@ import com.lcdt.userinfo.dao.WarehousseMapper;
 import com.lcdt.userinfo.localservice.GroupWareHouseService;
 import com.lcdt.userinfo.model.*;
 import com.lcdt.userinfo.service.WarehouseService;
+import com.lcdt.userinfo.web.dto.WarehouseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,7 +103,7 @@ public class WarehouseSeviceImpl implements WarehouseService {
             }
         }
         PageHelper.startPage(pageNo, pageSize);
-        List<Warehouse> list = warehousseMapper.selectByCondition(m);
+        List<WarehouseDto> list = warehousseMapper.selectByCondition(m);
         PageInfo pageInfo = new PageInfo(list);
 
         return pageInfo;
