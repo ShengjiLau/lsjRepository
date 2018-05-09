@@ -10,12 +10,14 @@ import com.lcdt.warehouse.mapper.AllotProductMapper;
 import com.lcdt.warehouse.service.AllotService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 /**
  * Created by liz on 2018/5/8.
  */
+@Service
 public class AllotServiceImpl implements AllotService{
     @Autowired
     private AllotMapper allotMapper;

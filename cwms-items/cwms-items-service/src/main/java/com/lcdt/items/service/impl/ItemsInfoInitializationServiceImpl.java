@@ -66,6 +66,7 @@ public class ItemsInfoInitializationServiceImpl implements ItemsInfoInitializati
         calcUnit2.setUnitName("方");
         result+=calcUnitService.addCalcUnit(calcUnit2);
 
+//        System.out.println("-----------------------商品开始---------------------------");
         ConversionRel conversionRel=new ConversionRel();
         conversionRel.setCompanyId(companyId);
         conversionRel.setCreateId(userId);
@@ -99,6 +100,7 @@ public class ItemsInfoInitializationServiceImpl implements ItemsInfoInitializati
         itemsInfoDao.setSubItemsInfoDaoList(subItemsInfoDaoList);
 
         itemsInfoService.addItemsInfo(itemsInfoDao);
+//        System.out.println("-----------------------商品结束---------------------------");
         return result;
     }
 }
