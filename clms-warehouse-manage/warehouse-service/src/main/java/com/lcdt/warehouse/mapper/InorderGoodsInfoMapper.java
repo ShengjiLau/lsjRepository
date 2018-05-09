@@ -1,7 +1,7 @@
 package com.lcdt.warehouse.mapper;
 
-import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.lcdt.warehouse.entity.InorderGoodsInfo;
 
 /**
  * <p>

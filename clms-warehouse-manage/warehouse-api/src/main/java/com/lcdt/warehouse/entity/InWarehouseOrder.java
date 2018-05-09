@@ -1,9 +1,13 @@
 package com.lcdt.warehouse.entity;
 
-import com.baomidou.mybatisplus.enums.IdType;
-import java.util.Date;
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.enums.FieldFill;
+import com.baomidou.mybatisplus.enums.IdType;
+import com.lcdt.converter.ResponseData;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -13,7 +17,7 @@ import java.io.Serializable;
  * @author code generate
  * @since 2018-05-07
  */
-public class InWarehouseOrder implements Serializable {
+public class InWarehouseOrder implements Serializable,ResponseData {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,7 +33,7 @@ public class InWarehouseOrder implements Serializable {
     /**
      * 入库单号
      */
-    private Long inOrderCode;
+    private String inOrderCode;
     /**
      * 入库单状态
      */
@@ -107,6 +111,9 @@ public class InWarehouseOrder implements Serializable {
      * 附件
      */
     private String attachments;
+
+    private Long companyId;
+
     /**
      * 创建人id
      */
@@ -153,11 +160,11 @@ public class InWarehouseOrder implements Serializable {
         this.planId = planId;
     }
 
-    public Long getInOrderCode() {
+    public String getInOrderCode() {
         return inOrderCode;
     }
 
-    public void setInOrderCode(Long inOrderCode) {
+    public void setInOrderCode(String inOrderCode) {
         this.inOrderCode = inOrderCode;
     }
 
@@ -305,6 +312,14 @@ public class InWarehouseOrder implements Serializable {
         this.attachments = attachments;
     }
 
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
     public Long getCreateId() {
         return createId;
     }
@@ -364,34 +379,35 @@ public class InWarehouseOrder implements Serializable {
     @Override
     public String toString() {
         return "InWarehouseOrder{" +
-        ", inorderId=" + inorderId +
-        ", planId=" + planId +
-        ", inOrderCode=" + inOrderCode +
-        ", inOrderStatus=" + inOrderStatus +
-        ", groupId=" + groupId +
-        ", groupName=" + groupName +
-        ", purchaseCode=" + purchaseCode +
-        ", customerName=" + customerName +
-        ", customerContactName=" + customerContactName +
-        ", customerContactPhone=" + customerContactPhone +
-        ", warehouseId=" + warehouseId +
-        ", warehouseName=" + warehouseName +
-        ", storageType=" + storageType +
-        ", storagePlanTime=" + storagePlanTime +
-        ", storageTime=" + storageTime +
-        ", storageRemark=" + storageRemark +
-        ", deliverymanName=" + deliverymanName +
-        ", deliverymanPhone=" + deliverymanPhone +
-        ", deliverymanLinkman=" + deliverymanLinkman +
-        ", deliverymanCar=" + deliverymanCar +
-        ", attachments=" + attachments +
-        ", createId=" + createId +
-        ", createName=" + createName +
-        ", createDate=" + createDate +
-        ", updateId=" + updateId +
-        ", updateName=" + updateName +
-        ", updateDate=" + updateDate +
-        ", isDeleted=" + isDeleted +
-        "}";
+                "inorderId=" + inorderId +
+                ", planId=" + planId +
+                ", inOrderCode=" + inOrderCode +
+                ", inOrderStatus=" + inOrderStatus +
+                ", groupId=" + groupId +
+                ", groupName='" + groupName + '\'' +
+                ", purchaseCode='" + purchaseCode + '\'' +
+                ", customerName='" + customerName + '\'' +
+                ", customerContactName='" + customerContactName + '\'' +
+                ", customerContactPhone='" + customerContactPhone + '\'' +
+                ", warehouseId=" + warehouseId +
+                ", warehouseName='" + warehouseName + '\'' +
+                ", storageType='" + storageType + '\'' +
+                ", storagePlanTime=" + storagePlanTime +
+                ", storageTime=" + storageTime +
+                ", storageRemark='" + storageRemark + '\'' +
+                ", deliverymanName='" + deliverymanName + '\'' +
+                ", deliverymanPhone='" + deliverymanPhone + '\'' +
+                ", deliverymanLinkman='" + deliverymanLinkman + '\'' +
+                ", deliverymanCar='" + deliverymanCar + '\'' +
+                ", attachments='" + attachments + '\'' +
+                ", companyId=" + companyId +
+                ", createId=" + createId +
+                ", createName='" + createName + '\'' +
+                ", createDate=" + createDate +
+                ", updateId=" + updateId +
+                ", updateName='" + updateName + '\'' +
+                ", updateDate=" + updateDate +
+                ", isDeleted=" + isDeleted +
+                '}';
     }
 }
