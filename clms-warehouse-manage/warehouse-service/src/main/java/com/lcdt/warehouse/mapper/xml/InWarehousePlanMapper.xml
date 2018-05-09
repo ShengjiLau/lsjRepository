@@ -9,12 +9,15 @@
         ware_house_id,warehouse_name,contract_no,attachment_id
     </sql>
 
-    <select id="inWarehousePlanList" parameterType="com.lcdt.warehouse.dto.InHouseParams4SearchDto" resultType="com.lcdt.warehouse.entity.InWarehousePlan">
+    <select id="inWarehousePlanList" parameterType="com.lcdt.warehouse.dto.InWhPlanSearchParamsDto" resultType="com.lcdt.warehouse.entity.InWarehousePlan">
         SELECT <include refid="Base_Column_List" />
         FROM in_warehouse_plan
         <where>
             <if test="companyId != null and companyId>0">
                 and  company_id = #{companyId}
+            </if>
+            <if test="planStatus != null and planStatus!=''">
+                and  plan_status = #{planStatus}
             </if>
             <if test="planNo!=null and planNo != ''">
                 and plan_no like concat('%',#{planNo},'%')
