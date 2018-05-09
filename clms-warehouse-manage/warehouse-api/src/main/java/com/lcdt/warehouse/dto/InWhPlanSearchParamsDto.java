@@ -30,6 +30,9 @@ public class InWhPlanSearchParamsDto implements Serializable {
     private String planStatus; //计划状态
 
 
+    private String groupIds;//项目组ID
+
+
     private Integer pageNo;
     private Integer pageSize;
 
@@ -167,5 +170,13 @@ public class InWhPlanSearchParamsDto implements Serializable {
 
     public void setPlanStatus(String planStatus) {
         this.planStatus = planStatus;
+    }
+
+    public String getGroupIds() {
+        return groupIds;
+    }
+
+    public void setGroupIds(String groupIds) {
+        this.groupIds = groupIds;
     }
 }

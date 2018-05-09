@@ -1,6 +1,9 @@
 package com.lcdt.warehouse.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.enums.IdType;
+
+import java.beans.Transient;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.lcdt.warehouse.dto.InPlanGoodsInfoResultDto;
@@ -68,6 +71,9 @@ public class InWarehousePlan implements Serializable {
      * 计划入库时间
      */
     private Date storagePlanTime;
+    /***
+     * 备注
+     */
     private String storageRemark;
     /**
      * 送货单位
@@ -97,8 +103,27 @@ public class InWarehousePlan implements Serializable {
      * 合同编号
      */
     private String contractNo;
-    private Long attachmentId;
+    /***
+     * 附件
+     */
+    private String attachment;
 
+    /**
+     * 更新人id
+     */
+    private Long updateId;
+    /**
+     * 更新人
+     */
+    private String updateName;
+    /**
+     * 更新时间
+     */
+    private Date updateDate;
+
+    //扩充属性
+    @TableField(exist=false)
+    private List<InPlanGoodsInfoResultDto> goodsList; //商品详细列表
 
     public List<InPlanGoodsInfoResultDto> getGoodsList() {
         return goodsList;
@@ -108,8 +133,7 @@ public class InWarehousePlan implements Serializable {
         this.goodsList = goodsList;
     }
 
-    //扩充属性
-    private List<InPlanGoodsInfoResultDto> goodsList; //商品详细列表
+
 
 
     public Long getPlanId() {
@@ -304,44 +328,36 @@ public class InWarehousePlan implements Serializable {
         this.contractNo = contractNo;
     }
 
-    public Long getAttachmentId() {
-        return attachmentId;
+
+    public String getAttachment() {
+        return attachment;
     }
 
-    public void setAttachmentId(Long attachmentId) {
-        this.attachmentId = attachmentId;
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
     }
 
-    @Override
-    public String toString() {
-        return "InWarehousePlan{" +
-        ", planId=" + planId +
-        ", planNo=" + planNo +
-        ", createTime=" + createTime +
-        ", createUserName=" + createUserName +
-        ", createUserId=" + createUserId +
-        ", groupId=" + groupId +
-        ", groupName=" + groupName +
-        ", companyId=" + companyId +
-        ", customerName=" + customerName +
-        ", customerId=" + customerId +
-        ", planStatus=" + planStatus +
-        ", customerContactName=" + customerContactName +
-        ", customerContactPhone=" + customerContactPhone +
-        ", customerPurchaseNo=" + customerPurchaseNo +
-        ", storageType=" + storageType +
-        ", storagePlanTime=" + storagePlanTime +
-        ", storageRemark=" + storageRemark +
-        ", deliverymanName=" + deliverymanName +
-        ", deliverymanPhone=" + deliverymanPhone +
-        ", deliverymanLinkman=" + deliverymanLinkman +
-        ", deliverymanCar=" + deliverymanCar +
-        ", wareHouseId=" + wareHouseId +
-        ", warehouseName=" + warehouseName +
-        ", contractNo=" + contractNo +
-        ", attachmentId=" + attachmentId +
-        "}";
+    public Long getUpdateId() {
+        return updateId;
     }
 
+    public void setUpdateId(Long updateId) {
+        this.updateId = updateId;
+    }
 
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
 }
