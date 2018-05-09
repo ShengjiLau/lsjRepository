@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.tl.commons.util.DateUtility;
 
 import java.util.HashMap;
@@ -33,7 +34,7 @@ import java.util.Map;
  * Created by yangbinq on 2018/05/08.
  * Desciption: 仓储入库计划API
  */
-@Controller
+@RestController
 @RequestMapping("/wh/in/plan")
 public class InWarehousePlanController {
 
@@ -43,14 +44,14 @@ public class InWarehousePlanController {
 
     @ApiOperation("入库计划列表")
     @RequestMapping(value = "/list",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
     public PageBaseDto inPlanList(@Validated InHouseParams4SearchDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         dto.setCompanyId(companyId);
-        if (dto.getCreateBegin()>0) {
+        if (dto.getCreateBegin()!=null && dto.getCreateBegin()>0) {
             dto.setCreateBeginStr(DateUtils.stampToDate(dto.getCreateBegin()));
         }
-        if (dto.getCreateEnd()>0) {
+        if (dto.getCreateBegin()!=null && dto.getCreateEnd()>0) {
             dto.setCreateEndStr(DateUtils.stampToDate(dto.getCreateEnd()));
         }
         Page pg = inWarehousePlanService.inWarehousePlanList(dto,new Page<InWarehousePlan>(dto.getPageNo(), dto.getPageSize()));
