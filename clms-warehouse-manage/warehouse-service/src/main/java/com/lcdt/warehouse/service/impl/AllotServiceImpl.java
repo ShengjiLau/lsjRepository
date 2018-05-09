@@ -17,8 +17,6 @@ import java.util.*;
 /**
  * Created by liz on 2018/5/8.
  */
-
-
 @Service
 public class AllotServiceImpl implements AllotService{
     @Autowired
