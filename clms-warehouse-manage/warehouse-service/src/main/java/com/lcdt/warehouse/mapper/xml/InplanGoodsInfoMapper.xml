@@ -2,5 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.warehouse.mapper.InplanGoodsInfoMapper">
 
-
+    <!--入库计划货物详细-->
+    <select id="inWhPlanGoodsInfoList" resultType="com.lcdt.warehouse.dto.InPlanGoodsInfoResultDto">
+        SELECT a.relation_id,a.goods_id,a.plan_goods_num,a.remark,a.in_house_price,a.unit,a.unit_data,
+        b.goods_name,b.goods_classify,b.goods_spec,b.goods_code,b.goods_barcode,b.goods_batch
+        FROM inplan_goods_info a
+        LEFT JOIN goods_info b on a.goods_id = b.goods_id
+        WHERE a.plan_id = #{planId}
+    </select>
 </mapper>

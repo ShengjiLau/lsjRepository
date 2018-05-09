@@ -3,7 +3,10 @@ package com.lcdt.warehouse.entity;
 import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.lcdt.warehouse.dto.InPlanGoodsInfoResultDto;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -95,6 +98,18 @@ public class InWarehousePlan implements Serializable {
      */
     private String contractNo;
     private Long attachmentId;
+
+
+    public List<InPlanGoodsInfoResultDto> getGoodsList() {
+        return goodsList;
+    }
+
+    public void setGoodsList(List<InPlanGoodsInfoResultDto> goodsList) {
+        this.goodsList = goodsList;
+    }
+
+    //扩充属性
+    private List<InPlanGoodsInfoResultDto> goodsList; //商品详细列表
 
 
     public Long getPlanId() {
@@ -327,4 +342,6 @@ public class InWarehousePlan implements Serializable {
         ", attachmentId=" + attachmentId +
         "}";
     }
+
+
 }
