@@ -98,7 +98,7 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=SMALLINT},
       company_id = #{companyId,jdbcType=BIGINT},
-      group_ids = #{updateName,jdbcType=VARCHAR}
+      group_ids = #{groupIds,jdbcType=VARCHAR}
     where wh_id = #{whId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">

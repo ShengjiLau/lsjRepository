@@ -12,7 +12,7 @@ spring:
     name: warehouse-db
     type: com.alibaba.druid.pool.DruidDataSource
 mybatis-plus:
-  mapper-locations: classpath:/com/lcdt/warehouse/mapper/*Mapper.xml
+  mapper-locations: classpath:/com/lcdt/warehouse/mapper/xml/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
   typeAliasesPackage: com.lcdt.warehouse.entity
   global-config:
