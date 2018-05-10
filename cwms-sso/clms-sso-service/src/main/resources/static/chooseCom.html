@@ -162,7 +162,7 @@
             <div class="acts">
               <a class="go" th:href="@{/account/logincompany(companyId=${company.compId})}">进入</a>
               <span th:if="${company.isCreate}==0">
-                <a id="unbinda" onclick="return clickUnbind(this)" th:href="@{/account/removecompany(usercomprelid=${company.userCompRelId},companyid=${company.compId})}" class="exit">解除关系</a>
+                <a onclick="return clickUnbind(this)" th:href="@{/account/removecompany(usercomprelid=${company.userCompRelId},companyid=${company.compId})}" class="exit">解除关系</a>
               </span>
             </div>
           </li>
@@ -172,15 +172,15 @@
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script type="text/javascript" th:inline="javascript">
   function clickUnbind(obj){
-
-      var a = $("#unbinda");
       var truthBeTold = window.confirm("确定要解除关系吗？")
       if (truthBeTold) {
-          var url = a.attr("href");
+          var url = obj.href;
           window.location.href=url;
       }
       return false;
   }
+
+
 </script>
   </body>
 </html>

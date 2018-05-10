@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by yangbinq on 2018/5/7.
  */
-public class InHouseParams4SearchDto implements Serializable {
+public class InWhPlanSearchParamsDto implements Serializable {
 
     private String planNo; //计划编码
 
@@ -27,7 +27,10 @@ public class InHouseParams4SearchDto implements Serializable {
     private String customerPurchaseNo; //采购单号
     private String contractNo; //合同编码
     private Long companyId;
+    private String planStatus; //计划状态
 
+
+    private String groupIds;//项目组ID
 
 
     private Integer pageNo;
@@ -159,5 +162,21 @@ public class InHouseParams4SearchDto implements Serializable {
 
     public void setCreateEndStr(String createEndStr) {
         this.createEndStr = createEndStr;
+    }
+
+    public String getPlanStatus() {
+        return planStatus;
+    }
+
+    public void setPlanStatus(String planStatus) {
+        this.planStatus = planStatus;
+    }
+
+    public String getGroupIds() {
+        return groupIds;
+    }
+
+    public void setGroupIds(String groupIds) {
+        this.groupIds = groupIds;
     }
 }
