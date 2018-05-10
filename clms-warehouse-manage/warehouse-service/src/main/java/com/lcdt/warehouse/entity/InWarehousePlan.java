@@ -1,9 +1,13 @@
 package com.lcdt.warehouse.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.enums.IdType;
+
+import java.beans.Transient;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.lcdt.warehouse.dto.InPlanGoodsInfoResultDto;
+import com.lcdt.warehouse.dto.InWarehouseOrderDto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -42,10 +46,10 @@ public class InWarehousePlan implements Serializable {
     private Long customerId;
     /**
      * 10-待发布
-20- 配舱中
-30-已配舱
-40-完成
-50-取消
+        20- 配舱中
+        30-已配舱
+        40-完成
+        50-取消
 
      */
     private Integer planStatus;
@@ -57,17 +61,20 @@ public class InWarehousePlan implements Serializable {
     private String customerPurchaseNo;
     /**
      * 入库类型
-{id:"01",value:"原料入库"},
-  {id:"02",value:"成品入库"},
-              {id:"03",value:"退换货入库"},
-              {id:"04",value:"采购入库"},
-              {id:"05",value:"其它"},
+        {id:"01",value:"原料入库"},
+          {id:"02",value:"成品入库"},
+                      {id:"03",value:"退换货入库"},
+                      {id:"04",value:"采购入库"},
+                      {id:"05",value:"其它"},
      */
     private String storageType;
     /**
      * 计划入库时间
      */
     private Date storagePlanTime;
+    /***
+     * 备注
+     */
     private String storageRemark;
     /**
      * 送货单位
@@ -97,8 +104,27 @@ public class InWarehousePlan implements Serializable {
      * 合同编号
      */
     private String contractNo;
-    private Long attachmentId;
+    /***
+     * 附件
+     */
+    private String attachment;
 
+    /**
+     * 更新人id
+     */
+    private Long updateId;
+    /**
+     * 更新人
+     */
+    private String updateName;
+    /**
+     * 更新时间
+     */
+    private Date updateDate;
+
+    //扩充属性
+    @TableField(exist=false)
+    private List<InPlanGoodsInfoResultDto> goodsList; //商品详细列表
 
     public List<InPlanGoodsInfoResultDto> getGoodsList() {
         return goodsList;
@@ -108,8 +134,21 @@ public class InWarehousePlan implements Serializable {
         this.goodsList = goodsList;
     }
 
-    //扩充属性
-    private List<InPlanGoodsInfoResultDto> goodsList; //商品详细列表
+
+
+    @TableField(exist=false)
+    private List<InWarehouseOrderDto> inWarehouseOrderDtoList; //入库计划详细
+
+
+
+    public List<InWarehouseOrderDto> getInWarehouseOrderDtoList() {
+        return inWarehouseOrderDtoList;
+    }
+
+    public void setInWarehouseOrderDtoList(List<InWarehouseOrderDto> inWarehouseOrderDtoList) {
+        this.inWarehouseOrderDtoList = inWarehouseOrderDtoList;
+    }
+
 
 
     public Long getPlanId() {
@@ -304,44 +343,36 @@ public class InWarehousePlan implements Serializable {
         this.contractNo = contractNo;
     }
 
-    public Long getAttachmentId() {
-        return attachmentId;
+
+    public String getAttachment() {
+        return attachment;
     }
 
-    public void setAttachmentId(Long attachmentId) {
-        this.attachmentId = attachmentId;
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
     }
 
-    @Override
-    public String toString() {
-        return "InWarehousePlan{" +
-        ", planId=" + planId +
-        ", planNo=" + planNo +
-        ", createTime=" + createTime +
-        ", createUserName=" + createUserName +
-        ", createUserId=" + createUserId +
-        ", groupId=" + groupId +
-        ", groupName=" + groupName +
-        ", companyId=" + companyId +
-        ", customerName=" + customerName +
-        ", customerId=" + customerId +
-        ", planStatus=" + planStatus +
-        ", customerContactName=" + customerContactName +
-        ", customerContactPhone=" + customerContactPhone +
-        ", customerPurchaseNo=" + customerPurchaseNo +
-        ", storageType=" + storageType +
-        ", storagePlanTime=" + storagePlanTime +
-        ", storageRemark=" + storageRemark +
-        ", deliverymanName=" + deliverymanName +
-        ", deliverymanPhone=" + deliverymanPhone +
-        ", deliverymanLinkman=" + deliverymanLinkman +
-        ", deliverymanCar=" + deliverymanCar +
-        ", wareHouseId=" + wareHouseId +
-        ", warehouseName=" + warehouseName +
-        ", contractNo=" + contractNo +
-        ", attachmentId=" + attachmentId +
-        "}";
+    public Long getUpdateId() {
+        return updateId;
     }
 
+    public void setUpdateId(Long updateId) {
+        this.updateId = updateId;
+    }
 
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
 }

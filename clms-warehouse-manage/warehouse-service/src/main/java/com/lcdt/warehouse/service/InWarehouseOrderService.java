@@ -1,7 +1,10 @@
 package com.lcdt.warehouse.service;
 
-import com.lcdt.warehouse.entity.InWarehouseOrder;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
+import com.lcdt.warehouse.dto.InWarehouseOrderDto;
+import com.lcdt.warehouse.dto.InWarehouseOrderSearchParamsDto;
+import com.lcdt.warehouse.entity.InWarehouseOrder;
 
 /**
  * <p>
@@ -12,5 +15,18 @@ import com.baomidou.mybatisplus.service.IService;
  * @since 2018-05-07
  */
 public interface InWarehouseOrderService extends IService<InWarehouseOrder> {
+    /**
+     * 新增入库单
+     * @param params
+     * @return
+     */
+    int addInWarehouseOrder(InWarehouseOrderDto params);
+
+    /**
+     * 入库单列表
+     * @param params
+     * @return
+     */
+    Page<InWarehouseOrderDto> queryInWarehouseOrderList(InWarehouseOrderSearchParamsDto params);
 
 }

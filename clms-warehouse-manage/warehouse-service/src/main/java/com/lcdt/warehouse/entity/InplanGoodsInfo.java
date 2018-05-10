@@ -45,6 +45,30 @@ public class InplanGoodsInfo implements Serializable {
      */
     private int unitData;
 
+    private String goodsName;
+    /**
+     * 商品分类
+     */
+    private String goodsClassify;
+    private String goodsSpec;
+    private String goodsCode;
+    private String goodsBarcode;
+    /**
+     * 库存单价
+     */
+    private Integer goodsPrice;
+    /**
+     * 商品批次
+     */
+    private String goodsBatch;
+    private Long subItemId;
+
+    /**
+     * 最小单位
+     */
+    private String minUnit;
+
+
 
     public Long getRelationId() {
         return relationId;
@@ -110,17 +134,79 @@ public class InplanGoodsInfo implements Serializable {
         this.unitData = unitData;
     }
 
-    @Override
-    public String toString() {
-        return "InplanGoodsInfo{" +
-                "relationId=" + relationId +
-                ", goodsId=" + goodsId +
-                ", planGoodsNum=" + planGoodsNum +
-                ", remark='" + remark + '\'' +
-                ", inHousePrice=" + inHousePrice +
-                ", planId=" + planId +
-                ", unit='" + unit + '\'' +
-                ", unitData=" + unitData +
-                '}';
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public String getGoodsClassify() {
+        return goodsClassify;
+    }
+
+    public void setGoodsClassify(String goodsClassify) {
+        this.goodsClassify = goodsClassify;
+    }
+
+    public String getGoodsSpec() {
+        return goodsSpec;
+    }
+
+    public void setGoodsSpec(String goodsSpec) {
+        this.goodsSpec = goodsSpec;
+    }
+
+    public String getGoodsCode() {
+        return goodsCode;
+    }
+
+    public void setGoodsCode(String goodsCode) {
+        this.goodsCode = goodsCode;
+    }
+
+    public String getGoodsBarcode() {
+        return goodsBarcode;
+    }
+
+    public void setGoodsBarcode(String goodsBarcode) {
+        this.goodsBarcode = goodsBarcode;
+    }
+
+    public Integer getGoodsPrice() {
+        return goodsPrice;
+    }
+
+    public void setGoodsPrice(Integer goodsPrice) {
+        this.goodsPrice = goodsPrice;
+    }
+
+    public String getGoodsBatch() {
+        return goodsBatch;
+    }
+
+    public void setGoodsBatch(String goodsBatch) {
+        this.goodsBatch = goodsBatch;
+    }
+
+    public Long getSubItemId() {
+        return subItemId;
+    }
+
+    public void setSubItemId(Long subItemId) {
+        this.subItemId = subItemId;
+    }
+
+    public String getMinUnit() {
+        return minUnit;
+    }
+
+    public void setMinUnit(String minUnit) {
+        this.minUnit = minUnit;
     }
 }

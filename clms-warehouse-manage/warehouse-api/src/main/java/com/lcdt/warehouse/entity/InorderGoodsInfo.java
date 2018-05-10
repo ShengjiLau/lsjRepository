@@ -1,7 +1,8 @@
 package com.lcdt.warehouse.entity;
 
-import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.enums.IdType;
+
 import java.io.Serializable;
 
 /**
@@ -19,11 +20,28 @@ public class InorderGoodsInfo implements Serializable {
     @TableId(value = "relation_id", type = IdType.AUTO)
     private Long relationId;
     private Long inorderId;
-    /**
-     * 货物id
-     */
-    private Long goodsId;
 
+    private Long goodsId;
+    private String goodsName;
+    /**
+     * 商品分类
+     */
+    private String goodsClassify;
+    private String goodsSpec;
+    private String goodsCode;
+    private String goodsBarcode;
+    /**
+     * 库存单价
+     */
+    private Integer goodsPrice;
+    /**
+     * 商品批次
+     */
+    private String goodsBatch;
+    /**
+     * 最小单位
+     */
+    private String minUnit;
     /**
      * 单位
      */
@@ -66,7 +84,6 @@ public class InorderGoodsInfo implements Serializable {
      */
     private String strogeLocationCode;
 
-
     public Long getRelationId() {
         return relationId;
     }
@@ -89,6 +106,70 @@ public class InorderGoodsInfo implements Serializable {
 
     public void setGoodsId(Long goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public String getGoodsClassify() {
+        return goodsClassify;
+    }
+
+    public void setGoodsClassify(String goodsClassify) {
+        this.goodsClassify = goodsClassify;
+    }
+
+    public String getGoodsSpec() {
+        return goodsSpec;
+    }
+
+    public void setGoodsSpec(String goodsSpec) {
+        this.goodsSpec = goodsSpec;
+    }
+
+    public String getGoodsCode() {
+        return goodsCode;
+    }
+
+    public void setGoodsCode(String goodsCode) {
+        this.goodsCode = goodsCode;
+    }
+
+    public String getGoodsBarcode() {
+        return goodsBarcode;
+    }
+
+    public void setGoodsBarcode(String goodsBarcode) {
+        this.goodsBarcode = goodsBarcode;
+    }
+
+    public Integer getGoodsPrice() {
+        return goodsPrice;
+    }
+
+    public void setGoodsPrice(Integer goodsPrice) {
+        this.goodsPrice = goodsPrice;
+    }
+
+    public String getGoodsBatch() {
+        return goodsBatch;
+    }
+
+    public void setGoodsBatch(String goodsBatch) {
+        this.goodsBatch = goodsBatch;
+    }
+
+    public String getMinUnit() {
+        return minUnit;
+    }
+
+    public void setMinUnit(String minUnit) {
+        this.minUnit = minUnit;
     }
 
     public String getUnit() {
@@ -169,24 +250,5 @@ public class InorderGoodsInfo implements Serializable {
 
     public void setStrogeLocationCode(String strogeLocationCode) {
         this.strogeLocationCode = strogeLocationCode;
-    }
-
-    @Override
-    public String toString() {
-        return "InorderGoodsInfo{" +
-                "relationId=" + relationId +
-                ", inorderId=" + inorderId +
-                ", goodsId=" + goodsId +
-                ", unit='" + unit + '\'' +
-                ", unitData=" + unitData +
-                ", receivalbeAmount=" + receivalbeAmount +
-                ", batch='" + batch + '\'' +
-                ", inHouseAmount=" + inHouseAmount +
-                ", inHousePrice=" + inHousePrice +
-                ", damage=" + damage +
-                ", remark='" + remark + '\'' +
-                ", strogeLocationId=" + strogeLocationId +
-                ", strogeLocationCode='" + strogeLocationCode + '\'' +
-                '}';
     }
 }

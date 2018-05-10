@@ -6,7 +6,7 @@
         plan_id, plan_no,create_time,create_user_name,create_user_id,group_id,group_name,company_id,customer_name,
         customer_id,plan_status,customer_contact_name,customer_contact_phone,customer_purchase_no,storage_type,
         storage_plan_time,storage_remark,deliveryman_name,deliveryman_phone,deliveryman_linkman,deliveryman_car,
-        ware_house_id,warehouse_name,contract_no,attachment_id
+        ware_house_id,warehouse_name,contract_no,attachment,update_id,update_name,update_date
     </sql>
 
     <select id="inWarehousePlanList" parameterType="com.lcdt.warehouse.dto.InWhPlanSearchParamsDto" resultType="com.lcdt.warehouse.entity.InWarehousePlan">
@@ -35,8 +35,7 @@
                 and create_user_name like concat('%',#{createUserName},'%')
             </if>
             <if test="goodsName != null and goodsName!=''">
-                and  plan_id in (SELECT plan_id FROM inplan_goods_info g1 LEFT JOIN goods_info g2 on g1.goods_id=g2.goods_id
-                                  WHERE g2.goods_name like concat('%',#{goodsName},'%')
+                and  plan_id in (SELECT plan_id FROM inplan_goods_info g1  WHERE g1.goods_name like concat('%',#{goodsName},'%')
                                  )
             </if>
             <if test="customerName!=null and customerName != ''">
@@ -45,8 +44,8 @@
             <if test="storageType!=null and storageType != ''">
                 and storage_type = #{storageType}
             </if>
-            <if test="groupId!=null and groupId>0">
-                and group_id = #{groupId}
+            <if test="groupIds!=null and groupIds!=''">
+                and group_id in (#{groupIds})
             </if>
             <if test="customerPurchaseNo!=null and customerPurchaseNo != ''">
                 and customer_purchase_no like concat('%',#{customerPurchaseNo},'%')

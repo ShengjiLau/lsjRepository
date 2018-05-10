@@ -1,7 +1,7 @@
 package com.lcdt.warehouse.service;
 
-import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.baomidou.mybatisplus.service.IService;
+import com.lcdt.warehouse.entity.InorderGoodsInfo;
 
 /**
  * <p>
