@@ -126,7 +126,7 @@ public class CustomerBindApi {
 		}
 
 		if (companyId.equals(inviteCompanyId)) {
-			ModelAndView errorView = new ModelAndView("/error");
+			ModelAndView errorView = new ModelAndView("error");
 			errorView.addObject("username", user.getRealName());
 			errorView.addObject("headimg", user.getPictureUrl());
 			String errorTipStr = "失败原因：同一企业内不能相互邀请绑定";
@@ -181,7 +181,7 @@ public class CustomerBindApi {
 		//绑定被邀请的客户id
 
 		if (customer.getBindCpid() != null) {
-			ModelAndView errorView = new ModelAndView("/error");
+			ModelAndView errorView = new ModelAndView("error");
 			errorView.addObject("username", user.getRealName());
 			errorView.addObject("headimg", user.getPictureUrl());
 			String successTipStr = "失败原因：客户已绑定";
