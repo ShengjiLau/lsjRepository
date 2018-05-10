@@ -4,12 +4,12 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.userinfo.model.UserCompRel;
-import com.lcdt.warehouse.dto.InPlanGoodsInfoResultDto;
-import com.lcdt.warehouse.dto.InWhPlanSearchParamsDto;
-import com.lcdt.warehouse.dto.InWhPlanStatusEnum;
+import com.lcdt.warehouse.dto.*;
+import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.entity.InWarehousePlan;
 import com.lcdt.warehouse.mapper.InWarehousePlanMapper;
 import com.lcdt.warehouse.mapper.InplanGoodsInfoMapper;
+import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.service.InWarehousePlanService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,14 +36,29 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
     @Autowired
     private InplanGoodsInfoMapper inplanGoodsInfoMapper;
 
+    @Autowired
+    InWarehouseOrderService inWarehouseOrderService;
+
     @Transactional(readOnly = true)
     @Override
     public Page<InWarehousePlan> inWarehousePlanList(InWhPlanSearchParamsDto dto, Page<InWarehousePlan> page) {
         List<InWarehousePlan> list = inWarehousePlanMapper.inWarehousePlanList(page, dto);
         if (null != list && list.size()>0) {
             for (InWarehousePlan obj : list) {
-                List<InPlanGoodsInfoResultDto> goodsList = inplanGoodsInfoMapper.inWhPlanGoodsInfoList(new Page<InPlanGoodsInfoResultDto>(),obj.getPlanId());
+                //计划划货物详细信息
+                List<InPlanGoodsInfoResultDto> goodsList = inplanGoodsInfoMapper.inWhPlanGoodsInfoList(new Page<InPlanGoodsInfoResultDto>(1,100),obj.getPlanId()); //默认拉取对应100条
                 obj.setGoodsList(goodsList);
+
+                //入库单
+                InWarehouseOrderSearchParamsDto params = new InWarehouseOrderSearchParamsDto();
+                params.setCompanyId(dto.getCompanyId());
+                params.setPlanId(obj.getPlanId());
+                params.setPageNo(1);
+                params.setPageSize(100);
+                Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderList(params);
+                if (inWarehouseOrderDtoList.getTotal()>0) {
+                    obj.setInWarehouseOrderDtoList(inWarehouseOrderDtoList.getRecords());
+                }
             }
         }
         return page.setRecords(list);
