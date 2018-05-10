@@ -19,8 +19,19 @@ import java.util.List;
  */
 public interface InWarehouseOrderMapper extends BaseMapper<InWarehouseOrder> {
 
+    /**
+     * 新增入库单
+     * @param inWarehouseOrder
+     * @return
+     */
     int insertInWarehouseOrder(InWarehouseOrder inWarehouseOrder);
 
+    /**
+     * 列表查询
+     * @param page
+     * @param params
+     * @return
+     */
     List<InWarehouseOrder> selectByCondition(Pagination page, InWarehouseOrderSearchParamsDto params);
 
 }
