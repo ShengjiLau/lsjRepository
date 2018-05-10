@@ -16,6 +16,7 @@
         <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName"/>
         <result column="storage_type" jdbcType="VARCHAR" property="storageType"/>
         <result column="storage_plan_time" jdbcType="TIMESTAMP" property="storagePlanTime"/>
+        <result column="storage_man" jdbcType="VARCHAR" property="storageMan"/>
         <result column="storage_time" jdbcType="TIMESTAMP" property="storageTime"/>
         <result column="storage_remark" jdbcType="VARCHAR" property="storageRemark"/>
         <result column="deliveryman_name" jdbcType="VARCHAR" property="deliverymanName"/>
@@ -33,8 +34,8 @@
         <result column="is_deleted" jdbcType="BIT" property="isDeleted"/>
     </resultMap>
 
-    <resultMap id="InWarehouseOrderDetailsMap" type="com.lcdt.warehouse.dto.InWarehouseOrderAddParamsDto" extends="BaseResultMap">
-        <collection property="goodsInfoDtoList" column="inorder_id" ofType="com.lcdt.warehouse.dto.InorderGoodsInfoParamsDto" select="com.lcdt.warehouse.mapper.InorderGoodsInfoMapper.goodsDetail"/>
+    <resultMap id="InWarehouseOrderDetailsMap" type="com.lcdt.warehouse.dto.InWarehouseOrderDto" extends="BaseResultMap">
+        <collection property="goodsInfoDtoList" column="inorder_id" ofType="com.lcdt.warehouse.dto.InorderGoodsInfoDto" select="com.lcdt.warehouse.mapper.InorderGoodsInfoMapper.goodsDetail"/>
     </resultMap>
 
     <sql id="Base_Select_List" >
@@ -45,13 +46,58 @@
         create_id, create_name, create_date,is_deleted
     </sql>
 
-    <sql id="Base_Select_Goods_List">
-        g.goods_id, goods_name, goods_classify, goods_spec, goods_code, goods_barcode,
-        goods_price, goods_batch, sub_item_id, min_unit, multi_unit
-    </sql>
-    <sql id="Base_Select_In_Goods_List">
-        relation_id, oi.inorder_id, oi.goods_id, unit, unit_data, receivalbe_amount, batch,
-        in_house_amount, in_house_price, damage, remark, stroge_location_id, stroge_location_code
+    <sql id="select_condition">
+        <if test="in_order_code!=null and in_order_code!=''">
+            and in_order_code like concat('%',#{inOrderCode,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="inOrderStatus!=null and inOrderStatus!='' and inOrderStatus.length>0">
+            and in_order_status in
+            <foreach collection="inOrderStatus" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="planId!=null and planId!=''">
+            and plan_id = #{plan_id,jdbcType=BIGINT}
+        </if>
+        <if test="warehouseId!=null and warehouseId!=''">
+            and warehouse_id = #{warehouseId,jdbcType=BIGINT}
+        </if>
+        <if test="createName!=null and createName!=''">
+            and create_name = #{createName,jdbcType=VARCHAR}
+        </if>
+        <if test="receiveCounty!=null and receiveCounty!=''">
+            and receive_county = #{receiveCounty,jdbcType=VARCHAR}
+        </if>
+        <if test="startCreateDate!=null and startCreateDate!=''">
+            and create_date &gt;= CONCAT(STR_TO_DATE(#{startCreateDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+        </if>
+        <if test="endCreateDate!=null and endCreateDate!=''">
+            and create_date &lt;= CONCAT(STR_TO_DATE(#{endCreateDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
+        </if>
+        <if test="startStorageTime!=null and startStorageTime!=''">
+            and storage_time &gt;= CONCAT(STR_TO_DATE(#{startStorageTime,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+        </if>
+        <if test="endStorageTime!=null and endStorageTime!=''">
+            and storage_time &lt;= CONCAT(STR_TO_DATE(#{endStorageTime,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
+        </if>
+        <if test="storageType!=null and storageType!=''">
+            and storage_type = #{storageType,jdbcType=VARCHAR}
+        </if>
+        <if test="customerName!=null and customerName!=''">
+            and customer_name like concat('%',#{customerName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="storageMan!=null and storageMan!=''">
+            and storage_man like concat('%',#{storageMan,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="purchaseCode!=null and purchaseCode!=''">
+            and purchase_code like concat('%',#{purchaseCode,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="goodsInfo != null and goodsInfo!=''">
+            and inorder_id in (SELECT DISTINCT o.inorder_id FROM inorder_goods_info o left join goods_info g on o.goods_id=g.goods_id WHERE g.goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%'))
+        </if>
+        <if test="isDeleted!=null and isDeleted!=''">
+            and is_deleted = #{isDeleted,jdbcType=VARCHAR}
+        </if>
     </sql>
 
     <insert id="insertInWarehouseOrder" parameterType="com.lcdt.warehouse.entity.InWarehouseOrder">
@@ -93,7 +139,7 @@
         SELECT <include refid="Base_Select_List"/>
         from in_warehouse_order
         <where>
-            company_id= #{companyId,jdbcType=BIGINT}
+            company_id= #{companyId,jdbcType=BIGINT} <include refid="select_condition"/>
         </where>
     </select>
 </mapper>

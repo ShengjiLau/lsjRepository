@@ -4,7 +4,7 @@ package com.lcdt.warehouse.dto;
  * Created by lyqishan on 2018/5/9
  */
 
-public class InorderGoodsInfoParamsDto {
+public class InorderGoodsInfoDto {
 
     //GoodsInfo
     private Long goodsId;

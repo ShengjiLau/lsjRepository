@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
@@ -10,17 +11,21 @@ import java.util.Date;
 
 public class InWarehouseOrderSearchParamsDto {
     @ApiModelProperty(value = "入库单号")
-    private Long inOrderCode;
+    private String inOrderCode;
     @ApiModelProperty(value = "货物信息")
     private String goodsInfo;
     @ApiModelProperty(value = "仓库id")
     private Long warehouseId;
     @ApiModelProperty(value = "制单人")
     private String createName;
-    @ApiModelProperty(value = "发布时间")
-    private Date createDate;
-    @ApiModelProperty(value = "入库时间")
-    private Date storageTime;
+    @ApiModelProperty(value = "发布起始时间")
+    private Date startCreateDate;
+    @ApiModelProperty(value = "发布最后时间")
+    private Date endCreateDate;
+    @ApiModelProperty(value = "超始入库时间")
+    private Date startStorageTime;
+    @ApiModelProperty(value = "结束入库时间")
+    private Date endStorageTime;
     @ApiModelProperty(value = "入库类型{id:\"01\",value:\"原料入库\"},\n" +
             "     {id:\"02\",value:\"成品入库\"},\n" +
             "     {id:\"03\",value:\"退换货入库\"},\n" +
@@ -45,11 +50,11 @@ public class InWarehouseOrderSearchParamsDto {
     private int pageSize;
 
 
-    public Long getInOrderCode() {
+    public String getInOrderCode() {
         return inOrderCode;
     }
 
-    public void setInOrderCode(Long inOrderCode) {
+    public void setInOrderCode(String inOrderCode) {
         this.inOrderCode = inOrderCode;
     }
 
@@ -77,20 +82,36 @@ public class InWarehouseOrderSearchParamsDto {
         this.createName = createName;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getStartCreateDate() {
+        return startCreateDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setStartCreateDate(Date startCreateDate) {
+        this.startCreateDate = startCreateDate;
     }
 
-    public Date getStorageTime() {
-        return storageTime;
+    public Date getEndCreateDate() {
+        return endCreateDate;
     }
 
-    public void setStorageTime(Date storageTime) {
-        this.storageTime = storageTime;
+    public void setEndCreateDate(Date endCreateDate) {
+        this.endCreateDate = endCreateDate;
+    }
+
+    public Date getStartStorageTime() {
+        return startStorageTime;
+    }
+
+    public void setStartStorageTime(Date startStorageTime) {
+        this.startStorageTime = startStorageTime;
+    }
+
+    public Date getEndStorageTime() {
+        return endStorageTime;
+    }
+
+    public void setEndStorageTime(Date endStorageTime) {
+        this.endStorageTime = endStorageTime;
     }
 
     public String getStorageType() {

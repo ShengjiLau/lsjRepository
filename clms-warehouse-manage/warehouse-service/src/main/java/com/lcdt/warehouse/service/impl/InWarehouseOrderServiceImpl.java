@@ -1,8 +1,7 @@
 package com.lcdt.warehouse.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.lcdt.warehouse.dto.InWarehouseOrderAddParamsDto;
+import com.lcdt.warehouse.dto.InWarehouseOrderDto;
 import com.lcdt.warehouse.dto.InWarehouseOrderSearchParamsDto;
 import com.lcdt.warehouse.entity.GoodsInfo;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
@@ -15,8 +14,6 @@ import com.lcdt.warehouse.service.InorderGoodsInfoService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 /**
  * <p>
@@ -36,7 +33,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
     GoodsInfoService goodsInfoService;
 
     @Override
-    public int addInWarehouseOrder(InWarehouseOrderAddParamsDto params) {
+    public int addInWarehouseOrder(InWarehouseOrderDto params) {
         int result=0;
         InWarehouseOrder inWarehouseOrder=new InWarehouseOrder();
         BeanUtils.copyProperties(params,inWarehouseOrder);
@@ -60,8 +57,8 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
     }
 
     @Override
-    public Page<InWarehouseOrder> queryInWarehouseOrderList(InWarehouseOrderSearchParamsDto params) {
-        Page page=new Page();
+    public Page<InWarehouseOrderDto> queryInWarehouseOrderList(InWarehouseOrderSearchParamsDto params) {
+        Page page=new Page(params.getPageNo(),params.getPageSize());
         return page.setRecords(baseMapper.selectByCondition(page,params));
     }
 }

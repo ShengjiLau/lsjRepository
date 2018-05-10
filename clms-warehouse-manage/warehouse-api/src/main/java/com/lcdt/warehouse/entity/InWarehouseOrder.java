@@ -86,6 +86,11 @@ public class InWarehouseOrder implements Serializable,ResponseData {
     /**
      * 实际入库时间
      */
+    /**
+     * 入库人员
+     */
+    private String storageMan;
+
     private Date storageTime;
     /**
      * 备注信息
@@ -254,6 +259,14 @@ public class InWarehouseOrder implements Serializable,ResponseData {
 
     public void setStoragePlanTime(Date storagePlanTime) {
         this.storagePlanTime = storagePlanTime;
+    }
+
+    public String getStorageMan() {
+        return storageMan;
+    }
+
+    public void setStorageMan(String storageMan) {
+        this.storageMan = storageMan;
     }
 
     public Date getStorageTime() {

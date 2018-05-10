@@ -2,11 +2,9 @@ package com.lcdt.warehouse.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
-import com.lcdt.warehouse.dto.InWarehouseOrderAddParamsDto;
+import com.lcdt.warehouse.dto.InWarehouseOrderDto;
 import com.lcdt.warehouse.dto.InWarehouseOrderSearchParamsDto;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
-
-import java.util.List;
 
 /**
  * <p>
@@ -17,8 +15,8 @@ import java.util.List;
  * @since 2018-05-07
  */
 public interface InWarehouseOrderService extends IService<InWarehouseOrder> {
-    int addInWarehouseOrder(InWarehouseOrderAddParamsDto params);
+    int addInWarehouseOrder(InWarehouseOrderDto params);
 
-    Page<InWarehouseOrder> queryInWarehouseOrderList(InWarehouseOrderSearchParamsDto params);
+    Page<InWarehouseOrderDto> queryInWarehouseOrderList(InWarehouseOrderSearchParamsDto params);
 
 }

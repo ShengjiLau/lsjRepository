@@ -19,7 +19,7 @@
     </resultMap>
 
     <!-- 开启二级缓存 -->
-    <resultMap id="GoodsInfoMap" type="com.lcdt.warehouse.dto.InorderGoodsInfoParamsDto">
+    <resultMap id="GoodsInfoMap" type="com.lcdt.warehouse.dto.InorderGoodsInfoDto">
         <id column="relation_id" jdbcType="BIGINT" property="relationId" />
         <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
         <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
