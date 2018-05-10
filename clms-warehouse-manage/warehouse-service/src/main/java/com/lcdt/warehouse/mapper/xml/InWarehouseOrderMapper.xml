@@ -47,7 +47,7 @@
     </sql>
 
     <sql id="select_condition">
-        <if test="in_order_code!=null and in_order_code!=''">
+        <if test="inOrderCode!=null and inOrderCode!=''">
             and in_order_code like concat('%',#{inOrderCode,jdbcType=VARCHAR},'%')
         </if>
         <if test="inOrderStatus!=null and inOrderStatus!='' and inOrderStatus.length>0">

@@ -14,6 +14,8 @@ public class InWarehouseOrderSearchParamsDto {
     private String inOrderCode;
     @ApiModelProperty(value = "货物信息")
     private String goodsInfo;
+    @ApiModelProperty(value = "入库单状态")
+    private Integer inOrderStatus;
     @ApiModelProperty(value = "仓库id")
     private Long warehouseId;
     @ApiModelProperty(value = "制单人")
@@ -49,13 +51,20 @@ public class InWarehouseOrderSearchParamsDto {
     @ApiModelProperty(value = "每页数",required = true)
     private int pageSize;
 
-
     public String getInOrderCode() {
         return inOrderCode;
     }
 
     public void setInOrderCode(String inOrderCode) {
         this.inOrderCode = inOrderCode;
+    }
+
+    public Integer getInOrderStatus() {
+        return inOrderStatus;
+    }
+
+    public void setInOrderStatus(Integer inOrderStatus) {
+        this.inOrderStatus = inOrderStatus;
     }
 
     public String getGoodsInfo() {

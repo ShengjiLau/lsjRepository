@@ -22,7 +22,7 @@ import java.util.Date;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author code generate
@@ -37,33 +37,31 @@ public class InWarehouseOrderController {
     InWarehouseOrderService inWarehouseOrderService;
 
     @ApiOperation("入库单新增")
-    @RequestMapping(value = "/order",method = RequestMethod.POST)
-    public JSONObject InWarehouseOrder(InWarehouseOrderDto params){
+    @RequestMapping(value = "/order", method = RequestMethod.POST)
+    public JSONObject InWarehouseOrder(InWarehouseOrderDto params) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        User user=SecurityInfoGetter.getUser();
+        User user = SecurityInfoGetter.getUser();
         params.setCompanyId(companyId);
         params.setCreateId(user.getUserId());
         params.setCreateName(user.getRealName());
         params.setCreateDate(new Date());
-        int result=inWarehouseOrderService.addInWarehouseOrder(params);
-        JSONObject jsonObject=new JSONObject();
-        if(result>0){
-            jsonObject.put("code",0);
-            jsonObject.put("message","添加成功");
-        }else {
-            jsonObject.put("code",-1);
-            jsonObject.put("message","添加失败");
+        int result = inWarehouseOrderService.addInWarehouseOrder(params);
+        JSONObject jsonObject = new JSONObject();
+        if (result > 0) {
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "添加成功");
+        } else {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "添加失败");
         }
         return jsonObject;
     }
 
     @ApiOperation("入库单列表")
-    @RequestMapping(value = "/order",method = RequestMethod.GET)
-    public PageBaseDto InWarehouseOrderList(InWarehouseOrderSearchParamsDto params){
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        User user=SecurityInfoGetter.getUser();
-        params.setCompanyId(companyId);
-        Page<InWarehouseOrder> inWarehouseOrderPage=inWarehouseOrderService.queryInWarehouseOrderList(params);
+    @RequestMapping(value = "/order", method = RequestMethod.GET)
+    public PageBaseDto InWarehouseOrderList(InWarehouseOrderSearchParamsDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+        Page<InWarehouseOrderDto> inWarehouseOrderPage = inWarehouseOrderService.queryInWarehouseOrderList(params);
         PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderPage.getRecords(), inWarehouseOrderPage.getTotal());
         return pageBaseDto;
     }
