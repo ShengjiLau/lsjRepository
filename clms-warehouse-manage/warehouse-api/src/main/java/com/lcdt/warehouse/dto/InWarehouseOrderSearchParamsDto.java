@@ -15,7 +15,7 @@ public class InWarehouseOrderSearchParamsDto {
     @ApiModelProperty(value = "货物信息")
     private String goodsInfo;
     @ApiModelProperty(value = "入库单状态")
-    private Integer inOrderStatus;
+    private int inOrderStatus;
     @ApiModelProperty(value = "仓库id")
     private Long warehouseId;
     @ApiModelProperty(value = "制单人")
@@ -44,6 +44,9 @@ public class InWarehouseOrderSearchParamsDto {
     private String purchaseCode;
     @ApiModelProperty(value = "计划id")
     private Long planId;
+
+    private boolean isDeleted;
+
     @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
     @ApiModelProperty(value = "分页编号",required = true)
@@ -59,11 +62,11 @@ public class InWarehouseOrderSearchParamsDto {
         this.inOrderCode = inOrderCode;
     }
 
-    public Integer getInOrderStatus() {
+    public int getInOrderStatus() {
         return inOrderStatus;
     }
 
-    public void setInOrderStatus(Integer inOrderStatus) {
+    public void setInOrderStatus(int inOrderStatus) {
         this.inOrderStatus = inOrderStatus;
     }
 
@@ -177,6 +180,14 @@ public class InWarehouseOrderSearchParamsDto {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public int getPageNo() {

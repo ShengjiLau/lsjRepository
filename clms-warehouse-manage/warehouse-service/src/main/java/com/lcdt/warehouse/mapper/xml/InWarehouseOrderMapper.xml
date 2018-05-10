@@ -65,9 +65,6 @@
         <if test="createName!=null and createName!=''">
             and create_name = #{createName,jdbcType=VARCHAR}
         </if>
-        <if test="receiveCounty!=null and receiveCounty!=''">
-            and receive_county = #{receiveCounty,jdbcType=VARCHAR}
-        </if>
         <if test="startCreateDate!=null and startCreateDate!=''">
             and create_date &gt;= CONCAT(STR_TO_DATE(#{startCreateDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
         </if>
