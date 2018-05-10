@@ -17,7 +17,7 @@ public class ClmsNotifyProducer {
     Producer producer;
 
     private List<Message> messages = new ArrayList<>();
-    private String topic_demo = "topic_demo";;
+    private String topic_demo = "topic_demo";
 
     public void sendNotifyEvent(TrafficStatusChangeEvent event) {
 
