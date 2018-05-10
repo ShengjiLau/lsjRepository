@@ -36,6 +36,18 @@ public class Inventory implements Serializable {
      */
     private String storageLocationCode;
 
+    /**
+     * 库位名称
+     */
+    private String warehouseName;
+
+    public String getWarehouseName() {
+        return warehouseName;
+    }
+
+    public void setWarehouseName(String warehouseName) {
+        this.warehouseName = warehouseName;
+    }
 
     public Long getInvertoryId() {
         return invertoryId;

@@ -6,15 +6,18 @@
         plan_id, plan_no,create_time,create_user_name,create_user_id,group_id,group_name,company_id,customer_name,
         customer_id,plan_status,customer_contact_name,customer_contact_phone,customer_purchase_no,storage_type,
         storage_plan_time,storage_remark,deliveryman_name,deliveryman_phone,deliveryman_linkman,deliveryman_car,
-        ware_house_id,warehouse_name,contract_no,attachment_id
+        ware_house_id,warehouse_name,contract_no,attachment,update_id,update_name,update_date
     </sql>
 
-    <select id="inWarehousePlanList" parameterType="com.lcdt.warehouse.dto.InHouseParams4SearchDto" resultType="com.lcdt.warehouse.entity.InWarehousePlan">
+    <select id="inWarehousePlanList" parameterType="com.lcdt.warehouse.dto.InWhPlanSearchParamsDto" resultType="com.lcdt.warehouse.entity.InWarehousePlan">
         SELECT <include refid="Base_Column_List" />
         FROM in_warehouse_plan
         <where>
             <if test="companyId != null and companyId>0">
                 and  company_id = #{companyId}
+            </if>
+            <if test="planStatus != null and planStatus!=''">
+                and  plan_status = #{planStatus}
             </if>
             <if test="planNo!=null and planNo != ''">
                 and plan_no like concat('%',#{planNo},'%')
@@ -42,8 +45,8 @@
             <if test="storageType!=null and storageType != ''">
                 and storage_type = #{storageType}
             </if>
-            <if test="groupId!=null and groupId>0">
-                and group_id = #{groupId}
+            <if test="groupIds!=null and groupIds!=''">
+                and group_id in (#{groupIds})
             </if>
             <if test="customerPurchaseNo!=null and customerPurchaseNo != ''">
                 and customer_purchase_no like concat('%',#{customerPurchaseNo},'%')

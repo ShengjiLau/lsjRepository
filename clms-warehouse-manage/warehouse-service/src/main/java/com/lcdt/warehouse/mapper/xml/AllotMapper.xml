@@ -24,12 +24,12 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
   </resultMap>
-  <resultMap id="BaseResultMapDto" type="com.lcdt.userinfo.web.dto.WarehouseDto" extends="BaseResultMap">
-    <!--仓库联系人-->
+<!--  <resultMap id="BaseResultMapDto" type="com.lcdt.userinfo.web.dto.WarehouseDto" extends="BaseResultMap">
+    &lt;!&ndash;仓库联系人&ndash;&gt;
     <collection property="allotProductList" column="{allotId=allot_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.warehouse.entity.AllotProduct" javaType="ArrayList"
                 select="com.lcdt.warehouse.mapper.xml.AllotProductMapper.selectByAllotId" />
-  </resultMap>
+  </resultMap>-->
   <sql id="Base_Column_List">
     allot_id, allot_status, group_id, allot_code, customer_id, customer_name,
     contact_name, phone_num, warehouse_out_id, warehouse_in_id, allot_out_time, allot_in_time, operator,
@@ -272,7 +272,7 @@
       is_deleted = #{isDeleted,jdbcType=SMALLINT}
     where allot_id = #{allotId,jdbcType=BIGINT}
   </update>
-  <select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMapDto">
+  <!--<select id="selectByCondition" parameterType="java.util.Map" resultMap="BaseResultMapDto">
     select
     <include refid="Base_Column_List" />
     from t_allot
@@ -313,5 +313,5 @@
       </if>
     </where>
     order by create_time desc
-  </select>
+  </select>-->
 </mapper>
