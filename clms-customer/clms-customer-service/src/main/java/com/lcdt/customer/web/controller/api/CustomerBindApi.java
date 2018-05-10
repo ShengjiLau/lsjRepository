@@ -178,6 +178,8 @@ public class CustomerBindApi {
 			customer = mapper.selectByPrimaryKey(customerId, companyId);
 		}
 
+		
+
 		//绑定被邀请的客户id
 
 		if (customer.getBindCpid() != null) {
