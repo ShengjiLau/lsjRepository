@@ -15,8 +15,18 @@ import com.lcdt.warehouse.entity.InWarehouseOrder;
  * @since 2018-05-07
  */
 public interface InWarehouseOrderService extends IService<InWarehouseOrder> {
+    /**
+     * 新增入库单
+     * @param params
+     * @return
+     */
     int addInWarehouseOrder(InWarehouseOrderDto params);
 
+    /**
+     * 入库单列表
+     * @param params
+     * @return
+     */
     Page<InWarehouseOrderDto> queryInWarehouseOrderList(InWarehouseOrderSearchParamsDto params);
 
 }
