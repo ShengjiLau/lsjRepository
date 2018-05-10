@@ -57,7 +57,7 @@
             </foreach>
         </if>
         <if test="planId!=null and planId!=''">
-            and plan_id = #{plan_id,jdbcType=BIGINT}
+            and plan_id = #{planId,jdbcType=BIGINT}
         </if>
         <if test="warehouseId!=null and warehouseId!=''">
             and warehouse_id = #{warehouseId,jdbcType=BIGINT}
