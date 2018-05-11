@@ -137,15 +137,15 @@ public class InWarehousePlanController {
         obj.setPlanId(planId);
         JSONObject jsonObject = new JSONObject();
         boolean flag = false;
-        String msg = "取消失败！";
+        String msg = "操作失败！";
         try {
-            flag = inWarehousePlanService.inWhPlanCancel(obj, userCompRel);
+            flag = inWarehousePlanService.inWhPlanComplete(obj, userCompRel);
         } catch (RuntimeException e) {
             msg = e.getMessage();
             logger.error(e.getMessage());
         }
         jsonObject.put("code", flag==true? 0:-1);
-        jsonObject.put("message", flag==true? "取消成功！":msg);
+        jsonObject.put("message", flag==true? "操作成功！":msg);
         return jsonObject;
     }
 

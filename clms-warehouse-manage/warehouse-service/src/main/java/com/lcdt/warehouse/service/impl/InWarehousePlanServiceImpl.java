@@ -66,36 +66,46 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
     }
 
 
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public boolean inWhPlanPublish(InWarehousePlan obj, UserCompRel userCompRel) {
-        InWarehousePlan inWarehousePlan = this.selectOne(new EntityWrapper<InWarehousePlan>(obj));
-        obj.setCompanyId(userCompRel.getCompany().getCompId());
-        if (inWarehousePlan == null) {
-            throw new RuntimeException("发布计划不存在！");
-        }
-        inWarehousePlan.setCompanyId(userCompRel.getCompany().getCompId());
-        inWarehousePlan.setPlanStatus((Integer) InWhPlanStatusEnum.publish.getValue());
+    /***
+     * 入库计划改变
+     *
+     * @param argObj --条件对象
+     * @param inWarehousePlan --入库计划
+     * @param userCompRel --登录用户参数
+     * @return
+     */
+    private boolean chagenInPlanStatus(InWarehousePlan argObj, InWarehousePlan inWarehousePlan, UserCompRel userCompRel) {
         inWarehousePlan.setUpdateId(userCompRel.getUser().getUserId());
         inWarehousePlan.setUpdateName(userCompRel.getUser().getRealName());
         inWarehousePlan.setUpdateDate(new Date());
-        return this.update(inWarehousePlan,new EntityWrapper<InWarehousePlan>(obj));
-
-
+        return this.update(inWarehousePlan,new EntityWrapper<InWarehousePlan>(argObj));
     }
 
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean inWhPlanCancel(InWarehousePlan obj, UserCompRel userCompRel) {
-        InWarehousePlan inWarehousePlan = this.selectOne(new EntityWrapper<InWarehousePlan>(obj));
+    public boolean inWhPlanPublish(InWarehousePlan obj, UserCompRel userCompRel) {
         obj.setCompanyId(userCompRel.getCompany().getCompId());
+        InWarehousePlan inWarehousePlan = this.selectOne(new EntityWrapper<InWarehousePlan>(obj));
+        if (inWarehousePlan == null) {
+            throw new RuntimeException("发布计划不存在！");
+        }
+        inWarehousePlan.setPlanStatus((Integer) InWhPlanStatusEnum.publish.getValue());
+        return chagenInPlanStatus(obj, inWarehousePlan,userCompRel);
+    }
+
+
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean inWhPlanCancel(InWarehousePlan obj, UserCompRel userCompRel) {
+        obj.setCompanyId(userCompRel.getCompany().getCompId());
+        InWarehousePlan inWarehousePlan = this.selectOne(new EntityWrapper<InWarehousePlan>(obj));
         if (inWarehousePlan == null) {
             throw new RuntimeException("计划不存在！");
         }
         /***
-         * 该计划是否存在对应的入库单，如果不存在，则直接可以取消；
+         *  逻辑：该计划是否存在对应的入库单，如果不存在，则直接可以取消；
          * 如果存在，需判断是否存在“待入库”“已完成”状态的入库单，如果存在，则不允许取消；
          */
         if (!inWarehousePlan.getPlanStatus().equals(InWhPlanStatusEnum.publish.getValue())
@@ -112,7 +122,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                 if (inWarehouseOrderDtoList.getTotal()>0) {
                     boolean flag = false;
                     for (InWarehouseOrderDto obj1 : inWarehouseOrderDtoList.getRecords()) {
-                        if (obj1.getInOrderStatus()== ConstantVO.IN_ORDER_STATUS_WATIE_STORAGE){
+                        if (obj1.getInOrderStatus()== ConstantVO.IN_ORDER_STATUS_WATIE_STORAGE || obj1.getInOrderStatus()== ConstantVO.IN_ORDER_STATUS_HAVE_STORAGE) {
                             flag = true;
                             break;
                         }
@@ -123,21 +133,45 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                 }
             }
         }
-        inWarehousePlan.setCompanyId(userCompRel.getCompany().getCompId());
         inWarehousePlan.setPlanStatus((Integer) InWhPlanStatusEnum.cancel.getValue());
-        inWarehousePlan.setUpdateId(userCompRel.getUser().getUserId());
-        inWarehousePlan.setUpdateName(userCompRel.getUser().getRealName());
-        inWarehousePlan.setUpdateDate(new Date());
-        return this.update(inWarehousePlan,new EntityWrapper<InWarehousePlan>(obj));
+        return chagenInPlanStatus(obj, inWarehousePlan,userCompRel);
     }
 
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean inWhPlanComplete(InWarehousePlan obj, UserCompRel userCompRel) {
+        obj.setCompanyId(userCompRel.getCompany().getCompId());
+        InWarehousePlan inWarehousePlan = this.selectOne(new EntityWrapper<InWarehousePlan>(obj));
+        if (inWarehousePlan == null) {
+            throw new RuntimeException("计划不存在！");
+        }
+        /**
+         * 逻辑：操作“完成”时需要验证：该计划是否存在对应的入库单，如果不存在，则直接可以完成；
+            如果存在，“待入库”状态下不允许取消，“已入库”、“已取消”状态下可以操作完成，也就是说对应的入库单如果有一条是“待入库”的状态，那么这条计划就不允许取消。
+         */
+        InWarehouseOrderSearchParamsDto params = new InWarehouseOrderSearchParamsDto();
+        params.setCompanyId(obj.getCompanyId());
+        params.setPlanId(obj.getPlanId());
+        params.setPageNo(1);
+        params.setPageSize(100);
+        Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderList(params);
+        if (inWarehouseOrderDtoList.getTotal() > 0) {
+            boolean flag = false;
+            for (InWarehouseOrderDto obj1 : inWarehouseOrderDtoList.getRecords()) {
+                if (obj1.getInOrderStatus()== ConstantVO.IN_ORDER_STATUS_WATIE_STORAGE) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag) {
+                throw new RuntimeException("该计划对应入库单存在“待入库”状态记录！");
+            }
 
-
-
-        return false;
+        }
+        inWarehousePlan.setPlanStatus((Integer) InWhPlanStatusEnum.completed.getValue());
+         return chagenInPlanStatus(obj, inWarehousePlan,userCompRel);
     }
+
+
 }
