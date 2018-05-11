@@ -1,6 +1,6 @@
 #spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
 protocolport: 20870
-applicationName :warehouse-service
+applicationName: warehouse-service
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
