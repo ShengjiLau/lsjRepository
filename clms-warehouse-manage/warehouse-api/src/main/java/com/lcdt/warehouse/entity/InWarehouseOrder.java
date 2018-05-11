@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.lcdt.converter.ResponseData;
@@ -35,7 +36,7 @@ public class InWarehouseOrder implements Serializable,ResponseData {
     /**
      * 入库单状态
      */
-    private int inOrderStatus;
+    private Integer inOrderStatus;
     /**
      * 组id
      */
@@ -144,7 +145,7 @@ public class InWarehouseOrder implements Serializable,ResponseData {
     /**
      * 是否删除
      */
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
 
     public Long getInorderId() {
@@ -171,11 +172,11 @@ public class InWarehouseOrder implements Serializable,ResponseData {
         this.inOrderCode = inOrderCode;
     }
 
-    public int getInOrderStatus() {
+    public Integer getInOrderStatus() {
         return inOrderStatus;
     }
 
-    public void setInOrderStatus(int inOrderStatus) {
+    public void setInOrderStatus(Integer inOrderStatus) {
         this.inOrderStatus = inOrderStatus;
     }
 
@@ -379,11 +380,11 @@ public class InWarehouseOrder implements Serializable,ResponseData {
         this.updateDate = updateDate;
     }
 
-    public boolean getDeleted() {
+    public Boolean getDeleted() {
         return isDeleted;
     }
 
-    public void setDeleted(boolean deleted) {
+    public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
     }
 
