@@ -171,7 +171,7 @@ public class CustomerBindApi {
 			map.put("customerName", customer.getCustomerName());
 			List<Customer> list = customerMapper.selectByCondition(map);
 			if (list.size()>0) {
-				return errorTip(user,"客户已存在，请联系管理员分配！");
+				return errorTip(user,"客户已存在，请选择客户绑定！");
 			}
 			customerService.customerAdd(customer);
 		}else{
