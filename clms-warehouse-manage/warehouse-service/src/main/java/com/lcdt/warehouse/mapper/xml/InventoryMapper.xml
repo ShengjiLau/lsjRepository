@@ -2,25 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.warehouse.mapper.InventoryMapper">
 
-    <select id="selectInventoryList" resultType="Inventory">
+    <resultMap id="baseResult" type="Inventory">
+
+    </resultMap>
+    <select id="selectInventoryList" resultType="Inventory" >
         SELECT * from inventory
         <where>
             <if test="batch != null">
                 batch = #{batch}
             </if>
 
-            <if test="batch != null">
-               AND batch = #{batch}
+            <if test="wareHouseId != null">
+               AND warehouse_id = #{wareHouseId}
             </if>
 
-            <if test="batch != null">
+            <if test="strogeLocationCode != null">
+                and storage_location_code = #{strogeLocationCode}
+            </if>
+
+            <if test="goodsQuery != null">
                 and batch = #{batch}
             </if>
-
-            <if test="batch != null">
-                and batch = #{batch}
-            </if>
-
         </where>
     </select>
 </mapper>

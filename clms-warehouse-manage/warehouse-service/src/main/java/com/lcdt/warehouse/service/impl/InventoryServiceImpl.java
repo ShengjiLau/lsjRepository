@@ -32,7 +32,14 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         return page.setRecords(inventoryMapper.selectInventoryList(page, inventoryQueryDto));
     }
 
-
+    /**
+     * 新增库存
+     * @param inventory
+     * @return
+     */
+    public Inventory addInventory(Inventory inventory){
+        return new Inventory();
+    }
 
 
 }
