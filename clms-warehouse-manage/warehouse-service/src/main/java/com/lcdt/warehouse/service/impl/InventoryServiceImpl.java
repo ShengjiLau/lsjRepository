@@ -9,7 +9,7 @@ import com.lcdt.warehouse.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,7 +56,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     public List<Inventory> querySameInventory(Inventory inventory) {
         List<Inventory> inventories = inventoryMapper.selectSameInventory(inventory);
         if (inventories == null) {
-            return Collections.emptyList();
+            return new ArrayList<>();
         }
         return inventories;
     }
