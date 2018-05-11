@@ -372,7 +372,7 @@
         $(".selectpicker").selectpicker({
             liveSearch:true,
         });
-        $("#next_btn").click(function () {
+        $("#next_btn").submit(function () {
             $("#customerId").attr("disabled", "");
             if($("#customerId option:selected").val()=="")
             {
