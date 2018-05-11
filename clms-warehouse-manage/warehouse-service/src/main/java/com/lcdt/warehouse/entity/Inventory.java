@@ -23,10 +23,21 @@ public class Inventory implements Serializable {
      * 库存量
      */
     private Integer invertoryNum;
+
+    //锁定量
     private Float lockNum;
     private Long warehouseId;
     private Long companyId;
     private String remark;
+
+    private Long customerId;
+
+    /**
+     * 客户名称
+     */
+    private String customerName;
+
+
     /**
      * 业务类型
      */
@@ -40,6 +51,32 @@ public class Inventory implements Serializable {
      * 库位名称
      */
     private String warehouseName;
+
+    private GoodsInfo goodsInfo;
+
+    public GoodsInfo getGoodsInfo() {
+        return goodsInfo;
+    }
+
+    public void setGoodsInfo(GoodsInfo goodsInfo) {
+        this.goodsInfo = goodsInfo;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
 
     public String getWarehouseName() {
         return warehouseName;

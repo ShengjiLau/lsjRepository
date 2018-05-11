@@ -8,6 +8,7 @@ import com.lcdt.customer.Utils.CommonUtil;
 import com.lcdt.customer.config.ConfigConstant;
 import com.lcdt.customer.dao.CustomerInviteLogMapper;
 import com.lcdt.customer.dao.CustomerMapper;
+import com.lcdt.customer.exception.CustomerException;
 import com.lcdt.customer.exception.CustomerNotBindException;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.model.CustomerInviteLog;
@@ -117,21 +118,12 @@ public class CustomerBindApi {
 		List<Customer> customers = mapper.selectByCondition(stringLongHashMap);
 		User user = SecurityInfoGetter.getUser();
 		if (customers != null && !customers.isEmpty()) {
-			ModelAndView errorView = new ModelAndView("error");
 			Customer customer = customers.get(0);
-			errorView.addObject("username", user.getRealName());
-			errorView.addObject("headimg", user.getPictureUrl());
-			errorView.addObject("errortip", "客户管理里【" + customer.getCustomerName() + "】已绑定企业【" + customer.getBindCompany() + "】。");
-			return errorView;
+			return errorTip(user,"客户管理里【" + customer.getCustomerName() + "】已绑定企业【" + customer.getBindCompany() + "】。");
 		}
 
 		if (companyId.equals(inviteCompanyId)) {
-			ModelAndView errorView = new ModelAndView("error");
-			errorView.addObject("username", user.getRealName());
-			errorView.addObject("headimg", user.getPictureUrl());
-			String errorTipStr = "失败原因：同一企业内不能相互邀请绑定";
-			errorView.addObject("errortip", errorTipStr);
-			return errorView;
+			return errorTip(user,"同一企业内不能相互邀请绑定");
 		}
 		Company company = companyService.selectById(inviteCompanyId);
 		Customer customer;
@@ -173,7 +165,13 @@ public class CustomerBindApi {
 				customer.setGroupIds(String.valueOf(group.getGroupId()));
 				customer.setGroupNames(group.getGroupName());
 			}
-			customerService.customerAdd(customer);
+			try{
+				customerService.customerAdd(customer);
+			}
+			catch (CustomerException e)
+			{
+				return errorTip(user,e.getMessage());
+			}
 		}else{
 			customer = mapper.selectByPrimaryKey(customerId, companyId);
 		}
@@ -183,12 +181,7 @@ public class CustomerBindApi {
 		//绑定被邀请的客户id
 
 		if (customer.getBindCpid() != null) {
-			ModelAndView errorView = new ModelAndView("error");
-			errorView.addObject("username", user.getRealName());
-			errorView.addObject("headimg", user.getPictureUrl());
-			String successTipStr = "失败原因：客户已绑定";
-			errorView.addObject("errortip", successTipStr);
-			return errorView;
+			return errorTip(user,"客户已绑定");
 		}
 		//帮邀请的绑定公司id是 邀请人的公司id
 		customer.setBindCpid(inviteCompanyId);
@@ -270,6 +263,15 @@ public class CustomerBindApi {
 	}
 
 
+	private ModelAndView errorTip(User user ,String message)
+	{
+		ModelAndView errorView = new ModelAndView("error");
+		errorView.addObject("username", user.getRealName());
+		errorView.addObject("headimg", user.getPictureUrl());
+		String errorTipStr = "失败原因："+ message;
+		errorView.addObject("errortip", errorTipStr);
+		return errorView;
+	}
 
 
 }
