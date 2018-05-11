@@ -2,11 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.warehouse.mapper.InventoryMapper">
 
-    <resultMap id="baseResult" type="Inventory">
+    <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.Inventory">
+        <id column="invertory_id" jdbcType="BIGINT" property="invertoryId" />
+        <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+        <result column="invertory_num" jdbcType="INTEGER" property="invertoryNum" />
+        <result column="lock_num" jdbcType="REAL" property="lockNum" />
+        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
+        <result column="company_id" jdbcType="BIGINT" property="companyId" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="business_desc" jdbcType="VARCHAR" property="businessDesc" />
+        <result column="storage_location_code" jdbcType="VARCHAR" property="storageLocationCode" />
+        <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName" />
+        <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+        <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+        
+        <association  property="goodsInfo" javaType="com.lcdt.warehouse.entity.GoodsInfo" autoMapping="true">
 
+        </association>
+        
     </resultMap>
-    <select id="selectInventoryList" resultType="Inventory" >
-        SELECT * from inventory
+
+    
+    <select id="selectInventoryList" resultMap="BaseResultMap" >
+        SELECT * from inventory t left join goods_info  g on
+        t.goods_id = g.goods_id
         <where>
             <if test="batch != null">
                 batch = #{batch}
@@ -20,9 +39,18 @@
                 and storage_location_code = #{strogeLocationCode}
             </if>
 
-            <if test="goodsQuery != null">
-                and batch = #{batch}
+            <if test="goodsId != null">
+                and goods_id = #{goodsId}
+            </if>
+
+            <if test="customerId != null">
+                and customer_id = #{customerId}
             </if>
         </where>
     </select>
+
+
+
+
+
 </mapper>

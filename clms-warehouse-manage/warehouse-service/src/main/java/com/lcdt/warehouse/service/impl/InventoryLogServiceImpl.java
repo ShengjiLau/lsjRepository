@@ -17,4 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, InventoryLog> implements InventoryLogService {
 
+
+
+
 }
