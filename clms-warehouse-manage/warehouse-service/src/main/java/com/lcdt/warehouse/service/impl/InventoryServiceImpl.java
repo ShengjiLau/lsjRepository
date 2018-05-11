@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.entity.Inventory;
 import com.lcdt.warehouse.mapper.InventoryMapper;
-import com.lcdt.warehouse.service.InventoryService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.lcdt.warehouse.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ import java.util.List;
  * @since 2018-05-07
  */
 @Service
-public class InventoryServiceTest extends ServiceImpl<InventoryMapper, Inventory> implements InventoryService {
+public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory> implements InventoryService {
 
     @Autowired
     InventoryMapper inventoryMapper;

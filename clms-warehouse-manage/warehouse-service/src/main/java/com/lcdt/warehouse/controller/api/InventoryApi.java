@@ -4,9 +4,11 @@ import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.entity.Inventory;
 import com.lcdt.warehouse.service.InventoryService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +23,8 @@ public class InventoryApi {
 
     private Logger logger = LoggerFactory.getLogger(InventoryApi.class);
 
-    @RequestMapping("/list")
+    @GetMapping("/list")
+    @ApiOperation("库存明细列表")
     private String inventoryList(InventoryQueryDto queryDto){
         logger.debug("query inventory list querydto:{}",queryDto);
         inventoryService.queryInventoryPage(queryDto);
