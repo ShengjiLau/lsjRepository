@@ -20,4 +20,10 @@ public interface AllotMapper {
     int updateByPrimaryKey(Allot record);
 
     List<AllotDto> selectByCondition(Map m);
+    /**
+     * 取消/删除（is_deleted=1）
+     * @param allotId
+     * @return
+     */
+    int updateAllotIsDelete(Long allotId);
 }

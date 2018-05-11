@@ -1,13 +1,13 @@
-package com.lcdt.userinfo.web.controller.api;
+package com.lcdt.warehouse.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.User;
-import com.lcdt.userinfo.model.WarehouseLoc;
-import com.lcdt.userinfo.service.WarehouseService;
-import com.lcdt.userinfo.web.dto.PageBaseDto;
 import com.lcdt.util.WebProduces;
+import com.lcdt.warehouse.dto.PageBaseDto;
+import com.lcdt.warehouse.entity.WarehouseLoc;
+import com.lcdt.warehouse.service.WarehouseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

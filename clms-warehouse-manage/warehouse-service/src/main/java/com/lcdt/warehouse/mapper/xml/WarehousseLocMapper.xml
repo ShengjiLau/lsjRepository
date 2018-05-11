@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lcdt.userinfo.dao.WarehousseLocMapper">
-  <resultMap id="BaseResultMap" type="com.lcdt.userinfo.model.WarehouseLoc">
+<mapper namespace="com.lcdt.warehouse.mapper.WarehousseLocMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.WarehouseLoc">
     <id column="wh_loc_id" jdbcType="BIGINT" property="whLocId" />
     <result column="wh_id" jdbcType="BIGINT" property="whId" />
     <result column="code" jdbcType="VARCHAR" property="code" />
@@ -27,7 +27,7 @@
     set is_deleted = 1
     where wh_loc_id = #{whLocId,jdbcType=BIGINT}
   </update>
-  <insert id="insert" parameterType="com.lcdt.userinfo.model.WarehouseLoc">
+  <insert id="insert" parameterType="com.lcdt.warehouse.entity.WarehouseLoc">
     <selectKey keyProperty="whLocId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -42,7 +42,7 @@
       #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{isDeleted,jdbcType=SMALLINT}, #{companyId,jdbcType=BIGINT})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.WarehouseLoc">
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.warehouse.entity.WarehouseLoc">
     update t_warehouse_loc
     set wh_id = #{whId,jdbcType=BIGINT},
       code = #{code,jdbcType=VARCHAR},

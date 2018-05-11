@@ -10,7 +10,7 @@
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="group_id" jdbcType="BIGINT" property="groupId" />
 <!--    内嵌关联结果 仓库数据 必须添加 column 和 id 属性 否则会有性能问题 -->
-    <association property="wareHouse" javaType="com.lcdt.userinfo.model.Warehouse" autoMapping="true" column="ware_house_id"   >
+    <association property="wareHouse" javaType="com.lcdt.warehouse.entity.Warehouse" autoMapping="true" column="ware_house_id"   >
       <id column="wh_id" jdbcType="BIGINT" property="whId" />
       <result column="wh_name" jdbcType="VARCHAR" property="whName" />
       <result column="wh_code" jdbcType="VARCHAR" property="whCode" />

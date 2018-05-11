@@ -17,11 +17,16 @@ import com.lcdt.userinfo.dto.CompanyDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.localservice.GroupWareHouseService;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.*;
+import com.lcdt.warehouse.entity.Warehouse;
+import com.lcdt.warehouse.entity.WarehouseLinkman;
+import com.lcdt.warehouse.entity.WarehouseLoc;
+import com.lcdt.warehouse.rpc.WarehouseRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,8 +68,8 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	@Autowired
 	UserCompRelMapper userCompRelMapper;
 
-	@Autowired
-	WarehouseService warehouseService;
+	@Reference
+	WarehouseRpcService warehouseRpcService;
 
 	@Autowired
 	FeePropertyService feePropertyService;
@@ -74,6 +79,9 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 
 	@Reference
 	ProductCountService productCountService;
+
+	@Autowired
+	GroupWareHouseService groupWareHouseService;
 
 	private SysRole sysAdminRole;
 
@@ -153,7 +161,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		if (compRel == null) {
 			return;
 		}
-		warehouseService.initWarehouse(compRel,group);
+		initWarehouse(compRel,group);
 		Message message = new Message();
 		message.setKey("companyinit");
 		message.setTopic(aliyunConfigProperties.getTopic());
@@ -192,5 +200,53 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 			return sysRole;
 		}
 	}
+	public boolean initWarehouse(UserCompRel userCompRel, Group group){
+		try{
+			//添加仓库
+			Warehouse warehouse = new Warehouse();
+			warehouse.setWhName("默认仓库");
+			warehouse.setWhType((short)0);
+			warehouse.setPrincipal(userCompRel.getUser().getRealName());
+			warehouse.setMobile(userCompRel.getUser().getPhone());
+			warehouse.setWhStatus((short)0);
+			warehouse.setCreateId(userCompRel.getUserId());
+			warehouse.setCreateName(userCompRel.getUser().getRealName());
+			warehouse.setCreateDate(new Date());
+			warehouse.setIsDeleted((short)0);
+			warehouse.setCompanyId(userCompRel.getCompId());
+			warehouse = warehouseRpcService.addWarehouse(warehouse);
+			//添加仓库默认联系人
+			WarehouseLinkman linkman = new WarehouseLinkman();
+			linkman.setWhId(warehouse.getWhId());
+			linkman.setName(warehouse.getPrincipal());
+			linkman.setMobile(warehouse.getMobile());
+			linkman.setCreateId(warehouse.getCreateId());
+			linkman.setCreateName(warehouse.getCreateName());
+			linkman.setCreateDate(new Date());
+			linkman.setIsDefault((short)1);
+			linkman.setIsDeleted((short)0);
+			linkman.setCompanyId(warehouse.getCompanyId());
+			linkman = warehouseRpcService.addWarehouseLinkMan(linkman);
 
+			//添加仓库与业务组关系
+
+			groupWareHouseService.addWareHouseRelation(group.getGroupId(),userCompRel.getCompId(),warehouse.getWhId());
+
+			//初始化库位信息
+			WarehouseLoc loc = new WarehouseLoc();
+			loc.setWhId(warehouse.getWhId());
+			loc.setCode("MOREN");
+			loc.setName("默认库位");
+			loc.setStatus((short) 0);
+			loc.setCreateDate(new Date());
+			loc.setCreateId(userCompRel.getUserId());
+			loc.setCompanyId(userCompRel.getCompId());
+			loc.setCreateName(userCompRel.getName());
+			loc.setIsDeleted((short)0);
+			loc = warehouseRpcService.addWarehouseLoc(loc);
+			return true;
+		}catch (Exception e){
+			return false;
+		}
+	}
 }

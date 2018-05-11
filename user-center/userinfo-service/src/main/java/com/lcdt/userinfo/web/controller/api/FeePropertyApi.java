@@ -8,6 +8,7 @@ import com.lcdt.traffic.model.FeeFlow;
 import com.lcdt.traffic.service.FeePropertyRpcService;
 import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.service.CreateCompanyService;
 import com.lcdt.userinfo.service.FeePropertyService;
 import com.lcdt.userinfo.web.dto.PageBaseDto;
 import com.lcdt.util.WebProduces;
@@ -41,6 +42,8 @@ public class FeePropertyApi {
 
     @Reference
     FeePropertyRpcService feePropertyRpcService;
+    @Autowired
+    CreateCompanyService createCompanyService;
 
     @ApiOperation("费用类型——列表")
     @RequestMapping(value = "/feePropertyList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)

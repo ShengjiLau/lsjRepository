@@ -3,14 +3,12 @@ package com.lcdt.userinfo.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.clms.permission.model.RoleUserRelation;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.userinfo.dao.CustomerMapper;
 import com.lcdt.userinfo.dao.GroupMapper;
 import com.lcdt.userinfo.dao.UserGroupRelationMapper;
 import com.lcdt.userinfo.dao.UserMapper;
 import com.lcdt.userinfo.exception.DeptmentExistException;
-import com.lcdt.userinfo.model.Department;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserGroupRelation;
@@ -329,6 +327,12 @@ public class GroupManageServiceImpl implements GroupManageService {
 		List<Customer> list  = customerMapper.selectByCondition(m);
 		PageInfo pageInfo = new PageInfo(list);
 		return pageInfo;
+	}
+
+	@Override
+	public String selectGroupNamesByGroupIds(String groupIds){
+		String groupNames = groupDao.selectGroupNamesByGroupIds(groupIds);
+		return groupNames;
 	}
 
 

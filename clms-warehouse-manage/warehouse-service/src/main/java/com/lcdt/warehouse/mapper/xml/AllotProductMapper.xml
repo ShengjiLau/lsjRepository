@@ -247,4 +247,9 @@
     where allot_id = #{allotId,jdbcType=BIGINT}
     and is_deleted = 0
   </select>
+  <update id="updateAllotProductIsDelete" parameterType="java.lang.Long">
+    update t_allot_product
+    set is_deleted = 1
+    where allot_id = #{allotId,jdbcType=BIGINT}
+  </update>
 </mapper>
