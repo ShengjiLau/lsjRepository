@@ -24,7 +24,7 @@ public class InventoryApi {
     @RequestMapping("/list")
     private String inventoryList(InventoryQueryDto queryDto){
         logger.debug("query inventory list querydto:{}",queryDto);
-        inventoryService.queryInventoryList(queryDto);
+        inventoryService.queryInventoryPage(queryDto);
         return null;
     }
 
