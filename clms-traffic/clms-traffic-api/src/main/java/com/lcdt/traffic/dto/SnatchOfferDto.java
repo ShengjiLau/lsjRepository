@@ -16,7 +16,12 @@ public class SnatchOfferDto implements java.io.Serializable {
     private Long companyId; //获取(计划)企业ID
     private String offerRemark; //抢单备注
 
+    private String vehicleNum;//司机车辆
+    private String vehicleType;
 
+    private double vehicleLoad;
+
+    private double vehicleLength;
     /***
      * 重新报价用
      */
@@ -81,5 +86,37 @@ public class SnatchOfferDto implements java.io.Serializable {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public String getVehicleNum() {
+        return vehicleNum;
+    }
+
+    public void setVehicleNum(String vehicleNum) {
+        this.vehicleNum = vehicleNum;
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public double getVehicleLoad() {
+        return vehicleLoad;
+    }
+
+    public void setVehicleLoad(double vehicleLoad) {
+        this.vehicleLoad = vehicleLoad;
+    }
+
+    public double getVehicleLength() {
+        return vehicleLength;
+    }
+
+    public void setVehicleLength(double vehicleLength) {
+        this.vehicleLength = vehicleLength;
     }
 }
