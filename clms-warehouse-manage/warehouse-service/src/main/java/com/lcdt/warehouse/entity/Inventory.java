@@ -52,6 +52,16 @@ public class Inventory implements Serializable {
      */
     private String warehouseName;
 
+    private GoodsInfo goodsInfo;
+
+    public GoodsInfo getGoodsInfo() {
+        return goodsInfo;
+    }
+
+    public void setGoodsInfo(GoodsInfo goodsInfo) {
+        this.goodsInfo = goodsInfo;
+    }
+
     public String getCustomerName() {
         return customerName;
     }

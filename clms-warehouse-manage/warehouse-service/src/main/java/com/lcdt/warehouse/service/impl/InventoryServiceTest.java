@@ -21,7 +21,7 @@ import java.util.List;
  * @since 2018-05-07
  */
 @Service
-public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory> implements InventoryService {
+public class InventoryServiceTest extends ServiceImpl<InventoryMapper, Inventory> implements InventoryService {
 
     @Autowired
     InventoryMapper inventoryMapper;
@@ -30,8 +30,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         Page<Inventory> page = new Page<>(inventoryQueryDto.getPageNo(),inventoryQueryDto.getPageSize());
         return page.setRecords(inventoryMapper.selectInventoryList(page, inventoryQueryDto));
     }
-
-
 
 
     /**

@@ -12,7 +12,7 @@ import java.util.List;
  * 服务类
  * </p>
  *
- * @author code generate
+ * @author ss
  * @since 2018-05-07
  */
 public interface InventoryService extends IService<Inventory> {

@@ -2,8 +2,6 @@ package com.lcdt.warehouse.dao;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.warehouse.dto.InPlanGoodsInfoResultDto;
-import com.lcdt.warehouse.entity.InHousePlan;
-import com.lcdt.warehouse.entity.InWarehousePlan;
 import com.lcdt.warehouse.mapper.InWarehousePlanMapper;
 import com.lcdt.warehouse.mapper.InplanGoodsInfoMapper;
 import com.lcdt.warehouse.service.InWarehousePlanService;
