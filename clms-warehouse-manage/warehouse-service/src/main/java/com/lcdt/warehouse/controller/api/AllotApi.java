@@ -7,6 +7,7 @@ import com.lcdt.userinfo.model.User;
 import com.lcdt.util.ClmsBeanUtil;
 import com.lcdt.warehouse.dto.AllotDto;
 import com.lcdt.warehouse.dto.PageBaseDto;
+import com.lcdt.warehouse.entity.Allot;
 import com.lcdt.warehouse.service.AllotService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -72,4 +73,51 @@ public class AllotApi {
         }
     }
 
+    @ApiOperation("编辑")
+    @RequestMapping(value = "/modifyAllot", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_modify')")
+    public JSONObject modifyAllot(@Validated @RequestBody AllotDto dto) {
+        boolean result = allotService.modifyAllot(dto);
+        if (result) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "修改成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("修改失败");
+        }
+    }
+
+    @ApiOperation("取消")
+    @RequestMapping(value = "/cancelAllot", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_cancel')")
+    public JSONObject cancelAllot(@Validated @RequestBody AllotDto dto) {
+        boolean result = allotService.modifyAllot(dto);
+        if (result) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "修改成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("修改失败");
+        }
+    }
+
+    @ApiOperation("入库")
+    @RequestMapping(value = "/addAllotInTime", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_allot_in_time_add')")
+    public JSONObject addAllotInTime(@ApiParam(value = "调拨单id",required = true) @RequestParam Long allotId) {
+        Allot allot = new Allot();
+        allot.setAllotId(allotId);
+        allot.setAllotInTime(new Date());
+        int result = allotService.addAllotInTime(allot);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "入库成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("入库失败");
+        }
+    }
 }

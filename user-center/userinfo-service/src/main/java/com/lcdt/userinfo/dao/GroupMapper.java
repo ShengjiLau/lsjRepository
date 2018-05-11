@@ -55,4 +55,6 @@ public interface GroupMapper {
     List<Group> selectByCondition(Map map);
 
     List<Group> selectUserCompanyGroups(@Param("userId") Long userId, @Param("companyId") Long companyId);
+
+    String selectGroupNamesByGroupIds(String groupIds);
 }

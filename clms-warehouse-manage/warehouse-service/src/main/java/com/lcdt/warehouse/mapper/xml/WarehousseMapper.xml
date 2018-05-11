@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lcdt.userinfo.dao.WarehousseMapper">
-  <resultMap id="BaseResultMap" type="com.lcdt.userinfo.model.Warehouse">
+<mapper namespace="com.lcdt.warehouse.mapper.WarehousseMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.Warehouse">
     <id column="wh_id" jdbcType="BIGINT" property="whId" />
     <result column="wh_name" jdbcType="VARCHAR" property="whName" />
     <result column="wh_code" jdbcType="VARCHAR" property="whCode" />
@@ -31,10 +31,10 @@
     <result column="group_ids" jdbcType="VARCHAR" property="groupIds" />
     <!--仓库联系人-->
     <collection property="linkmanList" column="{whId=wh_id,isDeleted=is_deleted}"
-                ofType="com.lcdt.userinfo.model.WarehouseLinkman" javaType="ArrayList"
-                select="com.lcdt.userinfo.dao.WarehousseLinkmanMapper.selectByWhId" />
+                ofType="com.lcdt.warehouse.entity.WarehouseLinkman" javaType="ArrayList"
+                select="com.lcdt.warehouse.mapper.WarehousseLinkmanMapper.selectByWhId" />
   </resultMap>
-  <resultMap id="BaseResultMapDto" type="com.lcdt.userinfo.web.dto.WarehouseDto" extends="BaseResultMap">
+  <resultMap id="BaseResultMapDto" type="com.lcdt.warehouse.dto.WarehouseDto" extends="BaseResultMap">
     <result column="group_names" jdbcType="VARCHAR" property="groupNames" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -46,7 +46,7 @@
     set is_deleted = 1
     where wh_id = #{whId,jdbcType=BIGINT}
   </update>
-  <insert id="insert" parameterType="com.lcdt.userinfo.model.Warehouse">
+  <insert id="insert" parameterType="com.lcdt.warehouse.entity.Warehouse">
     <selectKey keyProperty="whId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -71,7 +71,7 @@
       #{groupIds,jdbcType=VARCHAR}
       )
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.Warehouse">
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.warehouse.entity.Warehouse">
     update t_warehouse
     set wh_name = #{whName,jdbcType=VARCHAR},
       wh_code = #{whCode,jdbcType=VARCHAR},
@@ -121,7 +121,7 @@
     select wh_id, wh_name, wh_code, wh_type, wh_status, customer_id, customer_name, principal,
     mobile, mail, tel_num, fax, province, city, county, detail_address, post_code, remark,
     create_id, create_name, create_date, update_id, update_name, update_time, is_deleted,
-    company_id, group_ids, (select GROUP_CONCAT(g.group_name) from t_uc_group g where FIND_IN_SET(g.group_id,group_ids)) group_names
+    company_id, group_ids
     from t_warehouse
     <where>
       company_id = #{companyId,jdbcType=BIGINT}

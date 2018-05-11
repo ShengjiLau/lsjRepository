@@ -1,4 +1,4 @@
-package com.lcdt.userinfo.web.dto;
+package com.lcdt.warehouse.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 

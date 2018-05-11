@@ -60,11 +60,7 @@ public interface WaybillItemsMapper {
     int updateForBatch(List<WaybillItems> list);
 
     /**
-<<<<<<< HEAD
-     * 查询单个运单货物明细
-=======
      * 获取单个运单货物详情
->>>>>>> e40de7e47514181a55ad88782d3a960c5ce30907
      * @param waybillId
      * @return
      */
