@@ -104,6 +104,7 @@ public class PayableReconcileApi {
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_reconcile_list')")
 	public JSONObject getReconcileList(ReconcileDto reconcileDto) {
 		JSONObject jsonObject =new JSONObject();
+		reconcileDto.setPayeeType((short) 1);
 		PageInfo<ReconcileDto> page=reconcileService.getReconcileList(reconcileDto);
 		PageBaseDto<ReconcileDto> pagebase=new PageBaseDto<ReconcileDto>();
 		pagebase.setTotal(page.getTotal());
