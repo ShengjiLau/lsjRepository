@@ -90,22 +90,23 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
 
     @Override
     public boolean storage(ModifyInOrderStatusParamsDto modifyParams, List<InorderGoodsInfoDto> listParams) {
+        boolean result=false;
         //拆分
         List<InorderGoodsInfo> modifyInorderGoodsInfoList = new ArrayList<>();
         List<InorderGoodsInfo> addInorderGoodsInfoList = new ArrayList<>();
         if (listParams != null && listParams.size() > 0) {
             if (addInorderGoodsInfoList != null && addInorderGoodsInfoList.size() > 0) {
-                inorderGoodsInfoService.insertBatch(addInorderGoodsInfoList);
+                result=inorderGoodsInfoService.insertBatch(addInorderGoodsInfoList);
             }
             if (modifyInorderGoodsInfoList != null && modifyInorderGoodsInfoList.size() > 0) {
-                inorderGoodsInfoService.updateBatchById(modifyInorderGoodsInfoList);
+                result=inorderGoodsInfoService.updateBatchById(modifyInorderGoodsInfoList);
             }
         }
         //更新入库单状态
-        modifyInOrderStatus(modifyParams);
+        result=modifyInOrderStatus(modifyParams);
 
         //入库
-        return false;
+        return result;
     }
 
 }
