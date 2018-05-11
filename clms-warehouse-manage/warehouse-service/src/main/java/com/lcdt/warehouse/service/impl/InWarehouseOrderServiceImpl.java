@@ -90,11 +90,23 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
 
     @Override
     public boolean storage(ModifyInOrderStatusParamsDto modifyParams, List<InorderGoodsInfoDto> listParams) {
+        //拆分
         boolean result=false;
         //拆分
         List<InorderGoodsInfo> modifyInorderGoodsInfoList = new ArrayList<>();
         List<InorderGoodsInfo> addInorderGoodsInfoList = new ArrayList<>();
         if (listParams != null && listParams.size() > 0) {
+            for (InorderGoodsInfoDto infoDto : listParams) {
+                if (infoDto.getRelationId() != null && infoDto.getRelationId().equals("")) {
+                    InorderGoodsInfo inorderGoodsInfo = new InorderGoodsInfo();
+                    BeanUtils.copyProperties(infoDto, inorderGoodsInfo);
+                    modifyInorderGoodsInfoList.add(inorderGoodsInfo);
+                } else {
+                    InorderGoodsInfo inorderGoodsInfo = new InorderGoodsInfo();
+                    BeanUtils.copyProperties(infoDto, inorderGoodsInfo);
+                    addInorderGoodsInfoList.add(inorderGoodsInfo);
+                }
+            }
             if (addInorderGoodsInfoList != null && addInorderGoodsInfoList.size() > 0) {
                 result=inorderGoodsInfoService.insertBatch(addInorderGoodsInfoList);
             }
@@ -108,5 +120,6 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
         //入库
         return result;
     }
+
 
 }
