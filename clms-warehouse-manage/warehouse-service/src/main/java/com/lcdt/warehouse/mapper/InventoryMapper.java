@@ -19,4 +19,6 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
 
     List<Inventory> selectInventoryList(Pagination page, InventoryQueryDto queryDto);
 
+    List<Inventory> selectSameInventory(Inventory inventory);
+
 }

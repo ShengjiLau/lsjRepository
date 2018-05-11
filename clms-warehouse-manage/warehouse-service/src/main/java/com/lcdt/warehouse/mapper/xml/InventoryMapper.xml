@@ -20,9 +20,19 @@
                 and storage_location_code = #{strogeLocationCode}
             </if>
 
-            <if test="goodsQuery != null">
-                and batch = #{batch}
+            <if test="goodsId != null">
+                and goods_id = #{goodsId}
             </if>
+
+            <if test="customerId != null">
+                and customer_id = #{customerId}
+            </if>
+
         </where>
     </select>
+
+
+
+
+
 </mapper>
