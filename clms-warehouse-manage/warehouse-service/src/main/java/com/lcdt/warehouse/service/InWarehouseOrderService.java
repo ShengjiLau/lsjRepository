@@ -34,9 +34,19 @@ public interface InWarehouseOrderService extends IService<InWarehouseOrder> {
      */
     Page<InWarehouseOrderDto> queryInWarehouseOrderList(InWarehouseOrderSearchParamsDto params);
 
-
+    /**
+     * 修改入库单状态
+     * @param params
+     * @return
+     */
     boolean modifyInOrderStatus(ModifyInOrderStatusParamsDto params);
 
+    /**
+     * 入库操作
+     * @param modifyParams
+     * @param listParams
+     * @return
+     */
     boolean storage(ModifyInOrderStatusParamsDto modifyParams, List<InorderGoodsInfoDto> listParams);
 
 }
