@@ -35,7 +35,7 @@
     </resultMap>
 
     <resultMap id="InWarehouseOrderDetailsMap" type="com.lcdt.warehouse.dto.InWarehouseOrderDto" extends="BaseResultMap">
-        <collection property="goodsInfoDtoList" column="inorder_id" ofType="com.lcdt.warehouse.dto.InorderGoodsInfoDto" select="com.lcdt.warehouse.mapper.InorderGoodsInfoMapper.goodsDetail"/>
+        <collection property="goodsInfoDtoList" column="inorder_id" ofType="com.lcdt.warehouse.dto.InorderGoodsInfoDto" select="com.lcdt.warehouse.mapper.InorderGoodsInfoMapper.selectGoodsDetail"/>
     </resultMap>
 
     <sql id="Base_Select_List" >
@@ -47,7 +47,7 @@
     </sql>
 
     <sql id="select_condition">
-        <if test="in_order_code!=null and in_order_code!=''">
+        <if test="inOrderCode!=null and inOrderCode!=''">
             and in_order_code like concat('%',#{inOrderCode,jdbcType=VARCHAR},'%')
         </if>
         <if test="inOrderStatus!=null and inOrderStatus!='' and inOrderStatus.length>0">
@@ -57,16 +57,13 @@
             </foreach>
         </if>
         <if test="planId!=null and planId!=''">
-            and plan_id = #{plan_id,jdbcType=BIGINT}
+            and plan_id = #{planId,jdbcType=BIGINT}
         </if>
         <if test="warehouseId!=null and warehouseId!=''">
             and warehouse_id = #{warehouseId,jdbcType=BIGINT}
         </if>
         <if test="createName!=null and createName!=''">
             and create_name = #{createName,jdbcType=VARCHAR}
-        </if>
-        <if test="receiveCounty!=null and receiveCounty!=''">
-            and receive_county = #{receiveCounty,jdbcType=VARCHAR}
         </if>
         <if test="startCreateDate!=null and startCreateDate!=''">
             and create_date &gt;= CONCAT(STR_TO_DATE(#{startCreateDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
@@ -93,7 +90,7 @@
             and purchase_code like concat('%',#{purchaseCode,jdbcType=VARCHAR},'%')
         </if>
         <if test="goodsInfo != null and goodsInfo!=''">
-            and inorder_id in (SELECT DISTINCT o.inorder_id FROM inorder_goods_info o left join goods_info g on o.goods_id=g.goods_id WHERE g.goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%'))
+            and inorder_id in (SELECT DISTINCT inorder_id FROM inorder_goods_info WHERE goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%'))
         </if>
         <if test="isDeleted!=null and isDeleted!=''">
             and is_deleted = #{isDeleted,jdbcType=VARCHAR}

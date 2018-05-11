@@ -37,7 +37,7 @@ public class InWarehouseOrder implements Serializable,ResponseData {
     /**
      * 入库单状态
      */
-    private Integer inOrderStatus;
+    private int inOrderStatus;
     /**
      * 组id
      */
@@ -146,7 +146,7 @@ public class InWarehouseOrder implements Serializable,ResponseData {
     /**
      * 是否删除
      */
-    private Integer isDeleted;
+    private boolean isDeleted;
 
 
     public Long getInorderId() {
@@ -173,11 +173,11 @@ public class InWarehouseOrder implements Serializable,ResponseData {
         this.inOrderCode = inOrderCode;
     }
 
-    public Integer getInOrderStatus() {
+    public int getInOrderStatus() {
         return inOrderStatus;
     }
 
-    public void setInOrderStatus(Integer inOrderStatus) {
+    public void setInOrderStatus(int inOrderStatus) {
         this.inOrderStatus = inOrderStatus;
     }
 
@@ -381,12 +381,12 @@ public class InWarehouseOrder implements Serializable,ResponseData {
         this.updateDate = updateDate;
     }
 
-    public Integer getIsDeleted() {
+    public boolean getDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(Integer isDeleted) {
-        this.isDeleted = isDeleted;
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     @Override

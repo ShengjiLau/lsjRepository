@@ -35,8 +35,7 @@
                 and create_user_name like concat('%',#{createUserName},'%')
             </if>
             <if test="goodsName != null and goodsName!=''">
-                and  plan_id in (SELECT plan_id FROM inplan_goods_info g1 LEFT JOIN goods_info g2 on g1.goods_id=g2.goods_id
-                                  WHERE g2.goods_name like concat('%',#{goodsName},'%')
+                and  plan_id in (SELECT plan_id FROM inplan_goods_info g1  WHERE g1.goods_name like concat('%',#{goodsName},'%')
                                  )
             </if>
             <if test="customerName!=null and customerName != ''">

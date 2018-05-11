@@ -14,6 +14,7 @@ import com.lcdt.warehouse.service.InorderGoodsInfoService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -23,14 +24,12 @@ import org.springframework.stereotype.Service;
  * @author code generate
  * @since 2018-05-07
  */
+@Transactional
 @Service
 public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMapper, InWarehouseOrder> implements InWarehouseOrderService {
 
     @Autowired
     InorderGoodsInfoService inorderGoodsInfoService;
-
-    @Autowired
-    GoodsInfoService goodsInfoService;
 
     @Override
     public int addInWarehouseOrder(InWarehouseOrderDto params) {
@@ -41,13 +40,8 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
 
         if(params.getGoodsInfoDtoList()!=null&&params.getGoodsInfoDtoList().size()>0){
             for(int i=0;i<params.getGoodsInfoDtoList().size();i++){
-                GoodsInfo goodsInfo=new GoodsInfo();
-                BeanUtils.copyProperties(params.getGoodsInfoDtoList().get(i),goodsInfo);
-                goodsInfoService.insert(goodsInfo);
-
                 InorderGoodsInfo inorderGoodsInfo=new InorderGoodsInfo();
                 BeanUtils.copyProperties(params.getGoodsInfoDtoList().get(i),inorderGoodsInfo);
-                inorderGoodsInfo.setGoodsId(goodsInfo.getGoodsId());
                 inorderGoodsInfo.setInorderId(inWarehouseOrder.getInorderId());
                 inorderGoodsInfoService.insert(inorderGoodsInfo);
             }

@@ -2,6 +2,7 @@ package com.lcdt.warehouse.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -14,18 +15,20 @@ public class InWarehouseOrderSearchParamsDto {
     private String inOrderCode;
     @ApiModelProperty(value = "货物信息")
     private String goodsInfo;
+    @ApiModelProperty(value = "入库单状态")
+    private int inOrderStatus;
     @ApiModelProperty(value = "仓库id")
     private Long warehouseId;
     @ApiModelProperty(value = "制单人")
     private String createName;
     @ApiModelProperty(value = "发布起始时间")
-    private Date startCreateDate;
+    private String startCreateDate;
     @ApiModelProperty(value = "发布最后时间")
-    private Date endCreateDate;
+    private String endCreateDate;
     @ApiModelProperty(value = "超始入库时间")
-    private Date startStorageTime;
+    private String startStorageTime;
     @ApiModelProperty(value = "结束入库时间")
-    private Date endStorageTime;
+    private String endStorageTime;
     @ApiModelProperty(value = "入库类型{id:\"01\",value:\"原料入库\"},\n" +
             "     {id:\"02\",value:\"成品入库\"},\n" +
             "     {id:\"03\",value:\"退换货入库\"},\n" +
@@ -42,6 +45,9 @@ public class InWarehouseOrderSearchParamsDto {
     private String purchaseCode;
     @ApiModelProperty(value = "计划id")
     private Long planId;
+
+    private boolean isDeleted;
+
     @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
     @ApiModelProperty(value = "分页编号",required = true)
@@ -49,13 +55,20 @@ public class InWarehouseOrderSearchParamsDto {
     @ApiModelProperty(value = "每页数",required = true)
     private int pageSize;
 
-
     public String getInOrderCode() {
         return inOrderCode;
     }
 
     public void setInOrderCode(String inOrderCode) {
         this.inOrderCode = inOrderCode;
+    }
+
+    public int getInOrderStatus() {
+        return inOrderStatus;
+    }
+
+    public void setInOrderStatus(int inOrderStatus) {
+        this.inOrderStatus = inOrderStatus;
     }
 
     public String getGoodsInfo() {
@@ -82,35 +95,35 @@ public class InWarehouseOrderSearchParamsDto {
         this.createName = createName;
     }
 
-    public Date getStartCreateDate() {
+    public String getStartCreateDate() {
         return startCreateDate;
     }
 
-    public void setStartCreateDate(Date startCreateDate) {
+    public void setStartCreateDate(String startCreateDate) {
         this.startCreateDate = startCreateDate;
     }
 
-    public Date getEndCreateDate() {
+    public String getEndCreateDate() {
         return endCreateDate;
     }
 
-    public void setEndCreateDate(Date endCreateDate) {
+    public void setEndCreateDate(String endCreateDate) {
         this.endCreateDate = endCreateDate;
     }
 
-    public Date getStartStorageTime() {
+    public String getStartStorageTime() {
         return startStorageTime;
     }
 
-    public void setStartStorageTime(Date startStorageTime) {
+    public void setStartStorageTime(String startStorageTime) {
         this.startStorageTime = startStorageTime;
     }
 
-    public Date getEndStorageTime() {
+    public String getEndStorageTime() {
         return endStorageTime;
     }
 
-    public void setEndStorageTime(Date endStorageTime) {
+    public void setEndStorageTime(String endStorageTime) {
         this.endStorageTime = endStorageTime;
     }
 
@@ -168,6 +181,14 @@ public class InWarehouseOrderSearchParamsDto {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public int getPageNo() {

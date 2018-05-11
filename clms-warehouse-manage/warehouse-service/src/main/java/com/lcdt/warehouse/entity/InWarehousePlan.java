@@ -7,6 +7,7 @@ import java.beans.Transient;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.lcdt.warehouse.dto.InPlanGoodsInfoResultDto;
+import com.lcdt.warehouse.dto.InWarehouseOrderDto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -45,10 +46,10 @@ public class InWarehousePlan implements Serializable {
     private Long customerId;
     /**
      * 10-待发布
-20- 配舱中
-30-已配舱
-40-完成
-50-取消
+        20- 配舱中
+        30-已配舱
+        40-完成
+        50-取消
 
      */
     private Integer planStatus;
@@ -60,11 +61,11 @@ public class InWarehousePlan implements Serializable {
     private String customerPurchaseNo;
     /**
      * 入库类型
-{id:"01",value:"原料入库"},
-  {id:"02",value:"成品入库"},
-              {id:"03",value:"退换货入库"},
-              {id:"04",value:"采购入库"},
-              {id:"05",value:"其它"},
+        {id:"01",value:"原料入库"},
+          {id:"02",value:"成品入库"},
+                      {id:"03",value:"退换货入库"},
+                      {id:"04",value:"采购入库"},
+                      {id:"05",value:"其它"},
      */
     private String storageType;
     /**
@@ -133,6 +134,20 @@ public class InWarehousePlan implements Serializable {
         this.goodsList = goodsList;
     }
 
+
+
+    @TableField(exist=false)
+    private List<InWarehouseOrderDto> inWarehouseOrderDtoList; //入库计划详细
+
+
+
+    public List<InWarehouseOrderDto> getInWarehouseOrderDtoList() {
+        return inWarehouseOrderDtoList;
+    }
+
+    public void setInWarehouseOrderDtoList(List<InWarehouseOrderDto> inWarehouseOrderDtoList) {
+        this.inWarehouseOrderDtoList = inWarehouseOrderDtoList;
+    }
 
 
 
