@@ -8,7 +8,6 @@ import com.lcdt.customer.Utils.CommonUtil;
 import com.lcdt.customer.config.ConfigConstant;
 import com.lcdt.customer.dao.CustomerInviteLogMapper;
 import com.lcdt.customer.dao.CustomerMapper;
-import com.lcdt.customer.exception.CustomerException;
 import com.lcdt.customer.exception.CustomerNotBindException;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.model.CustomerInviteLog;
@@ -32,6 +31,7 @@ import javax.mail.MessagingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ss on 2017/11/27.
@@ -58,7 +58,8 @@ public class CustomerBindApi {
 	@Autowired
 	ConfigConstant configConstant;
 
-
+	@Autowired
+	private CustomerMapper customerMapper;
 
 	@RequestMapping("/testurl")
 	public ModelAndView testLogoutUrl(){
@@ -165,19 +166,17 @@ public class CustomerBindApi {
 				customer.setGroupIds(String.valueOf(group.getGroupId()));
 				customer.setGroupNames(group.getGroupName());
 			}
-			try{
-				customerService.customerAdd(customer);
+			Map map = new HashMap();
+			map.put("companyId", customer.getCompanyId());
+			map.put("customerName", customer.getCustomerName());
+			List<Customer> list = customerMapper.selectByCondition(map);
+			if (list.size()>0) {
+				return errorTip(user,"客户已存在，请联系管理员分配！");
 			}
-			catch (CustomerException e)
-			{
-				return errorTip(user,e.getMessage());
-			}
+			customerService.customerAdd(customer);
 		}else{
 			customer = mapper.selectByPrimaryKey(customerId, companyId);
 		}
-
-		
-
 		//绑定被邀请的客户id
 
 		if (customer.getBindCpid() != null) {
