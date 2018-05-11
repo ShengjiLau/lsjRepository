@@ -9,31 +9,51 @@ import java.io.Serializable;
  */
 public class InWhPlanSearchParamsDto implements Serializable {
 
-    private String planNo; //计划编码
 
-    //计划创建时间
+    @ApiModelProperty(value = "计划编码")
+    private String planNo;
+
+    @ApiModelProperty(value = "计划创建时间")
     private Long createBegin;
     private String createBeginStr;
     private Long createEnd;
     private String createEndStr;
 
-    private Long wareHouseId;//仓库ID
-    private String createUserName; // 制单人
-    private String goodsName; //货物信息
+    @ApiModelProperty(value = "仓库ID")
+    private Long wareHouseId;
 
-    private String customerName; //客户信息
-    private String storageType; //入类型
-    private Integer groupId; //项目组ID
-    private String customerPurchaseNo; //采购单号
-    private String contractNo; //合同编码
-    private Long companyId;
-    private String planStatus; //计划状态
+    @ApiModelProperty(value = "制单人")
+    private String createUserName;
 
+    @ApiModelProperty(value = "货物信息")
+    private String goodsName;
 
+    @ApiModelProperty(value = "客户信息")
+    private String customerName;
+
+    @ApiModelProperty(value = "入类型")
+    private String storageType;
+
+    @ApiModelProperty(value = "项目组ID")
+    private Integer groupId;
     private String groupIds;//项目组ID
 
+    @ApiModelProperty(value = "采购单号")
+    private String customerPurchaseNo;
 
+    @ApiModelProperty(value = "合同编码")
+    private String contractNo;
+
+    @ApiModelProperty(value = "企业ID")
+    private Long companyId;
+
+    @ApiModelProperty(value = "计划状态")
+    private String planStatus;
+
+    @ApiModelProperty(value = "分页编号",required = true)
     private Integer pageNo;
+
+    @ApiModelProperty(value = "每页数",required = true)
     private Integer pageSize;
 
     public String getPlanNo() {

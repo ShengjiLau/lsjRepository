@@ -2,6 +2,7 @@ package com.lcdt.warehouse.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.warehouse.dto.AllotDto;
+import com.lcdt.warehouse.entity.Allot;
 
 import java.util.Map;
 
@@ -28,15 +29,15 @@ public interface AllotService {
      */
     boolean modifyAllot(AllotDto dto);
     /**
-     * 删除仓库
+     * 删除/取消仓库
      * @param allotId
      * @return
      */
-    int modifyAllotIsDelete(Long allotId);
+    boolean modifyAllotIsDelete(Long allotId);
     /**
-     * 启用/禁用仓库
-     * @param whId
+     * 入库
+     * @param allot
      * @return
      */
-    int modifyWarehouseWhStatus(Long whId);
+    int addAllotInTime(Allot allot);
 }

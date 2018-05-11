@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.model;
 
 import com.lcdt.converter.ResponseData;
+import com.lcdt.warehouse.entity.Warehouse;
 
 import java.util.Date;
 

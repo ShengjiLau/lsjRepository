@@ -1,7 +1,7 @@
-package com.lcdt.userinfo.dao;
+package com.lcdt.warehouse.mapper;
 
-import com.lcdt.userinfo.model.Warehouse;
-import com.lcdt.userinfo.web.dto.WarehouseDto;
+import com.lcdt.warehouse.dto.WarehouseDto;
+import com.lcdt.warehouse.entity.Warehouse;
 
 import java.util.List;
 import java.util.Map;

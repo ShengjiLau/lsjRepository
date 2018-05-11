@@ -1,12 +1,12 @@
 package com.lcdt.userinfo.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.lcdt.userinfo.dao.TUserGroupWarehouseRelationMapper;
-import com.lcdt.userinfo.dao.WarehousseMapper;
 import com.lcdt.userinfo.localservice.GroupWareHouseService;
 import com.lcdt.userinfo.model.TUserGroupWarehouseRelation;
-import com.lcdt.userinfo.model.Warehouse;
 import com.lcdt.userinfo.service.UserGroupService;
-import com.lcdt.userinfo.service.WarehouseService;
+import com.lcdt.warehouse.entity.Warehouse;
+import com.lcdt.warehouse.rpc.WarehouseRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +19,6 @@ public class GroupWareHouseServiceImpl implements GroupWareHouseService{
 
     @Autowired
     TUserGroupWarehouseRelationMapper dao;
-
-    @Autowired
-    WarehouseService warehouseService;
-
-
 
     @Override
     public List<TUserGroupWarehouseRelation> addedUserGroupWareHouse(Long companyId,Long groupId) {
@@ -43,14 +38,14 @@ public class GroupWareHouseServiceImpl implements GroupWareHouseService{
         return tUserGroupWarehouseRelations;
     }
 
-    @Autowired
-    WarehousseMapper warehousseMapper;
+    @Reference
+    WarehouseRpcService warehouseRpcService;
 
     @Autowired
     UserGroupService userGroupService;
 
     public TUserGroupWarehouseRelation addWareHouseRelation(Long groupId,Long companyId,Long wareHouseId){
-        Warehouse warehouse = warehousseMapper.selectByPrimaryKey(wareHouseId);
+        Warehouse warehouse = warehouseRpcService.selectByPrimaryKey(wareHouseId);
         if (!warehouse.getCompanyId().equals(companyId)) {
             return null;
         }

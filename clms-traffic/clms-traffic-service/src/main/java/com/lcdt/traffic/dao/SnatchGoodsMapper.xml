@@ -24,12 +24,13 @@
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="plan_company_id" jdbcType="BIGINT" property="planCompanyId" />
     <result column="offer_remark" jdbcType="VARCHAR" property="offerRemark" />
-
+    <result column="vehicle_num" jdbcType="VARCHAR" property="vehicleNum" />
+    <result column="vehicle_type" jdbcType="VARCHAR" property="vehicleType" />
+    <result column="vehicle_load" jdbcType="DECIMAL" property="vehicleLoad" />
+    <result column="vehicle_length" jdbcType="DECIMAL" property="vehicleLength" />
     <collection property="snatchGoodsDetailList" column="{snatchGoodsId=snatch_goods_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.traffic.model.SnatchGoodsDetail" javaType="ArrayList"
                 select="com.lcdt.traffic.dao.SnatchGoodsDetailMapper.selectBySnatchGoodsDetailId" />
-
-
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
@@ -53,13 +54,14 @@
       offer_phone, is_using, company_id, 
       create_id, create_name, create_date, 
       update_id, update_name, update_time,
-      is_deleted,plan_company_id,offer_remark)
+      is_deleted,plan_company_id,offer_remark,vehicle_num ,vehicle_type, vehicle_load, vehicle_length )
     values (#{waybillPlanId,jdbcType=BIGINT}, #{offerDate,jdbcType=TIMESTAMP},
       #{offerId,jdbcType=BIGINT}, #{offerName,jdbcType=VARCHAR},
       #{offerPhone,jdbcType=VARCHAR}, #{isUsing,jdbcType=SMALLINT}, #{companyId,jdbcType=BIGINT}, 
       #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
       #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=SMALLINT},
-      #{planCompanyId,jdbcType=BIGINT}, #{offerRemark,jdbcType=VARCHAR})
+      #{planCompanyId,jdbcType=BIGINT}, #{offerRemark,jdbcType=VARCHAR}, #{vehicleNum,jdbcType=VARCHAR},
+    #{vehicleType,jdbcType=VARCHAR}, #{vehicleLoad,jdbcType=DECIMAL}, #{vehicleLength,jdbcType=DECIMAL})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.SnatchGoods">
     <!--
@@ -83,7 +85,11 @@
       update_name = #{updateName,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=SMALLINT},
-      offer_remark = #{offerRemark,jdbcType=VARCHAR}
+      offer_remark = #{offerRemark,jdbcType=VARCHAR},
+    vehicle_num = #{vehicleNum,jdbcType=VARCHAR},
+    vehicle_type = #{vehicleType,jdbcType=VARCHAR},
+    vehicle_load = #{vehicleLoad,jdbcType=DECIMAL},
+    vehicle_length = #{vehicleLength,jdbcType=DECIMAL}
     where snatch_goods_id = #{snatchGoodsId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -94,7 +100,7 @@
     -->
     select snatch_goods_id, waybill_plan_id, offer_date,
     offer_id, offer_name, offer_phone, is_using, company_id, create_id, create_name, 
-    create_date, update_id, update_name, update_time, is_deleted,plan_company_id,offer_remark
+    create_date, update_id, update_name, update_time, is_deleted,plan_company_id,offer_remark,vehicle_num,vehicle_type,vehicle_load,vehicle_length
     from t_snatch_goods
     where snatch_goods_id = #{snatchGoodsId,jdbcType=BIGINT}
   </select>
@@ -106,7 +112,7 @@
     -->
     select snatch_goods_id, waybill_plan_id, offer_date,
     offer_id, offer_name, offer_phone, is_using, company_id, create_id, create_name, 
-    create_date, update_id, update_name, update_time, is_deleted,plan_company_id,offer_remark
+    create_date, update_id, update_name, update_time, is_deleted,plan_company_id,offer_remark,vehicle_num,vehicle_type,vehicle_load,vehicle_length
     from t_snatch_goods
   </select>
 
@@ -118,7 +124,7 @@
     -->
     select snatch_goods_id, waybill_plan_id, offer_date,
     offer_id, offer_name, offer_phone, is_using, company_id, create_id, create_name,
-    create_date, update_id, update_name, update_time, is_deleted,plan_company_id,offer_remark
+    create_date, update_id, update_name, update_time, is_deleted,plan_company_id,offer_remark,vehicle_num,vehicle_type,vehicle_load,vehicle_length
     from t_snatch_goods
     where waybill_plan_id = #{waybillPlanId} and is_deleted=#{isDeleted}
     order by offer_date desc

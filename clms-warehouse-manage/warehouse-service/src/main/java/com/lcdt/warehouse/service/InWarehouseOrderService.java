@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import com.lcdt.warehouse.dto.InWarehouseOrderDto;
 import com.lcdt.warehouse.dto.InWarehouseOrderSearchParamsDto;
+import com.lcdt.warehouse.dto.ModifyInOrderStatusParamsDto;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
 
 /**
@@ -28,5 +29,8 @@ public interface InWarehouseOrderService extends IService<InWarehouseOrder> {
      * @return
      */
     Page<InWarehouseOrderDto> queryInWarehouseOrderList(InWarehouseOrderSearchParamsDto params);
+
+
+    boolean modifyInOrderStatus(ModifyInOrderStatusParamsDto params);
 
 }

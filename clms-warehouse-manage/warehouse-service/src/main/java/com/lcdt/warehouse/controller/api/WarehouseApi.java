@@ -1,16 +1,16 @@
-package com.lcdt.userinfo.web.controller.api;
+package com.lcdt.warehouse.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.User;
-import com.lcdt.userinfo.model.Warehouse;
-import com.lcdt.userinfo.model.WarehouseLinkman;
-import com.lcdt.userinfo.service.WarehouseService;
-import com.lcdt.userinfo.web.dto.PageBaseDto;
-import com.lcdt.userinfo.web.dto.WarehouseDto;
-import com.lcdt.userinfo.web.dto.WarehouseLinkmanDto;
 import com.lcdt.util.WebProduces;
+import com.lcdt.warehouse.dto.PageBaseDto;
+import com.lcdt.warehouse.dto.WarehouseDto;
+import com.lcdt.warehouse.dto.WarehouseLinkmanDto;
+import com.lcdt.warehouse.entity.Warehouse;
+import com.lcdt.warehouse.entity.WarehouseLinkman;
+import com.lcdt.warehouse.service.WarehouseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -42,8 +42,8 @@ public class WarehouseApi {
     @RequestMapping(value = "/warehouseList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('warehouse_list')")
     public PageBaseDto warehouseList(@Validated WarehouseDto dto,
-                                    @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
-                                    @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
+                                     @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                     @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);

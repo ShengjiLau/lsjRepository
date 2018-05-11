@@ -45,4 +45,15 @@ public interface InWarehousePlanService extends IService<InWarehousePlan> {
      * @return
      */
     boolean inWhPlanCancel(InWarehousePlan obj, UserCompRel userCompRel);
+
+
+
+    /***
+     * 计划取消
+     *
+     * @param obj
+     * @param userCompRel
+     * @return
+     */
+    boolean inWhPlanComplete(InWarehousePlan obj, UserCompRel userCompRel);
 }

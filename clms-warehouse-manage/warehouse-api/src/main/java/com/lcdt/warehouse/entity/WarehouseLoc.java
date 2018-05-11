@@ -1,36 +1,56 @@
 package com.lcdt.warehouse.entity;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
-public class WarehouseLoc {
+public class WarehouseLoc implements java.io.Serializable{
+    @ApiModelProperty(value = "主键")
     private Long whLocId;
 
+    @ApiModelProperty(value = "仓库id")
     private Long whId;
 
+    @ApiModelProperty(value = "库位编码")
     private String code;
 
+    @ApiModelProperty(value = "0-发货库位\n" +
+            "1-退货库位\n" +
+            "2-换货库位\n" +
+            "3-其他库位")
     private Short locType;
 
+    @ApiModelProperty(value = "库位名称")
     private String name;
 
+    @ApiModelProperty(value = "库位状态 0-启用 1-停用")
     private Short status;
 
+    @ApiModelProperty(value = "备注")
     private String remark;
 
+    @ApiModelProperty(value = "创建人id")
     private Long createId;
 
+    @ApiModelProperty(value = "创建人姓名")
     private String createName;
 
+    @ApiModelProperty(value = "创建时间")
     private Date createDate;
 
+    @ApiModelProperty(value = "修改人id")
     private Long updateId;
 
+    @ApiModelProperty(value = "修改人姓名")
     private String updateName;
 
+    @ApiModelProperty(value = "修改时间")
     private Date updateTime;
 
+    @ApiModelProperty(value = "0-未删除，1-已删除")
     private Short isDeleted;
 
+    @ApiModelProperty(value = "企业id")
     private Long companyId;
 
     public Long getWhLocId() {

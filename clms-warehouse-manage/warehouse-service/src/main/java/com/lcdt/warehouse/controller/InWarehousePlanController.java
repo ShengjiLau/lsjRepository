@@ -128,6 +128,28 @@ public class InWarehousePlanController {
 
 
 
+    @ApiOperation("完成")
+    @RequestMapping(value = "/complete",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject complete(@ApiParam(value = "计划ID",required = true) @RequestParam Long planId) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        InWarehousePlan obj = new InWarehousePlan();
+        obj.setPlanId(planId);
+        JSONObject jsonObject = new JSONObject();
+        boolean flag = false;
+        String msg = "操作失败！";
+        try {
+            flag = inWarehousePlanService.inWhPlanComplete(obj, userCompRel);
+        } catch (RuntimeException e) {
+            msg = e.getMessage();
+            logger.error(e.getMessage());
+        }
+        jsonObject.put("code", flag==true? 0:-1);
+        jsonObject.put("message", flag==true? "操作成功！":msg);
+        return jsonObject;
+    }
+
+
 
 
 

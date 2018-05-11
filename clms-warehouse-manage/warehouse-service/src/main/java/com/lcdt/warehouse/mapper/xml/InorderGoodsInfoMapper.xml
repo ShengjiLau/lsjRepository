@@ -6,35 +6,14 @@
         <id column="relation_id" jdbcType="BIGINT" property="relationId" />
         <result column="inorder_id" jdbcType="BIGINT" property="inorderId" />
         <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
-        <result column="unit" jdbcType="VARCHAR" property="unit" />
-        <result column="unit_data" jdbcType="INTEGER" property="unitData" />
-        <result column="receivalbe_amount" jdbcType="REAL" property="receivalbeAmount" />
-        <result column="batch" jdbcType="VARCHAR" property="batch" />
-        <result column="in_house_amount" jdbcType="REAL" property="inHouseAmount" />
-        <result column="in_house_price" jdbcType="INTEGER" property="inHousePrice" />
-        <result column="damage" jdbcType="INTEGER" property="damage" />
-        <result column="remark" jdbcType="VARCHAR" property="remark" />
-        <result column="stroge_location_id" jdbcType="BIGINT" property="strogeLocationId" />
-        <result column="stroge_location_code" jdbcType="VARCHAR" property="strogeLocationCode" />
-    </resultMap>
-
-    <!-- 开启二级缓存 -->
-    <resultMap id="GoodsInfoMap" type="com.lcdt.warehouse.dto.InorderGoodsInfoDto">
-        <id column="relation_id" jdbcType="BIGINT" property="relationId" />
-        <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
         <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
-        <result column="goods_classify" jdbcType="VARCHAR" property="goodsClassify" />
         <result column="goods_spec" jdbcType="VARCHAR" property="goodsSpec" />
+        <result column="goods_classify" jdbcType="VARCHAR" property="goodsClassify" />
         <result column="goods_code" jdbcType="VARCHAR" property="goodsCode" />
         <result column="goods_barcode" jdbcType="VARCHAR" property="goodsBarcode" />
-        <result column="goods_price" jdbcType="INTEGER" property="goodsPrice" />
+        <result column="goods_price" jdbcType="REAL" property="goodsPrice" />
         <result column="goods_batch" jdbcType="VARCHAR" property="goodsBatch" />
-        <result column="sub_item_id" jdbcType="BIGINT" property="subItemId" />
         <result column="min_unit" jdbcType="VARCHAR" property="minUnit" />
-        <result column="multi_unit" jdbcType="VARCHAR" property="multiUnit" />
-
-        <result column="inorder_id" jdbcType="BIGINT" property="inorderId" />
-        <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
         <result column="unit" jdbcType="VARCHAR" property="unit" />
         <result column="unit_data" jdbcType="INTEGER" property="unitData" />
         <result column="receivalbe_amount" jdbcType="REAL" property="receivalbeAmount" />
@@ -48,21 +27,14 @@
     </resultMap>
 
     <sql id="Base_Select_List">
-        relation_id, inorder_id, goods_id, unit, unit_data, receivalbe_amount, batch,
-        in_house_amount, in_house_price, damage, remark, stroge_location_id, stroge_location_code
+        relation_id, inorder_id, goods_id, goods_name, goods_spec, goods_classify,goods_code, goods_barcode,
+        goods_price, goods_batch, min_unit, unit, unit_data, receivalbe_amount, batch, in_house_amount,
+        in_house_price, damage, remark, stroge_location_id, stroge_location_code
     </sql>
 
-    <sql id="Base_Select_In_Goods_List">
-        g.goods_id, goods_name, goods_classify, goods_spec, goods_code, goods_barcode,
-        goods_price, goods_batch, sub_item_id, min_unit, multi_unit
-        relation_id, inorder_id,o.goods_id, unit, unit_data, receivalbe_amount, batch,
-        in_house_amount, in_house_price, damage, remark, stroge_location_id, stroge_location_code
-    </sql>
-
-    <select id="goodsDetail" parameterType="Long" resultMap="GoodsInfoMap">
-        SELECT <include refid="Base_Select_In_Goods_List"/>
-        FROM inorder_goods_info o
-        left join goods_info g on o.goods_id=g.goods_id
+    <select id="selectGoodsDetail" parameterType="Long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Select_List"/>
+        FROM inorder_goods_info
         WHERE inorder_id = #{inorderId,jdbcType=BIGINT}
     </select>
 </mapper>

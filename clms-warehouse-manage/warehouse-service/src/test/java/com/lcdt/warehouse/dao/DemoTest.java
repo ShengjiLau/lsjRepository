@@ -2,8 +2,6 @@ package com.lcdt.warehouse.dao;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.warehouse.dto.InPlanGoodsInfoResultDto;
-import com.lcdt.warehouse.entity.InHousePlan;
-import com.lcdt.warehouse.entity.InWarehousePlan;
 import com.lcdt.warehouse.mapper.InWarehousePlanMapper;
 import com.lcdt.warehouse.mapper.InplanGoodsInfoMapper;
 import com.lcdt.warehouse.service.InWarehousePlanService;
@@ -42,7 +40,7 @@ public class DemoTest extends BaseIntegrationContext{
         mapper.inWarehousePlanList();*/
         //Page<InWarehousePlan> list = inWarehousePlanService.inWarehousePlanList(null);
 
-        List<InPlanGoodsInfoResultDto> list =  mapper1.inWhPlanGoodsInfoList(new Page<InPlanGoodsInfoResultDto>(),2l);
+        List<InPlanGoodsInfoResultDto> list =  mapper1.inWhPlanGoodsInfoList(new Page<InPlanGoodsInfoResultDto>(),12l);
         for(InPlanGoodsInfoResultDto obj :list) {
             System.out.println(obj.getGoodsBarcode());
         }

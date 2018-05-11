@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lcdt.userinfo.dao.WarehousseLinkmanMapper">
-  <resultMap id="BaseResultMap" type="com.lcdt.userinfo.model.WarehouseLinkman">
+<mapper namespace="com.lcdt.warehouse.mapper.WarehousseLinkmanMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.WarehouseLinkman">
     <id column="wh_linkman_id" jdbcType="BIGINT" property="whLinkmanId" />
     <result column="wh_id" jdbcType="BIGINT" property="whId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -34,7 +34,7 @@
     set is_deleted = 1
     where wh_linkman_id = #{whLinkmanId,jdbcType=BIGINT}
   </update>
-  <insert id="insert" parameterType="com.lcdt.userinfo.model.WarehouseLinkman">
+  <insert id="insert" parameterType="com.lcdt.warehouse.entity.WarehouseLinkman">
     <selectKey keyProperty="whLinkmanId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -55,7 +55,7 @@
       #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}
       )
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.WarehouseLinkman">
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.warehouse.entity.WarehouseLinkman">
     update t_warehouse_linkman
     set wh_id = #{whId,jdbcType=BIGINT},
       name = #{name,jdbcType=VARCHAR},
@@ -111,7 +111,7 @@
     order by wh_linkman_id desc
   </select>
 
-  <update id="updateIsDefaultByPrimaryKey" parameterType="com.lcdt.userinfo.model.WarehouseLinkman">
+  <update id="updateIsDefaultByPrimaryKey" parameterType="com.lcdt.warehouse.entity.WarehouseLinkman">
     update t_warehouse_linkman
     set is_default = #{isDefault,jdbcType=SMALLINT}
     where wh_linkman_id = #{whLinkmanId,jdbcType=BIGINT}

@@ -41,4 +41,10 @@ public interface AllotProductMapper {
      * @return
      */
     List<Long> selectApIdsByAllotId(Long allotId);
+    /**
+     * 取消/删除（is_deleted=1）
+     * @param allotId
+     * @return
+     */
+    int updateAllotProductIsDelete(Long allotId);
 }

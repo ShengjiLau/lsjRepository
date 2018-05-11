@@ -330,11 +330,6 @@
             <div class="clms-input">
                 <select name="customerId" class="selectpicker" id="customerId" onchange="check()">
                     <option value="">请选择客户</option>
-                    <!--<option>cow</option>
-                    <option>bull</option>
-                    <option>ASD</option>
-                    <option>ASDd</option>
-                    <option>ASDdfff</option>-->
                     <option th:each="customer: ${list} " th:value = "${customer.customerId}"  th:text = "${customer.customerName}"></option>
                 </select>
                 <label style="font-size: 12px;color: #0891fb">
@@ -370,15 +365,15 @@
             }
         }
         var auto_bind = function () {
-
-            $("#customerId").value = null;
+            $("#customerId").attr("disabled", "disabled");
             $("#choose-customer").submit();
             return true;
         }
         $(".selectpicker").selectpicker({
             liveSearch:true,
         });
-        $("#next_btn").click(function () {
+        $("#next_btn").submit(function () {
+            $("#customerId").attr("disabled", "");
             if($("#customerId option:selected").val()=="")
             {
                 alert("请选择客户绑定！");

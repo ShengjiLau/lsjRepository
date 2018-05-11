@@ -1,18 +1,21 @@
-package com.lcdt.userinfo.service.impl;
+package com.lcdt.warehouse.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.userinfo.dao.TUserGroupWarehouseRelationMapper;
-import com.lcdt.userinfo.dao.WarehousseLinkmanMapper;
-import com.lcdt.userinfo.dao.WarehousseLocMapper;
-import com.lcdt.userinfo.dao.WarehousseMapper;
-import com.lcdt.userinfo.localservice.GroupWareHouseService;
-import com.lcdt.userinfo.model.*;
-import com.lcdt.userinfo.service.WarehouseService;
-import com.lcdt.userinfo.web.dto.WarehouseDto;
+import com.lcdt.userinfo.service.GroupManageService;
+import com.lcdt.warehouse.dto.WarehouseDto;
+import com.lcdt.warehouse.entity.Warehouse;
+import com.lcdt.warehouse.entity.WarehouseLinkman;
+import com.lcdt.warehouse.entity.WarehouseLoc;
+import com.lcdt.warehouse.mapper.WarehousseLinkmanMapper;
+import com.lcdt.warehouse.mapper.WarehousseLocMapper;
+import com.lcdt.warehouse.mapper.WarehousseMapper;
+import com.lcdt.warehouse.service.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.tl.commons.util.StringUtility;
 
 import java.util.Date;
 import java.util.List;
@@ -30,61 +33,8 @@ public class WarehouseSeviceImpl implements WarehouseService {
     private WarehousseLinkmanMapper warehousseLinkManMapper;
     @Autowired
     private WarehousseLocMapper warehousseLocMapper;
-
-    @Autowired
-    TUserGroupWarehouseRelationMapper tUserGroupWarehouseRelationMapper;
-
-    @Autowired
-    GroupWareHouseService groupWareHouseService;
-
-    @Autowired
-    WarehouseService warehouseService;
-    @Override
-    public int initWarehouse(UserCompRel userCompRel, Group group) {
-        //添加仓库
-        Warehouse warehouse = new Warehouse();
-        warehouse.setWhName("默认仓库");
-        warehouse.setWhType((short)0);
-        warehouse.setPrincipal(userCompRel.getUser().getRealName());
-        warehouse.setMobile(userCompRel.getUser().getPhone());
-        warehouse.setWhStatus((short)0);
-        warehouse.setCreateId(userCompRel.getUserId());
-        warehouse.setCreateName(userCompRel.getUser().getRealName());
-        warehouse.setCreateDate(new Date());
-        warehouse.setIsDeleted((short)0);
-        warehouse.setCompanyId(userCompRel.getCompId());
-        int result = warehousseMapper.insert(warehouse);
-        //添加仓库默认联系人
-        WarehouseLinkman linkman = new WarehouseLinkman();
-        linkman.setWhId(warehouse.getWhId());
-        linkman.setName(warehouse.getPrincipal());
-        linkman.setMobile(warehouse.getMobile());
-        linkman.setCreateId(warehouse.getCreateId());
-        linkman.setCreateName(warehouse.getCreateName());
-        linkman.setCreateDate(new Date());
-        linkman.setIsDefault((short)1);
-        linkman.setIsDeleted((short)0);
-        linkman.setCompanyId(warehouse.getCompanyId());
-        result += addWarehouseLinkMan(linkman);
-
-        //添加仓库与业务组关系
-
-        groupWareHouseService.addWareHouseRelation(group.getGroupId(),userCompRel.getCompId(),warehouse.getWhId());
-
-        //初始化库位信息
-        WarehouseLoc loc = new WarehouseLoc();
-        loc.setWhId(warehouse.getWhId());
-        loc.setCode("MOREN");
-        loc.setName("默认库位");
-        loc.setStatus((short) 0);
-        loc.setCreateDate(new Date());
-        loc.setCreateId(userCompRel.getUserId());
-        loc.setCompanyId(userCompRel.getCompId());
-        loc.setCreateName(userCompRel.getName());
-        loc.setIsDeleted((short)0);
-        result+=warehouseService.addWarehouseLoc(loc);
-        return result;
-    }
+    @Reference
+    GroupManageService groupManageService;
 
     @Transactional(readOnly = true)
     @Override
@@ -104,6 +54,14 @@ public class WarehouseSeviceImpl implements WarehouseService {
         }
         PageHelper.startPage(pageNo, pageSize);
         List<WarehouseDto> list = warehousseMapper.selectByCondition(m);
+        if(list != null && list.size() > 0){
+            for(WarehouseDto dto : list){
+                if(StringUtility.isNotEmpty(dto.getGroupIds())){
+                    String groupNames = groupManageService.selectGroupNamesByGroupIds(dto.getGroupIds());
+                    dto.setGroupNames(groupNames);
+                }
+            }
+        }
         PageInfo pageInfo = new PageInfo(list);
 
         return pageInfo;

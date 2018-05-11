@@ -118,12 +118,19 @@ public class AllotServiceImpl implements AllotService{
     }
 
     @Override
-    public int modifyAllotIsDelete(Long allotId) {
-        return 0;
+    public boolean modifyAllotIsDelete(Long allotId) {
+        try{
+            allotMapper.updateAllotIsDelete(allotId);
+            allotProductMapper.updateAllotProductIsDelete(allotId);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     @Override
-    public int modifyWarehouseWhStatus(Long whId) {
-        return 0;
+    public int addAllotInTime(Allot allot) {
+        int result = allotMapper.updateByPrimaryKeySelective(allot);
+        return result;
     }
 }

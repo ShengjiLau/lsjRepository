@@ -297,6 +297,10 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         snatchGoods.setOfferDate(dt);//报价时间
         snatchGoods.setIsDeleted((short)0);
         snatchGoods.setOfferRemark(dto.getOfferRemark());
+        snatchGoods.setVehicleNum(dto.getVehicleNum());
+        snatchGoods.setVehicleType(dto.getVehicleType());
+        snatchGoods.setVehicleLoad(dto.getVehicleLoad());
+        snatchGoods.setVehicleLength(dto.getVehicleLength());
         snatchGoods.setIsUsing(ConstantVO.SNATCH_GOODS_USING_DOING);
         int flag1 = 1,flag2 =1 ;
         flag1 = snatchGoodsMapper.insert(snatchGoods);

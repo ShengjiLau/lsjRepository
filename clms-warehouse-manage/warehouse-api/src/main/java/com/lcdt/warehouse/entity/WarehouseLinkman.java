@@ -2,7 +2,7 @@ package com.lcdt.warehouse.entity;
 
 import java.util.Date;
 
-public class WarehouseLinkman {
+public class WarehouseLinkman implements java.io.Serializable {
     private Long whLinkmanId;
 
     private Long whId;

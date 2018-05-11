@@ -13,7 +13,10 @@ public class InventoryQueryDto extends PageQueryDto {
     private String batch;
 
     @ApiModelProperty(value = "商品")
-    private String goodsQuery;
+    private Long goodsId;
+
+    @ApiModelProperty(value = "客户id")
+    private Long customerId;
 
     public Long getWareHouseId() {
         return wareHouseId;
@@ -39,12 +42,12 @@ public class InventoryQueryDto extends PageQueryDto {
         this.batch = batch;
     }
 
-    public String getGoodsQuery() {
-        return goodsQuery;
+    public Long getGoodsId() {
+        return this.goodsId;
     }
 
-    public void setGoodsQuery(String goodsQuery) {
-        this.goodsQuery = goodsQuery;
+    public void setGoodsId(Long goodsId) {
+        this.goodsId = goodsId;
     }
 
     @Override
@@ -53,7 +56,7 @@ public class InventoryQueryDto extends PageQueryDto {
                 "wareHouseId=" + wareHouseId +
                 ", strogeLocationCode=" + strogeLocationCode +
                 ", batch='" + batch + '\'' +
-                ", goodsQuery='" + goodsQuery + '\'' +
+                ", goodsId='" + goodsId + '\'' +
                 '}';
     }
 }

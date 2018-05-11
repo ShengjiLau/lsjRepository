@@ -245,9 +245,14 @@ public class PlanServiceImpl implements PlanService {
             User user = userCompRel.getUser();
             List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
             Date date = new Date();
+            boolean flag = false;
             for (PlanDetailParamsDto dto : dtoList) {
                 PlanDetail planDetail = planDetailMapper.selectByPrimaryKey1(dto.getPlanDetailId(),company.getCompId());
                 if (planDetail!=null) {
+                    if(dto.getAdjustAmount()+planDetail.getRemainderAmount()<0) {
+                        flag = true;
+                        break;
+                    }
                     planDetail.setUpdateName(user.getRealName());
                     planDetail.setUpdateId(user.getUserId());
                     planDetail.setUpdateTime(date);
@@ -258,6 +263,11 @@ public class PlanServiceImpl implements PlanService {
                     planDetailList.add(planDetail);
                 }
             }
+
+            if(flag){
+                throw new WaybillPlanException("调整数量不能小于剩余数量！");
+            }
+
             if(planDetailList!=null && planDetailList.size()>0) {
                 return planDetailMapper.batchUpdatePlanDetail(planDetailList);
             }
