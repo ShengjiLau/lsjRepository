@@ -30,7 +30,7 @@ public class AttachmentApi {
 
     @ApiOperation("文件列表")
     @RequestMapping(value = "/attachFileList", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('attachFile_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('attachfile_list')")
     public PageBaseDto attachFileList(){
         PageBaseDto pageBaseDto = new PageBaseDto();
 
@@ -44,8 +44,8 @@ public class AttachmentApi {
     }
 
     @ApiOperation("附件分类列表")
-    @RequestMapping(value = "/attachmentClassifyList", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('attachmentClassify_list')")
+    @RequestMapping(value = "/attachmentClassifyList")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('attachmentclassify_list')")
     public PageBaseDto attachmentClassifyList(@Validated TAttachmentClassify attachmentClassify,
                                               @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
                                               @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize){
@@ -68,7 +68,7 @@ public class AttachmentApi {
 
     @ApiOperation("附件分类添加")
     @RequestMapping(value = "/addAttachmentClassify", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('attachmentClassify_add')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('attachmentclassify_add')")
     public JSONObject addTAttachmentClassify(@RequestBody TAttachmentClassify attachmentClassify){
         JSONObject jo = new JSONObject();
         attachmentClassify.setCompanyId(SecurityInfoGetter.getCompanyId().intValue());
@@ -97,7 +97,7 @@ public class AttachmentApi {
 
     @ApiOperation("附件分类修改")
     @RequestMapping(value = "/modifyAttachmentClassify", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('attachmentClassify_modify')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('attachmentclassify_modify')")
     public JSONObject modifyTAttachmentClassify(@RequestBody TAttachmentClassify attachmentClassify){
         JSONObject jo = new JSONObject();
         int code = -1;
@@ -125,7 +125,7 @@ public class AttachmentApi {
 
     @ApiOperation("附件分类删除")
     @RequestMapping(value = "/deleteAttachmentClassify", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('attachmentClassify_delete')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('attachmentclassify_delete')")
     public JSONObject deleteTAttachmentClassify(@RequestParam Integer attachmentClassifyId){
         JSONObject jo = new JSONObject();
 
