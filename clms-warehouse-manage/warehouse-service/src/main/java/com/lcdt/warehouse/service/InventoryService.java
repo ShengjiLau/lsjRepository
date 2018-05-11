@@ -17,6 +17,6 @@ import java.util.List;
  */
 public interface InventoryService extends IService<Inventory> {
 
-    Page<Inventory> queryInventoryList(InventoryQueryDto inventoryQueryDto);
+    Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto);
 
 }
