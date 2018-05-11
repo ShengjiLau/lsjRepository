@@ -255,50 +255,53 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         return list;
     }
     @Override
-    public int feeAccountReconcileSave(List<Map<String,Object>> list, short payeeType) {
-        int result = 0;
-        if (list != null && list.size() > 0) {
-            ReconcileDto dto = new ReconcileDto();
-//            Date createTime = new Date();
-            List<Reconcile> reconcileList = new ArrayList<>();
-            for (Map<String, Object> m : list) {
-                Reconcile reconcile = new Reconcile();
-                reconcile.setCompanyId(SecurityInfoGetter.getCompanyId());
-                reconcile.setTransportationExpenses(Double.parseDouble(m.get("freightTotal").toString()));//运费
-                reconcile.setOtherExpenses(Double.parseDouble(m.get("otherFeeTaotal").toString()));//其他费用
-                reconcile.setOperatorId(SecurityInfoGetter.getUser().getUserId());
-                reconcile.setOperatorName(SecurityInfoGetter.getUser().getRealName());
-//                reconcile.setCreateTime(createTime);
-                reconcile.setCancelOk((short) 0);
-                reconcile.setWaybillId(m.get("waybillIds").toString());
-                reconcile.setAccountId(m.get("accountIds").toString());
-                reconcile.setPayeeType(payeeType);
-                reconcile.setPayerId(Long.parseLong(m.get("nameId").toString()));
-                reconcile.setPayerName(m.get("name").toString());
-                reconcile.setGroupId(Long.parseLong(m.get("groupId").toString()));
-                reconcileList.add(reconcile);
-            }
-            result = reconcileMapper.insertByBatch(reconcileList);
-            if(result == reconcileList.size()){
-                for(Reconcile reconcile : reconcileList){
+    public boolean feeAccountReconcileSave(List<Map<String,Object>> list, short payeeType) {
+        try{
+            if (list != null && list.size() > 0) {
+                ReconcileDto dto = new ReconcileDto();
+                Date createTime = new Date();
+                List<Reconcile> reconcileList = new ArrayList<>();
+                for (Map<String, Object> m : list) {
+                    Reconcile reconcile = new Reconcile();
+                    reconcile.setCompanyId(SecurityInfoGetter.getCompanyId());
+                    reconcile.setTransportationExpenses(Double.parseDouble(m.get("freightTotal").toString()));//运费
+                    reconcile.setOtherExpenses(Double.parseDouble(m.get("otherFeeTaotal").toString()));//其他费用
+                    reconcile.setOperatorId(SecurityInfoGetter.getUser().getUserId());
+                    reconcile.setOperatorName(SecurityInfoGetter.getUser().getRealName());
+                    reconcile.setCreateTime(createTime);
+                    reconcile.setCancelOk((short) 0);
+                    reconcile.setWaybillId(m.get("waybillIds").toString());
+                    reconcile.setAccountId(m.get("accountIds").toString());
+                    reconcile.setPayeeType(payeeType);
+                    reconcile.setPayerId(Long.parseLong(m.get("nameId").toString()));
+                    reconcile.setPayerName(m.get("name").toString());
+                    reconcile.setGroupId(Long.parseLong(m.get("groupId").toString()));
+                    reconcileList.add(reconcile);
+                }
+                int result = reconcileMapper.insertByBatch(reconcileList);
+                if(result == reconcileList.size()){
+                    for(Reconcile reconcile : reconcileList){
 //                    reconcile.setReconcileCode("DZ" + DateUtility.date2String(new Date(),
 //                            "yyyyMMdd") + reconcile.getReconcileId());
 //                    //修改对账单号
 //                    result += reconcileMapper.updateByPrimaryKeySelective(reconcile);
-                    //修改每个对账单对应的记账单对账信息
-                    dto.setReconcileId(reconcile.getReconcileId());
-                    dto.setReconcileCode(reconcileMapper.selectByPrimaryKey(reconcile.getReconcileId()).getReconcileCode());
-                    String[] accountIdStrArr = reconcile.getAccountId().split(",");
-                    Long[] accountIds = new Long[accountIdStrArr.length];
-                    for(int i=0; i<accountIdStrArr.length; i++){
-                        accountIds[i] = Long.parseLong(accountIdStrArr[i]);
+                        //修改每个对账单对应的记账单对账信息
+                        dto.setReconcileId(reconcile.getReconcileId());
+                        dto.setReconcileCode(reconcileMapper.selectByPrimaryKey(reconcile.getReconcileId()).getReconcileCode());
+                        String[] accountIdStrArr = reconcile.getAccountId().split(",");
+                        Long[] accountIds = new Long[accountIdStrArr.length];
+                        for(int i=0; i<accountIdStrArr.length; i++){
+                            accountIds[i] = Long.parseLong(accountIdStrArr[i]);
+                        }
+                        dto.setAccountIds(accountIds);
+                        feeAccountMapper.updateReconcileCodeAndId(dto);
                     }
-                    dto.setAccountIds(accountIds);
-                    result += feeAccountMapper.updateReconcileCodeAndId(dto);
                 }
             }
+            return true;
+        }catch (Exception e){
+            return false;
         }
-        return result;
     }
 
     @Override

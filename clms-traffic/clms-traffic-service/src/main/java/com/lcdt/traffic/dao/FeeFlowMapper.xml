@@ -111,7 +111,7 @@
     fee_property, money, original_money,
     group_id, create_id, create_name,
     create_date, update_id, update_name,
-    update_time, company_id, is_deleted
+    update_time, company_id, is_deleted, is_receivable
     )
     values
     <foreach item="item" collection="list" separator=",">
@@ -120,7 +120,8 @@
       #{item.feeProperty,jdbcType=VARCHAR}, #{item.money,jdbcType=REAL}, #{item.originalMoney,jdbcType=REAL},
       #{item.groupId,jdbcType=BIGINT}, #{item.createId,jdbcType=BIGINT}, #{item.createName,jdbcType=VARCHAR},
       #{item.createDate,jdbcType=TIMESTAMP}, #{item.updateId,jdbcType=BIGINT}, #{item.updateName,jdbcType=VARCHAR},
-      #{item.updateTime,jdbcType=TIMESTAMP}, #{item.companyId,jdbcType=BIGINT}, #{item.isDeleted,jdbcType=SMALLINT}
+      #{item.updateTime,jdbcType=TIMESTAMP}, #{item.companyId,jdbcType=BIGINT}, #{item.isDeleted,jdbcType=SMALLINT},
+      #{item.isReceivable,jdbcType=SMALLINT}
       )
     </foreach>
   </insert>
@@ -181,6 +182,9 @@
         </if>
         <if test="item.isDeleted != null">
           is_deleted = #{item.isDeleted,jdbcType=SMALLINT},
+        </if>
+        <if test="item.isReceivable != null">
+          is_receivable = #{item.isReceivable,jdbcType=SMALLINT},
         </if>
       </set>
       where account_id = #{item.accountId,jdbcType=BIGINT}

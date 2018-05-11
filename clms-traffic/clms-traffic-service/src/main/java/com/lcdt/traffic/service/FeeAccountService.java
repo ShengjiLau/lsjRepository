@@ -105,7 +105,7 @@ public interface FeeAccountService {
      * @param list
      * @return
      */
-    int feeAccountReconcileSave(List<Map<String,Object>> list, short payeeType);
+    boolean feeAccountReconcileSave(List<Map<String,Object>> list, short payeeType);
 
     /**
      * 对账单详情
