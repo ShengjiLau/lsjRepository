@@ -12,6 +12,7 @@ import com.lcdt.warehouse.mapper.InplanGoodsInfoMapper;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.service.InWarehousePlanService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.lcdt.warehouse.vo.ConstantVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,14 +94,33 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
         if (inWarehousePlan == null) {
             throw new RuntimeException("计划不存在！");
         }
-        //检查是否在存未取消的入库单
+        /***
+         * 该计划是否存在对应的入库单，如果不存在，则直接可以取消；
+         * 如果存在，需判断是否存在“待入库”“已完成”状态的入库单，如果存在，则不允许取消；
+         */
         if (!inWarehousePlan.getPlanStatus().equals(InWhPlanStatusEnum.publish.getValue())
-             && !inWarehousePlan.getPlanStatus().equals(InWhPlanStatusEnum.watting.getValue()) ) { //配仓状态下是否存在入库单
+             && !inWarehousePlan.getPlanStatus().equals(InWhPlanStatusEnum.watting.getValue()) ) {
             throw new RuntimeException("该计划不允许取消（非待配状态或存在配仓记录）！");
         } else {
-            if (inWarehousePlan.getPlanStatus().equals(InWhPlanStatusEnum.publish.getValue())) { //检查是否存在未取消的入库单
-
-
+            if (inWarehousePlan.getPlanStatus().equals(InWhPlanStatusEnum.publish.getValue())) {
+                InWarehouseOrderSearchParamsDto params = new InWarehouseOrderSearchParamsDto();
+                params.setCompanyId(obj.getCompanyId());
+                params.setPlanId(obj.getPlanId());
+                params.setPageNo(1);
+                params.setPageSize(100);
+                Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderList(params);
+                if (inWarehouseOrderDtoList.getTotal()>0) {
+                    boolean flag = false;
+                    for (InWarehouseOrderDto obj1 : inWarehouseOrderDtoList.getRecords()) {
+                        if (obj1.getInOrderStatus()== ConstantVO.IN_ORDER_STATUS_WATIE_STORAGE){
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        throw new RuntimeException("该计划对应入库单存在“待入库”“已完成”状态记录！");
+                    }
+                }
             }
         }
         inWarehousePlan.setCompanyId(userCompRel.getCompany().getCompId());
@@ -109,5 +129,15 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
         inWarehousePlan.setUpdateName(userCompRel.getUser().getRealName());
         inWarehousePlan.setUpdateDate(new Date());
         return this.update(inWarehousePlan,new EntityWrapper<InWarehousePlan>(obj));
+    }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean inWhPlanComplete(InWarehousePlan obj, UserCompRel userCompRel) {
+
+
+
+        return false;
     }
 }
