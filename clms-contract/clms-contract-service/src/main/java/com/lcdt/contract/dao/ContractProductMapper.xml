@@ -75,15 +75,13 @@
       where cp_id = #{item.cpId,jdbcType=BIGINT}
     </foreach>
   </update>
-
-  <update id="deleteByBatch" parameterType="Map">
-    update t_own_driver_certificate
-    set is_deleted = 1
+  <delete id="deleteByBatch" parameterType="Map">
+    delete from t_contract_product
     where cp_id in
     <foreach item="item" index="index" collection="cpIds" open="(" separator="," close=")">
       #{item,jdbcType=BIGINT}
     </foreach>
-  </update>
+  </delete>
 
   <select id="selectCpIdsByContractId" parameterType="java.lang.Long" resultType="java.lang.Long">
     select cp_id
