@@ -97,7 +97,7 @@
                 select="com.lcdt.traffic.dao.WaybillMapper.selectWaybillByPlanId" />
 
     <!--抢单报价-->
-    <collection property="snatchGoodsList" column="{waybillPlanId=waybill_plan_id,isDeleted=is_deleted}"
+    <collection property="snatchGoodsList" column="{waybillPlanId=waybill_plan_id,isDeleted=is_deleted,companyId=company_id}"
                   ofType="com.lcdt.traffic.model.SnatchGoods" javaType="ArrayList"
                   select="com.lcdt.traffic.dao.SnatchGoodsMapper.selectByWaybillPlanId" />
 
