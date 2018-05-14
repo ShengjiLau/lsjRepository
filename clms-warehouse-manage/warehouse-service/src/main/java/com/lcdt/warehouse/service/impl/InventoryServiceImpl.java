@@ -76,10 +76,20 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
     static class InventoryFactory {
+        /**
+         * 入库单 入库生成库存
+         * @param order
+         * @param goodsInfo
+         * @return
+         */
         static Inventory createInventory(InWarehouseOrder order,InorderGoodsInfo goodsInfo) {
             Assert.notNull(order,"新建库存，入库单不能为空");
             Inventory inventory = new Inventory();
             inventory.setCompanyId(order.getCompanyId());
+            inventory.setGoodsId(goodsInfo.getGoodsId());
+            inventory.setInvertoryNum(goodsInfo.getInHouseAmount());
+
+
 
             return new Inventory();
         }
