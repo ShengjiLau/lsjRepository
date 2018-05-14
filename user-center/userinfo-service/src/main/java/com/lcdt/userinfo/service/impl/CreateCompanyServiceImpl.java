@@ -214,6 +214,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 			warehouse.setCreateDate(new Date());
 			warehouse.setIsDeleted((short)0);
 			warehouse.setCompanyId(userCompRel.getCompId());
+			warehouse.setGroupIds(""+group.getGroupId());
 			warehouse = warehouseRpcService.addWarehouse(warehouse);
 			//添加仓库默认联系人
 			WarehouseLinkman linkman = new WarehouseLinkman();
@@ -230,7 +231,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 
 			//添加仓库与业务组关系
 
-			groupWareHouseService.addWareHouseRelation(group.getGroupId(),userCompRel.getCompId(),warehouse.getWhId());
+			groupWareHouseService.addWareHouseRelation(group.getGroupId(),userCompRel.getUser().getUserId(),userCompRel.getCompId(),warehouse.getWhId());
 
 			//初始化库位信息
 			WarehouseLoc loc = new WarehouseLoc();
