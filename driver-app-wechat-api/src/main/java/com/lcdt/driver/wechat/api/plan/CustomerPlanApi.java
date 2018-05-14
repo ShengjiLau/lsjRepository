@@ -3,13 +3,11 @@ package com.lcdt.driver.wechat.api.plan;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
-import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
 import com.lcdt.driver.dto.PageBaseDto;
 import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.SnatchGoods;
-import com.lcdt.traffic.model.SplitGoods;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.ICustomerPlanRpcService4Wechat;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
@@ -19,8 +17,6 @@ import com.lcdt.userinfo.model.UserCompRel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -169,9 +165,6 @@ public class CustomerPlanApi {
             if (snatchGoodsList!=null && snatchGoodsList.size()>0) {
                 List<SnatchGoods> otherSnatchGoods = new ArrayList<SnatchGoods>(); //存储其它数据
                 for (SnatchGoods obj :snatchGoodsList) {
-//                    if(!obj.getOfferId().equals(userCompRel.getUser().getUserId())) {
-//                        otherSnatchGoods.add(obj);
-//                    }
                     if(!obj.getCompanyId().equals(userCompRel.getCompId())) {
                         otherSnatchGoods.add(obj);
                     }
