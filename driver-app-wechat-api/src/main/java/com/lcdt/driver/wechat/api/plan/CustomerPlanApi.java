@@ -169,7 +169,10 @@ public class CustomerPlanApi {
             if (snatchGoodsList!=null && snatchGoodsList.size()>0) {
                 List<SnatchGoods> otherSnatchGoods = new ArrayList<SnatchGoods>(); //存储其它数据
                 for (SnatchGoods obj :snatchGoodsList) {
-                    if(!obj.getOfferId().equals(userCompRel.getUser().getUserId())) {
+//                    if(!obj.getOfferId().equals(userCompRel.getUser().getUserId())) {
+//                        otherSnatchGoods.add(obj);
+//                    }
+                    if(!obj.getCompanyId().equals(userCompRel.getCompId())) {
                         otherSnatchGoods.add(obj);
                     }
                 }

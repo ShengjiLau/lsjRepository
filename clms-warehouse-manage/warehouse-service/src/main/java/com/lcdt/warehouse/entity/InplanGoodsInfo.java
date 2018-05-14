@@ -50,6 +50,7 @@ public class InplanGoodsInfo implements Serializable {
      * 商品分类
      */
     private String goodsClassify;
+    private Long goodsClassifyId;
     private String goodsSpec;
     private String goodsCode;
     private String goodsBarcode;
@@ -208,5 +209,13 @@ public class InplanGoodsInfo implements Serializable {
 
     public void setMinUnit(String minUnit) {
         this.minUnit = minUnit;
+    }
+
+    public Long getGoodsClassifyId() {
+        return goodsClassifyId;
+    }
+
+    public void setGoodsClassifyId(Long goodsClassifyId) {
+        this.goodsClassifyId = goodsClassifyId;
     }
 }
