@@ -161,7 +161,6 @@ public class CustomerPlanApi {
         try {
             WaybillPlan waybillPlan = iPlanRpcService4Wechat.loadWaybillPlan(dto);
             List<SnatchGoods> snatchGoodsList = waybillPlan.getSnatchGoodsList();
-
             if (snatchGoodsList!=null && snatchGoodsList.size()>0) {
                 List<SnatchGoods> otherSnatchGoods = new ArrayList<SnatchGoods>(); //存储其它数据
                 for (SnatchGoods obj :snatchGoodsList) {
