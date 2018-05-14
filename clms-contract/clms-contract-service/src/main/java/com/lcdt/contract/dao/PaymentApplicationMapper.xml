@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.contract.dao.PaymentApplicationMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.PaymentApplication">
+    <id column="pa_id" jdbcType="BIGINT" property="paId" />
+    <result column="application_serial_no" jdbcType="VARCHAR" property="applicationSerialNo" />
+    <result column="application_date" jdbcType="TIMESTAMP" property="applicationDate" />
+    <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
+    <result column="approval_process_id" jdbcType="BIGINT" property="approvalProcessId" />
+    <result column="approval_process" jdbcType="VARCHAR" property="approvalProcess" />
+    <result column="approval_start_date" jdbcType="TIMESTAMP" property="approvalStartDate" />
+    <result column="approval_end_date" jdbcType="TIMESTAMP" property="approvalEndDate" />
+    <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
+    <result column="order_serial_no" jdbcType="VARCHAR" property="orderSerialNo" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="purchase_sum" jdbcType="DECIMAL" property="purchaseSum" />
+    <result column="supplier" jdbcType="VARCHAR" property="supplier" />
+    <result column="receipt_unit" jdbcType="VARCHAR" property="receiptUnit" />
+    <result column="receipt_unit_bank" jdbcType="VARCHAR" property="receiptUnitBank" />
+    <result column="receipt_unit_account" jdbcType="VARCHAR" property="receiptUnitAccount" />
+    <result column="payment_sum" jdbcType="DECIMAL" property="paymentSum" />
+    <result column="payment_unit" jdbcType="VARCHAR" property="paymentUnit" />
+    <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime" />
+    <result column="payment_name" jdbcType="VARCHAR" property="paymentName" />
+    <result column="manager" jdbcType="VARCHAR" property="manager" />
+    <result column="payment_directions" jdbcType="VARCHAR" property="paymentDirections" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="attachment1" jdbcType="VARCHAR" property="attachment1" />
+    <result column="attachment1_name" jdbcType="VARCHAR" property="attachment1Name" />
+    <result column="attachment2" jdbcType="VARCHAR" property="attachment2" />
+    <result column="attachment2_name" jdbcType="VARCHAR" property="attachment2Name" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    pa_id, application_serial_no, application_date, approval_status, approval_process_id,
+    approval_process, approval_start_date, approval_end_date, contract_code, order_serial_no,
+    order_no, purchase_sum, supplier, receipt_unit, receipt_unit_bank, receipt_unit_account,
+    payment_sum, payment_unit, payment_time, payment_name, manager, payment_directions,
+    remark, attachment1, attachment1_name, attachment2, attachment2_name, company_id,
+    create_id, create_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_payment_application
+    where pa_id = #{paId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_payment_application
+    where pa_id = #{paId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.PaymentApplication">
+    insert into t_payment_application (pa_id, application_serial_no, application_date,
+    approval_status, approval_process_id, approval_process,
+    approval_start_date, approval_end_date,
+    contract_code, order_serial_no, order_no,
+    purchase_sum, supplier, receipt_unit,
+    receipt_unit_bank, receipt_unit_account, payment_sum,
+    payment_unit, payment_time, payment_name,
+    manager, payment_directions, remark,
+    attachment1, attachment1_name, attachment2,
+    attachment2_name, company_id, create_id,
+    create_name)
+    values (#{paId,jdbcType=BIGINT}, #{applicationSerialNo,jdbcType=VARCHAR}, #{applicationDate,jdbcType=TIMESTAMP},
+    #{approvalStatus,jdbcType=SMALLINT}, #{approvalProcessId,jdbcType=BIGINT}, #{approvalProcess,jdbcType=VARCHAR},
+    #{approvalStartDate,jdbcType=TIMESTAMP}, #{approvalEndDate,jdbcType=TIMESTAMP},
+    #{contractCode,jdbcType=VARCHAR}, #{orderSerialNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR},
+    #{purchaseSum,jdbcType=DECIMAL}, #{supplier,jdbcType=VARCHAR}, #{receiptUnit,jdbcType=VARCHAR},
+    #{receiptUnitBank,jdbcType=VARCHAR}, #{receiptUnitAccount,jdbcType=VARCHAR}, #{paymentSum,jdbcType=DECIMAL},
+    #{paymentUnit,jdbcType=VARCHAR}, #{paymentTime,jdbcType=TIMESTAMP}, #{paymentName,jdbcType=VARCHAR},
+    #{manager,jdbcType=VARCHAR}, #{paymentDirections,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+    #{attachment1,jdbcType=VARCHAR}, #{attachment1Name,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR},
+    #{attachment2Name,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT},
+    #{createName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lcdt.contract.model.PaymentApplication">
+    insert into t_payment_application
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="paId != null">
+        pa_id,
+      </if>
+      <if test="applicationSerialNo != null">
+        application_serial_no,
+      </if>
+      <if test="applicationDate != null">
+        application_date,
+      </if>
+      <if test="approvalStatus != null">
+        approval_status,
+      </if>
+      <if test="approvalProcessId != null">
+        approval_process_id,
+      </if>
+      <if test="approvalProcess != null">
+        approval_process,
+      </if>
+      <if test="approvalStartDate != null">
+        approval_start_date,
+      </if>
+      <if test="approvalEndDate != null">
+        approval_end_date,
+      </if>
+      <if test="contractCode != null">
+        contract_code,
+      </if>
+      <if test="orderSerialNo != null">
+        order_serial_no,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="purchaseSum != null">
+        purchase_sum,
+      </if>
+      <if test="supplier != null">
+        supplier,
+      </if>
+      <if test="receiptUnit != null">
+        receipt_unit,
+      </if>
+      <if test="receiptUnitBank != null">
+        receipt_unit_bank,
+      </if>
+      <if test="receiptUnitAccount != null">
+        receipt_unit_account,
+      </if>
+      <if test="paymentSum != null">
+        payment_sum,
+      </if>
+      <if test="paymentUnit != null">
+        payment_unit,
+      </if>
+      <if test="paymentTime != null">
+        payment_time,
+      </if>
+      <if test="paymentName != null">
+        payment_name,
+      </if>
+      <if test="manager != null">
+        manager,
+      </if>
+      <if test="paymentDirections != null">
+        payment_directions,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="attachment1 != null">
+        attachment1,
+      </if>
+      <if test="attachment1Name != null">
+        attachment1_name,
+      </if>
+      <if test="attachment2 != null">
+        attachment2,
+      </if>
+      <if test="attachment2Name != null">
+        attachment2_name,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createName != null">
+        create_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="paId != null">
+        #{paId,jdbcType=BIGINT},
+      </if>
+      <if test="applicationSerialNo != null">
+        #{applicationSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationDate != null">
+        #{applicationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvalStatus != null">
+        #{approvalStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="approvalProcessId != null">
+        #{approvalProcessId,jdbcType=BIGINT},
+      </if>
+      <if test="approvalProcess != null">
+        #{approvalProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalStartDate != null">
+        #{approvalStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvalEndDate != null">
+        #{approvalEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractCode != null">
+        #{contractCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSerialNo != null">
+        #{orderSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseSum != null">
+        #{purchaseSum,jdbcType=DECIMAL},
+      </if>
+      <if test="supplier != null">
+        #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptUnit != null">
+        #{receiptUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptUnitBank != null">
+        #{receiptUnitBank,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptUnitAccount != null">
+        #{receiptUnitAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentSum != null">
+        #{paymentSum,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentUnit != null">
+        #{paymentUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentTime != null">
+        #{paymentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentName != null">
+        #{paymentName,jdbcType=VARCHAR},
+      </if>
+      <if test="manager != null">
+        #{manager,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDirections != null">
+        #{paymentDirections,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment1 != null">
+        #{attachment1,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment1Name != null">
+        #{attachment1Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2 != null">
+        #{attachment2,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2Name != null">
+        #{attachment2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null">
+        #{createName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.contract.model.PaymentApplication">
+    update t_payment_application
+    <set>
+      <if test="applicationSerialNo != null">
+        application_serial_no = #{applicationSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationDate != null">
+        application_date = #{applicationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvalStatus != null">
+        approval_status = #{approvalStatus,jdbcType=SMALLINT},
+      </if>
+      <if test="approvalProcessId != null">
+        approval_process_id = #{approvalProcessId,jdbcType=BIGINT},
+      </if>
+      <if test="approvalProcess != null">
+        approval_process = #{approvalProcess,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalStartDate != null">
+        approval_start_date = #{approvalStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvalEndDate != null">
+        approval_end_date = #{approvalEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractCode != null">
+        contract_code = #{contractCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSerialNo != null">
+        order_serial_no = #{orderSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseSum != null">
+        purchase_sum = #{purchaseSum,jdbcType=DECIMAL},
+      </if>
+      <if test="supplier != null">
+        supplier = #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptUnit != null">
+        receipt_unit = #{receiptUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptUnitBank != null">
+        receipt_unit_bank = #{receiptUnitBank,jdbcType=VARCHAR},
+      </if>
+      <if test="receiptUnitAccount != null">
+        receipt_unit_account = #{receiptUnitAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentSum != null">
+        payment_sum = #{paymentSum,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentUnit != null">
+        payment_unit = #{paymentUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentTime != null">
+        payment_time = #{paymentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentName != null">
+        payment_name = #{paymentName,jdbcType=VARCHAR},
+      </if>
+      <if test="manager != null">
+        manager = #{manager,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDirections != null">
+        payment_directions = #{paymentDirections,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment1 != null">
+        attachment1 = #{attachment1,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment1Name != null">
+        attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2 != null">
+        attachment2 = #{attachment2,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2Name != null">
+        attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null">
+        create_name = #{createName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where pa_id = #{paId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.PaymentApplication">
+    update t_payment_application
+    set application_serial_no = #{applicationSerialNo,jdbcType=VARCHAR},
+      application_date = #{applicationDate,jdbcType=TIMESTAMP},
+      approval_status = #{approvalStatus,jdbcType=SMALLINT},
+      approval_process_id = #{approvalProcessId,jdbcType=BIGINT},
+      approval_process = #{approvalProcess,jdbcType=VARCHAR},
+      approval_start_date = #{approvalStartDate,jdbcType=TIMESTAMP},
+      approval_end_date = #{approvalEndDate,jdbcType=TIMESTAMP},
+      contract_code = #{contractCode,jdbcType=VARCHAR},
+      order_serial_no = #{orderSerialNo,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      purchase_sum = #{purchaseSum,jdbcType=DECIMAL},
+      supplier = #{supplier,jdbcType=VARCHAR},
+      receipt_unit = #{receiptUnit,jdbcType=VARCHAR},
+      receipt_unit_bank = #{receiptUnitBank,jdbcType=VARCHAR},
+      receipt_unit_account = #{receiptUnitAccount,jdbcType=VARCHAR},
+      payment_sum = #{paymentSum,jdbcType=DECIMAL},
+      payment_unit = #{paymentUnit,jdbcType=VARCHAR},
+      payment_time = #{paymentTime,jdbcType=TIMESTAMP},
+      payment_name = #{paymentName,jdbcType=VARCHAR},
+      manager = #{manager,jdbcType=VARCHAR},
+      payment_directions = #{paymentDirections,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      attachment1 = #{attachment1,jdbcType=VARCHAR},
+      attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
+      attachment2 = #{attachment2,jdbcType=VARCHAR},
+      attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=BIGINT},
+      create_id = #{createId,jdbcType=BIGINT},
+      create_name = #{createName,jdbcType=VARCHAR}
+    where pa_id = #{paId,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByCondition" parameterType="com.lcdt.contract.web.dto.PaymentApplicationDto" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from t_payment_application
+    <where>
+      <if test="applicationSerialNo!=null and applicationSerialNo!=''">
+        and (application_serial_no like concat('%',#{applicationSerialNo},'%') or order_serial_no like concat('%',#{applicationSerialNo},'%'))
+      </if>
+      <if test="contractCode!=null and contractCode!=''">
+        and contract_code like concat('%',#{contractCode},'%')
+      </if>
+      <choose>
+        <when test="approvalStatus!=null and approvalStatus!=''">
+          and approval_status = #{approvalStatus}
+        </when>
+        <otherwise>
+          and (approval_status = 0 or approval_status = 2)
+        </otherwise>
+      </choose>
+      <if test="receiptUnit!=null and receiptUnit!=''">
+        and receipt_unit like concat('%',#{receiptUnit},'%')
+      </if>
+      <if test="paymentTimeStart!=null and paymentTimeStart!=''">
+        and (payment_time &gt; #{paymentTimeStart} and payment_time &lt; #{paymentTimeEnd})
+      </if>
+      and company_id = #{companyId}
+    </where>
+  </select>
+  <update id="updateApprovalStatus" >
+    update t_payment_application
+    set approval_status = #{arg2},
+    approval_end_date = CURRENT_TIMESTAMP
+    where pa_id = #{arg0} and company_id = #{arg1}
+  </update>
+</mapper>
