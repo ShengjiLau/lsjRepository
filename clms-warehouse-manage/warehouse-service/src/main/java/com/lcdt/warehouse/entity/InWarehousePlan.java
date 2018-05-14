@@ -3,7 +3,6 @@ package com.lcdt.warehouse.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.enums.IdType;
 
-import java.beans.Transient;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.lcdt.warehouse.dto.InPlanGoodsInfoResultDto;
