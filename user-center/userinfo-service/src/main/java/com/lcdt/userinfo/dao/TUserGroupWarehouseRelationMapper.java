@@ -19,4 +19,6 @@ public interface TUserGroupWarehouseRelationMapper {
     List<TUserGroupWarehouseRelation> selectAddedUserGroupWareHouse(@Param("groupId")Long groupId,@Param("companyId")Long companyId);
 
     List<TUserGroupWarehouseRelation> selectNotAddUserGroupWareHouse(@Param("groupId")Long groupId,@Param("companyId")Long companyId);
+
+    int deleteBatch(Long wareHouseId);
 }

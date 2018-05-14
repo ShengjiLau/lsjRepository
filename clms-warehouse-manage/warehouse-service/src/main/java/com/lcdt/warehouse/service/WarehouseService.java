@@ -22,19 +22,19 @@ public interface WarehouseService {
      * @param warehouse
      * @return
      */
-    int addWarehouse(Warehouse warehouse);
+    boolean addWarehouse(Warehouse warehouse);
     /**
      * 编辑仓库
      * @param warehouse
      * @return
      */
-    int modifyWarehouse(Warehouse warehouse);
+    boolean modifyWarehouse(Warehouse warehouse);
     /**
      * 删除仓库
      * @param whId
      * @return
      */
-    int modifyWarehouseIsDelete(Long whId);
+    boolean modifyWarehouseIsDelete(Long whId);
     /**
      * 启用/禁用仓库
      * @param whId

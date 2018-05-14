@@ -45,4 +45,10 @@ public class WarehouseRpcServiceImpl implements WarehouseRpcService{
         warehousseLocMapper.insert(loc);
         return loc;
     }
+
+    @Override
+    public Warehouse modifyWarehouse(Warehouse warehouse){
+        warehousseMapper.updateByPrimaryKey(warehouse);
+        return warehouse;
+    }
 }

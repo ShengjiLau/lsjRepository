@@ -62,12 +62,12 @@
     where relation_id = #{relationId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select relation_id, user_id, ware_house_id, create_date, version
+    select relation_id, user_id, ware_house_id, create_date, version, company_id, group_id
     from t_user_group_warehouse_relation
     where relation_id = #{relationId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select relation_id, user_id, ware_house_id, create_date, version
+    select relation_id, user_id, ware_house_id, create_date, version, company_id, group_id
     from t_user_group_warehouse_relation
   </select>
 
@@ -89,6 +89,9 @@ where w.wh_id not in (SELECT r.ware_house_id from t_user_group_warehouse_relatio
 
   </select>
 
-
+  <delete id="deleteBatch" parameterType="java.lang.Long">
+    delete from t_user_group_warehouse_relation
+    where ware_house_id = #{wareHouseId,jdbcType=BIGINT}
+  </delete>
 
 </mapper>

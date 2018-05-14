@@ -82,8 +82,8 @@ public class WarehouseApi {
         dto.setIsDeleted((short)0);
         dto.setCompanyId(companyId);
 
-        int result = warehouseService.addWarehouse(dto);
-        if (result == 2) {//同时添加仓库及默认联系人
+        boolean result = warehouseService.addWarehouse(dto);
+        if (result) {//同时添加仓库及默认联系人
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "添加成功");
@@ -102,8 +102,8 @@ public class WarehouseApi {
         dto.setUpdateName(user.getRealName());
         dto.setUpdateTime(new Date());
         dto.setIsDeleted((short)0);
-        int result = warehouseService.modifyWarehouse(dto);
-        if (result > 0) {
+        boolean result = warehouseService.modifyWarehouse(dto);
+        if (result) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "修改成功");
@@ -117,8 +117,8 @@ public class WarehouseApi {
     @RequestMapping(value = "/deleteWarehouse", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('delete_warehouse')")
     public JSONObject deleteWarehouse(@ApiParam(value = "仓库ID",required = true) @RequestParam Long whId) {
-        int result = warehouseService.modifyWarehouseIsDelete(whId);
-        if (result > 0) {
+        boolean result = warehouseService.modifyWarehouseIsDelete(whId);
+        if (result) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", "删除成功");

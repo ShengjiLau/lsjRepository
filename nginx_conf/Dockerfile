@@ -4,6 +4,7 @@ ADD ./nginx.conf /usr/local/openresty/nginx/conf/
 ADD ./request_access.lua /etc/nginx/lua/
 COPY ./release/clms_datuodui.key /usr/local/openresty/nginx/conf/
 COPY ./release/star.datuodui.com_nginx.crt /usr/local/openresty/nginx/conf/
+COPY ./cn /home/clms/cn
 RUN echo "Asia/shanghai" > /etc/timezone;
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
 RUN echo -e "127.0.0.1   login.datuodui.com " >> /etc/hosts
