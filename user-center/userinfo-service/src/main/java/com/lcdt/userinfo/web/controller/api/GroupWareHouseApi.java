@@ -2,7 +2,6 @@ package com.lcdt.userinfo.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.dao.TUserGroupWarehouseRelationMapper;
 import com.lcdt.userinfo.localservice.GroupWareHouseService;
@@ -40,6 +39,9 @@ public class GroupWareHouseApi {
         return new PageResultDto(list);
     }
 
+    /**
+     * 未添加的仓库列表
+     */
     @PostMapping("/notaddwarehouse")
     @PreAuthorize("hasAnyAuthority('group_warehouse') or hasRole('ROLE_SYS_ADMIN')")
     public PageResultDto<TUserGroupWarehouseRelation> notAddWareHouse(Long groupId, Integer pageSize, Integer pageNo) {
@@ -49,14 +51,21 @@ public class GroupWareHouseApi {
         return new PageResultDto(list);
     }
 
+    /**
+     * 添加
+     */
     @PostMapping("/addwareHouse")
     @PreAuthorize("hasAnyAuthority('group_warehouse') or hasRole('ROLE_SYS_ADMIN')")
     public TUserGroupWarehouseRelation addWareHouse(Long wareHouseId, Long groupId) {
         Long companyId = SecurityInfoGetter.getCompanyId();
-        TUserGroupWarehouseRelation relation = service.addWareHouseRelation(groupId, companyId, wareHouseId);
+        Long userId = SecurityInfoGetter.getUser().getUserId();
+        TUserGroupWarehouseRelation relation = service.addWareHouseRelation(groupId, userId, companyId, wareHouseId);
         return relation;
     }
 
+    /**
+     * 移除
+     */
     @PostMapping("/removeWareHouseRelation")
     public String removeWareHouse(Long relationId) {
         service.removeWareHouseGroupRelation(relationId);

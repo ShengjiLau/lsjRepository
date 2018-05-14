@@ -145,9 +145,7 @@
       <if test="shortName != null &amp;&amp; shortName !=''">
         short_name = #{shortName,jdbcType=VARCHAR},
       </if>
-      <if test="customerCode != null &amp;&amp; customerCode !=''">
         customer_code = #{customerCode,jdbcType=VARCHAR},
-      </if>
       <if test="clientTypes != null &amp;&amp; clientTypes !=''">
         client_types = #{clientTypes,jdbcType=VARCHAR},
       </if>
@@ -169,18 +167,10 @@
       <if test="groupNames != null &amp;&amp; groupNames !=''">
         group_names = #{groupNames,jdbcType=VARCHAR},
       </if>
-      <if test="postCode != null &amp;&amp; postCode !=''">
         post_code = #{postCode,jdbcType=VARCHAR},
-      </if>
-      <if test="telNo != null &amp;&amp; telNo !=''">
         tel_no = #{telNo,jdbcType=VARCHAR},
-      </if>
-      <if test="fax != null &amp;&amp; fax !=''">
         fax = #{fax,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null &amp;&amp; remark !=''">
         remark = #{remark,jdbcType=VARCHAR},
-      </if>
       <if test="attachment1 != null">
         attachment_1 = #{attachment1,jdbcType=VARCHAR},
       </if>
@@ -193,28 +183,13 @@
       <if test="attachmentName2 != null">
         attachment_name2 = #{attachmentName2,jdbcType=VARCHAR},
       </if>
-
-      <if test="invoiceTitle != null &amp;&amp; invoiceTitle !=''">
         invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="registrationNo != null &amp;&amp; registrationNo !=''">
         registration_no = #{registrationNo,jdbcType=VARCHAR},
-      </if>
-      <if test="bankName != null &amp;&amp; bankName !=''">
         bank_name = #{bankName,jdbcType=VARCHAR},
-      </if>
-      <if test="bankNo != null &amp;&amp; bankNo !=''">
         bank_no = #{bankNo,jdbcType=VARCHAR},
-      </if>
-      <if test="registrationAddress != null &amp;&amp; registrationAddress !=''">
         registration_address = #{registrationAddress,jdbcType=VARCHAR},
-      </if>
-      <if test="telNo1 != null &amp;&amp; telNo1 !=''">
         tel_no1 = #{telNo1,jdbcType=VARCHAR},
-      </if>
-      <if test="invoiceRemark != null &amp;&amp; invoiceRemark !=''">
         invoice_remark = #{invoiceRemark,jdbcType=VARCHAR},
-      </if>
       <if test="bindCpid != null">
         bind_comp_id = #{bindCpid,jdbcType=BIGINT},
       </if>
@@ -227,15 +202,11 @@
       <if test="linkMan != null  &amp;&amp; linkMan !=''">
         link_man = #{linkMan,jdbcType=VARCHAR},
       </if>
-      <if test="linkDuty != null  &amp;&amp; linkDuty !=''">
         link_duty = #{linkDuty,jdbcType=VARCHAR},
-      </if>
       <if test="linkTel != null  &amp;&amp; linkTel !=''">
         link_tel = #{linkTel,jdbcType=VARCHAR},
       </if>
-      <if test="linkEmail != null  &amp;&amp; linkEmail !=''">
         link_email = #{linkEmail,jdbcType=VARCHAR},
-      </if>
       <if test="collectionIds != null">
         collection_ids = #{collectionIds,jdbcType=VARCHAR},
       </if>

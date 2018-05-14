@@ -12,4 +12,5 @@ public interface WarehouseRpcService {
     Warehouse addWarehouse(Warehouse warehouse);
     WarehouseLinkman addWarehouseLinkMan(WarehouseLinkman linkman);
     WarehouseLoc addWarehouseLoc(WarehouseLoc loc);
+    Warehouse modifyWarehouse(Warehouse warehouse);
 }

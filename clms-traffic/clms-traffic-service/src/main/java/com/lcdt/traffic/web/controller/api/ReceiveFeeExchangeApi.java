@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,9 +42,9 @@ public class ReceiveFeeExchangeApi {
 	private FeeExchangeService feeExchangeService;
 	
 	@PostMapping("/add")
-	@ApiOperation("新增收付款记录,receive_exchange_add")
+	@ApiOperation("新增收款记录,receive_exchange_add")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_exchange_add')")
-	public JSONObject addFeeExchange(@Validated FeeExchangeListDto feeExchangeListDto) {
+	public JSONObject addFeeExchange(@RequestBody FeeExchangeListDto feeExchangeListDto) {
 		JSONObject jsonObject =validRequestBody(feeExchangeListDto);
 		if(jsonObject.size()>1) {
 			return jsonObject;	
@@ -58,17 +59,17 @@ public class ReceiveFeeExchangeApi {
 		int result=feeExchangeService.insertFeeExchangeByBatch(feeExchangeListDto.getFeeExchangeList());
 		if(result>0) {
 			jsonObject.put("code",0);
-			jsonObject.put("message","新增收付款记录成功");
+			jsonObject.put("message","新增收款记录成功");
 			return jsonObject;
 		}else {
-			throw new RuntimeException("插入收付款记录出现异常");
+			throw new RuntimeException("插入收款记录出现异常");
 		}
 	}
 	
 	
 	
 	@GetMapping("/list")
-	@ApiOperation("查询收付款记录列表,receive_exchange_list")
+	@ApiOperation("查询收款记录列表,receive_exchange_list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_exchange_list')")
 	public JSONObject getFeeExchange(FeeExchangeDto feeExchangeDto) {
 		JSONObject jsonObject =new JSONObject();
@@ -78,7 +79,7 @@ public class ReceiveFeeExchangeApi {
 		pageBase.setTotal(page.getTotal());
 		pageBase.setList(page.getList());
 		jsonObject.put("code",0);
-		jsonObject.put("msg","收付款记录列表");
+		jsonObject.put("msg","收款记录列表");
 		jsonObject.put("data",pageBase);
 		
 		return jsonObject;
@@ -87,9 +88,9 @@ public class ReceiveFeeExchangeApi {
 	
 	
 	@PostMapping("/cancel")
-	@ApiOperation("批量取消收付款记录,receive_exchange_cancel")
+	@ApiOperation("批量取消收款记录,receive_exchange_cancel")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_exchange_cancel')")
-	public JSONObject cancelFeeExchange(@ApiParam(value="收付款记录id数组",required=true)@RequestParam String feeExchanges) {
+	public JSONObject cancelFeeExchange(@ApiParam(value="收款记录id数组",required=true)@RequestParam String feeExchanges) {
 		JSONObject jsonObject =new JSONObject();
 		int result=feeExchangeService.updateSetCancelOk(feeExchanges);
 		if(result>0) {
@@ -97,20 +98,20 @@ public class ReceiveFeeExchangeApi {
 			jsonObject.put("msg","取消成功");
 			return jsonObject;
 		}else {
-			throw new RuntimeException("取消收付款记录出现异常");
+			throw new RuntimeException("取消收款记录出现异常");
 		}	
 	}
 	
 	
 	@GetMapping("/select")
-	@ApiOperation("单个收付款记录详情,receive_exchange_select")
+	@ApiOperation("单个收款记录详情,receive_exchange_select")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_exchange_select')")
 	public JSONObject selectFeeExchange(Long feeExchangeId) {
 		JSONObject jsonObject =new JSONObject();
 		FeeExchange fe=feeExchangeService.selectFeeExchangeById(feeExchangeId);
 		if(null!=fe) {
 			jsonObject.put("code",0);
-			jsonObject.put("message","收付款详情");
+			jsonObject.put("message","收款详情");
 			jsonObject.put("data",fe);
 		}else {
 			throw new RuntimeException("查询出现异常");
