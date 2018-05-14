@@ -82,36 +82,18 @@
       <if test="name != null &amp;&amp; name !=''">
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="duty != null &amp;&amp; duty !=''">
         duty = #{duty,jdbcType=VARCHAR},
-      </if>
       <if test="mobile != null &amp;&amp; mobile !=''">
         mobile = #{mobile,jdbcType=VARCHAR},
       </if>
-      <if test="mail != null &amp;&amp; mail !=''">
         mail = #{mail,jdbcType=VARCHAR},
-      </if>
-      <if test="birthday != null">
         birthday = #{birthday,jdbcType=DATE},
-      </if>
-      <if test="gender != null &amp;&amp; gender !=''">
         gender = #{gender,jdbcType=VARCHAR},
-      </if>
-      <if test="province != null &amp;&amp; province !=''">
         province = #{province,jdbcType=VARCHAR},
-      </if>
-      <if test="city != null &amp;&amp; city !=''">
         city = #{city,jdbcType=VARCHAR},
-      </if>
-      <if test="county != null &amp;&amp; county !=''">
         county = #{county,jdbcType=VARCHAR},
-      </if>
-      <if test="detailAddress != null &amp;&amp; detailAddress !=''">
         detail_address = #{detailAddress,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null &amp;&amp; remark !=''">
         remark = #{remark,jdbcType=VARCHAR},
-      </if>
       <if test="isDefault != null">
         is_default = #{isDefault,jdbcType=SMALLINT}
       </if>
