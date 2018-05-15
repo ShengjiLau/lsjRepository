@@ -11,36 +11,49 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tl.commons.util.StringUtility;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class GroupWareHouseServiceImpl implements GroupWareHouseService{
 
     @Autowired
     TUserGroupWarehouseRelationMapper dao;
+    @Reference
+    WarehouseRpcService warehouseRpcService;
 
     @Override
     public List<TUserGroupWarehouseRelation> addedUserGroupWareHouse(Long companyId,Long groupId) {
         List<TUserGroupWarehouseRelation> tUserGroupWarehouseRelations = dao.selectAddedUserGroupWareHouse(groupId, companyId);
         if (tUserGroupWarehouseRelations == null) {
-            return new ArrayList<TUserGroupWarehouseRelation>();
+            return new ArrayList<>();
+        }else{
+            for(TUserGroupWarehouseRelation relation : tUserGroupWarehouseRelations){
+                Warehouse warehouse = warehouseRpcService.selectByPrimaryKey(relation.getWareHouseId());
+                relation.setWareHouse(warehouse);
+            }
         }
         return tUserGroupWarehouseRelations;
     }
 
     @Override
     public List<TUserGroupWarehouseRelation> notAddUserGroupWareHouse(Long companyId,Long groupId) {
-        List<TUserGroupWarehouseRelation> tUserGroupWarehouseRelations = dao.selectNotAddUserGroupWareHouse(groupId, companyId);
-        if (tUserGroupWarehouseRelations == null) {
-            return new ArrayList<TUserGroupWarehouseRelation>();
+        String whIds = dao.selectAddedUserGroupWareHouseWareHouseIds(groupId, companyId);
+        Map map = new HashMap<>();
+        map.put("companyId", companyId);
+        map.put("whIds", whIds);
+        List<Warehouse> warehouseList = warehouseRpcService.selectNotInWhIds(map);
+        List<TUserGroupWarehouseRelation> tUserGroupWarehouseRelations = new ArrayList<>();
+        if(warehouseList != null && warehouseList.size() > 0){
+            for(Warehouse warehouse : warehouseList) {
+                TUserGroupWarehouseRelation relation = new TUserGroupWarehouseRelation();
+                relation.setCompanyId(companyId);
+                relation.setGroupId(groupId);
+                relation.setWareHouse(warehouse);
+                tUserGroupWarehouseRelations.add(relation);
+            }
         }
         return tUserGroupWarehouseRelations;
     }
-
-    @Reference
-    WarehouseRpcService warehouseRpcService;
 
     @Autowired
     UserGroupService userGroupService;

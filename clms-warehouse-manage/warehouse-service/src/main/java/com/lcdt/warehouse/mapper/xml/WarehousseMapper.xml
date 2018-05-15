@@ -29,13 +29,13 @@
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="group_ids" jdbcType="VARCHAR" property="groupIds" />
+  </resultMap>
+  <resultMap id="BaseResultMapDto" type="com.lcdt.warehouse.dto.WarehouseDto" extends="BaseResultMap">
+    <result column="group_names" jdbcType="VARCHAR" property="groupNames" />
     <!--仓库联系人-->
     <collection property="linkmanList" column="{whId=wh_id,isDeleted=is_deleted}"
                 ofType="com.lcdt.warehouse.entity.WarehouseLinkman" javaType="ArrayList"
                 select="com.lcdt.warehouse.mapper.WarehousseLinkmanMapper.selectByWhId" />
-  </resultMap>
-  <resultMap id="BaseResultMapDto" type="com.lcdt.warehouse.dto.WarehouseDto" extends="BaseResultMap">
-    <result column="group_names" jdbcType="VARCHAR" property="groupNames" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_warehouse
@@ -140,5 +140,19 @@
     </where>
     order by wh_id desc
   </select>
-
+  <select id="selectNotInWhIds" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select wh_id, wh_name, wh_code, wh_type, wh_status, customer_id, customer_name, principal,
+    mobile, mail, tel_num, fax, province, city, county, detail_address, post_code, remark,
+    create_id, create_name, create_date, update_id, update_name, update_time, is_deleted,
+    company_id, group_ids
+    from t_warehouse
+    <where>
+      is_deleted=0
+      and company_id = #{companyId,jdbcType=BIGINT}
+      <if test="whIds!=null and whIds!=''">
+        and not FIND_IN_SET(wh_id,#{whIds,jdbcType=VARCHAR})
+      </if>
+    </where>
+    order by wh_id desc
+  </select>
 </mapper>

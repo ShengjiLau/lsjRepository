@@ -3,7 +3,6 @@ package com.lcdt.warehouse.entity;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
-import java.util.List;
 
 public class Warehouse implements java.io.Serializable{
     @ApiModelProperty(value = "主键id")
@@ -86,11 +85,6 @@ public class Warehouse implements java.io.Serializable{
 
     @ApiModelProperty(value = "所属项目组IDS")
     private String groupIds;
-
-    /***
-     * 仓库联系人
-     */
-    private List<WarehouseLinkman> linkmanList;
 
     public Long getWhId() {
         return whId;
@@ -298,14 +292,6 @@ public class Warehouse implements java.io.Serializable{
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
-    }
-
-    public List<WarehouseLinkman> getLinkmanList() {
-        return linkmanList;
-    }
-
-    public void setLinkmanList(List<WarehouseLinkman> linkmanList) {
-        this.linkmanList = linkmanList;
     }
 
     public String getGroupIds() {

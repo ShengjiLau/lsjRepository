@@ -4,6 +4,9 @@ import com.lcdt.warehouse.entity.Warehouse;
 import com.lcdt.warehouse.entity.WarehouseLinkman;
 import com.lcdt.warehouse.entity.WarehouseLoc;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by liz on 2018/5/9.
  */
@@ -13,4 +16,5 @@ public interface WarehouseRpcService {
     WarehouseLinkman addWarehouseLinkMan(WarehouseLinkman linkman);
     WarehouseLoc addWarehouseLoc(WarehouseLoc loc);
     Warehouse modifyWarehouse(Warehouse warehouse);
+    List<Warehouse> selectNotInWhIds(Map map);
 }
