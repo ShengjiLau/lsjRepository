@@ -79,6 +79,4 @@ public interface GroupManageService {
 	 * @return
 	 */
 	PageInfo selectGroupClientList(Map m);
-
-	String selectGroupNamesByGroupIds(String groupIds);
 }

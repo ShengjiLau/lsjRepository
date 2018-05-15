@@ -10,6 +10,7 @@ import com.lcdt.warehouse.rpc.WarehouseRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by liz on 2018/5/14.
@@ -50,4 +51,12 @@ public class GroupWareHouseRpcServiceImpl implements GroupWareHouseRpcService{
         int result = tUserGroupWarehouseRelationMapper.deleteBatch(wareHouseId);
         return result;
     }
+
+    @Override
+    public String selectGroupNamesByGroupIds(Map map){
+        String groupNames = tUserGroupWarehouseRelationMapper.selectGroupNamesByGroupIds(map);
+        return groupNames;
+    }
+
+
 }

@@ -4,6 +4,7 @@ import com.lcdt.userinfo.model.TUserGroupWarehouseRelation;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TUserGroupWarehouseRelationMapper {
     int deleteByPrimaryKey(Long relationId);
@@ -21,4 +22,6 @@ public interface TUserGroupWarehouseRelationMapper {
     List<TUserGroupWarehouseRelation> selectNotAddUserGroupWareHouse(@Param("groupId")Long groupId,@Param("companyId")Long companyId);
 
     int deleteBatch(Long wareHouseId);
+
+    String selectGroupNamesByGroupIds(Map map);
 }
