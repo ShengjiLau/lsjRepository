@@ -22,7 +22,7 @@ public class Inventory implements Serializable {
     /**
      * 库存量
      */
-    private Integer invertoryNum;
+    private Float invertoryNum;
 
     //锁定量
     private Float lockNum;
@@ -102,11 +102,11 @@ public class Inventory implements Serializable {
         this.goodsId = goodsId;
     }
 
-    public Integer getInvertoryNum() {
+    public Float getInvertoryNum() {
         return invertoryNum;
     }
 
-    public void setInvertoryNum(Integer invertoryNum) {
+    public void setInvertoryNum(Float invertoryNum) {
         this.invertoryNum = invertoryNum;
     }
 
