@@ -95,7 +95,7 @@ where w.wh_id not in (SELECT r.ware_house_id from t_user_group_warehouse_relatio
   </delete>
 
   <select id="selectGroupNamesByGroupIds" parameterType="java.util.Map" resultType="java.lang.String">
-    select GROUP_CONCAT(group_name)
+    select GROUP_CONCAT(ug.group_name)
     from t_uc_group ug,t_user_group_warehouse_relation ugwr
     where ug.group_id=ugwr.group_id
     and ug.company_id=ugwr.company_id
