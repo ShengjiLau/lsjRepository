@@ -13,6 +13,10 @@ public class GoodsInfoDao extends SubItemsInfo{
     private String goodsName;
     private String unit;
     private ConversionRel multiUnit;
+    private Long classifyId;
+    private String classifyName;
+
+
     List<ItemSpecKeyValue> goodsSpec;
 
     public Long getGoodsId() {
@@ -53,5 +57,21 @@ public class GoodsInfoDao extends SubItemsInfo{
 
     public void setGoodsSpec(List<ItemSpecKeyValue> goodsSpec) {
         this.goodsSpec = goodsSpec;
+    }
+
+    public Long getClassifyId() {
+        return classifyId;
+    }
+
+    public void setClassifyId(Long classifyId) {
+        this.classifyId = classifyId;
+    }
+
+    public String getClassifyName() {
+        return classifyName;
+    }
+
+    public void setClassifyName(String classifyName) {
+        this.classifyName = classifyName;
     }
 }

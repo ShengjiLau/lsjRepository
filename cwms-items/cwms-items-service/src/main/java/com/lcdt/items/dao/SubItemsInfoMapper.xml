@@ -27,6 +27,8 @@
     <result column="subject" jdbcType="VARCHAR" property="goodsName" />
     <result column="item_id" jdbcType="BIGINT" property="goodsId"/>
     <result column="unit_name" jdbcType="VARCHAR" property="unit" />
+    <result column="classify_name" jdbcType="VARCHAR" property="classifyName" />
+    <result column="classify_id" jdbcType="BIGINT" property="classifyId" />
     <association property="multiUnit" column="conver_id" select="com.lcdt.items.dao.ConversionRelMapper.selectByPrimaryKey"/>
     <collection property="goodsSpec" column="sub_item_id" ofType="com.lcdt.items.model.ItemSpecKeyValue" select="com.lcdt.items.dao.ItemSpecKeyValueMapper.selectSpecKeyValueBySubItemId"/>
    </resultMap>
@@ -157,7 +159,7 @@
   </select>
   <select id="selectByCondition" resultMap="SubItemInfoList" parameterType="java.util.Map">
     select sub_item_id, sub.item_id, image, sub.code, sub.bar_code, sub.purchase_price, sub.wholesale_price,
-    sub.retail_price, spec_comb, items.company_id,items.subject ,items.unit_name,items.conver_id
+    sub.retail_price, spec_comb, items.company_id,items.subject ,items.unit_name,items.conver_id,items.classify_name,items.classify_id
     from t_sub_items_info sub,t_items_info items
     <where>
       sub.item_id=items.item_id and items.company_id = #{companyId,jdbcType=BIGINT}

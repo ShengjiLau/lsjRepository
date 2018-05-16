@@ -3,7 +3,8 @@ package com.lcdt.warehouse.service.impl;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.userinfo.service.GroupManageService;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.userinfo.rpc.GroupWareHouseRpcService;
 import com.lcdt.warehouse.dto.WarehouseDto;
 import com.lcdt.warehouse.entity.Warehouse;
 import com.lcdt.warehouse.entity.WarehouseLinkman;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tl.commons.util.StringUtility;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +36,7 @@ public class WarehouseSeviceImpl implements WarehouseService {
     @Autowired
     private WarehousseLocMapper warehousseLocMapper;
     @Reference
-    GroupManageService groupManageService;
+    GroupWareHouseRpcService groupWareHouseRpcService;
 
     @Transactional(readOnly = true)
     @Override
@@ -55,9 +57,12 @@ public class WarehouseSeviceImpl implements WarehouseService {
         PageHelper.startPage(pageNo, pageSize);
         List<WarehouseDto> list = warehousseMapper.selectByCondition(m);
         if(list != null && list.size() > 0){
+            Map map = new HashMap();
             for(WarehouseDto dto : list){
                 if(StringUtility.isNotEmpty(dto.getGroupIds())){
-                    String groupNames = groupManageService.selectGroupNamesByGroupIds(dto.getGroupIds());
+                    map.put("groupIds", dto.getGroupIds());
+                    map.put("wareHouseId", dto.getWhId());
+                    String groupNames = groupWareHouseRpcService.selectGroupNamesByGroupIds(map);
                     dto.setGroupNames(groupNames);
                 }
             }
@@ -68,37 +73,64 @@ public class WarehouseSeviceImpl implements WarehouseService {
     }
 
     @Override
-    public int addWarehouse(Warehouse warehouse) {
-        int result = warehousseMapper.insert(warehouse);
-        WarehouseLinkman linkman = new WarehouseLinkman();
-        linkman.setWhId(warehouse.getWhId());
-        linkman.setName(warehouse.getPrincipal());
-        linkman.setMobile(warehouse.getMobile());
-        linkman.setMail(warehouse.getMail());
-        linkman.setProvince(warehouse.getProvince());
-        linkman.setCity(warehouse.getCity());
-        linkman.setCounty(warehouse.getCounty());
-        linkman.setDetailAddress(warehouse.getDetailAddress());
-        linkman.setCreateId(warehouse.getCreateId());
-        linkman.setCreateName(warehouse.getCreateName());
-        linkman.setCreateDate(new Date());
-        linkman.setIsDefault((short)1);
-        linkman.setIsDeleted((short)0);
-        linkman.setCompanyId(warehouse.getCompanyId());
-        result += addWarehouseLinkMan(linkman);
-        return result;
+    public boolean addWarehouse(Warehouse warehouse) {
+        try{
+            warehousseMapper.insert(warehouse);
+            WarehouseLinkman linkman = new WarehouseLinkman();
+            linkman.setWhId(warehouse.getWhId());
+            linkman.setName(warehouse.getPrincipal());
+            linkman.setMobile(warehouse.getMobile());
+            linkman.setMail(warehouse.getMail());
+            linkman.setProvince(warehouse.getProvince());
+            linkman.setCity(warehouse.getCity());
+            linkman.setCounty(warehouse.getCounty());
+            linkman.setDetailAddress(warehouse.getDetailAddress());
+            linkman.setCreateId(warehouse.getCreateId());
+            linkman.setCreateName(warehouse.getCreateName());
+            linkman.setCreateDate(new Date());
+            linkman.setIsDefault((short)1);
+            linkman.setIsDeleted((short)0);
+            linkman.setCompanyId(warehouse.getCompanyId());
+            addWarehouseLinkMan(linkman);
+            if(StringUtility.isNotEmpty(warehouse.getGroupIds())) {
+                //新增仓库项目组关系（多条）
+                groupWareHouseRpcService.addWareHouseRelationBatch(warehouse.getGroupIds(), SecurityInfoGetter.getUser().getUserId(), SecurityInfoGetter.geUserCompRel().getCompId(), warehouse.getWhId());
+            }
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
-    public int modifyWarehouse(Warehouse warehouse) {
-        int result = warehousseMapper.updateByPrimaryKey(warehouse);
-        return result;
+    public boolean modifyWarehouse(Warehouse warehouse) {
+        try{
+            warehousseMapper.updateByPrimaryKey(warehouse);
+            //删除仓库项目组关系（多条）
+            groupWareHouseRpcService.deleteWareHouseRelationBatch(warehouse.getWhId());
+            if(StringUtility.isNotEmpty(warehouse.getGroupIds())) {
+                //新增仓库项目组关系（多条）
+                groupWareHouseRpcService.addWareHouseRelationBatch(warehouse.getGroupIds(), SecurityInfoGetter.getUser().getUserId(), SecurityInfoGetter.geUserCompRel().getCompId(), warehouse.getWhId());
+            }
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
-    public int modifyWarehouseIsDelete(Long whId) {
-        int result = warehousseMapper.updateIsDeleteByPrimaryKey(whId);
-        return result;
+    public boolean modifyWarehouseIsDelete(Long whId) {
+        try{
+            //删除仓库项目组关系（多条）
+            groupWareHouseRpcService.deleteWareHouseRelationBatch(whId);
+            warehousseMapper.updateIsDeleteByPrimaryKey(whId);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

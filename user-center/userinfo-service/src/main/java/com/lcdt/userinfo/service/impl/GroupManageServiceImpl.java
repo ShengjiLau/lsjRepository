@@ -328,12 +328,4 @@ public class GroupManageServiceImpl implements GroupManageService {
 		PageInfo pageInfo = new PageInfo(list);
 		return pageInfo;
 	}
-
-	@Override
-	public String selectGroupNamesByGroupIds(String groupIds){
-		String groupNames = groupDao.selectGroupNamesByGroupIds(groupIds);
-		return groupNames;
-	}
-
-
 }

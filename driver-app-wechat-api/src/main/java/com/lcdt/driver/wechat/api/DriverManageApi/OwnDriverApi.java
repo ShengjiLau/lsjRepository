@@ -1,6 +1,7 @@
 package com.lcdt.driver.wechat.api.DriverManageApi;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
@@ -18,6 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -90,5 +93,28 @@ public class OwnDriverApi {
         List<DriverGroupDto> driverGroupDtoList = driverGroupService.selectRelationship(companyId);
         PageBaseDto pageBaseDto = new PageBaseDto(driverGroupDtoList, driverGroupDtoList.size());
         return pageBaseDto;
+    }
+
+    @ApiOperation(value = "新增司机", notes = "新增司机")
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_add')")
+    public JSONObject addOwnDriver(@Validated @RequestBody OwnDriverDto ownDriverDto, BindingResult bindingResult) {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
+        String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
+        ownDriverDto.setCompanyId(companyId);
+        ownDriverDto.setCreateId(userId);
+        ownDriverDto.setCreateName(userName);
+        JSONObject jsonObject = new JSONObject();
+        if (bindingResult.hasErrors()) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
+            return jsonObject;
+        }
+        ownDriverService.addDriver(ownDriverDto);
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "新增成功");
+
+        return jsonObject;
     }
 }

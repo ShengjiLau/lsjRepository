@@ -10,6 +10,9 @@ import com.lcdt.warehouse.mapper.WarehousseMapper;
 import com.lcdt.warehouse.rpc.WarehouseRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by liz on 2018/5/9.
  */
@@ -44,5 +47,16 @@ public class WarehouseRpcServiceImpl implements WarehouseRpcService{
     public WarehouseLoc addWarehouseLoc(WarehouseLoc loc) {
         warehousseLocMapper.insert(loc);
         return loc;
+    }
+
+    @Override
+    public Warehouse modifyWarehouse(Warehouse warehouse){
+        warehousseMapper.updateByPrimaryKey(warehouse);
+        return warehouse;
+    }
+
+    @Override
+    public List<Warehouse> selectNotInWhIds(Map map){
+        return warehousseMapper.selectNotInWhIds(map);
     }
 }

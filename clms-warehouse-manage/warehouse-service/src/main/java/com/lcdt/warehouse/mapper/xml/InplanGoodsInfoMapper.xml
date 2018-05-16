@@ -5,7 +5,7 @@
     <!--入库计划货物详细-->
     <select id="inWhPlanGoodsInfoList" resultType="com.lcdt.warehouse.dto.InPlanGoodsInfoResultDto">
         SELECT a.relation_id,a.goods_id,a.plan_goods_num,a.remark,a.in_house_price,a.unit,a.unit_data,
-        a.goods_name,a.goods_classify,a.goods_spec,a.goods_code,a.goods_barcode,a.goods_batch
+        a.goods_name,a.goods_classify,a.goods_spec,a.goods_code,a.goods_barcode
         FROM inplan_goods_info a
          WHERE a.plan_id = #{planId}
     </select>

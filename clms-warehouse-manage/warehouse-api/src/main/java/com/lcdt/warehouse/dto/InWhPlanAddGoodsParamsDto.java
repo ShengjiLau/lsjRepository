@@ -1,80 +1,40 @@
-package com.lcdt.warehouse.entity;
+package com.lcdt.warehouse.dto;
 
-import com.baomidou.mybatisplus.enums.IdType;
-import com.baomidou.mybatisplus.annotations.TableId;
-import java.io.Serializable;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
- * <p>
- * 
- * </p>
- *
- * @author code generate
- * @since 2018-05-07
+ * Created by yangbinq on 2018/5/14.
  */
-public class InplanGoodsInfo implements Serializable {
+public class InWhPlanAddGoodsParamsDto {
 
-    private static final long serialVersionUID = 1L;
-
-    @TableId(value = "relation_id", type = IdType.AUTO)
-    private Long relationId;
-    /**
-     * 货物id
-     */
+    @ApiModelProperty(value = "货物ID")
     private Long goodsId;
-    /**
-     * 计划数量
-     */
-    private int planGoodsNum;
-    /**
-     * 备注
-     */
-    private String remark;
-    /**
-     * 入库价
-     */
+    @ApiModelProperty(value = "计划数量")
+    private Float planGoodsNum;
+    @ApiModelProperty(value = "入库价")
     private Integer inHousePrice;
-    private Long planId;
-
-    /**
-     * 单位
-     */
-    private String unit;
-    /**
-     * 换算关系
-     */
+    @ApiModelProperty(value = "换算关系")
     private int unitData;
-
+    @ApiModelProperty(value = "商品名称")
     private String goodsName;
-    /**
-     * 商品分类
-     */
+    @ApiModelProperty(value = "商品分类")
     private String goodsClassify;
+    @ApiModelProperty(value = "商品分类ID")
     private Long goodsClassifyId;
+    @ApiModelProperty(value = "商品规格")
     private String goodsSpec;
+    @ApiModelProperty(value = "商品编码")
     private String goodsCode;
+    @ApiModelProperty(value = "商品条码")
     private String goodsBarcode;
-
-    /**
-     * 商品批次
-     */
-    private String goodsBatch;
+    @ApiModelProperty(value = "单位")
+    private String unit;
+    @ApiModelProperty(value = "子商品ID")
     private Long subItemId;
-
-    /**
-     * 最小单位
-     */
+    @ApiModelProperty(value = "最小单位")
     private String minUnit;
-
-
-
-    public Long getRelationId() {
-        return relationId;
-    }
-
-    public void setRelationId(Long relationId) {
-        this.relationId = relationId;
-    }
+    @ApiModelProperty(value = "备注")
+    private String remark;
 
     public Long getGoodsId() {
         return goodsId;
@@ -84,20 +44,12 @@ public class InplanGoodsInfo implements Serializable {
         this.goodsId = goodsId;
     }
 
-    public int getPlanGoodsNum() {
+    public Float getPlanGoodsNum() {
         return planGoodsNum;
     }
 
-    public void setPlanGoodsNum(int planGoodsNum) {
+    public void setPlanGoodsNum(Float planGoodsNum) {
         this.planGoodsNum = planGoodsNum;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
     }
 
     public Integer getInHousePrice() {
@@ -108,32 +60,12 @@ public class InplanGoodsInfo implements Serializable {
         this.inHousePrice = inHousePrice;
     }
 
-    public Long getPlanId() {
-        return planId;
-    }
-
-    public void setPlanId(Long planId) {
-        this.planId = planId;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
     public int getUnitData() {
         return unitData;
     }
 
     public void setUnitData(int unitData) {
         this.unitData = unitData;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public String getGoodsName() {
@@ -150,6 +82,14 @@ public class InplanGoodsInfo implements Serializable {
 
     public void setGoodsClassify(String goodsClassify) {
         this.goodsClassify = goodsClassify;
+    }
+
+    public Long getGoodsClassifyId() {
+        return goodsClassifyId;
+    }
+
+    public void setGoodsClassifyId(Long goodsClassifyId) {
+        this.goodsClassifyId = goodsClassifyId;
     }
 
     public String getGoodsSpec() {
@@ -176,13 +116,12 @@ public class InplanGoodsInfo implements Serializable {
         this.goodsBarcode = goodsBarcode;
     }
 
-
-    public String getGoodsBatch() {
-        return goodsBatch;
+    public String getUnit() {
+        return unit;
     }
 
-    public void setGoodsBatch(String goodsBatch) {
-        this.goodsBatch = goodsBatch;
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public Long getSubItemId() {
@@ -201,11 +140,11 @@ public class InplanGoodsInfo implements Serializable {
         this.minUnit = minUnit;
     }
 
-    public Long getGoodsClassifyId() {
-        return goodsClassifyId;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setGoodsClassifyId(Long goodsClassifyId) {
-        this.goodsClassifyId = goodsClassifyId;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
