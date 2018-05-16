@@ -8,7 +8,6 @@ import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.DefaultNotifySender;
 import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.dao.*;
-import com.lcdt.traffic.dto.PlanDetailParamsDto;
 import com.lcdt.traffic.dto.WaybillDto;
 import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.*;
@@ -22,7 +21,6 @@ import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
-import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.tl.commons.util.DateUtility;
 
-import javax.jws.soap.SOAPBinding;
 import java.text.ParseException;
 import java.util.*;
 
@@ -300,7 +297,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         obj.setUpdateTime(obj.getCreateDate());
                         obj.setCompanyId(vo.getCompanyId());
                         obj.setIsDeleted((short)0);
-                        if (obj.getFreightTotal()==null) { //运费总价 = 单价 * 数量
+                        if (obj.getFreightPrice()!=null) { //运费总价 = 单价 * 数量
                             obj.setFreightTotal(obj.getFreightPrice()*obj.getPlanAmount());
                         }
                         sb_goods.append(obj.getGoodsName()+":"+obj.getAllotAmount()+";"); //发送消息
