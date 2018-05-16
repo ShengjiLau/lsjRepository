@@ -88,9 +88,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             inventory.setCompanyId(order.getCompanyId());
             inventory.setGoodsId(goodsInfo.getGoodsId());
             inventory.setInvertoryNum(goodsInfo.getInHouseAmount());
-
-
-
             return new Inventory();
         }
     }
