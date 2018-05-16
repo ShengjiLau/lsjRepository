@@ -55,11 +55,16 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         if (inventories.size() == 0) {
             //没有库存 新增
             inventoryMapper.insert(inventory);
+            return inventory;
         } else {
-
+            Inventory existInventory = inventories.get(0);
+            existInventory.setInvertoryNum(existInventory.getInvertoryNum() + inventory.getInvertoryNum());
+            inventoryMapper.updateById(existInventory);
+            return existInventory;
         }
-        return new Inventory();
     }
+
+
 
     /**
      * 查找是否有相同库存
@@ -87,8 +92,12 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             Inventory inventory = new Inventory();
             inventory.setCompanyId(order.getCompanyId());
             inventory.setGoodsId(goodsInfo.getGoodsId());
-            inventory.setInvertoryNum(goodsInfo.getInHouseAmount());
-            return new Inventory();
+            inventory.setInvertoryNum(goodsInfo.getInHouseAmount() * goodsInfo.getUnitData());
+            inventory.setWarehouseId(order.getWarehouseId());
+            inventory.setStorageLocationCode(goodsInfo.getStrogeLocationCode());
+            inventory.setCustomerName(order.getCustomerName());
+            inventory.setWarehouseName(order.getWarehouseName());
+            return inventory;
         }
     }
 }
