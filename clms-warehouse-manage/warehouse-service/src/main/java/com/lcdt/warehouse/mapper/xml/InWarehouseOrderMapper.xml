@@ -10,6 +10,7 @@
         <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
         <result column="purchase_code" jdbcType="VARCHAR" property="purchaseCode"/>
         <result column="customer_name" jdbcType="VARCHAR" property="customerName"/>
+        <result column="customer_id" jdbcType="BIGINT" property="customerId"/>
         <result column="customer_contact_name" jdbcType="VARCHAR" property="customerContactName"/>
         <result column="customer_contact_phone" jdbcType="VARCHAR" property="customerContactPhone"/>
         <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
@@ -40,7 +41,7 @@
 
     <sql id="Base_Select_List" >
         inorder_id, plan_id, in_order_code, in_order_status, group_id, group_name,
-        purchase_code, customer_name, customer_contact_name, customer_contact_phone, warehouse_id,
+        purchase_code, customer_name,customer_id, customer_contact_name, customer_contact_phone, warehouse_id,
         warehouse_name, storage_type, storage_plan_time, storage_time, storage_remark, deliveryman_name,
         deliveryman_phone, deliveryman_linkman, deliveryman_car, attachments, company_id,
         create_id, create_name, create_date,is_deleted
@@ -103,7 +104,7 @@
         </selectKey>
         insert into in_warehouse_order (plan_id, in_order_code, in_order_status,
         group_id, group_name, purchase_code,
-        customer_name, customer_contact_name, customer_contact_phone,
+        customer_name, customer_contact_name,customer_id, customer_contact_phone,
         warehouse_id, warehouse_name, storage_type,
         storage_plan_time, storage_time, storage_remark,
         deliveryman_name, deliveryman_phone, deliveryman_linkman,
@@ -121,7 +122,7 @@
         </choose>,
         #{inOrderStatus,jdbcType=TINYINT},
         #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{purchaseCode,jdbcType=VARCHAR},
-        #{customerName,jdbcType=VARCHAR}, #{customerContactName,jdbcType=VARCHAR},
+        #{customerName,jdbcType=VARCHAR},#{customerId,jdbcType=BIGINT}, #{customerContactName,jdbcType=VARCHAR},
         #{customerContactPhone,jdbcType=VARCHAR},
         #{warehouseId,jdbcType=BIGINT}, #{warehouseName,jdbcType=VARCHAR}, #{storageType,jdbcType=VARCHAR},
         #{storagePlanTime,jdbcType=TIMESTAMP}, #{storageTime,jdbcType=TIMESTAMP}, #{storageRemark,jdbcType=VARCHAR},

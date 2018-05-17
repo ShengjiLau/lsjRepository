@@ -53,6 +53,11 @@ public class InWarehouseOrder implements Serializable,ResponseData {
      * 客户名称
      */
     private String customerName;
+
+    /**
+     * 客户id
+     */
+    private Long customerId;
     /**
      * 客户联系人
      */
@@ -210,6 +215,14 @@ public class InWarehouseOrder implements Serializable,ResponseData {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public String getCustomerContactName() {

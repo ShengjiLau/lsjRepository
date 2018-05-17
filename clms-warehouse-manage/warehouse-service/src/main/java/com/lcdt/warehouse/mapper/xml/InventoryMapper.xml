@@ -46,8 +46,15 @@
             <if test="customerId != null">
                 and customer_id = #{customerId}
             </if>
+
+            <if test="originalGoodsId != null">
+                and original_goods_id = #{original_goods_id}
+            </if>
+
         </where>
     </select>
+
+
 
 
 

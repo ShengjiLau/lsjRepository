@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.dto;
 
+import com.lcdt.warehouse.entity.Inventory;
 import io.swagger.annotations.ApiModelProperty;
 
 public class InventoryQueryDto extends PageQueryDto {
@@ -48,6 +49,26 @@ public class InventoryQueryDto extends PageQueryDto {
 
     public void setGoodsId(Long goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
+    public static Inventory dtoToDataBean(InventoryQueryDto dto) {
+        Inventory inventory = new Inventory();
+        if (dto == null) {
+            return inventory;
+        }
+        inventory.setWarehouseId(dto.getWareHouseId());
+        inventory.setStorageLocationCode(dto.getStrogeLocationCode());
+        inventory.setGoodsId(dto.getGoodsId());
+        inventory.setCustomerId(dto.getCustomerId());
+        return inventory;
     }
 
     @Override

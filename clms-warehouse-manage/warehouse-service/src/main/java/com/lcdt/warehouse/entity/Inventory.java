@@ -45,7 +45,7 @@ public class Inventory implements Serializable {
     /**
      * 库位编码
      */
-    private String storageLocationCode;
+    private Long storageLocationCode;
 
     /**
      * 库位名称
@@ -53,6 +53,17 @@ public class Inventory implements Serializable {
     private String warehouseName;
 
     private GoodsInfo goodsInfo;
+
+
+    private Long originalGoodsId;
+
+    public Long getOriginalGoodsId() {
+        return originalGoodsId;
+    }
+
+    public void setOriginalGoodsId(Long originalGoodsId) {
+        this.originalGoodsId = originalGoodsId;
+    }
 
     public GoodsInfo getGoodsInfo() {
         return goodsInfo;
@@ -150,11 +161,11 @@ public class Inventory implements Serializable {
         this.businessDesc = businessDesc;
     }
 
-    public String getStorageLocationCode() {
+    public Long getStorageLocationCode() {
         return storageLocationCode;
     }
 
-    public void setStorageLocationCode(String storageLocationCode) {
+    public void setStorageLocationCode(Long storageLocationCode) {
         this.storageLocationCode = storageLocationCode;
     }
 
