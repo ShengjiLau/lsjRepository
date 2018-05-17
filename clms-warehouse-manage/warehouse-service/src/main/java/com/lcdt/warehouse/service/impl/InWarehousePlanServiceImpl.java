@@ -5,18 +5,24 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.warehouse.dto.*;
-import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.entity.InWarehousePlan;
+import com.lcdt.warehouse.entity.InplanGoodsInfo;
 import com.lcdt.warehouse.mapper.InWarehousePlanMapper;
 import com.lcdt.warehouse.mapper.InplanGoodsInfoMapper;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.service.InWarehousePlanService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.lcdt.warehouse.service.InplanGoodsInfoService;
 import com.lcdt.warehouse.vo.ConstantVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.tl.commons.util.DateUtility;
 
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +45,9 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
 
     @Autowired
     InWarehouseOrderService inWarehouseOrderService;
+
+    @Autowired
+    InplanGoodsInfoService inplanGoodsInfoService;
 
     @Transactional(readOnly = true)
     @Override
@@ -171,6 +180,115 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
         }
         inWarehousePlan.setPlanStatus((Integer) InWhPlanStatusEnum.completed.getValue());
          return chagenInPlanStatus(obj, inWarehousePlan,userCompRel);
+    }
+
+    @Transactional
+    @Override
+    public boolean inWhPlanAdd(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel) {
+        InWarehousePlan inWarehousePlan = new InWarehousePlan();
+        BeanUtils.copyProperties(inWhPlanAddParamsDto, inWarehousePlan);
+        inWarehousePlan.setCompanyId(userCompRel.getCompId());
+        inWarehousePlan.setPlanStatus((Integer) InWhPlanStatusEnum.watting.getValue());
+        inWarehousePlan.setCreateTime(new Date());
+        inWarehousePlan.setCreateUserId(userCompRel.getUser().getUserId());
+        inWarehousePlan.setCreateUserName(userCompRel.getUser().getRealName());
+        if (!StringUtils.isEmpty(inWhPlanAddParamsDto.getStoragePlanTime())) { //竞价开始
+            try {
+                inWarehousePlan.setStoragePlanTime(DateUtility.string2Date(inWhPlanAddParamsDto.getStoragePlanTime(),"yyyy-MM-dd HH:mm:ss"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        inWarehousePlan.setPlanNo(inWarehousePlanMapper.getPlanCode());
+        if (this.insert(inWarehousePlan)) {
+            List<InWhPlanGoodsDto> inWhPlanAddGoodsParamsDtoList = inWhPlanAddParamsDto.getInWhPlanGoodsDtoList();
+            if (null != inWhPlanAddGoodsParamsDtoList) {
+                List<InplanGoodsInfo> inplanGoodsInfos = new ArrayList<InplanGoodsInfo>();
+                for (InWhPlanGoodsDto dto : inWhPlanAddGoodsParamsDtoList) {
+                    InplanGoodsInfo obj = new InplanGoodsInfo();
+                    BeanUtils.copyProperties(dto, obj);
+                    obj.setPlanId(inWarehousePlan.getPlanId());
+                    inplanGoodsInfos.add(obj);
+                }
+                return inplanGoodsInfoService.insertBatch(inplanGoodsInfos);
+            }
+        }
+        return false;
+    }
+
+
+
+    @Transactional(readOnly = true)
+    @Override
+    public InWhPlanDto inWhPlanDetail(Long planId, UserCompRel userCompRel) {
+        InWhPlanDto result = new InWhPlanDto();
+
+        InWarehousePlan obj = new InWarehousePlan();
+        obj.setCompanyId(userCompRel.getCompany().getCompId());
+        obj.setPlanId(planId);
+        InWarehousePlan inWarehousePlan = this.selectOne(new EntityWrapper<InWarehousePlan>(obj));
+        if (null!=inWarehousePlan)  {
+            BeanUtils.copyProperties(inWarehousePlan, result);
+            result.setStoragePlanTime(DateUtility.date2String(inWarehousePlan.getStoragePlanTime(),"yyyy-MM-dd HH:mm:ss"));
+        }
+
+        //详细信息
+        InplanGoodsInfo inplanGoodsInfo = new InplanGoodsInfo();
+        inplanGoodsInfo.setPlanId(planId);
+        List<InplanGoodsInfo> list = inplanGoodsInfoService.selectList(new EntityWrapper<InplanGoodsInfo>(inplanGoodsInfo));
+        if (list != null) {
+            List<InWhPlanGoodsDto> inWhPlanGoodsDtoList = new ArrayList<InWhPlanGoodsDto>();
+            for (InplanGoodsInfo obj1 :list) {
+                InWhPlanGoodsDto inWhPlanGoodsDto = new InWhPlanGoodsDto();
+                BeanUtils.copyProperties(obj1, inWhPlanGoodsDto);
+                inWhPlanGoodsDtoList.add(inWhPlanGoodsDto);
+            }
+            result.setInWhPlanGoodsDtoList(inWhPlanGoodsDtoList);
+        }
+        return result;
+    }
+
+    @Transactional
+    @Override
+    public boolean inWhPlanEdit(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel) {
+        InWarehousePlan inWarehousePlan = new InWarehousePlan();
+        BeanUtils.copyProperties(inWhPlanAddParamsDto, inWarehousePlan);
+
+        inWarehousePlan.setPlanStatus((Integer) InWhPlanStatusEnum.watting.getValue());
+        inWarehousePlan.setUpdateDate(new Date());
+        inWarehousePlan.setUpdateId(userCompRel.getUser().getUserId());
+        inWarehousePlan.setUpdateName(userCompRel.getUser().getRealName());
+        if (!StringUtils.isEmpty(inWhPlanAddParamsDto.getStoragePlanTime())) { //竞价开始
+            try {
+                inWarehousePlan.setStoragePlanTime(DateUtility.string2Date(inWhPlanAddParamsDto.getStoragePlanTime(),"yyyy-MM-dd HH:mm:ss"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        //详细信息
+        InWarehousePlan wrapperObj = new InWarehousePlan();
+        wrapperObj.setPlanId(inWhPlanAddParamsDto.getCompanyId());
+        wrapperObj.setCompanyId(userCompRel.getCompId());
+        if (this.update(inWarehousePlan,new EntityWrapper<InWarehousePlan>(wrapperObj))) {
+
+//            //先删除原来所有记录
+            InplanGoodsInfo inplanGoodsInfo = new InplanGoodsInfo();
+            inplanGoodsInfo.setPlanId(inWarehousePlan.getPlanId());
+            inplanGoodsInfoService.delete(new EntityWrapper<InplanGoodsInfo>(inplanGoodsInfo));
+
+            List<InWhPlanGoodsDto> inWhPlanAddGoodsParamsDtoList = inWhPlanAddParamsDto.getInWhPlanGoodsDtoList();
+            if (null != inWhPlanAddGoodsParamsDtoList) {
+                List<InplanGoodsInfo> inplanGoodsInfos = new ArrayList<InplanGoodsInfo>();
+                for (InWhPlanGoodsDto dto : inWhPlanAddGoodsParamsDtoList) {
+                    InplanGoodsInfo obj = new InplanGoodsInfo();
+                    BeanUtils.copyProperties(dto, obj);
+                    obj.setPlanId(inWarehousePlan.getPlanId());
+                    inplanGoodsInfos.add(obj);
+                }
+                return inplanGoodsInfoService.insertOrUpdateBatch(inplanGoodsInfos);
+            }
+        }
+        return false;
     }
 
 
