@@ -57,6 +57,16 @@ public class Inventory implements Serializable {
 
     private Long originalGoodsId;
 
+    private String batch;
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch;
+    }
+
     public Long getOriginalGoodsId() {
         return originalGoodsId;
     }

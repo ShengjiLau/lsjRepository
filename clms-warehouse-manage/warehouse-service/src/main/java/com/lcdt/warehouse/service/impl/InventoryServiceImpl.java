@@ -34,6 +34,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
     private Logger logger = LoggerFactory.getLogger(InventoryServiceImpl.class);
 
+    //分页查询
     public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto) {
         Page<Inventory> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
         return page.setRecords(inventoryMapper.selectInventoryList(page, InventoryQueryDto.dtoToDataBean(inventoryQueryDto)));
