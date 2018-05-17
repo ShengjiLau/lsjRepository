@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.entity.Inventory;
 import com.lcdt.warehouse.service.InventoryService;
+import com.lcdt.warehouse.utils.JSONResponseUtil;
+import com.lcdt.warehouse.utils.ResponseMessage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -26,10 +28,10 @@ public class InventoryApi {
 
     @GetMapping("/list")
     @ApiOperation("库存明细列表")
-    private String inventoryList(InventoryQueryDto queryDto){
+    private ResponseMessage inventoryList(InventoryQueryDto queryDto){
         logger.debug("query inventory list querydto:{}",queryDto);
         Page<Inventory> page = inventoryService.queryInventoryPage(queryDto);
-        return null;
+        return JSONResponseUtil.success(page);
     }
 
 }
