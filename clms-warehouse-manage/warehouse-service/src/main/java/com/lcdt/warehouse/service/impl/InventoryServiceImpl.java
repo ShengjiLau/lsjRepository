@@ -32,7 +32,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
     public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto) {
         Page<Inventory> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
-        return page.setRecords(inventoryMapper.selectInventoryList(page, inventoryQueryDto));
+        return page.setRecords(inventoryMapper.selectInventoryList(page, InventoryQueryDto.dtoToDataBean(inventoryQueryDto)));
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -73,7 +73,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
      * @return
      */
     public List<Inventory> querySameInventory(Inventory inventory) {
-        List<Inventory> inventories = inventoryMapper.selectSameInventory(inventory);
+        List<Inventory> inventories = inventoryMapper.selectInventoryList(null,inventory);
         if (inventories == null) {
             return new ArrayList<>();
         }
@@ -94,7 +94,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             inventory.setGoodsId(goodsInfo.getGoodsId());
             inventory.setInvertoryNum(goodsInfo.getInHouseAmount() * goodsInfo.getUnitData());
             inventory.setWarehouseId(order.getWarehouseId());
-            inventory.setStorageLocationCode(goodsInfo.getStrogeLocationCode());
+            inventory.setStorageLocationCode(goodsInfo.getStrogeLocationId());
             inventory.setCustomerName(order.getCustomerName());
             inventory.setWarehouseName(order.getWarehouseName());
             return inventory;
