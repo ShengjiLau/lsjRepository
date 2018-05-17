@@ -21,6 +21,13 @@ public class InventoryLog implements Serializable {
     private Long logId;
     private Long goodsId;
     private Long warehouseId;
+    private Long originalGoodsId;
+    private Long customerId;
+    private String customerName;
+    private Long storageLocationId;
+    private String comment;
+
+
     /**
      * 库位
      */
@@ -38,6 +45,43 @@ public class InventoryLog implements Serializable {
      */
     private Integer type;
 
+
+
+    public void setOriginalGoodsId(Long originalGoodsId) {
+        this.originalGoodsId = originalGoodsId;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public Long getStorageLocationId() {
+        return storageLocationId;
+    }
+
+    public void setStorageLocationId(Long storageLocationId) {
+        this.storageLocationId = storageLocationId;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     public Long getLogId() {
         return logId;
