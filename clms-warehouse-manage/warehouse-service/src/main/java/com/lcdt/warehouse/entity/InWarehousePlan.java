@@ -35,7 +35,7 @@ public class InWarehousePlan implements Serializable {
     /**
      * 所属项目组 id
      */
-    private Integer groupId;
+    private Long groupId;
     /**
      * 所属项目组 名称
      */
@@ -190,11 +190,11 @@ public class InWarehousePlan implements Serializable {
         this.createUserId = createUserId;
     }
 
-    public Integer getGroupId() {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Integer groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 
