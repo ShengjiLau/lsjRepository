@@ -2,7 +2,6 @@ package com.lcdt.warehouse.service.impl;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.warehouse.dto.InventoryLogQueryDto;
-import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.entity.Inventory;
 import com.lcdt.warehouse.entity.InventoryLog;
@@ -46,7 +45,7 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
             inventoryLog.setBusinessNo(order.getInOrderCode());
             inventoryLog.setGoodsId(inventory.getGoodsId());
             inventoryLog.setCompanyId(inventory.getCompanyId());
-            inventoryLog.setWarehouseId(inventory.getWarehouseId());
+            inventoryLog.setWarehouseId(inventory.getWareHouseId());
             inventoryLog.setChangeNum(inventory.getInvertoryNum());
             inventoryLog.setStorageLocation(inventory.getStorageLocationCode());
             inventoryLog.setStorageLocationId(inventory.getStorageLocationId());

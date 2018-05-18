@@ -8,7 +8,7 @@ public class InventoryQueryDto extends PageQueryDto {
     private Long wareHouseId;
 
     @ApiModelProperty(value = "库位")
-    private Long strogeLocationCode;
+    private String strogeLocationCode;
 
     @ApiModelProperty(value = "批次")
     private String batch;
@@ -27,11 +27,11 @@ public class InventoryQueryDto extends PageQueryDto {
         this.wareHouseId = wareHouseId;
     }
 
-    public Long getStrogeLocationCode() {
+    public String getStrogeLocationCode() {
         return strogeLocationCode;
     }
 
-    public void setStrogeLocationCode(Long strogeLocationCode) {
+    public void setStrogeLocationCode(String strogeLocationCode) {
         this.strogeLocationCode = strogeLocationCode;
     }
 
@@ -64,7 +64,7 @@ public class InventoryQueryDto extends PageQueryDto {
         if (dto == null) {
             return inventory;
         }
-        inventory.setWarehouseId(dto.getWareHouseId());
+        inventory.setWareHouseId(dto.getWareHouseId());
         inventory.setStorageLocationCode(dto.getStrogeLocationCode());
         inventory.setGoodsId(dto.getGoodsId());
         inventory.setCustomerId(dto.getCustomerId());

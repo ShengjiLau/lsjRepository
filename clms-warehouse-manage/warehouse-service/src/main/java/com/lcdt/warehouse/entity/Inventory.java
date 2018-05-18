@@ -32,7 +32,7 @@ public class Inventory implements Serializable {
 
     //锁定量
     private Float lockNum;
-    private Long warehouseId;
+    private Long wareHouseId;
     private Long companyId;
     private String remark;
 
@@ -170,12 +170,12 @@ public class Inventory implements Serializable {
         this.lockNum = lockNum;
     }
 
-    public Long getWarehouseId() {
-        return warehouseId;
+    public Long getWareHouseId() {
+        return wareHouseId;
     }
 
-    public void setWarehouseId(Long warehouseId) {
-        this.warehouseId = warehouseId;
+    public void setWareHouseId(Long wareHouseId) {
+        this.wareHouseId = wareHouseId;
     }
 
     public Long getCompanyId() {
@@ -210,7 +210,7 @@ public class Inventory implements Serializable {
                 ", baseUnit='" + baseUnit + '\'' +
                 ", invertoryNum=" + invertoryNum +
                 ", lockNum=" + lockNum +
-                ", warehouseId=" + warehouseId +
+                ", wareHouseId=" + wareHouseId +
                 ", companyId=" + companyId +
                 ", remark='" + remark + '\'' +
                 ", customerId=" + customerId +
