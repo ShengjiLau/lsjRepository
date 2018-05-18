@@ -5,6 +5,7 @@
     <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.InorderGoodsInfo">
         <id column="relation_id" jdbcType="BIGINT" property="relationId" />
         <result column="inorder_id" jdbcType="BIGINT" property="inorderId" />
+        <result column="inplan_goods_id" jdbcType="BIGINT" property="inplanGoodsId" />
         <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
         <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
         <result column="goods_spec" jdbcType="VARCHAR" property="goodsSpec" />
@@ -27,7 +28,7 @@
     </resultMap>
 
     <sql id="Base_Select_List">
-        relation_id, inorder_id, goods_id, goods_name, goods_spec, goods_classify,goods_code, goods_barcode,
+        relation_id, inorder_id,inplan_goods_id, goods_id, goods_name, goods_spec, goods_classify,goods_code, goods_barcode,
         goods_price, goods_batch, min_unit, unit, unit_data, receivalbe_amount, batch, in_house_amount,
         in_house_price, damage, remark, stroge_location_id, stroge_location_code
     </sql>

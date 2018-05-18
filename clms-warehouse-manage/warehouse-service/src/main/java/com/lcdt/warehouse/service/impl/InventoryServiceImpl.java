@@ -8,6 +8,8 @@ import com.lcdt.warehouse.entity.Inventory;
 import com.lcdt.warehouse.mapper.InventoryMapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.lcdt.warehouse.service.InventoryService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,17 +32,35 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     @Autowired
     InventoryMapper inventoryMapper;
 
+    private Logger logger = LoggerFactory.getLogger(InventoryServiceImpl.class);
+
+    //分页查询
     public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto) {
         Page<Inventory> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
-        return page.setRecords(inventoryMapper.selectInventoryList(page, inventoryQueryDto));
+        return page.setRecords(inventoryMapper.selectInventoryList(page, InventoryQueryDto.dtoToDataBean(inventoryQueryDto)));
     }
 
+
+    /**
+     * 出库操作
+     * @param goods
+     * @param order
+     */
     @Transactional(rollbackFor = Exception.class)
     public void putInventory(List<InorderGoodsInfo> goods,InWarehouseOrder order) {
         Assert.notNull(goods, "入库货物不能为空");
+        logger.info("入库操作开始 入库单：{}",order);
         for (InorderGoodsInfo good : goods) {
             addInventory(InventoryFactory.createInventory(order,good));
         }
+    }
+
+    /**
+     * 出库操作
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void outInventory(){
+
     }
 
 
@@ -54,12 +74,14 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         List<Inventory> inventories = querySameInventory(inventory);
         if (inventories.size() == 0) {
             //没有库存 新增
+            logger.info("入库 新增库存:{}",inventory);
             inventoryMapper.insert(inventory);
             return inventory;
         } else {
             Inventory existInventory = inventories.get(0);
             existInventory.setInvertoryNum(existInventory.getInvertoryNum() + inventory.getInvertoryNum());
             inventoryMapper.updateById(existInventory);
+            logger.info("入库 更新库存数量：{}",existInventory);
             return existInventory;
         }
     }
@@ -73,7 +95,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
      * @return
      */
     public List<Inventory> querySameInventory(Inventory inventory) {
-        List<Inventory> inventories = inventoryMapper.selectSameInventory(inventory);
+        List<Inventory> inventories = inventoryMapper.selectInventoryList(null,inventory);
         if (inventories == null) {
             return new ArrayList<>();
         }
@@ -81,6 +103,9 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
     static class InventoryFactory {
+
+        private static Logger logger = LoggerFactory.getLogger(InventoryFactory.class);
+
         /**
          * 入库单 入库生成库存
          * @param order
@@ -93,10 +118,19 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             inventory.setCompanyId(order.getCompanyId());
             inventory.setGoodsId(goodsInfo.getGoodsId());
             inventory.setInvertoryNum(goodsInfo.getInHouseAmount() * goodsInfo.getUnitData());
-            inventory.setWarehouseId(order.getWarehouseId());
+            inventory.setWareHouseId(order.getWarehouseId());
             inventory.setStorageLocationCode(goodsInfo.getStrogeLocationCode());
+            inventory.setStorageLocationId(goodsInfo.getStrogeLocationId());
             inventory.setCustomerName(order.getCustomerName());
             inventory.setWarehouseName(order.getWarehouseName());
+            inventory.setBatch(goodsInfo.getBatch());
+            inventory.setCustomerId(order.getCustomerId());
+            inventory.setCustomerName(order.getCustomerName());
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("create inventory from inordergoods :{} ",inventory.toString());
+            }
+
             return inventory;
         }
     }

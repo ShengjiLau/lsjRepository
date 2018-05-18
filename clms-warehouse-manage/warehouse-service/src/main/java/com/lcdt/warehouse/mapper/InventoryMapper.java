@@ -17,8 +17,6 @@ import java.util.List;
  */
 public interface InventoryMapper extends BaseMapper<Inventory> {
 
-    List<Inventory> selectInventoryList(Pagination page, InventoryQueryDto queryDto);
-
-    List<Inventory> selectSameInventory(Inventory inventory);
+    List<Inventory> selectInventoryList(Pagination page, Inventory queryDto);
 
 }

@@ -5,6 +5,9 @@ import com.lcdt.warehouse.mapper.InplanGoodsInfoMapper;
 import com.lcdt.warehouse.service.InplanGoodsInfoService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +19,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class InplanGoodsInfoServiceImpl extends ServiceImpl<InplanGoodsInfoMapper, InplanGoodsInfo> implements InplanGoodsInfoService {
+
 
 }

@@ -25,7 +25,7 @@ public class InplanGoodsInfo implements Serializable {
     /**
      * 计划数量
      */
-    private int planGoodsNum;
+    private Integer planGoodsNum;
     /**
      * 备注
      */
@@ -43,7 +43,7 @@ public class InplanGoodsInfo implements Serializable {
     /**
      * 换算关系
      */
-    private int unitData;
+    private Integer unitData;
 
     private String goodsName;
     /**
@@ -54,12 +54,6 @@ public class InplanGoodsInfo implements Serializable {
     private String goodsSpec;
     private String goodsCode;
     private String goodsBarcode;
-
-    /**
-     * 商品批次
-     */
-    private String goodsBatch;
-    private Long subItemId;
 
     /**
      * 最小单位
@@ -84,11 +78,11 @@ public class InplanGoodsInfo implements Serializable {
         this.goodsId = goodsId;
     }
 
-    public int getPlanGoodsNum() {
+    public Integer getPlanGoodsNum() {
         return planGoodsNum;
     }
 
-    public void setPlanGoodsNum(int planGoodsNum) {
+    public void setPlanGoodsNum(Integer planGoodsNum) {
         this.planGoodsNum = planGoodsNum;
     }
 
@@ -124,11 +118,11 @@ public class InplanGoodsInfo implements Serializable {
         this.unit = unit;
     }
 
-    public int getUnitData() {
+    public Integer getUnitData() {
         return unitData;
     }
 
-    public void setUnitData(int unitData) {
+    public void setUnitData(Integer unitData) {
         this.unitData = unitData;
     }
 
@@ -176,22 +170,6 @@ public class InplanGoodsInfo implements Serializable {
         this.goodsBarcode = goodsBarcode;
     }
 
-
-    public String getGoodsBatch() {
-        return goodsBatch;
-    }
-
-    public void setGoodsBatch(String goodsBatch) {
-        this.goodsBatch = goodsBatch;
-    }
-
-    public Long getSubItemId() {
-        return subItemId;
-    }
-
-    public void setSubItemId(Long subItemId) {
-        this.subItemId = subItemId;
-    }
 
     public String getMinUnit() {
         return minUnit;

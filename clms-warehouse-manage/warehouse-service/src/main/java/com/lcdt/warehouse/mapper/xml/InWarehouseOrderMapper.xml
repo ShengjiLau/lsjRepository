@@ -13,7 +13,7 @@
         <result column="customer_id" jdbcType="BIGINT" property="customerId"/>
         <result column="customer_contact_name" jdbcType="VARCHAR" property="customerContactName"/>
         <result column="customer_contact_phone" jdbcType="VARCHAR" property="customerContactPhone"/>
-        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
+        <result column="warehouse_id" jdbcType="BIGINT" property="wareHouseId"/>
         <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName"/>
         <result column="storage_type" jdbcType="VARCHAR" property="storageType"/>
         <result column="storage_plan_time" jdbcType="TIMESTAMP" property="storagePlanTime"/>
@@ -60,8 +60,8 @@
         <if test="planId!=null and planId!=''">
             and plan_id = #{planId,jdbcType=BIGINT}
         </if>
-        <if test="warehouseId!=null and warehouseId!=''">
-            and warehouse_id = #{warehouseId,jdbcType=BIGINT}
+        <if test="wareHouseId!=null and wareHouseId!=''">
+            and warehouse_id = #{wareHouseId,jdbcType=BIGINT}
         </if>
         <if test="createName!=null and createName!=''">
             and create_name = #{createName,jdbcType=VARCHAR}
@@ -124,7 +124,7 @@
         #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{purchaseCode,jdbcType=VARCHAR},
         #{customerName,jdbcType=VARCHAR},#{customerId,jdbcType=BIGINT}, #{customerContactName,jdbcType=VARCHAR},
         #{customerContactPhone,jdbcType=VARCHAR},
-        #{warehouseId,jdbcType=BIGINT}, #{warehouseName,jdbcType=VARCHAR}, #{storageType,jdbcType=VARCHAR},
+        #{wareHouseId,jdbcType=BIGINT}, #{warehouseName,jdbcType=VARCHAR}, #{storageType,jdbcType=VARCHAR},
         #{storagePlanTime,jdbcType=TIMESTAMP}, #{storageTime,jdbcType=TIMESTAMP}, #{storageRemark,jdbcType=VARCHAR},
         #{deliverymanName,jdbcType=VARCHAR}, #{deliverymanPhone,jdbcType=VARCHAR},
         #{deliverymanLinkman,jdbcType=VARCHAR},

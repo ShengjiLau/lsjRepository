@@ -20,7 +20,7 @@ public class InorderGoodsInfo implements Serializable {
     @TableId(value = "relation_id", type = IdType.AUTO)
     private Long relationId;
     private Long inorderId;
-
+    private Long inplanGoodsId;
     private Long goodsId;
     private String goodsName;
     /**
@@ -98,6 +98,14 @@ public class InorderGoodsInfo implements Serializable {
 
     public void setInorderId(Long inorderId) {
         this.inorderId = inorderId;
+    }
+
+    public Long getInplanGoodsId() {
+        return inplanGoodsId;
+    }
+
+    public void setInplanGoodsId(Long inplanGoodsId) {
+        this.inplanGoodsId = inplanGoodsId;
     }
 
     public Long getGoodsId() {

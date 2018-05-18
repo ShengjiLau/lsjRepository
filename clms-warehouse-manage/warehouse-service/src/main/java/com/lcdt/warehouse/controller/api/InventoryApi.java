@@ -1,14 +1,18 @@
 package com.lcdt.warehouse.controller.api;
 
+import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.entity.Inventory;
 import com.lcdt.warehouse.service.InventoryService;
+import com.lcdt.warehouse.utils.JSONResponseUtil;
+import com.lcdt.warehouse.utils.ResponseMessage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,12 +27,12 @@ public class InventoryApi {
 
     private Logger logger = LoggerFactory.getLogger(InventoryApi.class);
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @ApiOperation("库存明细列表")
-    private String inventoryList(InventoryQueryDto queryDto){
+    private ResponseMessage inventoryList(InventoryQueryDto queryDto){
         logger.debug("query inventory list querydto:{}",queryDto);
-        inventoryService.queryInventoryPage(queryDto);
-        return null;
+        Page<Inventory> page = inventoryService.queryInventoryPage(queryDto);
+        return JSONResponseUtil.success(page);
     }
 
 }

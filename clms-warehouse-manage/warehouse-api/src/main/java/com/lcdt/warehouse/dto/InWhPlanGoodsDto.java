@@ -5,12 +5,13 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Created by yangbinq on 2018/5/14.
  */
-public class InWhPlanAddGoodsParamsDto {
+public class InWhPlanGoodsDto {
 
+    private Long relationId;
     @ApiModelProperty(value = "货物ID")
     private Long goodsId;
     @ApiModelProperty(value = "计划数量")
-    private Float planGoodsNum;
+    private int planGoodsNum;
     @ApiModelProperty(value = "入库价")
     private Integer inHousePrice;
     @ApiModelProperty(value = "换算关系")
@@ -44,11 +45,11 @@ public class InWhPlanAddGoodsParamsDto {
         this.goodsId = goodsId;
     }
 
-    public Float getPlanGoodsNum() {
+    public int getPlanGoodsNum() {
         return planGoodsNum;
     }
 
-    public void setPlanGoodsNum(Float planGoodsNum) {
+    public void setPlanGoodsNum(int planGoodsNum) {
         this.planGoodsNum = planGoodsNum;
     }
 
@@ -146,5 +147,13 @@ public class InWhPlanAddGoodsParamsDto {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Long getRelationId() {
+        return relationId;
+    }
+
+    public void setRelationId(Long relationId) {
+        this.relationId = relationId;
     }
 }
