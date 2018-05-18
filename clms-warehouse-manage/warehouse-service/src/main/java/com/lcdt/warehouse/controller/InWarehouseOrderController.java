@@ -15,11 +15,7 @@ import com.lcdt.warehouse.vo.ConstantVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -112,6 +108,13 @@ public class InWarehouseOrderController {
             jsonObject.put("message", "取消入库单失败");
         }
         return jsonObject;
+    }
+
+    @ApiOperation("配仓信息，计划用")
+    @RequestMapping(value = "/order/distribution/records", method = RequestMethod.GET)
+    public PageBaseDto queryDisRecords(@RequestParam Long plandId) {
+        PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderService.queryDisRecords(SecurityInfoGetter.getCompanyId(),plandId));
+        return pageBaseDto;
     }
 }
 
