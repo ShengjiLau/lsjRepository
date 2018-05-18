@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.warehouse.mapper.CheckMapper">
+
+    <!-- 开启二级缓存 -->
+    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+    <select id="selectListByParams" resultType="com.lcdt.warehouse.dto.CheckParamDto">
+        SELECT a.check_id,a.check_num,a.check_status,a.group_id,a.group_name,a.customer_id,a.customer_name,a.warehouse_id,
+        a.warehouse_name,a.attachments,a.company_id,a.remark,a.create_id,a.create_name,a.create_date,a.update_id,a.update_name,
+        a.update_date,a.is_deleted,a.complete_id,a.complete_name,a.complete_date
+        FROM check a
+        LEFT JOIN  (
+        select check_id from check_item where 1=1
+        <if test="goodsInfo!=null and goodsInfo!=''">
+            and (
+                goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')
+                or goods_code like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')
+            )
+        </if>
+        ) b on(a.check_id = b.check_id)
+        WHERE a.plan_id = #{planId,jdbcType=BIGINT}
+        <if test="createDateFrom!=null and createDateFrom!=''">
+
+            and date(a.create_date) >= CONCAT(STR_TO_DATE(#{createDateFrom,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+        </if>
+        <if test="createDateTo!=null and createDateTo!=''">
+            and  CONCAT(STR_TO_DATE(#{createDateTo,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59') >= date(a.create_date)
+        </if>
+        <if test="completeDateFrom!=null and completeDateFrom!=''">
+            and date(a.complete_date) >=  CONCAT(STR_TO_DATE(#{completeDateFrom,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+        </if>
+        <if test="completeDateTo!=null and completeDateTo!=''">
+            and CONCAT(STR_TO_DATE(#{completeDateTo,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59') >= date(a.complete_date)
+        </if>
+        <if test="checkNum!=null and checkNum!=''">
+            and a.check_num like concat('%',#{checkNum,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="completeName!=null and completeName!=''">
+            and a.complete_name like concat('%',#{completeName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="warehouseName!=null and warehouseName!=''">
+            and a.warehouse_name like concat('%',#{warehouseName,jdbcType=VARCHAR},'%')
+        </if>
+
+        <if test="customerId!=null">
+            and a.customerId =#{customerId,jdbcType=BIGINT}
+        </if>
+        order by a.check_id
+    </select>
+</mapper>
