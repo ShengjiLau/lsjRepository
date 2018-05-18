@@ -168,10 +168,11 @@ public class InWarehousePlanController {
     @ApiOperation("计划详细")
     @RequestMapping(value = "/detail",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
-    public JSONObject detail(@ApiParam(value = "计划ID",required = true) @RequestParam Long planId) {
+    public JSONObject detail(@ApiParam(value = "计划ID",required = true) @RequestParam Long planId,
+                             @ApiParam(value = "是否加载配仓",required = true) @RequestParam boolean flag) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         JSONObject jsonObject = new JSONObject();
-        InWhPlanDto inWhPlanDto = inWarehousePlanService.inWhPlanDetail(planId,userCompRel);
+        InWhPlanDto inWhPlanDto = inWarehousePlanService.inWhPlanDetail(planId,flag, userCompRel);
         jsonObject.put("data",inWhPlanDto);
         jsonObject.put("code", 0);
         return jsonObject;
@@ -195,6 +196,26 @@ public class InWarehousePlanController {
         }
         jsonObject.put("code", flag==true? 0:-1);
         jsonObject.put("message", flag==true? "编辑成功！":msg);
+        return jsonObject;
+    }
+
+
+    @ApiOperation("计划配仓")
+    @RequestMapping(value = "/distributeWh",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject distributeWh(@RequestBody InWhPlanDto inWhPlanAddParamsDto) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        String msg = "配仓失败！";
+        boolean flag = false;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            flag = inWarehousePlanService.inWhPlanEdit(inWhPlanAddParamsDto, userCompRel);
+        } catch (RuntimeException e) {
+            msg = e.getMessage();
+            logger.error(e.getMessage());
+        }
+        jsonObject.put("code", flag==true? 0:-1);
+        jsonObject.put("message", flag==true? "配仓成功！":msg);
         return jsonObject;
     }
 

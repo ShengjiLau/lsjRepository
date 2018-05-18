@@ -54,11 +54,10 @@ public class InWhPlanDto implements Serializable {
     private Long companyId;
     private String createUserName;
     private Long createUserId;
-
-
-
+    private String planNo;
 
     private List<InWhPlanGoodsDto> inWhPlanGoodsDtoList;
+    private List<InWarehouseOrderDto> inWarehouseOrderDtoList; //入库计划详细
 
 
     public Integer getGroupId() {
@@ -243,5 +242,21 @@ public class InWhPlanDto implements Serializable {
 
     public void setPlanId(Long planId) {
         this.planId = planId;
+    }
+
+    public List<InWarehouseOrderDto> getInWarehouseOrderDtoList() {
+        return inWarehouseOrderDtoList;
+    }
+
+    public void setInWarehouseOrderDtoList(List<InWarehouseOrderDto> inWarehouseOrderDtoList) {
+        this.inWarehouseOrderDtoList = inWarehouseOrderDtoList;
+    }
+
+    public String getPlanNo() {
+        return planNo;
+    }
+
+    public void setPlanNo(String planNo) {
+        this.planNo = planNo;
     }
 }
