@@ -7,6 +7,7 @@ import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.lcdt.warehouse.entity.Inventory;
 import com.lcdt.warehouse.mapper.InventoryMapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.lcdt.warehouse.service.InventoryLogService;
 import com.lcdt.warehouse.service.InventoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,9 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     @Autowired
     InventoryMapper inventoryMapper;
 
+    @Autowired
+    private InventoryLogService logService;
+
     private Logger logger = LoggerFactory.getLogger(InventoryServiceImpl.class);
 
     //分页查询 库存列表
@@ -52,7 +56,9 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         Assert.notNull(goods, "入库货物不能为空");
         logger.info("入库操作开始 入库单：{}", order);
         for (InorderGoodsInfo good : goods) {
-            addInventory(InventoryFactory.createInventory(order, good));
+            Inventory inventory = InventoryFactory.createInventory(order, good);
+            logService.saveInOrderLog(order, inventory);
+            addInventory(inventory);
         }
     }
 

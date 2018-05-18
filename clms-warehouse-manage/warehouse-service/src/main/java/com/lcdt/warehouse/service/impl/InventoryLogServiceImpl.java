@@ -3,6 +3,7 @@ package com.lcdt.warehouse.service.impl;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.warehouse.dto.InventoryLogQueryDto;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
+import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.lcdt.warehouse.entity.Inventory;
 import com.lcdt.warehouse.entity.InventoryLog;
 import com.lcdt.warehouse.mapper.InventoryLogMapper;
@@ -37,6 +38,12 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
         return page.setRecords(logMapper.selectLogList(page,inventoryQueryDto));
     }
 
+    @Override
+    public InventoryLog saveInOrderLog(InWarehouseOrder inWarehouseOrder, Inventory inventory) {
+        InventoryLog log = InventoryLogFactory.createFromInventory(inWarehouseOrder, inventory);
+        return saveInventoryLog(log);
+    }
+
 
     public InventoryLog saveInventoryLog(InventoryLog inventoryLog){
         Assert.notNull(inventoryLog,"object should not be null");
@@ -45,12 +52,12 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
     }
 
     public static class InventoryLogFactory{
-        InventoryLog createFromInventory(InWarehouseOrder order,Inventory inventory) {
+        public static InventoryLog createFromInventory(InWarehouseOrder order,Inventory inventory) {
             Assert.notNull(inventory,"库存不能为空");
             InventoryLog inventoryLog = new InventoryLog();
             inventoryLog.setBusinessNo(order.getInOrderCode());
             inventoryLog.setGoodsId(inventory.getGoodsId());
-            inventoryLog.setCompanyId(inventory.getCompanyId());
+            inventoryLog.setCompanyId(order.getCompanyId());
             inventoryLog.setWarehouseId(inventory.getWareHouseId());
             inventoryLog.setChangeNum(inventory.getInvertoryNum());
             inventoryLog.setStorageLocation(inventory.getStorageLocationCode());
@@ -61,6 +68,10 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
             inventoryLog.setType(0);
             return inventoryLog;
         }
+
+
+
+
     }
 
 }
