@@ -14,7 +14,7 @@ public class InWhPlanDto implements Serializable {
     @ApiModelProperty(value = "计划ID")
     private Long planId;
     @ApiModelProperty(value = "项目组ID")
-    private Integer groupId;
+    private Long groupId;
     @ApiModelProperty(value = "项目组名")
     private String groupName;
     @ApiModelProperty(value = "合同编码组名")
@@ -60,11 +60,11 @@ public class InWhPlanDto implements Serializable {
     private List<InWarehouseOrderDto> inWarehouseOrderDtoList; //入库计划详细
 
 
-    public Integer getGroupId() {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Integer groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 
