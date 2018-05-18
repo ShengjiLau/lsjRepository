@@ -51,6 +51,16 @@
                 and original_goods_id = #{originalGoodsId}
             </if>
 
+            <if test="goodsName != null ">
+                and goods_name like CONCAT(CONCAT('%',#{goodsName}),'%')
+            </if>
+            <if test="goodsBarCode != null ">
+                and goods_barcode like CONCAT(CONCAT('%',#{goodsBarCode}),'%')
+            </if>
+            <if test="goodsCode != null ">
+                and goods_code like CONCAT(CONCAT('%',#{goodsCode}),'%')
+            </if>
+
         </where>
     </select>
 
