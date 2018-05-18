@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.InWarehousePlan;
+import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.lcdt.warehouse.entity.InplanGoodsInfo;
 import com.lcdt.warehouse.mapper.InWarehousePlanMapper;
 import com.lcdt.warehouse.mapper.InplanGoodsInfoMapper;
@@ -315,7 +316,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
         }
         //详细信息
         InWarehousePlan wrapperObj = new InWarehousePlan();
-        wrapperObj.setPlanId(inWhPlanAddParamsDto.getCompanyId());
+        wrapperObj.setPlanId(inWhPlanAddParamsDto.getPlanId());
         wrapperObj.setCompanyId(userCompRel.getCompId());
         if (this.update(inWarehousePlan,new EntityWrapper<InWarehousePlan>(wrapperObj))) {
 
@@ -347,21 +348,83 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
         if (null == _inWhPlanDto) {
             throw new RuntimeException("计划不存在！");
         }
-
         /***
          * 再次检查数据库中的计划数量是否满足配仓数量
          */
-        List<InWhPlanGoodsDto> _inWhPlanGoodsDtoList1 = _inWhPlanDto.getInWhPlanGoodsDtoList();
-        List<InWhPlanGoodsDto> _inWhPlanGoodsDtoList2 = _inWhPlanDto.getInWhPlanGoodsDtoList();
+        List<InWhPlanGoodsDto> _inWhPlanGoodsDtoList1 = inWhPlanAddParamsDto.getInWhPlanGoodsDtoList(); //前端提交来的
+        List<InWhPlanGoodsDto> _inWhPlanGoodsDtoList2 = _inWhPlanDto.getInWhPlanGoodsDtoList(); //后端数据库中最新的
+        if (null == _inWhPlanGoodsDtoList1 || null == _inWhPlanGoodsDtoList2) {
+            throw new RuntimeException("配仓计划货物不存在！");
+        }
 
-//        if (null == _inWhPlanGoodsDtoList　) {
-//            throw new RuntimeException("配仓计划货物不存在！");
-//         }
-//         for(InWhPlanGoodsDto obj1：)
-//
+        boolean flag = true;
+        StringBuffer sb = new StringBuffer();
+        for (InWhPlanGoodsDto obj1: _inWhPlanGoodsDtoList1) {
+              for (InWhPlanGoodsDto obj2: _inWhPlanGoodsDtoList1) {
+                    if (obj1.getRelationId().equals(obj2.getRelationId())) { //同一种货物
+                        if (obj1.getDistGoodsNum()>obj2.getRemainGoodsNum()) { //如果前端提交过来的大于数据库中的剩余的
+                          sb.append("货物："+ obj1.getGoodsName()+"，剩余数量："+obj2.getRemainGoodsNum()+",不满足当前配仓数量："+obj1.getDistGoodsNum());
+                        } else {
+                            //如果本次配仓量+已配仓量=计划的
+                            if (obj1.getDistGoodsNum() + obj2.getInOderGoodsNum()!=obj2.getPlanGoodsNum()) {
+                                flag = false;
+                            }
+                        }
+                    }
+              }
+         }
+         if (StringUtils.isEmpty(sb.toString())) {
+             throw new RuntimeException(sb.toString());
+         }
 
 
-
+         /*************生成派单BEGIN**************/
+        InWarehouseOrderDto params = new InWarehouseOrderDto();
+        params.setPlanId(_inWhPlanDto.getPlanId());
+        params.setInOrderCode(_inWhPlanDto.getPlanNo());
+        params.setInOrderStatus(ConstantVO.IN_ORDER_STATUS_WATIE_STORAGE); //待入库
+        params.setGroupId(_inWhPlanDto.getGroupId());
+        params.setGroupName(_inWhPlanDto.getGroupName());
+        //params.setPurchaseCode(_inWhPlanDto.getp);
+        params.setCustomerName(_inWhPlanDto.getCustomerName());
+        params.setCustomerId(_inWhPlanDto.getCustomerId());
+        params.setCustomerContactName(_inWhPlanDto.getCustomerContactName());
+        params.setCustomerContactPhone(_inWhPlanDto.getCustomerContactPhone());
+        params.setWarehouseId(_inWhPlanDto.getWareHouseId());
+        params.setWarehouseName(_inWhPlanDto.getWarehouseName());
+        params.setStorageType(_inWhPlanDto.getStorageType());
+        //params.setStoragePlanTime(_inWhPlanDto.getStoragePlanTime());
+        params.setStorageRemark(inWhPlanAddParamsDto.getStorageRemark());
+        params.setDeliverymanCar(inWhPlanAddParamsDto.getDeliverymanCar());
+        params.setDeliverymanLinkman(inWhPlanAddParamsDto.getDeliverymanLinkman());
+        params.setDeliverymanName(inWhPlanAddParamsDto.getDeliverymanName());
+        params.setDeliverymanPhone(inWhPlanAddParamsDto.getDeliverymanPhone());
+        params.setAttachments(_inWhPlanDto.getAttachment());
+        params.setCompanyId(_inWhPlanDto.getCompanyId());
+        params.setCreateDate(new Date());
+        params.setCreateId(userCompRel.getUser().getUserId());
+        params.setCreateName(userCompRel.getUser().getRealName());
+        List<InorderGoodsInfoDto> inorderGoodsInfoList = new ArrayList<>();
+        for (InWhPlanGoodsDto obj1: _inWhPlanGoodsDtoList1) {
+            InorderGoodsInfoDto tObj = new InorderGoodsInfoDto();
+            tObj.setInplanGoodsId(obj1.getRelationId());
+            tObj.setGoodsId(obj1.getGoodsId());
+            tObj.setGoodsName(obj1.getGoodsName());
+            tObj.setGoodsClassify(obj1.getGoodsClassify());
+            tObj.setGoodsSpec(obj1.getGoodsSpec());
+            tObj.setGoodsCode(obj1.getGoodsCode());
+            tObj.setGoodsBarcode(obj1.getGoodsBarcode());
+            tObj.setMinUnit(obj1.getMinUnit());
+            tObj.setUnit(obj1.getUnit());
+            tObj.setUnitData(obj1.getUnitData());
+            tObj.setReceivalbeAmount(obj1.getDistGoodsNum()); //配仓数量
+            tObj.setInHousePrice(obj1.getInHousePrice());
+            tObj.setRemark(obj1.getRemark());
+            inorderGoodsInfoList.add(tObj);
+        }
+        params.setGoodsInfoDtoList(inorderGoodsInfoList);
+        inWarehouseOrderService.addInWarehouseOrder(params);
+        /*************生成派单END**************/
 
         //更新计划主表
         InWarehousePlan _inWarehousePlan = new InWarehousePlan();
@@ -372,16 +435,16 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
         _inWarehousePlan.setDeliverymanLinkman(inWhPlanAddParamsDto.getDeliverymanLinkman());
         _inWarehousePlan.setDeliverymanPhone(inWhPlanAddParamsDto.getDeliverymanPhone());
         _inWarehousePlan.setDeliverymanCar(inWhPlanAddParamsDto.getDeliverymanCar());
-
+        if (flag) { //如果全部配完，更改计划状态-已配仓
+            _inWarehousePlan.setPlanStatus((Integer) InWhPlanStatusEnum.isWarehouse.getValue());
+        }
         InWarehousePlan wrapperObj = new InWarehousePlan();
         wrapperObj.setPlanId(inWhPlanAddParamsDto.getCompanyId());
         wrapperObj.setCompanyId(userCompRel.getCompId());
-         this.update(_inWarehousePlan,new EntityWrapper<InWarehousePlan>(wrapperObj));
-
+        this.update(_inWarehousePlan,new EntityWrapper<InWarehousePlan>(wrapperObj));
 
         return null;
     }
-
 
 
 }
