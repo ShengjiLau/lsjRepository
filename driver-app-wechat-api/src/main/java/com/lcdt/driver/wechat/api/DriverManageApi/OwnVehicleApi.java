@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -99,6 +101,30 @@ public class OwnVehicleApi {
             jsonObject.put("code",-1);
             jsonObject.put("messages","同步失败!");
         }
+
+        return jsonObject;
+    }
+
+
+    @ApiOperation(value = "新增车辆", notes = "新增车辆")
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_add')")
+    public JSONObject addOwnVehicle(@Validated @RequestBody OwnVehicleDto ownVehicleDto, BindingResult bindingResult) {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
+        String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
+        ownVehicleDto.setCompanyId(companyId);
+        ownVehicleDto.setCreateId(userId);
+        ownVehicleDto.setCreateName(userName);
+        JSONObject jsonObject = new JSONObject();
+        if (bindingResult.hasErrors()) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
+            return jsonObject;
+        }
+        ownVehicleService.addVehicle(ownVehicleDto);
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "新增成功");
 
         return jsonObject;
     }

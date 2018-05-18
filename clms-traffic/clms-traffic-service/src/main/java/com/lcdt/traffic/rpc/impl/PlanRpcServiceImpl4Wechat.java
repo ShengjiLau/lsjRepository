@@ -232,6 +232,8 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                 Company company =  companyRpcService.findCompanyByCid(companyId);
                 if(company!=null) obj.setCompanyName(company.getFullName());
                 User user =  companyRpcService.selectByPrimaryKey(obj.getCreateId()); //查询创建用户
+
+
                 if(user!=null) obj.setOwnPhone(user.getPhone());
                 if(obj.getPlanStatus().equals("60"))  {
                     obj.setStatus("计划取消");
@@ -249,7 +251,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                              map1.put("splitGoodsId",splitGoodsId);
                              List<Waybill> waybillList = waybillMapper.selectWaybillByPlanIdAndSplitGoodsId(map1);
                              boolean flag1 = false;
-                             if(waybillList!=null && waybillList.size()>0) {
+                             if (waybillList!=null && waybillList.size()>0) {
                                  for(Waybill waybill: waybillList) {
                                      if(waybill.getDriverId()!=null&&waybill.getDriverId().equals(dto.getDriverId())) {
                                          flag1 = true;
@@ -263,6 +265,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                              }
                         }
                         if(flag) {
+
                             obj.setStatus("抢单成功");
                         } else {
                             obj.setStatus("抢单失败");
@@ -275,6 +278,14 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                 //统计总报价
                 float offerPrice = snatchGoodsDetailMapper.statSnatchTotalPrice4Driver(obj.getWaybillPlanId(),dto.getDriverId());
                 obj.setSnatchTotalPrice(offerPrice);
+
+                Map map1 = new HashMap<String,Long>();
+                map1.put("waybillPlanId",obj.getWaybillPlanId());
+                map1.put("isDeleted",0);
+                List<SnatchGoods> list = snatchGoodsMapper.selectByWaybillPlanId(map1);
+                if (null!=list && list.size()>0) {
+                    obj.setSnatchGoodsList(list);
+                }
             }
             pageInfo = new PageInfo(snatchBill4WaittingRdtos);
 

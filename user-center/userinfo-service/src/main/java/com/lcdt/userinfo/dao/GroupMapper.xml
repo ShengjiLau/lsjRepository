@@ -101,10 +101,4 @@
   LEFT JOIN t_uc_group g on ug.group_id = g.group_id
   WHERE ug.company_id = #{companyId,jdbcType=BIGINT} AND ug.user_id = #{userId,jdbcType=BIGINT}
   </select>
-  <select id="selectGroupNamesByGroupIds" parameterType="java.lang.String" resultType="java.lang.String">
-    select GROUP_CONCAT(group_name)
-    from t_uc_group
-    where FIND_IN_SET(group_id,#{groupIds,jdbcType=VARCHAR})
-  </select>
-
 </mapper>

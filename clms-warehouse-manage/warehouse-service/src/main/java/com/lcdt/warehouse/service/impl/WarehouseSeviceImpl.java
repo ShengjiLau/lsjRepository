@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.rpc.GroupWareHouseRpcService;
-import com.lcdt.userinfo.service.GroupManageService;
 import com.lcdt.warehouse.dto.WarehouseDto;
 import com.lcdt.warehouse.entity.Warehouse;
 import com.lcdt.warehouse.entity.WarehouseLinkman;
@@ -20,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tl.commons.util.StringUtility;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +35,6 @@ public class WarehouseSeviceImpl implements WarehouseService {
     private WarehousseLinkmanMapper warehousseLinkManMapper;
     @Autowired
     private WarehousseLocMapper warehousseLocMapper;
-    @Reference
-    GroupManageService groupManageService;
     @Reference
     GroupWareHouseRpcService groupWareHouseRpcService;
 
@@ -59,9 +57,12 @@ public class WarehouseSeviceImpl implements WarehouseService {
         PageHelper.startPage(pageNo, pageSize);
         List<WarehouseDto> list = warehousseMapper.selectByCondition(m);
         if(list != null && list.size() > 0){
+            Map map = new HashMap();
             for(WarehouseDto dto : list){
                 if(StringUtility.isNotEmpty(dto.getGroupIds())){
-                    String groupNames = groupManageService.selectGroupNamesByGroupIds(dto.getGroupIds());
+                    map.put("groupIds", dto.getGroupIds());
+                    map.put("wareHouseId", dto.getWhId());
+                    String groupNames = groupWareHouseRpcService.selectGroupNamesByGroupIds(map);
                     dto.setGroupNames(groupNames);
                 }
             }

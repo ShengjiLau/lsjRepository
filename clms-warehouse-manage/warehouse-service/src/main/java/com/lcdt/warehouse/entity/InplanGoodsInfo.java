@@ -33,7 +33,7 @@ public class InplanGoodsInfo implements Serializable {
     /**
      * 入库价
      */
-    private Integer inHousePrice;
+    private Float inHousePrice;
     private Long planId;
 
     /**
@@ -43,7 +43,7 @@ public class InplanGoodsInfo implements Serializable {
     /**
      * 换算关系
      */
-    private int unitData;
+    private Integer unitData;
 
     private String goodsName;
     /**
@@ -54,22 +54,15 @@ public class InplanGoodsInfo implements Serializable {
     private String goodsSpec;
     private String goodsCode;
     private String goodsBarcode;
-    /**
-     * 库存单价
-     */
-    private Integer goodsPrice;
-    /**
-     * 商品批次
-     */
-    private String goodsBatch;
-    private Long subItemId;
 
     /**
      * 最小单位
      */
     private String minUnit;
 
-
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public Long getRelationId() {
         return relationId;
@@ -103,11 +96,11 @@ public class InplanGoodsInfo implements Serializable {
         this.remark = remark;
     }
 
-    public Integer getInHousePrice() {
+    public Float getInHousePrice() {
         return inHousePrice;
     }
 
-    public void setInHousePrice(Integer inHousePrice) {
+    public void setInHousePrice(Float inHousePrice) {
         this.inHousePrice = inHousePrice;
     }
 
@@ -127,16 +120,12 @@ public class InplanGoodsInfo implements Serializable {
         this.unit = unit;
     }
 
-    public int getUnitData() {
+    public Integer getUnitData() {
         return unitData;
     }
 
-    public void setUnitData(int unitData) {
+    public void setUnitData(Integer unitData) {
         this.unitData = unitData;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public String getGoodsName() {
@@ -153,6 +142,14 @@ public class InplanGoodsInfo implements Serializable {
 
     public void setGoodsClassify(String goodsClassify) {
         this.goodsClassify = goodsClassify;
+    }
+
+    public Long getGoodsClassifyId() {
+        return goodsClassifyId;
+    }
+
+    public void setGoodsClassifyId(Long goodsClassifyId) {
+        this.goodsClassifyId = goodsClassifyId;
     }
 
     public String getGoodsSpec() {
@@ -179,43 +176,11 @@ public class InplanGoodsInfo implements Serializable {
         this.goodsBarcode = goodsBarcode;
     }
 
-    public Integer getGoodsPrice() {
-        return goodsPrice;
-    }
-
-    public void setGoodsPrice(Integer goodsPrice) {
-        this.goodsPrice = goodsPrice;
-    }
-
-    public String getGoodsBatch() {
-        return goodsBatch;
-    }
-
-    public void setGoodsBatch(String goodsBatch) {
-        this.goodsBatch = goodsBatch;
-    }
-
-    public Long getSubItemId() {
-        return subItemId;
-    }
-
-    public void setSubItemId(Long subItemId) {
-        this.subItemId = subItemId;
-    }
-
     public String getMinUnit() {
         return minUnit;
     }
 
     public void setMinUnit(String minUnit) {
         this.minUnit = minUnit;
-    }
-
-    public Long getGoodsClassifyId() {
-        return goodsClassifyId;
-    }
-
-    public void setGoodsClassifyId(Long goodsClassifyId) {
-        this.goodsClassifyId = goodsClassifyId;
     }
 }

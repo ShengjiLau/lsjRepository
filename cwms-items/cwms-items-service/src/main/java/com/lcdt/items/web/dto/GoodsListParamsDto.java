@@ -8,6 +8,7 @@ public class GoodsListParamsDto {
     private String goodsName;
     private String goodsCode;
     private String goodsSpec;
+    private Long itemId;
 
     public String getGoodsName() {
         return goodsName;
@@ -31,5 +32,13 @@ public class GoodsListParamsDto {
 
     public void setGoodsSpec(String goodsSpec) {
         this.goodsSpec = goodsSpec;
+    }
+
+    public Long getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
     }
 }

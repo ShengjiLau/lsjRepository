@@ -20,7 +20,7 @@ public class InorderGoodsInfo implements Serializable {
     @TableId(value = "relation_id", type = IdType.AUTO)
     private Long relationId;
     private Long inorderId;
-
+    private Long inplanGoodsId;
     private Long goodsId;
     private String goodsName;
     /**
@@ -33,7 +33,7 @@ public class InorderGoodsInfo implements Serializable {
     /**
      * 库存单价
      */
-    private Integer goodsPrice;
+    private Float goodsPrice;
     /**
      * 商品批次
      */
@@ -66,11 +66,11 @@ public class InorderGoodsInfo implements Serializable {
     /**
      * 入库价
      */
-    private Integer inHousePrice;
+    private Float inHousePrice;
     /**
      * 货损
      */
-    private Integer damage;
+    private Float damage;
     /**
      * 备注
      */
@@ -98,6 +98,14 @@ public class InorderGoodsInfo implements Serializable {
 
     public void setInorderId(Long inorderId) {
         this.inorderId = inorderId;
+    }
+
+    public Long getInplanGoodsId() {
+        return inplanGoodsId;
+    }
+
+    public void setInplanGoodsId(Long inplanGoodsId) {
+        this.inplanGoodsId = inplanGoodsId;
     }
 
     public Long getGoodsId() {
@@ -148,11 +156,11 @@ public class InorderGoodsInfo implements Serializable {
         this.goodsBarcode = goodsBarcode;
     }
 
-    public Integer getGoodsPrice() {
+    public Float getGoodsPrice() {
         return goodsPrice;
     }
 
-    public void setGoodsPrice(Integer goodsPrice) {
+    public void setGoodsPrice(Float goodsPrice) {
         this.goodsPrice = goodsPrice;
     }
 
@@ -212,19 +220,19 @@ public class InorderGoodsInfo implements Serializable {
         this.inHouseAmount = inHouseAmount;
     }
 
-    public Integer getInHousePrice() {
+    public Float getInHousePrice() {
         return inHousePrice;
     }
 
-    public void setInHousePrice(Integer inHousePrice) {
+    public void setInHousePrice(Float inHousePrice) {
         this.inHousePrice = inHousePrice;
     }
 
-    public Integer getDamage() {
+    public Float getDamage() {
         return damage;
     }
 
-    public void setDamage(Integer damage) {
+    public void setDamage(Float damage) {
         this.damage = damage;
     }
 

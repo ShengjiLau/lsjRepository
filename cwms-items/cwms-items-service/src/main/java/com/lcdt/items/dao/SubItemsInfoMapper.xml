@@ -157,6 +157,7 @@
     from t_sub_items_info
     where item_id=#{itemId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </select>
+
   <select id="selectByCondition" resultMap="SubItemInfoList" parameterType="java.util.Map">
     select sub_item_id, sub.item_id, image, sub.code, sub.bar_code, sub.purchase_price, sub.wholesale_price,
     sub.retail_price, spec_comb, items.company_id,items.subject ,items.unit_name,items.conver_id,items.classify_name,items.classify_id
@@ -171,6 +172,9 @@
       </if>
       <if test="goodsSpec!=null and goodsSpec!=''">
         and sub.sub_item_id in (select DISTINCT sub_item_id from t_item_spec_key_value where company_id = #{companyId,jdbcType=BIGINT} and (sp_name like concat('%',#{goodsSpec,jdbcType=VARCHAR},'%') or sp_value like concat('%',#{goodsSpec,jdbcType=VARCHAR},'%')))
+      </if>
+      <if test="itemId!=null and itemId>0">
+        and sub.item_id = #{itemId,jdbcType=BIGINT}
       </if>
       order by sub.item_id desc
     </where>

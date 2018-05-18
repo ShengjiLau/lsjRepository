@@ -110,14 +110,10 @@ public class ContractServiceImpl implements ContractService {
         log.setContractId(contract.getContractId());
         log.setLogName("新增");
         log.setLogContent("新增合同，"+(contract.getIsDraft()==0?"存草稿":"发布合同"));
-        saveContractLog(log);
         if(StringUtility.isNotEmpty(contract.getAttachment1())){
-            ContractLog log1 = new ContractLog();
-            log1.setContractId(contract.getContractId());
-            log1.setLogName("上传附件");
-            log1.setLogContent(contract.getAttachment1());
-            saveContractLog(log1);
+            log.setLogContent(log.getLogContent()+"，"+setAttachmentLog(contract.getAttachment1()));
         }
+        saveContractLog(log);
         return result;
     }
 
@@ -234,15 +230,11 @@ public class ContractServiceImpl implements ContractService {
         }else{
             log.setLogContent("编辑合同内容");
         }
-        saveContractLog(log);
         if(StringUtility.isNotEmpty(contract.getAttachment1())
                 && !contract.getAttachment1().equals(oldContract.getAttachment1())){
-            ContractLog log1 = new ContractLog();
-            log1.setContractId(contract.getContractId());
-            log1.setLogName("上传附件");
-            log1.setLogContent(contract.getAttachment1());
-            saveContractLog(log1);
+            log.setLogContent(log.getLogContent()+"，"+setAttachmentLog(contract.getAttachment1()));
         }
+        saveContractLog(log);
         return result;
     }
 
@@ -286,12 +278,12 @@ public class ContractServiceImpl implements ContractService {
         }
         return dto;
     }
-    public int saveContractLog(ContractLog log){
+    public String setAttachmentLog(String attachmentLog){
 //        String str = "{\"附件分类1\":[{\"name\":\"附件1name\",\"url\":\"附件1url\"},{\"name\":\"附件2name\",\"url\":\"附件2url\"}],"
 //                +"\"附件分类2\":[{\"name\":\"附件3name\",\"url\":\"附件3url\"},{\"name\":\"附件4name\",\"url\":\"附件4url\"}]}";
-        if("上传附件".equals(log.getLogName())){
+        try{
             StringBuffer logContent = new StringBuffer();
-            JSONObject jsonObject = JSONObject.parseObject(log.getLogContent());
+            JSONObject jsonObject = JSONObject.parseObject(attachmentLog);
             Set<String> keys = jsonObject.keySet();
             if(keys != null && keys.size() > 0){
                 logContent.append("上传附件为：");
@@ -309,8 +301,12 @@ public class ContractServiceImpl implements ContractService {
                     }
                 }
             }
-            log.setLogContent(logContent.toString());
+            return logContent.toString();
+        }catch (Exception e){
+            return attachmentLog;
         }
+    }
+    public int saveContractLog(ContractLog log){
         log.setOperatorId(SecurityInfoGetter.getUser().getUserId());
         log.setOperatorName(SecurityInfoGetter.getUser().getRealName());
         log.setOperatorDeptIds(SecurityInfoGetter.geUserCompRel().getDeptIds());
@@ -347,11 +343,11 @@ public class ContractServiceImpl implements ContractService {
         if(contract.getContractId() == null){
             return false;
         }
-        ContractLog log1 = new ContractLog();
-        log1.setContractId(contract.getContractId());
-        log1.setLogName("上传附件");
-        log1.setLogContent(contract.getAttachment1());
-        saveContractLog(log1);
+        ContractLog log = new ContractLog();
+        log.setContractId(contract.getContractId());
+        log.setLogName("上传附件");
+        log.setLogContent(setAttachmentLog(contract.getAttachment1()));
+        saveContractLog(log);
         contractMapper.updateByPrimaryKeySelective(contract);
 
         return true;

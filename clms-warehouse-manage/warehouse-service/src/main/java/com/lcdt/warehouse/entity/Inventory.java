@@ -19,14 +19,20 @@ public class Inventory implements Serializable {
     @TableId(value = "invertory_id", type = IdType.AUTO)
     private Long invertoryId;
     private Long goodsId;
+
+    /**
+     * 基本单位
+     */
+    private String baseUnit;
+
     /**
      * 库存量
      */
-    private Integer invertoryNum;
+    private Float invertoryNum;
 
     //锁定量
     private Float lockNum;
-    private Long warehouseId;
+    private Long wareHouseId;
     private Long companyId;
     private String remark;
 
@@ -46,6 +52,7 @@ public class Inventory implements Serializable {
      * 库位编码
      */
     private String storageLocationCode;
+    private Long storageLocationId;
 
     /**
      * 库位名称
@@ -53,6 +60,51 @@ public class Inventory implements Serializable {
     private String warehouseName;
 
     private GoodsInfo goodsInfo;
+
+
+    private Long originalGoodsId;
+
+    private String batch;
+
+    public String getBaseUnit() {
+        return baseUnit;
+    }
+
+    public void setBaseUnit(String baseUnit) {
+        this.baseUnit = baseUnit;
+    }
+
+    public String getStorageLocationCode() {
+        return storageLocationCode;
+    }
+
+    public void setStorageLocationCode(String storageLocationCode) {
+        this.storageLocationCode = storageLocationCode;
+    }
+
+    public Long getStorageLocationId() {
+        return storageLocationId;
+    }
+
+    public void setStorageLocationId(Long storageLocationId) {
+        this.storageLocationId = storageLocationId;
+    }
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch;
+    }
+
+    public Long getOriginalGoodsId() {
+        return originalGoodsId;
+    }
+
+    public void setOriginalGoodsId(Long originalGoodsId) {
+        this.originalGoodsId = originalGoodsId;
+    }
 
     public GoodsInfo getGoodsInfo() {
         return goodsInfo;
@@ -102,11 +154,11 @@ public class Inventory implements Serializable {
         this.goodsId = goodsId;
     }
 
-    public Integer getInvertoryNum() {
+    public Float getInvertoryNum() {
         return invertoryNum;
     }
 
-    public void setInvertoryNum(Integer invertoryNum) {
+    public void setInvertoryNum(Float invertoryNum) {
         this.invertoryNum = invertoryNum;
     }
 
@@ -118,12 +170,12 @@ public class Inventory implements Serializable {
         this.lockNum = lockNum;
     }
 
-    public Long getWarehouseId() {
-        return warehouseId;
+    public Long getWareHouseId() {
+        return wareHouseId;
     }
 
-    public void setWarehouseId(Long warehouseId) {
-        this.warehouseId = warehouseId;
+    public void setWareHouseId(Long wareHouseId) {
+        this.wareHouseId = wareHouseId;
     }
 
     public Long getCompanyId() {
@@ -150,26 +202,26 @@ public class Inventory implements Serializable {
         this.businessDesc = businessDesc;
     }
 
-    public String getStorageLocationCode() {
-        return storageLocationCode;
-    }
-
-    public void setStorageLocationCode(String storageLocationCode) {
-        this.storageLocationCode = storageLocationCode;
-    }
-
     @Override
     public String toString() {
         return "Inventory{" +
-        ", invertoryId=" + invertoryId +
-        ", goodsId=" + goodsId +
-        ", invertoryNum=" + invertoryNum +
-        ", lockNum=" + lockNum +
-        ", warehouseId=" + warehouseId +
-        ", companyId=" + companyId +
-        ", remark=" + remark +
-        ", businessDesc=" + businessDesc +
-        ", storageLocationCode=" + storageLocationCode +
-        "}";
+                "invertoryId=" + invertoryId +
+                ", goodsId=" + goodsId +
+                ", baseUnit='" + baseUnit + '\'' +
+                ", invertoryNum=" + invertoryNum +
+                ", lockNum=" + lockNum +
+                ", wareHouseId=" + wareHouseId +
+                ", companyId=" + companyId +
+                ", remark='" + remark + '\'' +
+                ", customerId=" + customerId +
+                ", customerName='" + customerName + '\'' +
+                ", businessDesc='" + businessDesc + '\'' +
+                ", storageLocationCode='" + storageLocationCode + '\'' +
+                ", storageLocationId=" + storageLocationId +
+                ", warehouseName='" + warehouseName + '\'' +
+                ", goodsInfo=" + goodsInfo +
+                ", originalGoodsId=" + originalGoodsId +
+                ", batch='" + batch + '\'' +
+                '}';
     }
 }

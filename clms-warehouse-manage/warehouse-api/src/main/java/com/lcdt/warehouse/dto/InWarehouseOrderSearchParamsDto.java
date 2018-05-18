@@ -18,7 +18,7 @@ public class InWarehouseOrderSearchParamsDto {
     @ApiModelProperty(value = "入库单状态")
     private int inOrderStatus;
     @ApiModelProperty(value = "仓库id")
-    private Long warehouseId;
+    private Long wareHouseId;
     @ApiModelProperty(value = "制单人")
     private String createName;
     @ApiModelProperty(value = "发布起始时间")
@@ -79,12 +79,12 @@ public class InWarehouseOrderSearchParamsDto {
         this.goodsInfo = goodsInfo;
     }
 
-    public Long getWarehouseId() {
-        return warehouseId;
+    public Long getWareHouseId() {
+        return wareHouseId;
     }
 
-    public void setWarehouseId(Long warehouseId) {
-        this.warehouseId = warehouseId;
+    public void setWareHouseId(Long wareHouseId) {
+        this.wareHouseId = wareHouseId;
     }
 
     public String getCreateName() {

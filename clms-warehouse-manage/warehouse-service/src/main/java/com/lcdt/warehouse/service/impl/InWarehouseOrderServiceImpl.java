@@ -2,10 +2,7 @@ package com.lcdt.warehouse.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.lcdt.warehouse.dto.InWarehouseOrderDto;
-import com.lcdt.warehouse.dto.InWarehouseOrderSearchParamsDto;
-import com.lcdt.warehouse.dto.InorderGoodsInfoDto;
-import com.lcdt.warehouse.dto.ModifyInOrderStatusParamsDto;
+import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.GoodsInfo;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.entity.InorderGoodsInfo;
@@ -119,6 +116,11 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
 
         //入库
         return result;
+    }
+
+    @Override
+    public List<DistributionRecordsDto> queryDisRecords(Long companyId, Long planId) {
+        return baseMapper.selectDisRecords(companyId,planId);
     }
 
 
