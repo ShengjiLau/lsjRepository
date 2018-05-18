@@ -46,6 +46,7 @@
             <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
             <result column="goods_code" jdbcType="VARCHAR" property="goodsCode" />
             <result column="goods_barcode" jdbcType="VARCHAR" property="goodsBarcode" />
+            <result column="unit" jdbcType="VARCHAR" property="unit" />
             <result column="receivalbe_amount" jdbcType="REAL" property="receivalbeAmount" />
         </collection>
     </resultMap>
@@ -153,10 +154,10 @@
     </select>
 
     <select id="selectDisRecords" resultMap="BaseResultMapOfDisRecords">
-        select o.warehouse_id,o.warehouse_name,g.goods_name,g.goods_code,g.goods_barcode,SUM(g.receivalbe_amount) receivalbe_amount
+        select o.warehouse_id,o.warehouse_name,g.goods_name,g.goods_code,g.goods_barcode,g.unit,SUM(g.receivalbe_amount) receivalbe_amount
         from in_warehouse_order o
         left join inorder_goods_info g on o.inorder_id=g.inorder_id
         where company_id= #{companyId,jdbcType=BIGINT} and plan_id = #{planId,jdbcType=BIGINT}
-        group by o.warehouse_id,o.warehouse_name,g.goods_name,g.goods_code,g.goods_barcode
+        group by o.warehouse_id,o.warehouse_name,g.goods_code,g.goods_barcode
     </select>
 </mapper>
