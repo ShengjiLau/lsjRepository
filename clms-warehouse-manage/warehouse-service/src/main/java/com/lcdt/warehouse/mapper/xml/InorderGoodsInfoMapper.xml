@@ -20,8 +20,8 @@
         <result column="receivalbe_amount" jdbcType="REAL" property="receivalbeAmount" />
         <result column="batch" jdbcType="VARCHAR" property="batch" />
         <result column="in_house_amount" jdbcType="REAL" property="inHouseAmount" />
-        <result column="in_house_price" jdbcType="INTEGER" property="inHousePrice" />
-        <result column="damage" jdbcType="INTEGER" property="damage" />
+        <result column="in_house_price" jdbcType="REAL" property="inHousePrice" />
+        <result column="damage" jdbcType="REAL" property="damage" />
         <result column="remark" jdbcType="VARCHAR" property="remark" />
         <result column="stroge_location_id" jdbcType="BIGINT" property="strogeLocationId" />
         <result column="stroge_location_code" jdbcType="VARCHAR" property="strogeLocationCode" />
