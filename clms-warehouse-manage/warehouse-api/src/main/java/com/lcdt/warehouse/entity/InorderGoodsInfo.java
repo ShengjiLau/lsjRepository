@@ -33,7 +33,7 @@ public class InorderGoodsInfo implements Serializable {
     /**
      * 库存单价
      */
-    private Integer goodsPrice;
+    private Float goodsPrice;
     /**
      * 商品批次
      */
@@ -156,11 +156,11 @@ public class InorderGoodsInfo implements Serializable {
         this.goodsBarcode = goodsBarcode;
     }
 
-    public Integer getGoodsPrice() {
+    public Float getGoodsPrice() {
         return goodsPrice;
     }
 
-    public void setGoodsPrice(Integer goodsPrice) {
+    public void setGoodsPrice(Float goodsPrice) {
         this.goodsPrice = goodsPrice;
     }
 
