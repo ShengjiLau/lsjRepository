@@ -34,7 +34,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
     private Logger logger = LoggerFactory.getLogger(InventoryServiceImpl.class);
 
-    //分页查询
+    //分页查询 库存列表
     public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto) {
         Page<Inventory> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
         return page.setRecords(inventoryMapper.selectInventoryList(page, InventoryQueryDto.dtoToDataBean(inventoryQueryDto)));
@@ -42,16 +42,17 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
 
     /**
-     * 出库操作
+     * 入库操作
+     *
      * @param goods
      * @param order
      */
     @Transactional(rollbackFor = Exception.class)
-    public void putInventory(List<InorderGoodsInfo> goods,InWarehouseOrder order) {
+    public void putInventory(List<InorderGoodsInfo> goods, InWarehouseOrder order) {
         Assert.notNull(goods, "入库货物不能为空");
-        logger.info("入库操作开始 入库单：{}",order);
+        logger.info("入库操作开始 入库单：{}", order);
         for (InorderGoodsInfo good : goods) {
-            addInventory(InventoryFactory.createInventory(order,good));
+            addInventory(InventoryFactory.createInventory(order, good));
         }
     }
 
@@ -59,7 +60,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
      * 出库操作
      */
     @Transactional(rollbackFor = Exception.class)
-    public void outInventory(){
+    public void outInventory() {
 
     }
 
@@ -72,20 +73,18 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
      */
     public Inventory addInventory(Inventory inventory) {
         List<Inventory> inventories = querySameInventory(inventory);
-        if (inventories.size() == 0) {
+        if (inventories.isEmpty()) {
             //没有库存 新增
-            logger.info("入库 新增库存:{}",inventory);
+            logger.info("入库 新增库存:{}", inventory);
             inventoryMapper.insert(inventory);
             return inventory;
-        } else {
-            Inventory existInventory = inventories.get(0);
-            existInventory.setInvertoryNum(existInventory.getInvertoryNum() + inventory.getInvertoryNum());
-            inventoryMapper.updateById(existInventory);
-            logger.info("入库 更新库存数量：{}",existInventory);
-            return existInventory;
         }
+        Inventory existInventory = inventories.get(0);
+        existInventory.setInvertoryNum(existInventory.getInvertoryNum() + inventory.getInvertoryNum());
+        inventoryMapper.updateById(existInventory);
+        logger.info("入库 更新库存数量：{}", existInventory);
+        return existInventory;
     }
-
 
 
     /**
@@ -95,7 +94,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
      * @return
      */
     public List<Inventory> querySameInventory(Inventory inventory) {
-        List<Inventory> inventories = inventoryMapper.selectInventoryList(null,inventory);
+        List<Inventory> inventories = inventoryMapper.selectInventoryList(null, inventory);
         if (inventories == null) {
             return new ArrayList<>();
         }
@@ -108,12 +107,13 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
         /**
          * 入库单 入库生成库存
+         *
          * @param order
          * @param goodsInfo
          * @return
          */
-        static Inventory createInventory(InWarehouseOrder order,InorderGoodsInfo goodsInfo) {
-            Assert.notNull(order,"新建库存，入库单不能为空");
+        static Inventory createInventory(InWarehouseOrder order, InorderGoodsInfo goodsInfo) {
+            Assert.notNull(order, "新建库存，入库单不能为空");
             Inventory inventory = new Inventory();
             inventory.setCompanyId(order.getCompanyId());
             inventory.setGoodsId(goodsInfo.getGoodsId());
@@ -128,7 +128,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             inventory.setCustomerName(order.getCustomerName());
 
             if (logger.isDebugEnabled()) {
-                logger.debug("create inventory from inordergoods :{} ",inventory.toString());
+                logger.debug("create inventory from inordergoods :{} ", inventory.toString());
             }
 
             return inventory;
