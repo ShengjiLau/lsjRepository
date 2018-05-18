@@ -19,6 +19,12 @@ public class Inventory implements Serializable {
     @TableId(value = "invertory_id", type = IdType.AUTO)
     private Long invertoryId;
     private Long goodsId;
+
+    /**
+     * 基本单位
+     */
+    private String baseUnit;
+
     /**
      * 库存量
      */
@@ -26,7 +32,7 @@ public class Inventory implements Serializable {
 
     //锁定量
     private Float lockNum;
-    private Long warehouseId;
+    private Long wareHouseId;
     private Long companyId;
     private String remark;
 
@@ -45,7 +51,8 @@ public class Inventory implements Serializable {
     /**
      * 库位编码
      */
-    private Long storageLocationCode;
+    private String storageLocationCode;
+    private Long storageLocationId;
 
     /**
      * 库位名称
@@ -58,6 +65,30 @@ public class Inventory implements Serializable {
     private Long originalGoodsId;
 
     private String batch;
+
+    public String getBaseUnit() {
+        return baseUnit;
+    }
+
+    public void setBaseUnit(String baseUnit) {
+        this.baseUnit = baseUnit;
+    }
+
+    public String getStorageLocationCode() {
+        return storageLocationCode;
+    }
+
+    public void setStorageLocationCode(String storageLocationCode) {
+        this.storageLocationCode = storageLocationCode;
+    }
+
+    public Long getStorageLocationId() {
+        return storageLocationId;
+    }
+
+    public void setStorageLocationId(Long storageLocationId) {
+        this.storageLocationId = storageLocationId;
+    }
 
     public String getBatch() {
         return batch;
@@ -139,12 +170,12 @@ public class Inventory implements Serializable {
         this.lockNum = lockNum;
     }
 
-    public Long getWarehouseId() {
-        return warehouseId;
+    public Long getWareHouseId() {
+        return wareHouseId;
     }
 
-    public void setWarehouseId(Long warehouseId) {
-        this.warehouseId = warehouseId;
+    public void setWareHouseId(Long wareHouseId) {
+        this.wareHouseId = wareHouseId;
     }
 
     public Long getCompanyId() {
@@ -171,26 +202,26 @@ public class Inventory implements Serializable {
         this.businessDesc = businessDesc;
     }
 
-    public Long getStorageLocationCode() {
-        return storageLocationCode;
-    }
-
-    public void setStorageLocationCode(Long storageLocationCode) {
-        this.storageLocationCode = storageLocationCode;
-    }
-
     @Override
     public String toString() {
         return "Inventory{" +
-        ", invertoryId=" + invertoryId +
-        ", goodsId=" + goodsId +
-        ", invertoryNum=" + invertoryNum +
-        ", lockNum=" + lockNum +
-        ", warehouseId=" + warehouseId +
-        ", companyId=" + companyId +
-        ", remark=" + remark +
-        ", businessDesc=" + businessDesc +
-        ", storageLocationCode=" + storageLocationCode +
-        "}";
+                "invertoryId=" + invertoryId +
+                ", goodsId=" + goodsId +
+                ", baseUnit='" + baseUnit + '\'' +
+                ", invertoryNum=" + invertoryNum +
+                ", lockNum=" + lockNum +
+                ", wareHouseId=" + wareHouseId +
+                ", companyId=" + companyId +
+                ", remark='" + remark + '\'' +
+                ", customerId=" + customerId +
+                ", customerName='" + customerName + '\'' +
+                ", businessDesc='" + businessDesc + '\'' +
+                ", storageLocationCode='" + storageLocationCode + '\'' +
+                ", storageLocationId=" + storageLocationId +
+                ", warehouseName='" + warehouseName + '\'' +
+                ", goodsInfo=" + goodsInfo +
+                ", originalGoodsId=" + originalGoodsId +
+                ", batch='" + batch + '\'' +
+                '}';
     }
 }

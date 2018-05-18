@@ -103,6 +103,9 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
     static class InventoryFactory {
+
+        private static Logger logger = LoggerFactory.getLogger(InventoryFactory.class);
+
         /**
          * 入库单 入库生成库存
          * @param order
@@ -115,10 +118,19 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             inventory.setCompanyId(order.getCompanyId());
             inventory.setGoodsId(goodsInfo.getGoodsId());
             inventory.setInvertoryNum(goodsInfo.getInHouseAmount() * goodsInfo.getUnitData());
-            inventory.setWarehouseId(order.getWarehouseId());
-            inventory.setStorageLocationCode(goodsInfo.getStrogeLocationId());
+            inventory.setWareHouseId(order.getWarehouseId());
+            inventory.setStorageLocationCode(goodsInfo.getStrogeLocationCode());
+            inventory.setStorageLocationId(goodsInfo.getStrogeLocationId());
             inventory.setCustomerName(order.getCustomerName());
             inventory.setWarehouseName(order.getWarehouseName());
+            inventory.setBatch(goodsInfo.getBatch());
+            inventory.setCustomerId(order.getCustomerId());
+            inventory.setCustomerName(order.getCustomerName());
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("create inventory from inordergoods :{} ",inventory.toString());
+            }
+
             return inventory;
         }
     }

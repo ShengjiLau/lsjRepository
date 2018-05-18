@@ -26,7 +26,7 @@ public class InventoryLog implements Serializable {
     private String customerName;
     private Long storageLocationId;
     private String comment;
-
+    private Long companyId;
 
     /**
      * 库位
@@ -34,8 +34,8 @@ public class InventoryLog implements Serializable {
     private String storageLocation;
     private Date logTime;
     private Integer currentInvetory;
-    private Integer changeNum;
-    private Integer businessNo;
+    private Float changeNum;
+    private String businessNo;
     /**
      * 库存id
      */
@@ -45,7 +45,17 @@ public class InventoryLog implements Serializable {
      */
     private Integer type;
 
+    public Long getOriginalGoodsId() {
+        return originalGoodsId;
+    }
 
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
 
     public void setOriginalGoodsId(Long originalGoodsId) {
         this.originalGoodsId = originalGoodsId;
@@ -131,19 +141,19 @@ public class InventoryLog implements Serializable {
         this.currentInvetory = currentInvetory;
     }
 
-    public Integer getChangeNum() {
+    public Float getChangeNum() {
         return changeNum;
     }
 
-    public void setChangeNum(Integer changeNum) {
+    public void setChangeNum(Float changeNum) {
         this.changeNum = changeNum;
     }
 
-    public Integer getBusinessNo() {
+    public String getBusinessNo() {
         return businessNo;
     }
 
-    public void setBusinessNo(Integer businessNo) {
+    public void setBusinessNo(String businessNo) {
         this.businessNo = businessNo;
     }
 
