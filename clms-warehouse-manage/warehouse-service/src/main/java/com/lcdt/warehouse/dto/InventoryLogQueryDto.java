@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class InventoryLogQueryDto extends PageQueryDto{
 
+
     private Date since;
 
     private Date until;

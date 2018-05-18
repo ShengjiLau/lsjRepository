@@ -29,6 +29,14 @@
             <if test="until != null">
                 and a.log_time &gt;= #{until}
             </if>
+            <if test="goodsName != null">
+                and b.goods_name like CONCAT(CONCAT('%',#{goodsName}),'%')
+            </if>
+            <if test="goodsbarcode != null">
+                and b.goods_barcode like CONCAT(CONCAT('%',#{goodsbarcode}),'%')
+            </if>
+
+
         </where>
     </select>
 
