@@ -8,6 +8,8 @@ import com.lcdt.warehouse.entity.InventoryLog;
 import com.lcdt.warehouse.mapper.InventoryLogMapper;
 import com.lcdt.warehouse.service.InventoryLogService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -26,7 +28,11 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
     @Autowired
     private InventoryLogMapper logMapper;
 
+    private Logger logger = LoggerFactory.getLogger(InventoryLogServiceImpl.class);
+
+
     public Page<InventoryLog> queryInventoryLogPage(InventoryLogQueryDto inventoryQueryDto) {
+        logger.info("query inventorylog list querydto :{}",inventoryQueryDto);
         Page<InventoryLog> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
         return page.setRecords(logMapper.selectLogList(page,inventoryQueryDto));
     }
@@ -49,9 +55,6 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
             inventoryLog.setChangeNum(inventory.getInvertoryNum());
             inventoryLog.setStorageLocation(inventory.getStorageLocationCode());
             inventoryLog.setStorageLocationId(inventory.getStorageLocationId());
-
-
-
             return inventoryLog;
         }
     }
