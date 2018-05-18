@@ -3,12 +3,15 @@ package com.lcdt.warehouse.utils;
 
 public final class JSONResponseUtil {
 
+    private static final int SUCCESS_CODE = 0;
+
+    public static<T> ResponseMessage success(T obj, String message) {
+        return new ResponseMessage(obj, SUCCESS_CODE, message);
+    }
+
 
     public static<T> ResponseMessage success(T obj){
-        ResponseMessage<T> tResponseMessage = new ResponseMessage<>();
-        tResponseMessage.setData(obj);
-        tResponseMessage.setResult(0);
-        return tResponseMessage;
+        return success(obj, "请求成功");
     }
 
 
