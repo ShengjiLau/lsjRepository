@@ -11,11 +11,11 @@ public class InWhPlanGoodsDto {
     @ApiModelProperty(value = "货物ID")
     private Long goodsId;
     @ApiModelProperty(value = "计划数量")
-    private int planGoodsNum;
+    private Float planGoodsNum;
     @ApiModelProperty(value = "入库价")
-    private Integer inHousePrice;
+    private Float inHousePrice;
     @ApiModelProperty(value = "换算关系")
-    private int unitData;
+    private Integer unitData;
     @ApiModelProperty(value = "商品名称")
     private String goodsName;
     @ApiModelProperty(value = "商品分类")
@@ -37,6 +37,49 @@ public class InWhPlanGoodsDto {
     @ApiModelProperty(value = "备注")
     private String remark;
 
+
+
+    @ApiModelProperty(value = "配仓---待配数量-也就是剩余计划数量")
+    private Float remainGoodsNum;
+    @ApiModelProperty(value = "配仓---已入库数量")
+    private Float inOderGoodsNum;
+    @ApiModelProperty(value = "配仓---本次配仓数")
+    private Float distGoodsNum;
+    @ApiModelProperty(value = "配仓---备注")
+    private String disRemark;
+
+    public Float getRemainGoodsNum() {
+        return remainGoodsNum;
+    }
+
+    public void setRemainGoodsNum(Float remainGoodsNum) {
+        this.remainGoodsNum = remainGoodsNum;
+    }
+
+    public Float getInOderGoodsNum() {
+        return inOderGoodsNum;
+    }
+
+    public void setInOderGoodsNum(Float inOderGoodsNum) {
+        this.inOderGoodsNum = inOderGoodsNum;
+    }
+
+    public Float getDistGoodsNum() {
+        return distGoodsNum;
+    }
+
+    public void setDistGoodsNum(Float distGoodsNum) {
+        this.distGoodsNum = distGoodsNum;
+    }
+
+    public String getDisRemark() {
+        return disRemark;
+    }
+
+    public void setDisRemark(String disRemark) {
+        this.disRemark = disRemark;
+    }
+
     public Long getGoodsId() {
         return goodsId;
     }
@@ -45,19 +88,19 @@ public class InWhPlanGoodsDto {
         this.goodsId = goodsId;
     }
 
-    public int getPlanGoodsNum() {
+    public Float getPlanGoodsNum() {
         return planGoodsNum;
     }
 
-    public void setPlanGoodsNum(int planGoodsNum) {
+    public void setPlanGoodsNum(Float planGoodsNum) {
         this.planGoodsNum = planGoodsNum;
     }
 
-    public Integer getInHousePrice() {
+    public Float getInHousePrice() {
         return inHousePrice;
     }
 
-    public void setInHousePrice(Integer inHousePrice) {
+    public void setInHousePrice(Float inHousePrice) {
         this.inHousePrice = inHousePrice;
     }
 
