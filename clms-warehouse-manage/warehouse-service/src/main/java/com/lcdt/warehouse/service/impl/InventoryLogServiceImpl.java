@@ -6,6 +6,7 @@ import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.lcdt.warehouse.entity.Inventory;
 import com.lcdt.warehouse.entity.InventoryLog;
+import com.lcdt.warehouse.factory.InventoryLogFactory;
 import com.lcdt.warehouse.mapper.InventoryLogMapper;
 import com.lcdt.warehouse.service.InventoryLogService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -44,34 +45,10 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
         return saveInventoryLog(log);
     }
 
-
     public InventoryLog saveInventoryLog(InventoryLog inventoryLog){
         Assert.notNull(inventoryLog,"object should not be null");
         logMapper.insert(inventoryLog);
         return inventoryLog;
-    }
-
-    public static class InventoryLogFactory{
-        public static InventoryLog createFromInventory(InWarehouseOrder order,Inventory inventory) {
-            Assert.notNull(inventory,"库存不能为空");
-            InventoryLog inventoryLog = new InventoryLog();
-            inventoryLog.setBusinessNo(order.getInOrderCode());
-            inventoryLog.setGoodsId(inventory.getGoodsId());
-            inventoryLog.setCompanyId(order.getCompanyId());
-            inventoryLog.setWarehouseId(inventory.getWareHouseId());
-            inventoryLog.setChangeNum(inventory.getInvertoryNum());
-            inventoryLog.setStorageLocation(inventory.getStorageLocationCode());
-            inventoryLog.setStorageLocationId(inventory.getStorageLocationId());
-            inventoryLog.setOriginalGoodsId(inventory.getOriginalGoodsId());
-            inventoryLog.setCustomerName(order.getCustomerName());
-            inventoryLog.setCustomerId(order.getCustomerId());
-            inventoryLog.setType(0);
-            return inventoryLog;
-        }
-
-
-
-
     }
 
 }
