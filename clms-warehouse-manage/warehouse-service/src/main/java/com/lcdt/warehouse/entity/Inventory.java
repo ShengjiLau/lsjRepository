@@ -202,20 +202,26 @@ public class Inventory implements Serializable {
         this.businessDesc = businessDesc;
     }
 
-
-
     @Override
     public String toString() {
         return "Inventory{" +
-        ", invertoryId=" + invertoryId +
-        ", goodsId=" + goodsId +
-        ", invertoryNum=" + invertoryNum +
-        ", lockNum=" + lockNum +
-        ", warehouseId=" + warehouseId +
-        ", companyId=" + companyId +
-        ", remark=" + remark +
-        ", businessDesc=" + businessDesc +
-        ", storageLocationCode=" + storageLocationCode +
-        "}";
+                "invertoryId=" + invertoryId +
+                ", goodsId=" + goodsId +
+                ", baseUnit='" + baseUnit + '\'' +
+                ", invertoryNum=" + invertoryNum +
+                ", lockNum=" + lockNum +
+                ", warehouseId=" + warehouseId +
+                ", companyId=" + companyId +
+                ", remark='" + remark + '\'' +
+                ", customerId=" + customerId +
+                ", customerName='" + customerName + '\'' +
+                ", businessDesc='" + businessDesc + '\'' +
+                ", storageLocationCode='" + storageLocationCode + '\'' +
+                ", storageLocationId=" + storageLocationId +
+                ", warehouseName='" + warehouseName + '\'' +
+                ", goodsInfo=" + goodsInfo +
+                ", originalGoodsId=" + originalGoodsId +
+                ", batch='" + batch + '\'' +
+                '}';
     }
 }
