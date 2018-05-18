@@ -2,5 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.warehouse.mapper.InventoryLogMapper">
 
+    <select id="selectLogList" resultType="InventoryLog">
+        SELECT * from inventory_log a left join goods_info b on
+        a.goods_id = b.goods_id
+        <where>
+            <if test="companyId != null">
+                a.company_id = #{companyId}
+            </if>
+            <if test="type != null">
+                and a.type = #{type}
+            </if>
+            <if test="customerName != null">
+                and a.customer_name like CONCAT(CONCAT('%', #{customerName}), '%')
+            </if>
+
+            <if test="warehouseId != null">
+                and a.warehouse_id = #{warehouseId}
+            </if>
+
+            <if test="storageLocationCode != null">
+                and a.storage_location_code like CONCAT(CONCAT('%',#{storageLocationCode}),'%')
+            </if>
+            <if test="since != null">
+                and a.log_time &lt;=  #{since}
+            </if>
+            <if test="until != null">
+                and a.log_time &gt;= #{until}
+            </if>
+        </where>
+    </select>
 
 </mapper>

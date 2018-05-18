@@ -22,6 +22,16 @@ public class InventoryLogQueryDto extends PageQueryDto{
 
     private String businessNo;
 
+    private Long companyId;
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
     public Date getSince() {
         return since;
     }
