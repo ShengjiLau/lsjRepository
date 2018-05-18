@@ -57,6 +57,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         logger.info("入库操作开始 入库单：{}", order);
         for (InorderGoodsInfo good : goods) {
             Inventory inventory = InventoryFactory.createInventory(order, good);
+            //写入库流水
             logService.saveInOrderLog(order, inventory);
             addInventory(inventory);
         }
