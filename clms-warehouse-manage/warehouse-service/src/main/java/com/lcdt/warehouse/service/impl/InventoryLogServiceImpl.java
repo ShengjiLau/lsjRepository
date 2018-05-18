@@ -55,6 +55,10 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
             inventoryLog.setChangeNum(inventory.getInvertoryNum());
             inventoryLog.setStorageLocation(inventory.getStorageLocationCode());
             inventoryLog.setStorageLocationId(inventory.getStorageLocationId());
+            inventoryLog.setOriginalGoodsId(inventory.getOriginalGoodsId());
+            inventoryLog.setCustomerName(order.getCustomerName());
+            inventoryLog.setCustomerId(order.getCustomerId());
+            inventoryLog.setType(0);
             return inventoryLog;
         }
     }
