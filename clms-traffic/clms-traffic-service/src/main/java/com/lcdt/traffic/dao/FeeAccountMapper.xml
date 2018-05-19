@@ -22,6 +22,7 @@
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
   </resultMap>
   <resultMap id="BaseResultDtoMap" type="com.lcdt.traffic.web.dto.FeeAccountDto" extends="BaseResultMap">
+    <result column="exchange-count" jdbcType="INTEGER" property="exchangeCount" />
     <result column="freight_total" jdbcType="REAL" property="freightTotal" />
     <result column="other_fee_total" jdbcType="REAL" property="otherFeeTotal" />
     <result column="fee_total" jdbcType="REAL" property="feeTotal" />
@@ -317,7 +318,8 @@
     select <include refid="Base_Column_List"/>,
     (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.fee_property='运费' and ff.is_deleted=0) freight_total,
     (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.fee_property!='运费' and ff.is_deleted=0) other_fee_total,
-    (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.is_deleted=0) fee_total
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.is_deleted=0) fee_total,
+    (select count(*) from t_fee_exchange fe where fe.reconcile_id = fa.reconcile_id) exchangeCount
     from t_fee_account fa
     <where>
       fa.is_receivable = #{isReceivable,jdbcType=SMALLINT}

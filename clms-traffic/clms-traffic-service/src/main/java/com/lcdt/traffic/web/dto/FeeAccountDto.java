@@ -12,6 +12,9 @@ import java.util.List;
  */
 public class FeeAccountDto extends FeeAccount{
 
+    @ApiModelProperty(value="记账单对应对账单收付款记录条数")
+    private Integer exchangeCount;
+
     @ApiModelProperty(value="运费")
     private Float freightTotal;
 
@@ -29,6 +32,14 @@ public class FeeAccountDto extends FeeAccount{
 
     @ApiModelProperty(value="默认隐藏费用类型")
     private List<FeeProperty> hidePropertyList;
+
+    public Integer getExchangeCount() {
+        return exchangeCount;
+    }
+
+    public void setExchangeCount(Integer exchangeCount) {
+        this.exchangeCount = exchangeCount;
+    }
 
     public Float getFreightTotal() {
         return freightTotal;
