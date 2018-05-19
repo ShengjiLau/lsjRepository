@@ -1,6 +1,8 @@
 package com.lcdt.traffic.dto;
 
 import com.lcdt.traffic.model.PlanDetail;
+import com.lcdt.traffic.model.SnatchGoods;
+import com.lcdt.traffic.model.SnatchGoodsDetail;
 
 import java.util.Date;
 import java.util.List;
@@ -64,7 +66,7 @@ public class SnatchBill4WaittingRdto implements java.io.Serializable {
     private String distributionWay;//运输要求
 
 
-
+    private List<SnatchGoods> snatchGoodsList;
 
     private List<PlanDetail> planDetailList;
 
@@ -293,5 +295,14 @@ public class SnatchBill4WaittingRdto implements java.io.Serializable {
 
     public void setDistributionWay(String distributionWay) {
         this.distributionWay = distributionWay;
+    }
+
+
+    public List<SnatchGoods> getSnatchGoodsList() {
+        return snatchGoodsList;
+    }
+
+    public void setSnatchGoodsList(List<SnatchGoods> snatchGoodsList) {
+        this.snatchGoodsList = snatchGoodsList;
     }
 }

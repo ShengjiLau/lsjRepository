@@ -3,12 +3,11 @@ package com.lcdt.warehouse.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.warehouse.dto.InWhPlanDto;
 import com.lcdt.warehouse.dto.InWhPlanSearchParamsDto;
-import com.lcdt.warehouse.dto.InWhPlanStatusEnum;
 import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.entity.InWarehousePlan;
 import com.lcdt.warehouse.service.InWarehousePlanService;
@@ -21,15 +20,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -151,6 +144,80 @@ public class InWarehousePlanController {
 
 
 
+    @ApiOperation("计划保存")
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject add(@RequestBody InWhPlanDto inWhPlanAddParamsDto) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        String msg = "新建失败！";
+        boolean flag = false;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            flag = inWarehousePlanService.inWhPlanAdd(inWhPlanAddParamsDto, userCompRel);
+        } catch (RuntimeException e) {
+            msg = e.getMessage();
+            logger.error(e.getMessage());
+        }
+        jsonObject.put("code", flag==true? 0:-1);
+        jsonObject.put("message", flag==true? "新建成功！":msg);
+        return jsonObject;
+    }
+
+
+
+    @ApiOperation("计划详细")
+    @RequestMapping(value = "/detail",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject detail(@ApiParam(value = "计划ID",required = true) @RequestParam Long planId,
+                             @ApiParam(value = "是否加载配仓",required = true) @RequestParam boolean flag) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        JSONObject jsonObject = new JSONObject();
+        InWhPlanDto inWhPlanDto = inWarehousePlanService.inWhPlanDetail(planId,flag, userCompRel);
+        jsonObject.put("data",inWhPlanDto);
+        jsonObject.put("code", 0);
+        return jsonObject;
+    }
+
+
+
+    @ApiOperation("计划编辑")
+    @RequestMapping(value = "/edit",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject edit(@RequestBody InWhPlanDto inWhPlanAddParamsDto) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        String msg = "编辑失败！";
+        boolean flag = false;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            flag = inWarehousePlanService.inWhPlanEdit(inWhPlanAddParamsDto, userCompRel);
+        } catch (RuntimeException e) {
+            msg = e.getMessage();
+            logger.error(e.getMessage());
+        }
+        jsonObject.put("code", flag==true? 0:-1);
+        jsonObject.put("message", flag==true? "编辑成功！":msg);
+        return jsonObject;
+    }
+
+
+    @ApiOperation("计划配仓")
+    @RequestMapping(value = "/distributeWh",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject distributeWh(@RequestBody InWhPlanDto inWhPlanAddParamsDto) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        String msg = "配仓失败！";
+        boolean flag = false;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            flag = inWarehousePlanService.inWhPlanEdit(inWhPlanAddParamsDto, userCompRel);
+        } catch (RuntimeException e) {
+            msg = e.getMessage();
+            logger.error(e.getMessage());
+        }
+        jsonObject.put("code", flag==true? 0:-1);
+        jsonObject.put("message", flag==true? "配仓成功！":msg);
+        return jsonObject;
+    }
 
 
 }

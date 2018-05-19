@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.warehouse.mapper.InventoryMapper">
@@ -7,7 +8,7 @@
         <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
         <result column="invertory_num" jdbcType="INTEGER" property="invertoryNum" />
         <result column="lock_num" jdbcType="REAL" property="lockNum" />
-        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
+        <result column="warehouse_id" jdbcType="BIGINT" property="wareHouseId" />
         <result column="company_id" jdbcType="BIGINT" property="companyId" />
         <result column="remark" jdbcType="VARCHAR" property="remark" />
         <result column="business_desc" jdbcType="VARCHAR" property="businessDesc" />
@@ -35,8 +36,8 @@
                AND warehouse_id = #{wareHouseId}
             </if>
 
-            <if test="strogeLocationCode != null">
-                and storage_location_code = #{strogeLocationCode}
+            <if test="storageLocationCode != null">
+                and storage_location_code = #{storageLocationCode}
             </if>
 
             <if test="goodsId != null">
@@ -46,11 +47,29 @@
             <if test="customerId != null">
                 and customer_id = #{customerId}
             </if>
+
+            <if test="originalGoodsId != null">
+                and original_goods_id = #{originalGoodsId}
+            </if>
+
         </where>
     </select>
+
+	<update id="updateInventoryLockNum">
+	update inventory
+	set 
+	lock_num = #{arg1,jdbcType=float}
+	where
+	inventory_id = #{arg0,jdbcType=BIGINT}
+	
+	
+	
+	
+	</update>
 
 
 
 
 
 </mapper>
+

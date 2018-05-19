@@ -2,6 +2,7 @@ package com.lcdt.warehouse.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.warehouse.dto.InWhPlanDto;
 import com.lcdt.warehouse.dto.InWhPlanSearchParamsDto;
 import com.lcdt.warehouse.entity.InWarehousePlan;
 import com.baomidou.mybatisplus.service.IService;
@@ -35,8 +36,6 @@ public interface InWarehousePlanService extends IService<InWarehousePlan> {
     boolean inWhPlanPublish(InWarehousePlan obj, UserCompRel userCompRel);
 
 
-
-
     /***
      * 计划取消
      *
@@ -47,7 +46,6 @@ public interface InWarehousePlanService extends IService<InWarehousePlan> {
     boolean inWhPlanCancel(InWarehousePlan obj, UserCompRel userCompRel);
 
 
-
     /***
      * 计划取消
      *
@@ -56,4 +54,40 @@ public interface InWarehousePlanService extends IService<InWarehousePlan> {
      * @return
      */
     boolean inWhPlanComplete(InWarehousePlan obj, UserCompRel userCompRel);
+
+
+    /***
+     * 计划新增
+     * @param inWhPlanAddParamsDto
+     * @param userCompRel
+     * @return
+     */
+    boolean inWhPlanAdd(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel);
+
+
+
+    /***
+     * 计划编辑
+     * @param inWhPlanAddParamsDto
+     * @param userCompRel
+     * @return
+     */
+    boolean inWhPlanEdit(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel);
+
+
+    /***
+     * 计划详细
+     * @return
+     */
+    InWhPlanDto inWhPlanDetail(Long planId, boolean flag, UserCompRel userCompRel);
+
+
+    /***
+     * 计划配仓
+     * @return
+     */
+    InWhPlanDto distributeWh(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel);
+
 }
+
+

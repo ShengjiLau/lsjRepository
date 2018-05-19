@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.ShiftInventoryListDO">
+    <id column="shift_id" jdbcType="BIGINT" property="shiftId" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+    <result column="shift_inventory_num" jdbcType="VARCHAR" property="shiftInventoryNum" />
+    <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
+    <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="shift_type" jdbcType="TINYINT" property="shiftType" />
+    <result column="attachment1_name" jdbcType="VARCHAR" property="attachment1Name" />
+    <result column="attachment1" jdbcType="VARCHAR" property="attachment1" />
+    <result column="attachment2_name" jdbcType="VARCHAR" property="attachment2Name" />
+    <result column="attachment2" jdbcType="VARCHAR" property="attachment2" />
+    <result column="attachment3_name" jdbcType="VARCHAR" property="attachment3Name" />
+    <result column="attachment3" jdbcType="VARCHAR" property="attachment3" />
+    <result column="attachment4_name" jdbcType="VARCHAR" property="attachment4Name" />
+    <result column="attachment4" jdbcType="VARCHAR" property="attachment4" />
+    <result column="attachment5_name" jdbcType="VARCHAR" property="attachment5Name" />
+    <result column="attachment5" jdbcType="VARCHAR" property="attachment5" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="shift_user" jdbcType="VARCHAR" property="shiftUser" />
+    <result column="shift_time" jdbcType="VARCHAR" property="shiftTime" />
+    <result column="inventory_shifted_id" jdbcType="VARCHAR" property="inventoryShiftedId" />
+    <result column="finished" jdbcType="TINYINT" property="finished" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    shift_id, group_id, group_name, shift_inventory_num, warehouse_id, warehouse_name, 
+    customer_id, customer_name, remark, shift_type, attachment1_name, attachment1, attachment2_name, 
+    attachment2, attachment3_name, attachment3, attachment4_name, attachment4, attachment5_name, 
+    attachment5, gmt_create, gmt_modified, create_user, create_user_id, company_id, shift_user, 
+    shift_time, inventory_shifted_id, finished
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from shift_inventory_list
+    where shift_id = #{shiftId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from shift_inventory_list
+    where shift_id = #{shiftId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.warehouse.entity.ShiftInventoryListDO" >
+   insert into shift_inventory_list (shift_id, group_id, group_name, 
+      shift_inventory_num, warehouse_id, warehouse_name, 
+      customer_id, customer_name, remark, 
+      shift_type, attachment1_name, attachment1, 
+      attachment2_name, attachment2, attachment3_name, 
+      attachment3, attachment4_name, attachment4, 
+      attachment5_name, attachment5, gmt_create, 
+      gmt_modified, create_user, create_user_id, 
+      company_id, shift_user, shift_time, 
+      inventory_shifted_id, finished)
+    values (#{shiftId,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, 
+      #{shiftInventoryNum,jdbcType=VARCHAR}, #{warehouseId,jdbcType=BIGINT}, #{warehouseName,jdbcType=VARCHAR}, 
+      #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{shiftType,jdbcType=TINYINT}, #{attachment1Name,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR}, 
+      #{attachment2Name,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR}, #{attachment3Name,jdbcType=VARCHAR}, 
+      #{attachment3,jdbcType=VARCHAR}, #{attachment4Name,jdbcType=VARCHAR}, #{attachment4,jdbcType=VARCHAR}, 
+      #{attachment5Name,jdbcType=VARCHAR}, #{attachment5,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, 
+      #{companyId,jdbcType=BIGINT}, #{shiftUser,jdbcType=VARCHAR}, #{shiftTime,jdbcType=VARCHAR}, 
+      #{inventoryShiftedId,jdbcType=VARCHAR}, #{finished,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lcdt.warehouse.entity.ShiftInventoryListDO" >
+     insert into shift_inventory_list
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="shiftId != null">
+        shift_id,
+      </if>
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="groupName != null">
+        group_name,
+      </if>
+      <if test="shiftInventoryNum != null">
+        shift_inventory_num,
+      </if>
+      <if test="warehouseId != null">
+        warehouse_id,
+      </if>
+      <if test="warehouseName != null">
+        warehouse_name,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="customerName != null">
+        customer_name,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="shiftType != null">
+        shift_type,
+      </if>
+      <if test="attachment1Name != null">
+        attachment1_name,
+      </if>
+      <if test="attachment1 != null">
+        attachment1,
+      </if>
+      <if test="attachment2Name != null">
+        attachment2_name,
+      </if>
+      <if test="attachment2 != null">
+        attachment2,
+      </if>
+      <if test="attachment3Name != null">
+        attachment3_name,
+      </if>
+      <if test="attachment3 != null">
+        attachment3,
+      </if>
+      <if test="attachment4Name != null">
+        attachment4_name,
+      </if>
+      <if test="attachment4 != null">
+        attachment4,
+      </if>
+      <if test="attachment5Name != null">
+        attachment5_name,
+      </if>
+      <if test="attachment5 != null">
+        attachment5,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createUserId != null">
+        create_user_id,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="shiftUser != null">
+        shift_user,
+      </if>
+      <if test="shiftTime != null">
+        shift_time,
+      </if>
+      <if test="inventoryShiftedId != null">
+        inventory_shifted_id,
+      </if>
+      <if test="finished != null">
+        finished,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="shiftId != null">
+        #{shiftId,jdbcType=BIGINT},
+      </if>
+      <if test="groupId != null">
+        #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="groupName != null">
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="shiftInventoryNum != null">
+        #{shiftInventoryNum,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null">
+        #{warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="warehouseName != null">
+        #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="shiftType != null">
+        #{shiftType,jdbcType=TINYINT},
+      </if>
+      <if test="attachment1Name != null">
+        #{attachment1Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment1 != null">
+        #{attachment1,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2Name != null">
+        #{attachment2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2 != null">
+        #{attachment2,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment3Name != null">
+        #{attachment3Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment3 != null">
+        #{attachment3,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment4Name != null">
+        #{attachment4Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment4 != null">
+        #{attachment4,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment5Name != null">
+        #{attachment5Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment5 != null">
+        #{attachment5,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="shiftUser != null">
+        #{shiftUser,jdbcType=VARCHAR},
+      </if>
+      <if test="shiftTime != null">
+        #{shiftTime,jdbcType=VARCHAR},
+      </if>
+      <if test="inventoryShiftedId != null">
+        #{inventoryShiftedId,jdbcType=VARCHAR},
+      </if>
+      <if test="finished != null">
+        #{finished,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.warehouse.entity.ShiftInventoryListDO" >
+   update shift_inventory_list
+    <set>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="groupName != null">
+        group_name = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="shiftInventoryNum != null">
+        shift_inventory_num = #{shiftInventoryNum,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null">
+        warehouse_id = #{warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="warehouseName != null">
+        warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="customerName != null">
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="shiftType != null">
+        shift_type = #{shiftType,jdbcType=TINYINT},
+      </if>
+      <if test="attachment1Name != null">
+        attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment1 != null">
+        attachment1 = #{attachment1,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2Name != null">
+        attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2 != null">
+        attachment2 = #{attachment2,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment3Name != null">
+        attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment3 != null">
+        attachment3 = #{attachment3,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment4Name != null">
+        attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment4 != null">
+        attachment4 = #{attachment4,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment5Name != null">
+        attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment5 != null">
+        attachment5 = #{attachment5,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null">
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="shiftUser != null">
+        shift_user = #{shiftUser,jdbcType=VARCHAR},
+      </if>
+      <if test="shiftTime != null">
+        shift_time = #{shiftTime,jdbcType=VARCHAR},
+      </if>
+      <if test="inventoryShiftedId != null">
+        inventory_shifted_id = #{inventoryShiftedId,jdbcType=VARCHAR},
+      </if>
+      <if test="finished != null">
+        finished = #{finished,jdbcType=TINYINT},
+      </if>
+    </set>
+    where shift_id = #{shiftId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.warehouse.entity.ShiftInventoryListDO" >
+  update shift_inventory_list
+    set group_id = #{groupId,jdbcType=BIGINT},
+      group_name = #{groupName,jdbcType=VARCHAR},
+      shift_inventory_num = #{shiftInventoryNum,jdbcType=VARCHAR},
+      warehouse_id = #{warehouseId,jdbcType=BIGINT},
+      warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=BIGINT},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      shift_type = #{shiftType,jdbcType=TINYINT},
+      attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
+      attachment1 = #{attachment1,jdbcType=VARCHAR},
+      attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
+      attachment2 = #{attachment2,jdbcType=VARCHAR},
+      attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
+      attachment3 = #{attachment3,jdbcType=VARCHAR},
+      attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
+      attachment4 = #{attachment4,jdbcType=VARCHAR},
+      attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
+      attachment5 = #{attachment5,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      company_id = #{companyId,jdbcType=BIGINT},
+      shift_user = #{shiftUser,jdbcType=VARCHAR},
+      shift_time = #{shiftTime,jdbcType=VARCHAR},
+      inventory_shifted_id = #{inventoryShiftedId,jdbcType=VARCHAR},
+      finished = #{finished,jdbcType=TINYINT}
+    where shift_id = #{shiftId,jdbcType=BIGINT}
+  </update>
+</mapper>

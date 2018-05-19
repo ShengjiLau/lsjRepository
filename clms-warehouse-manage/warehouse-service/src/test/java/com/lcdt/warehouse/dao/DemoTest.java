@@ -40,10 +40,11 @@ public class DemoTest extends BaseIntegrationContext{
         mapper.inWarehousePlanList();*/
         //Page<InWarehousePlan> list = inWarehousePlanService.inWarehousePlanList(null);
 
-        List<InPlanGoodsInfoResultDto> list =  mapper1.inWhPlanGoodsInfoList(new Page<InPlanGoodsInfoResultDto>(),12l);
-        for(InPlanGoodsInfoResultDto obj :list) {
-            System.out.println(obj.getGoodsBarcode());
-        }
+//        List<InPlanGoodsInfoResultDto> list =  mapper1.inWhPlanGoodsInfoList(new Page<InPlanGoodsInfoResultDto>(),12l);
+//        for(InPlanGoodsInfoResultDto obj :list) {
+//            System.out.println(obj.getGoodsBarcode());
+//        }
+        System.out.println("---"+mapper.getPlanCode());
 
     }
 

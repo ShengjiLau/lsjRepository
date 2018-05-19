@@ -8,10 +8,13 @@ import java.util.List;
 /**
  * Created by yangbinq on 2018/5/14.
  */
-public class InWhPlanAddParamsDto implements Serializable {
+public class InWhPlanDto implements Serializable {
 
+
+    @ApiModelProperty(value = "计划ID")
+    private Long planId;
     @ApiModelProperty(value = "项目组ID")
-    private Integer groupId;
+    private Long groupId;
     @ApiModelProperty(value = "项目组名")
     private String groupName;
     @ApiModelProperty(value = "合同编码组名")
@@ -47,14 +50,21 @@ public class InWhPlanAddParamsDto implements Serializable {
     @ApiModelProperty(value = "附件信息")
     private String attachment;
 
-    private List<InWhPlanAddGoodsParamsDto> inWhPlanAddGoodsParamsDtoList;
+
+    private Long companyId;
+    private String createUserName;
+    private Long createUserId;
+    private String planNo;
+
+    private List<InWhPlanGoodsDto> inWhPlanGoodsDtoList;
+    private List<InWarehouseOrderDto> inWarehouseOrderDtoList; //入库计划详细
 
 
-    public Integer getGroupId() {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Integer groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 
@@ -194,11 +204,59 @@ public class InWhPlanAddParamsDto implements Serializable {
         this.attachment = attachment;
     }
 
-    public List<InWhPlanAddGoodsParamsDto> getInWhPlanAddGoodsParamsDtoList() {
-        return inWhPlanAddGoodsParamsDtoList;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setInWhPlanAddGoodsParamsDtoList(List<InWhPlanAddGoodsParamsDto> inWhPlanAddGoodsParamsDtoList) {
-        this.inWhPlanAddGoodsParamsDtoList = inWhPlanAddGoodsParamsDtoList;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
+    public Long getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(Long createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public List<InWhPlanGoodsDto> getInWhPlanGoodsDtoList() {
+        return inWhPlanGoodsDtoList;
+    }
+
+    public void setInWhPlanGoodsDtoList(List<InWhPlanGoodsDto> inWhPlanGoodsDtoList) {
+        this.inWhPlanGoodsDtoList = inWhPlanGoodsDtoList;
+    }
+
+    public Long getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(Long planId) {
+        this.planId = planId;
+    }
+
+    public List<InWarehouseOrderDto> getInWarehouseOrderDtoList() {
+        return inWarehouseOrderDtoList;
+    }
+
+    public void setInWarehouseOrderDtoList(List<InWarehouseOrderDto> inWarehouseOrderDtoList) {
+        this.inWarehouseOrderDtoList = inWarehouseOrderDtoList;
+    }
+
+    public String getPlanNo() {
+        return planNo;
+    }
+
+    public void setPlanNo(String planNo) {
+        this.planNo = planNo;
     }
 }

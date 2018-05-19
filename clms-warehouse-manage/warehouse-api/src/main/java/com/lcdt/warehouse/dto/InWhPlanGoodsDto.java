@@ -5,16 +5,17 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Created by yangbinq on 2018/5/14.
  */
-public class InWhPlanAddGoodsParamsDto {
+public class InWhPlanGoodsDto {
 
+    private Long relationId;
     @ApiModelProperty(value = "货物ID")
     private Long goodsId;
     @ApiModelProperty(value = "计划数量")
     private Float planGoodsNum;
     @ApiModelProperty(value = "入库价")
-    private Integer inHousePrice;
+    private Float inHousePrice;
     @ApiModelProperty(value = "换算关系")
-    private int unitData;
+    private Integer unitData;
     @ApiModelProperty(value = "商品名称")
     private String goodsName;
     @ApiModelProperty(value = "商品分类")
@@ -36,6 +37,49 @@ public class InWhPlanAddGoodsParamsDto {
     @ApiModelProperty(value = "备注")
     private String remark;
 
+
+
+    @ApiModelProperty(value = "配仓---待配数量-也就是剩余计划数量")
+    private Float remainGoodsNum;
+    @ApiModelProperty(value = "配仓---已入库数量")
+    private Float inOderGoodsNum;
+    @ApiModelProperty(value = "配仓---本次配仓数")
+    private Float distGoodsNum;
+    @ApiModelProperty(value = "配仓---备注")
+    private String disRemark;
+
+    public Float getRemainGoodsNum() {
+        return remainGoodsNum;
+    }
+
+    public void setRemainGoodsNum(Float remainGoodsNum) {
+        this.remainGoodsNum = remainGoodsNum;
+    }
+
+    public Float getInOderGoodsNum() {
+        return inOderGoodsNum;
+    }
+
+    public void setInOderGoodsNum(Float inOderGoodsNum) {
+        this.inOderGoodsNum = inOderGoodsNum;
+    }
+
+    public Float getDistGoodsNum() {
+        return distGoodsNum;
+    }
+
+    public void setDistGoodsNum(Float distGoodsNum) {
+        this.distGoodsNum = distGoodsNum;
+    }
+
+    public String getDisRemark() {
+        return disRemark;
+    }
+
+    public void setDisRemark(String disRemark) {
+        this.disRemark = disRemark;
+    }
+
     public Long getGoodsId() {
         return goodsId;
     }
@@ -52,11 +96,11 @@ public class InWhPlanAddGoodsParamsDto {
         this.planGoodsNum = planGoodsNum;
     }
 
-    public Integer getInHousePrice() {
+    public Float getInHousePrice() {
         return inHousePrice;
     }
 
-    public void setInHousePrice(Integer inHousePrice) {
+    public void setInHousePrice(Float inHousePrice) {
         this.inHousePrice = inHousePrice;
     }
 
@@ -146,5 +190,13 @@ public class InWhPlanAddGoodsParamsDto {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Long getRelationId() {
+        return relationId;
+    }
+
+    public void setRelationId(Long relationId) {
+        this.relationId = relationId;
     }
 }

@@ -45,7 +45,7 @@
                 and storage_type = #{storageType}
             </if>
             <if test="groupIds!=null and groupIds!=''">
-                and group_id in (#{groupIds})
+                and group_id in (${groupIds})
             </if>
             <if test="customerPurchaseNo!=null and customerPurchaseNo != ''">
                 and customer_purchase_no like concat('%',#{customerPurchaseNo},'%')
@@ -55,6 +55,10 @@
             </if>
         </where>
        ORDER BY plan_id DESC
+    </select>
+
+    <select id="getPlanCode" resultType="java.lang.String">
+        SELECT F_IN_PLAN_CODE('WI')
     </select>
 
 </mapper>
