@@ -20,6 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.Reconcile;
 import com.lcdt.traffic.service.ReconcileService;
+import com.lcdt.traffic.util.ConvertStringAndLong;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.ReconcileDto;
 import com.lcdt.traffic.web.dto.ReconcileListDto;
@@ -83,18 +84,17 @@ public class PayableReconcileApi {
 	@ApiOperation("取消对账单,payable_reconcile_cancel")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_reconcile_cancel')")
 	public JSONObject cancelReconcile(@ApiParam(value="一个或多个对账单id,多个时用','隔开",required=true)@RequestParam String reconcileIds) {
-		JSONObject jsonObject =new JSONObject();	
-		Map<Integer,String> map=reconcileService.setCancelOk(reconcileIds);
-		StringBuilder sb = new StringBuilder();
-		if(map.containsKey(1)) {
-			sb.append("存在收付款记录的对账单不能取消,对账单id:"+map.get(1));
-			sb.append(";");
+		JSONObject jsonObject = new JSONObject();	
+		Map<Integer,String> map = reconcileService.setCancelOk(reconcileIds);
+		if (map.containsKey(1)) {
+			jsonObject.put("data","failedId:"+map.get(1));
+			Long[] Ids = ConvertStringAndLong.convertStrToLong(map.get(1));
+			jsonObject.put("message", "有"+Ids.length+"条对账单因为存在收付款记录不能取消!");
+		}else {
+			jsonObject.put("message", "取消成功！");
 		}
-		if(map.containsKey(2)) {
-			sb.append("取消成功");
-		}
+		
 		jsonObject.put("code",0);
-		jsonObject.put("message",sb.toString());	    
 		return jsonObject;			
 	}
 	

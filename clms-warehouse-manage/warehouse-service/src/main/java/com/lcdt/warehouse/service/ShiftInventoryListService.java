@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.service;
 
+import com.github.pagehelper.PageInfo;
 import com.lcdt.warehouse.dto.ShiftInventoryListDTO;
 
 /**
@@ -24,7 +25,18 @@ public interface ShiftInventoryListService {
 	int completeShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO);
 	
 	
+	/**
+	 * 依据条件查询移库单列表
+	 * @param shiftInventoryListDTO
+	 * @return
+	 */
+	PageInfo<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO);
 	
+	
+	/**
+	 * 查询单个移库单详情
+	 */
+	ShiftInventoryListDTO getShiftInventoryListDetails(Long shiftInventoryListId);
 	
 	
 

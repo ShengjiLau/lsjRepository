@@ -2,16 +2,26 @@ package com.lcdt.warehouse.service.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.github.pagehelper.PageInfo;
+import com.lcdt.warehouse.dto.InWarehouseOrderDto;
+import com.lcdt.warehouse.dto.InWarehouseOrderSearchParamsDto;
 import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.dto.ShiftInventoryListDTO;
+import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.entity.ShiftGoodsDO;
 import com.lcdt.warehouse.entity.ShiftInventoryListDO;
+import com.lcdt.warehouse.mapper.InWarehouseOrderMapper;
 import com.lcdt.warehouse.mapper.InventoryMapper;
 import com.lcdt.warehouse.mapper.ShiftGoodsDOMapper;
 import com.lcdt.warehouse.mapper.ShiftInventoryListDOMapper;
@@ -112,12 +122,60 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		}	
 	}
 	
+	@Override
+	public PageInfo<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
+		
+		
+		
+		
+		
+		
+		PageInfo page = new PageInfo();
+		
+		
+		
+       return page;
+    }
+
+	@Override
+	public ShiftInventoryListDTO getShiftInventoryListDetails(Long shiftInventoryListId) {
+		ShiftInventoryListDTO shiftInventoryListDTO = new ShiftInventoryListDTO();
+		ShiftInventoryListDO shiftInventoryListDO = shiftInventoryListDOMapper.selectByPrimaryKey(shiftInventoryListId);
+		BeanUtils.copyProperties(shiftInventoryListDO,shiftInventoryListDTO);
+		Long[] inventoryIds = ConvertStringToLong(shiftInventoryListDO.getInventoryShiftedId());
+		Map<Long,Long> m = new HashMap<Long,Long>();
+		if (null != inventoryIds) {
+			
+		}
+		
+		
+		
+		
+		
+		return shiftInventoryListDTO;
+	}
+
 	
 	
 	
-	
-	
-	
+	public Long[] ConvertStringToLong(String s) {
+		String patten="^(([0-9]+)([,])){0,}$";
+		String str = s+",";
+		boolean b= Pattern.matches(patten, str);
+		if (b) {
+			String [] ss = str.split(",");
+			Long [] group = new Long[ss.length];
+			for (int i = 0; i < ss.length; i++) {
+				group[i]=Long.valueOf(ss[i]);
+			}
+			return group;
+		}else {
+			return null;
+		}
+		
+		
+		
+	}
 	
 	
 	
