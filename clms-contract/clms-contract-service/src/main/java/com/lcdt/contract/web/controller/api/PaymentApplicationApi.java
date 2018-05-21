@@ -34,8 +34,10 @@ public class PaymentApplicationApi {
     @GetMapping("/paymentList")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_list')")
     public PageBaseDto<List<PaymentApplication>> billingRecordApiList(PaymentApplicationDto paymentApplicationDto) {
-        Long companyId = SecurityInfoGetter.getCompanyId(); //获取登陆人企业id
-        paymentApplicationDto.setCompanyId(companyId);   //设置登陆人企业id
+        //获取登陆人企业id
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        //设置登陆人企业id
+        paymentApplicationDto.setCompanyId(companyId);
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(paymentApplicationDto.getPageNum());
         pageInfo.setPageSize(paymentApplicationDto.getPageSize());
@@ -48,11 +50,15 @@ public class PaymentApplicationApi {
     @PostMapping("/paymentAdd")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_add')")
     public JSONObject addPaymentApplication(@RequestBody PaymentApplicationDto paymentApplicationDto){
-        Long companyId = SecurityInfoGetter.getCompanyId(); //获取登陆人企业id
-        paymentApplicationDto.setCompanyId(companyId);   //设置登陆人企业id
+        //获取登陆人企业id
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        //设置登陆人企业id
+        paymentApplicationDto.setCompanyId(companyId);
         User user = SecurityInfoGetter.getUser();
-        paymentApplicationDto.setCreateId(user.getUserId());   //设置创建人id
-        paymentApplicationDto.setCreateName(user.getRealName());   //设置创建人姓名
+        //设置创建人id
+        paymentApplicationDto.setCreateId(user.getUserId());
+        //设置创建人姓名
+        paymentApplicationDto.setCreateName(user.getRealName());
         JSONObject jsonObject = new JSONObject();
         int row = paymentApplictionService.addPaymentAppliction(paymentApplicationDto);
         if(row>0){
