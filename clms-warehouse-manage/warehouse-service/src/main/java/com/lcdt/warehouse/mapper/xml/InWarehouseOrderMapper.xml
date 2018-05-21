@@ -136,7 +136,7 @@
         #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{purchaseCode,jdbcType=VARCHAR},
         #{customerName,jdbcType=VARCHAR},#{customerId,jdbcType=BIGINT}, #{customerContactName,jdbcType=VARCHAR},
         #{customerContactPhone,jdbcType=VARCHAR},
-        #{wareHouseId,jdbcType=BIGINT}, #{warehouseName,jdbcType=VARCHAR}, #{storageType,jdbcType=VARCHAR},
+        #{warehouseId,jdbcType=BIGINT}, #{warehouseName,jdbcType=VARCHAR}, #{storageType,jdbcType=VARCHAR},
         #{storagePlanTime,jdbcType=TIMESTAMP}, #{storageTime,jdbcType=TIMESTAMP}, #{storageRemark,jdbcType=VARCHAR},
         #{deliverymanName,jdbcType=VARCHAR}, #{deliverymanPhone,jdbcType=VARCHAR},
         #{deliverymanLinkman,jdbcType=VARCHAR},
