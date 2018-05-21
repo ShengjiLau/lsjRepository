@@ -35,6 +35,13 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	@Autowired
 	private InventoryMapper inventoryMapper;
 
+	
+	/**
+	 * 新增移库单所传参数为ShiftInventoryListDTO，需要三步：
+	 * 1：创建新的移库单DO，复制从ShiftInventoryListDTO里的移库单属性，插入移库单，
+	 * 2：每一种库存计算移库数量，修改库存
+	 * 3：插入移库到新库的记录
+	 */
 	@Override
 	public int insertShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 	
@@ -45,33 +52,55 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		
 		List<ShiftGoodsListDTO> shiftGoodsListDTOList = shiftInventoryListDTO.getShiftGoodsListDTOList();
 		
+		//新建移库到新库的记录
 		List<ShiftGoodsDO> shiftGoodsDOList = new ArrayList<ShiftGoodsDO>();
-		
-		
-		
-		for(int a = 0; a < shiftGoodsListDTOList.size(); a++) {
+		int h = 0;
+			
+		for (int a = 0; a < shiftGoodsListDTOList.size(); a++) {
 			BigDecimal shiftPlanNum = new BigDecimal(0);
 			shiftGoodsDOList.addAll(shiftGoodsListDTOList.get(a).getShiftGoodsDOList());
 			for(int b = 0; b < shiftGoodsListDTOList.get(a).getShiftGoodsDOList().size(); b++) {
 				shiftPlanNum.add(shiftGoodsListDTOList.get(a).getShiftGoodsDOList().get(b).getShiftPlanNum());
 			}
 			Float lockNum = shiftPlanNum.floatValue();
-			inventoryMapper.updateInventoryLockNum(shiftGoodsListDTOList.get(a).getInventoryId(),lockNum);
+		    h = inventoryMapper.updateInventoryLockNum(shiftGoodsListDTOList.get(a).getInventoryId(),null,lockNum);
 		}
-		
-		
-	
-		
 		
 		int j = shiftGoodsDOMapper.insertShiftGoodsByBatch(shiftGoodsDOList);
 		
-		if (i > 0 && j == shiftGoodsDOList.size()) {
+		if (i > 0 && j == shiftGoodsDOList.size() && shiftGoodsListDTOList.size() == h) {
 			return 1;
 		}else {
 			return -1;
 		}
+	}
+
+
+	@Override
+	public int completeShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
+		int i = shiftInventoryListDOMapper.updateFinishedById(shiftInventoryListDTO.getShiftId());
+		
+		List<ShiftGoodsListDTO> shiftGoodsListDTOList = shiftInventoryListDTO.getShiftGoodsListDTOList();
+		List<ShiftGoodsDO> shiftGoodsDOList = new ArrayList<ShiftGoodsDO>();
+		
+		for (int a = 0; a < shiftGoodsListDTOList.size(); a++) {
+			BigDecimal shiftPlanNum = new BigDecimal(0);
+			BigDecimal shiftNum = new BigDecimal(0);
+			shiftGoodsDOList.addAll(shiftGoodsListDTOList.get(a).getShiftGoodsDOList());
+			for(int b = 0; b < shiftGoodsListDTOList.get(a).getShiftGoodsDOList().size(); b++) {
+				shiftPlanNum.add(shiftGoodsListDTOList.get(a).getShiftGoodsDOList().get(b).getShiftPlanNum());
+				shiftNum.add(shiftGoodsListDTOList.get(a).getShiftGoodsDOList().get(b).getShiftNum());
+			}
+			
+			Float lockNum = shiftPlanNum.floatValue();
+			Float inventoryNum = shiftNum.floatValue();
+		   inventoryMapper.updateInventoryLockNum(shiftGoodsListDTOList.get(a).getInventoryId(),inventoryNum,lockNum);
+		}
 		
 		
+		
+		
+		return 0;
 	}
 	
 	
