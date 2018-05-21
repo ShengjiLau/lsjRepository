@@ -12,14 +12,16 @@ public interface ShiftInventoryListService {
 	
 	
 	/**
-	 * 新增移库单
+	 * 创建移库单
 	 * @return
 	 */
 	int insertShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO);
 	
 	
-	
-	
+	/**
+	 * 完成移库单
+	 */
+	int completeShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO);
 	
 	
 	

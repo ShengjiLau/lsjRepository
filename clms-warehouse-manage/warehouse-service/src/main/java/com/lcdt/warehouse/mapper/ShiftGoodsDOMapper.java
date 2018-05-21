@@ -24,4 +24,8 @@ public interface ShiftGoodsDOMapper {
     int updateByPrimaryKey(ShiftGoodsDO record);
     
     int insertShiftGoodsByBatch(List<ShiftGoodsDO> shiftGoodsDOList);
+    
+    int updateShiftGoodsByBatch(List<ShiftGoodsDO> shiftGoodsDOList);
+    
+    
 }

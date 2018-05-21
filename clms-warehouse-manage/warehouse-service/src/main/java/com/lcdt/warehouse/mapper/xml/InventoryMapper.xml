@@ -57,13 +57,15 @@
 	<update id="updateInventoryLockNum">
 	update inventory
 	set 
-	lock_num = #{arg1,jdbcType=FLOAT}
-	where
-	inventory_id = #{arg0,jdbcType=BIGINT}
-	
-	
-	
-	
+	<choose>
+	<when test="arg1 != null">
+	inventory_num = inventory_num - #{arg1,jdbcType=float}
+	lock_num =lock_num - #{arg2,jdbcType=float}
+	</when>
+	<otherwise>
+	lock_num = #{arg2,jdbcType=float}
+	</otherwise>
+	</choose>
 	</update>
 
 
