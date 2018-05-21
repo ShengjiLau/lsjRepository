@@ -115,34 +115,39 @@
       #{item.shiftPlanNum,jdbcType=DECIMAL}, #{item.shiftNum,jdbcType=DECIMAL}, #{item.remark,jdbcType=VARCHAR}
       )
     </foreach>
+     </insert>
     
-    <update id="updateShiftGoodsByBatch">
+    
+    
+    <update id="updateShiftGoodsByBatch"  parameterType="java.util.List">
     update shift_goods
+    <foreach collection="list" index="index" open="" close="" separator="," item="item">
     <set >
       <if test="inventoryId != null" >
-        inventory_id = #{inventoryId,jdbcType=BIGINT},
+        inventory_id = #{item.inventoryId,jdbcType=BIGINT},
       </if>
       <if test="shiftLocation != null" >
-        shift_location = #{shiftLocation,jdbcType=VARCHAR},
+        shift_location = #{item.shiftLocation,jdbcType=VARCHAR},
       </if>
       <if test="shiftPlanNum != null" >
-        shift_plan_num = #{shiftPlanNum,jdbcType=DECIMAL},
+        shift_plan_num = #{item.shiftPlanNum,jdbcType=DECIMAL},
       </if>
       <if test="shiftNum != null" >
-        shift_num = #{shiftNum,jdbcType=DECIMAL},
+        shift_num = #{item.shiftNum,jdbcType=DECIMAL},
       </if>
       <if test="remark != null" >
-        remark = #{remark,jdbcType=VARCHAR},
+        remark = #{item.remark,jdbcType=VARCHAR},
       </if>
     </set>
-    where shift_goods_id = #{shiftGoodsId,jdbcType=BIGINT}
+    where shift_goods_id = #{item.shiftGoodsId,jdbcType=BIGINT}
+     </foreach>
   </update>
   
   
   
   
   
-  </insert>
+ 
   
   
   

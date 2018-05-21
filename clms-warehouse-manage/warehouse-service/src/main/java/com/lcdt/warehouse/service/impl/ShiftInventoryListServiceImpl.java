@@ -75,7 +75,13 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		}
 	}
 
-
+	/**
+	 * 完成移库单步骤有四：
+	 * 1：修改移库单ShiftInventoryList的finished状态为1
+	 * 2：修改库存，解除新建时锁定的库存，修改完成时的库存量
+	 * 3：修改移库时的移库商品信息
+	 * 4：新建移库目标库的入库单
+	 */
 	@Override
 	public int completeShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 		int i = shiftInventoryListDOMapper.updateFinishedById(shiftInventoryListDTO.getShiftId());
@@ -97,10 +103,13 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		   inventoryMapper.updateInventoryLockNum(shiftGoodsListDTOList.get(a).getInventoryId(),inventoryNum,lockNum);
 		}
 		
+		shiftGoodsDOMapper.updateShiftGoodsByBatch(shiftGoodsDOList);
 		
-		
-		
-		return 0;
+		if (i > 0) {
+			return 1;
+		}else {
+			return -1;
+		}	
 	}
 	
 	
