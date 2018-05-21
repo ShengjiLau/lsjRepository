@@ -33,7 +33,7 @@ public interface FeeAccountMapper {
 
     int auditByAccountIds(Map map);
 
-    List feeAccountGroupByReceivPayName(Map map);
+    List<Map<String,Object>> feeAccountGroupByReceivPayName(Map map);
    
     /**
      * 此方法用于生成对账单批量修改FeeAccount中对账单的id和code
@@ -66,4 +66,7 @@ public interface FeeAccountMapper {
 
     int updateIsDeleteByCondition(FeeAccountSaveParamsDto saveParamsDto);
 
+    List<Map<String,Object>> feeAccountGroupByReconcile(Map map);
+
+    String getWaybillIdsByAccountIds(String accountIds);
 }

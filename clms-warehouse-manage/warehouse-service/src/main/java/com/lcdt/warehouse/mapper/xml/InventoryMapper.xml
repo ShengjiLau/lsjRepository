@@ -54,10 +54,21 @@
         </where>
     </select>
 
-
+	<update id="updateInventoryLockNum">
+	update inventory
+	set 
+	lock_num = #{arg1,jdbcType=FLOAT}
+	where
+	inventory_id = #{arg0,jdbcType=BIGINT}
+	
+	
+	
+	
+	</update>
 
 
 
 
 
 </mapper>
+

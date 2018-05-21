@@ -98,7 +98,7 @@ public interface FeeAccountService {
      * @param map
      * @return
      */
-    List feeAccountReconcilePage(Map map);
+    List<Map<String,Object>> feeAccountReconcilePage(Map map);
 
     /**
      * 保存对账单
@@ -113,4 +113,11 @@ public interface FeeAccountService {
      * @return
      */
     List<FeeAccountDto> feeAccountReconcileDetail(Long reconcileId);
+
+    /**
+     * 取消对账
+     * @param accountIds
+     * @return
+     */
+    boolean feeAccountReconcileCancel(Long[] accountIds);
 }
