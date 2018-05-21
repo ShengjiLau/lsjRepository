@@ -86,7 +86,7 @@ public interface InWarehousePlanService extends IService<InWarehousePlan> {
      * 计划配仓
      * @return
      */
-    InWhPlanDto distributeWh(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel);
+    boolean distributeWh(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel);
 
 }
 

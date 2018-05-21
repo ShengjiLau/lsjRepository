@@ -26,14 +26,14 @@
         <result column="stroge_location_id" jdbcType="BIGINT" property="strogeLocationId" />
         <result column="stroge_location_code" jdbcType="VARCHAR" property="strogeLocationCode" />
     </resultMap>
-
+    <resultMap id="BaseResultMapDto" extends="BaseResultMap" type="com.lcdt.warehouse.dto.InorderGoodsInfoDto"></resultMap>
     <sql id="Base_Select_List">
         relation_id, inorder_id,inplan_goods_id, goods_id, goods_name, goods_spec, goods_classify,goods_code, goods_barcode,
         goods_price, goods_batch, min_unit, unit, unit_data, receivalbe_amount, batch, in_house_amount,
         in_house_price, damage, remark, stroge_location_id, stroge_location_code
     </sql>
 
-    <select id="selectGoodsDetail" parameterType="Long" resultMap="BaseResultMap">
+    <select id="selectGoodsDetail" parameterType="Long" resultMap="BaseResultMapDto">
         SELECT <include refid="Base_Select_List"/>
         FROM inorder_goods_info
         WHERE inorder_id = #{inorderId,jdbcType=BIGINT}

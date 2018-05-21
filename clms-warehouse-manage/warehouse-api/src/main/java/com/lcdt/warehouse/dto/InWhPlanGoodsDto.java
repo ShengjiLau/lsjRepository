@@ -104,11 +104,11 @@ public class InWhPlanGoodsDto {
         this.inHousePrice = inHousePrice;
     }
 
-    public int getUnitData() {
+    public Integer getUnitData() {
         return unitData;
     }
 
-    public void setUnitData(int unitData) {
+    public void setUnitData(Integer unitData) {
         this.unitData = unitData;
     }
 

@@ -130,4 +130,27 @@ public class OwnVehicleApi {
     }
 
 
+    @ApiOperation(value = "修改车辆", notes = "更新车辆")
+    @PostMapping("/modify")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_modify')")
+    public JSONObject modOwnVehicle(@Validated @RequestBody OwnVehicleDto ownVehicleDto, BindingResult bindingResult) {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
+        String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
+        ownVehicleDto.setCompanyId(companyId);
+        ownVehicleDto.setUpdateId(userId);
+        ownVehicleDto.setUpdateName(userName);
+        JSONObject jsonObject = new JSONObject();
+        if (bindingResult.hasErrors()) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
+            return jsonObject;
+        }
+        ownVehicleService.modVehicle(ownVehicleDto);
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "修改成功");
+        return jsonObject;
+    }
+
+
 }
