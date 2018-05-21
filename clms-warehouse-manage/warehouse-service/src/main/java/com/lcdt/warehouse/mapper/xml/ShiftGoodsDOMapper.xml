@@ -114,10 +114,29 @@
     #{item.shiftGoodsId,jdbcType=BIGINT}, #{item.inventoryId,jdbcType=BIGINT}, #{item.shiftLocation,jdbcType=VARCHAR}, 
       #{item.shiftPlanNum,jdbcType=DECIMAL}, #{item.shiftNum,jdbcType=DECIMAL}, #{item.remark,jdbcType=VARCHAR}
       )
-    
-    
-    
     </foreach>
+    
+    <update id="updateShiftGoodsByBatch">
+    update shift_goods
+    <set >
+      <if test="inventoryId != null" >
+        inventory_id = #{inventoryId,jdbcType=BIGINT},
+      </if>
+      <if test="shiftLocation != null" >
+        shift_location = #{shiftLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="shiftPlanNum != null" >
+        shift_plan_num = #{shiftPlanNum,jdbcType=DECIMAL},
+      </if>
+      <if test="shiftNum != null" >
+        shift_num = #{shiftNum,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where shift_goods_id = #{shiftGoodsId,jdbcType=BIGINT}
+  </update>
   
   
   

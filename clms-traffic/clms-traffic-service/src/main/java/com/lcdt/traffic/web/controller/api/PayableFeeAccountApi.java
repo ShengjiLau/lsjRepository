@@ -290,7 +290,7 @@ public class PayableFeeAccountApi {
     @RequestMapping(value = "/feeAccountAudit", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_audit')")
     public JSONObject feeAccountAudit(@ApiParam(value = "0-取消审核，1-审核",required = true) @RequestParam short auditStatus,
-                                      @ApiParam(value = "记账单IDs",required = true) @RequestParam List<Long> accountIds) {
+                                      @ApiParam(value = "记账单IDs（例:1,2,3）",required = true) @RequestParam String accountIds) {
         Map map = new HashMap();
         map.put("auditStatus", auditStatus);
         if(auditStatus == 1) {
@@ -298,9 +298,9 @@ public class PayableFeeAccountApi {
         }else{
             map.put("auditDate", null);
         }
-        map.put("accountIds", accountIds);
+        map.put("accountIds", accountIds.split(","));
         int result = feeAccountService.feeAccountAudit(map);
-        if (result == accountIds.size()) {
+        if (result == accountIds.split(",").length) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
             jsonObject.put("message", auditStatus==0?"取消审核成功":"审核成功");
@@ -313,9 +313,9 @@ public class PayableFeeAccountApi {
     @ApiOperation("应付记账单——对账（进入对账页面）")
     @RequestMapping(value = "/feeAccountReconcilePage", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_reconcile_page')")
-    public JSONObject feeAccountReconcilePage(@ApiParam(value = "记账单IDs",required = true) @RequestParam List<Long> accountIds) {
+    public JSONObject feeAccountReconcilePage(@ApiParam(value = "记账单IDs（例:1,2,3）",required = true) @RequestParam String accountIds) {
         Map map = new HashMap();
-        map.put("accountIds", accountIds);
+        map.put("accountIds", accountIds.split(","));
         List list = feeAccountService.feeAccountReconcilePage(map);
         if (list != null) {
             JSONObject jsonObject = new JSONObject();
@@ -331,9 +331,9 @@ public class PayableFeeAccountApi {
     @ApiOperation("应付记账单——对账单保存")
     @RequestMapping(value = "/feeAccountReconcileSave", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_reconcile_save')")
-    public JSONObject feeAccountReconcileSave(@ApiParam(value = "记账单IDs",required = true) @RequestParam List<Long> accountIds) {
+    public JSONObject feeAccountReconcileSave(@ApiParam(value = "记账单IDs（例:1,2,3）",required = true) @RequestParam String accountIds) {
         Map map = new HashMap();
-        map.put("accountIds", accountIds);
+        map.put("accountIds", accountIds.split(","));
         List<Map<String,Object>> list = feeAccountService.feeAccountReconcilePage(map);
         boolean result = feeAccountService.feeAccountReconcileSave(list, (short)1);
         if (result) {
@@ -343,6 +343,26 @@ public class PayableFeeAccountApi {
             return jsonObject;
         } else {
             throw new RuntimeException("对账失败");
+        }
+    }
+
+    @ApiOperation("对账单——取消对账")
+    @RequestMapping(value = "/feeAccountReconcileCancel", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_reconcile_cancel')")
+    public JSONObject feeAccountReconcileCancel(@ApiParam(value = "对账单id（例:1,2,3）",required = true) @RequestParam String accountIds) {
+        String[] accountIdStrArr = accountIds.split(",");
+        Long[] accountIdArr = new Long[accountIdStrArr.length];
+        for(int i=0; i<accountIdStrArr.length; i++){
+            accountIdArr[i] = Long.parseLong(accountIdStrArr[i]);
+        }
+        boolean result = feeAccountService.feeAccountReconcileCancel(accountIdArr);
+        if (result) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "取消成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("取消失败");
         }
     }
 }

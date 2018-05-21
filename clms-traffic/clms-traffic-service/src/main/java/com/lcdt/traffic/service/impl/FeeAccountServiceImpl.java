@@ -16,6 +16,7 @@ import com.lcdt.userinfo.rpc.FinanceRpcService;
 import com.lcdt.util.ClmsBeanUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.tl.commons.util.StringUtility;
 
 import java.util.*;
 
@@ -42,6 +43,8 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     private CustomerCompanyIds customerCompanyIds;
     @Autowired
     private ReconcileMapper reconcileMapper;
+    @Autowired
+    private FeeExchangeMapper feeExchangeMapper;
 
     @Override
     public PageInfo feeAccountWaybillList(Map map){
@@ -250,8 +253,8 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     }
 
     @Override
-    public List feeAccountReconcilePage(Map map) {
-        List list = feeAccountMapper.feeAccountGroupByReceivPayName(map);
+    public List<Map<String,Object>> feeAccountReconcilePage(Map map) {
+        List<Map<String,Object>> list = feeAccountMapper.feeAccountGroupByReceivPayName(map);
         return list;
     }
     @Override
@@ -265,7 +268,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                     Reconcile reconcile = new Reconcile();
                     reconcile.setCompanyId(SecurityInfoGetter.getCompanyId());
                     reconcile.setTransportationExpenses(Double.parseDouble(m.get("freightTotal").toString()));//运费
-                    reconcile.setOtherExpenses(Double.parseDouble(m.get("otherFeeTaotal").toString()));//其他费用
+                    reconcile.setOtherExpenses(Double.parseDouble(m.get("otherFeeTotal").toString()));//其他费用
                     reconcile.setOperatorId(SecurityInfoGetter.getUser().getUserId());
                     reconcile.setOperatorName(SecurityInfoGetter.getUser().getRealName());
                     reconcile.setCreateTime(createTime);
@@ -308,6 +311,83 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     public List<FeeAccountDto> feeAccountReconcileDetail(Long reconcileId) {
         List<FeeAccountDto> list = feeAccountMapper.selectByReconcileId(reconcileId);
         return list;
+    }
+
+    public boolean feeAccountReconcileCancel(Long[] accountIds) {
+        try{
+            Map map = new HashMap();
+            map.put("accountIds", accountIds);
+            //按对账id对记账单进行分组
+            List<Map<String,Object>> list = feeAccountMapper.feeAccountGroupByReconcile(map);
+
+            if(list != null && list.size() > 0){
+                for(Map<String, Object> m : list){
+                    Long reconcileId = Long.parseLong(m.get("reconcileId").toString());
+                    Reconcile reconcile = reconcileMapper.selectByPrimaryKey(reconcileId);
+                    if(reconcile != null){
+                        //记账单运费总金额
+                        Double freightTotal = Double.parseDouble(m.get("freightTotal").toString());
+                        //记账单其他费用总金额
+                        Double otherFeeTotal = Double.parseDouble(m.get("otherFeeTotal").toString());
+
+                        //对账单总运费金额
+                        Double transportationExpenses = reconcile.getTransportationExpenses()==null?0.0:reconcile.getTransportationExpenses();
+                        //对账单其他总费用金额
+                        Double otherExpenses = reconcile.getOtherExpenses()==null?0.0:reconcile.getOtherExpenses();
+
+                        //对账单收付款记录条数
+                        int exchangeCount = feeExchangeMapper.selectCountFeeExchangeByReconcileId(reconcileId);
+
+                        //记账单对应记账单总金额 - 对账单对账金额 = 0（在没有收付款记录的情况下，对账单可直接取消/删除）
+                        if((transportationExpenses + otherExpenses) - (freightTotal + otherFeeTotal) == 0){
+                            if(exchangeCount <= 0){
+                                Long[] reconcileIdArr = {reconcileId};
+                                reconcileMapper.cancelByBatch(reconcileIdArr);
+                            }
+                        }else{
+                            if(exchangeCount <= 0) {
+                                //否则需要从对账单中减去记账单金额
+                                reconcile.setTransportationExpenses(transportationExpenses - freightTotal);
+                                reconcile.setOtherExpenses(otherExpenses - otherFeeTotal);
+
+                                StringBuffer newAccountIds = new StringBuffer();//对账单新的accountIds
+
+                                List<String> oldAccountIdsArr_r = Arrays.asList(reconcile.getAccountId().split(","));//对账单原始accountIds
+
+                                List<String> accountIdsArr_a = Arrays.asList(m.get("accountIds").toString().split(","));//多个记账单id
+
+                                //取出不同的accountId
+                                for (String accountId : oldAccountIdsArr_r) {
+                                    if (!accountIdsArr_a.contains(accountId)) {
+                                        newAccountIds.append(accountId + ",");
+                                    }
+                                }
+
+                                reconcile.setAccountId(newAccountIds.length() > 0 ? newAccountIds.substring(0, newAccountIds.length() - 1) : null);
+                                //根据accountIds找出对应waybillIds
+                                if (StringUtility.isNotEmpty(reconcile.getAccountId())) {
+                                    reconcile.setWaybillId(feeAccountMapper.getWaybillIdsByAccountIds(reconcile.getAccountId()));
+                                } else {
+                                    reconcile.setWaybillId(null);
+                                }
+
+                                reconcileMapper.updateByPrimaryKey(reconcile);
+                            }
+                        }
+                    }
+                }
+                //设置记账单记账信息为空
+                ReconcileDto reconcileDto = new ReconcileDto();
+                reconcileDto.setReconcileCode(null);
+                reconcileDto.setReconcileId(null);
+                reconcileDto.setAccountIds(accountIds);
+                feeAccountMapper.updateReconcileCodeAndId(reconcileDto);
+            }
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }
 
