@@ -89,9 +89,33 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         }
         Inventory existInventory = inventories.get(0);
         existInventory.setInvertoryNum(existInventory.getInvertoryNum() + inventory.getInvertoryNum());
+
+        updateInventoryPrice(existInventory,inventory);
+
         inventoryMapper.updateById(existInventory);
         logger.info("入库 更新库存数量：{}", existInventory);
         return existInventory;
+    }
+
+
+
+    private void updateInventoryPrice(Inventory existInventory, Inventory inventory) {
+        int coststrategy = 0;
+        switch (coststrategy) {
+            case 0:
+                break;
+
+            case 1:
+                existInventory.setInventoryPrice((existInventory.getInventoryPrice() + inventory.getInventoryPrice()) / 2);
+                break;
+            case 2:
+
+
+                break;
+
+        }
+
+
     }
 
 
