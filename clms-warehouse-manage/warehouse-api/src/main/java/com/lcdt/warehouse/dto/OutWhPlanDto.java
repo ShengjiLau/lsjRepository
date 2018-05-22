@@ -1,96 +1,65 @@
-package com.lcdt.warehouse.entity;
+package com.lcdt.warehouse.dto;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.enums.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.lcdt.warehouse.dto.InPlanGoodsInfoResultDto;
-import com.lcdt.warehouse.dto.OutPlanGoodsInfoResultDto;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * <p>
- * 
- * </p>
- *
- * @author code generate
- * @since 2018-05-07
+ * Created by yangbinq on 2018/5/14.
  */
-public class OutWarehousePlan implements Serializable {
+public class OutWhPlanDto implements Serializable {
 
-    private static final long serialVersionUID = 1L;
 
-    @TableId(value = "outplan_id", type = IdType.AUTO)
+    @ApiModelProperty(value = "计划ID")
     private Long outplanId;
-
-    private String planNo;
-
-    private Integer groupId;
-
+    @ApiModelProperty(value = "项目组ID")
+    private Long groupId;
+    @ApiModelProperty(value = "项目组名")
     private String groupName;
-
+    @ApiModelProperty(value = "合同编码组名")
     private String contractNo;
-
+    @ApiModelProperty(value = "采购单号")
     private String customerPurchaseNo;
-
+    @ApiModelProperty(value = "客户ID")
     private Long customerId;
-
+    @ApiModelProperty(value = "客户名称")
     private String customerName;
-
+    @ApiModelProperty(value = "联系人")
     private String customerContactName;
-
+    @ApiModelProperty(value = "联系电话")
     private String customerContactPhone;
-
+    @ApiModelProperty(value = "入库仓库ID")
     private Long wareHouseId;
-
+    @ApiModelProperty(value = "入库仓库名")
     private String warehouseName;
-
+    @ApiModelProperty(value = "入库类型")
     private String storageType;
-
-    private Date storagePlanTime;
-
+    @ApiModelProperty(value = "计划时间")
+    private String storagePlanTime;
+    @ApiModelProperty(value = "备注")
     private String storageRemark;
-
+    @ApiModelProperty(value = "提货单位")
     private String pickupUnit;
-
+    @ApiModelProperty(value = "提货人电话")
+    private String pickupPhone;
+    @ApiModelProperty(value = "提货人")
     private String pickupLinkman;
-
+    @ApiModelProperty(value = "提货车辆")
+    private String pickupCar;
+    @ApiModelProperty(value = "提货人身证")
     private String pickupIdentiycard;
 
-    private String pickupPhone;
 
-    private String pickupCar;
-
-    private Integer planStatus;
-
+    @ApiModelProperty(value = "附件信息")
     private String attachment;
 
-    private Long createUserId;
-
-    private String createUserName;
-
-    private Date createTime;
-
-    private Long updateId;
-
-    private String updateName;
-
-    private Date updateDate;
-
     private Long companyId;
+    private String createUserName;
+    private Long createUserId;
+    private String planNo;
 
-
-    //扩充属性
-    @TableField(exist=false)
-    private List<OutPlanGoodsInfoResultDto> goodsList; //商品详细列表
-
-
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
+    private List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList;
 
     public Long getOutplanId() {
         return outplanId;
@@ -100,19 +69,11 @@ public class OutWarehousePlan implements Serializable {
         this.outplanId = outplanId;
     }
 
-    public String getPlanNo() {
-        return planNo;
-    }
-
-    public void setPlanNo(String planNo) {
-        this.planNo = planNo;
-    }
-
-    public Integer getGroupId() {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Integer groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 
@@ -196,11 +157,11 @@ public class OutWarehousePlan implements Serializable {
         this.storageType = storageType;
     }
 
-    public Date getStoragePlanTime() {
+    public String getStoragePlanTime() {
         return storagePlanTime;
     }
 
-    public void setStoragePlanTime(Date storagePlanTime) {
+    public void setStoragePlanTime(String storagePlanTime) {
         this.storagePlanTime = storagePlanTime;
     }
 
@@ -220,28 +181,20 @@ public class OutWarehousePlan implements Serializable {
         this.pickupUnit = pickupUnit;
     }
 
-    public String getPickupLinkman() {
-        return pickupLinkman;
-    }
-
-    public void setPickupLinkman(String pickupLinkman) {
-        this.pickupLinkman = pickupLinkman;
-    }
-
-    public String getPickupIdentiycard() {
-        return pickupIdentiycard;
-    }
-
-    public void setPickupIdentiycard(String pickupIdentiycard) {
-        this.pickupIdentiycard = pickupIdentiycard;
-    }
-
     public String getPickupPhone() {
         return pickupPhone;
     }
 
     public void setPickupPhone(String pickupPhone) {
         this.pickupPhone = pickupPhone;
+    }
+
+    public String getPickupLinkman() {
+        return pickupLinkman;
+    }
+
+    public void setPickupLinkman(String pickupLinkman) {
+        this.pickupLinkman = pickupLinkman;
     }
 
     public String getPickupCar() {
@@ -252,12 +205,12 @@ public class OutWarehousePlan implements Serializable {
         this.pickupCar = pickupCar;
     }
 
-    public Integer getPlanStatus() {
-        return planStatus;
+    public String getPickupIdentiycard() {
+        return pickupIdentiycard;
     }
 
-    public void setPlanStatus(Integer planStatus) {
-        this.planStatus = planStatus;
+    public void setPickupIdentiycard(String pickupIdentiycard) {
+        this.pickupIdentiycard = pickupIdentiycard;
     }
 
     public String getAttachment() {
@@ -268,12 +221,12 @@ public class OutWarehousePlan implements Serializable {
         this.attachment = attachment;
     }
 
-    public Long getCreateUserId() {
-        return createUserId;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setCreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public String getCreateUserName() {
@@ -284,51 +237,27 @@ public class OutWarehousePlan implements Serializable {
         this.createUserName = createUserName;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Long getCreateUserId() {
+        return createUserId;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreateUserId(Long createUserId) {
+        this.createUserId = createUserId;
     }
 
-    public Long getUpdateId() {
-        return updateId;
+    public String getPlanNo() {
+        return planNo;
     }
 
-    public void setUpdateId(Long updateId) {
-        this.updateId = updateId;
+    public void setPlanNo(String planNo) {
+        this.planNo = planNo;
     }
 
-    public String getUpdateName() {
-        return updateName;
+    public List<OutWhPlanGoodsDto> getOutWhPlanGoodsDtoList() {
+        return outWhPlanGoodsDtoList;
     }
 
-    public void setUpdateName(String updateName) {
-        this.updateName = updateName;
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
-    }
-
-    public List<OutPlanGoodsInfoResultDto> getGoodsList() {
-        return goodsList;
-    }
-
-    public void setGoodsList(List<OutPlanGoodsInfoResultDto> goodsList) {
-        this.goodsList = goodsList;
+    public void setOutWhPlanGoodsDtoList(List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList) {
+        this.outWhPlanGoodsDtoList = outWhPlanGoodsDtoList;
     }
 }

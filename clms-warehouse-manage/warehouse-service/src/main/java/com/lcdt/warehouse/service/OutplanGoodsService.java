@@ -2,6 +2,7 @@ package com.lcdt.warehouse.service;
 
 import com.lcdt.warehouse.entity.OutplanGoods;
 import com.baomidou.mybatisplus.service.IService;
+import org.springframework.stereotype.Service;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.service.IService;
  * @author code generate
  * @since 2018-05-07
  */
+@Service
 public interface OutplanGoodsService extends IService<OutplanGoods> {
 
 }
