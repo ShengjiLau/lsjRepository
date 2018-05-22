@@ -54,4 +54,11 @@ public interface OwnVehicleMapper {
      */
     int updateDriverId(OwnVehicle ownVehicle);
 
+    /**
+     * 查询车牌持否存在 （查询的为count，0不存在）
+     *
+     * @param ownVehicle
+     * @return
+     */
+    OwnVehicle selectAddWaybillVehicleNum(OwnVehicle ownVehicle);
 }

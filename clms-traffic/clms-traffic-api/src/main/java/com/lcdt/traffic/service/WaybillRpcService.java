@@ -12,6 +12,15 @@ import java.util.Map;
 
 public interface WaybillRpcService {
 
+
+    /**
+     * 新增运单
+     *
+     * @param waybillDto
+     * @return
+     */
+    Waybill addWaybill(WaybillDto waybillDto);
+
     /**
      * 查询获取我的运单列表
      * @param dto

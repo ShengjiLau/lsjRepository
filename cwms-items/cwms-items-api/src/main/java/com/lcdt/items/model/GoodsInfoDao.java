@@ -2,13 +2,14 @@ package com.lcdt.items.model;
 
 import com.lcdt.items.model.SubItemsInfoDao;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by lyqishan on 2018/1/10
  */
 
-public class GoodsInfoDao extends SubItemsInfo{
+public class GoodsInfoDao extends SubItemsInfo implements Serializable{
     private Long goodsId;
     private String goodsName;
     private String unit;

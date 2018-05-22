@@ -1,4 +1,4 @@
-package com.lcdt.items.web.dto;
+package com.lcdt.items.dto;
 
 /**
  * Created by lyqishan on 2018/1/10
