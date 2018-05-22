@@ -8,9 +8,11 @@
     <result column="shift_plan_num" property="shiftPlanNum" jdbcType="DECIMAL" />
     <result column="shift_num" property="shiftNum" jdbcType="DECIMAL" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="shift_inventory_id" property="shiftInventoryId" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Base_Column_List" >
-    shift_goods_id, inventory_id, shift_location, shift_plan_num, shift_num, remark
+    shift_goods_id, inventory_id, shift_location, shift_plan_num, shift_num, remark, 
+    shift_inventory_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -23,15 +25,15 @@
     where shift_goods_id = #{shiftGoodsId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lcdt.warehouse.entity.ShiftGoodsDO" >
-    insert into shift_goods (shift_goods_id, inventory_id, shift_location, 
-      shift_plan_num, shift_num, remark
-      )
+   insert into shift_goods (shift_goods_id, inventory_id, shift_location, 
+      shift_plan_num, shift_num, remark, 
+      shift_inventory_id)
     values (#{shiftGoodsId,jdbcType=BIGINT}, #{inventoryId,jdbcType=BIGINT}, #{shiftLocation,jdbcType=VARCHAR}, 
-      #{shiftPlanNum,jdbcType=DECIMAL}, #{shiftNum,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}
-      )
+      #{shiftPlanNum,jdbcType=DECIMAL}, #{shiftNum,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
+      #{shiftInventoryId,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.warehouse.entity.ShiftGoodsDO" >
-    insert into shift_goods
+   insert into shift_goods
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="shiftGoodsId != null" >
         shift_goods_id,
@@ -50,6 +52,9 @@
       </if>
       <if test="remark != null" >
         remark,
+      </if>
+      <if test="shiftInventoryId != null" >
+        shift_inventory_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -71,10 +76,13 @@
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="shiftInventoryId != null" >
+        #{shiftInventoryId,jdbcType=BIGINT},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.warehouse.entity.ShiftGoodsDO" >
-    update shift_goods
+   update shift_goods
     <set >
       <if test="inventoryId != null" >
         inventory_id = #{inventoryId,jdbcType=BIGINT},
@@ -91,39 +99,71 @@
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="shiftInventoryId != null" >
+        shift_inventory_id = #{shiftInventoryId,jdbcType=BIGINT},
+      </if>
     </set>
     where shift_goods_id = #{shiftGoodsId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.warehouse.entity.ShiftGoodsDO" >
-    update shift_goods
+     update shift_goods
     set inventory_id = #{inventoryId,jdbcType=BIGINT},
       shift_location = #{shiftLocation,jdbcType=VARCHAR},
       shift_plan_num = #{shiftPlanNum,jdbcType=DECIMAL},
       shift_num = #{shiftNum,jdbcType=DECIMAL},
-      remark = #{remark,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR},
+      shift_inventory_id = #{shiftInventoryId,jdbcType=BIGINT}
     where shift_goods_id = #{shiftGoodsId,jdbcType=BIGINT}
   </update>
   
   <insert id="insertShiftGoodsByBatch">
   insert into shift_goods (shift_goods_id, inventory_id, shift_location, 
-      shift_plan_num, shift_num, remark
+      shift_plan_num, shift_num, remark, shift_inventory_id
       )
     values
     <foreach collection="list" index="index" open="" close="" separator="," item="item">
     (
     #{item.shiftGoodsId,jdbcType=BIGINT}, #{item.inventoryId,jdbcType=BIGINT}, #{item.shiftLocation,jdbcType=VARCHAR}, 
-      #{item.shiftPlanNum,jdbcType=DECIMAL}, #{item.shiftNum,jdbcType=DECIMAL}, #{item.remark,jdbcType=VARCHAR}
+      #{item.shiftPlanNum,jdbcType=DECIMAL}, #{item.shiftNum,jdbcType=DECIMAL}, #{item.remark,jdbcType=VARCHAR},
+      #{shiftInventoryId,jdbcType=BIGINT}
       )
-    
-    
-    
     </foreach>
+     </insert>
+    
+    
+    
+    <update id="updateShiftGoodsByBatch"  parameterType="java.util.List">
+    update shift_goods
+    <foreach collection="list" index="index" open="" close="" separator="," item="item">
+    <set >
+      <if test="inventoryId != null" >
+        inventory_id = #{item.inventoryId,jdbcType=BIGINT},
+      </if>
+      <if test="shiftLocation != null" >
+        shift_location = #{item.shiftLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="shiftPlanNum != null" >
+        shift_plan_num = #{item.shiftPlanNum,jdbcType=DECIMAL},
+      </if>
+      <if test="shiftNum != null" >
+        shift_num = #{item.shiftNum,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{item.remark,jdbcType=VARCHAR},
+      </if>
+       <if test="shiftInventoryId != null" >
+        shift_inventory_id = #{shiftInventoryId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where shift_goods_id = #{item.shiftGoodsId,jdbcType=BIGINT}
+     </foreach>
+  </update>
   
   
   
   
   
-  </insert>
+ 
   
   
   

@@ -21,6 +21,8 @@ public class ShiftGoodsDO implements Serializable {
     private BigDecimal shiftNum;
 
     private String remark;
+    
+    private Long shiftInventoryId;
 
     private static final long serialVersionUID = 1491515315L;
 
@@ -71,6 +73,14 @@ public class ShiftGoodsDO implements Serializable {
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
+
+	public Long getShiftInventoryId() {
+		return shiftInventoryId;
+	}
+
+	public void setShiftInventoryId(Long shiftInventoryId) {
+		this.shiftInventoryId = shiftInventoryId;
+	}
 
    
 }

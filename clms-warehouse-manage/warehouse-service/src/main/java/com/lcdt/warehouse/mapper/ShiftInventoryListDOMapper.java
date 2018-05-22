@@ -20,4 +20,6 @@ public interface ShiftInventoryListDOMapper {
     int updateByPrimaryKeySelective(ShiftInventoryListDO record);
 
     int updateByPrimaryKey(ShiftInventoryListDO record);
+    
+    int updateFinishedById(Long ShiftInventoryListId);
 }

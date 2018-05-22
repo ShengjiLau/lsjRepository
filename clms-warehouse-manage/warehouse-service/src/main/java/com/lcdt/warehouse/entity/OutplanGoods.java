@@ -18,28 +18,38 @@ public class OutplanGoods implements Serializable {
 
     @TableId(value = "relation_id", type = IdType.AUTO)
     private Long relationId;
-    /**
-     * 货物id
-     */
+
+    private Long outplanId;
+
     private Long goodsId;
-    /**
-     * 计划数量
-     */
-    private Float goodsNum;
-    /**
-     * 备注
-     */
-    private String remark;
-    /**
-     * 入库价
-     */
-    private Integer outHousePrice;
-    private Long planId;
-    /**
-     * 单位
-     */
+
+    private String goodsName;
+
+    private String goodsClassify;
+
+    private Long goodsClassifyId;
+
+    private String goodsSpec;
+
+    private String goodsCode;
+
+    private String goodsBarcode;
+
+    private Float outHousePrice;
+
     private String unit;
 
+    private String minUnit;
+
+    private Integer unitData;
+
+    private Integer planGoodsNum;
+
+    private String remark;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public Long getRelationId() {
         return relationId;
@@ -47,6 +57,14 @@ public class OutplanGoods implements Serializable {
 
     public void setRelationId(Long relationId) {
         this.relationId = relationId;
+    }
+
+    public Long getOutplanId() {
+        return outplanId;
+    }
+
+    public void setOutplanId(Long outplanId) {
+        this.outplanId = outplanId;
     }
 
     public Long getGoodsId() {
@@ -57,36 +75,60 @@ public class OutplanGoods implements Serializable {
         this.goodsId = goodsId;
     }
 
-    public Float getGoodsNum() {
-        return goodsNum;
+    public String getGoodsName() {
+        return goodsName;
     }
 
-    public void setGoodsNum(Float goodsNum) {
-        this.goodsNum = goodsNum;
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
     }
 
-    public String getRemark() {
-        return remark;
+    public String getGoodsClassify() {
+        return goodsClassify;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setGoodsClassify(String goodsClassify) {
+        this.goodsClassify = goodsClassify;
     }
 
-    public Integer getOutHousePrice() {
+    public Long getGoodsClassifyId() {
+        return goodsClassifyId;
+    }
+
+    public void setGoodsClassifyId(Long goodsClassifyId) {
+        this.goodsClassifyId = goodsClassifyId;
+    }
+
+    public String getGoodsSpec() {
+        return goodsSpec;
+    }
+
+    public void setGoodsSpec(String goodsSpec) {
+        this.goodsSpec = goodsSpec;
+    }
+
+    public String getGoodsCode() {
+        return goodsCode;
+    }
+
+    public void setGoodsCode(String goodsCode) {
+        this.goodsCode = goodsCode;
+    }
+
+    public String getGoodsBarcode() {
+        return goodsBarcode;
+    }
+
+    public void setGoodsBarcode(String goodsBarcode) {
+        this.goodsBarcode = goodsBarcode;
+    }
+
+    public Float getOutHousePrice() {
         return outHousePrice;
     }
 
-    public void setOutHousePrice(Integer outHousePrice) {
+    public void setOutHousePrice(Float outHousePrice) {
         this.outHousePrice = outHousePrice;
-    }
-
-    public Long getPlanId() {
-        return planId;
-    }
-
-    public void setPlanId(Long planId) {
-        this.planId = planId;
     }
 
     public String getUnit() {
@@ -97,16 +139,35 @@ public class OutplanGoods implements Serializable {
         this.unit = unit;
     }
 
-    @Override
-    public String toString() {
-        return "OutplanGoods{" +
-        ", relationId=" + relationId +
-        ", goodsId=" + goodsId +
-        ", goodsNum=" + goodsNum +
-        ", remark=" + remark +
-        ", outHousePrice=" + outHousePrice +
-        ", planId=" + planId +
-        ", unit=" + unit +
-        "}";
+    public String getMinUnit() {
+        return minUnit;
+    }
+
+    public void setMinUnit(String minUnit) {
+        this.minUnit = minUnit;
+    }
+
+    public Integer getUnitData() {
+        return unitData;
+    }
+
+    public void setUnitData(Integer unitData) {
+        this.unitData = unitData;
+    }
+
+    public Integer getPlanGoodsNum() {
+        return planGoodsNum;
+    }
+
+    public void setPlanGoodsNum(Integer planGoodsNum) {
+        this.planGoodsNum = planGoodsNum;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

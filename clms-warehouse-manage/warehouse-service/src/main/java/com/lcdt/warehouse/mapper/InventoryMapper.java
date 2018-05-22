@@ -19,7 +19,11 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
 
     List<Inventory> selectInventoryList(Pagination page, Inventory queryDto);
     
-    int updateInventoryLockNum(Long inventoryId,Float lockNum);
+    int updateInventoryLockNum(Long inventoryId,Float inventoryNum,Float lockNum);
+    
+    List<Inventory> getInventoryListByIds(Long[] inventoryIds);
+    
+    
     
 
 }

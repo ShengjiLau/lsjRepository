@@ -209,7 +209,7 @@ public class InWarehousePlanController {
         boolean flag = false;
         JSONObject jsonObject = new JSONObject();
         try {
-            flag = inWarehousePlanService.inWhPlanEdit(inWhPlanAddParamsDto, userCompRel);
+            flag = inWarehousePlanService.distributeWh(inWhPlanAddParamsDto, userCompRel);
         } catch (RuntimeException e) {
             msg = e.getMessage();
             logger.error(e.getMessage());

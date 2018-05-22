@@ -267,8 +267,11 @@
             <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
 
-        <table tableName="inventory">
-            <generatedKey column="inventory_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        <table tableName="out_warehouse_plan" domainObjectName="OutWarehousePlan">
+            <generatedKey column="outplan_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
+        <table tableName="outplan_goods" domainObjectName="OutPlanGoods">
+            <generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
 
     </context>

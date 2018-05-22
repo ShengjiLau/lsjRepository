@@ -112,8 +112,8 @@ public class InWarehouseOrderController {
 
     @ApiOperation("配仓信息，计划用")
     @RequestMapping(value = "/order/distribution/records", method = RequestMethod.GET)
-    public PageBaseDto queryDisRecords(@RequestParam Long plandId) {
-        PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderService.queryDisRecords(SecurityInfoGetter.getCompanyId(),plandId));
+    public PageBaseDto queryDisRecords(@RequestParam Long planId) {
+        PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderService.queryDisRecords(SecurityInfoGetter.getCompanyId(),planId));
         return pageBaseDto;
     }
 }
