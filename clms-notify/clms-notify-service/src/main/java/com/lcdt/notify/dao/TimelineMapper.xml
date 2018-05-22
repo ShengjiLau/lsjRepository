@@ -48,4 +48,14 @@
     dataid, mq_message_id
     from timeline
   </select>
+  <select id="selectByTag" resultMap="BaseResultMap">
+    select timeline_id, action_title, action_time, actile_des, company_id, searchkey,
+    dataid, mq_message_id
+    from timeline
+    WHERE company_id = #{companyId}
+    <if test=" tag != null">
+      and searchkey = #{tag}
+    </if>
+
+  </select>
 </mapper>
