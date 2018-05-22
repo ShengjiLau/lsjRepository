@@ -41,7 +41,24 @@ public class MQConfig {
         consumerBean.setSubscriptionTable(map);
         return consumerBean;
     }
+    @Bean(initMethod = "start",destroyMethod = "shutdown",name = "timelinelistener")
+    public ConsumerBean timeLineconsumerBean(){
 
+        Properties properties = PropertiesUtil.aliyunProperties(aliyunConfigProperties);
+
+        ConsumerBean consumerBean = new ConsumerBean();
+        consumerBean.setProperties(properties);
+
+        Map<Subscription, MessageListener> map = new HashMap<Subscription, MessageListener>();
+
+        Subscription subscription = new Subscription();
+        subscription.setTopic("topic");
+        subscription.setExpression("*");
+        map.put(subscription, notifyServiceListener);
+
+        consumerBean.setSubscriptionTable(map);
+        return consumerBean;
+    }
 
 
 }
