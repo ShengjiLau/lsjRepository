@@ -51,23 +51,35 @@
                 and original_goods_id = #{originalGoodsId}
             </if>
 
-            <if test="goodsName != null ">
-                and goods_name like CONCAT(CONCAT('%',#{goodsName}),'%')
-            </if>
-            <if test="goodsBarCode != null ">
-                and goods_barcode like CONCAT(CONCAT('%',#{goodsBarCode}),'%')
-            </if>
-            <if test="goodsCode != null ">
-                and goods_code like CONCAT(CONCAT('%',#{goodsCode}),'%')
-            </if>
-
         </where>
     </select>
 
+	<update id="updateInventoryLockNum">
+		update inventory
+		set 
+		<choose>
+		<when test="arg1 != null">
+			inventory_num = inventory_num - #{arg1,jdbcType=float}
+			lock_num =lock_num - #{arg2,jdbcType=float}
+		</when>
+		<otherwise>
+			lock_num = #{arg2,jdbcType=float}
+		</otherwise>
+		</choose>
+	</update>
 
-
-
+	<select id="getInventoryListByIds" resultMap="BaseResultMap">
+		SELECT * from inventory t left join goods_info  g on
+        t.goods_id = g.goods_id
+		<where>
+		inventory_id in
+		<foreach collection="array" open="(" close=")" index="index" item="item" separator=",">
+		#{item,jdbcType=BIGINT}
+		</foreach>
+		</where>
+	</select>
 
 
 
 </mapper>
+

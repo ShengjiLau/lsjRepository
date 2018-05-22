@@ -31,7 +31,7 @@
             targetPackage     指定生成的model生成所在的包名
             targetProject     指定在该项目下所在的路径
         -->
-        <javaModelGenerator targetPackage="com.lcdt.notify" targetProject="MAVEN">
+        <javaModelGenerator targetPackage="com.lcdt.userinfo" targetProject="MAVEN">
             <!-- 是否对model添加 构造函数 -->
             <property name="constructorBased" value="false"/>
 
@@ -47,7 +47,7 @@
             <!-- 是否对类CHAR类型的列的数据进行trim操作 -->
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
-        <sqlMapGenerator targetPackage="com.lcdt.notify" targetProject="MAVEN">
+        <sqlMapGenerator targetPackage="com.lcdt.userinfo" targetProject="MAVEN">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
         <!--Mapper映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 -->
@@ -60,7 +60,7 @@
                 type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
         -->
         <!--<javaClientGenerator targetPackage="com.lcdt.userinfo.dao" targetProject="MAVEN" type="XMLMAPPER">-->
-        <javaClientGenerator targetPackage="com.lcdt.notify.dao" targetProject="MAVEN" type="XMLMAPPER">
+        <javaClientGenerator targetPackage="com.lcdt.userinfo.dao" targetProject="MAVEN" type="XMLMAPPER">
         <!--<javaClientGenerator targetPackage="com.lcdt.contract.dao" targetProject="clms-contract-service" type="XMLMAPPER">-->
 
             <!--
@@ -267,12 +267,9 @@
             <!--<generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
 
-        <!--<table tableName="inventory">-->
-            <!--<generatedKey column="inventory_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
-        <!--</table>-->
-
-        <table tableName="timeline">
-            <generatedKey column="timeline_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        <table tableName="inventory">
+            <generatedKey column="inventory_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
+
     </context>
 </generatorConfiguration>

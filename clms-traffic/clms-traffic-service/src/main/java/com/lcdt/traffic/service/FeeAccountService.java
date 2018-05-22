@@ -50,6 +50,12 @@ public interface FeeAccountService {
      */
     PageInfo feeAccountList(FeeAccountListParamsDto dto);
     /**
+     * 记账单详情
+     * @param accountId
+     * @return
+     */
+    Map feeAccountDetail(Long accountId);
+    /**
      * 记账单列表费用合计
      * @param dto
      * @return
@@ -98,7 +104,7 @@ public interface FeeAccountService {
      * @param map
      * @return
      */
-    List feeAccountReconcilePage(Map map);
+    List<Map<String,Object>> feeAccountReconcilePage(Map map);
 
     /**
      * 保存对账单
@@ -113,4 +119,11 @@ public interface FeeAccountService {
      * @return
      */
     List<FeeAccountDto> feeAccountReconcileDetail(Long reconcileId);
+
+    /**
+     * 取消对账
+     * @param accountIds
+     * @return
+     */
+    boolean feeAccountReconcileCancel(Long[] accountIds);
 }
