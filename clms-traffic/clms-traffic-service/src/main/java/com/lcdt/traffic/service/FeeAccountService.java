@@ -50,6 +50,12 @@ public interface FeeAccountService {
      */
     PageInfo feeAccountList(FeeAccountListParamsDto dto);
     /**
+     * 记账单详情
+     * @param accountId
+     * @return
+     */
+    Map feeAccountDetail(Long accountId);
+    /**
      * 记账单列表费用合计
      * @param dto
      * @return

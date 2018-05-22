@@ -25,7 +25,9 @@ public interface FeeAccountMapper {
 
     List<FeeAccountDto> selectFlowByWaybillId(Map m);
 
-    List<FeeAccountDto> selectFeeAccountDetail(Map m);
+    List<FeeAccountDto> selectWaybillFeeAccountDetail(Map m);
+
+    FeeAccountDto selectFeeAccountDetail(Long accountId);
 
     List<FeeAccountDto> selectByCondition(Map m);
 

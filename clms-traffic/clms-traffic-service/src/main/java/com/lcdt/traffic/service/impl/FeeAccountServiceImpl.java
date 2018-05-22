@@ -14,6 +14,7 @@ import com.lcdt.traffic.web.dto.*;
 import com.lcdt.userinfo.model.FeeProperty;
 import com.lcdt.userinfo.rpc.FinanceRpcService;
 import com.lcdt.util.ClmsBeanUtil;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tl.commons.util.StringUtility;
@@ -115,7 +116,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     @Override
     public Map feeAccountPage(Map m){
         Map map = new HashMap();
-        List<FeeAccountDto> feeAccountDtoList = feeAccountMapper.selectFeeAccountDetail(m);
+        List<FeeAccountDto> feeAccountDtoList = feeAccountMapper.selectWaybillFeeAccountDetail(m);
         List<WaybillItems> waybillItemsList = waybillItemsMapper.selectByWaybillId(Long.parseLong(m.get("waybillId").toString()));
         m.put("isShow", (short)0);
         List<FeeProperty> showPropertyList = financeRpcService.selectByCondition(m);
@@ -225,6 +226,15 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         Map map= ClmsBeanUtil.beanToMap(dto);
         FeeAccountDto resultDto = feeAccountMapper.selectByConditionFeeTotal(map);
         return resultDto;
+    }
+
+    @Override
+    public Map feeAccountDetail(Long accountId){
+        Map<String,Object> map = new HashedMap();
+        FeeAccountDto dto = feeAccountMapper.selectFeeAccountDetail(accountId);
+        map.put("feeAccount", dto);
+        map.put("waybillItems", waybillItemsMapper.selectByWaybillId(dto.getWaybillId()));
+        return map;
     }
     @Override
     public PageInfo feePropertyList(Map m) {
