@@ -12,10 +12,13 @@ import org.springframework.stereotype.Controller;
  *
  * @author code generate
  * @since 2018-05-07
+ * @Desciption: 仓储出库计划API
  */
 @Controller
-@RequestMapping("/outplanGoods")
+@RequestMapping("/out/plan")
 public class OutplanGoodsController {
+
+
 
 }
 
