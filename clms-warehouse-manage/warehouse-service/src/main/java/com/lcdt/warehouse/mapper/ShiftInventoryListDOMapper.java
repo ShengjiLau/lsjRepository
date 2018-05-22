@@ -1,5 +1,8 @@
 package com.lcdt.warehouse.mapper;
 
+import java.util.List;
+
+import com.lcdt.warehouse.dto.ShiftInventoryListDTO;
 import com.lcdt.warehouse.entity.ShiftInventoryListDO;
 
 /**
@@ -21,5 +24,8 @@ public interface ShiftInventoryListDOMapper {
 
     int updateByPrimaryKey(ShiftInventoryListDO record);
     
-    int updateFinishedById(Long ShiftInventoryListId);
+    int updateFinishedById(Long ShiftInventoryListId,Byte status);
+    
+    List<ShiftInventoryListDO> getShiftInventoryListDOByCondition(ShiftInventoryListDTO shiftInventoryListDTO);
+    
 }

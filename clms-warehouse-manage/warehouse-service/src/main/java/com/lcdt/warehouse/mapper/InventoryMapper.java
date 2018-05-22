@@ -2,6 +2,7 @@ package com.lcdt.warehouse.mapper;
 
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
+import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.entity.Inventory;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
@@ -23,7 +24,7 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
     
     List<Inventory> getInventoryListByIds(Long[] inventoryIds);
     
-    
+    List<ShiftGoodsListDTO> getInventoryAndGoodsInfo(Long[] inventoryIds);
     
 
 }
