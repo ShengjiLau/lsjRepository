@@ -291,7 +291,6 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
             inWhPlanGoodsDto.setInOderGoodsNum(receivalbeAmount);//已配仓数
             inWhPlanGoodsDto.setRemainGoodsNum(inWhPlanGoodsDto.getPlanGoodsNum()-receivalbeAmount);//计划-已配=剩余
         } else {
-
             inWhPlanGoodsDto.setInOderGoodsNum(0f);//已配仓数
             inWhPlanGoodsDto.setRemainGoodsNum(inWhPlanGoodsDto.getPlanGoodsNum()-0);//计划-已配=剩余
         }
@@ -302,7 +301,6 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
     public boolean inWhPlanEdit(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel) {
         InWarehousePlan inWarehousePlan = new InWarehousePlan();
         BeanUtils.copyProperties(inWhPlanAddParamsDto, inWarehousePlan);
-
         inWarehousePlan.setPlanStatus((Integer) InWhPlanStatusEnum.watting.getValue());
         inWarehousePlan.setUpdateDate(new Date());
         inWarehousePlan.setUpdateId(userCompRel.getUser().getUserId());

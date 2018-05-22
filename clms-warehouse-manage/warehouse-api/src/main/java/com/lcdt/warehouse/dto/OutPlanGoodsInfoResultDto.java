@@ -1,15 +1,16 @@
 package com.lcdt.warehouse.dto;
 
 /**
- * Created by yangbinq on 2018/5/9.
+ * Created by yangbinq on 2018/5/22.
  */
-public class InPlanGoodsInfoResultDto {
+public class OutPlanGoodsInfoResultDto {
+
 
     private Long relationId;
     private Long goodsId;
     private Float planGoodsNum; //计划数量
     private String remark; //备注
-    private Float inHousePrice; //入库价
+    private Float outHousePrice; //出库价
     private String unit; //单位
     private Integer unitData; //换算关系
     private String goodsName;
@@ -17,8 +18,6 @@ public class InPlanGoodsInfoResultDto {
     private String goodsSpec;
     private String goodsCode;
     private String goodsBarcode;
-    private String goodsBatch;
-
 
     public Long getRelationId() {
         return relationId;
@@ -52,12 +51,12 @@ public class InPlanGoodsInfoResultDto {
         this.remark = remark;
     }
 
-    public Float getInHousePrice() {
-        return inHousePrice;
+    public Float getOutHousePrice() {
+        return outHousePrice;
     }
 
-    public void setInHousePrice(Float inHousePrice) {
-        this.inHousePrice = inHousePrice;
+    public void setOutHousePrice(Float outHousePrice) {
+        this.outHousePrice = outHousePrice;
     }
 
     public String getUnit() {
@@ -114,13 +113,5 @@ public class InPlanGoodsInfoResultDto {
 
     public void setGoodsBarcode(String goodsBarcode) {
         this.goodsBarcode = goodsBarcode;
-    }
-
-    public String getGoodsBatch() {
-        return goodsBatch;
-    }
-
-    public void setGoodsBatch(String goodsBatch) {
-        this.goodsBatch = goodsBatch;
     }
 }
