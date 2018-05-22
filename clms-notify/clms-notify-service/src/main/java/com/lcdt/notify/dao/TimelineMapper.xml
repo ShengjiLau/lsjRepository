@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.notify.dao.TimelineMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.notify.Timeline">
+    <id column="timeline_id" jdbcType="BIGINT" property="timelineId" />
+    <result column="action_title" jdbcType="VARCHAR" property="actionTitle" />
+    <result column="action_time" jdbcType="TIMESTAMP" property="actionTime" />
+    <result column="actile_des" jdbcType="VARCHAR" property="actionDes" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="searchkey" jdbcType="VARCHAR" property="searchkey" />
+    <result column="dataid" jdbcType="BIGINT" property="dataid" />
+    <result column="mq_message_id" jdbcType="VARCHAR" property="mqMessageId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from timeline
+    where timeline_id = #{timelineId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.notify.Timeline">
+    <selectKey keyProperty="timelineId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into timeline (action_title, action_time, actile_des, 
+      company_id, searchkey, dataid, 
+      mq_message_id)
+    values (#{actionTitle,jdbcType=VARCHAR}, #{actionTime,jdbcType=TIMESTAMP}, #{actionDes,jdbcType=VARCHAR},
+      #{companyId,jdbcType=BIGINT}, #{searchkey,jdbcType=VARCHAR}, #{dataid,jdbcType=BIGINT}, 
+      #{mqMessageId,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.notify.Timeline">
+    update timeline
+    set action_title = #{actionTitle,jdbcType=VARCHAR},
+      action_time = #{actionTime,jdbcType=TIMESTAMP},
+      actile_des = #{actionDes,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=BIGINT},
+      searchkey = #{searchkey,jdbcType=VARCHAR},
+      dataid = #{dataid,jdbcType=BIGINT},
+      mq_message_id = #{mqMessageId,jdbcType=VARCHAR}
+    where timeline_id = #{timelineId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select timeline_id, action_title, action_time, actile_des, company_id, searchkey, 
+    dataid, mq_message_id
+    from timeline
+    where timeline_id = #{timelineId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select timeline_id, action_title, action_time, actile_des, company_id, searchkey, 
+    dataid, mq_message_id
+    from timeline
+  </select>
+  <select id="selectByTag" resultMap="BaseResultMap">
+    select timeline_id, action_title, action_time, actile_des, company_id, searchkey,
+    dataid, mq_message_id
+    from timeline
+    WHERE company_id = #{companyId}
+    <if test=" tag != null">
+      and searchkey = #{tag}
+    </if>
+
+  </select>
+</mapper>

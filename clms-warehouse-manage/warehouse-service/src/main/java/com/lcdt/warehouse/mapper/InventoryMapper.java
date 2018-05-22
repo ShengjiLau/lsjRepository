@@ -21,6 +21,8 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
     
     int updateInventoryLockNum(Long inventoryId,Float inventoryNum,Float lockNum);
     
+    List<Inventory> getInventoryListByIds(Long[] inventoryIds);
+    
     
     
 

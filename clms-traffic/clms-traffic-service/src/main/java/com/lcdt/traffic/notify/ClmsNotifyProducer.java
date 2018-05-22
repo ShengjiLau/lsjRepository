@@ -21,7 +21,6 @@ public class ClmsNotifyProducer {
     @Autowired
     AliyunConfigProperties mqConfig;
 
-    private List<Message> messages = new ArrayList<>();
 
     public void sendNotifyEvent(TrafficStatusChangeEvent event) {
 
