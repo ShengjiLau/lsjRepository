@@ -232,6 +232,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     public Map feeAccountDetail(Long accountId){
         Map<String,Object> map = new HashedMap();
         FeeAccountDto dto = feeAccountMapper.selectFeeAccountDetail(accountId);
+        dto.setWaybillCreateTime(waybillMapper.selectByPrimaryKey(dto.getWaybillId()).getCreateDate());
         map.put("feeAccount", dto);
         map.put("waybillItems", waybillItemsMapper.selectByWaybillId(dto.getWaybillId()));
         return map;
