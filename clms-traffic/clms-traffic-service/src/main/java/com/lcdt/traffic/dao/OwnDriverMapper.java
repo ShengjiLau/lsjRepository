@@ -69,4 +69,10 @@ public interface OwnDriverMapper {
 
     List<OwnDriver> selectByDriverId(Long driverId);
 
+    /**
+     * 运单新增，根据手机号企业id查询
+     * @param ownDriver
+     * @return
+     */
+    OwnDriver selectByAddWaybillDriverPhone(OwnDriver ownDriver);
 }
