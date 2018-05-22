@@ -4,6 +4,7 @@ import com.aliyun.openservices.ons.api.MessageListener;
 import com.aliyun.openservices.ons.api.bean.ConsumerBean;
 import com.aliyun.openservices.ons.api.bean.Subscription;
 import com.lcdt.aliyunmq.AliyunConfigProperties;
+import com.lcdt.aliyunmq.AliyunMqConfig;
 import com.lcdt.aliyunmq.PropertiesUtil;
 import com.lcdt.notify.mqlistener.NotifyServiceListener;
 import com.lcdt.notify.mqlistener.TimeLineMqListener;
@@ -32,16 +33,16 @@ public class MQConfig {
 
     @Bean(initMethod = "start",destroyMethod = "shutdown")
     public ConsumerBean consumerBean(){
-        return configConsumer(aliyunConfigProperties.getTopic(), notifyServiceListener);
+        return configConsumer(aliyunConfigProperties,aliyunConfigProperties.getTopic(), notifyServiceListener);
     }
 
     @Bean(initMethod = "start",destroyMethod = "shutdown",name = "timelinelistener")
     public ConsumerBean timeLineconsumerBean(){
-        return configConsumer(timeLineMqConfig.getTimelineMQName(), timeLineMqListener);
+        return configConsumer(timeLineMqConfig,timeLineMqConfig.getTimelineMQName(), timeLineMqListener);
     }
 
-    private ConsumerBean configConsumer(String topic,MessageListener messageListener) {
-        ConsumerBean consumerBean = baseconfigConsumerBean();
+    private ConsumerBean configConsumer(AliyunMqConfig mqConfig,String topic,MessageListener messageListener) {
+        ConsumerBean consumerBean = baseconfigConsumerBean(mqConfig);
         Subscription subscription = new Subscription();
         subscription.setExpression("*");
         subscription.setTopic(topic);
@@ -60,8 +61,8 @@ public class MQConfig {
         return consumerBean;
     }
 
-    private ConsumerBean baseconfigConsumerBean(){
-        Properties properties = PropertiesUtil.aliyunProperties(aliyunConfigProperties);
+    private ConsumerBean baseconfigConsumerBean(AliyunMqConfig config){
+        Properties properties = PropertiesUtil.aliyunProperties(config);
         ConsumerBean consumerBean = new ConsumerBean();
         consumerBean.setProperties(properties);
         return consumerBean;

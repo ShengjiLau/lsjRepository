@@ -4,14 +4,14 @@ import java.util.Properties;
 
 public class PropertiesUtil {
 
-    public static Properties aliyunProperties(AliyunConfigProperties configProperties) {
+    public static Properties aliyunProperties(AliyunMqConfig mqConfig) {
         Properties properties = new Properties();
-        safeput(properties,"AccessKey", configProperties.getAccesskey());
-        safeput(properties,"SecretKey", configProperties.getSecretkey());
-        safeput(properties,"ConsumerId", configProperties.getConsumerId());
-        safeput(properties,"ProducerId", configProperties.getProducerId());
-        safeput(properties,"OnsAddress", configProperties.getOnsAddress());
-        safeput(properties,"Topic", configProperties.getTopic());
+        safeput(properties,"AccessKey", mqConfig.getAccesskey());
+        safeput(properties,"SecretKey", mqConfig.getSecretkey());
+        safeput(properties,"ConsumerId", mqConfig.getConsumerId());
+        safeput(properties,"ProducerId", mqConfig.getProducerId());
+        safeput(properties,"OnsAddress", mqConfig.getOnsAddress());
+        safeput(properties,"Topic", mqConfig.getTopic());
         return properties;
     }
 
