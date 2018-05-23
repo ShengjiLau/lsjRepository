@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.items.dao.CustomValueMapper;
 import com.lcdt.items.dao.ItemSpecKeyValueMapper;
 import com.lcdt.items.dao.SubItemsInfoMapper;
+import com.lcdt.items.dto.GoodsListParamsDto;
 import com.lcdt.items.model.*;
 import com.lcdt.items.service.SubItemsInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,6 +173,12 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
         list = subItemsInfoMapper.selectByCondition(map);
         page = new PageInfo(list);
         return page;
+    }
+
+    @Override
+    public List<Long> queryGoodsIdsByCondition(GoodsListParamsDto dto) {
+        List<Long> goodsIds=subItemsInfoMapper.selectGoodsIdsByCondition(dto);
+        return goodsIds;
     }
 
 
