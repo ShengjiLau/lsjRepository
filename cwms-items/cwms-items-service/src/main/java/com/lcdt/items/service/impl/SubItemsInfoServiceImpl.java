@@ -177,7 +177,7 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
 
     @Override
     public List<Long> queryGoodsIdsByCondition(GoodsListParamsDto dto) {
-        List<Long> goodsIds=subItemsInfoMapper.selectGoodsIdsByCondition(dto);
+        List<Long> goodsIds = subItemsInfoMapper.selectGoodsIdsByCondition(dto);
         return goodsIds;
     }
 

@@ -1,6 +1,7 @@
 package com.lcdt.warehouse.controller.api;
 
 import com.baomidou.mybatisplus.plugins.Page;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.entity.Inventory;
 import com.lcdt.warehouse.service.InventoryService;
@@ -31,7 +32,7 @@ public class InventoryApi {
     @ApiOperation("库存明细列表")
     private ResponseMessage inventoryList(InventoryQueryDto queryDto){
         logger.debug("query inventory list querydto:{}",queryDto);
-        Page<Inventory> page = inventoryService.queryInventoryPage(queryDto);
+        Page<Inventory> page = inventoryService.queryInventoryPage(queryDto, SecurityInfoGetter.getCompanyId());
         return JSONResponseUtil.success(page);
     }
 

@@ -1,6 +1,10 @@
 package com.lcdt.warehouse.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.items.dto.GoodsListParamsDto;
+import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.entity.InorderGoodsInfo;
@@ -34,15 +38,31 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     @Autowired
     InventoryMapper inventoryMapper;
 
+    @Reference
+    SubItemsInfoService goodsService;
+
     @Autowired
     private InventoryLogService logService;
 
     private Logger logger = LoggerFactory.getLogger(InventoryServiceImpl.class);
 
+
+
     //分页查询 库存列表
-    public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto) {
+    public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto,Long companyId) {
+        List<Long> goodsId = queryGoodsIds(inventoryQueryDto, companyId);
         Page<Inventory> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
         return page.setRecords(inventoryMapper.selectInventoryListByqueryDto(page,inventoryQueryDto));
+    }
+
+    private List<Long> queryGoodsIds(InventoryQueryDto inventoryQueryDto, Long companyId) {
+        GoodsListParamsDto dto = new GoodsListParamsDto();
+        dto.setClassifyName(inventoryQueryDto.getGoodsCategory());
+        dto.setGoodsName(inventoryQueryDto.getGoodsName());
+        dto.setCompanyId(companyId);
+        dto.setGoodsCode(inventoryQueryDto.getGoodsCode());
+        dto.setBarCode(inventoryQueryDto.getGoodsBarCode());
+        return goodsService.queryGoodsIdsByCondition(dto);
     }
 
 
@@ -99,20 +119,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
 
     private void updateInventoryPrice(Inventory existInventory, Inventory inventory) {
-        int coststrategy = 0;
-        switch (coststrategy) {
-            case 0:
-                break;
-            case 1:
-                existInventory.setInventoryPrice((existInventory.getInventoryPrice() + inventory.getInventoryPrice()) / 2);
-                break;
-            case 2:
-                //TODO 库存成本计算
-                break;
-
-        }
-
-
+        //EMPTY
     }
 
 
