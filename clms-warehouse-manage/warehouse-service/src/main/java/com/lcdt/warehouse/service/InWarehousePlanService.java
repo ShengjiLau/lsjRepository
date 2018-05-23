@@ -47,7 +47,7 @@ public interface InWarehousePlanService extends IService<InWarehousePlan> {
 
 
     /***
-     * 计划取消
+     * 计划完成
      *
      * @param obj
      * @param userCompRel

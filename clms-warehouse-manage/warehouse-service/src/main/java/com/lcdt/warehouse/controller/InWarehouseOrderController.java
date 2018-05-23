@@ -37,7 +37,7 @@ public class InWarehouseOrderController {
 
     @ApiOperation("入库单新增")
     @RequestMapping(value = "/order", method = RequestMethod.POST)
-    public JSONObject inWarehouseOrder(InWarehouseOrderDto params) {
+    public JSONObject inWarehouseOrder(@RequestBody InWarehouseOrderDto params) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User user = SecurityInfoGetter.getUser();
         params.setCompanyId(companyId);

@@ -180,7 +180,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
 
         }
         inWarehousePlan.setPlanStatus((Integer) InWhPlanStatusEnum.completed.getValue());
-         return chagenInPlanStatus(obj, inWarehousePlan,userCompRel);
+        return chagenInPlanStatus(obj, inWarehousePlan,userCompRel);
     }
 
     @Transactional
@@ -317,8 +317,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
         wrapperObj.setPlanId(inWhPlanAddParamsDto.getPlanId());
         wrapperObj.setCompanyId(userCompRel.getCompId());
         if (this.update(inWarehousePlan,new EntityWrapper<InWarehousePlan>(wrapperObj))) {
-
-//            //先删除原来所有记录
+            //先删除原来所有记录
             InplanGoodsInfo inplanGoodsInfo = new InplanGoodsInfo();
             inplanGoodsInfo.setPlanId(inWarehousePlan.getPlanId());
             inplanGoodsInfoService.delete(new EntityWrapper<InplanGoodsInfo>(inplanGoodsInfo));
