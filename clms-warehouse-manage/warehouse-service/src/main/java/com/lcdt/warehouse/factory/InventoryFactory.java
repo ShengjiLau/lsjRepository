@@ -22,7 +22,6 @@ public class InventoryFactory {
         Assert.notNull(order, "新建库存，入库单不能为空");
         Inventory inventory = new Inventory();
         inventory.setCompanyId(order.getCompanyId());
-        inventory.setGoodsId(goodsInfo.getGoodsId());
         inventory.setInvertoryNum(goodsInfo.getInHouseAmount() * goodsInfo.getUnitData());
         inventory.setWareHouseId(order.getWarehouseId());
         inventory.setStorageLocationCode(goodsInfo.getStrogeLocationCode());
