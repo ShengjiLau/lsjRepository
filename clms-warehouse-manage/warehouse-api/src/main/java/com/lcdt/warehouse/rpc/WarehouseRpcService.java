@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.rpc;
 
+import com.github.pagehelper.PageInfo;
 import com.lcdt.warehouse.entity.Warehouse;
 import com.lcdt.warehouse.entity.WarehouseLinkman;
 import com.lcdt.warehouse.entity.WarehouseLoc;
@@ -17,4 +18,5 @@ public interface WarehouseRpcService {
     WarehouseLoc addWarehouseLoc(WarehouseLoc loc);
     Warehouse modifyWarehouse(Warehouse warehouse);
     List<Warehouse> selectNotInWhIds(Map map);
+    PageInfo warehouseList(Map m);
 }

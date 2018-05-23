@@ -1,5 +1,6 @@
 package com.lcdt.items.dao;
 
+import com.lcdt.items.dto.GoodsListParamsDto;
 import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.model.SubItemsInfo;
 import com.lcdt.items.model.SubItemsInfoDao;
@@ -105,8 +106,11 @@ public interface SubItemsInfoMapper {
 
     /**
      * 查询货物列表
-     * @param map
+     * @param dto
      * @return
      */
-    List<GoodsInfoDao> selectByCondition(Map map);
+    List<GoodsInfoDao> selectByCondition(GoodsListParamsDto dto);
+
+
+    List<Long> selectGoodsIdsByCondition(GoodsListParamsDto dto);
 }

@@ -14,6 +14,10 @@ public class OutWhPlanSearchParamsDto implements Serializable {
     @ApiModelProperty(value = "计划编码")
     private String planNo;
 
+    @ApiModelProperty(value = "计划id")
+    private Long outPlanId;
+
+
     @ApiModelProperty(value = "计划创建时间")
     private Long createBegin;
     private String createBeginStr;
@@ -200,5 +204,13 @@ public class OutWhPlanSearchParamsDto implements Serializable {
 
     public void setGroupIds(String groupIds) {
         this.groupIds = groupIds;
+    }
+
+    public Long getOutPlanId() {
+        return outPlanId;
+    }
+
+    public void setOutPlanId(Long outPlanId) {
+        this.outPlanId = outPlanId;
     }
 }

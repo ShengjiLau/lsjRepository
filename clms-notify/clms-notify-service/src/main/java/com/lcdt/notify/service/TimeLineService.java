@@ -20,8 +20,8 @@ public class TimeLineService {
         return timeline;
     }
 
-    public List<Timeline> list(String tag,Long companyId){
-        return mapper.selectByTag(companyId, tag);
+    public List<Timeline> list(String tag,Long companyId,Long dataId){
+        return mapper.selectByTag(companyId, tag,dataId);
     }
 
 }
