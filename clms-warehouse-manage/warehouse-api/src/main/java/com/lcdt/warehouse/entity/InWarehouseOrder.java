@@ -435,4 +435,5 @@ public class InWarehouseOrder implements Serializable,ResponseData {
                 ", isDeleted=" + isDeleted +
                 '}';
     }
+
 }

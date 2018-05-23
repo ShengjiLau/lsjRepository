@@ -1,9 +1,14 @@
 package com.lcdt.warehouse.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.lcdt.warehouse.dto.InPlanGoodsInfoResultDto;
+import com.lcdt.warehouse.dto.OutPlanGoodsInfoResultDto;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -19,61 +24,73 @@ public class OutWarehousePlan implements Serializable {
 
     @TableId(value = "outplan_id", type = IdType.AUTO)
     private Long outplanId;
-    /**
-     * 计划编号
-     */
+
     private String planNo;
-    private Date createTime;
-    private String createUserName;
-    /**
-     * 所属项目组 id
-     */
+
     private Integer groupId;
-    /**
-     * 所属项目组 名称
-     */
+
     private String groupName;
-    private Long companyId;
-    private String customerName;
-    private Integer planStatus;
-    private Long createUserId;
-    private String customerContactName;
-    private String customerContactPhone;
+
+    private String contractNo;
+
     private String customerPurchaseNo;
-    /**
-     * 入库类型
-     */
-    private String storageType;
-    /**
-     * 计划入库时间
-     */
-    private Date storagePlanTime;
-    private String storageRemark;
-    /**
-     * 送货单位
-     */
-    private String deliverymanName;
-    /**
-     * 送货人电话
-     */
-    private String deliverymanPhone;
-    /**
-     * 送货人
-     */
-    private String deliverymanLinkman;
-    /**
-     * 送货车辆
-     */
-    private String deliverymanCar;
-    /**
-     * 入库仓库id
-     */
+
+    private Long customerId;
+
+    private String customerName;
+
+    private String customerContactName;
+
+    private String customerContactPhone;
+
     private Long wareHouseId;
-    /**
-     * 入库仓库名
-     */
+
     private String warehouseName;
 
+    private String storageType;
+
+    private Date storagePlanTime;
+
+    private String storageRemark;
+
+    private String pickupUnit;
+
+    private String pickupLinkman;
+
+    private String pickupIdentiycard;
+
+    private String pickupPhone;
+
+    private String pickupCar;
+
+    private Integer planStatus;
+
+    private String attachment;
+
+    private Long createUserId;
+
+    private String createUserName;
+
+    private Date createTime;
+
+    private Long updateId;
+
+    private String updateName;
+
+    private Date updateDate;
+
+    private Long companyId;
+
+
+    //扩充属性
+    @TableField(exist=false)
+    private List<OutPlanGoodsInfoResultDto> goodsList; //商品详细列表
+
+
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public Long getOutplanId() {
         return outplanId;
@@ -89,22 +106,6 @@ public class OutWarehousePlan implements Serializable {
 
     public void setPlanNo(String planNo) {
         this.planNo = planNo;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
     }
 
     public Integer getGroupId() {
@@ -123,12 +124,28 @@ public class OutWarehousePlan implements Serializable {
         this.groupName = groupName;
     }
 
-    public Long getCompanyId() {
-        return companyId;
+    public String getContractNo() {
+        return contractNo;
     }
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
+    }
+
+    public String getCustomerPurchaseNo() {
+        return customerPurchaseNo;
+    }
+
+    public void setCustomerPurchaseNo(String customerPurchaseNo) {
+        this.customerPurchaseNo = customerPurchaseNo;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
     public String getCustomerName() {
@@ -137,22 +154,6 @@ public class OutWarehousePlan implements Serializable {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
-    }
-
-    public Integer getPlanStatus() {
-        return planStatus;
-    }
-
-    public void setPlanStatus(Integer planStatus) {
-        this.planStatus = planStatus;
-    }
-
-    public Long getCreateUserId() {
-        return createUserId;
-    }
-
-    public void setCreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
     }
 
     public String getCustomerContactName() {
@@ -171,12 +172,20 @@ public class OutWarehousePlan implements Serializable {
         this.customerContactPhone = customerContactPhone;
     }
 
-    public String getCustomerPurchaseNo() {
-        return customerPurchaseNo;
+    public Long getWareHouseId() {
+        return wareHouseId;
     }
 
-    public void setCustomerPurchaseNo(String customerPurchaseNo) {
-        this.customerPurchaseNo = customerPurchaseNo;
+    public void setWareHouseId(Long wareHouseId) {
+        this.wareHouseId = wareHouseId;
+    }
+
+    public String getWarehouseName() {
+        return warehouseName;
+    }
+
+    public void setWarehouseName(String warehouseName) {
+        this.warehouseName = warehouseName;
     }
 
     public String getStorageType() {
@@ -203,79 +212,123 @@ public class OutWarehousePlan implements Serializable {
         this.storageRemark = storageRemark;
     }
 
-    public String getDeliverymanName() {
-        return deliverymanName;
+    public String getPickupUnit() {
+        return pickupUnit;
     }
 
-    public void setDeliverymanName(String deliverymanName) {
-        this.deliverymanName = deliverymanName;
+    public void setPickupUnit(String pickupUnit) {
+        this.pickupUnit = pickupUnit;
     }
 
-    public String getDeliverymanPhone() {
-        return deliverymanPhone;
+    public String getPickupLinkman() {
+        return pickupLinkman;
     }
 
-    public void setDeliverymanPhone(String deliverymanPhone) {
-        this.deliverymanPhone = deliverymanPhone;
+    public void setPickupLinkman(String pickupLinkman) {
+        this.pickupLinkman = pickupLinkman;
     }
 
-    public String getDeliverymanLinkman() {
-        return deliverymanLinkman;
+    public String getPickupIdentiycard() {
+        return pickupIdentiycard;
     }
 
-    public void setDeliverymanLinkman(String deliverymanLinkman) {
-        this.deliverymanLinkman = deliverymanLinkman;
+    public void setPickupIdentiycard(String pickupIdentiycard) {
+        this.pickupIdentiycard = pickupIdentiycard;
     }
 
-    public String getDeliverymanCar() {
-        return deliverymanCar;
+    public String getPickupPhone() {
+        return pickupPhone;
     }
 
-    public void setDeliverymanCar(String deliverymanCar) {
-        this.deliverymanCar = deliverymanCar;
+    public void setPickupPhone(String pickupPhone) {
+        this.pickupPhone = pickupPhone;
     }
 
-    public Long getWareHouseId() {
-        return wareHouseId;
+    public String getPickupCar() {
+        return pickupCar;
     }
 
-    public void setWareHouseId(Long wareHouseId) {
-        this.wareHouseId = wareHouseId;
+    public void setPickupCar(String pickupCar) {
+        this.pickupCar = pickupCar;
     }
 
-    public String getWarehouseName() {
-        return warehouseName;
+    public Integer getPlanStatus() {
+        return planStatus;
     }
 
-    public void setWarehouseName(String warehouseName) {
-        this.warehouseName = warehouseName;
+    public void setPlanStatus(Integer planStatus) {
+        this.planStatus = planStatus;
     }
 
-    @Override
-    public String toString() {
-        return "OutWarehousePlan{" +
-        ", outplanId=" + outplanId +
-        ", planNo=" + planNo +
-        ", createTime=" + createTime +
-        ", createUserName=" + createUserName +
-        ", groupId=" + groupId +
-        ", groupName=" + groupName +
-        ", companyId=" + companyId +
-        ", customerName=" + customerName +
-        ", planStatus=" + planStatus +
-        ", createUserId=" + createUserId +
-        ", customerContactName=" + customerContactName +
-        ", customerContactPhone=" + customerContactPhone +
-        ", customerPurchaseNo=" + customerPurchaseNo +
-        ", storageType=" + storageType +
-        ", storagePlanTime=" + storagePlanTime +
-        ", storageRemark=" + storageRemark +
-        ", deliverymanName=" + deliverymanName +
-        ", deliverymanPhone=" + deliverymanPhone +
-        ", deliverymanLinkman=" + deliverymanLinkman +
-        ", deliverymanCar=" + deliverymanCar +
-        ", wareHouseId=" + wareHouseId +
-        ", warehouseName=" + warehouseName +
-        "}";
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
+    }
+
+    public Long getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(Long createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Long getUpdateId() {
+        return updateId;
+    }
+
+    public void setUpdateId(Long updateId) {
+        this.updateId = updateId;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public List<OutPlanGoodsInfoResultDto> getGoodsList() {
+        return goodsList;
+    }
+
+    public void setGoodsList(List<OutPlanGoodsInfoResultDto> goodsList) {
+        this.goodsList = goodsList;
     }
 }

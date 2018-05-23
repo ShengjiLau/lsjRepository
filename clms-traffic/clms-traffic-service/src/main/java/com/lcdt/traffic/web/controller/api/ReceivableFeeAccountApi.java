@@ -268,6 +268,21 @@ public class ReceivableFeeAccountApi {
 //        return pageBaseDto;
     }
 
+    @ApiOperation("记账单——记账单详情")
+    @RequestMapping(value = "/feeAccountDetail", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receivable_fee_account_detail')")
+    public JSONObject feeAccountDetail(@ApiParam(value = "记账单id",required = true) @RequestParam Long accountId) {
+        Map resultMap = feeAccountService.feeAccountDetail(accountId);
+        if (resultMap != null) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("data", resultMap);
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "记账单详情");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("获取失败");
+        }
+    }
     @ApiOperation("应收记账单——列表留言")
     @RequestMapping(value = "/feeAccountAddMsgPage", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receivable_fee_account_msg_page')")

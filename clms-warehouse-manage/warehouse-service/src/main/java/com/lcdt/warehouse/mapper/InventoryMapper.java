@@ -2,6 +2,7 @@ package com.lcdt.warehouse.mapper;
 
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
+import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.entity.Inventory;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
@@ -18,10 +19,14 @@ import java.util.List;
 public interface InventoryMapper extends BaseMapper<Inventory> {
 
     List<Inventory> selectInventoryList(Pagination page, Inventory queryDto);
+
+    List<Inventory> selectInventoryListByqueryDto(Pagination page, InventoryQueryDto queryDto);
     
     int updateInventoryLockNum(Long inventoryId,Float inventoryNum,Float lockNum);
     
+    List<Inventory> getInventoryListByIds(Long[] inventoryIds);
     
+    List<ShiftGoodsListDTO> getInventoryAndGoodsInfo(Long[] inventoryIds);
     
 
 }

@@ -5,6 +5,7 @@ import com.lcdt.traffic.model.FeeFlow;
 import com.lcdt.userinfo.model.FeeProperty;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,6 +15,9 @@ public class FeeAccountDto extends FeeAccount{
 
     @ApiModelProperty(value="记账单对应对账单收付款记录条数")
     private Integer exchangeCount;
+
+    @ApiModelProperty(value="运单创建时间")
+    private Date waybillCreateTime;
 
     @ApiModelProperty(value="运费")
     private Float freightTotal;
@@ -39,6 +43,14 @@ public class FeeAccountDto extends FeeAccount{
 
     public void setExchangeCount(Integer exchangeCount) {
         this.exchangeCount = exchangeCount;
+    }
+
+    public Date getWaybillCreateTime() {
+        return waybillCreateTime;
+    }
+
+    public void setWaybillCreateTime(Date waybillCreateTime) {
+        this.waybillCreateTime = waybillCreateTime;
     }
 
     public Float getFreightTotal() {

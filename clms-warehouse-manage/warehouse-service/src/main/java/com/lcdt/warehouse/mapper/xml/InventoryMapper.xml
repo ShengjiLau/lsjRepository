@@ -47,28 +47,101 @@
                 and customer_id = #{customerId}
             </if>
 
+            <if test="goodsCategory != null">
+                and g.goods_category = #{goodsCategory}
+            </if>
+
             <if test="originalGoodsId != null">
                 and original_goods_id = #{originalGoodsId}
             </if>
 
+            <if test="goodsBarCode != null">
+                and g.goods_barcode = #{goodsBarCode}
+            </if>
+            <if test="goodsCode != null">
+                and g.goods_code = #{goodsCode}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectInventoryListByqueryDto" resultMap="BaseResultMap" >
+        SELECT * from inventory t left join goods_info  g on
+        t.goods_id = g.goods_id
+        <where>
+            <if test="batch != null">
+                batch = #{batch}
+            </if>
+
+            <if test="wareHouseId != null">
+                AND warehouse_id = #{wareHouseId}
+            </if>
+
+            <if test="storageLocationCode != null">
+                and storage_location_code = #{storageLocationCode}
+            </if>
+
+            <if test="goodsId != null">
+                and goods_id = #{goodsId}
+            </if>
+
+            <if test="customerId != null">
+                and customer_id = #{customerId}
+            </if>
+
+            <if test="goodsCategory != null">
+                and g.goods_category = #{goodsCategory}
+            </if>
+
+            <if test="originalGoodsId != null">
+                and original_goods_id = #{originalGoodsId}
+            </if>
+
+            <if test="goodsBarCode != null">
+                and g.goods_barcode = #{goodsBarCode}
+            </if>
+            <if test="goodsCode != null">
+                and g.goods_code = #{goodsCode}
+            </if>
         </where>
     </select>
 
 	<update id="updateInventoryLockNum">
-	update inventory
-	set 
-	<choose>
-	<when test="arg1 != null">
-	inventory_num = inventory_num - #{arg1,jdbcType=float}
-	lock_num =lock_num - #{arg2,jdbcType=float}
-	</when>
-	<otherwise>
-	lock_num = #{arg2,jdbcType=float}
-	</otherwise>
-	</choose>
+		update inventory
+		set 
+		<choose>
+		<when test="arg1 != null">
+			inventory_num = inventory_num - #{arg1,jdbcType=float}
+			lock_num =lock_num - #{arg2,jdbcType=float}
+		</when>
+		<otherwise>
+			lock_num =lock_num + #{arg2,jdbcType=float}
+		</otherwise>
+		</choose>
 	</update>
 
-
+	<select id="getInventoryListByIds" resultMap="BaseResultMap">
+			SELECT * from inventory t left join goods_info  g on
+        	t.goods_id = g.goods_id
+		<where>
+			inventory_id in
+		<foreach collection="array" open="(" close=")" index="index" item="item" separator=",">
+			#{item,jdbcType=BIGINT}
+		</foreach>
+		</where>
+	</select>
+	
+	<select id="getInventoryAndGoodsInfo" resultType="com.lcdt.warehouse.dto.ShiftInventoryListDTO">
+			select t.inventory_id inventoryId,t.storage_location_code storageLocationCode,g.goods_batch goodsBatch
+			g.goods_name goodsName,g.goods_spec goodsSpec,g.goods_code goodsCode,g.bar_code barCode,t.base_unit baseUnit
+			from inventory t inner join goods_info  g on
+       		 t.goods_id = g.goods_id
+		<where>
+			inventory_id in
+		<foreach collection="array" open="(" close=")" index="index" item="item" separator=",">
+			#{item,jdbcType=BIGINT}
+		</foreach>
+		</where>
+	</select>
 
 
 

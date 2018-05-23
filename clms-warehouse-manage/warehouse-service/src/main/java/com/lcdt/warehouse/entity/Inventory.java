@@ -38,6 +38,9 @@ public class Inventory implements Serializable {
 
     private Long customerId;
 
+    //库存单价
+    private Float inventoryPrice;
+
     /**
      * 客户名称
      */
@@ -65,6 +68,14 @@ public class Inventory implements Serializable {
     private Long originalGoodsId;
 
     private String batch;
+
+    public Float getInventoryPrice() {
+        return inventoryPrice;
+    }
+
+    public void setInventoryPrice(Float inventoryPrice) {
+        this.inventoryPrice = inventoryPrice;
+    }
 
     public String getBaseUnit() {
         return baseUnit;

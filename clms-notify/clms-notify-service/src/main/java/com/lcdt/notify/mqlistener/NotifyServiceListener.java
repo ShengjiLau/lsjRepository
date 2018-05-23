@@ -17,8 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 import static com.aliyun.openservices.ons.api.Action.CommitMessage;
 
@@ -59,6 +58,8 @@ public class NotifyServiceListener implements MessageListener{
                 sendNotifyService.handleEvent(event);
             }
         });
+
+
         return CommitMessage;
     }
 

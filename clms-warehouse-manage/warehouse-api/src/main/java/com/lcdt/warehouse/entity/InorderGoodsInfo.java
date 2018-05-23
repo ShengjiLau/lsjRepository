@@ -49,7 +49,7 @@ public class InorderGoodsInfo implements Serializable {
     /**
      * 换算关系
      */
-    private int unitData;
+    private Integer unitData;
 
     /**
      * 应收数量
@@ -188,11 +188,11 @@ public class InorderGoodsInfo implements Serializable {
         this.unit = unit;
     }
 
-    public int getUnitData() {
+    public Integer getUnitData() {
         return unitData;
     }
 
-    public void setUnitData(int unitData) {
+    public void setUnitData(Integer unitData) {
         this.unitData = unitData;
     }
 
