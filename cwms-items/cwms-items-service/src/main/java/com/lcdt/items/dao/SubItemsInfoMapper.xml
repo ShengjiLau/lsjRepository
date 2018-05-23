@@ -170,13 +170,49 @@
       <if test="goodsCode!=null and goodsCode!=''">
         and sub.code like concat('%',#{goodsCode,jdbcType=VARCHAR},'%')
       </if>
+      <if test="barCode!=null and barCode!=''">
+        and sub.bar_code like concat('%',#{barCode,jdbcType=VARCHAR},'%')
+      </if>
       <if test="goodsSpec!=null and goodsSpec!=''">
         and sub.sub_item_id in (select DISTINCT sub_item_id from t_item_spec_key_value where company_id = #{companyId,jdbcType=BIGINT} and (sp_name like concat('%',#{goodsSpec,jdbcType=VARCHAR},'%') or sp_value like concat('%',#{goodsSpec,jdbcType=VARCHAR},'%')))
       </if>
       <if test="itemId!=null and itemId>0">
         and sub.item_id = #{itemId,jdbcType=BIGINT}
       </if>
+      <if test="classifyId!=null and classifyId>0">
+        and items.classify_id = #{classifyId,jdbcType=BIGINT}
+      </if>
+      <if test="classifyName!=null and classifyName!=''">
+        and items.classify_name like concat('%',#{classifyName,jdbcType=VARCHAR},'%')
+      </if>
       order by sub.item_id desc
+    </where>
+  </select>
+
+  <select id="selectGoodsIdsByCondition" resultType="Long" parameterType="com.lcdt.items.dto.GoodsListParamsDto">
+    select sub_item_id
+    from t_sub_items_info sub,t_items_info items
+    <where>
+      sub.item_id=items.item_id and items.company_id = #{companyId,jdbcType=BIGINT}
+      <if test="goodsInfo!=null and goodsInfo!=''">
+        and items.subject like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') or sub.code like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') or sub.bar_code like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="goodsName!=null and goodsName!=''">
+        and items.subject like concat('%',#{goodsName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="goodsCode!=null and goodsCode!=''">
+        and sub.code like concat('%',#{goodsCode,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="barCode!=null and barCode!=''">
+        and sub.bar_code like concat('%',#{barCode,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="classifyId!=null and classifyId>0">
+        and items.classify_id = #{classifyId,jdbcType=BIGINT}
+      </if>
+      <if test="classifyName!=null and classifyName!=''">
+        and items.classify_name like concat('%',#{classifyName,jdbcType=VARCHAR},'%')
+      </if>
+      order by sub.sub_item_id desc
     </where>
   </select>
 </mapper>

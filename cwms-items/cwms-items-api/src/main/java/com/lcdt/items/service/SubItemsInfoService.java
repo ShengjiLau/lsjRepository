@@ -1,6 +1,7 @@
 package com.lcdt.items.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.items.dto.GoodsListParamsDto;
 import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.model.SubItemsInfo;
 import com.lcdt.items.model.SubItemsInfoDao;
@@ -74,4 +75,7 @@ public interface SubItemsInfoService {
      * @return
      */
     PageInfo<List<GoodsInfoDao>> queryByCondition(Map map);
+
+
+    List<Long> queryGoodsIdsByCondition(GoodsListParamsDto dto);
 }
