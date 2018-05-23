@@ -67,6 +67,11 @@
             <artifactId>common-config</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>cwms-items-api</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
     <build>
 
