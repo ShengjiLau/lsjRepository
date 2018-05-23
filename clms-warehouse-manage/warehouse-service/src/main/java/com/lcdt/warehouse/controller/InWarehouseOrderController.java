@@ -44,6 +44,7 @@ public class InWarehouseOrderController {
         params.setCreateId(user.getUserId());
         params.setCreateName(user.getRealName());
         params.setCreateDate(new Date());
+        params.setInOrderStatus(1);
         int result = inWarehouseOrderService.addInWarehouseOrder(params);
         JSONObject jsonObject = new JSONObject();
         if (result > 0) {
@@ -63,6 +64,14 @@ public class InWarehouseOrderController {
         Page<InWarehouseOrderDto> inWarehouseOrderPage = inWarehouseOrderService.queryInWarehouseOrderList(params);
         PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderPage.getRecords(), inWarehouseOrderPage.getTotal());
         return pageBaseDto;
+    }
+
+    @ApiOperation("入库单详细")
+    @RequestMapping(value = "/order/{inorderId}", method = RequestMethod.GET)
+    public InWarehouseOrderDto inWarehouseOrderDetail(@PathVariable long inorderId) {
+        InWarehouseOrderDto inWarehouseOrderDto=new InWarehouseOrderDto();
+        inWarehouseOrderDto=inWarehouseOrderService.queryInWarehouseOrder(SecurityInfoGetter.getCompanyId(),inorderId);
+        return inWarehouseOrderDto;
     }
 
     @ApiOperation("入库单入库")
