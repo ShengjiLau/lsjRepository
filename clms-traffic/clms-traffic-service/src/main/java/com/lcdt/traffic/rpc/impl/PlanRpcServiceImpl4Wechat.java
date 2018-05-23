@@ -704,7 +704,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             ownVehicle.setVehicleCategory((short)2);
             ownVehicle.setVehicleLoad(dto.getVehicleLoad());
             ownVehicle.setVehicleType(dto.getVehicleType());
-            ownVehicle.setVehicleLength(dto.getVehicleLength());
+            ownVehicle.setVehicleLength(dto.getVehicleLength()+"米");
             int count = ownVehicleMapper.selectVehicleNum(ownVehicle);
             if(count==0)
             {
