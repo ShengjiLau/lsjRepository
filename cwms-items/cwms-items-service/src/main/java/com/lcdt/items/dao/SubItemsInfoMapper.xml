@@ -197,6 +197,15 @@
       <if test="goodsInfo!=null and goodsInfo!=''">
         and items.subject like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') or sub.code like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') or sub.bar_code like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')
       </if>
+      <if test="goodsName!=null and goodsName!=''">
+        and items.subject like concat('%',#{goodsName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="goodsCode!=null and goodsCode!=''">
+        and sub.code like concat('%',#{goodsCode,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="barCode!=null and barCode!=''">
+        and sub.bar_code like concat('%',#{barCode,jdbcType=VARCHAR},'%')
+      </if>
       <if test="classifyId!=null and classifyId>0">
         and items.classify_id = #{classifyId,jdbcType=BIGINT}
       </if>
