@@ -85,13 +85,11 @@
             </if>
 
             <if test="originalGoodsId != null">
-                and original_goods_id = #{originalGoodsId}
-            <foreach collection="goodIds" index="index" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
+                and original_goods_id IN
+              <foreach collection="goodIds" index="index" item="item" open="(" separator="," close=")">
+                 #{item}
+              </foreach>
             </if>
-
-
         </where>
     </select>
 
