@@ -686,7 +686,8 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         splitGoods.setCompanyId(companyId);
         splitGoods.setCarrierCompanyId(dto.getCarrierCompanyId() == null ? waybillPlan.getCompanyId() : dto.getCarrierCompanyId());// 承运商企业ID
 
-        if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) {
+        //4:全部司机
+        if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)||waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_ALL_DRIVER)) {
             splitGoods.setCarrierCollectionNames(snatchGoods.getOfferName());
             splitGoods.setCarrierCollectionIds(snatchGoods.getOfferId().toString());
 
