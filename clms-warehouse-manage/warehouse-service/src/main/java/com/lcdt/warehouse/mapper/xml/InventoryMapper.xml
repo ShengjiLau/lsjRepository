@@ -47,10 +47,61 @@
                 and customer_id = #{customerId}
             </if>
 
+            <if test="goodsCategory != null">
+                and g.goods_category = #{goodsCategory}
+            </if>
+
             <if test="originalGoodsId != null">
                 and original_goods_id = #{originalGoodsId}
             </if>
 
+            <if test="goodsBarCode != null">
+                and g.goods_barcode = #{goodsBarCode}
+            </if>
+            <if test="goodsCode != null">
+                and g.goods_code = #{goodsCode}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectInventoryListByqueryDto" resultMap="BaseResultMap" >
+        SELECT * from inventory t left join goods_info  g on
+        t.goods_id = g.goods_id
+        <where>
+            <if test="batch != null">
+                batch = #{batch}
+            </if>
+
+            <if test="wareHouseId != null">
+                AND warehouse_id = #{wareHouseId}
+            </if>
+
+            <if test="storageLocationCode != null">
+                and storage_location_code = #{storageLocationCode}
+            </if>
+
+            <if test="goodsId != null">
+                and goods_id = #{goodsId}
+            </if>
+
+            <if test="customerId != null">
+                and customer_id = #{customerId}
+            </if>
+
+            <if test="goodsCategory != null">
+                and g.goods_category = #{goodsCategory}
+            </if>
+
+            <if test="originalGoodsId != null">
+                and original_goods_id = #{originalGoodsId}
+            </if>
+
+            <if test="goodsBarCode != null">
+                and g.goods_barcode = #{goodsBarCode}
+            </if>
+            <if test="goodsCode != null">
+                and g.goods_code = #{goodsCode}
+            </if>
         </where>
     </select>
 

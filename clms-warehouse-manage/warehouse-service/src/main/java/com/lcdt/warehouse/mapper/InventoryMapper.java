@@ -19,6 +19,8 @@ import java.util.List;
 public interface InventoryMapper extends BaseMapper<Inventory> {
 
     List<Inventory> selectInventoryList(Pagination page, Inventory queryDto);
+
+    List<Inventory> selectInventoryListByqueryDto(Pagination page, InventoryQueryDto queryDto);
     
     int updateInventoryLockNum(Long inventoryId,Float inventoryNum,Float lockNum);
     

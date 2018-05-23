@@ -28,6 +28,27 @@ public class InventoryQueryDto extends PageQueryDto {
     @ApiModelProperty(value = "商品编码")
     private String goodsCode;
 
+    @ApiModelProperty(value = "商品分类")
+    private String goodsCategory;
+
+    private Long originalGoodsId;
+
+    public Long getOriginalGoodsId() {
+        return originalGoodsId;
+    }
+
+    public void setOriginalGoodsId(Long originalGoodsId) {
+        this.originalGoodsId = originalGoodsId;
+    }
+
+    public String getGoodsCategory() {
+        return goodsCategory;
+    }
+
+    public void setGoodsCategory(String goodsCategory) {
+        this.goodsCategory = goodsCategory;
+    }
+
     public String getGoodsName() {
         return goodsName;
     }
