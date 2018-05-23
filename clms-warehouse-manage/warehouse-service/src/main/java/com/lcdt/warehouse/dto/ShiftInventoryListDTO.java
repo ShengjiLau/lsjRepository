@@ -26,6 +26,8 @@ public class ShiftInventoryListDTO extends ShiftInventoryListDO{
 	private Integer pageNo;
 	
 	private Integer pageSize;
+	
+	private String goodsInfo;
 
 	public List<ShiftGoodsListDTO> getShiftGoodsListDTOList() {
 		return shiftGoodsListDTOList;
@@ -65,6 +67,14 @@ public class ShiftInventoryListDTO extends ShiftInventoryListDO{
 
 	public void setPageSize(Integer pageSize) {
 		this.pageSize = pageSize;
+	}
+
+	public String getGoodsInfo() {
+		return goodsInfo;
+	}
+
+	public void setGoodsInfo(String goodsInfo) {
+		this.goodsInfo = goodsInfo;
 	}
 
 	

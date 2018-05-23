@@ -49,7 +49,7 @@
     delete from shift_inventory_list
     where shift_id = #{shiftId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.lcdt.warehouse.entity.ShiftInventoryListDO" >
+  <insert id="insert" parameterType="com.lcdt.warehouse.entity.ShiftInventoryListDO" useGeneratedKeys="true" keyColumn="shift_id" keyProperty="shiftId">
    insert into shift_inventory_list (shift_id, group_id, group_name, 
       shift_inventory_num, warehouse_id, warehouse_name, 
       customer_id, customer_name, remark, 
@@ -374,4 +374,44 @@
       finished = #{finished,jdbcType=TINYINT}
     where shift_id = #{shiftId,jdbcType=BIGINT}
   </update>
+  
+    <select id="getShiftInventoryListDOByCondition" parameterType="com.lcdt.warehouse.dto.ShiftInventoryListDTO">
+  	 	select 
+    <include refid="Base_Column_List" />
+    	from shift_inventory_list
+  	<where>
+  		company_id = #{companyId,jdbcType=BIGINT}
+  		<if test="shiftInventoryNum != null and shiftInventoryNum != ''">
+  		and shift_inventory_num like concat('%',#{shiftInventoryNum,jdbcType=VARCHAR},'%')
+  		</if>
+  		<if test="groupId != null">
+  		and group_id = #{groupId,jdbcType=BIGINT}
+  		</if>
+  		<if test="warehouseId != null">
+  		and warehouse_id = #{warehouseId,jdbcType=BIGINT}
+  		</if>
+  		<if test="customerId != null">
+  		and customer_id = #{customerId,jdbcType=BIGINT}
+  		</if>
+  		<if test="create_user != null and create_user != ''">
+  		and create_user = #{createUser,jdbcType=VARCHAR}
+  		</if>
+  		<if test="beginTime != null and beginTime != ''">
+  		and gmt_create &gt; #{beginTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="endTime != null and endTime != ''">
+  		and gmt_create &lt; #{endTime,jdbcType=VARCHAR}
+  		</if>
+  	</where>
+  </select>
+  
+  <update id="updateFinishedById">
+     update shift_inventory_list
+  	 <set>
+  		 finished = #{arg1,jdbcType=TINYINT}
+  	 </set>
+  	 where shift_id = #{arg0,jdbcType=BIGINT}
+  </update>
+  
+  
 </mapper>

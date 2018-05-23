@@ -159,10 +159,15 @@
      </foreach>
   </update>
   
+  <select id="getShiftGoodsDOList" resultMap="BaseResultMap">
+  		select  <include refid="Base_Column_List" />
+  	 	from shift_goods
+  	 <where>
+  	 	shift_inventory_id = #{shiftInventoryId,jdbcType=BIGINT}
+  	 </where>
+  </select>
   
-  
-  
-  
+
  
   
   
