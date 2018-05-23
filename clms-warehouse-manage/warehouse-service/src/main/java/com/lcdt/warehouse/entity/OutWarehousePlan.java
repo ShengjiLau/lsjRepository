@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
-import com.lcdt.warehouse.dto.InPlanGoodsInfoResultDto;
-import com.lcdt.warehouse.dto.OutPlanGoodsInfoResultDto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -84,7 +82,7 @@ public class OutWarehousePlan implements Serializable {
 
     //扩充属性
     @TableField(exist=false)
-    private List<OutPlanGoodsInfoResultDto> goodsList; //商品详细列表
+    private List<OutplanGoods> goodsList; //商品详细列表
 
 
 
@@ -324,11 +322,11 @@ public class OutWarehousePlan implements Serializable {
         this.companyId = companyId;
     }
 
-    public List<OutPlanGoodsInfoResultDto> getGoodsList() {
+    public List<OutplanGoods> getGoodsList() {
         return goodsList;
     }
 
-    public void setGoodsList(List<OutPlanGoodsInfoResultDto> goodsList) {
+    public void setGoodsList(List<OutplanGoods> goodsList) {
         this.goodsList = goodsList;
     }
 }

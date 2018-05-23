@@ -1,10 +1,8 @@
 package com.lcdt.warehouse.mapper;
 
-import com.baomidou.mybatisplus.plugins.pagination.Pagination;
-import com.lcdt.warehouse.dto.InPlanGoodsInfoResultDto;
-import com.lcdt.warehouse.dto.OutPlanGoodsInfoResultDto;
-import com.lcdt.warehouse.entity.OutplanGoods;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+import com.lcdt.warehouse.entity.OutplanGoods;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,5 +17,5 @@ import java.util.List;
  */
 public interface OutplanGoodsMapper extends BaseMapper<OutplanGoods> {
 
-    List<OutPlanGoodsInfoResultDto> outWhPlanGoodsInfoList(Pagination page, @Param("planId") Long planId);
+    List<OutplanGoods> outWhPlanGoodsInfoList(Pagination page, @Param("planId") Long planId);
 }

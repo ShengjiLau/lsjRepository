@@ -119,5 +119,48 @@ public class OutplanGoodsController {
     }
 
 
+    @ApiOperation("计划编辑")
+    @RequestMapping(value = "/edit",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject edit(@RequestBody OutWhPlanDto outWhPlanDto) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        String msg = "编辑失败！";
+        boolean flag = false;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            flag = outWarehousePlanService.outWhPlanEdit(outWhPlanDto, userCompRel);
+        } catch (RuntimeException e) {
+            msg = e.getMessage();
+            logger.error(e.getMessage());
+        }
+        jsonObject.put("code", flag==true? 0:-1);
+        jsonObject.put("message", flag==true? "编辑成功！":msg);
+        return jsonObject;
+    }
+
+
+
+
+    @ApiOperation("发布")
+    @RequestMapping(value = "/publish",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject publish(@ApiParam(value = "计划ID",required = true) @RequestParam Long planOutId) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        OutWarehousePlan obj = new OutWarehousePlan();
+        obj.setOutplanId(planOutId);
+        JSONObject jsonObject = new JSONObject();
+        boolean flag = false;
+        String msg = "发布失败！";
+        try {
+            flag = outWarehousePlanService.outWhPlanPublish(obj, userCompRel);
+        } catch (RuntimeException e) {
+            msg = e.getMessage();
+            logger.error(e.getMessage());
+        }
+        jsonObject.put("code", flag==true? 0:-1);
+        jsonObject.put("message", flag==true? "发布成功！":msg);
+        return jsonObject;
+    }
+
 }
 

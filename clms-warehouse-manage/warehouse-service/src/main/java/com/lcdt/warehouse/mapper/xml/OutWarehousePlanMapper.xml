@@ -58,4 +58,8 @@
     </select>
 
 
+    <select id="getPlanCode" resultType="java.lang.String">
+        SELECT F_OUT_PLAN_CODE('CK')
+    </select>
+
 </mapper>
