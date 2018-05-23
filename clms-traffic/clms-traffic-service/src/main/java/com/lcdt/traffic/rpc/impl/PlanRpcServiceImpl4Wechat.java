@@ -19,6 +19,7 @@ import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.NotifyUtils;
 import com.lcdt.traffic.service.IPlanRpcService4Wechat;
+import com.lcdt.traffic.service.OwnVehicleService;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
@@ -50,6 +51,9 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
 
     @Reference
     private CompanyRpcService companyRpcService; //企业信息
+
+    @Reference
+    private OwnVehicleService ownVehicleService;
 
     @Autowired
     private SplitGoodsMapper splitGoodsMapper;
@@ -686,6 +690,23 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) {
             splitGoods.setCarrierCollectionNames(snatchGoods.getOfferName());
             splitGoods.setCarrierCollectionIds(snatchGoods.getOfferId().toString());
+
+            //同步司机的车辆信息到企业的我的车辆里
+            OwnVehicle ownVehicle = new OwnVehicle();
+            if(StringUtils.isEmpty(dto.getCarrierVehicle())) {
+                ownVehicle.setVehicleNum(splitGoods.getCarrierVehicle());
+
+            } else {
+                ownVehicle.setVehicleNum(dto.getCarrierVehicle());
+            }
+            ownVehicle.setCompanyId(companyId);
+            ownVehicle.setAffiliatedCompany(userCompRel.getCompany().getFullName());
+            ownVehicle.setVehicleCategory((short)2);
+            ownVehicle.setVehicleLoad(dto.getVehicleLoad());
+            ownVehicle.setVehicleType(dto.getVehicleType());
+            ownVehicle.setVehicleLength(dto.getVehicleLength());
+            ownVehicleService.syncVehicleInfo(ownVehicle);
+
         }
         splitGoodsMapper.insert(splitGoods);
         List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
@@ -746,6 +767,8 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             } else {
                 waybillDto.setVechicleNum(dto.getCarrierVehicle());
             }
+
+
 
             waybillDto.setDriverName(snatchGoods.getOfferName());
             waybillDto.setDriverId(snatchGoods.getOfferId());
