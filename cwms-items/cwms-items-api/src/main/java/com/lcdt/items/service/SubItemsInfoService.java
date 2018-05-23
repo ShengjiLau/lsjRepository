@@ -71,10 +71,10 @@ public interface SubItemsInfoService {
 
     /**
      * 根据条件查询列表
-     * @param map
+     * @param dto
      * @return
      */
-    PageInfo<List<GoodsInfoDao>> queryByCondition(Map map);
+    PageInfo<List<GoodsInfoDao>> queryByCondition(GoodsListParamsDto dto);
 
 
     List<Long> queryGoodsIdsByCondition(GoodsListParamsDto dto);
