@@ -27,5 +27,7 @@ public interface ShiftGoodsDOMapper {
     
     int updateShiftGoodsByBatch(List<ShiftGoodsDO> shiftGoodsDOList);
     
+    List<ShiftGoodsDO> getShiftGoodsDOList(Long shiftInventoryId);
+    
     
 }

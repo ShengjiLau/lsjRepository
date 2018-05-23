@@ -39,5 +39,12 @@ public interface ShiftInventoryListService {
 	ShiftInventoryListDTO getShiftInventoryListDetails(Long shiftInventoryListId);
 	
 	
+	
+	/**
+	 * 取消移库单
+	 * @param shiftInventoryListId
+	 * @return
+	 */
+	int deleteShiftInventoryList(Long shiftInventoryListId);
 
 }
