@@ -16,5 +16,5 @@ public interface TimelineMapper {
 
     int updateByPrimaryKey(Timeline record);
 
-    List<Timeline> selectByTag(@Param("companyId") Long companyId,@Param("tag") String tag);
+    List<Timeline> selectByTag(@Param("companyId") Long companyId,@Param("tag") String tag,@Param("dataId")Long dataId);
 }
