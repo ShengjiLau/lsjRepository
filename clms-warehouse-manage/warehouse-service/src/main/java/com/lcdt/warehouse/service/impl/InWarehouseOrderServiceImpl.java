@@ -63,6 +63,13 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
     }
 
     @Override
+    public InWarehouseOrderDto queryInWarehouseOrder(Long companyId, Long inorderId) {
+        InWarehouseOrderDto inWarehouseOrderDto=null;
+        inWarehouseOrderDto=baseMapper.selectInWarehouseOrder(companyId,inorderId);
+        return inWarehouseOrderDto;
+    }
+
+    @Override
     public boolean modifyInOrderStatus(ModifyInOrderStatusParamsDto params) {
         //更新字段
         InWarehouseOrder inWarehouseOrder = new InWarehouseOrder();
