@@ -57,5 +57,10 @@
       and searchkey = #{tag}
     </if>
 
+    <if test="dataId != null">
+      and dataid = #{dataId}
+    </if>
+
+    order by action_time desc
   </select>
 </mapper>
