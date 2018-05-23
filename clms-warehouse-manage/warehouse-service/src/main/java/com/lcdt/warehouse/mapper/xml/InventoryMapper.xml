@@ -79,7 +79,7 @@
 		</where>
 	</select>
 	
-	<select id="getInventoryAndGoodsInfo" resultType="ShiftGoodsListDTO">
+	<select id="getInventoryAndGoodsInfo" resultType="com.lcdt.warehouse.dto.ShiftInventoryListDTO">
 			select t.inventory_id inventoryId,t.storage_location_code storageLocationCode,g.goods_batch goodsBatch
 			g.goods_name goodsName,g.goods_spec goodsSpec,g.goods_code goodsCode,g.bar_code barCode,t.base_unit baseUnit
 			from inventory t inner join goods_info  g on
