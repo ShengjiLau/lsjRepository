@@ -151,26 +151,11 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     }
 
     @Override
-    public PageInfo<List<GoodsInfoDao>> queryByCondition(Map map) {
+    public PageInfo<List<GoodsInfoDao>> queryByCondition(GoodsListParamsDto dto) {
         List<GoodsInfoDao> list = null;
         PageInfo page = null;
-
-        int pageNo = 1;
-        int pageSize = 0; //0表示所有
-
-        if (map.containsKey("pageNo")) {
-            if (map.get("pageNo") != null) {
-                pageNo = (Integer) map.get("pageNo");
-            }
-        }
-        if (map.containsKey("pageSize")) {
-            if (map.get("pageSize") != null) {
-                pageSize = (Integer) map.get("pageSize");
-            }
-        }
-
-        PageHelper.startPage(pageNo, pageSize);
-        list = subItemsInfoMapper.selectByCondition(map);
+        PageHelper.startPage(dto.getPageNo(), dto.getPageSize());
+        list = subItemsInfoMapper.selectByCondition(dto);
         page = new PageInfo(list);
         return page;
     }
