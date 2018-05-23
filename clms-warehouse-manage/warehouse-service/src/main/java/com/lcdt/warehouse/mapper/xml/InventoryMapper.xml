@@ -47,10 +47,20 @@
                 and customer_id = #{customerId}
             </if>
 
+            <if test="goodsCategory != null">
+                and g.goods_category = #{goodsCategory}
+            </if>
+
             <if test="originalGoodsId != null">
                 and original_goods_id = #{originalGoodsId}
             </if>
 
+            <if test="goodsBarCode != null">
+                and g.goods_barcode = #{goodsBarCode}
+            </if>
+            <if test="goodsCode != null">
+                and g.goods_code = #{goodsCode}
+            </if>
         </where>
     </select>
 

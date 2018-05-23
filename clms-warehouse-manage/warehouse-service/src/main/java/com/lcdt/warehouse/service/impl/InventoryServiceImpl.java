@@ -91,7 +91,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         existInventory.setInvertoryNum(existInventory.getInvertoryNum() + inventory.getInvertoryNum());
 
         updateInventoryPrice(existInventory,inventory);
-
         inventoryMapper.updateById(existInventory);
         logger.info("入库 更新库存数量：{}", existInventory);
         return existInventory;
@@ -104,13 +103,11 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         switch (coststrategy) {
             case 0:
                 break;
-
             case 1:
                 existInventory.setInventoryPrice((existInventory.getInventoryPrice() + inventory.getInventoryPrice()) / 2);
                 break;
             case 2:
-
-
+                //TODO 库存成本计算
                 break;
 
         }
