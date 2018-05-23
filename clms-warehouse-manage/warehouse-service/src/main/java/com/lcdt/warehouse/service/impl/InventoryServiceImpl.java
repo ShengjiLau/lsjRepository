@@ -42,7 +42,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     //分页查询 库存列表
     public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto) {
         Page<Inventory> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
-        return page.setRecords(inventoryMapper.selectInventoryList(page, InventoryQueryDto.dtoToDataBean(inventoryQueryDto)));
+        return page.setRecords(inventoryMapper.selectInventoryListByqueryDto(page,inventoryQueryDto));
     }
 
 
