@@ -61,7 +61,6 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     @Autowired
     private OwnDriverMapper ownDriverMapper;
 
-    @Override
     public Waybill addWaybill(WaybillDto waybillDto) {
         int result = 0;
         Waybill waybill = new Waybill();
