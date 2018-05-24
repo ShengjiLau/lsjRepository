@@ -1,6 +1,7 @@
 package com.lcdt.warehouse.service.impl;
 
 import com.baomidou.mybatisplus.plugins.Page;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.warehouse.dto.InventoryLogQueryDto;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.entity.InorderGoodsInfo;
@@ -36,6 +37,7 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
     public Page<InventoryLog> queryInventoryLogPage(InventoryLogQueryDto inventoryQueryDto) {
         logger.info("query inventorylog list querydto :{}",inventoryQueryDto);
         Page<InventoryLog> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
+        inventoryQueryDto.setCompanyId(SecurityInfoGetter.getCompanyId());
         return page.setRecords(logMapper.selectLogList(page,inventoryQueryDto));
     }
 
@@ -50,5 +52,4 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
         logMapper.insert(inventoryLog);
         return inventoryLog;
     }
-
 }

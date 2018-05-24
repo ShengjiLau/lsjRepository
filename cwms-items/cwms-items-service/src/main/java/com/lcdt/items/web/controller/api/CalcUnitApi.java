@@ -106,12 +106,12 @@ public class CalcUnitApi {
     @ApiOperation("查询单位")
     @GetMapping("/list")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_calc_unit_list')")
-    public PageBaseDto<List<CalcUnit>> queryCalcUnitList(HttpSession httpSession) {
+    public PageBaseDto<CalcUnit> queryCalcUnitList(HttpSession httpSession) {
         Long companyId= SecurityInfoGetter.getCompanyId();
         PageInfo pageInfo=new PageInfo();
         pageInfo.setPageSize(0);
         pageInfo.setPageNum(1);
-        PageInfo<List<CalcUnit>> listPageInfo=calcUnitService.queryCalcUnitByCompanyId(companyId,pageInfo);
+        PageInfo<CalcUnit> listPageInfo=calcUnitService.queryCalcUnitByCompanyId(companyId,pageInfo);
         return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
     }
 }

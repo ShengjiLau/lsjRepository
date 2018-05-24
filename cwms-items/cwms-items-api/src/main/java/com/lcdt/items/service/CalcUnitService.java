@@ -55,5 +55,5 @@ public interface CalcUnitService {
      * @param pageInfo
      * @return
      */
-    PageInfo<List<CalcUnit>> queryCalcUnitByCompanyId(Long companyId, PageInfo pageInfo);
+    PageInfo<CalcUnit> queryCalcUnitByCompanyId(Long companyId, PageInfo pageInfo);
 }

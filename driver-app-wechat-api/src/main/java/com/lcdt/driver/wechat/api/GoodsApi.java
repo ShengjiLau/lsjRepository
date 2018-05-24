@@ -37,7 +37,7 @@ public class GoodsApi {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         Long companyId = userCompRel.getCompany().getCompId();
         params.setCompanyId(companyId);
-        PageInfo<List<GoodsInfoDao>> listPageInfo=subItemsInfoService.queryByCondition(params);
+        PageInfo<GoodsInfoDao> listPageInfo=subItemsInfoService.queryByCondition(params);
         return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
     }
 }
