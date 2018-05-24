@@ -68,25 +68,28 @@
         SELECT * from inventory t left join goods_info  g on
         t.goods_id = g.goods_id
         <where>
-            <if test="batch != null">
-                batch = #{batch}
+            <if test="querydto.companyId != null">
+                t.company_id = #{querydto.companyId}
+            </if>
+            <if test="querydto.batch != null">
+                batch = #{querydto.batch}
             </if>
 
-            <if test="wareHouseId != null">
-                AND warehouse_id = #{wareHouseId}
+            <if test="querydto.wareHouseId != null">
+                AND warehouse_id = #{querydto.wareHouseId}
             </if>
 
-            <if test="storageLocationCode != null">
-                and storage_location_code = #{storageLocationCode}
+            <if test="querydto.storageLocationCode != null">
+                and storage_location_code = #{querydto.storageLocationCode}
             </if>
 
-            <if test="customerId != null">
-                and customer_id = #{customerId}
+            <if test="querydto.customerId != null">
+                and customer_id = #{querydto.customerId}
             </if>
 
-            <if test="originalGoodsId != null">
-                and original_goods_id IN
-              <foreach collection="goodIds" index="index" item="item" open="(" separator="," close=")">
+            <if test="goodsIds != null">
+                and t.original_goods_id IN
+              <foreach collection="goodsIds" index="index" item="item" open="(" separator="," close=")">
                  #{item}
               </foreach>
             </if>
