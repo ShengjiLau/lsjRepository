@@ -60,7 +60,7 @@ public class SubItemsInfoApi {
     public PageBaseDto<List<GoodsInfoDao>> queryGoodsList(GoodsListParamsDto params){
         Long companyId=SecurityInfoGetter.getCompanyId();
         params.setCompanyId(companyId);
-        PageInfo<List<GoodsInfoDao>> listPageInfo=subItemsInfoService.queryByCondition(params);
+        PageInfo<GoodsInfoDao> listPageInfo=subItemsInfoService.queryByCondition(params);
         return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
     }
 
