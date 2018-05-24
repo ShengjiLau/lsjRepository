@@ -38,7 +38,6 @@ public class OutWhPlanGoodsDto {
     private String remark;
 
 
-
     @ApiModelProperty(value = "配仓---待配数量-也就是剩余计划数量")
     private Float remainGoodsNum;
     @ApiModelProperty(value = "配仓---已入库数量")

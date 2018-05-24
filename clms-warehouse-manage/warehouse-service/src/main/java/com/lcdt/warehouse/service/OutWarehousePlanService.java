@@ -47,5 +47,43 @@ public interface OutWarehousePlanService extends IService<OutWarehousePlan> {
     boolean outWhPlanAdd(OutWhPlanDto outWhPlanDto, UserCompRel userCompRel);
 
 
+    /***
+     * 计划编辑
+     * @param outWhPlanDto
+     * @param userCompRel
+     * @return
+     */
+    boolean outWhPlanEdit(OutWhPlanDto outWhPlanDto, UserCompRel userCompRel);
+
+
+
+    /***
+     * 计划发布
+     * @param obj
+     * @param userCompRel
+     * @return
+     */
+    boolean outWhPlanPublish(OutWarehousePlan obj, UserCompRel userCompRel);
+
+
+
+    /***
+     * 计划取消
+     *
+     * @param obj
+     * @param userCompRel
+     * @return
+     */
+    boolean outWhPlanCancel(OutWarehousePlan obj, UserCompRel userCompRel);
+
+
+    /***
+     * 计划完成
+     *
+     * @param obj
+     * @param userCompRel
+     * @return
+     */
+    boolean outWhPlanComplete(OutWarehousePlan obj, UserCompRel userCompRel);
 
 }

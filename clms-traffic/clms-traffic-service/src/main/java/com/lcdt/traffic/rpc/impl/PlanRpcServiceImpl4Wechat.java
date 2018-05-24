@@ -52,6 +52,9 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
     private CompanyRpcService companyRpcService; //企业信息
 
     @Autowired
+    private OwnVehicleMapper ownVehicleMapper;
+
+    @Autowired
     private SplitGoodsMapper splitGoodsMapper;
 
 
@@ -683,9 +686,30 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         splitGoods.setCompanyId(companyId);
         splitGoods.setCarrierCompanyId(dto.getCarrierCompanyId() == null ? waybillPlan.getCompanyId() : dto.getCarrierCompanyId());// 承运商企业ID
 
-        if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) {
+        //4:全部司机
+        if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)||waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_ALL_DRIVER)) {
             splitGoods.setCarrierCollectionNames(snatchGoods.getOfferName());
             splitGoods.setCarrierCollectionIds(snatchGoods.getOfferId().toString());
+
+            //同步司机的车辆信息到企业的我的车辆里
+
+            OwnVehicle ownVehicle = new OwnVehicle();
+            if(StringUtils.isEmpty(dto.getCarrierVehicle())) {
+                ownVehicle.setVehicleNum(splitGoods.getCarrierVehicle());
+            } else {
+                ownVehicle.setVehicleNum(dto.getCarrierVehicle());
+            }
+            ownVehicle.setCompanyId(companyId);
+            ownVehicle.setAffiliatedCompany(userCompRel.getCompany().getFullName());
+            ownVehicle.setVehicleCategory((short)2);
+            ownVehicle.setVehicleLoad(dto.getVehicleLoad());
+            ownVehicle.setVehicleType(dto.getVehicleType());
+            ownVehicle.setVehicleLength(dto.getVehicleLength()+"米");
+            int count = ownVehicleMapper.selectVehicleNum(ownVehicle);
+            if(count==0)
+            {
+                ownVehicleMapper.insert(ownVehicle);
+            }
         }
         splitGoodsMapper.insert(splitGoods);
         List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
@@ -746,6 +770,8 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             } else {
                 waybillDto.setVechicleNum(dto.getCarrierVehicle());
             }
+
+
 
             waybillDto.setDriverName(snatchGoods.getOfferName());
             waybillDto.setDriverId(snatchGoods.getOfferId());

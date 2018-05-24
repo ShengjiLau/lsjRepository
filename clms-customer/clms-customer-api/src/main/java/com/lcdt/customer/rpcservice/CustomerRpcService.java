@@ -1,5 +1,6 @@
 package com.lcdt.customer.rpcservice;
 
+import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
 
 import java.util.List;
@@ -44,5 +45,13 @@ public interface CustomerRpcService {
      * 企业初始化增加客户接口
      * */
     int customerAdd(Customer customer) ;
+
+
+    /**
+     * 根据查询条件获取客户列表
+     * @param m
+     * @return
+     */
+    PageInfo customerList(Map m);
 
 }

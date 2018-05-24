@@ -22,7 +22,6 @@ public class InventoryFactory {
         Assert.notNull(order, "新建库存，入库单不能为空");
         Inventory inventory = new Inventory();
         inventory.setCompanyId(order.getCompanyId());
-        inventory.setGoodsId(goodsInfo.getGoodsId());
         inventory.setInvertoryNum(goodsInfo.getInHouseAmount() * goodsInfo.getUnitData());
         inventory.setWareHouseId(order.getWarehouseId());
         inventory.setStorageLocationCode(goodsInfo.getStrogeLocationCode());
@@ -33,6 +32,7 @@ public class InventoryFactory {
         inventory.setCustomerId(order.getCustomerId());
         inventory.setCustomerName(order.getCustomerName());
         inventory.setInventoryPrice(goodsInfo.getGoodsPrice());
+        inventory.setOriginalGoodsId(goodsInfo.getGoodsId());
 
         if (logger.isDebugEnabled()) {
             logger.debug("create inventory from inordergoods :{} ", inventory.toString());

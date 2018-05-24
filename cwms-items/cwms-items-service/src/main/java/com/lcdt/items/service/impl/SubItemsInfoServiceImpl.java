@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.items.dao.CustomValueMapper;
 import com.lcdt.items.dao.ItemSpecKeyValueMapper;
 import com.lcdt.items.dao.SubItemsInfoMapper;
+import com.lcdt.items.dto.GoodsListParamsDto;
 import com.lcdt.items.model.*;
 import com.lcdt.items.service.SubItemsInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,7 +128,7 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     }
 
     @Override
-    public PageInfo<List<SubItemsInfoDao>> querySubAndSpecAndPropListByItemId(Long itemId, Long companyId, PageInfo pageInfo) {
+    public PageInfo<SubItemsInfoDao> querySubAndSpecAndPropListByItemId(Long itemId, Long companyId, PageInfo pageInfo) {
         List<SubItemsInfoDao> list = null;
         PageInfo page = null;
         SubItemsInfo subItemsInfo = new SubItemsInfo();
@@ -150,28 +151,19 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     }
 
     @Override
-    public PageInfo<List<GoodsInfoDao>> queryByCondition(Map map) {
+    public PageInfo<GoodsInfoDao> queryByCondition(GoodsListParamsDto dto) {
         List<GoodsInfoDao> list = null;
         PageInfo page = null;
-
-        int pageNo = 1;
-        int pageSize = 0; //0表示所有
-
-        if (map.containsKey("pageNo")) {
-            if (map.get("pageNo") != null) {
-                pageNo = (Integer) map.get("pageNo");
-            }
-        }
-        if (map.containsKey("pageSize")) {
-            if (map.get("pageSize") != null) {
-                pageSize = (Integer) map.get("pageSize");
-            }
-        }
-
-        PageHelper.startPage(pageNo, pageSize);
-        list = subItemsInfoMapper.selectByCondition(map);
+        PageHelper.startPage(dto.getPageNo(), dto.getPageSize());
+        list = subItemsInfoMapper.selectByCondition(dto);
         page = new PageInfo(list);
         return page;
+    }
+
+    @Override
+    public List<Long> queryGoodsIdsByCondition(GoodsListParamsDto dto) {
+        List<Long> goodsIds = subItemsInfoMapper.selectGoodsIdsByCondition(dto);
+        return goodsIds;
     }
 
 

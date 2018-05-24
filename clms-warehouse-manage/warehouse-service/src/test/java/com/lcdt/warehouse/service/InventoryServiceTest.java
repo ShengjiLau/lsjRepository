@@ -21,17 +21,6 @@ public class InventoryServiceTest extends BaseIntegrationContext{
     @Autowired
     InventoryService inventoryService;
 
-    @Test
-    @Rollback
-    public void testNestedQuery(){
-        InventoryQueryDto pageQueryDto = new InventoryQueryDto();
-        pageQueryDto.setPageNo(1);
-        pageQueryDto.setPageSize(10);
-        Page<Inventory> page = inventoryService.queryInventoryPage(pageQueryDto);
-        List<Inventory> records = page.getRecords();
-        GoodsInfo goods = records.get(0).getGoodsInfo();
-        Assert.assertNotNull(goods);
-        Assert.assertNotNull(goods.getGoodsId());
-    }
+
 
 }

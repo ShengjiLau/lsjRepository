@@ -41,8 +41,13 @@ public class ShiftInventoryListApi {
 	@ApiOperation(value = "创建移库单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_add')")
 	public JSONObject insertInventoryList(@Validated ShiftInventoryListDTO shiftInventoryListDTO) {
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = validateParamInfo(shiftInventoryListDTO);
+		if (jsonObject.size() > 0) {
+			jsonObject.put("code", -1);
+			return jsonObject;
+		}
 		
+		jsonObject.clear();
 		int result = shiftInventoryListService.insertShiftInventoryList(shiftInventoryListDTO);	
 		logger.debug("创建移库单的数量:"+result);
 		
@@ -60,8 +65,13 @@ public class ShiftInventoryListApi {
 	@ApiOperation(value = "完成移库单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_complete')")
 	public JSONObject completeInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = validateParamInfo(shiftInventoryListDTO);
+		if (jsonObject.size() > 0) {
+			jsonObject.put("code", -1);
+			return jsonObject;
+		}
 		
+		jsonObject.clear();
 		int result = shiftInventoryListService.insertShiftInventoryList(shiftInventoryListDTO);
 		logger.debug("完成移库单的数量:"+result);
 		
@@ -130,7 +140,29 @@ public class ShiftInventoryListApi {
 	}
 	
 	
-	
+	/**
+	 * 验证传入的移库单信息
+	 * @param shiftInventoryListDTO
+	 * @return
+	 */
+	public JSONObject validateParamInfo(ShiftInventoryListDTO shiftInventoryListDTO) {
+		JSONObject jsonObject = new JSONObject();
+		if (null == shiftInventoryListDTO.getShiftGoodsListDTOList()) {
+			jsonObject.put("message", "至少添加一条移库信息");
+			return jsonObject;
+		}
+		if (null == shiftInventoryListDTO.getShiftUser() || "".equals(shiftInventoryListDTO.getShiftUser())) {
+			jsonObject.put("message", "移库人不可为空");
+			return jsonObject;
+		}
+		if (null == shiftInventoryListDTO.getShiftTime() || "".equals(shiftInventoryListDTO.getShiftTime())) {
+			jsonObject.put("message", "移库时间不可为空");
+			return jsonObject;
+		}
+		
+		
+		return jsonObject;
+	}
 	
 	
 

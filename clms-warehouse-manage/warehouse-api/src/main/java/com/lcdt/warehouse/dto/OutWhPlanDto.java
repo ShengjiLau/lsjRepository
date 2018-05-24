@@ -29,11 +29,11 @@ public class OutWhPlanDto implements Serializable {
     private String customerContactName;
     @ApiModelProperty(value = "联系电话")
     private String customerContactPhone;
-    @ApiModelProperty(value = "入库仓库ID")
+    @ApiModelProperty(value = "出库仓库ID")
     private Long wareHouseId;
-    @ApiModelProperty(value = "入库仓库名")
+    @ApiModelProperty(value = "出库仓库名")
     private String warehouseName;
-    @ApiModelProperty(value = "入库类型")
+    @ApiModelProperty(value = "出库类型")
     private String storageType;
     @ApiModelProperty(value = "计划时间")
     private String storagePlanTime;
