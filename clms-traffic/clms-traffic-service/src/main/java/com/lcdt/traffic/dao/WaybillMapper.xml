@@ -91,6 +91,7 @@
     <result column="freight_total" jdbcType="REAL" property="freightTotal" />
     <result column="other_fee_total" jdbcType="REAL" property="otherFeeTotal" />
     <result column="fee_total" jdbcType="REAL" property="feeTotal" />
+    <result column="reconcile_count" jdbcType="INTEGER" property="reconcileCount" />
     <collection property="waybillItemsList" column="id" ofType="com.lcdt.traffic.model.WaybillItems" select="com.lcdt.traffic.dao.WaybillItemsMapper.selectByWaybillId"/>
   </resultMap>
 
@@ -653,7 +654,9 @@
         and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) other_fee_total,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
       where fa.waybill_id=id and ff.account_id=fa.account_id
-        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total
+        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total,
+    (select count(*) from t_fee_account fa
+      where fa.waybill_id=id and fa.is_deleted=0 and fa.reconcile_id is not null and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) reconcile_count
     from t_waybill
     <where>
       waybill_status!=8
@@ -677,7 +680,9 @@
         and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) other_fee_total,
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
       where fa.waybill_id=id and ff.account_id=fa.account_id
-        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total
+        and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total,
+    (select count(*) from t_fee_account fa
+      where fa.waybill_id=id and fa.is_deleted=0 and fa.reconcile_id is not null and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) reconcile_count
     from t_waybill
     <where>
       waybill_status!=8

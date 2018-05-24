@@ -141,6 +141,11 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         return map;
     }
     @Override
+    public int getWaybillReconcileCount(Map map){
+        int result = feeAccountMapper.getWaybillReconcileCount(map);
+        return result;
+    }
+    @Override
     public boolean feeAccountSave(FeeAccountSaveParamsDto saveParamsDto){
         try{
             Waybill waybill = waybillMapper.selectByPrimaryKey(saveParamsDto.getWaybillId());
