@@ -48,6 +48,12 @@ public class Inventory implements Serializable {
      */
     private String customerName;
 
+    /**
+     * 库存成本备注
+     */
+    private String costRemark;
+
+
 
     /**
      * 业务类型
@@ -72,6 +78,14 @@ public class Inventory implements Serializable {
     private String batch;
 
     private GoodsInfoDao goods;
+
+    public String getCostRemark() {
+        return costRemark;
+    }
+
+    public void setCostRemark(String costRemark) {
+        this.costRemark = costRemark;
+    }
 
     public GoodsInfoDao getGoods() {
         return goods;

@@ -32,8 +32,20 @@ public class InventoryApi {
     @ApiOperation("库存明细列表")
     private ResponseMessage inventoryList(InventoryQueryDto queryDto){
         logger.debug("query inventory list querydto:{}",queryDto);
-        Page<Inventory> page = inventoryService.queryInventoryPage(queryDto, SecurityInfoGetter.getCompanyId());
+        Long loginCompanyId = SecurityInfoGetter.getCompanyId();
+        queryDto.setCompanyId(loginCompanyId);
+        Page<Inventory> page = inventoryService.queryInventoryPage(queryDto, loginCompanyId);
         return JSONResponseUtil.success(page);
+    }
+
+    @PostMapping("/price/update")
+    @ApiOperation("修改库存成本价")
+    private ResponseMessage modifyInventoryPrice(Long inventoryId,Float newprice) {
+        return JSONResponseUtil.success(inventoryService.modifyInventoryPrice(inventoryId, newprice));
+    }
+
+    private ResponseMessage modifyInventoryRemark(Long inventoryId, String remark) {
+        return JSONResponseUtil.success(inventoryService.modifyInventoryRemark(inventoryId, remark));
     }
 
 }

@@ -1,12 +1,13 @@
 package com.lcdt.items.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by lyqishan on 2018/1/10
  */
 
-public class GoodsListParamsDto {
+public class GoodsListParamsDto implements Serializable{
     private String goodsName;
     private String goodsCode;
     private String barCode;

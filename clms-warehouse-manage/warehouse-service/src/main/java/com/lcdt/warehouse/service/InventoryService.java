@@ -23,4 +23,7 @@ public interface InventoryService extends IService<Inventory> {
 
     void putInventory(List<InorderGoodsInfo> goods, InWarehouseOrder order);
 
+    Inventory modifyInventoryPrice(Long inventoryId,Float newprice);
+
+    Inventory modifyInventoryRemark(Long inventoryId,String remark);
 }

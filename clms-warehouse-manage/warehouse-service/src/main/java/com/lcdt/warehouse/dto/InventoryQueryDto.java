@@ -4,11 +4,14 @@ import com.lcdt.warehouse.entity.Inventory;
 import io.swagger.annotations.ApiModelProperty;
 
 public class InventoryQueryDto extends PageQueryDto {
+
+    private Long companyId;
+
     @ApiModelProperty(value = "仓库id")
     private Long wareHouseId;
 
     @ApiModelProperty(value = "库位")
-    private String strogeLocationCode;
+    private String storageLocationCode;
 
     @ApiModelProperty(value = "批次")
     private String batch;
@@ -32,6 +35,14 @@ public class InventoryQueryDto extends PageQueryDto {
     private String goodsCategory;
 
     private Long originalGoodsId;
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
 
     public Long getOriginalGoodsId() {
         return originalGoodsId;
@@ -81,12 +92,12 @@ public class InventoryQueryDto extends PageQueryDto {
         this.wareHouseId = wareHouseId;
     }
 
-    public String getStrogeLocationCode() {
-        return strogeLocationCode;
+    public String getStorageLocationCode() {
+        return storageLocationCode;
     }
 
-    public void setStrogeLocationCode(String strogeLocationCode) {
-        this.strogeLocationCode = strogeLocationCode;
+    public void setStorageLocationCode(String strogeLocationCode) {
+        this.storageLocationCode = strogeLocationCode;
     }
 
     public String getBatch() {
@@ -119,7 +130,7 @@ public class InventoryQueryDto extends PageQueryDto {
             return inventory;
         }
         inventory.setWareHouseId(dto.getWareHouseId());
-        inventory.setStorageLocationCode(dto.getStrogeLocationCode());
+        inventory.setStorageLocationCode(dto.getStorageLocationCode());
         inventory.setGoodsId(dto.getGoodsId());
         inventory.setCustomerId(dto.getCustomerId());
         return inventory;
@@ -129,7 +140,7 @@ public class InventoryQueryDto extends PageQueryDto {
     public String toString() {
         return "InventoryQueryDto{" +
                 "wareHouseId=" + wareHouseId +
-                ", strogeLocationCode=" + strogeLocationCode +
+                ", strogeLocationCode=" + storageLocationCode +
                 ", batch='" + batch + '\'' +
                 ", goodsId='" + goodsId + '\'' +
                 '}';
