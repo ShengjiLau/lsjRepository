@@ -213,7 +213,7 @@
         and  f.is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
       <if test="groupIds!=null and groupIds!=''">
-        and  f.group_id in (#{groupIds,jdbcType=VARCHAR})
+        and FIND_IN_SET(f.group_id,#{groupIds,jdbcType=VARCHAR})
       </if>
       <if test="companyId!=null">
         and  f.company_id = #{companyId,jdbcType=BIGINT}
