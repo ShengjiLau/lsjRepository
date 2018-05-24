@@ -394,6 +394,14 @@
     <include refid="Base_Column_List"/>
     from t_payment_application
     <where>
+      <choose>
+        <when test="tempStatus!=null and tempStatus==1">
+          and payment_time is NULL
+        </when>
+        <when test="tempStatus!=null and tempStatus==2">
+          and payment_time is NOT NULL
+        </when>
+      </choose>
       <if test="applicationSerialNo!=null and applicationSerialNo!=''">
         and (application_serial_no like concat('%',#{applicationSerialNo},'%') or order_serial_no like concat('%',#{applicationSerialNo},'%'))
       </if>

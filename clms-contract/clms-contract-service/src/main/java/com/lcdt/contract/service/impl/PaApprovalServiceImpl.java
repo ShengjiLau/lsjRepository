@@ -34,9 +34,9 @@ public class PaApprovalServiceImpl implements PaApprovalService {
     @Override
     public PageInfo<List<PaApprovalDto>> paApprovalList(PaApprovalListDto paApprovalListDto, PageInfo pageInfo) {
         //根据需求审批创建起始时间加上时间
-        if(null!=paApprovalListDto.getApplicationDateStart() && !"".equals(paApprovalListDto.getApplicationDateStart())){
-            paApprovalListDto.setApplicationDateStart(paApprovalListDto.getApplicationDateStart()+" 00:00:00");
-            paApprovalListDto.setGetApplicationDateEnd(paApprovalListDto.getGetApplicationDateEnd()+" 23:59:59");
+        if(null!=paApprovalListDto.getPaymentTimeStart() && !"".equals(paApprovalListDto.getPaymentTimeStart())){
+            paApprovalListDto.setPaymentTimeStart(paApprovalListDto.getPaymentTimeStart()+" 00:00:00");
+            paApprovalListDto.setPaymentTimeEnd(paApprovalListDto.getPaymentTimeEnd()+" 23:59:59");
         }
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         List<PaApprovalDto> paApprovalDtoList = paApprovalMapper.selectPaApprovalByCondition(paApprovalListDto);

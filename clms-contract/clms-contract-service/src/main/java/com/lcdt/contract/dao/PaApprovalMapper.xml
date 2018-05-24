@@ -218,17 +218,17 @@
     from t_payment_application t1 left join t_pa_approval t2 on t1.pa_id = t2.pa_id
     <where>
       t1.company_id = #{companyId,jdbcType=BIGINT}
-      <if test="applicationDateStart!=null and applicationDateStart!=''">
-        and t1.application_date &gt; #{applicationDateStart,jdbcType=TIMESTAMP} and t1.application_date &lt; #{applicationDateEnd,jdbcType=TIMESTAMP}
+      <if test="paymentTimeStart!=null and paymentTimeStart!=''">
+        and t1.application_date &gt; #{paymentTimeStart,jdbcType=TIMESTAMP} and t1.application_date &lt; #{paymentTimeEnd,jdbcType=TIMESTAMP}
       </if>
       <if test="orderNo!=null and orderNo!=''">
-        and (t1.order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%') or t1.order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%'))
+        and t1.order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
       </if>
-      <if test="supplier!=null and supplier!=''">
-        and (t1.supplier like concat('%',#{supplier,jdbcType=VARCHAR},'%') or t1.supplier like concat('%',#{supplier,jdbcType=VARCHAR},'%'))
+      <if test="customerCName!=null and customerCName!=''">
+        and t1.supplier like concat('%',#{customerCName,jdbcType=VARCHAR},'%')
       </if>
       <if test="contractCode!=null and contractCode!=''">
-        and (t1.contract_code like concat('%',#{contractCode,jdbcType=VARCHAR},'%') or t1.contract_code like concat('%',#{contractCode,jdbcType=VARCHAR},'%'))
+        and t1.contract_code like concat('%',#{contractCode,jdbcType=VARCHAR},'%')
       </if>
       <if test="approvalStatus!=null and approvalStatus!=''">
         <choose>

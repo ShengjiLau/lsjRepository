@@ -13,9 +13,11 @@ public class PaymentApplicationDto extends PaymentApplication {
 
     private String paymentTimeStart;
 
-    private String PaymentTimeEnd;
+    private String paymentTimeEnd;
 
     private List<PaApproval> paApprovalList;
+
+    private Short tempStatus;
 
     private int pageNum;
 
@@ -30,11 +32,11 @@ public class PaymentApplicationDto extends PaymentApplication {
     }
 
     public String getPaymentTimeEnd() {
-        return PaymentTimeEnd;
+        return paymentTimeEnd;
     }
 
     public void setPaymentTimeEnd(String paymentTimeEnd) {
-        PaymentTimeEnd = paymentTimeEnd;
+        this.paymentTimeEnd = paymentTimeEnd;
     }
 
     public List<PaApproval> getPaApprovalList() {
@@ -43,6 +45,14 @@ public class PaymentApplicationDto extends PaymentApplication {
 
     public void setPaApprovalList(List<PaApproval> paApprovalList) {
         this.paApprovalList = paApprovalList;
+    }
+
+    public Short getTempStatus() {
+        return tempStatus;
+    }
+
+    public void setTempStatus(Short tempStatus) {
+        this.tempStatus = tempStatus;
     }
 
     public int getPageNum() {

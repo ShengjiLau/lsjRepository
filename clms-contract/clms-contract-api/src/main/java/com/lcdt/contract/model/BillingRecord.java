@@ -6,6 +6,8 @@ import java.util.Date;
 public class BillingRecord {
     private Long brId;
 
+    private String billingNo;
+
     private Date billingDate;
 
     private String contractCode;
@@ -16,7 +18,11 @@ public class BillingRecord {
 
     private String buyer;
 
-    private String taxId;
+    private String saler;
+
+    private String buyerTaxId;
+
+    private String salerTaxId;
 
     private String directions;
 
@@ -34,6 +40,14 @@ public class BillingRecord {
 
     public void setBrId(Long brId) {
         this.brId = brId;
+    }
+
+    public String getBillingNo() {
+        return billingNo;
+    }
+
+    public void setBillingNo(String billingNo) {
+        this.billingNo = billingNo == null ? null : billingNo.trim();
     }
 
     public Date getBillingDate() {
@@ -76,12 +90,28 @@ public class BillingRecord {
         this.buyer = buyer == null ? null : buyer.trim();
     }
 
-    public String getTaxId() {
-        return taxId;
+    public String getSaler() {
+        return saler;
     }
 
-    public void setTaxId(String taxId) {
-        this.taxId = taxId == null ? null : taxId.trim();
+    public void setSaler(String saler) {
+        this.saler = saler == null ? null : saler.trim();
+    }
+
+    public String getBuyerTaxId() {
+        return buyerTaxId;
+    }
+
+    public void setBuyerTaxId(String buyerTaxId) {
+        this.buyerTaxId = buyerTaxId == null ? null : buyerTaxId.trim();
+    }
+
+    public String getSalerTaxId() {
+        return salerTaxId;
+    }
+
+    public void setSalerTaxId(String salerTaxId) {
+        this.salerTaxId = salerTaxId == null ? null : salerTaxId.trim();
     }
 
     public String getDirections() {

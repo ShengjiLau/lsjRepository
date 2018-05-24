@@ -22,14 +22,14 @@ import java.util.List;
  */
 @Api(description = "采购开票api")
 @RestController
-@RequestMapping("/purchase")
+@RequestMapping("/payment/billingRecord")
 public class BillingRecordApi {
 
     @Autowired
     private BillingRecordService billingRecordService;
 
     @ApiOperation(value = "开票列表", notes = "采购单开票列表")
-    @GetMapping("/billingList")
+    @GetMapping("/list")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_billing_list')")
     public PageBaseDto<List<BillingRecord>> billingRecordApiList(BillingRecordDto billingRecordDto) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //获取登陆人企业id
@@ -43,7 +43,7 @@ public class BillingRecordApi {
     }
 
     @ApiOperation(value = "新增开票记录", notes = "采购单新增开票记录")
-    @PostMapping("/billingAdd")
+    @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_billing_add')")
     public JSONObject addBillingRecord(@RequestBody BillingRecord billingRecord){
         Long companyId = SecurityInfoGetter.getCompanyId(); //获取登陆人企业id

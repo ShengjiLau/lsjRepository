@@ -12,12 +12,12 @@ public class PaApprovalListDto implements Serializable {
     /**
      * 付款单创建时间开始
      */
-    private String applicationDateStart;
+    private String paymentTimeStart;
 
     /**
      * 付款单创建时间结束
      */
-    private String getApplicationDateEnd;
+    private String paymentTimeEnd;
 
     /**
      * 采购单号
@@ -32,7 +32,7 @@ public class PaApprovalListDto implements Serializable {
     /**
      * 供应商
      */
-    private String supplier;
+    private String customerCName;
 
     /**
      * 审批状态
@@ -75,20 +75,20 @@ public class PaApprovalListDto implements Serializable {
 
     private int pageSize;
 
-    public String getApplicationDateStart() {
-        return applicationDateStart;
+    public String getPaymentTimeStart() {
+        return paymentTimeStart;
     }
 
-    public void setApplicationDateStart(String applicationDateStart) {
-        this.applicationDateStart = applicationDateStart;
+    public void setPaymentTimeStart(String paymentTimeStart) {
+        this.paymentTimeStart = paymentTimeStart;
     }
 
-    public String getGetApplicationDateEnd() {
-        return getApplicationDateEnd;
+    public String getPaymentTimeEnd() {
+        return paymentTimeEnd;
     }
 
-    public void setGetApplicationDateEnd(String getApplicationDateEnd) {
-        this.getApplicationDateEnd = getApplicationDateEnd;
+    public void setPaymentTimeEnd(String paymentTimeEnd) {
+        this.paymentTimeEnd = paymentTimeEnd;
     }
 
     public String getOrderNo() {
@@ -107,12 +107,12 @@ public class PaApprovalListDto implements Serializable {
         this.contractCode = contractCode;
     }
 
-    public String getSupplier() {
-        return supplier;
+    public String getCustomerCName() {
+        return customerCName;
     }
 
-    public void setSupplier(String supplier) {
-        this.supplier = supplier;
+    public void setCustomerCName(String customerCName) {
+        this.customerCName = customerCName;
     }
 
     public Short getApprovalStatus() {
