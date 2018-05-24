@@ -51,7 +51,7 @@ public class SubItemsInfoApi {
         PageInfo page=new PageInfo();
         page.setPages(0);
         page.setPageNum(1);
-        PageInfo<List<SubItemsInfoDao>> listPageInfo=subItemsInfoService.querySubAndSpecAndPropListByItemId(itemId,companyId,page);
+        PageInfo<SubItemsInfoDao> listPageInfo=subItemsInfoService.querySubAndSpecAndPropListByItemId(itemId,companyId,page);
         return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
     }
 

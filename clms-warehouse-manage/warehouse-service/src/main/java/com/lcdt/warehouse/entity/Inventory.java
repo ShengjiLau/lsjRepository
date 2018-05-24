@@ -2,6 +2,8 @@ package com.lcdt.warehouse.entity;
 
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.lcdt.items.model.GoodsInfoDao;
+
 import java.io.Serializable;
 
 /**
@@ -68,6 +70,16 @@ public class Inventory implements Serializable {
     private Long originalGoodsId;
 
     private String batch;
+
+    private GoodsInfoDao goods;
+
+    public GoodsInfoDao getGoods() {
+        return goods;
+    }
+
+    public void setGoods(GoodsInfoDao goods) {
+        this.goods = goods;
+    }
 
     public Float getInventoryPrice() {
         return inventoryPrice;
