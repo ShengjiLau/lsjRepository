@@ -27,6 +27,8 @@ public interface FeeAccountMapper {
 
     List<FeeAccountDto> selectWaybillFeeAccountDetail(Map m);
 
+    int getWaybillReconcileCount(Map map);
+
     FeeAccountDto selectFeeAccountDetail(Long accountId);
 
     List<FeeAccountDto> selectByCondition(Map m);

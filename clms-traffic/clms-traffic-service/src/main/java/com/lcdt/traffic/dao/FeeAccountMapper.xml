@@ -276,6 +276,15 @@
     and is_deleted = 0
     order by account_id desc
   </select>
+  <select id="getWaybillReconcileCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(*)
+    from t_fee_account fa,t_waybill w
+    where fa.waybill_id=w.id
+    and fa.is_deleted=0
+    and fa.reconcile_id is not null
+    and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
+    and w.id=#{waybillId,jdbcType=BIGINT}
+  </select>
   <select id="selectFeeAccountDetail" parameterType="java.lang.Long" resultMap="BaseResultDtoMap">
     select <include refid="Base_Column_List"/>,
     (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.fee_property='运费' and ff.is_deleted=0) freight_total,

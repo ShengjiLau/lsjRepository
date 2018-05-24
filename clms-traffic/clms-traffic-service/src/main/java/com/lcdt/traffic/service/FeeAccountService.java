@@ -32,6 +32,13 @@ public interface FeeAccountService {
      * @return
      */
     Map feeAccountPage(Map m);
+
+    /**
+     * 获取运单对账数
+     * @param map
+     * @return
+     */
+    int getWaybillReconcileCount(Map map);
     /**
      * 保存/修改记账单及流水
      * @param dto
