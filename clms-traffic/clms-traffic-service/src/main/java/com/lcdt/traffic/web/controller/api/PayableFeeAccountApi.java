@@ -167,36 +167,41 @@ public class PayableFeeAccountApi {
         m.put("isReceivable", (short)1);
         m.put("isOwn", isOwn);
 
-        Map map = feeAccountService.feeAccountPage(m);
-        if(map!=null) {
-            List<FeeAccountDto> feeAccountDtoList = (List<FeeAccountDto>) map.get("feeAccountDtoList");
-            if(feeAccountDtoList != null && feeAccountDtoList.size() > 0){
-                for(FeeAccountDto dto : feeAccountDtoList){
-                    List<FeeFlow> feeFlowList = dto.getFeeFlowList();
-                    List<FeeProperty> showPropertyList = new ArrayList<>();
-                    List<FeeProperty> hidePropertyList = new ArrayList<>();
-                    if(feeFlowList != null && feeFlowList.size() > 0){
-                        List<Long> proIds = new ArrayList<>();
-                        for(FeeFlow f : feeFlowList){
-                            proIds.add(f.getProId());
-                        }
-                        m.put("proIds", proIds);
-                    }
-                    m.put("isShow", (short)0);
-                    showPropertyList = financeRpcService.selectByCondition(m);
-                    m.put("isShow", (short)1);
-                    hidePropertyList = financeRpcService.selectByCondition(m);
-                    dto.setShowPropertyList(showPropertyList);
-                    dto.setHidePropertyList(hidePropertyList);
-                }
-            }
-            JSONObject jsonObject=new JSONObject();
-            jsonObject.put("code",0);
-            jsonObject.put("message","记账明细");
-            jsonObject.put("data",map);
-            return jsonObject;
+        int reconcileCount = feeAccountService.getWaybillReconcileCount(m);
+        if(reconcileCount > 0){
+            throw new RuntimeException("此运单已对账，不能记账");
         }else {
-            throw new RuntimeException("获取失败");
+            Map map = feeAccountService.feeAccountPage(m);
+            if (map != null) {
+                List<FeeAccountDto> feeAccountDtoList = (List<FeeAccountDto>) map.get("feeAccountDtoList");
+                if (feeAccountDtoList != null && feeAccountDtoList.size() > 0) {
+                    for (FeeAccountDto dto : feeAccountDtoList) {
+                        List<FeeFlow> feeFlowList = dto.getFeeFlowList();
+                        List<FeeProperty> showPropertyList = new ArrayList<>();
+                        List<FeeProperty> hidePropertyList = new ArrayList<>();
+                        if (feeFlowList != null && feeFlowList.size() > 0) {
+                            List<Long> proIds = new ArrayList<>();
+                            for (FeeFlow f : feeFlowList) {
+                                proIds.add(f.getProId());
+                            }
+                            m.put("proIds", proIds);
+                        }
+                        m.put("isShow", (short) 0);
+                        showPropertyList = financeRpcService.selectByCondition(m);
+                        m.put("isShow", (short) 1);
+                        hidePropertyList = financeRpcService.selectByCondition(m);
+                        dto.setShowPropertyList(showPropertyList);
+                        dto.setHidePropertyList(hidePropertyList);
+                    }
+                }
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("code", 0);
+                jsonObject.put("message", "记账明细");
+                jsonObject.put("data", map);
+                return jsonObject;
+            } else {
+                throw new RuntimeException("获取失败");
+            }
         }
     }
 

@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * Created by ss on 2017/12/1.
  */
 @Configuration
-@DubboComponentScan(basePackages = {"com.lcdt.*.web.controller.api","com.lcdt.*.service","com.lcdt.*.service.impl","com.lcdt.clms.*.service.impl","com.lcdt.notify.rpcserviceImpl","com.lcdt.*.rpcserviceimpl","com.lcdt.*.rpc.impl","com.lcdt.*.rpc","com.lcdt.userinfo.controller.api"})
+@DubboComponentScan(basePackages = {"com.lcdt.*.web.controller.api","com.lcdt.*.service","com.lcdt.*.service.impl.*","com.lcdt.clms.*.service.impl","com.lcdt.notify.rpcserviceImpl","com.lcdt.*.rpcserviceimpl","com.lcdt.*.rpc.impl","com.lcdt.*.rpc","com.lcdt.userinfo.controller.api"})
 public class DubboConfig {
 
 	@Value("${applicationName:dubbo-app}")

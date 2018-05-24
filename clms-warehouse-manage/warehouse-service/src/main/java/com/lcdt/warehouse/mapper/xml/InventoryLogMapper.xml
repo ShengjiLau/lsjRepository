@@ -39,8 +39,6 @@
             <if test="goodsbarcode != null">
                 and b.goods_barcode like CONCAT(CONCAT('%',#{goodsbarcode}),'%')
             </if>
-
-
         </where>
     </select>
 

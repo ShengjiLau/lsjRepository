@@ -2,6 +2,8 @@ package com.lcdt.warehouse.entity;
 
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.lcdt.items.model.GoodsInfoDao;
+
 import java.io.Serializable;
 
 /**
@@ -46,6 +48,12 @@ public class Inventory implements Serializable {
      */
     private String customerName;
 
+    /**
+     * 库存成本备注
+     */
+    private String costRemark;
+
+
 
     /**
      * 业务类型
@@ -68,6 +76,24 @@ public class Inventory implements Serializable {
     private Long originalGoodsId;
 
     private String batch;
+
+    private GoodsInfoDao goods;
+
+    public String getCostRemark() {
+        return costRemark;
+    }
+
+    public void setCostRemark(String costRemark) {
+        this.costRemark = costRemark;
+    }
+
+    public GoodsInfoDao getGoods() {
+        return goods;
+    }
+
+    public void setGoods(GoodsInfoDao goods) {
+        this.goods = goods;
+    }
 
     public Float getInventoryPrice() {
         return inventoryPrice;

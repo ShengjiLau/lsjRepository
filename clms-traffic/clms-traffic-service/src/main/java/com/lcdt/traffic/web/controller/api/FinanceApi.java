@@ -91,13 +91,14 @@ public class FinanceApi {
         Map paramMap = new HashMap<String,String>();
         paramMap.put("companyId", company.getCompId());
         paramMap.put("isDeleted", 0);
-        paramMap.put("isReceivable", isReceivable); //应收
+        paramMap.put("type",0);//取运输的费用类型 运输是0 ，仓储是1
+        paramMap.put("isReceivable", isReceivable); //应收0，应付1
         List<FeeProperty> feePropertyList = financeRpcService.selectByCondition(paramMap);
         if (feePropertyList!=null && feePropertyList.size()>0) {
             StringBuffer sb_1 = new StringBuffer();
             if (dto.getGroupId()>0) {//业务组
                 dto.setGroupIds(dto.getGroupId().toString());
-            } else {
+            } else { g
                 List<Group> groupList = SecurityInfoGetter.groups();
                 for(int i=0;i<groupList.size();i++) {
                     Group group = groupList.get(i);

@@ -43,7 +43,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     @Autowired
     InventoryMapper inventoryMapper;
 
-    @Reference
+    @Reference()
     SubItemsInfoService goodsService;
 
     @Autowired
@@ -57,7 +57,11 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         List<Long> goodsId = queryGoodsIds(inventoryQueryDto, companyId);
         Page<Inventory> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
         List<Inventory> inventories = inventoryMapper.selectInventoryListByqueryDto(goodsId, page, inventoryQueryDto);
+        queryGoodsInfo(companyId, inventories);
+        return page.setRecords(inventories);
+    }
 
+    private void queryGoodsInfo(Long companyId, List<Inventory> inventories) {
         ArrayList<Long> longs = new ArrayList<>();
         for (Inventory inventory : inventories) {
             longs.add(inventory.getOriginalGoodsId());
@@ -65,14 +69,15 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         GoodsListParamsDto dto = new GoodsListParamsDto();
         dto.setGoodsIds(longs);
         dto.setCompanyId(companyId);
-//        PageInfo<GoodsInfoDao> listPageInfo = goodsService.queryByCondition(dto);
-//        List<GoodsInfoDao> list = listPageInfo.getList();
-//        for (GoodsInfoDao goodsInfoDao : list) {
-//            goodsInfoDao.
-//        }
-
-
-        return page.setRecords(inventoryMapper.selectInventoryListByqueryDto(goodsId,page,inventoryQueryDto));
+        PageInfo<GoodsInfoDao> listPageInfo = goodsService.queryByCondition(dto);
+        List<GoodsInfoDao> list = listPageInfo.getList();
+        for (Inventory inventory : inventories) {
+            for (GoodsInfoDao goodsInfoDao : list) {
+                if (inventory.getOriginalGoodsId().equals(goodsInfoDao.getGoodsId())) {
+                    inventory.setGoods(goodsInfoDao);
+                }
+            }
+        }
     }
 
     private List<Long> queryGoodsIds(InventoryQueryDto inventoryQueryDto, Long companyId) {
@@ -105,6 +110,28 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             logService.saveInOrderLog(order, inventory);
             addInventory(inventory);
         }
+    }
+
+    @Override
+    public Inventory modifyInventoryPrice(Long inventoryId, Float newprice) {
+        Inventory inventory = baseMapper.selectById(inventoryId);
+        if (inventory == null) {
+            return new Inventory();
+        }
+        inventory.setInventoryPrice(newprice);
+        baseMapper.updateById(inventory);
+        return inventory;
+    }
+
+    @Override
+    public Inventory modifyInventoryRemark(Long inventoryId, String remark) {
+        Inventory inventory = baseMapper.selectById(inventoryId);
+        if (inventory == null) {
+            return new Inventory();
+        }
+        inventory.setCostRemark(remark);
+        baseMapper.updateById(inventory);
+        return inventory;
     }
 
     @Autowired
