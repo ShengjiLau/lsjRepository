@@ -128,7 +128,7 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     }
 
     @Override
-    public PageInfo<List<SubItemsInfoDao>> querySubAndSpecAndPropListByItemId(Long itemId, Long companyId, PageInfo pageInfo) {
+    public PageInfo<SubItemsInfoDao> querySubAndSpecAndPropListByItemId(Long itemId, Long companyId, PageInfo pageInfo) {
         List<SubItemsInfoDao> list = null;
         PageInfo page = null;
         SubItemsInfo subItemsInfo = new SubItemsInfo();
