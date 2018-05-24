@@ -3,69 +3,107 @@ package com.lcdt.warehouse.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * @author Sheng-ji Lau
  * @date 2018年5月10日
  * @version
  * @Description: TODO 
  */
+@ApiModel("移库单实体类")
 public class ShiftInventoryListDO implements Serializable {
+	
+	@ApiModelProperty("移库单")
     private Long shiftId;
-
+	
+	@ApiModelProperty("所属业务组id")
     private Long groupId;
 
+	@ApiModelProperty("所属业务组名称")
     private String groupName;
 
+	@ApiModelProperty("移库单号")
     private String shiftInventoryNum;
 
+	@ApiModelProperty("仓库id")
     private Long warehouseId;
 
+	@ApiModelProperty("仓库名称")
     private String warehouseName;
 
+	@ApiModelProperty("客户id")
     private Long customerId;
 
+	@ApiModelProperty("客户名称")
     private String customerName;
 
+	@ApiModelProperty("备注")
     private String remark;
 
+	@ApiModelProperty("移库类型，0为内部移库，1为客户要求")
     private Byte shiftType;
 
+	@ApiModelProperty("附件1名称")
     private String attachment1Name;
 
+	@ApiModelProperty("附件1")
     private String attachment1;
 
+	@ApiModelProperty("附件2名称")
     private String attachment2Name;
 
+	@ApiModelProperty("附件2")
     private String attachment2;
 
+	@ApiModelProperty("附件3名称")
     private String attachment3Name;
 
+	@ApiModelProperty("附件3")
     private String attachment3;
 
+	@ApiModelProperty("附件4名称")
     private String attachment4Name;
 
+	@ApiModelProperty("附件4")
     private String attachment4;
 
+	@ApiModelProperty("附件5名称")
     private String attachment5Name;
 
+	@ApiModelProperty("附件5")
     private String attachment5;
 
+	@ApiModelProperty("创建日期")
     private Date gmtCreate;
 
+	@ApiModelProperty("修改日期")
     private Date gmtModified;
 
+	@ApiModelProperty("创建人")
     private String createUser;
 
+	@ApiModelProperty("创建人id")
     private Long createUserId;
 
+	@ApiModelProperty("所属公司id")
     private Long companyId;
-
+	
+	@NotBlank(message="移库人不可为空")
+	@ApiModelProperty("移库人")
     private String shiftUser;
 
+	@NotBlank(message="移库时间不可为空")
+	@ApiModelProperty("移库时间")
     private String shiftTime;
 
+	@ApiModelProperty("库存ids")
     private String inventoryShiftedId;
-    
+ 
+	@ApiModelProperty("状态，0为新建，1为完成，2为取消")
     private Byte finished;
 
     private static final long serialVersionUID = 1515156156L;
