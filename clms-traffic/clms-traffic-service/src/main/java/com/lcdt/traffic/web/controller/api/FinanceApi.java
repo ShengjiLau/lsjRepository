@@ -98,7 +98,7 @@ public class FinanceApi {
             StringBuffer sb_1 = new StringBuffer();
             if (dto.getGroupId()>0) {//业务组
                 dto.setGroupIds(dto.getGroupId().toString());
-            } else {
+            } else { g
                 List<Group> groupList = SecurityInfoGetter.groups();
                 for(int i=0;i<groupList.size();i++) {
                     Group group = groupList.get(i);
