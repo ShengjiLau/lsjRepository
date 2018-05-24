@@ -43,7 +43,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     @Autowired
     InventoryMapper inventoryMapper;
 
-    @Reference
+    @Reference()
     SubItemsInfoService goodsService;
 
     @Autowired
@@ -119,6 +119,17 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             return new Inventory();
         }
         inventory.setInventoryPrice(newprice);
+        baseMapper.updateById(inventory);
+        return inventory;
+    }
+
+    @Override
+    public Inventory modifyInventoryRemark(Long inventoryId, String remark) {
+        Inventory inventory = baseMapper.selectById(inventoryId);
+        if (inventory == null) {
+            return new Inventory();
+        }
+        inventory.setCostRemark(remark);
         baseMapper.updateById(inventory);
         return inventory;
     }
