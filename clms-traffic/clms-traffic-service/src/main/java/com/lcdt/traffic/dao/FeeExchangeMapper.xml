@@ -270,7 +270,7 @@
   	<if test="endTime !=null and endTime !=''">
   	and operate_time &lt; concat(#{endTime,jdbcType=VARCHAR})
   	</if>
-  	<if test="reconcileId !=null">
+  	<if test="reconcileId != null">
   	and reconcile_id = #{reconcileId,jdbcType=BIGINT}
   	</if>
   	</where>
@@ -301,7 +301,7 @@
    <include refid="Base_Column_List" />
    from t_fee_exchange
   <where>
-  reconcile_id = #{reconcileId,jdbcType=BIGINT}
+  reconcile_id = #{reconcileId,jdbcType=BIGINT} and cancel_ok = 0
   </where>
   </select>
   
@@ -314,6 +314,7 @@
    <foreach collection="array" index="index" item="item" separator="," close=")" open="(">
   	 #{item,jdbcType=BIGINT}
    </foreach>
+   and cancel_ok = 0
   </where>
   </select>
   
