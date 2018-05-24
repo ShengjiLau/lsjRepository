@@ -259,7 +259,10 @@ public class PlanServiceImpl implements PlanService {
                     Float amount = planDetail.getPlanAmount()+dto.getAdjustAmount(); //计划量+调整量
                     planDetail.setPlanAmount(amount);
                     planDetail.setRemainderAmount(planDetail.getRemainderAmount()+dto.getAdjustAmount()); //剩余数量+调整量
-                    planDetail.setFreightTotal(amount*planDetail.getFreightPrice());
+                    if(planDetail.getFreightPrice()!=null)
+                    {
+                        planDetail.setFreightTotal(amount*planDetail.getFreightPrice());
+                    }
                     planDetailList.add(planDetail);
                 }
             }
