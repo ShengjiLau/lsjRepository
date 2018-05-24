@@ -112,6 +112,17 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         }
     }
 
+    @Override
+    public Inventory modifyInventoryPrice(Long inventoryId, Float newprice) {
+        Inventory inventory = baseMapper.selectById(inventoryId);
+        if (inventory == null) {
+            return new Inventory();
+        }
+        inventory.setInventoryPrice(newprice);
+        baseMapper.updateById(inventory);
+        return inventory;
+    }
+
     @Autowired
     private GoodsInfoMapper goodsInfoMapper;
 

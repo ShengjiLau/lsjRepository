@@ -36,4 +36,10 @@ public class InventoryApi {
         return JSONResponseUtil.success(page);
     }
 
+    @PostMapping("/price/update")
+    @ApiOperation("修改库存成本价")
+    private ResponseMessage modifyInventoryPrice(Long inventoryId,Float newprice) {
+        return JSONResponseUtil.success(inventoryService.modifyInventoryPrice(inventoryId, newprice));
+    }
+
 }
