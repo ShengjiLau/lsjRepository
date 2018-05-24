@@ -268,7 +268,7 @@ public class PlanServiceImpl implements PlanService {
             }
 
             if(flag){
-                throw new WaybillPlanException("调整数量不能小于剩余数量！");
+                throw new WaybillPlanException("修改后计划量需大于已派单数量！");
             }
 
             if(planDetailList!=null && planDetailList.size()>0) {
