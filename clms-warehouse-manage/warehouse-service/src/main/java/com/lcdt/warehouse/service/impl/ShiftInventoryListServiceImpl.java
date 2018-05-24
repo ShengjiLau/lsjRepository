@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
@@ -60,7 +61,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 3：插入移库到新库的记录
 	 */
 	@Override
-	@Transactional
+	@Transactional(isolation=Isolation.REPEATABLE_READ)
 	public int insertShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 		
 		//新建一个移库单Model,并复制ShiftInventoryListDTO里的相关属性
@@ -112,7 +113,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 4：新建移库目标库的入库单
 	 */
 	@Override
-	@Transactional
+	@Transactional(isolation=Isolation.REPEATABLE_READ)
 	public int completeShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 		//将移库单的状态修改为1，即完成状态
 		int i = shiftInventoryListDOMapper.updateFinishedById(shiftInventoryListDTO.getShiftId(),(byte) 1);
