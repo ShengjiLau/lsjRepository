@@ -2,20 +2,25 @@ package com.lcdt.warehouse.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.items.dto.GoodsListParamsDto;
+import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
+import com.lcdt.warehouse.entity.GoodsInfo;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.lcdt.warehouse.entity.Inventory;
 import com.lcdt.warehouse.factory.InventoryFactory;
+import com.lcdt.warehouse.mapper.GoodsInfoMapper;
 import com.lcdt.warehouse.mapper.InventoryMapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.lcdt.warehouse.service.InventoryLogService;
 import com.lcdt.warehouse.service.InventoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +56,28 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto,Long companyId) {
         List<Long> goodsId = queryGoodsIds(inventoryQueryDto, companyId);
         Page<Inventory> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
-        return page.setRecords(inventoryMapper.selectInventoryListByqueryDto(goodsId,page,inventoryQueryDto));
+        List<Inventory> inventories = inventoryMapper.selectInventoryListByqueryDto(goodsId, page, inventoryQueryDto);
+        queryGoodsInfo(companyId, inventories);
+        return page.setRecords(inventories);
+    }
+
+    private void queryGoodsInfo(Long companyId, List<Inventory> inventories) {
+        ArrayList<Long> longs = new ArrayList<>();
+        for (Inventory inventory : inventories) {
+            longs.add(inventory.getOriginalGoodsId());
+        }
+        GoodsListParamsDto dto = new GoodsListParamsDto();
+        dto.setGoodsIds(longs);
+        dto.setCompanyId(companyId);
+        PageInfo<GoodsInfoDao> listPageInfo = goodsService.queryByCondition(dto);
+        List<GoodsInfoDao> list = listPageInfo.getList();
+        for (Inventory inventory : inventories) {
+            for (GoodsInfoDao goodsInfoDao : list) {
+                if (inventory.getOriginalGoodsId().equals(goodsInfoDao.getGoodsId())) {
+                    inventory.setGoods(goodsInfoDao);
+                }
+            }
+        }
     }
 
     private List<Long> queryGoodsIds(InventoryQueryDto inventoryQueryDto, Long companyId) {
@@ -76,11 +102,36 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         Assert.notNull(goods, "入库货物不能为空");
         logger.info("入库操作开始 入库单：{}", order);
         for (InorderGoodsInfo good : goods) {
+
             Inventory inventory = InventoryFactory.createInventory(order, good);
+            GoodsInfo goodsInfo = saveGoodsInfo(good);
+            inventory.setGoodsId(goodsInfo.getGoodsId());
             //写入库流水
             logService.saveInOrderLog(order, inventory);
             addInventory(inventory);
         }
+    }
+
+    @Override
+    public Inventory modifyInventoryPrice(Long inventoryId, Float newprice) {
+        Inventory inventory = baseMapper.selectById(inventoryId);
+        if (inventory == null) {
+            return new Inventory();
+        }
+        inventory.setInventoryPrice(newprice);
+        baseMapper.updateById(inventory);
+        return inventory;
+    }
+
+    @Autowired
+    private GoodsInfoMapper goodsInfoMapper;
+
+    public GoodsInfo saveGoodsInfo(InorderGoodsInfo inOrdergoodsInfo) {
+        GoodsInfo goodsInfo = new GoodsInfo();
+        BeanUtils.copyProperties(inOrdergoodsInfo, goodsInfo);
+        goodsInfo.setGoodsId(null);
+        goodsInfoMapper.insert(goodsInfo);
+        return goodsInfo;
     }
 
     /**

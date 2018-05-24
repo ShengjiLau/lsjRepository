@@ -3,8 +3,10 @@ package com.lcdt.driver.wechat.api;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
 import com.lcdt.driver.dto.PageBaseDto;
 import com.lcdt.driver.dto.WarehouseDto;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.util.WebProduces;
 import com.lcdt.warehouse.rpc.WarehouseRpcService;
 import io.swagger.annotations.Api;
@@ -36,7 +38,8 @@ public class WarehouseApi {
     public PageBaseDto warehouseList(@Validated WarehouseDto dto,
                                      @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
                                      @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
         Map map = new HashMap();
         map.put("companyId", companyId);
         map.put("page_no", pageNo);

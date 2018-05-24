@@ -33,15 +33,11 @@ public class GoodsApi {
 
     @ApiOperation("查询商品列表")
     @GetMapping("/v1/goodslist")
-    public PageBaseDto<List<GoodsInfoDao>> queryGoodsList(GoodsListParamsDto params, @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
-                                                          @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize){
+    public PageBaseDto<List<GoodsInfoDao>> queryGoodsList(GoodsListParamsDto params){
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         Long companyId = userCompRel.getCompany().getCompId();
-        Map map= ClmsBeanUtil.beanToMap(params);
-        map.put("companyId",companyId);
-        map.put("pageNo",pageNo);
-        map.put("pageSize",pageSize);
-        PageInfo<List<GoodsInfoDao>> listPageInfo=subItemsInfoService.queryByCondition(map);
+        params.setCompanyId(companyId);
+        PageInfo<GoodsInfoDao> listPageInfo=subItemsInfoService.queryByCondition(params);
         return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
     }
 }

@@ -1,10 +1,13 @@
 package com.lcdt.items.dto;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * Created by lyqishan on 2018/1/10
  */
 
-public class GoodsListParamsDto {
+public class GoodsListParamsDto implements Serializable{
     private String goodsName;
     private String goodsCode;
     private String barCode;
@@ -13,7 +16,10 @@ public class GoodsListParamsDto {
     private String goodsInfo;
     private Long classifyId;
     private String classifyName;
+    private List<Long> goodsIds;
     private Long companyId;
+    private int pageNo=1;
+    private int pageSize=0;
 
     public String getGoodsName() {
         return goodsName;
@@ -85,5 +91,29 @@ public class GoodsListParamsDto {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public List<Long> getGoodsIds() {
+        return goodsIds;
+    }
+
+    public void setGoodsIds(List<Long> goodsIds) {
+        this.goodsIds = goodsIds;
+    }
+
+    public int getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(int pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }

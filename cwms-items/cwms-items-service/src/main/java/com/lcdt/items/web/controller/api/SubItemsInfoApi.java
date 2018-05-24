@@ -46,25 +46,21 @@ public class SubItemsInfoApi {
 
     @ApiOperation("查询子商品列表")
     @GetMapping("/list")
-    public PageBaseDto<List<SubItemsInfoDao>> querySubItemsInfo(HttpSession httpSession, @ApiParam(value = "子商品Id", required = true) @RequestParam Long itemId){
+    public PageBaseDto<SubItemsInfoDao> querySubItemsInfo(HttpSession httpSession, @ApiParam(value = "子商品Id", required = true) @RequestParam Long itemId){
         Long companyId=SecurityInfoGetter.getCompanyId();
         PageInfo page=new PageInfo();
         page.setPages(0);
         page.setPageNum(1);
-        PageInfo<List<SubItemsInfoDao>> listPageInfo=subItemsInfoService.querySubAndSpecAndPropListByItemId(itemId,companyId,page);
+        PageInfo<SubItemsInfoDao> listPageInfo=subItemsInfoService.querySubAndSpecAndPropListByItemId(itemId,companyId,page);
         return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
     }
 
     @ApiOperation("查询商品列表")
     @GetMapping("/goodslist")
-    public PageBaseDto<List<GoodsInfoDao>> queryGoodsList(GoodsListParamsDto params, @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
-                                                          @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize){
+    public PageBaseDto<GoodsInfoDao> queryGoodsList(GoodsListParamsDto params){
         Long companyId=SecurityInfoGetter.getCompanyId();
-        Map map= ClmsBeanUtil.beanToMap(params);
-        map.put("companyId",companyId);
-        map.put("pageNo",pageNo);
-        map.put("pageSize",pageSize);
-        PageInfo<List<GoodsInfoDao>> listPageInfo=subItemsInfoService.queryByCondition(map);
+        params.setCompanyId(companyId);
+        PageInfo<GoodsInfoDao> listPageInfo=subItemsInfoService.queryByCondition(params);
         return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
     }
 

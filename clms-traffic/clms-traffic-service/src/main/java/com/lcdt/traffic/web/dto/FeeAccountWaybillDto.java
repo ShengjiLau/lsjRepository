@@ -25,6 +25,9 @@ public class FeeAccountWaybillDto extends WaybillDto {
     @ApiModelProperty(value="费用总计")
     private Float feeTotal;
 
+    @ApiModelProperty(value="对账条数")
+    private Float reconcileCount;
+
     public String getReceivAndPayName() {
         return receivAndPayName;
     }
@@ -63,5 +66,13 @@ public class FeeAccountWaybillDto extends WaybillDto {
 
     public void setWaybillItemsList(List<WaybillItems> waybillItemsList) {
         this.waybillItemsList = waybillItemsList;
+    }
+
+    public Float getReconcileCount() {
+        return reconcileCount;
+    }
+
+    public void setReconcileCount(Float reconcileCount) {
+        this.reconcileCount = reconcileCount;
     }
 }

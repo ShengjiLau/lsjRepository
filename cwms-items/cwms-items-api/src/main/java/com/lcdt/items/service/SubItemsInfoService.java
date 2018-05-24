@@ -58,7 +58,7 @@ public interface SubItemsInfoService {
      * @param companyId
      * @return
      */
-    PageInfo<List<SubItemsInfoDao>> querySubAndSpecAndPropListByItemId(Long itemId,Long companyId,PageInfo pageInfo);
+    PageInfo<SubItemsInfoDao> querySubAndSpecAndPropListByItemId(Long itemId,Long companyId,PageInfo pageInfo);
 
 
     /**
@@ -71,10 +71,10 @@ public interface SubItemsInfoService {
 
     /**
      * 根据条件查询列表
-     * @param map
+     * @param dto
      * @return
      */
-    PageInfo<List<GoodsInfoDao>> queryByCondition(Map map);
+    PageInfo<GoodsInfoDao> queryByCondition(GoodsListParamsDto dto);
 
 
     List<Long> queryGoodsIdsByCondition(GoodsListParamsDto dto);

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
@@ -27,6 +28,7 @@ import com.lcdt.warehouse.mapper.ShiftGoodsDOMapper;
 import com.lcdt.warehouse.mapper.ShiftInventoryListDOMapper;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.service.ShiftInventoryListService;
+import com.lcdt.warehouse.vo.ShiftInventoryListVO;
 
 /**
  * @author Sheng-ji Lau
@@ -48,9 +50,10 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	@Autowired
 	private InventoryMapper inventoryMapper;
 	
-	 @Autowired
+	@Autowired
 	private InWarehouseOrderService inWarehouseOrderService;
 
+	
 	/**
 	 * 新增移库单所传参数为ShiftInventoryListDTO，需要三步：
 	 * 1：创建新的移库单DO，复制从ShiftInventoryListDTO里的移库单属性，插入移库单，
@@ -58,11 +61,11 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 3：插入移库到新库的记录
 	 */
 	@Override
-	@Transactional
+	@Transactional(isolation=Isolation.REPEATABLE_READ)
 	public int insertShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
-	
-		ShiftInventoryListDO shiftInventoryListDO = new ShiftInventoryListDO(); 
 		
+		//新建一个移库单Model,并复制ShiftInventoryListDTO里的相关属性
+		ShiftInventoryListDO shiftInventoryListDO = new ShiftInventoryListDO(); 
 		BeanUtils.copyProperties(shiftInventoryListDTO, shiftInventoryListDO);
 		shiftInventoryListDO.setCompanyId(SecurityInfoGetter.getCompanyId());
 		shiftInventoryListDO.setGmtCreate(new Date());
@@ -70,6 +73,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		shiftInventoryListDO.setCreateUser(SecurityInfoGetter.getUser().getRealName());
 		int i = shiftInventoryListDOMapper.insert(shiftInventoryListDO);
 		
+		//取得ShiftGoodsListDTO集合
 		List<ShiftGoodsListDTO> shiftGoodsListDTOList = shiftInventoryListDTO.getShiftGoodsListDTOList();
 		
 		//新建移库到新库的记录
@@ -78,15 +82,19 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			
 		for (int a = 0; a < shiftGoodsListDTOList.size(); a++) {
 			BigDecimal shiftPlanNum = new BigDecimal(0);
-			for(int b = 0; b < shiftGoodsListDTOList.get(a).getShiftGoodsDOList().size(); b++) {
-				shiftPlanNum.add(shiftGoodsListDTOList.get(a).getShiftGoodsDOList().get(b).getShiftPlanNum());
-				shiftGoodsListDTOList.get(a).getShiftGoodsDOList().get(b).setShiftInventoryId(shiftInventoryListDO.getShiftId());
+			List<ShiftGoodsDO> shiftGoodsDOList1 = shiftGoodsListDTOList.get(a).getShiftGoodsDOList();
+			for(int b = 0; b < shiftGoodsDOList1.size(); b++) {
+				ShiftGoodsDO shiftGoodsDO = shiftGoodsDOList1.get(b);
+				//计算计划商品移库数量
+				shiftPlanNum.add(shiftGoodsDO.getShiftPlanNum());
+				shiftGoodsDO.setShiftInventoryId(shiftInventoryListDO.getShiftId());
 			}
-			shiftGoodsDOList.addAll(shiftGoodsListDTOList.get(a).getShiftGoodsDOList());
+			shiftGoodsDOList.addAll(shiftGoodsDOList1);
 			Float lockNum = shiftPlanNum.floatValue();
-		    inventoryMapper.updateInventoryLockNum(shiftGoodsListDTOList.get(a).getInventoryId(),null,lockNum);
+			//修改库存中库存总量以及库存锁定量
+		    h = inventoryMapper.updateInventoryLockNum(shiftGoodsListDTOList.get(a).getInventoryId(),null,lockNum);
 		}
-		
+		//数据库插入新的移库商品信息列表
 		int j = shiftGoodsDOMapper.insertShiftGoodsByBatch(shiftGoodsDOList);
 		
 		if (i > 0 && j == shiftGoodsDOList.size() && shiftGoodsListDTOList.size() == h) {
@@ -96,6 +104,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		}
 	}
 
+	
 	/**
 	 * 完成移库单步骤有四：
 	 * 1：修改移库单ShiftInventoryList的finished状态为1
@@ -104,23 +113,33 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 4：新建移库目标库的入库单
 	 */
 	@Override
-	@Transactional
+	@Transactional(isolation=Isolation.REPEATABLE_READ)
 	public int completeShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
+		//将移库单的状态修改为1，即完成状态
 		int i = shiftInventoryListDOMapper.updateFinishedById(shiftInventoryListDTO.getShiftId(),(byte) 1);
 		
 		List<ShiftGoodsListDTO> shiftGoodsListDTOList = shiftInventoryListDTO.getShiftGoodsListDTOList();
 		List<ShiftGoodsDO> shiftGoodsDOList = new ArrayList<ShiftGoodsDO>();
+		//创建一个入库单对应的商品信息集合
 		List<InorderGoodsInfoDto> goodsInfoDtoList = new ArrayList<InorderGoodsInfoDto>(shiftGoodsDOList.size());
 		
+		//遍历所有的ShiftGoodsListDTO
 		for (int a = 0; a < shiftGoodsListDTOList.size(); a++) {
+			ShiftGoodsListDTO sgdl = shiftGoodsListDTOList.get(a);
+			List<ShiftGoodsDO> shiftGoodsDOList1 = sgdl.getShiftGoodsDOList();
 			BigDecimal shiftPlanNum = new BigDecimal(0);
 			BigDecimal shiftNum = new BigDecimal(0);
-			shiftGoodsDOList.addAll(shiftGoodsListDTOList.get(a).getShiftGoodsDOList());
-			ShiftGoodsListDTO sgdl = shiftGoodsListDTOList.get(a);
-			for(int b = 0; b < sgdl.getShiftGoodsDOList().size(); b++) {
-				shiftPlanNum.add(shiftGoodsListDTOList.get(a).getShiftGoodsDOList().get(b).getShiftPlanNum());
-				shiftNum.add(shiftGoodsListDTOList.get(a).getShiftGoodsDOList().get(b).getShiftNum());
+			
+			//将所有的ShiftGoodsDO添加到shiftGoodsDOList
+			shiftGoodsDOList.addAll(shiftGoodsDOList1);
+			
+			for(int b = 0; b < shiftGoodsDOList1.size(); b++) {
+				ShiftGoodsDO shiftGoodsDO = shiftGoodsDOList1.get(b);
+				//计算计划和实际移库商品数量
+				shiftPlanNum.add(shiftGoodsDO.getShiftPlanNum());
+				shiftNum.add(shiftGoodsDO.getShiftNum());
 				
+				//创建入库商品信息类
 				InorderGoodsInfoDto inorderGoodsInfoDto = new InorderGoodsInfoDto();
 				inorderGoodsInfoDto.setBatch(sgdl.getGoodsBatch());
 				inorderGoodsInfoDto.setGoodsBarcode(sgdl.getBarCode());
@@ -129,15 +148,19 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				inorderGoodsInfoDto.setUnit(sgdl.getBaseUnit());
 				inorderGoodsInfoDto.setStrogeLocationCode(sgdl.getStorageLocationCode());
 				inorderGoodsInfoDto.setReceivalbeAmount(sgdl.getUsableInventory());
+				//将入库商品信息类加入到商品信息集合
 				goodsInfoDtoList.add(inorderGoodsInfoDto);
 			}
 			
 			Float lockNum = shiftPlanNum.floatValue();
 			Float inventoryNum = shiftNum.floatValue();
+			//修改库存的库存总量和锁定库存量
 		   inventoryMapper.updateInventoryLockNum(shiftGoodsListDTOList.get(a).getInventoryId(),inventoryNum,lockNum);
 		}
+		//修改移库商品信息
+		shiftGoodsDOMapper.updateShiftGoodsByBatch(shiftGoodsDOList);
 		
-		shiftGoodsDOMapper.updateShiftGoodsByBatch(shiftGoodsDOList);	
+		//创建一个新的入库单，并添加入库单的各种属性
 		InWarehouseOrderDto inWarehouseOrder = new InWarehouseOrderDto();
 		inWarehouseOrder.setCompanyId(SecurityInfoGetter.getCompanyId());
 		inWarehouseOrder.setCreateDate(new Date());
@@ -150,7 +173,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		inWarehouseOrder.setWarehouseId(shiftInventoryListDTO.getWarehouseId());
 		inWarehouseOrder.setWarehouseName(shiftInventoryListDTO.getWarehouseName());
 		inWarehouseOrder.setGoodsInfoDtoList(goodsInfoDtoList);
-		
+		//添加入库单
 		inWarehouseOrderService.addInWarehouseOrder(inWarehouseOrder);
 		
 		
@@ -164,6 +187,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	
 	/**
 	 * 依据条件查询移库单列表
+	 * 1：通过查询条件找到对应的ShiftInventoryListDO集合
+	 * 2：遍历ShiftInventoryListDO集合，找到对应的库存商品信息和移库商品信息
+	 * 3：如果库存商品信息和查询条件不一致，则去掉相应的ShiftInventoryListDTO
 	 */
 	@Override
 	public PageInfo<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO1) {
@@ -185,21 +211,27 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		}
 		
 		List<ShiftInventoryListDTO> shiftInventoryListDTOList = new ArrayList<ShiftInventoryListDTO>();
+		//遍历所有的ShiftInventoryListDO
 		for (int a = 0; a < shiftInventoryListDOList.size(); a++) {
+			ShiftInventoryListDO shiftInventoryListDO = shiftInventoryListDOList.get(a);
 			ShiftInventoryListDTO shiftInventoryListDTO2 = new ShiftInventoryListDTO();
-			BeanUtils.copyProperties(shiftInventoryListDOList.get(a),shiftInventoryListDTO2);
-			Long[] inventoryIds = ConvertStringToLong(shiftInventoryListDOList.get(a).getInventoryShiftedId());
+			BeanUtils.copyProperties(shiftInventoryListDO,shiftInventoryListDTO2);
+			
+			Long[] inventoryIds = ConvertStringToLong(shiftInventoryListDO.getInventoryShiftedId());
 			if (null != inventoryIds) {
+				//得到库存与商品信息
 				 List<ShiftGoodsListDTO> ShiftGoodsListDTOList = inventoryMapper.getInventoryAndGoodsInfo(inventoryIds);
-				 List<ShiftGoodsDO> shiftGoodsDOList = shiftGoodsDOMapper.getShiftGoodsDOList(shiftInventoryListDOList.get(a).getShiftId());	
+				//得到所有相关的移库商品信息集合
+				 List<ShiftGoodsDO> shiftGoodsDOList = shiftGoodsDOMapper.getShiftGoodsDOList(shiftInventoryListDO.getShiftId());	
 				 List<ShiftGoodsListDTO> ShiftGoodsListDTOList2 = new ArrayList<ShiftGoodsListDTO>();
 				
-				 for (int i = 0; i < ShiftGoodsListDTOList.size(); i++) {					
+				 for (int i = 0; i < ShiftGoodsListDTOList.size(); i++) {
+					 //如果查询条件传过来的goodsInfo与ShiftGoodsListDTO的商品name不相同，则去除掉相关的ShiftGoodsListDTO，并跳出此次循环
 					 if (null != shiftInventoryListDTO1.getGoodsInfo() && !shiftInventoryListDTO1.getGoodsInfo().equals(ShiftGoodsListDTOList.get(i).getGoodsName())) {
 							 ShiftGoodsListDTOList2.add(ShiftGoodsListDTOList.get(i));
 							 continue;
 					 }
-					 
+					 //遍历所有的移库商品信息shiftGoodsDO，如果shiftGoodsDO里存的InventoryId与ShiftGoodsListDTO里存的InventoryId相同，则将shiftGoodsDO添加到ShiftGoodsListDTO里的ShiftGoodsDOList
 					 for (int j = 0; j < shiftGoodsDOList.size(); j++) {
 						 if (ShiftGoodsListDTOList.get(i).getInventoryId().longValue() ==
 								 shiftGoodsDOList.get(j).getInventoryId().longValue()) {
@@ -210,24 +242,29 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				 
 				 ShiftGoodsListDTOList.removeAll(ShiftGoodsListDTOList2);
 				 shiftInventoryListDTO2.setShiftGoodsListDTOList(ShiftGoodsListDTOList);
-				 shiftInventoryListDTOList.add(shiftInventoryListDTO2);
 			}
+			 shiftInventoryListDTOList.add(shiftInventoryListDTO2);
 		}
 		PageInfo<ShiftInventoryListDTO> page = new PageInfo<ShiftInventoryListDTO>(shiftInventoryListDTOList);
-       return page;
+		return page;
     }
+	
 	
 	/**
 	 * 通过移库单主键id查询移库单信息
 	 */
 	@Override
 	public ShiftInventoryListDTO getShiftInventoryListDetails(Long shiftInventoryListId) {
+		//创建一个新的ShiftInventoryListDTO
 		ShiftInventoryListDTO shiftInventoryListDTO = new ShiftInventoryListDTO();
 		ShiftInventoryListDO shiftInventoryListDO = shiftInventoryListDOMapper.selectByPrimaryKey(shiftInventoryListId);
 		BeanUtils.copyProperties(shiftInventoryListDO,shiftInventoryListDTO);
+		
 		Long[] inventoryIds = ConvertStringToLong(shiftInventoryListDO.getInventoryShiftedId());
 		if (null != inventoryIds) {
+			//得到与移库单相关的所有库存与商品信息
 			 List<ShiftGoodsListDTO> shiftGoodsListDTOList = inventoryMapper.getInventoryAndGoodsInfo(inventoryIds);
+			 //得到去库存相关的移库商品信息
 			 List<ShiftGoodsDO> shiftGoodsDOList = shiftGoodsDOMapper.getShiftGoodsDOList(shiftInventoryListId);
 			 for (int i = 0; i < shiftGoodsListDTOList.size(); i++) {
 				 for (int j = 0; j < shiftGoodsDOList.size(); j++) {
@@ -243,8 +280,14 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		return shiftInventoryListDTO;
 	}
 	
+	
 	/**
 	 * 通过移库单主键id取消移库单
+	 * 1：通过shiftInventoryListId查询到相关ShiftInventoryListDO信息
+	 * 2：通过ShiftInventoryListDO的nventoryShiftedId查询所有的库存信息
+	 * 3：通过shiftInventoryListId查询到相关的ShiftGoodsDO信息
+	 * 4：遍历库存信息和移库商品ShiftGoodsDO信息，如果移库商品里存的库存id与库存id一致，则将其ShiftPlanNum计算入库存锁定数量
+	 * 5：修改库存锁定数量
 	 */
 	@Override
 	public int deleteShiftInventoryList(Long shiftInventoryListId) {
@@ -259,7 +302,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 					shiftPlanNum.add(shiftGoodsDOList.get(j).getShiftPlanNum());
 				}
 			}
-			Float lockNum = 0 - shiftPlanNum.floatValue();
+			Float lockNum = ShiftInventoryListVO.ZERO_VALUE - shiftPlanNum.floatValue();
 			inventoryMapper.updateInventoryLockNum(inventoryIds[i],null,lockNum);
 		 }
 		int result = shiftInventoryListDOMapper.updateFinishedById(shiftInventoryListId,(byte) 2);
