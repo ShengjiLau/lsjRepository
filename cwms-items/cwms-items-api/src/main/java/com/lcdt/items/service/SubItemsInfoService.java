@@ -74,7 +74,7 @@ public interface SubItemsInfoService {
      * @param dto
      * @return
      */
-    PageInfo<List<GoodsInfoDao>> queryByCondition(GoodsListParamsDto dto);
+    PageInfo<GoodsInfoDao> queryByCondition(GoodsListParamsDto dto);
 
 
     List<Long> queryGoodsIdsByCondition(GoodsListParamsDto dto);

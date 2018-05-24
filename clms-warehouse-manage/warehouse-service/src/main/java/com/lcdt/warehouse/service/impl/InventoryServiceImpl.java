@@ -2,8 +2,10 @@ package com.lcdt.warehouse.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.items.dto.GoodsListParamsDto;
+import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.entity.GoodsInfo;
@@ -54,6 +56,22 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto,Long companyId) {
         List<Long> goodsId = queryGoodsIds(inventoryQueryDto, companyId);
         Page<Inventory> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
+        List<Inventory> inventories = inventoryMapper.selectInventoryListByqueryDto(goodsId, page, inventoryQueryDto);
+
+        ArrayList<Long> longs = new ArrayList<>();
+        for (Inventory inventory : inventories) {
+            longs.add(inventory.getOriginalGoodsId());
+        }
+        GoodsListParamsDto dto = new GoodsListParamsDto();
+        dto.setGoodsIds(longs);
+        dto.setCompanyId(companyId);
+//        PageInfo<GoodsInfoDao> listPageInfo = goodsService.queryByCondition(dto);
+//        List<GoodsInfoDao> list = listPageInfo.getList();
+//        for (GoodsInfoDao goodsInfoDao : list) {
+//            goodsInfoDao.
+//        }
+
+
         return page.setRecords(inventoryMapper.selectInventoryListByqueryDto(goodsId,page,inventoryQueryDto));
     }
 
