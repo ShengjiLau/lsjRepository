@@ -14,6 +14,7 @@ import java.io.Serializable;
  */
 public class OutOrderGoodsInfo implements Serializable {
 
+
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "relation_id", type = IdType.AUTO)
@@ -31,6 +32,62 @@ public class OutOrderGoodsInfo implements Serializable {
      */
     private Long goodsId;
     /**
+     * 货物名称
+     */
+    private String goodsName;
+    /**
+     * 商品编码
+     */
+    private String goodsCode;
+    /**
+     * 商品条码
+     */
+    private String goodsBarCode;
+    /**
+     * 商品规格
+     */
+    private String goodsSpec;
+    /**
+     * 分类id
+     */
+    private Long goodsClassifyId;
+    /**
+     * 分类名称
+     */
+    private String goodsClassifyName;
+    /**
+     * 最小计量单位
+     */
+    private String minUnit;
+    /**
+     * 当前显示单位
+     */
+    private String unit;
+    /**
+     * 当前显示单位与最小单位之间的换算关系
+     */
+    private Integer unitData;
+    /**
+     * 批次
+     */
+    private String batch;
+    /**
+     * 库位id
+     */
+    private Long strogeLocationId;
+    /**
+     * 库位编码
+     */
+    private String strogeLocationCode;
+    /**
+     * 库存
+     */
+    private Float inStock;
+    /**
+     * 计划数量
+     */
+    private Float goodsNum;
+    /**
      * 出库数量
      */
     private Float outboundQuantity;
@@ -42,62 +99,6 @@ public class OutOrderGoodsInfo implements Serializable {
      * 备注
      */
     private String remark;
-    /**
-     * 库存
-     */
-    private Float inStock;
-    /**
-     * 库位id
-     */
-    private Long strogeLocationId;
-    /**
-     * 库位编码
-     */
-    private String strogeLocationCode;
-    /**
-     * 当前显示单位与最小单位之间的换算关系
-     */
-    private Integer unitData;
-    /**
-     * 批次
-     */
-    private String batch;
-    /**
-     * 当前显示单位
-     */
-    private String unit;
-    /**
-     * 最小计量单位
-     */
-    private String minUnit;
-    /**
-     * 分类名称
-     */
-    private String goodsClassifyName;
-    /**
-     * 分类id
-     */
-    private Long goodsClassifyId;
-    /**
-     * 商品规格
-     */
-    private String goodsSpec;
-    /**
-     * 计划数量
-     */
-    private Float goodsNum;
-    /**
-     * 商品条码
-     */
-    private String goodsBarCode;
-    /**
-     * 商品编码
-     */
-    private String goodsCode;
-    /**
-     * 货物名称
-     */
-    private String goodsName;
 
 
     public Long getRelationId() {
@@ -132,6 +133,118 @@ public class OutOrderGoodsInfo implements Serializable {
         this.goodsId = goodsId;
     }
 
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public String getGoodsCode() {
+        return goodsCode;
+    }
+
+    public void setGoodsCode(String goodsCode) {
+        this.goodsCode = goodsCode;
+    }
+
+    public String getGoodsBarCode() {
+        return goodsBarCode;
+    }
+
+    public void setGoodsBarCode(String goodsBarCode) {
+        this.goodsBarCode = goodsBarCode;
+    }
+
+    public String getGoodsSpec() {
+        return goodsSpec;
+    }
+
+    public void setGoodsSpec(String goodsSpec) {
+        this.goodsSpec = goodsSpec;
+    }
+
+    public Long getGoodsClassifyId() {
+        return goodsClassifyId;
+    }
+
+    public void setGoodsClassifyId(Long goodsClassifyId) {
+        this.goodsClassifyId = goodsClassifyId;
+    }
+
+    public String getGoodsClassifyName() {
+        return goodsClassifyName;
+    }
+
+    public void setGoodsClassifyName(String goodsClassifyName) {
+        this.goodsClassifyName = goodsClassifyName;
+    }
+
+    public String getMinUnit() {
+        return minUnit;
+    }
+
+    public void setMinUnit(String minUnit) {
+        this.minUnit = minUnit;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public Integer getUnitData() {
+        return unitData;
+    }
+
+    public void setUnitData(Integer unitData) {
+        this.unitData = unitData;
+    }
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch;
+    }
+
+    public Long getStrogeLocationId() {
+        return strogeLocationId;
+    }
+
+    public void setStrogeLocationId(Long strogeLocationId) {
+        this.strogeLocationId = strogeLocationId;
+    }
+
+    public String getStrogeLocationCode() {
+        return strogeLocationCode;
+    }
+
+    public void setStrogeLocationCode(String strogeLocationCode) {
+        this.strogeLocationCode = strogeLocationCode;
+    }
+
+    public Float getInStock() {
+        return inStock;
+    }
+
+    public void setInStock(Float inStock) {
+        this.inStock = inStock;
+    }
+
+    public Float getGoodsNum() {
+        return goodsNum;
+    }
+
+    public void setGoodsNum(Float goodsNum) {
+        this.goodsNum = goodsNum;
+    }
+
     public Float getOutboundQuantity() {
         return outboundQuantity;
     }
@@ -156,142 +269,30 @@ public class OutOrderGoodsInfo implements Serializable {
         this.remark = remark;
     }
 
-    public Float getInStock() {
-        return inStock;
-    }
-
-    public void setInStock(Float inStock) {
-        this.inStock = inStock;
-    }
-
-    public Long getStrogeLocationId() {
-        return strogeLocationId;
-    }
-
-    public void setStrogeLocationId(Long strogeLocationId) {
-        this.strogeLocationId = strogeLocationId;
-    }
-
-    public String getStrogeLocationCode() {
-        return strogeLocationCode;
-    }
-
-    public void setStrogeLocationCode(String strogeLocationCode) {
-        this.strogeLocationCode = strogeLocationCode;
-    }
-
-    public Integer getUnitData() {
-        return unitData;
-    }
-
-    public void setUnitData(Integer unitData) {
-        this.unitData = unitData;
-    }
-
-    public String getBatch() {
-        return batch;
-    }
-
-    public void setBatch(String batch) {
-        this.batch = batch;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
-    public String getMinUnit() {
-        return minUnit;
-    }
-
-    public void setMinUnit(String minUnit) {
-        this.minUnit = minUnit;
-    }
-
-    public String getGoodsClassifyName() {
-        return goodsClassifyName;
-    }
-
-    public void setGoodsClassifyName(String goodsClassifyName) {
-        this.goodsClassifyName = goodsClassifyName;
-    }
-
-    public Long getGoodsClassifyId() {
-        return goodsClassifyId;
-    }
-
-    public void setGoodsClassifyId(Long goodsClassifyId) {
-        this.goodsClassifyId = goodsClassifyId;
-    }
-
-    public String getGoodsSpec() {
-        return goodsSpec;
-    }
-
-    public void setGoodsSpec(String goodsSpec) {
-        this.goodsSpec = goodsSpec;
-    }
-
-    public Float getGoodsNum() {
-        return goodsNum;
-    }
-
-    public void setGoodsNum(Float goodsNum) {
-        this.goodsNum = goodsNum;
-    }
-
-    public String getGoodsBarCode() {
-        return goodsBarCode;
-    }
-
-    public void setGoodsBarCode(String goodsBarCode) {
-        this.goodsBarCode = goodsBarCode;
-    }
-
-    public String getGoodsCode() {
-        return goodsCode;
-    }
-
-    public void setGoodsCode(String goodsCode) {
-        this.goodsCode = goodsCode;
-    }
-
-    public String getGoodsName() {
-        return goodsName;
-    }
-
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
-    }
-
     @Override
     public String toString() {
         return "OutOrderGoodsInfo{" +
-        ", relationId=" + relationId +
-        ", outorderId=" + outorderId +
-        ", outplanRelationId=" + outplanRelationId +
-        ", goodsId=" + goodsId +
-        ", outboundQuantity=" + outboundQuantity +
-        ", outboundPrice=" + outboundPrice +
-        ", remark=" + remark +
-        ", inStock=" + inStock +
-        ", strogeLocationId=" + strogeLocationId +
-        ", strogeLocationCode=" + strogeLocationCode +
-        ", unitData=" + unitData +
-        ", batch=" + batch +
-        ", unit=" + unit +
-        ", minUnit=" + minUnit +
-        ", goodsClassifyName=" + goodsClassifyName +
-        ", goodsClassifyId=" + goodsClassifyId +
-        ", goodsSpec=" + goodsSpec +
-        ", goodsNum=" + goodsNum +
-        ", goodsBarCode=" + goodsBarCode +
-        ", goodsCode=" + goodsCode +
-        ", goodsName=" + goodsName +
-        "}";
+                ", relationId=" + relationId +
+                ", outorderId=" + outorderId +
+                ", outplanRelationId=" + outplanRelationId +
+                ", goodsId=" + goodsId +
+                ", goodsName=" + goodsName +
+                ", goodsCode=" + goodsCode +
+                ", goodsBarCode=" + goodsBarCode +
+                ", goodsSpec=" + goodsSpec +
+                ", goodsClassifyId=" + goodsClassifyId +
+                ", goodsClassifyName=" + goodsClassifyName +
+                ", minUnit=" + minUnit +
+                ", unit=" + unit +
+                ", unitData=" + unitData +
+                ", batch=" + batch +
+                ", strogeLocationId=" + strogeLocationId +
+                ", strogeLocationCode=" + strogeLocationCode +
+                ", inStock=" + inStock +
+                ", goodsNum=" + goodsNum +
+                ", outboundQuantity=" + outboundQuantity +
+                ", outboundPrice=" + outboundPrice +
+                ", remark=" + remark +
+                "}";
     }
 }
