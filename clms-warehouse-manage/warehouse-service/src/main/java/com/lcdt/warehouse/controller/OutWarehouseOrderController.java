@@ -4,6 +4,7 @@ package com.lcdt.warehouse.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -11,11 +12,11 @@ import org.springframework.stereotype.Controller;
  * </p>
  *
  * @author code generate
- * @since 2018-05-07
+ * @since 2018-05-25
  */
-@Controller
-@RequestMapping("/outOrderGoods")
-public class OutOrderGoodsController {
+@RestController
+@RequestMapping("/wh/out")
+public class OutWarehouseOrderController {
 
 }
 

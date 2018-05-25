@@ -60,6 +60,9 @@ public class FeeAccount implements Serializable {
     @ApiModelProperty(value="创建日期")
     private Date createDate;
 
+    @ApiModelProperty(value="备注")
+    private String remark;
+
     @ApiModelProperty(value="0-未删除，1-已删除")
     private Short isDeleted;
 
@@ -199,6 +202,14 @@ public class FeeAccount implements Serializable {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public Short getIsDeleted() {
