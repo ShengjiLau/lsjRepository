@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.warehouse.mapper.OutWarehouseOrderMapper">
+    <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.OutWarehouseOrder">
+        <id column="outorder_id" jdbcType="BIGINT" property="outorderId" />
+        <result column="out_plan_id" jdbcType="BIGINT" property="outPlanId" />
+        <result column="outorder_no" jdbcType="VARCHAR" property="outorderNo" />
+        <result column="order_status" jdbcType="INTEGER" property="orderStatus" />
+        <result column="group_id" jdbcType="BIGINT" property="groupId" />
+        <result column="group_name" jdbcType="VARCHAR" property="groupName" />
+        <result column="contract_no" jdbcType="VARCHAR" property="contractNo" />
+        <result column="purchase_no" jdbcType="VARCHAR" property="purchaseNo" />
+        <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+        <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+        <result column="customer_contact_name" jdbcType="VARCHAR" property="customerContactName" />
+        <result column="customer_contact_phone" jdbcType="VARCHAR" property="customerContactPhone" />
+        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
+        <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName" />
+        <result column="outbound_type" jdbcType="VARCHAR" property="outboundType" />
+        <result column="outbound_plan_time" jdbcType="TIMESTAMP" property="outboundPlanTime" />
+        <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime" />
+        <result column="outbound_remark" jdbcType="VARCHAR" property="outboundRemark" />
+        <result column="delivery_unit" jdbcType="VARCHAR" property="deliveryUnit" />
+        <result column="delivery_linkman" jdbcType="VARCHAR" property="deliveryLinkman" />
+        <result column="deliver_phone" jdbcType="VARCHAR" property="deliverPhone" />
+        <result column="deliver_vehicle_num" jdbcType="VARCHAR" property="deliverVehicleNum" />
+        <result column="attachments" jdbcType="VARCHAR" property="attachments" />
+        <result column="outbound_man" jdbcType="VARCHAR" property="outboundMan" />
+        <result column="company_id" jdbcType="BIGINT" property="companyId" />
+        <result column="create_id" jdbcType="BIGINT" property="createId" />
+        <result column="create_name" jdbcType="VARCHAR" property="createName" />
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+        <result column="update_id" jdbcType="BIGINT" property="updateId" />
+        <result column="update_name" jdbcType="VARCHAR" property="updateName" />
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+        <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    </resultMap>
+    <resultMap id="OutWarehouseOrderDetailsMap" type="com.lcdt.warehouse.dto.OutWhOrderDto">
+        <collection property="outOrderGoodsInfoList" column="outorder_id" select="com.lcdt.warehouse.mapper.xml.selectOutOrderGoodsDetail"/>
+    </resultMap>
+    <sql id="BaseSelectFields">
+        outorder_id, out_plan_id, outorder_no, order_status, group_id, group_name,
+        contract_no, purchase_no, customer_id, customer_name, customer_contact_name, customer_contact_phone,
+        warehouse_id, warehouse_name, outbound_type, outbound_plan_time, outbound_time, outbound_remark,
+        delivery_unit, delivery_linkman, deliver_phone, deliver_vehicle_num, attachments,outbound_man,
+        company_id, create_id, create_name, create_date, update_id, update_name, update_date,
+        is_deleted
+    </sql>
+
+    <insert id="insertOutWarehouseOrder" parameterType="com.lcdt.warehouse.entity.OutWarehouseOrder">
+        <selectKey keyProperty="outorderId" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into out_warehouse_order (out_plan_id, outorder_no, order_status,
+        group_id, group_name, contract_no,
+        purchase_no, customer_id, customer_name,
+        customer_contact_name, customer_contact_phone,
+        warehouse_id, warehouse_name, outbound_type,
+        outbound_plan_time, outbound_time, outbound_remark,
+        delivery_unit, delivery_linkman, deliver_phone,
+        deliver_vehicle_num, attachments,outbound_man, company_id,
+        create_id, create_name, create_date,
+        is_deleted)
+        values (#{outPlanId,jdbcType=BIGINT},
+        <choose>
+            <when test="outPlanId!=null and outPlanId!=''">
+                F_OUT_ORDER_CODE_BY_PLAN(#{outorderNo,jdbcType=VARCHAR},#{outPlanId,jdbcType=BIGINT})
+            </when>
+            <otherwise>
+                F_OUT_ORDER_CODE('OUT')
+            </otherwise>
+        </choose>,
+        #{orderStatus,jdbcType=INTEGER},
+        #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{contractNo,jdbcType=VARCHAR},
+        #{purchaseNo,jdbcType=VARCHAR}, #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR},
+        #{customerContactName,jdbcType=VARCHAR}, #{customerContactPhone,jdbcType=VARCHAR},
+        #{warehouseId,jdbcType=BIGINT}, #{warehouseName,jdbcType=VARCHAR}, #{outboundType,jdbcType=VARCHAR},
+        #{outboundPlanTime,jdbcType=TIMESTAMP}, #{outboundTime,jdbcType=TIMESTAMP}, #{outboundRemark,jdbcType=VARCHAR},
+        #{deliveryUnit,jdbcType=VARCHAR}, #{deliveryLinkman,jdbcType=VARCHAR}, #{deliverPhone,jdbcType=VARCHAR},
+        #{deliverVehicleNum,jdbcType=VARCHAR}, #{attachments,jdbcType=VARCHAR},#{outboundMan,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
+        #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP,
+        0)
+    </insert>
+</mapper>

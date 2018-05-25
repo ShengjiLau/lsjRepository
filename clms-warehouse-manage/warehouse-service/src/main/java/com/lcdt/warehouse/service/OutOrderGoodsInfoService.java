@@ -1,6 +1,6 @@
 package com.lcdt.warehouse.service;
 
-import com.lcdt.warehouse.entity.OutOrderGoods;
+import com.lcdt.warehouse.entity.OutOrderGoodsInfo;
 import com.baomidou.mybatisplus.service.IService;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.service.IService;
  * </p>
  *
  * @author code generate
- * @since 2018-05-07
+ * @since 2018-05-25
  */
-public interface OutOrderGoodsService extends IService<OutOrderGoods> {
+public interface OutOrderGoodsInfoService extends IService<OutOrderGoodsInfo> {
 
 }
