@@ -13,12 +13,6 @@ public class InWarehouseOrderStorageParamsDto {
     /**
      * 仓库id
      */
-    private Long warehouseId;
-    /**
-     * 仓库名称
-     */
-    private String warehouseName;
-
     private Date storageTime;
 
     private List<InorderGoodsInfoDto> goodsInfoDtoList;
@@ -37,22 +31,6 @@ public class InWarehouseOrderStorageParamsDto {
 
     public void setGoodsInfoDtoList(List<InorderGoodsInfoDto> goodsInfoDtoList) {
         this.goodsInfoDtoList = goodsInfoDtoList;
-    }
-
-    public Long getWarehouseId() {
-        return warehouseId;
-    }
-
-    public void setWarehouseId(Long warehouseId) {
-        this.warehouseId = warehouseId;
-    }
-
-    public String getWarehouseName() {
-        return warehouseName;
-    }
-
-    public void setWarehouseName(String warehouseName) {
-        this.warehouseName = warehouseName;
     }
 
     public Date getStorageTime() {

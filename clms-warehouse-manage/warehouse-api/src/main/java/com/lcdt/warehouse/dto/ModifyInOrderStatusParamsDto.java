@@ -15,10 +15,6 @@ public class ModifyInOrderStatusParamsDto {
     private int inOrderStatus;
     @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
-    @ApiModelProperty(value = "仓库id",hidden = true)
-    private Long warehouseId;
-    @ApiModelProperty(value = "仓库名称",hidden = true)
-    private String warehouseName;
     @ApiModelProperty(value = "入库时间",hidden = true)
     private Date storageTime;
     @ApiModelProperty(value = "更新人id",hidden = true)
@@ -50,22 +46,6 @@ public class ModifyInOrderStatusParamsDto {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
-    }
-
-    public Long getWarehouseId() {
-        return warehouseId;
-    }
-
-    public void setWarehouseId(Long warehouseId) {
-        this.warehouseId = warehouseId;
-    }
-
-    public String getWarehouseName() {
-        return warehouseName;
-    }
-
-    public void setWarehouseName(String warehouseName) {
-        this.warehouseName = warehouseName;
     }
 
     public Date getStorageTime() {
