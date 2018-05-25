@@ -61,17 +61,16 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         queryGoodsInfo(companyId, inventories);
         return page.setRecords(inventories);
     }
+
+
     private void queryGoodsInfo(Long companyId, List<Inventory> inventories) {
         logger.info("查询 库存 关联 商品信息 {}",inventories);
         List<Long> longs = inventories.stream().map(inventory -> inventory.getOriginalGoodsId()).collect(Collectors.toList());
         logger.info("批量查询商品id {}",longs);
-        GoodsListParamsDto dto = new GoodsListParamsDto();
-        dto.setGoodsIds(longs);
-        dto.setCompanyId(companyId);
+        GoodsListParamsDto dto = new GoodsListParamsDto(longs,companyId);
         PageInfo<GoodsInfoDao> listPageInfo = goodsService.queryByCondition(dto);
-        List<GoodsInfoDao> list = listPageInfo.getList();
-        logger.debug("商品查询结果 {}",list);
-        fillInventoryGoods(inventories, list);
+        logger.debug("商品查询结果 {}",listPageInfo.getList());
+        fillInventoryGoods(inventories, listPageInfo.getList());
     }
 
     public static void fillInventoryGoods(List<Inventory> inventories, List<GoodsInfoDao> list) {
@@ -102,7 +101,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         Assert.notNull(goods, "入库货物不能为空");
         logger.info("入库操作开始 入库单：{}", order);
         for (InorderGoodsInfo good : goods) {
-
             Inventory inventory = InventoryFactory.createInventory(order, good);
             GoodsInfo goodsInfo = saveGoodsInfo(good);
             inventory.setGoodsId(goodsInfo.getGoodsId());
