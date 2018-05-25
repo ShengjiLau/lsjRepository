@@ -162,5 +162,51 @@ public class OutWarehousePlanController {
         return jsonObject;
     }
 
+
+
+
+    @ApiOperation("完成")
+    @RequestMapping(value = "/complete",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject complete(@ApiParam(value = "计划ID",required = true) @RequestParam Long planOutId) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        OutWarehousePlan obj = new OutWarehousePlan();
+        obj.setOutplanId(planOutId);
+        JSONObject jsonObject = new JSONObject();
+        boolean flag = false;
+        String msg = "操作失败！";
+        try {
+            flag = outWarehousePlanService.outWhPlanComplete(obj, userCompRel);
+        } catch (RuntimeException e) {
+            msg = e.getMessage();
+            logger.error(e.getMessage());
+        }
+        jsonObject.put("code", flag==true? 0:-1);
+        jsonObject.put("message", flag==true? "操作成功！":msg);
+        return jsonObject;
+    }
+
+
+    @ApiOperation("取消")
+    @RequestMapping(value = "/cancel",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject cancel(@ApiParam(value = "计划ID",required = true) @RequestParam Long planOutId) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        OutWarehousePlan obj = new OutWarehousePlan();
+        obj.setOutplanId(planOutId);
+        JSONObject jsonObject = new JSONObject();
+        boolean flag = false;
+        String msg = "取消失败！";
+        try {
+            flag = outWarehousePlanService.outWhPlanCancel(obj, userCompRel);
+        } catch (RuntimeException e) {
+            msg = e.getMessage();
+            logger.error(e.getMessage());
+        }
+        jsonObject.put("code", flag==true? 0:-1);
+        jsonObject.put("message", flag==true? "取消成功！":msg);
+        return jsonObject;
+    }
+
 }
 
