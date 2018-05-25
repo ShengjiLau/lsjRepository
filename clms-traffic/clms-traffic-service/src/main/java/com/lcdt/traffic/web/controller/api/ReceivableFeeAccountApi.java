@@ -103,7 +103,7 @@ public class ReceivableFeeAccountApi {
 
         map.put("waybillType", 0);//我的运单
         if(dto.getGroupId()!=null&&dto.getGroupId()>0) {
-            map.put("groupIds",GroupIdsUtil.getOwnGroupIds(dto.getGroupId()).replaceAll("group_id","fa.group_id"));
+            map.put("groupIds",GroupIdsUtil.getOwnGroupIds(dto.getGroupId()).replaceAll("group_id","w.group_id"));
         }
         FeeAccountWaybillDto feeTotalDto = feeAccountService.feeAccountWaybillFeeTotal(map);
         data.put("feeTotal", FinanceUtil.getFeeTotalDto(feeTotalDto));
@@ -143,7 +143,7 @@ public class ReceivableFeeAccountApi {
 
         map.put("waybillType", 1);//客户运单
         if(dto.getGroupId()!=null&&dto.getGroupId()>0) {
-            map.put("groupIds",GroupIdsUtil.getOwnGroupIds(dto.getGroupId()).replaceAll("group_id","fa.group_id"));
+            map.put("groupIds",GroupIdsUtil.getOwnGroupIds(dto.getGroupId()).replaceAll("group_id","w.group_id"));
         }
         FeeAccountWaybillDto feeTotalDto = feeAccountService.feeAccountWaybillFeeTotal(map);
         data.put("feeTotal", FinanceUtil.getFeeTotalDto(feeTotalDto));
