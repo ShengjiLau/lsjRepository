@@ -152,6 +152,7 @@
         <where>
             company_id= #{companyId,jdbcType=BIGINT} <include refid="select_condition"/>
         </where>
+        order by inorder_id desc
     </select>
 
     <select id="selectInWarehouseOrder" resultMap="InWarehouseOrderDetailsMap">

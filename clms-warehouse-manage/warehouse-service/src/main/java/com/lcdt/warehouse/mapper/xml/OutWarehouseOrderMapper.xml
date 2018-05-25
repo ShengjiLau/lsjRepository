@@ -36,7 +36,7 @@
         <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
     </resultMap>
     <resultMap id="OutWarehouseOrderDetailsMap" type="com.lcdt.warehouse.dto.OutWhOrderDto">
-        <collection property="outOrderGoodsInfoList" column="outorder_id" select="com.lcdt.warehouse.mapper.xml.selectOutOrderGoodsDetail"/>
+        <collection property="outOrderGoodsInfoList" column="outorder_id" select="com.lcdt.warehouse.mapper.OutOrderGoodsInfoMapper.selectOutOrderGoodsDetail"/>
     </resultMap>
     <sql id="BaseSelectFields">
         outorder_id, out_plan_id, outorder_no, order_status, group_id, group_name,
@@ -45,6 +45,58 @@
         delivery_unit, delivery_linkman, deliver_phone, deliver_vehicle_num, attachments,outbound_man,
         company_id, create_id, create_name, create_date, update_id, update_name, update_date,
         is_deleted
+    </sql>
+
+    <sql id="selectCondition">
+        <if test="outorderNo!=null and outorderNo!=''">
+            and outorder_no like concat('%',#{outorderNo,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="orderStatus!=null and orderStatus!='' and orderStatus.length>0">
+            and order_status in
+            <foreach collection="orderStatus" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="outPlanId!=null and outPlanId!=''">
+            and out_plan_id = #{outPlanId,jdbcType=BIGINT}
+        </if>
+        <if test="warehouseId!=null and warehouseId!=''">
+            and warehouse_id = #{warehouseId,jdbcType=BIGINT}
+        </if>
+        <if test="createName!=null and createName!=''">
+            and create_name like concat('%',#{createName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="startCreateDate!=null and startCreateDate!=''">
+            and create_date &gt;= CONCAT(STR_TO_DATE(#{startCreateDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+        </if>
+        <if test="endCreateDate!=null and endCreateDate!=''">
+            and create_date &lt;= CONCAT(STR_TO_DATE(#{endCreateDate,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
+        </if>
+        <if test="startOutboundTime!=null and startOutboundTime!=''">
+            and outbound_time &gt;= CONCAT(STR_TO_DATE(#{startOutboundTime,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+        </if>
+        <if test="endOutboundTime!=null and endOutboundTime!=''">
+            and outbound_time &lt;= CONCAT(STR_TO_DATE(#{endOutboundTime,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
+        </if>
+        <if test="outboundType!=null and outboundType!=''">
+            and outbound_type = #{outboundType,jdbcType=VARCHAR}
+        </if>
+        <if test="customerId!=null and customerId!=''">
+            and customer_id = #{customerId,jdbcType=BIGINT}
+        </if>
+        <if test="customerName!=null and customerName!=''">
+            and customer_name like concat('%',#{customerName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="outboundMan!=null and outboundMan!=''">
+            and outbound_man like concat('%',#{outboundMan,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="groupId!=null and groupId!=''">
+            and group_id = #{groupId,jdbcType=BIGINT}
+        </if>
+        <if test="purchaseNo!=null and purchaseNo!=''">
+            and purchase_no like concat('%',#{purchaseNo,jdbcType=VARCHAR},'%')
+        </if>
+
     </sql>
 
     <insert id="insertOutWarehouseOrder" parameterType="com.lcdt.warehouse.entity.OutWarehouseOrder">
@@ -81,4 +133,19 @@
         #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP,
         0)
     </insert>
+
+    <select id="selectByCondition" parameterType="com.lcdt.warehouse.dto.OutWhOrderSearchDto" resultMap="OutWarehouseOrderDetailsMap">
+        select <include refid="BaseSelectFields"/>
+        from out_warehouse_order
+        <where>
+            company_id= #{companyId,jdbcType=BIGINT} <include refid="selectCondition"/>
+        </where>
+        order by outorder_id desc
+    </select>
+
+    <select id="selectOutWarehouseOrder" resultMap="OutWarehouseOrderDetailsMap">
+        SELECT <include refid="BaseSelectFields"/>
+        FROM out_warehouse_order
+        WHERE company_id= #{companyId,jdbcType=BIGINT} and outorder_id = #{outorderId,jdbcType=BIGINT}
+    </select>
 </mapper>

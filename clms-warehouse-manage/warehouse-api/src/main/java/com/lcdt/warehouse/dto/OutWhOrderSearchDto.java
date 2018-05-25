@@ -13,6 +13,8 @@ public class OutWhOrderSearchDto {
     private Long outPlanId;
     @ApiModelProperty(value = "出库单号")
     private String outorderNo;
+    @ApiModelProperty(value = "出库单状态")
+    private String orderStatus[];
     @ApiModelProperty(value = "货物信息")
     private String goodsInfo;
     @ApiModelProperty(value = "仓库id")
@@ -20,13 +22,13 @@ public class OutWhOrderSearchDto {
     @ApiModelProperty(value = "制单人")
     private String createName;
     @ApiModelProperty(value = "发布开始时间")
-    private Date startCreateDate;
+    private String startCreateDate;
     @ApiModelProperty(value = "发布结束时间")
-    private Date endCreateDate;
+    private String endCreateDate;
     @ApiModelProperty(value = "出库开始时间")
-    private Date startOutboundTime;
+    private String startOutboundTime;
     @ApiModelProperty(value = "出库结束时间")
-    private Date endOutboundTime;
+    private String endOutboundTime;
     @ApiModelProperty(value = "出库类型")
     private String outboundType;
     @ApiModelProperty(value = "客户id")
@@ -42,6 +44,10 @@ public class OutWhOrderSearchDto {
     @ApiModelProperty(value = "个业id",hidden = true)
     private Long companyId;
 
+    @ApiModelProperty(value = "分页编号",required = true)
+    private int pageNo;
+    @ApiModelProperty(value = "每页数",required = true)
+    private int pageSize;
 
     public Long getOutPlanId() {
         return outPlanId;
@@ -57,6 +63,14 @@ public class OutWhOrderSearchDto {
 
     public void setOutorderNo(String outorderNo) {
         this.outorderNo = outorderNo;
+    }
+
+    public String[] getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String[] orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public String getGoodsInfo() {
@@ -83,35 +97,35 @@ public class OutWhOrderSearchDto {
         this.createName = createName;
     }
 
-    public Date getStartCreateDate() {
+    public String getStartCreateDate() {
         return startCreateDate;
     }
 
-    public void setStartCreateDate(Date startCreateDate) {
+    public void setStartCreateDate(String startCreateDate) {
         this.startCreateDate = startCreateDate;
     }
 
-    public Date getEndCreateDate() {
+    public String getEndCreateDate() {
         return endCreateDate;
     }
 
-    public void setEndCreateDate(Date endCreateDate) {
+    public void setEndCreateDate(String endCreateDate) {
         this.endCreateDate = endCreateDate;
     }
 
-    public Date getStartOutboundTime() {
+    public String getStartOutboundTime() {
         return startOutboundTime;
     }
 
-    public void setStartOutboundTime(Date startOutboundTime) {
+    public void setStartOutboundTime(String startOutboundTime) {
         this.startOutboundTime = startOutboundTime;
     }
 
-    public Date getEndOutboundTime() {
+    public String getEndOutboundTime() {
         return endOutboundTime;
     }
 
-    public void setEndOutboundTime(Date endOutboundTime) {
+    public void setEndOutboundTime(String endOutboundTime) {
         this.endOutboundTime = endOutboundTime;
     }
 
@@ -169,5 +183,21 @@ public class OutWhOrderSearchDto {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public int getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(int pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }

@@ -1,7 +1,9 @@
 package com.lcdt.warehouse.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.warehouse.dto.OutWhOrderDto;
+import com.lcdt.warehouse.dto.OutWhOrderSearchDto;
 import com.lcdt.warehouse.entity.OutOrderGoodsInfo;
 import com.lcdt.warehouse.entity.OutWarehouseOrder;
 import com.lcdt.warehouse.mapper.OutWarehouseOrderMapper;
@@ -55,4 +57,16 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
         }
         return result;
     }
+
+    @Override
+    public Page<OutWhOrderDto> queryOutWarehouseOrderList(OutWhOrderSearchDto params) {
+        Page page = new Page(params.getPageNo(), params.getPageSize());
+        return page.setRecords(baseMapper.selectByCondition(page, params));
+    }
+
+    @Override
+    public OutWhOrderDto queryOutWarehouseOrder(Long companyId, Long outorderId) {
+        return baseMapper.selectOutWarehouseOrder(companyId,outorderId);
+    }
+
 }

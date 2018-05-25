@@ -2,19 +2,19 @@ package com.lcdt.warehouse.controller;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.warehouse.dto.OutWhOrderDto;
+import com.lcdt.warehouse.dto.OutWhOrderSearchDto;
+import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.service.OutWarehouseOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 
@@ -54,6 +54,25 @@ public class OutWarehouseOrderController {
         }
 
         return jsonObject;
+    }
+
+
+    @ApiOperation("出库单列表")
+    @RequestMapping(value = "/order", method = RequestMethod.GET)
+    public PageBaseDto outWarehouseOrderList(OutWhOrderSearchDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+        Page<OutWhOrderDto> inWarehouseOrderPage = outWarehouseOrderService.queryOutWarehouseOrderList(params);
+        PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderPage.getRecords(), inWarehouseOrderPage.getTotal());
+        return pageBaseDto;
+    }
+
+
+    @ApiOperation("入库单详细")
+    @RequestMapping(value = "/order/{inorderId}", method = RequestMethod.GET)
+    public OutWhOrderDto inWarehouseOrderDetail(@PathVariable Long outorderId) {
+        OutWhOrderDto outWhOrderDto = new OutWhOrderDto();
+        outWhOrderDto = outWarehouseOrderService.queryOutWarehouseOrder(SecurityInfoGetter.getCompanyId(), outorderId);
+        return outWhOrderDto;
     }
 }
 
