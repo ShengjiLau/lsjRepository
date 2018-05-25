@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.warehouse.mapper.OutOrderGoodsInfoMapper">
+    <resultMap id="BaseResultMap" type="com.lcdt.warehouse.OutOrderGoodsInfo">
+        <id column="relation_id" jdbcType="BIGINT" property="relationId" />
+        <result column="outorder_id" jdbcType="BIGINT" property="outorderId" />
+        <result column="outplan_relation_id" jdbcType="BIGINT" property="outplanRelationId" />
+        <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+        <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+        <result column="goods_code" jdbcType="VARCHAR" property="goodsCode" />
+        <result column="goods_bar_code" jdbcType="VARCHAR" property="goodsBarCode" />
+        <result column="goods_spec" jdbcType="VARCHAR" property="goodsSpec" />
+        <result column="goods_classify_id" jdbcType="BIGINT" property="goodsClassifyId" />
+        <result column="goods_classify_name" jdbcType="VARCHAR" property="goodsClassifyName" />
+        <result column="min_unit" jdbcType="VARCHAR" property="minUnit" />
+        <result column="unit" jdbcType="VARCHAR" property="unit" />
+        <result column="unit_data" jdbcType="INTEGER" property="unitData" />
+        <result column="batch" jdbcType="VARCHAR" property="batch" />
+        <result column="stroge_location_id" jdbcType="BIGINT" property="strogeLocationId" />
+        <result column="stroge_location_code" jdbcType="VARCHAR" property="strogeLocationCode" />
+        <result column="in_stock" jdbcType="REAL" property="inStock" />
+        <result column="goods_num" jdbcType="REAL" property="goodsNum" />
+        <result column="outbound_quantity" jdbcType="REAL" property="outboundQuantity" />
+        <result column="outbound_price" jdbcType="REAL" property="outboundPrice" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+    <resultMap id="OutOrderGoodsInfoDetailsMap" type="com.lcdt.warehouse.dto.OutOrderGoodsInfoDto"></resultMap>
+    <sql id="BaseSelectFields">
+        relation_id, outorder_id, outplan_relation_id, goods_id, goods_name, goods_code,
+        goods_bar_code, goods_spec, goods_classify_id, goods_classify_name, min_unit, unit,
+        unit_data, batch, stroge_location_id, stroge_location_code, in_stock, goods_num,
+        outbound_quantity, outbound_price, remark
+    </sql>
 
+    <select id="selectOutOrderGoodsDetail" parameterType="Long" resultMap="">
+        SELECT <include refid="BaseSelectFields"/>
+        FROM out_order_goods_info
+        WHERE outorder_id = #{outorderId,jdbcType=BIGINT}
+    </select>
 </mapper>

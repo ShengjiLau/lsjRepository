@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.service;
 
+import com.lcdt.warehouse.dto.OutWhOrderDto;
 import com.lcdt.warehouse.entity.OutWarehouseOrder;
 import com.baomidou.mybatisplus.service.IService;
 
@@ -12,5 +13,5 @@ import com.baomidou.mybatisplus.service.IService;
  * @since 2018-05-25
  */
 public interface OutWarehouseOrderService extends IService<OutWarehouseOrder> {
-
+    int addOutWarehouseOrder(OutWhOrderDto dto);
 }
