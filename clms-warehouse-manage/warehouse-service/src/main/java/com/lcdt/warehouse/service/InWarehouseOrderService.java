@@ -64,4 +64,12 @@ public interface InWarehouseOrderService extends IService<InWarehouseOrder> {
      * @return
      */
     List<DistributionRecordsDto> queryDisRecords(Long companyId,Long planId);
+
+
+    /**
+     * 新增入库单
+     * @param params
+     * @return
+     */
+    int addOrStorageInWarehouseOrder(InWarehouseOrderDto params,int operationType);
 }
