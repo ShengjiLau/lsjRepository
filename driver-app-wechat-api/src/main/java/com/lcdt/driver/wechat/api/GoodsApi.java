@@ -33,7 +33,7 @@ public class GoodsApi {
 
     @ApiOperation("查询商品列表")
     @GetMapping("/v1/goodslist")
-    public PageBaseDto<List<GoodsInfoDao>> queryGoodsList(GoodsListParamsDto params){
+    public PageBaseDto<GoodsInfoDao> queryGoodsList(GoodsListParamsDto params){
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         Long companyId = userCompRel.getCompany().getCompId();
         params.setCompanyId(companyId);

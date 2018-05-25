@@ -130,5 +130,20 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
         return baseMapper.selectDisRecords(companyId,planId);
     }
 
+    @Override
+    public int addOrStorageInWarehouseOrder(InWarehouseOrderDto params, int operationType) {
+        int result=addInWarehouseOrder(params);
+        if(operationType==0){
+            return result;
+        }else{
+            InWarehouseOrderDto inWarehouseOrderDto=queryInWarehouseOrder(params.getCompanyId(),params.getInorderId());
+            List<InorderGoodsInfoDto> inorderGoodsInfoDtoList=inWarehouseOrderDto.getGoodsInfoDtoList();
+
+        }
+
+
+        return 0;
+    }
+
 
 }

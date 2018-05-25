@@ -12,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
@@ -61,7 +62,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 3：插入移库到新库的记录
 	 */
 	@Override
-	@Transactional(isolation=Isolation.REPEATABLE_READ)
+	@Transactional(isolation=Isolation.REPEATABLE_READ,timeout=60,propagation=Propagation.REQUIRED,rollbackForClassName={"RuntimeException","Exception"})
 	public int insertShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 		
 		//新建一个移库单Model,并复制ShiftInventoryListDTO里的相关属性
@@ -113,7 +114,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 4：新建移库目标库的入库单
 	 */
 	@Override
-	@Transactional(isolation=Isolation.REPEATABLE_READ)
+	@Transactional(isolation=Isolation.REPEATABLE_READ,timeout=60,propagation=Propagation.REQUIRED,rollbackForClassName={"RuntimeException","Exception"})
 	public int completeShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 		//将移库单的状态修改为1，即完成状态
 		int i = shiftInventoryListDOMapper.updateFinishedById(shiftInventoryListDTO.getShiftId(),(byte) 1);
@@ -192,6 +193,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 3：如果库存商品信息和查询条件不一致，则去掉相应的ShiftInventoryListDTO
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public PageInfo<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO1) {
 		shiftInventoryListDTO1.setCompanyId(SecurityInfoGetter.getCompanyId());
 		
@@ -254,6 +256,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 通过移库单主键id查询移库单信息
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public ShiftInventoryListDTO getShiftInventoryListDetails(Long shiftInventoryListId) {
 		//创建一个新的ShiftInventoryListDTO
 		ShiftInventoryListDTO shiftInventoryListDTO = new ShiftInventoryListDTO();

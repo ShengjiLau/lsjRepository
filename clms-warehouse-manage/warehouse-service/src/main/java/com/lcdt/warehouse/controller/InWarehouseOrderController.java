@@ -11,6 +11,7 @@ import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.vo.ConstantVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,7 @@ public class InWarehouseOrderController {
 
     @ApiOperation("入库单新增")
     @RequestMapping(value = "/order", method = RequestMethod.POST)
-    public JSONObject inWarehouseOrder(@RequestBody InWarehouseOrderDto params) {
+    public JSONObject inWarehouseOrder(@RequestBody InWarehouseOrderDto params, @ApiParam(value = "操作类型，0-保存，1-入库", required = true)@RequestParam int operationType) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User user = SecurityInfoGetter.getUser();
         params.setCompanyId(companyId);
