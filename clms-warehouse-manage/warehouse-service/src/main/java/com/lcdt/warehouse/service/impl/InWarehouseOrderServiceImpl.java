@@ -11,6 +11,7 @@ import com.lcdt.warehouse.service.GoodsInfoService;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.lcdt.warehouse.service.InorderGoodsInfoService;
+import com.lcdt.warehouse.service.InventoryService;
 import com.lcdt.warehouse.vo.ConstantVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +37,15 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
     @Autowired
     InorderGoodsInfoService inorderGoodsInfoService;
 
+    @Autowired
+    InventoryService inventoryService;
+
     @Override
     public int addInWarehouseOrder(InWarehouseOrderDto params) {
         int result = 0;
         InWarehouseOrder inWarehouseOrder = new InWarehouseOrder();
         BeanUtils.copyProperties(params, inWarehouseOrder);
+        inWarehouseOrder.setInOrderStatus(1);
         result += baseMapper.insertInWarehouseOrder(inWarehouseOrder);
 
         if (params.getGoodsInfoDtoList() != null && params.getGoodsInfoDtoList().size() > 0) {
@@ -52,6 +57,9 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
                 inorderGoodsInfoList.add(inorderGoodsInfo);
             }
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);
+            for(InorderGoodsInfo inorderGoodsInfo:inorderGoodsInfoList){
+                System.out.println(inorderGoodsInfo.getRelationId()+"adfasfdasfsdaf");
+            }
         }
         return result;
     }
@@ -122,6 +130,13 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
         result=modifyInOrderStatus(modifyParams);
 
         //入库
+        List<InorderGoodsInfo> inorderGoodsInfoList=new ArrayList<>();
+        inorderGoodsInfoList.addAll(modifyInorderGoodsInfoList);
+        inorderGoodsInfoList.addAll(addInorderGoodsInfoList);
+        InWarehouseOrder inWarehouseOrder=queryInWarehouseOrder(modifyParams.getCompanyId(),modifyParams.getInorderId());
+
+        //inventoryService.putInventory(inorderGoodsInfoList,inWarehouseOrder);
+
         return result;
     }
 
@@ -131,18 +146,29 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
     }
 
     @Override
-    public int addOrStorageInWarehouseOrder(InWarehouseOrderDto params, int operationType) {
-        int result=addInWarehouseOrder(params);
-        if(operationType==0){
-            return result;
-        }else{
-            InWarehouseOrderDto inWarehouseOrderDto=queryInWarehouseOrder(params.getCompanyId(),params.getInorderId());
-            List<InorderGoodsInfoDto> inorderGoodsInfoDtoList=inWarehouseOrderDto.getGoodsInfoDtoList();
+    public int addAndStorageInWarehouseOrder(InWarehouseOrderDto params) {
+        int result = 0;
+        InWarehouseOrder inWarehouseOrder = new InWarehouseOrder();
+        BeanUtils.copyProperties(params, inWarehouseOrder);
+        inWarehouseOrder.setInOrderStatus(2);
+        inWarehouseOrder.setStorageMan(inWarehouseOrder.getCreateName());
+        result += baseMapper.insertInWarehouseOrder(inWarehouseOrder);
 
+        if (params.getGoodsInfoDtoList() != null && params.getGoodsInfoDtoList().size() > 0) {
+            List<InorderGoodsInfo> inorderGoodsInfoList = new ArrayList<>();
+            for (int i = 0; i < params.getGoodsInfoDtoList().size(); i++) {
+                InorderGoodsInfo inorderGoodsInfo = new InorderGoodsInfo();
+                BeanUtils.copyProperties(params.getGoodsInfoDtoList().get(i), inorderGoodsInfo);
+                inorderGoodsInfo.setInorderId(inWarehouseOrder.getInorderId());
+                inorderGoodsInfoList.add(inorderGoodsInfo);
+            }
+            inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);
+
+
+            //入库操作
+            //inventoryService.putInventory(inorderGoodsInfoList,inWarehouseOrder);
         }
-
-
-        return 0;
+        return result;
     }
 
 

@@ -67,9 +67,9 @@ public interface InWarehouseOrderService extends IService<InWarehouseOrder> {
 
 
     /**
-     * 新增入库单
-     * @param params
+     * 新增入库单且进行入库操作
+     * @param param
      * @return
      */
-    int addOrStorageInWarehouseOrder(InWarehouseOrderDto params,int operationType);
+    int addAndStorageInWarehouseOrder(InWarehouseOrderDto param);
 }

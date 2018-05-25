@@ -96,12 +96,11 @@ public class InWarehouseOrder implements Serializable,ResponseData {
     /**
      * 实际入库时间
      */
+    private Date storageTime;
     /**
      * 入库人员
      */
     private String storageMan;
-
-    private Date storageTime;
     /**
      * 备注信息
      */

@@ -43,8 +43,13 @@ public class InWarehouseOrderController {
         params.setCreateId(user.getUserId());
         params.setCreateName(user.getRealName());
         params.setCreateDate(new Date());
-        params.setInOrderStatus(1);
-        int result = inWarehouseOrderService.addInWarehouseOrder(params);
+        int result=0;
+        if(operationType==0){
+            result = inWarehouseOrderService.addInWarehouseOrder(params);
+        }else if(operationType==1){
+            result=inWarehouseOrderService.addAndStorageInWarehouseOrder(params);
+        }
+
         JSONObject jsonObject = new JSONObject();
         if (result > 0) {
             jsonObject.put("code", 0);
