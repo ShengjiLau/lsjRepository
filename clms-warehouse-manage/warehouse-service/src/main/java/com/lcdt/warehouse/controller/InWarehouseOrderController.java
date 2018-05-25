@@ -36,7 +36,7 @@ public class InWarehouseOrderController {
 
     @ApiOperation("入库单新增")
     @RequestMapping(value = "/order", method = RequestMethod.POST)
-    public JSONObject inWarehouseOrder(@RequestBody InWarehouseOrderDto params, @ApiParam(value = "操作类型，0-保存，1-入库", required = true)@RequestParam int operationType) {
+    public JSONObject inWarehouseOrder(@RequestBody InWarehouseOrderDto params) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User user = SecurityInfoGetter.getUser();
         params.setCompanyId(companyId);
@@ -44,9 +44,9 @@ public class InWarehouseOrderController {
         params.setCreateName(user.getRealName());
         params.setCreateDate(new Date());
         int result=0;
-        if(operationType==0){
+        if(params.getOperationType()==0){
             result = inWarehouseOrderService.addInWarehouseOrder(params);
-        }else if(operationType==1){
+        }else if(params.getOperationType()==1){
             result=inWarehouseOrderService.addAndStorageInWarehouseOrder(params);
         }
 
