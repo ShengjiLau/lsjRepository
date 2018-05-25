@@ -28,6 +28,7 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -60,15 +61,9 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         queryGoodsInfo(companyId, inventories);
         return page.setRecords(inventories);
     }
-    //TODO lambda 重写
     private void queryGoodsInfo(Long companyId, List<Inventory> inventories) {
         logger.info("查询 库存 关联 商品信息 {}",inventories);
-        ArrayList<Long> longs = new ArrayList<>();
-        inventories.stream().forEach(inventory -> longs.add(inventory.getOriginalGoodsId()));
-
-        for (Inventory inventory : inventories) {
-            longs.add(inventory.getOriginalGoodsId());
-        }
+        List<Long> longs = inventories.stream().map(inventory -> inventory.getOriginalGoodsId()).collect(Collectors.toList());
         logger.info("批量查询商品id {}",longs);
         GoodsListParamsDto dto = new GoodsListParamsDto();
         dto.setGoodsIds(longs);
@@ -76,15 +71,13 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         PageInfo<GoodsInfoDao> listPageInfo = goodsService.queryByCondition(dto);
         List<GoodsInfoDao> list = listPageInfo.getList();
         logger.debug("商品查询结果 {}",list);
-//        inventories.stream().map(inventory -> inventory.getOriginalGoodsId()).flatMap();
-//        inventories.stream().reduce()
-        for (Inventory inventory : inventories) {
-            for (GoodsInfoDao goodsInfoDao : list) {
-                if (inventory.getOriginalGoodsId().equals(goodsInfoDao.getSubItemId())) {
-                    inventory.setGoods(goodsInfoDao);
-                }
-            }
-        }
+        fillInventoryGoods(inventories, list);
+    }
+
+    public static void fillInventoryGoods(List<Inventory> inventories, List<GoodsInfoDao> list) {
+        inventories.stream().
+                forEach(inventory -> list.stream()
+                        .filter(goods -> inventory.getOriginalGoodsId().equals(goods.getSubItemId())).findFirst().ifPresent(goodsInfoDao -> inventory.setGoods(goodsInfoDao)));
     }
 
     private List<Long> queryGoodsIds(InventoryQueryDto inventoryQueryDto, Long companyId) {
