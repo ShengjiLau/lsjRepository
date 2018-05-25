@@ -45,6 +45,12 @@ public class InWarehouseOrder implements Serializable,ResponseData {
      * 组名称
      */
     private String groupName;
+
+    /**
+     * 合同编号
+     */
+    private String contractCode;
+
     /**
      * 采购单号
      */
@@ -90,12 +96,11 @@ public class InWarehouseOrder implements Serializable,ResponseData {
     /**
      * 实际入库时间
      */
+    private Date storageTime;
     /**
      * 入库人员
      */
     private String storageMan;
-
-    private Date storageTime;
     /**
      * 备注信息
      */
@@ -199,6 +204,14 @@ public class InWarehouseOrder implements Serializable,ResponseData {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public String getContractCode() {
+        return contractCode;
+    }
+
+    public void setContractCode(String contractCode) {
+        this.contractCode = contractCode;
     }
 
     public String getPurchaseCode() {

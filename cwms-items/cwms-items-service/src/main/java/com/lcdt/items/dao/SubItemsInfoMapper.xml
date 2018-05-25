@@ -25,7 +25,7 @@
 
   <resultMap id="SubItemInfoList" type="com.lcdt.items.model.GoodsInfoDao" extends="BaseResultMap">
     <result column="subject" jdbcType="VARCHAR" property="goodsName" />
-    <result column="item_id" jdbcType="BIGINT" property="goodsId"/>
+    <result column="sub_item_id" jdbcType="BIGINT" property="goodsId"/>
     <result column="unit_name" jdbcType="VARCHAR" property="unit" />
     <result column="classify_name" jdbcType="VARCHAR" property="classifyName" />
     <result column="classify_id" jdbcType="BIGINT" property="classifyId" />
@@ -160,10 +160,10 @@
 
   <select id="selectByCondition" resultMap="SubItemInfoList" parameterType="com.lcdt.items.dto.GoodsListParamsDto">
     select sub_item_id, sub.item_id, image, sub.code, sub.bar_code, sub.purchase_price, sub.wholesale_price,
-    sub.retail_price, spec_comb, items.company_id,items.subject ,items.unit_name,items.conver_id,items.classify_name,items.classify_id
-    from t_sub_items_info sub,t_items_info items
+    sub.retail_price, spec_comb, items.company_id,items.subject ,items.unit_name,items.conver_id,classify.classify_name,items.classify_id
+    from t_sub_items_info sub,t_items_info items,t_item_classify classify
     <where>
-      sub.item_id=items.item_id and items.company_id = #{companyId,jdbcType=BIGINT}
+      sub.item_id=items.item_id and classify.classify_id=items.classify_id and items.company_id = #{companyId,jdbcType=BIGINT}
       <if test="goodsName!=null and goodsName!=''">
         and items.subject like concat('%',#{goodsName,jdbcType=VARCHAR},'%')
       </if>
@@ -183,7 +183,7 @@
         and items.classify_id = #{classifyId,jdbcType=BIGINT}
       </if>
       <if test="classifyName!=null and classifyName!=''">
-        and items.classify_name like concat('%',#{classifyName,jdbcType=VARCHAR},'%')
+        and classify.classify_name like concat('%',#{classifyName,jdbcType=VARCHAR},'%')
       </if>
       <if test="goodsIds!=null and goodsIds.size()>0">
         and sub_item_id in

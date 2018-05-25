@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.dto;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -7,7 +8,13 @@ import java.util.List;
  */
 
 public class InWarehouseOrderStorageParamsDto {
+
     private Long inorderId;
+    /**
+     * 仓库id
+     */
+    private Date storageTime;
+
     private List<InorderGoodsInfoDto> goodsInfoDtoList;
 
     public Long getInorderId() {
@@ -24,5 +31,13 @@ public class InWarehouseOrderStorageParamsDto {
 
     public void setGoodsInfoDtoList(List<InorderGoodsInfoDto> goodsInfoDtoList) {
         this.goodsInfoDtoList = goodsInfoDtoList;
+    }
+
+    public Date getStorageTime() {
+        return storageTime;
+    }
+
+    public void setStorageTime(Date storageTime) {
+        this.storageTime = storageTime;
     }
 }
