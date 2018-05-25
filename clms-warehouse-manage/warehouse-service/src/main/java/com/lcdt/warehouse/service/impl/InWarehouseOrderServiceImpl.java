@@ -45,7 +45,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
         int result = 0;
         InWarehouseOrder inWarehouseOrder = new InWarehouseOrder();
         BeanUtils.copyProperties(params, inWarehouseOrder);
-        inWarehouseOrder.setInOrderStatus(1);
+        inWarehouseOrder.setInOrderStatus(ConstantVO.IN_ORDER_STATUS_WATIE_STORAGE);
         result += baseMapper.insertInWarehouseOrder(inWarehouseOrder);
 
         if (params.getGoodsInfoDtoList() != null && params.getGoodsInfoDtoList().size() > 0) {
@@ -150,7 +150,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
         int result = 0;
         InWarehouseOrder inWarehouseOrder = new InWarehouseOrder();
         BeanUtils.copyProperties(params, inWarehouseOrder);
-        inWarehouseOrder.setInOrderStatus(2);
+        inWarehouseOrder.setInOrderStatus(ConstantVO.IN_ORDER_STATUS_HAVE_CANCEL);
         inWarehouseOrder.setStorageMan(inWarehouseOrder.getCreateName());
         result += baseMapper.insertInWarehouseOrder(inWarehouseOrder);
 

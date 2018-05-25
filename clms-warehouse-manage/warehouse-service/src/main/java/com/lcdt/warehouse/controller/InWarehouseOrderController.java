@@ -88,6 +88,9 @@ public class InWarehouseOrderController {
         statusParams.setUpdateName(user.getRealName());
         statusParams.setInOrderStatus(ConstantVO.IN_ORDER_STATUS_HAVE_STORAGE);
         statusParams.setCompanyId(SecurityInfoGetter.getCompanyId());
+        statusParams.setWarehouseId(params.getWarehouseId());
+        statusParams.setWarehouseName(params.getWarehouseName());
+        statusParams.setStorageTime(params.getStorageTime());
 
         boolean result=inWarehouseOrderService.storage(statusParams,params.getGoodsInfoDtoList());
         JSONObject jsonObject = new JSONObject();
