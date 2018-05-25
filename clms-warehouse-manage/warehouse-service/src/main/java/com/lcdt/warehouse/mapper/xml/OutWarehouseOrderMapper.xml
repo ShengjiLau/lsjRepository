@@ -81,9 +81,4 @@
         #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP,
         0)
     </insert>
-
-
-    <select id="selectByCondition" parameterType="com.lcdt.warehouse.dto.OutWhOrderDto" resultMap="OutWarehouseOrderDetailsMap">
-
-    </select>
 </mapper>
