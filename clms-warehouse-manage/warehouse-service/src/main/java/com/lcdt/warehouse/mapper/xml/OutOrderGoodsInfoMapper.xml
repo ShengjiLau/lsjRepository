@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.warehouse.mapper.OutOrderGoodsInfoMapper">
-    <resultMap id="BaseResultMap" type="com.lcdt.warehouse.OutOrderGoodsInfo">
+    <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.OutOrderGoodsInfo">
         <id column="relation_id" jdbcType="BIGINT" property="relationId" />
         <result column="outorder_id" jdbcType="BIGINT" property="outorderId" />
         <result column="outplan_relation_id" jdbcType="BIGINT" property="outplanRelationId" />
@@ -32,7 +32,7 @@
         outbound_quantity, outbound_price, remark
     </sql>
 
-    <select id="selectOutOrderGoodsDetail" parameterType="Long" resultMap="">
+    <select id="selectOutOrderGoodsDetail" parameterType="Long" resultMap="OutOrderGoodsInfoDetailsMap">
         SELECT <include refid="BaseSelectFields"/>
         FROM out_order_goods_info
         WHERE outorder_id = #{outorderId,jdbcType=BIGINT}
