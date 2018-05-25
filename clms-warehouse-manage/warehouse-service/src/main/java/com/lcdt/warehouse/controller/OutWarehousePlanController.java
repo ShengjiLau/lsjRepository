@@ -41,9 +41,10 @@ import java.util.List;
 @RequestMapping("/out/plan")
 @Api(value = "仓储出库计划API",description = "仓储出库计划API接口")
 public class OutWarehousePlanController {
-    private static Logger logger = LoggerFactory.getLogger(InWarehousePlanController.class);
 
+    private static Logger logger = LoggerFactory.getLogger(InWarehousePlanController.class);
     @Autowired
+
     private OutWarehousePlanService outWarehousePlanService;
 
     @ApiOperation("出库计划列表")
@@ -107,9 +108,7 @@ public class OutWarehousePlanController {
         boolean flag = false;
         JSONObject jsonObject = new JSONObject();
         try {
-            flag = outWarehousePlanService.outWhPlanAdd(outWhPlanDto
-
-                    , userCompRel);
+            flag = outWarehousePlanService.outWhPlanAdd(outWhPlanDto, userCompRel);
         } catch (RuntimeException e) {
             msg = e.getMessage();
             logger.error(e.getMessage());
