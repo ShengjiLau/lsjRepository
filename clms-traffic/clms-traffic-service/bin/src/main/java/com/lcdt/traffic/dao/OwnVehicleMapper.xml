@@ -271,6 +271,9 @@
       <if test="vehicleLength!=null and vehicleLength!=''">
         and vehicle_length = #{vehicleLength,jdbcType=VARCHAR}
       </if>
+      <if test="vehicleDriverPhone!=null and vehicleDriverPhone!=''">
+        and vehicle_driver_phone like concat('%',#{vehicleDriverPhone,jdbcType=VARCHAR},'%')
+      </if>
     </where>
     order by own_vehicle_id desc
   </select>
