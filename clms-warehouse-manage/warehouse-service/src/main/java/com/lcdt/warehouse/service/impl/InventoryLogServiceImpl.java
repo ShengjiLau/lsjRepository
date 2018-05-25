@@ -35,7 +35,7 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
 
 
     public Page<InventoryLog> queryInventoryLogPage(InventoryLogQueryDto inventoryQueryDto) {
-        logger.info("query inventorylog list querydto :{}",inventoryQueryDto);
+        logger.info("query inventory log list query dto :{}",inventoryQueryDto);
         Page<InventoryLog> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
         inventoryQueryDto.setCompanyId(SecurityInfoGetter.getCompanyId());
         return page.setRecords(logMapper.selectLogList(page,inventoryQueryDto));

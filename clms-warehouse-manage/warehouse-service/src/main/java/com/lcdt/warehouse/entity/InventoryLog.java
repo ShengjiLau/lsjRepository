@@ -45,6 +45,59 @@ public class InventoryLog implements Serializable {
      */
     private Integer type;
 
+    /**
+     * 业务流水号
+     */
+    private String logNo;
+
+    private GoodsInfo goodsInfo;
+
+    private Warehouse warehouse;
+
+    private String batch;
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch;
+    }
+
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
+    }
+
+    private String storageLocationCode;
+
+    public String getStorageLocationCode() {
+        return storageLocationCode;
+    }
+
+    public void setStorageLocationCode(String storageLocationCode) {
+        this.storageLocationCode = storageLocationCode;
+    }
+
+    public GoodsInfo getGoodsInfo() {
+        return goodsInfo;
+    }
+
+    public void setGoodsInfo(GoodsInfo goodsInfo) {
+        this.goodsInfo = goodsInfo;
+    }
+
+    public String getLogNo() {
+        return logNo;
+    }
+
+    public void setLogNo(String logNo) {
+        this.logNo = logNo;
+    }
+
     public Long getOriginalGoodsId() {
         return originalGoodsId;
     }

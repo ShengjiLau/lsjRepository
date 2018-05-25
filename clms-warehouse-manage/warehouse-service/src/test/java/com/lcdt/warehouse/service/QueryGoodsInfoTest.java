@@ -3,7 +3,6 @@ package com.lcdt.warehouse.service;
 import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.warehouse.entity.Inventory;
 import com.lcdt.warehouse.service.impl.InventoryServiceImpl;
-import io.jsonwebtoken.lang.Collections;
 import org.junit.Assert;
 import org.junit.Test;
 
