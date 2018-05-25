@@ -46,3 +46,8 @@ mybatis-plus:
     cache-enabled: false
 server:
   port: 8071
+logging:
+  level:
+    com.lcdt.warehouse: debug
+  file: ${user.dir}/log/warehouse-service.log
+
