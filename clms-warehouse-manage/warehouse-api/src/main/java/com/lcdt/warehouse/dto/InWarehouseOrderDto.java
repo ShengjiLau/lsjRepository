@@ -14,11 +14,21 @@ public class InWarehouseOrderDto extends InWarehouseOrder implements Serializabl
 
     List<InorderGoodsInfoDto> goodsInfoDtoList;
 
+    private int operationType;
+
     public List<InorderGoodsInfoDto> getGoodsInfoDtoList() {
         return goodsInfoDtoList;
     }
 
     public void setGoodsInfoDtoList(List<InorderGoodsInfoDto> goodsInfoDtoList) {
         this.goodsInfoDtoList = goodsInfoDtoList;
+    }
+
+    public int getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(int operationType) {
+        this.operationType = operationType;
     }
 }

@@ -11,6 +11,7 @@ import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.vo.ConstantVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,8 +43,13 @@ public class InWarehouseOrderController {
         params.setCreateId(user.getUserId());
         params.setCreateName(user.getRealName());
         params.setCreateDate(new Date());
-        params.setInOrderStatus(1);
-        int result = inWarehouseOrderService.addInWarehouseOrder(params);
+        int result=0;
+        if(params.getOperationType()==0){
+            result = inWarehouseOrderService.addInWarehouseOrder(params);
+        }else if(params.getOperationType()==1){
+            result=inWarehouseOrderService.addAndStorageInWarehouseOrder(params);
+        }
+
         JSONObject jsonObject = new JSONObject();
         if (result > 0) {
             jsonObject.put("code", 0);
@@ -82,6 +88,7 @@ public class InWarehouseOrderController {
         statusParams.setUpdateName(user.getRealName());
         statusParams.setInOrderStatus(ConstantVO.IN_ORDER_STATUS_HAVE_STORAGE);
         statusParams.setCompanyId(SecurityInfoGetter.getCompanyId());
+        statusParams.setStorageTime(params.getStorageTime());
 
         boolean result=inWarehouseOrderService.storage(statusParams,params.getGoodsInfoDtoList());
         JSONObject jsonObject = new JSONObject();

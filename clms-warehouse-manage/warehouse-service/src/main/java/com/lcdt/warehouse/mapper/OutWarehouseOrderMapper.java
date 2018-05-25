@@ -1,6 +1,6 @@
 package com.lcdt.warehouse.mapper;
 
-import com.lcdt.warehouse.entity.Outorder;
+import com.lcdt.warehouse.entity.OutWarehouseOrder;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * </p>
  *
  * @author code generate
- * @since 2018-05-07
+ * @since 2018-05-25
  */
-public interface OutorderMapper extends BaseMapper<Outorder> {
+public interface OutWarehouseOrderMapper extends BaseMapper<OutWarehouseOrder> {
 
 }

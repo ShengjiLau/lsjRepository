@@ -19,6 +19,7 @@
     <result column="reconcile_code" jdbcType="VARCHAR" property="reconcileCode" />
     <result column="is_receivable" jdbcType="SMALLINT" property="isReceivable" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
   </resultMap>
   <resultMap id="BaseResultDtoMap" type="com.lcdt.traffic.web.dto.FeeAccountDto" extends="BaseResultMap">
@@ -31,7 +32,7 @@
   <sql id="Base_Column_List">
     account_id, account_code, company_id, waybill_id, waybill_code, group_id, group_name, 
     name_id, name, audit_status, audit_date, operator_id, operator_name, reconcile_id, 
-    reconcile_code, is_receivable, create_date, is_deleted
+    reconcile_code, is_receivable, create_date, remark, is_deleted
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -52,13 +53,13 @@
       name_id, name, audit_status, 
       audit_date, operator_id, operator_name, 
       reconcile_id, reconcile_code, is_receivable, 
-      create_date, is_deleted)
+      create_date, remark, is_deleted)
     values (ACCOUNT_CODE('JZ'), #{companyId,jdbcType=BIGINT}, #{waybillId,jdbcType=BIGINT}, 
       #{waybillCode,jdbcType=VARCHAR}, #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, 
       #{nameId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{auditStatus,jdbcType=SMALLINT}, 
       #{auditDate,jdbcType=TIMESTAMP}, #{operatorId,jdbcType=BIGINT}, #{operatorName,jdbcType=VARCHAR}, 
-      #{reconcileId,jdbcType=BIGINT}, #{reconcileCode,jdbcType=VARCHAR}, #{isReceivable,jdbcType=SMALLINT}, 
-      #{createDate,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT})
+      #{reconcileId,jdbcType=BIGINT}, #{reconcileCode,jdbcType=VARCHAR}, #{isReceivable,jdbcType=SMALLINT},
+      #{createDate,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, #{isDeleted,jdbcType=SMALLINT})
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.traffic.model.FeeAccount">
     <selectKey keyProperty="accountId" order="AFTER" resultType="java.lang.Long">
@@ -114,6 +115,9 @@
       <if test="createDate != null">
         create_date,
       </if>
+      <if test="remark != null">
+        remark,
+      </if>
       <if test="isDeleted != null">
         is_deleted,
       </if>
@@ -166,6 +170,9 @@
       </if>
       <if test="createDate != null">
         #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
       </if>
       <if test="isDeleted != null">
         #{isDeleted,jdbcType=SMALLINT},
@@ -223,6 +230,9 @@
       <if test="createDate != null">
         create_date = #{createDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
       <if test="isDeleted != null">
         is_deleted = #{isDeleted,jdbcType=SMALLINT},
       </if>
@@ -247,6 +257,7 @@
       reconcile_code = #{reconcileCode,jdbcType=VARCHAR},
       is_receivable = #{isReceivable,jdbcType=SMALLINT},
       create_date = #{createDate,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR},
       is_deleted = #{isDeleted,jdbcType=SMALLINT}
     where account_id = #{accountId,jdbcType=BIGINT}
   </update>
@@ -396,7 +407,7 @@
     name_id, name, audit_status,
     audit_date, operator_id, operator_name,
     reconcile_id, reconcile_code, is_receivable,
-    create_date, is_deleted)
+    create_date, remark, is_deleted)
     values
     <foreach item="item" collection="list" separator=",">
       (#{ACCOUNT_CODE('JZ'), #{item.companyId,jdbcType=BIGINT}, #{item.waybillId,jdbcType=BIGINT},
@@ -404,7 +415,7 @@
       #{item.nameId,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, #{item.auditStatus,jdbcType=SMALLINT},
       #{item.auditDate,jdbcType=TIMESTAMP}, #{item.operatorId,jdbcType=BIGINT}, #{item.operatorName,jdbcType=VARCHAR},
       #{item.reconcileId,jdbcType=BIGINT}, #{item.reconcileCode,jdbcType=VARCHAR}, #{item.isReceivable,jdbcType=SMALLINT},
-      #{item.createDate,jdbcType=TIMESTAMP}, #{item.isDeleted,jdbcType=SMALLINT})
+      #{item.createDate,jdbcType=TIMESTAMP}, #{item.remark,jdbcType=VARCHAR}, #{item.isDeleted,jdbcType=SMALLINT})
     </foreach>
   </insert>
   <update id="updateBatch" parameterType="java.util.List">
@@ -458,6 +469,9 @@
         </if>
         <if test="item.createDate != null">
           create_date = #{item.createDate,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.remark != null">
+          remark = #{item.remark,jdbcType=VARCHAR},
         </if>
         <if test="item.isDeleted != null">
           is_deleted = #{item.isDeleted,jdbcType=SMALLINT},
