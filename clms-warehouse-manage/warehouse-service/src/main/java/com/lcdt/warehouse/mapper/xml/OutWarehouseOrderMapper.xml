@@ -35,8 +35,6 @@
         <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
     </resultMap>
 
-    <resultMap id="BaseResultMapDto" type="com.lcdt."
-
     <sql id="BaseSelectFields">
         outorder_id, out_plan_id, outorder_no, order_status, group_id, group_name,
         contract_no, purchase_no, customer_id, customer_name, customer_contact_name, customer_contact_phone,
