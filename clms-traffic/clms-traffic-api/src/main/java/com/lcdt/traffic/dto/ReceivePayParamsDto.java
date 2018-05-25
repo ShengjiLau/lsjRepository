@@ -17,9 +17,6 @@ public class ReceivePayParamsDto implements java.io.Serializable {
     @ApiModelProperty(value = "收付款方名称")
     private String receivAndPayName;
 
-    @ApiModelProperty(value = "收付款方ID，全部为0")
-    private Long nameId;
-
     @ApiModelProperty(value = "日期始,格式：2018-01-02")
     private String createBegin;
 
@@ -87,14 +84,6 @@ public class ReceivePayParamsDto implements java.io.Serializable {
 
     public void setReceivAndPayName(String receivAndPayName) {
         this.receivAndPayName = receivAndPayName;
-    }
-
-    public Long getNameId() {
-        return nameId;
-    }
-
-    public void setNameId(Long nameId) {
-        this.nameId = nameId;
     }
 
     public String getCreateBegin() {
