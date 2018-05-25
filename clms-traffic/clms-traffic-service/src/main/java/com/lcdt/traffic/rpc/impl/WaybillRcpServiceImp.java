@@ -6,7 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
-import com.lcdt.traffic.dao.WaybillMapper;
+import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.notify.WaybillSenderNotify;
@@ -18,6 +18,7 @@ import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.util.ClmsBeanUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
@@ -43,11 +44,136 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     @Autowired
     private SplitGoodsService splitGoodsService;
 
+    @Autowired
+    private WaybillItemsMapper waybillItemsMapper;
+    @Autowired
+    private WaybillTransferRecordMapper waybillTransferRecordMapper;
+
     @Reference
     private CustomerRpcService customerRpcService;
 
     @Reference
     private CompanyService companyService;
+
+    @Autowired
+    private OwnVehicleMapper ownVehicleMapper;
+
+    @Autowired
+    private OwnDriverMapper ownDriverMapper;
+
+    public Waybill addWaybill(WaybillDto waybillDto) {
+        int result = 0;
+        Waybill waybill = new Waybill();
+        BeanUtils.copyProperties(waybillDto, waybill);
+
+        //计划传过来，判断对应运单有几条数据，然后生成运单编码
+        if (waybill.getWaybillPlanId() != null && waybill.getWaybillPlanId() > 0) {
+            Map map = new HashMap();
+            map.put("companyId", waybill.getCompanyId());
+            map.put("waybillPlanId", waybill.getWaybillPlanId());
+            map.put("noCancel","123");
+            List<Waybill> list = waybillMapper.selectWaybillByPlanId(map);
+            if (list != null) {
+                waybill.setWaybillCode(waybill.getWaybillCode() + "-" + (list.size() + 1));
+            } else {
+                waybill.setWaybillCode(waybill.getWaybillCode() + "-1");
+            }
+        }
+
+        //判断运单编码是否存在（相同企业下的运单编码不能重复）
+        if (null != waybill.getWaybillCode() && !("").equals(waybill.getWaybillCode())) {
+            if (isExistWaybillByCodeAndCompanyId(waybill.getWaybillCode(), waybill.getCompanyId())) {
+                throw new RuntimeException("运单编号已存在!");
+            }
+        }
+
+        if (waybill.getCarrierCompanyId() != null) {
+            if (waybill.getCompanyId().equals(waybill.getCarrierCompanyId())) {
+                Company carrierCompany = companyService.selectById(waybill.getCarrierCompanyId());
+                if (carrierCompany != null) {
+                    waybill.setCarrierCompanyName(carrierCompany.getFullName());
+                }
+            } else {
+                //设置承运商名字在本企业的客户名称
+                Customer carrierCustomer = customerRpcService.queryCustomer(waybill.getCompanyId(), waybill.getCarrierCompanyId());
+                if (carrierCustomer != null && carrierCustomer.getCustomerName() != null) {
+                    waybill.setCarrierCompanyName(carrierCustomer.getCustomerName());
+                }
+            }
+        }
+
+        //判断前端车辆是否输入还是选择
+        if(waybill.getVechicleId()==null||waybill.getVechicleId().equals("")){
+            OwnVehicle ownVehicle=new OwnVehicle();
+            ownVehicle.setVehicleNum(waybill.getVechicleNum());
+            ownVehicle.setCompanyId(waybill.getCompanyId());
+            OwnVehicle vehicle=ownVehicleMapper.selectAddWaybillVehicleNum(ownVehicle);
+            if(vehicle!=null){
+                waybill.setVechicleId(vehicle.getOwnVehicleId());
+            }else{
+                ownVehicle.setCreateId(waybill.getCreateId());
+                ownVehicle.setCreateName(waybill.getCreateName());
+                ownVehicle.setAffiliatedCompany(waybill.getCarrierCompanyName());
+                ownVehicle.setVehicleCategory((short)0);
+                ownVehicleMapper.insert(ownVehicle);
+                waybill.setVechicleId(ownVehicle.getOwnVehicleId());
+            }
+        }
+        //判断前端司机输入还是选择
+        if(waybill.getDriverId()==null||waybill.getDriverId().equals("")){
+            OwnDriver ownDriver=new OwnDriver();
+            ownDriver.setCompanyId(waybill.getCompanyId());
+            ownDriver.setDriverPhone(waybill.getDriverPhone());
+            OwnDriver driver=ownDriverMapper.selectByAddWaybillDriverPhone(ownDriver);
+            if(driver!=null){
+                waybill.setDriverId(driver.getDriverId());
+                waybill.setDriverName(driver.getDriverName());
+            }else{
+                ownDriver.setDriverCategory((short)0);
+                ownDriver.setCreateId(waybill.getCreateId());
+                ownDriver.setCreateName(waybill.getCreateName());
+                ownDriverMapper.insert(ownDriver);
+                waybill.setDriverId(ownDriver.getDriverId());
+            }
+
+        }
+        //新增运单
+        result += waybillMapper.insert(waybill);
+        //运单货物详细
+        if (waybillDto.getWaybillItemsDtoList() != null && waybillDto.getWaybillItemsDtoList().size() > 0) {
+            List<WaybillItems> waybillItemsList = new ArrayList<WaybillItems>();
+            for (int i = 0; i < waybillDto.getWaybillItemsDtoList().size(); i++) {
+                WaybillItems waybillItems = new WaybillItems();
+                BeanUtils.copyProperties(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
+                waybillItems.setCreateId(waybill.getCreateId());
+                waybillItems.setCreateName(waybill.getCreateName());
+                waybillItems.setCompanyId(waybill.getCompanyId());
+                waybillItems.setWaybillId(waybill.getId());
+                waybillItemsList.add(waybillItems);
+            }
+            //运单货物详细批量插入
+            result += waybillItemsMapper.insertForBatch(waybillItemsList);
+        }
+        //运单生成时添加一条派车记录
+        if(waybill.getId()!=null){
+            WaybillTransferRecord  waybillTransferRecord=new WaybillTransferRecord();
+            waybillTransferRecord.setWaybillId(waybill.getId());
+            waybillTransferRecord.setVechicleId(waybill.getVechicleId());
+            waybillTransferRecord.setVechicleNum(waybill.getVechicleNum());
+            waybillTransferRecord.setDriverId(waybill.getDriverId());
+            waybillTransferRecord.setDriverName(waybill.getDriverName());
+            waybillTransferRecord.setDriverPhone(waybill.getDriverPhone());
+            waybillTransferRecord.setCompanyId(waybill.getCompanyId());
+            waybillTransferRecord.setCarrierCompanyId(waybill.getCarrierCompanyId());
+            waybillTransferRecord.setCreateId(waybill.getCreateId());
+            waybillTransferRecord.setCreateName(waybill.getCreateName());
+
+            waybillTransferRecordMapper.insert(waybillTransferRecord);
+        }
+
+        waybill = waybillMapper.selectByPrimaryKey(waybill.getId());
+        return waybill;
+    }
 
     @Override
     public PageInfo queryOwnWaybillList(WaybillOwnListParamsDto dto) {
@@ -405,6 +531,18 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             waybillSenderNotify.customerCancelSendNotify(waybillIds, userId);
         }
 
+    }
+
+    private boolean isExistWaybillByCodeAndCompanyId(String waybillCode, Long companyId) {
+        Map map = new HashMap();
+        map.put("waybillCode", waybillCode);
+        map.put("companyId", companyId);
+        List<Waybill> waybillList = waybillMapper.selectByCodeAndCompanyId(map);
+        if (waybillList != null && waybillList.size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

@@ -3,6 +3,8 @@ package com.lcdt.warehouse.mapper;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+import com.lcdt.warehouse.dto.DistributionRecordsDto;
+import com.lcdt.warehouse.dto.InWarehouseOrderDto;
 import com.lcdt.warehouse.dto.InWarehouseOrderSearchParamsDto;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
 import org.apache.ibatis.annotations.Param;
@@ -27,11 +29,27 @@ public interface InWarehouseOrderMapper extends BaseMapper<InWarehouseOrder> {
     int insertInWarehouseOrder(InWarehouseOrder inWarehouseOrder);
 
     /**
+     * 根据id查询详细
+     * @param companyId
+     * @param inorderId
+     * @return
+     */
+    InWarehouseOrderDto selectInWarehouseOrder(@Param("companyId") Long companyId,@Param("inorderId") Long inorderId);
+
+    /**
      * 列表查询
      * @param page
      * @param params
      * @return
      */
-    List<InWarehouseOrder> selectByCondition(Pagination page, InWarehouseOrderSearchParamsDto params);
+    List<InWarehouseOrderDto> selectByCondition(Pagination page, InWarehouseOrderSearchParamsDto params);
+
+    /**
+     * 根据companyId和planId查询配仓信息
+     * @param companyId
+     * @param planId
+     * @return
+     */
+    List<DistributionRecordsDto> selectDisRecords(@Param("companyId") Long companyId,@Param("planId") Long planId);
 
 }

@@ -1,15 +1,26 @@
 package com.lcdt.warehouse.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.items.dto.GoodsListParamsDto;
+import com.lcdt.items.model.GoodsInfoDao;
+import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
+import com.lcdt.warehouse.entity.GoodsInfo;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.lcdt.warehouse.entity.Inventory;
+import com.lcdt.warehouse.factory.InventoryFactory;
+import com.lcdt.warehouse.mapper.GoodsInfoMapper;
 import com.lcdt.warehouse.mapper.InventoryMapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.lcdt.warehouse.service.InventoryLogService;
 import com.lcdt.warehouse.service.InventoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,34 +43,113 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     @Autowired
     InventoryMapper inventoryMapper;
 
+    @Reference()
+    SubItemsInfoService goodsService;
+
+    @Autowired
+    private InventoryLogService logService;
+
     private Logger logger = LoggerFactory.getLogger(InventoryServiceImpl.class);
 
-    //分页查询
-    public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto) {
+
+    //分页查询 库存列表
+    public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto,Long companyId) {
+        List<Long> goodsId = queryGoodsIds(inventoryQueryDto, companyId);
         Page<Inventory> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
-        return page.setRecords(inventoryMapper.selectInventoryList(page, InventoryQueryDto.dtoToDataBean(inventoryQueryDto)));
+        List<Inventory> inventories = inventoryMapper.selectInventoryListByqueryDto(goodsId, page, inventoryQueryDto);
+        queryGoodsInfo(companyId, inventories);
+        return page.setRecords(inventories);
+    }
+
+    private void queryGoodsInfo(Long companyId, List<Inventory> inventories) {
+        ArrayList<Long> longs = new ArrayList<>();
+        for (Inventory inventory : inventories) {
+            longs.add(inventory.getOriginalGoodsId());
+        }
+        GoodsListParamsDto dto = new GoodsListParamsDto();
+        dto.setGoodsIds(longs);
+        dto.setCompanyId(companyId);
+        PageInfo<GoodsInfoDao> listPageInfo = goodsService.queryByCondition(dto);
+        List<GoodsInfoDao> list = listPageInfo.getList();
+        for (Inventory inventory : inventories) {
+            for (GoodsInfoDao goodsInfoDao : list) {
+                if (inventory.getOriginalGoodsId().equals(goodsInfoDao.getGoodsId())) {
+                    inventory.setGoods(goodsInfoDao);
+                }
+            }
+        }
+    }
+
+    private List<Long> queryGoodsIds(InventoryQueryDto inventoryQueryDto, Long companyId) {
+        GoodsListParamsDto dto = new GoodsListParamsDto();
+        dto.setClassifyName(inventoryQueryDto.getGoodsCategory());
+        dto.setGoodsName(inventoryQueryDto.getGoodsName());
+        dto.setCompanyId(companyId);
+        dto.setGoodsCode(inventoryQueryDto.getGoodsCode());
+        dto.setBarCode(inventoryQueryDto.getGoodsBarCode());
+        return goodsService.queryGoodsIdsByCondition(dto);
     }
 
 
     /**
-     * 出库操作
+     * 入库操作
+     *
      * @param goods
      * @param order
      */
     @Transactional(rollbackFor = Exception.class)
-    public void putInventory(List<InorderGoodsInfo> goods,InWarehouseOrder order) {
+    public void putInventory(List<InorderGoodsInfo> goods, InWarehouseOrder order) {
         Assert.notNull(goods, "入库货物不能为空");
-        logger.info("入库操作开始 入库单：{}",order);
+        logger.info("入库操作开始 入库单：{}", order);
         for (InorderGoodsInfo good : goods) {
-            addInventory(InventoryFactory.createInventory(order,good));
+
+            Inventory inventory = InventoryFactory.createInventory(order, good);
+            GoodsInfo goodsInfo = saveGoodsInfo(good);
+            inventory.setGoodsId(goodsInfo.getGoodsId());
+            //写入库流水
+            logService.saveInOrderLog(order, inventory);
+            addInventory(inventory);
         }
+    }
+
+    @Override
+    public Inventory modifyInventoryPrice(Long inventoryId, Float newprice) {
+        Inventory inventory = baseMapper.selectById(inventoryId);
+        if (inventory == null) {
+            return new Inventory();
+        }
+        inventory.setInventoryPrice(newprice);
+        baseMapper.updateById(inventory);
+        return inventory;
+    }
+
+    @Override
+    public Inventory modifyInventoryRemark(Long inventoryId, String remark) {
+        Inventory inventory = baseMapper.selectById(inventoryId);
+        if (inventory == null) {
+            return new Inventory();
+        }
+        inventory.setCostRemark(remark);
+        baseMapper.updateById(inventory);
+        return inventory;
+    }
+
+    @Autowired
+    private GoodsInfoMapper goodsInfoMapper;
+
+    public GoodsInfo saveGoodsInfo(InorderGoodsInfo inOrdergoodsInfo) {
+        GoodsInfo goodsInfo = new GoodsInfo();
+        BeanUtils.copyProperties(inOrdergoodsInfo, goodsInfo);
+        goodsInfo.setGoodsId(null);
+        goodsInfoMapper.insert(goodsInfo);
+        return goodsInfo;
     }
 
     /**
      * 出库操作
      */
     @Transactional(rollbackFor = Exception.class)
-    public void outInventory(){
+    public void outInventory() {
 
     }
 
@@ -72,20 +162,26 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
      */
     public Inventory addInventory(Inventory inventory) {
         List<Inventory> inventories = querySameInventory(inventory);
-        if (inventories.size() == 0) {
+        if (inventories.isEmpty()) {
             //没有库存 新增
-            logger.info("入库 新增库存:{}",inventory);
+            logger.info("入库 新增库存:{}", inventory);
             inventoryMapper.insert(inventory);
             return inventory;
-        } else {
-            Inventory existInventory = inventories.get(0);
-            existInventory.setInvertoryNum(existInventory.getInvertoryNum() + inventory.getInvertoryNum());
-            inventoryMapper.updateById(existInventory);
-            logger.info("入库 更新库存数量：{}",existInventory);
-            return existInventory;
         }
+        Inventory existInventory = inventories.get(0);
+        existInventory.setInvertoryNum(existInventory.getInvertoryNum() + inventory.getInvertoryNum());
+
+        updateInventoryPrice(existInventory,inventory);
+        inventoryMapper.updateById(existInventory);
+        logger.info("入库 更新库存数量：{}", existInventory);
+        return existInventory;
     }
 
+
+
+    private void updateInventoryPrice(Inventory existInventory, Inventory inventory) {
+        //EMPTY
+    }
 
 
     /**
@@ -95,43 +191,11 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
      * @return
      */
     public List<Inventory> querySameInventory(Inventory inventory) {
-        List<Inventory> inventories = inventoryMapper.selectInventoryList(null,inventory);
+        List<Inventory> inventories = inventoryMapper.selectInventoryList(null, inventory);
         if (inventories == null) {
             return new ArrayList<>();
         }
         return inventories;
     }
 
-    static class InventoryFactory {
-
-        private static Logger logger = LoggerFactory.getLogger(InventoryFactory.class);
-
-        /**
-         * 入库单 入库生成库存
-         * @param order
-         * @param goodsInfo
-         * @return
-         */
-        static Inventory createInventory(InWarehouseOrder order,InorderGoodsInfo goodsInfo) {
-            Assert.notNull(order,"新建库存，入库单不能为空");
-            Inventory inventory = new Inventory();
-            inventory.setCompanyId(order.getCompanyId());
-            inventory.setGoodsId(goodsInfo.getGoodsId());
-            inventory.setInvertoryNum(goodsInfo.getInHouseAmount() * goodsInfo.getUnitData());
-            inventory.setWareHouseId(order.getWarehouseId());
-            inventory.setStorageLocationCode(goodsInfo.getStrogeLocationCode());
-            inventory.setStorageLocationId(goodsInfo.getStrogeLocationId());
-            inventory.setCustomerName(order.getCustomerName());
-            inventory.setWarehouseName(order.getWarehouseName());
-            inventory.setBatch(goodsInfo.getBatch());
-            inventory.setCustomerId(order.getCustomerId());
-            inventory.setCustomerName(order.getCustomerName());
-
-            if (logger.isDebugEnabled()) {
-                logger.debug("create inventory from inordergoods :{} ",inventory.toString());
-            }
-
-            return inventory;
-        }
-    }
 }

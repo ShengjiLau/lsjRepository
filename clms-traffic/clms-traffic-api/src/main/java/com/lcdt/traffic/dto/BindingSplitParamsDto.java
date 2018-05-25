@@ -1,10 +1,8 @@
 package com.lcdt.traffic.dto;
 
-import com.lcdt.converter.ResponseData;
-import com.lcdt.traffic.model.SnatchGoods;
 import com.lcdt.traffic.model.TransportWayItems;
-import com.lcdt.traffic.model.WaybillPlan;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -15,6 +13,12 @@ public class BindingSplitParamsDto implements java.io.Serializable{
 
     private Long waybillPlanId; //计划ID
     private Long snatchGoodsId; // 抢单ID
+
+    private String vehicleType;//车辆类型
+
+    private String vehicleLength;//车辆长度
+
+    private BigDecimal vehicleLoad;//车辆载重
 
     private List<TransportWayItems> transportWayItemsList;//运输项目
 
@@ -63,5 +67,29 @@ public class BindingSplitParamsDto implements java.io.Serializable{
 
     public void setCarrierCompanyId(Long carrierCompanyId) {
         this.carrierCompanyId = carrierCompanyId;
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public String getVehicleLength() {
+        return vehicleLength;
+    }
+
+    public void setVehicleLength(String vehicleLength) {
+        this.vehicleLength = vehicleLength;
+    }
+
+    public BigDecimal getVehicleLoad() {
+        return vehicleLoad;
+    }
+
+    public void setVehicleLoad(BigDecimal vehicleLoad) {
+        this.vehicleLoad = vehicleLoad;
     }
 }

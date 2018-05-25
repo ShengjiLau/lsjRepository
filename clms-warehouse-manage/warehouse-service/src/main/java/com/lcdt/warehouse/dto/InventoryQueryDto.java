@@ -4,11 +4,14 @@ import com.lcdt.warehouse.entity.Inventory;
 import io.swagger.annotations.ApiModelProperty;
 
 public class InventoryQueryDto extends PageQueryDto {
+
+    private Long companyId;
+
     @ApiModelProperty(value = "仓库id")
     private Long wareHouseId;
 
     @ApiModelProperty(value = "库位")
-    private String strogeLocationCode;
+    private String storageLocationCode;
 
     @ApiModelProperty(value = "批次")
     private String batch;
@@ -19,6 +22,68 @@ public class InventoryQueryDto extends PageQueryDto {
     @ApiModelProperty(value = "客户id")
     private Long customerId;
 
+    @ApiModelProperty(value = "商品名称")
+    private String goodsName;
+
+    @ApiModelProperty(value = "商品条码")
+    private String goodsBarCode;
+
+    @ApiModelProperty(value = "商品编码")
+    private String goodsCode;
+
+    @ApiModelProperty(value = "商品分类")
+    private String goodsCategory;
+
+    private Long originalGoodsId;
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
+
+    public Long getOriginalGoodsId() {
+        return originalGoodsId;
+    }
+
+    public void setOriginalGoodsId(Long originalGoodsId) {
+        this.originalGoodsId = originalGoodsId;
+    }
+
+    public String getGoodsCategory() {
+        return goodsCategory;
+    }
+
+    public void setGoodsCategory(String goodsCategory) {
+        this.goodsCategory = goodsCategory;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public String getGoodsBarCode() {
+        return goodsBarCode;
+    }
+
+    public void setGoodsBarCode(String goodsBarCode) {
+        this.goodsBarCode = goodsBarCode;
+    }
+
+    public String getGoodsCode() {
+        return goodsCode;
+    }
+
+    public void setGoodsCode(String goodsCode) {
+        this.goodsCode = goodsCode;
+    }
+
     public Long getWareHouseId() {
         return wareHouseId;
     }
@@ -27,12 +92,12 @@ public class InventoryQueryDto extends PageQueryDto {
         this.wareHouseId = wareHouseId;
     }
 
-    public String getStrogeLocationCode() {
-        return strogeLocationCode;
+    public String getStorageLocationCode() {
+        return storageLocationCode;
     }
 
-    public void setStrogeLocationCode(String strogeLocationCode) {
-        this.strogeLocationCode = strogeLocationCode;
+    public void setStorageLocationCode(String strogeLocationCode) {
+        this.storageLocationCode = strogeLocationCode;
     }
 
     public String getBatch() {
@@ -65,7 +130,7 @@ public class InventoryQueryDto extends PageQueryDto {
             return inventory;
         }
         inventory.setWareHouseId(dto.getWareHouseId());
-        inventory.setStorageLocationCode(dto.getStrogeLocationCode());
+        inventory.setStorageLocationCode(dto.getStorageLocationCode());
         inventory.setGoodsId(dto.getGoodsId());
         inventory.setCustomerId(dto.getCustomerId());
         return inventory;
@@ -75,7 +140,7 @@ public class InventoryQueryDto extends PageQueryDto {
     public String toString() {
         return "InventoryQueryDto{" +
                 "wareHouseId=" + wareHouseId +
-                ", strogeLocationCode=" + strogeLocationCode +
+                ", strogeLocationCode=" + storageLocationCode +
                 ", batch='" + batch + '\'' +
                 ", goodsId='" + goodsId + '\'' +
                 '}';

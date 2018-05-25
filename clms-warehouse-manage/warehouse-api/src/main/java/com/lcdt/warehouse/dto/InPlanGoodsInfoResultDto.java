@@ -9,9 +9,9 @@ public class InPlanGoodsInfoResultDto {
     private Long goodsId;
     private Float planGoodsNum; //计划数量
     private String remark; //备注
-    private Integer inHousePrice; //入库价
+    private Float inHousePrice; //入库价
     private String unit; //单位
-    private int unitData; //换算关系
+    private Integer unitData; //换算关系
     private String goodsName;
     private String goodsClassify;
     private String goodsSpec;
@@ -52,11 +52,11 @@ public class InPlanGoodsInfoResultDto {
         this.remark = remark;
     }
 
-    public Integer getInHousePrice() {
+    public Float getInHousePrice() {
         return inHousePrice;
     }
 
-    public void setInHousePrice(Integer inHousePrice) {
+    public void setInHousePrice(Float inHousePrice) {
         this.inHousePrice = inHousePrice;
     }
 
@@ -68,11 +68,11 @@ public class InPlanGoodsInfoResultDto {
         this.unit = unit;
     }
 
-    public int getUnitData() {
+    public Integer getUnitData() {
         return unitData;
     }
 
-    public void setUnitData(int unitData) {
+    public void setUnitData(Integer unitData) {
         this.unitData = unitData;
     }
 

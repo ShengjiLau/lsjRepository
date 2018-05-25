@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class InventoryLogQueryDto extends PageQueryDto{
 
+
     private Date since;
 
     private Date until;
@@ -21,6 +22,26 @@ public class InventoryLogQueryDto extends PageQueryDto{
     private String goodsbarcode;
 
     private String businessNo;
+
+    private Long companyId;
+
+    private Long inventoryId;
+
+    public Long getInventoryId() {
+        return inventoryId;
+    }
+
+    public void setInventoryId(Long inventoryId) {
+        this.inventoryId = inventoryId;
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
+    }
 
     public Date getSince() {
         return since;

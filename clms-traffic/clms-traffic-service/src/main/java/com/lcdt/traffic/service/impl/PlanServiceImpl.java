@@ -259,13 +259,16 @@ public class PlanServiceImpl implements PlanService {
                     Float amount = planDetail.getPlanAmount()+dto.getAdjustAmount(); //计划量+调整量
                     planDetail.setPlanAmount(amount);
                     planDetail.setRemainderAmount(planDetail.getRemainderAmount()+dto.getAdjustAmount()); //剩余数量+调整量
-                    planDetail.setFreightTotal(amount*planDetail.getFreightPrice());
+                    if(planDetail.getFreightPrice()!=null)
+                    {
+                        planDetail.setFreightTotal(amount*planDetail.getFreightPrice());
+                    }
                     planDetailList.add(planDetail);
                 }
             }
 
             if(flag){
-                throw new WaybillPlanException("调整数量不能小于剩余数量！");
+                throw new WaybillPlanException("修改后计划量需大于已派单数量！");
             }
 
             if(planDetailList!=null && planDetailList.size()>0) {

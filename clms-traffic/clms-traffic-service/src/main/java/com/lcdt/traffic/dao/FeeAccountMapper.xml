@@ -22,6 +22,7 @@
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
   </resultMap>
   <resultMap id="BaseResultDtoMap" type="com.lcdt.traffic.web.dto.FeeAccountDto" extends="BaseResultMap">
+    <result column="exchange-count" jdbcType="INTEGER" property="exchangeCount" />
     <result column="freight_total" jdbcType="REAL" property="freightTotal" />
     <result column="other_fee_total" jdbcType="REAL" property="otherFeeTotal" />
     <result column="fee_total" jdbcType="REAL" property="feeTotal" />
@@ -267,13 +268,30 @@
     and is_deleted = 0
     order by account_id desc
   </select>
-  <select id="selectFeeAccountDetail" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
+  <select id="selectWaybillFeeAccountDetail" parameterType="java.util.Map" resultMap="BaseResultDtoMap">
     select <include refid="Base_Column_List"/>
     from t_fee_account
     where waybill_id = #{waybillId,jdbcType=BIGINT}
     and is_receivable = #{isReceivable,jdbcType=SMALLINT}
     and is_deleted = 0
     order by account_id desc
+  </select>
+  <select id="getWaybillReconcileCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(*)
+    from t_fee_account fa,t_waybill w
+    where fa.waybill_id=w.id
+    and fa.is_deleted=0
+    and fa.reconcile_id is not null
+    and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
+    and w.id=#{waybillId,jdbcType=BIGINT}
+  </select>
+  <select id="selectFeeAccountDetail" parameterType="java.lang.Long" resultMap="BaseResultDtoMap">
+    select <include refid="Base_Column_List"/>,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.fee_property='运费' and ff.is_deleted=0) freight_total,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.fee_property!='运费' and ff.is_deleted=0) other_fee_total,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.is_deleted=0) fee_total
+    from t_fee_account fa
+    where fa.account_id = #{accountId,jdbcType=BIGINT}
   </select>
   <sql id="select_finance_condition">
     <if test="reconcileStatus!=null and reconcileStatus == 1">
@@ -317,7 +335,8 @@
     select <include refid="Base_Column_List"/>,
     (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.fee_property='运费' and ff.is_deleted=0) freight_total,
     (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.fee_property!='运费' and ff.is_deleted=0) other_fee_total,
-    (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.is_deleted=0) fee_total
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.is_deleted=0) fee_total,
+    (select count(*) from t_fee_exchange fe where fe.reconcile_id = fa.reconcile_id) exchangeCount
     from t_fee_account fa
     <where>
       fa.is_receivable = #{isReceivable,jdbcType=SMALLINT}
@@ -357,7 +376,7 @@
       a.name,
       a.group_id groupId,
       sum(case when f.fee_property='运费' then f.money else 0 end) freightTotal,
-      sum(case when f.fee_property!='运费' then f.money else 0 end) otherFeeTaotal,
+      sum(case when f.fee_property!='运费' then f.money else 0 end) otherFeeTotal,
       sum(f.money) feeTotal,
       group_concat(distinct a.waybill_id) waybillIds,
       group_concat(distinct a.account_id) accountIds
@@ -512,4 +531,30 @@
     where waybill_id = #{waybillId,jdbcType=BIGINT}
     and is_receivable = #{isReceivable,jdbcType=SMALLINT}
   </update>
+
+  <select id="feeAccountGroupByReconcile" parameterType="java.util.Map" resultType="java.util.Map">
+    select
+    group_concat(distinct a.account_id) accountIds,
+    group_concat(distinct a.waybill_id) waybillIds,
+    a.reconcile_id reconcileId,
+    a.reconcile_code reconcileCode,
+    sum(case when f.fee_property='运费' then f.money else 0 end) freightTotal,
+    sum(case when f.fee_property!='运费' then f.money else 0 end) otherFeeTotal,
+    sum(f.money) feeTotal
+    from t_fee_account a,t_fee_flow f
+    where a.account_id=f.account_id
+    and a.is_deleted=0
+    and f.is_deleted=0
+    and f.account_id in
+    <foreach collection="accountIds" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    group by a.reconcile_id
+  </select>
+  <select id="getWaybillIdsByAccountIds" parameterType="java.lang.String" resultType="java.lang.String">
+    select group_concat(distinct waybill_id) waybillIds
+    from t_fee_account
+    where is_deleted=0
+    and FIND_IN_SET(account_id,#{accountIds,jdbcType=VARCHAR})
+  </select>
 </mapper>

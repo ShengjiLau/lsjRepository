@@ -22,6 +22,7 @@ import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.model.FeeExchange;
 import com.lcdt.traffic.model.Reconcile;
 import com.lcdt.traffic.service.ReconcileService;
+import com.lcdt.traffic.util.ConvertStringAndLong;
 import com.lcdt.traffic.web.dto.ReconcileDto;
 
 
@@ -70,7 +71,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 	    for(Reconcile reconcile:reconcileList) {
 		    Reconcile rec = reconcileMapper.selectByPrimaryKey(reconcile.getReconcileId());
 		    //得到记账单id
-		    Long[] acLongId = convertStrToLong(rec.getAccountId());
+		    Long[] acLongId = ConvertStringAndLong.convertStrToLong(rec.getAccountId());
 		    for(Long l:acLongId) {
 			//创建一个记账单 依次放入每条记账单id以及对应的对账单id和对账单号
 			    FeeAccount fa = new FeeAccount();
@@ -94,9 +95,6 @@ public class ReconcileServiceImpl implements ReconcileService {
 	    }
 		}
 
-	
-	
-	
 	/**
 	 * 取消对账单
 	 * 批量取消对账单时也要批量修改相关记账单中的对账单id和reconcileCode,将其设置为空
@@ -104,12 +102,12 @@ public class ReconcileServiceImpl implements ReconcileService {
 	@Override
 	@Transactional
 	public Map<Integer, String> setCancelOk(String reconcileIds) {
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb1 = new StringBuilder();
 		Map<Integer, String> map = new HashMap<Integer, String>();
-		StringBuilder sbs = new StringBuilder();
+		StringBuilder sb2 = new StringBuilder();
 		StringBuilder sb3 = new StringBuilder();
 		
-		Long[] reconcileIdArray = convertStrToLong(reconcileIds);
+		Long[] reconcileIdArray = ConvertStringAndLong.convertStrToLong(reconcileIds);
 		int q1 = 0;
 		int q2 = 0;
 		int w1 = 0;
@@ -118,18 +116,18 @@ public class ReconcileServiceImpl implements ReconcileService {
 			int a = feeExchangeMapper.selectCountFeeExchangeByReconcileId(reconcileIdArray[i]);
 			if (a > 0) {
 				//将已存在收付款记录的对账单id拼接成字符串
-				sb.append(reconcileIdArray[i]);sb.append(",");
+				sb1.append(reconcileIdArray[i]);sb1.append(",");
 			}else {
 				q2 ++;
 				//将不存在收付款记录的对账单id拼接成字符串,dao层执行update set in操作
-				sbs.append(reconcileIdArray[i]);sbs.append(",");
+				sb2.append(reconcileIdArray[i]);sb2.append(",");
 			}
 		}
 			
 		if(q2>0) {
-			q1 = reconcileMapper.cancelByBatch(convertStrToLong(sbs.toString()));
+			q1 = reconcileMapper.cancelByBatch(ConvertStringAndLong.convertStrToLong(sb2.toString()));
 			//获取不存在收付款记录的对账单信息列表
-			List<Reconcile> reconcileList = reconcileMapper.getReconcileListByPk(convertStrToLong(sbs.toString()));
+			List<Reconcile> reconcileList = reconcileMapper.getReconcileListByPk(ConvertStringAndLong.convertStrToLong(sb2.toString()));
 			for(Reconcile reconcile:reconcileList) {
 				//得到所有需要修改的被取消的对账当单对应的记账单进行拼接
 				sb3.append(reconcile.getAccountId());sb3.append(",");
@@ -141,14 +139,14 @@ public class ReconcileServiceImpl implements ReconcileService {
 			}
 		}
 				
-		if (sb.length()>0) {
+		if (sb1.length()>0) {
 			//去掉字符串末尾的","
-		String str2 = sb.substring(0,sb.length()-1);
+		String str2 = sb1.substring(0,sb1.length()-1);
 			map.put(1,str2);
 		}
 		
 		if (sb3.length()>0) {
-			w2=feeAccountMapper.updateReconcileWhenCancel(convertStrToLong(sb3.toString()));
+			w2=feeAccountMapper.updateReconcileWhenCancel(ConvertStringAndLong.convertStrToLong(sb3.toString()));
 		}
 		logger.debug("不存在收付款记录的对账单数量为:"+q2);
 		logger.debug("应该修改的记账单数量为:"+w1);
@@ -193,7 +191,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 		List<FeeExchange> feeExchangelist = new ArrayList<FeeExchange>();
 		//批量获取一篮子对账单下的一篮子收付款记录
 		if (sbd.length() > 0) {
-			Long[] reconcileIds = convertStrToLong(sbd.toString());
+			Long[] reconcileIds = ConvertStringAndLong.convertStrToLong(sbd.toString());
 			feeExchangelist = feeExchangeMapper.getFeeExchangesByBatch(reconcileIds);
 		}
 		if (null != feeExchangelist && feeExchangelist.size() > 0) {
@@ -234,36 +232,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 	
 	
 	
-	/**
-	 * 此方法用于将一定格式的String字符串转化为规定格式的Long类型数组
-	 * @param String
-	 * @return longId
-	 */
-	public Long[] convertStrToLong(String str) {
-		String [] ss = str.split(",");
-		Long [] lids = new Long[ss.length];
-		for(int i = 0;i < ss.length;i++) {
-			lids[i] = Long.valueOf(ss[i]);
-		}
-		return lids;	
-	}
 	
-	/**
-	 * 这个方法用于将Long类型数组转化为规定格式的String字符串
-	 * @param longId
-	 * @return String
-	 */
-	public String convertLoToStr(Long[] longId) {
-		StringBuilder sbd = new StringBuilder();
-		for(Long l:longId) {
-			sbd.append(l);sbd.append(",");
-		}
-		sbd.substring(0,sbd.length() - 1);
-		
-		return sbd.toString();
-	}
-
-
 
 
 

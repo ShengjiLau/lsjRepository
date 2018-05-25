@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.aliyun.openservices.ons.api.*;
 import com.lcdt.aliyunmq.AliyunConfigProperties;
+import com.lcdt.notify.model.Timeline;
 import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.config.AliyunMqConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ public class ClmsNotifyProducer {
     @Autowired
     AliyunConfigProperties mqConfig;
 
-    private List<Message> messages = new ArrayList<>();
 
     public void sendNotifyEvent(TrafficStatusChangeEvent event) {
 
@@ -40,9 +40,24 @@ public class ClmsNotifyProducer {
 
             }
         });
-
     }
 
 
+
+    public void noteRouter(Timeline event) {
+        Message message = new Message();
+        message.setTopic(mqConfig.getTopic());
+        message.setBody(JSONObject.toJSONBytes(event, SerializerFeature.BrowserCompatible));
+        producer.sendAsync(message, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+            }
+
+            @Override
+            public void onException(OnExceptionContext context) {
+
+            }
+        });
+    }
 
 }

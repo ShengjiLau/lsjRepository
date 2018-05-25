@@ -295,4 +295,17 @@
     set vehicle_driver_id = #{vehicleDriverId,jdbcType=BIGINT}
     where own_vehicle_id = #{ownVehicleId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectAddWaybillVehicleNum" resultMap="BaseResultMap" parameterType="com.lcdt.traffic.model.OwnVehicle">
+        select own_vehicle_id, affiliated_company, vehicle_num, vehicle_trailer_num, vehicle_category,
+    vehicle_type, vehicle_length, vehicle_load, vehicle_driver_phone, vehicle_driver_name,vehicle_driver_id,
+    vehicle_brand, vehicle_specifications, vehicle_remark, vehicle_vin, vehicle_engine_number,
+    chassis_number, vehicle_axle_number, vehicle_wheelbase, vehicle_tyre_amount, energy_type,
+    swept_volume, vehicle_color, vehicle_factory_date, vehicle_buying_date, vehicle_annual_date,
+    vehicle_two_level_period, vehicle_insurance_company, vehicle_policy_num, vehicle_insurance_expiry_date,
+    vehicle_headerstock_photo1,vehicle_headerstock_photo2,vehicle_headerstock_photo3,
+    vehicle_tailstock_photo1, vehicle_tailstock_photo2,vehicle_tailstock_photo3, vehicle_tyre_spec, group_id,company_id
+    from t_own_vehicle
+    where vehicle_num = #{vehicleNum,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}
+  </select>
 </mapper>

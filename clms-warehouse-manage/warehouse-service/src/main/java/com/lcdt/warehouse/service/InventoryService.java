@@ -19,8 +19,11 @@ import java.util.List;
  */
 public interface InventoryService extends IService<Inventory> {
 
-    Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto);
+    Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto,Long companyId);
 
     void putInventory(List<InorderGoodsInfo> goods, InWarehouseOrder order);
 
+    Inventory modifyInventoryPrice(Long inventoryId,Float newprice);
+
+    Inventory modifyInventoryRemark(Long inventoryId,String remark);
 }

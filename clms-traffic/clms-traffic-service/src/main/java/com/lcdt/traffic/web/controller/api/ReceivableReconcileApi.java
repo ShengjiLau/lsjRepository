@@ -80,7 +80,7 @@ public class ReceivableReconcileApi {
 	
 	
 	@PostMapping("/cancel")
-	@ApiOperation("取消订单,receivable_reconcile_cancel")
+	@ApiOperation("取消对账单,receivable_reconcile_cancel")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receivable_reconcile_cancel')")
 	public JSONObject cancelReconcile(@ApiParam(value="一个或多个对账单id,多个时用','隔开",required=true)@RequestParam String reconcileIds) {
 		JSONObject jsonObject =new JSONObject();	

@@ -1,15 +1,25 @@
 package com.lcdt.warehouse.utils;
 
 public class ResponseMessage<T> {
-    T data;
-    Integer result;
 
-    public Integer getResult() {
-        return result;
+
+    private T data;
+    private Integer code;
+
+    private String message;
+
+    public ResponseMessage(T data, Integer code, String message) {
+        this.data = data;
+        this.code = code;
+        this.message = message;
     }
 
-    public void setResult(Integer result) {
-        this.result = result;
+    public Integer getCode() {
+        return code;
+    }
+
+    public void setCode(Integer code) {
+        this.code = code;
     }
 
     public T getData() {

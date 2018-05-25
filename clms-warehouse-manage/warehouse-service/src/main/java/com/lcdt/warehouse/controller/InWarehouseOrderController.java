@@ -5,23 +5,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.User;
-import com.lcdt.warehouse.dto.InWarehouseOrderDto;
-import com.lcdt.warehouse.dto.InWarehouseOrderSearchParamsDto;
-import com.lcdt.warehouse.dto.ModifyInOrderStatusParamsDto;
-import com.lcdt.warehouse.dto.PageBaseDto;
+import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.vo.ConstantVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -41,13 +36,14 @@ public class InWarehouseOrderController {
 
     @ApiOperation("入库单新增")
     @RequestMapping(value = "/order", method = RequestMethod.POST)
-    public JSONObject inWarehouseOrder(InWarehouseOrderDto params) {
+    public JSONObject inWarehouseOrder(@RequestBody InWarehouseOrderDto params, @ApiParam(value = "操作类型，0-保存，1-入库", required = true)@RequestParam int operationType) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User user = SecurityInfoGetter.getUser();
         params.setCompanyId(companyId);
         params.setCreateId(user.getUserId());
         params.setCreateName(user.getRealName());
         params.setCreateDate(new Date());
+        params.setInOrderStatus(1);
         int result = inWarehouseOrderService.addInWarehouseOrder(params);
         JSONObject jsonObject = new JSONObject();
         if (result > 0) {
@@ -69,18 +65,26 @@ public class InWarehouseOrderController {
         return pageBaseDto;
     }
 
-    @ApiOperation("入库单入库")
-    @RequestMapping(value = "/order/storage/{inorderId}", method = RequestMethod.PATCH)
-    public JSONObject inStorage(@PathVariable long inorderId){
-        ModifyInOrderStatusParamsDto params=new ModifyInOrderStatusParamsDto();
-        User user=SecurityInfoGetter.getUser();
-        params.setInorderId(inorderId);
-        params.setUpdateId(user.getUserId());
-        params.setUpdateName(user.getRealName());
-        params.setInOrderStatus(ConstantVO.IN_ORDER_STATUS_HAVE_STORAGE);
-        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+    @ApiOperation("入库单详细")
+    @RequestMapping(value = "/order/{inorderId}", method = RequestMethod.GET)
+    public InWarehouseOrderDto inWarehouseOrderDetail(@PathVariable long inorderId) {
+        InWarehouseOrderDto inWarehouseOrderDto=new InWarehouseOrderDto();
+        inWarehouseOrderDto=inWarehouseOrderService.queryInWarehouseOrder(SecurityInfoGetter.getCompanyId(),inorderId);
+        return inWarehouseOrderDto;
+    }
 
-        boolean result=inWarehouseOrderService.modifyInOrderStatus(params);
+    @ApiOperation("入库单入库")
+    @RequestMapping(value = "/order/storage", method = RequestMethod.PATCH)
+    public JSONObject inStorage(@RequestBody InWarehouseOrderStorageParamsDto params){
+        ModifyInOrderStatusParamsDto statusParams=new ModifyInOrderStatusParamsDto();
+        User user=SecurityInfoGetter.getUser();
+        statusParams.setInorderId(params.getInorderId());
+        statusParams.setUpdateId(user.getUserId());
+        statusParams.setUpdateName(user.getRealName());
+        statusParams.setInOrderStatus(ConstantVO.IN_ORDER_STATUS_HAVE_STORAGE);
+        statusParams.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        boolean result=inWarehouseOrderService.storage(statusParams,params.getGoodsInfoDtoList());
         JSONObject jsonObject = new JSONObject();
         if (result) {
             jsonObject.put("code", 0);
@@ -112,6 +116,13 @@ public class InWarehouseOrderController {
             jsonObject.put("message", "取消入库单失败");
         }
         return jsonObject;
+    }
+
+    @ApiOperation("配仓信息，计划用")
+    @RequestMapping(value = "/order/distribution/records", method = RequestMethod.GET)
+    public PageBaseDto queryDisRecords(@RequestParam Long planId) {
+        PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderService.queryDisRecords(SecurityInfoGetter.getCompanyId(),planId));
+        return pageBaseDto;
     }
 }
 

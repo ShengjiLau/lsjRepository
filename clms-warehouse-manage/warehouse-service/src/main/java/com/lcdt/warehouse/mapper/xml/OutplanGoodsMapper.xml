@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.warehouse.mapper.OutplanGoodsMapper">
 
-    <!-- 开启二级缓存 -->
-
+    <!--入库计划货物详细-->
+    <select id="outWhPlanGoodsInfoList" resultType="com.lcdt.warehouse.entity.OutplanGoods">
+        SELECT a.relation_id,a.goods_id,a.plan_goods_num,a.remark,a.out_house_price,a.unit,a.unit_data,
+        a.goods_name,a.goods_classify,a.goods_spec,a.goods_code,a.goods_barcode
+        FROM outplan_goods a
+        WHERE a.outplan_id = #{planId}
+    </select>
 </mapper>

@@ -117,4 +117,29 @@ public class OwnDriverApi {
 
         return jsonObject;
     }
+
+    @ApiOperation(value = "修改司机", notes = "更新司机")
+    @PostMapping("/modify")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_modify')")
+    public JSONObject modOwnDriver(@Validated @RequestBody OwnDriverDto ownDriverDto, BindingResult bindingResult) {
+        //  获取companyId
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        //获取用户id
+        Long userId = SecurityInfoGetter.getUser().getUserId();
+        //获取用户姓名
+        String userName = SecurityInfoGetter.getUser().getRealName();
+        ownDriverDto.setCompanyId(companyId);
+        ownDriverDto.setUpdateId(userId);
+        ownDriverDto.setUpdateName(userName);
+        JSONObject jsonObject = new JSONObject();
+        if (bindingResult.hasErrors()) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
+            return jsonObject;
+        }
+        ownDriverService.modDriver(ownDriverDto);
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "修改成功");
+        return jsonObject;
+    }
 }

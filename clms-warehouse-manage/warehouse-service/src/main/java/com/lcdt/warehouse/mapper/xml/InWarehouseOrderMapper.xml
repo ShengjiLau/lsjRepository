@@ -8,12 +8,13 @@
         <result column="in_order_status" jdbcType="TINYINT" property="inOrderStatus"/>
         <result column="group_id" jdbcType="BIGINT" property="groupId"/>
         <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="contract_code" jdbcType="VARCHAR" property="contractCode"/>
         <result column="purchase_code" jdbcType="VARCHAR" property="purchaseCode"/>
         <result column="customer_name" jdbcType="VARCHAR" property="customerName"/>
         <result column="customer_id" jdbcType="BIGINT" property="customerId"/>
         <result column="customer_contact_name" jdbcType="VARCHAR" property="customerContactName"/>
         <result column="customer_contact_phone" jdbcType="VARCHAR" property="customerContactPhone"/>
-        <result column="warehouse_id" jdbcType="BIGINT" property="wareHouseId"/>
+        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
         <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName"/>
         <result column="storage_type" jdbcType="VARCHAR" property="storageType"/>
         <result column="storage_plan_time" jdbcType="TIMESTAMP" property="storagePlanTime"/>
@@ -39,8 +40,20 @@
         <collection property="goodsInfoDtoList" column="inorder_id" ofType="com.lcdt.warehouse.dto.InorderGoodsInfoDto" select="com.lcdt.warehouse.mapper.InorderGoodsInfoMapper.selectGoodsDetail"/>
     </resultMap>
 
+    <resultMap id="BaseResultMapOfDisRecords" type="com.lcdt.warehouse.dto.DistributionRecordsDto">
+        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
+        <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName"/>
+        <collection property="goodsInfoDtoList" ofType="com.lcdt.warehouse.dto.InorderGoodsInfoDto">
+            <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+            <result column="goods_code" jdbcType="VARCHAR" property="goodsCode" />
+            <result column="goods_barcode" jdbcType="VARCHAR" property="goodsBarcode" />
+            <result column="unit" jdbcType="VARCHAR" property="unit" />
+            <result column="receivalbe_amount" jdbcType="REAL" property="receivalbeAmount" />
+        </collection>
+    </resultMap>
+
     <sql id="Base_Select_List" >
-        inorder_id, plan_id, in_order_code, in_order_status, group_id, group_name,
+        inorder_id, plan_id, in_order_code, in_order_status, group_id, group_name,contract_code,
         purchase_code, customer_name,customer_id, customer_contact_name, customer_contact_phone, warehouse_id,
         warehouse_name, storage_type, storage_plan_time, storage_time, storage_remark, deliveryman_name,
         deliveryman_phone, deliveryman_linkman, deliveryman_car, attachments, company_id,
@@ -60,8 +73,8 @@
         <if test="planId!=null and planId!=''">
             and plan_id = #{planId,jdbcType=BIGINT}
         </if>
-        <if test="wareHouseId!=null and wareHouseId!=''">
-            and warehouse_id = #{wareHouseId,jdbcType=BIGINT}
+        <if test="warehouseId!=null and warehouseId!=''">
+            and warehouse_id = #{warehouseId,jdbcType=BIGINT}
         </if>
         <if test="createName!=null and createName!=''">
             and create_name = #{createName,jdbcType=VARCHAR}
@@ -103,7 +116,7 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into in_warehouse_order (plan_id, in_order_code, in_order_status,
-        group_id, group_name, purchase_code,
+        group_id, group_name,contract_code, purchase_code,
         customer_name, customer_contact_name,customer_id, customer_contact_phone,
         warehouse_id, warehouse_name, storage_type,
         storage_plan_time, storage_time, storage_remark,
@@ -121,10 +134,10 @@
             </otherwise>
         </choose>,
         #{inOrderStatus,jdbcType=TINYINT},
-        #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, #{purchaseCode,jdbcType=VARCHAR},
+        #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR},#{contractCode,jdbcType=VARCHAR}, #{purchaseCode,jdbcType=VARCHAR},
         #{customerName,jdbcType=VARCHAR},#{customerId,jdbcType=BIGINT}, #{customerContactName,jdbcType=VARCHAR},
         #{customerContactPhone,jdbcType=VARCHAR},
-        #{wareHouseId,jdbcType=BIGINT}, #{warehouseName,jdbcType=VARCHAR}, #{storageType,jdbcType=VARCHAR},
+        #{warehouseId,jdbcType=BIGINT}, #{warehouseName,jdbcType=VARCHAR}, #{storageType,jdbcType=VARCHAR},
         #{storagePlanTime,jdbcType=TIMESTAMP}, #{storageTime,jdbcType=TIMESTAMP}, #{storageRemark,jdbcType=VARCHAR},
         #{deliverymanName,jdbcType=VARCHAR}, #{deliverymanPhone,jdbcType=VARCHAR},
         #{deliverymanLinkman,jdbcType=VARCHAR},
@@ -140,4 +153,20 @@
             company_id= #{companyId,jdbcType=BIGINT} <include refid="select_condition"/>
         </where>
     </select>
+
+    <select id="selectInWarehouseOrder" resultMap="InWarehouseOrderDetailsMap">
+        SELECT <include refid="Base_Select_List"/>
+        FROM in_warehouse_order
+        WHERE company_id= #{companyId,jdbcType=BIGINT} and inorder_id = #{inorderId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectDisRecords" resultMap="BaseResultMapOfDisRecords">
+        select o.warehouse_id,o.warehouse_name,g.goods_name,g.goods_code,g.goods_barcode,g.unit,SUM(g.receivalbe_amount) receivalbe_amount
+        from in_warehouse_order o
+        left join inorder_goods_info g on o.inorder_id=g.inorder_id
+        where company_id= #{companyId,jdbcType=BIGINT} and plan_id = #{planId,jdbcType=BIGINT}
+        group by o.warehouse_id,o.warehouse_name,g.goods_code,g.goods_barcode
+    </select>
+
+
 </mapper>

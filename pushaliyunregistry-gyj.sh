@@ -58,6 +58,7 @@ readonly QUARTZ_SERVICE="quartz-service 1.0 common-quartz/clms-quartz-service"
 readonly TRAFFIC_SERVICE="traffic-service 1.0 clms-traffic/clms-traffic-service"
 readonly CONTRACT_SERVICE="contract-service 1.0 clms-contract/clms-contract-service"
 readonly DRIVER_WECHAT_API="driver-wechat-api 1.0 driver-app-wechat-api"
+readonly WAREHOUSE_SERVICE="warehouse-service 1.0 clms-warehouse-manage/warehouse-service"
 
 echo "请选择要更新的应用：
 1)、user-service
@@ -69,7 +70,8 @@ echo "请选择要更新的应用：
 7)、quartz-service
 8)、traffic-service
 9)、contract-service
-10)、driver-wechat-api"
+10)、driver-wechat-api
+11)、warehouse-service"
 
 read -p "请选择应用对应的数字：" NUM
 
@@ -105,6 +107,9 @@ service_name=$CONTRACT_SERVICE
 ;;
 "10")
 service_name=$DRIVER_WECHAT_API
+;;
+"11")
+service_name=$WAREHOUSE_SERVICE
 ;;
 esac
 
