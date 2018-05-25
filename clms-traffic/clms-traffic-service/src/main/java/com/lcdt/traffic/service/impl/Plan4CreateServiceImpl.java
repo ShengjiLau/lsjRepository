@@ -124,21 +124,17 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
                     vo.setCarrierCompanyId(customer.getBindCpid());
                     vo.setCarrierCompanyName(customer.getBindCompany()); //绑定企业
+                } else {
+                    vo.setCarrierType(ConstantVO.PLAN_CARRIER_TYPE_ELSE); //没选承运人的情况下
                 }
-
-                //else {
-                  //  vo.setCarrierType(ConstantVO.PLAN_CARRIER_TYPE_ELSE); //没选承运人的情况下
-                //}
                 planDirectProcedure(vo, dto,  flag, (short)1);
             } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
                 if (!StringUtils.isEmpty(dto.getCarrierIds())) {
                     vo.setCarrierCompanyId(vo.getCompanyId());
                     vo.setCarrierCompanyName(dto.getCompanyName());
+                } else {
+                    vo.setCarrierType(ConstantVO.PLAN_CARRIER_TYPE_ELSE);//没选承运人的情况下
                 }
-
-                //else {
-                //    vo.setCarrierType(ConstantVO.PLAN_CARRIER_TYPE_ELSE);//没选承运人的情况下
-                //}
                 planDirectProcedure(vo, dto,  flag,(short)2);
             } else { //其它（发布后派单）
                 onlyCreateWaybillPlan(vo,dto,flag);
