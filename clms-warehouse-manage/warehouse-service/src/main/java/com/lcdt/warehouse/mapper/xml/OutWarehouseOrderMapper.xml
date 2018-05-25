@@ -44,7 +44,7 @@
         is_deleted
     </sql>
 
-    <insert id="insertOutWarehouseOrder" parameterType="com.lcdt.warehouse.OutWarehouseOrder">
+    <insert id="insertOutWarehouseOrder" parameterType="com.lcdt.warehouse.entity.OutWarehouseOrder">
         <selectKey keyProperty="outorderId" order="AFTER" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID()
         </selectKey>
