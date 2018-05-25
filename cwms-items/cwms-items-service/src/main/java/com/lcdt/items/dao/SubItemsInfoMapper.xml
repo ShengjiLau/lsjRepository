@@ -25,7 +25,7 @@
 
   <resultMap id="SubItemInfoList" type="com.lcdt.items.model.GoodsInfoDao" extends="BaseResultMap">
     <result column="subject" jdbcType="VARCHAR" property="goodsName" />
-    <result column="item_id" jdbcType="BIGINT" property="goodsId"/>
+    <result column="sub_item_id" jdbcType="BIGINT" property="goodsId"/>
     <result column="unit_name" jdbcType="VARCHAR" property="unit" />
     <result column="classify_name" jdbcType="VARCHAR" property="classifyName" />
     <result column="classify_id" jdbcType="BIGINT" property="classifyId" />
