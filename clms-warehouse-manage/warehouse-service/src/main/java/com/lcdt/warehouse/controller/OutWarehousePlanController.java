@@ -219,7 +219,7 @@ public class OutWarehousePlanController {
         boolean flag = false;
         JSONObject jsonObject = new JSONObject();
         try {
-            flag = false;//outWarehouseOrderService.distributeWh(inWhPlanAddParamsDto, userCompRel);
+            //flag = false;//outWarehouseOrderService.distributeWh(inWhPlanAddParamsDto, userCompRel);
         } catch (RuntimeException e) {
             msg = e.getMessage();
             logger.error(e.getMessage());
