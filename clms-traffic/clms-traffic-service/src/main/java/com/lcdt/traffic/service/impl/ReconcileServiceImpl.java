@@ -195,19 +195,19 @@ public class ReconcileServiceImpl implements ReconcileService {
 			feeExchangelist = feeExchangeMapper.getFeeExchangesByBatch(reconcileIds);
 		}
 		if (null != feeExchangelist && feeExchangelist.size() > 0) {
-		for(ReconcileDto rdto:reconcileList) {
-			double j = 0.0d;
-			int i = 0;
-			for(FeeExchange fe:feeExchangelist) {
-				if (rdto.getReconcileId().longValue() == fe.getReconcileId().longValue()) {
-					i++;
-					j += fe.getTransportationExpenses();
-					j += fe.getOtherExpenses();
+			for(ReconcileDto rdto:reconcileList) {
+				double j = 0.0d;
+				int i = 0;
+				for(FeeExchange fe:feeExchangelist) {
+					if (rdto.getReconcileId().longValue() == fe.getReconcileId().longValue()) {
+						i++;
+						j += fe.getTransportationExpenses();
+						j += fe.getOtherExpenses();
+					}
 				}
+				rdto.setSumAmount(j);
+				rdto.setSumAmountNum(i);
 			}
-			rdto.setSumAmount(j);
-			rdto.setSumAmountNum(i);
-		}
 		}
 		PageInfo<ReconcileDto> page = new PageInfo<ReconcileDto>(reconcileList);
 		return page;
