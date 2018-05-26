@@ -134,12 +134,12 @@ public class ReceiveFeeExchangeApi {
 		if(null != feeExchangeListDto.getFeeExchangeList() && 0 == feeExchangeListDto.getFeeExchangeList().size()) {
 			jsonObject.put("message","请至少添加一条收款信息");
 		}
+		if(null == feeExchangeListDto.getReconcileId()) {
+			jsonObject.put("message","请至少添加一条收款信息");
+		}
 		if(null != feeExchangeListDto.getFeeExchangeList() && feeExchangeListDto.getFeeExchangeList().size() > 0) {
 			StringBuilder sd = new StringBuilder();
 			for(FeeExchange fe:feeExchangeListDto.getFeeExchangeList()) {
-				if(null == fe.getReconcileId()) {
-					sd.append("对账单id不可为空,");
-				}
 				if(null == fe.getExchangeAccount()) {
 					sd.append("收款账户不可为空,");
 				}
