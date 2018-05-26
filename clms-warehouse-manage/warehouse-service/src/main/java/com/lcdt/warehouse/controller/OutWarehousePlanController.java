@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.warehouse.dto.InWhPlanDto;
 import com.lcdt.warehouse.dto.OutWhPlanDto;
 import com.lcdt.warehouse.dto.OutWhPlanSearchParamsDto;
 import com.lcdt.warehouse.dto.PageBaseDto;
@@ -207,6 +208,27 @@ public class OutWarehousePlanController {
         jsonObject.put("message", flag==true? "取消成功！":msg);
         return jsonObject;
     }
+
+
+    @ApiOperation("计划配仓")
+    @RequestMapping(value = "/distributeWh",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject distributeWh(@RequestBody OutWhPlanDto outWhPlanDto) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        String msg = "配仓失败！";
+        boolean flag = false;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            flag = false;//outWarehouseOrderService.distributeWh(inWhPlanAddParamsDto, userCompRel);
+        } catch (RuntimeException e) {
+            msg = e.getMessage();
+            logger.error(e.getMessage());
+        }
+        jsonObject.put("code", flag==true? 0:-1);
+        jsonObject.put("message", flag==true? "配仓成功！":msg);
+        return jsonObject;
+    }
+
 
 }
 
