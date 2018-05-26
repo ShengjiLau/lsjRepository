@@ -9,7 +9,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dao.FeeExchangeMapper;
+import com.lcdt.traffic.dao.ReconcileMapper;
 import com.lcdt.traffic.model.FeeExchange;
+import com.lcdt.traffic.model.Reconcile;
 import com.lcdt.traffic.service.FeeExchangeService;
 import com.lcdt.traffic.web.dto.FeeExchangeDto;
 
@@ -26,11 +28,15 @@ public class FeeExchangeImpl implements FeeExchangeService {
 	@Autowired
 	private FeeExchangeMapper feeExchangeMapper;
 	
-	
+
+	@Autowired
+	private ReconcileMapper reconcileMapper;
 	
 	@Override
 	public int insertFeeExchangeByBatch(List<FeeExchange> feeExchangeList) {
+		Reconcile reconcile = reconcileMapper.selectByPrimaryKey(feeExchangeList.get(0).getReconcileId());	
 		for(FeeExchange fe:feeExchangeList) {
+			fe.setReconcileCode(reconcile.getReconcileCode());
 			fe.setCompanyId(SecurityInfoGetter.getCompanyId());
 			fe.setOperateId(SecurityInfoGetter.getUser().getUserId());
 			fe.setOperateName(SecurityInfoGetter.getUser().getRealName());
