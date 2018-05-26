@@ -292,6 +292,7 @@
     from t_fee_account fa,t_waybill w
     where fa.waybill_id=w.id
     and fa.is_deleted=0
+    and w.is_deleted=0
     and fa.reconcile_id is not null
     and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
     and w.id=#{waybillId,jdbcType=BIGINT}
@@ -386,6 +387,7 @@
       a.name_id nameId,
       a.name,
       a.group_id groupId,
+      a.group_name groupName,
       sum(case when f.fee_property='运费' then f.money else 0 end) freightTotal,
       sum(case when f.fee_property!='运费' then f.money else 0 end) otherFeeTotal,
       sum(f.money) feeTotal,

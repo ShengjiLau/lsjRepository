@@ -74,6 +74,8 @@
     <result column="update_name" jdbcType="VARCHAR" property="updateName" />
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+    <result column="receivable_name" jdbcType="VARCHAR" property="receivableName" />
+    <result column="payable_name" jdbcType="VARCHAR" property="payableName" />
   </resultMap>
 
   <resultMap id="BaseWaybillDaoMap" type="com.lcdt.traffic.model.WaybillDao" extends="BaseResultMap">
@@ -87,7 +89,6 @@
     <collection property="waybillItemsList" column="id" ofType="com.lcdt.traffic.model.WaybillItems" select="com.lcdt.traffic.dao.WaybillItemsMapper.selectByWaybillId"/>
   </resultMap>
   <resultMap id="BaseFeeAccountWaybillMap" type="com.lcdt.traffic.web.dto.FeeAccountWaybillDto" extends="BaseResultMap">
-    <result column="receiv_and_pay_name" jdbcType="VARCHAR" property="receivAndPayName" />
     <result column="freight_total" jdbcType="REAL" property="freightTotal" />
     <result column="other_fee_total" jdbcType="REAL" property="otherFeeTotal" />
     <result column="fee_total" jdbcType="REAL" property="feeTotal" />
@@ -104,7 +105,7 @@
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
     attachment5, attachment5_name, waybill_remark, carrier_company_id, carrier_company_name,company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
-    update_id, update_name, update_date, is_deleted</sql>
+    update_id, update_name, update_date, is_deleted, receivable_name, payable_name</sql>
 
 
   <sql id="finance_column_list">id, waybill_plan_id,waybill_code, waybill_status, waybill_source,group_id, group_name, driver_id,
@@ -180,7 +181,9 @@
     update_id = #{updateId,jdbcType=BIGINT},
     update_name = #{updateName,jdbcType=VARCHAR},
     update_date = CURRENT_TIMESTAMP,
-    is_deleted = #{isDeleted,jdbcType=SMALLINT}
+    is_deleted = #{isDeleted,jdbcType=SMALLINT},
+    receivable_name = #{receivableName,jdbcType=VARCHAR},
+    payable_name = #{payableName,jdbcType=VARCHAR}
   </sql>
 
   <sql id="select_condition">
@@ -240,6 +243,16 @@
     </if>
   </sql>
   <sql id="select_finance_condition">
+    <if test="isReceivable == 0">
+      <if test="receivAndPayName!=null and receivAndPayName!=''">
+        and receivable_name like concat('%',#{receivAndPayName,jdbcType=VARCHAR},'%')
+      </if>
+    </if>
+    <if test="isReceivable == 1">
+      <if test="receivAndPayName!=null and receivAndPayName!=''">
+        and payable_name like concat('%',#{receivAndPayName,jdbcType=VARCHAR},'%')
+      </if>
+    </if>
     <if test="waybillCode!=null and waybillCode!=''">
       and waybill_code like concat('%',#{waybillCode,jdbcType=VARCHAR},'%')
     </if>
@@ -249,6 +262,12 @@
     <if test="createEnd!=null and createEnd!=''">
       and create_date &lt;= CONCAT(STR_TO_DATE(#{createEnd,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
     </if>
+    <if test="driverNameOrPhone!=null and driverNameOrPhone!=''">
+      and (driver_name like concat('%',#{driverNameOrPhone,jdbcType=VARCHAR},'%')
+      or driver_phone like concat('%',#{driverNameOrPhone,jdbcType=VARCHAR},'%')
+      <!--or vechicle_num like concat('%',#{driverInfo,jdbcType=VARCHAR},'%')-->
+      )
+    </if>
     <if test="customerName!=null and customerName!=''">
       and customer_name like concat('%',#{customerName,jdbcType=VARCHAR},'%')
     </if>
@@ -257,6 +276,16 @@
     </if>
   </sql>
   <sql id="select_finance_condition_fee_total">
+    <if test="isReceivable == 0">
+      <if test="receivAndPayName!=null and receivAndPayName!=''">
+        and w.receivable_name like concat('%',#{receivAndPayName,jdbcType=VARCHAR},'%')
+      </if>
+    </if>
+    <if test="isReceivable == 1">
+      <if test="receivAndPayName!=null and receivAndPayName!=''">
+        and w.payable_name like concat('%',#{receivAndPayName,jdbcType=VARCHAR},'%')
+      </if>
+    </if>
     <if test="waybillCode!=null and waybillCode!=''">
       and w.waybill_code like concat('%',#{waybillCode,jdbcType=VARCHAR},'%')
     </if>
@@ -265,6 +294,12 @@
     </if>
     <if test="createEnd!=null and createEnd!=''">
       and w.create_date &lt;= CONCAT(STR_TO_DATE(#{createEnd,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
+    </if>
+    <if test="driverNameOrPhone!=null and driverNameOrPhone!=''">
+      and (w.driver_name like concat('%',#{driverNameOrPhone,jdbcType=VARCHAR},'%')
+      or w.driver_phone like concat('%',#{driverNameOrPhone,jdbcType=VARCHAR},'%')
+      <!--or vechicle_num like concat('%',#{driverInfo,jdbcType=VARCHAR},'%')-->
+      )
     </if>
     <if test="customerName!=null and customerName!=''">
       and w.customer_name like concat('%',#{customerName,jdbcType=VARCHAR},'%')
@@ -301,7 +336,8 @@
       pub_date, finish_date, cancel_date, 
       cancel_man, cancel_remark, create_id, 
       create_name, create_date, update_id, 
-      update_name, update_date, is_deleted
+      update_name, update_date, is_deleted,
+      receivable_name, payable_name
       )
     values (#{waybillPlanId,jdbcType=BIGINT}, #{splitGoodsId,jdbcType=BIGINT},
     <choose>
@@ -331,7 +367,8 @@
       CURRENT_TIMESTAMP, #{finishDate,jdbcType=TIMESTAMP}, #{cancelDate,jdbcType=TIMESTAMP},
       #{cancelMan,jdbcType=VARCHAR}, #{cancelRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
       #{createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{updateId,jdbcType=BIGINT},
-      #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 0
+      #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 0,
+      #{receivableName,jdbcType=VARCHAR}, #{payableName,jdbcType=VARCHAR}
       )
   </insert>
 
@@ -404,7 +441,9 @@
     carrier_company_name = #{carrierCompanyName,jdbcType=VARCHAR},
     update_id = #{updateId,jdbcType=BIGINT},
     update_name = #{updateName,jdbcType=VARCHAR},
-    update_date = CURRENT_TIMESTAMP
+    update_date = CURRENT_TIMESTAMP,
+    receivable_name = #{receivableName,jdbcType=VARCHAR},
+    payable_name = #{payableName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
 
@@ -463,7 +502,9 @@
     carrier_company_name = #{carrierCompanyName,jdbcType=VARCHAR},
     update_id = #{updateId,jdbcType=BIGINT},
     update_name = #{updateName,jdbcType=VARCHAR},
-    update_date = CURRENT_TIMESTAMP
+    update_date = CURRENT_TIMESTAMP,
+    receivable_name = #{receivableName,jdbcType=VARCHAR},
+    payable_name = #{payableName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT} and carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
   </update>
 
@@ -638,14 +679,10 @@
     order by id desc
   </select>
 
-  <!--<if test="receivAndPayName!=null and receivAndPayName!=''">
-    and fa.name=#{receivAndPayName,jdbc=VARCHAR}
-  </if>-->
   <select id="selectFeeAccountWaybillByCondition" parameterType="java.util.Map" resultMap="BaseFeeAccountWaybillMap">
     select <include refid="finance_column_list"/>,
-    (select group_concat(distinct fa.name) from t_fee_account fa
-      where fa.waybill_id=id and fa.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
-      group by id) receiv_and_pay_name,
+    <if test="isReceivable==0">receivable_name receivAndPayName,</if>
+    <if test="isReceivable==1">payable_name receivAndPayName,</if>
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
       where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费'
         and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
@@ -655,11 +692,11 @@
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
       where fa.waybill_id=id and ff.account_id=fa.account_id
         and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total,
-    (select count(*) from t_fee_account fa
-      where fa.waybill_id=id and fa.is_deleted=0 and fa.reconcile_id is not null and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) reconcile_count
+    (select count(*) from t_fee_account fa where fa.waybill_id=id and fa.is_deleted=0 and fa.reconcile_id is not null ) reconcile_count
     from t_waybill
     <where>
       waybill_status!=8
+      and is_deleted=0
       and company_id = #{companyId,jdbcType=BIGINT}
       <if test="groupIds!=null and groupIds!=''">
         and ${groupIds}
@@ -669,9 +706,8 @@
   </select>
   <select id="selectFeeAccountCustomerWaybillByCondition" parameterType="java.util.Map" resultMap="BaseFeeAccountWaybillMap">
     select <include refid="finance_column_list"/>,
-    (select group_concat(distinct fa.name) from t_fee_account fa
-      where fa.waybill_id=id and fa.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
-      group by id) receiv_and_pay_name,
+    <if test="isReceivable==0">receivable_name receivAndPayName,</if>
+    <if test="isReceivable==1">payable_name receivAndPayName,</if>
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
       where fa.waybill_id=id and ff.account_id=fa.account_id and ff.fee_property='运费'
         and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) freight_total,
@@ -681,11 +717,11 @@
     (select sum(ff.money) from t_fee_account fa, t_fee_flow ff
       where fa.waybill_id=id and ff.account_id=fa.account_id
         and fa.is_deleted=0 and ff.is_deleted=0 and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) fee_total,
-    (select count(*) from t_fee_account fa
-      where fa.waybill_id=id and fa.is_deleted=0 and fa.reconcile_id is not null and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}) reconcile_count
+    (select count(*) from t_fee_account fa where fa.waybill_id=id and fa.is_deleted=0 and fa.reconcile_id is not null ) reconcile_count
     from t_waybill
     <where>
       waybill_status!=8
+      and is_deleted=0
       and carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
       <if test="companyIds!=null">
         and ${companyIds}
@@ -711,7 +747,9 @@
       and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
       and w.waybill_status!=8
       and w.company_id = #{companyId,jdbcType=BIGINT}
-      and fa.is_deleted=0 and ff.is_deleted=0
+      and fa.is_deleted=0
+      and ff.is_deleted=0
+      and w.is_deleted=0
       <if test="groupIds!=null and groupIds!=''">
         and ${groupIds}
       </if>
@@ -730,7 +768,9 @@
       and fa.is_receivable=#{isReceivable,jdbcType=SMALLINT}
       and w.waybill_status!=8
       and w.carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
-      and fa.is_deleted=0 and ff.is_deleted=0
+      and fa.is_deleted=0
+      and ff.is_deleted=0
+      and w.is_deleted=0
       <if test="companyIds!=null">
         and ${companyIds}
       </if>

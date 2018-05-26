@@ -12,11 +12,21 @@ public class OutWhOrderDto extends OutWarehouseOrder{
 
     private List<OutOrderGoodsInfoDto> outOrderGoodsInfoList;
 
+    private int operationType;
+
     public List<OutOrderGoodsInfoDto> getOutOrderGoodsInfoList() {
         return outOrderGoodsInfoList;
     }
 
     public void setOutOrderGoodsInfoList(List<OutOrderGoodsInfoDto> outOrderGoodsInfoList) {
         this.outOrderGoodsInfoList = outOrderGoodsInfoList;
+    }
+
+    public int getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(int operationType) {
+        this.operationType = operationType;
     }
 }

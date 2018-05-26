@@ -150,7 +150,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
         int result = 0;
         InWarehouseOrder inWarehouseOrder = new InWarehouseOrder();
         BeanUtils.copyProperties(params, inWarehouseOrder);
-        inWarehouseOrder.setInOrderStatus(ConstantVO.IN_ORDER_STATUS_HAVE_CANCEL);
+        inWarehouseOrder.setInOrderStatus(ConstantVO.IN_ORDER_STATUS_HAVE_STORAGE);
         inWarehouseOrder.setStorageMan(inWarehouseOrder.getCreateName());
         result += baseMapper.insertInWarehouseOrder(inWarehouseOrder);
 

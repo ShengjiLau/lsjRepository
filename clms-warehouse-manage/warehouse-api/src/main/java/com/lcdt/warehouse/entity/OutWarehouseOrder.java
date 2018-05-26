@@ -111,6 +111,10 @@ public class OutWarehouseOrder implements Serializable {
      */
     private String attachments;
     /**
+     * 出库人员
+     */
+    private String outboundMan;
+    /**
      * 企业id
      */
     private Long companyId;
@@ -326,6 +330,14 @@ public class OutWarehouseOrder implements Serializable {
 
     public void setAttachments(String attachments) {
         this.attachments = attachments;
+    }
+
+    public String getOutboundMan() {
+        return outboundMan;
+    }
+
+    public void setOutboundMan(String outboundMan) {
+        this.outboundMan = outboundMan;
     }
 
     public Long getCompanyId() {

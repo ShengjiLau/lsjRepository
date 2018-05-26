@@ -43,11 +43,11 @@ public class InWarehouseOrderController {
         params.setCreateId(user.getUserId());
         params.setCreateName(user.getRealName());
         params.setCreateDate(new Date());
-        int result=0;
-        if(params.getOperationType()==0){
+        int result = 0;
+        if (params.getOperationType() == 0) {
             result = inWarehouseOrderService.addInWarehouseOrder(params);
-        }else if(params.getOperationType()==1){
-            result=inWarehouseOrderService.addAndStorageInWarehouseOrder(params);
+        } else if (params.getOperationType() == 1) {
+            result = inWarehouseOrderService.addAndStorageInWarehouseOrder(params);
         }
 
         JSONObject jsonObject = new JSONObject();
@@ -73,16 +73,16 @@ public class InWarehouseOrderController {
     @ApiOperation("入库单详细")
     @RequestMapping(value = "/order/{inorderId}", method = RequestMethod.GET)
     public InWarehouseOrderDto inWarehouseOrderDetail(@PathVariable long inorderId) {
-        InWarehouseOrderDto inWarehouseOrderDto=new InWarehouseOrderDto();
-        inWarehouseOrderDto=inWarehouseOrderService.queryInWarehouseOrder(SecurityInfoGetter.getCompanyId(),inorderId);
+        InWarehouseOrderDto inWarehouseOrderDto = new InWarehouseOrderDto();
+        inWarehouseOrderDto = inWarehouseOrderService.queryInWarehouseOrder(SecurityInfoGetter.getCompanyId(), inorderId);
         return inWarehouseOrderDto;
     }
 
     @ApiOperation("入库单入库")
     @RequestMapping(value = "/order/storage", method = RequestMethod.PATCH)
-    public JSONObject inStorage(@RequestBody InWarehouseOrderStorageParamsDto params){
-        ModifyInOrderStatusParamsDto statusParams=new ModifyInOrderStatusParamsDto();
-        User user=SecurityInfoGetter.getUser();
+    public JSONObject inStorage(@RequestBody InWarehouseOrderStorageParamsDto params) {
+        ModifyInOrderStatusParamsDto statusParams = new ModifyInOrderStatusParamsDto();
+        User user = SecurityInfoGetter.getUser();
         statusParams.setInorderId(params.getInorderId());
         statusParams.setUpdateId(user.getUserId());
         statusParams.setUpdateName(user.getRealName());
@@ -90,7 +90,7 @@ public class InWarehouseOrderController {
         statusParams.setCompanyId(SecurityInfoGetter.getCompanyId());
         statusParams.setStorageTime(params.getStorageTime());
 
-        boolean result=inWarehouseOrderService.storage(statusParams,params.getGoodsInfoDtoList());
+        boolean result = inWarehouseOrderService.storage(statusParams, params.getGoodsInfoDtoList());
         JSONObject jsonObject = new JSONObject();
         if (result) {
             jsonObject.put("code", 0);
@@ -101,18 +101,19 @@ public class InWarehouseOrderController {
         }
         return jsonObject;
     }
+
     @ApiOperation("入库单取消")
     @RequestMapping(value = "/order/cancel/{inorderId}", method = RequestMethod.PATCH)
-    public JSONObject cancelStorage(@PathVariable long inorderId){
-        ModifyInOrderStatusParamsDto params=new ModifyInOrderStatusParamsDto();
-        User user=SecurityInfoGetter.getUser();
+    public JSONObject cancelStorage(@PathVariable long inorderId) {
+        ModifyInOrderStatusParamsDto params = new ModifyInOrderStatusParamsDto();
+        User user = SecurityInfoGetter.getUser();
         params.setInorderId(inorderId);
         params.setUpdateId(user.getUserId());
         params.setUpdateName(user.getRealName());
         params.setInOrderStatus(ConstantVO.IN_ORDER_STATUS_HAVE_CANCEL);
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
 
-        boolean result=inWarehouseOrderService.modifyInOrderStatus(params);
+        boolean result = inWarehouseOrderService.modifyInOrderStatus(params);
         JSONObject jsonObject = new JSONObject();
         if (result) {
             jsonObject.put("code", 0);
@@ -127,7 +128,7 @@ public class InWarehouseOrderController {
     @ApiOperation("配仓信息，计划用")
     @RequestMapping(value = "/order/distribution/records", method = RequestMethod.GET)
     public PageBaseDto queryDisRecords(@RequestParam Long planId) {
-        PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderService.queryDisRecords(SecurityInfoGetter.getCompanyId(),planId));
+        PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderService.queryDisRecords(SecurityInfoGetter.getCompanyId(), planId));
         return pageBaseDto;
     }
 }

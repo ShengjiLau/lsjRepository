@@ -233,7 +233,7 @@
       <if test="waybillCode!=null and waybillCode!=''">
         and a.waybill_code like concat('%',#{waybillCode,jdbcType=VARCHAR},'%')
       </if>
-      <if test="reconcileCode!=null and waybillCode!=''">
+      <if test="reconcileCode!=null and reconcileCode!=''">
         and a.reconcile_code like concat('%',#{reconcileCode,jdbcType=VARCHAR},'%')
       </if>
       <if test="createBegin!=null and createBegin!=''">

@@ -8,8 +8,14 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class ReceivePayParamsDto implements java.io.Serializable {
 
+    @ApiModelProperty(value = "司机名称/联系方式")
+    private String driverNameOrPhone;
+
     @ApiModelProperty(value = "业务组ID，全部为0")
     private Long groupId;
+
+    @ApiModelProperty(value = "收付款方名称")
+    private String receivAndPayName;
 
     @ApiModelProperty(value = "收付款方ID，全部为0")
     private Long nameId;
@@ -47,6 +53,13 @@ public class ReceivePayParamsDto implements java.io.Serializable {
     @ApiModelProperty(value = "客户名称")
     private String customerName;
 
+    public String getDriverNameOrPhone() {
+        return driverNameOrPhone;
+    }
+
+    public void setDriverNameOrPhone(String driverNameOrPhone) {
+        this.driverNameOrPhone = driverNameOrPhone;
+    }
 
     public String getStatCols() {
         return statCols;
@@ -66,6 +79,14 @@ public class ReceivePayParamsDto implements java.io.Serializable {
 
     public void setGroupId(Long groupId) {
         this.groupId = groupId;
+    }
+
+    public String getReceivAndPayName() {
+        return receivAndPayName;
+    }
+
+    public void setReceivAndPayName(String receivAndPayName) {
+        this.receivAndPayName = receivAndPayName;
     }
 
     public Long getNameId() {
