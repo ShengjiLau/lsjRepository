@@ -56,7 +56,7 @@ public class PayFeeExchangeApi {
 			fe.setType((short) 1);
 		}
 		
-		int result=feeExchangeService.insertFeeExchangeByBatch(feeExchangeListDto.getFeeExchangeList());
+		int result=feeExchangeService.insertFeeExchangeByBatch(feeExchangeListDto);
 		if(result>0) {
 			jsonObject.put("code",0);
 			jsonObject.put("message","新增付款记录成功");
