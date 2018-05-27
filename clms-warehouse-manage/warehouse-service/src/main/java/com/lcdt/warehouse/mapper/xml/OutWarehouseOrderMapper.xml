@@ -93,6 +93,9 @@
         <if test="groupId!=null and groupId!=''">
             and group_id = #{groupId,jdbcType=BIGINT}
         </if>
+        <if test="goodsInfo != null and goodsInfo!=''">
+            and outorder_id in (SELECT DISTINCT outorder_id FROM out_order_goods_info WHERE goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%'))
+        </if>
         <if test="purchaseNo!=null and purchaseNo!=''">
             and purchase_no like concat('%',#{purchaseNo,jdbcType=VARCHAR},'%')
         </if>

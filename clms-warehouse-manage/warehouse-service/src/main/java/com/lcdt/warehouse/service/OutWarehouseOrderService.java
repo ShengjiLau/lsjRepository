@@ -1,10 +1,14 @@
 package com.lcdt.warehouse.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
+import com.lcdt.warehouse.dto.ModifyOutOrderStatusParamsDto;
+import com.lcdt.warehouse.dto.OutOrderGoodsInfoDto;
 import com.lcdt.warehouse.dto.OutWhOrderDto;
 import com.lcdt.warehouse.dto.OutWhOrderSearchDto;
 import com.lcdt.warehouse.entity.OutWarehouseOrder;
 import com.baomidou.mybatisplus.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -38,4 +42,19 @@ public interface OutWarehouseOrderService extends IService<OutWarehouseOrder> {
      * @return
      */
     OutWhOrderDto queryOutWarehouseOrder(Long companyId,Long outorderId);
+
+    /**
+     * 修改状态
+     * @param params
+     * @return
+     */
+    boolean modifyOutOrderStatus(ModifyOutOrderStatusParamsDto params);
+
+    /**
+     * 出库
+     * @param modifyParams
+     * @param listParams
+     * @return
+     */
+    boolean outbound(ModifyOutOrderStatusParamsDto modifyParams, List<OutOrderGoodsInfoDto> listParams);
 }
