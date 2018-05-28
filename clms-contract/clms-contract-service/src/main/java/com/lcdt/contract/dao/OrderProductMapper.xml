@@ -167,8 +167,16 @@
   from t_order_product
     where order_id = #{orderId,jdbcType=BIGINT}
   </select>
-  
-  
+
+  <select id="selectProductByOrderIds" resultType="com.lcdt.contract.model.OrderProduct">
+    select order_id orderId, name, num, sku, code, spec
+    from t_order_product
+    where order_id in
+    <foreach collection="array" item="orderIds" index="index"
+             open="(" close=")" separator=",">
+      #{orderIds}
+    </foreach>
+  </select>
   
   
 </mapper>
