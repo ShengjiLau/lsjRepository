@@ -15,7 +15,12 @@
         <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName" />
         <result column="customer_id" jdbcType="BIGINT" property="customerId" />
         <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
-        
+        <result column="original_goods_id" jdbcType="BIGINT" property="originalGoodsId"/>
+        <result column="cost_remark" jdbcType="VARCHAR" property="costRemark" />
+        <result column="inventory_price" jdbcType="FLOAT" property="inventoryPrice"/>
+        <result column="batch" jdbcType="VARCHAR" property="batch" />
+        <result column="storage_location_id" jdbcType="BIGINT" property="storageLocationId"/>
+        <result column="base_unit" jdbcType="VARCHAR" property="baseUnit" />
         <association  property="goodsInfo" javaType="com.lcdt.warehouse.entity.GoodsInfo" autoMapping="true">
 
         </association>

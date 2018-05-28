@@ -21,6 +21,9 @@ public class InventoryLogFactory {
         inventoryLog.setCustomerName(order.getCustomerName());
         inventoryLog.setCustomerId(order.getCustomerId());
         inventoryLog.setType(0);
+        inventoryLog.setBatch(inventory.getBatch());
+        inventoryLog.setLogNo("");
+        inventoryLog.setComment(order.getStorageRemark());
         return inventoryLog;
     }
 

@@ -33,6 +33,7 @@ public class InventoryFactory {
         inventory.setCustomerName(order.getCustomerName());
         inventory.setInventoryPrice(goodsInfo.getGoodsPrice());
         inventory.setOriginalGoodsId(goodsInfo.getGoodsId());
+        inventory.setBaseUnit(goodsInfo.getMinUnit());
         if (logger.isDebugEnabled()) {
             logger.debug("create inventory from inordergoods :{} ", inventory.toString());
         }

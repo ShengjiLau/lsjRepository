@@ -8,6 +8,15 @@ import java.util.List;
  */
 
 public class GoodsListParamsDto implements Serializable{
+
+    public GoodsListParamsDto() {
+    }
+
+    public GoodsListParamsDto(List<Long> goodsIds, Long companyId) {
+        this.goodsIds = goodsIds;
+        this.companyId = companyId;
+    }
+
     private String goodsName;
     private String goodsCode;
     private String barCode;

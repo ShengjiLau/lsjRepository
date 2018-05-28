@@ -271,5 +271,9 @@
             <generatedKey column="inventory_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
 
+        <table tableName="inventory_log">
+            <generatedKey column="inventory_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
+
     </context>
 </generatorConfiguration>
