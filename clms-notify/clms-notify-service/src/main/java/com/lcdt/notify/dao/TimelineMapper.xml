@@ -5,7 +5,7 @@
     <id column="timeline_id" jdbcType="BIGINT" property="timelineId" />
     <result column="action_title" jdbcType="VARCHAR" property="actionTitle" />
     <result column="action_time" jdbcType="TIMESTAMP" property="actionTime" />
-    <result column="actile_des" jdbcType="VARCHAR" property="actionDes" />
+    <result column="action_des" jdbcType="VARCHAR" property="actionDes" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="searchkey" jdbcType="VARCHAR" property="searchkey" />
     <result column="dataid" jdbcType="BIGINT" property="dataid" />
@@ -49,7 +49,8 @@
     from timeline
   </select>
   <select id="selectByTag" resultMap="BaseResultMap">
-    select timeline_id, action_title, action_time, actile_des, company_id, searchkey,
+
+    select timeline_id, action_title, action_time, action_des, company_id, searchkey,
     dataid, mq_message_id
     from timeline
     WHERE company_id = #{companyId}
