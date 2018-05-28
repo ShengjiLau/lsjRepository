@@ -59,7 +59,7 @@
 
 
     <select id="getPlanCode" resultType="java.lang.String">
-        SELECT F_OUT_PLAN_CODE('CK')
+        SELECT F_OUT_PLAN_CODE('WO')
     </select>
 
 </mapper>

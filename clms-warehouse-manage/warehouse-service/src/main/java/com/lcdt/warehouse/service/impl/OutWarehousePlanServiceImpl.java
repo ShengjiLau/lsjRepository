@@ -2,16 +2,15 @@ package com.lcdt.warehouse.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.warehouse.dto.*;
-import com.lcdt.warehouse.entity.InWarehousePlan;
-import com.lcdt.warehouse.entity.InplanGoodsInfo;
 import com.lcdt.warehouse.entity.OutWarehousePlan;
 import com.lcdt.warehouse.entity.OutplanGoods;
 import com.lcdt.warehouse.mapper.OutWarehousePlanMapper;
 import com.lcdt.warehouse.mapper.OutplanGoodsMapper;
+import com.lcdt.warehouse.service.OutWarehouseOrderService;
 import com.lcdt.warehouse.service.OutWarehousePlanService;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.lcdt.warehouse.service.OutplanGoodsService;
 import com.lcdt.warehouse.vo.ConstantVO;
 import org.springframework.beans.BeanUtils;
@@ -46,6 +45,10 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
     @Autowired
     private OutplanGoodsService outplanGoodsService;
 
+    @Autowired
+    private OutWarehouseOrderService outWarehouseOrderService;
+
+
 
     @Transactional(readOnly = true)
     @Override
@@ -57,27 +60,27 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 List<OutplanGoods> goodsList = outplanGoodsMapper.outWhPlanGoodsInfoList(new Page<OutplanGoods>(1,100),obj.getOutplanId()); //默认拉取对应100条
                 obj.setGoodsList(goodsList);
 
-//                //出库单
-//                InWarehouseOrderSearchParamsDto params = new InWarehouseOrderSearchParamsDto();
-//                params.setCompanyId(dto.getCompanyId());
-//                params.setPlanId(obj.getPlanId());
-//                params.setPageNo(1);
-//                params.setPageSize(100);
-//                Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderList(params);
-//                if (inWarehouseOrderDtoList.getTotal()>0) {
-//                    obj.setInWarehouseOrderDtoList(inWarehouseOrderDtoList.getRecords());
-//                }
+                //出库单
+                OutWhOrderSearchDto params = new OutWhOrderSearchDto();
+                params.setCompanyId(dto.getCompanyId());
+                params.setOutPlanId(obj.getOutplanId());
+                params.setPageNo(1);
+                params.setPageSize(100);
+                Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
+                if (outWhOrderDtoList.getTotal()>0) {
+                    obj.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
+                }
             }
         }
         return page.setRecords(list);
     }
 
+
+
     @Transactional(readOnly = true)
     @Override
-    public OutWhPlanDto outWhPlanDetail(Long outPlanId, boolean flag, UserCompRel userCompRel) {
-
+    public OutWhPlanDto outWhPlanDetail(Long outPlanId, boolean flag, UserCompRel userCompRel) { //注:flag-true为配仓用
         OutWhPlanDto result = new OutWhPlanDto();
-
         OutWarehousePlan obj = new OutWarehousePlan();
         obj.setCompanyId(userCompRel.getCompany().getCompId());
         obj.setOutplanId(outPlanId);
@@ -91,34 +94,61 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         outplanGoods.setOutplanId(outPlanId);
         List<OutplanGoods> list = outplanGoodsService.selectList(new EntityWrapper<OutplanGoods>(outplanGoods));
         if (list != null) {
-            if (flag) {//入库单
-//                InWarehouseOrderSearchParamsDto params = new InWarehouseOrderSearchParamsDto();
-//                params.setCompanyId(obj.getCompanyId());
-//                params.setPlanId(obj.getPlanId());
-//                params.setPageNo(1);
-//                params.setPageSize(100);
-//                Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderList(params);
-//                if (inWarehouseOrderDtoList.getTotal()>0) {
-//                    result.setInWarehouseOrderDtoList(inWarehouseOrderDtoList.getRecords());
-//                }
+            if (flag) {//出库单
+                OutWhOrderSearchDto params = new OutWhOrderSearchDto();
+                params.setCompanyId(obj.getCompanyId());
+                params.setOutPlanId(obj.getOutplanId());
+                params.setPageNo(1);
+                params.setPageSize(100);
+                Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
+                if (outWhOrderDtoList.getTotal()>0) {
+                    result.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
+                }
             }
             List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<OutWhPlanGoodsDto>();
             for (OutplanGoods obj1 :list) {
                 OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
                 BeanUtils.copyProperties(obj1, outWhPlanGoodsDto);
                 if (flag) { //统计该计划商品已配仓数量
-//                    statDistributeNum(inWhPlanGoodsDto, result.getInWarehouseOrderDtoList());
-//                    if (null!=inWhPlanGoodsDto.getRemainGoodsNum() && inWhPlanGoodsDto.getRemainGoodsNum()==0) {
-//                        continue;//说明该商品已配完，继续下个
-//                    }
+                     statDistributeNum(outWhPlanGoodsDto, result.getOutWhOrderDtoList());
+                    if (null!=outWhPlanGoodsDto.getRemainGoodsNum() && outWhPlanGoodsDto.getRemainGoodsNum()==0) {
+                        continue;//说明该商品已配完，继续下个
+                    }
                 }
                 outWhPlanGoodsDtoList.add(outWhPlanGoodsDto);
             }
 
-            result.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);
+            result.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList); //展现用的是出库计划详细列表
         }
 
         return result;
+    }
+
+
+    /***
+     * 统计配仓数量
+     * @param outWhPlanGoodsDto
+     * @param outWhOrderDtoList
+     */
+    private void statDistributeNum(OutWhPlanGoodsDto outWhPlanGoodsDto, List<OutWhOrderDto> outWhOrderDtoList) {
+        if (null!=outWhOrderDtoList && outWhOrderDtoList.size()>0) {
+            Float outGoodsNumber = 0f;
+            for (OutWhOrderDto obj : outWhOrderDtoList) {
+                List<OutOrderGoodsInfoDto> list = obj.getOutOrderGoodsInfoList();
+                if (null!=list && list.size()>0) {
+                    for (OutOrderGoodsInfoDto obj1 :list) { //配仓数量=对应入库单的应收数量
+                        if (obj1.getOutplanRelationId().equals(outWhPlanGoodsDto.getRelationId())) {
+                            outGoodsNumber += obj1.getGoodsNum(); //出库详细表中的出库数量就是配仓数量
+                        }
+                    }
+                }
+            }
+            outWhPlanGoodsDto.setOutOderGoodsNum(outGoodsNumber);//已配仓数
+            outWhPlanGoodsDto.setRemainGoodsNum(outWhPlanGoodsDto.getPlanGoodsNum() - outGoodsNumber);//计划-已配=剩余(代配)
+        } else {
+            outWhPlanGoodsDto.setOutOderGoodsNum(0f);//已配仓数
+            outWhPlanGoodsDto.setRemainGoodsNum(outWhPlanGoodsDto.getPlanGoodsNum() - 0);
+        }
     }
 
 
@@ -214,6 +244,8 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         return this.update(outWarehousePlan,new EntityWrapper<OutWarehousePlan>(argObj));
     }
 
+
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean outWhPlanPublish(OutWarehousePlan obj, UserCompRel userCompRel) {
@@ -235,37 +267,35 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             throw new RuntimeException("计划不存在！");
         }
         /***
-         *  逻辑：该计划是否存在对应的入库单，如果不存在，则直接可以取消；
-         * 如果存在，需判断是否存在“待入库”“已完成”状态的入库单，如果存在，则不允许取消；
+         *  逻辑：该计划是否存在对应的出库单，如果不存在，则直接可以取消；
+         *  如果存在，需判断是否存在“待出库”“已完成”状态的出库单，如果存在，则不允许取消；
          */
-        if (!outWarehousePlan.getPlanStatus().equals(InWhPlanStatusEnum.publish.getValue())
-                && !outWarehousePlan.getPlanStatus().equals(InWhPlanStatusEnum.watting.getValue()) ) {
+        if (!outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.publish.getValue())
+                && !outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.watting.getValue()) ) {
             throw new RuntimeException("该计划不允许取消（非待配状态或存在配仓记录）！");
         } else {
-            if (outWarehousePlan.getPlanStatus().equals(InWhPlanStatusEnum.publish.getValue())) {
-                OutWhPlanSearchParamsDto params = new OutWhPlanSearchParamsDto();
+            if (outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.publish.getValue())) {
+                OutWhOrderSearchDto params = new OutWhOrderSearchDto();
                 params.setCompanyId(obj.getCompanyId());
                 params.setOutPlanId(obj.getOutplanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
-
-//              Page<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = inWarehouseOrderService.queryInWarehouseOrderList(params);
-//
-//                if (inWarehouseOrderDtoList.getTotal()>0) {
-//                    boolean flag = false;
-//                    for (InWarehouseOrderDto obj1 : inWarehouseOrderDtoList.getRecords()) {
-//                        if (obj1.getInOrderStatus()== ConstantVO.IN_ORDER_STATUS_WATIE_STORAGE || obj1.getInOrderStatus()== ConstantVO.IN_ORDER_STATUS_HAVE_STORAGE) {
-//                            flag = true;
-//                            break;
-//                        }
-//                    }
-//                    if (flag) {
-//                        throw new RuntimeException("该计划对应入库单存在“待入库”“已完成”状态记录！");
-//                    }
-              //  }
+                Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
+                if (outWhOrderDtoList.getTotal()>0) {
+                    boolean flag = false;
+                    for (OutWhOrderDto obj1 : outWhOrderDtoList.getRecords()) {
+                        if (obj1.getOrderStatus()== ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND || obj1.getOrderStatus()== ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        throw new RuntimeException("该计划对应出库单存在“待出库”“已完成”状态记录！");
+                    }
+                }
             }
         }
-        outWarehousePlan.setPlanStatus((Integer) InWhPlanStatusEnum.cancel.getValue());
+        outWarehousePlan.setPlanStatus((Integer) OutWhPlanStatusEnum.cancel.getValue());
         return chagenOutPlanStatus(obj, outWarehousePlan,userCompRel);
     }
 
@@ -282,35 +312,149 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
          *  逻辑：该计划是否存在对应的入库单，如果不存在，则直接可以取消；
          * 如果存在，需判断是否存在“待入库”“已完成”状态的入库单，如果存在，则不允许取消；
          */
-        if (!outWarehousePlan.getPlanStatus().equals(InWhPlanStatusEnum.publish.getValue())
-                && !outWarehousePlan.getPlanStatus().equals(InWhPlanStatusEnum.watting.getValue()) ) {
+        if (!outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.publish.getValue())
+                && !outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.watting.getValue()) ) {
             throw new RuntimeException("该计划不允许取消（非待配状态或存在配仓记录）！");
         } else {
-            if (outWarehousePlan.getPlanStatus().equals(InWhPlanStatusEnum.publish.getValue())) {
-                OutWhPlanSearchParamsDto params = new OutWhPlanSearchParamsDto();
+            if (outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.publish.getValue())) {
+                OutWhOrderSearchDto params = new OutWhOrderSearchDto();
                 params.setCompanyId(obj.getCompanyId());
                 params.setOutPlanId(obj.getOutplanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
-
-//                Page<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = inWarehouseOrderService.queryInWarehouseOrderList(params);
-//
-//                if (inWarehouseOrderDtoList.getTotal()>0) {
-//                    boolean flag = false;
-//                    for (InWarehouseOrderDto obj1 : inWarehouseOrderDtoList.getRecords()) {
-//                        if (obj1.getInOrderStatus()== ConstantVO.IN_ORDER_STATUS_WATIE_STORAGE || obj1.getInOrderStatus()== ConstantVO.IN_ORDER_STATUS_HAVE_STORAGE) {
-//                            flag = true;
-//                            break;
-//                        }
-//                    }
-//                    if (flag) {
-//                        throw new RuntimeException("该计划对应入库单存在“待入库”“已完成”状态记录！");
-//                    }
-                //  }
+                Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
+                if (outWhOrderDtoList.getTotal()>0) {
+                    boolean flag = false;
+                    for (OutWhOrderDto obj1 : outWhOrderDtoList.getRecords()) {
+                        if (obj1.getOrderStatus()== ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND || obj1.getOrderStatus()== ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        throw new RuntimeException("该计划对应出库单存在“待出库”“已完成”状态记录！");
+                    }
+                }
             }
         }
-        outWarehousePlan.setPlanStatus((Integer) InWhPlanStatusEnum.completed.getValue());
+        outWarehousePlan.setPlanStatus((Integer) OutWhPlanStatusEnum.completed.getValue());
         return chagenOutPlanStatus(obj, outWarehousePlan,userCompRel);
+    }
+
+
+
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean distributeWh(OutWhPlanDto outWhPlanDto, UserCompRel userCompRel) {
+        outWhPlanDto.setCompanyId(userCompRel.getCompany().getCompId());
+        OutWhPlanDto _outWhPlanDto = outWhPlanDetail(outWhPlanDto.getOutplanId(), true, userCompRel);
+        if (_outWhPlanDto == null) {
+            throw new RuntimeException("计划不存在！");
+        }
+        /***
+         * 再次检查数据库中的计划数量是否满足配仓数量
+         */
+        List<OutWhPlanGoodsDto> _outWhPlanGoodsDtoList1 = outWhPlanDto.getOutWhPlanGoodsDtoList(); //前端提交来的
+        List<OutWhPlanGoodsDto> _outWhPlanGoodsDtoList2 = _outWhPlanDto.getOutWhPlanGoodsDtoList(); //后端数据库中最新的
+        if (null == _outWhPlanGoodsDtoList1 || null == _outWhPlanGoodsDtoList2) {
+            throw new RuntimeException("配仓计划货物不存在！");
+        }
+
+        boolean flag = true;
+        StringBuffer sb = new StringBuffer();
+        for (OutWhPlanGoodsDto obj1: _outWhPlanGoodsDtoList1) {
+            for (OutWhPlanGoodsDto obj2: _outWhPlanGoodsDtoList2) {
+                if (obj1.getRelationId().equals(obj2.getRelationId())) { //同一种货物
+                    if (obj1.getDistGoodsNum() == null) {
+                        obj1.setDistGoodsNum(0f);
+                    }
+                    if (obj1.getDistGoodsNum()>obj2.getRemainGoodsNum()) { //如果前端提交过来的大于数据库中的剩余的
+                        sb.append("货物："+ obj1.getGoodsName()+"，剩余数量："+obj2.getRemainGoodsNum()+",不满足当前配仓数量："+obj1.getDistGoodsNum());
+                    } else {
+                        //如果本次配仓量+已配仓量=计划的
+                        if (obj1.getDistGoodsNum() + obj2.getOutOderGoodsNum()!=obj2.getPlanGoodsNum()) {
+                            flag = false;
+                        }
+                    }
+                }
+            }
+        }
+        if (!StringUtils.isEmpty(sb.toString())) {
+            throw new RuntimeException(sb.toString());
+        }
+        /*************出库计划配仓BEGIN**************/
+        OutWhOrderDto _tempObj = new OutWhOrderDto();
+        _tempObj.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND);
+        _tempObj.setOutPlanId(_outWhPlanDto.getOutplanId());
+        _tempObj.setGroupId(_outWhPlanDto.getGroupId());
+        _tempObj.setGroupName(_outWhPlanDto.getGroupName());
+        _tempObj.setContractNo(_outWhPlanDto.getContractNo());
+        _tempObj.setPurchaseNo(_outWhPlanDto.getCustomerPurchaseNo());
+        _tempObj.setCustomerId(_outWhPlanDto.getCustomerId());
+        _tempObj.setCustomerName(_outWhPlanDto.getCustomerName());
+        _tempObj.setCustomerContactName(_outWhPlanDto.getCustomerContactName());
+        _tempObj.setCustomerContactPhone(_outWhPlanDto.getCustomerContactPhone());
+        _tempObj.setWarehouseId(outWhPlanDto.getWareHouseId());
+        _tempObj.setWarehouseName(outWhPlanDto.getWarehouseName());
+        _tempObj.setOutboundType(_outWhPlanDto.getStorageType());
+        _tempObj.setOutboundPlanTime(new Date());
+        _tempObj.setOutboundRemark(outWhPlanDto.getStorageRemark());
+        _tempObj.setDeliveryUnit(outWhPlanDto.getPickupUnit());
+        _tempObj.setDeliveryLinkman(outWhPlanDto.getPickupLinkman());
+        _tempObj.setDeliverPhone(outWhPlanDto.getPickupPhone());
+        _tempObj.setDeliverVehicleNum(outWhPlanDto.getPickupCar());
+        _tempObj.setAttachments(outWhPlanDto.getAttachment());
+        _tempObj.setCompanyId(outWhPlanDto.getCompanyId());
+        _tempObj.setCreateDate(new Date());
+        _tempObj.setCreateId(userCompRel.getUser().getUserId());
+        _tempObj.setCreateName(userCompRel.getUser().getRealName());
+        _tempObj.setIsDeleted(0);
+
+        List<OutOrderGoodsInfoDto> outOrderGoodsInfoList = new ArrayList<OutOrderGoodsInfoDto>();
+        for (OutWhPlanGoodsDto obj1 : _outWhPlanGoodsDtoList1) {
+            OutOrderGoodsInfoDto tObj = new OutOrderGoodsInfoDto();
+            if (obj1.getDistGoodsNum()==null) continue; //如果本次配仓数为0，跳过
+            tObj.setOutplanRelationId(obj1.getRelationId());
+            tObj.setGoodsId(obj1.getGoodsId());
+            tObj.setGoodsName(obj1.getGoodsName());
+            tObj.setGoodsCode(obj1.getGoodsCode());
+            tObj.setGoodsBarCode(obj1.getGoodsBarcode());
+            tObj.setGoodsSpec(obj1.getGoodsSpec());
+            tObj.setGoodsClassifyId(obj1.getGoodsClassifyId());
+            tObj.setGoodsClassifyName(obj1.getGoodsClassify());
+            tObj.setMinUnit(obj1.getMinUnit());
+            tObj.setUnit(obj1.getUnit());
+            tObj.setUnitData(obj1.getUnitData());
+            tObj.setBatch(obj1.getBatch());
+            tObj.setStrogeLocationId(obj1.getStrogeLocationId());
+            tObj.setStrogeLocationCode(obj1.getStrogeLocationCode());
+            tObj.setGoodsNum(obj1.getOutOderGoodsNum());//配仓数
+            tObj.setInStock(obj1.getInStock());//可用库存
+            tObj.setRemark(obj1.getDisRemark());
+            outOrderGoodsInfoList.add(tObj);
+        }
+        _tempObj.setOutOrderGoodsInfoList(outOrderGoodsInfoList);
+        outWarehouseOrderService.addOutWarehouseOrder(_tempObj);
+        /*************出库计划配仓END**************/
+        //更新计划主表
+        OutWarehousePlan _outWarehousePlan = new OutWarehousePlan();
+        _outWarehousePlan.setUpdateId(userCompRel.getUser().getUserId());
+        _outWarehousePlan.setUpdateName(userCompRel.getUser().getRealName());
+        _outWarehousePlan.setUpdateDate(new Date());
+        _outWarehousePlan.setPickupUnit(outWhPlanDto.getPickupUnit());
+        _outWarehousePlan.setPickupLinkman(outWhPlanDto.getPickupLinkman());
+        _outWarehousePlan.setPickupIdentiycard(outWhPlanDto.getPickupIdentiycard());
+        _outWarehousePlan.setPickupPhone(outWhPlanDto.getPickupPhone());
+        _outWarehousePlan.setPickupCar(outWhPlanDto.getPickupCar());
+
+        if (flag) { //如果全部配完，更改计划状态-已配仓
+            _outWarehousePlan.setPlanStatus((Integer) OutWhPlanStatusEnum.isWarehouse.getValue());
+        }
+        OutWarehousePlan wrapperObj = new OutWarehousePlan();
+        wrapperObj.setOutplanId(outWhPlanDto.getCompanyId());
+        wrapperObj.setCompanyId(userCompRel.getCompId());
+        return this.update(_outWarehousePlan,new EntityWrapper<OutWarehousePlan>(wrapperObj));
     }
 
 

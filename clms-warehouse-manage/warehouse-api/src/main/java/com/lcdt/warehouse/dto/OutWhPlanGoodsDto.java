@@ -40,12 +40,22 @@ public class OutWhPlanGoodsDto {
 
     @ApiModelProperty(value = "配仓---待配数量-也就是剩余计划数量")
     private Float remainGoodsNum;
-    @ApiModelProperty(value = "配仓---已入库数量")
-    private Float inOderGoodsNum;
+    @ApiModelProperty(value = "配仓---已出库数量")
+    private Float outOderGoodsNum;
     @ApiModelProperty(value = "配仓---本次配仓数")
     private Float distGoodsNum;
     @ApiModelProperty(value = "配仓---备注")
     private String disRemark;
+    @ApiModelProperty(value = "配仓---批次")
+    private String batch;
+    @ApiModelProperty(value = "配仓---库位id")
+    private Long strogeLocationId;
+    @ApiModelProperty(value = "配仓---库位编码")
+    private String strogeLocationCode;
+    @ApiModelProperty(value = "配仓---可用库存")
+    private Float inStock;
+
+
 
     public Float getRemainGoodsNum() {
         return remainGoodsNum;
@@ -55,12 +65,12 @@ public class OutWhPlanGoodsDto {
         this.remainGoodsNum = remainGoodsNum;
     }
 
-    public Float getInOderGoodsNum() {
-        return inOderGoodsNum;
+    public Float getOutOderGoodsNum() {
+        return outOderGoodsNum;
     }
 
-    public void setInOderGoodsNum(Float inOderGoodsNum) {
-        this.inOderGoodsNum = inOderGoodsNum;
+    public void setOutOderGoodsNum(Float outOderGoodsNum) {
+        this.outOderGoodsNum = outOderGoodsNum;
     }
 
     public Float getDistGoodsNum() {
@@ -197,5 +207,37 @@ public class OutWhPlanGoodsDto {
 
     public void setRelationId(Long relationId) {
         this.relationId = relationId;
+    }
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch;
+    }
+
+    public Long getStrogeLocationId() {
+        return strogeLocationId;
+    }
+
+    public void setStrogeLocationId(Long strogeLocationId) {
+        this.strogeLocationId = strogeLocationId;
+    }
+
+    public String getStrogeLocationCode() {
+        return strogeLocationCode;
+    }
+
+    public void setStrogeLocationCode(String strogeLocationCode) {
+        this.strogeLocationCode = strogeLocationCode;
+    }
+
+    public Float getInStock() {
+        return inStock;
+    }
+
+    public void setInStock(Float inStock) {
+        this.inStock = inStock;
     }
 }
