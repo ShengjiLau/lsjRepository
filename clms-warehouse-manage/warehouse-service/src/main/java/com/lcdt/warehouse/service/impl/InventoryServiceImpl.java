@@ -8,10 +8,7 @@ import com.lcdt.items.dto.GoodsListParamsDto;
 import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
-import com.lcdt.warehouse.entity.GoodsInfo;
-import com.lcdt.warehouse.entity.InWarehouseOrder;
-import com.lcdt.warehouse.entity.InorderGoodsInfo;
-import com.lcdt.warehouse.entity.Inventory;
+import com.lcdt.warehouse.entity.*;
 import com.lcdt.warehouse.factory.InventoryFactory;
 import com.lcdt.warehouse.mapper.GoodsInfoMapper;
 import com.lcdt.warehouse.mapper.InventoryMapper;
@@ -90,6 +87,8 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
 
+
+
     /**
      * 入库操作
      *
@@ -147,8 +146,9 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
      * 出库操作
      */
     @Transactional(rollbackFor = Exception.class)
-    public void outInventory() {
-
+    public void outInventory(OutWarehouseOrder order,List<OutOrderGoodsInfo> goodsInfos) {
+        Assert.notNull(goodsInfos, "出库货物不能为空");
+        logger.info("出库操作开始 出库单：{}", order);
     }
 
 
