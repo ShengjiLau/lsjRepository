@@ -7,7 +7,7 @@
         <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
         <result column="invertory_num" jdbcType="INTEGER" property="invertoryNum" />
         <result column="lock_num" jdbcType="REAL" property="lockNum" />
-        <result column="warehouse_id" jdbcType="BIGINT" property="wareHouseId" />
+        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
         <result column="company_id" jdbcType="BIGINT" property="companyId" />
         <result column="remark" jdbcType="VARCHAR" property="remark" />
         <result column="business_desc" jdbcType="VARCHAR" property="businessDesc" />
