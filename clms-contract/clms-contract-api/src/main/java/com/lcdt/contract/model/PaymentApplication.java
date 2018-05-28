@@ -6,6 +6,8 @@ import java.util.Date;
 public class PaymentApplication {
     private Long paId;
 
+    private Long orderId;
+
     private String applicationSerialNo;
 
     private Date applicationDate;
@@ -70,6 +72,14 @@ public class PaymentApplication {
 
     public void setPaId(Long paId) {
         this.paId = paId;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public String getApplicationSerialNo() {

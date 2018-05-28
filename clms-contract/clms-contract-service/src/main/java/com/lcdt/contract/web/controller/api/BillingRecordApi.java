@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.model.BillingRecord;
 import com.lcdt.contract.service.BillingRecordService;
+import com.lcdt.contract.web.dto.BaseDto;
 import com.lcdt.contract.web.dto.BillingRecordDto;
 import com.lcdt.contract.web.dto.PageBaseDto;
 import com.lcdt.userinfo.model.User;
@@ -61,6 +62,15 @@ public class BillingRecordApi {
             jsonObject.put("message","开票失败");
         }
         return jsonObject;
+    }
+
+    @ApiOperation(value = "开票记录详情", notes = "根据主键查询开票记录详情")
+    @GetMapping("/detail")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_billing_list')")
+    public BaseDto addBillingRecord(Long brId){
+        BillingRecord billingRecord = billingRecordService.billingRecordDetail(brId);
+        BaseDto baseDto = new BaseDto(billingRecord);
+        return baseDto;
     }
 
 }

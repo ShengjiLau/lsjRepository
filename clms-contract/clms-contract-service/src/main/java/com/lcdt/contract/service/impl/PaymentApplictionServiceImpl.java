@@ -3,21 +3,23 @@ package com.lcdt.contract.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.contract.dao.OrderProductMapper;
 import com.lcdt.contract.dao.PaApprovalMapper;
 import com.lcdt.contract.dao.PaymentApplicationMapper;
+import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.model.PaApproval;
 import com.lcdt.contract.model.PaymentApplication;
 import com.lcdt.contract.service.PaymentApplictionService;
 import com.lcdt.contract.web.dto.PaymentApplicationDto;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
+import org.jboss.netty.handler.execution.OrderedDownstreamThreadPoolExecutor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @AUTHOR liuh
@@ -31,6 +33,8 @@ public class PaymentApplictionServiceImpl implements PaymentApplictionService {
     private PaymentApplicationMapper paymentApplicationMapper;
     @Autowired
     private PaApprovalMapper paApprovalMapper;
+    @Autowired
+    private OrderProductMapper orderProductMapper;
 
     @Override
     public PageInfo<List<PaymentApplication>> paymentApplictionList(PaymentApplicationDto paymentApplicationDto, PageInfo pageInfo) {
@@ -94,5 +98,21 @@ public class PaymentApplictionServiceImpl implements PaymentApplictionService {
             paymentApplicationMapper.updateByPrimaryKeySelective(paymentApplication);
         }
         return row;
+    }
+
+    @Override
+    public List<Map<Long,String>> orderProductInfo(String[] orderIds){
+        List<Map<Long,String>> mapList = new ArrayList<>();
+        List<OrderProduct> orderProductList = orderProductMapper.selectProductByOrderIds(orderIds);
+        Map<Long, String> map = null;
+        for(int i=0;i<orderProductList.size();i++){
+            map = new HashMap<>();
+            OrderProduct orderProduct = orderProductList.get(i);
+            //先尝试获取一下该orderId是否已经存在，组合后重新put值
+            String temp = map.get(orderProduct.getOrderId())==null?"":"、"+map.get(orderProduct.getOrderId());
+            map.put(orderProduct.getOrderId(),orderProduct.getName()+orderProduct.getNum()+orderProduct.getSku()+temp);
+            mapList.add(map);
+        }
+        return mapList;
     }
 }

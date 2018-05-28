@@ -36,4 +36,9 @@ public class BillingRecordServiceImpl implements BillingRecordService {
         int row = billingRecordMapper.insertSelective(billingRecord);
         return row;
     }
+
+    @Override
+    public BillingRecord billingRecordDetail(Long brId) {
+        return billingRecordMapper.selectByPrimaryKey(brId);
+    }
 }

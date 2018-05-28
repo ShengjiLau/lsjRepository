@@ -5,6 +5,7 @@ import com.lcdt.contract.model.PaymentApplication;
 import com.lcdt.contract.web.dto.PaymentApplicationDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @AUTHOR liuh
@@ -26,4 +27,12 @@ public interface PaymentApplictionService {
      * @return
      */
     int addPaymentAppliction(PaymentApplicationDto paymentApplicationDto);
+
+
+    /**
+     * 根据orderIds数组批量获取对应的产品信息
+     * @param orderIds
+     * @return
+     */
+    List<Map<Long,String>> orderProductInfo(String[] orderIds);
 }

@@ -3,6 +3,7 @@
 <mapper namespace="com.lcdt.contract.dao.PaymentApplicationMapper">
   <resultMap id="BaseResultMap" type="com.lcdt.contract.model.PaymentApplication">
     <id column="pa_id" jdbcType="BIGINT" property="paId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
     <result column="application_serial_no" jdbcType="VARCHAR" property="applicationSerialNo" />
     <result column="application_date" jdbcType="TIMESTAMP" property="applicationDate" />
     <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
@@ -34,7 +35,7 @@
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
   </resultMap>
   <sql id="Base_Column_List">
-    pa_id, application_serial_no, application_date, approval_status, approval_process_id,
+    pa_id, order_id, application_serial_no, application_date, approval_status, approval_process_id,
     approval_process, approval_start_date, approval_end_date, contract_code, order_serial_no,
     order_no, purchase_sum, supplier, receipt_unit, receipt_unit_bank, receipt_unit_account,
     payment_sum, payment_unit, payment_time, payment_name, manager, payment_directions,
@@ -52,9 +53,9 @@
     where pa_id = #{paId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lcdt.contract.model.PaymentApplication">
-    insert into t_payment_application (pa_id, application_serial_no, application_date,
-    approval_status, approval_process_id, approval_process,
-    approval_start_date, approval_end_date,
+    insert into t_payment_application (pa_id, order_id, application_serial_no,
+    application_date, approval_status, approval_process_id,
+    approval_process, approval_start_date, approval_end_date,
     contract_code, order_serial_no, order_no,
     purchase_sum, supplier, receipt_unit,
     receipt_unit_bank, receipt_unit_account, payment_sum,
@@ -63,9 +64,9 @@
     attachment1, attachment1_name, attachment2,
     attachment2_name, company_id, create_id,
     create_name)
-    values (#{paId,jdbcType=BIGINT}, #{applicationSerialNo,jdbcType=VARCHAR}, #{applicationDate,jdbcType=TIMESTAMP},
-    #{approvalStatus,jdbcType=SMALLINT}, #{approvalProcessId,jdbcType=BIGINT}, #{approvalProcess,jdbcType=VARCHAR},
-    #{approvalStartDate,jdbcType=TIMESTAMP}, #{approvalEndDate,jdbcType=TIMESTAMP},
+    values (#{paId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{applicationSerialNo,jdbcType=VARCHAR},
+    #{applicationDate,jdbcType=TIMESTAMP}, #{approvalStatus,jdbcType=SMALLINT}, #{approvalProcessId,jdbcType=BIGINT},
+    #{approvalProcess,jdbcType=VARCHAR}, #{approvalStartDate,jdbcType=TIMESTAMP}, #{approvalEndDate,jdbcType=TIMESTAMP},
     #{contractCode,jdbcType=VARCHAR}, #{orderSerialNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR},
     #{purchaseSum,jdbcType=DECIMAL}, #{supplier,jdbcType=VARCHAR}, #{receiptUnit,jdbcType=VARCHAR},
     #{receiptUnitBank,jdbcType=VARCHAR}, #{receiptUnitAccount,jdbcType=VARCHAR}, #{paymentSum,jdbcType=DECIMAL},
@@ -80,6 +81,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="paId != null">
         pa_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
       </if>
       <if test="applicationSerialNo != null">
         application_serial_no,
@@ -173,6 +177,9 @@
       <if test="paId != null">
         #{paId,jdbcType=BIGINT},
       </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
       <if test="applicationSerialNo != null">
         #{applicationSerialNo,jdbcType=VARCHAR},
       </if>
@@ -265,6 +272,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.contract.model.PaymentApplication">
     update t_payment_application
     <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
       <if test="applicationSerialNo != null">
         application_serial_no = #{applicationSerialNo,jdbcType=VARCHAR},
       </if>
@@ -357,7 +367,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.PaymentApplication">
     update t_payment_application
-    set application_serial_no = #{applicationSerialNo,jdbcType=VARCHAR},
+    set order_id = #{orderId,jdbcType=BIGINT},
+      application_serial_no = #{applicationSerialNo,jdbcType=VARCHAR},
       application_date = #{applicationDate,jdbcType=TIMESTAMP},
       approval_status = #{approvalStatus,jdbcType=SMALLINT},
       approval_process_id = #{approvalProcessId,jdbcType=BIGINT},

@@ -30,4 +30,12 @@ public interface BillingRecordService {
     int addBillingRecord(BillingRecord billingRecord);
 
 
+    /**
+     * 根据主键获取开票记录详情
+     * @param brId
+     * @return
+     */
+    BillingRecord billingRecordDetail(Long brId);
+
+
 }

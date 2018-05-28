@@ -178,6 +178,7 @@
 
   <resultMap id="PaApprovalDtoMap" type="com.lcdt.contract.web.dto.PaApprovalDto">
     <id column="pa_id" jdbcType="BIGINT" property="paId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
     <result column="application_serial_no" jdbcType="VARCHAR" property="applicationSerialNo" />
     <result column="application_date" jdbcType="TIMESTAMP" property="applicationDate" />
     <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
@@ -213,7 +214,7 @@
   </resultMap>
 
   <select id="selectPaApprovalByCondition" resultMap="PaApprovalDtoMap">
-    select t1.pa_id, t1.approval_status,t1.application_date, t1.order_no, t1.contract_code,t1.supplier, t1.purchase_sum, t1.payment_sum,
+    select t1.pa_id, t1.order_id,t1.approval_status,t1.application_date, t1.order_no, t1.contract_code,t1.supplier, t1.purchase_sum, t1.payment_sum,
     t1.approval_start_date, t1.approval_end_date,t1.company_id
     from t_payment_application t1 left join t_pa_approval t2 on t1.pa_id = t2.pa_id
     <where>
