@@ -18,4 +18,6 @@ import java.util.List;
 public interface CheckService extends IService<Check> {
 
     List<CheckListDto> selectList(CheckParamDto paramDto);
+
+    int cancelCheck(CheckParamDto checkDto);
 }

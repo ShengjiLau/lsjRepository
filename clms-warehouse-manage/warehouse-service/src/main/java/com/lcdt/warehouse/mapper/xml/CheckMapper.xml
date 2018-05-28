@@ -2,13 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.warehouse.mapper.CheckMapper">
 
-    <!-- 开启二级缓存 -->
-    <cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+
     <select id="selectListByParams" resultType="com.lcdt.warehouse.dto.CheckParamDto">
         SELECT a.check_id,a.check_num,a.check_status,a.group_id,a.group_name,a.customer_id,a.customer_name,a.warehouse_id,
         a.warehouse_name,a.attachments,a.company_id,a.remark,a.create_id,a.create_name,a.create_date,a.update_id,a.update_name,
-        a.update_date,a.is_deleted,a.complete_id,a.complete_name,a.complete_date
-        FROM check a
+        a.update_date,a.is_deleted,a.complete_id,a.complete_name,a.complete_date,diff_status
+        FROM `check` a
         LEFT JOIN  (
         select check_id from check_item where 1=1
         <if test="goodsInfo!=null and goodsInfo!=''">
@@ -18,9 +17,8 @@
             )
         </if>
         ) b on(a.check_id = b.check_id)
-        WHERE a.plan_id = #{planId,jdbcType=BIGINT}
+        WHERE a.company_id = #{companyId,jdbcType=BIGINT}
         <if test="createDateFrom!=null and createDateFrom!=''">
-
             and date(a.create_date) >= CONCAT(STR_TO_DATE(#{createDateFrom,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
         </if>
         <if test="createDateTo!=null and createDateTo!=''">
@@ -45,6 +43,14 @@
         <if test="customerId!=null">
             and a.customerId =#{customerId,jdbcType=BIGINT}
         </if>
+        <if test="checkStatus!=null and checkStatus!=0">
+            and a.check_status=#{checkStatus,jdbcType=TINYINT}
+        </if>
         order by a.check_id
     </select>
+
+
+    <update id="cancelCheck" parameterType="com.lcdt.warehouse.dto.CheckParamDto">
+      UPDATE `check` SET check_status = 9 WHERE check_id = #{checkId,jdbcType=BIGINT} AND company_id =#{companyId,jdbcType=BIGINT}
+    </update>
 </mapper>

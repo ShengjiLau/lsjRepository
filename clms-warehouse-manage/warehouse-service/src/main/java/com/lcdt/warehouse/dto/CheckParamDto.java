@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Created by Administrator on 2018/5/17.
  */
-public class CheckParamDto extends Check{
+public class CheckParamDto extends  Check{
     /**
      * 创建时间
      */

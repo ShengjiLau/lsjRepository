@@ -10,8 +10,8 @@ import java.io.Serializable;
  * 
  * </p>
  *
- * @author zhaosl
- * @since 2018-05-17
+ * @author code generate
+ * @since 2018-05-25
  */
 public class Check implements Serializable {
 
@@ -21,7 +21,7 @@ public class Check implements Serializable {
     private Long checkId;
     private String checkNum;
     /**
-     * 1:待盘库，2:已完成
+     * 1:待盘库，2:已完成，9:已取消
      */
     private Integer checkStatus;
     private Long groupId;
@@ -91,6 +91,10 @@ public class Check implements Serializable {
      * 盘库完成时间
      */
     private Date completeDate;
+    /**
+     * 差异状态：1：无差异，2：有差异
+     */
+    private Integer diffStatus;
 
 
     public Long getCheckId() {
@@ -269,6 +273,14 @@ public class Check implements Serializable {
         this.completeDate = completeDate;
     }
 
+    public Integer getDiffStatus() {
+        return diffStatus;
+    }
+
+    public void setDiffStatus(Integer diffStatus) {
+        this.diffStatus = diffStatus;
+    }
+
     @Override
     public String toString() {
         return "Check{" +
@@ -294,6 +306,7 @@ public class Check implements Serializable {
         ", completeId=" + completeId +
         ", completeName=" + completeName +
         ", completeDate=" + completeDate +
+        ", diffStatus=" + diffStatus +
         "}";
     }
 }

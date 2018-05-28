@@ -17,4 +17,7 @@ import java.util.List;
 public interface CheckMapper extends BaseMapper<Check> {
 
     List<Check> selectListByParams(CheckParamDto paramDto);
+
+
+    int cancelCheck(CheckParamDto checkDto);
 }
