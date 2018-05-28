@@ -78,11 +78,11 @@ public class InorderGoodsInfo implements Serializable {
     /**
      * 库位id
      */
-    private Long strogeLocationId;
+    private Long storageLocationId;
     /**
      * 库位编码
      */
-    private String strogeLocationCode;
+    private String storageLocationCode;
 
     public Long getRelationId() {
         return relationId;
@@ -244,19 +244,19 @@ public class InorderGoodsInfo implements Serializable {
         this.remark = remark;
     }
 
-    public Long getStrogeLocationId() {
-        return strogeLocationId;
+    public Long getStorageLocationId() {
+        return storageLocationId;
     }
 
-    public void setStrogeLocationId(Long strogeLocationId) {
-        this.strogeLocationId = strogeLocationId;
+    public void setStorageLocationId(Long storageLocationId) {
+        this.storageLocationId = storageLocationId;
     }
 
-    public String getStrogeLocationCode() {
-        return strogeLocationCode;
+    public String getStorageLocationCode() {
+        return storageLocationCode;
     }
 
-    public void setStrogeLocationCode(String strogeLocationCode) {
-        this.strogeLocationCode = strogeLocationCode;
+    public void setStorageLocationCode(String storageLocationCode) {
+        this.storageLocationCode = storageLocationCode;
     }
 }
