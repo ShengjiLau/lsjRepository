@@ -16,8 +16,8 @@
         <result column="unit" jdbcType="VARCHAR" property="unit" />
         <result column="unit_data" jdbcType="INTEGER" property="unitData" />
         <result column="batch" jdbcType="VARCHAR" property="batch" />
-        <result column="stroge_location_id" jdbcType="BIGINT" property="strogeLocationId" />
-        <result column="stroge_location_code" jdbcType="VARCHAR" property="strogeLocationCode" />
+        <result column="stroge_location_id" jdbcType="BIGINT" property="storageLocationId" />
+        <result column="stroge_location_code" jdbcType="VARCHAR" property="storageLocationCode" />
         <result column="in_stock" jdbcType="REAL" property="inStock" />
         <result column="goods_num" jdbcType="REAL" property="goodsNum" />
         <result column="outbound_quantity" jdbcType="REAL" property="outboundQuantity" />
