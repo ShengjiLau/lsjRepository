@@ -66,7 +66,7 @@ public class OutWarehouseOrderController {
     }
 
 
-    @ApiOperation("入库单详细")
+    @ApiOperation("出库单详细")
     @RequestMapping(value = "/order/{outorderId}", method = RequestMethod.GET)
     public OutWhOrderDto inWarehouseOrderDetail(@PathVariable Long outorderId) {
         OutWhOrderDto outWhOrderDto = new OutWhOrderDto();
@@ -74,7 +74,7 @@ public class OutWarehouseOrderController {
         return outWhOrderDto;
     }
 
-    @ApiOperation("入库单入库")
+    @ApiOperation("出库单出库")
     @RequestMapping(value = "/order/outbound", method = RequestMethod.PATCH)
     public JSONObject outbound(@RequestBody OutWhOrderOutboundParamsDto params) {
         ModifyOutOrderStatusParamsDto statusParams = new ModifyOutOrderStatusParamsDto();
@@ -98,7 +98,7 @@ public class OutWarehouseOrderController {
         return jsonObject;
     }
 
-    @ApiOperation("入库单取消")
+    @ApiOperation("出库单取消")
     @RequestMapping(value = "/order/cancel/{outorderId}", method = RequestMethod.PATCH)
     public JSONObject cancelOutbound(@PathVariable long outorderId) {
         ModifyOutOrderStatusParamsDto params = new ModifyOutOrderStatusParamsDto();
@@ -119,6 +119,13 @@ public class OutWarehouseOrderController {
             jsonObject.put("message", "取消出库单失败");
         }
         return jsonObject;
+    }
+
+    @ApiOperation("出库配仓信息，计划用")
+    @RequestMapping(value = "/order/distribution/records", method = RequestMethod.GET)
+    public PageBaseDto queryDisRecords(@RequestParam Long outPlanId) {
+        PageBaseDto pageBaseDto = new PageBaseDto(outWarehouseOrderService.queryOutOrderDisRecords(SecurityInfoGetter.getCompanyId(), outPlanId));
+        return pageBaseDto;
     }
 
 }

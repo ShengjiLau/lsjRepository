@@ -20,6 +20,9 @@ public class OutOrderGoodsInfo implements Serializable {
     @TableId(value = "relation_id", type = IdType.AUTO)
     private Long relationId;
 
+    /**
+     * 库存id
+     */
     private Long inventoryId;
 
     /**

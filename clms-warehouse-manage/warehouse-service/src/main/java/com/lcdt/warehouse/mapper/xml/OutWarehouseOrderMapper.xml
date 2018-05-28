@@ -35,9 +35,24 @@
         <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
         <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
     </resultMap>
+
     <resultMap id="OutWarehouseOrderDetailsMap" type="com.lcdt.warehouse.dto.OutWhOrderDto">
         <collection property="outOrderGoodsInfoList" column="outorder_id" select="com.lcdt.warehouse.mapper.OutOrderGoodsInfoMapper.selectOutOrderGoodsDetail"/>
     </resultMap>
+
+    <resultMap id="BaseResultMapOfDisRecords" type="com.lcdt.warehouse.dto.DistributionRecordsOutOrderDto">
+        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId"/>
+        <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName"/>
+        <collection property="outOrderGoodsInfoDtoList" ofType="com.lcdt.warehouse.dto.OutOrderGoodsInfoDto">
+            <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+            <result column="goods_code" jdbcType="VARCHAR" property="goodsCode" />
+            <result column="goods_barcode" jdbcType="VARCHAR" property="goodsBarCode" />
+            <result column="unit" jdbcType="VARCHAR" property="unit" />
+            <result column="goods_num" jdbcType="REAL" property="goodsNum" />
+            <result column="outbound_quantity" jdbcType="REAL" property="outboundQuantity" />
+        </collection>
+    </resultMap>
+
     <sql id="BaseSelectFields">
         outorder_id, out_plan_id, outorder_no, order_status, group_id, group_name,
         contract_no, purchase_no, customer_id, customer_name, customer_contact_name, customer_contact_phone,
@@ -122,7 +137,7 @@
                 F_OUT_ORDER_CODE_BY_PLAN(#{outorderNo,jdbcType=VARCHAR},#{outPlanId,jdbcType=BIGINT})
             </when>
             <otherwise>
-                F_OUT_ORDER_CODE('OUT')
+                F_OUT_ORDER_CODE('ON')
             </otherwise>
         </choose>,
         #{orderStatus,jdbcType=INTEGER},
@@ -151,4 +166,13 @@
         FROM out_warehouse_order
         WHERE company_id= #{companyId,jdbcType=BIGINT} and outorder_id = #{outorderId,jdbcType=BIGINT}
     </select>
+
+    <select id="selectOutOrderDisRecords" resultMap="BaseResultMapOfDisRecords">
+        select o.warehouse_id,o.warehouse_name,g.goods_name,g.goods_code,g.goods_bar_code,g.unit,SUM(g.goods_num) goods_num,SUM(g.outbound_quantity)
+        from out_warehouse_order o
+        left join out_order_goods_info g on o.outorder_id=g.outorder_id
+        where company_id= #{companyId,jdbcType=BIGINT} and out_plan_id = #{outPlanId,jdbcType=BIGINT}
+        group by o.warehouse_id,o.warehouse_name,g.goods_code,g.goods_bar_code
+    </select>
+
 </mapper>

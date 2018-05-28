@@ -46,7 +46,7 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
             for (int i = 0; i < dto.getOutOrderGoodsInfoList().size(); i++) {
                 OutOrderGoodsInfo outOrderGoodsInfo = new OutOrderGoodsInfo();
                 BeanUtils.copyProperties(dto.getOutOrderGoodsInfoList().get(i), outOrderGoodsInfo);
-                outOrderGoodsInfo.setOutorderId(outOrderGoodsInfo.getOutorderId());
+                outOrderGoodsInfo.setOutorderId(outWarehouseOrder.getOutorderId());
                 outOrderGoodsInfoList.add(outOrderGoodsInfo);
             }
             //批量插入出库单明细
@@ -119,6 +119,11 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
         //inventoryService.putInventory(inorderGoodsInfoList,inWarehouseOrder);
 
         return result;
+    }
+
+    @Override
+    public List<DistributionRecordsOutOrderDto> queryOutOrderDisRecords(Long companyId, Long outPlanId) {
+        return baseMapper.selectOutOrderDisRecords(companyId,outPlanId);
     }
 
 }
