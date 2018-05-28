@@ -201,8 +201,12 @@ public class ReconcileServiceImpl implements ReconcileService {
 				for(FeeExchange fe:feeExchangelist) {
 					if (rdto.getReconcileId().longValue() == fe.getReconcileId().longValue()) {
 						i++;
-						j += fe.getTransportationExpenses();
-						j += fe.getOtherExpenses();
+						if (null != fe.getTransportationExpenses()) {
+							j += fe.getTransportationExpenses();
+						}
+						if (null != fe.getOtherExpenses()) {
+							j += fe.getOtherExpenses();
+						}
 					}
 				}
 				rdto.setSumAmount(j);
