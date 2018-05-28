@@ -23,14 +23,14 @@
         <result column="in_house_price" jdbcType="REAL" property="inHousePrice" />
         <result column="damage" jdbcType="REAL" property="damage" />
         <result column="remark" jdbcType="VARCHAR" property="remark" />
-        <result column="stroge_location_id" jdbcType="BIGINT" property="strogeLocationId" />
-        <result column="stroge_location_code" jdbcType="VARCHAR" property="strogeLocationCode" />
+        <result column="storage_location_id" jdbcType="BIGINT" property="storageLocationId" />
+        <result column="storage_location_code" jdbcType="VARCHAR" property="storageLocationCode" />
     </resultMap>
     <resultMap id="BaseResultMapDto" extends="BaseResultMap" type="com.lcdt.warehouse.dto.InorderGoodsInfoDto"></resultMap>
     <sql id="Base_Select_List">
         relation_id, inorder_id,inplan_goods_id, goods_id, goods_name, goods_spec, goods_classify,goods_code, goods_barcode,
         goods_price, goods_batch, min_unit, unit, unit_data, receivalbe_amount, batch, in_house_amount,
-        in_house_price, damage, remark, stroge_location_id, stroge_location_code
+        in_house_price, damage, remark, storage_location_id, storage_location_code
     </sql>
 
     <select id="selectGoodsDetail" parameterType="Long" resultMap="BaseResultMapDto">
