@@ -44,6 +44,8 @@ public class InventoryApi {
         return JSONResponseUtil.success(inventoryService.modifyInventoryPrice(inventoryId, newprice));
     }
 
+    @PostMapping("/costremark/update")
+    @ApiOperation("修改备注")
     private ResponseMessage modifyInventoryRemark(Long inventoryId, String remark) {
         return JSONResponseUtil.success(inventoryService.modifyInventoryRemark(inventoryId, remark));
     }

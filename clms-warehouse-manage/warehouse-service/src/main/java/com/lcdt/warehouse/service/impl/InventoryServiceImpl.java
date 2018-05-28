@@ -28,6 +28,7 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -61,23 +62,21 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         return page.setRecords(inventories);
     }
 
+
     private void queryGoodsInfo(Long companyId, List<Inventory> inventories) {
-        ArrayList<Long> longs = new ArrayList<>();
-        for (Inventory inventory : inventories) {
-            longs.add(inventory.getOriginalGoodsId());
-        }
-        GoodsListParamsDto dto = new GoodsListParamsDto();
-        dto.setGoodsIds(longs);
-        dto.setCompanyId(companyId);
+        logger.info("查询 库存 关联 商品信息 {}",inventories);
+        List<Long> longs = inventories.stream().map(inventory -> inventory.getOriginalGoodsId()).collect(Collectors.toList());
+        logger.info("批量查询商品id {}",longs);
+        GoodsListParamsDto dto = new GoodsListParamsDto(longs,companyId);
         PageInfo<GoodsInfoDao> listPageInfo = goodsService.queryByCondition(dto);
-        List<GoodsInfoDao> list = listPageInfo.getList();
-        for (Inventory inventory : inventories) {
-            for (GoodsInfoDao goodsInfoDao : list) {
-                if (inventory.getOriginalGoodsId().equals(goodsInfoDao.getGoodsId())) {
-                    inventory.setGoods(goodsInfoDao);
-                }
-            }
-        }
+        logger.debug("商品查询结果 {}",listPageInfo.getList());
+        fillInventoryGoods(inventories, listPageInfo.getList());
+    }
+
+    public static void fillInventoryGoods(List<Inventory> inventories, List<GoodsInfoDao> list) {
+        inventories.stream().
+                forEach(inventory -> list.stream()
+                        .filter(goods -> inventory.getOriginalGoodsId().equals(goods.getSubItemId())).findFirst().ifPresent(goodsInfoDao -> inventory.setGoods(goodsInfoDao)));
     }
 
     private List<Long> queryGoodsIds(InventoryQueryDto inventoryQueryDto, Long companyId) {
@@ -102,7 +101,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         Assert.notNull(goods, "入库货物不能为空");
         logger.info("入库操作开始 入库单：{}", order);
         for (InorderGoodsInfo good : goods) {
-
             Inventory inventory = InventoryFactory.createInventory(order, good);
             GoodsInfo goodsInfo = saveGoodsInfo(good);
             inventory.setGoodsId(goodsInfo.getGoodsId());
