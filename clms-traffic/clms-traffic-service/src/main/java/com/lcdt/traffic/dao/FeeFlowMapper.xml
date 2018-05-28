@@ -280,7 +280,7 @@
                       and  #{createEnd,jdbcType=TIMESTAMP} >= date(f.create_date)
                     </if>
                   </where>
-                 group by pro_id ) t1 on t.dt= t1.create_date
+                 group by pro_id,date(f.create_date) ) t1 on t.dt= t1.create_date
         <where>
           <if test="createBegin!=null and createBegin!=''">
             and date(dt) >= #{createBegin,jdbcType=TIMESTAMP}

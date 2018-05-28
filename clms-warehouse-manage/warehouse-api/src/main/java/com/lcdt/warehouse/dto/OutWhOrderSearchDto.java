@@ -45,9 +45,9 @@ public class OutWhOrderSearchDto {
     private Long companyId;
 
     @ApiModelProperty(value = "分页编号",required = true)
-    private int pageNo;
+    private int pageNo=1;
     @ApiModelProperty(value = "每页数",required = true)
-    private int pageSize;
+    private int pageSize=10;
 
     public Long getOutPlanId() {
         return outPlanId;
