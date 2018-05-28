@@ -430,7 +430,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             tObj.setStrogeLocationId(obj1.getStrogeLocationId());
             tObj.setStrogeLocationCode(obj1.getStrogeLocationCode());
             tObj.setGoodsNum(obj1.getOutOderGoodsNum());//配仓数
-            tObj.setInStock(obj1.getInStock();//可用库存
+            tObj.setInStock(obj1.getInStock());//可用库存
             tObj.setRemark(obj1.getDisRemark());
             outOrderGoodsInfoList.add(tObj);
         }
