@@ -7,6 +7,7 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.items.dto.GoodsListParamsDto;
 import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.service.SubItemsInfoService;
+import com.lcdt.warehouse.contants.OutOrderStatus;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.entity.*;
 import com.lcdt.warehouse.factory.InventoryFactory;
@@ -149,6 +150,15 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     public void outInventory(OutWarehouseOrder order,List<OutOrderGoodsInfo> goodsInfos) {
         Assert.notNull(goodsInfos, "出库货物不能为空");
         logger.info("出库操作开始 出库单：{}", order);
+        if (order.isOut()) {
+            logger.warn("出库操作错误 出库单已出库：{}", order);
+            return;
+        }
+
+
+
+
+
     }
 
 
@@ -189,7 +199,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
      * @return
      */
     public List<Inventory> querySameInventory(Inventory inventory) {
-        List<Inventory> inventories = inventoryMapper.selectInventoryList(null, inventory);
+        List<Inventory> inventories = inventoryMapper.selectInventoryList(new Page<Inventory>(), inventory);
         if (inventories == null) {
             return new ArrayList<>();
         }

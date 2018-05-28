@@ -15,7 +15,7 @@ public class InventoryLogFactory {
         inventoryLog.setCompanyId(order.getCompanyId());
         inventoryLog.setWarehouseId(inventory.getWareHouseId());
         inventoryLog.setChangeNum(inventory.getInvertoryNum());
-        inventoryLog.setStorageLocation(inventory.getStorageLocationCode());
+        inventoryLog.setStorageLocationCode(inventory.getStorageLocationCode());
         inventoryLog.setStorageLocationId(inventory.getStorageLocationId());
         inventoryLog.setOriginalGoodsId(inventory.getOriginalGoodsId());
         inventoryLog.setCustomerName(order.getCustomerName());

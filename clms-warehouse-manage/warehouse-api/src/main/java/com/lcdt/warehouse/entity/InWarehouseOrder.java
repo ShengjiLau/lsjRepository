@@ -75,6 +75,7 @@ public class InWarehouseOrder implements Serializable,ResponseData {
     /**
      * 仓库id
      */
+
     private Long warehouseId;
     /**
      * 仓库名称
