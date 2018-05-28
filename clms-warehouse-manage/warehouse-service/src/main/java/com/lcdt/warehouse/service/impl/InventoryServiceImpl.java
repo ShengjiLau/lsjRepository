@@ -113,6 +113,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         }
         order.setInOrderStatus(InOrderStatus.ENTERED);
         inOrderService.updateById(order);
+        logger.info("入库成功 入库单：{}", order);
     }
 
     @Override
@@ -149,8 +150,9 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void lockInventoryNum(Inventory inventory,Float tryLockNum){
+    public void lockInventoryNum(Long inventoryId,Float tryLockNum){
         Assert.notNull(tryLockNum, "不能为空");
+        Inventory inventory = selectById(inventoryId);
         Float invertoryNum = inventory.getInvertoryNum();
         if (invertoryNum < tryLockNum) {
             throw new RuntimeException("锁定库存量不能大于库存剩余数量");
