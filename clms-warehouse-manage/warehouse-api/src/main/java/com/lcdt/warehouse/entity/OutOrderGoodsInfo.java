@@ -19,6 +19,9 @@ public class OutOrderGoodsInfo implements Serializable {
 
     @TableId(value = "relation_id", type = IdType.AUTO)
     private Long relationId;
+
+    private Long inventoryId;
+
     /**
      * 出库单id
      */
@@ -100,6 +103,13 @@ public class OutOrderGoodsInfo implements Serializable {
      */
     private String remark;
 
+    public Long getInventoryId() {
+        return inventoryId;
+    }
+
+    public void setInventoryId(Long inventoryId) {
+        this.inventoryId = inventoryId;
+    }
 
     public Long getRelationId() {
         return relationId;

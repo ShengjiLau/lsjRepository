@@ -144,7 +144,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
     /**
-     * 出库操作
+     * 出库操作 //TODO 可用数量 和锁定数量的确定
      */
     @Transactional(rollbackFor = Exception.class)
     public void outInventory(OutWarehouseOrder order,List<OutOrderGoodsInfo> goodsInfos) {
@@ -154,7 +154,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             logger.warn("出库操作错误 出库单已出库：{}", order);
             return;
         }
-
 
 
 
