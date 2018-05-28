@@ -3,6 +3,7 @@
 <mapper namespace="com.lcdt.contract.dao.BillingRecordMapper">
   <resultMap id="BaseResultMap" type="com.lcdt.contract.model.BillingRecord">
     <id column="br_id" jdbcType="BIGINT" property="brId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
     <result column="billing_no" jdbcType="VARCHAR" property="billingNo" />
     <result column="billing_date" jdbcType="TIMESTAMP" property="billingDate" />
     <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
@@ -19,8 +20,9 @@
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
   </resultMap>
   <sql id="Base_Column_List">
-    br_id, billing_no, billing_date, contract_code, order_serial_no, billing_sum, buyer,
-    saler, buyer_tax_id, saler_tax_id, directions, remark, company_id, create_id, create_name
+    br_id, order_id, billing_no, billing_date, contract_code, order_serial_no, billing_sum,
+    buyer, saler, buyer_tax_id, saler_tax_id, directions, remark, company_id, create_id,
+    create_name
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
@@ -33,24 +35,27 @@
     where br_id = #{brId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lcdt.contract.model.BillingRecord">
-    insert into t_billing_record (br_id, billing_no, billing_date,
-    contract_code, order_serial_no, billing_sum,
-    buyer, saler, buyer_tax_id,
-    saler_tax_id, directions, remark,
-    company_id, create_id, create_name
-    )
-    values (#{brId,jdbcType=BIGINT}, #{billingNo,jdbcType=VARCHAR}, #{billingDate,jdbcType=TIMESTAMP},
-    #{contractCode,jdbcType=VARCHAR}, #{orderSerialNo,jdbcType=VARCHAR}, #{billingSum,jdbcType=DECIMAL},
-    #{buyer,jdbcType=VARCHAR}, #{saler,jdbcType=VARCHAR}, #{buyerTaxId,jdbcType=VARCHAR},
-    #{salerTaxId,jdbcType=VARCHAR}, #{directions,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
-    #{companyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}
-    )
+    insert into t_billing_record (br_id, order_id, billing_no,
+    billing_date, contract_code, order_serial_no,
+    billing_sum, buyer, saler,
+    buyer_tax_id, saler_tax_id, directions,
+    remark, company_id, create_id,
+    create_name)
+    values (#{brId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{billingNo,jdbcType=VARCHAR},
+    #{billingDate,jdbcType=TIMESTAMP}, #{contractCode,jdbcType=VARCHAR}, #{orderSerialNo,jdbcType=VARCHAR},
+    #{billingSum,jdbcType=DECIMAL}, #{buyer,jdbcType=VARCHAR}, #{saler,jdbcType=VARCHAR},
+    #{buyerTaxId,jdbcType=VARCHAR}, #{salerTaxId,jdbcType=VARCHAR}, #{directions,jdbcType=VARCHAR},
+    #{remark,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT},
+    #{createName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.contract.model.BillingRecord">
     insert into t_billing_record
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="brId != null">
         br_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
       </if>
       <if test="billingNo != null">
         billing_no,
@@ -99,6 +104,9 @@
       <if test="brId != null">
         #{brId,jdbcType=BIGINT},
       </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
       <if test="billingNo != null">
         #{billingNo,jdbcType=VARCHAR},
       </if>
@@ -146,6 +154,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.contract.model.BillingRecord">
     update t_billing_record
     <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
       <if test="billingNo != null">
         billing_no = #{billingNo,jdbcType=VARCHAR},
       </if>
@@ -193,7 +204,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.BillingRecord">
     update t_billing_record
-    set billing_no = #{billingNo,jdbcType=VARCHAR},
+    set order_id = #{orderId,jdbcType=BIGINT},
+      billing_no = #{billingNo,jdbcType=VARCHAR},
       billing_date = #{billingDate,jdbcType=TIMESTAMP},
       contract_code = #{contractCode,jdbcType=VARCHAR},
       order_serial_no = #{orderSerialNo,jdbcType=VARCHAR},

@@ -6,6 +6,8 @@ import java.util.Date;
 public class BillingRecord {
     private Long brId;
 
+    private Long orderId;
+
     private String billingNo;
 
     private Date billingDate;
@@ -40,6 +42,14 @@ public class BillingRecord {
 
     public void setBrId(Long brId) {
         this.brId = brId;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public String getBillingNo() {
