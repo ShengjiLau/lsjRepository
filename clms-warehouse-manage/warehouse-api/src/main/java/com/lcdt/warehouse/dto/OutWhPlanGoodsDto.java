@@ -48,10 +48,11 @@ public class OutWhPlanGoodsDto {
     private String disRemark;
     @ApiModelProperty(value = "配仓---批次")
     private String batch;
+
     @ApiModelProperty(value = "配仓---库位id")
-    private Long strogeLocationId;
+    private Long storageLocationId;
     @ApiModelProperty(value = "配仓---库位编码")
-    private String strogeLocationCode;
+    private String storageLocationCode;
     @ApiModelProperty(value = "配仓---可用库存")
     private Float inStock;
     @ApiModelProperty(value = "配仓---库存主ID")
@@ -219,20 +220,20 @@ public class OutWhPlanGoodsDto {
         this.batch = batch;
     }
 
-    public Long getStrogeLocationId() {
-        return strogeLocationId;
+    public Long getStorageLocationId() {
+        return storageLocationId;
     }
 
-    public void setStrogeLocationId(Long strogeLocationId) {
-        this.strogeLocationId = strogeLocationId;
+    public void setStorageLocationId(Long storageLocationId) {
+        this.storageLocationId = storageLocationId;
     }
 
-    public String getStrogeLocationCode() {
-        return strogeLocationCode;
+    public String getStorageLocationCode() {
+        return storageLocationCode;
     }
 
-    public void setStrogeLocationCode(String strogeLocationCode) {
-        this.strogeLocationCode = strogeLocationCode;
+    public void setStorageLocationCode(String storageLocationCode) {
+        this.storageLocationCode = storageLocationCode;
     }
 
     public Float getInStock() {
