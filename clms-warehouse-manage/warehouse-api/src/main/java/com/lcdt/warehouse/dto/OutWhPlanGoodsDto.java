@@ -54,6 +54,8 @@ public class OutWhPlanGoodsDto {
     private String strogeLocationCode;
     @ApiModelProperty(value = "配仓---可用库存")
     private Float inStock;
+    @ApiModelProperty(value = "配仓---库存主ID")
+    private Long invertoryId;
 
 
 
@@ -239,5 +241,13 @@ public class OutWhPlanGoodsDto {
 
     public void setInStock(Float inStock) {
         this.inStock = inStock;
+    }
+
+    public Long getInvertoryId() {
+        return invertoryId;
+    }
+
+    public void setInvertoryId(Long invertoryId) {
+        this.invertoryId = invertoryId;
     }
 }
