@@ -15,7 +15,7 @@ public class GeneratorServiceEntity {
     public void generateCode() {
         String packageName = "com.lcdt.warehouse";
         boolean serviceNameStartWithI = false;//user -> UserService, 设置成true: user -> IUserService
-        generateByTables(serviceNameStartWithI, packageName,null);
+        generateByTables(serviceNameStartWithI, packageName,"out_warehouse_order");
     }
 
     private void generateByTables(boolean serviceNameStartWithI, String packageName, String... tableNames) {
