@@ -7,6 +7,7 @@ import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.OutOrderGoodsInfo;
 import com.lcdt.warehouse.entity.OutWarehouseOrder;
 import com.lcdt.warehouse.mapper.OutWarehouseOrderMapper;
+import com.lcdt.warehouse.service.InventoryService;
 import com.lcdt.warehouse.service.OutOrderGoodsInfoService;
 import com.lcdt.warehouse.service.OutWarehouseOrderService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -34,6 +35,9 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
     @Autowired
     OutOrderGoodsInfoService outOrderGoodsInfoService;
 
+    @Autowired
+    InventoryService inventoryService;
+
     @Override
     public int addOutWarehouseOrder(OutWhOrderDto dto) {
         int result = 0;
@@ -48,6 +52,7 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
                 BeanUtils.copyProperties(dto.getOutOrderGoodsInfoList().get(i), outOrderGoodsInfo);
                 outOrderGoodsInfo.setOutorderId(outWarehouseOrder.getOutorderId());
                 outOrderGoodsInfoList.add(outOrderGoodsInfo);
+                inventoryService.lockInventoryNum(outOrderGoodsInfo.getInventoryId(),outOrderGoodsInfo.getOutboundQuantity());
             }
             //批量插入出库单明细
             outOrderGoodsInfoService.insertBatch(outOrderGoodsInfoList);
