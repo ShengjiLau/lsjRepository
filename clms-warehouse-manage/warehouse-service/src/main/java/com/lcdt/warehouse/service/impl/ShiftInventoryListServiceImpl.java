@@ -3,6 +3,7 @@ package com.lcdt.warehouse.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -77,8 +78,8 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		//取得ShiftGoodsListDTO集合
 		List<ShiftGoodsListDTO> shiftGoodsListDTOList = shiftInventoryListDTO.getShiftGoodsListDTOList();
 		
-		//新建移库到新库的记录
-		List<ShiftGoodsDO> shiftGoodsDOList = new ArrayList<ShiftGoodsDO>();
+		//新建移库到新库的记录,不涉及遍历，此处采用LinkedList
+		List<ShiftGoodsDO> shiftGoodsDOList = new LinkedList<ShiftGoodsDO>();
 		int h = 0;
 			
 		for (int a = 0; a < shiftGoodsListDTOList.size(); a++) {
@@ -120,9 +121,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		int i = shiftInventoryListDOMapper.updateFinishedById(shiftInventoryListDTO.getShiftId(),(byte) 1);
 		
 		List<ShiftGoodsListDTO> shiftGoodsListDTOList = shiftInventoryListDTO.getShiftGoodsListDTOList();
-		List<ShiftGoodsDO> shiftGoodsDOList = new ArrayList<ShiftGoodsDO>();
+		List<ShiftGoodsDO> shiftGoodsDOList = new LinkedList<ShiftGoodsDO>();
 		//创建一个入库单对应的商品信息集合
-		List<InorderGoodsInfoDto> goodsInfoDtoList = new ArrayList<InorderGoodsInfoDto>(shiftGoodsDOList.size());
+		List<InorderGoodsInfoDto> goodsInfoDtoList = new LinkedList<InorderGoodsInfoDto>();
 		
 		//遍历所有的ShiftGoodsListDTO
 		for (int a = 0; a < shiftGoodsListDTOList.size(); a++) {

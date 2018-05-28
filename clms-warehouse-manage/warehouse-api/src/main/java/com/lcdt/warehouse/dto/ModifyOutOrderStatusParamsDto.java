@@ -5,18 +5,18 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Date;
 
 /**
- * Created by lyqishan on 2018/5/11
+ * Created by lyqishan on 2018/5/27
  */
 
-public class ModifyInOrderStatusParamsDto {
+public class ModifyOutOrderStatusParamsDto {
     @ApiModelProperty(value = "入库单id")
-    private Long inorderId;
+    private Long outorderId;
     @ApiModelProperty(value = "入库单状态")
-    private int inOrderStatus;
+    private Integer orderStatus;
     @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
     @ApiModelProperty(value = "入库时间",hidden = true)
-    private Date storageTime;
+    private Date outboundTime;
     @ApiModelProperty(value = "更新人id",hidden = true)
     private Long updateId;
     @ApiModelProperty(value = "更新人名",hidden = true)
@@ -24,20 +24,20 @@ public class ModifyInOrderStatusParamsDto {
     @ApiModelProperty(value = "更新时间",hidden = true)
     private Date updateDate;
 
-    public Long getInorderId() {
-        return inorderId;
+    public Long getOutorderId() {
+        return outorderId;
     }
 
-    public void setInorderId(Long inorderId) {
-        this.inorderId = inorderId;
+    public void setOutorderId(Long outorderId) {
+        this.outorderId = outorderId;
     }
 
-    public int getInOrderStatus() {
-        return inOrderStatus;
+    public Integer getOrderStatus() {
+        return orderStatus;
     }
 
-    public void setInOrderStatus(int inOrderStatus) {
-        this.inOrderStatus = inOrderStatus;
+    public void setOrderStatus(Integer orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public Long getCompanyId() {
@@ -48,12 +48,12 @@ public class ModifyInOrderStatusParamsDto {
         this.companyId = companyId;
     }
 
-    public Date getStorageTime() {
-        return storageTime;
+    public Date getOutboundTime() {
+        return outboundTime;
     }
 
-    public void setStorageTime(Date storageTime) {
-        this.storageTime = storageTime;
+    public void setOutboundTime(Date outboundTime) {
+        this.outboundTime = outboundTime;
     }
 
     public Long getUpdateId() {
@@ -79,5 +79,4 @@ public class ModifyInOrderStatusParamsDto {
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
-
 }

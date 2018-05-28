@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.warehouse.dto.InWhPlanDto;
 import com.lcdt.warehouse.dto.OutWhPlanDto;
 import com.lcdt.warehouse.dto.OutWhPlanSearchParamsDto;
 import com.lcdt.warehouse.dto.PageBaseDto;
@@ -41,9 +42,10 @@ import java.util.List;
 @RequestMapping("/out/plan")
 @Api(value = "仓储出库计划API",description = "仓储出库计划API接口")
 public class OutWarehousePlanController {
-    private static Logger logger = LoggerFactory.getLogger(InWarehousePlanController.class);
 
+    private static Logger logger = LoggerFactory.getLogger(InWarehousePlanController.class);
     @Autowired
+
     private OutWarehousePlanService outWarehousePlanService;
 
     @ApiOperation("出库计划列表")
@@ -107,9 +109,7 @@ public class OutWarehousePlanController {
         boolean flag = false;
         JSONObject jsonObject = new JSONObject();
         try {
-            flag = outWarehousePlanService.outWhPlanAdd(outWhPlanDto
-
-                    , userCompRel);
+            flag = outWarehousePlanService.outWhPlanAdd(outWhPlanDto, userCompRel);
         } catch (RuntimeException e) {
             msg = e.getMessage();
             logger.error(e.getMessage());
@@ -162,6 +162,73 @@ public class OutWarehousePlanController {
         jsonObject.put("message", flag==true? "发布成功！":msg);
         return jsonObject;
     }
+
+
+
+
+    @ApiOperation("完成")
+    @RequestMapping(value = "/complete",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject complete(@ApiParam(value = "计划ID",required = true) @RequestParam Long planOutId) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        OutWarehousePlan obj = new OutWarehousePlan();
+        obj.setOutplanId(planOutId);
+        JSONObject jsonObject = new JSONObject();
+        boolean flag = false;
+        String msg = "操作失败！";
+        try {
+            flag = outWarehousePlanService.outWhPlanComplete(obj, userCompRel);
+        } catch (RuntimeException e) {
+            msg = e.getMessage();
+            logger.error(e.getMessage());
+        }
+        jsonObject.put("code", flag==true? 0:-1);
+        jsonObject.put("message", flag==true? "操作成功！":msg);
+        return jsonObject;
+    }
+
+
+    @ApiOperation("取消")
+    @RequestMapping(value = "/cancel",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject cancel(@ApiParam(value = "计划ID",required = true) @RequestParam Long planOutId) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        OutWarehousePlan obj = new OutWarehousePlan();
+        obj.setOutplanId(planOutId);
+        JSONObject jsonObject = new JSONObject();
+        boolean flag = false;
+        String msg = "取消失败！";
+        try {
+            flag = outWarehousePlanService.outWhPlanCancel(obj, userCompRel);
+        } catch (RuntimeException e) {
+            msg = e.getMessage();
+            logger.error(e.getMessage());
+        }
+        jsonObject.put("code", flag==true? 0:-1);
+        jsonObject.put("message", flag==true? "取消成功！":msg);
+        return jsonObject;
+    }
+
+
+    @ApiOperation("计划配仓")
+    @RequestMapping(value = "/distributeWh",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    public JSONObject distributeWh(@RequestBody OutWhPlanDto outWhPlanDto) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        String msg = "配仓失败！";
+        boolean flag = false;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            //flag = false;//outWarehouseOrderService.distributeWh(inWhPlanAddParamsDto, userCompRel);
+        } catch (RuntimeException e) {
+            msg = e.getMessage();
+            logger.error(e.getMessage());
+        }
+        jsonObject.put("code", flag==true? 0:-1);
+        jsonObject.put("message", flag==true? "配仓成功！":msg);
+        return jsonObject;
+    }
+
 
 }
 

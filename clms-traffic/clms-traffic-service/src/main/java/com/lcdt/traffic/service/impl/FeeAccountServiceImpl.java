@@ -155,8 +155,10 @@ public class FeeAccountServiceImpl implements FeeAccountService{
             feeFlowMapper.updateIsDeleteByCondition(saveParamsDto);
             feeFlowLogMapper.updateIsDeleteByCondition(saveParamsDto);
 
+            StringBuffer receivAndPayName = new StringBuffer();
             if(dtoList != null && dtoList.size() > 0){
                 for(FeeAccountDto dto : dtoList){
+                    receivAndPayName.append(dto.getName()+",");
                     FeeAccount account = new FeeAccount();
                     BeanUtils.copyProperties(dto, account); //记账单复制对象属性
                     account.setCompanyId(saveParamsDto.getCompanyId());
@@ -175,21 +177,19 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                     if(dto.getFeeFlowList() != null && dto.getFeeFlowList().size() > 0){
                         List<FeeFlow> insertFeeFlowList = new ArrayList<>();//新增的流水
                         for(FeeFlow flow : dto.getFeeFlowList()) {
-                            if(flow.getFlowId() == null) {
-                                flow.setAccountId(account.getAccountId());
-                                flow.setWaybillId(saveParamsDto.getWaybillId());
-                                flow.setWaybillCode(saveParamsDto.getWaybillCode());
-                                flow.setWaybillDate(waybill.getCreateDate());
-                                flow.setOriginalMoney(flow.getMoney());
-                                flow.setGroupId(saveParamsDto.getGroupId());
-                                flow.setCreateId(saveParamsDto.getUserId());
-                                flow.setCreateName(saveParamsDto.getRealName());
-                                flow.setCreateDate(new Date());
-                                flow.setIsReceivable(saveParamsDto.getIsReceivable());
-                                flow.setCompanyId(saveParamsDto.getCompanyId());
-                                flow.setIsDeleted((short)0);
-                                insertFeeFlowList.add(flow);
-                            }
+                            flow.setAccountId(account.getAccountId());
+                            flow.setWaybillId(saveParamsDto.getWaybillId());
+                            flow.setWaybillCode(saveParamsDto.getWaybillCode());
+                            flow.setWaybillDate(waybill.getCreateDate());
+                            flow.setOriginalMoney(flow.getMoney());
+                            flow.setGroupId(saveParamsDto.getGroupId());
+                            flow.setCreateId(saveParamsDto.getUserId());
+                            flow.setCreateName(saveParamsDto.getRealName());
+                            flow.setCreateDate(new Date());
+                            flow.setIsReceivable(saveParamsDto.getIsReceivable());
+                            flow.setCompanyId(saveParamsDto.getCompanyId());
+                            flow.setIsDeleted((short)0);
+                            insertFeeFlowList.add(flow);
                         }
                         if(insertFeeFlowList.size() > 0){
                             feeFlowMapper.insertBatch(insertFeeFlowList);
@@ -197,6 +197,12 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                     }
                 }
             }
+            if(saveParamsDto.getIsReceivable() == 0) {
+                waybill.setReceivableName(receivAndPayName.length() > 0 ? receivAndPayName.substring(0, receivAndPayName.length() - 1) : null);
+            }else{
+                waybill.setPayableName(receivAndPayName.length() > 0 ? receivAndPayName.substring(0, receivAndPayName.length() - 1) : null);
+            }
+            waybillMapper.updateByPrimaryKey(waybill);
             return true;
         }catch (Exception e){
             e.printStackTrace();
@@ -295,6 +301,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                     reconcile.setPayerId(Long.parseLong(m.get("nameId").toString()));
                     reconcile.setPayerName(m.get("name").toString());
                     reconcile.setGroupId(Long.parseLong(m.get("groupId").toString()));
+                    reconcile.setGroupName(m.get("groupName").toString());
                     reconcileList.add(reconcile);
                 }
                 int result = reconcileMapper.insertByBatch(reconcileList);

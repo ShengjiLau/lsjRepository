@@ -1,10 +1,11 @@
 package com.lcdt.traffic.service;
 
-import java.util.List;
+
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.FeeExchange;
 import com.lcdt.traffic.web.dto.FeeExchangeDto;
+import com.lcdt.traffic.web.dto.FeeExchangeListDto;
 
 /**
  * @author Sheng-ji Lau
@@ -14,7 +15,7 @@ import com.lcdt.traffic.web.dto.FeeExchangeDto;
  */
 public interface FeeExchangeService {
 	
-	int insertFeeExchangeByBatch(List<FeeExchange> feeExchangeList);
+	int insertFeeExchangeByBatch(FeeExchangeListDto feeExchangeListDto);
 	
 	PageInfo<FeeExchange> getFeeExchangeList(FeeExchangeDto feeExchangeDto);
 	

@@ -1,5 +1,6 @@
 package com.lcdt.traffic.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,12 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dao.FeeExchangeMapper;
+import com.lcdt.traffic.dao.ReconcileMapper;
 import com.lcdt.traffic.model.FeeExchange;
+import com.lcdt.traffic.model.Reconcile;
 import com.lcdt.traffic.service.FeeExchangeService;
 import com.lcdt.traffic.web.dto.FeeExchangeDto;
+import com.lcdt.traffic.web.dto.FeeExchangeListDto;
 
 
 /**
@@ -26,17 +30,24 @@ public class FeeExchangeImpl implements FeeExchangeService {
 	@Autowired
 	private FeeExchangeMapper feeExchangeMapper;
 	
-	
+
+	@Autowired
+	private ReconcileMapper reconcileMapper;
 	
 	@Override
-	public int insertFeeExchangeByBatch(List<FeeExchange> feeExchangeList) {
-		for(FeeExchange fe:feeExchangeList) {
+	public int insertFeeExchangeByBatch(FeeExchangeListDto feeExchangeListDto) {
+		Reconcile reconcile = reconcileMapper.selectByPrimaryKey(feeExchangeListDto.getReconcileId());	
+		for(FeeExchange fe:feeExchangeListDto.getFeeExchangeList()) {
+			fe.setReconcileCode(reconcile.getReconcileCode());
+			fe.setReconcileId(feeExchangeListDto.getReconcileId());
+			fe.setType(feeExchangeListDto.getType());
 			fe.setCompanyId(SecurityInfoGetter.getCompanyId());
 			fe.setOperateId(SecurityInfoGetter.getUser().getUserId());
 			fe.setOperateName(SecurityInfoGetter.getUser().getRealName());
 			fe.setCancelOk((short) 0);//生成对账单时取消状态设置为0不取消
+			fe.setCreateTime(new Date());
 		}
-		return feeExchangeMapper.insertByBatch(feeExchangeList);
+		return feeExchangeMapper.insertByBatch(feeExchangeListDto.getFeeExchangeList());
 	}
 
 

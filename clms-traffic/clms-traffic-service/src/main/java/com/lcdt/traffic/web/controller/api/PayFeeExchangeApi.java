@@ -56,7 +56,7 @@ public class PayFeeExchangeApi {
 			fe.setType((short) 1);
 		}
 		
-		int result=feeExchangeService.insertFeeExchangeByBatch(feeExchangeListDto.getFeeExchangeList());
+		int result=feeExchangeService.insertFeeExchangeByBatch(feeExchangeListDto);
 		if(result>0) {
 			jsonObject.put("code",0);
 			jsonObject.put("message","新增付款记录成功");
@@ -111,7 +111,7 @@ public class PayFeeExchangeApi {
 		FeeExchange fe=feeExchangeService.selectFeeExchangeById(feeExchangeId);
 		if(null!=fe) {
 			jsonObject.put("code",0);
-			jsonObject.put("message","收付款详情");
+			jsonObject.put("message","付款详情");
 			jsonObject.put("data",fe);
 		}else {
 			throw new RuntimeException("查询出现异常");
@@ -128,36 +128,24 @@ public class PayFeeExchangeApi {
 	 * @return
 	 */
 	private JSONObject validRequestBody(FeeExchangeListDto feeExchangeListDto) {
-		JSONObject jsonObject =new JSONObject();
+		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("code",-1);
-		if(null==feeExchangeListDto.getFeeExchangeList()) {
+		if(null == feeExchangeListDto.getFeeExchangeList()) {
 			jsonObject.put("message","请至少添加一条付款信息");
 		}
-		if(null!=feeExchangeListDto.getFeeExchangeList()&&0==feeExchangeListDto.getFeeExchangeList().size()) {
+		if(null != feeExchangeListDto.getFeeExchangeList() && 0 == feeExchangeListDto.getFeeExchangeList().size()) {
 			jsonObject.put("message","请至少添加一条付款信息");
 		}
-		if(null!=feeExchangeListDto.getFeeExchangeList()&&feeExchangeListDto.getFeeExchangeList().size()>0) {
+		if(null == feeExchangeListDto.getReconcileId()) {
+			jsonObject.put("message","对账单id不可为空");
+		}
+		if(null != feeExchangeListDto.getFeeExchangeList() && feeExchangeListDto.getFeeExchangeList().size() > 0) {
 			StringBuilder sd = new StringBuilder();
 			for(FeeExchange fe:feeExchangeListDto.getFeeExchangeList()) {
-				if(null==fe.getReconcileId()) {
-					sd.append("对账单id不可为空,");
-				}
-				if(null==fe.getReconcileCode()) {
-					sd.append("对账单单号不可为空,");
-				}
-				if(null==fe.getPayerName()) {
-					sd.append("付款方名称不可为空,");
-				}
-				if(null==fe.getExchangeType()) {
-					sd.append("支付方式不可为空,");
-				}
-				if(null==fe.getExchangeAccount()) {
+				if(null == fe.getExchangeAccount()) {
 					sd.append("付款账户不可为空,");
 				}
-				if(null==fe.getExchangeName()) {
-					sd.append("付款账户名不可为空,");
-				}
-				if(null==fe.getOperateTime()) {
+				if(null == fe.getOperateTime()) {
 					sd.append("付款时间不可为空,");
 				}else {
 					String pattern ="^([0-9]{4})-([0-9]{2})-([0-9]{2})";
@@ -165,12 +153,12 @@ public class PayFeeExchangeApi {
 						sd.append("时间格式为:yyyy-MM-dd");
 					}
 				}
-				if(null==fe.getTransportationExpenses()&&null==fe.getOtherExpenses()) {
+				if(null == fe.getTransportationExpenses() && null == fe.getOtherExpenses()) {
 					sd.append("付款金额不可为空");
 				}
 			}
 			 if(sd.length()>0) {
-				 jsonObject.put("message",sd.toString());
+			 jsonObject.put("message",sd.toString());
 			 }
 		}
 		return jsonObject;
