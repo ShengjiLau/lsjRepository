@@ -1,5 +1,6 @@
 package com.lcdt.traffic.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ public class FeeExchangeImpl implements FeeExchangeService {
 			fe.setOperateId(SecurityInfoGetter.getUser().getUserId());
 			fe.setOperateName(SecurityInfoGetter.getUser().getRealName());
 			fe.setCancelOk((short) 0);//生成对账单时取消状态设置为0不取消
+			fe.setCreateTime(new Date());
 		}
 		return feeExchangeMapper.insertByBatch(feeExchangeListDto.getFeeExchangeList());
 	}
