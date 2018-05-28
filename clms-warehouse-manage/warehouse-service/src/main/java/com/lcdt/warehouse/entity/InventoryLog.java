@@ -31,7 +31,6 @@ public class InventoryLog implements Serializable {
     /**
      * 库位
      */
-    private String storageLocation;
     private Date logTime;
     private Integer currentInvetory;
     private Float changeNum;
@@ -170,14 +169,6 @@ public class InventoryLog implements Serializable {
         this.warehouseId = warehouseId;
     }
 
-    public String getStorageLocation() {
-        return storageLocation;
-    }
-
-    public void setStorageLocation(String storageLocation) {
-        this.storageLocation = storageLocation;
-    }
-
     public Date getLogTime() {
         return logTime;
     }
@@ -232,7 +223,6 @@ public class InventoryLog implements Serializable {
         ", logId=" + logId +
         ", goodsId=" + goodsId +
         ", warehouseId=" + warehouseId +
-        ", storageLocation=" + storageLocation +
         ", logTime=" + logTime +
         ", currentInvetory=" + currentInvetory +
         ", changeNum=" + changeNum +

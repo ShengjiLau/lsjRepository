@@ -40,11 +40,6 @@ public class GoodsInfo implements Serializable {
      * 最小单位
      */
     private String minUnit;
-    /**
-     * 多单位json串
-     */
-    private String multiUnit;
-
 
     public Long getGoodsId() {
         return goodsId;
@@ -126,14 +121,6 @@ public class GoodsInfo implements Serializable {
         this.minUnit = minUnit;
     }
 
-    public String getMultiUnit() {
-        return multiUnit;
-    }
-
-    public void setMultiUnit(String multiUnit) {
-        this.multiUnit = multiUnit;
-    }
-
     @Override
     public String toString() {
         return "GoodsInfo{" +
@@ -147,7 +134,6 @@ public class GoodsInfo implements Serializable {
                 ", goodsBatch='" + goodsBatch + '\'' +
                 ", subItemId=" + subItemId +
                 ", minUnit='" + minUnit + '\'' +
-                ", multiUnit='" + multiUnit + '\'' +
                 '}';
     }
 }
