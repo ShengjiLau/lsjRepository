@@ -427,8 +427,8 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             tObj.setUnit(obj1.getUnit());
             tObj.setUnitData(obj1.getUnitData());
             tObj.setBatch(obj1.getBatch());
-            tObj.setStrogeLocationId(obj1.getStrogeLocationId());
-            tObj.setStrogeLocationCode(obj1.getStrogeLocationCode());
+            tObj.setStorageLocationId(obj1.getStorageLocationId());
+            tObj.setStorageLocationCode(obj1.getStorageLocationCode());
             tObj.setGoodsNum(obj1.getOutOderGoodsNum());//配仓数
             tObj.setInStock(obj1.getInStock());//可用库存
             tObj.setRemark(obj1.getDisRemark());

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.contract.dao.BillingRecordMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.BillingRecord">
+    <id column="br_id" jdbcType="BIGINT" property="brId" />
+    <result column="billing_no" jdbcType="VARCHAR" property="billingNo" />
+    <result column="billing_date" jdbcType="TIMESTAMP" property="billingDate" />
+    <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
+    <result column="order_serial_no" jdbcType="VARCHAR" property="orderSerialNo" />
+    <result column="billing_sum" jdbcType="DECIMAL" property="billingSum" />
+    <result column="buyer" jdbcType="VARCHAR" property="buyer" />
+    <result column="saler" jdbcType="VARCHAR" property="saler" />
+    <result column="buyer_tax_id" jdbcType="VARCHAR" property="buyerTaxId" />
+    <result column="saler_tax_id" jdbcType="VARCHAR" property="salerTaxId" />
+    <result column="directions" jdbcType="VARCHAR" property="directions" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    br_id, billing_no, billing_date, contract_code, order_serial_no, billing_sum, buyer,
+    saler, buyer_tax_id, saler_tax_id, directions, remark, company_id, create_id, create_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_billing_record
+    where br_id = #{brId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_billing_record
+    where br_id = #{brId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.BillingRecord">
+    insert into t_billing_record (br_id, billing_no, billing_date,
+    contract_code, order_serial_no, billing_sum,
+    buyer, saler, buyer_tax_id,
+    saler_tax_id, directions, remark,
+    company_id, create_id, create_name
+    )
+    values (#{brId,jdbcType=BIGINT}, #{billingNo,jdbcType=VARCHAR}, #{billingDate,jdbcType=TIMESTAMP},
+    #{contractCode,jdbcType=VARCHAR}, #{orderSerialNo,jdbcType=VARCHAR}, #{billingSum,jdbcType=DECIMAL},
+    #{buyer,jdbcType=VARCHAR}, #{saler,jdbcType=VARCHAR}, #{buyerTaxId,jdbcType=VARCHAR},
+    #{salerTaxId,jdbcType=VARCHAR}, #{directions,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+    #{companyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lcdt.contract.model.BillingRecord">
+    insert into t_billing_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="brId != null">
+        br_id,
+      </if>
+      <if test="billingNo != null">
+        billing_no,
+      </if>
+      <if test="billingDate != null">
+        billing_date,
+      </if>
+      <if test="contractCode != null">
+        contract_code,
+      </if>
+      <if test="orderSerialNo != null">
+        order_serial_no,
+      </if>
+      <if test="billingSum != null">
+        billing_sum,
+      </if>
+      <if test="buyer != null">
+        buyer,
+      </if>
+      <if test="saler != null">
+        saler,
+      </if>
+      <if test="buyerTaxId != null">
+        buyer_tax_id,
+      </if>
+      <if test="salerTaxId != null">
+        saler_tax_id,
+      </if>
+      <if test="directions != null">
+        directions,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createName != null">
+        create_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="brId != null">
+        #{brId,jdbcType=BIGINT},
+      </if>
+      <if test="billingNo != null">
+        #{billingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="billingDate != null">
+        #{billingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractCode != null">
+        #{contractCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSerialNo != null">
+        #{orderSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="billingSum != null">
+        #{billingSum,jdbcType=DECIMAL},
+      </if>
+      <if test="buyer != null">
+        #{buyer,jdbcType=VARCHAR},
+      </if>
+      <if test="saler != null">
+        #{saler,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerTaxId != null">
+        #{buyerTaxId,jdbcType=VARCHAR},
+      </if>
+      <if test="salerTaxId != null">
+        #{salerTaxId,jdbcType=VARCHAR},
+      </if>
+      <if test="directions != null">
+        #{directions,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null">
+        #{createName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.contract.model.BillingRecord">
+    update t_billing_record
+    <set>
+      <if test="billingNo != null">
+        billing_no = #{billingNo,jdbcType=VARCHAR},
+      </if>
+      <if test="billingDate != null">
+        billing_date = #{billingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractCode != null">
+        contract_code = #{contractCode,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSerialNo != null">
+        order_serial_no = #{orderSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="billingSum != null">
+        billing_sum = #{billingSum,jdbcType=DECIMAL},
+      </if>
+      <if test="buyer != null">
+        buyer = #{buyer,jdbcType=VARCHAR},
+      </if>
+      <if test="saler != null">
+        saler = #{saler,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerTaxId != null">
+        buyer_tax_id = #{buyerTaxId,jdbcType=VARCHAR},
+      </if>
+      <if test="salerTaxId != null">
+        saler_tax_id = #{salerTaxId,jdbcType=VARCHAR},
+      </if>
+      <if test="directions != null">
+        directions = #{directions,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null">
+        create_name = #{createName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where br_id = #{brId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.BillingRecord">
+    update t_billing_record
+    set billing_no = #{billingNo,jdbcType=VARCHAR},
+      billing_date = #{billingDate,jdbcType=TIMESTAMP},
+      contract_code = #{contractCode,jdbcType=VARCHAR},
+      order_serial_no = #{orderSerialNo,jdbcType=VARCHAR},
+      billing_sum = #{billingSum,jdbcType=DECIMAL},
+      buyer = #{buyer,jdbcType=VARCHAR},
+      saler = #{saler,jdbcType=VARCHAR},
+      buyer_tax_id = #{buyerTaxId,jdbcType=VARCHAR},
+      saler_tax_id = #{salerTaxId,jdbcType=VARCHAR},
+      directions = #{directions,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=BIGINT},
+      create_id = #{createId,jdbcType=BIGINT},
+      create_name = #{createName,jdbcType=VARCHAR}
+    where br_id = #{brId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByCondition" parameterType="com.lcdt.contract.web.dto.BillingRecordDto" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_billing_record
+    <where>
+      <if test="billingNo!=null and billingNo!=''">
+        and billing_no like concat('%',#{billingNo},'%')
+      </if>
+      <if test="contractCode!=null and contractCode!=''">
+        and contract_code like concat('%',#{contractCode},'%')
+      </if>
+      <if test="orderSerialNo!=null and orderSerialNo!=''">
+        and order_serial_no like concat('%', #{orderSerialNo} ,'%')
+      </if>
+      <if test="billingDateStart!=null and billingDateStart!=''">
+        and (billing_date &gt; #{billingDateStart} and billing_date &lt; #{billingDateEnd})
+      </if>
+      <if test="buyer!=null and buyer!=''">
+        and buyer like concat('%',#{buyer},'%')
+      </if>
+        and company_id = #{companyId}
+    </where>
+  </select>
+</mapper>
