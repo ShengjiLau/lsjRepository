@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.dto;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -17,7 +18,7 @@ public class OutWhPlanDto implements Serializable {
     private Long groupId;
     @ApiModelProperty(value = "项目组名")
     private String groupName;
-    @ApiModelProperty(value = "合同编码组名")
+    @ApiModelProperty(value = "合同")
     private String contractNo;
     @ApiModelProperty(value = "采购单号")
     private String customerPurchaseNo;
@@ -59,7 +60,10 @@ public class OutWhPlanDto implements Serializable {
     private Long createUserId;
     private String planNo;
 
-    private List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList;
+    private List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList; //出库计划货物
+
+    private List<OutWhOrderDto> outWhOrderDtoList;//出库单列表
+
 
     public Long getOutplanId() {
         return outplanId;
@@ -259,5 +263,13 @@ public class OutWhPlanDto implements Serializable {
 
     public void setOutWhPlanGoodsDtoList(List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList) {
         this.outWhPlanGoodsDtoList = outWhPlanGoodsDtoList;
+    }
+
+    public List<OutWhOrderDto> getOutWhOrderDtoList() {
+        return outWhOrderDtoList;
+    }
+
+    public void setOutWhOrderDtoList(List<OutWhOrderDto> outWhOrderDtoList) {
+        this.outWhOrderDtoList = outWhOrderDtoList;
     }
 }

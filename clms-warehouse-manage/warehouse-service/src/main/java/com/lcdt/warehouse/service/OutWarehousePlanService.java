@@ -86,4 +86,11 @@ public interface OutWarehousePlanService extends IService<OutWarehousePlan> {
      */
     boolean outWhPlanComplete(OutWarehousePlan obj, UserCompRel userCompRel);
 
+
+    /***
+     * 计划配仓
+     * @return
+     */
+    boolean distributeWh(OutWhPlanDto outWhPlanDto, UserCompRel userCompRel);
+
 }
