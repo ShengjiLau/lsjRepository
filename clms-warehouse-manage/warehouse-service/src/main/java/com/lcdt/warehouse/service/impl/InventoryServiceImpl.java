@@ -88,8 +88,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
 
-
-
     /**
      * 入库操作
      *
@@ -144,7 +142,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
     /**
-     * 出库操作 //TODO 可用数量 和锁定数量的确定
+     * 出库操作
      */
     @Transactional(rollbackFor = Exception.class)
     public void outInventory(OutWarehouseOrder order,List<OutOrderGoodsInfo> goodsInfos) {
@@ -155,10 +153,20 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             return;
         }
 
-
-
-
+        for (OutOrderGoodsInfo good : goodsInfos) {
+            Inventory inventory = inventoryMapper.selectById(good.getInventoryId());
+            //扣减库存
+            //比较锁定量和 出库量
+            if (inventory.getLockNum() >= good.getGoodsNum()) {
+                inventory.setLockNum(inventory.getLockNum() - good.getGoodsNum());
+                inventoryMapper.updateById(inventory);
+                logService.saveOutOrderLog(order, good);
+            }else{
+                throw new RuntimeException("出库失败，库存锁定量 小于 出库量");
+            }
+        }
     }
+
 
 
     /**
