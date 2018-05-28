@@ -114,6 +114,46 @@
      where order_id=#{orderId,jdbcType=BIGINT}
   	</delete>
   	
-  	
+  	<select id="paymentInfo" resultType="java.util.Map">
+      SELECT order_id,
+        CASE payment_status
+        WHEN t3.payment_sum &lt; t3.purchase_sum THEN
+        '1' ELSE '2'
+        END AS payment_status,
+        payment_num
+        FROM
+        (
+            SELECT
+            t1.order_id,
+            '0' AS payment_status,
+            count(t1.order_id) payment_num,
+            sum(t1.payment_sum) payment_sum,
+            max(t1.purchase_sum) purchase_sum
+            FROM
+            t_payment_application t1
+            LEFT JOIN t_order t2 ON t1.order_id = t2.order_id
+            WHERE
+            t1.order_id IN
+            <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+                #{item.orderId}
+            </foreach>
+            GROUP BY
+            t1.order_id
+        ) t3
+    </select>
+    <select id="billingInfo" resultType="java.util.Map">
+        SELECT
+        t1.order_id,count(t1.order_id) as billing_record_num
+        FROM
+        t_billing_record t1
+        LEFT JOIN t_order t2 ON t1.order_id = t2.order_id
+        WHERE
+        t1.order_id IN
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item.orderId}
+        </foreach>
+        GROUP BY
+        t1.order_id
+    </select>
   	
 </mapper>
