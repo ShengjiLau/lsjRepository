@@ -123,7 +123,7 @@ public class OutWarehouseOrderController {
 
     @ApiOperation("出库配仓信息，计划用")
     @RequestMapping(value = "/order/distribution/records", method = RequestMethod.GET)
-    public PageBaseDto queryDisRecords(@RequestParam Long outPlanId) {
+    public PageBaseDto queryDisOutRecords(@RequestParam Long outPlanId) {
         PageBaseDto pageBaseDto = new PageBaseDto(outWarehouseOrderService.queryOutOrderDisRecords(SecurityInfoGetter.getCompanyId(), outPlanId));
         return pageBaseDto;
     }
