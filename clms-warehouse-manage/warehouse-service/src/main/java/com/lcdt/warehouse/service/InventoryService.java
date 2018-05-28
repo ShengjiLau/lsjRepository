@@ -27,5 +27,5 @@ public interface InventoryService extends IService<Inventory> {
 
     Inventory modifyInventoryRemark(Long inventoryId,String remark);
 
-    void lockInventoryNum(Inventory inventory,Float tryLockNum);
+    void lockInventoryNum(Long inventoryId,Float tryLockNum);
 }
