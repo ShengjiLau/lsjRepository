@@ -7,6 +7,7 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.items.dto.GoodsListParamsDto;
 import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.service.SubItemsInfoService;
+import com.lcdt.warehouse.contants.InOrderStatus;
 import com.lcdt.warehouse.contants.OutOrderStatus;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.entity.*;
@@ -14,6 +15,8 @@ import com.lcdt.warehouse.factory.InventoryFactory;
 import com.lcdt.warehouse.mapper.GoodsInfoMapper;
 import com.lcdt.warehouse.mapper.InventoryMapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.lcdt.warehouse.mapper.OutWarehouseOrderMapper;
+import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.service.InventoryLogService;
 import com.lcdt.warehouse.service.InventoryService;
 import org.slf4j.Logger;
@@ -88,6 +91,9 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
 
+    @Autowired
+    InWarehouseOrderService inOrderService;
+
     /**
      * 入库操作
      *
@@ -106,6 +112,8 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             logService.saveInOrderLog(order, inventory);
             addInventory(inventory);
         }
+        order.setInOrderStatus(InOrderStatus.ENTERED);
+        inOrderService.updateById(order);
     }
 
     @Override
@@ -141,6 +149,21 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         return goodsInfo;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void lockInventoryNum(Inventory inventory,Float tryLockNum){
+        Assert.notNull(tryLockNum, "不能为空");
+        Float invertoryNum = inventory.getInvertoryNum();
+        if (invertoryNum < tryLockNum) {
+            throw new RuntimeException("锁定库存量不能大于库存剩余数量");
+        }
+        inventory.setInvertoryNum(invertoryNum - tryLockNum);
+        inventory.setLockNum(tryLockNum);
+        updateById(inventory);
+    }
+
+    @Autowired
+    private OutWarehouseOrderMapper outOrderMapper;
+
     /**
      * 出库操作
      */
@@ -161,6 +184,9 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
                 inventory.setLockNum(inventory.getLockNum() - good.getGoodsNum());
                 inventoryMapper.updateById(inventory);
                 logService.saveOutOrderLog(order, good);
+                order.setOrderStatus(OutOrderStatus.OUTED);
+                outOrderMapper.updateById(order);
+                logger.info("出库单 出库成功 {}",order);
             }else{
                 throw new RuntimeException("出库失败，库存锁定量 小于 出库量");
             }
