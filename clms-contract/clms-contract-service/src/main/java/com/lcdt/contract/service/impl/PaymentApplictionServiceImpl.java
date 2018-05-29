@@ -116,4 +116,9 @@ public class PaymentApplictionServiceImpl implements PaymentApplictionService {
         }
         return mapList;
     }
+
+    @Override
+    public PaymentApplicationDto paymentApplictionDetail(Long paId){
+        return paymentApplicationMapper.selectPaymentApplicationDetail(paId);
+    }
 }

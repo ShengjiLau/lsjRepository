@@ -442,4 +442,57 @@
     approval_end_date = CURRENT_TIMESTAMP
     where pa_id = #{arg0} and company_id = #{arg1}
   </update>
+
+  <resultMap id="DetailResultMap" type="com.lcdt.contract.web.dto.PaymentApplicationDto">
+    <id column="pa_id" jdbcType="BIGINT" property="paId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="application_serial_no" jdbcType="VARCHAR" property="applicationSerialNo" />
+    <result column="application_date" jdbcType="TIMESTAMP" property="applicationDate" />
+    <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
+    <result column="approval_process_id" jdbcType="BIGINT" property="approvalProcessId" />
+    <result column="approval_process" jdbcType="VARCHAR" property="approvalProcess" />
+    <result column="approval_start_date" jdbcType="TIMESTAMP" property="approvalStartDate" />
+    <result column="approval_end_date" jdbcType="TIMESTAMP" property="approvalEndDate" />
+    <result column="contract_code" jdbcType="VARCHAR" property="contractCode" />
+    <result column="order_serial_no" jdbcType="VARCHAR" property="orderSerialNo" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="purchase_sum" jdbcType="DECIMAL" property="purchaseSum" />
+    <result column="supplier" jdbcType="VARCHAR" property="supplier" />
+    <result column="receipt_unit" jdbcType="VARCHAR" property="receiptUnit" />
+    <result column="receipt_unit_bank" jdbcType="VARCHAR" property="receiptUnitBank" />
+    <result column="receipt_unit_account" jdbcType="VARCHAR" property="receiptUnitAccount" />
+    <result column="payment_sum" jdbcType="DECIMAL" property="paymentSum" />
+    <result column="payment_unit" jdbcType="VARCHAR" property="paymentUnit" />
+    <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime" />
+    <result column="payment_name" jdbcType="VARCHAR" property="paymentName" />
+    <result column="manager" jdbcType="VARCHAR" property="manager" />
+    <result column="payment_directions" jdbcType="VARCHAR" property="paymentDirections" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="attachment1" jdbcType="VARCHAR" property="attachment1" />
+    <result column="attachment1_name" jdbcType="VARCHAR" property="attachment1Name" />
+    <result column="attachment2" jdbcType="VARCHAR" property="attachment2" />
+    <result column="attachment2_name" jdbcType="VARCHAR" property="attachment2Name" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <collection property="paApprovalList" ofType="com.lcdt.contract.model.PaymentRecord">
+      <id column="pr_id" jdbcType="BIGINT" property="prId" />
+      <result column="pa_id" jdbcType="BIGINT" property="paId" />
+      <result column="payment_serial_no" jdbcType="VARCHAR" property="paymentSerialNo" />
+      <result column="order_serial_no" jdbcType="VARCHAR" property="orderSerialNo" />
+      <result column="payment_date" jdbcType="TIMESTAMP" property="paymentDate" />
+      <result column="payment_name" jdbcType="VARCHAR" property="paymentName" />
+      <result column="payment_sum" jdbcType="DECIMAL" property="paymentSum" />
+      <result column="attachment1" jdbcType="VARCHAR" property="attachment1" />
+      <result column="attachment1_name" jdbcType="VARCHAR" property="attachment1Name" />
+      <result column="attachment2" jdbcType="VARCHAR" property="attachment2" />
+      <result column="attachment2_name" jdbcType="VARCHAR" property="attachment2Name" />
+      <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    </collection>
+  </resultMap>
+  <select id="selectPaymentApplicationDetail" resultMap="DetailResultMap">
+    select * from t_payment_application t1
+    left join t_pa_approval t2 on t1.pa_id = t2.pa_id
+    where t1.pa_id= #{arg0}
+  </select>
 </mapper>
