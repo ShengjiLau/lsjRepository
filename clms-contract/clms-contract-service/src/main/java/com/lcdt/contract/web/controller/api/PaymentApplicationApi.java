@@ -73,18 +73,6 @@ public class PaymentApplicationApi {
         return jsonObject;
     }
 
-
-    @ApiOperation(value = "新增付款单", notes = "采购单新增付款单")
-    @GetMapping("/product")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_list')")
-    @ResponseBody
-    public PageBaseDto<List<Map<Long,String>>> getOrderProduct(String orderId){
-        String[] orderIds = orderId.split(",");
-        List<Map<Long,String>> mapList = paymentApplictionService.orderProductInfo(orderIds);
-        PageBaseDto pageBaseDto = new PageBaseDto(mapList,mapList.size());
-        return pageBaseDto;
-    }
-
     @ApiOperation(value = "付款记录详情", notes = "根据主键查询付款记录详情")
     @GetMapping("/detail")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_list')")

@@ -28,14 +28,6 @@ public interface PaymentApplictionService {
      */
     int addPaymentAppliction(PaymentApplicationDto paymentApplicationDto);
 
-
-    /**
-     * 根据orderIds数组批量获取对应的产品信息
-     * @param orderIds
-     * @return
-     */
-    List<Map<Long,String>> orderProductInfo(String[] orderIds);
-
     /**
      * 获取开票记录详情
      * @param paId
