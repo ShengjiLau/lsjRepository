@@ -39,8 +39,8 @@ public class InventoryServiceTest extends BaseIntegrationContext{
         goodsInfo.setInHouseAmount(20.0F);
         goodsInfo.setUnitData(1);
         goodsInfo.setGoodsName("sd");
-        goodsInfo.setStrogeLocationCode("123ads");
-        goodsInfo.setStrogeLocationId(11L);
+        goodsInfo.setStorageLocationCode("123ads");
+        goodsInfo.setStorageLocationId(11L);
 //        goodsInfo.setWa
 //        goodsInfo.setUnitData();
         //

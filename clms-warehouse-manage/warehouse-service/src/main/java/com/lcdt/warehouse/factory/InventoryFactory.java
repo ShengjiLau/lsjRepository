@@ -24,8 +24,8 @@ public class InventoryFactory {
         inventory.setCompanyId(order.getCompanyId());
         inventory.setInvertoryNum(goodsInfo.getInHouseAmount() * goodsInfo.getUnitData());
         inventory.setWareHouseId(order.getWarehouseId());
-        inventory.setStorageLocationCode(goodsInfo.getStrogeLocationCode());
-        inventory.setStorageLocationId(goodsInfo.getStrogeLocationId());
+        inventory.setStorageLocationCode(goodsInfo.getStorageLocationCode());
+        inventory.setStorageLocationId(goodsInfo.getStorageLocationId());
         inventory.setCustomerName(order.getCustomerName());
         inventory.setWarehouseName(order.getWarehouseName());
         inventory.setBatch(goodsInfo.getBatch());

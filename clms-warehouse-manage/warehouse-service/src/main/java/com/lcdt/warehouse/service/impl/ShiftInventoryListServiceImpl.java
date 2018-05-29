@@ -148,7 +148,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				inorderGoodsInfoDto.setGoodsCode(sgdl.getGoodsCode());
 				inorderGoodsInfoDto.setGoodsSpec(sgdl.getGoodsSpec());
 				inorderGoodsInfoDto.setUnit(sgdl.getBaseUnit());
-				inorderGoodsInfoDto.setStrogeLocationCode(sgdl.getStorageLocationCode());
+				inorderGoodsInfoDto.setStorageLocationCode(sgdl.getStorageLocationCode());
 				inorderGoodsInfoDto.setReceivalbeAmount(sgdl.getUsableInventory());
 				//将入库商品信息类加入到商品信息集合
 				goodsInfoDtoList.add(inorderGoodsInfoDto);

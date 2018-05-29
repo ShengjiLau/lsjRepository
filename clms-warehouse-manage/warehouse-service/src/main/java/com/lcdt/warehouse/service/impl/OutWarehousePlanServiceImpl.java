@@ -360,7 +360,6 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         if (null == _outWhPlanGoodsDtoList1 || null == _outWhPlanGoodsDtoList2) {
             throw new RuntimeException("配仓计划货物不存在！");
         }
-
         boolean flag = true;
         StringBuffer sb = new StringBuffer();
         for (OutWhPlanGoodsDto obj1: _outWhPlanGoodsDtoList1) {
