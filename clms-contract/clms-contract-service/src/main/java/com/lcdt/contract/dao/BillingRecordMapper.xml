@@ -14,6 +14,7 @@
     <result column="buyer_tax_id" jdbcType="VARCHAR" property="buyerTaxId" />
     <result column="saler_tax_id" jdbcType="VARCHAR" property="salerTaxId" />
     <result column="directions" jdbcType="VARCHAR" property="directions" />
+    <result column="attachment1" jdbcType="VARCHAR" property="attachment1" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
@@ -21,8 +22,8 @@
   </resultMap>
   <sql id="Base_Column_List">
     br_id, order_id, billing_no, billing_date, contract_code, order_serial_no, billing_sum,
-    buyer, saler, buyer_tax_id, saler_tax_id, directions, remark, company_id, create_id,
-    create_name
+    buyer, saler, buyer_tax_id, saler_tax_id, directions, attachment1, remark, company_id,
+    create_id, create_name
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
@@ -39,14 +40,14 @@
     billing_date, contract_code, order_serial_no,
     billing_sum, buyer, saler,
     buyer_tax_id, saler_tax_id, directions,
-    remark, company_id, create_id,
-    create_name)
+    attachment1, remark, company_id,
+    create_id, create_name)
     values (#{brId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{billingNo,jdbcType=VARCHAR},
     #{billingDate,jdbcType=TIMESTAMP}, #{contractCode,jdbcType=VARCHAR}, #{orderSerialNo,jdbcType=VARCHAR},
     #{billingSum,jdbcType=DECIMAL}, #{buyer,jdbcType=VARCHAR}, #{saler,jdbcType=VARCHAR},
     #{buyerTaxId,jdbcType=VARCHAR}, #{salerTaxId,jdbcType=VARCHAR}, #{directions,jdbcType=VARCHAR},
-    #{remark,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT},
-    #{createName,jdbcType=VARCHAR})
+    #{attachment1,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
+    #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.contract.model.BillingRecord">
     insert into t_billing_record
@@ -86,6 +87,9 @@
       </if>
       <if test="directions != null">
         directions,
+      </if>
+      <if test="attachment1 != null">
+        attachment1,
       </if>
       <if test="remark != null">
         remark,
@@ -137,6 +141,9 @@
       <if test="directions != null">
         #{directions,jdbcType=VARCHAR},
       </if>
+      <if test="attachment1 != null">
+        #{attachment1,jdbcType=VARCHAR},
+      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -187,6 +194,9 @@
       <if test="directions != null">
         directions = #{directions,jdbcType=VARCHAR},
       </if>
+      <if test="attachment1 != null">
+        attachment1 = #{attachment1,jdbcType=VARCHAR},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -215,6 +225,7 @@
       buyer_tax_id = #{buyerTaxId,jdbcType=VARCHAR},
       saler_tax_id = #{salerTaxId,jdbcType=VARCHAR},
       directions = #{directions,jdbcType=VARCHAR},
+      attachment1 = #{attachment1,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       company_id = #{companyId,jdbcType=BIGINT},
       create_id = #{createId,jdbcType=BIGINT},

@@ -28,6 +28,8 @@ public class BillingRecord {
 
     private String directions;
 
+    private String attachment1;
+
     private String remark;
 
     private Long companyId;
@@ -130,6 +132,14 @@ public class BillingRecord {
 
     public void setDirections(String directions) {
         this.directions = directions == null ? null : directions.trim();
+    }
+
+    public String getAttachment1() {
+        return attachment1;
+    }
+
+    public void setAttachment1(String attachment1) {
+        this.attachment1 = attachment1 == null ? null : attachment1.trim();
     }
 
     public String getRemark() {
