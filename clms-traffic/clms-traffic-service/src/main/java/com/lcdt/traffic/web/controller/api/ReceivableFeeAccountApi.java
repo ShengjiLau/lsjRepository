@@ -388,7 +388,7 @@ public class ReceivableFeeAccountApi {
     @ApiOperation("对账单——取消对账")
     @RequestMapping(value = "/feeAccountReconcileCancel", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receivable_fee_account_reconcile_cancel')")
-    public JSONObject feeAccountReconcileCancel(@ApiParam(value = "对账单id（例:1,2,3）",required = true) @RequestParam String accountIds) {
+    public JSONObject feeAccountReconcileCancel(@ApiParam(value = "记账单ids（例:1,2,3）",required = true) @RequestParam String accountIds) {
         String[] accountIdStrArr = accountIds.split(",");
         Long[] accountIdArr = new Long[accountIdStrArr.length];
         for(int i=0; i<accountIdStrArr.length; i++){
