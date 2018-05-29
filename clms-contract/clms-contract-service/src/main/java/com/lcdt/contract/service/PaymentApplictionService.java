@@ -35,4 +35,11 @@ public interface PaymentApplictionService {
      * @return
      */
     List<Map<Long,String>> orderProductInfo(String[] orderIds);
+
+    /**
+     * 获取开票记录详情
+     * @param paId
+     * @return
+     */
+    PaymentApplicationDto paymentApplictionDetail(Long paId);
 }
