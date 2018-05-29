@@ -386,6 +386,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         OutWhOrderDto _tempObj = new OutWhOrderDto();
         _tempObj.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND);
         _tempObj.setOutPlanId(_outWhPlanDto.getOutplanId());
+        _tempObj.setOutorderNo(_outWhPlanDto.getPlanNo());
         _tempObj.setGroupId(_outWhPlanDto.getGroupId());
         _tempObj.setGroupName(_outWhPlanDto.getGroupName());
         _tempObj.setContractNo(_outWhPlanDto.getContractNo());

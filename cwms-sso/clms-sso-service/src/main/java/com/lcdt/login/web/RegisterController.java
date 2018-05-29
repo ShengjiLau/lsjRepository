@@ -117,7 +117,6 @@ public class RegisterController {
             } catch (ValidCodeExistException e) {
                 msg = "验证码已发送";
             }
-
         }
         map.put("msg", msg);
         map.put("flag", flag);
