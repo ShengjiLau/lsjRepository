@@ -89,7 +89,8 @@ public class PaymentApplictionServiceImpl implements PaymentApplictionService {
                 paApprovalMapper.insertBatch(paymentApplicationDto.getPaApprovalList());
                 //设置付款单审批状态为审批中
                 paymentApplication.setApprovalStatus(new Short("1"));
-
+                //设置审批开始时间
+                paymentApplication.setApprovalStartDate(new Date());
             }else{
                 //设置付款单审批状态为无需审批
                 paymentApplication.setApprovalStatus(new Short("0"));

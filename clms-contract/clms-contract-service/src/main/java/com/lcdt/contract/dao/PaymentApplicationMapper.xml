@@ -76,7 +76,7 @@
     #{attachment2Name,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT},
     #{createName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.lcdt.contract.model.PaymentApplication">
+  <insert id="insertSelective" parameterType="com.lcdt.contract.model.PaymentApplication" useGeneratedKeys="true" keyColumn="pa_id" keyProperty="paId">
     insert into t_payment_application
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="paId != null">
