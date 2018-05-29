@@ -94,5 +94,21 @@ public class PaymentApplicationApi {
         return baseDto;
     }
 
+    @ApiOperation(value = "确认付款", notes = "确认付款")
+    @PostMapping("/confirm")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_confirm')")
+    public JSONObject confirmPayment(@RequestBody PaymentApplication paymentApplication){
+
+        JSONObject jsonObject = new JSONObject();
+        int row = paymentApplictionService.confirmPayment(paymentApplication);
+        if(row>0){
+            jsonObject.put("code",0);
+            jsonObject.put("message","创建付款申请成功");
+        }else{
+            jsonObject.put("code",-1);
+            jsonObject.put("message","创建付款申请失败");
+        }
+        return jsonObject;
+    }
 
 }

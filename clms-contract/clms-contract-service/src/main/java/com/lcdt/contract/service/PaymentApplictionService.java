@@ -42,4 +42,11 @@ public interface PaymentApplictionService {
      * @return
      */
     PaymentApplicationDto paymentApplictionDetail(Long paId);
+
+    /**
+     * 确认付款
+     * @param paymentApplication
+     * @return
+     */
+    int confirmPayment(PaymentApplication paymentApplication);
 }

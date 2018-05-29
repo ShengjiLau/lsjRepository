@@ -121,4 +121,9 @@ public class PaymentApplictionServiceImpl implements PaymentApplictionService {
     public PaymentApplicationDto paymentApplictionDetail(Long paId){
         return paymentApplicationMapper.selectPaymentApplicationDetail(paId);
     }
+
+    @Override
+    public int confirmPayment(PaymentApplication paymentApplication){
+        return paymentApplicationMapper.updateByPrimaryKeySelective(paymentApplication);
+    }
 }
