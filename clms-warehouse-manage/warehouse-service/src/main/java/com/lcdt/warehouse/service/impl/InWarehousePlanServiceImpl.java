@@ -351,6 +351,15 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
          */
         List<InWhPlanGoodsDto> _inWhPlanGoodsDtoList1 = inWhPlanAddParamsDto.getInWhPlanGoodsDtoList(); //前端提交来的
         List<InWhPlanGoodsDto> _inWhPlanGoodsDtoList2 = _inWhPlanDto.getInWhPlanGoodsDtoList(); //后端数据库中最新的
+        int num = 0;
+        for (InWhPlanGoodsDto obj1: _inWhPlanGoodsDtoList1) {
+           if (obj1.getDistGoodsNum() == null) {
+               num++;
+            }
+         }
+        if (_inWhPlanGoodsDtoList1.size()==num) {
+              throw new RuntimeException("配仓数量不能为0！");
+        }
         if (null == _inWhPlanGoodsDtoList1 || null == _inWhPlanGoodsDtoList2) {
             throw new RuntimeException("配仓计划货物不存在！");
         }
@@ -371,13 +380,14 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                                 flag = false;
                             }
                         }
+
+
                     }
               }
          }
          if (!StringUtils.isEmpty(sb.toString())) {
              throw new RuntimeException(sb.toString());
          }
-
 
          /*************生成派单BEGIN**************/
         InWarehouseOrderDto params = new InWarehouseOrderDto();
@@ -386,17 +396,14 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
         params.setInOrderStatus(ConstantVO.IN_ORDER_STATUS_WATIE_STORAGE); //待入库
         params.setGroupId(_inWhPlanDto.getGroupId());
         params.setGroupName(_inWhPlanDto.getGroupName());
-        //params.setPurchaseCode(_inWhPlanDto.getp);
         params.setCustomerName(_inWhPlanDto.getCustomerName());
         params.setCustomerId(_inWhPlanDto.getCustomerId());
         params.setCustomerContactName(_inWhPlanDto.getCustomerContactName());
         params.setCustomerContactPhone(_inWhPlanDto.getCustomerContactPhone());
-
         params.setWarehouseId(inWhPlanAddParamsDto.getWareHouseId());
         params.setWarehouseName(inWhPlanAddParamsDto.getWarehouseName());
-
         params.setStorageType(_inWhPlanDto.getStorageType());
-       params.setStoragePlanTime(new Date());
+        params.setStoragePlanTime(new Date());
         params.setStorageRemark(inWhPlanAddParamsDto.getStorageRemark());
         params.setDeliverymanCar(inWhPlanAddParamsDto.getDeliverymanCar());
         params.setDeliverymanLinkman(inWhPlanAddParamsDto.getDeliverymanLinkman());
@@ -409,8 +416,8 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
         params.setCreateName(userCompRel.getUser().getRealName());
         List<InorderGoodsInfoDto> inorderGoodsInfoList = new ArrayList<>();
         for (InWhPlanGoodsDto obj1: _inWhPlanGoodsDtoList1) {
+           if(obj1.getDistGoodsNum()==null || obj1.getDistGoodsNum()<=0) continue;//如果配仓数为0，跳过
             InorderGoodsInfoDto tObj = new InorderGoodsInfoDto();
-            if(obj1.getDistGoodsNum()==null) continue;
             tObj.setInplanGoodsId(obj1.getRelationId());
             tObj.setGoodsId(obj1.getGoodsId());
             tObj.setGoodsName(obj1.getGoodsName());
