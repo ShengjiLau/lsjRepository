@@ -56,7 +56,14 @@ public interface OrderProductMapper {
      *获取某订单下的商品
      */
     List<OrderProduct> getOrderProductByOrderId(Long orderId);
-    
+
+
+    /**
+     * 根据orderIds数组获取产品信息
+     * @param orderIds
+     * @return
+     */
+    List<OrderProduct> selectProductByOrderIds(String[] orderIds);
     
     
 }

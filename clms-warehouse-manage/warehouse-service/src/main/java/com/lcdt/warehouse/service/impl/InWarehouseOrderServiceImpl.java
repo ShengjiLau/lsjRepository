@@ -135,7 +135,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
         inorderGoodsInfoList.addAll(addInorderGoodsInfoList);
         InWarehouseOrder inWarehouseOrder=queryInWarehouseOrder(modifyParams.getCompanyId(),modifyParams.getInorderId());
 
-        //inventoryService.putInventory(inorderGoodsInfoList,inWarehouseOrder);
+        inventoryService.putInventory(inorderGoodsInfoList,inWarehouseOrder);
 
         return result;
     }
@@ -166,7 +166,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
 
 
             //入库操作
-            //inventoryService.putInventory(inorderGoodsInfoList,inWarehouseOrder);
+            inventoryService.putInventory(inorderGoodsInfoList,inWarehouseOrder);
         }
         return result;
     }

@@ -16,8 +16,8 @@
         <result column="unit" jdbcType="VARCHAR" property="unit" />
         <result column="unit_data" jdbcType="INTEGER" property="unitData" />
         <result column="batch" jdbcType="VARCHAR" property="batch" />
-        <result column="stroge_location_id" jdbcType="BIGINT" property="strogeLocationId" />
-        <result column="stroge_location_code" jdbcType="VARCHAR" property="strogeLocationCode" />
+        <result column="storage_location_id" jdbcType="BIGINT" property="storageLocationId" />
+        <result column="storage_location_code" jdbcType="VARCHAR" property="storageLocationCode" />
         <result column="in_stock" jdbcType="REAL" property="inStock" />
         <result column="goods_num" jdbcType="REAL" property="goodsNum" />
         <result column="outbound_quantity" jdbcType="REAL" property="outboundQuantity" />
@@ -28,7 +28,7 @@
     <sql id="BaseSelectFields">
         relation_id, outorder_id, outplan_relation_id, goods_id, goods_name, goods_code,
         goods_bar_code, goods_spec, goods_classify_id, goods_classify_name, min_unit, unit,
-        unit_data, batch, stroge_location_id, stroge_location_code, in_stock, goods_num,
+        unit_data, batch, storage_location_id, storage_location_code, in_stock, goods_num,
         outbound_quantity, outbound_price, remark
     </sql>
 

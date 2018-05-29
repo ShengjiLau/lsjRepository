@@ -3,7 +3,6 @@ package com.lcdt.driver.wechat.api.DriverManageApi;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
 import com.lcdt.driver.dto.BaseDto;
 import com.lcdt.driver.dto.PageBaseDto;
@@ -16,7 +15,6 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -107,12 +105,12 @@ public class OwnVehicleApi {
 
 
     @ApiOperation(value = "新增车辆", notes = "新增车辆")
-    @PostMapping("/add")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_add')")
-    public JSONObject addOwnVehicle(@Validated @RequestBody OwnVehicleDto ownVehicleDto, BindingResult bindingResult) {
-        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
-        String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
+    public JSONObject addOwnVehicle(OwnVehicleDto ownVehicleDto, BindingResult bindingResult) {
+        Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId(); //  获取companyId
+        Long userId = TokenSecurityInfoGetter.getUserCompRel().getUser().getUserId(); //获取用户id
+        String userName = TokenSecurityInfoGetter.getUserCompRel().getUser().getRealName();   //获取用户姓名
         ownVehicleDto.setCompanyId(companyId);
         ownVehicleDto.setCreateId(userId);
         ownVehicleDto.setCreateName(userName);
@@ -131,12 +129,12 @@ public class OwnVehicleApi {
 
 
     @ApiOperation(value = "修改车辆", notes = "更新车辆")
-    @PostMapping("/modify")
+    @RequestMapping(value = "/modify", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_modify')")
-    public JSONObject modOwnVehicle(@Validated @RequestBody OwnVehicleDto ownVehicleDto, BindingResult bindingResult) {
-        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
-        String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
+    public JSONObject modOwnVehicle(OwnVehicleDto ownVehicleDto, BindingResult bindingResult) {
+        Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId(); //  获取companyId
+        Long userId = TokenSecurityInfoGetter.getUserCompRel().getUser().getUserId(); //获取用户id
+        String userName = TokenSecurityInfoGetter.getUserCompRel().getUser().getRealName();   //获取用户姓名
         ownVehicleDto.setCompanyId(companyId);
         ownVehicleDto.setUpdateId(userId);
         ownVehicleDto.setUpdateName(userName);

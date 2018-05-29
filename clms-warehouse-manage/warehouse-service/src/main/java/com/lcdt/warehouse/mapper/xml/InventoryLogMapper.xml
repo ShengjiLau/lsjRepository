@@ -2,7 +2,50 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.warehouse.mapper.InventoryLogMapper">
 
-    <select id="selectLogList" resultType="InventoryLog">
+    <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.InventoryLog">
+        <id column="log_id" jdbcType="BIGINT" property="logId" />
+        <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
+        <result column="storage_location_code" jdbcType="VARCHAR" property="storageLocationCode" />
+        <result column="log_time" jdbcType="TIMESTAMP" property="logTime" />
+        <result column="current_invetory" jdbcType="INTEGER" property="currentInvetory" />
+        <result column="change_num" jdbcType="REAL" property="changeNum" />
+        <result column="business_no" jdbcType="VARCHAR" property="businessNo" />
+        <result column="inventory_id" jdbcType="BIGINT" property="inventoryId" />
+        <result column="type" jdbcType="INTEGER" property="type" />
+        <result column="original_goods_id" jdbcType="BIGINT" property="originalGoodsId" />
+        <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+        <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+        <result column="storage_location_id" jdbcType="BIGINT" property="storageLocationId" />
+        <result column="comment" jdbcType="VARCHAR" property="comment" />
+        <result column="company_id" jdbcType="BIGINT" property="companyId" />
+        <result column="log_no" jdbcType="VARCHAR" property="logNo" />
+        <result column="batch" jdbcType="VARCHAR" property="batch" />
+        <association property="goodsInfo" autoMapping="true" javaType="com.lcdt.warehouse.entity.GoodsInfo"></association>
+        <association property="warehouse" autoMapping="true" javaType="com.lcdt.warehouse.entity.Warehouse"></association>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.lcdt.warehouse.entity.InventoryLog">
+        <selectKey keyProperty="inventoryId" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into inventory_log (log_id, goods_id, warehouse_id,
+        storage_location_code, log_time, current_invetory,
+        change_num, business_no, type,
+        original_goods_id, customer_id, customer_name,
+        storage_location_id, comment, company_id,
+        log_no, batch, order_id
+        )
+        values (#{logId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT},
+        #{storageLocationCode,jdbcType=VARCHAR}, #{logTime,jdbcType=TIMESTAMP}, #{currentInvetory,jdbcType=INTEGER},
+        #{changeNum,jdbcType=REAL}, #{businessNo,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
+        #{originalGoodsId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR},
+        #{storageLocationId,jdbcType=BIGINT}, #{comment,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
+        INVENTORY_LOG_NO(), #{batch,jdbcType=VARCHAR}, #{orderId,jdbcType=BIGINT}
+        )
+    </insert>
+
+    <select id="selectLogList" resultMap="BaseResultMap">
         SELECT * from inventory_log a left join goods_info b on
         a.goods_id = b.goods_id
         <where>

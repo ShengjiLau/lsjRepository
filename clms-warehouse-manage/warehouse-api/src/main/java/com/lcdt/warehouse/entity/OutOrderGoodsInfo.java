@@ -19,6 +19,12 @@ public class OutOrderGoodsInfo implements Serializable {
 
     @TableId(value = "relation_id", type = IdType.AUTO)
     private Long relationId;
+
+    /**
+     * 库存id
+     */
+    private Long inventoryId;
+
     /**
      * 出库单id
      */
@@ -74,11 +80,11 @@ public class OutOrderGoodsInfo implements Serializable {
     /**
      * 库位id
      */
-    private Long strogeLocationId;
+    private Long storageLocationId;
     /**
      * 库位编码
      */
-    private String strogeLocationCode;
+    private String storageLocationCode;
     /**
      * 库存
      */
@@ -100,6 +106,13 @@ public class OutOrderGoodsInfo implements Serializable {
      */
     private String remark;
 
+    public Long getInventoryId() {
+        return inventoryId;
+    }
+
+    public void setInventoryId(Long inventoryId) {
+        this.inventoryId = inventoryId;
+    }
 
     public Long getRelationId() {
         return relationId;
@@ -213,20 +226,20 @@ public class OutOrderGoodsInfo implements Serializable {
         this.batch = batch;
     }
 
-    public Long getStrogeLocationId() {
-        return strogeLocationId;
+    public Long getStorageLocationId() {
+        return storageLocationId;
     }
 
-    public void setStrogeLocationId(Long strogeLocationId) {
-        this.strogeLocationId = strogeLocationId;
+    public void setStorageLocationId(Long storageLocationId) {
+        this.storageLocationId = storageLocationId;
     }
 
-    public String getStrogeLocationCode() {
-        return strogeLocationCode;
+    public String getStorageLocationCode() {
+        return storageLocationCode;
     }
 
-    public void setStrogeLocationCode(String strogeLocationCode) {
-        this.strogeLocationCode = strogeLocationCode;
+    public void setStorageLocationCode(String storageLocationCode) {
+        this.storageLocationCode = storageLocationCode;
     }
 
     public Float getInStock() {
@@ -272,27 +285,28 @@ public class OutOrderGoodsInfo implements Serializable {
     @Override
     public String toString() {
         return "OutOrderGoodsInfo{" +
-                ", relationId=" + relationId +
+                "relationId=" + relationId +
+                ", inventoryId=" + inventoryId +
                 ", outorderId=" + outorderId +
                 ", outplanRelationId=" + outplanRelationId +
                 ", goodsId=" + goodsId +
-                ", goodsName=" + goodsName +
-                ", goodsCode=" + goodsCode +
-                ", goodsBarCode=" + goodsBarCode +
-                ", goodsSpec=" + goodsSpec +
+                ", goodsName='" + goodsName + '\'' +
+                ", goodsCode='" + goodsCode + '\'' +
+                ", goodsBarCode='" + goodsBarCode + '\'' +
+                ", goodsSpec='" + goodsSpec + '\'' +
                 ", goodsClassifyId=" + goodsClassifyId +
-                ", goodsClassifyName=" + goodsClassifyName +
-                ", minUnit=" + minUnit +
-                ", unit=" + unit +
+                ", goodsClassifyName='" + goodsClassifyName + '\'' +
+                ", minUnit='" + minUnit + '\'' +
+                ", unit='" + unit + '\'' +
                 ", unitData=" + unitData +
-                ", batch=" + batch +
-                ", strogeLocationId=" + strogeLocationId +
-                ", strogeLocationCode=" + strogeLocationCode +
+                ", batch='" + batch + '\'' +
+                ", storageLocationId=" + storageLocationId +
+                ", storageLocationCode='" + storageLocationCode + '\'' +
                 ", inStock=" + inStock +
                 ", goodsNum=" + goodsNum +
                 ", outboundQuantity=" + outboundQuantity +
                 ", outboundPrice=" + outboundPrice +
-                ", remark=" + remark +
-                "}";
+                ", remark='" + remark + '\'' +
+                '}';
     }
 }

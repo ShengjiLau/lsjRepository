@@ -201,11 +201,12 @@
     <result column="fee_property" jdbcType="VARCHAR" property="feeProperty" />
     <result column="money" jdbcType="REAL" property="money" />
     <result column="original_money" jdbcType="REAL" property="originalMoney" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
   </resultMap>
 
   <select id="searchCondition" parameterType="com.lcdt.traffic.dto.FeeFlow4SearchParamsDto" resultMap="searchMap">
     select f.flow_code,f.create_date,a.group_name,a.waybill_code,a.reconcile_code,a.name,f.fee_property,f.money,f.original_money,
-    f.waybill_id,f.waybill_code, waybill_date
+    f.waybill_id,f.waybill_code, waybill_date,f.is_deleted
     from t_fee_flow f
     LEFT JOIN t_fee_account a  ON  f.account_id = a.account_id
     <where>
@@ -280,7 +281,7 @@
                       and  #{createEnd,jdbcType=TIMESTAMP} >= date(f.create_date)
                     </if>
                   </where>
-                 group by pro_id ) t1 on t.dt= t1.create_date
+                 group by pro_id,date(f.create_date) ) t1 on t.dt= t1.create_date
         <where>
           <if test="createBegin!=null and createBegin!=''">
             and date(dt) >= #{createBegin,jdbcType=TIMESTAMP}

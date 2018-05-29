@@ -7,7 +7,7 @@
         <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
         <result column="invertory_num" jdbcType="INTEGER" property="invertoryNum" />
         <result column="lock_num" jdbcType="REAL" property="lockNum" />
-        <result column="warehouse_id" jdbcType="BIGINT" property="wareHouseId" />
+        <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
         <result column="company_id" jdbcType="BIGINT" property="companyId" />
         <result column="remark" jdbcType="VARCHAR" property="remark" />
         <result column="business_desc" jdbcType="VARCHAR" property="businessDesc" />
@@ -15,7 +15,12 @@
         <result column="warehouse_name" jdbcType="VARCHAR" property="warehouseName" />
         <result column="customer_id" jdbcType="BIGINT" property="customerId" />
         <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
-        
+        <result column="original_goods_id" jdbcType="BIGINT" property="originalGoodsId"/>
+        <result column="cost_remark" jdbcType="VARCHAR" property="costRemark" />
+        <result column="inventory_price" jdbcType="FLOAT" property="inventoryPrice"/>
+        <result column="batch" jdbcType="VARCHAR" property="batch" />
+        <result column="storage_location_id" jdbcType="BIGINT" property="storageLocationId"/>
+        <result column="base_unit" jdbcType="VARCHAR" property="baseUnit" />
         <association  property="goodsInfo" javaType="com.lcdt.warehouse.entity.GoodsInfo" autoMapping="true">
 
         </association>
@@ -28,39 +33,30 @@
         t.goods_id = g.goods_id
         <where>
             <if test="batch != null">
-                batch = #{batch}
+                t.batch = #{batch}
             </if>
 
             <if test="wareHouseId != null">
-               AND warehouse_id = #{wareHouseId}
+               AND t.warehouse_id = #{wareHouseId}
             </if>
 
             <if test="storageLocationCode != null">
-                and storage_location_code = #{storageLocationCode}
+                and t.storage_location_code = #{storageLocationCode}
             </if>
 
             <if test="goodsId != null">
-                and goods_id = #{goodsId}
+                and t.goods_id = #{goodsId}
             </if>
 
             <if test="customerId != null">
-                and customer_id = #{customerId}
+                and t.customer_id = #{customerId}
             </if>
 
-            <if test="goodsCategory != null">
-                and g.goods_category = #{goodsCategory}
-            </if>
 
             <if test="originalGoodsId != null">
-                and original_goods_id = #{originalGoodsId}
+                and t.original_goods_id = #{originalGoodsId}
             </if>
 
-            <if test="goodsBarCode != null">
-                and g.goods_barcode = #{goodsBarCode}
-            </if>
-            <if test="goodsCode != null">
-                and g.goods_code = #{goodsCode}
-            </if>
         </where>
     </select>
 
@@ -121,7 +117,7 @@
 		</where>
 	</select>
 	
-	<select id="getInventoryAndGoodsInfo" resultType="com.lcdt.warehouse.dto.ShiftInventoryListDTO">
+	<select id="getInventoryAndGoodsInfo" resultType="com.lcdt.warehouse.dto.ShiftGoodsListDTO">
 			select t.inventory_id inventoryId,t.storage_location_code storageLocationCode,g.goods_batch goodsBatch
 			g.goods_name goodsName,g.goods_spec goodsSpec,g.goods_code goodsCode,g.bar_code barCode,t.base_unit baseUnit
 			from inventory t inner join goods_info  g on

@@ -7,6 +7,7 @@ import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.OutOrderGoodsInfo;
 import com.lcdt.warehouse.entity.OutWarehouseOrder;
 import com.lcdt.warehouse.mapper.OutWarehouseOrderMapper;
+import com.lcdt.warehouse.service.InventoryService;
 import com.lcdt.warehouse.service.OutOrderGoodsInfoService;
 import com.lcdt.warehouse.service.OutWarehouseOrderService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -34,6 +35,9 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
     @Autowired
     OutOrderGoodsInfoService outOrderGoodsInfoService;
 
+    @Autowired
+    InventoryService inventoryService;
+
     @Override
     public int addOutWarehouseOrder(OutWhOrderDto dto) {
         int result = 0;
@@ -46,8 +50,9 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
             for (int i = 0; i < dto.getOutOrderGoodsInfoList().size(); i++) {
                 OutOrderGoodsInfo outOrderGoodsInfo = new OutOrderGoodsInfo();
                 BeanUtils.copyProperties(dto.getOutOrderGoodsInfoList().get(i), outOrderGoodsInfo);
-                outOrderGoodsInfo.setOutorderId(outOrderGoodsInfo.getOutorderId());
+                outOrderGoodsInfo.setOutorderId(outWarehouseOrder.getOutorderId());
                 outOrderGoodsInfoList.add(outOrderGoodsInfo);
+                inventoryService.lockInventoryNum(outOrderGoodsInfo.getInventoryId(),outOrderGoodsInfo.getOutboundQuantity());
             }
             //批量插入出库单明细
             outOrderGoodsInfoService.insertBatch(outOrderGoodsInfoList);
@@ -55,6 +60,7 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
             //直接出库
             if (dto.getOperationType() == 1) {
                 //对接库存，减库存
+                inventoryService.outInventory(outWarehouseOrder,outOrderGoodsInfoList);
             }
         }
         return result;
@@ -115,10 +121,16 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
         result = modifyOutOrderStatus(modifyParams);
 
         //出库减库存
-
-        //inventoryService.putInventory(inorderGoodsInfoList,inWarehouseOrder);
+        OutWarehouseOrder outWarehouseOrder=new OutWarehouseOrder();
+        outWarehouseOrder=queryOutWarehouseOrder(modifyParams.getCompanyId(),modifyParams.getOutorderId());
+        inventoryService.outInventory(outWarehouseOrder,modifyOutOrderGoodsInfoList);
 
         return result;
+    }
+
+    @Override
+    public List<DistributionRecordsOutOrderDto> queryOutOrderDisRecords(Long companyId, Long outPlanId) {
+        return baseMapper.selectOutOrderDisRecords(companyId,outPlanId);
     }
 
 }

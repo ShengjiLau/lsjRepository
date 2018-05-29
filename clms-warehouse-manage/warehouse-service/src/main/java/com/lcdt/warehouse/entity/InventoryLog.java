@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
@@ -13,7 +14,7 @@ import java.io.Serializable;
  * @author code generate
  * @since 2018-05-07
  */
-public class InventoryLog implements Serializable {
+public class InventoryLog implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
@@ -25,13 +26,14 @@ public class InventoryLog implements Serializable {
     private Long customerId;
     private String customerName;
     private Long storageLocationId;
+    private String storageLocationCode;
+
     private String comment;
     private Long companyId;
 
     /**
      * 库位
      */
-    private String storageLocation;
     private Date logTime;
     private Integer currentInvetory;
     private Float changeNum;
@@ -45,16 +47,62 @@ public class InventoryLog implements Serializable {
      */
     private Integer type;
 
+    /**
+     * 业务流水号
+     */
+    @TableField
+    private String logNo;
+
+    private GoodsInfo goodsInfo;
+
+    private Warehouse warehouse;
+
+    private String batch;
+
+    private Long orderId;
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getStorageLocationCode() {
+        return storageLocationCode;
+    }
+
+    public void setStorageLocationCode(String storageLocationCode) {
+        this.storageLocationCode = storageLocationCode;
+    }
+
+    public Long getLogId() {
+        return logId;
+    }
+
+    public void setLogId(Long logId) {
+        this.logId = logId;
+    }
+
+    public Long getGoodsId() {
+        return goodsId;
+    }
+
+    public void setGoodsId(Long goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public Long getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+
     public Long getOriginalGoodsId() {
         return originalGoodsId;
-    }
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
     }
 
     public void setOriginalGoodsId(Long originalGoodsId) {
@@ -93,36 +141,12 @@ public class InventoryLog implements Serializable {
         this.comment = comment;
     }
 
-    public Long getLogId() {
-        return logId;
+    public Long getCompanyId() {
+        return companyId;
     }
 
-    public void setLogId(Long logId) {
-        this.logId = logId;
-    }
-
-    public Long getGoodsId() {
-        return goodsId;
-    }
-
-    public void setGoodsId(Long goodsId) {
-        this.goodsId = goodsId;
-    }
-
-    public Long getWarehouseId() {
-        return warehouseId;
-    }
-
-    public void setWarehouseId(Long warehouseId) {
-        this.warehouseId = warehouseId;
-    }
-
-    public String getStorageLocation() {
-        return storageLocation;
-    }
-
-    public void setStorageLocation(String storageLocation) {
-        this.storageLocation = storageLocation;
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 
     public Date getLogTime() {
@@ -173,13 +197,44 @@ public class InventoryLog implements Serializable {
         this.type = type;
     }
 
+    public String getLogNo() {
+        return logNo;
+    }
+
+    public void setLogNo(String logNo) {
+        this.logNo = logNo;
+    }
+
+    public GoodsInfo getGoodsInfo() {
+        return goodsInfo;
+    }
+
+    public void setGoodsInfo(GoodsInfo goodsInfo) {
+        this.goodsInfo = goodsInfo;
+    }
+
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
+    }
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch;
+    }
+
     @Override
     public String toString() {
         return "InventoryLog{" +
         ", logId=" + logId +
         ", goodsId=" + goodsId +
         ", warehouseId=" + warehouseId +
-        ", storageLocation=" + storageLocation +
         ", logTime=" + logTime +
         ", currentInvetory=" + currentInvetory +
         ", changeNum=" + changeNum +

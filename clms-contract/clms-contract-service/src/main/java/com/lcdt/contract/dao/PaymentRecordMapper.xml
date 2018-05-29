@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.contract.dao.PaymentRecordMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.PaymentRecord">
+    <id column="pr_id" jdbcType="BIGINT" property="prId" />
+    <result column="pa_id" jdbcType="BIGINT" property="paId" />
+    <result column="payment_serial_no" jdbcType="VARCHAR" property="paymentSerialNo" />
+    <result column="order_serial_no" jdbcType="VARCHAR" property="orderSerialNo" />
+    <result column="payment_date" jdbcType="TIMESTAMP" property="paymentDate" />
+    <result column="payment_name" jdbcType="VARCHAR" property="paymentName" />
+    <result column="payment_sum" jdbcType="DECIMAL" property="paymentSum" />
+    <result column="attachment1" jdbcType="VARCHAR" property="attachment1" />
+    <result column="attachment1_name" jdbcType="VARCHAR" property="attachment1Name" />
+    <result column="attachment2" jdbcType="VARCHAR" property="attachment2" />
+    <result column="attachment2_name" jdbcType="VARCHAR" property="attachment2Name" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    pr_id, pa_id, payment_serial_no, order_serial_no, payment_date, payment_name, payment_sum, 
+    attachment1, attachment1_name, attachment2, attachment2_name, company_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_payment_record
+    where pr_id = #{prId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_payment_record
+    where pr_id = #{prId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.PaymentRecord">
+    insert into t_payment_record (pr_id, pa_id, payment_serial_no, 
+      order_serial_no, payment_date, payment_name, 
+      payment_sum, attachment1, attachment1_name, 
+      attachment2, attachment2_name, company_id
+      )
+    values (#{prId,jdbcType=BIGINT}, #{paId,jdbcType=BIGINT}, #{paymentSerialNo,jdbcType=VARCHAR}, 
+      #{orderSerialNo,jdbcType=VARCHAR}, #{paymentDate,jdbcType=TIMESTAMP}, #{paymentName,jdbcType=VARCHAR}, 
+      #{paymentSum,jdbcType=DECIMAL}, #{attachment1,jdbcType=VARCHAR}, #{attachment1Name,jdbcType=VARCHAR}, 
+      #{attachment2,jdbcType=VARCHAR}, #{attachment2Name,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.lcdt.contract.model.PaymentRecord">
+    insert into t_payment_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="prId != null">
+        pr_id,
+      </if>
+      <if test="paId != null">
+        pa_id,
+      </if>
+      <if test="paymentSerialNo != null">
+        payment_serial_no,
+      </if>
+      <if test="orderSerialNo != null">
+        order_serial_no,
+      </if>
+      <if test="paymentDate != null">
+        payment_date,
+      </if>
+      <if test="paymentName != null">
+        payment_name,
+      </if>
+      <if test="paymentSum != null">
+        payment_sum,
+      </if>
+      <if test="attachment1 != null">
+        attachment1,
+      </if>
+      <if test="attachment1Name != null">
+        attachment1_name,
+      </if>
+      <if test="attachment2 != null">
+        attachment2,
+      </if>
+      <if test="attachment2Name != null">
+        attachment2_name,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="prId != null">
+        #{prId,jdbcType=BIGINT},
+      </if>
+      <if test="paId != null">
+        #{paId,jdbcType=BIGINT},
+      </if>
+      <if test="paymentSerialNo != null">
+        #{paymentSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSerialNo != null">
+        #{orderSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDate != null">
+        #{paymentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentName != null">
+        #{paymentName,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentSum != null">
+        #{paymentSum,jdbcType=DECIMAL},
+      </if>
+      <if test="attachment1 != null">
+        #{attachment1,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment1Name != null">
+        #{attachment1Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2 != null">
+        #{attachment2,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2Name != null">
+        #{attachment2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.contract.model.PaymentRecord">
+    update t_payment_record
+    <set>
+      <if test="paId != null">
+        pa_id = #{paId,jdbcType=BIGINT},
+      </if>
+      <if test="paymentSerialNo != null">
+        payment_serial_no = #{paymentSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSerialNo != null">
+        order_serial_no = #{orderSerialNo,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentDate != null">
+        payment_date = #{paymentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentName != null">
+        payment_name = #{paymentName,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentSum != null">
+        payment_sum = #{paymentSum,jdbcType=DECIMAL},
+      </if>
+      <if test="attachment1 != null">
+        attachment1 = #{attachment1,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment1Name != null">
+        attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2 != null">
+        attachment2 = #{attachment2,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2Name != null">
+        attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where pr_id = #{prId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.PaymentRecord">
+    update t_payment_record
+    set pa_id = #{paId,jdbcType=BIGINT},
+      payment_serial_no = #{paymentSerialNo,jdbcType=VARCHAR},
+      order_serial_no = #{orderSerialNo,jdbcType=VARCHAR},
+      payment_date = #{paymentDate,jdbcType=TIMESTAMP},
+      payment_name = #{paymentName,jdbcType=VARCHAR},
+      payment_sum = #{paymentSum,jdbcType=DECIMAL},
+      attachment1 = #{attachment1,jdbcType=VARCHAR},
+      attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
+      attachment2 = #{attachment2,jdbcType=VARCHAR},
+      attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=BIGINT}
+    where pr_id = #{prId,jdbcType=BIGINT}
+  </update>
+</mapper>

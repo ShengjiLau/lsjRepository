@@ -2,9 +2,7 @@ package com.lcdt.warehouse.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
-import com.lcdt.warehouse.entity.InWarehouseOrder;
-import com.lcdt.warehouse.entity.InorderGoodsInfo;
-import com.lcdt.warehouse.entity.Inventory;
+import com.lcdt.warehouse.entity.*;
 import com.baomidou.mybatisplus.service.IService;
 
 import java.util.List;
@@ -26,4 +24,8 @@ public interface InventoryService extends IService<Inventory> {
     Inventory modifyInventoryPrice(Long inventoryId,Float newprice);
 
     Inventory modifyInventoryRemark(Long inventoryId,String remark);
+
+    void lockInventoryNum(Long inventoryId,Float tryLockNum);
+
+    void outInventory(OutWarehouseOrder order, List<OutOrderGoodsInfo> goodsInfos);
 }

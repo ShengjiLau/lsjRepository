@@ -102,7 +102,7 @@ public class PayableReconcileApi {
 	@GetMapping("/list")
 	@ApiOperation("查询对账单列表,payable_reconcile_list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_reconcile_list')")
-	public JSONObject getReconcileList(@RequestBody ReconcileDto reconcileDto) {
+	public JSONObject getReconcileList(ReconcileDto reconcileDto) {
 		JSONObject jsonObject =new JSONObject();
 		reconcileDto.setPayeeType((short) 1);
 		PageInfo<ReconcileDto> page=reconcileService.getReconcileList(reconcileDto);
