@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -95,7 +94,7 @@ public class OwnDriverApi {
     @ApiOperation(value = "新增司机", notes = "新增司机")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_add')")
-    public JSONObject addOwnDriver(OwnDriverDto ownDriverDto, BindingResult bindingResult) {
+    public JSONObject addOwnDriver(@RequestBody OwnDriverDto ownDriverDto) {
         Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId(); //  获取companyId
         Long userId = TokenSecurityInfoGetter.getUserCompRel().getUser().getUserId(); //获取用户id
         String userName = TokenSecurityInfoGetter.getUserCompRel().getUser().getRealName();   //获取用户姓名
@@ -103,11 +102,11 @@ public class OwnDriverApi {
         ownDriverDto.setCreateId(userId);
         ownDriverDto.setCreateName(userName);
         JSONObject jsonObject = new JSONObject();
-        if (bindingResult.hasErrors()) {
+       /* if (bindingResult.hasErrors()) {
             jsonObject.put("code", -1);
             jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
             return jsonObject;
-        }
+        }*/
         ownDriverService.addDriver(ownDriverDto);
         jsonObject.put("code", 0);
         jsonObject.put("message", "新增成功");
@@ -118,7 +117,7 @@ public class OwnDriverApi {
     @ApiOperation(value = "修改司机", notes = "更新司机")
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_modify')")
-    public JSONObject modOwnDriver(OwnDriverDto ownDriverDto, BindingResult bindingResult) {
+    public JSONObject modOwnDriver(@RequestBody OwnDriverDto ownDriverDto) {
         //  获取companyId
         Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompany().getCompId();
         //获取用户id
@@ -129,11 +128,11 @@ public class OwnDriverApi {
         ownDriverDto.setUpdateId(userId);
         ownDriverDto.setUpdateName(userName);
         JSONObject jsonObject = new JSONObject();
-        if (bindingResult.hasErrors()) {
+        /*if (bindingResult.hasErrors()) {
             jsonObject.put("code", -1);
             jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
             return jsonObject;
-        }
+        }*/
         ownDriverService.modDriver(ownDriverDto);
         jsonObject.put("code", 0);
         jsonObject.put("message", "修改成功");

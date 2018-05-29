@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.model.PaymentApplication;
 import com.lcdt.contract.service.PaymentApplictionService;
+import com.lcdt.contract.web.dto.BaseDto;
 import com.lcdt.contract.web.dto.PageBaseDto;
 import com.lcdt.contract.web.dto.PaymentApplicationDto;
 import com.lcdt.userinfo.model.User;
@@ -84,6 +85,14 @@ public class PaymentApplicationApi {
         return pageBaseDto;
     }
 
+    @ApiOperation(value = "付款记录详情", notes = "根据主键查询付款记录详情")
+    @GetMapping("/detail")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_list')")
+    public BaseDto addBillingRecord(Long paId){
+        PaymentApplicationDto paymentApplicationDto = paymentApplictionService.paymentApplictionDetail(paId);
+        BaseDto baseDto = new BaseDto(paymentApplicationDto);
+        return baseDto;
+    }
 
 
 }
