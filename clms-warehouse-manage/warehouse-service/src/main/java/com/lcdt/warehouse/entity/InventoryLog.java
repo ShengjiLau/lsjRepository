@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
@@ -49,6 +50,7 @@ public class InventoryLog implements Serializable{
     /**
      * 业务流水号
      */
+    @TableField
     private String logNo;
 
     private GoodsInfo goodsInfo;
@@ -56,6 +58,16 @@ public class InventoryLog implements Serializable{
     private Warehouse warehouse;
 
     private String batch;
+
+    private Long orderId;
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
 
     public String getStorageLocationCode() {
         return storageLocationCode;

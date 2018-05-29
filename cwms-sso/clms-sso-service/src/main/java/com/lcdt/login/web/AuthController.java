@@ -188,7 +188,6 @@ public class AuthController {
     @RequestMapping("/createcompany")
     @ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
     public ModelAndView createCompanyPage(HttpServletRequest request) {
-        User userInfo = LoginSessionReposity.getUserInfoInSession(request);
         ModelAndView view = new ModelAndView("/createCom");
         return view;
     }
