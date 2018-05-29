@@ -25,6 +25,26 @@
         <association property="warehouse" autoMapping="true" javaType="com.lcdt.warehouse.entity.Warehouse"></association>
     </resultMap>
 
+    <insert id="insert" parameterType="com.lcdt.warehouse.entity.InventoryLog">
+        <selectKey keyProperty="inventoryId" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into inventory_log (log_id, goods_id, warehouse_id,
+        storage_location_code, log_time, current_invetory,
+        change_num, business_no, type,
+        original_goods_id, customer_id, customer_name,
+        storage_location_id, comment, company_id,
+        log_no, batch, order_id
+        )
+        values (#{logId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT},
+        #{storageLocationCode,jdbcType=VARCHAR}, #{logTime,jdbcType=TIMESTAMP}, #{currentInvetory,jdbcType=INTEGER},
+        #{changeNum,jdbcType=REAL}, #{businessNo,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
+        #{originalGoodsId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR},
+        #{storageLocationId,jdbcType=BIGINT}, #{comment,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
+        INVENTORY_LOG_NO(), #{batch,jdbcType=VARCHAR}, #{orderId,jdbcType=BIGINT}
+        )
+    </insert>
+
     <select id="selectLogList" resultMap="BaseResultMap">
         SELECT * from inventory_log a left join goods_info b on
         a.goods_id = b.goods_id

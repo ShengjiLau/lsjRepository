@@ -26,7 +26,7 @@ public class FeeAccountWaybillDto extends WaybillDto {
     private Float feeTotal;
 
     @ApiModelProperty(value="对账条数")
-    private Float reconcileCount;
+    private Integer reconcileCount;
 
     public String getReceivAndPayName() {
         return receivAndPayName;
@@ -68,11 +68,11 @@ public class FeeAccountWaybillDto extends WaybillDto {
         this.waybillItemsList = waybillItemsList;
     }
 
-    public Float getReconcileCount() {
+    public Integer getReconcileCount() {
         return reconcileCount;
     }
 
-    public void setReconcileCount(Float reconcileCount) {
+    public void setReconcileCount(Integer reconcileCount) {
         this.reconcileCount = reconcileCount;
     }
 }

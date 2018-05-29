@@ -57,7 +57,6 @@ public class FeeFlowApi {
             dto.setCreateEnd(dto.getCreateEnd()+" 23:59:59");
         }
         dto.setCompanyId(SecurityInfoGetter.geUserCompRel().getCompany().getCompId());
-        dto.setIsDeleted((short)0);
         PageInfo pg = iFeeFlowService.feeFlowList(dto);
         PageBaseDto pg_result = new PageBaseDto(pg.getList(), pg.getTotal());
         return pg_result;
