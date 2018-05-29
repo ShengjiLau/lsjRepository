@@ -3,6 +3,7 @@ package com.lcdt.userinfo.service.impl;
 import com.lcdt.userinfo.dao.DriverMapper;
 import com.lcdt.userinfo.dao.UserMapper;
 import com.lcdt.userinfo.dto.RegisterDto;
+import com.lcdt.userinfo.event.RegisterUserEvent;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.exception.UserNotExistException;
@@ -13,7 +14,8 @@ import com.lcdt.userinfo.utils.RegisterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -22,9 +24,12 @@ import java.util.Date;
  * Created by ss on 2017/7/31.
  */
 @com.alibaba.dubbo.config.annotation.Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService,ApplicationEventPublisherAware {
 
 	private Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
+	private ApplicationEventPublisher applicationEventPublisher;//底层事件发布者
+
 
 	@Autowired
 	private UserMapper userMapper;
@@ -46,6 +51,7 @@ public class UserServiceImpl implements UserService {
 		driver.setDriverPhone(user.getPhone());
 		driver.setDriverName(user.getNickName());
 		driverMapper.insert(driver);
+		applicationEventPublisher.publishEvent(new RegisterUserEvent(driver));
 		return user;
 	}
 
@@ -75,8 +81,13 @@ public class UserServiceImpl implements UserService {
 		registerUser.setLastLoginTime(new Date());
 		registerUser.setNickName(registerDto.getName());
 		int insert = userMapper.insert(registerUser);
+		//发布应用事件
+		applicationEventPublisher.publishEvent(new RegisterUserEvent(registerUser));
 		return registerUser;
 	}
+
+
+
 
 
 	@Transactional(readOnly = true)
@@ -148,4 +159,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 
+	@Override
+	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+		this.applicationEventPublisher = applicationEventPublisher;
+	}
 }
