@@ -33,4 +33,7 @@ public interface PaymentApplicationMapper {
      * @return
      */
     int updateApprovalStatus(Long paId,Long companyId,Short status);
+
+
+    PaymentApplicationDto selectPaymentApplicationDetail(Long paId);
 }
