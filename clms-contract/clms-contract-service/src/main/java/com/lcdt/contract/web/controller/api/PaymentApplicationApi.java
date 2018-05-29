@@ -73,18 +73,6 @@ public class PaymentApplicationApi {
         return jsonObject;
     }
 
-
-    @ApiOperation(value = "新增付款单", notes = "采购单新增付款单")
-    @GetMapping("/product")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_list')")
-    @ResponseBody
-    public PageBaseDto<List<Map<Long,String>>> getOrderProduct(String orderId){
-        String[] orderIds = orderId.split(",");
-        List<Map<Long,String>> mapList = paymentApplictionService.orderProductInfo(orderIds);
-        PageBaseDto pageBaseDto = new PageBaseDto(mapList,mapList.size());
-        return pageBaseDto;
-    }
-
     @ApiOperation(value = "付款记录详情", notes = "根据主键查询付款记录详情")
     @GetMapping("/detail")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_list')")
@@ -94,5 +82,21 @@ public class PaymentApplicationApi {
         return baseDto;
     }
 
+    @ApiOperation(value = "确认付款", notes = "确认付款")
+    @PostMapping("/confirm")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_confirm')")
+    public JSONObject confirmPayment(@RequestBody PaymentApplication paymentApplication){
+
+        JSONObject jsonObject = new JSONObject();
+        int row = paymentApplictionService.confirmPayment(paymentApplication);
+        if(row>0){
+            jsonObject.put("code",0);
+            jsonObject.put("message","创建付款申请成功");
+        }else{
+            jsonObject.put("code",-1);
+            jsonObject.put("message","创建付款申请失败");
+        }
+        return jsonObject;
+    }
 
 }

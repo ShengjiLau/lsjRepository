@@ -6,6 +6,7 @@ import com.lcdt.contract.web.dto.PaApprovalDto;
 import com.lcdt.contract.web.dto.PaApprovalListDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @AUTHOR liuh
@@ -64,4 +65,11 @@ public interface PaApprovalService {
      * @return
      */
     int ccApproval(List<PaApproval> paApprovalList);
+
+    /**
+     * 根据orderIds数组批量获取对应的产品信息
+     * @param orderIds
+     * @return
+     */
+    List<Map<Long,String>> orderProductInfo(String[] orderIds);
 }
