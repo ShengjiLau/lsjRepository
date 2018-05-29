@@ -30,8 +30,8 @@
       <if test="groupId !=null">
       	and group_id=#{groupId,jdbcType=BIGINT}
       </if>
-      <if test="contractCode!=null and contractCode!=''">
-        and contract_code =#{contractCode,jdbcType=VARCHAR}
+      <if test="contractCode !=null and contractCode!=''">
+        and contract_code like concat('%',#{contractCode,jdbcType=VARCHAR},'%')
       </if>
       <if test="dispatchingType!=null">
         and dispatching_type = #{dispatchingType,jdbcType=SMALLINT}

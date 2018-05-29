@@ -341,6 +341,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
     @Transactional
     @Override
     public boolean distributeWh(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel) {
+        inWhPlanAddParamsDto.setCompanyId(userCompRel.getCompany().getCompId());
         InWhPlanDto _inWhPlanDto = inWhPlanDetail(inWhPlanAddParamsDto.getPlanId(),true,userCompRel);
         if (null == _inWhPlanDto) {
             throw new RuntimeException("计划不存在！");
@@ -390,10 +391,12 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
         params.setCustomerId(_inWhPlanDto.getCustomerId());
         params.setCustomerContactName(_inWhPlanDto.getCustomerContactName());
         params.setCustomerContactPhone(_inWhPlanDto.getCustomerContactPhone());
-        params.setWarehouseId(_inWhPlanDto.getWareHouseId());
-        params.setWarehouseName(_inWhPlanDto.getWarehouseName());
+
+        params.setWarehouseId(inWhPlanAddParamsDto.getWareHouseId());
+        params.setWarehouseName(inWhPlanAddParamsDto.getWarehouseName());
+
         params.setStorageType(_inWhPlanDto.getStorageType());
-        //params.setStoragePlanTime(_inWhPlanDto.getStoragePlanTime());
+       params.setStoragePlanTime(new Date());
         params.setStorageRemark(inWhPlanAddParamsDto.getStorageRemark());
         params.setDeliverymanCar(inWhPlanAddParamsDto.getDeliverymanCar());
         params.setDeliverymanLinkman(inWhPlanAddParamsDto.getDeliverymanLinkman());

@@ -1,6 +1,7 @@
 package com.lcdt.warehouse.mapper;
 
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
+import com.lcdt.warehouse.dto.DistributionRecordsOutOrderDto;
 import com.lcdt.warehouse.dto.OutWhOrderDto;
 import com.lcdt.warehouse.dto.OutWhOrderSearchDto;
 import com.lcdt.warehouse.entity.OutWarehouseOrder;
@@ -40,4 +41,12 @@ public interface OutWarehouseOrderMapper extends BaseMapper<OutWarehouseOrder> {
      * @return
      */
     OutWhOrderDto selectOutWarehouseOrder(@Param("companyId") Long companyId, @Param("outorderId") Long outorderId);
+
+    /**
+     * 获取出库配仓记录
+     * @param companyId
+     * @param outPlanId
+     * @return
+     */
+    List<DistributionRecordsOutOrderDto> selectOutOrderDisRecords(@Param("companyId") Long companyId,@Param("outPlanId") Long outPlanId);
 }

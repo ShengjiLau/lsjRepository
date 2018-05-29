@@ -23,6 +23,8 @@ public class OutplanGoods implements Serializable {
 
     private Long goodsId;
 
+    private Long invertoryId;
+
     private String goodsName;
 
     private String goodsClassify;
@@ -170,4 +172,13 @@ public class OutplanGoods implements Serializable {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public Long getInvertoryId() {
+        return invertoryId;
+    }
+
+    public void setInvertoryId(Long invertoryId) {
+        this.invertoryId = invertoryId;
+    }
 }
+

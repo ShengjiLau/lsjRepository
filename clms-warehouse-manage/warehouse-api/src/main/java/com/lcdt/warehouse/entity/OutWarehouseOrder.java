@@ -3,6 +3,8 @@ package com.lcdt.warehouse.entity;
 import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.lcdt.warehouse.contants.OutOrderStatus;
+
 import java.io.Serializable;
 
 /**
@@ -14,6 +16,8 @@ import java.io.Serializable;
  * @since 2018-05-25
  */
 public class OutWarehouseOrder implements Serializable {
+
+
 
     private static final long serialVersionUID = 1L;
 
@@ -147,6 +151,12 @@ public class OutWarehouseOrder implements Serializable {
      */
     private Integer isDeleted;
 
+    public boolean isOut() {
+        if (orderStatus != null) {
+            return orderStatus.equals(OutOrderStatus.OUTED);
+        }
+        return false;
+    }
 
     public Long getOutorderId() {
         return outorderId;

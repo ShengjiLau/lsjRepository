@@ -1,10 +1,7 @@
 package com.lcdt.warehouse.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.lcdt.warehouse.dto.ModifyOutOrderStatusParamsDto;
-import com.lcdt.warehouse.dto.OutOrderGoodsInfoDto;
-import com.lcdt.warehouse.dto.OutWhOrderDto;
-import com.lcdt.warehouse.dto.OutWhOrderSearchDto;
+import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.OutWarehouseOrder;
 import com.baomidou.mybatisplus.service.IService;
 
@@ -57,4 +54,13 @@ public interface OutWarehouseOrderService extends IService<OutWarehouseOrder> {
      * @return
      */
     boolean outbound(ModifyOutOrderStatusParamsDto modifyParams, List<OutOrderGoodsInfoDto> listParams);
+
+
+    /**
+     * 获取配仓记录
+     * @param companyId
+     * @param outPlanId
+     * @return
+     */
+    List<DistributionRecordsOutOrderDto> queryOutOrderDisRecords(Long companyId,Long outPlanId);
 }
