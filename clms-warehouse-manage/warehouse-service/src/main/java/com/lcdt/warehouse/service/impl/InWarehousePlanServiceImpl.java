@@ -59,11 +59,12 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                 //计划划货物详细信息
                 List<InPlanGoodsInfoResultDto> goodsList = inplanGoodsInfoMapper.inWhPlanGoodsInfoList(new Page<InPlanGoodsInfoResultDto>(1,100),obj.getPlanId()); //默认拉取对应100条
                 obj.setGoodsList(goodsList);
-
                 //入库单
                 InWarehouseOrderSearchParamsDto params = new InWarehouseOrderSearchParamsDto();
                 params.setCompanyId(dto.getCompanyId());
                 params.setPlanId(obj.getPlanId());
+                String[] pArray = {ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND+"",ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND+""};
+                params.setInOrderStatus(pArray);
                 params.setPageNo(1);
                 params.setPageSize(100);
                 Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderList(params);
@@ -277,18 +278,20 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
      */
     private void statDistributeNum(InWhPlanGoodsDto inWhPlanGoodsDto, List<InWarehouseOrderDto> inWarehouseOrderDtoList) {
         if (null!=inWarehouseOrderDtoList && inWarehouseOrderDtoList.size()>0) {
-            Float receivalbeAmount = 0f;
+            Float receivalbeAmount = 0f, inHouseAmount=0f;
             for (InWarehouseOrderDto obj : inWarehouseOrderDtoList) {
                 List<InorderGoodsInfoDto> list = obj.getGoodsInfoDtoList();
                 if (null!=list && list.size()>0) {
                     for (InorderGoodsInfoDto obj1 :list) { //配仓数量=对应入库单的应收数量
                          if (obj1.getInplanGoodsId().equals(inWhPlanGoodsDto.getRelationId())) {
-                             receivalbeAmount += obj1.getReceivalbeAmount();
+                             inHouseAmount += obj1.getInHouseAmount()==null?0:obj1.getInHouseAmount(); //入库数量
+                             receivalbeAmount += obj1.getReceivalbeAmount()==null?0:obj1.getReceivalbeAmount();//已配
+
                          }
                     }
                 }
             }
-            inWhPlanGoodsDto.setInOderGoodsNum(receivalbeAmount);//已配仓数
+            inWhPlanGoodsDto.setInHouseAmount(inHouseAmount);//已配仓数
             inWhPlanGoodsDto.setRemainGoodsNum(inWhPlanGoodsDto.getPlanGoodsNum()-receivalbeAmount);//计划-已配=剩余
         } else {
             inWhPlanGoodsDto.setInOderGoodsNum(0f);//已配仓数
