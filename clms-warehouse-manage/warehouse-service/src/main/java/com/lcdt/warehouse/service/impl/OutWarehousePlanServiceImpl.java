@@ -432,7 +432,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             tObj.setGoodsNum(obj1.getOutOderGoodsNum());//配仓数
             tObj.setInStock(obj1.getInStock());//可用库存
             tObj.setRemark(obj1.getDisRemark());
-            tObj.setInventoryId(obj1.getInvertoryId());
+            tObj.setInvertoryId(obj1.getInvertoryId());
             outOrderGoodsInfoList.add(tObj);
         }
         _tempObj.setOutOrderGoodsInfoList(outOrderGoodsInfoList);
