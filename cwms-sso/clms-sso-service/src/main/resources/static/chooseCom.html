@@ -124,6 +124,21 @@
       .onlygo{
         margin-top: 8px;
       }
+      .red{
+        color:red;
+        font-size: 13px;
+      }
+      .com-list li .acts a.disgo{
+
+        width: 78px;
+        height: 32px;
+        background: #EFEFEF;
+        font-size: 16px;
+        color: #C7C7C7;
+        text-align: center;
+        line-height: 32px;
+        border-radius: 3px;
+      }
     </style>
   </head>
   <body>
@@ -156,11 +171,16 @@
         <ul class="com-list"  th:each="company : ${companyMembers}">
           <li>
             <div class="com-info">
-              <p class="title" th:text="${company.company.fullName}">公司名称</p>
+              <p>
+              <span class="title" th:text="${company.company.fullName}">公司名称</span>
+                <span th:if="${company.company.enable} == false" class="red">企业已被平台禁用，请联系客服</span>
+              </p>
               <p class="sub-title"><span th:if="${company.isCreate}==1">我是管理员</span><span th:if="${company.isCreate}==0">我是员工</span></p>
             </div>
             <div class="acts">
-              <a class="go" th:href="@{/account/logincompany(companyId=${company.compId})}">进入</a>
+              <a class="disgo" href="#" th:if="${company.company.enable} == false">进入企业</a>
+              <a class="go" th:href="@{/account/logincompany(companyId=${company.compId})}" th:if="${company.company.enable} == null or ${company.company.enable} == true">进入企业</a>
+
               <span th:if="${company.isCreate}==0">
                 <a onclick="return clickUnbind(this)" th:href="@{/account/removecompany(usercomprelid=${company.userCompRelId},companyid=${company.compId})}" class="exit">解除关系</a>
               </span>

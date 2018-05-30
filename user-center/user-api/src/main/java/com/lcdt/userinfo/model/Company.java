@@ -266,6 +266,16 @@ public class Company implements java.io.Serializable,ResponseData{
     private String createName;
     private Date createDate;
 
+    private Boolean enable;
+
+    public Boolean getEnable() {
+        return enable;
+    }
+
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
+    }
+
     public Long getCreateId() {
         return createId;
     }

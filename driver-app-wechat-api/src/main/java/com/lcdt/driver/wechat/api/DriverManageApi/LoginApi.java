@@ -107,6 +107,14 @@ public class LoginApi {
         }
         String userId = String.valueOf(claimsFromToken.get("userId"));
         UserCompRel userCompRel = companyService.queryByUserIdCompanyId(Long.valueOf(userId), compId);
+        if (userCompRel.getCompany().getEnable() != null && userCompRel.getCompany().getEnable().equals(false)) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("token", "");
+            jsonObject.put("result", -1);
+            jsonObject.put("data", userCompRel);
+            jsonObject.put("message", "企业已被禁用");
+            return jsonObject.toString();
+        }
         HashMap<String, Object> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("userName", userCompRel.getUser().getPhone());
         stringStringHashMap.put("userCompId", userCompRel.getUserCompRelId());
