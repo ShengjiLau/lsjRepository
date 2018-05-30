@@ -47,6 +47,8 @@ public class InWhPlanGoodsDto {
     private Float distGoodsNum;
     @ApiModelProperty(value = "配仓---备注")
     private String disRemark;
+    @ApiModelProperty(value = "配仓---入库数量")
+    private Float inHouseAmount;
 
     public Float getRemainGoodsNum() {
         return remainGoodsNum;
@@ -198,5 +200,13 @@ public class InWhPlanGoodsDto {
 
     public void setRelationId(Long relationId) {
         this.relationId = relationId;
+    }
+
+    public Float getInHouseAmount() {
+        return inHouseAmount;
+    }
+
+    public void setInHouseAmount(Float inHouseAmount) {
+        this.inHouseAmount = inHouseAmount;
     }
 }

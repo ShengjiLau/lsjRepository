@@ -35,13 +35,19 @@ public class WaybillApi {
     @ApiOperation("我的运单--新增")
     @RequestMapping(value = "/v1/own", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_add')")
-    public JSONObject addOwnWaybill(WaybillDto dto) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        User loginUser = SecurityInfoGetter.getUser();
+    public JSONObject addOwnWaybill(@RequestBody WaybillDto dto) {
+        UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
+        Long companyId = userCompRel.getCompany().getCompId();
+        User loginUser = userCompRel.getUser();
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
         dto.setCarrierCompanyId(companyId);
+        //前端不好处理，后端处理
+        for(int i=0;i<dto.getWaybillItemsDtoList().size();i++){
+            dto.getWaybillItemsDtoList().get(i).setFreightTotal(dto.getWaybillItemsDtoList().get(i).getFreightPrice()*dto.getWaybillItemsDtoList().get(i).getAmount());
+            dto.getWaybillItemsDtoList().get(i).setPayTotal(dto.getWaybillItemsDtoList().get(i).getPayPrice()*dto.getWaybillItemsDtoList().get(i).getAmount());
+        }
         dto.setWaybillStatus((short)1);
         Waybill result = waybillRpcService.addWaybill(dto);
         if (result != null) {
