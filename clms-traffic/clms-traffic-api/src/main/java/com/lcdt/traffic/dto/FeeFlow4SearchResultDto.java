@@ -41,7 +41,6 @@ public class FeeFlow4SearchResultDto implements java.io.Serializable {
     @ApiModelProperty("原始费用")
     private Float originalMoney;
 
-
     @ApiModelProperty(value = "0-未删除，1-已删除")
     private Short isDeleted;
 
