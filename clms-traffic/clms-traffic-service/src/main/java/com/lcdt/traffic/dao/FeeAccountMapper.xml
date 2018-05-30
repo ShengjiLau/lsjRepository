@@ -535,11 +535,13 @@
   </select>
 
   <select id="selectByReconcileId" parameterType="java.lang.Long" resultMap="BaseResultDtoMap">
-    select <include refid="Base_Column_List"/>
-    from t_fee_account
-    where reconcile_id = #{reconcileId,jdbcType=BIGINT}
-    and is_deleted = 0
-    order by reconcile_id desc
+    select <include refid="Base_Column_List"/>,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.fee_property='运费' and ff.is_deleted=0) freight_total,
+    (select sum(ff.money) from t_fee_flow ff where ff.account_id=fa.account_id and ff.fee_property!='运费' and ff.is_deleted=0) other_fee_total
+    from t_fee_account fa
+    where fa.reconcile_id = #{reconcileId,jdbcType=BIGINT}
+    and fa.is_deleted = 0
+    order by fa.reconcile_id desc
   </select>
   <update id="updateIsDeleteByCondition" parameterType="com.lcdt.traffic.web.dto.FeeAccountSaveParamsDto">
     update t_fee_account
