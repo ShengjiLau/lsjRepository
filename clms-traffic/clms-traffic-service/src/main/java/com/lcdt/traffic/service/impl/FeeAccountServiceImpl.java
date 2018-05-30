@@ -118,14 +118,14 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         Map map = new HashMap();
         List<FeeAccountDto> feeAccountDtoList = feeAccountMapper.selectWaybillFeeAccountDetail(m);
         List<WaybillItems> waybillItemsList = waybillItemsMapper.selectByWaybillId(Long.parseLong(m.get("waybillId").toString()));
-        m.put("isShow", (short)0);
+//        m.put("isShow", (short)0);
         List<FeeProperty> showPropertyList = financeRpcService.selectByCondition(m);
-        m.put("isShow", (short)1);
-        List<FeeProperty> hidePropertyList = financeRpcService.selectByCondition(m);
+//        m.put("isShow", (short)1);
+//        List<FeeProperty> hidePropertyList = financeRpcService.selectByCondition(m);
         map.put("waybillItemsList", waybillItemsList);
         map.put("feeAccountDtoList", feeAccountDtoList);
         map.put("showPropertyList", showPropertyList);
-        map.put("hidePropertyList", hidePropertyList);
+//        map.put("hidePropertyList", hidePropertyList);
         Waybill waybill = waybillMapper.selectByPrimaryKey(Long.parseLong(m.get("waybillId").toString()));
         if(waybill != null){
             map.put("waybillId", waybill.getId());

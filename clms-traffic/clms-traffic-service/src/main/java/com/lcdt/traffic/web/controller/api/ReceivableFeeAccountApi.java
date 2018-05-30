@@ -180,7 +180,7 @@ public class ReceivableFeeAccountApi {
                     for(FeeAccountDto dto : feeAccountDtoList){
                         List<FeeFlow> feeFlowList = dto.getFeeFlowList();
                         List<FeeProperty> showPropertyList = new ArrayList<>();
-                        List<FeeProperty> hidePropertyList = new ArrayList<>();
+//                        List<FeeProperty> hidePropertyList = new ArrayList<>();
                         if(feeFlowList != null && feeFlowList.size() > 0){
                             List<Long> proIds = new ArrayList<>();
                             for(FeeFlow f : feeFlowList){
@@ -188,12 +188,12 @@ public class ReceivableFeeAccountApi {
                             }
                             m.put("proIds", proIds);
                         }
-                        m.put("isShow", (short)0);
+//                        m.put("isShow", (short)0);
                         showPropertyList = financeRpcService.selectByCondition(m);
-                        m.put("isShow", (short)1);
-                        hidePropertyList = financeRpcService.selectByCondition(m);
+//                        m.put("isShow", (short)1);
+//                        hidePropertyList = financeRpcService.selectByCondition(m);
                         dto.setShowPropertyList(showPropertyList);
-                        dto.setHidePropertyList(hidePropertyList);
+//                        dto.setHidePropertyList(hidePropertyList);
                     }
                 }
                 JSONObject jsonObject=new JSONObject();
