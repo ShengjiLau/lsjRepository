@@ -476,19 +476,18 @@
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
-    <collection property="paApprovalList" ofType="com.lcdt.contract.model.PaymentRecord">
-      <id column="pr_id" jdbcType="BIGINT" property="prId" />
+    <collection property="paApprovalList" ofType="com.lcdt.contract.model.PaApproval">
+      <id column="paa_id" jdbcType="BIGINT" property="paaId" />
       <result column="pa_id" jdbcType="BIGINT" property="paId" />
-      <result column="payment_serial_no" jdbcType="VARCHAR" property="paymentSerialNo" />
-      <result column="order_serial_no" jdbcType="VARCHAR" property="orderSerialNo" />
-      <result column="payment_date" jdbcType="TIMESTAMP" property="paymentDate" />
-      <result column="payment_name" jdbcType="VARCHAR" property="paymentName" />
-      <result column="payment_sum" jdbcType="DECIMAL" property="paymentSum" />
-      <result column="attachment1" jdbcType="VARCHAR" property="attachment1" />
-      <result column="attachment1_name" jdbcType="VARCHAR" property="attachment1Name" />
-      <result column="attachment2" jdbcType="VARCHAR" property="attachment2" />
-      <result column="attachment2_name" jdbcType="VARCHAR" property="attachment2Name" />
-      <result column="company_id" jdbcType="BIGINT" property="companyId" />
+      <result column="user_id" jdbcType="BIGINT" property="userId" />
+      <result column="user_name" jdbcType="VARCHAR" property="userName" />
+      <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+      <result column="sort" jdbcType="INTEGER" property="sort" />
+      <result column="result" jdbcType="SMALLINT" property="result" />
+      <result column="action_type" jdbcType="SMALLINT" property="actionType" />
+      <result column="status" jdbcType="SMALLINT" property="status" />
+      <result column="content" jdbcType="VARCHAR" property="content" />
+      <result column="time" jdbcType="TIMESTAMP" property="time" />
     </collection>
   </resultMap>
   <select id="selectPaymentApplicationDetail" resultMap="DetailResultMap">
