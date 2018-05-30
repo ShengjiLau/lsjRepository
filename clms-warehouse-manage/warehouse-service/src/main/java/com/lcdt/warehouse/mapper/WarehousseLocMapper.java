@@ -19,4 +19,6 @@ public interface WarehousseLocMapper {
     int updateByPrimaryKey(WarehouseLoc record);
 
     List<WarehouseLoc> selectByCondition(Map map);
+
+    int selectByCode(String code);
 }

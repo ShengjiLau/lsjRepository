@@ -98,4 +98,10 @@
     set is_deleted = 1
     where wh_loc_id = #{whLocId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectByCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(*)
+    from t_warehouse_loc
+    where code = #{code,jdbcType=VARCHAR}
+  </select>
 </mapper>
