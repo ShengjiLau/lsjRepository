@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.lcdt.items.model.GoodsInfoDao;
@@ -70,6 +71,7 @@ public class Inventory implements Serializable {
      */
     private String warehouseName;
 
+    @TableField(exist = false)
     private GoodsInfo goodsInfo;
 
 
