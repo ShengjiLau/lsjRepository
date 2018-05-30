@@ -102,6 +102,7 @@ public class FeePropertyApi {
                 dto.setOperatorId(user.getUserId());
                 dto.setOperatorName(user.getRealName());
                 dto.setCreateDate(new Date());
+                dto.setIsShow((short)0);
                 dto.setIsDeleted((short) 0);
 
                 int result = feePropertyService.addFeeProperty(dto);
