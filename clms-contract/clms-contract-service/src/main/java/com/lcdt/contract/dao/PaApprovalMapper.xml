@@ -222,11 +222,11 @@
       <if test="paymentTimeStart!=null and paymentTimeStart!=''">
         and t1.application_date &gt; #{paymentTimeStart,jdbcType=TIMESTAMP} and t1.application_date &lt; #{paymentTimeEnd,jdbcType=TIMESTAMP}
       </if>
-      <if test="orderNo!=null and orderNo!=''">
-        and t1.order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
+      <if test="orderSerialNo!=null and orderSerialNo!=''">
+        and t1.order_serial_no like concat('%',#{orderSerialNo,jdbcType=VARCHAR},'%')
       </if>
-      <if test="customerCName!=null and customerCName!=''">
-        and t1.supplier like concat('%',#{customerCName,jdbcType=VARCHAR},'%')
+      <if test="supplier!=null and supplier!=''">
+        and t1.supplier like concat('%',#{supplier,jdbcType=VARCHAR},'%')
       </if>
       <if test="contractCode!=null and contractCode!=''">
         and t1.contract_code like concat('%',#{contractCode,jdbcType=VARCHAR},'%')

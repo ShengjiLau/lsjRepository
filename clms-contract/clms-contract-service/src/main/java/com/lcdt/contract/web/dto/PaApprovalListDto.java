@@ -22,7 +22,7 @@ public class PaApprovalListDto implements Serializable {
     /**
      * 采购单号
      */
-    private String orderNo;
+    private String orderSerialNo;
 
     /**
      * 采购合同号
@@ -32,7 +32,7 @@ public class PaApprovalListDto implements Serializable {
     /**
      * 供应商
      */
-    private String customerCName;
+    private String supplier;
 
     /**
      * 审批状态
@@ -91,12 +91,12 @@ public class PaApprovalListDto implements Serializable {
         this.paymentTimeEnd = paymentTimeEnd;
     }
 
-    public String getOrderNo() {
-        return orderNo;
+    public String getOrderSerialNo() {
+        return orderSerialNo;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+    public void setOrderSerialNo(String orderSerialNo) {
+        this.orderSerialNo = orderSerialNo;
     }
 
     public String getContractCode() {
@@ -107,12 +107,12 @@ public class PaApprovalListDto implements Serializable {
         this.contractCode = contractCode;
     }
 
-    public String getCustomerCName() {
-        return customerCName;
+    public String getSupplier() {
+        return supplier;
     }
 
-    public void setCustomerCName(String customerCName) {
-        this.customerCName = customerCName;
+    public void setSupplier(String supplier) {
+        this.supplier = supplier;
     }
 
     public Short getApprovalStatus() {
