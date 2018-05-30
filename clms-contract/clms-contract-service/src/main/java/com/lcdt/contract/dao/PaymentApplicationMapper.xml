@@ -435,6 +435,7 @@
       </if>
       and company_id = #{companyId}
     </where>
+    order by pa_id DESC
   </select>
   <update id="updateApprovalStatus" >
     update t_payment_application
