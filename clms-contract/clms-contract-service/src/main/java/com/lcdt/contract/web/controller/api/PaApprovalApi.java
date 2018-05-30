@@ -18,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @AUTHOR liuh
@@ -153,6 +154,17 @@ public class PaApprovalApi {
             jsonObject.put("message", "操作失败");
         }
         return jsonObject;
+    }
+
+    @ApiOperation(value = "新增付款单", notes = "采购单新增付款单")
+    @GetMapping("/product")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_list')")
+    @ResponseBody
+    public PageBaseDto<List<Map<Long,String>>> getOrderProduct(String orderId){
+        String[] orderIds = orderId.split(",");
+        List<Map<Long,String>> mapList = paApprovalService.orderProductInfo(orderIds);
+        PageBaseDto pageBaseDto = new PageBaseDto(mapList,mapList.size());
+        return pageBaseDto;
     }
 
 }

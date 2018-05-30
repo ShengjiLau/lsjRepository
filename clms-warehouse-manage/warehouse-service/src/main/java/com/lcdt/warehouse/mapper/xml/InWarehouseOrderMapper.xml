@@ -117,7 +117,7 @@
         </selectKey>
         insert into in_warehouse_order (plan_id, in_order_code, in_order_status,
         group_id, group_name,contract_code, purchase_code,
-        customer_name, customer_contact_name,customer_id, customer_contact_phone,
+        customer_name,customer_id, customer_contact_name, customer_contact_phone,
         warehouse_id, warehouse_name, storage_type,
         storage_plan_time, storage_time, storage_remark,
         deliveryman_name, deliveryman_phone, deliveryman_linkman,
