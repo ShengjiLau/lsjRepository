@@ -52,7 +52,7 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
                 BeanUtils.copyProperties(dto.getOutOrderGoodsInfoList().get(i), outOrderGoodsInfo);
                 outOrderGoodsInfo.setOutorderId(outWarehouseOrder.getOutorderId());
                 outOrderGoodsInfoList.add(outOrderGoodsInfo);
-                inventoryService.lockInventoryNum(outOrderGoodsInfo.getInventoryId(),outOrderGoodsInfo.getOutboundQuantity());
+                inventoryService.lockInventoryNum(outOrderGoodsInfo.getInvertoryId(),outOrderGoodsInfo.getOutboundQuantity());
             }
             //批量插入出库单明细
             outOrderGoodsInfoService.insertBatch(outOrderGoodsInfoList);

@@ -297,6 +297,13 @@ public class AuthController {
             modelAndView.addObject("msg", "用户已被禁用");
             return modelAndView;
         }
+
+        if (companyMember.getCompany().getEnable() != null && companyMember.getCompany().getEnable().equals(false)) {
+            ModelAndView modelAndView = new ModelAndView("/error");
+            modelAndView.addObject("msg", "公司已被禁用");
+            return modelAndView;
+        }
+
         ticketService.generateTicketInResponse(request, response, userInfo.getUserId(), companyId);
         LoginSessionReposity.setCompanyMemberInSession(request, companyMember);
         User userInfoInSession = LoginSessionReposity.getUserInfoInSession(request);

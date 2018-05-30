@@ -14,6 +14,7 @@ import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.pay.rpc.ProductCountService;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.dto.CompanyDto;
+import com.lcdt.userinfo.event.CreateCompanyEvent;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.exception.UserNotExistException;
@@ -28,6 +29,8 @@ import com.lcdt.warehouse.entity.WarehouseLinkman;
 import com.lcdt.warehouse.entity.WarehouseLoc;
 import com.lcdt.warehouse.rpc.WarehouseRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -37,7 +40,7 @@ import java.util.List;
  * Created by ss on 2017/10/24.
  */
 @com.alibaba.dubbo.config.annotation.Service
-public class CreateCompanyServiceImpl implements CreateCompanyService {
+public class CreateCompanyServiceImpl implements CreateCompanyService,ApplicationEventPublisherAware {
 
 	public final String defaultGroupName = "默认项目";
 	public final String defaultGroupRemark = "公司默认项目";
@@ -83,6 +86,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 	@Autowired
 	GroupWareHouseService groupWareHouseService;
 
+
 	private SysRole sysAdminRole;
 
 	@Transactional(rollbackFor = Exception.class)
@@ -108,6 +112,9 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		addCustomer(company,userCompRel,group);
 		//初始化短信条数和基站条数
 		addSmsOrLbs(userCompRel);
+
+		publisher.publishEvent(new CreateCompanyEvent(userCompRel));
+
 		return company;
 	}
 
@@ -249,5 +256,12 @@ public class CreateCompanyServiceImpl implements CreateCompanyService {
 		}catch (Exception e){
 			return false;
 		}
+	}
+
+	private ApplicationEventPublisher publisher;
+
+	@Override
+	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+		this.publisher = applicationEventPublisher;
 	}
 }
