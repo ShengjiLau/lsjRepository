@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.tl.commons.util.StringUtility;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -77,7 +76,7 @@ public class FeePropertyApi {
     @RequestMapping(value = "/addFeeProperty", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_property_add')")
     public JSONObject addFeeProperty(@Validated FeeProperty dto) {
-        if(StringUtility.isNotEmpty(dto.getName()) && !"运费".equals(dto.getName())) {
+//        if(StringUtility.isNotEmpty(dto.getName()) && !"运费".equals(dto.getName())) {
             Long companyId = SecurityInfoGetter.getCompanyId();
 
             Map map = new HashMap();
@@ -103,6 +102,7 @@ public class FeePropertyApi {
                 dto.setOperatorId(user.getUserId());
                 dto.setOperatorName(user.getRealName());
                 dto.setCreateDate(new Date());
+                dto.setIsShow((short)0);
                 dto.setIsDeleted((short) 0);
 
                 int result = feePropertyService.addFeeProperty(dto);
@@ -115,16 +115,16 @@ public class FeePropertyApi {
                     throw new RuntimeException("添加失败");
                 }
             }
-        }else{
-            throw new RuntimeException("费用类型不能为‘运费’");
-        }
+//        }else{
+//            throw new RuntimeException("费用类型不能为‘运费’");
+//        }
     }
 
     @ApiOperation("费用类型——修改")
     @RequestMapping(value = "/modifyFeeProperty", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('fee_property_modify')")
     public JSONObject modifyFeeProperty(@Validated FeeProperty dto) {
-        if(StringUtility.isNotEmpty(dto.getName()) && !"运费".equals(dto.getName())) {
+//        if(StringUtility.isNotEmpty(dto.getName()) && !"运费".equals(dto.getName())) {
             Long companyId = SecurityInfoGetter.getCompanyId();
             Map map = new HashMap();
             map.put("companyId", companyId);
@@ -157,9 +157,9 @@ public class FeePropertyApi {
                     throw new RuntimeException("修改失败");
                 }
             }
-        }else{
-            throw new RuntimeException("费用类型不能为‘运费’");
-        }
+//        }else{
+//            throw new RuntimeException("费用类型不能为‘运费’");
+//        }
     }
 
     @ApiOperation("费用类型——删除")

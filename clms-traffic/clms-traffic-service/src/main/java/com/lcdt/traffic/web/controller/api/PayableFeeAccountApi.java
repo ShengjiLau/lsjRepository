@@ -178,7 +178,7 @@ public class PayableFeeAccountApi {
                     for (FeeAccountDto dto : feeAccountDtoList) {
                         List<FeeFlow> feeFlowList = dto.getFeeFlowList();
                         List<FeeProperty> showPropertyList = new ArrayList<>();
-                        List<FeeProperty> hidePropertyList = new ArrayList<>();
+//                        List<FeeProperty> hidePropertyList = new ArrayList<>();
                         if (feeFlowList != null && feeFlowList.size() > 0) {
                             List<Long> proIds = new ArrayList<>();
                             for (FeeFlow f : feeFlowList) {
@@ -186,12 +186,12 @@ public class PayableFeeAccountApi {
                             }
                             m.put("proIds", proIds);
                         }
-                        m.put("isShow", (short) 0);
+//                        m.put("isShow", (short) 0);
                         showPropertyList = financeRpcService.selectByCondition(m);
-                        m.put("isShow", (short) 1);
-                        hidePropertyList = financeRpcService.selectByCondition(m);
+//                        m.put("isShow", (short) 1);
+//                        hidePropertyList = financeRpcService.selectByCondition(m);
                         dto.setShowPropertyList(showPropertyList);
-                        dto.setHidePropertyList(hidePropertyList);
+//                        dto.setHidePropertyList(hidePropertyList);
                     }
                 }
                 JSONObject jsonObject = new JSONObject();
@@ -369,7 +369,7 @@ public class PayableFeeAccountApi {
     @ApiOperation("对账单——取消对账")
     @RequestMapping(value = "/feeAccountReconcileCancel", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_reconcile_cancel')")
-    public JSONObject feeAccountReconcileCancel(@ApiParam(value = "对账单id（例:1,2,3）",required = true) @RequestParam String accountIds) {
+    public JSONObject feeAccountReconcileCancel(@ApiParam(value = "记账单id（例:1,2,3）",required = true) @RequestParam String accountIds) {
         String[] accountIdStrArr = accountIds.split(",");
         Long[] accountIdArr = new Long[accountIdStrArr.length];
         for(int i=0; i<accountIdStrArr.length; i++){

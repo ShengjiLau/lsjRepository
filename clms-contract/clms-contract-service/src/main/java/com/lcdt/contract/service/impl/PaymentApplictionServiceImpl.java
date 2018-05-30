@@ -33,8 +33,6 @@ public class PaymentApplictionServiceImpl implements PaymentApplictionService {
     private PaymentApplicationMapper paymentApplicationMapper;
     @Autowired
     private PaApprovalMapper paApprovalMapper;
-    @Autowired
-    private OrderProductMapper orderProductMapper;
 
     @Override
     public PageInfo<List<PaymentApplication>> paymentApplictionList(PaymentApplicationDto paymentApplicationDto, PageInfo pageInfo) {
@@ -89,7 +87,8 @@ public class PaymentApplictionServiceImpl implements PaymentApplictionService {
                 paApprovalMapper.insertBatch(paymentApplicationDto.getPaApprovalList());
                 //设置付款单审批状态为审批中
                 paymentApplication.setApprovalStatus(new Short("1"));
-
+                //设置审批开始时间
+                paymentApplication.setApprovalStartDate(new Date());
             }else{
                 //设置付款单审批状态为无需审批
                 paymentApplication.setApprovalStatus(new Short("0"));
@@ -100,19 +99,15 @@ public class PaymentApplictionServiceImpl implements PaymentApplictionService {
         return row;
     }
 
+
+
     @Override
-    public List<Map<Long,String>> orderProductInfo(String[] orderIds){
-        List<Map<Long,String>> mapList = new ArrayList<>();
-        List<OrderProduct> orderProductList = orderProductMapper.selectProductByOrderIds(orderIds);
-        Map<Long, String> map = null;
-        for(int i=0;i<orderProductList.size();i++){
-            map = new HashMap<>();
-            OrderProduct orderProduct = orderProductList.get(i);
-            //先尝试获取一下该orderId是否已经存在，组合后重新put值
-            String temp = map.get(orderProduct.getOrderId())==null?"":"、"+map.get(orderProduct.getOrderId());
-            map.put(orderProduct.getOrderId(),orderProduct.getName()+orderProduct.getNum()+orderProduct.getSku()+temp);
-            mapList.add(map);
-        }
-        return mapList;
+    public PaymentApplicationDto paymentApplictionDetail(Long paId){
+        return paymentApplicationMapper.selectPaymentApplicationDetail(paId);
+    }
+
+    @Override
+    public int confirmPayment(PaymentApplication paymentApplication){
+        return paymentApplicationMapper.updateByPrimaryKeySelective(paymentApplication);
     }
 }

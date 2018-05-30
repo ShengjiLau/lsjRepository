@@ -16,6 +16,7 @@ public class PaApprovalDto extends PaymentApplication {
      */
     private List<PaApproval> paApprovalList;
 
+    private String product;
     /**
      * 审批创建人
      */
@@ -27,6 +28,14 @@ public class PaApprovalDto extends PaymentApplication {
 
     public void setPaApprovalList(List<PaApproval> paApprovalList) {
         this.paApprovalList = paApprovalList;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
     }
 
     public String getApprovalCreateName() {

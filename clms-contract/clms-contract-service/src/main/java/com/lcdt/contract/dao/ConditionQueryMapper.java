@@ -1,6 +1,8 @@
 package com.lcdt.contract.dao;
 
 import java.util.List;
+import java.util.Map;
+
 import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.web.dto.OrderDto;
 
@@ -67,6 +69,19 @@ public interface ConditionQueryMapper {
      * @return int
      */
     int deleteOrderProductByOrderId(Long orderId);
-    
 
+
+    /**
+     * 根据orderIds获取付款单相关信息
+     * @param orderDtoList
+     * @return
+     */
+    List<Map> paymentInfo(List<OrderDto> orderDtoList);
+
+    /**
+     * 根据orderIds获取开票相关信息
+     * @param orderDtoList
+     * @return
+     */
+    List<Map> billingInfo(List<OrderDto> orderDtoList);
 }

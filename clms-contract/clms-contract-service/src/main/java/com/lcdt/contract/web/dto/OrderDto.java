@@ -29,6 +29,12 @@ public class OrderDto extends Order  implements Serializable{
 	
 	@ApiModelProperty(value="查询创建时间终点")
 	private String endTime;
+
+	private Short paymentStatus;
+
+	private String paymentNum;
+
+	private String billingRecordNum;
 	
 	@ApiModelProperty(value="页码")
 	private int pageNum;
@@ -70,6 +76,30 @@ public class OrderDto extends Order  implements Serializable{
 	}
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
+	}
+
+	public Short getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(Short paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	public String getPaymentNum() {
+		return paymentNum;
+	}
+
+	public void setPaymentNum(String paymentNum) {
+		this.paymentNum = paymentNum;
+	}
+
+	public String getBillingRecordNum() {
+		return billingRecordNum;
+	}
+
+	public void setBillingRecordNum(String billingRecordNum) {
+		this.billingRecordNum = billingRecordNum;
 	}
 
 	public List<OrderApproval> getOrderApprovalList() {
