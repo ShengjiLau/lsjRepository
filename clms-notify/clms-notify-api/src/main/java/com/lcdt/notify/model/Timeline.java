@@ -5,17 +5,17 @@ import java.util.Date;
 public class Timeline {
     private Long timelineId;
 
-    private String actionTitle;
+    private String actionTitle; //标题
 
-    private Date actionTime;
+    private Date actionTime; //时间
 
-    private String actionDes;
+    private String actionDes; //详细内容
 
-    private Long companyId;
+    private Long companyId; //企业ID
 
-    private String searchkey;
+    private String searchkey; //分类（计划、排单等）
 
-    private Long dataid;
+    private Long dataid; //如创建计划ID（主键）
 
     private String mqMessageId;
 

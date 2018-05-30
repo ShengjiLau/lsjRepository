@@ -47,16 +47,16 @@ public class FeeFlow4SearchParamsDto implements java.io.Serializable {
     @ApiModelProperty(value = "组ID-后台处理，必须要传")
     private String groupIds;
 
-    public short getIsDeleted() {
+    public Short getIsDeleted() {
         return isDeleted;
     }
 
-    public void setIsDeleted(short isDeleted) {
+    public void setIsDeleted(Short isDeleted) {
         this.isDeleted = isDeleted;
     }
 
     @ApiModelProperty(value = "删除标记-0未删除-后台处理，必须要传")
-    private short isDeleted;
+    private Short isDeleted;
 
 
     public Short getIsReceivable() {
