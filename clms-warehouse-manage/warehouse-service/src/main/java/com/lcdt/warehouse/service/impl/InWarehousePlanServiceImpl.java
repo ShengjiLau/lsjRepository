@@ -246,7 +246,9 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                 params.setPlanId(obj.getPlanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
+                String[] pArray = {ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND+"",ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND+""};
                 Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderList(params);
+                params.setInOrderStatus(pArray);
                 if (inWarehouseOrderDtoList.getTotal()>0) {
                     result.setInWarehouseOrderDtoList(inWarehouseOrderDtoList.getRecords());
                 }
