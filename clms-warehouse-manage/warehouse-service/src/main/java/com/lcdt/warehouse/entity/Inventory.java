@@ -78,7 +78,7 @@ public class Inventory implements Serializable {
     private Long originalGoodsId;
 
     private String batch;
-
+    @TableField(exist = false)
     private GoodsInfoDao goods;
 
     public String getCostRemark() {
