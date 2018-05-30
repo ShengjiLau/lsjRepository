@@ -246,7 +246,9 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                 params.setPlanId(obj.getPlanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
+                String[] pArray = {ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND+"",ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND+""};
                 Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderList(params);
+                params.setInOrderStatus(pArray);
                 if (inWarehouseOrderDtoList.getTotal()>0) {
                     result.setInWarehouseOrderDtoList(inWarehouseOrderDtoList.getRecords());
                 }
@@ -294,7 +296,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
             inWhPlanGoodsDto.setInHouseAmount(inHouseAmount);//已配仓数
             inWhPlanGoodsDto.setRemainGoodsNum(inWhPlanGoodsDto.getPlanGoodsNum()-receivalbeAmount);//计划-已配=剩余
         } else {
-            inWhPlanGoodsDto.setInOderGoodsNum(0f);//已配仓数
+            inWhPlanGoodsDto.setInHouseAmount(0f);//已配仓数
             inWhPlanGoodsDto.setRemainGoodsNum(inWhPlanGoodsDto.getPlanGoodsNum()-0);//计划-已配=剩余
         }
     }
@@ -354,12 +356,14 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
          */
         List<InWhPlanGoodsDto> _inWhPlanGoodsDtoList1 = inWhPlanAddParamsDto.getInWhPlanGoodsDtoList(); //前端提交来的
         List<InWhPlanGoodsDto> _inWhPlanGoodsDtoList2 = _inWhPlanDto.getInWhPlanGoodsDtoList(); //后端数据库中最新的
-        int num = 0;
+        Integer num = 0;
         for (InWhPlanGoodsDto obj1: _inWhPlanGoodsDtoList1) {
            if (obj1.getDistGoodsNum() == null) {
                num++;
             }
          }
+
+
         if (_inWhPlanGoodsDtoList1.size()==num) {
               throw new RuntimeException("配仓数量不能为0！");
         }
@@ -379,7 +383,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                           sb.append("货物："+ obj1.getGoodsName()+"，剩余数量："+obj2.getRemainGoodsNum()+",不满足当前配仓数量："+obj1.getDistGoodsNum());
                         } else {
                             //如果本次配仓量+已配仓量=计划的
-                            if (obj1.getDistGoodsNum() + obj2.getInOderGoodsNum()!=obj2.getPlanGoodsNum()) {
+                            if (obj1.getDistGoodsNum() + obj2.getInHouseAmount() != obj2.getPlanGoodsNum()) {
                                 flag = false;
                             }
                         }
