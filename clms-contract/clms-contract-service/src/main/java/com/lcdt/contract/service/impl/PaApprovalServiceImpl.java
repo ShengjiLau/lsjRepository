@@ -95,19 +95,20 @@ public class PaApprovalServiceImpl implements PaApprovalService {
         for (PaApprovalDto paDto : paApprovalDtoList) {
             stringList.add(paDto.getOrderId().toString());
         }
-        String[] orderIds = new String[stringList.size()];
-        List<Map<Long, String>> mapList = this.orderProductInfo(stringList.toArray(orderIds));
-        for (PaApprovalDto paDto : paApprovalDtoList) {
-            for(Map<Long,String> map : mapList){
-                for (Long key : map.keySet()) {
-                    if(paDto.getOrderId().longValue()== key.longValue()){
-                        paDto.setProduct(map.get(key));
+        if(stringList.size()>0){
+            String[] orderIds = new String[stringList.size()];
+            List<Map<Long, String>> mapList = this.orderProductInfo(stringList.toArray(orderIds));
+            for (PaApprovalDto paDto : paApprovalDtoList) {
+                for(Map<Long,String> map : mapList){
+                    for (Long key : map.keySet()) {
+                        if(paDto.getOrderId().longValue()== key.longValue()){
+                            paDto.setProduct(map.get(key));
+                        }
                     }
-                }
 
+                }
             }
         }
-
         return page;
     }
 
