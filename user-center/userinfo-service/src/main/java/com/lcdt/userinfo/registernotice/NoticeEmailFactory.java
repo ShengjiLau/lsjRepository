@@ -5,7 +5,11 @@ import com.lcdt.userinfo.model.UserCompRel;
 import org.springframework.mail.SimpleMailMessage;
 
 public class NoticeEmailFactory {
-
+    static SimpleMailMessage createMessage(UserCompRel user) {
+        SimpleMailMessage baseMessage = createBaseMessage();
+        baseMessage.setText(messageText(user));
+        return baseMessage;
+    }
 
 
     static SimpleMailMessage createMessage(User user) {
@@ -19,6 +23,9 @@ public class NoticeEmailFactory {
         return String.format("%s 账户：%s 姓名： %s ,注册来源： %s", prefix(user), user.getPhone(), user.getRealName(), user.getRegisterFrom());
     }
 
+    static String messageText(UserCompRel userCompRel){
+        return String.format("%s 账户：%s 姓名： %s ,注册来源： %s", prefix(userCompRel), userCompRel.getUser().getPhone(),  userCompRel.getUser().getRealName(), userCompRel.getUser().getRegisterFrom());
+    }
 
     static SimpleMailMessage createBaseMessage(){
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
