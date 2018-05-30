@@ -246,9 +246,12 @@ public class PlanServiceImpl implements PlanService {
             List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
             Date date = new Date();
             boolean flag = false;
+
+            long planId = 0;
             for (PlanDetailParamsDto dto : dtoList) {
                 PlanDetail planDetail = planDetailMapper.selectByPrimaryKey1(dto.getPlanDetailId(),company.getCompId());
                 if (planDetail!=null) {
+                    planId = planDetail.getWaybillPlanId();
                     if(dto.getAdjustAmount()+planDetail.getRemainderAmount()<0) {
                         flag = true;
                         break;
@@ -272,13 +275,35 @@ public class PlanServiceImpl implements PlanService {
             }
 
             if(planDetailList!=null && planDetailList.size()>0) {
-                return planDetailMapper.batchUpdatePlanDetail(planDetailList);
+                 planDetailMapper.batchUpdatePlanDetail(planDetailList);
             }
+            //再次检查计划下的所有货物剩余数为0 的话，计划状态为已派单
+            if (planId > 0) {
+                Map tMap = new HashMap<String,String>();
+                tMap.put("waybillPlanId",planId);
+                tMap.put("companyId", company.getCompId());
+                tMap.put("isDeleted","0");
+                WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
+                if (waybillPlan!=null) {
+                    List<PlanDetail> planDetailList1 = waybillPlan.getPlanDetailList();
+                    Float _amount = 0f;
+                    for(PlanDetail obj : planDetailList1) {
+                        _amount +=obj.getRemainderAmount();
+                    }
+                    if(_amount<=0) {
+                        waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF);
+                        waybillPlan.setUpdateTime(new Date());
+                        waybillPlan.setUpdateId(user.getUserId());
+                        waybillPlan.setUpdateName(user.getRealName());
+                        waybillPlanMapper.updateWaybillPlan(waybillPlan);
+                    }
 
+                }
+            }
 
         }
 
-        return 0;
+        return 1;
     }
 
 

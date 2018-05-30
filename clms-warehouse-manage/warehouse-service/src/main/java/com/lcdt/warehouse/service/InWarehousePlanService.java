@@ -4,8 +4,11 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.warehouse.dto.InWhPlanDto;
 import com.lcdt.warehouse.dto.InWhPlanSearchParamsDto;
+import com.lcdt.warehouse.dto.InorderGoodsInfoDto;
 import com.lcdt.warehouse.entity.InWarehousePlan;
 import com.baomidou.mybatisplus.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -79,7 +82,7 @@ public interface InWarehousePlanService extends IService<InWarehousePlan> {
      * 计划详细
      * @return
      */
-    InWhPlanDto inWhPlanDetail(Long planId, boolean flag, UserCompRel userCompRel);
+    InWhPlanDto inWhPlanDetail(Long planId, boolean flag, UserCompRel userCompRel,boolean bFlag);
 
 
     /***
@@ -87,6 +90,8 @@ public interface InWarehousePlanService extends IService<InWarehousePlan> {
      * @return
      */
     boolean distributeWh(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel);
+
+
 
 }
 

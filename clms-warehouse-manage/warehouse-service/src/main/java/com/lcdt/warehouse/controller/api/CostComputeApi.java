@@ -7,6 +7,7 @@ import com.lcdt.warehouse.service.CostComputeSetService;
 import com.lcdt.warehouse.utils.JSONResponseUtil;
 import com.lcdt.warehouse.utils.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,4 +24,8 @@ public class CostComputeApi {
         return JSONResponseUtil.success(setService.updateSet(SecurityInfoGetter.getCompanyId(), set));
     }
 
+    @GetMapping("/get")
+    public ResponseMessage<CostComputeSet> computeSet(){
+        return JSONResponseUtil.success(setService.selectById(SecurityInfoGetter.getCompanyId()));
+    }
 }

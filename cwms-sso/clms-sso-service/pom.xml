@@ -87,11 +87,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.4.2</version>
-        </dependency>
-        <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>common-config</artifactId>
             <version>1.0</version>

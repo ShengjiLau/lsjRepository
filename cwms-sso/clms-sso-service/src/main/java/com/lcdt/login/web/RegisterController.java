@@ -80,6 +80,7 @@ public class RegisterController {
         }
         if (msg == "") {
             try {
+                registerDto.setRegisterFrom("web主站");
                 User fUser = userService.registerUser(registerDto);
                 if (fUser != null) {
                     flag = true;

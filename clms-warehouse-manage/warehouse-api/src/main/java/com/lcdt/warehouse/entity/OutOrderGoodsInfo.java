@@ -23,7 +23,7 @@ public class OutOrderGoodsInfo implements Serializable {
     /**
      * 库存id
      */
-    private Long inventoryId;
+    private Long invertoryId;
 
     /**
      * 出库单id
@@ -106,12 +106,12 @@ public class OutOrderGoodsInfo implements Serializable {
      */
     private String remark;
 
-    public Long getInventoryId() {
-        return inventoryId;
+    public Long getInvertoryId() {
+        return invertoryId;
     }
 
-    public void setInventoryId(Long inventoryId) {
-        this.inventoryId = inventoryId;
+    public void setInvertoryId(Long invertoryId) {
+        this.invertoryId = invertoryId;
     }
 
     public Long getRelationId() {
@@ -286,7 +286,7 @@ public class OutOrderGoodsInfo implements Serializable {
     public String toString() {
         return "OutOrderGoodsInfo{" +
                 "relationId=" + relationId +
-                ", inventoryId=" + inventoryId +
+                ", invertoryId=" + invertoryId +
                 ", outorderId=" + outorderId +
                 ", outplanRelationId=" + outplanRelationId +
                 ", goodsId=" + goodsId +

@@ -178,7 +178,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         }
 
         for (OutOrderGoodsInfo good : goodsInfos) {
-            Inventory inventory = inventoryMapper.selectById(good.getInventoryId());
+            Inventory inventory = inventoryMapper.selectById(good.getInvertoryId());
             //扣减库存
             //比较锁定量和 出库量
             if (inventory.getLockNum() >= good.getGoodsNum()) {

@@ -214,7 +214,7 @@
   </resultMap>
 
   <select id="selectPaApprovalByCondition" resultMap="PaApprovalDtoMap">
-    select t1.pa_id, t1.order_id,t1.approval_status,t1.application_date, t1.order_no, t1.contract_code,t1.supplier, t1.purchase_sum, t1.payment_sum,
+    select t1.pa_id, t1.order_id,t1.approval_status,t1.application_date, t1.order_no, t1.order_serial_no,t1.contract_code,t1.supplier, t1.purchase_sum, t1.payment_sum,
     t1.approval_start_date, t1.approval_end_date,t1.company_id
     from t_payment_application t1 left join t_pa_approval t2 on t1.pa_id = t2.pa_id
     <where>
@@ -222,11 +222,11 @@
       <if test="paymentTimeStart!=null and paymentTimeStart!=''">
         and t1.application_date &gt; #{paymentTimeStart,jdbcType=TIMESTAMP} and t1.application_date &lt; #{paymentTimeEnd,jdbcType=TIMESTAMP}
       </if>
-      <if test="orderNo!=null and orderNo!=''">
-        and t1.order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
+      <if test="orderSerialNo!=null and orderSerialNo!=''">
+        and t1.order_serial_no like concat('%',#{orderSerialNo,jdbcType=VARCHAR},'%')
       </if>
-      <if test="customerCName!=null and customerCName!=''">
-        and t1.supplier like concat('%',#{customerCName,jdbcType=VARCHAR},'%')
+      <if test="supplier!=null and supplier!=''">
+        and t1.supplier like concat('%',#{supplier,jdbcType=VARCHAR},'%')
       </if>
       <if test="contractCode!=null and contractCode!=''">
         and t1.contract_code like concat('%',#{contractCode,jdbcType=VARCHAR},'%')
