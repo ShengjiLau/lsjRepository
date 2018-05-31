@@ -1,6 +1,7 @@
 package com.lcdt.customer.service.impl;
 
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.dao.CustomerCollectionMapper;
@@ -14,6 +15,8 @@ import com.lcdt.customer.model.CustomerContact;
 import com.lcdt.customer.model.CustomerTypeRelation;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.service.CustomerService;
+import com.lcdt.userinfo.model.Group;
+import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +43,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerCollectionMapper customerCollectionMapper;
+
+    @Reference
+    private CompanyRpcService companyRpcService; //企业信息
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -104,6 +110,29 @@ public class CustomerServiceImpl implements CustomerService {
         }
         PageHelper.startPage(pageNo, pageSize);
         List<Customer> list = customerMapper.selectByCondition(m);
+        if (list != null && list.size()>0) {
+            for (Customer obj :list) {
+                if(!StringUtils.isEmpty(obj.getGroupIds())) {
+                    String[] array = obj.getGroupIds().split(",");
+                    if(array!=null && array.length>0) {
+                        StringBuffer sb = new StringBuffer();
+                        for (int i=0;i<array.length-1;i++) {
+                            Group group = companyRpcService.selectGroupById(Long.valueOf(array[i]));
+                            if(group!=null) {
+                                sb.append(group.getGroupName());
+                            }
+                        }
+                        obj.setGroupNames(sb.toString());
+                    }
+
+                }
+
+            }
+
+
+        }
+
+
         PageInfo pageInfo = new PageInfo(list);
         return  pageInfo;
     }
