@@ -63,6 +63,7 @@ public class OwnPlanApi {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        dto.setDeptNames(userCompRel.getDeptNames());
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
@@ -192,6 +193,12 @@ public class OwnPlanApi {
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
             map.put("pubdateEnd",dto.getPubdateEnd()+" 23:59:59");
         }
+        if (StringUtil.isNotEmpty(dto.getPlanShipBegin())) { //预计发货时间
+            map.put("startBegin",dto.getPlanShipBegin()+" 00:00:00");
+        }
+        if (StringUtil.isNotEmpty(dto.getPlanShipEnd())) {
+            map.put("startEnd",dto.getPlanShipEnd()+" 23:59:59");
+        }
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
             map.put("goodsInfo",dto.getGoodsInfo());
         }
@@ -264,9 +271,8 @@ public class OwnPlanApi {
     @RequestMapping(value = "/cancelOwnPlan",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_cancel_own_plan')")
     public String cancelOwnPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
-        User loginUser = SecurityInfoGetter.getUser();
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        Integer flag = planService.ownPlanCancel(waybillPlanId,companyId,loginUser);
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        Integer flag = planService.ownPlanCancel(waybillPlanId,userCompRel);
         JSONObject jsonObject = new JSONObject();
         String message = "取消成功！";
         int code = -1;
@@ -311,6 +317,7 @@ public class OwnPlanApi {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
+        dto.setDeptNames(userCompRel.getDeptNames());
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
         dto.setCompanyId(companyId);

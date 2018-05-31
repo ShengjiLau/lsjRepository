@@ -94,7 +94,7 @@ public class AccountAndReconcileMsgApi {
 	
 	@ApiOperation(value="依据条件查询留言")
 	@GetMapping("/select")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('account_msg_select')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('account_msg_get')")
 	public JSONObject getMsg(MsgDto msgDto) {
 		JSONObject jsonObject = new JSONObject();
 		List<Msg> msgList =msgService.selectSomeMsg(msgDto);
