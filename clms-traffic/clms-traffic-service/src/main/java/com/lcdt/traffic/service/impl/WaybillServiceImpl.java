@@ -1,24 +1,22 @@
 package com.lcdt.traffic.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
-import com.lcdt.notify.model.DefaultNotifyReceiver;
-import com.lcdt.notify.model.DefaultNotifySender;
-import com.lcdt.notify.model.TrafficStatusChangeEvent;
+import com.lcdt.notify.model.Timeline;
 import com.lcdt.traffic.dao.SplitGoodsMapper;
 import com.lcdt.traffic.dao.WaybillItemsMapper;
 import com.lcdt.traffic.dao.WaybillMapper;
 import com.lcdt.traffic.dao.WaybillTransferRecordMapper;
 import com.lcdt.traffic.dto.WaybillDto;
-import com.lcdt.traffic.model.*;
+import com.lcdt.traffic.model.Waybill;
+import com.lcdt.traffic.model.WaybillDao;
+import com.lcdt.traffic.model.WaybillItems;
+import com.lcdt.traffic.model.WaybillTransferRecord;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
-import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.WaybillSenderNotify;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.service.SplitGoodsService;
@@ -26,15 +24,12 @@ import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.GprsLocationBo;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.Driver;
-import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.DriverService;
-import com.lcdt.userinfo.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -159,6 +154,15 @@ public class WaybillServiceImpl implements WaybillService {
         }
 
         waybill = waybillMapper.selectByPrimaryKey(waybill.getId());
+        //路由==>运单增加新建 by xrr
+        Timeline event = new Timeline();
+        event.setActionTitle("【运单生成】");
+        event.setActionTime(new Date());
+        event.setCompanyId(waybill.getCompanyId());
+        event.setSearchkey("WAYBILL_ROUTE");
+        event.setDataid(waybill.getId());
+        event.setActionDes("司机："+waybill.getDriverName()+" "+waybill.getDriverPhone()+" "+waybill.getVechicleNum());
+        producer.noteRouter(event);
         return waybill;
     }
 

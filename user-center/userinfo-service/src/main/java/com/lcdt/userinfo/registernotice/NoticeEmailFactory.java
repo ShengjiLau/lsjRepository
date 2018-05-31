@@ -21,17 +21,17 @@ public class NoticeEmailFactory {
 
 
     static String messageText(User user) {
-        return String.format("%s 账户：%s 姓名： %s ,注册来源： %s", prefix(user), user.getPhone(), user.getRealName(), user.getRegisterFrom());
+        return String.format("%s 账户：%s ；姓名： %s ；注册来源： %s", prefix(user), user.getPhone(), user.getRealName(), user.getRegisterFrom());
     }
 
     static String messageText(UserCompRel userCompRel){
-        return String.format("%s 账户：%s 姓名： %s ,公司名称：%s,所属行业：%s,注册来源： %s", prefix(userCompRel), userCompRel.getUser().getPhone(),  userCompRel.getUser().getRealName(),userCompRel.getCompany().getFullName(),userCompRel.getCompany().getIndustry(), userCompRel.getUser().getRegisterFrom());
+        return String.format("%s 账户：%s ；姓名： %s ；公司名称：%s；所属行业：%s；注册来源： %s", prefix(userCompRel), userCompRel.getUser().getPhone(),  userCompRel.getUser().getRealName(),userCompRel.getCompany().getFullName(),userCompRel.getCompany().getIndustry(), userCompRel.getUser().getRegisterFrom());
     }
 
     static SimpleMailMessage createBaseMessage(){
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom("service@datuodui.com");
-        simpleMailMessage.setSubject("注册提醒");
+        simpleMailMessage.setSubject("大驼队cLMS注册通知");
         return simpleMailMessage;
     }
 

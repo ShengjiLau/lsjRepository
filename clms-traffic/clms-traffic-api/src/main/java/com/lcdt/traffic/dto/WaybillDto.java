@@ -3,7 +3,6 @@ package com.lcdt.traffic.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -128,6 +127,8 @@ public class WaybillDto implements java.io.Serializable {
 
     private Long companyId;
 
+    private String companyName;
+
     private Date pubDate;
 
     private Date finishDate;
@@ -174,7 +175,16 @@ public class WaybillDto implements java.io.Serializable {
         return splitGoodsId;
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
     public void setSplitGoodsId(Long splitGoodsId) {
+
         this.splitGoodsId = splitGoodsId;
     }
 
