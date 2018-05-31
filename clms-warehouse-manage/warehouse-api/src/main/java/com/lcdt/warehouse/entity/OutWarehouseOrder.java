@@ -3,6 +3,7 @@ package com.lcdt.warehouse.entity;
 import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.lcdt.converter.ResponseData;
 import com.lcdt.warehouse.contants.OutOrderStatus;
 
 import java.io.Serializable;
@@ -15,7 +16,7 @@ import java.io.Serializable;
  * @author code generate
  * @since 2018-05-25
  */
-public class OutWarehouseOrder implements Serializable {
+public class OutWarehouseOrder implements Serializable,ResponseData {
 
 
 
