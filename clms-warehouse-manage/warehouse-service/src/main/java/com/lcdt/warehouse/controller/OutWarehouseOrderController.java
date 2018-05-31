@@ -41,7 +41,10 @@ public class OutWarehouseOrderController {
         params.setCompanyId(companyId);
         params.setCreateId(user.getUserId());
         params.setCreateName(user.getRealName());
-
+        if(params.getOperationType()==1){
+            params.setOutboundMan(user.getRealName());
+            params.setOutboundTime(new Date());
+        }
         int result=outWarehouseOrderService.addOutWarehouseOrder(params);
         JSONObject jsonObject=new JSONObject();
         if(result>0){
