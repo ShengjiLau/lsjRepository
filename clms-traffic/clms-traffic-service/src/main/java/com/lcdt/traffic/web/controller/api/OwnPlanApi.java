@@ -63,6 +63,7 @@ public class OwnPlanApi {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        dto.setDeptNames(userCompRel.getDeptNames());
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
@@ -317,6 +318,7 @@ public class OwnPlanApi {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
+        dto.setDeptNames(userCompRel.getDeptNames());
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
         dto.setCompanyId(companyId);

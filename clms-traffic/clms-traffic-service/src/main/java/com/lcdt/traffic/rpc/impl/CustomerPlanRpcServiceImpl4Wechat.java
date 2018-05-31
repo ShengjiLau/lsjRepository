@@ -9,6 +9,7 @@ import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.DefaultNotifySender;
+import com.lcdt.notify.model.Timeline;
 import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.*;
@@ -870,6 +871,16 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             producer.sendNotifyEvent(plan_publish_event);
 
         }
+
+        //router:派车
+        Timeline event = new Timeline();
+        event.setActionTitle("【运单生成】"+waybill.getWaybillCode());
+        event.setActionTime(new Date());
+        event.setCompanyId(waybillDto.getCompanyId());
+        event.setSearchkey("R_PLAN");
+        event.setDataid(waybillPlan.getWaybillPlanId());
+        event.setActionDes("司机："+dto.getDriverPhone()+" "+dto.getVechicleNum());
+        producer.noteRouter(event);
 
         waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         return waybillPlan;
