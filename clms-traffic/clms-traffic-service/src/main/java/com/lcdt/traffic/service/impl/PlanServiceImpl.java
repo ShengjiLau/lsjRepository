@@ -196,7 +196,7 @@ public class PlanServiceImpl implements PlanService {
         Timeline event = new Timeline();
         event.setActionTitle("【计划取消】 操作人："+userCompRel.getCompany().getFullName()+" "+user.getRealName());
         event.setActionTime(new Date());
-        event.setCompanyId(waybillPlan.getCompanyId());
+        event.setCompanyId(userCompRel.getCompany().getCompId());
         event.setSearchkey("R_PLAN");
         event.setDataid(waybillPlan.getWaybillPlanId());
 
