@@ -30,7 +30,7 @@ public class AttachmentApi {
 
     @ApiOperation("文件列表")
     @RequestMapping(value = "/attachFileList", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('attachfile_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('attachmentclassify_list')")
     public PageBaseDto attachFileList(){
         PageBaseDto pageBaseDto = new PageBaseDto();
 
