@@ -43,7 +43,7 @@ public class PayFeeExchangeApi {
 	
 	@PostMapping("/add")
 	@ApiOperation("新增付款记录,receive_exchange_add")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_exchange_add')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('pay_exchange_add')")
 	public JSONObject addFeeExchange(@RequestBody FeeExchangeListDto feeExchangeListDto) {
 		JSONObject jsonObject =validRequestBody(feeExchangeListDto);
 		if(jsonObject.size()>1) {
@@ -70,7 +70,7 @@ public class PayFeeExchangeApi {
 	
 	@GetMapping("/list")
 	@ApiOperation("查询付款记录列表,receive_exchange_list")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_exchange_list')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('pay_exchange_list')")
 	public JSONObject getFeeExchange(FeeExchangeDto feeExchangeDto) {
 		JSONObject jsonObject =new JSONObject();
 		feeExchangeDto.setType((short) 1);
@@ -89,7 +89,7 @@ public class PayFeeExchangeApi {
 	
 	@PostMapping("/cancel")
 	@ApiOperation("批量取消付款记录,receive_exchange_cancel")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_exchange_cancel')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('pay_exchange_cancel')")
 	public JSONObject cancelFeeExchange(@ApiParam(value="付款记录id数组",required=true)@RequestParam String feeExchanges) {
 		JSONObject jsonObject =new JSONObject();
 		int result=feeExchangeService.updateSetCancelOk(feeExchanges);
@@ -105,7 +105,7 @@ public class PayFeeExchangeApi {
 	
 	@GetMapping("/select")
 	@ApiOperation("单个付款记录详情,receive_exchange_select")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_exchange_select')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('pay_exchange_select')")
 	public JSONObject selectFeeExchange(Long feeExchangeId) {
 		JSONObject jsonObject =new JSONObject();
 		FeeExchange fe=feeExchangeService.selectFeeExchangeById(feeExchangeId);
@@ -169,6 +169,7 @@ public class PayFeeExchangeApi {
 	 * @param bindingResult
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private JSONObject validResponse(BindingResult bindingResult) {
 		JSONObject jsonObject =new JSONObject();
 		JSONArray jsonArray =new JSONArray();
