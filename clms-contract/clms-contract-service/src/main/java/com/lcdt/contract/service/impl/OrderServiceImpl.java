@@ -233,8 +233,8 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
             //获取付款状态 付款单记录 开票记录信息
-            List<Map> paymentList = nonautomaticMapper.paymentInfo(orderDtoList);
-            List<Map> billingRecordList = nonautomaticMapper.billingInfo(orderDtoList);
+            List<Map> paymentList = nonautomaticMapper.paymentInfo(orderDtoList,orderDto.getCompanyId());
+            List<Map> billingRecordList = nonautomaticMapper.billingInfo(orderDtoList,orderDto.getCompanyId());
             for (OrderDto od : orderDtoList) {
                 //整合付款单信息
                 if (paymentList.size() > 0) {
