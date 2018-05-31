@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.util.WebProduces;
+import com.lcdt.warehouse.controller.exception.WareExistException;
 import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.dto.WarehouseDto;
 import com.lcdt.warehouse.dto.WarehouseLinkmanDto;
@@ -89,7 +90,7 @@ public class WarehouseApi {
             jsonObject.put("message", "添加成功");
             return jsonObject;
         } else {
-            throw new RuntimeException("添加失败");
+            throw new WareExistException("仓库名称不能重复!");
         }
     }
 

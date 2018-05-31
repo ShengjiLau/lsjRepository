@@ -75,28 +75,33 @@ public class WarehouseSeviceImpl implements WarehouseService {
     @Override
     public boolean addWarehouse(Warehouse warehouse) {
         try{
-            warehousseMapper.insert(warehouse);
-            WarehouseLinkman linkman = new WarehouseLinkman();
-            linkman.setWhId(warehouse.getWhId());
-            linkman.setName(warehouse.getPrincipal());
-            linkman.setMobile(warehouse.getMobile());
-            linkman.setMail(warehouse.getMail());
-            linkman.setProvince(warehouse.getProvince());
-            linkman.setCity(warehouse.getCity());
-            linkman.setCounty(warehouse.getCounty());
-            linkman.setDetailAddress(warehouse.getDetailAddress());
-            linkman.setCreateId(warehouse.getCreateId());
-            linkman.setCreateName(warehouse.getCreateName());
-            linkman.setCreateDate(new Date());
-            linkman.setIsDefault((short)1);
-            linkman.setIsDeleted((short)0);
-            linkman.setCompanyId(warehouse.getCompanyId());
-            addWarehouseLinkMan(linkman);
-            if(StringUtility.isNotEmpty(warehouse.getGroupIds())) {
-                //新增仓库项目组关系（多条）
-                groupWareHouseRpcService.addWareHouseRelationBatch(warehouse.getGroupIds(), SecurityInfoGetter.getUser().getUserId(), SecurityInfoGetter.geUserCompRel().getCompId(), warehouse.getWhId());
+            int count = warehousseMapper.selectWarehouse(warehouse);
+            if (count != 0) {   //判断仓库名称是否重复
+                return false;
+            } else {
+                warehousseMapper.insert(warehouse);
+                WarehouseLinkman linkman = new WarehouseLinkman();
+                linkman.setWhId(warehouse.getWhId());
+                linkman.setName(warehouse.getPrincipal());
+                linkman.setMobile(warehouse.getMobile());
+                linkman.setMail(warehouse.getMail());
+                linkman.setProvince(warehouse.getProvince());
+                linkman.setCity(warehouse.getCity());
+                linkman.setCounty(warehouse.getCounty());
+                linkman.setDetailAddress(warehouse.getDetailAddress());
+                linkman.setCreateId(warehouse.getCreateId());
+                linkman.setCreateName(warehouse.getCreateName());
+                linkman.setCreateDate(new Date());
+                linkman.setIsDefault((short)1);
+                linkman.setIsDeleted((short)0);
+                linkman.setCompanyId(warehouse.getCompanyId());
+                addWarehouseLinkMan(linkman);
+                if(StringUtility.isNotEmpty(warehouse.getGroupIds())) {
+                    //新增仓库项目组关系（多条）
+                    groupWareHouseRpcService.addWareHouseRelationBatch(warehouse.getGroupIds(), SecurityInfoGetter.getUser().getUserId(), SecurityInfoGetter.geUserCompRel().getCompId(), warehouse.getWhId());
+                }
+                return true;
             }
-            return true;
         }catch (Exception e){
             e.printStackTrace();
             return false;
