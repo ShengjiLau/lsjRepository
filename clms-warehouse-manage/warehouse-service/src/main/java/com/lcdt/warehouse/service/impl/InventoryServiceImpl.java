@@ -181,8 +181,8 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             Inventory inventory = inventoryMapper.selectById(good.getInvertoryId());
             //扣减库存
             //比较锁定量和 出库量
-            if (inventory.getLockNum() >= good.getGoodsNum()) {
-                inventory.setLockNum(inventory.getLockNum() - good.getGoodsNum());
+            if (inventory.getLockNum() >= good.getOutboundQuantity()) {
+                inventory.setLockNum(inventory.getLockNum() - good.getOutboundQuantity());
                 inventoryMapper.updateById(inventory);
                 logService.saveOutOrderLog(order, good);
                 order.setOrderStatus(OutOrderStatus.OUTED);
