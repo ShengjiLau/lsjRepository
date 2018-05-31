@@ -16,6 +16,7 @@ import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.service.SplitGoodsService;
 import com.lcdt.traffic.service.WaybillRpcService;
 import com.lcdt.traffic.service.impl.CustomerCompanyIds;
+import com.lcdt.traffic.util.WaybillUtil;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.service.CompanyService;
@@ -249,7 +250,23 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         modifyOwnWaybillStatusToSendNotify(map);
         //返回计划相关信息
         modifyWaybillPlanInfo(map);
-
+        //路由==>运单增加新建路由 by xrr
+        Timeline event = new Timeline();
+        event.setActionTitle("【"+ WaybillUtil.map_waybill_status.get(waybill.getWaybillStatus())+"】（操作人："+dto.getUpdateName()+" "+dto.getUpdatePhone()+"）");
+        event.setActionTime(new Date());
+        event.setCompanyId(waybill.getCompanyId());
+        event.setSearchkey("WAYBILL_ROUTE");
+        event.setDataid(waybill.getId());
+        if(waybill.getWaybillStatus()==5)
+        {
+            //卸货描述修改
+            event.setActionDes("当前位置："+waybill.getUnloadLocation());
+        }
+        else
+        {
+            event.setActionDes("司机："+waybill.getDriverName()+" "+waybill.getDriverPhone()+" "+waybill.getVechicleNum());
+        }
+        producer.noteRouter(event);
         return waybill;
     }
 
@@ -310,6 +327,16 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
         Customer customer = customerRpcService.queryCustomer(waybill.getCarrierCompanyId(), waybill.getCompanyId());
         waybill.setWaybillSource(customer.getCustomerName());
+
+        //路由==>运单上传回单路由 by xrr
+        Timeline event = new Timeline();
+        event.setActionTitle("【回单上传】（操作人："+dto.getUpdateName()+" "+dto.getUpdatePhone()+"）");
+        event.setActionTime(new Date());
+        event.setCompanyId(waybill.getCompanyId());
+        event.setSearchkey("WAYBILL_ROUTE");
+        event.setDataid(waybill.getId());
+        event.setActionDes("司机："+waybill.getDriverName()+" "+waybill.getDriverPhone()+" "+waybill.getVechicleNum());
+        producer.noteRouter(event);
 
         return waybill;
     }

@@ -116,10 +116,10 @@ public class CustomerServiceImpl implements CustomerService {
                     String[] array = obj.getGroupIds().split(",");
                     if(array!=null && array.length>0) {
                         StringBuffer sb = new StringBuffer();
-                        for (int i=0;i<array.length-1;i++) {
+                        for (int i=0;i<array.length;i++) {
                             Group group = companyRpcService.selectGroupById(Long.valueOf(array[i]));
                             if(group!=null) {
-                                sb.append(group.getGroupName());
+                                sb.append(group.getGroupName()+" ");
                             }
                         }
                         obj.setGroupNames(sb.toString());
