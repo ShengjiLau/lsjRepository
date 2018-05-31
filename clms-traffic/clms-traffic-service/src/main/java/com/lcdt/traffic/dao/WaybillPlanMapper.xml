@@ -683,6 +683,12 @@
           <if test="pubdateEnd != null and pubdateEnd != ''">
             and  #{pubdateEnd,jdbcType=TIMESTAMP} >= pubdate
           </if>
+          <if test="startBegin != null and startBegin != ''">
+            and  start_date >= #{startBegin,jdbcType=TIMESTAMP}
+          </if>
+          <if test="startEnd != null and startEnd != ''">
+            and  #{startEnd,jdbcType=TIMESTAMP} >= start_date
+          </if>
           <if test="sendOrderType != null">
             and  send_order_type = #{sendOrderType,jdbcType=SMALLINT}
           </if>
