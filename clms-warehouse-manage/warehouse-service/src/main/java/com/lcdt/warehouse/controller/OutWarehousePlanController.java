@@ -212,7 +212,7 @@ public class OutWarehousePlanController {
 
     @ApiOperation("计划配仓")
     @RequestMapping(value = "/distributeWh",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole(‘wh_out_plan_dis)")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('wh_out_plan_dis')")
     public JSONObject distributeWh(@RequestBody OutWhPlanDto outWhPlanDto) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         String msg = "配仓失败！";
