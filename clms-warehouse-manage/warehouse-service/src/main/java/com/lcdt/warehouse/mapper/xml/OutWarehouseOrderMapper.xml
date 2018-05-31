@@ -36,7 +36,7 @@
         <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
     </resultMap>
 
-    <resultMap id="OutWarehouseOrderDetailsMap" type="com.lcdt.warehouse.dto.OutWhOrderDto">
+    <resultMap id="OutWarehouseOrderDetailsMap" type="com.lcdt.warehouse.dto.OutWhOrderDto" extends="BaseResultMap">
         <collection property="outOrderGoodsInfoList" column="outorder_id" select="com.lcdt.warehouse.mapper.OutOrderGoodsInfoMapper.selectOutOrderGoodsDetail"/>
     </resultMap>
 
