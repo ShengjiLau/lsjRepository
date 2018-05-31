@@ -192,6 +192,12 @@ public class OwnPlanApi {
         if (StringUtil.isNotEmpty(dto.getPubdateEnd())) {
             map.put("pubdateEnd",dto.getPubdateEnd()+" 23:59:59");
         }
+        if (StringUtil.isNotEmpty(dto.getPlanShipBegin())) { //预计发货时间
+            map.put("startBegin",dto.getPlanShipBegin()+" 00:00:00");
+        }
+        if (StringUtil.isNotEmpty(dto.getPlanShipEnd())) {
+            map.put("startEnd",dto.getPlanShipEnd()+" 23:59:59");
+        }
         if (StringUtil.isNotEmpty(dto.getGoodsInfo())) {
             map.put("goodsInfo",dto.getGoodsInfo());
         }

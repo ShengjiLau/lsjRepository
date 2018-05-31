@@ -105,4 +105,10 @@ public interface WarehouseService {
      */
     int modifyWarehouseLocStatus(Long whLocId);
 
+    /**
+     * 根据库位编码查询库位
+     * @param code
+     * @return
+     */
+    int getWarehouseLocByCode(String code);
 }

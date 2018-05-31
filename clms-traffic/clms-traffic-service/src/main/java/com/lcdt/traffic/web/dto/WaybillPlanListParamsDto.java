@@ -54,6 +54,11 @@ public class WaybillPlanListParamsDto {
     @ApiModelProperty(value = "派单时间-结束")
     private String disDateEnd;
 
+    @ApiModelProperty(value = "预计时间-开始")
+    private String planShipBegin;
+    @ApiModelProperty(value = "预计时间-结束")
+    private String planShipEnd;
+
 
     @ApiModelProperty(value = "货物名称")
     private String goodsInfo;
@@ -189,5 +194,21 @@ public class WaybillPlanListParamsDto {
 
     public void setCustomerCids(String customerCids) {
         this.customerCids = customerCids;
+    }
+
+    public String getPlanShipBegin() {
+        return planShipBegin;
+    }
+
+    public void setPlanShipBegin(String planShipBegin) {
+        this.planShipBegin = planShipBegin;
+    }
+
+    public String getPlanShipEnd() {
+        return planShipEnd;
+    }
+
+    public void setPlanShipEnd(String planShipEnd) {
+        this.planShipEnd = planShipEnd;
     }
 }

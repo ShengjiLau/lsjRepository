@@ -246,4 +246,10 @@ public class WarehouseSeviceImpl implements WarehouseService {
         }
         return result;
     }
+
+    @Override
+    public int getWarehouseLocByCode(String code) {
+        int result = warehousseLocMapper.selectByCode(code);
+        return result;
+    }
 }
