@@ -19,11 +19,13 @@
         <result column="outbound_type" jdbcType="VARCHAR" property="outboundType" />
         <result column="outbound_plan_time" jdbcType="TIMESTAMP" property="outboundPlanTime" />
         <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime" />
+        <result column="out_plan_remark" jdbcType="VARCHAR" property="outPlanRemark" />
         <result column="outbound_remark" jdbcType="VARCHAR" property="outboundRemark" />
-        <result column="delivery_unit" jdbcType="VARCHAR" property="deliveryUnit" />
-        <result column="delivery_linkman" jdbcType="VARCHAR" property="deliveryLinkman" />
-        <result column="deliver_phone" jdbcType="VARCHAR" property="deliverPhone" />
-        <result column="deliver_vehicle_num" jdbcType="VARCHAR" property="deliverVehicleNum" />
+        <result column="pickup_unit" jdbcType="VARCHAR" property="pickupUnit" />
+        <result column="pickup_linkman" jdbcType="VARCHAR" property="pickupLinkman" />
+        <result column="pickup_identiycard" jdbcType="VARCHAR" property="pickupIdentiycard" />
+        <result column="pickup_phone" jdbcType="VARCHAR" property="pickupPhone" />
+        <result column="pickup_vehicle_num" jdbcType="VARCHAR" property="pickupVehicleNum" />
         <result column="attachments" jdbcType="VARCHAR" property="attachments" />
         <result column="outbound_man" jdbcType="VARCHAR" property="outboundMan" />
         <result column="company_id" jdbcType="BIGINT" property="companyId" />
@@ -56,8 +58,8 @@
     <sql id="BaseSelectFields">
         outorder_id, out_plan_id, outorder_no, order_status, group_id, group_name,
         contract_no, purchase_no, customer_id, customer_name, customer_contact_name, customer_contact_phone,
-        warehouse_id, warehouse_name, outbound_type, outbound_plan_time, outbound_time, outbound_remark,
-        delivery_unit, delivery_linkman, deliver_phone, deliver_vehicle_num, attachments,outbound_man,
+        warehouse_id, warehouse_name, outbound_type, outbound_plan_time, outbound_time,out_plan_remark ,outbound_remark,
+        pickup_unit, pickup_linkman, pickup_identiycard, pickup_phone,pickup_vehicle_num, attachments,outbound_man,
         company_id, create_id, create_name, create_date, update_id, update_name, update_date,
         is_deleted
     </sql>
@@ -126,9 +128,9 @@
         purchase_no, customer_id, customer_name,
         customer_contact_name, customer_contact_phone,
         warehouse_id, warehouse_name, outbound_type,
-        outbound_plan_time, outbound_time, outbound_remark,
-        delivery_unit, delivery_linkman, deliver_phone,
-        deliver_vehicle_num, attachments,outbound_man, company_id,
+        outbound_plan_time, outbound_time,out_plan_remark ,outbound_remark,
+        pickup_unit, pickup_linkman, pickup_identiycard,
+        pickup_phone,pickup_vehicle_num, attachments,outbound_man, company_id,
         create_id, create_name, create_date,
         is_deleted)
         values (#{outPlanId,jdbcType=BIGINT},
@@ -145,9 +147,9 @@
         #{purchaseNo,jdbcType=VARCHAR}, #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR},
         #{customerContactName,jdbcType=VARCHAR}, #{customerContactPhone,jdbcType=VARCHAR},
         #{warehouseId,jdbcType=BIGINT}, #{warehouseName,jdbcType=VARCHAR}, #{outboundType,jdbcType=VARCHAR},
-        #{outboundPlanTime,jdbcType=TIMESTAMP}, #{outboundTime,jdbcType=TIMESTAMP}, #{outboundRemark,jdbcType=VARCHAR},
-        #{deliveryUnit,jdbcType=VARCHAR}, #{deliveryLinkman,jdbcType=VARCHAR}, #{deliverPhone,jdbcType=VARCHAR},
-        #{deliverVehicleNum,jdbcType=VARCHAR}, #{attachments,jdbcType=VARCHAR},#{outboundMan,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
+        #{outboundPlanTime,jdbcType=TIMESTAMP}, #{outboundTime,jdbcType=TIMESTAMP},#{outPlanRemark,jdbcType=VARCHAR}, #{outboundRemark,jdbcType=VARCHAR},
+        #{pickupUnit,jdbcType=VARCHAR}, #{pickupLinkman,jdbcType=VARCHAR}, #{pickupIdentiycard,jdbcType=VARCHAR},#{pickupPhone,jdbcType=VARCHAR},
+        #{pickupVehicleNum,jdbcType=VARCHAR}, #{attachments,jdbcType=VARCHAR},#{outboundMan,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
         #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP,
         0)
     </insert>
