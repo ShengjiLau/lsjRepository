@@ -41,5 +41,6 @@
     select t_attachment_file_id, t_attachment_file_name, t_attachment_file_type, t_attachment_file_order, 
     t_attachment_file_code
     from t_attachment_file
+    where t_attachment_file_status = 1
   </select>
 </mapper>

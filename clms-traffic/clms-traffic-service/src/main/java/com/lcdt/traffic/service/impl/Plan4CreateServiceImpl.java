@@ -6,6 +6,7 @@ import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.DefaultNotifySender;
+import com.lcdt.notify.model.Timeline;
 import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.WaybillDto;
@@ -150,6 +151,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                  waybillPlanMapper.insert(vo); //生成计划
                  createTransportWayItems(dto, vo);//批量创建栏目
                  StringBuffer sb_goods = new StringBuffer(); //货物发送明细
+                 StringBuffer sb_goods1 = new StringBuffer();
                  List<PlanDetail> planDetailList = dto.getPlanDetailList();
                   if (null!=planDetailList && planDetailList.size()>0) {
                     for (PlanDetail obj : planDetailList) {
@@ -164,6 +166,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         obj.setCompanyId(vo.getCompanyId());
                         obj.setIsDeleted((short)0);
                         sb_goods.append(obj.getGoodsName()+":"+obj.getPlanAmount()+";");
+                        sb_goods1.append(obj.getGoodsName()+":"+obj.getPlanAmount()+" "+obj.getUnit()+";");
                     }
                     planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
                 }
@@ -252,6 +255,15 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                             }
                         }
                 }
+
+                //router:发布
+                Timeline event = new Timeline();
+                event.setActionTitle("【计划发布】（操作人："+dto.getCompanyName()+" "+vo.getCreateName()+"）");
+                event.setActionTime(new Date());
+                event.setCompanyId(vo.getCompanyId());
+                event.setSearchkey("R_PLAN");
+                event.setDataid(vo.getWaybillPlanId());
+                producer.noteRouter(event);
             }
         }
         return vo;

@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,7 @@ public class InventoryLogApi {
 
     @PostMapping("/list")
     @ApiOperation("库存流水列表")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('inventory_detail') ")
     public ResponseMessage inventorylogList(InventoryLogQueryDto queryDto){
         Page<InventoryLog> inventoryLogs = inventoryLogService.queryInventoryLogPage(queryDto);
         return JSONResponseUtil.success(inventoryLogs);

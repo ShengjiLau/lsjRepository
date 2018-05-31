@@ -6,9 +6,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
+import com.lcdt.notify.model.Timeline;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.model.*;
+import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.WaybillSenderNotify;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.service.SplitGoodsService;
@@ -60,6 +62,10 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
     @Autowired
     private OwnDriverMapper ownDriverMapper;
+
+
+    @Autowired
+    private ClmsNotifyProducer producer;
 
     public Waybill addWaybill(WaybillDto waybillDto) {
         int result = 0;
@@ -449,7 +455,6 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
         }
         if (waybillStatus == ConstantVO.WAYBILL_STATUS_HAVE_FINISH) {
-
             List<Waybill> list = waybillMapper.selectWaybillPlanId(map);
             if (list != null && list.size() > 0) {
                 for (Waybill waybill : list) {
@@ -473,7 +478,17 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                             waybillPlan.setWaybillPlanId(waybill.getWaybillPlanId());
                             waybillPlan.setFinishDate(new Date());
                             planService.updatePlanStatusByWaybill(waybillPlan);
-                        }
+
+                            //router:计划自动完成
+                            Timeline event = new Timeline();
+                            event.setActionTitle("【计划完成】"+waybill.getWaybillCode());
+                            event.setActionTime(new Date());
+                            event.setCompanyId(waybillPlan.getCompanyId());
+                            event.setSearchkey("R_PLAN");
+                            event.setDataid(waybillPlan.getWaybillPlanId());
+
+                            producer.noteRouter(event);
+                       }
                     }
                 }
             }
