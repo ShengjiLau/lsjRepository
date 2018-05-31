@@ -3,6 +3,7 @@ package com.lcdt.traffic.service.impl;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.notify.model.Timeline;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.PlanDetailParamsDto;
 import com.lcdt.traffic.exception.WaybillPlanException;
@@ -153,10 +154,11 @@ public class PlanServiceImpl implements PlanService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Integer ownPlanCancel(Long waybillPlanId, Long companyId, User user) {
+    public Integer ownPlanCancel(Long waybillPlanId, UserCompRel userCompRel) {
+        User user = userCompRel.getUser();
         Map tMap = new HashMap<String,String>();
         tMap.put("waybillPlanId",waybillPlanId);
-        tMap.put("companyId",companyId);
+        tMap.put("companyId",userCompRel.getCompany().getCompId());
         tMap.put("isDeleted","0");
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         if (waybillPlan==null) throw new WaybillPlanException("计划不存在！");
@@ -169,7 +171,7 @@ public class PlanServiceImpl implements PlanService {
         Date dt = new Date();
         //验证是否已经存在已卸货或者已完成的运单，如果存在则提示：该计划存在已经卸货或者完成的运单，不可取消！
         Map map = new HashMap<String,String>();
-        map.put("companyId", companyId);
+        map.put("companyId", userCompRel.getCompany().getCompId());
         map.put("waybillPlanId",waybillPlanId);
         map.put("isDeleted",0);
         PageInfo pg = waybillService.queryPlannedWaybillList(map);
@@ -188,6 +190,16 @@ public class PlanServiceImpl implements PlanService {
         waybillPlan.setCancelDate(new Date());
         waybillPlan.setCancelMan(user.getRealName());
         waybillPlanMapper.updateByPrimaryKey(waybillPlan);
+
+
+        //router:计划取消
+        Timeline event = new Timeline();
+        event.setActionTitle("【计划取消】 操作人："+userCompRel.getCompany().getFullName()+" "+user.getRealName());
+        event.setActionTime(new Date());
+        event.setCompanyId(waybillPlan.getCompanyId());
+        event.setSearchkey("R_PLAN");
+        event.setDataid(waybillPlan.getWaybillPlanId());
+
         return 1;
     }
 

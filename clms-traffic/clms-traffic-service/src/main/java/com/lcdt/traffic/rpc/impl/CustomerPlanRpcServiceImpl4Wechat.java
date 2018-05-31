@@ -653,6 +653,15 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             }
             flag2 = snatchGoodsDetailMapper.batchAddSnatchGoodsDetail(snatchList);
         }
+
+
+        //router:抢单
+        Timeline event = new Timeline();
+        event.setActionTitle("【客户抢单】");
+        event.setActionTime(new Date());
+        event.setCompanyId(dto.getCompanyId());
+        event.setSearchkey("R_PLAN");
+        event.setDataid(waybillPlan.getWaybillPlanId());
         return flag1+flag2>1?1:0;
     }
 
@@ -826,6 +835,8 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                 waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //计划状态(已派单)
                 waybillPlan.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);
                 waybillPlanMapper.updateWaybillPlan(waybillPlan);
+
+
             }
         }
 
@@ -881,7 +892,6 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         event.setDataid(waybillPlan.getWaybillPlanId());
         event.setActionDes("司机："+dto.getDriverPhone()+" "+dto.getVechicleNum());
         producer.noteRouter(event);
-
         waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         return waybillPlan;
     }
