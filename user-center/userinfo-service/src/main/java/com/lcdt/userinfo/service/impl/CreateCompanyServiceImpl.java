@@ -221,7 +221,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService,Applicatio
 			warehouse.setCreateDate(new Date());
 			warehouse.setIsDeleted((short)0);
 			warehouse.setCompanyId(userCompRel.getCompId());
-			warehouse.setGroupIds(""+group.getGroupId());
+//			warehouse.setGroupIds(""+group.getGroupId());
 			warehouse = warehouseRpcService.addWarehouse(warehouse);
 			//添加仓库默认联系人
 			WarehouseLinkman linkman = new WarehouseLinkman();
