@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,7 @@ public class InventoryApi {
 
     @PostMapping("/list")
     @ApiOperation("库存明细列表")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('inventory_list_search')")
     private ResponseMessage inventoryList(InventoryQueryDto queryDto){
         logger.debug("query inventory list querydto:{}",queryDto);
         Long loginCompanyId = SecurityInfoGetter.getCompanyId();
@@ -40,12 +42,14 @@ public class InventoryApi {
 
     @PostMapping("/price/update")
     @ApiOperation("修改库存成本价")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('update_price')")
     private ResponseMessage modifyInventoryPrice(Long inventoryId,Float newprice) {
         return JSONResponseUtil.success(inventoryService.modifyInventoryPrice(inventoryId, newprice));
     }
 
     @PostMapping("/costremark/update")
     @ApiOperation("修改备注")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('update_remark')")
     private ResponseMessage modifyInventoryRemark(Long inventoryId, String remark) {
         return JSONResponseUtil.success(inventoryService.modifyInventoryRemark(inventoryId, remark));
     }

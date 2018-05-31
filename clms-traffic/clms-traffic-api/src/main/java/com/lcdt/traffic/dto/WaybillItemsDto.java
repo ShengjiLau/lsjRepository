@@ -2,13 +2,14 @@ package com.lcdt.traffic.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by lyqishan on 2017/12/21
  */
 
-public class WaybillItemsDto {
+public class WaybillItemsDto implements Serializable{
 
     private Long id;
 
