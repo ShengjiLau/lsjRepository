@@ -22,4 +22,6 @@ public interface WarehousseMapper {
     List<WarehouseDto> selectByCondition(Map map);
 
     List<Warehouse> selectNotInWhIds(Map map);
+
+    int selectWarehouse(Warehouse warehouse);
 }
