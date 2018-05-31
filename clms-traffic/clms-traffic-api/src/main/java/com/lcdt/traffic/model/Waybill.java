@@ -540,7 +540,6 @@ public class Waybill implements Serializable ,ResponseData{
      */
     private String cancelRemark;
 
-
     private Double longitude;
 
     private Double latitude;

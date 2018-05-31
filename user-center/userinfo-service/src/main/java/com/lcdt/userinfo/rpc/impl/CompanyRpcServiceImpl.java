@@ -2,9 +2,11 @@ package com.lcdt.userinfo.rpc.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.lcdt.userinfo.dao.CompanyMapper;
+import com.lcdt.userinfo.dao.GroupMapper;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.dao.UserMapper;
 import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,11 @@ public class CompanyRpcServiceImpl implements CompanyRpcService {
 
     @Autowired
     private CompanyMapper companyMapper;
+
+    @Autowired
+    private GroupMapper groupMapper;
+
+
 
     @Autowired
     private com.lcdt.userinfo.dao.UserMapper userMapper;
@@ -44,6 +51,13 @@ public class CompanyRpcServiceImpl implements CompanyRpcService {
     public User selectByPrimaryKey(Long userId) {
         return userMapper.selectByPrimaryKey(userId);
     }
+
+
+    @Override
+    public Group selectGroupById(Long groupId) {
+        return groupMapper.selectByPrimaryKey(groupId);
+    }
+
 
 
 }

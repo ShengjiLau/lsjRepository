@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.rpc;
 
 import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 
 /**
@@ -39,5 +40,8 @@ public interface CompanyRpcService {
      * @return
      */
     User selectByPrimaryKey(Long userId);
+
+
+    Group selectGroupById(Long groupId);
 
 }
