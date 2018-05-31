@@ -22,6 +22,9 @@ public class WaybillModifyStatusDto implements Serializable{
     @ApiModelProperty(value = "修改人名字", hidden = true)
     private String updateName;
 
+    @ApiModelProperty(value = "修改人电话", hidden = true)
+    private String updatePhone;
+
     @ApiModelProperty(value = "企业Id", hidden = true)
     private Long companyId;
 
@@ -75,5 +78,13 @@ public class WaybillModifyStatusDto implements Serializable{
 
     public void setCarrierCompanyId(Long carrierCompanyId) {
         this.carrierCompanyId = carrierCompanyId;
+    }
+
+    public String getUpdatePhone() {
+        return updatePhone;
+    }
+
+    public void setUpdatePhone(String updatePhone) {
+        this.updatePhone = updatePhone;
     }
 }

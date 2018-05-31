@@ -3,6 +3,8 @@ package com.lcdt.traffic.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -85,6 +87,10 @@ public class WaybillDto implements java.io.Serializable {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date arriveDate;
 
+    private String startDateStr;
+
+    private String arriveDateStr;
+
     private Short isReceipt;
 
     private Short isUrgent;
@@ -120,6 +126,8 @@ public class WaybillDto implements java.io.Serializable {
     private String carrierCompanyName;
 
     private Long companyId;
+
+    private String companyName;
 
     private Date pubDate;
 
@@ -167,7 +175,16 @@ public class WaybillDto implements java.io.Serializable {
         return splitGoodsId;
     }
 
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
     public void setSplitGoodsId(Long splitGoodsId) {
+
         this.splitGoodsId = splitGoodsId;
     }
 
@@ -433,6 +450,38 @@ public class WaybillDto implements java.io.Serializable {
 
     public void setArriveDate(Date arriveDate) {
         this.arriveDate = arriveDate;
+    }
+
+    public String getStartDateStr() {
+        return startDateStr;
+    }
+
+    public void setStartDateStr(String startDateStr) {
+        this.startDateStr = startDateStr;
+        if(startDateStr!=null&&!startDateStr.equals("")){
+            SimpleDateFormat sDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                this.startDate=sDateFormat.parse(startDateStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public String getArriveDateStr() {
+        return arriveDateStr;
+    }
+
+    public void setArriveDateStr(String arriveDateStr) {
+        this.arriveDateStr = arriveDateStr;
+        if(arriveDateStr!=null&&!arriveDateStr.equals("")){
+            SimpleDateFormat sDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            try {
+                this.arriveDate=sDateFormat.parse(arriveDateStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public Short getIsReceipt() {

@@ -96,9 +96,7 @@ public class CompanyApi {
 		if (!StringUtils.isEmpty(modifyContactDto.getContactDuty())) {
 			company.setLinkDuty(modifyContactDto.getContactDuty());
 		}
-
 		companyService.updateCompany(company);
-
 		return company;
 	}
 

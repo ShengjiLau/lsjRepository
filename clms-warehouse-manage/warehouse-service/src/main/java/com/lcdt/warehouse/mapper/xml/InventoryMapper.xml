@@ -84,7 +84,7 @@
                 and customer_id = #{querydto.customerId}
             </if>
 
-            <if test="goodsIds != null">
+            <if test="goodsIds != null and goodsIds.size() > 0">
                 and t.original_goods_id IN
               <foreach collection="goodsIds" index="index" item="item" open="(" separator="," close=")">
                  #{item}

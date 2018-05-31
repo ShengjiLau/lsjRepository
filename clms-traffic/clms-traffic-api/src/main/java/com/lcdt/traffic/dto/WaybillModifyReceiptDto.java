@@ -22,6 +22,9 @@ public class WaybillModifyReceiptDto implements Serializable{
     @ApiModelProperty(value = "修改人名字", hidden = true)
     private String updateName;
 
+    @ApiModelProperty(value = "修改人电话", hidden = true)
+    private String updatePhone;
+
     @ApiModelProperty(value = "企业Id", hidden = true)
     private Long companyId;
 
@@ -76,5 +79,13 @@ public class WaybillModifyReceiptDto implements Serializable{
 
     public void setWaybillIds(String waybillIds) {
         this.waybillIds = waybillIds;
+    }
+
+    public String getUpdatePhone() {
+        return updatePhone;
+    }
+
+    public void setUpdatePhone(String updatePhone) {
+        this.updatePhone = updatePhone;
     }
 }

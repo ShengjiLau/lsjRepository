@@ -50,7 +50,7 @@ public class OutWarehousePlanController {
 
     @ApiOperation("出库计划列表")
     @RequestMapping(value = "/list",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')  or hasAuthority('wh_out_plan_search')")
     public PageBaseDto inPlanList(@Validated OutWhPlanSearchParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         dto.setCompanyId(companyId);
@@ -87,7 +87,7 @@ public class OutWarehousePlanController {
 
     @ApiOperation("计划详细")
     @RequestMapping(value = "/detail",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('wh_out_plan_detail')")
     public JSONObject detail(@ApiParam(value = "计划ID",required = true) @RequestParam Long outPlanId,
                              @ApiParam(value = "是否加载配仓",required = true) @RequestParam boolean flag) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
@@ -102,7 +102,7 @@ public class OutWarehousePlanController {
 
     @ApiOperation("计划保存")
     @RequestMapping(value = "/add",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('wh_out_plan_add')")
     public JSONObject add(@RequestBody OutWhPlanDto outWhPlanDto) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         String msg = "新建失败！";
@@ -122,7 +122,7 @@ public class OutWarehousePlanController {
 
     @ApiOperation("计划编辑")
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('wh_out_plan_edit')")
     public JSONObject edit(@RequestBody OutWhPlanDto outWhPlanDto) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         String msg = "编辑失败！";
@@ -144,7 +144,7 @@ public class OutWarehousePlanController {
 
     @ApiOperation("发布")
     @RequestMapping(value = "/publish",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('wh_out_plan_publish')")
     public JSONObject publish(@ApiParam(value = "计划ID",required = true) @RequestParam Long planOutId) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         OutWarehousePlan obj = new OutWarehousePlan();
@@ -168,7 +168,7 @@ public class OutWarehousePlanController {
 
     @ApiOperation("完成")
     @RequestMapping(value = "/complete",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('wh_out_plan_complete')")
     public JSONObject complete(@ApiParam(value = "计划ID",required = true) @RequestParam Long planOutId) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         OutWarehousePlan obj = new OutWarehousePlan();
@@ -190,7 +190,7 @@ public class OutWarehousePlanController {
 
     @ApiOperation("取消")
     @RequestMapping(value = "/cancel",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('wh_out_plan_cancel')")
     public JSONObject cancel(@ApiParam(value = "计划ID",required = true) @RequestParam Long planOutId) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         OutWarehousePlan obj = new OutWarehousePlan();
@@ -212,7 +212,7 @@ public class OutWarehousePlanController {
 
     @ApiOperation("计划配仓")
     @RequestMapping(value = "/distributeWh",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('wh_out_plan_dis')")
     public JSONObject distributeWh(@RequestBody OutWhPlanDto outWhPlanDto) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         String msg = "配仓失败！";
