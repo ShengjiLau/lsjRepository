@@ -2,6 +2,7 @@ package com.lcdt.warehouse.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.warehouse.dto.CheckListDto;
 import com.lcdt.warehouse.dto.CheckParamDto;
 import com.lcdt.warehouse.service.CheckService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.lcdt.warehouse.dto.PageBaseDto;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,28 +48,31 @@ public class CheckController {
     }
 
     @ApiOperation("取消盘库")
-    @RequestMapping(value = "/cancelCheck",method = RequestMethod.GET)
-    public String cancelCheck(Long checkId){
+    @RequestMapping(value = "/cancelCheck/{checkId}",method = RequestMethod.PATCH)
+    public JSONObject cancelCheck(@PathVariable Long checkId){
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
         String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
         CheckParamDto checkDto = new CheckParamDto();
         checkDto.setCompanyId(companyId);
         checkDto.setCheckId(checkId);
+        checkDto.setUpdateDate(new Date());
+        checkDto.setUpdateId(userId);
+        checkDto.setUpdateName(userName);
         int result =  checkService.cancelCheck(checkDto);
-        System.out.println("更新结果"+result);
 
         JSONObject jsonObject = new JSONObject();
         String message = "";
         int code = -1;
         if (result>0) {
             code = 0;
+            message = "取消成功！";
         } else {
-            message = "操作失败，请重试！";
+            message = "取消失败，请重试！";
         }
         jsonObject.put("message",message);
         jsonObject.put("code",code);
-        return jsonObject.toString();
+        return jsonObject;
     }
     @ApiOperation("保存盘库单和明细")
     @RequestMapping(value = "/saveCheckAndItems",method = RequestMethod.POST)

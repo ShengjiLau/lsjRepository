@@ -57,9 +57,12 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto,Long companyId) {
         List<Long> goodsId = queryGoodsIds(inventoryQueryDto, companyId);
         Page<Inventory> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
-        List<Inventory> inventories = inventoryMapper.selectInventoryListByqueryDto(goodsId, page, inventoryQueryDto);
-        queryGoodsInfo(companyId, inventories);
-        return page.setRecords(inventories);
+        if(goodsId!=null&&goodsId.size()>0) {
+            List<Inventory> inventories = inventoryMapper.selectInventoryListByqueryDto(goodsId, page, inventoryQueryDto);
+            queryGoodsInfo(companyId, inventories);
+            return page.setRecords(inventories);
+        }
+        return page;
     }
 
 

@@ -64,19 +64,20 @@
         SELECT * from inventory t left join goods_info  g on
         t.goods_id = g.goods_id
         <where>
+            1=1
             <if test="querydto.companyId != null">
-                t.company_id = #{querydto.companyId}
+                and t.company_id = #{querydto.companyId}
             </if>
             <if test="querydto.batch != null">
-                batch = #{querydto.batch}
+                and batch = #{querydto.batch}
             </if>
 
             <if test="querydto.wareHouseId != null">
                 AND warehouse_id = #{querydto.wareHouseId}
             </if>
 
-            <if test="querydto.storageLocationCode != null">
-                and storage_location_code = #{querydto.storageLocationCode}
+            <if test="querydto.storageLocationCode != null and querydto.storageLocationCode!=''">
+                and storage_location_code LIKE concat('%', #{querydto.storageLocationCode},'%')
             </if>
 
             <if test="querydto.customerId != null">
