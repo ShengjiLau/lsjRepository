@@ -63,6 +63,7 @@ public class OwnPlanApi {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        dto.setDeptNames(userCompRel.getDeptNames());
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
@@ -270,9 +271,8 @@ public class OwnPlanApi {
     @RequestMapping(value = "/cancelOwnPlan",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_cancel_own_plan')")
     public String cancelOwnPlan(@ApiParam(value = "计划ID",required = true) @RequestParam Long waybillPlanId) {
-        User loginUser = SecurityInfoGetter.getUser();
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        Integer flag = planService.ownPlanCancel(waybillPlanId,companyId,loginUser);
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        Integer flag = planService.ownPlanCancel(waybillPlanId,userCompRel);
         JSONObject jsonObject = new JSONObject();
         String message = "取消成功！";
         int code = -1;
@@ -317,6 +317,7 @@ public class OwnPlanApi {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
+        dto.setDeptNames(userCompRel.getDeptNames());
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
         dto.setCompanyId(companyId);

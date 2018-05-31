@@ -76,12 +76,12 @@ public interface ConditionQueryMapper {
      * @param orderDtoList
      * @return
      */
-    List<Map> paymentInfo(List<OrderDto> orderDtoList);
+    List<Map> paymentInfo(List<OrderDto> orderDtoList,Long companyId);
 
     /**
      * 根据orderIds获取开票相关信息
      * @param orderDtoList
      * @return
      */
-    List<Map> billingInfo(List<OrderDto> orderDtoList);
+    List<Map> billingInfo(List<OrderDto> orderDtoList,Long companyId);
 }

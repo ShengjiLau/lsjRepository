@@ -43,6 +43,7 @@
     select t_attachment_classify_id, t_attachment_classify_name, t_attachment_classify_order,
     tac.t_attachment_file_code, t_attachment_classify_maxnum, company_id
     from t_attachment_classify tac join t_attachment_file taf on tac.t_attachment_file_code = taf.t_attachment_file_code  where 1=1
+    and taf.t_attachment_file_status = 1
     <if test="tAttachmentClassifyName != null and tAttachmentClassifyName.length > 0">
       and t_attachment_classify_name = #{tAttachmentClassifyName}
     </if>

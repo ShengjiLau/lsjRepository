@@ -6,6 +6,7 @@ import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.DefaultNotifySender;
+import com.lcdt.notify.model.Timeline;
 import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.WaybillDto;
