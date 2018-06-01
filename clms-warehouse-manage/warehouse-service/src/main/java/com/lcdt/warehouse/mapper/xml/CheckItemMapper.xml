@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.warehouse.mapper.CheckItemMapper">
+
+    <!-- 开启二级缓存 -->
+
+    <select id="selectByCheckId" resultType="com.lcdt.warehouse.entity.CheckItem">
+        SELECT relation_id,check_id,invertory_id,goods_id,goods_name,goods_code,goods_unit,goods_spec,goods_barcode,goods_batch,storage_location_code,invertory_amount,check_amount,different_amount,remark
+        FROM check_item a
+        WHERE a.check_id = #{checkId,jdbcType=BIGINT}
+        ORDER BY a.relation_id DESC
+    </select>
+</mapper>

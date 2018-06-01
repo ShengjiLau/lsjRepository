@@ -3,6 +3,7 @@ package com.lcdt.warehouse.entity;
 import com.baomidou.mybatisplus.enums.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.lcdt.converter.ResponseData;
 import com.lcdt.warehouse.contants.OutOrderStatus;
 
 import java.io.Serializable;
@@ -15,7 +16,7 @@ import java.io.Serializable;
  * @author code generate
  * @since 2018-05-25
  */
-public class OutWarehouseOrder implements Serializable {
+public class OutWarehouseOrder implements Serializable,ResponseData {
 
 
 
@@ -90,6 +91,12 @@ public class OutWarehouseOrder implements Serializable {
      * 实际出库时间
      */
     private Date outboundTime;
+
+    /**
+     * 计划备注
+     */
+    private String outPlanRemark;
+
     /**
      * 出库备注
      */
@@ -97,19 +104,24 @@ public class OutWarehouseOrder implements Serializable {
     /**
      * 送货单位
      */
-    private String deliveryUnit;
+    private String pickupUnit;
     /**
      * 送货人
      */
-    private String deliveryLinkman;
+    private String pickupLinkman;
+
+    /**
+     * 身份证
+     */
+    private String pickupIdentiycard;
     /**
      * 送货人电话
      */
-    private String deliverPhone;
+    private String pickupPhone;
     /**
      * 送货车辆
      */
-    private String deliverVehicleNum;
+    private String pickupVehicleNum;
     /**
      * 附件
      */
@@ -302,36 +314,52 @@ public class OutWarehouseOrder implements Serializable {
         this.outboundRemark = outboundRemark;
     }
 
-    public String getDeliveryUnit() {
-        return deliveryUnit;
+    public String getOutPlanRemark() {
+        return outPlanRemark;
     }
 
-    public void setDeliveryUnit(String deliveryUnit) {
-        this.deliveryUnit = deliveryUnit;
+    public void setOutPlanRemark(String outPlanRemark) {
+        this.outPlanRemark = outPlanRemark;
     }
 
-    public String getDeliveryLinkman() {
-        return deliveryLinkman;
+    public String getPickupUnit() {
+        return pickupUnit;
     }
 
-    public void setDeliveryLinkman(String deliveryLinkman) {
-        this.deliveryLinkman = deliveryLinkman;
+    public void setPickupUnit(String pickupUnit) {
+        this.pickupUnit = pickupUnit;
     }
 
-    public String getDeliverPhone() {
-        return deliverPhone;
+    public String getPickupLinkman() {
+        return pickupLinkman;
     }
 
-    public void setDeliverPhone(String deliverPhone) {
-        this.deliverPhone = deliverPhone;
+    public void setPickupLinkman(String pickupLinkman) {
+        this.pickupLinkman = pickupLinkman;
     }
 
-    public String getDeliverVehicleNum() {
-        return deliverVehicleNum;
+    public String getPickupIdentiycard() {
+        return pickupIdentiycard;
     }
 
-    public void setDeliverVehicleNum(String deliverVehicleNum) {
-        this.deliverVehicleNum = deliverVehicleNum;
+    public void setPickupIdentiycard(String pickupIdentiycard) {
+        this.pickupIdentiycard = pickupIdentiycard;
+    }
+
+    public String getPickupPhone() {
+        return pickupPhone;
+    }
+
+    public void setPickupPhone(String pickupPhone) {
+        this.pickupPhone = pickupPhone;
+    }
+
+    public String getPickupVehicleNum() {
+        return pickupVehicleNum;
+    }
+
+    public void setPickupVehicleNum(String pickupVehicleNum) {
+        this.pickupVehicleNum = pickupVehicleNum;
     }
 
     public String getAttachments() {
@@ -417,37 +445,40 @@ public class OutWarehouseOrder implements Serializable {
     @Override
     public String toString() {
         return "OutWarehouseOrder{" +
-                ", outorderId=" + outorderId +
+                "outorderId=" + outorderId +
                 ", outPlanId=" + outPlanId +
-                ", outorderNo=" + outorderNo +
+                ", outorderNo='" + outorderNo + '\'' +
                 ", orderStatus=" + orderStatus +
                 ", groupId=" + groupId +
-                ", groupName=" + groupName +
-                ", contractNo=" + contractNo +
-                ", purchaseNo=" + purchaseNo +
+                ", groupName='" + groupName + '\'' +
+                ", contractNo='" + contractNo + '\'' +
+                ", purchaseNo='" + purchaseNo + '\'' +
                 ", customerId=" + customerId +
-                ", customerName=" + customerName +
-                ", customerContactName=" + customerContactName +
-                ", customerContactPhone=" + customerContactPhone +
+                ", customerName='" + customerName + '\'' +
+                ", customerContactName='" + customerContactName + '\'' +
+                ", customerContactPhone='" + customerContactPhone + '\'' +
                 ", warehouseId=" + warehouseId +
-                ", warehouseName=" + warehouseName +
-                ", outboundType=" + outboundType +
+                ", warehouseName='" + warehouseName + '\'' +
+                ", outboundType='" + outboundType + '\'' +
                 ", outboundPlanTime=" + outboundPlanTime +
                 ", outboundTime=" + outboundTime +
-                ", outboundRemark=" + outboundRemark +
-                ", deliveryUnit=" + deliveryUnit +
-                ", deliveryLinkman=" + deliveryLinkman +
-                ", deliverPhone=" + deliverPhone +
-                ", deliverVehicleNum=" + deliverVehicleNum +
-                ", attachments=" + attachments +
+                ", outPlanRemark='" + outPlanRemark + '\'' +
+                ", outboundRemark='" + outboundRemark + '\'' +
+                ", pickupUnit='" + pickupUnit + '\'' +
+                ", pickupLinkman='" + pickupLinkman + '\'' +
+                ", pickupIdentiycard='" + pickupIdentiycard + '\'' +
+                ", pickupPhone='" + pickupPhone + '\'' +
+                ", pickupVehicleNum='" + pickupVehicleNum + '\'' +
+                ", attachments='" + attachments + '\'' +
+                ", outboundMan='" + outboundMan + '\'' +
                 ", companyId=" + companyId +
                 ", createId=" + createId +
-                ", createName=" + createName +
+                ", createName='" + createName + '\'' +
                 ", createDate=" + createDate +
                 ", updateId=" + updateId +
-                ", updateName=" + updateName +
+                ", updateName='" + updateName + '\'' +
                 ", updateDate=" + updateDate +
                 ", isDeleted=" + isDeleted +
-                "}";
+                '}';
     }
 }

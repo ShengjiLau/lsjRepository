@@ -149,10 +149,10 @@
   (#{rec.reconcileId,jdbcType=BIGINT}, 
   <choose>
     <when test="rec.payeeType==0">
-    RECONCILE_CODE('YS'),
+    RECONCILE_CODE('DZ'),
     </when>
     <when test="rec.payeeType==1">
-    RECONCILE_CODE('YF'),
+    RECONCILE_CODE('DZ'),
     </when>
     <otherwise>
     'null',

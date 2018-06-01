@@ -292,7 +292,7 @@
   <select id="selectCountFeeExchangeByReconcileId" resultType="java.lang.Integer">
   select count(*) from t_fee_exchange
   <where>
-  reconcile_id = #{reconcileId,jdbcType=BIGINT}
+  reconcile_id = #{reconcileId,jdbcType=BIGINT} and cancel_ok = 0
   </where>
   </select>
   

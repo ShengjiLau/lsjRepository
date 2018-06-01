@@ -72,16 +72,12 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     @Override
     public FeeAccountWaybillDto feeAccountWaybillFeeTotal(Map map){
         FeeAccountWaybillDto dto;
-        if(Integer.parseInt(map.get("waybillType").toString()) == 0){
+        if(Integer.parseInt(map.get("waybillType").toString()) == 1){//我的运单
             dto = waybillMapper.selectFeeAccountMyWaybillFeeTotalByCondition(map);
         }else {
-            Map cMapIds = customerCompanyIds.getCustomerCompanyIds(map);
-            map.put("companyIds", cMapIds.get("companyIds") != null ?
-                                    cMapIds.get("companyIds").toString().replaceAll("company_id", "w.company_id") :
-                                    cMapIds.get("companyIds"));
-            map.put("carrierCompanyId", map.get("companyId"));
-            map.remove("companyId");
-            map.remove("customerName");
+            map.put("companyIds", map.get("companyIds") != null ?
+                                    map.get("companyIds").toString().replaceAll("company_id", "w.company_id") :
+                                    map.get("companyIds"));
             dto = waybillMapper.selectFeeAccountCustomerWaybillFeeTotalByCondition(map);
         }
         return dto;

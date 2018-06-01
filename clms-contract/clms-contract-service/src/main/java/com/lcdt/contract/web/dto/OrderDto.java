@@ -34,6 +34,8 @@ public class OrderDto extends Order  implements Serializable{
 
 	private String paymentNum;
 
+	private String paymentSum;
+
 	private String billingRecordNum;
 	
 	@ApiModelProperty(value="页码")
@@ -92,6 +94,14 @@ public class OrderDto extends Order  implements Serializable{
 
 	public void setPaymentNum(String paymentNum) {
 		this.paymentNum = paymentNum;
+	}
+
+	public String getPaymentSum() {
+		return paymentSum;
+	}
+
+	public void setPaymentSum(String paymentSum) {
+		this.paymentSum = paymentSum;
 	}
 
 	public String getBillingRecordNum() {
