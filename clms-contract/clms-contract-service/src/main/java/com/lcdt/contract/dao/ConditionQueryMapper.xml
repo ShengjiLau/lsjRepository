@@ -120,7 +120,7 @@
         WHEN t3.payment_sum &lt; t3.purchase_sum THEN
         '1' ELSE '2'
         END AS payment_status,
-        payment_num
+        payment_num,payment_sum
         FROM
         (
             SELECT
