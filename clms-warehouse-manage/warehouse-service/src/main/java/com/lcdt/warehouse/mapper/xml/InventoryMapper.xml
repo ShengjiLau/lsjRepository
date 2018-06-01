@@ -21,6 +21,7 @@
         <result column="batch" jdbcType="VARCHAR" property="batch" />
         <result column="storage_location_id" jdbcType="BIGINT" property="storageLocationId"/>
         <result column="base_unit" jdbcType="VARCHAR" property="baseUnit" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
         <association  property="goodsInfo" javaType="com.lcdt.warehouse.entity.GoodsInfo" autoMapping="true">
 
         </association>
@@ -58,6 +59,7 @@
             </if>
 
         </where>
+        order by update_time desc
     </select>
 
     <select id="selectInventoryListByqueryDto" resultMap="BaseResultMap" >
@@ -91,6 +93,7 @@
               </foreach>
             </if>
         </where>
+        order by update_time desc
     </select>
 
 	<update id="updateInventoryLockNum">
