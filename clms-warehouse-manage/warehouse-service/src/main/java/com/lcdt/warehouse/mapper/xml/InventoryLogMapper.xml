@@ -22,10 +22,14 @@
         <result column="log_no" jdbcType="VARCHAR" property="logNo" />
         <result column="batch" jdbcType="VARCHAR" property="batch" />
         <association property="goodsInfo" autoMapping="true" javaType="com.lcdt.warehouse.entity.GoodsInfo"></association>
-        <association property="warehouse" autoMapping="true" javaType="com.lcdt.warehouse.entity.Warehouse"></association>
+        <association property="warehouse" column="warehouse_id"  javaType="com.lcdt.warehouse.entity.Warehouse" select="selectWareHouse"></association>
     </resultMap>
 
-    <insert id="insert" parameterType="com.lcdt.warehouse.entity.InventoryLog">
+    <select id="selectWareHouse" resultMap="com.lcdt.warehouse.mapper.WarehousseMapper.BaseResultMap">
+        select * from t_warehouse where wh_id = #{id}
+    </select>
+
+    <insert id="saveLog" parameterType="com.lcdt.warehouse.entity.InventoryLog">
         <selectKey keyProperty="inventoryId" order="AFTER" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -83,6 +87,7 @@
                 and b.goods_barcode like CONCAT(CONCAT('%',#{goodsbarcode}),'%')
             </if>
         </where>
+        order by log_time desc
     </select>
 
 </mapper>

@@ -51,7 +51,7 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
 
     public InventoryLog saveInventoryLog(InventoryLog inventoryLog){
         Assert.notNull(inventoryLog,"object should not be null");
-        logMapper.insert(inventoryLog);
+        logMapper.saveLog(inventoryLog);
         return inventoryLog;
     }
 }

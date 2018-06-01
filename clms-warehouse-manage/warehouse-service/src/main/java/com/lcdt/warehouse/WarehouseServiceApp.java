@@ -29,6 +29,7 @@ public class WarehouseServiceApp {
         FastJsonConfig fastJsonConfig=new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
         fastJsonConfig.setSerializerFeatures(SerializerFeature.WriteMapNullValue);
+        fastJsonConfig.setSerializerFeatures(SerializerFeature.DisableCircularReferenceDetect);
         //3.在convert中添加配置信息
         fastConverter.setFastJsonConfig(fastJsonConfig);
 
