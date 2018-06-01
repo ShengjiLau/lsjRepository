@@ -120,6 +120,7 @@ public class FinanceApi {
             dto.setStatCols(sb_2.toString());
             dto.setIsDeleted((short)0);
             dto.setCompanyId(company.getCompId());
+            dto.setIsReceivable(isReceivable);
             return iFeeFlowService.receivePayStat(dto);
         }
         return null;

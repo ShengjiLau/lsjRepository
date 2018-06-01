@@ -446,7 +446,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
             tObj.setUnitData(obj1.getUnitData());
             tObj.setReceivalbeAmount(obj1.getDistGoodsNum()); //配仓数量
             tObj.setInHousePrice(obj1.getInHousePrice());
-            tObj.setRemark(obj1.getRemark());
+            tObj.setRemark(obj1.getDisRemark());
             inorderGoodsInfoList.add(tObj);
         }
         params.setGoodsInfoDtoList(inorderGoodsInfoList);

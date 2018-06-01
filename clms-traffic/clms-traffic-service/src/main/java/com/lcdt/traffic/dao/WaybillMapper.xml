@@ -708,6 +708,7 @@
       </if>
       <include refid="select_finance_condition"/>
     </where>
+    order by create_date desc
   </select>
   <select id="selectFeeAccountCustomerWaybillByCondition" parameterType="java.util.Map" resultMap="BaseFeeAccountWaybillMap">
     select <include refid="finance_column_list"/>,
@@ -740,6 +741,7 @@
       </if>
       <include refid="select_finance_condition"/>
     </where>
+    order by create_date desc
   </select>
 
   <select id="selectFeeAccountMyWaybillFeeTotalByCondition" parameterType="java.util.Map" resultMap="BaseFeeAccountWaybillMap">
