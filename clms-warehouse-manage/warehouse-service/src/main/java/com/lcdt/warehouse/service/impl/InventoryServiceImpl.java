@@ -111,8 +111,9 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             GoodsInfo goodsInfo = saveGoodsInfo(good);
             inventory.setGoodsId(goodsInfo.getGoodsId());
             //写入库流水
-            logService.saveInOrderLog(order, inventory);
-            addInventory(inventory);
+
+            Inventory updatedInventory = addInventory(inventory);
+            logService.saveInOrderLog(order, inventory,updatedInventory.getInvertoryNum());
         }
         order.setInOrderStatus(InOrderStatus.ENTERED);
         inOrderService.updateById(order);
@@ -187,7 +188,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             if (inventory.getLockNum() >= good.getOutboundQuantity()) {
                 inventory.setLockNum(inventory.getLockNum() - good.getOutboundQuantity());
                 inventoryMapper.updateById(inventory);
-                logService.saveOutOrderLog(order, good);
+                logService.saveOutOrderLog(order, good,inventory.getInvertoryNum());
                 order.setOrderStatus(OutOrderStatus.OUTED);
                 outOrderMapper.updateById(order);
                 logger.info("出库单 出库成功 {}",order);

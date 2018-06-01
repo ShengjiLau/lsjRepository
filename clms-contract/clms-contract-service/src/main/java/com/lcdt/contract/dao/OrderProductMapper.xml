@@ -169,7 +169,7 @@
   </select>
 
   <select id="selectProductByOrderIds" resultType="com.lcdt.contract.model.OrderProduct">
-    select order_id orderId, name, num, sku, code, spec
+    select order_id orderId, name, convert(num,decimal(10,2)) num, sku, code, spec
     from t_order_product
     where order_id in
     <foreach collection="array" item="orderIds" index="index"
