@@ -400,10 +400,11 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         _tempObj.setOutboundType(_outWhPlanDto.getStorageType());
         _tempObj.setOutboundPlanTime(new Date());
         _tempObj.setOutboundRemark(outWhPlanDto.getStorageRemark());
-        _tempObj.setDeliveryUnit(outWhPlanDto.getPickupUnit());
-        _tempObj.setDeliveryLinkman(outWhPlanDto.getPickupLinkman());
-        _tempObj.setDeliverPhone(outWhPlanDto.getPickupPhone());
-        _tempObj.setDeliverVehicleNum(outWhPlanDto.getPickupCar());
+        _tempObj.setPickupUnit(outWhPlanDto.getPickupUnit());
+        _tempObj.setPickupLinkman(outWhPlanDto.getPickupLinkman());
+        _tempObj.setPickupIdentiycard(outWhPlanDto.getPickupIdentiycard());
+        _tempObj.setPickupPhone(outWhPlanDto.getPickupPhone());
+        _tempObj.setPickupVehicleNum(outWhPlanDto.getPickupCar());
         _tempObj.setAttachments(outWhPlanDto.getAttachment());
         _tempObj.setCompanyId(outWhPlanDto.getCompanyId());
         _tempObj.setCreateDate(new Date());

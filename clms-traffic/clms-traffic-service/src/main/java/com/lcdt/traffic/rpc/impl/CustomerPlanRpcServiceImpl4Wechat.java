@@ -9,6 +9,7 @@ import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.DefaultNotifySender;
+import com.lcdt.notify.model.Timeline;
 import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.*;
@@ -652,6 +653,15 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             }
             flag2 = snatchGoodsDetailMapper.batchAddSnatchGoodsDetail(snatchList);
         }
+
+
+        //router:抢单
+        Timeline event = new Timeline();
+        event.setActionTitle("【客户抢单】");
+        event.setActionTime(new Date());
+        event.setCompanyId(dto.getCompanyId());
+        event.setSearchkey("R_PLAN");
+        event.setDataid(waybillPlan.getWaybillPlanId());
         return flag1+flag2>1?1:0;
     }
 
@@ -825,6 +835,8 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                 waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_OFF); //计划状态(已派单)
                 waybillPlan.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_COMPLETED);
                 waybillPlanMapper.updateWaybillPlan(waybillPlan);
+
+
             }
         }
 
@@ -871,6 +883,15 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
 
         }
 
+        //router:派车
+        Timeline event = new Timeline();
+        event.setActionTitle("【运单生成】"+waybill.getWaybillCode());
+        event.setActionTime(new Date());
+        event.setCompanyId(waybillDto.getCompanyId());
+        event.setSearchkey("R_PLAN");
+        event.setDataid(waybillPlan.getWaybillPlanId());
+        event.setActionDes("司机："+dto.getDriverPhone()+" "+dto.getVechicleNum());
+        producer.noteRouter(event);
         waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         return waybillPlan;
     }

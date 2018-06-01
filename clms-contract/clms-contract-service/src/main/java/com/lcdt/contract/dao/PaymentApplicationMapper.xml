@@ -424,7 +424,7 @@
           and approval_status = #{approvalStatus}
         </when>
         <otherwise>
-          and (approval_status = 0 or approval_status = 2)
+          and approval_status in (0,1,2)
         </otherwise>
       </choose>
       <if test="receiptUnit!=null and receiptUnit!=''">

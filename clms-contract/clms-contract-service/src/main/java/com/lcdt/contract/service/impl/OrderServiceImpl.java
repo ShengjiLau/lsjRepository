@@ -243,10 +243,12 @@ public class OrderServiceImpl implements OrderService {
                         if ((long) map.get("order_id") == od.getOrderId()) {
                             od.setPaymentStatus(new Short(map.get("payment_status").toString()));
                             od.setPaymentNum(map.get("payment_num").toString());
+                            od.setPaymentSum(map.get("payment_sum").toString());
                             break;
                         } else if (i == paymentList.size() - 1) {
                             od.setPaymentStatus(new Short("0"));
                             od.setPaymentNum("0");
+                            od.setPaymentSum("0");
                         }
                     }
                 } else {
@@ -255,8 +257,6 @@ public class OrderServiceImpl implements OrderService {
                 }
                 //整合开票记录信息
                 if (billingRecordList.size() > 0) {
-
-
                     for (int j = 0; j < billingRecordList.size(); j++) {
                         Map map = billingRecordList.get(j);
                         if ((long) map.get("order_id") == od.getOrderId()) {

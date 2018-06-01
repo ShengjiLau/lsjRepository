@@ -67,6 +67,10 @@
     <result column="cancel_date" jdbcType="TIMESTAMP" property="cancelDate" />
     <result column="cancel_man" jdbcType="VARCHAR" property="cancelMan" />
     <result column="cancel_remark" jdbcType="VARCHAR" property="cancelRemark" />
+    <result column="longitude" jdbcType="DOUBLE" property="longitude" />
+    <result column="latitude" jdbcType="DOUBLE" property="latitude" />
+    <result column="unload_location" jdbcType="VARCHAR" property="unloadLocation" />
+    <result column="unload_time" jdbcType="TIMESTAMP" property="unloadTime" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
@@ -104,7 +108,7 @@
     arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,electronical_receipt, attachment1, attachment1_name,
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
     attachment5, attachment5_name, waybill_remark, carrier_company_id, carrier_company_name,company_id, pub_date,
-    finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
+    finish_date, cancel_date, cancel_man, cancel_remark,longitude,latitude,unload_location,unload_time, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted, receivable_name, payable_name</sql>
 
 
@@ -115,7 +119,7 @@
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
     arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,
     waybill_remark, carrier_company_id, carrier_company_name,company_id, pub_date,
-    finish_date, cancel_date, cancel_man, cancel_remark, create_id, create_name, create_date,
+    finish_date, cancel_date, cancel_man, cancel_remark,longitude,latitude,unload_location,unload_time, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted</sql>
 
   <sql id="update_column_list">
@@ -334,7 +338,7 @@
       attachment4_name, attachment5, attachment5_name, 
       waybill_remark, carrier_company_id,carrier_company_name, company_id,
       pub_date, finish_date, cancel_date, 
-      cancel_man, cancel_remark, create_id, 
+      cancel_man, cancel_remark,longitude,latitude,unload_location,unload_time, create_id,
       create_name, create_date, update_id, 
       update_name, update_date, is_deleted,
       receivable_name, payable_name
@@ -365,7 +369,7 @@
       #{attachment4Name,jdbcType=VARCHAR}, #{attachment5,jdbcType=VARCHAR}, #{attachment5Name,jdbcType=VARCHAR}, 
       #{waybillRemark,jdbcType=VARCHAR}, #{carrierCompanyId,jdbcType=BIGINT},#{carrierCompanyName,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
       CURRENT_TIMESTAMP, #{finishDate,jdbcType=TIMESTAMP}, #{cancelDate,jdbcType=TIMESTAMP},
-      #{cancelMan,jdbcType=VARCHAR}, #{cancelRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
+      #{cancelMan,jdbcType=VARCHAR}, #{cancelRemark,jdbcType=VARCHAR},#{longitude,jdbcType=DOUBLE},#{latitude,jdbcType=DOUBLE},#{unloadLocation,jdbcType=VARCHAR},#{unloadTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT},
       #{createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{updateId,jdbcType=BIGINT},
       #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 0,
       #{receivableName,jdbcType=VARCHAR}, #{payableName,jdbcType=VARCHAR}

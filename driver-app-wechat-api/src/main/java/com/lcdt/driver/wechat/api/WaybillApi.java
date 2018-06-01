@@ -3,7 +3,6 @@ package com.lcdt.driver.wechat.api;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.clms.security.helper.TokenSecurityInfoGetter;
 import com.lcdt.driver.dto.PageBaseDto;
 import com.lcdt.driver.wechat.api.util.GroupIdsUtil;
@@ -102,6 +101,7 @@ public class WaybillApi {
 
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
+        dto.setUpdatePhone(loginUser.getPhone());
         dto.setCompanyId(companyId);
 
         return waybillRpcService.modifyOwnWaybillStatus(dto);
@@ -144,9 +144,9 @@ public class WaybillApi {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         Long companyId = userCompRel.getCompany().getCompId();
         User loginUser = userCompRel.getUser();
-
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
+        dto.setUpdatePhone(loginUser.getPhone());
         dto.setCarrierCompanyId(companyId);
 
         return waybillRpcService.modifyCustomerWaybillReceipt(dto);

@@ -49,5 +49,6 @@ server:
 logging:
   level:
     com.lcdt.warehouse: debug
+    org.springframework: DEBUG
   file: ${user.dir}/log/warehouse-service.log
 

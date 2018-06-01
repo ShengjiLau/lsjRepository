@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.warehouse.mapper.CheckMapper">
+
+
+    <select id="selectListByParams" resultType="com.lcdt.warehouse.dto.CheckParamDto">
+        SELECT a.check_id,a.check_num,a.check_status,a.group_id,a.group_name,a.customer_id,a.customer_name,a.warehouse_id,
+        a.warehouse_name,a.attachments,a.company_id,a.remark,a.create_id,a.create_name,a.create_date,a.update_id,a.update_name,
+        a.update_date,a.is_deleted,a.complete_id,a.complete_name,a.complete_date,diff_status
+        FROM `check` a
+        LEFT JOIN check_item b
+        on(a.check_id = b.check_id)
+
+        WHERE a.company_id = #{companyId,jdbcType=BIGINT}
+        <if test="createDateFrom!=null and createDateFrom!=''">
+            and date(a.create_date) >= CONCAT(STR_TO_DATE(#{createDateFrom,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+        </if>
+        <if test="createDateTo!=null and createDateTo!=''">
+            and  CONCAT(STR_TO_DATE(#{createDateTo,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59') >= date(a.create_date)
+        </if>
+        <if test="completeDateFrom!=null and completeDateFrom!=''">
+            and date(a.complete_date) >=  CONCAT(STR_TO_DATE(#{completeDateFrom,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+        </if>
+        <if test="completeDateTo!=null and completeDateTo!=''">
+            and CONCAT(STR_TO_DATE(#{completeDateTo,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59') >= date(a.complete_date)
+        </if>
+        <if test="checkNum!=null and checkNum!=''">
+            and a.check_num like concat('%',#{checkNum,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="completeName!=null and completeName!=''">
+            and a.complete_name like concat('%',#{completeName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="warehouseName!=null and warehouseName!=''">
+            and a.warehouse_name like concat('%',#{warehouseName,jdbcType=VARCHAR},'%')
+        </if>
+
+        <if test="customerId!=null">
+            and a.customerId =#{customerId,jdbcType=BIGINT}
+        </if>
+        <if test="checkStatus!=null and checkStatus!=0">
+            and a.check_status=#{checkStatus,jdbcType=TINYINT}
+        </if>
+        <if test="groupId!=null">
+            and a.group_id=#{groupId,jdbcType=BIGINT}
+        </if>
+        <if test="goodsInfo!=null and goodsInfo!=''">
+            and (
+            b.goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')
+            or b.goods_code like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')
+            )
+        </if>
+        order by a.check_id
+    </select>
+
+
+    <update id="cancelCheck" parameterType="com.lcdt.warehouse.dto.CheckParamDto">
+      UPDATE `check` SET check_status = 9 WHERE check_id = #{checkId,jdbcType=BIGINT} AND company_id =#{companyId,jdbcType=BIGINT}
+    </update>
+
+    <insert id="addCheck" parameterType="com.lcdt.warehouse.entity.Check">
+        <selectKey keyProperty="allotId" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+      INSERT INTO `check` (
+        check_num,
+        check_status,
+        group_id,
+        group_name,
+        customer_id,
+        customer_name,
+        warehouse_id,
+        warehouse_name,
+        attachments,
+        company_id,
+        remark,
+        create_id,
+        create_name,
+        create_date,
+        update_id,
+        update_name,
+        update_date,
+        is_deleted,
+        complete_id,
+        complete_name,
+        complete_date,
+        diff_status
+        ) VALUES (
+        F_CHECK_CODE('PK'),
+        #{checkStatus,jdbcType=TINYINT},
+        #{groupId,jdbcType=BIGINT},
+        #{groupName,jdbcType=VARCHAR},
+        #{customerId,jdbcType=BIGINT},
+        #{customerName,jdbcType=VARCHAR},
+        #{warehouseId,jdbcType=BIGINT},
+        #{warehouseName,jdbcType=VARCHAR},
+        #{attachments,jdbcType=VARCHAR},
+        #{companyId,jdbcType=BIGINT},
+        #{remark,jdbcType=VARCHAR},
+        #{createId,jdbcType=BIGINT},
+        #{createName,jdbcType=VARCHAR},
+        #{createDate,jdbcType=TIMESTAMP},
+        #{updateId,jdbcType=BIGINT},
+        #{updateName,jdbcType=VARCHAR},
+        #{updateDate,jdbcType=TIMESTAMP},
+        #{isDeleted,jdbcType=TINYINT},
+        #{completeId,jdbcType=BIGINT},
+        #{completeName,jdbcType=VARCHAR},
+        #{completeDate,jdbcType=TIMESTAMP},
+        #{diffStatus,jdbcType=TINYINT}
+        )
+
+    </insert>
+</mapper>

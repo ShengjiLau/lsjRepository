@@ -57,9 +57,12 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto,Long companyId) {
         List<Long> goodsId = queryGoodsIds(inventoryQueryDto, companyId);
         Page<Inventory> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
-        List<Inventory> inventories = inventoryMapper.selectInventoryListByqueryDto(goodsId, page, inventoryQueryDto);
-        queryGoodsInfo(companyId, inventories);
-        return page.setRecords(inventories);
+        if(goodsId!=null&&goodsId.size()>0) {
+            List<Inventory> inventories = inventoryMapper.selectInventoryListByqueryDto(goodsId, page, inventoryQueryDto);
+            queryGoodsInfo(companyId, inventories);
+            return page.setRecords(inventories);
+        }
+        return page;
     }
 
 
@@ -181,8 +184,8 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             Inventory inventory = inventoryMapper.selectById(good.getInvertoryId());
             //扣减库存
             //比较锁定量和 出库量
-            if (inventory.getLockNum() >= good.getGoodsNum()) {
-                inventory.setLockNum(inventory.getLockNum() - good.getGoodsNum());
+            if (inventory.getLockNum() >= good.getOutboundQuantity()) {
+                inventory.setLockNum(inventory.getLockNum() - good.getOutboundQuantity());
                 inventoryMapper.updateById(inventory);
                 logService.saveOutOrderLog(order, good);
                 order.setOrderStatus(OutOrderStatus.OUTED);
