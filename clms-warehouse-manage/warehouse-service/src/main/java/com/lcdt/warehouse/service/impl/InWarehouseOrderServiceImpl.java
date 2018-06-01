@@ -109,7 +109,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
         List<InorderGoodsInfo> addInorderGoodsInfoList = new ArrayList<>();
         if (listParams != null && listParams.size() > 0) {
             for (InorderGoodsInfoDto infoDto : listParams) {
-                if (infoDto.getRelationId() != null && infoDto.getRelationId().equals("")) {
+                if (infoDto.getRelationId() != null && !infoDto.getRelationId().equals("")) {
                     InorderGoodsInfo inorderGoodsInfo = new InorderGoodsInfo();
                     BeanUtils.copyProperties(infoDto, inorderGoodsInfo);
                     modifyInorderGoodsInfoList.add(inorderGoodsInfo);
@@ -166,7 +166,8 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
 
 
             //入库操作
-            inventoryService.putInventory(inorderGoodsInfoList,inWarehouseOrder);
+            InWarehouseOrder inOrder=queryInWarehouseOrder(inWarehouseOrder.getCompanyId(),inWarehouseOrder.getInorderId());
+            inventoryService.putInventory(inorderGoodsInfoList,inOrder);
         }
         return result;
     }
