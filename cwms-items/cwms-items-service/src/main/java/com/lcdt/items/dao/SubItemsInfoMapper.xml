@@ -201,7 +201,7 @@
     <where>
       sub.item_id=items.item_id and items.company_id = #{companyId,jdbcType=BIGINT}
       <if test="goodsInfo!=null and goodsInfo!=''">
-        and items.subject like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') or sub.code like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') or sub.bar_code like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')
+        and (items.subject like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') or sub.code like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') or sub.bar_code like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%'))
       </if>
       <if test="goodsName!=null and goodsName!=''">
         and items.subject like concat('%',#{goodsName,jdbcType=VARCHAR},'%')

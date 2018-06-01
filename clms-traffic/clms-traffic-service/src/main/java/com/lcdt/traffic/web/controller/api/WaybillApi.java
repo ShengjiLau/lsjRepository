@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -47,6 +46,7 @@ public class WaybillApi {
     public JSONObject addOwnWaybill(@RequestBody WaybillDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
+        dto.setCompanyName(SecurityInfoGetter.geUserCompRel().getCompany().getFullName());
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
@@ -176,6 +176,7 @@ public class WaybillApi {
 
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
+        dto.setUpdatePhone(loginUser.getPhone());
         dto.setCompanyId(companyId);
 
         Waybill waybill = waybillRpcService.modifyOwnWaybillStatus(dto);

@@ -194,6 +194,8 @@ public class WaybillParamsDto implements java.io.Serializable{
     private String updateName;
     private Date updateTime;
 
+    private String deptNames;
+
 
     @ApiModelProperty(value = "0-其它1-承运商2-司机")
     private Short carrierAllIds; //0-其它1-承运商2-司机
@@ -748,5 +750,13 @@ public class WaybillParamsDto implements java.io.Serializable{
 
     public void setCarrierNames(String carrierNames) {
         this.carrierNames = carrierNames;
+    }
+
+    public String getDeptNames() {
+        return deptNames;
+    }
+
+    public void setDeptNames(String deptNames) {
+        this.deptNames = deptNames;
     }
 }

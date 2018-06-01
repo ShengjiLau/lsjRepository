@@ -86,6 +86,7 @@ public class PayableReconcileApi {
 	public JSONObject cancelReconcile(@ApiParam(value="一个或多个对账单id,多个时用','隔开",required=true)@RequestParam String reconcileIds) {
 		JSONObject jsonObject = new JSONObject();	
 		Map<Integer,String> map = reconcileService.setCancelOk(reconcileIds);
+		
 		if (map.containsKey(1)) {
 			jsonObject.put("data","failedId:"+map.get(1));
 			Long[] Ids = ConvertStringAndLong.convertStrToLong(map.get(1));

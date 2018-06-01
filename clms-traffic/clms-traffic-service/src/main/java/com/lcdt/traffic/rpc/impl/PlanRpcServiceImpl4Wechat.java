@@ -9,6 +9,7 @@ import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.DefaultNotifySender;
+import com.lcdt.notify.model.Timeline;
 import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.*;
@@ -611,6 +612,18 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                     producer.sendNotifyEvent(plan_publish_event);
                 }
             }
+
+
+            //router:直派
+            Timeline event = new Timeline();
+            event.setActionTitle("【计划派单】（操作人："+company.getFullName()+" "+user.getRealName()+"）");
+            event.setActionTime(new Date());
+            event.setCompanyId(company.getCompId());
+            event.setSearchkey("R_PLAN");
+            event.setDataid(waybillPlan.getWaybillPlanId());
+            producer.noteRouter(event);
+
+
         } else {
             throw new SplitGoodsException("计划详细为空！");
         }
@@ -794,6 +807,16 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         waybillPlan.setUpdateName(user.getRealName());
         waybillPlan.setUpdateTime(new Date());
         waybillPlanMapper.updateWaybillPlan(waybillPlan);
+
+        //router:直派
+        Timeline event = new Timeline();
+        event.setActionTitle("【计划派单】（操作人："+userCompRel.getCompany().getFullName()+" "+user.getRealName()+"）");
+        event.setActionTime(new Date());
+        event.setCompanyId(userCompRel.getCompany().getCompId());
+        event.setSearchkey("R_PLAN");
+        event.setDataid(waybillPlan.getWaybillPlanId());
+        producer.noteRouter(event);
+
         return waybillPlan;
     }
 

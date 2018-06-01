@@ -155,4 +155,14 @@
     </where>
     order by wh_id desc
   </select>
+
+  <select id="selectWarehouse" resultType="java.lang.Integer">
+    select count(wh_id)
+    from t_warehouse
+    where wh_name = #{whName,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}
+    <if test="whId!=null and whId!=''">
+      and wh_id != #{whId,jdbcType=BIGINT}
+    </if>
+  </select>
+
 </mapper>
