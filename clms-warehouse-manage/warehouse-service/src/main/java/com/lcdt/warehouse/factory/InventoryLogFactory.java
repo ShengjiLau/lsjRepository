@@ -9,7 +9,7 @@ public interface InventoryLogFactory {
     InventoryLog createInventoryLog();
 
 
-    public static InventoryLog createFromInventory(InWarehouseOrder order, Inventory inventory) {
+    public static InventoryLog createFromInventory(InWarehouseOrder order, Inventory inventory,Float updatedInventoryNum) {
         Assert.notNull(inventory,"库存不能为空");
         InventoryLog inventoryLog = new InventoryLog();
         inventoryLog.setBusinessNo(order.getInOrderCode());
@@ -26,10 +26,11 @@ public interface InventoryLogFactory {
         inventoryLog.setBatch(inventory.getBatch());
         inventoryLog.setLogNo("");
         inventoryLog.setComment(order.getStorageRemark());
+        inventoryLog.setCurrentInvetory(updatedInventoryNum);
         return inventoryLog;
     }
 
-    public static InventoryLog createFromOutInventory(OutWarehouseOrder order,OutOrderGoodsInfo inventory){
+    public static InventoryLog createFromOutInventory(OutWarehouseOrder order,OutOrderGoodsInfo inventory,Float updatedInventoryNum){
         Assert.notNull(inventory,"库存不能为空");
         InventoryLog inventoryLog = new InventoryLog();
         inventoryLog.setBusinessNo(order.getOutorderNo());
@@ -46,6 +47,7 @@ public interface InventoryLogFactory {
         inventoryLog.setBatch(inventory.getBatch());
         inventoryLog.setLogNo("");
         inventoryLog.setComment(order.getOutboundRemark());
+        inventoryLog.setCurrentInvetory(updatedInventoryNum);
         return inventoryLog;
     }
 

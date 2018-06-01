@@ -35,7 +35,7 @@ public class InventoryLog implements Serializable{
      * 库位
      */
     private Date logTime;
-    private Integer currentInvetory;
+    private Float currentInvetory;
     private Float changeNum;
     private String businessNo;
     /**
@@ -157,11 +157,11 @@ public class InventoryLog implements Serializable{
         this.logTime = logTime;
     }
 
-    public Integer getCurrentInvetory() {
+    public Float getCurrentInvetory() {
         return currentInvetory;
     }
 
-    public void setCurrentInvetory(Integer currentInvetory) {
+    public void setCurrentInvetory(Float currentInvetory) {
         this.currentInvetory = currentInvetory;
     }
 
