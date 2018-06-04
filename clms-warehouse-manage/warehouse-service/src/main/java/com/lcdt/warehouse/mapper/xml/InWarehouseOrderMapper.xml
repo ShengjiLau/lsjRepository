@@ -172,7 +172,9 @@
     <select id="selectInWarehouseOrderListByPlanId" resultMap="BaseInWarehouseOrderDetailsMapOfPlan">
         SELECT <include refid="Base_Select_List"/>
         from in_warehouse_order
-        WHERE company_id= #{companyId,jdbcType=BIGINT} and plan_id = #{planId,jdbcType=BIGINT}
+        <where>
+            company_id= #{companyId,jdbcType=BIGINT} <include refid="select_condition"/>
+        </where>
         order by inorder_id desc
     </select>
 
