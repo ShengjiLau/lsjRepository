@@ -45,19 +45,13 @@
                 and t.storage_location_code = #{storageLocationCode}
             </if>
 
-            <if test="goodsId != null">
-                and t.goods_id = #{goodsId}
+            <if test="originalGoodsId != null">
+                and t.original_goods_id = #{originalGoodsId}
             </if>
 
             <if test="customerId != null">
                 and t.customer_id = #{customerId}
             </if>
-
-
-            <if test="originalGoodsId != null">
-                and t.original_goods_id = #{originalGoodsId}
-            </if>
-
         </where>
         order by update_time desc
     </select>
