@@ -34,6 +34,14 @@ public interface InWarehouseOrderService extends IService<InWarehouseOrder> {
 
 
     /**
+     * 根据companyId和planId查询此计划下的入库单列表
+     * @param params
+     * @return
+     */
+    Page<InWarehouseOrderDto> queryInWarehouseOrderListOfPlan(InWarehouseOrderSearchParamsDto params);
+
+
+    /**
      * 查询详细
      * @param companyId
      * @param inorderId

@@ -74,6 +74,12 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
     }
 
     @Override
+    public Page<InWarehouseOrderDto> queryInWarehouseOrderListOfPlan(InWarehouseOrderSearchParamsDto params) {
+        Page page = new Page(params.getPageNo(), params.getPageSize());
+        return page.setRecords(baseMapper.selectInWarehouseOrderListByPlanId(page, params));
+    }
+
+    @Override
     public InWarehouseOrderDetailDto queryInWarehouseOrder(Long companyId, Long inorderId) {
         InWarehouseOrderDetailDto inWarehouseOrderDetailDto=null;
         inWarehouseOrderDetailDto=baseMapper.selectInWarehouseOrder(companyId,inorderId);

@@ -46,6 +46,14 @@ public interface InWarehouseOrderMapper extends BaseMapper<InWarehouseOrder> {
     List<InWarehouseOrderDto> selectByCondition(Pagination page, InWarehouseOrderSearchParamsDto params);
 
     /**
+     * 根据companyId和planId查询此计划下的入库单列表
+     * @param page
+     * @param params
+     * @return
+     */
+    List<InWarehouseOrderDto> selectInWarehouseOrderListByPlanId(Pagination page,InWarehouseOrderSearchParamsDto params);
+
+    /**
      * 根据companyId和planId查询配仓信息
      * @param companyId
      * @param planId
