@@ -5,6 +5,7 @@ package com.lcdt.warehouse.dto;
  */
 
 public class InorderGoodsInfoLocationDto {
+    private Long relationId;
     /**
      * 批次
      */
@@ -39,6 +40,14 @@ public class InorderGoodsInfoLocationDto {
      */
     private Boolean isSplit;
 
+
+    public Long getRelationId() {
+        return relationId;
+    }
+
+    public void setRelationId(Long relationId) {
+        this.relationId = relationId;
+    }
 
     public String getBatch() {
         return batch;
