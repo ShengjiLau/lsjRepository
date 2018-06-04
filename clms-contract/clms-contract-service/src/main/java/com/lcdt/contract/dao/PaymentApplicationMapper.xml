@@ -496,6 +496,6 @@
   <select id="selectPaymentApplicationDetail" resultMap="DetailResultMap">
     select * from t_payment_application t1
     left join t_pa_approval t2 on t1.pa_id = t2.pa_id
-    where t1.pa_id= #{arg0}
+    where t1.pa_id= #{arg0} order by t2.sort
   </select>
 </mapper>
