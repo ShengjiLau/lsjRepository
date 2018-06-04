@@ -163,6 +163,9 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
                 InorderGoodsInfo inorderGoodsInfo = new InorderGoodsInfo();
                 BeanUtils.copyProperties(params.getGoodsInfoDtoList().get(i), inorderGoodsInfo);
                 inorderGoodsInfo.setInorderId(inWarehouseOrder.getInorderId());
+                if(inorderGoodsInfo.getSplit()==null){
+                    inorderGoodsInfo.setSplit(false);
+                }
                 inorderGoodsInfoList.add(inorderGoodsInfo);
             }
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);

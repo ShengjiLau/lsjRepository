@@ -44,6 +44,7 @@
         <result column="unit_data" jdbcType="INTEGER" property="unitData" />
         <result column="receivalbe_amount" jdbcType="REAL" property="receivalbeAmount" />
         <collection property="locationInfo" ofType="com.lcdt.warehouse.dto.InorderGoodsInfoLocationDto">
+            <id column="relation_id" jdbcType="BIGINT" property="relationId" />
             <result column="batch" jdbcType="VARCHAR" property="batch" />
             <result column="in_house_amount" jdbcType="REAL" property="inHouseAmount" />
             <result column="in_house_price" jdbcType="REAL" property="inHousePrice" />
