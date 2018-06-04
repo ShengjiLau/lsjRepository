@@ -26,4 +26,6 @@ public interface AllotMapper {
      * @return
      */
     int updateAllotIsDelete(Long allotId);
+
+    AllotDto selectByAllotId(Long allotId);
 }
