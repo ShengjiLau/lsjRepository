@@ -119,7 +119,7 @@
     receive_city, receive_county, receive_address, transport_way, goods_type, start_date,
     arrive_date, is_receipt, is_urgent, pickup_way, distribution_way,
     waybill_remark, carrier_company_id, carrier_company_name,company_id, pub_date,
-    finish_date, cancel_date, cancel_man, cancel_remark,longitude,latitude,unload_location,unload_time, create_id, create_name, create_date,
+    finish_date, cancel_date, cancel_man, cancel_remark,create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted</sql>
 
   <sql id="update_column_list">
