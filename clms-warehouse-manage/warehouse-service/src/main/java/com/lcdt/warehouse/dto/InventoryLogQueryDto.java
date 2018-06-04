@@ -27,6 +27,16 @@ public class InventoryLogQueryDto extends PageQueryDto{
 
     private Long inventoryId;
 
+    private Long customerId;
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
     public Long getInventoryId() {
         return inventoryId;
     }

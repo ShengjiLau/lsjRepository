@@ -34,14 +34,14 @@
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into inventory_log (log_id, goods_id, warehouse_id,
-        storage_location_code, log_time, current_invetory,
+        storage_location_code,  current_invetory,
         change_num, business_no, type,
         original_goods_id, customer_id, customer_name,
         storage_location_id, comment, company_id,
         log_no, batch, order_id
         )
         values (#{logId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT},
-        #{storageLocationCode,jdbcType=VARCHAR}, #{logTime,jdbcType=TIMESTAMP}, #{currentInvetory,jdbcType=INTEGER},
+        #{storageLocationCode,jdbcType=VARCHAR}, #{currentInvetory,jdbcType=INTEGER},
         #{changeNum,jdbcType=REAL}, #{businessNo,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
         #{originalGoodsId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR},
         #{storageLocationId,jdbcType=BIGINT}, #{comment,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
@@ -63,8 +63,8 @@
             <if test="type != null">
                 and a.type = #{type}
             </if>
-            <if test="customerName != null">
-                and a.customer_name like CONCAT(CONCAT('%', #{customerName}), '%')
+            <if test="customerId != null">
+                and a.customer_id = #{customerId}
             </if>
 
             <if test="warehouseId != null">
@@ -75,16 +75,19 @@
                 and a.storage_location_code like CONCAT(CONCAT('%',#{storageLocationCode}),'%')
             </if>
             <if test="since != null">
-                and a.log_time &lt;=  #{since}
+                and a.log_time &gt;=  #{since}
             </if>
             <if test="until != null">
-                and a.log_time &gt;= #{until}
+                and a.log_time &lt;= #{until}
             </if>
             <if test="goodsName != null">
                 and b.goods_name like CONCAT(CONCAT('%',#{goodsName}),'%')
             </if>
             <if test="goodsbarcode != null">
                 and b.goods_barcode like CONCAT(CONCAT('%',#{goodsbarcode}),'%')
+            </if>
+            <if test="businessNo != null ">
+                and a.business_no like CONCAT(CONCAT('%',#{businessNo}),'%')
             </if>
         </where>
         order by log_time desc
