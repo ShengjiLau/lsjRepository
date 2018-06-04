@@ -144,9 +144,9 @@
         t1.purchase_sum,
         CASE
         WHEN t1.payment_time IS NULL THEN
-        t1.payment_sum
-        ELSE
         0
+        ELSE
+        t1.payment_sum
         END AS payment_sure
         FROM
         t_payment_application t1

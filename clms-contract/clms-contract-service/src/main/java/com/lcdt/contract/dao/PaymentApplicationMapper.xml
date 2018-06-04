@@ -434,7 +434,7 @@
         and (payment_time &gt; #{paymentTimeStart} and payment_time &lt; #{paymentTimeEnd})
       </if>
       <if test="orderSerialNo!=null and  orderSerialNo!=''">
-        and order_serial_no = #{orderSerialNo}
+        and order_serial_no like concat('%',#{orderSerialNo},'%')
       </if>
       and company_id = #{companyId}
     </where>

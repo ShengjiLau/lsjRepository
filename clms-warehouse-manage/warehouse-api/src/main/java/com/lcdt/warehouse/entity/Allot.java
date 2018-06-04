@@ -12,7 +12,7 @@ public class Allot implements Serializable {
     @ApiModelProperty(value="调拨单id")
     private Long allotId;
 
-    @ApiModelProperty(value="状态 0-在途，1-取消，2-完成")
+    @ApiModelProperty(value="状态 1-在途，2-取消，3-完成")
     private Short allotStatus;
 
     @ApiModelProperty(value="所属项目")

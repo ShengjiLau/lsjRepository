@@ -40,4 +40,11 @@ public interface AllotService {
      * @return
      */
     int addAllotInTime(Allot allot);
+
+    /**
+     * 获取调拨单详情
+     * @param allotId
+     * @return
+     */
+    AllotDto getAllotInfo(Long allotId);
 }

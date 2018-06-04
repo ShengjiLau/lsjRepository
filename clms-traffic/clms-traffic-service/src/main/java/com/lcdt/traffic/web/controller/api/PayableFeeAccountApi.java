@@ -40,42 +40,9 @@ public class PayableFeeAccountApi {
     @Autowired
     private MsgService msgService;
 
-//    @ApiOperation("应付记账——列表")
-//    @RequestMapping(value = "/feeAccountWaybillList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
-//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_waybill_list')")
-//    public PageBaseDto feeAccountWaybillList(@Validated WaybillCustListParamsDto dto) {
-//        StringBuffer sb = new StringBuffer();
-//        if (dto.getGroupId()!=null&&dto.getGroupId()>0) {//传业务组，查这个组帮定的客户
-//            sb.append(" find_in_set('"+dto.getGroupId()+"',group_id)"); //项目组id
-//        } else {
-//            //没传组，查这个用户所有组帮定的客户
-//            List<Group> groupList = SecurityInfoGetter.groups();
-//            if(groupList!=null&&groupList.size()>0){
-//                sb.append("(");
-//                for(int i=0;i<groupList.size();i++) {
-//                    Group group = groupList.get(i);
-//                    sb.append(" find_in_set('"+group.getGroupId()+"',group_id)"); //所有项目组ids
-//                    if(i!=groupList.size()-1){
-//                        sb.append(" or ");
-//                    }
-//                }
-//                sb.append(")");
-//            }
-//        }
-//        Long companyId = SecurityInfoGetter.getCompanyId();
-//        Map map= ClmsBeanUtil.beanToMap(dto);
-//        map.put("companyId",companyId);
-//        map.put("isDeleted",0);
-//        map.put("groupIds",sb.toString());
-//        map.put("isReceivable",(short)1);
-//
-//        PageInfo<List<FeeAccountWaybillDto>> listPageInfo = feeAccountService.feeAccountWaybillList(map);
-//        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
-//        return pageBaseDto;
-//    }
     @ApiOperation("应付记账——列表（我的运单）")
     @RequestMapping(value = "/feeAccountMyWaybillList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_my_waybill_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_waybill_list')")
     public JSONObject feeAccountMyWaybillList(@Validated ReceivePayParamsDto dto,
                                                @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
                                                @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
@@ -110,12 +77,11 @@ public class PayableFeeAccountApi {
         jsonObject.put("data",data);
 
         return jsonObject;
-//        return pageBaseDto;
     }
 
     @ApiOperation("应付记账——列表（客户运单）")
     @RequestMapping(value = "/feeAccountCoustmerWaybillList", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_customer_waybill_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_waybill_list')")
     public JSONObject feeAccountCustomerWaybillList(@Validated ReceivePayParamsDto dto,
                                                      @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
                                                      @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
@@ -151,7 +117,6 @@ public class PayableFeeAccountApi {
         jsonObject.put("data",data);
 
         return jsonObject;
-//        return pageBaseDto;
     }
     @ApiOperation("应付记账——记账(进入记账页面)")
     @RequestMapping(value = "/feeAccountPage", method = RequestMethod.POST)
@@ -208,7 +173,7 @@ public class PayableFeeAccountApi {
 
     @ApiOperation("应付记账——保存记账")
     @RequestMapping(value = "/feeAccountSave", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_save')")
+//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_save')")
     public JSONObject feeAccountSave(@Validated @RequestBody FeeAccountSaveParamsDto dto) {
         dto.setCompanyId(SecurityInfoGetter.getCompanyId());
         dto.setUserId(SecurityInfoGetter.getUser().getUserId());
@@ -227,7 +192,7 @@ public class PayableFeeAccountApi {
 
     @ApiOperation("应付记账——查看流水")
     @RequestMapping(value = "/findFeeFlow", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_find_fee_flow')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('finace_pay_stat')")
     public JSONObject findFeeFlow(@ApiParam(value = "运单id",required = true) @RequestParam Long waybillId) {
         Map map = new HashMap();
         map.put("waybillId", waybillId);
@@ -268,12 +233,11 @@ public class PayableFeeAccountApi {
         jsonObject.put("data",data);
 
         return jsonObject;
-//        return pageBaseDto;
     }
 
     @ApiOperation("记账单——记账单详情")
     @RequestMapping(value = "/feeAccountDetail", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_detail')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_list')")
     public JSONObject feeAccountDetail(@ApiParam(value = "记账单id",required = true) @RequestParam Long accountId) {
         Map resultMap = feeAccountService.feeAccountDetail(accountId);
         if (resultMap != null) {
@@ -351,7 +315,7 @@ public class PayableFeeAccountApi {
 
     @ApiOperation("应付记账单——对账单保存")
     @RequestMapping(value = "/feeAccountReconcileSave", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_reconcile_save')")
+//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_reconcile_save')")
     public JSONObject feeAccountReconcileSave(@ApiParam(value = "记账单IDs（例:1,2,3）",required = true) @RequestParam String accountIds) {
         Map map = new HashMap();
         map.put("accountIds", accountIds.split(","));
@@ -369,7 +333,7 @@ public class PayableFeeAccountApi {
 
     @ApiOperation("对账单——取消对账")
     @RequestMapping(value = "/feeAccountReconcileCancel", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_reconcile_cancel')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_fee_account_reconcile_page')")
     public JSONObject feeAccountReconcileCancel(@ApiParam(value = "记账单id（例:1,2,3）",required = true) @RequestParam String accountIds) {
         String[] accountIdStrArr = accountIds.split(",");
         Long[] accountIdArr = new Long[accountIdStrArr.length];

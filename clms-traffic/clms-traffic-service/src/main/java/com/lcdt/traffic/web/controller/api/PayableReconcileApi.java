@@ -102,7 +102,7 @@ public class PayableReconcileApi {
 	
 	@GetMapping("/list")
 	@ApiOperation("查询对账单列表,payable_reconcile_list")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_reconcile_list')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_reconcile_get')")
 	public JSONObject getReconcileList(ReconcileDto reconcileDto) {
 		JSONObject jsonObject =new JSONObject();
 		reconcileDto.setPayeeType((short) 1);
@@ -119,7 +119,7 @@ public class PayableReconcileApi {
 	
 	@GetMapping("/select")
 	@ApiOperation("查询对账单详情,payable_reconcile_select")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_reconcile_select')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_reconcile_get')")
 	public JSONObject selectReconcile(@ApiParam(value="对账单id",required=true)@RequestParam Long reconcileId) {
 		JSONObject jsonObject =new JSONObject();		
 		ReconcileDto reconcileDto=reconcileService.selectReconcileByPk(reconcileId);
