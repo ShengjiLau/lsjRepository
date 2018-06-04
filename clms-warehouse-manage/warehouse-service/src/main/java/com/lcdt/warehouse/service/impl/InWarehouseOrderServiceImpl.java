@@ -54,6 +54,9 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
                 InorderGoodsInfo inorderGoodsInfo = new InorderGoodsInfo();
                 BeanUtils.copyProperties(params.getGoodsInfoDtoList().get(i), inorderGoodsInfo);
                 inorderGoodsInfo.setInorderId(inWarehouseOrder.getInorderId());
+                if(inorderGoodsInfo.getSplit()==null){
+                    inorderGoodsInfo.setSplit(false);
+                }
                 inorderGoodsInfoList.add(inorderGoodsInfo);
             }
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);
@@ -71,10 +74,16 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
     }
 
     @Override
-    public InWarehouseOrderDto queryInWarehouseOrder(Long companyId, Long inorderId) {
-        InWarehouseOrderDto inWarehouseOrderDto=null;
-        inWarehouseOrderDto=baseMapper.selectInWarehouseOrder(companyId,inorderId);
-        return inWarehouseOrderDto;
+    public Page<InWarehouseOrderDto> queryInWarehouseOrderListOfPlan(InWarehouseOrderSearchParamsDto params) {
+        Page page = new Page(params.getPageNo(), params.getPageSize());
+        return page.setRecords(baseMapper.selectInWarehouseOrderListByPlanId(page, params));
+    }
+
+    @Override
+    public InWarehouseOrderDetailDto queryInWarehouseOrder(Long companyId, Long inorderId) {
+        InWarehouseOrderDetailDto inWarehouseOrderDetailDto=null;
+        inWarehouseOrderDetailDto=baseMapper.selectInWarehouseOrder(companyId,inorderId);
+        return inWarehouseOrderDetailDto;
     }
 
     @Override
@@ -160,6 +169,9 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
                 InorderGoodsInfo inorderGoodsInfo = new InorderGoodsInfo();
                 BeanUtils.copyProperties(params.getGoodsInfoDtoList().get(i), inorderGoodsInfo);
                 inorderGoodsInfo.setInorderId(inWarehouseOrder.getInorderId());
+                if(inorderGoodsInfo.getSplit()==null){
+                    inorderGoodsInfo.setSplit(false);
+                }
                 inorderGoodsInfoList.add(inorderGoodsInfo);
             }
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);

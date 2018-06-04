@@ -72,10 +72,10 @@ public class InWarehouseOrderController {
 
     @ApiOperation("入库单详细")
     @RequestMapping(value = "/order/{inorderId}", method = RequestMethod.GET)
-    public InWarehouseOrderDto inWarehouseOrderDetail(@PathVariable long inorderId) {
-        InWarehouseOrderDto inWarehouseOrderDto = new InWarehouseOrderDto();
-        inWarehouseOrderDto = inWarehouseOrderService.queryInWarehouseOrder(SecurityInfoGetter.getCompanyId(), inorderId);
-        return inWarehouseOrderDto;
+    public InWarehouseOrderDetailDto inWarehouseOrderDetail(@PathVariable long inorderId) {
+        InWarehouseOrderDetailDto inWarehouseOrderDetailDto = new InWarehouseOrderDetailDto();
+        inWarehouseOrderDetailDto = inWarehouseOrderService.queryInWarehouseOrder(SecurityInfoGetter.getCompanyId(), inorderId);
+        return inWarehouseOrderDetailDto;
     }
 
     @ApiOperation("入库单入库")
@@ -129,6 +129,16 @@ public class InWarehouseOrderController {
     @RequestMapping(value = "/order/distribution/records", method = RequestMethod.GET)
     public PageBaseDto queryDisRecords(@RequestParam Long planId) {
         PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderService.queryDisRecords(SecurityInfoGetter.getCompanyId(), planId));
+        return pageBaseDto;
+    }
+
+
+    @ApiOperation("计划下的入库单")
+    @RequestMapping(value = "/plan/order", method = RequestMethod.GET)
+    public PageBaseDto inWarehouseOrderListOfPlan(InWarehouseOrderSearchParamsDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+        Page<InWarehouseOrderDto> inWarehouseOrderPage = inWarehouseOrderService.queryInWarehouseOrderListOfPlan(params);
+        PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderPage.getRecords(), inWarehouseOrderPage.getTotal());
         return pageBaseDto;
     }
 }

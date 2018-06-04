@@ -276,6 +276,7 @@
             var form = document.getElementById("com-create-form");
             var fd = new FormData(form);
             $(".login-btn").attr("disabled",true);
+            $(".login-btn").text("创建中...");
             $.ajax({
                 processData: false,
                 contentType: false,
@@ -290,12 +291,14 @@
 //                      data.redirecturl;
                     }else{
                         alert(data.message);
+                        $(".login-btn").text("进入企业");
                         $(".login-btn").attr("disabled",false);
                     }
                 },
                 error: function (data) {
                     var result = JSON.parse(data);
                     alert(result.message);
+                  $(".login-btn").text("进入企业");
                   $(".login-btn").attr("disabled",false);
                 },
             });
