@@ -211,7 +211,7 @@
       (#{item.allotId,jdbcType=BIGINT}, #{item.name,jdbcType=VARCHAR}, #{item.code,jdbcType=VARCHAR},
       #{item.barCode,jdbcType=VARCHAR}, #{item.spec,jdbcType=LONGVARCHAR}, #{item.unit,jdbcType=VARCHAR}, #{item.batchNum,jdbcType=VARCHAR},
       #{item.warehouseLocId,jdbcType=BIGINT}, #{item.warehouseLocCode,jdbcType=VARCHAR}, #{item.inventory,jdbcType=REAL},
-      #{item.allotNum,jdbcType=REAL}, #{item.remark,jdbcType=VARCHAR}, #{item.isDeleted,jdbcType=SMALLINT})
+      #{item.allotNum,jdbcType=REAL}, #{item.remark,jdbcType=VARCHAR}, 0)
     </foreach>
   </insert>
   <update id="updateBatch" parameterType="java.util.List">

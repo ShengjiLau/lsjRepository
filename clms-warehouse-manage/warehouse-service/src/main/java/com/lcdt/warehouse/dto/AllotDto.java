@@ -10,6 +10,12 @@ import java.util.List;
  * Created by liz on 2018/5/8.
  */
 public class AllotDto extends Allot{
+    @ApiModelProperty(value = "调出仓库名称")
+    private String warehouseOutName;
+
+    @ApiModelProperty(value = "调入仓库名称")
+    private String warehouseInName;
+
     @ApiModelProperty(value = "查询调出开始时间")
     private String allotOutBeginTime;
 
@@ -24,6 +30,22 @@ public class AllotDto extends Allot{
 
     @ApiModelProperty(value = "商品list")
     private List<AllotProduct> allotProductList;
+
+    public String getWarehouseOutName() {
+        return warehouseOutName;
+    }
+
+    public void setWarehouseOutName(String warehouseOutName) {
+        this.warehouseOutName = warehouseOutName;
+    }
+
+    public String getWarehouseInName() {
+        return warehouseInName;
+    }
+
+    public void setWarehouseInName(String warehouseInName) {
+        this.warehouseInName = warehouseInName;
+    }
 
     public String getAllotOutBeginTime() {
         return allotOutBeginTime;
