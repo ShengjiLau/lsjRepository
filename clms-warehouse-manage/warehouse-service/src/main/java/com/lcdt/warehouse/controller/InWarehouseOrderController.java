@@ -131,5 +131,15 @@ public class InWarehouseOrderController {
         PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderService.queryDisRecords(SecurityInfoGetter.getCompanyId(), planId));
         return pageBaseDto;
     }
+
+
+    @ApiOperation("计划下的入库单")
+    @RequestMapping(value = "/plan/order", method = RequestMethod.GET)
+    public PageBaseDto inWarehouseOrderListOfPlan(InWarehouseOrderSearchParamsDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+        Page<InWarehouseOrderDto> inWarehouseOrderPage = inWarehouseOrderService.queryInWarehouseOrderListOfPlan(params);
+        PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderPage.getRecords(), inWarehouseOrderPage.getTotal());
+        return pageBaseDto;
+    }
 }
 

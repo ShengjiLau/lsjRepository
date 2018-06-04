@@ -74,4 +74,11 @@
         FROM inorder_goods_info
         WHERE inorder_id = #{inorderId,jdbcType=BIGINT}
     </select>
+
+    <select id="selectRecordGoodsInfo" parameterType="Long" resultMap="BaseResultMap">
+        SELECT goods_id,goods_name,receivalbe_amount,sum(in_house_amount) in_house_amount
+        FROM inorder_goods_info
+        WHERE inorder_id = #{inorderId,jdbcType=BIGINT}
+        group by goods_id,receivalbe_amount
+    </select>
 </mapper>
