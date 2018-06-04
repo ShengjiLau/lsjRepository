@@ -39,7 +39,7 @@ public interface InWarehouseOrderService extends IService<InWarehouseOrder> {
      * @param inorderId
      * @return
      */
-    InWarehouseOrderDto queryInWarehouseOrder(Long companyId,Long inorderId);
+    InWarehouseOrderDetailDto queryInWarehouseOrder(Long companyId,Long inorderId);
 
     /**
      * 修改入库单状态

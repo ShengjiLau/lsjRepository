@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.lcdt.warehouse.dto.DistributionRecordsDto;
+import com.lcdt.warehouse.dto.InWarehouseOrderDetailDto;
 import com.lcdt.warehouse.dto.InWarehouseOrderDto;
 import com.lcdt.warehouse.dto.InWarehouseOrderSearchParamsDto;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
@@ -34,7 +35,7 @@ public interface InWarehouseOrderMapper extends BaseMapper<InWarehouseOrder> {
      * @param inorderId
      * @return
      */
-    InWarehouseOrderDto selectInWarehouseOrder(@Param("companyId") Long companyId,@Param("inorderId") Long inorderId);
+    InWarehouseOrderDetailDto selectInWarehouseOrder(@Param("companyId") Long companyId, @Param("inorderId") Long inorderId);
 
     /**
      * 列表查询

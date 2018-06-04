@@ -72,10 +72,10 @@ public class InWarehouseOrderController {
 
     @ApiOperation("入库单详细")
     @RequestMapping(value = "/order/{inorderId}", method = RequestMethod.GET)
-    public InWarehouseOrderDto inWarehouseOrderDetail(@PathVariable long inorderId) {
-        InWarehouseOrderDto inWarehouseOrderDto = new InWarehouseOrderDto();
-        inWarehouseOrderDto = inWarehouseOrderService.queryInWarehouseOrder(SecurityInfoGetter.getCompanyId(), inorderId);
-        return inWarehouseOrderDto;
+    public InWarehouseOrderDetailDto inWarehouseOrderDetail(@PathVariable long inorderId) {
+        InWarehouseOrderDetailDto inWarehouseOrderDetailDto = new InWarehouseOrderDetailDto();
+        inWarehouseOrderDetailDto = inWarehouseOrderService.queryInWarehouseOrder(SecurityInfoGetter.getCompanyId(), inorderId);
+        return inWarehouseOrderDetailDto;
     }
 
     @ApiOperation("入库单入库")

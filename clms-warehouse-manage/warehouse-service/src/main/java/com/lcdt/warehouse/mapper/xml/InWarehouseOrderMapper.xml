@@ -36,8 +36,12 @@
         <result column="is_deleted" jdbcType="BIT" property="isDeleted"/>
     </resultMap>
 
-    <resultMap id="InWarehouseOrderDetailsMap" type="com.lcdt.warehouse.dto.InWarehouseOrderDto" extends="BaseResultMap">
+    <resultMap id="BaseInWarehouseOrderDetailsMap" type="com.lcdt.warehouse.dto.InWarehouseOrderDto" extends="BaseResultMap">
         <collection property="goodsInfoDtoList" column="inorder_id" ofType="com.lcdt.warehouse.dto.InorderGoodsInfoDto" select="com.lcdt.warehouse.mapper.InorderGoodsInfoMapper.selectGoodsDetail"/>
+    </resultMap>
+
+    <resultMap id="InWarehouseOrderDetailMap" type="com.lcdt.warehouse.dto.InWarehouseOrderDetailDto" extends="BaseResultMap">
+        <collection property="goodsInfoDtoList" column="inorder_id" ofType="com.lcdt.warehouse.dto.InorderGoodsInfoDetailDto" select="com.lcdt.warehouse.mapper.InorderGoodsInfoMapper.selectGoodsInfoDetail"/>
     </resultMap>
 
     <resultMap id="BaseResultMapOfDisRecords" type="com.lcdt.warehouse.dto.DistributionRecordsDto">
@@ -146,7 +150,7 @@
         0)
     </insert>
 
-    <select id="selectByCondition" resultMap="InWarehouseOrderDetailsMap">
+    <select id="selectByCondition" resultMap="BaseInWarehouseOrderDetailsMap">
         SELECT <include refid="Base_Select_List"/>
         from in_warehouse_order
         <where>
@@ -155,7 +159,7 @@
         order by inorder_id desc
     </select>
 
-    <select id="selectInWarehouseOrder" resultMap="InWarehouseOrderDetailsMap">
+    <select id="selectInWarehouseOrder" resultMap="InWarehouseOrderDetailMap">
         SELECT <include refid="Base_Select_List"/>
         FROM in_warehouse_order
         WHERE company_id= #{companyId,jdbcType=BIGINT} and inorder_id = #{inorderId,jdbcType=BIGINT}
