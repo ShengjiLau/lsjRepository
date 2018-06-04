@@ -84,6 +84,11 @@ public class InorderGoodsInfo implements Serializable {
      */
     private String storageLocationCode;
 
+    /**
+     * 是否拆分
+     */
+    private Boolean isSplit;
+
     public Long getRelationId() {
         return relationId;
     }
@@ -258,5 +263,13 @@ public class InorderGoodsInfo implements Serializable {
 
     public void setStorageLocationCode(String storageLocationCode) {
         this.storageLocationCode = storageLocationCode;
+    }
+
+    public Boolean getSplit() {
+        return isSplit;
+    }
+
+    public void setSplit(Boolean split) {
+        isSplit = split;
     }
 }
