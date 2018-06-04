@@ -76,7 +76,7 @@
     </select>
 
     <select id="selectRecordGoodsInfo" parameterType="Long" resultMap="BaseResultMapDto">
-        SELECT goods_id,goods_name,receivalbe_amount,sum(in_house_amount) in_house_amount
+        SELECT inplan_goods_id,goods_id,goods_name,receivalbe_amount,sum(in_house_amount) in_house_amount
         FROM inorder_goods_info
         WHERE inorder_id = #{inorderId,jdbcType=BIGINT}
         group by goods_id,receivalbe_amount
