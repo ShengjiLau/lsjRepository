@@ -39,19 +39,19 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
     }
 
     @Override
-    public InventoryLog saveInOrderLog(InWarehouseOrder inWarehouseOrder, Inventory inventory) {
-        InventoryLog log = InventoryLogFactory.createFromInventory(inWarehouseOrder, inventory);
+    public InventoryLog saveInOrderLog(InWarehouseOrder inWarehouseOrder, Inventory inventory,Float updatedInventoryNum) {
+        InventoryLog log = InventoryLogFactory.createFromInventory(inWarehouseOrder, inventory,updatedInventoryNum);
         return saveInventoryLog(log);
     }
 
-    public InventoryLog saveOutOrderLog(OutWarehouseOrder outWarehouseOrder, OutOrderGoodsInfo goodsInfo) {
-        InventoryLog fromOutInventory = InventoryLogFactory.createFromOutInventory(outWarehouseOrder,goodsInfo);
+    public InventoryLog saveOutOrderLog(OutWarehouseOrder outWarehouseOrder, OutOrderGoodsInfo goodsInfo,Float updatedInventoryNum) {
+        InventoryLog fromOutInventory = InventoryLogFactory.createFromOutInventory(outWarehouseOrder,goodsInfo,updatedInventoryNum);
         return saveInventoryLog(fromOutInventory);
     }
 
     public InventoryLog saveInventoryLog(InventoryLog inventoryLog){
         Assert.notNull(inventoryLog,"object should not be null");
-        logMapper.insert(inventoryLog);
+        logMapper.saveLog(inventoryLog);
         return inventoryLog;
     }
 }

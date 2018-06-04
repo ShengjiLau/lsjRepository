@@ -26,7 +26,7 @@ public class OutWarehousePlan implements Serializable {
 
     private String planNo;
 
-    private Integer groupId;
+    private Long groupId;
 
     private String groupName;
 
@@ -110,11 +110,11 @@ public class OutWarehousePlan implements Serializable {
         this.planNo = planNo;
     }
 
-    public Integer getGroupId() {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Integer groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 

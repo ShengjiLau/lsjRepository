@@ -262,7 +262,6 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
 
                 if (flag) { //统计该计划商品已配仓数量
                     statDistributeNum(inWhPlanGoodsDto, result.getInWarehouseOrderDtoList(),bFlag);
-
                     if (null!=inWhPlanGoodsDto.getRemainGoodsNum() && inWhPlanGoodsDto.getRemainGoodsNum()==0) {
                         continue;//说明该商品已配完，继续下个
                     }
@@ -444,9 +443,14 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
             tObj.setMinUnit(obj1.getMinUnit());
             tObj.setUnit(obj1.getUnit());
             tObj.setUnitData(obj1.getUnitData());
+            if (StringUtils.isEmpty(obj1.getDisRemark())) {
+               tObj.setRemark(obj1.getRemark());
+            } else {
+                tObj.setRemark(obj1.getDisRemark());
+            }
             tObj.setReceivalbeAmount(obj1.getDistGoodsNum()); //配仓数量
             tObj.setInHousePrice(obj1.getInHousePrice());
-            tObj.setRemark(obj1.getRemark());
+
             inorderGoodsInfoList.add(tObj);
         }
         params.setGoodsInfoDtoList(inorderGoodsInfoList);
