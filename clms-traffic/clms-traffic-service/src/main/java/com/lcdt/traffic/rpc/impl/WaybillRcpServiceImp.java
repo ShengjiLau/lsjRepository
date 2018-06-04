@@ -156,7 +156,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             String phone = waybill.getDriverPhone();
             OwnDriver driver=ownDriverMapper.selectByAddWaybillDriverPhone(ownDriver);
             if(driver!=null){
-                waybill.setDriverId(driver.getDriverId());
+                ownDriver.setDriverId(driver.getDriverId());
                 waybill.setDriverName(driver.getDriverName());
             }else{
                 /**判断是否已经开通cLMS司机账号，若没有开通，则自动开通,新增一条司机账号信息*/
