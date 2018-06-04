@@ -154,54 +154,58 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             ownDriver.setDriverName(waybill.getDriverName());
             ownDriver.setDriverCategory((short)0);
             String phone = waybill.getDriverPhone();
-            /**判断是否已经开通cLMS司机账号，若没有开通，则自动开通,新增一条司机账号信息*/
-            if(!driverService.isExistDriver(phone)){
-                if (!userService.isPhoneBeenRegister(phone)) { //为空则保存clms司机账号信息
-                    RegisterDto registerDto = new RegisterDto();
-                    registerDto.setUserPhoneNum(phone);
-                    registerDto.setPassword(RegisterUtils.md5Encrypt(phone.substring(5)));
-                    logger.debug("司机账号默认密码：" + phone.substring(5));
-                    registerDto.setIntroducer("");
-                    registerDto.setEmail("");
-                    registerDto.setRegisterFrom("管车宝小程序");
-                    try {
-                        User user = userService.registerUser(registerDto);  //保存账号信息
-                        Driver driver = new Driver();
-                        driver.setUserId(user.getUserId());
-                        driver.setAffiliatedCompany(waybill.getCarrierCompanyName());
-                        driver.setDriverName(waybill.getDriverName());
-                        driver.setDriverPhone(phone);
-                        driver.setCreateId(waybill.getCreateId());
-                        driver.setCreateName(waybill.getCreateName());
-                        driverService.addDriver(driver);    //保存司机信息
+            OwnDriver driver=ownDriverMapper.selectByAddWaybillDriverPhone(ownDriver);
+            if(driver!=null){
+                waybill.setDriverId(driver.getDriverId());
+                waybill.setDriverName(driver.getDriverName());
+            }else{
+                /**判断是否已经开通cLMS司机账号，若没有开通，则自动开通,新增一条司机账号信息*/
+                if(!driverService.isExistDriver(phone)){
+                    if (!userService.isPhoneBeenRegister(phone)) { //为空则保存clms司机账号信息
+                        RegisterDto registerDto = new RegisterDto();
+                        registerDto.setUserPhoneNum(phone);
+                        registerDto.setPassword(RegisterUtils.md5Encrypt(phone.substring(5)));
+                        logger.debug("司机账号默认密码：" + phone.substring(5));
+                        registerDto.setIntroducer("");
+                        registerDto.setEmail("");
+                        registerDto.setRegisterFrom("管车宝小程序");
+                        try {
+                            User user = userService.registerUser(registerDto);  //保存账号信息
+                            Driver driverUser = new Driver();
+                            driverUser.setUserId(user.getUserId());
+                            driverUser.setAffiliatedCompany(waybill.getCarrierCompanyName());
+                            driverUser.setDriverName(waybill.getDriverName());
+                            driverUser.setDriverPhone(phone);
+                            driverUser.setCreateId(waybill.getCreateId());
+                            driverUser.setCreateName(waybill.getCreateName());
+                            driverService.addDriver(driverUser);    //保存司机信息
                             /*将司机账号的user_id更新到我的司机表里*/
+                            ownDriver.setDriverId(user.getUserId());
+                            ownDriverMapper.insert(ownDriver);
+                        } catch (PhoneHasRegisterException e) {
+                            e.printStackTrace();
+                            throw new RuntimeException("保存司机账号信息失败！");
+                        }
+                    }else{
+                        User user = userService.selectUserByPhone(phone);
+                        Driver driverUser = new Driver();
+                        driverUser.setUserId(user.getUserId());
+                        driverUser.setAffiliatedCompany(waybill.getCarrierCompanyName());
+                        driverUser.setDriverName(waybill.getDriverName());
+                        driverUser.setDriverPhone(phone);
+                        driverUser.setCreateId(waybill.getCreateId());
+                        driverUser.setCreateName(waybill.getCreateName());
+                        driverService.addDriver(driverUser);    //保存司机信息
+                        /*将司机账号的user_id更新到我的司机表里*/
                         ownDriver.setDriverId(user.getUserId());
                         ownDriverMapper.insert(ownDriver);
-                    } catch (PhoneHasRegisterException e) {
-                        e.printStackTrace();
-                        throw new RuntimeException("保存司机账号信息失败！");
                     }
-                }else{
+                } else {
+                    //开通过司机账号，测直接添加到我的司机里
                     User user = userService.selectUserByPhone(phone);
-                    Driver driver = new Driver();
-                    driver.setUserId(user.getUserId());
-                    driver.setAffiliatedCompany(waybill.getCarrierCompanyName());
-                    driver.setDriverName(waybill.getDriverName());
-                    driver.setDriverPhone(phone);
-                    driver.setCreateId(waybill.getCreateId());
-                    driver.setCreateName(waybill.getCreateName());
-                    driverService.addDriver(driver);    //保存司机信息
-                        /*将司机账号的user_id更新到我的司机表里*/
                     ownDriver.setDriverId(user.getUserId());
                     ownDriverMapper.insert(ownDriver);
                 }
-            }
-            else
-            {
-                User user = userService.selectUserByPhone(phone);
-                     /*将司机账号的user_id更新到我的司机表里*/
-                ownDriver.setDriverId(user.getUserId());
-                ownDriverMapper.updateDriverId(ownDriver);
             }
             waybill.setDriverId(ownDriver.getDriverId());
         }
