@@ -41,11 +41,6 @@ public class WaybillApi {
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
         dto.setCarrierCompanyId(companyId);
-        //前端不好处理，后端处理
-        for(int i=0;i<dto.getWaybillItemsDtoList().size();i++){
-            dto.getWaybillItemsDtoList().get(i).setFreightTotal(dto.getWaybillItemsDtoList().get(i).getFreightPrice()*dto.getWaybillItemsDtoList().get(i).getAmount());
-            dto.getWaybillItemsDtoList().get(i).setPayTotal(dto.getWaybillItemsDtoList().get(i).getPayPrice()*dto.getWaybillItemsDtoList().get(i).getAmount());
-        }
         dto.setWaybillStatus((short)1);
         Waybill result = waybillRpcService.addWaybill(dto);
         if (result != null) {
