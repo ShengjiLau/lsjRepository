@@ -34,7 +34,7 @@ public class WaybillApi {
     @ApiOperation("我的运单--新增")
     @RequestMapping(value = "/v1/own", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_add')")
-    public JSONObject addOwnWaybill(@RequestBody WaybillDto dto) {
+    public JSONObject addOwnWaybill(WaybillDto dto) {
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
         Long companyId = userCompRel.getCompany().getCompId();
         User loginUser = userCompRel.getUser();
