@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.lcdt.items.model.GoodsInfoDao;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -54,6 +55,7 @@ public class Inventory implements Serializable {
      */
     private String costRemark;
 
+    private Date updateTime;
 
 
     /**
@@ -80,6 +82,22 @@ public class Inventory implements Serializable {
     private String batch;
     @TableField(exist = false)
     private GoodsInfoDao goods;
+
+    public Long getWarehouseId() {
+        return warehouseId;
+    }
+
+    public void setWarehouseId(Long warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 
     public String getCostRemark() {
         return costRemark;

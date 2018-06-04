@@ -165,9 +165,9 @@
       <if test="isReceivable!=null">
         and is_receivable = #{isReceivable,jdbcType=SMALLINT}
       </if>
-      <if test="isShow!=null">
-        and is_show = #{isShow,jdbcType=SMALLINT}
-      </if>
+      <!--<if test="isShow!=null">-->
+        <!--and is_show = #{isShow,jdbcType=SMALLINT}-->
+      <!--</if>-->
       <if test="name!=null">
         and name = #{name,jdbcType=VARCHAR}
       </if>

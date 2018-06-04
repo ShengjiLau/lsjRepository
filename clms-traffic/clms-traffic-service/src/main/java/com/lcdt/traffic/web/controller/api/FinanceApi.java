@@ -47,7 +47,7 @@ public class FinanceApi {
 
     @ApiOperation("应收统计")
     @RequestMapping(value = "/receive/stat",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('finace_receive_stat') ")
     public JSONObject receiveStat(ReceivePayParamsDto dto) {
         JSONObject jsonObject = new JSONObject();
         try {
@@ -66,7 +66,7 @@ public class FinanceApi {
 
     @ApiOperation("应付统计 ")
     @RequestMapping(value = "/pay/stat",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('finace_pay_stat')")
     public JSONObject payStat(ReceivePayParamsDto dto) {
         JSONObject jsonObject = new JSONObject();
         try {
@@ -120,6 +120,7 @@ public class FinanceApi {
             dto.setStatCols(sb_2.toString());
             dto.setIsDeleted((short)0);
             dto.setCompanyId(company.getCompId());
+            dto.setIsReceivable(isReceivable);
             return iFeeFlowService.receivePayStat(dto);
         }
         return null;
@@ -129,7 +130,7 @@ public class FinanceApi {
 
     @ApiOperation("利润统计")
     @RequestMapping(value = "/profit/stat",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('finace_profit_stat')")
     public PageBaseDto profitStat(ProfitStatParamsDto dto) {
         Company company = SecurityInfoGetter.geUserCompRel().getCompany();
         List<Group> groupList = SecurityInfoGetter.groups();

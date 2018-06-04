@@ -424,9 +424,11 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             tObj.setGoodsSpec(obj1.getGoodsSpec());
             tObj.setGoodsClassifyId(obj1.getGoodsClassifyId());
             tObj.setGoodsClassifyName(obj1.getGoodsClassify());
+
             tObj.setMinUnit(obj1.getMinUnit());
             tObj.setUnit(obj1.getUnit());
             tObj.setUnitData(obj1.getUnitData());
+
             tObj.setBatch(obj1.getBatch());
             tObj.setStorageLocationId(obj1.getStorageLocationId());
             tObj.setStorageLocationCode(obj1.getStorageLocationCode());

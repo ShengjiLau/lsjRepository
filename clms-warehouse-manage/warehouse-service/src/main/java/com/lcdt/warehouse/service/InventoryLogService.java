@@ -18,7 +18,7 @@ import java.util.List;
 public interface InventoryLogService extends IService<InventoryLog> {
     Page<InventoryLog> queryInventoryLogPage(InventoryLogQueryDto queryDto);
 
-    InventoryLog saveInOrderLog(InWarehouseOrder inWarehouseOrder, Inventory inventory);
+    InventoryLog saveInOrderLog(InWarehouseOrder inWarehouseOrder, Inventory inventory,Float updatedInventoryNum);
 
-    InventoryLog saveOutOrderLog(OutWarehouseOrder outWarehouseOrder, OutOrderGoodsInfo goodsInfo);
+    InventoryLog saveOutOrderLog(OutWarehouseOrder outWarehouseOrder, OutOrderGoodsInfo goodsInfo,Float updatedInventoryNum);
 }

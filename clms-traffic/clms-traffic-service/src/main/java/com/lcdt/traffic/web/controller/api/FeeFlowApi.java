@@ -32,9 +32,9 @@ public class FeeFlowApi {
     @Autowired
     private IFeeFlowService iFeeFlowService;
 
-    @ApiOperation("应收/应付列表")
-    @RequestMapping(value = "/search/list",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
+    @ApiOperation("应收列表")
+    @RequestMapping(value = "/search/receive",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('receive_stat_list')")
     public PageBaseDto searchList(FeeFlow4SearchParamsDto dto) {
          StringBuffer sb = new StringBuffer();
          if (dto.getGroupId()>0) {//业务组
@@ -57,6 +57,7 @@ public class FeeFlowApi {
             dto.setCreateEnd(dto.getCreateEnd()+" 23:59:59");
         }
         dto.setCompanyId(SecurityInfoGetter.geUserCompRel().getCompany().getCompId());
+        dto.setIsReceivable((short)0);
         PageInfo pg = iFeeFlowService.feeFlowList(dto);
         PageBaseDto pg_result = new PageBaseDto(pg.getList(), pg.getTotal());
         return pg_result;
@@ -64,6 +65,36 @@ public class FeeFlowApi {
 
 
 
+    @ApiOperation("应付列表")
+    @RequestMapping(value = "/search/pay",method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('pay_stat_list')")
+    public PageBaseDto searchList1(FeeFlow4SearchParamsDto dto) {
+        StringBuffer sb = new StringBuffer();
+        if (dto.getGroupId()>0) {//业务组
+            dto.setGroupIds(dto.getGroupId().toString());
+        } else {
+            List<Group> groupList = SecurityInfoGetter.groups();
+            for(int i=0;i<groupList.size();i++) {
+                Group group = groupList.get(i);
+                sb.append(group.getGroupId());
+                if(i!=groupList.size()-1){
+                    sb.append(",");
+                }
+            }
+            dto.setGroupIds(sb.toString());
+        }
+        if (!StringUtils.isEmpty(dto.getCreateBegin())) {
+            dto.setCreateBegin(dto.getCreateBegin()+" 00:00:00");
+        }
+        if (!StringUtils.isEmpty(dto.getCreateEnd())) {
+            dto.setCreateEnd(dto.getCreateEnd()+" 23:59:59");
+        }
+        dto.setIsReceivable((short)1);
+        dto.setCompanyId(SecurityInfoGetter.geUserCompRel().getCompany().getCompId());
+        PageInfo pg = iFeeFlowService.feeFlowList(dto);
+        PageBaseDto pg_result = new PageBaseDto(pg.getList(), pg.getTotal());
+        return pg_result;
+    }
 
 
 
