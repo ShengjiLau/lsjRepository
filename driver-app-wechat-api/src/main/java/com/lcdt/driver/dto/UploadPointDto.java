@@ -10,18 +10,18 @@ public class UploadPointDto {
 
     private String loc_time;
 
-    private String AK;
+    private String ak;
 
     private String service_id;
 
     private String coord_type_input;
 
     public String getAk() {
-        return AK;
+        return ak;
     }
 
     public void setAk(String ak) {
-        this.AK = ak;
+        this.ak = ak;
     }
 
     public String getService_id() {
@@ -79,7 +79,7 @@ public class UploadPointDto {
                 ", longitude='" + longitude + '\'' +
                 ", entity_name='" + entity_name + '\'' +
                 ", loc_time='" + loc_time + '\'' +
-                ", ak='" + AK + '\'' +
+                ", ak='" + ak + '\'' +
                 ", service_id='" + service_id + '\'' +
                 ", coord_type_input='" + coord_type_input + '\'' +
                 '}';

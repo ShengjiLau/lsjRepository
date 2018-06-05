@@ -169,10 +169,11 @@ public class InWarehousePlanController {
     @RequestMapping(value = "/detail",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_plan_detail')")
     public JSONObject detail(@ApiParam(value = "计划ID",required = true) @RequestParam Long planId,
-                             @ApiParam(value = "是否加载配仓",required = true) @RequestParam boolean flag) {
+                             @ApiParam(value = "是否加载配仓",required = true) @RequestParam boolean flag,
+                             @ApiParam(value = "加载配仓完成后，是否显示",required = true) @RequestParam boolean flag1) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         JSONObject jsonObject = new JSONObject();
-        InWhPlanDto inWhPlanDto = inWarehousePlanService.inWhPlanDetail(planId,flag, userCompRel,false);
+        InWhPlanDto inWhPlanDto = inWarehousePlanService.inWhPlanDetail(planId,flag, userCompRel,false,flag1);
         jsonObject.put("data",inWhPlanDto);
         jsonObject.put("code", 0);
         return jsonObject;

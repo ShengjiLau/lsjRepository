@@ -23,9 +23,10 @@ public class TimeLineMqListener implements MessageListener{
 
     @Override
     public Action consume(Message message, ConsumeContext context) {
-        logger.info("接收到 timeline message");
+
         Timeline timelineMessage = JSONObject.parseObject(message.getBody(), Timeline.class, Feature.SupportNonPublicField);
         timelineMessage.setMqMessageId(message.getMsgID());
+        logger.info("接收到 timeline message {}",timelineMessage);
         timeLineService.save(timelineMessage);
         return Action.CommitMessage;
     }

@@ -126,11 +126,13 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         if(waybill != null){
             map.put("waybillId", waybill.getId());
             map.put("waybillCode", waybill.getWaybillCode());
+            map.put("waybillSource", waybill.getWaybillCode());
             map.put("groupId",(Integer)m.get("isOwn")==1?waybill.getGroupId():null);
             map.put("groupName",(Integer)m.get("isOwn")==1?waybill.getGroupName():null);
         }else{
             map.put("waybillId", null);
             map.put("waybillCode", null);
+            map.put("waybillSource", null);
             map.put("groupId", null);
             map.put("groupName", null);
         }
@@ -294,7 +296,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                     reconcile.setWaybillId(m.get("waybillIds").toString());
                     reconcile.setAccountId(m.get("accountIds").toString());
                     reconcile.setPayeeType(payeeType);
-                    reconcile.setPayerId(Long.parseLong(m.get("nameId").toString()));
+                    reconcile.setPayerId(m.get("nameId")==null ? null : Long.parseLong(m.get("nameId").toString()));
                     reconcile.setPayerName(m.get("name").toString());
                     reconcile.setGroupId(Long.parseLong(m.get("groupId").toString()));
                     reconcile.setGroupName(m.get("groupName").toString());
