@@ -393,7 +393,7 @@
   		<if test="customerId != null">
   		and customer_id = #{customerId,jdbcType=BIGINT}
   		</if>
-  		<if test="create_user != null and create_user != ''">
+  		<if test="createUser!= null and createUser != ''">
   		and create_user = #{createUser,jdbcType=VARCHAR}
   		</if>
   		<if test="beginTime != null and beginTime != ''">
@@ -401,6 +401,9 @@
   		</if>
   		<if test="endTime != null and endTime != ''">
   		and gmt_create &lt; #{endTime,jdbcType=VARCHAR}
+  		</if>
+  		<if test="finished != null">
+  		and finished = #{finished,jdbcType=TINYINT}
   		</if>
   	</where>
   </select>

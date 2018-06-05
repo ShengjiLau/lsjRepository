@@ -27,7 +27,6 @@ public class InventoryFactory {
         }else{
             inventory.setLockNum(goodsInfo.getInHouseAmount());
         }
-
         inventory.setWareHouseId(order.getWarehouseId());
         inventory.setStorageLocationCode(goodsInfo.getStorageLocationCode());
         inventory.setStorageLocationId(goodsInfo.getStorageLocationId());
@@ -36,9 +35,10 @@ public class InventoryFactory {
         inventory.setBatch(goodsInfo.getBatch());
         inventory.setCustomerId(order.getCustomerId());
         inventory.setCustomerName(order.getCustomerName());
-        inventory.setInventoryPrice(goodsInfo.getGoodsPrice());
+        inventory.setInventoryPrice(goodsInfo.getInHousePrice());
         inventory.setOriginalGoodsId(goodsInfo.getGoodsId());
         inventory.setBaseUnit(goodsInfo.getMinUnit());
+        inventory.setRemark(goodsInfo.getRemark());
         if (logger.isDebugEnabled()) {
             logger.debug("create inventory from inordergoods :{} ", inventory.toString());
         }

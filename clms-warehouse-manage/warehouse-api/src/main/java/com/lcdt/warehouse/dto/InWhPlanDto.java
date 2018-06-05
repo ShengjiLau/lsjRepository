@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.dto;
 
+import com.lcdt.converter.ResponseData;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -8,7 +9,7 @@ import java.util.List;
 /**
  * Created by yangbinq on 2018/5/14.
  */
-public class InWhPlanDto implements Serializable {
+public class InWhPlanDto implements Serializable,ResponseData {
 
 
     @ApiModelProperty(value = "计划ID")

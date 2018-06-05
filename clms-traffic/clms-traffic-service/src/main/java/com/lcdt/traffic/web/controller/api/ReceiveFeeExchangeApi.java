@@ -69,7 +69,7 @@ public class ReceiveFeeExchangeApi {
 	
 	@GetMapping("/list")
 	@ApiOperation("查询收款记录列表,receive_exchange_list")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_exchange_list')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_exchange_get')")
 	public JSONObject getFeeExchange(FeeExchangeDto feeExchangeDto) {
 		JSONObject jsonObject = new JSONObject();
 		feeExchangeDto.setType((short) 0);
@@ -104,7 +104,7 @@ public class ReceiveFeeExchangeApi {
 	
 	@GetMapping("/select")
 	@ApiOperation("单个收款记录详情,receive_exchange_select")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_exchange_select')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_exchange_get')")
 	public JSONObject selectFeeExchange(Long feeExchangeId) {
 		JSONObject jsonObject = new JSONObject();
 		FeeExchange fe = feeExchangeService.selectFeeExchangeById(feeExchangeId);

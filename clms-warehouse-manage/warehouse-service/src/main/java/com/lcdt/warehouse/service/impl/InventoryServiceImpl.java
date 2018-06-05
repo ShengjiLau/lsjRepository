@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,14 +56,15 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
     //分页查询 库存列表
     public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto,Long companyId) {
+        logger.info("查询库存列表 参数 ：{}",inventoryQueryDto);
         List<Long> goodsId = queryGoodsIds(inventoryQueryDto, companyId);
         Page<Inventory> page = new Page<>(inventoryQueryDto.getPageNo(), inventoryQueryDto.getPageSize());
-        if(goodsId!=null&&goodsId.size()>0) {
-            List<Inventory> inventories = inventoryMapper.selectInventoryListByqueryDto(goodsId, page, inventoryQueryDto);
-            queryGoodsInfo(companyId, inventories);
-            return page.setRecords(inventories);
+        if (CollectionUtils.isEmpty(goodsId)) {
+            return page;
         }
-        return page;
+        List<Inventory> inventories = inventoryMapper.selectInventoryListByqueryDto(goodsId, page, inventoryQueryDto);
+        queryGoodsInfo(companyId, inventories);
+        return page.setRecords(inventories);
     }
 
 
@@ -89,7 +91,11 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         dto.setCompanyId(companyId);
         dto.setGoodsCode(inventoryQueryDto.getGoodsCode());
         dto.setBarCode(inventoryQueryDto.getGoodsBarCode());
-        return goodsService.queryGoodsIdsByCondition(dto);
+        List<Long> longs = goodsService.queryGoodsIdsByCondition(dto);
+        if (longs == null) {
+            return new ArrayList<Long>();
+        }
+        return longs;
     }
 
 

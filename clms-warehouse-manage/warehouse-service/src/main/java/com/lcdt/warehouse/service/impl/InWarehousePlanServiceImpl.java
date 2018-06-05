@@ -67,7 +67,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                 params.setInOrderStatus(pArray);
                 params.setPageNo(1);
                 params.setPageSize(100);
-                Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderList(params);
+                Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderListOfPlan(params);
                 if (inWarehouseOrderDtoList.getTotal()>0) {
                     obj.setInWarehouseOrderDtoList(inWarehouseOrderDtoList.getRecords());
                 }
@@ -129,7 +129,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                 params.setPlanId(obj.getPlanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
-                Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderList(params);
+                Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderListOfPlan(params);
                 if (inWarehouseOrderDtoList.getTotal()>0) {
                     boolean flag = false;
                     for (InWarehouseOrderDto obj1 : inWarehouseOrderDtoList.getRecords()) {
@@ -166,7 +166,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
         params.setPlanId(obj.getPlanId());
         params.setPageNo(1);
         params.setPageSize(100);
-        Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderList(params);
+        Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderListOfPlan(params);
         if (inWarehouseOrderDtoList.getTotal() > 0) {
             boolean flag = false;
             for (InWarehouseOrderDto obj1 : inWarehouseOrderDtoList.getRecords()) {
@@ -248,13 +248,12 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                     String[] pArray = {ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND+"",ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND+""};
                     params.setInOrderStatus(pArray);
                 }
-                Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderList(params);
+                Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderListOfPlan(params);
 
                 if (inWarehouseOrderDtoList.getTotal()>0) {
                     result.setInWarehouseOrderDtoList(inWarehouseOrderDtoList.getRecords());
                 }
             }
-
             List<InWhPlanGoodsDto> inWhPlanGoodsDtoList = new ArrayList<InWhPlanGoodsDto>();
             for (InplanGoodsInfo obj1 :list) {
                 InWhPlanGoodsDto inWhPlanGoodsDto = new InWhPlanGoodsDto();
@@ -266,7 +265,6 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                         continue;//说明该商品已配完，继续下个
                     }
                 }
-
                 inWhPlanGoodsDtoList.add(inWhPlanGoodsDto);
             }
             result.setInWhPlanGoodsDtoList(inWhPlanGoodsDtoList);

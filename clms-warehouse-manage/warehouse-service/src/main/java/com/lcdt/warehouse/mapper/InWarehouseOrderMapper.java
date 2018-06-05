@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.lcdt.warehouse.dto.DistributionRecordsDto;
+import com.lcdt.warehouse.dto.InWarehouseOrderDetailDto;
 import com.lcdt.warehouse.dto.InWarehouseOrderDto;
 import com.lcdt.warehouse.dto.InWarehouseOrderSearchParamsDto;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
@@ -34,7 +35,7 @@ public interface InWarehouseOrderMapper extends BaseMapper<InWarehouseOrder> {
      * @param inorderId
      * @return
      */
-    InWarehouseOrderDto selectInWarehouseOrder(@Param("companyId") Long companyId,@Param("inorderId") Long inorderId);
+    InWarehouseOrderDetailDto selectInWarehouseOrder(@Param("companyId") Long companyId, @Param("inorderId") Long inorderId);
 
     /**
      * 列表查询
@@ -43,6 +44,14 @@ public interface InWarehouseOrderMapper extends BaseMapper<InWarehouseOrder> {
      * @return
      */
     List<InWarehouseOrderDto> selectByCondition(Pagination page, InWarehouseOrderSearchParamsDto params);
+
+    /**
+     * 根据companyId和planId查询此计划下的入库单列表
+     * @param page
+     * @param params
+     * @return
+     */
+    List<InWarehouseOrderDto> selectInWarehouseOrderListByPlanId(Pagination page,InWarehouseOrderSearchParamsDto params);
 
     /**
      * 根据companyId和planId查询配仓信息
