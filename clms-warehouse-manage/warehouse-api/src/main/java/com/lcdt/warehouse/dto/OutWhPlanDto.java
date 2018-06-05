@@ -1,6 +1,7 @@
 package com.lcdt.warehouse.dto;
 
 import com.baomidou.mybatisplus.annotations.TableField;
+import com.lcdt.converter.ResponseData;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -9,7 +10,7 @@ import java.util.List;
 /**
  * Created by yangbinq on 2018/5/14.
  */
-public class OutWhPlanDto implements Serializable {
+public class OutWhPlanDto implements Serializable,ResponseData {
 
 
     @ApiModelProperty(value = "计划ID")
@@ -50,7 +51,6 @@ public class OutWhPlanDto implements Serializable {
     private String pickupCar;
     @ApiModelProperty(value = "提货人身证")
     private String pickupIdentiycard;
-
 
     @ApiModelProperty(value = "附件信息")
     private String attachment;
@@ -272,4 +272,6 @@ public class OutWhPlanDto implements Serializable {
     public void setOutWhOrderDtoList(List<OutWhOrderDto> outWhOrderDtoList) {
         this.outWhOrderDtoList = outWhOrderDtoList;
     }
+
+
 }

@@ -133,4 +133,9 @@ public class AllotServiceImpl implements AllotService{
         int result = allotMapper.updateByPrimaryKeySelective(allot);
         return result;
     }
+    @Override
+    public AllotDto getAllotInfo(Long allotId) {
+        AllotDto dto = allotMapper.selectByAllotId(allotId);
+        return dto;
+    }
 }

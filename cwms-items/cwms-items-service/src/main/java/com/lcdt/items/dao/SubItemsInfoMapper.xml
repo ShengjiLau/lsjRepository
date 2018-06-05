@@ -179,8 +179,8 @@
       <if test="itemId!=null and itemId>0">
         and sub.item_id = #{itemId,jdbcType=BIGINT}
       </if>
-      <if test="classifyId!=null and classifyId>0">
-        and items.classify_id = #{classifyId,jdbcType=BIGINT}
+      <if test="classifyId!=null and classifyId!=''">
+        and FIND_IN_SET(items.classify_id,SELECT_CHILDREN_CLASSIFYID(#{classifyId,jdbcType=BIGINT}))
       </if>
       <if test="classifyName!=null and classifyName!=''">
         and classify.classify_name like concat('%',#{classifyName,jdbcType=VARCHAR},'%')
@@ -195,7 +195,7 @@
     </where>
   </select>
 
-  <select id="selectGoodsIdsByCondition" resultType="Long" parameterType="com.lcdt.items.dto.GoodsListParamsDto">
+  <select id="selectGoodsIdsByCondition" resultType="java.lang.Long" parameterType="com.lcdt.items.dto.GoodsListParamsDto">
     select sub_item_id
     from t_sub_items_info sub,t_items_info items
     <where>
@@ -212,8 +212,8 @@
       <if test="barCode!=null and barCode!=''">
         and sub.bar_code like concat('%',#{barCode,jdbcType=VARCHAR},'%')
       </if>
-      <if test="classifyId!=null and classifyId>0">
-        and items.classify_id = #{classifyId,jdbcType=BIGINT}
+      <if test="classifyId!=null and classifyId!=''">
+        and FIND_IN_SET(items.classify_id,SELECT_CHILDREN_CLASSIFYID(#{classifyId,jdbcType=BIGINT}))
       </if>
       <if test="classifyName!=null and classifyName!=''">
         and items.classify_name like concat('%',#{classifyName,jdbcType=VARCHAR},'%')

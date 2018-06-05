@@ -25,7 +25,37 @@
         <result column="remark" jdbcType="VARCHAR" property="remark" />
         <result column="storage_location_id" jdbcType="BIGINT" property="storageLocationId" />
         <result column="storage_location_code" jdbcType="VARCHAR" property="storageLocationCode" />
+        <result column="is_split" jdbcType="BIT" property="isSplit" />
     </resultMap>
+
+    <resultMap id="GoodsInfoAndLocationInfoMap" type="com.lcdt.warehouse.dto.InorderGoodsInfoDetailDto">
+        <result column="inorder_id" jdbcType="BIGINT" property="inorderId" />
+        <result column="inplan_goods_id" jdbcType="BIGINT" property="inplanGoodsId" />
+        <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+        <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+        <result column="goods_spec" jdbcType="VARCHAR" property="goodsSpec" />
+        <result column="goods_classify" jdbcType="VARCHAR" property="goodsClassify" />
+        <result column="goods_code" jdbcType="VARCHAR" property="goodsCode" />
+        <result column="goods_barcode" jdbcType="VARCHAR" property="goodsBarcode" />
+        <result column="goods_price" jdbcType="REAL" property="goodsPrice" />
+        <result column="goods_batch" jdbcType="VARCHAR" property="goodsBatch" />
+        <result column="min_unit" jdbcType="VARCHAR" property="minUnit" />
+        <result column="unit" jdbcType="VARCHAR" property="unit" />
+        <result column="unit_data" jdbcType="INTEGER" property="unitData" />
+        <result column="receivalbe_amount" jdbcType="REAL" property="receivalbeAmount" />
+        <collection property="locationInfo" ofType="com.lcdt.warehouse.dto.InorderGoodsInfoLocationDto">
+            <id column="relation_id" jdbcType="BIGINT" property="relationId" />
+            <result column="batch" jdbcType="VARCHAR" property="batch" />
+            <result column="in_house_amount" jdbcType="REAL" property="inHouseAmount" />
+            <result column="in_house_price" jdbcType="REAL" property="inHousePrice" />
+            <result column="damage" jdbcType="REAL" property="damage" />
+            <result column="remark" jdbcType="VARCHAR" property="remark" />
+            <result column="storage_location_id" jdbcType="BIGINT" property="storageLocationId" />
+            <result column="storage_location_code" jdbcType="VARCHAR" property="storageLocationCode" />
+            <result column="is_split" jdbcType="BIT" property="isSplit" />
+        </collection>
+    </resultMap>
+
     <resultMap id="BaseResultMapDto" extends="BaseResultMap" type="com.lcdt.warehouse.dto.InorderGoodsInfoDto"></resultMap>
     <sql id="Base_Select_List">
         relation_id, inorder_id,inplan_goods_id, goods_id, goods_name, goods_spec, goods_classify,goods_code, goods_barcode,
@@ -36,6 +66,19 @@
     <select id="selectGoodsDetail" parameterType="Long" resultMap="BaseResultMapDto">
         SELECT <include refid="Base_Select_List"/>
         FROM inorder_goods_info
+        WHERE inorder_id = #{inorderId,jdbcType=BIGINT} and is_split != 1
+    </select>
+
+    <select id="selectGoodsInfoDetail" parameterType="Long" resultMap="GoodsInfoAndLocationInfoMap">
+        SELECT <include refid="Base_Select_List"/>
+        FROM inorder_goods_info
         WHERE inorder_id = #{inorderId,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectRecordGoodsInfo" parameterType="Long" resultMap="BaseResultMapDto">
+        SELECT inplan_goods_id,goods_id,goods_name,receivalbe_amount,sum(in_house_amount) in_house_amount
+        FROM inorder_goods_info
+        WHERE inorder_id = #{inorderId,jdbcType=BIGINT}
+        group by goods_id,receivalbe_amount
     </select>
 </mapper>

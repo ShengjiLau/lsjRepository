@@ -52,7 +52,7 @@ public class WaybillApi {
         dto.setCompanyId(companyId);
         dto.setCarrierCompanyId(companyId);
         dto.setWaybillStatus((short)1);
-        Waybill result = waybillService.addWaybill(dto);
+        Waybill result = waybillRpcService.addWaybill(dto);
         if (result != null) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);

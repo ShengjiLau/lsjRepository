@@ -16,11 +16,20 @@ import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.service.SplitGoodsService;
 import com.lcdt.traffic.service.WaybillRpcService;
 import com.lcdt.traffic.service.impl.CustomerCompanyIds;
+import com.lcdt.traffic.util.RegisterUtils;
 import com.lcdt.traffic.util.WaybillUtil;
 import com.lcdt.traffic.vo.ConstantVO;
+import com.lcdt.userinfo.dto.RegisterDto;
+import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.Driver;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.CompanyService;
+import com.lcdt.userinfo.service.DriverService;
+import com.lcdt.userinfo.service.UserService;
 import com.lcdt.util.ClmsBeanUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,6 +40,8 @@ import java.util.*;
  */
 @Service
 public class WaybillRcpServiceImp implements WaybillRpcService {
+
+    Logger logger = LoggerFactory.getLogger(WaybillRcpServiceImp.class);
 
     @Autowired
     private WaybillMapper waybillMapper;
@@ -68,6 +79,12 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     @Autowired
     private ClmsNotifyProducer producer;
 
+    @Reference
+    public UserService userService;
+
+    @Reference
+    public DriverService driverService;
+
     public Waybill addWaybill(WaybillDto waybillDto) {
         int result = 0;
         Waybill waybill = new Waybill();
@@ -78,7 +95,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             Map map = new HashMap();
             map.put("companyId", waybill.getCompanyId());
             map.put("waybillPlanId", waybill.getWaybillPlanId());
-            map.put("noCancel","123");
+            map.put("noCancel", "123");
             List<Waybill> list = waybillMapper.selectWaybillByPlanId(map);
             if (list != null) {
                 waybill.setWaybillCode(waybill.getWaybillCode() + "-" + (list.size() + 1));
@@ -110,39 +127,87 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         }
 
         //判断前端车辆是否输入还是选择
-        if(waybill.getVechicleId()==null||waybill.getVechicleId().equals("")){
-            OwnVehicle ownVehicle=new OwnVehicle();
+        if (waybill.getVechicleId() == null || waybill.getVechicleId().equals("")) {
+            OwnVehicle ownVehicle = new OwnVehicle();
             ownVehicle.setVehicleNum(waybill.getVechicleNum());
             ownVehicle.setCompanyId(waybill.getCompanyId());
-            OwnVehicle vehicle=ownVehicleMapper.selectAddWaybillVehicleNum(ownVehicle);
-            if(vehicle!=null){
+            OwnVehicle vehicle = ownVehicleMapper.selectAddWaybillVehicleNum(ownVehicle);
+            if (vehicle != null) {
                 waybill.setVechicleId(vehicle.getOwnVehicleId());
-            }else{
+            } else {
                 ownVehicle.setCreateId(waybill.getCreateId());
                 ownVehicle.setCreateName(waybill.getCreateName());
                 ownVehicle.setAffiliatedCompany(waybill.getCarrierCompanyName());
-                ownVehicle.setVehicleCategory((short)0);
+                ownVehicle.setVehicleCategory((short) 0);
                 ownVehicleMapper.insert(ownVehicle);
                 waybill.setVechicleId(ownVehicle.getOwnVehicleId());
             }
         }
         //判断前端司机输入还是选择
-        if(waybill.getDriverId()==null||waybill.getDriverId().equals("")){
-            OwnDriver ownDriver=new OwnDriver();
+        if (waybill.getDriverId() == null || waybill.getDriverId().equals("")) {
+            OwnDriver ownDriver = new OwnDriver();
             ownDriver.setCompanyId(waybill.getCompanyId());
             ownDriver.setDriverPhone(waybill.getDriverPhone());
-            OwnDriver driver=ownDriverMapper.selectByAddWaybillDriverPhone(ownDriver);
-            if(driver!=null){
-                waybill.setDriverId(driver.getDriverId());
+            ownDriver.setAffiliatedCompany(waybill.getCarrierCompanyName());
+            ownDriver.setCreateId(waybill.getCreateId());
+            ownDriver.setCreateName(waybill.getCreateName());
+            ownDriver.setDriverName(waybill.getDriverName());
+            ownDriver.setDriverCategory((short) 0);
+            String phone = waybill.getDriverPhone();
+            OwnDriver driver = ownDriverMapper.selectByAddWaybillDriverPhone(ownDriver);
+            if (driver != null) {
+                ownDriver.setDriverId(driver.getDriverId());
                 waybill.setDriverName(driver.getDriverName());
-            }else{
-                ownDriver.setDriverCategory((short)0);
-                ownDriver.setCreateId(waybill.getCreateId());
-                ownDriver.setCreateName(waybill.getCreateName());
-                ownDriverMapper.insert(ownDriver);
-                waybill.setDriverId(ownDriver.getDriverId());
+            } else {
+                /**判断是否已经开通cLMS司机账号，若没有开通，则自动开通,新增一条司机账号信息*/
+                if (!driverService.isExistDriver(phone)) {
+                    if (!userService.isPhoneBeenRegister(phone)) { //为空则保存clms司机账号信息
+                        RegisterDto registerDto = new RegisterDto();
+                        registerDto.setUserPhoneNum(phone);
+                        registerDto.setPassword(RegisterUtils.md5Encrypt(phone.substring(5)));
+                        logger.debug("司机账号默认密码：" + phone.substring(5));
+                        registerDto.setIntroducer("");
+                        registerDto.setEmail("");
+                        registerDto.setRegisterFrom("管车宝小程序");
+                        try {
+                            User user = userService.registerUser(registerDto);  //保存账号信息
+                            Driver driverUser = new Driver();
+                            driverUser.setUserId(user.getUserId());
+                            driverUser.setAffiliatedCompany(waybill.getCarrierCompanyName());
+                            driverUser.setDriverName(waybill.getDriverName());
+                            driverUser.setDriverPhone(phone);
+                            driverUser.setCreateId(waybill.getCreateId());
+                            driverUser.setCreateName(waybill.getCreateName());
+                            driverService.addDriver(driverUser);    //保存司机信息
+                            /*将司机账号的user_id更新到我的司机表里*/
+                            ownDriver.setDriverId(user.getUserId());
+                            ownDriverMapper.insert(ownDriver);
+                        } catch (PhoneHasRegisterException e) {
+                            e.printStackTrace();
+                            throw new RuntimeException("保存司机账号信息失败！");
+                        }
+                    } else {
+                        User user = userService.selectUserByPhone(phone);
+                        Driver driverUser = new Driver();
+                        driverUser.setUserId(user.getUserId());
+                        driverUser.setAffiliatedCompany(waybill.getCarrierCompanyName());
+                        driverUser.setDriverName(waybill.getDriverName());
+                        driverUser.setDriverPhone(phone);
+                        driverUser.setCreateId(waybill.getCreateId());
+                        driverUser.setCreateName(waybill.getCreateName());
+                        driverService.addDriver(driverUser);    //保存司机信息
+                        /*将司机账号的user_id更新到我的司机表里*/
+                        ownDriver.setDriverId(user.getUserId());
+                        ownDriverMapper.insert(ownDriver);
+                    }
+                } else {
+                    //开通过司机账号，测直接添加到我的司机里
+                    User user = userService.selectUserByPhone(phone);
+                    ownDriver.setDriverId(user.getUserId());
+                    ownDriverMapper.insert(ownDriver);
+                }
             }
-
+            waybill.setDriverId(ownDriver.getDriverId());
         }
         //新增运单
         result += waybillMapper.insert(waybill);
@@ -162,8 +227,8 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             result += waybillItemsMapper.insertForBatch(waybillItemsList);
         }
         //运单生成时添加一条派车记录
-        if(waybill.getId()!=null){
-            WaybillTransferRecord  waybillTransferRecord=new WaybillTransferRecord();
+        if (waybill.getId() != null) {
+            WaybillTransferRecord waybillTransferRecord = new WaybillTransferRecord();
             waybillTransferRecord.setWaybillId(waybill.getId());
             waybillTransferRecord.setVechicleId(waybill.getVechicleId());
             waybillTransferRecord.setVechicleNum(waybill.getVechicleNum());
@@ -252,19 +317,16 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         modifyWaybillPlanInfo(map);
         //路由==>运单增加新建路由 by xrr
         Timeline event = new Timeline();
-        event.setActionTitle("【"+ WaybillUtil.map_waybill_status.get(waybill.getWaybillStatus())+"】（操作人："+dto.getUpdateName()+" "+dto.getUpdatePhone()+"）");
+        event.setActionTitle("【" + WaybillUtil.map_waybill_status.get(waybill.getWaybillStatus()) + "】（操作人：" + dto.getUpdateName() + " " + dto.getUpdatePhone() + "）");
         event.setActionTime(new Date());
         event.setCompanyId(waybill.getCompanyId());
         event.setSearchkey("WAYBILL_ROUTE");
         event.setDataid(waybill.getId());
-        if(waybill.getWaybillStatus()==5)
-        {
+        if (waybill.getWaybillStatus() == 5) {
             //卸货描述修改
-            event.setActionDes("当前位置："+waybill.getUnloadLocation());
-        }
-        else
-        {
-            event.setActionDes("司机："+waybill.getDriverName()+" "+waybill.getDriverPhone()+" "+waybill.getVechicleNum());
+            event.setActionDes("当前位置：" + waybill.getUnloadLocation());
+        } else {
+            event.setActionDes("司机：" + waybill.getDriverName() + " " + waybill.getDriverPhone() + " " + waybill.getVechicleNum());
         }
         producer.noteRouter(event);
         return waybill;
@@ -330,12 +392,12 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
         //路由==>运单上传回单路由 by xrr
         Timeline event = new Timeline();
-        event.setActionTitle("【回单上传】（操作人："+dto.getUpdateName()+" "+dto.getUpdatePhone()+"）");
+        event.setActionTitle("【回单上传】（操作人：" + dto.getUpdateName() + " " + dto.getUpdatePhone() + "）");
         event.setActionTime(new Date());
         event.setCompanyId(waybill.getCompanyId());
         event.setSearchkey("WAYBILL_ROUTE");
         event.setDataid(waybill.getId());
-        event.setActionDes("司机："+waybill.getDriverName()+" "+waybill.getDriverPhone()+" "+waybill.getVechicleNum());
+        event.setActionDes("司机：" + waybill.getDriverName() + " " + waybill.getDriverPhone() + " " + waybill.getVechicleNum());
         producer.noteRouter(event);
 
         return waybill;
@@ -454,7 +516,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             List<WaybillDao> list = waybillMapper.selectWaybillByIdOrPlanId(map);
             if (list != null && list.size() > 0) {
                 for (WaybillDao dao : list) {
-                    if(dao.getWaybillPlanId()!=null&&!dao.getWaybillPlanId().equals("")){
+                    if (dao.getWaybillPlanId() != null && !dao.getWaybillPlanId().equals("")) {
                         List<WaybillItems> itemsList = dao.getWaybillItemsList();
                         List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
                         for (WaybillItems item : itemsList) {
@@ -485,37 +547,39 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             List<Waybill> list = waybillMapper.selectWaybillPlanId(map);
             if (list != null && list.size() > 0) {
                 for (Waybill waybill : list) {
-                    if(waybill.getWaybillPlanId()!=null&&!waybill.getWaybillPlanId().equals("")){
-                        map.put("waybillPlanId", waybill.getWaybillPlanId());
-                        List<Waybill> waybillList = waybillMapper.selectWaybillByPlanId(map);
-                        boolean flag = true;
-                        for (Waybill bill : waybillList) {
-                            if (bill.getWaybillStatus() != ConstantVO.WAYBILL_STATUS_HAVE_FINISH) {
-                                flag = false;
-                                break;
+                    if (waybill != null) {
+                        if (waybill.getWaybillPlanId() != null && !waybill.getWaybillPlanId().equals("")) {
+                            map.put("waybillPlanId", waybill.getWaybillPlanId());
+                            List<Waybill> waybillList = waybillMapper.selectWaybillByPlanId(map);
+                            boolean flag = true;
+                            for (Waybill bill : waybillList) {
+                                if (bill.getWaybillStatus() != ConstantVO.WAYBILL_STATUS_HAVE_FINISH) {
+                                    flag = false;
+                                    break;
+                                }
+                            }
+                            if (flag) {
+                                //此计划下的运单全部完成，根据计划id 更新计划状态为完成
+                                WaybillPlan waybillPlan = new WaybillPlan();
+                                waybillPlan.setUpdateId((Long) map.get("updateId"));
+                                waybillPlan.setUpdateName((String) map.get("updateName"));
+                                waybillPlan.setUpdateTime(new Date());
+                                waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED);
+                                waybillPlan.setWaybillPlanId(waybill.getWaybillPlanId());
+                                waybillPlan.setFinishDate(new Date());
+                                planService.updatePlanStatusByWaybill(waybillPlan);
+
+                                //router:计划自动完成
+                                Timeline event = new Timeline();
+                                event.setActionTitle("【计划完成】" + waybill.getWaybillCode());
+                                event.setActionTime(new Date());
+                                event.setCompanyId(waybillPlan.getCompanyId());
+                                event.setSearchkey("R_PLAN");
+                                event.setDataid(waybillPlan.getWaybillPlanId());
+
+                                producer.noteRouter(event);
                             }
                         }
-                        if (flag) {
-                            //此计划下的运单全部完成，根据计划id 更新计划状态为完成
-                            WaybillPlan waybillPlan = new WaybillPlan();
-                            waybillPlan.setUpdateId((Long) map.get("updateId"));
-                            waybillPlan.setUpdateName((String) map.get("updateName"));
-                            waybillPlan.setUpdateTime(new Date());
-                            waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_COMPLETED);
-                            waybillPlan.setWaybillPlanId(waybill.getWaybillPlanId());
-                            waybillPlan.setFinishDate(new Date());
-                            planService.updatePlanStatusByWaybill(waybillPlan);
-
-                            //router:计划自动完成
-                            Timeline event = new Timeline();
-                            event.setActionTitle("【计划完成】"+waybill.getWaybillCode());
-                            event.setActionTime(new Date());
-                            event.setCompanyId(waybillPlan.getCompanyId());
-                            event.setSearchkey("R_PLAN");
-                            event.setDataid(waybillPlan.getWaybillPlanId());
-
-                            producer.noteRouter(event);
-                       }
                     }
                 }
             }
