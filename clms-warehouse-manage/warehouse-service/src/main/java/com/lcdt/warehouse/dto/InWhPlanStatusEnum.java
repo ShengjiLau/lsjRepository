@@ -14,10 +14,10 @@ public enum InWhPlanStatusEnum implements IEnum {
     completed(40,"完成"),
     cancel(50,"取消");
 
-    private int value;
+    private Integer value;
     private String desc;
 
-    InWhPlanStatusEnum(final int value, final String desc) {
+    InWhPlanStatusEnum(final Integer value, final String desc) {
         this.value = value;
         this.desc = desc;
     }

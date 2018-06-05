@@ -45,7 +45,8 @@ public interface CustomerService {
      * @param customer
      * @return
      */
-    int customerAdd(Customer customer) throws CustomerException;
+    Customer customerAdd(Customer customer) throws CustomerException;
+
 
     /***
      * 新增客户联系人
