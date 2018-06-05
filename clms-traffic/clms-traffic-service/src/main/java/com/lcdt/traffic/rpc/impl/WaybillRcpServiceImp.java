@@ -317,12 +317,12 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         modifyWaybillPlanInfo(map);
         //路由==>运单增加新建路由 by xrr
         Timeline event = new Timeline();
-        event.setActionTitle("【" + WaybillUtil.map_waybill_status.get(dto.getWaybillStatus()) + "】（操作人：" + dto.getUpdateName() + " " + dto.getUpdatePhone() + "）");
+        event.setActionTitle("【" + WaybillUtil.map_waybill_status.get(waybill.getWaybillStatus().toString()) + "】（操作人：" + dto.getUpdateName() + " " + dto.getUpdatePhone() + "）");
         event.setActionTime(new Date());
         event.setCompanyId(waybill.getCompanyId());
         event.setSearchkey("WAYBILL_ROUTE");
         event.setDataid(waybill.getId());
-        if (waybill.getWaybillStatus() == 5) {
+        if (waybill.getWaybillStatus()== 5) {
             //卸货描述修改
             event.setActionDes("当前位置：" + waybill.getUnloadLocation());
         } else {
