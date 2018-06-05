@@ -98,6 +98,7 @@ public class CustomerRpcServiceImpl implements CustomerRpcService {
     @Override
     public Customer createCustomer(Map map) {
         if (map.get("customerType")!=null && map.get("customerName")!=null) {
+            String customerType = map.get("customerType").toString();
            map.put("customerType","find_in_set('"+map.get("customerType").toString()+"',client_types)");
            map.put("companyId",map.get("companyId").toString());
            List<Customer> list = customerMapper.selectByCondition(map);
@@ -135,8 +136,8 @@ public class CustomerRpcServiceImpl implements CustomerRpcService {
                    customerContactMapper.insert(customerContact);
 
                    //组关系表
-                   if (!StringUtils.isEmpty(customer.getClientTypes())) {
-                       String[] typeArrays = customer.getClientTypes().split(",");  //传过来的值用逗号隔开
+                   if (!StringUtils.isEmpty(customerType)) {
+                       String[] typeArrays = customerType.split(",");  //传过来的值用逗号隔开
                        for (int i=0; i<typeArrays.length; i++) {
                            CustomerTypeRelation relationObj = new CustomerTypeRelation();
                            relationObj.setCustomerId(customer.getCustomerId());

@@ -89,7 +89,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             BeanUtils.copyProperties(outWarehousePlan, result);
             result.setStoragePlanTime(DateUtility.date2String(outWarehousePlan.getStoragePlanTime(),"yyyy-MM-dd HH:mm:ss"));
         }
-        //详细信息
+        //出库详细信息
         OutplanGoods outplanGoods = new OutplanGoods();
         outplanGoods.setOutplanId(outPlanId);
         List<OutplanGoods> list = outplanGoodsService.selectList(new EntityWrapper<OutplanGoods>(outplanGoods));
@@ -105,7 +105,6 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                     result.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
                 }
             }
-
             if(result.getOutWhPlanGoodsDtoList()!=null) {
                 List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<OutWhPlanGoodsDto>();
                 for (OutplanGoods obj1 :list) {
