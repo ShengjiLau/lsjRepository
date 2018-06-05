@@ -106,6 +106,11 @@ public class OutOrderGoodsInfo implements Serializable {
      */
     private String remark;
 
+    /**
+     * 企业id
+     */
+    private Long companyId;
+
     public Long getInvertoryId() {
         return invertoryId;
     }
@@ -282,31 +287,11 @@ public class OutOrderGoodsInfo implements Serializable {
         this.remark = remark;
     }
 
-    @Override
-    public String toString() {
-        return "OutOrderGoodsInfo{" +
-                "relationId=" + relationId +
-                ", invertoryId=" + invertoryId +
-                ", outorderId=" + outorderId +
-                ", outplanRelationId=" + outplanRelationId +
-                ", goodsId=" + goodsId +
-                ", goodsName='" + goodsName + '\'' +
-                ", goodsCode='" + goodsCode + '\'' +
-                ", goodsBarCode='" + goodsBarCode + '\'' +
-                ", goodsSpec='" + goodsSpec + '\'' +
-                ", goodsClassifyId=" + goodsClassifyId +
-                ", goodsClassifyName='" + goodsClassifyName + '\'' +
-                ", minUnit='" + minUnit + '\'' +
-                ", unit='" + unit + '\'' +
-                ", unitData=" + unitData +
-                ", batch='" + batch + '\'' +
-                ", storageLocationId=" + storageLocationId +
-                ", storageLocationCode='" + storageLocationCode + '\'' +
-                ", inStock=" + inStock +
-                ", goodsNum=" + goodsNum +
-                ", outboundQuantity=" + outboundQuantity +
-                ", outboundPrice=" + outboundPrice +
-                ", remark='" + remark + '\'' +
-                '}';
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 }
