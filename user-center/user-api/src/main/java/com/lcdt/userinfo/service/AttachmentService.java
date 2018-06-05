@@ -46,4 +46,6 @@ public interface AttachmentService {
      * @return
      */
     boolean isRepeat(TAttachmentClassify attachmentClassify);
+
+    TAttachmentClassify queryTAttachmentClassify(Integer attachmentClassifyId);
 }
