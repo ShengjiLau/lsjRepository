@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
@@ -72,7 +73,7 @@ public class ShiftInventoryListApi {
 		}
 		
 		jsonObject.clear();
-		int result = shiftInventoryListService.insertShiftInventoryList(shiftInventoryListDTO);
+		int result = shiftInventoryListService.completeShiftInventoryList(shiftInventoryListDTO);
 		logger.debug("完成移库单的数量:"+result);
 		
 		if (result > 0) {
@@ -104,7 +105,7 @@ public class ShiftInventoryListApi {
 	@PostMapping("/details")
 	@ApiOperation(value = "查询移库单详情")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_details')")
-	public JSONObject getOneShiftInventoryDetails(@ApiParam(value="移库单id",required=true) Long shiftId) {
+	public JSONObject getOneShiftInventoryDetails(@ApiParam(value="移库单id",required=true) @RequestParam Long shiftId) {
 		JSONObject jsonObject = new JSONObject();
 		ShiftInventoryListDTO shiftInventoryListDTO = shiftInventoryListService.getShiftInventoryListDetails(shiftId);
 		
