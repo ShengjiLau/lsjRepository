@@ -19,7 +19,7 @@
     <selectKey keyProperty="timelineId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into timeline (action_title, action_time, actile_des, 
+    insert into timeline (action_title, action_time, action_des,
       company_id, searchkey, dataid, 
       mq_message_id)
     values (#{actionTitle,jdbcType=VARCHAR}, #{actionTime,jdbcType=TIMESTAMP}, #{actionDes,jdbcType=VARCHAR},

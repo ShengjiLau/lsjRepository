@@ -105,22 +105,31 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                     result.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
                 }
             }
-            List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<OutWhPlanGoodsDto>();
-            for (OutplanGoods obj1 :list) {
-                OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
-                BeanUtils.copyProperties(obj1, outWhPlanGoodsDto);
-                if (flag) { //统计该计划商品已配仓数量
-                     statDistributeNum(outWhPlanGoodsDto, result.getOutWhOrderDtoList());
-                    if (null!=outWhPlanGoodsDto.getRemainGoodsNum() && outWhPlanGoodsDto.getRemainGoodsNum()==0) {
-                        continue;//说明该商品已配完，继续下个
+
+            if(result.getOutWhPlanGoodsDtoList()!=null) {
+                List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<OutWhPlanGoodsDto>();
+                for (OutplanGoods obj1 :list) {
+                    OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
+                    BeanUtils.copyProperties(obj1, outWhPlanGoodsDto);
+                    if (flag) { //统计该计划商品已配仓数量
+                        statDistributeNum(outWhPlanGoodsDto, result.getOutWhOrderDtoList());
+                        if (null!=outWhPlanGoodsDto.getRemainGoodsNum() && outWhPlanGoodsDto.getRemainGoodsNum()==0) {
+                            continue;//说明该商品已配完，继续下个
+                        }
                     }
+                    outWhPlanGoodsDtoList.add(outWhPlanGoodsDto);
                 }
-                outWhPlanGoodsDtoList.add(outWhPlanGoodsDto);
-            }
-
-            result.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList); //展现用的是出库计划详细列表
+                result.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);
+            } else {
+                List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<OutWhPlanGoodsDto>();
+                for (OutplanGoods obj1 :list) {
+                    OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
+                    BeanUtils.copyProperties(obj1, outWhPlanGoodsDto);
+                    outWhPlanGoodsDtoList.add(outWhPlanGoodsDto);
+                }
+                result.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);
+             }
         }
-
         return result;
     }
 
@@ -147,7 +156,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             outWhPlanGoodsDto.setRemainGoodsNum(outWhPlanGoodsDto.getPlanGoodsNum() - outGoodsNumber);//计划-已配=剩余(代配)
         } else {
             outWhPlanGoodsDto.setOutOderGoodsNum(0f);//已配仓数
-            outWhPlanGoodsDto.setRemainGoodsNum(outWhPlanGoodsDto.getPlanGoodsNum() - 0);
+            outWhPlanGoodsDto.setRemainGoodsNum(outWhPlanGoodsDto.getPlanGoodsNum()==null?0:outWhPlanGoodsDto.getPlanGoodsNum() - 0);
         }
     }
 

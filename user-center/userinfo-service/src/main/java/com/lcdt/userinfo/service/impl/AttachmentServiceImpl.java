@@ -80,4 +80,9 @@ public class AttachmentServiceImpl implements AttachmentService {
     public int modifyTAttachmentClassifyDelete(Integer attachmentClassifyId) {
         return attachmentClassifyMapper.deleteByPrimaryKey(attachmentClassifyId);
     }
+
+    @Override
+    public TAttachmentClassify queryTAttachmentClassify(Integer attachmentClassifyId) {
+        return attachmentClassifyMapper.selectByPrimaryKey(attachmentClassifyId);
+    }
 }

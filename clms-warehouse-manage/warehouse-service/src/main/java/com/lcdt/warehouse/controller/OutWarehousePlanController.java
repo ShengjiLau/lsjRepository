@@ -86,16 +86,14 @@ public class OutWarehousePlanController {
 
 
     @ApiOperation("计划详细")
-    @RequestMapping(value = "/detail",method = RequestMethod.POST)
+    @RequestMapping(value = "/detail",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('wh_out_plan_detail')")
-    public JSONObject detail(@ApiParam(value = "计划ID",required = true) @RequestParam Long outPlanId,
+    public OutWhPlanDto detail(@ApiParam(value = "计划ID",required = true) @RequestParam Long outPlanId,
                              @ApiParam(value = "是否加载配仓",required = true) @RequestParam boolean flag) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         JSONObject jsonObject = new JSONObject();
         OutWhPlanDto outWhPlanDto = outWarehousePlanService.outWhPlanDetail(outPlanId,flag, userCompRel);
-        jsonObject.put("data",outWhPlanDto);
-        jsonObject.put("code", 0);
-        return jsonObject;
+        return outWhPlanDto;
     }
 
 

@@ -106,7 +106,10 @@ public class AttachmentApi {
         if(attachmentService.isRepeat(attachmentClassify)){
             message = "附件分类名称重复！";
         }else{
-            int result = attachmentService.modifyTAttachmentClassify(attachmentClassify);
+            TAttachmentClassify source = attachmentService.queryTAttachmentClassify(attachmentClassify.gettAttachmentClassifyId());
+            source.settAttachmentFileType(attachmentClassify.gettAttachmentFileType());
+            source.settAttachmentClassifyName(attachmentClassify.gettAttachmentClassifyName());
+            int result = attachmentService.modifyTAttachmentClassify(source);
 
 
             if(result > 0){

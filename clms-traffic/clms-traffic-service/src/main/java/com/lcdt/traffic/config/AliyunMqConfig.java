@@ -15,6 +15,7 @@ public class AliyunMqConfig {
     @Autowired
     AliyunConfigProperties aliyunMqConfig;
 
+
     @Bean(initMethod = "start",destroyMethod = "shutdown")
     public ProducerBean producerBean(){
         Properties properties = PropertiesUtil.aliyunProperties(aliyunMqConfig);
@@ -22,5 +23,6 @@ public class AliyunMqConfig {
         producerBean.setProperties(properties);
         return producerBean;
     }
+
 
 }
