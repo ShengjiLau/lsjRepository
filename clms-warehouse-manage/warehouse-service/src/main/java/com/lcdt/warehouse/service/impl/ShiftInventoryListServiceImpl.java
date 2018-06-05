@@ -99,6 +99,10 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		//数据库插入新的移库商品信息列表
 		int j = shiftGoodsDOMapper.insertShiftGoodsByBatch(shiftGoodsDOList);
 		
+		logger.debug("插入的移库商品信息条数为"+j);
+		logger.debug("插入的移库单数量为"+i);
+		logger.debug("修改的库存数量为"+h);
+		
 		if (i > 0 && j == shiftGoodsDOList.size() && shiftGoodsListDTOList.size() == h) {
 			return 1;
 		}else {
@@ -208,9 +212,11 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		PageHelper.startPage(shiftInventoryListDTO1.getPageNo(), shiftInventoryListDTO1.getPageSize());
 		List<ShiftInventoryListDO> shiftInventoryListDOList = shiftInventoryListDOMapper.getShiftInventoryListDOByCondition(shiftInventoryListDTO1);
 		
+		logger.debug("查询得到的移库单数量为"+shiftInventoryListDOList.size());
 		//如果查询结果为空，直接返回
 		if (null == shiftInventoryListDOList || 0 == shiftInventoryListDOList.size()) {
-			return null;
+			PageInfo<ShiftInventoryListDTO> page = new PageInfo<ShiftInventoryListDTO>();
+			return page;
 		}
 		
 		List<ShiftInventoryListDTO> shiftInventoryListDTOList = new ArrayList<ShiftInventoryListDTO>();
@@ -225,22 +231,26 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				//得到库存与商品信息
 				 List<ShiftGoodsListDTO> ShiftGoodsListDTOList = inventoryMapper.getInventoryAndGoodsInfo(inventoryIds);
 				//得到所有相关的移库商品信息集合
-				 List<ShiftGoodsDO> shiftGoodsDOList = shiftGoodsDOMapper.getShiftGoodsDOList(shiftInventoryListDO.getShiftId());	
+
+				 List<ShiftGoodsDO> shiftGoodsDOList1 = shiftGoodsDOMapper.getShiftGoodsDOList(shiftInventoryListDO.getShiftId());
 				 List<ShiftGoodsListDTO> ShiftGoodsListDTOList2 = new ArrayList<ShiftGoodsListDTO>();
 				
 				 for (int i = 0; i < ShiftGoodsListDTOList.size(); i++) {
+					 List<ShiftGoodsDO> shiftGoodsDOList2 = new LinkedList<ShiftGoodsDO>();
 					 //如果查询条件传过来的goodsInfo与ShiftGoodsListDTO的商品name不相同，则去除掉相关的ShiftGoodsListDTO，并跳出此次循环
 					 if (null != shiftInventoryListDTO1.getGoodsInfo() && !shiftInventoryListDTO1.getGoodsInfo().equals(ShiftGoodsListDTOList.get(i).getGoodsName())) {
 							 ShiftGoodsListDTOList2.add(ShiftGoodsListDTOList.get(i));
 							 continue;
 					 }
 					 //遍历所有的移库商品信息shiftGoodsDO，如果shiftGoodsDO里存的InventoryId与ShiftGoodsListDTO里存的InventoryId相同，则将shiftGoodsDO添加到ShiftGoodsListDTO里的ShiftGoodsDOList
-					 for (int j = 0; j < shiftGoodsDOList.size(); j++) {
-						 if (ShiftGoodsListDTOList.get(i).getInventoryId().longValue() ==
-								 shiftGoodsDOList.get(j).getInventoryId().longValue()) {
-							 ShiftGoodsListDTOList.get(i).getShiftGoodsDOList().add(shiftGoodsDOList.get(j));
-						 }
+					 if (null != shiftGoodsDOList1 && 0 != shiftGoodsDOList1.size()) {
+						 for (int j = 0; j < shiftGoodsDOList1.size(); j++) {
+							 if (shiftGoodsDOList1.get(j).getInventoryId().longValue() == ShiftGoodsListDTOList.get(i).getInventoryId().longValue()) {
+								 shiftGoodsDOList2.add(shiftGoodsDOList1.get(j));
+							 }
+						 } 
 					 }
+					 ShiftGoodsListDTOList.get(i).setShiftGoodsDOList(shiftGoodsDOList2);
 				 }
 				 
 				 ShiftGoodsListDTOList.removeAll(ShiftGoodsListDTOList2);
