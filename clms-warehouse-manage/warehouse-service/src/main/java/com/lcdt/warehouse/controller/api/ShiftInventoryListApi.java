@@ -40,7 +40,7 @@ public class ShiftInventoryListApi {
 	@PostMapping("/add")
 	@ApiOperation(value = "创建移库单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_add')")
-	public JSONObject insertInventoryList(@Validated ShiftInventoryListDTO shiftInventoryListDTO) {
+	public JSONObject insertInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 		JSONObject jsonObject = validateParamInfo(shiftInventoryListDTO);
 		if (jsonObject.size() > 0) {
 			jsonObject.put("code", -1);

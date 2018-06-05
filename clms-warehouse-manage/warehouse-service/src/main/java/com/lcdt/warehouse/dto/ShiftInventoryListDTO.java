@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.lcdt.warehouse.entity.ShiftInventoryListDO;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * @author Sheng-ji Lau
  * @date 2018年5月18日
@@ -13,20 +15,26 @@ import com.lcdt.warehouse.entity.ShiftInventoryListDO;
 public class ShiftInventoryListDTO extends ShiftInventoryListDO{
 
 	/**
-	 * 
+	 * 序列号
 	 */
 	private static final long serialVersionUID = 110151561515L;
 	
+	@ApiModelProperty("移库商品信息list")
 	private List<ShiftGoodsListDTO> shiftGoodsListDTOList;
 	
+	@ApiModelProperty("查询的开始时间")
 	private String beginTime;
 	
+	@ApiModelProperty("查询的结束时间")
 	private String endTime;
 	
+	@ApiModelProperty("页码")
 	private Integer pageNo;
 	
+	@ApiModelProperty("页数")
 	private Integer pageSize;
 	
+	@ApiModelProperty("查询条件商品信息")
 	private String goodsInfo;
 
 	public List<ShiftGoodsListDTO> getShiftGoodsListDTOList() {
