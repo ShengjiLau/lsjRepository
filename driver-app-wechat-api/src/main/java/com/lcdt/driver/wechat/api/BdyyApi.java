@@ -34,8 +34,7 @@ public class BdyyApi {
         logger.info("鹰眼上传 dto {}",dto.toString());
 
 
-        StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
-        RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build();
+        RestTemplate restTemplate = getInstanceByCharset("UTF-8");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -50,7 +49,7 @@ public class BdyyApi {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 
-        ResponseEntity<String> response = restTemplate.postForEntity( "http://yingyan.baidu.com/api/v3/track/addpoint", request , String.class );
+        ResponseEntity<String> response = restTemplate.postForEntity( "http://yingyan.baidu.com/api/v3/track/addpoint",request,String.class);
 
 
 //        RestTemplate restTemplate = new RestTemplate();
@@ -61,5 +60,9 @@ public class BdyyApi {
         return body;
     }
 
-
-}
+    public static RestTemplate getInstanceByCharset(String charset) {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new StringHttpMessageConverter(Charset.forName(charset)));
+        return restTemplate;
+    }
+    }
