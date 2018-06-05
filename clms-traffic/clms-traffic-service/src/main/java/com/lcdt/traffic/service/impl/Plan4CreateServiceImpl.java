@@ -117,6 +117,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
         }
 
 
+        //客户自动创建
         if (vo.getCustomerId() == null && !StringUtils.isEmpty(vo.getCustomerName())) {
             Map customerMap = new HashMap<String,String>();
             customerMap.put("customerType","3"); //运输客户
