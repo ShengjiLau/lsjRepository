@@ -46,7 +46,7 @@ public class ClmsNotifyProducer {
 
     public void noteRouter(Timeline event) {
         Message message = new Message();
-        message.setTopic(mqConfig.getTopic());
+        message.setTopic(mqConfig.getTimeLineMqTopic());
         message.setBody(JSONObject.toJSONBytes(event, SerializerFeature.BrowserCompatible));
         producer.sendAsync(message, new SendCallback() {
             @Override
