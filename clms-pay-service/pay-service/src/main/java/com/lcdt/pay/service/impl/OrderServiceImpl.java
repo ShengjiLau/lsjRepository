@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -40,8 +41,6 @@ public class OrderServiceImpl implements OrderService{
     @Autowired
     ProductCountService productCountService;
 
-
-
     @Override
     public PayOrder selectByOrderId(Long orderId) {
         PayOrder payOrder = mapper.selectByPrimaryKey(orderId);
@@ -61,6 +60,7 @@ public class OrderServiceImpl implements OrderService{
     /**
      * 购买产品服务
      */
+    @Transactional(rollbackFor = Exception.class)
     public void buyServiceProduct(Long orderId,Long companyId, Integer productPackageId) {
 
         PayOrder payOrder = selectByOrderId(orderId);
@@ -73,43 +73,19 @@ public class OrderServiceImpl implements OrderService{
             throw new RuntimeException("购买的服务不存在");
         }
 
-        String packagePrice = serviceProductPackage.getPackagePrice();
-        Integer price = Integer.valueOf(packagePrice);
-        PayBalance money = balanceService.companyBalance(companyId);
-        if (price > money.getBalance()) {
-            throw new MoneyDontEnoughException("余额不足");
-        }
+        //扣减公司账户金钱余额
+        PayBalance money = reduceCompanyBalance(companyId, serviceProductPackage);
 
-        money.setBalance(money.getBalance() - price);
-        balanceMapper.updateByPrimaryKey(money);
+        //产品服务bean
+        ServiceProduct serviceProduct = productMapper.selectByPrimaryKey(serviceProductPackage.getProductId());
 
-        Integer productId = serviceProductPackage.getProductId();
+        CompanyServiceCount companyServiceCount = updateServiceCount(companyId, serviceProductPackage, serviceProduct);
 
-        ServiceProduct serviceProduct = productMapper.selectByPrimaryKey(productId);
+        finishOrder(companyId, payOrder, serviceProductPackage, money, serviceProduct, companyServiceCount);
 
-        List<CompanyServiceCount> companyServiceCounts = countMapper.selectByCompanyId(companyId,serviceProduct.getServiceName());
-        CompanyServiceCount companyServiceCount = null;
-        if (!CollectionUtils.isEmpty(companyServiceCounts)) {
-            companyServiceCount = companyServiceCounts.get(0);
-        }
+    }
 
-        if (companyServiceCount == null) {
-            CompanyServiceCount companyServiceCount1 = new CompanyServiceCount();
-            companyServiceCount1.setCompanyId(companyId);
-            companyServiceCount1.setProductName(serviceProduct.getServiceName());
-            companyServiceCount1.setProductServiceNum(serviceProductPackage.getProductNum());
-            countMapper.insert(companyServiceCount1);
-            companyServiceCount = companyServiceCount1;
-        }else{
-            if (companyServiceCount.getProductServiceNum() == null) {
-                companyServiceCount.setProductServiceNum(serviceProductPackage.getProductNum());
-            }else{
-                companyServiceCount.setProductServiceNum(companyServiceCount.getProductServiceNum() + serviceProductPackage.getProductNum());
-            }
-            countMapper.updateByPrimaryKey(companyServiceCount);
-        }
-
-
+    private void finishOrder(Long companyId, PayOrder payOrder, ServiceProductPackage serviceProductPackage, PayBalance money, ServiceProduct serviceProduct, CompanyServiceCount companyServiceCount) {
         payOrder.setOrderStatus(OrderStatus.PAYED);
         payOrder.setPayType(PayType.BALANCEPAY);
         payOrder.setOrderDes("购买"+serviceProductPackage.getPackageDes());
@@ -120,11 +96,53 @@ public class OrderServiceImpl implements OrderService{
         mapper.updateByPrimaryKey(payOrder);
         //记录消费流水
         logConsumeBalance(money,payOrder);
+        productCountService.logAddProductCount(serviceProduct.getServiceName(),"购买"+serviceProductPackage.getPackageDes(),serviceProductPackage.getProductNum(),payOrder.getCreateUserName(),companyId,companyServiceCount.getProductServiceNum());
+    }
 
-        String phone = SecurityInfoGetter.getUser().getPhone();
+    private CompanyServiceCount updateServiceCount(Long companyId, ServiceProductPackage serviceProductPackage, ServiceProduct serviceProduct) {
+        List<CompanyServiceCount> companyServiceCounts = countMapper.selectByCompanyId(companyId,serviceProduct.getServiceName());
 
-        productCountService.logAddProductCount(serviceProduct.getServiceName(),"购买"+serviceProductPackage.getPackageDes(),serviceProductPackage.getProductNum(),phone,companyId,companyServiceCount.getProductServiceNum());
+        if (CollectionUtils.isEmpty(companyServiceCounts)) {
+            CompanyServiceCount companyServiceCount = createCompanyService(companyId, serviceProductPackage, serviceProduct);
+            countMapper.insert(companyServiceCount);
+            return companyServiceCount;
+        }else {
+            Optional<CompanyServiceCount> first = companyServiceCounts.stream().findFirst();
+            first.ifPresent(companyServiceCount -> {
+                if (companyServiceCount.getProductServiceNum() == null) {
+                    companyServiceCount.setProductServiceNum(serviceProductPackage.getProductNum());
+                }else{
+                    companyServiceCount.setProductServiceNum(companyServiceCount.getProductServiceNum() + serviceProductPackage.getProductNum());
+                }
+                countMapper.updateByPrimaryKey(companyServiceCount);
+            });
+            return first.get();
+        }
+    }
 
+    private CompanyServiceCount createCompanyService(Long companyId, ServiceProductPackage serviceProductPackage, ServiceProduct serviceProduct) {
+        CompanyServiceCount companyServiceCount = new CompanyServiceCount();
+        companyServiceCount.setCompanyId(companyId);
+        companyServiceCount.setProductName(serviceProduct.getServiceName());
+        companyServiceCount.setProductServiceNum(serviceProductPackage.getProductNum());
+        return companyServiceCount;
+    }
+
+    /**
+     * 返回扣减后的余额
+     * @param companyId
+     * @param serviceProductPackage
+     * @return
+     */
+    private PayBalance reduceCompanyBalance(Long companyId, ServiceProductPackage serviceProductPackage) {
+        Integer price = Integer.valueOf(serviceProductPackage.getPackagePrice());
+        PayBalance money = balanceService.companyBalance(companyId);
+        if (price > money.getBalance()) {
+            throw new MoneyDontEnoughException("余额不足");
+        }
+        money.setBalance(money.getBalance() - price);
+        balanceMapper.updateByPrimaryKey(money);
+        return money;
     }
 
     @Autowired

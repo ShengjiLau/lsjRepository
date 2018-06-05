@@ -56,6 +56,7 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
                 OutOrderGoodsInfo outOrderGoodsInfo = new OutOrderGoodsInfo();
                 BeanUtils.copyProperties(dto.getOutOrderGoodsInfoList().get(i), outOrderGoodsInfo);
                 outOrderGoodsInfo.setOutorderId(outWarehouseOrder.getOutorderId());
+                outOrderGoodsInfo.setCompanyId(outWarehouseOrder.getCompanyId());
                 outOrderGoodsInfoList.add(outOrderGoodsInfo);
                 inventoryService.lockInventoryNum(outOrderGoodsInfo.getInvertoryId(),outOrderGoodsInfo.getOutboundQuantity());
             }
