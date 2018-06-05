@@ -154,7 +154,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public int customerAdd(Customer customer) throws CustomerException {
+    public Customer customerAdd(Customer customer) throws CustomerException {
         Map map = new HashMap();
         map.put("companyId", customer.getCompanyId());
         map.put("customerName", customer.getCustomerName());
@@ -201,7 +201,7 @@ public class CustomerServiceImpl implements CustomerService {
                 }
             }
         }
-        return flag;
+        return customer;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -455,5 +455,7 @@ public class CustomerServiceImpl implements CustomerService {
     public void updateCustomerBindCompId(Customer customer) {
         customerMapper.updateByPrimaryKey(customer);
     }
+
+
 
 }
