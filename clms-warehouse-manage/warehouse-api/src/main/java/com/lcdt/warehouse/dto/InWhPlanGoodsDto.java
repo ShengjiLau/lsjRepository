@@ -49,6 +49,9 @@ public class InWhPlanGoodsDto {
     @ApiModelProperty(value = "配仓---入库数量")
     private Float inHouseAmount;
 
+    @ApiModelProperty(value = "配仓---已配数量")
+    private Float disCompleteAmount;
+
     public Float getRemainGoodsNum() {
         return remainGoodsNum;
     }
@@ -200,5 +203,14 @@ public class InWhPlanGoodsDto {
 
     public void setInHouseAmount(Float inHouseAmount) {
         this.inHouseAmount = inHouseAmount;
+    }
+
+
+    public Float getDisCompleteAmount() {
+        return disCompleteAmount;
+    }
+
+    public void setDisCompleteAmount(Float disCompleteAmount) {
+        this.disCompleteAmount = disCompleteAmount;
     }
 }

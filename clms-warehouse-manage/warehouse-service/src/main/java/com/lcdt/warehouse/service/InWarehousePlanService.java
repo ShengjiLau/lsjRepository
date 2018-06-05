@@ -82,7 +82,7 @@ public interface InWarehousePlanService extends IService<InWarehousePlan> {
      * 计划详细
      * @return
      */
-    InWhPlanDto inWhPlanDetail(Long planId, boolean flag, UserCompRel userCompRel,boolean bFlag);
+    InWhPlanDto inWhPlanDetail(Long planId, boolean flag, UserCompRel userCompRel,boolean bFlag,boolean bFlag1);
 
 
     /***
