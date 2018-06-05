@@ -258,6 +258,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			}
 			 shiftInventoryListDTOList.add(shiftInventoryListDTO2);
 		}
+		
 		PageInfo<ShiftInventoryListDTO> page = new PageInfo<ShiftInventoryListDTO>(shiftInventoryListDTOList);
 		return page;
     }
