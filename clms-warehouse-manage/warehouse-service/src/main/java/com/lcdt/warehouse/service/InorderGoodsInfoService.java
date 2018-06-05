@@ -12,5 +12,11 @@ import com.lcdt.warehouse.entity.InorderGoodsInfo;
  * @since 2018-05-07
  */
 public interface InorderGoodsInfoService extends IService<InorderGoodsInfo> {
-
+    /**
+     * 删除商品信息
+     * @param companyId
+     * @param relationId
+     * @return
+     */
+    int deleteGoodsInfo(Long companyId,Long relationId);
 }
