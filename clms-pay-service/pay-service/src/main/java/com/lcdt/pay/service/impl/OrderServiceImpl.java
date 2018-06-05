@@ -76,9 +76,8 @@ public class OrderServiceImpl implements OrderService{
         //扣减公司账户金钱余额
         PayBalance money = reduceCompanyBalance(companyId, serviceProductPackage);
 
-        Integer productId = serviceProductPackage.getProductId();
-
-        ServiceProduct serviceProduct = productMapper.selectByPrimaryKey(productId);
+        //产品服务bean
+        ServiceProduct serviceProduct = productMapper.selectByPrimaryKey(serviceProductPackage.getProductId());
 
         CompanyServiceCount companyServiceCount = updateServiceCount(companyId, serviceProductPackage, serviceProduct);
 
