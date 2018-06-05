@@ -105,6 +105,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                     result.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
                 }
             }
+
             if(result.getOutWhPlanGoodsDtoList()!=null) {
                 List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<OutWhPlanGoodsDto>();
                 for (OutplanGoods obj1 :list) {

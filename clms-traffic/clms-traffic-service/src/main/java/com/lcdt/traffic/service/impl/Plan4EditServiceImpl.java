@@ -171,7 +171,24 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                 planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
             }
 
-
+            if (vo.getCustomerId() == null && !StringUtils.isEmpty(vo.getCustomerName())) {
+                Map customerMap = new HashMap<String,String>();
+                customerMap.put("customerType","3"); //运输客户
+                customerMap.put("customerName",vo.getCustomerName()); //运输客户
+                customerMap.put("companyId",dto.getCompanyId());
+                customerMap.put("province",dto.getReceiveProvince());
+                customerMap.put("city",dto.getReceiveCity());
+                customerMap.put("county",dto.getReceiveCounty());
+                customerMap.put("details",dto.getReceiveAddress());
+                customerMap.put("linkMan",dto.getReceiveMan());
+                customerMap.put("mobile",dto.getReceivePhone());
+                customerMap.put("userId",dto.getCreateId());
+                customerMap.put("userName",dto.getCreateName());
+                Customer customer = customerRpcService.createCustomer(customerMap);
+                if (customer!=null) {
+                    customer.setCustomerId(customer.getCustomerId());
+                }
+            }
 
             if (flag==1) { //发布--操作
                 /***
