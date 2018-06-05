@@ -160,7 +160,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 		ccRole.setRoleCompanyId(compId);
 		ccRole.setValid(true);
 		userRoleDao.insert(ccRole);*/
-		List<Permission> cgPermissions = permissionMapper.selectByPrefix("purchase_");
+		List<Permission> cgPermissions = permissionMapper.selectByCategory("purchase");
 		if(cgPermissions!=null&&cgPermissions.size()>0)
 		{
 			Map map = new HashMap<>();
@@ -168,7 +168,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 			map.put("permissions",cgPermissions);
 			rolePermissionDao.insertInitRole(map);
 		}
-		List<Permission> xsPermissions = permissionMapper.selectByPrefix("sales_");
+		List<Permission> xsPermissions = permissionMapper.selectByCategory("sales");
 		if(xsPermissions!=null&&xsPermissions.size()>0)
 		{
 			Map map = new HashMap<>();
