@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.warehouse.dto.InWarehouseOrderDto;
@@ -73,7 +73,6 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		shiftInventoryListDO.setGmtCreate(new Date());
 		shiftInventoryListDO.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
 		shiftInventoryListDO.setCreateUser(SecurityInfoGetter.getUser().getRealName());
-		shiftInventoryListDO.setFinished((byte) 0);
 		int i = shiftInventoryListDOMapper.insert(shiftInventoryListDO);
 		
 		//取得ShiftGoodsListDTO集合
@@ -203,7 +202,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	public PageInfo<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO1) {
 		shiftInventoryListDTO1.setCompanyId(SecurityInfoGetter.getCompanyId());
 		
-		if (null == shiftInventoryListDTO1.getPageNo() || 0 ==shiftInventoryListDTO1.getPageNo()) {
+		if (null == shiftInventoryListDTO1.getPageNo()) {
 			shiftInventoryListDTO1.setPageNo(1);
 		}
 		if (null == shiftInventoryListDTO1.getPageSize()) {
@@ -283,14 +282,12 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			 //得到去库存相关的移库商品信息
 			 List<ShiftGoodsDO> shiftGoodsDOList = shiftGoodsDOMapper.getShiftGoodsDOList(shiftInventoryListId);
 			 for (int i = 0; i < shiftGoodsListDTOList.size(); i++) {
-				 List<ShiftGoodsDO> shiftGoodsDOList2 = new LinkedList<ShiftGoodsDO>();
 				 for (int j = 0; j < shiftGoodsDOList.size(); j++) {
 					 if (shiftGoodsListDTOList.get(i).getInventoryId().longValue() ==
 							 shiftGoodsDOList.get(j).getInventoryId().longValue()) {
-						 shiftGoodsDOList2.add(shiftGoodsDOList.get(j));
+						 shiftGoodsListDTOList.get(i).getShiftGoodsDOList().add(shiftGoodsDOList.get(j));
 					 }
 				 }
-				 shiftGoodsListDTOList.get(i).setShiftGoodsDOList(shiftGoodsDOList2);
 			 }
 			 shiftInventoryListDTO.setShiftGoodsListDTOList(shiftGoodsListDTOList);
 		}
@@ -312,20 +309,17 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		 ShiftInventoryListDO shiftInventoryListDO = shiftInventoryListDOMapper.selectByPrimaryKey(shiftInventoryListId);
 		 Long [] inventoryIds = ConvertStringToLong(shiftInventoryListDO.getInventoryShiftedId());
 		 List<ShiftGoodsDO> shiftGoodsDOList = shiftGoodsDOMapper.getShiftGoodsDOList(shiftInventoryListId);
-		 
-		 if (null != inventoryIds && inventoryIds.length > 0) {
-			 for (int i = 0; i < inventoryIds.length; i++) {
-				 BigDecimal shiftPlanNum = new BigDecimal(0);
-				for (int j = 0; j < shiftGoodsDOList.size(); j++) {
-					if (inventoryIds[i].longValue() == shiftGoodsDOList.get(j).getInventoryId().longValue()) {
-						shiftPlanNum.add(shiftGoodsDOList.get(j).getShiftPlanNum());
-					}
-				}
-				Float lockNum = ShiftInventoryListVO.ZERO_VALUE - shiftPlanNum.floatValue();
-				inventoryMapper.updateInventoryLockNum(inventoryIds[i],null,lockNum);
-			 }
-		 }
 		
+		 for (int i = 0; i < inventoryIds.length; i++) {
+			 BigDecimal shiftPlanNum = new BigDecimal(0);
+			for (int j = 0; j < shiftGoodsDOList.size(); j++) {
+				if (inventoryIds[i].longValue() == shiftGoodsDOList.get(j).getInventoryId().longValue()) {
+					shiftPlanNum.add(shiftGoodsDOList.get(j).getShiftPlanNum());
+				}
+			}
+			Float lockNum = ShiftInventoryListVO.ZERO_VALUE - shiftPlanNum.floatValue();
+			inventoryMapper.updateInventoryLockNum(inventoryIds[i],null,lockNum);
+		 }
 		int result = shiftInventoryListDOMapper.updateFinishedById(shiftInventoryListId,(byte) 2);
 		
 		return result;

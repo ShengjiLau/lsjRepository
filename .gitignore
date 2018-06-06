@@ -92,6 +92,4 @@ fabric.properties
 *.project
 *.classpath
 
-sso.properties
-*.log
-
+/log/

@@ -132,27 +132,27 @@
     
     
     
-    <update id="updateShiftGoodsByBatch">
+    <update id="updateShiftGoodsByBatch"  parameterType="java.util.List">
     update shift_goods
     <foreach collection="list" index="index" open="" close="" separator="," item="item">
     <set >
-      <if test="item.inventoryId != null" >
+      <if test="inventoryId != null" >
         inventory_id = #{item.inventoryId,jdbcType=BIGINT},
       </if>
-      <if test="item.shiftLocation != null" >
+      <if test="shiftLocation != null" >
         shift_location = #{item.shiftLocation,jdbcType=VARCHAR},
       </if>
-      <if test="item.shiftPlanNum != null" >
+      <if test="shiftPlanNum != null" >
         shift_plan_num = #{item.shiftPlanNum,jdbcType=DECIMAL},
       </if>
-      <if test="item.shiftNum != null" >
+      <if test="shiftNum != null" >
         shift_num = #{item.shiftNum,jdbcType=DECIMAL},
       </if>
-      <if test="item.remark != null" >
+      <if test="remark != null" >
         remark = #{item.remark,jdbcType=VARCHAR},
       </if>
-       <if test="item.shiftInventoryId != null" >
-        shift_inventory_id = #{item.shiftInventoryId,jdbcType=BIGINT},
+       <if test="shiftInventoryId != null" >
+        shift_inventory_id = #{shiftInventoryId,jdbcType=BIGINT},
       </if>
     </set>
     where shift_goods_id = #{item.shiftGoodsId,jdbcType=BIGINT}

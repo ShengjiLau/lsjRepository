@@ -220,7 +220,7 @@ public class Inventory implements Serializable {
     }
 
     public Float getLockNum() {
-        return lockNum;
+        return lockNum == null ? 0.00F : lockNum;
     }
 
     public void setLockNum(Float lockNum) {
