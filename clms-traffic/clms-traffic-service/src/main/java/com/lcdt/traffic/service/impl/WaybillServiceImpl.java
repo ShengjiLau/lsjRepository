@@ -176,12 +176,12 @@ public class WaybillServiceImpl implements WaybillService {
         int result = 0;
         Waybill waybill = queryOwnWaybill(waybillDto.getId(),waybillDto.getCompanyId());
         BeanUtils.copyProperties(waybillDto, waybill);
-        //新增运单
+        //更新运单
         result += waybillMapper.updateByPrimaryKeyAndCompanyId(waybill);
         //运单货物详细
         if (waybillDto.getWaybillItemsDtoList() != null && waybillDto.getWaybillItemsDtoList().size() > 0) {
             List<WaybillItems> waybillItemsUpdateList = new ArrayList<WaybillItems>();
-            List<WaybillItems> waybillItemsList = new ArrayList<WaybillItems>();
+            List<WaybillItems> waybillItemsAddList = new ArrayList<WaybillItems>();
             for (int i = 0; i < waybillDto.getWaybillItemsDtoList().size(); i++) {
                 WaybillItems waybillItems = new WaybillItems();
                 BeanUtils.copyProperties(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
@@ -195,16 +195,16 @@ public class WaybillServiceImpl implements WaybillService {
                     waybillItems.setCreateName(waybill.getCreateName());
                     waybillItems.setCompanyId(waybill.getCompanyId());
                     waybillItems.setWaybillId(waybill.getId());
-                    waybillItemsList.add(waybillItems);
+                    waybillItemsAddList.add(waybillItems);
                 }
             }
             if (waybillItemsUpdateList.size() > 0) {
                 //运单货物详细修改
-                result += waybillItemsMapper.updateForBatch(waybillItemsList);
+                result += waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
             }
-            if (waybillItemsList.size() > 0) {
+            if (waybillItemsAddList.size() > 0) {
                 //运单货物详细批量插入
-                result += waybillItemsMapper.insertForBatch(waybillItemsList);
+                result += waybillItemsMapper.insertForBatch(waybillItemsAddList);
             }
         }
         return result;
@@ -220,7 +220,7 @@ public class WaybillServiceImpl implements WaybillService {
         //运单货物详细
         if (waybillDto.getWaybillItemsDtoList() != null && waybillDto.getWaybillItemsDtoList().size() > 0) {
             List<WaybillItems> waybillItemsUpdateList = new ArrayList<WaybillItems>();
-            List<WaybillItems> waybillItemsList = new ArrayList<WaybillItems>();
+            List<WaybillItems> waybillItemsAddList = new ArrayList<WaybillItems>();
             for (int i = 0; i < waybillDto.getWaybillItemsDtoList().size(); i++) {
                 WaybillItems waybillItems = new WaybillItems();
                 BeanUtils.copyProperties(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
@@ -234,16 +234,16 @@ public class WaybillServiceImpl implements WaybillService {
                     waybillItems.setCreateName(waybill.getCreateName());
                     waybillItems.setCompanyId(waybill.getCompanyId());
                     waybillItems.setWaybillId(waybill.getId());
-                    waybillItemsList.add(waybillItems);
+                    waybillItemsAddList.add(waybillItems);
                 }
             }
             if (waybillItemsUpdateList.size() > 0) {
                 //运单货物详细修改
-                result += waybillItemsMapper.updateForBatch(waybillItemsList);
+                result += waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
             }
-            if (waybillItemsList.size() > 0) {
+            if (waybillItemsAddList.size() > 0) {
                 //运单货物详细批量插入
-                result += waybillItemsMapper.insertForBatch(waybillItemsList);
+                result += waybillItemsMapper.insertForBatch(waybillItemsAddList);
             }
         }
         return result;

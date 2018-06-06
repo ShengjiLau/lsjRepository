@@ -124,6 +124,8 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 for (OutplanGoods obj1 :list) {
                     OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
                     BeanUtils.copyProperties(obj1, outWhPlanGoodsDto);
+                    outWhPlanGoodsDto.setRemainGoodsNum(obj1.getPlanGoodsNum());
+                    outWhPlanGoodsDto.setOutOderGoodsNum(0f);
                     outWhPlanGoodsDtoList.add(outWhPlanGoodsDto);
                 }
                 result.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);

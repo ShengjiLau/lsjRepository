@@ -4,6 +4,7 @@ import com.lcdt.items.dto.GoodsListParamsDto;
 import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.model.SubItemsInfo;
 import com.lcdt.items.model.SubItemsInfoDao;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -113,4 +114,12 @@ public interface SubItemsInfoMapper {
 
 
     List<Long> selectGoodsIdsByCondition(GoodsListParamsDto dto);
+
+    /**
+     * 根据商品编码查询
+     * @param code
+     * @param companyId
+     * @return
+     */
+    List<SubItemsInfo> selectSubItemInfoByCode(@Param("subItemId") Long subItemId,@Param("code") String code,@Param("companyId") Long companyId);
 }
