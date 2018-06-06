@@ -177,6 +177,6 @@
     select <include refid="Base_Column_List"/>
     from t_contract_log
     where contract_id = #{contractId,jdbcType=BIGINT}
-    order by create_time
+    order by create_time desc
   </select>
 </mapper>
