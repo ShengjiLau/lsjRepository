@@ -4,9 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
@@ -28,7 +30,7 @@ import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/api/shiftInventory")
-@Api("移库单接口")
+@Api(description="移库单接口")
 public class ShiftInventoryListApi {
 	
 	@Autowired
@@ -40,7 +42,7 @@ public class ShiftInventoryListApi {
 	@PostMapping("/add")
 	@ApiOperation(value = "创建移库单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_add')")
-	public JSONObject insertInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
+	public JSONObject insertInventoryList(@RequestBody ShiftInventoryListDTO shiftInventoryListDTO) {
 		JSONObject jsonObject = validateParamInfo(shiftInventoryListDTO);
 		if (jsonObject.size() > 0) {
 			jsonObject.put("code", -1);
@@ -64,7 +66,7 @@ public class ShiftInventoryListApi {
 	@PostMapping("/complete")
 	@ApiOperation(value = "完成移库单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_complete')")
-	public JSONObject completeInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
+	public JSONObject completeInventoryList(@RequestBody ShiftInventoryListDTO shiftInventoryListDTO) {
 		JSONObject jsonObject = validateParamInfo(shiftInventoryListDTO);
 		if (jsonObject.size() > 0) {
 			jsonObject.put("code", -1);
@@ -72,7 +74,7 @@ public class ShiftInventoryListApi {
 		}
 		
 		jsonObject.clear();
-		int result = shiftInventoryListService.insertShiftInventoryList(shiftInventoryListDTO);
+		int result = shiftInventoryListService.completeShiftInventoryList(shiftInventoryListDTO);
 		logger.debug("完成移库单的数量:"+result);
 		
 		if (result > 0) {
@@ -84,7 +86,7 @@ public class ShiftInventoryListApi {
 		return jsonObject;
 	}
 	
-	@PostMapping("/list")
+	@GetMapping("/list")
 	@ApiOperation(value = "查询移库单列表")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_list')")
 	public JSONObject getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
@@ -101,10 +103,10 @@ public class ShiftInventoryListApi {
 		return jsonObject;
 	}
 	
-	@PostMapping("/details")
+	@GetMapping("/details")
 	@ApiOperation(value = "查询移库单详情")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_details')")
-	public JSONObject getOneShiftInventoryDetails(@ApiParam(value="移库单id",required=true) Long shiftId) {
+	public JSONObject getOneShiftInventoryDetails(@ApiParam(value="移库单id",required=true) @RequestParam Long shiftId) {
 		JSONObject jsonObject = new JSONObject();
 		ShiftInventoryListDTO shiftInventoryListDTO = shiftInventoryListService.getShiftInventoryListDetails(shiftId);
 		
@@ -147,19 +149,26 @@ public class ShiftInventoryListApi {
 	 */
 	public JSONObject validateParamInfo(ShiftInventoryListDTO shiftInventoryListDTO) {
 		JSONObject jsonObject = new JSONObject();
-		if (null == shiftInventoryListDTO.getShiftGoodsListDTOList()) {
-			jsonObject.put("message", "至少添加一条移库信息");
+		if (null == shiftInventoryListDTO.getShiftGoodsListDTOList() || 0 == shiftInventoryListDTO.getShiftGoodsListDTOList().size()) {
+			jsonObject.put("message", "至少添加一条移库信息！");
 			return jsonObject;
 		}
-		if (null == shiftInventoryListDTO.getShiftUser() || "".equals(shiftInventoryListDTO.getShiftUser())) {
-			jsonObject.put("message", "移库人不可为空");
+		if (null == shiftInventoryListDTO.getGroupName() || "".equals(shiftInventoryListDTO.getGroupName())) {
+			jsonObject.put("message", "业务组名称不可为空！");
 			return jsonObject;
 		}
-		if (null == shiftInventoryListDTO.getShiftTime() || "".equals(shiftInventoryListDTO.getShiftTime())) {
-			jsonObject.put("message", "移库时间不可为空");
+		if (null == shiftInventoryListDTO.getCustomerName() || "".equals(shiftInventoryListDTO.getCustomerName())) {
+			jsonObject.put("message", "客户名称不可为空！");
 			return jsonObject;
 		}
-		
+		if (null == shiftInventoryListDTO.getWarehouseName() || "".equals(shiftInventoryListDTO.getWarehouseName())) {
+			jsonObject.put("message", "仓库名称不可为空！");
+			return jsonObject;
+		}
+		if (null == shiftInventoryListDTO.getShiftType()) {
+			jsonObject.put("message", "移库类型不可为空！");
+			return jsonObject;
+		}
 		
 		return jsonObject;
 	}

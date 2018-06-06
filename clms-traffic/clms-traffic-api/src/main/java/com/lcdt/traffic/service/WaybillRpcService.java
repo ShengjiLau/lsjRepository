@@ -3,6 +3,7 @@ package com.lcdt.traffic.service;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.model.Waybill;
+import com.lcdt.traffic.model.WaybillDao;
 
 import java.util.Map;
 
@@ -20,6 +21,23 @@ public interface WaybillRpcService {
      * @return
      */
     Waybill addWaybill(WaybillDto waybillDto);
+
+
+    /**
+     * 修改我的运单
+     *
+     * @param waybillDto
+     * @return
+     */
+    int modifyOwnWaybill(WaybillDto waybillDto);
+
+    /**
+     * 修改客户运单
+     *
+     * @param waybillDto
+     * @return
+     */
+    int modifyCustomerWaybill(WaybillDto waybillDto);
 
     /**
      * 查询获取我的运单列表
@@ -50,7 +68,22 @@ public interface WaybillRpcService {
      */
     Waybill modifyCustomerWaybillStatus(WaybillModifyStatusDto dto);
 
+    /**
+     * 我的运单查询
+     *
+     * @param waybillId
+     * @param companyId
+     * @return
+     */
+    WaybillDao queryOwnWaybill(Long waybillId, Long companyId);
 
+    /**
+     * 客户运单查询
+     * @param waybillId
+     * @param carrierCompanyId
+     * @return
+     */
+    WaybillDao queryCustomerWaybill(Long waybillId, Long carrierCompanyId);
     /**
      * 我的运单 上传回单
      * @param dto

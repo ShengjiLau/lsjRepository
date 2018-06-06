@@ -182,6 +182,10 @@
     cancel_date = #{cancelDate,jdbcType=TIMESTAMP},
     cancel_man = #{cancelMan,jdbcType=VARCHAR},
     cancel_remark = #{cancelRemark,jdbcType=VARCHAR},
+    longitude=#{longitude,jdbcType=DOUBLE},
+    latitude=#{latitude,jdbcType=DOUBLE},
+    unload_location=#{unloadLocation,jdbcType=VARCHAR},
+    unload_time=#{unloadTime,jdbcType=TIMESTAMP},
     update_id = #{updateId,jdbcType=BIGINT},
     update_name = #{updateName,jdbcType=VARCHAR},
     update_date = CURRENT_TIMESTAMP,
@@ -392,123 +396,13 @@
 
   <update id="updateByPrimaryKeyAndCompanyId" parameterType="com.lcdt.traffic.model.Waybill">
     update t_waybill
-    set waybill_code = #{waybillCode,jdbcType=VARCHAR},
-    waybill_status = #{waybillStatus,jdbcType=SMALLINT},
-    waybill_source = #{waybillSource,jdbcType=VARCHAR},
-    group_id = #{groupId,jdbcType=BIGINT},
-    group_name = #{groupName,jdbcType=VARCHAR},
-    driver_id = #{driverId,jdbcType=BIGINT},
-    driver_name = #{driverName,jdbcType=VARCHAR},
-    driver_phone = #{driverPhone,jdbcType=VARCHAR},
-    vechicle_id = #{vechicleId,jdbcType=BIGINT},
-    vechicle_num = #{vechicleNum,jdbcType=VARCHAR},
-    customer_id = #{customerId,jdbcType=BIGINT},
-    customer_name = #{customerName,jdbcType=VARCHAR},
-    customer_phone = #{customerPhone,jdbcType=VARCHAR},
-    sales_order = #{salesOrder,jdbcType=VARCHAR},
-    cust_contact_man = #{custContactMan,jdbcType=VARCHAR},
-    send_wh_id = #{sendWhId,jdbcType=BIGINT},
-    send_wh_name = #{sendWhName,jdbcType=VARCHAR},
-    send_man = #{sendMan,jdbcType=VARCHAR},
-    send_phone = #{sendPhone,jdbcType=VARCHAR},
-    send_province = #{sendProvince,jdbcType=VARCHAR},
-    send_city = #{sendCity,jdbcType=VARCHAR},
-    send_county = #{sendCounty,jdbcType=VARCHAR},
-    send_address = #{sendAddress,jdbcType=VARCHAR},
-    receive_man = #{receiveMan,jdbcType=VARCHAR},
-    receive_phone = #{receivePhone,jdbcType=VARCHAR},
-    receive_province = #{receiveProvince,jdbcType=VARCHAR},
-    receive_city = #{receiveCity,jdbcType=VARCHAR},
-    receive_county = #{receiveCounty,jdbcType=VARCHAR},
-    receive_address = #{receiveAddress,jdbcType=VARCHAR},
-    transport_way = #{transportWay,jdbcType=SMALLINT},
-    goods_type = #{goodsType,jdbcType=VARCHAR},
-    start_date = #{startDate,jdbcType=TIMESTAMP},
-    arrive_date = #{arriveDate,jdbcType=TIMESTAMP},
-    is_receipt = #{isReceipt,jdbcType=SMALLINT},
-    is_urgent = #{isUrgent,jdbcType=SMALLINT},
-    pickup_way = #{pickupWay,jdbcType=VARCHAR},
-    distribution_way = #{distributionWay,jdbcType=VARCHAR},
-    electronical_receipt = #{electronicalReceipt,jdbcType=VARCHAR},
-    attachment1 = #{attachment1,jdbcType=VARCHAR},
-    attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
-    attachment2 = #{attachment2,jdbcType=VARCHAR},
-    attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
-    attachment3 = #{attachment3,jdbcType=VARCHAR},
-    attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
-    attachment4 = #{attachment4,jdbcType=VARCHAR},
-    attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
-    attachment5 = #{attachment5,jdbcType=VARCHAR},
-    attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
-    waybill_remark = #{waybillRemark,jdbcType=VARCHAR},
-    carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
-    carrier_company_name = #{carrierCompanyName,jdbcType=VARCHAR},
-    update_id = #{updateId,jdbcType=BIGINT},
-    update_name = #{updateName,jdbcType=VARCHAR},
-    update_date = CURRENT_TIMESTAMP,
-    receivable_name = #{receivableName,jdbcType=VARCHAR},
-    payable_name = #{payableName,jdbcType=VARCHAR}
+    set <include refid="update_column_list"/>
     where id = #{id,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
 
   <update id="updateByPrimaryKeyAndCarrierCompanyId" parameterType="com.lcdt.traffic.model.Waybill">
     update t_waybill
-    set waybill_code = #{waybillCode,jdbcType=VARCHAR},
-    waybill_status = #{waybillStatus,jdbcType=SMALLINT},
-    waybill_source = #{waybillSource,jdbcType=VARCHAR},
-    group_id = #{groupId,jdbcType=BIGINT},
-    group_name = #{groupName,jdbcType=VARCHAR},
-    driver_id = #{driverId,jdbcType=BIGINT},
-    driver_name = #{driverName,jdbcType=VARCHAR},
-    driver_phone = #{driverPhone,jdbcType=VARCHAR},
-    vechicle_id = #{vechicleId,jdbcType=BIGINT},
-    vechicle_num = #{vechicleNum,jdbcType=VARCHAR},
-    customer_id = #{customerId,jdbcType=BIGINT},
-    customer_name = #{customerName,jdbcType=VARCHAR},
-    customer_phone = #{customerPhone,jdbcType=VARCHAR},
-    sales_order = #{salesOrder,jdbcType=VARCHAR},
-    cust_contact_man = #{custContactMan,jdbcType=VARCHAR},
-    send_wh_id = #{sendWhId,jdbcType=BIGINT},
-    send_wh_name = #{sendWhName,jdbcType=VARCHAR},
-    send_man = #{sendMan,jdbcType=VARCHAR},
-    send_phone = #{sendPhone,jdbcType=VARCHAR},
-    send_province = #{sendProvince,jdbcType=VARCHAR},
-    send_city = #{sendCity,jdbcType=VARCHAR},
-    send_county = #{sendCounty,jdbcType=VARCHAR},
-    send_address = #{sendAddress,jdbcType=VARCHAR},
-    receive_man = #{receiveMan,jdbcType=VARCHAR},
-    receive_phone = #{receivePhone,jdbcType=VARCHAR},
-    receive_province = #{receiveProvince,jdbcType=VARCHAR},
-    receive_city = #{receiveCity,jdbcType=VARCHAR},
-    receive_county = #{receiveCounty,jdbcType=VARCHAR},
-    receive_address = #{receiveAddress,jdbcType=VARCHAR},
-    transport_way = #{transportWay,jdbcType=SMALLINT},
-    goods_type = #{goodsType,jdbcType=VARCHAR},
-    start_date = #{startDate,jdbcType=TIMESTAMP},
-    arrive_date = #{arriveDate,jdbcType=TIMESTAMP},
-    is_receipt = #{isReceipt,jdbcType=SMALLINT},
-    is_urgent = #{isUrgent,jdbcType=SMALLINT},
-    pickup_way = #{pickupWay,jdbcType=VARCHAR},
-    distribution_way = #{distributionWay,jdbcType=VARCHAR},
-    electronical_receipt = #{electronicalReceipt,jdbcType=VARCHAR},
-    attachment1 = #{attachment1,jdbcType=VARCHAR},
-    attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
-    attachment2 = #{attachment2,jdbcType=VARCHAR},
-    attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
-    attachment3 = #{attachment3,jdbcType=VARCHAR},
-    attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
-    attachment4 = #{attachment4,jdbcType=VARCHAR},
-    attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
-    attachment5 = #{attachment5,jdbcType=VARCHAR},
-    attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
-    waybill_remark = #{waybillRemark,jdbcType=VARCHAR},
-    carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT},
-    carrier_company_name = #{carrierCompanyName,jdbcType=VARCHAR},
-    update_id = #{updateId,jdbcType=BIGINT},
-    update_name = #{updateName,jdbcType=VARCHAR},
-    update_date = CURRENT_TIMESTAMP,
-    receivable_name = #{receivableName,jdbcType=VARCHAR},
-    payable_name = #{payableName,jdbcType=VARCHAR}
+    set set <include refid="update_column_list"/>
     where id = #{id,jdbcType=BIGINT} and carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
   </update>
 
@@ -560,6 +454,18 @@
     <if test="waybillStatus!=null and waybillStatus!=''">
      waybill_status = #{waybillStatus,jdbcType=SMALLINT},
     </if>
+    <if test="longitude!=null and longitude!=''">
+      longitude=#{longitude,jdbcType=DOUBLE},
+    </if>
+    <if test="latitude!=null and latitude!=''">
+      latitude=#{latitude,jdbcType=DOUBLE},
+    </if>
+    <if test="unloadLocation!=null and unloadLocation!=''">
+      unload_location=#{unloadLocation,jdbcType=VARCHAR},
+    </if>
+    <if test="unloadTime!=null">
+      unload_time=CURRENT_TIMESTAMP,
+    </if>
     <if test="electronicalReceipt!=null and electronicalReceipt!=''">
       electronical_receipt = #{electronicalReceipt,jdbcType=VARCHAR},
     </if>
@@ -574,6 +480,18 @@
     set
     <if test="waybillStatus!=null and waybillStatus!=''">
       waybill_status = #{waybillStatus,jdbcType=SMALLINT},
+    </if>
+    <if test="longitude!=null and longitude!=''">
+      longitude=#{longitude,jdbcType=DOUBLE},
+    </if>
+    <if test="latitude!=null and latitude!=''">
+      latitude=#{latitude,jdbcType=DOUBLE},
+    </if>
+    <if test="unloadLocation!=null and unloadLocation!=''">
+      unload_location=#{unloadLocation,jdbcType=VARCHAR},
+    </if>
+    <if test="unloadTime!=null">
+      unload_time=CURRENT_TIMESTAMP,
     </if>
     <if test="electronicalReceipt!=null and electronicalReceipt!=''">
       electronical_receipt = #{electronicalReceipt,jdbcType=VARCHAR},
@@ -827,6 +745,18 @@
     </if>
     <if test="electronicalReceipt!=null and electronicalReceipt!=''">
       electronical_receipt = #{electronicalReceipt,jdbcType=VARCHAR},
+    </if>
+    <if test="longitude!=null and longitude!=''">
+      longitude=#{longitude,jdbcType=DOUBLE},
+    </if>
+    <if test="latitude!=null and latitude!=''">
+      latitude=#{latitude,jdbcType=DOUBLE},
+    </if>
+    <if test="unloadLocation!=null and unloadLocation!=''">
+      unload_location=#{unloadLocation,jdbcType=VARCHAR},
+    </if>
+    <if test="unloadTime!=null">
+      unload_time=CURRENT_TIMESTAMP,
     </if>
     update_id = #{updateId,jdbcType=BIGINT},
     update_name = #{updateName,jdbcType=VARCHAR},
