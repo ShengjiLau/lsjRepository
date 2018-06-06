@@ -443,6 +443,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             tObj.setStorageLocationId(obj1.getStorageLocationId());
             tObj.setStorageLocationCode(obj1.getStorageLocationCode());
             tObj.setGoodsNum(obj1.getOutOderGoodsNum());//配仓数
+            tObj.setOutboundQuantity(obj1.getOutOderGoodsNum());
             tObj.setInStock(obj1.getInStock());//可用库存
             tObj.setRemark(obj1.getDisRemark());
             tObj.setInvertoryId(obj1.getInvertoryId());
