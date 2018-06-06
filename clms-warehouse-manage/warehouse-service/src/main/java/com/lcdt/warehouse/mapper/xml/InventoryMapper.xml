@@ -95,7 +95,7 @@
 		set 
 		<choose>
 		<when test="arg1 != null">
-			invertory_num = invertory_num - #{arg1,jdbcType=FLOAT},
+			inventory_num = inventory_num - #{arg1,jdbcType=FLOAT}
 			lock_num =lock_num - #{arg2,jdbcType=FLOAT}
 		</when>
 		<otherwise>
