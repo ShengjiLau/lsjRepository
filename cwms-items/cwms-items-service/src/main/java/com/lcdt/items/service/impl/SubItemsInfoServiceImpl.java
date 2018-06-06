@@ -36,6 +36,9 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     @Override
     public int addSubItemsInfo(SubItemsInfoDao subItemsInfoDao) {
         int result = 0;
+        if(isExitCode(subItemsInfoDao.getCode(),subItemsInfoDao.getCompanyId())){
+            throw new RuntimeException("商品编码已存在");
+        }
         result = subItemsInfoMapper.insert(subItemsInfoDao);
 
         //子商品自定义属性值
@@ -108,6 +111,9 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
     @Override
     public int modifySubItemsInfo(SubItemsInfoDao subItemsInfoDao) {
         int result = 0;
+        if(isExitCode(subItemsInfoDao.getCode(),subItemsInfoDao.getCompanyId())){
+            throw new RuntimeException("商品编码已存在");
+        }
         //更新子商品自定义属性
         if (subItemsInfoDao.getCustomValueList() != null) {
             for (CustomValue customValue : subItemsInfoDao.getCustomValueList()) {
@@ -166,5 +172,12 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
         return goodsIds;
     }
 
-
+    private boolean isExitCode(String code,Long companyId){
+        List<SubItemsInfo> resultList= subItemsInfoMapper.selectSubItemInfoByCode(code,companyId);
+        if(resultList!=null&&resultList.size()>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

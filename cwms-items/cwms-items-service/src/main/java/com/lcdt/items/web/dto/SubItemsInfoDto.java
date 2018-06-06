@@ -30,6 +30,11 @@ public class SubItemsInfoDto {
     private String specComb;
     @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
+    @ApiModelProperty(value = "商品重量")
+    private Double weight;
+    @ApiModelProperty(value = "商品体积")
+    private Double volume;
+
     private List<ItemSpecKeyValueDto> itemSpecKeyValueDtoList;
 
     private List<CustomValue> customValueList;
@@ -112,6 +117,22 @@ public class SubItemsInfoDto {
 
     public void setCompanyId(Long companyId) {
         this.companyId = companyId;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public Double getVolume() {
+        return volume;
+    }
+
+    public void setVolume(Double volume) {
+        this.volume = volume;
     }
 
     public List<CustomValue> getCustomValueList() {
