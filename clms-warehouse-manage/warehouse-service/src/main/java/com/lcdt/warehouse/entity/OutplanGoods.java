@@ -45,7 +45,7 @@ public class OutplanGoods implements Serializable {
 
     private Integer unitData;
 
-    private Integer planGoodsNum;
+    private Float planGoodsNum;
 
     private String remark;
 
@@ -157,11 +157,11 @@ public class OutplanGoods implements Serializable {
         this.unitData = unitData;
     }
 
-    public Integer getPlanGoodsNum() {
+    public Float getPlanGoodsNum() {
         return planGoodsNum;
     }
 
-    public void setPlanGoodsNum(Integer planGoodsNum) {
+    public void setPlanGoodsNum(Float planGoodsNum) {
         this.planGoodsNum = planGoodsNum;
     }
 
