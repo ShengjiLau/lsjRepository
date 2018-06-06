@@ -121,5 +121,5 @@ public interface SubItemsInfoMapper {
      * @param companyId
      * @return
      */
-    List<SubItemsInfo> selectSubItemInfoByCode(@Param("code") String code,@Param("companyId") Long companyId);
+    List<SubItemsInfo> selectSubItemInfoByCode(@Param("subItemId") Long subItemId,@Param("code") String code,@Param("companyId") Long companyId);
 }

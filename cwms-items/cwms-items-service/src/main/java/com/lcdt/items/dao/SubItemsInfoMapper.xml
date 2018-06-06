@@ -232,6 +232,10 @@
     select sub_item_id, item_id, image, code, bar_code, purchase_price, wholesale_price,
     retail_price, spec_comb, company_id,weight,volume
     from t_sub_items_info
-    where code=#{code,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}
+    <where> code=#{code,jdbcType=VARCHAR} and company_id = #{companyId,jdbcType=BIGINT}
+      <if test="subItemId!=null and subItemId!=''">
+        and sub_item_id !=#{subItemId,jdbcType=BIGINT}
+      </if>
+    </where>
   </select>
 </mapper>
