@@ -38,14 +38,14 @@
         change_num, business_no, type,
         original_goods_id, customer_id, customer_name,
         storage_location_id, comment, company_id,
-        log_no, batch, order_id
+        log_no, batch, order_id,inventory_id
         )
         values (#{logId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{warehouseId,jdbcType=BIGINT},
         #{storageLocationCode,jdbcType=VARCHAR}, #{currentInvetory,jdbcType=INTEGER},
         #{changeNum,jdbcType=REAL}, #{businessNo,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER},
         #{originalGoodsId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR},
         #{storageLocationId,jdbcType=BIGINT}, #{comment,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
-        INVENTORY_LOG_NO(), #{batch,jdbcType=VARCHAR}, #{orderId,jdbcType=BIGINT}
+        INVENTORY_LOG_NO(), #{batch,jdbcType=VARCHAR}, #{orderId,jdbcType=BIGINT},#{inventoryId,jdbcType=BIGINT}
         )
     </insert>
 
