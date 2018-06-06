@@ -182,7 +182,7 @@
         select o.warehouse_id,o.warehouse_name,g.goods_name,g.goods_code,g.goods_barcode,g.unit,SUM(g.receivalbe_amount) receivalbe_amount
         from in_warehouse_order o
         left join inorder_goods_info g on o.inorder_id=g.inorder_id
-        where company_id= #{companyId,jdbcType=BIGINT} and plan_id = #{planId,jdbcType=BIGINT}
+        where o.company_id= #{companyId,jdbcType=BIGINT} and o.plan_id = #{planId,jdbcType=BIGINT}
         group by o.warehouse_id,o.warehouse_name,g.goods_code,g.goods_barcode
     </select>
 
