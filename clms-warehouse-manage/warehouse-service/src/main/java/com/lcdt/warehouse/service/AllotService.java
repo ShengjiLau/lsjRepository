@@ -2,7 +2,6 @@ package com.lcdt.warehouse.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.warehouse.dto.AllotDto;
-import com.lcdt.warehouse.entity.Allot;
 
 import java.util.Map;
 
@@ -35,16 +34,15 @@ public interface AllotService {
      */
     boolean modifyAllotIsDelete(Long allotId);
     /**
-     * 入库
-     * @param allot
-     * @return
-     */
-    int addAllotInTime(Allot allot);
-
-    /**
      * 获取调拨单详情
      * @param allotId
      * @return
      */
     AllotDto getAllotInfo(Long allotId);
+    /**
+     * 入库
+     * @param dto
+     * @return
+     */
+    boolean allotPutInStorage(AllotDto dto);
 }

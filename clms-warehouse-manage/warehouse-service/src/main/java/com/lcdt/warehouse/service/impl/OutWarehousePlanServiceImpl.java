@@ -124,6 +124,8 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 for (OutplanGoods obj1 :list) {
                     OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
                     BeanUtils.copyProperties(obj1, outWhPlanGoodsDto);
+                    outWhPlanGoodsDto.setRemainGoodsNum(obj1.getPlanGoodsNum());
+                    outWhPlanGoodsDto.setOutOderGoodsNum(0f);
                     outWhPlanGoodsDtoList.add(outWhPlanGoodsDto);
                 }
                 result.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);
@@ -440,7 +442,8 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             tObj.setBatch(obj1.getBatch());
             tObj.setStorageLocationId(obj1.getStorageLocationId());
             tObj.setStorageLocationCode(obj1.getStorageLocationCode());
-            tObj.setGoodsNum(obj1.getOutOderGoodsNum());//配仓数
+            tObj.setGoodsNum(obj1.getDistGoodsNum());//配仓数
+            tObj.setOutboundQuantity(obj1.getDistGoodsNum());
             tObj.setInStock(obj1.getInStock());//可用库存
             tObj.setRemark(obj1.getDisRemark());
             tObj.setInvertoryId(obj1.getInvertoryId());
@@ -464,7 +467,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             _outWarehousePlan.setPlanStatus((Integer) OutWhPlanStatusEnum.isWarehouse.getValue());
         }
         OutWarehousePlan wrapperObj = new OutWarehousePlan();
-        wrapperObj.setOutplanId(outWhPlanDto.getCompanyId());
+        wrapperObj.setOutplanId(outWhPlanDto.getOutplanId());
         wrapperObj.setCompanyId(userCompRel.getCompId());
         return this.update(_outWarehousePlan,new EntityWrapper<OutWarehousePlan>(wrapperObj));
     }

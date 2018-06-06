@@ -39,7 +39,7 @@
       This element was generated on Wed Dec 20 17:19:52 CST 2017.
     -->
     delete from t_waybill_items
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lcdt.traffic.model.WaybillItems">
     <!--
@@ -145,15 +145,23 @@
   <update id="updateForBatch" parameterType="java.util.List">
     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
       update t_waybill_items
-      set amount = #{tem.amount,jdbcType=REAL},
-      receipt_amount = #{tem.receiptAmount,jdbcType=REAL},
-      freight_price = #{tem.freightPrice,jdbcType=REAL},
-      freight_total = #{tem.freightTotal,jdbcType=REAL},
-      pay_price = #{tem.payPrice,jdbcType=REAL},
-      pay_total = #{tem.payTotal,jdbcType=REAL},
-      remark = #{tem.remark,jdbcType=VARCHAR},
-      update_id = #{tem.updateId,jdbcType=BIGINT},
-      update_name = #{tem.updateName,jdbcType=VARCHAR},
+      set split_goods_detail_id = #{splitGoodsDetailId,jdbcType=BIGINT},
+      plan_detail_id = #{planDetailId,jdbcType=BIGINT},
+      waybill_id = #{waybillId,jdbcType=BIGINT},
+      goods_id = #{goodsId,jdbcType=BIGINT},
+      goods_name = #{goodsName,jdbcType=VARCHAR},
+      sub_goods_id = #{subGoodsId,jdbcType=BIGINT},
+      goods_spec = #{goodsSpec,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=REAL},
+      receipt_amount = #{receiptAmount,jdbcType=REAL},
+      freight_price = #{freightPrice,jdbcType=REAL},
+      freight_total = #{freightTotal,jdbcType=REAL},
+      pay_price = #{payPrice,jdbcType=REAL},
+      pay_total = #{payTotal,jdbcType=REAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      update_id = #{updateId,jdbcType=BIGINT},
+      update_name = #{updateName,jdbcType=VARCHAR},
       update_date = CURRENT_TIMESTAMP
       where id = #{id,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
     </foreach>

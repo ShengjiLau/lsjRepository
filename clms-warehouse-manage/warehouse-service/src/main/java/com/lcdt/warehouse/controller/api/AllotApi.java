@@ -7,7 +7,6 @@ import com.lcdt.userinfo.model.User;
 import com.lcdt.util.ClmsBeanUtil;
 import com.lcdt.warehouse.dto.AllotDto;
 import com.lcdt.warehouse.dto.PageBaseDto;
-import com.lcdt.warehouse.entity.Allot;
 import com.lcdt.warehouse.service.AllotService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -105,24 +104,6 @@ public class AllotApi {
         }
     }
 
-    @ApiOperation("入库")
-    @RequestMapping(value = "/allotPutInStorage", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_put_in_storage')")
-    public JSONObject allotPutInStorage(@ApiParam(value = "调拨单id",required = true) @RequestParam Long allotId) {
-        Allot allot = new Allot();
-        allot.setAllotId(allotId);
-        allot.setAllotInTime(new Date());
-        int result = allotService.addAllotInTime(allot);
-        if (result > 0) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", 0);
-            jsonObject.put("message", "入库成功");
-            return jsonObject;
-        } else {
-            throw new RuntimeException("入库失败");
-        }
-    }
-
     @ApiOperation("详情")
     @RequestMapping(value = "/allotDetail", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_detail')")
@@ -136,6 +117,21 @@ public class AllotApi {
             return jsonObject;
         } else {
             throw new RuntimeException("获取失败");
+        }
+    }
+
+    @ApiOperation("入库")
+    @RequestMapping(value = "/allotPutInStorage", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_put_in_storage')")
+    public JSONObject allotPutInStorage(@Validated @RequestBody AllotDto dto) {
+        boolean result = allotService.allotPutInStorage(dto);
+        if (result) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "入库成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("入库失败");
         }
     }
 }
