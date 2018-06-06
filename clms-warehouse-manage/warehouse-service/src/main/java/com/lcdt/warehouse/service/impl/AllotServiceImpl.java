@@ -73,7 +73,7 @@ public class AllotServiceImpl implements AllotService{
             BeanUtils.copyProperties(dto, allot); //复制对象属性
 
             //得到修改之前调拨单
-            Allot oldAllot = allotMapper.selectByPrimaryKey(allot.getAllotId());
+//            Allot oldAllot = allotMapper.selectByPrimaryKey(allot.getAllotId());
 
             allotMapper.updateByPrimaryKeySelective(allot);
             //获取该调拨单下面的商品apId用来匹配被删除的商品
@@ -129,13 +129,24 @@ public class AllotServiceImpl implements AllotService{
     }
 
     @Override
-    public int addAllotInTime(Allot allot) {
-        int result = allotMapper.updateByPrimaryKeySelective(allot);
-        return result;
-    }
-    @Override
     public AllotDto getAllotInfo(Long allotId) {
         AllotDto dto = allotMapper.selectByAllotId(allotId);
         return dto;
+    }
+
+    @Override
+    public boolean allotPutInStorage(AllotDto dto) {
+        try{
+            Allot allot = new Allot();
+            BeanUtils.copyProperties(dto, allot); //复制对象属性
+            allotMapper.updateByPrimaryKeySelective(allot);
+
+            if (dto.getAllotProductList() != null && dto.getAllotProductList().size() > 0) {
+                allotProductMapper.updateBatch(dto.getAllotProductList());
+            }
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 }
