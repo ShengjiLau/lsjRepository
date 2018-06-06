@@ -42,11 +42,7 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
     public int addOutWarehouseOrder(OutWhOrderDto dto) {
         int result = 0;
         OutWarehouseOrder outWarehouseOrder = new OutWarehouseOrder();
-        if(dto.getOperationType()==1){
-            dto.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND);
-        }else{
-            dto.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND);
-        }
+        dto.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND);
         BeanUtils.copyProperties(dto, outWarehouseOrder);
         //插入出库单
         result += baseMapper.insertOutWarehouseOrder(outWarehouseOrder);
@@ -66,6 +62,8 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
             //直接出库
             if (dto.getOperationType() == 1) {
                 //对接库存，减库存
+                outWarehouseOrder = queryOutWarehouseOrder(outWarehouseOrder.getCompanyId(),outWarehouseOrder.getOutorderId());
+                outWarehouseOrder.setOutboundMan(dto.getCreateName());
                 inventoryService.outInventory(outWarehouseOrder,outOrderGoodsInfoList);
             }
         }
@@ -123,12 +121,13 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
                 result = outOrderGoodsInfoService.updateBatchById(modifyOutOrderGoodsInfoList);
             }
         }
-        //更新入库单状态
-        result = modifyOutOrderStatus(modifyParams);
+//        //更新入库单状态
+//        result = modifyOutOrderStatus(modifyParams);
 
         //出库减库存
         OutWarehouseOrder outWarehouseOrder=new OutWarehouseOrder();
-        outWarehouseOrder=queryOutWarehouseOrder(modifyParams.getCompanyId(),modifyParams.getOutorderId());
+        outWarehouseOrder = queryOutWarehouseOrder(modifyParams.getCompanyId(),modifyParams.getOutorderId());
+        outWarehouseOrder.setOutboundMan(modifyParams.getUpdateName());
         inventoryService.outInventory(outWarehouseOrder,modifyOutOrderGoodsInfoList);
 
         return result;
