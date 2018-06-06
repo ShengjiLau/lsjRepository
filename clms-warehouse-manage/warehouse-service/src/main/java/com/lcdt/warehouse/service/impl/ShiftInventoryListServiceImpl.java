@@ -73,7 +73,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		shiftInventoryListDO.setGmtCreate(new Date());
 		shiftInventoryListDO.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
 		shiftInventoryListDO.setCreateUser(SecurityInfoGetter.getUser().getRealName());
-		int i = shiftInventoryListDOMapper.insert(shiftInventoryListDO);
+		int result = shiftInventoryListDOMapper.insert(shiftInventoryListDO);
 		
 		//取得ShiftGoodsListDTO集合
 		List<ShiftGoodsListDTO> shiftGoodsListDTOList = shiftInventoryListDTO.getShiftGoodsListDTOList();
@@ -100,10 +100,10 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		int j = shiftGoodsDOMapper.insertShiftGoodsByBatch(shiftGoodsDOList);
 		
 		logger.debug("插入的移库商品信息条数为"+j);
-		logger.debug("插入的移库单数量为"+i);
+		logger.debug("插入的移库单数量为"+result);
 		logger.debug("修改的库存数量为"+h);
 		
-		if (i > 0 && j == shiftGoodsDOList.size() && shiftGoodsListDTOList.size() == h) {
+		if (result > 0) {
 			return 1;
 		}else {
 			return -1;

@@ -67,6 +67,17 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         return page.setRecords(inventories);
     }
 
+    public List<Inventory> queryAllInventory(Long companyId,Long wareHouseId,Long goodsId) {
+        InventoryQueryDto inventoryQueryDto = new InventoryQueryDto();
+        inventoryQueryDto.setWareHouseId(wareHouseId);
+        inventoryQueryDto.setCompanyId(companyId);
+
+        ArrayList arrayList = new ArrayList();
+        arrayList.add(goodsId);
+        List<Inventory> inventories = inventoryMapper.selectInventoryListByqueryDto(arrayList, inventoryQueryDto);
+        return inventories;
+    }
+
 
     private void queryGoodsInfo(Long companyId, List<Inventory> inventories) {
         logger.info("查询 库存 关联 商品信息 {}",inventories);
