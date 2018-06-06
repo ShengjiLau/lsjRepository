@@ -44,8 +44,16 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
+     
 server:
   port: 8071
 logging:
   file: ${user.dir}/log/warehouse-service.log
+  
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    pageSizeZero: true
+    params: count=countSql   
 

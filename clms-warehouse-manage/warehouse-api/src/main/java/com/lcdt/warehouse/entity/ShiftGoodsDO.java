@@ -54,13 +54,7 @@ public class ShiftGoodsDO implements Serializable {
         this.shiftGoodsId = shiftGoodsId;
     }
 
-    public Long getInventoryId() {
-        return inventoryId;
-    }
-
-    public void setInventoryId(Long inventoryId) {
-        this.inventoryId = inventoryId;
-    }
+  
 
     public String getShiftLocation() {
         return shiftLocation;
@@ -101,6 +95,16 @@ public class ShiftGoodsDO implements Serializable {
 	public void setShiftInventoryId(Long shiftInventoryId) {
 		this.shiftInventoryId = shiftInventoryId;
 	}
+
+	public Long getInventoryId() {
+		return inventoryId;
+	}
+
+	public void setInventoryId(Long inventoryId) {
+		this.inventoryId = inventoryId;
+	}
+
+	
 
    
 }
