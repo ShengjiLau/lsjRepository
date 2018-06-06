@@ -169,7 +169,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             throw new RuntimeException("锁定库存量不能大于库存剩余数量");
         }
         inventory.setInvertoryNum(invertoryNum - tryLockNum);
-        inventory.setLockNum(tryLockNum);
+        inventory.setLockNum(inventory.getLockNum() + tryLockNum);
         updateById(inventory);
     }
 
