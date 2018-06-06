@@ -2,12 +2,15 @@ package com.lcdt.warehouse.factory;
 
 import com.lcdt.warehouse.contants.InventoryBusinessType;
 import com.lcdt.warehouse.entity.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 public interface InventoryLogFactory {
 
     InventoryLog createInventoryLog();
 
+    static Logger logger = LoggerFactory.getLogger(InventoryLogFactory.class);
 
     public static InventoryLog createFromInventory(InWarehouseOrder order, Inventory inventory,Float updatedInventoryNum) {
         Assert.notNull(inventory,"库存不能为空");
@@ -31,6 +34,7 @@ public interface InventoryLogFactory {
     }
 
     public static InventoryLog createFromOutInventory(OutWarehouseOrder order,OutOrderGoodsInfo goodsInfo,Float updatedInventoryNum,Inventory inventory){
+        logger.info("创建 出库 日志 出库库存 {}",inventory);
         Assert.notNull(inventory,"库存不能为空");
         InventoryLog inventoryLog = new InventoryLog();
         inventoryLog.setBusinessNo(order.getOutorderNo());
