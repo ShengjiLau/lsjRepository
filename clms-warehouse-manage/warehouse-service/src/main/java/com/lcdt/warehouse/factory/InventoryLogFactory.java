@@ -30,14 +30,15 @@ public interface InventoryLogFactory {
         return inventoryLog;
     }
 
-    public static InventoryLog createFromOutInventory(OutWarehouseOrder order,OutOrderGoodsInfo inventory,Float updatedInventoryNum){
+    public static InventoryLog createFromOutInventory(OutWarehouseOrder order,OutOrderGoodsInfo goodsInfo,Float updatedInventoryNum,Inventory inventory){
         Assert.notNull(inventory,"库存不能为空");
         InventoryLog inventoryLog = new InventoryLog();
         inventoryLog.setBusinessNo(order.getOutorderNo());
+        inventoryLog.setOrderId(order.getOutorderId());
         inventoryLog.setGoodsId(inventory.getGoodsId());
         inventoryLog.setCompanyId(order.getCompanyId());
         inventoryLog.setWarehouseId(order.getWarehouseId());
-        inventoryLog.setChangeNum(inventory.getGoodsNum());
+        inventoryLog.setChangeNum(goodsInfo.getOutboundQuantity());
         inventoryLog.setStorageLocationCode(inventory.getStorageLocationCode());
         inventoryLog.setStorageLocationId(inventory.getStorageLocationId());
         inventoryLog.setOriginalGoodsId(inventory.getGoodsId());
@@ -48,6 +49,7 @@ public interface InventoryLogFactory {
         inventoryLog.setLogNo("");
         inventoryLog.setComment(order.getOutboundRemark());
         inventoryLog.setCurrentInvetory(updatedInventoryNum);
+        inventoryLog.setInventoryId(inventory.getInvertoryId());
         return inventoryLog;
     }
 
