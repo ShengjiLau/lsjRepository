@@ -174,7 +174,7 @@ public class WaybillServiceImpl implements WaybillService {
     @Override
     public int modifyOwnWaybill(WaybillDto waybillDto) {
         int result = 0;
-        Waybill waybill = new Waybill();
+        Waybill waybill = queryOwnWaybill(waybillDto.getId(),waybillDto.getCompanyId());
         BeanUtils.copyProperties(waybillDto, waybill);
         //新增运单
         result += waybillMapper.updateByPrimaryKeyAndCompanyId(waybill);
