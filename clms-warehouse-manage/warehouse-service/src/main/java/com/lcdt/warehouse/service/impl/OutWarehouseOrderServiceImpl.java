@@ -128,7 +128,7 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
 
         //出库减库存
         OutWarehouseOrder outWarehouseOrder=new OutWarehouseOrder();
-        outWarehouseOrder=queryOutWarehouseOrder(modifyParams.getCompanyId(),modifyParams.getOutorderId());
+        outWarehouseOrder = queryOutWarehouseOrder(modifyParams.getCompanyId(),modifyParams.getOutorderId());
         inventoryService.outInventory(outWarehouseOrder,modifyOutOrderGoodsInfoList);
 
         return result;
