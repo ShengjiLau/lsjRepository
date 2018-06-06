@@ -3,6 +3,7 @@
 <mapper namespace="com.lcdt.warehouse.mapper.OutOrderGoodsInfoMapper">
     <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.OutOrderGoodsInfo">
         <id column="relation_id" jdbcType="BIGINT" property="relationId" />
+        <result column="invertory_id" jdbcType="BIGINT" property="invertoryId" />
         <result column="outorder_id" jdbcType="BIGINT" property="outorderId" />
         <result column="outplan_relation_id" jdbcType="BIGINT" property="outplanRelationId" />
         <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
@@ -26,7 +27,7 @@
     </resultMap>
     <resultMap id="OutOrderGoodsInfoDetailsMap" type="com.lcdt.warehouse.dto.OutOrderGoodsInfoDto"></resultMap>
     <sql id="BaseSelectFields">
-        relation_id, outorder_id, outplan_relation_id, goods_id, goods_name, goods_code,
+        relation_id,invertory_id, outorder_id, outplan_relation_id, goods_id, goods_name, goods_code,
         goods_bar_code, goods_spec, goods_classify_id, goods_classify_name, min_unit, unit,
         unit_data, batch, storage_location_id, storage_location_code, in_stock, goods_num,
         outbound_quantity, outbound_price, remark
