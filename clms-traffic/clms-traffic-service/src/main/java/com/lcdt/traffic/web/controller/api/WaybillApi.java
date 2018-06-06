@@ -86,13 +86,13 @@ public class WaybillApi {
     @ApiOperation("我的运单--修改")
     @RequestMapping(value = "/own/modify", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_modify')")
-    public JSONObject modifyOwnWaybill(WaybillDto dto) {
+    public JSONObject modifyOwnWaybill(@RequestBody WaybillDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
-        int result = waybillService.modifyOwnWaybill(dto);
+        int result = waybillRpcService.modifyOwnWaybill(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
@@ -106,13 +106,13 @@ public class WaybillApi {
     @ApiOperation("客户运单--修改")
     @RequestMapping(value = "/customer/modify", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_modify')")
-    public JSONObject modifyCustomerWaybill(WaybillDto dto) {
+    public JSONObject modifyCustomerWaybill(@RequestBody WaybillDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
         dto.setCarrierCompanyId(companyId);
-        int result = waybillService.modifyCustomerWaybill(dto);
+        int result = waybillRpcService.modifyCustomerWaybill(dto);
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
