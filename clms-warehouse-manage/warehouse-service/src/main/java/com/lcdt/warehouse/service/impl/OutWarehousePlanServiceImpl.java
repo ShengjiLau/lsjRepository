@@ -105,7 +105,6 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                     result.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
                 }
             }
-
             if(result.getOutWhPlanGoodsDtoList()!=null) {
                 List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<OutWhPlanGoodsDto>();
                 for (OutplanGoods obj1 :list) {
@@ -172,7 +171,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         outWarehousePlan.setCreateTime(new Date());
         outWarehousePlan.setCreateUserId(userCompRel.getUser().getUserId());
         outWarehousePlan.setCreateUserName(userCompRel.getUser().getRealName());
-        if (!StringUtils.isEmpty(outWarehousePlan.getStoragePlanTime())) { //竞价开始
+        if (!StringUtils.isEmpty(outWhPlanDto.getStoragePlanTime())) { //竞价开始
             try {
                 outWarehousePlan.setStoragePlanTime(DateUtility.string2Date(outWhPlanDto.getStoragePlanTime(),"yyyy-MM-dd HH:mm:ss"));
             } catch (ParseException e) {
