@@ -169,9 +169,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             throw new RuntimeException("锁定库存量不能大于库存剩余数量");
         }
         inventory.setInvertoryNum(invertoryNum - tryLockNum);
-
-//        inventory.setLockNum(invertoryNum);
-
         inventory.setLockNum(inventory.getLockNum() + tryLockNum);
         updateById(inventory);
     }
@@ -198,7 +195,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             if (inventory.getLockNum() >= good.getOutboundQuantity()) {
                 inventory.setLockNum(inventory.getLockNum() - good.getOutboundQuantity());
                 inventoryMapper.updateById(inventory);
-                logService.saveOutOrderLog(order, good,inventory.getInvertoryNum());
+                logService.saveOutOrderLog(order, good,inventory.getInvertoryNum(),inventory);
                 order.setOrderStatus(OutOrderStatus.OUTED);
                 outOrderMapper.updateById(order);
                 logger.info("出库单 出库成功 {}",order);
