@@ -7,6 +7,8 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.customer.model.Customer;
+import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.service.FeeAccountService;
@@ -46,6 +48,8 @@ public class FeeAccountServiceImpl implements FeeAccountService{
     private ReconcileMapper reconcileMapper;
     @Autowired
     private FeeExchangeMapper feeExchangeMapper;
+    @Reference
+    CustomerRpcService customerRpcService;
 
     @Override
     public PageInfo feeAccountWaybillList(Map map){
@@ -126,6 +130,10 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         if(waybill != null){
             map.put("waybillId", waybill.getId());
             map.put("waybillCode", waybill.getWaybillCode());
+            if((Integer)m.get("isOwn")==0){//客户运单
+                Customer customer = customerRpcService.queryCustomer(waybill.getCarrierCompanyId(), waybill.getCompanyId());
+                waybill.setWaybillSource(customer.getCustomerName());
+            }
             map.put("waybillSource", waybill.getWaybillSource());
             map.put("groupId",(Integer)m.get("isOwn")==1?waybill.getGroupId():null);
             map.put("groupName",(Integer)m.get("isOwn")==1?waybill.getGroupName():null);
