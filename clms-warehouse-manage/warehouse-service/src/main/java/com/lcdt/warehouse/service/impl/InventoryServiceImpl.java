@@ -91,6 +91,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         dto.setCompanyId(companyId);
         dto.setGoodsCode(inventoryQueryDto.getGoodsCode());
         dto.setBarCode(inventoryQueryDto.getGoodsBarCode());
+        dto.setClassifyId(inventoryQueryDto.getClassifyId());
         List<Long> longs = goodsService.queryGoodsIdsByCondition(dto);
         if (longs == null) {
             return new ArrayList<Long>();
@@ -168,7 +169,10 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             throw new RuntimeException("锁定库存量不能大于库存剩余数量");
         }
         inventory.setInvertoryNum(invertoryNum - tryLockNum);
-        inventory.setLockNum(tryLockNum);
+
+//        inventory.setLockNum(invertoryNum);
+
+        inventory.setLockNum(inventory.getLockNum() + tryLockNum);
         updateById(inventory);
     }
 
