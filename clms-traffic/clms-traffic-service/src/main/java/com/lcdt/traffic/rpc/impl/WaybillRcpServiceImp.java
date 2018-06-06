@@ -303,6 +303,23 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     public Waybill modifyOwnWaybillStatus(WaybillModifyStatusDto dto) {
         Waybill waybill = null;
         Map map = ClmsBeanUtil.beanToMap(dto);
+        if(dto.getWaybillStatus()==ConstantVO.WAYBILL_STATUS_IS_UNLOADING){
+            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            waybill = resultList.get(0);
+            if(waybill!=null){
+                List<String> phoneList=new ArrayList<>();
+                phoneList.add(waybill.getDriverPhone());
+                List<Driver> driverList=driverService.getGpsInfo(phoneList);
+                for(Driver driver:driverList){
+                    if(driver.getDriverPhone()!=null&&driver.getDriverPhone().equals(waybill.getDriverPhone())){
+//                        map.put("longitude",1);
+//                        map.put("latitude",1);
+                        map.put("unloadLocation",driver.getCurrentLocation());
+                        map.put("unloadTime",new Date());
+                    }
+                }
+            }
+        }
         int result = waybillMapper.updateOwnWaybillStatus(map);
 
         if (result > 0) {
@@ -336,6 +353,23 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     public Waybill modifyCustomerWaybillStatus(WaybillModifyStatusDto dto) {
         Waybill waybill = null;
         Map map = ClmsBeanUtil.beanToMap(dto);
+        if(dto.getWaybillStatus()==ConstantVO.WAYBILL_STATUS_IS_UNLOADING){
+            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            waybill = resultList.get(0);
+            if(waybill!=null){
+                List<String> phoneList=new ArrayList<>();
+                phoneList.add(waybill.getDriverPhone());
+                List<Driver> driverList=driverService.getGpsInfo(phoneList);
+                for(Driver driver:driverList){
+                    if(driver.getDriverPhone()!=null&&driver.getDriverPhone().equals(waybill.getDriverPhone())){
+//                        map.put("longitude",1);
+//                        map.put("latitude",1);
+                        map.put("unloadLocation",driver.getCurrentLocation());
+                        map.put("unloadTime",new Date());
+                    }
+                }
+            }
+        }
         int result = waybillMapper.updateCustomerWaybillStatus(map);
 
         //发送消息通知
@@ -353,6 +387,20 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         Customer customer = customerRpcService.queryCustomer(waybill.getCarrierCompanyId(), waybill.getCompanyId());
         waybill.setWaybillSource(customer.getCustomerName());
 
+        //路由==>运单增加新建路由 by xrr
+        Timeline event = new Timeline();
+        event.setActionTitle("【" + WaybillUtil.map_waybill_status.get(waybill.getWaybillStatus()) + "】（操作人：" + dto.getUpdateName() + " " + dto.getUpdatePhone() + "）");
+        event.setActionTime(new Date());
+        event.setCompanyId(waybill.getCompanyId());
+        event.setSearchkey("WAYBILL_ROUTE");
+        event.setDataid(waybill.getId());
+        if (waybill.getWaybillStatus() == 5) {
+            //卸货描述修改
+            event.setActionDes("当前位置：" + waybill.getUnloadLocation());
+        } else {
+            event.setActionDes("司机：" + waybill.getDriverName() + " " + waybill.getDriverPhone() + " " + waybill.getVechicleNum());
+        }
+        producer.noteRouter(event);
         return waybill;
     }
 
@@ -461,6 +509,23 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         map.put("updateId", dto.getUpdateId());
         map.put("waybillStatus", dto.getWaybillStatus());
         map.put("waybillIds", dto.getWaybillIds());
+        if(dto.getWaybillStatus()==ConstantVO.WAYBILL_STATUS_IS_UNLOADING){
+            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            waybill = resultList.get(0);
+            if(waybill!=null){
+                List<String> phoneList=new ArrayList<>();
+                phoneList.add(waybill.getDriverPhone());
+                List<Driver> driverList=driverService.getGpsInfo(phoneList);
+                for(Driver driver:driverList){
+                    if(driver.getDriverPhone()!=null&&driver.getDriverPhone().equals(waybill.getDriverPhone())){
+//                        map.put("longitude",1);
+//                        map.put("latitude",1);
+                        map.put("unloadLocation",driver.getCurrentLocation());
+                        map.put("unloadTime",new Date());
+                    }
+                }
+            }
+        }
         int result = waybillMapper.updateWaybillByDriver(map);
         if (result > 0) {
             List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
