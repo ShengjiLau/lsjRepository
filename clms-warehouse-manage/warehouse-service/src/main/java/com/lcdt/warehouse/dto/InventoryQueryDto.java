@@ -36,6 +36,16 @@ public class InventoryQueryDto extends PageQueryDto {
 
     private Long originalGoodsId;
 
+    private Long classifyId;
+
+    public Long getClassifyId() {
+        return classifyId;
+    }
+
+    public void setClassifyId(Long classifyId) {
+        this.classifyId = classifyId;
+    }
+
     public Long getCompanyId() {
         return companyId;
     }

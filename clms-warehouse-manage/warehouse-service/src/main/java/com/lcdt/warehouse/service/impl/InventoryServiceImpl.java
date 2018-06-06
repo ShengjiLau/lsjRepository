@@ -91,6 +91,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         dto.setCompanyId(companyId);
         dto.setGoodsCode(inventoryQueryDto.getGoodsCode());
         dto.setBarCode(inventoryQueryDto.getGoodsBarCode());
+        dto.setClassifyId(inventoryQueryDto.getClassifyId());
         List<Long> longs = goodsService.queryGoodsIdsByCondition(dto);
         if (longs == null) {
             return new ArrayList<Long>();
