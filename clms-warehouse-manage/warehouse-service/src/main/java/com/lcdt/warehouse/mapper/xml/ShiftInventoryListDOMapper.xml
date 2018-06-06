@@ -375,7 +375,7 @@
     where shift_id = #{shiftId,jdbcType=BIGINT}
   </update>
   
-    <select id="getShiftInventoryListDOByCondition" parameterType="com.lcdt.warehouse.dto.ShiftInventoryListDTO">
+    <select id="getShiftInventoryListDOByCondition" parameterType="com.lcdt.warehouse.dto.ShiftInventoryListDTO" resultMap="BaseResultMap">
   	 	select 
     <include refid="Base_Column_List" />
     	from shift_inventory_list
