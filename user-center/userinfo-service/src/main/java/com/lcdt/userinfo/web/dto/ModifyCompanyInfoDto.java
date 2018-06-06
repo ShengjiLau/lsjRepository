@@ -66,7 +66,7 @@ public class ModifyCompanyInfoDto {
 
 	@NotBlank
 	@ApiModelProperty(value = "详细地址",required = true)
-	@Size(max = 100,message = "详细地址最长100个字")
+	@Size(max = 200,message = "详细地址最长200个字")
 	public String detailAddress;
 
 
