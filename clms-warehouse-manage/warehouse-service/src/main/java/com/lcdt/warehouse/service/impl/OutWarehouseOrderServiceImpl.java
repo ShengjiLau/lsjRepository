@@ -62,6 +62,8 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
             //直接出库
             if (dto.getOperationType() == 1) {
                 //对接库存，减库存
+                outWarehouseOrder = queryOutWarehouseOrder(outWarehouseOrder.getCompanyId(),outWarehouseOrder.getOutorderId());
+                outWarehouseOrder.setOutboundMan(dto.getCreateName());
                 inventoryService.outInventory(outWarehouseOrder,outOrderGoodsInfoList);
             }
         }
@@ -125,6 +127,7 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
         //出库减库存
         OutWarehouseOrder outWarehouseOrder=new OutWarehouseOrder();
         outWarehouseOrder = queryOutWarehouseOrder(modifyParams.getCompanyId(),modifyParams.getOutorderId());
+        outWarehouseOrder.setOutboundMan(modifyParams.getUpdateName());
         inventoryService.outInventory(outWarehouseOrder,modifyOutOrderGoodsInfoList);
 
         return result;
