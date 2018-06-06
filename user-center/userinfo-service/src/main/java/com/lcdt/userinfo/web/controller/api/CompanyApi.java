@@ -114,7 +114,7 @@ public class CompanyApi {
 			companyDto.setCompanyName(modifyCompanyInfoDto.getFullName());
 			Company company1 = companyService.findCompany(companyDto);
 			if (company1 != null) {
-				throw new CompanyNameExistException();
+				throw new CompanyNameExistException("企业名称已经存在!");
 			}
 		}
 		company.setFullName(modifyCompanyInfoDto.getFullName());

@@ -47,8 +47,5 @@ mybatis-plus:
 server:
   port: 8071
 logging:
-  level:
-    com.lcdt.warehouse: debug
-    org.springframework: DEBUG
   file: ${user.dir}/log/warehouse-service.log
 

@@ -41,15 +41,11 @@ public class InventoryServiceTest extends BaseIntegrationContext{
         goodsInfo.setGoodsName("sd");
         goodsInfo.setStorageLocationCode("123ads");
         goodsInfo.setStorageLocationId(11L);
-//        goodsInfo.setWa
-//        goodsInfo.setUnitData();
-        //
         goodsInfo.setBatch("12");
         goodsInfo.setGoodsBarcode("barcode");
         goodsInfo.setGoodsCode("adsas");
         goodsInfo.setGoodsClassify("sadas");
         goodsInfo.setMinUnit("asda");
-//        goodsInfo.set
         InWarehouseOrder inWarehouseOrder = new InWarehouseOrder();
         inWarehouseOrder.setWarehouseName("adsad");
         inWarehouseOrder.setCustomerId(11L);
@@ -65,7 +61,6 @@ public class InventoryServiceTest extends BaseIntegrationContext{
     @Test
     @Rollback
     public void testLockInventory(){
-
         inventoryService.lockInventoryNum(1L,1F);
     }
 
