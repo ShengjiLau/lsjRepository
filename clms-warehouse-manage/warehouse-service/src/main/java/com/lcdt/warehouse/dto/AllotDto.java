@@ -28,6 +28,9 @@ public class AllotDto extends Allot{
     @ApiModelProperty(value = "查询调入结束时间")
     private String allotInEndTime;
 
+    @ApiModelProperty(value = "查询货物信息")
+    private String product;
+
     @ApiModelProperty(value = "商品list")
     private List<AllotProduct> allotProductList;
 
@@ -77,6 +80,14 @@ public class AllotDto extends Allot{
 
     public void setAllotInEndTime(String allotInEndTime) {
         this.allotInEndTime = allotInEndTime;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
     }
 
     public List<AllotProduct> getAllotProductList() {
