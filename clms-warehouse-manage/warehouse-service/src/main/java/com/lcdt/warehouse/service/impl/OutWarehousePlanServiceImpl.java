@@ -93,6 +93,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         OutplanGoods outplanGoods = new OutplanGoods();
         outplanGoods.setOutplanId(outPlanId);
         List<OutplanGoods> list = outplanGoodsService.selectList(new EntityWrapper<OutplanGoods>(outplanGoods));
+        System.out.println("list---"+outPlanId+"------"+list.size());
 
         if (list != null) {
             if (flag) {//出库单
@@ -106,6 +107,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                     result.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
                 }
             }
+            System.out.println("result.getOutWhOrderDtoList()---"+result.getOutWhOrderDtoList().size());
             if(result.getOutWhOrderDtoList()!=null) {
                 List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<OutWhPlanGoodsDto>();
                 for (OutplanGoods obj1 :list) {
