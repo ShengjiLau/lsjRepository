@@ -1,6 +1,5 @@
 package com.lcdt.contract.service.impl;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
@@ -16,7 +15,6 @@ import com.lcdt.contract.model.ContractLog;
 import com.lcdt.contract.model.ContractProduct;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.ContractDto;
-import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import org.springframework.beans.BeanUtils;
@@ -43,8 +41,6 @@ public class ContractServiceImpl implements ContractService {
     private ContractApprovalMapper contractApprovalMapper;
     @Autowired
     private ContractLogMapper contractLogMapper;
-    @Reference
-    CustomerRpcService customerRpcService;
 
     @Override
     public int addContract(ContractDto dto) {
@@ -249,7 +245,7 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public PageInfo<List<Contract>> ontractList(ContractDto contractDto, PageInfo pageInfo) {
+    public PageInfo<List<Contract>> contractList(ContractDto contractDto, PageInfo pageInfo) {
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         PageInfo page = new PageInfo(contractMapper.selectByCondition(contractDto));
         return page;
@@ -261,8 +257,8 @@ public class ContractServiceImpl implements ContractService {
         //新增日志
         ContractLog log = new ContractLog();//0-生效 3-失效 2-草稿发布
         log.setContractId(contract.getContractId());
-        log.setLogName(contract.getContractStatus()==0?"生效":contract.getContractStatus()==3?"终止":"发布");
-        log.setLogContent(contract.getContractStatus()==0?"合同生效":contract.getContractStatus()==3?"合同终止":"发布草稿");
+        log.setLogName(contract.getContractStatus()==4?"取消":contract.getContractStatus()==0?"生效":contract.getContractStatus()==3?"终止":"发布");
+        log.setLogContent(contract.getContractStatus()==4?"取消合同":contract.getContractStatus()==0?"合同生效":contract.getContractStatus()==3?"合同终止":"发布草稿");
         saveContractLog(log);
         return result;
     }

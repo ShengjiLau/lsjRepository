@@ -11,12 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.warehouse.dto.InWarehouseOrderDto;
@@ -31,18 +31,17 @@ import com.lcdt.warehouse.mapper.ShiftInventoryListDOMapper;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.service.ShiftInventoryListService;
 import com.lcdt.warehouse.vo.ShiftInventoryListVO;
-
 /**
  * @author Sheng-ji Lau
  * @date 2018年5月10日
  * @version
  * @Description: TODO 
  */
-@Service 
-@Primary
-public class ShiftInventoryListServiceImpl implements ShiftInventoryListService {
+
+@Service
+public class ShiftInventoryListServiceImplt implements ShiftInventoryListService{
 	
-	private Logger logger = LoggerFactory.getLogger(ShiftInventoryListServiceImpl.class);
+private Logger logger = LoggerFactory.getLogger(ShiftInventoryListServiceImpl.class);
 	
 	@Autowired
 	private ShiftInventoryListDOMapper shiftInventoryListDOMapper;
@@ -227,9 +226,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		int pageSize = shiftInventoryListDTO1.getPageSize();
 		
 		//分页
-		//PageHelper.startPage(shiftInventoryListDTO1.getPageNo(), shiftInventoryListDTO1.getPageSize());
+		PageHelper.startPage(shiftInventoryListDTO1.getPageNo(), shiftInventoryListDTO1.getPageSize());
 		List<ShiftInventoryListDO> shiftInventoryListDOList = shiftInventoryListDOMapper.getShiftInventoryListDOByCondition(shiftInventoryListDTO1);
-		//PageInfo<ShiftInventoryListDO> page1 = new PageInfo<ShiftInventoryListDO>(shiftInventoryListDOList);
+		PageInfo<ShiftInventoryListDO> page1 = new PageInfo<ShiftInventoryListDO>(shiftInventoryListDOList);
 		
 		logger.debug("查询得到的移库单数量为"+shiftInventoryListDOList.size());
 		//如果查询结果为空，直接返回
@@ -285,15 +284,15 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		}
 		
 		//实现逻辑分页
-		List<ShiftInventoryListDTO> shiftInventoryListDTOList2 = new ArrayList<ShiftInventoryListDTO>();
-		if (pageNo*pageSize > shiftInventoryListDTOList.size()) {
-			shiftInventoryListDTOList2.addAll(shiftInventoryListDTOList.subList((pageNo - 1)*pageSize, shiftInventoryListDTOList.size()));
-		}else {
-			shiftInventoryListDTOList2.addAll(shiftInventoryListDTOList.subList((pageNo - 1)*pageSize, pageNo*pageSize));
-		}
-		
-		PageInfo<ShiftInventoryListDTO> page = new PageInfo<ShiftInventoryListDTO>(shiftInventoryListDTOList2);
-		page.setTotal(shiftInventoryListDTOList.size());
+//		List<ShiftInventoryListDTO> shiftInventoryListDTOList2 = new ArrayList<ShiftInventoryListDTO>();
+//		if (pageNo*pageSize > shiftInventoryListDTOList.size()) {
+//			shiftInventoryListDTOList2.addAll(shiftInventoryListDTOList.subList((pageNo - 1)*pageSize, shiftInventoryListDTOList.size()));
+//		}else {
+//			shiftInventoryListDTOList2.addAll(shiftInventoryListDTOList.subList((pageNo - 1)*pageSize, pageNo*pageSize));
+//		}
+//		
+		PageInfo<ShiftInventoryListDTO> page = new PageInfo<ShiftInventoryListDTO>(shiftInventoryListDTOList);
+		page.setTotal(page1.getTotal());
 		return page;
     }
 	
@@ -386,6 +385,30 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			return null;
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
