@@ -406,6 +406,7 @@
   		and finished = #{finished,jdbcType=TINYINT}
   		</if>
   	</where>
+  	    order by  gmt_create desc
   </select>
   
   <update id="updateFinishedById">
