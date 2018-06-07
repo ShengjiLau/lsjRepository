@@ -1,5 +1,7 @@
 package com.lcdt.contract.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -14,10 +16,22 @@ public class Contract {
 
     private Date signDate;
 
+    @ApiModelProperty(value="0 - 采购合同\n" +
+            "1 - 销售合同")
     private Short type;
 
+    @ApiModelProperty(value="0 - 生效中\n" +
+            "1 - 待生效\n" +
+            "2 - 创建中/待发布\n" +
+            "3 - 已失效\n" +
+            "4 - 已取消")
     private Short contractStatus;
 
+    @ApiModelProperty(value="0 - 无需审批\n" +
+            "1 - 审批中\n" +
+            "2 - 审批完成\n" +
+            "3 - 已撤销\n" +
+            "4 - 已驳回")
     private Short approvalStatus;
 
     private Long approvalProcessId;
