@@ -102,12 +102,17 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 params.setOutPlanId(obj.getOutplanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
+
+                System.out.println("obj.getCompanyId()---"+obj.getCompanyId());
+                System.out.println("obj.getOutplanId()---"+obj.getOutplanId());
+
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
                 if (outWhOrderDtoList.getTotal()>0) {
                     result.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
                 }
+                System.out.println("outWhOrderDtoList.getTotal()---"+outWhOrderDtoList.getTotal());
             }
-            System.out.println("result.getOutWhOrderDtoList()---"+result.getOutWhOrderDtoList().size());
+
             if(result.getOutWhOrderDtoList()!=null) {
                 List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<OutWhPlanGoodsDto>();
                 for (OutplanGoods obj1 :list) {
