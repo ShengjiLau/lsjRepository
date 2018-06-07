@@ -315,6 +315,9 @@
       <if test="customerName!=null and customerName!=''">
         and customer_name like concat('%',#{customerName,jdbcType=VARCHAR},'%')
       </if>
+      <if test="product!=null and product!=''">
+        and allot_id in (select allot_id from t_allot_product where name like concat('%',#{product,jdbcType=VARCHAR},'%'))
+      </if>
       <if test="groupId!=null and groupId!=''">
         and group_id = #{groupId,jdbcType=BIGINT}
       </if>
