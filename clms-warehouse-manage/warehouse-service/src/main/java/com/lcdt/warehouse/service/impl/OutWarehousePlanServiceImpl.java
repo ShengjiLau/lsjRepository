@@ -379,7 +379,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                     if (obj1.getDistGoodsNum() == null) {
                         obj1.setDistGoodsNum(0f);
                     }
-                    if (obj1.getDistGoodsNum()>obj2.getRemainGoodsNum()) { //如果前端提交过来的大于数据库中的剩余的
+                    if (obj1.getDistGoodsNum()>obj2.getRemainGoodsNum()) { //  如果前端提交过来的大于数据库中的剩余的
                         sb.append("货物："+ obj1.getGoodsName()+"，剩余数量："+obj2.getRemainGoodsNum()+",不满足当前配仓数量："+obj1.getDistGoodsNum());
                     } else {
                         //如果本次配仓量+已配仓量=计划的
