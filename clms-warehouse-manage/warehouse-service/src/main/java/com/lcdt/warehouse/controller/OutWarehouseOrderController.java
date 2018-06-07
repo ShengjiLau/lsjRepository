@@ -81,7 +81,7 @@ public class OutWarehouseOrderController {
         statusParams.setOutorderId(params.getOutorderId());
         statusParams.setUpdateId(user.getUserId());
         statusParams.setUpdateName(user.getRealName());
-        statusParams.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND);
+//        statusParams.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND);
         statusParams.setCompanyId(SecurityInfoGetter.getCompanyId());
         statusParams.setOutboundTime(params.getOutboundTime());
 
