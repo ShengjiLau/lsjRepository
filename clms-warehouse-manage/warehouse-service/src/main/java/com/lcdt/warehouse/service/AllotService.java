@@ -1,6 +1,6 @@
 package com.lcdt.warehouse.service;
 
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.warehouse.dto.AllotDto;
 
 import java.util.Map;
@@ -14,7 +14,7 @@ public interface AllotService {
      * @param m
      * @return
      */
-    PageInfo allotDtoList(Map m);
+    Page<AllotDto> allotDtoList(Map m);
     /**
      * 新增调拨单
      * @param dto
