@@ -58,7 +58,7 @@ public class SalesContractApi {
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(contractDto.getPageNum());    //设置页码
         pageInfo.setPageSize(contractDto.getPageSize());  //设置每页条数
-        PageInfo<List<Contract>> listPageInfo = contractService.ontractList(contractDto, pageInfo);
+        PageInfo<List<Contract>> listPageInfo = contractService.contractList(contractDto, pageInfo);
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         return pageBaseDto;
     }
@@ -180,7 +180,7 @@ public class SalesContractApi {
     //增加合同列表直接上传附件功能
     @ApiOperation("上传附件")
     @RequestMapping(value = "/uploadAttachment", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_modify')")
+//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_attachment_modify')")
     public JSONObject uploadAttachment(@Validated @RequestBody ContractDto dto) {
         //设置合同状态
         boolean result = contractService.uploadAttachment(dto);
@@ -191,6 +191,23 @@ public class SalesContractApi {
             return jsonObject;
         } else {
             throw new RuntimeException("上传失败");
+        }
+    }
+    @ApiOperation("取消合同")
+    @RequestMapping(value = "/cancelContract", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_cancel_contract')")
+    public JSONObject cancelContract(@ApiParam(value = "合同ID",required = true) @RequestParam Long contractId) {
+        Contract dto = new Contract();
+        dto.setContractId(contractId);
+        dto.setContractStatus((short)4);//取消
+        int result = contractService.modContractStatus(dto);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "取消成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("取消失败");
         }
     }
 }
