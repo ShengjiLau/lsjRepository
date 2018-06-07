@@ -32,13 +32,13 @@ public class CompanyServiceCountImpl implements CompanyServiceCountService {
     public CompanyServiceCount reduceCompanyProductCount(Long companyId,String serviceName,Integer reduceNum){
         List<CompanyServiceCount> companyServiceCounts = countMapper.selectByCompanyId(companyId, serviceName);
         if (CollectionUtils.isEmpty(companyServiceCounts)) {
-            log.error("额外服务超限");
+            log.error("剩余服务次数不足 公司Id{} serviceName:{} reduceName{} ",companyId,serviceName,reduceNum);
             throw new RuntimeException(serviceName + "数量不足");
         }else{
             CompanyServiceCount companyServiceCount = companyServiceCounts.get(0);
             if (companyServiceCount.getProductServiceNum() < reduceNum) {
+                log.error("剩余服务次数不足 公司Id{} serviceName:{} reduceName{} ",companyId,serviceName,reduceNum);
                 throw new RuntimeException(serviceName + "数量不足");
-
             }
             companyServiceCount.setProductServiceNum(companyServiceCount.getProductServiceNum() - reduceNum);
             countMapper.updateByPrimaryKey(companyServiceCount);
@@ -49,7 +49,6 @@ public class CompanyServiceCountImpl implements CompanyServiceCountService {
     public boolean checkCompanyProductCount(Long companyId,String serviceName,Integer reduceNum){
         List<CompanyServiceCount> companyServiceCounts = countMapper.selectByCompanyId(companyId, serviceName);
         if (CollectionUtils.isEmpty(companyServiceCounts)) {
-            log.error("额外服务超限");
             return false;
         }else{
             CompanyServiceCount companyServiceCount = companyServiceCounts.get(0);
@@ -70,5 +69,4 @@ public class CompanyServiceCountImpl implements CompanyServiceCountService {
             return companyServiceCounts.get(0).getProductServiceNum();
         }
     }
-
 }
