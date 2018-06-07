@@ -51,8 +51,8 @@ public class ContractServiceImpl implements ContractService {
         BigDecimal summation =new 	BigDecimal(0);// 为所有商品价格求和
         if(null!=dto.getContractProductList()&&dto.getContractProductList().size()!=0){
             for(ContractProduct contractProduct : dto.getContractProductList()) {
-                BigDecimal num = contractProduct.getNum();
-                BigDecimal price = contractProduct.getPrice();
+                BigDecimal num = contractProduct.getNum()==null ? BigDecimal.valueOf(0) : contractProduct.getNum();
+                BigDecimal price = contractProduct.getPrice()==null ? BigDecimal.valueOf(0) : contractProduct.getPrice();
                 //计算单个商品总价
                 BigDecimal total = num.multiply(price);
                 summation = summation.add(total);
@@ -129,8 +129,8 @@ public class ContractServiceImpl implements ContractService {
         BigDecimal summation =new 	BigDecimal(0);// 为所有商品价格求和
         if(null!=dto.getContractProductList()&&dto.getContractProductList().size()!=0){
             for(ContractProduct contractProduct : dto.getContractProductList()) {
-                BigDecimal num = contractProduct.getNum();
-                BigDecimal price = contractProduct.getPrice();
+                BigDecimal num = contractProduct.getNum()==null ? BigDecimal.valueOf(0) : contractProduct.getNum();
+                BigDecimal price = contractProduct.getPrice()==null ? BigDecimal.valueOf(0) : contractProduct.getPrice();
                 //计算单个商品总价
                 BigDecimal total = num.multiply(price);
                 summation = summation.add(total);
