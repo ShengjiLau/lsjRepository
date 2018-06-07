@@ -67,7 +67,7 @@ public class ShiftInventoryListApi {
 	@ApiOperation(value = "完成移库单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_complete')")
 	public JSONObject completeInventoryList(@RequestBody ShiftInventoryListDTO shiftInventoryListDTO) {
-		JSONObject jsonObject = validateParamInfo(shiftInventoryListDTO);
+		JSONObject jsonObject = validateComplete(shiftInventoryListDTO);
 		if (jsonObject.size() > 0) {
 			jsonObject.put("code", -1);
 			return jsonObject;
@@ -86,6 +86,7 @@ public class ShiftInventoryListApi {
 		return jsonObject;
 	}
 	
+	
 	@GetMapping("/list")
 	@ApiOperation(value = "查询移库单列表")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_list')")
@@ -102,6 +103,7 @@ public class ShiftInventoryListApi {
 		jsonObject.put("data", pageBaseDto);
 		return jsonObject;
 	}
+	
 	
 	@GetMapping("/details")
 	@ApiOperation(value = "查询移库单详情")
@@ -121,6 +123,7 @@ public class ShiftInventoryListApi {
 		
 		return jsonObject;
 	}
+	
 	
 	@PostMapping("/remove")
 	@ApiOperation(value = "取消移库单")
@@ -143,7 +146,7 @@ public class ShiftInventoryListApi {
 	
 	
 	/**
-	 * 验证传入的移库单信息
+	 * 新建时验证传入的移库单信息
 	 * @param shiftInventoryListDTO
 	 * @return
 	 */
@@ -172,6 +175,41 @@ public class ShiftInventoryListApi {
 		
 		return jsonObject;
 	}
+	
+	
+	
+	/**
+	 * 新建时验证传入的移库单信息
+	 * @param shiftInventoryListDTO
+	 * @return
+	 */
+	public JSONObject validateComplete(ShiftInventoryListDTO shiftInventoryListDTO) {
+		JSONObject jsonObject = new JSONObject();
+		if (null == shiftInventoryListDTO.getShiftGoodsListDTOList() || 0 == shiftInventoryListDTO.getShiftGoodsListDTOList().size()) {
+			jsonObject.put("message", "至少添加一条移库信息！");
+			return jsonObject;
+		}
+		if (null == shiftInventoryListDTO.getShiftUser()) {
+			jsonObject.put("message", "移库人不可为空！");
+			return jsonObject;
+		}
+		if (null == shiftInventoryListDTO.getShiftTime()) {
+			jsonObject.put("message", "移库时间不可为空！");
+			return jsonObject;
+		}
+		return jsonObject;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 

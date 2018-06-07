@@ -16,6 +16,11 @@
         <module>warehouse-api</module>
         <module>mybatis-plus-generate</module>
     </modules>
-
+    <dependencies>
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
