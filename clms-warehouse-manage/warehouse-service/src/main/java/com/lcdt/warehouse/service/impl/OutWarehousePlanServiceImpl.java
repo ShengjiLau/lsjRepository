@@ -67,7 +67,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 params.setPageNo(1);
                 params.setPageSize(100);
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
-                if (outWhOrderDtoList.getTotal()>0) {
+                if (outWhOrderDtoList.getRecords()!=null && outWhOrderDtoList.getRecords().size()>0) {
                     obj.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
                 }
             }
@@ -93,6 +93,8 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         OutplanGoods outplanGoods = new OutplanGoods();
         outplanGoods.setOutplanId(outPlanId);
         List<OutplanGoods> list = outplanGoodsService.selectList(new EntityWrapper<OutplanGoods>(outplanGoods));
+        System.out.println("list---"+outPlanId+"------"+list.size());
+
         if (list != null) {
             if (flag) {//出库单
                 OutWhOrderSearchDto params = new OutWhOrderSearchDto();
@@ -100,12 +102,16 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 params.setOutPlanId(obj.getOutplanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
+                System.out.println("obj.getCompanyId()---"+obj.getCompanyId());
+                System.out.println("obj.getOutplanId()---"+obj.getOutplanId());
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
-                if (outWhOrderDtoList.getTotal()>0) {
+                if (outWhOrderDtoList.getRecords()!=null && outWhOrderDtoList.getRecords().size()>0) {
                     result.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
                 }
+                System.out.println("outWhOrderDtoList.getTotal()---"+outWhOrderDtoList.getTotal());
             }
-            if(result.getOutWhPlanGoodsDtoList()!=null) {
+
+            if(result.getOutWhOrderDtoList()!=null) {
                 List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<OutWhPlanGoodsDto>();
                 for (OutplanGoods obj1 :list) {
                     OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
@@ -124,6 +130,8 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 for (OutplanGoods obj1 :list) {
                     OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
                     BeanUtils.copyProperties(obj1, outWhPlanGoodsDto);
+                    outWhPlanGoodsDto.setRemainGoodsNum(obj1.getPlanGoodsNum());
+                    outWhPlanGoodsDto.setOutOderGoodsNum(0f);
                     outWhPlanGoodsDtoList.add(outWhPlanGoodsDto);
                 }
                 result.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);
@@ -440,7 +448,8 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             tObj.setBatch(obj1.getBatch());
             tObj.setStorageLocationId(obj1.getStorageLocationId());
             tObj.setStorageLocationCode(obj1.getStorageLocationCode());
-            tObj.setGoodsNum(obj1.getOutOderGoodsNum());//配仓数
+            tObj.setGoodsNum(obj1.getDistGoodsNum());//配仓数
+            tObj.setOutboundQuantity(obj1.getDistGoodsNum());
             tObj.setInStock(obj1.getInStock());//可用库存
             tObj.setRemark(obj1.getDisRemark());
             tObj.setInvertoryId(obj1.getInvertoryId());
@@ -464,7 +473,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             _outWarehousePlan.setPlanStatus((Integer) OutWhPlanStatusEnum.isWarehouse.getValue());
         }
         OutWarehousePlan wrapperObj = new OutWarehousePlan();
-        wrapperObj.setOutplanId(outWhPlanDto.getCompanyId());
+        wrapperObj.setOutplanId(outWhPlanDto.getOutplanId());
         wrapperObj.setCompanyId(userCompRel.getCompId());
         return this.update(_outWarehousePlan,new EntityWrapper<OutWarehousePlan>(wrapperObj));
     }

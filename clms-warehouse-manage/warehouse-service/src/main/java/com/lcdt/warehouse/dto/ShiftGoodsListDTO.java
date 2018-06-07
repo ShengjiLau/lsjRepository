@@ -12,7 +12,7 @@ public class ShiftGoodsListDTO implements Serializable{
 	private static final long serialVersionUID = 1585621135211L;
 	
 	//库存id
-	private Long inventoryId;
+	private Long invertoryId;
 	
 	//库位名称
 	private String storageLocationCode;       
@@ -49,14 +49,7 @@ public class ShiftGoodsListDTO implements Serializable{
 		this.shiftGoodsDOList = shiftGoodsDOList;
 	}
 
-	public Long getInventoryId() {
-		return inventoryId;
-	}
-
-	public void setInventoryId(Long inventoryId) {
-		this.inventoryId = inventoryId;
-	}
-
+	
 	public String getStorageLocationCode() {
 		return storageLocationCode;
 	}
@@ -119,6 +112,14 @@ public class ShiftGoodsListDTO implements Serializable{
 
 	public void setBaseUnit(String baseUnit) {
 		this.baseUnit = baseUnit;
+	}
+
+	public Long getInvertoryId() {
+		return invertoryId;
+	}
+
+	public void setInvertoryId(Long invertoryId) {
+		this.invertoryId = invertoryId;
 	}
 
 
