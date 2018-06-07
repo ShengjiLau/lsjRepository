@@ -13,5 +13,4 @@ public interface ProductCountService {
 
     List<ProductCountLog> countLogs(Long companyId, String productName, Date startTime, Date endTime,Integer logType);
 
-
 }
