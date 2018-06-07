@@ -2,21 +2,30 @@ package com.lcdt.warehouse.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+
+import javax.sql.DataSource;
 
 import com.baomidou.mybatisplus.incrementer.H2KeyGenerator;
 import com.baomidou.mybatisplus.incrementer.IKeyGenerator;
 import com.baomidou.mybatisplus.mapper.ISqlInjector;
 import com.baomidou.mybatisplus.mapper.LogicSqlInjector;
 import com.baomidou.mybatisplus.mapper.MetaObjectHandler;
+
+import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.plugins.PerformanceInterceptor;
 import com.baomidou.mybatisplus.plugins.parser.ISqlParser;
 import com.baomidou.mybatisplus.plugins.parser.tenant.TenantHandler;
 import com.baomidou.mybatisplus.plugins.parser.tenant.TenantSqlParser;
+import com.github.pagehelper.PageHelper;
 
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;

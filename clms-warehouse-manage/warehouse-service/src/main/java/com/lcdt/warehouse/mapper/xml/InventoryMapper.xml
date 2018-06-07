@@ -95,7 +95,7 @@
 		set 
 		<choose>
 		<when test="arg1 != null">
-			inventory_num = inventory_num - #{arg1,jdbcType=FLOAT},
+			invertory_num = invertory_num - #{arg1,jdbcType=FLOAT},
 			lock_num =lock_num - #{arg2,jdbcType=FLOAT}
 		</when>
 		<otherwise>
@@ -111,7 +111,7 @@
 			SELECT * from inventory t left join goods_info  g on
         	t.goods_id = g.goods_id
 		<where>
-			inventory_id in
+			invertory_id in
 		<foreach collection="array" open="(" close=")" index="index" item="item" separator=",">
 			#{item,jdbcType=BIGINT}
 		</foreach>
@@ -119,7 +119,7 @@
 	</select>
 	
 	<select id="getInventoryAndGoodsInfo" resultType="com.lcdt.warehouse.dto.ShiftGoodsListDTO">
-			select t.invertory_id inventoryId,t.storage_location_code storageLocationCode,g.goods_batch goodsBatch,
+			select t.invertory_id invertoryId,t.storage_location_code storageLocationCode,g.goods_batch goodsBatch,
 			g.goods_name goodsName,g.goods_spec goodsSpec,g.goods_code goodsCode,g.goods_barcode barCode,t.base_unit baseUnit
 			from inventory t inner join goods_info g on
        		 t.goods_id = g.goods_id
