@@ -183,6 +183,9 @@ public class ItemsInfoApi {
                 subItemsInfoDao.setCompanyId(companyId);
                 subItemsInfoDao.setCreateId(user.getUserId());
                 subItemsInfoDao.setCreateName(user.getRealName());
+                subItemsInfoDao.setVolume(itemsInfoDto.getSubItemsInfoDtoList().get(i).getVolume());
+                subItemsInfoDao.setWeight(itemsInfoDto.getSubItemsInfoDtoList().get(i).getWeight());
+
                 //子商品自定义属性
                 if (itemsInfoDto.getSubItemsInfoDtoList().get(i).getCustomValueList() != null) {
                     List<CustomValue> subCustomValueList = new ArrayList<CustomValue>();

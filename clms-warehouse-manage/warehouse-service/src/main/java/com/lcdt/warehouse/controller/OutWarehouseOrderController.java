@@ -41,9 +41,6 @@ public class OutWarehouseOrderController {
         params.setCompanyId(companyId);
         params.setCreateId(user.getUserId());
         params.setCreateName(user.getRealName());
-        if(params.getOperationType()==1){
-            params.setOutboundMan(user.getRealName());
-        }
         int result=outWarehouseOrderService.addOutWarehouseOrder(params);
         JSONObject jsonObject=new JSONObject();
         if(result>0){
@@ -84,7 +81,7 @@ public class OutWarehouseOrderController {
         statusParams.setOutorderId(params.getOutorderId());
         statusParams.setUpdateId(user.getUserId());
         statusParams.setUpdateName(user.getRealName());
-        statusParams.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND);
+//        statusParams.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND);
         statusParams.setCompanyId(SecurityInfoGetter.getCompanyId());
         statusParams.setOutboundTime(params.getOutboundTime());
 

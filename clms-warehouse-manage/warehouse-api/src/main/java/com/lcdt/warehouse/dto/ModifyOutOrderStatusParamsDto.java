@@ -23,6 +23,8 @@ public class ModifyOutOrderStatusParamsDto {
     private String updateName;
     @ApiModelProperty(value = "更新时间",hidden = true)
     private Date updateDate;
+    @ApiModelProperty(value = "更新人名",hidden = true)
+    private String outboundMan;
 
     public Long getOutorderId() {
         return outorderId;
@@ -78,5 +80,13 @@ public class ModifyOutOrderStatusParamsDto {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public String getOutboundMan() {
+        return outboundMan;
+    }
+
+    public void setOutboundMan(String outboundMan) {
+        this.outboundMan = outboundMan;
     }
 }

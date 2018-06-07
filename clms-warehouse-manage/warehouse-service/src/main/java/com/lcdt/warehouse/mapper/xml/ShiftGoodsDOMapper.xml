@@ -136,23 +136,23 @@
     update shift_goods
     <foreach collection="list" index="index" open="" close="" separator="," item="item">
     <set >
-      <if test="inventoryId != null" >
+      <if test="item.inventoryId != null" >
         inventory_id = #{item.inventoryId,jdbcType=BIGINT},
       </if>
-      <if test="shiftLocation != null" >
+      <if test="item.shiftLocation != null" >
         shift_location = #{item.shiftLocation,jdbcType=VARCHAR},
       </if>
-      <if test="shiftPlanNum != null" >
+      <if test="item.shiftPlanNum != null" >
         shift_plan_num = #{item.shiftPlanNum,jdbcType=DECIMAL},
       </if>
-      <if test="shiftNum != null" >
+      <if test="item.shiftNum != null" >
         shift_num = #{item.shiftNum,jdbcType=DECIMAL},
       </if>
-      <if test="remark != null" >
+      <if test="item.remark != null" >
         remark = #{item.remark,jdbcType=VARCHAR},
       </if>
-       <if test="shiftInventoryId != null" >
-        shift_inventory_id = #{shiftInventoryId,jdbcType=BIGINT},
+       <if test="item.shiftInventoryId != null" >
+        shift_inventory_id = #{item.shiftInventoryId,jdbcType=BIGINT},
       </if>
     </set>
     where shift_goods_id = #{item.shiftGoodsId,jdbcType=BIGINT}

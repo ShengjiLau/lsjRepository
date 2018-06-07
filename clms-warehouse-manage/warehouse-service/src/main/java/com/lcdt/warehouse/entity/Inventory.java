@@ -83,6 +83,18 @@ public class Inventory implements Serializable {
     @TableField(exist = false)
     private GoodsInfoDao goods;
 
+    public Float getavailableNum(){
+        if (invertoryNum == null) {
+            return 0F;
+        }
+        if (lockNum == null) {
+            return invertoryNum;
+        }
+        return invertoryNum - lockNum;
+
+    }
+
+
     public Long getWarehouseId() {
         return warehouseId;
     }

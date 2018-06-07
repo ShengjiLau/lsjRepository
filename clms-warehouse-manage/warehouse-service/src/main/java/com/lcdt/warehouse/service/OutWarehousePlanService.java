@@ -31,7 +31,7 @@ public interface OutWarehousePlanService extends IService<OutWarehousePlan> {
 
 
     /***
-     * 计划详细
+     * 计划详细-拉取
      * @return
      */
     OutWhPlanDto outWhPlanDetail(Long outPlanId, boolean flag, UserCompRel userCompRel);

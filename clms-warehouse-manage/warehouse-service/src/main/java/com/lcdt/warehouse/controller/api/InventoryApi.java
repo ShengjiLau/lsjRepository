@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/inventory")
@@ -39,6 +41,16 @@ public class InventoryApi {
         Page<Inventory> page = inventoryService.queryInventoryPage(queryDto, loginCompanyId);
         return JSONResponseUtil.success(page);
     }
+
+    @PostMapping("/all")
+    @ApiOperation("查询指定商品在 仓库中的库存")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('inventory_list_search')")
+    public ResponseMessage inventoryList(Long warehouseId, Long goodsId) {
+        Long loginCompanyId = SecurityInfoGetter.getCompanyId();
+        List<Inventory> inventories = inventoryService.queryAllInventory(loginCompanyId,warehouseId, goodsId);
+        return JSONResponseUtil.success(inventories);
+    }
+
 
     @PostMapping("/price/update")
     @ApiOperation("修改库存成本价")

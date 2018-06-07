@@ -47,7 +47,7 @@
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from shift_inventory_list
-    where shift_id = #{shiftId,jdbcType=BIGINT}
+    where shift_id = #{arg0,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lcdt.warehouse.entity.ShiftInventoryListDO" useGeneratedKeys="true" keyColumn="shift_id" keyProperty="shiftId">
    insert into shift_inventory_list (shift_id, group_id, group_name, 
@@ -61,7 +61,7 @@
       company_id, shift_user, shift_time, 
       inventory_shifted_id, finished)
     values (#{shiftId,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, 
-      #{shiftInventoryNum,jdbcType=VARCHAR}, #{warehouseId,jdbcType=BIGINT}, #{warehouseName,jdbcType=VARCHAR}, 
+      SHIFT_INVENTORY(), #{warehouseId,jdbcType=BIGINT}, #{warehouseName,jdbcType=VARCHAR}, 
       #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{shiftType,jdbcType=TINYINT}, #{attachment1Name,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR}, 
       #{attachment2Name,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR}, #{attachment3Name,jdbcType=VARCHAR}, 

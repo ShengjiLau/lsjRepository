@@ -58,7 +58,7 @@ public interface ContractService {
      * 获取单个合同日志列表
      * @return
      */
-    PageInfo<List<ContractLog>> ontractLogList(Map map);
+    PageInfo<List<ContractLog>> contractLogList(Map map);
 
     /**
      * 上传附件

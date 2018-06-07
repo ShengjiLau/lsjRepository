@@ -42,11 +42,7 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
     public int addOutWarehouseOrder(OutWhOrderDto dto) {
         int result = 0;
         OutWarehouseOrder outWarehouseOrder = new OutWarehouseOrder();
-        if(dto.getOperationType()==1){
-            dto.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND);
-        }else{
-            dto.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND);
-        }
+        dto.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND);
         BeanUtils.copyProperties(dto, outWarehouseOrder);
         //插入出库单
         result += baseMapper.insertOutWarehouseOrder(outWarehouseOrder);
@@ -57,17 +53,20 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
                 BeanUtils.copyProperties(dto.getOutOrderGoodsInfoList().get(i), outOrderGoodsInfo);
                 outOrderGoodsInfo.setOutorderId(outWarehouseOrder.getOutorderId());
                 outOrderGoodsInfo.setCompanyId(outWarehouseOrder.getCompanyId());
+                outOrderGoodsInfo.setOutboundQuantity(outOrderGoodsInfo.getGoodsNum());
                 outOrderGoodsInfoList.add(outOrderGoodsInfo);
-                inventoryService.lockInventoryNum(outOrderGoodsInfo.getInvertoryId(),outOrderGoodsInfo.getOutboundQuantity());
+                inventoryService.lockInventoryNum(outOrderGoodsInfo.getInvertoryId(),outOrderGoodsInfo.getGoodsNum());
             }
             //批量插入出库单明细
             outOrderGoodsInfoService.insertBatch(outOrderGoodsInfoList);
 
             //直接出库
-            if (dto.getOperationType() == 1) {
-                //对接库存，减库存
-                inventoryService.outInventory(outWarehouseOrder,outOrderGoodsInfoList);
-            }
+//            if (dto.getOperationType() == 1) {
+//                //对接库存，减库存
+//                outWarehouseOrder = queryOutWarehouseOrder(outWarehouseOrder.getCompanyId(),outWarehouseOrder.getOutorderId());
+//                outWarehouseOrder.setOutboundMan(dto.getCreateName());
+//                inventoryService.outInventory(outWarehouseOrder,outOrderGoodsInfoList);
+//            }
         }
         return result;
     }
@@ -88,10 +87,6 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
         //更新字段
         OutWarehouseOrder outWarehouseOrder = new OutWarehouseOrder();
         BeanUtils.copyProperties(params, outWarehouseOrder);
-        if (params.getOrderStatus() == ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND) {
-            //如果是出库，需要有出库人员
-            outWarehouseOrder.setOutboundMan(params.getUpdateName());
-        }
         outWarehouseOrder.setUpdateDate(new Date());
 
         //更新条件
@@ -129,6 +124,7 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
         //出库减库存
         OutWarehouseOrder outWarehouseOrder=new OutWarehouseOrder();
         outWarehouseOrder = queryOutWarehouseOrder(modifyParams.getCompanyId(),modifyParams.getOutorderId());
+        outWarehouseOrder.setOutboundMan(modifyParams.getUpdateName());
         inventoryService.outInventory(outWarehouseOrder,modifyOutOrderGoodsInfoList);
 
         return result;

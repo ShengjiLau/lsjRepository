@@ -44,8 +44,8 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
         return saveInventoryLog(log);
     }
 
-    public InventoryLog saveOutOrderLog(OutWarehouseOrder outWarehouseOrder, OutOrderGoodsInfo goodsInfo,Float updatedInventoryNum) {
-        InventoryLog fromOutInventory = InventoryLogFactory.createFromOutInventory(outWarehouseOrder,goodsInfo,updatedInventoryNum);
+    public InventoryLog saveOutOrderLog(OutWarehouseOrder outWarehouseOrder, OutOrderGoodsInfo goodsInfo,Float updatedInventoryNum,Inventory inventory) {
+        InventoryLog fromOutInventory = InventoryLogFactory.createFromOutInventory(outWarehouseOrder,goodsInfo,updatedInventoryNum,inventory);
         return saveInventoryLog(fromOutInventory);
     }
 
