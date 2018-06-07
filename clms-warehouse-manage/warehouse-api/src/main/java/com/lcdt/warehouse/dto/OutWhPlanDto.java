@@ -55,6 +55,9 @@ public class OutWhPlanDto implements Serializable,ResponseData {
     @ApiModelProperty(value = "附件信息")
     private String attachment;
 
+
+
+    private Integer planStatus;
     private Long companyId;
     private String createUserName;
     private Long createUserId;
@@ -273,5 +276,11 @@ public class OutWhPlanDto implements Serializable,ResponseData {
         this.outWhOrderDtoList = outWhOrderDtoList;
     }
 
+    public Integer getPlanStatus() {
+        return planStatus;
+    }
 
+    public void setPlanStatus(Integer planStatus) {
+        this.planStatus = planStatus;
+    }
 }
