@@ -110,6 +110,12 @@ public class FeeAccountServiceImpl implements FeeAccountService{
         map.remove("customerName");
         PageHelper.startPage(pageNo, pageSize);
         resultList = waybillMapper.selectFeeAccountCustomerWaybillByCondition(map);
+        if(resultList != null && resultList.size() > 0){
+            for (int i = 0; i < resultList.size(); i++) {
+                Customer customer = customerRpcService.queryCustomer(resultList.get(i).getCarrierCompanyId(), resultList.get(i).getCompanyId());
+                resultList.get(i).setWaybillSource(customer.getCustomerName());
+            }
+        }
         page = new PageInfo(resultList);
         return page;
     }

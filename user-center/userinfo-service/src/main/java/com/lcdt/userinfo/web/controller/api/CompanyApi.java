@@ -147,6 +147,7 @@ public class CompanyApi {
 		}
 
 		company.setFax(company.getFax());
+
 		companyService.updateCompany(company);
 		return company;
 	}

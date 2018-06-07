@@ -1,13 +1,14 @@
 package com.lcdt.warehouse.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.util.ClmsBeanUtil;
 import com.lcdt.warehouse.dto.AllotDto;
-import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.service.AllotService;
+import com.lcdt.warehouse.utils.JSONResponseUtil;
+import com.lcdt.warehouse.utils.ResponseMessage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -17,7 +18,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,9 +33,9 @@ public class AllotApi {
     @ApiOperation(value = "调拨单列表", notes = "调拨单列表数据")
     @GetMapping("/allotList")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_list')")
-    public PageBaseDto allotList(@Validated AllotDto dto,
-                                    @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
-                                    @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
+    public ResponseMessage allotList(@Validated AllotDto dto,
+                                     @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                     @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         dto.setCompanyId(companyId);
         dto.setIsDeleted((short)0);
@@ -44,9 +44,8 @@ public class AllotApi {
         map.put("pageNo", pageNo);
         map.put("pageSize", pageSize);
 
-        PageInfo<List<AllotDto>> listPageInfo = allotService.allotDtoList(map);
-        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
-        return pageBaseDto;
+        Page<AllotDto> listPageInfo = allotService.allotDtoList(map);
+        return JSONResponseUtil.success(listPageInfo);
     }
 
     @ApiOperation("新增")
@@ -62,7 +61,7 @@ public class AllotApi {
         dto.setCompanyId(companyId);
         dto.setIsDeleted((short)0);
 
-        boolean result = allotService.addAllot(dto);
+        boolean result = true;
         if (result) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);

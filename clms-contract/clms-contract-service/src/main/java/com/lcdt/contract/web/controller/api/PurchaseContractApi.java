@@ -173,7 +173,7 @@ public class PurchaseContractApi {
         map.put("pageNo", pageNo);
         map.put("pageSize", pageSize);
         map.put("contractId", contractId);
-        PageInfo<List<ContractLog>> listPageInfo = contractService.ontractLogList(map);
+        PageInfo<List<ContractLog>> listPageInfo = contractService.contractLogList(map);
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         return pageBaseDto;
     }
