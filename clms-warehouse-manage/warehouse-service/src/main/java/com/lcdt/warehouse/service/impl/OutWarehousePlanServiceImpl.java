@@ -67,7 +67,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 params.setPageNo(1);
                 params.setPageSize(100);
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
-                if (outWhOrderDtoList.getRecords()!=null && outWhOrderDtoList.getRecords().size()>0) {
+                if (outWhOrderDtoList.getTotal()>0) {
                     obj.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
                 }
             }
@@ -102,7 +102,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 params.setPageNo(1);
                 params.setPageSize(100);
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
-                if (outWhOrderDtoList.getRecords()!=null && outWhOrderDtoList.getRecords().size()>0) {
+                if (outWhOrderDtoList.getTotal()>0) {
                     result.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
                 }
             }

@@ -80,7 +80,7 @@ public class OutWarehousePlanController {
         }
         Page pg = outWarehousePlanService.outWarehousePlanList(dto,new Page<OutWarehousePlan>(dto.getPageNo(), dto.getPageSize()));
         List<InWarehousePlan> inWarehousePlanList = pg.getRecords();
-        PageBaseDto result = new PageBaseDto(inWarehousePlanList,pg.getRecords()!=null?pg.getRecords().size():0);
+        PageBaseDto result = new PageBaseDto(inWarehousePlanList,pg.getTotal());
         return result;
     }
 
