@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.mapper;
 
+import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.lcdt.warehouse.dto.AllotDto;
 import com.lcdt.warehouse.entity.Allot;
 
@@ -19,7 +20,7 @@ public interface AllotMapper {
 
     int updateByPrimaryKey(Allot record);
 
-    List<AllotDto> selectByCondition(Map m);
+    List<AllotDto> selectByCondition(Pagination page, Map m);
     /**
      * 取消/删除（is_deleted=1）
      * @param allotId

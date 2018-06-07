@@ -67,7 +67,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 params.setPageNo(1);
                 params.setPageSize(100);
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
-                if (outWhOrderDtoList.getRecords()!=null && outWhOrderDtoList.getRecords().size()>0) {
+                if (outWhOrderDtoList.getTotal()>0) {
                     obj.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
                 }
             }
@@ -93,7 +93,6 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         OutplanGoods outplanGoods = new OutplanGoods();
         outplanGoods.setOutplanId(outPlanId);
         List<OutplanGoods> list = outplanGoodsService.selectList(new EntityWrapper<OutplanGoods>(outplanGoods));
-        System.out.println("list---"+outPlanId+"------"+list.size());
 
         if (list != null) {
             if (flag) {//出库单
@@ -102,13 +101,10 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 params.setOutPlanId(obj.getOutplanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
-                System.out.println("obj.getCompanyId()---"+obj.getCompanyId());
-                System.out.println("obj.getOutplanId()---"+obj.getOutplanId());
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
-                if (outWhOrderDtoList.getRecords()!=null && outWhOrderDtoList.getRecords().size()>0) {
+                if (outWhOrderDtoList.getTotal()>0) {
                     result.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
                 }
-                System.out.println("outWhOrderDtoList.getTotal()---"+outWhOrderDtoList.getTotal());
             }
 
             if(result.getOutWhOrderDtoList()!=null) {

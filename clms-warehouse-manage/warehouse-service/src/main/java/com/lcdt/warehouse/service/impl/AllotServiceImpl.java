@@ -1,7 +1,6 @@
 package com.lcdt.warehouse.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.warehouse.dto.AllotDto;
 import com.lcdt.warehouse.entity.Allot;
 import com.lcdt.warehouse.entity.AllotProduct;
@@ -25,9 +24,7 @@ public class AllotServiceImpl implements AllotService{
     private AllotProductMapper allotProductMapper;
 
     @Override
-    public PageInfo allotDtoList(Map m) {
-        List<AllotDto> resultList = null;
-        PageInfo page = null;
+    public Page<AllotDto> allotDtoList(Map m) {
         int pageNo = 1;
         int pageSize = 0; //0表示所有
         if (m.containsKey("pageNo")) {
@@ -40,10 +37,8 @@ public class AllotServiceImpl implements AllotService{
                 pageSize = (Integer) m.get("pageSize");
             }
         }
-        PageHelper.startPage(pageNo, pageSize);
-        resultList = allotMapper.selectByCondition(m);
-        page = new PageInfo(resultList);
-        return page;
+        Page<AllotDto> page = new Page<>(pageNo, pageSize);
+        return page.setRecords(allotMapper.selectByCondition(page, m));
     }
 
     @Override
@@ -139,6 +134,7 @@ public class AllotServiceImpl implements AllotService{
         try{
             Allot allot = new Allot();
             BeanUtils.copyProperties(dto, allot); //复制对象属性
+            allot.setAllotStatus((short)3);
             allotMapper.updateByPrimaryKeySelective(allot);
 
             if (dto.getAllotProductList() != null && dto.getAllotProductList().size() > 0) {

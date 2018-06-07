@@ -3,6 +3,8 @@ package com.lcdt.traffic.notify;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.aliyun.openservices.ons.api.*;
+import com.aliyun.openservices.ons.api.transaction.LocalTransactionChecker;
+import com.aliyun.openservices.ons.api.transaction.TransactionStatus;
 import com.lcdt.aliyunmq.AliyunConfigProperties;
 import com.lcdt.notify.model.Timeline;
 import com.lcdt.notify.model.TrafficStatusChangeEvent;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 @Service
 public class ClmsNotifyProducer {
@@ -38,6 +41,17 @@ public class ClmsNotifyProducer {
             @Override
             public void onException(OnExceptionContext context) {
 
+            }
+        });
+    }
+
+
+    public void sendTranEvent(){
+        ONSFactory.createTransactionProducer(new Properties(), new LocalTransactionChecker() {
+            @Override
+            public TransactionStatus check(Message msg) {
+
+                return null;
             }
         });
     }

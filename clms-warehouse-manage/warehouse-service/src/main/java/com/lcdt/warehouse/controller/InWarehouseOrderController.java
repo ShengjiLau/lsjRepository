@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -36,6 +37,7 @@ public class InWarehouseOrderController {
 
     @ApiOperation("入库单新增")
     @RequestMapping(value = "/order", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_order_add')")
     public JSONObject inWarehouseOrder(@RequestBody InWarehouseOrderDto params) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User user = SecurityInfoGetter.getUser();
@@ -63,6 +65,7 @@ public class InWarehouseOrderController {
 
     @ApiOperation("入库单列表")
     @RequestMapping(value = "/order", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_order_search')")
     public PageBaseDto inWarehouseOrderList(InWarehouseOrderSearchParamsDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
         Page<InWarehouseOrderDto> inWarehouseOrderPage = inWarehouseOrderService.queryInWarehouseOrderList(params);
@@ -72,6 +75,7 @@ public class InWarehouseOrderController {
 
     @ApiOperation("入库单详细")
     @RequestMapping(value = "/order/{inorderId}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_order_detail')")
     public InWarehouseOrderDetailDto inWarehouseOrderDetail(@PathVariable long inorderId) {
         InWarehouseOrderDetailDto inWarehouseOrderDetailDto = new InWarehouseOrderDetailDto();
         inWarehouseOrderDetailDto = inWarehouseOrderService.queryInWarehouseOrder(SecurityInfoGetter.getCompanyId(), inorderId);
@@ -80,6 +84,7 @@ public class InWarehouseOrderController {
 
     @ApiOperation("入库单入库")
     @RequestMapping(value = "/order/storage", method = RequestMethod.PATCH)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_order_storage')")
     public JSONObject inStorage(@RequestBody InWarehouseOrderStorageParamsDto params) {
         ModifyInOrderStatusParamsDto statusParams = new ModifyInOrderStatusParamsDto();
         User user = SecurityInfoGetter.getUser();
@@ -104,6 +109,7 @@ public class InWarehouseOrderController {
 
     @ApiOperation("入库单取消")
     @RequestMapping(value = "/order/cancel/{inorderId}", method = RequestMethod.PATCH)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_order_cancel')")
     public JSONObject cancelStorage(@PathVariable long inorderId) {
         ModifyInOrderStatusParamsDto params = new ModifyInOrderStatusParamsDto();
         User user = SecurityInfoGetter.getUser();

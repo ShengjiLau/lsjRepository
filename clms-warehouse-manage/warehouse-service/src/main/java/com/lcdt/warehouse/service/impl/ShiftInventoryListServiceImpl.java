@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.warehouse.dto.InWarehouseOrderDto;
@@ -210,22 +209,25 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 1：通过查询条件找到对应的ShiftInventoryListDO集合
 	 * 2：遍历ShiftInventoryListDO集合，找到对应的库存商品信息和移库商品信息
 	 * 3：如果库存商品信息和查询条件不一致，则去掉相应的ShiftInventoryListDTO
+	 * 4:本次查询较为复杂，无法采用关联查询，采用了逻辑分页
 	 */
 	@Override
 	@Transactional(readOnly=true)
 	public PageInfo<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO1) {
 		shiftInventoryListDTO1.setCompanyId(SecurityInfoGetter.getCompanyId());
-		
 		if (null == shiftInventoryListDTO1.getPageNo()) {
 			shiftInventoryListDTO1.setPageNo(1);
 		}
 		if (null == shiftInventoryListDTO1.getPageSize()) {
-			shiftInventoryListDTO1.setPageSize(0);
+			shiftInventoryListDTO1.setPageSize(Integer.MAX_VALUE);
 		}
+		int pageNo = shiftInventoryListDTO1.getPageNo();
+		int pageSize = shiftInventoryListDTO1.getPageSize();
+		
 		//分页
-		PageHelper.startPage(shiftInventoryListDTO1.getPageNo(), shiftInventoryListDTO1.getPageSize());
+		//PageHelper.startPage(shiftInventoryListDTO1.getPageNo(), shiftInventoryListDTO1.getPageSize());
 		List<ShiftInventoryListDO> shiftInventoryListDOList = shiftInventoryListDOMapper.getShiftInventoryListDOByCondition(shiftInventoryListDTO1);
-		PageInfo<ShiftInventoryListDO> page1 = new PageInfo<ShiftInventoryListDO>(shiftInventoryListDOList);
+		//PageInfo<ShiftInventoryListDO> page1 = new PageInfo<ShiftInventoryListDO>(shiftInventoryListDOList);
 		
 		logger.debug("查询得到的移库单数量为"+shiftInventoryListDOList.size());
 		//如果查询结果为空，直接返回
@@ -271,15 +273,28 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				 }
 				 
 				 ShiftGoodsListDTOList.removeAll(ShiftGoodsListDTOList2);
-				 shiftInventoryListDTO2.setShiftGoodsListDTOList(ShiftGoodsListDTOList);
+				 if (null != ShiftGoodsListDTOList && 0 != ShiftGoodsListDTOList.size()) {
+					 shiftInventoryListDTO2.setShiftGoodsListDTOList(ShiftGoodsListDTOList); 
+				 } 
 			}
-			 shiftInventoryListDTOList.add(shiftInventoryListDTO2);
+			if (null != shiftInventoryListDTO2.getShiftGoodsListDTOList() && 0 != shiftInventoryListDTO2.getShiftGoodsListDTOList().size()) {
+				shiftInventoryListDTOList.add(shiftInventoryListDTO2);
+			} 
 		}
 		
-		PageInfo<ShiftInventoryListDTO> page = new PageInfo<ShiftInventoryListDTO>(shiftInventoryListDTOList);
-		page.setTotal(page1.getTotal());
+		//实现逻辑分页
+		List<ShiftInventoryListDTO> shiftInventoryListDTOList2 = new ArrayList<ShiftInventoryListDTO>();
+		if (pageNo*pageSize > shiftInventoryListDTOList.size()) {
+			shiftInventoryListDTOList2.addAll(shiftInventoryListDTOList.subList((pageNo - 1)*pageSize, shiftInventoryListDTOList.size()));
+		}else {
+			shiftInventoryListDTOList2.addAll(shiftInventoryListDTOList.subList((pageNo - 1)*pageSize, pageNo*pageSize));
+		}
+		
+		PageInfo<ShiftInventoryListDTO> page = new PageInfo<ShiftInventoryListDTO>(shiftInventoryListDTOList2);
+		page.setTotal(shiftInventoryListDTOList.size());
 		return page;
     }
+	
 	
 	
 	/**
