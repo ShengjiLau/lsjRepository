@@ -1,5 +1,6 @@
 package com.lcdt.contract.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
@@ -15,6 +16,7 @@ import com.lcdt.contract.model.ContractLog;
 import com.lcdt.contract.model.ContractProduct;
 import com.lcdt.contract.service.ContractService;
 import com.lcdt.contract.web.dto.ContractDto;
+import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import org.springframework.beans.BeanUtils;
@@ -41,6 +43,8 @@ public class ContractServiceImpl implements ContractService {
     private ContractApprovalMapper contractApprovalMapper;
     @Autowired
     private ContractLogMapper contractLogMapper;
+    @Reference
+    CustomerRpcService customerRpcService;
 
     @Override
     public int addContract(ContractDto dto) {
@@ -106,17 +110,17 @@ public class ContractServiceImpl implements ContractService {
             contract.setApprovalStatus(new Short("0"));
             contractMapper.updateByPrimaryKeySelective(contract);
         }
+        //新增日志
         ContractLog log = new ContractLog();
         log.setContractId(contract.getContractId());
         log.setLogName("新增");
-        log.setLogContent("新增合同，"+(contract.getIsDraft()==0?"存草稿":"发布合同"));
+        log.setLogContent("新增合同，"+(contract.getIsDraft()==0?"":"并发布"));
         if(StringUtility.isNotEmpty(contract.getAttachment1())){
             log.setLogContent(log.getLogContent()+"，"+setAttachmentLog(contract.getAttachment1()));
         }
         saveContractLog(log);
         return result;
     }
-
     @Override
     public int modContract(ContractDto dto) {
         //修改之前的合同
@@ -222,11 +226,12 @@ public class ContractServiceImpl implements ContractService {
             contract.setApprovalProcessId(null);
             contractMapper.updateByPrimaryKeySelective(contract);
         }
+        //新增日志
         ContractLog log = new ContractLog();
         log.setContractId(contract.getContractId());
         log.setLogName("编辑");
         if(oldContract.getIsDraft() != contract.getIsDraft()){//草稿改为发布
-            log.setLogContent("编辑合同内容，并发布草稿");
+            log.setLogContent("编辑合同内容，并发布");
         }else{
             log.setLogContent("编辑合同内容");
         }
@@ -253,6 +258,7 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public int modContractStatus(Contract contract) {
         int result = contractMapper.updateContractStatus(contract);
+        //新增日志
         ContractLog log = new ContractLog();//0-生效 3-失效 2-草稿发布
         log.setContractId(contract.getContractId());
         log.setLogName(contract.getContractStatus()==0?"生效":contract.getContractStatus()==3?"终止":"发布");
@@ -290,7 +296,11 @@ public class ContractServiceImpl implements ContractService {
                 for(String key : keys) {
                     JSONArray jsonArray = jsonObject.getJSONArray(key);
                     if(jsonArray != null && jsonArray.size() > 0){
-                        logContent.append(key+"——");
+                        if("undefinedName".equals(key)){
+                            logContent.append("默认附件——");
+                        }else {
+                            logContent.append(key + "——");
+                        }
                         for(int i=0; i<jsonArray.size(); i++){
                             if(i > 0){
                                 logContent.append("，");
@@ -318,7 +328,7 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public PageInfo<List<ContractLog>> ontractLogList(Map map) {
+    public PageInfo<List<ContractLog>> contractLogList(Map map) {
         int pageNo = 1;
         int pageSize = 0; //0表示所有
 

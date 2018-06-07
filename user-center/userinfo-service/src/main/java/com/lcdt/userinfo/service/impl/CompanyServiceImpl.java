@@ -82,13 +82,21 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Company updateCompany(Company company) {
-
-        Company result = companyMapper.selectByCondition(company);
+       /* Company result = companyMapper.selectByCondition(company);
         if (result != null) {
             boolean isCompanyNameExist = !result.getCompId().equals(company.getCompId());
             if (isCompanyNameExist) {
                 throw new RuntimeException("公司名已存在");
             }
+        }*/
+        //同步企业用户关系表full_name
+        List<UserCompRel> userCompRels = userCompRelMapper.selectByUserIdCompanyId(company.getCreateId(),company.getCompId());
+        if(userCompRels!=null&&userCompRels.size()>0)
+        {
+            UserCompRel userCompRel = userCompRels.get(0);
+            userCompRel.setFullName(company.getFullName());
+            userCompRel.setIsEnable(true);
+            userCompRelMapper.updateByPrimaryKey(userCompRel);
         }
         companyMapper.updateByPrimaryKey(company);
         return company;
@@ -105,11 +113,11 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Company saveCompanyMetaData(CompanyDto dto) throws CompanyExistException {
-        checkCompanyExist(dto);
+        //checkCompanyExist(dto);
         //创建企业
-        if (isCompanyNameRegister(dto.getCompanyName())) {
+        /*if (isCompanyNameRegister(dto.getCompanyName())) {
             throw new RuntimeException("公司名已被注册");
-        }
+        }*/
         Company registerComp = fillCompanyDataFromCompanyDto(dto);
         companyMapper.insert(registerComp);
         //创建关系yd

@@ -90,11 +90,16 @@
             <artifactId>user-api</artifactId>
             <version>1.0</version>
         </dependency>
-       <!--   <dependency>
+        <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>clms-quartz-api</artifactId>
+            <artifactId>clms-customer-api</artifactId>
             <version>1.0</version>
-        </dependency>-->
+        </dependency>
+        <!--   <dependency>
+             <groupId>com.lcdt.cloud</groupId>
+             <artifactId>clms-quartz-api</artifactId>
+             <version>1.0</version>
+         </dependency>-->
     </dependencies>
 	
 
