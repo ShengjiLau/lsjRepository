@@ -11,6 +11,7 @@ import com.lcdt.warehouse.vo.ConstantVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,7 @@ public class OutWarehouseOrderController {
 
     @ApiOperation("出库单新增")
     @RequestMapping(value = "/order", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_out_order_add')")
     public JSONObject addOutWarehouseOrder(@RequestBody OutWhOrderDto params){
         Long companyId = SecurityInfoGetter.getCompanyId();
         User user = SecurityInfoGetter.getUser();
@@ -57,6 +59,7 @@ public class OutWarehouseOrderController {
 
     @ApiOperation("出库单列表")
     @RequestMapping(value = "/order", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_out_order_search')")
     public PageBaseDto outWarehouseOrderList(OutWhOrderSearchDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
         Page<OutWhOrderDto> inWarehouseOrderPage = outWarehouseOrderService.queryOutWarehouseOrderList(params);
@@ -67,6 +70,7 @@ public class OutWarehouseOrderController {
 
     @ApiOperation("出库单详细")
     @RequestMapping(value = "/order/{outorderId}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_out_order_detail')")
     public OutWhOrderDto inWarehouseOrderDetail(@PathVariable Long outorderId) {
         OutWhOrderDto outWhOrderDto = new OutWhOrderDto();
         outWhOrderDto = outWarehouseOrderService.queryOutWarehouseOrder(SecurityInfoGetter.getCompanyId(), outorderId);
@@ -75,6 +79,7 @@ public class OutWarehouseOrderController {
 
     @ApiOperation("出库单出库")
     @RequestMapping(value = "/order/outbound", method = RequestMethod.PATCH)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_out_order_outbound')")
     public JSONObject outbound(@RequestBody OutWhOrderOutboundParamsDto params) {
         ModifyOutOrderStatusParamsDto statusParams = new ModifyOutOrderStatusParamsDto();
         User user = SecurityInfoGetter.getUser();
@@ -99,6 +104,7 @@ public class OutWarehouseOrderController {
 
     @ApiOperation("出库单取消")
     @RequestMapping(value = "/order/cancel/{outorderId}", method = RequestMethod.PATCH)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_out_order_cancel')")
     public JSONObject cancelOutbound(@PathVariable long outorderId) {
         ModifyOutOrderStatusParamsDto params = new ModifyOutOrderStatusParamsDto();
         User user = SecurityInfoGetter.getUser();
