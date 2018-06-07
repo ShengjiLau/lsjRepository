@@ -49,7 +49,7 @@ docker_login
 
 #要更新的 服务名 版本号 路径，新增的服务需要添加
 readonly USER_SERVICE="user-service 1.0 user-center/userinfo-service"
-readonly SSO_SERVICE="sso_service 1.0 cwms-sso/clms-sso-service"
+readonly SSO_SERVICE="clms-sso 1.0 cwms-sso/clms-sso-service"
 readonly NOTIFY_SERVICE="notify-service 1.0 clms-notify/clms-notify-service"
 readonly PAY_SERVICE="pay-service 1.0 clms-pay-service/pay-service"
 readonly ITEMS_SERVICE="items-service 1.0 cwms-items/cwms-items-service"
