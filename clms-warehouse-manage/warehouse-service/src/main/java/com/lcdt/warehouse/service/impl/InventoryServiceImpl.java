@@ -175,11 +175,10 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     public void lockInventoryNum(Long inventoryId,Float tryLockNum){
         Assert.notNull(tryLockNum, "不能为空");
         Inventory inventory = selectById(inventoryId);
-        Float invertoryNum = inventory.getInvertoryNum();
-        if (invertoryNum < tryLockNum) {
+
+        if (inventory.getavailableNum() < tryLockNum) {
             throw new RuntimeException("锁定库存量不能大于库存剩余数量");
         }
-        inventory.setInvertoryNum(invertoryNum - tryLockNum);
         inventory.setLockNum(inventory.getLockNum() + tryLockNum);
         updateById(inventory);
     }
@@ -203,8 +202,19 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             Inventory inventory = inventoryMapper.selectById(good.getInvertoryId());
             //扣减库存
             //比较锁定量和 出库量
+            if (good.getOutboundQuantity() == null) {
+                logger.warn("出库失败 出库数量为空:{}",inventory);
+                continue;
+            }
+            if (good.getGoodsNum() == null) {
+                logger.warn("出库失败 出库计划数量为空{}",inventory);
+                continue;
+            }
+
+
             if (inventory.getLockNum() >= good.getOutboundQuantity()) {
-                inventory.setLockNum(inventory.getLockNum() - good.getOutboundQuantity());
+                inventory.setLockNum(inventory.getLockNum() - good.getGoodsNum());
+                inventory.setInvertoryNum(inventory.getInvertoryNum() - good.getOutboundQuantity());
                 inventoryMapper.updateById(inventory);
                 logService.saveOutOrderLog(order, good,inventory.getInvertoryNum(),inventory);
                 order.setOrderStatus(OutOrderStatus.OUTED);
