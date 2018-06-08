@@ -14,7 +14,7 @@
     attachment3_name attachment3Name,attachment3,attachment4_name attachment4Name,attachment4,attachment5_name attachment5Name,attachment5
     from t_order
     where
-       (company_id = #{companyId,jdbcType=BIGINT} and order_type = #{orderType,jdbcType=SMALLINT} 
+       company_id = #{companyId,jdbcType=BIGINT} and order_type = #{orderType,jdbcType=SMALLINT} 
        <if test="supplier!=null and supplier!=''">
        and supplier like concat('%',#{supplier,jdbcType=VARCHAR},'%')
       </if>
