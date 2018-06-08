@@ -226,7 +226,7 @@ public class ContractServiceImpl implements ContractService {
         ContractLog log = new ContractLog();
         log.setContractId(contract.getContractId());
         log.setLogName("编辑");
-        if(oldContract.getIsDraft() != contract.getIsDraft()){//草稿改为发布
+        if(oldContract.getIsDraft() != contract.getIsDraft()){//发布
             log.setLogContent("编辑合同内容，并发布");
         }else{
             log.setLogContent("编辑合同内容");
@@ -255,10 +255,10 @@ public class ContractServiceImpl implements ContractService {
     public int modContractStatus(Contract contract) {
         int result = contractMapper.updateContractStatus(contract);
         //新增日志
-        ContractLog log = new ContractLog();//0-生效 3-失效 2-草稿发布
+        ContractLog log = new ContractLog();//0-生效 3-失效 2-发布合同
         log.setContractId(contract.getContractId());
         log.setLogName(contract.getContractStatus()==4?"取消":contract.getContractStatus()==0?"生效":contract.getContractStatus()==3?"终止":"发布");
-        log.setLogContent(contract.getContractStatus()==4?"取消合同":contract.getContractStatus()==0?"合同生效":contract.getContractStatus()==3?"合同终止":"发布草稿");
+        log.setLogContent(contract.getContractStatus()==4?"取消合同":contract.getContractStatus()==0?"合同生效":contract.getContractStatus()==3?"合同终止":"发布合同");
         saveContractLog(log);
         return result;
     }
