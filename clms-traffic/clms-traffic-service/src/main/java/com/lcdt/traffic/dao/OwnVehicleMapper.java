@@ -1,6 +1,7 @@
 package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.dto.OwnVehicleDto;
+import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.model.OwnVehicle;
 
 import java.util.List;
@@ -23,6 +24,14 @@ public interface OwnVehicleMapper {
      * @return
      */
     int selectVehicleNum(OwnVehicle ownVehicle);
+
+
+    /**
+     * 根据车牌查询车辆信息
+     * @param ownVehicle
+     * @return
+     */
+    OwnVehicle selectByVehicleNum(OwnVehicle ownVehicle);
 
     /**
      * 删除车辆（实际为更新is_deteted字段）
