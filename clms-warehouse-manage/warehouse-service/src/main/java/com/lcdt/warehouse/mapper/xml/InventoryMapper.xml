@@ -48,7 +48,6 @@
             <if test="originalGoodsId != null">
                 and t.original_goods_id = #{originalGoodsId}
             </if>
-
             <if test="customerId != null">
                 and t.customer_id = #{customerId}
             </if>
