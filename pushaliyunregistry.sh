@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
-#阿里docker registry地址
+
 registry_url=registry.cn-hangzhou.aliyuncs.com/lcdt-clms/
-userservice="user-service 1.0 user-center/userinfo-service"
-clms-sso="clms-sso 1.0 cwms-sso/clms-sso-service"
-customer-service="customer-service 1.0 clms-customer/clms-customer-service"
+
 docker_login(){
-docker login --username=hi35700248@aliyun.com -p A1111777  registry.cn-hangzhou.aliyuncs.com
+    docker login --username=hi35700248@aliyun.com -p A1111777  registry.cn-hangzhou.aliyuncs.com
 }
 
 
@@ -20,6 +18,12 @@ docker build -t $fullimagename $3
 imageid=$(docker images | grep $fullimagename | awk 'NR==1{print $3}')
 docker tag $imageid $imagenamewithtag
 docker push $imagenamewithtag
+}
+
+read_service_file(){
+while IFS='' read -r line || [[ -n "$line" ]]; do
+    echo "Text read from file: $line"
+done < "$1"
 }
 
 update_server(){
@@ -37,13 +41,14 @@ push_to_aliregistry
 else
 echo "编译失败"
 say "编译失败"
+exit
 fi
 }
-if [ $1 ];
-then
+
+
+if [ $1 ];then
   maven_build
 fi
-
 
 docker_login
 
