@@ -1,7 +1,7 @@
 package com.lcdt.warehouse.service;
 
-import com.lcdt.warehouse.entity.CheckItem;
 import com.baomidou.mybatisplus.service.IService;
+import com.lcdt.warehouse.entity.TCheckItem;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.service.IService;
  * @author zhaosl
  * @since 2018-05-17
  */
-public interface CheckItemService extends IService<CheckItem> {
+public interface CheckItemService extends IService<TCheckItem> {
 
 }

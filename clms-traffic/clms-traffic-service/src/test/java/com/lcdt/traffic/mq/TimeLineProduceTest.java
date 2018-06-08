@@ -1,3 +1,4 @@
+
 package com.lcdt.traffic.mq;
 
 import com.alibaba.fastjson.JSONObject;
@@ -25,4 +26,7 @@ public class TimeLineProduceTest extends ContextBase{
         producer.send(message);
     }
 
+
+
 }
+

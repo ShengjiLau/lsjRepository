@@ -1,11 +1,11 @@
 package com.lcdt.warehouse.dto;
 
-import com.lcdt.warehouse.entity.Check;
+import com.lcdt.warehouse.entity.TCheck;
 
 /**
  * Created by Administrator on 2018/5/17.
  */
-public class CheckListDto extends Check{
+public class CheckListDto extends TCheck {
         private String goodsInfos;
         private  String locations;
 

@@ -1,13 +1,11 @@
 package com.lcdt.warehouse.dto;
 
-import com.lcdt.warehouse.entity.Check;
-
-import java.util.Date;
+import com.lcdt.warehouse.entity.TCheck;
 
 /**
  * Created by Administrator on 2018/5/17.
  */
-public class CheckParamDto extends  Check{
+public class CheckParamDto extends TCheck {
     /**
      * 创建时间
      */

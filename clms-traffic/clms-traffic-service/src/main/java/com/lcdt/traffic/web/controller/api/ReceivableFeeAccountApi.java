@@ -193,7 +193,7 @@ public class ReceivableFeeAccountApi {
 
     @ApiOperation("应收记账——查看流水")
     @RequestMapping(value = "/findFeeFlow", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('finace_receive_stat')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_stat_list')")
     public JSONObject findFeeFlow(@ApiParam(value = "运单id",required = true) @RequestParam Long waybillId) {
         Map map = new HashMap();
         map.put("waybillId", waybillId);
