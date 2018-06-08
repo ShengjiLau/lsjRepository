@@ -161,23 +161,26 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
 
                 //司机、车辆
                 if (StringUtils.isEmpty(dto.getCarrierIds())) { //如果没有选司机
-                    OwnDriver ownVehicle = new OwnDriver();
-                    ownVehicle.setCompanyId(dto.getCompanyId());
-                    ownVehicle.setDriverName(dto.getCarrierNames());
-                    ownVehicle.setDriverPhone(dto.getCarrierPhone());
-                    ownVehicle.setCreateId(dto.getCreateId());
-                    ownVehicle.setCreateName(dto.getCreateName());
-                    trafficRpc.addDriver(ownVehicle);
+                    OwnDriver ownDriver = new OwnDriver();
+                    ownDriver.setCompanyId(dto.getCompanyId());
+                    ownDriver.setDriverName(dto.getCarrierNames());
+                    ownDriver.setDriverPhone(dto.getCarrierPhone());
+                    ownDriver.setCreateId(dto.getCreateId());
+                    ownDriver.setCreateName(dto.getCreateName());
+                    OwnDriver ownDriver1 = trafficRpc.addDriver(ownDriver);
+                    if(ownDriver1!=null) {
+                        vo.setCarrierIds(ownDriver1.getOwnDriverId() + "");
+                    }
+
                 }
-                OwnVehicle ownVehicle1 = new OwnVehicle();
-                ownVehicle1.setVehicleNum(dto.getCarrierVehicle());
-                ownVehicle1.setCompanyId(dto.getCompanyId());
-                ownVehicle1.setCreateId(dto.getCreateId());
-                ownVehicle1.setCreateName(dto.getCreateName());
-                ownVehicle1.setVehicleDriverPhone(dto.getCarrierPhone());
-                trafficRpc.addVehicle(ownVehicle1);
 
-
+                OwnVehicle ownVehicle = new OwnVehicle();
+                ownVehicle.setVehicleNum(dto.getCarrierVehicle());
+                ownVehicle.setCompanyId(dto.getCompanyId());
+                ownVehicle.setCreateId(dto.getCreateId());
+                ownVehicle.setCreateName(dto.getCreateName());
+                ownVehicle.setVehicleDriverPhone(dto.getCarrierPhone());
+                trafficRpc.addVehicle(ownVehicle);
 
                 if (!StringUtils.isEmpty(dto.getCarrierIds())) {
                     vo.setCarrierCompanyId(vo.getCompanyId());
