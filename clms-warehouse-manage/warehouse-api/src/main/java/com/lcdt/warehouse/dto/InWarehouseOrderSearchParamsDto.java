@@ -43,6 +43,8 @@ public class InWarehouseOrderSearchParamsDto {
     private Long groupId;
     @ApiModelProperty(value = "采购单号")
     private String purchaseCode;
+    @ApiModelProperty(value = "合同编号")
+    private String contractCode;
     @ApiModelProperty(value = "计划id")
     private Long planId;
 
@@ -165,6 +167,14 @@ public class InWarehouseOrderSearchParamsDto {
 
     public void setPurchaseCode(String purchaseCode) {
         this.purchaseCode = purchaseCode;
+    }
+
+    public String getContractCode() {
+        return contractCode;
+    }
+
+    public void setContractCode(String contractCode) {
+        this.contractCode = contractCode;
     }
 
     public Long getPlanId() {
