@@ -12,7 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
-@Service
+@com.alibaba.dubbo.config.annotation.Service
 @Transactional(rollbackFor = Exception.class)
 public class CompanyServiceCountImpl implements CompanyServiceCountService {
 

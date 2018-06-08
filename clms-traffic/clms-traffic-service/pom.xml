@@ -11,7 +11,10 @@
 
     <artifactId>clms-traffic-service</artifactId>
     <dependencies>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-pay-api</artifactId>

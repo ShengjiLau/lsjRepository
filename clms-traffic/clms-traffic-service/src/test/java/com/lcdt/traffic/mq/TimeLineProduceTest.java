@@ -6,6 +6,7 @@ import com.aliyun.openservices.ons.api.Message;
 import com.aliyun.openservices.ons.api.Producer;
 import com.lcdt.notify.model.Timeline;
 import com.lcdt.traffic.ContextBase;
+import com.lcdt.traffic.service.impl.TestWaybillAop;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,5 +25,7 @@ public class TimeLineProduceTest extends ContextBase{
         message.setBody(JSONObject.toJSONBytes(timeline, SerializerFeature.BrowserCompatible));
         producer.send(message);
     }
+
+
 
 }
