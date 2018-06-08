@@ -88,11 +88,11 @@ public class AllotApi {
         }
     }
 
-    @ApiOperation("取消/删除")
-    @RequestMapping(value = "/deleteAllot", method = RequestMethod.POST)
+    @ApiOperation("取消")
+    @RequestMapping(value = "/cancelAllot", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_delete')")
-    public JSONObject deleteAllot(@ApiParam(value = "调拨单id",required = true) @RequestParam Long allotId) {
-        boolean result = allotService.modifyAllotIsDelete(allotId);
+    public JSONObject cancelAllot(@ApiParam(value = "调拨单id",required = true) @RequestParam Long allotId) {
+        boolean result = allotService.cancelAllot(allotId);
         if (result) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);

@@ -67,12 +67,13 @@ public class WarehouseLocApi {
     @RequestMapping(value = "/addWarehouseLoc", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('warehouse_loc_add')")
     public JSONObject addWarehouseLoc(@Validated WarehouseLoc dto) {
-        int locCount = warehouseService.getWarehouseLocByCode(dto.getCode());
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        dto.setCompanyId(companyId);
+        int locCount = warehouseService.getWarehouseLocByCode(dto);
         if(locCount > 0){
             throw new RuntimeException("库位编码已存在");
         }else{
             User user = SecurityInfoGetter.getUser();
-            Long companyId = SecurityInfoGetter.getCompanyId();
             dto.setStatus((short)0);
             dto.setCreateId(user.getUserId());
             dto.setCreateName(user.getRealName());
@@ -95,7 +96,7 @@ public class WarehouseLocApi {
     @RequestMapping(value = "/modifyWarehouseLoc", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('warehouse_loc_modify')")
     public JSONObject modifyWarehouseLoc(@Validated WarehouseLoc dto) {
-        int locCount = warehouseService.getWarehouseLocByCode(dto.getCode());
+        int locCount = warehouseService.getWarehouseLocByCode(dto);
         if(locCount > 0){
             throw new RuntimeException("库位编码已存在");
         }else{

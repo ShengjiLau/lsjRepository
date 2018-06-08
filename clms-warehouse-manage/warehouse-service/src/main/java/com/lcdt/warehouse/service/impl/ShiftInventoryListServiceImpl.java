@@ -137,7 +137,12 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	@Transactional(isolation=Isolation.REPEATABLE_READ,timeout=60,propagation=Propagation.REQUIRED,rollbackForClassName={"RuntimeException","Exception"})
 	public int completeShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 		//将移库单的状态修改为1，即完成状态
-		int i = shiftInventoryListDOMapper.updateFinishedById(shiftInventoryListDTO.getShiftId(),(byte) 1);
+		ShiftInventoryListDO shiftInventoryListDO = new ShiftInventoryListDO();
+		shiftInventoryListDO.setShiftId(shiftInventoryListDTO.getShiftId());
+		shiftInventoryListDO.setShiftUser(shiftInventoryListDTO.getShiftUser());
+		shiftInventoryListDO.setShiftTime(shiftInventoryListDTO.getShiftTime());
+		shiftInventoryListDO.setFinished((byte) 1);
+		int i = shiftInventoryListDOMapper.updateByPrimaryKeySelective(shiftInventoryListDO);
 		
 		List<ShiftGoodsListDTO> shiftGoodsListDTOList = shiftInventoryListDTO.getShiftGoodsListDTOList();
 		List<ShiftGoodsDO> shiftGoodsDOList = new LinkedList<ShiftGoodsDO>();

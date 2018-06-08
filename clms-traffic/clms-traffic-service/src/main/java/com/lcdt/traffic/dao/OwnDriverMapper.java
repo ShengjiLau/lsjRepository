@@ -26,6 +26,13 @@ public interface OwnDriverMapper {
     int selectDriverPhone(OwnDriver ownDriver);
 
     /**
+     * 根据手机号查询司机信息
+     * @param ownDriver
+     * @return
+     */
+    OwnDriver selectByPhone(OwnDriver ownDriver);
+
+    /**
      * 删除司机（实际为更新is_deteted字段）
      *
      * @param ownDriver

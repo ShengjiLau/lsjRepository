@@ -17,12 +17,12 @@ public interface TrafficRpc {
      * @param ownVehicle
      * @return
      */
-    int addVehicle(OwnVehicle ownVehicle);
+    OwnVehicle addVehicle(OwnVehicle ownVehicle);
 
     /**
      * 新增司机
      * @param ownDriver
      * @return
      */
-    int addDriver(OwnDriver ownDriver);
+    OwnDriver addDriver(OwnDriver ownDriver);
 }

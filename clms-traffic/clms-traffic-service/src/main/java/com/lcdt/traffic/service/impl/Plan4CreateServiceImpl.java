@@ -17,12 +17,14 @@ import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.NotifyUtils;
 import com.lcdt.traffic.service.OwnDriverService;
 import com.lcdt.traffic.service.Plan4CreateService;
+import com.lcdt.traffic.service.TrafficRpc;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,6 +72,8 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
     @Autowired
     private OwnDriverService ownDriverService;
 
+    @Autowired
+    private TrafficRpc trafficRpc;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -117,6 +121,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
         }
 
 
+        //客戶部分
         if (vo.getCustomerId() == null && !StringUtils.isEmpty(vo.getCustomerName())) {
             Map customerMap = new HashMap<String,String>();
             customerMap.put("customerType","3"); //运输客户
@@ -137,6 +142,8 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
         }
 
 
+
+
         //具体业务处理
         if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
@@ -150,6 +157,31 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 }
                 planDirectProcedure(vo, dto,  flag, (short)1);
             } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
+
+
+                //司机、车辆
+                if (StringUtils.isEmpty(dto.getCarrierIds())) { //如果没有选司机
+                    OwnDriver ownDriver = new OwnDriver();
+                    ownDriver.setCompanyId(dto.getCompanyId());
+                    ownDriver.setDriverName(dto.getCarrierNames());
+                    ownDriver.setDriverPhone(dto.getCarrierPhone());
+                    ownDriver.setCreateId(dto.getCreateId());
+                    ownDriver.setCreateName(dto.getCreateName());
+                    OwnDriver ownDriver1 = trafficRpc.addDriver(ownDriver);
+                    if(ownDriver1!=null) {
+                        vo.setCarrierIds(ownDriver1.getOwnDriverId() + "");
+                    }
+
+                }
+
+                OwnVehicle ownVehicle = new OwnVehicle();
+                ownVehicle.setVehicleNum(dto.getCarrierVehicle());
+                ownVehicle.setCompanyId(dto.getCompanyId());
+                ownVehicle.setCreateId(dto.getCreateId());
+                ownVehicle.setCreateName(dto.getCreateName());
+                ownVehicle.setVehicleDriverPhone(dto.getCarrierPhone());
+                trafficRpc.addVehicle(ownVehicle);
+
                 if (!StringUtils.isEmpty(dto.getCarrierIds())) {
                     vo.setCarrierCompanyId(vo.getCompanyId());
                     vo.setCarrierCompanyName(dto.getCompanyName());

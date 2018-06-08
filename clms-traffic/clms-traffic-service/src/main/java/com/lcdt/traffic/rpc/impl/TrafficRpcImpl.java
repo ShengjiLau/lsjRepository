@@ -48,41 +48,39 @@ public class TrafficRpcImpl implements TrafficRpc {
     }
 
     @Override
-    public int addVehicle(OwnVehicle ownVehicle) {
+    public OwnVehicle addVehicle(OwnVehicle ownVehicle) {
+        //  获取companyId
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        ownVehicle.setCompanyId(companyId);
         int count = ownVehicleMapper.selectVehicleNum(ownVehicle);
         //判断车牌号是否重复
         if (count != 0) {
-            return 0;
+            return ownVehicleMapper.selectByVehicleNum(ownVehicle);
         } else {
             /**保存车辆基本信息*/
-            //  获取companyId
-            Long companyId = SecurityInfoGetter.getCompanyId();
             Long userId = SecurityInfoGetter.getUser().getUserId();
             String userName = SecurityInfoGetter.getUser().getRealName();
-            ownVehicle.setCompanyId(companyId);
             ownVehicle.setCreateId(userId);
             ownVehicle.setCreateName(userName);
             ownVehicleMapper.insert(ownVehicle);
+            return ownVehicle;
         }
-        return 1;
     }
 
     @Override
-    public int addDriver(OwnDriver ownDriver) {
+    public OwnDriver addDriver(OwnDriver ownDriver) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        ownDriver.setCompanyId(companyId);
         int count = ownDriverMapper.selectDriverPhone(ownDriver);
         //判断手机号是否重复
         if (count != 0) {
-            return 0;
+            return ownDriverMapper.selectByPhone(ownDriver);
         } else {
             //保存车司机本信息
-            Long companyId = SecurityInfoGetter.getCompanyId();
             Long userId = SecurityInfoGetter.getUser().getUserId();
             String userName = SecurityInfoGetter.getUser().getRealName();
-            ownDriver.setCompanyId(companyId);
             ownDriver.setCreateId(userId);
             ownDriver.setCreateName(userName);
-            //保存我的司机信息
-            ownDriverMapper.insert(ownDriver);
             if(null != ownDriver.getDriverPhone()) {
                 String phone = ownDriver.getDriverPhone().trim();
                 /**判断是否已经开通cLMS司机账号，若没有开通，则自动开通,新增一条司机账号信息*/
@@ -108,7 +106,9 @@ public class TrafficRpcImpl implements TrafficRpc {
                             driverService.addDriver(driver);
                             /*将司机账号的user_id更新到我的司机表里*/
                             ownDriver.setDriverId(user.getUserId());
-                            ownDriverMapper.updateDriverId(ownDriver);
+                            //保存我的司机信息
+                            ownDriverMapper.insert(ownDriver);
+                            return ownDriver;
                         } catch (PhoneHasRegisterException e) {
                             e.printStackTrace();
                             throw new RuntimeException("保存司机账号信息失败！");
@@ -126,15 +126,19 @@ public class TrafficRpcImpl implements TrafficRpc {
                         driverService.addDriver(driver);
                         /*将司机账号的user_id更新到我的司机表里*/
                         ownDriver.setDriverId(user.getUserId());
-                        ownDriverMapper.updateDriverId(ownDriver);
+                        //保存我的司机信息
+                        ownDriverMapper.insert(ownDriver);
+                        return ownDriver;
                     }
                 }
                 User user = userService.selectUserByPhone(phone);
                 /*将司机账号的user_id更新到我的司机表里*/
                 ownDriver.setDriverId(user.getUserId());
-                ownDriverMapper.updateDriverId(ownDriver);
+                //保存我的司机信息
+                ownDriverMapper.insert(ownDriver);
+                return ownDriver;
             }
+            return ownDriver;
         }
-        return 1;
     }
 }

@@ -107,8 +107,8 @@ public interface WarehouseService {
 
     /**
      * 根据库位编码查询库位
-     * @param code
+     * @param loc
      * @return
      */
-    int getWarehouseLocByCode(String code);
+    int getWarehouseLocByCode(WarehouseLoc loc);
 }

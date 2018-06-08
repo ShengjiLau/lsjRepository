@@ -198,7 +198,7 @@ public class PurchaseContractApi {
 
     @ApiOperation("取消合同")
     @RequestMapping(value = "/cancelContract", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_cancel_contract')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_cancel')")
     public JSONObject cancelContract(@ApiParam(value = "合同ID",required = true) @RequestParam Long contractId) {
         Contract dto = new Contract();
         dto.setContractId(contractId);

@@ -18,6 +18,7 @@ import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.NotifyUtils;
 import com.lcdt.traffic.service.OwnDriverService;
 import com.lcdt.traffic.service.Plan4EditService;
+import com.lcdt.traffic.service.TrafficRpc;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
@@ -69,6 +70,9 @@ public class Plan4EditServiceImpl implements Plan4EditService {
 
     @Reference
     private CompanyRpcService companyRpcService; //企业信息
+
+    @Autowired
+    private TrafficRpc trafficRpc;
 
 
 
@@ -131,6 +135,29 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                 }
                 planDirectProcedure(vo, dto,  flag, (short)1);
             } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
+
+
+                //司机、车辆
+                if (StringUtils.isEmpty(dto.getCarrierIds())) { //如果没有选司机
+                    OwnDriver ownDriver = new OwnDriver();
+                    ownDriver.setCompanyId(dto.getCompanyId());
+                    ownDriver.setDriverName(dto.getCarrierNames());
+                    ownDriver.setDriverPhone(dto.getCarrierPhone());
+                    ownDriver.setCreateId(dto.getCreateId());
+                    ownDriver.setCreateName(dto.getCreateName());
+                    OwnDriver ownDriver1= trafficRpc.addDriver(ownDriver);
+                    if(ownDriver1!=null) {
+                        vo.setCarrierIds(ownDriver1.getOwnDriverId() + "");
+                    }
+                }
+                OwnVehicle ownVehicle1 = new OwnVehicle();
+                ownVehicle1.setVehicleNum(dto.getCarrierVehicle());
+                ownVehicle1.setCompanyId(dto.getCompanyId());
+                ownVehicle1.setCreateId(dto.getCreateId());
+                ownVehicle1.setCreateName(dto.getCreateName());
+                ownVehicle1.setVehicleDriverPhone(dto.getCarrierPhone());
+                trafficRpc.addVehicle(ownVehicle1);
+
                 if (!StringUtils.isEmpty(dto.getCarrierIds())) {
                     vo.setCarrierCompanyId(vo.getCompanyId());
                     vo.setCarrierCompanyName(dto.getCompanyName());

@@ -431,7 +431,7 @@
         and receipt_unit like concat('%',#{receiptUnit},'%')
       </if>
       <if test="paymentTimeStart!=null and paymentTimeStart!=''">
-        and (payment_time &gt; #{paymentTimeStart} and payment_time &lt; #{paymentTimeEnd})
+        and (application_date &gt; #{paymentTimeStart} and application_date &lt; #{paymentTimeEnd})
       </if>
       <if test="orderSerialNo!=null and  orderSerialNo!=''">
         and order_serial_no like concat('%',#{orderSerialNo},'%')

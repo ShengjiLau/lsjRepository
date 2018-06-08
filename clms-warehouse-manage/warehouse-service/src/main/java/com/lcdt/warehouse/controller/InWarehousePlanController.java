@@ -78,7 +78,7 @@ public class InWarehousePlanController {
 
     @ApiOperation("发布")
     @RequestMapping(value = "/publish",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('wh_in_plan_publish')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_plan_publish')")
     public JSONObject publish(@ApiParam(value = "计划ID",required = true) @RequestParam Long planId) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         InWarehousePlan obj = new InWarehousePlan();
@@ -100,7 +100,7 @@ public class InWarehousePlanController {
 
     @ApiOperation("取消")
     @RequestMapping(value = "/cancel",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('wh_in_plan_cancel')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_plan_cancel')")
     public JSONObject cancel(@ApiParam(value = "计划ID",required = true) @RequestParam Long planId) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         InWarehousePlan obj = new InWarehousePlan();
@@ -123,7 +123,7 @@ public class InWarehousePlanController {
 
     @ApiOperation("完成")
     @RequestMapping(value = "/complete",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('wh_in_plan_complete')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_plan_complete')")
     public JSONObject complete(@ApiParam(value = "计划ID",required = true) @RequestParam Long planId) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         InWarehousePlan obj = new InWarehousePlan();
@@ -183,7 +183,7 @@ public class InWarehousePlanController {
 
     @ApiOperation("计划编辑")
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('wh_in_plan_edit')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_plan_edit')")
     public JSONObject edit(@RequestBody InWhPlanDto inWhPlanAddParamsDto) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         String msg = "编辑失败！";
@@ -203,7 +203,7 @@ public class InWarehousePlanController {
 
     @ApiOperation("计划配仓")
     @RequestMapping(value = "/distributeWh",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('wh_in_plan_dis')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_plan_dis')")
     public JSONObject distributeWh(@RequestBody InWhPlanDto inWhPlanAddParamsDto) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         String msg = "配仓失败！";

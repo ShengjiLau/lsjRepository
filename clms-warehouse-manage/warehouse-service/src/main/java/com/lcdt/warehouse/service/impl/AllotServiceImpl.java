@@ -113,10 +113,11 @@ public class AllotServiceImpl implements AllotService{
     }
 
     @Override
-    public boolean modifyAllotIsDelete(Long allotId) {
+    public boolean cancelAllot(Long allotId) {
         try{
-            allotMapper.updateAllotIsDelete(allotId);
-            allotProductMapper.updateAllotProductIsDelete(allotId);
+            Allot allot = allotMapper.selectByPrimaryKey(allotId);
+            allot.setAllotStatus((short)2);//取消
+            allotMapper.updateByPrimaryKey(allot);
             return true;
         }catch (Exception e){
             return false;
