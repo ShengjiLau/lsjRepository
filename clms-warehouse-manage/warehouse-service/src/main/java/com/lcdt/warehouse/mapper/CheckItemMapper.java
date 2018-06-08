@@ -1,7 +1,7 @@
 package com.lcdt.warehouse.mapper;
 
-import com.lcdt.warehouse.entity.CheckItem;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.lcdt.warehouse.entity.TCheckItem;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @author zhaosl
  * @since 2018-05-17
  */
-public interface CheckItemMapper extends BaseMapper<CheckItem> {
+public interface CheckItemMapper extends BaseMapper<TCheckItem> {
 
-    List<CheckItem> selectByCheckId(Long checkId);
+    List<TCheckItem> selectByCheckId(Long checkId);
 }

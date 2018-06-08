@@ -1,11 +1,13 @@
 package com.lcdt.warehouse.service.impl;
 
+import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.lcdt.warehouse.dto.CheckListDto;
 import com.lcdt.warehouse.dto.CheckParamDto;
-import com.lcdt.warehouse.entity.Check;
-import com.lcdt.warehouse.entity.CheckItem;
+import com.lcdt.warehouse.entity.TCheck;
+import com.lcdt.warehouse.entity.TCheckItem;
 import com.lcdt.warehouse.mapper.CheckItemMapper;
 import com.lcdt.warehouse.mapper.CheckMapper;
+import com.lcdt.warehouse.service.CheckItemService;
 import com.lcdt.warehouse.service.CheckService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -24,27 +27,30 @@ import java.util.List;
  * @since 2018-05-16
  */
 @Service
-public class CheckServiceImpl extends ServiceImpl<CheckMapper, Check> implements CheckService {
+public class CheckServiceImpl extends ServiceImpl<CheckMapper, TCheck> implements CheckService {
     @Autowired
     private CheckMapper checkMapper;
     @Autowired
     private CheckItemMapper checkItemMapper;
+
+    @Autowired
+    private CheckItemService checkItemService;
     @Override
     public List<CheckListDto> selectList(CheckParamDto paramDto) {
         //return checkMapper.selectList(paramDto);
-        List<Check> checks = checkMapper.selectListByParams(paramDto);
+        List<TCheck> checks = checkMapper.selectListByParams(paramDto);
         List<CheckListDto> resultList = new ArrayList<CheckListDto>();
         if (checks!=null&&checks.size()>0){
-            for(Check ch:checks){
+            for(TCheck ch:checks){
                 CheckListDto checkRow = new CheckListDto();
                 BeanUtils.copyProperties(ch,checkRow);
-                List<CheckItem> items = checkItemMapper.selectByCheckId(ch.getCheckId());
+                List<TCheckItem> items = checkItemMapper.selectByCheckId(ch.getCheckId());
                 if(items!=null&&items.size()>0){
                     StringBuffer goodsInfos = new StringBuffer();
                     StringBuffer locations = new StringBuffer();
                     //与李明确认过：只显示3条，多余的用省略号；品名、数量、单位
                     for(int i=0;i<items.size()&&i<4;i++){
-                        CheckItem item = items.get(i);
+                        TCheckItem item = items.get(i);
                         if(goodsInfos.length()>0){
                             goodsInfos.append("， ");
                         }
@@ -75,5 +81,42 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, Check> implements
     public int cancelCheck(CheckParamDto checkDto){
         return checkMapper.cancelCheck(checkDto);
 
+    }
+
+    public boolean insertCheckAndItems(TCheck check, List<Map<String, Object>> items){
+        check.setCheckStatus(1);
+        check.setIsDeleted(0);
+        boolean result = true;
+        result=checkMapper.addCheck(check);
+
+        if(!CollectionUtils.isEmpty(items)){
+            for (Map<String, Object> dto:items) {
+                TCheckItem item = new TCheckItem();
+
+                item.setCheckId(check.getCheckId());
+                if (dto.get("goodsBarcode") != null)
+                    item.setGoodsBarcode(dto.get("goodsBarcode").toString());
+                if (dto.get("goodsBatch") != null)
+                    item.setGoodsBatch(dto.get("goodsBatch").toString());
+
+                item.setGoodsCode(dto.get("goodsCode").toString());
+                item.setGoodsId(Long.valueOf(dto.get("goodsId").toString()));
+                item.setGoodsName(dto.get("goodsName").toString());
+
+                if (dto.get("goodsSpec") != null)
+                    item.setGoodsSpec(dto.get("goodsSpec").toString());
+                if (dto.get("goodsUnit") != null)
+                    item.setGoodsUnit(dto.get("goodsUnit").toString());
+                item.setInvertoryAmount(Double.valueOf(dto.get("invertoryAmount").toString()));
+                item.setInvertoryId(Long.valueOf(dto.get("invertoryId").toString()));
+                if (dto.get("storageLocationCode") != null)
+                    item.setStorageLocationCode(dto.get("storageLocationCode").toString());
+
+
+                result= result && checkItemService.insert(item);
+            }
+        }
+
+        return result;
     }
 }

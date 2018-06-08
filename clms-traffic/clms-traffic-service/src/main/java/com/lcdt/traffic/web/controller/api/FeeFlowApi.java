@@ -34,7 +34,7 @@ public class FeeFlowApi {
 
     @ApiOperation("应收列表")
     @RequestMapping(value = "/search/receive",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('receive_stat_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_stat_list')")
     public PageBaseDto searchList(FeeFlow4SearchParamsDto dto) {
          StringBuffer sb = new StringBuffer();
          if (dto.getGroupId()>0) {//业务组
@@ -67,7 +67,7 @@ public class FeeFlowApi {
 
     @ApiOperation("应付列表")
     @RequestMapping(value = "/search/pay",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasRole('pay_stat_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('pay_stat_list')")
     public PageBaseDto searchList1(FeeFlow4SearchParamsDto dto) {
         StringBuffer sb = new StringBuffer();
         if (dto.getGroupId()>0) {//业务组

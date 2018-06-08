@@ -6,9 +6,9 @@
     <select id="selectListByParams" resultType="com.lcdt.warehouse.dto.CheckParamDto">
         SELECT a.check_id,a.check_num,a.check_status,a.group_id,a.group_name,a.customer_id,a.customer_name,a.warehouse_id,
         a.warehouse_name,a.attachments,a.company_id,a.remark,a.create_id,a.create_name,a.create_date,a.update_id,a.update_name,
-        a.update_date,a.is_deleted,a.complete_id,a.complete_name,a.complete_date,diff_status
-        FROM `check` a
-        LEFT JOIN check_item b
+        a.update_date,a.is_deleted,a.complete_id,a.complete_name,a.complete_date,diff_status,attachment
+        FROM `t_check` a
+        LEFT JOIN t_check_item b
         on(a.check_id = b.check_id)
 
         WHERE a.company_id = #{companyId,jdbcType=BIGINT}
@@ -54,14 +54,14 @@
 
 
     <update id="cancelCheck" parameterType="com.lcdt.warehouse.dto.CheckParamDto">
-      UPDATE `check` SET check_status = 9 WHERE check_id = #{checkId,jdbcType=BIGINT} AND company_id =#{companyId,jdbcType=BIGINT}
+      UPDATE `t_check` SET check_status = 9 WHERE check_id = #{checkId,jdbcType=BIGINT} AND company_id =#{companyId,jdbcType=BIGINT}
     </update>
 
-    <insert id="addCheck" parameterType="com.lcdt.warehouse.entity.Check">
-        <selectKey keyProperty="allotId" order="AFTER" resultType="java.lang.Long">
+    <insert id="addCheck" parameterType="com.lcdt.warehouse.entity.TCheck">
+        <selectKey keyProperty="checkId" order="AFTER" resultType="java.lang.Long">
             SELECT LAST_INSERT_ID()
         </selectKey>
-      INSERT INTO `check` (
+      INSERT INTO `t_check` (
         check_num,
         check_status,
         group_id,
@@ -83,7 +83,8 @@
         complete_id,
         complete_name,
         complete_date,
-        diff_status
+        diff_status,
+        attachment
         ) VALUES (
         F_CHECK_CODE('PK'),
         #{checkStatus,jdbcType=TINYINT},
@@ -106,7 +107,8 @@
         #{completeId,jdbcType=BIGINT},
         #{completeName,jdbcType=VARCHAR},
         #{completeDate,jdbcType=TIMESTAMP},
-        #{diffStatus,jdbcType=TINYINT}
+        #{diffStatus,jdbcType=TINYINT},
+        #{attachment,jdbcType=VARCHAR}
         )
 
     </insert>
