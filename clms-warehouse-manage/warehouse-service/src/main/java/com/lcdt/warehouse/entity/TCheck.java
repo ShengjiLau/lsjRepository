@@ -11,9 +11,9 @@ import java.io.Serializable;
  * </p>
  *
  * @author code generate
- * @since 2018-05-25
+ * @since 2018-06-07
  */
-public class Check implements Serializable {
+public class TCheck implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -95,7 +95,7 @@ public class Check implements Serializable {
      * 差异状态：1：无差异，2：有差异
      */
     private Integer diffStatus;
-
+    private String  attachment;
 
     public Long getCheckId() {
         return checkId;
@@ -281,9 +281,17 @@ public class Check implements Serializable {
         this.diffStatus = diffStatus;
     }
 
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
+    }
+
     @Override
     public String toString() {
-        return "Check{" +
+        return "TCheck{" +
         ", checkId=" + checkId +
         ", checkNum=" + checkNum +
         ", checkStatus=" + checkStatus +
@@ -307,6 +315,7 @@ public class Check implements Serializable {
         ", completeName=" + completeName +
         ", completeDate=" + completeDate +
         ", diffStatus=" + diffStatus +
+        ", attachment=" + attachment +
         "}";
     }
 }

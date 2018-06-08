@@ -9,10 +9,10 @@ import java.io.Serializable;
  * 
  * </p>
  *
- * @author zhaosl
- * @since 2018-05-17
+ * @author code generate
+ * @since 2018-06-07
  */
-public class CheckItem implements Serializable {
+public class TCheckItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -168,7 +168,7 @@ public class CheckItem implements Serializable {
 
     @Override
     public String toString() {
-        return "CheckItem{" +
+        return "TCheckItem{" +
         ", relationId=" + relationId +
         ", checkId=" + checkId +
         ", invertoryId=" + invertoryId +
