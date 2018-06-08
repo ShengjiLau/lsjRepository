@@ -121,6 +121,12 @@ public class AuthController {
         }
         try {
             User user = userService.userLogin(username, password);
+            if (user.getUserStatus() == 2) {
+                jsonObject.put("data", null);
+                jsonObject.put("code", -1);
+                jsonObject.put("message", "您的账号审核中或已被禁用，请联系客服");
+                return jsonObject.toString();
+            }
             LoginSessionReposity.setUserInSession(request, user);
             List<UserCompRel> companyMembers = companyService.companyList(user.getUserId());
             jsonObject.put("data", companyMembers);

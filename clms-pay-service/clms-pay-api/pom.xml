@@ -11,5 +11,8 @@
 
     <artifactId>clms-pay-api</artifactId>
 
+    <dependencies>
 
+
+    </dependencies>
 </project>

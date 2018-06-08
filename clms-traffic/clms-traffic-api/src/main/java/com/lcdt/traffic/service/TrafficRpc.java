@@ -1,5 +1,8 @@
 package com.lcdt.traffic.service;
 
+import com.lcdt.traffic.model.OwnDriver;
+import com.lcdt.traffic.model.OwnVehicle;
+
 import java.util.Map;
 
 /**
@@ -8,4 +11,18 @@ import java.util.Map;
 public interface TrafficRpc {
 
     void waybillPositionTimer(Map map);
+
+    /**
+     * 新增车辆
+     * @param ownVehicle
+     * @return
+     */
+    int addVehicle(OwnVehicle ownVehicle);
+
+    /**
+     * 新增司机
+     * @param ownDriver
+     * @return
+     */
+    int addDriver(OwnDriver ownDriver);
 }
