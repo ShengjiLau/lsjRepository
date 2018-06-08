@@ -28,11 +28,11 @@ public interface AllotService {
      */
     boolean modifyAllot(AllotDto dto);
     /**
-     * 删除/取消仓库
+     * 取消调拨单
      * @param allotId
      * @return
      */
-    boolean modifyAllotIsDelete(Long allotId);
+    boolean cancelAllot(Long allotId);
     /**
      * 获取调拨单详情
      * @param allotId
