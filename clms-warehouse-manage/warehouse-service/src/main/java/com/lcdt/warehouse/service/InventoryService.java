@@ -30,4 +30,6 @@ public interface InventoryService extends IService<Inventory> {
     void outInventory(OutWarehouseOrder order, List<OutOrderGoodsInfo> goodsInfos);
 
     List<Inventory> queryAllInventory(Long companyId,Long wareHouseId, Long goodsId);
+
+    void unLockInventoryNum(Long inventoryId, Float unlockNum);
 }
