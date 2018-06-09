@@ -162,7 +162,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                     vo.setCarrierCompanyId(vo.getCompanyId());
                     vo.setCarrierCompanyName(dto.getCompanyName());
                 } else {
-                    vo.setCarrierType(ConstantVO.PLAN_CARRIER_TYPE_ELSE);//没选承运人的情况下
+                    vo.setCarrierType(ConstantVO.PLAN_CARRIER_TYPE_ELSE);//没选承 运人的情况下
                 }
                 planDirectProcedure(vo, dto,  flag,(short)2);
             } else { //其它（发布后派单）
