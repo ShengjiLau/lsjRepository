@@ -22,7 +22,7 @@ public interface AllotMapper {
 
     List<AllotDto> selectByCondition(Pagination page, Map m);
     /**
-     * 取消/删除（is_deleted=1）
+     * 删除（is_deleted=1）
      * @param allotId
      * @return
      */

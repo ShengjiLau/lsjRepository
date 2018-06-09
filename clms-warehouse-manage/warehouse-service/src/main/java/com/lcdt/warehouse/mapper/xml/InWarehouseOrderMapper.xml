@@ -63,7 +63,7 @@
     <sql id="Base_Select_List" >
         inorder_id, plan_id, in_order_code, in_order_status, group_id, group_name,contract_code,
         purchase_code, customer_name,customer_id, customer_contact_name, customer_contact_phone, warehouse_id,
-        warehouse_name, storage_type, storage_plan_time, storage_time, storage_remark, deliveryman_name,
+        warehouse_name, storage_type, storage_plan_time,storage_man, storage_time, storage_remark, deliveryman_name,
         deliveryman_phone, deliveryman_linkman, deliveryman_car, attachments, company_id,
         create_id, create_name, create_date,is_deleted
     </sql>
@@ -80,6 +80,9 @@
         </if>
         <if test="planId!=null and planId!=''">
             and plan_id = #{planId,jdbcType=BIGINT}
+        </if>
+        <if test="groupId!=null and groupId!=''">
+            and  group_id= #{groupId,jdbcType=BIGINT}
         </if>
         <if test="warehouseId!=null and warehouseId!=''">
             and warehouse_id = #{warehouseId,jdbcType=BIGINT}
@@ -111,6 +114,9 @@
         <if test="purchaseCode!=null and purchaseCode!=''">
             and purchase_code like concat('%',#{purchaseCode,jdbcType=VARCHAR},'%')
         </if>
+        <if test="contractCode!=null and contractCode!=''">
+            and contract_code like concat('%',#{contractCode,jdbcType=VARCHAR},'%')
+        </if>
         <if test="goodsInfo != null and goodsInfo!=''">
             and inorder_id in (SELECT DISTINCT inorder_id FROM inorder_goods_info WHERE goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%'))
         </if>
@@ -127,7 +133,7 @@
         group_id, group_name,contract_code, purchase_code,
         customer_name,customer_id, customer_contact_name, customer_contact_phone,
         warehouse_id, warehouse_name, storage_type,
-        storage_plan_time, storage_time, storage_remark,
+        storage_plan_time,storage_man, storage_time, storage_remark,
         deliveryman_name, deliveryman_phone, deliveryman_linkman,
         deliveryman_car, attachments, company_id,
         create_id, create_name, create_date,
@@ -146,7 +152,7 @@
         #{customerName,jdbcType=VARCHAR},#{customerId,jdbcType=BIGINT}, #{customerContactName,jdbcType=VARCHAR},
         #{customerContactPhone,jdbcType=VARCHAR},
         #{warehouseId,jdbcType=BIGINT}, #{warehouseName,jdbcType=VARCHAR}, #{storageType,jdbcType=VARCHAR},
-        #{storagePlanTime,jdbcType=TIMESTAMP}, #{storageTime,jdbcType=TIMESTAMP}, #{storageRemark,jdbcType=VARCHAR},
+        #{storagePlanTime,jdbcType=TIMESTAMP},#{storageMan,jdbcType=VARCHAR}, #{storageTime,jdbcType=TIMESTAMP}, #{storageRemark,jdbcType=VARCHAR},
         #{deliverymanName,jdbcType=VARCHAR}, #{deliverymanPhone,jdbcType=VARCHAR},
         #{deliverymanLinkman,jdbcType=VARCHAR},
         #{deliverymanCar,jdbcType=VARCHAR}, #{attachments,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},

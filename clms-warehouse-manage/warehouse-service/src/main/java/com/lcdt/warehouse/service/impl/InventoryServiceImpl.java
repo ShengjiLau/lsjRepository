@@ -129,7 +129,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             GoodsInfo goodsInfo = saveGoodsInfo(good);
             inventory.setGoodsId(goodsInfo.getGoodsId());
             //写入库流水
-
             Inventory updatedInventory = addInventory(inventory);
             logService.saveInOrderLog(order, inventory,updatedInventory.getInvertoryNum());
         }
@@ -180,6 +179,18 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             throw new RuntimeException("锁定库存量不能大于库存剩余数量");
         }
         inventory.setLockNum(inventory.getLockNum() + tryLockNum);
+        updateById(inventory);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void unLockInventoryNum(Long inventoryId, Float unlockNum) {
+        Assert.notNull(unlockNum, "不能为空");
+        Inventory inventory = selectById(inventoryId);
+
+        if (inventory.getLockNum() < unlockNum) {
+            throw new RuntimeException("解锁库存量不能大于 已锁量");
+        }
+        inventory.setLockNum(inventory.getLockNum() - unlockNum);
         updateById(inventory);
     }
 
@@ -244,7 +255,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         }
         Inventory existInventory = inventories.get(0);
         existInventory.setInvertoryNum(existInventory.getInvertoryNum() + inventory.getInvertoryNum());
-
         updateInventoryPrice(existInventory,inventory);
         inventoryMapper.updateById(existInventory);
         logger.info("入库 更新库存数量：{}", existInventory);

@@ -306,7 +306,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                         }
                     }
                     if (flag) {
-                        throw new RuntimeException("该计划对应出库单存在“待出库”“已完成”状态记录！");
+                        throw new RuntimeException("该计划对应出库单存在“待出库“,“已出库“状态记录！");
                     }
                 }
             }
@@ -342,13 +342,13 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 if (outWhOrderDtoList.getTotal()>0) {
                     boolean flag = false;
                     for (OutWhOrderDto obj1 : outWhOrderDtoList.getRecords()) {
-                        if (obj1.getOrderStatus()== ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND || obj1.getOrderStatus()== ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND) {
+                        if (obj1.getOrderStatus()== ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND) {
                             flag = true;
                             break;
                         }
                     }
                     if (flag) {
-                        throw new RuntimeException("该计划对应出库单存在“待出库”“已完成”状态记录！");
+                        throw new RuntimeException("该计划对应出库单存在“待出库”状态记录！");
                     }
                 }
             }

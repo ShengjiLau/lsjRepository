@@ -134,6 +134,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
             }
         }
         //更新入库单状态
+        modifyParams.setStorageMan(modifyParams.getUpdateName());
         result=modifyInOrderStatus(modifyParams);
 
         //入库

@@ -117,7 +117,7 @@
         and t2.user_id = #{userId,jdbcType=BIGINT} and t2.status = 1
       </if>
       <if test="tempStatus!=null and tempStatus==2">
-        and t2.user_id = #{userId,jdbcType=BIGINT} and t2.status in(2,3,4,5) and t2.sort>0
+        and t2.user_id = #{userId,jdbcType=BIGINT} and t2.status in(2,4,5) and t2.sort>0
       </if>
       <if test="tempStatus!=null and tempStatus==3">
         and t2.user_id = #{userId,jdbcType=BIGINT} and t2.action_type = 1  and t1.approval_status=2

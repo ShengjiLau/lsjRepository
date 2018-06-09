@@ -23,6 +23,8 @@ public class ModifyInOrderStatusParamsDto {
     private String updateName;
     @ApiModelProperty(value = "更新时间",hidden = true)
     private Date updateDate;
+    @ApiModelProperty(value = "入库人",hidden = true)
+    private String storageMan;
 
     public Long getInorderId() {
         return inorderId;
@@ -80,4 +82,11 @@ public class ModifyInOrderStatusParamsDto {
         this.updateDate = updateDate;
     }
 
+    public String getStorageMan() {
+        return storageMan;
+    }
+
+    public void setStorageMan(String storageMan) {
+        this.storageMan = storageMan;
+    }
 }

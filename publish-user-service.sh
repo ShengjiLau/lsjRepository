@@ -12,7 +12,7 @@ buildpath=`findprojectpath`
 fullimagename=$registry_url$1
 imagenamewithtag=$fullimagename:1.0
 echo build $imagenamewithtag $buildpath
-docker build -t $fullimagename $3
+docker build -t $fullimagename buildpath
 imageid=$(docker images | grep $fullimagename | awk 'NR==1{print $3}')
 docker tag $imageid $imagenamewithtag
 docker push $imagenamewithtag
@@ -23,7 +23,6 @@ findprojectpath(){
         str=(${line//:/ })
         if [[ $str == $1* ]];then
             echo ${str[1]}
-            return ${str[1]}
         fi
     done < servicepath
 }

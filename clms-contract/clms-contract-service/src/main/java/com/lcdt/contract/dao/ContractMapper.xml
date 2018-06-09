@@ -195,7 +195,7 @@
       </if>
     </where>
     order by
-    <if test="contractStatus==null or contractStatus==2">
+    <if test="contractStatus==null or contractStatus==2 or contractStatus==4">
       create_time
     </if>
     <if test="contractStatus==0 or contractStatus==1">
