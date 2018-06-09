@@ -38,13 +38,14 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, TCheck> implement
     @Override
     public List<CheckListDto> selectList(CheckParamDto paramDto) {
         //return checkMapper.selectList(paramDto);
-        List<TCheck> checks = checkMapper.selectListByParams(paramDto);
-        List<CheckListDto> resultList = new ArrayList<CheckListDto>();
-        if (checks!=null&&checks.size()>0){
-            for(TCheck ch:checks){
-                CheckListDto checkRow = new CheckListDto();
-                BeanUtils.copyProperties(ch,checkRow);
+//        List<TCheck> checks = checkMapper.selectListByParams(paramDto);
+        List<CheckListDto> resultList = checkMapper.selectListByParams(paramDto);
+        if (resultList!=null&&resultList.size()>0){
+            for(CheckListDto ch:resultList){
+                //CheckListDto checkRow = new CheckListDto();
+//                BeanUtils.copyProperties(ch,checkRow);
                 List<TCheckItem> items = checkItemMapper.selectByCheckId(ch.getCheckId());
+                ch.setItemList(items);
                 if(items!=null&&items.size()>0){
                     StringBuffer goodsInfos = new StringBuffer();
                     StringBuffer locations = new StringBuffer();
@@ -66,11 +67,11 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, TCheck> implement
                             locations.append("...");
                         }
                     }
-                    checkRow.setGoodsInfos(goodsInfos.toString());
-                    checkRow.setLocations(locations.toString());
+                    ch.setGoodsInfos(goodsInfos.toString());
+                    ch.setLocations(locations.toString());
                 }
 
-                resultList.add(checkRow);
+               // resultList.add(checkRow);
             }
         }
 
