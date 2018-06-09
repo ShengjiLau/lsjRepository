@@ -30,6 +30,8 @@ public class PaymentApplication {
 
     private BigDecimal purchaseSum;
 
+    private Long supplierId;
+
     private String supplier;
 
     private String receiptUnit;
@@ -168,6 +170,14 @@ public class PaymentApplication {
 
     public void setPurchaseSum(BigDecimal purchaseSum) {
         this.purchaseSum = purchaseSum;
+    }
+
+    public Long getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
     }
 
     public String getSupplier() {
