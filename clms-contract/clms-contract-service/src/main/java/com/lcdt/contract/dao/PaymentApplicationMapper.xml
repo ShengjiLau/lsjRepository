@@ -15,6 +15,7 @@
     <result column="order_serial_no" jdbcType="VARCHAR" property="orderSerialNo" />
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
     <result column="purchase_sum" jdbcType="DECIMAL" property="purchaseSum" />
+    <result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
     <result column="supplier" jdbcType="VARCHAR" property="supplier" />
     <result column="receipt_unit" jdbcType="VARCHAR" property="receiptUnit" />
     <result column="receipt_unit_bank" jdbcType="VARCHAR" property="receiptUnitBank" />
@@ -37,7 +38,7 @@
   <sql id="Base_Column_List">
     pa_id, order_id, application_serial_no, application_date, approval_status, approval_process_id,
     approval_process, approval_start_date, approval_end_date, contract_code, order_serial_no,
-    order_no, purchase_sum, supplier, receipt_unit, receipt_unit_bank, receipt_unit_account,
+    order_no, purchase_sum, supplier_id, supplier, receipt_unit, receipt_unit_bank, receipt_unit_account,
     payment_sum, payment_unit, payment_time, payment_name, manager, payment_directions,
     remark, attachment1, attachment1_name, attachment2, attachment2_name, company_id,
     create_id, create_name
@@ -57,26 +58,26 @@
     application_date, approval_status, approval_process_id,
     approval_process, approval_start_date, approval_end_date,
     contract_code, order_serial_no, order_no,
-    purchase_sum, supplier, receipt_unit,
-    receipt_unit_bank, receipt_unit_account, payment_sum,
-    payment_unit, payment_time, payment_name,
-    manager, payment_directions, remark,
-    attachment1, attachment1_name, attachment2,
-    attachment2_name, company_id, create_id,
-    create_name)
+    purchase_sum, supplier_id, supplier,
+    receipt_unit, receipt_unit_bank, receipt_unit_account,
+    payment_sum, payment_unit, payment_time,
+    payment_name, manager, payment_directions,
+    remark, attachment1, attachment1_name,
+    attachment2, attachment2_name, company_id,
+    create_id, create_name)
     values (#{paId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{applicationSerialNo,jdbcType=VARCHAR},
     #{applicationDate,jdbcType=TIMESTAMP}, #{approvalStatus,jdbcType=SMALLINT}, #{approvalProcessId,jdbcType=BIGINT},
     #{approvalProcess,jdbcType=VARCHAR}, #{approvalStartDate,jdbcType=TIMESTAMP}, #{approvalEndDate,jdbcType=TIMESTAMP},
     #{contractCode,jdbcType=VARCHAR}, #{orderSerialNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR},
-    #{purchaseSum,jdbcType=DECIMAL}, #{supplier,jdbcType=VARCHAR}, #{receiptUnit,jdbcType=VARCHAR},
-    #{receiptUnitBank,jdbcType=VARCHAR}, #{receiptUnitAccount,jdbcType=VARCHAR}, #{paymentSum,jdbcType=DECIMAL},
-    #{paymentUnit,jdbcType=VARCHAR}, #{paymentTime,jdbcType=TIMESTAMP}, #{paymentName,jdbcType=VARCHAR},
-    #{manager,jdbcType=VARCHAR}, #{paymentDirections,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
-    #{attachment1,jdbcType=VARCHAR}, #{attachment1Name,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR},
-    #{attachment2Name,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT},
-    #{createName,jdbcType=VARCHAR})
+    #{purchaseSum,jdbcType=DECIMAL}, #{supplierId,jdbcType=BIGINT}, #{supplier,jdbcType=VARCHAR},
+    #{receiptUnit,jdbcType=VARCHAR}, #{receiptUnitBank,jdbcType=VARCHAR}, #{receiptUnitAccount,jdbcType=VARCHAR},
+    #{paymentSum,jdbcType=DECIMAL}, #{paymentUnit,jdbcType=VARCHAR}, #{paymentTime,jdbcType=TIMESTAMP},
+    #{paymentName,jdbcType=VARCHAR}, #{manager,jdbcType=VARCHAR}, #{paymentDirections,jdbcType=VARCHAR},
+    #{remark,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR}, #{attachment1Name,jdbcType=VARCHAR},
+    #{attachment2,jdbcType=VARCHAR}, #{attachment2Name,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
+    #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.lcdt.contract.model.PaymentApplication" useGeneratedKeys="true" keyColumn="pa_id" keyProperty="paId">
+  <insert id="insertSelective" parameterType="com.lcdt.contract.model.PaymentApplication">
     insert into t_payment_application
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="paId != null">
@@ -117,6 +118,9 @@
       </if>
       <if test="purchaseSum != null">
         purchase_sum,
+      </if>
+      <if test="supplierId != null">
+        supplier_id,
       </if>
       <if test="supplier != null">
         supplier,
@@ -213,6 +217,9 @@
       <if test="purchaseSum != null">
         #{purchaseSum,jdbcType=DECIMAL},
       </if>
+      <if test="supplierId != null">
+        #{supplierId,jdbcType=BIGINT},
+      </if>
       <if test="supplier != null">
         #{supplier,jdbcType=VARCHAR},
       </if>
@@ -308,6 +315,9 @@
       <if test="purchaseSum != null">
         purchase_sum = #{purchaseSum,jdbcType=DECIMAL},
       </if>
+      <if test="supplierId != null">
+        supplier_id = #{supplierId,jdbcType=BIGINT},
+      </if>
       <if test="supplier != null">
         supplier = #{supplier,jdbcType=VARCHAR},
       </if>
@@ -379,6 +389,7 @@
       order_serial_no = #{orderSerialNo,jdbcType=VARCHAR},
       order_no = #{orderNo,jdbcType=VARCHAR},
       purchase_sum = #{purchaseSum,jdbcType=DECIMAL},
+      supplier_id = #{supplierId,jdbcType=BIGINT},
       supplier = #{supplier,jdbcType=VARCHAR},
       receipt_unit = #{receiptUnit,jdbcType=VARCHAR},
       receipt_unit_bank = #{receiptUnitBank,jdbcType=VARCHAR},
