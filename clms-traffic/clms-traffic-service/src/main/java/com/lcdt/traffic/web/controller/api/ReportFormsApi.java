@@ -125,7 +125,7 @@ public class ReportFormsApi {
 
     @ApiOperation(value = "运单统计", notes = "运输首页概览-运单统计")
     @GetMapping("/own/waybill")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('reportforms_waybill')")
     public JSONObject waybillOverview(@RequestParam String param) {
         Long companyId = SecurityInfoGetter.getCompanyId();      //  获取companyId
         Map map = (Map) JSON.parseObject(param);
@@ -149,7 +149,7 @@ public class ReportFormsApi {
 
     @ApiOperation(value = "客户运单统计", notes = "运输首页概览-运单统计")
     @GetMapping("/customer/waybill")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('indexoverview')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('reportforms_waybill')")
     public JSONObject customerWaybillOverview(@RequestParam String param) {
         Long companyId = SecurityInfoGetter.getCompanyId();      //  获取companyId
         Map map = (Map) JSON.parseObject(param);

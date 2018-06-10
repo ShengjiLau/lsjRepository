@@ -253,8 +253,17 @@ public class WarehouseSeviceImpl implements WarehouseService {
     }
 
     @Override
-    public int getWarehouseLocByCode(String code) {
-        int result = warehousseLocMapper.selectByCode(code);
+    public int getWarehouseLocByCode(WarehouseLoc loc) {
+        int result = 0;
+        if(loc.getWhLocId() == null){
+            result = warehousseLocMapper.selectByCode(loc);
+        }else{
+            WarehouseLoc oldLoc = warehousseLocMapper.selectByPrimaryKey(loc.getWhLocId());
+            loc.setCompanyId(oldLoc.getCompanyId());
+            if(!loc.getCode().equals(oldLoc.getCode())){
+                result = warehousseLocMapper.selectByCode(loc);
+            }
+        }
         return result;
     }
 }

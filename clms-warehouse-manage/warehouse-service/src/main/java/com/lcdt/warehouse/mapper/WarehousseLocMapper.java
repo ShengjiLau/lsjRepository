@@ -20,5 +20,5 @@ public interface WarehousseLocMapper {
 
     List<WarehouseLoc> selectByCondition(Map map);
 
-    int selectByCode(String code);
+    int selectByCode(WarehouseLoc loc);
 }
