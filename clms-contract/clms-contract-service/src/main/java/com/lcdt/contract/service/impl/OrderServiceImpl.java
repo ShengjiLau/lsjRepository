@@ -1,7 +1,6 @@
 package com.lcdt.contract.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.contract.dao.BillingRecordMapper;
 import com.lcdt.contract.dao.ConditionQueryMapper;
 import com.lcdt.contract.dao.OrderMapper;
 import com.lcdt.contract.dao.OrderProductMapper;
+import com.lcdt.contract.model.BillingRecord;
 import com.lcdt.contract.model.Order;
 import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.service.OrderService;
@@ -51,6 +52,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderProductMapper orderProductMapper;
+    
+    @Autowired
+    private BillingRecordMapper billingRecordMapper;
 
 
     @Override
@@ -300,6 +304,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public int updateOrderIsDraft(Long orderId, Short isDraft) {
+    	List<BillingRecord> billingRecordList = billingRecordMapper.selectByOrderId(orderId);
+    	if (null != billingRecordList && 0 != billingRecordList.size()) {
+    		return 0;
+    	}
         return orderMapper.updateIsDraft(orderId, isDraft);
     }
 

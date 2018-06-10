@@ -89,7 +89,7 @@ public class ShiftInventoryListApi {
 	
 	@GetMapping("/list")
 	@ApiOperation(value = "查询移库单列表")
-	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_list')")
+	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_get')")
 	public JSONObject getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 		JSONObject jsonObject = new JSONObject();
 		PageBaseDto<ShiftInventoryListDTO> pageBaseDto = new PageBaseDto<ShiftInventoryListDTO>();
@@ -107,7 +107,7 @@ public class ShiftInventoryListApi {
 	
 	@GetMapping("/details")
 	@ApiOperation(value = "查询移库单详情")
-	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_details')")
+	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_get')")
 	public JSONObject getOneShiftInventoryDetails(@ApiParam(value="移库单id",required=true) @RequestParam Long shiftId) {
 		JSONObject jsonObject = new JSONObject();
 		ShiftInventoryListDTO shiftInventoryListDTO = shiftInventoryListService.getShiftInventoryListDetails(shiftId);
