@@ -509,4 +509,16 @@
     left join t_pa_approval t2 on t1.pa_id = t2.pa_id
     where t1.pa_id= #{arg0} order by t2.sort
   </select>
+  
+  <select id="selectByOrderId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from t_payment_application
+    <where>
+    order_id = #{orderId,jdbcType=BIGINT}
+    </where>
+  </select>
+  
+  
+  
 </mapper>
