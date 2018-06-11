@@ -200,7 +200,6 @@
     update_id = #{updateId,jdbcType=BIGINT},
     update_name = #{updateName,jdbcType=VARCHAR},
     update_date = CURRENT_TIMESTAMP,
-    is_deleted = #{isDeleted,jdbcType=SMALLINT},
     receivable_name = #{receivableName,jdbcType=VARCHAR},
     payable_name = #{payableName,jdbcType=VARCHAR},
       weight = #{weight,jdbcType=DOUBLE},
@@ -212,7 +211,7 @@
       freight_price = #{freightPrice,jdbcType=REAL},
       freight_total = #{freightTotal,jdbcType=REAL},
       pay_price = #{payPrice,jdbcType=REAL},
-      pay_total = #{payTotal,jdbcType=REAL},
+      pay_total = #{payTotal,jdbcType=REAL}
   </sql>
 
   <sql id="select_condition">
