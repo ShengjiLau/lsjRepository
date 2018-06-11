@@ -52,7 +52,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
 
         //author:ybq (后面计费用)
         boolean tFlag =  companyServiceCountService.checkCompanyProductCount(params.getCompanyId(),"storage_service", 1);
-        if(!tFlag) return result;
+        if(!tFlag) throw new RuntimeException("剩余仓单服务次数不足");
 
         InWarehouseOrder inWarehouseOrder = new InWarehouseOrder();
         BeanUtils.copyProperties(params, inWarehouseOrder);
