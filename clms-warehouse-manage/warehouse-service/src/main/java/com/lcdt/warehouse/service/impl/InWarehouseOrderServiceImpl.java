@@ -1,7 +1,9 @@
 package com.lcdt.warehouse.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.GoodsInfo;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
@@ -40,9 +42,18 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
     @Autowired
     InventoryService inventoryService;
 
+    @Reference
+    private CompanyServiceCountService companyServiceCountService;
+
+
     @Override
     public int addInWarehouseOrder(InWarehouseOrderDto params) {
         int result = 0;
+
+        //author:ybq (后面计费用)
+        boolean tFlag =  companyServiceCountService.checkCompanyProductCount(params.getCompanyId(),"waybill_service", 1);
+        if(!tFlag) return result;
+
         InWarehouseOrder inWarehouseOrder = new InWarehouseOrder();
         BeanUtils.copyProperties(params, inWarehouseOrder);
         inWarehouseOrder.setInOrderStatus(ConstantVO.IN_ORDER_STATUS_WATIE_STORAGE);
@@ -61,6 +72,9 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
                 inorderGoodsInfoList.add(inorderGoodsInfo);
             }
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);
+        }
+        if (result > 0) {
+            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"waybill_service", 1);
         }
         return result;
     }
@@ -156,6 +170,11 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
     @Override
     public int addAndStorageInWarehouseOrder(InWarehouseOrderDto params) {
         int result = 0;
+
+        //author:ybq (后面计费用)
+        boolean tFlag =  companyServiceCountService.checkCompanyProductCount(params.getCompanyId(),"waybill_service", 1);
+        if(!tFlag) return result;
+
         InWarehouseOrder inWarehouseOrder = new InWarehouseOrder();
         BeanUtils.copyProperties(params, inWarehouseOrder);
         inWarehouseOrder.setInOrderStatus(ConstantVO.IN_ORDER_STATUS_HAVE_STORAGE);
@@ -180,6 +199,11 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
             //入库操作
             InWarehouseOrder inOrder=queryInWarehouseOrder(inWarehouseOrder.getCompanyId(),inWarehouseOrder.getInorderId());
             inventoryService.putInventory(inorderGoodsInfoList,inOrder);
+        }
+
+        //入库单费用统计
+        if (result>0) {
+            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"waybill_service", 1);
         }
         return result;
     }
