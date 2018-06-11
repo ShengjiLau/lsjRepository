@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.notify.model.Timeline;
+import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.model.*;
@@ -85,8 +86,17 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     @Reference
     public DriverService driverService;
 
+    @Reference
+    private CompanyServiceCountService companyServiceCountService;
+
     public Waybill addWaybill(WaybillDto waybillDto) {
         int result = 0;
+
+        //先判断是否还有剩于运单服务条数(后面计费用)
+        if(!companyServiceCountService.checkCompanyProductCount(waybillDto.getCompanyId(),"waybill_service", 1)){
+            throw new RuntimeException("剩余运单服务次数不足");
+        }
+
         Waybill waybill = new Waybill();
         BeanUtils.copyProperties(waybillDto, waybill);
 
@@ -244,6 +254,12 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         }
 
         waybill = waybillMapper.selectByPrimaryKey(waybill.getId());
+
+        //扣减运单费用
+        if (result > 0) {
+            companyServiceCountService.reduceCompanyProductCount(waybillDto.getCompanyId(),"waybill_service", 1);
+        }
+
         return waybill;
     }
 

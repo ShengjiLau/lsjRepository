@@ -18,4 +18,5 @@ public interface UserPermissionService {
 
 	List<Permission> getPermissionByCategory(String category);
 
+	List<Permission> adminPermission(Long userId);
 }

@@ -1,11 +1,9 @@
 package com.lcdt.clms.permission.service.impl;
 
+import com.lcdt.clms.permission.dao.AdminPermissionRelationMapper;
 import com.lcdt.clms.permission.dao.PermissionMapper;
 import com.lcdt.clms.permission.dao.RolePermissionMapper;
-import com.lcdt.clms.permission.model.Permission;
-import com.lcdt.clms.permission.model.Role;
-import com.lcdt.clms.permission.model.SysRole;
-import com.lcdt.clms.permission.model.SysRoleUserCompany;
+import com.lcdt.clms.permission.model.*;
 import com.lcdt.clms.permission.service.SysRoleService;
 import com.lcdt.clms.permission.service.UserPermissionService;
 import com.lcdt.clms.permission.service.UserRoleService;
@@ -15,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by ss on 2017/10/12.
@@ -33,6 +32,25 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 
 	@Autowired
 	PermissionMapper permissionDao;
+
+
+	@Autowired
+	AdminPermissionRelationMapper adminPermissionRelationMapper;
+
+
+	@Transactional(rollbackFor = Exception.class,readOnly = true)
+	public List<Permission> adminPermission(Long userId){
+		List<AdminPermissionRelation> adminPermissionRelations = adminPermissionRelationMapper.selectByUserId(userId);
+		ArrayList<Permission> permissions = new ArrayList<>();
+		for (AdminPermissionRelation adminPermissionRelation : adminPermissionRelations) {
+			AdminPermission adminPermission = adminPermissionRelation.getAdminPermission();
+			Permission permission = new Permission();
+			permission.setPermissionCode(adminPermission.getAdminPermissionCode());
+			permissions.add(permission);
+		}
+		return permissions;
+	}
+
 
 
 	@Transactional

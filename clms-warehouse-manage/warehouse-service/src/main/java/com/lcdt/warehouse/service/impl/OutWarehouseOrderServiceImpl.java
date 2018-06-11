@@ -1,8 +1,10 @@
 package com.lcdt.warehouse.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.OutOrderGoodsInfo;
 import com.lcdt.warehouse.entity.OutWarehouseOrder;
@@ -38,9 +40,18 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
     @Autowired
     InventoryService inventoryService;
 
+    @Reference
+    private CompanyServiceCountService companyServiceCountService;
+
     @Override
     public int addOutWarehouseOrder(OutWhOrderDto dto) {
         int result = 0;
+
+        //先判断是否还有剩于运单服务条数(后面计费用)
+        if(!companyServiceCountService.checkCompanyProductCount(dto.getCompanyId(),"storage_service", 1)){
+            throw new RuntimeException("剩余仓单服务次数不足");
+        }
+
         OutWarehouseOrder outWarehouseOrder = new OutWarehouseOrder();
         dto.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND);
         BeanUtils.copyProperties(dto, outWarehouseOrder);
@@ -68,6 +79,12 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
 //                inventoryService.outInventory(outWarehouseOrder,outOrderGoodsInfoList);
 //            }
         }
+
+        //扣减运单费用
+        if (result > 0) {
+            companyServiceCountService.reduceCompanyProductCount(dto.getCompanyId(),"storage_service", 1);
+        }
+
         return result;
     }
 

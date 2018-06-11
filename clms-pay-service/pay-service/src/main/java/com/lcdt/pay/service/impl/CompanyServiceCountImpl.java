@@ -2,7 +2,7 @@ package com.lcdt.pay.service.impl;
 
 import com.lcdt.pay.dao.CompanyServiceCountMapper;
 import com.lcdt.pay.model.CompanyServiceCount;
-import com.lcdt.pay.service.CompanyServiceCountService;
+import com.lcdt.pay.rpc.CompanyServiceCountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

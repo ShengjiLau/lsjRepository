@@ -3,9 +3,9 @@ package com.lcdt.pay.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.lcdt.pay.dao.ProductCountLogMapper;
 import com.lcdt.pay.model.CompanyServiceCount;
+import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.pay.rpc.ProductCountLog;
 import com.lcdt.pay.rpc.SmsCountService;
-import com.lcdt.pay.service.CompanyServiceCountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 

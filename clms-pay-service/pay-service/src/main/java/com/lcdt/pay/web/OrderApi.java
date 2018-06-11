@@ -9,7 +9,7 @@ import com.lcdt.pay.dao.OrderType;
 import com.lcdt.pay.dao.PayOrderMapper;
 import com.lcdt.pay.dao.ServiceProductMapper;
 import com.lcdt.pay.model.*;
-import com.lcdt.pay.service.CompanyServiceCountService;
+import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.pay.rpc.ProductCountLog;
 import com.lcdt.pay.rpc.ProductCountService;
 import com.lcdt.pay.service.*;
@@ -169,7 +169,6 @@ public class OrderApi {
         payOrder.setOrderProductId(productId);
         payOrder.setCreateUserName(phone);
         orderMapper.insert(payOrder);
-
         return payOrder;
 
     }
