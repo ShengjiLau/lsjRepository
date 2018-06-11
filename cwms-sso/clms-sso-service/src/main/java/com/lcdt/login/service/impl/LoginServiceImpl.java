@@ -51,6 +51,8 @@ public class LoginServiceImpl implements LoginService {
 	@Value("${login.host}")
 	private String host;
 
+
+
 	@Override
 	public TicketAuthentication queryTicket(String ticket) throws InvalidTicketException, UserNotExistException {
 		TicketBean ticketValid = ticketService.isTicketValid(ticket);
@@ -73,6 +75,14 @@ public class LoginServiceImpl implements LoginService {
 			List<Group> userGroupRelations = userGroupService.userGroups(user.getUserId(), companyMember.getCompId());
 			authentication.setGroups(userGroupRelations);
 		}
+
+		if (userService.isUserAdmin(user.getUserId())) {
+			//后台管理员用户
+
+
+		}
+
+
 		return authentication;
 	}
 
