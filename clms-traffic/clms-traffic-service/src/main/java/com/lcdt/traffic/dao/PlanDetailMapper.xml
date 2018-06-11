@@ -31,6 +31,10 @@
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="detail_remark" jdbcType="VARCHAR" property="detailRemark" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="weight" jdbcType="REAL" property="weight" />
+    <result column="volume" jdbcType="REAL" property="volume" />
+
+
   </resultMap>
 
   <delete id="deleteByPrimaryKey" parameterType="java.util.Map">
@@ -57,7 +61,7 @@
       remainder_amount, freight_price, freight_total, 
       create_id, create_name, create_date, 
       update_id, update_name, update_time, 
-      is_deleted, detail_remark, company_id,pay_price,pay_total
+      is_deleted, detail_remark, company_id,pay_price,pay_total,weight,volume
       )
     values (#{waybillPlanId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{subGoodsId,jdbcType=BIGINT}, #{goodsName,jdbcType=VARCHAR},
       #{goodsSpec,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR},
@@ -67,7 +71,7 @@
       #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
       #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{isDeleted,jdbcType=SMALLINT}, #{detailRemark,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
-      #{payPrice,jdbcType=REAL}, #{payTotal,jdbcType=REAL}
+      #{payPrice,jdbcType=REAL}, #{payTotal,jdbcType=REAL}, #{weight,jdbcType=REAL}, #{volume,jdbcType=REAL}
       )
   </insert>
 
@@ -100,7 +104,9 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=SMALLINT},
       detail_remark = #{detailRemark,jdbcType=VARCHAR},
-      company_id = #{companyId,jdbcType=BIGINT}
+      company_id = #{companyId,jdbcType=BIGINT},
+      weight  = #{weight,jdbcType=REAL},
+      volume  = #{volume,jdbcType=REAL}
     where plan_detail_id = #{planDetailId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap">
@@ -111,7 +117,7 @@
     -->
     select plan_detail_id, waybill_plan_id, goods_id, sub_goods_id, goods_name, goods_spec, unit, plan_amount,min_unit,unit_data,
     remainder_amount, freight_price, freight_total, create_id, create_name, create_date, 
-    update_id, update_name, update_time, is_deleted, detail_remark, company_id,pay_price,pay_total
+    update_id, update_name, update_time, is_deleted, detail_remark, company_id,pay_price,pay_total,weight,volume
     from t_plan_detail
     where plan_detail_id = #{planDetailId,jdbcType=BIGINT}
   </select>
@@ -124,7 +130,7 @@
         -->
         select plan_detail_id, waybill_plan_id, goods_id, sub_goods_id, goods_name, goods_spec, unit, plan_amount,
         remainder_amount, freight_price, freight_total, create_id, create_name, create_date,min_unit,unit_data,
-        update_id, update_name, update_time, is_deleted, detail_remark, company_id,pay_price,pay_total
+        update_id, update_name, update_time, is_deleted, detail_remark, company_id,pay_price,pay_total,weight,volume
         from t_plan_detail
         where plan_detail_id = #{planDetailId,jdbcType=BIGINT} AND company_id = #{companyId,jdbcType=BIGINT}
     </select>
@@ -139,7 +145,7 @@
     -->
     select plan_detail_id, waybill_plan_id, goods_id, sub_goods_id, goods_name, goods_spec, unit, plan_amount,
     remainder_amount, freight_price, freight_total, create_id, create_name, create_date,min_unit,unit_data,
-    update_id, update_name, update_time, is_deleted, detail_remark, company_id,pay_price,pay_total
+    update_id, update_name, update_time, is_deleted, detail_remark, company_id,pay_price,pay_total,weight,volume
     from t_plan_detail
     <where>
       <if test=" isDeleted!=null">
@@ -163,7 +169,7 @@
     -->
     select plan_detail_id, waybill_plan_id, goods_id, sub_goods_id, goods_name, goods_spec, unit, plan_amount,
     remainder_amount, freight_price, freight_total, create_id, create_name, create_date,min_unit,unit_data,
-    update_id, update_name, update_time, is_deleted, detail_remark, company_id,pay_price,pay_total
+    update_id, update_name, update_time, is_deleted, detail_remark, company_id,pay_price,pay_total,weight,volume
     from t_plan_detail
   </select>
 
@@ -175,7 +181,7 @@
     remainder_amount, freight_price, freight_total,
     create_id, create_name, create_date,
     update_id, update_name, update_time,
-    is_deleted, detail_remark, company_id,pay_price,pay_total,min_unit,unit_data
+    is_deleted, detail_remark, company_id,pay_price,pay_total,min_unit,unit_data,weight,volume
     )
     values
     <foreach collection="list" item="goods" index="index" separator="," >
@@ -185,7 +191,7 @@
       #{goods.createId}, #{goods.createName}, #{goods.createDate},
       #{goods.updateId}, #{goods.updateName}, #{goods.updateTime},
       #{goods.isDeleted}, #{goods.detailRemark}, #{goods.companyId},
-      #{goods.payPrice}, #{goods.payTotal},#{goods.minUnit},#{goods.unitData}
+      #{goods.payPrice}, #{goods.payTotal},#{goods.minUnit},#{goods.unitData},#{goods.weight},#{goods.volume}
       )
     </foreach>
   </insert>
@@ -216,6 +222,8 @@
           update_name = #{goods.updateName},
           update_time = #{goods.updateTime},
           is_deleted = #{goods.isDeleted},
+          weight = #{goods.weight},
+          volume = #{goods.volume},
           detail_remark = #{goods.detailRemark}
       where plan_detail_id = #{goods.planDetailId,jdbcType=BIGINT} and company_id = #{goods.companyId}
     </foreach>
@@ -229,7 +237,7 @@
     -->
     select plan_detail_id, waybill_plan_id, goods_id, sub_goods_id, goods_name, goods_spec, unit, plan_amount,
     remainder_amount, freight_price, freight_total, create_id, create_name, create_date,
-    update_id, update_name, update_time, is_deleted, detail_remark, company_id,pay_price,pay_total,min_unit,unit_data
+    update_id, update_name, update_time, is_deleted, detail_remark, company_id,pay_price,pay_total,min_unit,unit_data,weight,volume
     from t_plan_detail
     <where>
     <if test=" isDeleted!=null">

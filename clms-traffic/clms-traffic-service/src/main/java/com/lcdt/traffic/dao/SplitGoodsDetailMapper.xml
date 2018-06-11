@@ -25,6 +25,8 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="weight" jdbcType="REAL" property="weight" />
+    <result column="volume" jdbcType="REAL" property="volume" />
   </resultMap>
 
   <select id="selectBySplitGoodsId" parameterType="java.util.Map" resultMap="BaseResultMap">
@@ -35,7 +37,7 @@
     -->
     select split_goods_detail_id, split_goods_id, plan_detail_id, allot_amount, remain_amount,
     freight_price, freight_total, detail_remark, create_id, create_name, create_date,
-    update_id, update_name, update_time, is_deleted, company_id,pay_price,pay_total
+    update_id, update_name, update_time, is_deleted, company_id,pay_price,pay_total,weight,volume
     from t_split_goods_detail
     where split_goods_id = #{splitGoodsId} and company_id = #{companyId} and is_deleted = #{isDeleted}
   </select>
@@ -64,14 +66,14 @@
      remain_amount, freight_price, freight_total,
       detail_remark, create_id, create_name, 
       create_date, update_id, update_name, 
-      update_time, is_deleted, company_id,pay_price,pay_total
+      update_time, is_deleted, company_id,pay_price,pay_total,weight,volume
       )
     values (#{splitGoodsId,jdbcType=BIGINT}, #{planDetailId,jdbcType=BIGINT}, #{allotAmount,jdbcType=REAL}, 
       #{remainAmount,jdbcType=REAL}, #{freightPrice,jdbcType=REAL}, #{freightTotal,jdbcType=REAL},
       #{detailRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, 
       #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, #{companyId,jdbcType=BIGINT},
-      #{payPrice,jdbcType=REAL}, #{payTotal,jdbcType=REAL}
+      #{payPrice,jdbcType=REAL}, #{payTotal,jdbcType=REAL}, #{weight,jdbcType=REAL}, #{volume,jdbcType=REAL}
 
       )
   </insert>
@@ -96,7 +98,9 @@
       update_name = #{updateName,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=SMALLINT},
-      company_id = #{companyId,jdbcType=BIGINT}
+      company_id = #{companyId,jdbcType=BIGINT},
+      weight  = #{weight,jdbcType=REAL},
+      volume  = #{volume,jdbcType=REAL}
     where split_goods_detail_id = #{splitGoodsDetailId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -107,7 +111,7 @@
     -->
     select split_goods_detail_id, split_goods_id, plan_detail_id, allot_amount, remain_amount,
     freight_price, freight_total, detail_remark, create_id, create_name, create_date, 
-    update_id, update_name, update_time, is_deleted, company_id,pay_price,pay_total
+    update_id, update_name, update_time, is_deleted, company_id,pay_price,pay_total,weight,volume
     from t_split_goods_detail
     where split_goods_detail_id = #{splitGoodsDetailId,jdbcType=BIGINT}
   </select>
@@ -122,7 +126,7 @@
     -->
     select split_goods_detail_id, split_goods_id, plan_detail_id, allot_amount, remain_amount,
     freight_price, freight_total, detail_remark, create_id, create_name, create_date,
-    update_id, update_name, update_time, is_deleted, company_id,pay_price,pay_total
+    update_id, update_name, update_time, is_deleted, company_id,pay_price,pay_total,weight,volume
     from t_split_goods_detail
   </select>
 
@@ -131,7 +135,7 @@
     remain_amount, freight_price, freight_total,
     detail_remark, create_id, create_name,
     create_date, update_id, update_name,
-    update_time, is_deleted, company_id,pay_price,pay_total
+    update_time, is_deleted, company_id,pay_price,pay_total,weight,volume
     )
     values
     <foreach collection="list" item="splitGoods" index="index" separator="," >
@@ -140,7 +144,7 @@
       #{splitGoods.detailRemark}, #{splitGoods.createId}, #{splitGoods.createName},
       #{splitGoods.createDate}, #{splitGoods.updateId}, #{splitGoods.updateName},
       #{splitGoods.updateTime}, #{splitGoods.isDeleted}, #{splitGoods.companyId},
-      #{splitGoods.payPrice}, #{splitGoods.payTotal}
+      #{splitGoods.payPrice}, #{splitGoods.payTotal},#{splitGoods.weight},#{splitGoods.volume}
       )
     </foreach>
   </insert>
