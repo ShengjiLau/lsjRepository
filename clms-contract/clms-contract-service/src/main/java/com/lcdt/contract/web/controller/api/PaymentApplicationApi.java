@@ -110,7 +110,7 @@ public class PaymentApplicationApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_list')")
     public BaseDto customerInfo(Long supplierId){
         Long companyId = SecurityInfoGetter.getCompanyId();
-        Customer customer = customerRpcService.queryCustomer(companyId,supplierId);
+        Customer customer = customerRpcService.findCustomerById(supplierId,companyId);
         BaseDto baseDto = new BaseDto(customer);
         return baseDto;
     }
