@@ -48,6 +48,9 @@ public class InWarehouseOrderSearchParamsDto {
 
     private boolean isDeleted;
 
+    @ApiModelProperty(value = "客户id")
+    private Long customerId;
+
     @ApiModelProperty(value = "企业id",hidden = true)
     private Long companyId;
     @ApiModelProperty(value = "分页编号",required = true)
@@ -205,5 +208,13 @@ public class InWarehouseOrderSearchParamsDto {
 
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 }

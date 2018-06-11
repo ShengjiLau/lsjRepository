@@ -123,5 +123,18 @@ public class InWarehouseOrderController {
         PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderService.queryDisRecords(SecurityInfoGetter.getCompanyId(),planId));
         return pageBaseDto;
     }
+
+
+    @ApiOperation("概览入库单已完成数量")
+    @RequestMapping(value = "/inWarehouseNum", method = RequestMethod.GET)
+    public JSONObject inWarehouseNum(InWarehouseOrderSearchParamsDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",inWarehouseOrderService.selectInWarehouseNum(params));
+
+        return jo;
+    }
 }
 
