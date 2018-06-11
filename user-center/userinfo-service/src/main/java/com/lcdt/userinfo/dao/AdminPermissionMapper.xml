@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.userinfo.dao.AdminPermissionMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.userinfo.model.AdminPermission">
+    <id column="admin_permission_id" jdbcType="BIGINT" property="adminPermissionId" />
+    <result column="admin_permission_name" jdbcType="VARCHAR" property="adminPermissionName" />
+    <result column="admin_permission_code" jdbcType="VARCHAR" property="adminPermissionCode" />
+    <result column="admin_permission_category" jdbcType="VARCHAR" property="adminPermissionCategory" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_admin_permission
+    where admin_permission_id = #{adminPermissionId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.userinfo.model.AdminPermission">
+    <selectKey keyProperty="adminPermissionId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_admin_permission (admin_permission_name, admin_permission_code, 
+      admin_permission_category)
+    values (#{adminPermissionName,jdbcType=VARCHAR}, #{adminPermissionCode,jdbcType=VARCHAR}, 
+      #{adminPermissionCategory,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.AdminPermission">
+    update t_admin_permission
+    set admin_permission_name = #{adminPermissionName,jdbcType=VARCHAR},
+      admin_permission_code = #{adminPermissionCode,jdbcType=VARCHAR},
+      admin_permission_category = #{adminPermissionCategory,jdbcType=VARCHAR}
+    where admin_permission_id = #{adminPermissionId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select admin_permission_id, admin_permission_name, admin_permission_code, admin_permission_category
+    from t_admin_permission
+    where admin_permission_id = #{adminPermissionId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select admin_permission_id, admin_permission_name, admin_permission_code, admin_permission_category
+    from t_admin_permission
+  </select>
+</mapper>
