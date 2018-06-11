@@ -67,11 +67,4 @@ public interface OwnVehicleService {
      */
     int syncVehicleInfo(OwnVehicle ownVehicle);
 
-
-    /**
-     * 新增车辆
-     * @param ownVehicle
-     * @return
-     */
-    OwnVehicle syncVehicle(OwnVehicle ownVehicle);
 }
