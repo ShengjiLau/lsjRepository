@@ -166,8 +166,11 @@
   </select>
 
   <select id="selectByUserDto"  resultMap="BaseResultMap" parameterType="com.lcdt.userinfo.web.dto.UserQueryDto">
-   select  user_id, mobile_country, phone, email, wechat, qq, real_name, nick_name,
-      birthday, picture_url, intro_memo, register_date, referrer_phone, user_status,register_from from t_uc_user
+   select  l.user_id, mobile_country, phone, email, wechat, qq, real_name, nick_name,
+      birthday, picture_url, intro_memo, register_date, referrer_phone, user_status,register_from from t_uc_user u
+
+      left join login_log l on u.user_id = l.user_id
+
       <where>
           <if test="phone != null and phone != ''">
            phone = #{phone}
@@ -190,6 +193,14 @@
         <if test="registerDateUntil != null and registerDateUntil != ''">
           register_date &lt;=  #{registerDateUntil}
         </if>
+
+        <if test="loginDateUntil != null and loginDateUntil != ''">
+          l.login_time &lt;=  #{loginDateUntil}
+        </if>
+        <if test="loginDateSince != null and loginDateSince != ''">
+          l.login_time &gt;=  #{loginDateSince}
+        </if>
+
 
       </where>
 
