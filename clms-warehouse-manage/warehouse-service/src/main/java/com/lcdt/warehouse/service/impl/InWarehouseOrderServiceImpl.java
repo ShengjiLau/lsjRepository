@@ -209,4 +209,12 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
     }
 
 
+    /**
+     * 概览入库单已完成数量
+     * @param params
+     * @return
+     */
+    public List<InWarehouseOrderDto> selectInWarehouseNum(InWarehouseOrderSearchParamsDto params){
+        return baseMapper.selectInWarehouseNum(params);
+    }
 }

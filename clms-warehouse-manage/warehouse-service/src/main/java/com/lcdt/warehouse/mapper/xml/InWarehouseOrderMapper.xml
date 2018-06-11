@@ -123,6 +123,9 @@
         <if test="isDeleted!=null and isDeleted!=''">
             and is_deleted = #{isDeleted,jdbcType=VARCHAR}
         </if>
+        <if test="customerId!=null and customerId!=''">
+            and customer_id = #{customerId,jdbcType=BIGINT}
+        </if>
     </sql>
 
     <insert id="insertInWarehouseOrder" parameterType="com.lcdt.warehouse.entity.InWarehouseOrder">
@@ -190,6 +193,16 @@
         left join inorder_goods_info g on o.inorder_id=g.inorder_id
         where o.company_id= #{companyId,jdbcType=BIGINT} and o.plan_id = #{planId,jdbcType=BIGINT}
         group by o.warehouse_id,o.warehouse_name,g.goods_code,g.goods_barcode
+    </select>
+
+
+    <select id="selectInWarehouseNum" parameterType="map" resultType="map" >
+        select date_format(storage_time1, '%Y-%m-%d') storage_time,sum(1) num from (
+        select storage_time storage_time1,warehouse_id,customer_id,company_id from in_warehouse_order
+        where 1=1  and storage_time is not null
+          and company_id= #{companyId,jdbcType=BIGINT}
+        <include refid="select_condition"/>
+        )a GROUP BY storage_time order by storage_time
     </select>
 
 
