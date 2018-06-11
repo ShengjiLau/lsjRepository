@@ -15,12 +15,17 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.tl.commons.util.DateUtility;
 
-import java.util.Arrays;
-import java.util.List;
+import java.nio.charset.Charset;
+import java.util.*;
 
 /**
  * @AUTHOR liuh
@@ -91,18 +96,18 @@ public class LocationServiceApi {
         try {
             //开通授权
             JSONObject openInfo = GprsLocationBo.getInstance().authOpen(mobile);
-            if(openInfo.getIntValue("resid")==0){   //开通成功后变更数据库状态为1等待激活
+            if (openInfo.getIntValue("resid") == 0) {   //开通成功后变更数据库状态为1等待激活
                 driver.setGpsStatus(new Short("1"));
                 int row = driverService.modGpsStatus(driver);
                 jsonObject.put("code", 0);
                 jsonObject.put("message", "开通成功，请回复短信小写的y");
-            }else if(openInfo.getIntValue("resid")==1){ //如果改手机已经激活过，则变更数据库状态为已激活
+            } else if (openInfo.getIntValue("resid") == 1) { //如果改手机已经激活过，则变更数据库状态为已激活
                 driver.setGpsStatus(new Short("2"));
                 int row = driverService.modGpsStatus(driver);
                 jsonObject.put("code", 0);
                 jsonObject.put("message", "手机号已经激活");
-            }else{
-                jsonObject.put("code",-1);
+            } else {
+                jsonObject.put("code", -1);
                 jsonObject.put("message", "开通失败，请联系客服");
             }
         } catch (Exception e) {
@@ -178,7 +183,7 @@ public class LocationServiceApi {
             jsonObject.put("code", 0);
             jsonObject.put("resid", resid);
             jsonObject.put("message", "一个手机号一天最多能下发白名单3次，请明天再试");
-        }else{
+        } else {
             /**
              *  -2	一个手机号一天最多能下发白名单3次，请明天再试
              *  -3	手机号长度必须为11位
@@ -202,7 +207,7 @@ public class LocationServiceApi {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-        if(!balanceCheckBo.check(companyId)){
+        if (!balanceCheckBo.check(companyId)) {
             jsonObject.put("code", -1);
             jsonObject.put("message", "余额不足！请充值！");
             return jsonObject;
@@ -222,9 +227,20 @@ public class LocationServiceApi {
                 driver.setDriverPhone(mobile);
                 driver.setCurrentLocation(result.getString("location"));
                 driver.setShortCurrentLocation(result.getString("street"));
+                //增加经纬度内容
+                driver.setLongitude(result.getString("lng"));
+                driver.setLatitude(result.getString("lat"));
                 driverService.updateLocation(driver);
+                //司机信息更新后上传鹰眼信息
+                MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+                map.add("entity_name", mobile);
+                map.add("latitude", driver.getLatitude());
+                map.add("longitude", driver.getLongitude());
+                //上传鹰眼信息
+                upPoint(map);
+
                 jsonObject.put("code", resid1);
-                jsonObject.put("location",result.getString("location"));
+                jsonObject.put("location", result.getString("location"));
                 jsonObject.put("locationTime", DateUtility.getCurrDatetime());
                 jsonObject.put("message", "查询成功");
             } else if (resid1 == -80) {    //	余额不足,请充值:请联系客服
@@ -276,14 +292,38 @@ public class LocationServiceApi {
             jsonObject.put("code", 0);
             jsonObject.put("message", "请求成功");
             JSONObject gmsCount = new JSONObject();
-            gmsCount.put("gmsCount",count);
-            jsonObject.put("data",gmsCount);
+            gmsCount.put("gmsCount", count);
+            jsonObject.put("data", gmsCount);
         } catch (Exception e) {
             e.printStackTrace();
-            jsonObject.put("code",-1);
+            jsonObject.put("code", -1);
             jsonObject.put("message", "请求失败");
         }
         return jsonObject;
+    }
+
+
+    public static RestTemplate getInstanceByCharset(String charset) {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getMessageConverters().add(new StringHttpMessageConverter(Charset.forName(charset)));
+        return restTemplate;
+    }
+
+    public static String upPoint(MultiValueMap map) {
+        RestTemplate restTemplate = getInstanceByCharset("utf-8");
+        map.add("ak","nDXccuEHSqNXVkHhyHT0UCyUOpUTnz0o");
+        map.add("service_id","200868");
+        map.add("coord_type_input", "bd09ll");
+        map.add("loc_time", (System.currentTimeMillis() / 1000)+"");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        HttpEntity entity = new HttpEntity(map, headers);
+        ResponseEntity<String> response = restTemplate.exchange("http://yingyan.baidu.com/api/v3/track/addpoint", HttpMethod.POST, entity, String.class);
+        String body = response.getBody();
+//        System.out.println("body=="+body);
+        return  body;
+
     }
 
 }
