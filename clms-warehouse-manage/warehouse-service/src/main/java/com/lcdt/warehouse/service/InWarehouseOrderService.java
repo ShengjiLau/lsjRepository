@@ -80,4 +80,11 @@ public interface InWarehouseOrderService extends IService<InWarehouseOrder> {
      * @return
      */
     int addAndStorageInWarehouseOrder(InWarehouseOrderDto param);
+
+    /**
+     * 概览入库单已完成数量
+     * @param params
+     * @return
+     */
+    List<InWarehouseOrderDto> selectInWarehouseNum(InWarehouseOrderSearchParamsDto params);
 }
