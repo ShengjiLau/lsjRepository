@@ -15,10 +15,7 @@ import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.NotifyUtils;
-import com.lcdt.traffic.service.OwnDriverService;
-import com.lcdt.traffic.service.Plan4CreateService;
-import com.lcdt.traffic.service.TrafficRpc;
-import com.lcdt.traffic.service.WaybillService;
+import com.lcdt.traffic.service.*;
 import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
@@ -73,7 +70,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
     private OwnDriverService ownDriverService;
 
     @Autowired
-    private TrafficRpc trafficRpc;
+    private OwnVehicleService ownVehicleService;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -167,7 +164,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     ownDriver.setDriverPhone(dto.getCarrierPhone());
                     ownDriver.setCreateId(dto.getCreateId());
                     ownDriver.setCreateName(dto.getCreateName());
-                    OwnDriver ownDriver1 = trafficRpc.addDriver(ownDriver);
+                    OwnDriver ownDriver1 = ownDriverService.syncDriver(ownDriver);
                     if(ownDriver1!=null) {
                         vo.setCarrierIds(ownDriver1.getOwnDriverId() + "");
                     }
@@ -180,7 +177,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 ownVehicle.setCreateId(dto.getCreateId());
                 ownVehicle.setCreateName(dto.getCreateName());
                 ownVehicle.setVehicleDriverPhone(dto.getCarrierPhone());
-                trafficRpc.addVehicle(ownVehicle);
+                ownVehicleService.syncVehicle(ownVehicle);
 
                 if (!StringUtils.isEmpty(dto.getCarrierIds())) {
                     vo.setCarrierCompanyId(vo.getCompanyId());

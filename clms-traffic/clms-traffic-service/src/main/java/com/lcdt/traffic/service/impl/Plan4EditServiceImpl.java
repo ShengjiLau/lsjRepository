@@ -16,10 +16,7 @@ import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.NotifyUtils;
-import com.lcdt.traffic.service.OwnDriverService;
-import com.lcdt.traffic.service.Plan4EditService;
-import com.lcdt.traffic.service.TrafficRpc;
-import com.lcdt.traffic.service.WaybillService;
+import com.lcdt.traffic.service.*;
 import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
@@ -71,9 +68,9 @@ public class Plan4EditServiceImpl implements Plan4EditService {
     @Reference
     private CompanyRpcService companyRpcService; //企业信息
 
-    @Autowired
-    private TrafficRpc trafficRpc;
 
+    @Autowired
+    private OwnVehicleService ownVehicleService;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -145,7 +142,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                     ownDriver.setDriverPhone(dto.getCarrierPhone());
                     ownDriver.setCreateId(dto.getCreateId());
                     ownDriver.setCreateName(dto.getCreateName());
-                    OwnDriver ownDriver1= trafficRpc.addDriver(ownDriver);
+                    OwnDriver ownDriver1= ownDriverService.syncDriver(ownDriver);
                     if(ownDriver1!=null) {
                         vo.setCarrierIds(ownDriver1.getOwnDriverId() + "");
                     }
@@ -156,7 +153,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                 ownVehicle1.setCreateId(dto.getCreateId());
                 ownVehicle1.setCreateName(dto.getCreateName());
                 ownVehicle1.setVehicleDriverPhone(dto.getCarrierPhone());
-                trafficRpc.addVehicle(ownVehicle1);
+                ownVehicleService.syncVehicle(ownVehicle1);
 
                 if (!StringUtils.isEmpty(dto.getCarrierIds())) {
                     vo.setCarrierCompanyId(vo.getCompanyId());
