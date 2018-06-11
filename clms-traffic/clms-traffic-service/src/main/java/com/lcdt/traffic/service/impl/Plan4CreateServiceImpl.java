@@ -70,7 +70,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
     private OwnDriverService ownDriverService;
 
     @Autowired
-    private OwnVehicleService ownVehicleService;
+    private TrafficRpc trafficRpc;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -164,7 +164,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     ownDriver.setDriverPhone(dto.getCarrierPhone());
                     ownDriver.setCreateId(dto.getCreateId());
                     ownDriver.setCreateName(dto.getCreateName());
-                    OwnDriver ownDriver1 = ownDriverService.syncDriver(ownDriver);
+                    OwnDriver ownDriver1 = trafficRpc.addDriver(ownDriver);
                     if(ownDriver1!=null) {
                         vo.setCarrierIds(ownDriver1.getOwnDriverId() + "");
                     }
@@ -177,7 +177,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 ownVehicle.setCreateId(dto.getCreateId());
                 ownVehicle.setCreateName(dto.getCreateName());
                 ownVehicle.setVehicleDriverPhone(dto.getCarrierPhone());
-                ownVehicleService.syncVehicle(ownVehicle);
+                trafficRpc.addVehicle(ownVehicle);
 
                 if (!StringUtils.isEmpty(dto.getCarrierIds())) {
                     vo.setCarrierCompanyId(vo.getCompanyId());
