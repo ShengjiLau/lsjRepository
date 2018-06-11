@@ -72,4 +72,12 @@ public interface OwnDriverService {
      * @return
      */
     List<OwnDriver> driverListByGroupId(Long companyId, String driverGroupId);
+
+
+    /**
+     * 新增司机
+     * @param ownDriver
+     * @return
+     */
+    OwnDriver syncDriver(OwnDriver ownDriver);
 }

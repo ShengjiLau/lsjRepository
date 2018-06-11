@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dao.OwnDriverMapper;
 import com.lcdt.traffic.dao.OwnVehicleCertificateMapper;
 import com.lcdt.traffic.dao.OwnVehicleMapper;
@@ -292,5 +293,25 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
             result = ownVehicleMapper.insert(ownVehicle);
         }
         return result;
+    }
+
+    @Override
+    public OwnVehicle syncVehicle(OwnVehicle ownVehicle) {
+        //  获取companyId
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        ownVehicle.setCompanyId(companyId);
+        int count = ownVehicleMapper.selectVehicleNum(ownVehicle);
+        //判断车牌号是否重复
+        if (count != 0) {
+            return ownVehicleMapper.selectByVehicleNum(ownVehicle);
+        } else {
+            /**保存车辆基本信息*/
+            Long userId = SecurityInfoGetter.getUser().getUserId();
+            String userName = SecurityInfoGetter.getUser().getRealName();
+            ownVehicle.setCreateId(userId);
+            ownVehicle.setCreateName(userName);
+            ownVehicleMapper.insert(ownVehicle);
+            return ownVehicle;
+        }
     }
 }
