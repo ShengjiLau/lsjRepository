@@ -48,8 +48,8 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
         int result = 0;
 
         //先判断是否还有剩于运单服务条数(后面计费用)
-        if(companyServiceCountService.checkCompanyProductCount(dto.getCompanyId(),"storage_service", 1)){
-            throw new RuntimeException("剩余出库单服务次数不足");
+        if(!companyServiceCountService.checkCompanyProductCount(dto.getCompanyId(),"storage_service", 1)){
+            throw new RuntimeException("剩余仓单服务次数不足");
         }
 
         OutWarehouseOrder outWarehouseOrder = new OutWarehouseOrder();
