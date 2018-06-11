@@ -61,4 +61,11 @@ public interface InWarehouseOrderMapper extends BaseMapper<InWarehouseOrder> {
      */
     List<DistributionRecordsDto> selectDisRecords(@Param("companyId") Long companyId,@Param("planId") Long planId);
 
+    /**
+     * 概览入库单已完成数量
+     * @param params
+     * @return
+     */
+    List<InWarehouseOrderDto> selectInWarehouseNum(InWarehouseOrderSearchParamsDto params);
+
 }
