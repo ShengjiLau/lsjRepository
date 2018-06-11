@@ -16,10 +16,7 @@ import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.NotifyUtils;
-import com.lcdt.traffic.service.OwnDriverService;
-import com.lcdt.traffic.service.Plan4EditService;
-import com.lcdt.traffic.service.TrafficRpc;
-import com.lcdt.traffic.service.WaybillService;
+import com.lcdt.traffic.service.*;
 import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
@@ -71,9 +68,9 @@ public class Plan4EditServiceImpl implements Plan4EditService {
     @Reference
     private CompanyRpcService companyRpcService; //企业信息
 
+
     @Autowired
     private TrafficRpc trafficRpc;
-
 
 
     @Transactional(rollbackFor = Exception.class)

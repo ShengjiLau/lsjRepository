@@ -8,6 +8,7 @@ import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -80,4 +81,11 @@ public interface InWarehouseOrderService extends IService<InWarehouseOrder> {
      * @return
      */
     int addAndStorageInWarehouseOrder(InWarehouseOrderDto param);
+
+    /**
+     * 概览入库单已完成数量
+     * @param params
+     * @return
+     */
+    List<Map<String,Object>> selectInWarehouseNum(InWarehouseOrderSearchParamsDto params);
 }

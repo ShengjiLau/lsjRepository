@@ -267,7 +267,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     public int modifyOwnWaybill(WaybillDto waybillDto) {
         int result = 0;
         Waybill waybill = queryOwnWaybill(waybillDto.getId(),waybillDto.getCompanyId());
-        BeanUtils.copyProperties(waybillDto, waybill);
+        ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto, waybill);
         //更新运单
         result += waybillMapper.updateByPrimaryKeyAndCompanyId(waybill);
         //运单货物详细
@@ -276,15 +276,15 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             List<WaybillItems> waybillItemsAddList = new ArrayList<WaybillItems>();
             for (int i = 0; i < waybillDto.getWaybillItemsDtoList().size(); i++) {
                 WaybillItems waybillItems = new WaybillItems();
-                if (waybillItems.getId() > 0) {
+                if (waybillDto.getWaybillItemsDtoList().get(i).getId() !=null &&waybillDto.getWaybillItemsDtoList().get(i).getId()>0) {
                     waybillItems=waybillItemsMapper.selectByPrimaryKey(waybillDto.getWaybillItemsDtoList().get(i).getId());
-                    BeanUtils.copyProperties(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
+                    ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
                     waybillItems.setUpdateId(waybill.getUpdateId());
                     waybillItems.setUpdateName(waybill.getUpdateName());
                     waybillItems.setCompanyId(waybill.getCompanyId());
                     waybillItemsUpdateList.add(waybillItems);
                 } else {
-                    BeanUtils.copyProperties(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
+                    ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
                     waybillItems.setCreateId(waybill.getCreateId());
                     waybillItems.setCreateName(waybill.getCreateName());
                     waybillItems.setCompanyId(waybill.getCompanyId());
@@ -308,7 +308,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     public int modifyCustomerWaybill(WaybillDto waybillDto) {
         int result = 0;
         Waybill waybill = new Waybill();
-        BeanUtils.copyProperties(waybillDto, waybill);
+        ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto, waybill);
         //新增运单
         result += waybillMapper.updateByPrimaryKeyAndCarrierCompanyId(waybill);
         //运单货物详细
@@ -317,15 +317,15 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             List<WaybillItems> waybillItemsAddList = new ArrayList<WaybillItems>();
             for (int i = 0; i < waybillDto.getWaybillItemsDtoList().size(); i++) {
                 WaybillItems waybillItems = new WaybillItems();
-                if (waybillItems.getId() > 0) {
+                if (waybillDto.getWaybillItemsDtoList().get(i).getId() !=null &&waybillDto.getWaybillItemsDtoList().get(i).getId()>0) {
                     waybillItems=waybillItemsMapper.selectByPrimaryKey(waybillDto.getWaybillItemsDtoList().get(i).getId());
-                    BeanUtils.copyProperties(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
+                    ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
                     waybillItems.setUpdateId(waybill.getUpdateId());
                     waybillItems.setUpdateName(waybill.getUpdateName());
                     waybillItems.setCompanyId(waybill.getCompanyId());
                     waybillItemsUpdateList.add(waybillItems);
                 } else {
-                    BeanUtils.copyProperties(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
+                    ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
                     waybillItems.setCreateId(waybill.getCreateId());
                     waybillItems.setCreateName(waybill.getCreateName());
                     waybillItems.setCompanyId(waybill.getCompanyId());

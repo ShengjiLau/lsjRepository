@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -209,4 +210,12 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
     }
 
 
+    /**
+     * 概览入库单已完成数量
+     * @param params
+     * @return
+     */
+    public List<Map<String,Object>> selectInWarehouseNum(InWarehouseOrderSearchParamsDto params){
+        return baseMapper.selectInWarehouseNum(params);
+    }
 }

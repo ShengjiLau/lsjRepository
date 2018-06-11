@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -49,4 +50,12 @@ public interface OutWarehouseOrderMapper extends BaseMapper<OutWarehouseOrder> {
      * @return
      */
     List<DistributionRecordsOutOrderDto> selectOutOrderDisRecords(@Param("companyId") Long companyId,@Param("outPlanId") Long outPlanId);
+
+
+    /**
+     * 概览出库单已完成数量
+     * @param params
+     * @return
+     */
+    List<Map<String,Object>> selectOutWarehouseNum(OutWhOrderSearchDto params);
 }

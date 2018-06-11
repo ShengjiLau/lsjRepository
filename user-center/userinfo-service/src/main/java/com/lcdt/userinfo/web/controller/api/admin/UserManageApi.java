@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class UserApi {
+public class UserManageApi {
 
     @Autowired
     UserMapper mapper;
