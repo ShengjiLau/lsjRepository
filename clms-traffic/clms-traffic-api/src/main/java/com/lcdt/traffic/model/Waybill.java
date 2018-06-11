@@ -1,5 +1,6 @@
 package com.lcdt.traffic.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lcdt.converter.ResponseData;
 
 import java.io.Serializable;
@@ -319,6 +320,7 @@ public class Waybill implements Serializable ,ResponseData{
      *
      * @mbg.generated Wed Dec 20 10:13:16 CST 2017
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date startDate;
 
     /**
@@ -328,6 +330,7 @@ public class Waybill implements Serializable ,ResponseData{
      *
      * @mbg.generated Wed Dec 20 10:13:16 CST 2017
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date arriveDate;
 
     /**
