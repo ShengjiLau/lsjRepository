@@ -710,4 +710,12 @@ public class WaybillItems implements Serializable, ResponseData {
     public void setWeight(Double weight) {
         this.weight = weight;
     }
+
+    public Double getVolume() {
+        return volume;
+    }
+
+    public void setVolume(Double volume) {
+        this.volume = volume;
+    }
 }
