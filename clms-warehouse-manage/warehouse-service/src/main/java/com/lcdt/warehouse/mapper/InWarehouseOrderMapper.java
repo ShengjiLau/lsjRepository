@@ -11,6 +11,7 @@ import com.lcdt.warehouse.entity.InWarehouseOrder;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -66,6 +67,6 @@ public interface InWarehouseOrderMapper extends BaseMapper<InWarehouseOrder> {
      * @param params
      * @return
      */
-    List<InWarehouseOrderDto> selectInWarehouseNum(InWarehouseOrderSearchParamsDto params);
+    List<Map<String,Object>> selectInWarehouseNum(InWarehouseOrderSearchParamsDto params);
 
 }
