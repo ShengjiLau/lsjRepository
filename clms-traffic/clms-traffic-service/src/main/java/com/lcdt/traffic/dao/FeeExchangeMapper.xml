@@ -274,6 +274,7 @@
   	and reconcile_id = #{reconcileId,jdbcType=BIGINT}
   	</if>
   	</where>
+  	order by create_time desc
   </select>
   
   <update id="updateCancelOkByBatch">

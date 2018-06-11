@@ -3,7 +3,7 @@
 <mapper namespace="com.lcdt.warehouse.mapper.CheckMapper">
 
 
-    <select id="selectListByParams" resultType="com.lcdt.warehouse.dto.CheckParamDto">
+    <select id="selectListByParams" resultType="com.lcdt.warehouse.dto.CheckListDto" parameterType="com.lcdt.warehouse.dto.CheckParamDto">
         SELECT a.check_id,a.check_num,a.check_status,a.group_id,a.group_name,a.customer_id,a.customer_name,a.warehouse_id,
         a.warehouse_name,a.attachments,a.company_id,a.remark,a.create_id,a.create_name,a.create_date,a.update_id,a.update_name,
         a.update_date,a.is_deleted,a.complete_id,a.complete_name,a.complete_date,diff_status,attachment
@@ -12,6 +12,11 @@
         on(a.check_id = b.check_id)
 
         WHERE a.company_id = #{companyId,jdbcType=BIGINT}
+
+        <if test="checkId!=null">
+            and a.check_id = #{checkId,jdbcType=BIGINT}
+        </if>
+
         <if test="createDateFrom!=null and createDateFrom!=''">
             and date(a.create_date) >= CONCAT(STR_TO_DATE(#{createDateFrom,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
         </if>

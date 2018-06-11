@@ -1,5 +1,6 @@
 package com.lcdt.contract.web.controller.api;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -8,6 +9,8 @@ import com.lcdt.contract.service.PaymentApplictionService;
 import com.lcdt.contract.web.dto.BaseDto;
 import com.lcdt.contract.web.dto.PageBaseDto;
 import com.lcdt.contract.web.dto.PaymentApplicationDto;
+import com.lcdt.customer.model.Customer;
+import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +34,9 @@ public class PaymentApplicationApi {
 
     @Autowired
     private PaymentApplictionService paymentApplictionService;
+
+    @Reference
+    private CustomerRpcService customerRpcService;
 
     @ApiOperation(value = "付款单列表", notes = "付款单列表")
     @GetMapping("/paymentList")
@@ -97,6 +103,16 @@ public class PaymentApplicationApi {
             jsonObject.put("message","创建付款申请失败");
         }
         return jsonObject;
+    }
+
+    @ApiOperation(value = "获取客户信息", notes = "根据客户id获取对应客户信息")
+    @GetMapping("/customer")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_list')")
+    public BaseDto customerInfo(Long supplierId){
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Customer customer = customerRpcService.findCustomerById(supplierId,companyId);
+        BaseDto baseDto = new BaseDto(customer);
+        return baseDto;
     }
 
 }

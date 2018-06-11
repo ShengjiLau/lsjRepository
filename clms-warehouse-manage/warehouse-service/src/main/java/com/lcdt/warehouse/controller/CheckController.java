@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.controller;
 
+import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.User;
@@ -47,9 +48,22 @@ public class CheckController {
 
     @ApiOperation("根据id读盘库记录")
     @RequestMapping(value = "/findCheckById", method = RequestMethod.GET)
-    public JSONObject findCheckById(@RequestParam Integer checkId) {
+    public JSONObject findCheckById(@RequestParam Long checkId) {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
+        String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
+        CheckParamDto checkDto = new CheckParamDto();
+        checkDto.setCompanyId(companyId);
+        checkDto.setCheckId(checkId);
+        List<CheckListDto> checkList = checkService.selectList(checkDto);
+        JSONObject jsonObject = new JSONObject();
 
-        return null;
+        if (CollectionUtils.isNotEmpty(checkList)){
+            jsonObject.put("data",checkList.get(0));
+        }
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "读取成功！");
+        return jsonObject;
     }
 
     @ApiOperation("取消盘库")
@@ -92,6 +106,7 @@ public class CheckController {
         check.setIsDeleted(0);
         check.setCreateDate(new Date());
         check.setCreateId(userId);
+        check.setCreateName(userName);
         check.setCompanyId(companyId);
         JSONObject jsonObject = new JSONObject();
         List<Map<String, Object>> items = checkSaveDto.getItems();

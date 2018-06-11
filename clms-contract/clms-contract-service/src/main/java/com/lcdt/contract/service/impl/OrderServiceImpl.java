@@ -1,7 +1,6 @@
 package com.lcdt.contract.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,11 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.contract.dao.BillingRecordMapper;
 import com.lcdt.contract.dao.ConditionQueryMapper;
 import com.lcdt.contract.dao.OrderMapper;
 import com.lcdt.contract.dao.OrderProductMapper;
+import com.lcdt.contract.dao.PaymentApplicationMapper;
+import com.lcdt.contract.model.BillingRecord;
 import com.lcdt.contract.model.Order;
 import com.lcdt.contract.model.OrderProduct;
+import com.lcdt.contract.model.PaymentApplication;
 import com.lcdt.contract.service.OrderService;
 import com.lcdt.contract.web.dto.OrderDto;
 
@@ -51,6 +54,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderProductMapper orderProductMapper;
+    
+    @Autowired
+    private PaymentApplicationMapper paymentApplicationMapper;
 
 
     @Override
@@ -297,9 +303,15 @@ public class OrderServiceImpl implements OrderService {
         return orderDto;
     }
 
-
+    /**
+     * 取消订单时需要判断是否具有付款单，具有付款单的订单不能取消
+     */
     @Override
     public int updateOrderIsDraft(Long orderId, Short isDraft) {
+    	List<PaymentApplication> billingRecordList = paymentApplicationMapper.selectByOrderId(orderId);
+    	if (null != billingRecordList && 0 != billingRecordList.size()) {
+    		return 0;
+    	}
         return orderMapper.updateIsDraft(orderId, isDraft);
     }
 

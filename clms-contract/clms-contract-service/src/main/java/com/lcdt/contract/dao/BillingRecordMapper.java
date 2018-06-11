@@ -19,4 +19,6 @@ public interface BillingRecordMapper {
     int updateByPrimaryKey(BillingRecord record);
 
     List<BillingRecord> selectByCondition(BillingRecordDto billingRecordDto);
+    
+    List<BillingRecord> selectByOrderId(Long orderId);
 }
