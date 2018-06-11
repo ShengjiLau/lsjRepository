@@ -59,6 +59,16 @@ public class WaybillItemsDto implements Serializable{
 
     private Long companyId;
 
+    /**
+     * 重量
+     */
+    private Double weight;
+
+    /**
+     * 体积
+     */
+    private Double volume;
+
 
     public Long getId() {
         return id;
@@ -252,5 +262,19 @@ public class WaybillItemsDto implements Serializable{
         this.companyId = companyId;
     }
 
+    public Double getWeight() {
+        return weight;
+    }
 
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public Double getVolume() {
+        return volume;
+    }
+
+    public void setVolume(Double volume) {
+        this.volume = volume;
+    }
 }
