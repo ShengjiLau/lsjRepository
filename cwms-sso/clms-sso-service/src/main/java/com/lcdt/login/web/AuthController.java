@@ -326,6 +326,20 @@ public class AuthController {
         return null;
     }
 
+
+    @RequestMapping("/adminlogin")
+    @ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
+    public ModelAndView adminUserLogin( HttpServletRequest request, HttpServletResponse response){
+        User user = LoginSessionReposity.getUserInfoInSession(request);
+        boolean userAdmin = userService.isUserAdmin(user.getUserId());
+
+
+
+        return new ModelAndView();
+    }
+
+
+
     @ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class,})
     public ModelAndView forgetPwd() {
         return new ModelAndView();

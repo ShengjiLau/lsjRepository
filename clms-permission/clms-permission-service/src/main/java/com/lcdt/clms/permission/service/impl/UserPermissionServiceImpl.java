@@ -35,6 +35,14 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 	PermissionMapper permissionDao;
 
 
+	@Transactional(rollbackFor = Exception.class,readOnly = true)
+	public List<Permission> adminPermission(){
+
+		return new ArrayList<>();
+	}
+
+
+
 	@Transactional
 	public List<Permission> rolePermissions(){
 		return null;

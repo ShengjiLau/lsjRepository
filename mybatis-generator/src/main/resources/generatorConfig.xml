@@ -274,8 +274,11 @@
         <!--<table tableName="inventory_log">-->
             <!--<generatedKey column="inventory_id" sqlStatement="MYSQL" identity="true"></generatedKey>-->
         <!--</table>-->
-        <table tableName="t_notice_email">
-        <generatedKey column="t_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        <table tableName="t_admin_permission" domainObjectName="AdminPermission">
+        <generatedKey column="admin_permission_id" sqlStatement="MYSQL" identity="true"></generatedKey>
+        </table>
+        <table tableName="t_admin_permission_relation" domainObjectName = "AdminPermissionRelation">
+            <generatedKey column="relation_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
     </context>
 </generatorConfiguration>

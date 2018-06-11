@@ -1,5 +1,6 @@
 package com.lcdt.contract.dao;
 
+import com.lcdt.contract.model.BillingRecord;
 import com.lcdt.contract.model.PaymentApplication;
 import com.lcdt.contract.web.dto.PaymentApplicationDto;
 
@@ -36,4 +37,7 @@ public interface PaymentApplicationMapper {
 
 
     PaymentApplicationDto selectPaymentApplicationDetail(Long paId);
+    
+    List<PaymentApplication> selectByOrderId(Long orderId);
+    
 }

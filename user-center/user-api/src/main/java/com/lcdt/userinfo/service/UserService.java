@@ -34,4 +34,6 @@ public interface UserService {
 	User selectUserByPhone(String phone);
 
 	User resetPwd(String username,String pwd);
+
+	boolean isUserAdmin(Long userId);
 }

@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.mapper;
 
+import com.lcdt.warehouse.dto.CheckListDto;
 import com.lcdt.warehouse.dto.CheckParamDto;
 import com.lcdt.warehouse.entity.TCheck;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 public interface CheckMapper extends BaseMapper<TCheck> {
 
-    List<TCheck> selectListByParams(CheckParamDto paramDto);
+    List<CheckListDto> selectListByParams(CheckParamDto paramDto);
 
 
     int cancelCheck(CheckParamDto checkDto);

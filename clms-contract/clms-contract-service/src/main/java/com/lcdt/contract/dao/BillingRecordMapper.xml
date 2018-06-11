@@ -255,4 +255,14 @@
         and company_id = #{companyId}
     </where>
   </select>
+  
+  <select id="selectByOrderId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+  select
+    <include refid="Base_Column_List" />
+    from t_billing_record
+  	<where>
+  	order_id = #{orderId,jdbcType=BIGINT}
+  	</where>
+  
+  </select>
 </mapper>
