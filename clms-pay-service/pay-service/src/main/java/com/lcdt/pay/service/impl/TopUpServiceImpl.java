@@ -24,9 +24,6 @@ public class TopUpServiceImpl implements TopupService{
 
     @Override
     public PayOrder createTopUpOrder(Integer money, Long companyId,User user) {
-
-
-
         PayOrder topUpPayOrder = PayOrderFactory.createTopUpPayOrder();
         topUpPayOrder.setOrderAmount(money);
         topUpPayOrder.setOrderPayCompanyId(companyId);
