@@ -1,4 +1,4 @@
-package com.lcdt.userinfo.model;
+package com.lcdt.clms.permission.model;
 
 public class AdminPermission {
     private Long adminPermissionId;

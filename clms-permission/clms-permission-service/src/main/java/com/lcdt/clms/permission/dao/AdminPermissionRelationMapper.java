@@ -1,6 +1,6 @@
-package com.lcdt.userinfo.dao;
+package com.lcdt.clms.permission.dao;
 
-import com.lcdt.userinfo.model.AdminPermissionRelation;
+import com.lcdt.clms.permission.model.AdminPermissionRelation;
 
 import java.util.List;
 
@@ -14,4 +14,6 @@ public interface AdminPermissionRelationMapper {
     List<AdminPermissionRelation> selectAll();
 
     int updateByPrimaryKey(AdminPermissionRelation record);
+
+    List<AdminPermissionRelation> selectByUserId(Long userId);
 }

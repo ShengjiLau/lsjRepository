@@ -1,7 +1,8 @@
-package com.lcdt.userinfo.dao;
+package com.lcdt.clms.permission.dao;
 
 
-import com.lcdt.userinfo.model.AdminPermission;
+
+import com.lcdt.clms.permission.model.AdminPermission;
 
 import java.util.List;
 

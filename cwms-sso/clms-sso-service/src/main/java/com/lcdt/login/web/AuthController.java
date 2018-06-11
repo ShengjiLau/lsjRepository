@@ -49,6 +49,7 @@ public class AuthController {
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     private static String LOGIN_PAGE = "/signin";
+    private static String ADMIN_LOGIN_PAGE = "/admin_login";
     public final String CHOOSE_COMPANY_PAGE = "/account/company";
 
     @Autowired
@@ -99,6 +100,12 @@ public class AuthController {
         return view;
     }
 
+    @RequestMapping(value = {"/admin"})
+    @ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
+    public ModelAndView loginAdminPage(HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView view = new ModelAndView(ADMIN_LOGIN_PAGE);
+        return view;
+    }
     /**
      * 登陆入口 返回json数据
      *
@@ -150,7 +157,6 @@ public class AuthController {
     @RequestMapping("/testlogin")
     @ResponseBody
     public String logintest(String username, String password, String captchacode, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-
         JSONObject jsonObject = new JSONObject();
         boolean captchaIsOk = LoginSessionReposity.captchaIsOk(request, captchacode);
         captchaIsOk= true;
@@ -328,14 +334,33 @@ public class AuthController {
 
 
     @RequestMapping("/adminlogin")
-    @ExcludeIntercept(excludeIntercept = {CompanyInterceptorAbstract.class})
-    public ModelAndView adminUserLogin( HttpServletRequest request, HttpServletResponse response){
-        User user = LoginSessionReposity.getUserInfoInSession(request);
-        boolean userAdmin = userService.isUserAdmin(user.getUserId());
-
-
-
-        return new ModelAndView();
+    @ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
+    @ResponseBody
+    public String adminUserLogin(String username, String password, String captchacode,HttpServletRequest request, HttpServletResponse response){
+        JSONObject jsonObject = new JSONObject();
+        if (!LoginSessionReposity.captchaIsOk(request, captchacode)) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "验证码错误");
+            return jsonObject.toString();
+        }
+        try {
+            User user = userService.userLogin(username, password);
+            LoginSessionReposity.setUserInSession(request, user);
+            ticketService.generateTicketInResponse(request, response, user.getUserId(), -1L);
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "success");
+            return jsonObject.toString();
+        } catch (UserNotExistException e) {
+            e.printStackTrace();
+            jsonObject.put("message", "账号不存在");
+            jsonObject.put("code", -1);
+            return jsonObject.toString();
+        } catch (PassErrorException e) {
+            jsonObject.put("message", "账号密码错误");
+            jsonObject.put("code", -1);
+            e.printStackTrace();
+            return jsonObject.toString();
+        }
     }
 
 
