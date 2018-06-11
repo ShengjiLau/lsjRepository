@@ -46,6 +46,10 @@ public class Driver implements Serializable,ResponseData {
 
     private String driverRemark;
 
+    private String longitude;
+
+    private String latitude;
+
     private String currentLocation;
 
     private String shortCurrentLocation;
@@ -226,6 +230,22 @@ public class Driver implements Serializable,ResponseData {
 
     public void setDriverRemark(String driverRemark) {
         this.driverRemark = driverRemark == null ? null : driverRemark.trim();
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
     public String getCurrentLocation() {
