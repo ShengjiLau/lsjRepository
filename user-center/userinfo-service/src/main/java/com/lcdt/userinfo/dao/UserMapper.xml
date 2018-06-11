@@ -165,6 +165,38 @@
     )
   </select>
 
+  <select id="selectByUser" resultMap="BaseResultMap" parameterType="com.lcdt.userinfo.model.User">
+   select  user_id, mobile_country, phone, email, wechat, qq, real_name, nick_name,
+      birthday, picture_url, intro_memo, register_date, referrer_phone, user_status,register_from from t_uc_user
+      <where>
+          <if test="phone != null and phone != ''">
+           phone = #{phone}
+          </if>
+        <if test="realName != null and realName != ''">
+          and real_name like   concat(concat('%',#{realName}),'%')
+        </if>
+
+        <if test="userStatus != null and userStatus != ''">
+          user_status = #{userStatus}
+        </if>
+
+        <if test="registerFrom != null and registerFrom != ''">
+          register_from = #{registerFrom}
+        </if>
+
+        <if test="registerDateSince != null and registerDateSince != ''">
+          register_date &gt;=  #{registerDateSince}
+        </if>
+        <if test="registerDateUntil != null and registerDateUntil != ''">
+          register_date &lt;=  #{registerDateUntil}
+        </if>
+
+      </where>
+
+
+
+  </select>
+
 
 
 
