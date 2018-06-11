@@ -2,6 +2,7 @@ package com.lcdt.userinfo.web.controller.api.admin;
 
 import com.lcdt.userinfo.dao.UserMapper;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.web.dto.UserQueryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,9 +15,7 @@ public class UserApi {
     @Autowired
     UserMapper mapper;
 
-    public List<User> list(){
-
-
+    public List<User> list(UserQueryDto userQueryDto){
 
         return new ArrayList<>();
     }

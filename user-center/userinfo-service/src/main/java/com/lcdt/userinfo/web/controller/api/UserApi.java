@@ -81,7 +81,6 @@ public class UserApi {
 
 	@ApiOperation("获取用户信息")
 	@RequestMapping(value = "/get", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
-//	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('getUserInfo')")
 	public UserInfoDto getUserInfo() {
 		User user = SecurityInfoGetter.getUser();
 		List<Group> groups = SecurityInfoGetter.groups();
@@ -97,7 +96,6 @@ public class UserApi {
 
 	@ApiOperation("获取企业信息")
 	@RequestMapping("/getallinfo")
-//	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('getUserInfo')")
 	public UserCompRel userCompInfo(){
 		UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
 		List<Role> userRole = roleService.getUserRole(userCompRel.getUserId(), userCompRel.getCompId());

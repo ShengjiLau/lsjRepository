@@ -165,7 +165,7 @@
     )
   </select>
 
-  <select id="selectByUser" resultMap="BaseResultMap" parameterType="com.lcdt.userinfo.model.User">
+  <select id="selectByUserDto"  resultMap="BaseResultMap" parameterType="com.lcdt.userinfo.web.dto.UserQueryDto">
    select  user_id, mobile_country, phone, email, wechat, qq, real_name, nick_name,
       birthday, picture_url, intro_memo, register_date, referrer_phone, user_status,register_from from t_uc_user
       <where>
