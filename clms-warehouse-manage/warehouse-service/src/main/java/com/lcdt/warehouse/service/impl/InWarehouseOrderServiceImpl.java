@@ -51,7 +51,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
         int result = 0;
 
         //author:ybq (后面计费用)
-        boolean tFlag =  companyServiceCountService.checkCompanyProductCount(params.getCompanyId(),"waybill_service", 1);
+        boolean tFlag =  companyServiceCountService.checkCompanyProductCount(params.getCompanyId(),"storage_service", 1);
         if(!tFlag) return result;
 
         InWarehouseOrder inWarehouseOrder = new InWarehouseOrder();
@@ -74,7 +74,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);
         }
         if (result > 0) {
-            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"waybill_service", 1);
+            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"storage_service", 1);
         }
         return result;
     }

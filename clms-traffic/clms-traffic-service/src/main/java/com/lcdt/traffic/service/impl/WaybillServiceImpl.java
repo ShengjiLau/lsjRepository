@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.notify.model.Timeline;
+import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.traffic.dao.SplitGoodsMapper;
 import com.lcdt.traffic.dao.WaybillItemsMapper;
 import com.lcdt.traffic.dao.WaybillMapper;
@@ -75,11 +76,20 @@ public class WaybillServiceImpl implements WaybillService {
     private CompanyService companyService;
 
     @Autowired
-    private WaybillTransferRecordMapper waybillTransferRecordMapper;;
+    private WaybillTransferRecordMapper waybillTransferRecordMapper;
+
+    @Reference
+    private CompanyServiceCountService companyServiceCountService;
 
     @Override
     public Waybill addWaybill(WaybillDto waybillDto) {
         int result = 0;
+
+        //先判断是否还有剩于运单服务条数(后面计费用)
+        if(!companyServiceCountService.checkCompanyProductCount(waybillDto.getCompanyId(),"waybill_service", 1)){
+            throw new RuntimeException("剩余运单服务次数不足");
+        }
+
         Waybill waybill = new Waybill();
         BeanUtils.copyProperties(waybillDto, waybill);
 
@@ -163,6 +173,12 @@ public class WaybillServiceImpl implements WaybillService {
         event.setDataid(waybill.getId());
         event.setActionDes("司机："+waybill.getDriverName()+" "+waybill.getDriverPhone()+" "+waybill.getVechicleNum());
         producer.noteRouter(event);
+
+        //扣减运单费用
+        if (result > 0) {
+            companyServiceCountService.reduceCompanyProductCount(waybillDto.getCompanyId(),"waybill_service", 1);
+        }
+
         return waybill;
     }
 
