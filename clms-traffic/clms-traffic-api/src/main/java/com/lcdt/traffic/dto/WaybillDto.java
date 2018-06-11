@@ -153,6 +153,64 @@ public class WaybillDto implements java.io.Serializable {
     @ApiModelProperty(value = "是否删除",hidden = true)
     private Short isDeleted;
 
+    private Double longitude;
+
+    private Double latitude;
+
+    private String unloadLocation;
+
+    private Date unloadTime;
+
+    /**
+     * 重量
+     */
+    private Double weight;
+
+    /**
+     * 体积
+     */
+    private Double volume;
+
+    /**
+     * 运输距离
+     */
+    private Double distance;
+
+    /**
+     * 件数
+     */
+    private Double piece;
+
+    /**
+     * 商品重量单位
+     */
+    private String weightUnit;
+
+    /**
+     * 计价类型
+     */
+    private Byte pricingType;
+
+    /**
+     * 应收单价
+     */
+    private Float freightPrice;
+
+    /**
+     * 应收运费
+     */
+    private Float freightTotal;
+
+    /**
+     * 应付单价
+     */
+    private Float payPrice;
+
+    /**
+     * 应付总价
+     */
+    private Float payTotal;
+
     private List<WaybillItemsDto> waybillItemsDtoList;
 
     public Long getId() {
@@ -730,5 +788,117 @@ public class WaybillDto implements java.io.Serializable {
 
     public void setWaybillItemsDtoList(List<WaybillItemsDto> waybillItemsDtoList) {
         this.waybillItemsDtoList = waybillItemsDtoList;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getUnloadLocation() {
+        return unloadLocation;
+    }
+
+    public void setUnloadLocation(String unloadLocation) {
+        this.unloadLocation = unloadLocation;
+    }
+
+    public Date getUnloadTime() {
+        return unloadTime;
+    }
+
+    public void setUnloadTime(Date unloadTime) {
+        this.unloadTime = unloadTime;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public Double getVolume() {
+        return volume;
+    }
+
+    public void setVolume(Double volume) {
+        this.volume = volume;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
+    public Double getPiece() {
+        return piece;
+    }
+
+    public void setPiece(Double piece) {
+        this.piece = piece;
+    }
+
+    public String getWeightUnit() {
+        return weightUnit;
+    }
+
+    public void setWeightUnit(String weightUnit) {
+        this.weightUnit = weightUnit;
+    }
+
+    public Byte getPricingType() {
+        return pricingType;
+    }
+
+    public void setPricingType(Byte pricingType) {
+        this.pricingType = pricingType;
+    }
+
+    public Float getFreightPrice() {
+        return freightPrice;
+    }
+
+    public void setFreightPrice(Float freightPrice) {
+        this.freightPrice = freightPrice;
+    }
+
+    public Float getFreightTotal() {
+        return freightTotal;
+    }
+
+    public void setFreightTotal(Float freightTotal) {
+        this.freightTotal = freightTotal;
+    }
+
+    public Float getPayPrice() {
+        return payPrice;
+    }
+
+    public void setPayPrice(Float payPrice) {
+        this.payPrice = payPrice;
+    }
+
+    public Float getPayTotal() {
+        return payTotal;
+    }
+
+    public void setPayTotal(Float payTotal) {
+        this.payTotal = payTotal;
     }
 }

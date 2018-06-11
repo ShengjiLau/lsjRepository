@@ -71,7 +71,7 @@
         </dependency>
         <dependency>
             <groupId>com.lcdt.cloud</groupId>
-            <artifactId>clms-pay-service</artifactId>
+            <artifactId>clms-pay-api</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>
