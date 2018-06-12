@@ -364,8 +364,8 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                     waybillItems.setUpdateName(waybillDto.getUpdateName());
                     waybillItems.setCompanyId(waybillDto.getCompanyId());
                     waybillItemsUpdateList.add(waybillItems);
-                    for(int j=0;i<waybillDao.getWaybillItemsList().size();j++){
-                        if(waybillItems.getId()==waybillDao.getWaybillItemsList().get(j).getId()){
+                    for(int j=0;j<waybillDao.getWaybillItemsList().size();j++){
+                        if(waybillItems.getId().equals(waybillDao.getWaybillItemsList().get(j).getId())){
                             waybillDao.getWaybillItemsList().get(j).setAmount(waybillDao.getWaybillItemsList().get(j).getAmount()-waybillItems.getAmount());
                         }
                     }
@@ -396,8 +396,8 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                     waybillItems.setUpdateName(waybillDto.getUpdateName());
                     waybillItems.setCompanyId(waybillDto.getCompanyId());
                     waybillItemsUpdateList.add(waybillItems);
-                    for(int j=0;i<waybillDao.getWaybillItemsList().size();j++){
-                        if(waybillItems.getId()==waybillDao.getWaybillItemsList().get(j).getId()){
+                    for(int j=0;j<waybillDao.getWaybillItemsList().size();j++){
+                        if(waybillItems.getId().equals(waybillDao.getWaybillItemsList().get(j).getId())){
                             waybillDao.getWaybillItemsList().get(j).setAmount(waybillDao.getWaybillItemsList().get(j).getAmount()-waybillItems.getAmount());
                         }
                     }
@@ -746,6 +746,16 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
         Company company = companyService.selectById(waybill.getCarrierCompanyId());
         waybill.setWaybillSource(company.getFullName());
+
+        //路由==>运单上传回单路由 by xrr
+        Timeline event = new Timeline();
+        event.setActionTitle("【回单上传】（操作人：" + dto.getUpdateName() + " " + dto.getUpdateName() + "）");
+        event.setActionTime(new Date());
+        event.setCompanyId(waybill.getCompanyId());
+        event.setSearchkey("WAYBILL_ROUTE");
+        event.setDataid(waybill.getId());
+        event.setActionDes("司机：" + waybill.getDriverName() + " " + waybill.getDriverPhone() + " " + waybill.getVechicleNum());
+        producer.noteRouter(event);
 
         return waybill;
     }

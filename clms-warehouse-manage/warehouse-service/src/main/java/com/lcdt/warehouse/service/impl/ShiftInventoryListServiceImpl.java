@@ -119,9 +119,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		logger.debug("修改的库存数量为"+h);
 		
 		if (result > 0) {
-			return 1;
+			return ShiftInventoryListVO.successNum;
 		}else {
-			return -1;
+			return ShiftInventoryListVO.failedNum;
 		}
 	}
 
@@ -204,9 +204,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		
 		
 		if (i > 0) {
-			return 1;
+			return ShiftInventoryListVO.successNum;
 		}else {
-			return -1;
+			return ShiftInventoryListVO.failedNum;
 		}	
 	}
 	
