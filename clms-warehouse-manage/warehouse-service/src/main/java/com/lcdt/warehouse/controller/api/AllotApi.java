@@ -1,8 +1,10 @@
 package com.lcdt.warehouse.controller.api;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.util.ClmsBeanUtil;
 import com.lcdt.warehouse.dto.AllotDto;
@@ -29,6 +31,8 @@ import java.util.Map;
 public class AllotApi {
     @Autowired
     private AllotService allotService;
+    @Reference
+    CompanyServiceCountService companyServiceCountService;
 
     @ApiOperation(value = "调拨单列表", notes = "调拨单列表数据")
     @GetMapping("/allotList")
@@ -52,25 +56,29 @@ public class AllotApi {
     @RequestMapping(value = "/addAllot", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_add')")
     public JSONObject addAllot(@Validated @RequestBody AllotDto dto) {
-        User user = SecurityInfoGetter.getUser();
         Long companyId = SecurityInfoGetter.getCompanyId();
-        dto.setAllotStatus((short)1);//在途
-        dto.setCreateId(user.getUserId());
-        dto.setCreateName(user.getRealName());
-        dto.setCreateTime(new Date());
-        dto.setCompanyId(companyId);
-        dto.setIsDeleted((short)0);
+//        int storageServiceCount = companyServiceCountService.companyProductCount(companyId, "storage_service");
+//        if(storageServiceCount > 0) {
+            User user = SecurityInfoGetter.getUser();
+            dto.setAllotStatus((short) 1);//在途
+            dto.setCreateId(user.getUserId());
+            dto.setCreateName(user.getRealName());
+            dto.setCreateTime(new Date());
+            dto.setCompanyId(companyId);
+            dto.setIsDeleted((short) 0);
 
-        boolean result = true;
-        if (result) {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("code", 0);
-            jsonObject.put("message", "添加成功");
-            return jsonObject;
-        } else {
-            throw new RuntimeException("添加失败");
-        }
-//            throw new RuntimeException("添加失败");
+            boolean result = allotService.addAllot(dto);
+            if (result) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("code", 0);
+                jsonObject.put("message", "添加成功");
+                return jsonObject;
+            } else {
+                throw new RuntimeException("添加失败");
+            }
+//        }else {
+//            throw new RuntimeException("仓单服务余额不足");
+//        }
     }
 
     @ApiOperation("编辑")
@@ -123,7 +131,8 @@ public class AllotApi {
     @RequestMapping(value = "/allotPutInStorage", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_put_in_storage')")
     public JSONObject allotPutInStorage(@Validated @RequestBody AllotDto dto) {
-        boolean result = allotService.allotPutInStorage(dto);
+//        boolean result = allotService.allotPutInStorage(dto);
+        boolean result = true;
         if (result) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);

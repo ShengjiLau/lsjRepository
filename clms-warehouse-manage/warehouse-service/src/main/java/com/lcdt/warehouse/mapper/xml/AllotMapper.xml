@@ -57,7 +57,7 @@
       allot_out_time, allot_in_time, operator, remark,
       attachments, company_id, create_id,
       create_name, create_time, is_deleted)
-    values (#{allotStatus,jdbcType=SMALLINT}, #{groupId,jdbcType=BIGINT}, ALLOT_CODE('DB'),
+    values (#{allotStatus,jdbcType=SMALLINT}, #{groupId,jdbcType=BIGINT}, ALLOT_CODE('DBD'),
       #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR},
       #{phoneNum,jdbcType=VARCHAR}, #{warehouseOutId,jdbcType=BIGINT}, #{warehouseInId,jdbcType=BIGINT},
       #{allotOutTime,jdbcType=TIMESTAMP}, #{allotInTime,jdbcType=TIMESTAMP}, #{operator,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},

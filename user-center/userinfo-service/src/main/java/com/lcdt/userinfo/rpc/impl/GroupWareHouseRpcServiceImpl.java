@@ -2,7 +2,9 @@ package com.lcdt.userinfo.rpc.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.lcdt.userinfo.dao.GroupMapper;
 import com.lcdt.userinfo.dao.TUserGroupWarehouseRelationMapper;
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.TUserGroupWarehouseRelation;
 import com.lcdt.userinfo.rpc.GroupWareHouseRpcService;
 import com.lcdt.warehouse.entity.Warehouse;
@@ -21,6 +23,8 @@ public class GroupWareHouseRpcServiceImpl implements GroupWareHouseRpcService{
     TUserGroupWarehouseRelationMapper tUserGroupWarehouseRelationMapper;
     @Reference
     WarehouseRpcService warehouseRpcService;
+    @Autowired
+    GroupMapper groupMapper;
 
     @Override
     public boolean addWareHouseRelationBatch(String groupIds, Long userId, Long companyId, Long wareHouseId){
@@ -58,5 +62,9 @@ public class GroupWareHouseRpcServiceImpl implements GroupWareHouseRpcService{
         return groupNames;
     }
 
+    @Override
+    public Group selectByGroupId(Long groupId){
+        return groupMapper.selectByPrimaryKey(groupId);
+    }
 
 }
