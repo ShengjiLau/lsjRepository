@@ -4,7 +4,10 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dao.UserMapper;
+import com.lcdt.userinfo.model.AdminUser;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.utils.JSONResponseUtil;
+import com.lcdt.userinfo.utils.ResponseMessage;
 import com.lcdt.userinfo.web.dto.UserQueryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,17 +25,17 @@ public class UserManageApi {
     UserMapper mapper;
 
     @PostMapping("/list")
-    public PageInfo<User> list(UserQueryDto userQueryDto){
-        PageInfo<User> pageInfo = PageHelper.startPage(userQueryDto.getPageNo(), userQueryDto.getPageSize()).doSelectPageInfo(() -> mapper.selectByUserDto(userQueryDto));
-        return pageInfo;
+    public ResponseMessage list(UserQueryDto userQueryDto){
+        PageInfo<AdminUser> pageInfo = PageHelper.startPage(userQueryDto.getPageNo(), userQueryDto.getPageSize()).doSelectPageInfo(() -> mapper.selectByUserDto(userQueryDto));
+        return JSONResponseUtil.success(pageInfo);
     }
 
     @PostMapping("/updateStatus")
-    public User updateStatus(UserQueryDto userQueryDto) {
+    public ResponseMessage updateStatus(UserQueryDto userQueryDto) {
         User user = mapper.selectByPrimaryKey(userQueryDto.getUserId());
         user.setUserStatus(userQueryDto.getUserStatus());
         mapper.updateByPrimaryKey(user);
-        return user;
+        return JSONResponseUtil.success(user);
     }
 
 
