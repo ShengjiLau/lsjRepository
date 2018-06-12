@@ -72,4 +72,5 @@ public interface OwnDriverService {
      * @return
      */
     List<OwnDriver> driverListByGroupId(Long companyId, String driverGroupId);
+
 }

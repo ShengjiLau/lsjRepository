@@ -196,7 +196,7 @@
     </select>
 
 
-    <select id="selectInWarehouseNum" parameterType="map" resultType="map" >
+    <select id="selectInWarehouseNum" resultType="map" >
         select date_format(storage_time1, '%Y-%m-%d') storage_time,sum(1) num from (
         select storage_time storage_time1,warehouse_id,customer_id,company_id from in_warehouse_order
         where 1=1  and storage_time is not null

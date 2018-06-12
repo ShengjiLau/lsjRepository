@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -161,6 +162,15 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
     @Override
     public List<DistributionRecordsOutOrderDto> queryOutOrderDisRecords(Long companyId, Long outPlanId) {
         return baseMapper.selectOutOrderDisRecords(companyId,outPlanId);
+    }
+
+    /**
+     * 概览出库单已完成数量
+     * @param params
+     * @return
+     */
+    public List<Map<String,Object>> selectOutWarehouseNum(OutWhOrderSearchDto params){
+        return baseMapper.selectOutWarehouseNum(params);
     }
 
 }

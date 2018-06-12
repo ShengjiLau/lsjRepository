@@ -149,27 +149,27 @@
   <update id="updateForBatch" parameterType="java.util.List">
     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
       update t_waybill_items
-      set split_goods_detail_id = #{splitGoodsDetailId,jdbcType=BIGINT},
-      plan_detail_id = #{planDetailId,jdbcType=BIGINT},
-      waybill_id = #{waybillId,jdbcType=BIGINT},
-      goods_id = #{goodsId,jdbcType=BIGINT},
-      goods_name = #{goodsName,jdbcType=VARCHAR},
-      sub_goods_id = #{subGoodsId,jdbcType=BIGINT},
-      goods_spec = #{goodsSpec,jdbcType=VARCHAR},
-      unit = #{unit,jdbcType=VARCHAR},
-      amount = #{amount,jdbcType=REAL},
-      receipt_amount = #{receiptAmount,jdbcType=REAL},
-      freight_price = #{freightPrice,jdbcType=REAL},
-      freight_total = #{freightTotal,jdbcType=REAL},
-      pay_price = #{payPrice,jdbcType=REAL},
-      pay_total = #{payTotal,jdbcType=REAL},
-      remark = #{remark,jdbcType=VARCHAR},
-      update_id = #{updateId,jdbcType=BIGINT},
-      update_name = #{updateName,jdbcType=VARCHAR},
+      set split_goods_detail_id = #{item.splitGoodsDetailId,jdbcType=BIGINT},
+      plan_detail_id = #{item.planDetailId,jdbcType=BIGINT},
+      waybill_id = #{item.waybillId,jdbcType=BIGINT},
+      goods_id = #{item.goodsId,jdbcType=BIGINT},
+      goods_name = #{item.goodsName,jdbcType=VARCHAR},
+      sub_goods_id = #{item.subGoodsId,jdbcType=BIGINT},
+      goods_spec = #{item.goodsSpec,jdbcType=VARCHAR},
+      unit = #{item.unit,jdbcType=VARCHAR},
+      amount = #{item.amount,jdbcType=REAL},
+      receipt_amount = #{item.receiptAmount,jdbcType=REAL},
+      freight_price = #{item.freightPrice,jdbcType=REAL},
+      freight_total = #{item.freightTotal,jdbcType=REAL},
+      pay_price = #{item.payPrice,jdbcType=REAL},
+      pay_total = #{item.payTotal,jdbcType=REAL},
+      remark = #{item.remark,jdbcType=VARCHAR},
+      update_id = #{item.updateId,jdbcType=BIGINT},
+      update_name = #{item.updateName,jdbcType=VARCHAR},
       update_date = CURRENT_TIMESTAMP,
-      weight = #{weight,jdbcType=DOUBLE},
-      volume = #{volume,jdbcType=DOUBLE}
-      where id = #{id,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+      weight = #{item.weight,jdbcType=DOUBLE},
+      volume = #{item.volume,jdbcType=DOUBLE}
+      where id = #{item.id,jdbcType=BIGINT} and company_id = #{item.companyId,jdbcType=BIGINT}
     </foreach>
   </update>
 
