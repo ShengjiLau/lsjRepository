@@ -377,6 +377,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                 result += waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
             }
             //计划编辑
+            planService.adjustPlanAndSplitAmount(waybillDao);
         }
         return result;
     }
@@ -410,6 +411,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                 result += waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
             }
             //计划编辑
+            planService.adjustPlanAndSplitAmount(waybillDao);
         }
         return result;
     }
