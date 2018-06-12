@@ -1,5 +1,6 @@
 package com.lcdt.userinfo.service.impl;
 
+import com.lcdt.userinfo.dao.AdminUserMapper;
 import com.lcdt.userinfo.dao.DriverMapper;
 import com.lcdt.userinfo.dao.UserMapper;
 import com.lcdt.userinfo.dto.RegisterDto;
@@ -7,6 +8,7 @@ import com.lcdt.userinfo.event.RegisterUserEvent;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.AdminUser;
 import com.lcdt.userinfo.model.Driver;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
@@ -17,8 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by ss on 2017/7/31.
@@ -36,6 +40,14 @@ public class UserServiceImpl implements UserService,ApplicationEventPublisherAwa
 
 	@Autowired
 	private DriverMapper driverMapper;
+
+	@Autowired
+	private AdminUserMapper adminUserMapper;
+
+	public boolean isUserAdmin(Long userId) {
+		return !CollectionUtils.isEmpty(adminUserMapper.selectByUserId(userId));
+	}
+
 
 	@Override
 	public User updateUser(User user) {

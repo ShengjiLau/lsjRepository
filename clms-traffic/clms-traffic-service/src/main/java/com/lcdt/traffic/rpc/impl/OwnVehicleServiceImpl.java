@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dao.OwnDriverMapper;
 import com.lcdt.traffic.dao.OwnVehicleCertificateMapper;
 import com.lcdt.traffic.dao.OwnVehicleMapper;
@@ -293,4 +294,5 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
         }
         return result;
     }
+
 }

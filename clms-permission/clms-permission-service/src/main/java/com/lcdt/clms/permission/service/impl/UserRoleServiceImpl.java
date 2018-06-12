@@ -155,11 +155,11 @@ public class UserRoleServiceImpl implements UserRoleService {
 		ysRole.setRoleCompanyId(compId);
 		ysRole.setValid(true);
 		userRoleDao.insert(ysRole);
-		/*Role ccRole = new Role();
+		Role ccRole = new Role();
 		ccRole.setRoleName("仓储经理");
 		ccRole.setRoleCompanyId(compId);
 		ccRole.setValid(true);
-		userRoleDao.insert(ccRole);*/
+		userRoleDao.insert(ccRole);
 		List<Permission> cgPermissions = permissionMapper.selectByCategory("purchase");
 		if(cgPermissions!=null&&cgPermissions.size()>0)
 		{
@@ -184,14 +184,14 @@ public class UserRoleServiceImpl implements UserRoleService {
 			map.put("permissions",ysPermissions);
 			rolePermissionDao.insertInitRole(map);
 		}
-		/*List<Permission> ccPermissions = permissionMapper.selectByPrefix("purchase_");
+		List<Permission> ccPermissions = permissionMapper.selectByCategory("warehouse");
 		if(ccPermissions!=null&&ccPermissions.size()>0)
 		{
 			Map map = new HashMap<>();
 			map.put("role",ccRole.getRoleId());
 			map.put("permissions",ccPermissions);
 			rolePermissionDao.insertInitRole(map);
-		}*/
+		}
 	}
 
 	@Transactional(rollbackFor = Exception.class)

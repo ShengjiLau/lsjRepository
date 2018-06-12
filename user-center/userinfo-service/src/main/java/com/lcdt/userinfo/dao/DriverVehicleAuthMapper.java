@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.dao;
 
 import com.lcdt.userinfo.model.DriverVehicleAuth;
+import com.lcdt.userinfo.web.controller.api.admin.dto.DriverQueryDto;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -21,4 +22,7 @@ public interface DriverVehicleAuthMapper {
     List<DriverVehicleAuth> selectVehicleNumExist(DriverVehicleAuth auth);
 
     void updateDefault(@Param("driverId") Long driverId);
+
+    List<DriverVehicleAuth> selectByDriverQueryDto(DriverQueryDto driverQueryDto);
+
 }

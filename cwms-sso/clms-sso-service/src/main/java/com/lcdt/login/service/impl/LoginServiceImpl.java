@@ -51,6 +51,8 @@ public class LoginServiceImpl implements LoginService {
 	@Value("${login.host}")
 	private String host;
 
+
+
 	@Override
 	public TicketAuthentication queryTicket(String ticket) throws InvalidTicketException, UserNotExistException {
 		TicketBean ticketValid = ticketService.isTicketValid(ticket);
@@ -61,18 +63,30 @@ public class LoginServiceImpl implements LoginService {
 		TicketAuthentication authentication = new TicketAuthentication();
 		authentication.setTicket(ticket);
 		authentication.setUser(user);
+		if (userService.isUserAdmin(user.getUserId())) {
+			//后台管理员用户
+			List<Permission> permissions = permissionService.adminPermission(user.getUserId());
+			authentication.setPermissions(permissions);
+		}
+
+
 		if (ticketValid.getCompanyId() == null) {
 			authentication.setChooseCompany(false);
 		}else{
 			UserCompRel companyMember = companyService.queryByUserIdCompanyId(ticketValid.getUserId(), ticketValid.getCompanyId().longValue());
 			authentication.setUserCompRel(companyMember);
-			List<Permission> permissions = permissionService.userPermissions(companyMember.getUserId(), companyMember.getCompId());
-			authentication.setPermissions(permissions);
-			List<SysRole> sysRoles = permissionService.userSysRoles(user.getUserId(), companyMember.getCompId());
-			authentication.setSysRoles(sysRoles);
-			List<Group> userGroupRelations = userGroupService.userGroups(user.getUserId(), companyMember.getCompId());
-			authentication.setGroups(userGroupRelations);
+			if (companyMember != null) {
+				List<Permission> permissions = permissionService.userPermissions(companyMember.getUserId(), companyMember.getCompId());
+				authentication.setPermissions(permissions);
+				List<SysRole> sysRoles = permissionService.userSysRoles(user.getUserId(), companyMember.getCompId());
+				authentication.setSysRoles(sysRoles);
+				List<Group> userGroupRelations = userGroupService.userGroups(user.getUserId(), companyMember.getCompId());
+				authentication.setGroups(userGroupRelations);
+			}
+
 		}
+
+
 		return authentication;
 	}
 

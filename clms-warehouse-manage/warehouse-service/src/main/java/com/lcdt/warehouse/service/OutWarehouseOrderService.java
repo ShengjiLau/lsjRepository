@@ -6,6 +6,7 @@ import com.lcdt.warehouse.entity.OutWarehouseOrder;
 import com.baomidou.mybatisplus.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -63,4 +64,12 @@ public interface OutWarehouseOrderService extends IService<OutWarehouseOrder> {
      * @return
      */
     List<DistributionRecordsOutOrderDto> queryOutOrderDisRecords(Long companyId,Long outPlanId);
+
+
+    /**
+     * 概览出库单已完成数量
+     * @param params
+     * @return
+     */
+    List<Map<String,Object>> selectOutWarehouseNum(OutWhOrderSearchDto params);
 }

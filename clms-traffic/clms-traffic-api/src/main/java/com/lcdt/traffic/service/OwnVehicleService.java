@@ -66,4 +66,5 @@ public interface OwnVehicleService {
      * @return
      */
     int syncVehicleInfo(OwnVehicle ownVehicle);
+
 }

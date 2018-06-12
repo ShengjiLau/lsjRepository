@@ -53,11 +53,11 @@ public class LoginApi {
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
     public String registerUser(RegisterDto registerDto) throws PhoneHasRegisterException {
-
             boolean codeCorrect = validCodeService.isCodeCorrect(registerDto.getEcode(), VCODETAG, registerDto.getUserPhoneNum());
             if (!codeCorrect) {
                 throw new RuntimeException("验证码错误");
             }
+            registerDto.setRegisterFrom("管车宝小程序");
             User user = userService.registerUser(registerDto);
             HashMap<String, Object> stringStringHashMap = new HashMap<>();
             stringStringHashMap.put("userId", user.getUserId());

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.clms.permission.dao.AdminPermissionRelationMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.clms.permission.model.AdminPermissionRelation">
+    <id column="relation_id" jdbcType="BIGINT" property="relationId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="permission_id" jdbcType="BIGINT" property="permissionId" />
+
+    <association property="adminPermission" column="permission_id" javaType="com.lcdt.clms.permission.model.AdminPermission"
+                 select="com.lcdt.clms.permission.dao.AdminPermissionMapper.selectByPrimaryKey"></association>
+
+  </resultMap>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_admin_permission_relation
+    where relation_id = #{relationId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.clms.permission.model.AdminPermissionRelation">
+    <selectKey keyProperty="relationId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_admin_permission_relation (user_id, permission_id)
+    values (#{userId,jdbcType=BIGINT}, #{permissionId,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.clms.permission.model.AdminPermissionRelation">
+    update t_admin_permission_relation
+    set user_id = #{userId,jdbcType=BIGINT},
+      permission_id = #{permissionId,jdbcType=BIGINT}
+    where relation_id = #{relationId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select relation_id, user_id, permission_id
+    from t_admin_permission_relation
+    where relation_id = #{relationId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select relation_id, user_id, permission_id
+    from t_admin_permission_relation
+  </select>
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    select relation_id, user_id, permission_id
+    from t_admin_permission_relation
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+</mapper>

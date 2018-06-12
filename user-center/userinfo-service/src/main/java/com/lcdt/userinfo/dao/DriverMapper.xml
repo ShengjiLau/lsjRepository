@@ -22,6 +22,8 @@
     <result column="driver_ID_photo" jdbcType="VARCHAR" property="driverIdPhoto" />
     <result column="driver_ID_neg_photo" jdbcType="VARCHAR" property="driverIdNegPhoto" />
     <result column="driver_remark" jdbcType="VARCHAR" property="driverRemark" />
+    <result column="longitude" jdbcType="VARCHAR" property="longitude" />
+    <result column="latitude" jdbcType="VARCHAR" property="latitude" />
     <result column="current_location" jdbcType="VARCHAR" property="currentLocation" />
     <result column="short_current_location" jdbcType="VARCHAR" property="shortCurrentLocation" />
     <result column="gps_status" jdbcType="SMALLINT" property="gpsStatus" />
@@ -45,7 +47,7 @@
       driver_birthday, driver_license, driver_province, 
       driver_city, driver_district, driver_address, 
       driver_header_img, driver_license_photo, driver_ID_photo, 
-      driver_ID_neg_photo, driver_remark, current_location, 
+      driver_ID_neg_photo, driver_remark, longitude,latitude,current_location,
       short_current_location, create_id, create_name, 
       create_date, is_deleted)
     values (#{userId,jdbcType=BIGINT}, #{affiliatedCompany,jdbcType=VARCHAR}, #{driverName,jdbcType=VARCHAR}, 
@@ -54,7 +56,8 @@
       #{driverBirthday,jdbcType=DATE}, #{driverLicense,jdbcType=VARCHAR}, #{driverProvince,jdbcType=VARCHAR}, 
       #{driverCity,jdbcType=VARCHAR}, #{driverDistrict,jdbcType=VARCHAR}, #{driverAddress,jdbcType=VARCHAR}, 
       #{driverHeaderImg,jdbcType=VARCHAR}, #{driverLicensePhoto,jdbcType=VARCHAR}, #{driverIdPhoto,jdbcType=VARCHAR}, 
-      #{driverIdNegPhoto,jdbcType=VARCHAR}, #{driverRemark,jdbcType=VARCHAR}, #{currentLocation,jdbcType=VARCHAR}, 
+      #{driverIdNegPhoto,jdbcType=VARCHAR}, #{driverRemark,jdbcType=VARCHAR},#{longitude,jdbcType=VARCHAR},
+      #{latitude,jdbcType=VARCHAR},#{currentLocation,jdbcType=VARCHAR},
       #{shortCurrentLocation,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, 
       CURRENT_TIMESTAMP, #{isDeleted,jdbcType=SMALLINT})
   </insert>
@@ -79,6 +82,8 @@
       driver_ID_photo = #{driverIdPhoto,jdbcType=VARCHAR},
       driver_ID_neg_photo = #{driverIdNegPhoto,jdbcType=VARCHAR},
       driver_remark = #{driverRemark,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
       current_location = #{currentLocation,jdbcType=VARCHAR},
       short_current_location = #{shortCurrentLocation,jdbcType=VARCHAR},
       gps_status = #{gpsStatus,jdbcType=SMALLINT},
@@ -93,7 +98,8 @@
     select user_id, affiliated_company, driver_name, driver_phone, driver_ID, driver_category, 
     driver_email, driver_sex, driver_nationality, driver_birthday, driver_license, driver_province, 
     driver_city, driver_district, driver_address, driver_header_img, driver_license_photo, 
-    driver_ID_photo, driver_ID_neg_photo, driver_remark, current_location, short_current_location, gps_status,location_time,
+    driver_ID_photo, driver_ID_neg_photo, driver_remark, longitude,latitude,current_location,
+    short_current_location, gps_status,location_time,
     create_id, create_name, create_date, update_id, update_name, update_date, is_deleted
     from t_driver
     where user_id = #{userId,jdbcType=BIGINT}
@@ -102,7 +108,8 @@
     select user_id, affiliated_company, driver_name, driver_phone, driver_ID, driver_category, 
     driver_email, driver_sex, driver_nationality, driver_birthday, driver_license, driver_province, 
     driver_city, driver_district, driver_address, driver_header_img, driver_license_photo,
-    driver_ID_photo, driver_ID_neg_photo, driver_remark, current_location, short_current_location,gps_status,location_time,
+    driver_ID_photo, driver_ID_neg_photo, driver_remark,longitude,latitude,
+    current_location, short_current_location,gps_status,location_time,
     create_id, create_name, create_date, update_id, update_name, update_date, is_deleted
     from t_driver
   </select>
@@ -129,4 +136,7 @@
     location_time = CURRENT_TIMESTAMP
     where driver_phone = #{driverPhone,jdbcType=VARCHAR}
   </update>
+
+
+
 </mapper>

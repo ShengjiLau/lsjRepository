@@ -133,5 +133,17 @@ public class OutWarehouseOrderController {
         return pageBaseDto;
     }
 
+    @ApiOperation("概览出库单已完成数量")
+    @RequestMapping(value = "/outWarehouseNum", method = RequestMethod.GET)
+    public JSONObject outWarehouseNum(OutWhOrderSearchDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",outWarehouseOrderService.selectOutWarehouseNum(params));
+
+        return jo;
+    }
+
 }
 

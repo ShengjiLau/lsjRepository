@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.quartz.rpc.QuartzRpc;
-import com.lcdt.traffic.dto.WaybillCustListParamsDto;
-import com.lcdt.traffic.dto.WaybillDto;
-import com.lcdt.traffic.dto.WaybillModifyStatusDto;
-import com.lcdt.traffic.dto.WaybillOwnListParamsDto;
+import com.lcdt.traffic.dto.*;
 import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.service.WaybillRpcService;
 import com.lcdt.traffic.service.WaybillService;
@@ -46,7 +43,6 @@ public class WaybillApi {
     public JSONObject addOwnWaybill(@RequestBody WaybillDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
-        dto.setCompanyName(SecurityInfoGetter.geUserCompRel().getCompany().getFullName());
         dto.setCreateId(loginUser.getUserId());
         dto.setCreateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
@@ -86,7 +82,7 @@ public class WaybillApi {
     @ApiOperation("我的运单--修改")
     @RequestMapping(value = "/own/modify", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_modify')")
-    public JSONObject modifyOwnWaybill(@RequestBody WaybillDto dto) {
+    public JSONObject modifyOwnWaybill(@RequestBody WaybillModifyParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         dto.setUpdateId(loginUser.getUserId());
@@ -106,7 +102,7 @@ public class WaybillApi {
     @ApiOperation("客户运单--修改")
     @RequestMapping(value = "/customer/modify", method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_waybill_modify')")
-    public JSONObject modifyCustomerWaybill(@RequestBody WaybillDto dto) {
+    public JSONObject modifyCustomerWaybill(@RequestBody WaybillModifyParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
         dto.setUpdateId(loginUser.getUserId());

@@ -1,6 +1,8 @@
 package com.lcdt.pay.model;
 
-public class CompanyServiceCount {
+import java.io.Serializable;
+
+public class CompanyServiceCount implements Serializable {
     private Integer countId;
 
     private Long companyId;

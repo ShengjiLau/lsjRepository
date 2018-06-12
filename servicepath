@@ -1,2 +1,3 @@
 clms-sso:cwms-sso/clms-sso-service
 warehouse-service:clms-warehouse-manage/warehouse-service
+driver-wechat-api:driver-app-wechat-api

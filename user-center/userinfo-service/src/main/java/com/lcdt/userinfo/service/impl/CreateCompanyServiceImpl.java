@@ -111,18 +111,22 @@ public class CreateCompanyServiceImpl implements CreateCompanyService,Applicatio
 		//初始化客户信息
 		addCustomer(company,userCompRel,group);
 		//初始化短信条数和基站条数
-		addSmsOrLbs(userCompRel);
+		addInitPayCount(userCompRel);
 
 		publisher.publishEvent(new CreateCompanyEvent(userCompRel));
 
 		return company;
 	}
 
-	private void addSmsOrLbs(UserCompRel userRel) {
+	private void addInitPayCount(UserCompRel userRel) {
 		//充值短信50条
 		productCountService.logAddProductCountAndCompanyCount("sms_service","系统赠送试用",50,userRel.getUser().getPhone(),userRel.getCompId(),50);
 		//充值基站20条
 		productCountService.logAddProductCountAndCompanyCount("gms_location","系统赠送试用",20,userRel.getUser().getPhone(),userRel.getCompId(),20);
+		//仓单服务30条
+		productCountService.logAddProductCountAndCompanyCount("waybill_service","系统赠送试用",30,userRel.getUser().getPhone(),userRel.getCompId(),30);
+		//运单服务30条
+		productCountService.logAddProductCountAndCompanyCount("storage_service","系统赠送试用",30,userRel.getUser().getPhone(),userRel.getCompId(),30);
 	}
 
 	private void addCustomer(Company company, UserCompRel userCompRel,Group group) {

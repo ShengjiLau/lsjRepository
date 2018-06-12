@@ -177,4 +177,14 @@
         group by o.warehouse_id,o.warehouse_name,g.goods_code,g.goods_bar_code
     </select>
 
+
+    <select id="selectOutWarehouseNum" resultType="map" >
+        select date_format(outbound_time1, '%Y-%m-%d') outbound_time,sum(1) num from (
+        select outbound_time outbound_time1,warehouse_id,customer_id,company_id from out_warehouse_order
+        where 1=1   and outbound_time is not null
+         and company_id= #{companyId,jdbcType=BIGINT}
+        <include refid="selectCondition"/>
+        )a GROUP BY outbound_time order by outbound_time
+    </select>
+
 </mapper>

@@ -62,6 +62,9 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
     private String unit;
+    private String minUnit;
+    private Integer unitData;
+
 
     /**
      *
@@ -101,6 +104,10 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
 
     private Float payPrice;
     private Float payTotal;
+
+
+    private Float weight;
+    private Float volume;
 
 
     /**
@@ -739,5 +746,37 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
 
     public void setPayTotal(Float payTotal) {
         this.payTotal = payTotal;
+    }
+
+    public String getMinUnit() {
+        return minUnit;
+    }
+
+    public void setMinUnit(String minUnit) {
+        this.minUnit = minUnit;
+    }
+
+    public Integer getUnitData() {
+        return unitData;
+    }
+
+    public void setUnitData(Integer unitData) {
+        this.unitData = unitData;
+    }
+
+    public Float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Float weight) {
+        this.weight = weight;
+    }
+
+    public Float getVolume() {
+        return volume;
+    }
+
+    public void setVolume(Float volume) {
+        this.volume = volume;
     }
 }

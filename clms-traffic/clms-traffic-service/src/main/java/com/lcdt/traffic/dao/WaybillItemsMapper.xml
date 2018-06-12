@@ -31,6 +31,8 @@
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="weight" jdbcType="DOUBLE" property="weight" />
+    <result column="volume" jdbcType="DOUBLE" property="volume" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
@@ -56,14 +58,14 @@
       freight_total,pay_price, pay_total, remark, create_id,
       create_name, create_date, update_id, 
       update_name, update_date, is_deleted,
-      company_id)
+      company_id, weight,volume)
     values (#{splitGoodsDetailId,jdbcType=BIGINT},#{planDetailId,jdbcType=BIGINT},#{waybillId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{goodsName,jdbcType=VARCHAR},
       #{subGoodsId,jdbcType=BIGINT}, #{goodsSpec,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
       #{amount,jdbcType=REAL}, #{receiptAmount,jdbcType=REAL}, #{freightPrice,jdbcType=REAL}, 
       #{freightTotal,jdbcType=REAL}, #{payPrice,jdbcType=REAL},#{payTotal,jdbcType=REAL}, #{remark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT},
       #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, 
       #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP},0,
-      #{companyId,jdbcType=BIGINT})
+      #{companyId,jdbcType=BIGINT}, #{weight,jdbcType=DOUBLE},#{volume,jdbcType=DOUBLE})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.WaybillItems">
     <!--
@@ -94,7 +96,9 @@
       update_name = #{updateName,jdbcType=VARCHAR},
       update_date = #{updateDate,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=SMALLINT},
-      company_id = #{companyId,jdbcType=BIGINT}
+      company_id = #{companyId,jdbcType=BIGINT},
+      weight = #{weight,jdbcType=DOUBLE},
+      volume = #{volume,jdbcType=DOUBLE}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -105,7 +109,7 @@
     -->
     select id,split_goods_detail_id,plan_detail_id, waybill_id, goods_id, goods_name, sub_goods_id, goods_spec, unit, amount,
     receipt_amount, freight_price, freight_total, pay_price, pay_total,remark, create_id, create_name, create_date,
-    update_id, update_name, update_date, is_deleted, company_id
+    update_id, update_name, update_date, is_deleted, company_id, weight, volume
     from t_waybill_items
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -117,7 +121,7 @@
     -->
     select id,split_goods_detail_id,plan_detail_id,  waybill_id, goods_id, goods_name, sub_goods_id, goods_spec, unit, amount,
     receipt_amount, freight_price, freight_total,pay_price, pay_total, remark, create_id, create_name, create_date,
-    update_id, update_name, update_date, is_deleted, company_id
+    update_id, update_name, update_date, is_deleted, company_id, weight, volume
     from t_waybill_items
   </select>
 
@@ -128,7 +132,7 @@
     freight_total,pay_price, pay_total, remark, create_id,
     create_name, create_date, update_id,
     update_name, update_date, is_deleted,
-    company_id)
+    company_id, weight,volume)
     values
     <foreach collection="list" item="item" separator=",">
       (#{item.splitGoodsDetailId,jdbcType=BIGINT}, #{item.planDetailId,jdbcType=BIGINT},
@@ -138,39 +142,41 @@
       #{item.freightTotal,jdbcType=REAL}, #{item.payPrice,jdbcType=REAL},#{item.payTotal,jdbcType=REAL},#{item.remark,jdbcType=VARCHAR}, #{item.createId,jdbcType=BIGINT},
       #{item.createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{item.updateId,jdbcType=BIGINT},
       #{item.updateName,jdbcType=VARCHAR}, #{item.updateDate,jdbcType=TIMESTAMP}, 0,
-      #{item.companyId,jdbcType=BIGINT})
+      #{item.companyId,jdbcType=BIGINT}, #{item.weight,jdbcType=DOUBLE},#{item.volume,jdbcType=DOUBLE})
     </foreach>
   </insert>
 
   <update id="updateForBatch" parameterType="java.util.List">
     <foreach collection="list" item="item" index="index" open="" close="" separator=";">
       update t_waybill_items
-      set split_goods_detail_id = #{splitGoodsDetailId,jdbcType=BIGINT},
-      plan_detail_id = #{planDetailId,jdbcType=BIGINT},
-      waybill_id = #{waybillId,jdbcType=BIGINT},
-      goods_id = #{goodsId,jdbcType=BIGINT},
-      goods_name = #{goodsName,jdbcType=VARCHAR},
-      sub_goods_id = #{subGoodsId,jdbcType=BIGINT},
-      goods_spec = #{goodsSpec,jdbcType=VARCHAR},
-      unit = #{unit,jdbcType=VARCHAR},
-      amount = #{amount,jdbcType=REAL},
-      receipt_amount = #{receiptAmount,jdbcType=REAL},
-      freight_price = #{freightPrice,jdbcType=REAL},
-      freight_total = #{freightTotal,jdbcType=REAL},
-      pay_price = #{payPrice,jdbcType=REAL},
-      pay_total = #{payTotal,jdbcType=REAL},
-      remark = #{remark,jdbcType=VARCHAR},
-      update_id = #{updateId,jdbcType=BIGINT},
-      update_name = #{updateName,jdbcType=VARCHAR},
-      update_date = CURRENT_TIMESTAMP
-      where id = #{id,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+      set split_goods_detail_id = #{item.splitGoodsDetailId,jdbcType=BIGINT},
+      plan_detail_id = #{item.planDetailId,jdbcType=BIGINT},
+      waybill_id = #{item.waybillId,jdbcType=BIGINT},
+      goods_id = #{item.goodsId,jdbcType=BIGINT},
+      goods_name = #{item.goodsName,jdbcType=VARCHAR},
+      sub_goods_id = #{item.subGoodsId,jdbcType=BIGINT},
+      goods_spec = #{item.goodsSpec,jdbcType=VARCHAR},
+      unit = #{item.unit,jdbcType=VARCHAR},
+      amount = #{item.amount,jdbcType=REAL},
+      receipt_amount = #{item.receiptAmount,jdbcType=REAL},
+      freight_price = #{item.freightPrice,jdbcType=REAL},
+      freight_total = #{item.freightTotal,jdbcType=REAL},
+      pay_price = #{item.payPrice,jdbcType=REAL},
+      pay_total = #{item.payTotal,jdbcType=REAL},
+      remark = #{item.remark,jdbcType=VARCHAR},
+      update_id = #{item.updateId,jdbcType=BIGINT},
+      update_name = #{item.updateName,jdbcType=VARCHAR},
+      update_date = CURRENT_TIMESTAMP,
+      weight = #{item.weight,jdbcType=DOUBLE},
+      volume = #{item.volume,jdbcType=DOUBLE}
+      where id = #{item.id,jdbcType=BIGINT} and company_id = #{item.companyId,jdbcType=BIGINT}
     </foreach>
   </update>
 
   <select id="selectByWaybillId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select id, split_goods_detail_id,plan_detail_id,waybill_id, goods_id, goods_name, sub_goods_id, goods_spec, unit, amount,
     receipt_amount, freight_price, freight_total,pay_price, pay_total, remark, create_id, create_name, create_date,
-    update_id, update_name, update_date, is_deleted, company_id
+    update_id, update_name, update_date, is_deleted, company_id, weight, volume
     from t_waybill_items
     where waybill_id=#{id,jdbcType=BIGINT}
   </select>

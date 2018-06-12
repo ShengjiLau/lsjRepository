@@ -110,7 +110,7 @@ public class ContractServiceImpl implements ContractService {
         ContractLog log = new ContractLog();
         log.setContractId(contract.getContractId());
         log.setLogName("新增");
-        log.setLogContent("新增合同，"+(contract.getIsDraft()==0?"":"并发布"));
+        log.setLogContent("新增合同"+(contract.getIsDraft()==0?"":"，并发布"));
         if(StringUtility.isNotEmpty(contract.getAttachment1())){
             log.setLogContent(log.getLogContent()+"，"+setAttachmentLog(contract.getAttachment1()));
         }

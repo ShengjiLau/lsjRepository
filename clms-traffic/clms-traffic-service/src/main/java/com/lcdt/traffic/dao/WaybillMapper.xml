@@ -80,6 +80,16 @@
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="receivable_name" jdbcType="VARCHAR" property="receivableName" />
     <result column="payable_name" jdbcType="VARCHAR" property="payableName" />
+    <result column="weight" jdbcType="DOUBLE" property="weight" />
+    <result column="volume" jdbcType="DOUBLE" property="volume" />
+    <result column="distance" jdbcType="DOUBLE" property="distance" />
+    <result column="piece" jdbcType="DOUBLE" property="piece" />
+    <result column="weight_unit" jdbcType="VARCHAR" property="weightUnit" />
+    <result column="pricing_type" jdbcType="TINYINT" property="pricingType" />
+    <result column="freight_price" jdbcType="REAL" property="freightPrice" />
+    <result column="freight_total" jdbcType="REAL" property="freightTotal" />
+    <result column="pay_price" jdbcType="REAL" property="payPrice" />
+    <result column="pay_total" jdbcType="REAL" property="payTotal" />
   </resultMap>
 
   <resultMap id="BaseWaybillDaoMap" type="com.lcdt.traffic.model.WaybillDao" extends="BaseResultMap">
@@ -109,7 +119,8 @@
     attachment2, attachment2_name, attachment3, attachment3_name, attachment4, attachment4_name,
     attachment5, attachment5_name, waybill_remark, carrier_company_id, carrier_company_name,company_id, pub_date,
     finish_date, cancel_date, cancel_man, cancel_remark,longitude,latitude,unload_location,unload_time, create_id, create_name, create_date,
-    update_id, update_name, update_date, is_deleted, receivable_name, payable_name</sql>
+    update_id, update_name, update_date, is_deleted, receivable_name, payable_name, weight, volume, distance, piece, weight_unit, pricing_type,
+    freight_price, freight_total, pay_price, pay_total</sql>
 
 
   <sql id="finance_column_list">id, waybill_plan_id,waybill_code, waybill_status, waybill_source,group_id, group_name, driver_id,
@@ -189,9 +200,18 @@
     update_id = #{updateId,jdbcType=BIGINT},
     update_name = #{updateName,jdbcType=VARCHAR},
     update_date = CURRENT_TIMESTAMP,
-    is_deleted = #{isDeleted,jdbcType=SMALLINT},
     receivable_name = #{receivableName,jdbcType=VARCHAR},
-    payable_name = #{payableName,jdbcType=VARCHAR}
+    payable_name = #{payableName,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DOUBLE},
+      volume = #{volume,jdbcType=DOUBLE},
+      distance = #{distance,jdbcType=DOUBLE},
+      piece = #{piece,jdbcType=DOUBLE},
+      weight_unit = #{weightUnit,jdbcType=VARCHAR},
+      pricing_type = #{pricingType,jdbcType=TINYINT},
+      freight_price = #{freightPrice,jdbcType=REAL},
+      freight_total = #{freightTotal,jdbcType=REAL},
+      pay_price = #{payPrice,jdbcType=REAL},
+      pay_total = #{payTotal,jdbcType=REAL}
   </sql>
 
   <sql id="select_condition">
@@ -345,7 +365,10 @@
       cancel_man, cancel_remark,longitude,latitude,unload_location,unload_time, create_id,
       create_name, create_date, update_id, 
       update_name, update_date, is_deleted,
-      receivable_name, payable_name
+      receivable_name, payable_name, weight, volume,
+      distance, piece, weight_unit,
+      pricing_type, freight_price, freight_total,
+      pay_price, pay_total
       )
     values (#{waybillPlanId,jdbcType=BIGINT}, #{splitGoodsId,jdbcType=BIGINT},
     <choose>
@@ -376,7 +399,10 @@
       #{cancelMan,jdbcType=VARCHAR}, #{cancelRemark,jdbcType=VARCHAR},#{longitude,jdbcType=DOUBLE},#{latitude,jdbcType=DOUBLE},#{unloadLocation,jdbcType=VARCHAR},#{unloadTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT},
       #{createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{updateId,jdbcType=BIGINT},
       #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 0,
-      #{receivableName,jdbcType=VARCHAR}, #{payableName,jdbcType=VARCHAR}
+      #{receivableName,jdbcType=VARCHAR}, #{payableName,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, #{volume,jdbcType=DOUBLE},
+      #{distance,jdbcType=DOUBLE}, #{piece,jdbcType=DOUBLE}, #{weightUnit,jdbcType=VARCHAR},
+      #{pricingType,jdbcType=TINYINT}, #{freightPrice,jdbcType=REAL}, #{freightTotal,jdbcType=REAL},
+      #{payPrice,jdbcType=REAL}, #{payTotal,jdbcType=REAL}
       )
   </insert>
 
