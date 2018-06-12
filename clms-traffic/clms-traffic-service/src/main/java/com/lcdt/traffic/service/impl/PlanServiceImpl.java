@@ -320,6 +320,60 @@ public class PlanServiceImpl implements PlanService {
     }
 
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void adjustPlanAndSplitAmount(WaybillDao waybillDao) {
+        //查询计划
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",waybillDao.getWaybillPlanId());
+        tMap.put("companyId",waybillDao.getCompanyId());
+        tMap.put("isDeleted","0");
+        PlanLeaveMsg planLeaveMsg = null;
+        WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
+        if (waybillPlan != null) {
+            List<PlanDetail> planDetailList = waybillPlan.getPlanDetailList();
+            List<SplitGoods> splitGoodsList = waybillPlan.getSplitGoodsList();
+            List<WaybillItems> waybillItemsList = waybillDao.getWaybillItemsList();
+
+
+            //先处理计划
+            if (planDetailList!=null && waybillItemsList.size()>0 && waybillItemsList!=null && waybillItemsList.size()>0) {
+                for (WaybillItems waybillItems: waybillItemsList) {
+                     for (PlanDetail planDetails :planDetailList) {
+                            if (waybillItems.getPlanDetailId().equals(planDetails.getPlanDetailId())) {
+                                planDetails.setRemainderAmount(waybillItems.getAmount()+planDetails.getRemainderAmount());
+                                planDetails.setPlanAmount(waybillItems.getAmount()+planDetails.getPlanAmount());
+                            }
+
+                    }
+                }
+           }
+
+
+            //再处理派单
+            if (splitGoodsList!=null && splitGoodsList.size()>0 && waybillItemsList!=null && waybillItemsList.size()>0) {
+                for (WaybillItems waybillItems: waybillItemsList) {
+                    for (SplitGoods splitGoods : splitGoodsList) {
+                        if (waybillItems.getSplitGoodsDetailId().equals(splitGoods.getSplitGoodsId())) {
+
+                        }
+
+                    }
+                }
+            }
+
+
+
+
+
+
+
+        }
+
+
+
+    }
+
 
 }
 
