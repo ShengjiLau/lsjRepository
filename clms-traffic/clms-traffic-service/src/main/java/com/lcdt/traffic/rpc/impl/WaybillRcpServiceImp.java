@@ -827,7 +827,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
                                 //router:计划自动完成
                                 Timeline event = new Timeline();
-                                event.setActionTitle("【计划完成】" + waybill.getWaybillCode());
+                                event.setActionTitle("【计划完成】" + waybill.getWaybillCode()==null?"":waybill.getWaybillCode());
                                 event.setActionTime(new Date());
                                 event.setCompanyId(waybillPlan.getCompanyId());
                                 event.setSearchkey("R_PLAN");
