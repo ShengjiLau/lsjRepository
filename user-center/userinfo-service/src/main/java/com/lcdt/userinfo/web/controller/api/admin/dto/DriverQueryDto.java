@@ -1,18 +1,36 @@
 package com.lcdt.userinfo.web.controller.api.admin.dto;
 
-import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.Driver;
 
-public class CompanyQueryDto extends Company{
+public class DriverQueryDto extends Driver{
 
     private Integer pageSize;
 
     private Integer pageNo;
 
-    private String adminphone;
-
     private String createDateSince;
 
     private String createDateUntil;
+
+    private String vehicleNum;
+
+    private Integer authStatus;
+
+    public Integer getAuthStatus() {
+        return authStatus;
+    }
+
+    public void setAuthStatus(Integer authStatus) {
+        this.authStatus = authStatus;
+    }
+
+    public String getVehicleNum() {
+        return vehicleNum;
+    }
+
+    public void setVehicleNum(String vehicleNum) {
+        this.vehicleNum = vehicleNum;
+    }
 
     public Integer getPageSize() {
         return pageSize;
@@ -28,14 +46,6 @@ public class CompanyQueryDto extends Company{
 
     public void setPageNo(Integer pageNo) {
         this.pageNo = pageNo;
-    }
-
-    public String getAdminphone() {
-        return adminphone;
-    }
-
-    public void setAdminphone(String adminphone) {
-        this.adminphone = adminphone;
     }
 
     public String getCreateDateSince() {

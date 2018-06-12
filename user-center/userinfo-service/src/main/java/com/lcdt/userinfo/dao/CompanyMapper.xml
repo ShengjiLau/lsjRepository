@@ -122,4 +122,64 @@
     </trim>
     order by comp_id
   </select>
+
+  <select id="selectByCompanyDto" parameterType="com.lcdt.userinfo.web.controller.api.admin.dto.CompanyQueryDto"
+    resultMap="BaseResultMap"
+  >
+     select c.comp_id, c.full_name, c.short_name, authentication, authentication_remark, industry,
+    province, city, county, detail_address, post_code, tel_no, fax, comp_intro, link_man,
+    link_duty, link_tel, link_email, link_remark, invoice_title, registration_no, bank_name,
+    bank_no, registration_address, tel_no1, invoice_remark, company_logo,c.create_id,c.create_name,c.create_date,c.enable
+    from t_uc_company c
+    left join t_uc_user u on c.create_id = u.user_id
+    <where>
+      <if test="fullName != null and fullName != ''">
+        c.full_name like   concat(concat('%',#{fullName}),'%')
+      </if>
+
+      <if test="adminphone != null and adminphone != ''">
+       and u.phone like   concat(concat('%',#{adminphone}),'%')
+      </if>
+      <if test="province != null and province != ''">
+       and  c.province = #{province}
+      </if>
+
+      <if test="city != null and city != ''">
+        and c.city = #{city}
+      </if>
+
+      <if test="county != null and county != ''">
+        and c.county = #{county}
+      </if>
+
+      <if test="industry != null and industry != ''">
+       and  c.industry = #{industry}
+      </if>
+
+      <if test="industry != null and industry != ''">
+        and c.industry = #{industry}
+      </if>
+
+      <if test="authentication != null and authentication != ''">
+        and c.authentication = #{authentication}
+      </if>
+
+
+      <if test="enable != null and enable != ''">
+        and c.enable = #{enable}
+      </if>
+
+      <if test="createDateSince != null and createDateSince != ''">
+        and c.create_date  &gt;= #{enable}
+      </if>
+      <if test="createDateUntil != null and createDateUntil != ''">
+        and c.create_date  &lt;=  #{createDateUntil}
+      </if>
+
+    </where>
+
+
+
+  </select>
+
 </mapper>

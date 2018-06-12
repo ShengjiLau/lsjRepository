@@ -136,4 +136,7 @@
     location_time = CURRENT_TIMESTAMP
     where driver_phone = #{driverPhone,jdbcType=VARCHAR}
   </update>
+
+
+
 </mapper>
