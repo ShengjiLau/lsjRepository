@@ -15,7 +15,6 @@ import java.util.List;
 /**
  * Created by liz on 2018/6/11.
  */
-@Service
 public class CompanyServiceCountServiceImpl implements CompanyServiceCountService {
 
     @Autowired
