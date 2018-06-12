@@ -195,7 +195,10 @@ public class PlanServiceImpl implements PlanService {
 
         //router:计划取消
         Timeline event = new Timeline();
-        event.setActionTitle("【计划取消】 操作人："+userCompRel.getCompany().getFullName()==null?"":userCompRel.getCompany().getFullName()+" "+user.getRealName()==null?"":user.getRealName());
+        String createName = user.getRealName()==null?"":user.getRealName();
+        String company = userCompRel.getCompany().getFullName()==null?"":userCompRel.getCompany().getFullName();
+
+        event.setActionTitle("【计划取消】 （操作人："+company+" "+createName+"）");
         event.setActionTime(new Date());
         event.setCompanyId(userCompRel.getCompany().getCompId());
         event.setSearchkey("R_PLAN");
