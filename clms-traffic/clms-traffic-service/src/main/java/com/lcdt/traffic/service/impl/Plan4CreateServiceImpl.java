@@ -307,7 +307,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
 
                 //router:发布
                 Timeline event = new Timeline();
-                event.setActionTitle("【计划发布】（操作人："+dto.getCompanyName()+" "+vo.getCreateName()+"）");
+                event.setActionTitle("【计划发布】（操作人："+dto.getCompanyName()==null?"":dto.getCompanyName()+" "+vo.getCreateName()==null?"":vo.getCreateName()+"）");
                 event.setActionTime(new Date());
                 event.setCompanyId(vo.getCompanyId());
                 event.setSearchkey("R_PLAN");
