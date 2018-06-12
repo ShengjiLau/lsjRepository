@@ -264,10 +264,11 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     }
 
     @Override
-    public int modifyOwnWaybill(WaybillDto waybillDto) {
+    public int modifyOwnWaybill(WaybillModifyParamsDto waybillDto) {
         int result = 0;
         Waybill waybill = queryOwnWaybill(waybillDto.getId(),waybillDto.getCompanyId());
-        ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto, waybill);
+        waybillDto.setCarrierCompanyId(waybill.getCarrierCompanyId());
+        BeanUtils.copyProperties(waybillDto, waybill);
         //更新运单
         result += waybillMapper.updateByPrimaryKeyAndCompanyId(waybill);
         //运单货物详细
@@ -305,9 +306,11 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     }
 
     @Override
-    public int modifyCustomerWaybill(WaybillDto waybillDto) {
+    public int modifyCustomerWaybill(WaybillModifyParamsDto waybillDto) {
         int result = 0;
-        Waybill waybill = new Waybill();
+        Waybill waybill = queryCustomerWaybill(waybillDto.getId(),waybillDto.getCarrierCompanyId());
+        waybillDto.setCompanyId(waybill.getCompanyId());
+        BeanUtils.copyProperties(waybillDto, waybill);
         ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto, waybill);
         //新增运单
         result += waybillMapper.updateByPrimaryKeyAndCarrierCompanyId(waybill);
