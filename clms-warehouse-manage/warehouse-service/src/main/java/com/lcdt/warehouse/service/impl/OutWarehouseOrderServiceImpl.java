@@ -173,4 +173,8 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
         return baseMapper.selectOutWarehouseNum(params);
     }
 
+    @Override
+    public List<Map<String, Object>> selectOutWarehouseProductNum(OutWhOrderSearchDto params) {
+        return baseMapper.selectOutWarehouseProductNum(params);
+    }
 }
