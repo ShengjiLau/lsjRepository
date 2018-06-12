@@ -334,8 +334,10 @@ public class PlanServiceImpl implements PlanService {
             List<PlanDetail> planDetailList = waybillPlan.getPlanDetailList();
             List<SplitGoods> splitGoodsList = waybillPlan.getSplitGoodsList();
             List<WaybillItems> waybillItemsList = waybillDao.getWaybillItemsList();
+            List<SplitGoodsDetail> splitGoodsDetailList = null;
 
-
+            Float _planRemainderAmount = 0f;
+            Float _splitRemainderAmount = 0f;
             //先处理计划
             if (planDetailList!=null && waybillItemsList.size()>0 && waybillItemsList!=null && waybillItemsList.size()>0) {
                 for (WaybillItems waybillItems: waybillItemsList) {
@@ -343,35 +345,66 @@ public class PlanServiceImpl implements PlanService {
                             if (waybillItems.getPlanDetailId().equals(planDetails.getPlanDetailId())) {
                                 planDetails.setRemainderAmount(waybillItems.getAmount()+planDetails.getRemainderAmount());
                                 planDetails.setPlanAmount(waybillItems.getAmount()+planDetails.getPlanAmount());
+                                planDetails.setUpdateTime(new Date());
+                                planDetails.setUpdateId(waybillDao.getUpdateId());
+                                planDetails.setUpdateName(waybillDao.getUpdateName());
+                                _planRemainderAmount += planDetails.getRemainderAmount(); //后台做处理
                             }
 
                     }
                 }
-           }
 
+           }
+           if (_planRemainderAmount <= 0) {
+               throw new WaybillPlanException("调整数量大于计划待派数量！");
+           }
 
             //再处理派单
             if (splitGoodsList!=null && splitGoodsList.size()>0 && waybillItemsList!=null && waybillItemsList.size()>0) {
                 for (WaybillItems waybillItems: waybillItemsList) {
                     for (SplitGoods splitGoods : splitGoodsList) {
-                        if (waybillItems.getSplitGoodsDetailId().equals(splitGoods.getSplitGoodsId())) {
+                        splitGoodsDetailList = splitGoods.getSplitGoodsDetailList();
+                        if (splitGoodsDetailList!=null && splitGoodsDetailList.size()>0) {
+                            for (SplitGoodsDetail splitGoodsDetail :splitGoodsDetailList) {
+                                if(waybillItems.getSplitGoodsDetailId().equals(splitGoodsDetail.getSplitGoodsDetailId())) {
+                                    splitGoodsDetail.setAllotAmount(waybillItems.getAmount()+splitGoodsDetail.getAllotAmount());
+                                    splitGoodsDetail.setRemainAmount(waybillItems.getAmount()+splitGoodsDetail.getRemainAmount());
+                                    splitGoodsDetail.setUpdateTime(new Date());
+                                    splitGoodsDetail.setUpdateId(waybillDao.getUpdateId());
+                                    splitGoodsDetail.setUpdateName(waybillDao.getUpdateName());
+                                }
+                           }
 
+                        }
+                    }
+                }
+            }
+
+            planDetailMapper.batchUpdatePlanDetail(planDetailList);
+            splitGoodsDetailMapper.batchUpdateSplitGoodsDetail(splitGoodsDetailList);
+
+            //再次查询派单剩余量是否
+            waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
+            splitGoodsList = waybillPlan.getSplitGoodsList();
+            if (splitGoodsList!=null && splitGoodsList.size()>0 ) {
+                for (SplitGoods splitGoods : splitGoodsList) {
+                    splitGoodsDetailList = splitGoods.getSplitGoodsDetailList();
+                    if (splitGoodsDetailList!=null && splitGoodsDetailList.size()>0) {
+                        for (SplitGoodsDetail splitGoodsDetail :splitGoodsDetailList) {
+                            _splitRemainderAmount +=splitGoodsDetail.getRemainAmount();
                         }
 
                     }
                 }
             }
-
-
-
-
-
-
-
+            if (_splitRemainderAmount>0) { //派单存在剩余-改计划状态为派车中
+                waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS);
+                waybillPlan.setUpdateTime(new Date());
+                waybillPlan.setUpdateId(waybillDao.getUpdateId());
+                waybillPlan.setUpdateName(waybillDao.getUpdateName());
+                waybillPlanMapper.updateWaybillPlan(waybillPlan);
+            }
         }
-
-
-
     }
 
 
