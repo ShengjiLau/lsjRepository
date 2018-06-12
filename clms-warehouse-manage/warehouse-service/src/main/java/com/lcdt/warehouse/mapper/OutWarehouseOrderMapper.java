@@ -58,4 +58,11 @@ public interface OutWarehouseOrderMapper extends BaseMapper<OutWarehouseOrder> {
      * @return
      */
     List<Map<String,Object>> selectOutWarehouseNum(OutWhOrderSearchDto params);
+
+    /**
+     * 概览出库单已完成商品数量
+     * @param params
+     * @return
+     */
+    List<Map<String,Object>> selectOutWarehouseProductNum(OutWhOrderSearchDto params);
 }
