@@ -134,13 +134,28 @@ public class OutWarehouseOrderController {
     }
 
     @ApiOperation("概览出库单已完成数量")
-    @RequestMapping(value = "/outWarehouseNum", method = RequestMethod.GET)
+    @RequestMapping(value = "/outWarehouseBillNum", method = RequestMethod.GET)
     public JSONObject outWarehouseNum(OutWhOrderSearchDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
+        String [] inOrderStatus = {"2"};
+        params.setOrderStatus(inOrderStatus);
 
         JSONObject jo =  new JSONObject();
         jo.put("code", 0);
         jo.put("data",outWarehouseOrderService.selectOutWarehouseNum(params));
+
+        return jo;
+    }
+
+
+    @ApiOperation("概览出库单已完成商品数量")
+    @RequestMapping(value = "/outWarehouseProductNum", method = RequestMethod.GET)
+    public JSONObject outWarehouseProductNum(OutWhOrderSearchDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",outWarehouseOrderService.selectOutWarehouseProductNum(params));
 
         return jo;
     }

@@ -3,6 +3,7 @@ package com.lcdt.traffic.service;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dto.PlanDetailParamsDto;
 import com.lcdt.traffic.model.PlanLeaveMsg;
+import com.lcdt.traffic.model.WaybillDao;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.web.dto.PlanLeaveMsgParamsDto;
 import com.lcdt.userinfo.model.User;
@@ -46,8 +47,8 @@ public interface PlanService {
     /***
      * 计划取消
      * @param waybillPlanId
-     * @param companyId
-     * @param user
+     * @param waybillPlanId
+     * @param userCompRel
      * @return
      */
     Integer ownPlanCancel(Long waybillPlanId,  UserCompRel userCompRel);
@@ -69,5 +70,12 @@ public interface PlanService {
      * @return
      */
     int adjustPlanRemainAmount(List<PlanDetailParamsDto> dtoList, UserCompRel userCompRel);
+
+
+    /***
+     * 計劃/派單原始數量調整
+     * @param waybillDao
+     */
+    void adjustPlanAndSplitAmount(WaybillDao waybillDao);
 
 }

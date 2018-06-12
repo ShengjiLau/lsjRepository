@@ -218,4 +218,9 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
     public List<Map<String,Object>> selectInWarehouseNum(InWarehouseOrderSearchParamsDto params){
         return baseMapper.selectInWarehouseNum(params);
     }
+
+    @Override
+    public List<Map<String, Object>> selectInWarehouseProductNum(InWarehouseOrderSearchParamsDto params) {
+        return baseMapper.selectInWarehouseProductNum(params);
+    }
 }

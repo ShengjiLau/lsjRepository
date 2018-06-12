@@ -11,6 +11,8 @@ public class ShiftInventoryListVO {
 	
 	public static final Integer ZERO_VALUE = 0;
 	
+	public static final Integer successNum = 1;
 	
+	public static final Integer failedNum = -1;
 
 }

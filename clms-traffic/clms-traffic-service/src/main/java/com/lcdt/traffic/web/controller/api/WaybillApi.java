@@ -88,7 +88,12 @@ public class WaybillApi {
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
-        int result = waybillRpcService.modifyOwnWaybill(dto);
+        int result=0;
+        if(dto.getOperationType()==2){
+            result=waybillRpcService.modifyOwnQuantity(dto);
+        }else{
+            result = waybillRpcService.modifyOwnWaybill(dto);
+        }
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
@@ -108,7 +113,12 @@ public class WaybillApi {
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
         dto.setCarrierCompanyId(companyId);
-        int result = waybillRpcService.modifyCustomerWaybill(dto);
+        int result=0;
+        if(dto.getOperationType()==2){
+            result=waybillRpcService.modifyCustomerQuantity(dto);
+        }else{
+            result = waybillRpcService.modifyCustomerWaybill(dto);
+        }
         if (result > 0) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);
