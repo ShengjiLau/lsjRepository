@@ -57,6 +57,7 @@ public class LoginApi {
             if (!codeCorrect) {
                 throw new RuntimeException("验证码错误");
             }
+            registerDto.setRegisterFrom("管车宝小程序");
             User user = userService.registerUser(registerDto);
             HashMap<String, Object> stringStringHashMap = new HashMap<>();
             stringStringHashMap.put("userId", user.getUserId());
