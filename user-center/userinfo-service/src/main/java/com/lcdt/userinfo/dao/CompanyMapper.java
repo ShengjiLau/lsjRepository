@@ -2,6 +2,7 @@ package com.lcdt.userinfo.dao;
 
 
 import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.web.controller.api.admin.dto.CompanyQueryDto;
 
 import java.util.List;
 
@@ -18,5 +19,7 @@ public interface CompanyMapper {
 	int updateByPrimaryKey(Company record);
 
 	Company selectByCondition(Company record);
+
+	List<Company> selectByCompanyDto(CompanyQueryDto companyQueryDto);
 
 }
