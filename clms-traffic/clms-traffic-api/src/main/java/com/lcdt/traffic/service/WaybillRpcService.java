@@ -40,6 +40,20 @@ public interface WaybillRpcService {
     int modifyCustomerWaybill(WaybillModifyParamsDto waybillDto);
 
     /**
+     * 我的运单调量
+     * @param waybillDto
+     * @return
+     */
+    int modifyOwnQuantity(WaybillModifyParamsDto waybillDto);
+
+    /**
+     * 客户运单调量
+     * @param waybillDto
+     * @return
+     */
+    int modifyCustomerQuantity(WaybillModifyParamsDto waybillDto);
+
+    /**
      * 查询获取我的运单列表
      * @param dto
      * @return

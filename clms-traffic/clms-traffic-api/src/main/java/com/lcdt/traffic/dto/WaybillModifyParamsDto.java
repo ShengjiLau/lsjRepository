@@ -51,7 +51,10 @@ public class WaybillModifyParamsDto implements Serializable {
     private String updateName;
     private Long companyId;
     private Long carrierCompanyId;
-
+    /**
+     * 1、编辑，2、调量
+     */
+    private int operationType;
 
     private List<WaybillItemsModifyParamsDto> waybillItemsDtoList;
 
@@ -357,5 +360,13 @@ public class WaybillModifyParamsDto implements Serializable {
 
     public void setWaybillItemsDtoList(List<WaybillItemsModifyParamsDto> waybillItemsDtoList) {
         this.waybillItemsDtoList = waybillItemsDtoList;
+    }
+
+    public int getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(int operationType) {
+        this.operationType = operationType;
     }
 }
