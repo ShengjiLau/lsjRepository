@@ -2,6 +2,8 @@ package com.lcdt.userinfo.web.controller.api.admin.dto;
 
 import com.lcdt.userinfo.model.Company;
 
+import java.util.Date;
+
 public class CompanyQueryDto extends Company{
 
     private Integer pageSize;
@@ -10,9 +12,9 @@ public class CompanyQueryDto extends Company{
 
     private String adminphone;
 
-    private String createDateSince;
+    private Date createDateSince;
 
-    private String createDateUntil;
+    private Date createDateUntil;
 
     public Integer getPageSize() {
         return pageSize;
@@ -38,19 +40,19 @@ public class CompanyQueryDto extends Company{
         this.adminphone = adminphone;
     }
 
-    public String getCreateDateSince() {
+    public Date getCreateDateSince() {
         return createDateSince;
     }
 
-    public void setCreateDateSince(String createDateSince) {
+    public void setCreateDateSince(Date createDateSince) {
         this.createDateSince = createDateSince;
     }
 
-    public String getCreateDateUntil() {
+    public Date getCreateDateUntil() {
         return createDateUntil;
     }
 
-    public void setCreateDateUntil(String createDateUntil) {
+    public void setCreateDateUntil(Date createDateUntil) {
         this.createDateUntil = createDateUntil;
     }
 }
