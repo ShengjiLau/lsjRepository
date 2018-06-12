@@ -29,7 +29,7 @@ public interface WaybillRpcService {
      * @param waybillDto
      * @return
      */
-    int modifyOwnWaybill(WaybillDto waybillDto);
+    int modifyOwnWaybill(WaybillModifyParamsDto waybillDto);
 
     /**
      * 修改客户运单
@@ -37,7 +37,21 @@ public interface WaybillRpcService {
      * @param waybillDto
      * @return
      */
-    int modifyCustomerWaybill(WaybillDto waybillDto);
+    int modifyCustomerWaybill(WaybillModifyParamsDto waybillDto);
+
+    /**
+     * 我的运单调量
+     * @param waybillDto
+     * @return
+     */
+    int modifyOwnQuantity(WaybillModifyParamsDto waybillDto);
+
+    /**
+     * 客户运单调量
+     * @param waybillDto
+     * @return
+     */
+    int modifyCustomerQuantity(WaybillModifyParamsDto waybillDto);
 
     /**
      * 查询获取我的运单列表

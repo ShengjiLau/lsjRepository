@@ -70,7 +70,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
 
 
     @Autowired
-    private OwnVehicleService ownVehicleService;
+    private TrafficRpc trafficRpc;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -142,7 +142,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                     ownDriver.setDriverPhone(dto.getCarrierPhone());
                     ownDriver.setCreateId(dto.getCreateId());
                     ownDriver.setCreateName(dto.getCreateName());
-                    OwnDriver ownDriver1= ownDriverService.syncDriver(ownDriver);
+                    OwnDriver ownDriver1= trafficRpc.addDriver(ownDriver);
                     if(ownDriver1!=null) {
                         vo.setCarrierIds(ownDriver1.getOwnDriverId() + "");
                     }
@@ -153,7 +153,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                 ownVehicle1.setCreateId(dto.getCreateId());
                 ownVehicle1.setCreateName(dto.getCreateName());
                 ownVehicle1.setVehicleDriverPhone(dto.getCarrierPhone());
-                ownVehicleService.syncVehicle(ownVehicle1);
+                trafficRpc.addVehicle(ownVehicle1);
 
                 if (!StringUtils.isEmpty(dto.getCarrierIds())) {
                     vo.setCarrierCompanyId(vo.getCompanyId());

@@ -123,10 +123,10 @@ public class CreateCompanyServiceImpl implements CreateCompanyService,Applicatio
 		productCountService.logAddProductCountAndCompanyCount("sms_service","系统赠送试用",50,userRel.getUser().getPhone(),userRel.getCompId(),50);
 		//充值基站20条
 		productCountService.logAddProductCountAndCompanyCount("gms_location","系统赠送试用",20,userRel.getUser().getPhone(),userRel.getCompId(),20);
-		//仓单服务20条
-		productCountService.logAddProductCountAndCompanyCount("waybill_service","系统赠送试用",20,userRel.getUser().getPhone(),userRel.getCompId(),10);
-		//运单服务20条
-		productCountService.logAddProductCountAndCompanyCount("storage_service","系统赠送试用",20,userRel.getUser().getPhone(),userRel.getCompId(),10);
+		//仓单服务30条
+		productCountService.logAddProductCountAndCompanyCount("waybill_service","系统赠送试用",30,userRel.getUser().getPhone(),userRel.getCompId(),30);
+		//运单服务30条
+		productCountService.logAddProductCountAndCompanyCount("storage_service","系统赠送试用",30,userRel.getUser().getPhone(),userRel.getCompId(),30);
 	}
 
 	private void addCustomer(Company company, UserCompRel userCompRel,Group group) {

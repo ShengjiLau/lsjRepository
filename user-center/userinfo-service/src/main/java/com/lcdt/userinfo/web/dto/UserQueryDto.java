@@ -2,6 +2,8 @@ package com.lcdt.userinfo.web.dto;
 
 import com.lcdt.userinfo.model.User;
 
+import java.util.Date;
+
 public class UserQueryDto extends User {
 
     private Integer pageSize;
@@ -9,10 +11,29 @@ public class UserQueryDto extends User {
     private Integer pageNo;
 
 
-    private String registerDateSince;
+    private Date registerDateSince;
 
-    private String registerDateUntil;
+    private Date registerDateUntil;
 
+    private String loginDateUntil;
+
+    private String loginDateSince;
+
+    public String getLoginDateUntil() {
+        return loginDateUntil;
+    }
+
+    public void setLoginDateUntil(String loginDateUntil) {
+        this.loginDateUntil = loginDateUntil;
+    }
+
+    public String getLoginDateSince() {
+        return loginDateSince;
+    }
+
+    public void setLoginDateSince(String loginDateSince) {
+        this.loginDateSince = loginDateSince;
+    }
 
     public Integer getPageSize() {
         return pageSize;
@@ -30,19 +51,19 @@ public class UserQueryDto extends User {
         this.pageNo = pageNo;
     }
 
-    public String getRegisterDateSince() {
+    public Date getRegisterDateSince() {
         return registerDateSince;
     }
 
-    public void setRegisterDateSince(String registerDateSince) {
+    public void setRegisterDateSince(Date registerDateSince) {
         this.registerDateSince = registerDateSince;
     }
 
-    public String getRegisterDateUntil() {
+    public Date getRegisterDateUntil() {
         return registerDateUntil;
     }
 
-    public void setRegisterDateUntil(String registerDateUntil) {
+    public void setRegisterDateUntil(Date registerDateUntil) {
         this.registerDateUntil = registerDateUntil;
     }
 }

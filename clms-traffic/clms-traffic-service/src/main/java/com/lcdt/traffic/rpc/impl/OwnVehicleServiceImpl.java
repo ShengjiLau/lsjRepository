@@ -295,23 +295,4 @@ public class OwnVehicleServiceImpl implements OwnVehicleService {
         return result;
     }
 
-    @Override
-    public OwnVehicle syncVehicle(OwnVehicle ownVehicle) {
-        //  获取companyId
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        ownVehicle.setCompanyId(companyId);
-        int count = ownVehicleMapper.selectVehicleNum(ownVehicle);
-        //判断车牌号是否重复
-        if (count != 0) {
-            return ownVehicleMapper.selectByVehicleNum(ownVehicle);
-        } else {
-            /**保存车辆基本信息*/
-            Long userId = SecurityInfoGetter.getUser().getUserId();
-            String userName = SecurityInfoGetter.getUser().getRealName();
-            ownVehicle.setCreateId(userId);
-            ownVehicle.setCreateName(userName);
-            ownVehicleMapper.insert(ownVehicle);
-            return ownVehicle;
-        }
-    }
 }

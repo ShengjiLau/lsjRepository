@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class DriverVehicleAuth implements Serializable,ResponseData {
+
+    private Driver driver;
+
     private Long authId;
 
     private Long driverId;
@@ -15,6 +18,8 @@ public class DriverVehicleAuth implements Serializable,ResponseData {
     private String vehicleTrailersNum;
 
     private String vehicleType;
+
+    private String authRemark;
 
     private double vehicleLoad;
 
@@ -49,6 +54,38 @@ public class DriverVehicleAuth implements Serializable,ResponseData {
     private Date updateDate;
 
     private Boolean isDeleted;
+
+    public Boolean getDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(Boolean aDefault) {
+        isDefault = aDefault;
+    }
+
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public String getAuthRemark() {
+        return authRemark;
+    }
+
+    public void setAuthRemark(String authRemark) {
+        this.authRemark = authRemark;
+    }
+
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
+    }
 
     public Long getAuthId() {
         return authId;

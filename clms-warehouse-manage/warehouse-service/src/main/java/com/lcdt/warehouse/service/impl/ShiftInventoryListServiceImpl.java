@@ -35,8 +35,8 @@ import com.lcdt.warehouse.vo.ShiftInventoryListVO;
 /**
  * @author Sheng-ji Lau
  * @date 2018年5月10日
- * @version
- * @Description: TODO 
+ * @version 1.0
+ * @Description: 移库单的增删改查，涉及到库存、移库商品信息以及生成入库单
  */
 @Service 
 @Primary
@@ -119,9 +119,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		logger.debug("修改的库存数量为"+h);
 		
 		if (result > 0) {
-			return 1;
+			return ShiftInventoryListVO.successNum;
 		}else {
-			return -1;
+			return ShiftInventoryListVO.failedNum;
 		}
 	}
 
@@ -204,9 +204,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		
 		
 		if (i > 0) {
-			return 1;
+			return ShiftInventoryListVO.successNum;
 		}else {
-			return -1;
+			return ShiftInventoryListVO.failedNum;
 		}	
 	}
 	
@@ -230,6 +230,13 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		}
 		int pageNo = shiftInventoryListDTO1.getPageNo();
 		int pageSize = shiftInventoryListDTO1.getPageSize();
+		
+		if (null != shiftInventoryListDTO1.getBeginTime() && !"".equals(shiftInventoryListDTO1.getBeginTime())) {
+			shiftInventoryListDTO1.setBeginTime(convertTimeFormat(shiftInventoryListDTO1.getBeginTime()));	
+		}
+		if (null != shiftInventoryListDTO1.getEndTime() && !"".equals(shiftInventoryListDTO1.getEndTime())) {
+			shiftInventoryListDTO1.setEndTime(convertTimeFormat(shiftInventoryListDTO1.getEndTime()));
+		}
 		
 		//分页
 		//PageHelper.startPage(shiftInventoryListDTO1.getPageNo(), shiftInventoryListDTO1.getPageSize());
@@ -262,10 +269,10 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				 for (int i = 0; i < ShiftGoodsListDTOList.size(); i++) {
 					 List<ShiftGoodsDO> shiftGoodsDOList2 = new LinkedList<ShiftGoodsDO>();
 					 //如果查询条件传过来的goodsInfo与ShiftGoodsListDTO的商品name不相同，则去除掉相关的ShiftGoodsListDTO，并跳出此次循环
-					 if (null != shiftInventoryListDTO1.getGoodsInfo() && !shiftInventoryListDTO1.getGoodsInfo().equals(ShiftGoodsListDTOList.get(i).getGoodsName())) {
+					if (null != shiftInventoryListDTO1.getGoodsInfo() && !"".equals(shiftInventoryListDTO1.getGoodsInfo()) && !shiftInventoryListDTO1.getGoodsInfo().equals(ShiftGoodsListDTOList.get(i).getGoodsName())) {
 							 ShiftGoodsListDTOList2.add(ShiftGoodsListDTOList.get(i));
 							 continue;
-					 }
+					 } 
 					 //遍历所有的移库商品信息shiftGoodsDO，如果shiftGoodsDO里存的InventoryId与ShiftGoodsListDTO里存的InventoryId相同，则将shiftGoodsDO添加到ShiftGoodsListDTO里的ShiftGoodsDOList
 					 if (null != shiftGoodsDOList1 && 0 != shiftGoodsDOList1.size()) {
 						 if (null != shiftGoodsDOList1 && 0 != shiftGoodsDOList1.size()) {
@@ -392,7 +399,22 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		}
 	}
 	
-	
+	/**
+	 * 将固定格式的时间格式转换为相应的字符串
+	 * @param s
+	 * @return
+	 */
+	public String convertTimeFormat(String s) {
+		String pattern = "^[0-9]{4}[-][0-9]{2}[-][0-9]{2}";
+		if (Pattern.matches(pattern, s)) {
+			String s2 = s.replace("-", "");
+			return s2;	
+		}else {
+			return null;
+		}
+		
+		
+	}
 	
 	
 	

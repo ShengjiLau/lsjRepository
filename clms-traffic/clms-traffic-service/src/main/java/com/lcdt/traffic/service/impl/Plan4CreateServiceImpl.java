@@ -70,7 +70,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
     private OwnDriverService ownDriverService;
 
     @Autowired
-    private OwnVehicleService ownVehicleService;
+    private TrafficRpc trafficRpc;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -164,7 +164,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     ownDriver.setDriverPhone(dto.getCarrierPhone());
                     ownDriver.setCreateId(dto.getCreateId());
                     ownDriver.setCreateName(dto.getCreateName());
-                    OwnDriver ownDriver1 = ownDriverService.syncDriver(ownDriver);
+                    OwnDriver ownDriver1 = trafficRpc.addDriver(ownDriver);
                     if(ownDriver1!=null) {
                         vo.setCarrierIds(ownDriver1.getOwnDriverId() + "");
                     }
@@ -177,7 +177,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 ownVehicle.setCreateId(dto.getCreateId());
                 ownVehicle.setCreateName(dto.getCreateName());
                 ownVehicle.setVehicleDriverPhone(dto.getCarrierPhone());
-                ownVehicleService.syncVehicle(ownVehicle);
+                trafficRpc.addVehicle(ownVehicle);
 
                 if (!StringUtils.isEmpty(dto.getCarrierIds())) {
                     vo.setCarrierCompanyId(vo.getCompanyId());
@@ -305,16 +305,18 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         }
                 }
 
-                //router:发布
-                Timeline event = new Timeline();
-                event.setActionTitle("【计划发布】（操作人："+dto.getCompanyName()+" "+vo.getCreateName()+"）");
-                event.setActionTime(new Date());
-                event.setCompanyId(vo.getCompanyId());
-                event.setSearchkey("R_PLAN");
-                event.setDataid(vo.getWaybillPlanId());
-                producer.noteRouter(event);
+
             }
+
         }
+        //router:发布
+        Timeline event = new Timeline();
+        event.setActionTitle("【计划发布】（操作人："+dto.getCompanyName()==null?"":dto.getCompanyName()+" "+vo.getCreateName()==null?"":vo.getCreateName()+"）");
+        event.setActionTime(new Date());
+        event.setCompanyId(vo.getCompanyId());
+        event.setSearchkey("R_PLAN");
+        event.setDataid(vo.getWaybillPlanId());
+        producer.noteRouter(event);
         return vo;
     }
 

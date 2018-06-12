@@ -74,7 +74,7 @@ public class TrafficRpcImpl implements TrafficRpc {
         int count = ownDriverMapper.selectDriverPhone(ownDriver);
         //判断手机号是否重复
         if (count != 0) {
-            return ownDriverMapper.selectByPhone(ownDriver);
+            return ownDriverMapper.selectByAddWaybillDriverPhone(ownDriver);
         } else {
             //保存车司机本信息
             Long userId = SecurityInfoGetter.getUser().getUserId();

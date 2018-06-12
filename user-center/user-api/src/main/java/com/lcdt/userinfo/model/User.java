@@ -145,7 +145,6 @@ public class User implements java.io.Serializable,ResponseData {
 
     private Date lastLoginTime;
 
-
     public String getRegisterFrom() {
         return registerFrom;
     }
