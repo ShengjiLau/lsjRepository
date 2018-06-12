@@ -24,7 +24,8 @@ public class DriverWaybillParamsDto implements Serializable{
     @ApiModelProperty(value = "更新人名字",hidden = true)
     private String updateName;//更新人名字
 
-
+    @ApiModelProperty(value = "更新人电话",hidden = true)
+    private String updatePhone;
 
 
     public Long getWaybillIds() {
@@ -73,5 +74,13 @@ public class DriverWaybillParamsDto implements Serializable{
 
     public void setUpdateName(String updateName) {
         this.updateName = updateName;
+    }
+
+    public String getUpdatePhone() {
+        return updatePhone;
+    }
+
+    public void setUpdatePhone(String updatePhone) {
+        this.updatePhone = updatePhone;
     }
 }
