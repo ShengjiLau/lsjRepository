@@ -53,7 +53,6 @@ public class LoginApi {
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
     public String registerUser(RegisterDto registerDto) throws PhoneHasRegisterException {
-
             boolean codeCorrect = validCodeService.isCodeCorrect(registerDto.getEcode(), VCODETAG, registerDto.getUserPhoneNum());
             if (!codeCorrect) {
                 throw new RuntimeException("验证码错误");

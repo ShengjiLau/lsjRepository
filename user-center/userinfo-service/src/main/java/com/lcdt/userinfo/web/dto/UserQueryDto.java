@@ -13,6 +13,25 @@ public class UserQueryDto extends User {
 
     private String registerDateUntil;
 
+    private String loginDateUntil;
+
+    private String loginDateSince;
+
+    public String getLoginDateUntil() {
+        return loginDateUntil;
+    }
+
+    public void setLoginDateUntil(String loginDateUntil) {
+        this.loginDateUntil = loginDateUntil;
+    }
+
+    public String getLoginDateSince() {
+        return loginDateSince;
+    }
+
+    public void setLoginDateSince(String loginDateSince) {
+        this.loginDateSince = loginDateSince;
+    }
 
     public Integer getPageSize() {
         return pageSize;
