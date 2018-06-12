@@ -169,10 +169,10 @@
         and c.enable = #{enable}
       </if>
 
-      <if test="createDateSince != null and createDateSince != ''">
+      <if test="createDateSince != null ">
         and c.create_date  &gt;= #{enable}
       </if>
-      <if test="createDateUntil != null and createDateUntil != ''">
+      <if test="createDateUntil != null ">
         and c.create_date  &lt;=  #{createDateUntil}
       </if>
 

@@ -279,13 +279,13 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                 WaybillItems waybillItems = new WaybillItems();
                 if (waybillDto.getWaybillItemsDtoList().get(i).getId() !=null &&waybillDto.getWaybillItemsDtoList().get(i).getId()>0) {
                     waybillItems=waybillItemsMapper.selectByPrimaryKey(waybillDto.getWaybillItemsDtoList().get(i).getId());
-                    ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
+                    BeanUtils.copyProperties(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
                     waybillItems.setUpdateId(waybill.getUpdateId());
                     waybillItems.setUpdateName(waybill.getUpdateName());
                     waybillItems.setCompanyId(waybill.getCompanyId());
                     waybillItemsUpdateList.add(waybillItems);
                 } else {
-                    ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
+                    BeanUtils.copyProperties(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
                     waybillItems.setCreateId(waybill.getCreateId());
                     waybillItems.setCreateName(waybill.getCreateName());
                     waybillItems.setCompanyId(waybill.getCompanyId());
@@ -344,6 +344,70 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                 //运单货物详细批量插入
                 result += waybillItemsMapper.insertForBatch(waybillItemsAddList);
             }
+        }
+        return result;
+    }
+
+    @Override
+    public int modifyOwnQuantity(WaybillModifyParamsDto waybillDto) {
+        int result = 0;
+        WaybillDao waybillDao = queryOwnWaybill(waybillDto.getId(),waybillDto.getCompanyId());
+
+        if (waybillDto.getWaybillItemsDtoList() != null && waybillDto.getWaybillItemsDtoList().size() > 0) {
+            List<WaybillItems> waybillItemsUpdateList = new ArrayList<WaybillItems>();
+            for (int i = 0; i < waybillDto.getWaybillItemsDtoList().size(); i++) {
+                WaybillItems waybillItems = new WaybillItems();
+                if (waybillDto.getWaybillItemsDtoList().get(i).getId() !=null &&waybillDto.getWaybillItemsDtoList().get(i).getId()>0) {
+                    waybillItems=waybillItemsMapper.selectByPrimaryKey(waybillDto.getWaybillItemsDtoList().get(i).getId());
+                    ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
+                    waybillItems.setUpdateId(waybillDto.getUpdateId());
+                    waybillItems.setUpdateName(waybillDto.getUpdateName());
+                    waybillItems.setCompanyId(waybillDto.getCompanyId());
+                    waybillItemsUpdateList.add(waybillItems);
+                    for(int j=0;i<waybillDao.getWaybillItemsList().size();j++){
+                        if(waybillItems.getId()==waybillDao.getWaybillItemsList().get(j).getId()){
+                            waybillDao.getWaybillItemsList().get(j).setAmount(waybillDao.getWaybillItemsList().get(j).getAmount()-waybillItems.getAmount());
+                        }
+                    }
+                }
+            }
+            if (waybillItemsUpdateList.size() > 0) {
+                //运单货物详细修改
+                result += waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
+            }
+            //计划编辑
+        }
+        return result;
+    }
+
+    @Override
+    public int modifyCustomerQuantity(WaybillModifyParamsDto waybillDto) {
+        int result = 0;
+        WaybillDao waybillDao = queryOwnWaybill(waybillDto.getId(),waybillDto.getCarrierCompanyId());
+
+        if (waybillDto.getWaybillItemsDtoList() != null && waybillDto.getWaybillItemsDtoList().size() > 0) {
+            List<WaybillItems> waybillItemsUpdateList = new ArrayList<WaybillItems>();
+            for (int i = 0; i < waybillDto.getWaybillItemsDtoList().size(); i++) {
+                WaybillItems waybillItems = new WaybillItems();
+                if (waybillDto.getWaybillItemsDtoList().get(i).getId() !=null &&waybillDto.getWaybillItemsDtoList().get(i).getId()>0) {
+                    waybillItems=waybillItemsMapper.selectByPrimaryKey(waybillDto.getWaybillItemsDtoList().get(i).getId());
+                    ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
+                    waybillItems.setUpdateId(waybillDto.getUpdateId());
+                    waybillItems.setUpdateName(waybillDto.getUpdateName());
+                    waybillItems.setCompanyId(waybillDto.getCompanyId());
+                    waybillItemsUpdateList.add(waybillItems);
+                    for(int j=0;i<waybillDao.getWaybillItemsList().size();j++){
+                        if(waybillItems.getId()==waybillDao.getWaybillItemsList().get(j).getId()){
+                            waybillDao.getWaybillItemsList().get(j).setAmount(waybillDao.getWaybillItemsList().get(j).getAmount()-waybillItems.getAmount());
+                        }
+                    }
+                }
+            }
+            if (waybillItemsUpdateList.size() > 0) {
+                //运单货物详细修改
+                result += waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
+            }
+            //计划编辑
         }
         return result;
     }
@@ -753,7 +817,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
                                 //router:计划自动完成
                                 Timeline event = new Timeline();
-                                event.setActionTitle("【计划完成】" + waybill.getWaybillCode());
+                                event.setActionTitle("【计划完成】" + waybill.getWaybillCode()==null?"":waybill.getWaybillCode());
                                 event.setActionTime(new Date());
                                 event.setCompanyId(waybillPlan.getCompanyId());
                                 event.setSearchkey("R_PLAN");

@@ -210,17 +210,17 @@
           register_from = #{registerFrom}
         </if>
 
-        <if test="registerDateSince != null and registerDateSince != ''">
-          register_date &gt;=  #{registerDateSince}
+        <if test="registerDateSince != null">
+          register_date &gt;=  #{registerDateSince,jdbcType=TIMESTAMP}
         </if>
-        <if test="registerDateUntil != null and registerDateUntil != ''">
-          register_date &lt;=  #{registerDateUntil}
+        <if test="registerDateUntil != null ">
+          register_date &lt;=  #{registerDateUntil,jdbcType=TIMESTAMP}
         </if>
 
-        <if test="loginDateUntil != null and loginDateUntil != ''">
+        <if test="loginDateUntil != null ">
           l.login_time &lt;=  #{loginDateUntil}
         </if>
-        <if test="loginDateSince != null and loginDateSince != ''">
+        <if test="loginDateSince != null ">
           l.login_time &gt;=  #{loginDateSince}
         </if>
 

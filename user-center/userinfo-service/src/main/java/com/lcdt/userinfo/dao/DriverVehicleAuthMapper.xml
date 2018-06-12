@@ -141,10 +141,10 @@ update t_driver_vehicle_auth set is_default=0 where driver_id =#{driverId,jdbcTy
       <if test="authStatus != null and authStatus != ''">
         a.auth_status = #{authStatus}
       </if>
-      <if test="createDateSince != null and createDateSince != ''">
+      <if test="createDateSince != null ">
         and c.create_date  &gt;= #{createDateSince}
       </if>
-      <if test="createDateUntil != null and createDateUntil != ''">
+      <if test="createDateUntil != null ">
         and c.create_date  &lt;=  #{createDateUntil}
       </if>
 
