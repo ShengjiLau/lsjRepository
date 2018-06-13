@@ -885,12 +885,15 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
 
         //router:派车
         Timeline event = new Timeline();
-        event.setActionTitle("【运单生成】"+ waybill.getWaybillCode()==null?"":waybill.getWaybillCode());
+        String billCode =  waybill.getWaybillCode()==null?"":waybill.getWaybillCode();
+        event.setActionTitle("【运单生成】"+billCode);
         event.setActionTime(new Date());
         event.setCompanyId(waybillDto.getCompanyId());
         event.setSearchkey("R_PLAN");
         event.setDataid(waybillPlan.getWaybillPlanId());
-        event.setActionDes("司机："+dto.getDriverPhone()==null?"":dto.getDriverPhone()+" "+dto.getVechicleNum()==null?"":dto.getVechicleNum());
+        String driverPhone = dto.getDriverPhone()==null?"":dto.getDriverPhone();
+        String vechicleNum = dto.getVechicleNum()==null?"":dto.getVechicleNum();
+        event.setActionDes("司机："+driverPhone+" "+vechicleNum);
         producer.noteRouter(event);
         waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         return waybillPlan;

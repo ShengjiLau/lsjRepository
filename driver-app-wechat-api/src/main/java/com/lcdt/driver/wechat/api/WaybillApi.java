@@ -80,7 +80,7 @@ public class WaybillApi {
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
         dto.setCompanyId(companyId);
-
+        dto.setUpdatePhone(loginUser.getPhone());
         return waybillRpcService.modifyOwnWaybillReceipt(dto);
 
     }

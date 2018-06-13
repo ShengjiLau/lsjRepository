@@ -150,13 +150,27 @@ public class InWarehouseOrderController {
 
 
     @ApiOperation("概览入库单已完成数量")
-    @RequestMapping(value = "/inWarehouseNum", method = RequestMethod.GET)
+    @RequestMapping(value = "/inWarehouseBillNum", method = RequestMethod.GET)
     public JSONObject inWarehouseNum(InWarehouseOrderSearchParamsDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
+        String [] inOrderStatus = {"2"};
+        params.setInOrderStatus(inOrderStatus);
 
         JSONObject jo =  new JSONObject();
         jo.put("code", 0);
         jo.put("data",inWarehouseOrderService.selectInWarehouseNum(params));
+
+        return jo;
+    }
+
+    @ApiOperation("概览入库单已完成商品数量")
+    @RequestMapping(value = "/inWarehouseProductNum", method = RequestMethod.GET)
+    public JSONObject inWarehouseProductNum(InWarehouseOrderSearchParamsDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",inWarehouseOrderService.selectInWarehouseProductNum(params));
 
         return jo;
     }
