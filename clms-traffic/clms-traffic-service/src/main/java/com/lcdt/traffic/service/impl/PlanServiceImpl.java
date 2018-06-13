@@ -334,33 +334,35 @@ public class PlanServiceImpl implements PlanService {
         PlanLeaveMsg planLeaveMsg = null;
         WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
         if (waybillPlan != null) {
-            List<PlanDetail> planDetailList = waybillPlan.getPlanDetailList();
+           // List<PlanDetail> planDetailList = waybillPlan.getPlanDetailList();
             List<SplitGoods> splitGoodsList = waybillPlan.getSplitGoodsList();
             List<WaybillItems> waybillItemsList = waybillDao.getWaybillItemsList();
             List<SplitGoodsDetail> splitGoodsDetailList = null;
 
-            Float _planRemainderAmount = 0f;
             Float _splitRemainderAmount = 0f;
-            //先处理计划
-            if (planDetailList!=null && waybillItemsList.size()>0 && waybillItemsList!=null && waybillItemsList.size()>0) {
-                for (WaybillItems waybillItems: waybillItemsList) {
-                     for (PlanDetail planDetails :planDetailList) {
-                            if (waybillItems.getPlanDetailId().equals(planDetails.getPlanDetailId())) {
-                                planDetails.setRemainderAmount(waybillItems.getAmount()+planDetails.getRemainderAmount());
-                                planDetails.setPlanAmount(waybillItems.getAmount()+planDetails.getPlanAmount());
-                                planDetails.setUpdateTime(new Date());
-                                planDetails.setUpdateId(waybillDao.getUpdateId());
-                                planDetails.setUpdateName(waybillDao.getUpdateName());
-                                _planRemainderAmount += planDetails.getRemainderAmount(); //后台做处理
-                            }
-
-                    }
-                }
-
-           }
-           if (_planRemainderAmount <= 0) {
-               throw new WaybillPlanException("调整数量大于计划待派数量！");
-           }
+//    //先处理计划
+//            if (planDetailList!=null && waybillItemsList.size()>0 && waybillItemsList!=null && waybillItemsList.size()>0) {
+//                for (WaybillItems waybillItems: waybillItemsList) {
+//                     for (PlanDetail planDetails :planDetailList) {
+//                            if (waybillItems.getPlanDetailId().equals(planDetails.getPlanDetailId())) {
+//                                planDetails.setRemainderAmount(waybillItems.getAmount()+planDetails.getRemainderAmount());
+//
+//                                planDetails.setUpdateTime(new Date());
+//                                planDetails.setUpdateId(waybillDao.getUpdateId());
+//                                planDetails.setUpdateName(waybillDao.getUpdateName());
+//                                if (planDetails.getRemainderAmount() <= 0) {
+//                                    throw new WaybillPlanException("调整数量大于计划待派数量！");
+//                                }
+//                                if (planDetails.getRemainderAmount()>planDetails.getPlanAmount()) {
+//                                    throw new WaybillPlanException("调整数量大于计划原始数量！");
+//                                }
+//
+//                            }
+//
+//                    }
+//                }
+//
+//           }
 
             //再处理派单
             if (splitGoodsList!=null && splitGoodsList.size()>0 && waybillItemsList!=null && waybillItemsList.size()>0) {
@@ -370,11 +372,19 @@ public class PlanServiceImpl implements PlanService {
                         if (splitGoodsDetailList!=null && splitGoodsDetailList.size()>0) {
                             for (SplitGoodsDetail splitGoodsDetail :splitGoodsDetailList) {
                                 if(waybillItems.getSplitGoodsDetailId().equals(splitGoodsDetail.getSplitGoodsDetailId())) {
-                                    splitGoodsDetail.setAllotAmount(waybillItems.getAmount()+splitGoodsDetail.getAllotAmount());
                                     splitGoodsDetail.setRemainAmount(waybillItems.getAmount()+splitGoodsDetail.getRemainAmount());
+                                    if (splitGoodsDetail.getRemainAmount()>splitGoodsDetail.getAllotAmount()) {
+                                        throw new WaybillPlanException("调整数量大于派单原始数量！");
+                                    }
+                                    if (splitGoodsDetail.getRemainAmount() <= 0) {
+                                        throw new WaybillPlanException("派单调整数量大于计划待派数量！");
+                                    }
                                     splitGoodsDetail.setUpdateTime(new Date());
                                     splitGoodsDetail.setUpdateId(waybillDao.getUpdateId());
                                     splitGoodsDetail.setUpdateName(waybillDao.getUpdateName());
+
+
+
                                 }
                            }
 
@@ -382,8 +392,6 @@ public class PlanServiceImpl implements PlanService {
                     }
                 }
             }
-
-            planDetailMapper.batchUpdatePlanDetail(planDetailList);
             splitGoodsDetailMapper.batchUpdateSplitGoodsDetail(splitGoodsDetailList);
 
             //再次查询派单剩余量是否
@@ -400,7 +408,7 @@ public class PlanServiceImpl implements PlanService {
                     }
                 }
             }
-            if (_splitRemainderAmount>0) { //派单存在剩余-改计划状态为派车中
+            if (_splitRemainderAmount>0) { //派单完成的更新计划状态
                 waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS);
                 waybillPlan.setUpdateTime(new Date());
                 waybillPlan.setUpdateId(waybillDao.getUpdateId());

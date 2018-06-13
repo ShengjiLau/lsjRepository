@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by lyqishan on 2018/5/9
@@ -59,6 +60,24 @@ public class InWarehouseOrderSearchParamsDto {
     private int pageNo;
     @ApiModelProperty(value = "每页数",required = true)
     private int pageSize;
+
+
+
+    @ApiModelProperty(value = "商品名称")
+    private String goodsName;
+
+    @ApiModelProperty(value = "商品条码")
+    private String goodsBarCode;
+
+    @ApiModelProperty(value = "商品编码")
+    private String goodsCode;
+
+    private Long classifyId;
+
+    private List<Long> goodIds;
+
+    private String batch;
+
 
     public String getInOrderCode() {
         return inOrderCode;
@@ -226,5 +245,54 @@ public class InWarehouseOrderSearchParamsDto {
 
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public String getGoodsBarCode() {
+        return goodsBarCode;
+    }
+
+    public void setGoodsBarCode(String goodsBarCode) {
+        this.goodsBarCode = goodsBarCode;
+    }
+
+    public String getGoodsCode() {
+        return goodsCode;
+    }
+
+    public void setGoodsCode(String goodsCode) {
+        this.goodsCode = goodsCode;
+    }
+
+    public Long getClassifyId() {
+        return classifyId;
+    }
+
+    public void setClassifyId(Long classifyId) {
+        this.classifyId = classifyId;
+    }
+
+    public List<Long> getGoodIds() {
+        return goodIds;
+    }
+
+    public void setGoodIds(List<Long> goodIds) {
+        this.goodIds = goodIds;
+    }
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch;
     }
 }

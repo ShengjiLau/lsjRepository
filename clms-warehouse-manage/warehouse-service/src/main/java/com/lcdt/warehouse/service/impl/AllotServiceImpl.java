@@ -41,6 +41,8 @@ public class AllotServiceImpl implements AllotService{
     InventoryService inventoryService;
     @Reference
     GroupWareHouseRpcService groupWareHouseRpcService;
+    @Autowired
+    GoodsInfoMapper goodsInfoMapper;
 
     @Override
     public Page<AllotDto> allotDtoList(Map m) {
@@ -169,6 +171,7 @@ public class AllotServiceImpl implements AllotService{
             saveInWarehouseOrder(allot, dto);
             return true;
         }catch (Exception e){
+            e.printStackTrace();
             return false;
         }
     }
@@ -188,6 +191,7 @@ public class AllotServiceImpl implements AllotService{
         outWarehouseOrder.setOutboundPlanTime(allot.getAllotOutTime());
         outWarehouseOrder.setOutboundTime(allot.getAllotOutTime());
         outWarehouseOrder.setOutboundRemark(allot.getRemark());
+        outWarehouseOrder.setOutboundMan(allot.getCreateName());
         outWarehouseOrder.setCompanyId(allot.getCompanyId());
         outWarehouseOrder.setCreateId(allot.getCreateId());
         outWarehouseOrder.setCreateName(allot.getCreateName());
@@ -200,16 +204,20 @@ public class AllotServiceImpl implements AllotService{
             for (AllotProduct allotProduct : dto.getAllotProductList()) {
                 OutOrderGoodsInfo outOrderGoodsInfo = new OutOrderGoodsInfo();
                 outOrderGoodsInfo.setOutorderId(outWarehouseOrder.getOutorderId());
-//                    outOrderGoodsInfo.setInvertoryId(allotProduct.getInventory());
-                outOrderGoodsInfo.setGoodsId(allotProduct.getApId());
+                outOrderGoodsInfo.setInvertoryId(allotProduct.getInventoryId());
+                outOrderGoodsInfo.setGoodsId(allotProduct.getGoodsId());
                 outOrderGoodsInfo.setGoodsName(allotProduct.getName());
                 outOrderGoodsInfo.setGoodsCode(allotProduct.getCode());
                 outOrderGoodsInfo.setGoodsBarCode(allotProduct.getBarCode());
                 outOrderGoodsInfo.setGoodsSpec(allotProduct.getSpec());
+                outOrderGoodsInfo.setGoodsClassifyName(allotProduct.getGoodsClassify());
+                outOrderGoodsInfo.setMinUnit(allotProduct.getUnit());
                 outOrderGoodsInfo.setUnit(allotProduct.getUnit());
+                outOrderGoodsInfo.setUnitData(1);
                 outOrderGoodsInfo.setBatch(allotProduct.getBatchNum());
                 outOrderGoodsInfo.setStorageLocationId(allotProduct.getWarehouseLocId());
                 outOrderGoodsInfo.setStorageLocationCode(allotProduct.getWarehouseLocCode());
+                outOrderGoodsInfo.setGoodsNum(allotProduct.getAllotNum());
                 outOrderGoodsInfo.setOutboundQuantity(allotProduct.getAllotNum());
                 outOrderGoodsInfo.setRemark(allotProduct.getRemark());
                 outOrderGoodsInfo.setCompanyId(outWarehouseOrder.getCompanyId());
@@ -221,7 +229,6 @@ public class AllotServiceImpl implements AllotService{
 
             //对接库存，减库存
             outWarehouseOrder = outWarehouseOrderService.queryOutWarehouseOrder(outWarehouseOrder.getCompanyId(),outWarehouseOrder.getOutorderId());
-            outWarehouseOrder.setOutboundMan(dto.getCreateName());
             inventoryService.outInventory(outWarehouseOrder,outOrderGoodsInfoList);
         }
     }
@@ -252,18 +259,22 @@ public class AllotServiceImpl implements AllotService{
             List<InorderGoodsInfo> inorderGoodsInfoList = new ArrayList<>();
             for (AllotProduct allotProduct : dto.getAllotProductList()) {
                 InorderGoodsInfo inorderGoodsInfo = new InorderGoodsInfo();
-                inorderGoodsInfo.setInorderId(inorderGoodsInfo.getInorderId());
-                inorderGoodsInfo.setGoodsId(allotProduct.getApId());
+                inorderGoodsInfo.setInorderId(inWarehouseOrder.getInorderId());
+                inorderGoodsInfo.setGoodsId(allotProduct.getGoodsId());
                 inorderGoodsInfo.setGoodsName(allotProduct.getName());
                 inorderGoodsInfo.setGoodsCode(allotProduct.getCode());
                 inorderGoodsInfo.setGoodsBarcode(allotProduct.getBarCode());
                 inorderGoodsInfo.setGoodsSpec(allotProduct.getSpec());
+                inorderGoodsInfo.setGoodsClassify(allotProduct.getGoodsClassify());
+                inorderGoodsInfo.setMinUnit(allotProduct.getUnit());
                 inorderGoodsInfo.setUnit(allotProduct.getUnit());
+                inorderGoodsInfo.setUnitData(1);
                 inorderGoodsInfo.setBatch(allotProduct.getBatchNum());
                 inorderGoodsInfo.setStorageLocationId(allotProduct.getWarehouseLocId());
                 inorderGoodsInfo.setStorageLocationCode(allotProduct.getWarehouseLocCode());
                 inorderGoodsInfo.setInHouseAmount(allotProduct.getAllotNum());
                 inorderGoodsInfo.setRemark(allotProduct.getRemark());
+                inorderGoodsInfo.setSplit(false);
                 inorderGoodsInfo.setCompanyId(inWarehouseOrder.getCompanyId());
                 inorderGoodsInfoList.add(inorderGoodsInfo);
             }

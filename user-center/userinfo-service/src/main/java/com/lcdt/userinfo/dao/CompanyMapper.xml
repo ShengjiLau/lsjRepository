@@ -33,6 +33,7 @@
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="enable" jdbcType="BIT" property="enable" />
+    <result column="create_phone" jdbcType="VARCHAR" property="createPhone"></result>
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_uc_company
@@ -129,7 +130,8 @@
      select c.comp_id, c.full_name, c.short_name, authentication, authentication_remark, industry,
     province, city, county, detail_address, post_code, tel_no, fax, comp_intro, link_man,
     link_duty, link_tel, link_email, link_remark, invoice_title, registration_no, bank_name,
-    bank_no, registration_address, tel_no1, invoice_remark, company_logo,c.create_id,c.create_name,c.create_date,c.enable
+    bank_no, registration_address, tel_no1, invoice_remark, company_logo,c.create_id,c.create_name,c.create_date,c.enable,
+    u.phone as create_phone
     from t_uc_company c
     left join t_uc_user u on c.create_id = u.user_id
     <where>
