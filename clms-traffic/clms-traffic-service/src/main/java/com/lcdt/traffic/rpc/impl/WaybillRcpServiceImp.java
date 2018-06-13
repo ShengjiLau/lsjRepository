@@ -352,7 +352,8 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     public int modifyOwnQuantity(WaybillModifyParamsDto waybillDto) {
         int result = 0;
         WaybillDao waybillDao = queryOwnWaybill(waybillDto.getId(),waybillDto.getCompanyId());
-
+        waybillDao.setUpdateId(waybillDto.getUpdateId());
+        waybillDao.setUpdateName(waybillDto.getUpdateName());
         if (waybillDto.getWaybillItemsDtoList() != null && waybillDto.getWaybillItemsDtoList().size() > 0) {
             List<WaybillItems> waybillItemsUpdateList = new ArrayList<WaybillItems>();
             for (int i = 0; i < waybillDto.getWaybillItemsDtoList().size(); i++) {
@@ -376,6 +377,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                 result += waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
             }
             //计划编辑
+            planService.adjustPlanAndSplitAmount(waybillDao);
         }
         return result;
     }
@@ -383,8 +385,9 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     @Override
     public int modifyCustomerQuantity(WaybillModifyParamsDto waybillDto) {
         int result = 0;
-        WaybillDao waybillDao = queryOwnWaybill(waybillDto.getId(),waybillDto.getCarrierCompanyId());
-
+        WaybillDao waybillDao = queryCustomerWaybill(waybillDto.getId(),waybillDto.getCarrierCompanyId());
+        waybillDao.setUpdateId(waybillDto.getUpdateId());
+        waybillDao.setUpdateName(waybillDto.getUpdateName());
         if (waybillDto.getWaybillItemsDtoList() != null && waybillDto.getWaybillItemsDtoList().size() > 0) {
             List<WaybillItems> waybillItemsUpdateList = new ArrayList<WaybillItems>();
             for (int i = 0; i < waybillDto.getWaybillItemsDtoList().size(); i++) {
@@ -408,6 +411,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                 result += waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
             }
             //计划编辑
+            planService.adjustPlanAndSplitAmount(waybillDao);
         }
         return result;
     }
@@ -827,7 +831,8 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
                                 //router:计划自动完成
                                 Timeline event = new Timeline();
-                                event.setActionTitle("【计划完成】" + waybill.getWaybillCode()==null?"":waybill.getWaybillCode());
+                                String wayBillCode = waybill.getWaybillCode()==null?"":waybill.getWaybillCode();
+                                event.setActionTitle("【计划完成】" + wayBillCode);
                                 event.setActionTime(new Date());
                                 event.setCompanyId(waybillPlan.getCompanyId());
                                 event.setSearchkey("R_PLAN");
