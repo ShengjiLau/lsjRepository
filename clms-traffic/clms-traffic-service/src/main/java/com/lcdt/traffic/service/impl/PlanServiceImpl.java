@@ -409,7 +409,7 @@ public class PlanServiceImpl implements PlanService {
                     }
                 }
             }
-            if (_splitRemainderAmount<=0) { //派单完成的更新计划状态
+            if (_splitRemainderAmount>0) { //派单完成的更新计划状态
                 waybillPlan.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS);
                 waybillPlan.setUpdateTime(new Date());
                 waybillPlan.setUpdateId(waybillDao.getUpdateId());
