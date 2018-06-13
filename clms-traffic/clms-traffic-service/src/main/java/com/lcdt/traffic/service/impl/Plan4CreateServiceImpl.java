@@ -311,7 +311,10 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
         }
         //router:发布
         Timeline event = new Timeline();
-        event.setActionTitle("【计划发布】（操作人："+dto.getCompanyName()==null?"":dto.getCompanyName()+" "+vo.getCreateName()==null?"":vo.getCreateName()+"）");
+        String company = dto.getCompanyName()==null?"":dto.getCompanyName();
+        String createName = vo.getCreateName()==null?"":vo.getCreateName();
+
+        event.setActionTitle("【计划发布】（操作人："+company+" "+createName+"）");
         event.setActionTime(new Date());
         event.setCompanyId(vo.getCompanyId());
         event.setSearchkey("R_PLAN");
@@ -426,7 +429,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         waybillDto.setVechicleNum(vo.getCarrierVehicle());
                         waybillDto.setWaybillRemark(vo.getPlanRemark());
 
-                        if(!StringUtils.isEmpty(vo.getCarrierIds())) {
+                        if(!StringUtils.isEmpty(vo.getCarrierIds()) && !vo.getCarrierIds().equals("null")) {
                             waybillDto.setDriverName(vo.getCarrierNames());
                             waybillDto.setDriverId(Long.valueOf(vo.getCarrierIds()));
                             waybillDto.setDriverPhone(vo.getCarrierPhone());

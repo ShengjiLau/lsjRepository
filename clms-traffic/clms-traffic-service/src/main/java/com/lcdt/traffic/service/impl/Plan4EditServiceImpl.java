@@ -135,7 +135,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
 
 
                 //司机、车辆
-                if (StringUtils.isEmpty(dto.getCarrierIds())) { //如果没有选司机
+                if (StringUtils.isEmpty(dto.getCarrierIds()) && !vo.getCarrierIds().equals("null")) { //如果没有选司机
                     OwnDriver ownDriver = new OwnDriver();
                     ownDriver.setCompanyId(dto.getCompanyId());
                     ownDriver.setDriverName(dto.getCarrierNames());

@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -32,6 +30,8 @@ import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.service.ShiftInventoryListService;
 import com.lcdt.warehouse.vo.ShiftInventoryListVO;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author Sheng-ji Lau
  * @date 2018年5月10日
@@ -40,9 +40,10 @@ import com.lcdt.warehouse.vo.ShiftInventoryListVO;
  */
 @Service 
 @Primary
+@Slf4j
 public class ShiftInventoryListServiceImpl implements ShiftInventoryListService {
 	
-	private Logger logger = LoggerFactory.getLogger(ShiftInventoryListServiceImpl.class);
+	//private Logger logger = LoggerFactory.getLogger(ShiftInventoryListServiceImpl.class);
 	
 	@Autowired
 	private ShiftInventoryListDOMapper shiftInventoryListDOMapper;
@@ -114,9 +115,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		//数据库插入新的移库商品信息列表
 		int j = shiftGoodsDOMapper.insertShiftGoodsByBatch(shiftGoodsDOList);
 		
-		logger.debug("插入的移库商品信息条数为"+j);
-		logger.debug("插入的移库单数量为"+result);
-		logger.debug("修改的库存数量为"+h);
+		log.debug("插入的移库商品信息条数为"+j);
+		log.debug("插入的移库单数量为"+result);
+		log.debug("修改的库存数量为"+h);
 		
 		if (result > 0) {
 			return ShiftInventoryListVO.successNum;
@@ -243,7 +244,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		List<ShiftInventoryListDO> shiftInventoryListDOList = shiftInventoryListDOMapper.getShiftInventoryListDOByCondition(shiftInventoryListDTO1);
 		//PageInfo<ShiftInventoryListDO> page1 = new PageInfo<ShiftInventoryListDO>(shiftInventoryListDOList);
 		
-		logger.debug("查询得到的移库单数量为"+shiftInventoryListDOList.size());
+		log.debug("查询得到的移库单数量为"+shiftInventoryListDOList.size());
 		//如果查询结果为空，直接返回
 		if (null == shiftInventoryListDOList || 0 == shiftInventoryListDOList.size()) {
 			PageInfo<ShiftInventoryListDTO> page = new PageInfo<ShiftInventoryListDTO>();

@@ -616,7 +616,9 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
 
             //router:直派
             Timeline event = new Timeline();
-            event.setActionTitle("【计划派单】（操作人："+userCompRel.getCompany().getFullName()==null?"":userCompRel.getCompany().getFullName()+" "+user.getRealName()==null?"":user.getRealName()+"）");
+            String createName = user.getRealName()==null?"":user.getRealName();
+            String companyName = userCompRel.getCompany().getFullName()==null?"":userCompRel.getCompany().getFullName();
+            event.setActionTitle("【计划派单】（操作人："+companyName+" "+createName+"）");
             event.setActionTime(new Date());
             event.setCompanyId(company.getCompId());
             event.setSearchkey("R_PLAN");
@@ -810,7 +812,10 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
 
         //router:直派
         Timeline event = new Timeline();
-        event.setActionTitle("【计划派单】（操作人："+userCompRel.getCompany().getFullName()==null?"":userCompRel.getCompany().getFullName()+" "+user.getRealName()==null?"":user.getRealName()+"）");
+        String createName = user.getRealName()==null?"":user.getRealName();
+        String company = userCompRel.getCompany().getFullName()==null?"":userCompRel.getCompany().getFullName();
+
+        event.setActionTitle("【计划派单】（操作人："+company+" "+createName+"）");
         event.setActionTime(new Date());
         event.setCompanyId(userCompRel.getCompany().getCompId());
         event.setSearchkey("R_PLAN");
