@@ -2,6 +2,7 @@ package com.lcdt.userinfo.web.controller.api.admin;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.PropertiesEditor;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -18,7 +19,9 @@ public class InitBinderControllerAdvice {
         binder.registerCustomEditor(Date.class,new PropertyEditorSupport(){
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
-//                super.setAsText(text);
+                if (StringUtils.isEmpty(text)) {
+                    return;
+                }
                 setValue(new Date(Long.valueOf(text)));
             }
         });

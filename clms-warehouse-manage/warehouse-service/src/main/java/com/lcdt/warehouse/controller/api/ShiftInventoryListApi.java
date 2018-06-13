@@ -21,6 +21,7 @@ import com.lcdt.warehouse.vo.ResponseCodeVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Sheng-ji Lau
@@ -32,12 +33,13 @@ import io.swagger.annotations.ApiParam;
 @RestController
 @RequestMapping("/api/shiftInventory")
 @Api(description="移库单接口")
+@Slf4j
 public class ShiftInventoryListApi {
 	
 	@Autowired
 	private ShiftInventoryListService shiftInventoryListService;
 	
-	private Logger logger = LoggerFactory.getLogger(ShiftInventoryListApi.class);
+	//private Logger logger = LoggerFactory.getLogger(ShiftInventoryListApi.class);
 	
 	
 	@PostMapping("/add")
@@ -50,7 +52,7 @@ public class ShiftInventoryListApi {
 		}
 		
 		int result = shiftInventoryListService.insertShiftInventoryList(shiftInventoryListDTO);	
-		logger.debug("创建移库单的数量:"+result);
+		log.debug("创建移库单的数量:"+result);
 		
 		if (result > 0) {
 			return successResponseJson(null, "创建成功");
@@ -70,7 +72,7 @@ public class ShiftInventoryListApi {
 		}
 		
 		int result = shiftInventoryListService.completeShiftInventoryList(shiftInventoryListDTO);
-		logger.debug("完成移库单的数量:"+result);
+		log.debug("完成移库单的数量:"+result);
 		
 		if (result > 0) {
 			return successResponseJson(null, "完成成功");
@@ -118,7 +120,7 @@ public class ShiftInventoryListApi {
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_remove')")
 	public JSONObject deleteShiftInventoryList(Long shiftInventoryListId) {
 		int result = shiftInventoryListService.deleteShiftInventoryList(shiftInventoryListId);
-		logger.debug("取消移库单的数量:"+result);
+		log.debug("取消移库单的数量:"+result);
 		
 		if (result > 0) {
 			return successResponseJson(null, "取消成功!");
