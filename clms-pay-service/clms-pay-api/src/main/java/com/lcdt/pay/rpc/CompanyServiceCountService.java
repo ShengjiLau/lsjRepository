@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface CompanyServiceCountService {
 
+    CompanyServiceCount reduceCompanyProductCount(Long companyId,String serviceName,Integer reduceNum);
+
     List<CompanyServiceCount> companyServiceCount(Long companyId);
 
-    CompanyServiceCount reduceCompanyProductCount(Long companyId, String serviceName, Integer reduceNum);
+    CompanyServiceCount reduceCompanyProductCount(Long companyId,String serviceName,Integer reduceNum,String username,String des);
 
     boolean checkCompanyProductCount(Long companyId, String serviceName, Integer reduceNum);
 

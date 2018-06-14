@@ -3,6 +3,7 @@ package com.lcdt.warehouse.dto;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by lyqishan on 2018/5/25
@@ -48,6 +49,21 @@ public class OutWhOrderSearchDto {
     private int pageNo=1;
     @ApiModelProperty(value = "每页数",required = true)
     private int pageSize=10;
+
+    @ApiModelProperty(value = "商品名称")
+    private String goodsName;
+
+    @ApiModelProperty(value = "商品条码")
+    private String goodsBarCode;
+
+    @ApiModelProperty(value = "商品编码")
+    private String goodsCode;
+
+    private Long classifyId;
+
+    private List<Long> goodIds;
+
+    private String batch;
 
     public Long getOutPlanId() {
         return outPlanId;
@@ -199,5 +215,53 @@ public class OutWhOrderSearchDto {
 
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public String getGoodsBarCode() {
+        return goodsBarCode;
+    }
+
+    public void setGoodsBarCode(String goodsBarCode) {
+        this.goodsBarCode = goodsBarCode;
+    }
+
+    public String getGoodsCode() {
+        return goodsCode;
+    }
+
+    public void setGoodsCode(String goodsCode) {
+        this.goodsCode = goodsCode;
+    }
+
+    public Long getClassifyId() {
+        return classifyId;
+    }
+
+    public void setClassifyId(Long classifyId) {
+        this.classifyId = classifyId;
+    }
+
+    public List<Long> getGoodIds() {
+        return goodIds;
+    }
+
+    public void setGoodIds(List<Long> goodIds) {
+        this.goodIds = goodIds;
+    }
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch;
     }
 }

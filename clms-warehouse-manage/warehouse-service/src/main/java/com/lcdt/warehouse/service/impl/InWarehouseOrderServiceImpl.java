@@ -3,13 +3,13 @@ package com.lcdt.warehouse.service.impl;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.lcdt.items.dto.GoodsListParamsDto;
+import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.warehouse.dto.*;
-import com.lcdt.warehouse.entity.GoodsInfo;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.lcdt.warehouse.mapper.InWarehouseOrderMapper;
-import com.lcdt.warehouse.service.GoodsInfoService;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.lcdt.warehouse.service.InorderGoodsInfoService;
@@ -19,6 +19,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+import org.tl.commons.util.StringUtility;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,6 +47,9 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
 
     @Reference
     private CompanyServiceCountService companyServiceCountService;
+
+    @Reference()
+    SubItemsInfoService goodsService;
 
 
     @Override
@@ -75,7 +80,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);
         }
         if (result > 0) {
-            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"storage_service", 1);
+            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"storage_service", 1, params.getCreateName(),"生成入库单...");
         }
         return result;
     }
@@ -204,7 +209,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
 
         //入库单费用统计
         if (result>0) {
-            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"waybill_service", 1);
+            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"waybill_service", 1,params.getCreateName(),"生成入库单...");
         }
         return result;
     }
@@ -222,5 +227,42 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
     @Override
     public List<Map<String, Object>> selectInWarehouseProductNum(InWarehouseOrderSearchParamsDto params) {
         return baseMapper.selectInWarehouseProductNum(params);
+    }
+
+    private List<Long> queryGoodsIds(InWarehouseOrderSearchParamsDto params) {
+        GoodsListParamsDto dto = new GoodsListParamsDto();
+        dto.setGoodsName(params.getGoodsName());
+        dto.setCompanyId(params.getCompanyId());
+        dto.setGoodsCode(params.getGoodsCode());
+        dto.setBarCode(params.getGoodsBarCode());
+        dto.setClassifyId(params.getClassifyId());
+        List<Long> longs = goodsService.queryGoodsIdsByCondition(dto);
+        if (longs == null) {
+            return new ArrayList<Long>();
+        }
+        return longs;
+    }
+
+    @Override
+    public Integer selectInWarehouseProductNum4Report(InWarehouseOrderSearchParamsDto params) {
+        params.setGoodIds(queryGoodsIds(params));
+        return baseMapper.selectInWarehouseProductNum4Report(params);
+    }
+
+    @Override
+    public Page<Map<String, Object>> selectInWarehouseProduct4Report(InWarehouseOrderSearchParamsDto params) {
+        Page page = new Page(params.getPageNo(), params.getPageSize());
+        params.setGoodIds(queryGoodsIds(params));
+        return page.setRecords(baseMapper.selectInWarehouseProduct4Report(page, params));
+    }
+
+    @Override
+    public List<Map<String, Object>> selectInWarehouseProduct4ReportGroupWare(InWarehouseOrderSearchParamsDto params) {
+        return baseMapper.selectInWarehouseProduct4ReportGroupWare(params);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectInWarehouseProduct4ReportGroupCustomer(InWarehouseOrderSearchParamsDto params) {
+        return baseMapper.selectInWarehouseProduct4ReportGroupCustomer(params);
     }
 }

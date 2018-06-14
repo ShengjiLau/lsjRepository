@@ -176,7 +176,7 @@ public class WaybillServiceImpl implements WaybillService {
 
         //扣减运单费用
         if (result > 0) {
-            companyServiceCountService.reduceCompanyProductCount(waybillDto.getCompanyId(),"waybill_service", 1);
+            companyServiceCountService.reduceCompanyProductCount(waybillDto.getCompanyId(),"waybill_service", 1,waybillDto.getCreateName(),"生成运单...");
         }
 
         return waybill;

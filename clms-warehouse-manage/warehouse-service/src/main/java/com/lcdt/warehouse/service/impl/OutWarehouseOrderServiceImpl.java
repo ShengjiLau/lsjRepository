@@ -4,6 +4,8 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.lcdt.items.dto.GoodsListParamsDto;
+import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.OutOrderGoodsInfo;
@@ -44,6 +46,9 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
     @Reference
     private CompanyServiceCountService companyServiceCountService;
 
+    @Reference()
+    SubItemsInfoService goodsService;
+
     @Override
     public int addOutWarehouseOrder(OutWhOrderDto dto) {
         int result = 0;
@@ -83,7 +88,7 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
 
         //扣减运单费用
         if (result > 0) {
-            companyServiceCountService.reduceCompanyProductCount(dto.getCompanyId(),"storage_service", 1);
+            companyServiceCountService.reduceCompanyProductCount(dto.getCompanyId(),"storage_service", 1,dto.getCreateName(),"生成出库单...");
         }
 
         return result;
@@ -176,5 +181,42 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
     @Override
     public List<Map<String, Object>> selectOutWarehouseProductNum(OutWhOrderSearchDto params) {
         return baseMapper.selectOutWarehouseProductNum(params);
+    }
+
+    private List<Long> queryGoodsIds(OutWhOrderSearchDto params) {
+        GoodsListParamsDto dto = new GoodsListParamsDto();
+        dto.setGoodsName(params.getGoodsName());
+        dto.setCompanyId(params.getCompanyId());
+        dto.setGoodsCode(params.getGoodsCode());
+        dto.setBarCode(params.getGoodsBarCode());
+        dto.setClassifyId(params.getClassifyId());
+        List<Long> longs = goodsService.queryGoodsIdsByCondition(dto);
+        if (longs == null) {
+            return new ArrayList<Long>();
+        }
+        return longs;
+    }
+
+    @Override
+    public Integer selectOutWarehouseProductNum4Report(OutWhOrderSearchDto params) {
+        params.setGoodIds(queryGoodsIds(params));
+        return baseMapper.selectOutWarehouseProductNum4Report(params);
+    }
+
+    @Override
+    public Page<Map<String, Object>> selectOutWarehouseProduct4Report(OutWhOrderSearchDto params) {
+        Page page = new Page(params.getPageNo(), params.getPageSize());
+        params.setGoodIds(queryGoodsIds(params));
+        return page.setRecords(baseMapper.selectOutWarehouseProduct4Report(page, params));
+    }
+
+    @Override
+    public List<Map<String, Object>> selectOutWarehouseProduct4ReportGroupWare(OutWhOrderSearchDto params) {
+        return baseMapper.selectOutWarehouseProduct4ReportGroupWare(params);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectOutWarehouseProduct4ReportGroupCustomer(OutWhOrderSearchDto params) {
+        return baseMapper.selectOutWarehouseProduct4ReportGroupCustomer(params);
     }
 }

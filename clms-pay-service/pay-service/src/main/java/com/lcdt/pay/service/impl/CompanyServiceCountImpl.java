@@ -3,6 +3,7 @@ package com.lcdt.pay.service.impl;
 import com.lcdt.pay.dao.CompanyServiceCountMapper;
 import com.lcdt.pay.model.CompanyServiceCount;
 import com.lcdt.pay.rpc.CompanyServiceCountService;
+import com.lcdt.pay.rpc.ProductCountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class CompanyServiceCountImpl implements CompanyServiceCountService {
     @Autowired
     CompanyServiceCountMapper countMapper;
 
+    @Autowired
+    ProductCountService productCountService;
+
     private static final Logger log = LoggerFactory.getLogger(CompanyServiceCountImpl.class);
 
 
@@ -27,8 +31,12 @@ public class CompanyServiceCountImpl implements CompanyServiceCountService {
         return companyServiceCounts;
     }
 
-
     public CompanyServiceCount reduceCompanyProductCount(Long companyId,String serviceName,Integer reduceNum){
+        return reduceCompanyProductCount(companyId, serviceName, reduceNum, null, null);
+    }
+
+
+    public CompanyServiceCount reduceCompanyProductCount(Long companyId,String serviceName,Integer reduceNum,String username,String des){
         List<CompanyServiceCount> companyServiceCounts = countMapper.selectByCompanyId(companyId, serviceName);
         if (CollectionUtils.isEmpty(companyServiceCounts)) {
             log.error("剩余服务次数不足 公司Id{} serviceName:{} reduceName{} ",companyId,serviceName,reduceNum);
@@ -41,6 +49,9 @@ public class CompanyServiceCountImpl implements CompanyServiceCountService {
             }
             companyServiceCount.setProductServiceNum(companyServiceCount.getProductServiceNum() - reduceNum);
             countMapper.updateByPrimaryKey(companyServiceCount);
+            if (username != null) {
+                productCountService.reduceProductCount(serviceName,des,reduceNum,username,companyId,companyServiceCount.getProductServiceNum());
+            }
             return companyServiceCount;
         }
     }
