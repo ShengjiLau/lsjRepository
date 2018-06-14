@@ -211,7 +211,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	public PageInfo<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO1) {
 		shiftInventoryListDTO1.setCompanyId(SecurityInfoGetter.getCompanyId());
 		if (null == shiftInventoryListDTO1.getPageNo()) {
-			shiftInventoryListDTO1.setPageNo(1);
+			shiftInventoryListDTO1.setPageNo(ShiftInventoryListVO.FIRST_PAGE_NO);
 		}
 		if (null == shiftInventoryListDTO1.getPageSize()) {
 			shiftInventoryListDTO1.setPageSize(Integer.MAX_VALUE);

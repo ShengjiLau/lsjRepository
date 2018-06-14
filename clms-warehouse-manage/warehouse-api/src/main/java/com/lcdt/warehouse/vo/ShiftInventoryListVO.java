@@ -12,7 +12,7 @@ public final class ShiftInventoryListVO {
 	/**
 	 * 零值
 	 */
-	public static final Float ZERO_VALUE = (float) 0.0;
+	public static final Float ZERO_VALUE =  0.0f;
 	
 	/**
 	 * page第一页
