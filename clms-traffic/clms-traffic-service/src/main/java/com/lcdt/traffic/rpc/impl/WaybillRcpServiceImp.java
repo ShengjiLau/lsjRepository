@@ -272,7 +272,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         //更新运单
         result += waybillMapper.updateByPrimaryKeyAndCompanyId(waybill);
         //运单货物详细
-        result += modifyWaybillItems(waybillDto, waybill);
+        result += modifyWaybillItems(waybillDto.getWaybillItemsDtoList(), waybill);
         return result;
     }
 
@@ -286,17 +286,17 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         //新增运单
         result += waybillMapper.updateByPrimaryKeyAndCarrierCompanyId(waybill);
         //运单货物详细
-        result += modifyWaybillItems(waybillDto, waybill);
+        result += modifyWaybillItems(waybillDto.getWaybillItemsDtoList(), waybill);
         return result;
     }
 
     //更新货物，如果有id则更新，如果没有id，则新增
-    private int modifyWaybillItems(WaybillModifyParamsDto waybillDto, Waybill waybill) {
+    private int modifyWaybillItems(List<WaybillItemsModifyParamsDto> waybillItemsDtoList, Waybill waybill) {
         int result = 0;
-        if (waybillDto.getWaybillItemsDtoList() != null && waybillDto.getWaybillItemsDtoList().size() > 0) {
+        if (waybillItemsDtoList != null && waybillItemsDtoList.size() > 0) {
             List<WaybillItems> waybillItemsUpdateList = new ArrayList<WaybillItems>();
             List<WaybillItems> waybillItemsAddList = new ArrayList<WaybillItems>();
-            for (WaybillItemsModifyParamsDto item : waybillDto.getWaybillItemsDtoList()) {
+            for (WaybillItemsModifyParamsDto item : waybillItemsDtoList) {
                 WaybillItems waybillItems = new WaybillItems();
                 if (item.getId() != null && item.getId() > 0) {
                     waybillItems = waybillItemsMapper.selectByPrimaryKey(item.getId());
