@@ -47,7 +47,6 @@ public class AllotApi {
         Map map= ClmsBeanUtil.beanToMap(dto);
         map.put("pageNo", pageNo);
         map.put("pageSize", pageSize);
-
         Page<AllotDto> listPageInfo = allotService.allotDtoList(map);
         return JSONResponseUtil.success(listPageInfo);
     }
@@ -131,8 +130,7 @@ public class AllotApi {
     @RequestMapping(value = "/allotPutInStorage", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_put_in_storage')")
     public JSONObject allotPutInStorage(@Validated @RequestBody AllotDto dto) {
-//        boolean result = allotService.allotPutInStorage(dto);
-        boolean result = true;
+        boolean result = allotService.allotPutInStorage(dto);
         if (result) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code", 0);

@@ -193,6 +193,51 @@
         where 1=1  and outbound_time is not null
         and company_id= #{companyId,jdbcType=BIGINT}
         and owo.order_status = 2
+        <include refid="sql_report"/>
+        )a GROUP BY outbound_time
+    </select>
+
+    <select id="selectOutWarehouseProductNum4Report" resultType="int" >
+        select sum(orgi.outbound_quantity)
+        from out_warehouse_order owo join out_order_goods_info orgi on owo.outorder_id = orgi.outorder_id
+        where 1=1  and owo.outbound_time is not null
+        and owo.company_id= #{companyId,jdbcType=BIGINT}
+        and owo.order_status = 2
+        <include refid="sql_report"/>
+    </select>
+
+    <select id="selectOutWarehouseProduct4Report" resultType="map" >
+        select owo.warehouse_id,owo.warehouse_name,owo.outbound_type,
+        owo.customer_id,owo.customer_name,orgi.goods_name,orgi.goods_id, orgi.goods_classify_name,orgi.unit,orgi.goods_spec,orgi.goods_code,orgi.goods_bar_code,orgi.batch,
+        orgi.outbound_quantity,concat_ws('-',owo.warehouse_id,owo.customer_id,orgi.goods_id,orgi.batch )rowkey
+        from out_warehouse_order owo join out_order_goods_info orgi on owo.outorder_id = orgi.outorder_id
+        where 1=1  and owo.outbound_time is not null
+        and owo.company_id= #{companyId,jdbcType=BIGINT}
+        and owo.order_status = 2
+        <include refid="sql_report"/>
+    </select>
+
+    <select id="selectOutWarehouseProduct4ReportGroupWare" resultType="map" >
+        select sum(orgi.outbound_quantity)num,owo.warehouse_id,owo.warehouse_name
+        from out_warehouse_order owo join out_order_goods_info orgi on owo.outorder_id = orgi.outorder_id
+        where 1=1  and owo.outbound_time is not null
+        and owo.company_id= #{companyId,jdbcType=BIGINT}
+        and owo.order_status = 2
+        <include refid="sql_report"/>
+         group by owo.warehouse_id,owo.warehouse_name
+    </select>
+
+    <select id="selectOutWarehouseProduct4ReportGroupCustomer" resultType="map" >
+        select sum(orgi.outbound_quantity)num,owo.customer_id,owo.customer_name
+        from out_warehouse_order owo join out_order_goods_info orgi on owo.outorder_id = orgi.outorder_id
+        where 1=1  and owo.outbound_time is not null
+        and owo.company_id= #{companyId,jdbcType=BIGINT}
+        and owo.order_status = 2
+         <include refid="sql_report"/>
+        group by owo.customer_id,owo.customer_name
+    </select>
+
+    <sql id="sql_report">
         <if test="startOutboundTime!=null and startOutboundTime!=''">
             and owo.outbound_time &gt;= CONCAT(STR_TO_DATE(#{startOutboundTime,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
         </if>
@@ -205,7 +250,17 @@
         <if test="customerId!=null and customerId!=''">
             and owo.customer_id = #{customerId,jdbcType=BIGINT}
         </if>
-        )a GROUP BY outbound_time
-    </select>
-
+        <if test="batch!=null and batch!=''">
+            and orgi.batch like concat('%',#{batch,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="outboundType!=null and outboundType!=''">
+            and owo.outbound_type = #{outboundType,jdbcType=VARCHAR}
+        </if>
+        <if test="goodIds != null and goodIds.size() > 0">
+            and orgi.goods_id IN
+            <foreach collection="goodIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </sql>
 </mapper>

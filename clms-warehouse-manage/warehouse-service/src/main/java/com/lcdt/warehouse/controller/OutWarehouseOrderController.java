@@ -160,5 +160,54 @@ public class OutWarehouseOrderController {
         return jo;
     }
 
+    @ApiOperation("出入库汇总出库已完成商品数量")
+    @RequestMapping(value = "/outWarehouseProductNum4Report", method = RequestMethod.GET)
+    public JSONObject outWarehouseProductNum4Report(OutWhOrderSearchDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",outWarehouseOrderService.selectOutWarehouseProductNum4Report(params));
+
+        return jo;
+    }
+
+    @ApiOperation("出入库汇总出库已完成商品")
+    @RequestMapping(value = "/outWarehouseProduct4Report", method = RequestMethod.GET)
+    public JSONObject outWarehouseProduct4Report(OutWhOrderSearchDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",outWarehouseOrderService.selectOutWarehouseProduct4Report(params));
+
+        return jo;
+    }
+
+
+    @ApiOperation("出入库汇总出库已完成商品按仓库分组")
+    @RequestMapping(value = "/outWarehouseProduct4ReportGroupWare", method = RequestMethod.GET)
+    public JSONObject selectOutWarehouseProduct4ReportGroupWare(OutWhOrderSearchDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",outWarehouseOrderService.selectOutWarehouseProduct4ReportGroupWare(params));
+
+        return jo;
+    }
+
+
+    @ApiOperation("出入库汇总出库已完成商品按客户分组")
+    @RequestMapping(value = "/outWarehouseProduct4ReportGroupCustomer", method = RequestMethod.GET)
+    public JSONObject selectOutWarehouseProduct4ReportGroupCustomer(OutWhOrderSearchDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",outWarehouseOrderService.selectOutWarehouseProduct4ReportGroupCustomer(params));
+
+        return jo;
+    }
 }
 
