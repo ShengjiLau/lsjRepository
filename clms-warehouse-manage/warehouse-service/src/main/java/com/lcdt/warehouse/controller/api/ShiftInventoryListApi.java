@@ -1,7 +1,5 @@
 package com.lcdt.warehouse.controller.api;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -184,10 +182,10 @@ public class ShiftInventoryListApi {
 	 */
 	private <T> JSONObject successResponseJson(T object,String message) {	
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put(ResponseCodeVO.code, ResponseCodeVO.successCode);
-		jsonObject.put(ResponseCodeVO.message, message);
+		jsonObject.put(ResponseCodeVO.CODE, ResponseCodeVO.SUCCESS_CODE);
+		jsonObject.put(ResponseCodeVO.MESSAGE, message);
 		if (null != object) {
-			jsonObject.put(ResponseCodeVO.data, object);
+			jsonObject.put(ResponseCodeVO.DATA, object);
 		}	
 		return jsonObject;
 	}
@@ -201,8 +199,8 @@ public class ShiftInventoryListApi {
 	 */
 	private <T> JSONObject failedResponseJson(String message) {
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put(ResponseCodeVO.code, ResponseCodeVO.failedCode);
-		jsonObject.put(ResponseCodeVO.message, message);
+		jsonObject.put(ResponseCodeVO.CODE, ResponseCodeVO.FAILED_CODE);
+		jsonObject.put(ResponseCodeVO.MESSAGE, message);
 		
 		return jsonObject;
 	}

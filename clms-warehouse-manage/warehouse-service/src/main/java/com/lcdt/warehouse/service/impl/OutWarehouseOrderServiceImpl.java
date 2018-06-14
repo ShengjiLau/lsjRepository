@@ -120,7 +120,7 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
         EntityWrapper wrapper = new EntityWrapper();
         wrapper.setEntity(orderWrapper);
         //释放锁定库存
-        if(params.getOrderStatus()==ConstantVO.IN_ORDER_STATUS_HAVE_CANCEL){
+        if(params.getOrderStatus()!=null&&params.getOrderStatus()==ConstantVO.IN_ORDER_STATUS_HAVE_CANCEL){
             OutWhOrderDto outWhOrderDto=queryOutWarehouseOrder(params.getCompanyId(),params.getOutorderId());
             List<OutOrderGoodsInfoDto> outOrderGoodsInfoDtoList=outWhOrderDto.getOutOrderGoodsInfoList();
             if(outOrderGoodsInfoDtoList!=null&&outOrderGoodsInfoDtoList.size()>0){

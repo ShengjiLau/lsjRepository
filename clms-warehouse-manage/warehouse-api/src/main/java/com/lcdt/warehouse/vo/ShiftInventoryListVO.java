@@ -7,12 +7,43 @@ package com.lcdt.warehouse.vo;
  * @version
  * @Description: TODO 
  */
-public class ShiftInventoryListVO {
+public final class ShiftInventoryListVO {
 	
-	public static final Integer ZERO_VALUE = 0;
+	/**
+	 * 零值
+	 */
+	public static final Float ZERO_VALUE = (float) 0.0;
 	
-	public static final Integer successNum = 1;
+	/**
+	 * page第一页
+	 */
+	public static final Integer FIRST_PAGE_NO = 1;
 	
-	public static final Integer failedNum = -1;
+	/**
+	 * 成功码
+	 */
+	public static final Integer SUCCESS_NUM = 1;
+	
+	/**
+	 * 失败码
+	 */
+	public static final Integer FAILED_NUM = -1;
+	
+	/**
+	 * 未完成状态码
+	 */
+	public static final byte UNFINISHED = 0;
+	
+	/**
+	 * 完成状态码
+	 */
+	public static final byte FISHINED = 1;
+	
+	/**
+	 * 取消状态码
+	 */
+	public static final byte CANCELED = 2;
+	
+	
 
 }
