@@ -43,7 +43,6 @@ public class ProductCountServiceImpl implements ProductCountService {
         productCountLog.setLogDes(des);
         productCountLog.setLogNo(OrderNoGenerator.generateDateNo(2));
         productCountLog.setLogType(CountLogType.TOPUPCOUNTTYPE);
-
         productCountLog.setCompanyId(companyId);
         productCountLog.setUserName(userName);
         productCountLog.setRemainNum(remainCounts);
@@ -75,7 +74,6 @@ public class ProductCountServiceImpl implements ProductCountService {
         companyServiceCount1.setCompanyId(companyId);
         companyServiceCount1.setProductName(productName);
         companyServiceCount1.setProductServiceNum(remainCounts);
-
         companyServiceCountMapper.insert(companyServiceCount1);
 
         return productCountLog;

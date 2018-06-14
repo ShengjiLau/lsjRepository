@@ -80,7 +80,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);
         }
         if (result > 0) {
-            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"storage_service", 1);
+            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"storage_service", 1, params.getCreateName(),"生成入库单...");
         }
         return result;
     }
@@ -209,7 +209,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
 
         //入库单费用统计
         if (result>0) {
-            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"waybill_service", 1);
+            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"waybill_service", 1,params.getCreateName(),"生成入库单...");
         }
         return result;
     }
@@ -224,45 +224,4 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
         return baseMapper.selectInWarehouseNum(params);
     }
 
-    @Override
-    public List<Map<String, Object>> selectInWarehouseProductNum(InWarehouseOrderSearchParamsDto params) {
-        return baseMapper.selectInWarehouseProductNum(params);
-    }
-
-    private List<Long> queryGoodsIds(InWarehouseOrderSearchParamsDto params) {
-        GoodsListParamsDto dto = new GoodsListParamsDto();
-        dto.setGoodsName(params.getGoodsName());
-        dto.setCompanyId(params.getCompanyId());
-        dto.setGoodsCode(params.getGoodsCode());
-        dto.setBarCode(params.getGoodsBarCode());
-        dto.setClassifyId(params.getClassifyId());
-        List<Long> longs = goodsService.queryGoodsIdsByCondition(dto);
-        if (longs == null) {
-            return new ArrayList<Long>();
-        }
-        return longs;
-    }
-
-    @Override
-    public Integer selectInWarehouseProductNum4Report(InWarehouseOrderSearchParamsDto params) {
-        params.setGoodIds(queryGoodsIds(params));
-        return baseMapper.selectInWarehouseProductNum4Report(params);
-    }
-
-    @Override
-    public Page<Map<String, Object>> selectInWarehouseProduct4Report(InWarehouseOrderSearchParamsDto params) {
-        Page page = new Page(params.getPageNo(), params.getPageSize());
-        params.setGoodIds(queryGoodsIds(params));
-        return page.setRecords(baseMapper.selectInWarehouseProduct4Report(page, params));
-    }
-
-    @Override
-    public List<Map<String, Object>> selectInWarehouseProduct4ReportGroupWare(InWarehouseOrderSearchParamsDto params) {
-        return baseMapper.selectInWarehouseProduct4ReportGroupWare(params);
-    }
-
-    @Override
-    public List<Map<String, Object>> selectInWarehouseProduct4ReportGroupCustomer(InWarehouseOrderSearchParamsDto params) {
-        return baseMapper.selectInWarehouseProduct4ReportGroupCustomer(params);
-    }
 }
