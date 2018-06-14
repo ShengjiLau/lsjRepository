@@ -68,7 +68,7 @@ public class SendNotifyService {
                 if (receiver != null && receiver.getPhoneNum() != null && !receiver.getPhoneNum().equals("")) {
                     if (companyNotifySetting.getEnableSms()) {
                         //发送短信通知
-                        smsNotify.sendSmsNotify(eventMetaData, user.getRealName(), notifyContent, receiver.getPhoneNum(), sendCompanyId);
+                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getPhoneNum(), sendCompanyId);
                     }
                 }
                 if (receiver != null && receiver.getCompanyId() != null && receiver.getUserId() != null) {
@@ -83,7 +83,7 @@ public class SendNotifyService {
                 if (receiver != null && receiver.getCarrierPhoneNum() != null && !receiver.getCarrierPhoneNum().equals("")) {
                     if (companyNotifySetting.getEnableSms()) {
                         //发送短信通知
-                        smsNotify.sendSmsNotify(eventMetaData, user.getRealName(), notifyContent, receiver.getCarrierPhoneNum(), sendCompanyId);
+                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getCarrierPhoneNum(), sendCompanyId);
                     }
                 }
                 if (receiver != null && receiver.getCarrierCompanyId() != null && receiver.getCarrierUserId() != null) {
@@ -98,7 +98,7 @@ public class SendNotifyService {
                 if (receiver != null && receiver.getCustomerPhoneNum() != null && !receiver.getCustomerPhoneNum().equals("")) {
                     if (companyNotifySetting.getEnableSms()) {
                         //发送短信通知
-                        smsNotify.sendSmsNotify(eventMetaData, user.getRealName(), notifyContent, receiver.getCustomerPhoneNum(), sendCompanyId);
+                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getCustomerPhoneNum(), sendCompanyId);
                     }
                 }
             }
@@ -107,7 +107,7 @@ public class SendNotifyService {
                 if (receiver != null && receiver.getDriverPhoneNum() != null && !receiver.getDriverPhoneNum().equals("")) {
                     if (companyNotifySetting.getEnableSms()) {
                         //发送短信通知
-                        smsNotify.sendSmsNotify(eventMetaData, user.getRealName(), notifyContent, receiver.getDriverPhoneNum(), sendCompanyId);
+                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getDriverPhoneNum(), sendCompanyId);
                     }
                 }
             }
@@ -115,7 +115,7 @@ public class SendNotifyService {
                 if (receiver != null && receiver.getReceivePhoneNum() != null && !receiver.getReceivePhoneNum().equals("")) {
                     if (companyNotifySetting.getEnableSms()) {
                         //发送短信通知
-                        smsNotify.sendSmsNotify(eventMetaData, user.getRealName(), notifyContent, receiver.getReceivePhoneNum(), sendCompanyId);
+                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getReceivePhoneNum(), sendCompanyId);
                     }
                 }
             }
