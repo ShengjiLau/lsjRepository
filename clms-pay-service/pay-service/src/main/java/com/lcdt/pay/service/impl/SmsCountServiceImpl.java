@@ -45,6 +45,6 @@ public class SmsCountServiceImpl implements SmsCountService {
 
     @Override
     public void deduction(Long companyId, String serviceName, Integer num) {
-        countService.reduceCompanyProductCount(companyId,serviceName,num);
+        countService.reduceCompanyProductCount(companyId,serviceName,num,"","发送短信");
     }
 }

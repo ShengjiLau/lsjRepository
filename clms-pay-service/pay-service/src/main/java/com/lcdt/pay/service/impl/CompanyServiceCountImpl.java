@@ -31,6 +31,10 @@ public class CompanyServiceCountImpl implements CompanyServiceCountService {
         return companyServiceCounts;
     }
 
+    public CompanyServiceCount reduceCompanyProductCount(Long companyId,String serviceName,Integer reduceNum){
+        return reduceCompanyProductCount(companyId, serviceName, reduceNum, null, null);
+    }
+
 
     public CompanyServiceCount reduceCompanyProductCount(Long companyId,String serviceName,Integer reduceNum,String username,String des){
         List<CompanyServiceCount> companyServiceCounts = countMapper.selectByCompanyId(companyId, serviceName);
@@ -45,7 +49,9 @@ public class CompanyServiceCountImpl implements CompanyServiceCountService {
             }
             companyServiceCount.setProductServiceNum(companyServiceCount.getProductServiceNum() - reduceNum);
             countMapper.updateByPrimaryKey(companyServiceCount);
-            productCountService.reduceProductCount(serviceName,des,reduceNum,username,companyId,companyServiceCount.getProductServiceNum());
+            if (username != null) {
+                productCountService.reduceProductCount(serviceName,des,reduceNum,username,companyId,companyServiceCount.getProductServiceNum());
+            }
             return companyServiceCount;
         }
     }
