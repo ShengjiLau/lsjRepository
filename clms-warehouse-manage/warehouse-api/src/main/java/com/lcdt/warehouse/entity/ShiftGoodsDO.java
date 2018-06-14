@@ -44,7 +44,7 @@ public class ShiftGoodsDO implements Serializable {
 	@ApiModelProperty("所对应的移库单id")
     private Long shiftInventoryId;
 
-    private static final long serialVersionUID = 1491515315L;
+    private static final long serialVersionUID = -1491515315L;
 
     public Long getShiftGoodsId() {
         return shiftGoodsId;

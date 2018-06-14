@@ -129,6 +129,22 @@
 		</foreach>
 		</where>
 	</select>
+	
+	<select id="selectInventoryListByShiftGoodsBO" parameterType="com.lcdt.warehouse.utils.ShiftGoodsBO">
+			select t.invertory_id invertoryId
+			from inventory t inner join goods_info g on
+       		t.goods_id = g.goods_id
+		<where>
+			t.company_id = #{companyId,jdbcType=BIGINT}
+			and t.customer_id = #{customerId,jdbcType=BIGINT}
+			and t.warehouse_id = #{warehouseId,jdbcType=BIGINT}
+			and t.storage_location_code = #{storageLocationCode,jdbcType=VARCHAR} 
+			and g.goods_code = #{goodsCode,jdbcType=VARCHAR}
+			and g.goods_batch = #{goodsBatch,jdbcType=VARCHAR}          
+		</where>	
+	</select>
+	
+	
 
 </mapper>
 
