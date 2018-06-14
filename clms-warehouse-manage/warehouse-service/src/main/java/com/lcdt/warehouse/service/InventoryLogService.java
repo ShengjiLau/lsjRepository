@@ -6,6 +6,7 @@ import com.lcdt.warehouse.entity.*;
 import com.baomidou.mybatisplus.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -21,4 +22,47 @@ public interface InventoryLogService extends IService<InventoryLog> {
     InventoryLog saveInOrderLog(InWarehouseOrder inWarehouseOrder, Inventory inventory,Float updatedInventoryNum);
 
     InventoryLog saveOutOrderLog(OutWarehouseOrder outWarehouseOrder, OutOrderGoodsInfo goodsInfo,Float updatedInventoryNum,Inventory inventory);
+
+    /**
+     * 出入库汇总已完成商品数量
+     * @param params
+     * @return
+     */
+    List<Map<String,Object>> selectWarehouseProductNum(InventoryLogQueryDto params);
+
+    /**
+     * 报表统计商品数量
+     * @param params
+     * @return
+     */
+    Page<List<Map<String,Object>>> selectWarehouseProduct4Report(InventoryLogQueryDto params);
+
+
+    /**
+     * 报表统计商品数量出入库
+     * @param params
+     * @return
+     */
+    Page<List<Map<String,Object>>> selectWarehouseProduct4SummaryReport(InventoryLogQueryDto params);
+
+    /**
+     * 报表统计商品数量按仓库
+     * @param params
+     * @return
+     */
+    List<Map<String,Object>> selectWarehouseProduct4ReportGroupWare(InventoryLogQueryDto params);
+
+    /**
+     * 报表统计商品数量按客户
+     * @param params
+     * @return
+     */
+    List<Map<String,Object>> selectWarehouseProduct4ReportGroupCustomer(InventoryLogQueryDto params);
+
+    /**
+     * 报表统计总量
+     * @param params
+     * @return
+     */
+    Long selectWarehouseProductNum4Report(InventoryLogQueryDto params);
 }

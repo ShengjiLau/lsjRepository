@@ -1,6 +1,8 @@
 package com.lcdt.warehouse.controller.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.warehouse.dto.InventoryLogQueryDto;
 import com.lcdt.warehouse.entity.Inventory;
 import com.lcdt.warehouse.entity.InventoryLog;
@@ -13,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -39,6 +38,80 @@ public class InventoryLogApi {
         return JSONResponseUtil.success(inventoryLogs);
     }
 
+    @ApiOperation("概览已完成商品数量")
+    @RequestMapping(value = "/warehouseProductNum", method = RequestMethod.GET)
+    public JSONObject inWarehouseProductNum(InventoryLogQueryDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",inventoryLogService.selectWarehouseProductNum(params));
+
+
+        return jo;
+    }
+
+    @ApiOperation("报表统计出入库商品列表")
+    @RequestMapping(value = "/warehouseProduct4Report", method = RequestMethod.GET)
+    public JSONObject inWarehouseProduct4Report(InventoryLogQueryDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",inventoryLogService.selectWarehouseProduct4Report(params));
+
+        return jo;
+    }
+
+    @ApiOperation("报表统计出入库商品列表按仓库分组")
+    @RequestMapping(value = "/warehouseProduct4ReportGroupWare", method = RequestMethod.GET)
+    public JSONObject selectInWarehouseProduct4ReportGroupWare(InventoryLogQueryDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",inventoryLogService.selectWarehouseProduct4ReportGroupWare(params));
+
+        return jo;
+    }
+
+
+    @ApiOperation("报表统计出入库商品列表按客户分组")
+    @RequestMapping(value = "/warehouseProduct4ReportGroupCustomer", method = RequestMethod.GET)
+    public JSONObject selectInWarehouseProduct4ReportGroupCustomer(InventoryLogQueryDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",inventoryLogService.selectWarehouseProduct4ReportGroupCustomer(params));
+
+        return jo;
+    }
+
+    @ApiOperation("报表统计出入库商品总数")
+    @RequestMapping(value = "/warehouseProductNum4Report", method = RequestMethod.GET)
+    public JSONObject selectWarehouseProductNum4Report(InventoryLogQueryDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",inventoryLogService.selectWarehouseProductNum4Report(params));
+
+        return jo;
+    }
+
+    @ApiOperation("报表统计出入库汇总商品列表")
+    @RequestMapping(value = "/warehouseProduct4SummaryReport", method = RequestMethod.GET)
+    public JSONObject selectWarehouseProduct4SummaryReport(InventoryLogQueryDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        params.setType(null);//这里不用这个属性，避免前端传过来造成sql使用这个属性
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",inventoryLogService.selectWarehouseProduct4SummaryReport(params));
+
+        return jo;
+    }
 
     @InitBinder
     protected void initBinder(HttpServletRequest request,

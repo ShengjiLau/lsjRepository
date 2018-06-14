@@ -72,7 +72,7 @@ public interface OutWarehouseOrderMapper extends BaseMapper<OutWarehouseOrder> {
      * @param params
      * @return
      */
-    Integer selectOutWarehouseProductNum4Report(OutWhOrderSearchDto params);
+    Long selectOutWarehouseProductNum4Report(OutWhOrderSearchDto params);
 
     /**
      * 出入库汇总出库已完成商品

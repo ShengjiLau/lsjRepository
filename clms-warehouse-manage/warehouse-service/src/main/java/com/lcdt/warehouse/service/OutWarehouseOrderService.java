@@ -73,38 +73,4 @@ public interface OutWarehouseOrderService extends IService<OutWarehouseOrder> {
      */
     List<Map<String,Object>> selectOutWarehouseNum(OutWhOrderSearchDto params);
 
-    /**
-     * 概览出库单已完成商品数量
-     * @param params
-     * @return
-     */
-    List<Map<String,Object>> selectOutWarehouseProductNum(OutWhOrderSearchDto params);
-
-    /**
-     * 出入库汇总出库已完成商品数量
-     * @param params
-     * @return
-     */
-    Integer selectOutWarehouseProductNum4Report(OutWhOrderSearchDto params);
-
-    /**
-     * 出入库汇总出库已完成商品
-     * @param params
-     * @return
-     */
-    Page<Map<String,Object>> selectOutWarehouseProduct4Report(OutWhOrderSearchDto params);
-
-    /**
-     * 出入库汇总出库已完成商品按仓库分组
-     * @param params
-     * @return
-     */
-    List<Map<String,Object>> selectOutWarehouseProduct4ReportGroupWare(OutWhOrderSearchDto params);
-
-    /**
-     * 出入库汇总出库已完成商品按仓库分组
-     * @param params
-     * @return
-     */
-    List<Map<String,Object>> selectOutWarehouseProduct4ReportGroupCustomer(OutWhOrderSearchDto params);
 }
