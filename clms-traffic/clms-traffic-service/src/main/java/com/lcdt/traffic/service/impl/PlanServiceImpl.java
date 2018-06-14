@@ -376,14 +376,12 @@ public class PlanServiceImpl implements PlanService {
                                     if (splitGoodsDetail.getRemainAmount()>splitGoodsDetail.getAllotAmount()) {
                                         throw new WaybillPlanException("调整数量大于派单原始数量！");
                                     }
-                                    if (splitGoodsDetail.getRemainAmount() <0) {
+                                    if (splitGoodsDetail.getRemainAmount() < 0) {
                                         throw new WaybillPlanException("派单调整数量大于计划待派数量！");
                                     }
                                     splitGoodsDetail.setUpdateTime(new Date());
                                     splitGoodsDetail.setUpdateId(waybillDao.getUpdateId());
                                     splitGoodsDetail.setUpdateName(waybillDao.getUpdateName());
-
-
 
                                 }
                            }

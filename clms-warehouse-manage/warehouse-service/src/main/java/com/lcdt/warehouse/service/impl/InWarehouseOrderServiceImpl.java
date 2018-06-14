@@ -80,7 +80,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);
         }
         if (result > 0) {
-            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"storage_service", 1);
+            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"storage_service", 1, params.getCreateName(),"生成入库单...");
         }
         return result;
     }
@@ -209,7 +209,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
 
         //入库单费用统计
         if (result>0) {
-            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"waybill_service", 1);
+            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"waybill_service", 1,params.getCreateName(),"生成入库单...");
         }
         return result;
     }
