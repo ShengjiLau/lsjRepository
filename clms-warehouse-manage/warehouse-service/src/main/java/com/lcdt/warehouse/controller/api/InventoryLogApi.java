@@ -39,7 +39,8 @@ public class InventoryLogApi {
     }
 
     @ApiOperation("概览已完成商品数量")
-    @RequestMapping(value = "/warehouseProductNum", method = RequestMethod.GET)
+    @RequestMapping(value = "/inWarehouseProductNum", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('in_ware_report')")
     public JSONObject inWarehouseProductNum(InventoryLogQueryDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
 
@@ -51,8 +52,23 @@ public class InventoryLogApi {
         return jo;
     }
 
+    @ApiOperation("概览已完成商品数量")
+    @RequestMapping(value = "/outWarehouseProductNum", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('out_ware_report')")
+    public JSONObject outWarehouseProductNum(InventoryLogQueryDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",inventoryLogService.selectWarehouseProductNum(params));
+
+
+        return jo;
+    }
+
     @ApiOperation("报表统计出入库商品列表")
-    @RequestMapping(value = "/warehouseProduct4Report", method = RequestMethod.GET)
+    @RequestMapping(value = "/inWarehouseProduct4Report", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('in_ware_report')")
     public JSONObject inWarehouseProduct4Report(InventoryLogQueryDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
 
@@ -63,8 +79,22 @@ public class InventoryLogApi {
         return jo;
     }
 
+    @ApiOperation("报表统计出入库商品列表")
+    @RequestMapping(value = "/outWarehouseProduct4Report", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('out_ware_report')")
+    public JSONObject outWarehouseProduct4Report(InventoryLogQueryDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",inventoryLogService.selectWarehouseProduct4Report(params));
+
+        return jo;
+    }
+
     @ApiOperation("报表统计出入库商品列表按仓库分组")
-    @RequestMapping(value = "/warehouseProduct4ReportGroupWare", method = RequestMethod.GET)
+    @RequestMapping(value = "/inWarehouseProduct4ReportGroupWare", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('in_ware_report')")
     public JSONObject selectInWarehouseProduct4ReportGroupWare(InventoryLogQueryDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
 
@@ -75,9 +105,22 @@ public class InventoryLogApi {
         return jo;
     }
 
+    @ApiOperation("报表统计出入库商品列表按仓库分组")
+    @RequestMapping(value = "/outWarehouseProduct4ReportGroupWare", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('out_ware_report')")
+    public JSONObject selectOutWarehouseProduct4ReportGroupWare(InventoryLogQueryDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",inventoryLogService.selectWarehouseProduct4ReportGroupWare(params));
+
+        return jo;
+    }
 
     @ApiOperation("报表统计出入库商品列表按客户分组")
-    @RequestMapping(value = "/warehouseProduct4ReportGroupCustomer", method = RequestMethod.GET)
+    @RequestMapping(value = "/inWarehouseProduct4ReportGroupCustomer", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('in_ware_report')")
     public JSONObject selectInWarehouseProduct4ReportGroupCustomer(InventoryLogQueryDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
 
@@ -88,9 +131,36 @@ public class InventoryLogApi {
         return jo;
     }
 
+    @ApiOperation("报表统计出入库商品列表按客户分组")
+    @RequestMapping(value = "/outWarehouseProduct4ReportGroupCustomer", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('out_ware_report')")
+    public JSONObject selectOutWarehouseProduct4ReportGroupCustomer(InventoryLogQueryDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",inventoryLogService.selectWarehouseProduct4ReportGroupCustomer(params));
+
+        return jo;
+    }
+
     @ApiOperation("报表统计出入库商品总数")
-    @RequestMapping(value = "/warehouseProductNum4Report", method = RequestMethod.GET)
-    public JSONObject selectWarehouseProductNum4Report(InventoryLogQueryDto params) {
+    @RequestMapping(value = "/inWarehouseProductNum4Report", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('in_ware_report')")
+    public JSONObject selectInWarehouseProductNum4Report(InventoryLogQueryDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",inventoryLogService.selectWarehouseProductNum4Report(params));
+
+        return jo;
+    }
+
+    @ApiOperation("报表统计出入库商品总数")
+    @RequestMapping(value = "/outWarehouseProductNum4Report", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('out_ware_report')")
+    public JSONObject selectOutWarehouseProductNum4Report(InventoryLogQueryDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
 
         JSONObject jo =  new JSONObject();
@@ -102,6 +172,7 @@ public class InventoryLogApi {
 
     @ApiOperation("报表统计出入库汇总商品列表")
     @RequestMapping(value = "/warehouseProduct4SummaryReport", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or (hasAuthority('in_ware_report') and hasAuthority('out_ware_report'))")
     public JSONObject selectWarehouseProduct4SummaryReport(InventoryLogQueryDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
 
