@@ -89,7 +89,7 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
 
         //扣减运单费用
         if (result > 0) {
-            companyServiceCountService.reduceCompanyProductCount(dto.getCompanyId(),"storage_service", 1);
+            companyServiceCountService.reduceCompanyProductCount(dto.getCompanyId(),"storage_service", 1,dto.getCreateName(),"生成出库单...");
         }
 
         return result;

@@ -237,7 +237,9 @@ public class LocationServiceApi {
                 map.add("latitude", driver.getLatitude());
                 map.add("longitude", driver.getLongitude());
                 //上传鹰眼信息
-                upPoint(map);
+                new Thread(() -> upPoint(map)).start();
+
+//                upPoint(map);
 
                 jsonObject.put("code", resid1);
                 jsonObject.put("location", result.getString("location"));
@@ -321,7 +323,7 @@ public class LocationServiceApi {
         HttpEntity entity = new HttpEntity(map, headers);
         ResponseEntity<String> response = restTemplate.exchange("http://yingyan.baidu.com/api/v3/track/addpoint", HttpMethod.POST, entity, String.class);
         String body = response.getBody();
-//        System.out.println("body=="+body);
+        System.out.println("body=="+body);
         return  body;
 
     }

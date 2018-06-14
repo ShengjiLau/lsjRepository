@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" href="/asset/style/style.css">
     <link rel="stylesheet" href="/asset/style/iconfont.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="shortcut icon" href="/favicon.ico" >
     <style media="screen">
       nav{
@@ -35,6 +36,12 @@
         background: #108EE9;
         border-radius: 4px;
       }
+      label {
+          font-weight: normal;
+      }
+     b{
+        color:#333333;
+     }
     </style>
   </head>
   <body>
@@ -55,20 +62,20 @@
         <div class="form-row require">
           <label for="name">姓名：</label>
           <div class="clms-input">
-            <input type="text" name="name"  value="" id="name" placeholder="请输入1-20位姓名">
+            <input type="text" name="name"  value="" id="name" placeholder="请输入1-20位姓名" autocomplete="off">
           </div>
         </div>
         <div class="form-row require">
           <label for="userPhoneNum">手机号：</label>
           <div class="clms-input">
             <span>+86</span>
-            <input type="text" id="userPhoneNum" name = "userPhoneNum"  value="" placeholder="请输入11位手机号码">
+            <input type="text" id="userPhoneNum" name = "userPhoneNum"  value="" placeholder="请输入11位手机号码"  autocomplete="off">
           </div>
         </div>
         <div class="form-row require">
           <label for="ecode">验证码：</label>
-          <div class="clms-input sms-capcha-input">
-            <input type="text" name="ecode" value="" id="ecode" placeholder="请输入验证码" >
+          <div class="clms-input sms-capcha-input"  style="width:160px;">
+            <input type="text" name="ecode" value="" id="ecode" placeholder="请输入验证码"  autocomplete="off">
           </div>
           <div class="sms_capcha_btn">
             <button type="button"  id="get-codes-btn" class="inline-btn normal" >
@@ -89,23 +96,144 @@
             <input type="password" name="password1"  id="password1"  value="" placeholder="请再次输入密码">
           </div>
         </div>
-        <div class="form-row">
+        <div class="form-row" style="margin-bottom: 0px">
           <label for="introducer">推荐人手机号：</label>
           <div class="clms-input">
-            <input type="text"  id="introducer" name="introducer" value="" placeholder="请输入推荐人手机号码">
+            <input type="text"  id="introducer" name="introducer" value="" placeholder="请输入推荐人手机号码"  autocomplete="off">
           </div>
         </div>
-        <div class="form-row" style="margin-top:32px;">
+          <div  class="form-row">
+              <label for="introducer"></label>
+              <div class="clms-input" style="font-size: 12px;color: #8b8b8b;margin-left: -10px;width: 310px">
+                  <input type="checkbox" style="width:5%;vertical-align: middle" id="xy" ><label style="vertical-align: middle;margin-top: 10px" >我已阅读并同意<a href="#" style="text-decoration: underline;color: #8b8b8b" data-toggle="modal" data-target="#myModal">大驼队软件使用许可及服务协议</a></label>
+                  <label id="xy_error" style="display: none;color: red;font-size: 12px;margin-left: 5px; float: left;">请同意大驼队使用许可及服务协议!</label>
+              </div>
+          </div>
+        <div class="form-row" style="margin-top:20px;">
             <button class="register-btn" type="submit">
               注册
             </button>
           </div>
       </form>
     </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!--<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>-->
+                <div class="modal-body" style="height: 400px;overflow-y: auto;font-size: 12px;color: #8b8b8b;">
+                   &nbsp;&nbsp;&nbsp;&nbsp;大驼队服务条款（<a>下称“服务条款”</a>）是济南邻商网络科技有限公司 (下称“济南邻商”)与您就大驼队服务（下称“服务”）等相关事项所订立的有效合约。您通过盖章、网络页面点击确认或以其他方式选择接受本服务条款，即表示您与济南邻商已达成协议并同意接受本服务条款的全部约定内容。
+                    <br>
+                    <b>一 服务条款确认</b>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;在接受本服务条款之前，请您仔细阅读本服务条款的全部内容。如果您对本服务条款的条款有疑问的，济南邻商将向您解释条款内容。如果您不同意本服务条款的任意内容，或者无法准确理解条款的解释，请不要进行后续操作。
+
+                    本服务条款的效力范围及于济南邻商的一切产品和服务，用户在享受济南邻商任何单项服务时，应当受本服务条款的约束。当用户使用济南邻商各单项服务时，用户的使用行为视为其对该单项服务的服务条款以及济南邻商在该单项服务中发出的各类公告的同意。
+
+                    用户通过进入注册程序使用服务，即表示用户与济南邻商已达成协议，自愿接受本服务条款的所有内容。[1]
+                    <br>
+                    <b> 二  声明及承诺</b>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;1 您以任何方式使用本公司所提供的服务，即表示您已充分阅读、理解并接受本协议的全部内容，一旦您使用本服务，即表示您同意遵循本协议之所有约定。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;2 本公司可随时自行全权决定更改“条款”。如“条款”有任何变更，本公司将在其网站上刊载公告，无需另行单独通知您。公告后，一旦您继续使用“服务”，则表示您已接受经修订的“条款”，如您不同意相关变更，必须停止使用“服务”。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;3 在您完成注册程序或以其他济南邻商允许的方式实际使用大驼队服务时，您应当是具备完全民事行为权利和完全民事能力的自然人、法人或其他组织。若您不具备前述主体资格，则您及您的监护人应承担因此而导致的一切后果，且大驼队有权注销或永久冻结您的账户，并向您及您的监护人索偿相应损失。
+                    <br>
+                    <b>三 收费及续费</b>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;1 济南邻商保留在服务条款确认后，收取服务费用或者是改变服务费用的权利。本公司保留在无须发出书面通知，仅在大驼队官网网站公示的情况下，暂时或永久地更改或停止部分或全部“服务”的权利。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;2 服务期满双方愿意继续合作的，您至少应在服务期满前7天内支付续费款项，以使服务得以继续进行。如续费时济南邻商对大驼队服务体系、名称或价格进行调整的，双方同意按照届时有效的新的服务体系、名称或价格履行，但调整前您已经支付的款项不受影响。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;3 延期续费 服务到期后，如果未续费，则视为服务终止。本公司没有义务替您保留账号及与之相关的数据，如果您超过60日没有支付相关费用，这些数据有可能被永久删除，本公司对此不承担任何责任。如果您延期续费，则需补全拖欠费用期间的与之相对应的服务费用。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;4 济南邻商保留在您未按照约定支付全部费用之前不向您提供服务和技术支持，或者终止服务和技术支持的权利。
+                    <br>
+                    <b> 四 使用权限</b>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp; 禁止出售、转售或复制、开发使用权限，禁止基于商业目的模仿本公司的产品和服务。禁止复制和模仿本公司的设计理念、界面、功能和图表。禁止未经本公司许可基于此项服务或其内容进行修改或制造派生其他产品。
+                    <br>
+                    <b> 五 知识产权声明</b>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;1 大驼队提供的内容（包括但不限于网页、文字、图片、音频、视频、图表等）的知识产权归济南邻商所有。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;2 除另有特别声明外，大驼队提供本服务时所依托软件的著作权、专利权及其他知识产权均归济南邻商所有。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;3 上述及其他任何服务包含的内容的知识产权均受到法律保护，未经济南邻商书面许可，任何人不得以任何形式进行使用或创造相关衍生作品。
+                    <br>
+                    <b>六 第三方产品说明</b>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp; 本公司只基于本协议各项条款向您提供服务，任何第三方产品在您使用服务过程中向您发出的各种活动、广告等均与本公司无关。本公司对第三方的产品没有任何责任和义务提供任何服务。
+                    <br>
+                    <b>七 注册及保密</b>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;1 您在注册成为大驼队会员时，您提供关于您或贵公司的资料是真实、完整的。倘若您提供任何不真实、不完整或过时的资料，或大驼队有合理理由怀疑该等资料不真实、不完整、大驼队有权暂停或终止您的会员身份，并暂停或终止对您的服务。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;2 您有义务维持并及时更新会员资料，使其保持真实、完整和反映当前的情况。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;3 在登记过程中，您将选择会员注册手机号和密码。您须自行负责对您的会员注册手机号和密码保密，且须对您在会员注册手机号和密码下发生的所有活动承担责任。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;4 如发现任何人未经授权使用您的会员注册手机号或密码，您有义务立即通知大驼队。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;5 在退出大驼队系统时，以正确步骤安全退出网站系统。大驼队不能也不会对因您未能遵守本款规定而发生的任何损失或损毁负责。
+                    <br>
+                    <b>八 软件定位</b>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;1大驼队将会在您允许的情况下通过基站与手机GPS功能对您进行定位，大驼队不会强制您使用定位功能，并承诺不会将您的定位信息应用于服务之外的任何地方，若您同意大驼队对您的手机进行定位，则代表您同意该协议。
+                    <br>
+                    <b>九 用户管理</b>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;用户单独承担发布内容的责任。用户对服务的使用是根据所有适用于服务的地方法律、国家法律和国际法律标准的。用户承诺：
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;1 在大驼队上发布信息或者利用济南邻商的产品或服务时必须符合中国有关法规，不得在大驼队上利用济南邻商的服务制作、复制、发布、传播以下信息：
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;(a)反对宪法所确定的基本原则的；
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;(b) 危害国家安全，泄露国家秘密，颠覆国家政权，破坏国家统一的；
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;(c) 损害国家荣誉和利益的；
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;(d) 煽动民族仇恨、民族歧视，破坏民族团结的；
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;(e) 破坏国家宗教政策，宣扬邪教和封建迷信的；
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;(f) 散布谣言，扰乱社会秩序，破坏社会稳定的；
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;(g) 散布淫秽、色情、赌博、暴力、凶杀、恐怖或者教唆犯罪的；
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;(h) 侮辱或者诽谤他人，侵害他人合法权益的；
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;(i) 含有法律、行政法规禁止的其他内容的。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;2 在大驼队上发布信息或者利用济南邻商的产品或服务时，必须符合其他有关国家和地区的法律规定以及国际法的有关规定。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;3 不利用济南邻商的产品或服务从事以下活动：
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;(a) 未经允许，进入计算机信息网络或者使用计算机信息网络资源的；
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;(b) 未经允许，对计算机信息网络功能进行删除、修改或者增加的；
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;(c) 未经允许，对进入计算机信息网络中存储、处理或者传输的数据和应用程序进行删除、修改或者增加的；
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;(d) 故意制作、传播计算机病毒等破坏性程序的；
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;(e) 其他危害计算机信息网络安全的行为。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;4 不以任何方式干扰济南邻商的服务。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;5 遵守济南邻商的所有其他规定和程序。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;用户须对自己在使用济南邻商产品或服务过程中的行为承担法律责任。用户承担法律责任的形式包括但不限于： 对受到侵害者进行赔偿，赔偿济南邻商因用户行为造成的损失（包括但不限于行政处罚、侵权损害赔偿、诉讼费用、律师费等）。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;用户理解，如果济南邻商发现其网站传输的信息明显属于上述所列内容之一，依据中国法律，济南邻商有义务立即停止传输，保存有关记录，向国家有关机关报告，并且删除含有该内容的地址、目录或关闭服务器。
+                    <br>
+                    <b> 十 服务中断及修改</b>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;济南邻商保留随时修改或中断服务而不需通知用户的权利。用户接受济南邻商行使修改或中断服务的权利，济南邻商不需对用户或第三方负责。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;1 在本公司未向您收费的情况下，本公司可自行全权决定以任何理由终止服务。或您在超过90天的时间内，未以您的账号及密码登录网站，本公司有权终止对您的“服务”。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;2 在本公司向您收费的情况下，服务到期后，服务自动终止。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;3 无论本公司是否向您收费，只要您有违反本协议条款的行为，或者是本公司基于合理的理由怀疑您违反本协议的行为。本公司可自行全权决定，在发出通知或不发出通知的情况下，随时停止提供“服务”或其任何部份。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;4 “服务”终止后，本公司没有义务为您原账号中或与之相关的任何信息提供保留或者是导出服务。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;5 本公司不会就终止对您的“服务”而对您或任何第三者承担任何责任
+                    <br>
+                    <b>十一 保密责任</b>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;1 保密资料指由一方向另一方披露的所有技术及非技术信息(包括但不限于产品资料，产品计划，价格，财务及营销规划，业务战略，客户信息，客户数据，研发，软件硬件，API应用数据接口，技术说明，设计，特殊公式，特殊算法等)。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;2 本服务条款任何一方同意对获悉的对方之上述保密资料予以保密，并严格限制接触上述保密信息的员工遵守本条之保密义务。除非国家机关依法强制要求或上述保密资料已经进入公有领域外，接受保密资料的一方不得对外披露。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;3 本服务条款双方明确认可各自用户信息和业务数据等是各自的重要资产及重点保密信息。本服务条款双方同意尽最大的努力保护上述保密信息等不被披露。一旦发现有上述保密信息泄露事件，双方应合作采取一切合理措施避免或者减轻损害后果的产生。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;4 本条款不因本服务条款的终止而失效。
+                    <br>
+                    <b>十二 责任免除</b>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;1 济南邻商在对服务进行配置、维护、升级时，需要短时间中断服务，济南邻商在中断服务之前会提前通知您，因您个人原因导致的数据丢失或其他一切损失均由您自行承担。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;2 济南邻商提供的服务涉及到互联网及相关信息等服务，可能会受到Internet不稳定因素的影响。因此服务存在因上述不可抗力、计算机病毒或黑客攻击、系统不稳定、用户所在位置、用户关机、通信网络、Internet等原因等造成您访问大驼队服务速度下降或无法使用。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;3 不可抗力。包括但不限于自然灾害、罢工或骚乱、物质短缺或定量配给、暴动、战争行为、政府行为、通讯或其他设施故障或严重伤亡事故等，致使本公司延迟或未能履约的，本公司不对您承担任何责任。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;4 您使用大驼队进行商务活动所引起的一切法律纠纷均与济南邻商无关。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;5 您对自己使用大驼队服务过程产生的数据以及进入和管理大驼队服务上各类产品与服务的账号、密码的完整性和保密性负责。因您维护不当或保密不当致使上述数据、口令、密码等丢失或泄漏所引起的一切损失和后果均由您自行承担。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;6 由于大驼队致力于卖家和各个电商平台及其他平台的连接，如果用户由于自身原因或者由于平台原因导致服务中断或者相关法律问题，一律与大驼队无关。
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;7 适用法律允许的最大范围内，本公司在任何情况下不就因使用或不能使用服务所发生的特殊的、意外的、直接或间接的损失承担赔偿责任。（包括但不限于因人身伤害或财产损坏而造成的损害，因利润损失、数据损失、营业中断、计算机瘫痪或故障、商业信息的遗失而造成的损害，因未能履行包括诚信或相当注意在内的任何责任致使隐私泄露而造成的损害，因疏忽而造成的损害，或因任何金钱上的损失或任何其它损失而造成的损害）承担赔偿责任，即使我公司及其代理商事先被告知该损害发生的可能性。即使补救措施未能达到预定目的，本损害赔偿排除条款将仍然有效。
+                    <br>
+                    <b>十三 转让</b>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;本公司转让本协议无需经您同意。
+                    <br>
+                    <b> 十四 诉讼</b>
+                    <br>&nbsp;&nbsp;&nbsp;&nbsp;因本协议或本公司服务所引起或与其有关的任何争议应向济南市历下区人民法院提起诉讼，并以中华人民共和国法律为管辖法律，诉讼费用和律师费由败诉方承担。</div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/jquery-validate/1.17.0/jquery.validate.min.js"></script>
     <script src="https://cdn.bootcss.com/jquery-validate/1.17.0/localization/messages_zh.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript">
+        $("#xy").change(function () {
+            if(this.checked)
+            {
+                $("#xy_error").hide();
+            }
+        });
+
       var countdown = 60;
       function settime(obj) {
           obj = $("#get-codes-btn");
@@ -170,6 +298,14 @@
 
       $.validator.setDefaults({
         submitHandler: function() {
+            if(!$("#xy").is(":checked"))
+            {
+                $("#xy_error").show()
+                return false;
+            }
+            else {
+                $("#xy_error").hide()
+            }
             var form = document.getElementById("signup-form");
             var fd = new FormData(form);
             event.preventDefault();
@@ -202,7 +338,8 @@
        },"*请输入正确的手机号码！");
 
       $().ready(function() {
-        $("#signup-form").validate({
+          $("[data-toggle='popover']").popover();
+          $("#signup-form").validate({
           rules:{     //配置验证规则，key就是被验证的dom对象，value就是调用验证的方法(也是json格式)
               name:{
                   required:true,  //必填。如果验证方法不需要参数，则配置为true
