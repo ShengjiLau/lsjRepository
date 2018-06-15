@@ -6,7 +6,6 @@ import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.DefaultNotifySender;
-import com.lcdt.notify.model.Timeline;
 import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.traffic.dao.*;
 import com.lcdt.traffic.dto.WaybillDto;
@@ -16,7 +15,10 @@ import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.NotifyUtils;
-import com.lcdt.traffic.service.*;
+import com.lcdt.traffic.service.OwnDriverService;
+import com.lcdt.traffic.service.Plan4EditService;
+import com.lcdt.traffic.service.TrafficRpc;
+import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
@@ -208,6 +210,8 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                 customerMap.put("mobile",dto.getReceivePhone());
                 customerMap.put("userId",dto.getCreateId());
                 customerMap.put("userName",dto.getCreateName());
+                customerMap.put("groupIds",dto.getGroupId());
+                customerMap.put("groupName",dto.getGroupName());
                 Customer customer = customerRpcService.createCustomer(customerMap);
                 if (customer!=null) {
                     customer.setCustomerId(customer.getCustomerId());

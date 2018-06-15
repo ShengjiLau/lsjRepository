@@ -30,6 +30,8 @@ public class TCheckItem implements Serializable {
      * 商品批次
      */
     private String goodsBatch;
+
+    private Long storageLocationId;
     /**
      * 库位编码
      */
@@ -124,6 +126,14 @@ public class TCheckItem implements Serializable {
 
     public void setGoodsBatch(String goodsBatch) {
         this.goodsBatch = goodsBatch;
+    }
+
+    public Long getStorageLocationId() {
+        return storageLocationId;
+    }
+
+    public void setStorageLocationId(Long storageLocationId) {
+        this.storageLocationId = storageLocationId;
     }
 
     public String getStorageLocationCode() {

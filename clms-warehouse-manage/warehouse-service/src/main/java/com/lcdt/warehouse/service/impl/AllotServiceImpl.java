@@ -209,7 +209,7 @@ public class AllotServiceImpl implements AllotService{
                 OutOrderGoodsInfo outOrderGoodsInfo = new OutOrderGoodsInfo();
                 outOrderGoodsInfo.setOutorderId(outWarehouseOrder.getOutorderId());
                 outOrderGoodsInfo.setInvertoryId(allotProduct.getInventoryId());
-                outOrderGoodsInfo.setGoodsId(allotProduct.getGoodsId());
+                outOrderGoodsInfo.setGoodsId(allotProduct.getOriginalGoodsId());
                 outOrderGoodsInfo.setGoodsName(allotProduct.getName());
                 outOrderGoodsInfo.setGoodsCode(allotProduct.getCode());
                 outOrderGoodsInfo.setGoodsBarCode(allotProduct.getBarCode());
@@ -227,8 +227,13 @@ public class AllotServiceImpl implements AllotService{
                 outOrderGoodsInfo.setCompanyId(outWarehouseOrder.getCompanyId());
                 outOrderGoodsInfoList.add(outOrderGoodsInfo);
 
-                //减库存（增加锁定库存）
-                inventoryService.lockInventoryNum(outOrderGoodsInfo.getInvertoryId(),outOrderGoodsInfo.getGoodsNum());
+                Inventory inventory = inventoryMapper.selectById(allotProduct.getInventoryId());
+                //减库存
+                Float invertoryNum = inventory.getInvertoryNum() - outOrderGoodsInfo.getOutboundQuantity();
+                inventory.setInvertoryNum(invertoryNum);
+                inventoryMapper.updateById(inventory);
+                //写出库流水
+                inventoryLogService.saveOutOrderLog(outWarehouseOrder, outOrderGoodsInfo, invertoryNum, inventory);
             }
             //批量插入出库单明细
             outOrderGoodsInfoService.insertBatch(outOrderGoodsInfoList);
@@ -266,7 +271,7 @@ public class AllotServiceImpl implements AllotService{
             for (AllotProduct allotProduct : dto.getAllotProductList()) {
                 InorderGoodsInfo inorderGoodsInfo = new InorderGoodsInfo();
                 inorderGoodsInfo.setInorderId(inWarehouseOrder.getInorderId());
-                inorderGoodsInfo.setGoodsId(allotProduct.getGoodsId());
+                inorderGoodsInfo.setGoodsId(allotProduct.getOriginalGoodsId());
                 inorderGoodsInfo.setGoodsName(allotProduct.getName());
                 inorderGoodsInfo.setGoodsCode(allotProduct.getCode());
                 inorderGoodsInfo.setGoodsBarcode(allotProduct.getBarCode());
@@ -284,18 +289,11 @@ public class AllotServiceImpl implements AllotService{
                 inorderGoodsInfo.setSplit(false);
                 inorderGoodsInfo.setCompanyId(inWarehouseOrder.getCompanyId());
                 inorderGoodsInfoList.add(inorderGoodsInfo);
-
-                Inventory inventory = inventoryMapper.selectById(allotProduct.getInventoryId());
-                //加库存
-                Float invertoryNum = inventory.getInvertoryNum() + inorderGoodsInfo.getInHouseAmount();
-                inventory.setInvertoryNum(invertoryNum);
-                inventoryMapper.updateById(inventory);
-                //写入库流水
-                inventory.setInvertoryNum(inorderGoodsInfo.getInHouseAmount());
-                inventoryLogService.saveInOrderLog(inWarehouseOrder, inventory, invertoryNum);
             }
             //批量插入入库单明细
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);
+            //入库操作
+            inventoryService.putInventory(inorderGoodsInfoList,inWarehouseOrder);
         }
     }
 }
