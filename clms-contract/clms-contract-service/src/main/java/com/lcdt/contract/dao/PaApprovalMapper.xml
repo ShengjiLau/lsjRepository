@@ -225,6 +225,9 @@
       <if test="orderSerialNo!=null and orderSerialNo!=''">
         and t1.order_serial_no like concat('%',#{orderSerialNo,jdbcType=VARCHAR},'%')
       </if>
+      <if test="orderNo!=null and orderNo!=''">
+        and t1.order_no like concat('%',#{orderNo,jdbcType=VARCHAR},'%')
+      </if>
       <if test="supplier!=null and supplier!=''">
         and t1.supplier like concat('%',#{supplier,jdbcType=VARCHAR},'%')
       </if>
