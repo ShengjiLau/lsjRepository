@@ -2,7 +2,6 @@ package com.lcdt.warehouse.dto;
 
 import com.lcdt.converter.ResponseData;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -54,7 +53,7 @@ public class CheckSaveDto implements java.io.Serializable,ResponseData {
     /**
      * 创建时间
      */
-    private Date createDate;
+    private String createDate;
     /**
      * 更新人id
      */
@@ -66,7 +65,7 @@ public class CheckSaveDto implements java.io.Serializable,ResponseData {
     /**
      * 更新时间
      */
-    private Date updateDate;
+    private String updateDate;
     /**
      * 0:未删除，1:删除
      */
@@ -82,7 +81,7 @@ public class CheckSaveDto implements java.io.Serializable,ResponseData {
     /**
      * 盘库完成时间
      */
-    private Date completeDate;
+    private String completeDate;
     /**
      * 差异状态：1：无差异，2：有差异
      */
@@ -202,11 +201,11 @@ public class CheckSaveDto implements java.io.Serializable,ResponseData {
         this.createName = createName;
     }
 
-    public Date getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
@@ -226,11 +225,11 @@ public class CheckSaveDto implements java.io.Serializable,ResponseData {
         this.updateName = updateName;
     }
 
-    public Date getUpdateDate() {
+    public String getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Date updateDate) {
+    public void setUpdateDate(String updateDate) {
         this.updateDate = updateDate;
     }
 
@@ -258,11 +257,11 @@ public class CheckSaveDto implements java.io.Serializable,ResponseData {
         this.completeName = completeName;
     }
 
-    public Date getCompleteDate() {
+    public String getCompleteDate() {
         return completeDate;
     }
 
-    public void setCompleteDate(Date completeDate) {
+    public void setCompleteDate(String completeDate) {
         this.completeDate = completeDate;
     }
 
