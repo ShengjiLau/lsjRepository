@@ -7,6 +7,7 @@ import com.lcdt.warehouse.dto.AllotDto;
 import com.lcdt.warehouse.entity.*;
 import com.lcdt.warehouse.mapper.*;
 import com.lcdt.warehouse.service.*;
+import com.lcdt.warehouse.utils.CommonUtils;
 import com.lcdt.warehouse.vo.ConstantVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -229,7 +230,7 @@ public class AllotServiceImpl implements AllotService{
 
                 Inventory inventory = inventoryMapper.selectById(allotProduct.getInventoryId());
                 //减库存
-                Float invertoryNum = inventory.getInvertoryNum() - outOrderGoodsInfo.getOutboundQuantity();
+                Float invertoryNum = CommonUtils.subtractFloat(inventory.getInvertoryNum(),outOrderGoodsInfo.getOutboundQuantity());
                 inventory.setInvertoryNum(invertoryNum);
                 inventoryMapper.updateById(inventory);
                 //写出库流水
