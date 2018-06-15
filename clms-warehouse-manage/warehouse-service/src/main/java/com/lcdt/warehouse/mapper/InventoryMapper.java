@@ -32,5 +32,5 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
 
     List<Inventory> selectInventoryListByqueryDto(@Param("goodsIds") List<Long> goodsIds,@Param("querydto") InventoryQueryDto queryDto);
     
-    Long selectInventoryListByShiftGoodsBO(ShiftGoodsBO shiftGoodsBO);
+    ShiftGoodsListDTO selectInventoryListByShiftGoodsBO(ShiftGoodsBO shiftGoodsBO);
 }

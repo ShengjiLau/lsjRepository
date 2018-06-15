@@ -30,6 +30,11 @@ public final class ShiftInventoryListVO {
 	public static final Integer FAILED_NUM = -1;
 	
 	/**
+	 * 库存不足状态码
+	 */
+	public static final Integer UNDERSTOCK = 2;
+	
+	/**
 	 * 未完成状态码
 	 */
 	public static final byte UNFINISHED = 0;
