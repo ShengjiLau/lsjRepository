@@ -311,13 +311,6 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		int pageNo = shiftInventoryListDTO1.getPageNo();
 		int pageSize = shiftInventoryListDTO1.getPageSize();
 		
-		if (null != shiftInventoryListDTO1.getBeginTime() && !"".equals(shiftInventoryListDTO1.getBeginTime())) {
-			shiftInventoryListDTO1.setBeginTime(convertTimeFormat(shiftInventoryListDTO1.getBeginTime()));	
-		}
-		if (null != shiftInventoryListDTO1.getEndTime() && !"".equals(shiftInventoryListDTO1.getEndTime())) {
-			shiftInventoryListDTO1.setEndTime(convertTimeFormat(shiftInventoryListDTO1.getEndTime()));
-		}
-		
 		//分页
 		//PageHelper.startPage(shiftInventoryListDTO1.getPageNo(), shiftInventoryListDTO1.getPageSize());
 		List<ShiftInventoryListDO> shiftInventoryListDOList = shiftInventoryListDOMapper.getShiftInventoryListDOByCondition(shiftInventoryListDTO1);
@@ -443,10 +436,10 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				 BigDecimal shiftPlanNum = new BigDecimal(0);
 				for (int j = 0; j < shiftGoodsDOList.size(); j++) {
 					if (inventoryIds[i].longValue() == shiftGoodsDOList.get(j).getInventoryId().longValue()) {
-						shiftPlanNum.add(shiftGoodsDOList.get(j).getShiftPlanNum());
+						shiftPlanNum = shiftPlanNum.add(shiftGoodsDOList.get(j).getShiftPlanNum());
 					}
 				}
-				Float lockNum = ShiftInventoryListVO.ZERO_VALUE - shiftPlanNum.floatValue();
+				Float lockNum = shiftPlanNum.floatValue();
 				inventoryService.unLockInventoryNum(inventoryIds[i], lockNum);
 			 }
 		 }
