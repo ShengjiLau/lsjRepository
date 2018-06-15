@@ -420,7 +420,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			 }
 			 shiftInventoryListDTO.setShiftGoodsListDTOList(shiftGoodsListDTOList);
 		}
-		
+
 		return shiftInventoryListDTO;
 	}
 	
