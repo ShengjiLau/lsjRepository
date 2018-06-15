@@ -20,9 +20,14 @@ public class PaApprovalListDto implements Serializable {
     private String paymentTimeEnd;
 
     /**
-     * 采购单号
+     * 采购单流水号
      */
     private String orderSerialNo;
+
+    /**
+     * 采购单号
+     */
+    private String orderNo;
 
     /**
      * 采购合同号
@@ -97,6 +102,14 @@ public class PaApprovalListDto implements Serializable {
 
     public void setOrderSerialNo(String orderSerialNo) {
         this.orderSerialNo = orderSerialNo;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(String orderNo) {
+        this.orderNo = orderNo;
     }
 
     public String getContractCode() {
