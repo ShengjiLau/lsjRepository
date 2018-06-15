@@ -413,8 +413,6 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		}else {
 			return null;
 		}
-		
-		
 	}
 	
 	
