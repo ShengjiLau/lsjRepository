@@ -89,23 +89,6 @@
         order by update_time desc
     </select>
 
-	<update id="updateInventoryLockNum">
-		update inventory
-		set 
-		<choose>
-		<when test="arg1 != null">
-			invertory_num = invertory_num - #{arg1,jdbcType=FLOAT},
-			lock_num =lock_num - #{arg2,jdbcType=FLOAT}
-		</when>
-		<otherwise>
-			lock_num =lock_num + #{arg2,jdbcType=FLOAT}
-		</otherwise>
-		</choose>
-		<where>
-		invertory_id = #{arg0,jdbcType=BIGINT}
-		</where>
-	</update>
-
 	<select id="getInventoryListByIds" resultMap="BaseResultMap">
 			SELECT * from inventory t left join goods_info  g on
         	t.goods_id = g.goods_id

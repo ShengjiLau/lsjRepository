@@ -27,6 +27,7 @@ import com.lcdt.warehouse.mapper.InventoryLogMapper;
 import com.lcdt.warehouse.mapper.InventoryMapper;
 import com.lcdt.warehouse.mapper.ShiftGoodsDOMapper;
 import com.lcdt.warehouse.mapper.ShiftInventoryListDOMapper;
+import com.lcdt.warehouse.service.InventoryService;
 import com.lcdt.warehouse.service.ShiftInventoryListService;
 import com.lcdt.warehouse.utils.ShiftGoodsBO;
 import com.lcdt.warehouse.vo.ShiftInventoryListVO;
@@ -57,6 +58,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	
 	@Autowired
 	private InventoryLogMapper logMapper;
+	
+	@Autowired
+	private InventoryService inventoryService;
 	
 	
 	/**
@@ -110,13 +114,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			}
 			shiftGoodsDOList.addAll(shiftGoodsDOList1);
 			Float lockNum = shiftPlanNum.floatValue();
-			//修改库存中库存总量以及库存锁定量
-			Inventory inventory = inventoryMapper.selectById(shiftGoodsListDTOList.get(a).getInvertoryId());
-			//如果需要锁定的库存大于现有库存减去已经锁定的库存量，则提示库存不足
-			  if ((inventory.getInvertoryNum()-inventory.getLockNum()) < lockNum) {
-				  return ShiftInventoryListVO.UNDERSTOCK;
-			  }
-		    h = inventoryMapper.updateInventoryLockNum(shiftGoodsListDTOList.get(a).getInvertoryId(),null,lockNum);
+			inventoryService.lockInventoryNum(shiftGoodsListDTOList.get(a).getInvertoryId(), lockNum);
 		}
 		//数据库插入新的移库商品信息列表
 		int j = shiftGoodsDOMapper.insertShiftGoodsByBatch(shiftGoodsDOList);
@@ -168,7 +166,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			
 			for(int b = 0; b < shiftGoodsDOList1.size(); b++) {
 				ShiftGoodsDO shiftGoodsDO = shiftGoodsDOList1.get(b);				
-				ShiftGoodsDO shiftGoodsDO2 = shiftGoodsDOMapper.selectByPrimaryKey(shiftGoodsDO.getShiftGoodsId());
+				//ShiftGoodsDO shiftGoodsDO2 = shiftGoodsDOMapper.selectByPrimaryKey(shiftGoodsDO.getShiftGoodsId());
 				//计算计划和实际移库商品数量
 				shiftPlanNum.add(shiftGoodsDO.getShiftPlanNum());
 				shiftNum.add(shiftGoodsDO.getShiftNum());
@@ -183,14 +181,17 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				
 				ShiftGoodsListDTO shiftGoodsListDTO1 = inventoryMapper.selectInventoryListByShiftGoodsBO(shiftGoodsBO);
 				if (null != shiftGoodsListDTO1) {
-					inventoryMapper.updateInventoryLockNum(shiftGoodsListDTO1.getInvertoryId(), ShiftInventoryListVO.ZERO_VALUE-shiftGoodsDO.getShiftNum().floatValue(), ShiftInventoryListVO.ZERO_VALUE.floatValue());
+					inventoryService.unLockInventoryNum(shiftGoodsListDTO1.getInvertoryId(), shiftGoodsDO.getShiftPlanNum().floatValue());
+					Inventory inventory = inventoryMapper.selectById(shiftGoodsListDTO1.getInvertoryId());
+					inventory.setInvertoryNum(shiftGoodsDO.getShiftNum().floatValue());
+					inventoryMapper.updateById(inventory);
 				}else {
 					//没有
 					Inventory inventory2 = new Inventory();
 					inventory2.setGoodsId(inventory1.getGoodsId());
 					inventory2.setWareHouseId(shiftInventoryListDO2.getWarehouseId());
 			        inventory2.setStorageLocationCode(shiftGoodsDO.getShiftLocation());
-			        inventory2.setStorageLocationId(shiftGoodsDO2.getStorageLocationId());
+			        inventory2.setStorageLocationId(shiftGoodsDO.getStorageLocationId());
 			        inventory2.setCustomerName(shiftInventoryListDO2.getCustomerName());
 			        inventory2.setWarehouseName(shiftInventoryListDO2.getWarehouseName());
 			        inventory2.setBatch(shiftGoodsDO.getBatch());
@@ -228,10 +229,8 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			
 		 
 		  //如果现有库存小于移动库存，则提示库存不足
-		  if (inventory1.getInvertoryNum() < inventoryNum) {
-			  return ShiftInventoryListVO.UNDERSTOCK;
-		  }
-		   inventoryMapper.updateInventoryLockNum(shiftGoodsListDTOList.get(a).getInvertoryId(),inventoryNum,lockNum);
+			inventoryService.unLockInventoryNum(shiftGoodsListDTOList.get(a).getInvertoryId(), lockNum);
+			
 		}
 		//修改移库商品信息
 		shiftGoodsDOMapper.updateShiftGoodsByBatch(shiftGoodsDOList);
@@ -403,7 +402,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 					}
 				}
 				Float lockNum = ShiftInventoryListVO.ZERO_VALUE - shiftPlanNum.floatValue();
-				inventoryMapper.updateInventoryLockNum(inventoryIds[i],null,lockNum);
+				inventoryService.unLockInventoryNum(inventoryIds[i], lockNum);
 			 }
 		 }
 		 
