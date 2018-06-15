@@ -7,23 +7,23 @@ package com.lcdt.warehouse.vo;
  * @version
  * @Description: TODO 
  */
-public class ResponseCodeVO {
+public final class ResponseCodeVO {
 	
 	/**
 	 * 访问成功返回的code值
 	 */
-	public static final Integer successCode = 0;
+	public static final Integer SUCCESS_CODE = 0;
 	
 	/**
 	 * 访问失败返回的code值
 	 */
-	public static final Integer failedCode = -1;
+	public static final Integer FAILED_CODE = -1;
 	
 	/**
-	 * 同一接口返回格式
+	 * 统一接口返回格式
 	 */
-	public static final String code = "code";
-	public static final String message = "message";
-	public static final String data = "data";
+	public static final String CODE = "code";
+	public static final String MESSAGE = "message";
+	public static final String DATA = "data";
 	
 }

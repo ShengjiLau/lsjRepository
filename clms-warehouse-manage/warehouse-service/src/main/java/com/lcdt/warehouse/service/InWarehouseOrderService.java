@@ -89,39 +89,4 @@ public interface InWarehouseOrderService extends IService<InWarehouseOrder> {
      */
     List<Map<String,Object>> selectInWarehouseNum(InWarehouseOrderSearchParamsDto params);
 
-    /**
-     * 概览入库单已完成商品数量
-     * @param params
-     * @return
-     */
-    List<Map<String,Object>> selectInWarehouseProductNum(InWarehouseOrderSearchParamsDto params);
-
-
-    /**
-     * 出入库汇总入库已完成商品数量
-     * @param params
-     * @return
-     */
-    Integer selectInWarehouseProductNum4Report(InWarehouseOrderSearchParamsDto params);
-
-    /**
-     * 出入库汇总入库已完成商品
-     * @param params
-     * @return
-     */
-    Page<Map<String,Object>> selectInWarehouseProduct4Report(InWarehouseOrderSearchParamsDto params);
-
-    /**
-     * 出入库汇总入库已完成商品按仓库分组
-     * @param params
-     * @return
-     */
-    List<Map<String,Object>> selectInWarehouseProduct4ReportGroupWare(InWarehouseOrderSearchParamsDto params);
-
-    /**
-     * 出入库汇总入库已完成商品按仓库分组
-     * @param params
-     * @return
-     */
-    List<Map<String,Object>> selectInWarehouseProduct4ReportGroupCustomer(InWarehouseOrderSearchParamsDto params);
 }

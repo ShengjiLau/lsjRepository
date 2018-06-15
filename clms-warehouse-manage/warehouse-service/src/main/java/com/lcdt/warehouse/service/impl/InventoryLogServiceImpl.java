@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  *  服务实现类
@@ -53,5 +56,37 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
         Assert.notNull(inventoryLog,"object should not be null");
         logMapper.saveLog(inventoryLog);
         return inventoryLog;
+    }
+
+    @Override
+    public List<Map<String,Object>> selectWarehouseProductNum(InventoryLogQueryDto params) {
+        return logMapper.selectWarehouseProductNum(params);
+    }
+
+    @Override
+    public Page<List<Map<String, Object>>> selectWarehouseProduct4Report(InventoryLogQueryDto params) {
+        Page page = new Page(params.getPageNo(), params.getPageSize());
+        return page.setRecords(logMapper.selectWarehouseProduct4Report(page, params));
+    }
+
+    @Override
+    public List<Map<String, Object>> selectWarehouseProduct4ReportGroupWare(InventoryLogQueryDto params) {
+        return logMapper.selectWarehouseProduct4ReportGroupWare(params);
+    }
+
+    @Override
+    public List<Map<String, Object>> selectWarehouseProduct4ReportGroupCustomer(InventoryLogQueryDto params) {
+        return logMapper.selectWarehouseProduct4ReportGroupCustomer(params);
+    }
+
+    @Override
+    public Long selectWarehouseProductNum4Report(InventoryLogQueryDto params) {
+        return logMapper.selectWarehouseProductNum4Report(params);
+    }
+
+    @Override
+    public Page<List<Map<String, Object>>> selectWarehouseProduct4SummaryReport(InventoryLogQueryDto params) {
+        Page page = new Page(params.getPageNo(), params.getPageSize());
+        return page.setRecords(logMapper.selectWarehouseProduct4SummaryReport(page, params));
     }
 }

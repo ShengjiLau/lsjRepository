@@ -35,6 +35,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by lyqishan on 2018/3/19
@@ -90,10 +91,9 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     private CompanyServiceCountService companyServiceCountService;
 
     public Waybill addWaybill(WaybillDto waybillDto) {
-        int result = 0;
 
         //先判断是否还有剩于运单服务条数(后面计费用)
-        if(!companyServiceCountService.checkCompanyProductCount(waybillDto.getCompanyId(),"waybill_service", 1)){
+        if (!companyServiceCountService.checkCompanyProductCount(waybillDto.getCompanyId(), "waybill_service", 1)) {
             throw new RuntimeException("剩余运单服务次数不足");
         }
 
@@ -220,21 +220,21 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             waybill.setDriverId(ownDriver.getDriverId());
         }
         //新增运单
-        result += waybillMapper.insert(waybill);
+        waybillMapper.insert(waybill);
         //运单货物详细
         if (waybillDto.getWaybillItemsDtoList() != null && waybillDto.getWaybillItemsDtoList().size() > 0) {
-            List<WaybillItems> waybillItemsList = new ArrayList<WaybillItems>();
-            for (int i = 0; i < waybillDto.getWaybillItemsDtoList().size(); i++) {
-                WaybillItems waybillItems = new WaybillItems();
-                BeanUtils.copyProperties(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
-                waybillItems.setCreateId(waybill.getCreateId());
-                waybillItems.setCreateName(waybill.getCreateName());
-                waybillItems.setCompanyId(waybill.getCompanyId());
-                waybillItems.setWaybillId(waybill.getId());
-                waybillItemsList.add(waybillItems);
-            }
+            List<WaybillItems> waybillItemsList= waybillDto.getWaybillItemsDtoList().stream()
+                    .map(item -> {
+                        WaybillItems waybillItems = new WaybillItems();
+                        BeanUtils.copyProperties(item, waybillItems);
+                        waybillItems.setCreateId(waybill.getCreateId());
+                        waybillItems.setCreateName(waybill.getCreateName());
+                        waybillItems.setCompanyId(waybill.getCompanyId());
+                        waybillItems.setWaybillId(waybill.getId());
+                        return waybillItems;
+                    }).collect(Collectors.toList());
             //运单货物详细批量插入
-            result += waybillItemsMapper.insertForBatch(waybillItemsList);
+            waybillItemsMapper.insertForBatch(waybillItemsList);
         }
         //运单生成时添加一条派车记录
         if (waybill.getId() != null) {
@@ -253,11 +253,11 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             waybillTransferRecordMapper.insert(waybillTransferRecord);
         }
 
-        waybill = waybillMapper.selectByPrimaryKey(waybill.getId());
+        Waybill result = waybillMapper.selectByPrimaryKey(waybill.getId());
 
         //扣减运单费用
-        if (result > 0) {
-            companyServiceCountService.reduceCompanyProductCount(waybillDto.getCompanyId(),"waybill_service", 1);
+        if (result != null) {
+            companyServiceCountService.reduceCompanyProductCount(waybillDto.getCompanyId(), "waybill_service", 1);
         }
 
         return waybill;
@@ -266,76 +266,68 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     @Override
     public int modifyOwnWaybill(WaybillModifyParamsDto waybillDto) {
         int result = 0;
-        Waybill waybill = queryOwnWaybill(waybillDto.getId(),waybillDto.getCompanyId());
+        Waybill waybill = queryOwnWaybill(waybillDto.getId(), waybillDto.getCompanyId());
         waybillDto.setCarrierCompanyId(waybill.getCarrierCompanyId());
         BeanUtils.copyProperties(waybillDto, waybill);
         //更新运单
         result += waybillMapper.updateByPrimaryKeyAndCompanyId(waybill);
         //运单货物详细
-        if (waybillDto.getWaybillItemsDtoList() != null && waybillDto.getWaybillItemsDtoList().size() > 0) {
-            List<WaybillItems> waybillItemsUpdateList = new ArrayList<WaybillItems>();
-            List<WaybillItems> waybillItemsAddList = new ArrayList<WaybillItems>();
-            for (int i = 0; i < waybillDto.getWaybillItemsDtoList().size(); i++) {
-                WaybillItems waybillItems = new WaybillItems();
-                if (waybillDto.getWaybillItemsDtoList().get(i).getId() !=null &&waybillDto.getWaybillItemsDtoList().get(i).getId()>0) {
-                    waybillItems=waybillItemsMapper.selectByPrimaryKey(waybillDto.getWaybillItemsDtoList().get(i).getId());
-                    BeanUtils.copyProperties(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
-                    waybillItems.setUpdateId(waybill.getUpdateId());
-                    waybillItems.setUpdateName(waybill.getUpdateName());
-                    waybillItems.setCompanyId(waybill.getCompanyId());
-                    waybillItemsUpdateList.add(waybillItems);
-                } else {
-                    BeanUtils.copyProperties(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
-                    waybillItems.setCreateId(waybill.getCreateId());
-                    waybillItems.setCreateName(waybill.getCreateName());
-                    waybillItems.setCompanyId(waybill.getCompanyId());
-                    waybillItems.setWaybillId(waybill.getId());
-                    waybillItemsAddList.add(waybillItems);
-                }
-            }
-            if (waybillItemsUpdateList.size() > 0) {
-                //运单货物详细修改
-                result += waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
-            }
-            if (waybillItemsAddList.size() > 0) {
-                //运单货物详细批量插入
-                result += waybillItemsMapper.insertForBatch(waybillItemsAddList);
-            }
-        }
+        result += modifyWaybillItems(waybillDto.getWaybillItemsDtoList(), waybill);
         return result;
     }
 
     @Override
     public int modifyCustomerWaybill(WaybillModifyParamsDto waybillDto) {
         int result = 0;
-        Waybill waybill = queryCustomerWaybill(waybillDto.getId(),waybillDto.getCarrierCompanyId());
+        Waybill waybill = queryCustomerWaybill(waybillDto.getId(), waybillDto.getCarrierCompanyId());
         waybillDto.setCompanyId(waybill.getCompanyId());
         BeanUtils.copyProperties(waybillDto, waybill);
         ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto, waybill);
         //新增运单
         result += waybillMapper.updateByPrimaryKeyAndCarrierCompanyId(waybill);
         //运单货物详细
-        if (waybillDto.getWaybillItemsDtoList() != null && waybillDto.getWaybillItemsDtoList().size() > 0) {
-            List<WaybillItems> waybillItemsUpdateList = new ArrayList<WaybillItems>();
-            List<WaybillItems> waybillItemsAddList = new ArrayList<WaybillItems>();
-            for (int i = 0; i < waybillDto.getWaybillItemsDtoList().size(); i++) {
-                WaybillItems waybillItems = new WaybillItems();
-                if (waybillDto.getWaybillItemsDtoList().get(i).getId() !=null &&waybillDto.getWaybillItemsDtoList().get(i).getId()>0) {
-                    waybillItems=waybillItemsMapper.selectByPrimaryKey(waybillDto.getWaybillItemsDtoList().get(i).getId());
-                    ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
-                    waybillItems.setUpdateId(waybill.getUpdateId());
-                    waybillItems.setUpdateName(waybill.getUpdateName());
-                    waybillItems.setCompanyId(waybill.getCompanyId());
-                    waybillItemsUpdateList.add(waybillItems);
-                } else {
-                    ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
-                    waybillItems.setCreateId(waybill.getCreateId());
-                    waybillItems.setCreateName(waybill.getCreateName());
-                    waybillItems.setCompanyId(waybill.getCompanyId());
-                    waybillItems.setWaybillId(waybill.getId());
-                    waybillItemsAddList.add(waybillItems);
-                }
-            }
+        result += modifyWaybillItems(waybillDto.getWaybillItemsDtoList(), waybill);
+        return result;
+    }
+
+    //更新货物，如果有id则更新，如果没有id，则新增
+    private int modifyWaybillItems(List<WaybillItemsModifyParamsDto> waybillItemsDtoList, Waybill waybill) {
+        int result = 0;
+        if (waybillItemsDtoList != null && waybillItemsDtoList.size() > 0) {
+
+            //有id的需要更新的分为一组，没有id需要新增的分为一组
+            Map<String, List<WaybillItemsModifyParamsDto>> waybillItemsMap = waybillItemsDtoList.stream()
+                    .collect(Collectors.groupingBy(item -> {
+                        if (item.getId() != null && item.getId() > 0) {
+                            return "update";
+                        } else {
+                            return "add";
+                        }
+                    }));
+
+            //需要更新的 List<WaybillItemsModifyParamsDto> 转为 List<WaybillItems>
+            List<WaybillItems> waybillItemsUpdateList = waybillItemsMap.get("update").stream()
+                    .map(item -> {
+                        WaybillItems waybillItem = waybillItemsMapper.selectByPrimaryKey(item.getId());
+                        BeanUtils.copyProperties(item, waybillItem);
+                        waybillItem.setUpdateId(waybill.getUpdateId());
+                        waybillItem.setUpdateName(waybill.getUpdateName());
+                        waybillItem.setCompanyId(waybill.getCompanyId());
+                        return waybillItem;
+                    }).collect(Collectors.toList());
+
+            //需要新增的 List<WaybillItemsModifyParamsDto> 转为 List<WaybillItems>
+            List<WaybillItems> waybillItemsAddList = waybillItemsMap.get("add").stream()
+                    .map(item -> {
+                        WaybillItems waybillItem = new WaybillItems();
+                        BeanUtils.copyProperties(item, waybillItem);
+                        waybillItem.setCreateId(waybill.getCreateId());
+                        waybillItem.setCreateName(waybill.getCreateName());
+                        waybillItem.setCompanyId(waybill.getCompanyId());
+                        waybillItem.setWaybillId(waybill.getId());
+                        return waybillItem;
+                    }).collect(Collectors.toList());
+
             if (waybillItemsUpdateList.size() > 0) {
                 //运单货物详细修改
                 result += waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
@@ -350,65 +342,43 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
     @Override
     public int modifyOwnQuantity(WaybillModifyParamsDto waybillDto) {
-        int result = 0;
-        WaybillDao waybillDao = queryOwnWaybill(waybillDto.getId(),waybillDto.getCompanyId());
+        WaybillDao waybillDao = queryOwnWaybill(waybillDto.getId(), waybillDto.getCompanyId());
         waybillDao.setUpdateId(waybillDto.getUpdateId());
         waybillDao.setUpdateName(waybillDto.getUpdateName());
-        if (waybillDto.getWaybillItemsDtoList() != null && waybillDto.getWaybillItemsDtoList().size() > 0) {
-            List<WaybillItems> waybillItemsUpdateList = new ArrayList<WaybillItems>();
-            for (int i = 0; i < waybillDto.getWaybillItemsDtoList().size(); i++) {
-                WaybillItems waybillItems = new WaybillItems();
-                if (waybillDto.getWaybillItemsDtoList().get(i).getId() !=null &&waybillDto.getWaybillItemsDtoList().get(i).getId()>0) {
-                    waybillItems=waybillItemsMapper.selectByPrimaryKey(waybillDto.getWaybillItemsDtoList().get(i).getId());
-                    ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
-                    waybillItems.setUpdateId(waybillDto.getUpdateId());
-                    waybillItems.setUpdateName(waybillDto.getUpdateName());
-                    waybillItems.setCompanyId(waybillDto.getCompanyId());
-                    waybillItemsUpdateList.add(waybillItems);
-                    for(int j=0;j<waybillDao.getWaybillItemsList().size();j++){
-                        if(waybillItems.getId().equals(waybillDao.getWaybillItemsList().get(j).getId())){
-                            waybillDao.getWaybillItemsList().get(j).setAmount(waybillDao.getWaybillItemsList().get(j).getAmount()-waybillItems.getAmount());
-                        }
-                    }
-                }
-            }
-            if (waybillItemsUpdateList.size() > 0) {
-                //运单货物详细修改
-                result += waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
-            }
-            //计划编辑
-            planService.adjustPlanAndSplitAmount(waybillDao);
-        }
-        return result;
+        return modifyWaybillItemsAmountNum(waybillDto, waybillDao);
     }
 
     @Override
     public int modifyCustomerQuantity(WaybillModifyParamsDto waybillDto) {
-        int result = 0;
-        WaybillDao waybillDao = queryCustomerWaybill(waybillDto.getId(),waybillDto.getCarrierCompanyId());
+        WaybillDao waybillDao = queryCustomerWaybill(waybillDto.getId(), waybillDto.getCarrierCompanyId());
         waybillDao.setUpdateId(waybillDto.getUpdateId());
         waybillDao.setUpdateName(waybillDto.getUpdateName());
+        return modifyWaybillItemsAmountNum(waybillDto, waybillDao);
+    }
+
+    //我的运单、客户运单：货物详细调量公用方法
+    private int modifyWaybillItemsAmountNum(WaybillModifyParamsDto waybillDto, WaybillDao waybillDao) {
+        int result = 0;
         if (waybillDto.getWaybillItemsDtoList() != null && waybillDto.getWaybillItemsDtoList().size() > 0) {
-            List<WaybillItems> waybillItemsUpdateList = new ArrayList<WaybillItems>();
-            for (int i = 0; i < waybillDto.getWaybillItemsDtoList().size(); i++) {
-                WaybillItems waybillItems = new WaybillItems();
-                if (waybillDto.getWaybillItemsDtoList().get(i).getId() !=null &&waybillDto.getWaybillItemsDtoList().get(i).getId()>0) {
-                    waybillItems=waybillItemsMapper.selectByPrimaryKey(waybillDto.getWaybillItemsDtoList().get(i).getId());
-                    ClmsBeanUtil.copyPropertiesIgnoreNull(waybillDto.getWaybillItemsDtoList().get(i), waybillItems);
-                    waybillItems.setUpdateId(waybillDto.getUpdateId());
-                    waybillItems.setUpdateName(waybillDto.getUpdateName());
-                    waybillItems.setCompanyId(waybillDto.getCompanyId());
-                    waybillItemsUpdateList.add(waybillItems);
-                    for(int j=0;j<waybillDao.getWaybillItemsList().size();j++){
-                        if(waybillItems.getId().equals(waybillDao.getWaybillItemsList().get(j).getId())){
-                            waybillDao.getWaybillItemsList().get(j).setAmount(waybillDao.getWaybillItemsList().get(j).getAmount()-waybillItems.getAmount());
-                        }
-                    }
-                }
-            }
+            List<WaybillItems> waybillItemsUpdateList = waybillDto.getWaybillItemsDtoList().stream()
+                    .filter(dto -> dto.getId() != null && dto.getId() > 0)
+                    .map(dto -> {
+                        WaybillItems waybillItem = waybillItemsMapper.selectByPrimaryKey(dto.getId());
+                        ClmsBeanUtil.copyPropertiesIgnoreNull(dto, waybillItem);
+                        waybillItem.setUpdateId(waybillDto.getUpdateId());
+                        waybillItem.setUpdateName(waybillDto.getUpdateName());
+                        waybillItem.setCompanyId(waybillDto.getCompanyId());
+
+                        //对waybillDao里面的货物详细计划数量
+                        waybillDao.getWaybillItemsList().forEach(item -> {
+                            item.setAmount(item.getAmount() - waybillItem.getAmount());
+                        });
+                        return waybillItem;
+                    }).collect(Collectors.toList());
+
             if (waybillItemsUpdateList.size() > 0) {
                 //运单货物详细修改
-                result += waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
+                result = waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
             }
             //计划编辑
             planService.adjustPlanAndSplitAmount(waybillDao);
@@ -439,7 +409,6 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
     @Override
     public PageInfo queryCustomerWaybillList(WaybillCustListParamsDto dto) {
-        List<WaybillDao> resultList = null;
         PageInfo page = null;
         int pageNo = 1;
         int pageSize = 0; //0表示所有
@@ -456,14 +425,13 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         map.put("carrierCompanyId", map.get("companyId"));
         map.remove("companyId");
         map.remove("customerName");
-        //将前端传过来的waybillStatus转成数组
-
         PageHelper.startPage(pageNo, pageSize);
-        resultList = waybillMapper.selectCustomerByCondition(map);
-        for (int i = 0; i < resultList.size(); i++) {
-            Customer customer = customerRpcService.queryCustomer(resultList.get(i).getCarrierCompanyId(), resultList.get(i).getCompanyId());
-            resultList.get(i).setWaybillSource(customer.getCustomerName());
-        }
+        List<WaybillDao> resultList = waybillMapper.selectCustomerByCondition(map);
+        //对customerName重新赋值
+        resultList.forEach(result -> {
+            Customer customer = customerRpcService.queryCustomer(result.getCarrierCompanyId(), result.getCompanyId());
+            result.setWaybillSource(customer.getCustomerName());
+        });
         page = new PageInfo(resultList);
         return page;
     }
@@ -472,19 +440,19 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     public Waybill modifyOwnWaybillStatus(WaybillModifyStatusDto dto) {
         Waybill waybill = null;
         Map map = ClmsBeanUtil.beanToMap(dto);
-        if(dto.getWaybillStatus()==ConstantVO.WAYBILL_STATUS_IS_UNLOADING){
+        if (dto.getWaybillStatus() == ConstantVO.WAYBILL_STATUS_IS_UNLOADING) {
             List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
             waybill = resultList.get(0);
-            if(waybill!=null){
-                List<String> phoneList=new ArrayList<>();
+            if (waybill != null) {
+                List<String> phoneList = new ArrayList<>();
                 phoneList.add(waybill.getDriverPhone());
-                List<Driver> driverList=driverService.getGpsInfo(phoneList);
-                for(Driver driver:driverList){
-                    if(driver.getDriverPhone()!=null&&driver.getDriverPhone().equals(waybill.getDriverPhone())){
+                List<Driver> driverList = driverService.getGpsInfo(phoneList);
+                for (Driver driver : driverList) {
+                    if (driver.getDriverPhone() != null && driver.getDriverPhone().equals(waybill.getDriverPhone())) {
 //                        map.put("longitude",1);
 //                        map.put("latitude",1);
-                        map.put("unloadLocation",driver.getCurrentLocation());
-                        map.put("unloadTime",new Date());
+                        map.put("unloadLocation", driver.getCurrentLocation());
+                        map.put("unloadTime", new Date());
                     }
                 }
             }
@@ -522,19 +490,19 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     public Waybill modifyCustomerWaybillStatus(WaybillModifyStatusDto dto) {
         Waybill waybill = null;
         Map map = ClmsBeanUtil.beanToMap(dto);
-        if(dto.getWaybillStatus()==ConstantVO.WAYBILL_STATUS_IS_UNLOADING){
+        if (dto.getWaybillStatus() == ConstantVO.WAYBILL_STATUS_IS_UNLOADING) {
             List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
             waybill = resultList.get(0);
-            if(waybill!=null){
-                List<String> phoneList=new ArrayList<>();
+            if (waybill != null) {
+                List<String> phoneList = new ArrayList<>();
                 phoneList.add(waybill.getDriverPhone());
-                List<Driver> driverList=driverService.getGpsInfo(phoneList);
-                for(Driver driver:driverList){
-                    if(driver.getDriverPhone()!=null&&driver.getDriverPhone().equals(waybill.getDriverPhone())){
+                List<Driver> driverList = driverService.getGpsInfo(phoneList);
+                for (Driver driver : driverList) {
+                    if (driver.getDriverPhone() != null && driver.getDriverPhone().equals(waybill.getDriverPhone())) {
 //                        map.put("longitude",1);
 //                        map.put("latitude",1);
-                        map.put("unloadLocation",driver.getCurrentLocation());
-                        map.put("unloadTime",new Date());
+                        map.put("unloadLocation", driver.getCurrentLocation());
+                        map.put("unloadTime", new Date());
                     }
                 }
             }
@@ -694,19 +662,19 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         map.put("updateId", dto.getUpdateId());
         map.put("waybillStatus", dto.getWaybillStatus());
         map.put("waybillIds", dto.getWaybillIds());
-        if(dto.getWaybillStatus()==ConstantVO.WAYBILL_STATUS_IS_UNLOADING){
+        if (dto.getWaybillStatus() == ConstantVO.WAYBILL_STATUS_IS_UNLOADING) {
             List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
             waybill = resultList.get(0);
-            if(waybill!=null){
-                List<String> phoneList=new ArrayList<>();
+            if (waybill != null) {
+                List<String> phoneList = new ArrayList<>();
                 phoneList.add(waybill.getDriverPhone());
-                List<Driver> driverList=driverService.getGpsInfo(phoneList);
-                for(Driver driver:driverList){
-                    if(driver.getDriverPhone()!=null&&driver.getDriverPhone().equals(waybill.getDriverPhone())){
+                List<Driver> driverList = driverService.getGpsInfo(phoneList);
+                for (Driver driver : driverList) {
+                    if (driver.getDriverPhone() != null && driver.getDriverPhone().equals(waybill.getDriverPhone())) {
 //                        map.put("longitude",1);
 //                        map.put("latitude",1);
-                        map.put("unloadLocation",driver.getCurrentLocation());
-                        map.put("unloadTime",new Date());
+                        map.put("unloadLocation", driver.getCurrentLocation());
+                        map.put("unloadTime", new Date());
                     }
                 }
             }
@@ -831,7 +799,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
                                 //router:计划自动完成
                                 Timeline event = new Timeline();
-                                String wayBillCode = waybill.getWaybillCode()==null?"":waybill.getWaybillCode();
+                                String wayBillCode = waybill.getWaybillCode() == null ? "" : waybill.getWaybillCode();
                                 event.setActionTitle("【计划完成】" + wayBillCode);
                                 event.setActionTime(new Date());
                                 event.setCompanyId(waybillPlan.getCompanyId());

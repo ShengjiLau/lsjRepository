@@ -93,4 +93,123 @@
         order by log_time desc
     </select>
 
+    <select id="selectWarehouseProductNum" resultType="map">
+        select sum(change_num) num,time from (
+        select il.change_num,DATE_FORMAT(il.log_time,'%Y-%m-%d') time from inventory_log il
+        where il.log_time is not null
+        and il.company_id= #{companyId,jdbcType=BIGINT}
+        <include refid="sql_report" />
+        ) a group by a.time
+    </select>
+
+    <select id="selectWarehouseProductNum4Report" resultType="long">
+        select sum(il.change_num)num from inventory_log il
+        join t_warehouse tw on il.warehouse_id = tw.wh_id
+        join goods_info gi on il.goods_id = gi.goods_id
+        where il.log_time is not null
+        and il.company_id= #{companyId,jdbcType=BIGINT}
+        <include refid="sql_report" />
+    </select>
+
+    <select id="selectWarehouseProduct4SummaryReport" resultType="map" >
+        select a.innum,a.outnum,b.* from
+        (select sum(innum) innum,
+        sum(outnum) outnum,a.rowkey
+         from (
+        select
+        CASE when il.type= 0 then il.change_num else 0 end innum,
+        CASE when il.type= 1 then il.change_num else 0 end outnum,
+        CONCAT_WS('-',il.warehouse_id,il.customer_id,il.goods_id,il.batch)rowkey,
+        il.type
+        from inventory_log il
+        join t_warehouse tw on il.warehouse_id = tw.wh_id
+        join goods_info gi on il.goods_id = gi.goods_id
+        where il.log_time is not null
+
+        and il.company_id= #{companyId,jdbcType=BIGINT}
+        <include refid="sql_report" />
+
+        ) a group by a.rowkey)a
+
+        join (
+        select il.customer_id,il.customer_name ,il.warehouse_id,tw.wh_name,
+                gi.goods_name,gi.goods_code,gi.goods_classify,il.batch,gi.min_unit,gi.goods_spec,gi.goods_barcode,
+        CONCAT_WS('-',il.warehouse_id,il.customer_id,il.goods_id,il.batch)rowkey
+                from inventory_log il
+                join t_warehouse tw on il.warehouse_id = tw.wh_id
+                join goods_info gi on il.goods_id = gi.goods_id
+                where il.log_time is not null
+
+                and il.company_id= #{companyId,jdbcType=BIGINT}
+                <include refid="sql_report" />
+
+                group by il.customer_id,il.warehouse_id,gi.goods_code,il.batch
+                )b on a.rowkey = b.rowkey order by b.goods_code
+
+    </select>
+
+    <select id="selectWarehouseProduct4ReportGroupWare" resultType="map">
+        select sum(il.change_num)num,il.warehouse_id,tw.wh_name from inventory_log il
+        join t_warehouse tw on il.warehouse_id = tw.wh_id
+        join goods_info gi on il.goods_id = gi.goods_id
+        where il.log_time is not null
+        and il.company_id= #{companyId,jdbcType=BIGINT}
+        <include refid="sql_report" />
+        group by il.warehouse_id
+    </select>
+    <select id="selectWarehouseProduct4ReportGroupCustomer" resultType="map">
+        select sum(il.change_num)num,il.customer_id,il.customer_name from inventory_log il
+        join t_warehouse tw on il.warehouse_id = tw.wh_id
+        join goods_info gi on il.goods_id = gi.goods_id
+        where il.log_time is not null
+        and il.company_id= #{companyId,jdbcType=BIGINT}
+        <include refid="sql_report" />
+        group by il.customer_id
+    </select>
+
+
+    <select id="selectWarehouseProduct4Report" resultType="map" >
+        select sum(il.change_num)num,il.customer_id,il.customer_name ,il.warehouse_id,tw.wh_name,
+        gi.goods_name,gi.goods_code,gi.goods_classify,il.batch,gi.min_unit,gi.goods_spec,gi.goods_barcode
+        from inventory_log il
+        join t_warehouse tw on il.warehouse_id = tw.wh_id
+        join goods_info gi on il.goods_id = gi.goods_id
+        where il.log_time is not null
+        and il.company_id= #{companyId,jdbcType=BIGINT}
+        <include refid="sql_report" />
+        group by il.customer_id,il.warehouse_id,gi.goods_code,il.batch
+        order by gi.goods_code
+    </select>
+
+    <sql id="sql_report">
+        <if test="type!=null and type!=''">
+            and il.type = #{type}
+        </if>
+        <if test="warehouseId!=null and warehouseId!=''">
+            and il.warehouse_id = #{warehouseId,jdbcType=BIGINT}
+        </if>
+        <if test="customerId!=null and customerId!=''">
+            and il.customer_id = #{customerId,jdbcType=BIGINT}
+        </if>
+        <if test="startStorageTime!=null and startStorageTime!=''">
+            and il.log_time &gt;= CONCAT(STR_TO_DATE(#{startStorageTime,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+        </if>
+        <if test="endStorageTime!=null and endStorageTime!=''">
+            and il.log_time &lt;= CONCAT(STR_TO_DATE(#{endStorageTime,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
+        </if>
+        <if test="batch!=null and batch!=''">
+            and il.batch like concat('%',#{batch,jdbcType=VARCHAR},'%')
+        </if>
+
+        <if test="goodsName != null and goodsName!=''">
+            and gi.goods_name like CONCAT(CONCAT('%',#{goodsName}),'%')
+        </if>
+        <if test="goodsbarcode != null and goodsbarcode!=''">
+            and gi.goods_barcode like CONCAT(CONCAT('%',#{goodsbarcode}),'%')
+        </if>
+        <if test="goodsCode != null and goodsCode!=''">
+            and gi.goods_code like CONCAT(CONCAT('%',#{goodsCode}),'%')
+        </if>
+    </sql>
+
 </mapper>

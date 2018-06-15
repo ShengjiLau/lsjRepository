@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.entity.Inventory;
+import com.lcdt.warehouse.utils.ShiftGoodsBO;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -29,6 +30,7 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
     
     List<ShiftGoodsListDTO> getInventoryAndGoodsInfo(Long[] inventoryIds);
 
-
     List<Inventory> selectInventoryListByqueryDto(@Param("goodsIds") List<Long> goodsIds,@Param("querydto") InventoryQueryDto queryDto);
+    
+    ShiftGoodsListDTO selectInventoryListByShiftGoodsBO(ShiftGoodsBO shiftGoodsBO);
 }

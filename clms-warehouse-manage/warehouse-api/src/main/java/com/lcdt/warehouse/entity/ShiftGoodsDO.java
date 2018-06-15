@@ -3,48 +3,34 @@ package com.lcdt.warehouse.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotBlank;
-
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
-/**
- * @author Sheng-ji Lau
- * @date 2018年5月18日
- * @version
- * @Description: TODO 
- */
-@ApiModel("移库商品信息")
 public class ShiftGoodsDO implements Serializable {
-	
-	@ApiModelProperty("移库商品信息")
     private Long shiftGoodsId;
-	
-	@NotNull(message="库存id不可为空")
-	@ApiModelProperty("库存id")
+
     private Long inventoryId;
-	
-	@NotBlank
-	@ApiModelProperty("目标库编码")
+
     private String shiftLocation;
-	
-	@NotNull
-	@ApiModelProperty("计划移库量")
+
     private BigDecimal shiftPlanNum;
 
-	@NotNull
-	@ApiModelProperty("实际移库量")
     private BigDecimal shiftNum;
 
-	@ApiModelProperty("备注")
     private String remark;
- 
-	@ApiModelProperty("所对应的移库单id")
+
     private Long shiftInventoryId;
 
-    private static final long serialVersionUID = 1491515315L;
+    private Long storageLocationId;
+
+    private Long goodsId;
+
+    private String batch;
+
+    private Long originalGoodsId;
+
+    private String baseUnit;
+
+    private Float inventoryPrice;
+
+    private static final long serialVersionUID = 1L;
 
     public Long getShiftGoodsId() {
         return shiftGoodsId;
@@ -54,7 +40,13 @@ public class ShiftGoodsDO implements Serializable {
         this.shiftGoodsId = shiftGoodsId;
     }
 
-  
+    public Long getInventoryId() {
+        return inventoryId;
+    }
+
+    public void setInventoryId(Long inventoryId) {
+        this.inventoryId = inventoryId;
+    }
 
     public String getShiftLocation() {
         return shiftLocation;
@@ -88,23 +80,60 @@ public class ShiftGoodsDO implements Serializable {
         this.remark = remark == null ? null : remark.trim();
     }
 
-	public Long getShiftInventoryId() {
-		return shiftInventoryId;
-	}
+    public Long getShiftInventoryId() {
+        return shiftInventoryId;
+    }
 
-	public void setShiftInventoryId(Long shiftInventoryId) {
-		this.shiftInventoryId = shiftInventoryId;
-	}
+    public void setShiftInventoryId(Long shiftInventoryId) {
+        this.shiftInventoryId = shiftInventoryId;
+    }
 
-	public Long getInventoryId() {
-		return inventoryId;
-	}
+    public Long getStorageLocationId() {
+        return storageLocationId;
+    }
 
-	public void setInventoryId(Long inventoryId) {
-		this.inventoryId = inventoryId;
-	}
+    public void setStorageLocationId(Long storageLocationId) {
+        this.storageLocationId = storageLocationId;
+    }
 
-	
+    public Long getGoodsId() {
+        return goodsId;
+    }
 
-   
+    public void setGoodsId(Long goodsId) {
+        this.goodsId = goodsId;
+    }
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch == null ? null : batch.trim();
+    }
+
+    public Long getOriginalGoodsId() {
+        return originalGoodsId;
+    }
+
+    public void setOriginalGoodsId(Long originalGoodsId) {
+        this.originalGoodsId = originalGoodsId;
+    }
+
+    public String getBaseUnit() {
+        return baseUnit;
+    }
+
+    public void setBaseUnit(String baseUnit) {
+        this.baseUnit = baseUnit == null ? null : baseUnit.trim();
+    }
+
+    public Float getInventoryPrice() {
+        return inventoryPrice;
+    }
+
+    public void setInventoryPrice(Float inventoryPrice) {
+        this.inventoryPrice = inventoryPrice;
+    }
+
 }

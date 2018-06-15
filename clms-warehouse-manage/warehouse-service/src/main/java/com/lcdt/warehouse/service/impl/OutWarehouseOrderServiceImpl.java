@@ -19,11 +19,13 @@ import com.lcdt.warehouse.vo.ConstantVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -54,41 +56,35 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
         int result = 0;
 
         //先判断是否还有剩于运单服务条数(后面计费用)
-        if(!companyServiceCountService.checkCompanyProductCount(dto.getCompanyId(),"storage_service", 1)){
+        if (!companyServiceCountService.checkCompanyProductCount(dto.getCompanyId(), "storage_service", 1)) {
             throw new RuntimeException("剩余仓单服务次数不足");
         }
 
         OutWarehouseOrder outWarehouseOrder = new OutWarehouseOrder();
         dto.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND);
         BeanUtils.copyProperties(dto, outWarehouseOrder);
+
         //插入出库单
         result += baseMapper.insertOutWarehouseOrder(outWarehouseOrder);
         if (dto.getOutOrderGoodsInfoList() != null && dto.getOutOrderGoodsInfoList().size() > 0) {
             List<OutOrderGoodsInfo> outOrderGoodsInfoList = new ArrayList<>();
-            for (int i = 0; i < dto.getOutOrderGoodsInfoList().size(); i++) {
+            dto.getOutOrderGoodsInfoList().forEach(goods -> {
                 OutOrderGoodsInfo outOrderGoodsInfo = new OutOrderGoodsInfo();
-                BeanUtils.copyProperties(dto.getOutOrderGoodsInfoList().get(i), outOrderGoodsInfo);
+                BeanUtils.copyProperties(goods, outOrderGoodsInfo);
                 outOrderGoodsInfo.setOutorderId(outWarehouseOrder.getOutorderId());
                 outOrderGoodsInfo.setCompanyId(outWarehouseOrder.getCompanyId());
                 outOrderGoodsInfo.setOutboundQuantity(outOrderGoodsInfo.getGoodsNum());
                 outOrderGoodsInfoList.add(outOrderGoodsInfo);
-                inventoryService.lockInventoryNum(outOrderGoodsInfo.getInvertoryId(),outOrderGoodsInfo.getGoodsNum());
-            }
+                inventoryService.lockInventoryNum(outOrderGoodsInfo.getInvertoryId(), outOrderGoodsInfo.getGoodsNum());
+            });
+
             //批量插入出库单明细
             outOrderGoodsInfoService.insertBatch(outOrderGoodsInfoList);
-
-            //直接出库
-//            if (dto.getOperationType() == 1) {
-//                //对接库存，减库存
-//                outWarehouseOrder = queryOutWarehouseOrder(outWarehouseOrder.getCompanyId(),outWarehouseOrder.getOutorderId());
-//                outWarehouseOrder.setOutboundMan(dto.getCreateName());
-//                inventoryService.outInventory(outWarehouseOrder,outOrderGoodsInfoList);
-//            }
         }
 
         //扣减运单费用
         if (result > 0) {
-            companyServiceCountService.reduceCompanyProductCount(dto.getCompanyId(),"storage_service", 1,dto.getCreateName(),"生成出库单...");
+            companyServiceCountService.reduceCompanyProductCount(dto.getCompanyId(), "storage_service", 1, dto.getCreateName(), "生成出库单...");
         }
 
         return result;
@@ -119,15 +115,11 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
         EntityWrapper wrapper = new EntityWrapper();
         wrapper.setEntity(orderWrapper);
         //释放锁定库存
-        if(params.getOrderStatus()==ConstantVO.IN_ORDER_STATUS_HAVE_CANCEL){
-            OutWhOrderDto outWhOrderDto=queryOutWarehouseOrder(params.getCompanyId(),params.getOutorderId());
-            List<OutOrderGoodsInfoDto> outOrderGoodsInfoDtoList=outWhOrderDto.getOutOrderGoodsInfoList();
-            if(outOrderGoodsInfoDtoList!=null&&outOrderGoodsInfoDtoList.size()>0){
-                for(OutOrderGoodsInfoDto dto:outOrderGoodsInfoDtoList){
-                    if(dto!=null){
-                        inventoryService.unLockInventoryNum(dto.getInvertoryId(),dto.getGoodsNum());
-                    }
-                }
+        if (params.getOrderStatus() != null && params.getOrderStatus() == ConstantVO.IN_ORDER_STATUS_HAVE_CANCEL) {
+            OutWhOrderDto outWhOrderDto = queryOutWarehouseOrder(params.getCompanyId(), params.getOutorderId());
+            List<OutOrderGoodsInfoDto> outOrderGoodsInfoDtoList = outWhOrderDto.getOutOrderGoodsInfoList();
+            if (outOrderGoodsInfoDtoList != null && outOrderGoodsInfoDtoList.size() > 0) {
+                outOrderGoodsInfoDtoList.forEach(goods->inventoryService.unLockInventoryNum(goods.getInvertoryId(), goods.getGoodsNum()));
             }
         }
         //调用更新的方法
@@ -141,13 +133,15 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
         //拆分
         boolean result = false;
         //拆分
-        List<OutOrderGoodsInfo> modifyOutOrderGoodsInfoList = new ArrayList<>();
+        List<OutOrderGoodsInfo> modifyOutOrderGoodsInfoList = null;
         if (listParams != null && listParams.size() > 0) {
-            for (OutOrderGoodsInfo infoDto : listParams) {
-                OutOrderGoodsInfo outorderGoodsInfo = new OutOrderGoodsInfo();
-                BeanUtils.copyProperties(infoDto, outorderGoodsInfo);
-                modifyOutOrderGoodsInfoList.add(outorderGoodsInfo);
-            }
+            modifyOutOrderGoodsInfoList = listParams.stream()
+                    .map(params -> {
+                        OutOrderGoodsInfo outorderGoodsInfo = new OutOrderGoodsInfo();
+                        BeanUtils.copyProperties(params, outorderGoodsInfo);
+                        return outorderGoodsInfo;
+                    }).collect(Collectors.toList());
+
             if (modifyOutOrderGoodsInfoList != null && modifyOutOrderGoodsInfoList.size() > 0) {
                 result = outOrderGoodsInfoService.updateBatchById(modifyOutOrderGoodsInfoList);
             }
@@ -156,67 +150,28 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
         result = modifyOutOrderStatus(modifyParams);
 
         //出库减库存
-        OutWarehouseOrder outWarehouseOrder=new OutWarehouseOrder();
-        outWarehouseOrder = queryOutWarehouseOrder(modifyParams.getCompanyId(),modifyParams.getOutorderId());
+        OutWarehouseOrder outWarehouseOrder = new OutWarehouseOrder();
+        outWarehouseOrder = queryOutWarehouseOrder(modifyParams.getCompanyId(), modifyParams.getOutorderId());
         outWarehouseOrder.setOutboundMan(modifyParams.getUpdateName());
-        inventoryService.outInventory(outWarehouseOrder,modifyOutOrderGoodsInfoList);
+        inventoryService.outInventory(outWarehouseOrder, modifyOutOrderGoodsInfoList);
 
         return result;
     }
 
     @Override
     public List<DistributionRecordsOutOrderDto> queryOutOrderDisRecords(Long companyId, Long outPlanId) {
-        return baseMapper.selectOutOrderDisRecords(companyId,outPlanId);
+        return baseMapper.selectOutOrderDisRecords(companyId, outPlanId);
     }
 
     /**
      * 概览出库单已完成数量
+     *
      * @param params
      * @return
      */
-    public List<Map<String,Object>> selectOutWarehouseNum(OutWhOrderSearchDto params){
+    public List<Map<String, Object>> selectOutWarehouseNum(OutWhOrderSearchDto params) {
         return baseMapper.selectOutWarehouseNum(params);
     }
 
-    @Override
-    public List<Map<String, Object>> selectOutWarehouseProductNum(OutWhOrderSearchDto params) {
-        return baseMapper.selectOutWarehouseProductNum(params);
-    }
 
-    private List<Long> queryGoodsIds(OutWhOrderSearchDto params) {
-        GoodsListParamsDto dto = new GoodsListParamsDto();
-        dto.setGoodsName(params.getGoodsName());
-        dto.setCompanyId(params.getCompanyId());
-        dto.setGoodsCode(params.getGoodsCode());
-        dto.setBarCode(params.getGoodsBarCode());
-        dto.setClassifyId(params.getClassifyId());
-        List<Long> longs = goodsService.queryGoodsIdsByCondition(dto);
-        if (longs == null) {
-            return new ArrayList<Long>();
-        }
-        return longs;
-    }
-
-    @Override
-    public Integer selectOutWarehouseProductNum4Report(OutWhOrderSearchDto params) {
-        params.setGoodIds(queryGoodsIds(params));
-        return baseMapper.selectOutWarehouseProductNum4Report(params);
-    }
-
-    @Override
-    public Page<Map<String, Object>> selectOutWarehouseProduct4Report(OutWhOrderSearchDto params) {
-        Page page = new Page(params.getPageNo(), params.getPageSize());
-        params.setGoodIds(queryGoodsIds(params));
-        return page.setRecords(baseMapper.selectOutWarehouseProduct4Report(page, params));
-    }
-
-    @Override
-    public List<Map<String, Object>> selectOutWarehouseProduct4ReportGroupWare(OutWhOrderSearchDto params) {
-        return baseMapper.selectOutWarehouseProduct4ReportGroupWare(params);
-    }
-
-    @Override
-    public List<Map<String, Object>> selectOutWarehouseProduct4ReportGroupCustomer(OutWhOrderSearchDto params) {
-        return baseMapper.selectOutWarehouseProduct4ReportGroupCustomer(params);
-    }
 }

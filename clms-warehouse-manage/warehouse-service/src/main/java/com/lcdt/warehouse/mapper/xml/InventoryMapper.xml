@@ -118,10 +118,15 @@
 	</select>
 	
 	<select id="getInventoryAndGoodsInfo" resultType="com.lcdt.warehouse.dto.ShiftGoodsListDTO">
-			select t.invertory_id invertoryId,t.storage_location_code storageLocationCode,g.goods_batch goodsBatch,
-			g.goods_name goodsName,g.goods_spec goodsSpec,g.goods_code goodsCode,g.goods_barcode barCode,t.base_unit baseUnit
+			select t.invertory_id invertoryId, t.goods_id GoodsId,t.invertory_num invertoryNum,t.lock_num lockNum,t.warehouse_id warehouseId,
+			t.company_id companyId,t.remark remark,t.business_desc businessDesc,t.storage_location_code storageLocationCode,
+			t.warehouse_name warehouseName,t.customer_id customerId,t.customer_name customerName,t.original_goods_id originalGoodsId,
+			t.cost_remark costRemark,t.inventory_price inventoryPrice,t.batch batch,t.storage_location_id storageLocationId,
+			t.base_unit baseUnit,t.update_time updateTime,g.goods_id goodsId,g.goods_name goodsName,g.goods_spec goodsSpec,
+			g.goods_code goodsCode,g.goods_barcode goodsBarcode,g.goods_price goodsPrice,g.goods_batch goodsBatch,g.sub_item_id subItemId,
+			g.original_goods_id originalGoodsId,g.goods_category goodsCategory,g.goods_classify goodsClassify,g.min_unit minUnit
 			from inventory t inner join goods_info g on
-       		 t.goods_id = g.goods_id
+       		t.goods_id = g.goods_id
 		<where>
 			t.invertory_id in
 		<foreach collection="array" open="(" close=")" index="index" item="item" separator=",">
@@ -129,6 +134,28 @@
 		</foreach>
 		</where>
 	</select>
+	
+	<select id="selectInventoryListByShiftGoodsBO" resultType="com.lcdt.warehouse.dto.ShiftGoodsListDTO" parameterType="com.lcdt.warehouse.utils.ShiftGoodsBO">
+			select t.invertory_id invertoryId, t.goods_id GoodsId,t.invertory_num invertoryNum,t.lock_num lockNum,t.warehouse_id warehouseId,
+			t.company_id companyId,t.remark remark,t.business_desc businessDesc,t.storage_location_code storageLocationCode,
+			t.warehouse_name warehouseName,t.customer_id customerId,t.customer_name customerName,t.original_goods_id originalGoodsId,
+			t.cost_remark costRemark,t.inventory_price inventoryPrice,t.batch batch,t.storage_location_id storageLocationId,
+			t.base_unit baseUnit,t.update_time updateTime,g.goods_id goodsId,g.goods_name goodsName,g.goods_spec goodsSpec,
+			g.goods_code goodsCode,g.goods_barcode goodsBarcode,g.goods_price goodsPrice,g.goods_batch goodsBatch,g.sub_item_id subItemId,
+			g.original_goods_id originalGoodsId,g.goods_category goodsCategory,g.goods_classify goodsClassify,g.min_unit minUnit
+			from inventory t inner join goods_info g on
+       		t.goods_id = g.goods_id
+		<where>
+			t.company_id = #{companyId,jdbcType=BIGINT}
+			and t.customer_id = #{customerId,jdbcType=BIGINT}
+			and t.warehouse_id = #{warehouseId,jdbcType=BIGINT}
+			and t.storage_location_code = #{storageLocationCode,jdbcType=VARCHAR} 
+			and g.goods_code = #{goodsCode,jdbcType=VARCHAR}
+			and g.goods_batch = #{goodsBatch,jdbcType=VARCHAR}          
+		</where>	
+	</select>
+	
+	
 
 </mapper>
 

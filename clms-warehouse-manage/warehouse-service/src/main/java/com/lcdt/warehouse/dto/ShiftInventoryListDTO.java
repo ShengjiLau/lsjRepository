@@ -1,5 +1,6 @@
 package com.lcdt.warehouse.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.lcdt.warehouse.entity.ShiftInventoryListDO;
@@ -12,7 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @version
  * @Description: TODO 
  */
-public class ShiftInventoryListDTO extends ShiftInventoryListDO{
+public class ShiftInventoryListDTO extends ShiftInventoryListDO implements Serializable{
 
 	/**
 	 * 序列号
