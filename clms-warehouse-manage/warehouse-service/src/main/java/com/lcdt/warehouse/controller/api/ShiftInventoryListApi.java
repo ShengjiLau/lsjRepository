@@ -54,9 +54,6 @@ public class ShiftInventoryListApi {
 		log.debug("创建移库单的数量:"+result);
 		
 		if (result > 0) {
-			if (ShiftInventoryListVO.UNDERSTOCK == result) {
-				return failedResponseJson("库存数量不足！");
-			}
 			return successResponseJson(null, "创建成功");
 		}else {
 			throw new RuntimeException("创建移库单时出现异常");
@@ -77,9 +74,6 @@ public class ShiftInventoryListApi {
 		log.debug("完成移库单的数量:"+result);
 		
 		if (result > 0) {
-			if (ShiftInventoryListVO.UNDERSTOCK == result) {
-				return failedResponseJson("库存数量不足！");
-			}
 			return successResponseJson(null, "完成成功");
 		}else {
 			throw new RuntimeException("完成移库单时出现异常");

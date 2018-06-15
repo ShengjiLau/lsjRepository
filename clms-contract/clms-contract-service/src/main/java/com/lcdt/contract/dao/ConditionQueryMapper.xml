@@ -39,14 +39,14 @@
       <if test="payType!=null and payType!=''">
         and pay_type = #{payType,jdbcType=VARCHAR}
       </if>
-      <if test="beginTime != null and beginTime !=''and endTime != null and endTime !=''">
+    <!--   <if test="beginTime != null and beginTime !=''and endTime != null and endTime !=''">
       and create_time between concat(#{beginTime,jdbcType=TIMESTAMP},'000000')  and  concat(#{endTime,jdbcType=TIMESTAMP},'235959')                
-      </if>
+      </if> -->
       <if test="beginTime != null and beginTime !=''">
-       and create_time &gt; concat(#{beginTime,jdbcType=TIMESTAMP},'000000')
+       and create_time &gt; concat(#{beginTime,jdbcType=TIMESTAMP},' 00:00:00')
       </if>
       <if test="endTime != null and endTime !=''">
-      and create_time &lt; concat(#{endTime,jdbcType=TIMESTAMP},'235959')
+      and create_time &lt; concat(#{endTime,jdbcType=TIMESTAMP},' 23:59:59')
       </if>
       <if test="isDraft!=null">
          and is_draft= #{isDraft,jdbcType=SMALLINT}
