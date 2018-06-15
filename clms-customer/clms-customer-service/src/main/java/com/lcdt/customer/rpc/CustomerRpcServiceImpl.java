@@ -12,7 +12,6 @@ import com.lcdt.customer.model.CustomerContact;
 import com.lcdt.customer.model.CustomerTypeRelation;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.customer.service.CustomerService;
-import com.lcdt.userinfo.model.UserCompRel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -116,6 +115,8 @@ public class CustomerRpcServiceImpl implements CustomerRpcService {
                customer.setCreateDate(new Date());
                customer.setCreateId(Long.valueOf(map.get("userId").toString()));
                customer.setCreateName(map.get("userName").toString());
+               customer.setGroupIds(map.get("groupIds").toString());
+               customer.setGroupNames(map.get("groupNames").toString());
                customer.setStatus((short)1);
                int flag = customerMapper.insert(customer);
                if (flag>0) {
