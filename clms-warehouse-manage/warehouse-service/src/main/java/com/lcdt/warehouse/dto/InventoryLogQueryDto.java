@@ -29,6 +29,16 @@ public class InventoryLogQueryDto extends PageQueryDto{
 
     private Long customerId;
 
+    //接收前端的日期字符串
+    private String startStorageTime;
+    private String endStorageTime;
+
+    private String goodsCode;
+
+    private Long classifyId;
+
+    private String batch;
+
     public Long getCustomerId() {
         return customerId;
     }
@@ -123,5 +133,45 @@ public class InventoryLogQueryDto extends PageQueryDto{
 
     public void setBusinessNo(String businessNo) {
         this.businessNo = businessNo;
+    }
+
+    public String getStartStorageTime() {
+        return startStorageTime;
+    }
+
+    public void setStartStorageTime(String startStorageTime) {
+        this.startStorageTime = startStorageTime;
+    }
+
+    public String getEndStorageTime() {
+        return endStorageTime;
+    }
+
+    public void setEndStorageTime(String endStorageTime) {
+        this.endStorageTime = endStorageTime;
+    }
+
+    public String getGoodsCode() {
+        return goodsCode;
+    }
+
+    public void setGoodsCode(String goodsCode) {
+        this.goodsCode = goodsCode;
+    }
+
+    public Long getClassifyId() {
+        return classifyId;
+    }
+
+    public void setClassifyId(Long classifyId) {
+        this.classifyId = classifyId;
+    }
+
+    public String getBatch() {
+        return batch;
+    }
+
+    public void setBatch(String batch) {
+        this.batch = batch;
     }
 }

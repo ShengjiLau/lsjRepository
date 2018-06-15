@@ -151,6 +151,7 @@ public class InWarehouseOrderController {
 
     @ApiOperation("概览入库单已完成数量")
     @RequestMapping(value = "/inWarehouseBillNum", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('in_ware_report')")
     public JSONObject inWarehouseNum(InWarehouseOrderSearchParamsDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
         String [] inOrderStatus = {"2"};
@@ -163,65 +164,6 @@ public class InWarehouseOrderController {
         return jo;
     }
 
-    @ApiOperation("概览入库单已完成商品数量")
-    @RequestMapping(value = "/inWarehouseProductNum", method = RequestMethod.GET)
-    public JSONObject inWarehouseProductNum(InWarehouseOrderSearchParamsDto params) {
-        params.setCompanyId(SecurityInfoGetter.getCompanyId());
 
-        JSONObject jo =  new JSONObject();
-        jo.put("code", 0);
-        jo.put("data",inWarehouseOrderService.selectInWarehouseProductNum(params));
-
-        return jo;
-    }
-
-    @ApiOperation("出入库汇总入库已完成商品数量")
-    @RequestMapping(value = "/inWarehouseProductNum4Report", method = RequestMethod.GET)
-    public JSONObject inWarehouseProductNum4Report(InWarehouseOrderSearchParamsDto params) {
-        params.setCompanyId(SecurityInfoGetter.getCompanyId());
-
-        JSONObject jo =  new JSONObject();
-        jo.put("code", 0);
-        jo.put("data",inWarehouseOrderService.selectInWarehouseProductNum4Report(params));
-
-        return jo;
-    }
-
-    @ApiOperation("出入库汇总入库已完成商品")
-    @RequestMapping(value = "/inWarehouseProduct4Report", method = RequestMethod.GET)
-    public JSONObject inWarehouseProduct4Report(InWarehouseOrderSearchParamsDto params) {
-        params.setCompanyId(SecurityInfoGetter.getCompanyId());
-
-        JSONObject jo =  new JSONObject();
-        jo.put("code", 0);
-        jo.put("data",inWarehouseOrderService.selectInWarehouseProduct4Report(params));
-
-        return jo;
-    }
-
-    @ApiOperation("出入库汇总出库已完成商品按仓库分组")
-    @RequestMapping(value = "/inWarehouseProduct4ReportGroupWare", method = RequestMethod.GET)
-    public JSONObject selectInWarehouseProduct4ReportGroupWare(InWarehouseOrderSearchParamsDto params) {
-        params.setCompanyId(SecurityInfoGetter.getCompanyId());
-
-        JSONObject jo =  new JSONObject();
-        jo.put("code", 0);
-        jo.put("data",inWarehouseOrderService.selectInWarehouseProduct4ReportGroupWare(params));
-
-        return jo;
-    }
-
-
-    @ApiOperation("出入库汇总出库已完成商品按客户分组")
-    @RequestMapping(value = "/inWarehouseProduct4ReportGroupCustomer", method = RequestMethod.GET)
-    public JSONObject selectInWarehouseProduct4ReportGroupCustomer(InWarehouseOrderSearchParamsDto params) {
-        params.setCompanyId(SecurityInfoGetter.getCompanyId());
-
-        JSONObject jo =  new JSONObject();
-        jo.put("code", 0);
-        jo.put("data",inWarehouseOrderService.selectInWarehouseProduct4ReportGroupCustomer(params));
-
-        return jo;
-    }
 }
 
