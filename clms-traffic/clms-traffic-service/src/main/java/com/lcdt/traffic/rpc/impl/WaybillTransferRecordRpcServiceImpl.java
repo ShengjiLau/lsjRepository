@@ -53,7 +53,6 @@ public class WaybillTransferRecordRpcServiceImpl implements WaybillTransferRecor
             waybillSenderNotify.ownTranserRecordSendNotify(dto.getWaybillId().toString(),dto.getCompanyId(),dto.getCreateId(),waybillTransferRecord);
         }else if(dto.getType()==2){
             //客户运单 换车记录发送消息知道
-            System.out.println("客户换车——————————————————————————————————————————————");
             waybillSenderNotify.customerTranserRecordSendNotify(dto.getWaybillId().toString(),dto.getCompanyId(),dto.getCreateId(),waybillTransferRecord);
         }
 

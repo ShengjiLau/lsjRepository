@@ -16,6 +16,8 @@ import java.util.List;
 
 public class WaybillDto extends Waybill implements java.io.Serializable {
 
+    private String createPhone;
+
     private List<WaybillItemsDto> waybillItemsDtoList;
 
     public List<WaybillItemsDto> getWaybillItemsDtoList() {
@@ -24,5 +26,13 @@ public class WaybillDto extends Waybill implements java.io.Serializable {
 
     public void setWaybillItemsDtoList(List<WaybillItemsDto> waybillItemsDtoList) {
         this.waybillItemsDtoList = waybillItemsDtoList;
+    }
+
+    public String getCreatePhone() {
+        return createPhone;
+    }
+
+    public void setCreatePhone(String createPhone) {
+        this.createPhone = createPhone;
     }
 }
