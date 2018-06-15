@@ -5,7 +5,7 @@
     <!-- 开启二级缓存 -->
 
     <select id="selectByCheckId" resultType="com.lcdt.warehouse.entity.TCheckItem">
-        SELECT relation_id,check_id,invertory_id,goods_id,goods_name,goods_code,goods_unit,goods_spec,goods_barcode,goods_batch,storage_location_code,invertory_amount,check_amount,different_amount,remark
+        SELECT relation_id,check_id,invertory_id,goods_id,goods_name,goods_code,goods_unit,goods_spec,goods_barcode,goods_batch,storage_location_id,storage_location_code,invertory_amount,check_amount,different_amount,remark
         FROM t_check_item a
         WHERE a.check_id = #{checkId,jdbcType=BIGINT}
         ORDER BY a.relation_id DESC

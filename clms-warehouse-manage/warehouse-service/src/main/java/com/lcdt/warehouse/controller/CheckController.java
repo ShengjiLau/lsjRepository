@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,7 @@ public class CheckController {
 
     @ApiOperation("盘库列表")
     @RequestMapping(value = "/checkList", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_check_search')")
     public PageBaseDto checkList(CheckParamDto checkDto) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
@@ -50,6 +52,7 @@ public class CheckController {
 
     @ApiOperation("根据id读盘库记录")
     @RequestMapping(value = "/findCheckById", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_check_detail') or hasAuthority('wh_check_complete')")
     public JSONObject findCheckById(@RequestParam Long checkId) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
@@ -73,6 +76,7 @@ public class CheckController {
 
     @ApiOperation("取消盘库")
     @RequestMapping(value = "/cancelCheck/{checkId}", method = RequestMethod.PATCH)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_check_cancel')")
     public JSONObject cancelCheck(@PathVariable Long checkId) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
@@ -102,6 +106,7 @@ public class CheckController {
 
     @ApiOperation("保存盘库单和明细")
     @RequestMapping(value = "/saveCheckAndItems", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_check_create')")
     public JSONObject saveCheckAndItems(@Validated CheckSaveDto checkSaveDto, BindingResult bindingResult) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
@@ -134,6 +139,7 @@ public class CheckController {
 
     @ApiOperation("保存并完成盘库")
     @RequestMapping(value = "/updateCheckAndComplete", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_check_complete')")
     public JSONObject updateCheckAndComplete(@Validated CheckSaveDto checkSaveDto) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
