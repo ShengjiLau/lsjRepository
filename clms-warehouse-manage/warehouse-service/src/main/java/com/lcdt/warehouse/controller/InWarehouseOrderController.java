@@ -151,6 +151,7 @@ public class InWarehouseOrderController {
 
     @ApiOperation("概览入库单已完成数量")
     @RequestMapping(value = "/inWarehouseBillNum", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('in_ware_report')")
     public JSONObject inWarehouseNum(InWarehouseOrderSearchParamsDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
         String [] inOrderStatus = {"2"};

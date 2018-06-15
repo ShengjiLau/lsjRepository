@@ -39,6 +39,7 @@ public class InventoryFactory {
         inventory.setOriginalGoodsId(goodsInfo.getGoodsId());
         inventory.setBaseUnit(goodsInfo.getMinUnit());
         inventory.setRemark(goodsInfo.getRemark());
+        inventory.setBusinessDesc(order.getStorageType());
         if (logger.isDebugEnabled()) {
             logger.debug("create inventory from inordergoods :{} ", inventory.toString());
         }

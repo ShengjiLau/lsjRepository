@@ -71,7 +71,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         InventoryQueryDto inventoryQueryDto = new InventoryQueryDto();
         inventoryQueryDto.setWareHouseId(wareHouseId);
         inventoryQueryDto.setCompanyId(companyId);
-
         ArrayList arrayList = new ArrayList();
         arrayList.add(goodsId);
         List<Inventory> inventories = inventoryMapper.selectInventoryListByqueryDto(arrayList, inventoryQueryDto);
@@ -221,7 +220,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
                 logger.warn("出库失败 出库计划数量为空{}",inventory);
                 continue;
             }
-
 
             if (inventory.getLockNum() >= good.getOutboundQuantity()) {
                 inventory.setLockNum(inventory.getLockNum() - good.getGoodsNum());

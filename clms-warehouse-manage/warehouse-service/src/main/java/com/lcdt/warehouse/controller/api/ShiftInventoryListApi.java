@@ -1,7 +1,5 @@
 package com.lcdt.warehouse.controller.api;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +15,7 @@ import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.dto.ShiftInventoryListDTO;
 import com.lcdt.warehouse.service.ShiftInventoryListService;
 import com.lcdt.warehouse.vo.ResponseCodeVO;
+import com.lcdt.warehouse.vo.ShiftInventoryListVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,6 +54,9 @@ public class ShiftInventoryListApi {
 		log.debug("创建移库单的数量:"+result);
 		
 		if (result > 0) {
+			if (ShiftInventoryListVO.UNDERSTOCK == result) {
+				return failedResponseJson("库存数量不足！");
+			}
 			return successResponseJson(null, "创建成功");
 		}else {
 			throw new RuntimeException("创建移库单时出现异常");
@@ -75,6 +77,9 @@ public class ShiftInventoryListApi {
 		log.debug("完成移库单的数量:"+result);
 		
 		if (result > 0) {
+			if (ShiftInventoryListVO.UNDERSTOCK == result) {
+				return failedResponseJson("库存数量不足！");
+			}
 			return successResponseJson(null, "完成成功");
 		}else {
 			throw new RuntimeException("完成移库单时出现异常");
@@ -184,10 +189,10 @@ public class ShiftInventoryListApi {
 	 */
 	private <T> JSONObject successResponseJson(T object,String message) {	
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put(ResponseCodeVO.code, ResponseCodeVO.successCode);
-		jsonObject.put(ResponseCodeVO.message, message);
+		jsonObject.put(ResponseCodeVO.CODE, ResponseCodeVO.SUCCESS_CODE);
+		jsonObject.put(ResponseCodeVO.MESSAGE, message);
 		if (null != object) {
-			jsonObject.put(ResponseCodeVO.data, object);
+			jsonObject.put(ResponseCodeVO.DATA, object);
 		}	
 		return jsonObject;
 	}
@@ -201,8 +206,8 @@ public class ShiftInventoryListApi {
 	 */
 	private <T> JSONObject failedResponseJson(String message) {
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put(ResponseCodeVO.code, ResponseCodeVO.failedCode);
-		jsonObject.put(ResponseCodeVO.message, message);
+		jsonObject.put(ResponseCodeVO.CODE, ResponseCodeVO.FAILED_CODE);
+		jsonObject.put(ResponseCodeVO.MESSAGE, message);
 		
 		return jsonObject;
 	}
