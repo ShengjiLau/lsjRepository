@@ -350,8 +350,6 @@ public class LocationServiceApi {
             waybill =  waybillMapper.selectByPrimaryKey(waybillId);
             Long sTime = waybill.getCreateDate().getTime()/1000;
             Long eTime = waybill.getUnloadTime()==null?new Date().getTime()/1000:waybill.getUnloadTime().getTime()/1000;
-            jsonObject.put("startTime",sTime);
-            jsonObject.put("endTime",eTime);
             long dayTime= 86400;
             long dif_time = eTime-sTime;
             int size = 0;
@@ -387,10 +385,15 @@ public class LocationServiceApi {
                     jsonArray.addAll(jsonArrayPo);
                 }
             }
+            jsonObject.put("startTime",sTime);
+            jsonObject.put("endTime",eTime);
+            jsonObject.put("code",0);
             jsonObject.put("points",jsonArray);
             return jsonObject.toJSONString();
         }
-        return null;
+        jsonObject.put("code",2);
+        jsonObject.put("message","运单信息不存在!");
+        return jsonObject.toJSONString();
     }
 
 }
