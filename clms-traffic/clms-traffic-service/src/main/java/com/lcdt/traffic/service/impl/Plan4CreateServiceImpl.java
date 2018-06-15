@@ -123,7 +123,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
         //客戶部分
         if (vo.getCustomerId() == null && !StringUtils.isEmpty(vo.getCustomerName())) {
             Map customerMap = new HashMap<String,String>();
-            customerMap.put("customerType","3"); //运输客户
+            customerMap.put("clientTypes","3"); //运输客户
             customerMap.put("customerName",vo.getCustomerName()); //运输客户
             customerMap.put("companyId",dto.getCompanyId());
             customerMap.put("province",dto.getReceiveProvince());
