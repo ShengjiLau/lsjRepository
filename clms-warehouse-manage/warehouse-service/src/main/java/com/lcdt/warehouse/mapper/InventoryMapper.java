@@ -24,13 +24,11 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
 
     List<Inventory> selectInventoryListByqueryDto(@Param("goodsIds") List<Long> goodsIds, Pagination page,@Param("querydto") InventoryQueryDto queryDto);
     
-    int updateInventoryLockNum(Long inventoryId,Float inventoryNum,Float lockNum);
-    
     List<Inventory> getInventoryListByIds(Long[] inventoryIds);
     
     List<ShiftGoodsListDTO> getInventoryAndGoodsInfo(Long[] inventoryIds);
 
     List<Inventory> selectInventoryListByqueryDto(@Param("goodsIds") List<Long> goodsIds,@Param("querydto") InventoryQueryDto queryDto);
     
-    Long selectInventoryListByShiftGoodsBO(ShiftGoodsBO shiftGoodsBO);
+    ShiftGoodsListDTO selectInventoryListByShiftGoodsBO(ShiftGoodsBO shiftGoodsBO);
 }

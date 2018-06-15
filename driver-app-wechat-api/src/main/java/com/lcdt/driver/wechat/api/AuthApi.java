@@ -6,7 +6,6 @@ import com.lcdt.clms.security.token.config.JwtTokenUtil;
 import com.lcdt.driver.dto.WechatUserDto;
 import com.lcdt.notify.rpcservice.IValidCodeService;
 import com.lcdt.notify.rpcservice.ValidCodeExistException;
-import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
@@ -15,8 +14,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 @RestController
@@ -36,15 +33,14 @@ public class AuthApi {
     public String login(@Valid @RequestBody WechatUserDto wechatUserDto) {
         JSONObject jsonObject = new JSONObject();
         String validcode = wechatUserDto.getValidCode();
-//        boolean codeCorrect = validCodeService.isCodeCorrect(validcode, VCODETAG, phone);
-//        if (!codeCorrect) {
-//            jsonObject.put("result", -1);
-//            jsonObject.put("message", "验证码错误");
-//            return jsonObject.toString();
-//        }
         String phone = wechatUserDto.getPhone();
-
-        User user;
+       boolean codeCorrect = validCodeService.isCodeCorrect(validcode, VCODETAG, phone);
+       if (!codeCorrect) {
+            jsonObject.put("result", -1);
+            jsonObject.put("message", "验证码错误");
+           return jsonObject.toString();
+        }
+        User user=null;
         try {
             user = userService.queryByPhone(phone);
         } catch (UserNotExistException e) {

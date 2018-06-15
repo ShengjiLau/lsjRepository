@@ -15,6 +15,7 @@ import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.dto.ShiftInventoryListDTO;
 import com.lcdt.warehouse.service.ShiftInventoryListService;
 import com.lcdt.warehouse.vo.ResponseCodeVO;
+import com.lcdt.warehouse.vo.ShiftInventoryListVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
