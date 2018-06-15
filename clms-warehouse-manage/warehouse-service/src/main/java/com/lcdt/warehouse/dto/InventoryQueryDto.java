@@ -2,6 +2,7 @@ package com.lcdt.warehouse.dto;
 
 import com.lcdt.warehouse.entity.Inventory;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.util.StringUtils;
 
 public class InventoryQueryDto extends PageQueryDto {
 
@@ -37,6 +38,18 @@ public class InventoryQueryDto extends PageQueryDto {
     private Long originalGoodsId;
 
     private Long classifyId;
+
+    public boolean goodsQueryExist(){
+        if (!StringUtils.isEmpty(getGoodsName()) ||
+                !StringUtils.isEmpty(goodsBarCode)
+                || !StringUtils.isEmpty(goodsCode)
+                || !StringUtils.isEmpty(goodsCategory)
+                || getClassifyId() != null) {
+            return true;
+        }
+        return false;
+    }
+
 
     public Long getClassifyId() {
         return classifyId;

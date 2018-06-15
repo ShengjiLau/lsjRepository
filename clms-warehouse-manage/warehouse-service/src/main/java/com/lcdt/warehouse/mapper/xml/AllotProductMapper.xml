@@ -5,6 +5,7 @@
     <id column="ap_id" jdbcType="BIGINT" property="apId" />
     <result column="allot_id" jdbcType="BIGINT" property="allotId" />
     <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="original_goods_id" jdbcType="BIGINT" property="originalGoodsId" />
     <result column="inventory_id" jdbcType="BIGINT" property="inventoryId" />
     <result column="goods_classify" jdbcType="VARCHAR" property="goodsClassify" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -21,7 +22,7 @@
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
   </resultMap>
   <sql id="Base_Column_List">
-    ap_id, allot_id, goods_id, inventory_id, goods_classify, name, code, bar_code, spec, unit, batch_num, warehouse_loc_id, warehouse_loc_code,
+    ap_id, allot_id, goods_id, original_goods_id, inventory_id, goods_classify, name, code, bar_code, spec, unit, batch_num, warehouse_loc_id, warehouse_loc_code,
     inventory, allot_num, remark, is_deleted
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -38,12 +39,12 @@
     <selectKey keyProperty="apId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into t_allot_product (allot_id, goods_id, inventory_id,
+    insert into t_allot_product (allot_id, goods_id, original_goods_id, inventory_id,
       goods_classify, name, code,
       bar_code, spec, unit, batch_num,
       warehouse_loc_id, warehouse_loc_code, inventory, 
       allot_num, remark, is_deleted)
-    values (#{allotId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT},#{inventoryId,jdbcType=BIGINT},
+    values (#{allotId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{originalGoodsId,jdbcType=BIGINT}, #{inventoryId,jdbcType=BIGINT},
       #{goodsClassify,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR},
       #{barCode,jdbcType=VARCHAR}, #{spec,jdbcType=LONGVARCHAR}, #{unit,jdbcType=VARCHAR}, #{batchNum,jdbcType=VARCHAR},
       #{warehouseLocId,jdbcType=BIGINT}, #{warehouseLocCode,jdbcType=VARCHAR}, #{inventory,jdbcType=REAL}, 
@@ -60,6 +61,9 @@
       </if>
       <if test="goodsId != null">
         goods_id,
+      </if>
+      <if test="originalGoodsId != null">
+        original_goods_id,
       </if>
       <if test="inventoryId != null">
         inventory_id,
@@ -110,6 +114,9 @@
       </if>
       <if test="goodsId != null">
         #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="originalGoodsId != null">
+        #{originalGoodsId,jdbcType=BIGINT},
       </if>
       <if test="inventoryId != null">
         #{inventoryId,jdbcType=BIGINT},
@@ -164,6 +171,9 @@
       <if test="goodsId != null">
         goods_id = #{goodsId,jdbcType=BIGINT},
       </if>
+      <if test="originalGoodsId != null">
+        original_goods_id = #{originalGoodsId,jdbcType=BIGINT},
+      </if>
       <if test="inventoryId != null">
         inventory_id = #{inventoryId,jdbcType=BIGINT},
       </if>
@@ -213,6 +223,7 @@
     update t_allot_product
     set allot_id = #{allotId,jdbcType=BIGINT},
       goods_id = #{goodsId,jdbcType=BIGINT},
+      original_goods_id = #{originalGoodsId,jdbcType=BIGINT},
       inventory_id = #{inventoryId,jdbcType=BIGINT},
       goods_classify = #{goodsClassify,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
@@ -237,14 +248,14 @@
     and  is_deleted = #{isDeleted,jdbcType=SMALLINT}
   </select>
   <insert id="insertBatch">
-    insert into t_allot_product (allot_id, goods_id, inventory_id,
+    insert into t_allot_product (allot_id, goods_id, original_goods_id, inventory_id,
     goods_classify, name, code,
     bar_code, spec, unit, batch_num,
     warehouse_loc_id, warehouse_loc_code, inventory,
     allot_num, remark, is_deleted)
     values
     <foreach item="item" collection="list" separator=",">
-      (#{item.allotId,jdbcType=BIGINT}, #{item.goodsId,jdbcType=BIGINT}, #{item.inventoryId,jdbcType=BIGINT},
+      (#{item.allotId,jdbcType=BIGINT}, #{item.goodsId,jdbcType=BIGINT}, #{item.originalGoodsId,jdbcType=BIGINT}, #{item.inventoryId,jdbcType=BIGINT},
       #{item.goodsClassify,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, #{item.code,jdbcType=VARCHAR},
       #{item.barCode,jdbcType=VARCHAR}, #{item.spec,jdbcType=LONGVARCHAR}, #{item.unit,jdbcType=VARCHAR}, #{item.batchNum,jdbcType=VARCHAR},
       #{item.warehouseLocId,jdbcType=BIGINT}, #{item.warehouseLocCode,jdbcType=VARCHAR}, #{item.inventory,jdbcType=REAL},
@@ -256,6 +267,7 @@
       update t_allot_product
       set allot_id = #{item.allotId,jdbcType=BIGINT},
       goods_id = #{item.goodsId,jdbcType=BIGINT},
+      original_goods_id = #{item.originalGoodsId,jdbcType=BIGINT},
       inventory_id = #{item.inventoryId,jdbcType=BIGINT},
       goods_classify = #{item.goodsClassify,jdbcType=VARCHAR},
       name = #{item.name,jdbcType=VARCHAR},

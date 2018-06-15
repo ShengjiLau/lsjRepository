@@ -18,6 +18,7 @@ import com.lcdt.warehouse.mapper.OutWarehouseOrderMapper;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.service.InventoryLogService;
 import com.lcdt.warehouse.service.InventoryService;
+import com.lcdt.warehouse.utils.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -52,8 +53,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     private InventoryLogService logService;
 
     private Logger logger = LoggerFactory.getLogger(InventoryServiceImpl.class);
-
-
 
 
     //分页查询 库存列表
@@ -191,7 +190,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         if (inventory.getLockNum() < unlockNum) {
             throw new RuntimeException("解锁库存量不能大于 已锁量");
         }
-        inventory.setLockNum(inventory.getLockNum() - unlockNum);
+        inventory.setLockNum(CommonUtils.subtractFloat(inventory.getLockNum(),unlockNum));
         updateById(inventory);
     }
 
@@ -224,8 +223,8 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             }
 
             if (inventory.getLockNum() >= good.getOutboundQuantity()) {
-                inventory.setLockNum(inventory.getLockNum() - good.getGoodsNum());
-                inventory.setInvertoryNum(inventory.getInvertoryNum() - good.getOutboundQuantity());
+                inventory.setLockNum(CommonUtils.subtractFloat(inventory.getLockNum(),good.getGoodsNum()));
+                inventory.setInvertoryNum(CommonUtils.subtractFloat(inventory.getInvertoryNum(),good.getOutboundQuantity()));
                 inventoryMapper.updateById(inventory);
                 logService.saveOutOrderLog(order, good,inventory.getInvertoryNum(),inventory);
                 order.setOrderStatus(OutOrderStatus.OUTED);
