@@ -48,6 +48,7 @@ public class WaybillApi {
         dto.setCompanyId(companyId);
         dto.setCarrierCompanyId(companyId);
         dto.setWaybillStatus((short)1);
+        dto.setCreatePhone(loginUser.getPhone());
         Waybill result = waybillRpcService.addWaybill(dto);
         if (result != null) {
             JSONObject jsonObject = new JSONObject();
@@ -206,6 +207,7 @@ public class WaybillApi {
         dto.setUpdateId(loginUser.getUserId());
         dto.setUpdateName(loginUser.getRealName());
         dto.setCarrierCompanyId(companyId);
+        dto.setUpdatePhone(loginUser.getPhone());
 
         Waybill waybill = waybillRpcService.modifyCustomerWaybillStatus(dto);
         if (waybill!=null) {
