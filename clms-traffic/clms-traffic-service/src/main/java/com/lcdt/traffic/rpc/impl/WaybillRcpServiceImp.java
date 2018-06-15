@@ -257,7 +257,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
         //扣减运单费用
         if (result != null) {
-            companyServiceCountService.reduceCompanyProductCount(waybillDto.getCompanyId(), "waybill_service", 1);
+            companyServiceCountService.reduceCompanyProductCount(waybillDto.getCompanyId(), "waybill_service", 1,waybillDto.getCreateName(),"生成运单...");
         }
 
         //新建运单路由
