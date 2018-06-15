@@ -7,6 +7,7 @@ import com.lcdt.userinfo.model.User;
 import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.TCheck;
 import com.lcdt.warehouse.service.CheckService;
+import com.lcdt.warehouse.utils.DateUtils;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,8 +61,11 @@ public class CheckController {
         JSONObject jsonObject = new JSONObject();
 
         if (CollectionUtils.isNotEmpty(checkList)){
-            jsonObject.put("data",checkList.get(0));
+            CheckListDto dto  = checkList.get(0);
+            dto.setCompleteName(userName);
+            jsonObject.put("data", dto);
         }
+//        jsonObject.put("userName",userName);
         jsonObject.put("code", 0);
         jsonObject.put("message", "读取成功！");
         return jsonObject;
@@ -78,6 +83,7 @@ public class CheckController {
         checkDto.setUpdateDate(new Date());
         checkDto.setUpdateId(userId);
         checkDto.setUpdateName(userName);
+        checkDto.setCheckStatus((Integer) CheckStatusEnum.cancel.getValue());
         int result = checkService.cancelCheck(checkDto);
 
         JSONObject jsonObject = new JSONObject();
@@ -102,17 +108,17 @@ public class CheckController {
         String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
         TCheck check = new TCheck();
         BeanUtils.copyProperties(checkSaveDto, check);
-        check.setCheckStatus(1);
+        check.setCheckStatus((Integer) CheckStatusEnum.watting.getValue());
         check.setIsDeleted(0);
         check.setCreateDate(new Date());
         check.setCreateId(userId);
         check.setCreateName(userName);
         check.setCompanyId(companyId);
-        JSONObject jsonObject = new JSONObject();
         List<Map<String, Object>> items = checkSaveDto.getItems();
 
         boolean result = checkService.insertCheckAndItems(check, items);
 
+        JSONObject jsonObject = new JSONObject();
         String message = "";
         int code = -1;
         if (result) {
@@ -128,8 +134,37 @@ public class CheckController {
 
     @ApiOperation("保存并完成盘库")
     @RequestMapping(value = "/updateCheckAndComplete", method = RequestMethod.POST)
-    public JSONObject updateCheckAndComplete() {
-        return null;
+    public JSONObject updateCheckAndComplete(@Validated CheckSaveDto checkSaveDto) {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
+        String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
+
+        TCheck check = new TCheck();
+        BeanUtils.copyProperties(checkSaveDto,check);
+        System.out.println("checkSaveDto.getCompleteDate():::::::::::"+checkSaveDto.getCompleteDate());
+        check.setCompleteDate(DateUtils.string2Date_safe(checkSaveDto.getCompleteDate(),"yyyy-MM-dd"));
+        System.out.println("check.getCompleteDate()::::::::::::"+check.getCompleteDate());
+        check.setCheckStatus((Integer) CheckStatusEnum.completed.getValue());
+
+        check.setUpdateDate(new Date());
+        check.setUpdateName(userName);
+        check.setUpdateId(userId);
+
+        List<Map<String, Object>> items = checkSaveDto.getItems();
+        boolean result = checkService.completeCheckAndItems(check,items);
+
+        JSONObject jsonObject = new JSONObject();
+        String message = "";
+        int code = -1;
+        if (result) {
+            code = 0;
+            message = "保存成功！";
+        } else {
+            message = "保存失败，请重试！";
+        }
+        jsonObject.put("message", message);
+        jsonObject.put("code", code);
+        return jsonObject;
     }
 
 

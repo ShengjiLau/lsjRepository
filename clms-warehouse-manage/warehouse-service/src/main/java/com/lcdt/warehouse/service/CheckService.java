@@ -23,4 +23,6 @@ public interface CheckService extends IService<TCheck> {
     int cancelCheck(CheckParamDto checkDto);
 
     boolean insertCheckAndItems(TCheck check, List<Map<String, Object>> items);
+
+    boolean completeCheckAndItems(TCheck check, List<Map<String, Object>> itemList);
 }

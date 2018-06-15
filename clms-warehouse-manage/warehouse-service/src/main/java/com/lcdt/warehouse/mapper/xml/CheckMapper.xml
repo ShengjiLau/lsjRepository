@@ -59,7 +59,9 @@
 
 
     <update id="cancelCheck" parameterType="com.lcdt.warehouse.dto.CheckParamDto">
-      UPDATE `t_check` SET check_status = 9 WHERE check_id = #{checkId,jdbcType=BIGINT} AND company_id =#{companyId,jdbcType=BIGINT}
+      UPDATE `t_check` SET check_status = #{checkStatus,jdbcType=TINYINT}
+       WHERE check_id = #{checkId,jdbcType=BIGINT}
+       AND company_id =#{companyId,jdbcType=BIGINT}
     </update>
 
     <insert id="addCheck" parameterType="com.lcdt.warehouse.entity.TCheck">
@@ -117,4 +119,21 @@
         )
 
     </insert>
+
+    <update id="updateCheckBySql" parameterType="com.lcdt.warehouse.entity.TCheck">
+ UPDATE `t_check` SET
+  check_status = #{checkStatus,jdbcType=TINYINT},
+  diff_status =  #{diffStatus,jdbcType=TINYINT},
+  remark = #{remark,jdbcType=VARCHAR},
+  complete_date= #{completeDate,jdbcType=TIMESTAMP},
+  complete_id= #{completeId,jdbcType=BIGINT},
+  complete_name=#{completeName,jdbcType=VARCHAR},
+  update_id= #{updateId,jdbcType=BIGINT},
+  update_name= #{updateName,jdbcType=VARCHAR},
+  update_date= #{updateDate,jdbcType=TIMESTAMP}
+
+  WHERE check_id = #{checkId,jdbcType=BIGINT}
+  AND company_id =#{companyId,jdbcType=BIGINT}
+
+    </update>
 </mapper>
