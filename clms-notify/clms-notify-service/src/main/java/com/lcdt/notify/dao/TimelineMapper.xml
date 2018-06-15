@@ -53,14 +53,24 @@
     select timeline_id, action_title, action_time, action_des, company_id, searchkey,
     dataid, mq_message_id
     from timeline
-    WHERE company_id = #{companyId}
-    <if test=" tag != null">
-      and searchkey = #{tag}
-    </if>
+    <where>
+      <if test=" companyId != null">
+         company_id = #{companyId}
+      </if>
 
-    <if test="dataId != null">
-      and dataid = #{dataId}
-    </if>
+      <if test=" tag != null">
+        and searchkey = #{tag}
+      </if>
+
+      <if test="dataId != null">
+        and dataid = #{dataId}
+      </if>
+
+
+    </where>
+
+
+
 
     order by action_time desc
   </select>
