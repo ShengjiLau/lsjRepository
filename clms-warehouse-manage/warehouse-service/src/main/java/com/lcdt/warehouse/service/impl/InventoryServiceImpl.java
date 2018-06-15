@@ -54,6 +54,8 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     private Logger logger = LoggerFactory.getLogger(InventoryServiceImpl.class);
 
 
+
+
     //分页查询 库存列表
     public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto,Long companyId) {
         logger.info("查询库存列表 参数 ：{}",inventoryQueryDto);
@@ -279,5 +281,12 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         }
         return inventories;
     }
+
+
+    //盘库更新库存
+    public void updateInventoryByCheck(TCheck tCheck,List<TCheckItem> items){
+
+    }
+
 
 }
