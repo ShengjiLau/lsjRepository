@@ -15,13 +15,15 @@ import com.lcdt.traffic.model.*;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.CommonAttachment;
 import com.lcdt.traffic.notify.NotifyUtils;
-import com.lcdt.traffic.service.*;
+import com.lcdt.traffic.service.OwnDriverService;
+import com.lcdt.traffic.service.Plan4CreateService;
+import com.lcdt.traffic.service.TrafficRpc;
+import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.PlanBO;
 import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
-import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -132,6 +134,8 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
             customerMap.put("mobile",dto.getReceivePhone());
             customerMap.put("userId",dto.getCreateId());
             customerMap.put("userName",dto.getCreateName());
+            customerMap.put("groupIds",dto.getGroupId());
+            customerMap.put("groupName",dto.getGroupName());
             Customer customer = customerRpcService.createCustomer(customerMap);
             if (customer!=null) {
                 customer.setCustomerId(customer.getCustomerId());

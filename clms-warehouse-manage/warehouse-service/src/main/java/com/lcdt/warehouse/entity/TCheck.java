@@ -21,7 +21,7 @@ public class TCheck implements Serializable {
     private Long checkId;
     private String checkNum;
     /**
-     * 1:待盘库，2:已完成，9:已取消
+     * 1:待盘库，5:已完成，9:已取消
      */
     private Integer checkStatus;
     private Long groupId;

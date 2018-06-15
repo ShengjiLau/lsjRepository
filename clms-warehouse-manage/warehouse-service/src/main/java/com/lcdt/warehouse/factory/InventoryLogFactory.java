@@ -33,6 +33,28 @@ public interface InventoryLogFactory {
         return inventoryLog;
     }
 
+    public static InventoryLog createFromCheckInventory(TCheck check,TCheckItem item){
+        Assert.notNull(check,"库存不能为空");
+        InventoryLog inventoryLog = new InventoryLog();
+        inventoryLog.setBusinessNo(check.getCheckNum());
+        inventoryLog.setGoodsId(item.getGoodsId());
+        inventoryLog.setCompanyId(check.getCompanyId());
+        inventoryLog.setWarehouseId(check.getWarehouseId());
+//        inventoryLog.setChangeNum(item.getDifferentAmount());
+        inventoryLog.setStorageLocationCode(item.getStorageLocationCode());
+//        inventoryLog.setStorageLocationId();
+        inventoryLog.setOriginalGoodsId(item.getGoodsId());
+        inventoryLog.setCustomerName(check.getCustomerName());
+        inventoryLog.setCustomerId(check.getCustomerId());
+        inventoryLog.setType(InventoryBusinessType.FORMATORDER);
+        inventoryLog.setBatch(item.getGoodsBatch());
+        inventoryLog.setLogNo("");
+        inventoryLog.setComment(check.getRemark());
+//        inventoryLog.setCurrentInvetory(item.getCheckAmount());
+        return inventoryLog;
+    }
+
+
     public static InventoryLog createFromOutInventory(OutWarehouseOrder order,OutOrderGoodsInfo goodsInfo,Float updatedInventoryNum,Inventory inventory){
         logger.info("创建 出库 日志 出库库存 {}",inventory);
         Assert.notNull(inventory,"库存不能为空");

@@ -397,10 +397,10 @@
   		and create_user = #{createUser,jdbcType=VARCHAR}
   		</if>
   		<if test="beginTime != null and beginTime != ''">
-  		and gmt_create &gt; concat(#{beginTime,jdbcType=VARCHAR},'000000')
+  		and gmt_create &gt; concat(#{beginTime,jdbcType=VARCHAR},' 00:00:00')
   		</if>
   		<if test="endTime != null and endTime != ''">
-  		and gmt_create &lt; concat(#{endTime,jdbcType=VARCHAR},'235959')
+  		and gmt_create &lt; concat(#{endTime,jdbcType=VARCHAR},' 23:59:59')
   		</if>
   		<if test="finished != null">
   		and finished = #{finished,jdbcType=TINYINT}

@@ -27,6 +27,7 @@ import com.lcdt.warehouse.mapper.InventoryLogMapper;
 import com.lcdt.warehouse.mapper.InventoryMapper;
 import com.lcdt.warehouse.mapper.ShiftGoodsDOMapper;
 import com.lcdt.warehouse.mapper.ShiftInventoryListDOMapper;
+import com.lcdt.warehouse.service.InventoryService;
 import com.lcdt.warehouse.service.ShiftInventoryListService;
 import com.lcdt.warehouse.utils.ShiftGoodsBO;
 import com.lcdt.warehouse.vo.ShiftInventoryListVO;
@@ -58,6 +59,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	@Autowired
 	private InventoryLogMapper logMapper;
 	
+	@Autowired
+	private InventoryService inventoryService;
+	
 	
 	/**
 	 * 新增移库单所传参数为ShiftInventoryListDTO，需要三步：
@@ -69,7 +73,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	@Transactional(isolation=Isolation.REPEATABLE_READ,timeout=60,propagation=Propagation.REQUIRED,rollbackForClassName={"RuntimeException","Exception"})
 	public int insertShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 		
-		//新建一个移库单Model,并复制ShiftInventoryListDTO里的相关属性
+		//新建一个移库单DO,并复制ShiftInventoryListDTO里的相关属性
 		ShiftInventoryListDO shiftInventoryListDO = new ShiftInventoryListDO(); 
 		BeanUtils.copyProperties(shiftInventoryListDTO, shiftInventoryListDO);
 		shiftInventoryListDO.setCompanyId(SecurityInfoGetter.getCompanyId());
@@ -78,11 +82,12 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		shiftInventoryListDO.setCreateUser(SecurityInfoGetter.getUser().getRealName());
 		shiftInventoryListDO.setFinished(ShiftInventoryListVO.UNFINISHED);
 		String s = null;
-		if (null != shiftInventoryListDTO.getShiftGoodsListDTOList() && 0 != shiftInventoryListDTO.getShiftGoodsListDTOList().size()) {
+		List<ShiftGoodsListDTO> shiftGoodsListDTOList = shiftInventoryListDTO.getShiftGoodsListDTOList();
+		if (null != shiftGoodsListDTOList && 0 != shiftGoodsListDTOList.size()) {
 			StringBuilder sbd = new StringBuilder();	
-			//将库存id组成字符串存入移库单属性
-			for (int i = 0; i < shiftInventoryListDTO.getShiftGoodsListDTOList().size(); i++) {
-				sbd.append(shiftInventoryListDTO.getShiftGoodsListDTOList().get(i).getInvertoryId());sbd.append(",");
+			//将移库单相关库存id组成字符串存入移库单属性
+			for (int i = 0; i < shiftGoodsListDTOList.size(); i++) {
+				sbd.append(shiftGoodsListDTOList.get(i).getInvertoryId());sbd.append(",");
 			}	
 			//去掉最后一个“，”
 			s = sbd.substring(0, sbd.length()-1);
@@ -90,16 +95,13 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		shiftInventoryListDO.setInventoryShiftedId(s);
 		int result = shiftInventoryListDOMapper.insert(shiftInventoryListDO);
 		
-		//取得ShiftGoodsListDTO集合
-		List<ShiftGoodsListDTO> shiftGoodsListDTOList = shiftInventoryListDTO.getShiftGoodsListDTOList();
-		
-		//新建移库到新库的记录,不涉及遍历，此处采用LinkedList
 		List<ShiftGoodsDO> shiftGoodsDOList = new LinkedList<ShiftGoodsDO>();
-		int h = 0;
 			
 		for (int a = 0; a < shiftGoodsListDTOList.size(); a++) {
 			BigDecimal shiftPlanNum = new BigDecimal(0);
-			List<ShiftGoodsDO> shiftGoodsDOList1 = shiftGoodsListDTOList.get(a).getShiftGoodsDOList();
+			ShiftGoodsListDTO shiftGoodsListDTO = shiftGoodsListDTOList.get(a);
+			List<ShiftGoodsDO> shiftGoodsDOList1 = shiftGoodsListDTO.getShiftGoodsDOList();
+			
 			for(int b = 0; b < shiftGoodsDOList1.size(); b++) {
 				ShiftGoodsDO shiftGoodsDO = shiftGoodsDOList1.get(b);
 				//将库存id存入移库商品信息中
@@ -110,21 +112,14 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			}
 			shiftGoodsDOList.addAll(shiftGoodsDOList1);
 			Float lockNum = shiftPlanNum.floatValue();
-			//修改库存中库存总量以及库存锁定量
-			Inventory inventory = inventoryMapper.selectById(shiftGoodsListDTOList.get(a).getInvertoryId());
-			//如果需要锁定的库存大于现有库存减去已经锁定的库存量，则提示库存不足
-			  if ((inventory.getInvertoryNum()-inventory.getLockNum()) < lockNum) {
-				  return ShiftInventoryListVO.UNDERSTOCK;
-			  }
-		    h = inventoryMapper.updateInventoryLockNum(shiftGoodsListDTOList.get(a).getInvertoryId(),null,lockNum);
+			inventoryService.lockInventoryNum(shiftGoodsListDTOList.get(a).getInvertoryId(), lockNum);
 		}
 		//数据库插入新的移库商品信息列表
 		int j = shiftGoodsDOMapper.insertShiftGoodsByBatch(shiftGoodsDOList);
 		
 		log.debug("插入的移库商品信息条数为"+j);
 		log.debug("插入的移库单数量为"+result);
-		log.debug("修改的库存数量为"+h);
-		
+
 		if (result > 0) {
 			return ShiftInventoryListVO.SUCCESS_NUM;
 		}else {
@@ -149,6 +144,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		shiftInventoryListDO.setShiftUser(shiftInventoryListDTO.getShiftUser());
 		shiftInventoryListDO.setShiftTime(shiftInventoryListDTO.getShiftTime());
 		shiftInventoryListDO.setFinished(ShiftInventoryListVO.FISHINED);
+		//shiftInventoryListDO.setGmtModified(new Date());
 		int i = shiftInventoryListDOMapper.updateByPrimaryKeySelective(shiftInventoryListDO);
 		
 		ShiftInventoryListDO shiftInventoryListDO2 = shiftInventoryListDOMapper.selectByPrimaryKey(shiftInventoryListDTO.getShiftId());
@@ -162,17 +158,18 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			List<ShiftGoodsDO> shiftGoodsDOList1 = sgdl.getShiftGoodsDOList();
 			BigDecimal shiftPlanNum = new BigDecimal(0);
 			BigDecimal shiftNum = new BigDecimal(0);
-			 Inventory inventory1 = inventoryMapper.selectById(sgdl.getInvertoryId());
-			//将所有的ShiftGoodsDO添加到shiftGoodsDOList
+			Inventory inventory1 = inventoryMapper.selectById(sgdl.getInvertoryId());
+			
+			 //将所有的ShiftGoodsDO添加到shiftGoodsDOList
 			shiftGoodsDOList.addAll(shiftGoodsDOList1);
 			
 			for(int b = 0; b < shiftGoodsDOList1.size(); b++) {
 				ShiftGoodsDO shiftGoodsDO = shiftGoodsDOList1.get(b);				
-				ShiftGoodsDO shiftGoodsDO2 = shiftGoodsDOMapper.selectByPrimaryKey(shiftGoodsDO.getShiftGoodsId());
+				//ShiftGoodsDO shiftGoodsDO2 = shiftGoodsDOMapper.selectByPrimaryKey(shiftGoodsDO.getShiftGoodsId());
 				//计算计划和实际移库商品数量
-				shiftPlanNum.add(shiftGoodsDO.getShiftPlanNum());
-				shiftNum.add(shiftGoodsDO.getShiftNum());
-				
+				shiftPlanNum = shiftPlanNum.add(shiftGoodsDO.getShiftPlanNum());
+				shiftNum = shiftNum.add(shiftGoodsDO.getShiftNum());
+				//业务领域对象ShiftGoodsBO
 				ShiftGoodsBO shiftGoodsBO = new ShiftGoodsBO();
 				shiftGoodsBO.setCompanyId(shiftInventoryListDO2.getCompanyId());
 				shiftGoodsBO.setCustomerId(shiftInventoryListDO2.getCustomerId());
@@ -183,25 +180,53 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				
 				ShiftGoodsListDTO shiftGoodsListDTO1 = inventoryMapper.selectInventoryListByShiftGoodsBO(shiftGoodsBO);
 				if (null != shiftGoodsListDTO1) {
-					inventoryMapper.updateInventoryLockNum(shiftGoodsListDTO1.getInvertoryId(), ShiftInventoryListVO.ZERO_VALUE-shiftGoodsDO.getShiftNum().floatValue(), ShiftInventoryListVO.ZERO_VALUE.floatValue());
+					Inventory inventory = inventoryMapper.selectById(shiftGoodsListDTO1.getInvertoryId());
+					inventory.setInvertoryNum(inventory.getInvertoryNum()+shiftGoodsDO.getShiftNum().floatValue());
+					inventoryMapper.updateById(inventory);
+					//新建库存流水
+					InventoryLog inventoryLog = new InventoryLog();
+			        inventoryLog.setGoodsId(shiftGoodsDO.getGoodsId());
+			        inventoryLog.setCompanyId(shiftInventoryListDO2.getCompanyId());
+			        inventoryLog.setWarehouseId(shiftInventoryListDO2.getWarehouseId());
+			        inventoryLog.setChangeNum(shiftGoodsDO.getShiftNum().floatValue());
+			        inventoryLog.setStorageLocationCode(shiftGoodsDO.getShiftLocation());
+			        inventoryLog.setStorageLocationId(shiftGoodsDO.getStorageLocationId());
+			        inventoryLog.setOriginalGoodsId(shiftGoodsDO.getOriginalGoodsId());
+			        inventoryLog.setCustomerName(shiftInventoryListDO2.getWarehouseName());
+			        inventoryLog.setCustomerId(shiftInventoryListDO2.getCustomerId());
+			        inventoryLog.setBusinessNo(shiftInventoryListDO2.getShiftInventoryNum());
+			        //inventoryLog.setType();
+			        inventoryLog.setBatch(shiftGoodsDO.getBatch());
+			        //inventoryLog.setLogNo();
+			        inventoryLog.setComment(shiftGoodsDO.getRemark());
+			        inventoryLog.setCurrentInvetory(inventory.getInvertoryNum()+shiftGoodsDO.getShiftNum().floatValue()); 
+			        inventoryLog.setLogTime(new Date());
+			        logMapper.saveLog(inventoryLog);     					
 				}else {
 					//没有
 					Inventory inventory2 = new Inventory();
 					inventory2.setGoodsId(inventory1.getGoodsId());
 					inventory2.setWareHouseId(shiftInventoryListDO2.getWarehouseId());
 			        inventory2.setStorageLocationCode(shiftGoodsDO.getShiftLocation());
-			        inventory2.setStorageLocationId(shiftGoodsDO2.getStorageLocationId());
+			        inventory2.setStorageLocationId(shiftGoodsDO.getStorageLocationId());
 			        inventory2.setCustomerName(shiftInventoryListDO2.getCustomerName());
 			        inventory2.setWarehouseName(shiftInventoryListDO2.getWarehouseName());
-			        inventory2.setBatch(shiftGoodsDO.getBatch());
+			        if (null != shiftGoodsDO.getBatch()) {
+			            inventory2.setBatch(shiftGoodsDO.getBatch());
+			        }
 			        inventory2.setCustomerId(shiftInventoryListDO2.getCustomerId());
-			        inventory2.setInventoryPrice(inventory1.getInventoryPrice());
+			       // inventory2.setInventoryPrice(inventory1.getInventoryPrice());
 			        inventory2.setOriginalGoodsId(inventory1.getOriginalGoodsId());
 			        inventory2.setBaseUnit(inventory1.getBaseUnit());
-			        inventory2.setRemark(shiftGoodsDO.getRemark());
+			        if (null != shiftGoodsDO.getRemark()) {
+			        	 inventory2.setRemark(shiftGoodsDO.getRemark());
+			        }
 			        inventory2.setCompanyId(shiftInventoryListDO2.getCompanyId());
+			        inventory2.setInvertoryNum(shiftGoodsDO.getShiftNum().floatValue());
+			        inventory2.setLockNum(ShiftInventoryListVO.ZERO_VALUE);
+			        //inventory2.setBusinessDesc(businessDesc);
 			        inventoryMapper.insert(inventory2);	
-			        
+			        //新建库存流水
 			        InventoryLog inventoryLog = new InventoryLog();
 			        inventoryLog.setGoodsId(shiftGoodsDO.getGoodsId());
 			        inventoryLog.setCompanyId(shiftInventoryListDO2.getCompanyId());
@@ -217,28 +242,47 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			        inventoryLog.setBatch(shiftGoodsDO.getBatch());
 			        //inventoryLog.setLogNo();
 			        inventoryLog.setComment(shiftGoodsDO.getRemark());
-			        inventoryLog.setCurrentInvetory(inventory1.getInvertoryNum());  
+			        inventoryLog.setCurrentInvetory(ShiftInventoryListVO.ZERO_VALUE); 
+			        inventoryLog.setLogTime(new Date());
 			        logMapper.saveLog(inventoryLog);     
 				}
 	
 			}
 			Float lockNum = shiftPlanNum.floatValue();
 			Float inventoryNum = shiftNum.floatValue();
-			//修改移除库存的库存总量和锁定库存量
-			
-		 
+		  //修改移除库存的库存总量和锁定库存量
 		  //如果现有库存小于移动库存，则提示库存不足
-		  if (inventory1.getInvertoryNum() < inventoryNum) {
-			  return ShiftInventoryListVO.UNDERSTOCK;
-		  }
-		   inventoryMapper.updateInventoryLockNum(shiftGoodsListDTOList.get(a).getInvertoryId(),inventoryNum,lockNum);
+			inventoryService.unLockInventoryNum(sgdl.getInvertoryId(), lockNum);
+			Inventory inventory = inventoryMapper.selectById(sgdl.getInvertoryId());
+			if (inventory.getInvertoryNum() < inventoryNum) {
+				throw new RuntimeException("库存数量不足！");
+			}
+			inventory.setInvertoryNum(inventory.getInvertoryNum()-inventoryNum);
+			inventoryService.updateById(inventory);
+			//新建库存流水
+			InventoryLog inventoryLog = new InventoryLog();
+		    inventoryLog.setGoodsId(inventory1.getGoodsId());
+		    inventoryLog.setCompanyId(shiftInventoryListDO2.getCompanyId());
+		    inventoryLog.setWarehouseId(shiftInventoryListDO2.getWarehouseId());
+		    inventoryLog.setChangeNum(inventoryNum);
+		    inventoryLog.setStorageLocationCode(inventory1.getStorageLocationCode());
+		    inventoryLog.setStorageLocationId(inventory1.getStorageLocationId());
+		    inventoryLog.setOriginalGoodsId(inventory1.getOriginalGoodsId());
+		    inventoryLog.setCustomerName(shiftInventoryListDO2.getWarehouseName());
+		    inventoryLog.setCustomerId(shiftInventoryListDO2.getCustomerId());
+		    inventoryLog.setBusinessNo(shiftInventoryListDO2.getShiftInventoryNum());
+		    //inventoryLog.setType();
+		    inventoryLog.setBatch(inventory1.getBatch());
+		    //inventoryLog.setLogNo();
+		    inventoryLog.setComment(null);
+		    inventoryLog.setCurrentInvetory(inventory1.getInvertoryNum()-inventoryNum); 
+		    inventoryLog.setLogTime(new Date());
+		    logMapper.saveLog(inventoryLog);     
+			
 		}
 		//修改移库商品信息
 		shiftGoodsDOMapper.updateShiftGoodsByBatch(shiftGoodsDOList);
-		
-	
-		
-		
+
 		if (i > 0) {
 			return ShiftInventoryListVO.SUCCESS_NUM;
 		}else {
@@ -266,13 +310,6 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		}
 		int pageNo = shiftInventoryListDTO1.getPageNo();
 		int pageSize = shiftInventoryListDTO1.getPageSize();
-		
-		if (null != shiftInventoryListDTO1.getBeginTime() && !"".equals(shiftInventoryListDTO1.getBeginTime())) {
-			shiftInventoryListDTO1.setBeginTime(convertTimeFormat(shiftInventoryListDTO1.getBeginTime()));	
-		}
-		if (null != shiftInventoryListDTO1.getEndTime() && !"".equals(shiftInventoryListDTO1.getEndTime())) {
-			shiftInventoryListDTO1.setEndTime(convertTimeFormat(shiftInventoryListDTO1.getEndTime()));
-		}
 		
 		//分页
 		//PageHelper.startPage(shiftInventoryListDTO1.getPageNo(), shiftInventoryListDTO1.getPageSize());
@@ -376,7 +413,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			 }
 			 shiftInventoryListDTO.setShiftGoodsListDTOList(shiftGoodsListDTOList);
 		}
-		
+
 		return shiftInventoryListDTO;
 	}
 	
@@ -399,11 +436,11 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				 BigDecimal shiftPlanNum = new BigDecimal(0);
 				for (int j = 0; j < shiftGoodsDOList.size(); j++) {
 					if (inventoryIds[i].longValue() == shiftGoodsDOList.get(j).getInventoryId().longValue()) {
-						shiftPlanNum.add(shiftGoodsDOList.get(j).getShiftPlanNum());
+						shiftPlanNum = shiftPlanNum.add(shiftGoodsDOList.get(j).getShiftPlanNum());
 					}
 				}
-				Float lockNum = ShiftInventoryListVO.ZERO_VALUE - shiftPlanNum.floatValue();
-				inventoryMapper.updateInventoryLockNum(inventoryIds[i],null,lockNum);
+				Float lockNum = shiftPlanNum.floatValue();
+				inventoryService.unLockInventoryNum(inventoryIds[i], lockNum);
 			 }
 		 }
 		 

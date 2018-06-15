@@ -1,8 +1,10 @@
 package com.lcdt.warehouse.service.impl;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
+import com.lcdt.warehouse.dto.CheckDiffStatusEnum;
 import com.lcdt.warehouse.dto.CheckListDto;
 import com.lcdt.warehouse.dto.CheckParamDto;
+import com.lcdt.warehouse.dto.CheckStatusEnum;
 import com.lcdt.warehouse.entity.TCheck;
 import com.lcdt.warehouse.entity.TCheckItem;
 import com.lcdt.warehouse.mapper.CheckItemMapper;
@@ -10,11 +12,11 @@ import com.lcdt.warehouse.mapper.CheckMapper;
 import com.lcdt.warehouse.service.CheckItemService;
 import com.lcdt.warehouse.service.CheckService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import org.springframework.beans.BeanUtils;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -119,5 +121,28 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, TCheck> implement
         }
 
         return result;
+    }
+
+    @Override
+    public boolean completeCheckAndItems(TCheck check, List<Map<String, Object>> itemList) {
+        boolean isDiff = false;
+        if(itemList!=null&&itemList.size()>0){
+            for (Map m :itemList) {
+                TCheckItem checkItem = checkItemService.selectById(Long.valueOf(m.get("relationId").toString()));
+                checkItem.setCheckAmount(Double.valueOf(m.get("checkAmount").toString()));
+                checkItem.setDifferentAmount(Double.valueOf(m.get("differentAmount").toString()));
+                checkItem.setRemark(m.get("remark").toString());
+                checkItemService.insertOrUpdate(checkItem);
+                if(!isDiff&&checkItem.getDifferentAmount()!=0){
+                    isDiff=true;
+                }
+            }
+            check.setCheckStatus((Integer) CheckStatusEnum.completed.getValue());
+            check.setDiffStatus(isDiff? (Integer) CheckDiffStatusEnum.different.getValue():(Integer) CheckDiffStatusEnum.same.getValue());
+            check.setUpdateDate(new Date());
+           int updateRusult =  checkMapper.updateCheckBySql(check);
+        }
+
+        return false;
     }
 }

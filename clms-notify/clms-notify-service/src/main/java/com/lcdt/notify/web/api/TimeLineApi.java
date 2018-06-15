@@ -26,9 +26,7 @@ public class TimeLineApi {
         if (pageNo != null && pageSize != null) {
             PageHelper.startPage(pageNo, pageSize);
         }
-        List<Timeline> list = timeLineService.list(tag, SecurityInfoGetter.getCompanyId(),dataId);
+        List<Timeline> list = timeLineService.list(tag, null,dataId);
         return new PageResultDto<Timeline>(list);
     }
-
-
 }

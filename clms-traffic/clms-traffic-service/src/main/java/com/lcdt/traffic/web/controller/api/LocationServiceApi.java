@@ -1,8 +1,13 @@
 package com.lcdt.traffic.web.controller.api;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.config.BaiduYyConfig;
+import com.lcdt.traffic.dao.WaybillMapper;
+import com.lcdt.traffic.model.Waybill;
 import com.lcdt.traffic.service.OwnDriverService;
 import com.lcdt.traffic.util.BalanceCheckBo;
 import com.lcdt.traffic.util.GprsLocationBo;
@@ -47,6 +52,12 @@ public class LocationServiceApi {
 
     @Autowired
     private BalanceCheckBo balanceCheckBo;
+
+    @Autowired
+    private BaiduYyConfig baiduYyConfig;
+
+    @Autowired
+    private WaybillMapper waybillMapper;
 
     @ApiOperation(value = "定位激活回调地址", notes = "用来接收基站定位第三方发送的回调信息（无任何权限控制）")
     @GetMapping("/callback")
@@ -311,10 +322,10 @@ public class LocationServiceApi {
         return restTemplate;
     }
 
-    public static String upPoint(MultiValueMap map) {
+    public String upPoint(MultiValueMap map) {
         RestTemplate restTemplate = getInstanceByCharset("utf-8");
-        map.add("ak","nDXccuEHSqNXVkHhyHT0UCyUOpUTnz0o");
-        map.add("service_id","200868");
+        map.add("ak", baiduYyConfig.getAk());
+        map.add("service_id", baiduYyConfig.getAk());
         map.add("coord_type_input", "bd09ll");
         map.add("loc_time", (System.currentTimeMillis() / 1000)+"");
 
@@ -326,6 +337,63 @@ public class LocationServiceApi {
         System.out.println("body=="+body);
         return  body;
 
+    }
+    @ApiOperation(value = "获取轨迹", notes = "根据运单id获取轨迹")
+    @GetMapping("/getTrack")
+    public String getTrack(@RequestParam Long waybillId) {
+        Waybill waybill=null;
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        //如果运单已完成或已卸货
+        if(waybillId!=null&&waybillMapper.selectByPrimaryKey(waybillId)!=null)
+        {
+            waybill =  waybillMapper.selectByPrimaryKey(waybillId);
+            Long sTime = waybill.getCreateDate().getTime()/1000;
+            Long eTime = waybill.getUnloadTime()==null?new Date().getTime()/1000:waybill.getUnloadTime().getTime()/1000;
+            long dayTime= 86400;
+            long dif_time = eTime-sTime;
+            int size = 0;
+            if(dif_time%dayTime==0){
+                size = (int) (dif_time/dayTime);
+            }else{
+                size = (int) (dif_time/dayTime)+1;
+            }
+            for (int i = 0; i < size; i++) {
+                Long  startTime = eTime-(dayTime*(i+1));
+                if(i==size-1)
+                {
+                    startTime = sTime;
+                }
+                Long  endTime = eTime-(dayTime*i);
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+                Map map = new HashMap();
+                map.put("service_id", baiduYyConfig.getService_id());
+                map.put("entity_name", waybill.getDriverPhone());
+                map.put("start_time", startTime);
+                map.put("end_time", endTime);
+                map.put("ak", baiduYyConfig.getAk());
+                logger.info("请求轨迹接口 参数：{}",map.toString());
+                HttpEntity entity = new HttpEntity(map, headers);
+                RestTemplate restTemplate = getInstanceByCharset("UTF-8");
+                ResponseEntity<String> exchange =
+                        restTemplate.getForEntity("http://yingyan.baidu.com/api/v3/track/gettrack?ak={ak}&service_id={service_id}&entity_name={entity_name}&start_time={start_time}&end_time={end_time}", String.class,map);
+                JSONObject result  = JSON.parseObject(exchange.getBody().toString());
+                if(result.containsKey("status")&&result.getInteger("status")==0)
+                {
+                    JSONArray jsonArrayPo = JSON.parseArray(result.getString("points"));
+                    jsonArray.addAll(jsonArrayPo);
+                }
+            }
+            jsonObject.put("startTime",sTime);
+            jsonObject.put("endTime",eTime);
+            jsonObject.put("code",0);
+            jsonObject.put("points",jsonArray);
+            return jsonObject.toJSONString();
+        }
+        jsonObject.put("code",2);
+        jsonObject.put("message","运单信息不存在!");
+        return jsonObject.toJSONString();
     }
 
 }
