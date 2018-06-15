@@ -116,7 +116,7 @@ public class CustomerRpcServiceImpl implements CustomerRpcService {
                customer.setCreateId(Long.valueOf(map.get("userId").toString()));
                customer.setCreateName(map.get("userName").toString());
                customer.setGroupIds(map.get("groupIds").toString());
-               customer.setGroupNames(map.get("groupNames").toString());
+               customer.setGroupNames(map.get("groupName").toString());
                customer.setStatus((short)1);
                int flag = customerMapper.insert(customer);
                if (flag>0) {
