@@ -43,6 +43,10 @@ public class AllotServiceImpl implements AllotService{
     GroupWareHouseRpcService groupWareHouseRpcService;
     @Autowired
     GoodsInfoMapper goodsInfoMapper;
+    @Autowired
+    InventoryMapper inventoryMapper;
+    @Autowired
+    InventoryLogService inventoryLogService;
 
     @Override
     public Page<AllotDto> allotDtoList(Map m) {
@@ -222,6 +226,8 @@ public class AllotServiceImpl implements AllotService{
                 outOrderGoodsInfo.setRemark(allotProduct.getRemark());
                 outOrderGoodsInfo.setCompanyId(outWarehouseOrder.getCompanyId());
                 outOrderGoodsInfoList.add(outOrderGoodsInfo);
+
+                //减库存（增加锁定库存）
                 inventoryService.lockInventoryNum(outOrderGoodsInfo.getInvertoryId(),outOrderGoodsInfo.getGoodsNum());
             }
             //批量插入出库单明细
@@ -269,6 +275,7 @@ public class AllotServiceImpl implements AllotService{
                 inorderGoodsInfo.setMinUnit(allotProduct.getUnit());
                 inorderGoodsInfo.setUnit(allotProduct.getUnit());
                 inorderGoodsInfo.setUnitData(1);
+                inorderGoodsInfo.setReceivalbeAmount(allotProduct.getAllotNum());
                 inorderGoodsInfo.setBatch(allotProduct.getBatchNum());
                 inorderGoodsInfo.setStorageLocationId(allotProduct.getWarehouseLocId());
                 inorderGoodsInfo.setStorageLocationCode(allotProduct.getWarehouseLocCode());
@@ -277,13 +284,18 @@ public class AllotServiceImpl implements AllotService{
                 inorderGoodsInfo.setSplit(false);
                 inorderGoodsInfo.setCompanyId(inWarehouseOrder.getCompanyId());
                 inorderGoodsInfoList.add(inorderGoodsInfo);
+
+                Inventory inventory = inventoryMapper.selectById(allotProduct.getInventoryId());
+                //加库存
+                Float invertoryNum = inventory.getInvertoryNum() + inorderGoodsInfo.getInHouseAmount();
+                inventory.setInvertoryNum(invertoryNum);
+                inventoryMapper.updateById(inventory);
+                //写入库流水
+                inventory.setInvertoryNum(inorderGoodsInfo.getInHouseAmount());
+                inventoryLogService.saveInOrderLog(inWarehouseOrder, inventory, invertoryNum);
             }
             //批量插入入库单明细
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);
-
-            //入库操作
-            InWarehouseOrder inOrder=inWarehouseOrderService.queryInWarehouseOrder(inWarehouseOrder.getCompanyId(),inWarehouseOrder.getInorderId());
-            inventoryService.putInventory(inorderGoodsInfoList,inOrder);
         }
     }
 }
