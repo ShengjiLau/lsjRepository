@@ -17,6 +17,9 @@ public class AllotProduct implements Serializable {
     @ApiModelProperty(value="商品id")
     private Long goodsId;
 
+    @ApiModelProperty(value="商品原始id")
+    private Long originalGoodsId;
+
     @ApiModelProperty(value="商品分类")
     private String goodsClassify;
 
@@ -83,6 +86,14 @@ public class AllotProduct implements Serializable {
 
     public void setGoodsId(Long goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public Long getOriginalGoodsId() {
+        return originalGoodsId;
+    }
+
+    public void setOriginalGoodsId(Long originalGoodsId) {
+        this.originalGoodsId = originalGoodsId;
     }
 
     public String getGoodsClassify() {

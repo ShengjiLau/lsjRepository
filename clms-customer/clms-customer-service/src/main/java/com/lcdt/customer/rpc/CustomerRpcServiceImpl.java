@@ -98,7 +98,7 @@ public class CustomerRpcServiceImpl implements CustomerRpcService {
     public Customer createCustomer(Map map) {
         if (map.get("customerType")!=null && map.get("customerName")!=null) {
             String customerType = map.get("customerType").toString();
-           map.put("customerType","find_in_set('"+map.get("customerType").toString()+"',client_types)");
+           //map.put("customerType","find_in_set('"+map.get("customerType").toString()+"',client_types)");
            map.put("companyId",map.get("companyId").toString());
            List<Customer> list = customerMapper.selectByCondition(map);
            if (list!=null && list.size()>0) {
