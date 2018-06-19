@@ -48,6 +48,10 @@ public class PaymentApplication {
 
     private String paymentName;
 
+    private Date paymentTimeSure;
+
+    private String paymentNameSure;
+
     private String manager;
 
     private String paymentDirections;
@@ -242,6 +246,22 @@ public class PaymentApplication {
 
     public void setPaymentName(String paymentName) {
         this.paymentName = paymentName == null ? null : paymentName.trim();
+    }
+
+    public Date getPaymentTimeSure() {
+        return paymentTimeSure;
+    }
+
+    public void setPaymentTimeSure(Date paymentTimeSure) {
+        this.paymentTimeSure = paymentTimeSure;
+    }
+
+    public String getPaymentNameSure() {
+        return paymentNameSure;
+    }
+
+    public void setPaymentNameSure(String paymentNameSure) {
+        this.paymentNameSure = paymentNameSure == null ? null : paymentNameSure.trim();
     }
 
     public String getManager() {

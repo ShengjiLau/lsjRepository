@@ -24,6 +24,8 @@
     <result column="payment_unit" jdbcType="VARCHAR" property="paymentUnit" />
     <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime" />
     <result column="payment_name" jdbcType="VARCHAR" property="paymentName" />
+    <result column="payment_time_sure" jdbcType="TIMESTAMP" property="paymentTimeSure" />
+    <result column="payment_name_sure" jdbcType="VARCHAR" property="paymentNameSure" />
     <result column="manager" jdbcType="VARCHAR" property="manager" />
     <result column="payment_directions" jdbcType="VARCHAR" property="paymentDirections" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -39,9 +41,9 @@
     pa_id, order_id, application_serial_no, application_date, approval_status, approval_process_id,
     approval_process, approval_start_date, approval_end_date, contract_code, order_serial_no,
     order_no, purchase_sum, supplier_id, supplier, receipt_unit, receipt_unit_bank, receipt_unit_account,
-    payment_sum, payment_unit, payment_time, payment_name, manager, payment_directions,
-    remark, attachment1, attachment1_name, attachment2, attachment2_name, company_id,
-    create_id, create_name
+    payment_sum, payment_unit, payment_time, payment_name, payment_time_sure, payment_name_sure,
+    manager, payment_directions, remark, attachment1, attachment1_name, attachment2,
+    attachment2_name, company_id, create_id, create_name
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
@@ -55,27 +57,29 @@
   </delete>
   <insert id="insert" parameterType="com.lcdt.contract.model.PaymentApplication">
     insert into t_payment_application (pa_id, order_id, application_serial_no,
-    application_date, approval_status, approval_process_id,
-    approval_process, approval_start_date, approval_end_date,
-    contract_code, order_serial_no, order_no,
-    purchase_sum, supplier_id, supplier,
-    receipt_unit, receipt_unit_bank, receipt_unit_account,
-    payment_sum, payment_unit, payment_time,
-    payment_name, manager, payment_directions,
-    remark, attachment1, attachment1_name,
-    attachment2, attachment2_name, company_id,
-    create_id, create_name)
+      application_date, approval_status, approval_process_id,
+      approval_process, approval_start_date, approval_end_date,
+      contract_code, order_serial_no, order_no,
+      purchase_sum, supplier_id, supplier,
+      receipt_unit, receipt_unit_bank, receipt_unit_account,
+      payment_sum, payment_unit, payment_time,
+      payment_name, payment_time_sure, payment_name_sure,
+      manager, payment_directions, remark,
+      attachment1, attachment1_name, attachment2,
+      attachment2_name, company_id, create_id,
+      create_name)
     values (#{paId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{applicationSerialNo,jdbcType=VARCHAR},
-    #{applicationDate,jdbcType=TIMESTAMP}, #{approvalStatus,jdbcType=SMALLINT}, #{approvalProcessId,jdbcType=BIGINT},
-    #{approvalProcess,jdbcType=VARCHAR}, #{approvalStartDate,jdbcType=TIMESTAMP}, #{approvalEndDate,jdbcType=TIMESTAMP},
-    #{contractCode,jdbcType=VARCHAR}, #{orderSerialNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR},
-    #{purchaseSum,jdbcType=DECIMAL}, #{supplierId,jdbcType=BIGINT}, #{supplier,jdbcType=VARCHAR},
-    #{receiptUnit,jdbcType=VARCHAR}, #{receiptUnitBank,jdbcType=VARCHAR}, #{receiptUnitAccount,jdbcType=VARCHAR},
-    #{paymentSum,jdbcType=DECIMAL}, #{paymentUnit,jdbcType=VARCHAR}, #{paymentTime,jdbcType=TIMESTAMP},
-    #{paymentName,jdbcType=VARCHAR}, #{manager,jdbcType=VARCHAR}, #{paymentDirections,jdbcType=VARCHAR},
-    #{remark,jdbcType=VARCHAR}, #{attachment1,jdbcType=VARCHAR}, #{attachment1Name,jdbcType=VARCHAR},
-    #{attachment2,jdbcType=VARCHAR}, #{attachment2Name,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
-    #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR})
+      #{applicationDate,jdbcType=TIMESTAMP}, #{approvalStatus,jdbcType=SMALLINT}, #{approvalProcessId,jdbcType=BIGINT},
+      #{approvalProcess,jdbcType=VARCHAR}, #{approvalStartDate,jdbcType=TIMESTAMP}, #{approvalEndDate,jdbcType=TIMESTAMP},
+      #{contractCode,jdbcType=VARCHAR}, #{orderSerialNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR},
+      #{purchaseSum,jdbcType=DECIMAL}, #{supplierId,jdbcType=BIGINT}, #{supplier,jdbcType=VARCHAR},
+      #{receiptUnit,jdbcType=VARCHAR}, #{receiptUnitBank,jdbcType=VARCHAR}, #{receiptUnitAccount,jdbcType=VARCHAR},
+      #{paymentSum,jdbcType=DECIMAL}, #{paymentUnit,jdbcType=VARCHAR}, #{paymentTime,jdbcType=TIMESTAMP},
+      #{paymentName,jdbcType=VARCHAR}, #{paymentTimeSure,jdbcType=TIMESTAMP}, #{paymentNameSure,jdbcType=VARCHAR},
+      #{manager,jdbcType=VARCHAR}, #{paymentDirections,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+      #{attachment1,jdbcType=VARCHAR}, #{attachment1Name,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR},
+      #{attachment2Name,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT},
+      #{createName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.contract.model.PaymentApplication" useGeneratedKeys="true" keyColumn="pa_id" keyProperty="paId">
     insert into t_payment_application
@@ -145,6 +149,12 @@
       </if>
       <if test="paymentName != null">
         payment_name,
+      </if>
+      <if test="paymentTimeSure != null">
+        payment_time_sure,
+      </if>
+      <if test="paymentNameSure != null">
+        payment_name_sure,
       </if>
       <if test="manager != null">
         manager,
@@ -244,6 +254,12 @@
       <if test="paymentName != null">
         #{paymentName,jdbcType=VARCHAR},
       </if>
+      <if test="paymentTimeSure != null">
+        #{paymentTimeSure,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentNameSure != null">
+        #{paymentNameSure,jdbcType=VARCHAR},
+      </if>
       <if test="manager != null">
         #{manager,jdbcType=VARCHAR},
       </if>
@@ -342,6 +358,12 @@
       <if test="paymentName != null">
         payment_name = #{paymentName,jdbcType=VARCHAR},
       </if>
+      <if test="paymentTimeSure != null">
+        payment_time_sure = #{paymentTimeSure,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentNameSure != null">
+        payment_name_sure = #{paymentNameSure,jdbcType=VARCHAR},
+      </if>
       <if test="manager != null">
         manager = #{manager,jdbcType=VARCHAR},
       </if>
@@ -398,6 +420,8 @@
       payment_unit = #{paymentUnit,jdbcType=VARCHAR},
       payment_time = #{paymentTime,jdbcType=TIMESTAMP},
       payment_name = #{paymentName,jdbcType=VARCHAR},
+      payment_time_sure = #{paymentTimeSure,jdbcType=TIMESTAMP},
+      payment_name_sure = #{paymentNameSure,jdbcType=VARCHAR},
       manager = #{manager,jdbcType=VARCHAR},
       payment_directions = #{paymentDirections,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
@@ -483,6 +507,8 @@
     <result column="payment_unit" jdbcType="VARCHAR" property="paymentUnit" />
     <result column="payment_time" jdbcType="TIMESTAMP" property="paymentTime" />
     <result column="payment_name" jdbcType="VARCHAR" property="paymentName" />
+    <result column="payment_time_sure" jdbcType="TIMESTAMP" property="paymentTimeSure" />
+    <result column="payment_name_sure" jdbcType="VARCHAR" property="paymentNameSure" />
     <result column="manager" jdbcType="VARCHAR" property="manager" />
     <result column="payment_directions" jdbcType="VARCHAR" property="paymentDirections" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
