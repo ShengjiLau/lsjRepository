@@ -42,6 +42,8 @@ public class OutWhOrderSearchDto {
     private Long groupId;
     @ApiModelProperty(value = "采购单号")
     private String purchaseNo;
+    @ApiModelProperty(value = "合同编码")
+    private String contractNo;
     @ApiModelProperty(value = "个业id",hidden = true)
     private Long companyId;
 
@@ -191,6 +193,14 @@ public class OutWhOrderSearchDto {
 
     public void setPurchaseNo(String purchaseNo) {
         this.purchaseNo = purchaseNo;
+    }
+
+    public String getContractNo() {
+        return contractNo;
+    }
+
+    public void setContractNo(String contractNo) {
+        this.contractNo = contractNo;
     }
 
     public Long getCompanyId() {

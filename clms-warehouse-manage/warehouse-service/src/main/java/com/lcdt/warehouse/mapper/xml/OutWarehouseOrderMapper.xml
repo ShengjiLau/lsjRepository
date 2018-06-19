@@ -116,7 +116,12 @@
         <if test="purchaseNo!=null and purchaseNo!=''">
             and purchase_no like concat('%',#{purchaseNo,jdbcType=VARCHAR},'%')
         </if>
-
+        <if test="purchaseNo!=null and purchaseNo!=''">
+            and purchase_no like concat('%',#{purchaseNo,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="contractNo!=null and contractNo!=''">
+            and contract_no like concat('%',#{contractNo,jdbcType=VARCHAR},'%')
+        </if>
     </sql>
 
     <insert id="insertOutWarehouseOrder" parameterType="com.lcdt.warehouse.entity.OutWarehouseOrder">
