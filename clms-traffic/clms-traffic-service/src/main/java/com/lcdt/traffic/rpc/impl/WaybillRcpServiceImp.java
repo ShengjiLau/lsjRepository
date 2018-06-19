@@ -376,7 +376,9 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
                         //对waybillDao里面的货物详细计划数量
                         waybillDao.getWaybillItemsList().forEach(item -> {
-                            item.setAmount(item.getAmount() - waybillItem.getAmount());
+                            if (waybillItem.getId().equals(item.getId())) {
+                                item.setAmount(item.getAmount() - waybillItem.getAmount());
+                            }
                         });
                         return waybillItem;
                     }).collect(Collectors.toList());
