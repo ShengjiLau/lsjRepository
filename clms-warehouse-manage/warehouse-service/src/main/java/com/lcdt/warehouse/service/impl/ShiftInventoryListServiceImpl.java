@@ -101,11 +101,15 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			BigDecimal shiftPlanNum = new BigDecimal(0);
 			ShiftGoodsListDTO shiftGoodsListDTO = shiftGoodsListDTOList.get(a);
 			List<ShiftGoodsDO> shiftGoodsDOList1 = shiftGoodsListDTO.getShiftGoodsDOList();
-			
+			Inventory inventory1 = inventoryMapper.selectById(shiftGoodsListDTO.getInvertoryId());			
 			for(int b = 0; b < shiftGoodsDOList1.size(); b++) {
 				ShiftGoodsDO shiftGoodsDO = shiftGoodsDOList1.get(b);
 				//将库存id存入移库商品信息中
 				shiftGoodsDO.setInventoryId(shiftGoodsListDTOList.get(a).getInvertoryId());
+				shiftGoodsDO.setGoodsId(inventory1.getGoodsId());
+				shiftGoodsDO.setBatch(inventory1.getBatch());
+				shiftGoodsDO.setOriginalGoodsId(inventory1.getOriginalGoodsId());
+				shiftGoodsDO.setBaseUnit(inventory1.getBaseUnit());
 				//计算计划商品移库数量
 				shiftPlanNum = shiftPlanNum.add(shiftGoodsDO.getShiftPlanNum());
 				shiftGoodsDO.setShiftInventoryId(shiftInventoryListDO.getShiftId());
