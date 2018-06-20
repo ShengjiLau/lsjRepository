@@ -178,7 +178,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				shiftGoodsBO.setCompanyId(shiftInventoryListDO2.getCompanyId());
 				shiftGoodsBO.setCustomerId(shiftInventoryListDO2.getCustomerId());
 				shiftGoodsBO.setWarehouseId(shiftInventoryListDO2.getWarehouseId());
-				shiftGoodsBO.setGoodsBatch(sgdl.getGoodsBatch());
+				shiftGoodsBO.setGoodsBatch(sgdl.getBatch());
 				shiftGoodsBO.setGoodsCode(sgdl.getGoodsCode());
 				shiftGoodsBO.setStorageLocationCode(shiftGoodsDO.getShiftLocation());
 				

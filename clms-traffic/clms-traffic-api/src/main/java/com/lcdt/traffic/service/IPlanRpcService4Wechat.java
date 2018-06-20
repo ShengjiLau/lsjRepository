@@ -44,10 +44,6 @@ public interface IPlanRpcService4Wechat {
     WaybillPlan biddingFinish(Long waybillPlanId, UserCompRel userCompRel);
 
 
-
-
-
-
     /****
      * 管车宝
      */
@@ -58,6 +54,11 @@ public interface IPlanRpcService4Wechat {
     WaybillPlan splitGoods4Direct(SplitGoodsParamsDto dto, UserCompRel userCompRel);
     //竞价派单(PC_复用)
     WaybillPlan splitGoods4Bidding(BindingSplitParamsDto dto, UserCompRel userCompRel);
+
+
+
+
+
 
 
 

@@ -36,7 +36,7 @@ public class InWarehouseOrderController {
     InWarehouseOrderService inWarehouseOrderService;
 
     @ApiOperation("入库单新增")
-    @RequestMapping(value = "/order", method = RequestMethod.POST)
+    @PostMapping(value = "/order")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_order_add')")
     public JSONObject inWarehouseOrder(@RequestBody InWarehouseOrderDto params) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -64,7 +64,7 @@ public class InWarehouseOrderController {
     }
 
     @ApiOperation("入库单列表")
-    @RequestMapping(value = "/order", method = RequestMethod.GET)
+    @GetMapping(value = "/order")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_order_search')")
     public PageBaseDto inWarehouseOrderList(InWarehouseOrderSearchParamsDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
@@ -74,7 +74,7 @@ public class InWarehouseOrderController {
     }
 
     @ApiOperation("入库单详细")
-    @RequestMapping(value = "/order/{inorderId}", method = RequestMethod.GET)
+    @GetMapping(value = "/order/{inorderId}")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_order_detail')")
     public InWarehouseOrderDetailDto inWarehouseOrderDetail(@PathVariable long inorderId) {
         InWarehouseOrderDetailDto inWarehouseOrderDetailDto = new InWarehouseOrderDetailDto();
@@ -83,7 +83,7 @@ public class InWarehouseOrderController {
     }
 
     @ApiOperation("入库单入库")
-    @RequestMapping(value = "/order/storage", method = RequestMethod.PATCH)
+    @PatchMapping(value = "/order/storage")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_order_storage')")
     public JSONObject inStorage(@RequestBody InWarehouseOrderStorageParamsDto params) {
         ModifyInOrderStatusParamsDto statusParams = new ModifyInOrderStatusParamsDto();
@@ -108,7 +108,7 @@ public class InWarehouseOrderController {
     }
 
     @ApiOperation("入库单取消")
-    @RequestMapping(value = "/order/cancel/{inorderId}", method = RequestMethod.PATCH)
+    @PatchMapping(value = "/order/cancel/{inorderId}")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_order_cancel')")
     public JSONObject cancelStorage(@PathVariable long inorderId) {
         ModifyInOrderStatusParamsDto params = new ModifyInOrderStatusParamsDto();
@@ -140,7 +140,7 @@ public class InWarehouseOrderController {
 
 
     @ApiOperation("计划下的入库单")
-    @RequestMapping(value = "/plan/order", method = RequestMethod.GET)
+    @GetMapping(value = "/plan/order")
     public PageBaseDto inWarehouseOrderListOfPlan(InWarehouseOrderSearchParamsDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
         Page<InWarehouseOrderDto> inWarehouseOrderPage = inWarehouseOrderService.queryInWarehouseOrderListOfPlan(params);
@@ -150,7 +150,7 @@ public class InWarehouseOrderController {
 
 
     @ApiOperation("概览入库单已完成数量")
-    @RequestMapping(value = "/inWarehouseBillNum", method = RequestMethod.GET)
+    @GetMapping(value = "/inWarehouseBillNum")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('in_ware_report')")
     public JSONObject inWarehouseNum(InWarehouseOrderSearchParamsDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());

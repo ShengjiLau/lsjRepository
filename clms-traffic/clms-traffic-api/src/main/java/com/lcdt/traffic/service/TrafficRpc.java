@@ -1,7 +1,9 @@
 package com.lcdt.traffic.service;
 
+import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.model.OwnVehicle;
+import com.lcdt.userinfo.model.UserCompRel;
 
 import java.util.Map;
 
@@ -25,4 +27,14 @@ public interface TrafficRpc {
      * @return
      */
     OwnDriver addDriver(OwnDriver ownDriver);
+
+
+
+
+
+
+
+
+
+
 }
