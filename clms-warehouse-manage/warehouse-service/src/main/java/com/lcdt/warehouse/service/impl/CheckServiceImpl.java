@@ -143,6 +143,6 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, TCheck> implement
            int updateRusult =  checkMapper.updateCheckBySql(check);
         }
 
-        return false;
+        return true;
     }
 }
