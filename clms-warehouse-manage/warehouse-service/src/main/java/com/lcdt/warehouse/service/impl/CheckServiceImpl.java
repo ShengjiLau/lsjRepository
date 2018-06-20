@@ -110,7 +110,7 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, TCheck> implement
                     item.setGoodsSpec(dto.get("goodsSpec").toString());
                 if (dto.get("goodsUnit") != null)
                     item.setGoodsUnit(dto.get("goodsUnit").toString());
-                item.setInvertoryAmount(Double.valueOf(dto.get("invertoryAmount").toString()));
+                item.setInvertoryAmount(Float.valueOf(dto.get("invertoryAmount").toString()));
                 item.setInvertoryId(Long.valueOf(dto.get("invertoryId").toString()));
                 if (dto.get("storageLocationCode") != null)
                     item.setStorageLocationCode(dto.get("storageLocationCode").toString());

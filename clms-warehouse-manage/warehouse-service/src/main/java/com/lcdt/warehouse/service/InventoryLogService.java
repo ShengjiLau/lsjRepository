@@ -17,6 +17,9 @@ import java.util.Map;
  * @since 2018-05-07
  */
 public interface InventoryLogService extends IService<InventoryLog> {
+
+    InventoryLog savePankuLog(TCheck tCheck, TCheckItem item);
+
     Page<InventoryLog> queryInventoryLogPage(InventoryLogQueryDto queryDto);
 
     InventoryLog saveInOrderLog(InWarehouseOrder inWarehouseOrder, Inventory inventory,Float updatedInventoryNum);

@@ -283,7 +283,22 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
 
     //盘库更新库存
+    @Transactional(rollbackFor = Exception.class)
     public void updateInventoryByCheck(TCheck tCheck,List<TCheckItem> items){
+        for (TCheckItem checkItem : items) {
+            Inventory inventory = selectById(checkItem.getInvertoryId());
+            if (inventory == null) {
+                throw new RuntimeException("库存不存在，请查看后重试");
+            }
+            if (inventory.getLockNum() != null || inventory.getLockNum().floatValue() > 0) {
+                throw new RuntimeException("库存已锁定，无法盘点");
+            }
+
+            inventory.setInvertoryNum(checkItem.getInvertoryAmount());
+            updateById(inventory);
+            logService.savePankuLog(tCheck, checkItem);
+            checkItem.getInvertoryId();
+        }
 
     }
 
