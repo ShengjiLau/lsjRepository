@@ -40,9 +40,7 @@ public interface InventoryLogFactory {
         inventoryLog.setGoodsId(item.getGoodsId());
         inventoryLog.setCompanyId(check.getCompanyId());
         inventoryLog.setWarehouseId(check.getWarehouseId());
-//        inventoryLog.setChangeNum(item.getDifferentAmount());
         inventoryLog.setStorageLocationCode(item.getStorageLocationCode());
-//        inventoryLog.setStorageLocationId();
         inventoryLog.setOriginalGoodsId(item.getGoodsId());
         inventoryLog.setCustomerName(check.getCustomerName());
         inventoryLog.setCustomerId(check.getCustomerId());
@@ -50,7 +48,9 @@ public interface InventoryLogFactory {
         inventoryLog.setBatch(item.getGoodsBatch());
         inventoryLog.setLogNo("");
         inventoryLog.setComment(check.getRemark());
-//        inventoryLog.setCurrentInvetory(item.getCheckAmount());
+        inventoryLog.setCurrentInvetory(item.getInvertoryAmount());
+//        Float.valueOf()
+//        inventoryLog.setChangeNum(item.getDifferentAmount());
         return inventoryLog;
     }
 
