@@ -48,6 +48,10 @@ public class PaymentApplication {
 
     private String paymentName;
 
+    private Date paymentTimeSure;
+
+    private String paymentNameSure;
+
     private String manager;
 
     private String paymentDirections;
@@ -67,6 +71,8 @@ public class PaymentApplication {
     private Long createId;
 
     private String createName;
+
+    private Date createTime;
 
     public Long getPaId() {
         return paId;
@@ -244,6 +250,22 @@ public class PaymentApplication {
         this.paymentName = paymentName == null ? null : paymentName.trim();
     }
 
+    public Date getPaymentTimeSure() {
+        return paymentTimeSure;
+    }
+
+    public void setPaymentTimeSure(Date paymentTimeSure) {
+        this.paymentTimeSure = paymentTimeSure;
+    }
+
+    public String getPaymentNameSure() {
+        return paymentNameSure;
+    }
+
+    public void setPaymentNameSure(String paymentNameSure) {
+        this.paymentNameSure = paymentNameSure == null ? null : paymentNameSure.trim();
+    }
+
     public String getManager() {
         return manager;
     }
@@ -322,5 +344,13 @@ public class PaymentApplication {
 
     public void setCreateName(String createName) {
         this.createName = createName == null ? null : createName.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }
