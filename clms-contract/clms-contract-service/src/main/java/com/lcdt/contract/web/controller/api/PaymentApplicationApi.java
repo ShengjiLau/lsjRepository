@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +68,7 @@ public class PaymentApplicationApi {
         paymentApplicationDto.setCreateId(user.getUserId());
         //设置创建人姓名
         paymentApplicationDto.setCreateName(user.getRealName());
+        paymentApplicationDto.setCreateTime(new Date());
         JSONObject jsonObject = new JSONObject();
         int row = paymentApplictionService.addPaymentAppliction(paymentApplicationDto);
         if(row>0){
@@ -92,9 +94,11 @@ public class PaymentApplicationApi {
     @PostMapping("/confirm")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_confirm')")
     public JSONObject confirmPayment(@RequestBody PaymentApplication paymentApplication){
-
-        JSONObject jsonObject = new JSONObject();
+        User user = SecurityInfoGetter.getUser();
+        paymentApplication.setPaymentNameSure(user.getRealName());
+        paymentApplication.setPaymentTimeSure(new Date());
         int row = paymentApplictionService.confirmPayment(paymentApplication);
+        JSONObject jsonObject = new JSONObject();
         if(row>0){
             jsonObject.put("code",0);
             jsonObject.put("message","创建付款申请成功");
