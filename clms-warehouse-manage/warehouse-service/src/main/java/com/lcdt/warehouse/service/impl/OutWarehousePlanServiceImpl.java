@@ -479,4 +479,25 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
     }
 
 
+
+    @Override
+    public boolean changeOutWarehousePlanStatus(OutWhPlanDto outWhPlanDto, UserCompRel userCompRel) {
+        OutWarehousePlan obj = new OutWarehousePlan();
+        obj.setCompanyId(userCompRel.getCompany().getCompId());
+        obj.setOutplanId(outWhPlanDto.getOutplanId());
+        OutWarehousePlan outWarehousePlan = this.selectOne(new EntityWrapper<OutWarehousePlan>(obj));
+        if (outWarehousePlan == null) {
+            return false;
+        }
+        if(outWarehousePlan.getPlanStatus().equals((Integer) OutWhPlanStatusEnum.isWarehouse.getValue())) {
+            outWarehousePlan.setPlanStatus((Integer) OutWhPlanStatusEnum.publish.getValue());
+            outWarehousePlan.setUpdateId(userCompRel.getUser().getUserId());
+            outWarehousePlan.setUpdateName(userCompRel.getUser().getRealName());
+            outWarehousePlan.setUpdateDate(new Date());
+            return this.update(outWarehousePlan,new EntityWrapper<OutWarehousePlan>(obj));
+        }
+        return false;
+    }
+
+
 }
