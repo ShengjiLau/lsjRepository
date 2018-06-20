@@ -36,6 +36,7 @@
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
     pa_id, order_id, application_serial_no, application_date, approval_status, approval_process_id,
@@ -43,7 +44,7 @@
     order_no, purchase_sum, supplier_id, supplier, receipt_unit, receipt_unit_bank, receipt_unit_account,
     payment_sum, payment_unit, payment_time, payment_name, payment_time_sure, payment_name_sure,
     manager, payment_directions, remark, attachment1, attachment1_name, attachment2,
-    attachment2_name, company_id, create_id, create_name
+    attachment2_name, company_id, create_id, create_name, create_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
@@ -67,7 +68,7 @@
       manager, payment_directions, remark,
       attachment1, attachment1_name, attachment2,
       attachment2_name, company_id, create_id,
-      create_name)
+      create_name, create_time)
     values (#{paId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{applicationSerialNo,jdbcType=VARCHAR},
       #{applicationDate,jdbcType=TIMESTAMP}, #{approvalStatus,jdbcType=SMALLINT}, #{approvalProcessId,jdbcType=BIGINT},
       #{approvalProcess,jdbcType=VARCHAR}, #{approvalStartDate,jdbcType=TIMESTAMP}, #{approvalEndDate,jdbcType=TIMESTAMP},
@@ -79,7 +80,7 @@
       #{manager,jdbcType=VARCHAR}, #{paymentDirections,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
       #{attachment1,jdbcType=VARCHAR}, #{attachment1Name,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR},
       #{attachment2Name,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT}, #{createId,jdbcType=BIGINT},
-      #{createName,jdbcType=VARCHAR})
+      #{createName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.contract.model.PaymentApplication" useGeneratedKeys="true" keyColumn="pa_id" keyProperty="paId">
     insert into t_payment_application
@@ -186,6 +187,9 @@
       <if test="createName != null">
         create_name,
       </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="paId != null">
@@ -289,6 +293,9 @@
       </if>
       <if test="createName != null">
         #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -394,6 +401,9 @@
       <if test="createName != null">
         create_name = #{createName,jdbcType=VARCHAR},
       </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where pa_id = #{paId,jdbcType=BIGINT}
   </update>
@@ -431,7 +441,8 @@
       attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
       company_id = #{companyId,jdbcType=BIGINT},
       create_id = #{createId,jdbcType=BIGINT},
-      create_name = #{createName,jdbcType=VARCHAR}
+      create_name = #{createName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
     where pa_id = #{paId,jdbcType=BIGINT}
   </update>
 
@@ -519,6 +530,7 @@
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <collection property="paApprovalList" ofType="com.lcdt.contract.model.PaApproval">
       <id column="paa_id" jdbcType="BIGINT" property="paaId" />
       <result column="pa_id" jdbcType="BIGINT" property="paId" />

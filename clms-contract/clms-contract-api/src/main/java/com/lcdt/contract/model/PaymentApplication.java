@@ -72,6 +72,8 @@ public class PaymentApplication {
 
     private String createName;
 
+    private Date createTime;
+
     public Long getPaId() {
         return paId;
     }
@@ -342,5 +344,13 @@ public class PaymentApplication {
 
     public void setCreateName(String createName) {
         this.createName = createName == null ? null : createName.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }
