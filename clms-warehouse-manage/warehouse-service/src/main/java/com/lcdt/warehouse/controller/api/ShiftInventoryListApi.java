@@ -1,5 +1,7 @@
 package com.lcdt.warehouse.controller.api;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,13 +34,13 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/api/shiftInventory")
 @Api(description="移库单接口")
-@Slf4j
+//@Slf4j
 public class ShiftInventoryListApi {
 	
 	@Autowired
 	private ShiftInventoryListService shiftInventoryListService;
 	
-	//private Logger logger = LoggerFactory.getLogger(ShiftInventoryListApi.class);
+	private Logger log = LoggerFactory.getLogger(ShiftInventoryListApi.class);
 	
 	
 	@PostMapping("/add")

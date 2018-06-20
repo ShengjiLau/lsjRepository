@@ -41,6 +41,14 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
         return page.setRecords(logMapper.selectLogList(page,inventoryQueryDto));
     }
 
+
+    @Override
+    public InventoryLog savePankuLog(TCheck tCheck, TCheckItem item) {
+        InventoryLog fromCheckInventory = InventoryLogFactory.createFromCheckInventory(tCheck, item);
+        return saveInventoryLog(fromCheckInventory);
+    }
+
+
     @Override
     public InventoryLog saveInOrderLog(InWarehouseOrder inWarehouseOrder, Inventory inventory,Float updatedInventoryNum) {
         InventoryLog log = InventoryLogFactory.createFromInventory(inWarehouseOrder, inventory,updatedInventoryNum);

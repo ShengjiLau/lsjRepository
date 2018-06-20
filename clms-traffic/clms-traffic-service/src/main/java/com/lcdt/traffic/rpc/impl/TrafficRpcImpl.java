@@ -3,22 +3,29 @@ package com.lcdt.traffic.rpc.impl;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.traffic.dao.FeeFlowMapper;
-import com.lcdt.traffic.dao.OwnDriverMapper;
-import com.lcdt.traffic.dao.OwnVehicleMapper;
+import com.lcdt.traffic.dao.*;
+import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.model.OwnVehicle;
+import com.lcdt.traffic.model.PlanDetail;
+import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.TrafficRpc;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.RegisterUtils;
+import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.model.Driver;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.DriverService;
 import com.lcdt.userinfo.service.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,11 +49,19 @@ public class TrafficRpcImpl implements TrafficRpc {
     @Reference
     public DriverService driverService;
 
+    @Autowired
+    private WaybillPlanMapper waybillPlanMapper; //计划
+
+    @Autowired
+    private PlanDetailMapper planDetailMapper; //计划详细
+
     @Override
     public void waybillPositionTimer(Map map) {
         waybillService.queryWaybillListToPoPosition(map);
     }
 
+
+    @Transactional
     @Override
     public OwnVehicle addVehicle(OwnVehicle ownVehicle) {
         //  获取companyId
@@ -67,6 +82,8 @@ public class TrafficRpcImpl implements TrafficRpc {
         }
     }
 
+
+    @Transactional
     @Override
     public OwnDriver addDriver(OwnDriver ownDriver) {
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -141,4 +158,6 @@ public class TrafficRpcImpl implements TrafficRpc {
             return ownDriver;
         }
     }
+
+
 }
