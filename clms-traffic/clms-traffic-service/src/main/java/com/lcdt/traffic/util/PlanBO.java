@@ -119,5 +119,14 @@ public class PlanBO {
     }
 
 
+    public  String toString(String arg) {
+
+        if(arg==null || arg.equals("null"))
+            return "";
+        else
+            return "";
+    }
+
+
 
 }

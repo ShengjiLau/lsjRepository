@@ -32,6 +32,7 @@ public class ProductCountServiceImpl implements ProductCountService {
         productCountLog.setLogType(CountLogType.COUNSUMETYPE);
         productCountLog.setUserName(userName);
         productCountLog.setCompanyId(companyId);
+        productCountLog.setRemainNum(remainCounts);
         countLogMapper.insert(productCountLog);
         return productCountLog;
     }

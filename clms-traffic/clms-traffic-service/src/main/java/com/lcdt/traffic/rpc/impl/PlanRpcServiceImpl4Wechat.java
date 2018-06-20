@@ -424,7 +424,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             StringBuffer sb = new StringBuffer();
             for (PlanDetail planDetail : planDetailList) {
                 if (!planDetail.isAllot()) {
-                    sb.append("商品："+planDetail.getGoodsName()+"，规格："+planDetail.getGoodsSpec()+
+                    sb.append("商品："+PlanBO.getInstance().toString(planDetail.getGoodsName())+"，规格："+PlanBO.getInstance().toString(planDetail.getGoodsSpec())+
                             "，剩余数量："+planDetail.getRemainderAmount()+"，派单数量:"+planDetail.getAllotAmountTotal()+"，不能派！\\n");
                 }
             }

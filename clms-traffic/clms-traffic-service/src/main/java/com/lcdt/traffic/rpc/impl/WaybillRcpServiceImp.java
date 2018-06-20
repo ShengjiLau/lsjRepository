@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
 /**
  * Created by lyqishan on 2018/3/19
  */
+@Transactional
 @Service
 public class WaybillRcpServiceImp implements WaybillRpcService {
 
@@ -374,7 +376,9 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
 
                         //对waybillDao里面的货物详细计划数量
                         waybillDao.getWaybillItemsList().forEach(item -> {
-                            item.setAmount(item.getAmount() - waybillItem.getAmount());
+                            if (waybillItem.getId().equals(item.getId())) {
+                                item.setAmount(item.getAmount() - waybillItem.getAmount());
+                            }
                         });
                         return waybillItem;
                     }).collect(Collectors.toList());
