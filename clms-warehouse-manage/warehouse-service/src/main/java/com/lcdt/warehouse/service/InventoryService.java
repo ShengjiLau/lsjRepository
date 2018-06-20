@@ -32,4 +32,6 @@ public interface InventoryService extends IService<Inventory> {
     List<Inventory> queryAllInventory(Long companyId,Long wareHouseId, Long goodsId);
 
     void unLockInventoryNum(Long inventoryId, Float unlockNum);
+
+    void updateInventoryByCheck(TCheck tCheck,List<TCheckItem> items);
 }
