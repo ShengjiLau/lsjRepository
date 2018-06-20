@@ -994,6 +994,7 @@
     <where>
       and wp.plan_status!='60' and wp.plan_status!='50'
       and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
+      and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status!=7 )!=0
       <if test="isDeleted!=null">
         and  sp.is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
@@ -1046,6 +1047,7 @@
           where a.split_goods_id = b.split_goods_id and b.remain_amount=0)
           and sp.company_id = a.company_id and a.is_deleted=0
       )
+       and wp.plan_status='50'
      -->
   <select id="customerPlanList4Completed" parameterType="java.util.Map" resultMap="CustomerPlanBaseResultMap1">
     SELECT
@@ -1067,7 +1069,6 @@
     LEFT JOIN t_waybill_plan wp
     on sp.waybill_plan_id = wp.waybill_plan_id
     <where>
-      and wp.plan_status='50'
       and (select sum(remain_amount) from t_split_goods_detail spd where spd.split_goods_id=sp.split_goods_id)=0
       and (SELECT count(1) from t_waybill wb where wb.split_goods_id=sp.split_goods_id and wb.company_id = sp.company_id and wb.is_deleted=0 AND wb.waybill_status!=7 )=0
       <if test="isDeleted!=null">
