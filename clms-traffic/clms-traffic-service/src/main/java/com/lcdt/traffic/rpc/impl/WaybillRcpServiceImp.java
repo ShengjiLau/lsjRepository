@@ -255,15 +255,15 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             waybillTransferRecordMapper.insert(waybillTransferRecord);
         }
 
-        Waybill result = waybillMapper.selectByPrimaryKey(waybill.getId());
+        Waybill resultWaybill = waybillMapper.selectByPrimaryKey(waybill.getId());
 
         //扣减运单费用
-        if (result != null) {
-            companyServiceCountService.reduceCompanyProductCount(waybillDto.getCompanyId(), "waybill_service", 1,waybillDto.getCreateName(),"运单消费-"+waybill.getWaybillCode());
+        if (resultWaybill != null) {
+            companyServiceCountService.reduceCompanyProductCount(waybillDto.getCompanyId(), "waybill_service", 1,waybillDto.getCreateName(),"运单消费-"+resultWaybill.getWaybillCode());
         }
 
         //新建运单路由
-        addWaybillRoute(waybill,waybillDto.getCreateName(),waybillDto.getCreatePhone(),0);
+        addWaybillRoute(resultWaybill,waybillDto.getCreateName(),waybillDto.getCreatePhone(),0);
 
         return waybill;
     }
