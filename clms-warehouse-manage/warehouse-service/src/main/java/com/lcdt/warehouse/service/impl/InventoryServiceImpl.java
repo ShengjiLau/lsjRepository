@@ -290,7 +290,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             if (inventory == null) {
                 throw new RuntimeException("库存不存在，请查看后重试");
             }
-            if (inventory.getLockNum() != null || inventory.getLockNum().floatValue() > 0) {
+            if (inventory.getLockNum() != null && inventory.getLockNum().floatValue() > 0) {
                 throw new RuntimeException("库存已锁定，无法盘点");
             }
 
