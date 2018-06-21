@@ -3,31 +3,55 @@ package com.lcdt.warehouse.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+/**
+ * @author Sheng-ji Lau
+ * @date 2018年6月01日
+ * @version
+ * @Description: TODO 
+ */
+@ApiModel("移库商品信息")
 public class ShiftGoodsDO implements Serializable {
+
+	@ApiModelProperty("移库商品信息id")
     private Long shiftGoodsId;
 
+	@ApiModelProperty("移库单id")
     private Long inventoryId;
 
+	@ApiModelProperty("移入库位编码")
     private String shiftLocation;
 
+	@ApiModelProperty("计划移入数量")
     private BigDecimal shiftPlanNum;
 
+	@ApiModelProperty("实际移入数量")
     private BigDecimal shiftNum;
 
+	@ApiModelProperty("备注")
     private String remark;
 
+	@ApiModelProperty("商品相关库存的id")
     private Long shiftInventoryId;
 
+	@ApiModelProperty("库位id")
     private Long storageLocationId;
 
+	@ApiModelProperty("商品id,goodsInfo表主键")
     private Long goodsId;
 
+	@ApiModelProperty("商品批次")
     private String batch;
 
+	@ApiModelProperty("源商品id")
     private Long originalGoodsId;
 
+	@ApiModelProperty("商品单位")
     private String baseUnit;
 
+	@ApiModelProperty("")
     private Float inventoryPrice;
 
     private static final long serialVersionUID = 1L;

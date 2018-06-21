@@ -17,12 +17,15 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dao.FeeAccountMapper;
 import com.lcdt.traffic.dao.FeeExchangeMapper;
+import com.lcdt.traffic.dao.MsgMapper;
 import com.lcdt.traffic.dao.ReconcileMapper;
 import com.lcdt.traffic.model.FeeAccount;
 import com.lcdt.traffic.model.FeeExchange;
+import com.lcdt.traffic.model.Msg;
 import com.lcdt.traffic.model.Reconcile;
 import com.lcdt.traffic.service.ReconcileService;
 import com.lcdt.traffic.util.ConvertStringAndLong;
+import com.lcdt.traffic.web.dto.MsgDto;
 import com.lcdt.traffic.web.dto.ReconcileDto;
 
 
@@ -46,6 +49,9 @@ public class ReconcileServiceImpl implements ReconcileService {
 	
 	@Autowired
 	private FeeExchangeMapper feeExchangeMapper;
+	
+	@Autowired
+	private MsgMapper msgMapper;
 	
 	/**
 	 * 插入对账单
@@ -198,6 +204,11 @@ public class ReconcileServiceImpl implements ReconcileService {
 			for(ReconcileDto rdto:reconcileList) {
 				double j = 0.0d;
 				int i = 0;
+				//查询对账单相关留言数量
+				MsgDto msgDto = new MsgDto();
+				msgDto.setAccountId(rdto.getReconcileId());
+				msgDto.setType((short) 1);
+				List<Msg> msgList = msgMapper.selectSomeMsg(msgDto);
 				for(FeeExchange fe:feeExchangelist) {
 					if (rdto.getReconcileId().longValue() == fe.getReconcileId().longValue()) {
 						i++;
@@ -211,6 +222,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 				}
 				rdto.setSumAmount(j);
 				rdto.setSumAmountNum(i);
+				rdto.setCommentNum(msgList.size());
 			}
 		}
 		PageInfo<ReconcileDto> page = new PageInfo<ReconcileDto>(reconcileList);

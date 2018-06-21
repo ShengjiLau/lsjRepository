@@ -203,8 +203,7 @@ public class ShiftInventoryListApi {
 	private <T> JSONObject failedResponseJson(String message) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put(ResponseCodeVO.CODE, ResponseCodeVO.FAILED_CODE);
-		jsonObject.put(ResponseCodeVO.MESSAGE, message);
-		
+		jsonObject.put(ResponseCodeVO.MESSAGE, message);	
 		return jsonObject;
 	}
 	

@@ -44,7 +44,7 @@ public class TCheckItem implements Serializable {
      * 盘点数量
      */
     private Float checkAmount;
-    private Double differentAmount;
+    private Float differentAmount;
     private String remark;
 
 
@@ -160,11 +160,11 @@ public class TCheckItem implements Serializable {
         this.checkAmount = checkAmount;
     }
 
-    public Double getDifferentAmount() {
+    public Float getDifferentAmount() {
         return differentAmount;
     }
 
-    public void setDifferentAmount(Double differentAmount) {
+    public void setDifferentAmount(Float differentAmount) {
         this.differentAmount = differentAmount;
     }
 
