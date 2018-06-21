@@ -646,7 +646,7 @@ public class Waybill implements Serializable ,ResponseData{
     private String weightUnit;
 
     /**
-     * 计价类型
+     * 计价类型 1-商品重量；2-商品体积；3-运输距离；4-运输件数
      */
     private Byte pricingType;
 
