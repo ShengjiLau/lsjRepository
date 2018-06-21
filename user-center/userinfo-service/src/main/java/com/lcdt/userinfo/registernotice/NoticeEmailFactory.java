@@ -39,7 +39,7 @@ public class NoticeEmailFactory {
     static private String prefix(User user){
         String from = user.getRegisterFrom();
         if (StringUtils.isEmpty(from)) {
-            return "【未知】";
+            throw new RuntimeException("注册来源为空");
         }
         if (user.getRegisterFrom().equals("司机宝小程序")) {
             return "【司机注册】";
