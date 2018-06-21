@@ -204,8 +204,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 					inventoryMapper.insert(inventory2);
 			        //新建库存流水
 					ShiftGoodsDO shiftGoodsDO3 = new ShiftGoodsDO();
-					shiftGoodsDO3.setShiftNum(new BigDecimal(0));
-					InventoryLog inventoryLog = createNewInventoryLog(shiftGoodsDO,inventory2,shiftInventoryListDO2);
+					BeanUtils.copyProperties(shiftGoodsDO,shiftGoodsDO3);
+					shiftGoodsDO3.setShiftNum(new BigDecimal(0));				
+					InventoryLog inventoryLog = createNewInventoryLog(shiftGoodsDO3,inventory2,shiftInventoryListDO2);
 			        logMapper.saveLog(inventoryLog);     
 				}
 	
@@ -407,7 +408,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * @param String
 	 * @return Long[]
 	 */
-	public Long[] ConvertStringToLong(String s) {
+	private Long[] ConvertStringToLong(String s) {
 		String patten="^(([0-9]+)([,])){0,}$";
 		String str = s+",";
 		boolean b= Pattern.matches(patten, str);
@@ -428,7 +429,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * @param s
 	 * @return
 	 */
-	public String convertTimeFormat(String s) {
+	private String convertTimeFormat(String s) {
 		String pattern = "^[0-9]{4}[-][0-9]{2}[-][0-9]{2}";
 		if (Pattern.matches(pattern, s)) {
 			String s2 = s.replace("-", "");
