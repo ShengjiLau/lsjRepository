@@ -93,4 +93,12 @@ public interface OutWarehousePlanService extends IService<OutWarehousePlan> {
      */
     boolean distributeWh(OutWhPlanDto outWhPlanDto, UserCompRel userCompRel);
 
+
+    /**
+     * 更改出库计划状态
+     * @param outWhPlanDto
+     * @param userCompRel
+     * @return
+     */
+    boolean changeOutWarehousePlanStatus(OutWhPlanDto outWhPlanDto, UserCompRel userCompRel);
 }
