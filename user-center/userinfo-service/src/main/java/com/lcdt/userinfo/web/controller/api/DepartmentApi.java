@@ -86,8 +86,8 @@ public class DepartmentApi {
         if (department1 == null) {
             throw new DeptmentExistException("部门不存在");
         }
-        long index1 = department.getDeptOrder()==null? department.getDeptId(): department.getDeptOrder();
-        long index2 = department1.getDeptOrder()==null? department1.getDeptId(): department1.getDeptOrder();
+        long index1 = (department.getDeptOrder()==null|| department.getDeptOrder()==0)? department.getDeptId(): department.getDeptOrder();
+        long index2 = (department1.getDeptOrder()==null || department1.getDeptOrder()==0) ? department1.getDeptId(): department1.getDeptOrder();
 
         department.setDeptOrder(index2);
         departmentService.getIdsNames(department);
