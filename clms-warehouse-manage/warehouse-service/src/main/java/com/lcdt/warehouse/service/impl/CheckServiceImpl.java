@@ -137,7 +137,7 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, TCheck> implement
                 for (Map m : itemList) {
                     TCheckItem checkItem = checkItemService.selectById(Long.valueOf(m.get("relationId").toString()));
                     checkItem.setCheckAmount(Float.valueOf(m.get("checkAmount").toString()));
-                    checkItem.setDifferentAmount(Double.valueOf(m.get("differentAmount").toString()));
+                    checkItem.setDifferentAmount(Float.valueOf(m.get("differentAmount").toString()));
                     checkItem.setRemark(m.get("remark").toString());
                     checkItemList.add(checkItem);
                     if (!isDiff && checkItem.getDifferentAmount() != 0) {
