@@ -290,11 +290,12 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             if (inventory == null) {
                 throw new RuntimeException("库存不存在，请查看后重试");
             }
+            System.out.println("inventory.getLockNum():"+inventory.getLockNum());
             if (inventory.getLockNum() != null && inventory.getLockNum().floatValue() > 0) {
                 throw new RuntimeException("库存已锁定，无法盘点");
             }
 
-            inventory.setInvertoryNum(checkItem.getInvertoryAmount());
+            inventory.setInvertoryNum(checkItem.getCheckAmount());
             updateById(inventory);
             logService.savePankuLog(tCheck, checkItem);
             checkItem.getInvertoryId();

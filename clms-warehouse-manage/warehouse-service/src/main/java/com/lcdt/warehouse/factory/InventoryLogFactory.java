@@ -48,7 +48,7 @@ public interface InventoryLogFactory {
         inventoryLog.setBatch(item.getGoodsBatch());
         inventoryLog.setLogNo("");
         inventoryLog.setComment(check.getRemark());
-        inventoryLog.setCurrentInvetory(item.getInvertoryAmount());
+        inventoryLog.setCurrentInvetory(item.getCheckAmount());
 //        Float.valueOf()
 //        inventoryLog.setChangeNum(item.getDifferentAmount());
         return inventoryLog;

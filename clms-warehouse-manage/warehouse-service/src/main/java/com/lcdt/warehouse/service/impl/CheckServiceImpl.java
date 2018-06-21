@@ -12,10 +12,12 @@ import com.lcdt.warehouse.mapper.CheckMapper;
 import com.lcdt.warehouse.service.CheckItemService;
 import com.lcdt.warehouse.service.CheckService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.lcdt.warehouse.service.InventoryService;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,8 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, TCheck> implement
 
     @Autowired
     private CheckItemService checkItemService;
+    @Autowired
+    private InventoryService inventoryService;
     @Override
     public List<CheckListDto> selectList(CheckParamDto paramDto) {
         //return checkMapper.selectList(paramDto);
@@ -125,24 +129,32 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, TCheck> implement
 
     @Override
     public boolean completeCheckAndItems(TCheck check, List<Map<String, Object>> itemList) {
-        boolean isDiff = false;
-        if(itemList!=null&&itemList.size()>0){
-            for (Map m :itemList) {
-                TCheckItem checkItem = checkItemService.selectById(Long.valueOf(m.get("relationId").toString()));
-                checkItem.setCheckAmount(Double.valueOf(m.get("checkAmount").toString()));
-                checkItem.setDifferentAmount(Double.valueOf(m.get("differentAmount").toString()));
-                checkItem.setRemark(m.get("remark").toString());
-                checkItemService.insertOrUpdate(checkItem);
-                if(!isDiff&&checkItem.getDifferentAmount()!=0){
-                    isDiff=true;
-                }
-            }
-            check.setCheckStatus((Integer) CheckStatusEnum.completed.getValue());
-            check.setDiffStatus(isDiff? (Integer) CheckDiffStatusEnum.different.getValue():(Integer) CheckDiffStatusEnum.same.getValue());
-            check.setUpdateDate(new Date());
-           int updateRusult =  checkMapper.updateCheckBySql(check);
-        }
 
-        return false;
+            boolean isDiff = false;
+            if (itemList != null && itemList.size() > 0) {
+                List<TCheckItem> checkItemList = new ArrayList<TCheckItem>();
+
+                for (Map m : itemList) {
+                    TCheckItem checkItem = checkItemService.selectById(Long.valueOf(m.get("relationId").toString()));
+                    checkItem.setCheckAmount(Float.valueOf(m.get("checkAmount").toString()));
+                    checkItem.setDifferentAmount(Double.valueOf(m.get("differentAmount").toString()));
+                    checkItem.setRemark(m.get("remark").toString());
+                    checkItemList.add(checkItem);
+                    if (!isDiff && checkItem.getDifferentAmount() != 0) {
+                        isDiff = true;
+                    }
+                }
+                inventoryService.updateInventoryByCheck(check, checkItemList);
+                for(TCheckItem checkItem:checkItemList){
+                    checkItemService.insertOrUpdate(checkItem);
+                }
+                check.setCheckStatus((Integer) CheckStatusEnum.completed.getValue());
+                check.setDiffStatus(isDiff ? (Integer) CheckDiffStatusEnum.different.getValue() : (Integer) CheckDiffStatusEnum.same.getValue());
+                check.setUpdateDate(new Date());
+                int updateRusult = checkMapper.updateCheckBySql(check);
+
+            }
+
+        return true;
     }
 }
