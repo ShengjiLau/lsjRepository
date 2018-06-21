@@ -64,6 +64,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 OutWhOrderSearchDto params = new OutWhOrderSearchDto();
                 params.setCompanyId(dto.getCompanyId());
                 params.setOutPlanId(obj.getOutplanId());
+                params.setOrderStatus(new String[]{"1","2"});
                 params.setPageNo(1);
                 params.setPageSize(100);
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
@@ -476,6 +477,27 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         wrapperObj.setOutplanId(outWhPlanDto.getOutplanId());
         wrapperObj.setCompanyId(userCompRel.getCompId());
         return this.update(_outWarehousePlan,new EntityWrapper<OutWarehousePlan>(wrapperObj));
+    }
+
+
+
+    @Override
+    public boolean changeOutWarehousePlanStatus(OutWhPlanDto outWhPlanDto, UserCompRel userCompRel) {
+        OutWarehousePlan obj = new OutWarehousePlan();
+        obj.setCompanyId(userCompRel.getCompany().getCompId());
+        obj.setOutplanId(outWhPlanDto.getOutplanId());
+        OutWarehousePlan outWarehousePlan = this.selectOne(new EntityWrapper<OutWarehousePlan>(obj));
+        if (outWarehousePlan == null) {
+            return false;
+        }
+        if(outWarehousePlan.getPlanStatus().equals((Integer) OutWhPlanStatusEnum.isWarehouse.getValue())) {
+            outWarehousePlan.setPlanStatus((Integer) OutWhPlanStatusEnum.publish.getValue());
+            outWarehousePlan.setUpdateId(userCompRel.getUser().getUserId());
+            outWarehousePlan.setUpdateName(userCompRel.getUser().getRealName());
+            outWarehousePlan.setUpdateDate(new Date());
+            return this.update(outWarehousePlan,new EntityWrapper<OutWarehousePlan>(obj));
+        }
+        return false;
     }
 
 

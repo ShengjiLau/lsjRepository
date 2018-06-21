@@ -139,6 +139,7 @@
     from t_fee_msg
     where account_id = #{arg0,jdbcType=BIGINT} and
     type = #{arg1,jdbcType=SMALLINT}
+    order by create_date desc
   </select>
   
   <select id="selectSomeMsg" parameterType="com.lcdt.traffic.web.dto.MsgDto" resultMap="BaseResultMap">
@@ -159,6 +160,7 @@
         and is_deleted = #{isDeleted,jdbcType=SMALLINT}
       </if>
   	</where>
+  	 order by create_date desc
   </select>
   
   <insert id="insertByBatch" useGeneratedKeys="true" keyProperty="msgId" keyColumn="msg_id">

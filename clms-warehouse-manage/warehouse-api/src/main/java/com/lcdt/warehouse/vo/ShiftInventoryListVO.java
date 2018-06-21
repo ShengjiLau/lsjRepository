@@ -50,5 +50,8 @@ public final class ShiftInventoryListVO {
 	public static final byte CANCELED = 2;
 	
 	
+	
+	
+	
 
 }

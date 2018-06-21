@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.warehouse.contants.InventoryBusinessType;
 import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.dto.ShiftInventoryListDTO;
 import com.lcdt.warehouse.entity.Inventory;
@@ -42,10 +45,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service 
 @Primary
-@Slf4j
+//@Slf4j
 public class ShiftInventoryListServiceImpl implements ShiftInventoryListService {
 	
-	//private Logger logger = LoggerFactory.getLogger(ShiftInventoryListServiceImpl.class);
+	private Logger log = LoggerFactory.getLogger(ShiftInventoryListServiceImpl.class);
 	
 	@Autowired
 	private ShiftInventoryListDOMapper shiftInventoryListDOMapper;
@@ -178,9 +181,15 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				shiftGoodsBO.setCompanyId(shiftInventoryListDO2.getCompanyId());
 				shiftGoodsBO.setCustomerId(shiftInventoryListDO2.getCustomerId());
 				shiftGoodsBO.setWarehouseId(shiftInventoryListDO2.getWarehouseId());
-				shiftGoodsBO.setGoodsBatch(sgdl.getBatch());
-				shiftGoodsBO.setGoodsCode(sgdl.getGoodsCode());
-				shiftGoodsBO.setStorageLocationCode(shiftGoodsDO.getShiftLocation());
+				if (null != sgdl.getBatch()) {
+					shiftGoodsBO.setGoodsBatch(sgdl.getBatch());
+				}
+				if (null != sgdl.getGoodsCode()) {
+					shiftGoodsBO.setGoodsCode(sgdl.getGoodsCode());
+				}
+				if (null != shiftGoodsDO.getShiftLocation()) {
+					shiftGoodsBO.setStorageLocationCode(shiftGoodsDO.getShiftLocation());
+				}
 				
 				ShiftGoodsListDTO shiftGoodsListDTO1 = inventoryMapper.selectInventoryListByShiftGoodsBO(shiftGoodsBO);
 				if (null != shiftGoodsListDTO1) {
@@ -188,66 +197,15 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 					inventory.setInvertoryNum(inventory.getInvertoryNum()+shiftGoodsDO.getShiftNum().floatValue());
 					inventoryMapper.updateById(inventory);
 					//新建库存流水
-					InventoryLog inventoryLog = new InventoryLog();
-			        inventoryLog.setGoodsId(shiftGoodsDO.getGoodsId());
-			        inventoryLog.setCompanyId(shiftInventoryListDO2.getCompanyId());
-			        inventoryLog.setWarehouseId(shiftInventoryListDO2.getWarehouseId());
-			        inventoryLog.setChangeNum(shiftGoodsDO.getShiftNum().floatValue());
-			        inventoryLog.setStorageLocationCode(shiftGoodsDO.getShiftLocation());
-			        inventoryLog.setStorageLocationId(shiftGoodsDO.getStorageLocationId());
-			        inventoryLog.setOriginalGoodsId(shiftGoodsDO.getOriginalGoodsId());
-			        inventoryLog.setCustomerName(shiftInventoryListDO2.getWarehouseName());
-			        inventoryLog.setCustomerId(shiftInventoryListDO2.getCustomerId());
-			        inventoryLog.setBusinessNo(shiftInventoryListDO2.getShiftInventoryNum());
-			        //inventoryLog.setType();
-			        inventoryLog.setBatch(shiftGoodsDO.getBatch());
-			        //inventoryLog.setLogNo();
-			        inventoryLog.setComment(shiftGoodsDO.getRemark());
-			        inventoryLog.setCurrentInvetory(inventory.getInvertoryNum()+shiftGoodsDO.getShiftNum().floatValue()); 
-			        inventoryLog.setLogTime(new Date());
+					InventoryLog inventoryLog = createNewInventoryLog(shiftGoodsDO,inventory,shiftInventoryListDO2);
 			        logMapper.saveLog(inventoryLog);     					
 				}else {
-					//没有
-					Inventory inventory2 = new Inventory();
-					inventory2.setGoodsId(inventory1.getGoodsId());
-					inventory2.setWareHouseId(shiftInventoryListDO2.getWarehouseId());
-			        inventory2.setStorageLocationCode(shiftGoodsDO.getShiftLocation());
-			        inventory2.setStorageLocationId(shiftGoodsDO.getStorageLocationId());
-			        inventory2.setCustomerName(shiftInventoryListDO2.getCustomerName());
-			        inventory2.setWarehouseName(shiftInventoryListDO2.getWarehouseName());
-			        if (null != shiftGoodsDO.getBatch()) {
-			            inventory2.setBatch(shiftGoodsDO.getBatch());
-			        }
-			        inventory2.setCustomerId(shiftInventoryListDO2.getCustomerId());
-			       // inventory2.setInventoryPrice(inventory1.getInventoryPrice());
-			        inventory2.setOriginalGoodsId(inventory1.getOriginalGoodsId());
-			        inventory2.setBaseUnit(inventory1.getBaseUnit());
-			        if (null != shiftGoodsDO.getRemark()) {
-			        	 inventory2.setRemark(shiftGoodsDO.getRemark());
-			        }
-			        inventory2.setCompanyId(shiftInventoryListDO2.getCompanyId());
-			        inventory2.setInvertoryNum(shiftGoodsDO.getShiftNum().floatValue());
-			        inventory2.setLockNum(ShiftInventoryListVO.ZERO_VALUE);
-			        //inventory2.setBusinessDesc(businessDesc);
-			        inventoryMapper.insert(inventory2);	
+					Inventory inventory2 = createNewInventory(shiftGoodsDO,inventory1,shiftInventoryListDO2);
+					inventoryMapper.insert(inventory2);
 			        //新建库存流水
-			        InventoryLog inventoryLog = new InventoryLog();
-			        inventoryLog.setGoodsId(shiftGoodsDO.getGoodsId());
-			        inventoryLog.setCompanyId(shiftInventoryListDO2.getCompanyId());
-			        inventoryLog.setWarehouseId(shiftInventoryListDO2.getWarehouseId());
-			        inventoryLog.setChangeNum(shiftGoodsDO.getShiftNum().floatValue());
-			        inventoryLog.setStorageLocationCode(shiftGoodsDO.getShiftLocation());
-			        inventoryLog.setStorageLocationId(shiftGoodsDO.getStorageLocationId());
-			        inventoryLog.setOriginalGoodsId(shiftGoodsDO.getOriginalGoodsId());
-			        inventoryLog.setCustomerName(shiftInventoryListDO2.getWarehouseName());
-			        inventoryLog.setCustomerId(shiftInventoryListDO2.getCustomerId());
-			        inventoryLog.setBusinessNo(shiftInventoryListDO2.getShiftInventoryNum());
-			        //inventoryLog.setType();
-			        inventoryLog.setBatch(shiftGoodsDO.getBatch());
-			        //inventoryLog.setLogNo();
-			        inventoryLog.setComment(shiftGoodsDO.getRemark());
-			        inventoryLog.setCurrentInvetory(ShiftInventoryListVO.ZERO_VALUE); 
-			        inventoryLog.setLogTime(new Date());
+					ShiftGoodsDO shiftGoodsDO3 = new ShiftGoodsDO();
+					shiftGoodsDO3.setShiftNum(new BigDecimal(0));
+					InventoryLog inventoryLog = createNewInventoryLog(shiftGoodsDO,inventory2,shiftInventoryListDO2);
 			        logMapper.saveLog(inventoryLog);     
 				}
 	
@@ -264,23 +222,12 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			inventory.setInvertoryNum(inventory.getInvertoryNum()-inventoryNum);
 			inventoryService.updateById(inventory);
 			//新建库存流水
-			InventoryLog inventoryLog = new InventoryLog();
-		    inventoryLog.setGoodsId(inventory1.getGoodsId());
-		    inventoryLog.setCompanyId(shiftInventoryListDO2.getCompanyId());
-		    inventoryLog.setWarehouseId(shiftInventoryListDO2.getWarehouseId());
-		    inventoryLog.setChangeNum(inventoryNum);
-		    inventoryLog.setStorageLocationCode(inventory1.getStorageLocationCode());
-		    inventoryLog.setStorageLocationId(inventory1.getStorageLocationId());
-		    inventoryLog.setOriginalGoodsId(inventory1.getOriginalGoodsId());
-		    inventoryLog.setCustomerName(shiftInventoryListDO2.getWarehouseName());
-		    inventoryLog.setCustomerId(shiftInventoryListDO2.getCustomerId());
-		    inventoryLog.setBusinessNo(shiftInventoryListDO2.getShiftInventoryNum());
-		    //inventoryLog.setType();
-		    inventoryLog.setBatch(inventory1.getBatch());
-		    //inventoryLog.setLogNo();
-		    inventoryLog.setComment(null);
-		    inventoryLog.setCurrentInvetory(inventory1.getInvertoryNum()-inventoryNum); 
-		    inventoryLog.setLogTime(new Date());
+		    ShiftGoodsDO shiftGoodsDO3 = new ShiftGoodsDO();
+		    shiftGoodsDO3.setShiftNum(shiftNum.negate());
+		    shiftGoodsDO3.setShiftLocation(inventory1.getStorageLocationCode());
+		    shiftGoodsDO3.setStorageLocationId(inventory1.getStorageLocationId());
+		    shiftGoodsDO3.setRemark(null);
+		    InventoryLog inventoryLog = createNewInventoryLog(shiftGoodsDO3,inventory1,shiftInventoryListDO2);  
 		    logMapper.saveLog(inventoryLog);     
 			
 		}
@@ -490,6 +437,84 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			return null;
 		}
 	}
+	
+	/**
+	 * 完成移库时新建库存
+	 * @param shiftGoodsDO
+	 * @param inventory1
+	 * @param shiftInventoryListDO2
+	 * @return
+	 */
+	private Inventory createNewInventory(ShiftGoodsDO shiftGoodsDO,Inventory inventory1,ShiftInventoryListDO shiftInventoryListDO2) {
+		Inventory inventory2 = new Inventory();
+		inventory2.setGoodsId(inventory1.getGoodsId());
+		inventory2.setWareHouseId(shiftInventoryListDO2.getWarehouseId());
+        inventory2.setStorageLocationCode(shiftGoodsDO.getShiftLocation());
+        inventory2.setStorageLocationId(shiftGoodsDO.getStorageLocationId());
+        inventory2.setCustomerName(shiftInventoryListDO2.getCustomerName());
+        inventory2.setWarehouseName(shiftInventoryListDO2.getWarehouseName());
+        if (null != shiftGoodsDO.getBatch()) {
+            inventory2.setBatch(shiftGoodsDO.getBatch());
+        }
+        inventory2.setCustomerId(shiftInventoryListDO2.getCustomerId());
+       // inventory2.setInventoryPrice(inventory1.getInventoryPrice());
+        inventory2.setOriginalGoodsId(inventory1.getOriginalGoodsId());
+        inventory2.setBaseUnit(inventory1.getBaseUnit());
+        if (null != shiftGoodsDO.getRemark()) {
+        	 inventory2.setRemark(shiftGoodsDO.getRemark());
+        }
+        inventory2.setCompanyId(shiftInventoryListDO2.getCompanyId());
+        inventory2.setInvertoryNum(shiftGoodsDO.getShiftNum().floatValue());
+        inventory2.setLockNum(ShiftInventoryListVO.ZERO_VALUE);
+        inventory2.setUpdateTime(new Date());
+        //inventory2.setBusinessDesc(businessDesc);
+        return inventory2;
+	}
+	
+	
+	/**
+	 * 新建库存流水
+	 * @param shiftGoodsDO
+	 * @param inventory
+	 * @param shiftInventoryListDO2
+	 * @return
+	 */
+	private InventoryLog createNewInventoryLog(ShiftGoodsDO shiftGoodsDO,Inventory inventory,ShiftInventoryListDO shiftInventoryListDO2) {
+		InventoryLog inventoryLog = new InventoryLog();
+        inventoryLog.setGoodsId(inventory.getGoodsId());
+        inventoryLog.setCompanyId(shiftInventoryListDO2.getCompanyId());
+        inventoryLog.setWarehouseId(shiftInventoryListDO2.getWarehouseId());
+        inventoryLog.setChangeNum(shiftGoodsDO.getShiftNum().floatValue());
+        inventoryLog.setStorageLocationCode(shiftGoodsDO.getShiftLocation());
+        inventoryLog.setStorageLocationId(shiftGoodsDO.getStorageLocationId());
+        inventoryLog.setOriginalGoodsId(inventory.getOriginalGoodsId());
+        inventoryLog.setCustomerName(shiftInventoryListDO2.getWarehouseName());
+        inventoryLog.setCustomerId(shiftInventoryListDO2.getCustomerId());
+        inventoryLog.setBusinessNo(shiftInventoryListDO2.getShiftInventoryNum());
+        inventoryLog.setType(InventoryBusinessType.SHIFT_ORDER);
+        if (null != inventory.getBatch()) {
+        	inventoryLog.setBatch(inventory.getBatch());
+        }		        
+        //inventoryLog.setLogNo();
+        if (null != shiftGoodsDO.getRemark()) {
+        	inventoryLog.setComment(shiftGoodsDO.getRemark());
+        }
+        inventoryLog.setCurrentInvetory(inventory.getInvertoryNum()+shiftGoodsDO.getShiftNum().floatValue()); 
+        inventoryLog.setLogTime(new Date());
+        inventoryLog.setInventoryId(inventory.getInvertoryId());
+        inventoryLog.setOrderId(shiftInventoryListDO2.getShiftId());
+		return inventoryLog;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
