@@ -64,6 +64,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 OutWhOrderSearchDto params = new OutWhOrderSearchDto();
                 params.setCompanyId(dto.getCompanyId());
                 params.setOutPlanId(obj.getOutplanId());
+                params.setOrderStatus(new String[]{"1","2"});
                 params.setPageNo(1);
                 params.setPageSize(100);
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
