@@ -133,8 +133,8 @@
 			and t.customer_id = #{customerId,jdbcType=BIGINT}
 			and t.warehouse_id = #{warehouseId,jdbcType=BIGINT}
 			and t.storage_location_code = #{storageLocationCode,jdbcType=VARCHAR} 
-			and g.goods_code = #{goodsCode,jdbcType=VARCHAR}
-			and g.goods_batch = #{goodsBatch,jdbcType=VARCHAR}          
+			and t.batch = #{goodsBatch,jdbcType=VARCHAR} 
+			and g.goods_code = #{goodsCode,jdbcType=VARCHAR}		         
 		</where>	
 	</select>
 	
