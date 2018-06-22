@@ -72,6 +72,7 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
                     //新增子商品
                     //给dto增加商品itemsId
                     dao.setItemId(itemsInfoDao.getItemId());
+                    dao.setCompanyId(itemsInfoDao.getCompanyId());
                     result += subItemsInfoService.addSubItemsInfo(dao);
                 }
             }

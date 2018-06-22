@@ -192,7 +192,7 @@ public class AllotServiceImpl implements AllotService{
         outWarehouseOrder.setCustomerContactPhone(allot.getPhoneNum());
         outWarehouseOrder.setWarehouseId(allot.getWarehouseOutId());
         outWarehouseOrder.setWarehouseName(warehousseMapper.selectByPrimaryKey(allot.getWarehouseOutId()).getWhName());
-        outWarehouseOrder.setOutboundType("05");//其他出库
+        outWarehouseOrder.setOutboundType("03");//其他出库
         outWarehouseOrder.setOutboundPlanTime(allot.getAllotOutTime());
         outWarehouseOrder.setOutboundTime(allot.getAllotOutTime());
         outWarehouseOrder.setOutboundRemark(allot.getRemark());
@@ -254,8 +254,8 @@ public class AllotServiceImpl implements AllotService{
         inWarehouseOrder.setCustomerName(allot.getCustomerName());
         inWarehouseOrder.setCustomerContactName(allot.getContactName());
         inWarehouseOrder.setCustomerContactPhone(allot.getPhoneNum());
-        inWarehouseOrder.setWarehouseId(allot.getWarehouseInId());
-        inWarehouseOrder.setWarehouseName(warehousseMapper.selectByPrimaryKey(allot.getWarehouseInId()).getWhName());
+        inWarehouseOrder.setWarehouseId(allot.getWarehouseOutId());
+        inWarehouseOrder.setWarehouseName(warehousseMapper.selectByPrimaryKey(allot.getWarehouseOutId()).getWhName());
         inWarehouseOrder.setStorageType("05");//其他入库
         inWarehouseOrder.setStoragePlanTime(allot.getAllotOutTime());
         inWarehouseOrder.setStorageTime(allot.getAllotOutTime());
