@@ -204,6 +204,7 @@ public class AllotServiceImpl implements AllotService{
         outWarehouseOrder.setCreateDate(new Date());
         outWarehouseOrder.setIsDeleted(0);
         outWarehouseOrderMapper.insertOutWarehouseOrder(outWarehouseOrder);
+        OutWarehouseOrder outWarehouseOrderNew = outWarehouseOrderMapper.selectById(outWarehouseOrder.getOutorderId());
         //插入出库单商品
         if (dto.getAllotProductList() != null && dto.getAllotProductList().size() > 0) {
             List<OutOrderGoodsInfo> outOrderGoodsInfoList = new ArrayList<>();
@@ -235,7 +236,7 @@ public class AllotServiceImpl implements AllotService{
                 inventory.setInvertoryNum(invertoryNum);
                 inventoryMapper.updateById(inventory);
                 //写出库流水
-                inventoryLogService.saveOutOrderLog(outWarehouseOrder, outOrderGoodsInfo, invertoryNum, inventory);
+                inventoryLogService.saveOutOrderLog(outWarehouseOrderNew, outOrderGoodsInfo, invertoryNum, inventory);
             }
             //批量插入出库单明细
             outOrderGoodsInfoService.insertBatch(outOrderGoodsInfoList);
@@ -257,7 +258,7 @@ public class AllotServiceImpl implements AllotService{
         inWarehouseOrder.setCustomerContactPhone(allot.getPhoneNum());
         inWarehouseOrder.setWarehouseId(allot.getWarehouseOutId());
         inWarehouseOrder.setWarehouseName(warehousseMapper.selectByPrimaryKey(allot.getWarehouseOutId()).getWhName());
-        inWarehouseOrder.setStorageType("05");//其他入库
+        inWarehouseOrder.setStorageType("03");//调拨入库
         inWarehouseOrder.setStoragePlanTime(allot.getAllotOutTime());
         inWarehouseOrder.setStorageTime(allot.getAllotOutTime());
         inWarehouseOrder.setStorageRemark(allot.getRemark());
@@ -268,6 +269,7 @@ public class AllotServiceImpl implements AllotService{
         inWarehouseOrder.setStorageMan(inWarehouseOrder.getCreateName());
         inWarehouseOrder.setInOrderStatus(InOrderStatus.ENTERED);
         inWarehouseOrderMapper.insertInWarehouseOrder(inWarehouseOrder);
+        InWarehouseOrder inWarehouseOrderNew = inWarehouseOrderMapper.selectById(inWarehouseOrder.getInorderId());
         //插入出库单商品
         if (dto.getAllotProductList() != null && dto.getAllotProductList().size() > 0) {
             List<InorderGoodsInfo> inorderGoodsInfoList = new ArrayList<>();
@@ -296,7 +298,7 @@ public class AllotServiceImpl implements AllotService{
             //批量插入入库单明细
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);
             //入库操作
-            inventoryService.updateInventoryByAllot(inWarehouseOrder,dto);
+            inventoryService.updateInventoryByAllot(inWarehouseOrderNew,dto);
         }
     }
 }
