@@ -485,11 +485,15 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
         inventoryLog.setGoodsId(inventory.getGoodsId());
         inventoryLog.setCompanyId(shiftInventoryListDO2.getCompanyId());
         inventoryLog.setWarehouseId(shiftInventoryListDO2.getWarehouseId());
-        inventoryLog.setChangeNum(shiftGoodsDO.getShiftNum().floatValue());
+        if (0 == shiftGoodsDO.getShiftNum().intValue()) {
+        	inventoryLog.setChangeNum(inventory.getInvertoryNum());
+        }else {
+        	inventoryLog.setChangeNum(shiftGoodsDO.getShiftNum().floatValue());
+        }
         inventoryLog.setStorageLocationCode(shiftGoodsDO.getShiftLocation());
         inventoryLog.setStorageLocationId(shiftGoodsDO.getStorageLocationId());
         inventoryLog.setOriginalGoodsId(inventory.getOriginalGoodsId());
-        inventoryLog.setCustomerName(shiftInventoryListDO2.getWarehouseName());
+        inventoryLog.setCustomerName(shiftInventoryListDO2.getCustomerName());
         inventoryLog.setCustomerId(shiftInventoryListDO2.getCustomerId());
         inventoryLog.setBusinessNo(shiftInventoryListDO2.getShiftInventoryNum());
         inventoryLog.setType(InventoryBusinessType.SHIFT_ORDER);
