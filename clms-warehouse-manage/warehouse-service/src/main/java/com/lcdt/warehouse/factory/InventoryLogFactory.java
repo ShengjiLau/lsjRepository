@@ -64,7 +64,8 @@ public interface InventoryLogFactory {
         inventoryLog.setGoodsId(inventory.getGoodsId());
         inventoryLog.setCompanyId(order.getCompanyId());
         inventoryLog.setWarehouseId(order.getWarehouseId());
-        inventoryLog.setChangeNum(goodsInfo.getOutboundQuantity());
+        //出库的带符号 负数
+        inventoryLog.setChangeNum(0 - goodsInfo.getOutboundQuantity());
         inventoryLog.setStorageLocationCode(inventory.getStorageLocationCode());
         inventoryLog.setStorageLocationId(inventory.getStorageLocationId());
         inventoryLog.setOriginalGoodsId(inventory.getGoodsId());
