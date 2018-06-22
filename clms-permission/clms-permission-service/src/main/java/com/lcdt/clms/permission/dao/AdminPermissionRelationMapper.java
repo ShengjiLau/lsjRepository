@@ -16,4 +16,8 @@ public interface AdminPermissionRelationMapper {
     int updateByPrimaryKey(AdminPermissionRelation record);
 
     List<AdminPermissionRelation> selectByUserId(Long userId);
+
+    int insertBatch(AdminPermissionRelation record);
+
+    int delete(AdminPermissionRelation record);
 }

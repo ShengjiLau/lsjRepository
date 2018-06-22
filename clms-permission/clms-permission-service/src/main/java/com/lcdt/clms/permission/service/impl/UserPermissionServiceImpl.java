@@ -46,6 +46,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 			AdminPermission adminPermission = adminPermissionRelation.getAdminPermission();
 			Permission permission = new Permission();
 			permission.setPermissionCode(adminPermission.getAdminPermissionCode());
+			permission.setPermissionId(Integer.valueOf(adminPermission.getAdminPermissionId().toString()));
 			permissions.add(permission);
 		}
 		return permissions;
@@ -108,5 +109,9 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 		return rolePermissions;
 	}
 
-
+	@Override
+	public int insertAdminPermissions(AdminPermissionRelation relation) {
+		adminPermissionRelationMapper.delete(relation);
+		return adminPermissionRelationMapper.insertBatch(relation);
+	}
 }

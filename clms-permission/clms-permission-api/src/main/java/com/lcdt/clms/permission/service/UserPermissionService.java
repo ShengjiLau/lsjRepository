@@ -1,5 +1,7 @@
 package com.lcdt.clms.permission.service;
 
+import com.lcdt.clms.permission.model.AdminPermission;
+import com.lcdt.clms.permission.model.AdminPermissionRelation;
 import com.lcdt.clms.permission.model.Permission;
 import com.lcdt.clms.permission.model.SysRole;
 
@@ -19,4 +21,6 @@ public interface UserPermissionService {
 	List<Permission> getPermissionByCategory(String category);
 
 	List<Permission> adminPermission(Long userId);
+
+	int insertAdminPermissions(AdminPermissionRelation relation);
 }

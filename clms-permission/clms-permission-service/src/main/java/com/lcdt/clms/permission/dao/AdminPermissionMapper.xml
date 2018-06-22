@@ -6,6 +6,7 @@
     <result column="admin_permission_name" jdbcType="VARCHAR" property="adminPermissionName" />
     <result column="admin_permission_code" jdbcType="VARCHAR" property="adminPermissionCode" />
     <result column="admin_permission_category" jdbcType="VARCHAR" property="adminPermissionCategory" />
+    <result column="dictionary_value" jdbcType="VARCHAR" property="adminPermissionCategoryValue" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_admin_permission
@@ -33,7 +34,31 @@
     where admin_permission_id = #{adminPermissionId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select admin_permission_id, admin_permission_name, admin_permission_code, admin_permission_category
-    from t_admin_permission
+    select
+    <include refid="column" ><property name="table_name" value="p"></property></include>
+    ,d.dictionary_value
+    from t_admin_permission p left join dictionary d on p.admin_permission_category = d.dictionary_key
+    where 1=1
+    <if test="obj != null">
+      <include refid="select_condition"><property name="table_name" value="p"></property></include>
+    </if>
   </select>
+
+  <sql id="column">
+    ${table_name}.admin_permission_id,
+    ${table_name}.admin_permission_name,
+    ${table_name}.admin_permission_code,
+    ${table_name}.admin_permission_category
+  </sql>
+  <sql id="select_condition">
+    <if test="obj.adminPermissionName != null and obj.adminPermissionName.length > 0">
+      and ${table_name}.admin_Permission_Name like concat('%',#{obj.adminPermissionName,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="obj.adminPermissionCode != null and obj.adminPermissionCode.length > 0">
+      and ${table_name}.admin_Permission_code like concat('%',#{obj.adminPermissionCode,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="obj.adminPermissionCategory != null and obj.adminPermissionCategory.length > 0">
+      and ${table_name}.admin_Permission_category = #{obj.adminPermissionCategory,jdbcType=VARCHAR}
+    </if>
+  </sql>
 </mapper>
