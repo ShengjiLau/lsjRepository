@@ -3,6 +3,7 @@ package com.lcdt.warehouse.service.impl;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.userinfo.rpc.GroupWareHouseRpcService;
+import com.lcdt.warehouse.contants.InOrderStatus;
 import com.lcdt.warehouse.dto.AllotDto;
 import com.lcdt.warehouse.entity.*;
 import com.lcdt.warehouse.mapper.*;
@@ -265,6 +266,7 @@ public class AllotServiceImpl implements AllotService{
         inWarehouseOrder.setCreateName(allot.getCreateName());
         inWarehouseOrder.setCreateDate(new Date());
         inWarehouseOrder.setStorageMan(inWarehouseOrder.getCreateName());
+        inWarehouseOrder.setInOrderStatus(InOrderStatus.ENTERED);
         inWarehouseOrderMapper.insertInWarehouseOrder(inWarehouseOrder);
         //插入出库单商品
         if (dto.getAllotProductList() != null && dto.getAllotProductList().size() > 0) {
@@ -294,7 +296,7 @@ public class AllotServiceImpl implements AllotService{
             //批量插入入库单明细
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);
             //入库操作
-            inventoryService.putInventory(inorderGoodsInfoList,inWarehouseOrder);
+            inventoryService.updateInventoryByAllot(inWarehouseOrder,dto);
         }
     }
 }

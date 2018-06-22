@@ -1,6 +1,7 @@
 package com.lcdt.warehouse.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
+import com.lcdt.warehouse.dto.AllotDto;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.entity.*;
 import com.baomidou.mybatisplus.service.IService;
@@ -34,4 +35,6 @@ public interface InventoryService extends IService<Inventory> {
     void unLockInventoryNum(Long inventoryId, Float unlockNum);
 
     void updateInventoryByCheck(TCheck tCheck,List<TCheckItem> items);
+    
+    void updateInventoryByAllot(InWarehouseOrder inWarehouseOrder,AllotDto allotDto);
 }
