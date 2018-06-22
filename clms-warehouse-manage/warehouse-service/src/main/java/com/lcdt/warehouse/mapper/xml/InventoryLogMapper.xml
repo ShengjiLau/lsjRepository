@@ -94,7 +94,7 @@
     </select>
 
     <select id="selectWarehouseProductNum" resultType="map">
-        select sum(change_num) num,time from (
+        select abs(sum(change_num)) num,time from (
         select il.change_num,DATE_FORMAT(il.log_time,'%Y-%m-%d') time from inventory_log il
         where il.log_time is not null
         and il.company_id= #{companyId,jdbcType=BIGINT}
@@ -103,7 +103,7 @@
     </select>
 
     <select id="selectWarehouseProductNum4Report" resultType="long">
-        select sum(il.change_num)num from inventory_log il
+        select abs(sum(il.change_num))num from inventory_log il
         join t_warehouse tw on il.warehouse_id = tw.wh_id
         join goods_info gi on il.goods_id = gi.goods_id
         where il.log_time is not null
@@ -113,8 +113,8 @@
 
     <select id="selectWarehouseProduct4SummaryReport" resultType="map" >
         select a.innum,a.outnum,b.* from
-        (select sum(innum) innum,
-        sum(outnum) outnum,a.rowkey
+        (select abs(sum(innum)) innum,
+        abs(sum(outnum)) outnum,a.rowkey
          from (
         select
         CASE when il.type= 0 then il.change_num else 0 end innum,
@@ -149,7 +149,7 @@
     </select>
 
     <select id="selectWarehouseProduct4ReportGroupWare" resultType="map">
-        select sum(il.change_num)num,il.warehouse_id,tw.wh_name from inventory_log il
+        select abs(sum(il.change_num))num,il.warehouse_id,tw.wh_name from inventory_log il
         join t_warehouse tw on il.warehouse_id = tw.wh_id
         join goods_info gi on il.goods_id = gi.goods_id
         where il.log_time is not null
@@ -158,7 +158,7 @@
         group by il.warehouse_id
     </select>
     <select id="selectWarehouseProduct4ReportGroupCustomer" resultType="map">
-        select sum(il.change_num)num,il.customer_id,il.customer_name from inventory_log il
+        select abs(sum(il.change_num))num,il.customer_id,il.customer_name from inventory_log il
         join t_warehouse tw on il.warehouse_id = tw.wh_id
         join goods_info gi on il.goods_id = gi.goods_id
         where il.log_time is not null
@@ -169,7 +169,7 @@
 
 
     <select id="selectWarehouseProduct4Report" resultType="map" >
-        select sum(il.change_num)num,il.customer_id,il.customer_name ,il.warehouse_id,tw.wh_name,
+        select abs(sum(il.change_num))num,il.customer_id,il.customer_name ,il.warehouse_id,tw.wh_name,
         gi.goods_name,gi.goods_code,gi.goods_classify,il.batch,gi.min_unit,gi.goods_spec,gi.goods_barcode
         from inventory_log il
         join t_warehouse tw on il.warehouse_id = tw.wh_id
