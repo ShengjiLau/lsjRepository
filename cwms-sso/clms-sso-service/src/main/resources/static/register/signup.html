@@ -123,7 +123,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>-->
                 <div class="modal-body" style="height: 400px;overflow-y: auto;font-size: 12px;color: #8b8b8b;">
-                   &nbsp;&nbsp;&nbsp;&nbsp;大驼队服务条款（<a>下称“服务条款”</a>）是济南邻商网络科技有限公司 (下称“济南邻商”)与您就大驼队服务（下称“服务”）等相关事项所订立的有效合约。您通过盖章、网络页面点击确认或以其他方式选择接受本服务条款，即表示您与济南邻商已达成协议并同意接受本服务条款的全部约定内容。
+                   &nbsp;&nbsp;&nbsp;&nbsp;大驼队服务条款（下称“服务条款”）是济南邻商网络科技有限公司 (下称“济南邻商”)与您就大驼队服务（下称“服务”）等相关事项所订立的有效合约。您通过盖章、网络页面点击确认或以其他方式选择接受本服务条款，即表示您与济南邻商已达成协议并同意接受本服务条款的全部约定内容。
                     <br>
                     <b>一 服务条款确认</b>
                     <br>&nbsp;&nbsp;&nbsp;&nbsp;在接受本服务条款之前，请您仔细阅读本服务条款的全部内容。如果您对本服务条款的条款有疑问的，济南邻商将向您解释条款内容。如果您不同意本服务条款的任意内容，或者无法准确理解条款的解释，请不要进行后续操作。
@@ -270,6 +270,7 @@
           if ($("#userPhoneNum").val().length == 11) {
               var form = document.getElementById("signup-form");
               var fd = new FormData(form);
+
               $.ajax({
                   url : '/auth/register/vSmsCode',
                   type : 'POST',
@@ -279,7 +280,7 @@
                   contentType : false,// 告诉jQuery不要去设置Content-Type请求头
                   processData : false,// 告诉jQuery不要去处理发送的数据
                   success : function(data) {
-                      console.log(data);
+
                       if (!data.flag && data.msg!="") {
                           alert(data.msg);
                       } else {
@@ -309,7 +310,8 @@
             var form = document.getElementById("signup-form");
             var fd = new FormData(form);
             event.preventDefault();
-
+            $(".register-btn").attr("disabled",true);
+            $(".register-btn").text("注册中...");
             $.ajax({
                 url : '/auth/register/save',
                 type : 'POST',
@@ -324,11 +326,9 @@
                     } else {
                         window.location.href="../auth/register/regSuccess";
                     }
-                    console.log(data);
+                    $(".register-btn").text("注册");
+                    $(".register-btn").attr("disabled",false);
                 },
-                error : function(data) {
-                    console.log(data);
-                }
             });
         }
       });
