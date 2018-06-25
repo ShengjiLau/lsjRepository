@@ -8,6 +8,7 @@ import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.warehouse.contants.InOrderStatus;
 import com.lcdt.warehouse.contants.OutOrderStatus;
+import com.lcdt.warehouse.dto.AllotDto;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.entity.*;
 import com.lcdt.warehouse.factory.InventoryFactory;
@@ -302,6 +303,29 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         }
 
     }
+    
+    /**
+     * 取消调拨时需要重新更新库存
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void updateInventoryByAllot(InWarehouseOrder inWarehouseOrder,AllotDto allotDto) {
+    	List<AllotProduct> allotProductList = allotDto.getAllotProductList();
+    	for (AllotProduct allotProduct : allotProductList) {
+    		Inventory inventory = selectById(allotProduct.getInventoryId());
+    		inventory.setInvertoryNum(inventory.getInvertoryNum()+allotProduct.getAllotNum());
+    		updateById(inventory);
+    		logService.saveInOrderLog(inWarehouseOrder,inventory,allotProduct.getAllotNum());
+    	}
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 }
