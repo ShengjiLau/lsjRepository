@@ -13,14 +13,14 @@ public class NoticeEmailFactory {
     }
 
 
-    static SimpleMailMessage createMessage(User user) {
+    static SimpleMailMessage createMessage(User user) throws NoticeException {
         SimpleMailMessage baseMessage = createBaseMessage();
         baseMessage.setText(messageText(user));
         return baseMessage;
     }
 
 
-    static String messageText(User user) {
+    static String messageText(User user) throws NoticeException {
         return String.format("%s 账户：%s ；姓名： %s ；注册来源： %s", prefix(user), user.getPhone(), user.getRealName(), user.getRegisterFrom());
     }
 
@@ -36,10 +36,10 @@ public class NoticeEmailFactory {
     }
 
 
-    static private String prefix(User user){
+    static private String prefix(User user) throws NoticeException {
         String from = user.getRegisterFrom();
         if (StringUtils.isEmpty(from)) {
-            throw new RuntimeException("注册来源为空");
+            throw new NoticeException();
         }
         if (user.getRegisterFrom().equals("司机宝小程序")) {
             return "【司机注册】";
