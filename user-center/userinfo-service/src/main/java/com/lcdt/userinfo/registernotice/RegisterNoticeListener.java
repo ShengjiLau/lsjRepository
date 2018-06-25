@@ -11,7 +11,12 @@ public class RegisterNoticeListener extends CommonNoticeListener<RegisterUserEve
     @Override
     SimpleMailMessage createSimpleMailMessage(RegisterUserEvent event) {
         if (event.getSource() != null && event.getSource() instanceof User) {
-            return NoticeEmailFactory.createMessage((User) event.getSource());
+            try {
+                return NoticeEmailFactory.createMessage((User) event.getSource());
+            } catch (NoticeException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
         return null;
     }

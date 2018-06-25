@@ -72,6 +72,16 @@ public class Driver implements Serializable,ResponseData {
 
     private Short isDeleted;
 
+    private Integer authStatus;
+
+    public Integer getAuthStatus() {
+        return authStatus;
+    }
+
+    public void setAuthStatus(Integer authStatus) {
+        this.authStatus = authStatus;
+    }
+
     public Long getUserId() {
         return userId;
     }
