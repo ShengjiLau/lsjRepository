@@ -19,6 +19,9 @@
     <association property="user" column="user_id" javaType="com.lcdt.userinfo.model.User"
     select="com.lcdt.userinfo.dao.UserMapper.selectByPrimaryKeyWithoutPwd" fetchType="eager"
     ></association>
+
+
+
     <association property="company" column="comp_id"
                  javaType="com.lcdt.userinfo.model.Company"
                  select="com.lcdt.userinfo.dao.CompanyMapper.selectByPrimaryKey" fetchType="eager"></association>
@@ -170,5 +173,9 @@
     from t_uc_user_comp_rel  comp
     WHERE comp.comp_id = #{companyId} and  FIND_IN_SET(comp.dept_ids,#{deptIds})
   </select>
-
+  <cache
+          eviction="LRU"
+          flushInterval="60000"
+          size="1024"
+          readOnly="true"/>
 </mapper>

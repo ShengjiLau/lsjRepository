@@ -8,6 +8,8 @@ import com.lcdt.wms.config.DubboConfig;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
@@ -19,6 +21,7 @@ import java.util.concurrent.CountDownLatch;
 @SpringBootApplication
 @Import({AliyunConfigProperties.class,PermissionAppConfiguration.class, ClmsResponseConvertConfig.class, DubboConfig.class})
 @EnableClmsSecurity
+@ComponentScan({"com.lcdt.swagger","com.lcdt.userinfo"})
 public class UserServiceApp {
 
 	public static void main(String[] args) {

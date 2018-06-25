@@ -1,22 +1,12 @@
 [INFO] Scanning for projects...
-[WARNING] 
-[WARNING] Some problems were encountered while building the effective model for com.lcdt.cloud:userinfo-service:jar:1.0
-[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: com.github.pagehelper:pagehelper:jar -> version 5.1.2 vs 4.1.6 @ com.lcdt.cloud:userinfo-service:[unknown-version], /Users/ss/dev_work_code/cwms/user-center/userinfo-service/pom.xml, line 88, column 21
-[WARNING] 
-[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
-[WARNING] 
-[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
-[WARNING] 
-[INFO]                                                                         
+[INFO] 
 [INFO] ------------------------------------------------------------------------
 [INFO] Building user-service 1.0
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-dependency-plugin:2.10:tree (default-cli) @ userinfo-service ---
 [INFO] com.lcdt.cloud:userinfo-service:jar:1.0
-[INFO] +- com.github.pagehelper:pagehelper:jar:4.1.6:compile
-[INFO] |  \- com.github.jsqlparser:jsqlparser:jar:0.9.5:compile
-[INFO] +- com.github.pagehelper:pagehelper-spring-boot-starter:jar:1.2.3:compile
+[INFO] +- org.springframework.boot:spring-boot-starter-mail:jar:1.5.6.RELEASE:compile
 [INFO] |  +- org.springframework.boot:spring-boot-starter:jar:1.5.6.RELEASE:compile
 [INFO] |  |  +- org.springframework.boot:spring-boot:jar:1.5.6.RELEASE:compile
 [INFO] |  |  +- org.springframework.boot:spring-boot-autoconfigure:jar:1.5.6.RELEASE:compile
@@ -26,40 +16,49 @@
 [INFO] |  |  |  +- org.slf4j:jul-to-slf4j:jar:1.7.25:compile
 [INFO] |  |  |  \- org.slf4j:log4j-over-slf4j:jar:1.7.25:compile
 [INFO] |  |  \- org.yaml:snakeyaml:jar:1.17:runtime
+[INFO] |  +- org.springframework:spring-context:jar:4.3.10.RELEASE:compile
+[INFO] |  |  +- org.springframework:spring-aop:jar:4.3.10.RELEASE:compile
+[INFO] |  |  \- org.springframework:spring-expression:jar:4.3.10.RELEASE:compile
+[INFO] |  +- org.springframework:spring-context-support:jar:4.3.10.RELEASE:compile
+[INFO] |  \- com.sun.mail:javax.mail:jar:1.5.6:compile
+[INFO] |     \- javax.activation:activation:jar:1.1:compile
+[INFO] +- com.lcdt.cloud:clms-notify-api:jar:1.0:compile
+[INFO] |  +- com.aliyun.openservices:ons-client:jar:1.7.1.Final:compile
+[INFO] |  \- org.apache.httpcomponents:httpclient:jar:4.5.3:compile
+[INFO] |     +- org.apache.httpcomponents:httpcore:jar:4.4.6:compile
+[INFO] |     \- commons-codec:commons-codec:jar:1.10:compile
+[INFO] +- com.github.pagehelper:pagehelper:jar:5.1.2:compile
+[INFO] |  \- com.github.jsqlparser:jsqlparser:jar:1.0:compile
+[INFO] +- com.github.pagehelper:pagehelper-spring-boot-starter:jar:1.2.3:compile
 [INFO] |  +- org.mybatis.spring.boot:mybatis-spring-boot-starter:jar:1.3.1:compile
 [INFO] |  |  \- org.mybatis.spring.boot:mybatis-spring-boot-autoconfigure:jar:1.3.1:compile
 [INFO] |  \- com.github.pagehelper:pagehelper-spring-boot-autoconfigure:jar:1.2.3:compile
 [INFO] +- com.lcdt.cloud:clms-response-converter:jar:1.0:compile
 [INFO] |  \- com.alibaba:fastjson:jar:1.2.31:compile
-[INFO] +- com.lcdt.cloud:clms-swagger:jar:1.0:compile
-[INFO] |  +- io.springfox:springfox-swagger2:jar:2.7.0:compile
-[INFO] |  |  +- io.swagger:swagger-annotations:jar:1.5.13:compile
-[INFO] |  |  +- io.swagger:swagger-models:jar:1.5.13:compile
-[INFO] |  |  +- io.springfox:springfox-spi:jar:2.7.0:compile
-[INFO] |  |  |  \- io.springfox:springfox-core:jar:2.7.0:compile
-[INFO] |  |  |     \- net.bytebuddy:byte-buddy:jar:1.6.14:compile
-[INFO] |  |  +- io.springfox:springfox-schema:jar:2.7.0:compile
-[INFO] |  |  +- io.springfox:springfox-swagger-common:jar:2.7.0:compile
-[INFO] |  |  +- io.springfox:springfox-spring-web:jar:2.7.0:compile
-[INFO] |  |  |  \- org.reflections:reflections:jar:0.9.11:compile
-[INFO] |  |  +- com.fasterxml:classmate:jar:1.3.3:compile
-[INFO] |  |  +- org.springframework.plugin:spring-plugin-core:jar:1.2.0.RELEASE:compile
-[INFO] |  |  +- org.springframework.plugin:spring-plugin-metadata:jar:1.2.0.RELEASE:compile
-[INFO] |  |  \- org.mapstruct:mapstruct:jar:1.1.0.Final:compile
-[INFO] |  \- io.springfox:springfox-swagger-ui:jar:2.7.0:compile
 [INFO] +- com.lcdt.cloud:common-utils:jar:1.0:compile
 [INFO] +- com.lcdt.cloud:clms-permission-service:jar:1.0:compile
 [INFO] |  \- com.lcdt.cloud:common-config:jar:1.0:compile
+[INFO] |     \- org.projectlombok:lombok:jar:1.16.18:compile
 [INFO] +- com.lcdt.cloud:clms-permission-api:jar:1.0:compile
 [INFO] +- com.lcdt.cloud:clms-security:jar:1.0:compile
 [INFO] |  +- org.springframework.boot:spring-boot-starter-security:jar:1.5.6.RELEASE:compile
 [INFO] |  |  +- org.springframework.security:spring-security-config:jar:4.2.3.RELEASE:compile
 [INFO] |  |  |  \- org.springframework.security:spring-security-core:jar:4.2.3.RELEASE:compile
 [INFO] |  |  \- org.springframework.security:spring-security-web:jar:4.2.3.RELEASE:compile
-[INFO] |  +- com.lcdt.cloud:cwms-sso-customer:jar:1.0:compile
-[INFO] |  \- com.lcdt.cloud:cwms-sso-api:jar:1.0:compile
+[INFO] |  +- com.lcdt.cloud:cwms-sso-client:jar:1.0:compile
+[INFO] |  +- com.lcdt.cloud:cwms-sso-api:jar:1.0:compile
+[INFO] |  \- io.jsonwebtoken:jjwt:jar:0.9.0:compile
 [INFO] +- com.lcdt.cloud:user-api:jar:1.0:compile
-[INFO] +- org.mybatis:mybatis:jar:3.4.1:compile
+[INFO] |  +- com.lcdt.cloud:clms-swagger:jar:1.0:compile
+[INFO] |  \- com.lcdt.cloud:warehouse-api:jar:1.0:compile
+[INFO] |     \- com.baomidou:mybatis-plus:jar:2.1.9:compile
+[INFO] |        +- com.baomidou:mybatis-plus-support:jar:2.1.9:compile
+[INFO] |        +- com.baomidou:mybatis-plus-core:jar:2.1.9:compile
+[INFO] |        \- com.baomidou:mybatis-plus-generate:jar:2.1.9:compile
+[INFO] |           +- org.apache.velocity:velocity-engine-core:jar:2.0:optional
+[INFO] |           |  \- org.apache.commons:commons-lang3:jar:3.5:runtime
+[INFO] |           \- org.freemarker:freemarker:jar:2.3.26-incubating:optional
+[INFO] +- org.mybatis:mybatis:jar:3.4.2:compile
 [INFO] +- org.mybatis:mybatis-spring:jar:1.3.0:compile
 [INFO] +- io.netty:netty:jar:3.10.6.Final:compile
 [INFO] +- mysql:mysql-connector-java:jar:5.1.38:compile
@@ -75,12 +74,42 @@
 [INFO] |  |  \- org.apache.tomcat.embed:tomcat-embed-websocket:jar:8.5.16:compile
 [INFO] |  +- org.hibernate:hibernate-validator:jar:5.4.0.Final:compile
 [INFO] |  |  +- javax.validation:validation-api:jar:1.1.0.Final:compile
-[INFO] |  |  \- org.jboss.logging:jboss-logging:jar:3.3.1.Final:compile
+[INFO] |  |  +- org.jboss.logging:jboss-logging:jar:3.3.1.Final:compile
+[INFO] |  |  \- com.fasterxml:classmate:jar:1.3.3:compile
 [INFO] |  +- com.fasterxml.jackson.core:jackson-databind:jar:2.8.9:compile
 [INFO] |  |  +- com.fasterxml.jackson.core:jackson-annotations:jar:2.8.0:compile
 [INFO] |  |  \- com.fasterxml.jackson.core:jackson-core:jar:2.8.9:compile
 [INFO] |  +- org.springframework:spring-web:jar:4.3.10.RELEASE:compile
 [INFO] |  \- org.springframework:spring-webmvc:jar:4.3.10.RELEASE:compile
+[INFO] +- com.aliyun.oss:aliyun-sdk-oss:jar:2.0.6:compile
+[INFO] |  +- org.jdom:jdom:jar:1.1:compile
+[INFO] |  \- net.sf.json-lib:json-lib:jar:jdk15:2.4:compile
+[INFO] |     +- commons-beanutils:commons-beanutils:jar:1.9.3:compile
+[INFO] |     +- commons-collections:commons-collections:jar:3.2.2:compile
+[INFO] |     +- commons-lang:commons-lang:jar:2.5:compile
+[INFO] |     +- commons-logging:commons-logging:jar:1.1.1:compile
+[INFO] |     \- net.sf.ezmorph:ezmorph:jar:1.0.6:compile
+[INFO] +- com.aliyun:aliyun-java-sdk-sts:jar:2.1.6:compile
+[INFO] +- com.aliyun:aliyun-java-sdk-core:jar:2.1.7:compile
+[INFO] +- com.lcdt.cloud:clms-customer-api:jar:1.0:compile
+[INFO] +- com.lcdt.cloud:AliyunMqConfig:jar:1.0:compile
+[INFO] +- com.lcdt.cloud:clms-traffic-api:jar:1.0:compile
+[INFO] |  +- io.springfox:springfox-swagger2:jar:2.7.0:compile
+[INFO] |  |  +- io.swagger:swagger-annotations:jar:1.5.13:compile
+[INFO] |  |  +- io.swagger:swagger-models:jar:1.5.13:compile
+[INFO] |  |  +- io.springfox:springfox-spi:jar:2.7.0:compile
+[INFO] |  |  |  \- io.springfox:springfox-core:jar:2.7.0:compile
+[INFO] |  |  |     \- net.bytebuddy:byte-buddy:jar:1.6.14:compile
+[INFO] |  |  +- io.springfox:springfox-schema:jar:2.7.0:compile
+[INFO] |  |  +- io.springfox:springfox-swagger-common:jar:2.7.0:compile
+[INFO] |  |  +- io.springfox:springfox-spring-web:jar:2.7.0:compile
+[INFO] |  |  |  \- org.reflections:reflections:jar:0.9.11:compile
+[INFO] |  |  +- com.google.guava:guava:jar:18.0:compile
+[INFO] |  |  +- org.springframework.plugin:spring-plugin-core:jar:1.2.0.RELEASE:compile
+[INFO] |  |  +- org.springframework.plugin:spring-plugin-metadata:jar:1.2.0.RELEASE:compile
+[INFO] |  |  \- org.mapstruct:mapstruct:jar:1.1.0.Final:compile
+[INFO] |  \- io.springfox:springfox-swagger-ui:jar:2.7.0:compile
+[INFO] +- com.lcdt.cloud:clms-pay-api:jar:1.0:compile
 [INFO] +- redis.clients:jedis:jar:2.9.0:compile
 [INFO] |  \- org.apache.commons:commons-pool2:jar:2.4.2:compile
 [INFO] +- org.springframework.boot:spring-boot-starter-data-redis:jar:1.4.0.RELEASE:compile
@@ -88,11 +117,8 @@
 [INFO] |     +- org.springframework.data:spring-data-keyvalue:jar:1.2.6.RELEASE:compile
 [INFO] |     |  \- org.springframework.data:spring-data-commons:jar:1.13.6.RELEASE:compile
 [INFO] |     +- org.springframework:spring-oxm:jar:4.3.10.RELEASE:compile
-[INFO] |     +- org.springframework:spring-context-support:jar:4.3.10.RELEASE:compile
 [INFO] |     \- org.slf4j:jcl-over-slf4j:jar:1.7.25:compile
-[INFO] +- com.alibaba:druid:jar:1.0.18:compile
-[INFO] |  +- com.alibaba:jconsole:jar:1.8.0:system
-[INFO] |  \- com.alibaba:tools:jar:1.8.0:system
+[INFO] +- com.alibaba:druid:jar:1.1.9:compile
 [INFO] +- org.springframework.boot:spring-boot-starter-test:jar:1.5.6.RELEASE:compile
 [INFO] |  +- org.springframework.boot:spring-boot-test:jar:1.5.6.RELEASE:compile
 [INFO] |  +- org.springframework.boot:spring-boot-test-autoconfigure:jar:1.5.6.RELEASE:compile
@@ -110,24 +136,12 @@
 [INFO] |  |  \- com.vaadin.external.google:android-json:jar:0.0.20131108.vaadin1:compile
 [INFO] |  +- org.springframework:spring-core:jar:4.3.10.RELEASE:compile
 [INFO] |  \- org.springframework:spring-test:jar:4.3.10.RELEASE:compile
-[INFO] +- com.alibaba:dubbo:jar:2.8.4:compile
+[INFO] +- com.alibaba:dubbo:jar:2.5.7:compile
 [INFO] |  +- org.springframework:spring-beans:jar:4.3.10.RELEASE:compile
-[INFO] |  +- org.springframework:spring-context:jar:4.3.10.RELEASE:compile
-[INFO] |  +- org.springframework:spring-aop:jar:4.3.10.RELEASE:compile
-[INFO] |  +- aopalliance:aopalliance:jar:1.0:compile
-[INFO] |  +- org.springframework:spring-expression:jar:4.3.10.RELEASE:compile
 [INFO] |  +- org.javassist:javassist:jar:3.21.0-GA:compile
-[INFO] |  +- javax.servlet:javax.servlet-api:jar:3.1.0:compile
-[INFO] |  +- org.apache.httpcomponents:httpclient:jar:4.5.3:compile
-[INFO] |  +- org.apache.httpcomponents:httpcore:jar:4.4.6:compile
-[INFO] |  +- commons-logging:commons-logging:jar:1.1.1:compile
-[INFO] |  +- commons-codec:commons-codec:jar:1.10:compile
-[INFO] |  +- commons-pool:commons-pool:jar:1.6:compile
-[INFO] |  +- org.apache.curator:curator-framework:jar:2.5.0:compile
-[INFO] |  +- org.apache.curator:curator-customer:jar:2.5.0:compile
-[INFO] |  +- org.slf4j:slf4j-api:jar:1.7.25:compile
-[INFO] |  \- com.google.guava:guava:jar:16.0.1:compile
+[INFO] |  \- org.jboss.netty:netty:jar:3.2.5.Final:compile
 [INFO] +- org.apache.zookeeper:zookeeper:jar:3.4.9:compile
+[INFO] |  +- org.slf4j:slf4j-api:jar:1.7.25:compile
 [INFO] |  +- log4j:log4j:jar:1.2.16:compile
 [INFO] |  \- jline:jline:jar:0.9.94:compile
 [INFO] +- com.github.sgroschupf:zkclient:jar:0.1:compile
@@ -135,7 +149,7 @@
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 2.997 s
-[INFO] Finished at: 2017-11-13T16:01:46+08:00
-[INFO] Final Memory: 29M/229M
+[INFO] Total time: 1.706 s
+[INFO] Finished at: 2018-06-25T11:09:45+08:00
+[INFO] Final Memory: 31M/309M
 [INFO] ------------------------------------------------------------------------
