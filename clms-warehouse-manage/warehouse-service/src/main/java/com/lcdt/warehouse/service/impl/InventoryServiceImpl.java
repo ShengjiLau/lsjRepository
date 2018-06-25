@@ -314,7 +314,10 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     		Inventory inventory = selectById(allotProduct.getInventoryId());
     		inventory.setInvertoryNum(inventory.getInvertoryNum()+allotProduct.getAllotNum());
     		updateById(inventory);
-    		logService.saveInOrderLog(inWarehouseOrder,inventory,allotProduct.getAllotNum());
+    		Inventory inventory2 = new Inventory();
+    		BeanUtils.copyProperties(inventory, inventory2);
+    		inventory2.setInvertoryNum(allotProduct.getAllotNum());
+    		logService.saveInOrderLog(inWarehouseOrder,inventory2,inventory.getInvertoryNum());
     	}
 
     }
