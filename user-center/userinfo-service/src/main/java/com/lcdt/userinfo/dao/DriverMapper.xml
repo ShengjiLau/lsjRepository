@@ -35,6 +35,8 @@
     <result column="update_name" jdbcType="VARCHAR" property="updateName" />
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+    <result column="auth_status" jdbcType="INTEGER" property="authStatus" />
+    <result column="auth_remark" jdbcType="VARCHAR" property="authRemark" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_driver
@@ -91,7 +93,11 @@
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
       update_date = #{updateDate,jdbcType=TIMESTAMP},
-      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      auth_status = #{authStatus},
+      auth_remark = #{authRemark},
+      auth_time = #{authTime},
+      auth_user = #{authUser}
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -100,7 +106,7 @@
     driver_city, driver_district, driver_address, driver_header_img, driver_license_photo, 
     driver_ID_photo, driver_ID_neg_photo, driver_remark, longitude,latitude,current_location,
     short_current_location, gps_status,location_time,
-    create_id, create_name, create_date, update_id, update_name, update_date, is_deleted
+    create_id, create_name, create_date, update_id, update_name, update_date, is_deleted,auth_status,auth_remark
     from t_driver
     where user_id = #{userId,jdbcType=BIGINT}
   </select>
@@ -136,7 +142,111 @@
     location_time = CURRENT_TIMESTAMP
     where driver_phone = #{driverPhone,jdbcType=VARCHAR}
   </update>
+  <select id="selectByDriverQueryDto" resultMap="BaseResultMap" parameterType="com.lcdt.userinfo.web.controller.api.admin.dto.DriverQueryDto">
+    SELECT * from t_driver d
+    <where>
+      <if test="driverName != null and driverName != ''">
+        d.driver_name like concat(concat('%',#{driverName}),'%')
+      </if>
 
+      <if test="driverPhone != null and driverPhone != ''">
+        d.driver_phone like concat(concat('%',#{driverPhone}),'%')
+      </if>
+
+      <if test="driverProvince != null and driverProvince != ''">
+        d.driver_province like concat(concat('%',#{driverProvince}),'%')
+      </if>
+
+      <if test="driverCity != null and driverCity != ''">
+        d.driver_city like concat(concat('%',#{driverCity}),'%')
+      </if>
+
+      <if test="driverDistrict != null and driverDistrict != ''">
+        d.driver_district like concat(concat('%',#{driverDistrict}),'%')
+      </if>
+
+      <if test="authStatus != null and authStatus != ''">
+        d.auth_status = #{authStatus}
+      </if>
+      <if test="createDateSince != null ">
+        and d.create_date  &gt;= #{createDateSince}
+      </if>
+      <if test="createDateUntil != null ">
+        and d.create_date  &lt;=  #{createDateUntil}
+      </if>
+
+    </where>
+  </select>
+
+  <select id="selectCarnumBydriverId" resultType="Integer">
+  select count(*) from t_driver_vehicle_auth where driver_id = #{driverId}
+  </select>
+  <resultMap id="driverManageMap" type="com.lcdt.userinfo.dto.DriverDto">
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="affiliated_company" jdbcType="VARCHAR" property="affiliatedCompany" />
+    <result column="driver_name" jdbcType="VARCHAR" property="driverName" />
+    <result column="driver_phone" jdbcType="VARCHAR" property="driverPhone" />
+    <result column="driver_ID" jdbcType="BIGINT" property="driverId" />
+    <result column="driver_category" jdbcType="SMALLINT" property="driverCategory" />
+    <result column="driver_email" jdbcType="VARCHAR" property="driverEmail" />
+    <result column="driver_sex" jdbcType="SMALLINT" property="driverSex" />
+    <result column="driver_nationality" jdbcType="VARCHAR" property="driverNationality" />
+    <result column="driver_birthday" jdbcType="DATE" property="driverBirthday" />
+    <result column="driver_license" jdbcType="VARCHAR" property="driverLicense" />
+    <result column="driver_province" jdbcType="VARCHAR" property="driverProvince" />
+    <result column="driver_city" jdbcType="VARCHAR" property="driverCity" />
+    <result column="driver_district" jdbcType="VARCHAR" property="driverDistrict" />
+    <result column="driver_address" jdbcType="VARCHAR" property="driverAddress" />
+    <result column="driver_header_img" jdbcType="VARCHAR" property="driverHeaderImg" />
+    <result column="driver_license_photo" jdbcType="VARCHAR" property="driverLicensePhoto" />
+    <result column="driver_ID_photo" jdbcType="VARCHAR" property="driverIdPhoto" />
+    <result column="driver_ID_neg_photo" jdbcType="VARCHAR" property="driverIdNegPhoto" />
+    <result column="driver_remark" jdbcType="VARCHAR" property="driverRemark" />
+    <result column="longitude" jdbcType="VARCHAR" property="longitude" />
+    <result column="latitude" jdbcType="VARCHAR" property="latitude" />
+    <result column="current_location" jdbcType="VARCHAR" property="currentLocation" />
+    <result column="short_current_location" jdbcType="VARCHAR" property="shortCurrentLocation" />
+    <result column="gps_status" jdbcType="SMALLINT" property="gpsStatus" />
+    <result column="location_time" jdbcType="TIMESTAMP" property="locationTime" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_id" jdbcType="BIGINT" property="updateId" />
+    <result column="update_name" jdbcType="VARCHAR" property="updateName" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+    <result column="auth_status" jdbcType="INTEGER" property="authStatus" />
+    <association property="user" column="user_id" javaType="com.lcdt.userinfo.model.User">
+
+    </association>
+  </resultMap>
+
+  <select id="selectForManager" parameterType="com.lcdt.userinfo.dto.DriverDto" resultMap="driverManageMap">
+    select t1.user_id, t1.affiliated_company, t1.driver_name, t1.driver_phone, t1.driver_ID, t1.driver_category,
+    t1.driver_email, t1.driver_sex, t1.driver_nationality, t1.driver_birthday, t1.driver_license, t1.driver_province,
+    t1.driver_city, t1.driver_district, t1.driver_address, t1.driver_header_img, t1.driver_license_photo,
+    t1.driver_ID_photo, t1.driver_ID_neg_photo, t1.driver_remark, t1.longitude, t1.latitude, t1.current_location,
+    t1.short_current_location, t1.gps_status,location_time,
+    t1.create_id, t1.create_name, t1.create_date, t1.update_id, t1.update_name, t1.update_date, t1.is_deleted,t1.auth_status
+    from t_driver t1 left join t_uc_user t2 on t1.user_id = t2.user_id
+    <where>
+      <if test="driverName!=null">
+        and t1.driver_name = #{driverName}
+      </if>
+      <if test="driverPhone!=null">
+        and t2.driver_phone = #{driverPhone}
+      </if>
+      <if test="authStatus!=null">
+        and t1.auth_status = #{authStatus}
+      </if>
+      <if test="driverProvince!=null">
+        and t1.driver_province = #{driverProvince} and t1.driver_city = #{driverCity} and t1.driver_district = #{driverDistrict}
+      </if>
+      <if test="createDateStart!=null">
+        and t1.create_date &gt; createDateStart and t1.create_date &lt; createDateEnd
+      </if>
+    </where>
+  </select>
 
 
 </mapper>

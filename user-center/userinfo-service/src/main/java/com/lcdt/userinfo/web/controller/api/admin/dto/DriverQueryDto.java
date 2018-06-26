@@ -16,6 +16,40 @@ public class DriverQueryDto extends Driver{
 
     private Integer authStatus;
 
+    private String driverProvince;
+    private String driverCity;
+    private String driverDistrict;
+
+    @Override
+    public String getDriverProvince() {
+        return driverProvince;
+    }
+
+    @Override
+    public void setDriverProvince(String driverProvince) {
+        this.driverProvince = driverProvince;
+    }
+
+    @Override
+    public String getDriverCity() {
+        return driverCity;
+    }
+
+    @Override
+    public void setDriverCity(String driverCity) {
+        this.driverCity = driverCity;
+    }
+
+    @Override
+    public String getDriverDistrict() {
+        return driverDistrict;
+    }
+
+    @Override
+    public void setDriverDistrict(String driverDistrict) {
+        this.driverDistrict = driverDistrict;
+    }
+
     public Integer getAuthStatus() {
         return authStatus;
     }

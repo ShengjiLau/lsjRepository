@@ -1,5 +1,7 @@
 package com.lcdt.userinfo.service;
 
+import com.github.pagehelper.PageInfo;
+import com.lcdt.userinfo.dto.DriverDto;
 import com.lcdt.userinfo.model.Driver;
 
 import java.util.List;
@@ -24,4 +26,11 @@ public interface DriverService {
     int updateLocation(Driver driver);
 
     boolean isExistDriver(String driverPhone);
+
+    /**
+     * 管理后台获取司机列表
+     * @param driverDto
+     * @return
+     */
+    PageInfo<List<DriverDto>> driverListForManager(DriverDto driverDto);
 }

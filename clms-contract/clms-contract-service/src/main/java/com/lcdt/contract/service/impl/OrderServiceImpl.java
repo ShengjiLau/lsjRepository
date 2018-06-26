@@ -1,7 +1,9 @@
 package com.lcdt.contract.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +12,7 @@ import com.lcdt.contract.dao.OrderApprovalMapper;
 import com.lcdt.contract.model.OrderApproval;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -17,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.contract.dao.BillingRecordMapper;
@@ -31,6 +34,11 @@ import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.model.PaymentApplication;
 import com.lcdt.contract.service.OrderService;
 import com.lcdt.contract.web.dto.OrderDto;
+import com.lcdt.traffic.dto.WaybillParamsDto;
+import com.lcdt.traffic.model.PlanDetail;
+import com.lcdt.traffic.model.WaybillPlan;
+import com.lcdt.traffic.service.TrafficRpc;
+import com.lcdt.traffic.vo.ConstantVO;
 
 
 /**
@@ -58,6 +66,10 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private PaymentApplicationMapper paymentApplicationMapper;
 
+    @Reference
+    private TrafficRpc trafficRpc;
+    
+    
 
     @Override
     public int addOrder(OrderDto orderDto) {
@@ -316,57 +328,67 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-    //得到数据库中商品表中orderId等于此需要修改的订单的orderId的所有商品的opId
-//	List<Long> orderProductIdList=nonautomaticMapper.selectOrderProductIdByOrderId(order.getOrderId());
-//	List<OrderProduct> list1=new ArrayList<OrderProduct>();
-//	List<OrderProduct> list2=new ArrayList<OrderProduct>();
-//	if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0) {
-//		for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
-//			if(null==orderProduct.getOpId()) {
-//				orderProduct.setOrderId(orderDto.getOrderId());
-//				list1.add(orderProduct);
-//			}else {
-//				list2.add(orderProduct);
-//				logger.debug("测试输出list2");
-//				if(null!=orderProductIdList&&orderProductIdList.size()!=0) {
-//					 Iterator<Long> it = orderProductIdList.iterator();
-//					 logger.debug("测试输出点位a");
-//					 while(it.hasNext()) {
-//						 logger.debug("测试输出点位b");
-//						 Long ipl=it.next();
-//						 logger.debug("in.next():"+ipl);
-//						 logger.debug("orderProduct.getOpId():"+orderProduct);
-//						 if(ipl==orderProduct.getOpId().longValue()) {
-//							 logger.debug("测试输出点位c");
-//							 it.remove();
-//							 logger.debug("测试输出点位d");
-//						 }
-//					 }
-// for循环效率高 , 但遍历过程不可执行remove操作					 
-//					for(Long opId:orderProductIdList) {
-//						if(orderProduct.getOpId()==opId) {
-//							orderProductIdList.remove(opId);
-//						}
-//					}
-//				}
-//			}
-//		}
-//	}
-    //list1为没有opId的,是新增的商品
-//	if(list1.size()>0) {
-//		i+= nonautomaticMapper.insertOrderProductByBatch(list1);
-//		logger.debug("新增订单商品"+i);
-//	}
-//	//orderProductIdList剩余的商品id不存在于修改订单中,是删除商品
-//	if(orderProductIdList.size()>0) {
-//		i+= nonautomaticMapper.deleteOrderProducByBatch(orderProductIdList);
-//		logger.debug("删除订单商品"+i);
-//	}
-//	//list2为有数据库和修改订单中均有相同商品id,是修改商品
-//	if(list2.size()>0) {
-//		i+= nonautomaticMapper.updateOrderProductByBatch(list2);
-//		logger.debug("修改订单商品"+i);
-//	}
+	@Override
+	public Boolean generateTrafficPlan(Long orderId) {
+		int purchaseFlag = 1;
+		int salesFlag = 2;
+		
+		Order order = orderMapper.selectByPrimaryKey(orderId);
+		WaybillParamsDto WaybillParamsDto = new WaybillParamsDto();
+		WaybillParamsDto.setCustomerId(order.getSupplierId());
+		WaybillParamsDto.setCustomerName(order.getSupplier());
+		Long companyId = SecurityInfoGetter.getCompanyId();
+	    User loginUser = SecurityInfoGetter.getUser();
+	    UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+	    WaybillParamsDto.setDeptNames(userCompRel.getDeptNames());
+	    WaybillParamsDto.setCreateId(loginUser.getUserId());
+	    WaybillParamsDto.setCreateName(loginUser.getRealName());
+	    WaybillParamsDto.setCompanyId(companyId);
+	    WaybillParamsDto.setCompanyName(userCompRel.getCompany().getFullName()); //企业名称
+	    WaybillParamsDto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
+	    WaybillParamsDto.setSalesOrder(order.getOrderSerialNo());
+	    WaybillParamsDto.setSendMan(order.getSender());
+	    WaybillParamsDto.setSendPhone(order.getSenderPhone());
+	    WaybillParamsDto.setSendProvince(order.getSendProvince());
+	    WaybillParamsDto.setSendCity(order.getSendCity());
+	    WaybillParamsDto.setSendCounty(order.getSendDistrict());
+	    WaybillParamsDto.setSendAddress(order.getSendAddress());
+	    WaybillParamsDto.setReceiveMan(order.getReceiver());
+	    WaybillParamsDto.setReceivePhone(order.getReceiverPhone());
+	    WaybillParamsDto.setReceiveProvince(order.getReceiverProvince());
+	    WaybillParamsDto.setReceiveCity(order.getReceiverCity());
+	    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
+	    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
+	   
+	    List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
+	    List<PlanDetail> planDetailList = new ArrayList<PlanDetail>(orderProductList.size());
+	    for (OrderProduct orderProduct : orderProductList) {
+	    	PlanDetail planDetail = new PlanDetail();
+	    	planDetail.setGoodsName(orderProduct.getName());
+	    	planDetail.setGoodsSpec(orderProduct.getSpec());
+	    	planDetail.setUnit(orderProduct.getSku());
+	    	planDetail.setPlanAmount(orderProduct.getNum().floatValue());
+	    	planDetail.setPayPrice(orderProduct.getPrice().floatValue());
+	    	planDetail.setPayTotal(orderProduct.getTotal().floatValue());
+	    	planDetail.setCompanyId(companyId);
+	    	planDetail.setIsDeleted((short) 0);
+	    	planDetail.setCreateDate(new Date());
+	    	planDetail.setCreateId(loginUser.getUserId());
+	    	planDetail.setCreateName(loginUser.getRealName());
+	    	planDetailList.add(planDetail);
+	    }
+	    WaybillParamsDto.setPlanDetailList(planDetailList);
+	    
+	    
+	    
+	    
+	    
+	    
+	   return null; 
+	}
+
+
+  
 
 
 }
