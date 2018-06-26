@@ -1,6 +1,8 @@
 package com.lcdt.userinfo.dao;
 
+import com.lcdt.userinfo.dto.DriverDto;
 import com.lcdt.userinfo.model.Driver;
+
 import java.util.List;
 
 public interface DriverMapper {
@@ -36,4 +38,6 @@ public interface DriverMapper {
     int updateGpsStatus(Driver record);
 
     int updateLocation(Driver driver);
+
+    List<DriverDto> selectForManager(DriverDto driverDto);
 }

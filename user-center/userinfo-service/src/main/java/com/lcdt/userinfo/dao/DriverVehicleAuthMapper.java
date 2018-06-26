@@ -5,6 +5,7 @@ import com.lcdt.userinfo.web.controller.api.admin.dto.DriverQueryDto;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DriverVehicleAuthMapper {
     int deleteByPrimaryKey(Long authId);
@@ -24,5 +25,7 @@ public interface DriverVehicleAuthMapper {
     void updateDefault(@Param("driverId") Long driverId);
 
     List<DriverVehicleAuth> selectByDriverQueryDto(DriverQueryDto driverQueryDto);
+
+    List<Map<String,?>> selectByDriverIds(List<Long> driverIds);
 
 }
