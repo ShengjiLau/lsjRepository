@@ -3,6 +3,7 @@ package com.lcdt.contract.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import com.lcdt.contract.dao.OrderApprovalMapper;
 import com.lcdt.contract.model.OrderApproval;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -28,7 +30,10 @@ import com.lcdt.contract.model.Order;
 import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.service.OrderService;
 import com.lcdt.contract.web.dto.OrderDto;
+import com.lcdt.traffic.dto.WaybillParamsDto;
+import com.lcdt.traffic.model.PlanDetail;
 import com.lcdt.traffic.model.WaybillPlan;
+import com.lcdt.traffic.vo.ConstantVO;
 
 
 /**
@@ -53,9 +58,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderProductMapper orderProductMapper;
     
-    private 
-
-
+    
     @Override
     public int addOrder(OrderDto orderDto) {
         BigDecimal aTotal = new BigDecimal(0);// aTotal为所有商品总价格
@@ -309,18 +312,61 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public Boolean generateTrafficPlan(Long orderId) {
+		int purchaseFlag = 1;
+		int salesFlag = 2;
+		
 		Order order = orderMapper.selectByPrimaryKey(orderId);
-		WaybillPlan WaybillPlan = new WaybillPlan();
-		WaybillPlan.setCustomerId(order.getSupplierId());
-		WaybillPlan.setCustomerName(order.getSupplier());
-		
-		
-		
-		
-		
-		
-		
-		return null;
+		WaybillParamsDto WaybillParamsDto = new WaybillParamsDto();
+		WaybillParamsDto.setCustomerId(order.getSupplierId());
+		WaybillParamsDto.setCustomerName(order.getSupplier());
+		Long companyId = SecurityInfoGetter.getCompanyId();
+	    User loginUser = SecurityInfoGetter.getUser();
+	    UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+	    WaybillParamsDto.setDeptNames(userCompRel.getDeptNames());
+	    WaybillParamsDto.setCreateId(loginUser.getUserId());
+	    WaybillParamsDto.setCreateName(loginUser.getRealName());
+	    WaybillParamsDto.setCompanyId(companyId);
+	    WaybillParamsDto.setCompanyName(userCompRel.getCompany().getFullName()); //企业名称
+	    WaybillParamsDto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
+	    WaybillParamsDto.setSalesOrder(order.getOrderSerialNo());
+	    WaybillParamsDto.setSendMan(order.getSender());
+	    WaybillParamsDto.setSendPhone(order.getSenderPhone());
+	    WaybillParamsDto.setSendProvince(order.getSendProvince());
+	    WaybillParamsDto.setSendCity(order.getSendCity());
+	    WaybillParamsDto.setSendCounty(order.getSendDistrict());
+	    WaybillParamsDto.setSendAddress(order.getSendAddress());
+	    WaybillParamsDto.setReceiveMan(order.getReceiver());
+	    WaybillParamsDto.setReceivePhone(order.getReceiverPhone());
+	    WaybillParamsDto.setReceiveProvince(order.getReceiverProvince());
+	    WaybillParamsDto.setReceiveCity(order.getReceiverCity());
+	    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
+	    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
+	   
+	    List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
+	    List<PlanDetail> planDetailList = new ArrayList<PlanDetail>(orderProductList.size());
+	    for (OrderProduct orderProduct : orderProductList) {
+	    	PlanDetail planDetail = new PlanDetail();
+	    	planDetail.setGoodsName(orderProduct.getName());
+	    	planDetail.setGoodsSpec(orderProduct.getSpec());
+	    	planDetail.setUnit(orderProduct.getSku());
+	    	planDetail.setPlanAmount(orderProduct.getNum().floatValue());
+	    	planDetail.setPayPrice(orderProduct.getPrice().floatValue());
+	    	planDetail.setPayTotal(orderProduct.getTotal().floatValue());
+	    	planDetail.setCompanyId(companyId);
+	    	planDetail.setIsDeleted((short) 0);
+	    	planDetail.setCreateDate(new Date());
+	    	planDetail.setCreateId(loginUser.getUserId());
+	    	planDetail.setCreateName(loginUser.getRealName());
+	    	planDetailList.add(planDetail);
+	    }
+	    WaybillParamsDto.setPlanDetailList(planDetailList);
+	    
+	    
+	    
+	    
+	    
+	    
+	   return null; 
 	}
 
 
