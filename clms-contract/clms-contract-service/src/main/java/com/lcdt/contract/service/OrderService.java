@@ -70,8 +70,12 @@ public interface OrderService {
 	 */
 	Boolean generateInWarehousePlan(Long orderId);
 	
-	
-	
+	/**
+	 * 销售单生成出库计划
+	 * @param orderId
+	 * @return
+	 */
+	Boolean generateOutWarehousePlan(Long orderId);
 		
 
 }

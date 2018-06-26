@@ -11,6 +11,8 @@ import com.lcdt.contract.dao.OrderApprovalMapper;
 import com.lcdt.contract.model.OrderApproval;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.warehouse.dto.OutWhPlanDto;
+import com.lcdt.warehouse.dto.OutWhPlanGoodsDto;
 import com.lcdt.warehouse.rpc.WarehouseRpcService;
 
 import org.slf4j.Logger;
@@ -429,11 +431,48 @@ public class OrderServiceImpl implements OrderService {
 		
 		
 		
-		
+		//warehouseRpcService.
 		
 		
 		
 		return null;
+	}
+
+
+	@Override
+	public Boolean generateOutWarehousePlan(Long orderId) {
+		Order order = orderMapper.selectByPrimaryKey(orderId);
+		
+		OutWhPlanDto outWhPlanDto = new OutWhPlanDto();
+		Long companyId = SecurityInfoGetter.getCompanyId();
+	    User loginUser = SecurityInfoGetter.getUser();
+	    UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+		outWhPlanDto.setCompanyId(companyId);
+		outWhPlanDto.setCreateUserId(loginUser.getUserId());
+		outWhPlanDto.setCustomerId(order.getSupplierId());
+		outWhPlanDto.setCustomerName(order.getSupplier());
+		outWhPlanDto.setContractNo(order.getContractCode());
+		outWhPlanDto.setGroupId(order.getGroupId());
+		outWhPlanDto.setWareHouseId(order.getWarehouseId());
+		outWhPlanDto.setWarehouseName(order.getReceiveWarehouse());
+		
+		List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
+		List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<>(orderProductList.size());
+		for (OrderProduct orderProduct : orderProductList) {
+			OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
+			
+			
+			outWhPlanGoodsDtoList.add(outWhPlanGoodsDto);
+		}
+		outWhPlanDto.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);
+		
+		Boolean flag = warehouseRpcService.outWhPlanAdd(outWhPlanDto);
+		if (flag) {
+			return true;
+		}else {
+			return false;
+		}
+	
 	}
 
 	
