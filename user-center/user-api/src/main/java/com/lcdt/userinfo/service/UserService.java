@@ -4,6 +4,7 @@ import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.exception.UserNotExistException;
+import com.lcdt.userinfo.model.AdminUser;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 
@@ -36,4 +37,8 @@ public interface UserService {
 	User resetPwd(String username,String pwd);
 
 	boolean isUserAdmin(Long userId);
+
+	boolean addUserAdmin(AdminUser adminUser);
+
+	boolean deleteUserAdmin(AdminUser adminUser);
 }

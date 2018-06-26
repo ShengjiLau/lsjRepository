@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.userinfo.dao.DictionaryMapper">
+    <resultMap id="BaseResultMap" type="com.lcdt.userinfo.model.Dictionary">
+        <id column="dictionary_id" jdbcType="INTEGER" property="dictionaryId"/>
+        <result column="dictionary_key" jdbcType="VARCHAR" property="dictionaryKey"/>
+        <result column="dictionary_value" jdbcType="VARCHAR" property="dictionaryValue"/>
+        <result column="dictionary_code" jdbcType="VARCHAR" property="dictionaryCode"/>
+        <result column="dictionary_type" jdbcType="VARCHAR" property="dictionaryType"/>
+        <result column="dictionary_status" jdbcType="VARCHAR" property="dictionaryStatus"/>
+        <result column="dictionary_code_value" jdbcType="VARCHAR" property="dictionaryCodeValue"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from dictionary
+    where dictionary_id = #{dictionaryId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.lcdt.userinfo.model.Dictionary">
+        <selectKey keyProperty="dictionaryId" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into dictionary (dictionary_key, dictionary_value, dictionary_code,
+        dictionary_type, dictionary_status)
+        values (#{dictionaryKey,jdbcType=VARCHAR}, #{dictionaryValue,jdbcType=VARCHAR},
+        #{dictionaryCode,jdbcType=VARCHAR},
+        #{dictionaryType,jdbcType=VARCHAR}, #{dictionaryStatus,jdbcType=VARCHAR})
+    </insert>
+    <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.Dictionary">
+    update dictionary
+    set dictionary_key = #{dictionaryKey,jdbcType=VARCHAR},
+      dictionary_value = #{dictionaryValue,jdbcType=VARCHAR},
+      dictionary_code = #{dictionaryCode,jdbcType=VARCHAR},
+      dictionary_type = #{dictionaryType,jdbcType=VARCHAR},
+      dictionary_status = #{dictionaryStatus,jdbcType=VARCHAR}
+    where dictionary_id = #{dictionaryId,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select dictionary_id, dictionary_key, dictionary_value, dictionary_code, dictionary_type, 
+    dictionary_status
+    from dictionary
+    where dictionary_id = #{dictionaryId,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="dictionary_column">
+            <property name="table_name" value="d"></property>
+        </include>
+        ,d1.dictionary_value dictionary_code_value
+        from dictionary d left join dictionary d1 on d.dictionary_code = d1.dictionary_key
+        where 1=1
+        <if test="dictionary != null">
+            <include refid="dictionary_conditions">
+                <property name="table_name" value="d"></property>
+            </include>
+        </if>
+    </select>
+
+    <sql id="dictionary_conditions">
+        <if test="dictionary.dictionaryKey != null and dictionary.dictionaryKey.length > 0">
+            and ${table_name}.dictionary_key like concat('%',#{dictionary.dictionaryKey,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="dictionary.dictionaryValue != null and dictionary.dictionaryValue.length > 0">
+            and ${table_name}.dictionary_value like concat('%',#{dictionary.dictionaryValue,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="dictionary.dictionaryCode != null and dictionary.dictionaryCode.length > 0">
+            and ${table_name}.dictionary_code = #{dictionary.dictionaryCode,jdbcType=VARCHAR}
+        </if>
+        <if test="dictionary.dictionaryType != null and dictionary.dictionaryType.length > 0">
+            and ${table_name}.dictionary_type = #{dictionary.dictionaryType,jdbcType=VARCHAR}
+        </if>
+    </sql>
+
+    <sql id="dictionary_column">
+    ${table_name}.dictionary_id,
+    ${table_name}.dictionary_key,
+    ${table_name}.dictionary_value,
+    ${table_name}.dictionary_code,
+    ${table_name}.dictionary_type,
+    ${table_name}.dictionary_status
+  </sql>
+</mapper>

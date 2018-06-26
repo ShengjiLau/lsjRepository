@@ -1,11 +1,13 @@
 package com.lcdt.userinfo.web.controller.api.admin;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dao.UserMapper;
 import com.lcdt.userinfo.model.AdminUser;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.utils.JSONResponseUtil;
 import com.lcdt.userinfo.utils.ResponseMessage;
 import com.lcdt.userinfo.web.dto.UserQueryDto;
@@ -28,6 +30,9 @@ public class UserManageApi {
     @Autowired
     UserMapper mapper;
 
+    @Autowired
+    UserService userService;
+
     @PostMapping("/list")
     public ResponseMessage list(UserQueryDto userQueryDto){
         PageInfo<AdminUser> pageInfo = PageHelper.startPage(userQueryDto.getPageNo(), userQueryDto.getPageSize()).doSelectPageInfo(() -> mapper.selectByUserDto(userQueryDto));
@@ -42,6 +47,43 @@ public class UserManageApi {
         return JSONResponseUtil.success(user);
     }
 
+    @PostMapping("/addUserAdmin")
+    public ResponseMessage addUserAdmin(AdminUser adminUser) {
+        JSONObject jo = new JSONObject();
+        if(adminUser == null || adminUser.getAdminUserId() == null){
+            jo.put("code",-2);
+            jo.put("message","参数不正确！");
+        }
+        try {
+            userService.addUserAdmin(adminUser);
+            jo.put("code",0);
+        }catch(Exception e){
+            e.printStackTrace();
+            jo.put("code",-2);
+            jo.put("message","设置后端用户失败！");
+        }
+
+        return JSONResponseUtil.success(adminUser);
+    }
+
+    @PostMapping("/deleteUserAdmin")
+    public ResponseMessage deleteUserAdmin(AdminUser adminUser) {
+        JSONObject jo = new JSONObject();
+        if(adminUser == null || adminUser.getAdminUserId() == null || adminUser.getAdminId() != null){
+            jo.put("code",-2);
+            jo.put("message","参数不正确！");
+        }
+        try {
+            userService.deleteUserAdmin(adminUser);
+            jo.put("code",0);
+        }catch(Exception e){
+            e.printStackTrace();
+            jo.put("code",-2);
+            jo.put("message","取消后端用户失败！");
+        }
+
+        return JSONResponseUtil.success(adminUser);
+    }
 
 
 

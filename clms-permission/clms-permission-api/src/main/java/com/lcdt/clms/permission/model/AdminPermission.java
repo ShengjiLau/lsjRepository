@@ -9,6 +9,8 @@ public class AdminPermission {
 
     private String adminPermissionCategory;
 
+    private String adminPermissionCategoryValue;
+
     public Long getAdminPermissionId() {
         return adminPermissionId;
     }
@@ -39,5 +41,13 @@ public class AdminPermission {
 
     public void setAdminPermissionCategory(String adminPermissionCategory) {
         this.adminPermissionCategory = adminPermissionCategory == null ? null : adminPermissionCategory.trim();
+    }
+
+    public String getAdminPermissionCategoryValue() {
+        return adminPermissionCategoryValue;
+    }
+
+    public void setAdminPermissionCategoryValue(String adminPermissionCategoryValue) {
+        this.adminPermissionCategoryValue = adminPermissionCategoryValue;
     }
 }

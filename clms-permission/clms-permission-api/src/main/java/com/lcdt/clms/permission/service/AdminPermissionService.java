@@ -1,5 +1,4 @@
-package com.lcdt.clms.permission.dao;
-
+package com.lcdt.clms.permission.service;
 
 
 import com.lcdt.clms.permission.dto.AdminPermissionQueryDto;
@@ -7,7 +6,8 @@ import com.lcdt.clms.permission.model.AdminPermission;
 
 import java.util.List;
 
-public interface AdminPermissionMapper {
+public interface AdminPermissionService {
+
     int deleteByPrimaryKey(Long adminPermissionId);
 
     int insert(AdminPermission record);
