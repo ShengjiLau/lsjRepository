@@ -28,6 +28,7 @@ import com.lcdt.contract.model.Order;
 import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.service.OrderService;
 import com.lcdt.contract.web.dto.OrderDto;
+import com.lcdt.traffic.model.WaybillPlan;
 
 
 /**
@@ -51,6 +52,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderProductMapper orderProductMapper;
+    
+    private 
 
 
     @Override
@@ -304,57 +307,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-    //得到数据库中商品表中orderId等于此需要修改的订单的orderId的所有商品的opId
-//	List<Long> orderProductIdList=nonautomaticMapper.selectOrderProductIdByOrderId(order.getOrderId());
-//	List<OrderProduct> list1=new ArrayList<OrderProduct>();
-//	List<OrderProduct> list2=new ArrayList<OrderProduct>();
-//	if(null!=orderDto.getOrderProductList()&&orderDto.getOrderProductList().size()!=0) {
-//		for(OrderProduct orderProduct:orderDto.getOrderProductList()) {
-//			if(null==orderProduct.getOpId()) {
-//				orderProduct.setOrderId(orderDto.getOrderId());
-//				list1.add(orderProduct);
-//			}else {
-//				list2.add(orderProduct);
-//				logger.debug("测试输出list2");
-//				if(null!=orderProductIdList&&orderProductIdList.size()!=0) {
-//					 Iterator<Long> it = orderProductIdList.iterator();
-//					 logger.debug("测试输出点位a");
-//					 while(it.hasNext()) {
-//						 logger.debug("测试输出点位b");
-//						 Long ipl=it.next();
-//						 logger.debug("in.next():"+ipl);
-//						 logger.debug("orderProduct.getOpId():"+orderProduct);
-//						 if(ipl==orderProduct.getOpId().longValue()) {
-//							 logger.debug("测试输出点位c");
-//							 it.remove();
-//							 logger.debug("测试输出点位d");
-//						 }
-//					 }
-// for循环效率高 , 但遍历过程不可执行remove操作					 
-//					for(Long opId:orderProductIdList) {
-//						if(orderProduct.getOpId()==opId) {
-//							orderProductIdList.remove(opId);
-//						}
-//					}
-//				}
-//			}
-//		}
-//	}
-    //list1为没有opId的,是新增的商品
-//	if(list1.size()>0) {
-//		i+= nonautomaticMapper.insertOrderProductByBatch(list1);
-//		logger.debug("新增订单商品"+i);
-//	}
-//	//orderProductIdList剩余的商品id不存在于修改订单中,是删除商品
-//	if(orderProductIdList.size()>0) {
-//		i+= nonautomaticMapper.deleteOrderProducByBatch(orderProductIdList);
-//		logger.debug("删除订单商品"+i);
-//	}
-//	//list2为有数据库和修改订单中均有相同商品id,是修改商品
-//	if(list2.size()>0) {
-//		i+= nonautomaticMapper.updateOrderProductByBatch(list2);
-//		logger.debug("修改订单商品"+i);
-//	}
+	@Override
+	public Boolean generateTrafficPlan(Long orderId) {
+		Order order = orderMapper.selectByPrimaryKey(orderId);
+		WaybillPlan WaybillPlan = new WaybillPlan();
+		WaybillPlan.setCustomerId(order.getSupplierId());
+		WaybillPlan.setCustomerName(order.getSupplier());
+		
+		
+		
+		
+		
+		
+		
+		return null;
+	}
+
+
+  
 
 
 }

@@ -57,6 +57,10 @@ public interface OrderService {
 	int updateOrderIsDraft(Long orderId,Short isDraft);
 	
 	
+	/**
+	 * 生成运输计划
+	 */
+	Boolean generateTrafficPlan(Long orderId);
 	
 	
 		
