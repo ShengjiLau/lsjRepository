@@ -1,5 +1,6 @@
 package com.lcdt.userinfo.dao;
 
+import com.lcdt.userinfo.dto.DriverDto;
 import com.lcdt.userinfo.model.Driver;
 import com.lcdt.userinfo.web.controller.api.admin.dto.DriverQueryDto;
 
@@ -42,4 +43,6 @@ public interface DriverMapper {
     List<Driver> selectByDriverQueryDto(DriverQueryDto driverQueryDto);
 
     Integer selectCarnumBydriverId(Long driverId);
+
+    List<DriverDto> selectForManager(DriverDto driverDto);
 }
