@@ -164,7 +164,7 @@ public class TrafficRpcImpl implements TrafficRpc {
 
     @Transactional
     @Override
-    public WaybillPlan purchase4Plan(WaybillParamsDto waybillParamsDto) {
+    public WaybillPlan purchase4Plan(WaybillParamsDto waybillParamsDto,int flag) {
         WaybillPlan vo = new WaybillPlan(); //复制传来对象值
         BeanUtils.copyProperties(waybillParamsDto, vo);
         vo.setSendOrderType(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI);
