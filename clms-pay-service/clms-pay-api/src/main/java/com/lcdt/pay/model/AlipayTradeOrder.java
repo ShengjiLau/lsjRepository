@@ -2,8 +2,6 @@ package com.lcdt.pay.model;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
-import com.lcdt.pay.utils.MoneyNumUtil;
-import com.lcdt.pay.utils.OrderNoGenerator;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -11,6 +11,7 @@ import com.lcdt.contract.dao.OrderApprovalMapper;
 import com.lcdt.contract.model.OrderApproval;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.warehouse.rpc.WarehouseRpcService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,6 +68,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Reference
     private TrafficRpc trafficRpc;
+    
+    @Reference
+    private WarehouseRpcService warehouseRpcService;
     
     
 

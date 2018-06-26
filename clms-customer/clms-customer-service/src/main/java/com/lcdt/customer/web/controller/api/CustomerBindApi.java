@@ -69,6 +69,7 @@ public class CustomerBindApi {
 	@ApiOperation("获取邀请邮件内容")
 	@RequestMapping(value = "/invitecustomer",method = RequestMethod.POST)
 	@ResponseBody
+	@PreAuthorize("hasAnyAuthority('customer_invite') or hasRole('ROLE_SYS_ADMIN')")
 	public InviteDto inviteCustomer(Long customerId) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		User user = SecurityInfoGetter.getUser();
