@@ -120,7 +120,8 @@ public class CheckController {
         check.setCreateName(userName);
         check.setCompanyId(companyId);
         List<Map<String, Object>> items = checkSaveDto.getItems();
-
+        System.out.println("check.getWarehouseId:"+check.getWarehouseId());
+        System.out.println("check.getWarehouseName:"+check.getWarehouseName());
         boolean result = checkService.insertCheckAndItems(check, items);
 
         JSONObject jsonObject = new JSONObject();
