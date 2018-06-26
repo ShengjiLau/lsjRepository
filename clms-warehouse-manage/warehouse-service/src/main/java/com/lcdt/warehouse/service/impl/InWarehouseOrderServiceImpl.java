@@ -79,8 +79,12 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
             }
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);
         }
+
+
+        //入库单扣减费用
         if (result > 0) {
-            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"storage_service", 1, params.getCreateName(),"生成入库单...");
+            InWarehouseOrder resultInWarehouseOrder=baseMapper.selectById(inWarehouseOrder.getInorderId());
+            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"storage_service", 1, params.getCreateName(),"入库单消费-"+resultInWarehouseOrder.getInOrderCode());
         }
         return result;
     }
@@ -208,8 +212,9 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
         }
 
         //入库单费用统计
-        if (result>0) {
-            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"storage_service", 1,params.getCreateName(),"生成入库单...");
+        if (result > 0) {
+            InWarehouseOrder resultInWarehouseOrder=baseMapper.selectById(inWarehouseOrder.getInorderId());
+            companyServiceCountService.reduceCompanyProductCount(params.getCompanyId(),"storage_service", 1, params.getCreateName(),"入库单消费-"+resultInWarehouseOrder.getInOrderCode());
         }
         return result;
     }
