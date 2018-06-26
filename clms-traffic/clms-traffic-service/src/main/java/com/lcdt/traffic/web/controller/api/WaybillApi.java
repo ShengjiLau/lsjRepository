@@ -31,9 +31,6 @@ public class WaybillApi {
     @Autowired
     private WaybillService waybillService;
 
-    @Reference
-    private QuartzRpc quartzRpc;
-
     @Autowired
     private WaybillRpcService waybillRpcService;
 
@@ -218,15 +215,5 @@ public class WaybillApi {
         } else {
             throw new RuntimeException("修改失败");
         }
-    }
-
-    @ApiOperation("运单手动定时任务")
-    @RequestMapping(value = "/timer", method = RequestMethod.GET)
-    public JSONObject startPoistionTimer() {
-        quartzRpc.startWaybillPositionTimer();
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code", 0);
-        jsonObject.put("message", "开启成功");
-        return jsonObject;
     }
 }
