@@ -23,7 +23,7 @@ public interface WarehouseRpcService {
 
 
     /***
-     * 计划新增
+     * 销售单生成出库计划
      * @param outWhPlanDto
      * @return
      */
