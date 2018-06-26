@@ -34,9 +34,11 @@ public interface TrafficRpc {
     /***
      * 采购单生成运计划
      * @param waybillParamsDto
+     *
+     * @param flag (1--采购单生成运输计划; 2--销售单生成运输计划)
      * @return
      */
-    WaybillPlan purchase4Plan(WaybillParamsDto waybillParamsDto);
+    WaybillPlan purchase4Plan(WaybillParamsDto waybillParamsDto,int flag);
 
 
 
