@@ -63,6 +63,15 @@ public interface OrderService {
 	Boolean generateTrafficPlan(Long orderId);
 	
 	
+	/**
+	 * 采购单生成入库计划
+	 * @param orderId
+	 * @return
+	 */
+	Boolean generateInWarehousePlan(Long orderId);
+	
+	
+	
 		
 
 }

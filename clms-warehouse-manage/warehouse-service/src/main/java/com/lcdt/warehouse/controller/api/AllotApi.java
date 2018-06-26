@@ -36,7 +36,7 @@ public class AllotApi {
 
     @ApiOperation(value = "调拨单列表", notes = "调拨单列表数据")
     @GetMapping("/allotList")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_get')")
     public ResponseMessage allotList(@Validated AllotDto dto,
                                      @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
                                      @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
@@ -112,7 +112,7 @@ public class AllotApi {
 
     @ApiOperation("详情")
     @RequestMapping(value = "/allotDetail", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_detail')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_get')")
     public JSONObject allotDetail(@ApiParam(value = "调拨单id",required = true) @RequestParam Long allotId) {
         AllotDto dto = allotService.getAllotInfo(allotId);
         if (dto != null) {
