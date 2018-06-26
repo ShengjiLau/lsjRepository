@@ -74,6 +74,36 @@ public class Driver implements Serializable,ResponseData {
 
     private Integer authStatus;
 
+    private String authRemark;
+
+    private String authUser;
+
+    private Date authTime;
+
+    public Date getAuthTime() {
+        return authTime;
+    }
+
+    public void setAuthTime(Date authTime) {
+        this.authTime = authTime;
+    }
+
+    public String getAuthUser() {
+        return authUser;
+    }
+
+    public void setAuthUser(String authUser) {
+        this.authUser = authUser;
+    }
+
+    public String getAuthRemark() {
+        return authRemark;
+    }
+
+    public void setAuthRemark(String authRemark) {
+        this.authRemark = authRemark;
+    }
+
     public Integer getAuthStatus() {
         return authStatus;
     }

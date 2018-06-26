@@ -35,6 +35,8 @@
     <result column="update_name" jdbcType="VARCHAR" property="updateName" />
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
+    <result column="auth_status" jdbcType="INTEGER" property="authStatus" />
+    <result column="auth_remark" jdbcType="VARCHAR" property="authRemark" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_driver
@@ -91,7 +93,11 @@
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
       update_date = #{updateDate,jdbcType=TIMESTAMP},
-      is_deleted = #{isDeleted,jdbcType=SMALLINT}
+      is_deleted = #{isDeleted,jdbcType=SMALLINT},
+      auth_status = #{authStatus},
+      auth_remark = #{authRemark},
+      auth_time = #{authTime},
+      auth_user = #{authUser}
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -100,7 +106,7 @@
     driver_city, driver_district, driver_address, driver_header_img, driver_license_photo, 
     driver_ID_photo, driver_ID_neg_photo, driver_remark, longitude,latitude,current_location,
     short_current_location, gps_status,location_time,
-    create_id, create_name, create_date, update_id, update_name, update_date, is_deleted
+    create_id, create_name, create_date, update_id, update_name, update_date, is_deleted,auth_status,auth_remark
     from t_driver
     where user_id = #{userId,jdbcType=BIGINT}
   </select>
@@ -136,6 +142,45 @@
     location_time = CURRENT_TIMESTAMP
     where driver_phone = #{driverPhone,jdbcType=VARCHAR}
   </update>
+  <select id="selectByDriverQueryDto" resultMap="BaseResultMap" parameterType="com.lcdt.userinfo.web.controller.api.admin.dto.DriverQueryDto">
+    SELECT * from t_driver d
+    <where>
+      <if test="driverName != null and driverName != ''">
+        d.driver_name like concat(concat('%',#{driverName}),'%')
+      </if>
+
+      <if test="driverPhone != null and driverPhone != ''">
+        d.driver_phone like concat(concat('%',#{driverPhone}),'%')
+      </if>
+
+      <if test="driverProvince != null and driverProvince != ''">
+        d.driver_province like concat(concat('%',#{driverProvince}),'%')
+      </if>
+
+      <if test="driverCity != null and driverCity != ''">
+        d.driver_city like concat(concat('%',#{driverCity}),'%')
+      </if>
+
+      <if test="driverDistrict != null and driverDistrict != ''">
+        d.driver_district like concat(concat('%',#{driverDistrict}),'%')
+      </if>
+
+      <if test="authStatus != null and authStatus != ''">
+        d.auth_status = #{authStatus}
+      </if>
+      <if test="createDateSince != null ">
+        and d.create_date  &gt;= #{createDateSince}
+      </if>
+      <if test="createDateUntil != null ">
+        and d.create_date  &lt;=  #{createDateUntil}
+      </if>
+
+    </where>
+  </select>
+
+  <select id="selectCarnumBydriverId" resultType="Integer">
+  select count(*) from t_driver_vehicle_auth where driver_id = #{driverId}
+  </select>
 
 
 
