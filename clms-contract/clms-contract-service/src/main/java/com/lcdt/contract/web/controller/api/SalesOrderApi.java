@@ -248,6 +248,27 @@ public class SalesOrderApi {
 	}
 	
 	
+	@ApiOperation("生成运输计划")
+	@PostMapping("/trafficPlan")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_traffic_plan')")
+	public JSONObject generateTrafficPlan(@ApiParam(value = "采购订单id",required = true) @RequestParam Long orderId) {
+		Boolean flag = orderService.generateTrafficPlan(orderId);
+		if (flag) {
+			JSONObject jsonObject = new JSONObject();
+	        jsonObject.put("code", 0);
+	        jsonObject.put("message", "操作成功");
+	        return jsonObject;
+		}else {
+			throw new RuntimeException("操作失败");
+		}
+
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 	
