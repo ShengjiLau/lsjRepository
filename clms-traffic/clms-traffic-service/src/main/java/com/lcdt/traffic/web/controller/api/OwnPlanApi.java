@@ -363,65 +363,6 @@ public class OwnPlanApi {
     }
 
 
-
-
-    @ApiOperation("采购单--计划")
-    @RequestMapping(value = "/purchase4Plan",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
-    public JSONObject purchase4Plan(@RequestBody WaybillParamsDto dto, BindingResult bindingResult) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        User loginUser = SecurityInfoGetter.getUser();
-        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
-        dto.setDeptNames(userCompRel.getDeptNames());
-        dto.setCreateId(loginUser.getUserId());
-        dto.setCreateName(loginUser.getRealName());
-        dto.setCompanyId(companyId);
-        dto.setCompanyName(userCompRel.getCompany().getFullName()); //企业名称
-        dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
-
-        JSONObject jsonObject = new JSONObject();
-        if (bindingResult.hasErrors()) {
-            jsonObject.put("code", -1);
-            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
-            return jsonObject;
-        }
-        WaybillPlan waybillPlan = plan4CreateService.purchase4Plan(dto);
-        jsonObject.put("code", 0);
-        jsonObject.put("data",waybillPlan);
-        jsonObject.put("message", "创建成功！");
-        return jsonObject;
-    }
-
-
-    @ApiOperation("入库单--计划")
-    @RequestMapping(value = "/inBill4Plan",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN')")
-    public JSONObject inBill4Plan(@RequestBody WaybillParamsDto dto, BindingResult bindingResult) {
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        User loginUser = SecurityInfoGetter.getUser();
-        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
-        dto.setDeptNames(userCompRel.getDeptNames());
-        dto.setCreateId(loginUser.getUserId());
-        dto.setCreateName(loginUser.getRealName());
-        dto.setCompanyId(companyId);
-        dto.setCompanyName(userCompRel.getCompany().getFullName()); //企业名称
-        dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
-
-        JSONObject jsonObject = new JSONObject();
-        if (bindingResult.hasErrors()) {
-            jsonObject.put("code", -1);
-            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
-            return jsonObject;
-        }
-        WaybillPlan waybillPlan = plan4CreateService.purchase4Plan(dto);
-        jsonObject.put("code", 0);
-        jsonObject.put("data",waybillPlan);
-        jsonObject.put("message", "创建成功！");
-        return jsonObject;
-    }
-
-
-
 }
 
 

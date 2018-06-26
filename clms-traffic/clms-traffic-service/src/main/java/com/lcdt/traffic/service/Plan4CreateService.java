@@ -22,14 +22,6 @@ public interface Plan4CreateService {
     WaybillPlan createWaybillPlan(WaybillParamsDto dto, short flag);
 
 
-    /***
-     * 采购单生成运计划
-     * @param waybillParamsDto
-     * @return
-     */
-    WaybillPlan purchase4Plan(WaybillParamsDto waybillParamsDto);
-
-
 
 
 }
