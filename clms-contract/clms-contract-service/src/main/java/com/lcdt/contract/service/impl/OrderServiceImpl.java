@@ -3,7 +3,6 @@ package com.lcdt.contract.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -327,11 +326,14 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.updateIsDraft(orderId, isDraft);
     }
 
-
+    /**
+     * 订单生成运输计划
+     */
 	@Override
 	public Boolean generateTrafficPlan(Long orderId) {
 		int purchaseFlag = 1;
 		int salesFlag = 2;
+		int flag;
 		
 		Order order = orderMapper.selectByPrimaryKey(orderId);
 		WaybillParamsDto WaybillParamsDto = new WaybillParamsDto();
@@ -347,19 +349,36 @@ public class OrderServiceImpl implements OrderService {
 	    WaybillParamsDto.setCompanyName(userCompRel.getCompany().getFullName()); //企业名称
 	    WaybillParamsDto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
 	    WaybillParamsDto.setSalesOrder(order.getOrderSerialNo());
-	    WaybillParamsDto.setSendMan(order.getSender());
-	    WaybillParamsDto.setSendPhone(order.getSenderPhone());
-	    WaybillParamsDto.setSendProvince(order.getSendProvince());
-	    WaybillParamsDto.setSendCity(order.getSendCity());
-	    WaybillParamsDto.setSendCounty(order.getSendDistrict());
-	    WaybillParamsDto.setSendAddress(order.getSendAddress());
-	    WaybillParamsDto.setReceiveMan(order.getReceiver());
-	    WaybillParamsDto.setReceivePhone(order.getReceiverPhone());
-	    WaybillParamsDto.setReceiveProvince(order.getReceiverProvince());
-	    WaybillParamsDto.setReceiveCity(order.getReceiverCity());
-	    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
-	    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
-	   
+	    if (0 == order.getOrderType()) {
+	    	WaybillParamsDto.setSendMan(order.getSender());
+		    WaybillParamsDto.setSendPhone(order.getSenderPhone());
+		    WaybillParamsDto.setSendProvince(order.getSendProvince());
+		    WaybillParamsDto.setSendCity(order.getSendCity());
+		    WaybillParamsDto.setSendCounty(order.getSendDistrict());
+		    WaybillParamsDto.setSendAddress(order.getSendAddress());
+		    WaybillParamsDto.setReceiveMan(order.getReceiver());
+		    WaybillParamsDto.setReceivePhone(order.getReceiverPhone());
+		    WaybillParamsDto.setReceiveProvince(order.getReceiverProvince());
+		    WaybillParamsDto.setReceiveCity(order.getReceiverCity());
+		    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
+		    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
+		    flag = 1;
+	    }else {
+	    	WaybillParamsDto.setSendMan(order.getReceiver());
+		    WaybillParamsDto.setSendPhone(order.getReceiverPhone());
+		    WaybillParamsDto.setSendProvince(order.getReceiverProvince());
+		    WaybillParamsDto.setSendCity(order.getReceiverCity());
+		    WaybillParamsDto.setSendCounty(order.getReceiveDistrict());
+		    WaybillParamsDto.setSendAddress(order.getReceiveAddress());
+		    WaybillParamsDto.setReceiveMan(order.getSender());
+		    WaybillParamsDto.setReceivePhone(order.getSenderPhone());
+		    WaybillParamsDto.setReceiveProvince(order.getSendProvince());
+		    WaybillParamsDto.setReceiveCity(order.getSendCity());
+		    WaybillParamsDto.setReceiveCounty(order.getSendDistrict());
+		    WaybillParamsDto.setReceiveAddress(order.getSendAddress());
+		    flag = 2;
+	    }
+	    
 	    List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
 	    List<PlanDetail> planDetailList = new ArrayList<PlanDetail>(orderProductList.size());
 	    for (OrderProduct orderProduct : orderProductList) {
@@ -379,14 +398,48 @@ public class OrderServiceImpl implements OrderService {
 	    }
 	    WaybillParamsDto.setPlanDetailList(planDetailList);
 	    
+	    WaybillPlan waybillPlan = trafficRpc.purchase4Plan(WaybillParamsDto, flag);
+	    if (null != waybillPlan) {
+	    	return true;
+	    }else {
+	    	return false;
+	    }
 	    
-	    
-	    
-	    
-	    
-	   return null; 
 	}
 
+	/**
+	 * 采购订单生成入库计划
+	 */
+	@Override
+	public Boolean generateInWarehousePlan(Long orderId) {
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		return null;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
 
   
 

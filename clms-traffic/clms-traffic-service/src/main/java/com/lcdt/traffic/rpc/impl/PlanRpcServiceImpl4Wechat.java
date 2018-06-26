@@ -727,6 +727,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             }
         }
         splitGoodsMapper.insert(splitGoods);
+        StringBuffer sb_goods = new StringBuffer(); //货物发送明细
         List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
         if (snatchGoods!=null) {
             List<SnatchGoodsDetail> list = snatchGoods.getSnatchGoodsDetailList();
@@ -761,6 +762,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                     planDetail.setUpdateId(user.getUserId());
                     planDetail.setUpdateTime(opDate);
                     planDetail.setUpdateName(user.getRealName());
+                    sb_goods.append(planDetail.getGoodsName()+":"+splitGoodsDetail.getAllotAmount()+";"); //发送消息
                     planDetailMapper.updateByPrimaryKey(planDetail);
 
                 }
@@ -778,25 +780,14 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             waybillDto.setCarrierCompanyId(splitGoods.getCarrierCompanyId());
             waybillDto.setCreateId(splitGoods.getCreateId());
             waybillDto.setCreateName(splitGoods.getCreateName());
-
-
             if(StringUtils.isEmpty(dto.getCarrierVehicle())) {
                 waybillDto.setVechicleNum(splitGoods.getCarrierVehicle());
             } else {
                 waybillDto.setVechicleNum(dto.getCarrierVehicle());
             }
-
-
-
             waybillDto.setDriverName(snatchGoods.getOfferName());
             waybillDto.setDriverId(snatchGoods.getOfferId());
             waybillDto.setDriverPhone(snatchGoods.getOfferPhone());
-
-       /*     if(!StringUtils.isEmpty(splitGoods.getCarrierCollectionIds())) {
-                waybillDto.setDriverName(splitGoods.getCarrierCollectionNames());
-                waybillDto.setDriverId(Long.valueOf(splitGoods.getCarrierCollectionIds()));
-            }*/
-
             waybillDto.setWaybillCode(waybillPlan.getSerialCode()); //流水号
             PlanBO.getInstance().toWaybillItemsDto(waybillPlan,splitGoods,waybillDto,waybillPlan.getPlanDetailList(),splitGoodsDetailList);
             if (null!=waybillDto) {
@@ -808,7 +799,31 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
         waybillPlan.setUpdateId(user.getUserId());
         waybillPlan.setUpdateName(user.getRealName());
         waybillPlan.setUpdateTime(new Date());
+
+        //派单消息
+        if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) {  //承运商
+            String sendAddress = waybillPlan.getSendProvince()+" "+waybillPlan.getSendCity()+" "+waybillPlan.getSendCounty()+" "+waybillPlan.getSendAddress();
+            String receiveAddress = waybillPlan.getReceiveProvince()+" "+waybillPlan.getReceiveCity()+" "+waybillPlan.getReceiveCounty()+" "+waybillPlan.getReceiveAddress();
+            DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(waybillPlan.getCompanyId(), user.getUserId()); //发送
+            User receiveUser = companyRpcService.findCompanyCreate(splitGoods.getCarrierCompanyId()); //承运商对应企业管理员
+            if (receiveUser!=null) {
+                DefaultNotifyReceiver defaultNotifyReceiver = NotifyUtils.notifyCarrierReceiver(splitGoods.getCarrierCompanyId(),receiveUser.getUserId(),receiveUser.getPhone()); //接收
+                CommonAttachment attachment = new CommonAttachment();
+                attachment.setPlanSerialNum(waybillPlan.getSerialCode());
+                attachment.setContractCustomer(waybillPlan.getCustomerName());
+                attachment.setOriginAddress(sendAddress);
+                attachment.setDestinationAdress(receiveAddress);
+                attachment.setGoodsDetail(sb_goods.toString());
+                TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("task_to_carrier", attachment, defaultNotifyReceiver, defaultNotifySender);
+                producer.sendNotifyEvent(plan_publish_event);
+            }
+        }
+
+
         waybillPlanMapper.updateWaybillPlan(waybillPlan);
+
+
+
 
         //router:直派
         Timeline event = new Timeline();
