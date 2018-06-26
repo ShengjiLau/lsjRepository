@@ -5,14 +5,20 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dao.DriverMapper;
 import com.lcdt.userinfo.dao.DriverVehicleAuthMapper;
 import com.lcdt.userinfo.model.AdminUser;
+import com.lcdt.userinfo.model.Driver;
 import com.lcdt.userinfo.model.DriverVehicleAuth;
+import com.lcdt.userinfo.service.DriverService;
 import com.lcdt.userinfo.utils.JSONResponseUtil;
 import com.lcdt.userinfo.utils.ResponseMessage;
+import com.lcdt.userinfo.dto.DriverDto;
 import com.lcdt.userinfo.web.controller.api.admin.dto.DriverQueryDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/company")
@@ -23,6 +29,9 @@ public class DriverManageApi {
 
     @Autowired
     DriverVehicleAuthMapper driverVehicleAuthMapper;
+
+    @Autowired
+    DriverService driverService;
 
     @PostMapping("/list")
     private ResponseMessage list(DriverQueryDto driverQueryDto){
@@ -38,5 +47,10 @@ public class DriverManageApi {
         return JSONResponseUtil.success(driverVehicleAuth);
     }
 
+    @GetMapping("/driverList")
+    private ResponseMessage driverList(DriverDto driverDto){
+        PageInfo<List<DriverDto>> pageInfo = driverService.driverListForManager(driverDto);
+        return JSONResponseUtil.success(pageInfo);
+    }
 
 }
