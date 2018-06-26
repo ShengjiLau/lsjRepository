@@ -57,7 +57,7 @@
                 a.company_id = #{companyId}
             </if>
             <if test="inventoryId != null">
-                a.inventory_id = #{inventoryId}
+                and a.inventory_id = #{inventoryId}
             </if>
 
             <if test="type != null">
