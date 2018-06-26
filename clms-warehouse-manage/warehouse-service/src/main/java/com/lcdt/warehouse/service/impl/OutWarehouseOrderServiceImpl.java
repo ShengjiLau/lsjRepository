@@ -74,16 +74,15 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
         //插入出库单
         result += baseMapper.insertOutWarehouseOrder(outWarehouseOrder);
         if (dto.getOutOrderGoodsInfoList() != null && dto.getOutOrderGoodsInfoList().size() > 0) {
-            List<OutOrderGoodsInfo> outOrderGoodsInfoList = new ArrayList<>();
-            dto.getOutOrderGoodsInfoList().forEach(goods -> {
+            List<OutOrderGoodsInfo> outOrderGoodsInfoList = dto.getOutOrderGoodsInfoList().stream().map(goods -> {
                 OutOrderGoodsInfo outOrderGoodsInfo = new OutOrderGoodsInfo();
                 BeanUtils.copyProperties(goods, outOrderGoodsInfo);
                 outOrderGoodsInfo.setOutorderId(outWarehouseOrder.getOutorderId());
                 outOrderGoodsInfo.setCompanyId(outWarehouseOrder.getCompanyId());
                 outOrderGoodsInfo.setOutboundQuantity(outOrderGoodsInfo.getGoodsNum());
-                outOrderGoodsInfoList.add(outOrderGoodsInfo);
                 inventoryService.lockInventoryNum(outOrderGoodsInfo.getInvertoryId(), outOrderGoodsInfo.getGoodsNum());
-            });
+                return outOrderGoodsInfo;
+            }).collect(Collectors.toList());
 
             //批量插入出库单明细
             outOrderGoodsInfoService.insertBatch(outOrderGoodsInfoList);
@@ -128,23 +127,23 @@ public class OutWarehouseOrderServiceImpl extends ServiceImpl<OutWarehouseOrderM
             //解锁库存
             List<OutOrderGoodsInfoDto> outOrderGoodsInfoDtoList = outWhOrderDto.getOutOrderGoodsInfoList();
             if (outOrderGoodsInfoDtoList != null && outOrderGoodsInfoDtoList.size() > 0) {
-                outOrderGoodsInfoDtoList.forEach(goods->inventoryService.unLockInventoryNum(goods.getInvertoryId(), goods.getGoodsNum()));
+                outOrderGoodsInfoDtoList.forEach(goods -> inventoryService.unLockInventoryNum(goods.getInvertoryId(), goods.getGoodsNum()));
             }
 
             //通知计划改变状态
-            if(outWhOrderDto!=null&&outWhOrderDto.getOutPlanId()!=null){
-                OutWhPlanDto whPlanDto=new OutWhPlanDto();
-                UserCompRel userCompRel=new UserCompRel();
+            if (outWhOrderDto != null && outWhOrderDto.getOutPlanId() != null) {
+                OutWhPlanDto whPlanDto = new OutWhPlanDto();
+                UserCompRel userCompRel = new UserCompRel();
                 whPlanDto.setOutplanId(outWhOrderDto.getOutPlanId());
 
-                User user=new User();
-                Company company=new Company();
+                User user = new User();
+                Company company = new Company();
                 user.setUserId(params.getUpdateId());
                 user.setRealName(params.getUpdateName());
                 company.setCompId(params.getCompanyId());
                 userCompRel.setUser(user);
                 userCompRel.setCompany(company);
-                outWarehousePlanService.changeOutWarehousePlanStatus(whPlanDto,userCompRel);
+                outWarehousePlanService.changeOutWarehousePlanStatus(whPlanDto, userCompRel);
             }
         }
         //调用更新的方法
