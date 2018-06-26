@@ -249,7 +249,18 @@ public class PurchaseOrderApi {
 	}
 	
 	
-	
+	@ApiOperation("生成运输计划")
+	@PostMapping("/trafficPlan")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_traffic_plan')")
+	public JSONObject generateTrafficPlan(@ApiParam(value = "采购订单id",required = true) @RequestParam Long orderId) {
+		
+		
+		
+		
+		
+		
+		return null;
+	}
 	
 	
 	

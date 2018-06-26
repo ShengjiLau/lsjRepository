@@ -94,6 +94,11 @@
             <groupId>com.lcdt.cloud</groupId>
             <artifactId>clms-customer-api</artifactId>
             <version>1.0</version>
+         </dependency>
+         <dependency> 
+        	<groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-traffic-api</artifactId>
+            <version>1.0</version>
         </dependency>
         <!--   <dependency>
              <groupId>com.lcdt.cloud</groupId>
