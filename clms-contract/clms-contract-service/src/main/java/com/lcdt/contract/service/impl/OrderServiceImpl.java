@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.contract.dao.ConditionQueryMapper;
@@ -33,6 +33,7 @@ import com.lcdt.contract.web.dto.OrderDto;
 import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.PlanDetail;
 import com.lcdt.traffic.model.WaybillPlan;
+import com.lcdt.traffic.service.TrafficRpc;
 import com.lcdt.traffic.vo.ConstantVO;
 
 
@@ -57,6 +58,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderProductMapper orderProductMapper;
+    
+    @Reference
+    private TrafficRpc trafficRpc;
     
     
     @Override
