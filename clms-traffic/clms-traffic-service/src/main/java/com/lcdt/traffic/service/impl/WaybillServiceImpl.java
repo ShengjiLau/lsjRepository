@@ -86,7 +86,7 @@ public class WaybillServiceImpl implements WaybillService {
         int result = 0;
 
         //先判断是否还有剩于运单服务条数(后面计费用)
-        if(!companyServiceCountService.checkCompanyProductCount(waybillDto.getCompanyId(),"waybill_service", 1)){
+        if (!companyServiceCountService.checkCompanyProductCount(waybillDto.getCompanyId(), "waybill_service", 1)) {
             throw new RuntimeException("剩余运单服务次数不足");
         }
 
@@ -98,7 +98,7 @@ public class WaybillServiceImpl implements WaybillService {
             Map map = new HashMap();
             map.put("companyId", waybill.getCompanyId());
             map.put("waybillPlanId", waybill.getWaybillPlanId());
-            map.put("noCancel","123");
+            map.put("noCancel", "123");
             List<Waybill> list = waybillMapper.selectWaybillByPlanId(map);
             if (list != null) {
                 waybill.setWaybillCode(waybill.getWaybillCode() + "-" + (list.size() + 1));
@@ -147,8 +147,8 @@ public class WaybillServiceImpl implements WaybillService {
             result += waybillItemsMapper.insertForBatch(waybillItemsList);
         }
         //运单生成时添加一条派车记录
-        if(waybill.getId()!=null){
-            WaybillTransferRecord  waybillTransferRecord=new WaybillTransferRecord();
+        if (waybill.getId() != null) {
+            WaybillTransferRecord waybillTransferRecord = new WaybillTransferRecord();
             waybillTransferRecord.setWaybillId(waybill.getId());
             waybillTransferRecord.setVechicleId(waybill.getVechicleId());
             waybillTransferRecord.setVechicleNum(waybill.getVechicleNum());
@@ -171,12 +171,12 @@ public class WaybillServiceImpl implements WaybillService {
         event.setCompanyId(waybill.getCompanyId());
         event.setSearchkey("WAYBILL_ROUTE");
         event.setDataid(waybill.getId());
-        event.setActionDes("司机："+waybill.getDriverName()+" "+waybill.getDriverPhone()+" "+waybill.getVechicleNum());
+        event.setActionDes("司机：" + waybill.getDriverName() + " " + waybill.getDriverPhone() + " " + waybill.getVechicleNum());
         producer.noteRouter(event);
 
         //扣减运单费用
         if (result > 0) {
-            companyServiceCountService.reduceCompanyProductCount(waybillDto.getCompanyId(),"waybill_service", 1,waybillDto.getCreateName(),"运单消费-"+waybill.getWaybillCode());
+            companyServiceCountService.reduceCompanyProductCount(waybillDto.getCompanyId(), "waybill_service", 1, waybillDto.getCreateName(), "运单消费-" + waybill.getWaybillCode());
         }
 
         return waybill;
@@ -190,7 +190,7 @@ public class WaybillServiceImpl implements WaybillService {
     @Override
     public int modifyOwnWaybill(WaybillDto waybillDto) {
         int result = 0;
-        Waybill waybill = queryOwnWaybill(waybillDto.getId(),waybillDto.getCompanyId());
+        Waybill waybill = queryOwnWaybill(waybillDto.getId(), waybillDto.getCompanyId());
         BeanUtils.copyProperties(waybillDto, waybill);
         //更新运单
         result += waybillMapper.updateByPrimaryKeyAndCompanyId(waybill);
@@ -306,31 +306,28 @@ public class WaybillServiceImpl implements WaybillService {
 
     @Override
     public void queryWaybillListToPoPosition(Map map) {
+        //查询出需要定位的运单
         List<Waybill> list = waybillMapper.selectWaybillByPositionSetting(map);
         if (list != null && list.size() > 0) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    for (Waybill waybill : list) {
-                        JSONObject result = GprsLocationBo.getInstance().queryLocation(waybill.getDriverPhone());
-                        int resid = result.getInteger("resid");
-                        if (resid == 0) {   //正确返回
-                            Driver driver = new Driver();
-                            driver.setDriverPhone(waybill.getDriverPhone());
-                            driver.setCurrentLocation(result.getString("location"));
-                            driver.setShortCurrentLocation(result.getString("street"));
-                            driverService.updateLocation(driver);
-                            logger.info("查询成功");
-                        } else if (resid == -80) {    //	余额不足,请充值:请联系客服
-                            logger.warn("余额不足,请充值:请联系客服");
-                        } else if (resid == -130) {    //用户可能关机
-                            logger.warn("用户可能关机");
-                        } else {      //对于移动手机，定位失败时运营商返回的结果
-                            logger.error("接口返回错误");
-                        }
-                    }
+            //多线程并行处理需要定位的运单
+            list.parallelStream().forEach(waybill -> {
+                JSONObject result = GprsLocationBo.getInstance().queryLocation(waybill.getDriverPhone());
+                int resid = result.getInteger("resid");
+                if (resid == 0) {   //正确返回
+                    Driver driver = new Driver();
+                    driver.setDriverPhone(waybill.getDriverPhone());
+                    driver.setCurrentLocation(result.getString("location"));
+                    driver.setShortCurrentLocation(result.getString("street"));
+                    driverService.updateLocation(driver);
+                    logger.info("查询成功");
+                } else if (resid == -80) {    //	余额不足,请充值:请联系客服
+                    logger.warn("余额不足,请充值:请联系客服");
+                } else if (resid == -130) {    //用户可能关机
+                    logger.warn("用户可能关机");
+                } else {      //对于移动手机，定位失败时运营商返回的结果
+                    logger.error("接口返回错误");
                 }
-            }).start();
+            });
         }
     }
 
