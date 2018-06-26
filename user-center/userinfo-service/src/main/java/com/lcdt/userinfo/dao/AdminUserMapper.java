@@ -8,4 +8,8 @@ public interface AdminUserMapper {
 
     List<AdminUser> selectByUserId(Long userId);
 
+    int deleteByPrimaryKey(Long adminId);
+
+    int insert(AdminUser record);
+
 }
