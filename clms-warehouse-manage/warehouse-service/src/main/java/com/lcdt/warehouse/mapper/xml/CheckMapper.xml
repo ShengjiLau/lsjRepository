@@ -35,6 +35,9 @@
         <if test="completeName!=null and completeName!=''">
             and a.complete_name like concat('%',#{completeName,jdbcType=VARCHAR},'%')
         </if>
+        <if test="warehouseId!=null and warehouseId!=''">
+            and a.warehouse_id like concat('%',#{warehouseId,jdbcType=BIGINT},'%')
+        </if>
         <if test="warehouseName!=null and warehouseName!=''">
             and a.warehouse_name like concat('%',#{warehouseName,jdbcType=VARCHAR},'%')
         </if>
@@ -54,7 +57,7 @@
             or b.goods_code like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%')
             )
         </if>
-        order by a.check_id
+        order by a.check_id DESC
     </select>
 
 

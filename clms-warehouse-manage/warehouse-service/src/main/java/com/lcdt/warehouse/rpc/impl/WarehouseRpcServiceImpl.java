@@ -4,7 +4,10 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.rpc.GroupWareHouseRpcService;
+import com.lcdt.warehouse.dto.OutWhPlanDto;
 import com.lcdt.warehouse.dto.WarehouseDto;
 import com.lcdt.warehouse.entity.Warehouse;
 import com.lcdt.warehouse.entity.WarehouseLinkman;
@@ -13,6 +16,7 @@ import com.lcdt.warehouse.mapper.WarehousseLinkmanMapper;
 import com.lcdt.warehouse.mapper.WarehousseLocMapper;
 import com.lcdt.warehouse.mapper.WarehousseMapper;
 import com.lcdt.warehouse.rpc.WarehouseRpcService;
+import com.lcdt.warehouse.service.OutWarehousePlanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tl.commons.util.StringUtility;
 
@@ -33,6 +37,10 @@ public class WarehouseRpcServiceImpl implements WarehouseRpcService{
     WarehousseLocMapper warehousseLocMapper;
     @Reference
     GroupWareHouseRpcService groupWareHouseRpcService;
+
+
+    @Autowired
+    private OutWarehousePlanService outWarehousePlanService;
 
     @Override
     public Warehouse selectByPrimaryKey(Long whId) {
@@ -99,5 +107,16 @@ public class WarehouseRpcServiceImpl implements WarehouseRpcService{
         }
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
+    }
+
+    @Override
+    public boolean outWhPlanAdd(OutWhPlanDto outWhPlanDto) {
+        UserCompRel userCompRel = new UserCompRel();
+        userCompRel.setCompId(outWhPlanDto.getCompanyId());
+        User user = new User();
+        user.setUserId(outWhPlanDto.getUserId());
+        user.setRealName(outWhPlanDto.getUserName());
+
+        return outWarehousePlanService.outWhPlanAdd(outWhPlanDto,userCompRel);
     }
 }

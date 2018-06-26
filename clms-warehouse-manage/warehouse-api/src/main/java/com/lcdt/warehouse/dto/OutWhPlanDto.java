@@ -58,7 +58,14 @@ public class OutWhPlanDto implements Serializable,ResponseData {
 
 
     private Integer planStatus;
+
+    @ApiModelProperty(value = "登录企业ID")
     private Long companyId;
+    @ApiModelProperty(value = "登录用户ID")
+    private Long userId;
+    @ApiModelProperty(value = "登录用户名")
+    private String userName;
+
     private String createUserName;
     private Long createUserId;
     private String planNo;
@@ -67,6 +74,24 @@ public class OutWhPlanDto implements Serializable,ResponseData {
 
     private List<OutWhOrderDto> outWhOrderDtoList;//出库单列表
 
+
+
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public Long getOutplanId() {
         return outplanId;

@@ -1,6 +1,7 @@
 package com.lcdt.warehouse.rpc;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.warehouse.dto.OutWhPlanDto;
 import com.lcdt.warehouse.entity.Warehouse;
 import com.lcdt.warehouse.entity.WarehouseLinkman;
 import com.lcdt.warehouse.entity.WarehouseLoc;
@@ -19,4 +20,12 @@ public interface WarehouseRpcService {
     Warehouse modifyWarehouse(Warehouse warehouse);
     List<Warehouse> selectNotInWhIds(Map map);
     PageInfo warehouseList(Map m);
+
+
+    /***
+     * 销售单生成出库计划
+     * @param outWhPlanDto
+     * @return
+     */
+    boolean outWhPlanAdd(OutWhPlanDto outWhPlanDto);
 }

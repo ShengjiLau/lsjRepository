@@ -74,6 +74,8 @@ public class Driver implements Serializable,ResponseData {
 
     private Integer authStatus;
 
+    private User user;
+
     private String authRemark;
 
     private String authUser;
@@ -374,5 +376,13 @@ public class Driver implements Serializable,ResponseData {
 
     public void setIsDeleted(Short isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

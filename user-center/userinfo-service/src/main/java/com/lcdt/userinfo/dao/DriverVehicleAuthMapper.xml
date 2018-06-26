@@ -150,4 +150,14 @@ update t_driver_vehicle_auth set is_default=0 where driver_id =#{driverId,jdbcTy
 
     </where>
   </select>
+
+  <select id="selectByDriverIds" resultType="java.util.Map">
+    select driver_id,count(*) vehicle_num
+    from t_driver_vehicle_auth
+    where driver_id in
+    <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+      #{item}
+    </foreach>
+    GROUP BY driver_id
+  </select>
 </mapper>

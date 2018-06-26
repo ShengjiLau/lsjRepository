@@ -584,35 +584,4 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
 
 
 
-    @Transactional
-    @Override
-    public WaybillPlan purchase4Plan(WaybillParamsDto waybillParamsDto) {
-        WaybillPlan vo = new WaybillPlan(); //复制传来对象值
-        BeanUtils.copyProperties(waybillParamsDto, vo);
-        vo.setSendOrderType(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI);
-        vo.setCarrierType(ConstantVO.PLAN_CARRIER_TYPE_ELSE); //发布后派单
-        vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //派单中
-        vo.setStartDate(new Date()); //当前系统是时间
-        waybillPlanMapper.insert(vo); //生成计划
-
-        List<PlanDetail> planDetailList = waybillParamsDto.getPlanDetailList();
-        if (null!=planDetailList && planDetailList.size()>0) {
-            for (PlanDetail obj : planDetailList) {
-                obj.setWaybillPlanId(vo.getWaybillPlanId());
-                obj.setRemainderAmount(obj.getPlanAmount());//初期【计划=剩余】
-                obj.setCreateId(vo.getCreateId());
-                obj.setCreateName(vo.getCreateName());
-                obj.setCreateDate(new Date());
-                obj.setUpdateId(vo.getUpdateId());
-                obj.setUpdateName(vo.getUpdateName());
-                obj.setUpdateTime(obj.getCreateDate());
-                obj.setCompanyId(vo.getCompanyId());
-                obj.setIsDeleted((short)0);
-            }
-            planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
-        }
-        return vo;
-    }
-
-
 }
