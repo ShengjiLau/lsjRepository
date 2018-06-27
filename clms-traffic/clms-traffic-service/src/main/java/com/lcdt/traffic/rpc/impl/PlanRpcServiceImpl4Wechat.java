@@ -818,12 +818,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                 producer.sendNotifyEvent(plan_publish_event);
             }
         }
-
-
         waybillPlanMapper.updateWaybillPlan(waybillPlan);
-
-
-
 
         //router:直派
         Timeline event = new Timeline();
