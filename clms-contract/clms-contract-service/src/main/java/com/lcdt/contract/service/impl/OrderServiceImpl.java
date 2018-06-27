@@ -11,6 +11,8 @@ import com.lcdt.contract.dao.OrderApprovalMapper;
 import com.lcdt.contract.model.OrderApproval;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.warehouse.dto.InWhPlanDto;
+import com.lcdt.warehouse.dto.InWhPlanGoodsDto;
 import com.lcdt.warehouse.dto.OutWhPlanDto;
 import com.lcdt.warehouse.dto.OutWhPlanGoodsDto;
 import com.lcdt.warehouse.rpc.WarehouseRpcService;
@@ -418,26 +420,48 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Override
 	public Boolean generateInWarehousePlan(Long orderId) {
+		InWhPlanDto inWhPlanAddParamsDto = new InWhPlanDto();
+		Order order = orderMapper.selectByPrimaryKey(orderId);
+		Long companyId = SecurityInfoGetter.getCompanyId();
+	    User loginUser = SecurityInfoGetter.getUser();
+	    UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+	    inWhPlanAddParamsDto.setCompanyId(companyId);
+	    inWhPlanAddParamsDto.setCreateUserId(loginUser.getUserId());
+	    inWhPlanAddParamsDto.setCreateUserName(loginUser.getRealName());
+	    inWhPlanAddParamsDto.setContractNo(order.getContractCode());
+	    inWhPlanAddParamsDto.setCustomerId(order.getSupplierId());
+	    inWhPlanAddParamsDto.setCustomerName(order.getSupplier());
+	    inWhPlanAddParamsDto.setGroupId(order.getGroupId());
+	    inWhPlanAddParamsDto.setWareHouseId(order.getWarehouseId());
+	    inWhPlanAddParamsDto.setWarehouseName(order.getReceiveWarehouse());
+	    inWhPlanAddParamsDto.setCustomerContactName(order.getSender());
+	    inWhPlanAddParamsDto.setCustomerContactPhone(order.getSenderPhone());
+	    inWhPlanAddParamsDto.setCustomerPurchaseNo(order.getOrderSerialNo());
+	    
+	    List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
+	    List<InWhPlanGoodsDto> inWhPlanGoodsDtoList = new ArrayList<InWhPlanGoodsDto>(orderProductList.size());
+		for (OrderProduct orderProduct : orderProductList) {
+			InWhPlanGoodsDto inWhPlanGoodsDto = new InWhPlanGoodsDto();
+			inWhPlanGoodsDto.setGoodsName(orderProduct.getName());
+			inWhPlanGoodsDto.setGoodsCode(orderProduct.getCode());
+			inWhPlanGoodsDto.setGoodsSpec(orderProduct.getSpec());
+			inWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getPrice().floatValue());
+			inWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getNum().floatValue());
+			inWhPlanGoodsDto.setUnit(orderProduct.getSku());
+			inWhPlanGoodsDtoList.add(inWhPlanGoodsDto);
+		}
+  
+	    inWhPlanAddParamsDto.setInWhPlanGoodsDtoList(inWhPlanGoodsDtoList);
+	    Boolean flag = warehouseRpcService.inWhPlanAdd(inWhPlanAddParamsDto);
+		if (flag) {
+			return true;
+		}else {
+			return false;
+		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		//warehouseRpcService.
-		
-		
-		
-		return null;
 	}
 
+	
 	/**
 	 * 销售单生成出库计划
 	 */
