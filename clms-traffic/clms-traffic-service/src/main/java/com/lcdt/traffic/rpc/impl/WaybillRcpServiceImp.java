@@ -494,8 +494,8 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                 List<Driver> driverList = driverService.getGpsInfo(phoneList);
                 for (Driver driver : driverList) {
                     if (driver.getDriverPhone() != null && driver.getDriverPhone().equals(waybill.getDriverPhone())) {
-//                        map.put("longitude",1);
-//                        map.put("latitude",1);
+                        map.put("longitude",waybill.getLongitude());
+                        map.put("latitude",waybill.getLatitude());
                         map.put("unloadLocation", driver.getCurrentLocation());
                         map.put("unloadTime", new Date());
                     }
