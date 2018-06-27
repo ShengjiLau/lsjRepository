@@ -267,7 +267,7 @@ public class PurchaseOrderApi {
 	
 	@ApiOperation("采购单生成入库计划")
 	@PostMapping("/inWarehousePlan")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('in_warehouse_plan')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_warehouse_plan')")
 	public JSONObject generateInWarehousePlan(@ApiParam(value = "采购订单id",required = true) @RequestParam Long orderId) {
 		Boolean flag = orderService.generateInWarehousePlan(orderId);
 		if (flag) {

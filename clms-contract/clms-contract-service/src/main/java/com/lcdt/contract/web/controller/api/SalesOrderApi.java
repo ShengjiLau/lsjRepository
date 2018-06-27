@@ -266,7 +266,7 @@ public class SalesOrderApi {
 	
 	@ApiOperation("销售单生成出库计划")
 	@PostMapping("/outWarehousePlan")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('out_warehouse_plan')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_warehouse_plan')")
 	public JSONObject generateOutWarehousePlan(@ApiParam(value = "销售订单id",required = true) @RequestParam Long orderId) {
 		Boolean flag = orderService.generateOutWarehousePlan(orderId);
 		if (flag) {
