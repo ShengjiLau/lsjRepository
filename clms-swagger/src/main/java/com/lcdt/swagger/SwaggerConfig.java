@@ -16,7 +16,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-    @Value("${swagger-toggle}")
+
+    //冒号后为默认值
+    @Value("${swagger-toggle:true}")
     private boolean online;
 
     @Bean
