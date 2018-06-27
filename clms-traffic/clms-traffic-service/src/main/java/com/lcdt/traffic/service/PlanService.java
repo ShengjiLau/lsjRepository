@@ -1,6 +1,8 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.traffic.dto.LeaveMsgDto;
+import com.lcdt.traffic.dto.LeaveMsgParamDto;
 import com.lcdt.traffic.dto.PlanDetailParamsDto;
 import com.lcdt.traffic.model.PlanLeaveMsg;
 import com.lcdt.traffic.model.WaybillDao;
@@ -33,6 +35,14 @@ public interface PlanService {
      * @return
      */
     PageInfo planLeaveMsgList(Map map);
+
+
+    /***
+     * 留言列表-batch
+     * @param leaveMsgParamDto
+     * @return
+     */
+    List<LeaveMsgDto> planLeaveMsgList4Batch(LeaveMsgParamDto leaveMsgParamDto);
 
 
     /***
