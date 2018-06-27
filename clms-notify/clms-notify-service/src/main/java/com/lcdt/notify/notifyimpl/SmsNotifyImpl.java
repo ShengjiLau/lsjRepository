@@ -5,6 +5,8 @@ import com.lcdt.notify.dao.SmsLogMapper;
 import com.lcdt.notify.model.EventMetaData;
 import com.lcdt.notify.model.NotifyReceiver;
 import com.lcdt.notify.model.SmsLog;
+import com.lcdt.pay.model.CompanyServiceCount;
+import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.pay.rpc.ProductCountLog;
 import com.lcdt.pay.rpc.ProductCountService;
 import com.lcdt.pay.rpc.SmsCountService;
@@ -46,6 +48,9 @@ public class SmsNotifyImpl  {
     @Reference
     SmsCountService smsCountService;
 
+    @Reference
+    CompanyServiceCountService countService;
+
     public boolean sendSmsNotify(EventMetaData eventMetaData,String operateUsername, String content, String phoneNum, Long companyId) {
 
         boolean b = smsCountService.checkSmsCount(companyId, 1);
@@ -54,14 +59,13 @@ public class SmsNotifyImpl  {
             return false;
         }
         logger.info("发送短信通知 >>> {} >>> {}",content,phoneNum);
-
-        ProductCountLog countLog = productCountService.reduceProductCount("sms_service", eventMetaData.getEventDisplayName(), 1, operateUsername, companyId,null);
-        sendSms(new String[]{phoneNum}, content, countLog.getServiceCountLogId());
+        CompanyServiceCount companyServiceCount = countService.reduceCompanyProductCount(companyId, SmsCountService.smsServiceProductName, 1,operateUsername,eventMetaData.getEventDisplayName());
+        sendSms(new String[]{phoneNum}, content);
         return true;
     }
 
 
-    public boolean sendSms(String[] phonsNums, String message,Long productServiceLogId) {
+    public boolean sendSms(String[] phonsNums, String message) {
         logger.info("调用短信api >>> {} >>> {}",phonsNums[0],message);
         if (phonsNums == null) {
             return false;
@@ -75,7 +79,7 @@ public class SmsNotifyImpl  {
         nameValuePairs.add(new BasicNameValuePair("key", encodeKey(seed)));
         nameValuePairs.add(new BasicNameValuePair("dest", phoneNumsValue(phonsNums)));
         nameValuePairs.add(new BasicNameValuePair("content", "【大驼队】" + message));
-        nameValuePairs.add(new BasicNameValuePair("reference", String.valueOf(productServiceLogId)));
+//        nameValuePairs.add(new BasicNameValuePair("reference", String.valueOf(productServiceLogId)));
         UrlEncodedFormEntity uefEntity;
         try {
             uefEntity = new UrlEncodedFormEntity(nameValuePairs, "UTF-8");
