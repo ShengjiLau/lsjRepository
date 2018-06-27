@@ -57,8 +57,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
         int result = 0;
 
         //author:ybq (后面计费用)
-        boolean tFlag =  companyServiceCountService.checkCompanyProductCount(params.getCompanyId(),"storage_service", 1);
-        if(!tFlag) throw new RuntimeException("剩余仓单服务次数不足");
+        checkWarehouseProductCount(params.getCompanyId());
 
         InWarehouseOrder inWarehouseOrder = new InWarehouseOrder();
         BeanUtils.copyProperties(params, inWarehouseOrder);
@@ -182,8 +181,7 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
         int result = 0;
 
         //author:ybq (后面计费用)
-        boolean tFlag =  companyServiceCountService.checkCompanyProductCount(params.getCompanyId(),"waybill_service", 1);
-        if(!tFlag) return result;
+        checkWarehouseProductCount(params.getCompanyId());
 
         InWarehouseOrder inWarehouseOrder = new InWarehouseOrder();
         BeanUtils.copyProperties(params, inWarehouseOrder);
@@ -227,6 +225,12 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
      */
     public List<Map<String,Object>> selectInWarehouseNum(InWarehouseOrderSearchParamsDto params){
         return baseMapper.selectInWarehouseNum(params);
+    }
+
+    private void checkWarehouseProductCount(Long companyId){
+        if(!companyServiceCountService.checkCompanyProductCount(companyId,"storage_service", 1)){
+            throw new RuntimeException("剩余仓单服务次数不足");
+        }
     }
 
 }
