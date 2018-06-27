@@ -7,6 +7,8 @@ import com.lcdt.pay.model.*;
 import com.lcdt.pay.rpc.ProductCountService;
 import com.lcdt.pay.service.CompanyBalanceService;
 import com.lcdt.pay.service.OrderService;
+import com.lcdt.pay.utils.OrderNoGenerator;
+import com.lcdt.userinfo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+@com.alibaba.dubbo.config.annotation.Service
 @Transactional(rollbackFor = Exception.class)
 public class OrderServiceImpl implements OrderService{
 
@@ -55,6 +57,25 @@ public class OrderServiceImpl implements OrderService{
         }else{
             return payOrders.get(0);
         }
+    }
+
+    @Override
+    public PayOrder createOrder(Long comapnyId, User user, Integer productId) {
+        ServiceProduct serviceProduct = productMapper.selectByPrimaryKey(productId);
+        if (serviceProduct == null) {
+            throw new RuntimeException("产品不存在");
+        }
+
+        PayOrder payOrder = new PayOrder();
+        payOrder.setOrderStatus(OrderStatus.PENDINGPAY);
+        payOrder.setOrderPayCompanyId(comapnyId);
+        payOrder.setOrderPayUserId(user.getUserId());
+        payOrder.setOrderNo(OrderNoGenerator.generateDateNo(1));
+        payOrder.setOrderType(2);
+        payOrder.setOrderProductId(productId);
+        payOrder.setCreateUserName(user.getPhone());
+        mapper.insert(payOrder);
+        return payOrder;
     }
 
     /**

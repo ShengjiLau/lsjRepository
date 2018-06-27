@@ -151,26 +151,7 @@ public class OrderApi {
 
     @RequestMapping(value = "/createorder",method = RequestMethod.POST)
     public PayOrder createPayOrder(Integer productId){
-        Long companyId = SecurityInfoGetter.getCompanyId();
-        Long userId = SecurityInfoGetter.getUser().getUserId();
-        String phone = SecurityInfoGetter.getUser().getPhone();
-
-        ServiceProduct serviceProduct = productMapper.selectByPrimaryKey(productId);
-        if (serviceProduct == null) {
-            throw new RuntimeException("产品不存在");
-        }
-
-        PayOrder payOrder = new PayOrder();
-        payOrder.setOrderStatus(OrderStatus.PENDINGPAY);
-        payOrder.setOrderPayCompanyId(companyId);
-        payOrder.setOrderPayUserId(userId);
-        payOrder.setOrderNo(OrderNoGenerator.generateDateNo(1));
-        payOrder.setOrderType(2);
-        payOrder.setOrderProductId(productId);
-        payOrder.setCreateUserName(phone);
-        orderMapper.insert(payOrder);
-        return payOrder;
-
+        return orderService.createOrder(SecurityInfoGetter.getCompanyId(), SecurityInfoGetter.getUser(), productId);
     }
 
     @PreAuthorize(" hasRole('ROLE_SYS_ADMIN') ")
