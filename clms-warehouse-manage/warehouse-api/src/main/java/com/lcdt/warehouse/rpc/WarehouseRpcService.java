@@ -1,6 +1,7 @@
 package com.lcdt.warehouse.rpc;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.warehouse.dto.InWhPlanDto;
 import com.lcdt.warehouse.dto.OutWhPlanDto;
 import com.lcdt.warehouse.entity.Warehouse;
 import com.lcdt.warehouse.entity.WarehouseLinkman;
@@ -28,4 +29,15 @@ public interface WarehouseRpcService {
      * @return
      */
     boolean outWhPlanAdd(OutWhPlanDto outWhPlanDto);
+
+
+
+    /***
+     * 采购单生成入库计划
+     * @param inWhPlanAddParamsDto
+     * @return
+     */
+    boolean inWhPlanAdd(InWhPlanDto inWhPlanAddParamsDto);
+
+
 }
