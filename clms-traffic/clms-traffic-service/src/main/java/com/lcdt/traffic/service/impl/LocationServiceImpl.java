@@ -36,11 +36,10 @@ public class LocationServiceImpl implements LocationService {
     private BalanceCheckBo balanceCheckBo;
 
     @Override
-    public JSONObject queryLocation(String mobile) {
+    public JSONObject queryLocation(Long companyId, String mobile) {
 
         JSONObject jsonObject = new JSONObject();
-        //  获取companyId
-        Long companyId = SecurityInfoGetter.getCompanyId();
+
         if (!balanceCheckBo.check(companyId)) {
             jsonObject.put("code", -1);
             jsonObject.put("message", "余额不足！请充值！");

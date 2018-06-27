@@ -10,8 +10,9 @@ public interface LocationService {
 
     /**
      * 基站定位信息查询，并返回相关信息
+     *
      * @param mobile
      * @return
      */
-    JSONObject queryLocation(String mobile);
+    JSONObject queryLocation(Long companyId, String mobile);
 }
