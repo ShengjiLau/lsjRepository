@@ -248,7 +248,7 @@ public class SalesOrderApi {
 	}
 	
 	
-	@ApiOperation("生成运输计划")
+	@ApiOperation("销售单生成运输计划")
 	@PostMapping("/trafficPlan")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_traffic_plan')")
 	public JSONObject generateTrafficPlan(@ApiParam(value = "销售订单id",required = true) @RequestParam Long orderId) {
@@ -265,7 +265,7 @@ public class SalesOrderApi {
 	}
 	
 	@ApiOperation("销售单生成出库计划")
-	@PostMapping("/outPlan")
+	@PostMapping("/outWarehousePlan")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('out_warehouse_plan')")
 	public JSONObject generateOutWarehousePlan(@ApiParam(value = "销售订单id",required = true) @RequestParam Long orderId) {
 		Boolean flag = orderService.generateOutWarehousePlan(orderId);
