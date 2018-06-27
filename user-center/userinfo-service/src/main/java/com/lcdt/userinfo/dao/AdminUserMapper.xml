@@ -17,5 +17,18 @@
 
   </select>
 
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_admin_user
+    where admin_id = #{adminId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.lcdt.userinfo.model.AdminUser">
+    <selectKey keyProperty="adminId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_admin_user (admin_user_id)
+    values (#{adminUserId,jdbcType=BIGINT})
+  </insert>
+
 
 </mapper>

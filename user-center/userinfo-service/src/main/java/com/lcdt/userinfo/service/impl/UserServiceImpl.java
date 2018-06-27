@@ -1,5 +1,7 @@
 package com.lcdt.userinfo.service.impl;
 
+import com.lcdt.clms.permission.dao.AdminPermissionRelationMapper;
+import com.lcdt.clms.permission.model.AdminPermissionRelation;
 import com.lcdt.userinfo.dao.AdminUserMapper;
 import com.lcdt.userinfo.dao.DriverMapper;
 import com.lcdt.userinfo.dao.UserMapper;
@@ -43,6 +45,9 @@ public class UserServiceImpl implements UserService,ApplicationEventPublisherAwa
 
 	@Autowired
 	private AdminUserMapper adminUserMapper;
+
+	@Autowired
+	private AdminPermissionRelationMapper adminPermissionRelationMapper;
 
 	public boolean isUserAdmin(Long userId) {
 		return !CollectionUtils.isEmpty(adminUserMapper.selectByUserId(userId));
@@ -176,5 +181,19 @@ public class UserServiceImpl implements UserService,ApplicationEventPublisherAwa
 	@Override
 	public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
 		this.applicationEventPublisher = applicationEventPublisher;
+	}
+
+	@Override
+	public boolean addUserAdmin(AdminUser adminUser) {
+		return adminUserMapper.insert(adminUser) > 0;
+	}
+
+	@Override
+	public boolean deleteUserAdmin(AdminUser adminUser) {
+		AdminPermissionRelation relation = new AdminPermissionRelation();
+		relation.setUserId(adminUser.getAdminUserId());
+		adminPermissionRelationMapper.delete(relation);
+		adminUserMapper.deleteByPrimaryKey(adminUser.getAdminId());
+		return true;
 	}
 }

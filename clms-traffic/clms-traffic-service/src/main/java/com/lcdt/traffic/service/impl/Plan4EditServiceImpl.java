@@ -378,7 +378,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                         if (obj.getFreightTotal()==null) { //运费总价 = 单价 * 数量
                             obj.setFreightTotal(obj.getFreightPrice()*obj.getPlanAmount());
                         }
-                        sb_goods.append(obj.getGoodsName()+":"+obj.getAllotAmount()+";"); //发送消息
+                        sb_goods.append(obj.getGoodsName()+":"+(obj.getPlanAmount()==null?0:obj.getPlanAmount())+";"); //发送消息
 
                     }
                     planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
@@ -461,14 +461,14 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                             //接收对象
                             DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
                             defaultNotifyReceiver.setCustomerPhoneNum(vo.getCustomerPhone());//合同客户电话
-                            defaultNotifyReceiver.setReceivePhoneNum(vo.getReceivePhone());//司机
+                            defaultNotifyReceiver.setReceivePhoneNum(vo.getCarrierPhone());//司机
 
                             CommonAttachment attachment = new CommonAttachment();
                             attachment.setOwnerCompany(company.getFullName()); //货主公司
                             attachment.setDestinationAdress(receiveAddress);
                             attachment.setGoodsDetail(sb_goods.toString());
                             attachment.setVehicleNum(vo.getCarrierVehicle()); //车辆
-                            attachment.setDriverName(vo.getCarrierCollectionNames());//司机名
+                            attachment.setDriverName(vo.getCarrierNames());//司机名
                             attachment.setDriverPhone(vo.getCarrierPhone()); //司机手机
 
                             TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("bill_to_driver", attachment, defaultNotifyReceiver, defaultNotifySender);

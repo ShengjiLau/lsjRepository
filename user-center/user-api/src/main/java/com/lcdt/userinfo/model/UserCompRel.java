@@ -21,6 +21,8 @@ public class UserCompRel implements java.io.Serializable,ResponseData {
 
     private String comment;
 
+    private Long adminId;
+
 
     public String getComment() {
         return comment;
@@ -343,5 +345,13 @@ public class UserCompRel implements java.io.Serializable,ResponseData {
 
     public void setDeptNames(String deptNames) {
         this.deptNames = deptNames;
+    }
+
+    public Long getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(Long adminId) {
+        this.adminId = adminId;
     }
 }

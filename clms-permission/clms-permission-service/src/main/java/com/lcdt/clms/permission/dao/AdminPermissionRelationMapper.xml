@@ -15,12 +15,26 @@
     delete from t_admin_permission_relation
     where relation_id = #{relationId,jdbcType=BIGINT}
   </delete>
+  <delete id="delete" >
+    delete from t_admin_permission_relation
+    where 1=1
+    <if test="userId != null" >
+      and user_Id = #{userId,jdbcType=BIGINT}
+    </if>
+  </delete>
   <insert id="insert" parameterType="com.lcdt.clms.permission.model.AdminPermissionRelation">
     <selectKey keyProperty="relationId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_admin_permission_relation (user_id, permission_id)
     values (#{userId,jdbcType=BIGINT}, #{permissionId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertBatch">
+    insert into t_admin_permission_relation (user_id, permission_id)
+    values
+    <foreach item="item" collection="permissions" separator=",">
+      (#{userId,jdbcType=BIGINT}, #{item,jdbcType=BIGINT})
+    </foreach>
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.clms.permission.model.AdminPermissionRelation">
     update t_admin_permission_relation

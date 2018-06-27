@@ -45,6 +45,7 @@
     <result column="referrer_phone" jdbcType="VARCHAR" property="referrerPhone" />
     <result column="user_status" jdbcType="SMALLINT" property="userStatus" />
     <result column="driver_name" jdbcType="SMALLINT" property="driverName" />
+    <result column="admin_id" jdbcType="BIGINT" property="adminId"></result>
   </resultMap>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -192,9 +193,12 @@
 
   <select id="selectByUserDto"  resultMap="AdminUserMap" parameterType="com.lcdt.userinfo.web.dto.UserQueryDto">
    select  u.user_id, mobile_country, phone, email, wechat, qq, real_name, nick_name,
-      birthday, picture_url, intro_memo, register_date, referrer_phone, user_status,register_from,d.driver_name,register_from from t_uc_user u
+      birthday, picture_url, intro_memo, register_date, referrer_phone, user_status,register_from,d.driver_name,register_from
+    ,t1.admin_id
+    from t_uc_user u
 
       left join t_driver d on d.user_id = u.user_id
+      left join t_admin_user t1 on u.user_id = t1.admin_user_id
       <where>
           <if test="phone != null and phone != ''">
            phone = #{phone}

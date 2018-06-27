@@ -136,7 +136,6 @@ public class SplitGoodsApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_split_goods')")
     public String splitGoodsCancel(@ApiParam(value = "派单主ID",required = true) @RequestParam Long splitGoodsId,
                                    @ApiParam(value = "派单明细ID",required = true) @RequestParam Long splitGoodsDetailId
-
                                     ) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
