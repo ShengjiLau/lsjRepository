@@ -606,7 +606,7 @@
   </select>
 
   <select id="selectWaybillByPositionSetting" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select id,w.driver_phone
+    select id,w.driver_phone,p.company_id
     from t_waybill w , t_waybill_position_setting p
     <where> w.id=p.waybill_id and (w.waybill_status !=8 or w.waybill_status!=7) and w.is_deleted=0
       <if test="fixedTime!=null and fixedTime!=''">
