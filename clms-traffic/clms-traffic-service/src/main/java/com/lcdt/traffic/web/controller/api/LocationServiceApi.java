@@ -220,7 +220,9 @@ public class LocationServiceApi {
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('lbs_location')")
     public JSONObject queryLocation(String mobile) {
         logger.debug("mobile:" + mobile);
-        return locationService.queryLocation(mobile);
+        //  获取companyId
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        return locationService.queryLocation(companyId,mobile);
     }
 
     @ApiOperation(value = "列表获取位置信息", notes = "根据手机号获取位置(基站定位),多个手机号需要用逗号分隔")
