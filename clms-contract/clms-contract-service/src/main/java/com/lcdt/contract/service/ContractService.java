@@ -39,7 +39,7 @@ public interface ContractService {
      * 获取合同列表
      * @return
      */
-    PageInfo<List<Contract>> contractList(ContractDto contractDto, PageInfo pageInfo);
+    PageInfo<List<ContractDto>> contractList(ContractDto contractDto, PageInfo pageInfo);
 
     /**
      * 终止合同

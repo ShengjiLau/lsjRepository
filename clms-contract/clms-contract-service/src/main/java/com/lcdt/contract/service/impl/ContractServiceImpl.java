@@ -245,9 +245,18 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public PageInfo<List<Contract>> contractList(ContractDto contractDto, PageInfo pageInfo) {
+    public PageInfo<List<ContractDto>> contractList(ContractDto contractDto, PageInfo pageInfo) {
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
-        PageInfo page = new PageInfo(contractMapper.selectByCondition(contractDto));
+        List<Contract> contractList = contractMapper.selectByCondition(contractDto);
+        List<ContractDto> contractDtoList = new ArrayList<ContractDto>(contractList.size());
+        for (Contract Contract : contractList) {
+        	ContractDto contractDto2 = new ContractDto();
+        	BeanUtils.copyProperties(Contract, contractDto2);
+        	List<ContractProduct> contractProductList = contractProductMapper.selectCpsByContractId(Contract.getContractId());
+        	contractDto2.setContractProductList(contractProductList);
+        	contractDtoList.add(contractDto2);
+        }
+        PageInfo page = new PageInfo(contractDtoList);
         return page;
     }
 
