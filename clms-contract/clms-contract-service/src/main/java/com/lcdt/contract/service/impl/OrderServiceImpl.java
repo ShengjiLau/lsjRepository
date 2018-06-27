@@ -438,7 +438,9 @@ public class OrderServiceImpl implements OrderService {
 		return null;
 	}
 
-
+	/**
+	 * 销售单生成出库计划
+	 */
 	@Override
 	public Boolean generateOutWarehousePlan(Long orderId) {
 		Order order = orderMapper.selectByPrimaryKey(orderId);
@@ -460,8 +462,12 @@ public class OrderServiceImpl implements OrderService {
 		List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<>(orderProductList.size());
 		for (OrderProduct orderProduct : orderProductList) {
 			OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
-			
-			
+			outWhPlanGoodsDto.setGoodsName(orderProduct.getName());
+			outWhPlanGoodsDto.setGoodsSpec(orderProduct.getSpec());
+			outWhPlanGoodsDto.setGoodsCode(orderProduct.getCode());
+			outWhPlanGoodsDto.setUnit(orderProduct.getSku());
+			outWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getNum().floatValue());
+			outWhPlanGoodsDto.setOutHousePrice(orderProduct.getPrice().floatValue());
 			outWhPlanGoodsDtoList.add(outWhPlanGoodsDto);
 		}
 		outWhPlanDto.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);
