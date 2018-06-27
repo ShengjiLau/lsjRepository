@@ -5,6 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.notify.model.Timeline;
 import com.lcdt.traffic.dao.*;
+import com.lcdt.traffic.dto.LeaveMsgDto;
+import com.lcdt.traffic.dto.LeaveMsgParamDto;
 import com.lcdt.traffic.dto.PlanDetailParamsDto;
 import com.lcdt.traffic.exception.WaybillPlanException;
 import com.lcdt.traffic.model.*;
@@ -141,6 +143,37 @@ public class PlanServiceImpl implements PlanService {
             pageInfo = new PageInfo(list);
         }
         return pageInfo;
+    }
+
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<LeaveMsgDto> planLeaveMsgList4Batch(LeaveMsgParamDto leaveMsgParamDto) {
+        if(leaveMsgParamDto==null) return null;
+        for(LeaveMsgDto dto : leaveMsgParamDto.getLeaveMsgDtoList()) {
+            Map tMap = new HashMap<String,String>();
+            tMap.put("waybillPlanId",dto.getWaybillPlanId());
+            tMap.put("companyId",dto.getCreateCompanyId());
+            tMap.put("isDeleted","0");
+            WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
+            long companyId = Long.valueOf(leaveMsgParamDto.getLoginCmpId());//登录人企业ID
+            PageInfo pageInfo = null;
+            if (waybillPlan != null) { //计划存在
+                Map map = new HashMap<String,String>();
+                 PlanLeaveMsg planLeaveMsg = new PlanLeaveMsg();
+                if (waybillPlan.getCompanyId() == companyId) { //说明是货主
+                    map.put("companyId",companyId);
+                } else {
+                    map.put("carrierCompanyId4leaveMsg",companyId);
+                    map.put("companyId",waybillPlan.getCompanyId());
+                }
+                List<PlanLeaveMsg> list = planLeaveMsgMapper.selectByCondition(map);
+                dto.setList(list);
+                dto.setTotal(list==null?0:list.size());
+            }
+        }
+        return leaveMsgParamDto.getLeaveMsgDtoList();
+
     }
 
 
