@@ -256,8 +256,11 @@ public class ContractServiceImpl implements ContractService {
         	contractDto2.setContractProductList(contractProductList);
         	contractDtoList.add(contractDto2);
         }
-        PageInfo page = new PageInfo(contractDtoList);
-        return page;
+        PageInfo page1 = new PageInfo(contractList);
+        PageInfo page2 = new PageInfo();
+        page2.setTotal(page1.getTotal());
+        page2.setList(contractDtoList);
+        return page2;
     }
 
     @Override
