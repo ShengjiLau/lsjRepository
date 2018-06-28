@@ -1,13 +1,19 @@
 package com.lcdt.warehouse.dto;
 
+import java.io.Serializable;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Created by yangbinq on 2018/5/14.
  */
-public class InWhPlanGoodsDto {
+public class InWhPlanGoodsDto implements Serializable {
 
-    private Long relationId;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -12612561L;
+	private Long relationId;
     @ApiModelProperty(value = "货物ID")
     private Long goodsId;
     @ApiModelProperty(value = "计划数量")

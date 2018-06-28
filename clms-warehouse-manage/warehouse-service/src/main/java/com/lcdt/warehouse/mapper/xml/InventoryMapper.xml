@@ -133,7 +133,9 @@
 			and t.customer_id = #{customerId,jdbcType=BIGINT}
 			and t.warehouse_id = #{warehouseId,jdbcType=BIGINT}
 			and t.storage_location_code = #{storageLocationCode,jdbcType=VARCHAR} 
-			and t.batch = #{goodsBatch,jdbcType=VARCHAR} 
+			<if test="goodsBatch != null">
+				and t.batch = #{goodsBatch,jdbcType=VARCHAR}
+			</if>			 
 			and g.goods_code = #{goodsCode,jdbcType=VARCHAR}		         
 		</where>	
 	</select>

@@ -12,7 +12,11 @@ import java.util.List;
 public class InWhPlanDto implements Serializable,ResponseData {
 
 
-    @ApiModelProperty(value = "计划ID")
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 16963314L;
+	@ApiModelProperty(value = "计划ID")
     private Long planId;
     @ApiModelProperty(value = "项目组ID")
     private Long groupId;
