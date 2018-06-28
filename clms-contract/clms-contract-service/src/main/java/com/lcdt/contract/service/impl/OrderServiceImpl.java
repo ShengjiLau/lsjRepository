@@ -76,7 +76,9 @@ public class OrderServiceImpl implements OrderService {
     @Reference
     private WarehouseRpcService warehouseRpcService;
     
-    
+    private final short defaultValue = 0;
+    private final short trafficPlan = 1;
+    private final short warehousePlan = 1;
 
     @Override
     public int addOrder(OrderDto orderDto) {
@@ -94,6 +96,8 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         BeanUtils.copyProperties(orderDto, order);
         order.setSummation(aTotal);
+        order.setTrafficPlan(defaultValue);
+        order.setWarehousePlan(defaultValue);
         int result = orderMapper.insertOrder(order);
         int i = 0;
         int j = 0;
@@ -405,7 +409,8 @@ public class OrderServiceImpl implements OrderService {
 	    	planDetailList.add(planDetail);
 	    }
 	    WaybillParamsDto.setPlanDetailList(planDetailList);
-	    
+	    order.setTrafficPlan(trafficPlan);
+	    orderMapper.updateByPrimaryKey(order);
 	    WaybillPlan waybillPlan = trafficRpc.purchase4Plan(WaybillParamsDto, flag);
 	    if (null != waybillPlan) {
 	    	return true;
@@ -452,6 +457,8 @@ public class OrderServiceImpl implements OrderService {
 		}
   
 	    inWhPlanAddParamsDto.setInWhPlanGoodsDtoList(inWhPlanGoodsDtoList);
+	    order.setWarehousePlan(warehousePlan);
+	    orderMapper.updateByPrimaryKey(order);
 	    Boolean flag = warehouseRpcService.inWhPlanAdd(inWhPlanAddParamsDto);
 		if (flag) {
 			return true;
@@ -496,6 +503,8 @@ public class OrderServiceImpl implements OrderService {
 		}
 		outWhPlanDto.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);
 		
+		order.setWarehousePlan(warehousePlan);
+	    orderMapper.updateByPrimaryKey(order);
 		Boolean flag = warehouseRpcService.outWhPlanAdd(outWhPlanDto);
 		if (flag) {
 			return true;

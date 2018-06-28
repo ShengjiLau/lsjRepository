@@ -238,12 +238,15 @@ public class OwnPlanApi {
 
 
     @ApiOperation("留言-列表-批量获取")
-    @RequestMapping(value = "/planLeaveMsgList4Batch",method = RequestMethod.GET)
+    @RequestMapping(value = "/planLeaveMsgList4Batch",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_list') or hasAuthority('traffic_plan_leave_msg') or hasAuthority('traffic_plan_leave_msg_1')")
-    public List<LeaveMsgDto>  planLeaveMsgList4Batch(@Validated LeaveMsgParamDto leaveMsgParamDto) {
+    public JSONObject  planLeaveMsgList4Batch(@Validated @RequestBody LeaveMsgParamDto leaveMsgParamDto) {
+        JSONObject jo = new JSONObject();
+        jo.put("code", 0);
         Long companyId = SecurityInfoGetter.getCompanyId();
         leaveMsgParamDto.setLoginCmpId(companyId);
-        return planService.planLeaveMsgList4Batch(leaveMsgParamDto);
+        jo.put("data",planService.planLeaveMsgList4Batch(leaveMsgParamDto));
+        return jo;
     }
 
 
