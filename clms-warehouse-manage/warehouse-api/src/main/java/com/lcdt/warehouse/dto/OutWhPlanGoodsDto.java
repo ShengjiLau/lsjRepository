@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * Created by yangbinq on 2018/5/14.
  */
-public class OutWhPlanGoodsDto {
+public class OutWhPlanGoodsDto implements java.io.Serializable{
 
     private Long relationId;
     @ApiModelProperty(value = "货物ID")
