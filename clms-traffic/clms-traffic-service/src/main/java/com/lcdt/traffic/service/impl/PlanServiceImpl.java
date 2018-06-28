@@ -160,8 +160,10 @@ public class PlanServiceImpl implements PlanService {
             PageInfo pageInfo = null;
             if (waybillPlan != null) { //计划存在
                 Map map = new HashMap<String,String>();
-                 PlanLeaveMsg planLeaveMsg = new PlanLeaveMsg();
+                map.put("waybillPlanId",waybillPlan.getWaybillPlanId());
+                PlanLeaveMsg planLeaveMsg = new PlanLeaveMsg();
                 if (waybillPlan.getCompanyId() == companyId) { //说明是货主
+
                     map.put("companyId",companyId);
                 } else {
                     map.put("carrierCompanyId4leaveMsg",companyId);

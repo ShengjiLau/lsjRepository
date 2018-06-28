@@ -2,9 +2,10 @@ package com.lcdt.pay.model;
 
 import com.lcdt.converter.ResponseData;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PayOrder implements ResponseData{
+public class PayOrder implements ResponseData,Serializable{
     private Long orderId;
 
     private Integer orderType;
@@ -31,6 +32,16 @@ public class PayOrder implements ResponseData{
     private String orderDes;
 
     private Integer balance;
+
+    Integer productPackageId;
+
+    public Integer getProductPackageId() {
+        return productPackageId;
+    }
+
+    public void setProductPackageId(Integer productPackageId) {
+        this.productPackageId = productPackageId;
+    }
 
     public Integer getBalance() {
         return balance;

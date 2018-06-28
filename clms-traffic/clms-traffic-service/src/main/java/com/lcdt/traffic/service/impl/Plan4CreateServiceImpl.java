@@ -242,8 +242,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                   DefaultNotifySender defaultNotifySender = NotifyUtils.notifySender(dto.getCompanyId(), dto.getCreateId()); //发送
 
                 if (!StringUtils.isEmpty(dto.getCarrierCollectionIds()) || !StringUtils.isEmpty(dto.getCarrierDriverIds())) {
-
-
                     if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商(获取承运商ID)
                         String[] ids = null;
                         StringBuffer sb = new StringBuffer();

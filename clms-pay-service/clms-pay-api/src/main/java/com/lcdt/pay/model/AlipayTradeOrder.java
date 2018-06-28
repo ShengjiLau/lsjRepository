@@ -3,10 +3,11 @@ package com.lcdt.pay.model;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AlipayTradeOrder {
+public class AlipayTradeOrder implements Serializable{
 
     @JSONField(name = "out_trade_no")
     private String tradeNo;
