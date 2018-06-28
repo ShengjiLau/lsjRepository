@@ -410,7 +410,7 @@ public class OrderServiceImpl implements OrderService {
 	    WaybillPlan waybillPlan = trafficRpc.purchase4Plan(WaybillParamsDto, flag);
 	    if (null != waybillPlan) {
 	    	order.setTrafficPlan(waybillPlan.getSerialCode());
-	    	orderMapper.updateByPrimaryKey(order);
+	    	orderMapper.updateByPrimaryKeySelective(order);
 	    	return true;
 	    }else {
 	    	return false;
@@ -458,8 +458,8 @@ public class OrderServiceImpl implements OrderService {
 	    
         String warehousePlan = warehouseRpcService.inWhPlanAdd(inWhPlanAddParamsDto);
 		if (!StringUtils.isEmpty(warehousePlan)) {
-			order.setTrafficPlan(warehousePlan);
-		    orderMapper.updateByPrimaryKey(order);
+			order.setWarehousePlan(warehousePlan);
+		    orderMapper.updateByPrimaryKeySelective(order);
 			return true;
 		}else {
 			return false;
@@ -505,7 +505,7 @@ public class OrderServiceImpl implements OrderService {
 		String warehousePlan  = warehouseRpcService.outWhPlanAdd(outWhPlanDto);
 		if (!StringUtils.isEmpty(warehousePlan)) {
 			order.setWarehousePlan(warehousePlan);
-			orderMapper.updateByPrimaryKey(order);
+			orderMapper.updateByPrimaryKeySelective(order);
 			return true;
 		}else {
 			return false;
