@@ -2,9 +2,10 @@ package com.lcdt.pay.model;
 
 import com.lcdt.converter.ResponseData;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PayBalance implements ResponseData{
+public class PayBalance implements ResponseData,Serializable{
     private Long balanceId;
 
     private Long balanceCompanyId;

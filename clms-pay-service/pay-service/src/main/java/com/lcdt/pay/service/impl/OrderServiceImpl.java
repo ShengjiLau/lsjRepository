@@ -65,17 +65,25 @@ public class OrderServiceImpl implements OrderService{
         if (serviceProduct == null) {
             throw new RuntimeException("产品不存在");
         }
-
         PayOrder payOrder = new PayOrder();
         payOrder.setOrderStatus(OrderStatus.PENDINGPAY);
         payOrder.setOrderPayCompanyId(comapnyId);
         payOrder.setOrderPayUserId(user.getUserId());
         payOrder.setOrderNo(OrderNoGenerator.generateDateNo(1));
-        payOrder.setOrderType(2);
+        payOrder.setOrderType(OrderType.PAYORDER);
         payOrder.setOrderProductId(productId);
         payOrder.setCreateUserName(user.getPhone());
         mapper.insert(payOrder);
         return payOrder;
+    }
+
+
+    public PayOrder createOrder(Integer productPackageId,Long comapnyId, User user) {
+        ServiceProductPackage serviceProductPackage = packageMapper.selectByPrimaryKey(productPackageId);
+        PayOrder order = createOrder(comapnyId, user, serviceProductPackage.getProductId());
+        order.setProductPackageId(productPackageId);
+        mapper.updateByPrimaryKey(order);
+        return order;
     }
 
     /**
@@ -105,6 +113,15 @@ public class OrderServiceImpl implements OrderService{
         finishOrder(companyId, payOrder, serviceProductPackage, money, serviceProduct, companyServiceCount);
 
     }
+
+    public void updateCompanyService(PayOrder payOrder,Long companyId) {
+        Integer productPackageId = payOrder.getProductPackageId();
+        ServiceProductPackage serviceProductPackage = packageMapper.selectByPrimaryKey(productPackageId);
+        ServiceProduct serviceProduct = productMapper.selectByPrimaryKey(serviceProductPackage.getProductId());
+        CompanyServiceCount companyServiceCount = updateServiceCount(companyId, serviceProductPackage, serviceProduct);
+        finishOrder(companyId, payOrder, serviceProductPackage,  balanceService.companyBalance(companyId), serviceProduct, companyServiceCount);
+    }
+
 
     private void finishOrder(Long companyId, PayOrder payOrder, ServiceProductPackage serviceProductPackage, PayBalance money, ServiceProduct serviceProduct, CompanyServiceCount companyServiceCount) {
         payOrder.setOrderStatus(OrderStatus.PAYED);
@@ -184,13 +201,18 @@ public class OrderServiceImpl implements OrderService{
     }
 
 
-
-
     public PayOrder changeToPayFinish(PayOrder payOrder,Integer payType){
         //检查订单号是否已经被处理过
         if (payOrder.getOrderStatus() != OrderStatus.PENDINGPAY) {
-            throw new RuntimeException("订单已付款");
+            throw new RuntimeException("订单状态异常");
         }
+        Integer orderType = payOrder.getOrderType();
+        if (orderType == OrderType.PAYORDER) {
+
+            updateCompanyService(payOrder,payOrder.getOrderPayCompanyId());
+            return payOrder;
+        }
+
         //检查是否已付款
         balanceService.rechargeBalance(payOrder,payOrder.getOrderPayCompanyId(),payOrder.getCreateUserName());
         payOrder.setOrderStatus(OrderStatus.PAYED);
