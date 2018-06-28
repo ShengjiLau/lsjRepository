@@ -311,33 +311,41 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                     }));
 
             //需要更新的 List<WaybillItemsModifyParamsDto> 转为 List<WaybillItems>
-            List<WaybillItems> waybillItemsUpdateList = waybillItemsMap.get("update").stream()
-                    .map(item -> {
-                        WaybillItems waybillItem = waybillItemsMapper.selectByPrimaryKey(item.getId());
-                        BeanUtils.copyProperties(item, waybillItem);
-                        waybillItem.setUpdateId(waybill.getUpdateId());
-                        waybillItem.setUpdateName(waybill.getUpdateName());
-                        waybillItem.setCompanyId(waybill.getCompanyId());
-                        return waybillItem;
-                    }).collect(Collectors.toList());
+            List<WaybillItems> waybillItemsUpdateList=null;
+            if(waybillItemsMap.get("update")!=null&&waybillItemsMap.get("update").size()>0){
+                waybillItemsUpdateList = waybillItemsMap.get("update").stream()
+                        .map(item -> {
+                            WaybillItems waybillItem = waybillItemsMapper.selectByPrimaryKey(item.getId());
+                            BeanUtils.copyProperties(item, waybillItem);
+                            waybillItem.setUpdateId(waybill.getUpdateId());
+                            waybillItem.setUpdateName(waybill.getUpdateName());
+                            waybillItem.setCompanyId(waybill.getCompanyId());
+                            return waybillItem;
+                        }).collect(Collectors.toList());
+            }
+
+            List<WaybillItems> waybillItemsAddList=null;
+            if(waybillItemsMap.get("add")!=null&&waybillItemsMap.get("add").size()>0){
+                waybillItemsAddList= waybillItemsMap.get("add").stream()
+                        .map(item -> {
+                            WaybillItems waybillItem = new WaybillItems();
+                            BeanUtils.copyProperties(item, waybillItem);
+                            waybillItem.setCreateId(waybill.getCreateId());
+                            waybillItem.setCreateName(waybill.getCreateName());
+                            waybillItem.setCompanyId(waybill.getCompanyId());
+                            waybillItem.setWaybillId(waybill.getId());
+                            return waybillItem;
+                        }).collect(Collectors.toList());
+            }
 
             //需要新增的 List<WaybillItemsModifyParamsDto> 转为 List<WaybillItems>
-            List<WaybillItems> waybillItemsAddList = waybillItemsMap.get("add").stream()
-                    .map(item -> {
-                        WaybillItems waybillItem = new WaybillItems();
-                        BeanUtils.copyProperties(item, waybillItem);
-                        waybillItem.setCreateId(waybill.getCreateId());
-                        waybillItem.setCreateName(waybill.getCreateName());
-                        waybillItem.setCompanyId(waybill.getCompanyId());
-                        waybillItem.setWaybillId(waybill.getId());
-                        return waybillItem;
-                    }).collect(Collectors.toList());
 
-            if (waybillItemsUpdateList.size() > 0) {
+
+            if (waybillItemsUpdateList!=null&&waybillItemsUpdateList.size() > 0) {
                 //运单货物详细修改
                 result += waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
             }
-            if (waybillItemsAddList.size() > 0) {
+            if (waybillItemsAddList!=null&&waybillItemsAddList.size() > 0) {
                 //运单货物详细批量插入
                 result += waybillItemsMapper.insertForBatch(waybillItemsAddList);
             }
