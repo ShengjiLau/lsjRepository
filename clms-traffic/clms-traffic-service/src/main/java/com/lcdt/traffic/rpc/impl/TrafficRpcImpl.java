@@ -172,7 +172,7 @@ public class TrafficRpcImpl implements TrafficRpc {
         vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //派单中
         vo.setStartDate(new Date()); //当前系统是时间
         waybillPlanMapper.insert(vo); //生成计划
-
+        WaybillPlan vo2 = waybillPlanMapper.selectByWaybillPlanId(vo.getWaybillPlanId());
         List<PlanDetail> planDetailList = waybillParamsDto.getPlanDetailList();
         if (null!=planDetailList && planDetailList.size()>0) {
             for (PlanDetail obj : planDetailList) {
@@ -189,7 +189,7 @@ public class TrafficRpcImpl implements TrafficRpc {
             }
             planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
         }
-        return vo;
+        return vo2;
     }
 
 
