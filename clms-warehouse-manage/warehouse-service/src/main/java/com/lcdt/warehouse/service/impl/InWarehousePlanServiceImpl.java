@@ -186,7 +186,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
 
     @Transactional
     @Override
-    public boolean inWhPlanAdd(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel) {
+    public InWarehousePlan inWhPlanAdd(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel) {
         InWarehousePlan inWarehousePlan = new InWarehousePlan();
         BeanUtils.copyProperties(inWhPlanAddParamsDto, inWarehousePlan);
         inWarehousePlan.setCompanyId(userCompRel.getCompId());
@@ -212,10 +212,10 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                     obj.setPlanId(inWarehousePlan.getPlanId());
                     inplanGoodsInfos.add(obj);
                 }
-                return inplanGoodsInfoService.insertBatch(inplanGoodsInfos);
+                inplanGoodsInfoService.insertBatch(inplanGoodsInfos);
             }
         }
-        return false;
+        return inWarehousePlan;
     }
 
 

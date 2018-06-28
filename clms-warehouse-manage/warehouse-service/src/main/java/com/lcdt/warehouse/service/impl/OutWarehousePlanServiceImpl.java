@@ -172,7 +172,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
 
     @Transactional
     @Override
-    public boolean outWhPlanAdd(OutWhPlanDto outWhPlanDto, UserCompRel userCompRel) {
+    public OutWarehousePlan outWhPlanAdd(OutWhPlanDto outWhPlanDto, UserCompRel userCompRel) {
         OutWarehousePlan outWarehousePlan = new OutWarehousePlan();
         BeanUtils.copyProperties(outWhPlanDto, outWarehousePlan);
         outWarehousePlan.setCompanyId(userCompRel.getCompId());
@@ -198,10 +198,10 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                     obj.setOutplanId(outWarehousePlan.getOutplanId());
                     outplanGoods.add(obj);
                 }
-                return outplanGoodsService.insertBatch(outplanGoods);
+                 outplanGoodsService.insertBatch(outplanGoods);
             }
         }
-        return false;
+        return outWarehousePlan;
     }
 
 

@@ -18,7 +18,7 @@ public class SmsNotifyImplTest {
 
     @Test
     public void testSendsms(){
-        smsNotify.sendSms(new String[]{"15550977566"}, "短信测试", 0L);
+        //smsNotify.sendSms(new String[]{"15550977566"}, "短信测试", 0L);
     }
 
 

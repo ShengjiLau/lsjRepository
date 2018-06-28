@@ -65,7 +65,7 @@ public interface InWarehousePlanService extends IService<InWarehousePlan> {
      * @param userCompRel
      * @return
      */
-    boolean inWhPlanAdd(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel);
+    InWarehousePlan inWhPlanAdd(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel);
 
 
 

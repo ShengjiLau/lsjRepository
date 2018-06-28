@@ -43,6 +43,7 @@ import com.lcdt.traffic.model.PlanDetail;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.TrafficRpc;
 import com.lcdt.traffic.vo.ConstantVO;
+import org.springframework.util.StringUtils;
 
 
 /**
@@ -459,8 +460,8 @@ public class OrderServiceImpl implements OrderService {
 	    inWhPlanAddParamsDto.setInWhPlanGoodsDtoList(inWhPlanGoodsDtoList);
 	    order.setWarehousePlan(warehousePlan);
 	    orderMapper.updateByPrimaryKey(order);
-	    Boolean flag = warehouseRpcService.inWhPlanAdd(inWhPlanAddParamsDto);
-		if (flag) {
+        String flag = warehouseRpcService.inWhPlanAdd(inWhPlanAddParamsDto);
+		if (!StringUtils.isEmpty(flag)) {
 			return true;
 		}else {
 			return false;
@@ -505,8 +506,8 @@ public class OrderServiceImpl implements OrderService {
 		
 		order.setWarehousePlan(warehousePlan);
 	    orderMapper.updateByPrimaryKey(order);
-		Boolean flag = warehouseRpcService.outWhPlanAdd(outWhPlanDto);
-		if (flag) {
+		String flag = warehouseRpcService.outWhPlanAdd(outWhPlanDto);
+		if (!StringUtils.isEmpty(flag)) {
 			return true;
 		}else {
 			return false;
