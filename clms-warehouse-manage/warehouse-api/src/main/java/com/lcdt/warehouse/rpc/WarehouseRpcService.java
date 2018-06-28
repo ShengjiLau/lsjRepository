@@ -28,7 +28,7 @@ public interface WarehouseRpcService {
      * @param outWhPlanDto
      * @return
      */
-    boolean outWhPlanAdd(OutWhPlanDto outWhPlanDto);
+    String outWhPlanAdd(OutWhPlanDto outWhPlanDto);
 
 
 
@@ -37,7 +37,7 @@ public interface WarehouseRpcService {
      * @param inWhPlanAddParamsDto
      * @return
      */
-    boolean inWhPlanAdd(InWhPlanDto inWhPlanAddParamsDto);
+    String inWhPlanAdd(InWhPlanDto inWhPlanAddParamsDto);
 
 
 }
