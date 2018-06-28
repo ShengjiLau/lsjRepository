@@ -38,14 +38,14 @@ public class ContractApi {
     @ApiOperation(value = "合同列表", notes = "合同列表数据")
     @GetMapping("/list")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('contract_list')")
-    public PageBaseDto<List<Contract>> contractList(ContractDto contractDto) {
+    public PageBaseDto<List<ContractDto>> contractList(ContractDto contractDto) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         contractDto.setCompanyId(companyId);
 
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(contractDto.getPageNum());    //设置页码
         pageInfo.setPageSize(contractDto.getPageSize());  //设置每页条数
-        PageInfo<List<Contract>> listPageInfo = contractService.contractList(contractDto, pageInfo);
+        PageInfo<List<ContractDto>> listPageInfo = contractService.contractList(contractDto, pageInfo);
         logger.debug("合同总条数：" + listPageInfo.getTotal());
         logger.debug("listPageInfo:" + listPageInfo.toString());
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());

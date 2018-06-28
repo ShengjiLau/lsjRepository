@@ -47,7 +47,7 @@ public class PurchaseContractApi {
     @ApiOperation(value = "合同列表", notes = "合同列表数据")
     @GetMapping("/contractList")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_contract_list')")
-    public PageBaseDto<List<Contract>> contractList(@Validated ContractDto contractDto) {
+    public PageBaseDto<List<ContractDto>> contractList(@Validated ContractDto contractDto) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         contractDto.setCompanyId(companyId);
 
@@ -60,7 +60,7 @@ public class PurchaseContractApi {
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(contractDto.getPageNum());    //设置页码
         pageInfo.setPageSize(contractDto.getPageSize());  //设置每页条数
-        PageInfo<List<Contract>> listPageInfo = contractService.contractList(contractDto, pageInfo);
+        PageInfo<List<ContractDto>> listPageInfo = contractService.contractList(contractDto, pageInfo);
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
         return pageBaseDto;
     }

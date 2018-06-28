@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.dto.LeaveMsgDto;
+import com.lcdt.traffic.dto.LeaveMsgParamDto;
 import com.lcdt.traffic.dto.PlanDetailParamsDto;
 import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.PlanLeaveMsg;
@@ -235,6 +237,20 @@ public class OwnPlanApi {
     }
 
 
+    @ApiOperation("留言-列表-批量获取")
+    @RequestMapping(value = "/planLeaveMsgList4Batch",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_list') or hasAuthority('traffic_plan_leave_msg') or hasAuthority('traffic_plan_leave_msg_1')")
+    public JSONObject  planLeaveMsgList4Batch(@Validated @RequestBody LeaveMsgParamDto leaveMsgParamDto) {
+        JSONObject jo = new JSONObject();
+        jo.put("code", 0);
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        leaveMsgParamDto.setLoginCmpId(companyId);
+        jo.put("data",planService.planLeaveMsgList4Batch(leaveMsgParamDto));
+        return jo;
+    }
+
+
+
     @ApiOperation("留言-添加")
     @RequestMapping(value = "/planLeaveMsgAdd",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_Add') or hasAuthority('traffic_plan_leave_msg') or hasAuthority('traffic_plan_leave_msg_1')")
@@ -313,7 +329,7 @@ public class OwnPlanApi {
     @ApiOperation("编辑--发布")
     @RequestMapping(value = "/planEdit4Publish",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_create_plan') or hasAuthority('traffic_create_plan_1')")
-    public JSONObject planEdit4Publish(@RequestBody WaybillParamsDto dto, BindingResult bindingResult) {
+    public JSONObject planEdit4Publish(@Validated WaybillParamsDto dto, BindingResult bindingResult) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();
