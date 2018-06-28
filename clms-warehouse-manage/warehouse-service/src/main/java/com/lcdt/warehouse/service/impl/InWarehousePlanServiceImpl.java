@@ -426,6 +426,8 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
         params.setDeliverymanPhone(inWhPlanAddParamsDto.getDeliverymanPhone());
         params.setAttachments(_inWhPlanDto.getAttachment());
         params.setCompanyId(_inWhPlanDto.getCompanyId());
+        params.setPurchaseCode(_inWhPlanDto.getCustomerPurchaseNo());//采购单号
+        params.setContractCode(_inWhPlanDto.getContractNo());//合同编号
         params.setCreateDate(new Date());
         params.setCreateId(userCompRel.getUser().getUserId());
         params.setCreateName(userCompRel.getUser().getRealName());
