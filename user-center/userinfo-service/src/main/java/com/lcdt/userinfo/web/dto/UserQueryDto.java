@@ -19,6 +19,8 @@ public class UserQueryDto extends User {
 
     private String loginDateSince;
 
+    private String selectFlag;
+
     public String getLoginDateUntil() {
         return loginDateUntil;
     }
@@ -65,5 +67,13 @@ public class UserQueryDto extends User {
 
     public void setRegisterDateUntil(Date registerDateUntil) {
         this.registerDateUntil = registerDateUntil;
+    }
+
+    public String getSelectFlag() {
+        return selectFlag;
+    }
+
+    public void setSelectFlag(String selectFlag) {
+        this.selectFlag = selectFlag;
     }
 }
