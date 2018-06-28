@@ -1,3 +1,4 @@
+
 package com.lcdt.warehouse.dto;
 
 import java.io.Serializable;
@@ -258,3 +259,6 @@ public class OutWhPlanGoodsDto implements Serializable {
         this.invertoryId = invertoryId;
     }
 }
+
+
+
