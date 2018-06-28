@@ -15,6 +15,6 @@ public interface OrderService {
 
     void buyServiceProduct(Long orderId,Long companyId, Integer productPackageId);
 
-
+    PayOrder createOrder(Integer productPackageId,Long comapnyId, User user);
 
 }

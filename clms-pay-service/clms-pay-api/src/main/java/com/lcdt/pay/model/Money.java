@@ -1,6 +1,8 @@
 package com.lcdt.pay.model;
 
-public class Money {
+import java.io.Serializable;
+
+public class Money implements Serializable {
 
     public Money(Integer moneyNum) {
         this.moneyNum = moneyNum;

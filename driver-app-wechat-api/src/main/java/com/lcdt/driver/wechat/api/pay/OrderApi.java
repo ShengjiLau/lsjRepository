@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/pay")
 public class OrderApi {
 
     @Reference
@@ -52,9 +53,10 @@ public class OrderApi {
     }
     @ApiOperation("生成订单")
     @RequestMapping(value = "/createorder",method = RequestMethod.POST)
-    public PayOrder createPayOrder(Integer productId){
-        return orderService.createOrder(SecurityInfoGetter.getCompanyId(), SecurityInfoGetter.getUser(), productId);
+    public PayOrder createPayOrder(Integer productPackageId){
+        return orderService.createOrder(productPackageId,SecurityInfoGetter.getCompanyId(), SecurityInfoGetter.getUser());
     }
+
     @ApiOperation("公司余额购买产品")
     @RequestMapping(value = "/buypackage",method = RequestMethod.POST)
     public String buyServicePackage(Integer packageId,Long orderId){

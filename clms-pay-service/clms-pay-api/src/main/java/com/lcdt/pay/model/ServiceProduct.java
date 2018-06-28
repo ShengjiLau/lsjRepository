@@ -1,6 +1,8 @@
 package com.lcdt.pay.model;
 
-public class ServiceProduct {
+import java.io.Serializable;
+
+public class ServiceProduct implements Serializable {
     private Integer productId;
 
     private String productName;
