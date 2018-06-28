@@ -77,10 +77,6 @@ public class OrderServiceImpl implements OrderService {
     @Reference
     private WarehouseRpcService warehouseRpcService;
     
-    private final short defaultValue = 0;
-    private final short trafficPlan = 1;
-    private final short warehousePlan = 1;
-
     @Override
     public int addOrder(OrderDto orderDto) {
         BigDecimal aTotal = new BigDecimal(0);// aTotal为所有商品总价格
@@ -97,8 +93,6 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         BeanUtils.copyProperties(orderDto, order);
         order.setSummation(aTotal);
-        order.setTrafficPlan(defaultValue);
-        order.setWarehousePlan(defaultValue);
         int result = orderMapper.insertOrder(order);
         int i = 0;
         int j = 0;
@@ -375,7 +369,7 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setReceiveCity(order.getReceiverCity());
 		    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
 		    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
-		    flag = 1;
+		    flag = purchaseFlag;
 	    }else {
 	    	WaybillParamsDto.setSendMan(order.getReceiver());
 		    WaybillParamsDto.setSendPhone(order.getReceiverPhone());
@@ -389,7 +383,7 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setReceiveCity(order.getSendCity());
 		    WaybillParamsDto.setReceiveCounty(order.getSendDistrict());
 		    WaybillParamsDto.setReceiveAddress(order.getSendAddress());
-		    flag = 2;
+		    flag = salesFlag;
 	    }
 	    
 	    List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
@@ -410,10 +404,12 @@ public class OrderServiceImpl implements OrderService {
 	    	planDetailList.add(planDetail);
 	    }
 	    WaybillParamsDto.setPlanDetailList(planDetailList);
-	    order.setTrafficPlan(trafficPlan);
-	    orderMapper.updateByPrimaryKey(order);
+	
+	   
 	    WaybillPlan waybillPlan = trafficRpc.purchase4Plan(WaybillParamsDto, flag);
 	    if (null != waybillPlan) {
+	    	order.setTrafficPlan(waybillPlan.getSerialCode());
+	    	orderMapper.updateByPrimaryKey(order);
 	    	return true;
 	    }else {
 	    	return false;
@@ -458,10 +454,11 @@ public class OrderServiceImpl implements OrderService {
 		}
   
 	    inWhPlanAddParamsDto.setInWhPlanGoodsDtoList(inWhPlanGoodsDtoList);
-	    order.setWarehousePlan(warehousePlan);
-	    orderMapper.updateByPrimaryKey(order);
-        String flag = warehouseRpcService.inWhPlanAdd(inWhPlanAddParamsDto);
-		if (!StringUtils.isEmpty(flag)) {
+	    
+        String warehousePlan = warehouseRpcService.inWhPlanAdd(inWhPlanAddParamsDto);
+		if (!StringUtils.isEmpty(warehousePlan)) {
+			order.setTrafficPlan(warehousePlan);
+		    orderMapper.updateByPrimaryKey(order);
 			return true;
 		}else {
 			return false;
@@ -504,10 +501,10 @@ public class OrderServiceImpl implements OrderService {
 		}
 		outWhPlanDto.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);
 		
-		order.setWarehousePlan(warehousePlan);
-	    orderMapper.updateByPrimaryKey(order);
-		String flag = warehouseRpcService.outWhPlanAdd(outWhPlanDto);
-		if (!StringUtils.isEmpty(flag)) {
+		String warehousePlan  = warehouseRpcService.outWhPlanAdd(outWhPlanDto);
+		if (!StringUtils.isEmpty(warehousePlan)) {
+			order.setWarehousePlan(warehousePlan);
+			orderMapper.updateByPrimaryKey(order);
 			return true;
 		}else {
 			return false;

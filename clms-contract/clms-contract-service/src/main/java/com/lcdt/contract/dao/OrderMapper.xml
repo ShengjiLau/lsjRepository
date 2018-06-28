@@ -41,8 +41,8 @@
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="order_serial_no" jdbcType="VARCHAR" property="orderSerialNo" />
     <result column="receive_time" jdbcType="TIMESTAMP" property="receiveTime" />
-    <result column="traffic_plan" property="trafficPlan" jdbcType="SMALLINT" />
-    <result column="warehouse_plan" property="warehousePlan" jdbcType="SMALLINT" />
+    <result column="traffic_plan" property="trafficPlan" jdbcType="VARCHAR" />
+    <result column="warehouse_plan" property="warehousePlan" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -134,7 +134,7 @@
       #{attachment3Name,jdbcType=VARCHAR},#{attachment3,jdbcType=VARCHAR},
       #{attachment4Name,jdbcType=VARCHAR},#{attachment4,jdbcType=VARCHAR},
       #{attachment5Name,jdbcType=VARCHAR},#{attachment5,jdbcType=VARCHAR}),
-      #{trafficPlan,jdbcType=SMALLINT}, #{warehousePlan,jdbcType=SMALLINT}
+      #{trafficPlan,jdbcType=VARCHAR}, #{warehousePlan,jdbcType=VARCHAR}
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.contract.model.Order" >
     insert into t_order
@@ -439,10 +439,10 @@
         #{attachment5,jdbcType=VARCHAR},
       </if>
        <if test="trafficPlan != null" >
-        #{trafficPlan,jdbcType=SMALLINT},
+        #{trafficPlan,jdbcType=VARCHAR},
       </if>
       <if test="warehousePlan != null" >
-        #{warehousePlan,jdbcType=SMALLINT},
+        #{warehousePlan,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -594,10 +594,10 @@
         attachment5 = #{attachment5,jdbcType=VARCHAR},
       </if>
        <if test="trafficPlan != null" >
-        traffic_plan = #{trafficPlan,jdbcType=SMALLINT},
+        traffic_plan = #{trafficPlan,jdbcType=VARCHAR},
       </if>
       <if test="warehousePlan != null" >
-        warehouse_plan = #{warehousePlan,jdbcType=SMALLINT},
+        warehouse_plan = #{warehousePlan,jdbcType=VARCHAR},
       </if>
       <if test="approvalStatus==0">
       	approval_process_id=null,
@@ -662,8 +662,8 @@
       attachment4 = #{attachment4,jdbcType=VARCHAR},
       attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
       attachment5 = #{attachment5,jdbcType=VARCHAR},
-      traffic_plan = #{trafficPlan,jdbcType=SMALLINT},
-      warehouse_plan = #{warehousePlan,jdbcType=SMALLINT}
+      traffic_plan = #{trafficPlan,jdbcType=VARCHAR},
+      warehouse_plan = #{warehousePlan,jdbcType=VARCHAR}
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
   <update id="updateApprovalStatus" >
