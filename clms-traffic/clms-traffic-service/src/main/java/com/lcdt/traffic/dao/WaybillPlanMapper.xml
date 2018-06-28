@@ -1278,6 +1278,23 @@
     from t_waybill_plan
 	where waybill_plan_id = #{waybillPlanId,jdbcType=BIGINT}
 	</select>
-
+	
+	<select id="getWaybillPlanBySerialCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+	select waybill_plan_id, plan_code, serial_code, group_id, group_name, plan_source, 
+    plan_status, send_card_status, send_order_type, carrier_type,carrier_collection_ids, carrier_collection_names,
+    carrier_phone, carrier_vehicle, biding_start, biding_end,
+    customer_id, customer_name, customer_phone, sales_order, cust_contact_man, send_wh_id, 
+    send_wh_name, send_man, send_phone, send_province, send_city, send_county, send_address, 
+    receive_man, receive_phone, receive_province, receive_city, receive_county, receive_address, 
+    transport_way, goods_type, start_date, arrive_date, is_receipt, is_urgent, distribution_way, 
+    attachment1, attachment1_name, attachment2, attachment2_name, attachment3, attachment3_name, 
+    attachment4, attachment4_name, attachment5, attachment5_name, is_approval, plan_remark, 
+    create_id, create_name, create_date, update_id, update_name, update_time, is_deleted, 
+    carrier_company_id, company_id, plan_days, pubdate, finish_date, cancel_date, cancel_man,
+    carrier_driver_ids,carrier_driver_names,carrier_ids,carrier_names,
+    cancel_remark,carrier_company_name,carrier_all_ids
+    from t_waybill_plan
+	where serial_code = #{serialCode,jdbcType=VARCHAR}
+	</select>
 
 </mapper>

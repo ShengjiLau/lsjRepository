@@ -118,4 +118,11 @@ public interface WaybillPlanMapper {
      * 司机已抢
      */
     List<SnatchBill4WaittingRdto> completeSnatch4Driver(Map map);
+    
+    
+    
+    WaybillPlan getWaybillPlanBySerialCode(String serialCode);
+    
+    
+    
 }

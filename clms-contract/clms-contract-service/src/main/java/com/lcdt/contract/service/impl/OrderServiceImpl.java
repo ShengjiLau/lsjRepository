@@ -15,6 +15,8 @@ import com.lcdt.warehouse.dto.InWhPlanDto;
 import com.lcdt.warehouse.dto.InWhPlanGoodsDto;
 import com.lcdt.warehouse.dto.OutWhPlanDto;
 import com.lcdt.warehouse.dto.OutWhPlanGoodsDto;
+import com.lcdt.warehouse.entity.InWarehousePlan;
+import com.lcdt.warehouse.entity.OutWarehousePlan;
 import com.lcdt.warehouse.rpc.WarehouseRpcService;
 
 import org.slf4j.Logger;
@@ -260,6 +262,22 @@ public class OrderServiceImpl implements OrderService {
             List<Map> paymentList = nonautomaticMapper.paymentInfo(orderDtoList,orderDto.getCompanyId());
             List<Map> billingRecordList = nonautomaticMapper.billingInfo(orderDtoList,orderDto.getCompanyId());
             for (OrderDto od : orderDtoList) {
+            	//通过RPC查询添加计划状态
+            	if (null != od.getTrafficPlan() && !"".equals(od.getTrafficPlan())) {
+            		WaybillPlan waybillPlan = trafficRpc.getWaybillPlanBySerialNo(od.getTrafficPlan());
+            		od.setTrafficPlanStatus(waybillPlan.getPlanStatus());
+            	}
+            	if (null != od.getWarehousePlan() && !"".equals(od.getWarehousePlan())) {
+            		if (0 == od.getOrderType()) {
+            			InWarehousePlan inWarehousePlan = warehouseRpcService.getInWarehousePlanBySerialNo(od.getWarehousePlan());
+            			od.setWarehousePlanStatus(inWarehousePlan.getPlanStatus());
+            		}
+            		if (1 == od.getOrderType()) {
+            			OutWarehousePlan outWarehousePlan = warehouseRpcService.getOutWarehousePlanBySerialNo(od.getWarehousePlan());
+            			od.setWarehousePlanStatus(outWarehousePlan.getPlanStatus());
+            		}
+            	}
+            	
                 //整合付款单信息
                 if (paymentList.size() > 0) {
                     for (int i = 0; i < paymentList.size(); i++) {

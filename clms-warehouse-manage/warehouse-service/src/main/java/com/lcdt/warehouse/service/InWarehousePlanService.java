@@ -90,6 +90,9 @@ public interface InWarehousePlanService extends IService<InWarehousePlan> {
      * @return
      */
     boolean distributeWh(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel);
+    
+    
+ 
 
 
 

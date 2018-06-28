@@ -193,5 +193,11 @@ public class TrafficRpcImpl implements TrafficRpc {
     }
 
 
+	@Override
+	public WaybillPlan getWaybillPlanBySerialNo(String serialNo) {
+		return waybillPlanMapper.getWaybillPlanBySerialCode(serialNo);
+	}
+
+
 
 }
