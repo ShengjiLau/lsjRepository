@@ -356,6 +356,7 @@ public class OrderServiceImpl implements OrderService {
 	    WaybillParamsDto.setCompanyName(userCompRel.getCompany().getFullName()); //企业名称
 	    WaybillParamsDto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
 	    WaybillParamsDto.setSalesOrder(order.getOrderSerialNo());
+	    WaybillParamsDto.setTransportWay((short) 1);//设置运输方式为陆运
 	    if (0 == order.getOrderType()) {
 	    	WaybillParamsDto.setSendMan(order.getSender());
 		    WaybillParamsDto.setSendPhone(order.getSenderPhone());
