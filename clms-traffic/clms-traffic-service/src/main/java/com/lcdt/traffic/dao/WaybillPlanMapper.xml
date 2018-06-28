@@ -1261,7 +1261,7 @@
     order by ${orderFiled} ${orderDesc}
   </select>
   
-	<select id="selectByWaybillPlanId" parameterType="java.lang.Long" resultType="com.lcdt.traffic.model.WaybillPlan">
+	<select id="selectByWaybillPlanId" parameterType="java.lang.Long" resultMap="BaseResultMap">
 	select waybill_plan_id, plan_code, serial_code, group_id, group_name, plan_source, 
     plan_status, send_card_status, send_order_type, carrier_type,carrier_collection_ids, carrier_collection_names,
     carrier_phone, carrier_vehicle, biding_start, biding_end,
