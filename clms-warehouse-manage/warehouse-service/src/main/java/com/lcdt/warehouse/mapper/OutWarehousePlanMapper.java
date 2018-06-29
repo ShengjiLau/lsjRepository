@@ -22,5 +22,7 @@ public interface OutWarehousePlanMapper extends BaseMapper<OutWarehousePlan> {
     List<OutWarehousePlan> outWarehousePlanList(Pagination page, OutWhPlanSearchParamsDto dto);
 
     String getPlanCode();
+    
+    OutWarehousePlan getOutWarehousePlanBySerialCode(String serialCode);
 
 }

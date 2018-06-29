@@ -69,8 +69,10 @@
     <result column="cycle" jdbcType="SMALLINT" property="cycle" />
     <result column="pay_type" jdbcType="VARCHAR" property="payType" />
     <result column="party_a" jdbcType="VARCHAR" property="partyA" />
+    <result column="party_a_name" jdbcType="VARCHAR" property="partyAName" />
     <result column="party_a_principal" jdbcType="VARCHAR" property="partyAPrincipal" />
     <result column="party_b" jdbcType="VARCHAR" property="partyB" />
+    <result column="party_b_name" jdbcType="VARCHAR" property="partyBName" />
     <result column="party_b_principal" jdbcType="VARCHAR" property="partyBPrincipal" />
     <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
     <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
@@ -83,14 +85,17 @@
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <collection property="contractApprovalList" select="selectContractApproval"
                 ofType="com.lcdt.contract.model.ContractApproval" column="{p1=contract_id}" >
-
+    </collection>
+    <collection property="contractProductList" select="selectContractProductByContractId" javaType="ArrayList"
+                ofType="com.lcdt.contract.model.ContractProduct" column="{contractId = contract_id}" >
     </collection>
   </resultMap>
 
   <select id="selectContractApprovalByCondition" resultMap="ContractApprovalDtoMap">
     select t1.contract_id, t1.contract_code, t1.serial_no,t1.title, t1.type, t1.contract_status,
-    t1.approval_status,t1.approval_start_date, t1.approval_end_date, t1.group_id,t1.company_id
-    from t_contract t1 left join t_contract_approval t2 on t1.contract_id = t2.contract_id
+    t1.party_a_name,t1.party_b_name,t1.approval_status,t1.approval_start_date, t1.approval_end_date, 
+    t1.group_id,t1.company_id from t_contract t1 left join t_contract_approval t2 
+    on t1.contract_id = t2.contract_id
     <where>
       t1.type = #{type,jdbcType=VARCHAR} and t1.company_id = #{companyId,jdbcType=BIGINT}
       <if test="title!=null and title!=''">
@@ -197,4 +202,15 @@
       #{item.userId,jdbcType=BIGINT}
     </foreach>
   </select>
+  
+  <select id="selectContractProductByContractId" resultType="com.lcdt.contract.model.ContractProduct">
+    select cp_id cpId,contract_id contractId,product_name productName,product_code productCode,
+    sku,num,price,total,spec,remark from t_contract_product
+    where contract_id = #{contractId,jdbcType=BIGINT}
+ 	order by cp_id desc 
+  </select>
+  
+  
+  
+  
 </mapper>

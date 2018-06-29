@@ -38,7 +38,7 @@ public class SalesContractApprovalApi {
     @ApiOperation(value = "销售合同审批列表", notes = "销售合同审批列表")
     @GetMapping("/list")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_contract_approval_list')")
-    public PageBaseDto<List<Contract>> approvalList(ContractApprovalListDto contractApprovalListDto) {
+    public PageBaseDto<List<ContractApprovalDto>> approvalList(ContractApprovalListDto contractApprovalListDto) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId();    //获取user_id
         contractApprovalListDto.setCompanyId(companyId);

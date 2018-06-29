@@ -7,6 +7,7 @@ import com.lcdt.contract.dao.ContractApprovalMapper;
 import com.lcdt.contract.dao.ContractMapper;
 import com.lcdt.contract.model.Contract;
 import com.lcdt.contract.model.ContractApproval;
+import com.lcdt.contract.model.ContractProduct;
 import com.lcdt.contract.service.ContractApprovalService;
 import com.lcdt.contract.web.dto.ContractApprovalDto;
 import com.lcdt.contract.web.dto.ContractApprovalListDto;
@@ -32,6 +33,7 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
 
     @Autowired
     private ContractMapper contractMapper;
+    
 
     @Override
     public PageInfo<List<ContractApprovalDto>> contractApprovalList(ContractApprovalListDto contractApprovalListDto, PageInfo pageInfo) {

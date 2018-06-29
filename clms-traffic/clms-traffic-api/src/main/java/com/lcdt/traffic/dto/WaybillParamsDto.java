@@ -13,7 +13,13 @@ import java.util.List;
 public class WaybillParamsDto implements java.io.Serializable{
 
 
-    @ApiModelProperty(value = "计划主键ID")
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 15525612146L;
+
+
+	@ApiModelProperty(value = "计划主键ID")
     private Long waybillPlanId;
 
 

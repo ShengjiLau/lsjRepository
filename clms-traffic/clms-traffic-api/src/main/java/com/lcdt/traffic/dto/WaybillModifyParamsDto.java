@@ -52,6 +52,55 @@ public class WaybillModifyParamsDto implements Serializable {
     private Long companyId;
     private Long carrierCompanyId;
     /**
+     * 重量
+     */
+    private Double weight;
+
+    /**
+     * 体积
+     */
+    private Double volume;
+
+    /**
+     * 运输距离
+     */
+    private Double distance;
+
+    /**
+     * 件数
+     */
+    private Double piece;
+
+    /**
+     * 商品重量单位
+     */
+    private String weightUnit;
+
+    /**
+     * 计价类型 1-商品重量；2-商品体积；3-运输距离；4-运输件数
+     */
+    private Byte pricingType;
+
+    /**
+     * 应收单价
+     */
+    private Float freightPrice;
+
+    /**
+     * 应收运费
+     */
+    private Float freightTotal;
+
+    /**
+     * 应付单价
+     */
+    private Float payPrice;
+
+    /**
+     * 应付总价
+     */
+    private Float payTotal;
+    /**
      * 1、编辑，2、调量
      */
     private int operationType;
@@ -368,5 +417,95 @@ public class WaybillModifyParamsDto implements Serializable {
 
     public void setOperationType(int operationType) {
         this.operationType = operationType;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public WaybillModifyParamsDto setWeight(Double weight) {
+        this.weight = weight;
+        return this;
+    }
+
+    public Double getVolume() {
+        return volume;
+    }
+
+    public WaybillModifyParamsDto setVolume(Double volume) {
+        this.volume = volume;
+        return this;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public WaybillModifyParamsDto setDistance(Double distance) {
+        this.distance = distance;
+        return this;
+    }
+
+    public Double getPiece() {
+        return piece;
+    }
+
+    public WaybillModifyParamsDto setPiece(Double piece) {
+        this.piece = piece;
+        return this;
+    }
+
+    public String getWeightUnit() {
+        return weightUnit;
+    }
+
+    public WaybillModifyParamsDto setWeightUnit(String weightUnit) {
+        this.weightUnit = weightUnit;
+        return this;
+    }
+
+    public Byte getPricingType() {
+        return pricingType;
+    }
+
+    public WaybillModifyParamsDto setPricingType(Byte pricingType) {
+        this.pricingType = pricingType;
+        return this;
+    }
+
+    public Float getFreightPrice() {
+        return freightPrice;
+    }
+
+    public WaybillModifyParamsDto setFreightPrice(Float freightPrice) {
+        this.freightPrice = freightPrice;
+        return this;
+    }
+
+    public Float getFreightTotal() {
+        return freightTotal;
+    }
+
+    public WaybillModifyParamsDto setFreightTotal(Float freightTotal) {
+        this.freightTotal = freightTotal;
+        return this;
+    }
+
+    public Float getPayPrice() {
+        return payPrice;
+    }
+
+    public WaybillModifyParamsDto setPayPrice(Float payPrice) {
+        this.payPrice = payPrice;
+        return this;
+    }
+
+    public Float getPayTotal() {
+        return payTotal;
+    }
+
+    public WaybillModifyParamsDto setPayTotal(Float payTotal) {
+        this.payTotal = payTotal;
+        return this;
     }
 }

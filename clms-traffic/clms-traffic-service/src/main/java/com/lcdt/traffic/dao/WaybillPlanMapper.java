@@ -45,6 +45,13 @@ public interface WaybillPlanMapper {
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
     int updateByPrimaryKey(WaybillPlan record);
+    
+    /**
+     * 依据运输计划id查询计划
+     * @param waybillPlanId
+     * @return
+     */
+    WaybillPlan selectByWaybillPlanId(Long waybillPlanId);
 
     int updateWaybillPlan(WaybillPlan record);
 
@@ -111,4 +118,11 @@ public interface WaybillPlanMapper {
      * 司机已抢
      */
     List<SnatchBill4WaittingRdto> completeSnatch4Driver(Map map);
+    
+    
+    
+    WaybillPlan getWaybillPlanBySerialCode(String serialCode);
+    
+    
+    
 }

@@ -181,11 +181,11 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="附件5地址")
 	private String attachment5;
 	
-	@ApiModelProperty(value="是否生成运输计划，默认0未生成，1为已生成")
-	private Short trafficPlan;
+	@ApiModelProperty(value="运输计划流水号")
+	private String trafficPlan;
 	
-	@ApiModelProperty(value="是否生成入库出库计划，默认0未生成，1为已生成")
-	private Short warehousePlan;
+	@ApiModelProperty(value="出入库计划流水号")
+	private String warehousePlan;
 	
     private static final long serialVersionUID = 13333L;
 
@@ -918,24 +918,26 @@ public class Order implements Serializable {
 	}
 
 
-	public Short getTrafficPlan() {
+	public String getTrafficPlan() {
 		return trafficPlan;
 	}
 
 
-	public void setTrafficPlan(Short trafficPlan) {
+	public void setTrafficPlan(String trafficPlan) {
 		this.trafficPlan = trafficPlan;
 	}
 
 
-	public Short getWarehousePlan() {
+	public String getWarehousePlan() {
 		return warehousePlan;
 	}
 
 
-	public void setWarehousePlan(Short warehousePlan) {
+	public void setWarehousePlan(String warehousePlan) {
 		this.warehousePlan = warehousePlan;
 	}
+
+
 
  
 
