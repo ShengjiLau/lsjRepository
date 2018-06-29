@@ -39,6 +39,15 @@ public class OrderApi {
     OrderService orderService;
 
 
+    @RequestMapping(value = "/balance",method = RequestMethod.GET)
+    @ApiOperation("账户余额")
+    public ResponseMessage companyBalance(){
+        Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompId();
+        PayBalance balance = companyBalanceService.companyBalance(companyId);
+        return JSONResponseUtil.success(balance);
+    }
+
+
     @RequestMapping(value = "/companyservice",method = RequestMethod.GET)
     @ApiOperation("服务余额")
     public ResponseMessage companyServiceCount(){
@@ -61,12 +70,12 @@ public class OrderApi {
 
     @ApiOperation("公司余额购买产品")
     @RequestMapping(value = "/buypackage",method = RequestMethod.POST)
-    public String buyServicePackage(Integer packageId,Long orderId){
+    public JSONObject buyServicePackage(Integer packageId,Long orderId){
         orderService.buyServiceProduct(orderId,TokenSecurityInfoGetter.getUserCompRel().getCompId(),packageId);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", 0);
         jsonObject.put("message", "操作成功");
-        return jsonObject.toString();
+        return jsonObject;
     }
 
 }
