@@ -62,7 +62,7 @@
         SELECT F_OUT_PLAN_CODE('WO')
     </select>
     
-    <select id="getOutWarehousePlanBySerialCode" parameterMap="java.lang.String" resultType="com.lcdt.warehouse.entity.OutWarehousePlan">
+    <select id="getOutWarehousePlanBySerialCode" parameterType="java.lang.String" resultType="com.lcdt.warehouse.entity.OutWarehousePlan">
      SELECT <include refid="Base_Column_List" />
         FROM out_warehouse_plan
         where plan_no = #{serialCode,jdbcType=VARCHAR}
