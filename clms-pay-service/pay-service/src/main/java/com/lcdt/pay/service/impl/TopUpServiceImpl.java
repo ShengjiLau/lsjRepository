@@ -1,6 +1,8 @@
 package com.lcdt.pay.service.impl;
 
+import com.lcdt.pay.dao.OrderType;
 import com.lcdt.pay.dao.PayOrderMapper;
+import com.lcdt.pay.model.OrderStatus;
 import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.service.TopupService;
 import com.lcdt.pay.utils.MoneyNumUtil;
@@ -29,10 +31,11 @@ public class TopUpServiceImpl implements TopupService{
         topUpPayOrder.setOrderPayCompanyId(companyId);
         topUpPayOrder.setOrderPayUserId(user.getUserId());
         topUpPayOrder.setCreateUserName(user.getPhone());
-        topUpPayOrder.setOrderStatus(0);
+        topUpPayOrder.setOrderStatus(OrderStatus.PENDINGPAY);
         topUpPayOrder.setOrderNo(OrderNoGenerator.generateDateNo(1));
         topUpPayOrder.setCreateUserName(user.getPhone());
         topUpPayOrder.setOrderDes("账户余额充值"+ MoneyNumUtil.integerMoneyToString(money)+"元");
+        topUpPayOrder.setOrderType(OrderType.TOPUPORDER);
         orderMapper.insert(topUpPayOrder);
         return topUpPayOrder;
     }

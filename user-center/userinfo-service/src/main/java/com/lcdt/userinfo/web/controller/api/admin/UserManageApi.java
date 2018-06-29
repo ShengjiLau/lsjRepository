@@ -47,6 +47,12 @@ public class UserManageApi {
         return JSONResponseUtil.success(user);
     }
 
+    @PostMapping("/manageList")
+    public ResponseMessage manageList(UserQueryDto userQueryDto){
+        PageInfo<AdminUser> pageInfo = PageHelper.startPage(userQueryDto.getPageNo(), userQueryDto.getPageSize()).doSelectPageInfo(() -> mapper.selectManageUserByUserDto(userQueryDto));
+        return JSONResponseUtil.success(pageInfo);
+    }
+
     @PostMapping("/addUserAdmin")
     public ResponseMessage addUserAdmin(AdminUser adminUser) {
         JSONObject jo = new JSONObject();

@@ -186,7 +186,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
 
     @Transactional
     @Override
-    public boolean inWhPlanAdd(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel) {
+    public InWarehousePlan inWhPlanAdd(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel) {
         InWarehousePlan inWarehousePlan = new InWarehousePlan();
         BeanUtils.copyProperties(inWhPlanAddParamsDto, inWarehousePlan);
         inWarehousePlan.setCompanyId(userCompRel.getCompId());
@@ -212,10 +212,10 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                     obj.setPlanId(inWarehousePlan.getPlanId());
                     inplanGoodsInfos.add(obj);
                 }
-                return inplanGoodsInfoService.insertBatch(inplanGoodsInfos);
+                inplanGoodsInfoService.insertBatch(inplanGoodsInfos);
             }
         }
-        return false;
+        return inWarehousePlan;
     }
 
 
@@ -426,6 +426,8 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
         params.setDeliverymanPhone(inWhPlanAddParamsDto.getDeliverymanPhone());
         params.setAttachments(_inWhPlanDto.getAttachment());
         params.setCompanyId(_inWhPlanDto.getCompanyId());
+        params.setPurchaseCode(_inWhPlanDto.getCustomerPurchaseNo());//采购单号
+        params.setContractCode(_inWhPlanDto.getContractNo());//合同编号
         params.setCreateDate(new Date());
         params.setCreateId(userCompRel.getUser().getUserId());
         params.setCreateName(userCompRel.getUser().getRealName());

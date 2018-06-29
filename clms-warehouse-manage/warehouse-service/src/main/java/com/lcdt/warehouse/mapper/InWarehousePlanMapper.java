@@ -20,5 +20,7 @@ public interface InWarehousePlanMapper extends BaseMapper<InWarehousePlan> {
     List<InWarehousePlan> inWarehousePlanList(Pagination page, InWhPlanSearchParamsDto dto);
 
     String getPlanCode();
+    
+    InWarehousePlan getInWarehousePlanBySerialCode(String serialCode);
 
 }

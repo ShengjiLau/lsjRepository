@@ -24,5 +24,4 @@ public class TrafficServiceApp  {
         ConfigurableApplicationContext run = new SpringApplicationBuilder().sources(TrafficServiceApp.class).run(args);
     }
 
-
 }

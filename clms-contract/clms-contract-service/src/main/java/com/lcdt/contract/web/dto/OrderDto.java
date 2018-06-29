@@ -47,7 +47,9 @@ public class OrderDto extends Order  implements Serializable{
 
 	private List<OrderApproval> orderApprovalList;
 	
+	private String trafficPlanStatus;
 	
+	private Integer warehousePlanStatus;
 
 	public int getPageNum() {
 		return pageNum;
@@ -119,4 +121,17 @@ public class OrderDto extends Order  implements Serializable{
 	public void setOrderApprovalList(List<OrderApproval> orderApprovalList) {
 		this.orderApprovalList = orderApprovalList;
 	}
+	public String getTrafficPlanStatus() {
+		return trafficPlanStatus;
+	}
+	public void setTrafficPlanStatus(String trafficPlanStatus) {
+		this.trafficPlanStatus = trafficPlanStatus;
+	}
+	public Integer getWarehousePlanStatus() {
+		return warehousePlanStatus;
+	}
+	public void setWarehousePlanStatus(Integer warehousePlanStatus) {
+		this.warehousePlanStatus = warehousePlanStatus;
+	}
+	
 }

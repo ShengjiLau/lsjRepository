@@ -1,6 +1,7 @@
 package com.lcdt.warehouse.mapper;
 
 import com.lcdt.warehouse.entity.TransfersOrder;
+
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**
@@ -12,5 +13,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @since 2018-05-07
  */
 public interface TransfersOrderMapper extends BaseMapper<TransfersOrder> {
-
+	
 }

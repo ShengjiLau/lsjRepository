@@ -1,8 +1,9 @@
 package com.lcdt.pay.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class BalanceLog {
+public class BalanceLog implements Serializable{
     private Integer balanceLogId;
 
     private Integer logType;
