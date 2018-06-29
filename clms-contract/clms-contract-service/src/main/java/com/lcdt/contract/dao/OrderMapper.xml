@@ -133,8 +133,8 @@
       #{attachment2Name,jdbcType=VARCHAR},#{attachment2,jdbcType=VARCHAR},
       #{attachment3Name,jdbcType=VARCHAR},#{attachment3,jdbcType=VARCHAR},
       #{attachment4Name,jdbcType=VARCHAR},#{attachment4,jdbcType=VARCHAR},
-      #{attachment5Name,jdbcType=VARCHAR},#{attachment5,jdbcType=VARCHAR}),
-      #{trafficPlan,jdbcType=VARCHAR}, #{warehousePlan,jdbcType=VARCHAR}
+      #{attachment5Name,jdbcType=VARCHAR},#{attachment5,jdbcType=VARCHAR},
+      #{trafficPlan,jdbcType=VARCHAR}, #{warehousePlan,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.contract.model.Order" >
     insert into t_order

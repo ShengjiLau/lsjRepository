@@ -16,6 +16,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class OrderOverviewDto {
 	
+	@ApiModelProperty("所属业务组id")
+	private Long companyId;
+	
 	@ApiModelProperty("业务组id数组")
 	private Long[] groups;
 	
@@ -26,7 +29,7 @@ public class OrderOverviewDto {
 	private BigDecimal totalOrderAmount;
 	
 	@ApiModelProperty("采购/销售客单价")
-	private BigDecimal coustomerUnitPrice;
+	private BigDecimal customerUnitPrice;
 	
 	@ApiModelProperty("采购/销售商品数量")
 	private Integer numOfProduct;
