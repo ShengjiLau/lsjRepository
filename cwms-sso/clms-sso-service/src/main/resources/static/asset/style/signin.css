@@ -51,6 +51,11 @@ border-color: transparent;
   margin-bottom: 30px;
   background: #fff url(../image/logo.png) no-repeat center;
 }
+.logo-box-m{
+  height: 63px;
+  margin-bottom: 30px;
+  background: #fff url(../image/logo_m.png) no-repeat center;
+}
 .signin-form{
  /* border-top: 1px solid #f0f0f0;*/
   padding: 40px 33px 0 33px;
