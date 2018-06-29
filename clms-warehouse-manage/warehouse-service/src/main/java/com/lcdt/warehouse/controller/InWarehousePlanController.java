@@ -158,8 +158,8 @@ public class InWarehousePlanController {
             msg = e.getMessage();
             logger.error(e.getMessage());
         }
-        jsonObject.put("code", inWarehousePlan==null? 0:-1);
-        jsonObject.put("message", inWarehousePlan==null? "新建成功！":msg);
+        jsonObject.put("code", inWarehousePlan==null? -1:0);
+        jsonObject.put("message", inWarehousePlan==null? msg:"新建成功！");
         return jsonObject;
     }
 
