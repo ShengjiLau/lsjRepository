@@ -2,33 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lcdt.contract.dao.OverviewMapper">
 <resultMap type="com.lcdt.contract.web.dto.OrderOverviewDto" id="BaseResultMap">
-	<result property="numOfOrders" column="num_of_orders" jdbcType="INT"/>
+	<result property="numOfOrders" column="num_of_orders" jdbcType="INTEGER"/>
 	<result property="totalOrderAmount" column="total_order_amount" jdbcType="DECIMAL"/>
 	<result property="customerUnitPrice" column="customer_unit_price" jdbcType="DECIMAL"/>
-	<result property="numOfProduct" column="num_of_product" jdbcType="INT"/>
+	<result property="numOfProduct" column="num_of_product" jdbcType="INTEGER"/>
 	<result property="averagePriceOfProduce" column="average_price_of_produce" jdbcType="DECIMAL"/>
-	<result property="waitingReleasedContract" column="waiting_released_contract" jdbcType="INT"/>
-	<result property="waitingEffectiveContract" column="waiting_effective_contract" jdbcType="INT"/>
-	<result property="inEffectContract" column="in_effect_contract" jdbcType="INT"/>
-	<result property="defunctContract" column="defunct_contract" jdbcType="INT"/>
-	<result property="waitingReleasedOrder" column="waiting_released_order" jdbcType="INT"/>
-	<result property="waitingMoneyGatheringOrder" column="waiting_money_gathering_order" jdbcType="INT"/>
-	<result property="moneyCollectingOrder" column="money_collecting_order" jdbcType="INT"/>
-	<result property="moneyReceivedOrder" column="money_received_order" jdbcType="INT"/>
+	<result property="waitingReleasedContract" column="waiting_released_contract" jdbcType="INTEGER"/>
+	<result property="waitingEffectiveContract" column="waiting_effective_contract" jdbcType="INTEGER"/>
+	<result property="inEffectContract" column="in_effect_contract" jdbcType="INTEGER"/>
+	<result property="defunctContract" column="defunct_contract" jdbcType="INTEGER"/>
+	<result property="waitingReleasedOrder" column="waiting_released_order" jdbcType="INTEGER"/>
+	<result property="waitingMoneyGatheringOrder" column="waiting_money_gathering_order" jdbcType="INTEGER"/>
+	<result property="moneyCollectingOrder" column="money_collecting_order" jdbcType="INTEGER"/>
+	<result property="moneyReceivedOrder" column="money_received_order" jdbcType="INTEGER"/>
 </resultMap>
 	<select id="getOverviewOrderList" parameterType="com.lcdt.contract.web.dto.OrderOverviewDto" resultMap="BaseResultMap">
-		
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	</select>
 
 
