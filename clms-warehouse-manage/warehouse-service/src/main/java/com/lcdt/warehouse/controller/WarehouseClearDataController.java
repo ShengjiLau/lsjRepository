@@ -23,14 +23,14 @@ public class WarehouseClearDataController {
     @Autowired
     WarehouseClearDataRpcService warehouseClearDataRpcService;
 
-    @ApiOperation("入库单新增")
-    @PostMapping(value = "/clear/{companyId}")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_clear_data')")
-    public JSONObject clearWarehouseData(@PathVariable Long companyId) {
-        warehouseClearDataRpcService.clearWarehouseData(companyId);
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("code",0);
-        jsonObject.put("message","清空完成");
-        return jsonObject;
-    }
+//    @ApiOperation("入库单新增")
+//    @PostMapping(value = "/clear/{companyId}")
+//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_clear_data')")
+//    public JSONObject clearWarehouseData(@PathVariable Long companyId) {
+//        warehouseClearDataRpcService.clearWarehouseData(companyId);
+//        JSONObject jsonObject=new JSONObject();
+//        jsonObject.put("code",0);
+//        jsonObject.put("message","清空完成");
+//        return jsonObject;
+//    }
 }
