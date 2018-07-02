@@ -150,16 +150,16 @@ public class InWarehousePlanController {
     public JSONObject add(@RequestBody InWhPlanDto inWhPlanAddParamsDto) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         String msg = "新建失败！";
-        boolean flag = false;
+        InWarehousePlan inWarehousePlan = null;
         JSONObject jsonObject = new JSONObject();
         try {
-            flag = inWarehousePlanService.inWhPlanAdd(inWhPlanAddParamsDto, userCompRel);
+            inWarehousePlan = inWarehousePlanService.inWhPlanAdd(inWhPlanAddParamsDto, userCompRel);
         } catch (RuntimeException e) {
             msg = e.getMessage();
             logger.error(e.getMessage());
         }
-        jsonObject.put("code", flag==true? 0:-1);
-        jsonObject.put("message", flag==true? "新建成功！":msg);
+        jsonObject.put("code", inWarehousePlan==null? -1:0);
+        jsonObject.put("message", inWarehousePlan==null? msg:"新建成功！");
         return jsonObject;
     }
 

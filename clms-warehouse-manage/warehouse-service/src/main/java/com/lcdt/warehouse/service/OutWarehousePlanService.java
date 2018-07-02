@@ -44,7 +44,7 @@ public interface OutWarehousePlanService extends IService<OutWarehousePlan> {
      * @param userCompRel
      * @return
      */
-    boolean outWhPlanAdd(OutWhPlanDto outWhPlanDto, UserCompRel userCompRel);
+    OutWarehousePlan outWhPlanAdd(OutWhPlanDto outWhPlanDto, UserCompRel userCompRel);
 
 
     /***

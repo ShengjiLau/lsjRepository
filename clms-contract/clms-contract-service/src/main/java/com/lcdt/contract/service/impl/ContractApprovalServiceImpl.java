@@ -20,7 +20,6 @@ import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.DefaultNotifySender;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
-import org.apache.commons.lang.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

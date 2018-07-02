@@ -99,11 +99,11 @@
     from t_waybill_position_setting
     where waybill_id = #{waybillId,jdbcType=BIGINT} and (company_id = #{companyId,jdbcType=BIGINT} or carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT})
   </select>
-  <select id="selectByWaybillId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByWaybillId" parameterType="java.util.Map" resultMap="BaseResultMap">
     select wps_id, waybill_id, driver_phone, wps_type, frequency_type, fixed_interval,
     fixed_time, company_id, carrier_company_id, create_id, create_name, create_date,
     update_id, update_name, update_date, is_deleted
     from t_waybill_position_setting
-    where waybill_id = #{waybillId,jdbcType=BIGINT}
+    where waybill_id = #{waybillId,jdbcType=BIGINT} and company_id=#{companyId,jdbcType=BIGINT}
   </select>
 </mapper>

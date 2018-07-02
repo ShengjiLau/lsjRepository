@@ -43,8 +43,12 @@ public interface TrafficRpc {
 
 
 
-
-
+    /**
+     * 通过计划流水号查询DO
+     * @param serialNo
+     * @return
+     */
+    WaybillPlan getWaybillPlanBySerialNo(String serialNo);
 
 
 

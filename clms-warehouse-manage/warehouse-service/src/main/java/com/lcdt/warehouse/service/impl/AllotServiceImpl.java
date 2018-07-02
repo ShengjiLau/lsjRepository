@@ -185,8 +185,11 @@ public class AllotServiceImpl implements AllotService{
             if (dto.getAllotProductList() != null && dto.getAllotProductList().size() > 0) {
                 allotProductMapper.updateBatch(dto.getAllotProductList());
             }
+            Allot allot2 = new Allot();
+            BeanUtils.copyProperties(allot, allot2);
+            allot2.setWarehouseOutId(allot.getWarehouseInId());
             //新增入库单
-            saveInWarehouseOrder(allot, dto);
+            saveInWarehouseOrder(allot2, dto);
             return true;
         }catch (Exception e){
             e.printStackTrace();

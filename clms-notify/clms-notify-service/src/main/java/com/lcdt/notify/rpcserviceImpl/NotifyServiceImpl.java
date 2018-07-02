@@ -18,7 +18,7 @@ public class NotifyServiceImpl implements com.lcdt.notify.rpcservice.NotifyServi
     }
 
     public void sendSms(String[] phons ,String content){
-        smsNotify.sendSms(phons, content, 0L);
+        smsNotify.sendSms(phons, content);
     }
 
 }

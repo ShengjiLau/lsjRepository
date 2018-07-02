@@ -19,6 +19,7 @@ import com.lcdt.traffic.model.WaybillItems;
 import com.lcdt.traffic.model.WaybillTransferRecord;
 import com.lcdt.traffic.notify.ClmsNotifyProducer;
 import com.lcdt.traffic.notify.WaybillSenderNotify;
+import com.lcdt.traffic.service.LocationService;
 import com.lcdt.traffic.service.PlanService;
 import com.lcdt.traffic.service.SplitGoodsService;
 import com.lcdt.traffic.service.WaybillService;
@@ -80,6 +81,9 @@ public class WaybillServiceImpl implements WaybillService {
 
     @Reference
     private CompanyServiceCountService companyServiceCountService;
+
+    @Autowired
+    private LocationService locationService;
 
     @Override
     public Waybill addWaybill(WaybillDto waybillDto) {
@@ -311,22 +315,8 @@ public class WaybillServiceImpl implements WaybillService {
         if (list != null && list.size() > 0) {
             //多线程并行处理需要定位的运单
             list.parallelStream().forEach(waybill -> {
-                JSONObject result = GprsLocationBo.getInstance().queryLocation(waybill.getDriverPhone());
-                int resid = result.getInteger("resid");
-                if (resid == 0) {   //正确返回
-                    Driver driver = new Driver();
-                    driver.setDriverPhone(waybill.getDriverPhone());
-                    driver.setCurrentLocation(result.getString("location"));
-                    driver.setShortCurrentLocation(result.getString("street"));
-                    driverService.updateLocation(driver);
-                    logger.info("查询成功");
-                } else if (resid == -80) {    //	余额不足,请充值:请联系客服
-                    logger.warn("余额不足,请充值:请联系客服");
-                } else if (resid == -130) {    //用户可能关机
-                    logger.warn("用户可能关机");
-                } else {      //对于移动手机，定位失败时运营商返回的结果
-                    logger.error("接口返回错误");
-                }
+                JSONObject jsonObject=locationService.queryLocation(waybill.getCompanyId(),waybill.getDriverPhone());
+                logger.info("waybillCode："+waybill.getWaybillCode()+"；定位公司的companyId："+waybill.getCompanyId()+"； code："+jsonObject.getString("code")+"； message："+jsonObject.getString("message"));
             });
         }
     }

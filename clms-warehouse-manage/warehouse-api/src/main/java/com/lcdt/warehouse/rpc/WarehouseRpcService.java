@@ -1,7 +1,10 @@
 package com.lcdt.warehouse.rpc;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.warehouse.dto.InWhPlanDto;
 import com.lcdt.warehouse.dto.OutWhPlanDto;
+import com.lcdt.warehouse.entity.InWarehousePlan;
+import com.lcdt.warehouse.entity.OutWarehousePlan;
 import com.lcdt.warehouse.entity.Warehouse;
 import com.lcdt.warehouse.entity.WarehouseLinkman;
 import com.lcdt.warehouse.entity.WarehouseLoc;
@@ -27,5 +30,27 @@ public interface WarehouseRpcService {
      * @param outWhPlanDto
      * @return
      */
-    boolean outWhPlanAdd(OutWhPlanDto outWhPlanDto);
+    String outWhPlanAdd(OutWhPlanDto outWhPlanDto);
+
+
+
+    /***
+     * 采购单生成入库计划
+     * @param inWhPlanAddParamsDto
+     * @return
+     */
+    String inWhPlanAdd(InWhPlanDto inWhPlanAddParamsDto);
+    
+    
+    /**
+     * 通过入库计划流水号查询入库计划
+     * @param serialNo
+     * @return
+     */
+    InWarehousePlan getInWarehousePlanBySerialNo(String serialNo);
+    
+    
+    OutWarehousePlan getOutWarehousePlanBySerialNo(String serialNo);
+
+
 }

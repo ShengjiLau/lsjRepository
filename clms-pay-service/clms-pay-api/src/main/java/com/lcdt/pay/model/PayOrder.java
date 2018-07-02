@@ -2,9 +2,10 @@ package com.lcdt.pay.model;
 
 import com.lcdt.converter.ResponseData;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class PayOrder implements ResponseData{
+public class PayOrder implements ResponseData,Serializable{
     private Long orderId;
 
     private Integer orderType;
@@ -31,6 +32,16 @@ public class PayOrder implements ResponseData{
     private String orderDes;
 
     private Integer balance;
+
+    Integer productPackageId;
+
+    public Integer getProductPackageId() {
+        return productPackageId;
+    }
+
+    public void setProductPackageId(Integer productPackageId) {
+        this.productPackageId = productPackageId;
+    }
 
     public Integer getBalance() {
         return balance;
@@ -134,5 +145,25 @@ public class PayOrder implements ResponseData{
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo == null ? null : orderNo.trim();
+    }
+
+    @Override
+    public String toString() {
+        return "PayOrder{" +
+                "orderId=" + orderId +
+                ", orderType=" + orderType +
+                ", orderAmount=" + orderAmount +
+                ", createTime=" + createTime +
+                ", orderPayUserId=" + orderPayUserId +
+                ", orderPayCompanyId=" + orderPayCompanyId +
+                ", orderStatus=" + orderStatus +
+                ", orderNo='" + orderNo + '\'' +
+                ", orderProductId=" + orderProductId +
+                ", payType=" + payType +
+                ", createUserName='" + createUserName + '\'' +
+                ", orderDes='" + orderDes + '\'' +
+                ", balance=" + balance +
+                ", productPackageId=" + productPackageId +
+                '}';
     }
 }

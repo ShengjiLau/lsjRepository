@@ -11,8 +11,12 @@ import com.lcdt.contract.dao.OrderApprovalMapper;
 import com.lcdt.contract.model.OrderApproval;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.warehouse.dto.InWhPlanDto;
+import com.lcdt.warehouse.dto.InWhPlanGoodsDto;
 import com.lcdt.warehouse.dto.OutWhPlanDto;
 import com.lcdt.warehouse.dto.OutWhPlanGoodsDto;
+import com.lcdt.warehouse.entity.InWarehousePlan;
+import com.lcdt.warehouse.entity.OutWarehousePlan;
 import com.lcdt.warehouse.rpc.WarehouseRpcService;
 
 import org.slf4j.Logger;
@@ -41,6 +45,7 @@ import com.lcdt.traffic.model.PlanDetail;
 import com.lcdt.traffic.model.WaybillPlan;
 import com.lcdt.traffic.service.TrafficRpc;
 import com.lcdt.traffic.vo.ConstantVO;
+import org.springframework.util.StringUtils;
 
 
 /**
@@ -74,8 +79,6 @@ public class OrderServiceImpl implements OrderService {
     @Reference
     private WarehouseRpcService warehouseRpcService;
     
-    
-
     @Override
     public int addOrder(OrderDto orderDto) {
         BigDecimal aTotal = new BigDecimal(0);// aTotal为所有商品总价格
@@ -259,6 +262,22 @@ public class OrderServiceImpl implements OrderService {
             List<Map> paymentList = nonautomaticMapper.paymentInfo(orderDtoList,orderDto.getCompanyId());
             List<Map> billingRecordList = nonautomaticMapper.billingInfo(orderDtoList,orderDto.getCompanyId());
             for (OrderDto od : orderDtoList) {
+            	//通过RPC查询添加计划状态
+            	if (null != od.getTrafficPlan() && !"".equals(od.getTrafficPlan())) {
+            		WaybillPlan waybillPlan = trafficRpc.getWaybillPlanBySerialNo(od.getTrafficPlan());
+            		od.setTrafficPlanStatus(waybillPlan.getPlanStatus());
+            	}
+            	if (null != od.getWarehousePlan() && !"".equals(od.getWarehousePlan())) {
+            		if (0 == od.getOrderType()) {
+            			InWarehousePlan inWarehousePlan = warehouseRpcService.getInWarehousePlanBySerialNo(od.getWarehousePlan());
+            			od.setWarehousePlanStatus(inWarehousePlan.getPlanStatus());
+            		}
+            		if (1 == od.getOrderType()) {
+            			OutWarehousePlan outWarehousePlan = warehouseRpcService.getOutWarehousePlanBySerialNo(od.getWarehousePlan());
+            			od.setWarehousePlanStatus(outWarehousePlan.getPlanStatus());
+            		}
+            	}
+            	
                 //整合付款单信息
                 if (paymentList.size() > 0) {
                     for (int i = 0; i < paymentList.size(); i++) {
@@ -355,6 +374,10 @@ public class OrderServiceImpl implements OrderService {
 	    WaybillParamsDto.setCompanyName(userCompRel.getCompany().getFullName()); //企业名称
 	    WaybillParamsDto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
 	    WaybillParamsDto.setSalesOrder(order.getOrderSerialNo());
+	    WaybillParamsDto.setTransportWay((short) 1);//设置运输方式为陆运
+	    WaybillParamsDto.setGroupId(order.getGroupId());
+	    WaybillParamsDto.setSendWhId(order.getWarehouseId());
+	    WaybillParamsDto.setSendWhName(order.getReceiveWarehouse());
 	    if (0 == order.getOrderType()) {
 	    	WaybillParamsDto.setSendMan(order.getSender());
 		    WaybillParamsDto.setSendPhone(order.getSenderPhone());
@@ -368,7 +391,7 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setReceiveCity(order.getReceiverCity());
 		    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
 		    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
-		    flag = 1;
+		    flag = purchaseFlag;
 	    }else {
 	    	WaybillParamsDto.setSendMan(order.getReceiver());
 		    WaybillParamsDto.setSendPhone(order.getReceiverPhone());
@@ -382,7 +405,7 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setReceiveCity(order.getSendCity());
 		    WaybillParamsDto.setReceiveCounty(order.getSendDistrict());
 		    WaybillParamsDto.setReceiveAddress(order.getSendAddress());
-		    flag = 2;
+		    flag = salesFlag;
 	    }
 	    
 	    List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
@@ -403,9 +426,12 @@ public class OrderServiceImpl implements OrderService {
 	    	planDetailList.add(planDetail);
 	    }
 	    WaybillParamsDto.setPlanDetailList(planDetailList);
-	    
+	
+	   
 	    WaybillPlan waybillPlan = trafficRpc.purchase4Plan(WaybillParamsDto, flag);
 	    if (null != waybillPlan) {
+	    	order.setTrafficPlan(waybillPlan.getSerialCode());
+	    	orderMapper.updateByPrimaryKeySelective(order);
 	    	return true;
 	    }else {
 	    	return false;
@@ -418,27 +444,54 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Override
 	public Boolean generateInWarehousePlan(Long orderId) {
+		InWhPlanDto inWhPlanAddParamsDto = new InWhPlanDto();
+		Order order = orderMapper.selectByPrimaryKey(orderId);
+		Long companyId = SecurityInfoGetter.getCompanyId();
+	    User loginUser = SecurityInfoGetter.getUser();
+	    UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+	    inWhPlanAddParamsDto.setCompanyId(companyId);
+	    inWhPlanAddParamsDto.setCreateUserId(loginUser.getUserId());
+	    inWhPlanAddParamsDto.setCreateUserName(loginUser.getRealName());
+	    inWhPlanAddParamsDto.setContractNo(order.getContractCode());
+	    inWhPlanAddParamsDto.setCustomerId(order.getSupplierId());
+	    inWhPlanAddParamsDto.setCustomerName(order.getSupplier());
+	    inWhPlanAddParamsDto.setGroupId(order.getGroupId());
+	    inWhPlanAddParamsDto.setWareHouseId(order.getWarehouseId());
+	    inWhPlanAddParamsDto.setWarehouseName(order.getReceiveWarehouse());
+	    inWhPlanAddParamsDto.setCustomerContactName(order.getSender());
+	    inWhPlanAddParamsDto.setCustomerContactPhone(order.getSenderPhone());
+	    inWhPlanAddParamsDto.setCustomerPurchaseNo(order.getOrderSerialNo());
+	    
+	    List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
+	    List<InWhPlanGoodsDto> inWhPlanGoodsDtoList = new ArrayList<InWhPlanGoodsDto>(orderProductList.size());
+		for (OrderProduct orderProduct : orderProductList) {
+			InWhPlanGoodsDto inWhPlanGoodsDto = new InWhPlanGoodsDto();
+			inWhPlanGoodsDto.setGoodsName(orderProduct.getName());
+			inWhPlanGoodsDto.setGoodsCode(orderProduct.getCode());
+			inWhPlanGoodsDto.setGoodsSpec(orderProduct.getSpec());
+			inWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getPrice().floatValue());
+			inWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getNum().floatValue());
+			inWhPlanGoodsDto.setUnit(orderProduct.getSku());
+			inWhPlanGoodsDtoList.add(inWhPlanGoodsDto);
+		}
+  
+	    inWhPlanAddParamsDto.setInWhPlanGoodsDtoList(inWhPlanGoodsDtoList);
+	    
+        String warehousePlan = warehouseRpcService.inWhPlanAdd(inWhPlanAddParamsDto);
+		if (!StringUtils.isEmpty(warehousePlan)) {
+			order.setWarehousePlan(warehousePlan);
+		    orderMapper.updateByPrimaryKeySelective(order);
+			return true;
+		}else {
+			return false;
+		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		//warehouseRpcService.
-		
-		
-		
-		return null;
 	}
 
-
+	
+	/**
+	 * 销售单生成出库计划
+	 */
 	@Override
 	public Boolean generateOutWarehousePlan(Long orderId) {
 		Order order = orderMapper.selectByPrimaryKey(orderId);
@@ -460,14 +513,20 @@ public class OrderServiceImpl implements OrderService {
 		List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<>(orderProductList.size());
 		for (OrderProduct orderProduct : orderProductList) {
 			OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
-			
-			
+			outWhPlanGoodsDto.setGoodsName(orderProduct.getName());
+			outWhPlanGoodsDto.setGoodsSpec(orderProduct.getSpec());
+			outWhPlanGoodsDto.setGoodsCode(orderProduct.getCode());
+			outWhPlanGoodsDto.setUnit(orderProduct.getSku());
+			outWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getNum().floatValue());
+			outWhPlanGoodsDto.setOutHousePrice(orderProduct.getPrice().floatValue());
 			outWhPlanGoodsDtoList.add(outWhPlanGoodsDto);
 		}
 		outWhPlanDto.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);
 		
-		Boolean flag = warehouseRpcService.outWhPlanAdd(outWhPlanDto);
-		if (flag) {
+		String warehousePlan  = warehouseRpcService.outWhPlanAdd(outWhPlanDto);
+		if (!StringUtils.isEmpty(warehousePlan)) {
+			order.setWarehousePlan(warehousePlan);
+			orderMapper.updateByPrimaryKeySelective(order);
 			return true;
 		}else {
 			return false;

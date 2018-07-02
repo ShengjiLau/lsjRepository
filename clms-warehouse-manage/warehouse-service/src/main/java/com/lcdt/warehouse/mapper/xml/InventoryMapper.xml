@@ -23,9 +23,7 @@
         <result column="base_unit" jdbcType="VARCHAR" property="baseUnit" />
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
         <association  property="goodsInfo" javaType="com.lcdt.warehouse.entity.GoodsInfo" autoMapping="true">
-
         </association>
-        
     </resultMap>
 
     
@@ -130,11 +128,24 @@
        		t.goods_id = g.goods_id
 		<where>
 			t.company_id = #{companyId,jdbcType=BIGINT}
+			<if test="customerId != null">
 			and t.customer_id = #{customerId,jdbcType=BIGINT}
+			</if>
+			<if test="warehouseId != null">
 			and t.warehouse_id = #{warehouseId,jdbcType=BIGINT}
+			</if>
+			<if test="storageLocationCode != null">
 			and t.storage_location_code = #{storageLocationCode,jdbcType=VARCHAR} 
-			and t.batch = #{goodsBatch,jdbcType=VARCHAR} 
-			and g.goods_code = #{goodsCode,jdbcType=VARCHAR}		         
+			</if>
+			<if test="goodsBatch != null">
+			and t.batch = #{goodsBatch,jdbcType=VARCHAR}
+			</if>
+			<if test="goodsBatch == null">
+			and t.batch is null
+			</if>
+			<if test="goodsCode">
+			and g.goods_code = #{goodsCode,jdbcType=VARCHAR}
+			</if>			 
 		</where>	
 	</select>
 	

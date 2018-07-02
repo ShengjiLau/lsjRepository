@@ -92,10 +92,17 @@
     <result column="pay_total" jdbcType="REAL" property="payTotal" />
   </resultMap>
 
-  <resultMap id="BaseWaybillDaoMap" type="com.lcdt.traffic.model.WaybillDao" extends="BaseResultMap">
+  <resultMap id="BaseOwnWaybillDaoMap" type="com.lcdt.traffic.model.WaybillDao" extends="BaseResultMap">
     <collection property="waybillItemsList" column="id" ofType="com.lcdt.traffic.model.WaybillItems" select="com.lcdt.traffic.dao.WaybillItemsMapper.selectByWaybillId"/>
     <collection property="waybillTransferRecordList" column="id" ofType="com.lcdt.traffic.model.WaybillTransferRecord" select="com.lcdt.traffic.dao.WaybillTransferRecordMapper.selectByWaybillId"/>
-    <collection property="waybillPositionSettingList" column="id" ofType="com.lcdt.traffic.model.WaybillPositionSetting" select="com.lcdt.traffic.dao.WaybillPositionSettingMapper.selectByWaybillId"/>
+    <collection property="waybillPositionSettingList" column="{waybillId=id,companyId=company_id}" ofType="com.lcdt.traffic.model.WaybillPositionSetting" select="com.lcdt.traffic.dao.WaybillPositionSettingMapper.selectByWaybillId"/>
+    <collection property="waybillLeaveMsgList" column="id" ofType="com.lcdt.traffic.model.WaybillLeaveMsg" select="com.lcdt.traffic.dao.WaybillLeaveMsgMapper.selectByWaybillId"/>
+  </resultMap>
+
+  <resultMap id="BaseCustomerWaybillDaoMap" type="com.lcdt.traffic.model.WaybillDao" extends="BaseResultMap">
+    <collection property="waybillItemsList" column="id" ofType="com.lcdt.traffic.model.WaybillItems" select="com.lcdt.traffic.dao.WaybillItemsMapper.selectByWaybillId"/>
+    <collection property="waybillTransferRecordList" column="id" ofType="com.lcdt.traffic.model.WaybillTransferRecord" select="com.lcdt.traffic.dao.WaybillTransferRecordMapper.selectByWaybillId"/>
+    <collection property="waybillPositionSettingList" column="{waybillId=id,companyId=carrier_company_id}" ofType="com.lcdt.traffic.model.WaybillPositionSetting" select="com.lcdt.traffic.dao.WaybillPositionSettingMapper.selectByWaybillId"/>
     <collection property="waybillLeaveMsgList" column="id" ofType="com.lcdt.traffic.model.WaybillLeaveMsg" select="com.lcdt.traffic.dao.WaybillLeaveMsgMapper.selectByWaybillId"/>
   </resultMap>
 
@@ -432,19 +439,19 @@
     where id = #{id,jdbcType=BIGINT} and carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
   </update>
 
-  <select id="selectOwnWaybillByIdAndCompanyId" parameterType="com.lcdt.traffic.model.Waybill" resultMap="BaseWaybillDaoMap">
+  <select id="selectOwnWaybillByIdAndCompanyId" parameterType="com.lcdt.traffic.model.Waybill" resultMap="BaseOwnWaybillDaoMap">
     select <include refid="base_column_list"/>
     from t_waybill
     where id = #{id,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </select>
 
-  <select id="selectCustomerWaybillByIdAndCarrierCompanyId" parameterType="com.lcdt.traffic.model.Waybill" resultMap="BaseWaybillDaoMap">
+  <select id="selectCustomerWaybillByIdAndCarrierCompanyId" parameterType="com.lcdt.traffic.model.Waybill" resultMap="BaseCustomerWaybillDaoMap">
     select <include refid="base_column_list"/>
     from t_waybill
     where id = #{id,jdbcType=BIGINT} and carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
   </select>
 
-  <select id="selectOwnByCondition" parameterType="java.util.Map" resultMap="BaseWaybillDaoMap">
+  <select id="selectOwnByCondition" parameterType="java.util.Map" resultMap="BaseOwnWaybillDaoMap">
     select <include refid="base_column_list"/>
     from t_waybill
     <where>company_id = #{companyId,jdbcType=BIGINT}
@@ -459,7 +466,7 @@
     order by id desc
   </select>
 
-  <select id="selectCustomerByCondition" parameterType="java.util.Map" resultMap="BaseWaybillDaoMap">
+  <select id="selectCustomerByCondition" parameterType="java.util.Map" resultMap="BaseCustomerWaybillDaoMap">
     select <include refid="base_column_list"/>
     from t_waybill
     <where>carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
@@ -599,9 +606,9 @@
   </select>
 
   <select id="selectWaybillByPositionSetting" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select id,w.driver_phone
+    select w.id,w.waybill_code,w.driver_phone,p.company_id
     from t_waybill w , t_waybill_position_setting p
-    <where> w.id=p.waybill_id and (w.waybill_status !=8 or w.waybill_status!=7) and w.is_deleted=0
+    <where> w.id=p.waybill_id and w.waybill_status not in (5,6,7,8) and w.is_deleted=0
       <if test="fixedTime!=null and fixedTime!=''">
         and find_in_set(#{fixedTime,jdbcType=VARCHAR},p.fixed_time)
       </if>
