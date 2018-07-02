@@ -205,8 +205,8 @@ public class OrderServiceImpl implements OrderService{
 
     public PayOrder changeToPayFinish(PayOrder payOrder,Integer payType){
         //检查订单号是否已经被处理过
-        if (payOrder.getOrderStatus() != OrderStatus.PENDINGPAY) {
-            throw new RuntimeException("订单状态异常");
+        if (payOrder.getOrderStatus() > OrderStatus.PENDINGPAY) {
+            return payOrder;
         }
         Integer orderType = payOrder.getOrderType();
         if (orderType == OrderType.PAYORDER) {

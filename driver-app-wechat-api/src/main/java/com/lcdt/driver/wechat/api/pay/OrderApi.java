@@ -92,8 +92,7 @@ public class OrderApi {
     public ResponseMessage<ProductCountLog> countlogs(Integer pageNo, Integer pageSize, String servicename,
                                                     @RequestParam(required = false) Integer logType){
         Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompId();
-        PageHelper.startPage(pageNo, pageSize);
-        List<ProductCountLog> productCountLogs = countService.countLogs(companyId, servicename, null, null,logType);
+        List<ProductCountLog> productCountLogs = countService.countLogs(companyId, servicename, null, null,logType,pageSize,pageNo);
         return JSONResponseUtil.success(new PageResultDto<>(productCountLogs));
     }
 
