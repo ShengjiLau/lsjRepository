@@ -146,4 +146,24 @@ public class PayOrder implements ResponseData,Serializable{
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo == null ? null : orderNo.trim();
     }
+
+    @Override
+    public String toString() {
+        return "PayOrder{" +
+                "orderId=" + orderId +
+                ", orderType=" + orderType +
+                ", orderAmount=" + orderAmount +
+                ", createTime=" + createTime +
+                ", orderPayUserId=" + orderPayUserId +
+                ", orderPayCompanyId=" + orderPayCompanyId +
+                ", orderStatus=" + orderStatus +
+                ", orderNo='" + orderNo + '\'' +
+                ", orderProductId=" + orderProductId +
+                ", payType=" + payType +
+                ", createUserName='" + createUserName + '\'' +
+                ", orderDes='" + orderDes + '\'' +
+                ", balance=" + balance +
+                ", productPackageId=" + productPackageId +
+                '}';
+    }
 }

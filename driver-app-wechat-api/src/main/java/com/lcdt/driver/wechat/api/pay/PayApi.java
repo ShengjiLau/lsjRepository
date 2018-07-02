@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +21,8 @@ public class PayApi {
 
     @Reference
     OrderService orderService;
+    @Autowired
+    PayUtils payUtils;
 
     @ResponseBody
     @RequestMapping(value = "/prepay", produces = "text/html;charset=UTF-8")
@@ -30,6 +33,7 @@ public class PayApi {
         map.put("timeStamp", System.currentTimeMillis() / 1000 + "");
         map.put("signType", "MD5");
         PayOrder payOrder = orderService.selectByOrderId(orderid);
+
         ObjectMapper objectMapper = new ObjectMapper();
         String openId = PayUtils.getOpenId(code);
 
@@ -44,7 +48,7 @@ public class PayApi {
             openId = openId.replace("\"", "").trim();
             String clientIp = CommonUtils.getClientIp(request);
             String randomNonceStr = RandomUtils.generateMixString(32);
-            String prepayId = PayUtils.unifiedOrder(openId, clientIp, randomNonceStr,payOrder);
+            String prepayId = payUtils.unifiedOrder(openId, clientIp, randomNonceStr,payOrder);
 
             if (StringUtils.isEmpty(prepayId)){
                 responseJson.put("result", false);
@@ -53,10 +57,12 @@ public class PayApi {
             }else{
                 map.put("prepayId", prepayId);
                 map.put("nonceStr", randomNonceStr);
+
                 responseJson.put("result", true);
                 responseJson.put("message", "获取成功");
                 String s = mapToKVStr(map);
-                responseJson.put("sign", s);
+                map.put("sign", s);
+                responseJson.put("data", map);
                 return responseJson;
             }
         }

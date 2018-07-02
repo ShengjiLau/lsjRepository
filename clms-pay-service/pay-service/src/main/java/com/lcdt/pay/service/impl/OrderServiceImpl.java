@@ -82,6 +82,8 @@ public class OrderServiceImpl implements OrderService{
         ServiceProductPackage serviceProductPackage = packageMapper.selectByPrimaryKey(productPackageId);
         PayOrder order = createOrder(comapnyId, user, serviceProductPackage.getProductId());
         order.setProductPackageId(productPackageId);
+        order.setOrderDes("购买"+serviceProductPackage.getPackageDes());
+        order.setOrderAmount(Integer.valueOf(serviceProductPackage.getPackagePrice())/100);
         mapper.updateByPrimaryKey(order);
         return order;
     }

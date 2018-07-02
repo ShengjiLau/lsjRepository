@@ -5,12 +5,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.lcdt.pay.model.PayOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
 import java.util.Map;
 
+@Service
 public class PayUtils {
 
     private static Logger logger = LoggerFactory.getLogger(PayUtils.class);
@@ -39,11 +42,14 @@ public class PayUtils {
     }
 
 
+    @Autowired
+    HttpsRequest request;
+
     /**
      * 调用统一下单接口
      * @param openId
      */
-    public static String unifiedOrder(String openId, String clientIP, String randomNonceStr, PayOrder order) {
+    public  String unifiedOrder(String openId, String clientIP, String randomNonceStr, PayOrder order) {
 
         try {
 
@@ -55,19 +61,22 @@ public class PayUtils {
 
 
             String xml = CommonUtils.payInfoToXML(payInfo);
-            xml = xml.replace("__", "_").replace("<![CDATA[1]]>", "1");
-            //xml = xml.replace("__", "_").replace("<![CDATA[", "").replace("]]>", "");
+//            xml = xml.replace("__", "_").replace("<![CDATA[1]]>", "1");
+            xml = xml.replace("__", "_").replace("<![CDATA[", "").replace("]]>", "");
+            logger.info("统一下单 请求参数 {}",xml);
+            RestTemplate restTemplate = new RestTemplate();
 
-            StringBuffer buffer = HttpUtils.httpsRequest(url, "POST", xml);
+            String buffer = request.sendPost(WxpayConstant.URL_UNIFIED_ORDER, payInfo);
+//            StringBuffer buffer = HttpUtils.httpsRequest(url, "POST", xml);
+            logger.info("统一下单 返回内容" + buffer.toString());
             Map<String, String> result = CommonUtils.parseXml(buffer.toString());
 
 
             String return_code = result.get("return_code");
             if(StringUtils.isNotEmpty(return_code) && return_code.equals("SUCCESS")) {
-
                 String return_msg = result.get("return_msg");
                 if(StringUtils.isNotEmpty(return_msg) && !return_msg.equals("OK")) {
-                    //log.error("统一下单错误！");
+                    logger.error("统一下单错误！");
                     return "";
                 }
 
@@ -92,7 +101,7 @@ public class PayUtils {
         String timeExpire = TimeUtils.getFormatTime(TimeUtils.addDay(date, WxpayConstant.TIME_EXPIRE), WxpayConstant.TIME_FORMAT);
 
         String randomOrderId = CommonUtils.getRandomOrderId();
-
+        logger.info("create payorder"+order);
         PayInfo payInfo = new PayInfo();
         payInfo.setAppid(WxpayConstant.APP_ID);
         payInfo.setMch_id(WxpayConstant.MCH_ID);
@@ -100,7 +109,6 @@ public class PayUtils {
         payInfo.setNonce_str(randomNonceStr);
         payInfo.setSign_type("MD5");  //默认即为MD5
         payInfo.setBody(order.getOrderDes());
-//        payInfo.setAttach("支付测试4luluteam");
         payInfo.setOut_trade_no(order.getOrderNo());
         payInfo.setTotal_fee(order.getOrderAmount());
         payInfo.setSpbill_create_ip(clientIP);
@@ -119,7 +127,6 @@ public class PayUtils {
     private static String getSign(PayInfo payInfo) throws Exception {
         StringBuffer sb = new StringBuffer();
         sb.append("appid=" + payInfo.getAppid())
-                .append("&attach=" + payInfo.getAttach())
                 .append("&body=" + payInfo.getBody())
                 .append("&device_info=" + payInfo.getDevice_info())
                 .append("&limit_pay=" + payInfo.getLimit_pay())
@@ -133,11 +140,19 @@ public class PayUtils {
                 .append("&time_expire=" + payInfo.getTime_expire())
                 .append("&time_start=" + payInfo.getTime_start())
                 .append("&total_fee=" + payInfo.getTotal_fee())
-                .append("&trade_type=" + payInfo.getTrade_type());
-//                .append("&key=" + WxpayConstant.APP_KEY);
-
-
+                .append("&trade_type=" + payInfo.getTrade_type())
+                .append("&key=" + WxpayConstant.APP_KEY);
+        logger.info("签名前 编码"+sb.toString());
         return CommonUtils.getMD5(sb.toString().trim()).toUpperCase();
     }
+
+
+    public static void main(String[] args) throws Exception {
+        PayInfo payInfo = new PayInfo();
+        payInfo.setNonce_str(RandomUtils.generateMixString(12));
+        String sign = getSign(payInfo);
+        System.out.println(sign);
+    }
+
 
 }
