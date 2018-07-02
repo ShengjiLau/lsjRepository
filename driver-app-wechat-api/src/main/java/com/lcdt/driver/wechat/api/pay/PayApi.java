@@ -26,7 +26,7 @@ public class PayApi {
 
     @ResponseBody
     @RequestMapping(value = "/prepay", produces = "text/html;charset=UTF-8")
-    public JSONObject prepay(String code, HttpServletRequest request, Long orderid){
+    public JSONObject prepay(String code, HttpServletRequest request, Long orderid) throws Exception {
 
         Map<String,String> map = new HashMap();
         map.put("appId", WxpayConstant.APP_ID);
@@ -49,12 +49,12 @@ public class PayApi {
                 responseJson.put("message","获取prepayId失败");
                 return responseJson;
             }else{
-                map.put("prepayId", prepayId);
+                map.put("package", "prepay_id="+prepayId);
                 map.put("nonceStr", randomNonceStr);
                 responseJson.put("result", true);
                 responseJson.put("message", "获取成功");
                 String s = mapToKVStr(map);
-                map.put("sign", s);
+                map.put("paySign", s);
                 responseJson.put("data", map);
                 return responseJson;
             }
@@ -62,12 +62,16 @@ public class PayApi {
     }
 
 
-    private String mapToKVStr(Map<String,String> map) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            stringBuilder.append(entry.getKey()).append("=").append(entry.getValue()).append('&');
-        }
-        return stringBuilder.toString();
+    private String mapToKVStr(Map<String,String> map) throws Exception {
+
+        StringBuffer sb = new StringBuffer();
+        sb.append("appid=" + map.get("appId"))
+                .append("&nonceStr=" + map.get("nonceStr"))
+                .append("&package=" + map.get("package"))
+                .append("&signType=" + "MD5")
+                .append("&timeStamp=" + map.get("timeStamp"));
+
+        return CommonUtils.getMD5(sb.toString().trim()).toUpperCase();
     }
 
 
