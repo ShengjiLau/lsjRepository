@@ -63,7 +63,7 @@ public class PayUtils {
             String xml = CommonUtils.payInfoToXML(payInfo);
 //            xml = xml.replace("__", "_").replace("<![CDATA[1]]>", "1");
             xml = xml.replace("__", "_").replace("<![CDATA[", "").replace("]]>", "");
-            logger.info("统一下单 请求参数 {}",xml);
+            logger.info("统一下单 请求参数 \n {}",xml);
             RestTemplate restTemplate = new RestTemplate();
 
             String buffer = request.sendPost(WxpayConstant.URL_UNIFIED_ORDER, payInfo);
@@ -142,7 +142,7 @@ public class PayUtils {
                 .append("&total_fee=" + payInfo.getTotal_fee())
                 .append("&trade_type=" + payInfo.getTrade_type())
                 .append("&key=" + WxpayConstant.APP_KEY);
-        logger.info("签名前 编码"+sb.toString());
+        logger.info("签名前 编码 \n {}",sb.toString());
         return CommonUtils.getMD5(sb.toString().trim()).toUpperCase();
     }
 

@@ -8,7 +8,7 @@ public class WxpayConstant {
     public static final String MCH_ID = "1426511402";
     public static final String URL_NOTIFY = "http://clms-test.datuodui.com:8087/wechatpaynotify";
     public static final String URL_UNIFIED_ORDER = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-    public static final String APP_KEY = "901fc8b471d1257755af3c7c34e30a53";
+    public static final String APP_KEY = "zxchygfjuijbvfiopkmnhgter4567436";
     public static final String TIME_FORMAT = "yyyyMMddHHmmss";
     public static final int TIME_EXPIRE = 1;
 }

@@ -33,13 +33,8 @@ public class PayApi {
         map.put("timeStamp", System.currentTimeMillis() / 1000 + "");
         map.put("signType", "MD5");
         PayOrder payOrder = orderService.selectByOrderId(orderid);
-
-        ObjectMapper objectMapper = new ObjectMapper();
         String openId = PayUtils.getOpenId(code);
-
-
         JSONObject responseJson = new JSONObject();
-
         if (StringUtils.isEmpty(openId)) {
             responseJson.put("result", false);
             responseJson.put("message","获取openId失败");
@@ -49,7 +44,6 @@ public class PayApi {
             String clientIp = CommonUtils.getClientIp(request);
             String randomNonceStr = RandomUtils.generateMixString(32);
             String prepayId = payUtils.unifiedOrder(openId, clientIp, randomNonceStr,payOrder);
-
             if (StringUtils.isEmpty(prepayId)){
                 responseJson.put("result", false);
                 responseJson.put("message","获取prepayId失败");
@@ -57,7 +51,6 @@ public class PayApi {
             }else{
                 map.put("prepayId", prepayId);
                 map.put("nonceStr", randomNonceStr);
-
                 responseJson.put("result", true);
                 responseJson.put("message", "获取成功");
                 String s = mapToKVStr(map);
