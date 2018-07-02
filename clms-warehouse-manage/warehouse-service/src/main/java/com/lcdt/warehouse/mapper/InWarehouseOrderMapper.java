@@ -69,4 +69,11 @@ public interface InWarehouseOrderMapper extends BaseMapper<InWarehouseOrder> {
      */
     List<Map<String,Object>> selectInWarehouseNum(InWarehouseOrderSearchParamsDto params);
 
+
+    /**
+     * 清空仓库数据
+     * @param companyId
+     */
+    void clearWarehouseData(Long companyId);
+
 }
