@@ -106,10 +106,6 @@ public class AccountAndReconcileMsgApi {
 		return jsonObject;	
 	}
 	
-	
-	
-	
-	
 	/**
 	 * 验证传入信息
 	 * @param bindingResult

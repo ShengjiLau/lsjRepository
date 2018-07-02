@@ -112,8 +112,8 @@ public class OutWarehousePlanController {
             msg = e.getMessage();
             logger.error(e.getMessage());
         }
-        jsonObject.put("code", outWarehousePlan==null? 0:-1);
-        jsonObject.put("message", outWarehousePlan==null? "新建成功！":msg);
+        jsonObject.put("code", outWarehousePlan==null? -1:0);
+        jsonObject.put("message", outWarehousePlan==null? msg:"新建成功！");
         return jsonObject;
     }
 
