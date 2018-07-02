@@ -6,7 +6,6 @@ import com.lcdt.notify.dao.NotifyDao;
 import com.lcdt.notify.model.*;
 import com.lcdt.notify.notifyimpl.SmsNotifyImpl;
 import com.lcdt.notify.notifyimpl.WebNotifyImpl;
-import com.lcdt.notify.model.TrafficStatusChangeEvent;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
@@ -20,7 +19,7 @@ import java.util.Map;
 public class SendNotifyService {
 
     @Autowired
-    NotifyService notifyService;
+    NotifyManageService notifyService;
 
     @Autowired
     TemplateParser templateParser;

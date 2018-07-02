@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.notify.dao.NotifyDao;
 import com.lcdt.notify.model.CompanyNotifySetting;
-import com.lcdt.notify.service.NotifyService;
+import com.lcdt.notify.service.NotifyManageService;
 import com.lcdt.notify.web.PageResultDto;
 import com.lcdt.notify.web.dto.NotifySetDto;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +23,7 @@ public class CompanyNotifySetApi {
     NotifyDao notifyDao;
 
     @Autowired
-    NotifyService notifyService;
+    NotifyManageService notifyService;
 
     /**
      * 获取通知设置列表
