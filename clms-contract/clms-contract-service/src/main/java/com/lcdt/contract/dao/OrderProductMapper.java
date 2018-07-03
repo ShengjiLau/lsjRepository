@@ -66,4 +66,14 @@ public interface OrderProductMapper {
     List<OrderProduct> selectProductByOrderIds(String[] orderIds);
     
     
+    /**
+     * 统计一篮子订单下订单商品的数量
+     * @param orderIds
+     * @return
+     */
+    Integer getProductCountByOrderIds(Long[] orderIds);
+    
+    
+    
+    
 }

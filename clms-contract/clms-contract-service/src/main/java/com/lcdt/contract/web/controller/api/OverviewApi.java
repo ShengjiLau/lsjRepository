@@ -38,11 +38,9 @@ public class OverviewApi {
 	public JSONObject getOrderCount(OverviewDto overviewDto) {
 		JSONObject jsonObject = new JSONObject();
 		OrderCountDto orderCountDto = overviewService.getOrderCount(overviewDto);
-		
 			jsonObject.put("code", 0);
 			jsonObject.put("message", "订单数量统计");
 			jsonObject.put("data", orderCountDto);
-		
 		return jsonObject;
 	}
 	
@@ -56,7 +54,6 @@ public class OverviewApi {
 		jsonObject.put("code", 0);
 		jsonObject.put("message", "采购销售概览");
 		jsonObject.put("data", orderOverviewDto);
-		
 		return jsonObject;
 	}
 	
