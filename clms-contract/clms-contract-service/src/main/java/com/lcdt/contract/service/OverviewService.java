@@ -1,5 +1,8 @@
 package com.lcdt.contract.service;
 
+import java.util.HashMap;
+
+import com.lcdt.contract.web.dto.OrderCountDto;
 import com.lcdt.contract.web.dto.OrderOverviewDto;
 import com.lcdt.contract.web.dto.OverviewDto;
 
@@ -14,18 +17,9 @@ public interface OverviewService {
 	OrderOverviewDto getOverviewDtoList(OverviewDto overviewDto);
 	
 	
+	HashMap<String,Integer> countOrder(OverviewDto overviewDto);
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	OrderCountDto getOrderCount(OverviewDto overviewDto);
 	
 	
 }

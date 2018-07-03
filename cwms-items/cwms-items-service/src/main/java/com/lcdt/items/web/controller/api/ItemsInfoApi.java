@@ -112,12 +112,8 @@ public class ItemsInfoApi {
 
     @ApiOperation(value = "商品数量", notes = "统计商品数量")
     @GetMapping("/count")
-    public JSONObject queryCountItems(){
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("code",0);
-        jsonObject.put("message","请求成功");
-        jsonObject.put("data",itemsInfoService.queryCountItems(SecurityInfoGetter.getCompanyId()));
-        return jsonObject;
+    public PageBaseDto<List<ItemsInfoDao>> queryCountItems(){
+        return new PageBaseDto(new ArrayList(),itemsInfoService.queryCountItems(SecurityInfoGetter.getCompanyId()));
     }
 
 
