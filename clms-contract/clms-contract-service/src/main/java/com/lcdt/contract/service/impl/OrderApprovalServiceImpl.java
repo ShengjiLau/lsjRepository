@@ -1,14 +1,24 @@
 package com.lcdt.contract.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.dao.OrderApprovalMapper;
 import com.lcdt.contract.dao.OrderMapper;
+import com.lcdt.contract.model.Order;
 import com.lcdt.contract.model.OrderApproval;
+import com.lcdt.contract.notify.ContractAttachment;
+import com.lcdt.contract.notify.ContractNotifyBuilder;
+import com.lcdt.contract.notify.ContractNotifyProducer;
 import com.lcdt.contract.service.OrderApprovalService;
 import com.lcdt.contract.web.dto.OrderApprovalDto;
 import com.lcdt.contract.web.dto.OrderApprovalListDto;
+import com.lcdt.notify.model.ContractNotifyEvent;
+import com.lcdt.notify.model.DefaultNotifyReceiver;
+import com.lcdt.notify.model.DefaultNotifySender;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,11 +42,17 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
     @Autowired
     private OrderMapper orderMapper;
 
+    @Reference
+    private CompanyRpcService companyRpcService;
+
+    @Autowired
+    private ContractNotifyProducer producer;
+
     @Override
     public PageInfo<List<OrderApprovalDto>> orderApprovalList(OrderApprovalListDto orderApprovalListDto, PageInfo pageInfo) {
-        if(null!=orderApprovalListDto.getApprovalStartDate() && !"".equals(orderApprovalListDto.getApprovalStartDate())){
-            orderApprovalListDto.setApprovalStartDate(orderApprovalListDto.getApprovalStartDate()+" 00:00:00");
-            orderApprovalListDto.setApprovalEndDate(orderApprovalListDto.getApprovalEndDate()+" 23:59:59");
+        if (null != orderApprovalListDto.getApprovalStartDate() && !"".equals(orderApprovalListDto.getApprovalStartDate())) {
+            orderApprovalListDto.setApprovalStartDate(orderApprovalListDto.getApprovalStartDate() + " 00:00:00");
+            orderApprovalListDto.setApprovalEndDate(orderApprovalListDto.getApprovalEndDate() + " 23:59:59");
         }
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         List<OrderApprovalDto> orderApprovalDtoList = orderApprovalMapper.selectOrderApprovalByCondition(orderApprovalListDto);
@@ -47,10 +63,10 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
          * 已完成和已撤销的只设置审批创建人
          *
          * */
-        for(OrderApprovalDto oad : orderApprovalDtoList){
+        for (OrderApprovalDto oad : orderApprovalDtoList) {
             OrderApproval oa = null;
-            for(OrderApproval orderApproval : oad.getOrderApprovalList()){
-                if(null != orderApproval.getSort()) {
+            for (OrderApproval orderApproval : oad.getOrderApprovalList()) {
+                if (null != orderApproval.getSort()) {
                     if (orderApproval.getSort() == 0) {  //发起人及创建人
                         oad.setApprovalCreateName(orderApproval.getUserName());
                     }
@@ -60,7 +76,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                             oa = new OrderApproval();
                             oa.setOaId(orderApproval.getOaId());
                             oa.setOrderId(orderApproval.getOrderId());
-                            if(null!=orderApproval.getDeptName()){
+                            if (null != orderApproval.getDeptName()) {
                                 oa.setDeptName(orderApproval.getDeptName());
                             }
                             oa.setSort(orderApproval.getSort());
@@ -69,14 +85,14 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                             oa.setActionType(orderApproval.getActionType());
                             oa.setStatus(orderApproval.getStatus());
                             oad.setApprovalStatus(orderApproval.getStatus());   //设置当前审批状态
-                        }else if (oad.getApprovalStatus() == 2) {   //审批流程完成，无需再设置当前人
+                        } else if (oad.getApprovalStatus() == 2) {   //审批流程完成，无需再设置当前人
                             oad.setApprovalStatus(new Short("2"));
                         }
                     }
                 }
             }
             oad.getOrderApprovalList().clear();
-            if(null!=oa){
+            if (null != oa) {
                 oad.getOrderApprovalList().add(oa);
             }
         }
@@ -84,8 +100,8 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
     }
 
     @Override
-    public int pendingApprovalNum(Long userId, Long companyId, Short type){
-        return orderApprovalMapper.selectPendingNum(userId,companyId,type);
+    public int pendingApprovalNum(Long userId, Long companyId, Short type) {
+        return orderApprovalMapper.selectPendingNum(userId, companyId, type);
     }
 
     @Override
@@ -107,18 +123,41 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
         try {
             rows = orderApprovalMapper.updateStatus(orderApproval);
             List<OrderApproval> caList = orderApprovalMapper.selectByOrderId(orderApproval.getOrderId());
-            for(int i=0;i<caList.size();i++){
+            for (int i = 0; i < caList.size(); i++) {
                 OrderApproval ca = caList.get(i);
-                if(ca.getOaId().equals(orderApproval.getOaId())){    //找出当前正在审核的人
-                    if(ca.getSort().longValue()==caList.size()){  //如果正在审核的人为最后一人，则审批流程结束
-                        rows = orderMapper.updateApprovalStatus(orderApproval.getOrderId(),companyId,new Short("2"));
+                //找出当前正在审核的人
+                if (ca.getOaId().equals(orderApproval.getOaId())) {
+                    //如果正在审核的人为最后一人，则审批流程结束
+                    if (ca.getSort().longValue() == caList.size()) {
+                        rows = orderMapper.updateApprovalStatus(orderApproval.getOrderId(), companyId, new Short("2"));
                         break;
-                    }else{  //否则更新下一位审核人状态为审批中
-                        orderApproval.setOaId(caList.get(i+1).getOaId());
+                    } else {  //否则更新下一位审核人状态为审批中
+                        orderApproval.setOaId(caList.get(i + 1).getOaId());
                         orderApproval.setStatus(new Short("1"));
-                        orderApproval.setTime(null);   //置空之前设置的值
+                        //置空之前设置的值
+                        orderApproval.setTime(null);
                         orderApproval.setContent(null);
                         rows = orderApprovalMapper.updateStatus(orderApproval);
+                        if (rows > 0) {
+                            /**↓发送消息通知开始*/
+                            //发送者
+                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, orderApproval.getUserId());
+                            Order order = orderMapper.selectByPrimaryKey(orderApproval.getOrderId());
+                            User user = companyRpcService.selectByPrimaryKey(order.getCreateUserId());
+                            //接收者
+                            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(order.getCompanyId(), order.getCreateUserId(), user.getPhone());
+                            ContractAttachment attachment = new ContractAttachment();
+                            attachment.setPurOrderSerialNum(order.getOrderSerialNo());
+                            attachment.setCarrierWebNotifyUrl("");
+                            String eventName = "purchase_bill_approval_agree";
+                            if (order.getOrderType().shortValue() == 1) {
+                                eventName = "sale_bill_approval_agree";
+                                attachment.setSaleOrderSerialNum(order.getOrderSerialNo());
+                            }
+                            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                            producer.sendNotifyEvent(plan_publish_event);
+                            /**↑发送消息通知结束*/
+                        }
                         break;
                     }
                 }
@@ -145,7 +184,27 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
         int rows = 0;
         try {
             rows += orderApprovalMapper.updateStatus(orderApproval);
-            rows += orderMapper.updateApprovalStatus(orderApproval.getOrderId(),companyId,new Short("4"));
+            rows += orderMapper.updateApprovalStatus(orderApproval.getOrderId(), companyId, new Short("4"));
+            if (rows > 0) {
+                /**↓发送消息通知开始*/
+                //发送者
+                DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, orderApproval.getUserId());
+                Order order = orderMapper.selectByPrimaryKey(orderApproval.getOrderId());
+                User user = companyRpcService.selectByPrimaryKey(order.getCreateUserId());
+                //接收者
+                DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(order.getCompanyId(), order.getCreateUserId(), user.getPhone());
+                ContractAttachment attachment = new ContractAttachment();
+                attachment.setPurOrderSerialNum(order.getOrderSerialNo());
+                attachment.setCarrierWebNotifyUrl("");
+                String eventName = "purchase_bill_approval_reject";
+                if (order.getOrderType().shortValue() == 1) {
+                    eventName = "sale_bill_approval_reject";
+                    attachment.setSaleOrderSerialNum(order.getOrderSerialNo());
+                }
+                ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                producer.sendNotifyEvent(plan_publish_event);
+                /**↑发送消息通知结束*/
+            }
         } catch (NumberFormatException e) {
             e.printStackTrace();
             throw new RuntimeException("操作失败！");
@@ -167,7 +226,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
         int rows = 0;
         try {
             rows += orderApprovalMapper.updateStatus(orderApproval);
-            rows += orderMapper.updateApprovalStatus(orderApproval.getOrderId(),companyId,new Short("3"));
+            rows += orderMapper.updateApprovalStatus(orderApproval.getOrderId(), companyId, new Short("3"));
         } catch (NumberFormatException e) {
             e.printStackTrace();
             throw new RuntimeException("操作失败！");
@@ -177,7 +236,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
 
     @Override
     public int turnDoApproval(List<OrderApproval> orderApprovalList) {
-        OrderApproval orderApproval =  orderApprovalList.get(0);    //第一个为当前审批人
+        OrderApproval orderApproval = orderApprovalList.get(0);    //第一个为当前审批人
         Long companyId = SecurityInfoGetter.getCompanyId();
         orderApproval.setStatus(new Short("5"));     //审批状态 5 - 转办
         orderApproval.setActionType(new Short("0"));
@@ -198,7 +257,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
             orderApproval1.setOrderId(oa.getOrderId());
             orderApproval1.setStatus(new Short("1"));   //设置审批状态为审批中
             orderApproval1.setActionType(new Short("0"));    //为审批类型
-            if(rows>0){
+            if (rows > 0) {
                 orderApprovalMapper.insert(orderApproval1);
             }
         } catch (NumberFormatException e) {
@@ -210,36 +269,61 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
 
     @Override
     public int ccApproval(List<OrderApproval> orderApprovalList) {
-        OrderApproval orderApproval =  orderApprovalList.get(0);    //第一个携带合同信息，合同主键orderId
+        //第一个携带合同信息，合同主键orderId
+        OrderApproval orderApproval = orderApprovalList.get(0);
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long orderId = orderApproval.getOrderId();
-        orderApprovalList.remove(0); //移除第一个只携带合同信息的记录，剩余的即为需要抄送的人员记录
+        Long userId = SecurityInfoGetter.getUser().getUserId();
+        //移除第一个只携带合同信息的记录，剩余的即为需要抄送的人员记录
+        orderApprovalList.remove(0);
         /**
          * 抄送处理逻辑：
          * 1.获取抄送合同的主键信息
          * 2.查询抄送人是否已经存在
          * 3.组织抄送人信息记录并批量更新
          */
-        List<OrderApproval> ccList = orderApprovalMapper.selectCC(orderId,orderApprovalList);
+        List<OrderApproval> ccList = orderApprovalMapper.selectCC(orderId, orderApprovalList);
         //剔除重复的抄送人
-        for(OrderApproval oal : ccList){
-            for(int i=0; i<orderApprovalList.size(); i++){
-                if(oal.getUserId().longValue()==orderApprovalList.get(i).getUserId().longValue()){
+        for (OrderApproval oal : ccList) {
+            for (int i = 0; i < orderApprovalList.size(); i++) {
+                if (oal.getUserId().longValue() == orderApprovalList.get(i).getUserId().longValue()) {
                     orderApprovalList.remove(i);
                 }
             }
         }
         int row = 0;
         try {
-            for(OrderApproval oa : orderApprovalList){
+            for (OrderApproval oa : orderApprovalList) {
                 oa.setOrderId(orderId);
                 oa.setActionType(new Short("1"));
                 oa.setStatus(new Short("0"));
                 oa.setTime(new Date());
             }
-            if(null != orderApprovalList && orderApprovalList.size()>0){
+            if (null != orderApprovalList && orderApprovalList.size() > 0) {
                 row = orderApprovalMapper.insertBatch(orderApprovalList);
-            }else{
+                if (row > 0) {
+                    /**↓发送消息通知开始*/
+                    //发送者
+                    DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, userId);
+                    Order order = orderMapper.selectByPrimaryKey(orderApproval.getOrderId());
+                    for (OrderApproval orderApproval1 : orderApprovalList) {
+                        User user = companyRpcService.selectByPrimaryKey(orderApproval1.getUserId());
+                        //接收者
+                        DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
+                        ContractAttachment attachment = new ContractAttachment();
+                        attachment.setPurOrderSerialNum(order.getOrderSerialNo());
+                        attachment.setCarrierWebNotifyUrl("");
+                        String eventName = "purchase_bill_approval_cc";
+                        if (order.getOrderType().shortValue() == 1) {
+                            eventName = "sale_bill_approval_cc";
+                            attachment.setSaleOrderSerialNum(order.getOrderSerialNo());
+                        }
+                        ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                        producer.sendNotifyEvent(plan_publish_event);
+                    }
+                    /**↑发送消息通知结束*/
+                }
+            } else {
                 row = 1;
             }
         } catch (NumberFormatException e) {
@@ -251,6 +335,4 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
     }
 
 
-
-    
 }

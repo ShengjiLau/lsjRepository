@@ -58,4 +58,11 @@ public interface ItemsInfoService {
 
 
     List<ItemsInfo> queryItemsByCalUnitId(Long calUnitId,Long companyId);
+
+    /**
+     * 统计企业内的商品数量
+     * @param companyId
+     * @return
+     */
+    int queryCountItems(Long companyId);
 }
