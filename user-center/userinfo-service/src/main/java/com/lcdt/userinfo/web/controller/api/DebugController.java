@@ -57,7 +57,7 @@ public class DebugController implements ApplicationContextAware {
 	private SessionRegistry sessionRegistry;
 
 	@GetMapping("/a")
-	@PreAuthorize("hasAnyAuthority('a')")
+	@PreAuthorize("hasAnyAuthority('update_company_info')")
 	public String nullException(){
 		String a = null;
 		System.out.println(1/0);
