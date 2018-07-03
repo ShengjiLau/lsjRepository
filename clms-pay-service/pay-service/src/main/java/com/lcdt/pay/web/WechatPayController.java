@@ -6,6 +6,7 @@ import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.service.OrderService;
 import com.lcdt.pay.service.TopupService;
 import com.lcdt.pay.service.impl.OrderServiceImpl;
+import com.lcdt.pay.utils.CommonUtils;
 import com.lcdt.pay.wechatpay.Signature;
 import com.lcdt.pay.wechatpay.XMLParser;
 import org.slf4j.Logger;
@@ -57,6 +58,7 @@ public class WechatPayController {
                         logger.info("微信回调处理成功");
                         jo.put("return_code", "SUCCESS");
                         jo.put("return_msg", "OK");
+                        return CommonUtils.successXml(ResponseXml.successXml());
                     }
                 }
             }else{
@@ -100,5 +102,35 @@ public class WechatPayController {
         }
         return null;
     }
+
+    static class ResponseXml {
+
+        static ResponseXml successXml(){
+            ResponseXml responseXml = new ResponseXml();
+            responseXml.setReturn_code("SUCCESS");
+            responseXml.setReturn_message("OK");
+            return responseXml;
+        }
+
+        private String return_code;
+        private String return_message;
+
+        public String getReturn_code() {
+            return return_code;
+        }
+
+        public void setReturn_code(String return_code) {
+            this.return_code = return_code;
+        }
+
+        public String getReturn_message() {
+            return return_message;
+        }
+
+        public void setReturn_message(String return_message) {
+            this.return_message = return_message;
+        }
+    }
+
 
 }
