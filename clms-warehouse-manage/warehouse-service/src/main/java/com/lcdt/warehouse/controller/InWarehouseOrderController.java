@@ -151,7 +151,6 @@ public class InWarehouseOrderController {
 
     @ApiOperation("概览入库单已完成数量")
     @GetMapping(value = "/inWarehouseBillNum")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('in_ware_report')")
     public JSONObject inWarehouseNum(InWarehouseOrderSearchParamsDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
         String [] inOrderStatus = {"2"};
@@ -164,6 +163,20 @@ public class InWarehouseOrderController {
         return jo;
     }
 
+
+    @ApiOperation("概览入库单已完成数量")
+    @GetMapping(value = "/inWarehouseBillNum4Index")
+    public JSONObject inWarehouseBillNum4Index(InWarehouseOrderSearchParamsDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+        String [] inOrderStatus = {"2","1"};
+        params.setInOrderStatus(inOrderStatus);
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",inWarehouseOrderService.selectInWarehouseNum(params));
+
+        return jo;
+    }
 
 }
 

@@ -135,10 +135,24 @@ public class OutWarehouseOrderController {
 
     @ApiOperation("概览出库单已完成数量")
     @GetMapping(value = "/outWarehouseBillNum")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('out_ware_report')")
     public JSONObject outWarehouseNum(OutWhOrderSearchDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
         String [] inOrderStatus = {"2"};
+        params.setOrderStatus(inOrderStatus);
+
+        JSONObject jo =  new JSONObject();
+        jo.put("code", 0);
+        jo.put("data",outWarehouseOrderService.selectOutWarehouseNum(params));
+
+        return jo;
+    }
+
+
+    @ApiOperation("首页出库单数量")
+    @GetMapping(value = "/outWarehouseBillNum4Index")
+    public JSONObject outWarehouseNum4Index(OutWhOrderSearchDto params) {
+        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+        String [] inOrderStatus = {"2","1"};
         params.setOrderStatus(inOrderStatus);
 
         JSONObject jo =  new JSONObject();
