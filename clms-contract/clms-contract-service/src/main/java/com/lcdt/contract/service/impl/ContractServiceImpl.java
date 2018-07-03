@@ -454,7 +454,7 @@ public class ContractServiceImpl implements ContractService {
         attachment.setPurConSerialNum(ct.getSerialNo());
         attachment.setCarrierWebNotifyUrl("");
         String eventName = "purchase_upload";
-        if (contract.getType().shortValue() == 1) {
+        if (ct.getType().shortValue() == 1) {
             eventName = "sale_upload";
             attachment.setSaleConTittle(ct.getTitle());
             attachment.setSaleConSerialNum(ct.getSerialNo());
