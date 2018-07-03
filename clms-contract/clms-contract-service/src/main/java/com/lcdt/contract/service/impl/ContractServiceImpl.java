@@ -87,7 +87,7 @@ public class ContractServiceImpl implements ContractService {
                 if (ca.getActionType().shortValue() == 0) {
                     if (ca.getSort() == 1) {
                         ca.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
-                        /**发送消息通知*/
+                        /**↓发送消息通知开始*/
                         //发送
                         DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(dto.getCompanyId(), dto.getCreateId());
                         User user = companyRpcService.selectByPrimaryKey(ca.getUserId());
@@ -101,9 +101,12 @@ public class ContractServiceImpl implements ContractService {
                         String eventName = "purchase_approval_publish";
                         if (dto.getType().shortValue() == 1) {
                             eventName = "sale_approval_publish";
+                            attachment.setSaleConTittle(dto.getTitle());
+                            attachment.setSaleConSerialNum(dto.getSerialNo());
                         }
                         ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
                         producer.sendNotifyEvent(plan_publish_event);
+                        /**↑发送消息通知结束*/
                     } else {
                         ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
                     }
@@ -280,11 +283,11 @@ public class ContractServiceImpl implements ContractService {
         List<Contract> contractList = contractMapper.selectByCondition(contractDto);
         List<ContractDto> contractDtoList = new ArrayList<ContractDto>(contractList.size());
         for (Contract Contract : contractList) {
-        	ContractDto contractDto2 = new ContractDto();
-        	BeanUtils.copyProperties(Contract, contractDto2);
-        	List<ContractProduct> contractProductList = contractProductMapper.selectCpsByContractId(Contract.getContractId());
-        	contractDto2.setContractProductList(contractProductList);
-        	contractDtoList.add(contractDto2);
+            ContractDto contractDto2 = new ContractDto();
+            BeanUtils.copyProperties(Contract, contractDto2);
+            List<ContractProduct> contractProductList = contractProductMapper.selectCpsByContractId(Contract.getContractId());
+            contractDto2.setContractProductList(contractProductList);
+            contractDtoList.add(contractDto2);
         }
         PageInfo page1 = new PageInfo(contractList);
         PageInfo page2 = new PageInfo();
@@ -302,6 +305,45 @@ public class ContractServiceImpl implements ContractService {
         log.setLogName(contract.getContractStatus() == 4 ? "取消" : contract.getContractStatus() == 0 ? "生效" : contract.getContractStatus() == 3 ? "终止" : "发布");
         log.setLogContent(contract.getContractStatus() == 4 ? "取消合同" : contract.getContractStatus() == 0 ? "合同生效" : contract.getContractStatus() == 3 ? "合同终止" : "发布合同");
         saveContractLog(log);
+        //如果更新成功，则进行消息发送
+        if (result > 0) {
+            /**↓发送消息通知开始*/
+            ContractDto contractDto = this.selectByPrimaryKey(contract.getContractId());
+            Long userId = SecurityInfoGetter.getUser().getUserId();
+            //发送者
+            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(contractDto.getCompanyId(), userId);
+            //接收者
+            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(contractDto.getCompanyId(), contractDto.getCreateId());
+            ContractAttachment attachment = new ContractAttachment();
+            attachment.setCarrierWebNotifyUrl("");
+            String eventName = "";
+            //合同生效
+            if(contract.getContractStatus()==0){
+                if (contractDto.getType().shortValue() == 1) {
+                    eventName = "sale_effective";
+                    attachment.setSaleConTittle(contractDto.getTitle());
+                    attachment.setSaleConSerialNum(contractDto.getSerialNo());
+                }else {
+                    eventName = "purchase_effective";
+                    attachment.setPurConTittle(contractDto.getTitle());
+                    attachment.setPurConSerialNum(contractDto.getSerialNo());
+                }
+                //合同失效
+            }else if(contract.getContractStatus()==3){
+                if (contractDto.getType().shortValue() == 1) {
+                    eventName = "sale_lose_effective";
+                    attachment.setSaleConTittle(contractDto.getTitle());
+                    attachment.setSaleConSerialNum(contractDto.getSerialNo());
+                }else {
+                    eventName = "purchase_lose_effective";
+                    attachment.setPurConTittle(contractDto.getTitle());
+                    attachment.setPurConSerialNum(contractDto.getSerialNo());
+                }
+            }
+            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+            producer.sendNotifyEvent(plan_publish_event);
+            /**↑发送消息通知结束*/
+        }
         return result;
     }
 
@@ -414,6 +456,8 @@ public class ContractServiceImpl implements ContractService {
         String eventName = "purchase_upload";
         if (contract.getType().shortValue() == 1) {
             eventName = "sale_upload";
+            attachment.setSaleConTittle(ct.getTitle());
+            attachment.setSaleConSerialNum(ct.getSerialNo());
         }
         ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
         producer.sendNotifyEvent(plan_publish_event);

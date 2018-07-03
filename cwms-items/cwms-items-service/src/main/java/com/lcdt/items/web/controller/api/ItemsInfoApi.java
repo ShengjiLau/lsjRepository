@@ -109,6 +109,18 @@ public class ItemsInfoApi {
         PageInfo<List<ItemsInfoDao>> listPageInfo = itemsInfoService.queryItemsByItemsInfo(itemsInfoDao,pageInfo);
         return new PageBaseDto(listPageInfo.getList(),listPageInfo.getTotal());
     }
+
+    @ApiOperation(value = "商品数量", notes = "统计商品数量")
+    @GetMapping("/count")
+    public JSONObject queryCountItems(){
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("code",0);
+        jsonObject.put("message","请求成功");
+        jsonObject.put("data",itemsInfoService.queryCountItems(SecurityInfoGetter.getCompanyId()));
+        return jsonObject;
+    }
+
+
     /**
      * 私有方法，前端dto转换成dao
      * @param itemsInfoDto

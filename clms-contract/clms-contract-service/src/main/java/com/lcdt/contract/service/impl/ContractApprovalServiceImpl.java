@@ -144,24 +144,28 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
                         contractApproval.setTime(null);
                         contractApproval.setContent(null);
                         rows += contractApprovalMapper.updateStatus(contractApproval);
-                        /**↓发送消息通知开始*/
-                        //发送者
-                        DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, contractApproval.getUserId());
-                        Contract contract = contractMapper.selectByPrimaryKey(contractApproval.getContractId());
-                        User user = companyRpcService.selectByPrimaryKey(contract.getCreateId());
-                        //接收者
-                        DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(contract.getCompanyId(), contract.getCreateId(), user.getPhone());
-                        ContractAttachment attachment = new ContractAttachment();
-                        attachment.setPurConTittle(contract.getTitle());
-                        attachment.setPurConSerialNum(contract.getSerialNo());
-                        attachment.setCarrierWebNotifyUrl("");
-                        String eventName = "purchase_approval_agree";
-                        if (contract.getType().shortValue() == 1) {
-                            eventName = "sale_approval_agree";
+                        if (rows > 0) {
+                            /**↓发送消息通知开始*/
+                            //发送者
+                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, contractApproval.getUserId());
+                            Contract contract = contractMapper.selectByPrimaryKey(contractApproval.getContractId());
+                            User user = companyRpcService.selectByPrimaryKey(contract.getCreateId());
+                            //接收者
+                            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(contract.getCompanyId(), contract.getCreateId(), user.getPhone());
+                            ContractAttachment attachment = new ContractAttachment();
+                            attachment.setPurConTittle(contract.getTitle());
+                            attachment.setPurConSerialNum(contract.getSerialNo());
+                            attachment.setCarrierWebNotifyUrl("");
+                            String eventName = "purchase_approval_agree";
+                            if (contract.getType().shortValue() == 1) {
+                                eventName = "sale_approval_agree";
+                                attachment.setSaleConTittle(contract.getTitle());
+                                attachment.setSaleConSerialNum(contract.getSerialNo());
+                            }
+                            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                            producer.sendNotifyEvent(plan_publish_event);
+                            /**↑发送消息通知结束*/
                         }
-                        ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-                        producer.sendNotifyEvent(plan_publish_event);
-                        /**↑发送消息通知结束*/
                         break;
                     }
                 }
@@ -191,24 +195,28 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
         try {
             rows = contractApprovalMapper.updateStatus(contractApproval);
             contractMapper.updateApprovalStatus(contractApproval.getContractId(), companyId, new Short("4"));
-            /**↓发送消息通知开始*/
-            //发送者
-            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, contractApproval.getUserId());
-            Contract contract = contractMapper.selectByPrimaryKey(contractApproval.getContractId());
-            User user = companyRpcService.selectByPrimaryKey(contract.getCreateId());
-            //接收者
-            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(contract.getCompanyId(), contract.getCreateId(), user.getPhone());
-            ContractAttachment attachment = new ContractAttachment();
-            attachment.setPurConTittle(contract.getTitle());
-            attachment.setPurConSerialNum(contract.getSerialNo());
-            attachment.setCarrierWebNotifyUrl("");
-            String eventName = "purchase_approval_reject";
-            if (contract.getType().shortValue() == 1) {
-                eventName = "sale_approval_reject";
+            if (rows > 0) {
+                /**↓发送消息通知开始*/
+                //发送者
+                DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, contractApproval.getUserId());
+                Contract contract = contractMapper.selectByPrimaryKey(contractApproval.getContractId());
+                User user = companyRpcService.selectByPrimaryKey(contract.getCreateId());
+                //接收者
+                DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(contract.getCompanyId(), contract.getCreateId(), user.getPhone());
+                ContractAttachment attachment = new ContractAttachment();
+                attachment.setPurConTittle(contract.getTitle());
+                attachment.setPurConSerialNum(contract.getSerialNo());
+                attachment.setCarrierWebNotifyUrl("");
+                String eventName = "purchase_approval_reject";
+                if (contract.getType().shortValue() == 1) {
+                    eventName = "sale_approval_reject";
+                    attachment.setSaleConTittle(contract.getTitle());
+                    attachment.setSaleConSerialNum(contract.getSerialNo());
+                }
+                ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                producer.sendNotifyEvent(plan_publish_event);
+                /**↑发送消息通知结束*/
             }
-            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-            producer.sendNotifyEvent(plan_publish_event);
-            /**↑发送消息通知结束*/
         } catch (NumberFormatException e) {
             e.printStackTrace();
             throw new RuntimeException("操作失败！");
@@ -302,26 +310,30 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
             }
             if (null != contractApprovalList && contractApprovalList.size() > 0) {
                 row = contractApprovalMapper.insertBatch(contractApprovalList);
-                /**↓发送消息通知开始*/
-                //发送者
-                DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, userId);
-                Contract contract = contractMapper.selectByPrimaryKey(contractApproval.getContractId());
-                for (ContractApproval contractApproval1 : contractApprovalList) {
-                    User user = companyRpcService.selectByPrimaryKey(contractApproval1.getUserId());
-                    //接收者
-                    DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
-                    ContractAttachment attachment = new ContractAttachment();
-                    attachment.setPurConTittle(contract.getTitle());
-                    attachment.setPurConSerialNum(contract.getSerialNo());
-                    attachment.setCarrierWebNotifyUrl("");
-                    String eventName = "purchase_approval_cc";
-                    if (contract.getType().shortValue() == 1) {
-                        eventName = "sale_approval_cc";
+                if (row > 0) {
+                    /**↓发送消息通知开始*/
+                    //发送者
+                    DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, userId);
+                    Contract contract = contractMapper.selectByPrimaryKey(contractApproval.getContractId());
+                    for (ContractApproval contractApproval1 : contractApprovalList) {
+                        User user = companyRpcService.selectByPrimaryKey(contractApproval1.getUserId());
+                        //接收者
+                        DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
+                        ContractAttachment attachment = new ContractAttachment();
+                        attachment.setPurConTittle(contract.getTitle());
+                        attachment.setPurConSerialNum(contract.getSerialNo());
+                        attachment.setCarrierWebNotifyUrl("");
+                        String eventName = "purchase_approval_cc";
+                        if (contract.getType().shortValue() == 1) {
+                            eventName = "sale_approval_cc";
+                            attachment.setSaleConTittle(contract.getTitle());
+                            attachment.setSaleConSerialNum(contract.getSerialNo());
+                        }
+                        ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                        producer.sendNotifyEvent(plan_publish_event);
                     }
-                    ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-                    producer.sendNotifyEvent(plan_publish_event);
+                    /**↑发送消息通知结束*/
                 }
-                /**↑发送消息通知结束*/
             } else {
                 row = 1;
             }

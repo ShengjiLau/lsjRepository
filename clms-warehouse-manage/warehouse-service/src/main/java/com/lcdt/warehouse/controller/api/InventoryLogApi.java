@@ -40,7 +40,6 @@ public class InventoryLogApi {
 
     @ApiOperation("概览已完成商品数量")
     @RequestMapping(value = "/inWarehouseProductNum", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('in_ware_report')")
     public JSONObject inWarehouseProductNum(InventoryLogQueryDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
 
@@ -54,7 +53,6 @@ public class InventoryLogApi {
 
     @ApiOperation("概览已完成商品数量")
     @RequestMapping(value = "/outWarehouseProductNum", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('out_ware_report')")
     public JSONObject outWarehouseProductNum(InventoryLogQueryDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
 
