@@ -20,6 +20,7 @@ import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.WebApplicationContext;
@@ -54,6 +55,14 @@ public class DebugController implements ApplicationContextAware {
 	@Autowired
 	@Qualifier("sessionRegistry")
 	private SessionRegistry sessionRegistry;
+
+	@GetMapping("/a")
+	@PreAuthorize("hasAnyAuthority('a')")
+	public String nullException(){
+		String a = null;
+		System.out.println(1/0);
+		return a;
+	}
 
 	@RequestMapping("/logininuser")
 	public String allLoginUser(HttpSession session,Long userId,Long companyId){
@@ -90,6 +99,7 @@ public class DebugController implements ApplicationContextAware {
 				Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();
 				for (HandlerMethod method : handlerMethods.values()) {
 					Method method1 = method.getMethod();
+
 					PreAuthorize annotation = method1.getAnnotation(PreAuthorize.class);
 					if (annotation == null) {
 						continue;
