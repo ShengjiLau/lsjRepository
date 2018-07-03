@@ -14,7 +14,6 @@ import com.lcdt.pay.rpc.ProductCountLog;
 import com.lcdt.pay.rpc.ProductCountService;
 import com.lcdt.pay.service.*;
 import com.lcdt.pay.utils.MoneyNumUtil;
-import com.lcdt.pay.utils.OrderNoGenerator;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

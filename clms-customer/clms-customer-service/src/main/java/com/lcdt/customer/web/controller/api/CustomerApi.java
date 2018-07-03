@@ -144,6 +144,104 @@ public class CustomerApi {
     }
 
 
+
+
+
+    @ApiOperation("我的客户统计")
+    @RequestMapping(value = "/customerCount", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    public JSONObject  customerCount(@Validated CustomerListParamsDto dto) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", 1);
+        map.put("page_size", 0);
+
+        if (StringUtil.isNotEmpty(dto.getComplexContition())) {
+            map.put("complexContition",dto.getComplexContition());
+        }
+        if (dto.getStatus()!=null) {
+            map.put("status",dto.getStatus());
+        }
+        if (StringUtil.isNotEmpty(dto.getProvince())) {
+            map.put("province",dto.getProvince());
+        }
+        if (StringUtil.isNotEmpty(dto.getCity())) {
+            map.put("city",dto.getCity());
+        }
+        if (StringUtil.isNotEmpty(dto.getCounty())) {
+            map.put("county",dto.getCounty());
+        }
+
+        if (StringUtil.isNotEmpty(dto.getCustomerTypes())) { //1-销售客户2-仓储客户3-运输客户4-仓储服务商5-运输服务商6-供应商7-其他
+            String[] customTypeArray = dto.getCustomerTypes().split(",");
+            StringBuffer sb = new StringBuffer();
+            sb.append("(");
+            for (int i=0;i<customTypeArray.length;i++) {
+                sb.append(" find_in_set('"+customTypeArray[i]+"',client_types)");
+                if(i!=customTypeArray.length-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+            map.put("customerType", sb.toString());
+        }
+        //竞价(抢单用)
+        if (StringUtil.isNotEmpty(dto.getCollectionIds())) {
+            String[] collectionIds = dto.getCollectionIds().split(",");
+            StringBuffer sb = new StringBuffer();
+            sb.append("(");
+            for (int i=0;i<collectionIds.length;i++) {
+                sb.append(" find_in_set('"+collectionIds[i]+"',collection_ids)");
+                if(i!=collectionIds.length-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+
+            map.put("collectionIds", sb.toString());
+        }
+        //项目分组
+        if (StringUtil.isNotEmpty(dto.getGroupIds())) {
+            String[] groupIdArray = dto.getGroupIds().split(",");
+            StringBuffer sb = new StringBuffer();
+            sb.append("(");
+            for (int i=0;i<groupIdArray.length;i++) {
+                sb.append(" find_in_set('"+groupIdArray[i]+"',group_ids)");
+                if(i!=groupIdArray.length-1){
+                    sb.append(" or ");
+                }
+            }
+            sb.append(")");
+            map.put("groupIds", sb.toString());
+        } else {
+            StringBuffer sb = new StringBuffer();
+            List<Group> groupList = SecurityInfoGetter.groups();
+            if(groupList!=null && groupList.size()>0) {
+                sb.append("(");
+                for(int i=0;i<groupList.size();i++) {
+                    Group group = groupList.get(i);
+                    sb.append(" find_in_set('"+group.getGroupId()+"',group_ids)");
+                    if(i!=groupList.size()-1){
+                        sb.append(" or ");
+                    }
+                }
+                sb.append(")");
+            }
+            map.put("groupIds", sb.toString());
+        }
+        JSONObject jsonObject = new JSONObject();
+        PageInfo pageInfo = customerService.customerList(map);
+        jsonObject.put("data",pageInfo.getTotal());
+        jsonObject.put("code",0);
+        return jsonObject;
+    }
+
+
+
+
+
      /**
      * 客户详情
      * @return

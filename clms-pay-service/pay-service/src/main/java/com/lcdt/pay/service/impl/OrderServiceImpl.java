@@ -82,6 +82,8 @@ public class OrderServiceImpl implements OrderService{
         ServiceProductPackage serviceProductPackage = packageMapper.selectByPrimaryKey(productPackageId);
         PayOrder order = createOrder(comapnyId, user, serviceProductPackage.getProductId());
         order.setProductPackageId(productPackageId);
+        order.setOrderDes("购买"+serviceProductPackage.getPackageDes());
+        order.setOrderAmount(Integer.valueOf(serviceProductPackage.getPackagePrice()));
         mapper.updateByPrimaryKey(order);
         return order;
     }
@@ -203,8 +205,8 @@ public class OrderServiceImpl implements OrderService{
 
     public PayOrder changeToPayFinish(PayOrder payOrder,Integer payType){
         //检查订单号是否已经被处理过
-        if (payOrder.getOrderStatus() != OrderStatus.PENDINGPAY) {
-            throw new RuntimeException("订单状态异常");
+        if (payOrder.getOrderStatus() > OrderStatus.PENDINGPAY) {
+            return payOrder;
         }
         Integer orderType = payOrder.getOrderType();
         if (orderType == OrderType.PAYORDER) {

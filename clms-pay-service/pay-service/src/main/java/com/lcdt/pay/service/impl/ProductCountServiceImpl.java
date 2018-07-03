@@ -1,12 +1,14 @@
 package com.lcdt.pay.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.PageHelper;
 import com.lcdt.pay.dao.CompanyServiceCountMapper;
 import com.lcdt.pay.dao.ProductCountLogMapper;
 import com.lcdt.pay.model.CompanyServiceCount;
 import com.lcdt.pay.rpc.ProductCountLog;
 import com.lcdt.pay.rpc.ProductCountService;
 import com.lcdt.pay.utils.OrderNoGenerator;
+import com.lcdt.pay.model.PageResultDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -51,6 +53,12 @@ public class ProductCountServiceImpl implements ProductCountService {
         productCountLog.setLogTime(new Date());
         countLogMapper.insert(productCountLog);
         return productCountLog;
+    }
+
+    public PageResultDto<ProductCountLog> countLogs(Long companyId, String productName, Date startTime, Date endTime,Integer logType,Integer pageSize,Integer pageNo){
+        PageHelper.startPage(pageNo, pageSize);
+        List<ProductCountLog> productCountLogs = countLogMapper.selectByProductNameCompanyId(companyId, productName, startTime, endTime, logType);
+        return new PageResultDto<ProductCountLog>(productCountLogs);
     }
 
     public List<ProductCountLog> countLogs(Long companyId, String productName, Date startTime, Date endTime,Integer logType){

@@ -39,11 +39,9 @@ public class TicketAccessDeniedHandler implements AccessDeniedHandler {
 
 			//AJAX 返回JSON 格式化错误信息
 			if (HttpUtils.isAjaxRequest(request)){
-
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("message", accessDeniedException.getMessage());
 				jsonObject.put("code", -1);
-
 				response.setContentType(JSON_MEDIA_TYPE);
 				PrintWriter writer = response.getWriter();
 				writer.write(jsonObject.toString());

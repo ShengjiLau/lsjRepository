@@ -205,5 +205,8 @@
         )a GROUP BY storage_time order by storage_time
     </select>
 
+    <select id="clearWarehouseData" parameterType="Long">
+        call ( #{companyId,jdbcType=BIGINT,mode=IN})
+    </select>
 
 </mapper>

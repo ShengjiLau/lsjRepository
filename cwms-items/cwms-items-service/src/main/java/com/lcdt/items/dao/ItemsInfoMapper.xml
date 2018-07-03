@@ -251,4 +251,10 @@
         WHERE classify_id=#{classifyId,jdbcType=BIGINT} and company_id=#{companyId,jdbcType=BIGINT}
     </select>
 
+    <select id="selectCountItems" parameterType="Long" resultType="int">
+        SELECT count(item_id)
+        FROM t_items_info
+        WHERE company_id=#{companyId,jdbcType=BIGINT}
+    </select>
+
 </mapper>

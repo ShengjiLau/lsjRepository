@@ -12,7 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 @Service
-public class NotifyService {
+public class NotifyManageService {
 
     @Autowired
     NotifyMapper notifyMapper;
