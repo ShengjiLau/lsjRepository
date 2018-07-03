@@ -23,6 +23,9 @@ public class OverviewDto implements Serializable{
 	@ApiModelProperty("业务组id数组")
 	private Long[] groups;
 	
+	@ApiModelProperty("业务组id")
+	private Long groupId;
+	
 	@ApiModelProperty("查询时间起点")
 	private String beginTime;
 	
@@ -60,6 +63,14 @@ public class OverviewDto implements Serializable{
 
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
+	}
+
+	public Long getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
 	}
 	
 	
