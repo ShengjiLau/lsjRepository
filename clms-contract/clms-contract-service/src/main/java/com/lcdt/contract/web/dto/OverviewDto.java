@@ -16,6 +16,9 @@ public class OverviewDto implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 48535656566L;
+	
+	@ApiModelProperty("订单类型：采购==0；销售==1")
+	private Short type;
 
 	@ApiModelProperty("所属业务组id")
 	private Long companyId;
@@ -72,6 +75,16 @@ public class OverviewDto implements Serializable{
 	public void setGroupId(Long groupId) {
 		this.groupId = groupId;
 	}
+
+	public Short getType() {
+		return type;
+	}
+
+	public void setType(Short type) {
+		this.type = type;
+	}
+
+
 	
 	
 	

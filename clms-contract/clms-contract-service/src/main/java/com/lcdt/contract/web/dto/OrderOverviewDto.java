@@ -62,7 +62,7 @@ public class OrderOverviewDto implements Serializable{
 	private Integer moneyReceivedOrder;
 	
 	@ApiModelProperty("采购/销售 走势图")
-	private TreeMap<Date,Hashtable<Integer,BigDecimal>> trendDiagram;
+	private TreeMap<String,Hashtable<Integer,BigDecimal>> trendDiagram;
 
 	public Integer getNumOfOrders() {
 		return numOfOrders;
@@ -168,13 +168,15 @@ public class OrderOverviewDto implements Serializable{
 		this.moneyReceivedOrder = moneyReceivedOrder;
 	}
 
-	public TreeMap<Date, Hashtable<Integer, BigDecimal>> getTrendDiagram() {
+	public TreeMap<String, Hashtable<Integer, BigDecimal>> getTrendDiagram() {
 		return trendDiagram;
 	}
 
-	public void setTrendDiagram(TreeMap<Date, Hashtable<Integer, BigDecimal>> trendDiagram) {
+	public void setTrendDiagram(TreeMap<String, Hashtable<Integer, BigDecimal>> trendDiagram) {
 		this.trendDiagram = trendDiagram;
 	}
+
+	
 
 	
 	
