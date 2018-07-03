@@ -299,7 +299,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.contract.model.PaymentApplication">
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.contract.model.PaymentApplication" useGeneratedKeys="true" keyColumn="pa_id" keyProperty="paId" >
     update t_payment_application
     <set>
       <if test="orderId != null">

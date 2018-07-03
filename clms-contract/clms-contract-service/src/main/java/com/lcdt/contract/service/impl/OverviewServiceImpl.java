@@ -74,12 +74,19 @@ public class OverviewServiceImpl implements OverviewService {
 				w++;
 			}
 		}
+		List<OrderProduct> orderProductList = null;
 		String [] ss = new String[orderIds.size()];
 		orderIds.toArray(ss);
-		List<OrderProduct> orderProductList = orderProductMapper.selectProductByOrderIds(ss);
+		if (ss.length > 0) {
+			orderProductList = orderProductMapper.selectProductByOrderIds(ss);
+		}
+		
 		
 		BigDecimal y = new BigDecimal(orderList.size());
-		BigDecimal u = new BigDecimal(orderProductList.size());
+		BigDecimal u = new BigDecimal(0);
+		if (null != orderProductList) {
+			 u = new BigDecimal(orderProductList.size());
+		}
 		BigDecimal t =r.divide(y).setScale(2, BigDecimal.ROUND_HALF_DOWN);
 		BigDecimal i =r.divide(u).setScale(2, BigDecimal.ROUND_HALF_DOWN);
 		orderOverviewDto.setMoneyReceivedOrder(w);
@@ -123,20 +130,20 @@ public class OverviewServiceImpl implements OverviewService {
 		orderOverviewDto.setInEffectContract(k);
 		orderOverviewDto.setDefunctContract(d);
 		
-		List<Date> dateList = finddatesList(overviewDto.getBeginTime(), overviewDto.getEndTime());
-		TreeMap<Date,Hashtable<Integer,BigDecimal>> trendDiagram = new TreeMap<Date,Hashtable<Integer,BigDecimal>>();
-		for (Date date : dateList) {
+		List<String> dateList = finddatesList(overviewDto.getBeginTime(), overviewDto.getEndTime());
+		TreeMap<String,Hashtable<Integer,BigDecimal>> trendDiagram = new TreeMap<String,Hashtable<Integer,BigDecimal>>();
+		for (String s : dateList) {
 			int m = 0;
 			BigDecimal b1 = new BigDecimal(0);
 			for (Order order : orderList) {
-				if (DateUtils.isSameDay(date,dateCovertFromat(order.getCreateTime()))) {
+				if (s.equals(dateCovertFromat(order.getCreateTime()))) {
 					m++;
 					b1 = b1.add(order.getSummation());
 				}
 			}
 			Hashtable<Integer,BigDecimal> ht1 = new Hashtable<Integer,BigDecimal>();
 			ht1.put(m, b1);
-			trendDiagram.put(date, ht1);
+			trendDiagram.put(s, ht1);
 		}
 		
 		orderOverviewDto.setTrendDiagram(trendDiagram);
@@ -167,24 +174,35 @@ public class OverviewServiceImpl implements OverviewService {
 		Integer salesOrderCount = overviewMapper.countSalesOrderByOverviewDto(overviewDto);
 		orderCountDto.setPurchaseOrderCount(purchaseOrderCount);
 		orderCountDto.setSalesOrderCount(salesOrderCount);
-		List<Date> dateList = finddatesList(overviewDto.getBeginTime(), overviewDto.getEndTime());
-		TreeMap<Date, Integer> orderCountByDate = new TreeMap<Date, Integer>();
-		for (Date date : dateList) {
+		List<String> dateList = finddatesList(overviewDto.getBeginTime(), overviewDto.getEndTime());
+		TreeMap<String, Integer> purchaseOrderCountByDate = new TreeMap<String, Integer>();
+		TreeMap<String, Integer> salesOrderCountByDate = new TreeMap<String, Integer>();
+		for (String s : dateList) {
 			int m = 0;
+			int n = 0;
 			for (Order order : orderList) {
-				if (DateUtils.isSameDay(date,dateCovertFromat(order.getCreateTime()))) {
-					m++;
+				if (0 == order.getOrderType()) {
+					if (s.equals(dateCovertFromat(order.getCreateTime()))) {
+						m++;
+					}
+				}
+				if (1 == order.getOrderType()) {
+					if (s.equals(dateCovertFromat(order.getCreateTime()))) {
+						n++;
+					}
 				}
 			}
-			orderCountByDate.put(date, m);
+			purchaseOrderCountByDate.put(s, m);
+			salesOrderCountByDate.put(s, n);
 		}
-		orderCountDto.setOrderCountByDate(orderCountByDate);
-		
+		orderCountDto.setPurchaseOrderCountByDate(purchaseOrderCountByDate);
+		orderCountDto.setSalesOrderCountByDate(salesOrderCountByDate);
 		return orderCountDto;
 	}
 	
 	private HashMap<String, Object> ConvertDtoToMap(OverviewDto overviewDto) {
 		HashMap<String, Object> map = new HashMap<String,Object>();
+		map.put("type", overviewDto.getType());
 		map.put("companyId", overviewDto.getCompanyId());
 		map.put("beginTime", overviewDto.getBeginTime());
 		map.put("endTime", overviewDto.getEndTime());
@@ -193,7 +211,7 @@ public class OverviewServiceImpl implements OverviewService {
 		return (HashMap<String, Object>) map;
 	}
 	
-	private List<Date> finddatesList(String beginTime,String endTime){
+	private List<String> finddatesList(String beginTime,String endTime){
 		String pattern = "^[0-9]{4}[-][0-9]{2}[-][0-9]{2}";
 		if (!Pattern.matches(pattern, beginTime) || !Pattern.matches(pattern, endTime)) {
 			throw new RuntimeException("时间格式不正确!");
@@ -209,30 +227,25 @@ public class OverviewServiceImpl implements OverviewService {
 			e.printStackTrace();
 		}
 
-		List<Date> datesList = new LinkedList<Date>();
+		List<String> datesList = new LinkedList<String>();
 		Calendar c1 = Calendar.getInstance();
 		Calendar c2 = Calendar.getInstance();
 		c1.setTime(d1);
 		c2.setTime(d2);
-		datesList.add(d1);
+		datesList.add(beginTime);
 		while (d2.after(c1.getTime())) {
 			c1.add(Calendar.DAY_OF_MONTH, 1);
-			datesList.add(c1.getTime());
+			datesList.add(dateCovertFromat(c1.getTime()));
 		}
 		
 		return datesList;
 	}
 	
-	private Date dateCovertFromat(Date date) {
+	private String dateCovertFromat(Date date) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String s = sdf.format(date);
-		Date newDate = null;
-		try {
-			newDate = sdf.parse(s);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return newDate;
+		
+		return s;
 	}
 	
 	

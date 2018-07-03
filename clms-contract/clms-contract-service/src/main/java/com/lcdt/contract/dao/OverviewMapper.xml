@@ -132,6 +132,7 @@
     from t_order
 	<where>
 	company_id = #{companyId,jdbcType=BIGINT} and is_draft = 1
+	and order_type = #{type,jdbcType=SMALLINT}
 	<if test="beginTime != null and beginTime !=''">
 	and create_time &gt; concat(#{beginTime,jdbcType=TIMESTAMP},' 00:00:00')
 	</if>
@@ -177,6 +178,7 @@
     from t_contract
 	<where>
 	company_id = #{companyId,jdbcType=BIGINT}
+	and type = #{type,jdbcType=SMALLINT}
 	<if test="beginTime != null and beginTime !=''">
 	and create_time &gt; concat(#{beginTime,jdbcType=TIMESTAMP},' 00:00:00')
 	</if>
