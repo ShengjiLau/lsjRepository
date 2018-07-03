@@ -21,8 +21,6 @@ import java.util.Properties;
 /**
  * Created by ss on 2017/7/31.
  */
-@Configuration
-@EnableTransactionManagement
 public class MybatisConfig implements TransactionManagementConfigurer {
 
 	@Autowired

@@ -428,6 +428,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         _tempObj.setCreateId(userCompRel.getUser().getUserId());
         _tempObj.setCreateName(userCompRel.getUser().getRealName());
         _tempObj.setIsDeleted(0);
+        _tempObj.setOutPlanRemark(_outWhPlanDto.getStorageRemark());
 
         List<OutOrderGoodsInfoDto> outOrderGoodsInfoList = new ArrayList<OutOrderGoodsInfoDto>();
         for (OutWhPlanGoodsDto obj1 : _outWhPlanGoodsDtoList1) {

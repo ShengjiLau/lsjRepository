@@ -4,6 +4,7 @@ import com.lcdt.aliyunmq.AliyunConfigProperties;
 import com.lcdt.clms.security.annontion.EnableClmsSecurity;
 import com.lcdt.converter.ClmsResponseConvertConfig;
 import com.lcdt.wms.config.DubboConfig;
+import com.lcdt.wms.config.MybatisCommonConfig;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @SpringBootApplication
 @EnableTransactionManagement
-@Import({AliyunConfigProperties.class,com.lcdt.swagger.SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class})
+@Import({MybatisCommonConfig.class,AliyunConfigProperties.class,com.lcdt.swagger.SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class})
 @EnableClmsSecurity
 //@ImportResource("classpath:producer.xml")
 public class TrafficServiceApp  {

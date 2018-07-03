@@ -25,4 +25,9 @@ public interface OverviewMapper {
 	
 	List<Contract> getContractOverviewList(HashMap<String,Object> map);
 	
+	Integer countPurchaseOrderByOverviewDto(OverviewDto overviewDto);
+	
+	Integer countSalesOrderByOverviewDto(OverviewDto overviewDto);
+	
+	Integer countContractByOverviewDto(OverviewDto overviewDto);
 }

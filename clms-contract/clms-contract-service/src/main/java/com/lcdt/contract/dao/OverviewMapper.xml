@@ -141,13 +141,13 @@
 	<if test="groups != null">
 	and group_id in
 	<foreach collection="groups" open="(" close=")" index="index" item="group" separator=",">
-	group
+	#{group,jdbcType=BIGINT}
 	</foreach>
 	</if>
 	</where>
 	</select>
 	
-	<select id="getPaymentApplicationListByOrderId">
+	<select id="getPaymentApplicationListByOrderId" parameterType="java.lang.Long" resultType="com.lcdt.contract.model.PaymentApplication">
 	select pa_id, order_id, application_serial_no,
       application_date, approval_status, approval_process_id,
       approval_process, approval_start_date, approval_end_date,
@@ -161,7 +161,7 @@
       attachment2_name, company_id, create_id,
       create_name, create_time
 	  from t_payment_application
-	  where order_id = {orderId,jdbcType=BIGINT}
+	  where order_id = #{orderId,jdbcType=BIGINT}
 	</select>
 	
 	<select id="getContractOverviewList" parameterType="java.util.HashMap" resultMap="ContractResultMap">
@@ -186,14 +186,59 @@
 	<if test="groups != null">
 	and group_id in
 	<foreach collection="groups" open="(" close=")" index="index" item="group" separator=",">
-	group
+	#{group,jdbcType=BIGINT}
 	</foreach>
 	</if>
 	</where>
 	</select>
+	
+	<select id="countPurchaseOrderByOverviewDto" resultType="java.lang.Integer" parameterType="com.lcdt.contract.web.dto.OverviewDto">
+	select count(order_id) from t_order 
+	<where>
+	company_id = #{companyId,jdbcType=BIGINT} and is_draft = 1 and order_type = 0
+	<if test="beginTime != null and beginTime !=''">
+	and create_time &gt; concat(#{beginTime,jdbcType=TIMESTAMP},' 00:00:00')
+	</if>
+	<if test="endTime != null and endTime !=''">
+	and create_time &lt; concat(#{endTime,jdbcType=TIMESTAMP},' 23:59:59')
+	</if>
+	<if test="groupId != null">
+	and group_id = #{groupId,jdbcType=BIGINT}
+	</if>
+	</where>
+	</select>
+	
+	<select id="countSalesOrderByOverviewDto" resultType="java.lang.Integer" parameterType="com.lcdt.contract.web.dto.OverviewDto">
+	select count(order_id) from t_order 
+	<where>
+	company_id = #{companyId,jdbcType=BIGINT} and is_draft = 1 and order_type = 1
+	<if test="beginTime != null and beginTime !=''">
+	and create_time &gt; concat(#{beginTime,jdbcType=TIMESTAMP},' 00:00:00')
+	</if>
+	<if test="endTime != null and endTime !=''">
+	and create_time &lt; concat(#{endTime,jdbcType=TIMESTAMP},' 23:59:59')
+	</if>
+	<if test="groupId != null">
+	and group_id = #{groupId,jdbcType=BIGINT}
+	</if>
+	</where>
+	</select>
 
-
-
+	<select id="countContractByOverviewDto" resultType="java.lang.Integer" parameterType="com.lcdt.contract.web.dto.OverviewDto">
+	select count(contract_id) from t_contract 
+	<where>
+	company_id = #{companyId,jdbcType=BIGINT} 
+	<if test="beginTime != null and beginTime !=''">
+	and create_time &gt; concat(#{beginTime,jdbcType=TIMESTAMP},' 00:00:00')
+	</if>
+	<if test="endTime != null and endTime !=''">
+	and create_time &lt; concat(#{endTime,jdbcType=TIMESTAMP},' 23:59:59')
+	</if>
+	<if test="groupId != null">
+	and group_id = #{groupId,jdbcType=BIGINT}
+	</if>
+	</where>
+	</select>
 
 
 
