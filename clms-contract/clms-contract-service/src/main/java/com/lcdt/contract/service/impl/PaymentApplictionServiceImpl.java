@@ -1,5 +1,6 @@
 package com.lcdt.contract.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -9,10 +10,17 @@ import com.lcdt.contract.dao.PaymentApplicationMapper;
 import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.model.PaApproval;
 import com.lcdt.contract.model.PaymentApplication;
+import com.lcdt.contract.notify.ContractAttachment;
+import com.lcdt.contract.notify.ContractNotifyBuilder;
+import com.lcdt.contract.notify.ContractNotifyProducer;
 import com.lcdt.contract.service.PaymentApplictionService;
 import com.lcdt.contract.web.dto.PaymentApplicationDto;
+import com.lcdt.notify.model.ContractNotifyEvent;
+import com.lcdt.notify.model.DefaultNotifyReceiver;
+import com.lcdt.notify.model.DefaultNotifySender;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.jboss.netty.handler.execution.OrderedDownstreamThreadPoolExecutor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +41,10 @@ public class PaymentApplictionServiceImpl implements PaymentApplictionService {
     private PaymentApplicationMapper paymentApplicationMapper;
     @Autowired
     private PaApprovalMapper paApprovalMapper;
+    @Reference
+    private CompanyRpcService companyRpcService;
+    @Autowired
+    private ContractNotifyProducer producer;
 
     @Override
     public PageInfo<List<PaymentApplication>> paymentApplictionList(PaymentApplicationDto paymentApplicationDto, PageInfo pageInfo) {
@@ -60,6 +72,23 @@ public class PaymentApplictionServiceImpl implements PaymentApplictionService {
                         if(paApproval.getSort()==1){
                             //同时设置第一个审批的人的状态为审批中
                             paApproval.setStatus(new Short("1"));
+                            /**↓发送消息通知开始*/
+                            //发送
+                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(paymentApplicationDto.getCompanyId(), paymentApplicationDto.getCreateId());
+                            User user = companyRpcService.selectByPrimaryKey(paApproval.getUserId());
+                            //接收
+                            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(paymentApplicationDto.getCompanyId(), user.getUserId(), user.getPhone());
+                            ContractAttachment attachment = new ContractAttachment();
+                            attachment.setEmployee(paymentApplicationDto.getCreateName());
+                            attachment.setPerPaymentSerialNum(paymentApplicationDto.getApplicationSerialNo());
+                            attachment.setCarrierWebNotifyUrl("");
+                            String eventName = "payment_approval_publish";
+                            /*if (dto.getType().shortValue() == 1) {
+                                eventName = "sale_approval_publish";
+                                attachment.setPerPaymentSerialNum(dto.getSerialNo());
+                            }*/
+                            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                            producer.sendNotifyEvent(plan_publish_event);
                         }else{
                             //设置其他审批状态为 0 - 初始值
                             paApproval.setStatus(new Short("0"));
@@ -108,6 +137,30 @@ public class PaymentApplictionServiceImpl implements PaymentApplictionService {
 
     @Override
     public int confirmPayment(PaymentApplication paymentApplication){
-        return paymentApplicationMapper.updateByPrimaryKeySelective(paymentApplication);
+        int row = 0;
+        row = paymentApplicationMapper.updateByPrimaryKeySelective(paymentApplication);
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Long userId = SecurityInfoGetter.getUser().getUserId();
+        if(row>0){
+            /**↓发送消息通知开始*/
+            //发送者
+            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, userId);
+            PaymentApplication pa = paymentApplicationMapper.selectByPrimaryKey(paymentApplication.getPaId());
+            User user = companyRpcService.selectByPrimaryKey(pa.getCreateId());
+            //接收者
+            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
+            ContractAttachment attachment = new ContractAttachment();
+            attachment.setPerPaymentSerialNum(pa.getApplicationSerialNo());
+            attachment.setCarrierWebNotifyUrl("");
+            String eventName = "payment_confirm";
+                /*if (paymentApplication.getType().shortValue() == 1) {
+                    eventName = "sale_approval_reject";
+                    attachment.setSaleOrderSerialNum(order.getOrderSerialNo());
+                }*/
+            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+            producer.sendNotifyEvent(plan_publish_event);
+            /**↑发送消息通知结束*/
+        }
+        return row;
     }
 }
