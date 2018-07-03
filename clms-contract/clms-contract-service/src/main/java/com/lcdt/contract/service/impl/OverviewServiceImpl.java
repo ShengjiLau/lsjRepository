@@ -198,7 +198,7 @@ public class OverviewServiceImpl implements OverviewService {
 		OrderCountDto orderCountDto = new OrderCountDto();
 		overviewDto.setCompanyId(SecurityInfoGetter.getCompanyId());
 		HashMap<String, Object> map = ConvertDtoToMap(overviewDto);
-		List<Order> orderList = overviewMapper.getOrderOverviewList(map);
+		List<Order> orderList = overviewMapper.getOrderListByOverviewDto(overviewDto);
 		
 		Integer purchaseOrderCount = overviewMapper.countPurchaseOrderByOverviewDto(overviewDto);
 		Integer salesOrderCount = overviewMapper.countSalesOrderByOverviewDto(overviewDto);
@@ -242,7 +242,7 @@ public class OverviewServiceImpl implements OverviewService {
 		map.put("companyId", overviewDto.getCompanyId());
 		map.put("beginTime", overviewDto.getBeginTime());
 		map.put("endTime", overviewDto.getEndTime());
-		map.put("groups", overviewDto.getGroups());
+		map.put("groups", convertStringToLong(overviewDto.getGroups()));
 		
 		return (HashMap<String, Object>) map;
 	}
@@ -294,8 +294,25 @@ public class OverviewServiceImpl implements OverviewService {
 		return s;
 	}
 	
-	
-	
+	/**
+	 * 将规定格式的String字符串转化为Long数组
+	 * @param s
+	 * @return
+	 */
+	private Long[] convertStringToLong(String s) {
+		String sn = s+",";
+		String pattern = "^(([0-9]+)([,])){0,}$";
+		if (!Pattern.matches(pattern, sn)) {
+			throw new RuntimeException("传入的业务组groups格式不正确！");
+		}
+		String[] ss = s.split(",");
+		Long[] groups = new Long[ss.length];
+		for (int i = 0; i < ss.length; i++) {
+			groups[i] = Long.parseLong(ss[i]);
+		}
+		
+		return groups;
+	}
 	
 	
 	

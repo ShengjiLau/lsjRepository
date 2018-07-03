@@ -26,7 +26,7 @@ public class OverviewDto implements Serializable{
 	private Long companyId;
 	
 	@ApiModelProperty("业务组id数组")
-	private Long[] groups;
+	private String groups;
 	
 	@ApiModelProperty("业务组id")
 	private Long groupId;
@@ -45,14 +45,6 @@ public class OverviewDto implements Serializable{
 
 	public void setCompanyId(Long companyId) {
 		this.companyId = companyId;
-	}
-
-	public Long[] getGroups() {
-		return groups;
-	}
-
-	public void setGroups(Long[] groups) {
-		this.groups = groups;
 	}
 
 	public String getBeginTime() {
@@ -85,6 +77,14 @@ public class OverviewDto implements Serializable{
 
 	public void setType(Short type) {
 		this.type = type;
+	}
+
+	public String getGroups() {
+		return groups;
+	}
+
+	public void setGroups(String groups) {
+		this.groups = groups;
 	}
 
 

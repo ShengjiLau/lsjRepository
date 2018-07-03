@@ -30,4 +30,6 @@ public interface OverviewMapper {
 	Integer countSalesOrderByOverviewDto(OverviewDto overviewDto);
 	
 	Integer countContractByOverviewDto(OverviewDto overviewDto);
+	
+	List<Order> getOrderListByOverviewDto(OverviewDto overviewDto);
 }
