@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.spring.context.annotation.DubboComponentScan;
 import com.lcdt.clms.security.annontion.EnableClmsSecurity;
 import com.lcdt.converter.ClmsResponseConvertConfig;
 import com.lcdt.wms.config.DubboConfig;
+import com.lcdt.wms.config.MybatisCommonConfig;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @SpringBootApplication
 @EnableTransactionManagement
-@Import({com.lcdt.swagger.SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class})
+@Import({com.lcdt.swagger.SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class, MybatisCommonConfig.class})
 @DubboComponentScan(basePackages = "com.lcdt.customer.rpc")
 @EnableClmsSecurity
 public class CustomerServiceApp {

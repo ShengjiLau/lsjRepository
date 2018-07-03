@@ -1,5 +1,6 @@
 package com.lcdt.contract.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -9,9 +10,17 @@ import com.lcdt.contract.dao.PaymentApplicationMapper;
 import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.model.PaApproval;
 import com.lcdt.contract.model.PaymentApplication;
+import com.lcdt.contract.notify.ContractAttachment;
+import com.lcdt.contract.notify.ContractNotifyBuilder;
+import com.lcdt.contract.notify.ContractNotifyProducer;
 import com.lcdt.contract.service.PaApprovalService;
 import com.lcdt.contract.web.dto.PaApprovalDto;
 import com.lcdt.contract.web.dto.PaApprovalListDto;
+import com.lcdt.notify.model.ContractNotifyEvent;
+import com.lcdt.notify.model.DefaultNotifyReceiver;
+import com.lcdt.notify.model.DefaultNotifySender;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.rpc.CompanyRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +43,12 @@ public class PaApprovalServiceImpl implements PaApprovalService {
 
     @Autowired
     private OrderProductMapper orderProductMapper;
+
+    @Reference
+    private CompanyRpcService companyRpcService;
+
+    @Autowired
+    private ContractNotifyProducer producer;
 
     @Override
     public PageInfo<List<PaApprovalDto>> paApprovalList(PaApprovalListDto paApprovalListDto, PageInfo pageInfo) {
@@ -153,6 +168,26 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                         paApproval.setTime(null);
                         paApproval.setContent(null);
                         rows += paApprovalMapper.updateStatus(paApproval);
+                        if (rows > 0) {
+                            /**↓发送消息通知开始*/
+                            //发送者
+                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, paApproval.getUserId());
+                            PaymentApplication paymentApplication = paymentApplicationMapper.selectByPrimaryKey(paApproval.getPaId());
+                            User user = companyRpcService.selectByPrimaryKey(paymentApplication.getCreateId());
+                            //接收者
+                            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(paymentApplication.getCompanyId(), paymentApplication.getCreateId(), user.getPhone());
+                            ContractAttachment attachment = new ContractAttachment();
+                            attachment.setPerPaymentSerialNum(paymentApplication.getApplicationSerialNo());
+                            attachment.setCarrierWebNotifyUrl("");
+                            String eventName = "purchase_approval_agree";
+                            /*if (paymentApplication.getType().shortValue() == 1) {
+                                eventName = "sale_approval_agree";
+                                attachment.setSaleRecSerialNum(contract.getSerialNo());
+                            }*/
+                            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                            producer.sendNotifyEvent(plan_publish_event);
+                            /**↑发送消息通知结束*/
+                        }
                         break;
                     }
                 }
@@ -182,6 +217,26 @@ public class PaApprovalServiceImpl implements PaApprovalService {
         try {
             rows = paApprovalMapper.updateStatus(paApproval);
             paymentApplicationMapper.updateApprovalStatus(paApproval.getPaId(), companyId, new Short("4"));
+            if (rows > 0) {
+                /**↓发送消息通知开始*/
+                //发送者
+                DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, paApproval.getUserId());
+                PaymentApplication paymentApplication = paymentApplicationMapper.selectByPrimaryKey(paApproval.getPaId());
+                User user = companyRpcService.selectByPrimaryKey(paymentApplication.getCreateId());
+                //接收者
+                DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(paymentApplication.getCompanyId(), paymentApplication.getCreateId(), user.getPhone());
+                ContractAttachment attachment = new ContractAttachment();
+                attachment.setPerPaymentSerialNum(paymentApplication.getApplicationSerialNo());
+                attachment.setCarrierWebNotifyUrl("");
+                String eventName = "payment_approval_reject";
+                /*if (paymentApplication.getType().shortValue() == 1) {
+                    eventName = "sale_approval_reject";
+                    attachment.setSaleOrderSerialNum(order.getOrderSerialNo());
+                }*/
+                ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                producer.sendNotifyEvent(plan_publish_event);
+                /**↑发送消息通知结束*/
+            }
         } catch (NumberFormatException e) {
             e.printStackTrace();
             throw new RuntimeException("操作失败！");
@@ -256,6 +311,7 @@ public class PaApprovalServiceImpl implements PaApprovalService {
         PaApproval paApproval = paApprovalList.get(0);
         Long companyId = SecurityInfoGetter.getCompanyId();
         Long paId = paApproval.getPaId();
+        Long userId = SecurityInfoGetter.getUser().getUserId();
         //移除第一个只携带合同信息的记录，剩余的即为需要抄送的人员记录
         paApprovalList.remove(0);
         /**
@@ -283,6 +339,28 @@ public class PaApprovalServiceImpl implements PaApprovalService {
             }
             if (null != paApprovalList && paApprovalList.size() > 0) {
                 row = paApprovalMapper.insertBatch(paApprovalList);
+                if (row > 0) {
+                    /**↓发送消息通知开始*/
+                    //发送者
+                    DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, userId);
+                    PaymentApplication paymentApplication = paymentApplicationMapper.selectByPrimaryKey(paId);
+                    for (PaApproval paApproval1 : paApprovalList) {
+                        User user = companyRpcService.selectByPrimaryKey(paApproval1.getUserId());
+                        //接收者
+                        DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
+                        ContractAttachment attachment = new ContractAttachment();
+                        attachment.setPerPaymentSerialNum(paymentApplication.getApplicationSerialNo());
+                        attachment.setCarrierWebNotifyUrl("");
+                        String eventName = "payment_approval_cc";
+                        /*if (paymentApplication.getType().shortValue() == 1) {
+                            eventName = "sale_approval_cc";
+                            attachment.setSaleConSerialNum(paymentApplication.getSerialNo());
+                        }*/
+                        ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                        producer.sendNotifyEvent(plan_publish_event);
+                    }
+                    /**↑发送消息通知结束*/
+                }
             } else {
                 row = 1;
             }
