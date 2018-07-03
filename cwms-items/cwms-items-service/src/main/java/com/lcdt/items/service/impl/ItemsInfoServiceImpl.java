@@ -173,6 +173,11 @@ public class ItemsInfoServiceImpl implements ItemsInfoService {
     }
 
     @Override
+    public int queryCountItems(Long companyId) {
+        return itemsInfoMapper.selectCountItems(companyId);
+    }
+
+    @Override
     public ItemsInfoDao queryIetmsInfoDetails(Long itemId, Long companyId) {
         ItemsInfo itemsInfo = new ItemsInfo();
         itemsInfo.setItemId(itemId);

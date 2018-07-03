@@ -109,4 +109,12 @@ public interface ItemsInfoMapper {
      * @return
      */
     List<ItemsInfo> selectByClassifyIdCodeAndCompanyId(Map map);
+
+
+    /**
+     * 统计企业内的商品数据
+     * @param companyId
+     * @return
+     */
+    int selectCountItems(Long companyId);
 }
