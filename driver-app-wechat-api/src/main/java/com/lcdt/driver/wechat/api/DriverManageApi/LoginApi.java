@@ -52,7 +52,7 @@ public class LoginApi {
     CreateCompanyService createCompanyService;
 
     @RequestMapping(value = "/register",method = RequestMethod.POST)
-    public String registerUser(RegisterDto registerDto) throws PhoneHasRegisterException {
+    public JSONObject registerUser(RegisterDto registerDto) throws PhoneHasRegisterException {
             boolean codeCorrect = validCodeService.isCodeCorrect(registerDto.getEcode(), VCODETAG, registerDto.getUserPhoneNum());
             if (!codeCorrect) {
                 throw new RuntimeException("验证码错误");
@@ -65,11 +65,11 @@ public class LoginApi {
             jsonObject.put("data", user);
             jsonObject.put("code", 0);
             jsonObject.put("token", jwtTokenUtil.generateToken(stringStringHashMap));
-            return jsonObject.toString();
+            return jsonObject;
     }
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public String login(String userName, String pwd) throws UserNotExistException, PassErrorException {
+    public JSONObject login(String userName, String pwd) throws UserNotExistException, PassErrorException {
         User user = userService.userLogin(userName, pwd);
         HashMap<String, Object> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("userId", user.getUserId());
@@ -84,7 +84,7 @@ public class LoginApi {
         jsonObject.put("user", user);
         jsonObject.put("comps", userCompRels);
         jsonObject.put("message", "请求成功");
-        return jsonObject.toString();
+        return jsonObject;
     }
 
     @RequestMapping(value = "/complist",method = RequestMethod.POST)
@@ -100,7 +100,7 @@ public class LoginApi {
 
 
     @RequestMapping(value = "/choosecomp",method = RequestMethod.POST)
-    public String chooseCompany(String token,Long compId) throws Exception {
+    public JSONObject chooseCompany(String token,Long compId) throws Exception {
         Claims claimsFromToken = jwtTokenUtil.getClaimsFromToken(token);
         if (claimsFromToken == null) {
             throw new Exception("token 错误");
@@ -113,7 +113,7 @@ public class LoginApi {
             jsonObject.put("result", -1);
             jsonObject.put("data", userCompRel);
             jsonObject.put("message", "企业已被禁用");
-            return jsonObject.toString();
+            return jsonObject;
         }
         HashMap<String, Object> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("userName", userCompRel.getUser().getPhone());
@@ -125,7 +125,7 @@ public class LoginApi {
         jsonObject.put("result", 0);
         jsonObject.put("data", userCompRel);
         jsonObject.put("message", "请求成功");
-        return jsonObject.toString();
+        return jsonObject;
     }
 
     @RequestMapping(value = "/createcomp", method = RequestMethod.POST)

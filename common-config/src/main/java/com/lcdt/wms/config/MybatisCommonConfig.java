@@ -1,5 +1,8 @@
 package com.lcdt.wms.config;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInterceptor;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -14,6 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 /**
  * Created by ss on 2017/8/4.
@@ -37,36 +41,36 @@ public class MybatisCommonConfig implements TransactionManagementConfigurer {
 		return mapperScannerConfigurer;
 	}
 
-	@Bean
-	public SqlSessionFactory sqlSessionFactory() {
-		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-		sqlSessionFactoryBean.setDataSource(dataSource);
-		ClassPathResource classPathResource = new ClassPathResource("mybatis-config.xml");
-		if (classPathResource.exists()) {
-			sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
-		}
-
-
-//		//分页插件
-//		PageHelper pageHelper = new PageHelper();
-//		Properties properties = new Properties();
-//		properties.setProperty("reasonable", "true");
-//		properties.setProperty("supportMethodsArguments", "true");
-//		properties.setProperty("returnPageInfo", "check");
-//		properties.setProperty("params", "count=countSql");
-//		pageHelper.setProperties(properties);
+//	@Bean
+//	public SqlSessionFactory sqlSessionFactory() {
+//		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+//		sqlSessionFactoryBean.setDataSource(dataSource);
+//		ClassPathResource classPathResource = new ClassPathResource("mybatis-config.xml");
+//		if (classPathResource.exists()) {
+//			sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
+//		}
 //
-//		//添加插件
-//		sqlSessionFactoryBean.setPlugins(new Interceptor[]{pageHelper});
-
-		try {
-			SqlSessionFactory object = sqlSessionFactoryBean.getObject();
-			return object;
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException();
-		}
-	}
+//		PageInterceptor pageInterceptor = new PageInterceptor();
+////		//分页插件
+////		PageHelper pageHelper = new PageHelper();
+////		Properties properties = new Properties();
+////		properties.setProperty("reasonable", "true");
+////		properties.setProperty("supportMethodsArguments", "true");
+////		properties.setProperty("returnPageInfo", "check");
+////		properties.setProperty("params", "count=countSql");
+////		pageHelper.setProperties(properties);
+////
+////		//添加插件
+//		sqlSessionFactoryBean.setPlugins(new Interceptor[]{pageInterceptor});
+//
+//		try {
+//			SqlSessionFactory object = sqlSessionFactoryBean.getObject();
+//			return object;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			throw new RuntimeException();
+//		}
+//	}
 
 	@Bean
 	public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {

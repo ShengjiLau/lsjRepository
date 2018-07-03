@@ -1,6 +1,7 @@
 package com.lcdt.pay.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.PageHelper;
 import com.lcdt.pay.dao.CompanyServiceCountMapper;
 import com.lcdt.pay.dao.ProductCountLogMapper;
 import com.lcdt.pay.model.CompanyServiceCount;
@@ -51,6 +52,11 @@ public class ProductCountServiceImpl implements ProductCountService {
         productCountLog.setLogTime(new Date());
         countLogMapper.insert(productCountLog);
         return productCountLog;
+    }
+
+    public List<ProductCountLog> countLogs(Long companyId, String productName, Date startTime, Date endTime,Integer logType,Integer pageSize,Integer pageNo){
+        PageHelper.startPage(pageNo, pageSize);
+        return countLogMapper.selectByProductNameCompanyId(companyId, productName, startTime, endTime,logType);
     }
 
     public List<ProductCountLog> countLogs(Long companyId, String productName, Date startTime, Date endTime,Integer logType){

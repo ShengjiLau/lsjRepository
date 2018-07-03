@@ -55,7 +55,6 @@
   </sql>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-
     select
     <include refid="baseColumn"></include>
     from pay_order

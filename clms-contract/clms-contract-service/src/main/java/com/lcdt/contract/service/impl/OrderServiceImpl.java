@@ -9,8 +9,15 @@ import java.util.Map;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.dao.OrderApprovalMapper;
 import com.lcdt.contract.model.OrderApproval;
+import com.lcdt.contract.notify.ContractAttachment;
+import com.lcdt.contract.notify.ContractNotifyBuilder;
+import com.lcdt.contract.notify.ContractNotifyProducer;
+import com.lcdt.notify.model.ContractNotifyEvent;
+import com.lcdt.notify.model.DefaultNotifyReceiver;
+import com.lcdt.notify.model.DefaultNotifySender;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.userinfo.rpc.CompanyRpcService;
 import com.lcdt.warehouse.dto.InWhPlanDto;
 import com.lcdt.warehouse.dto.InWhPlanGoodsDto;
 import com.lcdt.warehouse.dto.OutWhPlanDto;
@@ -78,6 +85,10 @@ public class OrderServiceImpl implements OrderService {
     
     @Reference
     private WarehouseRpcService warehouseRpcService;
+    @Reference
+    private CompanyRpcService companyRpcService;
+    @Autowired
+    private ContractNotifyProducer producer;
     
     @Override
     public int addOrder(OrderDto orderDto) {
@@ -111,28 +122,53 @@ public class OrderServiceImpl implements OrderService {
         if (null != orderDto.getOrderApprovalList() && orderDto.getOrderApprovalList().size() > 0) {
             /*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
             for (OrderApproval oa : orderDto.getOrderApprovalList()) {
-                oa.setOrderId(order.getOrderId()); //设置关联订单id
+                //设置关联订单id
+                oa.setOrderId(order.getOrderId());
                 if (oa.getActionType().shortValue() == 0) {
                     if (oa.getSort() == 1) {
-                        oa.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                        //同时设置第一个审批的人的状态为审批中
+                        oa.setStatus(new Short("1"));
+                        /**↓发送消息通知开始*/
+                        //发送
+                        DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(orderDto.getCompanyId(), orderDto.getCreateUserId());
+                        User user = companyRpcService.selectByPrimaryKey(oa.getUserId());
+                        //接收
+                        DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(orderDto.getCompanyId(), user.getUserId(), user.getPhone());
+                        ContractAttachment attachment = new ContractAttachment();
+                        attachment.setEmployee(SecurityInfoGetter.getUser().getRealName());
+                        attachment.setPurOrderSerialNum(orderDto.getOrderSerialNo());
+                        attachment.setCarrierWebNotifyUrl("");
+                        String eventName = "purchase_approval_publish";
+                        //如果是销售单
+                        if (orderDto.getOrderType().shortValue() == 1) {
+                            eventName = "sale_approval_publish";
+                            attachment.setSaleOrderSerialNum(orderDto.getOrderSerialNo());
+                        }
+                        ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                        producer.sendNotifyEvent(plan_publish_event);
+                        /**↑发送消息通知结束*/
                     } else {
-                        oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+                        //设置其他审批状态为 0 - 初始值
+                        oa.setStatus(new Short("0"));
                     }
                 } else {
-                    oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+                    //设置其他审批状态为 0 - 初始值
+                    oa.setStatus(new Short("0"));
                 }
             }
             OrderApproval orderApproval = new OrderApproval();
-//            Long companyId = SecurityInfoGetter.getCompanyId();
             User user = SecurityInfoGetter.getUser();
             UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
             orderApproval.setOrderId(order.getOrderId());
             orderApproval.setUserName(user.getRealName());
             orderApproval.setUserId(user.getUserId());
             orderApproval.setDeptName(userCompRel.getDeptNames());
-            orderApproval.setSort(0);    // 0 为创建着
-            orderApproval.setActionType(new Short("0"));    //默认actionType 0
-            orderApproval.setStatus(new Short("2"));    //创建人默认
+            // 0 为创建着
+            orderApproval.setSort(0);
+            //默认actionType 0
+            orderApproval.setActionType(new Short("0"));
+            //创建人默认
+            orderApproval.setStatus(new Short("2"));
             orderApproval.setTime(new Date());
             orderDto.getOrderApprovalList().add(orderApproval);
             j += orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
@@ -375,6 +411,9 @@ public class OrderServiceImpl implements OrderService {
 	    WaybillParamsDto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
 	    WaybillParamsDto.setSalesOrder(order.getOrderSerialNo());
 	    WaybillParamsDto.setTransportWay((short) 1);//设置运输方式为陆运
+	    WaybillParamsDto.setGroupId(order.getGroupId());
+	    WaybillParamsDto.setSendWhId(order.getWarehouseId());
+	    WaybillParamsDto.setSendWhName(order.getReceiveWarehouse());
 	    if (0 == order.getOrderType()) {
 	    	WaybillParamsDto.setSendMan(order.getSender());
 		    WaybillParamsDto.setSendPhone(order.getSenderPhone());
