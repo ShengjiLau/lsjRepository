@@ -92,8 +92,8 @@ public class OrderApi {
     public ResponseMessage<ProductCountLog> countlogs(Integer pageNo, Integer pageSize, String servicename,
                                                     @RequestParam(required = false) Integer logType){
         Long companyId = TokenSecurityInfoGetter.getUserCompRel().getCompId();
-        List<ProductCountLog> productCountLogs = countService.countLogs(companyId, servicename, null, null,logType,pageSize,pageNo);
-        return JSONResponseUtil.success(new PageResultDto<>(productCountLogs));
+        com.lcdt.pay.model.PageResultDto<ProductCountLog> productCountLogs = countService.countLogs(companyId, servicename, null, null,logType,pageSize,pageNo);
+        return JSONResponseUtil.success(productCountLogs);
     }
 
 }
