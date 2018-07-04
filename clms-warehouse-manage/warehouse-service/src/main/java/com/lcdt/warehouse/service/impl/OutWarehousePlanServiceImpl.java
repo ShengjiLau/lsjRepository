@@ -331,7 +331,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
          */
         if (!outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.publish.getValue())
                 && !outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.watting.getValue()) ) {
-            throw new RuntimeException("该计划不允许取消（非待配状态或存在配仓记录）！");
+            throw new RuntimeException("该计划不允许完成（非待配状态或存在配仓记录）！");
         } else {
             if (outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.publish.getValue())) {
                 OutWhOrderSearchDto params = new OutWhOrderSearchDto();
