@@ -488,4 +488,26 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
 
 
 
+    @Transactional
+    @Override
+    public boolean changeInWarehousePlanStatus(InWhPlanDto inWhPlanDto, UserCompRel userCompRel) {
+        InWarehousePlan obj = new InWarehousePlan();
+        obj.setCompanyId(userCompRel.getCompany().getCompId());
+        obj.setPlanId(inWhPlanDto.getPlanId());
+
+        InWarehousePlan inWarehousePlan = this.selectOne(new EntityWrapper<InWarehousePlan>(obj));
+        if (inWarehousePlan == null) {
+            return false;
+        }
+        if (inWarehousePlan.getPlanStatus().equals((Integer) InWhPlanStatusEnum.isWarehouse.getValue())) {
+            inWarehousePlan.setPlanStatus((Integer) InWhPlanStatusEnum.publish.getValue());
+            inWarehousePlan.setUpdateId(userCompRel.getUser().getUserId());
+            inWarehousePlan.setUpdateName(userCompRel.getUser().getRealName());
+            inWarehousePlan.setUpdateDate(new Date());
+            return this.update(inWarehousePlan,new EntityWrapper<InWarehousePlan>(obj));
+        }
+        return false;
+    }
+
+
 }

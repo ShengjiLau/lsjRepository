@@ -5,6 +5,7 @@ import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.warehouse.dto.InWhPlanDto;
 import com.lcdt.warehouse.dto.InWhPlanSearchParamsDto;
 import com.lcdt.warehouse.dto.InorderGoodsInfoDto;
+import com.lcdt.warehouse.dto.OutWhPlanDto;
 import com.lcdt.warehouse.entity.InWarehousePlan;
 import com.baomidou.mybatisplus.service.IService;
 
@@ -90,10 +91,16 @@ public interface InWarehousePlanService extends IService<InWarehousePlan> {
      * @return
      */
     boolean distributeWh(InWhPlanDto inWhPlanAddParamsDto, UserCompRel userCompRel);
-    
-    
- 
 
+
+
+    /**
+     * 更改入库计划状态
+     * @param inWhPlanDto
+     * @param userCompRel
+     * @return
+     */
+    boolean changeInWarehousePlanStatus(InWhPlanDto inWhPlanDto, UserCompRel userCompRel);
 
 
 }
