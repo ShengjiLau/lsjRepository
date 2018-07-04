@@ -16,7 +16,9 @@ public class OrderCountDto implements Serializable{
 	
 	private Integer salesOrderCount;
 	
-	private TreeMap<Date, Integer> orderCountByDate;
+	private TreeMap<String, Integer> purchaseOrderCountByDate;
+	
+	private TreeMap<String, Integer> salesOrderCountByDate;
 
 	public Integer getPurchaseOrderCount() {
 		return purchaseOrderCount;
@@ -34,13 +36,24 @@ public class OrderCountDto implements Serializable{
 		this.salesOrderCount = salesOrderCount;
 	}
 
-	public TreeMap<Date, Integer> getOrderCountByDate() {
-		return orderCountByDate;
+	public TreeMap<String, Integer> getPurchaseOrderCountByDate() {
+		return purchaseOrderCountByDate;
 	}
 
-	public void setOrderCountByDate(TreeMap<Date, Integer> orderCountByDate) {
-		this.orderCountByDate = orderCountByDate;
+	public void setPurchaseOrderCountByDate(TreeMap<String, Integer> purchaseOrderCountByDate) {
+		this.purchaseOrderCountByDate = purchaseOrderCountByDate;
 	}
+
+	public TreeMap<String, Integer> getSalesOrderCountByDate() {
+		return salesOrderCountByDate;
+	}
+
+	public void setSalesOrderCountByDate(TreeMap<String, Integer> salesOrderCountByDate) {
+		this.salesOrderCountByDate = salesOrderCountByDate;
+	}
+
+
+
 	
 	
 

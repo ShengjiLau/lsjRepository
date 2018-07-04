@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.TreeMap;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -62,7 +63,7 @@ public class OrderOverviewDto implements Serializable{
 	private Integer moneyReceivedOrder;
 	
 	@ApiModelProperty("采购/销售 走势图")
-	private TreeMap<Date,Hashtable<Integer,BigDecimal>> trendDiagram;
+	private List<TrendDiagramDto> trendDiagramList;
 
 	public Integer getNumOfOrders() {
 		return numOfOrders;
@@ -168,13 +169,17 @@ public class OrderOverviewDto implements Serializable{
 		this.moneyReceivedOrder = moneyReceivedOrder;
 	}
 
-	public TreeMap<Date, Hashtable<Integer, BigDecimal>> getTrendDiagram() {
-		return trendDiagram;
+	public List<TrendDiagramDto> getTrendDiagramList() {
+		return trendDiagramList;
 	}
 
-	public void setTrendDiagram(TreeMap<Date, Hashtable<Integer, BigDecimal>> trendDiagram) {
-		this.trendDiagram = trendDiagram;
+	public void setTrendDiagramList(List<TrendDiagramDto> trendDiagramList) {
+		this.trendDiagramList = trendDiagramList;
 	}
+
+	
+
+	
 
 	
 	
