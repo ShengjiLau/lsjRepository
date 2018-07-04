@@ -128,7 +128,7 @@ public class OwnDriverApi {
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(ownDriverDto.getPageNum());    //设置页码
         pageInfo.setPageSize(ownDriverDto.getPageSize());  //设置每页条数
-        PageInfo<List<OwnDriverDao>> listPageInfo = ownDriverService.ownDriverList(ownDriver, pageInfo);
+        PageInfo<List<OwnDriver>> listPageInfo = ownDriverService.ownDriverList(ownDriver, pageInfo);
         logger.debug("司机总条数：" + listPageInfo.getTotal());
         logger.debug("listPageInfo:" + listPageInfo.toString());
         PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
