@@ -178,7 +178,7 @@
     </foreach>
   </select>
   
-  <select id="getProductCountByOrderIds">
+  <select id="getProductCountByOrderIds" resultType="java.lang.Long" parameterType="java.util.List">
    select count(op_id) 
    from t_order_product
    where order_id in

@@ -53,6 +53,12 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
     @Transactional(readOnly = true)
     @Override
     public Page<InWarehousePlan> inWarehousePlanList(InWhPlanSearchParamsDto dto, Page<InWarehousePlan> page) {
+        if (!StringUtils.isEmpty(dto.getCreateBeginStr())) {
+           dto.setCreateBeginStr(DateUtility.date2String(DateUtility.string2Date_safe(dto.getCreateBeginStr(),null))+" 00:00:00");
+         }
+        if (!StringUtils.isEmpty(dto.getCreateEndStr())) {
+            dto.setCreateEndStr(DateUtility.date2String(DateUtility.string2Date_safe(dto.getCreateEndStr(),null))+" 23:59:59");
+        }
         List<InWarehousePlan> list = inWarehousePlanMapper.inWarehousePlanList(page, dto);
         if (null != list && list.size()>0) {
             for (InWarehousePlan obj : list) {
@@ -480,6 +486,28 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
     }
 
 
+
+
+    @Transactional
+    @Override
+    public boolean changeInWarehousePlanStatus(InWhPlanDto inWhPlanDto, UserCompRel userCompRel) {
+        InWarehousePlan obj = new InWarehousePlan();
+        obj.setCompanyId(userCompRel.getCompany().getCompId());
+        obj.setPlanId(inWhPlanDto.getPlanId());
+
+        InWarehousePlan inWarehousePlan = this.selectOne(new EntityWrapper<InWarehousePlan>(obj));
+        if (inWarehousePlan == null) {
+            return false;
+        }
+        if (inWarehousePlan.getPlanStatus().equals((Integer) InWhPlanStatusEnum.isWarehouse.getValue())) {
+            inWarehousePlan.setPlanStatus((Integer) InWhPlanStatusEnum.publish.getValue());
+            inWarehousePlan.setUpdateId(userCompRel.getUser().getUserId());
+            inWarehousePlan.setUpdateName(userCompRel.getUser().getRealName());
+            inWarehousePlan.setUpdateDate(new Date());
+            return this.update(inWarehousePlan,new EntityWrapper<InWarehousePlan>(obj));
+        }
+        return false;
+    }
 
 
 }
