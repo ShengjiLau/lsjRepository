@@ -20,6 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -38,7 +42,7 @@ public class RestExceptionHandler {
 
 	@org.springframework.web.bind.annotation.ExceptionHandler(AccessDeniedException.class)
 	@ResponseBody()
-	public String AccessDeniedHandler(HttpServletRequest request, Exception e,HandlerMethod handle) {
+	public void AccessDeniedHandler(HttpServletRequest request, Exception e, HandlerMethod handle, OutputStream outputStream, HttpServletResponse response) {
 		if (handle != null) {
 			PreAuthorize annotation = AnnotationUtils.getAnnotation(handle.getMethod(), PreAuthorize.class);
 			if (annotation != null) {
@@ -54,16 +58,28 @@ public class RestExceptionHandler {
 						jsonObject.put("code", -2);
 						jsonObject.put("data", permissions);
 						jsonObject.put("message", "缺少权限 " + exceptionMessage(annontionValue.getAuthority()));
-						return jsonObject.toString();
+						response.setContentType("text/html;charset=UTF-8");
+						outputStream.write(jsonObject.toString().getBytes("UTF-8"));
+						return;
+//						return jsonObject.toString();
 					}
 
 				}catch (EvaluationException ex){
 					logger.error(ex.getMessage(),ex);
+				} catch (UnsupportedEncodingException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
 				}
 			}
 		}
-
-		return defaultErrorHandler(request, e);
+		try {
+			outputStream.write(defaultErrorHandler(request,e).getBytes("UTF-8"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		return;
+//		return defaultErrorHandler(request, e);
 	}
 
 	private String exceptionMessage(String value){
