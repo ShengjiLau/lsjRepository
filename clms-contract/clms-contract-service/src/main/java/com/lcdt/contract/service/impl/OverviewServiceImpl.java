@@ -84,9 +84,8 @@ public class OverviewServiceImpl implements OverviewService {
 		}
 		//countOrderProduct统计所有的商品数量
 		int countOrderProduct = 0;
-		Long [] orderId = (Long[]) orderIds.toArray();
 		if (orderIds.size() > 0) {
-			countOrderProduct = orderProductMapper.getProductCountByOrderIds(orderId);
+			countOrderProduct = orderProductMapper.getProductCountByOrderIds(orderIds);
 		}
 		//y 统计所有订单数量
 		BigDecimal y = new BigDecimal(orderList.size());
