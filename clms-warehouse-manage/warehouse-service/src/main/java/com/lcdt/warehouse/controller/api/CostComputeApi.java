@@ -26,6 +26,7 @@ public class CostComputeApi {
     }
 
     @GetMapping("/get")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('get_compute_set')")
     public ResponseMessage<CostComputeSet> computeSet(){
         return JSONResponseUtil.success(setService.selectById(SecurityInfoGetter.getCompanyId()));
     }

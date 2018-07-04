@@ -6,12 +6,16 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.items.dto.GoodsListParamsDto;
 import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.pay.rpc.CompanyServiceCountService;
+import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.lcdt.warehouse.mapper.InWarehouseOrderMapper;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.lcdt.warehouse.service.InWarehousePlanService;
 import com.lcdt.warehouse.service.InorderGoodsInfoService;
 import com.lcdt.warehouse.service.InventoryService;
 import com.lcdt.warehouse.vo.ConstantVO;
@@ -51,6 +55,8 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
     @Reference()
     SubItemsInfoService goodsService;
 
+    @Autowired
+    private InWarehousePlanService inWarehousePlanService;
 
     @Override
     public int addInWarehouseOrder(InWarehouseOrderDto params) {
@@ -126,6 +132,23 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
 
         //调用更新的方法
         boolean result = update(inWarehouseOrder, wrapper);
+
+        if (result){
+            if(params.getInOrderStatus()==ConstantVO.IN_ORDER_STATUS_HAVE_CANCEL){
+                InWhPlanDto inWhPlanDto=new InWhPlanDto();
+                inWarehouseOrder=baseMapper.selectById(inWarehouseOrder.getInorderId());
+                inWhPlanDto.setPlanId(inWarehouseOrder.getPlanId());
+                UserCompRel userCompRel=new UserCompRel();
+                Company company=new Company();
+                company.setCompId(inWarehouseOrder.getCompanyId());
+                User user=new User();
+                user.setRealName(inWarehouseOrder.getUpdateName());
+                user.setUserId(inWarehouseOrder.getUpdateId());
+                userCompRel.setCompany(company);
+                userCompRel.setUser(user);
+                inWarehousePlanService.changeInWarehousePlanStatus(inWhPlanDto,userCompRel);
+            }
+        }
 
         return result;
     }

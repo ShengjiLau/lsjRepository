@@ -15,14 +15,6 @@ public class InorderGoodsInfoLocationDto {
      */
     private Float inHouseAmount;
     /**
-     * 入库价
-     */
-    private Float inHousePrice;
-    /**
-     * 货损
-     */
-    private Float damage;
-    /**
      * 备注
      */
     private String remark;
@@ -63,22 +55,6 @@ public class InorderGoodsInfoLocationDto {
 
     public void setInHouseAmount(Float inHouseAmount) {
         this.inHouseAmount = inHouseAmount;
-    }
-
-    public Float getInHousePrice() {
-        return inHousePrice;
-    }
-
-    public void setInHousePrice(Float inHousePrice) {
-        this.inHousePrice = inHousePrice;
-    }
-
-    public Float getDamage() {
-        return damage;
-    }
-
-    public void setDamage(Float damage) {
-        this.damage = damage;
     }
 
     public String getRemark() {

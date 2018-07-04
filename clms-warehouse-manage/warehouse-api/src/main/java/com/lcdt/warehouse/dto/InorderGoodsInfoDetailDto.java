@@ -22,6 +22,7 @@ public class InorderGoodsInfoDetailDto {
      * 库存单价
      */
     private Float goodsPrice;
+
     /**
      * 商品批次
      */
@@ -43,6 +44,15 @@ public class InorderGoodsInfoDetailDto {
      * 应收数量
      */
     private Float receivalbeAmount;
+
+    /**
+     * 入库价
+     */
+    private Float inHousePrice;
+    /**
+     * 货损
+     */
+    private Float damage;
 
     private List<InorderGoodsInfoLocationDto> locationInfo;
 
@@ -164,5 +174,23 @@ public class InorderGoodsInfoDetailDto {
 
     public void setLocationInfo(List<InorderGoodsInfoLocationDto> locationInfo) {
         this.locationInfo = locationInfo;
+    }
+
+    public Float getInHousePrice() {
+        return inHousePrice;
+    }
+
+    public InorderGoodsInfoDetailDto setInHousePrice(Float inHousePrice) {
+        this.inHousePrice = inHousePrice;
+        return this;
+    }
+
+    public Float getDamage() {
+        return damage;
+    }
+
+    public InorderGoodsInfoDetailDto setDamage(Float damage) {
+        this.damage = damage;
+        return this;
     }
 }
