@@ -44,7 +44,7 @@ public interface OwnDriverService {
      *
      * @return
      */
-    PageInfo<List<OwnDriverDao>> ownDriverList(OwnDriver ownDriver, PageInfo pageInfo);
+    PageInfo<List<OwnDriver>> ownDriverList(OwnDriver ownDriver, PageInfo pageInfo);
 
     /**
      * 车辆详情
