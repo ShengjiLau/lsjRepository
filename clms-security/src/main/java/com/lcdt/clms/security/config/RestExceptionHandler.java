@@ -1,11 +1,11 @@
-package com.lcdt.userinfo.web;
+package com.lcdt.clms.security.config;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
-import com.lcdt.clms.permission.dao.PermissionMapper;
 import com.lcdt.clms.permission.model.Permission;
+import com.lcdt.clms.permission.service.UserPermissionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.expression.EvaluationException;
 import org.springframework.expression.Expression;
@@ -21,7 +21,6 @@ import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created by ss on 2017/11/3.
@@ -34,11 +33,11 @@ public class RestExceptionHandler {
 
 	ExpressionParser expressionParser = new SpelExpressionParser();
 
-	@Autowired
-	PermissionMapper permissionMapper;
+	@Reference(check = false)
+	UserPermissionService permissionService;
 
 	@org.springframework.web.bind.annotation.ExceptionHandler(AccessDeniedException.class)
-	@ResponseBody
+	@ResponseBody()
 	public String AccessDeniedHandler(HttpServletRequest request, Exception e,HandlerMethod handle) {
 		if (handle != null) {
 			PreAuthorize annotation = AnnotationUtils.getAnnotation(handle.getMethod(), PreAuthorize.class);
@@ -48,12 +47,16 @@ public class RestExceptionHandler {
 				AuthAnnontionValue annontionValue = new AuthAnnontionValue();
 				try {
 					expression.getValue(annontionValue);
-					List<Permission> permissions = permissionMapper.selectByPermissionValue(annontionValue.getAuthority());
-					JSONObject jsonObject = new JSONObject();
-					jsonObject.put("code", -2);
-					jsonObject.put("data", permissions);
-					jsonObject.put("message", "缺少权限 " + exceptionMessage(annontionValue.getAuthority()));
-					return jsonObject.toString();
+
+					if (permissionService != null) {
+						List<Permission> permissions = permissionService.selectByCode(annontionValue.getAuthority());
+						JSONObject jsonObject = new JSONObject();
+						jsonObject.put("code", -2);
+						jsonObject.put("data", permissions);
+						jsonObject.put("message", "缺少权限 " + exceptionMessage(annontionValue.getAuthority()));
+						return jsonObject.toString();
+					}
+
 				}catch (EvaluationException ex){
 					logger.error(ex.getMessage(),ex);
 				}
@@ -64,7 +67,7 @@ public class RestExceptionHandler {
 	}
 
 	private String exceptionMessage(String value){
-		List<Permission> permissions = permissionMapper.selectByPermissionValue(value);
+		List<Permission> permissions = permissionService.selectByCode(value);
 		if (!CollectionUtils.isEmpty(permissions)) {
 
 			StringBuilder message = new StringBuilder();

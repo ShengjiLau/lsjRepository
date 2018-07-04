@@ -1,7 +1,6 @@
 package com.lcdt.clms.permission;
 
 import com.lcdt.wms.config.MybatisCommonConfig;
-import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

@@ -11,8 +11,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 @EnableTransactionManagement
@@ -20,12 +26,22 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableClmsSecurity
 public class WarehouseServiceApp {
 
+
+    @Bean
+    public StringHttpMessageConverter stringMessageConverter(){
+        StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        ArrayList<MediaType> mediaTypes = new ArrayList<>();
+        mediaTypes.add(MediaType.TEXT_HTML);
+        stringHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
+        return stringHttpMessageConverter;
+    }
+
     @Bean
     public HttpMessageConverters fastJsonHttpMessageConverters(){
         //1.需要定义一个Convert转换消息的对象
         FastJsonHttpMessageConverter fastConverter=new FastJsonHttpMessageConverter();
         //2.添加fastjson的配置信息，比如是否要格式化返回的json数据
-
+        fastConverter.setDefaultCharset(Charset.forName("UTF-8"));
         FastJsonConfig fastJsonConfig=new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
         fastJsonConfig.setSerializerFeatures(SerializerFeature.WriteMapNullValue);

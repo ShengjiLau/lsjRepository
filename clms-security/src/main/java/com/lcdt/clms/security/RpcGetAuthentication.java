@@ -39,6 +39,7 @@ public class RpcGetAuthentication implements Authentication {
 		return ticketAuthentication;
 	}
 
+
 	public String getTicket() {
 		String ticket = ticketThreadLocal.get();
 		if (StringUtils.isEmpty(ticket)) {

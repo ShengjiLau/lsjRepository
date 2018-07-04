@@ -15,9 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * Created by yangbinq on 2017/11/22.
  */
 @SpringBootApplication
-@EnableTransactionManagement
-@Import({com.lcdt.swagger.SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class, MybatisCommonConfig.class})
-@DubboComponentScan(basePackages = "com.lcdt.customer.rpc")
+@Import({ MybatisCommonConfig.class,com.lcdt.swagger.SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class})
 @EnableClmsSecurity
 public class CustomerServiceApp {
 	public static void main(String[] args) {

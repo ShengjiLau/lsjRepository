@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * Created by ss on 2017/11/3.
  */
-@ControllerAdvice
+//@ControllerAdvice
 public class RestExceptionHandler {
 
 	private Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);

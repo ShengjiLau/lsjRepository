@@ -1,6 +1,5 @@
 package com.lcdt.userinfo.service.impl;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.userinfo.dao.DictionaryMapper;
 import com.lcdt.userinfo.dto.DictionaryQueryDto;
 import com.lcdt.userinfo.model.Dictionary;

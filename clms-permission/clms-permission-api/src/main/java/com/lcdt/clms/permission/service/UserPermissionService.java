@@ -23,4 +23,6 @@ public interface UserPermissionService {
 	List<Permission> adminPermission(Long userId);
 
 	int insertAdminPermissions(AdminPermissionRelation relation);
+
+	List<Permission> selectByCode(String permissionCode);
 }

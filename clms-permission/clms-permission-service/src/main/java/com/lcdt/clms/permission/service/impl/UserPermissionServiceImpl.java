@@ -114,4 +114,9 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 		adminPermissionRelationMapper.delete(relation);
 		return adminPermissionRelationMapper.insertBatch(relation);
 	}
+
+	public List<Permission> selectByCode(String permissionCode){
+		return permissionDao.selectByPermissionValue(permissionCode);
+	}
+
 }
