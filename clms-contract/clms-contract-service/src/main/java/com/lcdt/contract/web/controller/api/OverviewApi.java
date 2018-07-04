@@ -3,6 +3,8 @@ package com.lcdt.contract.web.controller.api;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,8 +35,14 @@ public class OverviewApi {
 	
 	@ApiOperation("采购销售数量统计")
 	@GetMapping("/order/count")
-	public JSONObject getOrderCount(OverviewDto overviewDto) {
+	public JSONObject getOrderCount(@Validated OverviewDto overviewDto,BindingResult bindingResult) {
 		JSONObject jsonObject = new JSONObject();
+		 if (bindingResult.hasErrors()) {
+	            jsonObject.put("code", -1);
+	            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
+	            return jsonObject;
+	        }
+		
 		OrderCountDto orderCountDto = overviewService.getOrderCount(overviewDto);
 			jsonObject.put("code", 0);
 			jsonObject.put("message", "订单数量统计");
@@ -45,8 +53,14 @@ public class OverviewApi {
 	
 	@ApiOperation("合同订单概览")
 	@GetMapping("/overview/get")
-	public JSONObject getOverview(OverviewDto overviewDto) {
+	public JSONObject getOverview(@Validated OverviewDto overviewDto,BindingResult bindingResult) {
 		JSONObject jsonObject = new JSONObject();
+		 if (bindingResult.hasErrors()) {
+	            jsonObject.put("code", -1);
+	            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
+	            return jsonObject;
+	        }
+		
 		OrderOverviewDto orderOverviewDto = overviewService.getOverviewDtoList(overviewDto);
 		jsonObject.put("code", 0);
 		jsonObject.put("message", "采购销售概览");

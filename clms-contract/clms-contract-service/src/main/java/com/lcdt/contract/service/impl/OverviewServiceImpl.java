@@ -196,7 +196,7 @@ public class OverviewServiceImpl implements OverviewService {
 		}
 		OrderCountDto orderCountDto = new OrderCountDto();
 		overviewDto.setCompanyId(SecurityInfoGetter.getCompanyId());
-		HashMap<String, Object> map = ConvertDtoToMap(overviewDto);
+		//HashMap<String, Object> map = ConvertDtoToMap(overviewDto);
 		List<Order> orderList = overviewMapper.getOrderListByOverviewDto(overviewDto);
 		
 		Integer purchaseOrderCount = overviewMapper.countPurchaseOrderByOverviewDto(overviewDto);
@@ -241,7 +241,9 @@ public class OverviewServiceImpl implements OverviewService {
 		map.put("companyId", overviewDto.getCompanyId());
 		map.put("beginTime", overviewDto.getBeginTime());
 		map.put("endTime", overviewDto.getEndTime());
-		map.put("groups", convertStringToLong(overviewDto.getGroups()));
+		if (null != overviewDto.getGroups()) {
+			map.put("groups", convertStringToLong(overviewDto.getGroups()));
+		}
 		
 		return (HashMap<String, Object>) map;
 	}
