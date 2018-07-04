@@ -108,14 +108,6 @@
     <result column="attachment5" jdbcType="VARCHAR" property="attachment5" />
   </resultMap>
   
-  
-  
-  
-
-
-
-
-
 	<select id="getOverviewOrderList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
 	</select>
 
@@ -132,7 +124,9 @@
     from t_order
 	<where>
 	company_id = #{companyId,jdbcType=BIGINT} and is_draft = 1
+	<if test="type != null">
 	and order_type = #{type,jdbcType=SMALLINT}
+	</if>
 	<if test="beginTime != null and beginTime !=''">
 	and create_time &gt; concat(#{beginTime,jdbcType=TIMESTAMP},' 00:00:00')
 	</if>
@@ -178,7 +172,9 @@
     from t_contract
 	<where>
 	company_id = #{companyId,jdbcType=BIGINT}
+	<if test="type != null">
 	and type = #{type,jdbcType=SMALLINT}
+	</if>
 	<if test="beginTime != null and beginTime !=''">
 	and create_time &gt; concat(#{beginTime,jdbcType=TIMESTAMP},' 00:00:00')
 	</if>
@@ -241,18 +237,31 @@
 	</if>
 	</where>
 	</select>
-
-
-
-
-
-
-
-
-
-
-
-
+	
+	<select id="getOrderListByOverviewDto" parameterType="com.lcdt.contract.web.dto.OverviewDto" resultMap="OrderResultMap">
+	select order_id orderId, supplier, order_no orderNo, order_type orderType, contract_code contractCode, dispatching_type dispatchingType, 
+    pay_type payType, receive_warehouse receiveWarehouse,sender, sender_phone senderPhone, send_province sendProvince, send_city sendCity, 
+    send_district sendDistrict, send_address sendAddress, send_time sendTime, pack_require packRequire, receiver, receiver_phone receiverPhone, receiver_province receiverProvince, 
+    receiver_city receiverCity, receive_district receiveDistrict, receive_address receiveAddress, remarks, create_time createTime, group_id groupId,company_id companyId,
+    receive_time receiveTime,approval_start_date approvalStartDate,approval_end_date approvalEndDate,create_user_id createUserId,order_serial_no orderSerialNo,
+    approval_status approvalStatus,approval_process approvalProcess,approval_process_id approvalProcessId,supplier_id supplierId,is_draft isDraft,receive_require receiveRequire,summation,warehouse_id warehouseId,
+    attachment1_name attachment1Name,attachment1,attachment2_name attachment2Name,attachment2,attachment3_name attachment3Name,attachment3,attachment4_name attachment4Name,attachment4,
+    attachment5_name attachment5Name,attachment5,traffic_plan, 
+    warehouse_plan
+    from t_order
+	<where>
+	company_id = #{companyId,jdbcType=BIGINT} and is_draft = 1
+	<if test="groupId != null">
+	and group_id = #{groupId,jdbcType=BIGINT}
+	</if>
+	<if test="beginTime != null and beginTime !=''">
+	and create_time &gt; concat(#{beginTime,jdbcType=TIMESTAMP},' 00:00:00')
+	</if>
+	<if test="endTime != null and endTime !=''">
+	and create_time &lt; concat(#{endTime,jdbcType=TIMESTAMP},' 23:59:59')
+	</if>
+	</where>
+	</select>
 
 </mapper>
 

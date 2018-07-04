@@ -178,5 +178,12 @@
     </foreach>
   </select>
   
-  
+  <select id="getProductCountByOrderIds">
+   select count(op_id) 
+   from t_order_product
+   where order_id in
+    <foreach collection="array" item="orderIds" index="index" open="(" close=")" separator=",">
+      #{orderIds}
+    </foreach>
+  </select>
 </mapper>
