@@ -3,7 +3,6 @@ package com.lcdt.contract.web.controller.api;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +33,6 @@ public class OverviewApi {
 	
 	@ApiOperation("采购销售数量统计")
 	@GetMapping("/order/count")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('order_count_get')")
 	public JSONObject getOrderCount(OverviewDto overviewDto) {
 		JSONObject jsonObject = new JSONObject();
 		OrderCountDto orderCountDto = overviewService.getOrderCount(overviewDto);
@@ -47,7 +45,6 @@ public class OverviewApi {
 	
 	@ApiOperation("合同订单概览")
 	@GetMapping("/overview/get")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('order_overview_get')")
 	public JSONObject getOverview(OverviewDto overviewDto) {
 		JSONObject jsonObject = new JSONObject();
 		OrderOverviewDto orderOverviewDto = overviewService.getOverviewDtoList(overviewDto);
