@@ -1,7 +1,6 @@
 package com.lcdt.userinfo.dao;
 
 
-import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.lcdt.userinfo.dto.DictionaryQueryDto;
 import com.lcdt.userinfo.model.Dictionary;
 
