@@ -57,7 +57,7 @@ public class RestExceptionHandler {
 						JSONObject jsonObject = new JSONObject();
 						jsonObject.put("code", -2);
 						jsonObject.put("data", permissions);
-						jsonObject.put("message", "缺少权限 " + exceptionMessage(annontionValue.getAuthority()));
+						jsonObject.put("message", "抱歉，您没有'" + exceptionMessage(annontionValue.getAuthority())+"'的权限！");
 						response.setContentType("text/html;charset=UTF-8");
 						outputStream.write(jsonObject.toString().getBytes("UTF-8"));
 						return;

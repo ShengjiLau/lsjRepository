@@ -173,7 +173,7 @@ public class InWarehousePlanController {
                              @ApiParam(value = "加载配仓完成后，是否显示",required = true) @RequestParam boolean flag1) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         JSONObject jsonObject = new JSONObject();
-        InWhPlanDto inWhPlanDto = inWarehousePlanService.inWhPlanDetail(planId,flag, userCompRel,false,flag1);
+        InWhPlanDto inWhPlanDto = inWarehousePlanService.inWhPlanDetail(planId,flag, userCompRel,true,flag1);
         jsonObject.put("data",inWhPlanDto);
         jsonObject.put("code", 0);
         return jsonObject;

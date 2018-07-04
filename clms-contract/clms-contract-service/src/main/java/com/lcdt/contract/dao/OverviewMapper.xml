@@ -111,7 +111,7 @@
 	<select id="getOverviewOrderList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
 	</select>
 
-	<select id="getOrderOverviewList" parameterType="java.util.HashMap" resultMap="OrderResultMap">
+	<select id="getOrderOverviewList" parameterType="java.util.HashMap" resultType="com.lcdt.contract.model.Order">
 	select order_id orderId, supplier, order_no orderNo, order_type orderType, contract_code contractCode, dispatching_type dispatchingType, 
     pay_type payType, receive_warehouse receiveWarehouse,sender, sender_phone senderPhone, send_province sendProvince, send_city sendCity, 
     send_district sendDistrict, send_address sendAddress, send_time sendTime, pack_require packRequire, receiver, receiver_phone receiverPhone, receiver_province receiverProvince, 
@@ -159,7 +159,7 @@
 	  where order_id = #{orderId,jdbcType=BIGINT}
 	</select>
 	
-	<select id="getContractOverviewList" parameterType="java.util.HashMap" resultMap="ContractResultMap">
+	<select id="getContractOverviewList" parameterType="java.util.HashMap" resultType="com.lcdt.contract.model.Contract">
 	select contract_id contractId, contract_code contractCode, serial_no serialNo, title, sign_date signDate, type,
     contract_status contractStatus, approval_status approvalStatus,approval_process approvalProcess, approval_process_id approvalProcessId, cycle,
     pay_type payType, party_a_id partyAId, party_a_name partyAName, party_a_principal partyAPrincipal,
