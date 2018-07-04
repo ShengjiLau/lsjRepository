@@ -11,6 +11,7 @@ import com.lcdt.traffic.model.DriverAndGroup;
 import com.lcdt.traffic.model.DriverGroup;
 import com.lcdt.traffic.service.DriverGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.HashMap;
@@ -22,6 +23,7 @@ import java.util.Map;
  * @DATE 2017-12-25
  */
 @Service
+@Transactional
 public class DriverGroupServiceImpl implements DriverGroupService {
 
     @Autowired
