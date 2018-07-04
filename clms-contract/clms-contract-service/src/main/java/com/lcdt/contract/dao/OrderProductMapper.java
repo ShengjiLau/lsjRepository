@@ -71,7 +71,7 @@ public interface OrderProductMapper {
      * @param orderIds
      * @return
      */
-    Integer getProductCountByOrderIds(Long[] orderIds);
+    Integer getProductCountByOrderIds(List<Long> orderIds);
     
     
     

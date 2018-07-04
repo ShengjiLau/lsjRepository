@@ -182,8 +182,8 @@
    select count(op_id) 
    from t_order_product
    where order_id in
-    <foreach collection="array" item="orderIds" index="index" open="(" close=")" separator=",">
-      #{orderIds}
+    <foreach collection="List" item="orderId" index="index" open="(" close=")" separator=",">
+      #{orderId,jdbcType=BIGINT}
     </foreach>
   </select>
 </mapper>
