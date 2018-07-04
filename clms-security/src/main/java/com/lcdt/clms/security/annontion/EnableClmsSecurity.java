@@ -11,7 +11,7 @@ import java.lang.annotation.*;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Import({SecurityConfig.class, RestExceptionHandler.class})
+@Import({SecurityConfig.class})
 @Inherited
 public @interface EnableClmsSecurity {
 
