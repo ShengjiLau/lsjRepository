@@ -291,6 +291,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
 
             for (InWarehouseOrderDto obj : inWarehouseOrderDtoList) {
 
+
                 List<InorderGoodsInfoDto> list = obj.getGoodsInfoDtoList();
                 if (null!=list && list.size()>0) {
                     for (InorderGoodsInfoDto obj1 :list) { //配仓数量=对应入库单的应收数量

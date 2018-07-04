@@ -87,9 +87,9 @@ public class DriverGroupApi {
     @PostMapping("/delete")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('owndriver_group')")
     public JSONObject delOwnDriver(@RequestBody DriverGroup driverGroup, BindingResult bindingResult) {
-        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
-        String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Long userId = SecurityInfoGetter.getUser().getUserId();
+        String userName = SecurityInfoGetter.getUser().getRealName();
         driverGroup.setCompanyId(companyId);
         driverGroup.setUpdateId(userId);
         driverGroup.setUpdateName(userName);

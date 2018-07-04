@@ -1,5 +1,6 @@
-package com.lcdt.wms.config;
+package com.lcdt.notify.config;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -48,20 +49,19 @@ public class MybatisCommonConfig implements TransactionManagementConfigurer {
 		if (classPathResource.exists()) {
 			sqlSessionFactoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
 		}
-
-//		PageInterceptor pageInterceptor = new PageHelper();
+		PageInterceptor pageInterceptor = new PageInterceptor();
 //		pageInterceptor.setProperties();
 		//分页插件
-//		PageHelper pageHelper = new PageHelper();
-//		Properties properties = new Properties();
-//		properties.setProperty("reasonable", "true");
-//		properties.setProperty("supportMethodsArguments", "true");
-//		properties.setProperty("returnPageInfo", "check");
-//		properties.setProperty("params", "count=countSql");
-//		pageInterceptor.setProperties(properties);
+		PageHelper pageHelper = new PageHelper();
+		Properties properties = new Properties();
+		properties.setProperty("reasonable", "true");
+		properties.setProperty("supportMethodsArguments", "true");
+		properties.setProperty("returnPageInfo", "check");
+		properties.setProperty("params", "count=countSql");
+		pageInterceptor.setProperties(properties);
 
 		//添加插件
-//		sqlSessionFactoryBean.setPlugins(new Interceptor[]{pageInterceptor});
+		sqlSessionFactoryBean.setPlugins(new Interceptor[]{pageInterceptor});
 
 		try {
 			SqlSessionFactory object = sqlSessionFactoryBean.getObject();
