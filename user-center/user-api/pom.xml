@@ -41,6 +41,10 @@
                     <groupId>com.baomidou</groupId>
                     <artifactId>mybatis-plus</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>com.github.pagehelper</groupId>
+                    <artifactId>pagehelper</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
     </dependencies>
