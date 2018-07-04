@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Import({MybatisCommonConfig.class,AliyunConfigProperties.class,com.lcdt.swagger.SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class})
 @EnableClmsSecurity
 //@ComponentScan(basePackageClasses = {com.lcdt.userinfo.service.CompanyService.class,com.lcdt.userinfo.service.WarehouseService.class})
-@MapperScan(basePackages = "com.lcdt.contract")
+@MapperScan(basePackages = "com.lcdt.contract.dao")
 public class ContractServiceApp {
     public static void main(String[] args) {
 
