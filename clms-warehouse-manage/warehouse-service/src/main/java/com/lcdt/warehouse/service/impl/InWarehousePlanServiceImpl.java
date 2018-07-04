@@ -53,6 +53,12 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
     @Transactional(readOnly = true)
     @Override
     public Page<InWarehousePlan> inWarehousePlanList(InWhPlanSearchParamsDto dto, Page<InWarehousePlan> page) {
+        if (!StringUtils.isEmpty(dto.getCreateBeginStr())) {
+           dto.setCreateBeginStr(DateUtility.date2String(DateUtility.string2Date_safe(dto.getCreateBeginStr(),null))+" 00:00:00");
+         }
+        if (!StringUtils.isEmpty(dto.getCreateEndStr())) {
+            dto.setCreateEndStr(DateUtility.date2String(DateUtility.string2Date_safe(dto.getCreateEndStr(),null))+" 23:59:59");
+        }
         List<InWarehousePlan> list = inWarehousePlanMapper.inWarehousePlanList(page, dto);
         if (null != list && list.size()>0) {
             for (InWarehousePlan obj : list) {
