@@ -223,7 +223,7 @@ public class OwnDriverServiceImpl implements OwnDriverService {
     }
 
     @Override
-    public PageInfo<List<OwnDriverDao>> ownDriverList(OwnDriver ownDriver, PageInfo pageInfo) {
+    public PageInfo<List<OwnDriver>> ownDriverList(OwnDriver ownDriver, PageInfo pageInfo) {
         PageHelper.startPage(pageInfo.getPageNum(), pageInfo.getPageSize());
         PageInfo page = new PageInfo(ownDriverMapper.selectByCondition(ownDriver));
         return page;
