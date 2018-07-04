@@ -15,10 +15,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
-@Import({AliyunConfigProperties.class,MybatisCommonConfig.class, SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class})
+@Import({AliyunConfigProperties.class,SwaggerConfig.class, DubboConfig.class, ClmsResponseConvertConfig.class})
 //@ImportResource("classpath:consumer.xml")
 @EnableClmsSecurity
-@MapperScan(basePackages = "com.lcdt.notify")
 public class NotifyServiceApp {
     public static void main(String[] args) {
         SpringApplication.run(NotifyServiceApp.class, args);

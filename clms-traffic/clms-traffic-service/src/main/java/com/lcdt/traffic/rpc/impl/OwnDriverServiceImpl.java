@@ -12,6 +12,7 @@ import com.lcdt.traffic.dto.OwnDriverDto;
 import com.lcdt.traffic.model.DriverGroupRelationship;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.model.OwnDriverCertificate;
+import com.lcdt.traffic.model.OwnDriverDao;
 import com.lcdt.traffic.service.OwnDriverService;
 import com.lcdt.traffic.util.RegisterUtils;
 import com.lcdt.userinfo.dto.RegisterDto;
