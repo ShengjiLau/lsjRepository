@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.dto.OwnDriverDto;
 import com.lcdt.traffic.model.DriverGroupRelationship;
 import com.lcdt.traffic.model.OwnDriver;
+import com.lcdt.traffic.model.OwnDriverDao;
 import com.lcdt.userinfo.model.Driver;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public interface OwnDriverService {
      *
      * @return
      */
-    PageInfo<List<OwnDriver>> ownDriverList(OwnDriver ownDriver, PageInfo pageInfo);
+    PageInfo<List<OwnDriverDao>> ownDriverList(OwnDriver ownDriver, PageInfo pageInfo);
 
     /**
      * 车辆详情
