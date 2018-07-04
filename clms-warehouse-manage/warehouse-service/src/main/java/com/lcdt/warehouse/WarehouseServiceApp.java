@@ -40,6 +40,12 @@ public class WarehouseServiceApp {
     public HttpMessageConverters fastJsonHttpMessageConverters(){
         //1.需要定义一个Convert转换消息的对象
         FastJsonHttpMessageConverter fastConverter=new FastJsonHttpMessageConverter();
+
+        ArrayList<MediaType> mediaTypes = new ArrayList<>();
+        mediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
+        mediaTypes.add(MediaType.APPLICATION_JSON);
+        fastConverter.setSupportedMediaTypes(mediaTypes);
+
         //2.添加fastjson的配置信息，比如是否要格式化返回的json数据
         fastConverter.setDefaultCharset(Charset.forName("UTF-8"));
         FastJsonConfig fastJsonConfig=new FastJsonConfig();
