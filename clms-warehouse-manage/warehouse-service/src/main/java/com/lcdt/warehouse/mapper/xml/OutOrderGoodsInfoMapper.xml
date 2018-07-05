@@ -43,7 +43,7 @@
         select o.out_plan_id,g.outplan_relation_id,sum(g.outbound_quantity) outbound_quantity from out_warehouse_order o
         left join out_order_goods_info g
         on o.outorder_id=g.outorder_id
-        where o.order_status=2 and company_id= #{companyId,jdbcType=BIGINT} and o.out_plan_id=#{outPlanId,jdbcType=BIGINT} and outplan_relation_id=#{outplanRelationId,jdbcType=BIGINT}
+        where o.order_status=2 and o.company_id= #{companyId,jdbcType=BIGINT} and o.out_plan_id=#{outPlanId,jdbcType=BIGINT} and outplan_relation_id=#{outplanRelationId,jdbcType=BIGINT}
         group by g.outplan_relation_id,o.out_plan_id
     </select>
 </mapper>
