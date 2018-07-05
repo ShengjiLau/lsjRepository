@@ -53,6 +53,9 @@ public class ShiftGoodsDO implements Serializable {
 
 	@ApiModelProperty("")
     private Float inventoryPrice;
+	
+	@ApiModelProperty("商品条码")
+	private String barcode;
 
     private static final long serialVersionUID = 1L;
 
@@ -159,5 +162,13 @@ public class ShiftGoodsDO implements Serializable {
     public void setInventoryPrice(Float inventoryPrice) {
         this.inventoryPrice = inventoryPrice;
     }
+
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
+	}
 
 }

@@ -15,11 +15,12 @@
     <result column="original_goods_id" jdbcType="BIGINT" property="originalGoodsId" />
     <result column="base_unit" jdbcType="VARCHAR" property="baseUnit" />
     <result column="inventory_price" jdbcType="REAL" property="inventoryPrice" />
+    <result column="barcode" property="barcode" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Base_Column_List">
     shift_goods_id, inventory_id, shift_location, shift_plan_num, shift_num, remark, 
     shift_inventory_id, storage_location_id, goods_id, batch, original_goods_id, base_unit, 
-    inventory_price
+    inventory_price，barcode
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -39,12 +40,12 @@
       shift_plan_num, shift_num, remark, 
       shift_inventory_id, storage_location_id, goods_id, 
       batch, original_goods_id, base_unit, 
-      inventory_price)
+      inventory_price,barcode)
     values (#{shiftGoodsId,jdbcType=BIGINT}, #{inventoryId,jdbcType=BIGINT}, #{shiftLocation,jdbcType=VARCHAR}, 
       #{shiftPlanNum,jdbcType=DECIMAL}, #{shiftNum,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
       #{shiftInventoryId,jdbcType=BIGINT}, #{storageLocationId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, 
       #{batch,jdbcType=VARCHAR}, #{originalGoodsId,jdbcType=BIGINT}, #{baseUnit,jdbcType=VARCHAR}, 
-      #{inventoryPrice,jdbcType=REAL})
+      #{inventoryPrice,jdbcType=REAL},#{barcode,jdbcType=VARCHAR})
   </insert>
   
   <insert id="insertSelective" parameterType="com.lcdt.warehouse.entity.ShiftGoodsDO" >
@@ -89,6 +90,9 @@
       <if test="inventoryPrice != null">
         inventory_price,
       </if>
+      <if test="barcode != null">
+     	 barcode	
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="shiftGoodsId != null">
@@ -129,6 +133,9 @@
       </if>
       <if test="inventoryPrice != null">
         #{inventoryPrice,jdbcType=REAL},
+      </if>
+      <if test="barcode != null">
+      	#{barcode,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -172,6 +179,9 @@
       <if test="inventoryPrice != null">
         inventory_price = #{inventoryPrice,jdbcType=REAL},
       </if>
+      <if test="barcode != null">
+      	barcode = #{barcode,jdbcType=VARCHAR} 
+      </if>
     </set>
     where shift_goods_id = #{shiftGoodsId,jdbcType=BIGINT}
   </update>
@@ -189,7 +199,8 @@
       batch = #{batch,jdbcType=VARCHAR},
       original_goods_id = #{originalGoodsId,jdbcType=BIGINT},
       base_unit = #{baseUnit,jdbcType=VARCHAR},
-      inventory_price = #{inventoryPrice,jdbcType=REAL}
+      inventory_price = #{inventoryPrice,jdbcType=REAL},
+      barcode = #{barcode,jdbcType=VARCHAR} 
     where shift_goods_id = #{shiftGoodsId,jdbcType=BIGINT}
   </update>
   
@@ -198,14 +209,14 @@
       shift_plan_num, shift_num, remark, 
       shift_inventory_id, storage_location_id, goods_id, 
       batch, original_goods_id, base_unit, 
-      inventory_price)
+      inventory_price,barcode)
     values
     <foreach collection="list" index="index" open="" close="" separator="," item="item">
    	(#{item.shiftGoodsId,jdbcType=BIGINT}, #{item.inventoryId,jdbcType=BIGINT}, #{item.shiftLocation,jdbcType=VARCHAR}, 
       #{item.shiftPlanNum,jdbcType=DECIMAL}, #{item.shiftNum,jdbcType=DECIMAL}, #{item.remark,jdbcType=VARCHAR}, 
       #{item.shiftInventoryId,jdbcType=BIGINT}, #{item.storageLocationId,jdbcType=BIGINT}, #{item.goodsId,jdbcType=BIGINT}, 
       #{item.batch,jdbcType=VARCHAR}, #{item.originalGoodsId,jdbcType=BIGINT}, #{item.baseUnit,jdbcType=VARCHAR}, 
-      #{item.inventoryPrice,jdbcType=REAL})
+      #{item.inventoryPrice,jdbcType=REAL},#{item.shiftGoodsId,jdbcType=BIGINT})
     </foreach>
      </insert>
     
@@ -250,6 +261,9 @@
       </if>
       <if test="item.inventoryPrice != null">
         inventory_price = #{item.inventoryPrice,jdbcType=REAL},
+      </if>
+       <if test="item.barcode != null">
+      	barcode = #{item.barcode,jdbcType=VARCHAR} 
       </if>
     </set>
         where shift_goods_id = #{item.shiftGoodsId,jdbcType=BIGINT}
