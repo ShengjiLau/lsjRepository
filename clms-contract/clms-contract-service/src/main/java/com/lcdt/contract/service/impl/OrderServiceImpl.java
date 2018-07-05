@@ -545,6 +545,8 @@ public class OrderServiceImpl implements OrderService {
 		outWhPlanDto.setWareHouseId(order.getWarehouseId());
 		outWhPlanDto.setWarehouseName(order.getReceiveWarehouse());
 		outWhPlanDto.setCustomerPurchaseNo(order.getOrderNo());
+		outWhPlanDto.setCustomerContactName(order.getReceiver());
+		outWhPlanDto.setCustomerContactPhone(order.getReceiverPhone());
 		
 		List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
 		List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<>(orderProductList.size());
