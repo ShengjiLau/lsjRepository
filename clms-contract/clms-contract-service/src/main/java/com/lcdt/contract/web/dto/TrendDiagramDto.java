@@ -17,11 +17,14 @@ public class TrendDiagramDto implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 65156456235615245L;
-
+	
+	//时间
 	private String date;
 	
+	//订单数量
 	private Integer orderCount;
 	
+	//订单金额
 	private BigDecimal orderMoneyAmount;
 
 	public Integer getOrderCount() {
