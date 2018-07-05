@@ -409,6 +409,9 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 }
             }
         }
+
+
+
         if (!StringUtils.isEmpty(sb.toString())) {
             throw new RuntimeException(sb.toString());
         }
@@ -485,6 +488,9 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         _outWarehousePlan.setPickupCar(outWhPlanDto.getPickupCar());
 
         if (flag) { //如果全部配完，更改计划状态-已配仓
+            //再从数据库查找是否
+
+
             _outWarehousePlan.setPlanStatus((Integer) OutWhPlanStatusEnum.isWarehouse.getValue());
         }
         OutWarehousePlan wrapperObj = new OutWarehousePlan();
