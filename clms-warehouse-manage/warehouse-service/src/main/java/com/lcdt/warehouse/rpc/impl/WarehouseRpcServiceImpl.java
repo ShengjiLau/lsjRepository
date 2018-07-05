@@ -129,6 +129,7 @@ public class WarehouseRpcServiceImpl implements WarehouseRpcService{
         user.setUserId(outWhPlanDto.getUserId());
         user.setRealName(outWhPlanDto.getUserName());
         userCompRel.setUser(user);
+        outWhPlanDto.setStorageType("01"); //原料出库
         OutWarehousePlan outWarehousePlan = outWarehousePlanService.outWhPlanAdd(outWhPlanDto,userCompRel);
         if(outWarehousePlan!=null) return outWarehousePlan.getPlanNo();
         return "";
@@ -143,6 +144,7 @@ public class WarehouseRpcServiceImpl implements WarehouseRpcService{
         user.setUserId(inWhPlanAddParamsDto.getCreateUserId());
         user.setRealName(inWhPlanAddParamsDto.getCreateUserName());
         userCompRel.setUser(user);
+        inWhPlanAddParamsDto.setStorageType("01"); //"原料入库"
         InWarehousePlan inWarehousePlan = inWarehousePlanService.inWhPlanAdd(inWhPlanAddParamsDto,userCompRel);
         if(inWarehousePlan!=null) return inWarehousePlan.getPlanNo();
         return "";
