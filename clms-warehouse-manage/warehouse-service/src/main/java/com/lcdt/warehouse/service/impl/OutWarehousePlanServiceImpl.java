@@ -374,6 +374,19 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
          */
         List<OutWhPlanGoodsDto> _outWhPlanGoodsDtoList1 = outWhPlanDto.getOutWhPlanGoodsDtoList(); //前端提交来的
         List<OutWhPlanGoodsDto> _outWhPlanGoodsDtoList2 = _outWhPlanDto.getOutWhPlanGoodsDtoList(); //后端数据库中最新的
+
+
+        Integer num = 0;
+        for (OutWhPlanGoodsDto obj1: _outWhPlanGoodsDtoList1) {
+            if (obj1.getDistGoodsNum() == null) {
+                num++;
+            }
+        }
+        if (_outWhPlanGoodsDtoList1.size()==num) {
+            throw new RuntimeException("配仓数量不能为0！");
+        }
+
+
         if (null == _outWhPlanGoodsDtoList1 || null == _outWhPlanGoodsDtoList2) {
             throw new RuntimeException("配仓计划货物不存在！");
         }
