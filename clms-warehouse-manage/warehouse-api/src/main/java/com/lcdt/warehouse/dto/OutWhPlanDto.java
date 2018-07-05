@@ -21,7 +21,7 @@ public class OutWhPlanDto implements Serializable,ResponseData {
     private String groupName;
     @ApiModelProperty(value = "合同")
     private String contractNo;
-    @ApiModelProperty(value = "采购单号")
+    @ApiModelProperty(value = "销售单号")
     private String customerPurchaseNo;
     @ApiModelProperty(value = "客户ID")
     private Long customerId;
