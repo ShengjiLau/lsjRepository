@@ -15,9 +15,11 @@ import com.lcdt.contract.notify.ContractNotifyProducer;
 import com.lcdt.notify.model.ContractNotifyEvent;
 import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.DefaultNotifySender;
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
+import com.lcdt.userinfo.rpc.GroupWareHouseRpcService;
 import com.lcdt.warehouse.dto.InWhPlanDto;
 import com.lcdt.warehouse.dto.InWhPlanGoodsDto;
 import com.lcdt.warehouse.dto.OutWhPlanDto;
@@ -82,6 +84,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Reference
     private TrafficRpc trafficRpc;
+    
+    @Reference
+    private GroupWareHouseRpcService groupWareHouseRpcService;
     
     @Reference
     private WarehouseRpcService warehouseRpcService;
@@ -412,6 +417,8 @@ public class OrderServiceImpl implements OrderService {
 	    WaybillParamsDto.setSalesOrder(order.getOrderNo());
 	    WaybillParamsDto.setTransportWay((short) 1);//设置运输方式为陆运
 	    WaybillParamsDto.setGroupId(order.getGroupId());
+	    Group group = groupWareHouseRpcService.selectByGroupId(order.getGroupId());
+	    WaybillParamsDto.setGroupName(group.getGroupName());
 	    WaybillParamsDto.setSendWhId(order.getWarehouseId());
 	    WaybillParamsDto.setSendWhName(order.getReceiveWarehouse());
 	    if (0 == order.getOrderType()) {
@@ -492,6 +499,8 @@ public class OrderServiceImpl implements OrderService {
 	    inWhPlanAddParamsDto.setCustomerId(order.getSupplierId());
 	    inWhPlanAddParamsDto.setCustomerName(order.getSupplier());
 	    inWhPlanAddParamsDto.setGroupId(order.getGroupId());
+	    Group group = groupWareHouseRpcService.selectByGroupId(order.getGroupId());
+	    inWhPlanAddParamsDto.setGroupName(group.getGroupName());
 	    inWhPlanAddParamsDto.setWareHouseId(order.getWarehouseId());
 	    inWhPlanAddParamsDto.setWarehouseName(order.getReceiveWarehouse());
 	    inWhPlanAddParamsDto.setCustomerContactName(order.getSender());
@@ -542,6 +551,8 @@ public class OrderServiceImpl implements OrderService {
 		outWhPlanDto.setCustomerName(order.getSupplier());
 		outWhPlanDto.setContractNo(order.getContractCode());
 		outWhPlanDto.setGroupId(order.getGroupId());
+		Group group = groupWareHouseRpcService.selectByGroupId(order.getGroupId());
+		outWhPlanDto.setGroupName(group.getGroupName());
 		outWhPlanDto.setWareHouseId(order.getWarehouseId());
 		outWhPlanDto.setWarehouseName(order.getReceiveWarehouse());
 		outWhPlanDto.setCustomerPurchaseNo(order.getOrderNo());
