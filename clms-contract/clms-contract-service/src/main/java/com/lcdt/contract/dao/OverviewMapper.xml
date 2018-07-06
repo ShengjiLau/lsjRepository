@@ -238,7 +238,7 @@
 	</where>
 	</select>
 	
-	<select id="getOrderListByOverviewDto" parameterType="com.lcdt.contract.web.dto.OverviewDto" resultMap="OrderResultMap">
+	<select id="getOrderListByOverviewDto" parameterType="com.lcdt.contract.web.dto.OverviewDto" resultType="com.lcdt.contract.model.Order">
 	select order_id orderId, supplier, order_no orderNo, order_type orderType, contract_code contractCode, dispatching_type dispatchingType, 
     pay_type payType, receive_warehouse receiveWarehouse,sender, sender_phone senderPhone, send_province sendProvince, send_city sendCity, 
     send_district sendDistrict, send_address sendAddress, send_time sendTime, pack_require packRequire, receiver, receiver_phone receiverPhone, receiver_province receiverProvince, 
