@@ -104,6 +104,8 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 params.setOutPlanId(obj.getOutplanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
+                String[] pArray = {ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND+"",ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND+""};
+                params.setOrderStatus(pArray);
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
                 if (outWhOrderDtoList.getTotal()>0) {
                     result.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
@@ -331,7 +333,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
          */
         if (!outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.publish.getValue())
                 && !outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.watting.getValue()) ) {
-            throw new RuntimeException("该计划不允许取消（非待配状态或存在配仓记录）！");
+            throw new RuntimeException("该计划不允许完成（非待配状态或存在配仓记录）！");
         } else {
             if (outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.publish.getValue())) {
                 OutWhOrderSearchDto params = new OutWhOrderSearchDto();
@@ -374,6 +376,19 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
          */
         List<OutWhPlanGoodsDto> _outWhPlanGoodsDtoList1 = outWhPlanDto.getOutWhPlanGoodsDtoList(); //前端提交来的
         List<OutWhPlanGoodsDto> _outWhPlanGoodsDtoList2 = _outWhPlanDto.getOutWhPlanGoodsDtoList(); //后端数据库中最新的
+
+
+        Integer num = 0;
+        for (OutWhPlanGoodsDto obj1: _outWhPlanGoodsDtoList1) {
+            if (obj1.getDistGoodsNum() == null) {
+                num++;
+            }
+        }
+        if (_outWhPlanGoodsDtoList1.size()==num) {
+            throw new RuntimeException("配仓数量不能为0！");
+        }
+
+
         if (null == _outWhPlanGoodsDtoList1 || null == _outWhPlanGoodsDtoList2) {
             throw new RuntimeException("配仓计划货物不存在！");
         }
@@ -396,6 +411,9 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 }
             }
         }
+
+
+
         if (!StringUtils.isEmpty(sb.toString())) {
             throw new RuntimeException(sb.toString());
         }
@@ -451,7 +469,6 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             tObj.setStorageLocationId(obj1.getStorageLocationId());
             tObj.setStorageLocationCode(obj1.getStorageLocationCode());
             tObj.setGoodsNum(obj1.getDistGoodsNum());//配仓数
-            tObj.setOutboundQuantity(obj1.getDistGoodsNum());
             tObj.setInStock(obj1.getInStock());//可用库存
             tObj.setRemark(obj1.getDisRemark());
             tObj.setInvertoryId(obj1.getInvertoryId());
@@ -472,6 +489,9 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         _outWarehousePlan.setPickupCar(outWhPlanDto.getPickupCar());
 
         if (flag) { //如果全部配完，更改计划状态-已配仓
+            //再从数据库查找是否
+
+
             _outWarehousePlan.setPlanStatus((Integer) OutWhPlanStatusEnum.isWarehouse.getValue());
         }
         OutWarehousePlan wrapperObj = new OutWarehousePlan();

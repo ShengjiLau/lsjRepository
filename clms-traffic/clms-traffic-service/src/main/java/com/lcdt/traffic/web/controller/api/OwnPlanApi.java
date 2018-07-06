@@ -240,7 +240,7 @@ public class OwnPlanApi {
     @ApiOperation("留言-列表-批量获取")
     @RequestMapping(value = "/planLeaveMsgList4Batch",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_plan_leave_msg_list') or hasAuthority('traffic_plan_leave_msg') or hasAuthority('traffic_plan_leave_msg_1')")
-    public JSONObject  planLeaveMsgList4Batch(@Validated @RequestBody LeaveMsgParamDto leaveMsgParamDto) {
+    public JSONObject  planLeaveMsgList4Batch(@RequestBody LeaveMsgParamDto leaveMsgParamDto) {
         JSONObject jo = new JSONObject();
         jo.put("code", 0);
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -329,7 +329,7 @@ public class OwnPlanApi {
     @ApiOperation("编辑--发布")
     @RequestMapping(value = "/planEdit4Publish",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_create_plan') or hasAuthority('traffic_create_plan_1')")
-    public JSONObject planEdit4Publish(@Validated WaybillParamsDto dto, BindingResult bindingResult) {
+    public JSONObject planEdit4Publish(@RequestBody WaybillParamsDto dto, BindingResult bindingResult) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();

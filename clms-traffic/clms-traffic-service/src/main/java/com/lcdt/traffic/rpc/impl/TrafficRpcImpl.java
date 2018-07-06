@@ -170,7 +170,12 @@ public class TrafficRpcImpl implements TrafficRpc {
         vo.setSendOrderType(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI);
         vo.setCarrierType(ConstantVO.PLAN_CARRIER_TYPE_ELSE); //发布后派单
         vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //派单中
-        vo.setStartDate(new Date()); //当前系统是时间
+        Date dt = new Date();
+        vo.setStartDate(dt); //当前系统是时间
+        vo.setIsDeleted((short) 0);
+        vo.setCreateDate(dt);
+        vo.setTransportWay((short) 1);
+        vo.setDistributionWay(4+"");
         waybillPlanMapper.insert(vo); //生成计划
         WaybillPlan vo2 = waybillPlanMapper.selectByWaybillPlanId(vo.getWaybillPlanId());
         List<PlanDetail> planDetailList = waybillParamsDto.getPlanDetailList();

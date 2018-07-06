@@ -173,6 +173,11 @@
       is_deleted = #{isDeleted,jdbcType=SMALLINT}
     where log_id = #{logId,jdbcType=BIGINT}
   </update>
+
+  <delete id="deleteByCompanyId" parameterType="java.lang.Long">
+    delete from t_contract_log
+    where contract_id in (select contract_id from t_contract where company_id = #{companyId,jdbcType=BIGINT})
+  </delete>
   <select id="selectByContractId" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/>
     from t_contract_log

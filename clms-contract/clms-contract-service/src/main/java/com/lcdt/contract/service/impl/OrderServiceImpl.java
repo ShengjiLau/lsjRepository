@@ -15,9 +15,11 @@ import com.lcdt.contract.notify.ContractNotifyProducer;
 import com.lcdt.notify.model.ContractNotifyEvent;
 import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.DefaultNotifySender;
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.rpc.CompanyRpcService;
+import com.lcdt.userinfo.rpc.GroupWareHouseRpcService;
 import com.lcdt.warehouse.dto.InWhPlanDto;
 import com.lcdt.warehouse.dto.InWhPlanGoodsDto;
 import com.lcdt.warehouse.dto.OutWhPlanDto;
@@ -82,6 +84,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Reference
     private TrafficRpc trafficRpc;
+    
+    @Reference
+    private GroupWareHouseRpcService groupWareHouseRpcService;
     
     @Reference
     private WarehouseRpcService warehouseRpcService;
@@ -409,9 +414,11 @@ public class OrderServiceImpl implements OrderService {
 	    WaybillParamsDto.setCompanyId(companyId);
 	    WaybillParamsDto.setCompanyName(userCompRel.getCompany().getFullName()); //企业名称
 	    WaybillParamsDto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
-	    WaybillParamsDto.setSalesOrder(order.getOrderSerialNo());
+	    WaybillParamsDto.setSalesOrder(order.getOrderNo());
 	    WaybillParamsDto.setTransportWay((short) 1);//设置运输方式为陆运
 	    WaybillParamsDto.setGroupId(order.getGroupId());
+	    Group group = groupWareHouseRpcService.selectByGroupId(order.getGroupId());
+	    WaybillParamsDto.setGroupName(group.getGroupName());
 	    WaybillParamsDto.setSendWhId(order.getWarehouseId());
 	    WaybillParamsDto.setSendWhName(order.getReceiveWarehouse());
 	    if (0 == order.getOrderType()) {
@@ -492,11 +499,13 @@ public class OrderServiceImpl implements OrderService {
 	    inWhPlanAddParamsDto.setCustomerId(order.getSupplierId());
 	    inWhPlanAddParamsDto.setCustomerName(order.getSupplier());
 	    inWhPlanAddParamsDto.setGroupId(order.getGroupId());
+	    Group group = groupWareHouseRpcService.selectByGroupId(order.getGroupId());
+	    inWhPlanAddParamsDto.setGroupName(group.getGroupName());
 	    inWhPlanAddParamsDto.setWareHouseId(order.getWarehouseId());
 	    inWhPlanAddParamsDto.setWarehouseName(order.getReceiveWarehouse());
 	    inWhPlanAddParamsDto.setCustomerContactName(order.getSender());
 	    inWhPlanAddParamsDto.setCustomerContactPhone(order.getSenderPhone());
-	    inWhPlanAddParamsDto.setCustomerPurchaseNo(order.getOrderSerialNo());
+	    inWhPlanAddParamsDto.setCustomerPurchaseNo(order.getOrderNo());
 	    
 	    List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
 	    List<InWhPlanGoodsDto> inWhPlanGoodsDtoList = new ArrayList<InWhPlanGoodsDto>(orderProductList.size());
@@ -505,7 +514,7 @@ public class OrderServiceImpl implements OrderService {
 			inWhPlanGoodsDto.setGoodsName(orderProduct.getName());
 			inWhPlanGoodsDto.setGoodsCode(orderProduct.getCode());
 			inWhPlanGoodsDto.setGoodsSpec(orderProduct.getSpec());
-			inWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getPrice().floatValue());
+			inWhPlanGoodsDto.setInHousePrice(orderProduct.getPrice().floatValue());
 			inWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getNum().floatValue());
 			inWhPlanGoodsDto.setUnit(orderProduct.getSku());
 			inWhPlanGoodsDtoList.add(inWhPlanGoodsDto);
@@ -542,8 +551,13 @@ public class OrderServiceImpl implements OrderService {
 		outWhPlanDto.setCustomerName(order.getSupplier());
 		outWhPlanDto.setContractNo(order.getContractCode());
 		outWhPlanDto.setGroupId(order.getGroupId());
+		Group group = groupWareHouseRpcService.selectByGroupId(order.getGroupId());
+		outWhPlanDto.setGroupName(group.getGroupName());
 		outWhPlanDto.setWareHouseId(order.getWarehouseId());
 		outWhPlanDto.setWarehouseName(order.getReceiveWarehouse());
+		outWhPlanDto.setCustomerPurchaseNo(order.getOrderNo());
+		outWhPlanDto.setCustomerContactName(order.getReceiver());
+		outWhPlanDto.setCustomerContactPhone(order.getReceiverPhone());
 		
 		List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
 		List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<>(orderProductList.size());

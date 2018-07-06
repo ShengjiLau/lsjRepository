@@ -130,6 +130,26 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                     //如果正在审核的人为最后一人，则审批流程结束
                     if (ca.getSort().longValue() == caList.size()) {
                         rows = orderMapper.updateApprovalStatus(orderApproval.getOrderId(), companyId, new Short("2"));
+                        if (rows > 0) {
+                            /**↓发送消息通知开始*/
+                            //发送者
+                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, orderApproval.getUserId());
+                            Order order = orderMapper.selectByPrimaryKey(orderApproval.getOrderId());
+                            User user = companyRpcService.selectByPrimaryKey(order.getCreateUserId());
+                            //接收者
+                            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(order.getCompanyId(), order.getCreateUserId(), user.getPhone());
+                            ContractAttachment attachment = new ContractAttachment();
+                            attachment.setPurOrderSerialNum(order.getOrderSerialNo());
+                            attachment.setCarrierWebNotifyUrl("");
+                            String eventName = "purchase_bill_approval_agree";
+                            if (order.getOrderType().shortValue() == 1) {
+                                eventName = "sale_bill_approval_agree";
+                                attachment.setSaleOrderSerialNum(order.getOrderSerialNo());
+                            }
+                            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                            producer.sendNotifyEvent(plan_publish_event);
+                            /**↑发送消息通知结束*/
+                        }
                         break;
                     } else {  //否则更新下一位审核人状态为审批中
                         orderApproval.setOaId(caList.get(i + 1).getOaId());
@@ -143,9 +163,10 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                             //发送者
                             DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, orderApproval.getUserId());
                             Order order = orderMapper.selectByPrimaryKey(orderApproval.getOrderId());
-                            User user = companyRpcService.selectByPrimaryKey(order.getCreateUserId());
+                            OrderApproval oApproval = caList.get(i+1);
+                            User user = companyRpcService.selectByPrimaryKey(oApproval.getUserId());
                             //接收者
-                            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(order.getCompanyId(), order.getCreateUserId(), user.getPhone());
+                            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setPurOrderSerialNum(order.getOrderSerialNo());
                             attachment.setCarrierWebNotifyUrl("");

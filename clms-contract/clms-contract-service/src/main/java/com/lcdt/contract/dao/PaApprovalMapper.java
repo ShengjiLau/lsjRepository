@@ -19,6 +19,8 @@ public interface PaApprovalMapper {
 
     int updateByPrimaryKey(PaApproval record);
 
+    int deleteByCompanyId(Long companyId);
+
     int insertBatch(List<PaApproval> paApprovalList);
 
     List<PaApprovalDto> selectPaApprovalByCondition(PaApprovalListDto paApprovalListDto);

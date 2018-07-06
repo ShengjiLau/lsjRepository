@@ -1,6 +1,5 @@
 package com.lcdt.contract.dao;
 
-import com.lcdt.contract.model.BillingRecord;
 import com.lcdt.contract.model.PaymentApplication;
 import com.lcdt.contract.web.dto.PaymentApplicationDto;
 
@@ -18,6 +17,8 @@ public interface PaymentApplicationMapper {
     int updateByPrimaryKeySelective(PaymentApplication record);
 
     int updateByPrimaryKey(PaymentApplication record);
+
+    int deleteByCompanyId(Long companyId);
 
     /**
      * 根据条件查询付款单记录

@@ -7,6 +7,9 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.notify.model.Timeline;
+import com.lcdt.notify.model.TimerQuartzLog;
+import com.lcdt.notify.rpcservice.TimerQuartzLogService;
+import com.lcdt.notify.vo.TimerQuartzLogVo;
 import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.traffic.dao.SplitGoodsMapper;
 import com.lcdt.traffic.dao.WaybillItemsMapper;
@@ -84,6 +87,9 @@ public class WaybillServiceImpl implements WaybillService {
 
     @Autowired
     private LocationService locationService;
+
+    @Reference
+    private TimerQuartzLogService timerQuartzLogService;
 
     @Override
     public Waybill addWaybill(WaybillDto waybillDto) {
@@ -315,8 +321,30 @@ public class WaybillServiceImpl implements WaybillService {
         if (list != null && list.size() > 0) {
             //多线程并行处理需要定位的运单
             list.parallelStream().forEach(waybill -> {
-                JSONObject jsonObject=locationService.queryLocation(waybill.getCompanyId(),waybill.getDriverPhone());
-                logger.info("waybillCode："+waybill.getWaybillCode()+"；定位公司的companyId："+waybill.getCompanyId()+"； code："+jsonObject.getString("code")+"； message："+jsonObject.getString("message"));
+                //定位
+                JSONObject jsonObject = locationService.queryLocation(waybill.getCompanyId(), waybill.getDriverPhone());
+                logger.info("waybillCode：" + waybill.getWaybillCode() + "；定位公司的companyId：" + waybill.getCompanyId() + "； code：" + jsonObject.getString("code") + "； message：" + jsonObject.getString("message"));
+
+                //new 一个定位日志对象
+                TimerQuartzLog timerQuartzLog = new TimerQuartzLog();
+                //判断是否定位成功
+                if (jsonObject.getInteger("code") == 0) {
+                    timerQuartzLog.setExecuteResult(true);
+                } else {
+                    timerQuartzLog.setExecuteResult(false);
+                }
+                //赋值
+                timerQuartzLog.setBusinessCode(waybill.getWaybillCode())
+                        .setBusinessType(TimerQuartzLogVo.TRAFFIC_SERVICE)
+                        .setExecuteDesc(jsonObject.getString("message"))
+                        .setCompanyId(waybill.getCompanyId())
+                        .setTimerDate(new Date())
+                        .setCreateDate(new Date());
+
+                if(timerQuartzLogService.add(timerQuartzLog)>0){
+                    logger.info("新增定时日志成功");
+                }
+
             });
         }
     }

@@ -20,6 +20,8 @@ public interface ApprovalProcessMapper {
 
     int updateByPrimaryKey(ApprovalProcess record);
 
+    int deleteByCompanyId(Long companyId);
+
     List<ApprovalProcessDto> selectByCondition(Long companyId,Short processType);
 
     List<ApprovalProcessDto> selectDetail(Long companyId,Long processId);

@@ -446,6 +446,10 @@
     where pa_id = #{paId,jdbcType=BIGINT}
   </update>
 
+  <delete id="deleteByCompanyId" parameterType="java.lang.Long">
+    delete from t_payment_application
+    where company_id = #{companyId,jdbcType=BIGINT}
+  </delete>
   <select id="selectByCondition" parameterType="com.lcdt.contract.web.dto.PaymentApplicationDto" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
