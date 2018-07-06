@@ -118,6 +118,51 @@ public class SendNotifyService {
                     }
                 }
             }
+            if (notify.getReceiveRole().equals("待审批人")) {
+                if (receiver != null && receiver.getCarrierPhoneNum() != null && !receiver.getCarrierPhoneNum().equals("")) {
+                    if (companyNotifySetting.getEnableSms()) {
+                        //发送短信通知
+                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getCarrierPhoneNum(), sendCompanyId);
+                    }
+                }
+                if (receiver != null && receiver.getCarrierCompanyId() != null && receiver.getCarrierUserId() != null) {
+                    if (companyNotifySetting.getEnableWeb()) {
+                        String webUrl=attachment.get("carrierWebNotifyUrl")!=null?attachment.get("carrierWebNotifyUrl").toString():"";
+                        //发送web通知
+                        webNotify.sendWebNotify(notify.getCategory(), notifyContent, receiver.getCarrierCompanyId(), receiver.getCarrierUserId(), webUrl);
+                    }
+                }
+            }
+            if (notify.getReceiveRole().equals("发布人")) {
+                if (receiver != null && receiver.getCarrierPhoneNum() != null && !receiver.getCarrierPhoneNum().equals("")) {
+                    if (companyNotifySetting.getEnableSms()) {
+                        //发送短信通知
+                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getCarrierPhoneNum(), sendCompanyId);
+                    }
+                }
+                if (receiver != null && receiver.getCarrierCompanyId() != null && receiver.getCarrierUserId() != null) {
+                    if (companyNotifySetting.getEnableWeb()) {
+                        String webUrl=attachment.get("carrierWebNotifyUrl")!=null?attachment.get("carrierWebNotifyUrl").toString():"";
+                        //发送web通知
+                        webNotify.sendWebNotify(notify.getCategory(), notifyContent, receiver.getCarrierCompanyId(), receiver.getCarrierUserId(), webUrl);
+                    }
+                }
+            }
+            if (notify.getReceiveRole().equals("被抄送人")) {
+                if (receiver != null && receiver.getCarrierPhoneNum() != null && !receiver.getCarrierPhoneNum().equals("")) {
+                    if (companyNotifySetting.getEnableSms()) {
+                        //发送短信通知
+                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getCarrierPhoneNum(), sendCompanyId);
+                    }
+                }
+                if (receiver != null && receiver.getCarrierCompanyId() != null && receiver.getCarrierUserId() != null) {
+                    if (companyNotifySetting.getEnableWeb()) {
+                        String webUrl=attachment.get("carrierWebNotifyUrl")!=null?attachment.get("carrierWebNotifyUrl").toString():"";
+                        //发送web通知
+                        webNotify.sendWebNotify(notify.getCategory(), notifyContent, receiver.getCarrierCompanyId(), receiver.getCarrierUserId(), webUrl);
+                    }
+                }
+            }
         }
     }
 
