@@ -1,25 +1,20 @@
 package com.lcdt.notify.dto;
 
+import io.swagger.annotations.ApiParam;
+
 /**
  * Created by lyqishan on 2018/7/6
  */
 
 public class TimerQuartzLogListParams {
-    /**
-     * 业务类型
-     */
+
+    @ApiParam(value = "业务类型（运输：traffic-service ；仓储：warehouse-service）",required = true)
     private String businessType;
-    /**
-     * 企业id
-     */
+    @ApiParam(value = "企业id",hidden = true)
     private Long companyId;
-    /**
-     * 页码
-     */
+    @ApiParam(value = "页码",required = true)
     private Integer pageNo;
-    /**
-     * 每页数量
-     */
+    @ApiParam(value = "每页条件",required = true)
     private Integer pageSize;
 
     public Long getCompanyId() {
