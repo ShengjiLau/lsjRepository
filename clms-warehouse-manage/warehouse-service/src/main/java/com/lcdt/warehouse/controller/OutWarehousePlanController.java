@@ -54,7 +54,7 @@ public class OutWarehousePlanController {
     @ApiOperation("出库计划列表")
     @RequestMapping(value = "/list",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN')  or hasAuthority('wh_out_plan_search')")
-    public PageBaseDto inPlanList(@Validated OutWhPlanSearchParamsDto dto) {
+    public PageBaseDto inPlanList(@RequestBody OutWhPlanSearchParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         dto.setCompanyId(companyId);
         if (dto.getCreateBegin()!=null && dto.getCreateBegin()>0) {
@@ -123,9 +123,6 @@ public class OutWarehousePlanController {
         JSONObject jsonObject = new JSONObject();
         try {
             outWarehousePlan = outWarehousePlanService.outWhPlanAdd(outWhPlanDto, userCompRel);
-
-
-
         } catch (RuntimeException e) {
             msg = e.getMessage();
             logger.error(e.getMessage());
