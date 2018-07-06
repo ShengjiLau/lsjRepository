@@ -133,7 +133,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                         if (rows > 0) {
                             /**↓发送消息通知开始*/
                             //发送者
-                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, orderApproval.getUserId());
+                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, ca.getUserId());
                             Order order = orderMapper.selectByPrimaryKey(orderApproval.getOrderId());
                             User user = companyRpcService.selectByPrimaryKey(order.getCreateUserId());
                             //接收者
@@ -161,7 +161,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                         if (rows > 0) {
                             /**↓发送消息通知开始*/
                             //发送者
-                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, orderApproval.getUserId());
+                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, ca.getUserId());
                             Order order = orderMapper.selectByPrimaryKey(orderApproval.getOrderId());
                             OrderApproval oApproval = caList.get(i+1);
                             User user = companyRpcService.selectByPrimaryKey(oApproval.getUserId());
@@ -209,7 +209,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
             if (rows > 0) {
                 /**↓发送消息通知开始*/
                 //发送者
-                DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, orderApproval.getUserId());
+                DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, SecurityInfoGetter.getUser().getUserId());
                 Order order = orderMapper.selectByPrimaryKey(orderApproval.getOrderId());
                 User user = companyRpcService.selectByPrimaryKey(order.getCreateUserId());
                 //接收者

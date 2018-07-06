@@ -139,7 +139,7 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
                         if (rows > 0) {
                             /**↓发送消息通知开始*/
                             //发送者
-                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, contractApproval.getUserId());
+                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, ca.getUserId());
                             User user = companyRpcService.selectByPrimaryKey(contract.getCreateId());
                             //接收者 //如果是最后一个审批人，则通知发布人
                             DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(contract.getCompanyId(), contract.getCreateId(), user.getPhone());
@@ -168,7 +168,7 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
                         if (rows > 0) {
                             /**↓发送消息通知开始*/
                             //发送者
-                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, contractApproval.getUserId());
+                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, ca.getUserId());
                             ContractApproval cApproval = caList.get(i+1);
                             User user = companyRpcService.selectByPrimaryKey(cApproval.getUserId());
                             Contract contract = contractMapper.selectByPrimaryKey(contractApproval.getContractId());
@@ -220,7 +220,7 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
             if (rows > 0) {
                 /**↓发送消息通知开始*/
                 //发送者
-                DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, contractApproval.getUserId());
+                DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, SecurityInfoGetter.getUser().getUserId());
                 Contract contract = contractMapper.selectByPrimaryKey(contractApproval.getContractId());
                 User user = companyRpcService.selectByPrimaryKey(contract.getCreateId());
                 //接收者
