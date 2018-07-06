@@ -67,6 +67,20 @@ public class OutWhPlanGoodsDto implements Serializable {
 
 
 
+    @ApiModelProperty(value = "出库数量")
+    private Float outboundQuantity;
+
+
+    public Float getOutboundQuantity() {
+        return outboundQuantity;
+    }
+
+    public void setOutboundQuantity(Float outboundQuantity) {
+        this.outboundQuantity = outboundQuantity;
+    }
+
+
+
     public Float getRemainGoodsNum() {
         return remainGoodsNum;
     }

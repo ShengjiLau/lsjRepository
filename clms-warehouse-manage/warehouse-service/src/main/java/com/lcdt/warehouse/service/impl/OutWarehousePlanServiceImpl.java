@@ -104,6 +104,8 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 params.setOutPlanId(obj.getOutplanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
+                String[] pArray = {ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND+"",ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND+""};
+                params.setOrderStatus(pArray);
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
                 if (outWhOrderDtoList.getTotal()>0) {
                     result.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
@@ -409,6 +411,9 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 }
             }
         }
+
+
+
         if (!StringUtils.isEmpty(sb.toString())) {
             throw new RuntimeException(sb.toString());
         }
@@ -484,6 +489,9 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         _outWarehousePlan.setPickupCar(outWhPlanDto.getPickupCar());
 
         if (flag) { //如果全部配完，更改计划状态-已配仓
+            //再从数据库查找是否
+
+
             _outWarehousePlan.setPlanStatus((Integer) OutWhPlanStatusEnum.isWarehouse.getValue());
         }
         OutWarehousePlan wrapperObj = new OutWarehousePlan();

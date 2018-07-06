@@ -250,7 +250,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                 params.setPageNo(1);
                 params.setPageSize(100);
                 if(bFlag) {
-                    String[] pArray = {ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND+"",ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND+""};
+                    String[] pArray = {ConstantVO.IN_ORDER_STATUS_WATIE_STORAGE+"",ConstantVO.IN_ORDER_STATUS_HAVE_STORAGE+""};
                     params.setInOrderStatus(pArray);
                 }
                 Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderListOfPlan(params);
@@ -301,7 +301,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                          }
                     }
                 }
-                if (!bFlag && obj.getInOrderStatus().equals(ConstantVO.OUT_ORDER_STATUS_HAVE_CANCEL)) { //已配数为负数
+                if (!bFlag && obj.getInOrderStatus().equals(ConstantVO.IN_ORDER_STATUS_HAVE_CANCEL)) { //已配数为负数
                     receivalbeAmount = 0 - receivalbeAmount;
                 }
             }

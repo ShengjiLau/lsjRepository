@@ -15,12 +15,12 @@
     <result column="original_goods_id" jdbcType="BIGINT" property="originalGoodsId" />
     <result column="base_unit" jdbcType="VARCHAR" property="baseUnit" />
     <result column="inventory_price" jdbcType="REAL" property="inventoryPrice" />
-    <result column="barcode" property="barcode" jdbcType="VARCHAR"/>
+    <result column="barcode" jdbcType="VARCHAR" property="barcode"/>
   </resultMap>
   <sql id="Base_Column_List">
     shift_goods_id, inventory_id, shift_location, shift_plan_num, shift_num, remark, 
     shift_inventory_id, storage_location_id, goods_id, batch, original_goods_id, base_unit, 
-    inventory_price，barcode
+    inventory_price,barcode
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
