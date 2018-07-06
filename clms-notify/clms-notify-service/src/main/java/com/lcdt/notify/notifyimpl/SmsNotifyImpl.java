@@ -69,9 +69,6 @@ public class SmsNotifyImpl  {
         smsLog.setIsSend(true);
         smsLog.setSmsLogContent(content);
         smsLog.setSmsLogTime(new Date());
-
-
-
         smsLogMapper.insert(smsLog);
 
 
