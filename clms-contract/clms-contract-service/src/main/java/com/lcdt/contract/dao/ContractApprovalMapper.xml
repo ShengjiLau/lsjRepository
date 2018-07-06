@@ -56,6 +56,10 @@
 
 
   <!-- ——————————————————————————————————————————华丽分割线—————————————————————————————————————————————— -->
+  <delete id="deleteByCompanyId" parameterType="java.lang.Long">
+    delete from t_contract_approval
+    where contract_id in (select contract_id from t_contract where company_id = #{companyId,jdbcType=BIGINT})
+  </delete>
 
   <resultMap id="ContractApprovalDtoMap" type="com.lcdt.contract.web.dto.ContractApprovalDto">
     <id column="contract_id" jdbcType="BIGINT" property="contractId" />

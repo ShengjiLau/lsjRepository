@@ -55,6 +55,8 @@ public interface OrderApprovalMapper {
      */
     int updateByPrimaryKey(OrderApproval record);
 
+    int deleteByCompanyId(Long companyId);
+
     /**
      * 批量新增审批人信息
      * @param orderApprovalList
