@@ -70,8 +70,6 @@ public class SmsNotifyImpl  {
         smsLog.setSmsLogContent(content);
         smsLog.setSmsLogTime(new Date());
         smsLogMapper.insert(smsLog);
-
-
         sendSms(new String[]{phoneNum}, content,"");
         return true;
     }
