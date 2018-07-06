@@ -17,4 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class OutOrderGoodsInfoServiceImpl extends ServiceImpl<OutOrderGoodsInfoMapper, OutOrderGoodsInfo> implements OutOrderGoodsInfoService {
 
+    @Override
+    public OutOrderGoodsInfo queryOutboundQuantity(Long companyId, Long outPlanId, Long outplanRelationId) {
+        return baseMapper.selectOutboundQuantity(companyId,outPlanId,outplanRelationId);
+    }
 }

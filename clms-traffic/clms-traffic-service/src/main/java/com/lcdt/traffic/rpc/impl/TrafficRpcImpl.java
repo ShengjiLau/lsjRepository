@@ -175,6 +175,7 @@ public class TrafficRpcImpl implements TrafficRpc {
         vo.setIsDeleted((short) 0);
         vo.setCreateDate(dt);
         vo.setTransportWay((short) 1);
+        vo.setTransportWay((short)4);
         waybillPlanMapper.insert(vo); //生成计划
         WaybillPlan vo2 = waybillPlanMapper.selectByWaybillPlanId(vo.getWaybillPlanId());
         List<PlanDetail> planDetailList = waybillParamsDto.getPlanDetailList();

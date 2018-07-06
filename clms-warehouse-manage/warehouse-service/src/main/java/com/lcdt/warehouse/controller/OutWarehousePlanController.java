@@ -6,12 +6,11 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.UserCompRel;
-import com.lcdt.warehouse.dto.InWhPlanDto;
-import com.lcdt.warehouse.dto.OutWhPlanDto;
-import com.lcdt.warehouse.dto.OutWhPlanSearchParamsDto;
-import com.lcdt.warehouse.dto.PageBaseDto;
+import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.InWarehousePlan;
+import com.lcdt.warehouse.entity.OutOrderGoodsInfo;
 import com.lcdt.warehouse.entity.OutWarehousePlan;
+import com.lcdt.warehouse.service.OutOrderGoodsInfoService;
 import com.lcdt.warehouse.service.OutWarehousePlanService;
 import com.lcdt.warehouse.utils.DateUtils;
 import io.swagger.annotations.Api;
@@ -42,11 +41,15 @@ import java.util.List;
 @RequestMapping("/out/plan")
 @Api(value = "仓储出库计划API",description = "仓储出库计划API接口")
 public class OutWarehousePlanController {
-
     private static Logger logger = LoggerFactory.getLogger(InWarehousePlanController.class);
-    @Autowired
 
+    @Autowired
     private OutWarehousePlanService outWarehousePlanService;
+
+    @Autowired
+    private OutOrderGoodsInfoService outOrderGoodsInfoService;
+
+
 
     @ApiOperation("出库计划列表")
     @RequestMapping(value = "/list",method = RequestMethod.GET)
@@ -93,6 +96,18 @@ public class OutWarehousePlanController {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         JSONObject jsonObject = new JSONObject();
         OutWhPlanDto outWhPlanDto = outWarehousePlanService.outWhPlanDetail(outPlanId,flag, userCompRel);
+        if(outWhPlanDto!=null) {
+            List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = outWhPlanDto.getOutWhPlanGoodsDtoList();
+            if (outWhPlanGoodsDtoList!=null && outWhPlanGoodsDtoList.size()>0) {
+                for (OutWhPlanGoodsDto dto : outWhPlanGoodsDtoList)  {
+                    OutOrderGoodsInfo outOrderGoodsInfo = outOrderGoodsInfoService.queryOutboundQuantity(userCompRel.getCompId(),outPlanId,dto.getRelationId());
+                    if (outOrderGoodsInfo != null) {
+                        dto.setOutboundQuantity(outOrderGoodsInfo.getOutboundQuantity());
+
+                    }
+                }
+            }
+        }
         return outWhPlanDto;
     }
 
@@ -108,6 +123,9 @@ public class OutWarehousePlanController {
         JSONObject jsonObject = new JSONObject();
         try {
             outWarehousePlan = outWarehousePlanService.outWhPlanAdd(outWhPlanDto, userCompRel);
+
+
+
         } catch (RuntimeException e) {
             msg = e.getMessage();
             logger.error(e.getMessage());
