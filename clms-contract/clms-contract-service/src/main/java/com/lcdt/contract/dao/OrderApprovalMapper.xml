@@ -190,6 +190,10 @@
     where oa_id = #{oaId,jdbcType=BIGINT}
   </update>
 
+  <delete id="deleteByCompanyId" parameterType="java.lang.Long" >
+    delete from t_order_approval
+    where order_id in (select order_id from t_order where company_id = #{companyId,jdbcType=BIGINT})
+  </delete>
   <insert id="insertBatch">
     insert into t_order_approval (order_id, user_id,user_name, dept_name, sort, action_type,status)
     values

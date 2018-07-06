@@ -48,6 +48,10 @@
     from t_contract_product
   </select>
 
+  <delete id="deleteByCompanyId" parameterType="java.lang.Long">
+    delete from t_contract_product
+    where contract_id in (select contract_id from t_contract where company_id = #{companyId,jdbcType=BIGINT})
+  </delete>
   <insert id="insertBatch">
     insert into t_contract_product (cp_id, contract_id, product_name,
     product_code, sku, num,
