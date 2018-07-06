@@ -155,7 +155,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             for (OutWhOrderDto obj : outWhOrderDtoList) {
                 List<OutOrderGoodsInfoDto> list = obj.getOutOrderGoodsInfoList();
                 if (null!=list && list.size()>0) {
-                    for (OutOrderGoodsInfoDto obj1 :list) { //配仓数量=对应入库单的应收数量
+                    for (OutOrderGoodsInfoDto obj1 :list) { //配仓数量=对应出库单的应收数量
                         if (obj1.getOutplanRelationId().equals(outWhPlanGoodsDto.getRelationId())) {
                             outGoodsNumber += obj1.getGoodsNum(); //出库详细表中的出库数量就是配仓数量
                         }
@@ -252,7 +252,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
      * 出库计划改变
      *
      * @param argObj --条件对象
-     * @param outWarehousePlan --入库计划
+     * @param outWarehousePlan --出库计划
      * @param userCompRel --登录用户参数
      * @return
      */
@@ -328,14 +328,15 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             throw new RuntimeException("计划不存在！");
         }
         /***
-         *  逻辑：该计划是否存在对应的入库单，如果不存在，则直接可以取消；
-         * 如果存在，需判断是否存在“待入库”“已完成”状态的入库单，如果存在，则不允许取消；
+         *  逻辑：该计划是否存在对应的出库单，如果不存在，则直接可以取消；
+         * 如果存在，需判断是否存在“待出库”“已完成”状态的出库单，如果存在，则不允许取消；
          */
-        if (!outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.publish.getValue())
-                && !outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.watting.getValue()) ) {
-            throw new RuntimeException("该计划不允许完成（非待配状态或存在配仓记录）！");
+
+        if (outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.publish.getValue())
+               || outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.watting.getValue()) ) {
+            throw new RuntimeException("计划状态为“待配仓”或“配仓中”的不能完成！");
         } else {
-            if (outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.publish.getValue())) {
+            if (outWarehousePlan.getPlanStatus().equals(OutWhPlanStatusEnum.isWarehouse.getValue())) {
                 OutWhOrderSearchDto params = new OutWhOrderSearchDto();
                 params.setCompanyId(obj.getCompanyId());
                 params.setOutPlanId(obj.getOutplanId());
@@ -351,7 +352,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                         }
                     }
                     if (flag) {
-                        throw new RuntimeException("该计划对应出库单存在“待出库”状态记录！");
+                        throw new RuntimeException("该计划存在“待出库”状态的出库单，不能完成！");
                     }
                 }
             }
