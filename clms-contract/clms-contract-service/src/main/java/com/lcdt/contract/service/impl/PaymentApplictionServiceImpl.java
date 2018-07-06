@@ -76,11 +76,12 @@ public class PaymentApplictionServiceImpl implements PaymentApplictionService {
                             //发送
                             DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(paymentApplicationDto.getCompanyId(), paymentApplicationDto.getCreateId());
                             User user = companyRpcService.selectByPrimaryKey(paApproval.getUserId());
+                            PaymentApplication queryApplication = paymentApplicationMapper.selectByPrimaryKey(paymentApplication.getPaId());
                             //接收
                             DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(paymentApplicationDto.getCompanyId(), user.getUserId(), user.getPhone());
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setEmployee(paymentApplicationDto.getCreateName());
-                            attachment.setPerPaymentSerialNum(paymentApplicationDto.getApplicationSerialNo());
+                            attachment.setPerPaymentSerialNum(queryApplication.getApplicationSerialNo());
                             attachment.setCarrierWebNotifyUrl("");
                             String eventName = "payment_approval_publish";
                             /*if (dto.getType().shortValue() == 1) {

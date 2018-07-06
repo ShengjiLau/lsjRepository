@@ -163,8 +163,8 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                         if (rows > 0) {
                             /**↓发送消息通知开始*/
                             //发送者
-                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, paApproval.getUserId());
-                            PaymentApplication paymentApplication = paymentApplicationMapper.selectByPrimaryKey(paApproval.getPaId());
+                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, pa.getUserId());
+                            PaymentApplication paymentApplication = paymentApplicationMapper.selectByPrimaryKey(pa.getPaId());
                             User user = companyRpcService.selectByPrimaryKey(paymentApplication.getCreateId());
                             //接收者
                             DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(paymentApplication.getCompanyId(), paymentApplication.getCreateId(), user.getPhone());
@@ -191,8 +191,8 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                         if (rows > 0) {
                             /**↓发送消息通知开始*/
                             //发送者
-                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, paApproval.getUserId());
-                            PaymentApplication paymentApplication = paymentApplicationMapper.selectByPrimaryKey(paApproval.getPaId());
+                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, pa.getUserId());
+                            PaymentApplication paymentApplication = paymentApplicationMapper.selectByPrimaryKey(pa.getPaId());
                             PaApproval pApproval = caList.get(i+1);
                             User user = companyRpcService.selectByPrimaryKey(pApproval.getUserId());
                             //接收者
@@ -241,7 +241,7 @@ public class PaApprovalServiceImpl implements PaApprovalService {
             if (rows > 0) {
                 /**↓发送消息通知开始*/
                 //发送者
-                DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, paApproval.getUserId());
+                DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, SecurityInfoGetter.getUser().getUserId());
                 PaymentApplication paymentApplication = paymentApplicationMapper.selectByPrimaryKey(paApproval.getPaId());
                 User user = companyRpcService.selectByPrimaryKey(paymentApplication.getCreateId());
                 //接收者
