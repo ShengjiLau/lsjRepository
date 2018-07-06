@@ -323,6 +323,8 @@ public class WaybillServiceImpl implements WaybillService {
             list.parallelStream().forEach(waybill -> {
                 //定位
                 JSONObject jsonObject = locationService.queryLocation(waybill.getCompanyId(), waybill.getDriverPhone());
+                logger.info("waybillCode：" + waybill.getWaybillCode() + "；定位公司的companyId：" + waybill.getCompanyId() + "； code：" + jsonObject.getString("code") + "； message：" + jsonObject.getString("message"));
+
                 //new 一个定位日志对象
                 TimerQuartzLog timerQuartzLog = new TimerQuartzLog();
                 //判断是否定位成功
@@ -343,7 +345,6 @@ public class WaybillServiceImpl implements WaybillService {
                     logger.info("新增定时日志成功");
                 }
 
-                logger.info("waybillCode：" + waybill.getWaybillCode() + "；定位公司的companyId：" + waybill.getCompanyId() + "； code：" + jsonObject.getString("code") + "； message：" + jsonObject.getString("message"));
             });
         }
     }
