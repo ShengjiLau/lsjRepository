@@ -159,6 +159,10 @@
   </select>
 
 
+  <delete id="deleteByCompanyId" parameterType="java.lang.Long">
+    delete from t_contract
+    where company_id = #{companyId,jdbcType=BIGINT}
+  </delete>
   <select id="selectByCondition" resultMap="BaseResultMap">
     select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, approval_process_id, cycle,
     pay_type, party_a_id, party_a_name, party_a_principal, party_b_id, party_b_name, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,

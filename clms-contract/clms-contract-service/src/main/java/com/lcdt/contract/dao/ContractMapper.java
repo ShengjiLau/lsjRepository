@@ -17,6 +17,8 @@ public interface ContractMapper {
 
     int updateByPrimaryKey(Contract record);
 
+    int deleteByCompanyId(Long companyId);
+
     /**
      * 选择性更改,避免数据被覆盖
      * @param record

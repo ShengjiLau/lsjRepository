@@ -45,6 +45,8 @@ public interface OrderProductMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(OrderProduct record);
+
+    int deleteByCompanyId(Long companyId);
     
     
     /**

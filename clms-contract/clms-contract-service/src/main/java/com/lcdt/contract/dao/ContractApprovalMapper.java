@@ -18,6 +18,8 @@ public interface ContractApprovalMapper {
 
     int updateByPrimaryKey(ContractApproval record);
 
+    int deleteByCompanyId(Long companyId);
+
     List<ContractApprovalDto> selectContractApprovalByCondition(ContractApprovalListDto contractApprovalListDto);
 
     int selectPendingNum(Long userId, Long companyId, Short type);

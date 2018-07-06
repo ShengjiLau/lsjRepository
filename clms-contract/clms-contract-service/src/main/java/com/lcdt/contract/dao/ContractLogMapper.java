@@ -17,6 +17,8 @@ public interface ContractLogMapper {
     int updateByPrimaryKeySelective(ContractLog record);
 
     int updateByPrimaryKey(ContractLog record);
+
+    int deleteByCompanyId(Long companyId);
     /**
      * 根据contractId查询
      * @param map

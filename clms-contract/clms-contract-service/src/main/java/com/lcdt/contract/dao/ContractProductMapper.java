@@ -15,6 +15,8 @@ public interface ContractProductMapper {
 
     int updateByPrimaryKey(ContractProduct record);
 
+    int deleteByCompanyId(Long companyId);
+
     /**
      * 批量插入
      * @param contractProductList

@@ -162,6 +162,10 @@
     where paa_id = #{paaId,jdbcType=BIGINT}
   </update>
 
+  <delete id="deleteByCompanyId" parameterType="java.lang.Long">
+    delete from t_pa_approval
+    where pa_id in (select pa_id from t_payment_application where company_id = #{companyId,jdbcType=BIGINT})
+  </delete>
   <insert id="insertBatch">
     insert into t_pa_approval (pa_id, user_id,
     user_name, dept_name, sort,
