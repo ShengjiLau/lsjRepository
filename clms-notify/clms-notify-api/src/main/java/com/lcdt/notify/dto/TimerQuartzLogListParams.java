@@ -5,9 +5,40 @@ package com.lcdt.notify.dto;
  */
 
 public class TimerQuartzLogListParams {
-
+    /**
+     * 业务类型
+     */
+    private String businessType;
+    /**
+     * 企业id
+     */
+    private Long companyId;
+    /**
+     * 页码
+     */
     private Integer pageNo;
+    /**
+     * 每页数量
+     */
     private Integer pageSize;
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public TimerQuartzLogListParams setCompanyId(Long companyId) {
+        this.companyId = companyId;
+        return this;
+    }
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public TimerQuartzLogListParams setBusinessType(String businessType) {
+        this.businessType = businessType;
+        return this;
+    }
 
     public Integer getPageNo() {
         return pageNo;

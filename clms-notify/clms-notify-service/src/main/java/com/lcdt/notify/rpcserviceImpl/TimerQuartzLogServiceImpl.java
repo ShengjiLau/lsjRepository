@@ -1,5 +1,6 @@
 package com.lcdt.notify.rpcserviceImpl;
 
+import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.notify.dao.TimerQuartzLogMapper;
@@ -8,12 +9,10 @@ import com.lcdt.notify.model.TimerQuartzLog;
 import com.lcdt.notify.rpcservice.TimerQuartzLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-
 /**
  * Created by lyqishan on 2018/7/6
  */
-
+@Service
 public class TimerQuartzLogServiceImpl implements TimerQuartzLogService {
 
     @Autowired
@@ -21,18 +20,15 @@ public class TimerQuartzLogServiceImpl implements TimerQuartzLogService {
 
     @Override
     public int add(TimerQuartzLog log) {
-        int result = 0;
-        result = timerQuartzLogMapper.insert(log);
-        return result;
+        return timerQuartzLogMapper.insert(log);
     }
 
     @Override
     public PageInfo<TimerQuartzLog> queryTimerQuartzLogList(TimerQuartzLogListParams params) {
-        List<TimerQuartzLog> resultList = null;
 
-        PageInfo page = null;
         int pageNo = 1;
-        int pageSize = 0; //0表示所有
+        int pageSize = 10; //默认10条
+
         if (params.getPageNo() != null) {
             pageNo = params.getPageNo();
         }
@@ -40,8 +36,7 @@ public class TimerQuartzLogServiceImpl implements TimerQuartzLogService {
             pageSize = params.getPageSize();
         }
         PageHelper.startPage(pageNo, pageSize);
-        resultList = timerQuartzLogMapper.selectByCondition(params);
-        page = new PageInfo(resultList);
-        return page;
+
+        return new PageInfo(timerQuartzLogMapper.selectByCondition(params));
     }
 }

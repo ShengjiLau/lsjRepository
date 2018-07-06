@@ -1,8 +1,11 @@
 package com.lcdt.notify.model;
 
+import com.lcdt.converter.ResponseData;
+
+import java.io.Serializable;
 import java.util.Date;
 
-public class TimerQuartzLog {
+public class TimerQuartzLog implements Serializable,ResponseData {
     private Long logId;
 
     private String businessCode;
@@ -23,63 +26,71 @@ public class TimerQuartzLog {
         return logId;
     }
 
-    public void setLogId(Long logId) {
+    public TimerQuartzLog setLogId(Long logId) {
         this.logId = logId;
+        return this;
     }
 
     public String getBusinessCode() {
         return businessCode;
     }
 
-    public void setBusinessCode(String businessCode) {
-        this.businessCode = businessCode == null ? null : businessCode.trim();
+    public TimerQuartzLog setBusinessCode(String businessCode) {
+        this.businessCode = businessCode;
+        return this;
     }
 
     public String getBusinessType() {
         return businessType;
     }
 
-    public void setBusinessType(String businessType) {
-        this.businessType = businessType == null ? null : businessType.trim();
+    public TimerQuartzLog setBusinessType(String businessType) {
+        this.businessType = businessType;
+        return this;
     }
 
     public Boolean getExecuteResult() {
         return executeResult;
     }
 
-    public void setExecuteResult(Boolean executeResult) {
+    public TimerQuartzLog setExecuteResult(Boolean executeResult) {
         this.executeResult = executeResult;
+        return this;
     }
 
     public String getExecuteDesc() {
         return executeDesc;
     }
 
-    public void setExecuteDesc(String executeDesc) {
-        this.executeDesc = executeDesc == null ? null : executeDesc.trim();
+    public TimerQuartzLog setExecuteDesc(String executeDesc) {
+        this.executeDesc = executeDesc;
+        return this;
     }
 
     public Date getTimerDate() {
         return timerDate;
     }
 
-    public void setTimerDate(Date timerDate) {
+    public TimerQuartzLog setTimerDate(Date timerDate) {
         this.timerDate = timerDate;
+        return this;
     }
 
     public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public TimerQuartzLog setCreateDate(Date createDate) {
         this.createDate = createDate;
+        return this;
     }
 
     public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(Long companyId) {
+    public TimerQuartzLog setCompanyId(Long companyId) {
         this.companyId = companyId;
+        return this;
     }
 }
