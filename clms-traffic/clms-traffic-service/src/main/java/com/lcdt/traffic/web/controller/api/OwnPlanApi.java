@@ -136,7 +136,7 @@ public class OwnPlanApi {
     @ApiOperation("我的计划-列表")
     @RequestMapping(value = "/ownPlanList",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_plan_list')")
-    public PageBaseDto ownPlanList(@RequestBody WaybillPlanListParamsDto dto,
+    public PageBaseDto ownPlanList(@Validated WaybillPlanListParamsDto dto,
                              @ApiParam(value = "页码",required = true,defaultValue = "1") @RequestParam Integer pageNo,
                              @ApiParam(value = "每页显示条数",required = true,defaultValue = "10") @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();

@@ -53,6 +53,8 @@ public interface OrderMapper {
      */
     int updateByPrimaryKey(Order record);
 
+    int deleteByCompanyId(Long companyId);
+
     /**
      * 更新审批状态
      * @param orderId

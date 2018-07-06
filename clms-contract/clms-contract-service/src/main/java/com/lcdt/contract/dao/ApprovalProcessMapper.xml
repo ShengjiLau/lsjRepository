@@ -42,6 +42,10 @@
   </select>
 
 
+  <delete id="deleteByCompanyId" parameterType="java.lang.Long">
+    delete from t_approval_process
+    where company_id = #{companyId,jdbcType=BIGINT}
+  </delete>
   <resultMap id="ApprovalProcessDtoResultMap" type="com.lcdt.contract.web.dto.ApprovalProcessDto">
     <id column="process_id" jdbcType="BIGINT" property="processId" />
     <result column="process_name" jdbcType="VARCHAR" property="processName" />
