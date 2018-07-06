@@ -90,9 +90,13 @@
 
 
 
-        <table tableName="system_permission" domainObjectName="SystemPermission">
-            <generatedKey column="system_permission_id" sqlStatement="MYSQL" identity="true"/>
+        <!--<table tableName="system_permission" domainObjectName="SystemPermission">-->
+            <!--<generatedKey column="system_permission_id" sqlStatement="MYSQL" identity="true"/>-->
+        <!--</table>-->
+        <table tableName="sms_log" domainObjectName="SmsLog">
+            <generatedKey column="sms_log_id" sqlStatement="MYSQL" identity="true"></generatedKey>
         </table>
+
 
     </context>
 </generatorConfiguration>
