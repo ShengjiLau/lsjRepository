@@ -5,11 +5,11 @@ import com.lcdt.notify.model.SmsLog;
 import java.util.List;
 
 public interface SmsLogMapper {
-    int deleteByPrimaryKey(Long smsId);
+    int deleteByPrimaryKey(Long smsLogId);
 
     int insert(SmsLog record);
 
-    SmsLog selectByPrimaryKey(Long smsId);
+    SmsLog selectByPrimaryKey(Long smsLogId);
 
     List<SmsLog> selectAll();
 

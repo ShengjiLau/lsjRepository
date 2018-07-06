@@ -51,6 +51,9 @@ public class SmsNotifyImpl  {
     @Reference
     CompanyServiceCountService countService;
 
+    @Autowired
+    SmsLogMapper smsLogMapper;
+
     public boolean sendSmsNotify(EventMetaData eventMetaData,String operateUsername, String content, String phoneNum, Long companyId) {
 
         boolean b = smsCountService.checkSmsCount(companyId, 1);
@@ -60,12 +63,24 @@ public class SmsNotifyImpl  {
         }
         logger.info("发送短信通知 >>> {} >>> {}",content,phoneNum);
         CompanyServiceCount companyServiceCount = countService.reduceCompanyProductCount(companyId, SmsCountService.smsServiceProductName, 1,operateUsername,eventMetaData.getEventDisplayName());
-        sendSms(new String[]{phoneNum}, content);
+        SmsLog smsLog = new SmsLog();
+        smsLog.setReceivePhone(phoneNum);
+        smsLog.setSmsLogCompanyId(companyId);
+        smsLog.setIsSend(true);
+        smsLog.setSmsLogContent(content);
+        smsLog.setSmsLogTime(new Date());
+
+
+
+        smsLogMapper.insert(smsLog);
+
+
+        sendSms(new String[]{phoneNum}, content,"");
         return true;
     }
 
 
-    public boolean sendSms(String[] phonsNums, String message) {
+    public boolean sendSms(String[] phonsNums, String message,String params) {
         logger.info("调用短信api >>> {} >>> {}",phonsNums[0],message);
         if (phonsNums == null) {
             return false;

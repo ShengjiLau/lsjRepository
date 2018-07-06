@@ -136,6 +136,27 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
                         Contract contract = contractMapper.selectByPrimaryKey(contractApproval.getContractId());
                         contract = Utils.getContractStatus(contract);
                         rows += contractMapper.updateByPrimaryKey(contract);
+                        if (rows > 0) {
+                            /**↓发送消息通知开始*/
+                            //发送者
+                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, contractApproval.getUserId());
+                            User user = companyRpcService.selectByPrimaryKey(contract.getCreateId());
+                            //接收者 //如果是最后一个审批人，则通知发布人
+                            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(contract.getCompanyId(), contract.getCreateId(), user.getPhone());
+                            ContractAttachment attachment = new ContractAttachment();
+                            attachment.setPurConTittle(contract.getTitle());
+                            attachment.setPurConSerialNum(contract.getSerialNo());
+                            attachment.setCarrierWebNotifyUrl("");
+                            String eventName = "purchase_approval_agree";
+                            if (contract.getType().shortValue() == 1) {
+                                eventName = "sale_approval_agree";
+                                attachment.setSaleConTittle(contract.getTitle());
+                                attachment.setSaleConSerialNum(contract.getSerialNo());
+                            }
+                            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                            producer.sendNotifyEvent(plan_publish_event);
+                            /**↑发送消息通知结束*/
+                        }
                         break;
                     } else {  //否则更新下一位审核人状态为审批中
                         contractApproval.setCaId(caList.get(i + 1).getCaId());
@@ -148,10 +169,11 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
                             /**↓发送消息通知开始*/
                             //发送者
                             DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, contractApproval.getUserId());
+                            ContractApproval cApproval = caList.get(i+1);
+                            User user = companyRpcService.selectByPrimaryKey(cApproval.getUserId());
                             Contract contract = contractMapper.selectByPrimaryKey(contractApproval.getContractId());
-                            User user = companyRpcService.selectByPrimaryKey(contract.getCreateId());
-                            //接收者
-                            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(contract.getCompanyId(), contract.getCreateId(), user.getPhone());
+                            //接收者 //如果不是最后一个审批人，则通知下一个审批人
+                            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setPurConTittle(contract.getTitle());
                             attachment.setPurConSerialNum(contract.getSerialNo());

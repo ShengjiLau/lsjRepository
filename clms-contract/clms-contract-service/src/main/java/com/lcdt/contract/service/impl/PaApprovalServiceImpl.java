@@ -160,6 +160,26 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                     //如果正在审核的人为最后一人，则审批流程结束
                     if (pa.getSort().longValue() == caList.size()) {
                         rows += paymentApplicationMapper.updateApprovalStatus(paApproval.getPaId(), companyId, new Short("2"));
+                        if (rows > 0) {
+                            /**↓发送消息通知开始*/
+                            //发送者
+                            DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, paApproval.getUserId());
+                            PaymentApplication paymentApplication = paymentApplicationMapper.selectByPrimaryKey(paApproval.getPaId());
+                            User user = companyRpcService.selectByPrimaryKey(paymentApplication.getCreateId());
+                            //接收者
+                            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(paymentApplication.getCompanyId(), paymentApplication.getCreateId(), user.getPhone());
+                            ContractAttachment attachment = new ContractAttachment();
+                            attachment.setPerPaymentSerialNum(paymentApplication.getApplicationSerialNo());
+                            attachment.setCarrierWebNotifyUrl("");
+                            String eventName = "purchase_approval_agree";
+                            /*if (paymentApplication.getType().shortValue() == 1) {
+                                eventName = "sale_approval_agree";
+                                attachment.setSaleRecSerialNum(contract.getSerialNo());
+                            }*/
+                            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                            producer.sendNotifyEvent(plan_publish_event);
+                            /**↑发送消息通知结束*/
+                        }
                         break;
                     } else {  //否则更新下一位审核人状态为审批中
                         paApproval.setPaaId(caList.get(i + 1).getPaaId());
@@ -173,9 +193,10 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                             //发送者
                             DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, paApproval.getUserId());
                             PaymentApplication paymentApplication = paymentApplicationMapper.selectByPrimaryKey(paApproval.getPaId());
-                            User user = companyRpcService.selectByPrimaryKey(paymentApplication.getCreateId());
+                            PaApproval pApproval = caList.get(i+1);
+                            User user = companyRpcService.selectByPrimaryKey(pApproval.getUserId());
                             //接收者
-                            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(paymentApplication.getCompanyId(), paymentApplication.getCreateId(), user.getPhone());
+                            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setPerPaymentSerialNum(paymentApplication.getApplicationSerialNo());
                             attachment.setCarrierWebNotifyUrl("");
