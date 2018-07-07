@@ -137,17 +137,18 @@ public class OrderServiceImpl implements OrderService {
                         //发送
                         DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(orderDto.getCompanyId(), orderDto.getCreateUserId());
                         User user = companyRpcService.selectByPrimaryKey(oa.getUserId());
+                        Order queryOrder = orderMapper.selectByPrimaryKey(order.getOrderId());
                         //接收
                         DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(orderDto.getCompanyId(), user.getUserId(), user.getPhone());
                         ContractAttachment attachment = new ContractAttachment();
                         attachment.setEmployee(SecurityInfoGetter.getUser().getRealName());
-                        attachment.setPurOrderSerialNum(orderDto.getOrderSerialNo());
+                        attachment.setPurOrderSerialNum(queryOrder.getOrderSerialNo());
                         attachment.setCarrierWebNotifyUrl("");
                         String eventName = "purchase_approval_publish";
                         //如果是销售单
                         if (orderDto.getOrderType().shortValue() == 1) {
                             eventName = "sale_approval_publish";
-                            attachment.setSaleOrderSerialNum(orderDto.getOrderSerialNo());
+                            attachment.setSaleOrderSerialNum(queryOrder.getOrderSerialNo());
                         }
                         ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
                         producer.sendNotifyEvent(plan_publish_event);

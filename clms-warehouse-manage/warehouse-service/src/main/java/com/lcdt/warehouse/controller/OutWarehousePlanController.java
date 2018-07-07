@@ -54,7 +54,7 @@ public class OutWarehousePlanController {
     @ApiOperation("出库计划列表")
     @RequestMapping(value = "/list",method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN')  or hasAuthority('wh_out_plan_search')")
-    public PageBaseDto inPlanList(@RequestBody OutWhPlanSearchParamsDto dto) {
+    public PageBaseDto inPlanList(@Validated OutWhPlanSearchParamsDto dto) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         dto.setCompanyId(companyId);
         if (dto.getCreateBegin()!=null && dto.getCreateBegin()>0) {

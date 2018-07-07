@@ -91,18 +91,19 @@ public class ContractServiceImpl implements ContractService {
                         //发送
                         DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(dto.getCompanyId(), dto.getCreateId());
                         User user = companyRpcService.selectByPrimaryKey(ca.getUserId());
+                        Contract queryContract = contractMapper.selectByPrimaryKey(contract.getContractId());
                         //接收
                         DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(dto.getCompanyId(), user.getUserId(), user.getPhone());
                         ContractAttachment attachment = new ContractAttachment();
-                        attachment.setEmployee(dto.getCreateName());
-                        attachment.setPurConTittle(dto.getTitle());
-                        attachment.setPurConSerialNum(dto.getSerialNo());
+                        attachment.setEmployee(queryContract.getCreateName());
+                        attachment.setPurConTittle(queryContract.getTitle());
+                        attachment.setPurConSerialNum(queryContract.getSerialNo());
                         attachment.setCarrierWebNotifyUrl("");
                         String eventName = "purchase_approval_publish";
                         if (dto.getType().shortValue() == 1) {
                             eventName = "sale_approval_publish";
-                            attachment.setSaleConTittle(dto.getTitle());
-                            attachment.setSaleConSerialNum(dto.getSerialNo());
+                            attachment.setSaleConTittle(queryContract.getTitle());
+                            attachment.setSaleConSerialNum(queryContract.getSerialNo());
                         }
                         ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
                         producer.sendNotifyEvent(plan_publish_event);
