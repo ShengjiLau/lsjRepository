@@ -148,11 +148,8 @@ public class AllotServiceImpl implements AllotService{
             allot.setAllotStatus((short)2);//取消
             allotMapper.updateByPrimaryKey(allot);
             AllotDto dto = allotMapper.selectByAllotId(allotId);
-            Allot allot2 = new Allot();
-            BeanUtils.copyProperties(allot, allot2);
-            allot2.setWarehouseOutId(allot.getWarehouseInId());
             //新增入库单
-            saveInWarehouseOrder(allot2, dto);
+            InWarehouseOrder inWarehouseOrderNew = saveInWarehouseOrder(allot, dto);
             if (dto.getAllotProductList() != null && 0 != dto.getAllotProductList().size()) {
             	List<AllotProduct> allotProductList = dto.getAllotProductList();
             	for (int i = 0; i < allotProductList.size(); i++) {
@@ -161,7 +158,8 @@ public class AllotServiceImpl implements AllotService{
             	}
             	allotProductMapper.updateBatch(allotProductList);
             }
-            
+            //入库操作
+            inventoryService.updateInventoryByAllot(inWarehouseOrderNew,dto);  
             return true;
         }catch (Exception e){
             return false;
@@ -185,11 +183,9 @@ public class AllotServiceImpl implements AllotService{
             if (dto.getAllotProductList() != null && dto.getAllotProductList().size() > 0) {
                 allotProductMapper.updateBatch(dto.getAllotProductList());
             }
-            Allot allot2 = new Allot();
-            BeanUtils.copyProperties(allot, allot2);
-            allot2.setWarehouseOutId(allot.getWarehouseInId());
             //新增入库单
-            saveInWarehouseOrder(allot2, dto);
+            InWarehouseOrder inWarehouseOrderNew = saveInWarehouseOrder(allot, dto);
+            inventoryService.updateInventoryByAllotAndInwarehouseOrder(inWarehouseOrderNew, dto);
             return true;
         }catch (Exception e){
             e.printStackTrace();
@@ -197,7 +193,7 @@ public class AllotServiceImpl implements AllotService{
         }
     }
     //新增出库单
-    public void saveOutWarehouseOrder(Allot allot, AllotDto dto){
+    private void saveOutWarehouseOrder(Allot allot, AllotDto dto){
         OutWarehouseOrder outWarehouseOrder = new OutWarehouseOrder();
         outWarehouseOrder.setOrderStatus(ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND);
         outWarehouseOrder.setGroupId(allot.getGroupId());
@@ -262,7 +258,7 @@ public class AllotServiceImpl implements AllotService{
         }
     }
     //新增入库单
-    public void saveInWarehouseOrder(Allot allot, AllotDto dto){
+    private InWarehouseOrder saveInWarehouseOrder(Allot allot, AllotDto dto){
         InWarehouseOrder inWarehouseOrder = new InWarehouseOrder();
         inWarehouseOrder.setInOrderStatus(ConstantVO.IN_ORDER_STATUS_HAVE_STORAGE);
         inWarehouseOrder.setGroupId(allot.getGroupId());
@@ -271,8 +267,8 @@ public class AllotServiceImpl implements AllotService{
         inWarehouseOrder.setCustomerName(allot.getCustomerName());
         inWarehouseOrder.setCustomerContactName(allot.getContactName());
         inWarehouseOrder.setCustomerContactPhone(allot.getPhoneNum());
-        inWarehouseOrder.setWarehouseId(allot.getWarehouseOutId());
-        inWarehouseOrder.setWarehouseName(warehousseMapper.selectByPrimaryKey(allot.getWarehouseOutId()).getWhName());
+        inWarehouseOrder.setWarehouseId(allot.getWarehouseInId());
+        inWarehouseOrder.setWarehouseName(warehousseMapper.selectByPrimaryKey(allot.getWarehouseInId()).getWhName());
         inWarehouseOrder.setStorageType("03");//调拨入库
         inWarehouseOrder.setStoragePlanTime(allot.getAllotOutTime());
         inWarehouseOrder.setStorageTime(allot.getAllotOutTime());
@@ -312,8 +308,31 @@ public class AllotServiceImpl implements AllotService{
             }
             //批量插入入库单明细
             inorderGoodsInfoService.insertBatch(inorderGoodsInfoList);
-            //入库操作
-            inventoryService.updateInventoryByAllot(inWarehouseOrderNew,dto);
+            
         }
+        return inWarehouseOrderNew;
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

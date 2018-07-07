@@ -10,6 +10,7 @@ import com.lcdt.warehouse.contants.InOrderStatus;
 import com.lcdt.warehouse.contants.OutOrderStatus;
 import com.lcdt.warehouse.dto.AllotDto;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
+import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.entity.*;
 import com.lcdt.warehouse.factory.InventoryFactory;
 import com.lcdt.warehouse.mapper.GoodsInfoMapper;
@@ -20,6 +21,8 @@ import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.service.InventoryLogService;
 import com.lcdt.warehouse.service.InventoryService;
 import com.lcdt.warehouse.utils.CommonUtils;
+import com.lcdt.warehouse.utils.ShiftGoodsBO;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -322,8 +325,41 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
     }
     
-    
-    
+    /**
+     * 调拨入库时变更库存且生成库存流水
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void updateInventoryByAllotAndInwarehouseOrder(InWarehouseOrder inWarehouseOrder,AllotDto allotDto) {
+    	List<AllotProduct> allotProductList = allotDto.getAllotProductList();
+    	for (AllotProduct allotProduct : allotProductList) {
+    			Inventory inventory = new Inventory();
+    			inventory.setWarehouseId(allotDto.getWarehouseInId());
+    			inventory.setBusinessDesc(inWarehouseOrder.getInOrderCode());
+    			inventory.setBaseUnit(allotProduct.getUnit());
+    			inventory.setBatch(allotProduct.getBatchNum());
+    			inventory.setCompanyId(inWarehouseOrder.getCompanyId());
+    			inventory.setCustomerId(inWarehouseOrder.getCustomerId());
+    			inventory.setCustomerName(inWarehouseOrder.getCustomerName());
+    			inventory.setGoodsId(allotProduct.getGoodsId());
+    			inventory.setInvertoryNum(allotProduct.getAllotNum());
+    			inventory.setLockNum((float) 0);
+    			inventory.setOriginalGoodsId(allotProduct.getOriginalGoodsId());
+    			inventory.setRemark(allotProduct.getRemark());
+    			inventory.setStorageLocationCode(allotProduct.getWarehouseLocCode());
+    			inventory.setStorageLocationId(allotProduct.getWarehouseLocId());
+    			inventory.setWarehouseName(allotDto.getWarehouseInName());
+    			addInventory(inventory);
+    			List<Inventory> inventoryList = querySameInventory(inventory);
+    			if (null != inventoryList && 0 != inventoryList.size()) {
+    				Inventory inventory2 = new Inventory();
+        			BeanUtils.copyProperties(inventory, inventory2);
+        		    inventory2.setInvertoryNum(allotProduct.getAllotNum());
+        		    logService.saveInOrderLog(inWarehouseOrder,inventory2,inventory.getInvertoryNum());
+    			}else {
+    				 logService.saveInOrderLog(inWarehouseOrder,inventory,inventory.getInvertoryNum());
+    			}
+    	}
+    }
     
     
     

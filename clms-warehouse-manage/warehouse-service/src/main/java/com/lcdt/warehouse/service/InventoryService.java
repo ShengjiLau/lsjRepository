@@ -37,4 +37,6 @@ public interface InventoryService extends IService<Inventory> {
     void updateInventoryByCheck(TCheck tCheck,List<TCheckItem> items);
     
     void updateInventoryByAllot(InWarehouseOrder inWarehouseOrder,AllotDto allotDto);
+    
+    void updateInventoryByAllotAndInwarehouseOrder(InWarehouseOrder inWarehouseOrder,AllotDto allotDto);
 }
