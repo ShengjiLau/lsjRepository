@@ -10,7 +10,6 @@ public class UserQueryDto extends User {
 
     private Integer pageNo;
 
-
     private Date registerDateSince;
 
     private Date registerDateUntil;

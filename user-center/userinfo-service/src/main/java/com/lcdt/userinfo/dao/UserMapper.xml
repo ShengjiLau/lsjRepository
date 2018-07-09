@@ -207,7 +207,10 @@
           and real_name like   concat(concat('%',#{realName}),'%')
         </if>
 
-        <if test="userStatus != null and userStatus != ''">
+        <if test="userStatus != null and userStatus == 1 ">
+          (user_status = 1 or user_status is null)
+        </if>
+        <if test="userStatus != null and userStatus == 2 ">
           user_status = #{userStatus}
         </if>
 
@@ -231,6 +234,7 @@
         <if test="selectFlag != null ">
           t1.admin_id is null
         </if>
+
 
       </where>
 
