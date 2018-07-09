@@ -135,6 +135,11 @@
     from t_uc_company c
     left join t_uc_user u on c.create_id = u.user_id
     <where>
+
+      <if test="compId != null and compId != ''">
+        c.comp_id = #{compId}
+      </if>
+
       <if test="fullName != null and fullName != ''">
         c.full_name like   concat(concat('%',#{fullName}),'%')
       </if>

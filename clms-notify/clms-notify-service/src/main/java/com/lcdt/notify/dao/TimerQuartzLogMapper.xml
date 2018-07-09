@@ -10,11 +10,14 @@
     <result column="timer_date" jdbcType="TIMESTAMP" property="timerDate" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="vechicle_num" jdbcType="VARCHAR" property="vechicleNum" />
+    <result column="driver_name" jdbcType="VARCHAR" property="driverName" />
+    <result column="driver_phone" jdbcType="VARCHAR" property="driverPhone" />
   </resultMap>
 
   <sql id="base_columns">
     log_id, business_code, business_type, execute_result, execute_desc, timer_date,
-    create_date, company_id
+    create_date, company_id,vechicle_num,driver_name,driver_phone
   </sql>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -28,10 +31,10 @@
     </selectKey>
     insert into timer_quartz_log (business_code, business_type, execute_result, 
       execute_desc, timer_date, create_date, 
-      company_id)
+      company_id,vechicle_num,driver_name,driver_phone)
     values (#{businessCode,jdbcType=VARCHAR}, #{businessType,jdbcType=VARCHAR}, #{executeResult,jdbcType=BIT}, 
       #{executeDesc,jdbcType=VARCHAR}, #{timerDate,jdbcType=TIMESTAMP}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{companyId,jdbcType=BIGINT})
+      #{companyId,jdbcType=BIGINT},#{vechicleNum,jdbcType=VARCHAR},#{driverName,jdbcType=VARCHAR},#{driverPhone,jdbcType=VARCHAR})
   </insert>
 
   <update id="updateByPrimaryKey" parameterType="com.lcdt.notify.model.TimerQuartzLog">
@@ -42,7 +45,10 @@
       execute_desc = #{executeDesc,jdbcType=VARCHAR},
       timer_date = #{timerDate,jdbcType=TIMESTAMP},
       create_date = #{createDate,jdbcType=TIMESTAMP},
-      company_id = #{companyId,jdbcType=BIGINT}
+      company_id = #{companyId,jdbcType=BIGINT},
+      vechicle_num = #{vechicleNum,jdbcType=VARCHAR},
+      driver_name = #{driverName,jdbcType=VARCHAR},
+      driver_phone = #{driverPhone,jdbcType=VARCHAR}
     where log_id = #{logId,jdbcType=BIGINT}
   </update>
 

@@ -3,6 +3,7 @@ package com.lcdt.userinfo.dao;
 import com.aliyun.openservices.ons.api.Admin;
 import com.lcdt.userinfo.model.AdminUser;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.web.controller.api.admin.dto.AdminUserDto;
 import com.lcdt.userinfo.web.dto.UserQueryDto;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Map;
 public interface UserMapper {
 
 
-    List<AdminUser> selectByUserDto(UserQueryDto userQueryDto);
+    List<AdminUserDto> selectByUserDto(UserQueryDto userQueryDto);
 
     List<AdminUser> selectManageUserByUserDto(UserQueryDto userQueryDto);
 

@@ -169,13 +169,17 @@
         and d.auth_status = #{authStatus}
       </if>
       <if test="createDateSince != null ">
-        and d.create_date  &gt;= #{createDateSince,jdbcType=Date}
+        and d.create_date  &gt;= #{createDateSince,jdbcType=TIMESTAMP}
       </if>
       <if test="createDateUntil != null ">
-        and d.create_date  &lt;=  #{createDateUntil,jdbcType=Date}
+        and d.create_date  &lt;=  #{createDateUntil,jdbcType=TIMESTAMP}
       </if>
 
+
+
     </where>
+      order by d.create_date desc
+
   </select>
 
   <select id="selectCarnumBydriverId" resultType="Integer">

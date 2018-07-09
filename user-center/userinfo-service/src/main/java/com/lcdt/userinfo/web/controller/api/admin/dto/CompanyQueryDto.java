@@ -16,6 +16,18 @@ public class CompanyQueryDto extends Company{
 
     private Date createDateUntil;
 
+    private Long compId;
+
+    @Override
+    public Long getCompId() {
+        return compId;
+    }
+
+    @Override
+    public void setCompId(Long compId) {
+        this.compId = compId;
+    }
+
     public Integer getPageSize() {
         return pageSize;
     }
