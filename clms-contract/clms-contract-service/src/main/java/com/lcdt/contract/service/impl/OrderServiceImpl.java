@@ -404,8 +404,8 @@ public class OrderServiceImpl implements OrderService {
 		
 		Order order = orderMapper.selectByPrimaryKey(orderId);
 		WaybillParamsDto WaybillParamsDto = new WaybillParamsDto();
-		WaybillParamsDto.setCustomerId(order.getSupplierId());
-		WaybillParamsDto.setCustomerName(order.getSupplier());
+		WaybillParamsDto.setCustomerId(null);
+		WaybillParamsDto.setCustomerName(null);
 		Long companyId = SecurityInfoGetter.getCompanyId();
 	    User loginUser = SecurityInfoGetter.getUser();
 	    UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
