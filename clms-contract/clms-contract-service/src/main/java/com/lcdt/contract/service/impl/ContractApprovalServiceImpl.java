@@ -146,7 +146,7 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setPurConTittle(contract.getTitle());
                             attachment.setPurConSerialNum(contract.getSerialNo());
-                            attachment.setCarrierWebNotifyUrl("");
+                            attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.CONTRACT_WEB_NOTIFY_URL+contract.getSerialNo());
                             String eventName = "purchase_approval_agree";
                             if (contract.getType().shortValue() == 1) {
                                 eventName = "sale_approval_agree";
@@ -177,7 +177,7 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setPurConTittle(contract.getTitle());
                             attachment.setPurConSerialNum(contract.getSerialNo());
-                            attachment.setCarrierWebNotifyUrl("");
+                            attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.CONTRACT_WEB_NOTIFY_URL+contract.getSerialNo());
                             String eventName = "purchase_approval_agree";
                             if (contract.getType().shortValue() == 1) {
                                 eventName = "sale_approval_agree";
@@ -228,7 +228,7 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
                 ContractAttachment attachment = new ContractAttachment();
                 attachment.setPurConTittle(contract.getTitle());
                 attachment.setPurConSerialNum(contract.getSerialNo());
-                attachment.setCarrierWebNotifyUrl("");
+                attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.CONTRACT_WEB_NOTIFY_URL+contract.getSerialNo());
                 String eventName = "purchase_approval_reject";
                 if (contract.getType().shortValue() == 1) {
                     eventName = "sale_approval_reject";
@@ -344,7 +344,7 @@ public class ContractApprovalServiceImpl implements ContractApprovalService {
                         ContractAttachment attachment = new ContractAttachment();
                         attachment.setPurConTittle(contract.getTitle());
                         attachment.setPurConSerialNum(contract.getSerialNo());
-                        attachment.setCarrierWebNotifyUrl("");
+                        attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.CONTRACT_WEB_NOTIFY_URL+contract.getSerialNo());
                         String eventName = "purchase_approval_cc";
                         if (contract.getType().shortValue() == 1) {
                             eventName = "sale_approval_cc";

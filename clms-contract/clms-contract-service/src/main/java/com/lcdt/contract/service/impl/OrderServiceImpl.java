@@ -143,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
                         ContractAttachment attachment = new ContractAttachment();
                         attachment.setEmployee(SecurityInfoGetter.getUser().getRealName());
                         attachment.setPurOrderSerialNum(queryOrder.getOrderSerialNo());
-                        attachment.setCarrierWebNotifyUrl("");
+                        attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.ORDER_WEB_NOTIFY_URL+queryOrder.getOrderSerialNo());
                         String eventName = "purchase_approval_publish";
                         //如果是销售单
                         if (orderDto.getOrderType().shortValue() == 1) {
@@ -435,6 +435,16 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setReceiveCity(order.getReceiverCity());
 		    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
 		    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
+		    if (null != order.getSendTime()) {
+		    	WaybillParamsDto.setStartDate(order.getSendTime().toLocaleString());
+		    }else {
+		    	WaybillParamsDto.setStartDate(new Date().toLocaleString());
+		    }
+		    if (null != order.getReceiveTime()) {
+		    	WaybillParamsDto.setArriveDate(order.getReceiveTime().toLocaleString());
+		    }else {
+		    	WaybillParamsDto.setArriveDate(null);
+		    }
 		    flag = purchaseFlag;
 	    }else {
 	    	WaybillParamsDto.setSendMan(order.getReceiver());
@@ -449,6 +459,16 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setReceiveCity(order.getSendCity());
 		    WaybillParamsDto.setReceiveCounty(order.getSendDistrict());
 		    WaybillParamsDto.setReceiveAddress(order.getSendAddress());
+		    if (null != order.getReceiveTime()) {
+		    	WaybillParamsDto.setStartDate(order.getReceiveTime().toLocaleString());
+		    }else {
+		    	WaybillParamsDto.setStartDate(new Date().toLocaleString());
+		    }
+		    if (null != order.getSendTime()) {
+		    	 WaybillParamsDto.setArriveDate(order.getSendTime().toLocaleString());
+		    }else {
+		    	 WaybillParamsDto.setArriveDate(null);
+		    }
 		    flag = salesFlag;
 	    }
 	    

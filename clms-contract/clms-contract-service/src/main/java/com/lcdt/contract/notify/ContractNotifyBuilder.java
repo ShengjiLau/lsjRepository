@@ -9,8 +9,9 @@ import com.lcdt.notify.model.DefaultNotifySender;
  */
 public class ContractNotifyBuilder {
 
-    public static final String OWN_WAYBILL_WEB_NOTIFY_URL="/transport.html#/myWaybill/";
-    public static final String CUSTOMER_WAYBILL_WEB_NOTIFY_URL="/transport.html#/customerWaybill/";
+    public static final String CONTRACT_WEB_NOTIFY_URL="/purchase.html#/purchaseContractApproval/";
+    public static final String ORDER_WEB_NOTIFY_URL="/purchase.html#/purchaseBillApproval/";
+    public static final String PAYMENT_WEB_NOTIFY_URL="/purchase.html#/paymentApproval/";
 
     /***
      * 消息发送
