@@ -198,48 +198,44 @@
       birthday, picture_url, intro_memo, register_date, referrer_phone, user_status,register_from,d.driver_name,register_from
     ,t1.admin_id,driver_phone,l.login_time
     from t_uc_user u
-
       left join t_driver d on d.user_id = u.user_id
       left join t_admin_user t1 on u.user_id = t1.admin_user_id
       left join login_log l on l.user_id = u.user_id
       <where>
           <if test="phone != null and phone != ''">
-           phone = #{phone}
+           and phone = #{phone}
           </if>
         <if test="realName != null and realName != ''">
           and real_name like   concat(concat('%',#{realName}),'%')
         </if>
 
         <if test="userStatus != null and userStatus == 1 ">
-          (user_status = 1 or user_status is null)
+          and (user_status = 1 or user_status is null)
         </if>
         <if test="userStatus != null and userStatus == 2 ">
-          user_status = #{userStatus}
+          and user_status = #{userStatus}
         </if>
 
         <if test="registerFrom != null and registerFrom != ''">
-          register_from = #{registerFrom}
+          and register_from = #{registerFrom}
         </if>
 
         <if test="registerDateSince != null">
-          register_date &gt;=  #{registerDateSince,jdbcType=TIMESTAMP}
+          and register_date &gt;=  #{registerDateSince,jdbcType=TIMESTAMP}
         </if>
         <if test="registerDateUntil != null ">
-          register_date &lt;=  #{registerDateUntil,jdbcType=TIMESTAMP}
+          and register_date &lt;=  #{registerDateUntil,jdbcType=TIMESTAMP}
         </if>
 
         <if test="loginDateUntil != null ">
-          l.login_time &lt;=  #{loginDateUntil}
+          and l.login_time &lt;=  #{loginDateUntil}
         </if>
         <if test="loginDateSince != null ">
-          l.login_time &gt;=  #{loginDateSince}
+          and l.login_time &gt;=  #{loginDateSince}
         </if>
         <if test="selectFlag != null ">
-          t1.admin_id is null
+          and t1.admin_id is null
         </if>
-
-
-
       </where>
     order by u.register_date desc
 

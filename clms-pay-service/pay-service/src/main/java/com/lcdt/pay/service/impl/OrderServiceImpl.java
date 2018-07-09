@@ -210,7 +210,6 @@ public class OrderServiceImpl implements OrderService{
         }
         Integer orderType = payOrder.getOrderType();
         if (orderType == OrderType.PAYORDER) {
-
             updateCompanyService(payOrder,payOrder.getOrderPayCompanyId());
             return payOrder;
         }
