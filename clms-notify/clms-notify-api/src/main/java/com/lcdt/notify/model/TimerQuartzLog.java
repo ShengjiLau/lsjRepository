@@ -22,6 +22,12 @@ public class TimerQuartzLog implements Serializable,ResponseData {
 
     private Long companyId;
 
+    private String vechicleNum;
+
+    private String driverName;
+
+    private String driverPhone;
+
     public Long getLogId() {
         return logId;
     }
@@ -91,6 +97,33 @@ public class TimerQuartzLog implements Serializable,ResponseData {
 
     public TimerQuartzLog setCompanyId(Long companyId) {
         this.companyId = companyId;
+        return this;
+    }
+
+    public String getVechicleNum() {
+        return vechicleNum;
+    }
+
+    public TimerQuartzLog setVechicleNum(String vechicleNum) {
+        this.vechicleNum = vechicleNum;
+        return this;
+    }
+
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public TimerQuartzLog setDriverName(String driverName) {
+        this.driverName = driverName;
+        return this;
+    }
+
+    public String getDriverPhone() {
+        return driverPhone;
+    }
+
+    public TimerQuartzLog setDriverPhone(String driverPhone) {
+        this.driverPhone = driverPhone;
         return this;
     }
 }

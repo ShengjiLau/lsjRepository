@@ -338,6 +338,9 @@ public class WaybillServiceImpl implements WaybillService {
                         .setBusinessType(TimerQuartzLogVo.TRAFFIC_SERVICE)
                         .setExecuteDesc(jsonObject.getString("message"))
                         .setCompanyId(waybill.getCompanyId())
+                        .setVechicleNum(waybill.getVechicleNum())
+                        .setDriverName(waybill.getDriverName())
+                        .setDriverPhone(waybill.getDriverPhone())
                         .setTimerDate(new Date())
                         .setCreateDate(new Date());
 
