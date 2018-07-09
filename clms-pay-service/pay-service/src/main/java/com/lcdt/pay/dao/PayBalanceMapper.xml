@@ -34,7 +34,7 @@
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select balance_id, balance_company_id, balance, update_time
-    from pay_balance∑
+    from pay_balance
   </select>
 
   <select id="selectByCompanyId" resultMap="BaseResultMap">
