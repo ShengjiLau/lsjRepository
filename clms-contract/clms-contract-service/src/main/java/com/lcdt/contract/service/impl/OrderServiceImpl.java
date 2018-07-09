@@ -440,7 +440,11 @@ public class OrderServiceImpl implements OrderService {
 		    }else {
 		    	WaybillParamsDto.setStartDate(new Date().toLocaleString());
 		    }
-		    WaybillParamsDto.setArriveDate(order.getReceiveTime().toLocaleString());
+		    if (null != order.getReceiveTime()) {
+		    	WaybillParamsDto.setArriveDate(order.getReceiveTime().toLocaleString());
+		    }else {
+		    	WaybillParamsDto.setArriveDate(null);
+		    }
 		    flag = purchaseFlag;
 	    }else {
 	    	WaybillParamsDto.setSendMan(order.getReceiver());
@@ -460,7 +464,11 @@ public class OrderServiceImpl implements OrderService {
 		    }else {
 		    	WaybillParamsDto.setStartDate(new Date().toLocaleString());
 		    }
-		    WaybillParamsDto.setArriveDate(order.getSendTime().toLocaleString());
+		    if (null != order.getSendTime()) {
+		    	 WaybillParamsDto.setArriveDate(order.getSendTime().toLocaleString());
+		    }else {
+		    	 WaybillParamsDto.setArriveDate(null);
+		    }
 		    flag = salesFlag;
 	    }
 	    
