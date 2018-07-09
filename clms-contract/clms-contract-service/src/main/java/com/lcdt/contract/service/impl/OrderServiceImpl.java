@@ -532,6 +532,7 @@ public class OrderServiceImpl implements OrderService {
 	    List<InWhPlanGoodsDto> inWhPlanGoodsDtoList = new ArrayList<InWhPlanGoodsDto>(orderProductList.size());
 		for (OrderProduct orderProduct : orderProductList) {
 			InWhPlanGoodsDto inWhPlanGoodsDto = new InWhPlanGoodsDto();
+			inWhPlanGoodsDto.setGoodsId(orderProduct.getGoodsId());
 			inWhPlanGoodsDto.setGoodsName(orderProduct.getName());
 			inWhPlanGoodsDto.setGoodsCode(orderProduct.getCode());
 			inWhPlanGoodsDto.setGoodsSpec(orderProduct.getSpec());
@@ -585,6 +586,7 @@ public class OrderServiceImpl implements OrderService {
 		for (OrderProduct orderProduct : orderProductList) {
 			OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
 			outWhPlanGoodsDto.setGoodsName(orderProduct.getName());
+			outWhPlanGoodsDto.setGoodsId(orderProduct.getGoodsId());
 			outWhPlanGoodsDto.setGoodsSpec(orderProduct.getSpec());
 			outWhPlanGoodsDto.setGoodsCode(orderProduct.getCode());
 			outWhPlanGoodsDto.setUnit(orderProduct.getSku());

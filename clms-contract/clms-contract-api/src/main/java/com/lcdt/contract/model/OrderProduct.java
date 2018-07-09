@@ -3,6 +3,7 @@ package com.lcdt.contract.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.executable.ValidateOnExecution;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -94,6 +95,10 @@ public class OrderProduct implements Serializable {
     @NotBlank(message="商品规格不可为空")
     @ApiModelProperty(value="商品规格")
     private String spec;
+    
+    @NotNull(message="商品id不可为空")
+    @ApiModelProperty(value="商品id")
+    private Long goodsId;
     
     
     /**
@@ -288,6 +293,14 @@ public class OrderProduct implements Serializable {
 
 	public void setNum(BigDecimal num) {
 		this.num = num;
+	}
+
+	public Long getGoodsId() {
+		return goodsId;
+	}
+
+	public void setGoodsId(Long goodsId) {
+		this.goodsId = goodsId;
 	}
 
 
