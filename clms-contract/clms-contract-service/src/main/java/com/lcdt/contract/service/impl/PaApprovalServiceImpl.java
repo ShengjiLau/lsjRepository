@@ -170,7 +170,7 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                             DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(paymentApplication.getCompanyId(), paymentApplication.getCreateId(), user.getPhone());
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setPerPaymentSerialNum(paymentApplication.getApplicationSerialNo());
-                            attachment.setCarrierWebNotifyUrl("");
+                            attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.PAYMENT_WEB_NOTIFY_URL+paymentApplication.getApplicationSerialNo());
                             String eventName = "purchase_approval_agree";
                             /*if (paymentApplication.getType().shortValue() == 1) {
                                 eventName = "sale_approval_agree";
@@ -199,7 +199,7 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                             DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setPerPaymentSerialNum(paymentApplication.getApplicationSerialNo());
-                            attachment.setCarrierWebNotifyUrl("");
+                            attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.PAYMENT_WEB_NOTIFY_URL+paymentApplication.getApplicationSerialNo());
                             String eventName = "purchase_approval_agree";
                             /*if (paymentApplication.getType().shortValue() == 1) {
                                 eventName = "sale_approval_agree";
@@ -248,7 +248,7 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                 DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(paymentApplication.getCompanyId(), paymentApplication.getCreateId(), user.getPhone());
                 ContractAttachment attachment = new ContractAttachment();
                 attachment.setPerPaymentSerialNum(paymentApplication.getApplicationSerialNo());
-                attachment.setCarrierWebNotifyUrl("");
+                attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.PAYMENT_WEB_NOTIFY_URL+paymentApplication.getApplicationSerialNo());
                 String eventName = "payment_approval_reject";
                 /*if (paymentApplication.getType().shortValue() == 1) {
                     eventName = "sale_approval_reject";
@@ -371,7 +371,7 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                         DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
                         ContractAttachment attachment = new ContractAttachment();
                         attachment.setPerPaymentSerialNum(paymentApplication.getApplicationSerialNo());
-                        attachment.setCarrierWebNotifyUrl("");
+                        attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.PAYMENT_WEB_NOTIFY_URL+paymentApplication.getApplicationSerialNo());
                         String eventName = "payment_approval_cc";
                         /*if (paymentApplication.getType().shortValue() == 1) {
                             eventName = "sale_approval_cc";
