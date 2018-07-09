@@ -59,7 +59,7 @@
   </select>
   <select id="selectByOrderId" resultType="com.lcdt.contract.model.OrderProduct" parameterType="java.lang.Long" >
     select 
-    op_id opId, order_id orderId, name, code, sku, num, price, total,spec
+    op_id opId, order_id orderId, name, code, sku, num, price, total,spec,goods_id goodsId
     from t_order_product
     where order_id = #{orderId,jdbcType=BIGINT}
   </select>
@@ -74,12 +74,12 @@
   <insert id="insertOrderProductByBatch" parameterType="java.util.List">
     insert into t_order_product (op_id,order_id, name, 
       code, sku, num, price, 
-      total,spec)
+      total,spec,goods_id)
     values 
     <foreach collection="list"  item="op" index="index" separator=",">
       (#{op.opId,jdbcType=BIGINT},#{op.orderId,jdbcType=BIGINT}, #{op.name,jdbcType=VARCHAR}, 
       #{op.code,jdbcType=VARCHAR}, #{op.sku,jdbcType=VARCHAR}, #{op.num,jdbcType=DECIMAL}, #{op.price,jdbcType=DECIMAL}, 
-      #{op.total,jdbcType=DECIMAL},#{op.spec,jdbcType=VARCHAR})
+      #{op.total,jdbcType=DECIMAL},#{op.spec,jdbcType=VARCHAR},#{op.goodsId,jdbcType=BIGINT})
     </foreach>
   </insert>
   
@@ -94,7 +94,8 @@
       num = #{op.num,jdbcType=DECIMAL},
       price = #{op.price,jdbcType=DECIMAL},
       total = #{op.total,jdbcType=DECIMAL},
-      spec = #{op.spec,jdbcType=VARCHAR}
+      spec = #{op.spec,jdbcType=VARCHAR},
+      goods_id = #{op.goodsId,jdbcType=BIGINT}
       where op_id = #{op.opId,jdbcType=BIGINT}
     </foreach>
   </update>
