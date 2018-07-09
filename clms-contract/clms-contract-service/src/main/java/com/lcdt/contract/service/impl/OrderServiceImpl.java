@@ -497,8 +497,8 @@ public class OrderServiceImpl implements OrderService {
 	    inWhPlanAddParamsDto.setCreateUserId(loginUser.getUserId());
 	    inWhPlanAddParamsDto.setCreateUserName(loginUser.getRealName());
 	    inWhPlanAddParamsDto.setContractNo(order.getContractCode());
-	    inWhPlanAddParamsDto.setCustomerId(order.getSupplierId());
-	    inWhPlanAddParamsDto.setCustomerName(order.getSupplier());
+	    inWhPlanAddParamsDto.setCustomerId(companyId);
+	    inWhPlanAddParamsDto.setCustomerName(userCompRel.getCompany().getFullName());
 	    inWhPlanAddParamsDto.setGroupId(order.getGroupId());
 	    Group group = groupWareHouseRpcService.selectByGroupId(order.getGroupId());
 	    inWhPlanAddParamsDto.setGroupName(group.getGroupName());
@@ -548,8 +548,8 @@ public class OrderServiceImpl implements OrderService {
 	    UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
 		outWhPlanDto.setCompanyId(companyId);
 		outWhPlanDto.setCreateUserId(loginUser.getUserId());
-		outWhPlanDto.setCustomerId(order.getSupplierId());
-		outWhPlanDto.setCustomerName(order.getSupplier());
+		outWhPlanDto.setCustomerId(companyId);
+		outWhPlanDto.setCustomerName(userCompRel.getCompany().getFullName());
 		outWhPlanDto.setContractNo(order.getContractCode());
 		outWhPlanDto.setGroupId(order.getGroupId());
 		Group group = groupWareHouseRpcService.selectByGroupId(order.getGroupId());
