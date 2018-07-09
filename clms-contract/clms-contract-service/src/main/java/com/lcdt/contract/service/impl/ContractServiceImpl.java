@@ -98,7 +98,7 @@ public class ContractServiceImpl implements ContractService {
                         attachment.setEmployee(queryContract.getCreateName());
                         attachment.setPurConTittle(queryContract.getTitle());
                         attachment.setPurConSerialNum(queryContract.getSerialNo());
-                        attachment.setCarrierWebNotifyUrl("");
+                        attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.CONTRACT_WEB_NOTIFY_URL+queryContract.getSerialNo());
                         String eventName = "purchase_approval_publish";
                         if (dto.getType().shortValue() == 1) {
                             eventName = "sale_approval_publish";
