@@ -118,7 +118,7 @@ public class LocationServiceImpl implements LocationService {
     public String upPoint(MultiValueMap map) {
         RestTemplate restTemplate = getInstanceByCharset("utf-8");
         map.add("ak", baiduYyConfig.getAk());
-        map.add("service_id", baiduYyConfig.getAk());
+        map.add("service_id", baiduYyConfig.getService_id());
         map.add("coord_type_input", "bd09ll");
         map.add("loc_time", (System.currentTimeMillis() / 1000) + "");
 
