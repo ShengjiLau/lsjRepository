@@ -435,6 +435,12 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setReceiveCity(order.getReceiverCity());
 		    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
 		    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
+		    if (null != order.getSendTime()) {
+		    	WaybillParamsDto.setStartDate(order.getSendTime().toLocaleString());
+		    }else {
+		    	WaybillParamsDto.setStartDate(new Date().toLocaleString());
+		    }
+		    WaybillParamsDto.setArriveDate(order.getReceiveTime().toLocaleString());
 		    flag = purchaseFlag;
 	    }else {
 	    	WaybillParamsDto.setSendMan(order.getReceiver());
@@ -449,6 +455,12 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setReceiveCity(order.getSendCity());
 		    WaybillParamsDto.setReceiveCounty(order.getSendDistrict());
 		    WaybillParamsDto.setReceiveAddress(order.getSendAddress());
+		    if (null != order.getReceiveTime()) {
+		    	WaybillParamsDto.setStartDate(order.getReceiveTime().toLocaleString());
+		    }else {
+		    	WaybillParamsDto.setStartDate(new Date().toLocaleString());
+		    }
+		    WaybillParamsDto.setArriveDate(order.getSendTime().toLocaleString());
 		    flag = salesFlag;
 	    }
 	    
