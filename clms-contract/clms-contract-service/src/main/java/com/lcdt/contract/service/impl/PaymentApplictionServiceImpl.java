@@ -82,7 +82,7 @@ public class PaymentApplictionServiceImpl implements PaymentApplictionService {
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setEmployee(paymentApplicationDto.getCreateName());
                             attachment.setPerPaymentSerialNum(queryApplication.getApplicationSerialNo());
-                            attachment.setCarrierWebNotifyUrl("");
+                            attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.PAYMENT_WEB_NOTIFY_URL+queryApplication.getApplicationSerialNo());
                             String eventName = "payment_approval_publish";
                             /*if (dto.getType().shortValue() == 1) {
                                 eventName = "sale_approval_publish";

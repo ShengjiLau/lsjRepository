@@ -140,7 +140,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                             DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(order.getCompanyId(), order.getCreateUserId(), user.getPhone());
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setPurOrderSerialNum(order.getOrderSerialNo());
-                            attachment.setCarrierWebNotifyUrl("");
+                            attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.ORDER_WEB_NOTIFY_URL+order.getOrderSerialNo());
                             String eventName = "purchase_bill_approval_agree";
                             if (order.getOrderType().shortValue() == 1) {
                                 eventName = "sale_bill_approval_agree";
@@ -169,7 +169,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                             DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setPurOrderSerialNum(order.getOrderSerialNo());
-                            attachment.setCarrierWebNotifyUrl("");
+                            attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.ORDER_WEB_NOTIFY_URL+order.getOrderSerialNo());
                             String eventName = "purchase_bill_approval_agree";
                             if (order.getOrderType().shortValue() == 1) {
                                 eventName = "sale_bill_approval_agree";
@@ -216,7 +216,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                 DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(order.getCompanyId(), order.getCreateUserId(), user.getPhone());
                 ContractAttachment attachment = new ContractAttachment();
                 attachment.setPurOrderSerialNum(order.getOrderSerialNo());
-                attachment.setCarrierWebNotifyUrl("");
+                attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.ORDER_WEB_NOTIFY_URL+order.getOrderSerialNo());
                 String eventName = "purchase_bill_approval_reject";
                 if (order.getOrderType().shortValue() == 1) {
                     eventName = "sale_bill_approval_reject";
@@ -333,7 +333,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                         DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
                         ContractAttachment attachment = new ContractAttachment();
                         attachment.setPurOrderSerialNum(order.getOrderSerialNo());
-                        attachment.setCarrierWebNotifyUrl("");
+                        attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.ORDER_WEB_NOTIFY_URL+order.getOrderSerialNo());
                         String eventName = "purchase_bill_approval_cc";
                         if (order.getOrderType().shortValue() == 1) {
                             eventName = "sale_bill_approval_cc";
