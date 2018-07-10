@@ -82,7 +82,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
 
     @Transactional(readOnly = true)
     @Override
-    public OutWhPlanDto outWhPlanDetail(Long outPlanId, boolean flag, UserCompRel userCompRel) { //注:flag-true为配仓用
+    public OutWhPlanDto outWhPlanDetail(Long outPlanId, boolean flag, UserCompRel userCompRel,boolean sFlag) { //注:flag-true为配仓用
         OutWhPlanDto result = new OutWhPlanDto();
         OutWarehousePlan obj = new OutWarehousePlan();
         obj.setCompanyId(userCompRel.getCompany().getCompId());
@@ -104,8 +104,11 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 params.setOutPlanId(obj.getOutplanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
-                String[] pArray = {ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND+"",ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND+""};
-                params.setOrderStatus(pArray);
+                if(sFlag) {
+                    String[] pArray = {ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND + "", ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND + ""};
+                    params.setOrderStatus(pArray);
+                }
+
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
                 if (outWhOrderDtoList.getTotal()>0) {
                     result.setOutWhOrderDtoList(outWhOrderDtoList.getRecords());
@@ -368,7 +371,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
     @Override
     public boolean distributeWh(OutWhPlanDto outWhPlanDto, UserCompRel userCompRel) {
         outWhPlanDto.setCompanyId(userCompRel.getCompany().getCompId());
-        OutWhPlanDto _outWhPlanDto = outWhPlanDetail(outWhPlanDto.getOutplanId(), true, userCompRel);
+        OutWhPlanDto _outWhPlanDto = outWhPlanDetail(outWhPlanDto.getOutplanId(), true, userCompRel,true);
         if (_outWhPlanDto == null) {
             throw new RuntimeException("计划不存在！");
         }
@@ -397,6 +400,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         StringBuffer sb = new StringBuffer();
         for (OutWhPlanGoodsDto obj1: _outWhPlanGoodsDtoList1) {
             for (OutWhPlanGoodsDto obj2: _outWhPlanGoodsDtoList2) {
+
                 if (obj1.getRelationId().equals(obj2.getRelationId())) { //同一种货物
                     if (obj1.getDistGoodsNum() == null) {
                         obj1.setDistGoodsNum(0f);
@@ -412,9 +416,6 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 }
             }
         }
-
-
-
         if (!StringUtils.isEmpty(sb.toString())) {
             throw new RuntimeException(sb.toString());
         }
