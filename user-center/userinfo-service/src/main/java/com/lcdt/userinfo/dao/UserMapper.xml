@@ -195,13 +195,14 @@
 
   <select id="selectByUserDto"  resultMap="AdminUserMap" parameterType="com.lcdt.userinfo.web.dto.UserQueryDto">
    select  DISTINCT(u.user_id), mobile_country, u.phone, email, wechat, qq, real_name, nick_name,
-      birthday, picture_url, intro_memo, register_date, referrer_phone, user_status,u.register_from,d.driver_name,u.register_from
-    ,t1.admin_id,driver_phone,l.login_time
+      birthday, picture_url, intro_memo, register_date, referrer_phone, user_status,u.register_from,d.driver_name,
+    t1.admin_id,driver_phone,l.login_time
     from t_uc_user u
       left join t_driver d on d.user_id = u.user_id
       left join t_admin_user t1 on u.user_id = t1.admin_user_id
-      left join login_log l on l.user_id = u.user_id
-      <where>
+      LEFT JOIN (select max(login_time)  as login_time,user_id from login_log l  GROUP BY l.user_id order by login_time desc ) l ON l.user_id = u.user_id
+
+    <where>
           <if test="phone != null and phone != ''">
            and phone = #{phone}
           </if>
