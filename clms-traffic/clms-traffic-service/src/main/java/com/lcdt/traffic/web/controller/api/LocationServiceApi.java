@@ -218,11 +218,11 @@ public class LocationServiceApi {
     @ApiOperation(value = "基站定位", notes = "通过接口查询定位信息，并同步到本地数据库")
     @GetMapping("/querylocation")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('lbs_location')")
-    public JSONObject queryLocation(String mobile) {
+    public JSONObject queryLocation(String mobile,String driverName) {
         logger.debug("mobile:" + mobile);
         //  获取companyId
         Long companyId = SecurityInfoGetter.getCompanyId();
-        return locationService.queryLocation(companyId,mobile);
+        return locationService.queryLocation(companyId,mobile,driverName,null);
     }
 
     @ApiOperation(value = "列表获取位置信息", notes = "根据手机号获取位置(基站定位),多个手机号需要用逗号分隔")

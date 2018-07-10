@@ -1,6 +1,7 @@
 package com.lcdt.driver.wechat.api.util;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.pay.rpc.SmsCountService;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,16 @@ public class BalanceCheckBo {
         return smsCountService.getProductCount(companyId,"gms_location");
     }
 
-    public void deductionGms(Long companyId){
-        smsCountService.deduction(companyId,"gms_location",1);
+    public void deductionGms(Long companyId, String mobile, String driverName, String serialNo) {
+        //扣费触发人
+        String username = SecurityInfoGetter.getUser().getRealName();
+        String name = null!=driverName?driverName:"";
+        String des = "";
+        if (null != serialNo || "".equals(serialNo)) {
+            des = "定位" + name + mobile + "-" + serialNo;
+        } else {
+            des = "定位" + name + mobile;
+        }
+        smsCountService.deduction(companyId, "gms_location", 1, username, des);
     }
 }

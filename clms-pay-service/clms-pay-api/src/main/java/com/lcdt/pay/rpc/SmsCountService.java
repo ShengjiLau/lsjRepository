@@ -20,6 +20,6 @@ public interface SmsCountService {
      * @param serviceName
      * @param num
      */
-    void deduction(Long companyId, String serviceName, Integer num);
+    void deduction(Long companyId, String serviceName, Integer num,String username,String des);
 
 }
