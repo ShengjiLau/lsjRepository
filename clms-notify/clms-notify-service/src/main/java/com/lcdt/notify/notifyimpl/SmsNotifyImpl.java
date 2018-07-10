@@ -65,8 +65,8 @@ public class SmsNotifyImpl  {
         }
         logger.info("发送短信通知 >>> {} >>> {}",content,phoneNum);
         CompanyServiceCount companyServiceCount = countService.reduceCompanyProductCount(companyId, SmsCountService.smsServiceProductName, 1,operateUsername,eventMetaData.getEventDisplayName());
-        saveSmsLog(content, phoneNum, companyId,businessNo);
-        sendSms(new String[]{phoneNum}, content,"");
+        SmsLog smsLog = saveSmsLog(content, phoneNum, companyId, businessNo);
+        sendSms(new String[]{phoneNum}, content,smsLog.getSmsLogId()+"");
         return true;
     }
 
@@ -77,7 +77,7 @@ public class SmsNotifyImpl  {
      * @param companyId
      * @param businessNo 业务单号
      */
-    private void saveSmsLog(String content, String phoneNum, Long companyId,String businessNo) {
+    private SmsLog saveSmsLog(String content, String phoneNum, Long companyId,String businessNo) {
         SmsLog smsLog = new SmsLog();
         smsLog.setBusinessNo(businessNo);
         smsLog.setReceivePhone(phoneNum);
@@ -86,6 +86,7 @@ public class SmsNotifyImpl  {
         smsLog.setSmsLogContent(content);
         smsLog.setSmsLogTime(new Date());
         smsLogMapper.insert(smsLog);
+        return smsLog;
     }
 
 
@@ -103,7 +104,7 @@ public class SmsNotifyImpl  {
         nameValuePairs.add(new BasicNameValuePair("key", encodeKey(seed)));
         nameValuePairs.add(new BasicNameValuePair("dest", phoneNumsValue(phonsNums)));
         nameValuePairs.add(new BasicNameValuePair("content", "【大驼队】" + message));
-//        nameValuePairs.add(new BasicNameValuePair("reference", String.valueOf(productServiceLogId)));
+        nameValuePairs.add(new BasicNameValuePair("reference",params));
         UrlEncodedFormEntity uefEntity;
         try {
             uefEntity = new UrlEncodedFormEntity(nameValuePairs, "UTF-8");

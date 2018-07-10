@@ -14,4 +14,6 @@ public interface SmsLogMapper {
     List<SmsLog> selectAll();
 
     int updateByPrimaryKey(SmsLog record);
+
+    List<SmsLog> selectByBusinessNo(String businessNo);
 }
