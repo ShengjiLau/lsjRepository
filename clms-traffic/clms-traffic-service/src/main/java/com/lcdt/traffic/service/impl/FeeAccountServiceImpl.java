@@ -301,19 +301,31 @@ public class FeeAccountServiceImpl implements FeeAccountService{
                 for (Map<String, Object> m : list) {
                     Reconcile reconcile = new Reconcile();
                     reconcile.setCompanyId(SecurityInfoGetter.getCompanyId());
-                    reconcile.setTransportationExpenses(Double.parseDouble(m.get("freightTotal").toString()));//运费
-                    reconcile.setOtherExpenses(Double.parseDouble(m.get("otherFeeTotal").toString()));//其他费用
+                    if (null != m.get("freightTotal")) {
+                    	 reconcile.setTransportationExpenses(Double.parseDouble(m.get("freightTotal").toString()));//运费
+                    }
+                    if (null != m.get("otherFeeTotal")) {
+                    	 reconcile.setOtherExpenses(Double.parseDouble(m.get("otherFeeTotal").toString()));//其他费用
+                    }
                     reconcile.setOperatorId(SecurityInfoGetter.getUser().getUserId());
                     reconcile.setOperatorName(SecurityInfoGetter.getUser().getRealName());
                     reconcile.setCreateTime(createTime);
                     reconcile.setCancelOk((short) 0);
-                    reconcile.setWaybillId(m.get("waybillIds").toString());
-                    reconcile.setAccountId(m.get("accountIds").toString());
+                    if (null != m.get("waybillIds")) {
+                    	 reconcile.setWaybillId(m.get("waybillIds").toString());
+                    }
+                   if (null != m.get("accountIds")) {
+                	   reconcile.setAccountId(m.get("accountIds").toString()); 
+                   }
                     reconcile.setPayeeType(payeeType);
-                    reconcile.setPayerId(m.get("nameId")==null ? null : Long.parseLong(m.get("nameId").toString()));
-                    reconcile.setPayerName(m.get("name").toString());
-                    reconcile.setGroupId(Long.parseLong(m.get("groupId").toString()));
-                    reconcile.setGroupName(m.get("groupName").toString());
+                    reconcile.setPayerId(m.get("nameId") == null ? null : Long.parseLong(m.get("nameId").toString()));
+                    reconcile.setPayerName(m.get("name") == null ? null : m.get("name").toString());
+                    if (null != m.get("groupId")) {
+                    	reconcile.setGroupId(Long.parseLong(m.get("groupId").toString()));
+                    }
+                    if (null != m.get("groupName")) {
+                    	 reconcile.setGroupName(m.get("groupName").toString());
+                    }
                     reconcileList.add(reconcile);
                 }
                 int result = reconcileMapper.insertByBatch(reconcileList);
@@ -338,6 +350,7 @@ public class FeeAccountServiceImpl implements FeeAccountService{
             }
             return true;
         }catch (Exception e){
+        	e.printStackTrace();
             return false;
         }
     }
