@@ -200,6 +200,8 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 for (OutWhPlanGoodsDto dto : outWhPlanGoodsDtos) {
                     OutplanGoods obj = new OutplanGoods();
                     BeanUtils.copyProperties(dto, obj);
+                    //暂时将最小单位处理为计量单位
+                    obj.setMinUnit(obj.getUnit());
                     obj.setOutplanId(outWarehousePlan.getOutplanId());
                     outplanGoods.add(obj);
                 }

@@ -1,18 +1,16 @@
 package com.lcdt.warehouse.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.InWarehousePlan;
-import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.lcdt.warehouse.entity.InplanGoodsInfo;
 import com.lcdt.warehouse.mapper.InWarehousePlanMapper;
 import com.lcdt.warehouse.mapper.InplanGoodsInfoMapper;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.service.InWarehousePlanService;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.lcdt.warehouse.service.InplanGoodsInfoService;
 import com.lcdt.warehouse.vo.ConstantVO;
 import org.springframework.beans.BeanUtils;
@@ -215,6 +213,9 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                 for (InWhPlanGoodsDto dto : inWhPlanAddGoodsParamsDtoList) {
                     InplanGoodsInfo obj = new InplanGoodsInfo();
                     BeanUtils.copyProperties(dto, obj);
+                    //暂时将最小单位处理为计量单位
+                    obj.setMinUnit(obj.getUnit());
+                    //obj.setUnitData(1);
                     obj.setPlanId(inWarehousePlan.getPlanId());
                     inplanGoodsInfos.add(obj);
                 }
