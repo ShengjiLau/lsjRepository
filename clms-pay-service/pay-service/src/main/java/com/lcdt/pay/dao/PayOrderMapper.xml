@@ -115,7 +115,9 @@
     <if test="endTime != null">
       and create_time &lt;=  #{endTime,jdbcType=TIMESTAMP}
     </if>
-
+    <if test="payType != null">
+      and p.pay_type = #{payType}
+    </if>
     order by create_time DESC
 
   </select>
