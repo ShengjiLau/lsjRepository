@@ -21,5 +21,5 @@ public interface PayOrderMapper {
 
     List<PayOrder> selectByCompanyId(@Param("companyId") Long companyId, @Param("orderType") Integer orderType, @Param("beginTime") Date beginTime,@Param("endTime") Date endTime,@Param("payType") Integer payType);
 
-    List<PayOrder> selectPayOrderByProductName(@Param("companyId") Long companyId, @Param("productName") String productName,@Param("beginTime") Date beginTime,@Param("endTime") Date endTime);
+    List<PayOrder> selectPayOrderByProductName(@Param("companyId") Long companyId, @Param("productName") String productName,@Param("beginTime") Date beginTime,@Param("endTime") Date endTime,@Param("payType")Integer payType);
 }
