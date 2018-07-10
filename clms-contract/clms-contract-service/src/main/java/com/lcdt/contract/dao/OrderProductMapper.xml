@@ -180,13 +180,13 @@
   </delete>
   <select id="getOrderProductByOrderId" parameterType="java.lang.Long" resultType="com.lcdt.contract.model.OrderProduct">
   select 
-  op_id opId,order_id orderId,name,code,sku,num,price,total,spec,goods_id
+  op_id opId,order_id orderId,name,code,sku,num,price,total,spec,goods_id goodsId
   from t_order_product
     where order_id = #{orderId,jdbcType=BIGINT}
   </select>
 
   <select id="selectProductByOrderIds" resultType="com.lcdt.contract.model.OrderProduct">
-    select order_id orderId, name, convert(num,decimal(10,2)) num, sku, code, spec,goods_id
+    select order_id orderId, name, convert(num,decimal(10,2)) num, sku, code, spec,goods_id goodsId
     from t_order_product
     where order_id in
     <foreach collection="array" item="orderIds" index="index"
