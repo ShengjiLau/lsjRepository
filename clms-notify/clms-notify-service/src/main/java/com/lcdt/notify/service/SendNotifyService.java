@@ -9,6 +9,8 @@ import com.lcdt.notify.notifyimpl.WebNotifyImpl;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -40,6 +42,8 @@ public class SendNotifyService {
     @Autowired
     EventMetaDataMapper eventMetaDataMapper;
 
+    private Logger logger = LoggerFactory.getLogger(SendNotifyService.class);
+
     public void handleEvent(JsonParserPropertyEvent event) {
         String eventName = event.getEventName();
         EventMetaData eventMetaData = eventMetaDataMapper.selectByEventName(eventName);
@@ -54,12 +58,15 @@ public class SendNotifyService {
         }
         Long sendCompanyId = sender.sendCompanyId();
         User user = null;
+
         try {
             user = userService.queryByUserId(sender.sendUserId());
         } catch (UserNotExistException e) {
-            e.printStackTrace();
+            logger.error("接收通知的用户不存在",e);
             return;
         }
+
+
         for (Notify notify : notifies) {
             CompanyNotifySetting companyNotifySetting = notifyService.queryCompanyNotifySetting(sendCompanyId, notify.getNotifyId());
 
