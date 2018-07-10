@@ -59,7 +59,6 @@ public class NotifyServiceListener implements MessageListener{
             }
         });
 
-
         return CommitMessage;
     }
 
