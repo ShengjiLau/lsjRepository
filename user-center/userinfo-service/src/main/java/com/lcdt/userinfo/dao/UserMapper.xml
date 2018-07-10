@@ -195,7 +195,7 @@
 
   <select id="selectByUserDto"  resultMap="AdminUserMap" parameterType="com.lcdt.userinfo.web.dto.UserQueryDto">
    select  DISTINCT(u.user_id), mobile_country, u.phone, email, wechat, qq, real_name, nick_name,
-      birthday, picture_url, intro_memo, register_date, referrer_phone, user_status,register_from,d.driver_name,u.register_from
+      birthday, picture_url, intro_memo, register_date, referrer_phone, user_status,u.register_from,d.driver_name,u.register_from
     ,t1.admin_id,driver_phone,l.login_time
     from t_uc_user u
       left join t_driver d on d.user_id = u.user_id
