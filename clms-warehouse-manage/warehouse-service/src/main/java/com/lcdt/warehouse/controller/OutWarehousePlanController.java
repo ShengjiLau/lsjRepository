@@ -95,7 +95,7 @@ public class OutWarehousePlanController {
                              @ApiParam(value = "是否加载配仓",required = true) @RequestParam boolean flag) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         JSONObject jsonObject = new JSONObject();
-        OutWhPlanDto outWhPlanDto = outWarehousePlanService.outWhPlanDetail(outPlanId,flag, userCompRel);
+        OutWhPlanDto outWhPlanDto = outWarehousePlanService.outWhPlanDetail(outPlanId,flag, userCompRel,false);
         if(outWhPlanDto!=null) {
             List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = outWhPlanDto.getOutWhPlanGoodsDtoList();
             if (outWhPlanGoodsDtoList!=null && outWhPlanGoodsDtoList.size()>0) {
