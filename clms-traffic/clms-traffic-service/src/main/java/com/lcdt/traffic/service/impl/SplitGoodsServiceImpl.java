@@ -164,6 +164,8 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                         }
                         attachment.setCancelFlag(ConstantVO.CANCEL_FLAG);
                         TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("task_cancel_carrier", attachment, defaultNotifyReceiver, defaultNotifySender);
+                        plan_publish_event.setBusinessNo(waybillPlan.getSerialCode());
+
                         producer.sendNotifyEvent(plan_publish_event);
                     }
                 }

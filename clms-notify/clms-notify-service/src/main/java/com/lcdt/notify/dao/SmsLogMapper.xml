@@ -54,5 +54,10 @@
     receive_phone, result_code, business_no, business_tag
     from sms_log
   </select>
-
+  <select id="selectByBusinessNo" resultMap="BaseResultMap">
+    select sms_log_id, sms_log_content, sms_log_time, sms_log_company_id, is_send, send_result,
+    receive_phone, result_code, business_no, business_tag
+    from sms_log
+    where business_no = #{businessNo}
+  </select>
 </mapper>

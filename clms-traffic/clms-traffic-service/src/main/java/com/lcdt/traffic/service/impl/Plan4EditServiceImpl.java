@@ -472,6 +472,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                             attachment.setDriverPhone(vo.getCarrierPhone()); //司机手机
 
                             TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("bill_to_driver", attachment, defaultNotifyReceiver, defaultNotifySender);
+                            plan_publish_event.setBusinessNo(vo.getSerialCode());
                             producer.sendNotifyEvent(plan_publish_event);
                         }
                     }
