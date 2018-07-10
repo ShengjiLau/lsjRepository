@@ -54,24 +54,38 @@ public class SmsNotifyImpl  {
     @Autowired
     SmsLogMapper smsLogMapper;
 
-    public boolean sendSmsNotify(EventMetaData eventMetaData,String operateUsername, String content, String phoneNum, Long companyId) {
 
-        boolean b = smsCountService.checkSmsCount(companyId, 1);
-        if (!b) {
+
+
+    public boolean sendSmsNotify(EventMetaData eventMetaData,String operateUsername, String content, String phoneNum, Long companyId,String businessNo) {
+
+        if (!smsCountService.checkSmsCount(companyId, 1)) {
             logger.info("短信余额不足 companyId:{}",companyId);
             return false;
         }
         logger.info("发送短信通知 >>> {} >>> {}",content,phoneNum);
         CompanyServiceCount companyServiceCount = countService.reduceCompanyProductCount(companyId, SmsCountService.smsServiceProductName, 1,operateUsername,eventMetaData.getEventDisplayName());
+        saveSmsLog(content, phoneNum, companyId,businessNo);
+        sendSms(new String[]{phoneNum}, content,"");
+        return true;
+    }
+
+    /**
+     *
+     * @param content
+     * @param phoneNum
+     * @param companyId
+     * @param businessNo 业务单号
+     */
+    private void saveSmsLog(String content, String phoneNum, Long companyId,String businessNo) {
         SmsLog smsLog = new SmsLog();
+        smsLog.setBusinessNo(businessNo);
         smsLog.setReceivePhone(phoneNum);
         smsLog.setSmsLogCompanyId(companyId);
         smsLog.setIsSend(true);
         smsLog.setSmsLogContent(content);
         smsLog.setSmsLogTime(new Date());
         smsLogMapper.insert(smsLog);
-        sendSms(new String[]{phoneNum}, content,"");
-        return true;
     }
 
 

@@ -11,11 +11,21 @@ public class NotifyEvent {
         this.sender = sender;
     }
 
+    private String businessNo;
+
     private String eventName;
 
     private DefaultNotifyReceiver receiver;
 
     private DefaultNotifySender sender;
+
+    public String getBusinessNo() {
+        return businessNo;
+    }
+
+    public void setBusinessNo(String businessNo) {
+        this.businessNo = businessNo;
+    }
 
     public String getEventName() {
         return eventName;

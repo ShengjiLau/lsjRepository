@@ -11,6 +11,7 @@ import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,9 @@ public class SendNotifyService {
         Map attachment = event.getAttachment();
         NotifyReceiver receiver = event.getReceiver();
         NotifySender sender = event.getSender();
-
+        if (receiver == null) {
+            return;
+        }
         Long sendCompanyId = sender.sendCompanyId();
         User user = null;
         try {
@@ -63,106 +66,57 @@ public class SendNotifyService {
             Long templateId = notify.getTemplateId();
             String templateContent = notifyService.templateContent(templateId, sendCompanyId);
             String notifyContent = TemplateParser.parseTemplateParams(templateContent, attachment);
-            if (notify.getReceiveRole().equals("货主")) {
-                if (receiver != null && receiver.getPhoneNum() != null && !receiver.getPhoneNum().equals("")) {
-                    if (companyNotifySetting.getEnableSms()) {
-                        //发送短信通知
-                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getPhoneNum(), sendCompanyId);
-                    }
-                }
-                if (receiver != null && receiver.getCompanyId() != null && receiver.getUserId() != null) {
-                    if (companyNotifySetting.getEnableWeb()) {
-                        String webUrl=attachment.get("webNotifyUrl")!=null?attachment.get("webNotifyUrl").toString():"";
-                        //发送web通知
-                        webNotify.sendWebNotify(notify.getCategory(), notifyContent, receiver.getCompanyId(), receiver.getUserId(),webUrl);
-                    }
-                }
-            }
-            if (notify.getReceiveRole().equals("承运商")) {
-                if (receiver != null && receiver.getCarrierPhoneNum() != null && !receiver.getCarrierPhoneNum().equals("")) {
-                    if (companyNotifySetting.getEnableSms()) {
-                        //发送短信通知
-                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getCarrierPhoneNum(), sendCompanyId);
-                    }
-                }
-                if (receiver != null && receiver.getCarrierCompanyId() != null && receiver.getCarrierUserId() != null) {
-                    if (companyNotifySetting.getEnableWeb()) {
-                        String webUrl=attachment.get("carrierWebNotifyUrl")!=null?attachment.get("carrierWebNotifyUrl").toString():"";
-                        //发送web通知
-                        webNotify.sendWebNotify(notify.getCategory(), notifyContent, receiver.getCarrierCompanyId(), receiver.getCarrierUserId(), webUrl);
-                    }
-                }
-            }
-            if (notify.getReceiveRole().equals("合同客户")) {
-                if (receiver != null && receiver.getCustomerPhoneNum() != null && !receiver.getCustomerPhoneNum().equals("")) {
-                    if (companyNotifySetting.getEnableSms()) {
-                        //发送短信通知
-                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getCustomerPhoneNum(), sendCompanyId);
-                    }
-                }
-            }
 
-            if (notify.getReceiveRole().equals("司机")) {
-                if (receiver != null && receiver.getDriverPhoneNum() != null && !receiver.getDriverPhoneNum().equals("")) {
-                    if (companyNotifySetting.getEnableSms()) {
-                        //发送短信通知
-                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getDriverPhoneNum(), sendCompanyId);
-                    }
+            if (!StringUtils.isEmpty(receiver.getPhoneNum())) {
+                if (companyNotifySetting.getEnableSms()) {
+                    //发送短信通知
+                    smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent,getReceiverPhone(notify,receiver), sendCompanyId,event.getBusinessNo());
                 }
             }
-            if (notify.getReceiveRole().equals("收货人")) {
-                if (receiver != null && receiver.getReceivePhoneNum() != null && !receiver.getReceivePhoneNum().equals("")) {
-                    if (companyNotifySetting.getEnableSms()) {
-                        //发送短信通知
-                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getReceivePhoneNum(), sendCompanyId);
-                    }
+            if (receiver.getCompanyId() != null && receiver.getUserId() != null) {
+                if (companyNotifySetting.getEnableWeb()) {
+                    String webUrl=attachment.get("webNotifyUrl") != null ? attachment.get("webNotifyUrl").toString() : "";
+                    //发送web通知
+                    webNotify.sendWebNotify(notify.getCategory(), notifyContent, getReceiverCompanyId(notify,receiver), getReceiverUserId(notify,receiver),webUrl);
                 }
             }
-            if (notify.getReceiveRole().equals("待审批人")) {
-                if (receiver != null && receiver.getCarrierPhoneNum() != null && !receiver.getCarrierPhoneNum().equals("")) {
-                    if (companyNotifySetting.getEnableSms()) {
-                        //发送短信通知
-                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getCarrierPhoneNum(), sendCompanyId);
-                    }
-                }
-                if (receiver != null && receiver.getCarrierCompanyId() != null && receiver.getCarrierUserId() != null) {
-                    if (companyNotifySetting.getEnableWeb()) {
-                        String webUrl=attachment.get("carrierWebNotifyUrl")!=null?attachment.get("carrierWebNotifyUrl").toString():"";
-                        //发送web通知
-                        webNotify.sendWebNotify(notify.getCategory(), notifyContent, receiver.getCarrierCompanyId(), receiver.getCarrierUserId(), webUrl);
-                    }
-                }
-            }
-            if (notify.getReceiveRole().equals("发布人")) {
-                if (receiver != null && receiver.getCarrierPhoneNum() != null && !receiver.getCarrierPhoneNum().equals("")) {
-                    if (companyNotifySetting.getEnableSms()) {
-                        //发送短信通知
-                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getCarrierPhoneNum(), sendCompanyId);
-                    }
-                }
-                if (receiver != null && receiver.getCarrierCompanyId() != null && receiver.getCarrierUserId() != null) {
-                    if (companyNotifySetting.getEnableWeb()) {
-                        String webUrl=attachment.get("carrierWebNotifyUrl")!=null?attachment.get("carrierWebNotifyUrl").toString():"";
-                        //发送web通知
-                        webNotify.sendWebNotify(notify.getCategory(), notifyContent, receiver.getCarrierCompanyId(), receiver.getCarrierUserId(), webUrl);
-                    }
-                }
-            }
-            if (notify.getReceiveRole().equals("被抄送人")) {
-                if (receiver != null && receiver.getCarrierPhoneNum() != null && !receiver.getCarrierPhoneNum().equals("")) {
-                    if (companyNotifySetting.getEnableSms()) {
-                        //发送短信通知
-                        smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent, receiver.getCarrierPhoneNum(), sendCompanyId);
-                    }
-                }
-                if (receiver != null && receiver.getCarrierCompanyId() != null && receiver.getCarrierUserId() != null) {
-                    if (companyNotifySetting.getEnableWeb()) {
-                        String webUrl=attachment.get("carrierWebNotifyUrl")!=null?attachment.get("carrierWebNotifyUrl").toString():"";
-                        //发送web通知
-                        webNotify.sendWebNotify(notify.getCategory(), notifyContent, receiver.getCarrierCompanyId(), receiver.getCarrierUserId(), webUrl);
-                    }
-                }
-            }
+        }
+    }
+
+    private Long getReceiverUserId(Notify notify, NotifyReceiver receiver) {
+        switch (notify.getReceiveRole()) {
+            case "货主":
+                return receiver.getUserId();
+            default:
+                return receiver.getCarrierUserId();
+        }
+    }
+
+    private Long getReceiverCompanyId(Notify notify, NotifyReceiver receiver) {
+        switch (notify.getReceiveRole()) {
+            case "货主":
+                return receiver.getCompanyId();
+            default:
+                return receiver.getCarrierCompanyId();
+        }
+    }
+
+    private String getReceiverPhone(Notify notify, NotifyReceiver receiver) {
+        switch (notify.getReceiveRole()) {
+            case "收货人":
+                return receiver.getPhoneNum();
+            case "货主":
+                return receiver.getPhoneNum();
+            case "司机":
+                return receiver.getDriverPhoneNum();
+            case "合同客户":
+                return receiver.getCustomerPhoneNum();
+            case "承运商":
+                return receiver.getCarrierPhoneNum();
+            case "被抄送人":
+                return receiver.getCarrierPhoneNum();
+                default:
+                    return receiver.getCarrierPhoneNum();
         }
     }
 
