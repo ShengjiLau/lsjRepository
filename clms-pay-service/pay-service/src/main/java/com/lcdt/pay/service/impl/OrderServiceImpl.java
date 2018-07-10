@@ -9,6 +9,8 @@ import com.lcdt.pay.service.CompanyBalanceService;
 import com.lcdt.pay.service.OrderService;
 import com.lcdt.pay.utils.OrderNoGenerator;
 import com.lcdt.userinfo.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +44,8 @@ public class OrderServiceImpl implements OrderService{
 
     @Autowired
     ProductCountService productCountService;
+
+    private Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Override
     public PayOrder selectByOrderId(Long orderId) {
@@ -127,10 +131,8 @@ public class OrderServiceImpl implements OrderService{
 
     private void finishOrder(Long companyId, PayOrder payOrder, ServiceProductPackage serviceProductPackage, PayBalance money, ServiceProduct serviceProduct, CompanyServiceCount companyServiceCount) {
         payOrder.setOrderStatus(OrderStatus.PAYED);
-        payOrder.setPayType(PayType.BALANCEPAY);
         payOrder.setOrderDes("购买"+serviceProductPackage.getPackageDes());
         payOrder.setOrderAmount(Integer.valueOf(serviceProductPackage.getPackagePrice()));
-        payOrder.setPayType(PayType.BALANCEPAY);
         payOrder.setBalance(money.getBalance());
 
         mapper.updateByPrimaryKey(payOrder);
@@ -206,11 +208,14 @@ public class OrderServiceImpl implements OrderService{
     public PayOrder changeToPayFinish(PayOrder payOrder,Integer payType){
         //检查订单号是否已经被处理过
         if (payOrder.getOrderStatus() > OrderStatus.PENDINGPAY) {
+            logger.warn("订单已经被支付");
             return payOrder;
         }
         Integer orderType = payOrder.getOrderType();
         if (orderType == OrderType.PAYORDER) {
+            payOrder.setPayType(payType);
             updateCompanyService(payOrder,payOrder.getOrderPayCompanyId());
+            mapper.updateByPrimaryKey(payOrder);
             return payOrder;
         }
 
