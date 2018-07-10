@@ -209,7 +209,7 @@
   
   <select id="selectContractProductByContractId" resultType="com.lcdt.contract.model.ContractProduct">
     select cp_id cpId,contract_id contractId,product_name productName,product_code productCode,
-    sku,num,price,total,spec,remark from t_contract_product
+    sku,num,price,total,spec,remark,goods_id goodsId from t_contract_product
     where contract_id = #{contractId,jdbcType=BIGINT}
  	order by cp_id desc 
   </select>

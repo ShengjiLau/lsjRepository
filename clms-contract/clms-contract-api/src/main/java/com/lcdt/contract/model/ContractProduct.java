@@ -1,9 +1,15 @@
 package com.lcdt.contract.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ContractProduct {
-    private Long cpId;
+public class ContractProduct implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1321315421L;
+
+	private Long cpId;
 
     private Long contractId;
 
@@ -22,6 +28,8 @@ public class ContractProduct {
     private String spec;
 
     private String remark;
+    
+    private Long goodsId;
 
     public Long getCpId() {
         return cpId;
@@ -104,4 +112,12 @@ public class ContractProduct {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+	public Long getGoodsId() {
+		return goodsId;
+	}
+
+	public void setGoodsId(Long goodsId) {
+		this.goodsId = goodsId;
+	}
 }
