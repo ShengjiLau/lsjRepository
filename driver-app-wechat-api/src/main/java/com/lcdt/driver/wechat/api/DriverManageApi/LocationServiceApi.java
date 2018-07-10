@@ -201,7 +201,7 @@ public class LocationServiceApi {
     @ApiOperation(value = "基站定位", notes = "通过接口查询定位信息，并同步到本地数据库")
     @GetMapping("/querylocation")
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('lbs_location')")
-    public JSONObject queryLocation(String mobile) {
+    public JSONObject queryLocation(String mobile,String driverName) {
         logger.debug("mobile:" + mobile);
         JSONObject jsonObject = new JSONObject();
         UserCompRel userCompRel = TokenSecurityInfoGetter.getUserCompRel();
@@ -221,7 +221,7 @@ public class LocationServiceApi {
             JSONObject result = GprsLocationBo.getInstance().queryLocation(mobile);
             int resid1 = result.getIntValue("resid");
             if (resid1 == 0) {   //已激活
-                balanceCheckBo.deductionGms(companyId); //查询正常扣费
+                balanceCheckBo.deductionGms(companyId,mobile,driverName,null); //查询正常扣费
                 Driver driver = new Driver();
                 driver.setDriverPhone(mobile);
                 driver.setCurrentLocation(result.getString("location"));
