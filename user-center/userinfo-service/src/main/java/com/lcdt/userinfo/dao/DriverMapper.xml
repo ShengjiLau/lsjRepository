@@ -124,7 +124,7 @@
     from t_driver where driver_phone=#{arg0}
   </select>
   <select id="selectByPhone" resultMap="BaseResultMap">
-    select driver_phone, current_location, short_current_location, gps_status,location_time
+    select driver_phone, driver_name, current_location, short_current_location, gps_status,location_time
     from t_driver where driver_phone in
     <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
       #{item}
