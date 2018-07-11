@@ -96,10 +96,10 @@ public class OverviewServiceImpl implements OverviewService {
 		//i计算得出商品均价
 		BigDecimal i = new BigDecimal(0);
 		if (0 != y.intValue()) {
-			 t =r.divide(y).setScale(2, BigDecimal.ROUND_HALF_DOWN);
+			 t =r.divide(y,2, BigDecimal.ROUND_HALF_DOWN);
 		}
 		if (0 != u.intValue()) {
-			 i =r.divide(u).setScale(2, BigDecimal.ROUND_HALF_DOWN);
+			 i =r.divide(u,2, BigDecimal.ROUND_HALF_DOWN);//.setScale(2, BigDecimal.ROUND_HALF_DOWN);
 		}
 		orderOverviewDto.setMoneyReceivedOrder(w);
 		//订单总数-已收款-未收款 = 收款中
