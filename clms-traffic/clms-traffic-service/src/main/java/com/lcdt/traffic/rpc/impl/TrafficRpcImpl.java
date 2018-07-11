@@ -24,9 +24,12 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Created by yangbinq on 2018/1/12.
@@ -171,7 +174,14 @@ public class TrafficRpcImpl implements TrafficRpc {
         vo.setCarrierType(ConstantVO.PLAN_CARRIER_TYPE_ELSE); //发布后派单
         vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //派单中
         Date dt = new Date();
-        vo.setStartDate(dt); //当前系统是时间
+        if (null != waybillParamsDto.getStartDate() && !"".equals(waybillParamsDto.getStartDate())) {
+        	 vo.setStartDate(convertStringToDate(waybillParamsDto.getStartDate())); //当前系统是时间
+        }else {
+        	vo.setStartDate(dt);
+        }
+        if (null != waybillParamsDto.getArriveDate() && !"" .equals(waybillParamsDto.getArriveDate())) {
+        	vo.setArriveDate(convertStringToDate(waybillParamsDto.getArriveDate()));
+        }
         vo.setIsDeleted((short) 0);
         vo.setCreateDate(dt);
         vo.setTransportWay((short) 1);
@@ -203,6 +213,24 @@ public class TrafficRpcImpl implements TrafficRpc {
 		return waybillPlanMapper.getWaybillPlanBySerialCode(serialNo);
 	}
 
+	private Date convertStringToDate(String dateString) {
+		String pattern = "^(20)[0-9]{2}[-][0-9]{2}[-][0-9]{2}[' '][0-9]{2}[:][0-9]{2}[:][0-9]{2}$";
+		if (Pattern.matches(pattern, dateString)) {
+			return null;
+		}
+		Date date = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			date= sdf.parse(dateString);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return date;
+	}
 
-
+	
+	
+	
+	
 }
