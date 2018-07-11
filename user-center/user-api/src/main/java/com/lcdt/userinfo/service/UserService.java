@@ -41,4 +41,6 @@ public interface UserService {
 	boolean addUserAdmin(AdminUser adminUser);
 
 	boolean deleteUserAdmin(AdminUser adminUser);
+
+	User adminLogin(String username, String pwd);
 }
