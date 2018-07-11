@@ -136,6 +136,30 @@ public class UserServiceImpl implements UserService,ApplicationEventPublisherAwa
 		}
 	}
 
+
+	@Transactional(rollbackFor = Exception.class)
+	public User adminLogin(String username, String pwd){
+		User user = queryByPhone(username);
+
+		if (user.getPwd() == null) {
+			throw new PassErrorException("密码未设置");
+		}
+		if (user.getPwd().toUpperCase().equals(RegisterUtils.md5Encrypt(pwd).toUpperCase())){
+
+			List<AdminUser> adminUsers = adminUserMapper.selectByUserId(user.getUserId());
+			if (!CollectionUtils.isEmpty(adminUsers)) {
+				user.setLastLoginTime(new Date()); //更新登录时间
+				userMapper.updateByPrimaryKey(user);
+				return user;
+			}else{
+				throw new RuntimeException("请使用管理员账号登录");
+			}
+		}else{
+			throw new PassErrorException("手机号或者密码错误，请重新输入");
+		}
+	}
+
+
 	@Transactional(readOnly = true)
 	@Override
 	public User selectUserByPhone(String phone) {

@@ -344,7 +344,7 @@ public class AuthController {
             return jsonObject.toString();
         }
         try {
-            User user = userService.userLogin(username, password);
+            User user = userService.adminLogin(username, password);
             LoginSessionReposity.setUserInSession(request, user);
             ticketService.generateTicketInResponse(request, response, user.getUserId(), -1L);
             jsonObject.put("code", 0);
