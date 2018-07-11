@@ -215,7 +215,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                     BeanUtils.copyProperties(dto, obj);
                     //暂时将最小单位处理为计量单位
                     obj.setMinUnit(obj.getUnit());
-                    //obj.setUnitData(1);
+                    obj.setUnitData(1);
                     obj.setPlanId(inWarehousePlan.getPlanId());
                     inplanGoodsInfos.add(obj);
                 }

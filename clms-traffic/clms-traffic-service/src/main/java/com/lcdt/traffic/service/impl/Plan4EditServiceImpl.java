@@ -376,7 +376,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                         obj.setCompanyId(vo.getCompanyId());
                         obj.setIsDeleted((short)0);
                         if (obj.getFreightTotal()==null) { //运费总价 = 单价 * 数量
-                            obj.setFreightTotal(obj.getFreightPrice()*obj.getPlanAmount());
+                            obj.setFreightTotal((obj.getFreightPrice()==null?0:obj.getFreightPrice())*(obj.getPlanAmount()==null?0:obj.getPlanAmount()));
                         }
                         sb_goods.append(obj.getGoodsName()+":"+(obj.getPlanAmount()==null?0:obj.getPlanAmount())+";"); //发送消息
 
