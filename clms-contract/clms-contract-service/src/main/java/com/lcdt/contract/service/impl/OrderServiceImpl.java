@@ -429,12 +429,12 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setSendCity(order.getSendCity());
 		    WaybillParamsDto.setSendCounty(order.getSendDistrict());
 		    WaybillParamsDto.setSendAddress(order.getSendAddress());
-		    WaybillParamsDto.setReceiveMan(order.getReceiver());
-		    WaybillParamsDto.setReceivePhone(order.getReceiverPhone());
-		    WaybillParamsDto.setReceiveProvince(order.getReceiverProvince());
-		    WaybillParamsDto.setReceiveCity(order.getReceiverCity());
-		    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
-		    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
+//		    WaybillParamsDto.setReceiveMan(order.getReceiver());
+//		    WaybillParamsDto.setReceivePhone(order.getReceiverPhone());
+//		    WaybillParamsDto.setReceiveProvince(order.getReceiverProvince());
+//		    WaybillParamsDto.setReceiveCity(order.getReceiverCity());
+//		    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
+//		    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
 		    if (null != order.getSendTime()) {
 		    	WaybillParamsDto.setStartDate(order.getSendTime().toLocaleString());
 		    }else {
@@ -453,12 +453,12 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setSendCity(order.getReceiverCity());
 		    WaybillParamsDto.setSendCounty(order.getReceiveDistrict());
 		    WaybillParamsDto.setSendAddress(order.getReceiveAddress());
-		    WaybillParamsDto.setReceiveMan(order.getSender());
-		    WaybillParamsDto.setReceivePhone(order.getSenderPhone());
-		    WaybillParamsDto.setReceiveProvince(order.getSendProvince());
-		    WaybillParamsDto.setReceiveCity(order.getSendCity());
-		    WaybillParamsDto.setReceiveCounty(order.getSendDistrict());
-		    WaybillParamsDto.setReceiveAddress(order.getSendAddress());
+//		    WaybillParamsDto.setReceiveMan(order.getSender());
+//		    WaybillParamsDto.setReceivePhone(order.getSenderPhone());
+//		    WaybillParamsDto.setReceiveProvince(order.getSendProvince());
+//		    WaybillParamsDto.setReceiveCity(order.getSendCity());
+//		    WaybillParamsDto.setReceiveCounty(order.getSendDistrict());
+//		    WaybillParamsDto.setReceiveAddress(order.getSendAddress());
 		    if (null != order.getReceiveTime()) {
 		    	WaybillParamsDto.setStartDate(order.getReceiveTime().toLocaleString());
 		    }else {
