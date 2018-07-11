@@ -13,6 +13,7 @@ spring:
       driver-class-name: com.mysql.jdbc.Driver
     name: warehouse-db
     type: com.alibaba.druid.pool.DruidDataSource
+
 mybatis-plus:
   mapper-locations: classpath:/com/lcdt/warehouse/mapper/xml/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
@@ -41,6 +42,7 @@ mybatis-plus:
     #sql-injector: com.baomidou.springboot.xxx
     # SQL 解析缓存，开启后多租户 @SqlParser 注解生效
 #    sql-parser-cache: true
+
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
@@ -49,6 +51,6 @@ server:
   port: 8071
 logging:
   file: ${user.dir}/log/warehouse-service.log
-  
+swagger-toggle: true
   
 
