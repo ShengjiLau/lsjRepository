@@ -36,7 +36,7 @@ public class LoginServiceImpl implements LoginService {
 	@Autowired
 	AuthTicketService ticketService;
 
-	@Reference(check = false)
+	@Reference(check = true)
 	UserService userService;
 
 	@Reference(check = false)
