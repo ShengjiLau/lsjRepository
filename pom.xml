@@ -29,6 +29,7 @@
         <module>clms-warehouse-manage</module>
         <module>driver-app-wechat-api</module>
         <module>Aliyun-Mq-Config</module>
+        <module>clms-manage</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>
