@@ -98,16 +98,16 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
         List<OutplanGoods> list = outplanGoodsService.selectList(new EntityWrapper<OutplanGoods>(outplanGoods));
 
         if (list != null) {
-            if (flag) {//出库单
+            //if (flag) {//出库单
                 OutWhOrderSearchDto params = new OutWhOrderSearchDto();
                 params.setCompanyId(obj.getCompanyId());
                 params.setOutPlanId(obj.getOutplanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
-                if(sFlag) {
-                    String[] pArray = {ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND + "", ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND + ""};
-                    params.setOrderStatus(pArray);
-                }
+               // if(sFlag) {
+                  //  String[] pArray = {ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND + "", ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND + ""};
+                   // params.setOrderStatus(pArray);
+               // }
 
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
                 if (outWhOrderDtoList.getTotal()>0) {
@@ -115,19 +115,19 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 }else {
                     obj.setOutWhOrderDtoList(new ArrayList<OutWhOrderDto>());
                 }
-            }
+            //}
 
             if(result.getOutWhOrderDtoList()!=null && result.getOutWhOrderDtoList().size()>0) {
                 List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<OutWhPlanGoodsDto>();
                 for (OutplanGoods obj1 :list) {
                     OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
                     BeanUtils.copyProperties(obj1, outWhPlanGoodsDto);
-                    if (flag && sFlag) { //统计该计划商品已配仓数量
+                    //if (flag && sFlag) { //统计该计划商品已配仓数量
                         statDistributeNum(outWhPlanGoodsDto, result.getOutWhOrderDtoList());
-                        if (null!=outWhPlanGoodsDto.getRemainGoodsNum() && outWhPlanGoodsDto.getRemainGoodsNum()==0) {
-                            continue;//说明该商品已配完，继续下个
-                        }
-                    }
+//                        if (null!=outWhPlanGoodsDto.getRemainGoodsNum() && outWhPlanGoodsDto.getRemainGoodsNum()==0) {
+//                            continue;//说明该商品已配完，继续下个
+//                        }
+                   // }
                     outWhPlanGoodsDtoList.add(outWhPlanGoodsDto);
                 }
                 result.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);
