@@ -30,6 +30,7 @@ public interface InventoryLogFactory {
         inventoryLog.setLogNo("");
         inventoryLog.setComment(order.getStorageRemark());
         inventoryLog.setCurrentInvetory(updatedInventoryNum);
+        inventoryLog.setInventoryId(inventory.getInvertoryId());
         return inventoryLog;
     }
 
