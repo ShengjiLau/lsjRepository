@@ -1,2 +1,3 @@
 clms-sso:cwms-sso/clms-sso-service
 warehouse-service:clms-warehouse-manage/warehouse-service
+pay-service:clms-pay-service/pay-service

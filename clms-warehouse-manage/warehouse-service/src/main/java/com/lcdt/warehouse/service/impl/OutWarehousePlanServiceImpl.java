@@ -122,7 +122,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 for (OutplanGoods obj1 :list) {
                     OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
                     BeanUtils.copyProperties(obj1, outWhPlanGoodsDto);
-                    if (flag) { //统计该计划商品已配仓数量
+                    if (flag && sFlag) { //统计该计划商品已配仓数量
                         statDistributeNum(outWhPlanGoodsDto, result.getOutWhOrderDtoList());
                         if (null!=outWhPlanGoodsDto.getRemainGoodsNum() && outWhPlanGoodsDto.getRemainGoodsNum()==0) {
                             continue;//说明该商品已配完，继续下个
@@ -200,6 +200,9 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 for (OutWhPlanGoodsDto dto : outWhPlanGoodsDtos) {
                     OutplanGoods obj = new OutplanGoods();
                     BeanUtils.copyProperties(dto, obj);
+                    //暂时将最小单位处理为计量单位
+                    obj.setMinUnit(obj.getUnit());
+                    obj.setUnitData(1);
                     obj.setOutplanId(outWarehousePlan.getOutplanId());
                     outplanGoods.add(obj);
                 }

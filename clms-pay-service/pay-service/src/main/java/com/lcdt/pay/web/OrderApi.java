@@ -108,11 +108,12 @@ public class OrderApi {
     @ApiOperation("获取余额消费订单")
     @RequestMapping(value = "payOrders",method = RequestMethod.POST)
     public PageResultDto<PayOrder> payOrders(String productName,Integer pageNo,Integer pageSize,
+                                             @RequestParam(required = false) Integer payType,
                        @RequestParam(required = false) Date beginTime,
                                              @RequestParam(required = false) Date endTime){
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
-        List<PayOrder> payOrders = orderMapper.selectPayOrderByProductName(companyId, productName,beginTime,endTime);
+        List<PayOrder> payOrders = orderMapper.selectPayOrderByProductName(companyId, productName,beginTime,endTime,payType);
         return new PageResultDto<PayOrder>(payOrders);
     }
 
