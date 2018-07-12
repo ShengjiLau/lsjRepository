@@ -27,7 +27,7 @@ public class SystemManageApi {
 
     @ApiOperation(value = "销售单审批列表", notes = "销售单审批列表")
     @GetMapping("/cleardata")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') ")
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') ")
     public JSONObject clearContractData(Long companyId){
         JSONObject jsonObject = new JSONObject();
         int rows = systemService.clearContractData(companyId);
