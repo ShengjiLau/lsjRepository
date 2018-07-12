@@ -206,7 +206,7 @@
     </select>
 
     <select id="clearWarehouseData" parameterType="Long">
-        call P_CLEAR_DATA ( #{companyId,jdbcType=BIGINT,mode=IN})
+        call P_CLEAR_DATA (#{companyId,jdbcType=BIGINT,mode=IN})
     </select>
 
 </mapper>
