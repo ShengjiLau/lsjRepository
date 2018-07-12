@@ -5,10 +5,7 @@ import com.lcdt.traffic.dao.WaybillMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by yangbinq on 2018/7/12.
@@ -22,9 +19,9 @@ public class TrafficClearDataController {
     private WaybillMapper waybillMapper;
 
     @ApiOperation("清除运输业务数据")
-    @DeleteMapping(value = "/clear/{companyId}")
+    @RequestMapping(value = "/clear",method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_clear_data')")
-    public JSONObject clearWarehouseData(@PathVariable Long companyId) {
+    public JSONObject clearWarehouseData(Long companyId) {
         waybillMapper.clearTrafficData(companyId);
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("code",0);
