@@ -24,7 +24,7 @@ public class WarehouseClearDataController {
     WarehouseClearDataRpcService warehouseClearDataRpcService;
 
     @ApiOperation("入库单新增")
-    @PostMapping(value = "/clear/{companyId}")
+    @DeleteMapping(value = "/clear/{companyId}")
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_clear_data')")
     public JSONObject clearWarehouseData(@PathVariable Long companyId) {
         warehouseClearDataRpcService.clearWarehouseData(companyId);
