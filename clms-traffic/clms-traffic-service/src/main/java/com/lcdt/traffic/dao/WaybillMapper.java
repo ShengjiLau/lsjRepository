@@ -208,4 +208,11 @@ public interface WaybillMapper {
      * @return
      */
     FeeAccountWaybillDto selectFeeAccountCustomerWaybillFeeTotalByCondition(Map map);
+
+
+    /***
+     * 清除数据
+     * @param companyId
+     */
+    void clearTrafficData(Long companyId);
 }
