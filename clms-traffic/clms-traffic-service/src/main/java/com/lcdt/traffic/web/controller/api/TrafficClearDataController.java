@@ -1,33 +1,31 @@
-package com.lcdt.warehouse.controller;
+package com.lcdt.traffic.web.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.userinfo.model.User;
-import com.lcdt.warehouse.dto.InWarehouseOrderDto;
-import com.lcdt.warehouse.rpc.WarehouseClearDataRpcService;
+import com.lcdt.traffic.dao.WaybillMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Created by lyqishan on 2018/7/2
+ * Created by yangbinq on 2018/7/12.
  */
-
 @RestController
-@RequestMapping("/wh")
+@RequestMapping("/traffic")
 @Api(value = "清空数据api", description = "清空操作")
-public class WarehouseClearDataController {
+public class TrafficClearDataController {
 
     @Autowired
-    WarehouseClearDataRpcService warehouseClearDataRpcService;
+    private WaybillMapper waybillMapper;
 
-    @ApiOperation("入库单新增")
+    @ApiOperation("清除运输业务数据")
     @DeleteMapping(value = "/clear/{companyId}")
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_clear_data')")
     public JSONObject clearWarehouseData(@PathVariable Long companyId) {
-        warehouseClearDataRpcService.clearWarehouseData(companyId);
+        waybillMapper.clearTrafficData(companyId);
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("code",0);
         jsonObject.put("message","清空完成");

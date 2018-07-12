@@ -796,4 +796,11 @@
     update_date = CURRENT_TIMESTAMP
     where id in ( #{waybillIds,jdbcType=VARCHAR} ) and driver_id = #{driverId,jdbcType=BIGINT}
   </update>
+
+
+
+  <select id="clearTrafficData" parameterType="java.lang.Long">
+    call P_CLEAR_DATA(#{companyId,jdbcType=BIGINT,mode=IN})
+  </select>
+
 </mapper>

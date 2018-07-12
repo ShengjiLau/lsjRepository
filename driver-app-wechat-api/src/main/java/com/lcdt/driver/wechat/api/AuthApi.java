@@ -30,7 +30,7 @@ public class AuthApi {
     IValidCodeService validCodeService;
 
     @PostMapping("/login")
-    public String login(@Valid @RequestBody WechatUserDto wechatUserDto) {
+    public JSONObject login(@Valid @RequestBody WechatUserDto wechatUserDto) {
         JSONObject jsonObject = new JSONObject();
         String validcode = wechatUserDto.getValidCode();
         String phone = wechatUserDto.getPhone();
@@ -38,7 +38,7 @@ public class AuthApi {
        if (!codeCorrect) {
             jsonObject.put("result", -1);
             jsonObject.put("message", "验证码错误");
-           return jsonObject.toString();
+           return jsonObject;
         }
         User user=null;
         try {
@@ -66,27 +66,27 @@ public class AuthApi {
         jsonObject.put("result", 0);
         jsonObject.put("user", user);
         jsonObject.put("message", "请求成功");
-        return jsonObject.toString();
+        return jsonObject;
     }
 
     public static final String VCODETAG = "driverwechat";
 
 
     @RequestMapping(value = "/sendvcode",method = RequestMethod.POST)
-    public String sendVcode(String phone) {
+    public JSONObject sendVcode(String phone) {
         JSONObject jsonObject = new JSONObject();
         try {
             String s = validCodeService.sendValidCode(VCODETAG, 15 * 60, phone);
             jsonObject.put("data", s);
             jsonObject.put("result", 0);
             jsonObject.put("message", "请求成功");
-            return jsonObject.toString();
+            return jsonObject;
         } catch (ValidCodeExistException e) {
             e.printStackTrace();
             jsonObject.put("result", -1);
             jsonObject.put("message", "已发送");
         }
-        return jsonObject.toString();
+        return jsonObject;
     }
 
 }

@@ -10,14 +10,28 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 @SpringBootApplication
 @EnableTokenBaseSecurity
 @EnableSwagger2
 @Import({ClmsResponseConvertConfig.class})
 public class DriverApp {
+
+    @Bean
+    public StringHttpMessageConverter stringMessageConverter(){
+        StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+        ArrayList<MediaType> mediaTypes = new ArrayList<>();
+        mediaTypes.add(MediaType.TEXT_HTML);
+        stringHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
+        return stringHttpMessageConverter;
+    }
 
     @Bean
     public HttpMessageConverters fastJsonHttpMessageConverters(){
