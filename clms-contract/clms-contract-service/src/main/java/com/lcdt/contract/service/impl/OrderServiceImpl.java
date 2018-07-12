@@ -420,8 +420,6 @@ public class OrderServiceImpl implements OrderService {
 	    WaybillParamsDto.setGroupId(order.getGroupId());
 	    Group group = groupWareHouseRpcService.selectByGroupId(order.getGroupId());
 	    WaybillParamsDto.setGroupName(group.getGroupName());
-	    WaybillParamsDto.setSendWhId(order.getWarehouseId());
-	    WaybillParamsDto.setSendWhName(order.getReceiveWarehouse());
 	    if (0 == order.getOrderType()) {
 	    	WaybillParamsDto.setSendMan(order.getSender());
 		    WaybillParamsDto.setSendPhone(order.getSenderPhone());
@@ -447,6 +445,8 @@ public class OrderServiceImpl implements OrderService {
 		    }
 		    flag = purchaseFlag;
 	    }else {
+	    	WaybillParamsDto.setSendWhId(order.getWarehouseId());
+	 	    WaybillParamsDto.setSendWhName(order.getReceiveWarehouse());
 	    	WaybillParamsDto.setSendMan(order.getReceiver());
 		    WaybillParamsDto.setSendPhone(order.getReceiverPhone());
 		    WaybillParamsDto.setSendProvince(order.getReceiverProvince());
@@ -527,6 +527,10 @@ public class OrderServiceImpl implements OrderService {
 	    inWhPlanAddParamsDto.setCustomerContactName(order.getSender());
 	    inWhPlanAddParamsDto.setCustomerContactPhone(order.getSenderPhone());
 	    inWhPlanAddParamsDto.setCustomerPurchaseNo(order.getOrderNo());
+	    if (null != order.getReceiveTime()) {
+	    	inWhPlanAddParamsDto.setStoragePlanTime(order.getReceiveTime().toLocaleString());
+	    }
+//	    inWhPlanAddParamsDto.setStorageRemark(order.getRemarks());
 	    
 	    List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
 	    List<InWhPlanGoodsDto> inWhPlanGoodsDtoList = new ArrayList<InWhPlanGoodsDto>(orderProductList.size());
@@ -580,6 +584,10 @@ public class OrderServiceImpl implements OrderService {
 		outWhPlanDto.setCustomerPurchaseNo(order.getOrderNo());
 		outWhPlanDto.setCustomerContactName(order.getReceiver());
 		outWhPlanDto.setCustomerContactPhone(order.getReceiverPhone());
+		if (null != order.getReceiveTime()) {
+			outWhPlanDto.setStoragePlanTime(order.getReceiveTime().toLocaleString());
+		}
+//		outWhPlanDto.setStorageRemark(order.getRemarks());
 		
 		List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
 		List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<>(orderProductList.size());
