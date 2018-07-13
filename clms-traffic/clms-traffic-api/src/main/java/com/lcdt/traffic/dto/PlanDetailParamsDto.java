@@ -11,7 +11,7 @@ public class PlanDetailParamsDto {
     private Long planDetailId;
 
     @ApiModelProperty(value = "调整数量")
-    private Float adjustAmount;
+    private Double adjustAmount;
 
     public Long getPlanDetailId() {
         return planDetailId;
@@ -21,11 +21,11 @@ public class PlanDetailParamsDto {
         this.planDetailId = planDetailId;
     }
 
-    public Float getAdjustAmount() {
+    public Double getAdjustAmount() {
         return adjustAmount;
     }
 
-    public void setAdjustAmount(Float adjustAmount) {
+    public void setAdjustAmount(Double adjustAmount) {
         this.adjustAmount = adjustAmount;
     }
 }

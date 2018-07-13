@@ -77,7 +77,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
         SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(map);
         if (splitGoods == null) throw new SplitGoodsException("派单信息异常！");
 
-        float remainAmount = 0; //剩余数量
+        Double remainAmount = 0d; //剩余数量
         List<SplitGoodsDetail> splitGoodsDetailList = splitGoods.getSplitGoodsDetailList();
         if (null!=splitGoodsDetailList && splitGoodsDetailList.size()>0) {
             for (SplitGoodsDetail obj : splitGoodsDetailList) {
@@ -115,7 +115,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                                 obj.setUpdateId(user.getUserId());  //更新计划详细
                                 obj.setUpdateTime(new Date());
                                 obj.setUpdateName(user.getRealName());
-                                obj.setRemainAmount(0f);
+                                obj.setRemainAmount(0d);
                                 obj.setFreightTotal(obj.getAllotAmount()*obj.getFreightPrice());
                                 splitGoodsDetailMapper.updateByPrimaryKey(obj);
                             }
@@ -244,7 +244,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
                 for (SplitGoodsDetail splitGoodsDetail : splitGoodsDetails) { //传过来的派单详细
                      SplitGoodsDetail targetObj = splitGoodsDetailMapper.selectByPrimaryKey(splitGoodsDetail.getSplitGoodsDetailId());
                      if (targetObj!=null) {
-                         float remainAmount = splitGoodsDetail.getRemainAmount(); //派单返回来的数量
+                         Double remainAmount = splitGoodsDetail.getRemainAmount(); //派单返回来的数量
                          PlanDetail planDetail = planDetailMapper.selectByPrimaryKey(targetObj.getPlanDetailId());
                          if (null!=planDetail) {
                              planDetail.setUpdateId(splitGoodsDetail.getUpdateId());
@@ -286,7 +286,7 @@ public class SplitGoodsServiceImpl implements SplitGoodsService {
             for (SplitGoodsDetail splitGoodsDetail : splitGoodsDetails) { //传过来的派单详细
                  SplitGoodsDetail targetObj = splitGoodsDetailMapper.selectByPrimaryKey(splitGoodsDetail.getSplitGoodsDetailId());
                  if (targetObj!=null) {
-                     float remainAmount = splitGoodsDetail.getRemainAmount(); //派单返回来的数量
+                     Double remainAmount = splitGoodsDetail.getRemainAmount(); //派单返回来的数量
                      targetObj.setUpdateId(splitGoodsDetail.getUpdateId());
                      targetObj.setUpdateTime(splitGoodsDetail.getUpdateTime());
                      targetObj.setUpdateName(splitGoodsDetail.getUpdateName());

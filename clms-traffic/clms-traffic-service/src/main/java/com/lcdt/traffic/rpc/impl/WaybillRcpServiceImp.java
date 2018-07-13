@@ -731,7 +731,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                         for (WaybillItems item : itemsList) {
                             //根据派单货物明细id更新派单货物明细数量
                             SplitGoodsDetail sp = new SplitGoodsDetail();
-                            float amount = item.getAmount();
+                            Double amount = item.getAmount();
                             Long splitGoodsDetailId = item.getSplitGoodsDetailId();
                             sp.setUpdateId((Long) map.get("updateId"));
                             sp.setUpdateName((String) map.get("updateName"));

@@ -16,13 +16,13 @@ public class ProfitStatResultDto implements java.io.Serializable {
     private Date waybillDate;
 
     @ApiModelProperty("应收费用")
-    private Float receiveMoney;
+    private Double receiveMoney;
 
     @ApiModelProperty("应付费用")
-    private Float payMoney;
+    private Double payMoney;
 
     @ApiModelProperty("利润")
-    private Float profitMoney;
+    private Double profitMoney;
 
 
     public String getWaybillCode() {
@@ -33,27 +33,27 @@ public class ProfitStatResultDto implements java.io.Serializable {
         this.waybillCode = waybillCode;
     }
 
-    public Float getReceiveMoney() {
+    public Double getReceiveMoney() {
         return receiveMoney;
     }
 
-    public void setReceiveMoney(Float receiveMoney) {
+    public void setReceiveMoney(Double receiveMoney) {
         this.receiveMoney = receiveMoney;
     }
 
-    public Float getPayMoney() {
+    public Double getPayMoney() {
         return payMoney;
     }
 
-    public void setPayMoney(Float payMoney) {
+    public void setPayMoney(Double payMoney) {
         this.payMoney = payMoney;
     }
 
-    public Float getProfitMoney() {
+    public Double getProfitMoney() {
         return profitMoney;
     }
 
-    public void setProfitMoney(Float profitMoney) {
+    public void setProfitMoney(Double profitMoney) {
         this.profitMoney = profitMoney;
     }
 

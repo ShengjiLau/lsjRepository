@@ -402,7 +402,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     StringBuffer sb_goods = new StringBuffer(); //货物发送明细
                     for (PlanDetail obj : planDetailList) {
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
-                        obj.setRemainderAmount((float)0); //全部派完--剩余为0
+                        obj.setRemainderAmount(0d); //全部派完--剩余为0
                         obj.setCreateName(vo.getCreateName());
                         obj.setCreateId(vo.getCreateId());
                         obj.setCreateDate(new Date());
@@ -443,7 +443,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         tObj.setPlanDetailId(obj.getPlanDetailId());
                         tObj.setAllotAmount(obj.getPlanAmount()); //派单数量
                         if (carrierType == ConstantVO.PLAN_CARRIER_TYPE_DRIVER) { //如果司机的话为0
-                            tObj.setRemainAmount((float)0); //本次剩余
+                            tObj.setRemainAmount(0d); //本次剩余
                         } else {
                             tObj.setRemainAmount(obj.getPlanAmount()); //本次剩余
                         }

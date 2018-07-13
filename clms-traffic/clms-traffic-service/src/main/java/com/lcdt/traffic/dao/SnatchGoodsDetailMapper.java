@@ -74,5 +74,5 @@ public interface SnatchGoodsDetailMapper {
      * @param offerId
      * @return
      */
-    float statSnatchTotalPrice4Driver(@Param("waybillPlanId") Long waybillPlanId, @Param("offerId") long offerId);
+    Double statSnatchTotalPrice4Driver(@Param("waybillPlanId") Long waybillPlanId, @Param("offerId") long offerId);
 }

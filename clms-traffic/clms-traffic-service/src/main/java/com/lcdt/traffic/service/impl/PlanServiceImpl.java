@@ -310,7 +310,7 @@ public class PlanServiceImpl implements PlanService {
                     planDetail.setUpdateName(user.getRealName());
                     planDetail.setUpdateId(user.getUserId());
                     planDetail.setUpdateTime(date);
-                    Float amount = planDetail.getPlanAmount()+dto.getAdjustAmount(); //计划量+调整量
+                    Double amount = planDetail.getPlanAmount()+dto.getAdjustAmount(); //计划量+调整量
                     planDetail.setPlanAmount(amount);
                     planDetail.setRemainderAmount(planDetail.getRemainderAmount()+dto.getAdjustAmount()); //剩余数量+调整量
                     if(planDetail.getFreightPrice()!=null)
@@ -337,7 +337,7 @@ public class PlanServiceImpl implements PlanService {
                 WaybillPlan waybillPlan = waybillPlanMapper.selectByPrimaryKey(tMap);
                 if (waybillPlan!=null) {
                     List<PlanDetail> planDetailList1 = waybillPlan.getPlanDetailList();
-                    Float _amount = 0f;
+                    Double _amount = 0d;
                     for(PlanDetail obj : planDetailList1) {
                         _amount +=obj.getRemainderAmount();
                     }
@@ -374,7 +374,7 @@ public class PlanServiceImpl implements PlanService {
             List<WaybillItems> waybillItemsList = waybillDao.getWaybillItemsList();
             List<SplitGoodsDetail> splitGoodsDetailList = null;
 
-            Float _splitRemainderAmount = 0f;
+            Double _splitRemainderAmount = 0d;
 //    //先处理计划
 //            if (planDetailList!=null && waybillItemsList.size()>0 && waybillItemsList!=null && waybillItemsList.size()>0) {
 //                for (WaybillItems waybillItems: waybillItemsList) {
