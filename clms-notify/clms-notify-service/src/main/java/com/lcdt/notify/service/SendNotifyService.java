@@ -54,8 +54,10 @@ public class SendNotifyService {
         NotifyReceiver receiver = event.getReceiver();
         NotifySender sender = event.getSender();
         if (receiver == null) {
+            logger.warn("消息提醒，接收人为空");
             return;
         }
+        logger.info("消息通知接收者 ：{}",receiver.toString());
         Long sendCompanyId = sender.sendCompanyId();
         User user = null;
 

@@ -97,4 +97,19 @@ public class DefaultNotifyReceiver implements NotifyReceiver, Serializable {
     public void setReceivePhoneNum(String receivePhoneNum) {
         this.receivePhoneNum = receivePhoneNum;
     }
+
+    @Override
+    public String toString() {
+        return "DefaultNotifyReceiver{" +
+                "companyId=" + companyId +
+                ", userId=" + userId +
+                ", phoneNum='" + phoneNum + '\'' +
+                ", carrierCompanyId=" + carrierCompanyId +
+                ", carrierUserId=" + carrierUserId +
+                ", carrierPhoneNum='" + carrierPhoneNum + '\'' +
+                ", customerPhoneNum='" + customerPhoneNum + '\'' +
+                ", driverPhoneNum='" + driverPhoneNum + '\'' +
+                ", receivePhoneNum='" + receivePhoneNum + '\'' +
+                '}';
+    }
 }
