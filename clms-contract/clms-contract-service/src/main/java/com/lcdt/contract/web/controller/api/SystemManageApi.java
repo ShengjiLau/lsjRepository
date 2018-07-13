@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -26,19 +27,15 @@ public class SystemManageApi {
     private SystemService systemService;
 
     @ApiOperation(value = "销售单审批列表", notes = "销售单审批列表")
-    @GetMapping("/cleardata")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') ")
+    @RequestMapping(value="/cleardata", method = RequestMethod.POST)
+    //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') ")
     public JSONObject clearContractData(Long companyId){
         JSONObject jsonObject = new JSONObject();
         int rows = systemService.clearContractData(companyId);
-        if (rows > 0) {
-            jsonObject.put("code", 0);
-            jsonObject.put("message", "操作成功");
-            jsonObject.put("rows",rows);
-        } else {
-            jsonObject.put("code", -1);
-            jsonObject.put("message", "操作失败");
-        }
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "清空完成");
+        jsonObject.put("rows",rows);
+
         return jsonObject;
     }
 }

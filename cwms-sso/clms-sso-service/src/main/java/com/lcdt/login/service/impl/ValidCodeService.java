@@ -69,11 +69,11 @@ public class ValidCodeService {
     private  boolean canSendCode(ValidCodeBean codeBean){
 
         if (codeBean == null) {
-            return false;
+            return true;
         }
 
         if (codeBean.getCreateTime() == 0) {
-            return false;
+            return true;
         }
 
         if (codeBean.getTimeout() == 0) {

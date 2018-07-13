@@ -307,7 +307,9 @@ public class OrderServiceImpl implements OrderService {
             	//通过RPC查询添加计划状态
             	if (null != od.getTrafficPlan() && !"".equals(od.getTrafficPlan())) {
             		WaybillPlan waybillPlan = trafficRpc.getWaybillPlanBySerialNo(od.getTrafficPlan());
-            		od.setTrafficPlanStatus(waybillPlan.getPlanStatus());
+            		if (null != waybillPlan) {
+            			od.setTrafficPlanStatus(waybillPlan.getPlanStatus());
+            		}
             	}
             	if (null != od.getWarehousePlan() && !"".equals(od.getWarehousePlan())) {
             		if (0 == od.getOrderType()) {
@@ -316,7 +318,9 @@ public class OrderServiceImpl implements OrderService {
             		}
             		if (1 == od.getOrderType()) {
             			OutWarehousePlan outWarehousePlan = warehouseRpcService.getOutWarehousePlanBySerialNo(od.getWarehousePlan());
-            			od.setWarehousePlanStatus(outWarehousePlan.getPlanStatus());
+            			if (null != outWarehousePlan) {
+            				od.setWarehousePlanStatus(outWarehousePlan.getPlanStatus());
+            			}
             		}
             	}
             	

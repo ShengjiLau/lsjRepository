@@ -63,7 +63,6 @@ public class ValidCodeService implements IValidCodeService {
                 validCodeCountService.updateValidCodeLog(phoneNum);
                 return random;
             }
-            throw new ValidCodeExistException();
         }
         throw new ValidCodeExistException();
     }
@@ -80,11 +79,11 @@ public class ValidCodeService implements IValidCodeService {
     private boolean canSendCode(ValidCodeBean codeBean) {
 
         if (codeBean == null) {
-            return false;
+            return true;
         }
 
         if (codeBean.getCreateTime() == 0) {
-            return false;
+            return true;
         }
 
         if (codeBean.getTimeout() == 0) {

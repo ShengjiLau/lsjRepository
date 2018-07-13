@@ -5,11 +5,13 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dao.CompanyMapper;
 import com.lcdt.userinfo.model.AdminUser;
 import com.lcdt.userinfo.model.Company;
+import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.utils.JSONResponseUtil;
 import com.lcdt.userinfo.utils.ResponseMessage;
 import com.lcdt.userinfo.web.controller.api.admin.dto.CompanyQueryDto;
+import com.lcdt.userinfo.web.dto.UserQueryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +46,14 @@ public class CompanyManageApi {
         Company company = companyMapper.selectByPrimaryKey(companyId);
         company.setAuthentication(auth);
         company.setAuthenticationRemark(remark);
+        companyMapper.updateByPrimaryKey(company);
+        return JSONResponseUtil.success(company);
+    }
+
+    @PostMapping("/updateStatus")
+    public ResponseMessage updateStatus(Long companyId,Boolean enable) {
+        Company company = companyMapper.selectByPrimaryKey(companyId);
+        company.setEnable(enable);
         companyMapper.updateByPrimaryKey(company);
         return JSONResponseUtil.success(company);
     }
