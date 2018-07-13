@@ -9,15 +9,15 @@ import java.io.Serializable;
 
 public class WaybillItemsModifyParamsDto implements Serializable {
     private Long id;
-    private Float amount;
-    private Float freightPrice;
-    private Float freightTotal;
+    private Double amount;
+    private Double freightPrice;
+    private Double freightTotal;
     private Long goodsId;
     private String goodsName;
     private String goodsSpec;
-    private Float payPrice;
-    private Float payTotal;
-    private Float receiptAmount;
+    private Double payPrice;
+    private Double payTotal;
+    private Double receiptAmount;
     private String remark;
     private Long subGoodsId;
     private String unit;
@@ -34,27 +34,27 @@ public class WaybillItemsModifyParamsDto implements Serializable {
         this.id = id;
     }
 
-    public Float getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(Float amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
-    public Float getFreightPrice() {
+    public Double getFreightPrice() {
         return freightPrice;
     }
 
-    public void setFreightPrice(Float freightPrice) {
+    public void setFreightPrice(Double freightPrice) {
         this.freightPrice = freightPrice;
     }
 
-    public Float getFreightTotal() {
+    public Double getFreightTotal() {
         return freightTotal;
     }
 
-    public void setFreightTotal(Float freightTotal) {
+    public void setFreightTotal(Double freightTotal) {
         this.freightTotal = freightTotal;
     }
 
@@ -82,27 +82,27 @@ public class WaybillItemsModifyParamsDto implements Serializable {
         this.goodsSpec = goodsSpec;
     }
 
-    public Float getPayPrice() {
+    public Double getPayPrice() {
         return payPrice;
     }
 
-    public void setPayPrice(Float payPrice) {
+    public void setPayPrice(Double payPrice) {
         this.payPrice = payPrice;
     }
 
-    public Float getPayTotal() {
+    public Double getPayTotal() {
         return payTotal;
     }
 
-    public void setPayTotal(Float payTotal) {
+    public void setPayTotal(Double payTotal) {
         this.payTotal = payTotal;
     }
 
-    public Float getReceiptAmount() {
+    public Double getReceiptAmount() {
         return receiptAmount;
     }
 
-    public void setReceiptAmount(Float receiptAmount) {
+    public void setReceiptAmount(Double receiptAmount) {
         this.receiptAmount = receiptAmount;
     }
 
