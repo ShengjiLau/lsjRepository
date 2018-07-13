@@ -2,6 +2,8 @@ package com.lcdt.contract.web.controller.api;
 
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -10,10 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageInfo;
+import com.lcdt.contract.model.Order;
 import com.lcdt.contract.service.OverviewService;
 import com.lcdt.contract.web.dto.OrderCountDto;
+import com.lcdt.contract.web.dto.OrderDto;
 import com.lcdt.contract.web.dto.OrderOverviewDto;
 import com.lcdt.contract.web.dto.OverviewDto;
+import com.lcdt.contract.web.dto.PageBaseDto;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -67,6 +73,26 @@ public class OverviewApi {
 		jsonObject.put("data", orderOverviewDto);
 		return jsonObject;
 	}
+	
+	@ApiOperation("根据收付款状况查询订单")
+	@GetMapping("/overview/getOrder")
+	public JSONObject getOrderListByPayment(@Validated OverviewDto overviewDto,BindingResult bindingResult) {
+		JSONObject jsonObject = new JSONObject();
+		 if (bindingResult.hasErrors()) {
+	            jsonObject.put("code", -1);
+	            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
+	            return jsonObject;
+	        }
+		PageBaseDto<OrderDto> pageBaseDto = overviewService.getOrderListByPayment(overviewDto);
+		jsonObject.put("code", 0);
+		jsonObject.put("message", "采购销售概览");
+		jsonObject.put("data", pageBaseDto);
+		return jsonObject;
+		
+	}
+	
+	
+	
 	
 	
 

@@ -39,6 +39,15 @@ public class OverviewDto implements Serializable{
 	@ApiModelProperty("查询时间终点")
 	private String endTime;
 	
+	@ApiModelProperty("付款状态:0-未付款；1-已付款；2-付款中；3-全部")
+	private Integer paymentType;
+	
+	@ApiModelProperty("每页数量")
+	private Integer pageSize;
+	
+	@ApiModelProperty("页码")
+	private Integer pageNum;
+	
 	public Long getCompanyId() {
 		return companyId;
 	}
@@ -85,6 +94,30 @@ public class OverviewDto implements Serializable{
 
 	public void setGroups(String groups) {
 		this.groups = groups;
+	}
+
+	public Integer getPaymentType() {
+		return paymentType;
+	}
+
+	public void setPaymentType(Integer paymentType) {
+		this.paymentType = paymentType;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public Integer getPageNum() {
+		return pageNum;
+	}
+
+	public void setPageNum(Integer pageNum) {
+		this.pageNum = pageNum;
 	}
 
 

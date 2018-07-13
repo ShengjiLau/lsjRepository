@@ -35,6 +35,12 @@ public class ContractDto extends Contract{
     private int pageNum;
 
     private int pageSize;
+    
+    @ApiModelProperty("创建时间查询起点")
+    private String createBeginTime;
+    
+    @ApiModelProperty("创建时间查询终点")
+    private String createEndTime;
 
 //    @ApiModelProperty(value = "合同类型 0-采购 1-销售")
 //    private Short type;
@@ -107,4 +113,20 @@ public class ContractDto extends Contract{
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
+
+	public String getCreateBeginTime() {
+		return createBeginTime;
+	}
+
+	public void setCreateBeginTime(String createBeginTime) {
+		this.createBeginTime = createBeginTime;
+	}
+
+	public String getCreateEndTime() {
+		return createEndTime;
+	}
+
+	public void setCreateEndTime(String createEndTime) {
+		this.createEndTime = createEndTime;
+	}
 }
