@@ -23,10 +23,10 @@ public class WarehouseClearDataController {
     @Autowired
     WarehouseClearDataRpcService warehouseClearDataRpcService;
 
-    @ApiOperation("入库单新增")
-    @DeleteMapping(value = "/clear/{companyId}")
+    @ApiOperation("清空数据api")
+    @RequestMapping(value = "/clear" , method = RequestMethod.POST)
     //@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_clear_data')")
-    public JSONObject clearWarehouseData(@PathVariable Long companyId) {
+    public JSONObject clearWarehouseData(Long companyId) {
         warehouseClearDataRpcService.clearWarehouseData(companyId);
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("code",0);
