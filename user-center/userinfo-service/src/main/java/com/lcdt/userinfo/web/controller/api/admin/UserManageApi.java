@@ -12,6 +12,7 @@ import com.lcdt.userinfo.utils.ResponseMessage;
 import com.lcdt.userinfo.web.controller.api.admin.dto.AdminUserDto;
 import com.lcdt.userinfo.web.dto.UserQueryDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,12 +28,14 @@ public class UserManageApi {
     UserService userService;
 
     @PostMapping("/list")
+    @PreAuthorize("hasAnyAuthority('admin_user_list')")
     public ResponseMessage list(UserQueryDto userQueryDto){
         PageInfo<AdminUserDto> pageInfo = PageHelper.startPage(userQueryDto.getPageNo(), userQueryDto.getPageSize()).doSelectPageInfo(() -> mapper.selectByUserDto(userQueryDto));
         return JSONResponseUtil.success(pageInfo);
     }
 
     @PostMapping("/updateStatus")
+    @PreAuthorize("hasAnyAuthority('admin_user_status')")
     public ResponseMessage updateStatus(UserQueryDto userQueryDto) {
         User user = mapper.selectByPrimaryKey(userQueryDto.getUserId());
         user.setUserStatus(userQueryDto.getUserStatus());
@@ -41,6 +44,7 @@ public class UserManageApi {
     }
 
     @PostMapping("/manageList")
+    @PreAuthorize("hasAnyAuthority('admin_user_list')")
     public ResponseMessage manageList(UserQueryDto userQueryDto){
         PageInfo<AdminUserDto> pageInfo = PageHelper.startPage(userQueryDto.getPageNo(), userQueryDto.getPageSize()).doSelectPageInfo(() -> mapper.selectManageUserByUserDto(userQueryDto));
         return JSONResponseUtil.success(pageInfo);
