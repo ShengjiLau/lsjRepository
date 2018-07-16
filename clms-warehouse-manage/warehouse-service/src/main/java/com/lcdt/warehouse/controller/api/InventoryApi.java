@@ -55,7 +55,7 @@ public class InventoryApi {
     @PostMapping("/price/update")
     @ApiOperation("修改库存成本价")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('update_price')")
-    public ResponseMessage modifyInventoryPrice(Long inventoryId,Float newprice) {
+    public ResponseMessage modifyInventoryPrice(Long inventoryId,Double newprice) {
         return JSONResponseUtil.success(inventoryService.modifyInventoryPrice(inventoryId, newprice));
     }
 

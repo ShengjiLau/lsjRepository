@@ -175,7 +175,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void lockInventoryNum(Long inventoryId,Float tryLockNum){
+    public void lockInventoryNum(Long inventoryId,Double tryLockNum){
         Assert.notNull(tryLockNum, "不能为空");
         Inventory inventory = selectById(inventoryId);
 
