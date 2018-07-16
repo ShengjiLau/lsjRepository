@@ -51,10 +51,10 @@ public class AllotProduct implements Serializable {
     private String warehouseLocCode;
 
     @ApiModelProperty(value="库存")
-    private Float inventory;
+    private Double inventory;
 
     @ApiModelProperty(value="调拨数量")
-    private Float allotNum;
+    private Double allotNum;
 
     @ApiModelProperty(value="备注")
     private String remark;
@@ -176,19 +176,19 @@ public class AllotProduct implements Serializable {
         this.warehouseLocCode = warehouseLocCode;
     }
 
-    public Float getInventory() {
+    public Double getInventory() {
         return inventory;
     }
 
-    public void setInventory(Float inventory) {
+    public void setInventory(Double inventory) {
         this.inventory = inventory;
     }
 
-    public Float getAllotNum() {
+    public Double getAllotNum() {
         return allotNum;
     }
 
-    public void setAllotNum(Float allotNum) {
+    public void setAllotNum(Double allotNum) {
         this.allotNum = allotNum;
     }
 
