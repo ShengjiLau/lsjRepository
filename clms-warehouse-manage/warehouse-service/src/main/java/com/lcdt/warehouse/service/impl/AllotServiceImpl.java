@@ -243,7 +243,7 @@ public class AllotServiceImpl implements AllotService{
 
                 Inventory inventory = inventoryMapper.selectById(allotProduct.getInventoryId());
                 //减库存
-                Float invertoryNum = CommonUtils.subtractFloat(inventory.getInvertoryNum(),outOrderGoodsInfo.getOutboundQuantity());
+                Double invertoryNum = CommonUtils.sub(inventory.getInvertoryNum(),outOrderGoodsInfo.getOutboundQuantity());
                 inventory.setInvertoryNum(invertoryNum);
                 inventoryMapper.updateById(inventory);
                 //写出库流水
