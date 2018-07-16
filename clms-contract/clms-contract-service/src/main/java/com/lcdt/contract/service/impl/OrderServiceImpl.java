@@ -483,9 +483,9 @@ public class OrderServiceImpl implements OrderService {
 	    	planDetail.setGoodsName(orderProduct.getName());
 	    	planDetail.setGoodsSpec(orderProduct.getSpec());
 	    	planDetail.setUnit(orderProduct.getSku());
-	    	planDetail.setPlanAmount(orderProduct.getNum().floatValue());
-	    	planDetail.setPayPrice(orderProduct.getPrice().floatValue());
-	    	planDetail.setPayTotal(orderProduct.getTotal().floatValue());
+	    	planDetail.setPlanAmount(orderProduct.getNum().doubleValue());
+	    	planDetail.setPayPrice(orderProduct.getPrice().doubleValue());
+	    	planDetail.setPayTotal(orderProduct.getTotal().doubleValue());
 	    	planDetail.setCompanyId(companyId);
 	    	planDetail.setIsDeleted((short) 0);
 	    	planDetail.setCreateDate(new Date());
@@ -544,8 +544,8 @@ public class OrderServiceImpl implements OrderService {
 			inWhPlanGoodsDto.setGoodsName(orderProduct.getName());
 			inWhPlanGoodsDto.setGoodsCode(orderProduct.getCode());
 			inWhPlanGoodsDto.setGoodsSpec(orderProduct.getSpec());
-			inWhPlanGoodsDto.setInHousePrice(orderProduct.getPrice().floatValue());
-			inWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getNum().floatValue());
+			inWhPlanGoodsDto.setInHousePrice(orderProduct.getPrice().doubleValue());
+			inWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getNum().doubleValue());
 			inWhPlanGoodsDto.setUnit(orderProduct.getSku());
 			inWhPlanGoodsDtoList.add(inWhPlanGoodsDto);
 		}
@@ -602,8 +602,8 @@ public class OrderServiceImpl implements OrderService {
 			outWhPlanGoodsDto.setGoodsSpec(orderProduct.getSpec());
 			outWhPlanGoodsDto.setGoodsCode(orderProduct.getCode());
 			outWhPlanGoodsDto.setUnit(orderProduct.getSku());
-			outWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getNum().floatValue());
-			outWhPlanGoodsDto.setOutHousePrice(orderProduct.getPrice().floatValue());
+			outWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getNum().doubleValue());
+			outWhPlanGoodsDto.setOutHousePrice(orderProduct.getPrice().doubleValue());
 			outWhPlanGoodsDtoList.add(outWhPlanGoodsDto);
 		}
 		outWhPlanDto.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);
