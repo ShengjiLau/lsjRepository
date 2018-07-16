@@ -5,8 +5,8 @@
     <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.Inventory">
         <id column="invertory_id" jdbcType="BIGINT" property="invertoryId" />
         <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
-        <result column="invertory_num" jdbcType="INTEGER" property="invertoryNum" />
-        <result column="lock_num" jdbcType="REAL" property="lockNum" />
+        <result column="invertory_num" jdbcType="DOUBLE" property="invertoryNum" />
+        <result column="lock_num" jdbcType="DOUBLE" property="lockNum" />
         <result column="warehouse_id" jdbcType="BIGINT" property="warehouseId" />
         <result column="company_id" jdbcType="BIGINT" property="companyId" />
         <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -17,7 +17,7 @@
         <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
         <result column="original_goods_id" jdbcType="BIGINT" property="originalGoodsId"/>
         <result column="cost_remark" jdbcType="VARCHAR" property="costRemark" />
-        <result column="inventory_price" jdbcType="FLOAT" property="inventoryPrice"/>
+        <result column="inventory_price" jdbcType="DOUBLE" property="inventoryPrice"/>
         <result column="batch" jdbcType="VARCHAR" property="batch" />
         <result column="storage_location_id" jdbcType="BIGINT" property="storageLocationId"/>
         <result column="base_unit" jdbcType="VARCHAR" property="baseUnit" />

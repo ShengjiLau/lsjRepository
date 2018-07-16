@@ -35,8 +35,8 @@ public class InventoryLog implements Serializable{
      * 库位
      */
     private Date logTime;
-    private Float currentInvetory;
-    private Float changeNum;
+    private Double currentInvetory;
+    private Double changeNum;
     private String businessNo;
     /**
      * 库存id
@@ -157,19 +157,19 @@ public class InventoryLog implements Serializable{
         this.logTime = logTime;
     }
 
-    public Float getCurrentInvetory() {
+    public Double getCurrentInvetory() {
         return currentInvetory;
     }
 
-    public void setCurrentInvetory(Float currentInvetory) {
+    public void setCurrentInvetory(Double currentInvetory) {
         this.currentInvetory = currentInvetory;
     }
 
-    public Float getChangeNum() {
+    public Double getChangeNum() {
         return changeNum;
     }
 
-    public void setChangeNum(Float changeNum) {
+    public void setChangeNum(Double changeNum) {
         this.changeNum = changeNum;
     }
 
