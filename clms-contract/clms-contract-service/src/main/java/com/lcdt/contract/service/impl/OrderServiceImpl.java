@@ -496,7 +496,7 @@ public class OrderServiceImpl implements OrderService {
 	    WaybillParamsDto.setPlanDetailList(planDetailList);
 	
 	   
-	    WaybillPlan waybillPlan = trafficRpc.purchase4Plan(WaybillParamsDto, flag);
+ 	    WaybillPlan waybillPlan = trafficRpc.purchase4Plan(WaybillParamsDto, flag);
 	    if (null != waybillPlan) {
 	    	order.setTrafficPlan(waybillPlan.getSerialCode());
 	    	orderMapper.updateByPrimaryKeySelective(order);
