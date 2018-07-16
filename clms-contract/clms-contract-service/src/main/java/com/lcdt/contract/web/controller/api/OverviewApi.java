@@ -75,15 +75,10 @@ public class OverviewApi {
 	}
 	
 	@ApiOperation("根据收付款状况查询订单")
-	@GetMapping("/overview/getOrder")
-	public JSONObject getOrderListByPayment(@Validated OverviewDto overviewDto,BindingResult bindingResult) {
+	@GetMapping("/payment/order")
+	public JSONObject getOrderListByPayment(OrderDto orderDto) {
 		JSONObject jsonObject = new JSONObject();
-		 if (bindingResult.hasErrors()) {
-	            jsonObject.put("code", -1);
-	            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
-	            return jsonObject;
-	        }
-		PageBaseDto<OrderDto> pageBaseDto = overviewService.getOrderListByPayment(overviewDto);
+		PageBaseDto<OrderDto> pageBaseDto = overviewService.getOrderListByPayment(orderDto);
 		jsonObject.put("code", 0);
 		jsonObject.put("message", "采购销售概览");
 		jsonObject.put("data", pageBaseDto);

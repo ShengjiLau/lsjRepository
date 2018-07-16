@@ -1,6 +1,8 @@
 package com.lcdt.traffic.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.config.BaiduYyConfig;
@@ -16,6 +18,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.tl.commons.util.DateUtility;
+
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.lcdt.traffic.web.controller.api.LocationServiceApi.getInstanceByCharset;
 
@@ -121,7 +127,23 @@ public class LocationServiceImpl implements LocationService {
 
 
     public String upPoint(MultiValueMap map) {
+        /**
+         * 由于坐标是非百度坐标，所以需要对坐标进行转换后再上传
+         *http://lbsyun.baidu.com/index.php?title=webapi/guide/changeposition 转换api文档
+         * from 3 to 5
+         * */
         RestTemplate restTemplate = getInstanceByCharset("utf-8");
+
+        String coords = map.getFirst("longitude") + ","+ map.getFirst("latitude");
+        String url = "http://api.map.baidu.com/geoconv/v1/?"+ "coords="+coords+"&ak="+baiduYyConfig.getAk();
+        ResponseEntity<String> result = restTemplate.getForEntity(url,String.class);
+        String bodyString = result.getBody();
+//        System.out.println("bodyString==" + bodyString);
+        JSONObject jsonObject = (JSONObject) JSON.parseObject(bodyString).getJSONArray("result").get(0);
+        System.out.println("x="+jsonObject.getString("x"));
+        System.out.println("x="+jsonObject.getString("y"));
+        map.set("longitude",jsonObject.getString("x"));
+        map.set("latitude",jsonObject.getString("y"));
         map.add("ak", baiduYyConfig.getAk());
         map.add("service_id", baiduYyConfig.getService_id());
         map.add("coord_type_input", "bd09ll");

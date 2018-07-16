@@ -26,7 +26,7 @@ public interface OverviewService {
 	
 	OrderCountDto getOrderCount(OverviewDto overviewDto);
 	
-	PageBaseDto<OrderDto> getOrderListByPayment(OverviewDto overviewDto);
+	PageBaseDto<OrderDto> getOrderListByPayment(OrderDto orderDto);
 	
 	
 }

@@ -36,7 +36,7 @@ public class InventoryServiceTest extends BaseIntegrationContext{
         InorderGoodsInfo goodsInfo = new InorderGoodsInfo();
         goodsInfo.setInorderId(30L);
         goodsInfo.setGoodsId(20L);
-        goodsInfo.setInHouseAmount(20.0F);
+        goodsInfo.setInHouseAmount(20.0);
         goodsInfo.setUnitData(1);
         goodsInfo.setGoodsName("sd");
         goodsInfo.setStorageLocationCode("123ads");
@@ -61,7 +61,7 @@ public class InventoryServiceTest extends BaseIntegrationContext{
     @Test
     @Rollback
     public void testLockInventory(){
-        inventoryService.lockInventoryNum(1L,1F);
+        inventoryService.lockInventoryNum(1L,1.0);
     }
 
 

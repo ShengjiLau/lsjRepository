@@ -56,10 +56,7 @@ public class SalesOrderApi {
 	@ApiOperation(value="销售订单列表",notes="销售订单列表数据")
 	@GetMapping("/list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_get')")
-	public JSONObject OrderList(OrderDto orderDto
-     //		   ,@ApiParam(value="第几页",required=true,defaultValue="1") @RequestParam Integer pageNum,
-     //			@ApiParam(value="每页条目数量",required=true,defaultValue="1")@RequestParam Integer pagesize
-			){
+	public JSONObject OrderList(OrderDto orderDto){
 		Long UserId = SecurityInfoGetter.getUser().getUserId();//get 创建者
 		Long companyId = SecurityInfoGetter.getCompanyId();//get 公司id	
 		orderDto.setCompanyId(companyId);

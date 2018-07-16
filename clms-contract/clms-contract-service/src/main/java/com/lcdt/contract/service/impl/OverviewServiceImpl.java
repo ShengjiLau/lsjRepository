@@ -262,26 +262,28 @@ public class OverviewServiceImpl implements OverviewService {
 		return orderCountDto;
 	}
 	
+	/**
+	 * 依据收付款状况查询订单
+	 */
 	@Override
-	public PageBaseDto<OrderDto> getOrderListByPayment(OverviewDto overviewDto){
-		overviewDto.setCompanyId(SecurityInfoGetter.getCompanyId());
-		HashMap<String, Object> map = ConvertDtoToMap(overviewDto);
-		List<Order> orderList = overviewMapper.getOrderOverviewList(map);
-		if (null ==overviewDto.getPaymentType() || 3 == overviewDto.getPaymentType()) {
-			return getpageInfo(overviewDto.getPageSize(),overviewDto.getPageNum(),getOrderDtoList(orderList));
+	public PageBaseDto<OrderDto> getOrderListByPayment(OrderDto orderDto){
+		orderDto.setCompanyId(SecurityInfoGetter.getCompanyId());
+		List<OrderDto> orderDtoList = nonautomaticMapper.selectByCondition(orderDto);
+		if (null ==orderDto.getPaymentType() || 3 == orderDto.getPaymentType()) {
+			return getpageInfo(orderDto.getPageSize(),orderDto.getPageNum(),getOrderDtoList(orderDtoList));
 		}
 		BigDecimal r = new BigDecimal(0);
 		//List<Long> orderIds = new ArrayList<Long>(orderList.size());
-		List<Order> alreadyPayOrderList = new LinkedList<Order>();
-		List<Order> notPayOrderList = new LinkedList<Order>();
-		List<Order> payingOrderList = new LinkedList<Order>();
-		for (Order order : orderList) {
-			r = r.add(order.getSummation());
+		List<OrderDto> alreadyPayOrderList = new LinkedList<OrderDto>();
+		List<OrderDto> notPayOrderList = new LinkedList<OrderDto>();
+		List<OrderDto> payingOrderList = new LinkedList<OrderDto>();
+		for (OrderDto orderDto2 : orderDtoList) {
+			r = r.add(orderDto2.getSummation());
 			//e统计所有确认收款的收款单的收款金额
 			BigDecimal e = new BigDecimal(0);
-			List<PaymentApplication> paymentApplicationList = overviewMapper.getPaymentApplicationListByOrderId(order.getOrderId());
+			List<PaymentApplication> paymentApplicationList = overviewMapper.getPaymentApplicationListByOrderId(orderDto2.getOrderId());
 			if (null == paymentApplicationList || 0 == paymentApplicationList.size()) {
-				notPayOrderList.add(order);
+				notPayOrderList.add(orderDto2);
 				continue;
 			}
 			for (PaymentApplication PaymentApplication : paymentApplicationList) {
@@ -289,20 +291,20 @@ public class OverviewServiceImpl implements OverviewService {
 					e = e.add(PaymentApplication.getPaymentSum());
 				}
 			}
-			if (e == order.getSummation()) {
-				alreadyPayOrderList.add(order);
+			if (e == orderDto2.getSummation()) {
+				alreadyPayOrderList.add(orderDto2);
 				continue;
 			}
-			payingOrderList.add(order);
+			payingOrderList.add(orderDto2);
 		}
-		if (0 == overviewDto.getPaymentType()) {
-			return getpageInfo(overviewDto.getPageSize(),overviewDto.getPageNum(),getOrderDtoList(notPayOrderList));
+		if (0 == orderDto.getPaymentType()) {
+			return getpageInfo(orderDto.getPageSize(),orderDto.getPageNum(),getOrderDtoList(notPayOrderList));
 		}
-		if (1 == overviewDto.getPaymentType()) {
-			return getpageInfo(overviewDto.getPageSize(),overviewDto.getPageNum(),getOrderDtoList(payingOrderList));
+		if (1 == orderDto.getPaymentType()) {
+			return getpageInfo(orderDto.getPageSize(),orderDto.getPageNum(),getOrderDtoList(payingOrderList));
 		}
-		if (2 == overviewDto.getPaymentType()) {
-			return getpageInfo(overviewDto.getPageSize(),overviewDto.getPageNum(),getOrderDtoList(alreadyPayOrderList));
+		if (2 == orderDto.getPaymentType()) {
+			return getpageInfo(orderDto.getPageSize(),orderDto.getPageNum(),getOrderDtoList(alreadyPayOrderList));
 		}
 		
 		return null;
@@ -338,15 +340,12 @@ public class OverviewServiceImpl implements OverviewService {
 	/**
 	 * Order转化为OrderDto
 	 */
-	private List<OrderDto> getOrderDtoList(List<Order> orderList){
-		if (0 == orderList.size()) {
+	private List<OrderDto> getOrderDtoList(List<OrderDto> orderDtoList){
+		if (0 == orderDtoList.size()) {
 			return null;
 		}
-		List<OrderDto> orderDtoList = new ArrayList<OrderDto>(orderList.size());
-		for (Order order : orderList) {
-			List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
-			OrderDto orderDto = new OrderDto();
-			BeanUtils.copyProperties(order, orderDto); 
+		for (OrderDto orderDto : orderDtoList) {
+			List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(orderDto.getOrderId());
 			orderDto.setOrderProductList(orderProductList);
 			//通过RPC查询添加计划状态
         	if (null != orderDto.getTrafficPlan() && !"".equals(orderDto.getTrafficPlan())) {
@@ -367,11 +366,10 @@ public class OverviewServiceImpl implements OverviewService {
         			}
         		}
         	}
-			orderDtoList.add(orderDto);
 		}
 		 //获取付款状态 付款单记录 开票记录信息
-        List<Map> paymentList = nonautomaticMapper.paymentInfo(orderDtoList,orderList.get(0).getCompanyId());
-        List<Map> billingRecordList = nonautomaticMapper.billingInfo(orderDtoList,orderList.get(0).getCompanyId());
+        List<Map> paymentList = nonautomaticMapper.paymentInfo(orderDtoList,orderDtoList.get(0).getCompanyId());
+        List<Map> billingRecordList = nonautomaticMapper.billingInfo(orderDtoList,orderDtoList.get(0).getCompanyId());
         for (OrderDto orderDto : orderDtoList) {
         	 //整合付款单信息
             if (paymentList.size() > 0) {
