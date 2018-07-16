@@ -37,7 +37,7 @@ public class OutplanGoods implements Serializable {
 
     private String goodsBarcode;
 
-    private Float outHousePrice;
+    private Double outHousePrice;
 
     private String unit;
 
@@ -45,7 +45,7 @@ public class OutplanGoods implements Serializable {
 
     private Integer unitData;
 
-    private Float planGoodsNum;
+    private Double planGoodsNum;
 
     private String remark;
 
@@ -125,11 +125,11 @@ public class OutplanGoods implements Serializable {
         this.goodsBarcode = goodsBarcode;
     }
 
-    public Float getOutHousePrice() {
+    public Double getOutHousePrice() {
         return outHousePrice;
     }
 
-    public void setOutHousePrice(Float outHousePrice) {
+    public void setOutHousePrice(Double outHousePrice) {
         this.outHousePrice = outHousePrice;
     }
 
@@ -157,11 +157,11 @@ public class OutplanGoods implements Serializable {
         this.unitData = unitData;
     }
 
-    public Float getPlanGoodsNum() {
+    public Double getPlanGoodsNum() {
         return planGoodsNum;
     }
 
-    public void setPlanGoodsNum(Float planGoodsNum) {
+    public void setPlanGoodsNum(Double planGoodsNum) {
         this.planGoodsNum = planGoodsNum;
     }
 

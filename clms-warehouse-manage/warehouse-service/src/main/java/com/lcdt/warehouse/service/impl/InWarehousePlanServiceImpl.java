@@ -288,7 +288,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
     private void statDistributeNum(InWhPlanGoodsDto inWhPlanGoodsDto, List<InWarehouseOrderDto> inWarehouseOrderDtoList,boolean bFlag) {
         if (null!=inWarehouseOrderDtoList && inWarehouseOrderDtoList.size()>0) {
 
-            Float receivalbeAmount = 0f, inHouseAmount=0f;
+            Double receivalbeAmount = 0d, inHouseAmount=0d;
 
             for (InWarehouseOrderDto obj : inWarehouseOrderDtoList) {
 
@@ -311,9 +311,9 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
             inWhPlanGoodsDto.setDisCompleteAmount(receivalbeAmount); //已配置
 
         } else {
-            inWhPlanGoodsDto.setInHouseAmount(0f);//入库数
+            inWhPlanGoodsDto.setInHouseAmount(0d);//入库数
             inWhPlanGoodsDto.setRemainGoodsNum(inWhPlanGoodsDto.getPlanGoodsNum()-0);//计划-已配=待配
-            inWhPlanGoodsDto.setDisCompleteAmount(0f); //已配置
+            inWhPlanGoodsDto.setDisCompleteAmount(0d); //已配置
         }
     }
 
@@ -392,7 +392,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                     if (obj1.getRelationId().equals(obj2.getRelationId())) { //同一种货物
 
                         if (obj1.getDistGoodsNum() == null) {
-                            obj1.setDistGoodsNum(0f);
+                            obj1.setDistGoodsNum(0d);
                         }
                         if (obj1.getDistGoodsNum()>obj2.getRemainGoodsNum()) { //如果前端提交过来的大于数据库中的剩余的
                           sb.append("货物："+ obj1.getGoodsName()+"，剩余数量："+obj2.getRemainGoodsNum()+",不满足当前配仓数量："+obj1.getDistGoodsNum());

@@ -7,9 +7,9 @@ public class InPlanGoodsInfoResultDto {
 
     private Long relationId;
     private Long goodsId;
-    private Float planGoodsNum; //计划数量
+    private Double planGoodsNum; //计划数量
     private String remark; //备注
-    private Float inHousePrice; //入库价
+    private Double inHousePrice; //入库价
     private String unit; //单位
     private Integer unitData; //换算关系
     private String goodsName;
@@ -36,11 +36,11 @@ public class InPlanGoodsInfoResultDto {
         this.goodsId = goodsId;
     }
 
-    public Float getPlanGoodsNum() {
+    public Double getPlanGoodsNum() {
         return planGoodsNum;
     }
 
-    public void setPlanGoodsNum(Float planGoodsNum) {
+    public void setPlanGoodsNum(Double planGoodsNum) {
         this.planGoodsNum = planGoodsNum;
     }
 
@@ -52,11 +52,11 @@ public class InPlanGoodsInfoResultDto {
         this.remark = remark;
     }
 
-    public Float getInHousePrice() {
+    public Double getInHousePrice() {
         return inHousePrice;
     }
 
-    public void setInHousePrice(Float inHousePrice) {
+    public void setInHousePrice(Double inHousePrice) {
         this.inHousePrice = inHousePrice;
     }
 

@@ -17,9 +17,9 @@ public class InWhPlanGoodsDto implements Serializable {
     @ApiModelProperty(value = "货物ID")
     private Long goodsId;
     @ApiModelProperty(value = "计划数量")
-    private Float planGoodsNum;
+    private Double planGoodsNum;
     @ApiModelProperty(value = "入库价")
-    private Float inHousePrice;
+    private Double inHousePrice;
     @ApiModelProperty(value = "换算关系")
     private Integer unitData;
     @ApiModelProperty(value = "商品名称")
@@ -46,32 +46,32 @@ public class InWhPlanGoodsDto implements Serializable {
 
 
     @ApiModelProperty(value = "配仓---待配数量-也就是剩余计划数量")
-    private Float remainGoodsNum;
+    private Double remainGoodsNum;
 
     @ApiModelProperty(value = "配仓---本次配仓数")
-    private Float distGoodsNum;
+    private Double distGoodsNum;
     @ApiModelProperty(value = "配仓---备注")
     private String disRemark;
     @ApiModelProperty(value = "配仓---入库数量")
-    private Float inHouseAmount;
+    private Double inHouseAmount;
 
     @ApiModelProperty(value = "配仓---已配数量")
-    private Float disCompleteAmount;
+    private Double disCompleteAmount;
 
-    public Float getRemainGoodsNum() {
+    public Double getRemainGoodsNum() {
         return remainGoodsNum;
     }
 
-    public void setRemainGoodsNum(Float remainGoodsNum) {
+    public void setRemainGoodsNum(Double remainGoodsNum) {
         this.remainGoodsNum = remainGoodsNum;
     }
 
 
-    public Float getDistGoodsNum() {
+    public Double getDistGoodsNum() {
         return distGoodsNum;
     }
 
-    public void setDistGoodsNum(Float distGoodsNum) {
+    public void setDistGoodsNum(Double distGoodsNum) {
         this.distGoodsNum = distGoodsNum;
     }
 
@@ -91,19 +91,19 @@ public class InWhPlanGoodsDto implements Serializable {
         this.goodsId = goodsId;
     }
 
-    public Float getPlanGoodsNum() {
+    public Double getPlanGoodsNum() {
         return planGoodsNum;
     }
 
-    public void setPlanGoodsNum(Float planGoodsNum) {
+    public void setPlanGoodsNum(Double planGoodsNum) {
         this.planGoodsNum = planGoodsNum;
     }
 
-    public Float getInHousePrice() {
+    public Double getInHousePrice() {
         return inHousePrice;
     }
 
-    public void setInHousePrice(Float inHousePrice) {
+    public void setInHousePrice(Double inHousePrice) {
         this.inHousePrice = inHousePrice;
     }
 
@@ -203,20 +203,20 @@ public class InWhPlanGoodsDto implements Serializable {
         this.relationId = relationId;
     }
 
-    public Float getInHouseAmount() {
+    public Double getInHouseAmount() {
         return inHouseAmount;
     }
 
-    public void setInHouseAmount(Float inHouseAmount) {
+    public void setInHouseAmount(Double inHouseAmount) {
         this.inHouseAmount = inHouseAmount;
     }
 
 
-    public Float getDisCompleteAmount() {
+    public Double getDisCompleteAmount() {
         return disCompleteAmount;
     }
 
-    public void setDisCompleteAmount(Float disCompleteAmount) {
+    public void setDisCompleteAmount(Double disCompleteAmount) {
         this.disCompleteAmount = disCompleteAmount;
     }
 }
