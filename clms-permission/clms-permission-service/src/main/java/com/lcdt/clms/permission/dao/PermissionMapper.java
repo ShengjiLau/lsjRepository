@@ -1,5 +1,6 @@
 package com.lcdt.clms.permission.dao;
 
+import com.lcdt.clms.permission.dto.PermissionParamsDto;
 import com.lcdt.clms.permission.model.Permission;
 
 import java.util.List;
@@ -53,5 +54,6 @@ public interface PermissionMapper {
 
     List<Permission> selectByPrefix(String permissionPrefix);
 
+    List<Permission> selectPermissionByCondition(PermissionParamsDto params);
 
 }
