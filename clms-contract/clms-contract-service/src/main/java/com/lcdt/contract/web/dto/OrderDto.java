@@ -38,6 +38,9 @@ public class OrderDto extends Order  implements Serializable{
 
 	private String billingRecordNum;
 	
+	@ApiModelProperty("订单的收付款状态：0-全部；1-未收款；2-已收款（收款完成）；3-收款中")
+	private Integer paymentType;
+	
 	@ApiModelProperty(value="页码")
 	private int pageNum;
 	@ApiModelProperty(value="每页条目数")
@@ -132,6 +135,12 @@ public class OrderDto extends Order  implements Serializable{
 	}
 	public void setWarehousePlanStatus(Integer warehousePlanStatus) {
 		this.warehousePlanStatus = warehousePlanStatus;
+	}
+	public Integer getPaymentType() {
+		return paymentType;
+	}
+	public void setPaymentType(Integer paymentType) {
+		this.paymentType = paymentType;
 	}
 	
 }
