@@ -7,7 +7,10 @@ import io.swagger.annotations.ApiModelProperty;
  */
 
 public class PermissionParamsDto {
-
+    @ApiModelProperty(value = "")
+    private String permissionRemark;
+    @ApiModelProperty(value = "")
+    private String permissionName;
     @ApiModelProperty(value = "权限小分类")
     private String permissionPrefix;
     @ApiModelProperty(value = "")
@@ -18,6 +21,24 @@ public class PermissionParamsDto {
     private Integer pageNo=1;
     @ApiModelProperty(value = "每页条数",required = true)
     private Integer pageSize=10;
+
+    public String getPermissionRemark() {
+        return permissionRemark;
+    }
+
+    public PermissionParamsDto setPermissionRemark(String permissionRemark) {
+        this.permissionRemark = permissionRemark;
+        return this;
+    }
+
+    public String getPermissionName() {
+        return permissionName;
+    }
+
+    public PermissionParamsDto setPermissionName(String permissionName) {
+        this.permissionName = permissionName;
+        return this;
+    }
 
     public String getPermissionPrefix() {
         return permissionPrefix;
