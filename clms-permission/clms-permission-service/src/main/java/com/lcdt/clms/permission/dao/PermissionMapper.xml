@@ -68,4 +68,19 @@
         concat('',#{permissionPrefix,jdbcType=VARCHAR},'%')
     </select>
 
+    <select id="selectPermissionByCondition" parameterType="com.lcdt.clms.permission.dto.PermissionParamsDto" resultMap="BaseResultMap">
+        select permission_id, permission_remark, permission_name, permission_prefix, permission_code, permission_category
+        from permission
+        <where>
+            <if test="permissionPrefix != null and permissionPrefix != '' ">
+              permission_prefix=#{permissionPrefix,jdbcType=VARCHAR}
+            </if>
+            <if test="permissionPrefix != null and permissionPrefix != '' ">
+                permission_code=#{permissionCode,jdbcType=VARCHAR}
+            </if>
+            <if test="permissionPrefix != null and permissionPrefix != '' ">
+                permission_category=#{permissionCategory,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
 </mapper>
