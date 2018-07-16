@@ -22,11 +22,11 @@ public interface InventoryService extends IService<Inventory> {
 
     void putInventory(List<InorderGoodsInfo> goods, InWarehouseOrder order);
 
-    Inventory modifyInventoryPrice(Long inventoryId,Float newprice);
+    Inventory modifyInventoryPrice(Long inventoryId,Double newprice);
 
     Inventory modifyInventoryRemark(Long inventoryId,String remark);
 
-    void lockInventoryNum(Long inventoryId,Float tryLockNum);
+    void lockInventoryNum(Long inventoryId,Double tryLockNum);
 
     void outInventory(OutWarehouseOrder order, List<OutOrderGoodsInfo> goodsInfos);
 

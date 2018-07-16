@@ -142,7 +142,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
     @Override
-    public Inventory modifyInventoryPrice(Long inventoryId, Float newprice) {
+    public Inventory modifyInventoryPrice(Long inventoryId, Double newprice) {
         Inventory inventory = baseMapper.selectById(inventoryId);
         if (inventory == null) {
             return new Inventory();
