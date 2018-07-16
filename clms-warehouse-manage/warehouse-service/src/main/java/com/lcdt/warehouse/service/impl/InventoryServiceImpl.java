@@ -187,14 +187,14 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void unLockInventoryNum(Long inventoryId, Float unlockNum) {
+    public void unLockInventoryNum(Long inventoryId, Double unlockNum) {
         Assert.notNull(unlockNum, "不能为空");
         Inventory inventory = selectById(inventoryId);
 
         if (inventory.getLockNum() < unlockNum) {
             throw new RuntimeException("解锁库存量不能大于 已锁量");
         }
-        inventory.setLockNum(CommonUtils.subtractFloat(inventory.getLockNum(),unlockNum));
+        inventory.setLockNum(CommonUtils.sub(inventory.getLockNum(),unlockNum));
         updateById(inventory);
     }
 
@@ -227,8 +227,8 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             }
 
             if (inventory.getLockNum() >= good.getOutboundQuantity()) {
-                inventory.setLockNum(CommonUtils.subtractFloat(inventory.getLockNum(),good.getGoodsNum()));
-                inventory.setInvertoryNum(CommonUtils.subtractFloat(inventory.getInvertoryNum(),good.getOutboundQuantity()));
+                inventory.setLockNum(CommonUtils.sub(inventory.getLockNum(),good.getGoodsNum()));
+                inventory.setInvertoryNum(CommonUtils.sub(inventory.getInvertoryNum(),good.getOutboundQuantity()));
                 inventoryMapper.updateById(inventory);
                 logService.saveOutOrderLog(order, good,inventory.getInvertoryNum(),inventory);
                 order.setOrderStatus(OutOrderStatus.OUTED);
@@ -342,7 +342,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     			inventory.setCustomerName(inWarehouseOrder.getCustomerName());
     			inventory.setGoodsId(allotProduct.getGoodsId());
     			inventory.setInvertoryNum(allotProduct.getAllotNum());
-    			inventory.setLockNum((float) 0);
+    			inventory.setLockNum(0.0D);
     			inventory.setOriginalGoodsId(allotProduct.getOriginalGoodsId());
     			inventory.setRemark(allotProduct.getRemark());
     			inventory.setStorageLocationCode(allotProduct.getWarehouseLocCode());
