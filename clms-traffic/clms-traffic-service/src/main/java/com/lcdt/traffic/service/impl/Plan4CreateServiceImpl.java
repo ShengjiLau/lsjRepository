@@ -142,9 +142,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
             }
         }
 
-
-
-
         //具体业务处理
         if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
@@ -353,23 +350,26 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     }
                 }
 
+                  //router:发布
+                  Timeline event = new Timeline();
+                  String company = dto.getCompanyName()==null?"":dto.getCompanyName();
+                  String createName = vo.getCreateName()==null?"":vo.getCreateName();
+
+                  event.setActionTitle("【计划发布】（操作人："+company+" "+createName+"）");
+                  event.setActionTime(new Date());
+                  event.setCompanyId(vo.getCompanyId());
+                  event.setSearchkey("R_PLAN");
+                  event.setDataid(vo.getWaybillPlanId());
+                  producer.noteRouter(event);
 
             }
 
         }
-        //router:发布
-        Timeline event = new Timeline();
-        String company = dto.getCompanyName()==null?"":dto.getCompanyName();
-        String createName = vo.getCreateName()==null?"":vo.getCreateName();
 
-        event.setActionTitle("【计划发布】（操作人："+company+" "+createName+"）");
-        event.setActionTime(new Date());
-        event.setCompanyId(vo.getCompanyId());
-        event.setSearchkey("R_PLAN");
-        event.setDataid(vo.getWaybillPlanId());
-        producer.noteRouter(event);
         return vo;
     }
+
+
 
 
     /***
@@ -623,6 +623,8 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
               transportWayItemsMapper.batchAddTransportWayItems(dto.getTransportWayItemsList());
           }
     }
+
+
 
 
 
