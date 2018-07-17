@@ -1,4 +1,4 @@
-package com.lcdt.warehouse.vo;
+package com.lcdt.util;
 
 
 /**

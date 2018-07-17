@@ -26,6 +26,8 @@ import com.lcdt.contract.service.OrderService;
 import com.lcdt.contract.web.dto.OrderDto;
 import com.lcdt.contract.web.dto.PageBaseDto;
 import com.lcdt.contract.web.utils.OrderValidator;
+import com.lcdt.contract.web.utils.RequestValidated;
+import com.lcdt.util.ResponseJsonUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -48,11 +50,7 @@ public class SalesOrderApi {
 	@Autowired
 	private OrderService orderService;
 	
-	/**
-	 * 依据条件查询订单列表
-	 * @param OrderDto
-	 * @return JSONObject
-	 */
+	
 	@ApiOperation(value="销售订单列表",notes="销售订单列表数据")
 	@GetMapping("/list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_get')")
@@ -69,83 +67,47 @@ public class SalesOrderApi {
 		
 		logger.debug("销售订单条目数"+pageInfo.getTotal());
 		
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("code",0);
-		jsonObject.put("message","销售订单列表");
-		jsonObject.put("data",pageBaseDto);
-		//PageBaseDto<List<OrderDto>> pageBaseDto = new PageBaseDto<List<OrderDto>>(pageInfoList.getList(),pageInfoList.getTotal());
-		return jsonObject;
+		return ResponseJsonUtils.successResponseJson(pageBaseDto, "销售订单列表");
 	}
 	
 	
-	/**
-	 * 查询单个订单
-	 * @param Long(id)
-	 * @return JSONObject
-	 */
 	@ApiOperation(value="获取单个销售订单",notes="单个销售订单")
 	@GetMapping("/selsorder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_get')")
 	public JSONObject selectOrder(@ApiParam(value = "订单id")@RequestParam Long orderId){
 		OrderDto orderDto = orderService.selectByPrimaryKey(orderId);
-		JSONObject jsonObject = new JSONObject();
 		if (orderDto != null) {
-			jsonObject.put("code",0);
-			jsonObject.put("message","单个采购订单");
-			jsonObject.put("data",orderDto);
+			return ResponseJsonUtils.successResponseJson(orderDto, "销售订单详情");
 		}else {
 			throw new RuntimeException("获取失败");
 		}
-		return jsonObject;
 	}
 	
 	
-	/**
-	 * 新增销售订单
-	 * @param OrderDto
-	 * @return JSONObject
-	 */
 	@ApiOperation("新增销售订单")
 	@PostMapping("/addOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_add')")
-	public JSONObject addOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindResult) {
-        JSONObject jsonObject = new JSONObject();
+	public JSONObject addOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindingResult) {
         //Validated自动验证
-        if (bindResult.hasErrors()) {
-        	 Map<String,String> map = new HashMap<String,String>();//此map用于盛装验证时所验证的实体类各属性(Field)和验证属性反馈的error
-        	List<FieldError> list = bindResult.getFieldErrors();
-        	for(FieldError error:list) {
-        		String n = error.getField();//作为map的key
-        		String m = error.getDefaultMessage();//作为map的value
-        		map.put(n,m);
-        	}
-            jsonObject.put("code",-1);
-          	jsonObject.put("message","验证信息未能通过");
-          	jsonObject.put("data",map);
-          	return jsonObject;
+		Map<String,String> map = RequestValidated.validatedRequest(bindingResult);
+		if (!map.isEmpty()) {
+        	return ResponseJsonUtils.failedResponseJson(map, "验证信息未能通过");
         }
         //采用OrderValidator  (OrderValidator中封装对Order各属性的验证)
         Map<String,String> validateMap = OrderValidator.validator(orderDto);
         if (!validateMap.isEmpty()) {
-        	jsonObject.put("code",-1);
-           	jsonObject.put("message","验证信息未能通过");
-           	jsonObject.put("data",validateMap);
-           	return jsonObject;
+        	return ResponseJsonUtils.failedResponseJson(validateMap, "验证信息未能通过");
         }
 		Long UserId = SecurityInfoGetter.getUser().getUserId();
 		Long companyId = SecurityInfoGetter.getCompanyId();
-//		String orderSerialNum =SerialNumAutoGenerator.serialNoGenerate();
 		orderDto.setCompanyId(companyId);
 		orderDto.setCreateUserId(UserId);
-//		orderDto.setOrderSerialNo(orderSerialNum);
 		orderDto.setCreateTime(new Date());
 		orderDto.setOrderType(new Short("1"));	//设置订单类型为销售单
 		int result = orderService.addOrder(orderDto);
 		logger.debug("新增销售订单条目数:"+result);
 		if (result > 0) {
-            jsonObject.put("code",0);
-            jsonObject.put("message", "添加成功");
-            return jsonObject;
+			return ResponseJsonUtils.successResponseJson(null, "添加成功!");
         } else {
             throw new RuntimeException("添加失败");
         }
@@ -161,84 +123,52 @@ public class SalesOrderApi {
 	@PostMapping("/modifyOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_modify')")
 	public JSONObject modifyOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindingResult) {
-		JSONObject jsonObject = new JSONObject();
 		 //Validated自动验证
-        if (bindingResult.hasErrors()) {
-        	 Map<String,String> map = new HashMap<String,String>();
-        	List<FieldError> list = bindingResult.getFieldErrors();
-        	for(FieldError error:list) {
-        		String n = error.getField();
-        		String m = error.getDefaultMessage();
-        		map.put(n,m);
-        	}
-            jsonObject.put("code",-1);
-          	jsonObject.put("message","验证信息未能通过");
-          	jsonObject.put("data",map);
-          	return jsonObject;
+		Map<String,String> map = RequestValidated.validatedRequest(bindingResult);
+		if (!map.isEmpty()) {
+        	return ResponseJsonUtils.failedResponseJson(map, "验证信息未能通过");
         }
       //采用OrderValidator(封装对Order各属性的验证)
         Map<String,String> validateMap = OrderValidator.validator(orderDto);
         if (!validateMap.isEmpty()) {
-        	jsonObject.put("code",-1);
-           	jsonObject.put("message","验证信息未能通过");
-           	jsonObject.put("data",validateMap);
-           	return jsonObject;
+        	return ResponseJsonUtils.failedResponseJson(validateMap, "验证信息未能通过");
         }
         int result = orderService.modOrder(orderDto);
         logger.debug("修改销售订单条目数:"+result);
         if (result > 0) {
-        	jsonObject.put("code",0);
-        	jsonObject.put("message", "修改成功");
-        	return jsonObject;
+        	return ResponseJsonUtils.successResponseJson(null, "修改成功!");
         } else {
         	throw new RuntimeException("修改失败");
         }
 		}
 	
 	
-	/**
-	 * 取消销售订单
-	 * @param Long
-	 * @return JSONObject
-	 */
 	@ApiOperation("取消销售订单")
 	@PostMapping("/deleteOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_delete')")
 	public JSONObject delOrder(@ApiParam(value="销售订单id",required=true) @RequestParam Long orderId) {
-		JSONObject jsonObject = new JSONObject();
 		int result = orderService.updateOrderIsDraft(orderId,(short) 2);
 		logger.debug("取消销售订单条目数:"+result);
 		if (result > 0) {        
-	        jsonObject.put("code", 0);
-	        jsonObject.put("message", "取消成功");
-	        return jsonObject;
+			return ResponseJsonUtils.successResponseJson(null, "取消成功!");
 	    } else {
 	    	if (0 == result) {
-	    		jsonObject.put("code", -1);
-		        jsonObject.put("message", "存在付款单的订单不能取消！");
-		        return jsonObject;
+	    		return ResponseJsonUtils.failedResponseJson(null, "存在付款单的订单不能取消!");
 	    	}else {
 	    		throw new RuntimeException("取消失败");
 	    	}  
 	    }
 	}
 	
-	/**
-	 * 发布销售订单
-	 * @param Long
-	 * @return JSONObject
-	 */
+	
 	@ApiOperation("发布销售订单")
 	@PostMapping("/releaseOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_release')")
 	public JSONObject releaseOrder(@ApiParam(value="销售订单id",required=true) @RequestParam Long orderId) {
 		int result = orderService.updateOrderIsDraft(orderId,(short) 1);
-		logger.debug("取消销售订单条目数:"+result);
+		logger.debug("发布销售订单条目数:"+result);
 		if (result > 0) {
-	        JSONObject jsonObject = new JSONObject();
-	        jsonObject.put("code", 0);
-	        jsonObject.put("message", "发布成功");
-	        return jsonObject;
+			return ResponseJsonUtils.successResponseJson(null, "发布成功!");
 	    } else {
 	        throw new RuntimeException("发布失败");
 	    }
@@ -251,15 +181,13 @@ public class SalesOrderApi {
 	public JSONObject generateTrafficPlan(@ApiParam(value = "销售订单id",required = true) @RequestParam Long orderId) {
 		Boolean flag = orderService.generateTrafficPlan(orderId);
 		if (flag) {
-			JSONObject jsonObject = new JSONObject();
-	        jsonObject.put("code", 0);
-	        jsonObject.put("message", "操作成功");
-	        return jsonObject;
+			return ResponseJsonUtils.successResponseJson(null, "操作成功!");
 		}else {
 			throw new RuntimeException("操作失败");
 		}
 
 	}
+	
 	
 	@ApiOperation("销售单生成出库计划")
 	@PostMapping("/outWarehousePlan")
@@ -267,10 +195,7 @@ public class SalesOrderApi {
 	public JSONObject generateOutWarehousePlan(@ApiParam(value = "销售订单id",required = true) @RequestParam Long orderId) {
 		Boolean flag = orderService.generateOutWarehousePlan(orderId);
 		if (flag) {
-			JSONObject jsonObject = new JSONObject();
-	        jsonObject.put("code", 0);
-	        jsonObject.put("message", "操作成功");
-	        return jsonObject;
+			return ResponseJsonUtils.successResponseJson(null, "操作成功!");
 		}else {
 			throw new RuntimeException("操作失败");
 		}

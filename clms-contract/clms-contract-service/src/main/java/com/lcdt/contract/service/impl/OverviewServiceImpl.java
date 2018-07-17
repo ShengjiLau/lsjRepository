@@ -268,6 +268,7 @@ public class OverviewServiceImpl implements OverviewService {
 	@Override
 	public PageBaseDto<OrderDto> getOrderListByPayment(OrderDto orderDto){
 		orderDto.setCompanyId(SecurityInfoGetter.getCompanyId());
+		orderDto.setIsDraft((short) 1);
 		List<OrderDto> orderDtoList = nonautomaticMapper.selectByCondition(orderDto);
 		if (null ==orderDto.getPaymentType() || 3 == orderDto.getPaymentType()) {
 			return getpageInfo(orderDto.getPageSize(),orderDto.getPageNum(),getOrderDtoList(orderDtoList));
