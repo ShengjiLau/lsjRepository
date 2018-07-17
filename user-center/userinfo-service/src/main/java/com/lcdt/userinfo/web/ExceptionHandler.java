@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lcdt.util.HttpUtils;
 import com.lcdt.util.WebProduces;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
@@ -17,6 +18,7 @@ import java.io.PrintWriter;
  * Created by ss on 2017/11/3.
  */
 @Component
+@ControllerAdvice
 public class ExceptionHandler extends SimpleMappingExceptionResolver {
 
 	@Override

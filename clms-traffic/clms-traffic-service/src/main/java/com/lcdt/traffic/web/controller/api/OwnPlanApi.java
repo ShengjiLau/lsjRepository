@@ -58,6 +58,38 @@ public class OwnPlanApi {
     private IPlanRpcService4Wechat iPlanRpcService4Wechat;
 
 
+
+
+    @ApiOperation("创建--暂存")
+    @RequestMapping(value = "/planTempStorage",method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_create_plan') or hasAuthority('traffic_create_plan_1')")
+    public JSONObject planTempStorage(@RequestBody WaybillParamsDto dto, BindingResult bindingResult) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        dto.setDeptNames(userCompRel.getDeptNames());
+        dto.setCreateId(loginUser.getUserId());
+        dto.setCreateName(loginUser.getRealName());
+        dto.setCompanyId(companyId);
+        dto.setCompanyName(userCompRel.getCompany().getFullName()); //企业名称
+        dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
+
+        JSONObject jsonObject = new JSONObject();
+        if (bindingResult.hasErrors()) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
+            return jsonObject;
+        }
+        WaybillPlan waybillPlan = plan4CreateService.createWaybillPlan(dto, (short) 0);
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "创建成功！");
+        return jsonObject;
+    }
+
+
+
+
+
     @ApiOperation("创建--发布")
     @RequestMapping(value = "/createPlan",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_create_plan') or hasAuthority('traffic_create_plan_1')")

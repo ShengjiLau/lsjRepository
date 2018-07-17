@@ -76,18 +76,14 @@ public class SendNotifyService {
             String templateContent = notifyService.templateContent(templateId, sendCompanyId);
             String notifyContent = TemplateParser.parseTemplateParams(templateContent, attachment);
 
-            if (!StringUtils.isEmpty(receiver.getPhoneNum())) {
-                if (companyNotifySetting.getEnableSms()) {
-                    //发送短信通知
-                    smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent,getReceiverPhone(notify,receiver), sendCompanyId,event.getBusinessNo());
-                }
+            if (companyNotifySetting.getEnableSms()) {
+                   //发送短信通知
+                   smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent,getReceiverPhone(notify,receiver), sendCompanyId,event.getBusinessNo());
             }
-            if (receiver.getCompanyId() != null && receiver.getUserId() != null) {
-                if (companyNotifySetting.getEnableWeb()) {
-                    String webUrl=attachment.get("webNotifyUrl") != null ? attachment.get("webNotifyUrl").toString() : "";
+            if (companyNotifySetting.getEnableWeb()) {
+                   String webUrl=attachment.get("webNotifyUrl") != null ? attachment.get("webNotifyUrl").toString() : "";
                     //发送web通知
-                    webNotify.sendWebNotify(notify.getCategory(), notifyContent, getReceiverCompanyId(notify,receiver), getReceiverUserId(notify,receiver),webUrl);
-                }
+                   webNotify.sendWebNotify(notify.getCategory(), notifyContent, getReceiverCompanyId(notify,receiver), getReceiverUserId(notify,receiver),webUrl);
             }
         }
     }
