@@ -67,8 +67,6 @@ public class LoginServiceImpl implements LoginService {
 			//后台管理员用户
 			List<Permission> permissions = permissionService.adminPermission(user.getUserId());
 			authentication.setPermissions(permissions);
-
-			return authentication;
 		}
 
 
