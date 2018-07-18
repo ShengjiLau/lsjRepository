@@ -51,5 +51,7 @@ public class OrderVO {
 	public static final Integer ZERO_INTEGER = 0;
 	
 	
+	
+	
 
 }

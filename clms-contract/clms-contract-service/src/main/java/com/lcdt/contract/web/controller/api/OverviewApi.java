@@ -29,7 +29,7 @@ import io.swagger.annotations.ApiOperation;
  * @Description: TODO 
  */
 
-@Api(value="订单合同统计Api",description="统计")
+@Api(value = "订单合同统计Api",description = "统计")
 @RestController
 @RequestMapping("/overview")
 public class OverviewApi {
@@ -39,9 +39,9 @@ public class OverviewApi {
 	
 	@ApiOperation("采购销售数量统计")
 	@GetMapping("/order/count")
-	public JSONObject getOrderCount(@Validated OverviewDto overviewDto,BindingResult bindingResult) {
+	public JSONObject getOrderCount(@Validated OverviewDto overviewDto, BindingResult bindingResult) {
 		 if (bindingResult.hasErrors()) {
-			 ResponseJsonUtils.failedResponseJson(null, bindingResult.getFieldError().getDefaultMessage());
+			 ResponseJsonUtils.failedResponseJsonWithoutData(bindingResult.getFieldError().getDefaultMessage());
 	        }
 		OrderCountDto orderCountDto = overviewService.getOrderCount(overviewDto);
 		return ResponseJsonUtils.successResponseJson(orderCountDto, "订单数量统计");
@@ -50,9 +50,9 @@ public class OverviewApi {
 	
 	@ApiOperation("合同订单概览")
 	@GetMapping("/overview/get")
-	public JSONObject getOverview(@Validated OverviewDto overviewDto,BindingResult bindingResult) {
+	public JSONObject getOverview(@Validated OverviewDto overviewDto, BindingResult bindingResult) {
 		 if (bindingResult.hasErrors()) {
-			 ResponseJsonUtils.failedResponseJson(null, bindingResult.getFieldError().getDefaultMessage());
+			 ResponseJsonUtils.failedResponseJsonWithoutData(bindingResult.getFieldError().getDefaultMessage());
 	        }
 		
 		OrderOverviewDto orderOverviewDto = overviewService.getOverviewDtoList(overviewDto);
