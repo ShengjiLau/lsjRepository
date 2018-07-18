@@ -3,21 +3,34 @@ image: maven:latest
 variables:
   MAVEN_CLI_OPTS: "-s ./.m2/settings.xml --batch-mode"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  ALIYUN_REGISTRY: "registry.cn-hangzhou.aliyuncs.com"
+  CI_REGISTRY_USER: "hi35700248@aliyun.com"
+  CI_REGISTRY_PASSWORD: "A1111777"
+  CI_REGISTRY: "registry.cn-hangzhou.aliyuncs.com/lcdt-clms/"
 
 cache:
   paths:
     - .m2/repository/
     - target/
 
+before_script:
+  - docker info
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $ALIYUN_REGISTRY
+
 build:
   stage: build
   script:
-    - mvn  compile
+    - mvn  compile install
 
 test:
   stage: test
   script:
     - mvn  test
+build_image:
+  stage: build_image
+  script:
+    - docker build -t $CI_REGISTRYuser-service:1.0 user-center/userinfo-service
+
 deploy:
   stage: deploy
   script:
