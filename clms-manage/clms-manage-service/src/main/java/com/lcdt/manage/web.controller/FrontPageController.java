@@ -3,6 +3,7 @@ package com.lcdt.manage.web.controller;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.manage.dto.NoticeListDto;
+import com.lcdt.manage.dto.NoticeListParamsDto;
 import com.lcdt.manage.entity.TNotice;
 import com.lcdt.manage.entity.TNoticeCategory;
 import com.lcdt.manage.service.TNoticeCategoryService;
@@ -23,6 +24,8 @@ import java.util.List;
  */
 @Controller
 public class FrontPageController {
+    private final Logger logger = LoggerFactory.getLogger(FrontPageController.class);
+
     private static String LOGIN_PAGE = "/index";
     private static String NEWS_LIST_PAGE = "/news-list";
     private static String NEWS_PAGE = "/news";
@@ -31,32 +34,27 @@ public class FrontPageController {
     private TNoticeService noticeService;
     @Autowired
     private TNoticeCategoryService noticeCategoryService;
-    private TNotice notice;
 
     /**
      * 首页
      *
      * @return
      */
-    @RequestMapping(value = "/index",method = RequestMethod.GET)
-    public ModelAndView index(){
-        System.out.println("--------------index------------------");
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public ModelAndView index() {
+        logger.info("--------------index------------------");
         ModelAndView view = new ModelAndView(LOGIN_PAGE);
-        Logger logger = LoggerFactory.getLogger(FrontPageController.class);
-        PageInfo<NoticeListDto> noticesPage = new PageInfo<NoticeListDto>();
-        noticesPage.setPageSize(5);
-        noticesPage.setPageNum(1);
         TNoticeCategory cate = new TNoticeCategory();
         cate = noticeCategoryService.findByName(NewsCategory);
-        if(cate!=null) {
-            TNotice notice = new TNotice();
-            notice.setCategoryId(cate.getCategoryId());
-            noticesPage = noticeService.findTopNoticesByPage(noticesPage,notice);
-            System.out.println("noticesPage.getList:"+noticesPage.getList());
-            TNotice topOne = noticesPage.getList().remove(0);
-            List<NoticeListDto> notices = noticesPage.getList();
-            view.addObject("notices",notices);
-            view.addObject("topOne",topOne);
+        if (cate != null) {
+            NoticeListParamsDto params = new NoticeListParamsDto();
+            params.setPageNo(1).setPageSize(5);
+            params.setCategoryId(cate.getCategoryId());
+            Page<NoticeListDto> page = noticeService.findTopNoticesByPage(params);
+            TNotice topOne = page.getRecords().remove(0);
+            List<NoticeListDto> notices = page.getRecords();
+            view.addObject("notices", notices);
+            view.addObject("topOne", topOne);
         }
         return view;
     }
@@ -67,46 +65,46 @@ public class FrontPageController {
      *
      * @return
      */
-    @RequestMapping(value = "/news-list",method = RequestMethod.GET)
-    public ModelAndView newsList(Integer start){
+    @RequestMapping(value = "/news-list", method = RequestMethod.GET)
+    public ModelAndView newsList(Integer start) {
         ModelAndView view = new ModelAndView(NEWS_LIST_PAGE);
         //view.addObject("info","这是咨询" );
-        PageInfo<NoticeListDto> noticesPage = new PageInfo<NoticeListDto>();
-        noticesPage.setPageSize(10);
-        if(start!=null&&start>0) {
-            noticesPage.setPageNum(start);
-        }
-        else{
-            noticesPage.setPageNum(1);
+        NoticeListParamsDto params = new NoticeListParamsDto();
+        params.setPageSize(10);
+
+        if (start != null && start > 0) {
+            params.setPageNo(start);
+        } else {
+            params.setPageNo(1);
         }
         TNoticeCategory cate = new TNoticeCategory();
         cate = noticeCategoryService.findByName(NewsCategory);
-        if(cate!=null) {
-            TNotice notice = new TNotice();
-            notice.setCategoryId(cate.getCategoryId());
-            noticesPage = noticeService.findTopNoticesByPage(noticesPage,notice);
-            List<NoticeListDto> notices = noticesPage.getList();
-            view.addObject("notices",notices);
+        if (cate != null) {
+            params.setCategoryId(cate.getCategoryId());
+            Page<NoticeListDto> page = noticeService.findTopNoticesByPage(params);
+            List<NoticeListDto> notices = page.getRecords();
+            view.addObject("notices", notices);
         }
         return view;
     }
+
     /**
      * 新闻详情页
      *
      * @return
      */
-    @RequestMapping(value = "/news",method = RequestMethod.GET)
-    public ModelAndView news(Long id){
+    @RequestMapping(value = "/news", method = RequestMethod.GET)
+    public ModelAndView news(Long id) {
         ModelAndView view = new ModelAndView(NEWS_PAGE);
         TNotice notice = noticeService.selectById(id);
-        System.out.println(notice.getNoticeTitle());
+        logger.info(notice.getNoticeTitle());
 
-        view.addObject("notice",notice);
-        if(notice!=null) {
-            List<NoticeListDto> nextNotice = noticeService.findNoticeAndNextById(notice);
-            if (nextNotice!=null&&nextNotice.size()>0) {
-                System.out.println("nextNotice.get(0).getNoticeTitle==="+nextNotice.get(0).getNoticeTitle());
-                view.addObject("nextNotice", nextNotice.get(0));
+        view.addObject("notice", notice);
+        if (notice != null) {
+            NoticeListDto nextNotice = noticeService.findNoticeAndNextById(notice);
+            if (nextNotice != null) {
+                logger.info("nextNotice.get(0).getNoticeTitle===" + nextNotice.getNoticeTitle());
+                view.addObject("nextNotice", nextNotice);
             }
         }
         return view;
