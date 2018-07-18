@@ -24,6 +24,8 @@ import java.util.List;
  */
 @Controller
 public class FrontPageController {
+    private final Logger logger = LoggerFactory.getLogger(FrontPageController.class);
+
     private static String LOGIN_PAGE = "/index";
     private static String NEWS_LIST_PAGE = "/news-list";
     private static String NEWS_PAGE = "/news";
@@ -40,10 +42,8 @@ public class FrontPageController {
      */
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public ModelAndView index() {
-        System.out.println("--------------index------------------");
+        logger.info("--------------index------------------");
         ModelAndView view = new ModelAndView(LOGIN_PAGE);
-        Logger logger = LoggerFactory.getLogger(FrontPageController.class);
-
         TNoticeCategory cate = new TNoticeCategory();
         cate = noticeCategoryService.findByName(NewsCategory);
         if (cate != null) {
@@ -97,13 +97,13 @@ public class FrontPageController {
     public ModelAndView news(Long id) {
         ModelAndView view = new ModelAndView(NEWS_PAGE);
         TNotice notice = noticeService.selectById(id);
-        System.out.println(notice.getNoticeTitle());
+        logger.info(notice.getNoticeTitle());
 
         view.addObject("notice", notice);
         if (notice != null) {
             NoticeListDto nextNotice = noticeService.findNoticeAndNextById(notice);
             if (nextNotice != null) {
-                System.out.println("nextNotice.get(0).getNoticeTitle===" + nextNotice.getNoticeTitle());
+                logger.info("nextNotice.get(0).getNoticeTitle===" + nextNotice.getNoticeTitle());
                 view.addObject("nextNotice", nextNotice);
             }
         }
