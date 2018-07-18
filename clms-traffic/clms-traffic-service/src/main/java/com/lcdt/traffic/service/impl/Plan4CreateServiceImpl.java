@@ -574,9 +574,19 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
      * @param flag -- 操作动作(1-发布，2-暂存)
      */
     private void onlyCreateWaybillPlan(WaybillPlan vo, WaybillParamsDto dto,short flag) {
+        if (flag==1) { //发布--操作
+            vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
+            vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
+        } else { //暂存--操作
+            vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //计划状态(待发布)
+            vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
+        }
+
+
+
        // if (dto.getIsApproval()==0) { //不需要审批
      //   if (flag==1) { //发布--操作
-            vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
+    /*        vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
             vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
 /*        } else { //暂存--操作
             vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //计划状态(待发布)
