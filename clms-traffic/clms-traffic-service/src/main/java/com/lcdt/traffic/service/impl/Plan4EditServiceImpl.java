@@ -52,7 +52,6 @@ public class Plan4EditServiceImpl implements Plan4EditService {
     @Autowired
     private SplitGoodsDetailMapper splitGoodsDetailMapper; //派单详细
 
-
     @com.alibaba.dubbo.config.annotation.Reference
     public CustomerRpcService customerRpcService;  //客户信息
 

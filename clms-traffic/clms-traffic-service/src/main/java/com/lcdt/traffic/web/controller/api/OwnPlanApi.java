@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.traffic.dao.WaybillPlanMapper;
 import com.lcdt.traffic.dto.LeaveMsgDto;
 import com.lcdt.traffic.dto.LeaveMsgParamDto;
 import com.lcdt.traffic.dto.PlanDetailParamsDto;
@@ -25,6 +26,7 @@ import com.lcdt.userinfo.model.UserCompRel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -56,6 +58,9 @@ public class OwnPlanApi {
 
     @Autowired
     private IPlanRpcService4Wechat iPlanRpcService4Wechat;
+
+    @Autowired
+    private WaybillPlanMapper waybillPlanMapper; //计划
 
 
 
@@ -382,6 +387,40 @@ public class OwnPlanApi {
         jsonObject.put("message", "发布成功！");
         return jsonObject;
     }
+
+
+
+
+    @ApiOperation("发布")
+    @GetMapping(value = "/planPublish/{waybillPlanId}")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_create_plan') or hasAuthority('traffic_create_plan_1')")
+    public JSONObject planPublish(Long waybillPlanId) {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+
+        WaybillParamsDto dto = new WaybillParamsDto();
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",waybillPlanId);
+        tMap.put("companyId",companyId);
+        tMap.put("isDeleted","0");
+        WaybillPlan vo = waybillPlanMapper.selectByPrimaryKey(tMap);
+        BeanUtils.copyProperties(vo, dto);
+        dto.setDeptNames(userCompRel.getDeptNames());
+        dto.setUpdateId(loginUser.getUserId());
+        dto.setUpdateName(loginUser.getRealName());
+        dto.setCompanyId(companyId);
+        dto.setPlanSource(ConstantVO.PLAN_SOURCE_ENTERING); //计划来源-录入
+        dto.setCompanyName(userCompRel.getCompany().getFullName()); //企业名称
+        JSONObject jsonObject = new JSONObject();
+        plan4EditService.waybillPlanEdit(dto, (short) 1);
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "发布成功！");
+        return jsonObject;
+    }
+
+
+
 
 
 
