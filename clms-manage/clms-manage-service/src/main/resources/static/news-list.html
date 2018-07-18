@@ -110,58 +110,45 @@
 
     <div class="row news-block news-page">
       <div class="col-md-12 col-xs-12">
-        <ul class="news-list">
+        <ul class="news-list" th:each="notice : ${notices}">
             <li>
                 <div >
                     <div class="list-img">
-                        <img src="https://img.datuodui.com/ws/pic12.jpg" alt="">
-
+                        <span th:if="${notice.coverImageUrl}">
+                            <img th:src="${notice.coverImageUrl}">
+                        </span>
                     </div>
                     <div class="list-content">
-                        <p class="title"><a href="">恭喜济南子公司研发中心乔迁新址</a></p>
+                        <p class="title"><a th:href="@{/news.html(id=${notice.noticeId})}"><span th:text="${notice.noticeTitle}"></span></a></p>
                         <p class="content">
-                            <span class="label label-default">企业新闻</span>
-                            <span class="label label-default">签约新闻</span>
-                            <span>2018-3-4 15:00</span>
-                            <a href="">查看更多</a>
-                        </p>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div >
-                    <div class="list-img">
-                        <img src="https://img.datuodui.com/ws/pic12.jpg" alt="">
-                    </div>
-                    <div class="list-content">
-                        <p class="title"><a href="">恭喜济南子公司研发中心乔迁新址</a></p>
-                        <p class="content">
-                            <span class="label label-default">企业新闻</span>
-                            <span class="label label-default">签约新闻</span>
-                            <span>2018-3-4 15:00</span>
-                            <a href="">查看更多</a>
-                        </p>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div >
-                    <div class="list-img">
-                        <img src="https://img.datuodui.com/ws/pic12.jpg" alt="">
-
-                    </div>
-                    <div class="list-content">
-                        <p class="title">恭喜济南子公司研发中心乔迁新址</p>
-                        <p class="content">
-                            <span class="label label-default">企业新闻</span>
-                            <span class="label label-default">签约新闻</span>
-                            <span>2018-3-4 15:00</span>
-                            <a href="">查看更多</a>
+                            <span class="label label-default" th:text="${notice.categoryName}"></span>
+                            <!--<span class="label label-default">签约新闻</span>-->
+                            <span th:text="${{notice.publishTime}}"></span>
+                            <a th:href="@{/news.html(id=${notice.noticeId})}">查看更多</a>
                         </p>
                     </div>
                 </div>
             </li>
         </ul>
+          <nav aria-label="Page navigation">
+              <ul class="pagination">
+                  <li>
+                      <a href="#" aria-label="Previous">
+                          <span aria-hidden="true">&laquo;</span>
+                      </a>
+                  </li>
+                  <li class="active"><a href="#">1</a></li>
+                  <li><a href="#">2</a></li>
+                  <li><a href="#">3</a></li>
+                  <li><a href="#">4</a></li>
+                  <li><a href="#">5</a></li>
+                  <li>
+                      <a href="#" aria-label="Next">
+                          <span aria-hidden="true">&raquo;</span>
+                      </a>
+                  </li>
+              </ul>
+          </nav>
       </div>
       <!-- <div class="col-md-4 col-xs-12">
 

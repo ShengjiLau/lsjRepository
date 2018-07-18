@@ -3,9 +3,9 @@ package com.lcdt.contract.service;
 
 
 
-import com.github.pagehelper.PageInfo;
 
 import com.lcdt.contract.web.dto.OrderDto;
+import com.lcdt.contract.web.dto.PageBaseDto;
 
 
 
@@ -40,7 +40,7 @@ public interface OrderService {
      * 获取订单列表
      * @return PageInfo<List<Order>>
      */
-    PageInfo<OrderDto> OrderList(OrderDto OrderDto);
+    PageBaseDto<OrderDto> OrderList(OrderDto OrderDto);
 
 	
     /**

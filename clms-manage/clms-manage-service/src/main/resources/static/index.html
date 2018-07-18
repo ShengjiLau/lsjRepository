@@ -264,84 +264,35 @@
                 <p class="block-subtitle">了解大驼队最新资讯，掌握行业实时动态</p>
                 <div class="row news-block">
                     <div class="col-md-6">
-                        <ul class="news-list">
+                        <ul class="news-list"  th:each="notice : ${notices}">
                             <li>
                                 <div >
                                     <div class="list-img">
-                                        <img src="https://img.datuodui.com/ws/pic12.jpg" alt="">
-
+                                        <span th:if="${notice.coverImageUrl}">
+                                            <img th:src="${notice.coverImageUrl}" alt="">
+                                        </span>
                                     </div>
                                     <div class="list-content">
-                                        <p class="title">恭喜济南子公司研发中心乔迁新址</p>
+                                        <p class="title" th:text="${notice.noticeTitle}">
+                                        </p>
                                         <p class="content">
-                                            <span class="label label-default">企业新闻</span>
-                                            <span class="label label-default">签约新闻</span>
-                                            <span>2018-3-4 15:00</span>
-                                            <a href="">查看更多</a>
+                                            <span class="label label-default" th:text="${notice.categoryName}"></span>
+                                            <span  th:text="${{notice.publishTime}}"></span>
+
+                                            <a th:href="@{/news.html(id=${notice.noticeId})}">查看更多</a>
                                         </p>
                                     </div>
                                 </div>
                             </li>
-                            <li>
-                                <div >
-                                    <div class="list-img">
-                                        <img src="https://img.datuodui.com/ws/pic12.jpg" alt="">
 
-                                    </div>
-                                    <div class="list-content">
-                                        <p class="title">恭喜济南子公司研发中心乔迁新址</p>
-                                        <p class="content">
-                                            <span class="label label-default">企业新闻</span>
-                                            <span class="label label-default">签约新闻</span>
-                                            <span>2018-3-4 15:00</span>
-                                            <a href="">查看更多</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div >
-                                    <div class="list-img">
-                                        <img src="https://img.datuodui.com/ws/pic12.jpg" alt="">
-
-                                    </div>
-                                    <div class="list-content">
-                                        <p class="title">恭喜济南子公司研发中心乔迁新址</p>
-                                        <p class="content">
-                                            <span class="label label-default">企业新闻</span>
-                                            <span class="label label-default">签约新闻</span>
-                                            <span>2018-3-4 15:00</span>
-                                            <a href="">查看更多</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div >
-                                    <div class="list-img">
-                                        <img src="https://img.datuodui.com/ws/pic12.jpg" alt="">
-
-                                    </div>
-                                    <div class="list-content">
-                                        <p class="title">恭喜济南子公司研发中心乔迁新址</p>
-                                        <p class="content">
-                                            <span class="label label-default">企业新闻</span>
-                                            <span class="label label-default">签约新闻</span>
-                                            <span>2018-3-4 15:00</span>
-                                            <a href="">查看更多</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
                         </ul>
                     </div>
                     <div class="col-md-6 hidden-sm hidden-xs">
                         <div class="new-info">
-                            <p class="title">恭喜济南子公司研发中心乔迁新址</p>
-                            <p class="content">立晨数据济南研发中心自2018年4月18日迁往新的办公地址，并启用新的电话号码，因公司迁址给您带来不便，敬请谅解。我们将在新的环境里为您提供更加优质的服务，敬请莅临指！</p>
+                            <p class="title" th:text="${topOne.noticeTitle}"></p>
+                            <p class="content" th:text="${topOne.noticeContent}"></p>
                             <div class="thum">
-                                <img src="https://img.datuodui.com/ws/pic18.jpg" alt="https://img.datuodui.com/ws/pic18.jpg">
-
+                                <img th:src="${topOne.coverImageUrl}" >
                             </div>
                         </div>
                     </div>

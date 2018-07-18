@@ -1,6 +1,5 @@
 package com.lcdt.contract.web.controller.api;
 
-import java.util.Date;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -20,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.service.OrderService;
+import com.lcdt.contract.vo.OrderVO;
 import com.lcdt.contract.web.dto.OrderDto;
 import com.lcdt.contract.web.dto.PageBaseDto;
 import com.lcdt.contract.web.utils.OrderValidator;
@@ -47,42 +47,34 @@ public class PurchaseOrderApi {
 	private OrderService orderService;
 	
 	
-	@ApiOperation(value="采购订单列表",notes="采购订单列表数据")
+	@ApiOperation(value = "采购订单列表",notes = "采购订单列表数据")
 	@GetMapping("/list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_get')")
 	public JSONObject OrderList(OrderDto orderDto){
-		Long UserId = SecurityInfoGetter.getUser().getUserId();//get 创建者
-		Long companyId = SecurityInfoGetter.getCompanyId();//get 公司id	
-		orderDto.setCompanyId(companyId);
-		orderDto.setCreateUserId(UserId);
-		
-		PageInfo<OrderDto> pageInfo = orderService.OrderList(orderDto);
-		PageBaseDto<OrderDto> pageBaseDto = new PageBaseDto<OrderDto>();
-		pageBaseDto.setList(pageInfo.getList());
-		pageBaseDto.setTotal(pageInfo.getTotal());
-		logger.debug("采购订单条目数"+pageInfo.getTotal());
-		
-		return ResponseJsonUtils.successResponseJson(pageBaseDto, "采购订单列表");
+		PageBaseDto<OrderDto> pageBaseDto = orderService.OrderList(orderDto);
+		String message = "采购订单列表";
+		return ResponseJsonUtils.successResponseJson(pageBaseDto, message);
 	}
-	
 	
 	@ApiOperation(value="获取单个采购订单",notes="单个采购订单")
 	@GetMapping("/selporder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_get')")
-	public  JSONObject selectOrder(@ApiParam(value = "订单id")@RequestParam Long orderId){
+	public  JSONObject selectOrder(@ApiParam(value = "订单id") @RequestParam Long orderId){
 		OrderDto orderDto = orderService.selectByPrimaryKey(orderId);
+		String message = null;
 		if (orderDto != null) {
-			return ResponseJsonUtils.successResponseJson(orderDto, "采购订单详情");
+			message = "采购订单详情";
+			return ResponseJsonUtils.successResponseJson(orderDto, message);
 		}else {
-			throw new RuntimeException("获取失败");
+			message = "获取失败";
+			throw new RuntimeException(message);
 		}
 	}
-	
 	
 	@ApiOperation("新增采购订单")
 	@PostMapping("/addOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_add')")
-	public JSONObject addOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindingResult) {
+	public JSONObject addOrder(@Validated @RequestBody OrderDto orderDto, BindingResult bindingResult) {
 		  //Validated自动验证
 		Map<String,String> map = RequestValidated.validatedRequest(bindingResult);
 		if (!map.isEmpty()) {
@@ -93,28 +85,23 @@ public class PurchaseOrderApi {
 	       if (!validateMap.isEmpty()) {
 	    		return ResponseJsonUtils.failedResponseJson(validateMap, "验证信息未能通过");
 	      }
-		Long UserId = SecurityInfoGetter.getUser().getUserId();
-		Long companyId = SecurityInfoGetter.getCompanyId();
-		orderDto.setCompanyId(companyId);
-		logger.debug("创建人UserId:" + UserId);
-		logger.debug("所属公司companyId:" + companyId);
-		orderDto.setCreateUserId(UserId);
-		orderDto.setCreateTime(new Date());
-		orderDto.setOrderType(new Short("0"));	//设置订单类型为采购单
+		orderDto.setOrderType(OrderVO.PURCHASE_ORDER);	//设置订单类型为采购单
 		int result = orderService.addOrder(orderDto);
 		logger.debug("新增采购订单条目数:"+result);
+		String message = null;
 		if (result > 0) {
-			return ResponseJsonUtils.successResponseJson(null, "添加成功!");
+			message = "添加成功!";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
         } else {
-            throw new RuntimeException("添加失败");
+        	message = "添加失败";
+            throw new RuntimeException(message);
         }
 	}
-	
 	
 	@ApiOperation("编辑采购订单")
 	@PostMapping("/modifyOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_modify')")
-	public JSONObject modifyOrder(@Validated @RequestBody OrderDto orderDto,BindingResult bindingResult) {
+	public JSONObject modifyOrder(@Validated @RequestBody OrderDto orderDto, BindingResult bindingResult) {
 		//Validated自动验证
 		Map<String,String> map = RequestValidated.validatedRequest(bindingResult);
 		if (!map.isEmpty()) {
@@ -127,55 +114,65 @@ public class PurchaseOrderApi {
 	        }
 	    int result = orderService.modOrder(orderDto);
 	    logger.debug("修改采购订单条目数:"+result);
+	    String message = null;
 	    if (result > 0) {
-	    	return ResponseJsonUtils.successResponseJson(null, "修改成功!");
+	      message = "修改成功!";
+	      return ResponseJsonUtils.successResponseJsonWithoutData(message);
        } else {
-          throw new RuntimeException("修改失败");
+    	  message = "修改失败";
+          throw new RuntimeException(message);
        }
 	}
-	
 	
 	@ApiOperation("取消采购订单")
 	@PostMapping("/deleteOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_delete')")
 	public JSONObject delOrder(@ApiParam(value = "采购订单id",required = true) @RequestParam Long orderId) {
-		int result = orderService.updateOrderIsDraft(orderId,(short) 2);
+		int result = orderService.updateOrderIsDraft(orderId, OrderVO.CANCEL_STATUS);
 		logger.debug("取消销售订单条目数:"+result);
+		String message = null;
 		if (result > 0) {    
-			return ResponseJsonUtils.successResponseJson(null, "取消成功!");
+			message = "取消成功!";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 	    } else {
 	    	if (0 == result) {
-	    		return ResponseJsonUtils.failedResponseJson(null, "存在付款单的订单不能取消!");
+	    		message = "存在付款单的订单不能取消!";
+	    		return ResponseJsonUtils.failedResponseJsonWithoutData(message);
 	    	}else {
-	    		throw new RuntimeException("取消失败");
+	    		message = "取消失败";
+	    		throw new RuntimeException(message);
 	    	}  
 	    }
 	 }
-	
 	
 	@ApiOperation("发布采购订单")
 	@PostMapping("/releaseOrder")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_release')")
 	public JSONObject releaseOrder(@ApiParam(value = "采购订单id",required = true) @RequestParam Long orderId) {
-		int result = orderService.updateOrderIsDraft(orderId,(short) 1);
+		int result = orderService.updateOrderIsDraft(orderId, OrderVO.ALREADY_PUBLISHI);
 		logger.debug("取消销售订单条目数:"+result);
+		String message = null;
 		if (result > 0) {
-			return ResponseJsonUtils.successResponseJson(null, "发布成功!");
+			message = "发布成功!";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 	    } else {
-	        throw new RuntimeException("发布失败");
+	    	message = "发布失败";
+	        throw new RuntimeException(message);
 	    }
 	}
-	
 	
 	@ApiOperation("采购单生成运输计划")
 	@PostMapping("/trafficPlan")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_traffic_plan')")
 	public JSONObject generateTrafficPlan(@ApiParam(value = "采购订单id",required = true) @RequestParam Long orderId) {
 		Boolean flag = orderService.generateTrafficPlan(orderId);
+		String message = null;
 		if (flag) {
-			return ResponseJsonUtils.successResponseJson(null, "操作成功!");
+			message = "操作成功!";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 		}else {
-			throw new RuntimeException("操作失败");
+			message = "操作失败";
+			throw new RuntimeException(message);
 		}
 
 	}
@@ -185,12 +182,14 @@ public class PurchaseOrderApi {
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_warehouse_plan')")
 	public JSONObject generateInWarehousePlan(@ApiParam(value = "采购订单id",required = true) @RequestParam Long orderId) {
 		Boolean flag = orderService.generateInWarehousePlan(orderId);
+		String message = null;
 		if (flag) {
-			return ResponseJsonUtils.successResponseJson(null, "操作成功!");
+			message = "操作成功!";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 		}else {
-			throw new RuntimeException("操作失败");
+			message = "操作失败";
+			throw new RuntimeException(message);
 		}
-		
 	}	
 	
 
