@@ -82,36 +82,46 @@
     <ol class="breadcrumb">
         <li><a href="#">资讯</a></li>
         <li><a href="#">公司新闻</a></li>
-        <li class="active">恭喜济南子公司研发中心乔迁新址</li>
+        <li class="active" th:text="${notice.noticeTitle}"></li>
     </ol>
 </div>
 
 <div class="main-container">
     <div class="container news-content">
        <h1>恭喜济南子公司研发中心乔迁新址</h1>
-        <p>2018-07-05 08:57:40　来源: 新华网</p>
+        <p th:text="${{notice.publishTime}}+'　来源: '+${notice.publisher}">　</p>
         <hr>
         <div class="content">
-            <p>
-                立晨数据济南研发中心自2018年4月18日迁往新的办公地址，并启用新的电话号码，因公司迁址给您带来不便，敬请谅解。我们将在新的环境里为您提供更加优质的服务，敬请莅临指！
+            <p th:text="${notice.noticeContent}">
             </p>
-
         </div>
-        <p style="text-align: right">
-            2018-07-05 08:57:40　来源: 新华网
-
+        <p style="text-align: right"th:text="${{notice.publishTime}}+'　来源: '+${notice.publisher}">
         </p>
         <hr>
     </div>
     <div class="next-post">
         <div class="container">
-            <p class="tips">阅读下一篇</p>
-            <p class="next-title">下一篇标题</p>
-            <p class="next-contet">下一篇摘要下一篇摘要下一篇摘要下一篇摘要下一篇摘要下一篇摘要下一篇摘要下一篇摘要下一篇摘要下一篇摘要下一篇摘要下一篇摘要</p>
-            <p class="back-btn">
-                <a href="">返回首页</a>
-                <a href="">返回资讯首页</a>
-            </p>
+        <div  th:if="${nextNotice}">
+
+                <p class="tips">阅读下一篇</p>
+                <p class="next-title"><a style="color: black" th:href="@{/news.html(id=${nextNotice.noticeId})}"><span th:text="${nextNotice.noticeTitle}"></span></a></p>
+                <p class="next-contet">
+                    <a style="color: black" th:href="@{/news.html(id=${nextNotice.noticeId})}"><span th:text="${nextNotice.noticeSummary}"></span></a>
+                </p>
+
+        </div>
+        <div th:if="${nextNotice}==null">
+
+                <p class="tips">没有下一篇了</p>
+                <p class="next-title"></p>
+                <p class="next-contet"></p>
+
+        </div>
+
+        <p class="back-btn">
+            <a href="/index.html">返回首页</a>
+            <a href="/news-list.html">返回资讯首页</a>
+        </p>
         </div>
     </div>
     <div class="footer">

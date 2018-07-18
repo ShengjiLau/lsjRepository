@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.manage.mapper.TNoticeCategoryMapper">
+    <resultMap id="BaseResultMap" type="com.lcdt.manage.entity.TNoticeCategory">
+        <id column="category_id" jdbcType="BIGINT" property="categoryId" />
+        <result column="category_name" jdbcType="BIGINT" property="categoryName" />
+        <result column="sequence_number" jdbcType="VARCHAR" property="sequenceNumber" />
+    </resultMap>
+</mapper>
