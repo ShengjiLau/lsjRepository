@@ -25,6 +25,7 @@ import com.lcdt.traffic.model.Msg;
 import com.lcdt.traffic.model.Reconcile;
 import com.lcdt.traffic.service.ReconcileService;
 import com.lcdt.traffic.util.ConvertStringAndLong;
+import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.MsgDto;
 import com.lcdt.traffic.web.dto.ReconcileDto;
 
@@ -64,24 +65,24 @@ public class ReconcileServiceImpl implements ReconcileService {
 	public int insertReconcileBatch(List<Reconcile> reconcileList) {
 		
 	    List<FeeAccount> feeAccountList = new ArrayList<FeeAccount>();
-	    for(Reconcile fa:reconcileList) {
+	    for(Reconcile fa : reconcileList) {
 		//添加对账单的所属公司id 操作人id 操作人姓名 默认状态
 		    fa.setCompanyId(SecurityInfoGetter.getCompanyId());
 		    fa.setOperatorId(SecurityInfoGetter.getUser().getUserId());
 		    fa.setOperatorName(SecurityInfoGetter.getUser().getRealName());
-		    fa.setCancelOk((short) 0);//生成对账单时取消状态设置为0不取消
+		    fa.setCancelOk(ConstantVO.NO_CANCEL);//生成对账单时取消状态设置为0不取消
 	    }
 	    //批量插入
 	    int result = reconcileMapper.insertByBatch(reconcileList);
 	
-	    for(Reconcile reconcile:reconcileList) {
+	    for(Reconcile reconcile : reconcileList) {
 		    Reconcile rec = reconcileMapper.selectByPrimaryKey(reconcile.getReconcileId());
 		    //得到记账单id
 		    Long[] acLongId = ConvertStringAndLong.convertStrToLong(rec.getAccountId());
-		    for(Long l:acLongId) {
+		    for(Long id:acLongId) {
 			//创建一个记账单 依次放入每条记账单id以及对应的对账单id和对账单号
 			    FeeAccount fa = new FeeAccount();
-			    fa.setAccountId(l);
+			    fa.setAccountId(id);
 			    fa.setReconcileId(rec.getReconcileId());
 			    fa.setReconcileCode(rec.getReconcileCode());
 			    feeAccountList.add(fa);
@@ -130,7 +131,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 			}
 		}
 			
-		if(q2>0) {
+		if(q2 > 0) {
 			q1 = reconcileMapper.cancelByBatch(ConvertStringAndLong.convertStrToLong(sb2.toString()));
 			//获取不存在收付款记录的对账单信息列表
 			List<Reconcile> reconcileList = reconcileMapper.getReconcileListByPk(ConvertStringAndLong.convertStrToLong(sb2.toString()));
@@ -148,7 +149,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 		if (sb1.length()>0) {
 			//去掉字符串末尾的","
 		String str2 = sb1.substring(0,sb1.length()-1);
-			map.put(1,str2);
+			map.put(ConstantVO.ALREADY_PAYMENT, str2);
 		}
 		
 		if (sb3.length()>0) {
@@ -158,14 +159,13 @@ public class ReconcileServiceImpl implements ReconcileService {
 		logger.debug("应该修改的记账单数量为:"+w1);
 
 		if (q1 > 0) {
-			map.put(2,"取消成功");
+			String message = "取消成功";
+			map.put(ConstantVO.NO_PAYMENT, message);
 		}
 		
 		
 		return map;	
 	}
-	
-	
 	
 	
 	/**
@@ -175,24 +175,23 @@ public class ReconcileServiceImpl implements ReconcileService {
 	@Override
 	public PageInfo<ReconcileDto> getReconcileList(ReconcileDto reconcileDto){
 		if (reconcileDto.getPageNum() < 1) {
-			reconcileDto.setPageNum(1);
+			reconcileDto.setPageNum(ConstantVO.PAGE_NUM);
 		}
 		if (reconcileDto.getPageSize() < 0) {
-			reconcileDto.setPageSize(0);
+			reconcileDto.setPageSize(ConstantVO.PAGE_SIZE);
 		}
 		StringBuilder sbd = new StringBuilder();
 		reconcileDto.setCompanyId(SecurityInfoGetter.getCompanyId());
-		PageHelper.startPage(reconcileDto.getPageNum(),reconcileDto.getPageSize());
+		PageHelper.startPage(reconcileDto.getPageNum(), reconcileDto.getPageSize());
 		List<ReconcileDto> reconcileList = reconcileMapper.getReconcileList(reconcileDto);
 		if (null != reconcileList && reconcileList.size() > 0) {
-			for(ReconcileDto rd:reconcileList) {
+			for(ReconcileDto rd : reconcileList) {
 				sbd.append(rd.getReconcileId());sbd.append(",");
 			}	
 		}else {
 			PageInfo<ReconcileDto> page = new PageInfo<ReconcileDto>(reconcileList);
 			return page;
 		}
-		
 		
 		List<FeeExchange> feeExchangelist = new ArrayList<FeeExchange>();
 		//批量获取一篮子对账单下的一篮子收付款记录
@@ -207,9 +206,9 @@ public class ReconcileServiceImpl implements ReconcileService {
 				//查询对账单相关留言数量
 				MsgDto msgDto = new MsgDto();
 				msgDto.setAccountId(rdto.getReconcileId());
-				msgDto.setType((short) 1);
+				msgDto.setType(ConstantVO.MSG_RECONCILE_TYPE);
 				List<Msg> msgList = msgMapper.selectSomeMsg(msgDto);
-				for(FeeExchange fe:feeExchangelist) {
+				for(FeeExchange fe : feeExchangelist) {
 					if (rdto.getReconcileId().longValue() == fe.getReconcileId().longValue()) {
 						i++;
 						if (null != fe.getTransportationExpenses()) {
@@ -228,8 +227,6 @@ public class ReconcileServiceImpl implements ReconcileService {
 		PageInfo<ReconcileDto> page = new PageInfo<ReconcileDto>(reconcileList);
 		return page;
 	}
-	
-	
 	
 	@Override
 	public ReconcileDto selectReconcileByPk(Long pk) {

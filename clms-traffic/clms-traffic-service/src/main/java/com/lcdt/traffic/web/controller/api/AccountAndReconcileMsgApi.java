@@ -100,7 +100,7 @@ public class AccountAndReconcileMsgApi {
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('account_msg_get')")
 	public JSONObject getMsg(MsgDto msgDto) {
 		List<Msg> msgList = msgService.selectSomeMsg(msgDto);
-		PageBaseDto<Msg> pageBaseDto = new PageBaseDto<Msg>(msgList,msgList.size());
+		PageBaseDto<Msg> pageBaseDto = new PageBaseDto<Msg>(msgList, msgList.size());
 		String message = "留言列表";
 		return ResponseJsonUtils.successResponseJson(pageBaseDto, message);
 	}

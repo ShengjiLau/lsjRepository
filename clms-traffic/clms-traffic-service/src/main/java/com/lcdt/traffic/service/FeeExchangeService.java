@@ -2,10 +2,10 @@ package com.lcdt.traffic.service;
 
 
 
-import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.FeeExchange;
 import com.lcdt.traffic.web.dto.FeeExchangeDto;
 import com.lcdt.traffic.web.dto.FeeExchangeListDto;
+import com.lcdt.traffic.web.dto.PageBaseDto;
 
 /**
  * @author Sheng-ji Lau
@@ -17,7 +17,7 @@ public interface FeeExchangeService {
 	
 	int insertFeeExchangeByBatch(FeeExchangeListDto feeExchangeListDto);
 	
-	PageInfo<FeeExchange> getFeeExchangeList(FeeExchangeDto feeExchangeDto);
+	PageBaseDto<FeeExchange> getFeeExchangeList(FeeExchangeDto feeExchangeDto);
 	
 	int updateSetCancelOk(String feeExchangeIds);
 	

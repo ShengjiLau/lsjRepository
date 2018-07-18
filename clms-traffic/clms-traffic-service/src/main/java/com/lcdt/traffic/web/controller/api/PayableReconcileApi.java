@@ -21,6 +21,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.Reconcile;
 import com.lcdt.traffic.service.ReconcileService;
 import com.lcdt.traffic.util.ConvertStringAndLong;
+import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.ReconcileDto;
 import com.lcdt.traffic.web.dto.ReconcileListDto;
@@ -48,7 +49,7 @@ public class PayableReconcileApi {
 	Logger logger = LoggerFactory.getLogger(PayableReconcileApi.class);
 	
 
-	@ApiOperation(value = "添加对账单,payable_reconcile_add")
+	@ApiOperation(value = "添加对账单, payable_reconcile_add")
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_reconcile_add')")
 	public JSONObject addReconcile(@RequestBody ReconcileListDto reconcileListDto) {
@@ -61,7 +62,7 @@ public class PayableReconcileApi {
 		//传入的应生成的对账单数量
 		int reconcileSize = reconcileListDto.getReconcileList().size();
 		for (Reconcile reconcile : reconcileListDto.getReconcileList()) {
-			reconcile.setPayeeType((short) 1);
+			reconcile.setPayeeType(ConstantVO.RECONCILE_PAYABLE);
 		}
 		//result 为返回的对账单插入数量
 		int result = reconcileService.insertReconcileBatch(reconcileListDto.getReconcileList());
@@ -98,7 +99,7 @@ public class PayableReconcileApi {
 	@ApiOperation("查询对账单列表, payable_reconcile_list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_reconcile_get')")
 	public JSONObject getReconcileList(ReconcileDto reconcileDto) {
-		reconcileDto.setPayeeType((short) 1);
+		reconcileDto.setPayeeType(ConstantVO.RECONCILE_PAYABLE);
 		PageInfo<ReconcileDto> page = reconcileService.getReconcileList(reconcileDto);
 		PageBaseDto<ReconcileDto> pageBaseDto = new PageBaseDto<ReconcileDto>();
 		pageBaseDto.setTotal(page.getTotal());
@@ -111,7 +112,7 @@ public class PayableReconcileApi {
 	@GetMapping("/select")
 	@ApiOperation("查询对账单详情,payable_reconcile_select")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('payable_reconcile_get')")
-	public JSONObject selectReconcile(@ApiParam(value = "对账单id",required=true) @RequestParam Long reconcileId) {
+	public JSONObject selectReconcile(@ApiParam(value = "对账单id",required = true) @RequestParam Long reconcileId) {
 		ReconcileDto reconcileDto = reconcileService.selectReconcileByPk(reconcileId);
 		String message = null;
 		if(reconcileDto != null) {

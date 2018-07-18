@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.FeeExchange;
 import com.lcdt.traffic.service.FeeExchangeService;
+import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.FeeExchangeDto;
 import com.lcdt.traffic.web.dto.FeeExchangeListDto;
 import com.lcdt.traffic.web.dto.PageBaseDto;
@@ -51,7 +52,7 @@ public class ReceiveFeeExchangeApi {
 		}
 		
 		for(FeeExchange fe : feeExchangeListDto.getFeeExchangeList()) {
-			fe.setType((short) 0);
+			fe.setType(ConstantVO.EXCHANGE_RECEIVABLE);
 		}
 		
 		int result = feeExchangeService.insertFeeExchangeByBatch(feeExchangeListDto);
@@ -71,11 +72,8 @@ public class ReceiveFeeExchangeApi {
 	@ApiOperation("查询收款记录列表,receive_exchange_list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receive_exchange_get')")
 	public JSONObject getFeeExchange(FeeExchangeDto feeExchangeDto) {
-		feeExchangeDto.setType((short) 0);
-		PageInfo<FeeExchange> page = feeExchangeService.getFeeExchangeList(feeExchangeDto);
-		PageBaseDto<FeeExchange> pageBaseDto = new PageBaseDto<FeeExchange>();
-		pageBaseDto.setTotal(page.getTotal());
-		pageBaseDto.setList(page.getList());
+		feeExchangeDto.setType(ConstantVO.EXCHANGE_RECEIVABLE);
+		PageBaseDto<FeeExchange> pageBaseDto = feeExchangeService.getFeeExchangeList(feeExchangeDto);
 		String message = "请求成功!";
 		return ResponseJsonUtils.successResponseJson(pageBaseDto, message);
 	}
