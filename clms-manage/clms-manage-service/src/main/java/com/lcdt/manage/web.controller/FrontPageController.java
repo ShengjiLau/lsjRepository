@@ -46,8 +46,6 @@ public class FrontPageController {
         PageInfo<NoticeListDto> noticesPage = new PageInfo<NoticeListDto>();
         noticesPage.setPageSize(5);
         noticesPage.setPageNum(1);
-        noticesPage.setStartRow(0);
-        noticesPage.setEndRow(4);
         TNoticeCategory cate = new TNoticeCategory();
         cate = noticeCategoryService.findByName(NewsCategory);
         if(cate!=null) {
