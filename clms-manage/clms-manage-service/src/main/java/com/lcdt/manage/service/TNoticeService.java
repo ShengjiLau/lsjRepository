@@ -3,6 +3,7 @@ package com.lcdt.manage.service;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.manage.dto.NoticeListDto;
+import com.lcdt.manage.dto.NoticeListParamsDto;
 import com.lcdt.manage.entity.TNotice;
 import com.baomidou.mybatisplus.service.IService;
 
@@ -19,8 +20,18 @@ import java.util.List;
 public interface TNoticeService extends IService<TNotice>{
 
     List<NoticeListDto> findAllNoticesByCateId(Long categoryId);
-    List<NoticeListDto> findNoticeAndNextById(TNotice currentNotice);
-    PageInfo<NoticeListDto> findTopNoticesByPage(PageInfo<NoticeListDto> page, TNotice p);
 
+    /**
+     * 获取新闻详细信息
+     * @param currentNotice
+     * @return
+     */
+    NoticeListDto findNoticeAndNextById(TNotice currentNotice);
 
+    /**
+     * 分页查询新闻列表
+     * @param params
+     * @return
+     */
+    Page<NoticeListDto> findTopNoticesByPage(NoticeListParamsDto params);
 }
