@@ -21,6 +21,7 @@ import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.Reconcile;
 import com.lcdt.traffic.service.ReconcileService;
 import com.lcdt.traffic.util.ConvertStringAndLong;
+import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.traffic.web.dto.ReconcileDto;
 import com.lcdt.traffic.web.dto.ReconcileListDto;
@@ -38,7 +39,7 @@ import io.swagger.annotations.ApiParam;
  */
 
 @RestController
-@Api(description="应收对账单api")
+@Api(description = "应收对账单api")
 @RequestMapping("/reconcile/receivable")
 public class ReceivableReconcileApi {
 	
@@ -61,7 +62,7 @@ public class ReceivableReconcileApi {
 		//传入的应生成的记账单数量
 		int  reconcileSize = reconcileListDto.getReconcileList().size();
 		for(Reconcile reconcile:reconcileListDto.getReconcileList()) {
-			reconcile.setPayeeType((short) 0);
+			reconcile.setPayeeType(ConstantVO.RECONCILE_RECEIVABLE);
 		}
 		//result 为返回的对账单插入数量
 		int result = reconcileService.insertReconcileBatch(reconcileListDto.getReconcileList());
@@ -83,10 +84,10 @@ public class ReceivableReconcileApi {
 	public JSONObject cancelReconcile(@ApiParam(value = "一个或多个对账单id,多个时用','隔开",required = true) @RequestParam String reconcileIds) {
 		Map<Integer,String> map = reconcileService.setCancelOk(reconcileIds);
 		String message = null;
-		if (map.containsKey(1)) {
+		if (map.containsKey(ConstantVO.ALREADY_PAYMENT)) {
 			Long[] Ids = ConvertStringAndLong.convertStrToLong(map.get(1));
 			message = "有" + Ids.length + "条对账单因为存在收付款记录不能取消!";
-			return ResponseJsonUtils.failedResponseJson(map.get(1), message);
+			return ResponseJsonUtils.failedResponseJson(map.get(ConstantVO.ALREADY_PAYMENT), message);
 		}else {
 			message = "取消成功！";
 			return ResponseJsonUtils.successResponseJsonWithoutData(message);
@@ -98,7 +99,7 @@ public class ReceivableReconcileApi {
 	@ApiOperation("查询对账单列表,receivable_reconcile_list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receivable_reconcile_get')")
 	public JSONObject getReconcileList(ReconcileDto reconcileDto) {
-		reconcileDto.setPayeeType((short) 0);
+		reconcileDto.setPayeeType(ConstantVO.RECONCILE_RECEIVABLE);
 		PageInfo<ReconcileDto> page = reconcileService.getReconcileList(reconcileDto);
 		PageBaseDto<ReconcileDto> pageBaseDto = new PageBaseDto<ReconcileDto>();
 		pageBaseDto.setTotal(page.getTotal());

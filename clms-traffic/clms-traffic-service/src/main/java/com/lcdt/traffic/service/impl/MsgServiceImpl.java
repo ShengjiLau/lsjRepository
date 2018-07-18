@@ -4,6 +4,7 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dao.MsgMapper;
 import com.lcdt.traffic.model.Msg;
 import com.lcdt.traffic.service.MsgService;
+import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.MsgDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,8 @@ import java.util.List;
 
 /**
  * @author Sheng-ji Lau
- * @date 2018年3月30日下午1:56:49
- * @version
+ * @date 2018年3月30日
+ * @version 1.0
  */
 @Service
 public class MsgServiceImpl implements MsgService {
@@ -25,7 +26,7 @@ public class MsgServiceImpl implements MsgService {
 	@Override
 	public int addMsg(Msg msg) {
 		msg.setCreateDate(new Date());
-		msg.setIsDeleted((short) 0);
+		msg.setIsDeleted(ConstantVO.NORMAL_STATUS);
 		msg.setOperatorId(SecurityInfoGetter.getUser().getUserId());
 		msg.setOperatorName(SecurityInfoGetter.getUser().getRealName());
 

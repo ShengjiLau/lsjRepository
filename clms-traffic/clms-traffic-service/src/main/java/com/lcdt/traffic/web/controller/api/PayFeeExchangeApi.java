@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.traffic.model.FeeExchange;
 import com.lcdt.traffic.service.FeeExchangeService;
+import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.FeeExchangeDto;
 import com.lcdt.traffic.web.dto.FeeExchangeListDto;
 import com.lcdt.traffic.web.dto.PageBaseDto;
@@ -35,7 +36,7 @@ import io.swagger.annotations.ApiParam;
  * @Description: TODO 
  */
 @RequestMapping("/feeExchange/pay")
-@Api(description="付款记录操作API")
+@Api(description = "付款记录操作API")
 @RestController
 public class PayFeeExchangeApi {
 	
@@ -43,7 +44,7 @@ public class PayFeeExchangeApi {
 	private FeeExchangeService feeExchangeService;
 	
 	@PostMapping("/add")
-	@ApiOperation("新增付款记录,receive_exchange_add")
+	@ApiOperation("新增付款记录, receive_exchange_add")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('pay_exchange_add')")
 	public JSONObject addFeeExchange(@RequestBody FeeExchangeListDto feeExchangeListDto) {
 		String validateMessage = validRequestBody(feeExchangeListDto);
@@ -51,8 +52,8 @@ public class PayFeeExchangeApi {
 			return ResponseJsonUtils.failedResponseJsonWithoutData(validateMessage);
 		}
 				
-		for(FeeExchange fe:feeExchangeListDto.getFeeExchangeList()) {
-			fe.setType((short) 1);
+		for(FeeExchange fe : feeExchangeListDto.getFeeExchangeList()) {
+			fe.setType(ConstantVO.EXCHANGE_PAYABLE);
 		}
 		
 		int result = feeExchangeService.insertFeeExchangeByBatch(feeExchangeListDto);
@@ -72,11 +73,8 @@ public class PayFeeExchangeApi {
 	@ApiOperation("查询付款记录列表, receive_exchange_list")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('pay_exchange_get')")
 	public JSONObject getFeeExchange(FeeExchangeDto feeExchangeDto) {
-		feeExchangeDto.setType((short) 1);
-		PageInfo<FeeExchange> page = feeExchangeService.getFeeExchangeList(feeExchangeDto);
-		PageBaseDto<FeeExchange> pageBaseDto = new PageBaseDto<FeeExchange>();
-		pageBaseDto.setTotal(page.getTotal());
-		pageBaseDto.setList(page.getList());
+		feeExchangeDto.setType(ConstantVO.EXCHANGE_PAYABLE);
+		PageBaseDto<FeeExchange> pageBaseDto = feeExchangeService.getFeeExchangeList(feeExchangeDto);
 		String message = "请求成功!";
 		return ResponseJsonUtils.successResponseJson(pageBaseDto, message);
 	}
