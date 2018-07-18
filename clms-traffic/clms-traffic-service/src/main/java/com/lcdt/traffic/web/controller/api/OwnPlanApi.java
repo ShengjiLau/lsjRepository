@@ -392,7 +392,7 @@ public class OwnPlanApi {
 
 
     @ApiOperation("发布")
-    @GetMapping(value = "/planPublish")
+    @RequestMapping(value = "/planPublish",method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_create_plan') or hasAuthority('traffic_create_plan_1')")
     public JSONObject planPublish(@RequestBody WaybillParamsDto dto, BindingResult bindingResult) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
