@@ -13,6 +13,11 @@ cache:
     - .m2/repository/
     - target/
 
+stages:
+  - build
+  - test
+  - build_image
+
 before_script:
   - docker info
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $ALIYUN_REGISTRY
@@ -29,6 +34,8 @@ test:
 build_image:
   stage: build_image
   script:
+    - pwd
+    - ls -r user-center/userinfo-service/target
     - docker build -t $CI_REGISTRYuser-service:1.0 user-center/userinfo-service
 
 deploy:
