@@ -38,7 +38,3 @@ build_image:
     - ls -r user-center/userinfo-service/target
     - docker build -t $CI_REGISTRYuser-service:1.0 user-center/userinfo-service
 
-deploy:
-  stage: deploy
-  script:
-    - echo 'deploy'
