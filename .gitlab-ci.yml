@@ -18,3 +18,7 @@ test:
   stage: test
   script:
     - mvn  test
+deploy:
+  stage: deploy
+  script:
+    - echo 'deploy'
