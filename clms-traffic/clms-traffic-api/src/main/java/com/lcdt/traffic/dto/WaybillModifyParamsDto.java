@@ -84,22 +84,22 @@ public class WaybillModifyParamsDto implements Serializable {
     /**
      * 应收单价
      */
-    private Float freightPrice;
+    private Double freightPrice;
 
     /**
      * 应收运费
      */
-    private Float freightTotal;
+    private Double freightTotal;
 
     /**
      * 应付单价
      */
-    private Float payPrice;
+    private Double payPrice;
 
     /**
      * 应付总价
      */
-    private Float payTotal;
+    private Double payTotal;
     /**
      * 1、编辑，2、调量
      */
@@ -473,38 +473,38 @@ public class WaybillModifyParamsDto implements Serializable {
         return this;
     }
 
-    public Float getFreightPrice() {
+    public Double getFreightPrice() {
         return freightPrice;
     }
 
-    public WaybillModifyParamsDto setFreightPrice(Float freightPrice) {
+    public WaybillModifyParamsDto setFreightPrice(Double freightPrice) {
         this.freightPrice = freightPrice;
         return this;
     }
 
-    public Float getFreightTotal() {
+    public Double getFreightTotal() {
         return freightTotal;
     }
 
-    public WaybillModifyParamsDto setFreightTotal(Float freightTotal) {
+    public WaybillModifyParamsDto setFreightTotal(Double freightTotal) {
         this.freightTotal = freightTotal;
         return this;
     }
 
-    public Float getPayPrice() {
+    public Double getPayPrice() {
         return payPrice;
     }
 
-    public WaybillModifyParamsDto setPayPrice(Float payPrice) {
+    public WaybillModifyParamsDto setPayPrice(Double payPrice) {
         this.payPrice = payPrice;
         return this;
     }
 
-    public Float getPayTotal() {
+    public Double getPayTotal() {
         return payTotal;
     }
 
-    public WaybillModifyParamsDto setPayTotal(Float payTotal) {
+    public WaybillModifyParamsDto setPayTotal(Double payTotal) {
         this.payTotal = payTotal;
         return this;
     }

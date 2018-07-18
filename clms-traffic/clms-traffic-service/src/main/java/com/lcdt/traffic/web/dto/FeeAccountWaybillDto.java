@@ -17,13 +17,13 @@ public class FeeAccountWaybillDto extends WaybillDto {
     private String receivAndPayName;
 
     @ApiModelProperty(value="运费")
-    private Float freightTotal;
+    private Double freightTotal;
 
     @ApiModelProperty(value="其他费用")
-    private Float otherFeeTotal;
+    private Double otherFeeTotal;
 
     @ApiModelProperty(value="费用总计")
-    private Float feeTotal;
+    private Double feeTotal;
 
     @ApiModelProperty(value="对账条数")
     private Integer reconcileCount;
@@ -36,27 +36,27 @@ public class FeeAccountWaybillDto extends WaybillDto {
         this.receivAndPayName = receivAndPayName;
     }
 
-    public Float getFreightTotal() {
+    public Double getFreightTotal() {
         return freightTotal;
     }
 
-    public void setFreightTotal(Float freightTotal) {
+    public void setFreightTotal(Double freightTotal) {
         this.freightTotal = freightTotal;
     }
 
-    public Float getOtherFeeTotal() {
+    public Double getOtherFeeTotal() {
         return otherFeeTotal;
     }
 
-    public void setOtherFeeTotal(Float otherFeeTotal) {
+    public void setOtherFeeTotal(Double otherFeeTotal) {
         this.otherFeeTotal = otherFeeTotal;
     }
 
-    public Float getFeeTotal() {
+    public Double getFeeTotal() {
         return feeTotal;
     }
 
-    public void setFeeTotal(Float feeTotal) {
+    public void setFeeTotal(Double feeTotal) {
         this.feeTotal = feeTotal;
     }
 

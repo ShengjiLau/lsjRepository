@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -127,6 +128,7 @@ public class AdminPermissionApi {
 
     @ApiOperation("设置账号权限")
     @RequestMapping(value = "/permissionSet",method = RequestMethod.POST)
+    @PreAuthorize("hasAnyAuthority('admin_adimin_permission')")
     public JSONObject permissionSet(@RequestBody AdminPermissionRelation relation){
         JSONObject jo = new JSONObject();
         try {

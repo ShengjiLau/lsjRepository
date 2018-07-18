@@ -98,7 +98,6 @@ public class UserServiceImpl implements UserService,ApplicationEventPublisherAwa
 		registerUser.setLastLoginTime(new Date());
 		registerUser.setNickName(registerDto.getName());
 		registerUser.setRegisterFrom(registerDto.getRegisterFrom());
-
 		int insert = userMapper.insert(registerUser);
 		//发布应用事件
 		applicationEventPublisher.publishEvent(new RegisterUserEvent(registerUser));

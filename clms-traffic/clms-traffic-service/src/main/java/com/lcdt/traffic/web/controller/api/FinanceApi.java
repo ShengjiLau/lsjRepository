@@ -174,7 +174,7 @@ public class FinanceApi {
         ProfitStatResult1Dto dto1 = new ProfitStatResult1Dto();
         if(pg.getTotal()>0) {
             List<ProfitStatResultDto> list = pg.getList();
-            float receiveMoneyTotal = 0,payMoneyTotal=0,profitMoneyTotal=0;
+            Double receiveMoneyTotal = 0d,payMoneyTotal=0d,profitMoneyTotal=0d;
             for(ProfitStatResultDto obj :list) {
                 if(obj.getPayMoney()!=null) payMoneyTotal+=obj.getPayMoney();
                 if(obj.getReceiveMoney()!=null) receiveMoneyTotal+=obj.getReceiveMoney();

@@ -52,7 +52,6 @@ public class Plan4EditServiceImpl implements Plan4EditService {
     @Autowired
     private SplitGoodsDetailMapper splitGoodsDetailMapper; //派单详细
 
-
     @com.alibaba.dubbo.config.annotation.Reference
     public CustomerRpcService customerRpcService;  //客户信息
 
@@ -275,7 +274,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                                             attachment.setOriginAddress(sendAddress);
                                             attachment.setDestinationAdress(receiveAddress);
                                             attachment.setGoodsDetail(sb_goods.toString());
-                                            attachment.setCarrierWebNotifyUrl("");//客户计划列表，按流水号查询
+                                            attachment.setCarrierWebNotifyUrl("transport.html#/customerPlanParam/"+tWaybillPlan.getSerialCode());//客户计划列表，按流水号查询
                                             TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("plan_publish", attachment, defaultNotifyReceiver, defaultNotifySender);
                                             producer.sendNotifyEvent(plan_publish_event);
                                         }
@@ -366,7 +365,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                     StringBuffer sb_goods = new StringBuffer(); //货物发送明细
                     for (PlanDetail obj : planDetailList) {
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
-                        obj.setRemainderAmount((float)0); //全部派完--剩余为0
+                        obj.setRemainderAmount(0d); //全部派完--剩余为0
                         obj.setCreateName(vo.getCreateName());
                         obj.setCreateId(vo.getCreateId());
                         obj.setCreateDate(new Date());
@@ -407,7 +406,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                         tObj.setPlanDetailId(obj.getPlanDetailId());
                         tObj.setAllotAmount(obj.getPlanAmount()); //派单数量
                         if (carrierType == ConstantVO.PLAN_CARRIER_TYPE_DRIVER) { //如果司机的话为0
-                            tObj.setRemainAmount((float)0); //本次剩余
+                            tObj.setRemainAmount(0d); //本次剩余
                         } else {
                             tObj.setRemainAmount(obj.getPlanAmount()); //本次剩余
                         }

@@ -307,7 +307,9 @@ public class OrderServiceImpl implements OrderService {
             	//通过RPC查询添加计划状态
             	if (null != od.getTrafficPlan() && !"".equals(od.getTrafficPlan())) {
             		WaybillPlan waybillPlan = trafficRpc.getWaybillPlanBySerialNo(od.getTrafficPlan());
-            		od.setTrafficPlanStatus(waybillPlan.getPlanStatus());
+            		if (null != waybillPlan) {
+            			od.setTrafficPlanStatus(waybillPlan.getPlanStatus());
+            		}
             	}
             	if (null != od.getWarehousePlan() && !"".equals(od.getWarehousePlan())) {
             		if (0 == od.getOrderType()) {
@@ -316,7 +318,9 @@ public class OrderServiceImpl implements OrderService {
             		}
             		if (1 == od.getOrderType()) {
             			OutWarehousePlan outWarehousePlan = warehouseRpcService.getOutWarehousePlanBySerialNo(od.getWarehousePlan());
-            			od.setWarehousePlanStatus(outWarehousePlan.getPlanStatus());
+            			if (null != outWarehousePlan) {
+            				od.setWarehousePlanStatus(outWarehousePlan.getPlanStatus());
+            			}
             		}
             	}
             	
@@ -420,8 +424,6 @@ public class OrderServiceImpl implements OrderService {
 	    WaybillParamsDto.setGroupId(order.getGroupId());
 	    Group group = groupWareHouseRpcService.selectByGroupId(order.getGroupId());
 	    WaybillParamsDto.setGroupName(group.getGroupName());
-	    WaybillParamsDto.setSendWhId(order.getWarehouseId());
-	    WaybillParamsDto.setSendWhName(order.getReceiveWarehouse());
 	    if (0 == order.getOrderType()) {
 	    	WaybillParamsDto.setSendMan(order.getSender());
 		    WaybillParamsDto.setSendPhone(order.getSenderPhone());
@@ -447,6 +449,8 @@ public class OrderServiceImpl implements OrderService {
 		    }
 		    flag = purchaseFlag;
 	    }else {
+	    	WaybillParamsDto.setSendWhId(order.getWarehouseId());
+	 	    WaybillParamsDto.setSendWhName(order.getReceiveWarehouse());
 	    	WaybillParamsDto.setSendMan(order.getReceiver());
 		    WaybillParamsDto.setSendPhone(order.getReceiverPhone());
 		    WaybillParamsDto.setSendProvince(order.getReceiverProvince());
@@ -479,9 +483,9 @@ public class OrderServiceImpl implements OrderService {
 	    	planDetail.setGoodsName(orderProduct.getName());
 	    	planDetail.setGoodsSpec(orderProduct.getSpec());
 	    	planDetail.setUnit(orderProduct.getSku());
-	    	planDetail.setPlanAmount(orderProduct.getNum().floatValue());
-	    	planDetail.setPayPrice(orderProduct.getPrice().floatValue());
-	    	planDetail.setPayTotal(orderProduct.getTotal().floatValue());
+	    	planDetail.setPlanAmount(orderProduct.getNum().doubleValue());
+	    	planDetail.setPayPrice(orderProduct.getPrice().doubleValue());
+	    	planDetail.setPayTotal(orderProduct.getTotal().doubleValue());
 	    	planDetail.setCompanyId(companyId);
 	    	planDetail.setIsDeleted((short) 0);
 	    	planDetail.setCreateDate(new Date());
@@ -492,7 +496,7 @@ public class OrderServiceImpl implements OrderService {
 	    WaybillParamsDto.setPlanDetailList(planDetailList);
 	
 	   
-	    WaybillPlan waybillPlan = trafficRpc.purchase4Plan(WaybillParamsDto, flag);
+ 	    WaybillPlan waybillPlan = trafficRpc.purchase4Plan(WaybillParamsDto, flag);
 	    if (null != waybillPlan) {
 	    	order.setTrafficPlan(waybillPlan.getSerialCode());
 	    	orderMapper.updateByPrimaryKeySelective(order);
@@ -527,6 +531,10 @@ public class OrderServiceImpl implements OrderService {
 	    inWhPlanAddParamsDto.setCustomerContactName(order.getSender());
 	    inWhPlanAddParamsDto.setCustomerContactPhone(order.getSenderPhone());
 	    inWhPlanAddParamsDto.setCustomerPurchaseNo(order.getOrderNo());
+	    if (null != order.getReceiveTime()) {
+	    	inWhPlanAddParamsDto.setStoragePlanTime(order.getReceiveTime().toLocaleString());
+	    }
+//	    inWhPlanAddParamsDto.setStorageRemark(order.getRemarks());
 	    
 	    List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
 	    List<InWhPlanGoodsDto> inWhPlanGoodsDtoList = new ArrayList<InWhPlanGoodsDto>(orderProductList.size());
@@ -536,8 +544,8 @@ public class OrderServiceImpl implements OrderService {
 			inWhPlanGoodsDto.setGoodsName(orderProduct.getName());
 			inWhPlanGoodsDto.setGoodsCode(orderProduct.getCode());
 			inWhPlanGoodsDto.setGoodsSpec(orderProduct.getSpec());
-			inWhPlanGoodsDto.setInHousePrice(orderProduct.getPrice().floatValue());
-			inWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getNum().floatValue());
+			inWhPlanGoodsDto.setInHousePrice(orderProduct.getPrice().doubleValue());
+			inWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getNum().doubleValue());
 			inWhPlanGoodsDto.setUnit(orderProduct.getSku());
 			inWhPlanGoodsDtoList.add(inWhPlanGoodsDto);
 		}
@@ -580,6 +588,10 @@ public class OrderServiceImpl implements OrderService {
 		outWhPlanDto.setCustomerPurchaseNo(order.getOrderNo());
 		outWhPlanDto.setCustomerContactName(order.getReceiver());
 		outWhPlanDto.setCustomerContactPhone(order.getReceiverPhone());
+		if (null != order.getReceiveTime()) {
+			outWhPlanDto.setStoragePlanTime(order.getReceiveTime().toLocaleString());
+		}
+//		outWhPlanDto.setStorageRemark(order.getRemarks());
 		
 		List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(order.getOrderId());
 		List<OutWhPlanGoodsDto> outWhPlanGoodsDtoList = new ArrayList<>(orderProductList.size());
@@ -590,8 +602,8 @@ public class OrderServiceImpl implements OrderService {
 			outWhPlanGoodsDto.setGoodsSpec(orderProduct.getSpec());
 			outWhPlanGoodsDto.setGoodsCode(orderProduct.getCode());
 			outWhPlanGoodsDto.setUnit(orderProduct.getSku());
-			outWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getNum().floatValue());
-			outWhPlanGoodsDto.setOutHousePrice(orderProduct.getPrice().floatValue());
+			outWhPlanGoodsDto.setPlanGoodsNum(orderProduct.getNum().doubleValue());
+			outWhPlanGoodsDto.setOutHousePrice(orderProduct.getPrice().doubleValue());
 			outWhPlanGoodsDtoList.add(outWhPlanGoodsDto);
 		}
 		outWhPlanDto.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);

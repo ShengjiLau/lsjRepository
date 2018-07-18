@@ -142,9 +142,6 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
             }
         }
 
-
-
-
         //具体业务处理
         if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
             if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
@@ -284,7 +281,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                                             attachment.setOriginAddress(sendAddress);
                                             attachment.setDestinationAdress(receiveAddress);
                                             attachment.setGoodsDetail(sb_goods.toString());
-                                            attachment.setCarrierWebNotifyUrl("");//客户计划列表，按流水号查询
+                                            attachment.setCarrierWebNotifyUrl("transport.html#/customerPlanParam/"+vo.getSerialCode());//客户计划列表，按流水号查询
                                             TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("plan_publish", attachment, defaultNotifyReceiver, defaultNotifySender);
                                             producer.sendNotifyEvent(plan_publish_event);
                                         }
@@ -328,7 +325,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                                         attachment.setOriginAddress(sendAddress);
                                         attachment.setDestinationAdress(receiveAddress);
                                         attachment.setGoodsDetail(sb_goods.toString());
-                                        attachment.setCarrierWebNotifyUrl("");//客户计划列表，按流水号查询
+                                        attachment.setCarrierWebNotifyUrl("transport.html#/customerPlanParam/"+vo.getSerialCode());//客户计划列表，按流水号查询
                                         TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("plan_publish", attachment, defaultNotifyReceiver, defaultNotifySender);
                                         producer.sendNotifyEvent(plan_publish_event);
                                     }
@@ -353,23 +350,26 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     }
                 }
 
+                  //router:发布
+                  Timeline event = new Timeline();
+                  String company = dto.getCompanyName()==null?"":dto.getCompanyName();
+                  String createName = vo.getCreateName()==null?"":vo.getCreateName();
+
+                  event.setActionTitle("【计划发布】（操作人："+company+" "+createName+"）");
+                  event.setActionTime(new Date());
+                  event.setCompanyId(vo.getCompanyId());
+                  event.setSearchkey("R_PLAN");
+                  event.setDataid(vo.getWaybillPlanId());
+                  producer.noteRouter(event);
 
             }
 
         }
-        //router:发布
-        Timeline event = new Timeline();
-        String company = dto.getCompanyName()==null?"":dto.getCompanyName();
-        String createName = vo.getCreateName()==null?"":vo.getCreateName();
 
-        event.setActionTitle("【计划发布】（操作人："+company+" "+createName+"）");
-        event.setActionTime(new Date());
-        event.setCompanyId(vo.getCompanyId());
-        event.setSearchkey("R_PLAN");
-        event.setDataid(vo.getWaybillPlanId());
-        producer.noteRouter(event);
         return vo;
     }
+
+
 
 
     /***
@@ -402,7 +402,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                     StringBuffer sb_goods = new StringBuffer(); //货物发送明细
                     for (PlanDetail obj : planDetailList) {
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
-                        obj.setRemainderAmount((float)0); //全部派完--剩余为0
+                        obj.setRemainderAmount(0d); //全部派完--剩余为0
                         obj.setCreateName(vo.getCreateName());
                         obj.setCreateId(vo.getCreateId());
                         obj.setCreateDate(new Date());
@@ -443,7 +443,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                         tObj.setPlanDetailId(obj.getPlanDetailId());
                         tObj.setAllotAmount(obj.getPlanAmount()); //派单数量
                         if (carrierType == ConstantVO.PLAN_CARRIER_TYPE_DRIVER) { //如果司机的话为0
-                            tObj.setRemainAmount((float)0); //本次剩余
+                            tObj.setRemainAmount(0d); //本次剩余
                         } else {
                             tObj.setRemainAmount(obj.getPlanAmount()); //本次剩余
                         }
@@ -574,9 +574,19 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
      * @param flag -- 操作动作(1-发布，2-暂存)
      */
     private void onlyCreateWaybillPlan(WaybillPlan vo, WaybillParamsDto dto,short flag) {
+        if (flag==1) { //发布--操作
+            vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
+            vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
+        } else { //暂存--操作
+            vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //计划状态(待发布)
+            vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
+        }
+
+
+
        // if (dto.getIsApproval()==0) { //不需要审批
      //   if (flag==1) { //发布--操作
-            vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
+    /*        vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //计划状态(派单中)
             vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE);//车状态(其它)
 /*        } else { //暂存--操作
             vo.setPlanStatus(ConstantVO.PLAN_STATUS_WAITE＿PUBLISH); //计划状态(待发布)
@@ -623,6 +633,8 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
               transportWayItemsMapper.batchAddTransportWayItems(dto.getTransportWayItemsList());
           }
     }
+
+
 
 
 

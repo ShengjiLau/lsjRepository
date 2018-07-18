@@ -163,7 +163,7 @@
     delete from t_contract
     where company_id = #{companyId,jdbcType=BIGINT}
   </delete>
-  <select id="selectByCondition" resultMap="BaseResultMap">
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="com.lcdt.contract.web.dto.ContractDto">
     select contract_id, contract_code, serial_no, title, sign_date, type, contract_status,approval_status, approval_process, approval_process_id, cycle,
     pay_type, party_a_id, party_a_name, party_a_principal, party_b_id, party_b_name, party_b_principal, start_date, end_date,approval_start_date, approval_end_date,
     summary, terms, file_url, group_id,company_id, is_draft, summation, create_id, create_name, create_time, effective_time, termination_time, sign_place,
@@ -196,6 +196,12 @@
       </if>
       <if test="approvalStatus!=null and approvalStatus==-1">
         and is_draft=0
+      </if>
+      <if test="createBeginTime != null and createBeginTime != '' ">
+       and create_time &gt; concat(#{createBeginTime,jdbcType=TIMESTAMP},' 00:00:00')
+      </if>
+      <if test="createEndTime != null and createEndTime != '' ">
+       and create_time &lt; concat(#{createEndTime,jdbcType=TIMESTAMP},' 23:59:59')
       </if>
     </where>
     order by

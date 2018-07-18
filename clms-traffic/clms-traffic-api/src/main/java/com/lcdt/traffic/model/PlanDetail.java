@@ -78,7 +78,7 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    private Float planAmount;
+    private Double planAmount;
 
     /**
      *
@@ -87,7 +87,7 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    private Float remainderAmount;
+    private Double remainderAmount;
 
     /**
      *
@@ -96,7 +96,7 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    private Float freightPrice;
+    private Double freightPrice;
 
     /**
      *
@@ -105,14 +105,14 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    private Float freightTotal;
+    private Double freightTotal;
 
-    private Float payPrice;
-    private Float payTotal;
+    private Double payPrice;
+    private Double payTotal;
 
 
-    private Float weight;
-    private Float volume;
+    private Double weight;
+    private Double volume;
 
 
     /**
@@ -198,18 +198,18 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
 
 
     //主要是为派单用
-    private Float allotAmountTotal;
+    private Double allotAmountTotal;
     private boolean isAllot;
 
 
     //主要是 抢单报价
-    private Float offerPrice;
-    private Float offerTotal;
+    private Double offerPrice;
+    private Double offerTotal;
     private String offerRemark;
 
 
     //待派数量(竞价派车)
-    private Float allotAmount;
+    private Double allotAmount;
 
 
     public Object getSplitGoodsDetailObj() {
@@ -232,19 +232,19 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
     }
 
 
-    public Float getOfferPrice() {
+    public Double getOfferPrice() {
         return offerPrice;
     }
 
-    public void setOfferPrice(Float offerPrice) {
+    public void setOfferPrice(Double offerPrice) {
         this.offerPrice = offerPrice;
     }
 
-    public Float getOfferTotal() {
+    public Double getOfferTotal() {
         return offerTotal;
     }
 
-    public void setOfferTotal(Float offerTotal) {
+    public void setOfferTotal(Double offerTotal) {
         this.offerTotal = offerTotal;
     }
 
@@ -408,7 +408,7 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    public Float getPlanAmount() {
+    public Double getPlanAmount() {
         return planAmount;
     }
 
@@ -420,7 +420,7 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    public void setPlanAmount(Float planAmount) {
+    public void setPlanAmount(Double planAmount) {
         this.planAmount = planAmount;
     }
 
@@ -432,7 +432,7 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    public Float getRemainderAmount() {
+    public Double getRemainderAmount() {
         return remainderAmount;
     }
 
@@ -444,7 +444,7 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    public void setRemainderAmount(Float remainderAmount) {
+    public void setRemainderAmount(Double remainderAmount) {
         this.remainderAmount = remainderAmount;
     }
 
@@ -456,7 +456,7 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    public Float getFreightPrice() {
+    public Double getFreightPrice() {
         return freightPrice;
     }
 
@@ -468,7 +468,7 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    public void setFreightPrice(Float freightPrice) {
+    public void setFreightPrice(Double freightPrice) {
         this.freightPrice = freightPrice;
     }
 
@@ -480,7 +480,7 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    public Float getFreightTotal() {
+    public Double getFreightTotal() {
         return freightTotal;
     }
 
@@ -492,7 +492,7 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    public void setFreightTotal(Float freightTotal) {
+    public void setFreightTotal(Double freightTotal) {
         this.freightTotal = freightTotal;
     }
 
@@ -721,35 +721,35 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
     }
 
 
-    public Float getAllotAmountTotal() {
+    public Double getAllotAmountTotal() {
         return allotAmountTotal;
     }
 
-    public void setAllotAmountTotal(Float allotAmountTotal) {
+    public void setAllotAmountTotal(Double allotAmountTotal) {
         this.allotAmountTotal = allotAmountTotal;
     }
 
-    public Float getAllotAmount() {
+    public Double getAllotAmount() {
         return allotAmount;
     }
 
-    public void setAllotAmount(Float allotAmount) {
+    public void setAllotAmount(Double allotAmount) {
         this.allotAmount = allotAmount;
     }
 
-    public Float getPayPrice() {
+    public Double getPayPrice() {
         return payPrice;
     }
 
-    public void setPayPrice(Float payPrice) {
+    public void setPayPrice(Double payPrice) {
         this.payPrice = payPrice;
     }
 
-    public Float getPayTotal() {
+    public Double getPayTotal() {
         return payTotal;
     }
 
-    public void setPayTotal(Float payTotal) {
+    public void setPayTotal(Double payTotal) {
         this.payTotal = payTotal;
     }
 
@@ -769,19 +769,19 @@ public class PlanDetail implements java.io.Serializable,ResponseData {
         this.unitData = unitData;
     }
 
-    public Float getWeight() {
+    public Double getWeight() {
         return weight;
     }
 
-    public void setWeight(Float weight) {
+    public void setWeight(Double weight) {
         this.weight = weight;
     }
 
-    public Float getVolume() {
+    public Double getVolume() {
         return volume;
     }
 
-    public void setVolume(Float volume) {
+    public void setVolume(Double volume) {
         this.volume = volume;
     }
 }

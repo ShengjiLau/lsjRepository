@@ -88,19 +88,19 @@ public class OutOrderGoodsInfo implements Serializable {
     /**
      * 库存
      */
-    private Float inStock;
+    private Double inStock;
     /**
      * 计划数量
      */
-    private Float goodsNum;
+    private Double goodsNum;
     /**
      * 出库数量
      */
-    private Float outboundQuantity;
+    private Double outboundQuantity;
     /**
      * 出库单价
      */
-    private Float outboundPrice;
+    private Double outboundPrice;
     /**
      * 备注
      */
@@ -247,35 +247,35 @@ public class OutOrderGoodsInfo implements Serializable {
         this.storageLocationCode = storageLocationCode;
     }
 
-    public Float getInStock() {
+    public Double getInStock() {
         return inStock;
     }
 
-    public void setInStock(Float inStock) {
+    public void setInStock(Double inStock) {
         this.inStock = inStock;
     }
 
-    public Float getGoodsNum() {
+    public Double getGoodsNum() {
         return goodsNum;
     }
 
-    public void setGoodsNum(Float goodsNum) {
+    public void setGoodsNum(Double goodsNum) {
         this.goodsNum = goodsNum;
     }
 
-    public Float getOutboundQuantity() {
+    public Double getOutboundQuantity() {
         return outboundQuantity;
     }
 
-    public void setOutboundQuantity(Float outboundQuantity) {
+    public void setOutboundQuantity(Double outboundQuantity) {
         this.outboundQuantity = outboundQuantity;
     }
 
-    public Float getOutboundPrice() {
+    public Double getOutboundPrice() {
         return outboundPrice;
     }
 
-    public void setOutboundPrice(Float outboundPrice) {
+    public void setOutboundPrice(Double outboundPrice) {
         this.outboundPrice = outboundPrice;
     }
 

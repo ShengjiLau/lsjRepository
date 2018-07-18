@@ -22,9 +22,9 @@ public interface InventoryLogService extends IService<InventoryLog> {
 
     Page<InventoryLog> queryInventoryLogPage(InventoryLogQueryDto queryDto);
 
-    InventoryLog saveInOrderLog(InWarehouseOrder inWarehouseOrder, Inventory inventory,Float updatedInventoryNum);
+    InventoryLog saveInOrderLog(InWarehouseOrder inWarehouseOrder, Inventory inventory,Double updatedInventoryNum);
 
-    InventoryLog saveOutOrderLog(OutWarehouseOrder outWarehouseOrder, OutOrderGoodsInfo goodsInfo,Float updatedInventoryNum,Inventory inventory);
+    InventoryLog saveOutOrderLog(OutWarehouseOrder outWarehouseOrder, OutOrderGoodsInfo goodsInfo,Double updatedInventoryNum,Inventory inventory);
 
     /**
      * 出入库汇总已完成商品数量

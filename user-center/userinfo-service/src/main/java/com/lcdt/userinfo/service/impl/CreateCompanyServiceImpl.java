@@ -112,9 +112,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService,Applicatio
 		addCustomer(company,userCompRel,group);
 		//初始化短信条数和基站条数
 		addInitPayCount(userCompRel);
-
 		publisher.publishEvent(new CreateCompanyEvent(userCompRel));
-
 		return company;
 	}
 

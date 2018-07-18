@@ -7,26 +7,42 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.contract.dao.ConditionQueryMapper;
 import com.lcdt.contract.dao.OrderProductMapper;
 import com.lcdt.contract.dao.OverviewMapper;
+import com.lcdt.contract.dao.PaymentApplicationMapper;
 import com.lcdt.contract.model.Contract;
 import com.lcdt.contract.model.Order;
+import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.model.PaymentApplication;
 import com.lcdt.contract.service.OverviewService;
 import com.lcdt.contract.web.dto.OrderCountDto;
+import com.lcdt.contract.web.dto.OrderDto;
 import com.lcdt.contract.web.dto.OrderOverviewDto;
 import com.lcdt.contract.web.dto.OverviewDto;
+import com.lcdt.contract.web.dto.PageBaseDto;
 import com.lcdt.contract.web.dto.TrendDiagramDto;
+import com.lcdt.traffic.model.WaybillPlan;
+import com.lcdt.traffic.service.TrafficRpc;
+import com.lcdt.userinfo.rpc.GroupWareHouseRpcService;
+import com.lcdt.warehouse.entity.InWarehousePlan;
+import com.lcdt.warehouse.entity.OutWarehousePlan;
+import com.lcdt.warehouse.rpc.WarehouseRpcService;
 
 /**
  * @author Sheng-ji Lau
@@ -42,6 +58,23 @@ public class OverviewServiceImpl implements OverviewService {
 	
 	@Autowired
 	private OrderProductMapper orderProductMapper;
+	
+	@Autowired
+	private ConditionQueryMapper nonautomaticMapper;
+	
+	@Autowired
+    private PaymentApplicationMapper paymentApplicationMapper;
+
+    @Reference
+    private TrafficRpc trafficRpc;
+    
+    @Reference
+    private GroupWareHouseRpcService groupWareHouseRpcService;
+    
+    @Reference
+    private WarehouseRpcService warehouseRpcService;
+
+    Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 	
  /**
   * 查询订单合同概览，主要逻辑为查询相应时间段的订单，再在业务逻辑里进行各项统计，没有使用复杂的sql语句直接进行统计。
@@ -229,6 +262,152 @@ public class OverviewServiceImpl implements OverviewService {
 		return orderCountDto;
 	}
 	
+	/**
+	 * 依据收付款状况查询订单
+	 */
+	@Override
+	public PageBaseDto<OrderDto> getOrderListByPayment(OrderDto orderDto){
+		orderDto.setCompanyId(SecurityInfoGetter.getCompanyId());
+		orderDto.setIsDraft((short) 1);
+		List<OrderDto> orderDtoList = nonautomaticMapper.selectByCondition(orderDto);
+		if (null ==orderDto.getPaymentType() || 3 == orderDto.getPaymentType()) {
+			return getpageInfo(orderDto.getPageSize(),orderDto.getPageNum(),getOrderDtoList(orderDtoList));
+		}
+		BigDecimal r = new BigDecimal(0);
+		//List<Long> orderIds = new ArrayList<Long>(orderList.size());
+		List<OrderDto> alreadyPayOrderList = new LinkedList<OrderDto>();
+		List<OrderDto> notPayOrderList = new LinkedList<OrderDto>();
+		List<OrderDto> payingOrderList = new LinkedList<OrderDto>();
+		for (OrderDto orderDto2 : orderDtoList) {
+			r = r.add(orderDto2.getSummation());
+			//e统计所有确认收款的收款单的收款金额
+			BigDecimal e = new BigDecimal(0);
+			List<PaymentApplication> paymentApplicationList = overviewMapper.getPaymentApplicationListByOrderId(orderDto2.getOrderId());
+			if (null == paymentApplicationList || 0 == paymentApplicationList.size()) {
+				notPayOrderList.add(orderDto2);
+				continue;
+			}
+			for (PaymentApplication PaymentApplication : paymentApplicationList) {
+				if (null != PaymentApplication.getPaymentTimeSure()) {
+					e = e.add(PaymentApplication.getPaymentSum());
+				}
+			}
+			if (e == orderDto2.getSummation()) {
+				alreadyPayOrderList.add(orderDto2);
+				continue;
+			}
+			payingOrderList.add(orderDto2);
+		}
+		if (0 == orderDto.getPaymentType()) {
+			return getpageInfo(orderDto.getPageSize(),orderDto.getPageNum(),getOrderDtoList(notPayOrderList));
+		}
+		if (1 == orderDto.getPaymentType()) {
+			return getpageInfo(orderDto.getPageSize(),orderDto.getPageNum(),getOrderDtoList(payingOrderList));
+		}
+		if (2 == orderDto.getPaymentType()) {
+			return getpageInfo(orderDto.getPageSize(),orderDto.getPageNum(),getOrderDtoList(alreadyPayOrderList));
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 逻辑分页
+	 */
+	private PageBaseDto<OrderDto> getpageInfo(Integer pageSize,Integer pageNum,List<OrderDto> orderDtoList){
+		List<OrderDto> orderDtoListNew = new LinkedList<OrderDto>();
+		if (null == pageSize || 0 >= pageSize) {
+			pageSize = 10;
+		}
+		if (null == pageNum || 0 >= pageNum) {
+			pageNum = 1;
+		}
+		PageBaseDto<OrderDto> pageBaseDto = new PageBaseDto<OrderDto>();
+		if (null == orderDtoList) {
+			pageBaseDto.setTotal(0);
+			pageBaseDto.setList(orderDtoListNew);
+			return pageBaseDto;
+		}
+		pageBaseDto.setTotal(orderDtoList.size());
+		if (pageSize*pageNum > orderDtoList.size()) {
+			orderDtoListNew.addAll(orderDtoList.subList((pageNum - 1)*pageSize, orderDtoList.size()));
+		}else {
+			orderDtoListNew.addAll(orderDtoList.subList((pageNum - 1)*pageSize, pageSize*pageNum));
+		}
+		pageBaseDto.setList(orderDtoListNew);
+		return pageBaseDto;
+	}
+	
+	/**
+	 * Order转化为OrderDto
+	 */
+	private List<OrderDto> getOrderDtoList(List<OrderDto> orderDtoList){
+		if (0 == orderDtoList.size()) {
+			return null;
+		}
+		for (OrderDto orderDto : orderDtoList) {
+			List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(orderDto.getOrderId());
+			orderDto.setOrderProductList(orderProductList);
+			//通过RPC查询添加计划状态
+        	if (null != orderDto.getTrafficPlan() && !"".equals(orderDto.getTrafficPlan())) {
+        		WaybillPlan waybillPlan = trafficRpc.getWaybillPlanBySerialNo(orderDto.getTrafficPlan());
+        		if (null != waybillPlan) {
+        			orderDto.setTrafficPlanStatus(waybillPlan.getPlanStatus());
+        		}
+        	}
+        	if (null != orderDto.getWarehousePlan() && !"".equals(orderDto.getWarehousePlan())) {
+        		if (0 == orderDto.getOrderType()) {
+        			InWarehousePlan inWarehousePlan = warehouseRpcService.getInWarehousePlanBySerialNo(orderDto.getWarehousePlan());
+        			orderDto.setWarehousePlanStatus(inWarehousePlan.getPlanStatus());
+        		}
+        		if (1 == orderDto.getOrderType()) {
+        			OutWarehousePlan outWarehousePlan = warehouseRpcService.getOutWarehousePlanBySerialNo(orderDto.getWarehousePlan());
+        			if (null != outWarehousePlan) {
+        				orderDto.setWarehousePlanStatus(outWarehousePlan.getPlanStatus());
+        			}
+        		}
+        	}
+		}
+		 //获取付款状态 付款单记录 开票记录信息
+        List<Map> paymentList = nonautomaticMapper.paymentInfo(orderDtoList,orderDtoList.get(0).getCompanyId());
+        List<Map> billingRecordList = nonautomaticMapper.billingInfo(orderDtoList,orderDtoList.get(0).getCompanyId());
+        for (OrderDto orderDto : orderDtoList) {
+        	 //整合付款单信息
+            if (paymentList.size() > 0) {
+                for (int i = 0; i < paymentList.size(); i++) {
+                    Map map = paymentList.get(i);
+                    if ((long) map.get("order_id") == orderDto.getOrderId()) {
+                            orderDto.setPaymentStatus(new Short(map.get("payment_status").toString()));
+                        	orderDto.setPaymentNum(map.get("payment_num").toString());
+                        	orderDto.setPaymentSum(map.get("payment_sum").toString());
+                            break;
+                        } else if (i == paymentList.size() - 1) {
+                        	orderDto.setPaymentStatus(new Short("0"));
+                        	orderDto.setPaymentNum("0");
+                        	orderDto.setPaymentSum("0");
+                        }
+                    }
+                } else {
+                	orderDto.setPaymentStatus(new Short("0"));
+                	orderDto.setPaymentNum("0");
+                }
+                //整合开票记录信息
+                if (billingRecordList.size() > 0) {
+                    for (int j = 0; j < billingRecordList.size(); j++) {
+                        Map map = billingRecordList.get(j);
+                        if ((long) map.get("order_id") == orderDto.getOrderId()) {
+                        	orderDto.setBillingRecordNum(map.get("billing_record_num").toString());
+                            break;
+                        } else if (j == billingRecordList.size() - 1) {
+                        	orderDto.setBillingRecordNum("0");
+                        }
+                    }
+                } else {
+                	orderDto.setBillingRecordNum("0");
+                }
+        }
+		return orderDtoList;
+	}
 	
 	/**
 	 * 将OverviewDto转化为map集合
@@ -241,7 +420,7 @@ public class OverviewServiceImpl implements OverviewService {
 		map.put("companyId", overviewDto.getCompanyId());
 		map.put("beginTime", overviewDto.getBeginTime());
 		map.put("endTime", overviewDto.getEndTime());
-		if (null != overviewDto.getGroups()) {
+		if (null != overviewDto.getGroups() && !"".equals(overviewDto.getGroups())) {
 			map.put("groups", convertStringToLong(overviewDto.getGroups()));
 		}
 		
@@ -314,7 +493,9 @@ public class OverviewServiceImpl implements OverviewService {
 		
 		return groups;
 	}
-	
+
+
+
 	
 	
 

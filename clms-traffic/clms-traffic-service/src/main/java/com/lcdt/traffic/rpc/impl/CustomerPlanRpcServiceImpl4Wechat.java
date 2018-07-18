@@ -741,7 +741,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
         PlanBO.getInstance().converPlan2Waybill(waybillPlan,tObj, waybillDto);  //计划转为运单
 
         List<PlanDetail> list = dto.getPlanDetailList();
-        float sumAmount = 0; //统计本次派车总重量（这块本应是循环比较的，前端目前验证了派出只能派最大数量，所的这块把所有的明细派车数加在一起比较）
+        Double sumAmount = 0d; //统计本次派车总重量（这块本应是循环比较的，前端目前验证了派出只能派最大数量，所的这块把所有的明细派车数加在一起比较）
         List<WaybillItemsDto> waybillItemsDtos = new ArrayList<WaybillItemsDto>();
         StringBuffer sb_goods = new StringBuffer(); //货物发送明细
         if (null != list  && list.size()>0) {
@@ -767,7 +767,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
                 sb_goods.append(obj.getGoodsName()+":"+obj.getAllotAmount()+";"); //
             }
         }
-        float splitRemainAmount = 0 ;
+        Double splitRemainAmount = 0d ;
         List<SplitGoodsDetail> splitGoodsDetails = splitGoods.getSplitGoodsDetailList(); //因为派车是按派单来的
 
         if (null!=splitGoodsDetails && splitGoodsDetails.size()>0) {
@@ -787,7 +787,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
             throw new RuntimeException("本次派车总数量："+sumAmount+"，剩余待派数量："+splitRemainAmount+"，派车失败！");
         } else {
             if(sumAmount-splitRemainAmount==0) { //全部派完的话，更新计划状态
-                float remainCount = 0;
+                Double remainCount = 0d;
 
                 //如果派单完成要检查计划中剩余数量是否完成
                 List<PlanDetail> planDetailList = waybillPlan.getPlanDetailList();

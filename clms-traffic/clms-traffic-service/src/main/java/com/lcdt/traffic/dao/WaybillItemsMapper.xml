@@ -16,12 +16,12 @@
     <result column="sub_goods_id" jdbcType="BIGINT" property="subGoodsId" />
     <result column="goods_spec" jdbcType="VARCHAR" property="goodsSpec" />
     <result column="unit" jdbcType="VARCHAR" property="unit" />
-    <result column="amount" jdbcType="REAL" property="amount" />
-    <result column="receipt_amount" jdbcType="REAL" property="receiptAmount" />
-    <result column="freight_price" jdbcType="REAL" property="freightPrice" />
-    <result column="freight_total" jdbcType="REAL" property="freightTotal" />
-    <result column="pay_price" jdbcType="REAL" property="payPrice" />
-    <result column="pay_total" jdbcType="REAL" property="payTotal" />
+    <result column="amount" jdbcType="DOUBLE" property="amount" />
+    <result column="receipt_amount" jdbcType="DOUBLE" property="receiptAmount" />
+    <result column="freight_price" jdbcType="DOUBLE" property="freightPrice" />
+    <result column="freight_total" jdbcType="DOUBLE" property="freightTotal" />
+    <result column="pay_price" jdbcType="DOUBLE" property="payPrice" />
+    <result column="pay_total" jdbcType="DOUBLE" property="payTotal" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
@@ -61,8 +61,8 @@
       company_id, weight,volume)
     values (#{splitGoodsDetailId,jdbcType=BIGINT},#{planDetailId,jdbcType=BIGINT},#{waybillId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{goodsName,jdbcType=VARCHAR},
       #{subGoodsId,jdbcType=BIGINT}, #{goodsSpec,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
-      #{amount,jdbcType=REAL}, #{receiptAmount,jdbcType=REAL}, #{freightPrice,jdbcType=REAL}, 
-      #{freightTotal,jdbcType=REAL}, #{payPrice,jdbcType=REAL},#{payTotal,jdbcType=REAL}, #{remark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT},
+      #{amount,jdbcType=DOUBLE}, #{receiptAmount,jdbcType=DOUBLE}, #{freightPrice,jdbcType=DOUBLE}, 
+      #{freightTotal,jdbcType=DOUBLE}, #{payPrice,jdbcType=DOUBLE},#{payTotal,jdbcType=DOUBLE}, #{remark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT},
       #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, 
       #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP},0,
       #{companyId,jdbcType=BIGINT}, #{weight,jdbcType=DOUBLE},#{volume,jdbcType=DOUBLE})
@@ -82,12 +82,12 @@
       sub_goods_id = #{subGoodsId,jdbcType=BIGINT},
       goods_spec = #{goodsSpec,jdbcType=VARCHAR},
       unit = #{unit,jdbcType=VARCHAR},
-      amount = #{amount,jdbcType=REAL},
-      receipt_amount = #{receiptAmount,jdbcType=REAL},
-      freight_price = #{freightPrice,jdbcType=REAL},
-      freight_total = #{freightTotal,jdbcType=REAL},
-      pay_price = #{payPrice,jdbcType=REAL},
-      pay_total = #{payTotal,jdbcType=REAL},
+      amount = #{amount,jdbcType=DOUBLE},
+      receipt_amount = #{receiptAmount,jdbcType=DOUBLE},
+      freight_price = #{freightPrice,jdbcType=DOUBLE},
+      freight_total = #{freightTotal,jdbcType=DOUBLE},
+      pay_price = #{payPrice,jdbcType=DOUBLE},
+      pay_total = #{payTotal,jdbcType=DOUBLE},
       remark = #{remark,jdbcType=VARCHAR},
       create_id = #{createId,jdbcType=BIGINT},
       create_name = #{createName,jdbcType=VARCHAR},
@@ -138,8 +138,8 @@
       (#{item.splitGoodsDetailId,jdbcType=BIGINT}, #{item.planDetailId,jdbcType=BIGINT},
       #{item.waybillId,jdbcType=BIGINT}, #{item.goodsId,jdbcType=BIGINT}, #{item.goodsName,jdbcType=VARCHAR},
       #{item.subGoodsId,jdbcType=BIGINT}, #{item.goodsSpec,jdbcType=VARCHAR}, #{item.unit,jdbcType=VARCHAR},
-      #{item.amount,jdbcType=REAL}, #{item.receiptAmount,jdbcType=REAL}, #{item.freightPrice,jdbcType=REAL},
-      #{item.freightTotal,jdbcType=REAL}, #{item.payPrice,jdbcType=REAL},#{item.payTotal,jdbcType=REAL},#{item.remark,jdbcType=VARCHAR}, #{item.createId,jdbcType=BIGINT},
+      #{item.amount,jdbcType=DOUBLE}, #{item.receiptAmount,jdbcType=DOUBLE}, #{item.freightPrice,jdbcType=DOUBLE},
+      #{item.freightTotal,jdbcType=DOUBLE}, #{item.payPrice,jdbcType=DOUBLE},#{item.payTotal,jdbcType=DOUBLE},#{item.remark,jdbcType=VARCHAR}, #{item.createId,jdbcType=BIGINT},
       #{item.createName,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{item.updateId,jdbcType=BIGINT},
       #{item.updateName,jdbcType=VARCHAR}, #{item.updateDate,jdbcType=TIMESTAMP}, 0,
       #{item.companyId,jdbcType=BIGINT}, #{item.weight,jdbcType=DOUBLE},#{item.volume,jdbcType=DOUBLE})
@@ -157,12 +157,12 @@
       sub_goods_id = #{item.subGoodsId,jdbcType=BIGINT},
       goods_spec = #{item.goodsSpec,jdbcType=VARCHAR},
       unit = #{item.unit,jdbcType=VARCHAR},
-      amount = #{item.amount,jdbcType=REAL},
-      receipt_amount = #{item.receiptAmount,jdbcType=REAL},
-      freight_price = #{item.freightPrice,jdbcType=REAL},
-      freight_total = #{item.freightTotal,jdbcType=REAL},
-      pay_price = #{item.payPrice,jdbcType=REAL},
-      pay_total = #{item.payTotal,jdbcType=REAL},
+      amount = #{item.amount,jdbcType=DOUBLE},
+      receipt_amount = #{item.receiptAmount,jdbcType=DOUBLE},
+      freight_price = #{item.freightPrice,jdbcType=DOUBLE},
+      freight_total = #{item.freightTotal,jdbcType=DOUBLE},
+      pay_price = #{item.payPrice,jdbcType=DOUBLE},
+      pay_total = #{item.payTotal,jdbcType=DOUBLE},
       remark = #{item.remark,jdbcType=VARCHAR},
       update_id = #{item.updateId,jdbcType=BIGINT},
       update_name = #{item.updateName,jdbcType=VARCHAR},

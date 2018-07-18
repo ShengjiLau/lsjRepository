@@ -54,8 +54,10 @@ public class SendNotifyService {
         NotifyReceiver receiver = event.getReceiver();
         NotifySender sender = event.getSender();
         if (receiver == null) {
+            logger.warn("消息提醒，接收人为空");
             return;
         }
+        logger.info("消息通知接收者 ：{}",receiver.toString());
         Long sendCompanyId = sender.sendCompanyId();
         User user = null;
 
@@ -74,18 +76,14 @@ public class SendNotifyService {
             String templateContent = notifyService.templateContent(templateId, sendCompanyId);
             String notifyContent = TemplateParser.parseTemplateParams(templateContent, attachment);
 
-            if (!StringUtils.isEmpty(receiver.getPhoneNum())) {
-                if (companyNotifySetting.getEnableSms()) {
-                    //发送短信通知
-                    smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent,getReceiverPhone(notify,receiver), sendCompanyId,event.getBusinessNo());
-                }
+            if (companyNotifySetting.getEnableSms()) {
+                   //发送短信通知
+                   smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent,getReceiverPhone(notify,receiver), sendCompanyId,event.getBusinessNo());
             }
-            if (receiver.getCompanyId() != null && receiver.getUserId() != null) {
-                if (companyNotifySetting.getEnableWeb()) {
-                    String webUrl=attachment.get("webNotifyUrl") != null ? attachment.get("webNotifyUrl").toString() : "";
+            if (companyNotifySetting.getEnableWeb()) {
+                   String webUrl=attachment.get("webNotifyUrl") != null ? attachment.get("webNotifyUrl").toString() : "";
                     //发送web通知
-                    webNotify.sendWebNotify(notify.getCategory(), notifyContent, getReceiverCompanyId(notify,receiver), getReceiverUserId(notify,receiver),webUrl);
-                }
+                   webNotify.sendWebNotify(notify.getCategory(), notifyContent, getReceiverCompanyId(notify,receiver), getReceiverUserId(notify,receiver),webUrl);
             }
         }
     }

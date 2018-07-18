@@ -12,36 +12,36 @@ public class ProfitStatResult1Dto implements ResponseData {
 
 
     @ApiModelProperty("应收费用")
-    private Float receiveMoneyTotal;
+    private Double receiveMoneyTotal;
 
     @ApiModelProperty("应付费用")
-    private Float payMoneyTotal;
+    private Double payMoneyTotal;
 
     @ApiModelProperty("利润")
-    private Float profitMoneyTotal;
+    private Double profitMoneyTotal;
 
 
-    public Float getReceiveMoneyTotal() {
+    public Double getReceiveMoneyTotal() {
         return receiveMoneyTotal;
     }
 
-    public void setReceiveMoneyTotal(Float receiveMoneyTotal) {
+    public void setReceiveMoneyTotal(Double receiveMoneyTotal) {
         this.receiveMoneyTotal = receiveMoneyTotal;
     }
 
-    public Float getPayMoneyTotal() {
+    public Double getPayMoneyTotal() {
         return payMoneyTotal;
     }
 
-    public void setPayMoneyTotal(Float payMoneyTotal) {
+    public void setPayMoneyTotal(Double payMoneyTotal) {
         this.payMoneyTotal = payMoneyTotal;
     }
 
-    public Float getProfitMoneyTotal() {
+    public Double getProfitMoneyTotal() {
         return profitMoneyTotal;
     }
 
-    public void setProfitMoneyTotal(Float profitMoneyTotal) {
+    public void setProfitMoneyTotal(Double profitMoneyTotal) {
         this.profitMoneyTotal = profitMoneyTotal;
     }
 }

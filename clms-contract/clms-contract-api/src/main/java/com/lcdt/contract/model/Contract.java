@@ -2,11 +2,17 @@ package com.lcdt.contract.model;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Contract {
-    private Long contractId;
+public class Contract implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 166580515L;
+
+	private Long contractId;
 
     private String contractCode;
 

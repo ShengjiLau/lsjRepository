@@ -18,7 +18,7 @@ public class BindingSplitParamsDto implements java.io.Serializable{
 
     private String vehicleLength;//车辆长度
 
-    private BigDecimal vehicleLoad;//车辆载重
+    private Double vehicleLoad;//车辆载重
 
     private List<TransportWayItems> transportWayItemsList;//运输项目
 
@@ -85,11 +85,11 @@ public class BindingSplitParamsDto implements java.io.Serializable{
         this.vehicleLength = vehicleLength;
     }
 
-    public BigDecimal getVehicleLoad() {
+    public Double getVehicleLoad() {
         return vehicleLoad;
     }
 
-    public void setVehicleLoad(BigDecimal vehicleLoad) {
+    public void setVehicleLoad(Double vehicleLoad) {
         this.vehicleLoad = vehicleLoad;
     }
 }

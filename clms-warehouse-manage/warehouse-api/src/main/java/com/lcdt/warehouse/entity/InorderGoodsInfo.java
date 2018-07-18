@@ -33,7 +33,7 @@ public class InorderGoodsInfo implements Serializable {
     /**
      * 库存单价
      */
-    private Float goodsPrice;
+    private Double goodsPrice;
     /**
      * 商品批次
      */
@@ -54,7 +54,7 @@ public class InorderGoodsInfo implements Serializable {
     /**
      * 应收数量
      */
-    private Float receivalbeAmount;
+    private Double receivalbeAmount;
     /**
      * 批次
      */
@@ -62,15 +62,15 @@ public class InorderGoodsInfo implements Serializable {
     /**
      * 入库数量
      */
-    private Float inHouseAmount;
+    private Double inHouseAmount;
     /**
      * 入库价
      */
-    private Float inHousePrice;
+    private Double inHousePrice;
     /**
      * 货损
      */
-    private Float damage;
+    private Double damage;
     /**
      * 备注
      */
@@ -163,11 +163,11 @@ public class InorderGoodsInfo implements Serializable {
         this.goodsBarcode = goodsBarcode;
     }
 
-    public Float getGoodsPrice() {
+    public Double getGoodsPrice() {
         return goodsPrice;
     }
 
-    public void setGoodsPrice(Float goodsPrice) {
+    public void setGoodsPrice(Double goodsPrice) {
         this.goodsPrice = goodsPrice;
     }
 
@@ -203,11 +203,11 @@ public class InorderGoodsInfo implements Serializable {
         this.unitData = unitData;
     }
 
-    public Float getReceivalbeAmount() {
+    public Double getReceivalbeAmount() {
         return receivalbeAmount;
     }
 
-    public void setReceivalbeAmount(Float receivalbeAmount) {
+    public void setReceivalbeAmount(Double receivalbeAmount) {
         this.receivalbeAmount = receivalbeAmount;
     }
 
@@ -219,27 +219,27 @@ public class InorderGoodsInfo implements Serializable {
         this.batch = batch;
     }
 
-    public Float getInHouseAmount() {
+    public Double getInHouseAmount() {
         return inHouseAmount;
     }
 
-    public void setInHouseAmount(Float inHouseAmount) {
+    public void setInHouseAmount(Double inHouseAmount) {
         this.inHouseAmount = inHouseAmount;
     }
 
-    public Float getInHousePrice() {
+    public Double getInHousePrice() {
         return inHousePrice;
     }
 
-    public void setInHousePrice(Float inHousePrice) {
+    public void setInHousePrice(Double inHousePrice) {
         this.inHousePrice = inHousePrice;
     }
 
-    public Float getDamage() {
+    public Double getDamage() {
         return damage;
     }
 
-    public void setDamage(Float damage) {
+    public void setDamage(Double damage) {
         this.damage = damage;
     }
 

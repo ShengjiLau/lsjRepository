@@ -21,6 +21,9 @@ public class WebNotifyImpl{
      */
     public boolean sendWebNotify(String webMessageCategory,String content, Long companyId,Long userId,String url){
         logger.info("发送web通知 >>> {} >>> userId:{} companyId:{}", content, companyId, userId);
+        if (companyId == null || userId == null) {
+            return false;
+        }
         messageService.createWebMessage(webMessageCategory,content,companyId,userId,url);
         return true;
     }

@@ -100,7 +100,7 @@ public class WaybillSenderNotify {
                 commonAttachment.setWebNotifyUrl(NotifyUtils.OWN_WAYBILL_WEB_NOTIFY_URL + dao.getWaybillCode());
 
                 //接收者是承运商，承运商不是货主本人
-                if (dao.getCompanyId() != dao.getCarrierCompanyId()) {
+                if (!dao.getCompanyId().equals(dao.getCarrierCompanyId())) {
                     defaultNotifyReceiver.setCarrierCompanyId(dao.getCarrierCompanyId());
                     defaultNotifyReceiver.setCarrierUserId(dao.getCreateId());
                     defaultNotifyReceiver.setCarrierPhoneNum(carrierCompanyUser.getPhone());
@@ -110,7 +110,7 @@ public class WaybillSenderNotify {
                 commonAttachment.setCarrierWebNotifyUrl(NotifyUtils.CUSTOMER_WAYBILL_WEB_NOTIFY_URL + dao.getWaybillCode());
 
                 //合同客户
-                if (dao.getCustomerPhone() != null && !dao.getCustomerPhone().equals("")) {
+                if (StringUtil.isNotEmpty(dao.getCustomerPhone())) {
                     defaultNotifyReceiver.setCustomerPhoneNum(dao.getCustomerPhone());
                 }
 
@@ -169,7 +169,7 @@ public class WaybillSenderNotify {
                 commonAttachment.setWebNotifyUrl(NotifyUtils.OWN_WAYBILL_WEB_NOTIFY_URL + dao.getWaybillCode());
 
                 //承运商不是货主本人
-                if (dao.getCompanyId() != dao.getCarrierCompanyId()) {
+                if (!dao.getCompanyId().equals(dao.getCarrierCompanyId())) {
                     defaultNotifyReceiver.setCarrierCompanyId(dao.getCarrierCompanyId());
                     defaultNotifyReceiver.setCarrierUserId(dao.getCreateId());
                     //获取派车人的电话
@@ -247,7 +247,7 @@ public class WaybillSenderNotify {
                 commonAttachment.setWebNotifyUrl(NotifyUtils.OWN_WAYBILL_WEB_NOTIFY_URL + dao.getWaybillCode());
 
                 //承运商不是货主本人
-                if (dao.getCompanyId() != dao.getCarrierCompanyId()) {
+                if (!dao.getCompanyId().equals(dao.getCarrierCompanyId())) {
                     defaultNotifyReceiver.setCarrierCompanyId(dao.getCarrierCompanyId());
                     defaultNotifyReceiver.setCarrierUserId(dao.getCreateId());
                     //获取派车人的电话
@@ -263,7 +263,7 @@ public class WaybillSenderNotify {
                 commonAttachment.setCarrierWebNotifyUrl(NotifyUtils.CUSTOMER_WAYBILL_WEB_NOTIFY_URL + dao.getWaybillCode());
 
                 //判断客户是否有客户电话，有就发送短信，没有就不发送
-                if (dao.getCustomerPhone() != null && !dao.getCustomerPhone().equals("")) {
+                if (StringUtil.isNotEmpty(dao.getCustomerPhone())) {
                     defaultNotifyReceiver.setCustomerPhoneNum(dao.getCustomerPhone());
                 }
                 commonAttachment.setGoodsDetail(configDoodsDetails(dao.getWaybillItemsList()));
@@ -327,7 +327,7 @@ public class WaybillSenderNotify {
                 commonAttachment.setWebNotifyUrl(NotifyUtils.OWN_WAYBILL_WEB_NOTIFY_URL + dao.getWaybillCode());
 
                 //接收者是合同客户 判断客户是否有客户电话，有就发送短信，没有就不发送
-                if (dao.getCustomerPhone() != null && !dao.getCustomerPhone().equals("")) {
+                if (StringUtil.isNotEmpty(dao.getCustomerPhone())) {
                     defaultNotifyReceiver.setCustomerPhoneNum(dao.getCustomerPhone());
                 }
                 //接收者是收货人
@@ -361,7 +361,7 @@ public class WaybillSenderNotify {
                 DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
 
                 //判断客户是否有客户电话，有就发送短信，没有就不发送
-                if (dao.getCustomerPhone() != null) {
+                if (StringUtil.isNotEmpty(dao.getCustomerPhone())) {
                     //发送合同客户
                     defaultNotifyReceiver.setCustomerPhoneNum(dao.getCustomerPhone());
 
@@ -424,7 +424,7 @@ public class WaybillSenderNotify {
                 commonAttachment.setWebNotifyUrl(NotifyUtils.OWN_WAYBILL_WEB_NOTIFY_URL + dao.getWaybillCode());
 
                 //承运商不是货主本人
-                if (dao.getCompanyId() != dao.getCarrierCompanyId()) {
+                if (!dao.getCompanyId().equals(dao.getCarrierCompanyId())) {
                     defaultNotifyReceiver.setCarrierCompanyId(dao.getCarrierCompanyId());
                     defaultNotifyReceiver.setCarrierUserId(dao.getCreateId());
 
@@ -646,7 +646,7 @@ public class WaybillSenderNotify {
                 }
                 //发送给承运商-->派车人
                 //承运商不是货主本人
-                if (dao.getCompanyId() != dao.getCarrierCompanyId()) {
+                if (dao.getCompanyId().equals(dao.getCarrierCompanyId())) {
                     defaultNotifyReceiver.setCarrierCompanyId(dao.getCarrierCompanyId());
                     defaultNotifyReceiver.setCarrierUserId(dao.getCreateId());
                     defaultNotifyReceiver.setCarrierPhoneNum(carrierCompanyUser.getPhone());
@@ -660,12 +660,12 @@ public class WaybillSenderNotify {
                 commonAttachment.setCarrierWebNotifyUrl(NotifyUtils.CUSTOMER_WAYBILL_WEB_NOTIFY_URL + dao.getWaybillCode());
 
                 //发送司机
-                if (dao.getDriverPhone() != null && !dao.getDriverPhone().equals("")) {
+                if (StringUtil.isNotEmpty(dao.getDriverPhone())) {
                     defaultNotifyReceiver.setDriverPhoneNum(dao.getDriverPhone());
                 }
 
                 //判断客户是否有客户电话，有就发送短信，没有就不发送
-                if (dao.getCustomerPhone() != null && !dao.getCustomerPhone().equals("")) {
+                if (StringUtil.isNotEmpty(dao.getCustomerPhone())) {
                     //发送合同客户
                     defaultNotifyReceiver.setCustomerPhoneNum(dao.getCustomerPhone());
                 }
@@ -720,7 +720,7 @@ public class WaybillSenderNotify {
                 }
 
                 //承运商不是货主本人
-                if (dao.getCompanyId() != dao.getCarrierCompanyId()) {
+                if (!dao.getCompanyId().equals(dao.getCarrierCompanyId())) {
 
                     defaultNotifyReceiver.setCarrierCompanyId(dao.getCarrierCompanyId());
                     defaultNotifyReceiver.setCarrierUserId(dao.getCreateId());
@@ -737,7 +737,7 @@ public class WaybillSenderNotify {
                 defaultNotifyReceiver.setDriverPhoneNum(dao.getDriverPhone());
 
                 //判断客户是否有客户电话，有就发送短信，没有就不发送
-                if (dao.getCustomerPhone() != null && !dao.getCustomerPhone().equals("")) {
+                if (StringUtil.isNotEmpty(dao.getCustomerPhone())) {
                     defaultNotifyReceiver.setCustomerPhoneNum(dao.getCustomerPhone());
                 }
 
@@ -784,12 +784,12 @@ public class WaybillSenderNotify {
 
 
                 //接收者是司机
-                if (dao.getDriverPhone() != null && !dao.getDriverPhone().equals("")) {
+                if (StringUtil.isNotEmpty(dao.getDriverPhone())) {
                     defaultNotifyReceiver.setDriverPhoneNum(dao.getDriverPhone());
                 }
 
                 //判断客户是否有客户电话，有就发送短信，没有就不发送
-                if (dao.getCustomerPhone() != null && !dao.getDriverPhone().equals("")) {
+                if (StringUtil.isNotEmpty(dao.getCustomerPhone())) {
                     defaultNotifyReceiver.setCustomerPhoneNum(dao.getCustomerPhone());
                 }
 
@@ -847,12 +847,12 @@ public class WaybillSenderNotify {
                 commonAttachment.setWebNotifyUrl(NotifyUtils.OWN_WAYBILL_WEB_NOTIFY_URL + dao.getWaybillCode());
 
                 //接收者是司机
-                if (dao.getDriverPhone() != null && !dao.getDriverPhone().equals("")) {
+                if (StringUtil.isNotEmpty(dao.getDriverPhone())) {
                     defaultNotifyReceiver.setDriverPhoneNum(dao.getDriverPhone());
                 }
 
                 //判断客户是否有客户电话，有就发送短信，没有就不发送
-                if (dao.getCustomerPhone() != null && !dao.getCustomerPhone().equals("")) {
+                if (StringUtil.isNotEmpty(dao.getCustomerPhone())) {
                     defaultNotifyReceiver.setCustomerPhoneNum(dao.getCustomerPhone());
                 }
 

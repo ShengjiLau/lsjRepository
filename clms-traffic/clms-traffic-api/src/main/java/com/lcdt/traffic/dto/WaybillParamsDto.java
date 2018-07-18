@@ -119,7 +119,7 @@ public class WaybillParamsDto implements java.io.Serializable{
     private String receiveMan;
     @ApiModelProperty(value = "发货-电话")
     private String receivePhone;
-    @ApiModelProperty(value = "发货-市")
+    @ApiModelProperty(value = "发货-省")
     private String receiveProvince;
     @ApiModelProperty(value = "发货-市")
     private String receiveCity;

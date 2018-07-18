@@ -10,8 +10,8 @@
     <id column="snatch_goods_detail_id" jdbcType="BIGINT" property="snatchGoodsDetailId" />
     <result column="snatch_goods_id" jdbcType="BIGINT" property="snatchGoodsId" />
     <result column="plan_detail_id" jdbcType="BIGINT" property="planDetailId" />
-    <result column="offer_price" jdbcType="REAL" property="offerPrice" />
-    <result column="offer_total" jdbcType="REAL" property="offerTotal" />
+    <result column="offer_price" jdbcType="DOUBLE" property="offerPrice" />
+    <result column="offer_total" jdbcType="DOUBLE" property="offerTotal" />
     <result column="offer_remark" jdbcType="VARCHAR" property="offerRemark" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
@@ -20,7 +20,7 @@
     <result column="update_name" jdbcType="VARCHAR" property="updateName" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
-    <result column="last_offer" jdbcType="REAL" property="lastOffer" />
+    <result column="last_offer" jdbcType="DOUBLE" property="lastOffer" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
@@ -45,10 +45,10 @@
       create_name, create_date, update_id, 
       update_name, update_time, is_deleted,last_offer
       )
-    values (#{snatchGoodsId,jdbcType=BIGINT}, #{planDetailId,jdbcType=BIGINT}, #{offerPrice,jdbcType=REAL}, 
-      #{offerTotal,jdbcType=REAL}, #{offerRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
+    values (#{snatchGoodsId,jdbcType=BIGINT}, #{planDetailId,jdbcType=BIGINT}, #{offerPrice,jdbcType=DOUBLE}, 
+      #{offerTotal,jdbcType=DOUBLE}, #{offerRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
       #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, 
-      #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT},#{lastOffer,jdbcType=REAL}
+      #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT},#{lastOffer,jdbcType=DOUBLE}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.SnatchGoodsDetail">
@@ -60,8 +60,8 @@
     update t_snatch_goods_detail
     set snatch_goods_id = #{snatchGoodsId,jdbcType=BIGINT},
       plan_detail_id = #{planDetailId,jdbcType=BIGINT},
-      offer_price = #{offerPrice,jdbcType=REAL},
-      offer_total = #{offerTotal,jdbcType=REAL},
+      offer_price = #{offerPrice,jdbcType=DOUBLE},
+      offer_total = #{offerTotal,jdbcType=DOUBLE},
       offer_remark = #{offerRemark,jdbcType=VARCHAR},
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},
@@ -144,9 +144,9 @@
     <foreach separator=";" index="index" item="goods" collection="list" close="" open="">
       update t_snatch_goods_detail
       set
-      offer_price = #{offerPrice,jdbcType=REAL},
-      offer_total = #{offerTotal,jdbcType=REAL},
-      last_offer =  #{lastOffer,jdbcType=REAL},
+      offer_price = #{offerPrice,jdbcType=DOUBLE},
+      offer_total = #{offerTotal,jdbcType=DOUBLE},
+      last_offer =  #{lastOffer,jdbcType=DOUBLE},
       offer_remark = #{offerRemark,jdbcType=VARCHAR},
       update_id = #{updateId,jdbcType=BIGINT},
       update_name = #{updateName,jdbcType=VARCHAR},

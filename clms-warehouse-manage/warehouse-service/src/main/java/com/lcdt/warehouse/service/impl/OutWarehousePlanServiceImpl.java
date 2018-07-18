@@ -137,7 +137,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                     OutWhPlanGoodsDto outWhPlanGoodsDto = new OutWhPlanGoodsDto();
                     BeanUtils.copyProperties(obj1, outWhPlanGoodsDto);
                     outWhPlanGoodsDto.setRemainGoodsNum(obj1.getPlanGoodsNum());
-                    outWhPlanGoodsDto.setOutOderGoodsNum(0f);
+                    outWhPlanGoodsDto.setOutOderGoodsNum(0d);
                     outWhPlanGoodsDtoList.add(outWhPlanGoodsDto);
                 }
                 result.setOutWhPlanGoodsDtoList(outWhPlanGoodsDtoList);
@@ -154,7 +154,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
      */
     private void statDistributeNum(OutWhPlanGoodsDto outWhPlanGoodsDto, List<OutWhOrderDto> outWhOrderDtoList) {
         if (null!=outWhOrderDtoList && outWhOrderDtoList.size()>0) {
-            Float outGoodsNumber = 0f;
+            Double outGoodsNumber = 0d;
             for (OutWhOrderDto obj : outWhOrderDtoList) {
                 List<OutOrderGoodsInfoDto> list = obj.getOutOrderGoodsInfoList();
                 if (null!=list && list.size()>0) {
@@ -168,7 +168,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             outWhPlanGoodsDto.setOutOderGoodsNum(outGoodsNumber);//已配仓数
             outWhPlanGoodsDto.setRemainGoodsNum(outWhPlanGoodsDto.getPlanGoodsNum() - outGoodsNumber);//计划-已配=剩余(代配)
         } else {
-            outWhPlanGoodsDto.setOutOderGoodsNum(0f);//已配仓数
+            outWhPlanGoodsDto.setOutOderGoodsNum(0d);//已配仓数
             outWhPlanGoodsDto.setRemainGoodsNum(outWhPlanGoodsDto.getPlanGoodsNum()==null?0:outWhPlanGoodsDto.getPlanGoodsNum() - 0);
         }
     }
@@ -402,7 +402,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
             for (OutWhPlanGoodsDto obj2: _outWhPlanGoodsDtoList2) {
                 if (obj1.getRelationId().equals(obj2.getRelationId())) { //同一种货物
                     if (obj1.getDistGoodsNum() == null) {
-                        obj1.setDistGoodsNum(0f);
+                        obj1.setDistGoodsNum(0d);
                     }
                     if (obj1.getDistGoodsNum()>obj2.getRemainGoodsNum()) { //如果前端提交过来的大于数据库中的剩余的
                         sb.append("货物："+ obj1.getGoodsName()+"，剩余数量："+obj2.getRemainGoodsNum()+",不满足当前配仓数量："+obj1.getDistGoodsNum());
@@ -418,8 +418,8 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
 
         //拆分逻辑检查
         for (OutWhPlanGoodsDto obj2: _outWhPlanGoodsDtoList2) { //后端的
-            Float remainGoods = obj2.getRemainGoodsNum(); //后台剩余的货物
-            Float disGoods = 0f;
+            Double remainGoods = obj2.getRemainGoodsNum(); //后台剩余的货物
+            Double disGoods = 0d;
             for (OutWhPlanGoodsDto obj1: _outWhPlanGoodsDtoList1) {
                 if (obj1.getRelationId().equals(obj2.getRelationId())) { //同一种货物
                     disGoods+= obj1.getDistGoodsNum();

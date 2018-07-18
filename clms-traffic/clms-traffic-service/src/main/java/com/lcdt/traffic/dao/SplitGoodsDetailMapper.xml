@@ -10,12 +10,12 @@
     <id column="split_goods_detail_id" jdbcType="BIGINT" property="splitGoodsDetailId" />
     <result column="split_goods_id" jdbcType="BIGINT" property="splitGoodsId" />
     <result column="plan_detail_id" jdbcType="BIGINT" property="planDetailId" />
-    <result column="allot_amount" jdbcType="REAL" property="allotAmount" />
-    <result column="remain_amount" jdbcType="REAL" property="remainAmount" />
-    <result column="freight_price" jdbcType="REAL" property="freightPrice" />
-    <result column="freight_total" jdbcType="REAL" property="freightTotal" />
-    <result column="pay_price" jdbcType="REAL" property="payPrice" />
-    <result column="pay_total" jdbcType="REAL" property="payTotal" />
+    <result column="allot_amount" jdbcType="DOUBLE" property="allotAmount" />
+    <result column="remain_amount" jdbcType="DOUBLE" property="remainAmount" />
+    <result column="freight_price" jdbcType="DOUBLE" property="freightPrice" />
+    <result column="freight_total" jdbcType="DOUBLE" property="freightTotal" />
+    <result column="pay_price" jdbcType="DOUBLE" property="payPrice" />
+    <result column="pay_total" jdbcType="DOUBLE" property="payTotal" />
     <result column="detail_remark" jdbcType="VARCHAR" property="detailRemark" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
@@ -25,8 +25,8 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
-    <result column="weight" jdbcType="REAL" property="weight" />
-    <result column="volume" jdbcType="REAL" property="volume" />
+    <result column="weight" jdbcType="DOUBLE" property="weight" />
+    <result column="volume" jdbcType="DOUBLE" property="volume" />
   </resultMap>
 
   <select id="selectBySplitGoodsId" parameterType="java.util.Map" resultMap="BaseResultMap">
@@ -68,12 +68,12 @@
       create_date, update_id, update_name, 
       update_time, is_deleted, company_id,pay_price,pay_total,weight,volume
       )
-    values (#{splitGoodsId,jdbcType=BIGINT}, #{planDetailId,jdbcType=BIGINT}, #{allotAmount,jdbcType=REAL}, 
-      #{remainAmount,jdbcType=REAL}, #{freightPrice,jdbcType=REAL}, #{freightTotal,jdbcType=REAL},
+    values (#{splitGoodsId,jdbcType=BIGINT}, #{planDetailId,jdbcType=BIGINT}, #{allotAmount,jdbcType=DOUBLE}, 
+      #{remainAmount,jdbcType=DOUBLE}, #{freightPrice,jdbcType=DOUBLE}, #{freightTotal,jdbcType=DOUBLE},
       #{detailRemark,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, 
       #{createDate,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=SMALLINT}, #{companyId,jdbcType=BIGINT},
-      #{payPrice,jdbcType=REAL}, #{payTotal,jdbcType=REAL}, #{weight,jdbcType=REAL}, #{volume,jdbcType=REAL}
+      #{payPrice,jdbcType=DOUBLE}, #{payTotal,jdbcType=DOUBLE}, #{weight,jdbcType=DOUBLE}, #{volume,jdbcType=DOUBLE}
 
       )
   </insert>
@@ -86,10 +86,10 @@
     update t_split_goods_detail
     set split_goods_id = #{splitGoodsId,jdbcType=BIGINT},
       plan_detail_id = #{planDetailId,jdbcType=BIGINT},
-      allot_amount = #{allotAmount,jdbcType=REAL},
-       remain_amount = #{remainAmount,jdbcType=REAL},
-      freight_price = #{freightPrice,jdbcType=REAL},
-      freight_total = #{freightTotal,jdbcType=REAL},
+      allot_amount = #{allotAmount,jdbcType=DOUBLE},
+       remain_amount = #{remainAmount,jdbcType=DOUBLE},
+      freight_price = #{freightPrice,jdbcType=DOUBLE},
+      freight_total = #{freightTotal,jdbcType=DOUBLE},
       detail_remark = #{detailRemark,jdbcType=VARCHAR},
       create_id = #{createId,jdbcType=BIGINT},
       create_name = #{createName,jdbcType=VARCHAR},
@@ -99,8 +99,8 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       is_deleted = #{isDeleted,jdbcType=SMALLINT},
       company_id = #{companyId,jdbcType=BIGINT},
-      weight  = #{weight,jdbcType=REAL},
-      volume  = #{volume,jdbcType=REAL}
+      weight  = #{weight,jdbcType=DOUBLE},
+      volume  = #{volume,jdbcType=DOUBLE}
     where split_goods_detail_id = #{splitGoodsDetailId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">

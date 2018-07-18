@@ -16,12 +16,12 @@
     <result column="unit" jdbcType="VARCHAR" property="unit" />
     <result column="min_unit" jdbcType="VARCHAR" property="minUnit" />
     <result column="unit_data" jdbcType="BIGINT" property="unitData" />
-    <result column="plan_amount" jdbcType="REAL" property="planAmount" />
-    <result column="remainder_amount" jdbcType="REAL" property="remainderAmount" />
-    <result column="freight_price" jdbcType="REAL" property="freightPrice" />
-    <result column="freight_total" jdbcType="REAL" property="freightTotal" />
-    <result column="pay_price" jdbcType="REAL" property="payPrice" />
-    <result column="pay_total" jdbcType="REAL" property="payTotal" />
+    <result column="plan_amount" jdbcType="DOUBLE" property="planAmount" />
+    <result column="remainder_amount" jdbcType="DOUBLE" property="remainderAmount" />
+    <result column="freight_price" jdbcType="DOUBLE" property="freightPrice" />
+    <result column="freight_total" jdbcType="DOUBLE" property="freightTotal" />
+    <result column="pay_price" jdbcType="DOUBLE" property="payPrice" />
+    <result column="pay_total" jdbcType="DOUBLE" property="payTotal" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
@@ -31,8 +31,8 @@
     <result column="is_deleted" jdbcType="SMALLINT" property="isDeleted" />
     <result column="detail_remark" jdbcType="VARCHAR" property="detailRemark" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
-    <result column="weight" jdbcType="REAL" property="weight" />
-    <result column="volume" jdbcType="REAL" property="volume" />
+    <result column="weight" jdbcType="DOUBLE" property="weight" />
+    <result column="volume" jdbcType="DOUBLE" property="volume" />
 
 
   </resultMap>
@@ -66,12 +66,12 @@
     values (#{waybillPlanId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{subGoodsId,jdbcType=BIGINT}, #{goodsName,jdbcType=VARCHAR},
       #{goodsSpec,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR},
       #{minUnit,jdbcType=VARCHAR},#{unitData,jdbcType=BIGINT},
-      #{planAmount,jdbcType=REAL},
-      #{remainderAmount,jdbcType=REAL}, #{freightPrice,jdbcType=REAL}, #{freightTotal,jdbcType=REAL},
+      #{planAmount,jdbcType=DOUBLE},
+      #{remainderAmount,jdbcType=DOUBLE}, #{freightPrice,jdbcType=DOUBLE}, #{freightTotal,jdbcType=DOUBLE},
       #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
       #{updateId,jdbcType=BIGINT}, #{updateName,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{isDeleted,jdbcType=SMALLINT}, #{detailRemark,jdbcType=VARCHAR}, #{companyId,jdbcType=BIGINT},
-      #{payPrice,jdbcType=REAL}, #{payTotal,jdbcType=REAL}, #{weight,jdbcType=REAL}, #{volume,jdbcType=REAL}
+      #{payPrice,jdbcType=DOUBLE}, #{payTotal,jdbcType=DOUBLE}, #{weight,jdbcType=DOUBLE}, #{volume,jdbcType=DOUBLE}
       )
   </insert>
 
@@ -92,10 +92,10 @@
       unit = #{unit,jdbcType=VARCHAR},
       min_unit = #{minUnit,jdbcType=VARCHAR},
       unit_data = #{unitData,jdbcType=BIGINT},
-      plan_amount = #{planAmount,jdbcType=REAL},
-      remainder_amount = #{remainderAmount,jdbcType=REAL},
-      freight_price = #{freightPrice,jdbcType=REAL},
-      freight_total = #{freightTotal,jdbcType=REAL},
+      plan_amount = #{planAmount,jdbcType=DOUBLE},
+      remainder_amount = #{remainderAmount,jdbcType=DOUBLE},
+      freight_price = #{freightPrice,jdbcType=DOUBLE},
+      freight_total = #{freightTotal,jdbcType=DOUBLE},
       create_id = #{createId,jdbcType=BIGINT},
       create_name = #{createName,jdbcType=VARCHAR},
       create_date = #{createDate,jdbcType=TIMESTAMP},
@@ -105,8 +105,8 @@
       is_deleted = #{isDeleted,jdbcType=SMALLINT},
       detail_remark = #{detailRemark,jdbcType=VARCHAR},
       company_id = #{companyId,jdbcType=BIGINT},
-      weight  = #{weight,jdbcType=REAL},
-      volume  = #{volume,jdbcType=REAL}
+      weight  = #{weight,jdbcType=DOUBLE},
+      volume  = #{volume,jdbcType=DOUBLE}
     where plan_detail_id = #{planDetailId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap">

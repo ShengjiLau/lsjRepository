@@ -39,7 +39,7 @@ public class SnatchGoodsDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    private Float offerPrice;
+    private Double offerPrice;
 
     /**
      *
@@ -48,17 +48,17 @@ public class SnatchGoodsDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    private Float offerTotal;
+    private Double offerTotal;
 
-    public Float getLastOffer() {
+    public Double getLastOffer() {
         return lastOffer;
     }
 
-    public void setLastOffer(Float lastOffer) {
+    public void setLastOffer(Double lastOffer) {
         this.lastOffer = lastOffer;
     }
 
-    private Float lastOffer;
+    private Double lastOffer;
 
     /**
      *
@@ -223,7 +223,7 @@ public class SnatchGoodsDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    public Float getOfferPrice() {
+    public Double getOfferPrice() {
         return offerPrice;
     }
 
@@ -235,7 +235,7 @@ public class SnatchGoodsDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    public void setOfferPrice(Float offerPrice) {
+    public void setOfferPrice(Double offerPrice) {
         this.offerPrice = offerPrice;
     }
 
@@ -247,7 +247,7 @@ public class SnatchGoodsDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    public Float getOfferTotal() {
+    public Double getOfferTotal() {
         return offerTotal;
     }
 
@@ -259,7 +259,7 @@ public class SnatchGoodsDetail implements java.io.Serializable,ResponseData {
      *
      * @mbg.generated Tue Dec 12 09:56:12 CST 2017
      */
-    public void setOfferTotal(Float offerTotal) {
+    public void setOfferTotal(Double offerTotal) {
         this.offerTotal = offerTotal;
     }
 

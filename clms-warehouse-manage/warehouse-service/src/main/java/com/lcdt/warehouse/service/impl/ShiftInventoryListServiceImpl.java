@@ -118,7 +118,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				shiftGoodsDO.setShiftInventoryId(shiftInventoryListDO.getShiftId());
 			}
 			shiftGoodsDOList.addAll(shiftGoodsDOList1);
-			Float lockNum = shiftPlanNum.floatValue();
+			Double lockNum = shiftPlanNum.doubleValue();
 			inventoryService.lockInventoryNum(shiftGoodsListDTOList.get(a).getInvertoryId(), lockNum);
 		}
 		//数据库插入新的移库商品信息列表
@@ -211,8 +211,8 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				}
 	
 			}
-			Float lockNum = shiftPlanNum.floatValue();
-			Float inventoryNum = shiftNum.floatValue();
+			Double lockNum = shiftPlanNum.doubleValue();
+			Double inventoryNum = shiftNum.doubleValue();
 		  //修改移除库存的库存总量和锁定库存量
 		  //如果现有库存小于移动库存，则提示库存不足
 			inventoryService.unLockInventoryNum(sgdl.getInvertoryId(), lockNum);
@@ -391,7 +391,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 						shiftPlanNum = shiftPlanNum.add(shiftGoodsDOList.get(j).getShiftPlanNum());
 					}
 				}
-				Float lockNum = shiftPlanNum.floatValue();
+				Double lockNum = shiftPlanNum.doubleValue();
 				inventoryService.unLockInventoryNum(inventoryIds[i], lockNum);
 			 }
 		 }
@@ -405,7 +405,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	
 	/**
 	 * 将规定格式的字符串转化为Long类型数组
-	 * @param String
+	 * @param s
 	 * @return Long[]
 	 */
 	private Long[] ConvertStringToLong(String s) {
@@ -465,7 +465,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
         	 inventory2.setRemark(shiftGoodsDO.getRemark());
         }
         inventory2.setCompanyId(shiftInventoryListDO2.getCompanyId());
-        inventory2.setInvertoryNum(shiftGoodsDO.getShiftNum().floatValue());
+        inventory2.setInvertoryNum(shiftGoodsDO.getShiftNum().doubleValue());
         inventory2.setLockNum(ShiftInventoryListVO.ZERO_VALUE);
         inventory2.setUpdateTime(new Date());
         //inventory2.setBusinessDesc(businessDesc);
@@ -488,7 +488,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
         if (0 == shiftGoodsDO.getShiftNum().intValue()) {
         	inventoryLog.setChangeNum(inventory.getInvertoryNum());
         }else {
-        	inventoryLog.setChangeNum(shiftGoodsDO.getShiftNum().floatValue());
+        	inventoryLog.setChangeNum(shiftGoodsDO.getShiftNum().doubleValue());
         }
         inventoryLog.setStorageLocationCode(shiftGoodsDO.getShiftLocation());
         inventoryLog.setStorageLocationId(shiftGoodsDO.getStorageLocationId());

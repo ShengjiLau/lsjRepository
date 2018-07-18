@@ -140,6 +140,7 @@
 	</foreach>
 	</if>
 	</where>
+	order by create_time desc
 	</select>
 	
 	<select id="getPaymentApplicationListByOrderId" parameterType="java.lang.Long" resultType="com.lcdt.contract.model.PaymentApplication">
