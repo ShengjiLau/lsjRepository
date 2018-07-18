@@ -18,4 +18,3 @@ test:
   stage: test
   script:
     - mvn  test
-    - ifconfig -a
