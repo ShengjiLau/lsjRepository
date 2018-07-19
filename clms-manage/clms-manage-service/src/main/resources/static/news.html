@@ -80,15 +80,15 @@
   </nav>
 <div class="container">
     <ol class="breadcrumb">
-        <li><a href="#">资讯</a></li>
-        <li><a href="#">公司新闻</a></li>
+        <li><a href="/news-list.html">资讯</a></li>
+        <li><a href="/news-list.html">公司新闻</a></li>
         <li class="active" th:text="${notice.noticeTitle}"></li>
     </ol>
 </div>
 
 <div class="main-container">
     <div class="container news-content">
-       <h1>恭喜济南子公司研发中心乔迁新址</h1>
+       <h1><span th:text="${notice.noticeTitle}"></span></h1>
         <p th:text="${{notice.publishTime}}+'　来源: '+${notice.publisher}">　</p>
         <hr>
         <div class="content">

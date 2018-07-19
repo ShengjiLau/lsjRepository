@@ -131,19 +131,15 @@
             </li>
         </ul>
           <nav aria-label="Page navigation">
-              <ul class="pagination">
-                  <li>
-                      <a href="#" aria-label="Previous">
+              <ul class="pagination" th:each="page:${pageNums}">
+                  <li th:if="${page.isPrevious}">
+                      <a th:href="'/news-list.html?start='+${page.num}" aria-label="Previous">
                           <span aria-hidden="true">&laquo;</span>
                       </a>
                   </li>
-                  <li class="active"><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li><a href="#">5</a></li>
-                  <li>
-                      <a href="#" aria-label="Next">
+                  <li th:if="${!page.isPrevious&&!page.isNext}" th:class="${page.isCurrent}?'active':''"><a th:href="'/news-list.html?start='+${page.num}"><span th:text="${page.num}"></span></a></li>
+                  <li th:if="${page.isNext}">
+                      <a th:href="'/news-list.html?start='+${page.num}" aria-label="Next">
                           <span aria-hidden="true">&raquo;</span>
                       </a>
                   </li>
