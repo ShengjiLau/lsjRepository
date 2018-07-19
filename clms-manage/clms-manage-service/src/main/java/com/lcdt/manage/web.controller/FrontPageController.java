@@ -1,7 +1,6 @@
 package com.lcdt.manage.web.controller;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.github.pagehelper.PageInfo;
 import com.lcdt.manage.dto.NoticeListDto;
 import com.lcdt.manage.dto.NoticeListParamsDto;
 import com.lcdt.manage.entity.TNotice;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;

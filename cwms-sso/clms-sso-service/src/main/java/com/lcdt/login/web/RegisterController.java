@@ -9,7 +9,6 @@ import com.lcdt.userinfo.dto.RegisterDto;
 import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
-import com.lcdt.util.RandomNoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,6 +81,7 @@ public class RegisterController {
             try {
                 registerDto.setRegisterFrom("web主站");
                 User fUser = userService.registerUser(registerDto);
+                LoginSessionReposity.setUserInSession(request, fUser);
                 if (fUser != null) {
                     flag = true;
                 } else {
