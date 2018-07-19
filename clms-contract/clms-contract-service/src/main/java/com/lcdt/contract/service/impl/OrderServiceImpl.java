@@ -491,8 +491,8 @@ public class OrderServiceImpl implements OrderService {
 	    	planDetail.setGoodsSpec(orderProduct.getSpec());
 	    	planDetail.setUnit(orderProduct.getSku());
 	    	planDetail.setPlanAmount(orderProduct.getNum().doubleValue());
-	    	planDetail.setPayPrice(orderProduct.getPrice().doubleValue());
-	    	planDetail.setPayTotal(orderProduct.getTotal().doubleValue());
+//	    	planDetail.setPayPrice(orderProduct.getPrice().doubleValue());
+//	    	planDetail.setPayTotal(orderProduct.getTotal().doubleValue());
 	    	planDetail.setCompanyId(companyId);
 	    	planDetail.setIsDeleted((OrderVO.IS_DELETED));
 	    	planDetail.setCreateDate(new Date());
