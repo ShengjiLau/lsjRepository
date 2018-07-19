@@ -444,12 +444,12 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setSendCity(order.getSendCity());
 		    WaybillParamsDto.setSendCounty(order.getSendDistrict());
 		    WaybillParamsDto.setSendAddress(order.getSendAddress());
-//		    WaybillParamsDto.setReceiveMan(order.getReceiver());
-//		    WaybillParamsDto.setReceivePhone(order.getReceiverPhone());
-//		    WaybillParamsDto.setReceiveProvince(order.getReceiverProvince());
-//		    WaybillParamsDto.setReceiveCity(order.getReceiverCity());
-//		    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
-//		    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
+		    WaybillParamsDto.setReceiveMan(order.getReceiver());
+		    WaybillParamsDto.setReceivePhone(order.getReceiverPhone());
+		    WaybillParamsDto.setReceiveProvince(order.getReceiverProvince());
+		    WaybillParamsDto.setReceiveCity(order.getReceiverCity());
+		    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
+		    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
 		    if (null != order.getSendTime()) {
 		    	WaybillParamsDto.setStartDate(order.getSendTime().toLocaleString());
 		    }else {
@@ -491,8 +491,8 @@ public class OrderServiceImpl implements OrderService {
 	    	planDetail.setGoodsSpec(orderProduct.getSpec());
 	    	planDetail.setUnit(orderProduct.getSku());
 	    	planDetail.setPlanAmount(orderProduct.getNum().doubleValue());
-	    	planDetail.setPayPrice(orderProduct.getPrice().doubleValue());
-	    	planDetail.setPayTotal(orderProduct.getTotal().doubleValue());
+//	    	planDetail.setPayPrice(orderProduct.getPrice().doubleValue());
+//	    	planDetail.setPayTotal(orderProduct.getTotal().doubleValue());
 	    	planDetail.setCompanyId(companyId);
 	    	planDetail.setIsDeleted((OrderVO.IS_DELETED));
 	    	planDetail.setCreateDate(new Date());
@@ -527,7 +527,7 @@ public class OrderServiceImpl implements OrderService {
 	    inWhPlanAddParamsDto.setCompanyId(companyId);
 	    inWhPlanAddParamsDto.setCreateUserId(loginUser.getUserId());
 	    inWhPlanAddParamsDto.setCreateUserName(loginUser.getRealName());
-	    inWhPlanAddParamsDto.setContractNo(order.getContractCode());
+	    inWhPlanAddParamsDto.setContractNo(order.getOrderNo());
 	    inWhPlanAddParamsDto.setCustomerId(companyId);
 	    inWhPlanAddParamsDto.setCustomerName(userCompRel.getCompany().getFullName());
 	    inWhPlanAddParamsDto.setGroupId(order.getGroupId());
