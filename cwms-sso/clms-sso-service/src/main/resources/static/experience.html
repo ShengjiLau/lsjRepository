@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <title>体验 | 大驼队cLMS协同物流管理系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="/asset/style/signin.css">
+    <link rel="stylesheet" href="./asset/style/iconfont.css">
+    <link rel="shortcut icon" href="/favicon.ico" >
+    <style type="text/css">
+      .signin-form {
+        /* border-top: 1px solid #f0f0f0; */
+        padding: 40px 33px 0 33px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="signin-box">
+         <!-- <div style="font-size: 12px;text-align: right;color: #0891fb"><a href="https://tms.datuodui.com" target="_blank">登录老系统</a></div>-->
+      <div class="logo-box">
+      </div>
+      <div class="signin-form">
+        <form id="signin-form" class="" action="/account/experience" method="post">
+          <div class="form-row">
+            <label for="captchacode">验证码：</label>
+            <div class="clms-input capcha_input">
+              <input type="text" name="captchacode" id="captchacode" value="" placeholder="请输入验证码">
+            </div>
+            <div class="capcha_img">
+              <img style="height: 38px" id="captchaimg" src="/auth/getcaptcha" alt="./public/vc.png" onclick="refreshCaptcha()"></a></div>
+          </div>
+          <div class="form-row login-btn-row" style="margin-top:32px;">
+            <button type="submit" class="login-btn">
+              立即体验
+            </button>
+          </div>
+          <!--<div class="form-row login-btn-row">-->
+            <!--<a href="#" class="primary-btn" onclick="register();">立即注册</a>-->
+            <!--<a href="/forgetpage" class="default-btn">忘记密码</a>-->
+          <!--</div>-->
+        </form>
+      </div>
+    </div>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-validate/1.17.0/localization/messages_zh.min.js"></script>
+    <script type="text/javascript">
+        $().ready(function() {
+            $("#signin-form").validate({
+                rules:{     //配置验证规则，key就是被验证的dom对象，value就是调用验证的方法(也是json格式)
+                    captchacode:{
+                        required:true,
+                        rangelength:[3,5],
+                    }
+                },
+                messages: {
+                    captchacode:{
+                        required: "请输入验证码",
+                        rangelength: "请输入4位验证码",
+                    }
+                }
+            });
+        });
+
+        //验证码
+        var refreshCaptcha = function(){
+            document.getElementById("captchaimg").src="/auth/getcaptcha?random=" + Math.random();
+            return false;
+        }
+
+        $.validator.setDefaults({
+        submitHandler: function() {
+            var form = document.getElementById("signin-form");
+            var fd = new FormData(form);
+            $.ajax({
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                url: '/account/experience',
+                data: fd,
+                success: function (data) {
+                    var data = JSON.parse(data);
+                    console.log(data)
+                    if (data.code == 0) {
+                        if (data.hasOwnProperty("data")) {
+                            var dataArray = data.data;
+                            if (dataArray.length==0) { //没有企业关系
+                                alert("体验账号没有企业，请联系管理员");
+                            } else {
+                                window.location.href = "/account/logincompany?companyId="+data.data[0].compId;
+                            }
+                        }
+
+                    }else{
+                        alert(data.message);
+                        $("#captchacode").val("");
+                        refreshCaptcha();
+                    }
+                },
+                error: function (data) {
+                    var result = JSON.parse(data);
+                    alert(result.message);
+                },
+            });
+
+        }
+      });
+      </script>
+
+  </body>
+</html>
