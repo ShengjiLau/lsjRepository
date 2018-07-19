@@ -1,7 +1,6 @@
 package com.lcdt.manage.web.controller;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.github.pagehelper.PageInfo;
 import com.lcdt.manage.dto.NoticeListDto;
 import com.lcdt.manage.dto.NoticeListParamsDto;
 import com.lcdt.manage.entity.TNotice;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -28,11 +26,18 @@ import java.util.Map;
 @Controller
 public class FrontPageController {
     private final Logger logger = LoggerFactory.getLogger(FrontPageController.class);
+    private static final String INDEX_PAGE = "/index";
 
-    private static String LOGIN_PAGE = "/index";
-    private static String NEWS_LIST_PAGE = "/news-list";
-    private static String NEWS_PAGE = "/news";
+    private static final String NEWS_LIST_PAGE = "/news-list";
+    private static final String NEWS_PAGE = "/news";
+    private static final String PRICE_PAGE = "/price";
+    private static final String ABOUT_PAGE = "/about";
+    private static final String CLMS_PAGE = "/product/clms";
+    private static final String COMS_PAGE = "/product/coms";
+    private static final String CTMS_PAGE = "/product/ctms";
+    private static final String CWMS_PAGE = "/product/cwms";
     private static final String NewsCategory = "新闻资讯";
+
     @Autowired
     private TNoticeService noticeService;
     @Autowired
@@ -43,10 +48,10 @@ public class FrontPageController {
      *
      * @return
      */
-    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    @RequestMapping(value = INDEX_PAGE, method = RequestMethod.GET)
     public ModelAndView index() {
         logger.info("--------------index------------------");
-        ModelAndView view = new ModelAndView(LOGIN_PAGE);
+        ModelAndView view = new ModelAndView(INDEX_PAGE);
         TNoticeCategory cate = new TNoticeCategory();
         cate = noticeCategoryService.findByName(NewsCategory);
         if (cate != null) {
@@ -58,6 +63,7 @@ public class FrontPageController {
             List<NoticeListDto> notices = page.getRecords();
             view.addObject("notices", notices);
             view.addObject("topOne", topOne);
+            view.addObject("active",1);
         }
         return view;
     }
@@ -68,12 +74,12 @@ public class FrontPageController {
      *
      * @return
      */
-    @RequestMapping(value = "/news-list", method = RequestMethod.GET)
+    @RequestMapping(value = NEWS_LIST_PAGE, method = RequestMethod.GET)
     public ModelAndView newsList(Integer start) {
         ModelAndView view = new ModelAndView(NEWS_LIST_PAGE);
         //view.addObject("info","这是咨询" );
         NoticeListParamsDto params = new NoticeListParamsDto();
-        params.setPageSize(5);
+        params.setPageSize(10);
 
         if (start != null && start > 0) {
             params.setPageNo(start);
@@ -131,6 +137,7 @@ public class FrontPageController {
             view.addObject("pageNums",pageNums);
 
         }
+        view.addObject("active",3);
         return view;
     }
 
@@ -139,7 +146,7 @@ public class FrontPageController {
      *
      * @return
      */
-    @RequestMapping(value = "/news", method = RequestMethod.GET)
+    @RequestMapping(value = NEWS_PAGE, method = RequestMethod.GET)
     public ModelAndView news(Long id) {
         ModelAndView view = new ModelAndView(NEWS_PAGE);
         TNotice notice = noticeService.selectById(id);
@@ -153,8 +160,46 @@ public class FrontPageController {
                 view.addObject("nextNotice", nextNotice);
             }
         }
+        view.addObject("active",3);
         return view;
     }
 
+    @RequestMapping(value = PRICE_PAGE, method = RequestMethod.GET)
+    public ModelAndView price() {
+        ModelAndView view = new ModelAndView(PRICE_PAGE);
+        view.addObject("active",4);
+        return view;
+    }
 
+    @RequestMapping(value = CLMS_PAGE, method = RequestMethod.GET)
+    public ModelAndView clms() {
+        ModelAndView view = new ModelAndView(CLMS_PAGE);
+        view.addObject("active",2);
+        return view;
+    }
+    @RequestMapping(value = COMS_PAGE, method = RequestMethod.GET)
+    public ModelAndView coms() {
+        ModelAndView view = new ModelAndView(COMS_PAGE);
+        view.addObject("active",2);
+        return view;
+    }
+    @RequestMapping(value = CTMS_PAGE, method = RequestMethod.GET)
+    public ModelAndView ctms() {
+        ModelAndView view = new ModelAndView(CTMS_PAGE);
+        view.addObject("active",2);
+        return view;
+    }
+    @RequestMapping(value = CWMS_PAGE, method = RequestMethod.GET)
+    public ModelAndView cwms() {
+        ModelAndView view = new ModelAndView(CWMS_PAGE);
+        view.addObject("active",2);
+        return view;
+    }
+
+    @RequestMapping(value = ABOUT_PAGE, method = RequestMethod.GET)
+    public ModelAndView about() {
+        ModelAndView view = new ModelAndView(ABOUT_PAGE);
+        view.addObject("active",5);
+        return view;
+    }
 }

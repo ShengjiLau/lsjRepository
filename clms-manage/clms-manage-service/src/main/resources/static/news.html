@@ -11,73 +11,9 @@
     <Link href="../style/style.min.css.map" rel="stylesheet">
 </head>
 <body>
-  <nav class="navbar navbar-static-top bs-docs-nav" id="top">
-      <div class="container">
-          <div class="navbar-header ">
-              <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#bs-navbar"
-                      aria-controls="bs-navbar" aria-expanded="false">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-              </button>
-              <a href="../.." class="navbar-brand"></a>
-          </div>
-          <nav id="bs-navbar" class="collapse navbar-collapse">
-              <ul class="nav navbar-nav">
-                <li>
-                    <a href="/">首页</a>
-                </li>
-                  <li class=""><a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">产品与服务
-                      <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span> </a>
-                      <div class="dropdown-menu">
-                          <ul class="nav nav-pills nav-stacked">
-                            <li><a href="/product/clms.html">CLMS 协同管理系统</a></li>
-                            <li><a href="/product/ctms.html">CTMS 运输管理系统</a></li>
-                            <li><a href="/product/cwms.html">CWMS 仓储管理系统</a></li>
-                            <li><a href="/product/coms.html">COMS 订单管理系统</a></li>
-                          </ul>
-                      </div>
-                  </li>
-                  <li>
-                      <a href="/news-list.html">资讯</a>
-                  </li>
-                  <!-- <li class=""><a href="#" class="dropdown-toggle"
-                                  data-hover="dropdown" data-toggle="dropdown" aria-expanded="false">行业案例
-                      <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span> </a>
-                      <div class="dropdown-menu" style="width: 450px;">
-                          <ul class="nav nav-pills nav-stacked fl">
-                              <li>生产制造商</li>
-                              <li>商贸流通业</li>
-                              <li>第三方物流</li>
-                              <li>城市配送</li>
-                          </ul>
-                          <ul class="nav nav-pills nav-stacked fl">
-                              <li>供应链协同</li>
-                              <li>仓配一体化</li>
-                              <li>大车队管理</li>
-                              <li>无车承运人</li>
-                          </ul>
-                      </div>
-                  </li> -->
-                  <li>
-                      <a href="/price.html">产品定价</a>
-                  </li>
-                  <li>
-                      <a href="/about.html">关于我们</a>
-                  </li>
-              </ul>
-              <ul class="nav navbar-nav navbar-right login-nav">
-                  <li>
-                      <a href="">登录</a>
-                  </li>
-                  <li>
-                      <a href="" class="primary-link">注册</a>
-                  </li>
-              </ul>
-          </nav>
-      </div>
-  </nav>
+<nav class="navbar navbar-default navbar-static-top bs-docs-nav" id="top">
+    <div th:replace="/nav::nav_div"></div>
+</nav>
 <div class="container">
     <ol class="breadcrumb">
         <li><a href="/news-list.html">资讯</a></li>
@@ -95,7 +31,7 @@
             <p th:text="${notice.noticeContent}">
             </p>
         </div>
-        <p style="text-align: right"th:text="${{notice.publishTime}}+'　来源: '+${notice.publisher}">
+        <p style="text-align: right" th:text="${{notice.publishTime}}+'　来源: '+${notice.publisher}">
         </p>
         <hr>
     </div>
@@ -125,50 +61,7 @@
         </div>
     </div>
     <div class="footer">
-        <div class="container">
-          <p class="bot-list">
-            <a href="/product/clms.html">CLMS 协同管理系统</a>
-            <a href="/product/ctms.html">CTMS 运输管理系统</a>
-            <a href="/product/cwms.html">CWMS 仓储管理系统</a>
-            <a href="/product/coms.html">COMS 订单管理系统</a>
-          </p>
-          <hr>
-            <div class="row">
-                <div class="row footer-top">
-                    <div class="col-md-5  col-lg-5">
-                        <div class="row about">
-                            <div class="col-sm-6"><h4>关于大驼队</h4>
-                                <ul class="list-unstyled">
-                                    <li><a href="/about.html">关于我们</a></li>
-                                    <li><a href="http://www.lichendt.com/cn/careers/" target="_blank">招聘</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-sm-6"><h4>联系方式</h4>
-                                <ul class="list-unstyled">
-                                    <li>咨询热线：400-180-5656</li>
-                                    <li>服务QQ：3308766826</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-lg-2"></div>
-                    <div class="col-md-5 col-lg-5">
-                        <div style="margin-top: 10px;"><h4>使用微信扫一扫</h4></div>
-                        <div class="col-sm-4"><img src="https://img.datuodui.com/qr_driver.jpg" width="100px">
-                        </div>
-                        <div class="col-sm-4"><img src="https://img.datuodui.com/qr_carrier.jpg" width="100px">
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <div class="row footer-bottom">
-                    <ul class="list-inline text-center">济南邻商网络科技有限公司&nbsp;版权所有
-                        <li><a href="http://www.miibeian.gov.cn/" target="_blank">鲁ICP备18017250号-1</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <div th:replace="/footer::ft_div"></div>
     </div>
 
 </div>
