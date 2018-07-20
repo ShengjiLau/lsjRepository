@@ -18,9 +18,6 @@ stages:
   - test
   - build_image
 
-before_script:
-  - docker info
-  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $ALIYUN_REGISTRY
 
 build:
   stage: build
@@ -30,6 +27,7 @@ build:
   artifacts:
     paths: [*/*/target/*-service.jar]
 test:
+  image: maven
   stage: test
   script:
     - pwd
