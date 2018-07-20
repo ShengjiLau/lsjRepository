@@ -12,6 +12,7 @@ cache:
   paths:
     - .m2/repository/
 stages:
+  - code_statics
   - build
   - code_statics
   - test
@@ -51,9 +52,9 @@ code_statics:
 #  only:
 #    - schedules
 
-  stage: build
+  stage: code_statics
   script:
-    - gitinspector.py -T --since 1.day -F html -L . > total.html
-    - gitinspector.py -T --since 1.day -F html -L . > `date -u +%Y_%m_%d_`report.html
+    - gitinspector -T --since 1.day -F html -L . > total.html
+    - gitinspector -T --since 1.day -F html -L . > `date -u +%Y_%m_%d_`report.html
   artifacts:
     paths: [total.html]
