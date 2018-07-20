@@ -36,14 +36,18 @@ build_image:
     - ls -r user-center/userinfo-service/target
     - docker build -t $CI_REGISTRYuser-service:1.0 user-center/userinfo-service
 
-deploy:
+deploy-to-test:
   when: manual
   stage: deploy
   script:
     - echo "deploy app"
-
+deploy-to-production:
+  when: manual
+  stage: deploy
+  script:
+    - echo "deploy app"
 code_statics:
-  image: tawalaya/gitinspector
+  image: felix/gitinspector
 #  only:
 #    - schedules
 
