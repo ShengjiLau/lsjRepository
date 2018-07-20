@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh">
+<html lang="zh" xmlns:th="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -10,77 +10,15 @@
     <meta name="description" content="大驼队是基于移动互联网和大数据技术的企业SaaS化物流软件，致力于为公路货运领域提供高效的货运协同管理工具">
     <meta name="keywords" content="大驼队 物流 公路货运 协同运输 可视运输 物流SaaS平台 物流金融 司机生态 货运APP">
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <Link href="../style/style.min.css" rel="stylesheet">
-    <Link href="../style/style.min.css.map" rel="stylesheet">
+    <Link href="../style/style.min.css?v=1.0" rel="stylesheet">
+    <Link href="../style/style.min.css.map?v=1.0" rel="stylesheet">
+
 </head>
 <body>
-<nav class="navbar navbar-static-top bs-docs-nav" id="top">
-    <div class="container">
-        <div class="navbar-header ">
-            <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#bs-navbar"
-                    aria-controls="bs-navbar" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a href="../.." class="navbar-brand"></a>
-        </div>
-        <nav id="bs-navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-              <li>
-                  <a href="/">首页</a>
-              </li>
-                <li class=""><a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">产品与服务
-                    <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span> </a>
-                    <div class="dropdown-menu">
-                        <ul class="nav nav-pills nav-stacked">
-                          <li><a href="/product/clms.html">CLMS 协同管理系统</a></li>
-                          <li><a href="/product/ctms.html">CTMS 运输管理系统</a></li>
-                          <li><a href="/product/cwms.html">CWMS 仓储管理系统</a></li>
-                          <li><a href="/product/coms.html">COMS 订单管理系统</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li>
-                    <a href="/news-list.html">资讯</a>
-                </li>
-                <!-- <li class=""><a href="#" class="dropdown-toggle"
-                                data-hover="dropdown" data-toggle="dropdown" aria-expanded="false">行业案例
-                    <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span> </a>
-                    <div class="dropdown-menu" style="width: 450px;">
-                        <ul class="nav nav-pills nav-stacked fl">
-                            <li>生产制造商</li>
-                            <li>商贸流通业</li>
-                            <li>第三方物流</li>
-                            <li>城市配送</li>
-                        </ul>
-                        <ul class="nav nav-pills nav-stacked fl">
-                            <li>供应链协同</li>
-                            <li>仓配一体化</li>
-                            <li>大车队管理</li>
-                            <li>无车承运人</li>
-                        </ul>
-                    </div>
-                </li> -->
-                <li>
-                    <a href="/price.html">产品定价</a>
-                </li>
-                <li>
-                    <a href="/about.html">关于我们</a>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right login-nav">
-                <li>
-                    <a href="">登录</a>
-                </li>
-                <li>
-                    <a href="" class="primary-link">注册</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+<nav class="navbar navbar-default navbar-static-top bs-docs-nav" id="top">
+    <div th:replace="/nav::nav_div"></div>
 </nav>
+
 <div class="main-container">
     <div>
         <div class="jumbotron">
@@ -195,7 +133,7 @@
                                             适时推出了大驼队cLMS协同管理系统，真正实现了核心企业采购，生产，销售，仓储，运输等全流程的“物流、商流...
                                         </p>
                                         <p>
-                                            <a href=""><span class="glyphicon glyphicon-arrow-right"
+                                            <a href="/product/clms.html"><span class="glyphicon glyphicon-arrow-right"
                                                              aria-hidden="true"></span> 详细了解大驼队cLMS</a>
                                         </p>
                                     </div>
@@ -212,7 +150,7 @@
                                             传统物流业务即是企业的成本支出，又是后勤部门，信息化程序普遍十分落后，ERP甚至不涉及物流运输的业务管理，
                                             大驼队整合市面上普遍使用的TMS常用功能和社交化，移动化的前沿技术手段，为企业新动能转换提供一种即节约成本，又提高效率的选择。</p>
                                         <p>
-                                            <a href=""><span class="glyphicon glyphicon-arrow-right"
+                                            <a href="/product/ctms.html"><span class="glyphicon glyphicon-arrow-right"
                                                              aria-hidden="true"></span> 详细了解大驼队cTMS</a>
                                         </p>
                                     </div>
@@ -229,7 +167,7 @@
                                             仓储管理即是核心企业自身生产、销售的核心联动部门，也是三方物流与其客户、上下游企业进行业务协作的核心组织，
                                             大驼队cWMS系统解决传统WMS信息孤岛，操作繁琐，与上下游客户无法协同工作等问题，达到货主，物流公司可在同一系统内协作管理...</p>
                                         <p>
-                                            <a href=""><span class="glyphicon glyphicon-arrow-right"
+                                            <a href="/product/cwms.html"><span class="glyphicon glyphicon-arrow-right"
                                                              aria-hidden="true"></span> 详细了解大驼队cWMS</a>
                                         </p>
                                     </div>
@@ -246,7 +184,7 @@
                                             大驼队订单管理系统（cOMS），以合同或订单为业务流程的出发点，在管理合同创建、订单接收、收支管理的基础上，实现与仓储和运输模块协同，
                                             推送仓储计划和运输计划，监控整个业务执行的全过程，从而提升...</p>
                                         <p>
-                                            <a href=""><span class="glyphicon glyphicon-arrow-right"
+                                            <a href="/product/coms.html"><span class="glyphicon glyphicon-arrow-right"
                                                              aria-hidden="true"></span> 详细了解大驼队cOMS</a>
                                         </p>
                                     </div>
@@ -264,84 +202,35 @@
                 <p class="block-subtitle">了解大驼队最新资讯，掌握行业实时动态</p>
                 <div class="row news-block">
                     <div class="col-md-6">
-                        <ul class="news-list">
+                        <ul class="news-list"  th:each="notice : ${notices}">
                             <li>
                                 <div >
                                     <div class="list-img">
-                                        <img src="https://img.datuodui.com/ws/pic12.jpg" alt="">
-
+                                        <span th:if="${notice.coverImageUrl}">
+                                            <img th:src="${notice.coverImageUrl}" alt="">
+                                        </span>
                                     </div>
                                     <div class="list-content">
-                                        <p class="title">恭喜济南子公司研发中心乔迁新址</p>
+                                        <p class="title" th:text="${notice.noticeTitle}">
+                                        </p>
                                         <p class="content">
-                                            <span class="label label-default">企业新闻</span>
-                                            <span class="label label-default">签约新闻</span>
-                                            <span>2018-3-4 15:00</span>
-                                            <a href="">查看更多</a>
+                                            <span class="label label-default" th:text="${notice.categoryName}"></span>
+                                            <span  th:text="${{notice.publishTime}}"></span>
+
+                                            <a th:href="@{/news.html(id=${notice.noticeId})}">查看更多</a>
                                         </p>
                                     </div>
                                 </div>
                             </li>
-                            <li>
-                                <div >
-                                    <div class="list-img">
-                                        <img src="https://img.datuodui.com/ws/pic12.jpg" alt="">
 
-                                    </div>
-                                    <div class="list-content">
-                                        <p class="title">恭喜济南子公司研发中心乔迁新址</p>
-                                        <p class="content">
-                                            <span class="label label-default">企业新闻</span>
-                                            <span class="label label-default">签约新闻</span>
-                                            <span>2018-3-4 15:00</span>
-                                            <a href="">查看更多</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div >
-                                    <div class="list-img">
-                                        <img src="https://img.datuodui.com/ws/pic12.jpg" alt="">
-
-                                    </div>
-                                    <div class="list-content">
-                                        <p class="title">恭喜济南子公司研发中心乔迁新址</p>
-                                        <p class="content">
-                                            <span class="label label-default">企业新闻</span>
-                                            <span class="label label-default">签约新闻</span>
-                                            <span>2018-3-4 15:00</span>
-                                            <a href="">查看更多</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div >
-                                    <div class="list-img">
-                                        <img src="https://img.datuodui.com/ws/pic12.jpg" alt="">
-
-                                    </div>
-                                    <div class="list-content">
-                                        <p class="title">恭喜济南子公司研发中心乔迁新址</p>
-                                        <p class="content">
-                                            <span class="label label-default">企业新闻</span>
-                                            <span class="label label-default">签约新闻</span>
-                                            <span>2018-3-4 15:00</span>
-                                            <a href="">查看更多</a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
                         </ul>
                     </div>
                     <div class="col-md-6 hidden-sm hidden-xs">
                         <div class="new-info">
-                            <p class="title">恭喜济南子公司研发中心乔迁新址</p>
-                            <p class="content">立晨数据济南研发中心自2018年4月18日迁往新的办公地址，并启用新的电话号码，因公司迁址给您带来不便，敬请谅解。我们将在新的环境里为您提供更加优质的服务，敬请莅临指！</p>
+                            <p class="title" th:text="${topOne.noticeTitle}"></p>
+                            <p class="content" th:text="${topOne.noticeContent}"></p>
                             <div class="thum">
-                                <img src="https://img.datuodui.com/ws/pic18.jpg" alt="https://img.datuodui.com/ws/pic18.jpg">
-
+                                <img th:src="${topOne.coverImageUrl}" >
                             </div>
                         </div>
                     </div>
@@ -430,50 +319,8 @@
             </div>
         </div>
         <div class="footer">
-            <div class="container">
-              <p class="bot-list">
-                <a href="/product/clms.html">CLMS 协同管理系统</a>
-                <a href="/product/ctms.html">CTMS 运输管理系统</a>
-                <a href="/product/cwms.html">CWMS 仓储管理系统</a>
-                <a href="/product/coms.html">COMS 订单管理系统</a>
-              </p>
-              <hr>
-                <div class="row">
-                    <div class="row footer-top">
-                        <div class="col-md-5  col-lg-5">
-                            <div class="row about">
-                                <div class="col-sm-6"><h4>关于大驼队</h4>
-                                    <ul class="list-unstyled">
-                                        <li><a href="/about.html">关于我们</a></li>
-                                        <li><a href="http://www.lichendt.com/cn/careers/" target="_blank">招聘</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="col-sm-6"><h4>联系方式</h4>
-                                    <ul class="list-unstyled">
-                                        <li>咨询热线：400-180-5656</li>
-                                        <li>服务QQ：3308766826</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-lg-2"></div>
-                        <div class="col-md-5 col-lg-5">
-                            <div style="margin-top: 10px;"><h4>使用微信扫一扫</h4></div>
-                            <div class="col-sm-4"><img src="https://img.datuodui.com/qr_driver.jpg" width="100px">
-                            </div>
-                            <div class="col-sm-4"><img src="https://img.datuodui.com/qr_carrier.jpg" width="100px">
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row footer-bottom">
-                        <ul class="list-inline text-center">济南邻商网络科技有限公司&nbsp;版权所有
-                            <li><a href="http://www.miibeian.gov.cn/" target="_blank">鲁ICP备18017250号-1</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <div th:replace="/footer::ft_div"></div>
+        </div>
         </div>
     </div>
 </div>

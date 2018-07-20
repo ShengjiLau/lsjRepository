@@ -280,7 +280,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                 }
 
                 //统计总报价
-                float offerPrice = snatchGoodsDetailMapper.statSnatchTotalPrice4Driver(obj.getWaybillPlanId(),dto.getDriverId());
+                Double offerPrice = snatchGoodsDetailMapper.statSnatchTotalPrice4Driver(obj.getWaybillPlanId(),dto.getDriverId());
                 obj.setSnatchTotalPrice(offerPrice);
 
                 Map map1 = new HashMap<String,Long>();
@@ -483,7 +483,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                         if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //如果承运商
                             splitGoodsDetail.setRemainAmount(splitGoodsDetail.getAllotAmount());
                         } else {
-                            splitGoodsDetail.setRemainAmount(0f);
+                            splitGoodsDetail.setRemainAmount(0d);
                         }
                         sb_goods.append(planDetail.getGoodsName()+":"+splitGoodsDetail.getAllotAmount()+";"); //发送消息
 
@@ -513,7 +513,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
             List<PlanDetail> list  = planDetailMapper.selectByWaybillPlanId(map);
             Waybill waybill = null;
             if (list!=null && list.size()>0) {
-                float remainAmount  = 0; //剩余
+                Double remainAmount  = 0d; //剩余
                 for (PlanDetail tobj : list) {
                     remainAmount += tobj.getRemainderAmount(); //所有剩余合计
                 }
@@ -642,7 +642,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
      */
     private void statAllotAmount(List<PlanDetail> planDetailList, SplitGoodsParamsDto dto) {
         for (PlanDetail planDetail : planDetailList) {
-            float allotAmountTotal = 0; //分配总数量
+            double allotAmountTotal = 0; //分配总数量
             List<SplitGoodsDetailParamsDto> list = dto.getList();
             SplitGoodsDetailParamsDto tempObj = null;
             for (SplitGoodsDetailParamsDto obj1 : list) {
@@ -742,7 +742,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                     if (waybillPlan.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
                         splitGoodsDetail.setRemainAmount(planDetail.getPlanAmount());//剩余派单数
                     }else {
-                        splitGoodsDetail.setRemainAmount(0f);
+                        splitGoodsDetail.setRemainAmount(0d);
                     }
                     splitGoodsDetail.setPlanDetailId(planDetail.getPlanDetailId());
                     splitGoodsDetail.setFreightPrice(obj.getOfferPrice());//报单价
@@ -758,7 +758,7 @@ public class PlanRpcServiceImpl4Wechat implements IPlanRpcService4Wechat {
                     splitGoodsDetailMapper.insert(splitGoodsDetail);
                     splitGoodsDetailList.add(splitGoodsDetail);
                     //计划派单详细剩余数为0
-                    planDetail.setRemainderAmount(0f);
+                    planDetail.setRemainderAmount(0d);
                     planDetail.setUpdateId(user.getUserId());
                     planDetail.setUpdateTime(opDate);
                     planDetail.setUpdateName(user.getRealName());

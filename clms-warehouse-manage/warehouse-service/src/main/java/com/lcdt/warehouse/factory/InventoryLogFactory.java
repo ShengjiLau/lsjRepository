@@ -12,7 +12,7 @@ public interface InventoryLogFactory {
 
     static Logger logger = LoggerFactory.getLogger(InventoryLogFactory.class);
 
-    public static InventoryLog createFromInventory(InWarehouseOrder order, Inventory inventory,Float updatedInventoryNum) {
+    public static InventoryLog createFromInventory(InWarehouseOrder order, Inventory inventory,Double updatedInventoryNum) {
         Assert.notNull(inventory,"库存不能为空");
         InventoryLog inventoryLog = new InventoryLog();
         inventoryLog.setBusinessNo(order.getInOrderCode());
@@ -55,7 +55,7 @@ public interface InventoryLogFactory {
     }
 
 
-    public static InventoryLog createFromOutInventory(OutWarehouseOrder order,OutOrderGoodsInfo goodsInfo,Float updatedInventoryNum,Inventory inventory){
+    public static InventoryLog createFromOutInventory(OutWarehouseOrder order,OutOrderGoodsInfo goodsInfo,Double updatedInventoryNum,Inventory inventory){
         logger.info("创建 出库 日志 出库库存 {}",inventory);
         Assert.notNull(inventory,"库存不能为空");
         InventoryLog inventoryLog = new InventoryLog();

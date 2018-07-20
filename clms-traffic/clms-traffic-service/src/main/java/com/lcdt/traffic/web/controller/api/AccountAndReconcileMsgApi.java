@@ -21,6 +21,7 @@ import com.lcdt.traffic.model.Msg;
 import com.lcdt.traffic.service.MsgService;
 import com.lcdt.traffic.web.dto.MsgDto;
 import com.lcdt.traffic.web.dto.PageBaseDto;
+import com.lcdt.util.ResponseJsonUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,99 +32,93 @@ import io.swagger.annotations.ApiParam;
  * @date 2018年3月30日下午3:06:16
  * @version
  */
+
 @RestController
 @RequestMapping("/account/msg")
-@Api(value="AccountAndReconcileMsgApi",description="记账对账留言接口")
+@Api(value = "AccountAndReconcileMsgApi", description = "记账对账留言接口")
 public class AccountAndReconcileMsgApi {
 	
 	@Autowired
 	private MsgService msgService;
 	
-	@ApiOperation(value="添加留言")
+	@ApiOperation(value = "添加留言")
 	@PostMapping("/add")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('account_msg_add')")
-	public JSONObject addMsg(@Validated @RequestBody Msg msg,BindingResult bindingResult) {
-		JSONObject jsonObject = validRequestBody(bindingResult);
-		if(!jsonObject.isEmpty()) {
-			return jsonObject;
+	public JSONObject addMsg(@Validated @RequestBody Msg msg, BindingResult bindingResult) {
+		Map<String,String> map = validRequestBody(bindingResult);
+		if (!map.isEmpty()) {
+			String message = "验证信息未能通过！";
+			return  ResponseJsonUtils.failedResponseJson(map, message);
 		}
 		
-		int result =msgService.addMsg(msg);
-		if(result>0) {
-			jsonObject.put("code",0);
-			jsonObject.put("message","添加成功");	
-			return jsonObject;
+		int result = msgService.addMsg(msg);
+		if (result > 0) {
+			String message = "添加成功";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 		}else {
-			throw new RuntimeException("添加留言失败");
+			String message = "添加留言失败";
+			throw new RuntimeException(message);
 		}
 	}
 	
-	@ApiOperation(value="修改留言")
+	@ApiOperation(value = "修改留言")
 	@PostMapping("/modify")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('account_msg_modify')")
-	public JSONObject modifyMsg(@Validated @RequestBody Msg msg,BindingResult bindingResult) {
-		JSONObject jsonObject = validRequestBody(bindingResult);
-		if(!jsonObject.isEmpty()) {
-			return jsonObject;
+	public JSONObject modifyMsg(@Validated @RequestBody Msg msg, BindingResult bindingResult) {
+		Map<String,String> map = validRequestBody(bindingResult);
+		if (!map.isEmpty()) {
+			String message = "验证信息未能通过！";
+			return  ResponseJsonUtils.failedResponseJson(map, message);
 		}
 	
-		int result =msgService.updateMsg(msg);
-		if(result>0) {
-			jsonObject.put("code",0);
-			jsonObject.put("message","修改成功");	
-			return jsonObject;
+		int result = msgService.updateMsg(msg);
+		if (result > 0) {
+			String message = "修改成功";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 		}else {
-			throw new RuntimeException("修改留言失败");
+			String message = "修改留言失败";
+			throw new RuntimeException(message);
 		}
 	}
 	
-	@ApiOperation(value="设置删除")
+	@ApiOperation(value = "设置删除")
 	@PostMapping("/delete")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('account_msg_delete')")
-	public JSONObject setIsDelete(@RequestParam @ApiParam(value="留言id") Long msgId) {
-		JSONObject jsonObject = new JSONObject();
-		int result =msgService.cancelMsg(msgId);
-		if(result>0) {
-			jsonObject.put("code",0);
-			jsonObject.put("message","删除成功");	
-			return jsonObject;
+	public JSONObject setIsDelete(@RequestParam @ApiParam(value = "留言id") Long msgId) {
+		int result = msgService.cancelMsg(msgId);
+		if (result > 0) {
+			String message = "删除成功";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 		}else {
-			throw new RuntimeException("删除留言失败");
+			String message = "删除留言失败";
+			throw new RuntimeException(message);
 		}
 	}
 	
-	@ApiOperation(value="依据条件查询留言")
+	@ApiOperation(value = "依据条件查询留言")
 	@GetMapping("/select")
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('account_msg_get')")
 	public JSONObject getMsg(MsgDto msgDto) {
-		JSONObject jsonObject = new JSONObject();
-		List<Msg> msgList =msgService.selectSomeMsg(msgDto);
-		PageBaseDto<Msg> pageBaseDto = new PageBaseDto<Msg>(msgList,msgList.size());
-		jsonObject.put("code",0);
-		jsonObject.put("message","留言列表");
-		jsonObject.put("data",pageBaseDto);
-		
-		return jsonObject;	
+		List<Msg> msgList = msgService.selectSomeMsg(msgDto);
+		PageBaseDto<Msg> pageBaseDto = new PageBaseDto<Msg>(msgList, msgList.size());
+		String message = "留言列表";
+		return ResponseJsonUtils.successResponseJson(pageBaseDto, message);
 	}
+	
 	
 	/**
 	 * 验证传入信息
 	 * @param bindingResult
 	 * @return
 	 */
-	public JSONObject validRequestBody(BindingResult bindingResult) {
-		JSONObject jsonObject = new JSONObject();
-		if(bindingResult.hasErrors()) {
-			Map<String,String> map =new HashMap<String, String>();
-			for(FieldError fieldError: bindingResult.getFieldErrors()) {
+	public Map<String,String> validRequestBody(BindingResult bindingResult) {
+		Map<String,String> map = new HashMap<String, String>();
+		if (bindingResult.hasErrors()) {
+			for (FieldError fieldError: bindingResult.getFieldErrors()) {
 				map.put(fieldError.getField(),fieldError.getDefaultMessage());
 			}
-			jsonObject.put("code",-1);
-			jsonObject.put("message","验证信息未能通过");
-			jsonObject.put("data",map);
 		}
-		
-		return jsonObject;
+		return map;
 	}
 	
 	

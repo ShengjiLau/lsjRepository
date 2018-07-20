@@ -198,7 +198,7 @@
         and is_draft=0
       </if>
       <if test="createBeginTime != null and createBeginTime != '' ">
-       create_time &gt; concat(#{createBeginTime,jdbcType=TIMESTAMP},' 00:00:00')
+       and create_time &gt; concat(#{createBeginTime,jdbcType=TIMESTAMP},' 00:00:00')
       </if>
       <if test="createEndTime != null and createEndTime != '' ">
        and create_time &lt; concat(#{createEndTime,jdbcType=TIMESTAMP},' 23:59:59')

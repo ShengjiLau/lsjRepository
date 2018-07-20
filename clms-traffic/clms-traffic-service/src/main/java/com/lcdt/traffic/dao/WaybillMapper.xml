@@ -86,10 +86,10 @@
     <result column="piece" jdbcType="DOUBLE" property="piece" />
     <result column="weight_unit" jdbcType="VARCHAR" property="weightUnit" />
     <result column="pricing_type" jdbcType="TINYINT" property="pricingType" />
-    <result column="freight_price" jdbcType="REAL" property="freightPrice" />
-    <result column="freight_total" jdbcType="REAL" property="freightTotal" />
-    <result column="pay_price" jdbcType="REAL" property="payPrice" />
-    <result column="pay_total" jdbcType="REAL" property="payTotal" />
+    <result column="freight_price" jdbcType="DOUBLE" property="freightPrice" />
+    <result column="freight_total" jdbcType="DOUBLE" property="freightTotal" />
+    <result column="pay_price" jdbcType="DOUBLE" property="payPrice" />
+    <result column="pay_total" jdbcType="DOUBLE" property="payTotal" />
   </resultMap>
 
   <resultMap id="BaseOwnWaybillDaoMap" type="com.lcdt.traffic.model.WaybillDao" extends="BaseResultMap">
@@ -110,9 +110,9 @@
     <collection property="waybillItemsList" column="id" ofType="com.lcdt.traffic.model.WaybillItems" select="com.lcdt.traffic.dao.WaybillItemsMapper.selectByWaybillId"/>
   </resultMap>
   <resultMap id="BaseFeeAccountWaybillMap" type="com.lcdt.traffic.web.dto.FeeAccountWaybillDto" extends="BaseResultMap">
-    <result column="freight_total" jdbcType="REAL" property="freightTotal" />
-    <result column="other_fee_total" jdbcType="REAL" property="otherFeeTotal" />
-    <result column="fee_total" jdbcType="REAL" property="feeTotal" />
+    <result column="freight_total" jdbcType="DOUBLE" property="freightTotal" />
+    <result column="other_fee_total" jdbcType="DOUBLE" property="otherFeeTotal" />
+    <result column="fee_total" jdbcType="DOUBLE" property="feeTotal" />
     <result column="reconcile_count" jdbcType="INTEGER" property="reconcileCount" />
     <collection property="waybillItemsList" column="id" ofType="com.lcdt.traffic.model.WaybillItems" select="com.lcdt.traffic.dao.WaybillItemsMapper.selectByWaybillId"/>
   </resultMap>
@@ -215,10 +215,10 @@
       piece = #{piece,jdbcType=DOUBLE},
       weight_unit = #{weightUnit,jdbcType=VARCHAR},
       pricing_type = #{pricingType,jdbcType=TINYINT},
-      freight_price = #{freightPrice,jdbcType=REAL},
-      freight_total = #{freightTotal,jdbcType=REAL},
-      pay_price = #{payPrice,jdbcType=REAL},
-      pay_total = #{payTotal,jdbcType=REAL}
+      freight_price = #{freightPrice,jdbcType=DOUBLE},
+      freight_total = #{freightTotal,jdbcType=DOUBLE},
+      pay_price = #{payPrice,jdbcType=DOUBLE},
+      pay_total = #{payTotal,jdbcType=DOUBLE}
   </sql>
 
   <sql id="select_condition">
@@ -408,8 +408,8 @@
       #{updateName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 0,
       #{receivableName,jdbcType=VARCHAR}, #{payableName,jdbcType=VARCHAR}, #{weight,jdbcType=DOUBLE}, #{volume,jdbcType=DOUBLE},
       #{distance,jdbcType=DOUBLE}, #{piece,jdbcType=DOUBLE}, #{weightUnit,jdbcType=VARCHAR},
-      #{pricingType,jdbcType=TINYINT}, #{freightPrice,jdbcType=REAL}, #{freightTotal,jdbcType=REAL},
-      #{payPrice,jdbcType=REAL}, #{payTotal,jdbcType=REAL}
+      #{pricingType,jdbcType=TINYINT}, #{freightPrice,jdbcType=DOUBLE}, #{freightTotal,jdbcType=DOUBLE},
+      #{payPrice,jdbcType=DOUBLE}, #{payTotal,jdbcType=DOUBLE}
       )
   </insert>
 

@@ -52,7 +52,6 @@ public class Plan4EditServiceImpl implements Plan4EditService {
     @Autowired
     private SplitGoodsDetailMapper splitGoodsDetailMapper; //派单详细
 
-
     @com.alibaba.dubbo.config.annotation.Reference
     public CustomerRpcService customerRpcService;  //客户信息
 
@@ -305,6 +304,148 @@ public class Plan4EditServiceImpl implements Plan4EditService {
         return vo;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public WaybillPlan waybillPlanEditStorage(WaybillParamsDto dto, short flag) {
+        Map tMap = new HashMap<String,String>();
+        tMap.put("waybillPlanId",dto.getWaybillPlanId());
+        tMap.put("companyId",dto.getCompanyId());
+        tMap.put("isDeleted","0");
+        WaybillPlan vo = waybillPlanMapper.selectByPrimaryKey(tMap);
+        if (vo==null) {
+            throw new WaybillPlanException("计划不存在！");
+        }
+        BeanUtils.copyProperties(dto, vo);
+        try {
+            if (!StringUtils.isEmpty(dto.getBidingStart())) { //竞价开始
+                vo.setBidingStart(DateUtility.string2Date(dto.getBidingStart(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if (!StringUtils.isEmpty(dto.getBidingEnd())) { //结束
+                vo.setBidingEnd(DateUtility.string2Date(dto.getBidingEnd(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if (!StringUtils.isEmpty(dto.getStartDate())) { //起运时间
+                vo.setStartDate(DateUtility.string2Date(dto.getStartDate(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if (!StringUtils.isEmpty(dto.getArriveDate())) { //时间
+                vo.setArriveDate(DateUtility.string2Date(dto.getArriveDate(),"yyyy-MM-dd HH:mm:ss"));
+            }
+        } catch (ParseException e) {
+            throw new RuntimeException("竞价/起运时间、送达有误！");
+        }
+
+        if (!StringUtils.isEmpty(dto.getAttachement())) { //附件信息处理
+            JSONArray jsonArray = JSONArray.parseArray(dto.getAttachement());
+            List<WaybillParamsDto> waybillParamsDtoList = jsonArray.toJavaList(WaybillParamsDto.class);
+            for (WaybillParamsDto dto1 : waybillParamsDtoList) {
+                vo.setAttachment1(dto1.getAttachment1());
+                vo.setAttachment1Name(dto1.getAttachment1Name());
+                vo.setAttachment2(dto1.getAttachment2());
+                vo.setAttachment2Name(dto1.getAttachment2Name());
+                vo.setAttachment3(dto1.getAttachment3());
+                vo.setAttachment3Name(dto1.getAttachment3Name());
+                vo.setAttachment4(dto1.getAttachment4());
+                vo.setAttachment4Name(dto1.getAttachment4Name());
+                vo.setAttachment5(dto1.getAttachment5());
+                vo.setAttachment5Name(dto1.getAttachment5Name());
+            }
+        }
+
+        //具体业务处理
+        if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI)) { //直派
+
+            if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_CARRIER)) { //承运商
+                if (!StringUtils.isEmpty(dto.getCarrierIds())) {
+                    String carrierId = dto.getCarrierIds(); //承运商ID（如果是承运商只存在一个）
+                    Customer customer = customerRpcService.findCustomerById(Long.valueOf(carrierId));
+                    vo.setCarrierCompanyId(customer.getBindCpid());
+                    vo.setCarrierCompanyName(customer.getBindCompany()); //绑定企业
+                } else {
+                    vo.setCarrierType(ConstantVO.PLAN_CARRIER_TYPE_ELSE); //没选承运人的情况下
+                }
+                planDirectProcedure(vo, dto,  flag, (short)1);
+            } else if (dto.getCarrierType().equals(ConstantVO.PLAN_CARRIER_TYPE_DRIVER)) { //司机
+
+                //司机、车辆
+                if (StringUtils.isEmpty(dto.getCarrierIds()) && !vo.getCarrierIds().equals("null")) { //如果没有选司机
+                    OwnDriver ownDriver = new OwnDriver();
+                    ownDriver.setCompanyId(dto.getCompanyId());
+                    ownDriver.setDriverName(dto.getCarrierNames());
+                    ownDriver.setDriverPhone(dto.getCarrierPhone());
+                    ownDriver.setCreateId(dto.getCreateId());
+                    ownDriver.setCreateName(dto.getCreateName());
+                    OwnDriver ownDriver1= trafficRpc.addDriver(ownDriver);
+                    if(ownDriver1!=null) {
+                        vo.setCarrierIds(ownDriver1.getOwnDriverId() + "");
+                    }
+                }
+                OwnVehicle ownVehicle1 = new OwnVehicle();
+                ownVehicle1.setVehicleNum(dto.getCarrierVehicle());
+                ownVehicle1.setCompanyId(dto.getCompanyId());
+                ownVehicle1.setCreateId(dto.getCreateId());
+                ownVehicle1.setCreateName(dto.getCreateName());
+                ownVehicle1.setVehicleDriverPhone(dto.getCarrierPhone());
+                trafficRpc.addVehicle(ownVehicle1);
+
+                if (!StringUtils.isEmpty(dto.getCarrierIds())) {
+                    vo.setCarrierCompanyId(vo.getCompanyId());
+                    vo.setCarrierCompanyName(dto.getCompanyName());
+                } else {
+                    vo.setCarrierType(ConstantVO.PLAN_CARRIER_TYPE_ELSE);//没选承 运人的情况下
+                }
+                planDirectProcedure(vo, dto,  flag,(short)2);
+            } else { //其它（发布后派单）
+                onlyCreateWaybillPlan(vo,dto,flag);
+            }
+
+        } else  if (dto.getSendOrderType().equals(ConstantVO.PLAN_SEND_ORDER_TPYE_JINGJIA)) { //竞价
+
+            vo.setSendCardStatus(ConstantVO.PLAN_SEND_CARD_STATUS_ELSE); //车状态(其它)
+            waybillPlanMapper.updateWaybillPlan(vo); //生成计划
+            createTransportWayItems(dto, vo);//批量创建栏目
+            planDetailMapper.batchDeletePlanDetail(vo.getWaybillPlanId());
+            List<PlanDetail> planDetailList = dto.getPlanDetailList();
+            if (null!=planDetailList && planDetailList.size()>0) {
+                for (PlanDetail obj : planDetailList) {
+                    obj.setWaybillPlanId(vo.getWaybillPlanId());
+                    obj.setRemainderAmount(obj.getPlanAmount());//初期【计划=剩余】
+                    obj.setCreateId(vo.getCreateId());
+                    obj.setCreateName(vo.getCreateName());
+                    obj.setCreateDate(new Date());
+                    obj.setUpdateId(vo.getUpdateId());
+                    obj.setUpdateName(vo.getUpdateName());
+                    obj.setUpdateTime(obj.getCreateDate());
+                    obj.setCompanyId(vo.getCompanyId());
+                    obj.setIsDeleted((short)0);
+                }
+                planDetailMapper.batchAddPlanDetail(planDetailList);//批量保存计划详细
+            }
+
+            if (vo.getCustomerId() == null && !StringUtils.isEmpty(vo.getCustomerName())) {
+                Map customerMap = new HashMap<String,String>();
+                customerMap.put("customerType","3"); //运输客户
+                customerMap.put("customerName",vo.getCustomerName()); //运输客户
+                customerMap.put("companyId",dto.getCompanyId());
+                customerMap.put("province",dto.getReceiveProvince());
+                customerMap.put("city",dto.getReceiveCity());
+                customerMap.put("county",dto.getReceiveCounty());
+                customerMap.put("details",dto.getReceiveAddress());
+                customerMap.put("linkMan",dto.getReceiveMan());
+                customerMap.put("mobile",dto.getReceivePhone());
+                customerMap.put("userId",dto.getCreateId());
+                customerMap.put("userName",dto.getCreateName());
+                customerMap.put("groupIds",dto.getGroupId());
+                customerMap.put("groupName",dto.getGroupName());
+                Customer customer = customerRpcService.createCustomer(customerMap);
+                if (customer!=null) {
+                    customer.setCustomerId(customer.getCustomerId());
+                }
+            }
+
+        }
+        return vo;
+
+    }
+
 
     /***
      * 未指定承运商/竞价
@@ -366,7 +507,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                     StringBuffer sb_goods = new StringBuffer(); //货物发送明细
                     for (PlanDetail obj : planDetailList) {
                         obj.setWaybillPlanId(vo.getWaybillPlanId());
-                        obj.setRemainderAmount((float)0); //全部派完--剩余为0
+                        obj.setRemainderAmount(0d); //全部派完--剩余为0
                         obj.setCreateName(vo.getCreateName());
                         obj.setCreateId(vo.getCreateId());
                         obj.setCreateDate(new Date());
@@ -407,7 +548,7 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                         tObj.setPlanDetailId(obj.getPlanDetailId());
                         tObj.setAllotAmount(obj.getPlanAmount()); //派单数量
                         if (carrierType == ConstantVO.PLAN_CARRIER_TYPE_DRIVER) { //如果司机的话为0
-                            tObj.setRemainAmount((float)0); //本次剩余
+                            tObj.setRemainAmount(0d); //本次剩余
                         } else {
                             tObj.setRemainAmount(obj.getPlanAmount()); //本次剩余
                         }
@@ -477,9 +618,17 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                         }
                     }
 
-                } else { //暂存 -- 操作
+                } else { //暂存 -- 编辑操作
 
-                }
+
+                    waybillPlanMapper.updateWaybillPlan(vo);
+                    Map map = new HashMap();
+                    map.put("waybillPlanId",vo.getWaybillPlanId());
+                    WaybillPlan tWaybillPlan = waybillPlanMapper.selectByPrimaryKey(map);
+                    vo.setSerialCode(tWaybillPlan.getSerialCode());
+                    createTransportWayItems(dto, vo);//批量创建栏目
+                    planDetailMapper.batchDeletePlanDetail(vo.getWaybillPlanId());
+                 }
 
             } else { //需要审批 //生成计划单 （审批通过后，生成派单）
 

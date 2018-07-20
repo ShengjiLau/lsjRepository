@@ -39,12 +39,12 @@ public class TCheckItem implements Serializable {
     /**
      * 账面库存量
      */
-    private Float invertoryAmount;
+    private Double invertoryAmount;
     /**
      * 盘点数量
      */
-    private Float checkAmount;
-    private Float differentAmount;
+    private Double checkAmount;
+    private Double differentAmount;
     private String remark;
 
 
@@ -144,27 +144,27 @@ public class TCheckItem implements Serializable {
         this.storageLocationCode = storageLocationCode;
     }
 
-    public Float getInvertoryAmount() {
+    public Double getInvertoryAmount() {
         return invertoryAmount;
     }
 
-    public void setInvertoryAmount(Float invertoryAmount) {
+    public void setInvertoryAmount(Double invertoryAmount) {
         this.invertoryAmount = invertoryAmount;
     }
 
-    public Float getCheckAmount() {
+    public Double getCheckAmount() {
         return checkAmount;
     }
 
-    public void setCheckAmount(Float checkAmount) {
+    public void setCheckAmount(Double checkAmount) {
         this.checkAmount = checkAmount;
     }
 
-    public Float getDifferentAmount() {
+    public Double getDifferentAmount() {
         return differentAmount;
     }
 
-    public void setDifferentAmount(Float differentAmount) {
+    public void setDifferentAmount(Double differentAmount) {
         this.differentAmount = differentAmount;
     }
 

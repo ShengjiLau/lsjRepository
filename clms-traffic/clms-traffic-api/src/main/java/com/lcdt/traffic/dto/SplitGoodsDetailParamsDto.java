@@ -17,10 +17,10 @@ public class SplitGoodsDetailParamsDto implements java.io.Serializable{
     private String goodsName; //商品名称
     private String goodsSepc; //商品规格
     private String unit; //商品单位
-    private Float allotAmount; //派单数量
-    private Float remainAmount; //剩余数量
-    private Float freightPrice; //运单单价
-    private Float freightTotal; //运单总价
+    private Double allotAmount; //派单数量
+    private Double remainAmount; //剩余数量
+    private Double freightPrice; //运单单价
+    private Double freightTotal; //运单总价
     private String detailRemark;
 
 
@@ -72,27 +72,27 @@ public class SplitGoodsDetailParamsDto implements java.io.Serializable{
         this.unit = unit;
     }
 
-    public Float getAllotAmount() {
+    public Double getAllotAmount() {
         return allotAmount;
     }
 
-    public void setAllotAmount(Float allotAmount) {
+    public void setAllotAmount(Double allotAmount) {
         this.allotAmount = allotAmount;
     }
 
-    public Float getFreightPrice() {
+    public Double getFreightPrice() {
         return freightPrice;
     }
 
-    public void setFreightPrice(Float freightPrice) {
+    public void setFreightPrice(Double freightPrice) {
         this.freightPrice = freightPrice;
     }
 
-    public Float getFreightTotal() {
+    public Double getFreightTotal() {
         return freightTotal;
     }
 
-    public void setFreightTotal(Float freightTotal) {
+    public void setFreightTotal(Double freightTotal) {
         this.freightTotal = freightTotal;
     }
 
@@ -105,11 +105,11 @@ public class SplitGoodsDetailParamsDto implements java.io.Serializable{
     }
 
 
-    public Float getRemainAmount() {
+    public Double getRemainAmount() {
         return remainAmount;
     }
 
-    public void setRemainAmount(Float remainAmount) {
+    public void setRemainAmount(Double remainAmount) {
         this.remainAmount = remainAmount;
     }
 }

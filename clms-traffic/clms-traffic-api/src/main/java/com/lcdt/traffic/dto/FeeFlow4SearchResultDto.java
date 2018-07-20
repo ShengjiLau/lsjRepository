@@ -36,10 +36,10 @@ public class FeeFlow4SearchResultDto implements java.io.Serializable {
     private String feeProperty;
 
     @ApiModelProperty("最新费用")
-    private Float money;
+    private Double money;
 
     @ApiModelProperty("原始费用")
-    private Float originalMoney;
+    private Double originalMoney;
 
     @ApiModelProperty(value = "0-未删除，1-已删除")
     private Short isDeleted;
@@ -100,19 +100,19 @@ public class FeeFlow4SearchResultDto implements java.io.Serializable {
         this.feeProperty = feeProperty;
     }
 
-    public Float getMoney() {
+    public Double getMoney() {
         return money;
     }
 
-    public void setMoney(Float money) {
+    public void setMoney(Double money) {
         this.money = money;
     }
 
-    public Float getOriginalMoney() {
+    public Double getOriginalMoney() {
         return originalMoney;
     }
 
-    public void setOriginalMoney(Float originalMoney) {
+    public void setOriginalMoney(Double originalMoney) {
         this.originalMoney = originalMoney;
     }
 

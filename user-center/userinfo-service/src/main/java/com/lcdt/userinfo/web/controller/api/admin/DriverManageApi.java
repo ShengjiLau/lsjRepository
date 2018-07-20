@@ -15,6 +15,7 @@ import com.lcdt.userinfo.web.controller.api.admin.dto.DriverQueryDto;
 import com.lcdt.userinfo.web.dto.UserQueryDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +33,7 @@ public class DriverManageApi {
     DriverVehicleAuthMapper driverVehicleAuthMapper;
 
     @PostMapping("/list")
+    @PreAuthorize("hasAnyAuthority('admin_cars_select')")
     private ResponseMessage list(DriverQueryDto driverQueryDto){
         PageInfo<AdminUser> pageInfo = PageHelper.startPage(driverQueryDto.getPageNo(), driverQueryDto.getPageSize()).doSelectPageInfo(() -> driverVehicleAuthMapper.selectByDriverQueryDto(driverQueryDto));
         return JSONResponseUtil.success(pageInfo);
@@ -48,6 +50,7 @@ public class DriverManageApi {
 
     @PostMapping("/driverlist")
     @ApiOperation("司机列表")
+    @PreAuthorize("hasAnyAuthority('admin_driver_select')")
     private ResponseMessage driverList(DriverQueryDto driverQueryDto){
         PageInfo<Driver> pageInfo = PageHelper.startPage(driverQueryDto.getPageNo(), driverQueryDto.getPageSize()).doSelectPageInfo(() -> driverMapper.selectByDriverQueryDto(driverQueryDto));
         return JSONResponseUtil.success(pageInfo);
@@ -66,6 +69,7 @@ public class DriverManageApi {
 
     @PostMapping("/drivercatnum")
     @ApiOperation("司机车辆数量")
+    @PreAuthorize("hasAnyAuthority('admin_driver_car')")
     private ResponseMessage driverCarNum(Long driverId){
         Integer integer = driverMapper.selectCarnumBydriverId(driverId);
         return JSONResponseUtil.success(integer);

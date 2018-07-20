@@ -25,7 +25,7 @@ public class InplanGoodsInfo implements Serializable {
     /**
      * 计划数量
      */
-    private Float planGoodsNum;
+    private Double planGoodsNum;
     /**
      * 备注
      */
@@ -33,7 +33,7 @@ public class InplanGoodsInfo implements Serializable {
     /**
      * 入库价
      */
-    private Float inHousePrice;
+    private Double inHousePrice;
     private Long planId;
 
     /**
@@ -80,11 +80,11 @@ public class InplanGoodsInfo implements Serializable {
         this.goodsId = goodsId;
     }
 
-    public Float getPlanGoodsNum() {
+    public Double getPlanGoodsNum() {
         return planGoodsNum;
     }
 
-    public void setPlanGoodsNum(Float planGoodsNum) {
+    public void setPlanGoodsNum(Double planGoodsNum) {
         this.planGoodsNum = planGoodsNum;
     }
 
@@ -96,11 +96,11 @@ public class InplanGoodsInfo implements Serializable {
         this.remark = remark;
     }
 
-    public Float getInHousePrice() {
+    public Double getInHousePrice() {
         return inHousePrice;
     }
 
-    public void setInHousePrice(Float inHousePrice) {
+    public void setInHousePrice(Double inHousePrice) {
         this.inHousePrice = inHousePrice;
     }
 

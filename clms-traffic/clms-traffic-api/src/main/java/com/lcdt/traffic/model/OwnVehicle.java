@@ -19,7 +19,7 @@ public class OwnVehicle implements Serializable {
 
     private String vehicleLength;
 
-    private BigDecimal vehicleLoad;
+    private Double vehicleLoad;
 
     private String vehicleDriverPhone;
 
@@ -152,11 +152,11 @@ public class OwnVehicle implements Serializable {
         this.vehicleLength = vehicleLength == null ? null : vehicleLength.trim();
     }
 
-    public BigDecimal getVehicleLoad() {
+    public Double getVehicleLoad() {
         return vehicleLoad;
     }
 
-    public void setVehicleLoad(BigDecimal vehicleLoad) {
+    public void setVehicleLoad(Double vehicleLoad) {
         this.vehicleLoad = vehicleLoad;
     }
 

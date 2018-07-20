@@ -32,10 +32,10 @@ public class Inventory implements Serializable {
     /**
      * 库存量
      */
-    private Float invertoryNum;
+    private Double invertoryNum;
 
     //锁定量
-    private Float lockNum;
+    private Double lockNum;
     private Long warehouseId;
     private Long companyId;
     private String remark;
@@ -43,7 +43,7 @@ public class Inventory implements Serializable {
     private Long customerId;
 
     //库存单价
-    private Float inventoryPrice;
+    private Double inventoryPrice;
 
     /**
      * 客户名称
@@ -83,9 +83,9 @@ public class Inventory implements Serializable {
     @TableField(exist = false)
     private GoodsInfoDao goods;
 
-    public Float getavailableNum(){
+    public Double getavailableNum(){
         if (invertoryNum == null) {
-            return 0F;
+            return 0D;
         }
         if (lockNum == null) {
             return invertoryNum;
@@ -127,11 +127,11 @@ public class Inventory implements Serializable {
         this.goods = goods;
     }
 
-    public Float getInventoryPrice() {
+    public Double getInventoryPrice() {
         return inventoryPrice;
     }
 
-    public void setInventoryPrice(Float inventoryPrice) {
+    public void setInventoryPrice(Double inventoryPrice) {
         this.inventoryPrice = inventoryPrice;
     }
 
@@ -223,19 +223,19 @@ public class Inventory implements Serializable {
         this.goodsId = goodsId;
     }
 
-    public Float getInvertoryNum() {
+    public Double getInvertoryNum() {
         return invertoryNum;
     }
 
-    public void setInvertoryNum(Float invertoryNum) {
+    public void setInvertoryNum(Double invertoryNum) {
         this.invertoryNum = invertoryNum;
     }
 
-    public Float getLockNum() {
+    public Double getLockNum() {
         return lockNum == null ? 0.00F : lockNum;
     }
 
-    public void setLockNum(Float lockNum) {
+    public void setLockNum(Double lockNum) {
         this.lockNum = lockNum;
     }
 

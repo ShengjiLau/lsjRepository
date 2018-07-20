@@ -18,9 +18,9 @@ public class OutWhPlanGoodsDto implements Serializable {
     @ApiModelProperty(value = "货物ID")
     private Long goodsId;
     @ApiModelProperty(value = "计划数量")
-    private Float planGoodsNum;
+    private Double planGoodsNum;
     @ApiModelProperty(value = "出库价")
-    private Float outHousePrice;
+    private Double outHousePrice;
     @ApiModelProperty(value = "换算关系")
     private Integer unitData;
     @ApiModelProperty(value = "商品名称")
@@ -46,11 +46,11 @@ public class OutWhPlanGoodsDto implements Serializable {
 
 
     @ApiModelProperty(value = "配仓---待配数量-也就是剩余计划数量")
-    private Float remainGoodsNum;
+    private Double remainGoodsNum;
     @ApiModelProperty(value = "配仓---已出库数量")
-    private Float outOderGoodsNum;
+    private Double outOderGoodsNum;
     @ApiModelProperty(value = "配仓---本次配仓数")
-    private Float distGoodsNum;
+    private Double distGoodsNum;
     @ApiModelProperty(value = "配仓---备注")
     private String disRemark;
     @ApiModelProperty(value = "配仓---批次")
@@ -61,47 +61,47 @@ public class OutWhPlanGoodsDto implements Serializable {
     @ApiModelProperty(value = "配仓---库位编码")
     private String storageLocationCode;
     @ApiModelProperty(value = "配仓---可用库存")
-    private Float inStock;
+    private Double inStock;
     @ApiModelProperty(value = "配仓---库存主ID")
     private Long invertoryId;
 
 
 
     @ApiModelProperty(value = "出库数量")
-    private Float outboundQuantity;
+    private Double outboundQuantity;
 
 
-    public Float getOutboundQuantity() {
+    public Double getOutboundQuantity() {
         return outboundQuantity;
     }
 
-    public void setOutboundQuantity(Float outboundQuantity) {
+    public void setOutboundQuantity(Double outboundQuantity) {
         this.outboundQuantity = outboundQuantity;
     }
 
 
 
-    public Float getRemainGoodsNum() {
+    public Double getRemainGoodsNum() {
         return remainGoodsNum;
     }
 
-    public void setRemainGoodsNum(Float remainGoodsNum) {
+    public void setRemainGoodsNum(Double remainGoodsNum) {
         this.remainGoodsNum = remainGoodsNum;
     }
 
-    public Float getOutOderGoodsNum() {
+    public Double getOutOderGoodsNum() {
         return outOderGoodsNum;
     }
 
-    public void setOutOderGoodsNum(Float outOderGoodsNum) {
+    public void setOutOderGoodsNum(Double outOderGoodsNum) {
         this.outOderGoodsNum = outOderGoodsNum;
     }
 
-    public Float getDistGoodsNum() {
+    public Double getDistGoodsNum() {
         return distGoodsNum;
     }
 
-    public void setDistGoodsNum(Float distGoodsNum) {
+    public void setDistGoodsNum(Double distGoodsNum) {
         this.distGoodsNum = distGoodsNum;
     }
 
@@ -121,19 +121,19 @@ public class OutWhPlanGoodsDto implements Serializable {
         this.goodsId = goodsId;
     }
 
-    public Float getPlanGoodsNum() {
+    public Double getPlanGoodsNum() {
         return planGoodsNum;
     }
 
-    public void setPlanGoodsNum(Float planGoodsNum) {
+    public void setPlanGoodsNum(Double planGoodsNum) {
         this.planGoodsNum = planGoodsNum;
     }
 
-    public Float getOutHousePrice() {
+    public Double getOutHousePrice() {
         return outHousePrice;
     }
 
-    public void setOutHousePrice(Float outHousePrice) {
+    public void setOutHousePrice(Double outHousePrice) {
         this.outHousePrice = outHousePrice;
     }
 
@@ -257,11 +257,11 @@ public class OutWhPlanGoodsDto implements Serializable {
         this.storageLocationCode = storageLocationCode;
     }
 
-    public Float getInStock() {
+    public Double getInStock() {
         return inStock;
     }
 
-    public void setInStock(Float inStock) {
+    public void setInStock(Double inStock) {
         this.inStock = inStock;
     }
 
