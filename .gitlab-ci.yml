@@ -42,8 +42,7 @@ deploy:
     - echo "deploy app"
 
 code_statics:
-  variables:
-    today: `date -u +%Y_%m_%d_`
+
   image: tawalaya/gitinspector
   only:
 #    - schedules
