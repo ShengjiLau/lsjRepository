@@ -30,6 +30,7 @@
         <module>driver-app-wechat-api</module>
         <module>Aliyun-Mq-Config</module>
         <module>clms-manage</module>
+        <module>filepreview</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>

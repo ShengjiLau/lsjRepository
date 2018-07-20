@@ -15,10 +15,8 @@ import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.UserNotExistException;
-import com.lcdt.userinfo.model.Company;
-import com.lcdt.userinfo.model.LoginLog;
-import com.lcdt.userinfo.model.User;
-import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.userinfo.model.*;
+import com.lcdt.userinfo.rpc.ExperienceLogService;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.CreateCompanyService;
 import com.lcdt.userinfo.service.LoginLogService;
@@ -27,6 +25,7 @@ import com.lcdt.util.HttpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,6 +46,11 @@ public class AuthController {
 
 
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
+
+    @Value("${exp_user_name:15965792008}")
+    private String expUserName;
+    @Value("${exp_user_pwd:123456}")
+    private String expUserPwd;
 
     private static String LOGIN_PAGE = "/signin";
     private static String ADMIN_LOGIN_PAGE = "/admin_login";
@@ -69,6 +73,9 @@ public class AuthController {
 
     @Reference(async = true)
     NotifyService notifyService;
+
+    @Reference
+    private ExperienceLogService experienceLogService;
 
     /**
      * 登陆页面
@@ -137,6 +144,61 @@ public class AuthController {
             LoginSessionReposity.setUserInSession(request, user);
             List<UserCompRel> companyMembers = companyService.companyList(user.getUserId());
             jsonObject.put("data", companyMembers);
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "success");
+            return jsonObject.toString();
+        } catch (UserNotExistException e) {
+            e.printStackTrace();
+            jsonObject.put("message", "账号不存在");
+            jsonObject.put("code", -1);
+            return jsonObject.toString();
+        } catch (PassErrorException e) {
+            jsonObject.put("message", "账号密码错误");
+            jsonObject.put("code", -1);
+            e.printStackTrace();
+            return jsonObject.toString();
+        }
+    }
+
+    /**
+     * 体验账号登录
+     *
+     * @param request
+     * @param response
+     * @return
+     */
+    @ExcludeIntercept(excludeIntercept = {LoginInterceptorAbstract.class, CompanyInterceptorAbstract.class})
+    @RequestMapping("/experience")
+    @ResponseBody
+    public String experience(String ecode,String userPhoneNum, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        JSONObject jsonObject = new JSONObject();
+        boolean codeCorrect = validCodeService.isCodeCorrect(ecode, request, VALID_CODE_TAG, userPhoneNum);
+        if (!codeCorrect) {
+            jsonObject.put("code", -1);
+            jsonObject.put("message", "验证码错误");
+            return jsonObject.toString();
+        }
+        try {
+            User user = userService.userLogin(expUserName, expUserPwd);
+            if (user.getUserStatus() == 2) {
+                jsonObject.put("data", null);
+                jsonObject.put("code", -1);
+                jsonObject.put("message", "您的账号审核中或已被禁用，请联系客服");
+                return jsonObject.toString();
+            }
+            LoginSessionReposity.setUserInSession(request, user);
+            Company company = companyService.companyList(user.getUserId()).get(0).getCompany();
+
+            //体验者日志
+            ExperienceLog experienceLog=new ExperienceLog();
+            experienceLog.setPhoneNumber(userPhoneNum)
+                    .setExperienceUserId(user.getUserId())
+                    .setExperienceUserPhone(user.getPhone())
+                    .setExperienceCompanyId(company.getCompId())
+                    .setExperienceCompanyName(company.getFullName());
+            this.experienceLogService.addExperienceLog(experienceLog);
+
+            jsonObject.put("data", company);
             jsonObject.put("code", 0);
             jsonObject.put("message", "success");
             return jsonObject.toString();
@@ -392,6 +454,30 @@ public class AuthController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static final String VALID_CODE_TAG = "register";
+    /***
+     * 体验发信短信码
+     * @return
+     */
+    @RequestMapping(path = "/exsendsmscode")
+    @ResponseBody
+    public Map vCode(HttpServletRequest request,HttpSession httpSession, String userPhoneNum) {
+        Map<String, Object> map = new HashMap();
+        String msg = "";
+        boolean flag = false;
+            try {
+                flag = validCodeService.sendValidCode(request, VALID_CODE_TAG, 60 * 15,userPhoneNum);
+                if (!flag) {
+                    msg = "获取验证码已经超限，请明天再试!";
+                }
+            } catch (ValidCodeExistException e) {
+                msg = "验证码已发送";
+            }
+        map.put("msg", msg);
+        map.put("flag", flag);
+        return map;
     }
 
     public ModelAndView setNewPwdPage(String validCode,String phone,HttpServletRequest request){
