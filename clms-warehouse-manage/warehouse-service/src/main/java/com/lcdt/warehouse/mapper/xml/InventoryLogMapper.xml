@@ -124,7 +124,7 @@
         from inventory_log il
         join t_warehouse tw on il.warehouse_id = tw.wh_id
         join goods_info gi on il.goods_id = gi.goods_id
-        where il.log_time is not null
+        where il.log_time is not null and il.type in (0, 1)
 
         and il.company_id= #{companyId,jdbcType=BIGINT}
         <include refid="sql_report" />
@@ -138,7 +138,7 @@
                 from inventory_log il
                 join t_warehouse tw on il.warehouse_id = tw.wh_id
                 join goods_info gi on il.goods_id = gi.goods_id
-                where il.log_time is not null
+                where il.log_time is not null and il.type in (0, 1)
 
                 and il.company_id= #{companyId,jdbcType=BIGINT}
                 <include refid="sql_report" />
