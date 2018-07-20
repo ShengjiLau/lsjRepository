@@ -352,11 +352,16 @@ public class AuthController {
             return jsonObject.toString();
         } catch (UserNotExistException e) {
             e.printStackTrace();
-            jsonObject.put("message", "账号不存在");
+            jsonObject.put("message", "账号不存在！");
             jsonObject.put("code", -1);
             return jsonObject.toString();
         } catch (PassErrorException e) {
-            jsonObject.put("message", "账号密码错误");
+            jsonObject.put("message", "账号密码错误！");
+            jsonObject.put("code", -1);
+            e.printStackTrace();
+            return jsonObject.toString();
+        }catch (RuntimeException e) {
+            jsonObject.put("message", "请使用管理员账号登录！");
             jsonObject.put("code", -1);
             e.printStackTrace();
             return jsonObject.toString();
