@@ -8,7 +8,9 @@ variables:
   CI_REGISTRY_PASSWORD: "A1111777"
   CI_REGISTRY: "registry.cn-hangzhou.aliyuncs.com/lcdt-clms/"
   VERSION: "v1.0rc"
-
+cache:
+  paths:
+    - .m2/repository/
 stages:
   - build
   - test
@@ -40,12 +42,14 @@ deploy:
     - echo "deploy app"
 
 code_statics:
+  variables: {today:`date -u +%Y_%m_%d_`}
   image: tawalaya/gitinspector
   only:
 #    - schedules
     - web
   stage: build
   script:
-    - gitinspector.py -T  -F html -L . > report.html
+    - gitinspector.py -T --since 1.day -F html -L . > total.html
+    - gitinspector.py -T --since 1.day -F html -L . > `date -u +%Y_%m_%d_`report.html
   artifacts:
-    paths: [report.html]
+    paths: [`date -u +%Y_%m_%d_`report.html,total.html]
