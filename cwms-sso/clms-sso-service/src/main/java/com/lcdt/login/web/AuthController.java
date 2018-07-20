@@ -47,9 +47,9 @@ public class AuthController {
 
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    @Value("${exp_user_name:15965792008}")
+    @Value("${expUserName:15965792008}")
     private String expUserName;
-    @Value("${exp_user_pwd:123456}")
+    @Value("${expUserPwd:123456}")
     private String expUserPwd;
 
     private static String LOGIN_PAGE = "/signin";
