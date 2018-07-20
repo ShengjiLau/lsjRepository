@@ -48,7 +48,7 @@ deploy-to-production:
   script:
     - echo "deploy app"
 code_statics:
-  image: felix/gitinspector
+  image: felix/gitinspector:0.4.4
 #  only:
 #    - schedules
 
