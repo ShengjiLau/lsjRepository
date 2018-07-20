@@ -2,7 +2,7 @@ image: twalter/maven-docker
 
 variables:
   MAVEN_CLI_OPTS: "-s ./.m2/settings.xml --batch-mode"
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository "
   ALIYUN_REGISTRY: "registry.cn-hangzhou.aliyuncs.com"
   CI_REGISTRY_USER: "hi35700248@aliyun.com"
   CI_REGISTRY_PASSWORD: "A1111777"
