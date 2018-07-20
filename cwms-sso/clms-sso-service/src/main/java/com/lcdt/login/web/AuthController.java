@@ -423,7 +423,7 @@ public class AuthController {
             e.printStackTrace();
             return jsonObject.toString();
         }catch (RuntimeException e) {
-            jsonObject.put("message", "请使用管理员账号登录！");
+            jsonObject.put("message", "请使用管理员账号登录");
             jsonObject.put("code", -1);
             e.printStackTrace();
             return jsonObject.toString();
