@@ -43,11 +43,10 @@ deploy:
     - echo "deploy app"
 
 code_statics:
-
   image: tawalaya/gitinspector
-  only:
+#  only:
 #    - schedules
-    - web
+
   stage: code_statics
   script:
     - gitinspector.py -T --since 1.day -F html -L . > total.html
