@@ -52,4 +52,4 @@ code_statics:
     - gitinspector.py -T --since 1.day -F html -L . > total.html
     - gitinspector.py -T --since 1.day -F html -L . > `date -u +%Y_%m_%d_`report.html
   artifacts:
-    paths: [*.html,total.html]
+    paths: [*.html]
