@@ -28,7 +28,7 @@ build:
     - pwd
     - mvn  compile install
   artifacts:
-    paths: [user-center/userinfo-service/target/user-service.jar]
+    paths: [*/*/target/*-service.jar]
 test:
   stage: test
   script:
