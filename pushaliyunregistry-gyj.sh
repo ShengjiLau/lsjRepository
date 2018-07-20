@@ -59,7 +59,7 @@ readonly TRAFFIC_SERVICE="traffic-service 1.0 clms-traffic/clms-traffic-service"
 readonly CONTRACT_SERVICE="contract-service 1.0 clms-contract/clms-contract-service"
 readonly DRIVER_WECHAT_API="driver-wechat-api 1.0 driver-app-wechat-api"
 readonly WAREHOUSE_SERVICE="warehouse-service 1.0 clms-warehouse-manage/warehouse-service"
-readonly MANAGE_SERVICE="clms-manage-service 1.0 clms-manage/clms-manage-service"
+readonly MANAGE_SERVICE="clms-manage 1.0 clms-manage/clms-manage"
 echo "请选择要更新的应用：
 1)、user-service
 2)、sso-service
