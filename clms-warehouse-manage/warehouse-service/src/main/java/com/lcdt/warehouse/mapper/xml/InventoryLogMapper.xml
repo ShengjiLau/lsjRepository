@@ -182,7 +182,7 @@
     </select>
 
     <sql id="sql_report">
-        <if test="type!=null and type!=''">
+        <if test="type!=null">
             and il.type = #{type}
         </if>
         <if test="warehouseId!=null and warehouseId!=''">
