@@ -32,6 +32,7 @@ test:
   script:
     - mvn  test
 build_image:
+  when: manual
   stage: build_image
   script:
     - ls -r user-center/userinfo-service/target
