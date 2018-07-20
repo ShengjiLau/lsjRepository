@@ -29,8 +29,10 @@ build:
     - mvn  compile install
 
 test:
+  image: maven
   stage: test
   script:
+    - pwd
     - mvn  test
 build_image:
   when: manual
