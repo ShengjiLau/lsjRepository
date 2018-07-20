@@ -527,7 +527,7 @@ public class OrderServiceImpl implements OrderService {
 	    inWhPlanAddParamsDto.setCompanyId(companyId);
 	    inWhPlanAddParamsDto.setCreateUserId(loginUser.getUserId());
 	    inWhPlanAddParamsDto.setCreateUserName(loginUser.getRealName());
-	    inWhPlanAddParamsDto.setContractNo(order.getContractCode());
+	    inWhPlanAddParamsDto.setContractNo(order.getOrderNo());
 	    inWhPlanAddParamsDto.setCustomerId(companyId);
 	    inWhPlanAddParamsDto.setCustomerName(userCompRel.getCompany().getFullName());
 	    inWhPlanAddParamsDto.setGroupId(order.getGroupId());
