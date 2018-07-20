@@ -8,17 +8,12 @@ variables:
   CI_REGISTRY_PASSWORD: "A1111777"
   CI_REGISTRY: "registry.cn-hangzhou.aliyuncs.com/lcdt-clms/"
   VERSION: "v1.0rc"
-cache:
-  paths:
-    - .m2/repository/
-    - target/
 
 stages:
   - build
   - test
   - build_image
-
-
+  - deploy
 build:
   stage: build
   script:
@@ -26,6 +21,7 @@ build:
     - mvn  compile install
   artifacts:
     paths: [user-center/userinfo-service/target/user-service.jar]
+
 test:
   image: maven
   stage: test
@@ -39,10 +35,19 @@ build_image:
     - ls -r user-center/userinfo-service/target
     - docker build -t $CI_REGISTRYuser-service:1.0 user-center/userinfo-service
 
+deploy:
+  when: manual
+  stage: deploy
+  script:
+    - echo "deploy app"
+
 code_statics:
+  image: tawalaya/gitinspector
   only:
-    - schedules
+#    - schedules
     - web
   stage: build
   script:
-    - git log
+    - gitinspector.py -T  -F html -L . > report.html
+  artifacts:
+    paths: [report.html]
