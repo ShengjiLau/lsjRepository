@@ -57,10 +57,10 @@
         phone_number like concat('%',#{phoneNumber,jdbcType=VARCHAR},'%')
       </if>
       <if test="createDateBegin!=null and createDateBegin!=''">
-        and w.create_date &gt;= CONCAT(STR_TO_DATE(#{createDateBegin,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+        and create_date &gt;= CONCAT(STR_TO_DATE(#{createDateBegin,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
       </if>
       <if test="createDateEnd!=null and createDateEnd!=''">
-        and w.create_date &lt;= CONCAT(STR_TO_DATE(#{createDateEnd,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
+        and create_date &lt;= CONCAT(STR_TO_DATE(#{createDateEnd,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
       </if>
     </where>
   </select>
