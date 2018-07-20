@@ -9,7 +9,7 @@ import com.lcdt.traffic.model.WaybillPlan;
 public interface Plan4EditService {
 
     /***
-     * 编辑计划-发布、暂存
+     * 编辑计划-发布
      * @param dto
      * @param flag
      * @return
@@ -18,7 +18,13 @@ public interface Plan4EditService {
 
 
 
-
+    /***
+     * 编辑计划-发布、暂存
+     * @param dto
+     * @param flag
+     * @return
+     */
+    WaybillPlan waybillPlanEditStorage(WaybillParamsDto dto, short flag);
 
 
 }
