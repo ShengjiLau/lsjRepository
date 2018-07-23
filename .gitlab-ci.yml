@@ -23,6 +23,9 @@ build:
     - pwd
     - mvn  compile install
 
+before_script:
+  script: docker login --username=${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}  registry.cn-hangzhou.aliyuncs.com
+
 test:
   image: maven
   stage: test
@@ -47,7 +50,7 @@ deploy-to-production:
   script:
     - echo "deploy app"
 code_statics:
-  image: felix/gitinspector:0.4.4
+  image: registry.cn-hangzhou.aliyuncs.com/lcdt-clms/python_2.7-gitinspector
 #  only:
 #    - schedules
 
@@ -56,4 +59,6 @@ code_statics:
     - gitinspector -T -F html -L . > total.html
     - gitinspector -T --since 1.day -F html -L . > `date -u +%Y_%m_%d_`report.html
   artifacts:
+    expire_in: 1 week
+    name: code_statics
     paths: [/*.html]
