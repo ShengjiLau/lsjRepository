@@ -21,7 +21,7 @@ build:
   stage: build
   script:
     - pwd
-    - mvn  compile install
+    - mvn  compile install -Dmaven.test.skip=true
 
 .docker_login: &docker_login
   script:
