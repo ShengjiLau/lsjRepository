@@ -24,7 +24,7 @@ build:
     - mvn  compile install
 
 before_script:
-  script: docker login --username=${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}  registry.cn-hangzhou.aliyuncs.com
+  - docker login --username=${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}  registry.cn-hangzhou.aliyuncs.com
 
 test:
   image: maven
