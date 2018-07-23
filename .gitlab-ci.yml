@@ -22,7 +22,8 @@ build:
   script:
     - pwd
     - mvn  compile install
-.docker_login:&docker_login
+
+.docker_login: &docker_login
   script:
     - docker login --username=${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}  registry.cn-hangzhou.aliyuncs.com
 
