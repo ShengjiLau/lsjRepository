@@ -63,5 +63,33 @@ public class ConstantVO {
     //计划消息中的APP_URL
     public static String APP_URL = "";
     public static String CANCEL_FLAG = "";
+    
+    //正常生成的账单状态
+    public static final short NORMAL_STATUS = 0;
+    //应付对账单
+    public static final short RECONCILE_PAYABLE = 1;
+    //应收对账单
+    public static final short RECONCILE_RECEIVABLE = 0;
+    //未取消状态
+    public static final short NO_CANCEL = 0;
+    //不存在收付款状态
+    public static final Integer NO_PAYMENT = 2;
+    //存在收付款状态
+    public static final Integer ALREADY_PAYMENT = 1;
+    //默认每页数量
+    public static final Integer PAGE_SIZE = 0;
+    //默认页码
+    public static final Integer PAGE_NUM = 1;
+    //留言记账单
+    public static final short MSG_ACCOUNT_TYPE = 0;
+    //留言对账单
+    public static final short MSG_RECONCILE_TYPE = 1;
+    //付款
+    public static final short EXCHANGE_PAYABLE = 1;
+    //收款
+    public static final short EXCHANGE_RECEIVABLE = 0;
+    //异常值
+    public static final Integer EXCEPTION_VALUE = -1;
+    
 
 }

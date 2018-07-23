@@ -13,16 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.util.ResponseJsonUtils;
+import com.lcdt.warehouse.controller.exception.ShiftInventoryException;
 import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.dto.ShiftInventoryListDTO;
 import com.lcdt.warehouse.service.ShiftInventoryListService;
-import com.lcdt.warehouse.vo.ResponseCodeVO;
-import com.lcdt.warehouse.vo.ShiftInventoryListVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Sheng-ji Lau
@@ -47,18 +46,20 @@ public class ShiftInventoryListApi {
 	@ApiOperation(value = "创建移库单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_add')")
 	public JSONObject insertInventoryList(@RequestBody ShiftInventoryListDTO shiftInventoryListDTO) {
-		String message = validateParamInfo(shiftInventoryListDTO);
-		if (null != message) {
-			return failedResponseJson(message);
+		String validatedMessage = validateParamInfo(shiftInventoryListDTO);
+		if (null != validatedMessage) {
+			return ResponseJsonUtils.failedResponseJsonWithoutData(validatedMessage);
 		}
 		
 		int result = shiftInventoryListService.insertShiftInventoryList(shiftInventoryListDTO);	
 		log.debug("创建移库单的数量:"+result);
 		
 		if (result > 0) {
-			return successResponseJson(null, "创建成功");
+			String message = "创建成功";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 		}else {
-			throw new RuntimeException("创建移库单时出现异常");
+			String message = "创建移库单时出现异常";
+			throw new ShiftInventoryException(message);
 		}
 	}
 	
@@ -67,18 +68,20 @@ public class ShiftInventoryListApi {
 	@ApiOperation(value = "完成移库单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_complete')")
 	public JSONObject completeInventoryList(@RequestBody ShiftInventoryListDTO shiftInventoryListDTO) {
-		String message = validateComplete(shiftInventoryListDTO);
-		if (null != message) {
-			return failedResponseJson(message);
+		String validatedMessage = validateComplete(shiftInventoryListDTO);
+		if (null != validatedMessage) {
+			return ResponseJsonUtils.failedResponseJsonWithoutData(validatedMessage);
 		}
 		
 		int result = shiftInventoryListService.completeShiftInventoryList(shiftInventoryListDTO);
 		log.debug("完成移库单的数量:"+result);
 		
 		if (result > 0) {
-			return successResponseJson(null, "完成成功");
+			String message = "完成成功";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 		}else {
-			throw new RuntimeException("完成移库单时出现异常");
+			String message = "完成移库单时出现异常";
+			throw new ShiftInventoryException(message);
 		}
 	}
 	
@@ -87,15 +90,14 @@ public class ShiftInventoryListApi {
 	@ApiOperation(value = "查询移库单列表")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_get')")
 	public JSONObject getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
-		
 		PageBaseDto<ShiftInventoryListDTO> pageBaseDto = new PageBaseDto<ShiftInventoryListDTO>();
 		
 		PageInfo<ShiftInventoryListDTO> pageInfo = shiftInventoryListService.getShiftInventoryList(shiftInventoryListDTO);
 		pageBaseDto.setList(pageInfo.getList());
 		pageBaseDto.setTotal(pageInfo.getTotal());
 		
-		return successResponseJson(pageBaseDto, "移库单列表");
-		
+		String message = "移库单列表";
+		return ResponseJsonUtils.successResponseJson(pageBaseDto, message);
 	}
 	
 	
@@ -103,13 +105,14 @@ public class ShiftInventoryListApi {
 	@ApiOperation(value = "查询移库单详情")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_get')")
 	public JSONObject getOneShiftInventoryDetails(@ApiParam(value="移库单id",required=true) @RequestParam Long shiftId) {
-		
 		ShiftInventoryListDTO shiftInventoryListDTO = shiftInventoryListService.getShiftInventoryListDetails(shiftId);
 		
 		if (null != shiftInventoryListDTO) {
-			return successResponseJson(shiftInventoryListDTO, "移库单详情");
+			String message = "移库单详情";
+			return ResponseJsonUtils.successResponseJson(shiftInventoryListDTO, message);
 		}else {
-		    return failedResponseJson("查询失败");
+			String message = "查询失败";
+			return ResponseJsonUtils.failedResponseJsonWithoutData(message);
 		}
 		
 		
@@ -124,9 +127,11 @@ public class ShiftInventoryListApi {
 		log.debug("取消移库单的数量:"+result);
 		
 		if (result > 0) {
-			return successResponseJson(null, "取消成功!");
+			String message = "取消成功!";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 		}else {
-			return failedResponseJson("取消失败！");
+			String message = "取消失败!";
+			return ResponseJsonUtils.failedResponseJsonWithoutData(message);
 		}
 		
 	}
@@ -177,39 +182,4 @@ public class ShiftInventoryListApi {
 	}
 	
 	
-	/**
-	 * 访问成功返回值格式
-	 * @param object
-	 * @param message
-	 * @return
-	 */
-	private <T> JSONObject successResponseJson(T object,String message) {	
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put(ResponseCodeVO.CODE, ResponseCodeVO.SUCCESS_CODE);
-		jsonObject.put(ResponseCodeVO.MESSAGE, message);
-		if (null != object) {
-			jsonObject.put(ResponseCodeVO.DATA, object);
-		}	
-		return jsonObject;
-	}
-	
-	
-	/**
-	 * 失败访问返回值格式
-	 * @param object
-	 * @param message
-	 * @return
-	 */
-	private <T> JSONObject failedResponseJson(String message) {
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put(ResponseCodeVO.CODE, ResponseCodeVO.FAILED_CODE);
-		jsonObject.put(ResponseCodeVO.MESSAGE, message);	
-		return jsonObject;
-	}
-	
-	
-	
-	
-	
-
 }

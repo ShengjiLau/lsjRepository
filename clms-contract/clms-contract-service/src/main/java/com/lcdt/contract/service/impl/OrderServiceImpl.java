@@ -38,17 +38,17 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.contract.dao.BillingRecordMapper;
 import com.lcdt.contract.dao.ConditionQueryMapper;
 import com.lcdt.contract.dao.OrderMapper;
 import com.lcdt.contract.dao.OrderProductMapper;
 import com.lcdt.contract.dao.PaymentApplicationMapper;
-import com.lcdt.contract.model.BillingRecord;
 import com.lcdt.contract.model.Order;
 import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.model.PaymentApplication;
 import com.lcdt.contract.service.OrderService;
+import com.lcdt.contract.vo.OrderVO;
 import com.lcdt.contract.web.dto.OrderDto;
+import com.lcdt.contract.web.dto.PageBaseDto;
 import com.lcdt.traffic.dto.WaybillParamsDto;
 import com.lcdt.traffic.model.PlanDetail;
 import com.lcdt.traffic.model.WaybillPlan;
@@ -97,7 +97,13 @@ public class OrderServiceImpl implements OrderService {
     
     @Override
     public int addOrder(OrderDto orderDto) {
-        BigDecimal aTotal = new BigDecimal(0);// aTotal为所有商品总价格
+    	Long UserId = SecurityInfoGetter.getUser().getUserId();
+		Long companyId = SecurityInfoGetter.getCompanyId();
+		orderDto.setCompanyId(companyId);
+		orderDto.setCreateUserId(UserId);
+		orderDto.setCreateTime(new Date());
+		
+        BigDecimal aTotal = OrderVO.ZERO_VALUE;// aTotal为所有商品总价格
         if (null != orderDto.getOrderProductList() && orderDto.getOrderProductList().size() != 0) {
             for (OrderProduct orderProduct : orderDto.getOrderProductList()) {
                 BigDecimal num = orderProduct.getNum();
@@ -112,15 +118,15 @@ public class OrderServiceImpl implements OrderService {
         BeanUtils.copyProperties(orderDto, order);
         order.setSummation(aTotal);
         int result = orderMapper.insertOrder(order);
-        int i = 0;
-        int j = 0;
+        //新增订单商品的总数量
+        int productCount = 0;
         if (null != orderDto.getOrderProductList() && orderDto.getOrderProductList().size() != 0) {
             for (OrderProduct orderProduct : orderDto.getOrderProductList()) {
                 //为每个商品添加OrderId
                 orderProduct.setOrderId(order.getOrderId());
             }
-            i += nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());
-            logger.debug("新增订单商品数量:" + i);
+            productCount += nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());
+            logger.debug("新增订单商品数量:" + productCount);
         }
 
         //审批流程添加
@@ -177,19 +183,19 @@ public class OrderServiceImpl implements OrderService {
             orderApproval.setStatus(new Short("2"));
             orderApproval.setTime(new Date());
             orderDto.getOrderApprovalList().add(orderApproval);
-            j += orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
+            orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
             //同时设置合同的审批状态为审批中
             order.setApprovalStatus(new Short("1"));
             order.setApprovalStartDate(new Date());
-            j += orderMapper.updateByPrimaryKeySelective(order);
+            orderMapper.updateByPrimaryKeySelective(order);
         } else {
             // todo 没有添加审批人，则认为合同无需审批
             //同时设置合同的审批状态为审批中
             order.setApprovalStatus(new Short("0"));
-            j += orderMapper.updateByPrimaryKeySelective(order);
+            orderMapper.updateByPrimaryKeySelective(order);
         }
 
-        if (i > 0) {
+        if (productCount  > 0) {
             return result;
         } else {
             throw new RuntimeException("订单商品添加失败");
@@ -199,7 +205,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public int modOrder(OrderDto orderDto) {
-        BigDecimal aTotal = new BigDecimal(0);
+        BigDecimal aTotal = OrderVO.ZERO_VALUE;
         if (null != orderDto.getOrderProductList() && orderDto.getOrderProductList().size() != 0) {
             for (OrderProduct orderProduct : orderDto.getOrderProductList()) {
                 BigDecimal num = orderProduct.getNum();
@@ -283,7 +289,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public PageInfo<OrderDto> OrderList(OrderDto orderDto) {
+    public  PageBaseDto<OrderDto> OrderList(OrderDto orderDto) {
+    	Long UserId = SecurityInfoGetter.getUser().getUserId();//get 创建者
+		Long companyId = SecurityInfoGetter.getCompanyId();//get 公司id	
+		orderDto.setCompanyId(companyId);
+		orderDto.setCreateUserId(UserId);
         if (orderDto.getPageNum() <= 0) {
             orderDto.setPageNum(1);
         }
@@ -362,7 +372,12 @@ public class OrderServiceImpl implements OrderService {
         }
 
         PageInfo<OrderDto> pageInfo = new PageInfo<OrderDto>(orderDtoList);
-        return pageInfo;
+        PageBaseDto<OrderDto> pageBaseDto = new PageBaseDto<OrderDto>();
+        pageBaseDto.setList(pageInfo.getList());
+		pageBaseDto.setTotal(pageInfo.getTotal());
+		logger.debug("销售订单条目数"+pageInfo.getTotal());
+		
+        return pageBaseDto;
     }
 
 
@@ -408,8 +423,6 @@ public class OrderServiceImpl implements OrderService {
 		
 		Order order = orderMapper.selectByPrimaryKey(orderId);
 		WaybillParamsDto WaybillParamsDto = new WaybillParamsDto();
-		WaybillParamsDto.setCustomerId(null);
-		WaybillParamsDto.setCustomerName(null);
 		Long companyId = SecurityInfoGetter.getCompanyId();
 	    User loginUser = SecurityInfoGetter.getUser();
 	    UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
@@ -431,12 +444,12 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setSendCity(order.getSendCity());
 		    WaybillParamsDto.setSendCounty(order.getSendDistrict());
 		    WaybillParamsDto.setSendAddress(order.getSendAddress());
-//		    WaybillParamsDto.setReceiveMan(order.getReceiver());
-//		    WaybillParamsDto.setReceivePhone(order.getReceiverPhone());
-//		    WaybillParamsDto.setReceiveProvince(order.getReceiverProvince());
-//		    WaybillParamsDto.setReceiveCity(order.getReceiverCity());
-//		    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
-//		    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
+		    WaybillParamsDto.setReceiveMan(order.getReceiver());
+		    WaybillParamsDto.setReceivePhone(order.getReceiverPhone());
+		    WaybillParamsDto.setReceiveProvince(order.getReceiverProvince());
+		    WaybillParamsDto.setReceiveCity(order.getReceiverCity());
+		    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
+		    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
 		    if (null != order.getSendTime()) {
 		    	WaybillParamsDto.setStartDate(order.getSendTime().toLocaleString());
 		    }else {
@@ -457,12 +470,6 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setSendCity(order.getReceiverCity());
 		    WaybillParamsDto.setSendCounty(order.getReceiveDistrict());
 		    WaybillParamsDto.setSendAddress(order.getReceiveAddress());
-//		    WaybillParamsDto.setReceiveMan(order.getSender());
-//		    WaybillParamsDto.setReceivePhone(order.getSenderPhone());
-//		    WaybillParamsDto.setReceiveProvince(order.getSendProvince());
-//		    WaybillParamsDto.setReceiveCity(order.getSendCity());
-//		    WaybillParamsDto.setReceiveCounty(order.getSendDistrict());
-//		    WaybillParamsDto.setReceiveAddress(order.getSendAddress());
 		    if (null != order.getReceiveTime()) {
 		    	WaybillParamsDto.setStartDate(order.getReceiveTime().toLocaleString());
 		    }else {
@@ -484,10 +491,10 @@ public class OrderServiceImpl implements OrderService {
 	    	planDetail.setGoodsSpec(orderProduct.getSpec());
 	    	planDetail.setUnit(orderProduct.getSku());
 	    	planDetail.setPlanAmount(orderProduct.getNum().doubleValue());
-	    	planDetail.setPayPrice(orderProduct.getPrice().doubleValue());
-	    	planDetail.setPayTotal(orderProduct.getTotal().doubleValue());
+//	    	planDetail.setPayPrice(orderProduct.getPrice().doubleValue());
+//	    	planDetail.setPayTotal(orderProduct.getTotal().doubleValue());
 	    	planDetail.setCompanyId(companyId);
-	    	planDetail.setIsDeleted((short) 0);
+	    	planDetail.setIsDeleted((OrderVO.IS_DELETED));
 	    	planDetail.setCreateDate(new Date());
 	    	planDetail.setCreateId(loginUser.getUserId());
 	    	planDetail.setCreateName(loginUser.getRealName());
@@ -520,7 +527,7 @@ public class OrderServiceImpl implements OrderService {
 	    inWhPlanAddParamsDto.setCompanyId(companyId);
 	    inWhPlanAddParamsDto.setCreateUserId(loginUser.getUserId());
 	    inWhPlanAddParamsDto.setCreateUserName(loginUser.getRealName());
-	    inWhPlanAddParamsDto.setContractNo(order.getContractCode());
+	    inWhPlanAddParamsDto.setContractNo(order.getOrderNo());
 	    inWhPlanAddParamsDto.setCustomerId(companyId);
 	    inWhPlanAddParamsDto.setCustomerName(userCompRel.getCompany().getFullName());
 	    inWhPlanAddParamsDto.setGroupId(order.getGroupId());

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.manage.mapper.TNoticeMapper">
+    <resultMap id="BaseResultMap" type="com.lcdt.manage.entity.TNotice">
+        <id column="notice_id" jdbcType="BIGINT" property="noticeId" />
+        <result column="category_id" jdbcType="BIGINT" property="categoryId" />
+        <result column="notice_title" jdbcType="VARCHAR" property="noticeTitle" />
+        <result column="key_words" jdbcType="VARCHAR" property="keyWords" />
+        <result column="cover_image_url" jdbcType="VARCHAR" property="coverImageUrl" />
+        <result column="publisher" jdbcType="VARCHAR" property="publisher" />
+        <result column="notice_content" jdbcType="LONGVARCHAR" property="noticeContent" />
+        <result column="notice_summary" jdbcType="VARCHAR" property="noticeSummary" />
+        <result column="publish_time" jdbcType="VARCHAR" property="publishTime" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+        <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+        <result column="is_top" jdbcType="SMALLINT" property="isTop" />
+    </resultMap>
+    <resultMap id="BaseDtoMap" type="com.lcdt.manage.dto.NoticeListDto" extends="BaseResultMap">
+        <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    </resultMap>
+    <sql id="BaseSelectFields">
+        notice_id,category_id,notice_title,key_words,cover_image_url,publisher,notice_content,notice_summary,publish_time,create_time,create_user_id,create_user_name
+    </sql>
+    <sql id="dtoFields">
+        t1.notice_id,t1.category_id,t1.notice_title,t1.cover_image_url,t1.publisher,t1.notice_content,t1.notice_summary,t1.publish_time,t1.create_time,t1.create_user_id,t1.create_user_name,t1.is_top,t1.key_words
+    </sql>
+    <select id="findAllNoticesByCateId" parameterType="long" resultType="com.lcdt.manage.dto.NoticeListDto">
+        select <include refid="dtoFields"/>
+        from t_notice t1, t_notice_category t2
+        <where>
+            t2.category_id = t1.category_id
+            and t1.category_id = #{categoryId,jdbcType=BIGINT}
+
+        </where>
+        order by t1.notice_id desc
+    </select>
+
+    <select id="findTopNoticesByPage" parameterType="com.lcdt.manage.entity.TNotice" resultMap="BaseDtoMap">
+     select t1.notice_id,t1.category_id,t1.notice_title,t1.cover_image_url,t1.publisher,t1.notice_content,t1.notice_summary,t1.publish_time,t1.create_time,t1.create_user_id,t1.is_top,t1.key_words
+     ,(select cc.category_name from t_notice_category cc where (cc.is_delete is null or cc.is_delete=0) AND cc.category_id=t1.category_id) category_name
+        from `t_notice` t1
+        where  t1.category_id = #{categoryId,jdbcType=BIGINT}
+        <if test="noticeId!=null">
+            AND  t1.notice_id &lt; #{noticeId,jdbcType=BIGINT}
+        </if>
+        order by t1.is_top DESC ,t1.notice_id DESC
+    </select>
+</mapper>

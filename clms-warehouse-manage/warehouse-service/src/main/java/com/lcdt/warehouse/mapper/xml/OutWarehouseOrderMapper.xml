@@ -107,8 +107,11 @@
         <if test="outboundMan!=null and outboundMan!=''">
             and outbound_man like concat('%',#{outboundMan,jdbcType=VARCHAR},'%')
         </if>
-        <if test="groupId!=null and groupId!=''">
-            and group_id = #{groupId,jdbcType=BIGINT}
+        <if test="groupIds!=null and groupIds!=''">
+            and  #{groupIds}
+        </if>
+        <if test="groupIds==null or groupIds==''">
+            and  group_id is null
         </if>
         <if test="goodsInfo != null and goodsInfo!=''">
             and outorder_id in (SELECT DISTINCT outorder_id FROM out_order_goods_info WHERE goods_name like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%'))

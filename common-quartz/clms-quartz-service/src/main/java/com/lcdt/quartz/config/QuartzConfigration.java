@@ -2,6 +2,7 @@ package com.lcdt.quartz.config;
 
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,9 @@ public class QuartzConfigration {
     @Autowired
     private MyJobFactory myJobFactory;  //自定义的factory
 
+    //冒号后为默认值
+    @Value("${quartz-debug:true}")
+    private boolean quartzDebug;
 
     //获取工厂bean
     @Bean
@@ -39,7 +43,11 @@ public class QuartzConfigration {
     @Bean
     public Properties quartzProperties() throws IOException {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-        propertiesFactoryBean.setLocation(new ClassPathResource("/quartz.properties"));
+        if (quartzDebug) {
+            propertiesFactoryBean.setLocation(new ClassPathResource("/quartz-debug.properties"));
+        } else {
+            propertiesFactoryBean.setLocation(new ClassPathResource("/quartz.properties"));
+        }
         propertiesFactoryBean.afterPropertiesSet();
         return propertiesFactoryBean.getObject();
     }
