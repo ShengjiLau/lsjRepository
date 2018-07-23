@@ -77,7 +77,7 @@ public class InWarehouseOrderController {
 
     @ApiOperation("入库单详细")
     @GetMapping(value = "/order/{inorderId}")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_order_detail')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_order_search')")
     public InWarehouseOrderDetailDto inWarehouseOrderDetail(@PathVariable long inorderId) {
         InWarehouseOrderDetailDto inWarehouseOrderDetailDto = new InWarehouseOrderDetailDto();
         inWarehouseOrderDetailDto = inWarehouseOrderService.queryInWarehouseOrder(SecurityInfoGetter.getCompanyId(), inorderId);

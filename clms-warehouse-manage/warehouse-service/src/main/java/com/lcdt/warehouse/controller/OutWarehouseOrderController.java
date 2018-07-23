@@ -72,7 +72,7 @@ public class OutWarehouseOrderController {
 
     @ApiOperation("出库单详细")
     @GetMapping(value = "/order/{outorderId}")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_out_order_detail')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_out_order_search')")
     public OutWhOrderDto inWarehouseOrderDetail(@PathVariable Long outorderId) {
         OutWhOrderDto outWhOrderDto = new OutWhOrderDto();
         outWhOrderDto = outWarehouseOrderService.queryOutWarehouseOrder(SecurityInfoGetter.getCompanyId(), outorderId);
