@@ -5,6 +5,7 @@ import com.lcdt.clms.permission.TestContext;
 import com.lcdt.clms.permission.model.Permission;
 import com.lcdt.clms.permission.model.Role;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,11 @@ import java.util.List;
 /**
  * Created by ss on 2017/10/12.
  */
+@Ignore
 public class UserRoleServiceImplTest extends SpringBootIntegrationTest{
 
 		@Autowired
 		UserRoleService userRoleService;
-
-		@Autowired
-		UserPermissionService permissionService;
 
 		@Test
 		public void testGetRoles(){
@@ -30,14 +29,6 @@ public class UserRoleServiceImplTest extends SpringBootIntegrationTest{
 			Assert.assertNotNull(userRole);
 			Role role = userRole.get(0);
 			Assert.assertEquals(userRole.get(0).getRoleName(),"测试员");
-		}
-
-
-		@Test
-		public void testGetUserPermissions(){
-			List<Permission> permissions = permissionService.userPermissions(1L, 1L);
-			Assert.assertNotNull(permissions);
-			Assert.assertEquals(permissions.get(0).getPermissionName(),"测试权限");
 		}
 
 }

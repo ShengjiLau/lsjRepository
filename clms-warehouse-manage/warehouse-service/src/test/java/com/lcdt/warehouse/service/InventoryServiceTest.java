@@ -58,11 +58,7 @@ public class InventoryServiceTest extends BaseIntegrationContext{
         inventoryService.putInventory(inorderGoodsInfos,inWarehouseOrder);
     }
 
-    @Test
-    @Rollback
-    public void testLockInventory(){
-        inventoryService.lockInventoryNum(1L,1.0);
-    }
+
 
 
 }

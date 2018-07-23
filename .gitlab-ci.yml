@@ -15,6 +15,7 @@ stages:
   - code_statics
   - build
   - test
+  - page
   - build_image
   - deploy
 build:
@@ -34,8 +35,8 @@ test:
   script:
     - pwd
     - mvn  test
-pages:
-  stage: test
+.pages:
+  stage: page
   script:
     - mkdir .public
     - cp -rf user-center/userinfo-service/target/jacoco-ut .public/user-service

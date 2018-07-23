@@ -37,6 +37,8 @@
         <argLine>-Dfile.encoding=UTF-8</argLine>
         <java.version>1.8</java.version>
         <dubbo-version>2.5.7</dubbo-version>
+        <jacoco.version>0.7.5.201505241946</jacoco.version>
+        <jacoco.reportPath>${project.basedir}/target/ut</jacoco.reportPath>
     </properties>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -208,5 +210,45 @@
                 </includes>
             </resource>
         </resources>
+
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18.1</version>
+                <configuration>
+                    <argLine>${argLine}</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.1</version>
+                <configuration>
+                    <append>true</append>
+                    <dataFile>${jacoco.reportPath}/jacoco.exec</dataFile>
+                    <outputDirectory>${jacoco.reportPath}</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>agent-for-ut</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <append>true</append>
+                            <destFile>${jacoco.reportPath}</destFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+
     </build>
+
 </project>
