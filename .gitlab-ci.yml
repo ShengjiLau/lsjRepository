@@ -22,6 +22,10 @@ build:
   script:
     - pwd
     - mvn  compile install
+.docker_login:&docker_login
+  script:
+    - docker login --username=${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}  registry.cn-hangzhou.aliyuncs.com
+
 
 test:
   image: maven
@@ -52,8 +56,8 @@ code_statics:
 
   stage: code_statics
   script:
-    - ./root/gitinspector-master/gitinspector.py -T -F html -L . > total.html
-    - ./root/gitinspector-master/gitinspector.py -T --since 1.day -F html -L . > `date -u +%Y_%m_%d_`report.html
+    - ./root/gitinspector.py -T -F html -L . > total.html
+    - ./root/gitinspector.py -T --since 1.day -F html -L . > `date -u +%Y_%m_%d_`report.html
   artifacts:
     expire_in: 1 week
     name: code_statics
