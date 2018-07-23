@@ -34,6 +34,18 @@ test:
   script:
     - pwd
     - mvn  test
+pages:
+  stage: test
+  script:
+    - mkdir .public
+    - cp -rf user-center/userinfo-service/target/jacoco-ut .public/user-service
+    - cp -rf clms-customer/clms-customer-service/target/jacoco-ut .public/customer-service
+    - mv .public public
+  artifacts:
+      paths:
+        - public
+
+
 build_image:
   when: manual
   stage: build_image
