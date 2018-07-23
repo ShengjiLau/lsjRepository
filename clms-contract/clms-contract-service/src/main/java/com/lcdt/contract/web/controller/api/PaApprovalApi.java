@@ -45,6 +45,7 @@ public class PaApprovalApi {
         Long userId = SecurityInfoGetter.getUser().getUserId();
         paApprovalListDto.setCompanyId(companyId);
         paApprovalListDto.setUserId(userId);
+        paApprovalListDto.setApplicationType(new Short("0"));
 
         PageInfo pageInfo = new PageInfo();
         //设置页码

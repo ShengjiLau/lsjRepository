@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @AUTHOR liuh
@@ -28,10 +27,10 @@ import java.util.Map;
  */
 
 
-@Api(description = "付款单管理api")
+@Api(description = "收款单管理api")
 @RestController
-@RequestMapping("/payment")
-public class PaymentApplicationApi {
+@RequestMapping("/receipt")
+public class SalesPaymentApplicationApi {
 
     @Autowired
     private PaymentApplictionService paymentApplictionService;
@@ -39,16 +38,16 @@ public class PaymentApplicationApi {
     @Reference
     private CustomerRpcService customerRpcService;
 
-    @ApiOperation(value = "付款单列表", notes = "付款单列表")
-    @GetMapping("/paymentList")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_list')")
+    @ApiOperation(value = "收款单列表", notes = "收款单列表")
+    @GetMapping("/receiptList")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receipt_payment_list')")
     public PageBaseDto<List<PaymentApplication>> billingRecordApiList(PaymentApplicationDto paymentApplicationDto) {
         //获取登陆人企业id
         Long companyId = SecurityInfoGetter.getCompanyId();
         //设置登陆人企业id
         paymentApplicationDto.setCompanyId(companyId);
         //设置付款单类型 0 - 付款单 1 - 收款单
-        paymentApplicationDto.setApplicationType(new Short("0"));
+        paymentApplicationDto.setApplicationType(new Short("1"));
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(paymentApplicationDto.getPageNum());
         pageInfo.setPageSize(paymentApplicationDto.getPageSize());
@@ -57,9 +56,9 @@ public class PaymentApplicationApi {
         return pageBaseDto;
     }
 
-    @ApiOperation(value = "新增付款单", notes = "采购单新增付款单")
-    @PostMapping("/paymentAdd")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_add')")
+    @ApiOperation(value = "新增收款单", notes = "采购单新增收款单")
+    @PostMapping("/receiptAdd")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receipt_payment_add')")
     public JSONObject addPaymentApplication(@RequestBody PaymentApplicationDto paymentApplicationDto){
         //获取登陆人企业id
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -71,7 +70,7 @@ public class PaymentApplicationApi {
         //设置创建人姓名
         paymentApplicationDto.setCreateName(user.getRealName());
         //设置付款单类型 0 - 付款单 1 - 收款单
-        paymentApplicationDto.setApplicationType(new Short("0"));
+        paymentApplicationDto.setApplicationType(new Short("1"));
         paymentApplicationDto.setCreateTime(new Date());
         JSONObject jsonObject = new JSONObject();
         int row = paymentApplictionService.addPaymentAppliction(paymentApplicationDto);
@@ -87,7 +86,7 @@ public class PaymentApplicationApi {
 
     @ApiOperation(value = "付款记录详情", notes = "根据主键查询付款记录详情")
     @GetMapping("/detail")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_record')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receipt_payment_record')")
     public BaseDto addBillingRecord(Long paId){
         PaymentApplicationDto paymentApplicationDto = paymentApplictionService.paymentApplictionDetail(paId);
         BaseDto baseDto = new BaseDto(paymentApplicationDto);
@@ -96,7 +95,7 @@ public class PaymentApplicationApi {
 
     @ApiOperation(value = "确认付款", notes = "确认付款")
     @PostMapping("/confirm")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_confirm')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receipt_payment_confirm')")
     public JSONObject confirmPayment(@RequestBody PaymentApplication paymentApplication){
         User user = SecurityInfoGetter.getUser();
         paymentApplication.setPaymentNameSure(user.getRealName());
@@ -115,7 +114,7 @@ public class PaymentApplicationApi {
 
     @ApiOperation(value = "获取客户信息", notes = "根据客户id获取对应客户信息")
     @GetMapping("/customer")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receipt_payment_list')")
     public BaseDto customerInfo(Long supplierId){
         Long companyId = SecurityInfoGetter.getCompanyId();
         Customer customer = customerRpcService.findCustomerById(supplierId,companyId);

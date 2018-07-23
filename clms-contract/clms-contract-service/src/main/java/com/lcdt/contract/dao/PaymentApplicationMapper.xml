@@ -455,6 +455,7 @@
     <include refid="Base_Column_List"/>
     from t_payment_application
     <where>
+      and application_type = #{applicationType}
       <choose>
         <when test="tempStatus!=null and tempStatus==1">
           and payment_time is NULL
