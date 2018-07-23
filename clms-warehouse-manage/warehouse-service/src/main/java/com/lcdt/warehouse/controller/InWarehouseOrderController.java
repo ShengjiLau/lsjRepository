@@ -8,6 +8,7 @@ import com.lcdt.userinfo.model.User;
 import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
+import com.lcdt.warehouse.utils.GroupIdsUtil;
 import com.lcdt.warehouse.vo.ConstantVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -67,7 +68,8 @@ public class InWarehouseOrderController {
     @GetMapping(value = "/order")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_order_search')")
     public PageBaseDto inWarehouseOrderList(InWarehouseOrderSearchParamsDto params) {
-        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+        params.setGroupIds(GroupIdsUtil.getOwnGroupIds(params.getGroupId()))
+                .setCompanyId(SecurityInfoGetter.getCompanyId());
         Page<InWarehouseOrderDto> inWarehouseOrderPage = inWarehouseOrderService.queryInWarehouseOrderList(params);
         PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderPage.getRecords(), inWarehouseOrderPage.getTotal());
         return pageBaseDto;
@@ -153,12 +155,12 @@ public class InWarehouseOrderController {
     @GetMapping(value = "/inWarehouseBillNum")
     public JSONObject inWarehouseNum(InWarehouseOrderSearchParamsDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
-        String [] inOrderStatus = {"2"};
+        String[] inOrderStatus = {"2"};
         params.setInOrderStatus(inOrderStatus);
 
-        JSONObject jo =  new JSONObject();
+        JSONObject jo = new JSONObject();
         jo.put("code", 0);
-        jo.put("data",inWarehouseOrderService.selectInWarehouseNum(params));
+        jo.put("data", inWarehouseOrderService.selectInWarehouseNum(params));
 
         return jo;
     }
@@ -168,12 +170,12 @@ public class InWarehouseOrderController {
     @GetMapping(value = "/inWarehouseBillNum4Index")
     public JSONObject inWarehouseBillNum4Index(InWarehouseOrderSearchParamsDto params) {
         params.setCompanyId(SecurityInfoGetter.getCompanyId());
-        String [] inOrderStatus = {"2","1"};
+        String[] inOrderStatus = {"2", "1"};
         params.setInOrderStatus(inOrderStatus);
 
-        JSONObject jo =  new JSONObject();
+        JSONObject jo = new JSONObject();
         jo.put("code", 0);
-        jo.put("data",inWarehouseOrderService.selectInWarehouseNum(params));
+        jo.put("data", inWarehouseOrderService.selectInWarehouseNum(params));
 
         return jo;
     }

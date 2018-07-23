@@ -42,6 +42,8 @@ public class InWarehouseOrderSearchParamsDto {
     private String storageMan;
     @ApiModelProperty(value = "组id")
     private Long groupId;
+    @ApiModelProperty(value = "组ids,用于数据库",hidden = true)
+    private String groupIds;
     @ApiModelProperty(value = "采购单号")
     private String purchaseCode;
     @ApiModelProperty(value = "合同编号")
@@ -78,221 +80,255 @@ public class InWarehouseOrderSearchParamsDto {
 
     private String batch;
 
-
     public String getInOrderCode() {
         return inOrderCode;
     }
 
-    public void setInOrderCode(String inOrderCode) {
+    public InWarehouseOrderSearchParamsDto setInOrderCode(String inOrderCode) {
         this.inOrderCode = inOrderCode;
-    }
-
-    public String[] getInOrderStatus() {
-        return inOrderStatus;
-    }
-
-    public void setInOrderStatus(String[] inOrderStatus) {
-        this.inOrderStatus = inOrderStatus;
+        return this;
     }
 
     public String getGoodsInfo() {
         return goodsInfo;
     }
 
-    public void setGoodsInfo(String goodsInfo) {
+    public InWarehouseOrderSearchParamsDto setGoodsInfo(String goodsInfo) {
         this.goodsInfo = goodsInfo;
+        return this;
+    }
+
+    public String[] getInOrderStatus() {
+        return inOrderStatus;
+    }
+
+    public InWarehouseOrderSearchParamsDto setInOrderStatus(String[] inOrderStatus) {
+        this.inOrderStatus = inOrderStatus;
+        return this;
     }
 
     public Long getWarehouseId() {
         return warehouseId;
     }
 
-    public void setWarehouseId(Long warehouseId) {
+    public InWarehouseOrderSearchParamsDto setWarehouseId(Long warehouseId) {
         this.warehouseId = warehouseId;
+        return this;
     }
 
     public String getCreateName() {
         return createName;
     }
 
-    public void setCreateName(String createName) {
+    public InWarehouseOrderSearchParamsDto setCreateName(String createName) {
         this.createName = createName;
+        return this;
     }
 
     public String getStartCreateDate() {
         return startCreateDate;
     }
 
-    public void setStartCreateDate(String startCreateDate) {
+    public InWarehouseOrderSearchParamsDto setStartCreateDate(String startCreateDate) {
         this.startCreateDate = startCreateDate;
+        return this;
     }
 
     public String getEndCreateDate() {
         return endCreateDate;
     }
 
-    public void setEndCreateDate(String endCreateDate) {
+    public InWarehouseOrderSearchParamsDto setEndCreateDate(String endCreateDate) {
         this.endCreateDate = endCreateDate;
+        return this;
     }
 
     public String getStartStorageTime() {
         return startStorageTime;
     }
 
-    public void setStartStorageTime(String startStorageTime) {
+    public InWarehouseOrderSearchParamsDto setStartStorageTime(String startStorageTime) {
         this.startStorageTime = startStorageTime;
+        return this;
     }
 
     public String getEndStorageTime() {
         return endStorageTime;
     }
 
-    public void setEndStorageTime(String endStorageTime) {
+    public InWarehouseOrderSearchParamsDto setEndStorageTime(String endStorageTime) {
         this.endStorageTime = endStorageTime;
+        return this;
     }
 
     public String getStorageType() {
         return storageType;
     }
 
-    public void setStorageType(String storageType) {
+    public InWarehouseOrderSearchParamsDto setStorageType(String storageType) {
         this.storageType = storageType;
+        return this;
     }
 
     public String getCustomerName() {
         return customerName;
     }
 
-    public void setCustomerName(String customerName) {
+    public InWarehouseOrderSearchParamsDto setCustomerName(String customerName) {
         this.customerName = customerName;
+        return this;
     }
 
     public String getStorageMan() {
         return storageMan;
     }
 
-    public void setStorageMan(String storageMan) {
+    public InWarehouseOrderSearchParamsDto setStorageMan(String storageMan) {
         this.storageMan = storageMan;
+        return this;
     }
 
     public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Long groupId) {
+    public InWarehouseOrderSearchParamsDto setGroupId(Long groupId) {
         this.groupId = groupId;
+        return this;
+    }
+
+    public String getGroupIds() {
+        return groupIds;
+    }
+
+    public InWarehouseOrderSearchParamsDto setGroupIds(String groupIds) {
+        this.groupIds = groupIds;
+        return this;
     }
 
     public String getPurchaseCode() {
         return purchaseCode;
     }
 
-    public void setPurchaseCode(String purchaseCode) {
+    public InWarehouseOrderSearchParamsDto setPurchaseCode(String purchaseCode) {
         this.purchaseCode = purchaseCode;
+        return this;
     }
 
     public String getContractCode() {
         return contractCode;
     }
 
-    public void setContractCode(String contractCode) {
+    public InWarehouseOrderSearchParamsDto setContractCode(String contractCode) {
         this.contractCode = contractCode;
+        return this;
     }
 
     public Long getPlanId() {
         return planId;
     }
 
-    public void setPlanId(Long planId) {
+    public InWarehouseOrderSearchParamsDto setPlanId(Long planId) {
         this.planId = planId;
+        return this;
     }
 
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
-    }
-
-    public boolean getDeleted() {
+    public boolean isDeleted() {
         return isDeleted;
     }
 
-    public void setDeleted(boolean deleted) {
+    public InWarehouseOrderSearchParamsDto setDeleted(boolean deleted) {
         isDeleted = deleted;
-    }
-
-    public int getPageNo() {
-        return pageNo;
-    }
-
-    public void setPageNo(int pageNo) {
-        this.pageNo = pageNo;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
+        return this;
     }
 
     public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public InWarehouseOrderSearchParamsDto setCustomerId(Long customerId) {
         this.customerId = customerId;
+        return this;
     }
 
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public InWarehouseOrderSearchParamsDto setCompanyId(Long companyId) {
+        this.companyId = companyId;
+        return this;
+    }
+
+    public int getPageNo() {
+        return pageNo;
+    }
+
+    public InWarehouseOrderSearchParamsDto setPageNo(int pageNo) {
+        this.pageNo = pageNo;
+        return this;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public InWarehouseOrderSearchParamsDto setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+        return this;
+    }
 
     public String getGoodsName() {
         return goodsName;
     }
 
-    public void setGoodsName(String goodsName) {
+    public InWarehouseOrderSearchParamsDto setGoodsName(String goodsName) {
         this.goodsName = goodsName;
+        return this;
     }
 
     public String getGoodsBarCode() {
         return goodsBarCode;
     }
 
-    public void setGoodsBarCode(String goodsBarCode) {
+    public InWarehouseOrderSearchParamsDto setGoodsBarCode(String goodsBarCode) {
         this.goodsBarCode = goodsBarCode;
+        return this;
     }
 
     public String getGoodsCode() {
         return goodsCode;
     }
 
-    public void setGoodsCode(String goodsCode) {
+    public InWarehouseOrderSearchParamsDto setGoodsCode(String goodsCode) {
         this.goodsCode = goodsCode;
+        return this;
     }
 
     public Long getClassifyId() {
         return classifyId;
     }
 
-    public void setClassifyId(Long classifyId) {
+    public InWarehouseOrderSearchParamsDto setClassifyId(Long classifyId) {
         this.classifyId = classifyId;
+        return this;
     }
 
     public List<Long> getGoodIds() {
         return goodIds;
     }
 
-    public void setGoodIds(List<Long> goodIds) {
+    public InWarehouseOrderSearchParamsDto setGoodIds(List<Long> goodIds) {
         this.goodIds = goodIds;
+        return this;
     }
 
     public String getBatch() {
         return batch;
     }
 
-    public void setBatch(String batch) {
+    public InWarehouseOrderSearchParamsDto setBatch(String batch) {
         this.batch = batch;
+        return this;
     }
 }

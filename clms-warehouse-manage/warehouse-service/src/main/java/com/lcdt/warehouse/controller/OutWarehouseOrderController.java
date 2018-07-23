@@ -7,6 +7,7 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.service.OutWarehouseOrderService;
+import com.lcdt.warehouse.utils.GroupIdsUtil;
 import com.lcdt.warehouse.vo.ConstantVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -61,7 +62,8 @@ public class OutWarehouseOrderController {
     @GetMapping(value = "/order")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_out_order_search')")
     public PageBaseDto outWarehouseOrderList(OutWhOrderSearchDto params) {
-        params.setCompanyId(SecurityInfoGetter.getCompanyId());
+        params.setGroupIds(GroupIdsUtil.getOwnGroupIds(params.getGroupId()))
+                .setCompanyId(SecurityInfoGetter.getCompanyId());
         Page<OutWhOrderDto> inWarehouseOrderPage = outWarehouseOrderService.queryOutWarehouseOrderList(params);
         PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderPage.getRecords(), inWarehouseOrderPage.getTotal());
         return pageBaseDto;
