@@ -81,8 +81,11 @@
         <if test="planId!=null and planId!=''">
             and plan_id = #{planId,jdbcType=BIGINT}
         </if>
-        <if test="groupId!=null and groupId!=''">
-            and  group_id= #{groupId,jdbcType=BIGINT}
+        <if test="groupIds!=null and groupIds!=''">
+            and  #{groupIds}
+        </if>
+        <if test="groupIds==null or groupIds==''">
+            and  group_id is null
         </if>
         <if test="warehouseId!=null and warehouseId!=''">
             and warehouse_id = #{warehouseId,jdbcType=BIGINT}
