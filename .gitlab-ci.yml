@@ -62,4 +62,4 @@ code_statics:
   artifacts:
     expire_in: 1 week
     name: code_statics
-    paths: [/*.html]
+    paths: [/total.html,/*.html]
