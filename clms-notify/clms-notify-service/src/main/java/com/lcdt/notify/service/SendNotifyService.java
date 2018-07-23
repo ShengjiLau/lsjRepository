@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -81,9 +80,8 @@ public class SendNotifyService {
                    smsNotify.sendSmsNotify(eventMetaData, user.getPhone(), notifyContent,getReceiverPhone(notify,receiver), sendCompanyId,event.getBusinessNo());
             }
             if (companyNotifySetting.getEnableWeb()) {
-                   String webUrl=attachment.get("webNotifyUrl") != null ? attachment.get("webNotifyUrl").toString() : "";
                     //发送web通知
-                   webNotify.sendWebNotify(notify.getCategory(), notifyContent, getReceiverCompanyId(notify,receiver), getReceiverUserId(notify,receiver),webUrl);
+                   webNotify.sendWebNotify(notify.getCategory(), notifyContent, getReceiverCompanyId(notify,receiver), getReceiverUserId(notify,receiver),getWebUrl(notify,attachment));
             }
         }
     }
@@ -125,5 +123,20 @@ public class SendNotifyService {
         }
     }
 
+    //根据接收人获取对应的url
+    private String getWebUrl(Notify notify,Map attachment) {
+        switch (notify.getReceiveRole()) {
+            case "被抄送人":
+                return attachment.get("carrierWebNotifyUrl")!=null?attachment.get("carrierWebNotifyUrl").toString():"";
+            case "发布人":
+                return attachment.get("carrierWebNotifyUrl")!=null?attachment.get("carrierWebNotifyUrl").toString():"";
+            case "承运商":
+                return attachment.get("carrierWebNotifyUrl")!=null?attachment.get("carrierWebNotifyUrl").toString():"";
+            case "待审批人":
+                return attachment.get("carrierWebNotifyUrl")!=null?attachment.get("carrierWebNotifyUrl").toString():"";
+            default:
+                return attachment.get("webNotifyUrl")!=null?attachment.get("webNotifyUrl").toString():"";
+        }
+    }
 
 }
