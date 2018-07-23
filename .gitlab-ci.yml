@@ -57,8 +57,8 @@ code_statics:
 
   stage: code_statics
   script:
-    - ./root/gitinspector.py -T -F html -L . > total.html
-    - ./root/gitinspector.py -T --since 1.day -F html -L . > `date -u +%Y_%m_%d_`report.html
+    - /root/gitinspector.py -T -F html -L . > total.html
+    - /root/gitinspector.py -T --since 1.day -F html -L . > `date -u +%Y_%m_%d_`report.html
   artifacts:
     expire_in: 1 week
     name: code_statics
