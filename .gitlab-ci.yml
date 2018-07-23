@@ -50,7 +50,7 @@ deploy-to-production:
   script:
     - echo "deploy app"
 code_statics:
-  image: registry.cn-hangzhou.aliyuncs.com/lcdt-clms/gitinspector
+  image: registry.cn-hangzhou.aliyuncs.com/lcdt-clms/gitinspector:1.0
 #  only:
 #    - schedules
 
