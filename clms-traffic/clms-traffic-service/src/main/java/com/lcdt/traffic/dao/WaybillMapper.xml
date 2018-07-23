@@ -435,7 +435,7 @@
 
   <update id="updateByPrimaryKeyAndCarrierCompanyId" parameterType="com.lcdt.traffic.model.Waybill">
     update t_waybill
-    set set <include refid="update_column_list"/>
+    set <include refid="update_column_list"/>
     where id = #{id,jdbcType=BIGINT} and carrier_company_id = #{carrierCompanyId,jdbcType=BIGINT}
   </update>
 

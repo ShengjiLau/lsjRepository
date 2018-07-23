@@ -30,6 +30,7 @@
         <module>driver-app-wechat-api</module>
         <module>Aliyun-Mq-Config</module>
         <module>clms-manage</module>
+        <module>filepreview</module>
     </modules>
     <properties>
         <project-version>1.0</project-version>
@@ -192,6 +193,20 @@
             <artifactId>yico</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <optional>true</optional>
+            <version>3.7.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-imm</artifactId>
+            <optional>true</optional>
+            <version>1.7.1</version>
+        </dependency>
+
     </dependencies>
     <build>
         <resources>

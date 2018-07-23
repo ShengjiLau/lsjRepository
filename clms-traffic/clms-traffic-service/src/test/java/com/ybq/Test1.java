@@ -1,5 +1,8 @@
 package com.ybq;
 
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.imm.main.IMMClient;
+import com.aliyuncs.imm.model.v20170906.*;
 import com.lcdt.traffic.TrafficServiceApp;
 import com.lcdt.traffic.dao.PlanDetailMapper;
 import com.lcdt.traffic.dao.WaybillPlanMapper;
@@ -17,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -24,63 +28,47 @@ import static org.junit.Assert.assertTrue;
  * @DATE 2017-11-16
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes=TrafficServiceApp.class)
+//@SpringBootTest(classes=TrafficServiceApp.class)
 public class Test1 {
-
-
-    @Autowired
-    private WaybillPlanMapper waybillPlanMapper;
-
-
-    @Autowired
-    private PlanDetailMapper planDetailMapper;
-
 
     @Test
     @Rollback
-    public void test() {
+    public void test() throws ClientException {
 
-/*        WaybillPlan obj = new WaybillPlan();
-        obj.setPlanCode("okok");
-        System.out.println("插入结果："+waybillPlanMapper.insert(obj));*/
+        String accessKeyId = "89nsjzR8irwKjep7";  //RAM 中 test 子账号的 AK ID
+        String accessKeySecret = "F8d08IUID5tFtWI9c88e8qfgbko62s"; //RAM 中 test 子账号的 AK Secret
+        IMMClient client = new IMMClient("cn-beijing", accessKeyId, accessKeySecret);
+        CreateOfficeConversionTaskResponse resp = new CreateOfficeConversionTaskResponse();
+        CreateOfficeConversionTaskRequest req = new CreateOfficeConversionTaskRequest();
+        req.setProject("clms-view");   //在 IMM 中创建的项目
+        req.setSrcUri("oss://clms-dtd/1.docx");   //OSS 源文件路径
+        req.setTgtUri("oss://clms-dtd/word-pdf/");  //OSS 转换文件路径
+        req.setTgtType("pdf");
 
-        List<PlanDetail> planDetailList = new ArrayList<PlanDetail>();
-
-        PlanDetail vo = new  PlanDetail();
-        vo.setWaybillPlanId(1l);
-        vo.setGoodsId(1l);
-        vo.setGoodsName("西红柿2");
-
-      //  planDetailMapper.insert(vo);
-
-        planDetailList.add(vo);
-
-
-
-
-        vo = new  PlanDetail();
-        vo.setWaybillPlanId(1l);
-        vo.setGoodsId(1l);
-        vo.setGoodsName("西红柿3");
-        planDetailList.add(vo);
-
-
-        int flag = planDetailMapper.batchAddPlanDetail(planDetailList);
-
-        for(PlanDetail obj :planDetailList) {
-
-            System.out.println("----id-----"+obj.getPlanDetailId()+"---------"+obj.getGoodsName());
-
+        try {
+            resp = client.getResponse(req);
+        System.out.printf("requestId=%s, taskId=%s, tgtloc=%s", resp.getRequestId(), resp.getTaskId(),resp.getTgtLoc());
+        }catch (ClientException e){
+            System.out.println(e);
         }
 
 
-
-
-
-
-
-
-
+        //get
+//        GetOfficeConversionTaskRequest getOfficeConversionTaskRequest = new GetOfficeConversionTaskRequest();
+//        getOfficeConversionTaskRequest.setProject("clms-view");
+//        getOfficeConversionTaskRequest.setTaskId(resp.getTaskId());
+//        GetOfficeConversionTaskResponse getOfficeConversionTaskResponse = client.getResponse(getOfficeConversionTaskRequest);
+//        try {
+//            while (true) {
+//                if (getOfficeConversionTaskResponse.getStatus() == "Finished") {
+//                    System.out.println("Done");
+//                    break;
+//                }
+//                Thread.sleep(5000); // 5 seconds
+//            }
+//        }catch (InterruptedException e){
+//            System.out.println(e);
+//        }
 
     }
 

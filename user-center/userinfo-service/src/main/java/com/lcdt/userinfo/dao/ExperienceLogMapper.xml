@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.userinfo.dao.ExperienceLogMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.userinfo.model.ExperienceLog">
+    <id column="log_id" jdbcType="BIGINT" property="logId" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="experience_user_id" jdbcType="BIGINT" property="experienceUserId" />
+    <result column="experience_user_phone" jdbcType="VARCHAR" property="experienceUserPhone" />
+    <result column="experience_company_id" jdbcType="BIGINT" property="experienceCompanyId" />
+    <result column="experience_company_name" jdbcType="VARCHAR" property="experienceCompanyName" />
+  </resultMap>
+
+  <sql id="baseColumn">
+    log_id, phone_number, create_date, experience_user_id, experience_user_phone,
+    experience_company_id, experience_company_name
+  </sql>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_experience_log
+    where log_id = #{logId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.lcdt.userinfo.model.ExperienceLog">
+    <selectKey keyProperty="logId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_experience_log (phone_number, create_date, experience_user_id,
+    experience_user_phone, experience_company_id,
+    experience_company_name)
+    values (#{phoneNumber,jdbcType=VARCHAR}, CURRENT_TIMESTAMP, #{experienceUserId,jdbcType=BIGINT},
+    #{experienceUserPhone,jdbcType=VARCHAR}, #{experienceCompanyId,jdbcType=BIGINT},
+    #{experienceCompanyName,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.ExperienceLog">
+    update t_experience_log
+    set phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      experience_user_id = #{experienceUserId,jdbcType=BIGINT},
+      experience_user_phone = #{experienceUserPhone,jdbcType=VARCHAR},
+      experience_company_id = #{experienceCompanyId,jdbcType=BIGINT},
+      experience_company_name = #{experienceCompanyName,jdbcType=VARCHAR}
+    where log_id = #{logId,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select <include refid="baseColumn"/>
+    from t_experience_log
+    where log_id = #{logId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByCondition" parameterType="com.lcdt.userinfo.dto.ExperienceLogListParams" resultMap="BaseResultMap">
+    select <include refid="baseColumn"/>
+    from t_experience_log
+    <where>
+      <if test="phoneNumber != null and phoneNumber != '' ">
+        phone_number like concat('%',#{phoneNumber,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="createDateBegin!=null and createDateBegin!=''">
+        and create_date &gt;= CONCAT(STR_TO_DATE(#{createDateBegin,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+      </if>
+      <if test="createDateEnd!=null and createDateEnd!=''">
+        and create_date &lt;= CONCAT(STR_TO_DATE(#{createDateEnd,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59')
+      </if>
+    </where>
+  </select>
+</mapper>

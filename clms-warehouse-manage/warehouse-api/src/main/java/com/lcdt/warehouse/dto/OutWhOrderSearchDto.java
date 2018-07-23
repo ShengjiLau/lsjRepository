@@ -40,6 +40,8 @@ public class OutWhOrderSearchDto {
     private String outboundMan;
     @ApiModelProperty(value = "分组id")
     private Long groupId;
+    @ApiModelProperty(value = "分组id",hidden = true)
+    private String groupIds;
     @ApiModelProperty(value = "采购单号")
     private String purchaseNo;
     @ApiModelProperty(value = "合同编码")
@@ -71,207 +73,242 @@ public class OutWhOrderSearchDto {
         return outPlanId;
     }
 
-    public void setOutPlanId(Long outPlanId) {
+    public OutWhOrderSearchDto setOutPlanId(Long outPlanId) {
         this.outPlanId = outPlanId;
+        return this;
     }
 
     public String getOutorderNo() {
         return outorderNo;
     }
 
-    public void setOutorderNo(String outorderNo) {
+    public OutWhOrderSearchDto setOutorderNo(String outorderNo) {
         this.outorderNo = outorderNo;
+        return this;
     }
 
     public String[] getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(String[] orderStatus) {
+    public OutWhOrderSearchDto setOrderStatus(String[] orderStatus) {
         this.orderStatus = orderStatus;
+        return this;
     }
 
     public String getGoodsInfo() {
         return goodsInfo;
     }
 
-    public void setGoodsInfo(String goodsInfo) {
+    public OutWhOrderSearchDto setGoodsInfo(String goodsInfo) {
         this.goodsInfo = goodsInfo;
+        return this;
     }
 
     public Long getWarehouseId() {
         return warehouseId;
     }
 
-    public void setWarehouseId(Long warehouseId) {
+    public OutWhOrderSearchDto setWarehouseId(Long warehouseId) {
         this.warehouseId = warehouseId;
+        return this;
     }
 
     public String getCreateName() {
         return createName;
     }
 
-    public void setCreateName(String createName) {
+    public OutWhOrderSearchDto setCreateName(String createName) {
         this.createName = createName;
+        return this;
     }
 
     public String getStartCreateDate() {
         return startCreateDate;
     }
 
-    public void setStartCreateDate(String startCreateDate) {
+    public OutWhOrderSearchDto setStartCreateDate(String startCreateDate) {
         this.startCreateDate = startCreateDate;
+        return this;
     }
 
     public String getEndCreateDate() {
         return endCreateDate;
     }
 
-    public void setEndCreateDate(String endCreateDate) {
+    public OutWhOrderSearchDto setEndCreateDate(String endCreateDate) {
         this.endCreateDate = endCreateDate;
+        return this;
     }
 
     public String getStartOutboundTime() {
         return startOutboundTime;
     }
 
-    public void setStartOutboundTime(String startOutboundTime) {
+    public OutWhOrderSearchDto setStartOutboundTime(String startOutboundTime) {
         this.startOutboundTime = startOutboundTime;
+        return this;
     }
 
     public String getEndOutboundTime() {
         return endOutboundTime;
     }
 
-    public void setEndOutboundTime(String endOutboundTime) {
+    public OutWhOrderSearchDto setEndOutboundTime(String endOutboundTime) {
         this.endOutboundTime = endOutboundTime;
+        return this;
     }
 
     public String getOutboundType() {
         return outboundType;
     }
 
-    public void setOutboundType(String outboundType) {
+    public OutWhOrderSearchDto setOutboundType(String outboundType) {
         this.outboundType = outboundType;
+        return this;
     }
 
     public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public OutWhOrderSearchDto setCustomerId(Long customerId) {
         this.customerId = customerId;
+        return this;
     }
 
     public String getCustomerName() {
         return customerName;
     }
 
-    public void setCustomerName(String customerName) {
+    public OutWhOrderSearchDto setCustomerName(String customerName) {
         this.customerName = customerName;
+        return this;
     }
 
     public String getOutboundMan() {
         return outboundMan;
     }
 
-    public void setOutboundMan(String outboundMan) {
+    public OutWhOrderSearchDto setOutboundMan(String outboundMan) {
         this.outboundMan = outboundMan;
+        return this;
     }
 
     public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Long groupId) {
+    public OutWhOrderSearchDto setGroupId(Long groupId) {
         this.groupId = groupId;
+        return this;
+    }
+
+    public String getGroupIds() {
+        return groupIds;
+    }
+
+    public OutWhOrderSearchDto setGroupIds(String groupIds) {
+        this.groupIds = groupIds;
+        return this;
     }
 
     public String getPurchaseNo() {
         return purchaseNo;
     }
 
-    public void setPurchaseNo(String purchaseNo) {
+    public OutWhOrderSearchDto setPurchaseNo(String purchaseNo) {
         this.purchaseNo = purchaseNo;
+        return this;
     }
 
     public String getContractNo() {
         return contractNo;
     }
 
-    public void setContractNo(String contractNo) {
+    public OutWhOrderSearchDto setContractNo(String contractNo) {
         this.contractNo = contractNo;
+        return this;
     }
 
     public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(Long companyId) {
+    public OutWhOrderSearchDto setCompanyId(Long companyId) {
         this.companyId = companyId;
+        return this;
     }
 
     public int getPageNo() {
         return pageNo;
     }
 
-    public void setPageNo(int pageNo) {
+    public OutWhOrderSearchDto setPageNo(int pageNo) {
         this.pageNo = pageNo;
+        return this;
     }
 
     public int getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    public OutWhOrderSearchDto setPageSize(int pageSize) {
         this.pageSize = pageSize;
+        return this;
     }
 
     public String getGoodsName() {
         return goodsName;
     }
 
-    public void setGoodsName(String goodsName) {
+    public OutWhOrderSearchDto setGoodsName(String goodsName) {
         this.goodsName = goodsName;
+        return this;
     }
 
     public String getGoodsBarCode() {
         return goodsBarCode;
     }
 
-    public void setGoodsBarCode(String goodsBarCode) {
+    public OutWhOrderSearchDto setGoodsBarCode(String goodsBarCode) {
         this.goodsBarCode = goodsBarCode;
+        return this;
     }
 
     public String getGoodsCode() {
         return goodsCode;
     }
 
-    public void setGoodsCode(String goodsCode) {
+    public OutWhOrderSearchDto setGoodsCode(String goodsCode) {
         this.goodsCode = goodsCode;
+        return this;
     }
 
     public Long getClassifyId() {
         return classifyId;
     }
 
-    public void setClassifyId(Long classifyId) {
+    public OutWhOrderSearchDto setClassifyId(Long classifyId) {
         this.classifyId = classifyId;
+        return this;
     }
 
     public List<Long> getGoodIds() {
         return goodIds;
     }
 
-    public void setGoodIds(List<Long> goodIds) {
+    public OutWhOrderSearchDto setGoodIds(List<Long> goodIds) {
         this.goodIds = goodIds;
+        return this;
     }
 
     public String getBatch() {
         return batch;
     }
 
-    public void setBatch(String batch) {
+    public OutWhOrderSearchDto setBatch(String batch) {
         this.batch = batch;
+        return this;
     }
 }
