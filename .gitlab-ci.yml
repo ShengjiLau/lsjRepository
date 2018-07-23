@@ -14,7 +14,6 @@ cache:
 stages:
   - code_statics
   - build
-  - code_statics
   - test
   - build_image
   - deploy
@@ -54,7 +53,7 @@ code_statics:
 
   stage: code_statics
   script:
-    - gitinspector -T --since 1.day -F html -L . > total.html
+    - gitinspector -T -F html -L . > total.html
     - gitinspector -T --since 1.day -F html -L . > `date -u +%Y_%m_%d_`report.html
   artifacts:
-    paths: [total.html]
+    paths: [/*.html]
