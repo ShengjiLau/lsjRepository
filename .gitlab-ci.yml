@@ -15,7 +15,6 @@ stages:
   - code_statics
   - build
   - test
-  - page
   - build_image
   - deploy
 build:
