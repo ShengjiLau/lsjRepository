@@ -163,8 +163,6 @@ public class TrafficRpcImpl implements TrafficRpc {
     }
 
 
-
-
     @Transactional
     @Override
     public WaybillPlan purchase4Plan(WaybillParamsDto waybillParamsDto,int flag) {

@@ -20,7 +20,7 @@ public class TNoticeCategory implements Serializable {
     private Long categoryId;
     private String categoryName;
     private Integer sequenceNumber;
-
+    private Integer isDelete;
 
     public Long getCategoryId() {
         return categoryId;
@@ -46,12 +46,21 @@ public class TNoticeCategory implements Serializable {
         this.sequenceNumber = sequenceNumber;
     }
 
+    public Integer getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Integer isDelete) {
+        this.isDelete = isDelete;
+    }
+
     @Override
     public String toString() {
         return "TNoticeCategory{" +
         ", categoryId=" + categoryId +
         ", categoryName=" + categoryName +
         ", sequenceNumber=" + sequenceNumber +
+                ", isDelete=" + isDelete +
         "}";
     }
 }
