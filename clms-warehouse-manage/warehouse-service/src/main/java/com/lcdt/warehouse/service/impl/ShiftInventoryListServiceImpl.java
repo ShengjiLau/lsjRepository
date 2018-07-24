@@ -73,7 +73,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 3：插入移库到新库的记录。
 	 */
 	@Override
-	@Transactional(isolation=Isolation.REPEATABLE_READ,timeout=60,propagation=Propagation.REQUIRED,rollbackForClassName={"RuntimeException","Exception"})
+	@Transactional(isolation = Isolation.REPEATABLE_READ,timeout = 60,propagation = Propagation.REQUIRED,rollbackForClassName = {"RuntimeException","Exception"})
 	public int insertShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 		
 		//新建一个移库单DO,并复制ShiftInventoryListDTO里的相关属性
@@ -143,7 +143,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 4：查询移入库位是否存在对应的商品，如果存在修改相应库存，如果不存在则新建库存。
 	 */
 	@Override
-	@Transactional(isolation=Isolation.REPEATABLE_READ,timeout=60,propagation=Propagation.REQUIRED,rollbackForClassName={"RuntimeException","Exception"})
+	@Transactional(isolation = Isolation.REPEATABLE_READ,timeout = 60,propagation = Propagation.REQUIRED,rollbackForClassName = {"RuntimeException","Exception"})
 	public int completeShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 		//将移库单的状态修改为1，即完成状态
 		ShiftInventoryListDO shiftInventoryListDO = new ShiftInventoryListDO();
@@ -251,7 +251,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 4:本次查询较为复杂，无法采用关联查询，采用了逻辑分页。
 	 */
 	@Override
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	public PageInfo<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO1) {
 		shiftInventoryListDTO1.setCompanyId(SecurityInfoGetter.getCompanyId());
 		if (null == shiftInventoryListDTO1.getPageNo()) {
@@ -340,7 +340,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 通过移库单主键id查询移库单信息。
 	 */
 	@Override
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	public ShiftInventoryListDTO getShiftInventoryListDetails(Long shiftInventoryListId) {
 		//创建一个新的ShiftInventoryListDTO
 		ShiftInventoryListDTO shiftInventoryListDTO = new ShiftInventoryListDTO();
