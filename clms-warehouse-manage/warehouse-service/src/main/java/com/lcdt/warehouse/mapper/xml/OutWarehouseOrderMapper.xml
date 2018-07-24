@@ -108,7 +108,7 @@
             and outbound_man like concat('%',#{outboundMan,jdbcType=VARCHAR},'%')
         </if>
         <if test="groupIds!=null and groupIds!=''">
-            and  #{groupIds}
+            and  ${groupIds}
         </if>
         <if test="groupIds==null or groupIds==''">
             and  group_id is null

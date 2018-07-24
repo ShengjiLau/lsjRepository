@@ -82,7 +82,7 @@
             and plan_id = #{planId,jdbcType=BIGINT}
         </if>
         <if test="groupIds!=null and groupIds!=''">
-            and  #{groupIds}
+            and  ${groupIds}
         </if>
         <if test="groupIds==null or groupIds==''">
             and  group_id is null
