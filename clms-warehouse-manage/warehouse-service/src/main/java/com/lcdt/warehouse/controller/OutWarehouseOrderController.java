@@ -62,11 +62,7 @@ public class OutWarehouseOrderController {
     @GetMapping(value = "/order")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_out_order_search')")
     public PageBaseDto outWarehouseOrderList(OutWhOrderSearchDto params) {
-        params.setGroupIds(GroupIdsUtil.getOwnGroupIds(params.getGroupId()))
-                .setCompanyId(SecurityInfoGetter.getCompanyId());
-        Page<OutWhOrderDto> inWarehouseOrderPage = outWarehouseOrderService.queryOutWarehouseOrderList(params);
-        PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderPage.getRecords(), inWarehouseOrderPage.getTotal());
-        return pageBaseDto;
+        return getPageBaseDto(params);
     }
 
 
@@ -164,8 +160,18 @@ public class OutWarehouseOrderController {
         return jo;
     }
 
+    @ApiOperation("概览出库单待出库")
+    @GetMapping(value = "/order/wait")
+    public PageBaseDto outWarehouseOrderWaiteOutbound(OutWhOrderSearchDto params) {
+        return getPageBaseDto(params);
+    }
 
-
+    private PageBaseDto getPageBaseDto(OutWhOrderSearchDto params){
+        params.setGroupIds(GroupIdsUtil.getOwnGroupIds(params.getGroupId()))
+                .setCompanyId(SecurityInfoGetter.getCompanyId());
+        Page<OutWhOrderDto> inWarehouseOrderPage = outWarehouseOrderService.queryOutWarehouseOrderList(params);
+        return new PageBaseDto(inWarehouseOrderPage.getRecords(), inWarehouseOrderPage.getTotal());
+    }
 
 }
 

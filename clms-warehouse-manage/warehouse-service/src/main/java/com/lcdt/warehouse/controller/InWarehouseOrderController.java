@@ -68,11 +68,7 @@ public class InWarehouseOrderController {
     @GetMapping(value = "/order")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_order_search')")
     public PageBaseDto inWarehouseOrderList(InWarehouseOrderSearchParamsDto params) {
-        params.setGroupIds(GroupIdsUtil.getOwnGroupIds(params.getGroupId()))
-                .setCompanyId(SecurityInfoGetter.getCompanyId());
-        Page<InWarehouseOrderDto> inWarehouseOrderPage = inWarehouseOrderService.queryInWarehouseOrderList(params);
-        PageBaseDto pageBaseDto = new PageBaseDto(inWarehouseOrderPage.getRecords(), inWarehouseOrderPage.getTotal());
-        return pageBaseDto;
+        return getPageBaseDto(params);
     }
 
     @ApiOperation("入库单详细")
@@ -178,6 +174,24 @@ public class InWarehouseOrderController {
         jo.put("data", inWarehouseOrderService.selectInWarehouseNum(params));
 
         return jo;
+    }
+
+    @ApiOperation("概览入库单待入库数量")
+    @GetMapping(value = "/order/wait")
+    public PageBaseDto inWarehouseOrderWaiteStorage(InWarehouseOrderSearchParamsDto params){
+        return getPageBaseDto(params);
+    }
+
+    /**
+     * 提取列表，和待入库概览
+     * @param params
+     * @return
+     */
+    private PageBaseDto getPageBaseDto(InWarehouseOrderSearchParamsDto params){
+        params.setGroupIds(GroupIdsUtil.getOwnGroupIds(params.getGroupId()))
+                .setCompanyId(SecurityInfoGetter.getCompanyId());
+        Page<InWarehouseOrderDto> inWarehouseOrderPage = inWarehouseOrderService.queryInWarehouseOrderList(params);
+        return new PageBaseDto(inWarehouseOrderPage.getRecords(), inWarehouseOrderPage.getTotal());
     }
 
 }
