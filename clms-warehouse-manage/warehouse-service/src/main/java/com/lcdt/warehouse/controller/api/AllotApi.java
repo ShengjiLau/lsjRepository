@@ -140,4 +140,31 @@ public class AllotApi {
             throw new RuntimeException("入库失败");
         }
     }
+    
+    
+    @ApiOperation(value = "调拨单列表", notes = "调拨单列表数据")
+    @GetMapping("/list")
+    public ResponseMessage allotListWithoutAuthorize(@Validated AllotDto dto,
+                                     @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                     @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        dto.setCompanyId(companyId);
+        dto.setIsDeleted((short)0);
+
+        Map map= ClmsBeanUtil.beanToMap(dto);
+        map.put("pageNo", pageNo);
+        map.put("pageSize", pageSize);
+        Page<AllotDto> listPageInfo = allotService.allotDtoList(map);
+        return JSONResponseUtil.success(listPageInfo);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
