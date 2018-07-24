@@ -27,4 +27,6 @@ public interface CheckMapper extends BaseMapper<TCheck> {
     boolean addCheck(TCheck check);
 
     int updateCheckBySql(TCheck check);
+
+    int countNumByParam(CheckParamDto paramDto);
 }

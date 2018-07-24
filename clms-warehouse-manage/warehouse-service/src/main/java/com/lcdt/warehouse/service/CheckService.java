@@ -19,7 +19,7 @@ import java.util.Map;
 public interface CheckService extends IService<TCheck> {
 
     List<CheckListDto> selectList(CheckParamDto paramDto);
-
+    int selectWattingNum(CheckParamDto paramDto);
     int cancelCheck(CheckParamDto checkDto);
 
     boolean insertCheckAndItems(TCheck check, List<Map<String, Object>> items);
