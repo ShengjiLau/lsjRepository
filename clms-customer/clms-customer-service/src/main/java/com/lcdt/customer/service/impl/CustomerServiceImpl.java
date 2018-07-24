@@ -181,6 +181,7 @@ public class CustomerServiceImpl implements CustomerService {
             customerContact.setCreateId(customer.getCreateId());
             customerContact.setCreateName(customer.getCreateName());
             customerContact.setCreateDate(new Date());
+            customerContact.setGender("男");
             customerContactMapper.insert(customerContact);
 
             //组关系表
