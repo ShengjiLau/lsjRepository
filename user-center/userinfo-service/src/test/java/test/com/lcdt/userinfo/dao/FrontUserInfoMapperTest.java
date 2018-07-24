@@ -40,31 +40,9 @@ public class FrontUserInfoMapperTest extends BaseIntegrationContext {
 			userService.registerUser(registerDto);
 		} catch (PhoneHasRegisterException e) {
 			e.printStackTrace();
-			assertTrue(true);
 		}
 	}
 
-	@Test
-	@Rollback
-	public void testInsertGroups(){
-
-		UpdateEmployeeAccountDto updateEmployeeAccountDto = new UpdateEmployeeAccountDto();
-		updateEmployeeAccountDto.setUserPhoneNum("18666667789");
-		ArrayList<Long> longs = new ArrayList<>();
-		longs.add(11L);
-		longs.add(1L);
-		updateEmployeeAccountDto.setGroups(longs);
-
-
-		ArrayList<Long> roles = new ArrayList<>();
-		longs.add(10L);
-		longs.add(68L);
-		updateEmployeeAccountDto.setRoles(roles);
-		updateEmployeeAccountDto.setUserCompRelId(94L);
-		updateEmployeeAccountDto.setName("胖子");
-
-		employeeService.updateEmployee(updateEmployeeAccountDto);
-	}
 
 	@Autowired
 	CompanyService companyService;

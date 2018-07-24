@@ -731,7 +731,7 @@ public class CustomerPlanRpcServiceImpl4Wechat implements ICustomerPlanRpcServic
 
         Map map = new HashMap();
         map.put("splitGoodsId",dto.getSplitGoodsId());
-        map.put("carrierCompanyId",dto.getCompanyId());
+        //map.put("carrierCompanyId",dto.getCompanyId());
         map.put("isDeleted",0);
         SplitGoods splitGoods = splitGoodsMapper.selectByPrimaryKey(map);
         if (null==splitGoods) { throw new RuntimeException("没有派单记录，不能派车！"); }

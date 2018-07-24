@@ -236,6 +236,7 @@ public class CreateCompanyServiceImpl implements CreateCompanyService,Applicatio
 			linkman.setIsDefault((short)1);
 			linkman.setIsDeleted((short)0);
 			linkman.setCompanyId(warehouse.getCompanyId());
+			linkman.setSex("男");
 			linkman = warehouseRpcService.addWarehouseLinkMan(linkman);
 
 			//添加仓库与业务组关系

@@ -382,7 +382,7 @@ public class OwnPlanApi {
             jsonObject.put("message", bindingResult.getFieldError().getDefaultMessage());
             return jsonObject;
         }
-        plan4EditService.waybillPlanEdit(dto, (short) 1);
+        plan4EditService.waybillPlanEditStorage(dto, (short)0);
         jsonObject.put("code", 0);
         jsonObject.put("message", "发布成功！");
         return jsonObject;

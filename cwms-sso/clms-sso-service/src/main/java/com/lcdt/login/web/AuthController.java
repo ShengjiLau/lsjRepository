@@ -15,10 +15,8 @@ import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.exception.PassErrorException;
 import com.lcdt.userinfo.exception.UserNotExistException;
-import com.lcdt.userinfo.model.Company;
-import com.lcdt.userinfo.model.LoginLog;
-import com.lcdt.userinfo.model.User;
-import com.lcdt.userinfo.model.UserCompRel;
+import com.lcdt.userinfo.model.*;
+import com.lcdt.userinfo.rpc.ExperienceLogService;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.CreateCompanyService;
 import com.lcdt.userinfo.service.LoginLogService;
@@ -49,9 +47,9 @@ public class AuthController {
 
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-    @Value("${exp_user_name:15965792008}")
+    @Value("${expUserName:15965792008}")
     private String expUserName;
-    @Value("${exp_user_pwd:123456}")
+    @Value("${expUserPwd:123456}")
     private String expUserPwd;
 
     private static String LOGIN_PAGE = "/signin";
@@ -76,6 +74,8 @@ public class AuthController {
     @Reference(async = true)
     NotifyService notifyService;
 
+    @Reference
+    private ExperienceLogService experienceLogService;
 
     /**
      * 登陆页面
@@ -187,8 +187,18 @@ public class AuthController {
                 return jsonObject.toString();
             }
             LoginSessionReposity.setUserInSession(request, user);
-            List<UserCompRel> companyMembers = companyService.companyList(user.getUserId());
-            jsonObject.put("data", companyMembers);
+            Company company = companyService.companyList(user.getUserId()).get(0).getCompany();
+
+            //体验者日志
+            ExperienceLog experienceLog=new ExperienceLog();
+            experienceLog.setPhoneNumber(userPhoneNum)
+                    .setExperienceUserId(user.getUserId())
+                    .setExperienceUserPhone(user.getPhone())
+                    .setExperienceCompanyId(company.getCompId())
+                    .setExperienceCompanyName(company.getFullName());
+            this.experienceLogService.addExperienceLog(experienceLog);
+
+            jsonObject.put("data", company);
             jsonObject.put("code", 0);
             jsonObject.put("message", "success");
             return jsonObject.toString();
@@ -404,11 +414,16 @@ public class AuthController {
             return jsonObject.toString();
         } catch (UserNotExistException e) {
             e.printStackTrace();
-            jsonObject.put("message", "账号不存在");
+            jsonObject.put("message", "账号不存在！");
             jsonObject.put("code", -1);
             return jsonObject.toString();
         } catch (PassErrorException e) {
-            jsonObject.put("message", "账号密码错误");
+            jsonObject.put("message", "账号密码错误！");
+            jsonObject.put("code", -1);
+            e.printStackTrace();
+            return jsonObject.toString();
+        }catch (RuntimeException e) {
+            jsonObject.put("message", "请使用管理员账号登录");
             jsonObject.put("code", -1);
             e.printStackTrace();
             return jsonObject.toString();

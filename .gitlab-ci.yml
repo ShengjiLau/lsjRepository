@@ -1,0 +1,83 @@
+image: twalter/maven-docker
+
+variables:
+  MAVEN_CLI_OPTS: "-s ./.m2/settings.xml --batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository "
+  ALIYUN_REGISTRY: "registry.cn-hangzhou.aliyuncs.com"
+  CI_REGISTRY_USER: "hi35700248@aliyun.com"
+  CI_REGISTRY_PASSWORD: "A1111777"
+  CI_REGISTRY: "registry.cn-hangzhou.aliyuncs.com/lcdt-clms/"
+  VERSION: "v1.0rc"
+cache:
+  paths:
+    - .m2/repository/
+stages:
+  - code_statics
+  - build
+  - test
+  - build_image
+  - deploy
+build:
+  stage: build
+  script:
+    - pwd
+    - mvn  compile install -Dmaven.test.skip=true
+
+.docker_login: &docker_login
+  script:
+    - docker login --username=${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}  registry.cn-hangzhou.aliyuncs.com
+
+
+test:
+  image: maven
+  stage: test
+  script:
+    - pwd
+    - mvn  test
+.pages:
+  stage: page
+  script:
+    - mkdir .public
+    - cp -rf user-center/userinfo-service/target/jacoco-ut .public/user-service
+    - cp -rf clms-customer/clms-customer-service/target/jacoco-ut .public/customer-service
+    - mv .public public
+  artifacts:
+      paths:
+        - public
+
+
+build_image:
+  when: manual
+  stage: build_image
+  script:
+    - ls -r user-center/userinfo-service/target
+    - docker build -t $CI_REGISTRYuser-service:1.0 user-center/userinfo-service
+deploy-to-test:
+  when: manual
+  stage: deploy
+  script:
+    - echo "deploy app"
+deploy-to-production:
+  when: manual
+  stage: deploy
+  script:
+    - echo "deploy app"
+code_statics:
+  image: registry.cn-hangzhou.aliyuncs.com/lcdt-clms/gitinspector:1.0
+#  only:
+#    - schedules
+
+  stage: code_statics
+  script:
+    - mkdir -p report
+    - /root/gitinspector.py -T -F html -L . > ./report/total.html
+    - /root/gitinspector.py -T --since 1.day -F html -L . > ./report/`date -u +%Y_%m_%d_`report.html
+    - ls /
+    - ls /root/
+    - ls .
+    - pwd
+  artifacts:
+    expire_in: 1 week
+    name: code_statics
+    paths:
+      - report/

@@ -92,6 +92,11 @@
             <artifactId>clms-pay-api</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.lcdt</groupId>
+            <artifactId>yico</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
     <build>
 
@@ -106,9 +111,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
+
             </plugin>
         </plugins>
 

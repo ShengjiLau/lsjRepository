@@ -281,7 +281,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                                             attachment.setOriginAddress(sendAddress);
                                             attachment.setDestinationAdress(receiveAddress);
                                             attachment.setGoodsDetail(sb_goods.toString());
-                                            attachment.setCarrierWebNotifyUrl("transport.html#/customerPlanParam/"+vo.getSerialCode());//客户计划列表，按流水号查询
+                                            attachment.setCarrierWebNotifyUrl("transport.html#/customerPlanParam/"+serialCode);//客户计划列表，按流水号查询
                                             TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("plan_publish", attachment, defaultNotifyReceiver, defaultNotifySender);
                                             producer.sendNotifyEvent(plan_publish_event);
                                         }
@@ -325,7 +325,7 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                                         attachment.setOriginAddress(sendAddress);
                                         attachment.setDestinationAdress(receiveAddress);
                                         attachment.setGoodsDetail(sb_goods.toString());
-                                        attachment.setCarrierWebNotifyUrl("transport.html#/customerPlanParam/"+vo.getSerialCode());//客户计划列表，按流水号查询
+                                        attachment.setCarrierWebNotifyUrl("transport.html#/customerPlanParam/"+serialCode);//客户计划列表，按流水号查询
                                         TrafficStatusChangeEvent plan_publish_event = new TrafficStatusChangeEvent("plan_publish", attachment, defaultNotifyReceiver, defaultNotifySender);
                                         producer.sendNotifyEvent(plan_publish_event);
                                     }

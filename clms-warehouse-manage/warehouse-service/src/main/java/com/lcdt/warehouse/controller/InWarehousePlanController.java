@@ -167,7 +167,7 @@ public class InWarehousePlanController {
 
     @ApiOperation("计划详细")
     @RequestMapping(value = "/detail",method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_plan_detail')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_in_plan_search')")
     public JSONObject detail(@ApiParam(value = "计划ID",required = true) @RequestParam Long planId,
                              @ApiParam(value = "是否加载配仓",required = true) @RequestParam boolean flag,
                              @ApiParam(value = "加载配仓完成后，是否显示",required = true) @RequestParam boolean flag1) {
