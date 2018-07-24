@@ -52,7 +52,7 @@ public class CheckController {
 
     @ApiOperation("根据id读盘库记录")
     @RequestMapping(value = "/findCheckById", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_check_detail') or hasAuthority('wh_check_complete')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_check_search') or hasAuthority('wh_check_complete')")
     public JSONObject findCheckById(@RequestParam Long checkId) {
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id

@@ -52,6 +52,7 @@ public class TNotice implements Serializable {
     private Long createUserId;
     private String createUserName;
     private  Integer isTop;
+    private  String keyWords;
 
     public Long getNoticeId() {
         return noticeId;
@@ -149,6 +150,14 @@ public class TNotice implements Serializable {
         this.isTop = isTop;
     }
 
+    public String getKeyWords() {
+        return keyWords;
+    }
+
+    public void setKeyWords(String keyWords) {
+        this.keyWords = keyWords;
+    }
+
     @Override
     public String toString() {
         return "TNotice{" +
@@ -163,7 +172,8 @@ public class TNotice implements Serializable {
         ", createTime=" + createTime +
         ", createUserId=" + createUserId +
         ", createUserName=" + createUserName +
-                "}"+
-                ", isTop="+isTop;
+                ",isTop =" + isTop +
+                ", keyWords=" + keyWords  +
+                "}";
     }
 }

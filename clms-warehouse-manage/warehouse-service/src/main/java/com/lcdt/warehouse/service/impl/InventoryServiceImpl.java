@@ -178,7 +178,9 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     public void lockInventoryNum(Long inventoryId,Double tryLockNum){
         Assert.notNull(tryLockNum, "不能为空");
         Inventory inventory = selectById(inventoryId);
-
+        if (inventory == null) {
+            throw new RuntimeException("库存信息不存在");
+        }
         if (inventory.getavailableNum() < tryLockNum) {
             throw new RuntimeException("锁定库存量不能大于库存剩余数量");
         }
