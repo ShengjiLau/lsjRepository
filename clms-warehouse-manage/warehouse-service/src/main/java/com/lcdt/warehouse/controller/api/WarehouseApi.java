@@ -249,7 +249,7 @@ public class WarehouseApi {
     
     
     @ApiOperation("仓库管理——列表-无权限")
-    @RequestMapping(value = "/List", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    @RequestMapping(value = "/list", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
     public PageBaseDto warehouseListWithoutAuthorize(@Validated WarehouseDto dto,
                                      @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
                                      @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
