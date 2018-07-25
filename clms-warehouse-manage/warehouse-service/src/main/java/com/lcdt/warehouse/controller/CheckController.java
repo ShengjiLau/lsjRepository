@@ -175,4 +175,23 @@ public class CheckController {
     }
 
 
+    @ApiOperation("首页待盘库数量")
+    @RequestMapping(value = "/findWaittingChecks", method = RequestMethod.GET)
+    public JSONObject findWaittingChecks() {
+        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
+        String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
+        CheckParamDto checkDto = new CheckParamDto();
+        checkDto.setCompanyId(companyId);
+        checkDto.setCheckStatus((Integer) CheckStatusEnum.watting.getValue());
+        int num = checkService.selectWattingNum(checkDto);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("checkNums", num);
+
+//        jsonObject.put("userName",userName);
+        jsonObject.put("code", 0);
+        jsonObject.put("message", "读取成功！");
+        return jsonObject;
+    }
+
 }

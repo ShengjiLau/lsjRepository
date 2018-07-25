@@ -1,6 +1,7 @@
 package com.lcdt.warehouse.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.dto.ShiftInventoryListDTO;
 
 /**
@@ -30,7 +31,7 @@ public interface ShiftInventoryListService {
 	 * @param shiftInventoryListDTO
 	 * @return
 	 */
-	PageInfo<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO);
+	PageBaseDto<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO);
 	
 	
 	/**

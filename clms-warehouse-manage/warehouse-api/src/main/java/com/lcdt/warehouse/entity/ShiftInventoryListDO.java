@@ -103,7 +103,7 @@ public class ShiftInventoryListDO implements Serializable {
 	@ApiModelProperty("库存ids")
     private String inventoryShiftedId;
  
-	@ApiModelProperty("状态，0为新建，1为完成，2为取消")
+	@ApiModelProperty("状态，0为新建，1为已完成，2为取消")
     private Byte finished;
 
     private static final long serialVersionUID = 1515156156L;

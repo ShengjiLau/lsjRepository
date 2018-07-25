@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.warehouse.contants.InventoryBusinessType;
+import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.dto.ShiftInventoryListDTO;
 import com.lcdt.warehouse.entity.Inventory;
@@ -73,7 +74,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 3：插入移库到新库的记录。
 	 */
 	@Override
-	@Transactional(isolation=Isolation.REPEATABLE_READ,timeout=60,propagation=Propagation.REQUIRED,rollbackForClassName={"RuntimeException","Exception"})
+	@Transactional(isolation = Isolation.REPEATABLE_READ,timeout = 60,propagation = Propagation.REQUIRED,rollbackForClassName = {"RuntimeException","Exception"})
 	public int insertShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 		
 		//新建一个移库单DO,并复制ShiftInventoryListDTO里的相关属性
@@ -143,7 +144,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 4：查询移入库位是否存在对应的商品，如果存在修改相应库存，如果不存在则新建库存。
 	 */
 	@Override
-	@Transactional(isolation=Isolation.REPEATABLE_READ,timeout=60,propagation=Propagation.REQUIRED,rollbackForClassName={"RuntimeException","Exception"})
+	@Transactional(isolation = Isolation.REPEATABLE_READ,timeout = 60,propagation = Propagation.REQUIRED,rollbackForClassName = {"RuntimeException","Exception"})
 	public int completeShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 		//将移库单的状态修改为1，即完成状态
 		ShiftInventoryListDO shiftInventoryListDO = new ShiftInventoryListDO();
@@ -251,8 +252,8 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 4:本次查询较为复杂，无法采用关联查询，采用了逻辑分页。
 	 */
 	@Override
-	@Transactional(readOnly=true)
-	public PageInfo<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO1) {
+	@Transactional(readOnly = true)
+	public PageBaseDto<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO1) {
 		shiftInventoryListDTO1.setCompanyId(SecurityInfoGetter.getCompanyId());
 		if (null == shiftInventoryListDTO1.getPageNo()) {
 			shiftInventoryListDTO1.setPageNo(ShiftInventoryListVO.FIRST_PAGE_NO);
@@ -270,9 +271,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		
 		log.debug("查询得到的移库单数量为"+shiftInventoryListDOList.size());
 		//如果查询结果为空，直接返回
+		PageBaseDto<ShiftInventoryListDTO> pageBaseDto = new PageBaseDto<ShiftInventoryListDTO>();
 		if (null == shiftInventoryListDOList || 0 == shiftInventoryListDOList.size()) {
-			PageInfo<ShiftInventoryListDTO> page = new PageInfo<ShiftInventoryListDTO>();
-			return page;
+			return pageBaseDto;
 		}
 		
 		List<ShiftInventoryListDTO> shiftInventoryListDTOList = new ArrayList<ShiftInventoryListDTO>();
@@ -329,9 +330,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			shiftInventoryListDTOList2.addAll(shiftInventoryListDTOList.subList((pageNo - 1)*pageSize, pageNo*pageSize));
 		}
 		
-		PageInfo<ShiftInventoryListDTO> page = new PageInfo<ShiftInventoryListDTO>(shiftInventoryListDTOList2);
-		page.setTotal(shiftInventoryListDTOList.size());
-		return page;
+		pageBaseDto.setList(shiftInventoryListDTOList2);
+		pageBaseDto.setTotal(shiftInventoryListDTOList.size());
+		return pageBaseDto;
     }
 	
 	
@@ -340,7 +341,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 * 通过移库单主键id查询移库单信息。
 	 */
 	@Override
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	public ShiftInventoryListDTO getShiftInventoryListDetails(Long shiftInventoryListId) {
 		//创建一个新的ShiftInventoryListDTO
 		ShiftInventoryListDTO shiftInventoryListDTO = new ShiftInventoryListDTO();

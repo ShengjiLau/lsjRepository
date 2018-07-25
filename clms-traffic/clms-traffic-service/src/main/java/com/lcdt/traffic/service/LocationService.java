@@ -16,7 +16,7 @@ public interface LocationService {
      * @param serialNo
      * @return
      */
-    JSONObject queryLocation(Long companyId, String mobile, String driverName, String serialNo);
+    JSONObject queryLocation(Long companyId, String mobile, String driverName,String userName, String serialNo);
 
     /**
      * 基站定位信息查询，并返回相关信息
