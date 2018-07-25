@@ -288,7 +288,6 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(isolation = Isolation.READ_COMMITTED , propagation = Propagation.REQUIRED, timeout = 30, rollbackForClassName = {"RuntimeException","Exception"})
     public int delOrder(Long orderId) {
         int result = orderMapper.deleteByPrimaryKey(orderId);
-        //result+=orderProductService.delOrderProductByOrderId(orderId);
         return result;
     }
 
@@ -320,13 +319,13 @@ public class OrderServiceImpl implements OrderService {
             List<Map> billingRecordList = nonautomaticMapper.billingInfo(orderDtoList,orderDto.getCompanyId());
             for (OrderDto od : orderDtoList) {
             	//通过RPC查询添加计划状态
-            	if (null != od.getTrafficPlan() && !"".equals(od.getTrafficPlan())) {
+            	if (null != od.getTrafficPlan() && !"".equals(od.getTrafficPlan().trim())) {
             		WaybillPlan waybillPlan = trafficRpc.getWaybillPlanBySerialNo(od.getTrafficPlan());
             		if (null != waybillPlan) {
             			od.setTrafficPlanStatus(waybillPlan.getPlanStatus());
             		}
             	}
-            	if (null != od.getWarehousePlan() && !"".equals(od.getWarehousePlan())) {
+            	if (null != od.getWarehousePlan() && !"".equals(od.getWarehousePlan().trim())) {
             		if (0 == od.getOrderType()) {
             			InWarehousePlan inWarehousePlan = warehouseRpcService.getInWarehousePlanBySerialNo(od.getWarehousePlan());
             			od.setWarehousePlanStatus(inWarehousePlan.getPlanStatus());
@@ -636,8 +635,42 @@ public class OrderServiceImpl implements OrderService {
 	
 	}
 
-	
-	
+
+	@Override
+	@Transactional(isolation = Isolation.REPEATABLE_READ, timeout = 30, propagation = Propagation.REQUIRED, rollbackForClassName = {"RuntimeException","Exception"})
+	public int salesOrderToPurchaseOrder(Long orderId) {
+		Order salesOrder = orderMapper.selectByPrimaryKey(orderId);
+		List<OrderProduct> salesOrderProductList = orderProductMapper.getOrderProductByOrderId(orderId);
+		if (null == salesOrder ) {
+			return OrderVO.ZERO_INTEGER;
+		}
+		Order purchaseOrder = new Order();
+		purchaseOrder.setOrderType(OrderVO.PURCHASE_ORDER);
+		purchaseOrder.setGroupId(salesOrder.getGroupId());
+		purchaseOrder.setReceiveWarehouse(salesOrder.getReceiveWarehouse());
+		purchaseOrder.setWarehouseId(salesOrder.getWarehouseId());
+		purchaseOrder.setReceiverPhone(salesOrder.getReceiverPhone());
+		purchaseOrder.setReceiver(salesOrder.getReceiver());
+		purchaseOrder.setReceiverProvince(salesOrder.getReceiverProvince());
+		purchaseOrder.setReceiverCity(salesOrder.getReceiverCity());
+		purchaseOrder.setReceiveDistrict(salesOrder.getReceiveDistrict());
+		purchaseOrder.setReceiveAddress(salesOrder.getReceiveAddress());
+		purchaseOrder.setIsDraft(OrderVO.NO_PUBLISHI);
+		if (null != salesOrderProductList && 0 != salesOrderProductList.size()) {
+			List<OrderProduct> purchaseOrderProductList = new ArrayList<OrderProduct>(salesOrderProductList.size());
+			for (OrderProduct salesOrderProduct: salesOrderProductList) {
+				OrderProduct purchaseOrderProduct = new OrderProduct();
+				BeanUtils.copyProperties(salesOrderProduct, purchaseOrderProduct);
+				purchaseOrderProduct.setPrice(null);
+				purchaseOrderProductList.add(purchaseOrderProduct);
+			}
+			nonautomaticMapper.insertOrderProductByBatch(purchaseOrderProductList);
+		}
+		
+		int result = orderMapper.insertOrder(salesOrder);
+		return result;
+	}
+
 	
 	
 	
