@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.warehouse.contants.InventoryBusinessType;
+import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.dto.ShiftInventoryListDTO;
 import com.lcdt.warehouse.entity.Inventory;
@@ -252,7 +253,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	 */
 	@Override
 	@Transactional(readOnly = true)
-	public PageInfo<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO1) {
+	public PageBaseDto<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO1) {
 		shiftInventoryListDTO1.setCompanyId(SecurityInfoGetter.getCompanyId());
 		if (null == shiftInventoryListDTO1.getPageNo()) {
 			shiftInventoryListDTO1.setPageNo(ShiftInventoryListVO.FIRST_PAGE_NO);
@@ -270,9 +271,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		
 		log.debug("查询得到的移库单数量为"+shiftInventoryListDOList.size());
 		//如果查询结果为空，直接返回
+		PageBaseDto<ShiftInventoryListDTO> pageBaseDto = new PageBaseDto<ShiftInventoryListDTO>();
 		if (null == shiftInventoryListDOList || 0 == shiftInventoryListDOList.size()) {
-			PageInfo<ShiftInventoryListDTO> page = new PageInfo<ShiftInventoryListDTO>();
-			return page;
+			return pageBaseDto;
 		}
 		
 		List<ShiftInventoryListDTO> shiftInventoryListDTOList = new ArrayList<ShiftInventoryListDTO>();
@@ -329,9 +330,9 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			shiftInventoryListDTOList2.addAll(shiftInventoryListDTOList.subList((pageNo - 1)*pageSize, pageNo*pageSize));
 		}
 		
-		PageInfo<ShiftInventoryListDTO> page = new PageInfo<ShiftInventoryListDTO>(shiftInventoryListDTOList2);
-		page.setTotal(shiftInventoryListDTOList.size());
-		return page;
+		pageBaseDto.setList(shiftInventoryListDTOList2);
+		pageBaseDto.setTotal(shiftInventoryListDTOList.size());
+		return pageBaseDto;
     }
 	
 	
