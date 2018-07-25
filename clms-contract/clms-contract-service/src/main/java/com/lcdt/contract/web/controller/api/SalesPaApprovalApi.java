@@ -24,20 +24,20 @@ import java.util.Map;
  * @AUTHOR liuh
  * @DATE 2018-05-12
  */
-@Api(description = "付款单审批api")
+@Api(description = "收款单审批api")
 @RestController
-@RequestMapping("/payment/approval")
-public class PaApprovalApi {
+@RequestMapping("/receipt/approval")
+public class SalesPaApprovalApi {
 
-    Logger logger = LoggerFactory.getLogger(PaApprovalApi.class);
+    Logger logger = LoggerFactory.getLogger(SalesPaApprovalApi.class);
 
     @Autowired
     private PaApprovalService paApprovalService;
 
 
-    @ApiOperation(value = "付款单审批列表", notes = "付款单审批列表")
+    @ApiOperation(value = "收款单审批列表", notes = "收款单审批列表")
     @GetMapping("/list")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_approval_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_payment_approval_list')")
     public PageBaseDto<List<PaymentApplication>> approvalList(PaApprovalListDto paApprovalListDto) {
         //  获取companyId
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -45,7 +45,7 @@ public class PaApprovalApi {
         Long userId = SecurityInfoGetter.getUser().getUserId();
         paApprovalListDto.setCompanyId(companyId);
         paApprovalListDto.setUserId(userId);
-        paApprovalListDto.setApplicationType(new Short("0"));
+        paApprovalListDto.setApplicationType(new Short("1"));
 
         PageInfo pageInfo = new PageInfo();
         //设置页码
@@ -61,7 +61,7 @@ public class PaApprovalApi {
 
     @ApiOperation(value = "待审批数量", notes = "返回我待审批的总数量")
     @GetMapping(value = "/pending_num")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_approval_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_payment_approval_list')")
     public JSONObject pendingNum() {
         //  获取companyId
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -78,7 +78,7 @@ public class PaApprovalApi {
 
     @ApiOperation(value = "审批同意", notes = "正常通过审批操作")
     @PostMapping(value = "/agree")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_approval_operate')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_payment_approval_operate')")
     public JSONObject agreeApproval(@RequestBody PaApproval paApproval) {
         int result = paApprovalService.agreeApproval(paApproval);
         JSONObject jsonObject = new JSONObject();
@@ -95,7 +95,7 @@ public class PaApprovalApi {
 
     @ApiOperation(value = "驳回审批", notes = "驳回操作")
     @PostMapping(value = "/reject")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_approval_operate')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_payment_approval_operate')")
     public JSONObject rejectApproval(@RequestBody PaApproval paApproval) {
         int result = paApprovalService.rejectApproval(paApproval);
         JSONObject jsonObject = new JSONObject();
@@ -111,7 +111,7 @@ public class PaApprovalApi {
 
     @ApiOperation(value = "撤销审批", notes = "撤销操作")
     @PostMapping(value = "/revoke")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_approval_revoke')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_payment_approval_revoke')")
     public JSONObject revokeApproval(@RequestBody PaApproval paApproval) {
         int result = paApprovalService.revokeApproval(paApproval);
         JSONObject jsonObject = new JSONObject();
@@ -127,7 +127,7 @@ public class PaApprovalApi {
 
     @ApiOperation(value = "转办审批", notes = "转办操作")
     @PostMapping(value = "/turnDo")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_approval_operate')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_payment_approval_operate')")
     public JSONObject turnDoApproval(@RequestBody List<PaApproval> paApprovalList) {
         int result = paApprovalService.turnDoApproval(paApprovalList);
         JSONObject jsonObject = new JSONObject();
@@ -157,7 +157,7 @@ public class PaApprovalApi {
         return jsonObject;
     }
 
-    @ApiOperation(value = "新增付款单", notes = "采购单新增付款单")
+    @ApiOperation(value = "新增收款单", notes = "采购单新增收款单")
     @GetMapping("/product")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_payment_list')")
     @ResponseBody

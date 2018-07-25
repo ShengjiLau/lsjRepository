@@ -5,6 +5,7 @@
     <id column="pa_id" jdbcType="BIGINT" property="paId" />
     <result column="order_id" jdbcType="BIGINT" property="orderId" />
     <result column="application_serial_no" jdbcType="VARCHAR" property="applicationSerialNo" />
+    <result column="application_type" jdbcType="SMALLINT" property="applicationType" />
     <result column="application_date" jdbcType="TIMESTAMP" property="applicationDate" />
     <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
     <result column="approval_process_id" jdbcType="BIGINT" property="approvalProcessId" />
@@ -39,7 +40,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Base_Column_List">
-    pa_id, order_id, application_serial_no, application_date, approval_status, approval_process_id,
+    pa_id, order_id, application_serial_no, application_type, application_date, approval_status, approval_process_id,
     approval_process, approval_start_date, approval_end_date, contract_code, order_serial_no,
     order_no, purchase_sum, supplier_id, supplier, receipt_unit, receipt_unit_bank, receipt_unit_account,
     payment_sum, payment_unit, payment_time, payment_name, payment_time_sure, payment_name_sure,
@@ -58,6 +59,7 @@
   </delete>
   <insert id="insert" parameterType="com.lcdt.contract.model.PaymentApplication">
     insert into t_payment_application (pa_id, order_id, application_serial_no,
+    ,
       application_date, approval_status, approval_process_id,
       approval_process, approval_start_date, approval_end_date,
       contract_code, order_serial_no, order_no,
@@ -69,7 +71,7 @@
       attachment1, attachment1_name, attachment2,
       attachment2_name, company_id, create_id,
       create_name, create_time)
-    values (#{paId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{applicationSerialNo,jdbcType=VARCHAR},
+    values (#{paId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{applicationSerialNo,jdbcType=VARCHAR},#{applicationType,jdbcType=SMALLINT},
       #{applicationDate,jdbcType=TIMESTAMP}, #{approvalStatus,jdbcType=SMALLINT}, #{approvalProcessId,jdbcType=BIGINT},
       #{approvalProcess,jdbcType=VARCHAR}, #{approvalStartDate,jdbcType=TIMESTAMP}, #{approvalEndDate,jdbcType=TIMESTAMP},
       #{contractCode,jdbcType=VARCHAR}, #{orderSerialNo,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR},
@@ -93,6 +95,9 @@
       </if>
       <if test="applicationSerialNo != null">
         application_serial_no,
+      </if>
+      <if test="applicationType != null">
+        application_type,
       </if>
       <if test="applicationDate != null">
         application_date,
@@ -201,6 +206,9 @@
       <if test="applicationSerialNo != null">
         #{applicationSerialNo,jdbcType=VARCHAR},
       </if>
+      <if test="applicationType != null">
+        #{applicationType,jdbcType=SMALLINT},
+      </if>
       <if test="applicationDate != null">
         #{applicationDate,jdbcType=TIMESTAMP},
       </if>
@@ -308,6 +316,9 @@
       <if test="applicationSerialNo != null">
         application_serial_no = #{applicationSerialNo,jdbcType=VARCHAR},
       </if>
+      <if test="applicationType != null">
+        application_type = #{applicationType,jdbcType=SMALLINT},
+      </if>
       <if test="applicationDate != null">
         application_date = #{applicationDate,jdbcType=TIMESTAMP},
       </if>
@@ -411,6 +422,7 @@
     update t_payment_application
     set order_id = #{orderId,jdbcType=BIGINT},
       application_serial_no = #{applicationSerialNo,jdbcType=VARCHAR},
+      application_type = #{applicationType,jdbcType=SMALLINT},
       application_date = #{applicationDate,jdbcType=TIMESTAMP},
       approval_status = #{approvalStatus,jdbcType=SMALLINT},
       approval_process_id = #{approvalProcessId,jdbcType=BIGINT},
@@ -455,6 +467,7 @@
     <include refid="Base_Column_List"/>
     from t_payment_application
     <where>
+      and application_type = #{applicationType}
       <choose>
         <when test="tempStatus!=null and tempStatus==1">
           and payment_time is NULL
@@ -504,6 +517,7 @@
     <id column="pa_id" jdbcType="BIGINT" property="paId" />
     <result column="order_id" jdbcType="BIGINT" property="orderId" />
     <result column="application_serial_no" jdbcType="VARCHAR" property="applicationSerialNo" />
+    <result column="application_type" jdbcType="SMALLINT" property="applicationType" />
     <result column="application_date" jdbcType="TIMESTAMP" property="applicationDate" />
     <result column="approval_status" jdbcType="SMALLINT" property="approvalStatus" />
     <result column="approval_process_id" jdbcType="BIGINT" property="approvalProcessId" />

@@ -9,6 +9,8 @@ import java.util.Date;
  */
 public class PaApprovalListDto implements Serializable {
 
+
+    private Short applicationType;
     /**
      * 付款单创建时间开始
      */
@@ -79,6 +81,14 @@ public class PaApprovalListDto implements Serializable {
     private int pageNum;
 
     private int pageSize;
+
+    public Short getApplicationType() {
+        return applicationType;
+    }
+
+    public void setApplicationType(Short applicationType) {
+        this.applicationType = applicationType;
+    }
 
     public String getPaymentTimeStart() {
         return paymentTimeStart;
