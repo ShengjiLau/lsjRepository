@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -61,9 +63,8 @@ public class ReconcileServiceImpl implements ReconcileService {
 	 * 将相应的Reconcile的主键id和reconcileCode并将其添加到对应的记账单中
 	 */
 	@Override
-	@Transactional
+	@Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED, timeout = 30, rollbackForClassName = {"RuntimeException","Exception"})
 	public int insertReconcileBatch(List<Reconcile> reconcileList) {
-		
 	    List<FeeAccount> feeAccountList = new ArrayList<FeeAccount>();
 	    for(Reconcile fa : reconcileList) {
 		//添加对账单的所属公司id 操作人id 操作人姓名 默认状态
@@ -107,7 +108,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 	 * 批量取消对账单时也要批量修改相关记账单中的对账单id和reconcileCode,将其设置为空
 	 */
 	@Override
-	@Transactional
+	@Transactional(isolation = Isolation.REPEATABLE_READ, timeout = 30, propagation = Propagation.REQUIRED, rollbackForClassName = {"RuntimeException","Exception"})
 	public Map<Integer, String> setCancelOk(String reconcileIds) {
 		StringBuilder sb1 = new StringBuilder();
 		Map<Integer, String> map = new HashMap<Integer, String>();
@@ -173,6 +174,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 	 * 查询到符合条件的对账单列表时还需要查询对账单下的收付款信息
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public PageInfo<ReconcileDto> getReconcileList(ReconcileDto reconcileDto){
 		if (reconcileDto.getPageNum() < 1) {
 			reconcileDto.setPageNum(ConstantVO.PAGE_NUM);
@@ -229,6 +231,7 @@ public class ReconcileServiceImpl implements ReconcileService {
 	}
 	
 	@Override
+	@Transactional(readOnly = true)
 	public ReconcileDto selectReconcileByPk(Long pk) {
 		
 		ReconcileDto reconcileDto = reconcileMapper.selectReconcileByPrimaryKey(pk);

@@ -8,6 +8,7 @@ import com.lcdt.traffic.vo.ConstantVO;
 import com.lcdt.traffic.web.dto.MsgDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -43,19 +44,16 @@ public class MsgServiceImpl implements MsgService {
 
 	@Override
 	public int cancelMsg(Long msgId) {
-
 		return msgMapper.updateIsDelete(msgId);
 	}
 
 	@Override
 	public Msg selectMsg(Long accountId,Short type) {
-
 		return msgMapper.selectByAccountId(accountId,type);
 	}
 
 	@Override
 	public  List<Msg> selectSomeMsg(MsgDto msgDto) {
-
 		return msgMapper.selectSomeMsg(msgDto);
 	}
 
