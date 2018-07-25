@@ -46,7 +46,7 @@ public class SalesPaymentApplicationApi {
         Long companyId = SecurityInfoGetter.getCompanyId();
         //设置登陆人企业id
         paymentApplicationDto.setCompanyId(companyId);
-        //设置付款单类型 0 - 付款单 1 - 收款单
+        //设置收款单类型 0 - 收款单 1 - 收款单
         paymentApplicationDto.setApplicationType(new Short("1"));
         PageInfo pageInfo = new PageInfo();
         pageInfo.setPageNum(paymentApplicationDto.getPageNum());
@@ -69,22 +69,22 @@ public class SalesPaymentApplicationApi {
         paymentApplicationDto.setCreateId(user.getUserId());
         //设置创建人姓名
         paymentApplicationDto.setCreateName(user.getRealName());
-        //设置付款单类型 0 - 付款单 1 - 收款单
+        //设置收款单类型 0 - 收款单 1 - 收款单
         paymentApplicationDto.setApplicationType(new Short("1"));
         paymentApplicationDto.setCreateTime(new Date());
         JSONObject jsonObject = new JSONObject();
         int row = paymentApplictionService.addPaymentAppliction(paymentApplicationDto);
         if(row>0){
             jsonObject.put("code",0);
-            jsonObject.put("message","创建付款申请成功");
+            jsonObject.put("message","创建收款申请成功");
         }else{
             jsonObject.put("code",-1);
-            jsonObject.put("message","创建付款申请失败");
+            jsonObject.put("message","创建收款申请失败");
         }
         return jsonObject;
     }
 
-    @ApiOperation(value = "付款记录详情", notes = "根据主键查询付款记录详情")
+    @ApiOperation(value = "收款记录详情", notes = "根据主键查询收款记录详情")
     @GetMapping("/detail")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receipt_payment_record')")
     public BaseDto addBillingRecord(Long paId){
@@ -93,7 +93,7 @@ public class SalesPaymentApplicationApi {
         return baseDto;
     }
 
-    @ApiOperation(value = "确认付款", notes = "确认付款")
+    @ApiOperation(value = "确认收款", notes = "确认收款")
     @PostMapping("/confirm")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receipt_payment_confirm')")
     public JSONObject confirmPayment(@RequestBody PaymentApplication paymentApplication){
@@ -104,10 +104,10 @@ public class SalesPaymentApplicationApi {
         JSONObject jsonObject = new JSONObject();
         if(row>0){
             jsonObject.put("code",0);
-            jsonObject.put("message","创建付款申请成功");
+            jsonObject.put("message","创建收款申请成功");
         }else{
             jsonObject.put("code",-1);
-            jsonObject.put("message","创建付款申请失败");
+            jsonObject.put("message","创建收款申请失败");
         }
         return jsonObject;
     }
