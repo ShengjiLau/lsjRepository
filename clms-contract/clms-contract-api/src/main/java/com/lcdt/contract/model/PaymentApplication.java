@@ -10,6 +10,8 @@ public class PaymentApplication {
 
     private String applicationSerialNo;
 
+    private Short applicationType;
+
     private Date applicationDate;
 
     private Short approvalStatus;
@@ -96,6 +98,14 @@ public class PaymentApplication {
 
     public void setApplicationSerialNo(String applicationSerialNo) {
         this.applicationSerialNo = applicationSerialNo == null ? null : applicationSerialNo.trim();
+    }
+
+    public Short getApplicationType() {
+        return applicationType;
+    }
+
+    public void setApplicationType(Short applicationType) {
+        this.applicationType = applicationType;
     }
 
     public Date getApplicationDate() {

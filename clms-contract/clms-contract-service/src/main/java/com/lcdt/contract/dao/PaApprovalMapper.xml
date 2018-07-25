@@ -223,6 +223,7 @@
     from t_payment_application t1 left join t_pa_approval t2 on t1.pa_id = t2.pa_id
     <where>
       t1.company_id = #{companyId,jdbcType=BIGINT}
+      and t1.application_type = #{applicationType,jdbcType=SMALLINT}
       <if test="paymentTimeStart!=null and paymentTimeStart!=''">
         and t1.application_date &gt; #{paymentTimeStart,jdbcType=TIMESTAMP} and t1.application_date &lt; #{paymentTimeEnd,jdbcType=TIMESTAMP}
       </if>
