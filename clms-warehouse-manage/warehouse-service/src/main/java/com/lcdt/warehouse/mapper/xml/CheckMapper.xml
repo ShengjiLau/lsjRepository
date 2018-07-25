@@ -60,7 +60,15 @@
         order by a.check_id DESC
     </select>
 
+    <select id="countNumByParam" resultType="int" parameterType="com.lcdt.warehouse.dto.CheckParamDto">
+        SELECT count(a.check_id) waittingNum
+        FROM `t_check` a
+        WHERE a.company_id = #{companyId,jdbcType=BIGINT}
+        <if test="checkStatus!=null and checkStatus!=0">
+            and a.check_status=#{checkStatus,jdbcType=TINYINT}
+        </if>
 
+    </select>
     <update id="cancelCheck" parameterType="com.lcdt.warehouse.dto.CheckParamDto">
       UPDATE `t_check` SET check_status = #{checkStatus,jdbcType=TINYINT}
        WHERE check_id = #{checkId,jdbcType=BIGINT}

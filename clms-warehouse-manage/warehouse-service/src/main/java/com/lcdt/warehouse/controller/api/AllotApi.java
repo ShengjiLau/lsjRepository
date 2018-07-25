@@ -142,7 +142,7 @@ public class AllotApi {
     }
     
     
-    @ApiOperation(value = "调拨单列表", notes = "调拨单列表数据")
+    @ApiOperation(value = "调拨单列表-无权限", notes = "调拨单列表数据")
     @GetMapping("/list")
     public ResponseMessage allotListWithoutAuthorize(@Validated AllotDto dto,
                                      @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,

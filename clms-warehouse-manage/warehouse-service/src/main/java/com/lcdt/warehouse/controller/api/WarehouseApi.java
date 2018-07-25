@@ -246,4 +246,45 @@ public class WarehouseApi {
             throw new RuntimeException((isDefault==1?"设置":"取消")+"失败");
         }
     }
+    
+    
+    @ApiOperation("仓库管理——列表-无权限")
+    @RequestMapping(value = "/list", produces = WebProduces.JSON_UTF_8, method = RequestMethod.GET)
+    public PageBaseDto warehouseListWithoutAuthorize(@Validated WarehouseDto dto,
+                                     @ApiParam(value = "页码",required = true, defaultValue = "1") @RequestParam Integer pageNo,
+                                     @ApiParam(value = "每页显示条数",required = true, defaultValue = "10") @RequestParam Integer pageSize) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Map map = new HashMap();
+        map.put("companyId", companyId);
+        map.put("page_no", pageNo);
+        map.put("page_size", pageSize);
+
+        if(StringUtility.isNotEmpty(dto.getWhName())){
+            map.put("whName", dto.getWhName());
+        }
+        if (dto.getWhType()!=null) {
+            map.put("whType",dto.getWhType());
+        }
+        if (dto.getWhStatus()!=null) {
+            map.put("whStatus",dto.getWhStatus());
+        }
+        if (dto.getIsDeleted()!=null) {
+            map.put("isDeleted",dto.getIsDeleted());
+        }
+        PageInfo pageInfo = warehouseService.warehouseList(map);
+        PageBaseDto baseDto = new PageBaseDto();
+        baseDto.setList(pageInfo.getList());
+        baseDto.setTotal(pageInfo.getTotal());
+        return baseDto;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

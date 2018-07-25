@@ -90,7 +90,7 @@ public class OutWarehousePlanController {
 
     @ApiOperation("计划详细")
     @RequestMapping(value = "/detail",method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_out_plan_detail')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_out_plan_search')")
     public OutWhPlanDto detail(@ApiParam(value = "计划ID",required = true) @RequestParam Long outPlanId,
                              @ApiParam(value = "是否加载配仓",required = true) @RequestParam boolean flag) {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();

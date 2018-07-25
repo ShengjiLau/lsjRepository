@@ -90,12 +90,7 @@ public class ShiftInventoryListApi {
 	@ApiOperation(value = "查询移库单列表")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_get')")
 	public JSONObject getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
-		PageBaseDto<ShiftInventoryListDTO> pageBaseDto = new PageBaseDto<ShiftInventoryListDTO>();
-		
-		PageInfo<ShiftInventoryListDTO> pageInfo = shiftInventoryListService.getShiftInventoryList(shiftInventoryListDTO);
-		pageBaseDto.setList(pageInfo.getList());
-		pageBaseDto.setTotal(pageInfo.getTotal());
-		
+		PageBaseDto<ShiftInventoryListDTO> pageBaseDto = shiftInventoryListService.getShiftInventoryList(shiftInventoryListDTO);
 		String message = "移库单列表";
 		return ResponseJsonUtils.successResponseJson(pageBaseDto, message);
 	}
@@ -138,13 +133,9 @@ public class ShiftInventoryListApi {
 	
 	
 	@GetMapping("/inventoryList")
-	@ApiOperation(value = "查询移库单列表")
+	@ApiOperation(value = "查询移库单列表-无权限")
 	public JSONObject getShiftInventoryListWithoutAuthorize(ShiftInventoryListDTO shiftInventoryListDTO) {
-		PageBaseDto<ShiftInventoryListDTO> pageBaseDto = new PageBaseDto<ShiftInventoryListDTO>();
-		PageInfo<ShiftInventoryListDTO> pageInfo = shiftInventoryListService.getShiftInventoryList(shiftInventoryListDTO);
-		pageBaseDto.setList(pageInfo.getList());
-		pageBaseDto.setTotal(pageInfo.getTotal());
-		
+		PageBaseDto<ShiftInventoryListDTO> pageBaseDto = shiftInventoryListService.getShiftInventoryList(shiftInventoryListDTO);
 		String message = "移库单列表";
 		return ResponseJsonUtils.successResponseJson(pageBaseDto, message);
 	}

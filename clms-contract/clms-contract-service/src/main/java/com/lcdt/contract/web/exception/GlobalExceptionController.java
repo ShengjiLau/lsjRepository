@@ -18,7 +18,8 @@ public class GlobalExceptionController {
 	
 	@ExceptionHandler(Exception.class)
 	public JSONObject handlerAllException(Exception e) {
-		return ResponseJsonUtils.failedResponseJson(null, "系统服务异常，请稍后再试！");
+		String message = "系统服务异常，请稍后再试！";
+		return ResponseJsonUtils.failedResponseJsonWithoutData(message);
 	}
 	
 }

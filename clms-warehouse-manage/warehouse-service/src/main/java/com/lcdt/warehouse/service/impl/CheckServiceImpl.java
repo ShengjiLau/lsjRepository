@@ -157,4 +157,10 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, TCheck> implement
 
         return true;
     }
+
+
+    @Override
+    public int selectWattingNum(CheckParamDto paramDto){
+        return checkMapper.countNumByParam(paramDto);
+    }
 }
