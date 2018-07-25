@@ -36,7 +36,7 @@ test:
     - mvn  test
 
 sonar:
-  stage: test
+  stage: build
   script:
     - mvn --batch-mode verify sonar:sonar \
           -Dsonar.host.url=http://192.168.1.21:9000 \
