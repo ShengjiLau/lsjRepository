@@ -322,7 +322,7 @@ public class WaybillServiceImpl implements WaybillService {
             //多线程并行处理需要定位的运单
             list.parallelStream().forEach(waybill -> {
                 //定位
-                JSONObject jsonObject = locationService.queryLocation(waybill.getCompanyId(), waybill.getDriverPhone(),waybill.getDriverName(),waybill.getWaybillCode());
+                JSONObject jsonObject = locationService.queryLocation(waybill.getCompanyId(), waybill.getDriverPhone(),waybill.getDriverName(),waybill.getCreateName(),waybill.getWaybillCode());
                 logger.info("waybillCode：" + waybill.getWaybillCode() + "；定位公司的companyId：" + waybill.getCompanyId() + "； code：" + jsonObject.getString("code") + "； message：" + jsonObject.getString("message"));
 
                 //new 一个定位日志对象

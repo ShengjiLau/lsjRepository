@@ -43,11 +43,11 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public JSONObject queryLocation(Long companyId, String mobile, String driverName){
-        return  this.queryLocation(companyId,mobile,driverName,null);
+        return  this.queryLocation(companyId,mobile,driverName,null,null);
     }
 
     @Override
-    public JSONObject queryLocation(Long companyId, String mobile,String driverName, String serialNo) {
+    public JSONObject queryLocation(Long companyId, String mobile,String driverName,String userName, String serialNo) {
 
         JSONObject jsonObject = new JSONObject();
 
@@ -69,7 +69,7 @@ public class LocationServiceImpl implements LocationService {
             //已激活
             if (resid1 == 0) {
                 //查询正常扣费
-                balanceCheckBo.deductionGms(companyId,mobile,driverName,serialNo);
+                balanceCheckBo.deductionGms(companyId,mobile,driverName,userName,serialNo);
                 Driver driver = new Driver();
                 driver.setDriverPhone(mobile);
                 driver.setCurrentLocation(result.getString("location"));

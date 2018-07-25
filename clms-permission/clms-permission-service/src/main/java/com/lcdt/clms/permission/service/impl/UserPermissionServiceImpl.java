@@ -8,12 +8,10 @@ import com.lcdt.clms.permission.service.SysRoleService;
 import com.lcdt.clms.permission.service.UserPermissionService;
 import com.lcdt.clms.permission.service.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by ss on 2017/10/12.
@@ -56,22 +54,20 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 
 	@Transactional
 	public List<Permission> rolePermissions(){
-		return null;
+		return new ArrayList<>();
 	}
 
 
 	@Transactional(readOnly = true)
 	@Override
 	public List<Permission> getAllPermissionInfo(){
-		List<Permission> permissions = permissionDao.selectAll();
-		return permissions;
+		return permissionDao.selectAll();
 	}
 
 	@Transactional(readOnly = true)
 	@Override
 	public List<Permission> getPermissionByCategory(String category) {
-		List<Permission> permissions = permissionDao.selectByCategory(category);
-		return permissions;
+		return permissionDao.selectByCategory(category);
 	}
 
 	/**
@@ -85,7 +81,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 	public List<Permission> userPermissions(Long userId, Long companyId) {
 		List<Role> userRole = userRoleService.getUserRole(userId, companyId);
 		if (userRole == null || userRole.isEmpty()) {
-			return null;
+			return new ArrayList<>();
 		}
 		ArrayList<Permission> permissions = new ArrayList<>();
 		for (Role role : userRole) {
@@ -105,8 +101,7 @@ public class UserPermissionServiceImpl implements UserPermissionService {
 
 	@Transactional(readOnly = true)
 	public List<Permission> selectRolePermissions(Long roleId) {
-		List<Permission> rolePermissions = rolePermissionDao.selectByRoleId(roleId);
-		return rolePermissions;
+		return rolePermissionDao.selectByRoleId(roleId);
 	}
 
 	@Override

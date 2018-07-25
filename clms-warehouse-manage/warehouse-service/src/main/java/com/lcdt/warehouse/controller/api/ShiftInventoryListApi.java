@@ -139,8 +139,8 @@ public class ShiftInventoryListApi {
 		String message = "移库单列表";
 		return ResponseJsonUtils.successResponseJson(pageBaseDto, message);
 	}
-	
-	
+
+
 	/**
 	 * 新建时验证传入的移库单信息
 	 * @param shiftInventoryListDTO
@@ -185,10 +185,10 @@ public class ShiftInventoryListApi {
 		return null;
 	}
 	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 }
