@@ -34,7 +34,6 @@ test:
     - pwd
     - mvn  test
 
-
 code_analyze:
   stage: build
   script:
