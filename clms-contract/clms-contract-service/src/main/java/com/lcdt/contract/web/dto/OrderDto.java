@@ -53,6 +53,8 @@ public class OrderDto extends Order  implements Serializable{
 	private String trafficPlanStatus;
 	
 	private Integer warehousePlanStatus;
+	
+	private short purchasePuSalesStatus;
 
 	public int getPageNum() {
 		return pageNum;
@@ -142,5 +144,12 @@ public class OrderDto extends Order  implements Serializable{
 	public void setPaymentType(Integer paymentType) {
 		this.paymentType = paymentType;
 	}
+	public short getPurchasePuSalesStatus() {
+		return purchasePuSalesStatus;
+	}
+	public void setPurchasePuSalesStatus(short purchasePuSalesStatus) {
+		this.purchasePuSalesStatus = purchasePuSalesStatus;
+	}
+	
 	
 }
