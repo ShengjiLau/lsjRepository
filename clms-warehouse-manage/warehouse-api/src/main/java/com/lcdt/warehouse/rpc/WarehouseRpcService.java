@@ -52,5 +52,10 @@ public interface WarehouseRpcService {
     
     OutWarehousePlan getOutWarehousePlanBySerialNo(String serialNo);
 
-
+    /**
+     * 根据groupIds和companyId查询
+     * @param warehouse
+     * @return
+     */
+    List<Warehouse> queryWarehouseByGroupIdAndCmpId(Warehouse warehouse);
 }

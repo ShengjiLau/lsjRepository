@@ -1,18 +1,24 @@
 package com.lcdt.userinfo.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.clms.permission.exception.EmployeeExistException;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.userinfo.dao.CustomerMapper;
 import com.lcdt.userinfo.dao.GroupMapper;
 import com.lcdt.userinfo.dao.UserGroupRelationMapper;
 import com.lcdt.userinfo.dao.UserMapper;
+import com.lcdt.userinfo.dto.CustomerExistParams;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserGroupRelation;
 import com.lcdt.userinfo.service.GroupManageService;
+import com.lcdt.util.ClmsBeanUtil;
+import com.lcdt.warehouse.entity.Warehouse;
+import com.lcdt.warehouse.rpc.WarehouseRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +49,9 @@ public class GroupManageServiceImpl implements GroupManageService {
 
 	@Autowired
 	private CustomerMapper customerMapper;
+
+	@Reference
+	private WarehouseRpcService warehouseRpcService;
 
 	public static Logger logger = LoggerFactory.getLogger(GroupManageServiceImpl.class);
 
@@ -89,6 +98,9 @@ public class GroupManageServiceImpl implements GroupManageService {
 		if (list!=null && list.size()>0) {
 			throw new DeptmentExistException("业务组已存在");
 		} else {
+			if(this.isExistEmployeeOrCustomer(group)){
+				throw new EmployeeExistException("有隶属与该项目组的员工、客户或仓库，不能停用！");
+			}
 			groupDao.updateByPrimaryKey(group);
 		}
 		return group;
@@ -327,5 +339,36 @@ public class GroupManageServiceImpl implements GroupManageService {
 		List<Customer> list  = customerMapper.selectByCondition(m);
 		PageInfo pageInfo = new PageInfo(list);
 		return pageInfo;
+	}
+
+	/**
+	 * 项目内是否存在员工或客户
+	 * @param group
+	 * @return
+	 */
+	private Boolean isExistEmployeeOrCustomer(Group group){
+		if(null != group.getValid() && !group.getValid()){
+			//项目组关系，有没有员工
+			List<UserGroupRelation> groupRelationList=relationDao.selectByGroupIdAndCmpId(group.getGroupId(),group.getCompanyId());
+			if(null != groupRelationList && !groupRelationList.isEmpty()){
+				return true;
+			}
+			//客户
+			CustomerExistParams params=new CustomerExistParams();
+			params.setCompanyId(group.getCompanyId()).setGroupIds("find_in_set('"+group.getGroupId()+"',group_ids)");
+			List<Customer> customerList=customerMapper.selectByCondition(ClmsBeanUtil.beanToMap(params));
+			if(null != customerList && !customerList.isEmpty()){
+				return true;
+			}
+			//仓库
+			Warehouse warehouse=new Warehouse();
+			warehouse.setCompanyId(group.getCompanyId());
+			warehouse.setGroupIds("find_in_set('"+group.getGroupId()+"',group_ids)");
+			List<Warehouse> warehouseList=warehouseRpcService.queryWarehouseByGroupIdAndCmpId(warehouse);
+			if(null != warehouseList && !warehouseList.isEmpty()){
+				return true;
+			}
+		}
+		return false;
 	}
 }
