@@ -117,7 +117,7 @@ public class PayableReconcileApi {
 		String message = null;
 		if(reconcileDto != null) {
 			message = "请求成功";
-			return ResponseJsonUtils.successResponseJsonWithoutData(message);
+			return ResponseJsonUtils.successResponseJson(reconcileDto, message);
 		}else {
 			message = "获取对账单详细信息失败";
 			throw new RuntimeException(message);
@@ -135,7 +135,7 @@ public class PayableReconcileApi {
 	 * @param bindingResult
 	 * @return
 	 */
-	public String validReconcile(ReconcileListDto reconcileListDto) {
+	private String validReconcile(ReconcileListDto reconcileListDto) {
 		if(null == reconcileListDto.getReconcileList() || 0 == reconcileListDto.getReconcileList().size()) {
 			return "请至少添加一条对账单信息";
 		}
@@ -180,7 +180,7 @@ public class PayableReconcileApi {
 	 * @param bindingResult
 	 * @return
 	 */
-	public JSONObject validResponse(BindingResult bindingResult) {
+	private JSONObject validResponse(BindingResult bindingResult) {
 		JSONArray jsonArray = new JSONArray();
 		if(bindingResult.hasErrors()) {
 			bindingResult.getAllErrors().
