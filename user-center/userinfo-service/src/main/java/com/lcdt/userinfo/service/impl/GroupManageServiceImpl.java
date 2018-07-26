@@ -348,17 +348,19 @@ public class GroupManageServiceImpl implements GroupManageService {
 	 */
 	private Boolean isExistEmployeeOrCustomer(Group group){
 		if(null != group.getValid() && !group.getValid()){
+			//项目组关系，有没有员工
 			List<UserGroupRelation> groupRelationList=relationDao.selectByGroupIdAndCmpId(group.getGroupId(),group.getCompanyId());
 			if(null != groupRelationList && !groupRelationList.isEmpty()){
 				return true;
 			}
+			//客户
 			CustomerExistParams params=new CustomerExistParams();
 			params.setCompanyId(group.getCompanyId()).setGroupIds("find_in_set('"+group.getGroupId()+"',group_ids)");
 			List<Customer> customerList=customerMapper.selectByCondition(ClmsBeanUtil.beanToMap(params));
 			if(null != customerList && !customerList.isEmpty()){
 				return true;
 			}
-
+			//仓库
 			Warehouse warehouse=new Warehouse();
 			warehouse.setCompanyId(group.getCompanyId());
 			warehouse.setGroupIds("find_in_set('"+group.getGroupId()+"',group_ids)");
