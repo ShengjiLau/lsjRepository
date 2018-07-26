@@ -61,7 +61,7 @@ public class WaybillSenderNotify {
                 DefaultNotifyReceiver defaultNotifyReceiver = new DefaultNotifyReceiver();
                 User shipperUser = null;
                 Company company = null;
-                if (dao.getSplitGoodsId() != null && !dao.getSplitGoodsId().equals("")) {
+                if (dao.getSplitGoodsId() != null && !"".equals(dao.getSplitGoodsId())) {
                     //发送给货主-->派单人
                     Map splitGoodsMap = new HashMap();
                     splitGoodsMap.put("splitGoodsId", dao.getSplitGoodsId());
