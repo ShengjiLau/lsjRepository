@@ -93,7 +93,7 @@
         and group_id &lt;&gt; #{groupId,jdbcType=BIGINT}
       </if>
       <if test="isValid != null">
-        and is_valid &lt;&gt; #{isValid,jdbcType=BIT}
+        and is_valid = #{isValid,jdbcType=BIT}
       </if>
     </trim>
   </select>
