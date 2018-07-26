@@ -187,6 +187,12 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="出入库计划流水号")
 	private String warehousePlan;
 	
+	@ApiModelProperty(value="原始订单单号")
+	private String originOrderNo;
+	
+	@ApiModelProperty(value="原始订单id")
+	private Long originOrderId;
+	
     private static final long serialVersionUID = 13333L;
 
     public Long getOrderId() {
@@ -935,6 +941,25 @@ public class Order implements Serializable {
 
 	public void setWarehousePlan(String warehousePlan) {
 		this.warehousePlan = warehousePlan;
+	}
+
+
+	public String getOriginOrderNo() {
+		return originOrderNo;
+	}
+
+
+	public void setOriginOrderNo(String originOrderNo) {
+		this.originOrderNo = originOrderNo;
+	}
+
+	public void setOriginOrderId(Long originOrderId) {
+		this.originOrderId = originOrderId;
+	}
+
+
+	public Long getOriginOrderId() {
+		return originOrderId;
 	}
 
 
