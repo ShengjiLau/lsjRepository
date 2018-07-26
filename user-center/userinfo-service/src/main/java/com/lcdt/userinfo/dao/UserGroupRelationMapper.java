@@ -65,5 +65,11 @@ public interface UserGroupRelationMapper {
 
     void removeUserGroupRelation(@Param("userId") Long userId,@Param("companyId") Long companyId);
 
-
+    /**
+     * 根据 groupId 和 companyId 查询
+     * @param groupId
+     * @param companyId
+     * @return
+     */
+    List<UserGroupRelation> selectByGroupIdAndCmpId(@Param("groupId") Long groupId,@Param("companyId") Long companyId);
 }

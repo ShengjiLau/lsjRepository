@@ -134,4 +134,10 @@
     WHERE user_id = #{userId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </delete>
 
+  <select id="selectByGroupIdAndCmpId" resultMap="BaseResultMap">
+    select relation_id, user_id, company_id, group_id
+    from t_uc_user_group
+    WHERE group_id = #{groupId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </select>
+
 </mapper>

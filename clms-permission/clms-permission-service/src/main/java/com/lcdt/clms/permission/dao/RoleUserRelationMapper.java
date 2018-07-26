@@ -1,6 +1,5 @@
 package com.lcdt.clms.permission.dao;
 
-import com.lcdt.clms.permission.model.Role;
 import com.lcdt.clms.permission.model.RoleUserRelation;
 import org.apache.ibatis.annotations.Param;
 
@@ -59,4 +58,11 @@ public interface RoleUserRelationMapper {
 
     void removeUserRoleRelation(@Param("userId") Long userId,@Param("companyId") Long companyId);
 
+    /**
+     * 根据roleId 和 companyId 查询
+     * @param roleId
+     * @param companyId
+     * @return
+     */
+    List<RoleUserRelation> selectByRoleIdAndCompId(@Param("roleId") Long roleId,@Param("companyId") Long companyId);
 }

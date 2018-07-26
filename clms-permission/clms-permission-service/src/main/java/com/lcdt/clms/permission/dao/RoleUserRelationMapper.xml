@@ -104,4 +104,10 @@
     and company_id = #{companyId,jdbcType=BIGINT}
   </delete>
 
+  <select id="selectByRoleIdAndCompId" resultMap="BaseResultMap">
+    SELECT * from role_user_relation
+    WHERE
+     role_id = #{roleId,jdbcType = BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
+  </select>
+
 </mapper>
