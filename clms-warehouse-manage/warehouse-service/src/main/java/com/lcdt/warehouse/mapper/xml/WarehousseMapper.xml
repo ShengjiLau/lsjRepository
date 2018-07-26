@@ -165,4 +165,19 @@
     </if>
   </select>
 
+  <select id="selectByGroupIdAndCmpId" parameterType="java.util.Map" resultMap="BaseResultMapDto">
+    select wh_id, wh_name, wh_code, wh_type, wh_status, customer_id, customer_name, principal,
+    mobile, mail, tel_num, fax, province, city, county, detail_address, post_code, remark,
+    create_id, create_name, create_date, update_id, update_name, update_time, is_deleted,
+    company_id, group_ids
+    from t_warehouse
+    <where>
+      company_id = #{companyId,jdbcType=BIGINT}
+      <if test="groupIds!=null">
+        and  ${groupIds}
+      </if>
+    </where>
+    order by wh_id desc
+  </select>
+
 </mapper>

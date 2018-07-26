@@ -159,4 +159,9 @@ public class WarehouseRpcServiceImpl implements WarehouseRpcService{
 	public OutWarehousePlan getOutWarehousePlanBySerialNo(String serialNo) {
 		return OutWarehousePlanMapper.getOutWarehousePlanBySerialCode(serialNo);
 	}
+
+	@Override
+	public List<Warehouse> queryWarehouseByGroupIdAndCmpId(Warehouse warehouse){
+        return warehousseMapper.selectByGroupIdAndCmpId(warehouse);
+    }
 }
