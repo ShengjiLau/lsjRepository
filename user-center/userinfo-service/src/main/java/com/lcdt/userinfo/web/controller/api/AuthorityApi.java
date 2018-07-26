@@ -79,10 +79,10 @@ public class AuthorityApi {
 	@RequestMapping(value = "/getcompanyRole", method = RequestMethod.GET)
 	@ApiOperation("获取所有角色信息")
 	@PreAuthorize("hasAnyAuthority('role_list') or hasRole('ROLE_SYS_ADMIN')")
-	public PageResultDto<Role> getCompanyRole(Integer pageNo,Integer pageSize) {
+	public PageResultDto<Role> getCompanyRole(Integer pageNo,Integer pageSize,Boolean valid) {
 		Long companyId = SecurityInfoGetter.getCompanyId();
 		PageHelper.startPage(pageNo, pageSize);
-		List<Role> companyRole = roleService.getCompanyRole(companyId);
+		List<Role> companyRole = roleService.getCompanyRole(companyId,valid);
 		PageResultDto pageResultDto = new PageResultDto(companyRole);
 		return pageResultDto;
 	}
