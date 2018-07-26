@@ -639,9 +639,11 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	@Transactional(isolation = Isolation.REPEATABLE_READ, timeout = 30, propagation = Propagation.REQUIRED, rollbackForClassName = {"RuntimeException","Exception"})
 	public int salesOrderToPurchaseOrder(Long orderId) {
-		Order salesOrder = orderMapper.selectByPrimaryKey(orderId);
+		OrderDto salesOrderDto = orderMapper.selectByPrimaryKey(orderId);
+		Order salesOrder = new Order();
+		BeanUtils.copyProperties(salesOrderDto, salesOrder);
 		List<OrderProduct> salesOrderProductList = orderProductMapper.getOrderProductByOrderId(orderId);
-		if (null == salesOrder ) {
+		if (null == salesOrder) {
 			return OrderVO.ZERO_INTEGER;
 		}
 		Order purchaseOrder = new Order();
@@ -656,18 +658,21 @@ public class OrderServiceImpl implements OrderService {
 		purchaseOrder.setReceiveDistrict(salesOrder.getReceiveDistrict());
 		purchaseOrder.setReceiveAddress(salesOrder.getReceiveAddress());
 		purchaseOrder.setIsDraft(OrderVO.NO_PUBLISHI);
+		purchaseOrder.setOriginOrderId(salesOrder.getOrderId());
+		purchaseOrder.setOriginOrderNo(salesOrder.getOrderNo());
 		if (null != salesOrderProductList && 0 != salesOrderProductList.size()) {
 			List<OrderProduct> purchaseOrderProductList = new ArrayList<OrderProduct>(salesOrderProductList.size());
 			for (OrderProduct salesOrderProduct: salesOrderProductList) {
 				OrderProduct purchaseOrderProduct = new OrderProduct();
 				BeanUtils.copyProperties(salesOrderProduct, purchaseOrderProduct);
 				purchaseOrderProduct.setPrice(null);
+				purchaseOrderProduct.setOpId(null);
 				purchaseOrderProductList.add(purchaseOrderProduct);
 			}
 			nonautomaticMapper.insertOrderProductByBatch(purchaseOrderProductList);
 		}
 		
-		int result = orderMapper.insertOrder(salesOrder);
+		int result = orderMapper.insertOrder(purchaseOrder);
 		return result;
 	}
 
