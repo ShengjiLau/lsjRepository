@@ -128,12 +128,14 @@ public class GroupApi {
     @RequestMapping(value = "/groupList", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('group_list')")
     public GroupResultDto groupList(@ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
-                                    @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
+                                    @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize,
+                                    @ApiParam(value = "是否停用") @RequestParam(required = false) Boolean isValid) {
         Long companyId = SecurityInfoGetter.getCompanyId();
         Map map = new HashMap();
         map.put("companyId", companyId);
         map.put("page_no", pageNo);
         map.put("page_size", pageSize);
+        map.put("isValid",isValid);
         PageInfo pageInfo = groupManageService.groupList(map);
         GroupResultDto rDto = new GroupResultDto();
         rDto.setList(pageInfo.getList());
