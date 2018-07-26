@@ -191,5 +191,25 @@ public class SalesOrderApi {
 	}
 	
 	
+	@ApiOperation("销售单推送采购单")
+	@PostMapping("/topurchase")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_to_purchase')")
+	public JSONObject salesOrderToPurchaseOrder(Long orderId) {
+		int result = orderService.salesOrderToPurchaseOrder(orderId);
+		String message = null;
+		if (result > 0) {
+			message = "操作成功!";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
+		}else {
+			message = "操作失败";
+			throw new RuntimeException(message);
+		}
+	}
+	
+	
+	
+	
+	
+	
 
 }
