@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService,ApplicationEventPublisherAwa
 		registerUser.setLastLoginTime(new Date());
 		registerUser.setNickName(registerDto.getName());
 		registerUser.setRegisterFrom(registerDto.getRegisterFrom());
-		int insert = userMapper.insert(registerUser);
+		userMapper.insert(registerUser);
 		//发布应用事件
 		applicationEventPublisher.publishEvent(new RegisterUserEvent(registerUser));
 		return registerUser;
@@ -112,10 +112,7 @@ public class UserServiceImpl implements UserService,ApplicationEventPublisherAwa
 	@Override
 	public boolean isPhoneBeenRegister(String phone) {
 		User user = userMapper.queryByUserPhone(phone);
-		if (user == null) {
-			return false;
-		}
-		return true;
+		return user == null ? false : true;
 	}
 
 	@Transactional

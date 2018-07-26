@@ -16,7 +16,7 @@ public interface UserRoleService {
 
 	List<Role> getUserRole(Long userId, Long companyId);
 
-	List<Role> getCompanyRole(Long companyId);
+	List<Role> getCompanyRole(Long companyId,Boolean valid);
 
 	Role createCompanyRole(Long companyId, Role insertRole) throws RoleExistException, RoleExistException;
 

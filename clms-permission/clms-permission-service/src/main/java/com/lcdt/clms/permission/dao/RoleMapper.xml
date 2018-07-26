@@ -48,7 +48,12 @@
     <select id="selectByCompanyId" resultMap="BaseResultMap">
     select role_id, role_name, role_comment, role_company_id,valid
     from role
-    WHERE role_company_id = #{companyId,jdbcType=INTEGER}
+    <where>
+        role_company_id = #{companyId,jdbcType=INTEGER}
+        <if test="valid != null">
+            and valid=#{valid,jdbcType=BIT}
+        </if>
+    </where>
   </select>
     <select id="selectUserCompanyRoles" resultMap="BaseResultMap">
   SELECT r.* from

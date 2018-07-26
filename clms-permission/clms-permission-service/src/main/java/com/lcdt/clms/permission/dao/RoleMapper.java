@@ -47,7 +47,7 @@ public interface RoleMapper {
      */
     int updateByPrimaryKey(Role record);
 
-    List<Role> selectByCompanyId(Long companyId);
+    List<Role> selectByCompanyId(@Param("companyId") Long companyId,@Param("valid") Boolean valid);
 
     List<Role> selectUserCompanyRoles(@Param("userId") Long userId, @Param("companyId") Long companyId);
 

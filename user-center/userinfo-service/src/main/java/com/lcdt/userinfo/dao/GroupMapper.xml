@@ -92,6 +92,9 @@
       <if test="groupId != null">
         and group_id &lt;&gt; #{groupId,jdbcType=BIGINT}
       </if>
+      <if test="isValid != null">
+        and is_valid &lt;&gt; #{isValid,jdbcType=BIT}
+      </if>
     </trim>
   </select>
 

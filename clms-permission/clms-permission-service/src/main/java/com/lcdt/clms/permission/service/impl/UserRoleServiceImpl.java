@@ -4,6 +4,7 @@ import com.lcdt.clms.permission.dao.PermissionMapper;
 import com.lcdt.clms.permission.dao.RoleMapper;
 import com.lcdt.clms.permission.dao.RolePermissionMapper;
 import com.lcdt.clms.permission.dao.RoleUserRelationMapper;
+import com.lcdt.clms.permission.exception.EmployeeExistException;
 import com.lcdt.clms.permission.exception.RoleExistException;
 import com.lcdt.clms.permission.model.Permission;
 import com.lcdt.clms.permission.model.Role;
@@ -70,8 +71,8 @@ public class UserRoleServiceImpl implements UserRoleService {
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public List<Role> getCompanyRole(Long companyId) {
-		List<Role> roles = userRoleDao.selectByCompanyId(companyId);
+	public List<Role> getCompanyRole(Long companyId,Boolean valid) {
+		List<Role> roles = userRoleDao.selectByCompanyId(companyId,valid);
 		return roles;
 	}
 
@@ -104,6 +105,9 @@ public class UserRoleServiceImpl implements UserRoleService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Role updateCompanyRole(Role updatedRole) {
+		if(isExistEmployee(updatedRole)){
+			throw new EmployeeExistException("有隶属与该角色的员工，不能停用！");
+		}
 		userRoleDao.updateByPrimaryKey(updatedRole);
 		return updatedRole;
 	}
@@ -248,6 +252,21 @@ public class UserRoleServiceImpl implements UserRoleService {
 	@Override
 	public List<Role> userCompanyRole(Long userId, Long companyId) {
 		return userRoleDao.selectUserCompanyRoles(userId, companyId);
+	}
+
+	/**
+	 * 如果停用需要判断有没有员工，如果有，不能停用，如果没有，可以停用
+	 * @param role
+	 * @return
+	 */
+	private Boolean isExistEmployee(Role role){
+		if(null != role.getValid() && !role.getValid()){
+			List<RoleUserRelation> list=roleUserRelationDao.selectByRoleIdAndCompId(role.getRoleId(),role.getRoleCompanyId());
+			if(null != list && !list.isEmpty()){
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
