@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
@@ -75,6 +76,7 @@ public class OverviewServiceImpl implements OverviewService {
   * 查询订单合同概览，主要逻辑为查询相应时间段的订单，再在业务逻辑里进行各项统计，没有使用复杂的sql语句直接进行统计。
   */
 	@Override
+	@Transactional(readOnly = true)
 	public OrderOverviewDto getOverviewDtoList(OverviewDto overviewDto) {
 		List<String> dateList = finddatesList(overviewDto.getBeginTime(), overviewDto.getEndTime());
 		if (dateList.size() > 30) {
@@ -202,6 +204,7 @@ public class OverviewServiceImpl implements OverviewService {
 	
 	
 	@Override
+	@Transactional(readOnly = true)
 	public HashMap<String,Integer> countOrder(OverviewDto overviewDto){
 		overviewDto.setCompanyId(SecurityInfoGetter.getCompanyId());
 		HashMap<String,Integer> map = new HashMap<String,Integer>();
@@ -218,6 +221,7 @@ public class OverviewServiceImpl implements OverviewService {
 	 * 统计采购订单和销售订单某时间段内的数量以及对应的某天的数量，用于生成首页。
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public OrderCountDto getOrderCount(OverviewDto overviewDto) {
 		List<String> dateList = finddatesList(overviewDto.getBeginTime(), overviewDto.getEndTime());
 		if (dateList.size() > 30) {
@@ -262,6 +266,7 @@ public class OverviewServiceImpl implements OverviewService {
 	 * 依据收付款状况查询订单
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public PageBaseDto<OrderDto> getOrderListByPayment(OrderDto orderDto){
 		orderDto.setCompanyId(SecurityInfoGetter.getCompanyId());
 		orderDto.setIsDraft( OrderVO.ALREADY_PUBLISHI);

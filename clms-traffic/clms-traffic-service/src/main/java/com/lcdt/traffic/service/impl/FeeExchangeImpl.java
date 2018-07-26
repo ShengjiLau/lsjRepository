@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -36,6 +39,7 @@ public class FeeExchangeImpl implements FeeExchangeService {
 	private ReconcileMapper reconcileMapper;
 	
 	@Override
+	@Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED, timeout = 30, rollbackForClassName = {"RuntimeException","Exception"})
 	public int insertFeeExchangeByBatch(FeeExchangeListDto feeExchangeListDto) {
 		Reconcile reconcile = reconcileMapper.selectByPrimaryKey(feeExchangeListDto.getReconcileId());	
 		for(FeeExchange fe : feeExchangeListDto.getFeeExchangeList()) {
@@ -56,6 +60,7 @@ public class FeeExchangeImpl implements FeeExchangeService {
 	 * 通过相应的条件查询收付款记录
 	 */
 	@Override
+	@Transactional(readOnly = true)
 	public PageBaseDto<FeeExchange> getFeeExchangeList(FeeExchangeDto feeExchangeDto) {
 		if(feeExchangeDto.getPageNo() < 1) {
 			feeExchangeDto.setPageNo(ConstantVO.PAGE_NUM);

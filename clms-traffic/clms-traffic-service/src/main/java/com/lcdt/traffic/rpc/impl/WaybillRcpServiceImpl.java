@@ -43,9 +43,9 @@ import java.util.stream.Collectors;
  */
 @Transactional
 @Service
-public class WaybillRcpServiceImp implements WaybillRpcService {
+public class WaybillRcpServiceImpl implements WaybillRpcService {
 
-    Logger logger = LoggerFactory.getLogger(WaybillRcpServiceImp.class);
+    Logger logger = LoggerFactory.getLogger(WaybillRcpServiceImpl.class);
 
     @Autowired
     private WaybillMapper waybillMapper;
@@ -92,6 +92,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
     @Reference
     private CompanyServiceCountService companyServiceCountService;
 
+    @Override
     public Waybill addWaybill(WaybillDto waybillDto) {
 
         //先判断是否还有剩于运单服务条数(后面计费用)
@@ -456,7 +457,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         Waybill waybill = null;
         Map map = ClmsBeanUtil.beanToMap(dto);
         if (dto.getWaybillStatus() == ConstantVO.WAYBILL_STATUS_IS_UNLOADING) {
-            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds());
             waybill = resultList.get(0);
             if (waybill != null) {
                 List<String> phoneList = new ArrayList<>();
@@ -475,7 +476,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         int result = waybillMapper.updateOwnWaybillStatus(map);
 
         if (result > 0) {
-            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds());
             waybill = resultList.get(0);
         } else {
             throw new RuntimeException("修改失败");
@@ -494,7 +495,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         Waybill waybill = null;
         Map map = ClmsBeanUtil.beanToMap(dto);
         if (dto.getWaybillStatus() == ConstantVO.WAYBILL_STATUS_IS_UNLOADING) {
-            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds());
             waybill = resultList.get(0);
             if (waybill != null) {
                 List<String> phoneList = new ArrayList<>();
@@ -518,7 +519,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         modifyWaybillPlanInfo(map);
 
         if (result > 0) {
-            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds());
             waybill = resultList.get(0);
         } else {
             throw new RuntimeException("修改失败");
@@ -556,7 +557,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         int result = waybillMapper.updateOwnWaybillStatus(map);
 
         if (result > 0) {
-            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds());
             waybill = resultList.get(0);
         } else {
             throw new RuntimeException("修改失败");
@@ -574,7 +575,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
         waybillSenderNotify.customerReceiptSendNotify(dto.getWaybillIds(), dto.getUpdateId());
 
         if (result > 0) {
-            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds().toString());
+            List<WaybillDao> resultList = waybillMapper.selectWaybillByWaybillIds(dto.getWaybillIds());
             waybill = resultList.get(0);
         } else {
             throw new RuntimeException("修改失败");
@@ -656,8 +657,8 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
                 List<Driver> driverList = driverService.getGpsInfo(phoneList);
                 for (Driver driver : driverList) {
                     if (driver.getDriverPhone() != null && driver.getDriverPhone().equals(waybill.getDriverPhone())) {
-//                        map.put("longitude",1);
-//                        map.put("latitude",1);
+                        map.put("longitude",driver.getLatitude());
+                        map.put("latitude",driver.getLongitude());
                         map.put("unloadLocation", driver.getCurrentLocation());
                         map.put("unloadTime", new Date());
                     }
@@ -725,9 +726,9 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             List<WaybillDao> list = waybillMapper.selectWaybillByIdOrPlanId(map);
             if (list != null && list.size() > 0) {
                 for (WaybillDao dao : list) {
-                    if (dao.getWaybillPlanId() != null && !dao.getWaybillPlanId().equals("")) {
+                    if (dao.getWaybillPlanId() != null && !"".equals(dao.getWaybillPlanId())) {
                         List<WaybillItems> itemsList = dao.getWaybillItemsList();
-                        List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<SplitGoodsDetail>();
+                        List<SplitGoodsDetail> splitGoodsDetailList = new ArrayList<>();
                         for (WaybillItems item : itemsList) {
                             //根据派单货物明细id更新派单货物明细数量
                             SplitGoodsDetail sp = new SplitGoodsDetail();
@@ -757,7 +758,7 @@ public class WaybillRcpServiceImp implements WaybillRpcService {
             if (list != null && list.size() > 0) {
                 for (Waybill waybill : list) {
                     if (waybill != null) {
-                        if (waybill.getWaybillPlanId() != null && !waybill.getWaybillPlanId().equals("")) {
+                        if (waybill.getWaybillPlanId() != null) {
                             map.put("waybillPlanId", waybill.getWaybillPlanId());
                             List<Waybill> waybillList = waybillMapper.selectWaybillByPlanId(map);
                             boolean flag = true;

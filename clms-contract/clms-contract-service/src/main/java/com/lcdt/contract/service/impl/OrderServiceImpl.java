@@ -33,6 +33,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.dubbo.config.annotation.Reference;
@@ -62,7 +64,6 @@ import org.springframework.util.StringUtils;
  * @date 2018年3月2日下午2:31:06
  */
 @Service
-@Transactional
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
@@ -96,6 +97,7 @@ public class OrderServiceImpl implements OrderService {
     private ContractNotifyProducer producer;
     
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ, timeout = 30, rollbackForClassName = {"RuntimeException","Exception"})
     public int addOrder(OrderDto orderDto) {
     	Long UserId = SecurityInfoGetter.getUser().getUserId();
 		Long companyId = SecurityInfoGetter.getCompanyId();
@@ -204,6 +206,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED, rollbackForClassName = {"RuntimeException","Exception"}, timeout = 30)
     public int modOrder(OrderDto orderDto) {
         BigDecimal aTotal = OrderVO.ZERO_VALUE;
         if (null != orderDto.getOrderProductList() && orderDto.getOrderProductList().size() != 0) {
@@ -282,13 +285,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED , propagation = Propagation.REQUIRED, timeout = 30, rollbackForClassName = {"RuntimeException","Exception"})
     public int delOrder(Long orderId) {
         int result = orderMapper.deleteByPrimaryKey(orderId);
-        //result+=orderProductService.delOrderProductByOrderId(orderId);
         return result;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public  PageBaseDto<OrderDto> OrderList(OrderDto orderDto) {
     	Long UserId = SecurityInfoGetter.getUser().getUserId();//get 创建者
 		Long companyId = SecurityInfoGetter.getCompanyId();//get 公司id	
@@ -315,13 +319,13 @@ public class OrderServiceImpl implements OrderService {
             List<Map> billingRecordList = nonautomaticMapper.billingInfo(orderDtoList,orderDto.getCompanyId());
             for (OrderDto od : orderDtoList) {
             	//通过RPC查询添加计划状态
-            	if (null != od.getTrafficPlan() && !"".equals(od.getTrafficPlan())) {
+            	if (null != od.getTrafficPlan() && !"".equals(od.getTrafficPlan().trim())) {
             		WaybillPlan waybillPlan = trafficRpc.getWaybillPlanBySerialNo(od.getTrafficPlan());
             		if (null != waybillPlan) {
             			od.setTrafficPlanStatus(waybillPlan.getPlanStatus());
             		}
             	}
-            	if (null != od.getWarehousePlan() && !"".equals(od.getWarehousePlan())) {
+            	if (null != od.getWarehousePlan() && !"".equals(od.getWarehousePlan().trim())) {
             		if (0 == od.getOrderType()) {
             			InWarehousePlan inWarehousePlan = warehouseRpcService.getInWarehousePlanBySerialNo(od.getWarehousePlan());
             			od.setWarehousePlanStatus(inWarehousePlan.getPlanStatus());
@@ -382,6 +386,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public OrderDto selectByPrimaryKey(Long orderId) {
         OrderDto orderDto = orderMapper.selectByPrimaryKey(orderId);
         if (null != orderDto) {
@@ -404,6 +409,7 @@ public class OrderServiceImpl implements OrderService {
      * 取消订单时需要判断是否具有付款单，具有付款单的订单不能取消
      */
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, timeout = 30, propagation = Propagation.REQUIRED, rollbackForClassName = {"RuntimeException","Exception"})
     public int updateOrderIsDraft(Long orderId, Short isDraft) {
     	List<PaymentApplication> billingRecordList = paymentApplicationMapper.selectByOrderId(orderId);
     	if (null != billingRecordList && 0 != billingRecordList.size()) {
@@ -416,6 +422,7 @@ public class OrderServiceImpl implements OrderService {
      * 订单生成运输计划
      */
 	@Override
+	@Transactional
 	public Boolean generateTrafficPlan(Long orderId) {
 		int purchaseFlag = 1;
 		int salesFlag = 2;
@@ -518,6 +525,7 @@ public class OrderServiceImpl implements OrderService {
 	 * 采购订单生成入库计划
 	 */
 	@Override
+	@Transactional
 	public Boolean generateInWarehousePlan(Long orderId) {
 		InWhPlanDto inWhPlanAddParamsDto = new InWhPlanDto();
 		Order order = orderMapper.selectByPrimaryKey(orderId);
@@ -575,6 +583,7 @@ public class OrderServiceImpl implements OrderService {
 	 * 销售单生成出库计划
 	 */
 	@Override
+	@Transactional
 	public Boolean generateOutWarehousePlan(Long orderId) {
 		Order order = orderMapper.selectByPrimaryKey(orderId);
 		
@@ -626,8 +635,42 @@ public class OrderServiceImpl implements OrderService {
 	
 	}
 
-	
-	
+
+	@Override
+	@Transactional(isolation = Isolation.REPEATABLE_READ, timeout = 30, propagation = Propagation.REQUIRED, rollbackForClassName = {"RuntimeException","Exception"})
+	public int salesOrderToPurchaseOrder(Long orderId) {
+		Order salesOrder = orderMapper.selectByPrimaryKey(orderId);
+		List<OrderProduct> salesOrderProductList = orderProductMapper.getOrderProductByOrderId(orderId);
+		if (null == salesOrder ) {
+			return OrderVO.ZERO_INTEGER;
+		}
+		Order purchaseOrder = new Order();
+		purchaseOrder.setOrderType(OrderVO.PURCHASE_ORDER);
+		purchaseOrder.setGroupId(salesOrder.getGroupId());
+		purchaseOrder.setReceiveWarehouse(salesOrder.getReceiveWarehouse());
+		purchaseOrder.setWarehouseId(salesOrder.getWarehouseId());
+		purchaseOrder.setReceiverPhone(salesOrder.getReceiverPhone());
+		purchaseOrder.setReceiver(salesOrder.getReceiver());
+		purchaseOrder.setReceiverProvince(salesOrder.getReceiverProvince());
+		purchaseOrder.setReceiverCity(salesOrder.getReceiverCity());
+		purchaseOrder.setReceiveDistrict(salesOrder.getReceiveDistrict());
+		purchaseOrder.setReceiveAddress(salesOrder.getReceiveAddress());
+		purchaseOrder.setIsDraft(OrderVO.NO_PUBLISHI);
+		if (null != salesOrderProductList && 0 != salesOrderProductList.size()) {
+			List<OrderProduct> purchaseOrderProductList = new ArrayList<OrderProduct>(salesOrderProductList.size());
+			for (OrderProduct salesOrderProduct: salesOrderProductList) {
+				OrderProduct purchaseOrderProduct = new OrderProduct();
+				BeanUtils.copyProperties(salesOrderProduct, purchaseOrderProduct);
+				purchaseOrderProduct.setPrice(null);
+				purchaseOrderProductList.add(purchaseOrderProduct);
+			}
+			nonautomaticMapper.insertOrderProductByBatch(purchaseOrderProductList);
+		}
+		
+		int result = orderMapper.insertOrder(salesOrder);
+		return result;
+	}
+
 	
 	
 	

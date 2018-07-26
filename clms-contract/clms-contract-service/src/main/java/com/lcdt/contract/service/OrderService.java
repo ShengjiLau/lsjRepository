@@ -76,6 +76,13 @@ public interface OrderService {
 	 * @return
 	 */
 	Boolean generateOutWarehousePlan(Long orderId);
+	
+	/**
+	 * 
+	 * @param orderId id不能为空
+	 * @return >1成功
+	 */
+	int salesOrderToPurchaseOrder(Long orderId);
 		
 
 }

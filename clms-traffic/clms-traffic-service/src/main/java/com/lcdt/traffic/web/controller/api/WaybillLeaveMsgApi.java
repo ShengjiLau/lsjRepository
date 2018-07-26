@@ -154,7 +154,7 @@ public class WaybillLeaveMsgApi {
     @ApiOperation("客户运单--留言--列表")
     @RequestMapping(value = "/customer/list", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_customer_waybill_leave_msg')")
-    public PageBaseDto<List<WaybillLeaveMsg>> CustomerWaybillLeaveMsgList(WaybillLeaveMsgDto dto,
+    public PageBaseDto<List<WaybillLeaveMsg>> customerWaybillLeaveMsgList(WaybillLeaveMsgDto dto,
                                                                           @ApiParam(value = "页码", required = true) @RequestParam Integer pageNo,
                                                                           @ApiParam(value = "每页显示条数", required = true) @RequestParam Integer pageSize) {
         Long companyId = SecurityInfoGetter.getCompanyId();
