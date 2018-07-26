@@ -170,7 +170,7 @@ public class TrafficRpcImpl implements TrafficRpc {
         BeanUtils.copyProperties(waybillParamsDto, vo);
         vo.setSendOrderType(ConstantVO.PLAN_SEND_ORDER_TPYE_ZHIPAI);
         vo.setCarrierType(ConstantVO.PLAN_CARRIER_TYPE_ELSE); //发布后派单
-        vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //派单中
+        vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //派单 中
         Date dt = new Date();
         if (null != waybillParamsDto.getStartDate() && !"".equals(waybillParamsDto.getStartDate())) {
         	 vo.setStartDate(convertStringToDate(waybillParamsDto.getStartDate())); //当前系统是时间
