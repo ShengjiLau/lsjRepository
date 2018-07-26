@@ -70,8 +70,8 @@ public class UserRoleServiceImpl implements UserRoleService {
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public List<Role> getCompanyRole(Long companyId) {
-		List<Role> roles = userRoleDao.selectByCompanyId(companyId);
+	public List<Role> getCompanyRole(Long companyId,Boolean valid) {
+		List<Role> roles = userRoleDao.selectByCompanyId(companyId,valid);
 		return roles;
 	}
 
