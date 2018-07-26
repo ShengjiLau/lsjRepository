@@ -40,7 +40,7 @@ public class SalesPaymentApplicationApi {
 
     @ApiOperation(value = "收款单列表", notes = "收款单列表")
     @GetMapping("/receiptList")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receipt_payment_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('salse_receipt_list')")
     public PageBaseDto<List<PaymentApplication>> billingRecordApiList(PaymentApplicationDto paymentApplicationDto) {
         //获取登陆人企业id
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -58,7 +58,7 @@ public class SalesPaymentApplicationApi {
 
     @ApiOperation(value = "新增收款单", notes = "采购单新增收款单")
     @PostMapping("/receiptAdd")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receipt_payment_add')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('salse_receipt_add')")
     public JSONObject addPaymentApplication(@RequestBody PaymentApplicationDto paymentApplicationDto){
         //获取登陆人企业id
         Long companyId = SecurityInfoGetter.getCompanyId();
@@ -86,7 +86,7 @@ public class SalesPaymentApplicationApi {
 
     @ApiOperation(value = "收款记录详情", notes = "根据主键查询收款记录详情")
     @GetMapping("/detail")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receipt_payment_record')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('salse_receipt_record')")
     public BaseDto addBillingRecord(Long paId){
         PaymentApplicationDto paymentApplicationDto = paymentApplictionService.paymentApplictionDetail(paId);
         BaseDto baseDto = new BaseDto(paymentApplicationDto);
@@ -95,7 +95,7 @@ public class SalesPaymentApplicationApi {
 
     @ApiOperation(value = "确认收款", notes = "确认收款")
     @PostMapping("/confirm")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receipt_payment_confirm')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('salse_receipt_confirm')")
     public JSONObject confirmPayment(@RequestBody PaymentApplication paymentApplication){
         User user = SecurityInfoGetter.getUser();
         paymentApplication.setPaymentNameSure(user.getRealName());
@@ -114,7 +114,7 @@ public class SalesPaymentApplicationApi {
 
     @ApiOperation(value = "获取客户信息", notes = "根据客户id获取对应客户信息")
     @GetMapping("/customer")
-    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('receipt_payment_list')")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('salse_receipt_list')")
     public BaseDto customerInfo(Long supplierId){
         Long companyId = SecurityInfoGetter.getCompanyId();
         Customer customer = customerRpcService.findCustomerById(supplierId,companyId);
