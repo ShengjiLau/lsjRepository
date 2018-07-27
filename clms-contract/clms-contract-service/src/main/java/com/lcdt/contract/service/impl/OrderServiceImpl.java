@@ -1,6 +1,7 @@
 package com.lcdt.contract.service.impl;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -458,12 +459,12 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setReceiveCounty(order.getReceiveDistrict());
 		    WaybillParamsDto.setReceiveAddress(order.getReceiveAddress());
 		    if (null != order.getSendTime()) {
-		    	WaybillParamsDto.setStartDate(order.getSendTime().toLocaleString());
+		    	WaybillParamsDto.setStartDate(convertDateToString(order.getSendTime()));
 		    }else {
-		    	WaybillParamsDto.setStartDate(new Date().toLocaleString());
+		    	WaybillParamsDto.setStartDate(convertDateToString(new Date()));
 		    }
 		    if (null != order.getReceiveTime()) {
-		    	WaybillParamsDto.setArriveDate(order.getReceiveTime().toLocaleString());
+		    	WaybillParamsDto.setArriveDate(convertDateToString(order.getReceiveTime()));
 		    }else {
 		    	WaybillParamsDto.setArriveDate(null);
 		    }
@@ -478,12 +479,12 @@ public class OrderServiceImpl implements OrderService {
 		    WaybillParamsDto.setSendCounty(order.getReceiveDistrict());
 		    WaybillParamsDto.setSendAddress(order.getReceiveAddress());
 		    if (null != order.getReceiveTime()) {
-		    	WaybillParamsDto.setStartDate(order.getReceiveTime().toLocaleString());
+		    	WaybillParamsDto.setStartDate(convertDateToString(order.getReceiveTime()));
 		    }else {
-		    	WaybillParamsDto.setStartDate(new Date().toLocaleString());
+		    	WaybillParamsDto.setStartDate(convertDateToString(new Date()));
 		    }
 		    if (null != order.getSendTime()) {
-		    	 WaybillParamsDto.setArriveDate(order.getSendTime().toLocaleString());
+		    	 WaybillParamsDto.setArriveDate(convertDateToString(order.getSendTime()));
 		    }else {
 		    	 WaybillParamsDto.setArriveDate(null);
 		    }
@@ -547,7 +548,7 @@ public class OrderServiceImpl implements OrderService {
 	    inWhPlanAddParamsDto.setCustomerContactPhone(order.getSenderPhone());
 	    inWhPlanAddParamsDto.setCustomerPurchaseNo(order.getOrderNo());
 	    if (null != order.getReceiveTime()) {
-	    	inWhPlanAddParamsDto.setStoragePlanTime(order.getReceiveTime().toLocaleString());
+	    	inWhPlanAddParamsDto.setStoragePlanTime(convertDateToString(order.getReceiveTime()));
 	    }
 //	    inWhPlanAddParamsDto.setStorageRemark(order.getRemarks());
 	    
@@ -605,7 +606,7 @@ public class OrderServiceImpl implements OrderService {
 		outWhPlanDto.setCustomerContactName(order.getReceiver());
 		outWhPlanDto.setCustomerContactPhone(order.getReceiverPhone());
 		if (null != order.getReceiveTime()) {
-			outWhPlanDto.setStoragePlanTime(order.getReceiveTime().toLocaleString());
+			outWhPlanDto.setStoragePlanTime(convertDateToString(order.getReceiveTime()));
 		}
 //		outWhPlanDto.setStorageRemark(order.getRemarks());
 		
@@ -688,8 +689,14 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	
-	
-	
+	/**
+	 * 时间转化为固定格式字符串
+	 */
+	private String convertDateToString(Date date) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String dateString = sdf.format(date);
+		return dateString;
+	}
 	
 	
 	

@@ -35,16 +35,14 @@ test:
   stage: test
   script:
     - pwd
+    #指定gitlab 测试时的配置文件
     - mvn -DargLine="-Dspring.profiles.active=gitlab" test
 
 code_analyze:
   stage: build
-  only:
-    - schedules
   script:
    - >-
        mvn  sonar:sonar  -X -Dsonar.java.binaries=target -Dsonar.host.url=http://192.168.1.21:9000 -Dsonar.login=admin -Dsonar.password=admin -Dsonar.analysis.mode=preview -Dsonar.gitlab.project_id=$CI_PROJECT_ID -Dsonar.gitlab.commit_sha=$CI_COMMIT_SHA -Dsonar.gitlab.ref_name=$CI_COMMIT_REF_NAME
-
 
 .pages:
   stage: page
@@ -57,13 +55,6 @@ code_analyze:
       paths:
         - public
 
-
-build_image:
-  when: manual
-  stage: build_image
-  script:
-    - ls -r user-center/userinfo-service/target
-    - docker build -t $CI_REGISTRYuser-service:1.0 user-center/userinfo-service
 deploy-to-test:
   when: manual
   stage: deploy
@@ -78,7 +69,6 @@ code_statics:
   image: registry.cn-hangzhou.aliyuncs.com/lcdt-clms/gitinspector:1.0
   only:
     - schedules
-
   stage: code_statics
   script:
     - mkdir -p report
@@ -93,3 +83,14 @@ code_statics:
     name: code_statics
     paths:
       - report/
+
+build_image_user-service_and_push:
+  when: manual
+  stage: build_image
+  script:
+    - bash script/publish.sh -t user-service
+build_image_warehouse_service_and_push:
+  when: manual
+  stage: build_image
+  script:
+    - bash scripts/publish.sh -t warehouse-service

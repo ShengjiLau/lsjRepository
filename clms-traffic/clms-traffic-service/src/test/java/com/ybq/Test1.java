@@ -2,26 +2,12 @@ package com.ybq;
 
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.imm.main.IMMClient;
-import com.aliyuncs.imm.model.v20170906.*;
-import com.lcdt.traffic.TrafficServiceApp;
-import com.lcdt.traffic.dao.PlanDetailMapper;
-import com.lcdt.traffic.dao.WaybillPlanMapper;
-import com.lcdt.traffic.model.PlanDetail;
-import com.lcdt.traffic.model.WaybillPlan;
-import com.lcdt.userinfo.dto.RegisterDto;
-import com.lcdt.userinfo.exception.PhoneHasRegisterException;
+import com.aliyuncs.imm.model.v20170906.ConvertOfficeFormatRequest;
+import com.aliyuncs.imm.model.v20170906.ConvertOfficeFormatResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @AUTHOR liuh
@@ -56,7 +42,7 @@ public class Test1 {
         //同步
         String accessKeyId = "89nsjzR8irwKjep7";  //RAM 中 test 子账号的 AK ID
         String accessKeySecret = "F8d08IUID5tFtWI9c88e8qfgbko62s"; //RAM 中 test 子账号的 AK Secret
-        IMMClient client = new IMMClient("cn-beijing", accessKeyId, accessKeySecret);
+              IMMClient client = new IMMClient("cn-beijing", accessKeyId, accessKeySecret);
         ConvertOfficeFormatRequest req = new ConvertOfficeFormatRequest();
         req.setProject("clms-view");
         req.setSrcUri("oss://clms-dtd/2.docx");
