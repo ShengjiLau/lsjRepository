@@ -15,15 +15,29 @@ import com.lcdt.warehouse.utils.DateUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yangbinq on 2018/05/08.
@@ -219,6 +233,44 @@ public class InWarehousePlanController {
         jsonObject.put("message", flag==true? "配仓成功！":msg);
         return jsonObject;
     }
+
+
+
+    @ApiOperation("入库计划导出")
+    @RequestMapping(value = "/exportInplan")
+    public void exportInplan(@ApiParam(value = "计划ID",required = true) @RequestParam Long planId,
+                                   HttpServletResponse response) throws IOException {
+        UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
+        InWhPlanDto inWhPlanDto = inWarehousePlanService.inWhPlanDetail(planId, true, userCompRel, true, false);
+        File fi = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "templates/入库计划.xlsx");
+        if (fi.exists()) {
+            OutputStream os = response.getOutputStream();
+            response.reset();
+            XSSFWorkbook wb = null;
+            try {
+                wb = new XSSFWorkbook(new FileInputStream(fi));    // 读取excel模板
+                XSSFSheet sheet = wb.getSheetAt(0);  // 读取了模板内所有sheet内容
+                XSSFRow row = sheet.getRow(0);
+                XSSFCell cell = row.getCell(0);
+                cell.setCellValue("入库计划-2333");
+
+                response.setContentType("applicationnd.ms-excel");
+                response.setHeader("Content-disposition", "attachment;filename=入库计划.xlsx");
+                OutputStream ouputStream = response.getOutputStream();
+                wb.write(ouputStream);
+                ouputStream.flush();
+                ouputStream.close();
+
+            } catch (Exception e) {
+                logger.error("导出excel出现异常:", e);
+            }
+
+        }
+    }
+
+
+
+
 
 
 }
