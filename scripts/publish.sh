@@ -29,7 +29,6 @@ find_project_in_path(){
             buildpath=${str[1]}
             break
         fi
-    exit 2
     done < service_path
     echo '----find build_path----'
     echo ${servicename}:${buildpath}
