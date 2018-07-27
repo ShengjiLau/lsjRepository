@@ -6,10 +6,10 @@ docker_login(){
 
 
 push_to_aliregistry(){
-    cd $base_path
+    cd $BASE_PATH
 
-    echo build $servicename $base_path/$buildpath
-    docker build -t $registry_url$servicename $base_path/$buildpath
+    echo build $servicename $BASE_PATH/$buildpath
+    docker build -t $registry_url$servicename $BASE_PATH/$buildpath
     imageid=$(docker images | grep $registry_url$servicename | awk 'NR==1{print $3}')
     docker tag $imageid $registry_url$servicename:1.0
     docker push $registry_url$servicename:1.0
@@ -18,7 +18,7 @@ push_to_aliregistry(){
 
 
 find_project_in_path(){
-    cd $script_path
+    cd $SCRIPT_PATH
     while IFS='' read -r line || [[ -n "$line" ]]; do
         str=(${line//:/ })
         if [[ $str == $1* ]];then
@@ -26,6 +26,7 @@ find_project_in_path(){
             buildpath=${str[1]}
             break
         fi
+    exit 2
     done < service_path
     echo '----find build_path----'
     echo ${servicename}:${buildpath}
@@ -34,7 +35,7 @@ find_project_in_path(){
 
 
 maven_build(){
-    cd $base_path
+    cd $BASE_PATH
     mvn clean install package -Dmaven.test.skip=true
     STATUS=$?
     if [[ $STATUS -eq 0 ]] ; then
@@ -54,10 +55,11 @@ main(){
     push_to_aliregistry
 }
 
+DIR="$( cd "$( dirname "$0"  )" && pwd  )"
+SCRIPT_PATH=$DIR
+cd $SCRIPT_PATH/..
+BASE_PATH=`pwd`
 
-cd ..
-base_path=$(cd `dirname $0`; pwd)
-script_path=$base_path/scripts
 while [ "$1" ]
 do
 if [ "$1" = "-t" ];then

@@ -31,6 +31,7 @@ public class InventoryApi {
 
     private Logger logger = LoggerFactory.getLogger(InventoryApi.class);
 
+
     @PostMapping("/list")
     @ApiOperation("库存明细列表")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('inventory_list_search')")
