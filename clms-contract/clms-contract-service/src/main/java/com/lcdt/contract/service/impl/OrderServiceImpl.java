@@ -548,7 +548,7 @@ public class OrderServiceImpl implements OrderService {
 	    inWhPlanAddParamsDto.setCustomerContactPhone(order.getSenderPhone());
 	    inWhPlanAddParamsDto.setCustomerPurchaseNo(order.getOrderNo());
 	    if (null != order.getReceiveTime()) {
-	    	inWhPlanAddParamsDto.setStoragePlanTime(order.getReceiveTime().toLocaleString());
+	    	inWhPlanAddParamsDto.setStoragePlanTime(convertDateToString(order.getReceiveTime()));
 	    }
 //	    inWhPlanAddParamsDto.setStorageRemark(order.getRemarks());
 	    
@@ -606,7 +606,7 @@ public class OrderServiceImpl implements OrderService {
 		outWhPlanDto.setCustomerContactName(order.getReceiver());
 		outWhPlanDto.setCustomerContactPhone(order.getReceiverPhone());
 		if (null != order.getReceiveTime()) {
-			outWhPlanDto.setStoragePlanTime(order.getReceiveTime().toLocaleString());
+			outWhPlanDto.setStoragePlanTime(convertDateToString(order.getReceiveTime()));
 		}
 //		outWhPlanDto.setStorageRemark(order.getRemarks());
 		
