@@ -647,6 +647,9 @@ public class OrderServiceImpl implements OrderService {
 			return OrderVO.ZERO_INTEGER;
 		}
 		Order purchaseOrder = new Order();
+		purchaseOrder.setCompanyId(SecurityInfoGetter.getCompanyId());
+		purchaseOrder.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
+		purchaseOrder.setCreateTime(new Date());
 		purchaseOrder.setOrderType(OrderVO.PURCHASE_ORDER);
 		purchaseOrder.setGroupId(salesOrder.getGroupId());
 		purchaseOrder.setReceiveWarehouse(salesOrder.getReceiveWarehouse());
@@ -663,7 +666,7 @@ public class OrderServiceImpl implements OrderService {
 		
 		int result = orderMapper.insertOrder(purchaseOrder);
 		Order order = new Order();
-		order.setOriginOrderId(purchaseOrder.getOrderId());
+		order.setPushOrderId(purchaseOrder.getOrderId());
 		order.setOrderId(salesOrder.getOrderId());
 		orderMapper.updateByPrimaryKeySelective(order);
 		
