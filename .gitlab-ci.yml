@@ -93,4 +93,4 @@ build_image_warehouse_service_and_push:
   when: manual
   stage: build_image
   script:
-    - bash script/publish.sh -t warehouse-service
+    - bash scripts/publish.sh -t warehouse-service
