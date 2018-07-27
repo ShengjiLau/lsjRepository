@@ -55,13 +55,6 @@ code_analyze:
       paths:
         - public
 
-
-build_image:
-  when: manual
-  stage: build_image
-  script:
-    - ls -r user-center/userinfo-service/target
-    - docker build -t $CI_REGISTRYuser-service:1.0 user-center/userinfo-service
 deploy-to-test:
   when: manual
   stage: deploy
@@ -90,3 +83,9 @@ code_statics:
     name: code_statics
     paths:
       - report/
+
+build_image_user-service_and_push:
+  when: manual
+  stage: build_image
+  script:
+    - bash script/publish.sh -t user-service
