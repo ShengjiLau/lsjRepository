@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#AUTHOR ss
+#update 20180727 format and test
+
 registry_url=registry.cn-hangzhou.aliyuncs.com/lcdt-clms/
 docker_login(){
     docker login --username=hi35700248@aliyun.com -p A1111777  registry.cn-hangzhou.aliyuncs.com
