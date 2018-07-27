@@ -13,6 +13,7 @@ import com.lcdt.warehouse.entity.OutWarehousePlan;
 import com.lcdt.warehouse.service.OutOrderGoodsInfoService;
 import com.lcdt.warehouse.service.OutWarehousePlanService;
 import com.lcdt.warehouse.utils.DateUtils;
+import com.lcdt.warehouse.utils.GroupIdsUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -66,21 +67,22 @@ public class OutWarehousePlanController {
         if(!StringUtils.isEmpty(dto.getPlanStatus()) && dto.getPlanStatus().equals("00")) {
             dto.setPlanStatus(null); //查询所有
         }
-        if(StringUtils.isEmpty(dto.getGroupId())) {
-            StringBuffer sb = new StringBuffer();
-            List<Group> groupList = SecurityInfoGetter.groups();
-            if(groupList!=null && groupList.size()>0) {
-                for(int i=0;i<groupList.size();i++) {
-                    Group group = groupList.get(i);
-                    sb.append(group.getGroupId()+",");
-                }
-                dto.setGroupIds(sb.toString().substring(0,sb.toString().length()-1));
-            }
-        } else {
-            if (dto.getGroupId()>0) {
-                dto.setGroupIds(dto.getGroupId().toString());
-            }
-        }
+        dto.setGroupIds(GroupIdsUtil.getOwnGroupIds(dto.getGroupId()));
+//        if(StringUtils.isEmpty(dto.getGroupId())) {
+//            StringBuffer sb = new StringBuffer();
+//            List<Group> groupList = SecurityInfoGetter.groups();
+//            if(groupList!=null && groupList.size()>0) {
+//                for(int i=0;i<groupList.size();i++) {
+//                    Group group = groupList.get(i);
+//                    sb.append(group.getGroupId()+",");
+//                }
+//                dto.setGroupIds(sb.toString().substring(0,sb.toString().length()-1));
+//            }
+//        } else {
+//            if (dto.getGroupId()>0) {
+//                dto.setGroupIds(dto.getGroupId().toString());
+//            }
+//        }
         Page pg = outWarehousePlanService.outWarehousePlanList(dto,new Page<OutWarehousePlan>(dto.getPageNo(), dto.getPageSize()));
         List<InWarehousePlan> inWarehousePlanList = pg.getRecords();
         PageBaseDto result = new PageBaseDto(inWarehousePlanList,pg.getTotal());

@@ -45,7 +45,7 @@
                 and storage_type = #{storageType}
             </if>
             <if test="groupIds!=null and groupIds!=''">
-                and group_id in (${groupIds})
+                and (${groupIds})
             </if>
             <if test="customerPurchaseNo!=null and customerPurchaseNo != ''">
                 and customer_purchase_no like concat('%',#{customerPurchaseNo},'%')

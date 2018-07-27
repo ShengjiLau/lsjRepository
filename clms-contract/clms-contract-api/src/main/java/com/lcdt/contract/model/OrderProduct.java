@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.executable.ValidateOnExecution;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.junit.validator.ValidateWith;
 import org.springframework.validation.annotation.Validated;
 
 import io.swagger.annotations.ApiModelProperty;

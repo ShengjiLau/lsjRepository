@@ -12,6 +12,7 @@ import com.lcdt.warehouse.mapper.InplanGoodsInfoMapper;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.service.InWarehousePlanService;
 import com.lcdt.warehouse.service.InplanGoodsInfoService;
+import com.lcdt.warehouse.utils.GroupIdsUtil;
 import com.lcdt.warehouse.vo.ConstantVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                 params.setPlanId(obj.getPlanId());
                 String[] pArray = {ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND+"",ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND+""};
                 params.setInOrderStatus(pArray);
+                params.setGroupIds(dto.getGroupIds());
                 params.setPageNo(1);
                 params.setPageSize(100);
                 Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderListOfPlan(params);
@@ -133,6 +135,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                 params.setPlanId(obj.getPlanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
+                params.setGroupIds(GroupIdsUtil.getOwnGroupIds(inWarehousePlan.getGroupId()));
                 Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderListOfPlan(params);
                 if (inWarehouseOrderDtoList.getTotal()>0) {
                     boolean flag = false;
@@ -168,6 +171,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
         InWarehouseOrderSearchParamsDto params = new InWarehouseOrderSearchParamsDto();
         params.setCompanyId(obj.getCompanyId());
         params.setPlanId(obj.getPlanId());
+        params.setGroupIds(GroupIdsUtil.getOwnGroupIds(inWarehousePlan.getGroupId()));
         params.setPageNo(1);
         params.setPageSize(100);
         Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderListOfPlan(params);
@@ -254,6 +258,7 @@ public class InWarehousePlanServiceImpl extends ServiceImpl<InWarehousePlanMappe
                     String[] pArray = {ConstantVO.IN_ORDER_STATUS_WATIE_STORAGE+"",ConstantVO.IN_ORDER_STATUS_HAVE_STORAGE+""};
                     params.setInOrderStatus(pArray);
                 }
+                params.setGroupIds(GroupIdsUtil.getOwnGroupIds(inWarehousePlan.getGroupId()));
                 Page<InWarehouseOrderDto> inWarehouseOrderDtoList = inWarehouseOrderService.queryInWarehouseOrderListOfPlan(params);
                 if (inWarehouseOrderDtoList.getTotal()>0) {
                     result.setInWarehouseOrderDtoList(inWarehouseOrderDtoList.getRecords());
