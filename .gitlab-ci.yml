@@ -31,10 +31,11 @@ test:
   image: maven
   services:
     - redis:latest
+    - zookeeper:latest
   stage: test
   script:
     - pwd
-    - mvn -Dmaven.test.jvmargs='spring.profiles.active=gitlab'  test
+    - mvn -DargLine="-Dspring.profiles.active=gitlab" test
 
 code_analyze:
   stage: build
@@ -75,8 +76,8 @@ deploy-to-production:
     - echo "deploy app"
 code_statics:
   image: registry.cn-hangzhou.aliyuncs.com/lcdt-clms/gitinspector:1.0
-#  only:
-#    - schedules
+  only:
+    - schedules
 
   stage: code_statics
   script:
