@@ -172,12 +172,12 @@ public class TrafficRpcImpl implements TrafficRpc {
         vo.setCarrierType(ConstantVO.PLAN_CARRIER_TYPE_ELSE); //发布后派单
         vo.setPlanStatus(ConstantVO.PLAN_STATUS_SEND_ORDERS); //派单 中
         Date dt = new Date();
-        if (null != waybillParamsDto.getStartDate() && !"".equals(waybillParamsDto.getStartDate())) {
+        if (null != waybillParamsDto.getStartDate() && !"".equals(waybillParamsDto.getStartDate().trim())) {
         	 vo.setStartDate(convertStringToDate(waybillParamsDto.getStartDate())); //当前系统是时间
         }else {
         	vo.setStartDate(dt);
         }
-        if (null != waybillParamsDto.getArriveDate() && !"" .equals(waybillParamsDto.getArriveDate())) {
+        if (null != waybillParamsDto.getArriveDate() && !"" .equals(waybillParamsDto.getArriveDate().trim())) {
         	vo.setArriveDate(convertStringToDate(waybillParamsDto.getArriveDate()));
         }
         vo.setIsDeleted((short) 0);
