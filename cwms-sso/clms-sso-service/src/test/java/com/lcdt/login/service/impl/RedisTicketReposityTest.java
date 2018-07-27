@@ -3,10 +3,12 @@ package com.lcdt.login.service.impl;
 import com.lcdt.login.CwmsLoginApp;
 import com.lcdt.login.ticket.TicketBean;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -19,8 +21,10 @@ import static org.junit.Assert.*;
 @SpringBootTest(classes = CwmsLoginApp.class)
 public class RedisTicketReposityTest {
 
+
 	@Autowired
 	RedisTicketReposity redisTicketReposity;
+
 
 	@Test
 	public void testSaveTicket(){
