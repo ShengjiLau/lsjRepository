@@ -12,6 +12,7 @@ import com.lcdt.warehouse.mapper.OutplanGoodsMapper;
 import com.lcdt.warehouse.service.OutWarehouseOrderService;
 import com.lcdt.warehouse.service.OutWarehousePlanService;
 import com.lcdt.warehouse.service.OutplanGoodsService;
+import com.lcdt.warehouse.utils.GroupIdsUtil;
 import com.lcdt.warehouse.vo.ConstantVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 params.setCompanyId(dto.getCompanyId());
                 params.setOutPlanId(obj.getOutplanId());
                 params.setOrderStatus(new String[]{"1","2"});
+                params.setGroupIds(dto.getGroupIds());
                 params.setPageNo(1);
                 params.setPageSize(100);
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
@@ -104,6 +106,9 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 params.setOutPlanId(obj.getOutplanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
+                params.setGroupIds(GroupIdsUtil.getOwnGroupIds(outWarehousePlan.getGroupId()));
+
+
                // if(sFlag) {
                   //  String[] pArray = {ConstantVO.OUT_ORDER_STATUS_WATIE_OUTBOUND + "", ConstantVO.OUT_ORDER_STATUS_HAVE_OUTBOUND + ""};
                    // params.setOrderStatus(pArray);
@@ -305,6 +310,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 params.setOutPlanId(obj.getOutplanId());
                 params.setPageNo(1);
                 params.setPageSize(100);
+                params.setGroupIds(GroupIdsUtil.getOwnGroupIds(outWarehousePlan.getGroupId()));
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
                 if (outWhOrderDtoList.getTotal()>0) {
                     boolean flag = false;
@@ -346,6 +352,7 @@ public class OutWarehousePlanServiceImpl extends ServiceImpl<OutWarehousePlanMap
                 OutWhOrderSearchDto params = new OutWhOrderSearchDto();
                 params.setCompanyId(obj.getCompanyId());
                 params.setOutPlanId(obj.getOutplanId());
+                params.setGroupIds(GroupIdsUtil.getOwnGroupIds(outWarehousePlan.getGroupId()));
                 params.setPageNo(1);
                 params.setPageSize(100);
                 Page<OutWhOrderDto> outWhOrderDtoList = outWarehouseOrderService.queryOutWarehouseOrderList(params);
