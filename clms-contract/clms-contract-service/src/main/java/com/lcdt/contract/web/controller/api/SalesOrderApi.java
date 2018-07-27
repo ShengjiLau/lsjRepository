@@ -193,7 +193,7 @@ public class SalesOrderApi {
 	
 	@ApiOperation("销售单推送采购单")
 	@PostMapping("/topurchase")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_to_purchase')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_topurchase')")
 	public JSONObject salesOrderToPurchaseOrder(Long orderId) {
 		int result = orderService.salesOrderToPurchaseOrder(orderId);
 		String message = null;

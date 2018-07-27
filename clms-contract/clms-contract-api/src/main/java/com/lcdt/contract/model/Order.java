@@ -193,6 +193,9 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="原始订单id")
 	private Long originOrderId;
 	
+	@ApiModelProperty(value="推送订单id")
+	private Long pushOrderId;
+	
     private static final long serialVersionUID = 13333L;
 
     public Long getOrderId() {
@@ -960,6 +963,16 @@ public class Order implements Serializable {
 
 	public Long getOriginOrderId() {
 		return originOrderId;
+	}
+
+
+	public Long getPushOrderId() {
+		return pushOrderId;
+	}
+
+
+	public void setPushOrderId(Long pushOrderId) {
+		this.pushOrderId = pushOrderId;
 	}
 
 

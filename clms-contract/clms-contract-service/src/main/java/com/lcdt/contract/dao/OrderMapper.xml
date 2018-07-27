@@ -45,6 +45,7 @@
     <result column="warehouse_plan" property="warehousePlan" jdbcType="VARCHAR" />
     <result column="origin_order_no" property="originOrderNo" jdbcType="VARCHAR"/>
     <result column="origin_order_id" property="originOrderId" jdbcType="BIGINT"/>
+    <result column="push_order_id" property="pushOrderId" jdbcType="BIGINT"/>
   </resultMap>
   <sql id="Base_Column_List">
     <!--
@@ -59,7 +60,7 @@
     create_user_id, order_serial_no, receive_time, supplier_id, is_draft, receive_require, 
     summation, warehouse_id, attachment1_name, attachment2_name, attachment2, attachment3_name, 
     attachment3, attachment4_name, attachment4, attachment5_name, attachment5, traffic_plan, 
-    warehouse_plan,origin_order_no,origin_order_id
+    warehouse_plan,origin_order_no,origin_order_id,push_order_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultType="com.lcdt.contract.web.dto.OrderDto">
     select order_id orderId, supplier, order_no orderNo, order_type orderType, contract_code contractCode, dispatching_type dispatchingType, 
@@ -70,7 +71,7 @@
     approval_status approvalStatus,approval_process approvalProcess,approval_process_id approvalProcessId,supplier_id supplierId,is_draft isDraft,receive_require receiveRequire,summation,warehouse_id warehouseId,
     attachment1_name attachment1Name,attachment1,attachment2_name attachment2Name,attachment2,attachment3_name attachment3Name,attachment3,attachment4_name attachment4Name,attachment4,
     attachment5_name attachment5Name,attachment5,traffic_plan trafficPlan, 
-    warehouse_plan warehousePlan,origin_order_no originOrderNo,origin_order_id originOrderId
+    warehouse_plan warehousePlan,origin_order_no originOrderNo,origin_order_id originOrderId, push_order_id pushOrderId
     from t_order
     where order_id = #{orderId,jdbcType=BIGINT}
   </select>
@@ -94,7 +95,7 @@
       summation,warehouse_id,attachment1_name,attachment1,
       attachment2_name,attachment2,attachment3_name,attachment3,
       attachment4_name,attachment4,attachment5_name,attachment5,traffic_plan, 
-   	  warehouse_plan,origin_order_no,origin_order_id)
+   	  warehouse_plan,origin_order_no,origin_order_id,push_order_id)
     values (#{orderId,jdbcType=BIGINT},#{supplier,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
       #{orderType,jdbcType=SMALLINT}, #{contractCode,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=SMALLINT}, 
       #{dispatchingType,jdbcType=SMALLINT}, #{payType,jdbcType=VARCHAR}, #{receiveWarehouse,jdbcType=VARCHAR}, 
@@ -125,7 +126,8 @@
       #{attachment4Name,jdbcType=VARCHAR},#{attachment4,jdbcType=VARCHAR},
       #{attachment5Name,jdbcType=VARCHAR},#{attachment5,jdbcType=VARCHAR},
       #{trafficPlan,jdbcType=VARCHAR}, #{warehousePlan,jdbcType=VARCHAR},
-      #{originOrderNo,jdbcType=VARCHAR},#{originOrderId,jdbcType=BIGINT})
+      #{originOrderNo,jdbcType=VARCHAR},#{originOrderId,jdbcType=BIGINT},
+      #{pushOrderId,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.lcdt.contract.model.Order" >
     insert into t_order
@@ -289,6 +291,9 @@
       <if test="originOrderId != null">
       	origin_order_id,
       </if>
+      <if test="pushOrderId != null">
+      	push_order_id
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="orderId != null" >
@@ -446,6 +451,9 @@
       </if>
       <if test="originOrderId != null">
       	#{originOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="pushOrderId != null">
+        #{pushOrderId,jdbcType=BIGINT},
       </if>
     </trim>
   </insert>
@@ -608,6 +616,9 @@
       <if test="originOrderId != null">
       	origin_order_id = #{originOrderId,jdbcType=BIGINT},
       </if>
+      <if test="pushOrderId != null">
+      	push_order_id = #{pushOrderId,jdbcType=BIGINT},
+      </if>
       <if test="approvalStatus==0">
       	approval_process_id=null,
       	approval_process=null,
@@ -674,7 +685,8 @@
       traffic_plan = #{trafficPlan,jdbcType=VARCHAR},
       warehouse_plan = #{warehousePlan,jdbcType=VARCHAR},
       origin_order_no = #{originOrderNo,jdbcType=VARCHAR},
-      origin_order_id = #{originOrderId,jdbcType=BIGINT}
+      origin_order_id = #{originOrderId,jdbcType=BIGINT},
+      push_order_id = #{pushOrderId,jdbcType=BIGINT}
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
 

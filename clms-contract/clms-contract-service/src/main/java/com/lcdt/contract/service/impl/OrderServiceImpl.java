@@ -660,6 +660,13 @@ public class OrderServiceImpl implements OrderService {
 		purchaseOrder.setIsDraft(OrderVO.NO_PUBLISHI);
 		purchaseOrder.setOriginOrderId(salesOrder.getOrderId());
 		purchaseOrder.setOriginOrderNo(salesOrder.getOrderNo());
+		
+		int result = orderMapper.insertOrder(purchaseOrder);
+		Order order = new Order();
+		order.setOriginOrderId(purchaseOrder.getOrderId());
+		order.setOrderId(salesOrder.getOrderId());
+		orderMapper.updateByPrimaryKeySelective(order);
+		
 		if (null != salesOrderProductList && 0 != salesOrderProductList.size()) {
 			List<OrderProduct> purchaseOrderProductList = new ArrayList<OrderProduct>(salesOrderProductList.size());
 			for (OrderProduct salesOrderProduct: salesOrderProductList) {
@@ -667,12 +674,13 @@ public class OrderServiceImpl implements OrderService {
 				BeanUtils.copyProperties(salesOrderProduct, purchaseOrderProduct);
 				purchaseOrderProduct.setPrice(null);
 				purchaseOrderProduct.setOpId(null);
+				purchaseOrderProduct.setOrderId(purchaseOrder.getOrderId());
 				purchaseOrderProductList.add(purchaseOrderProduct);
 			}
 			nonautomaticMapper.insertOrderProductByBatch(purchaseOrderProductList);
 		}
 		
-		int result = orderMapper.insertOrder(purchaseOrder);
+		
 		return result;
 	}
 
