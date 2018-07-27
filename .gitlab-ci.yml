@@ -89,3 +89,8 @@ build_image_user-service_and_push:
   stage: build_image
   script:
     - bash script/publish.sh -t user-service
+build_image_warehouse_service_and_push:
+  when: manual
+  stage: build_image
+  script:
+    - bash script/publish.sh -t warehouse-service
