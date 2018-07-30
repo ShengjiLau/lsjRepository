@@ -3,6 +3,7 @@ package com.lcdt.manage.mapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.lcdt.manage.dto.NoticeListDto;
+import com.lcdt.manage.dto.NoticeListParamsDto;
 import com.lcdt.manage.entity.TNotice;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
@@ -21,5 +22,5 @@ public interface TNoticeMapper extends BaseMapper<TNotice>{
     List<NoticeListDto> findAllNoticesByCateId(Long categoryId);
 
 
-    List<NoticeListDto> findTopNoticesByPage(Pagination page, TNotice p);
+    List<NoticeListDto> findTopNoticesByPage(Pagination page, NoticeListParamsDto p);
 }

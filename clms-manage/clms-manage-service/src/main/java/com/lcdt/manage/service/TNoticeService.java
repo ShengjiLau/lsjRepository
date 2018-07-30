@@ -26,7 +26,7 @@ public interface TNoticeService extends IService<TNotice>{
      * @param currentNotice
      * @return
      */
-    NoticeListDto findNoticeAndNextById(TNotice currentNotice);
+    NoticeListDto findNoticeAndNextById(NoticeListParamsDto currentNotice);
 
     /**
      * 分页查询新闻列表
@@ -34,4 +34,6 @@ public interface TNoticeService extends IService<TNotice>{
      * @return
      */
     Page<NoticeListDto> findTopNoticesByPage(NoticeListParamsDto params);
+
+
 }

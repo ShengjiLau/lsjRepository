@@ -1,7 +1,11 @@
 package com.lcdt.manage.service;
 
+import com.baomidou.mybatisplus.plugins.Page;
+import com.lcdt.manage.dto.CategoryParamDto;
 import com.lcdt.manage.entity.TNoticeCategory;
 import com.baomidou.mybatisplus.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,4 +20,8 @@ public interface TNoticeCategoryService extends  IService<TNoticeCategory>{
     TNoticeCategory findByName(String name);
 
     boolean findExistTNoticeCategory(TNoticeCategory category);
+
+    Page<TNoticeCategory> findCategoryPage(CategoryParamDto paramDto);
+
+    List<TNoticeCategory> findCategoryAll();
 }

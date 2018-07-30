@@ -33,15 +33,21 @@ public class TNoticeServiceImpl extends ServiceImpl<TNoticeMapper, TNotice> impl
     }
 
     @Override
-    public NoticeListDto findNoticeAndNextById(TNotice currentNotice) {
+    public NoticeListDto findNoticeAndNextById(NoticeListParamsDto params) {
         Page<NoticeListDto> page = new Page(1, 1);
-        page.setRecords(baseMapper.findTopNoticesByPage(page, currentNotice));
-        return page.getRecords().get(0);
+        page.setRecords(baseMapper.findTopNoticesByPage(page, params));
+        if(page.getRecords()!=null&&page.getRecords().size()>0)
+            return page.getRecords().get(0);
+        else
+            return new NoticeListDto();
     }
 
     @Override
     public Page<NoticeListDto> findTopNoticesByPage(NoticeListParamsDto params) {
         Page page = new Page(params.getPageNo(), params.getPageSize());
+        System.out.println("params.getPageSize()"+params.getPageSize());
         return page.setRecords(baseMapper.findTopNoticesByPage(page, params));
     }
+
+
 }
