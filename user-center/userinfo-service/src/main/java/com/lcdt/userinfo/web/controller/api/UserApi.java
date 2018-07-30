@@ -8,6 +8,7 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.converter.ArrayListResponseWrapper;
 import com.lcdt.notify.rpcservice.NotifyService;
 import com.lcdt.userinfo.dao.DepartmentMapper;
+import com.lcdt.userinfo.dao.DriverMapper;
 import com.lcdt.userinfo.exception.UserNotExistException;
 import com.lcdt.userinfo.model.Department;
 import com.lcdt.userinfo.model.Group;
@@ -60,6 +61,9 @@ public class UserApi {
 
 	@Autowired
 	DepartmentMapper departmentMapper;
+
+	@Autowired
+	DriverMapper driverMapper;
 
 	@ApiOperation("手机号是否已注册")
 	@RequestMapping(value = "/isPhoneRegister",method = RequestMethod.POST)
