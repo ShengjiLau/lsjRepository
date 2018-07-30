@@ -10,8 +10,8 @@
     <meta name="description" content="大驼队是基于移动互联网和大数据技术的企业SaaS化物流软件，致力于为公路货运领域提供高效的货运协同管理工具">
     <meta name="keywords" content="大驼队 物流 公路货运 协同运输 可视运输 物流SaaS平台 物流金融 司机生态 货运APP">
     <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <Link href="../style/style.min.css?v=1.0" rel="stylesheet">
-    <Link href="../style/style.min.css.map?v=1.0" rel="stylesheet">
+    <Link href="../style/style.min.css" rel="stylesheet">
+    <Link href="../style/style.min.css.map" rel="stylesheet">
 
 </head>
 <body>
@@ -207,7 +207,7 @@
                                 <div >
                                     <div class="list-img">
                                         <span th:if="${notice.coverImageUrl}">
-                                            <img th:src="${notice.coverImageUrl}" alt="">
+                                            <a th:href="@{/news.html(id=${notice.noticeId})}"><img th:src="${notice.coverImageUrl}" alt=""></a>
                                         </span>
                                     </div>
                                     <div class="list-content">
@@ -228,9 +228,9 @@
                     <div class="col-md-6 hidden-sm hidden-xs">
                         <div class="new-info">
                             <p class="title" th:text="${topOne.noticeTitle}"></p>
-                            <p class="content" th:text="${topOne.noticeContent}"></p>
+                            <p class="content" th:text="${topOne.noticeSummary}"></p>
                             <div class="thum">
-                                <img th:src="${topOne.coverImageUrl}" >
+                                <a th:href="@{/news.html(id=${topOne.noticeId})}"><img th:src="${topOne.coverImageUrl}" /></a>
                             </div>
                         </div>
                     </div>

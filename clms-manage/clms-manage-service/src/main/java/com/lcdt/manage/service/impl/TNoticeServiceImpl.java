@@ -45,7 +45,6 @@ public class TNoticeServiceImpl extends ServiceImpl<TNoticeMapper, TNotice> impl
     @Override
     public Page<NoticeListDto> findTopNoticesByPage(NoticeListParamsDto params) {
         Page page = new Page(params.getPageNo(), params.getPageSize());
-        System.out.println("params.getPageSize()"+params.getPageSize());
         return page.setRecords(baseMapper.findTopNoticesByPage(page, params));
     }
 
