@@ -14,6 +14,7 @@ import com.lcdt.warehouse.service.InWarehousePlanService;
 import com.lcdt.warehouse.utils.DateUtils;
 import com.lcdt.warehouse.utils.GroupIdsUtil;
 import com.lcdt.warehouse.utils.InplanUtil;
+import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -35,6 +36,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -347,12 +349,12 @@ public class InWarehousePlanController {
     }
 
 
-  /*  public static String encodeFilename(String filename, HttpServletResponse request) {
-        *//**
+    public static String encodeFilename(String filename, HttpServletResponse request) {
+        /**
          * 获取客户端浏览器和操作系统信息
          * 在IE浏览器中得到的是：User-Agent=Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; Maxthon; Alexa Toolbar)
          * 在Firefox中得到的是：User-Agent=Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.7.10) Gecko/20050717 Firefox/1.0.6
-         *//*
+         */
         String agent = request.getHeader("USER-AGENT");
         try {
             if ((agent != null) && (-1 != agent.indexOf("MSIE"))) {
@@ -371,7 +373,7 @@ public class InWarehousePlanController {
         } catch (Exception ex) {
             return filename;
         }
-    }*/
+    }
 
 
 
