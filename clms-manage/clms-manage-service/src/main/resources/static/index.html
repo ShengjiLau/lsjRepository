@@ -228,7 +228,7 @@
                     <div class="col-md-6 hidden-sm hidden-xs">
                         <div class="new-info">
                             <p class="title" th:text="${topOne.noticeTitle}"></p>
-                            <p class="content" th:text="${topOne.noticeSummary}"></p>
+                            <p class="content" th:text="${#strings.abbreviate(topOne.noticeSummary,150)}"></p>
                             <div class="thum">
                                 <a th:href="@{/news.html(id=${topOne.noticeId})}"><img th:src="${topOne.coverImageUrl}" /></a>
                             </div>
