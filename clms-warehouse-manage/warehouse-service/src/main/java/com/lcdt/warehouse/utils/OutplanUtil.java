@@ -3,11 +3,11 @@ package com.lcdt.warehouse.utils;
 /**
  * Created by yangbinq on 2018/7/27.
  */
-public class InplanUtil {
+public class OutplanUtil {
 
 
     /***
-     * 入库类型
+     * 出库类型
      * @param type
      * @return
      */
@@ -16,16 +16,13 @@ public class InplanUtil {
         String result = "";
         switch (type) {
             case "01":
-                result = "原料入库";
+                result = "原料出库";
                 break;
             case "02":
-                result = "成品入库";
+                result = "成品出库";
                 break;
             case "03":
-                result = "退换货入库";
-                break;
-            case "04":
-                result = "采购入库";
+                result = "残次品出库";
                 break;
             default:
                 result = "其它";
