@@ -106,7 +106,7 @@ public class OrderServiceImpl implements OrderService {
 		orderDto.setCreateTime(new Date());
 		
         BigDecimal aTotal = OrderVO.ZERO_VALUE;// aTotal为所有商品总价格
-        if (null != orderDto.getOrderProductList() && orderDto.getOrderProductList().size() != 0) {
+        if (null != orderDto.getOrderProductList() && !orderDto.getOrderProductList().isEmpty()) {
             for (OrderProduct orderProduct : orderDto.getOrderProductList()) {
                 BigDecimal num = orderProduct.getNum();
                 BigDecimal price = orderProduct.getPrice();
@@ -122,17 +122,17 @@ public class OrderServiceImpl implements OrderService {
         int result = orderMapper.insertOrder(order);
         //新增订单商品的总数量
         int productCount = 0;
-        if (null != orderDto.getOrderProductList() && orderDto.getOrderProductList().size() != 0) {
+        if (null != orderDto.getOrderProductList() && !orderDto.getOrderProductList().isEmpty()) {
             for (OrderProduct orderProduct : orderDto.getOrderProductList()) {
                 //为每个商品添加OrderId
                 orderProduct.setOrderId(order.getOrderId());
             }
             productCount += nonautomaticMapper.insertOrderProductByBatch(orderDto.getOrderProductList());
-            logger.debug("新增订单商品数量:" + productCount);
+            logger.debug("新增订单商品数量:" , productCount);
         }
 
         //审批流程添加
-        if (null != orderDto.getOrderApprovalList() && orderDto.getOrderApprovalList().size() > 0) {
+        if (null != orderDto.getOrderApprovalList() && !orderDto.getOrderApprovalList().isEmpty()) {
             /*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
             for (OrderApproval oa : orderDto.getOrderApprovalList()) {
                 //设置关联订单id
@@ -158,8 +158,8 @@ public class OrderServiceImpl implements OrderService {
                             eventName = "sale_approval_publish";
                             attachment.setSaleOrderSerialNum(queryOrder.getOrderSerialNo());
                         }
-                        ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-                        producer.sendNotifyEvent(plan_publish_event);
+                        ContractNotifyEvent planPublishEvent = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                        producer.sendNotifyEvent(planPublishEvent);
                         /**↑发送消息通知结束*/
                     } else {
                         //设置其他审批状态为 0 - 初始值
@@ -209,7 +209,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(isolation = Isolation.REPEATABLE_READ, propagation = Propagation.REQUIRED, rollbackForClassName = {"RuntimeException","Exception"}, timeout = 30)
     public int modOrder(OrderDto orderDto) {
         BigDecimal aTotal = OrderVO.ZERO_VALUE;
-        if (null != orderDto.getOrderProductList() && orderDto.getOrderProductList().size() != 0) {
+        if (null != orderDto.getOrderProductList() && !orderDto.getOrderProductList().isEmpty()) {
             for (OrderProduct orderProduct : orderDto.getOrderProductList()) {
                 BigDecimal num = orderProduct.getNum();
                 BigDecimal price = orderProduct.getPrice();
@@ -225,7 +225,7 @@ public class OrderServiceImpl implements OrderService {
         int result = orderMapper.updateByPrimaryKeySelective(order);
         int i = 0;
         int j = 0;
-        if (null != orderDto.getOrderProductList() && orderDto.getOrderProductList().size() != 0) {
+        if (null != orderDto.getOrderProductList() && !orderDto.getOrderProductList().isEmpty()) {
             //删除订单下所有商品
             nonautomaticMapper.deleteOrderProductByOrderId(order.getOrderId());
             //插入新的订单商品
@@ -234,21 +234,26 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //审批流程添加 如果添加了审批人，则先清楚数据库中原来保存的审批人，然后新增
-        if (null != orderDto.getOrderApprovalList() && orderDto.getOrderApprovalList().size() > 0) {
+        if (null != orderDto.getOrderApprovalList() && !orderDto.getOrderApprovalList().isEmpty()) {
             //删除之前数据库保存的审批人信息
             orderApprovalMapper.deleteByOrderId(orderDto.getOrderId());
             /*1.加入创建人信息 2.设置关联的合同id 3.批量插入审批人信息*/
 
             for (OrderApproval oa : orderDto.getOrderApprovalList()) {
-                oa.setOrderId(order.getOrderId()); //设置关联订单id
-                if (oa.getActionType().shortValue() == 0) {
+                //设置关联订单id
+                oa.setOrderId(order.getOrderId());
+                short aType = oa.getActionType().shortValue();
+                if (aType == 0) {
                     if (oa.getSort() == 1) {
-                        oa.setStatus(new Short("1"));   //同时设置第一个审批的人的状态为审批中
+                        //同时设置第一个审批的人的状态为审批中
+                        oa.setStatus(new Short("1"));
                     } else {
-                        oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+                        //设置其他审批状态为 0 - 初始值
+                        oa.setStatus(new Short("0"));
                     }
                 } else {
-                    oa.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
+                    //设置其他审批状态为 0 - 初始值
+                    oa.setStatus(new Short("0"));
                 }
             }
             OrderApproval orderApproval = new OrderApproval();
@@ -259,9 +264,12 @@ public class OrderServiceImpl implements OrderService {
             orderApproval.setUserName(user.getRealName());
             orderApproval.setUserId(user.getUserId());
             orderApproval.setDeptName(userCompRel.getDeptNames());
-            orderApproval.setSort(0);    // 0 为创建着
-            orderApproval.setActionType(new Short("0"));    //默认actionType 0
-            orderApproval.setStatus(new Short("2"));    //创建人默认
+            // 0 为创建着
+            orderApproval.setSort(0);
+            //默认actionType 0
+            orderApproval.setActionType(new Short("0"));
+            //创建人默认
+            orderApproval.setStatus(new Short("2"));
             orderApproval.setTime(new Date());
             orderDto.getOrderApprovalList().add(orderApproval);
             j += orderApprovalMapper.insertBatch(orderDto.getOrderApprovalList());
@@ -294,23 +302,26 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(readOnly = true)
     public  PageBaseDto<OrderDto> OrderList(OrderDto orderDto) {
-    	Long UserId = SecurityInfoGetter.getUser().getUserId();//get 创建者
-		Long companyId = SecurityInfoGetter.getCompanyId();//get 公司id	
+        //get 创建者
+    	Long UserId = SecurityInfoGetter.getUser().getUserId();
+        //get 公司id
+		Long companyId = SecurityInfoGetter.getCompanyId();
 		orderDto.setCompanyId(companyId);
 		orderDto.setCreateUserId(UserId);
         if (orderDto.getPageNum() <= 0) {
             orderDto.setPageNum(1);
         }
         if (orderDto.getPageSize() <= 0) {
-            orderDto.setPageSize(0);//设置为0是查询全部
+            //设置为0是查询全部
+            orderDto.setPageSize(0);
         }
-        PageHelper.startPage(orderDto.getPageNum(), orderDto.getPageSize());//分页
+        PageHelper.startPage(orderDto.getPageNum(), orderDto.getPageSize());
         List<OrderDto> orderDtoList = nonautomaticMapper.selectByCondition(orderDto);
-        if (null != orderDtoList && orderDtoList.size() != 0) {
+        if (null != orderDtoList && !orderDtoList.isEmpty()) {
             for (OrderDto ord : orderDtoList) {
                 //获取订单商品
                 List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(ord.getOrderId());
-                if (null != orderProductList && orderProductList.size() > 0) {
+                if (null != orderProductList && !orderProductList.isEmpty()) {
                     ord.setOrderProductList(orderProductList);
                 }
             }
@@ -339,7 +350,7 @@ public class OrderServiceImpl implements OrderService {
             	}
             	
                 //整合付款单信息
-                if (paymentList.size() > 0) {
+                if (!paymentList.isEmpty()) {
                     for (int i = 0; i < paymentList.size(); i++) {
                         Map map = paymentList.get(i);
                         if ((long) map.get("order_id") == od.getOrderId()) {
@@ -358,7 +369,7 @@ public class OrderServiceImpl implements OrderService {
                     od.setPaymentNum("0");
                 }
                 //整合开票记录信息
-                if (billingRecordList.size() > 0) {
+                if (!billingRecordList.isEmpty()) {
                     for (int j = 0; j < billingRecordList.size(); j++) {
                         Map map = billingRecordList.get(j);
                         if ((long) map.get("order_id") == od.getOrderId()) {
@@ -379,7 +390,7 @@ public class OrderServiceImpl implements OrderService {
         PageBaseDto<OrderDto> pageBaseDto = new PageBaseDto<OrderDto>();
         pageBaseDto.setList(pageInfo.getList());
 		pageBaseDto.setTotal(pageInfo.getTotal());
-		logger.debug("销售订单条目数"+pageInfo.getTotal());
+		logger.debug("销售订单条目数",pageInfo.getTotal());
 		
         return pageBaseDto;
     }
@@ -390,15 +401,15 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto selectByPrimaryKey(Long orderId) {
         OrderDto orderDto = orderMapper.selectByPrimaryKey(orderId);
         if (null != orderDto) {
-            logger.debug("订单id为" + orderDto.getOrderId());
+            logger.debug("订单id为" , orderDto.getOrderId());
             //获取订单下商品
             List<OrderProduct> orderProductList = orderProductMapper.getOrderProductByOrderId(orderDto.getOrderId());
-            if (null != orderProductList && orderProductList.size() != 0) {
+            if (null != orderProductList && !orderProductList.isEmpty()) {
                 orderDto.setOrderProductList(orderProductList);
             }
             //添加审批人及抄送人信息
             List<OrderApproval> orderApprovalList = orderApprovalMapper.selectForOrderDetail(orderDto.getOrderId());
-            if (null != orderApprovalList && orderApprovalList.size() > 0) {
+            if (null != orderApprovalList && !orderApprovalList.isEmpty()) {
                 orderDto.setOrderApprovalList(orderApprovalList);
             }
         }
@@ -412,7 +423,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(isolation = Isolation.READ_COMMITTED, timeout = 30, propagation = Propagation.REQUIRED, rollbackForClassName = {"RuntimeException","Exception"})
     public int updateOrderIsDraft(Long orderId, Short isDraft) {
     	List<PaymentApplication> billingRecordList = paymentApplicationMapper.selectByOrderId(orderId);
-    	if (null != billingRecordList && 0 != billingRecordList.size()) {
+    	if (null != billingRecordList && !billingRecordList.isEmpty()) {
     		return 0;
     	}
         return orderMapper.updateIsDraft(orderId, isDraft);
@@ -670,7 +681,7 @@ public class OrderServiceImpl implements OrderService {
 		order.setOrderId(salesOrder.getOrderId());
 		orderMapper.updateByPrimaryKeySelective(order);
 		
-		if (null != salesOrderProductList && 0 != salesOrderProductList.size()) {
+		if (null != salesOrderProductList && !salesOrderProductList.isEmpty()) {
 			List<OrderProduct> purchaseOrderProductList = new ArrayList<OrderProduct>(salesOrderProductList.size());
 			for (OrderProduct salesOrderProduct: salesOrderProductList) {
 				OrderProduct purchaseOrderProduct = new OrderProduct();

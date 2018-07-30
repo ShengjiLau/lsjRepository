@@ -169,15 +169,15 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                             //接收者
                             DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(paymentApplication.getCompanyId(), paymentApplication.getCreateId(), user.getPhone());
                             ContractAttachment attachment = new ContractAttachment();
-                            attachment.setPerPaymentSerialNum(paymentApplication.getApplicationSerialNo());
+                            attachment.setPaymentSerialNum(paymentApplication.getApplicationSerialNo());
                             attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.PAYMENT_WEB_NOTIFY_URL+paymentApplication.getApplicationSerialNo());
                             String eventName = "purchase_approval_agree";
-                            /*if (paymentApplication.getType().shortValue() == 1) {
-                                eventName = "sale_approval_agree";
-                                attachment.setSaleRecSerialNum(contract.getSerialNo());
-                            }*/
-                            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-                            producer.sendNotifyEvent(plan_publish_event);
+                            if (paymentApplication.getApplicationType().shortValue() == 1) {
+                                eventName = "receivable_approval_agree";
+                                attachment.setSaleRecSerialNum(paymentApplication.getApplicationSerialNo());
+                            }
+                            ContractNotifyEvent planPublishEvent = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                            producer.sendNotifyEvent(planPublishEvent);
                             /**↑发送消息通知结束*/
                         }
                         break;
@@ -198,15 +198,15 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                             //接收者
                             DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
                             ContractAttachment attachment = new ContractAttachment();
-                            attachment.setPerPaymentSerialNum(paymentApplication.getApplicationSerialNo());
+                            attachment.setPaymentSerialNum(paymentApplication.getApplicationSerialNo());
                             attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.PAYMENT_WEB_NOTIFY_URL+paymentApplication.getApplicationSerialNo());
                             String eventName = "purchase_approval_agree";
-                            /*if (paymentApplication.getType().shortValue() == 1) {
-                                eventName = "sale_approval_agree";
-                                attachment.setSaleRecSerialNum(contract.getSerialNo());
-                            }*/
-                            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-                            producer.sendNotifyEvent(plan_publish_event);
+                            if (paymentApplication.getApplicationType().shortValue() == 1) {
+                                eventName = "receivable_approval_agree";
+                                attachment.setSaleRecSerialNum(paymentApplication.getApplicationSerialNo());
+                            }
+                            ContractNotifyEvent planPublishEvent = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                            producer.sendNotifyEvent(planPublishEvent);
                             /**↑发送消息通知结束*/
                         }
                         break;
@@ -247,15 +247,15 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                 //接收者
                 DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(paymentApplication.getCompanyId(), paymentApplication.getCreateId(), user.getPhone());
                 ContractAttachment attachment = new ContractAttachment();
-                attachment.setPerPaymentSerialNum(paymentApplication.getApplicationSerialNo());
+                attachment.setPaymentSerialNum(paymentApplication.getApplicationSerialNo());
                 attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.PAYMENT_WEB_NOTIFY_URL+paymentApplication.getApplicationSerialNo());
                 String eventName = "payment_approval_reject";
-                /*if (paymentApplication.getType().shortValue() == 1) {
-                    eventName = "sale_approval_reject";
-                    attachment.setSaleOrderSerialNum(order.getOrderSerialNo());
-                }*/
-                ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-                producer.sendNotifyEvent(plan_publish_event);
+                if (paymentApplication.getApplicationType().shortValue() == 1) {
+                    eventName = "receivable_approval_reject";
+                    attachment.setSaleRecSerialNum(paymentApplication.getApplicationSerialNo());
+                }
+                ContractNotifyEvent planPublishEvent = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                producer.sendNotifyEvent(planPublishEvent);
                 /**↑发送消息通知结束*/
             }
         } catch (NumberFormatException e) {
@@ -370,15 +370,15 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                         //接收者
                         DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
                         ContractAttachment attachment = new ContractAttachment();
-                        attachment.setPerPaymentSerialNum(paymentApplication.getApplicationSerialNo());
+                        attachment.setPaymentSerialNum(paymentApplication.getApplicationSerialNo());
                         attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.PAYMENT_WEB_NOTIFY_URL+paymentApplication.getApplicationSerialNo());
                         String eventName = "payment_approval_cc";
-                        /*if (paymentApplication.getType().shortValue() == 1) {
-                            eventName = "sale_approval_cc";
-                            attachment.setSaleConSerialNum(paymentApplication.getSerialNo());
-                        }*/
-                        ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-                        producer.sendNotifyEvent(plan_publish_event);
+                        if (paymentApplication.getApplicationType().shortValue() == 1) {
+                            eventName = "receivable_approval_cc";
+                            attachment.setSaleRecSerialNum(paymentApplication.getApplicationSerialNo());
+                        }
+                        ContractNotifyEvent planPublishEvent = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                        producer.sendNotifyEvent(planPublishEvent);
                     }
                     /**↑发送消息通知结束*/
                 }
