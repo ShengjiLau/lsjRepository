@@ -45,7 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.exceptionHandling().authenticationEntryPoint(entryPoint());
 		http.addFilterAt(ticketAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 				.authorizeRequests().antMatchers("/auth/**").permitAll()
-				.antMatchers("/register/**","/wechatpaynotify","/alipay/notify","/alipay/returnurl").permitAll()
+				.antMatchers("/front/**","/register/**","/wechatpaynotify","/alipay/notify","/alipay/returnurl").permitAll()
 				.and().logout().logoutSuccessHandler(ticketLogoutSuccessHandler()).logoutUrl("/signout").logoutSuccessUrl("/auth/loginpage").permitAll()
 				.and().exceptionHandling().accessDeniedHandler(deniedHandler())
 				.and().csrf().disable();

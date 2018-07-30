@@ -5,6 +5,10 @@ package com.lcdt.warehouse.utils;
  */
 public class InplanUtil {
 
+    private InplanUtil(){
+
+    }
+
 
     /***
      * 入库类型

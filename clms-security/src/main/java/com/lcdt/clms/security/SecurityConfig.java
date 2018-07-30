@@ -13,7 +13,6 @@ import org.springframework.context.annotation.ImportResource;
 @Configuration
 @ComponentScan("com.lcdt.clms.security.config")
 @Import(SecurityConfiguration.class)
-//@ImportResource("dubbo-security-consumer.xml")
 @DubboComponentScan(basePackages = "com.lcdt.clms.security.config")
 public class SecurityConfig {
 

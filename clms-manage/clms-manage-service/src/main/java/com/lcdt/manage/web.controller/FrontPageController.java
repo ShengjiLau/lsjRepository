@@ -25,6 +25,7 @@ import java.util.Map;
  * Created by xrr on 2018/7/11.
  */
 @Controller
+@RequestMapping(value = "/front")
 public class FrontPageController {
     private final Logger logger = LoggerFactory.getLogger(FrontPageController.class);
     private static final String INDEX_PAGE = "/index";
