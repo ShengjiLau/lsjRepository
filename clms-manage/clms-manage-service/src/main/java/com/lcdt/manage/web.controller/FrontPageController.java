@@ -9,6 +9,7 @@ import com.lcdt.manage.service.TNoticeCategoryService;
 import com.lcdt.manage.service.TNoticeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,6 +59,7 @@ public class FrontPageController {
             NoticeListParamsDto params = new NoticeListParamsDto();
             params.setPageNo(1).setPageSize(5);
             params.setCategoryId(cate.getCategoryId());
+            params.setNoticeStatus(1);
             Page<NoticeListDto> page = noticeService.findTopNoticesByPage(params);
             TNotice topOne = page.getRecords().remove(0);
             List<NoticeListDto> notices = page.getRecords();
@@ -150,16 +152,22 @@ public class FrontPageController {
     public ModelAndView news(Long id) {
         ModelAndView view = new ModelAndView(NEWS_PAGE);
         TNotice notice = noticeService.selectById(id);
-        logger.info(notice.getNoticeTitle());
+
 
         view.addObject("notice", notice);
         if (notice != null) {
-            NoticeListDto nextNotice = noticeService.findNoticeAndNextById(notice);
+            NoticeListParamsDto paramsDto = new NoticeListParamsDto();
+            //BeanUtils.copyProperties(paramsDto,notice);
+            paramsDto.setCategoryId(notice.getCategoryId());
+            paramsDto.setNoticeId(notice.getNoticeId());
+
+            NoticeListDto nextNotice = noticeService.findNoticeAndNextById(paramsDto);
             if (nextNotice != null) {
                 logger.info("nextNotice.get(0).getNoticeTitle===" + nextNotice.getNoticeTitle());
                 view.addObject("nextNotice", nextNotice);
             }
         }
+        //导航菜单：3-资讯
         view.addObject("active",3);
         return view;
     }

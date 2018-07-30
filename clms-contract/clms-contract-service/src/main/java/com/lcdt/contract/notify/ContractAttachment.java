@@ -31,7 +31,7 @@ public class ContractAttachment extends BaseAttachment {
     /**
      * 付款单流水号
      */
-    private String perPaymentSerialNum;
+    private String paymentSerialNum;
 
     /**
      * 销售合同标题
@@ -85,12 +85,12 @@ public class ContractAttachment extends BaseAttachment {
         this.purOrderSerialNum = purOrderSerialNum;
     }
 
-    public String getPerPaymentSerialNum() {
-        return perPaymentSerialNum;
+    public String getPaymentSerialNum() {
+        return paymentSerialNum;
     }
 
-    public void setPerPaymentSerialNum(String perPaymentSerialNum) {
-        this.perPaymentSerialNum = perPaymentSerialNum;
+    public void setPaymentSerialNum(String paymentSerialNum) {
+        this.paymentSerialNum = paymentSerialNum;
     }
 
     public String getSaleConTittle() {

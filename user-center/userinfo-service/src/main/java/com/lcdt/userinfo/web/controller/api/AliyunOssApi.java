@@ -1,5 +1,6 @@
 package com.lcdt.userinfo.web.controller.api;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.common.utils.BinaryUtil;
@@ -50,7 +51,6 @@ public class AliyunOssApi {
 			byte[] binaryData = postPolicy.getBytes("utf-8");
 			String encodedPolicy = BinaryUtil.toBase64String(binaryData);
 			String postSignature = client.calculatePostSignature(postPolicy);
-
 			Map<String, String> respMap = new LinkedHashMap<String, String>();
 			respMap.put("accessid", accessId);
 			respMap.put("policy", encodedPolicy);
@@ -58,11 +58,10 @@ public class AliyunOssApi {
 			respMap.put("dir", dir);
 			respMap.put("host", host);
 			respMap.put("expire", String.valueOf(expireEndTime / 1000));
-			JSONObject ja1 = JSONObject.parseObject(respMap.toString());
+			JSONObject ja1 = JSONObject.parseObject(JSON.toJSONString(respMap));
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("data", ja1);
 			jsonObject.put("code", 0);
-
 			return jsonObject.toString();
 		} catch (Exception e)
 		{

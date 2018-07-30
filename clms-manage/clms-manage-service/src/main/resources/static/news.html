@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="zh">
-<head>
+<head th:fragment="common_header(title,links)">
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>大驼队|资讯详情</title>
     <meta name="copyright" content="datuodui.com">
     <meta name="description" th:content="${notice.noticeSummary}">
     <meta name="keywords" th:content="${notice.keyWords}">
@@ -31,7 +31,7 @@
         <p th:text="${{notice.publishTime}}+'　来源: '+${notice.publisher}">　</p>
         <hr>
         <div class="content">
-            <p th:text="${notice.noticeContent}">
+            <p th:utext="${notice.noticeContent}">
             </p>
         </div>
         <p style="text-align: right" th:text="${{notice.publishTime}}+'　来源: '+${notice.publisher}">

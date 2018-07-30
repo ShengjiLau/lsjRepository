@@ -15,6 +15,7 @@
         <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
         <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
         <result column="is_top" jdbcType="SMALLINT" property="isTop" />
+        <result column="notice_status" jdbcType="SMALLINT" property="noticeStatus" />
     </resultMap>
     <resultMap id="BaseDtoMap" type="com.lcdt.manage.dto.NoticeListDto" extends="BaseResultMap">
         <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
@@ -36,13 +37,34 @@
         order by t1.notice_id desc
     </select>
 
-    <select id="findTopNoticesByPage" parameterType="com.lcdt.manage.entity.TNotice" resultMap="BaseDtoMap">
-     select t1.notice_id,t1.category_id,t1.notice_title,t1.cover_image_url,t1.publisher,t1.notice_content,t1.notice_summary,t1.publish_time,t1.create_time,t1.create_user_id,t1.is_top,t1.key_words
+    <select id="findTopNoticesByPage" parameterType="com.lcdt.manage.dto.NoticeListParamsDto" resultMap="BaseDtoMap">
+     select t1.notice_id,t1.category_id,t1.notice_title,t1.cover_image_url,t1.publisher,t1.notice_content,t1.notice_summary,t1.publish_time,t1.create_time,t1.create_user_id,t1.create_user_name,t1.is_top,t1.key_words,t1.notice_status
      ,(select cc.category_name from t_notice_category cc where (cc.is_delete is null or cc.is_delete=0) AND cc.category_id=t1.category_id) category_name
         from `t_notice` t1
-        where  t1.category_id = #{categoryId,jdbcType=BIGINT}
+        where 1=1
+        <if test="categoryId!=null">
+          AND t1.category_id = #{categoryId,jdbcType=BIGINT}
+        </if>
         <if test="noticeId!=null">
             AND  t1.notice_id &lt; #{noticeId,jdbcType=BIGINT}
+        </if>
+        <if test="createDateFrom!=null and createDateFrom!=''">
+            and date(t1.create_time) >= CONCAT(STR_TO_DATE(#{createDateFrom,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+        </if>
+        <if test="createDateTo!=null and createDateTo!=''">
+            and  CONCAT(STR_TO_DATE(#{createDateTo,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59') >= date(t1.create_time)
+        </if>
+        <if test="noticeTitle!=null and noticeTitle!=''">
+            and t1.notice_title like CONCAT('%',#{noticeTitle,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="keyWords!=null and keyWords!=''">
+            and t1.key_words like CONCAT('%',#{keyWords,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="isTop!=null">
+            and t1.is_top = #{isTop,jdbcType=SMALLINT}
+        </if>
+        <if test="noticeStatus!=null">
+            and t1.notice_status = #{noticeStatus,jdbcType=SMALLINT}
         </if>
         order by t1.is_top DESC ,t1.notice_id DESC
     </select>
