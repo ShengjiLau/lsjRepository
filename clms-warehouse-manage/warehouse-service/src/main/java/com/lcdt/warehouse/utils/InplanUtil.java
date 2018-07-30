@@ -1,5 +1,11 @@
 package com.lcdt.warehouse.utils;
 
+import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
+import org.springframework.util.StringUtils;
+
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
+
 /**
  * Created by yangbinq on 2018/7/27.
  */
@@ -33,4 +39,7 @@ public class InplanUtil {
 
         return  result;
     }
+
+
+
 }
