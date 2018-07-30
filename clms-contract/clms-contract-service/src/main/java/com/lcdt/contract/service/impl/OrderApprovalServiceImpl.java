@@ -23,9 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -35,6 +33,8 @@ import java.util.List;
 @Service
 @Transactional
 public class OrderApprovalServiceImpl implements OrderApprovalService {
+
+    private static final String ERR_MSG = "操作失败！";
 
     @Autowired
     private OrderApprovalMapper orderApprovalMapper;
@@ -67,7 +67,8 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
             OrderApproval oa = null;
             for (OrderApproval orderApproval : oad.getOrderApprovalList()) {
                 if (null != orderApproval.getSort()) {
-                    if (orderApproval.getSort() == 0) {  //发起人及创建人
+                    //发起人及创建人
+                    if (orderApproval.getSort() == 0) {
                         oad.setApprovalCreateName(orderApproval.getUserName());
                     }
                     /**审批状态为 1 3 4 代表审批流程正在执行的状态或者已经结束（撤销/驳回），可作为列表审批关键环节的展示*/
@@ -84,8 +85,10 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                             oa.setUserName(orderApproval.getUserName());
                             oa.setActionType(orderApproval.getActionType());
                             oa.setStatus(orderApproval.getStatus());
-                            oad.setApprovalStatus(orderApproval.getStatus());   //设置当前审批状态
-                        } else if (oad.getApprovalStatus() == 2) {   //审批流程完成，无需再设置当前人
+                            //设置当前审批状态
+                            oad.setApprovalStatus(orderApproval.getStatus());
+                            //审批流程完成，无需再设置当前人
+                        } else if (oad.getApprovalStatus() == 2) {
                             oad.setApprovalStatus(new Short("2"));
                         }
                     }
@@ -140,14 +143,14 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                             DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(order.getCompanyId(), order.getCreateUserId(), user.getPhone());
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setPurOrderSerialNum(order.getOrderSerialNo());
-                            attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.ORDER_WEB_NOTIFY_URL+order.getOrderSerialNo());
+                            attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.ORDER_WEB_NOTIFY_URL + order.getOrderSerialNo());
                             String eventName = "purchase_bill_approval_agree";
                             if (order.getOrderType().shortValue() == 1) {
                                 eventName = "sale_bill_approval_agree";
                                 attachment.setSaleOrderSerialNum(order.getOrderSerialNo());
                             }
-                            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-                            producer.sendNotifyEvent(plan_publish_event);
+                            ContractNotifyEvent planPublishEvent = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                            producer.sendNotifyEvent(planPublishEvent);
                             /**↑发送消息通知结束*/
                         }
                         break;
@@ -163,29 +166,28 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                             //发送者
                             DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(companyId, ca.getUserId());
                             Order order = orderMapper.selectByPrimaryKey(orderApproval.getOrderId());
-                            OrderApproval oApproval = caList.get(i+1);
+                            OrderApproval oApproval = caList.get(i + 1);
                             User user = companyRpcService.selectByPrimaryKey(oApproval.getUserId());
                             //接收者
                             DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setPurOrderSerialNum(order.getOrderSerialNo());
-                            attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.ORDER_WEB_NOTIFY_URL+order.getOrderSerialNo());
+                            attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.ORDER_WEB_NOTIFY_URL + order.getOrderSerialNo());
                             String eventName = "purchase_bill_approval_agree";
                             if (order.getOrderType().shortValue() == 1) {
                                 eventName = "sale_bill_approval_agree";
                                 attachment.setSaleOrderSerialNum(order.getOrderSerialNo());
                             }
-                            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-                            producer.sendNotifyEvent(plan_publish_event);
+                            ContractNotifyEvent planPublishEvent = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                            producer.sendNotifyEvent(planPublishEvent);
                             /**↑发送消息通知结束*/
                         }
-                        break;
                     }
                 }
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
-            throw new RuntimeException("操作失败!");
+
+            throw new RuntimeException(ERR_MSG);
         }
         return rows;
     }
@@ -216,19 +218,19 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                 DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(order.getCompanyId(), order.getCreateUserId(), user.getPhone());
                 ContractAttachment attachment = new ContractAttachment();
                 attachment.setPurOrderSerialNum(order.getOrderSerialNo());
-                attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.ORDER_WEB_NOTIFY_URL+order.getOrderSerialNo());
+                attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.ORDER_WEB_NOTIFY_URL + order.getOrderSerialNo());
                 String eventName = "purchase_bill_approval_reject";
                 if (order.getOrderType().shortValue() == 1) {
                     eventName = "sale_bill_approval_reject";
                     attachment.setSaleOrderSerialNum(order.getOrderSerialNo());
                 }
-                ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-                producer.sendNotifyEvent(plan_publish_event);
+                ContractNotifyEvent planPublishEvent = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                producer.sendNotifyEvent(planPublishEvent);
                 /**↑发送消息通知结束*/
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
-            throw new RuntimeException("操作失败！");
+
+            throw new RuntimeException(ERR_MSG);
         }
         return rows;
     }
@@ -249,8 +251,8 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
             rows += orderApprovalMapper.updateStatus(orderApproval);
             rows += orderMapper.updateApprovalStatus(orderApproval.getOrderId(), companyId, new Short("3"));
         } catch (NumberFormatException e) {
-            e.printStackTrace();
-            throw new RuntimeException("操作失败！");
+
+            throw new RuntimeException(ERR_MSG);
         }
         return rows;
     }
@@ -258,7 +260,6 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
     @Override
     public int turnDoApproval(List<OrderApproval> orderApprovalList) {
         OrderApproval orderApproval = orderApprovalList.get(0);    //第一个为当前审批人
-        Long companyId = SecurityInfoGetter.getCompanyId();
         orderApproval.setStatus(new Short("5"));     //审批状态 5 - 转办
         orderApproval.setActionType(new Short("0"));
         orderApproval.setTime(new Date());   //审批时间
@@ -282,8 +283,8 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                 orderApprovalMapper.insert(orderApproval1);
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
-            throw new RuntimeException("操作失败！");
+
+            throw new RuntimeException(ERR_MSG);
         }
         return rows;
     }
@@ -320,7 +321,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                 oa.setStatus(new Short("0"));
                 oa.setTime(new Date());
             }
-            if (null != orderApprovalList && orderApprovalList.size() > 0) {
+            if (null != orderApprovalList && !orderApprovalList.isEmpty()) {
                 row = orderApprovalMapper.insertBatch(orderApprovalList);
                 if (row > 0) {
                     /**↓发送消息通知开始*/
@@ -333,14 +334,14 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                         DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(companyId, user.getUserId(), user.getPhone());
                         ContractAttachment attachment = new ContractAttachment();
                         attachment.setPurOrderSerialNum(order.getOrderSerialNo());
-                        attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.ORDER_WEB_NOTIFY_URL+order.getOrderSerialNo());
+                        attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.ORDER_WEB_NOTIFY_URL + order.getOrderSerialNo());
                         String eventName = "purchase_bill_approval_cc";
                         if (order.getOrderType().shortValue() == 1) {
                             eventName = "sale_bill_approval_cc";
                             attachment.setSaleOrderSerialNum(order.getOrderSerialNo());
                         }
-                        ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-                        producer.sendNotifyEvent(plan_publish_event);
+                        ContractNotifyEvent planPublishEvent = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                        producer.sendNotifyEvent(planPublishEvent);
                     }
                     /**↑发送消息通知结束*/
                 }
@@ -348,8 +349,8 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
                 row = 1;
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
-            throw new RuntimeException("操作失败！");
+
+            throw new RuntimeException(ERR_MSG);
 
         }
         return row;
