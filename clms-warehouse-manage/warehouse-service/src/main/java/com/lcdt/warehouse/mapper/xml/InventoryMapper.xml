@@ -58,7 +58,7 @@
         t.goods_id = g.goods_id
         <where>
             <if test="querydto.inventoryId != null">
-                and t.inventory_id = #{querydto.inventoryId}
+                and t.invertory_id = #{querydto.inventoryId}
             </if>
 
 
