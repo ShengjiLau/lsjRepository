@@ -58,7 +58,7 @@
     receiver_phone, receiver_province, receiver_city, receive_district, receive_address, 
     remarks, create_time, approval_start_date, approval_end_date, group_id, company_id, 
     create_user_id, order_serial_no, receive_time, supplier_id, is_draft, receive_require, 
-    summation, warehouse_id, attachment1_name, attachment2_name, attachment2, attachment3_name, 
+    summation, logistics_company,logistics_no,logistics_status, warehouse_id, attachment1_name, attachment2_name, attachment2, attachment3_name,
     attachment3, attachment4_name, attachment4, attachment5_name, attachment5, traffic_plan, 
     warehouse_plan,origin_order_no,origin_order_id,push_order_id
   </sql>
@@ -68,7 +68,8 @@
     send_district sendDistrict, send_address sendAddress, send_time sendTime, pack_require packRequire, receiver, receiver_phone receiverPhone, receiver_province receiverProvince, 
     receiver_city receiverCity, receive_district receiveDistrict, receive_address receiveAddress, remarks, create_time createTime, group_id groupId,company_id companyId,
     receive_time receiveTime,approval_start_date approvalStartDate,approval_end_date approvalEndDate,create_user_id createUserId,order_serial_no orderSerialNo,
-    approval_status approvalStatus,approval_process approvalProcess,approval_process_id approvalProcessId,supplier_id supplierId,is_draft isDraft,receive_require receiveRequire,summation,warehouse_id warehouseId,
+    approval_status approvalStatus,approval_process approvalProcess,approval_process_id approvalProcessId,supplier_id supplierId,is_draft isDraft,receive_require receiveRequire,
+    summation,logistics_company,logistics_no,logistics_status,warehouse_id warehouseId,
     attachment1_name attachment1Name,attachment1,attachment2_name attachment2Name,attachment2,attachment3_name attachment3Name,attachment3,attachment4_name attachment4Name,attachment4,
     attachment5_name attachment5Name,attachment5,traffic_plan trafficPlan, 
     warehouse_plan warehousePlan,origin_order_no originOrderNo,origin_order_id originOrderId, push_order_id pushOrderId
@@ -92,7 +93,7 @@
       approval_end_date, group_id, company_id, 
       create_user_id, order_serial_no,receive_time,
       approval_process,approval_process_id,supplier_id,is_draft,receive_require,
-      summation,warehouse_id,attachment1_name,attachment1,
+      summation,logistics_company,logistics_no,logistics_status,warehouse_id,attachment1_name,attachment1,
       attachment2_name,attachment2,attachment3_name,attachment3,
       attachment4_name,attachment4,attachment5_name,attachment5,traffic_plan, 
    	  warehouse_plan,origin_order_no,origin_order_id,push_order_id)
@@ -119,7 +120,8 @@
     </choose>
       #{receiveTime,jdbcType=TIMESTAMP},
       #{approvalProcess,jdbcType=VARCHAR},#{approvalProcessId,jdbcType=BIGINT},#{supplierId,jdbcType=BIGINT},#{isDraft,jdbcType=SMALLINT},
-      #{receiveRequire,jdbcType=VARCHAR},#{summation,jdbcType=DECIMAL},#{warehouseId,jdbcType=BIGINT},
+      #{receiveRequire,jdbcType=VARCHAR},#{summation,jdbcType=DECIMAL},
+      #{logisticsCompany,jdbcType=VARCHAR},#{logisticsNo,jdbcType=VARCHAR},#{logisticsStatus,jdbcType=VARCHAR},#{warehouseId,jdbcType=BIGINT},
       #{attachment1Name,jdbcType=VARCHAR},#{attachment1,jdbcType=VARCHAR},
       #{attachment2Name,jdbcType=VARCHAR},#{attachment2,jdbcType=VARCHAR},
       #{attachment3Name,jdbcType=VARCHAR},#{attachment3,jdbcType=VARCHAR},
@@ -245,6 +247,15 @@
       </if>
       <if test="summation != null" >
         summation,
+      </if>
+      <if test="logisticsCompany != null" >
+        logistics_company,
+      </if>
+      <if test="logisticsNo != null" >
+        logistics_no,
+      </if>
+      <if test="logisticsStatus != null" >
+        logistics_status,
       </if>
       <if test="warehouseId != null" >
         warehouse_id,
@@ -407,6 +418,17 @@
       <if test="summation != null" >
         #{summation,jdbcType=DECIMAL},
       </if>
+
+      <if test="logisticsCompany != null" >
+        #{logisticsCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsNo != null" >
+        #{logisticsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsStatus != null" >
+        #{logisticsStatus,jdbcType=VARCHAR},
+      </if>
+
       <if test="warehouseId != null" >
         #{warehouseId,jdbcType=BIGINT},
       </if>
@@ -571,6 +593,17 @@
       <if test="summation != null" >
         summation = #{summation,jdbcType=DECIMAL},
       </if>
+
+      <if test="logisticsCompany != null" >
+        logistics_company = #{logisticsCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsNo != null" >
+        logistics_no = #{logisticsNo,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsStatus != null" >
+        logistics_status = #{logisticsStatus,jdbcType=VARCHAR},
+      </if>
+
       <if test="warehouseId != null" >
         warehouse_id = #{warehouseId,jdbcType=BIGINT},
       </if>
@@ -671,6 +704,9 @@
       is_draft = #{isDraft,jdbcType=SMALLINT},
       receive_require = #{receiveRequire,jdbcType=VARCHAR},
       summation = #{summation,jdbcType=DECIMAL},
+      logistics_company = #{logisticsCompany,jdbcType=VARCHAR},
+      logistics_no = #{logisticsNo,jdbcType=VARCHAR},
+      logistics_status = #{logisticsStatus,jdbcType=VARCHAR},
       warehouse_id = #{warehouseId,jdbcType=BIGINT},
       attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
       attachment1 = #{attachment1,jdbcType=VARCHAR},
