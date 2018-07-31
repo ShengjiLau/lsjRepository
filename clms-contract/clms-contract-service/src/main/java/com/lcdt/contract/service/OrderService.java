@@ -4,6 +4,7 @@ package com.lcdt.contract.service;
 
 
 
+import com.lcdt.contract.model.Order;
 import com.lcdt.contract.web.dto.OrderDto;
 import com.lcdt.contract.web.dto.PageBaseDto;
 
@@ -83,6 +84,14 @@ public interface OrderService {
 	 * @return >1成功
 	 */
 	int salesOrderToPurchaseOrder(Long orderId);
+
+
+	/**
+	 * 新增物流信息
+	 * @param order
+	 * @return
+	 */
+	int addLogisticsInfo(Order order);
 		
 
 }

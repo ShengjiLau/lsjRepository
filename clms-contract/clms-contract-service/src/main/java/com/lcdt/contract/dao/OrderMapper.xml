@@ -736,10 +736,16 @@
     approval_end_date = CURRENT_TIMESTAMP
     where order_id = #{arg0} and company_id = #{arg1}
   </update>
-  
-    <update id="updateIsDraft">
+  <update id="updateIsDraft">
     update t_order
     set is_draft = #{arg1}
     where order_id = #{arg0} 
+  </update>
+  <update id="updateLogisticsInfo" parameterType="com.lcdt.contract.model.Order">
+    update t_order
+    set logistics_company = #{logisticsCompany,jdbcType=VARCHAR},
+        logistics_no = #{logisticsNo,jdbcType=VARCHAR},
+        logistics_status = #{logisticsStatus,jdbcType=VARCHAR}
+    where order_id = #{orderId,jdbcType=BIGINT} and company_id = #{companyId,jdbcType=BIGINT}
   </update>
 </mapper>
