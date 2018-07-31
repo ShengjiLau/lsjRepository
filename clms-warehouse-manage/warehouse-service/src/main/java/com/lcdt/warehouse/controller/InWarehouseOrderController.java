@@ -5,18 +5,30 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
+import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.utils.GroupIdsUtil;
+import com.lcdt.warehouse.utils.InplanUtil;
 import com.lcdt.warehouse.vo.ConstantVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.Date;
 import java.util.List;
 
@@ -180,6 +192,142 @@ public class InWarehouseOrderController {
         return getPageBaseDto(params);
     }
 
+
+    @ApiOperation("入库单导出")
+    @GetMapping(value = "/export/{inorderId}")
+    public void export(@PathVariable Long inorderId,HttpServletResponse response) throws IOException {
+        InWarehouseOrderDetailDto orderDeatil = inWarehouseOrderService.queryInWarehouseOrder(SecurityInfoGetter.getCompanyId(),inorderId);
+        File fi = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "templates/入库单.xlsx");
+        if (fi.exists()) {
+            response.reset();
+            XSSFWorkbook wb = null;
+            try {
+                wb = new XSSFWorkbook(new FileInputStream(fi));    // 读取excel模板
+                XSSFSheet sheet = wb.getSheetAt(0);  // 读取了模板内所有sheet内容
+                XSSFCellStyle cellStyle = wb.createCellStyle();
+                XSSFRow row = sheet.getRow(0);
+                XSSFCell cell = row.getCell(0);
+                cell.setCellValue("入库单-"+orderDeatil.getInOrderCode());
+
+                row = sheet.getRow(2);
+                cell= row.getCell(11);
+                cell.setCellValue(orderDeatil.getGroupName()==null?"":orderDeatil.getGroupName());//所属项目
+
+                row = sheet.getRow(3);
+                cell = row.getCell(11);
+                cell.setCellValue(orderDeatil.getContractCode()==null?"":orderDeatil.getContractCode());//合同单号
+
+                row = sheet.getRow(3);
+                cell = row.getCell(36);
+                cell.setCellValue(orderDeatil.getPurchaseCode()==null?"":orderDeatil.getPurchaseCode());//采购单号
+
+                row = sheet.getRow(5);
+                cell = row.getCell(11);
+                cell.setCellValue(orderDeatil.getCustomerName()==null?"":orderDeatil.getCustomerName());//客户名称
+
+                row = sheet.getRow(6);
+                cell = row.getCell(11);
+                cell.setCellValue(orderDeatil.getCustomerContactName()==null?"":orderDeatil.getCustomerContactName());//联系人
+
+                row = sheet.getRow(6);
+                cell = row.getCell(36);
+                cell.setCellValue(orderDeatil.getCustomerContactPhone()==null?"":orderDeatil.getCustomerContactPhone());//联系电话
+
+                row = sheet.getRow(8);
+                cell = row.getCell(11);
+                cell.setCellValue(orderDeatil.getWarehouseName()==null?"":orderDeatil.getWarehouseName());//入库仓库
+
+                row = sheet.getRow(8);
+                cell = row.getCell(36);
+                cell.setCellValue(orderDeatil.getStorageType()==null?"": InplanUtil.convertStorageType(orderDeatil.getStorageType()));//入库类型
+
+                row = sheet.getRow(9);
+                cell = row.getCell(11);
+                cell.setCellValue(orderDeatil.getStoragePlanTime()==null ? "" : orderDeatil.getStoragePlanTime().toString());//计划日期
+
+                row = sheet.getRow(10);
+                cell = row.getCell(11);
+                cell.setCellValue(orderDeatil.getStorageRemark()==null?"":orderDeatil.getStorageRemark());//备注
+
+                row = sheet.getRow(12);
+                cell = row.getCell(11);
+                cell.setCellValue(orderDeatil.getDeliverymanName()==null?"":orderDeatil.getDeliverymanName());//送货单位
+
+                row = sheet.getRow(12);
+                cell = row.getCell(36);
+                cell.setCellValue(orderDeatil.getDeliverymanLinkman()==null?"":orderDeatil.getDeliverymanLinkman());//送货人
+
+                row = sheet.getRow(13);
+                cell = row.getCell(11);
+                cell.setCellValue(orderDeatil.getDeliverymanPhone()==null?"":orderDeatil.getDeliverymanPhone());//送货人电话
+
+                row = sheet.getRow(13);
+                cell = row.getCell(36);
+                cell.setCellValue(orderDeatil.getDeliverymanCar()==null?"":orderDeatil.getDeliverymanCar());//送货人车辆
+
+                List<InorderGoodsInfoDetailDto> inorderGoodsInfoDetailDtoList = orderDeatil.getGoodsInfoDtoList();
+
+                if (null!=inorderGoodsInfoDetailDtoList && !inorderGoodsInfoDetailDtoList.isEmpty()) {
+                    int rows = 16,i=1;
+                    for (InorderGoodsInfoDetailDto dto : inorderGoodsInfoDetailDtoList) {
+                        sheet.addMergedRegion(new CellRangeAddress(rows,rows+dto.getLocationInfo().size()-1,0,1));
+                        sheet.addMergedRegion(new CellRangeAddress(rows,rows+dto.getLocationInfo().size()-1,2,10));
+                        sheet.addMergedRegion(new CellRangeAddress(rows,rows+dto.getLocationInfo().size()-1,11,18));
+                        sheet.addMergedRegion(new CellRangeAddress(rows,rows+dto.getLocationInfo().size()-1,19,25));
+                        sheet.addMergedRegion(new CellRangeAddress(rows,rows+dto.getLocationInfo().size()-1,26,30));
+                        sheet.addMergedRegion(new CellRangeAddress(rows,rows+dto.getLocationInfo().size()-1,31,35));
+                        sheet.addMergedRegion(new CellRangeAddress(rows,rows+dto.getLocationInfo().size()-1,42,46));
+                        int j=1;
+                        for(InorderGoodsInfoLocationDto inorderGoodsInfoLocationDto:dto.getLocationInfo()){
+                            sheet.addMergedRegion(new CellRangeAddress(rows,rows,36,41));
+                            sheet.addMergedRegion(new CellRangeAddress(rows,rows,47,52));
+                            row=sheet.createRow(rows);
+                            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+                            cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+                            cellStyle.setBorderBottom(BorderStyle.THIN);
+                            cellStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+                            cellStyle.setBorderLeft(BorderStyle.THIN);
+                            cellStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+                            cellStyle.setBorderRight(BorderStyle.THIN);
+                            cellStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
+                            cellStyle.setBorderTop(BorderStyle.THIN);
+                            cellStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
+
+                            for(int n=0;n<53;n++){
+                                cell=row.createCell(n);
+                                cell.setCellStyle(cellStyle);
+                            }
+                            if(j==1){
+                                row.getCell(0).setCellValue(i++);
+                                row.getCell(2).setCellValue(dto.getGoodsName());
+                                row.getCell(11).setCellValue(dto.getGoodsCode());
+                                row.getCell(19).setCellValue(dto.getGoodsBarcode());
+                                row.getCell(26).setCellValue(dto.getUnit());
+                                row.getCell(31).setCellValue(dto.getReceivalbeAmount());
+                                row.getCell(42).setCellValue(dto.getDamage());
+                            }
+                            row.getCell(36).setCellValue(inorderGoodsInfoLocationDto.getInHouseAmount());
+                            row.getCell(47).setCellValue(inorderGoodsInfoLocationDto.getBatch());
+                            rows++;
+                            j++;
+                        }
+                    }
+                }
+                String fileName ="入库单.xlsx";
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("gbk"),"iso-8859-1") + "\"");
+                response.setContentType("application/octet-stream;charset=UTF-8");
+                OutputStream ouputStream = response.getOutputStream();
+                wb.write(ouputStream);
+                ouputStream.flush();
+                ouputStream.close();
+
+            } catch (Exception e) {
+//                logger.error("导出excel出现异常:", e);
+            }
+
+        }
+    }
+
     /**
      * 提取列表，和待入库概览
      * @param params
@@ -191,6 +339,9 @@ public class InWarehouseOrderController {
         Page<InWarehouseOrderDto> inWarehouseOrderPage = inWarehouseOrderService.queryInWarehouseOrderList(params);
         return new PageBaseDto(inWarehouseOrderPage.getRecords(), inWarehouseOrderPage.getTotal());
     }
+
+
+
 
 }
 

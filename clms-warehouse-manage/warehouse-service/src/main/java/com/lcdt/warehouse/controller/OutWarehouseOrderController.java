@@ -5,19 +5,35 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.User;
+import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.warehouse.dto.*;
+import com.lcdt.warehouse.entity.OutOrderGoodsInfo;
 import com.lcdt.warehouse.service.OutWarehouseOrderService;
 import com.lcdt.warehouse.utils.GroupIdsUtil;
+import com.lcdt.warehouse.utils.InplanUtil;
+import com.lcdt.warehouse.utils.OutplanUtil;
 import com.lcdt.warehouse.vo.ConstantVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -69,7 +85,7 @@ public class OutWarehouseOrderController {
     @ApiOperation("出库单详细")
     @GetMapping(value = "/order/{outorderId}")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_out_order_search')")
-    public OutWhOrderDto inWarehouseOrderDetail(@PathVariable Long outorderId) {
+    public OutWhOrderDto outWarehouseOrderDetail(@PathVariable Long outorderId) {
         OutWhOrderDto outWhOrderDto = new OutWhOrderDto();
         outWhOrderDto = outWarehouseOrderService.queryOutWarehouseOrder(SecurityInfoGetter.getCompanyId(), outorderId);
         return outWhOrderDto;
@@ -171,6 +187,112 @@ public class OutWarehouseOrderController {
                 .setCompanyId(SecurityInfoGetter.getCompanyId());
         Page<OutWhOrderDto> inWarehouseOrderPage = outWarehouseOrderService.queryOutWarehouseOrderList(params);
         return new PageBaseDto(inWarehouseOrderPage.getRecords(), inWarehouseOrderPage.getTotal());
+    }
+
+
+
+    @ApiOperation("出库单导出")
+    @GetMapping(value = "/export/{outorderId}")
+    public void exportOutWarehouseOrderDetail(@PathVariable Long outorderId,HttpServletResponse response) throws IOException {
+        OutWhOrderDto outWhOrderDto = outWarehouseOrderService.queryOutWarehouseOrder(SecurityInfoGetter.getCompanyId(), outorderId);
+        File fi = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "templates/出库单.xlsx");
+        if (fi.exists()) {
+            response.reset();
+            XSSFWorkbook wb = null;
+            try {
+                wb = new XSSFWorkbook(new FileInputStream(fi));    // 读取excel模板
+                XSSFSheet sheet = wb.getSheetAt(0);  // 读取了模板内所有sheet内容
+                XSSFRow row = sheet.getRow(0);
+                XSSFCell cell = row.getCell(0);
+                cell.setCellValue("出库单-" + outWhOrderDto.getOutorderNo());
+
+                row = sheet.getRow(2);
+                cell = row.getCell(2);
+                cell.setCellValue(outWhOrderDto.getGroupName() == null ? "所属项目" : outWhOrderDto.getGroupName());//所属项目
+
+                row = sheet.getRow(4);
+                cell = row.getCell(2);
+                cell.setCellValue(outWhOrderDto.getCustomerName() == null ? "客户名称" : outWhOrderDto.getCustomerName());//客户名称
+
+                row = sheet.getRow(5);
+                cell = row.getCell(2);
+                cell.setCellValue(outWhOrderDto.getCustomerContactName() == null ? "联系人" : outWhOrderDto.getCustomerContactName());//联系人
+
+                row = sheet.getRow(5);
+                cell = row.getCell(9);
+                cell.setCellValue(outWhOrderDto.getCustomerContactPhone() == null ? "联系电话" : outWhOrderDto.getCustomerContactPhone());//联系电话
+
+                row = sheet.getRow(7);
+                cell = row.getCell(2);
+                cell.setCellValue(outWhOrderDto.getWarehouseName() == null ? "" : outWhOrderDto.getWarehouseName());//仓库
+
+                row = sheet.getRow(7);
+                cell = row.getCell(9);
+                cell.setCellValue(outWhOrderDto.getOutboundType() == null ? "" : OutplanUtil.convertStorageType(outWhOrderDto.getOutboundType()));//出库类型
+
+                row = sheet.getRow(8);
+                cell = row.getCell(2);
+                cell.setCellValue(outWhOrderDto.getOutboundPlanTime() == null ? "计划日期" : outWhOrderDto.getOutboundPlanTime().toString());//计划日期
+
+                row = sheet.getRow(9);
+                cell = row.getCell(2);
+                cell.setCellValue(outWhOrderDto.getOutboundRemark() == null ? "" : outWhOrderDto.getOutboundRemark());//备注
+
+                row = sheet.getRow(11);
+                cell = row.getCell(2);
+                cell.setCellValue(outWhOrderDto.getPickupUnit() == null ? "提货单位" : outWhOrderDto.getPickupUnit());//提货单位
+
+                row = sheet.getRow(12);
+                cell = row.getCell(2);
+                cell.setCellValue(outWhOrderDto.getPickupLinkman() == null ? "提货人" : outWhOrderDto.getPickupLinkman());//提货人
+
+                row = sheet.getRow(12);
+                cell = row.getCell(9);
+                cell.setCellValue(outWhOrderDto.getPickupIdentiycard() == null ? "提货人身份证号" : outWhOrderDto.getPickupIdentiycard());//提货人身份证号
+
+                row = sheet.getRow(13);
+                cell = row.getCell(2);
+                cell.setCellValue(outWhOrderDto.getPickupPhone() == null ? "提货人电话" : outWhOrderDto.getPickupPhone());//提货人电话
+
+
+                row = sheet.getRow(13);
+                cell = row.getCell(9);
+                cell.setCellValue(outWhOrderDto.getPickupVehicleNum() == null ? "提货人车辆" : outWhOrderDto.getPickupVehicleNum());//提货人车辆
+
+                List<OutOrderGoodsInfoDto> outOrderGoodsInfoList = outWhOrderDto.getOutOrderGoodsInfoList();
+                if (outOrderGoodsInfoList != null && outOrderGoodsInfoList.size() > 0) {
+
+                    int rows = 16, i = 1;
+                    for (OutOrderGoodsInfoDto dto : outOrderGoodsInfoList) {
+
+                        row = sheet.getRow(rows);
+                        row.getCell(10).setCellValue(dto.getOutboundQuantity());
+                        row.getCell(0).setCellValue(i++);
+                        row.getCell(1).setCellValue(dto.getGoodsName());
+                        row.getCell(3).setCellValue(dto.getGoodsCode());
+                        row.getCell(5).setCellValue(dto.getGoodsBarCode());
+                        row.getCell(6).setCellValue(dto.getUnit());
+                        row.getCell(7).setCellValue(dto.getOutboundQuantity());
+                        row.getCell(8).setCellValue(dto.getOutboundQuantity());
+                        row.getCell(9).setCellValue(dto.getOutboundQuantity());
+                        row.getCell(11).setCellValue(dto.getOutboundQuantity());
+                        rows++;
+                    }
+
+                }
+                String fileName = "出库单.xlsx";
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("gbk"), "iso-8859-1") + "\"");
+                response.setContentType("application/octet-stream;charset=UTF-8");
+                OutputStream ouputStream = response.getOutputStream();
+                wb.write(ouputStream);
+                ouputStream.flush();
+                ouputStream.close();
+
+            } catch (Exception e) {
+//                logger.error("导出excel出现异常:", e);
+            }
+
+        }
     }
 
 }
