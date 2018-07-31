@@ -5,36 +5,29 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.userinfo.model.User;
-import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.warehouse.dto.*;
-import com.lcdt.warehouse.entity.OutOrderGoodsInfo;
 import com.lcdt.warehouse.service.OutWarehouseOrderService;
 import com.lcdt.warehouse.utils.DateUtils;
 import com.lcdt.warehouse.utils.GroupIdsUtil;
-import com.lcdt.warehouse.utils.InplanUtil;
 import com.lcdt.warehouse.utils.OutplanUtil;
 import com.lcdt.warehouse.vo.ConstantVO;
-import freemarker.template.utility.DateUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.stereotype.Controller;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -197,12 +190,12 @@ public class OutWarehouseOrderController {
     @GetMapping(value = "/export/{outorderId}")
     public void exportOutWarehouseOrderDetail(@PathVariable Long outorderId,HttpServletResponse response) throws IOException {
         OutWhOrderDto outWhOrderDto = outWarehouseOrderService.queryOutWarehouseOrder(SecurityInfoGetter.getCompanyId(), outorderId);
-        File fi = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "templates/出库单.xlsx");
-        if (fi.exists()) {
+        ClassPathResource resource = new ClassPathResource("templates/出库单.xlsx");
+        if (resource.exists()) {
             response.reset();
             XSSFWorkbook wb = null;
             try {
-                wb = new XSSFWorkbook(new FileInputStream(fi));    // 读取excel模板
+                wb = new XSSFWorkbook(resource.getInputStream());    // 读取excel模板
                 XSSFSheet sheet = wb.getSheetAt(0);  // 读取了模板内所有sheet内容
                 XSSFRow row = sheet.getRow(0);
                 XSSFCell cell = row.getCell(0);

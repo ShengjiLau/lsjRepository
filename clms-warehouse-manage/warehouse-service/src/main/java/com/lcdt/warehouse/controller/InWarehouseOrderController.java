@@ -24,6 +24,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
@@ -198,12 +199,12 @@ public class InWarehouseOrderController {
     @GetMapping(value = "/export/{inorderId}")
     public void export(@PathVariable Long inorderId,HttpServletResponse response) throws IOException {
         InWarehouseOrderDto orderDeatil = inWarehouseOrderService.queryInWarehouseOrderDetail(SecurityInfoGetter.getCompanyId(),inorderId);
-        File fi = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "templates/入库单.xlsx");
-        if (fi.exists()) {
+        ClassPathResource resource = new ClassPathResource("templates/入库单.xlsx");
+        if (resource.exists()) {
             response.reset();
             XSSFWorkbook wb = null;
             try {
-                wb = new XSSFWorkbook(new FileInputStream(fi));    // 读取excel模板
+                wb = new XSSFWorkbook(resource.getInputStream());    // 读取excel模板
                 XSSFSheet sheet = wb.getSheetAt(0);  // 读取了模板内所有sheet内容
                 XSSFRow row = sheet.getRow(0);
                 XSSFCell cell = row.getCell(0);
