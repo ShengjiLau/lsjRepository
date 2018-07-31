@@ -9,10 +9,12 @@ import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.warehouse.dto.*;
 import com.lcdt.warehouse.entity.OutOrderGoodsInfo;
 import com.lcdt.warehouse.service.OutWarehouseOrderService;
+import com.lcdt.warehouse.utils.DateUtils;
 import com.lcdt.warehouse.utils.GroupIdsUtil;
 import com.lcdt.warehouse.utils.InplanUtil;
 import com.lcdt.warehouse.utils.OutplanUtil;
 import com.lcdt.warehouse.vo.ConstantVO;
+import freemarker.template.utility.DateUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -207,57 +209,65 @@ public class OutWarehouseOrderController {
                 cell.setCellValue("出库单-" + outWhOrderDto.getOutorderNo());
 
                 row = sheet.getRow(2);
-                cell = row.getCell(2);
-                cell.setCellValue(outWhOrderDto.getGroupName() == null ? "所属项目" : outWhOrderDto.getGroupName());//所属项目
+                cell = row.getCell(11);
+                cell.setCellValue(outWhOrderDto.getCustomerName() == null ? "" : outWhOrderDto.getCustomerName());//客户名称
+
+                row = sheet.getRow(3);
+                cell = row.getCell(11);
+                cell.setCellValue(outWhOrderDto.getCustomerContactName() == null ? "" : outWhOrderDto.getCustomerContactName());//联系人
+
+                row = sheet.getRow(3);
+                cell = row.getCell(37);
+                cell.setCellValue(outWhOrderDto.getCustomerContactPhone() == null ? "" : outWhOrderDto.getCustomerContactPhone());//联系电话
 
                 row = sheet.getRow(4);
-                cell = row.getCell(2);
-                cell.setCellValue(outWhOrderDto.getCustomerName() == null ? "客户名称" : outWhOrderDto.getCustomerName());//客户名称
+                cell = row.getCell(11);
+                cell.setCellValue(outWhOrderDto.getCreateDate() == null ? "" : DateUtils.date2String(outWhOrderDto.getCreateDate(),"yyyy-MM-dd hh:mm:ss"));//创建时间
 
-                row = sheet.getRow(5);
-                cell = row.getCell(2);
-                cell.setCellValue(outWhOrderDto.getCustomerContactName() == null ? "联系人" : outWhOrderDto.getCustomerContactName());//联系人
-
-                row = sheet.getRow(5);
-                cell = row.getCell(9);
-                cell.setCellValue(outWhOrderDto.getCustomerContactPhone() == null ? "联系电话" : outWhOrderDto.getCustomerContactPhone());//联系电话
-
-                row = sheet.getRow(7);
-                cell = row.getCell(2);
+                row = sheet.getRow(6);
+                cell = row.getCell(11);
                 cell.setCellValue(outWhOrderDto.getWarehouseName() == null ? "" : outWhOrderDto.getWarehouseName());//仓库
 
-                row = sheet.getRow(7);
-                cell = row.getCell(9);
+                row = sheet.getRow(6);
+                cell = row.getCell(37);
                 cell.setCellValue(outWhOrderDto.getOutboundType() == null ? "" : OutplanUtil.convertStorageType(outWhOrderDto.getOutboundType()));//出库类型
 
+                row = sheet.getRow(7);
+                cell = row.getCell(11);
+                cell.setCellValue(outWhOrderDto.getOutboundPlanTime() == null ? "" : DateUtils.date2String(outWhOrderDto.getOutboundPlanTime(),"yyyy-MM-dd hh:mm:ss"));//计划日期                row = sheet.getRow(7);
+
+                row = sheet.getRow(7);
+                cell = row.getCell(37);
+                cell.setCellValue(outWhOrderDto.getOutboundTime() == null ? "" : DateUtils.date2String(outWhOrderDto.getOutboundTime(),"yyyy-MM-dd hh:mm:ss"));//实际日期
+
                 row = sheet.getRow(8);
-                cell = row.getCell(2);
-                cell.setCellValue(outWhOrderDto.getOutboundPlanTime() == null ? "计划日期" : outWhOrderDto.getOutboundPlanTime().toString());//计划日期
+                cell = row.getCell(11);
+                cell.setCellValue(outWhOrderDto.getOutPlanRemark() == null ? "" : outWhOrderDto.getOutPlanRemark());//计划备注
 
                 row = sheet.getRow(9);
-                cell = row.getCell(2);
-                cell.setCellValue(outWhOrderDto.getOutboundRemark() == null ? "" : outWhOrderDto.getOutboundRemark());//备注
+                cell = row.getCell(11);
+                cell.setCellValue(outWhOrderDto.getOutboundRemark() == null ? "" : outWhOrderDto.getOutboundRemark());//计划备注
 
                 row = sheet.getRow(11);
-                cell = row.getCell(2);
-                cell.setCellValue(outWhOrderDto.getPickupUnit() == null ? "提货单位" : outWhOrderDto.getPickupUnit());//提货单位
+                cell = row.getCell(11);
+                cell.setCellValue(outWhOrderDto.getPickupUnit() == null ? "" : outWhOrderDto.getPickupUnit());//提货单位
 
                 row = sheet.getRow(12);
-                cell = row.getCell(2);
-                cell.setCellValue(outWhOrderDto.getPickupLinkman() == null ? "提货人" : outWhOrderDto.getPickupLinkman());//提货人
+                cell = row.getCell(11);
+                cell.setCellValue(outWhOrderDto.getPickupLinkman() == null ? "" : outWhOrderDto.getPickupLinkman());//提货人
 
                 row = sheet.getRow(12);
-                cell = row.getCell(9);
-                cell.setCellValue(outWhOrderDto.getPickupIdentiycard() == null ? "提货人身份证号" : outWhOrderDto.getPickupIdentiycard());//提货人身份证号
+                cell = row.getCell(37);
+                cell.setCellValue(outWhOrderDto.getPickupIdentiycard() == null ? "" : outWhOrderDto.getPickupIdentiycard());//提货人身份证号
 
                 row = sheet.getRow(13);
-                cell = row.getCell(2);
-                cell.setCellValue(outWhOrderDto.getPickupPhone() == null ? "提货人电话" : outWhOrderDto.getPickupPhone());//提货人电话
+                cell = row.getCell(11);
+                cell.setCellValue(outWhOrderDto.getPickupPhone() == null ? "" : outWhOrderDto.getPickupPhone());//提货人电话
 
 
                 row = sheet.getRow(13);
-                cell = row.getCell(9);
-                cell.setCellValue(outWhOrderDto.getPickupVehicleNum() == null ? "提货人车辆" : outWhOrderDto.getPickupVehicleNum());//提货人车辆
+                cell = row.getCell(37);
+                cell.setCellValue(outWhOrderDto.getPickupVehicleNum() == null ? "" : outWhOrderDto.getPickupVehicleNum());//提货人车辆
 
                 List<OutOrderGoodsInfoDto> outOrderGoodsInfoList = outWhOrderDto.getOutOrderGoodsInfoList();
                 if (outOrderGoodsInfoList != null && outOrderGoodsInfoList.size() > 0) {
@@ -266,16 +276,17 @@ public class OutWarehouseOrderController {
                     for (OutOrderGoodsInfoDto dto : outOrderGoodsInfoList) {
 
                         row = sheet.getRow(rows);
-                        row.getCell(10).setCellValue(dto.getOutboundQuantity());
                         row.getCell(0).setCellValue(i++);
-                        row.getCell(1).setCellValue(dto.getGoodsName());
-                        row.getCell(3).setCellValue(dto.getGoodsCode());
-                        row.getCell(5).setCellValue(dto.getGoodsBarCode());
-                        row.getCell(6).setCellValue(dto.getUnit());
-                        row.getCell(7).setCellValue(dto.getOutboundQuantity());
-                        row.getCell(8).setCellValue(dto.getOutboundQuantity());
-                        row.getCell(9).setCellValue(dto.getOutboundQuantity());
-                        row.getCell(11).setCellValue(dto.getOutboundQuantity());
+                        row.getCell(2).setCellValue(dto.getGoodsName());
+                        row.getCell(11).setCellValue(dto.getGoodsCode());
+                        row.getCell(16).setCellValue(dto.getGoodsBarCode());
+                        row.getCell(21).setCellValue(dto.getUnit());
+                        row.getCell(25).setCellValue(dto.getOutboundPrice());
+                        row.getCell(29).setCellValue(dto.getBatch());
+                        row.getCell(34).setCellValue(dto.getStorageLocationCode());
+                        row.getCell(40).setCellValue(dto.getGoodsNum());
+                        row.getCell(45).setCellValue(dto.getOutboundQuantity());
+                        row.getCell(50).setCellValue(dto.getGoodsNum()-dto.getOutboundQuantity());
                         rows++;
                     }
 

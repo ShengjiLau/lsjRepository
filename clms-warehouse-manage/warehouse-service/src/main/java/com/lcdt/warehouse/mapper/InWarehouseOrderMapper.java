@@ -39,6 +39,14 @@ public interface InWarehouseOrderMapper extends BaseMapper<InWarehouseOrder> {
     InWarehouseOrderDetailDto selectInWarehouseOrder(@Param("companyId") Long companyId, @Param("inorderId") Long inorderId);
 
     /**
+     * 根据id查询详细,导出excl用
+     * @param companyId
+     * @param inorderId
+     * @return
+     */
+    InWarehouseOrderDto selectInWarehouseOrderDetail(@Param("companyId") Long companyId, @Param("inorderId") Long inorderId);
+
+    /**
      * 列表查询
      * @param page
      * @param params
