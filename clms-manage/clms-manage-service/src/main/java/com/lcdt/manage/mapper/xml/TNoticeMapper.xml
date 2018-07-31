@@ -7,6 +7,7 @@
         <result column="notice_title" jdbcType="VARCHAR" property="noticeTitle" />
         <result column="key_words" jdbcType="VARCHAR" property="keyWords" />
         <result column="cover_image_url" jdbcType="VARCHAR" property="coverImageUrl" />
+        <result column="top_image_url" jdbcType="VARCHAR" property="topImageUrl" />
         <result column="publisher" jdbcType="VARCHAR" property="publisher" />
         <result column="notice_content" jdbcType="LONGVARCHAR" property="noticeContent" />
         <result column="notice_summary" jdbcType="VARCHAR" property="noticeSummary" />
@@ -21,10 +22,10 @@
         <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
     </resultMap>
     <sql id="BaseSelectFields">
-        notice_id,category_id,notice_title,key_words,cover_image_url,publisher,notice_content,notice_summary,publish_time,create_time,create_user_id,create_user_name
+        notice_id,category_id,notice_title,key_words,cover_image_url,top_image_url,publisher,notice_content,notice_summary,publish_time,create_time,create_user_id,create_user_name
     </sql>
     <sql id="dtoFields">
-        t1.notice_id,t1.category_id,t1.notice_title,t1.cover_image_url,t1.publisher,t1.notice_content,t1.notice_summary,t1.publish_time,t1.create_time,t1.create_user_id,t1.create_user_name,t1.is_top,t1.key_words
+        t1.notice_id,t1.category_id,t1.notice_title,t1.cover_image_url,t1.top_image_url,t1.publisher,t1.notice_content,t1.notice_summary,t1.publish_time,t1.create_time,t1.create_user_id,t1.create_user_name,t1.is_top,t1.key_words
     </sql>
     <select id="findAllNoticesByCateId" parameterType="long" resultType="com.lcdt.manage.dto.NoticeListDto">
         select <include refid="dtoFields"/>
@@ -38,7 +39,7 @@
     </select>
 
     <select id="findTopNoticesByPage" parameterType="com.lcdt.manage.dto.NoticeListParamsDto" resultMap="BaseDtoMap">
-     select t1.notice_id,t1.category_id,t1.notice_title,t1.cover_image_url,t1.publisher,t1.notice_content,t1.notice_summary,t1.publish_time,t1.create_time,t1.create_user_id,t1.create_user_name,t1.is_top,t1.key_words,t1.notice_status
+     select t1.notice_id,t1.category_id,t1.notice_title,t1.cover_image_url,t1.top_image_url,t1.publisher,t1.notice_content,t1.notice_summary,t1.publish_time,t1.create_time,t1.create_user_id,t1.create_user_name,t1.is_top,t1.key_words,t1.notice_status
      ,(select cc.category_name from t_notice_category cc where (cc.is_delete is null or cc.is_delete=0) AND cc.category_id=t1.category_id) category_name
         from `t_notice` t1
         where 1=1

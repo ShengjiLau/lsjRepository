@@ -29,6 +29,11 @@ public class TNotice implements Serializable {
      * 封面图片
      */
     private String coverImageUrl;
+
+    /**
+     * 封面图片
+     */
+    private String topImageUrl;
     /**
      * 署名
      */
@@ -84,6 +89,14 @@ public class TNotice implements Serializable {
 
     public void setCoverImageUrl(String coverImageUrl) {
         this.coverImageUrl = coverImageUrl;
+    }
+
+    public String getTopImageUrl() {
+        return topImageUrl;
+    }
+
+    public void setTopImageUrl(String topImageUrl) {
+        this.topImageUrl = topImageUrl;
     }
 
     public String getPublisher() {
@@ -173,6 +186,7 @@ public class TNotice implements Serializable {
         ", categoryId=" + categoryId +
         ", noticeTitle=" + noticeTitle +
         ", coverImageUrl=" + coverImageUrl +
+                ", topImageUrl=" + topImageUrl +
         ", publisher=" + publisher +
         ", noticeContent=" + noticeContent +
         ", noticeSummary=" + noticeSummary +
