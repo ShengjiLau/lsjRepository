@@ -266,10 +266,8 @@ public class OutWarehousePlanController {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         OutWhPlanDto outWhPlanDto = outWarehousePlanService.outWhPlanDetail(outPlanId,true, userCompRel,false);
         if(outWhPlanDto!=null) {
-
             File fi = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "templates/出库计划.xlsx");
             if (fi.exists()) {
-                OutputStream os = response.getOutputStream();
                 response.reset();
                 XSSFWorkbook wb = null;
                 try {

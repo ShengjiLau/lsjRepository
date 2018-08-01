@@ -3,14 +3,18 @@
 <mapper namespace="com.lcdt.manage.mapper.TNoticeCategoryMapper">
     <resultMap id="BaseResultMap" type="com.lcdt.manage.entity.TNoticeCategory">
         <id column="category_id" jdbcType="BIGINT" property="categoryId" />
-        <result column="category_name" jdbcType="BIGINT" property="categoryName" />
-        <result column="sequence_number" jdbcType="VARCHAR" property="sequenceNumber" />
+        <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+        <result column="sequence_number" jdbcType="BIGINT" property="sequenceNumber" />
         <result column="is_delete" jdbcType="VARCHAR" property="isDelete" />
     </resultMap>
 
     <select id="findListByParam" parameterType="com.lcdt.manage.dto.CategoryParamDto" resultMap="BaseResultMap">
       SELECT category_id,category_name,sequence_number,is_delete
       FROM `t_notice_category`
+      WHERE  1=1
+      <if test="categoryName!=null and categoryName!=''">
+          AND category_name = #{categoryName,jdbcType=VARCHAR}
+      </if>
       ORDER BY  sequence_number ,category_id DESC
     </select>
 

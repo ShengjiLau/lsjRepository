@@ -243,7 +243,6 @@ public class InWarehousePlanController {
         InWhPlanDto inWhPlanDto = inWarehousePlanService.inWhPlanDetail(planId, true, userCompRel, true, false);
         File fi = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "templates/入库计划.xlsx");
         if (fi.exists()) {
-            OutputStream os = response.getOutputStream();
             response.reset();
             XSSFWorkbook wb = null;
             try {
