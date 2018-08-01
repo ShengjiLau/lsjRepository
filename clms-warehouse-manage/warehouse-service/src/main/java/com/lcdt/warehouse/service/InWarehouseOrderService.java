@@ -51,6 +51,14 @@ public interface InWarehouseOrderService extends IService<InWarehouseOrder> {
     InWarehouseOrderDetailDto queryInWarehouseOrder(Long companyId,Long inorderId);
 
     /**
+     * 查询详细,导出excl用
+     * @param companyId
+     * @param inorderId
+     * @return
+     */
+    InWarehouseOrderDto queryInWarehouseOrderDetail(Long companyId,Long inorderId);
+
+    /**
      * 修改入库单状态
      * @param params
      * @return

@@ -2,18 +2,14 @@ package com.lcdt.contract.web.controller.api;
 
 import java.util.Map;
 
+import com.lcdt.contract.model.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
@@ -190,20 +186,32 @@ public class PurchaseOrderApi {
 			message = "操作失败";
 			throw new RuntimeException(message);
 		}
-	}	
-	
+	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	@ApiOperation("采购单新增物流信息记录")
+	@PostMapping("/addLogistics")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_get')")
+	public JSONObject addLogistics(@RequestBody Order order) {
+		order.setCompanyId(SecurityInfoGetter.getCompanyId());
+		int rows = orderService.addLogisticsInfo(order);
+		String message = null;
+		if (rows>0) {
+			message = "操作成功!";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
+		}else {
+			message = "操作失败";
+			throw new RuntimeException(message);
+		}
+	}
+
+
+
+
+
+
+
+
+
+
 }

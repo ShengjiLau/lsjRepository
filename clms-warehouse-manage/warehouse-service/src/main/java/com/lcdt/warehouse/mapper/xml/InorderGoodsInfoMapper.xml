@@ -63,10 +63,16 @@
         in_house_price, damage, remark, storage_location_id, storage_location_code
     </sql>
 
-    <select id="selectGoodsDetail" parameterType="Long" resultMap="BaseResultMapDto">
+    <select id="selectGoodsDetails" parameterType="Long" resultMap="BaseResultMapDto">
         SELECT <include refid="Base_Select_List"/>
         FROM inorder_goods_info
         WHERE inorder_id = #{inorderId,jdbcType=BIGINT} and is_split != 1
+    </select>
+
+    <select id="selectGoodsDetail" parameterType="Long" resultMap="BaseResultMapDto">
+        SELECT <include refid="Base_Select_List"/>
+        FROM inorder_goods_info
+        WHERE inorder_id = #{inorderId,jdbcType=BIGINT}
     </select>
 
     <select id="selectGoodsInfoDetail" parameterType="Long" resultMap="GoodsInfoAndLocationInfoMap">

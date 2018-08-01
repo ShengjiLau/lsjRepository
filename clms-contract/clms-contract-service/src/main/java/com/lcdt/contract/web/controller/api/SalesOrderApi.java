@@ -2,6 +2,8 @@ package com.lcdt.contract.web.controller.api;
 
 import java.util.Map;
 
+import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.contract.model.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,7 @@ import io.swagger.annotations.ApiParam;
 @RestController
 @RequestMapping("/salesOrder")
 public class SalesOrderApi {
-	
+
 	Logger logger = LoggerFactory.getLogger(SalesOrderApi.class);
 	
 	@Autowired
@@ -205,9 +207,23 @@ public class SalesOrderApi {
 			throw new RuntimeException(message);
 		}
 	}
-	
-	
-	
+
+
+	@ApiOperation("销售单新增物流信息记录")
+	@PostMapping("/addLogistics")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('sales_order_get')")
+	public JSONObject addLogistics(@RequestBody Order order) {
+		order.setCompanyId(SecurityInfoGetter.getCompanyId());
+		int rows = orderService.addLogisticsInfo(order);
+		String message = null;
+		if (rows>0) {
+			message = "操作成功!";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
+		}else {
+			message = "操作失败";
+			throw new RuntimeException(message);
+		}
+	}
 	
 	
 	

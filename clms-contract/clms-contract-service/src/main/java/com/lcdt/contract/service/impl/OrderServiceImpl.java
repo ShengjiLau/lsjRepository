@@ -699,6 +699,10 @@ public class OrderServiceImpl implements OrderService {
         return result;
     }
 
+    @Override
+    public int addLogisticsInfo(Order order){
+        return orderMapper.updateLogisticsInfo(order);
+    }
 
     /**
      * 时间转化为固定格式字符串

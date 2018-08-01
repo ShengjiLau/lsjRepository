@@ -230,7 +230,7 @@
                             <p class="title" th:text="${topOne.noticeTitle}"></p>
                             <p class="content" th:text="${#strings.abbreviate(topOne.noticeSummary,150)}"></p>
                             <div class="thum">
-                                <a th:href="@{/front/news.html(id=${topOne.noticeId})}"><img th:src="${topOne.coverImageUrl}" /></a>
+                                <a th:href="@{/front/news.html(id=${topOne.noticeId})}"><img th:src="${topOne.topImageUrl}" /></a>
                             </div>
                         </div>
                     </div>

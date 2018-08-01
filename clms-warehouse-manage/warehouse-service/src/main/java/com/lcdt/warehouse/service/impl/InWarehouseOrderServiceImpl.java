@@ -108,9 +108,12 @@ public class InWarehouseOrderServiceImpl extends ServiceImpl<InWarehouseOrderMap
 
     @Override
     public InWarehouseOrderDetailDto queryInWarehouseOrder(Long companyId, Long inorderId) {
-        InWarehouseOrderDetailDto inWarehouseOrderDetailDto=null;
-        inWarehouseOrderDetailDto=baseMapper.selectInWarehouseOrder(companyId,inorderId);
-        return inWarehouseOrderDetailDto;
+        return baseMapper.selectInWarehouseOrder(companyId,inorderId);
+    }
+
+    @Override
+    public InWarehouseOrderDto queryInWarehouseOrderDetail(Long companyId, Long inorderId) {
+        return baseMapper.selectInWarehouseOrderDetail(companyId,inorderId);
     }
 
     @Override

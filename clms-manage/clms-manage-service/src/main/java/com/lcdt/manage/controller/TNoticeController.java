@@ -20,12 +20,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.spring.web.json.Json;
 
 import javax.servlet.http.HttpSession;
@@ -101,33 +98,32 @@ public class TNoticeController {
         return jsonObject;
     }
 
-//    @ApiOperation("新闻分类详情")
-//    @PostMapping("/categoryRead")
-//    public JSONObject categoryRead(@RequestParam Long id){
-//        TNoticeCategory category = categoryService.selectById(id);
-//
-//
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put("data",category);
-//        jsonObject.put("code", 0);
-//        jsonObject.put("message", "读取成功！");
-//        return jsonObject;
-//    }
-//
-//    @ApiOperation("新闻分类状态切换")
-//    @PostMapping("/categorySwitch")
-//    public JSONObject categorySwitch(@Validated TNoticeCategory category){
-//        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
-//        String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
-//
-//
-//        JSONObject jsonObject = new JSONObject();
-//        jsonObject.put("code", 0);
-//        jsonObject.put("message", "读取成功！");
-//        return jsonObject;
-//    }
+    /**
+     * 删除分类
+     * @return
+     */
+    @ApiOperation("删除新闻分类")
+    @PostMapping("/categoryDelete")
+    public JSONObject categoryDelete(@RequestParam Long categoryId) {
+        System.out.println("==============categoryDelete===============");
+        List l = noticeService.findAllNoticesByCateId(categoryId);
 
+        String msg = "";
+        int code = 0;
+        if(l!=null && l.size()>0){
+            code = 1;
+            msg = "该分类已在使用，不能删除！";
+        }
+        else{
+            categoryService.deleteById(categoryId);
+        }
 
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", code);
+        jsonObject.put("message", msg);
+
+        return jsonObject;
+    }
 
     @ApiOperation("新闻列表")
     @PostMapping("/noticeList")
