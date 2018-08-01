@@ -44,7 +44,11 @@ public class FrontPageController {
     private TNoticeService noticeService;
     @Autowired
     private TNoticeCategoryService noticeCategoryService;
-
+//    @RequestMapping(value = "/", method = RequestMethod.GET)
+//    public ModelAndView home() {
+//        System.out.println("home------------");
+//        return index();
+//    }
     /**
      * 首页
      *

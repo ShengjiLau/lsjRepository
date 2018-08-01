@@ -79,12 +79,21 @@ public class AliyunOssApi {
 		if(!StringUtils.isEmpty(url)&&(url.contains("https://") || url.contains("http://")))
 		{
 			url = url.replace("http://clms-dtd.oss-cn-beijing.aliyuncs.com/","").replace("https://clms-dtd.oss-cn-beijing.aliyuncs.com/","").replace("http://img.datuodui.com/","").replace("https://img.datuodui.com/","");
+			//校验原oss文件key是否存在
+			if(!AliyunOss.getInstance().validOssKey(url))
+			{
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("message", "该附件已经丢失，请重新上传！");
+				jsonObject.put("viewUrl", "");
+				jsonObject.put("code", -1);
+				return jsonObject;
+			}
 			String fileName = "";
 			int dot = url.lastIndexOf('.');
 			if ((dot >-1) && (dot < (url.length()))) {
 				fileName= url.substring(0, dot);
 			}
-			//校验key是否存在
+			//校验源文件预览文件key是否存在
 			String key ="attachments/"+new MD5().getMD5ofStr(fileName).toLowerCase()+"/1.pdf";
 			if(AliyunOss.getInstance().validOssKey(key))
 			{
