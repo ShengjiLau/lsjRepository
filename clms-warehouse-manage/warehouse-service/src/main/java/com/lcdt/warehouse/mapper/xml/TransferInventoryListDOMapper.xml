@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lcdt.warehouse.mapper.TransferInventoryListDOMapper" >
+  <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.TransferInventoryListDO" >
+    <id column="transfers_id" property="transfersId" jdbcType="BIGINT" />
+    <result column="group_id" property="groupId" jdbcType="BIGINT" />
+    <result column="group_name" property="groupName" jdbcType="VARCHAR" />
+    <result column="customer_id" property="customerId" jdbcType="BIGINT" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
+    <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="attachment1_name" property="attachment1Name" jdbcType="VARCHAR" />
+    <result column="attachment1" property="attachment1" jdbcType="VARCHAR" />
+    <result column="attachment2_name" property="attachment2Name" jdbcType="VARCHAR" />
+    <result column="attachment2" property="attachment2" jdbcType="VARCHAR" />
+    <result column="attachment3_name" property="attachment3Name" jdbcType="VARCHAR" />
+    <result column="attachment3" property="attachment3" jdbcType="VARCHAR" />
+    <result column="attachment4_name" property="attachment4Name" jdbcType="VARCHAR" />
+    <result column="attachment4" property="attachment4" jdbcType="VARCHAR" />
+    <result column="attachment5_name" property="attachment5Name" jdbcType="VARCHAR" />
+    <result column="attachment5" property="attachment5" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
+    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
+    <result column="company_id" property="companyId" jdbcType="BIGINT" />
+    <result column="list_status" property="listStatus" jdbcType="TINYINT" />
+    <result column="list_serial_no" property="listSerialNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    transfers_id, group_id, group_name, customer_id, customer_name, warehouse_id, warehouse_name, 
+    remark, attachment1_name, attachment1, attachment2_name, attachment2, attachment3_name, 
+    attachment3, attachment4_name, attachment4, attachment5_name, attachment5, gmt_create, 
+    gmt_modified, create_user, create_user_id, company_id, list_status, list_serial_no
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from transfers_inventory_list
+    where transfers_id = #{transfersId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from transfers_inventory_list
+    where transfers_id = #{transfersId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.warehouse.entity.TransferInventoryListDO" >
+    insert into transfers_inventory_list (transfers_id, group_id, group_name, 
+      customer_id, customer_name, warehouse_id, 
+      warehouse_name, remark, attachment1_name, 
+      attachment1, attachment2_name, attachment2, 
+      attachment3_name, attachment3, attachment4_name, 
+      attachment4, attachment5_name, attachment5, 
+      gmt_create, gmt_modified, create_user, 
+      create_user_id, company_id, list_status, 
+      list_serial_no)
+    values (#{transfersId,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, 
+      #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, #{warehouseId,jdbcType=BIGINT}, 
+      #{warehouseName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{attachment1Name,jdbcType=VARCHAR}, 
+      #{attachment1,jdbcType=VARCHAR}, #{attachment2Name,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR}, 
+      #{attachment3Name,jdbcType=VARCHAR}, #{attachment3,jdbcType=VARCHAR}, #{attachment4Name,jdbcType=VARCHAR}, 
+      #{attachment4,jdbcType=VARCHAR}, #{attachment5Name,jdbcType=VARCHAR}, #{attachment5,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
+      #{createUserId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, #{listStatus,jdbcType=TINYINT}, 
+      #{listSerialNo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lcdt.warehouse.entity.TransferInventoryListDO" >
+    insert into transfers_inventory_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="transfersId != null" >
+        transfers_id,
+      </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
+      <if test="groupName != null" >
+        group_name,
+      </if>
+      <if test="customerId != null" >
+        customer_id,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id,
+      </if>
+      <if test="warehouseName != null" >
+        warehouse_name,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="attachment1Name != null" >
+        attachment1_name,
+      </if>
+      <if test="attachment1 != null" >
+        attachment1,
+      </if>
+      <if test="attachment2Name != null" >
+        attachment2_name,
+      </if>
+      <if test="attachment2 != null" >
+        attachment2,
+      </if>
+      <if test="attachment3Name != null" >
+        attachment3_name,
+      </if>
+      <if test="attachment3 != null" >
+        attachment3,
+      </if>
+      <if test="attachment4Name != null" >
+        attachment4_name,
+      </if>
+      <if test="attachment4 != null" >
+        attachment4,
+      </if>
+      <if test="attachment5Name != null" >
+        attachment5_name,
+      </if>
+      <if test="attachment5 != null" >
+        attachment5,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="listStatus != null" >
+        list_status,
+      </if>
+      <if test="listSerialNo != null" >
+        list_serial_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="transfersId != null" >
+        #{transfersId,jdbcType=BIGINT},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="groupName != null" >
+        #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null" >
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null" >
+        #{warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="warehouseName != null" >
+        #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment1Name != null" >
+        #{attachment1Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment1 != null" >
+        #{attachment1,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2Name != null" >
+        #{attachment2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2 != null" >
+        #{attachment2,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment3Name != null" >
+        #{attachment3Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment3 != null" >
+        #{attachment3,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment4Name != null" >
+        #{attachment4Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment4 != null" >
+        #{attachment4,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment5Name != null" >
+        #{attachment5Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment5 != null" >
+        #{attachment5,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="listStatus != null" >
+        #{listStatus,jdbcType=TINYINT},
+      </if>
+      <if test="listSerialNo != null" >
+        #{listSerialNo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.warehouse.entity.TransferInventoryListDO" >
+    update transfers_inventory_list
+    <set >
+      <if test="groupId != null" >
+        group_id = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="groupName != null" >
+        group_name = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null" >
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id = #{warehouseId,jdbcType=BIGINT},
+      </if>
+      <if test="warehouseName != null" >
+        warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment1Name != null" >
+        attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment1 != null" >
+        attachment1 = #{attachment1,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2Name != null" >
+        attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment2 != null" >
+        attachment2 = #{attachment2,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment3Name != null" >
+        attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment3 != null" >
+        attachment3 = #{attachment3,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment4Name != null" >
+        attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment4 != null" >
+        attachment4 = #{attachment4,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment5Name != null" >
+        attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
+      </if>
+      <if test="attachment5 != null" >
+        attachment5 = #{attachment5,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=BIGINT},
+      </if>
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="listStatus != null" >
+        list_status = #{listStatus,jdbcType=TINYINT},
+      </if>
+      <if test="listSerialNo != null" >
+        list_serial_no = #{listSerialNo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where transfers_id = #{transfersId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.warehouse.entity.TransferInventoryListDO" >
+    update transfers_inventory_list
+    set group_id = #{groupId,jdbcType=BIGINT},
+      group_name = #{groupName,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=BIGINT},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      warehouse_id = #{warehouseId,jdbcType=BIGINT},
+      warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
+      attachment1 = #{attachment1,jdbcType=VARCHAR},
+      attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
+      attachment2 = #{attachment2,jdbcType=VARCHAR},
+      attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
+      attachment3 = #{attachment3,jdbcType=VARCHAR},
+      attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
+      attachment4 = #{attachment4,jdbcType=VARCHAR},
+      attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
+      attachment5 = #{attachment5,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_user_id = #{createUserId,jdbcType=BIGINT},
+      company_id = #{companyId,jdbcType=BIGINT},
+      list_status = #{listStatus,jdbcType=TINYINT},
+      list_serial_no = #{listSerialNo,jdbcType=VARCHAR}
+    where transfers_id = #{transfersId,jdbcType=BIGINT}
+  </update>
+</mapper>
