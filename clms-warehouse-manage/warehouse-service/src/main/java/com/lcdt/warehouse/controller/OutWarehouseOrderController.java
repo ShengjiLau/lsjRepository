@@ -270,16 +270,16 @@ public class OutWarehouseOrderController {
 
                         row = sheet.getRow(rows);
                         row.getCell(0).setCellValue(i++);
-                        row.getCell(2).setCellValue(dto.getGoodsName());
-                        row.getCell(11).setCellValue(dto.getGoodsCode());
-                        row.getCell(16).setCellValue(dto.getGoodsBarCode());
-                        row.getCell(21).setCellValue(dto.getUnit());
-                        row.getCell(25).setCellValue(dto.getOutboundPrice());
-                        row.getCell(29).setCellValue(dto.getBatch());
-                        row.getCell(34).setCellValue(dto.getStorageLocationCode());
-                        row.getCell(40).setCellValue(dto.getGoodsNum());
-                        row.getCell(45).setCellValue(dto.getOutboundQuantity());
-                        row.getCell(50).setCellValue(dto.getGoodsNum()-dto.getOutboundQuantity());
+                        row.getCell(2).setCellValue(dto.getGoodsName()==null?"":dto.getGoodsName());
+                        row.getCell(11).setCellValue(dto.getGoodsCode()==null?"":dto.getGoodsCode());
+                        row.getCell(16).setCellValue(dto.getGoodsBarCode()==null?"":dto.getGoodsBarCode());
+                        row.getCell(21).setCellValue(dto.getUnit()==null?"":dto.getUnit());
+                        row.getCell(25).setCellValue(dto.getOutboundPrice()==null?"":dto.getOutboundPrice().toString());
+                        row.getCell(29).setCellValue(dto.getBatch()==null?"":dto.getBatch());
+                        row.getCell(34).setCellValue(dto.getStorageLocationCode()==null?"":dto.getStorageLocationCode());
+                        row.getCell(40).setCellValue(dto.getGoodsNum()==null?"":dto.getGoodsNum().toString());
+                        row.getCell(45).setCellValue(dto.getOutboundQuantity()==null?"":dto.getOutboundQuantity().toString());
+                        row.getCell(50).setCellValue((dto.getGoodsNum()==null?0:dto.getGoodsNum())-(dto.getOutboundQuantity()==null?0:dto.getOutboundQuantity()));
                         rows++;
                     }
 
