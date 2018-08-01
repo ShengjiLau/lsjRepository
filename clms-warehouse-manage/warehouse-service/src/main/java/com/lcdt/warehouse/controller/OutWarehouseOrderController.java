@@ -190,7 +190,7 @@ public class OutWarehouseOrderController {
     @GetMapping(value = "/export/{outorderId}")
     public void exportOutWarehouseOrderDetail(@PathVariable Long outorderId,HttpServletResponse response) throws IOException {
         OutWhOrderDto outWhOrderDto = outWarehouseOrderService.queryOutWarehouseOrder(SecurityInfoGetter.getCompanyId(), outorderId);
-        ClassPathResource resource = new ClassPathResource("templates/出库单.xlsx");
+        ClassPathResource resource = new ClassPathResource("/templates/out_warehouse_order.xlsx");
         if (resource.exists()) {
             response.reset();
             XSSFWorkbook wb = null;
