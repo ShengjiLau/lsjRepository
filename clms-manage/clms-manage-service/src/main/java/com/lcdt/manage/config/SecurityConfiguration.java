@@ -27,8 +27,6 @@ import java.util.Locale;
  * Created by ss on 2017/8/8.
  */
 @Configuration
-@ComponentScan("com.lcdt.clms.security.config")
-@DubboComponentScan(basePackages = "com.lcdt.clms.security.config")
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true,prePostEnabled = true)
 @Order(Ordered.HIGHEST_PRECEDENCE)
