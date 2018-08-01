@@ -1,106 +1,201 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lcdt.warehouse.mapper.TransferGoodsDOMapper" >
-  <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.TransferGoodsDO" >
-    <id column="goods_id" property="goodsId" jdbcType="BIGINT" />
-    <result column="origin_goods_id" property="originGoodsId" jdbcType="BIGINT" />
-    <result column="inventory_id" property="inventoryId" jdbcType="BIGINT" />
-    <result column="transfer_num" property="transferNum" jdbcType="DECIMAL" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="transfer_id" property="transferId" jdbcType="BIGINT" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.warehouse.mapper.TransferGoodsDOMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.TransferGoodsDO">
+    <id column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="origin_goods_id" jdbcType="BIGINT" property="originGoodsId" />
+    <result column="inventory_id" jdbcType="BIGINT" property="inventoryId" />
+    <result column="transfer_num" jdbcType="DECIMAL" property="transferNum" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="transfer_id" jdbcType="BIGINT" property="transferId" />
+    <result column="wh_loc_id" jdbcType="BIGINT" property="whLocId" />
+    <result column="wh_loc_code" jdbcType="VARCHAR" property="whLocCode" />
+    <result column="goods_batch" jdbcType="VARCHAR" property="goodsBatch" />
+    <result column="is_material" javaType="TINYINT" property="isMaterial"/>
   </resultMap>
-  <sql id="Base_Column_List" >
-    goods_id, origin_goods_id, inventory_id, transfer_num, remark, transfer_id
+  <sql id="Base_Column_List">
+    goods_id, origin_goods_id, inventory_id, transfer_num, remark, transfer_id, wh_loc_id, 
+    wh_loc_code, goods_batch, is_material
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from transfers_goods
     where goods_id = #{goodsId,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from transfers_goods
     where goods_id = #{goodsId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.lcdt.warehouse.entity.TransferGoodsDO" >
+  <insert id="insert" parameterType="com.lcdt.warehouse.entity.TransferGoodsDO" flushCache="true">
     insert into transfers_goods (goods_id, origin_goods_id, inventory_id, 
-      transfer_num, remark, transfer_id
+      transfer_num, remark, transfer_id, 
+      wh_loc_id, wh_loc_code, goods_batch, is_material
       )
     values (#{goodsId,jdbcType=BIGINT}, #{originGoodsId,jdbcType=BIGINT}, #{inventoryId,jdbcType=BIGINT}, 
-      #{transferNum,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{transferId,jdbcType=BIGINT}
+      #{transferNum,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{transferId,jdbcType=BIGINT}, 
+      #{whLocId,jdbcType=BIGINT}, #{whLocCode,jdbcType=VARCHAR}, #{goodsBatch,jdbcType=VARCHAR},
+      #{isMaterial,jdbcType=TINYINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.lcdt.warehouse.entity.TransferGoodsDO" >
+  <insert id="insertSelective" parameterType="com.lcdt.warehouse.entity.TransferGoodsDO" flushCache="true">
     insert into transfers_goods
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="goodsId != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="goodsId != null">
         goods_id,
       </if>
-      <if test="originGoodsId != null" >
+      <if test="originGoodsId != null">
         origin_goods_id,
       </if>
-      <if test="inventoryId != null" >
+      <if test="inventoryId != null">
         inventory_id,
       </if>
-      <if test="transferNum != null" >
+      <if test="transferNum != null">
         transfer_num,
       </if>
-      <if test="remark != null" >
+      <if test="remark != null">
         remark,
       </if>
-      <if test="transferId != null" >
+      <if test="transferId != null">
         transfer_id,
       </if>
+      <if test="whLocId != null">
+        wh_loc_id,
+      </if>
+      <if test="whLocCode != null">
+        wh_loc_code,
+      </if>
+      <if test="goodsBatch != null">
+        goods_batch,
+      </if>
+      <if test="isMaterial != null">
+      	is_material
+      </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="goodsId != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="goodsId != null">
         #{goodsId,jdbcType=BIGINT},
       </if>
-      <if test="originGoodsId != null" >
+      <if test="originGoodsId != null">
         #{originGoodsId,jdbcType=BIGINT},
       </if>
-      <if test="inventoryId != null" >
+      <if test="inventoryId != null">
         #{inventoryId,jdbcType=BIGINT},
       </if>
-      <if test="transferNum != null" >
+      <if test="transferNum != null">
         #{transferNum,jdbcType=DECIMAL},
       </if>
-      <if test="remark != null" >
+      <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="transferId != null" >
+      <if test="transferId != null">
         #{transferId,jdbcType=BIGINT},
+      </if>
+      <if test="whLocId != null">
+        #{whLocId,jdbcType=BIGINT},
+      </if>
+      <if test="whLocCode != null">
+        #{whLocCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsBatch != null">
+        #{goodsBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="isMaterial != null">
+      	#{isMaterial,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.warehouse.entity.TransferGoodsDO" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.warehouse.entity.TransferGoodsDO" flushCache="true">
     update transfers_goods
-    <set >
-      <if test="originGoodsId != null" >
+    <set>
+      <if test="originGoodsId != null">
         origin_goods_id = #{originGoodsId,jdbcType=BIGINT},
       </if>
-      <if test="inventoryId != null" >
+      <if test="inventoryId != null">
         inventory_id = #{inventoryId,jdbcType=BIGINT},
       </if>
-      <if test="transferNum != null" >
+      <if test="transferNum != null">
         transfer_num = #{transferNum,jdbcType=DECIMAL},
       </if>
-      <if test="remark != null" >
+      <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="transferId != null" >
+      <if test="transferId != null">
         transfer_id = #{transferId,jdbcType=BIGINT},
+      </if>
+      <if test="whLocId != null">
+        wh_loc_id = #{whLocId,jdbcType=BIGINT},
+      </if>
+      <if test="whLocCode != null">
+        wh_loc_code = #{whLocCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsBatch != null">
+        goods_batch = #{goodsBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="isMaterial != null">
+      	is_material = #{isMaterial,jdbcType=TINYINT},
       </if>
     </set>
     where goods_id = #{goodsId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.lcdt.warehouse.entity.TransferGoodsDO" >
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.warehouse.entity.TransferGoodsDO" flushCache="true">
     update transfers_goods
     set origin_goods_id = #{originGoodsId,jdbcType=BIGINT},
       inventory_id = #{inventoryId,jdbcType=BIGINT},
       transfer_num = #{transferNum,jdbcType=DECIMAL},
       remark = #{remark,jdbcType=VARCHAR},
-      transfer_id = #{transferId,jdbcType=BIGINT}
+      transfer_id = #{transferId,jdbcType=BIGINT},
+      wh_loc_id = #{whLocId,jdbcType=BIGINT},
+      wh_loc_code = #{whLocCode,jdbcType=VARCHAR},
+      goods_batch = #{goodsBatch,jdbcType=VARCHAR},
+      is_material = #{isMaterial,jdbcType=TINYINT}
     where goods_id = #{goodsId,jdbcType=BIGINT}
   </update>
+  
+    <insert id="insertTransferGoodsDOByBatch" flushCache="true">
+    insert into transfers_goods (goods_id, origin_goods_id, inventory_id, 
+      transfer_num, remark, transfer_id, 
+      wh_loc_id, wh_loc_code, goods_batch, is_material 
+      )
+    values
+     <foreach collection="list" open="(" close=")" separator="," item="item" index="index">
+       #{item.goodsId,jdbcType=BIGINT}, #{item.originGoodsId,jdbcType=BIGINT}, #{item.inventoryId,jdbcType=BIGINT}, 
+       #{item.transferNum,jdbcType=DECIMAL}, #{item.remark,jdbcType=VARCHAR}, #{item.transferId,jdbcType=BIGINT},
+       #{item.whLocId,jdbcType=BIGINT},#{item.whLocCode,jdbcType=VARCHAR},#{item.goodsBatch,jdbcType=VARCHAR},
+       #{isMaterial,jdbcType=TINYINT}
+     </foreach>
+   </insert>
+   
+   <update id="updateTransferGoodsDOByBatch" flushCache="true">
+   <foreach collection="list" open="" close="" index="index" separator=";" item="item">
+    update transfers_goods
+    set origin_goods_id = #{item.originGoodsId,jdbcType=BIGINT},
+      inventory_id = #{item.inventoryId,jdbcType=BIGINT},
+      transfer_num = #{item.transferNum,jdbcType=DECIMAL},
+      remark = #{item.remark,jdbcType=VARCHAR},
+      transfer_id = #{item.transferId,jdbcType=BIGINT},
+      wh_loc_id = #{item.whLocId,jdbcType=BIGINT},
+      wh_loc_code = #{item.whLocCode,jdbcType=VARCHAR},
+      goods_batch = #{item.goodsBatch,jdbcType=VARCHAR},
+      is_material = #{isMaterial,jdbcType=TINYINT}
+    where goods_id = #{item.goodsId,jdbcType=BIGINT}
+   </foreach>
+   </update>
+   
+   <select id="getTransferGoodsDOListByTransferId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from transfers_goods
+   	where transfer_id = #{transferId, jdbcType=BIGINT}
+   </select>
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
 </mapper>

@@ -2,6 +2,7 @@ package com.lcdt.warehouse.dto;
 
 import java.util.List;
 
+import com.lcdt.warehouse.entity.TransferGoodsDO;
 import com.lcdt.warehouse.entity.TransferInventoryListDO;
 
 import lombok.Getter;
@@ -17,7 +18,17 @@ import lombok.Setter;
 @Getter
 public class TransferInventoryListDTO extends TransferInventoryListDO{
 	
-	private List<TransferGoodsDTO> transferGoodsDTOList;
+	private List<TransferGoodsDO> transferGoodsDOList;
+	
+	private String customName;
+	
+	private String materialProduct;
+	
+	private String finishedProduct;
+	
+	private Integer pageSize;
+	
+	private Integer pageNo;
 
 
 }

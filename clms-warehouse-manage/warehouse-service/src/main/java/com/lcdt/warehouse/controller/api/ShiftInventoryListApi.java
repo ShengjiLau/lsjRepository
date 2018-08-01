@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
 import com.lcdt.util.ResponseJsonUtils;
 import com.lcdt.warehouse.controller.exception.ShiftInventoryException;
 import com.lcdt.warehouse.dto.PageBaseDto;
@@ -53,12 +52,12 @@ public class ShiftInventoryListApi {
 		
 		int result = shiftInventoryListService.insertShiftInventoryList(shiftInventoryListDTO);	
 		log.debug("创建移库单的数量:"+result);
-		
+		String message = null;
 		if (result > 0) {
-			String message = "创建成功";
+			message = "创建成功";
 			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 		}else {
-			String message = "创建移库单时出现异常";
+			message = "创建移库单时出现异常";
 			throw new ShiftInventoryException(message);
 		}
 	}
@@ -75,12 +74,12 @@ public class ShiftInventoryListApi {
 		
 		int result = shiftInventoryListService.completeShiftInventoryList(shiftInventoryListDTO);
 		log.debug("完成移库单的数量:"+result);
-		
+		String message = null;
 		if (result > 0) {
-			String message = "完成成功";
+			message = "完成成功";
 			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 		}else {
-			String message = "完成移库单时出现异常";
+			message = "完成移库单时出现异常";
 			throw new ShiftInventoryException(message);
 		}
 	}
@@ -101,12 +100,12 @@ public class ShiftInventoryListApi {
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_get')")
 	public JSONObject getOneShiftInventoryDetails(@ApiParam(value="移库单id",required=true) @RequestParam Long shiftId) {
 		ShiftInventoryListDTO shiftInventoryListDTO = shiftInventoryListService.getShiftInventoryListDetails(shiftId);
-		
+		String message = null;
 		if (null != shiftInventoryListDTO) {
-			String message = "移库单详情";
+			message = "移库单详情";
 			return ResponseJsonUtils.successResponseJson(shiftInventoryListDTO, message);
 		}else {
-			String message = "查询失败";
+			message = "查询失败";
 			return ResponseJsonUtils.failedResponseJsonWithoutData(message);
 		}
 		
@@ -120,12 +119,12 @@ public class ShiftInventoryListApi {
 	public JSONObject deleteShiftInventoryList(Long shiftInventoryListId) {
 		int result = shiftInventoryListService.deleteShiftInventoryList(shiftInventoryListId);
 		log.debug("取消移库单的数量:"+result);
-		
+		String message = null;
 		if (result > 0) {
-			String message = "取消成功!";
+			message = "取消成功!";
 			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 		}else {
-			String message = "取消失败!";
+			message = "取消失败!";
 			return ResponseJsonUtils.failedResponseJsonWithoutData(message);
 		}
 		
