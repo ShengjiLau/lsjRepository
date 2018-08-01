@@ -57,7 +57,11 @@
         SELECT * from inventory t left join goods_info  g on
         t.goods_id = g.goods_id
         <where>
-            1=1
+            <if test="querydto.inventoryId != null">
+                and t.invertory_id = #{querydto.inventoryId}
+            </if>
+
+
             <if test="querydto.companyId != null">
                 and t.company_id = #{querydto.companyId}
             </if>

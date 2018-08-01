@@ -4,21 +4,19 @@ package com.lcdt.warehouse.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.warehouse.dto.InWhPlanDto;
+import com.lcdt.warehouse.dto.InWhPlanGoodsDto;
 import com.lcdt.warehouse.dto.InWhPlanSearchParamsDto;
 import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.entity.InWarehousePlan;
 import com.lcdt.warehouse.service.InWarehousePlanService;
 import com.lcdt.warehouse.utils.DateUtils;
 import com.lcdt.warehouse.utils.GroupIdsUtil;
+import com.lcdt.warehouse.utils.InplanUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -38,7 +36,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by yangbinq on 2018/05/08.
@@ -239,7 +236,7 @@ public class InWarehousePlanController {
 
 
     @ApiOperation("入库计划导出")
-    @RequestMapping(value = "/exportInplan")
+    @RequestMapping(value = "/exportInplan",method = RequestMethod.GET)
     public void exportInplan(@ApiParam(value = "计划ID",required = true) @RequestParam Long planId,
                                    HttpServletResponse response) throws IOException {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
@@ -254,10 +251,84 @@ public class InWarehousePlanController {
                 XSSFSheet sheet = wb.getSheetAt(0);  // 读取了模板内所有sheet内容
                 XSSFRow row = sheet.getRow(0);
                 XSSFCell cell = row.getCell(0);
-                cell.setCellValue("入库计划-2333");
+                cell.setCellValue("入库计划-"+inWhPlanDto.getPlanNo());
 
-                response.setContentType("applicationnd.ms-excel");
-                response.setHeader("Content-disposition", "attachment;filename=入库计划.xlsx");
+                row = sheet.getRow(2);
+                cell= row.getCell(11);
+                cell.setCellValue(inWhPlanDto.getGroupName()==null?"":inWhPlanDto.getGroupName());//所属项目
+
+                row = sheet.getRow(3);
+                cell = row.getCell(11);
+                cell.setCellValue(inWhPlanDto.getContractNo()==null?"":inWhPlanDto.getContractNo());//合同单号
+
+                row = sheet.getRow(3);
+                cell = row.getCell(36);
+                cell.setCellValue(inWhPlanDto.getCustomerPurchaseNo()==null?"":inWhPlanDto.getCustomerPurchaseNo());//采购单号
+
+                row = sheet.getRow(5);
+                cell = row.getCell(11);
+                cell.setCellValue(inWhPlanDto.getCustomerName()==null?"":inWhPlanDto.getCustomerName());//客户名称
+
+                row = sheet.getRow(6);
+                cell = row.getCell(11);
+                cell.setCellValue(inWhPlanDto.getCustomerContactName()==null?"":inWhPlanDto.getCustomerContactName());//联系人
+
+                row = sheet.getRow(6);
+                cell = row.getCell(36);
+                cell.setCellValue(inWhPlanDto.getCustomerContactPhone()==null?"":inWhPlanDto.getCustomerContactPhone());//联系电话
+
+                row = sheet.getRow(8);
+                cell = row.getCell(11);
+                cell.setCellValue(inWhPlanDto.getWarehouseName()==null?"":inWhPlanDto.getWarehouseName());//入库仓库
+
+                row = sheet.getRow(8);
+                cell = row.getCell(36);
+                cell.setCellValue(inWhPlanDto.getStorageType()==null?"": InplanUtil.convertStorageType(inWhPlanDto.getStorageType()));//入库类型
+
+                row = sheet.getRow(9);
+                cell = row.getCell(11);
+                cell.setCellValue(inWhPlanDto.getStoragePlanTime()==null?"":inWhPlanDto.getStoragePlanTime());//计划日期
+
+                row = sheet.getRow(10);
+                cell = row.getCell(11);
+                cell.setCellValue(inWhPlanDto.getStorageRemark()==null?"":inWhPlanDto.getStorageRemark());//备注
+
+                row = sheet.getRow(12);
+                cell = row.getCell(11);
+                cell.setCellValue(inWhPlanDto.getDeliverymanName()==null?"":inWhPlanDto.getDeliverymanName());//送货单位
+
+                row = sheet.getRow(12);
+                cell = row.getCell(36);
+                cell.setCellValue(inWhPlanDto.getDeliverymanLinkman()==null?"":inWhPlanDto.getDeliverymanLinkman());//送货人
+
+                row = sheet.getRow(13);
+                cell = row.getCell(11);
+                cell.setCellValue(inWhPlanDto.getDeliverymanPhone()==null?"":inWhPlanDto.getDeliverymanPhone());//送货人电话
+
+                row = sheet.getRow(13);
+                cell = row.getCell(36);
+                cell.setCellValue(inWhPlanDto.getDeliverymanCar()==null?"":inWhPlanDto.getDeliverymanCar());//送货人车辆
+
+                List<InWhPlanGoodsDto> inWhPlanGoodsDtoList = inWhPlanDto.getInWhPlanGoodsDtoList();
+                if (null!=inWhPlanGoodsDtoList && inWhPlanGoodsDtoList.size()>0) {
+                    int rows = 16,i=1;
+                    for (InWhPlanGoodsDto dto : inWhPlanGoodsDtoList) {
+                         row = sheet.getRow(rows);
+                         row.getCell(0).setCellValue(i++);
+                         row.getCell(2).setCellValue(dto.getGoodsName());
+                         row.getCell(11).setCellValue(dto.getGoodsCode());
+                         row.getCell(19).setCellValue(dto.getGoodsBarcode());
+                         row.getCell(26).setCellValue(dto.getUnit());
+                         row.getCell(31).setCellValue(dto.getPlanGoodsNum());
+                         row.getCell(36).setCellValue(dto.getInHouseAmount());
+                         row.getCell(42).setCellValue(dto.getRemainGoodsNum());
+                         row.getCell(47).setCellValue(dto.getInHousePrice());
+                         rows++;
+                    }
+                }
+                String fileName ="入库计划.xlsx";
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("gbk"),"iso-8859-1") + "\"");
+                response.setContentType("application/octet-stream;charset=UTF-8");
                 OutputStream ouputStream = response.getOutputStream();
                 wb.write(ouputStream);
                 ouputStream.flush();
@@ -269,9 +340,6 @@ public class InWarehousePlanController {
 
         }
     }
-
-
-
 
 
 

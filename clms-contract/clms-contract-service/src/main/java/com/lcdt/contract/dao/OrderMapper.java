@@ -70,5 +70,12 @@ public interface OrderMapper {
      * @return
      */
     int updateIsDraft(Long orderId,Short isDraft);
+
+    /**
+     * 更新物流信息
+     * @param order
+     * @return
+     */
+    int updateLogisticsInfo(Order order);
     
 }

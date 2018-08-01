@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="zh">
-<head>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="common_header(title,links)">
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title th:text="${notice.noticeTitle}"></title>
     <meta name="copyright" content="datuodui.com">
     <meta name="description" th:content="${notice.noticeSummary}">
     <meta name="keywords" th:content="${notice.keyWords}">
@@ -19,8 +19,8 @@
 </nav>
 <div class="container">
     <ol class="breadcrumb">
-        <li><a href="/news-list.html">资讯</a></li>
-        <li><a href="/news-list.html">公司新闻</a></li>
+        <li><a href="/front/news-list.html">资讯</a></li>
+        <li><a href="/front/news-list.html">公司新闻</a></li>
         <li class="active" th:text="${notice.noticeTitle}"></li>
     </ol>
 </div>
@@ -31,7 +31,7 @@
         <p th:text="${{notice.publishTime}}+'　来源: '+${notice.publisher}">　</p>
         <hr>
         <div class="content">
-            <p th:text="${notice.noticeContent}">
+            <p th:utext="${notice.noticeContent}">
             </p>
         </div>
         <p style="text-align: right" th:text="${{notice.publishTime}}+'　来源: '+${notice.publisher}">
@@ -43,9 +43,9 @@
         <div  th:if="${nextNotice}">
 
                 <p class="tips">阅读下一篇</p>
-                <p class="next-title"><a style="color: black" th:href="@{/news.html(id=${nextNotice.noticeId})}"><span th:text="${nextNotice.noticeTitle}"></span></a></p>
+                <p class="next-title"><a style="color: black" th:href="@{/front/news.html(id=${nextNotice.noticeId})}"><span th:text="${nextNotice.noticeTitle}"></span></a></p>
                 <p class="next-contet">
-                    <a style="color: black" th:href="@{/news.html(id=${nextNotice.noticeId})}"><span th:text="${nextNotice.noticeSummary}"></span></a>
+                    <a style="color: black" th:href="@{/front/news.html(id=${nextNotice.noticeId})}"><span th:text="${nextNotice.noticeSummary}"></span></a>
                 </p>
 
         </div>
@@ -58,8 +58,8 @@
         </div>
 
         <p class="back-btn">
-            <a href="/index.html">返回首页</a>
-            <a href="/news-list.html">返回资讯首页</a>
+            <a href="/front/index.html">返回首页</a>
+            <a href="/front/news-list.html">返回资讯首页</a>
         </p>
         </div>
     </div>

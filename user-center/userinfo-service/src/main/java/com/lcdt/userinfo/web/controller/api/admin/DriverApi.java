@@ -8,11 +8,9 @@ import com.lcdt.userinfo.dao.DriverVehicleAuthMapper;
 import com.lcdt.userinfo.model.AdminUser;
 import com.lcdt.userinfo.model.Driver;
 import com.lcdt.userinfo.model.DriverVehicleAuth;
-import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.utils.JSONResponseUtil;
 import com.lcdt.userinfo.utils.ResponseMessage;
 import com.lcdt.userinfo.web.controller.api.admin.dto.DriverQueryDto;
-import com.lcdt.userinfo.web.dto.UserQueryDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +22,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping("/admin/driver")
-public class DriverManageApi {
+public class DriverApi {
 
     @Autowired
     DriverMapper driverMapper;
@@ -34,12 +32,12 @@ public class DriverManageApi {
 
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('admin_cars_select')")
-    private ResponseMessage list(DriverQueryDto driverQueryDto){
+    public ResponseMessage list(DriverQueryDto driverQueryDto){
         PageInfo<AdminUser> pageInfo = PageHelper.startPage(driverQueryDto.getPageNo(), driverQueryDto.getPageSize()).doSelectPageInfo(() -> driverVehicleAuthMapper.selectByDriverQueryDto(driverQueryDto));
         return JSONResponseUtil.success(pageInfo);
     }
     @PostMapping("/updateAuth")
-    private ResponseMessage updateAuth(Long authId,String remark,String authStatus){
+    public ResponseMessage updateAuth(Long authId,String remark,String authStatus){
         DriverVehicleAuth driverVehicleAuth = driverVehicleAuthMapper.selectByPrimaryKey(authId);
         driverVehicleAuth.setAuthStatus(authStatus);
         driverVehicleAuth.setAuthRemark(remark);
@@ -51,13 +49,13 @@ public class DriverManageApi {
     @PostMapping("/driverlist")
     @ApiOperation("司机列表")
     @PreAuthorize("hasAnyAuthority('admin_driver_select')")
-    private ResponseMessage driverList(DriverQueryDto driverQueryDto){
+    public ResponseMessage driverList(DriverQueryDto driverQueryDto){
         PageInfo<Driver> pageInfo = PageHelper.startPage(driverQueryDto.getPageNo(), driverQueryDto.getPageSize()).doSelectPageInfo(() -> driverMapper.selectByDriverQueryDto(driverQueryDto));
         return JSONResponseUtil.success(pageInfo);
     }
     @PostMapping("/updateDriverAuth")
     @ApiOperation("司机认证")
-    private ResponseMessage updateDriverAuth(Long driverId,String remark,String authStatus){
+    public ResponseMessage updateDriverAuth(Long driverId,String remark,String authStatus){
         Driver driver = driverMapper.selectByPrimaryKey(driverId);
         driver.setAuthStatus(Integer.valueOf(authStatus));
         driver.setAuthRemark(remark);
@@ -70,10 +68,8 @@ public class DriverManageApi {
     @PostMapping("/drivercatnum")
     @ApiOperation("司机车辆数量")
     @PreAuthorize("hasAnyAuthority('admin_driver_car')")
-    private ResponseMessage driverCarNum(Long driverId){
+    public ResponseMessage driverCarNum(Long driverId){
         Integer integer = driverMapper.selectCarnumBydriverId(driverId);
         return JSONResponseUtil.success(integer);
     }
-
-
 }

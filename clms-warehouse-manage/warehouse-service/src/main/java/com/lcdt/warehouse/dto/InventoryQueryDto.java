@@ -8,6 +8,9 @@ public class InventoryQueryDto extends PageQueryDto {
 
     private Long companyId;
 
+    @ApiModelProperty(value = "库存id")
+    private Long inventoryId;
+
     @ApiModelProperty(value = "仓库id")
     private Long wareHouseId;
 
@@ -38,6 +41,14 @@ public class InventoryQueryDto extends PageQueryDto {
     private Long originalGoodsId;
 
     private Long classifyId;
+
+    public Long getInventoryId() {
+        return inventoryId;
+    }
+
+    public void setInventoryId(Long inventoryId) {
+        this.inventoryId = inventoryId;
+    }
 
     public boolean goodsQueryExist(){
         if (!StringUtils.isEmpty(getGoodsName()) ||

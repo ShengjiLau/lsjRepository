@@ -1,6 +1,8 @@
 package com.lcdt.manage.service.impl;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.lcdt.manage.dto.CategoryParamDto;
 import com.lcdt.manage.entity.TNoticeCategory;
 import com.lcdt.manage.mapper.TNoticeCategoryMapper;
 import com.lcdt.manage.service.TNoticeCategoryService;
@@ -57,5 +59,17 @@ public class TNoticeCategoryServiceImpl extends ServiceImpl<TNoticeCategoryMappe
         }
         //不存在记录返回false
         return false;
+    }
+
+
+    public Page<TNoticeCategory> findCategoryPage(CategoryParamDto params){
+        Page page = new Page(params.getPageNo(), params.getPageSize());
+        return page.setRecords(baseMapper.findListByParam(page, params));
+    }
+
+    @Override
+    public List<TNoticeCategory> findCategoryAll() {
+
+        return baseMapper.findAllExceptDelete();
     }
 }

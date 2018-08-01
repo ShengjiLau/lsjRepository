@@ -150,6 +150,15 @@ public class Order implements Serializable {
 	
 	@ApiModelProperty(value="商品合计总金额")
 	private BigDecimal summation;
+
+    @ApiModelProperty(value="物流公司")
+    private String logisticsCompany;
+
+    @ApiModelProperty(value="物流单号")
+    private String logisticsNo;
+
+    @ApiModelProperty(value="物流状态")
+    private String logisticsStatus;
 	
 	@ApiModelProperty(value="附件1名称")
 	private String attachment1Name;
@@ -816,8 +825,31 @@ public class Order implements Serializable {
 		this.summation = summation;
 	}
 
+    public String getLogisticsCompany() {
+        return logisticsCompany;
+    }
 
-	public Long getWarehouseId() {
+    public void setLogisticsCompany(String logisticsCompany) {
+        this.logisticsCompany = logisticsCompany;
+    }
+
+    public String getLogisticsNo() {
+        return logisticsNo;
+    }
+
+    public void setLogisticsNo(String logisticsNo) {
+        this.logisticsNo = logisticsNo;
+    }
+
+    public String getLogisticsStatus() {
+        return logisticsStatus;
+    }
+
+    public void setLogisticsStatus(String logisticsStatus) {
+        this.logisticsStatus = logisticsStatus;
+    }
+
+    public Long getWarehouseId() {
 		return warehouseId;
 	}
 

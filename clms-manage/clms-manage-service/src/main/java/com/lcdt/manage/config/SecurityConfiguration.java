@@ -1,7 +1,6 @@
-package com.lcdt.clms.security.config;
+package com.lcdt.manage.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.lcdt.clms.security.config.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -14,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -30,12 +28,10 @@ import java.util.Locale;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	private Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
-
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		super.configure(web);
-		web.ignoring().antMatchers("/css/**","/js/**","/img/**","/wechatpaynotify","/alipay/notify","/alipay/returnurl","/front/**");
+		web.ignoring().antMatchers("/*","/css/**","/js/**","/img/**","/wechatpaynotify","/alipay/notify","/alipay/returnurl","/front/**");
 	}
 
 	@Override
@@ -47,14 +43,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry());
 		http.exceptionHandling().authenticationEntryPoint(entryPoint());
-		http.addFilterAt(ticketAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-				.authorizeRequests().antMatchers("/auth/**").permitAll()
-				.antMatchers("/register/**","/wechatpaynotify","/alipay/notify","/alipay/returnurl").permitAll()
-				.and().logout().logoutSuccessHandler(ticketLogoutSuccessHandler()).logoutUrl("/signout").logoutSuccessUrl("/auth/loginpage").permitAll()
-				.and().exceptionHandling().accessDeniedHandler(deniedHandler())
-				.and().csrf().disable();
 		http.authorizeRequests().anyRequest().authenticated();
-
 	}
 
 	@Bean
@@ -78,7 +67,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		try {
 			ticketAuthenticationFilter.setAuthenticationManager(authenticationManager());
 		} catch (Exception e) {
-			logger.error("设置认知管理其错误",e);
+			e.printStackTrace();
 		}
 		return ticketAuthenticationFilter;
 	}

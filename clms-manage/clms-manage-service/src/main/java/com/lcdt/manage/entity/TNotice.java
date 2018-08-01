@@ -29,6 +29,11 @@ public class TNotice implements Serializable {
      * 封面图片
      */
     private String coverImageUrl;
+
+    /**
+     * 封面图片
+     */
+    private String topImageUrl;
     /**
      * 署名
      */
@@ -53,7 +58,7 @@ public class TNotice implements Serializable {
     private String createUserName;
     private  Integer isTop;
     private  String keyWords;
-
+    private Integer noticeStatus;
     public Long getNoticeId() {
         return noticeId;
     }
@@ -84,6 +89,14 @@ public class TNotice implements Serializable {
 
     public void setCoverImageUrl(String coverImageUrl) {
         this.coverImageUrl = coverImageUrl;
+    }
+
+    public String getTopImageUrl() {
+        return topImageUrl;
+    }
+
+    public void setTopImageUrl(String topImageUrl) {
+        this.topImageUrl = topImageUrl;
     }
 
     public String getPublisher() {
@@ -158,6 +171,14 @@ public class TNotice implements Serializable {
         this.keyWords = keyWords;
     }
 
+    public Integer getNoticeStatus() {
+        return noticeStatus;
+    }
+
+    public void setNoticeStatus(Integer noticeStatus) {
+        this.noticeStatus = noticeStatus;
+    }
+
     @Override
     public String toString() {
         return "TNotice{" +
@@ -165,6 +186,7 @@ public class TNotice implements Serializable {
         ", categoryId=" + categoryId +
         ", noticeTitle=" + noticeTitle +
         ", coverImageUrl=" + coverImageUrl +
+                ", topImageUrl=" + topImageUrl +
         ", publisher=" + publisher +
         ", noticeContent=" + noticeContent +
         ", noticeSummary=" + noticeSummary +
@@ -174,6 +196,7 @@ public class TNotice implements Serializable {
         ", createUserName=" + createUserName +
                 ",isTop =" + isTop +
                 ", keyWords=" + keyWords  +
+                ", noticeStatus=" + noticeStatus  +
                 "}";
     }
 }
