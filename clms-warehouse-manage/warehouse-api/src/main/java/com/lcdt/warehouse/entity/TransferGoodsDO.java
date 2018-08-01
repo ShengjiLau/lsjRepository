@@ -15,6 +15,14 @@ public class TransferGoodsDO implements Serializable {
 
     private Long transferId;
 
+    private Long whLocId;
+
+    private String whLocCode;
+
+    private String goodsBatch;
+    
+    private byte isMaterial;
+    
     private static final long serialVersionUID = 1L;
 
     public Long getGoodsId() {
@@ -65,6 +73,30 @@ public class TransferGoodsDO implements Serializable {
         this.transferId = transferId;
     }
 
+    public Long getWhLocId() {
+        return whLocId;
+    }
+
+    public void setWhLocId(Long whLocId) {
+        this.whLocId = whLocId;
+    }
+
+    public String getWhLocCode() {
+        return whLocCode;
+    }
+
+    public void setWhLocCode(String whLocCode) {
+        this.whLocCode = whLocCode == null ? null : whLocCode.trim();
+    }
+
+    public String getGoodsBatch() {
+        return goodsBatch;
+    }
+
+    public void setGoodsBatch(String goodsBatch) {
+        this.goodsBatch = goodsBatch == null ? null : goodsBatch.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -82,7 +114,10 @@ public class TransferGoodsDO implements Serializable {
             && (this.getInventoryId() == null ? other.getInventoryId() == null : this.getInventoryId().equals(other.getInventoryId()))
             && (this.getTransferNum() == null ? other.getTransferNum() == null : this.getTransferNum().equals(other.getTransferNum()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
-            && (this.getTransferId() == null ? other.getTransferId() == null : this.getTransferId().equals(other.getTransferId()));
+            && (this.getTransferId() == null ? other.getTransferId() == null : this.getTransferId().equals(other.getTransferId()))
+            && (this.getWhLocId() == null ? other.getWhLocId() == null : this.getWhLocId().equals(other.getWhLocId()))
+            && (this.getWhLocCode() == null ? other.getWhLocCode() == null : this.getWhLocCode().equals(other.getWhLocCode()))
+            && (this.getGoodsBatch() == null ? other.getGoodsBatch() == null : this.getGoodsBatch().equals(other.getGoodsBatch()));
     }
 
     @Override
@@ -95,6 +130,9 @@ public class TransferGoodsDO implements Serializable {
         result = prime * result + ((getTransferNum() == null) ? 0 : getTransferNum().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getTransferId() == null) ? 0 : getTransferId().hashCode());
+        result = prime * result + ((getWhLocId() == null) ? 0 : getWhLocId().hashCode());
+        result = prime * result + ((getWhLocCode() == null) ? 0 : getWhLocCode().hashCode());
+        result = prime * result + ((getGoodsBatch() == null) ? 0 : getGoodsBatch().hashCode());
         return result;
     }
 
@@ -110,8 +148,19 @@ public class TransferGoodsDO implements Serializable {
         sb.append(", transferNum=").append(transferNum);
         sb.append(", remark=").append(remark);
         sb.append(", transferId=").append(transferId);
+        sb.append(", whLocId=").append(whLocId);
+        sb.append(", whLocCode=").append(whLocCode);
+        sb.append(", goodsBatch=").append(goodsBatch);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
     }
+
+	public byte getIsMaterial() {
+		return isMaterial;
+	}
+
+	public void setIsMaterial(byte isMaterial) {
+		this.isMaterial = isMaterial;
+	}
 }

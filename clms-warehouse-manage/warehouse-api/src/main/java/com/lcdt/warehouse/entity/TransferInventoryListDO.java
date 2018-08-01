@@ -53,7 +53,7 @@ public class TransferInventoryListDO implements Serializable {
     private Byte listStatus;
 
     private String listSerialNo;
-
+    
     private static final long serialVersionUID = 1L;
 
     public Long getTransfersId() {

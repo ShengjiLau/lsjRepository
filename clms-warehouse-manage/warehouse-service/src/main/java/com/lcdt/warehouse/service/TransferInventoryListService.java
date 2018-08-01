@@ -2,6 +2,7 @@ package com.lcdt.warehouse.service;
 
 import java.util.List;
 
+import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.dto.TransferInventoryListDTO;
 
 public interface TransferInventoryListService {
@@ -10,7 +11,7 @@ public interface TransferInventoryListService {
 	
 	int completeTransferInventoryList(TransferInventoryListDTO transferInventoryListDTO);
 	
-	List<TransferInventoryListDTO> getTransferInventoryListDTOList(TransferInventoryListDTO transferInventoryListDTO);
+	PageBaseDto<TransferInventoryListDTO> getTransferInventoryListDTOList(TransferInventoryListDTO transferInventoryListDTO);
 	
 	TransferInventoryListDTO getTransferInventoryListDTODetail(Long transferInventoryListId);
 	
