@@ -67,6 +67,7 @@ public class FrontPageController {
             //置顶的
             TNotice topOne = new TNotice();
             params.setPageNo(1).setPageSize(1);
+            //已发布状态的
             params.setIsTop(1);
             Page<NoticeListDto> topPage = noticeService.findTopNoticesByPage(params);
             if(topPage!=null&&topPage.getRecords().size()>0){
@@ -99,8 +100,11 @@ public class FrontPageController {
         } else {
             params.setPageNo(1);
         }
+        //已发布状态的
+        params.setNoticeStatus(1);
         TNoticeCategory cate = new TNoticeCategory();
         cate = noticeCategoryService.findByName(NewsCategory);
+
         if (cate != null) {
             params.setCategoryId(cate.getCategoryId());
             Page<NoticeListDto> page = noticeService.findTopNoticesByPage(params);
@@ -167,16 +171,21 @@ public class FrontPageController {
     public ModelAndView news(Long id) {
         ModelAndView view = new ModelAndView(NEWS_PAGE);
         TNotice notice = noticeService.selectById(id);
+        if(notice.getNoticeStatus()!=1){
+            notice = new TNotice();
+
+        }
+
         //当前新闻
         view.addObject("notice", notice);
         if (notice != null) {
             NoticeListParamsDto paramsDto = new NoticeListParamsDto();
             paramsDto.setCategoryId(notice.getCategoryId());
             paramsDto.setNoticeId(notice.getNoticeId());
+            paramsDto.setNoticeStatus(1);
             //下一条
             NoticeListDto nextNotice = noticeService.findNoticeAndNextById(paramsDto);
             if (nextNotice != null) {
-                logger.info("nextNotice.get(0).getNoticeTitle===" + nextNotice.getNoticeTitle());
                 view.addObject("nextNotice", nextNotice);
             }
         }
