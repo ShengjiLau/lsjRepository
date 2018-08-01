@@ -83,11 +83,12 @@ public class InWarehouseOrder implements Serializable,ResponseData {
     private String warehouseName;
     /**
      * 入库类型
-{id:"01",value:"原料入库"},
-  {id:"02",value:"成品入库"},
-              {id:"03",value:"退换货入库"},
-              {id:"04",value:"采购入库"},
-              {id:"05",value:"其它"},
+     {id:"01",value:"原料入库"},
+     {id:"02",value:"成品入库"},
+     {id:"03",value:"调拨入库"},
+     {id:"04",value:"退换货入库"},
+     {id:"05",value:"采购入库"},
+     {id:"06",value:"其它"},
      */
     private String storageType;
     /**
