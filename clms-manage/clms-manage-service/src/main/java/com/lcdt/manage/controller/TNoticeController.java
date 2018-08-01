@@ -70,6 +70,13 @@ public class TNoticeController {
         System.out.println("==============categorySave==============="+category.toString());
         JSONObject jsonObject = new JSONObject();
         boolean result = false;
+        //校验是否存在相同的类别
+        boolean ext =  categoryService.findExistTNoticeCategory(category);
+        if(ext){
+            jsonObject.put("code", 1);
+            jsonObject.put("message", "类别重复，提交失败！");
+            return jsonObject;
+        }
         if(category.getCategoryId()!=null){
             result = categoryService.updateAllColumnById(category);
         }
