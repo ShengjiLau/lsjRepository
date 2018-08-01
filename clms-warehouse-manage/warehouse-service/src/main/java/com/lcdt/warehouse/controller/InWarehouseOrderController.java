@@ -12,6 +12,7 @@ import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.utils.DateUtils;
 import com.lcdt.warehouse.utils.GroupIdsUtil;
+import com.lcdt.warehouse.utils.InOrderTypeUtil;
 import com.lcdt.warehouse.utils.InplanUtil;
 import com.lcdt.warehouse.vo.ConstantVO;
 import io.swagger.annotations.Api;
@@ -232,7 +233,7 @@ public class InWarehouseOrderController {
 
                 row = sheet.getRow(6);
                 cell = row.getCell(39);
-                cell.setCellValue(orderDeatil.getStorageType()==null?"": InplanUtil.convertStorageType(orderDeatil.getStorageType()));//入库类型
+                cell.setCellValue(orderDeatil.getStorageType()==null?"": InOrderTypeUtil.convertStorageType(orderDeatil.getStorageType()));//入库类型
 
                 row = sheet.getRow(7);
                 cell = row.getCell(11);
