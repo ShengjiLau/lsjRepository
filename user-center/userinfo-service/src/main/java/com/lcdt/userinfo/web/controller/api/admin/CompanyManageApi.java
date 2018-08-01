@@ -1,5 +1,6 @@
 package com.lcdt.userinfo.web.controller.api.admin;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dao.CompanyMapper;
@@ -60,6 +61,16 @@ public class CompanyManageApi {
         company.setEnable(enable);
         companyMapper.updateByPrimaryKey(company);
         return JSONResponseUtil.success(company);
+    }
+
+
+
+    @PostMapping("/clearData")
+    @PreAuthorize("hasAnyAuthority('admin_clear_data')")
+    public ResponseMessage clearData(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code",0);
+        return JSONResponseUtil.success(jsonObject);
     }
 
 }
