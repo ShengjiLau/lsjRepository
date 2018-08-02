@@ -142,27 +142,33 @@ public class CheckController {
     @RequestMapping(value = "/updateCheckAndComplete", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_check_complete')")
     public JSONObject updateCheckAndComplete(@Validated CheckSaveDto checkSaveDto) {
+        JSONObject jsonObject = new JSONObject();
+        String message = "";
+        boolean result = true;
+        int code = -1;
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
         String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
 
         TCheck check = new TCheck();
         BeanUtils.copyProperties(checkSaveDto,check);
-        System.out.println("checkSaveDto.getCompleteDate():::::::::::"+checkSaveDto.getCompleteDate());
         check.setCompleteDate(DateUtils.string2Date_safe(checkSaveDto.getCompleteDate(),"yyyy-MM-dd"));
-        System.out.println("check.getCompleteDate()::::::::::::"+check.getCompleteDate());
         check.setCheckStatus((Integer) CheckStatusEnum.completed.getValue());
-
         check.setUpdateDate(new Date());
         check.setUpdateName(userName);
         check.setUpdateId(userId);
 
         List<Map<String, Object>> items = checkSaveDto.getItems();
-        boolean result = checkService.completeCheckAndItems(check,items);
+        try {
+            checkService.completeCheckAndItems(check, items);
+        }catch (RuntimeException e){
+            e.printStackTrace();
+            message = e.getLocalizedMessage();
+            jsonObject.put("message", message);
+            jsonObject.put("code", code);
+            return jsonObject;
+        }
 
-        JSONObject jsonObject = new JSONObject();
-        String message = "";
-        int code = -1;
         if (result) {
             code = 0;
             message = "保存成功！";
