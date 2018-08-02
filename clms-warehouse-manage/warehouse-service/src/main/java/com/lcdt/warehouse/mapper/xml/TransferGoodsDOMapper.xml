@@ -11,7 +11,7 @@
     <result column="wh_loc_id" jdbcType="BIGINT" property="whLocId" />
     <result column="wh_loc_code" jdbcType="VARCHAR" property="whLocCode" />
     <result column="goods_batch" jdbcType="VARCHAR" property="goodsBatch" />
-    <result column="is_material" javaType="TINYINT" property="isMaterial"/>
+    <result column="is_material" jdbcType="TINYINT" property="isMaterial"/>
   </resultMap>
   <sql id="Base_Column_List">
     goods_id, origin_goods_id, inventory_id, transfer_num, remark, transfer_id, wh_loc_id, 
