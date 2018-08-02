@@ -23,8 +23,16 @@ public final class TransferInventoryListVO {
 	 */
 	public static final byte CANCELED = 2;
 	
+	/**
+	 * page第一页
+	 */
+	public static final Integer FIRST_PAGE_NO = 1;
 	
 	
+	public static final byte IS_MATERIAL = 0;
+	
+	
+	public static final byte IS_PRODUCT = 1;
 	
 	
 	

@@ -2,27 +2,42 @@ package com.lcdt.warehouse.entity;
 
 import java.io.Serializable;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel("转换单商品Model")
 public class TransferGoodsDO implements Serializable {
+	@ApiModelProperty("转换单商品id")
     private Long goodsId;
-
+	@ApiModelProperty("源商品id")
     private Long originGoodsId;
-
+	@ApiModelProperty("库存id")
     private Long inventoryId;
-
+	@ApiModelProperty("转换数量")
     private Long transferNum;
-
+	@ApiModelProperty("备注")
     private String remark;
-
+	@ApiModelProperty("转换单主表id")
     private Long transferId;
-
+	@ApiModelProperty("库位id")
     private Long whLocId;
-
+	@ApiModelProperty("库位编码")
     private String whLocCode;
-
+	@ApiModelProperty("商品批次")
     private String goodsBatch;
-    
-    private byte isMaterial;
-    
+	@ApiModelProperty("0-原料；1-生成")
+    private Byte isMaterial;
+	@ApiModelProperty("商品名称")
+    private String goodsName;
+	@ApiModelProperty("商品编码")
+    private String goodsCode;
+	@ApiModelProperty("商品条形码")
+    private String goodsBarcode;
+	@ApiModelProperty("商品规格")
+    private String goodsSpec;
+	@ApiModelProperty("商品单位")
+    private String goodsUnit;
+
     private static final long serialVersionUID = 1L;
 
     public Long getGoodsId() {
@@ -97,6 +112,54 @@ public class TransferGoodsDO implements Serializable {
         this.goodsBatch = goodsBatch == null ? null : goodsBatch.trim();
     }
 
+    public Byte getIsMaterial() {
+        return isMaterial;
+    }
+
+    public void setIsMaterial(Byte isMaterial) {
+        this.isMaterial = isMaterial;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName == null ? null : goodsName.trim();
+    }
+
+    public String getGoodsCode() {
+        return goodsCode;
+    }
+
+    public void setGoodsCode(String goodsCode) {
+        this.goodsCode = goodsCode == null ? null : goodsCode.trim();
+    }
+
+    public String getGoodsBarcode() {
+        return goodsBarcode;
+    }
+
+    public void setGoodsBarcode(String goodsBarcode) {
+        this.goodsBarcode = goodsBarcode == null ? null : goodsBarcode.trim();
+    }
+
+    public String getGoodsSpec() {
+        return goodsSpec;
+    }
+
+    public void setGoodsSpec(String goodsSpec) {
+        this.goodsSpec = goodsSpec == null ? null : goodsSpec.trim();
+    }
+
+    public String getGoodsUnit() {
+        return goodsUnit;
+    }
+
+    public void setGoodsUnit(String goodsUnit) {
+        this.goodsUnit = goodsUnit == null ? null : goodsUnit.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -117,7 +180,13 @@ public class TransferGoodsDO implements Serializable {
             && (this.getTransferId() == null ? other.getTransferId() == null : this.getTransferId().equals(other.getTransferId()))
             && (this.getWhLocId() == null ? other.getWhLocId() == null : this.getWhLocId().equals(other.getWhLocId()))
             && (this.getWhLocCode() == null ? other.getWhLocCode() == null : this.getWhLocCode().equals(other.getWhLocCode()))
-            && (this.getGoodsBatch() == null ? other.getGoodsBatch() == null : this.getGoodsBatch().equals(other.getGoodsBatch()));
+            && (this.getGoodsBatch() == null ? other.getGoodsBatch() == null : this.getGoodsBatch().equals(other.getGoodsBatch()))
+            && (this.getIsMaterial() == null ? other.getIsMaterial() == null : this.getIsMaterial().equals(other.getIsMaterial()))
+            && (this.getGoodsName() == null ? other.getGoodsName() == null : this.getGoodsName().equals(other.getGoodsName()))
+            && (this.getGoodsCode() == null ? other.getGoodsCode() == null : this.getGoodsCode().equals(other.getGoodsCode()))
+            && (this.getGoodsBarcode() == null ? other.getGoodsBarcode() == null : this.getGoodsBarcode().equals(other.getGoodsBarcode()))
+            && (this.getGoodsSpec() == null ? other.getGoodsSpec() == null : this.getGoodsSpec().equals(other.getGoodsSpec()))
+            && (this.getGoodsUnit() == null ? other.getGoodsUnit() == null : this.getGoodsUnit().equals(other.getGoodsUnit()));
     }
 
     @Override
@@ -133,6 +202,12 @@ public class TransferGoodsDO implements Serializable {
         result = prime * result + ((getWhLocId() == null) ? 0 : getWhLocId().hashCode());
         result = prime * result + ((getWhLocCode() == null) ? 0 : getWhLocCode().hashCode());
         result = prime * result + ((getGoodsBatch() == null) ? 0 : getGoodsBatch().hashCode());
+        result = prime * result + ((getIsMaterial() == null) ? 0 : getIsMaterial().hashCode());
+        result = prime * result + ((getGoodsName() == null) ? 0 : getGoodsName().hashCode());
+        result = prime * result + ((getGoodsCode() == null) ? 0 : getGoodsCode().hashCode());
+        result = prime * result + ((getGoodsBarcode() == null) ? 0 : getGoodsBarcode().hashCode());
+        result = prime * result + ((getGoodsSpec() == null) ? 0 : getGoodsSpec().hashCode());
+        result = prime * result + ((getGoodsUnit() == null) ? 0 : getGoodsUnit().hashCode());
         return result;
     }
 
@@ -151,16 +226,14 @@ public class TransferGoodsDO implements Serializable {
         sb.append(", whLocId=").append(whLocId);
         sb.append(", whLocCode=").append(whLocCode);
         sb.append(", goodsBatch=").append(goodsBatch);
+        sb.append(", isMaterial=").append(isMaterial);
+        sb.append(", goodsName=").append(goodsName);
+        sb.append(", goodsCode=").append(goodsCode);
+        sb.append(", goodsBarcode=").append(goodsBarcode);
+        sb.append(", goodsSpec=").append(goodsSpec);
+        sb.append(", goodsUnit=").append(goodsUnit);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
     }
-
-	public byte getIsMaterial() {
-		return isMaterial;
-	}
-
-	public void setIsMaterial(byte isMaterial) {
-		this.isMaterial = isMaterial;
-	}
 }

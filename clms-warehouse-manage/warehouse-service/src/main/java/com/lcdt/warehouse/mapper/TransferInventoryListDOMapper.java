@@ -3,6 +3,7 @@ package com.lcdt.warehouse.mapper;
 import java.util.List;
 
 import com.lcdt.warehouse.dto.TransferInventoryListDTO;
+import com.lcdt.warehouse.dto.TransferListDTO;
 import com.lcdt.warehouse.entity.TransferInventoryListDO;
 
 public interface TransferInventoryListDOMapper {
@@ -18,6 +19,10 @@ public interface TransferInventoryListDOMapper {
 
     int updateByPrimaryKey(TransferInventoryListDO record);
     
-    List<TransferInventoryListDTO> getTransferInventoryListDTOList(TransferInventoryListDTO transferInventoryListDTO);
+    List<TransferInventoryListDTO> getTransferInventoryListDTOLists(TransferInventoryListDTO transferInventoryListDTO);
+    
+    TransferInventoryListDTO getTransferInventoryListDTO(Long transfersId);
+    
+    List<TransferInventoryListDTO> getTransferInventoryListDTOList(TransferListDTO transferListDTO);
     
 }

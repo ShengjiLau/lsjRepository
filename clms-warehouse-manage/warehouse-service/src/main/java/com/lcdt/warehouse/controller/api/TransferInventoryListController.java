@@ -13,6 +13,7 @@ import com.lcdt.util.ResponseJsonUtils;
 import com.lcdt.warehouse.controller.exception.ShiftInventoryException;
 import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.dto.TransferInventoryListDTO;
+import com.lcdt.warehouse.dto.TransferListDTO;
 import com.lcdt.warehouse.service.TransferInventoryListService;
 
 import io.swagger.annotations.Api;
@@ -69,8 +70,8 @@ public class TransferInventoryListController {
 	@PostMapping("/list")
 	@ApiOperation(value = "查询库存转换单列表")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('transfer_inventory_get')")
-	public JSONObject getTransferInventoryLists(TransferInventoryListDTO transferInventoryListDTO) {
-		PageBaseDto<TransferInventoryListDTO> pageBaseDto = transferInventoryListService.getTransferInventoryListDTOList(transferInventoryListDTO);
+	public JSONObject getTransferInventoryLists(TransferListDTO transferListDTO) {
+		PageBaseDto<TransferInventoryListDTO> pageBaseDto = transferInventoryListService.getTransferInventoryListDTOList(transferListDTO);
 		String message = "库存转换单列表";
 		return ResponseJsonUtils.successResponseJson(pageBaseDto, message);
 	}
@@ -81,8 +82,14 @@ public class TransferInventoryListController {
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('transfer_inventory_get')")
 	public JSONObject getTransferInventoryDetail(Long transferId) {
 		TransferInventoryListDTO transferInventoryListDTO = transferInventoryListService.getTransferInventoryListDTODetail(transferId);
-		String message = "库存转换单详情";
-		return ResponseJsonUtils.successResponseJson(transferInventoryListDTO, message);
+		String message = null;
+		if (null != transferInventoryListDTO) {
+			message = "库存转换单详情";
+			return ResponseJsonUtils.successResponseJson(transferInventoryListDTO, message);
+		}else {
+			message = "查询详情失败！";
+			throw new RuntimeException(message);
+		}
 	}
 	
 	
