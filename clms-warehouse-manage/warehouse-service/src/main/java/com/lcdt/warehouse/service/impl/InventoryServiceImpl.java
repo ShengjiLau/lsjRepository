@@ -9,6 +9,7 @@ import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.warehouse.contants.InOrderStatus;
 import com.lcdt.warehouse.contants.OutOrderStatus;
 import com.lcdt.warehouse.dto.AllotDto;
+import com.lcdt.warehouse.dto.ImportInventoryDto;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.entity.*;
@@ -20,6 +21,7 @@ import com.lcdt.warehouse.mapper.OutWarehouseOrderMapper;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.service.InventoryLogService;
 import com.lcdt.warehouse.service.InventoryService;
+import com.lcdt.warehouse.service.WarehouseService;
 import com.lcdt.warehouse.utils.CommonUtils;
 import com.lcdt.warehouse.utils.ShiftGoodsBO;
 
@@ -31,8 +33,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +62,8 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
     private Logger logger = LoggerFactory.getLogger(InventoryServiceImpl.class);
 
+    @Autowired
+    private WarehouseService warehouseService;
 
     //分页查询 库存列表
     public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto,Long companyId) {
@@ -362,10 +368,53 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     			}
     	}
     }
-    
-    
-    
-    
+
+
+    @Transactional(rollbackFor = Exception.class)
+    public List<Inventory> importInventory(List<ImportInventoryDto> dtos){
+        GoodsListParamsDto gooddto = new GoodsListParamsDto();
+        ArrayList<Inventory> inventories = new ArrayList<>();
+        for (ImportInventoryDto dto : dtos) {
+            if (StringUtils.isEmpty(dto.getGoodcode())) {
+                throw new RuntimeException();
+            }
+            gooddto.setGoodsCode(dto.getGoodcode());
+            PageInfo<GoodsInfoDao> goodsInfoDaoPageInfo = goodsService.queryByCondition(gooddto);
+            if (CollectionUtils.isEmpty(goodsInfoDaoPageInfo.getList()) || goodsInfoDaoPageInfo.getList().size() < 1) {
+                throw new RuntimeException("商品sn不存在");
+            }
+            final List<WarehouseLoc> warehouseLocs = warehouseService.selectByWarehouseCode(dto.getStorageLocationCode(), dto.getWareHouseId());
+
+            if(CollectionUtils.isEmpty(warehouseLocs)){
+                throw new RuntimeException("库位填写错误或不存在");
+            }
+            WarehouseLoc warehouseLoc = warehouseLocs.get(0);
+
+
+            //数量检验
+            final Double inventoryNum = Double.valueOf(dto.getNum());
+            //判断小数位最多4位
+            GoodsInfoDao goodsInfoDao = goodsInfoDaoPageInfo.getList().get(0);
+            GoodsInfo goodsInfo = saveGoodsInfo(goodsInfoDao);
+            Inventory inventory = InventoryFactory.createInventoryFromInventoryImportDto(dto,goodsInfo);
+            inventory.setGoodsId(goodsInfo.getGoodsId());
+            inventory.setOriginalGoodsId(goodsInfoDao.getGoodsId());
+            inventory.setStorageLocationId(warehouseLoc.getWhLocId());
+            Inventory inventory1 = addInventory(inventory);
+            logService.saveImportInventoryLog(inventory, dto);
+            inventories.add(inventory1);
+        }
+        return inventories;
+    }
+
+
+    public GoodsInfo saveGoodsInfo(GoodsInfoDao inOrdergoodsInfo) {
+        GoodsInfo goodsInfo = new GoodsInfo();
+        BeanUtils.copyProperties(inOrdergoodsInfo, goodsInfo);
+        goodsInfo.setGoodsId(null);
+        goodsInfoMapper.insert(goodsInfo);
+        return goodsInfo;
+    }
     
 
 

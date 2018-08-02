@@ -1,5 +1,7 @@
 package com.lcdt.warehouse.factory;
 
+import com.lcdt.warehouse.dto.ImportInventoryDto;
+import com.lcdt.warehouse.entity.GoodsInfo;
 import com.lcdt.warehouse.entity.InWarehouseOrder;
 import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.lcdt.warehouse.entity.Inventory;
@@ -10,6 +12,24 @@ import org.springframework.util.Assert;
 public class InventoryFactory {
 
     private static Logger logger = LoggerFactory.getLogger(InventoryFactory.class);
+
+
+    public static Inventory createInventoryFromInventoryImportDto(ImportInventoryDto dto, GoodsInfo goodsInfo) {
+        Inventory inventory = new Inventory();
+        inventory.setBatch(dto.getBatch());
+        inventory.setCompanyId(dto.getCompanyId());
+        inventory.setGoodsId(goodsInfo.getGoodsId());
+        inventory.setCustomerId(dto.getCustomerId());
+        inventory.setWarehouseId(dto.getWareHouseId());
+        inventory.setBaseUnit(goodsInfo.getMinUnit());
+        inventory.setStorageLocationCode(dto.getStorageLocationCode());
+        inventory.setInvertoryNum(Double.valueOf(dto.getNum()));
+        inventory.setBusinessDesc("");
+//        inventory.setOriginalGoodsId(dto.getG);
+        return inventory;
+    }
+
+
 
     /**
      * 入库单 入库生成库存对象
