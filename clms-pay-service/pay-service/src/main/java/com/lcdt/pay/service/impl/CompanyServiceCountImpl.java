@@ -1,7 +1,9 @@
 package com.lcdt.pay.service.impl;
 
 import com.lcdt.pay.dao.CompanyServiceCountMapper;
+import com.lcdt.pay.dao.ServiceProductMapper;
 import com.lcdt.pay.model.CompanyServiceCount;
+import com.lcdt.pay.model.ServiceProduct;
 import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.pay.rpc.ProductCountService;
 import org.slf4j.Logger;
@@ -22,7 +24,35 @@ public class CompanyServiceCountImpl implements CompanyServiceCountService {
     @Autowired
     ProductCountService productCountService;
 
+    @Autowired
+    ServiceProductMapper serviceProductMapper;
+
     private static final Logger log = LoggerFactory.getLogger(CompanyServiceCountImpl.class);
+
+
+    //后台管理员设置增加
+    public CompanyServiceCount addCountNum(Long companyId,String serviceName,Integer num,String operationUserName){
+
+        final List<ServiceProduct> serviceProducts = serviceProductMapper.selectProductByName(serviceName);
+        if (CollectionUtils.isEmpty(serviceProducts)) {
+            throw new RuntimeException("产品不存在");
+        }
+        final List<CompanyServiceCount> companyServiceCounts = countMapper.selectByCompanyId(companyId, serviceName);
+        CompanyServiceCount count = null;
+        if (CollectionUtils.isEmpty(companyServiceCounts)) {
+            final CompanyServiceCount companyServiceCount = new CompanyServiceCount();
+            companyServiceCount.setProductName(serviceName);
+            companyServiceCount.setCompanyId(companyId);
+            companyServiceCount.setProductServiceNum(num);
+            countMapper.insert(companyServiceCount);
+        }else{
+            final CompanyServiceCount companyServiceCount = companyServiceCounts.get(0);
+            companyServiceCount.setProductServiceNum(companyServiceCount.getProductServiceNum() + num);
+            countMapper.updateByPrimaryKey(companyServiceCount);
+        }
+        productCountService.logAddProductCount(serviceProducts.get(0).getProductName(), "管理员增加余额", num, operationUserName, companyId, count.getProductServiceNum(), ProductCountServiceImpl.CountLogType.ADMIN_TOPUP);
+        return count;
+    }
 
 
     @Override

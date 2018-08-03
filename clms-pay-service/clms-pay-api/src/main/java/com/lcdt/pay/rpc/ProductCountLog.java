@@ -26,6 +26,23 @@ public class ProductCountLog implements Serializable{
 
     private String userName;
 
+    public ProductCountLog() {
+    }
+
+    public ProductCountLog(Long serviceCountLogId, String logNo, String logDes, String serviceName, Integer consumeNum, Integer remainNum, Integer logType, Integer deduct, Long companyId, Date logTime, String userName) {
+        this.serviceCountLogId = serviceCountLogId;
+        this.logNo = logNo;
+        this.logDes = logDes;
+        this.serviceName = serviceName;
+        this.consumeNum = consumeNum;
+        this.remainNum = remainNum;
+        this.logType = logType;
+        this.deduct = deduct;
+        this.companyId = companyId;
+        this.logTime = logTime;
+        this.userName = userName;
+    }
+
     public String getUserName() {
         return userName;
     }

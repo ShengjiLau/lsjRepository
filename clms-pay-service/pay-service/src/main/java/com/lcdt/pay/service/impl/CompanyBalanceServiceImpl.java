@@ -43,6 +43,31 @@ public class CompanyBalanceServiceImpl implements CompanyBalanceService{
         return payBalance;
     }
 
+    public void adminRecharge(Long companyId,Integer amount,String userName){
+        PayBalance payBalance = mapper.selectByCompanyId(companyId);
+
+        if (payBalance == null) {
+            payBalance = new PayBalance();
+            payBalance.setBalanceCompanyId(companyId);
+
+            mapper.insert(payBalance);
+        }
+        Integer balance = payBalance.getBalance();
+        if (balance == null) {
+            balance = 0;
+        }
+        payBalance.setBalance(balance + amount);
+        mapper.updateByPrimaryKey(payBalance);
+
+        BalanceLog balanceLog = new BalanceLog();
+        balanceLog.setAmount(amount);
+        balanceLog.setCurrentBalance(payBalance.getBalance());
+        balanceLog.setLogDes("管理员充值");
+        balanceLog.setLogType(OrderType.ADMIN_TOPUP);
+        balanceLog.setLogUsername(userName);
+        balanceLogMapper.insert(balanceLog);
+    }
+
 
     @Override
     public boolean rechargeBalance(PayOrder payOrder, Long companyId, String userName) {

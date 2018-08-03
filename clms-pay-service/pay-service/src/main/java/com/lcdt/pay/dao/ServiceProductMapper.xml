@@ -33,4 +33,12 @@
     select product_id, product_name, product_valid,product_service
     from service_product
   </select>
+  <select id="selectProductByName" resultMap="BaseResultMap">
+    SELECT *
+    from service_product
+    WHERE
+    product_name = #{productName}
+  </select>
+
+
 </mapper>
