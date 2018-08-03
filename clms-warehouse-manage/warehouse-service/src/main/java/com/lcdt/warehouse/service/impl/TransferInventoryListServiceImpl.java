@@ -103,7 +103,8 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 					 getTransferInventoryListDTOListWithGoods(transferInventoryListDTOList,  transferGoodsDOList);
 			Iterator<TransferInventoryListDTO> it = transferInventoryListDTOListWithGoods.iterator();
 			while  (it.hasNext()) {
-				if (null == it.next().getTransferGoodsDOList() || 0 == it.next().getTransferGoodsDOList().size()) {
+				TransferInventoryListDTO transferInventoryListDTO = it.next();
+				if (null == transferInventoryListDTO.getTransferGoodsDOList() || 0 == transferInventoryListDTO.getTransferGoodsDOList().size()) {
 					it.remove();
 				}
 			}
