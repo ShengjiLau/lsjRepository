@@ -448,8 +448,9 @@ public class ContractServiceImpl implements ContractService {
         Long upLoader = SecurityInfoGetter.getUser().getUserId();
         DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(SecurityInfoGetter.getCompanyId(), upLoader);
         Contract ct = contractMapper.selectByPrimaryKey(contract.getContractId());
+        User user = companyRpcService.selectByPrimaryKey(ct.getCreateId());
         //接收者
-        DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(ct.getCompanyId(), ct.getCreateId());
+        DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(ct.getCompanyId(), ct.getCreateId(),user.getPhone());
         ContractAttachment attachment = new ContractAttachment();
         attachment.setPurConTittle(ct.getTitle());
         attachment.setPurConSerialNum(ct.getSerialNo());
