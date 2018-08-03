@@ -2,6 +2,7 @@ package com.lcdt.warehouse.service.impl;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.warehouse.dto.ImportInventoryDto;
 import com.lcdt.warehouse.dto.InventoryLogQueryDto;
 import com.lcdt.warehouse.entity.*;
 import com.lcdt.warehouse.factory.InventoryLogFactory;
@@ -57,6 +58,12 @@ public class InventoryLogServiceImpl extends ServiceImpl<InventoryLogMapper, Inv
 
     public InventoryLog saveOutOrderLog(OutWarehouseOrder outWarehouseOrder, OutOrderGoodsInfo goodsInfo,Double updatedInventoryNum,Inventory inventory) {
         InventoryLog fromOutInventory = InventoryLogFactory.createFromOutInventory(outWarehouseOrder,goodsInfo,updatedInventoryNum,inventory);
+        return saveInventoryLog(fromOutInventory);
+    }
+
+    @Override
+    public InventoryLog saveImportInventoryLog(Inventory inventory, ImportInventoryDto dto) {
+        InventoryLog fromOutInventory = InventoryLogFactory.createFromInventoryInit(inventory,dto);
         return saveInventoryLog(fromOutInventory);
     }
 

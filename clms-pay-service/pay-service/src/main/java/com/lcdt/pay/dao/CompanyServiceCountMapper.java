@@ -6,6 +6,9 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface CompanyServiceCountMapper {
+
+    List<CompanyServiceCount> selectByCompanyIds(String companyIds);
+
     int deleteByPrimaryKey(Integer countId);
 
     int insert(CompanyServiceCount record);

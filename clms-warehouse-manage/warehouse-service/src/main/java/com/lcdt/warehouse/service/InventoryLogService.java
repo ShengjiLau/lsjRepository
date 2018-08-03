@@ -1,6 +1,7 @@
 package com.lcdt.warehouse.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
+import com.lcdt.warehouse.dto.ImportInventoryDto;
 import com.lcdt.warehouse.dto.InventoryLogQueryDto;
 import com.lcdt.warehouse.entity.*;
 import com.baomidou.mybatisplus.service.IService;
@@ -26,6 +27,7 @@ public interface InventoryLogService extends IService<InventoryLog> {
 
     InventoryLog saveOutOrderLog(OutWarehouseOrder outWarehouseOrder, OutOrderGoodsInfo goodsInfo,Double updatedInventoryNum,Inventory inventory);
 
+    InventoryLog saveImportInventoryLog(Inventory inventory, ImportInventoryDto dto);
     /**
      * 出入库汇总已完成商品数量
      * @param params

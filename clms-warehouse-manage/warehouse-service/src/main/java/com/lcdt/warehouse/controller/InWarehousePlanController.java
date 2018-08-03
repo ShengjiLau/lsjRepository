@@ -336,6 +336,8 @@ public class InWarehousePlanController {
 
             } catch (Exception e) {
                 logger.error("导出excel出现异常:", e);
+            }finally {
+                wb.close();
             }
 
         }

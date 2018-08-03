@@ -1,6 +1,7 @@
 package com.lcdt.warehouse.factory;
 
 import com.lcdt.warehouse.contants.InventoryBusinessType;
+import com.lcdt.warehouse.dto.ImportInventoryDto;
 import com.lcdt.warehouse.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,25 +13,54 @@ public interface InventoryLogFactory {
 
     static Logger logger = LoggerFactory.getLogger(InventoryLogFactory.class);
 
+    static InventoryLog createFromInventoryInit(Inventory inventory, ImportInventoryDto dto) {
+        Assert.notNull(inventory,"库存不能为空");
+        InventoryLog inventoryLog = new InventoryLog();
+
+        inventoryLog.setCompanyId(dto.getCompanyId());
+
+        //inventory data
+        inventoryLog.setGoodsId(inventory.getGoodsId());
+        inventoryLog.setWarehouseId(inventory.getWareHouseId());
+        inventoryLog.setChangeNum(inventory.getInvertoryNum());
+        inventoryLog.setBatch(inventory.getBatch());
+        inventoryLog.setInventoryId(inventory.getInvertoryId());
+        inventoryLog.setStorageLocationCode(inventory.getStorageLocationCode());
+        inventoryLog.setStorageLocationId(inventory.getStorageLocationId());
+        inventoryLog.setOriginalGoodsId(inventory.getOriginalGoodsId());
+
+
+        inventoryLog.setCustomerName(dto.getCustomerName());
+        inventoryLog.setCustomerId(dto.getCustomerId());
+        inventoryLog.setType(InventoryBusinessType.INVENTORY_INIT);
+        inventoryLog.setCurrentInvetory(inventory.getInvertoryNum());
+        return inventoryLog;
+    }
+
     public static InventoryLog createFromInventory(InWarehouseOrder order, Inventory inventory,Double updatedInventoryNum) {
         Assert.notNull(inventory,"库存不能为空");
         InventoryLog inventoryLog = new InventoryLog();
         inventoryLog.setBusinessNo(order.getInOrderCode());
-        inventoryLog.setGoodsId(inventory.getGoodsId());
         inventoryLog.setCompanyId(order.getCompanyId());
+
+        //inventory data
+        inventoryLog.setGoodsId(inventory.getGoodsId());
         inventoryLog.setWarehouseId(inventory.getWareHouseId());
         inventoryLog.setChangeNum(inventory.getInvertoryNum());
+        inventoryLog.setBatch(inventory.getBatch());
+        inventoryLog.setInventoryId(inventory.getInvertoryId());
         inventoryLog.setStorageLocationCode(inventory.getStorageLocationCode());
         inventoryLog.setStorageLocationId(inventory.getStorageLocationId());
         inventoryLog.setOriginalGoodsId(inventory.getOriginalGoodsId());
+
         inventoryLog.setCustomerName(order.getCustomerName());
         inventoryLog.setCustomerId(order.getCustomerId());
         inventoryLog.setType(InventoryBusinessType.INORDER);
-        inventoryLog.setBatch(inventory.getBatch());
+
         inventoryLog.setLogNo("");
         inventoryLog.setComment(order.getStorageRemark());
         inventoryLog.setCurrentInvetory(updatedInventoryNum);
-        inventoryLog.setInventoryId(inventory.getInvertoryId());
+
         return inventoryLog;
     }
 

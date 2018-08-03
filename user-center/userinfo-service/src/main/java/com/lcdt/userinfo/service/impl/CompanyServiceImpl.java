@@ -7,6 +7,7 @@ import com.lcdt.userinfo.dao.CompanyCertificateMapper;
 import com.lcdt.userinfo.dao.CompanyMapper;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.dto.CompanyDto;
+import com.lcdt.userinfo.dto.CompanyQueryDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.model.*;
@@ -49,6 +50,11 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     UserGroupService userGroupService;
+    @Transactional(rollbackFor = Exception.class,readOnly = true)
+    public List<Company> findByComanyQueryDto(CompanyQueryDto queryDto){
+        return companyMapper.selectByCompanyDto(queryDto);
+    }
+
 
     @Transactional(rollbackFor = Exception.class)
     public UserCompRel findByUserCompRelId(Long userCompRelId) {
