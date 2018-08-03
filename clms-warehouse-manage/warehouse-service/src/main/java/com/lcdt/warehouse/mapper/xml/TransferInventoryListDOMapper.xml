@@ -373,6 +373,9 @@
     <if test="customName != null and customName != ''">
     and customer_name like concat('%', #{customName, jdbcType=VARCHAR}, '%')
     </if>
+    <if test="whId != null">
+    and warehouse_id = #{whId, jdbcType=BIGINT}
+    </if>
   </select>
   
   
