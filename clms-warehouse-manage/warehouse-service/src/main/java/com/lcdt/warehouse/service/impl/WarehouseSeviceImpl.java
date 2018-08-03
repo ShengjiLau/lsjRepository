@@ -16,12 +16,10 @@ import com.lcdt.warehouse.service.WarehouseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.tl.commons.util.StringUtility;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yangbinq on 2018/1/10.
@@ -37,6 +35,24 @@ public class WarehouseSeviceImpl implements WarehouseService {
     private WarehousseLocMapper warehousseLocMapper;
     @Reference
     GroupWareHouseRpcService groupWareHouseRpcService;
+
+    @Transactional(rollbackFor = Exception.class)
+    public List<WarehouseLoc> selectByWarehouseCode(String locationCode,Long wareHouseId,Long companyId){
+        if (StringUtils.isEmpty(locationCode) || wareHouseId == null) {
+            return new ArrayList<>();
+        }
+        final HashMap<Object, Object> conditionMap = new HashMap<>();
+        conditionMap.put("whId", wareHouseId);
+        conditionMap.put("code", locationCode);
+        conditionMap.put("companyId", companyId);
+        return warehousseLocMapper.selectByCondition(conditionMap);
+    }
+
+
+    public Warehouse selectById(Long id) {
+        return warehousseMapper.selectByPrimaryKey(id);
+    }
+
 
     @Transactional(readOnly = true)
     @Override

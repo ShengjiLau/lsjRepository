@@ -2,6 +2,7 @@ package com.lcdt.warehouse.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.warehouse.dto.AllotDto;
+import com.lcdt.warehouse.dto.ImportInventoryDto;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
 import com.lcdt.warehouse.entity.*;
 import com.baomidou.mybatisplus.service.IService;
@@ -17,6 +18,8 @@ import java.util.List;
  * @since 2018-05-07
  */
 public interface InventoryService extends IService<Inventory> {
+
+    List<Inventory> importInventory(List<ImportInventoryDto> dtos);
 
     Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto,Long companyId);
 

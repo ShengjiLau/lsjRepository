@@ -446,10 +446,10 @@ public class ContractServiceImpl implements ContractService {
         /**↓发送消息通知开始*/
         //发送者
         Long upLoader = SecurityInfoGetter.getUser().getUserId();
-        DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(contract.getCompanyId(), upLoader);
+        DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(SecurityInfoGetter.getCompanyId(), upLoader);
         Contract ct = contractMapper.selectByPrimaryKey(contract.getContractId());
         //接收者
-        DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(contract.getCompanyId(), ct.getCreateId());
+        DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(ct.getCompanyId(), ct.getCreateId());
         ContractAttachment attachment = new ContractAttachment();
         attachment.setPurConTittle(ct.getTitle());
         attachment.setPurConSerialNum(ct.getSerialNo());

@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface ProductCountService {
 
+     ProductCountLog logAddProductCount(String productName,String des,Integer countNum,String userName,Long companyId,Integer remainCounts,Integer logType);
+
     ProductCountLog reduceProductCount(String productName, String des, Integer countNum, String userName,Long companyId,Integer remainCounts);
 
     ProductCountLog logAddProductCount(String productName, String des, Integer countNum, String userName,Long companyId,Integer remainCounts);

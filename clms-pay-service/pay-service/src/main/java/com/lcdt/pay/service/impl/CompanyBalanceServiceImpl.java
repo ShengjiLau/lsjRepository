@@ -10,6 +10,7 @@ import com.lcdt.pay.service.CompanyBalanceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
 @com.alibaba.dubbo.config.annotation.Service
 public class CompanyBalanceServiceImpl implements CompanyBalanceService{
@@ -22,10 +23,49 @@ public class CompanyBalanceServiceImpl implements CompanyBalanceService{
 
     private Logger logger = LoggerFactory.getLogger(CompanyBalanceServiceImpl.class);
 
+
+    public List<PayBalance> companyBalance(List<Long> companyIds){
+        final StringBuffer stringBuffer = new StringBuffer();
+
+        for (int i = 0;i < companyIds.size();i++) {
+            if (i > 0) {
+                stringBuffer.append(",");
+            }
+            stringBuffer.append(companyIds.get(i));
+        }
+        return mapper.selectByCompanyIds(stringBuffer.toString());
+    }
+
+
     @Override
     public PayBalance companyBalance(Long companyId) {
         PayBalance payBalance = mapper.selectByCompanyId(companyId);
         return payBalance;
+    }
+
+    public void adminRecharge(Long companyId,Integer amount,String userName){
+        PayBalance payBalance = mapper.selectByCompanyId(companyId);
+
+        if (payBalance == null) {
+            payBalance = new PayBalance();
+            payBalance.setBalanceCompanyId(companyId);
+
+            mapper.insert(payBalance);
+        }
+        Integer balance = payBalance.getBalance();
+        if (balance == null) {
+            balance = 0;
+        }
+        payBalance.setBalance(balance + amount);
+        mapper.updateByPrimaryKey(payBalance);
+
+        BalanceLog balanceLog = new BalanceLog();
+        balanceLog.setAmount(amount);
+        balanceLog.setCurrentBalance(payBalance.getBalance());
+        balanceLog.setLogDes("管理员充值");
+        balanceLog.setLogType(OrderType.ADMIN_TOPUP);
+        balanceLog.setLogUsername(userName);
+        balanceLogMapper.insert(balanceLog);
     }
 
 
