@@ -183,10 +183,8 @@
         and c.create_date  &lt;=  #{createDateUntil}
       </if>
 
+
     </where>
-
-
-
   </select>
 
 </mapper>

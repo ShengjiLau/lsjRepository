@@ -1,4 +1,4 @@
-package com.lcdt.userinfo.web.controller.api.admin.dto;
+package com.lcdt.userinfo.dto;
 
 import com.lcdt.userinfo.model.Company;
 
@@ -17,6 +17,16 @@ public class CompanyQueryDto extends Company{
     private Date createDateUntil;
 
     private Long compId;
+
+    private String adminUserName;
+
+    public String getAdminUserName() {
+        return adminUserName;
+    }
+
+    public void setAdminUserName(String adminUserName) {
+        this.adminUserName = adminUserName;
+    }
 
     @Override
     public Long getCompId() {

@@ -13,7 +13,9 @@ import java.util.Map;
  */
 public interface WarehouseService {
 
-    List<WarehouseLoc> selectByWarehouseCode(String locationCode, Long wareHouseId);
+    Warehouse selectById(Long id);
+
+    List<WarehouseLoc> selectByWarehouseCode(String locationCode, Long wareHouseId,Long companyId);
     /**
      * 仓库列表查询
      * @param m

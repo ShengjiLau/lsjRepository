@@ -12,7 +12,7 @@ public class ImportInventoryDto {
 
     private String storageLocationCode;
 
-    private String num;
+    private  Double num;
 
     private String costPrice;
 
@@ -106,11 +106,11 @@ public class ImportInventoryDto {
         this.storageLocationCode = storageLocationCode;
     }
 
-    public String getNum() {
+    public Double getNum() {
         return num;
     }
 
-    public void setNum(String num) {
+    public void setNum(Double num) {
         this.num = num;
     }
 

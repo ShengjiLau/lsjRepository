@@ -3,11 +3,14 @@ package com.lcdt.userinfo.web.controller.api.admin;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dao.CompanyMapper;
+import com.lcdt.userinfo.dto.CompanyDto;
+import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.model.AdminUser;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
+import com.lcdt.userinfo.service.CreateCompanyService;
 import com.lcdt.userinfo.utils.JSONResponseUtil;
 import com.lcdt.userinfo.utils.ResponseMessage;
 import com.lcdt.userinfo.web.controller.api.admin.dto.CompanyQueryDto;
@@ -29,6 +32,9 @@ public class CompanyManageApi {
 
     @Autowired
     CompanyMapper companyMapper;
+
+    @Autowired
+    CreateCompanyService createCompanyService;
 
     @PostMapping("/usercomps")
     @PreAuthorize("hasAnyAuthority('admin_company_select')")
@@ -60,6 +66,11 @@ public class CompanyManageApi {
         company.setEnable(enable);
         companyMapper.updateByPrimaryKey(company);
         return JSONResponseUtil.success(company);
+    }
+
+    @PostMapping("/create")
+    public ResponseMessage createCompany(CompanyDto companyDto) throws CompanyExistException {
+        return JSONResponseUtil.success(createCompanyService.createCompany(companyDto));
     }
 
 }

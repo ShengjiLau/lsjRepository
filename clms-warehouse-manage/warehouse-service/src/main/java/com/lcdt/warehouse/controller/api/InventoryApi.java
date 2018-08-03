@@ -92,64 +92,57 @@ public class InventoryApi {
     @ApiOperation("修改备注")
     public ResponseMessage importInventorylist(String fileUrl,Long customerId,Long wareHouseId){
         //download file
+        final ArrayList<ImportInventoryDto> dtos = new ArrayList<>();
         XSSFWorkbook sheets = null;
         try {
 
-            ArrayList<ImportInventoryDto> importInventoryDtos = new ArrayList<>();
 
             sheets = new XSSFWorkbook(doanloadFile(fileUrl));// 读取excel模板
             //只读取第一个sheet
             XSSFSheet firstSheet = sheets.getSheetAt(0);
-            ExcelReader.readSheet(firstSheet, new ExcelReader.CellReadCallback() {
-                @Override
-                public void onCellRead(Cell cell) {
-                    int rowNum = cell.getRowIndex();
-                    if (rowNum == 0) {
-                        return;
-                    }
-                    int columnIndex = cell.getColumnIndex();
-                    ImportInventoryDto importInventoryDto;
-                    if (rowNum - 1 > importInventoryDtos.size()) {
-                        importInventoryDto = new ImportInventoryDto();
+
+            final Iterator<Row> rowIterator = firstSheet.rowIterator();
+            Row firstRow = null;
+            while (rowIterator.hasNext()) {
+                final Row next = rowIterator.next();
+                final int rowNum = next.getRowNum();
+                if (rowNum == 0) {
+                    firstRow = next;
+                    continue;
+                }
+                final Iterator<Cell> cellIterator = next.cellIterator();
+                while (cellIterator.hasNext()) {
+                    if (dtos.size() <= rowNum - 1) {
+                        final ImportInventoryDto importInventoryDto = new ImportInventoryDto();
                         importInventoryDto.setCompanyId(SecurityInfoGetter.getCompanyId());
-                        importInventoryDto.setUserId(SecurityInfoGetter.getUser().getUserId());
                         importInventoryDto.setWareHouseId(wareHouseId);
                         importInventoryDto.setCustomerId(customerId);
-                        importInventoryDtos.add(importInventoryDto);
-                    }
-                    else{
-                        importInventoryDto = importInventoryDtos.get(rowNum - 1);
-                    }
-                        switch (columnIndex) {
-                            case 0:
-                                importInventoryDto.setGoodName(cell.getStringCellValue());
-                                break;
-                            case 1:
-                                importInventoryDto.setGoodSpec(cell.getStringCellValue());
-                                break;
-                            case 2:
-                                importInventoryDto.setGoodcode(cell.getStringCellValue());
-                                break;
-                            case 3:
-                                importInventoryDto.setBatch(cell.getStringCellValue());
-                                break;
-                            case 4:
-                                importInventoryDto.setStorageLocationCode(cell.getStringCellValue());
-                                break;
-                            case 5:
-                                importInventoryDto.setNum(cell.getStringCellValue());
-                                break;
-                            case 6:
-                                importInventoryDto.setCostPrice(cell.getStringCellValue());
-                                break;
-                        }
+                        importInventoryDto.setUserId(SecurityInfoGetter.getUser().getUserId());
 
+                        dtos.add(importInventoryDto);
+                    }
+                    ImportInventoryDto importInventoryDto = dtos.get(rowNum - 1);
+                    final Cell cell = cellIterator.next();
+                    final int columnIndex = cell.getColumnIndex();
+                    switch (columnIndex) {
+                        case 0:
+                            importInventoryDto.setGoodcode(cell.getStringCellValue());
+                            break;
+                        case 1:
+                            importInventoryDto.setStorageLocationCode(cell.getStringCellValue());
+                            break;
+                        case 2:
+                            importInventoryDto.setNum(cell.getNumericCellValue());
+                            break;
+                        case 3:
+                            importInventoryDto.setCostPrice(cell.getStringCellValue());
+                            break;
                     }
 
                 }
-            );
+            }
 
-            inventoryService.importInventory(importInventoryDtos);
+            inventoryService.importInventory(dtos);
 
         } catch (IOException e) {
             e.printStackTrace();

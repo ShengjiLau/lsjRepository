@@ -37,17 +37,21 @@ public class WarehouseSeviceImpl implements WarehouseService {
     GroupWareHouseRpcService groupWareHouseRpcService;
 
     @Transactional(rollbackFor = Exception.class)
-    public List<WarehouseLoc> selectByWarehouseCode(String locationCode,Long wareHouseId){
+    public List<WarehouseLoc> selectByWarehouseCode(String locationCode,Long wareHouseId,Long companyId){
         if (StringUtils.isEmpty(locationCode) || wareHouseId == null) {
             return new ArrayList<>();
         }
         final HashMap<Object, Object> conditionMap = new HashMap<>();
         conditionMap.put("whId", wareHouseId);
         conditionMap.put("code", locationCode);
+        conditionMap.put("companyId", companyId);
         return warehousseLocMapper.selectByCondition(conditionMap);
     }
 
 
+    public Warehouse selectById(Long id) {
+        return warehousseMapper.selectByPrimaryKey(id);
+    }
 
 
     @Transactional(readOnly = true)

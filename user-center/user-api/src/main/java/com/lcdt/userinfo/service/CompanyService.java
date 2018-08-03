@@ -2,6 +2,7 @@ package com.lcdt.userinfo.service;
 
 import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dto.CompanyDto;
+import com.lcdt.userinfo.dto.CompanyQueryDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.CompanyCertificate;
@@ -20,6 +21,7 @@ public interface CompanyService {
 
 	Company updateCompany(Company company);
 
+	List<Company> findByComanyQueryDto(CompanyQueryDto queryDto);
 
 	Company selectById(Long companyId);
 

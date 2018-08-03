@@ -10,6 +10,7 @@ import com.lcdt.pay.service.CompanyBalanceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 
 @com.alibaba.dubbo.config.annotation.Service
 public class CompanyBalanceServiceImpl implements CompanyBalanceService{
@@ -21,6 +22,20 @@ public class CompanyBalanceServiceImpl implements CompanyBalanceService{
     BalanceLogMapper balanceLogMapper;
 
     private Logger logger = LoggerFactory.getLogger(CompanyBalanceServiceImpl.class);
+
+
+    public List<PayBalance> companyBalance(List<Long> companyIds){
+        final StringBuffer stringBuffer = new StringBuffer();
+
+        for (int i = 0;i < companyIds.size();i++) {
+            if (i > 0) {
+                stringBuffer.append(",");
+            }
+            stringBuffer.append(companyIds.get(i));
+        }
+        return mapper.selectByCompanyIds(stringBuffer.toString());
+    }
+
 
     @Override
     public PayBalance companyBalance(Long companyId) {

@@ -37,6 +37,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -370,6 +371,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
 
+
     @Transactional(rollbackFor = Exception.class)
     public List<Inventory> importInventory(List<ImportInventoryDto> dtos){
         GoodsListParamsDto gooddto = new GoodsListParamsDto();
@@ -379,16 +381,22 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
                 throw new RuntimeException();
             }
             gooddto.setGoodsCode(dto.getGoodcode());
+            gooddto.setCompanyId(dto.getCompanyId());
             PageInfo<GoodsInfoDao> goodsInfoDaoPageInfo = goodsService.queryByCondition(gooddto);
             if (CollectionUtils.isEmpty(goodsInfoDaoPageInfo.getList()) || goodsInfoDaoPageInfo.getList().size() < 1) {
-                throw new RuntimeException("商品sn不存在");
+                throw new RuntimeException("商品sn不存在：" + dto.getGoodcode());
             }
-            final List<WarehouseLoc> warehouseLocs = warehouseService.selectByWarehouseCode(dto.getStorageLocationCode(), dto.getWareHouseId());
+            final List<WarehouseLoc> warehouseLocs = warehouseService.selectByWarehouseCode(dto.getStorageLocationCode(), dto.getWareHouseId(),dto.getCompanyId());
 
             if(CollectionUtils.isEmpty(warehouseLocs)){
-                throw new RuntimeException("库位填写错误或不存在");
+                    throw new RuntimeException("库位填写错误或不存在");
             }
             WarehouseLoc warehouseLoc = warehouseLocs.get(0);
+            final HashMap<Object, Object> map = new HashMap<>();
+            final Warehouse warehouse = warehouseService.selectById(warehouseLoc.getWhId());
+            if (warehouse == null) {
+                throw new RuntimeException("仓库不存在");
+            }
 
 
             //数量检验
@@ -397,6 +405,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             GoodsInfoDao goodsInfoDao = goodsInfoDaoPageInfo.getList().get(0);
             GoodsInfo goodsInfo = saveGoodsInfo(goodsInfoDao);
             Inventory inventory = InventoryFactory.createInventoryFromInventoryImportDto(dto,goodsInfo);
+            inventory.setWarehouseName(warehouse.getWhName());
             inventory.setGoodsId(goodsInfo.getGoodsId());
             inventory.setOriginalGoodsId(goodsInfoDao.getGoodsId());
             inventory.setStorageLocationId(warehouseLoc.getWhLocId());

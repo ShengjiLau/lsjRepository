@@ -1,12 +1,15 @@
 package com.lcdt.userinfo.dao;
 
 
+import com.lcdt.userinfo.dto.CompanyQueryDto;
 import com.lcdt.userinfo.model.Company;
-import com.lcdt.userinfo.web.controller.api.admin.dto.CompanyQueryDto;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface CompanyMapper {
+
+
 
 	int deleteByPrimaryKey(Long compId);
 
