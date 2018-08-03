@@ -31,6 +31,16 @@ public class RegisterDto implements java.io.Serializable{
 
 	private String email;
 
+	private String introMemo;
+
+	public String getIntroMemo() {
+		return introMemo;
+	}
+
+	public void setIntroMemo(String introMemo) {
+		this.introMemo = introMemo;
+	}
+
 	public String getRegisterFrom() {
 		return registerFrom;
 	}
