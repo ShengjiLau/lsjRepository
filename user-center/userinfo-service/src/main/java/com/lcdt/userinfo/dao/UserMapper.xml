@@ -144,8 +144,6 @@
       intro_memo = #{introMemo,jdbcType=VARCHAR},
     </if>
 
-
-
     <if test="registerDate != null">
       register_date = #{registerDate,jdbcType=TIMESTAMP},
     </if>
