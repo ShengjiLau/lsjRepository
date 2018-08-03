@@ -13,6 +13,7 @@ import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
 import com.lcdt.userinfo.service.CreateCompanyService;
+import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.utils.JSONResponseUtil;
 import com.lcdt.userinfo.utils.ResponseMessage;
 import com.lcdt.userinfo.web.dto.UserQueryDto;
@@ -36,6 +37,9 @@ public class CompanyManageApi {
 
     @Autowired
     CreateCompanyService createCompanyService;
+
+    @Autowired
+    UserService userService;
 
     @PostMapping("/usercomps")
     @PreAuthorize("hasAnyAuthority('admin_company_select')")
@@ -81,6 +85,11 @@ public class CompanyManageApi {
 
     @PostMapping("/create")
     public ResponseMessage createCompany(CompanyDto companyDto) throws CompanyExistException {
+        final User user = userService.queryByPhone(companyDto.getCreateName());
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+
         return JSONResponseUtil.success(createCompanyService.createCompany(companyDto));
     }
 
