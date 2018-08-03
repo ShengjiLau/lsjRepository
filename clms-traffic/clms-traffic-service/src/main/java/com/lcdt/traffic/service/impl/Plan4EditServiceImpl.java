@@ -154,7 +154,11 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                 ownVehicle1.setCreateId(dto.getCreateId());
                 ownVehicle1.setCreateName(dto.getCreateName());
                 ownVehicle1.setVehicleDriverPhone(dto.getCarrierPhone());
-                trafficRpc.addVehicle(ownVehicle1);
+                if(!StringUtils.isEmpty(ownVehicle1.getVehicleNum())) {
+                    trafficRpc.addVehicle(ownVehicle1);
+                }
+
+
 
                 if (!StringUtils.isEmpty(dto.getCarrierIds())) {
                     vo.setCarrierCompanyId(vo.getCompanyId());
@@ -384,7 +388,9 @@ public class Plan4EditServiceImpl implements Plan4EditService {
                 ownVehicle1.setCreateId(dto.getCreateId());
                 ownVehicle1.setCreateName(dto.getCreateName());
                 ownVehicle1.setVehicleDriverPhone(dto.getCarrierPhone());
-                trafficRpc.addVehicle(ownVehicle1);
+                if(!StringUtils.isEmpty(ownVehicle1.getVehicleNum())) {
+                    trafficRpc.addVehicle(ownVehicle1);
+                }
 
                 if (!StringUtils.isEmpty(dto.getCarrierIds())) {
                     vo.setCarrierCompanyId(vo.getCompanyId());

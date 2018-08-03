@@ -12,6 +12,7 @@ import com.lcdt.warehouse.entity.InorderGoodsInfo;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.utils.DateUtils;
 import com.lcdt.warehouse.utils.GroupIdsUtil;
+import com.lcdt.warehouse.utils.InOrderTypeUtil;
 import com.lcdt.warehouse.utils.InplanUtil;
 import com.lcdt.warehouse.vo.ConstantVO;
 import io.swagger.annotations.Api;
@@ -232,7 +233,7 @@ public class InWarehouseOrderController {
 
                 row = sheet.getRow(6);
                 cell = row.getCell(39);
-                cell.setCellValue(orderDeatil.getStorageType()==null?"": InplanUtil.convertStorageType(orderDeatil.getStorageType()));//入库类型
+                cell.setCellValue(orderDeatil.getStorageType()==null?"": InOrderTypeUtil.convertStorageType(orderDeatil.getStorageType()));//入库类型
 
                 row = sheet.getRow(7);
                 cell = row.getCell(11);
@@ -268,15 +269,15 @@ public class InWarehouseOrderController {
                     for (InorderGoodsInfoDto dto : inorderGoodsInfoDtoList) {
                         row = sheet.getRow(rows);
                         row.getCell(0).setCellValue(i++);
-                        row.getCell(2).setCellValue(dto.getGoodsName());
-                        row.getCell(11).setCellValue(dto.getGoodsCode());
-                        row.getCell(16).setCellValue(dto.getGoodsBarcode());
-                        row.getCell(21).setCellValue(dto.getUnit());
-                        row.getCell(26).setCellValue(dto.getReceivalbeAmount());
-                        row.getCell(31).setCellValue(dto.getInHouseAmount());
-                        row.getCell(36).setCellValue(dto.getDamage());
-                        row.getCell(42).setCellValue(dto.getBatch());
-                        row.getCell(47).setCellValue(dto.getStorageLocationCode());
+                        row.getCell(2).setCellValue(dto.getGoodsName()==null?"":dto.getGoodsName());
+                        row.getCell(11).setCellValue(dto.getGoodsCode()==null?"":dto.getGoodsCode());
+                        row.getCell(16).setCellValue(dto.getGoodsBarcode()==null?"":dto.getGoodsBarcode());
+                        row.getCell(21).setCellValue(dto.getUnit()==null?"":dto.getUnit());
+                        row.getCell(26).setCellValue(dto.getReceivalbeAmount()==null?"":dto.getReceivalbeAmount().toString());
+                        row.getCell(31).setCellValue(dto.getInHouseAmount()==null?"":dto.getInHouseAmount().toString());
+                        row.getCell(36).setCellValue(dto.getDamage()==null?"":dto.getDamage().toString());
+                        row.getCell(42).setCellValue(dto.getBatch()==null?"":dto.getBatch());
+                        row.getCell(47).setCellValue(dto.getStorageLocationCode()==null?"":dto.getStorageLocationCode());
                         rows++;
                     }
 

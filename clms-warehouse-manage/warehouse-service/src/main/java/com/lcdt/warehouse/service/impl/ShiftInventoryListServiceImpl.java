@@ -323,14 +323,14 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 		}
 		
 		//实现逻辑分页
-		List<ShiftInventoryListDTO> shiftInventoryListDTOList2 = new ArrayList<ShiftInventoryListDTO>();
+		List<ShiftInventoryListDTO> shiftInventoryListDTOListPage = new LinkedList<ShiftInventoryListDTO>();
 		if (pageNo*pageSize > shiftInventoryListDTOList.size()) {
-			shiftInventoryListDTOList2.addAll(shiftInventoryListDTOList.subList((pageNo - 1)*pageSize, shiftInventoryListDTOList.size()));
+			shiftInventoryListDTOListPage.addAll(shiftInventoryListDTOList.subList((pageNo - 1)*pageSize, shiftInventoryListDTOList.size()));
 		}else {
-			shiftInventoryListDTOList2.addAll(shiftInventoryListDTOList.subList((pageNo - 1)*pageSize, pageNo*pageSize));
+			shiftInventoryListDTOListPage.addAll(shiftInventoryListDTOList.subList((pageNo - 1)*pageSize, pageNo*pageSize));
 		}
 		
-		pageBaseDto.setList(shiftInventoryListDTOList2);
+		pageBaseDto.setList(shiftInventoryListDTOListPage);
 		pageBaseDto.setTotal(shiftInventoryListDTOList.size());
 		return pageBaseDto;
     }

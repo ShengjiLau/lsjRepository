@@ -34,6 +34,11 @@
             <artifactId>pagehelper</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>common-config</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 
 </project>

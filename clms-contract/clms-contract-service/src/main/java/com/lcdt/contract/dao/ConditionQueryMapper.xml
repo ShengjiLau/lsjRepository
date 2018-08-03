@@ -10,7 +10,8 @@
     approval_start_date approvalStartDate,approval_end_date approvalEndDate,create_user_id createUserId,order_serial_no orderSerialNo,
     approval_process_id approvalProcessId,
     approval_status approvalStatus,approval_process approvalProcess,supplier_id supplierId,is_draft isDraft,receive_require receiveRequire,
-    summation,warehouse_id warehouseId,attachment1_name attachment1Name,attachment1,attachment2_name attachment2Name,attachment2,
+    summation,logistics_company logisticsCompany,logistics_no logisticsNo,logistics_status logisticsStatus,
+    warehouse_id warehouseId,attachment1_name attachment1Name,attachment1,attachment2_name attachment2Name,attachment2,
     attachment3_name attachment3Name,attachment3,attachment4_name attachment4Name,attachment4,attachment5_name attachment5Name,attachment5,
     traffic_plan trafficPlan,  warehouse_plan warehousePlan, origin_order_no originOrderNo, origin_order_id originOrderId,push_order_id pushOrderId
     from t_order

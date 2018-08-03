@@ -41,20 +41,22 @@ public class TNoticeCategoryServiceImpl extends ServiceImpl<TNoticeCategoryMappe
     public boolean findExistTNoticeCategory(TNoticeCategory category) {
         Map<String,Object> p = new HashMap<>();
         p.put("category_Name",category.getCategoryName());
-        List<TNoticeCategory> list = this.selectByMap(p);
+//        List<TNoticeCategory> list = this.selectByMap(p);
+        CategoryParamDto params = new CategoryParamDto();
+        params.setCategoryName(category.getCategoryName());
+        params.setCategoryId(category.getCategoryId());
+        Page page = new Page(1,10);
+        List<TNoticeCategory> list = baseMapper.findListByParam(page,params);
 
         if(list!=null&&list.size()>0){
-            TNoticeCategory category1 =  list.get(0);
             //新增时，已经存在了
             if(category.getCategoryId()==null) {
                 return true;
             }
-            //修改时，条件id与结果id一样表示同一条记录
-            else if(!category1.getCategoryId().equals(category.getCategoryId())) {
-                return true;
-            }
-            else {
-                return false;
+            for(TNoticeCategory category1:list){
+                if(!category1.getCategoryId().equals(category.getCategoryId())) {
+                    return true;
+                }
             }
         }
         //不存在记录返回false
