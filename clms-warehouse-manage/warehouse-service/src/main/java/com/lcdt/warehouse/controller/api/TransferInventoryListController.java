@@ -1,6 +1,5 @@
 package com.lcdt.warehouse.controller.api;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -45,7 +44,7 @@ public class TransferInventoryListController {
 			message = "创建成功";
 			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 		}else {
-			message = "创建库存转换单时出现异常";
+			message = "创建库存转换单时出现异常！";
 			throw new ShiftInventoryException(message);
 		}
 	}
@@ -61,7 +60,7 @@ public class TransferInventoryListController {
 			message = "操作成功";
 			return ResponseJsonUtils.successResponseJsonWithoutData(message);
 		}else {
-			message = "完成库存转换单时出现异常";
+			message = "完成库存转换单时出现异常！";
 			throw new ShiftInventoryException(message);
 		}
 	}
@@ -93,7 +92,20 @@ public class TransferInventoryListController {
 	}
 	
 	
-	
+	@PostMapping("/remove")
+	@ApiOperation(value = "取消库存转换单")
+	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('transfer_inventory_remove')")
+	public JSONObject cancelTransferInventoryList(Long transferId) {
+		int result = transferInventoryListService.updateTransferStatus(transferId);
+		String message = null;
+		if (result > 0) {
+			message = "操作成功";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
+		}else {
+			message = "取消库存转换单时出现异常！";
+			throw new ShiftInventoryException(message);
+		}
+	}
 	
 	
 

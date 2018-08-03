@@ -164,6 +164,17 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		return transferInventoryListDTO;
 	}
 	
+	
+	@Override
+	public int updateTransferStatus(Long transferInventoryListId) {
+		TransferInventoryListDO transferInventoryListDO = new TransferInventoryListDO();
+		transferInventoryListDO.setTransfersId(transferInventoryListId);
+		transferInventoryListDO.setListStatus(TransferInventoryListVO.CANCELED);
+		int result = TransferInventoryListDOMapper.updateByPrimaryKeySelective(transferInventoryListDO);
+		return result;
+	}
+	
+	
 	/**
 	 * 将一些Mapper接口参数封装为Map
 	 */
@@ -221,6 +232,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 			}
 		return transferInventoryListDTOListWithGoods;
 	}
+
 	
 	
 	
