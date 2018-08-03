@@ -124,7 +124,7 @@
     order by comp_id
   </select>
 
-  <select id="selectByCompanyDto" parameterType="com.lcdt.userinfo.web.controller.api.admin.dto.CompanyQueryDto"
+  <select id="selectByCompanyDto" parameterType="com.lcdt.userinfo.dto.CompanyQueryDto"
     resultMap="BaseResultMap"
   >
      select c.comp_id, c.full_name, c.short_name, authentication, authentication_remark, industry,
