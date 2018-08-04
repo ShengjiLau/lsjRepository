@@ -93,4 +93,11 @@ on rp.permission_id = p.permission_id WHERE rp.role_id = #{roleId,jdbcType = BIG
     (#{role},#{permissions.permissionId})
   </foreach>
   </insert>
+
+  <select id="selectByRoleName" resultMap="BaseResultMap">
+     SELECT p.* FROM role_permission  p left join role r on p.role_id = r.role_id
+    WHERE r.role_company_id  = #{companyId,jdbcType=BIGINT}
+    and r.role_name = #{roleName,jdbcType = VARCHAR}
+  </select>
+
 </mapper>
