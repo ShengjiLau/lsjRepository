@@ -12,4 +12,6 @@ public final class InventoryBusinessType {
     
     public static final Integer ALLOT_ORDER = 4; //调拨
 
+    public static final Integer INVENTORY_INIT = 5; // 库存初始化
+
 }

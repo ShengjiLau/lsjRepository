@@ -1,7 +1,12 @@
 package com.lcdt.warehouse.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +15,10 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.baomidou.mybatisplus.plugins.pagination.PageHelper;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.dto.TransferInventoryListDTO;
+import com.lcdt.warehouse.dto.TransferListDTO;
 import com.lcdt.warehouse.entity.TransferGoodsDO;
 import com.lcdt.warehouse.entity.TransferInventoryListDO;
 import com.lcdt.warehouse.mapper.TransferGoodsDOMapper;
@@ -73,35 +78,166 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 
 	@Override
 	@Transactional(readOnly = true)
-	public PageBaseDto<TransferInventoryListDTO> getTransferInventoryListDTOList(TransferInventoryListDTO transferInventoryListDTO) {
+	public PageBaseDto<TransferInventoryListDTO> getTransferInventoryListDTOList(TransferListDTO transferListDTO) {
 		int pageNo; 
 		int pageSize;
-		pageNo = null == transferInventoryListDTO.getPageNo()? 1 : transferInventoryListDTO.getPageNo();
-		pageSize = null == transferInventoryListDTO.getPageSize()? 0 : transferInventoryListDTO.getPageSize();
-		PageHelper.startPage(pageNo, pageSize);
-		List<TransferInventoryListDTO> TransferInventoryListDTOList = TransferInventoryListDOMapper.getTransferInventoryListDTOList(transferInventoryListDTO);
+		pageNo = null == transferListDTO.getPageNo()? TransferInventoryListVO.FIRST_PAGE_NO : transferListDTO.getPageNo();
+		pageSize = null == transferListDTO.getPageSize()? Integer.MAX_VALUE : transferListDTO.getPageSize();
+		transferListDTO.setCompanyId(SecurityInfoGetter.getCompanyId());
+		List<TransferInventoryListDTO> transferInventoryListDTOList = TransferInventoryListDOMapper.getTransferInventoryListDTOList(transferListDTO);
+		long total = transferInventoryListDTOList.size();
+		Long[] tranferIds = new Long[(int) total];
+		for (int i = -1; i++ < (total-1);) {
+			tranferIds[i] = transferInventoryListDTOList.get(i).getTransfersId();
+		}
+		List<TransferGoodsDO> transferGoodsDOList = null;
+		if (null == transferListDTO.getMaterialProduct() && null == transferListDTO.getFinishedProduct()) {
+			 transferGoodsDOList = TransferGoodsDOMapper.getTransferGoodsDOListByTransferIds(tranferIds);
+			 List<TransferInventoryListDTO> transferInventoryListDTOListWithGoods = 
+					 getTransferInventoryListDTOListWithGoods(transferInventoryListDTOList,  transferGoodsDOList);
+			 return getPageBaseDto(transferInventoryListDTOListWithGoods, pageSize, pageNo);
+		}else if(null != transferListDTO.getMaterialProduct() && null == transferListDTO.getFinishedProduct()){
+			Map<String,Object>  map = getMap(tranferIds, transferListDTO.getMaterialProduct(), TransferInventoryListVO.IS_MATERIAL);
+			transferGoodsDOList = getTransferGoodsDOList(map);
+			List<TransferInventoryListDTO> transferInventoryListDTOListWithGoods = 
+					 getTransferInventoryListDTOListWithGoods(transferInventoryListDTOList,  transferGoodsDOList);
+			Iterator<TransferInventoryListDTO> it = transferInventoryListDTOListWithGoods.iterator();
+			while  (it.hasNext()) {
+				TransferInventoryListDTO transferInventoryListDTO = it.next();
+				if (null == transferInventoryListDTO.getTransferGoodsDOList() || 0 == transferInventoryListDTO.getTransferGoodsDOList().size()) {
+					it.remove();
+				}
+			}
+			 return getPageBaseDto(transferInventoryListDTOListWithGoods, pageSize, pageNo);
+		}else if(null == transferListDTO.getMaterialProduct() && null != transferListDTO.getFinishedProduct()) {
+			Map<String,Object>  map = getMap(tranferIds,transferListDTO.getFinishedProduct(), TransferInventoryListVO.IS_PRODUCT);
+			transferGoodsDOList = getTransferGoodsDOList(map);
+			List<TransferInventoryListDTO> transferInventoryListDTOListWithGoods = 
+					 getTransferInventoryListDTOListWithGoods(transferInventoryListDTOList,  transferGoodsDOList);
+			Iterator<TransferInventoryListDTO> it = transferInventoryListDTOListWithGoods.iterator();
+			while (it.hasNext()) {
+				TransferInventoryListDTO transferInventoryListDTO = it.next();
+				if (null == transferInventoryListDTO.getTransferGoodsDOList() || 0 == transferInventoryListDTO.getTransferGoodsDOList().size()) {
+					it.remove();
+				}
+			}
+			 return getPageBaseDto(transferInventoryListDTOListWithGoods, pageSize, pageNo);
+		}else {
+			Map<String,Object>  map1 = getMap(tranferIds, transferListDTO.getMaterialProduct(), TransferInventoryListVO.IS_MATERIAL);
+			List<TransferGoodsDO> transferGoodsDOList1 = getTransferGoodsDOList(map1);
+			Map<String,Object>  map2 = getMap(tranferIds, transferListDTO.getMaterialProduct(), TransferInventoryListVO.IS_PRODUCT);
+			List<TransferGoodsDO> transferGoodsDOList2 = getTransferGoodsDOList(map2);
+			transferGoodsDOList = new ArrayList<TransferGoodsDO>(transferGoodsDOList1.size() + transferGoodsDOList2.size());
+			transferGoodsDOList.addAll(transferGoodsDOList1);
+			transferGoodsDOList.addAll(transferGoodsDOList2);
+			List<TransferInventoryListDTO> transferInventoryListDTOListWithGoods = 
+					 getTransferInventoryListDTOListWithGoods(transferInventoryListDTOList,  transferGoodsDOList);
+			List<TransferInventoryListDTO> transferInventoryListDTOListRemove = new LinkedList<TransferInventoryListDTO>();
+			for (int j = -1; j++ < (transferInventoryListDTOListWithGoods.size()-1);) {
+				TransferInventoryListDTO transferInventoryListDTO = transferInventoryListDTOListWithGoods.get(j);
+				List<TransferGoodsDO> transferGoodsDOList3 = transferInventoryListDTO.getTransferGoodsDOList();
+				if (null == transferGoodsDOList3 || 0 == transferGoodsDOList3.size()) {
+					transferInventoryListDTOListRemove.add(transferInventoryListDTO);
+					continue;
+				}
+				int flag = 0;
+				for (int i = -1; i++ < (transferGoodsDOList3.size()-1);) {
+					TransferGoodsDO TransferGoodsDO = transferGoodsDOList3.get(i);
+					if (TransferGoodsDO.getIsMaterial() == 0) {
+						flag ++;
+					}
+				}
+				if (flag == 0 || flag == transferGoodsDOList3.size()) {
+					transferInventoryListDTOListRemove.add(transferInventoryListDTO);
+				}
+			}
+			transferInventoryListDTOListWithGoods.removeAll(transferInventoryListDTOListRemove);
+			return getPageBaseDto(transferInventoryListDTOListWithGoods, pageSize, pageNo);
+		}
 		
-		
-		
-		PageBaseDto pageBaseDto = new PageBaseDto();
-		
-		return pageBaseDto;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public TransferInventoryListDTO getTransferInventoryListDTODetail(Long transferInventoryListId) {
-		TransferInventoryListDO transferInventoryListDO = TransferInventoryListDOMapper.selectByPrimaryKey(transferInventoryListId);
-		TransferInventoryListDTO transferInventoryListDTO = new TransferInventoryListDTO();
-		BeanUtils.copyProperties(transferInventoryListDO, transferInventoryListDTO);
-		
-		
-		
-		
-		
-		
-		
+		TransferInventoryListDTO transferInventoryListDTO = TransferInventoryListDOMapper.getTransferInventoryListDTO(transferInventoryListId);
 		return transferInventoryListDTO;
 	}
+	
+	
+	@Override
+	public int updateTransferStatus(Long transferInventoryListId) {
+		TransferInventoryListDO transferInventoryListDO = new TransferInventoryListDO();
+		transferInventoryListDO.setTransfersId(transferInventoryListId);
+		transferInventoryListDO.setListStatus(TransferInventoryListVO.CANCELED);
+		int result = TransferInventoryListDOMapper.updateByPrimaryKeySelective(transferInventoryListDO);
+		return result;
+	}
+	
+	
+	/**
+	 * 将一些Mapper接口参数封装为Map
+	 */
+	private HashMap<String,Object> getMap(Long[] array, String str, byte byt){
+		Map<String,Object>  map = new HashMap<String,Object>();
+		map.put("transferIds", array);
+		map.put("arg1", str);
+		map.put("arg2", byt);
+		return (HashMap<String, Object>) map;
+	}
+	
+	/**
+	 * 查询TransferGoodsDO列表
+	 */
+	private List<TransferGoodsDO> getTransferGoodsDOList(Map<String,Object> map){
+		List<TransferGoodsDO> transferGoodsDOList = TransferGoodsDOMapper.getTransferGoodsDOListByConditions(map);
+		return transferGoodsDOList;
+	}
+	
+	/**
+	 * 逻辑分页
+	 */
+	private PageBaseDto<TransferInventoryListDTO> getPageBaseDto(List<TransferInventoryListDTO> transferInventoryListDTOList, int pageSize, int pageNo){
+		PageBaseDto<TransferInventoryListDTO> pageBaseDto = new PageBaseDto<TransferInventoryListDTO>();
+		List<TransferInventoryListDTO> listPage = new LinkedList<TransferInventoryListDTO>();
+		if (pageNo*pageSize > transferInventoryListDTOList.size()) {
+			listPage.addAll(transferInventoryListDTOList.subList((pageNo - 1)*pageSize, transferInventoryListDTOList.size()));
+		}else {
+			listPage.addAll(transferInventoryListDTOList.subList((pageNo - 1)*pageSize, pageNo*pageSize));
+		}
+		pageBaseDto.setList(listPage);
+		pageBaseDto.setTotal(transferInventoryListDTOList.size());
+		return pageBaseDto;
+	}
+	
+	/**
+	 * 将转换单主表与转换单商品表关联起来
+	 */
+	private List<TransferInventoryListDTO> getTransferInventoryListDTOListWithGoods(
+			                              List<TransferInventoryListDTO> transferInventoryListDTOList,
+			                                                         List<TransferGoodsDO> transferGoodsDOList){
+		List<TransferInventoryListDTO> transferInventoryListDTOListWithGoods = 
+				                              new ArrayList<>(transferInventoryListDTOList.size());
+		transferInventoryListDTOListWithGoods.addAll(transferInventoryListDTOList);
+		 for (int i = 0; i < transferInventoryListDTOListWithGoods.size(); i++) {
+				TransferInventoryListDTO transferInventoryListDTO = transferInventoryListDTOListWithGoods.get(i);
+				List<TransferGoodsDO> transferGoodsList = new LinkedList<TransferGoodsDO>();
+				for (int j = -1; j++ < (transferGoodsDOList.size() - 1);) {
+					TransferGoodsDO TransferGoodsDO = transferGoodsDOList.get(j);
+					if (transferInventoryListDTO.getTransfersId().longValue() == TransferGoodsDO.getTransferId().longValue()) {
+						transferGoodsList.add(TransferGoodsDO);
+					}
+				}
+				transferInventoryListDTO.setTransferGoodsDOList(transferGoodsList);
+			}
+		return transferInventoryListDTOListWithGoods;
+	}
+
+	
+	
+	
+	
+	
+	
 
 }

@@ -52,4 +52,17 @@ public class CommonUtils {
    public static String successXml(Object object){
        return xstream.toXML(object);
    }
+
+
+   public static String joinStringWithToken(List<Long> longs,char token){
+       final StringBuffer stringBuffer = new StringBuffer();
+
+       for (int i = 0;i < longs.size();i++) {
+           if (i > 0) {
+               stringBuffer.append(token);
+           }
+           stringBuffer.append(longs.get(i));
+       }
+       return stringBuffer.toString();
+   }
 }

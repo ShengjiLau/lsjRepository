@@ -41,12 +41,18 @@ public class ProductCountServiceImpl implements ProductCountService {
 
     @Override
     public ProductCountLog logAddProductCount(String productName,String des,Integer countNum,String userName,Long companyId,Integer remainCounts){
+        return this.logAddProductCount(productName, des, countNum, userName, companyId, remainCounts, CountLogType.TOPUPCOUNTTYPE);
+    }
+
+
+
+    public ProductCountLog logAddProductCount(String productName,String des,Integer countNum,String userName,Long companyId,Integer remainCounts,Integer logType){
         ProductCountLog productCountLog = new ProductCountLog();
         productCountLog.setServiceName(productName);
         productCountLog.setConsumeNum(countNum);
         productCountLog.setLogDes(des);
         productCountLog.setLogNo(OrderNoGenerator.generateDateNo(2));
-        productCountLog.setLogType(CountLogType.TOPUPCOUNTTYPE);
+        productCountLog.setLogType(logType);
         productCountLog.setCompanyId(companyId);
         productCountLog.setUserName(userName);
         productCountLog.setRemainNum(remainCounts);
@@ -54,6 +60,7 @@ public class ProductCountServiceImpl implements ProductCountService {
         countLogMapper.insert(productCountLog);
         return productCountLog;
     }
+
 
     public PageResultDto<ProductCountLog> countLogs(Long companyId, String productName, Date startTime, Date endTime,Integer logType,Integer pageSize,Integer pageNo){
         PageHelper.startPage(pageNo, pageSize);
@@ -90,10 +97,11 @@ public class ProductCountServiceImpl implements ProductCountService {
     }
 
 
-    static final class CountLogType {
+    public static final class CountLogType {
         public static final Integer COUNSUMETYPE = 1;
 
         public static final Integer TOPUPCOUNTTYPE = 2;
+        public static final Integer ADMIN_TOPUP = 3;
     }
 
     //流水号不使用uuID

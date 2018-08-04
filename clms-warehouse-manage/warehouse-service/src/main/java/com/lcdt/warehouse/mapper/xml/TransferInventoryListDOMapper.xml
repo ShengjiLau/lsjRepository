@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lcdt.warehouse.mapper.TransferInventoryListDOMapper" >
-  <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.TransferInventoryListDO" >
+  <resultMap id="BaseResultMap" type="com.lcdt.warehouse.dto.TransferInventoryListDTO" >
     <id column="transfers_id" property="transfersId" jdbcType="BIGINT" />
     <result column="group_id" property="groupId" jdbcType="BIGINT" />
     <result column="group_name" property="groupName" jdbcType="VARCHAR" />
@@ -330,39 +330,22 @@
   </update>
   
   <!--   ————————————————————————————         华丽的分割线               ————————————————————————————   --> 
-  <resultMap id="TransferInventoryListDTOMap" type="com.lcdt.warehouse.dto.TransferInventoryListDTO" >
-    <id column="transfers_id" property="transfersId" jdbcType="BIGINT" />
-    <result column="group_id" property="groupId" jdbcType="BIGINT" />
-    <result column="group_name" property="groupName" jdbcType="VARCHAR" />
-    <result column="customer_id" property="customerId" jdbcType="BIGINT" />
-    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
-    <result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
-    <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="attachment1_name" property="attachment1Name" jdbcType="VARCHAR" />
-    <result column="attachment1" property="attachment1" jdbcType="VARCHAR" />
-    <result column="attachment2_name" property="attachment2Name" jdbcType="VARCHAR" />
-    <result column="attachment2" property="attachment2" jdbcType="VARCHAR" />
-    <result column="attachment3_name" property="attachment3Name" jdbcType="VARCHAR" />
-    <result column="attachment3" property="attachment3" jdbcType="VARCHAR" />
-    <result column="attachment4_name" property="attachment4Name" jdbcType="VARCHAR" />
-    <result column="attachment4" property="attachment4" jdbcType="VARCHAR" />
-    <result column="attachment5_name" property="attachment5Name" jdbcType="VARCHAR" />
-    <result column="attachment5" property="attachment5" jdbcType="VARCHAR" />
-    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
-    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
-    <result column="create_user" property="createUser" jdbcType="VARCHAR" />
-    <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
-    <result column="company_id" property="companyId" jdbcType="BIGINT" />
-    <result column="list_status" property="listStatus" jdbcType="TINYINT" />
-    <result column="list_serial_no" property="listSerialNo" jdbcType="VARCHAR" />
-    <collection property="transferGoodsDOList" ofType="com.lcdt.warehouse.entity.TransferGoodsDO"
+  
+  <resultMap id="TransferInventoryListsDTOMap" type="com.lcdt.warehouse.dto.TransferInventoryListDTO"  extends="BaseResultMap">
+    <collection property="transferGoodsDOList" ofType="com.lcdt.warehouse.entity.TransferGoodsDO" 
                 javaType="ArrayList" select="com.lcdt.warehouse.mapper.TransferGoodsDOMapper.getTransferGoodsDOListByTransferId" 
     			column="transferId = transfers_id">
     </collection>
   </resultMap>
   
-  <select id="getTransferInventoryListDTOList" parameterType="com.lcdt.warehouse.dto.TransferInventoryListDTO" resultMap="TransferInventoryListDTOMap">
+  <resultMap type="com.lcdt.warehouse.dto.TransferInventoryListDTO" id="TransferInventoryListDTOMap" extends="BaseResultMap">
+   <collection property="transferGoodsDOList" ofType="com.lcdt.warehouse.entity.TransferGoodsDO" 
+                javaType="ArrayList" select="com.lcdt.warehouse.mapper.TransferGoodsDOMapper.getTransferGoodsDOListByCondition" 
+    			column="{transferId = transfers_id, materialProduct, finishedProduct}">
+    </collection>
+  </resultMap>
+  
+  <select id="getTransferInventoryListDTOLists" parameterType="com.lcdt.warehouse.dto.TransferInventoryListDTO" resultMap="TransferInventoryListsDTOMap">
     select 
     <include refid="Base_Column_List" />
     from transfers_inventory_list
@@ -372,5 +355,29 @@
     and customer_name like concat('%', #{customName, jdbcType=VARCHAR}, '%')
     </if>
   </select>
+  
+  <select id="getTransferInventoryListDTO" resultMap="TransferInventoryListsDTOMap" parameterType="java.lang.Long">
+    select
+   <include refid="Base_Column_List" />
+  	from transfers_inventory_list
+    where
+    transfers_id = #{transfersId, jdbcType=BIGINT}
+  </select>
+  
+  <select id="getTransferInventoryListDTOList" parameterType="com.lcdt.warehouse.dto.TransferListDTO" resultMap="BaseResultMap">
+  select 
+    <include refid="Base_Column_List" />
+    from transfers_inventory_list
+    where
+    company_id = #{companyId,jdbcType=BIGINT}
+    <if test="customName != null and customName != ''">
+    and customer_name like concat('%', #{customName, jdbcType=VARCHAR}, '%')
+    </if>
+    <if test="whId != null">
+    and warehouse_id = #{whId, jdbcType=BIGINT}
+    </if>
+  </select>
+  
+  
   
 </mapper>

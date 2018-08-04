@@ -131,6 +131,7 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, TCheck> implement
     public boolean completeCheckAndItems(TCheck check, List<Map<String, Object>> itemList) {
 
             boolean isDiff = false;
+            boolean result = true;
             if (itemList != null && itemList.size() > 0) {
                 List<TCheckItem> checkItemList = new ArrayList<TCheckItem>();
 
@@ -144,18 +145,30 @@ public class CheckServiceImpl extends ServiceImpl<CheckMapper, TCheck> implement
                         isDiff = true;
                     }
                 }
-                inventoryService.updateInventoryByCheck(check, checkItemList);
+                try {
+                    inventoryService.updateInventoryByCheck(check, checkItemList);
+                }
+                catch (RuntimeException e){
+                    e.printStackTrace();
+                   throw e;
+                }
+
                 for(TCheckItem checkItem:checkItemList){
-                    checkItemService.insertOrUpdate(checkItem);
+                    result = checkItemService.insertOrUpdate(checkItem);
+                    if(!result) return false;
                 }
                 check.setCheckStatus((Integer) CheckStatusEnum.completed.getValue());
                 check.setDiffStatus(isDiff ? (Integer) CheckDiffStatusEnum.different.getValue() : (Integer) CheckDiffStatusEnum.same.getValue());
                 check.setUpdateDate(new Date());
-                int updateRusult = checkMapper.updateCheckBySql(check);
-
+               if(result) {
+                   int updateRusult = checkMapper.updateAllColumnById(check);
+                   if(updateRusult<=0){
+                       result = false;
+                   }
+               }
             }
 
-        return true;
+        return result;
     }
 
 

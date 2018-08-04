@@ -5,12 +5,17 @@ import com.lcdt.warehouse.entity.Warehouse;
 import com.lcdt.warehouse.entity.WarehouseLinkman;
 import com.lcdt.warehouse.entity.WarehouseLoc;
 
+import java.util.List;
 import java.util.Map;
 
 /**
  * Created by yangbinq on 2018/1/10.
  */
 public interface WarehouseService {
+
+    Warehouse selectById(Long id);
+
+    List<WarehouseLoc> selectByWarehouseCode(String locationCode, Long wareHouseId,Long companyId);
     /**
      * 仓库列表查询
      * @param m

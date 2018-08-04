@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dao.UserMapper;
+import com.lcdt.userinfo.dto.RegisterDto;
+import com.lcdt.userinfo.exception.PhoneHasRegisterException;
 import com.lcdt.userinfo.model.AdminUser;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.service.UserService;
@@ -26,6 +28,18 @@ public class UserManageApi {
 
     @Autowired
     UserService userService;
+
+
+    @PostMapping("/addUser")
+    public ResponseMessage addUser(RegisterDto registerDto) throws PhoneHasRegisterException {
+        return JSONResponseUtil.success(userService.registerUser(registerDto));
+    }
+
+    @PostMapping("/modifyUser")
+    public ResponseMessage modifyUser(User user){
+        return JSONResponseUtil.success(userService.updateUser(user));
+    }
+
 
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('admin_user_list')")

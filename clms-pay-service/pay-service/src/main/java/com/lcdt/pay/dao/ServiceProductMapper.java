@@ -15,4 +15,6 @@ public interface ServiceProductMapper {
 
     int updateByPrimaryKey(ServiceProduct record);
 
+    List<ServiceProduct> selectProductByName(String productName);
+
 }

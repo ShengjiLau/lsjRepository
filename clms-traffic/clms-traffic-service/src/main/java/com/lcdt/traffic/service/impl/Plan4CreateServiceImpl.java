@@ -178,7 +178,9 @@ public class Plan4CreateServiceImpl implements Plan4CreateService {
                 ownVehicle.setCreateId(dto.getCreateId());
                 ownVehicle.setCreateName(dto.getCreateName());
                 ownVehicle.setVehicleDriverPhone(dto.getCarrierPhone());
-                trafficRpc.addVehicle(ownVehicle);
+                if(!StringUtils.isEmpty(ownVehicle.getVehicleNum())) {
+                    trafficRpc.addVehicle(ownVehicle);
+                }
 
                 if (!StringUtils.isEmpty(dto.getCarrierIds())) {
                     vo.setCarrierCompanyId(vo.getCompanyId());
