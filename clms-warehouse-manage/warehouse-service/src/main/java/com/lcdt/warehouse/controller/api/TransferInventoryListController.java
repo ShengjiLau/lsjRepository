@@ -1,7 +1,18 @@
 package com.lcdt.warehouse.controller.api;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -106,6 +117,71 @@ public class TransferInventoryListController {
 			throw new ShiftInventoryException(message);
 		}
 	}
+	
+	
+	@PostMapping("/export")
+	@ApiOperation(value = "导出库存转换单")
+	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('transfer_inventory_export')")
+	public void exportXSSFile(Long transferId, HttpServletResponse response) {
+		TransferInventoryListDTO transferInventoryListDTO = transferInventoryListService.getTransferInventoryListDTODetail(transferId);
+		ClassPathResource resource = new ClassPathResource("/templates/transfers_inventory_list.xlsx");
+		if (resource.exists()) {
+			response.reset();
+			XSSFWorkbook xwb = null;
+			InputStream inputStream = null;
+			OutputStream ouputStream = null;
+			try {
+				inputStream = resource.getInputStream();
+				 xwb = new XSSFWorkbook(); // 读取excel模板
+				 XSSFSheet sheet = xwb.getSheetAt(0);
+				 XSSFRow row = sheet.getRow(0);
+				 XSSFCell cell = row.getCell(0);
+				 cell.setCellValue("商品转换单-"+transferInventoryListDTO.getListSerialNo());
+				
+				 //something 
+				 
+				 String fileName = "商品转换单.xlsx";
+				 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("gbk"),"iso-8859-1") + "\"");
+	             response.setContentType("application/octet-stream;charset=UTF-8");
+	             ouputStream = response.getOutputStream();
+	             ouputStream.flush();
+	             xwb.write(ouputStream);
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+				log.debug("导出Excel表出现异常："+e.getMessage());
+			}finally {
+				if (null !=  xwb) {
+					try {
+						xwb.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if (null != ouputStream) {
+					try {
+						ouputStream.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if (null != inputStream) {
+					try {
+						inputStream.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				
+			}
+		}else {
+			throw new RuntimeException("文件路径异常!");
+		}
+	}
+	
+	
+	
+	
 	
 	
 
