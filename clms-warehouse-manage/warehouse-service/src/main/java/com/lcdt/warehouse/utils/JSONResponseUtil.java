@@ -14,5 +14,7 @@ public final class JSONResponseUtil {
         return success(obj, "请求成功");
     }
 
-
+    public static ResponseMessage failure(String message, Integer code) {
+        return new ResponseMessage(null, code, message);
+    }
 }
