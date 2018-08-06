@@ -4,7 +4,7 @@ main(){
     pwd
     mvn -DargLine="-Dspring.profiles.active=gitlab" test
     echo $?
-    if [[ `$?` != 0 ]];then
+    if [[ $? != 0 ]];then
         echo "push notify"
        push_dingtalk_notification
     fi
@@ -18,8 +18,8 @@ push_dingtalk_notification(){
   {\"msgtype\": \"markdown\",
     \"markdown\":{
         \"title\":\"集成警报\",
-        \"text\":\" ${CI_COMMIT_REF_NAME} ${GITLAB_USER_NAME} start job ${CI_JOB_TOKEN}  on ${CI_JOB_STAGE} 编译失败
-        \n [${CI_JOB_URL}]\"
+        \"text\":\"#### 集成失败警报 \n > ${CI_COMMIT_REF_NAME} ${GITLAB_USER_NAME} start job ${CI_JOB_TOKEN}  on ${CI_JOB_STAGE} 失败
+        \n [http://dev.cangkuguanjia.com/datuodui_group/cwms/pipelines]\"
     }
   }"
 }
