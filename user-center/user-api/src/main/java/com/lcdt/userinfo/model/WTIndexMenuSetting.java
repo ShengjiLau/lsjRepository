@@ -3,6 +3,7 @@ package com.lcdt.userinfo.model;
 import java.util.Date;
 
 public class WTIndexMenuSetting {
+
     private Long menuSettingId;
 
     private Long userId;
@@ -21,55 +22,62 @@ public class WTIndexMenuSetting {
         return menuSettingId;
     }
 
-    public void setMenuSettingId(Long menuSettingId) {
+    public WTIndexMenuSetting setMenuSettingId(Long menuSettingId) {
         this.menuSettingId = menuSettingId;
+        return this;
     }
 
     public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public WTIndexMenuSetting setUserId(Long userId) {
         this.userId = userId;
+        return this;
     }
 
     public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(Long companyId) {
+    public WTIndexMenuSetting setCompanyId(Long companyId) {
         this.companyId = companyId;
+        return this;
     }
 
     public Long getMenuId() {
         return menuId;
     }
 
-    public void setMenuId(Long menuId) {
+    public WTIndexMenuSetting setMenuId(Long menuId) {
         this.menuId = menuId;
+        return this;
     }
 
     public Boolean getMenuEnable() {
         return menuEnable;
     }
 
-    public void setMenuEnable(Boolean menuEnable) {
+    public WTIndexMenuSetting setMenuEnable(Boolean menuEnable) {
         this.menuEnable = menuEnable;
+        return this;
     }
 
     public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public WTIndexMenuSetting setCreateDate(Date createDate) {
         this.createDate = createDate;
+        return this;
     }
 
     public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Date updateDate) {
+    public WTIndexMenuSetting setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+        return this;
     }
 }

@@ -1,6 +1,7 @@
 package com.lcdt.userinfo.model;
 
 public class WTIndexMenu {
+
     private Long menuId;
 
     private String menuUrl;
@@ -17,47 +18,53 @@ public class WTIndexMenu {
         return menuId;
     }
 
-    public void setMenuId(Long menuId) {
+    public WTIndexMenu setMenuId(Long menuId) {
         this.menuId = menuId;
+        return this;
     }
 
     public String getMenuUrl() {
         return menuUrl;
     }
 
-    public void setMenuUrl(String menuUrl) {
-        this.menuUrl = menuUrl == null ? null : menuUrl.trim();
+    public WTIndexMenu setMenuUrl(String menuUrl) {
+        this.menuUrl = menuUrl;
+        return this;
     }
 
     public String getMenuIcon() {
         return menuIcon;
     }
 
-    public void setMenuIcon(String menuIcon) {
-        this.menuIcon = menuIcon == null ? null : menuIcon.trim();
+    public WTIndexMenu setMenuIcon(String menuIcon) {
+        this.menuIcon = menuIcon;
+        return this;
     }
 
     public String getMenuColor() {
         return menuColor;
     }
 
-    public void setMenuColor(String menuColor) {
-        this.menuColor = menuColor == null ? null : menuColor.trim();
+    public WTIndexMenu setMenuColor(String menuColor) {
+        this.menuColor = menuColor;
+        return this;
     }
 
     public String getMenuName() {
         return menuName;
     }
 
-    public void setMenuName(String menuName) {
-        this.menuName = menuName == null ? null : menuName.trim();
+    public WTIndexMenu setMenuName(String menuName) {
+        this.menuName = menuName;
+        return this;
     }
 
     public Boolean getDefaultEnable() {
         return defaultEnable;
     }
 
-    public void setDefaultEnable(Boolean defaultEnable) {
+    public WTIndexMenu setDefaultEnable(Boolean defaultEnable) {
         this.defaultEnable = defaultEnable;
+        return this;
     }
 }
