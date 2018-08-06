@@ -1,11 +1,13 @@
 package com.lcdt.userinfo.dto;
 
+import com.lcdt.userinfo.model.Company;
+
 import java.util.Date;
 
 /**
  * Created by ybq on 2017/8/15.
  */
-public class CompanyDto implements java.io.Serializable {
+public class CompanyDto extends Company implements java.io.Serializable {
 
     private Long userId; //用户ID
     private Long companyId; //企业ID

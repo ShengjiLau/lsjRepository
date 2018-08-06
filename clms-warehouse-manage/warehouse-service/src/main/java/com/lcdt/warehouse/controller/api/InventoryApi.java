@@ -89,7 +89,7 @@ public class InventoryApi {
 
 
     @PostMapping("/inventory/import")
-    @ApiOperation("修改备注")
+    @ApiOperation("库存导入")
     public ResponseMessage importInventorylist(String fileUrl,Long customerId,Long wareHouseId){
         //download file
         final ArrayList<ImportInventoryDto> dtos = new ArrayList<>();
@@ -129,12 +129,19 @@ public class InventoryApi {
                             importInventoryDto.setGoodcode(cell.getStringCellValue());
                             break;
                         case 1:
-                            importInventoryDto.setStorageLocationCode(cell.getStringCellValue());
+                            try {
+                                importInventoryDto.setBatch(cell.getStringCellValue());
+                            } catch (Exception e) {
+                                importInventoryDto.setBatch(String.valueOf(cell.getNumericCellValue()));
+                            }
                             break;
                         case 2:
-                            importInventoryDto.setNum(cell.getNumericCellValue());
+                            importInventoryDto.setStorageLocationCode(cell.getStringCellValue());
                             break;
                         case 3:
+                            importInventoryDto.setNum(cell.getNumericCellValue());
+                            break;
+                        case 4:
                             importInventoryDto.setCostPrice(cell.getStringCellValue());
                             break;
                     }

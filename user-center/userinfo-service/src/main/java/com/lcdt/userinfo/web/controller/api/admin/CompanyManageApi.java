@@ -85,12 +85,25 @@ public class CompanyManageApi {
 
     @PostMapping("/create")
     public ResponseMessage createCompany(CompanyDto companyDto) throws CompanyExistException {
-        final User user = userService.queryByPhone(companyDto.getCreateName());
+
+        final User user = userService.queryByPhone(companyDto.getCreatePhone());
         if (user == null) {
             throw new RuntimeException("用户不存在");
         }
-
+        companyDto.setCreateId(user.getUserId());
+        companyDto.setCreateName(user.getRealName());
+        companyDto.setUserId(user.getUserId());
         return JSONResponseUtil.success(createCompanyService.createCompany(companyDto));
+    }
+
+    @PostMapping("/update")
+    public ResponseMessage updateCompany(Company company){
+        final Company company1 = companyMapper.selectByPrimaryKey(company.getCompId());
+        if (company1 == null) {
+            return JSONResponseUtil.failure("数据不存在", -1);
+        }
+        companyMapper.updateByPrimaryKey(company);
+        return JSONResponseUtil.success(company);
     }
 
 }
