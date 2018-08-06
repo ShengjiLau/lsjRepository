@@ -70,6 +70,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		TransferInventoryListDO transferInventoryListDO = new TransferInventoryListDO();
 		transferInventoryListDO.setTransfersId(transferInventoryListDTO.getTransfersId());
 		transferInventoryListDO.setListStatus(TransferInventoryListVO.FISHINED);
+		transferInventoryListDO.setGmtComplete(new Date());
 		int result = TransferInventoryListDOMapper.updateByPrimaryKeySelective(transferInventoryListDO);
 		int transferGoodsResult = TransferGoodsDOMapper.updateTransferGoodsDOByBatch(transferInventoryListDTO.getTransferGoodsDOList());
 		log.debug("修改转换商品的数量为：" + transferGoodsResult);
