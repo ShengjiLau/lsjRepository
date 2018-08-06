@@ -94,4 +94,14 @@ public class CompanyManageApi {
         return JSONResponseUtil.success(createCompanyService.createCompany(companyDto));
     }
 
+    @PostMapping("/update")
+    public ResponseMessage updateCompany(Company company){
+        final Company company1 = companyMapper.selectByPrimaryKey(company.getCompId());
+        if (company1 == null) {
+            return JSONResponseUtil.failure("数据不存在", -1);
+        }
+        companyMapper.updateByPrimaryKey(company);
+        return JSONResponseUtil.success(company);
+    }
+
 }
