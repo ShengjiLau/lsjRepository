@@ -4,14 +4,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.userinfo.dao.CompanyMapper;
+import com.lcdt.userinfo.dto.CompanyDto;
+import com.lcdt.userinfo.dto.CompanyQueryDto;
+import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.model.AdminUser;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.userinfo.model.UserCompRel;
 import com.lcdt.userinfo.service.CompanyService;
+import com.lcdt.userinfo.service.CreateCompanyService;
+import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.utils.JSONResponseUtil;
 import com.lcdt.userinfo.utils.ResponseMessage;
-import com.lcdt.userinfo.web.controller.api.admin.dto.CompanyQueryDto;
 import com.lcdt.userinfo.web.dto.UserQueryDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +34,12 @@ public class CompanyManageApi {
 
     @Autowired
     CompanyMapper companyMapper;
+
+    @Autowired
+    CreateCompanyService createCompanyService;
+
+    @Autowired
+    UserService userService;
 
     @PostMapping("/usercomps")
     @PreAuthorize("hasAnyAuthority('admin_company_select')")
@@ -71,6 +81,27 @@ public class CompanyManageApi {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code",0);
         return JSONResponseUtil.success(jsonObject);
+    }
+
+    @PostMapping("/create")
+    public ResponseMessage createCompany(CompanyDto companyDto) throws CompanyExistException {
+
+        final User user = userService.queryByPhone(companyDto.getCreateName());
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+        companyDto.setCreateId(user.getUserId());
+        return JSONResponseUtil.success(createCompanyService.createCompany(companyDto));
+    }
+
+    @PostMapping("/update")
+    public ResponseMessage updateCompany(Company company){
+        final Company company1 = companyMapper.selectByPrimaryKey(company.getCompId());
+        if (company1 == null) {
+            return JSONResponseUtil.failure("数据不存在", -1);
+        }
+        companyMapper.updateByPrimaryKey(company);
+        return JSONResponseUtil.success(company);
     }
 
 }

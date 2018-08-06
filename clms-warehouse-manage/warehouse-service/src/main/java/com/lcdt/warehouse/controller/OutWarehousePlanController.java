@@ -26,6 +26,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
@@ -266,12 +267,13 @@ public class OutWarehousePlanController {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         OutWhPlanDto outWhPlanDto = outWarehousePlanService.outWhPlanDetail(outPlanId,true, userCompRel,false);
         if(outWhPlanDto!=null) {
-            File fi = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "templates/出库计划.xlsx");
-            if (fi.exists()) {
+            ClassPathResource resource = new ClassPathResource("/templates/出库计划.xlsx");
+           // File fi = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "templates/出库计划.xlsx");
+            if (resource.exists()) {
                 response.reset();
                 XSSFWorkbook wb = null;
                 try {
-                    wb = new XSSFWorkbook(new FileInputStream(fi));    // 读取excel模板
+                    wb = new XSSFWorkbook(resource.getInputStream());    // 读取excel模板
                     XSSFSheet sheet = wb.getSheetAt(0);  // 读取了模板内所有sheet内容
                     XSSFRow row = sheet.getRow(0);
                     XSSFCell cell = row.getCell(0);

@@ -70,6 +70,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		TransferInventoryListDO transferInventoryListDO = new TransferInventoryListDO();
 		transferInventoryListDO.setTransfersId(transferInventoryListDTO.getTransfersId());
 		transferInventoryListDO.setListStatus(TransferInventoryListVO.FISHINED);
+		transferInventoryListDO.setGmtComplete(new Date());
 		int result = TransferInventoryListDOMapper.updateByPrimaryKeySelective(transferInventoryListDO);
 		int transferGoodsResult = TransferGoodsDOMapper.updateTransferGoodsDOByBatch(transferInventoryListDTO.getTransferGoodsDOList());
 		log.debug("修改转换商品的数量为：" + transferGoodsResult);
@@ -164,6 +165,17 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		return transferInventoryListDTO;
 	}
 	
+	
+	@Override
+	public int updateTransferStatus(Long transferInventoryListId) {
+		TransferInventoryListDO transferInventoryListDO = new TransferInventoryListDO();
+		transferInventoryListDO.setTransfersId(transferInventoryListId);
+		transferInventoryListDO.setListStatus(TransferInventoryListVO.CANCELED);
+		int result = TransferInventoryListDOMapper.updateByPrimaryKeySelective(transferInventoryListDO);
+		return result;
+	}
+	
+	
 	/**
 	 * 将一些Mapper接口参数封装为Map
 	 */
@@ -221,6 +233,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 			}
 		return transferInventoryListDTOListWithGoods;
 	}
+
 	
 	
 	

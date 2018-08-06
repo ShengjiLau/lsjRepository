@@ -7,6 +7,7 @@ import com.lcdt.userinfo.dao.CompanyCertificateMapper;
 import com.lcdt.userinfo.dao.CompanyMapper;
 import com.lcdt.userinfo.dao.UserCompRelMapper;
 import com.lcdt.userinfo.dto.CompanyDto;
+import com.lcdt.userinfo.dto.CompanyQueryDto;
 import com.lcdt.userinfo.exception.CompanyExistException;
 import com.lcdt.userinfo.exception.DeptmentExistException;
 import com.lcdt.userinfo.model.*;
@@ -49,6 +50,11 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     UserGroupService userGroupService;
+    @Transactional(rollbackFor = Exception.class,readOnly = true)
+    public List<Company> findByComanyQueryDto(CompanyQueryDto queryDto){
+        return companyMapper.selectByCompanyDto(queryDto);
+    }
+
 
     @Transactional(rollbackFor = Exception.class)
     public UserCompRel findByUserCompRelId(Long userCompRelId) {
@@ -113,11 +119,11 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Company saveCompanyMetaData(CompanyDto dto) throws CompanyExistException {
-        //checkCompanyExist(dto);
+        checkCompanyExist(dto);
         //创建企业
-        /*if (isCompanyNameRegister(dto.getCompanyName())) {
+        if (isCompanyNameRegister(dto.getCompanyName())) {
             throw new RuntimeException("公司名已被注册");
-        }*/
+        }
         Company registerComp = fillCompanyDataFromCompanyDto(dto);
         companyMapper.insert(registerComp);
         //创建关系yd
@@ -127,37 +133,43 @@ public class CompanyServiceImpl implements CompanyService {
 
     /**
      * 创建要注册的company
-     * @param dto
+     * @param company
      * @return
      */
-    private final  Company fillCompanyDataFromCompanyDto(CompanyDto dto){
-        assert dto != null;
-        Company company = new Company();
-        company.setFullName(dto.getCompanyName());
-        company.setIndustry(dto.getIndustry());
+    private final  Company fillCompanyDataFromCompanyDto(CompanyDto company){
+        assert company != null;
+
+        company.setFullName(company.getCompanyName());
+        company.setIndustry(company.getIndustry());
         //未认证
         company.setAuthentication((short)0);
-        company.setCreateId(dto.getUserId());
-        company.setCreateName(dto.getCreateName());
+        company.setCreateId(company.getUserId());
+        company.setCreateName(company.getCreateName());
         company.setCreateDate(new Date());
-        if (!StringUtils.isEmpty(dto.getCompanyName())) {
+        company.setDetailAddress(company.getDetailAddress());
+        company.setLinkTel(company.getLinkTel());
+        company.setLinkMan(company.getLinkMan());
+        company.setCounty(company.getCounty());
+
+
+        if (!StringUtils.isEmpty(company.getCompanyName())) {
             //企业简称默认取企业全称的前六位
-            if (dto.getCompanyName().length() <= 6) {
-                dto.setShortName(dto.getCompanyName());
+            if (company.getCompanyName().length() <= 6) {
+                company.setShortName(company.getCompanyName());
             }
             else{
-                dto.setShortName(dto.getCompanyName().substring(0,6));
+                company.setShortName(company.getCompanyName().substring(0,6));
             }
         }
 
-        if (StringUtils.isEmpty(dto.getShortName())) {
+        if (StringUtils.isEmpty(company.getShortName())) {
             if (company.getFullName().length() <= 4) {
                 company.setShortName(company.getFullName());
             }else{
                 company.setShortName(company.getFullName().substring(0,4));
             }
         }else{
-            company.setShortName(dto.getShortName());
+            company.setShortName(company.getShortName());
         }
         fillLinkManData(company);
         return company;

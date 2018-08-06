@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lcdt.warehouse.mapper.TransferInventoryListDOMapper" >
-  <resultMap id="BaseResultMap" type="com.lcdt.warehouse.dto.TransferInventoryListDTO" >
+ <mapper namespace="com.lcdt.warehouse.mapper.TransferInventoryListDOMapper" >
+  <resultMap id="BaseResultMap" type="com.lcdt.warehouse.entity.TransferInventoryListDO" >
     <id column="transfers_id" property="transfersId" jdbcType="BIGINT" />
     <result column="group_id" property="groupId" jdbcType="BIGINT" />
     <result column="group_name" property="groupName" jdbcType="VARCHAR" />
@@ -10,16 +10,8 @@
     <result column="warehouse_id" property="warehouseId" jdbcType="BIGINT" />
     <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="attachment1_name" property="attachment1Name" jdbcType="VARCHAR" />
-    <result column="attachment1" property="attachment1" jdbcType="VARCHAR" />
-    <result column="attachment2_name" property="attachment2Name" jdbcType="VARCHAR" />
-    <result column="attachment2" property="attachment2" jdbcType="VARCHAR" />
-    <result column="attachment3_name" property="attachment3Name" jdbcType="VARCHAR" />
-    <result column="attachment3" property="attachment3" jdbcType="VARCHAR" />
-    <result column="attachment4_name" property="attachment4Name" jdbcType="VARCHAR" />
-    <result column="attachment4" property="attachment4" jdbcType="VARCHAR" />
-    <result column="attachment5_name" property="attachment5Name" jdbcType="VARCHAR" />
-    <result column="attachment5" property="attachment5" jdbcType="VARCHAR" />
+    <result column="attachment_name" property="attachmentName" jdbcType="VARCHAR" />
+    <result column="attachment" property="attachment" jdbcType="VARCHAR" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
     <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
     <result column="create_user" property="createUser" jdbcType="VARCHAR" />
@@ -27,12 +19,12 @@
     <result column="company_id" property="companyId" jdbcType="BIGINT" />
     <result column="list_status" property="listStatus" jdbcType="TINYINT" />
     <result column="list_serial_no" property="listSerialNo" jdbcType="VARCHAR" />
+    <result column="gmt_complete" property="gmtComplete" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     transfers_id, group_id, group_name, customer_id, customer_name, warehouse_id, warehouse_name, 
-    remark, attachment1_name, attachment1, attachment2_name, attachment2, attachment3_name, 
-    attachment3, attachment4_name, attachment4, attachment5_name, attachment5, gmt_create, 
-    gmt_modified, create_user, create_user_id, company_id, list_status, list_serial_no
+    remark, attachment_name, attachment, gmt_create, gmt_modified, create_user, create_user_id, 
+    company_id, list_status, list_serial_no, gmt_complete
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -48,24 +40,21 @@
   keyProperty="transfersId" useGeneratedKeys="true">
     insert into transfers_inventory_list (transfers_id, group_id, group_name, 
       customer_id, customer_name, warehouse_id, 
-      warehouse_name, remark, attachment1_name, 
-      attachment1, attachment2_name, attachment2, 
-      attachment3_name, attachment3, attachment4_name, 
-      attachment4, attachment5_name, attachment5, 
-      gmt_create, gmt_modified, create_user, 
-      create_user_id, company_id, list_status, 
-      list_serial_no)
+      warehouse_name, remark, attachment_name, 
+      attachment, gmt_create, gmt_modified, 
+      create_user, create_user_id, company_id, 
+      list_status, list_serial_no, gmt_complete
+      )
     values (#{transfersId,jdbcType=BIGINT}, #{groupId,jdbcType=BIGINT}, #{groupName,jdbcType=VARCHAR}, 
       #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, #{warehouseId,jdbcType=BIGINT}, 
-      #{warehouseName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{attachment1Name,jdbcType=VARCHAR}, 
-      #{attachment1,jdbcType=VARCHAR}, #{attachment2Name,jdbcType=VARCHAR}, #{attachment2,jdbcType=VARCHAR}, 
-      #{attachment3Name,jdbcType=VARCHAR}, #{attachment3,jdbcType=VARCHAR}, #{attachment4Name,jdbcType=VARCHAR}, 
-      #{attachment4,jdbcType=VARCHAR}, #{attachment5Name,jdbcType=VARCHAR}, #{attachment5,jdbcType=VARCHAR}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, 
-      #{createUserId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, #{listStatus,jdbcType=TINYINT}, 
-      #{listSerialNo,jdbcType=VARCHAR})
+      #{warehouseName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{attachmentName,jdbcType=VARCHAR}, 
+      #{attachment,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, 
+      #{listStatus,jdbcType=TINYINT}, #{listSerialNo,jdbcType=VARCHAR}, #{gmtComplete,jdbcType=TIMESTAMP}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.lcdt.warehouse.entity.TransferInventoryListDO" flushCache="true">
+  
+  <insert id="insertSelective" parameterType="com.lcdt.warehouse.entity.TransferInventoryListDO" >
     insert into transfers_inventory_list
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="transfersId != null" >
@@ -92,35 +81,11 @@
       <if test="remark != null" >
         remark,
       </if>
-      <if test="attachment1Name != null" >
-        attachment1_name,
+      <if test="attachmentName != null" >
+        attachment_name,
       </if>
-      <if test="attachment1 != null" >
-        attachment1,
-      </if>
-      <if test="attachment2Name != null" >
-        attachment2_name,
-      </if>
-      <if test="attachment2 != null" >
-        attachment2,
-      </if>
-      <if test="attachment3Name != null" >
-        attachment3_name,
-      </if>
-      <if test="attachment3 != null" >
-        attachment3,
-      </if>
-      <if test="attachment4Name != null" >
-        attachment4_name,
-      </if>
-      <if test="attachment4 != null" >
-        attachment4,
-      </if>
-      <if test="attachment5Name != null" >
-        attachment5_name,
-      </if>
-      <if test="attachment5 != null" >
-        attachment5,
+      <if test="attachment != null" >
+        attachment,
       </if>
       <if test="gmtCreate != null" >
         gmt_create,
@@ -142,6 +107,9 @@
       </if>
       <if test="listSerialNo != null" >
         list_serial_no,
+      </if>
+      <if test="gmtComplete != null" >
+        gmt_complete,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -169,35 +137,11 @@
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="attachment1Name != null" >
-        #{attachment1Name,jdbcType=VARCHAR},
+      <if test="attachmentName != null" >
+        #{attachmentName,jdbcType=VARCHAR},
       </if>
-      <if test="attachment1 != null" >
-        #{attachment1,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment2Name != null" >
-        #{attachment2Name,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment2 != null" >
-        #{attachment2,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment3Name != null" >
-        #{attachment3Name,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment3 != null" >
-        #{attachment3,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment4Name != null" >
-        #{attachment4Name,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment4 != null" >
-        #{attachment4,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment5Name != null" >
-        #{attachment5Name,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment5 != null" >
-        #{attachment5,jdbcType=VARCHAR},
+      <if test="attachment != null" >
+        #{attachment,jdbcType=VARCHAR},
       </if>
       <if test="gmtCreate != null" >
         #{gmtCreate,jdbcType=TIMESTAMP},
@@ -220,9 +164,12 @@
       <if test="listSerialNo != null" >
         #{listSerialNo,jdbcType=VARCHAR},
       </if>
+      <if test="gmtComplete != null" >
+        #{gmtComplete,jdbcType=TIMESTAMP},
+      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.warehouse.entity.TransferInventoryListDO" flushCache="true">
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.warehouse.entity.TransferInventoryListDO" >
     update transfers_inventory_list
     <set >
       <if test="groupId != null" >
@@ -246,35 +193,11 @@
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="attachment1Name != null" >
-        attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
+      <if test="attachmentName != null" >
+        attachment_name = #{attachmentName,jdbcType=VARCHAR},
       </if>
-      <if test="attachment1 != null" >
-        attachment1 = #{attachment1,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment2Name != null" >
-        attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment2 != null" >
-        attachment2 = #{attachment2,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment3Name != null" >
-        attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment3 != null" >
-        attachment3 = #{attachment3,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment4Name != null" >
-        attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment4 != null" >
-        attachment4 = #{attachment4,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment5Name != null" >
-        attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
-      </if>
-      <if test="attachment5 != null" >
-        attachment5 = #{attachment5,jdbcType=VARCHAR},
+      <if test="attachment != null" >
+        attachment = #{attachment,jdbcType=VARCHAR},
       </if>
       <if test="gmtCreate != null" >
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
@@ -297,10 +220,13 @@
       <if test="listSerialNo != null" >
         list_serial_no = #{listSerialNo,jdbcType=VARCHAR},
       </if>
+      <if test="gmtComplete != null" >
+        gmt_complete = #{gmtComplete,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where transfers_id = #{transfersId,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.lcdt.warehouse.entity.TransferInventoryListDO" flushCache="true">
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.warehouse.entity.TransferInventoryListDO" >
     update transfers_inventory_list
     set group_id = #{groupId,jdbcType=BIGINT},
       group_name = #{groupName,jdbcType=VARCHAR},
@@ -309,29 +235,21 @@
       warehouse_id = #{warehouseId,jdbcType=BIGINT},
       warehouse_name = #{warehouseName,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
-      attachment1_name = #{attachment1Name,jdbcType=VARCHAR},
-      attachment1 = #{attachment1,jdbcType=VARCHAR},
-      attachment2_name = #{attachment2Name,jdbcType=VARCHAR},
-      attachment2 = #{attachment2,jdbcType=VARCHAR},
-      attachment3_name = #{attachment3Name,jdbcType=VARCHAR},
-      attachment3 = #{attachment3,jdbcType=VARCHAR},
-      attachment4_name = #{attachment4Name,jdbcType=VARCHAR},
-      attachment4 = #{attachment4,jdbcType=VARCHAR},
-      attachment5_name = #{attachment5Name,jdbcType=VARCHAR},
-      attachment5 = #{attachment5,jdbcType=VARCHAR},
+      attachment_name = #{attachmentName,jdbcType=VARCHAR},
+      attachment = #{attachment,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       create_user = #{createUser,jdbcType=VARCHAR},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       company_id = #{companyId,jdbcType=BIGINT},
       list_status = #{listStatus,jdbcType=TINYINT},
-      list_serial_no = #{listSerialNo,jdbcType=VARCHAR}
+      list_serial_no = #{listSerialNo,jdbcType=VARCHAR},
+      gmt_complete = #{gmtComplete,jdbcType=TIMESTAMP}
     where transfers_id = #{transfersId,jdbcType=BIGINT}
-  </update>
-  
+  </update>  
   <!--   ————————————————————————————         华丽的分割线               ————————————————————————————   --> 
   
-  <resultMap id="TransferInventoryListsDTOMap" type="com.lcdt.warehouse.dto.TransferInventoryListDTO"  extends="BaseResultMap">
+   <resultMap id="TransferInventoryListsDTOMap" type="com.lcdt.warehouse.dto.TransferInventoryListDTO"  extends="BaseResultMap">
     <collection property="transferGoodsDOList" ofType="com.lcdt.warehouse.entity.TransferGoodsDO" 
                 javaType="ArrayList" select="com.lcdt.warehouse.mapper.TransferGoodsDOMapper.getTransferGoodsDOListByTransferId" 
     			column="transferId = transfers_id">
@@ -373,8 +291,14 @@
     <if test="customName != null and customName != ''">
     and customer_name like concat('%', #{customName, jdbcType=VARCHAR}, '%')
     </if>
+    <if test="whId != null">
+    and warehouse_id = #{whId, jdbcType=BIGINT}
+    </if>
+    <if test="listStatus != null">
+    and list_status = #{listStatus,jdbcType=TINYINT}
+    </if>
   </select>
   
   
   
-</mapper>
+</mapper>  

@@ -24,6 +24,8 @@ public class TransferListDTO implements Serializable{
 	
 	@ApiModelProperty("所属公司id")
 	private Long companyId;
+	@ApiModelProperty("仓库id")
+	private Long whId;
 	@ApiModelProperty("客户名称，可模糊")
 	private String customName;
 	@ApiModelProperty("消耗商品的名称/编码/条码")
@@ -34,6 +36,8 @@ public class TransferListDTO implements Serializable{
 	private Integer pageSize;
 	@ApiModelProperty("页码")
 	private Integer pageNo;
+	@ApiModelProperty("转换单状态")
+	private byte listStatus;
 
 	
 

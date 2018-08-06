@@ -164,38 +164,79 @@ public class UserRoleServiceImpl implements UserRoleService {
 		ccRole.setRoleCompanyId(compId);
 		ccRole.setValid(true);
 		userRoleDao.insert(ccRole);
-		List<Permission> cgPermissions = permissionMapper.selectByCategory("purchase");
-		if(cgPermissions!=null&&cgPermissions.size()>0)
+		//正式环境以企业“18669996260 / dushouwei，企业：笊篱坪二队企业id为123”的企业角色权限数据初始化新创建企业的角色权限
+		//采购权限初始化
+		List<RolePermission> cgRolePermissions = rolePermissionDao.selectByRoleName((long) 123,cgRole.getRoleName());
+		Map cgMap = new HashMap<>();
+		cgMap.put("role",cgRole.getRoleId());
+		if(cgRolePermissions!=null&&cgRolePermissions.size()>0)
 		{
-			Map map = new HashMap<>();
-			map.put("role",cgRole.getRoleId());
-			map.put("permissions",cgPermissions);
-			rolePermissionDao.insertInitRole(map);
+			if(cgRolePermissions!=null&&cgRolePermissions.size()>0)
+			{
+				cgMap.put("permissions",cgRolePermissions);
+			}
 		}
-		List<Permission> xsPermissions = permissionMapper.selectByCategory("sales");
-		if(xsPermissions!=null&&xsPermissions.size()>0)
+		else
 		{
-			Map map = new HashMap<>();
-			map.put("role",xsRole.getRoleId());
-			map.put("permissions",xsPermissions);
-			rolePermissionDao.insertInitRole(map);
+			List<Permission> cgPermissions = permissionMapper.selectByCategory("purchase");
+			if(cgPermissions!=null&&cgPermissions.size()>0)
+			{
+				cgMap.put("permissions",cgPermissions);
+			}
 		}
-		List<Permission> ysPermissions = permissionMapper.selectByCategory("tms");
-		if(ysPermissions!=null&&ysPermissions.size()>0)
+		rolePermissionDao.insertInitRole(cgMap);
+		//销售权限初始化
+		List<RolePermission> xsRolePermissions = rolePermissionDao.selectByRoleName((long) 123,xsRole.getRoleName());
+		Map xsMap = new HashMap<>();
+		xsMap.put("role",xsRole.getRoleId());
+		if(xsRolePermissions!=null&&xsRolePermissions.size()>0)
 		{
-			Map map = new HashMap<>();
-			map.put("role",ysRole.getRoleId());
-			map.put("permissions",ysPermissions);
-			rolePermissionDao.insertInitRole(map);
+			xsMap.put("permissions",xsRolePermissions);
 		}
-		List<Permission> ccPermissions = permissionMapper.selectByCategory("warehouse");
-		if(ccPermissions!=null&&ccPermissions.size()>0)
+		else{
+			List<Permission> xsPermissions = permissionMapper.selectByCategory("sales");
+			if(xsPermissions!=null&&xsPermissions.size()>0)
+			{
+				xsMap.put("permissions",xsPermissions);
+			}
+		}
+		rolePermissionDao.insertInitRole(xsMap);
+
+		//运输权限初始化
+		List<RolePermission> ysRolePermissions = rolePermissionDao.selectByRoleName((long) 123,ysRole.getRoleName());
+		Map ysMap = new HashMap<>();
+		ysMap.put("role",ysRole.getRoleId());
+		if(ysRolePermissions!=null&&ysRolePermissions.size()>0)
 		{
-			Map map = new HashMap<>();
-			map.put("role",ccRole.getRoleId());
-			map.put("permissions",ccPermissions);
-			rolePermissionDao.insertInitRole(map);
+			ysMap.put("permissions",ysRolePermissions);
 		}
+		else
+		{
+			List<Permission> ysPermissions = permissionMapper.selectByCategory("tms");
+			if(ysPermissions!=null&&ysPermissions.size()>0)
+			{
+				ysMap.put("permissions",ysPermissions);
+			}
+		}
+		rolePermissionDao.insertInitRole(ysMap);
+
+		//仓储权限初始化
+		List<RolePermission> ccRolePermissions = rolePermissionDao.selectByRoleName((long) 123,ccRole.getRoleName());
+		Map ccMap = new HashMap<>();
+		ccMap.put("role",ccRole.getRoleId());
+		if(ccRolePermissions!=null&&ccRolePermissions.size()>0)
+		{
+			ccMap.put("permissions",ccRolePermissions);
+		}
+		else
+		{
+			List<Permission> ccPermissions = permissionMapper.selectByCategory("warehouse");
+			if(ccPermissions!=null&&ccPermissions.size()>0)
+			{
+				ccMap.put("permissions",ccPermissions);
+			}
+		}
+		rolePermissionDao.insertInitRole(ccMap);
 	}
 
 	@Transactional(rollbackFor = Exception.class)

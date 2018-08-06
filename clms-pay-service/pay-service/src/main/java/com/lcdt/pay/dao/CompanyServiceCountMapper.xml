@@ -47,5 +47,12 @@
 
   </select>
 
+  <select id="selectByCompanyIds" resultMap="BaseResultMap">
+    select count_id, company_id, product_name, product_service_num
+    from company_service_count
+    where company_id in #{companyIds}
+
+  </select>
+
 
 </mapper>

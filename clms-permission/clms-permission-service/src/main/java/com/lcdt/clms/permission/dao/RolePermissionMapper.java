@@ -58,7 +58,8 @@ public interface RolePermissionMapper {
 
     void insertRolePermission(@Param("roleId")Long roleId,@Param("permissions") List<Long> permissions);
 
-    List<RolePermission> selectByRolePermissionName(@Param(("permissionPrefix")) String permissionPrefix);
+    List<RolePermission> selectByRoleName(@Param(("companyId")) Long companyId ,@Param(("roleName")) String roleName);
+
 
     void insertInitRole(Map map);
 

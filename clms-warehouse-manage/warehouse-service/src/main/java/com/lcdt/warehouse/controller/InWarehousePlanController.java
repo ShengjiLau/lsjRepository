@@ -24,6 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
@@ -241,12 +242,13 @@ public class InWarehousePlanController {
                                    HttpServletResponse response) throws IOException {
         UserCompRel userCompRel = SecurityInfoGetter.geUserCompRel();
         InWhPlanDto inWhPlanDto = inWarehousePlanService.inWhPlanDetail(planId, true, userCompRel, true, false);
-        File fi = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "templates/入库计划.xlsx");
-        if (fi.exists()) {
+        //File fi = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "templates/入库计划.xlsx");
+        ClassPathResource resource = new ClassPathResource("/templates/入库计划.xlsx");
+        if (resource.exists()) {
             response.reset();
             XSSFWorkbook wb = null;
             try {
-                wb = new XSSFWorkbook(new FileInputStream(fi));    // 读取excel模板
+                wb = new XSSFWorkbook(resource.getInputStream());    // 读取excel模板
                 XSSFSheet sheet = wb.getSheetAt(0);  // 读取了模板内所有sheet内容
                 XSSFRow row = sheet.getRow(0);
                 XSSFCell cell = row.getCell(0);
@@ -335,6 +337,8 @@ public class InWarehousePlanController {
 
             } catch (Exception e) {
                 logger.error("导出excel出现异常:", e);
+            }finally {
+                wb.close();
             }
 
         }
