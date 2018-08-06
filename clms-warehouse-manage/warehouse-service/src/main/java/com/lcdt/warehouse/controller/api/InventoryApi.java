@@ -149,8 +149,8 @@ public class InventoryApi {
                 }
             }
 
-            inventoryService.importInventory(dtos);
-
+            final List<Inventory> inventories = inventoryService.importInventory(dtos);
+            return JSONResponseUtil.success(inventories);
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
@@ -162,7 +162,7 @@ public class InventoryApi {
                 }
             }
         }
-        return null;
+        return JSONResponseUtil.failure("导入失败",-1);
     }
 
 

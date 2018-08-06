@@ -62,36 +62,107 @@
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.Company">
     update t_uc_company
-    set full_name = #{fullName,jdbcType=VARCHAR},
+    set
+    <if test="fullName != null and fullName != '' ">
+      full_name = #{fullName,jdbcType=VARCHAR},
+    </if>
+    <if test="shortName != null and shortName != '' ">
       short_name = #{shortName,jdbcType=VARCHAR},
-      authentication = #{authentication,jdbcType=SMALLINT},
+    </if>
+    <if test="authentication != null and authentication != '' ">
+      authentication = #{authentication,jdbcType=VARCHAR},
+    </if>
+
+    <if test="authenticationRemark != null and authenticationRemark != '' ">
       authentication_remark = #{authenticationRemark,jdbcType=VARCHAR},
+    </if>
+
+    <if test="industry != null and industry != '' ">
       industry = #{industry,jdbcType=VARCHAR},
+    </if>
+    <if test="province != null and province != '' ">
       province = #{province,jdbcType=VARCHAR},
+    </if>
+    <if test="city != null and city != '' ">
       city = #{city,jdbcType=VARCHAR},
+    </if>
+    <if test="county != null and county != '' ">
       county = #{county,jdbcType=VARCHAR},
+    </if>
+    <if test="detailAddress != null and detailAddress != '' ">
       detail_address = #{detailAddress,jdbcType=VARCHAR},
+    </if>
+    <if test="postCode != null and postCode != '' ">
       post_code = #{postCode,jdbcType=VARCHAR},
+    </if>
+    <if test="telNo != null and telNo != '' ">
       tel_no = #{telNo,jdbcType=VARCHAR},
+    </if>
+    <if test="fax != null and fax != '' ">
       fax = #{fax,jdbcType=VARCHAR},
+    </if>
+    <if test="compIntro != null and compIntro != '' ">
       comp_intro = #{compIntro,jdbcType=VARCHAR},
+    </if>
+    <if test="linkMan != null and linkMan != '' ">
       link_man = #{linkMan,jdbcType=VARCHAR},
+    </if>
+
+    <if test="linkDuty != null and linkDuty != '' ">
       link_duty = #{linkDuty,jdbcType=VARCHAR},
+    </if>
+    <if test="linkTel != null and linkTel != '' ">
       link_tel = #{linkTel,jdbcType=VARCHAR},
+    </if>
+    <if test="linkEmail != null and linkEmail != '' ">
       link_email = #{linkEmail,jdbcType=VARCHAR},
+    </if>
+    <if test="linkRemark != null and linkRemark != '' ">
       link_remark = #{linkRemark,jdbcType=VARCHAR},
+    </if>
+
+    <if test="invoiceTitle != null and invoiceTitle != '' ">
       invoice_title = #{invoiceTitle,jdbcType=VARCHAR},
+    </if>
+
+
+    <if test="registrationNo != null and registrationNo != '' ">
       registration_no = #{registrationNo,jdbcType=VARCHAR},
+    </if>
+
+    <if test="bankName != null and bankName != '' ">
       bank_name = #{bankName,jdbcType=VARCHAR},
+    </if>
+    <if test="bankNo != null and bankNo != '' ">
       bank_no = #{bankNo,jdbcType=VARCHAR},
+    </if>
+    <if test="registrationAddress != null and registrationAddress != '' ">
       registration_address = #{registrationAddress,jdbcType=VARCHAR},
+    </if>
+
+    <if test="telNo1 != null and telNo1 != '' ">
       tel_no1 = #{telNo1,jdbcType=VARCHAR},
+    </if>
+    <if test="invoiceRemark != null and invoiceRemark != '' ">
       invoice_remark = #{invoiceRemark,jdbcType=VARCHAR},
-      company_logo = #{companyLogo,jdbcType=VARCHAR},
-      create_id = #{createId,jdbcType=BIGINT},
+    </if>
+    <if test="companyLogo != null and companyLogo != '' ">
+      company_logo = #{invoiceRemark,jdbcType=VARCHAR},
+    </if>
+    <if test="createId != null and companyLogo != '' ">
+      create_id = #{createId,jdbcType=VARCHAR},
+    </if>
+
+    <if test="createName != null and createName != '' ">
       create_name = #{createName,jdbcType=VARCHAR},
-      create_date = #{createDate,jdbcType=TIMESTAMP},
+    </if>
+    <if test="createDate != null and createDate != '' ">
+      create_date = #{createDate,jdbcType=VARCHAR},
+    </if>
+    <if test="enable != null and enable != '' ">
       enable = #{enable,jdbcType=BIT}
+    </if>
+
     where comp_id = #{compId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
