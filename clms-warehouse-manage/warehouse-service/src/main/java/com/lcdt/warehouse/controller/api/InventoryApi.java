@@ -129,7 +129,11 @@ public class InventoryApi {
                             importInventoryDto.setGoodcode(cell.getStringCellValue());
                             break;
                         case 1:
-                            importInventoryDto.setBatch(cell.getStringCellValue());
+                            try {
+                                importInventoryDto.setBatch(cell.getStringCellValue());
+                            } catch (Exception e) {
+                                importInventoryDto.setBatch(String.valueOf(cell.getNumericCellValue()));
+                            }
                             break;
                         case 2:
                             importInventoryDto.setStorageLocationCode(cell.getStringCellValue());
