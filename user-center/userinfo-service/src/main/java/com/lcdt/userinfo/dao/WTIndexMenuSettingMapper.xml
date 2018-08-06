@@ -10,38 +10,41 @@
     <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
   </resultMap>
+  <sql id="base_column">
+    menu_setting_id, user_id, company_id, menu_id, menu_enable, create_date, update_date
+  </sql>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from "wt_index _menu_setting"
+    delete from wt_index_menu_setting
     where menu_setting_id = #{menuSettingId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.lcdt.userinfo.model.WTIndexMenuSetting">
     <selectKey keyProperty="menuSettingId" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into "wt_index _menu_setting" (user_id, company_id, menu_id,
-    menu_enable, create_date, update_date
+    insert into wt_index_menu_setting (user_id, company_id, menu_id,
+    menu_enable, create_date
     )
     values (#{userId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, #{menuId,jdbcType=BIGINT},
-    #{menuEnable,jdbcType=BIT}, #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}
+    #{menuEnable,jdbcType=BIT}, CURRENT_TIMESTAMP
     )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.WTIndexMenuSetting">
-    update "wt_index _menu_setting"
+    update wt_index_menu_setting
     set user_id = #{userId,jdbcType=BIGINT},
       company_id = #{companyId,jdbcType=BIGINT},
       menu_id = #{menuId,jdbcType=BIGINT},
       menu_enable = #{menuEnable,jdbcType=BIT},
-      create_date = #{createDate,jdbcType=TIMESTAMP},
       update_date = #{updateDate,jdbcType=TIMESTAMP}
     where menu_setting_id = #{menuSettingId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select menu_setting_id, user_id, company_id, menu_id, menu_enable, create_date, update_date
-    from "wt_index _menu_setting"
+    select <include refid="base_column"/>
+    from wt_index_menu_setting
     where menu_setting_id = #{menuSettingId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select menu_setting_id, user_id, company_id, menu_id, menu_enable, create_date, update_date
-    from "wt_index _menu_setting"
+    select <include refid="base_column"/>
+    from wt_index_menu_setting
   </select>
 </mapper>
