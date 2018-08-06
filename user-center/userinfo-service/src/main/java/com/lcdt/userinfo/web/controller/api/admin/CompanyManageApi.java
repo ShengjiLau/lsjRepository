@@ -85,11 +85,12 @@ public class CompanyManageApi {
 
     @PostMapping("/create")
     public ResponseMessage createCompany(CompanyDto companyDto) throws CompanyExistException {
+
         final User user = userService.queryByPhone(companyDto.getCreateName());
         if (user == null) {
             throw new RuntimeException("用户不存在");
         }
-
+        companyDto.setCreateId(user.getUserId());
         return JSONResponseUtil.success(createCompanyService.createCompany(companyDto));
     }
 
