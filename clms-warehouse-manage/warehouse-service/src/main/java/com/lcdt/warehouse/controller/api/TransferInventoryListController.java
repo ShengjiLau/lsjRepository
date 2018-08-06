@@ -7,6 +7,9 @@ import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -122,7 +125,7 @@ public class TransferInventoryListController {
 	@PostMapping("/export")
 	@ApiOperation(value = "导出库存转换单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('transfer_inventory_export')")
-	public void exportXSSFile(Long transferId, HttpServletResponse response) {
+	public void exportXSSFile(Long transferId, HttpServletResponse response) throws Exception, InvalidFormatException {
 		TransferInventoryListDTO transferInventoryListDTO = transferInventoryListService.getTransferInventoryListDTODetail(transferId);
 		ClassPathResource resource = new ClassPathResource("/templates/transfers_inventory_list.xlsx");
 		if (resource.exists()) {
@@ -132,11 +135,11 @@ public class TransferInventoryListController {
 			OutputStream ouputStream = null;
 			try {
 				inputStream = resource.getInputStream();
-				 xwb = new XSSFWorkbook(); // 读取excel模板
+				 xwb = (XSSFWorkbook) WorkbookFactory.create(inputStream); // 读取excel模板
 				 XSSFSheet sheet = xwb.getSheetAt(0);
 				 XSSFRow row = sheet.getRow(0);
 				 XSSFCell cell = row.getCell(0);
-				 cell.setCellValue("商品转换单-"+transferInventoryListDTO.getListSerialNo());
+				 cell.setCellValue("商品转换单-" + transferInventoryListDTO.getListSerialNo());
 				
 				 //something 
 				 
@@ -147,7 +150,7 @@ public class TransferInventoryListController {
 	             ouputStream.flush();
 	             xwb.write(ouputStream);
 				
-			}catch(Exception e) {
+			}catch(IOException e) {
 				e.printStackTrace();
 				log.debug("导出Excel表出现异常："+e.getMessage());
 			}finally {

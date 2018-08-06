@@ -148,9 +148,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	public int completeShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO) {
 		//将移库单的状态修改为1，即完成状态
 		ShiftInventoryListDO shiftInventoryListDO = new ShiftInventoryListDO();
-		shiftInventoryListDO.setShiftId(shiftInventoryListDTO.getShiftId());
-		shiftInventoryListDO.setShiftUser(shiftInventoryListDTO.getShiftUser());
-		shiftInventoryListDO.setShiftTime(shiftInventoryListDTO.getShiftTime());
+		BeanUtils.copyProperties(shiftInventoryListDTO, shiftInventoryListDO);
 		shiftInventoryListDO.setFinished(ShiftInventoryListVO.FISHINED);
 		//shiftInventoryListDO.setGmtModified(new Date());
 		int i = shiftInventoryListDOMapper.updateByPrimaryKeySelective(shiftInventoryListDO);
