@@ -249,14 +249,14 @@
    </foreach>
    </update>
    
-   <select id="getTransferGoodsDOListByTransferIds" resultMap="BaseResultMap">
+   <select id="getTransferGoodsDOListByTransferIds" resultMap="BaseResultMap" >
     select 
-    <include refid="Base_Column_List" />
+   <include refid="Base_Column_List" />
     from transfers_goods
    	where transfer_id in 
-   	<foreach collection="array" index="index" item="item" separator="," close=")" open="(">
+   	 <foreach collection="array" index="index" item="item" separator="," close=")" open="(">
   	 #{item,jdbcType=BIGINT}
-   </foreach>
+   </foreach> 
    </select>
    
    <select id="getTransferGoodsDOListByCondition" resultMap="BaseResultMap">
