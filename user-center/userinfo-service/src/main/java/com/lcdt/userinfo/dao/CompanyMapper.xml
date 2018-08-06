@@ -62,7 +62,9 @@
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.userinfo.model.Company">
     update t_uc_company
-    set
+
+    <trim prefix="set" suffixOverrides=",">
+
     <if test="fullName != null and fullName != '' ">
       full_name = #{fullName,jdbcType=VARCHAR},
     </if>
@@ -162,7 +164,7 @@
     <if test="enable != null and enable != '' ">
       enable = #{enable,jdbcType=BIT}
     </if>
-
+    </trim>
     where comp_id = #{compId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
