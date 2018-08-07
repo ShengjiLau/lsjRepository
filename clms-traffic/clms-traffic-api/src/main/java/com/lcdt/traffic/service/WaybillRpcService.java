@@ -139,4 +139,19 @@ public interface WaybillRpcService {
      * @return
      */
     Waybill modifyWaybillReceiptByDriver(DriverWaybillParamsDto dto);
+
+
+    /**
+     * 我的运单增加路由
+     * @param params
+     * @return
+     */
+    int addOwnWaybillRoute(WaybillRouteAddParams params);
+
+    /**
+     * 客户运单增加路由
+     * @param params
+     * @return
+     */
+    int addCustomerWaybillRoute(WaybillRouteAddParams params);
 }

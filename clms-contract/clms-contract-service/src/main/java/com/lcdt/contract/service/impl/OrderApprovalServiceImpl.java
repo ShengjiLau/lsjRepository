@@ -300,7 +300,7 @@ public class OrderApprovalServiceImpl implements OrderApprovalService {
         orderApprovalList.remove(0);
         /**
          * 抄送处理逻辑：
-         * 1.获取抄送合同的主键信息
+         * 1.获取抄送订单的主键信息
          * 2.查询抄送人是否已经存在
          * 3.组织抄送人信息记录并批量更新
          */

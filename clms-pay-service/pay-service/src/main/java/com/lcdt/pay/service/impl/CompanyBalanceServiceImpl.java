@@ -23,6 +23,9 @@ public class CompanyBalanceServiceImpl implements CompanyBalanceService{
 
     private Logger logger = LoggerFactory.getLogger(CompanyBalanceServiceImpl.class);
 
+    public List<PayBalance> allBalance(){
+        return mapper.selectAll();
+    }
 
     public List<PayBalance> companyBalance(List<Long> companyIds){
         final StringBuffer stringBuffer = new StringBuffer();
