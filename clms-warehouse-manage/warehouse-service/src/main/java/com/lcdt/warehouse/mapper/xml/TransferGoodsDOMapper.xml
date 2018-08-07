@@ -253,10 +253,11 @@
     select 
    <include refid="Base_Column_List" />
     from transfers_goods
-   	where transfer_id in 
+   	where transfer_id 
+   	in 
    	 <foreach collection="array" index="index" item="item" separator="," close=")" open="(">
   	 #{item,jdbcType=BIGINT}
-   </foreach> 
+   </foreach>  
    </select>
    
    <select id="getTransferGoodsDOListByCondition" resultMap="BaseResultMap">

@@ -174,9 +174,9 @@ public class AllotApi {
     
     
     @ApiOperation("导出")
-    @RequestMapping(value = "/export", method = RequestMethod.GET)
+    @RequestMapping(value = "/export/{allotId}", method = RequestMethod.GET)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_export')")
-    public void exportAllot(Long allotId, HttpServletResponse response) {
+    public void exportAllot(@PathVariable Long allotId, HttpServletResponse response) {
     	AllotDto dto = allotService.getAllotInfo(allotId);
     	ClassPathResource resource = new ClassPathResource("/templates/allot_order.xlsx");
     	if (resource.exists()) {
