@@ -409,6 +409,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             inventory.setGoodsId(goodsInfo.getGoodsId());
             inventory.setOriginalGoodsId(goodsInfoDao.getGoodsId());
             inventory.setStorageLocationId(warehouseLoc.getWhLocId());
+            inventory.setBaseUnit(goodsInfoDao.getUnit());
             Inventory inventory1 = addInventory(inventory);
             logService.saveImportInventoryLog(inventory, dto);
             inventories.add(inventory1);

@@ -162,6 +162,13 @@ public class SubItemsInfoServiceImpl implements SubItemsInfoService {
         PageInfo page = null;
         PageHelper.startPage(dto.getPageNo(), dto.getPageSize());
         list = subItemsInfoMapper.selectByCondition(dto);
+        if(list!=null&&!list.isEmpty()){
+            list.forEach(item->{
+                if(item.getUnit()==null&&item.getMultiUnit()!=null){
+                    item.setUnit(item.getMultiUnit().getUnitName());
+                }
+            });
+        }
         page = new PageInfo(list);
         return page;
     }
