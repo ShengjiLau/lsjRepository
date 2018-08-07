@@ -17,6 +17,7 @@ public class WaybillUtil {
             put((short)6,"签收确认");//
             put((short)7,"运单完成"); //
             put((short)8,"运单取消"); //
+            put((short)20,"更新"); //
         }
     };
 }
