@@ -105,8 +105,8 @@ public class ContractServiceImpl implements ContractService {
                             attachment.setSaleConTittle(queryContract.getTitle());
                             attachment.setSaleConSerialNum(queryContract.getSerialNo());
                         }
-                        ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-                        producer.sendNotifyEvent(plan_publish_event);
+                        ContractNotifyEvent planPublishEvent = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+                        producer.sendNotifyEvent(planPublishEvent);
                         /**↑发送消息通知结束*/
                     } else {
                         ca.setStatus(new Short("0"));   //设置其他审批状态为 0 - 初始值
@@ -313,8 +313,10 @@ public class ContractServiceImpl implements ContractService {
             Long userId = SecurityInfoGetter.getUser().getUserId();
             //发送者
             DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(contractDto.getCompanyId(), userId);
+            Contract ct = contractMapper.selectByPrimaryKey(contract.getContractId());
+            User user = companyRpcService.selectByPrimaryKey(ct.getCreateId());
             //接收者
-            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(contractDto.getCompanyId(), contractDto.getCreateId());
+            DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(contractDto.getCompanyId(), contractDto.getCreateId(),user.getPhone());
             ContractAttachment attachment = new ContractAttachment();
             attachment.setCarrierWebNotifyUrl("");
             String eventName = "";
@@ -341,8 +343,8 @@ public class ContractServiceImpl implements ContractService {
                     attachment.setPurConSerialNum(contractDto.getSerialNo());
                 }
             }
-            ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-            producer.sendNotifyEvent(plan_publish_event);
+            ContractNotifyEvent planPublishEvent = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+            producer.sendNotifyEvent(planPublishEvent);
             /**↑发送消息通知结束*/
         }
         return result;
@@ -448,8 +450,9 @@ public class ContractServiceImpl implements ContractService {
         Long upLoader = SecurityInfoGetter.getUser().getUserId();
         DefaultNotifySender defaultNotifySender = ContractNotifyBuilder.notifySender(SecurityInfoGetter.getCompanyId(), upLoader);
         Contract ct = contractMapper.selectByPrimaryKey(contract.getContractId());
+        User user = companyRpcService.selectByPrimaryKey(ct.getCreateId());
         //接收者
-        DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(ct.getCompanyId(), ct.getCreateId());
+        DefaultNotifyReceiver defaultNotifyReceiver = ContractNotifyBuilder.notifyCarrierReceiver(ct.getCompanyId(), ct.getCreateId(),user.getPhone());
         ContractAttachment attachment = new ContractAttachment();
         attachment.setPurConTittle(ct.getTitle());
         attachment.setPurConSerialNum(ct.getSerialNo());
@@ -460,8 +463,8 @@ public class ContractServiceImpl implements ContractService {
             attachment.setSaleConTittle(ct.getTitle());
             attachment.setSaleConSerialNum(ct.getSerialNo());
         }
-        ContractNotifyEvent plan_publish_event = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
-        producer.sendNotifyEvent(plan_publish_event);
+        ContractNotifyEvent planPublishEvent = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);
+        producer.sendNotifyEvent(planPublishEvent);
         /**↑发送消息通知结束*/
         return true;
     }

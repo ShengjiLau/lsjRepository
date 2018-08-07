@@ -153,10 +153,10 @@ public class OrderServiceImpl implements OrderService {
                         attachment.setEmployee(SecurityInfoGetter.getUser().getRealName());
                         attachment.setPurOrderSerialNum(queryOrder.getOrderSerialNo());
                         attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.ORDER_WEB_NOTIFY_URL+queryOrder.getOrderSerialNo());
-                        String eventName = "purchase_approval_publish";
+                        String eventName = "purchase_bill_approval_publish";
                         //如果是销售单
                         if (orderDto.getOrderType().shortValue() == 1) {
-                            eventName = "sale_approval_publish";
+                            eventName = "sale_bill_approval_publish";
                             attachment.setSaleOrderSerialNum(queryOrder.getOrderSerialNo());
                         }
                         ContractNotifyEvent planPublishEvent = new ContractNotifyEvent(eventName, attachment, defaultNotifyReceiver, defaultNotifySender);

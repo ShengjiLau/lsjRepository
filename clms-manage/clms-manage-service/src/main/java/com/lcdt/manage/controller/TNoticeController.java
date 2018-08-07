@@ -53,8 +53,6 @@ public class TNoticeController {
     @PostMapping("/categoryList")
 //    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('item_calc_unit_add')")
     public PageBaseDto findCategoryList(@Validated CategoryParamDto paramDto) {
-        System.out.println("==============findCategoryList==============="+paramDto);
-
         Page<TNoticeCategory> page = categoryService.findCategoryPage(paramDto);
         System.out.println("page.getTotal="+page.getTotal());
         PageBaseDto pageBaseDto = new PageBaseDto(page.getRecords(),page.getTotal());
@@ -65,9 +63,6 @@ public class TNoticeController {
     @ApiOperation("新闻分类保存")
     @PostMapping("/categorySave")
     public JSONObject categorySave(@Validated TNoticeCategory category){
-//        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
-//        String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
-        System.out.println("==============categorySave==============="+category.toString());
         JSONObject jsonObject = new JSONObject();
         boolean result = false;
         //校验是否存在相同的类别
@@ -96,7 +91,6 @@ public class TNoticeController {
     @ApiOperation("新闻分类下拉列表")
     @PostMapping("/categoryAllList")
     public JSONObject findCategoryAllList() {
-        System.out.println("==============findCategoryAllList===============");
         List<TNoticeCategory> list = categoryService.findCategoryAll();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("code", 0);
@@ -112,7 +106,6 @@ public class TNoticeController {
     @ApiOperation("删除新闻分类")
     @PostMapping("/categoryDelete")
     public JSONObject categoryDelete(@RequestParam Long categoryId) {
-        System.out.println("==============categoryDelete===============");
         List l = noticeService.findAllNoticesByCateId(categoryId);
 
         String msg = "";

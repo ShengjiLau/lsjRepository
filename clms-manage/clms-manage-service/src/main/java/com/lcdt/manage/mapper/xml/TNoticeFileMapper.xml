@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.manage.mapper.TNoticeFileMapper">
+    <resultMap id="BaseResultMap" type="com.lcdt.manage.entity.TNoticeFile">
+        <id column="file_id" jdbcType="BIGINT" property="fileId" />
+        <result column="category_id" jdbcType="BIGINT" property="categoryId" />
+        <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+        <result column="oss_path" jdbcType="VARCHAR" property="ossPath" />
+        <result column="file_type" jdbcType="SMALLINT" property="fileType" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="create_id" jdbcType="BIGINT" property="createId" />
+        <result column="create_name" jdbcType="VARCHAR" property="createName" />
+
+    </resultMap>
+    <resultMap id="BaseDtoMap" type="com.lcdt.manage.dto.FileListDto" extends="BaseResultMap">
+        <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    </resultMap>
+
+    <select id="findByPage" parameterType="com.lcdt.manage.dto.FileParamsDto" resultMap="BaseDtoMap">
+        select t1.file_id,t1.file_name,t1.category_id,t1.oss_path,t1.file_type,t1.remark,t1.create_id,t1.create_name,t1.create_time
+        ,(select cc.category_name from t_notice_category cc where (cc.is_delete is null or cc.is_delete=0) AND cc.category_id=t1.category_id) category_name
+        from `t_notice_file` t1
+        where 1=1
+        <if test="categoryId!=null">
+            AND t1.category_id = #{categoryId,jdbcType=BIGINT}
+        </if>
+        <if test="fileId!=null">
+            AND  t1.file_id &lt; #{fileId,jdbcType=BIGINT}
+        </if>
+        <if test="createDateFrom!=null and createDateFrom!=''">
+            and date(t1.create_time) >= CONCAT(STR_TO_DATE(#{createDateFrom,jdbcType=VARCHAR},'%Y-%m-%d'),' ','00:00:00')
+        </if>
+        <if test="createDateTo!=null and createDateTo!=''">
+            and  CONCAT(STR_TO_DATE(#{createDateTo,jdbcType=VARCHAR},'%Y-%m-%d'),' ','23:59:59') >= date(t1.create_time)
+        </if>
+        <if test="fileType!=null and fileType!=''">
+            and t1.file_type = #{fileType,jdbcType=SMALLINT}
+        </if>
+
+        order by file_id DESC
+    </select>
+</mapper>
