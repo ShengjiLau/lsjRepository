@@ -216,4 +216,38 @@ public class WaybillApi {
             throw new RuntimeException("修改失败");
         }
     }
+
+    @ApiOperation("我的运单--添加路由")
+    @PostMapping(value = "/own/route")
+    public JSONObject addOwnWaybillRoute(WaybillRouteAddParams params){
+        User loginUser = SecurityInfoGetter.getUser();
+        params.setCompanyId(SecurityInfoGetter.getCompanyId())
+                .setUserName(loginUser.getRealName())
+                .setUserPhone(loginUser.getPhone());
+        if (waybillRpcService.addOwnWaybillRoute(params)>0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "添加成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("添加失败");
+        }
+    }
+
+    @ApiOperation("客户运单--添加路由")
+    @PostMapping(value = "/customer/route")
+    public JSONObject addCustomerWaybillRoute(WaybillRouteAddParams params){
+        User loginUser = SecurityInfoGetter.getUser();
+        params.setCarrierCompanyId(SecurityInfoGetter.getCompanyId())
+                .setUserName(loginUser.getRealName())
+                .setUserPhone(loginUser.getPhone());
+        if (waybillRpcService.addCustomerWaybillRoute(params)>0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "添加成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("添加失败");
+        }
+    }
 }

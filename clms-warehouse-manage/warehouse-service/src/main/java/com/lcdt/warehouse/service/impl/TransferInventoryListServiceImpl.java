@@ -97,7 +97,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 			 List<TransferInventoryListDTO> transferInventoryListDTOListWithGoods = 
 					 getTransferInventoryListDTOListWithGoods(transferInventoryListDTOList,  transferGoodsDOList);
 			 return getPageBaseDto(transferInventoryListDTOListWithGoods, pageSize, pageNo);
-		}else if(null != transferListDTO.getMaterialProduct() && null == transferListDTO.getFinishedProduct()){
+		}else if (null != transferListDTO.getMaterialProduct() && null == transferListDTO.getFinishedProduct()){
 			Map<String,Object>  map = getMap(tranferIds, transferListDTO.getMaterialProduct(), TransferInventoryListVO.IS_MATERIAL);
 			transferGoodsDOList = getTransferGoodsDOList(map);
 			List<TransferInventoryListDTO> transferInventoryListDTOListWithGoods = 

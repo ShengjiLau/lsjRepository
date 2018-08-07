@@ -51,6 +51,7 @@ public class ConstantVO {
     public static short WAYBILL_STATUS_HAVE_SIGNED=6;//已签收
     public static short WAYBILL_STATUS_HAVE_FINISH=7;//已完成
     public static short WAYBILL_STATUS_HAVE_CANCEL=8;//已取消
+    public static short WAYBILL_STATUS_UPDATE_ROUTE=20; //路由操作
 
 
     //抢单是否采用

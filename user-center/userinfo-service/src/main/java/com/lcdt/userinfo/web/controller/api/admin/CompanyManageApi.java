@@ -106,4 +106,9 @@ public class CompanyManageApi {
         return JSONResponseUtil.success(company);
     }
 
+    @PostMapping("/info")
+    public ResponseMessage companyInfo(Long compId) {
+        return JSONResponseUtil.success(companyMapper.selectByPrimaryKey(compId));
+    }
+
 }

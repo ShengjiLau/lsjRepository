@@ -226,7 +226,7 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
         waybillMapper.insert(waybill);
         //运单货物详细
         if (waybillDto.getWaybillItemsDtoList() != null && waybillDto.getWaybillItemsDtoList().size() > 0) {
-            List<WaybillItems> waybillItemsList= waybillDto.getWaybillItemsDtoList().stream()
+            List<WaybillItems> waybillItemsList = waybillDto.getWaybillItemsDtoList().stream()
                     .map(item -> {
                         WaybillItems waybillItems = new WaybillItems();
                         BeanUtils.copyProperties(item, waybillItems);
@@ -260,11 +260,11 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
 
         //扣减运单费用
         if (resultWaybill != null) {
-            companyServiceCountService.reduceCompanyProductCount(waybillDto.getCompanyId(), "waybill_service", 1,waybillDto.getCreateName(),"运单消费-"+resultWaybill.getWaybillCode());
+            companyServiceCountService.reduceCompanyProductCount(waybillDto.getCompanyId(), "waybill_service", 1, waybillDto.getCreateName(), "运单消费-" + resultWaybill.getWaybillCode());
         }
 
         //新建运单路由
-        addWaybillRoute(resultWaybill,waybillDto.getCreateName(),waybillDto.getCreatePhone(),0);
+        addWaybillRoute(resultWaybill, waybillDto.getCreateName(), waybillDto.getCreatePhone(), 0);
 
         return waybill;
     }
@@ -312,8 +312,8 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
                     }));
 
             //需要更新的 List<WaybillItemsModifyParamsDto> 转为 List<WaybillItems>
-            List<WaybillItems> waybillItemsUpdateList=null;
-            if(waybillItemsMap.get("update")!=null&&waybillItemsMap.get("update").size()>0){
+            List<WaybillItems> waybillItemsUpdateList = null;
+            if (waybillItemsMap.get("update") != null && waybillItemsMap.get("update").size() > 0) {
                 waybillItemsUpdateList = waybillItemsMap.get("update").stream()
                         .map(item -> {
                             WaybillItems waybillItem = waybillItemsMapper.selectByPrimaryKey(item.getId());
@@ -325,9 +325,9 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
                         }).collect(Collectors.toList());
             }
 
-            List<WaybillItems> waybillItemsAddList=null;
-            if(waybillItemsMap.get("add")!=null&&waybillItemsMap.get("add").size()>0){
-                waybillItemsAddList= waybillItemsMap.get("add").stream()
+            List<WaybillItems> waybillItemsAddList = null;
+            if (waybillItemsMap.get("add") != null && waybillItemsMap.get("add").size() > 0) {
+                waybillItemsAddList = waybillItemsMap.get("add").stream()
                         .map(item -> {
                             WaybillItems waybillItem = new WaybillItems();
                             BeanUtils.copyProperties(item, waybillItem);
@@ -342,11 +342,11 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
             //需要新增的 List<WaybillItemsModifyParamsDto> 转为 List<WaybillItems>
 
 
-            if (waybillItemsUpdateList!=null&&waybillItemsUpdateList.size() > 0) {
+            if (waybillItemsUpdateList != null && waybillItemsUpdateList.size() > 0) {
                 //运单货物详细修改
                 result += waybillItemsMapper.updateForBatch(waybillItemsUpdateList);
             }
-            if (waybillItemsAddList!=null&&waybillItemsAddList.size() > 0) {
+            if (waybillItemsAddList != null && waybillItemsAddList.size() > 0) {
                 //运单货物详细批量插入
                 result += waybillItemsMapper.insertForBatch(waybillItemsAddList);
             }
@@ -465,8 +465,8 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
                 List<Driver> driverList = driverService.getGpsInfo(phoneList);
                 for (Driver driver : driverList) {
                     if (driver.getDriverPhone() != null && driver.getDriverPhone().equals(waybill.getDriverPhone())) {
-                        map.put("longitude",waybill.getLongitude());
-                        map.put("latitude",waybill.getLatitude());
+                        map.put("longitude", waybill.getLongitude());
+                        map.put("latitude", waybill.getLatitude());
                         map.put("unloadLocation", driver.getCurrentLocation());
                         map.put("unloadTime", new Date());
                     }
@@ -486,7 +486,7 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
         //返回计划相关信息
         modifyWaybillPlanInfo(map);
         //路由==>运单增加新建路由 by xrr
-        addWaybillRoute(waybill,dto.getUpdateName(),dto.getUpdatePhone(),0);
+        addWaybillRoute(waybill, dto.getUpdateName(), dto.getUpdatePhone(), 0);
         return waybill;
     }
 
@@ -503,8 +503,8 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
                 List<Driver> driverList = driverService.getGpsInfo(phoneList);
                 for (Driver driver : driverList) {
                     if (driver.getDriverPhone() != null && driver.getDriverPhone().equals(waybill.getDriverPhone())) {
-                        map.put("longitude",waybill.getLongitude());
-                        map.put("latitude",waybill.getLatitude());
+                        map.put("longitude", waybill.getLongitude());
+                        map.put("latitude", waybill.getLatitude());
                         map.put("unloadLocation", driver.getCurrentLocation());
                         map.put("unloadTime", new Date());
                     }
@@ -529,7 +529,7 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
         waybill.setWaybillSource(customer.getCustomerName());
 
         //路由==>运单增加新建路由 by xrr
-        addWaybillRoute(waybill,dto.getUpdateName(),dto.getUpdatePhone(),0);
+        addWaybillRoute(waybill, dto.getUpdateName(), dto.getUpdatePhone(), 0);
 
         return waybill;
     }
@@ -585,7 +585,7 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
         waybill.setWaybillSource(customer.getCustomerName());
 
         //路由==>运单上传回单路由 by xrr
-        addWaybillRoute(waybill,dto.getUpdateName(),dto.getUpdatePhone(),1);
+        addWaybillRoute(waybill, dto.getUpdateName(), dto.getUpdatePhone(), 1);
 
         return waybill;
     }
@@ -657,8 +657,8 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
                 List<Driver> driverList = driverService.getGpsInfo(phoneList);
                 for (Driver driver : driverList) {
                     if (driver.getDriverPhone() != null && driver.getDriverPhone().equals(waybill.getDriverPhone())) {
-                        map.put("longitude",driver.getLatitude());
-                        map.put("latitude",driver.getLongitude());
+                        map.put("longitude", driver.getLatitude());
+                        map.put("latitude", driver.getLongitude());
                         map.put("unloadLocation", driver.getCurrentLocation());
                         map.put("unloadTime", new Date());
                     }
@@ -679,7 +679,7 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
         waybill.setWaybillSource(company.getFullName());
 
         //路由==>运单增加新建路由 by xrr
-        addWaybillRoute(waybill,dto.getUpdateName(),dto.getUpdatePhone(),0);
+        addWaybillRoute(waybill, dto.getUpdateName(), dto.getUpdatePhone(), 0);
 
         return waybill;
 
@@ -709,9 +709,31 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
         waybill.setWaybillSource(company.getFullName());
 
         //路由==>运单上传回单路由 by xrr
-        addWaybillRoute(waybill,dto.getUpdateName(),dto.getUpdatePhone(),1);
+        addWaybillRoute(waybill, dto.getUpdateName(), dto.getUpdatePhone(), 1);
 
         return waybill;
+    }
+
+    @Override
+    public int addOwnWaybillRoute(WaybillRouteAddParams params) {
+        Waybill waybill=queryOwnWaybill(params.getWaybillId(),params.getCompanyId());
+        if(waybill!=null){
+            waybill.setWaybillStatus((ConstantVO.WAYBILL_STATUS_UPDATE_ROUTE));
+            addWaybillRoute(waybill,params.getUserName(),params.getUserPhone(),0,params.getDescription());
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public int addCustomerWaybillRoute(WaybillRouteAddParams params) {
+        Waybill waybill=queryCustomerWaybill(params.getWaybillId(),params.getCarrierCompanyId());
+        if(waybill!=null){
+            waybill.setWaybillStatus((ConstantVO.WAYBILL_STATUS_UPDATE_ROUTE));
+            addWaybillRoute(waybill,params.getUserName(),params.getUserPhone(),0,params.getDescription());
+            return 1;
+        }
+        return 0;
     }
 
     /**
@@ -862,27 +884,35 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
         }
     }
 
-
-    private void addWaybillRoute(Waybill waybill,String operatorName,String operatorPhone ,int operatorType){
+    private void addWaybillRoute(Waybill waybill, String operatorName, String operatorPhone, int operatorType, String actionDesc) {
         //路由==>运单增加新建路由 by xrr
         Timeline event = new Timeline();
-        if(operatorType==1){
-            event.setActionTitle("【回单上传】（操作人：" + operatorName + " " + operatorName + "）");
-        }else{
+        if (operatorType == 1) {
+            event.setActionTitle("【回单上传】（操作人：" + operatorName + " " + operatorPhone + "）");
+        } else {
             event.setActionTitle("【" + WaybillUtil.map_waybill_status.get(waybill.getWaybillStatus()) + "】（操作人：" + operatorName + " " + operatorPhone + "）");
         }
         event.setActionTime(new Date());
         event.setCompanyId(waybill.getCompanyId());
         event.setSearchkey("WAYBILL_ROUTE");
         event.setDataid(waybill.getId());
-
-        if (waybill.getWaybillStatus() == 5) {
-            //卸货描述修改
-            event.setActionDes("当前位置：" + waybill.getUnloadLocation());
+        StringBuffer actionDes = new StringBuffer();
+        switch (waybill.getWaybillStatus()) {
+            case 5:
+                actionDes.append("当前位置：" + waybill.getUnloadLocation());
+                break;
+            case 20:
+                actionDes.append(actionDesc);
+                break;
+            default:
+                actionDes.append("司机：" + waybill.getDriverName() + " " + waybill.getDriverPhone() + " " + waybill.getVechicleNum());
         }
-        event.setActionDes("司机：" + waybill.getDriverName() + " " + waybill.getDriverPhone() + " " + waybill.getVechicleNum());
-
+        event.setActionDes(actionDesc.toString());
         producer.noteRouter(event);
+    }
+
+    private void addWaybillRoute(Waybill waybill, String operatorName, String operatorPhone, int operatorType) {
+        addWaybillRoute(waybill, operatorName, operatorPhone, operatorType, null);
     }
 
 }

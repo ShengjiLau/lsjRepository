@@ -14,13 +14,26 @@ import com.lcdt.warehouse.utils.ResponseMessage;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
+
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by liz on 2018/5/8.
@@ -28,6 +41,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/allot")
 @Api(value = "调拨api", description = "调拨操作")
+@Slf4j
 public class AllotApi {
     @Autowired
     private AllotService allotService;
@@ -159,8 +173,74 @@ public class AllotApi {
     }
     
     
-    
-    
+    @ApiOperation("导出")
+    @RequestMapping(value = "/export/{allotId}", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('allot_export')")
+    public void exportAllot(@PathVariable Long allotId, HttpServletResponse response) {
+    	AllotDto dto = allotService.getAllotInfo(allotId);
+    	ClassPathResource resource = new ClassPathResource("/templates/allot_order.xlsx");
+    	if (resource.exists()) {
+    		response.reset();
+    		XSSFWorkbook xwb = null;
+			InputStream inputStream = null;
+			OutputStream ouputStream = null;
+			try {
+				inputStream = resource.getInputStream();
+				xwb = (XSSFWorkbook) WorkbookFactory.create(inputStream);
+				 XSSFSheet sheet = xwb.getSheetAt(0);
+				 XSSFRow row = sheet.getRow(0);
+				 XSSFCell cell = row.getCell(0);
+				 cell.setCellValue("调拨单-" + dto.getAllotCode());
+				 
+				 //something
+				 
+				 String fileName = "调拨单.xlsx";
+				 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("utf-8"),"iso-8859-1") + "\"");
+	             response.setContentType("application/octet-stream;charset=UTF-8");
+	             ouputStream = response.getOutputStream();
+	             ouputStream.flush();
+	             xwb.write(ouputStream);
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+				log.debug("导出出现异常：" + e.getMessage());
+			}finally {
+				if (null != xwb) {
+					try {
+						xwb.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if (null != inputStream) {
+					try {
+						inputStream.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if (null != ouputStream) {
+					try {
+						ouputStream.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+    		
+    		
+    		
+    		
+    		
+    		
+    	}
+    	
+    	
+    	
+    	
+    	
+    	
+    }
     
     
     

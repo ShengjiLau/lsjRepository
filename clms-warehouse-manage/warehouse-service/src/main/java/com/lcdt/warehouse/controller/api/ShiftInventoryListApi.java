@@ -1,10 +1,23 @@
 package com.lcdt.warehouse.controller.api;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -98,7 +111,7 @@ public class ShiftInventoryListApi {
 	@GetMapping("/details")
 	@ApiOperation(value = "查询移库单详情")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_get')")
-	public JSONObject getOneShiftInventoryDetails(@ApiParam(value="移库单id",required=true) @RequestParam Long shiftId) {
+	public JSONObject getOneShiftInventoryDetails(@ApiParam (value = "移库单id",required = true) @RequestParam Long shiftId) {
 		ShiftInventoryListDTO shiftInventoryListDTO = shiftInventoryListService.getShiftInventoryListDetails(shiftId);
 		String message = null;
 		if (null != shiftInventoryListDTO) {
@@ -129,6 +142,70 @@ public class ShiftInventoryListApi {
 		}
 		
 	}
+	
+	@GetMapping("/export/{shiftId}")
+	@ApiOperation(value = "导出移库单")
+	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_export')")
+	public void exportShiftInventoryList(@PathVariable Long shiftId, HttpServletResponse response) {
+		ShiftInventoryListDTO shiftInventoryListDTO = shiftInventoryListService.getShiftInventoryListDetails(shiftId);
+		ClassPathResource resource = new ClassPathResource("/templates/shift_inventory_list.xlsx");
+		System.out.println("lalal");
+		if (resource.exists()) {
+			response.reset();
+			XSSFWorkbook xwb = null;
+			InputStream inputStream = null;
+			OutputStream ouputStream = null;
+			try {
+				inputStream = resource.getInputStream();
+				 xwb = (XSSFWorkbook) WorkbookFactory.create(inputStream); // 读取excel模板
+				 XSSFSheet sheet = xwb.getSheetAt(0);
+				 XSSFRow row = sheet.getRow(0);
+				 XSSFCell cell = row.getCell(0);
+				 cell.setCellValue("移库单-" + shiftInventoryListDTO.getShiftInventoryNum());
+				
+				 //something 
+				 
+				 String fileName = "移库单.xlsx";
+				 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("utf-8"),"iso-8859-1") + "\"");
+	             response.setContentType("application/octet-stream;charset=UTF-8");
+	             ouputStream = response.getOutputStream();
+	             ouputStream.flush();
+	             xwb.write(ouputStream);
+	             
+			}catch(Exception e) {
+				e.printStackTrace();
+				log.debug("移库导出出现异常：" + e.getMessage());
+			}finally {
+				if (null != xwb) {
+					try {
+						xwb.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if (null != inputStream) {
+					try {
+						inputStream.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if (null != ouputStream) {
+					try {
+						ouputStream.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}else {
+			throw new RuntimeException("Excel模板地址有误！");
+		}
+	}
+	
+	
+	
+	
 	
 	
 	@GetMapping("/inventoryList")
