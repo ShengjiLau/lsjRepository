@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.manage.dto.FileParamsDto;
 import com.lcdt.manage.dto.FileListDto;
+import com.lcdt.manage.dto.FileUploadDto;
 import com.lcdt.manage.dto.PageBaseDto;
 import com.lcdt.manage.entity.TNoticeCategory;
 import com.lcdt.manage.entity.TNoticeFile;
@@ -13,18 +14,14 @@ import com.lcdt.manage.service.TNoticeFileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.spring.web.json.Json;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -52,39 +49,43 @@ public class TNoticeFileController {
 
     @ApiOperation("文件上传")
     @PostMapping("/uploadFiles")
-    public JSONObject uploadFiles(@Validated List<TNoticeFile> files){
+    public JSONObject uploadFiles(@Validated FileUploadDto o, BindingResult bindingResult){
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
         String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
-        System.out.println("filePaths:"+files);
         boolean result =false;
 
-        if(files!=null){
+        if(o.getFiles()!=null){
             Date createTime = new Date();
-            for (TNoticeFile f:files) {
-                System.out.println(f);
+            List<TNoticeFile> fileList = new ArrayList<TNoticeFile>();
+            for (Map<String,Object> f : o.getFiles()) {
                 //1-图片，2-视频，3-音频，4-文档
                 String[] type1 ={"jpg","jpeg","png","bmp","gif"};
                 String[] type4 ={"doc","docx","xls","xlsx","rar","zip","pdf"};
+    //
+                TNoticeFile file = new TNoticeFile();
+                file.setFileName(f.get("name").toString());
+                file.setOssPath(f.get("url").toString());
+                file.setCategoryId(o.getCategoryId());
+                file.setCreateTime(createTime);
+                file.setCreateId(userId);
+                file.setCreateName(userName);
+                //图片格式
                 for(String type : type1){
-
-                    if(f.getFileName().endsWith("."+type)) {
-                        f.setFileType(1);
+                    if(f.get("name").toString().endsWith("."+type)) {
+                        file.setFileType(1);
                         break;
                     }
                 }
+                //文档格式
                 for(String type : type4){
-
-                    if(f.getFileName().endsWith("."+type)) {
-                        f.setFileType(4);
-                        break;
+                    if(f.get("name").toString().endsWith("."+type)) {
+                       file.setFileType(4);
+                       break;
                     }
                 }
-                f.setCreateTime(createTime);
-                f.setCreateId(userId);
-                f.setCreateName(userName);
-                //fileService.insertAllColumn(f);
+                fileList.add(file);
             }
-            result = fileService.insertBatch(files);
+            result = fileService.insertBatch(fileList);
         }
         JSONObject jsonObject = new JSONObject();
         if(result) {
@@ -95,7 +96,7 @@ public class TNoticeFileController {
             jsonObject.put("code", 1);
             jsonObject.put("message", "保存失败！");
         }
-        return null;
+        return jsonObject;
     }
     @ApiOperation("文件信息修改")
     @PostMapping("/updateFile")

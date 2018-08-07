@@ -18,7 +18,7 @@
     </resultMap>
 
     <select id="findByPage" parameterType="com.lcdt.manage.dto.FileParamsDto" resultMap="BaseDtoMap">
-        select t1.file_id,t1.category_id,t1.oss_path,t1.file_type,t1.remark,t1.create_id,t1.create_name,t1.create_time
+        select t1.file_id,t1.file_name,t1.category_id,t1.oss_path,t1.file_type,t1.remark,t1.create_id,t1.create_name,t1.create_time
         ,(select cc.category_name from t_notice_category cc where (cc.is_delete is null or cc.is_delete=0) AND cc.category_id=t1.category_id) category_name
         from `t_notice_file` t1
         where 1=1
@@ -37,15 +37,7 @@
         <if test="fileType!=null and fileType!=''">
             and t1.file_type = #{fileType,jdbcType=SMALLINT}
         </if>
-        <if test="keyWords!=null and keyWords!=''">
-            and t1.key_words like CONCAT('%',#{keyWords,jdbcType=VARCHAR},'%')
-        </if>
-        <if test="isTop!=null">
-            and t1.is_top = #{isTop,jdbcType=SMALLINT}
-        </if>
-        <if test="noticeStatus!=null">
-            and t1.notice_status = #{noticeStatus,jdbcType=SMALLINT}
-        </if>
-        order by t1.is_top DESC ,t1.notice_id DESC
+
+        order by file_id DESC
     </select>
 </mapper>
