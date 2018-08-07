@@ -19,8 +19,10 @@ import com.lcdt.userinfo.service.CompanyService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -50,8 +52,11 @@ public class PayManageApi {
 
     @PostMapping("/balanceList")
     @ApiOperation("根据公司名和管理员账号查询公司余额")
-    public PageResultDto allList(Integer pageSize,Integer pageNo,String companyName,String adminUserName){
+    public PageResultDto allList(Integer pageSize, Integer pageNo, @RequestParam(required = false) String companyName, @RequestParam(required = false) String adminUserName){
         PageHelper.startPage(pageNo, pageSize);
+        if (StringUtils.isEmpty(companyName) && StringUtils.isEmpty(adminUserName)) {
+            return new PageResultDto(companyBalanceService.allBalance());
+        }
         return new PageResultDto(companyBalanceService.companyBalance(selectCompanyIds(companyName, adminUserName)));
     }
 

@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface CompanyBalanceService {
 
+    public List<PayBalance> allBalance();
+
     void adminRecharge(Long companyId,Integer amount,String userName);
 
     PayBalance companyBalance(Long companyId);
