@@ -50,7 +50,8 @@ public class PayManageApi {
 
     @PostMapping("/balanceList")
     @ApiOperation("根据公司名和管理员账号查询公司余额")
-    public PageResultDto allList(String companyName,String adminUserName){
+    public PageResultDto allList(Integer pageSize,Integer pageNo,String companyName,String adminUserName){
+        PageHelper.startPage(pageNo, pageSize);
         return new PageResultDto(companyBalanceService.companyBalance(selectCompanyIds(companyName, adminUserName)));
     }
 
