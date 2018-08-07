@@ -263,6 +263,8 @@
     </collection>
   </resultMap>
   
+  <resultMap type="com.lcdt.warehouse.dto.TransferInventoryListDTO" id="TransferInventoryListDTOWithoutGoodsMap" extends="BaseResultMap"></resultMap>
+  
   <select id="getTransferInventoryListDTOLists" parameterType="com.lcdt.warehouse.dto.TransferInventoryListDTO" resultMap="TransferInventoryListsDTOMap">
     select 
     <include refid="Base_Column_List" />
@@ -282,7 +284,7 @@
     transfers_id = #{transfersId, jdbcType=BIGINT}
   </select>
   
-  <select id="getTransferInventoryListDTOList" parameterType="com.lcdt.warehouse.dto.TransferListDTO" resultMap="BaseResultMap">
+  <select id="getTransferInventoryListDTOList" parameterType="com.lcdt.warehouse.dto.TransferListDTO" resultMap="TransferInventoryListDTOWithoutGoodsMap">
   select 
     <include refid="Base_Column_List" />
     from transfers_inventory_list

@@ -37,7 +37,7 @@ public class TransferListDTO implements Serializable{
 	@ApiModelProperty("页码")
 	private Integer pageNo;
 	@ApiModelProperty("转换单状态")
-	private byte listStatus;
+	private Byte listStatus;
 
 	
 

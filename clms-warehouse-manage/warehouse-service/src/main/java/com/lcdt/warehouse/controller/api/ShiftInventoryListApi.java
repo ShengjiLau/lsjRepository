@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -142,12 +143,13 @@ public class ShiftInventoryListApi {
 		
 	}
 	
-	@GetMapping("/export")
+	@GetMapping("/export/{shiftId}")
 	@ApiOperation(value = "导出移库单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_export')")
-	public void exportShiftInventoryList(Long shiftId, HttpServletResponse response) {
+	public void exportShiftInventoryList(@PathVariable Long shiftId, HttpServletResponse response) {
 		ShiftInventoryListDTO shiftInventoryListDTO = shiftInventoryListService.getShiftInventoryListDetails(shiftId);
-		ClassPathResource resource = new ClassPathResource("shift_inventory_list.xlsx");
+		ClassPathResource resource = new ClassPathResource("/templates/shift_inventory_list.xlsx");
+		System.out.println("lalal");
 		if (resource.exists()) {
 			response.reset();
 			XSSFWorkbook xwb = null;
@@ -196,6 +198,8 @@ public class ShiftInventoryListApi {
 					}
 				}
 			}
+		}else {
+			throw new RuntimeException("Excel模板地址有误！");
 		}
 	}
 	
