@@ -166,7 +166,7 @@ public class ShiftInventoryListApi {
 				 //something 
 				 
 				 String fileName = "移库单.xlsx";
-				 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("gbk"),"iso-8859-1") + "\"");
+				 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("utf-8"),"iso-8859-1") + "\"");
 	             response.setContentType("application/octet-stream;charset=UTF-8");
 	             ouputStream = response.getOutputStream();
 	             ouputStream.flush();
