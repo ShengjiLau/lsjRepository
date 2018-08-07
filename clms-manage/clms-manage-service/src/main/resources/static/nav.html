@@ -42,11 +42,35 @@
                 <li th:class="${active}==3?'active':''">
                     <a href="/front/news-list.html">资讯</a>
                 </li>
-
                 <li th:class="${active}==4?'active':''">
-                    <a href="/front/price.html">产品定价</a>
+                    <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown" aria-expanded="false">行业案例
+                        <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span> </a>
+                    <div class="dropdown-menu clearfix top-case-service" >
+                        <ul class="nav nav-pills nav-stacked fl">
+                            <li><a href="/front/case/case1.html">生产制造商</a></li>
+                            <li><a href="/front/case/case4.html">商贸流通业</a></li>
+                            <!--<li><a href="/case/case0.html">第三方物流</a></li> -->
+                            <!--<li><a href="/case/case0.html">城市配送</a></li> -->
+                        </ul>
+                        <ul class="nav nav-pills nav-stacked fl">
+                            <!--<li><a href="/case/case0.html">供应链协同</a></li> -->
+                            <li><a href="/front/case/case2.html">仓配一体化</a></li>
+                            <li><a href="/front/case/case3.html">大车队管理</a></li>
+                            <li><a href="/front/case/case5.html">无车承运人</a></li>
+                        </ul>
+                        <ul class="nav nav-pills nav-stacked fl show-pc" >
+                            <p>
+                                <img src="https://img.datuodui.com/ws/menu-anli.jpg" alt="">
+                            </p>
+
+
+                        </ul>
+                    </div>
                 </li>
                 <li th:class="${active}==5?'active':''">
+                    <a href="/front/price.html">产品定价</a>
+                </li>
+                <li th:class="${active}==6?'active':''">
                     <a href="/front/about.html">关于我们</a>
                 </li>
             </ul>
