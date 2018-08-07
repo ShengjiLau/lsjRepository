@@ -16,6 +16,7 @@ import com.lcdt.pay.utils.CommonUtils;
 import com.lcdt.userinfo.dto.CompanyQueryDto;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.service.CompanyService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,21 +49,26 @@ public class PayManageApi {
     private CompanyServiceCountMapper countMapper;
 
     @PostMapping("/balanceList")
-    public PageResultDto allList(String companyName,String adminUserName){
+    @ApiOperation("根据公司名和管理员账号查询公司余额")
+    public PageResultDto allList(Integer pageSize,Integer pageNo,String companyName,String adminUserName){
+        PageHelper.startPage(pageNo, pageSize);
         return new PageResultDto(companyBalanceService.companyBalance(selectCompanyIds(companyName, adminUserName)));
     }
 
     @PostMapping("/serviceList")
+    @ApiOperation("根据公司名和管理员账号查询服务剩余次数")
     public PageResultDto serviceCountList(String companyName,String adminUserName){
         final List<Long> longs = selectCompanyIds(companyName, adminUserName);
         return new PageResultDto(companyServiceCountMapper.selectByCompanyIds(CommonUtils.joinStringWithToken(longs, ',')));
     }
 
     @PostMapping("/addservicenum")
+    @ApiOperation("充值服务次数，serviceName服务代码")
     public CompanyServiceCount topUp(Long companyId,String serviceName,Integer num){
         return countService.addCountNum(companyId, serviceName, num, SecurityInfoGetter.getUser().getPhone());
     }
     @PostMapping("/countlog")
+    @ApiOperation("查询服务消费日志")
     public PageResultDto serviceCountLogs(Integer pageNo, Integer pageSize,Long companyId, String serviceName, Date begin,Date end){
         PageHelper.startPage(pageNo, pageSize);
         final List<ProductCountLog> productCountLogs = logMapper.selectByProductNameCompanyId(companyId, serviceName, begin, end, ProductCountServiceImpl.CountLogType.ADMIN_TOPUP);
@@ -70,6 +76,7 @@ public class PayManageApi {
     }
 
     @PostMapping("/topup")
+    @ApiOperation("公司余额充值")
     public String balanceTopup(Long companyId, Integer num) {
         //充值
         companyBalanceService.adminRecharge(companyId,num,String.valueOf(SecurityInfoGetter.getUser().getUserId()));

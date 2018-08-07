@@ -1,5 +1,6 @@
 package com.lcdt.driver.dto;
 
+import com.github.pagehelper.Page;
 import com.lcdt.converter.ResponseData;
 
 import java.util.ArrayList;
@@ -16,8 +17,13 @@ public class PageBaseDto<T> implements ResponseData {
     private long total;
 
     public PageBaseDto(List<T> list) {
-        this.list = list;
-        total = list.size();
+        if (list instanceof Page) {
+            this.total = ((Page) list).getTotal();
+            this.list = ((Page) list).getResult();
+        }else{
+            this.list = list;
+            this.total = Long.valueOf(list.size());
+        }
     }
 
     public PageBaseDto(List<T> list, long total) {

@@ -1,6 +1,10 @@
 package com.lcdt.userinfo.model;
 
-public class WTIndexMenu {
+import com.lcdt.converter.ResponseData;
+
+import java.io.Serializable;
+
+public class WTIndexMenu implements Serializable, ResponseData {
 
     private Long menuId;
 

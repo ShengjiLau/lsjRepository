@@ -171,7 +171,7 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setPaymentSerialNum(paymentApplication.getApplicationSerialNo());
                             attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.PAYMENT_WEB_NOTIFY_URL+paymentApplication.getApplicationSerialNo());
-                            String eventName = "purchase_approval_agree";
+                            String eventName = "payment_approval_agree";
                             if (paymentApplication.getApplicationType().shortValue() == 1) {
                                 eventName = "receivable_approval_agree";
                                 attachment.setSaleRecSerialNum(paymentApplication.getApplicationSerialNo());
@@ -200,7 +200,7 @@ public class PaApprovalServiceImpl implements PaApprovalService {
                             ContractAttachment attachment = new ContractAttachment();
                             attachment.setPaymentSerialNum(paymentApplication.getApplicationSerialNo());
                             attachment.setCarrierWebNotifyUrl(ContractNotifyBuilder.PAYMENT_WEB_NOTIFY_URL+paymentApplication.getApplicationSerialNo());
-                            String eventName = "purchase_approval_agree";
+                            String eventName = "payment_approval_agree";
                             if (paymentApplication.getApplicationType().shortValue() == 1) {
                                 eventName = "receivable_approval_agree";
                                 attachment.setSaleRecSerialNum(paymentApplication.getApplicationSerialNo());
