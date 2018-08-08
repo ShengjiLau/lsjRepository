@@ -42,4 +42,6 @@ public interface InventoryService extends IService<Inventory> {
     void updateInventoryByAllot(InWarehouseOrder inWarehouseOrder,AllotDto allotDto);
     
     void updateInventoryByAllotAndInwarehouseOrder(InWarehouseOrder inWarehouseOrder,AllotDto allotDto);
+    
+    Inventory addInventory(Inventory inventory);
 }

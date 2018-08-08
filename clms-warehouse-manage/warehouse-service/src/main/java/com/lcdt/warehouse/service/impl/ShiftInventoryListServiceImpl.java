@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.warehouse.contants.InventoryBusinessType;
 import com.lcdt.warehouse.dto.PageBaseDto;
@@ -193,7 +192,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				ShiftGoodsListDTO shiftGoodsListDTO1 = inventoryMapper.selectInventoryListByShiftGoodsBO(shiftGoodsBO);
 				if (null != shiftGoodsListDTO1) {
 					Inventory inventory = inventoryMapper.selectById(shiftGoodsListDTO1.getInvertoryId());
-					inventory.setInvertoryNum(inventory.getInvertoryNum()+shiftGoodsDO.getShiftNum().floatValue());
+					inventory.setInvertoryNum(inventory.getInvertoryNum()+shiftGoodsDO.getShiftNum().doubleValue());
 					inventoryMapper.updateById(inventory);
 					//新建库存流水
 					InventoryLog inventoryLog = createNewInventoryLog(shiftGoodsDO,inventory,shiftInventoryListDO2);

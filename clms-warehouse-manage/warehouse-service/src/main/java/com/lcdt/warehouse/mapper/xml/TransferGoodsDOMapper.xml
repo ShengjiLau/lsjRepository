@@ -228,23 +228,53 @@
      </foreach>
    </insert>
    
-   <update id="updateTransferGoodsDOByBatch" flushCache="true">
+   <update id="updateTransferGoodsDOByBatchSelective" flushCache="true">
    <foreach collection="list" open="" close="" index="index" separator=";" item="item">
     update transfers_goods
-    set origin_goods_id = #{item.originGoodsId,jdbcType=BIGINT},
-      inventory_id = #{item.inventoryId,jdbcType=BIGINT},
-      transfer_num = #{item.transferNum,jdbcType=DECIMAL},
-      remark = #{item.remark,jdbcType=VARCHAR},
-      transfer_id = #{item.transferId,jdbcType=BIGINT},
-      wh_loc_id = #{item.whLocId,jdbcType=BIGINT},
-      wh_loc_code = #{item.whLocCode,jdbcType=VARCHAR},
-      goods_batch = #{item.goodsBatch,jdbcType=VARCHAR},
-      is_material = #{item.isMaterial,jdbcType=TINYINT},
-      goods_name = #{item.goodsName,jdbcType=VARCHAR},
-      goods_code = #{item.goodsCode,jdbcType=VARCHAR},
-      goods_barcode = #{item.goodsBarcode,jdbcType=VARCHAR},
-      goods_spec = #{item.goodsSpec,jdbcType=VARCHAR},
-      goods_unit = #{item.goodsUnit,jdbcType=VARCHAR}
+    <set >
+      <if test="item.originGoodsId != null" >
+        origin_goods_id = #{item.originGoodsId,jdbcType=BIGINT},
+      </if>
+      <if test="item.inventoryId != null" >
+        inventory_id = #{item.inventoryId,jdbcType=BIGINT},
+      </if>
+      <if test="item.transferNum != null" >
+        transfer_num = #{item.transferNum,jdbcType=DECIMAL},
+      </if>
+      <if test="item.remark != null" >
+        remark = #{item.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="item.transferId != null" >
+        transfer_id = #{item.transferId,jdbcType=BIGINT},
+      </if>
+      <if test="item.whLocId != null" >
+        wh_loc_id = #{item.whLocId,jdbcType=BIGINT},
+      </if>
+      <if test="item.whLocCode != null" >
+        wh_loc_code = #{item.whLocCode,jdbcType=VARCHAR},
+      </if>
+      <if test="item.goodsBatch != null" >
+        goods_batch = #{item.goodsBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="item.isMaterial != null" >
+        is_material = #{item.isMaterial,jdbcType=TINYINT},
+      </if>
+      <if test="item.goodsName != null" >
+        goods_name = #{item.goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="item.goodsCode != null" >
+        goods_code = #{item.goodsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="item.goodsBarcode != null" >
+        goods_barcode = #{item.goodsBarcode,jdbcType=VARCHAR},
+      </if>
+      <if test="item.goodsSpec != null" >
+        goods_spec = #{item.goodsSpec,jdbcType=VARCHAR},
+      </if>
+      <if test="item.goodsUnit != null" >
+        goods_unit = #{item.goodsUnit,jdbcType=VARCHAR},
+      </if>
+    </set>
     where goods_id = #{item.goodsId,jdbcType=BIGINT}
    </foreach>
    </update>

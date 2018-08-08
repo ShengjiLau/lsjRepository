@@ -16,13 +16,21 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.warehouse.contants.InventoryBusinessType;
 import com.lcdt.warehouse.dto.PageBaseDto;
+import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.dto.TransferInventoryListDTO;
 import com.lcdt.warehouse.dto.TransferListDTO;
+import com.lcdt.warehouse.entity.Inventory;
+import com.lcdt.warehouse.entity.InventoryLog;
 import com.lcdt.warehouse.entity.TransferGoodsDO;
 import com.lcdt.warehouse.entity.TransferInventoryListDO;
+import com.lcdt.warehouse.mapper.InventoryLogMapper;
+import com.lcdt.warehouse.mapper.InventoryMapper;
 import com.lcdt.warehouse.mapper.TransferGoodsDOMapper;
+import com.lcdt.warehouse.service.InventoryService;
 import com.lcdt.warehouse.service.TransferInventoryListService;
+import com.lcdt.warehouse.utils.ShiftGoodsBO;
 import com.lcdt.warehouse.vo.TransferInventoryListVO;
 import com.lcdt.warehouse.mapper.TransferInventoryListDOMapper;
 
@@ -43,7 +51,19 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 	
 	@Autowired
 	private TransferGoodsDOMapper TransferGoodsDOMapper;
-
+	
+	@Autowired
+	private InventoryService inventoryService;
+	
+	@Autowired
+    private InventoryMapper inventoryMapper;
+	
+	@Autowired
+	private InventoryLogMapper logMapper;
+	
+	/**
+	 * 新建库存商品转换单
+	 */
 	@Override
 	@Transactional(isolation = Isolation.REPEATABLE_READ, rollbackForClassName = {"RuntimeException","Exception"}, timeout = 30, propagation = Propagation.REQUIRED)
 	public int insertTransferInventoryList(TransferInventoryListDTO transferInventoryListDTO) {
@@ -54,25 +74,61 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		transferInventoryListDO.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
 		transferInventoryListDO.setGmtCreate(new Date());
 		transferInventoryListDO.setListStatus(TransferInventoryListVO.UNFINISHED);
-		int result = TransferInventoryListDOMapper.insert(transferInventoryListDO);
 		List<TransferGoodsDO> transferGoodsDOList = transferInventoryListDTO.getTransferGoodsDOList();
-		for (TransferGoodsDO transferGoodsDO : transferGoodsDOList) {
+		for (int i = 0; i < transferGoodsDOList.size(); i++) {
+			TransferGoodsDO transferGoodsDO = transferGoodsDOList.get(i);
 			transferGoodsDO.setTransferId(transferInventoryListDO.getTransfersId());
+			if (0 == transferGoodsDO.getIsMaterial()) {
+				inventoryService.lockInventoryNum(transferGoodsDO.getInventoryId(), transferGoodsDO.getTransferNum().doubleValue());
+			}
 		}
+		
+		int result = TransferInventoryListDOMapper.insert(transferInventoryListDO);
 		int transferGoodsResult = TransferGoodsDOMapper.insertTransferGoodsDOByBatch(transferGoodsDOList);
 		log.debug("插入转换商品的数量为：" + transferGoodsResult);
 		return result;
 	}
-
+	
+	
+	/**
+	 * 完成库存商品转换单
+	 */
 	@Override
 	@Transactional(isolation = Isolation.REPEATABLE_READ, rollbackForClassName = {"RuntimeException","Exception"}, timeout = 30, propagation = Propagation.REQUIRED)
 	public int completeTransferInventoryList(TransferInventoryListDTO transferInventoryListDTO) {
+		TransferInventoryListDTO transferInventoryListDTOOld = TransferInventoryListDOMapper.getTransferInventoryListDTO(transferInventoryListDTO.getTransfersId());
+		List<TransferGoodsDO> transferGoodsDOListOld = transferInventoryListDTOOld.getTransferGoodsDOList();
+		for (int i = 0; i < transferGoodsDOListOld.size(); i++) {
+			TransferGoodsDO transferGoodsDO = transferGoodsDOListOld.get(i);
+			if (0 == transferGoodsDO.getIsMaterial()) {
+				inventoryService.unLockInventoryNum(transferGoodsDO.getInventoryId(), transferGoodsDO.getTransferNum().doubleValue());
+			}
+		}
 		TransferInventoryListDO transferInventoryListDO = new TransferInventoryListDO();
 		transferInventoryListDO.setTransfersId(transferInventoryListDTO.getTransfersId());
 		transferInventoryListDO.setListStatus(TransferInventoryListVO.FISHINED);
 		transferInventoryListDO.setGmtComplete(new Date());
 		int result = TransferInventoryListDOMapper.updateByPrimaryKeySelective(transferInventoryListDO);
-		int transferGoodsResult = TransferGoodsDOMapper.updateTransferGoodsDOByBatch(transferInventoryListDTO.getTransferGoodsDOList());
+		int transferGoodsResult = TransferGoodsDOMapper.updateTransferGoodsDOByBatchSelective(transferInventoryListDTO.getTransferGoodsDOList());
+		
+		TransferInventoryListDTO transferInventoryListDTONew = TransferInventoryListDOMapper.getTransferInventoryListDTO(transferInventoryListDTO.getTransfersId());
+		List<TransferGoodsDO> transferGoodsDOListNew = transferInventoryListDTONew.getTransferGoodsDOList();
+		for (int i = 0; i < transferGoodsDOListNew.size(); i++) {
+			TransferGoodsDO transferGoodsDO = transferGoodsDOListNew.get(i);
+			if (0 == transferGoodsDO.getIsMaterial()) {
+				Inventory inventory = inventoryMapper.selectById(transferGoodsDO.getInventoryId());
+				if (0 > (inventory.getInvertoryNum() - transferGoodsDO.getTransferNum().doubleValue())) {
+					throw new RuntimeException(transferGoodsDO.getGoodsName() + "库存量不足");
+				}
+				inventory.setInvertoryNum(inventory.getInvertoryNum() - transferGoodsDO.getTransferNum().doubleValue());
+				inventoryMapper.updateById(inventory);
+				addInventoryLog(inventory, transferInventoryListDTONew, transferGoodsDO);
+			}
+			if (1 == transferGoodsDO.getIsMaterial()) {
+				Inventory inventory = addInventory(transferGoodsDO,transferInventoryListDTONew);
+				addInventoryLog(inventory, transferInventoryListDTONew, transferGoodsDO);
+			}
+		}
 		log.debug("修改转换商品的数量为：" + transferGoodsResult);
 		return result;
 	}
@@ -244,8 +300,52 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 	}
 
 	
+	/**
+	 * 加入库存
+	 */
+	private Inventory addInventory(TransferGoodsDO transferGoodsDO, TransferInventoryListDTO transferInventoryListDTO) {
+		Inventory inventory = new Inventory();
+		inventory.setBatch(transferGoodsDO.getGoodsBatch());
+		inventory.setBusinessDesc("6");
+		inventory.setCompanyId(transferInventoryListDTO.getCompanyId());
+		inventory.setCustomerId(transferInventoryListDTO.getCustomerId());
+		inventory.setCustomerName(transferInventoryListDTO.getCustomerName());
+		inventory.setGoodsId(transferGoodsDO.getOriginGoodsId());
+		inventory.setInvertoryNum(transferGoodsDO.getTransferNum().doubleValue());
+		inventory.setStorageLocationId(transferGoodsDO.getWhLocId());
+		inventory.setStorageLocationCode(transferGoodsDO.getWhLocCode());
+		inventory.setWarehouseId(transferInventoryListDTO.getWarehouseId());
+		inventory.setWarehouseName(transferInventoryListDTO.getWarehouseName());
+		inventory.setLockNum((double) 0.0);
+		return inventoryService.addInventory(inventory);
+	}
 	
-	
+	/**
+	 * 生成库存流水
+	 */
+	private  void addInventoryLog(Inventory inventory, TransferInventoryListDTO transferInventoryListDTO, TransferGoodsDO transferGoodsDO) {
+		InventoryLog inventoryLog = new InventoryLog();
+        inventoryLog.setGoodsId(inventory.getGoodsId());
+        inventoryLog.setCompanyId(inventory.getCompanyId());
+        inventoryLog.setWarehouseId(inventory.getWarehouseId());
+        inventoryLog.setChangeNum(transferGoodsDO.getTransferNum().doubleValue());
+        
+        inventoryLog.setStorageLocationCode(inventory.getStorageLocationCode());
+        inventoryLog.setStorageLocationId(inventory.getStorageLocationId());
+        inventoryLog.setOriginalGoodsId(inventory.getOriginalGoodsId());
+        inventoryLog.setCustomerName(inventory.getCustomerName());
+        inventoryLog.setCustomerId(inventory.getCustomerId());
+        inventoryLog.setBusinessNo(transferInventoryListDTO.getListSerialNo());
+        inventoryLog.setType(InventoryBusinessType.SHIFT_ORDER);
+        if (null != inventory.getBatch()) {
+        	inventoryLog.setBatch(inventory.getBatch());
+        }		        
+        inventoryLog.setCurrentInvetory(inventory.getInvertoryNum()); 
+        inventoryLog.setLogTime(new Date());
+        inventoryLog.setInventoryId(inventory.getInvertoryId());
+        inventoryLog.setOrderId(transferInventoryListDTO.getTransfersId());
+        logMapper.saveLog(inventoryLog);    		
+	}
 	
 	
 	
