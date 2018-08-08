@@ -20,11 +20,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,6 +47,32 @@ public class PayManageApi {
 
     @Autowired
     private CompanyServiceCountMapper countMapper;
+
+
+    @PostMapping("/balances")
+    @ApiOperation("根据公司id list查询现金余额")
+    public PageResultDto queryBalanceList(@RequestBody List<Long> compIds){
+        return new PageResultDto(companyBalanceService.companyBalance(compIds));
+    }
+
+    @PostMapping("/counts")
+    @ApiOperation("根据公司id list查询服务余额")
+    public PageResultDto queryCompanyCount(@RequestBody List<Long> compIds){
+        if (CollectionUtils.isEmpty(compIds)) {
+            return new PageResultDto(new ArrayList());
+        }
+        final StringBuffer stringBuffer = new StringBuffer();
+
+        for (int i = 0;i < compIds.size();i++) {
+            if (i > 0) {
+                stringBuffer.append(",");
+            }
+            stringBuffer.append(compIds.get(i));
+        }
+        return new PageResultDto(countMapper.selectByCompanyIds(stringBuffer.toString()));
+    }
+
+
 
     @PostMapping("/balanceList")
     @ApiOperation("根据公司名和管理员账号查询公司余额")

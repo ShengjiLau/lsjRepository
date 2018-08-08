@@ -46,7 +46,8 @@
 
   <select id="selectByCompanyIds" resultMap="BaseResultMap">
     select * from pay_balance
-    where balance_company_id in #{companyIds}
+
+    where balance_company_id in (#{companyIds})
 
   </select>
 
