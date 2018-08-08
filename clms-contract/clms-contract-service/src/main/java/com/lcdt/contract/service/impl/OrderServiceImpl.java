@@ -307,6 +307,9 @@ public class OrderServiceImpl implements OrderService {
         Long UserId = SecurityInfoGetter.getUser().getUserId();
         //get 公司id
         Long companyId = SecurityInfoGetter.getCompanyId();
+        if (null != orderDto.getOrderNoEmpty() && 1 != orderDto.getOrderNoEmpty()) {
+        	orderDto.setOrderNoEmpty(null);
+        }
         orderDto.setCompanyId(companyId);
         orderDto.setCreateUserId(UserId);
         if (orderDto.getPageNum() <= 0) {
