@@ -39,6 +39,18 @@ public class FrontPageController {
     private static final String CTMS_PAGE = "/product/ctms";
     private static final String CWMS_PAGE = "/product/cwms";
     private static final String NewsCategory = "新闻资讯";
+    private static final String CASE_PAGE1 = "/case/case1";
+    private static final String CASE_PAGE2 = "/case/case2";
+    private static final String CASE_PAGE3 = "/case/case3";
+    private static final String CASE_PAGE4 = "/case/case4";
+    private static final String CASE_PAGE5 = "/case/case5";
+    //当前页，关系到样式
+    private static final int ACTIVE_INDEX=1;
+    private static final int ACTIVE_PRODUCT=2;
+    private static final int ACTIVE_NEWS=3;
+    private static final int ACTIVE_CASE=4;
+    private static final int ACTIVE_PRICE=5;
+    private static final int ACTIVE_ABOUT=6;
 
     @Autowired
     private TNoticeService noticeService;
@@ -82,7 +94,7 @@ public class FrontPageController {
             view.addObject("notices", notices);
             view.addObject("topOne", topOne);
             //当前位置：首页
-            view.addObject("active",1);
+            view.addObject("active",ACTIVE_INDEX);
         }
         return view;
     }
@@ -162,7 +174,7 @@ public class FrontPageController {
 
         }
         //当前位置：资讯
-        view.addObject("active",3);
+        view.addObject("active",ACTIVE_NEWS);
         return view;
     }
 
@@ -194,7 +206,7 @@ public class FrontPageController {
             }
         }
         //当前位置：3-资讯
-        view.addObject("active",3);
+        view.addObject("active",ACTIVE_NEWS);
         return view;
     }
 
@@ -206,7 +218,7 @@ public class FrontPageController {
     public ModelAndView price() {
         ModelAndView view = new ModelAndView(PRICE_PAGE);
         //当前位置：4-产品定价
-        view.addObject("active",4);
+        view.addObject("active",ACTIVE_PRICE);
         return view;
     }
 
@@ -218,7 +230,7 @@ public class FrontPageController {
     public ModelAndView clms() {
         ModelAndView view = new ModelAndView(CLMS_PAGE);
         //当前位置：2-产品与服务
-        view.addObject("active",2);
+        view.addObject("active",ACTIVE_PRODUCT);
         return view;
     }
     /**
@@ -229,7 +241,7 @@ public class FrontPageController {
     public ModelAndView coms() {
         ModelAndView view = new ModelAndView(COMS_PAGE);
         //当前位置：2-产品与服务
-        view.addObject("active",2);
+        view.addObject("active",ACTIVE_PRODUCT);
         return view;
     }
     /**
@@ -240,7 +252,7 @@ public class FrontPageController {
     public ModelAndView ctms() {
         ModelAndView view = new ModelAndView(CTMS_PAGE);
         //当前位置：2-产品与服务
-        view.addObject("active",2);
+        view.addObject("active",ACTIVE_PRODUCT);
         return view;
     }
     /**
@@ -251,7 +263,7 @@ public class FrontPageController {
     public ModelAndView cwms() {
         ModelAndView view = new ModelAndView(CWMS_PAGE);
         //当前位置：2-产品与服务
-        view.addObject("active",2);
+        view.addObject("active",ACTIVE_PRODUCT);
         return view;
     }
     /**
@@ -262,7 +274,70 @@ public class FrontPageController {
     public ModelAndView about() {
         ModelAndView view = new ModelAndView(ABOUT_PAGE);
         //当前位置：5-关于我们
-        view.addObject("active",5);
+        view.addObject("active",ACTIVE_ABOUT);
         return view;
     }
+    /**
+     * 案例1
+     * @return
+     */
+    @RequestMapping(value = CASE_PAGE1, method = RequestMethod.GET)
+    public ModelAndView case1(){
+        ModelAndView view = new ModelAndView(CASE_PAGE1);
+        //当前位置：5-关于我们
+        view.addObject("active",ACTIVE_CASE);
+        return view;
+    }
+
+    /**
+     * 案例1
+     * @return
+     */
+    @RequestMapping(value = CASE_PAGE2, method = RequestMethod.GET)
+    public ModelAndView case2(){
+        ModelAndView view = new ModelAndView(CASE_PAGE2);
+        //当前位置：5-关于我们
+        view.addObject("active",ACTIVE_CASE);
+        return view;
+    }
+
+
+    /**
+     * 案例1
+     * @return
+     */
+    @RequestMapping(value = CASE_PAGE3, method = RequestMethod.GET)
+    public ModelAndView case3(){
+        ModelAndView view = new ModelAndView(CASE_PAGE3);
+        //当前位置：5-关于我们
+        view.addObject("active",ACTIVE_CASE);
+        return view;
+    }
+
+
+    /**
+     * 案例1
+     * @return
+     */
+    @RequestMapping(value = CASE_PAGE4, method = RequestMethod.GET)
+    public ModelAndView case4(){
+        ModelAndView view = new ModelAndView(CASE_PAGE4);
+        //当前位置：5-关于我们
+        view.addObject("active",ACTIVE_CASE);
+        return view;
+    }
+
+    /**
+     * 案例1
+     * @return
+     */
+    @RequestMapping(value = CASE_PAGE5, method = RequestMethod.GET)
+    public ModelAndView case5(){
+        ModelAndView view = new ModelAndView(CASE_PAGE5);
+        //当前位置：5-关于我们
+        view.addObject("active",ACTIVE_CASE);
+        return view;
+    }
+
+
 }
