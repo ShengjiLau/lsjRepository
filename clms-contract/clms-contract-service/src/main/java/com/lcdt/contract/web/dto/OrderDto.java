@@ -54,7 +54,7 @@ public class OrderDto extends Order  implements Serializable{
 	
 	private Integer warehousePlanStatus;
 	
-	@ApiModelProperty(value="订单号是否为空？0-为空；1-不为空")
+	@ApiModelProperty(value="订单号是否为空？0或者不传-为空；1-不为空")
 	private Byte orderNoEmpty;
 	
 	public int getPageNum() {

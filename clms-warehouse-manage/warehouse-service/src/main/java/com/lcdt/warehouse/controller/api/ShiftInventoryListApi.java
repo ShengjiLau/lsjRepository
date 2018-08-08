@@ -143,13 +143,13 @@ public class ShiftInventoryListApi {
 		
 	}
 	
+	
 	@GetMapping("/export/{shiftId}")
 	@ApiOperation(value = "导出移库单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_export')")
 	public void exportShiftInventoryList(@PathVariable Long shiftId, HttpServletResponse response) {
 		ShiftInventoryListDTO shiftInventoryListDTO = shiftInventoryListService.getShiftInventoryListDetails(shiftId);
 		ClassPathResource resource = new ClassPathResource("/templates/shift_inventory_list.xlsx");
-		System.out.println("lalal");
 		if (resource.exists()) {
 			response.reset();
 			XSSFWorkbook xwb = null;

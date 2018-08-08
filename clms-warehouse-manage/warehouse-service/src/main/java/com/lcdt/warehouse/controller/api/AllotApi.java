@@ -226,19 +226,7 @@ public class AllotApi {
 					}
 				}
 			}
-    		
-    		
-    		
-    		
-    		
-    		
     	}
-    	
-    	
-    	
-    	
-    	
-    	
     }
     
     
