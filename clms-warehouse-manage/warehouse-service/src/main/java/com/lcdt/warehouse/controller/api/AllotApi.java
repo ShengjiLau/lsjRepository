@@ -198,7 +198,6 @@ public class AllotApi {
 				 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("utf-8"),"iso-8859-1") + "\"");
 	             response.setContentType("application/octet-stream;charset=UTF-8");
 	             ouputStream = response.getOutputStream();
-	             ouputStream.flush();
 	             xwb.write(ouputStream);
 				
 			}catch(Exception e) {

@@ -108,6 +108,9 @@ public class CheckController {
     @RequestMapping(value = "/saveCheckAndItems", method = RequestMethod.POST)
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_check_create')")
     public JSONObject saveCheckAndItems(@Validated CheckSaveDto checkSaveDto, BindingResult bindingResult) {
+//        if(1==1) {
+//            throw new RuntimeException("异常测试");
+//        }
         Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
         Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
         String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
@@ -132,6 +135,32 @@ public class CheckController {
             message = "保存成功！";
         } else {
             message = "保存失败，请重试！";
+        }
+        jsonObject.put("message", message);
+        jsonObject.put("code", code);
+        jsonObject.put("data", checkSaveDto);
+        return jsonObject;
+    }
+    @ApiOperation("保存盘库单和明细")
+    @RequestMapping(value = "/updateAttachment", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('wh_check_create')")
+    public JSONObject updateAttachment(@Validated CheckSaveDto checkSaveDto) {
+        System.out.println("checkSaveDto:"+checkSaveDto);
+        JSONObject jsonObject = new JSONObject();
+        String message = "附件更新失败";
+        boolean result = false;
+        int code = -1;
+         TCheck check = checkService.selectById(checkSaveDto.getCheckId());
+        if(check==null){
+            jsonObject.put("message", message);
+            jsonObject.put("code", code);
+            return jsonObject;
+        }
+        check.setAttachment(checkSaveDto.getAttachment());
+        result  = checkService.updateAllColumnById(check);
+        if(result){
+            code=0;
+            message="附件更新成功";
         }
         jsonObject.put("message", message);
         jsonObject.put("code", code);

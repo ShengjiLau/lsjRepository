@@ -219,12 +219,12 @@
       goods_barcode, goods_spec, goods_unit
       )
     values
-     <foreach collection="list" open="(" close=")" separator="," item="item" index="index">
-       #{item.goodsId,jdbcType=BIGINT}, #{item.originGoodsId,jdbcType=BIGINT}, #{item.inventoryId,jdbcType=BIGINT}, 
+     <foreach collection="list" open="" close="" separator="," item="item" index="index">
+       (#{item.goodsId,jdbcType=BIGINT}, #{item.originGoodsId,jdbcType=BIGINT}, #{item.inventoryId,jdbcType=BIGINT}, 
        #{item.transferNum,jdbcType=DECIMAL}, #{item.remark,jdbcType=VARCHAR}, #{item.transferId,jdbcType=BIGINT},
        #{item.whLocId,jdbcType=BIGINT}, #{item.whLocCode,jdbcType=VARCHAR}, #{item.goodsBatch,jdbcType=VARCHAR},
        #{item.isMaterial,jdbcType=TINYINT}, #{item.goodsName,jdbcType=VARCHAR}, #{item.goodsCode,jdbcType=VARCHAR}, 
-       #{item.goodsBarcode,jdbcType=VARCHAR}, #{item.goodsSpec,jdbcType=VARCHAR}, #{item.goodsUnit,jdbcType=VARCHAR}
+       #{item.goodsBarcode,jdbcType=VARCHAR}, #{item.goodsSpec,jdbcType=VARCHAR}, #{item.goodsUnit,jdbcType=VARCHAR})
      </foreach>
    </insert>
    

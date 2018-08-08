@@ -7,7 +7,6 @@ import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -17,7 +16,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,7 +52,7 @@ public class TransferInventoryListController {
 	@PostMapping("/add")
 	@ApiOperation(value = "创建库存转换单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('transfer_inventory_add')")
-	public JSONObject insertTransferInventoryList(TransferInventoryListDTO transferInventoryListDTO) {
+	public JSONObject insertTransferInventoryList(@RequestBody TransferInventoryListDTO transferInventoryListDTO) {
 		int result = transferInventoryListService.insertTransferInventoryList(transferInventoryListDTO);
 		String message = null;
 		if (result > 0) {
@@ -122,7 +123,7 @@ public class TransferInventoryListController {
 	}
 	
 	
-	@PostMapping("/export")
+	@GetMapping("/export")
 	@ApiOperation(value = "导出库存转换单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('transfer_inventory_export')")
 	public void exportXSSFile(Long transferId, HttpServletResponse response) throws Exception, InvalidFormatException {
@@ -147,12 +148,11 @@ public class TransferInventoryListController {
 				 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("utf-8"),"iso-8859-1") + "\"");
 	             response.setContentType("application/octet-stream;charset=UTF-8");
 	             ouputStream = response.getOutputStream();
-	             ouputStream.flush();
 	             xwb.write(ouputStream);
 				
 			}catch(IOException e) {
 				e.printStackTrace();
-				log.debug("导出Excel表出现异常："+e.getMessage());
+				log.debug("导出Excel表出现异常：" + e.getMessage());
 			}finally {
 				if (null !=  xwb) {
 					try {

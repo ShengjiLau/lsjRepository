@@ -54,6 +54,9 @@ public class OrderDto extends Order  implements Serializable{
 	
 	private Integer warehousePlanStatus;
 	
+	@ApiModelProperty(value="订单号是否为空？0-为空；1-不为空")
+	private Byte orderNoEmpty;
+	
 	public int getPageNum() {
 		return pageNum;
 	}
@@ -141,6 +144,12 @@ public class OrderDto extends Order  implements Serializable{
 	}
 	public void setPaymentType(Integer paymentType) {
 		this.paymentType = paymentType;
+	}
+	public Byte getOrderNoEmpty() {
+		return orderNoEmpty;
+	}
+	public void setOrderNoEmpty(Byte orderNoEmpty) {
+		this.orderNoEmpty = orderNoEmpty;
 	}
 	
 	

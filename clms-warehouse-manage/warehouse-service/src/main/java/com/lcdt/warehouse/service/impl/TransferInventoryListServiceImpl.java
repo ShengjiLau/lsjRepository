@@ -86,6 +86,10 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		pageSize = null == transferListDTO.getPageSize()? Integer.MAX_VALUE : transferListDTO.getPageSize();
 		transferListDTO.setCompanyId(SecurityInfoGetter.getCompanyId());
 		List<TransferInventoryListDTO> transferInventoryListDTOList = TransferInventoryListDOMapper.getTransferInventoryListDTOList(transferListDTO);
+		if (null == transferInventoryListDTOList || 0 == transferInventoryListDTOList.size()) {
+			List<TransferInventoryListDTO> transferInventoryListDTOListEmpty = new ArrayList<TransferInventoryListDTO>();
+			return getPageBaseDto(transferInventoryListDTOListEmpty, pageSize, pageNo);
+		}
 		long total = transferInventoryListDTOList.size();
 		Long[] tranferIds = new Long[(int) total];
 		for (int i = -1; i++ < (total-1);) {
@@ -200,6 +204,11 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 	 */
 	private PageBaseDto<TransferInventoryListDTO> getPageBaseDto(List<TransferInventoryListDTO> transferInventoryListDTOList, int pageSize, int pageNo){
 		PageBaseDto<TransferInventoryListDTO> pageBaseDto = new PageBaseDto<TransferInventoryListDTO>();
+		if (0 == transferInventoryListDTOList.size()) {
+			pageBaseDto.setList(transferInventoryListDTOList);
+			pageBaseDto.setTotal(0);
+			return pageBaseDto;
+		}
 		List<TransferInventoryListDTO> listPage = new LinkedList<TransferInventoryListDTO>();
 		if (pageNo*pageSize > transferInventoryListDTOList.size()) {
 			listPage.addAll(transferInventoryListDTOList.subList((pageNo - 1)*pageSize, transferInventoryListDTOList.size()));
