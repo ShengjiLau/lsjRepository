@@ -50,7 +50,7 @@
       #{warehouseName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{attachmentName,jdbcType=VARCHAR}, 
       #{attachment,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
       #{createUser,jdbcType=VARCHAR}, #{createUserId,jdbcType=BIGINT}, #{companyId,jdbcType=BIGINT}, 
-      #{listStatus,jdbcType=TINYINT}, #{listSerialNo,jdbcType=VARCHAR}, #{gmtComplete,jdbcType=TIMESTAMP}
+      #{listStatus,jdbcType=TINYINT}, F_TRANSFER_NO(), #{gmtComplete,jdbcType=TIMESTAMP}
       )
   </insert>
   
