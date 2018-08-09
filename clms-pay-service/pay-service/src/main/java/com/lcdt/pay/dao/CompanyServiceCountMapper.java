@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CompanyServiceCountMapper {
 
-    List<CompanyServiceCount> selectByCompanyIds(String companyIds);
+    List<CompanyServiceCount> selectByCompanyIds(@Param("companyIds") List<Long> companyIds);
 
     int deleteByPrimaryKey(Integer countId);
 

@@ -177,7 +177,7 @@ public class OrderApi {
     {
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
-        List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, beginTime, endTime, orderType,payType);
+        List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, beginTime, endTime, orderType,payType,null);
         return new PageResultDto<BalanceLog>(balanceLogs);
     }
 

@@ -22,5 +22,6 @@ public interface BalanceLogMapper {
                                        @Param("beginTime") Date beginTime,
                                        @Param("endTime") Date endTime,
                                        @Param("orderType") Integer orderType,
-                                       @Param("payType") Integer payType);
+                                       @Param("payType") Integer payType,
+                                       @Param("logUser") String logUser);
 }
