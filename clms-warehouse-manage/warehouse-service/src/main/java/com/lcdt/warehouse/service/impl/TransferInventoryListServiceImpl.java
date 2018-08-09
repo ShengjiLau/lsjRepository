@@ -74,6 +74,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		transferInventoryListDO.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
 		transferInventoryListDO.setGmtCreate(new Date());
 		transferInventoryListDO.setListStatus(TransferInventoryListVO.UNFINISHED);
+		int result = TransferInventoryListDOMapper.insert(transferInventoryListDO);
 		List<TransferGoodsDO> transferGoodsDOList = transferInventoryListDTO.getTransferGoodsDOList();
 		for (int i = 0; i < transferGoodsDOList.size(); i++) {
 			TransferGoodsDO transferGoodsDO = transferGoodsDOList.get(i);
@@ -83,7 +84,6 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 			}
 		}
 		
-		int result = TransferInventoryListDOMapper.insert(transferInventoryListDO);
 		int transferGoodsResult = TransferGoodsDOMapper.insertTransferGoodsDOByBatch(transferGoodsDOList);
 		log.debug("插入转换商品的数量为：" + transferGoodsResult);
 		return result;
@@ -310,7 +310,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 	private Inventory addInventory(TransferGoodsDO transferGoodsDO, TransferInventoryListDTO transferInventoryListDTO) {
 		Inventory inventory = new Inventory();
 		inventory.setBatch(transferGoodsDO.getGoodsBatch());
-		inventory.setBusinessDesc("6");
+		//inventory.setBusinessDesc(InventoryBusinessType.TRANSFER_ORDER.toString());
 		inventory.setCompanyId(transferInventoryListDTO.getCompanyId());
 		inventory.setCustomerId(transferInventoryListDTO.getCustomerId());
 		inventory.setCustomerName(transferInventoryListDTO.getCustomerName());
@@ -348,6 +348,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
         inventoryLog.setLogTime(new Date());
         inventoryLog.setInventoryId(inventory.getInvertoryId());
         inventoryLog.setOrderId(transferInventoryListDTO.getTransfersId());
+        inventoryLog.setType(InventoryBusinessType.TRANSFER_ORDER);
         logMapper.saveLog(inventoryLog);    		
 	}
 	
