@@ -8,6 +8,7 @@ import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.util.ClmsBeanUtil;
 import com.lcdt.warehouse.dto.AllotDto;
+import com.lcdt.warehouse.entity.AllotProduct;
 import com.lcdt.warehouse.service.AllotService;
 import com.lcdt.warehouse.utils.JSONResponseUtil;
 import com.lcdt.warehouse.utils.ResponseMessage;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -192,7 +194,67 @@ public class AllotApi {
 				 XSSFCell cell = row.getCell(0);
 				 cell.setCellValue("调拨单-" + dto.getAllotCode());
 				 
-				 //something
+				 row = sheet.getRow(4);
+				 cell = row.getCell(2);
+				 cell.setCellValue(allotService.getGroupName(dto.getGroupId()));
+				 cell = row.getCell(6);
+				 cell.setCellValue(dto.getCreateTime().toGMTString());
+				 
+				 row = sheet.getRow(5);
+				 cell = row.getCell(2);
+				 cell.setCellValue(dto.getCustomerName());
+				 cell = row.getCell(6);
+				 cell.setCellValue(dto.getContactName());
+				 
+				 row = sheet.getRow(6);
+				 cell = row.getCell(2);
+				 cell.setCellValue(dto.getPhoneNum());
+				 
+				 row = sheet.getRow(7);
+				 cell = row.getCell(2);
+				 cell.setCellValue(dto.getWarehouseInName());
+				 cell = row.getCell(6);
+				 cell.setCellValue(dto.getAllotInTime().toGMTString());
+				 
+				 row = sheet.getRow(8);
+				 cell = row.getCell(2);
+				 cell.setCellValue(dto.getWarehouseOutName());
+				 cell = row.getCell(6);
+				 cell.setCellValue(dto.getAllotOutTime().toGMTString());
+				 
+				 row = sheet.getRow(9);
+				 cell = row.getCell(2);
+				 cell.setCellValue(dto.getOperator());
+				 
+				 row = sheet.getRow(10);
+				 cell = row.getCell(2);
+				 cell.setCellValue(dto.getRemark());
+				 
+				 List<AllotProduct> allotProductList = dto.getAllotProductList();
+				 int goodsRow = 14;
+				 for (int i = 0; i < allotProductList.size(); i++) {
+					 AllotProduct allotProduct = allotProductList.get(i);
+					 row = sheet.getRow(goodsRow); 
+					 cell = row.getCell(0);
+					 cell.setCellValue(allotProduct.getName());
+					 cell = row.getCell(1);
+					 cell.setCellValue(allotProduct.getCode());
+					 cell = row.getCell(2);
+					 cell.setCellValue(allotProduct.getBarCode());
+					 cell = row.getCell(3);
+					 cell.setCellValue(allotProduct.getSpec());
+					 cell = row.getCell(4);
+					 cell.setCellValue(allotProduct.getUnit());
+					 cell = row.getCell(5);
+					 cell.setCellValue(allotProduct.getBatchNum());
+					 cell = row.getCell(6);
+					 cell.setCellValue(allotProduct.getWarehouseLocCode());
+					 cell = row.getCell(7);
+					 cell.setCellValue(allotProduct.getAllotNum().doubleValue());
+					 cell = row.getCell(8);
+					 cell.setCellValue(allotProduct.getRemark());
+					 goodsRow ++;
+				 }
 				 
 				 String fileName = "调拨单.xlsx";
 				 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("utf-8"),"iso-8859-1") + "\"");

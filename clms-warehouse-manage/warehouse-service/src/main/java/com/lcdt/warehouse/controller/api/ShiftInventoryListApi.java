@@ -3,6 +3,7 @@ package com.lcdt.warehouse.controller.api;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,7 +29,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.lcdt.util.ResponseJsonUtils;
 import com.lcdt.warehouse.controller.exception.ShiftInventoryException;
 import com.lcdt.warehouse.dto.PageBaseDto;
+import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.dto.ShiftInventoryListDTO;
+import com.lcdt.warehouse.entity.ShiftGoodsDO;
 import com.lcdt.warehouse.service.ShiftInventoryListService;
 
 import io.swagger.annotations.Api;
@@ -156,14 +159,70 @@ public class ShiftInventoryListApi {
 			InputStream inputStream = null;
 			OutputStream ouputStream = null;
 			try {
-				inputStream = resource.getInputStream();
+				 inputStream = resource.getInputStream();
 				 xwb = (XSSFWorkbook) WorkbookFactory.create(inputStream); // 读取excel模板
 				 XSSFSheet sheet = xwb.getSheetAt(0);
 				 XSSFRow row = sheet.getRow(0);
 				 XSSFCell cell = row.getCell(0);
 				 cell.setCellValue("移库单-" + shiftInventoryListDTO.getShiftInventoryNum());
-				
-				 //something 
+				 
+				 row = sheet.getRow(4);
+				 cell = row.getCell(2);
+				 cell.setCellValue(shiftInventoryListDTO.getGroupName());
+				 cell = row.getCell(6);
+				 cell.setCellValue(shiftInventoryListDTO.getWarehouseName());
+				 
+				 row = sheet.getRow(5);
+				 cell = row.getCell(2);
+				 cell.setCellValue(shiftInventoryListDTO.getCustomerName());
+				 cell = row.getCell(6);
+				 cell.setCellValue(shiftInventoryListDTO.getGmtCreate().toGMTString());
+				 
+				 row = sheet.getRow(6);
+				 cell = row.getCell(2);
+				 cell.setCellValue(shiftInventoryListDTO.getShiftUser());
+				 cell = row.getCell(6);
+				 cell.setCellValue(shiftInventoryListDTO.getShiftTime());
+				 
+				 row = sheet.getRow(7);
+				 cell = row.getCell(2);
+				 cell.setCellValue(shiftInventoryListDTO.getShiftType() == 0 ? "内部移库" : "客户要求");
+				 
+				 row = sheet.getRow(8);
+				 cell = row.getCell(2);
+				 cell.setCellValue(shiftInventoryListDTO.getRemark());
+				 
+				 List<ShiftGoodsListDTO> shiftGoodsListDTOList = shiftInventoryListDTO.getShiftGoodsListDTOList();
+				 if (null != shiftGoodsListDTOList && !shiftGoodsListDTOList.isEmpty()) {
+					 int goodsRow = 12;
+					 for (int i = 0; i < shiftGoodsListDTOList.size(); i++) {
+						 ShiftGoodsListDTO shiftGoodsListDTO = shiftGoodsListDTOList.get(i);
+						 List<ShiftGoodsDO> shiftGoodsDOList = shiftGoodsListDTO.getShiftGoodsDOList();
+						 for (int j = 0; j < shiftGoodsDOList.size(); j++) {
+							 ShiftGoodsDO shiftGoodsDO = shiftGoodsDOList.get(j);
+							 row = sheet.getRow(goodsRow); 
+							 cell = row.getCell(0);
+							 cell.setCellValue(shiftGoodsListDTO.getGoodsName());
+							 cell = row.getCell(1);
+							 cell.setCellValue(shiftGoodsListDTO.getGoodsCode());
+							 cell = row.getCell(2);
+							 cell.setCellValue(shiftGoodsListDTO.getBarCode());
+							 cell = row.getCell(3);
+							 cell.setCellValue(shiftGoodsListDTO.getGoodsSpec());
+							 cell = row.getCell(4);
+							 cell.setCellValue(shiftGoodsListDTO.getBaseUnit());
+							 cell = row.getCell(5);
+							 cell.setCellValue(shiftGoodsListDTO.getGoodsBatch());
+							 cell = row.getCell(6);
+							 cell.setCellValue(shiftGoodsListDTO.getStorageLocationCode());
+							 cell = row.getCell(7);
+							 cell.setCellValue(shiftGoodsDO.getShiftNum().doubleValue());
+							 cell = row.getCell(8);
+							 cell.setCellValue(shiftGoodsDO.getRemark());
+							 goodsRow ++;
+						 }
+					 } 
+				 }
 				 
 				 String fileName = "移库单.xlsx";
 				 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("utf-8"),"iso-8859-1") + "\"");
