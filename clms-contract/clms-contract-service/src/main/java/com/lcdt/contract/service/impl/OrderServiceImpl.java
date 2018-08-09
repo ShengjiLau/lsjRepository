@@ -707,6 +707,60 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.updateLogisticsInfo(order);
     }
 
+
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ, timeout = 30, propagation = Propagation.REQUIRED, rollbackForClassName = {"RuntimeException","Exception"})
+    @Override
+    public int purchaseOrderToSalesOrder(Long orderId) {
+        OrderDto salesOrderDto = orderMapper.selectByPrimaryKey(orderId);
+        Order salesOrder = new Order();
+        BeanUtils.copyProperties(salesOrderDto, salesOrder);
+        List<OrderProduct> salesOrderProductList = orderProductMapper.getOrderProductByOrderId(orderId);
+        if (null == salesOrder) {
+            return OrderVO.ZERO_INTEGER;
+        }
+        Order purchaseOrder = new Order();
+        purchaseOrder.setCompanyId(SecurityInfoGetter.getCompanyId());
+        purchaseOrder.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
+        purchaseOrder.setCreateTime(new Date());
+        purchaseOrder.setOrderType(OrderVO.SALES_ORDER);
+        purchaseOrder.setGroupId(salesOrder.getGroupId());
+        purchaseOrder.setReceiveWarehouse(salesOrder.getReceiveWarehouse());
+        purchaseOrder.setWarehouseId(salesOrder.getWarehouseId());
+        purchaseOrder.setReceiverPhone(salesOrder.getReceiverPhone());
+
+        purchaseOrder.setReceiver(salesOrder.getReceiver());
+        purchaseOrder.setReceiverProvince(salesOrder.getReceiverProvince());
+        purchaseOrder.setReceiverCity(salesOrder.getReceiverCity());
+        purchaseOrder.setReceiveDistrict(salesOrder.getReceiveDistrict());
+        purchaseOrder.setReceiveAddress(salesOrder.getReceiveAddress());
+        purchaseOrder.setIsDraft(OrderVO.WATTING_PUBLISHI);
+        purchaseOrder.setOriginOrderId(salesOrder.getOrderId());
+        purchaseOrder.setOriginOrderNo(salesOrder.getOrderNo());
+
+        int result = orderMapper.insertOrder(purchaseOrder);
+        Order order = new Order();
+        order.setPushOrderId(purchaseOrder.getOrderId());
+        order.setOrderId(salesOrder.getOrderId());
+        orderMapper.updateByPrimaryKeySelective(order);
+
+        if (null != salesOrderProductList && !salesOrderProductList.isEmpty()) {
+            List<OrderProduct> purchaseOrderProductList = new ArrayList<OrderProduct>(salesOrderProductList.size());
+            for (OrderProduct salesOrderProduct: salesOrderProductList) {
+                OrderProduct purchaseOrderProduct = new OrderProduct();
+                BeanUtils.copyProperties(salesOrderProduct, purchaseOrderProduct);
+                purchaseOrderProduct.setPrice(null);
+                purchaseOrderProduct.setOpId(null);
+                purchaseOrderProduct.setOrderId(purchaseOrder.getOrderId());
+                purchaseOrderProductList.add(purchaseOrderProduct);
+            }
+            nonautomaticMapper.insertOrderProductByBatch(purchaseOrderProductList);
+        }
+
+
+        return result;
+    }
+
     /**
      * 时间转化为固定格式字符串
      */

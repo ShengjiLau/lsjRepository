@@ -45,4 +45,11 @@ public interface AllotService {
      * @return
      */
     boolean allotPutInStorage(AllotDto dto);
+    
+    /**
+     * 获取groupName
+     * @param groupId
+     * @return
+     */
+    String getGroupName(Long groupId);
 }

@@ -2,6 +2,7 @@ package com.lcdt.warehouse.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.lcdt.userinfo.model.Group;
 import com.lcdt.userinfo.rpc.GroupWareHouseRpcService;
 import com.lcdt.warehouse.contants.InOrderStatus;
 import com.lcdt.warehouse.dto.AllotDto;
@@ -192,6 +193,13 @@ public class AllotServiceImpl implements AllotService{
             return false;
         }
     }
+    
+    @Override
+    public String getGroupName(Long groupId) {
+    	Group group = groupWareHouseRpcService.selectByGroupId(groupId);
+    	return group.getGroupName();
+    }
+    
     //新增出库单
     private void saveOutWarehouseOrder(Allot allot, AllotDto dto){
         OutWarehouseOrder outWarehouseOrder = new OutWarehouseOrder();

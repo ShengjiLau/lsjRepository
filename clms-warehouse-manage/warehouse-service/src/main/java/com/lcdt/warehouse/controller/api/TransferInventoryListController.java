@@ -4,6 +4,7 @@ package com.lcdt.warehouse.controller.api;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -28,6 +29,7 @@ import com.lcdt.warehouse.controller.exception.ShiftInventoryException;
 import com.lcdt.warehouse.dto.PageBaseDto;
 import com.lcdt.warehouse.dto.TransferInventoryListDTO;
 import com.lcdt.warehouse.dto.TransferListDTO;
+import com.lcdt.warehouse.entity.TransferGoodsDO;
 import com.lcdt.warehouse.service.TransferInventoryListService;
 
 import io.swagger.annotations.Api;
@@ -128,7 +130,7 @@ public class TransferInventoryListController {
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('transfer_inventory_export')")
 	public void exportXSSFile(Long transferId, HttpServletResponse response) throws Exception, InvalidFormatException {
 		TransferInventoryListDTO transferInventoryListDTO = transferInventoryListService.getTransferInventoryListDTODetail(transferId);
-		ClassPathResource resource = new ClassPathResource("/templates/transfers_inventory_list.xlsx");
+		ClassPathResource resource = new ClassPathResource("/templates/transfer_inventory_list.xlsx");
 		if (resource.exists()) {
 			response.reset();
 			XSSFWorkbook xwb = null;
@@ -142,7 +144,78 @@ public class TransferInventoryListController {
 				 XSSFCell cell = row.getCell(0);
 				 cell.setCellValue("商品转换单-" + transferInventoryListDTO.getListSerialNo());
 				
-				 //something 
+				 row = sheet.getRow(4);
+				 cell = row.getCell(2);
+				 cell.setCellValue(transferInventoryListDTO.getGroupName());
+				 cell = row.getCell(6);
+				 cell.setCellValue(transferInventoryListDTO.getCustomerName());
+				 
+				 row = sheet.getRow(5);
+				 cell = row.getCell(2);
+				 cell.setCellValue(transferInventoryListDTO.getWarehouseName());
+				 cell = row.getCell(6);
+				 cell.setCellValue(transferInventoryListDTO.getCreateUser());
+				 
+				 row = sheet.getRow(6);
+				 cell = row.getCell(2);
+				 cell.setCellValue(transferInventoryListDTO.getGmtCreate().toGMTString());
+				 cell = row.getCell(6);
+				 cell.setCellValue(transferInventoryListDTO.getGmtComplete().toGMTString());
+				 
+				 row = sheet.getRow(7);
+				 cell = row.getCell(2);
+				 cell.setCellValue(transferInventoryListDTO.getRemark());
+				 
+				 List<TransferGoodsDO> transferGoodsDOList = transferInventoryListDTO.getTransferGoodsDOList();
+				 if (null != transferGoodsDOList && !transferGoodsDOList.isEmpty()) {
+					 int materialGoodsRow = 11,productGoodsRow = 29;
+					 for (int i = 0; i < transferGoodsDOList.size(); i++) {
+						 TransferGoodsDO transferGoodsDO = transferGoodsDOList.get(i);
+						 if (0 == transferGoodsDO.getIsMaterial()) {
+							 row = sheet.getRow(materialGoodsRow); 
+							 cell = row.getCell(0);
+							 cell.setCellValue(transferGoodsDO.getGoodsName());
+							 cell = row.getCell(1);
+							 cell.setCellValue(transferGoodsDO.getGoodsCode());
+							 cell = row.getCell(2);
+							 cell.setCellValue(transferGoodsDO.getGoodsBarcode());
+							 cell = row.getCell(3);
+							 cell.setCellValue(transferGoodsDO.getGoodsSpec());
+							 cell = row.getCell(4);
+							 cell.setCellValue(transferGoodsDO.getGoodsUnit());
+							 cell = row.getCell(5);
+							 cell.setCellValue(transferGoodsDO.getGoodsBatch());
+							 cell = row.getCell(6);
+							 cell.setCellValue(transferGoodsDO.getWhLocCode());
+							 cell = row.getCell(7);
+							 cell.setCellValue(transferGoodsDO.getTransferNum().doubleValue());
+							 cell = row.getCell(8);
+							 cell.setCellValue(transferGoodsDO.getRemark());
+							 materialGoodsRow++;
+						 }else {
+							 row = sheet.getRow(productGoodsRow); 
+							 cell = row.getCell(0);
+							 cell.setCellValue(transferGoodsDO.getGoodsName());
+							 cell = row.getCell(1);
+							 cell.setCellValue(transferGoodsDO.getGoodsCode());
+							 cell = row.getCell(2);
+							 cell.setCellValue(transferGoodsDO.getGoodsBarcode());
+							 cell = row.getCell(3);
+							 cell.setCellValue(transferGoodsDO.getGoodsSpec());
+							 cell = row.getCell(4);
+							 cell.setCellValue(transferGoodsDO.getGoodsUnit());
+							 cell = row.getCell(5);
+							 cell.setCellValue(transferGoodsDO.getGoodsBatch());
+							 cell = row.getCell(6);
+							 cell.setCellValue(transferGoodsDO.getWhLocCode());
+							 cell = row.getCell(7);
+							 cell.setCellValue(transferGoodsDO.getTransferNum().doubleValue());
+							 cell = row.getCell(8);
+							 cell.setCellValue(transferGoodsDO.getRemark());
+							 productGoodsRow++;
+						 }
+					 }
+				 }
 				 
 				 String fileName = "商品转换单.xlsx";
 				 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("utf-8"),"iso-8859-1") + "\"");
