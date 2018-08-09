@@ -68,7 +68,7 @@ public class TransferInventoryListController {
 	@PostMapping("/complete")
 	@ApiOperation(value = "完成库存转换单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('transfer_inventory_complete')")
-	public JSONObject complementTransferInventoryList(TransferInventoryListDTO transferInventoryListDTO) {
+	public JSONObject complementTransferInventoryList(@RequestBody TransferInventoryListDTO transferInventoryListDTO) {
 		int result = transferInventoryListService.completeTransferInventoryList(transferInventoryListDTO);
 		String message = null;
 		if (result > 0) {
