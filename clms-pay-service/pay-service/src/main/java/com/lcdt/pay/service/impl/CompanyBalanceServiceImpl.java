@@ -28,15 +28,8 @@ public class CompanyBalanceServiceImpl implements CompanyBalanceService{
     }
 
     public List<PayBalance> companyBalance(List<Long> companyIds){
-        final StringBuffer stringBuffer = new StringBuffer();
 
-        for (int i = 0;i < companyIds.size();i++) {
-            if (i > 0) {
-                stringBuffer.append(",");
-            }
-            stringBuffer.append(companyIds.get(i));
-        }
-        return mapper.selectByCompanyIds(stringBuffer.toString());
+        return mapper.selectByCompanyIds(companyIds);
     }
 
 
