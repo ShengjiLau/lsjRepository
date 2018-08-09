@@ -35,8 +35,11 @@ public class OrderVO {
 	 * 订单状态：已取消
 	 */
 	public static final short CANCEL_STATUS = 2;
-	
-	
+
+
+	public static final short WATTING_PUBLISHI = -1;
+
+
 	/**
 	 * 订单状态：未发布
 	 */
