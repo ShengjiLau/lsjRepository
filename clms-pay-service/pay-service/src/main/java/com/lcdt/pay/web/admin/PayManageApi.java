@@ -61,15 +61,7 @@ public class PayManageApi {
         if (CollectionUtils.isEmpty(compIds)) {
             return new PageResultDto(new ArrayList());
         }
-        final StringBuffer stringBuffer = new StringBuffer();
-
-        for (int i = 0;i < compIds.size();i++) {
-            if (i > 0) {
-                stringBuffer.append(",");
-            }
-            stringBuffer.append(compIds.get(i));
-        }
-        return new PageResultDto(countMapper.selectByCompanyIds(stringBuffer.toString()));
+        return new PageResultDto(countMapper.selectByCompanyIds(compIds));
     }
 
 
@@ -88,7 +80,7 @@ public class PayManageApi {
     @ApiOperation("根据公司名和管理员账号查询服务剩余次数")
     public PageResultDto serviceCountList(String companyName,String adminUserName){
         final List<Long> longs = selectCompanyIds(companyName, adminUserName);
-        return new PageResultDto(companyServiceCountMapper.selectByCompanyIds(CommonUtils.joinStringWithToken(longs, ',')));
+        return new PageResultDto(companyServiceCountMapper.selectByCompanyIds(longs));
     }
 
     @PostMapping("/addservicenum")
@@ -97,7 +89,7 @@ public class PayManageApi {
         return countService.addCountNum(companyId, serviceName, num, SecurityInfoGetter.getUser().getPhone());
     }
     @PostMapping("/countlog")
-    @ApiOperation("查询服务消费日志")
+    @ApiOperation("查询管理员充值记录")
     public PageResultDto serviceCountLogs(Integer pageNo, Integer pageSize,Long companyId, String serviceName, Date begin,Date end){
         PageHelper.startPage(pageNo, pageSize);
         final List<ProductCountLog> productCountLogs = logMapper.selectByProductNameCompanyId(companyId, serviceName, begin, end, ProductCountServiceImpl.CountLogType.ADMIN_TOPUP);

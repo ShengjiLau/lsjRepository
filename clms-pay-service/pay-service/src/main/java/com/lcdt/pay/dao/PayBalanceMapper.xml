@@ -46,9 +46,9 @@
 
   <select id="selectByCompanyIds" resultMap="BaseResultMap">
     select * from pay_balance
-    where balance_company_id
+
       <if test="companyIds != null">
-          IN
+        where balance_company_id IN
           <foreach collection="companyIds" index="index" item="item" open="(" separator="," close=")">
               #{item}
           </foreach>
