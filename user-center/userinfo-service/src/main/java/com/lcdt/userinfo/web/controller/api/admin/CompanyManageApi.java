@@ -115,9 +115,9 @@ public class CompanyManageApi {
 
     @PostMapping("/allcomps")
     @ApiOperation("查看所有公司列表")
-    public ResponseMessage companys(Integer pageSize, Integer pageNo, CompanyQueryDto companyQueryDto){
-        PageHelper.startPage(pageNo, pageSize);
-        return JSONResponseUtil.success(companyMapper.selectByCompanyDto(companyQueryDto));
+    public ResponseMessage companys(CompanyQueryDto companyQueryDto){
+        PageInfo pageInfo = PageHelper.startPage(companyQueryDto.getPageNo(), companyQueryDto.getPageSize()).doSelectPageInfo(() -> companyMapper.selectByCompanyDto(companyQueryDto));
+        return JSONResponseUtil.success(pageInfo);
     }
 
 }
