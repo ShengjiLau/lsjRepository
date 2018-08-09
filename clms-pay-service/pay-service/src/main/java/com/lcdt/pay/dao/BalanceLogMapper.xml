@@ -88,6 +88,9 @@
       and p.pay_type = #{payType,jdbcType=INTEGER}
 
     </if>
+    <if test="logUser != null">
+      and b.log_username = #{logUser,jdbcType=VARCHAR}
+    </if>
   order by log_time DESC
 
 

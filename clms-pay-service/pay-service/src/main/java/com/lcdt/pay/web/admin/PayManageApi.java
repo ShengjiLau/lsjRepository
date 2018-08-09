@@ -4,8 +4,10 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.pay.dao.BalanceLogMapper;
 import com.lcdt.pay.dao.CompanyServiceCountMapper;
 import com.lcdt.pay.dao.ProductCountLogMapper;
+import com.lcdt.pay.model.BalanceLog;
 import com.lcdt.pay.model.CompanyServiceCount;
 import com.lcdt.pay.model.PageResultDto;
 import com.lcdt.pay.rpc.CompanyServiceCountService;
@@ -48,6 +50,10 @@ public class PayManageApi {
     @Autowired
     private CompanyServiceCountMapper countMapper;
 
+    @Autowired
+    private BalanceLogMapper balanceLogMapper;
+
+
 
     @PostMapping("/balances")
     @ApiOperation("根据公司id list查询现金余额")
@@ -61,15 +67,7 @@ public class PayManageApi {
         if (CollectionUtils.isEmpty(compIds)) {
             return new PageResultDto(new ArrayList());
         }
-        final StringBuffer stringBuffer = new StringBuffer();
-
-        for (int i = 0;i < compIds.size();i++) {
-            if (i > 0) {
-                stringBuffer.append(",");
-            }
-            stringBuffer.append(compIds.get(i));
-        }
-        return new PageResultDto(countMapper.selectByCompanyIds(stringBuffer.toString()));
+        return new PageResultDto(countMapper.selectByCompanyIds(compIds));
     }
 
 
@@ -88,7 +86,7 @@ public class PayManageApi {
     @ApiOperation("根据公司名和管理员账号查询服务剩余次数")
     public PageResultDto serviceCountList(String companyName,String adminUserName){
         final List<Long> longs = selectCompanyIds(companyName, adminUserName);
-        return new PageResultDto(companyServiceCountMapper.selectByCompanyIds(CommonUtils.joinStringWithToken(longs, ',')));
+        return new PageResultDto(companyServiceCountMapper.selectByCompanyIds(longs));
     }
 
     @PostMapping("/addservicenum")
@@ -97,12 +95,31 @@ public class PayManageApi {
         return countService.addCountNum(companyId, serviceName, num, SecurityInfoGetter.getUser().getPhone());
     }
     @PostMapping("/countlog")
-    @ApiOperation("查询服务消费日志")
-    public PageResultDto serviceCountLogs(Integer pageNo, Integer pageSize,Long companyId, String serviceName, Date begin,Date end){
+    @ApiOperation("查询服务流水记录")
+    public PageResultDto serviceCountLogs(Integer pageNo, Integer pageSize,Long companyId, String serviceName, Date begin,Date end,Integer logtype){
         PageHelper.startPage(pageNo, pageSize);
-        final List<ProductCountLog> productCountLogs = logMapper.selectByProductNameCompanyId(companyId, serviceName, begin, end, ProductCountServiceImpl.CountLogType.ADMIN_TOPUP);
+        final List<ProductCountLog> productCountLogs = logMapper.selectByProductNameCompanyId(companyId, serviceName, begin, end, logtype);
         return new PageResultDto(productCountLogs);
     }
+
+    @RequestMapping(value = "/balancelog",method = RequestMethod.POST)
+    public PageResultDto<BalanceLog> balanceLog(Integer pageSize, Integer pageNo,
+                                                Long companyId,
+                                                @RequestParam(required = false) Date beginTime,
+                                                @RequestParam(required = false) Date endTime
+            , @RequestParam(required = false) Integer payType, @RequestParam(required = false)Integer orderType
+        ,@RequestParam(required = false) String operationUserName
+    )
+    {
+        PageHelper.startPage(pageNo, pageSize);
+        List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, beginTime, endTime, orderType,payType,operationUserName);
+        return new PageResultDto<BalanceLog>(balanceLogs);
+    }
+
+
+
+
+
 
     @PostMapping("/topup")
     @ApiOperation("公司余额充值")

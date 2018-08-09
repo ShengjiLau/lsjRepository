@@ -217,6 +217,14 @@
         c.full_name like   concat(concat('%',#{fullName}),'%')
       </if>
 
+      <if test="createPhone != null and createPhone != ''">
+        and c.create_phone = #{createPhone}
+      </if>
+
+      <if test="shortName != null and shortName != ''">
+        and c.short_name like concat(concat('%',#{shortName}),'%')
+      </if>
+
       <if test="adminphone != null and adminphone != ''">
        and u.phone like   concat(concat('%',#{adminphone}),'%')
       </if>
