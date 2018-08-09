@@ -133,6 +133,10 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		return result;
 	}
 
+	
+	/**
+	 * 依据条件查询转换单列表
+	 */
 	@Override
 	@Transactional(readOnly = true)
 	public PageBaseDto<TransferInventoryListDTO> getTransferInventoryListDTOList(TransferListDTO transferListDTO) {
