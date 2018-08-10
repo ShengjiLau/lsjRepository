@@ -183,18 +183,6 @@ public class OrderApi {
 
 
 
-    @InitBinder
-    public void initBinder(final WebDataBinder webdataBinder) {
-        webdataBinder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) throws IllegalArgumentException {
-                if (StringUtils.isEmpty(text)) {
-                    setValue(null);
-                    return;
-                }
-                setValue(new Date(Long.valueOf(text)));
-            }
-        });
-    }
+
 
 }

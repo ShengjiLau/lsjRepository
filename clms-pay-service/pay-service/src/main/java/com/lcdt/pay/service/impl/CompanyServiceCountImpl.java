@@ -1,11 +1,17 @@
 package com.lcdt.pay.service.impl;
 
 import com.lcdt.pay.dao.CompanyServiceCountMapper;
+import com.lcdt.pay.dao.OrderType;
+import com.lcdt.pay.dao.PayOrderMapper;
 import com.lcdt.pay.dao.ServiceProductMapper;
 import com.lcdt.pay.model.CompanyServiceCount;
+import com.lcdt.pay.model.OrderStatus;
+import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.model.ServiceProduct;
 import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.pay.rpc.ProductCountService;
+import com.lcdt.pay.service.OrderService;
+import com.lcdt.pay.utils.OrderNoGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +33,38 @@ public class CompanyServiceCountImpl implements CompanyServiceCountService {
     @Autowired
     ServiceProductMapper serviceProductMapper;
 
+    @Autowired
+    OrderService orderService;
+
+    @Autowired
+    PayOrderMapper payOrderMapper;
+
+    @Autowired
+    ServiceProductMapper productMapper;
+
     private static final Logger log = LoggerFactory.getLogger(CompanyServiceCountImpl.class);
 
 
     //后台管理员设置增加
     public CompanyServiceCount addCountNum(Long companyId,String serviceName,Integer num,String operationUserName){
+
+        //save order log
+        final List<ServiceProduct> serviceProducts1 = productMapper.selectProductByServiceName(serviceName);
+        if (CollectionUtils.isEmpty(serviceProducts1)) {
+            throw new RuntimeException("产品不存在");
+        }
+        final ServiceProduct serviceProduct = serviceProducts1.get(0);
+
+        PayOrder payOrder = new PayOrder();
+        payOrder.setOrderStatus(OrderStatus.FINISH);
+        payOrder.setOrderPayCompanyId(companyId);
+        payOrder.setOrderNo(OrderNoGenerator.generateDateNo(1));
+        payOrder.setOrderType(OrderType.ADMIN_TOPUP);
+        payOrder.setOrderProductId(serviceProduct.getProductId());
+        payOrder.setCreateUserName(operationUserName);
+        payOrderMapper.insert(payOrder);
+
+
 
         final List<ServiceProduct> serviceProducts = serviceProductMapper.selectProductByName(serviceName);
         if (CollectionUtils.isEmpty(serviceProducts)) {

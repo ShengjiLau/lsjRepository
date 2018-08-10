@@ -10,9 +10,11 @@ import com.lcdt.pay.dao.ProductCountLogMapper;
 import com.lcdt.pay.model.BalanceLog;
 import com.lcdt.pay.model.CompanyServiceCount;
 import com.lcdt.pay.model.PageResultDto;
+import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.pay.rpc.ProductCountLog;
 import com.lcdt.pay.service.CompanyBalanceService;
+import com.lcdt.pay.service.TopupService;
 import com.lcdt.pay.service.impl.ProductCountServiceImpl;
 import com.lcdt.pay.utils.CommonUtils;
 import com.lcdt.userinfo.dto.CompanyQueryDto;
@@ -53,7 +55,8 @@ public class PayManageApi {
     @Autowired
     private BalanceLogMapper balanceLogMapper;
 
-
+    @Autowired
+    private TopupService topupService;
 
     @PostMapping("/balances")
     @ApiOperation("根据公司id list查询现金余额")
@@ -113,6 +116,20 @@ public class PayManageApi {
         PageHelper.startPage(pageNo, pageSize);
         List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, beginTime, endTime, orderType,payType,operationUserName);
         return new PageResultDto<BalanceLog>(balanceLogs);
+    }
+
+    @ApiOperation("查看所有订单")
+    @RequestMapping(value = "/orders",method = RequestMethod.GET)
+    public PageResultDto<PayOrder> allorderlist(Integer pageNo, Integer pageSize,
+                                                @RequestParam(required = false) Long companyId,
+                                                @RequestParam(required = false) Date beginTime,
+                                                @RequestParam(required = false) Date endTime,
+                                                @RequestParam(required = false)Integer orderType
+            , @RequestParam(required = false) Integer payType
+    ){
+        PageHelper.startPage(pageNo, pageSize);
+        List<PayOrder> payOrders = topupService.topUpOrderList(companyId, orderType,beginTime,endTime,payType);
+        return new PageResultDto<PayOrder>(payOrders);
     }
 
 
