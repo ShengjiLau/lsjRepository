@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.lcdt.util.ResponseJsonUtils;
 import com.lcdt.warehouse.controller.exception.ShiftInventoryException;
@@ -53,8 +54,11 @@ public class TransferInventoryListController {
 	@ApiOperation(value = "创建库存转换单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('transfer_inventory_add')")
 	public JSONObject insertTransferInventoryList(@RequestBody TransferInventoryListDTO transferInventoryListDTO) {
+		String message = validatetransferInventoryList(transferInventoryListDTO);
+		if (null != message) {
+			return ResponseJsonUtils.failedResponseJsonWithoutData(message);
+		}
 		int result = transferInventoryListService.insertTransferInventoryList(transferInventoryListDTO);
-		String message = null;
 		if (result > 0) {
 			message = "创建成功";
 			return ResponseJsonUtils.successResponseJsonWithoutData(message);
@@ -84,7 +88,7 @@ public class TransferInventoryListController {
 	@PostMapping("/list")
 	@ApiOperation(value = "查询库存转换单列表")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('transfer_inventory_get')")
-	public JSONObject getTransferInventoryLists(TransferListDTO transferListDTO) {
+	public JSONObject getTransferInventoryLists(@RequestBody TransferListDTO transferListDTO) {
 		PageBaseDto<TransferInventoryListDTO> pageBaseDto = transferInventoryListService.getTransferInventoryListDTOList(transferListDTO);
 		String message = "库存转换单列表";
 		return ResponseJsonUtils.successResponseJson(pageBaseDto, message);
@@ -193,6 +197,57 @@ public class TransferInventoryListController {
 		 SheetGoodsUtils.setCell(7, transferGoodsDO.getTransferNum().doubleValue());
 		 SheetGoodsUtils.setCell(8, transferGoodsDO.getRemark());
 	}
+	
+	/**
+	 * 验证转换单信息
+	 * @param transferInventoryListDTO
+	 */
+	private String validatetransferInventoryList(TransferInventoryListDTO transferInventoryListDTO) {
+		String validateMessage = null;
+		if (StringUtils.isBlank(transferInventoryListDTO.getGroupName())) {
+			validateMessage = "所属项目组不可为空！";
+			return validateMessage;
+		}
+		if (StringUtils.isBlank(transferInventoryListDTO.getCustomerName())) {
+			validateMessage = "客户名称不可为空！";
+			return validateMessage;
+		}
+		if (StringUtils.isBlank(transferInventoryListDTO.getWarehouseName())) {
+			validateMessage = "仓库不可为空！";
+			return validateMessage;
+		}
+		List<TransferGoodsDO> transferGoodsDOList = transferInventoryListDTO.getTransferGoodsDOList();
+		for (int i = 0; i < transferGoodsDOList.size(); i++) {
+			TransferGoodsDO transferGoodsDO = transferGoodsDOList.get(i);
+			if (null == transferGoodsDO.getIsMaterial()) {
+				validateMessage = "商品类型isMaterial字段不可为空！";
+				return validateMessage;
+			}else {
+				if (0 == transferGoodsDO.getIsMaterial()) {
+					if (StringUtils.isBlank(transferGoodsDO.getWhLocCode())){
+						validateMessage = "消耗商品的库位不可为空！";
+						return validateMessage;
+					}
+					if (null == transferGoodsDO.getTransferNum()) {
+						validateMessage = "消耗商品的使用库存不可为空！";
+						return validateMessage;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

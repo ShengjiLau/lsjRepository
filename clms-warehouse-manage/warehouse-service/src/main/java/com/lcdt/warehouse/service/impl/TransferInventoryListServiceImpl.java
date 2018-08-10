@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.warehouse.contants.InventoryBusinessType;
 import com.lcdt.warehouse.dto.PageBaseDto;
-import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.dto.TransferInventoryListDTO;
 import com.lcdt.warehouse.dto.TransferListDTO;
 import com.lcdt.warehouse.entity.Inventory;
@@ -30,7 +29,7 @@ import com.lcdt.warehouse.mapper.InventoryMapper;
 import com.lcdt.warehouse.mapper.TransferGoodsDOMapper;
 import com.lcdt.warehouse.service.InventoryService;
 import com.lcdt.warehouse.service.TransferInventoryListService;
-import com.lcdt.warehouse.utils.ShiftGoodsBO;
+import com.lcdt.warehouse.utils.CommonUtils;
 import com.lcdt.warehouse.vo.TransferInventoryListVO;
 import com.lcdt.warehouse.mapper.TransferInventoryListDOMapper;
 
@@ -63,6 +62,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 	
 	/**
 	 * 新建库存商品转换单
+	 * 需要锁定消耗商品的库存数量
 	 */
 	@Override
 	@Transactional(isolation = Isolation.REPEATABLE_READ, rollbackForClassName = {"RuntimeException","Exception"}, timeout = 30, propagation = Propagation.REQUIRED)
@@ -92,6 +92,8 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 	
 	/**
 	 * 完成库存商品转换单
+	 * 需要释放消耗商品的库存数量，并按照实际消耗数量进行扣减，同时生成库存流水。
+	 * 生成商品需要按照条件查询库存，已存在库存则增加库存，不存在库存则新生成一条库存，并且生成库存流水。
 	 */
 	@Override
 	@Transactional(isolation = Isolation.REPEATABLE_READ, rollbackForClassName = {"RuntimeException","Exception"}, timeout = 30, propagation = Propagation.REQUIRED)
@@ -117,7 +119,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 			TransferGoodsDO transferGoodsDO = transferGoodsDOListNew.get(i);
 			if (0 == transferGoodsDO.getIsMaterial()) {
 				Inventory inventory = inventoryMapper.selectById(transferGoodsDO.getInventoryId());
-				if (0 > (inventory.getInvertoryNum() - transferGoodsDO.getTransferNum().doubleValue())) {
+				if (0 > CommonUtils.sub(inventory.getInvertoryNum(), transferGoodsDO.getTransferNum().doubleValue())) {
 					throw new RuntimeException(transferGoodsDO.getGoodsName() + "库存量不足");
 				}
 				inventory.setInvertoryNum(inventory.getInvertoryNum() - transferGoodsDO.getTransferNum().doubleValue());
@@ -140,10 +142,9 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 	@Override
 	@Transactional(readOnly = true)
 	public PageBaseDto<TransferInventoryListDTO> getTransferInventoryListDTOList(TransferListDTO transferListDTO) {
-		int pageNo; 
-		int pageSize;
-		pageNo = null == transferListDTO.getPageNo()? TransferInventoryListVO.FIRST_PAGE_NO : transferListDTO.getPageNo();
-		pageSize = null == transferListDTO.getPageSize()? Integer.MAX_VALUE : transferListDTO.getPageSize();
+		int pageNo, pageSize; 
+		pageNo = null == transferListDTO.getPageNo() ? TransferInventoryListVO.FIRST_PAGE_NO : transferListDTO.getPageNo();
+		pageSize = null == transferListDTO.getPageSize() ? Integer.MAX_VALUE : transferListDTO.getPageSize();
 		transferListDTO.setCompanyId(SecurityInfoGetter.getCompanyId());
 		List<TransferInventoryListDTO> transferInventoryListDTOList = TransferInventoryListDOMapper.getTransferInventoryListDTOList(transferListDTO);
 		if (null == transferInventoryListDTOList || 0 == transferInventoryListDTOList.size()) {
@@ -222,6 +223,9 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		
 	}
 
+	/**
+	 * 查询转换单详情
+	 */
 	@Override
 	@Transactional(readOnly = true)
 	public TransferInventoryListDTO getTransferInventoryListDTODetail(Long transferInventoryListId) {
@@ -230,6 +234,9 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 	}
 	
 	
+	/*
+	 * 修改转换单状态
+	 */
 	@Override
 	public int updateTransferStatus(Long transferInventoryListId) {
 		TransferInventoryListDO transferInventoryListDO = new TransferInventoryListDO();
@@ -251,6 +258,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		return (HashMap<String, Object>) map;
 	}
 	
+	
 	/**
 	 * 查询TransferGoodsDO列表
 	 */
@@ -258,6 +266,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		List<TransferGoodsDO> transferGoodsDOList = TransferGoodsDOMapper.getTransferGoodsDOListByConditions(map);
 		return transferGoodsDOList;
 	}
+	
 	
 	/**
 	 * 逻辑分页
@@ -279,6 +288,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		pageBaseDto.setTotal(transferInventoryListDTOList.size());
 		return pageBaseDto;
 	}
+	
 	
 	/**
 	 * 将转换单主表与转换单商品表关联起来
@@ -324,6 +334,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		return inventoryService.addInventory(inventory);
 	}
 	
+	
 	/**
 	 * 生成库存流水
 	 */
@@ -352,7 +363,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
         logMapper.saveLog(inventoryLog);    		
 	}
 	
-	
+
 	
 
 }

@@ -43,7 +43,7 @@ public class TransferGoodsDO implements Serializable {
 	@ApiModelProperty("商品单位")
     private String goodsUnit;
 
-    private static final long serialVersionUID = 1154156156156L;
+    private static final long serialVersionUID = 100154156156156L;
 
    
 }
