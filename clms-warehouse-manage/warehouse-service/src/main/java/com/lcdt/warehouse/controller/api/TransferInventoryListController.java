@@ -26,9 +26,9 @@ import com.lcdt.warehouse.dto.TransferInventoryListDTO;
 import com.lcdt.warehouse.dto.TransferListDTO;
 import com.lcdt.warehouse.entity.TransferGoodsDO;
 import com.lcdt.warehouse.service.TransferInventoryListService;
-import com.lcdt.warehouse.utils.CloseStream;
 import com.lcdt.warehouse.utils.DateToStringUtils;
 import com.lcdt.warehouse.utils.SheetUtils;
+import com.lcdt.warehouse.utils.StreamUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -166,18 +166,15 @@ public class TransferInventoryListController {
 				 }
 				 
 				 String fileName = "商品转换单.xlsx";
-				 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("utf-8"),"iso-8859-1") + "\"");
-	             response.setContentType("application/octet-stream; charset=UTF-8");
-	             ouputStream = response.getOutputStream();
-	             xwb.write(ouputStream);
-				
+				 ouputStream = StreamUtils.getOutputStream(response, fileName);
+	             xwb.write(ouputStream);				
 			}catch(Exception e) {
 				e.printStackTrace();
 				log.debug("导出Excel表出现异常：" + e.getMessage());
 			}finally {
-				CloseStream.close(xwb);
-				CloseStream.close(ouputStream);
-				CloseStream.close(inputStream);
+				StreamUtils.closeStream(xwb);
+				StreamUtils.closeStream(inputStream);
+				StreamUtils.closeStream(ouputStream);			
 			}
 		}else {
 			throw new RuntimeException("Excel模板文件路径异常!");

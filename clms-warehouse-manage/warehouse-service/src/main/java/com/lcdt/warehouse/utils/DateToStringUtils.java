@@ -12,6 +12,9 @@ import java.util.Date;
 public class DateToStringUtils {
 	
 	public static String ConvertDateToString(Date date) {
+		if (null == date){
+			return "";
+		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String dateString = sdf.format(date);
 		return dateString;

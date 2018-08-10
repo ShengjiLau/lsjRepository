@@ -74,6 +74,8 @@ public class SheetUtils {
 		if (object.getClass() == Date.class) {
 			cell.setCellValue((Date)object);
 		}
+		//some type else or enum 
+		//如果有别的类型或者enum请添加
 	}
 	
 	
