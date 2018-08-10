@@ -39,6 +39,11 @@
     WHERE
     product_name = #{productName}
   </select>
-
+  <select id="selectProductByServiceName" resultMap="BaseResultMap">
+    SELECT *
+    from service_product
+    WHERE
+    product_service = #{serviceName}
+  </select>
 
 </mapper>

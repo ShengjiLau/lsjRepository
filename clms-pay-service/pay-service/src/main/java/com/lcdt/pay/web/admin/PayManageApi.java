@@ -10,9 +10,11 @@ import com.lcdt.pay.dao.ProductCountLogMapper;
 import com.lcdt.pay.model.BalanceLog;
 import com.lcdt.pay.model.CompanyServiceCount;
 import com.lcdt.pay.model.PageResultDto;
+import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.pay.rpc.ProductCountLog;
 import com.lcdt.pay.service.CompanyBalanceService;
+import com.lcdt.pay.service.TopupService;
 import com.lcdt.pay.service.impl.ProductCountServiceImpl;
 import com.lcdt.pay.utils.CommonUtils;
 import com.lcdt.userinfo.dto.CompanyQueryDto;
@@ -42,6 +44,7 @@ public class PayManageApi {
     @Autowired
     private CompanyServiceCountMapper companyServiceCountMapper;
 
+    @Autowired
     private CompanyServiceCountService countService;
 
     @Autowired
@@ -53,7 +56,8 @@ public class PayManageApi {
     @Autowired
     private BalanceLogMapper balanceLogMapper;
 
-
+    @Autowired
+    private TopupService topupService;
 
     @PostMapping("/balances")
     @ApiOperation("根据公司id list查询现金余额")
@@ -69,8 +73,6 @@ public class PayManageApi {
         }
         return new PageResultDto(countMapper.selectByCompanyIds(compIds));
     }
-
-
 
     @PostMapping("/balanceList")
     @ApiOperation("根据公司名和管理员账号查询公司余额")
@@ -92,19 +94,20 @@ public class PayManageApi {
     @PostMapping("/addservicenum")
     @ApiOperation("充值服务次数，serviceName服务代码")
     public CompanyServiceCount topUp(Long companyId,String serviceName,Integer num){
-        return countService.addCountNum(companyId, serviceName, num, SecurityInfoGetter.getUser().getPhone());
+        return countService.addCountNum(companyId,SecurityInfoGetter.getUser().getUserId(),serviceName, num, SecurityInfoGetter.getUser().getPhone());
     }
     @PostMapping("/countlog")
     @ApiOperation("查询服务流水记录")
-    public PageResultDto serviceCountLogs(Integer pageNo, Integer pageSize,Long companyId, String serviceName, Date begin,Date end,Integer logtype){
+    public PageResultDto serviceCountLogs(Integer pageNo, Integer pageSize,@RequestParam(required = false) Long companyId, String serviceName, Date begin,Date end,Integer logtype){
         PageHelper.startPage(pageNo, pageSize);
         final List<ProductCountLog> productCountLogs = logMapper.selectByProductNameCompanyId(companyId, serviceName, begin, end, logtype);
         return new PageResultDto(productCountLogs);
     }
 
     @RequestMapping(value = "/balancelog",method = RequestMethod.POST)
+    @ApiOperation("金额余额流水记录")
     public PageResultDto<BalanceLog> balanceLog(Integer pageSize, Integer pageNo,
-                                                Long companyId,
+                                                @RequestParam(required = false) Long companyId,
                                                 @RequestParam(required = false) Date beginTime,
                                                 @RequestParam(required = false) Date endTime
             , @RequestParam(required = false) Integer payType, @RequestParam(required = false)Integer orderType
@@ -116,9 +119,19 @@ public class PayManageApi {
         return new PageResultDto<BalanceLog>(balanceLogs);
     }
 
-
-
-
+    @ApiOperation("查看所有订单")
+    @RequestMapping(value = "/orders",method = RequestMethod.GET)
+    public PageResultDto<PayOrder> allorderlist(Integer pageNo, Integer pageSize,
+                                                @RequestParam(required = false) Long companyId,
+                                                @RequestParam(required = false) Date beginTime,
+                                                @RequestParam(required = false) Date endTime,
+                                                @RequestParam(required = false)Integer orderType
+            , @RequestParam(required = false) Integer payType
+    ){
+        PageHelper.startPage(pageNo, pageSize);
+        List<PayOrder> payOrders = topupService.topUpOrderList(companyId, orderType,beginTime,endTime,payType);
+        return new PageResultDto<PayOrder>(payOrders);
+    }
 
 
     @PostMapping("/topup")
@@ -141,5 +154,11 @@ public class PayManageApi {
         final List<Company> byComanyQueryDto = companyService.findByComanyQueryDto(companyQueryDto);
         return byComanyQueryDto.stream().map(company -> company.getCompId()).collect(Collectors.toList());
     }
+
+
+    public void initBinder(){
+
+    }
+
 
 }

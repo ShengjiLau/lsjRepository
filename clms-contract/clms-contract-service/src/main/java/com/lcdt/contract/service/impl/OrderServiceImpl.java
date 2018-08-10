@@ -13,6 +13,8 @@ import com.lcdt.contract.model.OrderApproval;
 import com.lcdt.contract.notify.ContractAttachment;
 import com.lcdt.contract.notify.ContractNotifyBuilder;
 import com.lcdt.contract.notify.ContractNotifyProducer;
+import com.lcdt.customer.model.Customer;
+import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.notify.model.ContractNotifyEvent;
 import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.DefaultNotifySender;
@@ -96,6 +98,9 @@ public class OrderServiceImpl implements OrderService {
     private CompanyRpcService companyRpcService;
     @Autowired
     private ContractNotifyProducer producer;
+
+    @Reference
+    private CustomerRpcService customerRpcService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ, timeout = 30, rollbackForClassName = {"RuntimeException","Exception"})
@@ -715,29 +720,47 @@ public class OrderServiceImpl implements OrderService {
         OrderDto salesOrderDto = orderMapper.selectByPrimaryKey(orderId);
         Order salesOrder = new Order();
         BeanUtils.copyProperties(salesOrderDto, salesOrder);
-        List<OrderProduct> salesOrderProductList = orderProductMapper.getOrderProductByOrderId(orderId);
+
         if (null == salesOrder) {
             return OrderVO.ZERO_INTEGER;
         }
+
+        //查询对应供应商对应的'绑定企业'
+        Customer customer = customerRpcService.findCustomerById(salesOrder.getSupplierId(),salesOrder.getCompanyId());
+        if (customer==null) {
+            return OrderVO.ZERO_INTEGER;
+        }
+        salesOrder.setCompanyId(customer.getBindCpid());
+
+        List<OrderProduct> salesOrderProductList = orderProductMapper.getOrderProductByOrderId(orderId);
+
         Order purchaseOrder = new Order();
         purchaseOrder.setCompanyId(SecurityInfoGetter.getCompanyId());
         purchaseOrder.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
         purchaseOrder.setCreateTime(new Date());
         purchaseOrder.setOrderType(OrderVO.SALES_ORDER);
         purchaseOrder.setGroupId(salesOrder.getGroupId());
-        purchaseOrder.setReceiveWarehouse(salesOrder.getReceiveWarehouse());
-        purchaseOrder.setWarehouseId(salesOrder.getWarehouseId());
-        purchaseOrder.setReceiverPhone(salesOrder.getReceiverPhone());
+/*      purchaseOrder.setReceiveWarehouse(salesOrder.getReceiveWarehouse());
+        purchaseOrder.setWarehouseId(salesOrder.getWarehouseId());*/
+        //销售单收货----采购单收货
+        purchaseOrder.setSenderPhone(salesOrder.getReceiverPhone());
+        purchaseOrder.setSender(salesOrder.getReceiver());
+        purchaseOrder.setSendProvince(salesOrder.getReceiverProvince());
+        purchaseOrder.setSendCity(salesOrder.getReceiverCity());
+        purchaseOrder.setSendDistrict(salesOrder.getReceiveDistrict());
+        purchaseOrder.setSendAddress(salesOrder.getReceiveAddress());
 
-        purchaseOrder.setReceiver(salesOrder.getReceiver());
-        purchaseOrder.setReceiverProvince(salesOrder.getReceiverProvince());
+        //销售单发货----采购单发货
+        purchaseOrder.setReceiverPhone(salesOrder.getSenderPhone());
+        purchaseOrder.setReceiver(salesOrder.getSender());
+        purchaseOrder.setReceiverProvince(salesOrder.getSendProvince());
         purchaseOrder.setReceiverCity(salesOrder.getReceiverCity());
-        purchaseOrder.setReceiveDistrict(salesOrder.getReceiveDistrict());
-        purchaseOrder.setReceiveAddress(salesOrder.getReceiveAddress());
+        purchaseOrder.setReceiveDistrict(salesOrder.getSendDistrict());
+        purchaseOrder.setReceiveAddress(salesOrder.getSendAddress());
+
         purchaseOrder.setIsDraft(OrderVO.WATTING_PUBLISHI);
         purchaseOrder.setOriginOrderId(salesOrder.getOrderId());
         purchaseOrder.setOriginOrderNo(salesOrder.getOrderNo());
-
         int result = orderMapper.insertOrder(purchaseOrder);
         Order order = new Order();
         order.setPushOrderId(purchaseOrder.getOrderId());
@@ -752,6 +775,11 @@ public class OrderServiceImpl implements OrderService {
                 purchaseOrderProduct.setPrice(null);
                 purchaseOrderProduct.setOpId(null);
                 purchaseOrderProduct.setOrderId(purchaseOrder.getOrderId());
+
+
+
+
+
                 purchaseOrderProductList.add(purchaseOrderProduct);
             }
             nonautomaticMapper.insertOrderProductByBatch(purchaseOrderProductList);

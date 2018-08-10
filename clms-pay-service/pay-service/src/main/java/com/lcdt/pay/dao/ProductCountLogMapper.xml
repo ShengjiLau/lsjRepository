@@ -57,12 +57,11 @@
        select service_count_log_id, log_no, log_des, service_name, consume_num, remain_num,company_id,log_time,
     log_type, deduct,log_time,user_name
     from product_count_log
-    where
+
+    <where>
     <if test="companyId != null">
       and     company_id = #{companyId}
     </if>
-
-
 
     <if test="productName != null">
       and service_name = #{productName}
@@ -79,6 +78,7 @@
     <if test="logType != null">
       and log_type = #{logType,jdbcType=INTEGER}
     </if>
+    </where>
     order by log_time desc
   </select>
 

@@ -22,6 +22,6 @@ public interface CompanyServiceCountService {
      */
     int companyProductCount(Long companyId, String serviceName);
 
-    CompanyServiceCount addCountNum(Long companyId,String serviceName,Integer num,String operationUserName);
+    CompanyServiceCount addCountNum(Long companyId,Long payUserId,String serviceName,Integer num,String operationUserName);
 
 }

@@ -79,7 +79,13 @@
     <include refid="baseColumn"></include>
     from pay_order
 
-    WHERE order_pay_company_id = #{companyId,jdbcType=BIGINT}
+    <where>
+
+      <if test="companyId != null">
+        order_pay_company_id = #{companyId,jdbcType=BIGINT}
+      </if>
+
+
     <if test="orderType != null">
       and order_type = #{orderType,jdbcType=INTEGER}
     </if>
@@ -94,6 +100,7 @@
     <if test="payType != null">
       and pay_type = #{payType,jdbcType=INTEGER}
     </if>
+    </where>
     order by create_time DESC
   </select>
 
