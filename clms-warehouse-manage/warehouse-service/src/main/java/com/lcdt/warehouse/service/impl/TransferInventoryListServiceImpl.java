@@ -30,6 +30,7 @@ import com.lcdt.warehouse.mapper.TransferGoodsDOMapper;
 import com.lcdt.warehouse.service.InventoryService;
 import com.lcdt.warehouse.service.TransferInventoryListService;
 import com.lcdt.warehouse.utils.CommonUtils;
+import com.lcdt.warehouse.utils.LogicalPagination;
 import com.lcdt.warehouse.vo.TransferInventoryListVO;
 import com.lcdt.warehouse.mapper.TransferInventoryListDOMapper;
 
@@ -142,14 +143,13 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 	@Override
 	@Transactional(readOnly = true)
 	public PageBaseDto<TransferInventoryListDTO> getTransferInventoryListDTOList(TransferListDTO transferListDTO) {
-		int pageNo, pageSize; 
-		pageNo = null == transferListDTO.getPageNo() ? TransferInventoryListVO.FIRST_PAGE_NO : transferListDTO.getPageNo();
-		pageSize = null == transferListDTO.getPageSize() ? Integer.MAX_VALUE : transferListDTO.getPageSize();
+		Integer pageNo = transferListDTO.getPageNo();
+		Integer pageSize =  transferListDTO.getPageSize();
 		transferListDTO.setCompanyId(SecurityInfoGetter.getCompanyId());
 		List<TransferInventoryListDTO> transferInventoryListDTOList = TransferInventoryListDOMapper.getTransferInventoryListDTOList(transferListDTO);
 		if (null == transferInventoryListDTOList || 0 == transferInventoryListDTOList.size()) {
 			List<TransferInventoryListDTO> transferInventoryListDTOListEmpty = new ArrayList<TransferInventoryListDTO>();
-			return getPageBaseDto(transferInventoryListDTOListEmpty, pageSize, pageNo);
+			return LogicalPagination.paging(transferInventoryListDTOListEmpty, pageSize, pageNo);
 		}
 		long total = transferInventoryListDTOList.size();
 		Long[] tranferIds = new Long[(int) total];
@@ -161,7 +161,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 			 transferGoodsDOList = TransferGoodsDOMapper.getTransferGoodsDOListByTransferIds(tranferIds);
 			 List<TransferInventoryListDTO> transferInventoryListDTOListWithGoods = 
 					 getTransferInventoryListDTOListWithGoods(transferInventoryListDTOList,  transferGoodsDOList);
-			 return getPageBaseDto(transferInventoryListDTOListWithGoods, pageSize, pageNo);
+			 return LogicalPagination.paging(transferInventoryListDTOListWithGoods, pageSize, pageNo);
 		}else if (null != transferListDTO.getMaterialProduct() && null == transferListDTO.getFinishedProduct()){
 			Map<String,Object>  map = getMap(tranferIds, transferListDTO.getMaterialProduct(), TransferInventoryListVO.IS_MATERIAL);
 			transferGoodsDOList = getTransferGoodsDOList(map);
@@ -174,7 +174,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 					it.remove();
 				}
 			}
-			 return getPageBaseDto(transferInventoryListDTOListWithGoods, pageSize, pageNo);
+			 return LogicalPagination.paging(transferInventoryListDTOListWithGoods, pageSize, pageNo);
 		}else if(null == transferListDTO.getMaterialProduct() && null != transferListDTO.getFinishedProduct()) {
 			Map<String,Object>  map = getMap(tranferIds,transferListDTO.getFinishedProduct(), TransferInventoryListVO.IS_PRODUCT);
 			transferGoodsDOList = getTransferGoodsDOList(map);
@@ -187,7 +187,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 					it.remove();
 				}
 			}
-			 return getPageBaseDto(transferInventoryListDTOListWithGoods, pageSize, pageNo);
+			 return LogicalPagination.paging(transferInventoryListDTOListWithGoods, pageSize, pageNo);
 		}else {
 			Map<String,Object>  map1 = getMap(tranferIds, transferListDTO.getMaterialProduct(), TransferInventoryListVO.IS_MATERIAL);
 			List<TransferGoodsDO> transferGoodsDOList1 = getTransferGoodsDOList(map1);
@@ -218,7 +218,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 				}
 			}
 			transferInventoryListDTOListWithGoods.removeAll(transferInventoryListDTOListRemove);
-			return getPageBaseDto(transferInventoryListDTOListWithGoods, pageSize, pageNo);
+			return LogicalPagination.paging(transferInventoryListDTOListWithGoods, pageSize, pageNo);
 		}
 		
 	}
@@ -265,28 +265,6 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 	private List<TransferGoodsDO> getTransferGoodsDOList(Map<String,Object> map){
 		List<TransferGoodsDO> transferGoodsDOList = TransferGoodsDOMapper.getTransferGoodsDOListByConditions(map);
 		return transferGoodsDOList;
-	}
-	
-	
-	/**
-	 * 逻辑分页
-	 */
-	private PageBaseDto<TransferInventoryListDTO> getPageBaseDto(List<TransferInventoryListDTO> transferInventoryListDTOList, int pageSize, int pageNo){
-		PageBaseDto<TransferInventoryListDTO> pageBaseDto = new PageBaseDto<TransferInventoryListDTO>();
-		if (0 == transferInventoryListDTOList.size()) {
-			pageBaseDto.setList(transferInventoryListDTOList);
-			pageBaseDto.setTotal(0);
-			return pageBaseDto;
-		}
-		List<TransferInventoryListDTO> listPage = new LinkedList<TransferInventoryListDTO>();
-		if (pageNo*pageSize > transferInventoryListDTOList.size()) {
-			listPage.addAll(transferInventoryListDTOList.subList((pageNo - 1)*pageSize, transferInventoryListDTOList.size()));
-		}else {
-			listPage.addAll(transferInventoryListDTOList.subList((pageNo - 1)*pageSize, pageNo*pageSize));
-		}
-		pageBaseDto.setList(listPage);
-		pageBaseDto.setTotal(transferInventoryListDTOList.size());
-		return pageBaseDto;
 	}
 	
 	

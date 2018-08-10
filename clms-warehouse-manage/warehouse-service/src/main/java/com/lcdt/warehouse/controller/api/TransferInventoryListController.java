@@ -88,7 +88,7 @@ public class TransferInventoryListController {
 	@PostMapping("/list")
 	@ApiOperation(value = "查询库存转换单列表")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('transfer_inventory_get')")
-	public JSONObject getTransferInventoryLists(@RequestBody TransferListDTO transferListDTO) {
+	public JSONObject getTransferInventoryLists(TransferListDTO transferListDTO) {
 		PageBaseDto<TransferInventoryListDTO> pageBaseDto = transferInventoryListService.getTransferInventoryListDTOList(transferListDTO);
 		String message = "库存转换单列表";
 		return ResponseJsonUtils.successResponseJson(pageBaseDto, message);

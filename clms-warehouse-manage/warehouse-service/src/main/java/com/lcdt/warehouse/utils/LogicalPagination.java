@@ -14,39 +14,42 @@ import com.lcdt.warehouse.dto.PageBaseDto;
 
 public class  LogicalPagination <T>{
 	
-	public static <T> PageBaseDto<T> paging(List<T> totalList, Integer pageNo, Integer pageSize) {
+	private final static Integer TATAL_ZERO = 0;
+	
+	private final static Integer PAGE_ONE = 1;
+	
+	private final static Integer PAGE_SIZE_ZERO = 0;
+	
+	public static <T> PageBaseDto<T> paging(List<T> totalList, Integer pageSize, Integer pageNo) {
 		PageBaseDto<T> pageBaseDto = new PageBaseDto<T>();
 		//相信Integer.MAX_VALUE已经足够大
-		int listSize = totalList.size();
-		/**
-		 * 如果List为空
-		 */
+		int totalSize = totalList.size();
 		if (null == totalList || totalList.isEmpty() ) {
 			pageBaseDto.setList(totalList);
-			pageBaseDto.setTotal(0);
+			pageBaseDto.setTotal(TATAL_ZERO);
 			return pageBaseDto;
 		}
 		if (null == pageNo) {
-			pageNo = 1;
+			pageNo = PAGE_ONE;
 		}
 		if (null == pageSize) {
-			pageSize = 0;
+			pageSize = PAGE_SIZE_ZERO;
 		}
 		/**
 		 * 如果pageSize为0 ， 则返回全部，类似于PageHelper.
 		 */
 		if (0 == pageSize) {
-			pageBaseDto.setTotal(listSize);
+			pageBaseDto.setTotal(totalSize);
 			pageBaseDto.setList(totalList);
 			return pageBaseDto;
 		}
 		List<T> pageList = new LinkedList<T>();
-		if (pageNo * pageSize > listSize) {
-			pageList.addAll(totalList.subList((pageNo - 1) * pageSize, listSize));
+		if (pageNo * pageSize > totalSize) {
+			pageList.addAll(totalList.subList((pageNo - PAGE_ONE) * pageSize, totalSize));
 		}else {
-			pageList.addAll(totalList.subList((pageNo - 1) * pageSize, pageNo * pageSize));
+			pageList.addAll(totalList.subList((pageNo - PAGE_ONE) * pageSize, pageNo * pageSize));
 		}
-		pageBaseDto.setTotal(listSize);
+		pageBaseDto.setTotal(totalSize);
 		pageBaseDto.setList(pageList);
 		return pageBaseDto;
 	}
