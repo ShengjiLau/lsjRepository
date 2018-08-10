@@ -33,6 +33,7 @@ import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.dto.ShiftInventoryListDTO;
 import com.lcdt.warehouse.entity.ShiftGoodsDO;
 import com.lcdt.warehouse.service.ShiftInventoryListService;
+import com.lcdt.warehouse.utils.DateToStringUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -176,7 +177,7 @@ public class ShiftInventoryListApi {
 				 cell = row.getCell(2);
 				 cell.setCellValue(shiftInventoryListDTO.getCustomerName());
 				 cell = row.getCell(6);
-				 cell.setCellValue(shiftInventoryListDTO.getGmtCreate().toGMTString());
+				 cell.setCellValue(DateToStringUtils.ConvertDateToString(shiftInventoryListDTO.getGmtCreate()));
 				 
 				 row = sheet.getRow(6);
 				 cell = row.getCell(2);
