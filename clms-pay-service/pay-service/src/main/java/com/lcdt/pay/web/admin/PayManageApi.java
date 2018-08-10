@@ -44,6 +44,7 @@ public class PayManageApi {
     @Autowired
     private CompanyServiceCountMapper companyServiceCountMapper;
 
+    @Autowired
     private CompanyServiceCountService countService;
 
     @Autowired
@@ -93,7 +94,7 @@ public class PayManageApi {
     @PostMapping("/addservicenum")
     @ApiOperation("充值服务次数，serviceName服务代码")
     public CompanyServiceCount topUp(Long companyId,String serviceName,Integer num){
-        return countService.addCountNum(companyId, serviceName, num, SecurityInfoGetter.getUser().getPhone());
+        return countService.addCountNum(companyId,SecurityInfoGetter.getUser().getUserId(),serviceName, num, SecurityInfoGetter.getUser().getPhone());
     }
     @PostMapping("/countlog")
     @ApiOperation("查询服务流水记录")
