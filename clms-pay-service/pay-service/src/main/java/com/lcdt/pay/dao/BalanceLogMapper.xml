@@ -71,7 +71,12 @@
     select b.*
     from balance_log b
     left join pay_order p on p.order_id = b.order_id
-    where b.company_id = #{companyId}
+    <where>
+    <if test="companyId != null">
+      and     b.company_id = #{companyId}
+    </if>
+
+
 
     <if test="orderType != null">
       and b.log_type = #{orderType,jdbcType=INTEGER}
@@ -91,6 +96,7 @@
     <if test="logUser != null">
       and b.log_username = #{logUser,jdbcType=VARCHAR}
     </if>
+    </where>
   order by log_time DESC
 
 

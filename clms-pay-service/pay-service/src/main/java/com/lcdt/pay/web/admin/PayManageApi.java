@@ -70,8 +70,6 @@ public class PayManageApi {
         return new PageResultDto(countMapper.selectByCompanyIds(compIds));
     }
 
-
-
     @PostMapping("/balanceList")
     @ApiOperation("根据公司名和管理员账号查询公司余额")
     public PageResultDto allList(Integer pageSize, Integer pageNo, @RequestParam(required = false) String companyName, @RequestParam(required = false) String adminUserName){
@@ -96,15 +94,16 @@ public class PayManageApi {
     }
     @PostMapping("/countlog")
     @ApiOperation("查询服务流水记录")
-    public PageResultDto serviceCountLogs(Integer pageNo, Integer pageSize,Long companyId, String serviceName, Date begin,Date end,Integer logtype){
+    public PageResultDto serviceCountLogs(Integer pageNo, Integer pageSize,@RequestParam(required = false) Long companyId, String serviceName, Date begin,Date end,Integer logtype){
         PageHelper.startPage(pageNo, pageSize);
         final List<ProductCountLog> productCountLogs = logMapper.selectByProductNameCompanyId(companyId, serviceName, begin, end, logtype);
         return new PageResultDto(productCountLogs);
     }
 
     @RequestMapping(value = "/balancelog",method = RequestMethod.POST)
+    @ApiOperation("金额余额流水记录")
     public PageResultDto<BalanceLog> balanceLog(Integer pageSize, Integer pageNo,
-                                                Long companyId,
+                                                @RequestParam(required = false) Long companyId,
                                                 @RequestParam(required = false) Date beginTime,
                                                 @RequestParam(required = false) Date endTime
             , @RequestParam(required = false) Integer payType, @RequestParam(required = false)Integer orderType
@@ -115,10 +114,6 @@ public class PayManageApi {
         List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, beginTime, endTime, orderType,payType,operationUserName);
         return new PageResultDto<BalanceLog>(balanceLogs);
     }
-
-
-
-
 
 
     @PostMapping("/topup")
@@ -141,5 +136,11 @@ public class PayManageApi {
         final List<Company> byComanyQueryDto = companyService.findByComanyQueryDto(companyQueryDto);
         return byComanyQueryDto.stream().map(company -> company.getCompId()).collect(Collectors.toList());
     }
+
+
+    public void initBinder(){
+
+    }
+
 
 }
