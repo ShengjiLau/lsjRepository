@@ -47,11 +47,15 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="付款方式")
     private String payType;
 
+
+
 	@ApiModelProperty(value="采购收货仓库/销售发货仓库")
     private String receiveWarehouse;
 	
 	@ApiModelProperty(value="采购收货仓库id/销售发货仓库id")
 	private Long warehouseId;
+
+
 
 	@ApiModelProperty(value="销售收货联系人/采购发货联系人")
     private String sender;
@@ -80,6 +84,10 @@ public class Order implements Serializable {
 
 	@ApiModelProperty(value="采购收货要求/销售包装要求")
     private String packRequire;
+
+
+
+
 
 	@ApiModelProperty(value="销售发货联系人/采购收货联系人")
 	//@NotBlank(message="联系人不可为空")
