@@ -10,6 +10,7 @@ import com.lcdt.util.ClmsBeanUtil;
 import com.lcdt.warehouse.dto.AllotDto;
 import com.lcdt.warehouse.entity.AllotProduct;
 import com.lcdt.warehouse.service.AllotService;
+import com.lcdt.warehouse.utils.DateToStringUtils;
 import com.lcdt.warehouse.utils.JSONResponseUtil;
 import com.lcdt.warehouse.utils.ResponseMessage;
 import io.swagger.annotations.Api;
@@ -198,7 +199,7 @@ public class AllotApi {
 				 cell = row.getCell(2);
 				 cell.setCellValue(allotService.getGroupName(dto.getGroupId()));
 				 cell = row.getCell(6);
-				 cell.setCellValue(dto.getCreateTime().toGMTString());
+				 cell.setCellValue(DateToStringUtils.ConvertDateToString(dto.getCreateTime()));
 				 
 				 row = sheet.getRow(5);
 				 cell = row.getCell(2);
@@ -214,13 +215,13 @@ public class AllotApi {
 				 cell = row.getCell(2);
 				 cell.setCellValue(dto.getWarehouseInName());
 				 cell = row.getCell(6);
-				 cell.setCellValue(dto.getAllotInTime().toGMTString());
+				 cell.setCellValue(DateToStringUtils.ConvertDateToString(dto.getAllotInTime()));
 				 
 				 row = sheet.getRow(8);
 				 cell = row.getCell(2);
 				 cell.setCellValue(dto.getWarehouseOutName());
 				 cell = row.getCell(6);
-				 cell.setCellValue(dto.getAllotOutTime().toGMTString());
+				 cell.setCellValue(DateToStringUtils.ConvertDateToString(dto.getAllotOutTime()));
 				 
 				 row = sheet.getRow(9);
 				 cell = row.getCell(2);
