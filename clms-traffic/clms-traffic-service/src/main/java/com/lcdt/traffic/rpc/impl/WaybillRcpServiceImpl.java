@@ -716,10 +716,10 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
 
     @Override
     public int addOwnWaybillRoute(WaybillRouteAddParams params) {
-        Waybill waybill=queryOwnWaybill(params.getWaybillId(),params.getCompanyId());
-        if(waybill!=null){
+        Waybill waybill = queryOwnWaybill(params.getWaybillId(), params.getCompanyId());
+        if (waybill != null) {
             waybill.setWaybillStatus((ConstantVO.WAYBILL_STATUS_UPDATE_ROUTE));
-            addWaybillRoute(waybill,params.getUserName(),params.getUserPhone(),0,params.getDescription());
+            addWaybillRoute(waybill, params.getUserName(), params.getUserPhone(), 0, params.getDescription());
             return 1;
         }
         return 0;
@@ -727,10 +727,10 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
 
     @Override
     public int addCustomerWaybillRoute(WaybillRouteAddParams params) {
-        Waybill waybill=queryCustomerWaybill(params.getWaybillId(),params.getCarrierCompanyId());
-        if(waybill!=null){
+        Waybill waybill = queryCustomerWaybill(params.getWaybillId(), params.getCarrierCompanyId());
+        if (waybill != null) {
             waybill.setWaybillStatus((ConstantVO.WAYBILL_STATUS_UPDATE_ROUTE));
-            addWaybillRoute(waybill,params.getUserName(),params.getUserPhone(),0,params.getDescription());
+            addWaybillRoute(waybill, params.getUserName(), params.getUserPhone(), 0, params.getDescription());
             return 1;
         }
         return 0;
@@ -884,7 +884,7 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
         }
     }
 
-    private void addWaybillRoute(Waybill waybill, String operatorName, String operatorPhone, int operatorType, String actionDesc) {
+    private void addWaybillRoute(Waybill waybill, String operatorName, String operatorPhone, int operatorType, String description) {
         //路由==>运单增加新建路由 by xrr
         Timeline event = new Timeline();
         if (operatorType == 1) {
@@ -902,12 +902,13 @@ public class WaybillRcpServiceImpl implements WaybillRpcService {
                 actionDes.append("当前位置：" + waybill.getUnloadLocation());
                 break;
             case 20:
-                actionDes.append(actionDesc);
+                actionDes.append(description);
                 break;
             default:
                 actionDes.append("司机：" + waybill.getDriverName() + " " + waybill.getDriverPhone() + " " + waybill.getVechicleNum());
+
         }
-        event.setActionDes(actionDesc.toString());
+        event.setActionDes(actionDes.toString());
         producer.noteRouter(event);
     }
 
