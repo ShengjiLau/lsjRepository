@@ -221,7 +221,7 @@ public class AllotApi {
 					 goodsRow ++;
 				 }
 				 
-				 String fileName = "调拨单.xlsx";
+				 String fileName = "调拨单" + dto.getAllotCode() + ".xlsx";
 				 ouputStream = StreamUtils.getOutputStream(response, fileName);
 	             xwb.write(ouputStream);				
 			}catch(Exception e) {
