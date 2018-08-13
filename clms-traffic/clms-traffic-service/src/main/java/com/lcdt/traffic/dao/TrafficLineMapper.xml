@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.traffic.dao.TrafficLineMapper">
+    <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.TrafficLine">
+        <id column="line_id" jdbcType="BIGINT" property="lineId"  />
+        <result column="line_name" jdbcType="VARCHAR" property="lineName"  />
+        <result column="line_start_province" jdbcType="VARCHAR" property="lineStartProvince"  />
+        <result column="line_start_city" jdbcType="VARCHAR" property="lineStartCity"  />
+        <result column="line_end_province" jdbcType="VARCHAR" property="lineEndProvince"  />
+        <result column="line_end_city" jdbcType="VARCHAR" property="lineEndCity"  />
+        <result column="line_status" jdbcType="SMALLINT" property="lineStatus"  />
+        <result column="company_id" jdbcType="BIGINT" property="companyId"  />
+        <result column="create_id" jdbcType="BIGINT" property="createId"  />
+        <result column="create_name" jdbcType="VARCHAR" property="createName"  />
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"  />
+
+    </resultMap>
+
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT line_id,line_name,line_start_province,line_start_city,line_end_province,line_end_city,line_status,company_id,create_id,create_name,create_date
+        FROM t_traffic_line
+        WHERE line_id = #{lineId,jdbcType=BIGINT}
+    </select>
+    <select id="selectByPage" parameterType="com.lcdt.traffic.web.dto.TrafficLineParamDto" resultMap="BaseResultMap">
+      SELECT line_id,line_name,line_start_province,line_start_city,line_end_province,line_end_city,line_status,company_id,create_id,create_name,create_date
+      FROM  t_traffic_line
+      WHERE 1=1
+      ORDER BY line_id DESC
+    </select>
+
+    <insert id="insertLine" parameterType="com.lcdt.traffic.model.TrafficLine">
+        <selectKey keyProperty="lineId" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO t_traffic_line (line_name,line_start_province,line_start_city,line_end_province,line_end_city,line_status,company_id,create_id,create_name,create_date) VALUES (
+        #{lineName,jdbcType=VARCHAR},
+        #{lineStartProvince,jdbcType=VARCHAR},
+        #{lineStartCity,jdbcType=VARCHAR},
+        #{lineEndProvince,jdbcType=VARCHAR},
+        #{lineEndCity,jdbcType=VARCHAR},
+        #{lineStatus,jdbcType=SMALLINT},
+        #{companyId,jdbcType=BIGINT},
+        #{createId,jdbcType=BIGINT},
+        #{createName,jdbcType=VARCHAR},
+        #{createDate,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <update id="updateAllById" parameterType="com.lcdt.traffic.model.TrafficLine" >
+      UPDATE t_traffic_line SET
+        line_name          =#{lineName,jdbcType=VARCHAR},
+        line_start_province=#{lineStartProvince,jdbcType=VARCHAR},
+        line_start_city    =#{lineStartCity,jdbcType=VARCHAR},
+        line_end_province  =#{lineEndProvince,jdbcType=VARCHAR},
+        line_end_city      =#{lineEndCity,jdbcType=VARCHAR},
+        line_status        =#{lineStatus,jdbcType=SMALLINT},
+        company_id         =#{companyId,jdbcType=BIGINT},
+        create_id          =#{createId,jdbcType=BIGINT},
+        create_name        =#{createName,jdbcType=VARCHAR},
+        create_date        =#{createDate,jdbcType=TIMESTAMP}
+        WHERE line_id     =#{lineId,jdbcType=BIGINT}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+      DELETE FROM  t_traffic_line WHERE  line_id = #{lineId,jdbcType=BIGINT}
+    </delete>
+</mapper>
