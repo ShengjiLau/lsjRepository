@@ -15,6 +15,7 @@ import com.lcdt.contract.notify.ContractNotifyBuilder;
 import com.lcdt.contract.notify.ContractNotifyProducer;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
+import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.notify.model.ContractNotifyEvent;
 import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.DefaultNotifySender;
@@ -101,6 +102,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Reference
     private CustomerRpcService customerRpcService;
+
+
+    @Reference
+    private SubItemsInfoService subItemsInfoService;
+
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ, timeout = 30, rollbackForClassName = {"RuntimeException","Exception"})

@@ -208,7 +208,7 @@ public class PurchaseOrderApi {
 
 	@ApiOperation("采购单转销售单")
 	@PostMapping("/purchaseOrderToSalesOrder")
-	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_sales_Order')")
+	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_to_sales_Order')")
 	public JSONObject purchaseOrderToSalesOrder(@ApiParam(value = "采购订单id",required = true) @RequestParam Long orderId) {
 
 
