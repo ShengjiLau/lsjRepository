@@ -11,6 +11,7 @@ import com.lcdt.userinfo.model.DriverVehicleAuth;
 import com.lcdt.userinfo.utils.JSONResponseUtil;
 import com.lcdt.userinfo.utils.ResponseMessage;
 import com.lcdt.userinfo.web.controller.api.admin.dto.DriverQueryDto;
+import com.lcdt.userinfo.web.controller.api.admin.dto.VehicleAuthDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -71,5 +72,12 @@ public class DriverApi {
     public ResponseMessage driverCarNum(Long driverId){
         Integer integer = driverMapper.selectCarnumBydriverId(driverId);
         return JSONResponseUtil.success(integer);
+    }
+
+    @PostMapping("/vehicleAuth")
+    @ApiOperation("车辆认证")
+    public ResponseMessage updateAuth(VehicleAuthDto auth){
+        int row = driverVehicleAuthMapper.updateAuthStatus(auth);
+        return JSONResponseUtil.success(row);
     }
 }
