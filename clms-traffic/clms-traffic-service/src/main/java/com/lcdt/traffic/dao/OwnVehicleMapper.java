@@ -1,5 +1,6 @@
 package com.lcdt.traffic.dao;
 
+import com.lcdt.traffic.dto.BackstageVehicleDto;
 import com.lcdt.traffic.dto.OwnVehicleDto;
 import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.model.OwnVehicle;
@@ -70,4 +71,11 @@ public interface OwnVehicleMapper {
      * @return
      */
     OwnVehicle selectAddWaybillVehicleNum(OwnVehicle ownVehicle);
+
+    /**
+     * 大后台查询车辆信息
+     * @param dto
+     * @return
+     */
+    List<OwnVehicle> selectForManage(BackstageVehicleDto dto);
 }
