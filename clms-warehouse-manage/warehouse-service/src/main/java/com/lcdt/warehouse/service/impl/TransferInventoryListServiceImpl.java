@@ -153,7 +153,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		}
 		long total = transferInventoryListDTOList.size();
 		Long[] tranferIds = new Long[(int) total];
-		for (int i = -1; i++ < (total-1);) {
+		for (int i = -1; ++i < total;) {
 			tranferIds[i] = transferInventoryListDTOList.get(i).getTransfersId();
 		}
 		List<TransferGoodsDO> transferGoodsDOList = null;
@@ -199,7 +199,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 			List<TransferInventoryListDTO> transferInventoryListDTOListWithGoods = 
 					 getTransferInventoryListDTOListWithGoods(transferInventoryListDTOList,  transferGoodsDOList);
 			List<TransferInventoryListDTO> transferInventoryListDTOListRemove = new LinkedList<TransferInventoryListDTO>();
-			for (int j = -1; j++ < (transferInventoryListDTOListWithGoods.size()-1);) {
+			for (int j = -1; ++j < transferInventoryListDTOListWithGoods.size();) {
 				TransferInventoryListDTO transferInventoryListDTO = transferInventoryListDTOListWithGoods.get(j);
 				List<TransferGoodsDO> transferGoodsDOList3 = transferInventoryListDTO.getTransferGoodsDOList();
 				if (null == transferGoodsDOList3 || 0 == transferGoodsDOList3.size()) {
@@ -207,7 +207,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 					continue;
 				}
 				int flag = 0;
-				for (int i = -1; i++ < (transferGoodsDOList3.size()-1);) {
+				for (int i = -1; ++i < transferGoodsDOList3.size();) {
 					TransferGoodsDO TransferGoodsDO = transferGoodsDOList3.get(i);
 					if (TransferGoodsDO.getIsMaterial() == 0) {
 						flag ++;
@@ -280,7 +280,7 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
 		 for (int i = 0; i < transferInventoryListDTOListWithGoods.size(); i++) {
 				TransferInventoryListDTO transferInventoryListDTO = transferInventoryListDTOListWithGoods.get(i);
 				List<TransferGoodsDO> transferGoodsList = new LinkedList<TransferGoodsDO>();
-				for (int j = -1; j++ < (transferGoodsDOList.size() - 1);) {
+				for (int j = -1; ++j < transferGoodsDOList.size();) {
 					TransferGoodsDO TransferGoodsDO = transferGoodsDOList.get(j);
 					if (transferInventoryListDTO.getTransfersId().longValue() == TransferGoodsDO.getTransferId().longValue()) {
 						transferGoodsList.add(TransferGoodsDO);
