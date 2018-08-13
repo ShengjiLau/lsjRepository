@@ -169,7 +169,7 @@ public class TransferInventoryListController {
 					 }
 				 }
 				 
-				 String fileName = "商品转换单.xlsx";
+				 String fileName = "商品转换单" + transferInventoryListDTO.getListSerialNo() + ".xlsx";
 				 ouputStream = StreamUtils.getOutputStream(response, fileName);
 	             xwb.write(ouputStream);				
 			}catch(Exception e) {

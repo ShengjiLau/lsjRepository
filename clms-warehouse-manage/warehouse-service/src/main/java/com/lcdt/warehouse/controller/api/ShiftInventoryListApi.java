@@ -196,7 +196,7 @@ public class ShiftInventoryListApi {
 					 } 
 				 }
 				 
-				 String fileName = "移库单.xlsx";
+				 String fileName = "移库单" + shiftInventoryListDTO.getShiftInventoryNum() + ".xlsx";
 				 ouputStream = StreamUtils.getOutputStream(response, fileName);
 	             xwb.write(ouputStream);
 	             
