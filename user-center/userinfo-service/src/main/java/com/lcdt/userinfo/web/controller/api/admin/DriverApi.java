@@ -81,6 +81,8 @@ public class DriverApi {
     @PostMapping("/vehicleAuth")
     @ApiOperation("车辆认证")
     public ResponseMessage updateAuth(VehicleAuthDto auth){
+        auth.setAuthTime(new Date());
+        auth.setAuthName(SecurityInfoGetter.getUser().getRealName());
         int row = driverVehicleAuthMapper.updateAuthStatus(auth);
         return JSONResponseUtil.success(row);
     }

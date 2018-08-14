@@ -1,5 +1,7 @@
 package com.lcdt.userinfo.web.controller.api.admin.dto;
 
+import java.util.Date;
+
 /**
  * @AUTHOR liuh
  * @DATE 2018-08-13
@@ -14,7 +16,7 @@ public class VehicleAuthDto {
 
     private String authRemark;
 
-    private String authTime;
+    private Date authTime;
 
     public String getAuthStatus() {
         return authStatus;
@@ -48,11 +50,11 @@ public class VehicleAuthDto {
         this.authRemark = authRemark;
     }
 
-    public String getAuthTime() {
+    public Date getAuthTime() {
         return authTime;
     }
 
-    public void setAuthTime(String authTime) {
+    public void setAuthTime(Date authTime) {
         this.authTime = authTime;
     }
 }
