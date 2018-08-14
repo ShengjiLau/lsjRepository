@@ -31,7 +31,18 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public int addDriver(Driver driver) {
-        return driverMapper.insert(driver);
+        if(!isExistDriver(driver.getDriverPhone())){
+            return driverMapper.insert(driver);
+        }
+        return 0;
+    }
+
+    @Override
+    public int modifyDriver(Driver driver) {
+        if(!isExistDriver(driver.getDriverPhone())){
+            return driverMapper.updateByPrimaryKey(driver);
+        }
+        return 0;
     }
 
     @Override

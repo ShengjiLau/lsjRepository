@@ -8,9 +8,11 @@ import com.lcdt.userinfo.dao.DriverVehicleAuthMapper;
 import com.lcdt.userinfo.model.AdminUser;
 import com.lcdt.userinfo.model.Driver;
 import com.lcdt.userinfo.model.DriverVehicleAuth;
+import com.lcdt.userinfo.service.DriverService;
 import com.lcdt.userinfo.utils.JSONResponseUtil;
 import com.lcdt.userinfo.utils.ResponseMessage;
 import com.lcdt.userinfo.web.controller.api.admin.dto.DriverQueryDto;
+import com.lcdt.userinfo.web.controller.api.admin.dto.VehicleAuthDto;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +31,9 @@ public class DriverApi {
 
     @Autowired
     DriverVehicleAuthMapper driverVehicleAuthMapper;
+
+    @Autowired
+    DriverService driverService;
 
     @PostMapping("/list")
     @PreAuthorize("hasAnyAuthority('admin_cars_select')")
@@ -71,5 +76,40 @@ public class DriverApi {
     public ResponseMessage driverCarNum(Long driverId){
         Integer integer = driverMapper.selectCarnumBydriverId(driverId);
         return JSONResponseUtil.success(integer);
+    }
+
+    @PostMapping("/vehicleAuth")
+    @ApiOperation("车辆认证")
+    public ResponseMessage updateAuth(VehicleAuthDto auth){
+        int row = driverVehicleAuthMapper.updateAuthStatus(auth);
+        return JSONResponseUtil.success(row);
+    }
+
+    @PostMapping("/driverDetail")
+    @ApiOperation("司机详情")
+    @PreAuthorize("hasAnyAuthority('admin_driver_select')")
+    public ResponseMessage driverDetails(Long userId){
+        Driver driver = driverMapper.selectByPrimaryKey(userId);
+        return JSONResponseUtil.success(driver);
+    }
+
+    @PostMapping("/addDriver")
+    @ApiOperation("司机新增")
+    public ResponseMessage addDriver(Driver driver){
+        int row = driverService.addDriver(driver);
+        if(row>0){
+            return JSONResponseUtil.success(row);
+        }
+        return JSONResponseUtil.failure("新增失败",-1);
+    }
+
+    @PostMapping("/modifyDriver")
+    @ApiOperation("司机编辑")
+    public ResponseMessage modifyDriver(Driver driver){
+        int row = driverMapper.updateByPrimaryKey(driver);
+        if (row>0){
+            return JSONResponseUtil.success(row);
+        }
+        return JSONResponseUtil.failure("编辑失败",-1);
     }
 }
