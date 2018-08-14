@@ -20,19 +20,15 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_order_product_relationship (op_id, goods_id, create_date, 
-      create_name, update_date, update_name, 
-      company_id)
-    values (#{opId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{createDate,jdbcType=TIMESTAMP}, 
-      #{createName,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{updateName,jdbcType=VARCHAR}, 
-      #{companyId,jdbcType=BIGINT})
+      create_name,company_id)
+    values (#{opId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT},CURRENT_TIMESTAMP,
+      #{createName,jdbcType=VARCHAR},#{companyId,jdbcType=BIGINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.OrderProductRelationship">
     update t_order_product_relationship
     set op_id = #{opId,jdbcType=BIGINT},
       goods_id = #{goodsId,jdbcType=BIGINT},
-      create_date = #{createDate,jdbcType=TIMESTAMP},
-      create_name = #{createName,jdbcType=VARCHAR},
-      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      update_date = CURRENT_TIMESTAMP,
       update_name = #{updateName,jdbcType=VARCHAR},
       company_id = #{companyId,jdbcType=BIGINT}
     where relationship_id = #{relationshipId,jdbcType=BIGINT}

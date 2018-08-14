@@ -1,5 +1,6 @@
 package com.lcdt.contract.service;
 
+import com.lcdt.contract.dto.OrderProductRelationshipParams;
 import com.lcdt.contract.model.OrderProductRelationship;
 
 /**
@@ -7,10 +8,26 @@ import com.lcdt.contract.model.OrderProductRelationship;
  */
 
 public interface OrderProductRelationshipService {
-    int addRelationship();
 
-    int modifyRelationship();
+    /**
+     * 新增关系
+     * @param params
+     * @return
+     */
+    int addRelationship(OrderProductRelationshipParams params);
 
-    OrderProductRelationship queryRelationship();
+    /**
+     * 修改关系
+     * @param params
+     * @return
+     */
+    int modifyRelationship(OrderProductRelationshipParams params);
+
+    /**
+     * 查询关系
+     * @param relationshipId
+     * @return
+     */
+    OrderProductRelationship queryRelationship(Long relationshipId);
 
 }
