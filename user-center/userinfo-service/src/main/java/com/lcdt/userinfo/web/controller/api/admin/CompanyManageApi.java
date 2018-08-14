@@ -17,10 +17,12 @@ import com.lcdt.userinfo.service.UserService;
 import com.lcdt.userinfo.utils.JSONResponseUtil;
 import com.lcdt.userinfo.utils.ResponseMessage;
 import com.lcdt.userinfo.web.dto.UserQueryDto;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -109,6 +111,13 @@ public class CompanyManageApi {
     @PostMapping("/info")
     public ResponseMessage companyInfo(Long compId) {
         return JSONResponseUtil.success(companyMapper.selectByPrimaryKey(compId));
+    }
+
+    @PostMapping("/allcomps")
+    @ApiOperation("查看所有公司列表")
+    public ResponseMessage companys(CompanyQueryDto companyQueryDto){
+        PageInfo pageInfo = PageHelper.startPage(companyQueryDto.getPageNo(), companyQueryDto.getPageSize()).doSelectPageInfo(() -> companyMapper.selectByCompanyDto(companyQueryDto));
+        return JSONResponseUtil.success(pageInfo);
     }
 
 }

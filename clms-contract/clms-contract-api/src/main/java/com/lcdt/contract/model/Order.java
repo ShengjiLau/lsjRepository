@@ -47,11 +47,15 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="付款方式")
     private String payType;
 
+
+
 	@ApiModelProperty(value="采购收货仓库/销售发货仓库")
     private String receiveWarehouse;
 	
 	@ApiModelProperty(value="采购收货仓库id/销售发货仓库id")
 	private Long warehouseId;
+
+
 
 	@ApiModelProperty(value="销售收货联系人/采购发货联系人")
     private String sender;
@@ -80,6 +84,10 @@ public class Order implements Serializable {
 
 	@ApiModelProperty(value="采购收货要求/销售包装要求")
     private String packRequire;
+
+
+
+
 
 	@ApiModelProperty(value="销售发货联系人/采购收货联系人")
 	//@NotBlank(message="联系人不可为空")
@@ -147,7 +155,10 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="是/否草稿/取消订单:0是草稿/1发布/2取消订单")
 	@NotNull(message="是否草稿不可为空")
 	private Short isDraft;
-	
+
+    @ApiModelProperty(value="客户销售单状态:0取消/1待接收/2已接收")
+    private Short customerOrderStatus;
+
 	@ApiModelProperty(value="商品合计总金额")
 	private BigDecimal summation;
 
@@ -805,8 +816,16 @@ public class Order implements Serializable {
 		this.isDraft = isDraft;
 	}
 
+    public Short getCustomerOrderStatus() {
+        return customerOrderStatus;
+    }
 
-	public String getReceiveRequire() {
+    public Order setCustomerOrderStatus(Short customerOrderStatus) {
+        this.customerOrderStatus = customerOrderStatus;
+        return this;
+    }
+
+    public String getReceiveRequire() {
 		return receiveRequire;
 	}
 

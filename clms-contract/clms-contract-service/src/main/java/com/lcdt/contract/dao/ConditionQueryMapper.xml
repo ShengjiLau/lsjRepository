@@ -53,6 +53,9 @@
       <if test="isDraft!=null">
          and is_draft= #{isDraft,jdbcType=SMALLINT}
       </if> 
+      <if test="orderNoEmpty != null">
+         and order_no is not null 
+      </if>
    <!--  <if test="approvalStatus!=null ">
          and approval_status = #{approvalStatus,jdbcType=SMALLINT}
       </if>  -->

@@ -8,18 +8,20 @@ import com.lcdt.pay.rpc.CompanyServiceCountService;
 import com.lcdt.userinfo.model.User;
 import com.lcdt.util.ClmsBeanUtil;
 import com.lcdt.warehouse.dto.AllotDto;
+import com.lcdt.warehouse.entity.AllotProduct;
 import com.lcdt.warehouse.service.AllotService;
+import com.lcdt.warehouse.utils.DateToStringUtils;
 import com.lcdt.warehouse.utils.JSONResponseUtil;
 import com.lcdt.warehouse.utils.ResponseMessage;
+import com.lcdt.warehouse.utils.SheetUtils;
+import com.lcdt.warehouse.utils.StreamUtils;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -27,10 +29,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -187,58 +189,50 @@ public class AllotApi {
 			try {
 				inputStream = resource.getInputStream();
 				xwb = (XSSFWorkbook) WorkbookFactory.create(inputStream);
-				 XSSFSheet sheet = xwb.getSheetAt(0);
-				 XSSFRow row = sheet.getRow(0);
-				 XSSFCell cell = row.getCell(0);
-				 cell.setCellValue("调拨单-" + dto.getAllotCode());
-				 
-				 //something
-				 
-				 String fileName = "调拨单.xlsx";
-				 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("utf-8"),"iso-8859-1") + "\"");
-	             response.setContentType("application/octet-stream;charset=UTF-8");
-	             ouputStream = response.getOutputStream();
-	             xwb.write(ouputStream);
 				
+				SheetUtils SheetUtils = new SheetUtils(xwb, 0);
+				SheetUtils.setCell(0, 0, "调拨单-" + dto.getAllotCode());
+				SheetUtils.setCell(4, 2, allotService.getGroupName(dto.getGroupId()));
+				SheetUtils.setCell(4, 6, DateToStringUtils.ConvertDateToString(dto.getCreateTime()));
+				SheetUtils.setCell(5, 2, dto.getCustomerName());
+				SheetUtils.setCell(5, 6, dto.getContactName());
+				SheetUtils.setCell(6, 2, dto.getPhoneNum());
+				SheetUtils.setCell(7, 2, dto.getWarehouseInName());	
+				SheetUtils.setCell(7, 6, DateToStringUtils.ConvertDateToString(dto.getAllotInTime()));
+				SheetUtils.setCell(8, 2, dto.getWarehouseOutName());	
+				SheetUtils.setCell(8, 6, DateToStringUtils.ConvertDateToString(dto.getAllotOutTime()));	
+				SheetUtils.setCell(9, 2, dto.getOperator());	
+				SheetUtils.setCell(10, 2, dto.getRemark());	
+				 
+				 List<AllotProduct> allotProductList = dto.getAllotProductList();
+				 int goodsRow = 14;
+				 for (int i = 0; i < allotProductList.size(); i++) {
+					 AllotProduct allotProduct = allotProductList.get(i);
+					 SheetUtils SheetUtilsGoods = new SheetUtils(xwb, 0, goodsRow);
+					 SheetUtilsGoods.setCell(0, allotProduct.getName());
+					 SheetUtilsGoods.setCell(1, allotProduct.getCode());		 
+					 SheetUtilsGoods.setCell(2, allotProduct.getBarCode()); 
+					 SheetUtilsGoods.setCell(3, allotProduct.getSpec());
+					 SheetUtilsGoods.setCell(4, allotProduct.getUnit());
+					 SheetUtilsGoods.setCell(5, allotProduct.getBatchNum());
+					 SheetUtilsGoods.setCell(6, allotProduct.getWarehouseLocCode());
+					 SheetUtilsGoods.setCell(7, allotProduct.getAllotNum().doubleValue());
+					 SheetUtilsGoods.setCell(8, allotProduct.getRemark());
+					 goodsRow ++;
+				 }
+				 
+				 String fileName = "调拨单" + dto.getAllotCode() + ".xlsx";
+				 ouputStream = StreamUtils.getOutputStream(response, fileName);
+	             xwb.write(ouputStream);				
 			}catch(Exception e) {
 				e.printStackTrace();
 				log.debug("导出出现异常：" + e.getMessage());
 			}finally {
-				if (null != xwb) {
-					try {
-						xwb.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				if (null != inputStream) {
-					try {
-						inputStream.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				if (null != ouputStream) {
-					try {
-						ouputStream.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
+				StreamUtils.closeStream(xwb);
+				StreamUtils.closeStream(inputStream);
+				StreamUtils.closeStream(ouputStream);
 			}
-    		
-    		
-    		
-    		
-    		
-    		
     	}
-    	
-    	
-    	
-    	
-    	
-    	
     }
     
     

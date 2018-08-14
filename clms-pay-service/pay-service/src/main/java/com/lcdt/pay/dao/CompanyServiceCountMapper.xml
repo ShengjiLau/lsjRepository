@@ -50,7 +50,13 @@
   <select id="selectByCompanyIds" resultMap="BaseResultMap">
     select count_id, company_id, product_name, product_service_num
     from company_service_count
-    where company_id in #{companyIds}
+    <if test="companyIds != null">
+      where company_id in
+      <foreach collection="companyIds" index="index" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+
+    </if>
 
   </select>
 

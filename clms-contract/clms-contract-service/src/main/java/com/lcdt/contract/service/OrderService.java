@@ -92,6 +92,13 @@ public interface OrderService {
 	 * @return
 	 */
 	int addLogisticsInfo(Order order);
+
+
+
+	/**
+	 * 采购转销售单
+	 */
+	int purchaseOrderToSalesOrder(Long orderId);
 		
 
 }

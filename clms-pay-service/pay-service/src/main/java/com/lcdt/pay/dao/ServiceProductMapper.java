@@ -17,4 +17,6 @@ public interface ServiceProductMapper {
 
     List<ServiceProduct> selectProductByName(String productName);
 
+    List<ServiceProduct> selectProductByServiceName(String serviceName);
+
 }

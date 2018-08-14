@@ -177,24 +177,12 @@ public class OrderApi {
     {
         Long companyId = SecurityInfoGetter.getCompanyId();
         PageHelper.startPage(pageNo, pageSize);
-        List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, beginTime, endTime, orderType,payType);
+        List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, beginTime, endTime, orderType,payType,null);
         return new PageResultDto<BalanceLog>(balanceLogs);
     }
 
 
 
-    @InitBinder
-    public void initBinder(final WebDataBinder webdataBinder) {
-        webdataBinder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) throws IllegalArgumentException {
-                if (StringUtils.isEmpty(text)) {
-                    setValue(null);
-                    return;
-                }
-                setValue(new Date(Long.valueOf(text)));
-            }
-        });
-    }
+
 
 }

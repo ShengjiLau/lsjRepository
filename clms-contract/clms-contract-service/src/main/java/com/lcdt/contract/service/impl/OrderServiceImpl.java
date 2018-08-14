@@ -13,6 +13,9 @@ import com.lcdt.contract.model.OrderApproval;
 import com.lcdt.contract.notify.ContractAttachment;
 import com.lcdt.contract.notify.ContractNotifyBuilder;
 import com.lcdt.contract.notify.ContractNotifyProducer;
+import com.lcdt.customer.model.Customer;
+import com.lcdt.customer.rpcservice.CustomerRpcService;
+import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.notify.model.ContractNotifyEvent;
 import com.lcdt.notify.model.DefaultNotifyReceiver;
 import com.lcdt.notify.model.DefaultNotifySender;
@@ -96,6 +99,14 @@ public class OrderServiceImpl implements OrderService {
     private CompanyRpcService companyRpcService;
     @Autowired
     private ContractNotifyProducer producer;
+
+    @Reference
+    private CustomerRpcService customerRpcService;
+
+
+    @Reference
+    private SubItemsInfoService subItemsInfoService;
+
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ, timeout = 30, rollbackForClassName = {"RuntimeException","Exception"})
@@ -307,6 +318,9 @@ public class OrderServiceImpl implements OrderService {
         Long UserId = SecurityInfoGetter.getUser().getUserId();
         //get 公司id
         Long companyId = SecurityInfoGetter.getCompanyId();
+        if (null != orderDto.getOrderNoEmpty() && 1 != orderDto.getOrderNoEmpty()) {
+        	orderDto.setOrderNoEmpty(null);
+        }
         orderDto.setCompanyId(companyId);
         orderDto.setCreateUserId(UserId);
         if (orderDto.getPageNum() <= 0) {
@@ -702,6 +716,83 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int addLogisticsInfo(Order order){
         return orderMapper.updateLogisticsInfo(order);
+    }
+
+
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ, timeout = 30, propagation = Propagation.REQUIRED, rollbackForClassName = {"RuntimeException","Exception"})
+    @Override
+    public int purchaseOrderToSalesOrder(Long orderId) {
+        OrderDto salesOrderDto = orderMapper.selectByPrimaryKey(orderId);
+        Order salesOrder = new Order();
+        BeanUtils.copyProperties(salesOrderDto, salesOrder);
+
+        if (null == salesOrder) {
+            return OrderVO.ZERO_INTEGER;
+        }
+
+        //查询对应供应商对应的'绑定企业'
+        Customer customer = customerRpcService.findCustomerById(salesOrder.getSupplierId(),salesOrder.getCompanyId());
+        if (customer==null) {
+            return OrderVO.ZERO_INTEGER;
+        }
+        salesOrder.setCompanyId(customer.getBindCpid());
+
+        List<OrderProduct> salesOrderProductList = orderProductMapper.getOrderProductByOrderId(orderId);
+
+        Order purchaseOrder = new Order();
+        purchaseOrder.setCompanyId(SecurityInfoGetter.getCompanyId());
+        purchaseOrder.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
+        purchaseOrder.setCreateTime(new Date());
+        purchaseOrder.setOrderType(OrderVO.SALES_ORDER);
+        purchaseOrder.setGroupId(salesOrder.getGroupId());
+/*      purchaseOrder.setReceiveWarehouse(salesOrder.getReceiveWarehouse());
+        purchaseOrder.setWarehouseId(salesOrder.getWarehouseId());*/
+        //销售单收货----采购单收货
+        purchaseOrder.setSenderPhone(salesOrder.getReceiverPhone());
+        purchaseOrder.setSender(salesOrder.getReceiver());
+        purchaseOrder.setSendProvince(salesOrder.getReceiverProvince());
+        purchaseOrder.setSendCity(salesOrder.getReceiverCity());
+        purchaseOrder.setSendDistrict(salesOrder.getReceiveDistrict());
+        purchaseOrder.setSendAddress(salesOrder.getReceiveAddress());
+
+        //销售单发货----采购单发货
+        purchaseOrder.setReceiverPhone(salesOrder.getSenderPhone());
+        purchaseOrder.setReceiver(salesOrder.getSender());
+        purchaseOrder.setReceiverProvince(salesOrder.getSendProvince());
+        purchaseOrder.setReceiverCity(salesOrder.getReceiverCity());
+        purchaseOrder.setReceiveDistrict(salesOrder.getSendDistrict());
+        purchaseOrder.setReceiveAddress(salesOrder.getSendAddress());
+
+        purchaseOrder.setIsDraft(OrderVO.WATTING_PUBLISHI);
+        purchaseOrder.setOriginOrderId(salesOrder.getOrderId());
+        purchaseOrder.setOriginOrderNo(salesOrder.getOrderNo());
+        int result = orderMapper.insertOrder(purchaseOrder);
+        Order order = new Order();
+        order.setPushOrderId(purchaseOrder.getOrderId());
+        order.setOrderId(salesOrder.getOrderId());
+        orderMapper.updateByPrimaryKeySelective(order);
+
+        if (null != salesOrderProductList && !salesOrderProductList.isEmpty()) {
+            List<OrderProduct> purchaseOrderProductList = new ArrayList<OrderProduct>(salesOrderProductList.size());
+            for (OrderProduct salesOrderProduct: salesOrderProductList) {
+                OrderProduct purchaseOrderProduct = new OrderProduct();
+                BeanUtils.copyProperties(salesOrderProduct, purchaseOrderProduct);
+                purchaseOrderProduct.setPrice(null);
+                purchaseOrderProduct.setOpId(null);
+                purchaseOrderProduct.setOrderId(purchaseOrder.getOrderId());
+
+
+
+
+
+                purchaseOrderProductList.add(purchaseOrderProduct);
+            }
+            nonautomaticMapper.insertOrderProductByBatch(purchaseOrderProductList);
+        }
+
+
+        return result;
     }
 
     /**

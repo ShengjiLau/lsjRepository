@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.warehouse.contants.InventoryBusinessType;
 import com.lcdt.warehouse.dto.PageBaseDto;
@@ -33,6 +32,7 @@ import com.lcdt.warehouse.mapper.ShiftGoodsDOMapper;
 import com.lcdt.warehouse.mapper.ShiftInventoryListDOMapper;
 import com.lcdt.warehouse.service.InventoryService;
 import com.lcdt.warehouse.service.ShiftInventoryListService;
+import com.lcdt.warehouse.utils.LogicalPagination;
 import com.lcdt.warehouse.utils.ShiftGoodsBO;
 import com.lcdt.warehouse.vo.ShiftInventoryListVO;
 
@@ -193,7 +193,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 				ShiftGoodsListDTO shiftGoodsListDTO1 = inventoryMapper.selectInventoryListByShiftGoodsBO(shiftGoodsBO);
 				if (null != shiftGoodsListDTO1) {
 					Inventory inventory = inventoryMapper.selectById(shiftGoodsListDTO1.getInvertoryId());
-					inventory.setInvertoryNum(inventory.getInvertoryNum()+shiftGoodsDO.getShiftNum().floatValue());
+					inventory.setInvertoryNum(inventory.getInvertoryNum()+shiftGoodsDO.getShiftNum().doubleValue());
 					inventoryMapper.updateById(inventory);
 					//新建库存流水
 					InventoryLog inventoryLog = createNewInventoryLog(shiftGoodsDO,inventory,shiftInventoryListDO2);
@@ -253,14 +253,8 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 	@Transactional(readOnly = true)
 	public PageBaseDto<ShiftInventoryListDTO> getShiftInventoryList(ShiftInventoryListDTO shiftInventoryListDTO1) {
 		shiftInventoryListDTO1.setCompanyId(SecurityInfoGetter.getCompanyId());
-		if (null == shiftInventoryListDTO1.getPageNo()) {
-			shiftInventoryListDTO1.setPageNo(ShiftInventoryListVO.FIRST_PAGE_NO);
-		}
-		if (null == shiftInventoryListDTO1.getPageSize()) {
-			shiftInventoryListDTO1.setPageSize(Integer.MAX_VALUE);
-		}
-		int pageNo = shiftInventoryListDTO1.getPageNo();
-		int pageSize = shiftInventoryListDTO1.getPageSize();
+		Integer pageNo = shiftInventoryListDTO1.getPageNo();
+		Integer pageSize = shiftInventoryListDTO1.getPageSize();
 		
 		//分页
 		//PageHelper.startPage(shiftInventoryListDTO1.getPageNo(), shiftInventoryListDTO1.getPageSize());
@@ -274,7 +268,7 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 			return pageBaseDto;
 		}
 		
-		List<ShiftInventoryListDTO> shiftInventoryListDTOList = new ArrayList<ShiftInventoryListDTO>();
+		List<ShiftInventoryListDTO> shiftInventoryListDTOList = new LinkedList<ShiftInventoryListDTO>();
 		//遍历所有的ShiftInventoryListDO
 		for (int a = 0; a < shiftInventoryListDOList.size(); a++) {
 			ShiftInventoryListDO shiftInventoryListDO = shiftInventoryListDOList.get(a);
@@ -315,22 +309,12 @@ public class ShiftInventoryListServiceImpl implements ShiftInventoryListService 
 					 shiftInventoryListDTO2.setShiftGoodsListDTOList(ShiftGoodsListDTOList); 
 				 } 
 			}
-			if (null != shiftInventoryListDTO2.getShiftGoodsListDTOList() && 0 != shiftInventoryListDTO2.getShiftGoodsListDTOList().size()) {
+			if (null != shiftInventoryListDTO2.getShiftGoodsListDTOList() && !shiftInventoryListDTO2.getShiftGoodsListDTOList().isEmpty()) {
 				shiftInventoryListDTOList.add(shiftInventoryListDTO2);
 			} 
 		}
 		
-		//实现逻辑分页
-		List<ShiftInventoryListDTO> shiftInventoryListDTOListPage = new LinkedList<ShiftInventoryListDTO>();
-		if (pageNo*pageSize > shiftInventoryListDTOList.size()) {
-			shiftInventoryListDTOListPage.addAll(shiftInventoryListDTOList.subList((pageNo - 1)*pageSize, shiftInventoryListDTOList.size()));
-		}else {
-			shiftInventoryListDTOListPage.addAll(shiftInventoryListDTOList.subList((pageNo - 1)*pageSize, pageNo*pageSize));
-		}
-		
-		pageBaseDto.setList(shiftInventoryListDTOListPage);
-		pageBaseDto.setTotal(shiftInventoryListDTOList.size());
-		return pageBaseDto;
+		return LogicalPagination.paging(shiftInventoryListDTOList, pageSize, pageNo); 
     }
 	
 	

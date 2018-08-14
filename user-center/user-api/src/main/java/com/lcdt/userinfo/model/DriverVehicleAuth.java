@@ -27,6 +27,10 @@ public class DriverVehicleAuth implements Serializable,ResponseData {
 
     private String authStatus;
 
+    private String authName;
+
+    private String authTime;
+
     private String vehiclePhoto;//车头照片
 
     private String vehicleTailPhoto;//车尾照片
@@ -149,6 +153,22 @@ public class DriverVehicleAuth implements Serializable,ResponseData {
 
     public void setAuthStatus(String authStatus) {
         this.authStatus = authStatus == null ? null : authStatus.trim();
+    }
+
+    public String getAuthName() {
+        return authName;
+    }
+
+    public void setAuthName(String authName) {
+        this.authName = authName;
+    }
+
+    public String getAuthTime() {
+        return authTime;
+    }
+
+    public void setAuthTime(String authTime) {
+        this.authTime = authTime;
     }
 
     public String getVehiclePhoto() {

@@ -357,7 +357,7 @@ public class OutWarehousePlanController {
                         }
 
                     }
-                    String fileName ="出库计划.xlsx";
+                    String fileName ="出库计划-"+outWhPlanDto.getPlanNo()+".xlsx";
                     response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("gbk"),"iso-8859-1") + "\"");
                     response.setContentType("application/octet-stream;charset=UTF-8");
                     OutputStream ouputStream = response.getOutputStream();

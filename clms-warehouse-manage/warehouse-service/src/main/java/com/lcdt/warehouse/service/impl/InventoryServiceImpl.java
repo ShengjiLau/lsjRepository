@@ -254,6 +254,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
      * @param inventory
      * @return
      */
+    @Override
     public Inventory addInventory(Inventory inventory) {
         List<Inventory> inventories = querySameInventory(inventory);
         if (inventories.isEmpty()) {

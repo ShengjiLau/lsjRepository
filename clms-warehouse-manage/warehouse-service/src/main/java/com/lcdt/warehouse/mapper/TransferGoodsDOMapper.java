@@ -20,7 +20,7 @@ public interface TransferGoodsDOMapper {
     
     int insertTransferGoodsDOByBatch(List<TransferGoodsDO> transferGoodsDOList);
     
-    int updateTransferGoodsDOByBatch(List<TransferGoodsDO> transferGoodsDOList);
+    int updateTransferGoodsDOByBatchSelective(List<TransferGoodsDO> transferGoodsDOList);
     
     List<TransferGoodsDO> getTransferGoodsDOListByTransferIds(Long[] transferIds);
     

@@ -3,13 +3,11 @@ package com.lcdt.warehouse.controller.api;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +26,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.lcdt.util.ResponseJsonUtils;
 import com.lcdt.warehouse.controller.exception.ShiftInventoryException;
 import com.lcdt.warehouse.dto.PageBaseDto;
+import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.dto.ShiftInventoryListDTO;
+import com.lcdt.warehouse.entity.ShiftGoodsDO;
 import com.lcdt.warehouse.service.ShiftInventoryListService;
+import com.lcdt.warehouse.utils.DateToStringUtils;
+import com.lcdt.warehouse.utils.SheetUtils;
+import com.lcdt.warehouse.utils.StreamUtils;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -143,59 +146,67 @@ public class ShiftInventoryListApi {
 		
 	}
 	
+	
 	@GetMapping("/export/{shiftId}")
 	@ApiOperation(value = "导出移库单")
 	@PreAuthorize(value = "hasRole('ROLE_SYS_ADMIN') or hasAuthority('shift_inventory_export')")
 	public void exportShiftInventoryList(@PathVariable Long shiftId, HttpServletResponse response) {
 		ShiftInventoryListDTO shiftInventoryListDTO = shiftInventoryListService.getShiftInventoryListDetails(shiftId);
 		ClassPathResource resource = new ClassPathResource("/templates/shift_inventory_list.xlsx");
-		System.out.println("lalal");
 		if (resource.exists()) {
 			response.reset();
 			XSSFWorkbook xwb = null;
 			InputStream inputStream = null;
 			OutputStream ouputStream = null;
 			try {
-				inputStream = resource.getInputStream();
+				 inputStream = resource.getInputStream();
 				 xwb = (XSSFWorkbook) WorkbookFactory.create(inputStream); // 读取excel模板
-				 XSSFSheet sheet = xwb.getSheetAt(0);
-				 XSSFRow row = sheet.getRow(0);
-				 XSSFCell cell = row.getCell(0);
-				 cell.setCellValue("移库单-" + shiftInventoryListDTO.getShiftInventoryNum());
 				
-				 //something 
+				 SheetUtils SheetUtils = new SheetUtils(xwb, 0);
+				 SheetUtils.setCell(0, 0, "移库单-" + shiftInventoryListDTO.getShiftInventoryNum());
+				 SheetUtils.setCell(4, 2, shiftInventoryListDTO.getGroupName());
+				 SheetUtils.setCell(4, 6, shiftInventoryListDTO.getWarehouseName());
+				 SheetUtils.setCell(5, 2, shiftInventoryListDTO.getCustomerName());
+			     SheetUtils.setCell(5, 6, DateToStringUtils.ConvertDateToString(shiftInventoryListDTO.getGmtCreate()));
+			     SheetUtils.setCell(6, 2, shiftInventoryListDTO.getShiftUser());
+			     SheetUtils.setCell(6, 6, shiftInventoryListDTO.getShiftTime());
+			     SheetUtils.setCell(7, 2, shiftInventoryListDTO.getShiftType() == 0 ? "内部移库" : "客户要求");
+			     SheetUtils.setCell(8, 2, shiftInventoryListDTO.getRemark());
 				 
-				 String fileName = "移库单.xlsx";
-				 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("utf-8"),"iso-8859-1") + "\"");
-	             response.setContentType("application/octet-stream;charset=UTF-8");
-	             ouputStream = response.getOutputStream();
+				 List<ShiftGoodsListDTO> shiftGoodsListDTOList = shiftInventoryListDTO.getShiftGoodsListDTOList();
+				 if (null != shiftGoodsListDTOList && !shiftGoodsListDTOList.isEmpty()) {
+					 int goodsRow = 12;
+					 for (int i = 0; i < shiftGoodsListDTOList.size(); i++) {
+						 ShiftGoodsListDTO shiftGoodsListDTO = shiftGoodsListDTOList.get(i);
+						 List<ShiftGoodsDO> shiftGoodsDOList = shiftGoodsListDTO.getShiftGoodsDOList();
+						 for (int j = 0; j < shiftGoodsDOList.size(); j++) {
+							 SheetUtils SheetUtilGoods = new SheetUtils(xwb, 0, goodsRow);
+							 ShiftGoodsDO shiftGoodsDO = shiftGoodsDOList.get(j);
+							 SheetUtilGoods.setCell(0, shiftGoodsListDTO.getGoodsName());
+							 SheetUtilGoods.setCell(1, shiftGoodsListDTO.getGoodsCode());		 
+							 SheetUtilGoods.setCell(2, shiftGoodsListDTO.getBarCode()); 
+							 SheetUtilGoods.setCell(3, shiftGoodsListDTO.getGoodsSpec());
+							 SheetUtilGoods.setCell(4, shiftGoodsListDTO.getBaseUnit());
+							 SheetUtilGoods.setCell(5, shiftGoodsListDTO.getGoodsBatch());
+							 SheetUtilGoods.setCell(6, shiftGoodsListDTO.getStorageLocationCode());
+							 SheetUtilGoods.setCell(7, shiftGoodsDO.getShiftNum().doubleValue());
+							 SheetUtilGoods.setCell(8, shiftGoodsDO.getRemark());
+							 goodsRow ++;
+						 }
+					 } 
+				 }
+				 
+				 String fileName = "移库单" + shiftInventoryListDTO.getShiftInventoryNum() + ".xlsx";
+				 ouputStream = StreamUtils.getOutputStream(response, fileName);
 	             xwb.write(ouputStream);
 	             
 			}catch(Exception e) {
 				e.printStackTrace();
 				log.debug("移库导出出现异常：" + e.getMessage());
 			}finally {
-				if (null != xwb) {
-					try {
-						xwb.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				if (null != inputStream) {
-					try {
-						inputStream.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				if (null != ouputStream) {
-					try {
-						ouputStream.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
+				StreamUtils.closeStream(xwb);
+				StreamUtils.closeStream(inputStream);
+				StreamUtils.closeStream(ouputStream);
 			}
 		}else {
 			throw new RuntimeException("Excel模板地址有误！");
