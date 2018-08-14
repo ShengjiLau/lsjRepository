@@ -10,6 +10,8 @@
     <result column="vehicle_load" jdbcType="DECIMAL" property="vehicleLoad" />
     <result column="vehicle_length" jdbcType="DECIMAL" property="vehicleLength" />
     <result column="auth_status" jdbcType="VARCHAR" property="authStatus" />
+    <result column="auth_name" jdbcType="VARCHAR" property="authName" />
+    <result column="auth_time" jdbcType="TIMESTAMP" property="authTime" />
     <result column="vehicle_photo" jdbcType="VARCHAR" property="vehiclePhoto" />
     <result column="vehicle_tail_photo" jdbcType="VARCHAR" property="vehicleTailPhoto" />
     <result column="vehicle_trailers_photo" jdbcType="VARCHAR" property="vehicleTrailersPhoto" />
@@ -160,4 +162,12 @@ update t_driver_vehicle_auth set is_default=0 where driver_id =#{driverId,jdbcTy
     </foreach>
     GROUP BY driver_id
   </select>
+  <update id="updateAuthStatus" parameterType="com.lcdt.userinfo.web.controller.api.admin.dto.VehicleAuthDto">
+    update t_driver_vehicle_auth
+    set auth_status = #{authStatus,jdbcType=VARCHAR},
+      auth_name = #{authName,jdbcType=VARCHAR},
+      auth_time = #{authTime,jdbcType=TIMESTAMP},
+      auth_remark = #{authRemark,jdbcType=VARCHAR}
+    where auth_id = #{authId,jdbcType=BIGINT}
+  </update>
 </mapper>

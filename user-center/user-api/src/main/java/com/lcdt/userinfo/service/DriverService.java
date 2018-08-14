@@ -14,6 +14,8 @@ public interface DriverService {
 
     int addDriver(Driver driver);
 
+    int modifyDriver(Driver driver);
+
     List<Driver> getGpsInfo(List<String> driverPhoneList);
 
     /**
