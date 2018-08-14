@@ -68,7 +68,7 @@
     send_district sendDistrict, send_address sendAddress, send_time sendTime, pack_require packRequire, receiver, receiver_phone receiverPhone, receiver_province receiverProvince, 
     receiver_city receiverCity, receive_district receiveDistrict, receive_address receiveAddress, remarks, create_time createTime, group_id groupId,company_id companyId,
     receive_time receiveTime,approval_start_date approvalStartDate,approval_end_date approvalEndDate,create_user_id createUserId,order_serial_no orderSerialNo,
-    approval_status approvalStatus,approval_process approvalProcess,approval_process_id approvalProcessId,supplier_id supplierId,is_draft isDraft,receive_require receiveRequire,
+    approval_status approvalStatus,approval_process approvalProcess,approval_process_id approvalProcessId,supplier_id supplierId,is_draft isDraft,customer_order_status customerOrderStatus,receive_require receiveRequire,
     summation,logistics_company,logistics_no,logistics_status,warehouse_id warehouseId,
     attachment1_name attachment1Name,attachment1,attachment2_name attachment2Name,attachment2,attachment3_name attachment3Name,attachment3,attachment4_name attachment4Name,attachment4,
     attachment5_name attachment5Name,attachment5,traffic_plan trafficPlan, 
@@ -92,7 +92,7 @@
       remarks, create_time, approval_start_date, 
       approval_end_date, group_id, company_id, 
       create_user_id, order_serial_no,receive_time,
-      approval_process,approval_process_id,supplier_id,is_draft,receive_require,
+      approval_process,approval_process_id,supplier_id,is_draft,customer_order_status,receive_require,
       summation,logistics_company,logistics_no,logistics_status,warehouse_id,attachment1_name,attachment1,
       attachment2_name,attachment2,attachment3_name,attachment3,
       attachment4_name,attachment4,attachment5_name,attachment5,traffic_plan, 
@@ -119,7 +119,7 @@
       </otherwise>
     </choose>
       #{receiveTime,jdbcType=TIMESTAMP},
-      #{approvalProcess,jdbcType=VARCHAR},#{approvalProcessId,jdbcType=BIGINT},#{supplierId,jdbcType=BIGINT},#{isDraft,jdbcType=SMALLINT},
+      #{approvalProcess,jdbcType=VARCHAR},#{approvalProcessId,jdbcType=BIGINT},#{supplierId,jdbcType=BIGINT},#{isDraft,jdbcType=SMALLINT},#{customerOrderStatus,jdbcType=TINYINT},
       #{receiveRequire,jdbcType=VARCHAR},#{summation,jdbcType=DECIMAL},
       #{logisticsCompany,jdbcType=VARCHAR},#{logisticsNo,jdbcType=VARCHAR},#{logisticsStatus,jdbcType=VARCHAR},#{warehouseId,jdbcType=BIGINT},
       #{attachment1Name,jdbcType=VARCHAR},#{attachment1,jdbcType=VARCHAR},
@@ -241,6 +241,9 @@
       </if>
       <if test="isDraft != null" >
         is_draft,
+      </if>
+      <if test="customerOrderStatus != null" >
+        customer_order_status,
       </if>
       <if test="receiveRequire != null" >
         receive_require,
@@ -411,6 +414,9 @@
       </if>
       <if test="isDraft != null" >
         #{isDraft,jdbcType=SMALLINT},
+      </if>
+      <if test="customerOrderStatus != null" >
+        #{customerOrderStatus,jdbcType=TINYINT},
       </if>
       <if test="receiveRequire != null" >
         #{receiveRequire,jdbcType=VARCHAR},
@@ -587,6 +593,9 @@
       <if test="isDraft != null" >
         is_draft = #{isDraft,jdbcType=SMALLINT},
       </if>
+      <if test="customerOrderStatus != null" >
+        customer_order_status=#{customerOrderStatus,jdbcType=TINYINT},
+      </if>
       <if test="receiveRequire != null" >
         receive_require = #{receiveRequire,jdbcType=VARCHAR},
       </if>
@@ -702,6 +711,7 @@
       approval_process_id=#{approvalProcessId,jdbcType=BIGINT},
       supplier_id = #{supplierId,jdbcType=BIGINT},
       is_draft = #{isDraft,jdbcType=SMALLINT},
+      customer_order_status=#{customerOrderStatus,jdbcType=TINYINT},
       receive_require = #{receiveRequire,jdbcType=VARCHAR},
       summation = #{summation,jdbcType=DECIMAL},
       logistics_company = #{logisticsCompany,jdbcType=VARCHAR},

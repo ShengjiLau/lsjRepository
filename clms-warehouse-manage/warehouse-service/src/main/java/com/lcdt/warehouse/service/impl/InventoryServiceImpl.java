@@ -2,29 +2,27 @@ package com.lcdt.warehouse.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.items.dto.GoodsListParamsDto;
 import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.warehouse.contants.InOrderStatus;
 import com.lcdt.warehouse.contants.OutOrderStatus;
+import com.lcdt.warehouse.controller.exception.InventoryException;
 import com.lcdt.warehouse.dto.AllotDto;
 import com.lcdt.warehouse.dto.ImportInventoryDto;
 import com.lcdt.warehouse.dto.InventoryQueryDto;
-import com.lcdt.warehouse.dto.ShiftGoodsListDTO;
 import com.lcdt.warehouse.entity.*;
 import com.lcdt.warehouse.factory.InventoryFactory;
 import com.lcdt.warehouse.mapper.GoodsInfoMapper;
 import com.lcdt.warehouse.mapper.InventoryMapper;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.lcdt.warehouse.mapper.OutWarehouseOrderMapper;
 import com.lcdt.warehouse.service.InWarehouseOrderService;
 import com.lcdt.warehouse.service.InventoryLogService;
 import com.lcdt.warehouse.service.InventoryService;
 import com.lcdt.warehouse.service.WarehouseService;
 import com.lcdt.warehouse.utils.CommonUtils;
-import com.lcdt.warehouse.utils.ShiftGoodsBO;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -36,7 +34,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -186,10 +183,10 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         Assert.notNull(tryLockNum, "不能为空");
         Inventory inventory = selectById(inventoryId);
         if (inventory == null) {
-            throw new RuntimeException("库存信息不存在");
+            throw new InventoryException("库存信息不存在");
         }
         if (inventory.getavailableNum() < tryLockNum) {
-            throw new RuntimeException("锁定库存量不能大于库存剩余数量");
+            throw new InventoryException("锁定库存量不能大于库存剩余数量");
         }
         inventory.setLockNum(inventory.getLockNum() + tryLockNum);
         updateById(inventory);
@@ -201,7 +198,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         Inventory inventory = selectById(inventoryId);
 
         if (inventory.getLockNum() < unlockNum) {
-            throw new RuntimeException("解锁库存量不能大于 已锁量");
+            throw new InventoryException("解锁库存量不能大于 已锁量");
         }
         inventory.setLockNum(CommonUtils.sub(inventory.getLockNum(),unlockNum));
         updateById(inventory);
@@ -302,11 +299,11 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         for (TCheckItem checkItem : items) {
             Inventory inventory = selectById(checkItem.getInvertoryId());
             if (inventory == null) {
-                throw new RuntimeException("库存不存在，请查看后重试");
+                throw new InventoryException("库存不存在，请查看后重试");
             }
             System.out.println("inventory.getLockNum():"+inventory.getLockNum());
             if (inventory.getLockNum() != null && inventory.getLockNum().floatValue() > 0) {
-                throw new RuntimeException("库存已锁定，无法盘点");
+                throw new InventoryException("库存已锁定，无法盘点");
             }
 
             inventory.setInvertoryNum(checkItem.getCheckAmount());
@@ -379,24 +376,24 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         ArrayList<Inventory> inventories = new ArrayList<>();
         for (ImportInventoryDto dto : dtos) {
             if (StringUtils.isEmpty(dto.getGoodcode())) {
-                throw new RuntimeException();
+                throw new InventoryException("商品编码不能为空！");
             }
             gooddto.setGoodsCode(dto.getGoodcode());
             gooddto.setCompanyId(dto.getCompanyId());
             PageInfo<GoodsInfoDao> goodsInfoDaoPageInfo = goodsService.queryByCondition(gooddto);
             if (CollectionUtils.isEmpty(goodsInfoDaoPageInfo.getList()) || goodsInfoDaoPageInfo.getList().size() < 1) {
-                throw new RuntimeException("商品sn不存在：" + dto.getGoodcode());
+                throw new InventoryException("商品sn不存在：" + dto.getGoodcode());
             }
             final List<WarehouseLoc> warehouseLocs = warehouseService.selectByWarehouseCode(dto.getStorageLocationCode(), dto.getWareHouseId(),dto.getCompanyId());
 
             if(CollectionUtils.isEmpty(warehouseLocs)){
-                    throw new RuntimeException("库位填写错误或不存在");
+                    throw new InventoryException("库位填写错误或不存在");
             }
             WarehouseLoc warehouseLoc = warehouseLocs.get(0);
             final HashMap<Object, Object> map = new HashMap<>();
             final Warehouse warehouse = warehouseService.selectById(warehouseLoc.getWhId());
             if (warehouse == null) {
-                throw new RuntimeException("仓库不存在");
+                throw new InventoryException("仓库不存在");
             }
 
 

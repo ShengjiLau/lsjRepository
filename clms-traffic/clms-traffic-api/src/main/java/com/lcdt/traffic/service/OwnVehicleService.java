@@ -1,6 +1,7 @@
 package com.lcdt.traffic.service;
 
 import com.github.pagehelper.PageInfo;
+import com.lcdt.traffic.dto.BackstageVehicleDto;
 import com.lcdt.traffic.dto.OwnVehicleDto;
 import com.lcdt.traffic.model.OwnVehicle;
 import com.lcdt.userinfo.model.Driver;
@@ -66,5 +67,12 @@ public interface OwnVehicleService {
      * @return
      */
     int syncVehicleInfo(OwnVehicle ownVehicle);
+
+    /**
+     * 公司车辆（大后台使用）
+     *
+     * @return
+     */
+    PageInfo<List<OwnVehicle>> companyVehicleList(BackstageVehicleDto dto, PageInfo pageInfo);
 
 }

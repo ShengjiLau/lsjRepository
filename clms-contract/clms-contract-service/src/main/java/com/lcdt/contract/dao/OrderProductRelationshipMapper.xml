@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lcdt.contract.dao.OrderProductRelationshipMapper">
+  <resultMap id="BaseResultMap" type="com.lcdt.contract.model.OrderProductRelationship">
+    <id column="relationship_id" jdbcType="BIGINT" property="relationshipId" />
+    <result column="op_id" jdbcType="BIGINT" property="opId" />
+    <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="update_name" jdbcType="VARCHAR" property="updateName" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_order_product_relationship
+    where relationship_id = #{relationshipId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.contract.model.OrderProductRelationship">
+    <selectKey keyProperty="relationshipId" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_order_product_relationship (op_id, goods_id, create_date, 
+      create_name,company_id)
+    values (#{opId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT},CURRENT_TIMESTAMP,
+      #{createName,jdbcType=VARCHAR},#{companyId,jdbcType=BIGINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.OrderProductRelationship">
+    update t_order_product_relationship
+    set op_id = #{opId,jdbcType=BIGINT},
+      goods_id = #{goodsId,jdbcType=BIGINT},
+      update_date = CURRENT_TIMESTAMP,
+      update_name = #{updateName,jdbcType=VARCHAR},
+      company_id = #{companyId,jdbcType=BIGINT}
+    where relationship_id = #{relationshipId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select relationship_id, op_id, goods_id, create_date, create_name, update_date, update_name, 
+    company_id
+    from t_order_product_relationship
+    where relationship_id = #{relationshipId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select relationship_id, op_id, goods_id, create_date, create_name, update_date, update_name, 
+    company_id
+    from t_order_product_relationship
+  </select>
+</mapper>
