@@ -142,7 +142,11 @@ public class InventoryApi {
                             importInventoryDto.setNum(cell.getNumericCellValue());
                             break;
                         case 4:
-                            importInventoryDto.setCostPrice(cell.getStringCellValue());
+                            try {
+                                importInventoryDto.setCostPrice(cell.getStringCellValue());
+                            } catch (Exception e) {
+                                importInventoryDto.setCostPrice(String.valueOf(cell.getNumericCellValue()));
+                            }
                             break;
                     }
 
