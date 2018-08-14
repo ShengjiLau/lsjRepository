@@ -6,6 +6,7 @@ import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.traffic.dto.OwnVehicleDto;
 import com.lcdt.traffic.model.OwnVehicle;
 import com.lcdt.traffic.service.OwnVehicleService;
+import com.lcdt.traffic.dto.BackstageVehicleDto;
 import com.lcdt.traffic.web.dto.BaseDto;
 import com.lcdt.traffic.web.dto.PageBaseDto;
 import com.lcdt.userinfo.model.Driver;
@@ -42,9 +43,9 @@ public class OwnVehicleApi {
     @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_add')")
     public JSONObject addOwnVehicle(@Validated @RequestBody OwnVehicleDto ownVehicleDto, BindingResult bindingResult) {
-        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
-        String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Long userId = SecurityInfoGetter.getUser().getUserId();
+        String userName = SecurityInfoGetter.getUser().getRealName();
         ownVehicleDto.setCompanyId(companyId);
         ownVehicleDto.setCreateId(userId);
         ownVehicleDto.setCreateName(userName);
@@ -65,9 +66,9 @@ public class OwnVehicleApi {
     @PostMapping("/modify")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_modify')")
     public JSONObject modOwnVehicle(@Validated @RequestBody OwnVehicleDto ownVehicleDto, BindingResult bindingResult) {
-        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
-        String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Long userId = SecurityInfoGetter.getUser().getUserId();
+        String userName = SecurityInfoGetter.getUser().getRealName();
         ownVehicleDto.setCompanyId(companyId);
         ownVehicleDto.setUpdateId(userId);
         ownVehicleDto.setUpdateName(userName);
@@ -87,9 +88,9 @@ public class OwnVehicleApi {
     @PostMapping("/delete")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_delete')")
     public JSONObject delOwnVehicle(@RequestBody OwnVehicleDto ownVehicleDto, BindingResult bindingResult) {
-        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
-        Long userId = SecurityInfoGetter.getUser().getUserId(); //获取用户id
-        String userName = SecurityInfoGetter.getUser().getRealName();   //获取用户姓名
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        Long userId = SecurityInfoGetter.getUser().getUserId();
+        String userName = SecurityInfoGetter.getUser().getRealName();
         ownVehicleDto.setCompanyId(companyId);
         ownVehicleDto.setUpdateId(userId);
         ownVehicleDto.setUpdateName(userName);
@@ -115,31 +116,28 @@ public class OwnVehicleApi {
     @GetMapping("/list")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_list')")
     public PageBaseDto<List<OwnVehicle>> ownVehicleList(OwnVehicleDto ownVehicleDto) {
-        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long companyId = SecurityInfoGetter.getCompanyId();
         OwnVehicle ownVehicle = new OwnVehicle();
         BeanUtils.copyProperties(ownVehicleDto, ownVehicle);
         ownVehicle.setCompanyId(companyId);
 
         PageInfo pageInfo = new PageInfo();
-        pageInfo.setPageNum(ownVehicleDto.getPageNum());    //设置页码
-        pageInfo.setPageSize(ownVehicleDto.getPageSize());  //设置每页条数
+        pageInfo.setPageNum(ownVehicleDto.getPageNum());
+        pageInfo.setPageSize(ownVehicleDto.getPageSize());
         PageInfo<List<OwnVehicle>> listPageInfo = ownVehicleService.ownVehicleList(ownVehicle, pageInfo);
         logger.debug("车辆总条数：" + listPageInfo.getTotal());
         logger.debug("listPageInfo:" + listPageInfo.toString());
-        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
-        return pageBaseDto;
+        return new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
     }
 
     @ApiOperation(value = "车辆详情", notes = "车辆详情包含证件信息")
     @GetMapping("/detail")
     @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_list')")
     public BaseDto ownVehicleList(Long ownVehicleId) {
-        Long companyId = SecurityInfoGetter.getCompanyId(); //  获取companyId
+        Long companyId = SecurityInfoGetter.getCompanyId();
         OwnVehicle ownVehicle = new OwnVehicle();
-//        BeanUtils.copyProperties(ownVehicleDto, ownVehicle);
         OwnVehicleDto ownVehicleDto = ownVehicleService.ownVehicleDetail(ownVehicleId,companyId);
-        BaseDto baseDto = new BaseDto(ownVehicleDto);
-        return baseDto;
+        return new BaseDto(ownVehicleDto);
     }
 
     @ApiOperation(value = "获取车辆位置", notes = "根据随车手机号获取车辆(基站定位)")
@@ -151,13 +149,25 @@ public class OwnVehicleApi {
         logger.debug("driverPhones:" + driverPhoneList.size());
         if(driverPhoneList.size()>0){
             List<Driver> driverList = ownVehicleService.getGpsInfo(driverPhoneList);
-            PageBaseDto pageBaseDto = new PageBaseDto(driverList, driverList.size());
-            return pageBaseDto;
+            return new PageBaseDto(driverList, driverList.size());
         }else {
             return new PageBaseDto(new ArrayList(),0);
         }
 
 
+    }
+
+    @ApiOperation(value = "公司车辆列表", notes = "大后台查看企业车辆")
+    @GetMapping("/listforbackstage")
+    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('ownvehicle_list')")
+    public PageBaseDto<List<OwnVehicle>> backstageVehiclelist(BackstageVehicleDto dto) {
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageNum(dto.getPageNum());
+        pageInfo.setPageSize(dto.getPageSize());
+        PageInfo<List<OwnVehicle>> listPageInfo = ownVehicleService.companyVehicleList(dto, pageInfo);
+        logger.debug("车辆总条数：" + listPageInfo.getTotal());
+        logger.debug("listPageInfo:" + listPageInfo.toString());
+        return new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());
     }
 
 }
