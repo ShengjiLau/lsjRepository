@@ -770,7 +770,8 @@ public class OrderServiceImpl implements OrderService {
         purchaseOrder.setReceiveDistrict(salesOrder.getSendDistrict());
         purchaseOrder.setReceiveAddress(salesOrder.getSendAddress());
 
-        purchaseOrder.setIsDraft(OrderVO.WATTING_PUBLISHI);
+        purchaseOrder.setIsDraft(OrderVO.ALREADY_PUBLISHI);
+        purchaseOrder.setCustomerOrderStatus((short)1);
         purchaseOrder.setOriginOrderId(salesOrder.getOrderId());
         purchaseOrder.setOriginOrderNo(salesOrder.getOrderNo());
         int result = orderMapper.insertOrder(purchaseOrder);
@@ -787,11 +788,6 @@ public class OrderServiceImpl implements OrderService {
                 purchaseOrderProduct.setPrice(null);
                 purchaseOrderProduct.setOpId(null);
                 purchaseOrderProduct.setOrderId(purchaseOrder.getOrderId());
-
-
-
-
-
                 purchaseOrderProductList.add(purchaseOrderProduct);
             }
             nonautomaticMapper.insertOrderProductByBatch(purchaseOrderProductList);
