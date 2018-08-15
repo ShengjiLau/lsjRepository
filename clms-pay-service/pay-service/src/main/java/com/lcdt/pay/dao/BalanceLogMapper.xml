@@ -76,8 +76,6 @@
       and     b.company_id = #{companyId}
     </if>
 
-
-
     <if test="orderType != null">
       and b.log_type = #{orderType,jdbcType=INTEGER}
     </if>

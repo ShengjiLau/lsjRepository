@@ -17,6 +17,7 @@ import com.lcdt.pay.service.CompanyBalanceService;
 import com.lcdt.pay.service.TopupService;
 import com.lcdt.pay.service.impl.ProductCountServiceImpl;
 import com.lcdt.pay.utils.CommonUtils;
+import com.lcdt.pay.web.admin.dto.BalanceLogDto;
 import com.lcdt.pay.web.admin.dto.PayOrderDto;
 import com.lcdt.userinfo.dto.CompanyQueryDto;
 import com.lcdt.userinfo.model.Company;
@@ -116,7 +117,7 @@ public class PayManageApi {
 
     @RequestMapping(value = "/balancelog",method = RequestMethod.POST)
     @ApiOperation("金额余额流水记录")
-    public PageResultDto<BalanceLog> balanceLog(Integer pageSize, Integer pageNo,
+    public PageResultDto<BalanceLogDto> balanceLog(Integer pageSize, Integer pageNo,
                                                 @RequestParam(required = false) Long companyId,
                                                 @RequestParam(required = false) Date beginTime,
                                                 @RequestParam(required = false) Date endTime
@@ -126,7 +127,14 @@ public class PayManageApi {
     {
         PageHelper.startPage(pageNo, pageSize);
         List<BalanceLog> balanceLogs = balanceLogMapper.selectByCompanyId(companyId, beginTime, endTime, orderType,payType,operationUserName);
-        return new PageResultDto<BalanceLog>(balanceLogs);
+        final ArrayList<BalanceLogDto> balanceLogDtos = new ArrayList<>();
+        for (BalanceLog balanceLog : balanceLogs) {
+            final BalanceLogDto balanceLogDto = new BalanceLogDto();
+            final Company company = companyService.selectById(balanceLog.getCompanyId());
+            balanceLogDto.setCompany(company);
+            balanceLogDtos.add(balanceLogDto);
+        }
+        return new PageResultDto<BalanceLogDto>(balanceLogDtos);
     }
 
     @ApiOperation("查看所有订单")

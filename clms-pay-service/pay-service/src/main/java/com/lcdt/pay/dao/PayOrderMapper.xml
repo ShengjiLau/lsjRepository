@@ -70,7 +70,6 @@
     <include refid="baseColumn"></include>
     from pay_order
     WHERE order_no = #{orderNo,jdbcType=VARCHAR}
-
   </select>
 
   <select id="selectByCompanyId" resultMap="BaseResultMap">
