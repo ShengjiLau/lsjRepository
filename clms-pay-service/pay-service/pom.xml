@@ -16,7 +16,6 @@
             <groupId>com.github.wxpay</groupId>
             <artifactId>wxpay-sdk</artifactId>
             <version>0.0.3</version>
-
         </dependency>
 
         <dependency>
@@ -89,6 +88,11 @@
             <version>1.9.21</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.lcdt.cloud</groupId>
+            <artifactId>clms-customer-api</artifactId>
+            <version>1.0</version>
+        </dependency>
 
     </dependencies>
     <build>

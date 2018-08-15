@@ -4,6 +4,8 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageInfo;
+import com.lcdt.customer.model.Customer;
+import com.lcdt.customer.rpcservice.CustomerRpcService;
 import com.lcdt.items.dto.GoodsListParamsDto;
 import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.service.SubItemsInfoService;
@@ -62,6 +64,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
     @Autowired
     private WarehouseService warehouseService;
+
 
     //分页查询 库存列表
     public Page<Inventory> queryInventoryPage(InventoryQueryDto inventoryQueryDto,Long companyId) {
@@ -368,7 +371,8 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     	}
     }
 
-
+    @Reference
+    public CustomerRpcService customerRpcService;  //客户信息
 
     @Transactional(rollbackFor = Exception.class)
     public List<Inventory> importInventory(List<ImportInventoryDto> dtos){
@@ -408,6 +412,8 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             inventory.setOriginalGoodsId(goodsInfoDao.getGoodsId());
             inventory.setStorageLocationId(warehouseLoc.getWhLocId());
             inventory.setBaseUnit(goodsInfoDao.getUnit());
+            final Customer customerById = customerRpcService.findCustomerById(inventory.getCustomerId());
+            inventory.setCustomerName(customerById.getCustomerName());
 
             Inventory inventory1 = addInventory(inventory);
             logService.saveImportInventoryLog(inventory, dto);
