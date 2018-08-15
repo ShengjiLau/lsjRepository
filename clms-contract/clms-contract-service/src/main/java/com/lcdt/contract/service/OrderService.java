@@ -4,6 +4,7 @@ package com.lcdt.contract.service;
 
 
 
+import com.lcdt.contract.dto.CustomerOrderStatusParams;
 import com.lcdt.contract.model.Order;
 import com.lcdt.contract.web.dto.OrderDto;
 import com.lcdt.contract.web.dto.PageBaseDto;
@@ -101,4 +102,5 @@ public interface OrderService {
 	int purchaseOrderToSalesOrder(Long orderId);
 		
 
+	int modifyCustomerOrderStatus(CustomerOrderStatusParams params);
 }
