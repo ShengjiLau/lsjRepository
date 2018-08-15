@@ -211,11 +211,16 @@ public class PurchaseOrderApi {
 	@PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('purchase_order_to_sales_Order')")
 	public JSONObject purchaseOrderToSalesOrder(@ApiParam(value = "采购订单id",required = true) @RequestParam Long orderId) {
 
+		int flag = orderService.purchaseOrderToSalesOrder(orderId);
+		String message = null;
+		if (flag>0) {
+			message = "操作成功!";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
+		}else {
+			message = "操作失败";
+			throw new RuntimeException(message);
+		}
 
-
-
-
-		return null;
 	}
 
 
