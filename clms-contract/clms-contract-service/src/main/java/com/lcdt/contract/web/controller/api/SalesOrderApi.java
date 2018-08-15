@@ -3,6 +3,7 @@ package com.lcdt.contract.web.controller.api;
 import java.util.Map;
 
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.contract.dto.CustomerOrderStatusParams;
 import com.lcdt.contract.model.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -224,7 +225,38 @@ public class SalesOrderApi {
 			throw new RuntimeException(message);
 		}
 	}
-	
+
+	@ApiOperation("接收销售单")
+	@PostMapping("/customer/receive")
+	public JSONObject customerOrderReceive(CustomerOrderStatusParams params) {
+		params.setCompanyId(SecurityInfoGetter.getCompanyId())
+				.setCustomerOrderStatus(OrderVO.CUSTOMER_ORDER_HAVE_RECEIVE);
+		int rows = orderService.modifyCustomerOrderStatus(params);
+		String message = null;
+		if (rows>0) {
+			message = "操作成功!";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
+		}else {
+			message = "操作失败";
+			throw new RuntimeException(message);
+		}
+	}
+
+	@ApiOperation("取消销售单")
+	@PostMapping("/customer/cancel")
+	public JSONObject customerOrderCancel(CustomerOrderStatusParams params) {
+		params.setCompanyId(SecurityInfoGetter.getCompanyId())
+				.setCustomerOrderStatus(OrderVO.CUSTOMER_ORDER_CANCEL);
+		int rows = orderService.modifyCustomerOrderStatus(params);
+		String message = null;
+		if (rows>0) {
+			message = "操作成功!";
+			return ResponseJsonUtils.successResponseJsonWithoutData(message);
+		}else {
+			message = "操作失败";
+			throw new RuntimeException(message);
+		}
+	}
 	
 	
 

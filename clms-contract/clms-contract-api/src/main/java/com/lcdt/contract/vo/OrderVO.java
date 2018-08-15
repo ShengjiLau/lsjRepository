@@ -52,8 +52,16 @@ public class OrderVO {
 	
 	
 	public static final Integer ZERO_INTEGER = 0;
-	
-	
+
+
+
+	/**
+	 * 订单类型：客户销售单状态
+	 */
+	public static final short CUSTOMER_ORDER_CANCEL = 0;
+	public static final short CUSTOMER_ORDER_NONE_RECEIVE = 1;
+	public static final short CUSTOMER_ORDER_HAVE_RECEIVE = 2;
+
 	
 	
 
