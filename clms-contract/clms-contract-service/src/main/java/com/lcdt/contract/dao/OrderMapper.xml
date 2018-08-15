@@ -81,8 +81,8 @@
     where order_id = #{orderId,jdbcType=BIGINT}
   </delete>
   <insert id="insertOrder" parameterType="com.lcdt.contract.model.Order" useGeneratedKeys="true" keyProperty="orderId">
-    insert into t_order (order_id,supplier, order_no, 
-      order_type, contract_code, approval_status, 
+    insert into t_order (order_id,supplier, order_no,
+      order_type, contract_code, approval_status,
       dispatching_type, pay_type, receive_warehouse, 
       sender, sender_phone, 
       send_province, send_city, send_district, 
@@ -112,7 +112,7 @@
       <when test="orderType==0">
         SERIAL_NO_GENERATE("PO"),
       </when>
-      <when test="orderType==1">
+      <when test="orderType==1 or orderType==2">
      	SERIAL_NO_GENERATE("SO"),
       </when>
       <otherwise>  

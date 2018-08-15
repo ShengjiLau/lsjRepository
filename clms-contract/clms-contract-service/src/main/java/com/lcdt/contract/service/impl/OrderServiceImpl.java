@@ -750,7 +750,7 @@ public class OrderServiceImpl implements OrderService {
         purchaseOrder.setCompanyId(SecurityInfoGetter.getCompanyId());
         purchaseOrder.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
         purchaseOrder.setCreateTime(new Date());
-        purchaseOrder.setOrderType(OrderVO.SALES_ORDER);
+        purchaseOrder.setOrderType(OrderVO.CST＿SALES_ORDER);
         purchaseOrder.setGroupId(salesOrder.getGroupId());
 /*      purchaseOrder.setReceiveWarehouse(salesOrder.getReceiveWarehouse());
         purchaseOrder.setWarehouseId(salesOrder.getWarehouseId());*/
@@ -785,11 +785,12 @@ public class OrderServiceImpl implements OrderService {
             for (OrderProduct salesOrderProduct: salesOrderProductList) {
                 OrderProduct purchaseOrderProduct = new OrderProduct();
                 BeanUtils.copyProperties(salesOrderProduct, purchaseOrderProduct);
-                purchaseOrderProduct.setPrice(null);
+                //purchaseOrderProduct.setPrice(null);
                 purchaseOrderProduct.setOpId(null);
                 purchaseOrderProduct.setOrderId(purchaseOrder.getOrderId());
                 purchaseOrderProductList.add(purchaseOrderProduct);
             }
+
             nonautomaticMapper.insertOrderProductByBatch(purchaseOrderProductList);
 
             //匹配商品
