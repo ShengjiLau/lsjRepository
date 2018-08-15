@@ -9,12 +9,16 @@ import java.util.Map;
 
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
 import com.lcdt.contract.dao.OrderApprovalMapper;
+import com.lcdt.contract.dto.OrderProductRelationshipParams;
 import com.lcdt.contract.model.OrderApproval;
 import com.lcdt.contract.notify.ContractAttachment;
 import com.lcdt.contract.notify.ContractNotifyBuilder;
 import com.lcdt.contract.notify.ContractNotifyProducer;
+import com.lcdt.contract.service.OrderProductRelationshipService;
 import com.lcdt.customer.model.Customer;
 import com.lcdt.customer.rpcservice.CustomerRpcService;
+import com.lcdt.items.dto.GoodsListParamsDto;
+import com.lcdt.items.model.GoodsInfoDao;
 import com.lcdt.items.service.SubItemsInfoService;
 import com.lcdt.notify.model.ContractNotifyEvent;
 import com.lcdt.notify.model.DefaultNotifyReceiver;
@@ -107,6 +111,8 @@ public class OrderServiceImpl implements OrderService {
     @Reference
     private SubItemsInfoService subItemsInfoService;
 
+    @Autowired
+    private OrderProductRelationshipService orderProductRelationshipService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ, timeout = 30, rollbackForClassName = {"RuntimeException","Exception"})
@@ -789,6 +795,27 @@ public class OrderServiceImpl implements OrderService {
                 purchaseOrderProductList.add(purchaseOrderProduct);
             }
             nonautomaticMapper.insertOrderProductByBatch(purchaseOrderProductList);
+
+            //匹配商品
+            purchaseOrderProductList.forEach(product->{
+                //根据商品编码查询本企业内是否有对应的商品
+                GoodsListParamsDto goodsListParamsDto=new GoodsListParamsDto();
+                goodsListParamsDto.setGoodsCode(product.getCode());
+                goodsListParamsDto.setCompanyId(purchaseOrder.getCompanyId());
+                List<GoodsInfoDao> goodsList=subItemsInfoService.queryByCondition(goodsListParamsDto).getList();
+                if(null != goodsList && !goodsList.isEmpty()){
+                    GoodsInfoDao goodsInfoDao=goodsList.get(0);
+                    OrderProductRelationshipParams orderProductRelationshipParams=new OrderProductRelationshipParams();
+                    orderProductRelationshipParams.setOpId(product.getOpId()).setGoodsId(goodsInfoDao.getGoodsId()).setCompanyId(purchaseOrder.getCompanyId());
+                    //查询出商品后判断商品单位是否匹配,单位相同，则匹配成功，单位不同，则显示匹配不成功，但也匹配了
+                    if(goodsInfoDao.getUnit().equalsIgnoreCase(product.getSku())){
+                        orderProductRelationshipParams.setIsPair(true);
+                    }else{
+                        orderProductRelationshipParams.setIsPair(false);
+                    }
+                    orderProductRelationshipService.addRelationship(orderProductRelationshipParams);
+                }
+            });
         }
 
 

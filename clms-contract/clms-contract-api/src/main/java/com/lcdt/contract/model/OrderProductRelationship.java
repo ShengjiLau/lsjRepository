@@ -37,6 +37,11 @@ public class OrderProductRelationship implements Serializable {
      */
     private Long companyId;
 
+    /**
+     * 是否匹配
+     */
+    private Boolean isPair;
+
     public Long getRelationshipId() {
         return relationshipId;
     }
@@ -108,4 +113,14 @@ public class OrderProductRelationship implements Serializable {
         this.companyId = companyId;
         return this;
     }
+
+    public Boolean getIsPair() {
+        return isPair;
+    }
+
+    public OrderProductRelationship setIsPair(Boolean pair) {
+        isPair = pair;
+        return this;
+    }
+
 }

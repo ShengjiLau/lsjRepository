@@ -10,6 +10,7 @@
     <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="update_name" jdbcType="VARCHAR" property="updateName" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="is_pair" jdbcType="TINYINT" property="isPair" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_order_product_relationship
@@ -20,9 +21,9 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_order_product_relationship (op_id, goods_id, create_date, 
-      create_name,company_id)
+      create_name,company_id,is_pair)
     values (#{opId,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT},CURRENT_TIMESTAMP,
-      #{createName,jdbcType=VARCHAR},#{companyId,jdbcType=BIGINT})
+      #{createName,jdbcType=VARCHAR},#{companyId,jdbcType=BIGINT},#{isPair,jdbcType=TINYINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.lcdt.contract.model.OrderProductRelationship">
     update t_order_product_relationship
@@ -31,17 +32,18 @@
       update_date = CURRENT_TIMESTAMP,
       update_name = #{updateName,jdbcType=VARCHAR},
       company_id = #{companyId,jdbcType=BIGINT}
+      is_pair = #{isPair,jdbcType=TINYINT}
     where relationship_id = #{relationshipId,jdbcType=BIGINT}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select relationship_id, op_id, goods_id, create_date, create_name, update_date, update_name, 
-    company_id
+    company_id,is_pair
     from t_order_product_relationship
     where relationship_id = #{relationshipId,jdbcType=BIGINT}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select relationship_id, op_id, goods_id, create_date, create_name, update_date, update_name, 
-    company_id
+    company_id,is_pair
     from t_order_product_relationship
   </select>
 </mapper>

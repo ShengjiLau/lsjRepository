@@ -20,6 +20,8 @@ public class OrderProductRelationshipParams {
     private String updateName;
     @ApiModelProperty(value="企业",hidden = true)
     private Long companyId;
+    @ApiModelProperty(value = "是否匹配")
+    private Boolean isPair;
 
     public Long getRelationshipId() {
         return relationshipId;
@@ -72,6 +74,15 @@ public class OrderProductRelationshipParams {
 
     public OrderProductRelationshipParams setCompanyId(Long companyId) {
         this.companyId = companyId;
+        return this;
+    }
+
+    public Boolean getIsPair() {
+        return isPair;
+    }
+
+    public OrderProductRelationshipParams setIsPair(Boolean pair) {
+        isPair = pair;
         return this;
     }
 }
