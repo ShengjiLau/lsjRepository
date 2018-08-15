@@ -48,11 +48,11 @@ public class OrderProductRelationshipApi {
         JSONObject jsonObject=new JSONObject();
         if(null !=orderProductRelationshipDao){
             jsonObject.put("code",0);
-            jsonObject.put("message","匹配成功");
+            jsonObject.put("message","查询成功");
             jsonObject.put("data",orderProductRelationshipDao);
         }else{
-            jsonObject.put("code",0);
-            jsonObject.put("message","匹配成功");
+            jsonObject.put("code",-1);
+            jsonObject.put("message","查询失败");
             jsonObject.put("data",orderProductRelationshipDao);
         }
         return jsonObject;

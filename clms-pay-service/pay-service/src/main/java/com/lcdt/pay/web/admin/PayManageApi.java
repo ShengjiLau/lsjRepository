@@ -132,6 +132,7 @@ public class PayManageApi {
             final BalanceLogDto balanceLogDto = new BalanceLogDto();
             final Company company = companyService.selectById(balanceLog.getCompanyId());
             balanceLogDto.setCompany(company);
+            BeanUtils.copyProperties(balanceLog,balanceLogDto);
             balanceLogDtos.add(balanceLogDto);
         }
         return new PageResultDto<BalanceLogDto>(balanceLogDtos);
