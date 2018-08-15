@@ -20,6 +20,7 @@ import com.lcdt.pay.utils.CommonUtils;
 import com.lcdt.userinfo.dto.CompanyQueryDto;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.service.CompanyService;
+import com.lcdt.util.ResponseJsonUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -93,8 +94,9 @@ public class PayManageApi {
 
     @PostMapping("/addservicenum")
     @ApiOperation("充值服务次数，serviceName服务代码")
-    public CompanyServiceCount topUp(Long companyId,String serviceName,Integer num){
-        return countService.addCountNum(companyId,SecurityInfoGetter.getUser().getUserId(),serviceName, num, SecurityInfoGetter.getUser().getPhone());
+    public JSONObject topUp(Long companyId,String serviceName,Integer num){
+        final CompanyServiceCount companyServiceCount = countService.addCountNum(companyId, SecurityInfoGetter.getUser().getUserId(), serviceName, num, SecurityInfoGetter.getUser().getPhone());
+        return ResponseJsonUtils.successResponseJson(companyServiceCount, "操作成功");
     }
     @PostMapping("/countlog")
     @ApiOperation("查询服务流水记录")
@@ -156,9 +158,7 @@ public class PayManageApi {
     }
 
 
-    public void initBinder(){
 
-    }
 
 
 }
