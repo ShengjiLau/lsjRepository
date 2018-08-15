@@ -9,7 +9,7 @@
     receive_address receiveAddress, remarks, create_time createTime, group_id groupId,company_id companyId,receive_time receiveTime,
     approval_start_date approvalStartDate,approval_end_date approvalEndDate,create_user_id createUserId,order_serial_no orderSerialNo,
     approval_process_id approvalProcessId,
-    approval_status approvalStatus,approval_process approvalProcess,supplier_id supplierId,is_draft isDraft,receive_require receiveRequire,
+    approval_status approvalStatus,approval_process approvalProcess,supplier_id supplierId,is_draft isDraft,customer_order_status customerOrderStatus,receive_require receiveRequire,
     summation,logistics_company logisticsCompany,logistics_no logisticsNo,logistics_status logisticsStatus,
     warehouse_id warehouseId,attachment1_name attachment1Name,attachment1,attachment2_name attachment2Name,attachment2,
     attachment3_name attachment3Name,attachment3,attachment4_name attachment4Name,attachment4,attachment5_name attachment5Name,attachment5,
@@ -55,6 +55,9 @@
       </if> 
       <if test="orderNoEmpty != null">
          and order_no is not null 
+      </if>
+      <if test="customerOrderStatus != null">
+          and customer_order_status = #{customerOrderStatus,jdbcType=TINYINT}
       </if>
    <!--  <if test="approvalStatus!=null ">
          and approval_status = #{approvalStatus,jdbcType=SMALLINT}
