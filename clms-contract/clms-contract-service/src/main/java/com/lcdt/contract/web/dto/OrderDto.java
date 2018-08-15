@@ -56,6 +56,8 @@ public class OrderDto extends Order  implements Serializable{
 	
 	@ApiModelProperty(value="订单号是否为空？0或者不传-为空；1-不为空")
 	private Byte orderNoEmpty;
+
+	private Short[] customerOrderStatuses;
 	
 	public int getPageNum() {
 		return pageNum;
@@ -151,6 +153,13 @@ public class OrderDto extends Order  implements Serializable{
 	public void setOrderNoEmpty(Byte orderNoEmpty) {
 		this.orderNoEmpty = orderNoEmpty;
 	}
-	
-	
+
+	public Short[] getCustomerOrderStatuses() {
+		return customerOrderStatuses;
+	}
+
+	public OrderDto setCustomerOrderStatuses(Short[] customerOrderStatuses) {
+		this.customerOrderStatuses = customerOrderStatuses;
+		return this;
+	}
 }

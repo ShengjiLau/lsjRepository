@@ -56,8 +56,11 @@
       <if test="orderNoEmpty != null">
          and order_no is not null 
       </if>
-      <if test="customerOrderStatus != null">
-          and customer_order_status = #{customerOrderStatus,jdbcType=TINYINT}
+      <if test="customerOrderStatuses != null and customerOrderStatuses.length>0">
+          and customer_order_status in
+          <foreach collection="customerOrderStatuses" index="index" item="status" open="(" separator="," close=")">
+              #{status}
+          </foreach>
       </if>
    <!--  <if test="approvalStatus!=null ">
          and approval_status = #{approvalStatus,jdbcType=SMALLINT}
