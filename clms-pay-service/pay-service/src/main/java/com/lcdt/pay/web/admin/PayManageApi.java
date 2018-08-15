@@ -17,11 +17,14 @@ import com.lcdt.pay.service.CompanyBalanceService;
 import com.lcdt.pay.service.TopupService;
 import com.lcdt.pay.service.impl.ProductCountServiceImpl;
 import com.lcdt.pay.utils.CommonUtils;
+import com.lcdt.pay.web.admin.dto.PayOrderDto;
 import com.lcdt.userinfo.dto.CompanyQueryDto;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.service.CompanyService;
+import com.lcdt.userinfo.service.UserService;
 import com.lcdt.util.ResponseJsonUtils;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -59,6 +62,11 @@ public class PayManageApi {
 
     @Autowired
     private TopupService topupService;
+
+    @Reference
+    private UserService userService;
+
+
 
     @PostMapping("/balances")
     @ApiOperation("根据公司id list查询现金余额")
@@ -123,7 +131,7 @@ public class PayManageApi {
 
     @ApiOperation("查看所有订单")
     @RequestMapping(value = "/orders",method = RequestMethod.GET)
-    public PageResultDto<PayOrder> allorderlist(Integer pageNo, Integer pageSize,
+    public PageResultDto<PayOrderDto> allorderlist(Integer pageNo, Integer pageSize,
                                                 @RequestParam(required = false) Long companyId,
                                                 @RequestParam(required = false) Date beginTime,
                                                 @RequestParam(required = false) Date endTime,
@@ -132,7 +140,18 @@ public class PayManageApi {
     ){
         PageHelper.startPage(pageNo, pageSize);
         List<PayOrder> payOrders = topupService.topUpOrderList(companyId, orderType,beginTime,endTime,payType);
-        return new PageResultDto<PayOrder>(payOrders);
+
+        final ArrayList<PayOrderDto> payOrderDtos = new ArrayList<>();
+
+        for (PayOrder payOrder : payOrders) {
+            final PayOrderDto payOrderDto = new PayOrderDto();
+            BeanUtils.copyProperties(payOrder, payOrderDto);
+            final Company company = companyService.selectById(payOrder.getOrderPayCompanyId());
+            payOrderDto.setCompany(company);
+            payOrderDtos.add(payOrderDto);
+        }
+
+        return new PageResultDto<PayOrderDto>(payOrderDtos);
     }
 
 
