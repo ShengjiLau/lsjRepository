@@ -8,6 +8,7 @@ import com.lcdt.contract.model.OrderProductRelationship;
 import com.lcdt.contract.service.OrderProductRelationshipService;
 import com.lcdt.userinfo.model.User;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public class OrderProductRelationshipApi {
     @Autowired
     private OrderProductRelationshipService orderProductRelationshipService;
 
+    @ApiOperation("修改匹配关系")
     @PostMapping(value = "relationship")
     public JSONObject modifyRelationship(OrderProductRelationshipParams params){
         User loginUser = SecurityInfoGetter.getUser();
@@ -39,6 +41,7 @@ public class OrderProductRelationshipApi {
         }
     }
 
+    @ApiOperation("查询匹配关系和商品")
     @GetMapping(value = "relationship")
     public JSONObject getRelationship(@ApiParam(value = "product id") @RequestParam Long opId){
         OrderProductRelationshipDao orderProductRelationshipDao=orderProductRelationshipService.queryRelationshipDao(opId,SecurityInfoGetter.getCompanyId());
