@@ -52,7 +52,7 @@ public class OrderProductRelationshipApi {
             jsonObject.put("data",orderProductRelationshipDao);
         }else{
             jsonObject.put("code",-1);
-            jsonObject.put("message","查询成功");
+            jsonObject.put("message","查询失败");
             jsonObject.put("data",orderProductRelationshipDao);
         }
         return jsonObject;
