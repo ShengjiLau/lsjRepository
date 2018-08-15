@@ -1,5 +1,6 @@
 package com.lcdt.contract.service;
 
+import com.lcdt.contract.dao.OrderProductRelationshipDao;
 import com.lcdt.contract.dto.OrderProductRelationshipParams;
 import com.lcdt.contract.model.OrderProductRelationship;
 
@@ -30,4 +31,11 @@ public interface OrderProductRelationshipService {
      */
     OrderProductRelationship queryRelationship(Long relationshipId);
 
+    /**
+     * 查询匹配商品
+     * @param opId
+     * @param companyId
+     * @return
+     */
+    OrderProductRelationshipDao queryRelationshipDao(Long opId,Long companyId);
 }
