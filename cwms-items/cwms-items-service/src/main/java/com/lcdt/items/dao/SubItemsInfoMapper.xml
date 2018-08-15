@@ -191,6 +191,9 @@
       <if test="classifyName!=null and classifyName!=''">
         and classify.classify_name like concat('%',#{classifyName,jdbcType=VARCHAR},'%')
       </if>
+      <if test="goodsInfo!=null and goodsInfo!=''">
+        and (items.subject like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') or sub.code like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%') or sub.bar_code like concat('%',#{goodsInfo,jdbcType=VARCHAR},'%'))
+      </if>
       <if test="goodsIds!=null and goodsIds.size()>0">
         and sub_item_id in
         <foreach collection="goodsIds" index="index" item="item" open="(" separator="," close=")">
