@@ -321,7 +321,11 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
         inventoryLog.setGoodsId(inventory.getGoodsId());
         inventoryLog.setCompanyId(inventory.getCompanyId());
         inventoryLog.setWarehouseId(inventory.getWarehouseId());
-        inventoryLog.setChangeNum(transferGoodsDO.getTransferNum().doubleValue());
+        if (0 == transferGoodsDO.getIsMaterial()) {
+        	inventoryLog.setChangeNum(- transferGoodsDO.getTransferNum().doubleValue());
+        }else {
+        	inventoryLog.setChangeNum(transferGoodsDO.getTransferNum().doubleValue());
+        }
         
         inventoryLog.setStorageLocationCode(inventory.getStorageLocationCode());
         inventoryLog.setStorageLocationId(inventory.getStorageLocationId());
