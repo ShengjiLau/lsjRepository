@@ -217,7 +217,7 @@
                                 <div >
                                     <div class="list-img">
                                         <span th:if="${notice.coverImageUrl}">
-                                            <a th:href="@{/front/news.html(id=${notice.noticeId})}"><img th:src="${notice.coverImageUrl}" alt=""></a>
+                                            <a th:href="@{/portal/news.html(id=${notice.noticeId})}"><img th:src="${notice.coverImageUrl}" alt=""></a>
                                         </span>
                                     </div>
                                     <div class="list-content">
@@ -227,7 +227,7 @@
                                             <span class="label label-default" th:text="${notice.categoryName}"></span>
                                             <span  th:text="${{notice.publishTime}}"></span>
 
-                                            <a th:href="@{/front/news.html(id=${notice.noticeId})}">查看更多</a>
+                                            <a th:href="@{/portal/news.html(id=${notice.noticeId})}">查看更多</a>
                                         </p>
                                     </div>
                                 </div>
@@ -240,7 +240,7 @@
                             <p class="title" th:text="${topOne.noticeTitle}"></p>
                             <p class="content" th:text="${#strings.abbreviate(topOne.noticeSummary,150)}"></p>
                             <div class="thum">
-                                <a th:href="@{/front/news.html(id=${topOne.noticeId})}"><img th:src="${topOne.topImageUrl}" /></a>
+                                <a th:href="@{/portal/news.html(id=${topOne.noticeId})}"><img th:src="${topOne.topImageUrl}" /></a>
                             </div>
                         </div>
                     </div>
