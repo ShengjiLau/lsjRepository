@@ -25,7 +25,7 @@ public class OrderProductRelationshipApi {
     private OrderProductRelationshipService orderProductRelationshipService;
 
     @ApiOperation("修改匹配关系")
-    @PostMapping(value = "relationship")
+    @PostMapping(value = "modifyRelationship")
     public JSONObject modifyRelationship(OrderProductRelationshipParams params){
         User loginUser = SecurityInfoGetter.getUser();
         params.setCompanyId(SecurityInfoGetter.getCompanyId())
@@ -42,8 +42,8 @@ public class OrderProductRelationshipApi {
     }
 
     @ApiOperation("查询匹配关系和商品")
-    @GetMapping(value = "relationship")
-    public JSONObject getRelationship(@ApiParam(value = "product id") @RequestParam Long opId){
+    @GetMapping(value = "getRelationship")
+    public JSONObject getRelationship(@ApiParam(value = "productid") @RequestParam Long opId){
         OrderProductRelationshipDao orderProductRelationshipDao=orderProductRelationshipService.queryRelationshipDao(opId,SecurityInfoGetter.getCompanyId());
         JSONObject jsonObject=new JSONObject();
         if(null !=orderProductRelationshipDao){
