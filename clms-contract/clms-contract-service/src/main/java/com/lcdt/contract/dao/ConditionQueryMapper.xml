@@ -54,7 +54,7 @@
          and is_draft= #{isDraft,jdbcType=SMALLINT}
       </if> 
       <if test="orderNoEmpty != null">
-         and order_no is not null 
+         and order_no is not null and order_no != ''
       </if>
       <if test="customerOrderStatuses != null and customerOrderStatuses.length>0">
           and customer_order_status in
