@@ -74,18 +74,26 @@ public class WaybillPositionSettingApi {
         return waybillPositionSettingList(waybillId);
     }
 
-    @ApiOperation("司机管理--定位设置--新增")
-    @RequestMapping(value = "/driver/add", method = RequestMethod.POST)
+    @ApiOperation("司机管理--定位设置")
+    @RequestMapping(value = "/driver", method = RequestMethod.POST)
 //    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybillpositionsetting')")
     public JSONObject addDriverPositionSetting(WaybillPositionSettingDto dto) {
-        return addWaybillPositionSetting(dto);
-    }
-
-    @ApiOperation("司机管理--定位设置--修改")
-    @RequestMapping(value = "/driver/modify", method = RequestMethod.POST)
-//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybillpositionsetting')")
-    public JSONObject modifyDriverPositionSetting(WaybillPositionSettingDto dto) {
-        return updateAddWaybillPositionSetting(dto);
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+        dto.setCreateId(loginUser.getUserId());
+        dto.setCreateName(loginUser.getRealName());
+        dto.setUpdateId(loginUser.getUserId());
+        dto.setUpdateName(loginUser.getRealName());
+        dto.setCompanyId(companyId);
+        int result = waybillPositionSettingService.modifyDriverPositionSetting(dto);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "设置成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("设置失败");
+        }
     }
 
     @ApiOperation("司机管理--定位设置--查询")

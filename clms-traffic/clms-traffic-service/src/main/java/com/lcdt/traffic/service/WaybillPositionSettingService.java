@@ -28,6 +28,12 @@ public interface WaybillPositionSettingService {
     int modifyWaybillPositionSetting(WaybillPositionSettingDto dto);
 
     /**
+     * 司机定位设置
+     * @param dto
+     * @return
+     */
+    int modifyDriverPositionSetting(WaybillPositionSettingDto dto);
+    /**
      * 查询定位设置
      * @param map
      * @return

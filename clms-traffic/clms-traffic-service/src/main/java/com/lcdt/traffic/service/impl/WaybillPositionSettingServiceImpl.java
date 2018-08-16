@@ -41,6 +41,17 @@ public class WaybillPositionSettingServiceImpl implements WaybillPositionSetting
     }
 
     @Override
+    public int modifyDriverPositionSetting(WaybillPositionSettingDto dto) {
+        List<WaybillPositionSetting> list=waybillPositionSettingMapper.selectByDriverPhoneAndCompanyId(dto.getDriverPhone(),dto.getCompanyId());
+        if(null != list && !list.isEmpty()){
+            dto.setWpsId(list.get(0).getWpsId());
+            return modifyWaybillPositionSetting(dto);
+        }else{
+            return addWaybillPositionSetting(dto);
+        }
+    }
+
+    @Override
     public WaybillPositionSetting queryWaybillPositionSetting(Map map) {
         return waybillPositionSettingMapper.selectByWpsIdAndXCompanyId(map);
     }
