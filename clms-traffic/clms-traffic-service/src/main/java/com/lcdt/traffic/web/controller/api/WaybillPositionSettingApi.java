@@ -74,6 +74,20 @@ public class WaybillPositionSettingApi {
         return waybillPositionSettingList(waybillId);
     }
 
+    @ApiOperation("司机管理--定位设置--新增")
+    @RequestMapping(value = "/driver/add", method = RequestMethod.POST)
+//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybillpositionsetting')")
+    public JSONObject addDriverPositionSetting(WaybillPositionSettingDto dto) {
+        return addWaybillPositionSetting(dto);
+    }
+
+    @ApiOperation("司机管理--定位设置--修改")
+    @RequestMapping(value = "/driver/modify", method = RequestMethod.POST)
+//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybillpositionsetting')")
+    public JSONObject modifyDriverPositionSetting(WaybillPositionSettingDto dto) {
+        return updateAddWaybillPositionSetting(dto);
+    }
+
 
     private JSONObject addWaybillPositionSetting(WaybillPositionSettingDto dto){
         Long companyId = SecurityInfoGetter.getCompanyId();
