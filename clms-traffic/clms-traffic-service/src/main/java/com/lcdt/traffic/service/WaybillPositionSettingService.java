@@ -40,4 +40,12 @@ public interface WaybillPositionSettingService {
      * @return
      */
     PageInfo<List<WaybillPositionSetting>> queryWaybillPositionSettingList(Map map);
+
+    /**
+     * 获取司机定位
+     * @param driverPhone
+     * @param companyId
+     * @return
+     */
+    PageInfo<List<WaybillPositionSetting>> queryDriverPositionSettingList(String driverPhone,Long companyId);
 }

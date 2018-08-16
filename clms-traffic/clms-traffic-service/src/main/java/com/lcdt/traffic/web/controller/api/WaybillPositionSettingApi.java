@@ -88,6 +88,14 @@ public class WaybillPositionSettingApi {
         return updateAddWaybillPositionSetting(dto);
     }
 
+    @ApiOperation("司机管理--定位设置--查询")
+    @RequestMapping(value = "/driver/query", method = RequestMethod.GET)
+//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybillpositionsetting')")
+    public PageBaseDto<List<WaybillPositionSetting>> queryDriverPositionSetting(@ApiParam(value = "司机手机号", required = true) @RequestParam String driverPhone) {
+        PageInfo<List<WaybillPositionSetting>> listPageInfo=waybillPositionSettingService.queryDriverPositionSettingList(driverPhone,SecurityInfoGetter.getCompanyId());
+        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());;
+        return pageBaseDto;
+    }
 
     private JSONObject addWaybillPositionSetting(WaybillPositionSettingDto dto){
         Long companyId = SecurityInfoGetter.getCompanyId();

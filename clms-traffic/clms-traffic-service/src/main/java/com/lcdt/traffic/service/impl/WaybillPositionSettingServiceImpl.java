@@ -66,4 +66,16 @@ public class WaybillPositionSettingServiceImpl implements WaybillPositionSetting
         page=new PageInfo(resultList);
         return page;
     }
+
+    @Override
+    public PageInfo<List<WaybillPositionSetting>> queryDriverPositionSettingList(String driverPhone, Long companyId) {
+        List<WaybillPositionSetting> resultList = null;
+        PageInfo page = null;
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+        PageHelper.startPage(pageNo,pageSize);
+        resultList=waybillPositionSettingMapper.selectByDriverPhoneAndCompanyId(driverPhone,companyId);
+        page=new PageInfo(resultList);
+        return page;
+    }
 }

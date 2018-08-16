@@ -2,6 +2,7 @@ package com.lcdt.traffic.dao;
 
 import com.lcdt.traffic.model.WaybillPositionSetting;
 import com.lcdt.traffic.web.dto.WaybillPositionSettingDto;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -61,4 +62,12 @@ public interface WaybillPositionSettingMapper {
      * @return
      */
     List<WaybillPositionSetting> selectByWaybillIdAndXCompanyId(Map map);
+
+    /**
+     * 获取司机定位
+     * @param driverPhone
+     * @param companyId
+     * @return
+     */
+    List<WaybillPositionSetting> selectByDriverPhoneAndCompanyId(@Param("driverPhone") String driverPhone,@Param("companyId") Long companyId);
 }
