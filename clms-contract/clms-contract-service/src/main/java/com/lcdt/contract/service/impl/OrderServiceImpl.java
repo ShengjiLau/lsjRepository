@@ -741,18 +741,16 @@ public class OrderServiceImpl implements OrderService {
         }
         salesOrder.setCompanyId(customer.getBindCpid());
 
-
-
         List<OrderProduct> salesOrderProductList = orderProductMapper.getOrderProductByOrderId(orderId);
 
         Order purchaseOrder = new Order();
         purchaseOrder.setSupplier(customer.getCustomerName());
-        purchaseOrder.setCompanyId(SecurityInfoGetter.getCompanyId());
+        purchaseOrder.setCompanyId(customer.getBindCpid());
         purchaseOrder.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
         purchaseOrder.setCreateTime(new Date());
         purchaseOrder.setOrderType(OrderVO.CST＿SALES_ORDER);
-        purchaseOrder.setGroupId(salesOrder.getGroupId());
-/*      purchaseOrder.setReceiveWarehouse(salesOrder.getReceiveWarehouse());
+  /*       purchaseOrder.setGroupId(salesOrder.getGroupId());
+      purchaseOrder.setReceiveWarehouse(salesOrder.getReceiveWarehouse());
         purchaseOrder.setWarehouseId(salesOrder.getWarehouseId());*/
         //销售单收货----采购单收货
         purchaseOrder.setSenderPhone(salesOrder.getReceiverPhone());
