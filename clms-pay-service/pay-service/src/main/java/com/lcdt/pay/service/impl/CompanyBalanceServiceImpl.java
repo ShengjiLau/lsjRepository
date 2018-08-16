@@ -3,13 +3,20 @@ package com.lcdt.pay.service.impl;
 import com.lcdt.pay.dao.BalanceLogMapper;
 import com.lcdt.pay.dao.OrderType;
 import com.lcdt.pay.dao.PayBalanceMapper;
+import com.lcdt.pay.dao.PayOrderMapper;
 import com.lcdt.pay.model.BalanceLog;
+import com.lcdt.pay.model.OrderStatus;
 import com.lcdt.pay.model.PayBalance;
 import com.lcdt.pay.model.PayOrder;
 import com.lcdt.pay.service.CompanyBalanceService;
+import com.lcdt.pay.service.OrderService;
+import com.lcdt.pay.service.TopupService;
+import com.lcdt.userinfo.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @com.alibaba.dubbo.config.annotation.Service
@@ -39,13 +46,27 @@ public class CompanyBalanceServiceImpl implements CompanyBalanceService{
         return payBalance;
     }
 
-    public void adminRecharge(Long companyId,Integer amount,String userName){
+    @Autowired
+    private TopupService topupService;
+
+    @Autowired
+    private PayOrderMapper orderMapper;
+
+    @Transactional(rollbackFor = Exception.class)
+    public void adminRecharge(Long companyId,Integer amount,User user){
+
+        final PayOrder topUpOrder = topupService.createTopUpOrder(amount, companyId, user);
+
+        topUpOrder.setOrderStatus(OrderStatus.PAYED);
+        topUpOrder.setPayType(OrderServiceImpl.PayType.ADMIN_PAY);
+        orderMapper.updateByPrimaryKey(topUpOrder);
+
+
         PayBalance payBalance = mapper.selectByCompanyId(companyId);
 
         if (payBalance == null) {
             payBalance = new PayBalance();
             payBalance.setBalanceCompanyId(companyId);
-
             mapper.insert(payBalance);
         }
         Integer balance = payBalance.getBalance();
@@ -60,7 +81,7 @@ public class CompanyBalanceServiceImpl implements CompanyBalanceService{
         balanceLog.setCurrentBalance(payBalance.getBalance());
         balanceLog.setLogDes("管理员充值");
         balanceLog.setLogType(OrderType.ADMIN_TOPUP);
-        balanceLog.setLogUsername(userName);
+        balanceLog.setLogUsername(user.getPhone());
         balanceLogMapper.insert(balanceLog);
     }
 
