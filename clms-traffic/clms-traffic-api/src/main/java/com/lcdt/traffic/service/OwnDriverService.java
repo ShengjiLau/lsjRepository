@@ -8,6 +8,7 @@ import com.lcdt.traffic.model.OwnDriverDao;
 import com.lcdt.userinfo.model.Driver;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @AUTHOR liuh
@@ -73,5 +74,8 @@ public interface OwnDriverService {
      * @return
      */
     List<OwnDriver> driverListByGroupId(Long companyId, String driverGroupId);
+
+
+    void driverLocation(Map map);
 
 }
