@@ -1,5 +1,6 @@
 package com.lcdt.userinfo.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lcdt.converter.ResponseData;
 
 import java.io.Serializable;
@@ -24,6 +25,7 @@ public class Driver implements Serializable,ResponseData {
 
     private String driverNationality;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date driverBirthday;
 
     private String driverLicense;
