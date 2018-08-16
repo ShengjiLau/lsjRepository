@@ -6,6 +6,166 @@
     <result column="rule_name" jdbcType="VARCHAR" property="ruleName" />
     <result column="fee_type" jdbcType="SMALLINT" property="feeType" />
     <result column="rule_unit" jdbcType="SMALLINT" property="ruleUnit" />
+    <result column="item_ids" jdbcType="VARCHAR" property="itemIds" />
+    <result column="customer_ids" jdbcType="VARCHAR" property="customerIds" />
+    <result column="create_id" jdbcType="BIGINT" property="createId" />
+    <result column="create_name" jdbcType="VARCHAR" property="createName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    pr_id, rule_name, fee_type, rule_unit, item_ids, customer_ids, create_id, create_name, 
+    create_time, update_time, company_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_pricing_rule
+    where pr_id = #{prId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_pricing_rule
+    where pr_id = #{prId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.traffic.model.PricingRule">
+    insert into t_pricing_rule (pr_id, rule_name, fee_type, 
+      rule_unit, item_ids, customer_ids, 
+      create_id, create_name, create_time, 
+      update_time, company_id)
+    values (#{prId,jdbcType=BIGINT}, #{ruleName,jdbcType=VARCHAR}, #{feeType,jdbcType=SMALLINT}, 
+      #{ruleUnit,jdbcType=SMALLINT}, #{itemIds,jdbcType=VARCHAR}, #{customerIds,jdbcType=VARCHAR}, 
+      #{createId,jdbcType=BIGINT}, #{createName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{companyId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lcdt.traffic.model.PricingRule">
+    insert into t_pricing_rule
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="prId != null">
+        pr_id,
+      </if>
+      <if test="ruleName != null">
+        rule_name,
+      </if>
+      <if test="feeType != null">
+        fee_type,
+      </if>
+      <if test="ruleUnit != null">
+        rule_unit,
+      </if>
+      <if test="itemIds != null">
+        item_ids,
+      </if>
+      <if test="customerIds != null">
+        customer_ids,
+      </if>
+      <if test="createId != null">
+        create_id,
+      </if>
+      <if test="createName != null">
+        create_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="companyId != null">
+        company_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="prId != null">
+        #{prId,jdbcType=BIGINT},
+      </if>
+      <if test="ruleName != null">
+        #{ruleName,jdbcType=VARCHAR},
+      </if>
+      <if test="feeType != null">
+        #{feeType,jdbcType=SMALLINT},
+      </if>
+      <if test="ruleUnit != null">
+        #{ruleUnit,jdbcType=SMALLINT},
+      </if>
+      <if test="itemIds != null">
+        #{itemIds,jdbcType=VARCHAR},
+      </if>
+      <if test="customerIds != null">
+        #{customerIds,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null">
+        #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="companyId != null">
+        #{companyId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.traffic.model.PricingRule">
+    update t_pricing_rule
+    <set>
+      <if test="ruleName != null">
+        rule_name = #{ruleName,jdbcType=VARCHAR},
+      </if>
+      <if test="feeType != null">
+        fee_type = #{feeType,jdbcType=SMALLINT},
+      </if>
+      <if test="ruleUnit != null">
+        rule_unit = #{ruleUnit,jdbcType=SMALLINT},
+      </if>
+      <if test="itemIds != null">
+        item_ids = #{itemIds,jdbcType=VARCHAR},
+      </if>
+      <if test="customerIds != null">
+        customer_ids = #{customerIds,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null">
+        create_id = #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createName != null">
+        create_name = #{createName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where pr_id = #{prId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.PricingRule">
+    update t_pricing_rule
+    set rule_name = #{ruleName,jdbcType=VARCHAR},
+      fee_type = #{feeType,jdbcType=SMALLINT},
+      rule_unit = #{ruleUnit,jdbcType=SMALLINT},
+      item_ids = #{itemIds,jdbcType=VARCHAR},
+      customer_ids = #{customerIds,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=BIGINT},
+      create_name = #{createName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      company_id = #{companyId,jdbcType=BIGINT}
+    where pr_id = #{prId,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.PricingRule">
+    <id column="pr_id" jdbcType="BIGINT" property="prId" />
+    <result column="rule_name" jdbcType="VARCHAR" property="ruleName" />
+    <result column="fee_type" jdbcType="SMALLINT" property="feeType" />
+    <result column="rule_unit" jdbcType="SMALLINT" property="ruleUnit" />
     <result column="create_id" jdbcType="BIGINT" property="createId" />
     <result column="create_name" jdbcType="VARCHAR" property="createName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />

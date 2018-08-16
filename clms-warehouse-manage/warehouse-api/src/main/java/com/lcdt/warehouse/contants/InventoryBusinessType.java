@@ -14,6 +14,8 @@ public final class InventoryBusinessType {
 
     public static final Integer INVENTORY_INIT = 5; // 库存初始化
     
-    public static final Integer TRANSFER_ORDER = 6;//库存转换单
+    public static final Integer TRANSFER_ORDER_MATERIAL = 6;//库存转换单消耗商品
+    
+    public static final Integer TRANSFER_ORDER_PRODUCT = 7;//库存转换单生成商品
 
 }

@@ -3,11 +3,9 @@ package com.lcdt.traffic.model;
 public class PricingRuleDetail {
     private Long prdId;
 
+    private Long prId;
+
     private Long lineId;
-
-    private String itemIds;
-
-    private String customerIds;
 
     private String rangePrices;
 
@@ -21,28 +19,20 @@ public class PricingRuleDetail {
         this.prdId = prdId;
     }
 
+    public Long getPrId() {
+        return prId;
+    }
+
+    public void setPrId(Long prId) {
+        this.prId = prId;
+    }
+
     public Long getLineId() {
         return lineId;
     }
 
     public void setLineId(Long lineId) {
         this.lineId = lineId;
-    }
-
-    public String getItemIds() {
-        return itemIds;
-    }
-
-    public void setItemIds(String itemIds) {
-        this.itemIds = itemIds == null ? null : itemIds.trim();
-    }
-
-    public String getCustomerIds() {
-        return customerIds;
-    }
-
-    public void setCustomerIds(String customerIds) {
-        this.customerIds = customerIds == null ? null : customerIds.trim();
     }
 
     public String getRangePrices() {

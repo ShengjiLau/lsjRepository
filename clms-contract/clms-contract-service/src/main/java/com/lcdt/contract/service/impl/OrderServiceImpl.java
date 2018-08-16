@@ -741,9 +741,12 @@ public class OrderServiceImpl implements OrderService {
         }
         salesOrder.setCompanyId(customer.getBindCpid());
 
+
+
         List<OrderProduct> salesOrderProductList = orderProductMapper.getOrderProductByOrderId(orderId);
 
         Order purchaseOrder = new Order();
+        purchaseOrder.setSupplier(customer.getCustomerName());
         purchaseOrder.setCompanyId(SecurityInfoGetter.getCompanyId());
         purchaseOrder.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
         purchaseOrder.setCreateTime(new Date());
