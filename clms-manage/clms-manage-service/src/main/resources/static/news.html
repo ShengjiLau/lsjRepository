@@ -19,8 +19,8 @@
 </nav>
 <div class="container">
     <ol class="breadcrumb">
-        <li><a href="/front/news-list.html">资讯</a></li>
-        <li><a href="/front/news-list.html">公司新闻</a></li>
+        <li><a href="/portal/news-list.html">资讯</a></li>
+        <li><a href="/portal/news-list.html">公司新闻</a></li>
         <li class="active" th:text="${notice.noticeTitle}"></li>
     </ol>
 </div>
@@ -28,13 +28,13 @@
 <div class="main-container">
     <div class="container news-content">
        <h1><span th:text="${notice.noticeTitle}"></span></h1>
-        <p th:text="${{notice.publishTime}}+'　来源: '+${notice.publisher}">　</p>
+        <p th:text="${{notice.publishTime}}+'　来源: '+(${notice.publisher==null||notice.publisher==''}?'大驼队':${notice.publisher})">　</p>
         <hr>
         <div class="content">
             <p th:utext="${notice.noticeContent}">
             </p>
         </div>
-        <p style="text-align: right" th:text="${{notice.publishTime}}+'　来源: '+${notice.publisher}">
+        <p style="text-align: right" th:text="${{notice.publishTime}}+'　来源: '+(${notice.publisher==null||notice.publisher==''}?'大驼队':${notice.publisher})">
         </p>
         <hr>
     </div>
@@ -43,9 +43,9 @@
         <div  th:if="${nextNotice}">
 
                 <p class="tips">阅读下一篇</p>
-                <p class="next-title"><a style="color: black" th:href="@{/front/news.html(id=${nextNotice.noticeId})}"><span th:text="${nextNotice.noticeTitle}"></span></a></p>
+                <p class="next-title"><a style="color: black" th:href="@{/portal/news.html(id=${nextNotice.noticeId})}"><span th:text="${nextNotice.noticeTitle}"></span></a></p>
                 <p class="next-contet">
-                    <a style="color: black" th:href="@{/front/news.html(id=${nextNotice.noticeId})}"><span th:text="${nextNotice.noticeSummary}"></span></a>
+                    <a style="color: black" th:href="@{/portal/news.html(id=${nextNotice.noticeId})}"><span th:text="${nextNotice.noticeSummary}"></span></a>
                 </p>
 
         </div>
@@ -58,8 +58,8 @@
         </div>
 
         <p class="back-btn">
-            <a href="/front/index.html">返回首页</a>
-            <a href="/front/news-list.html">返回资讯首页</a>
+            <a href="/portal/index.html">返回首页</a>
+            <a href="/portal/news-list.html">返回资讯首页</a>
         </p>
         </div>
     </div>

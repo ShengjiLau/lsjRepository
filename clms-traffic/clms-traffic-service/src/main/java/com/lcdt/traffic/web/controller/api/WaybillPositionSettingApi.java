@@ -74,6 +74,36 @@ public class WaybillPositionSettingApi {
         return waybillPositionSettingList(waybillId);
     }
 
+    @ApiOperation("司机管理--定位设置")
+    @RequestMapping(value = "/driver", method = RequestMethod.POST)
+//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybillpositionsetting')")
+    public JSONObject addDriverPositionSetting(WaybillPositionSettingDto dto) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        User loginUser = SecurityInfoGetter.getUser();
+        dto.setCreateId(loginUser.getUserId());
+        dto.setCreateName(loginUser.getRealName());
+        dto.setUpdateId(loginUser.getUserId());
+        dto.setUpdateName(loginUser.getRealName());
+        dto.setCompanyId(companyId);
+        int result = waybillPositionSettingService.modifyDriverPositionSetting(dto);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "设置成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("设置失败");
+        }
+    }
+
+    @ApiOperation("司机管理--定位设置--查询")
+    @RequestMapping(value = "/driver/query", method = RequestMethod.GET)
+//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybillpositionsetting')")
+    public PageBaseDto<List<WaybillPositionSetting>> queryDriverPositionSetting(@ApiParam(value = "司机手机号", required = true) @RequestParam String driverPhone) {
+        PageInfo<List<WaybillPositionSetting>> listPageInfo=waybillPositionSettingService.queryDriverPositionSettingList(driverPhone,SecurityInfoGetter.getCompanyId());
+        PageBaseDto pageBaseDto = new PageBaseDto(listPageInfo.getList(), listPageInfo.getTotal());;
+        return pageBaseDto;
+    }
 
     private JSONObject addWaybillPositionSetting(WaybillPositionSettingDto dto){
         Long companyId = SecurityInfoGetter.getCompanyId();

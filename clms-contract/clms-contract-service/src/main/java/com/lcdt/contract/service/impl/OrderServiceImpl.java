@@ -833,12 +833,10 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
             orderDto.setCustomerOrderStatus(params.getCustomerOrderStatus());
-            orderMapper.updateByPrimaryKey(orderDto);
+            return orderMapper.updateByPrimaryKey(orderDto);
         }else{
             throw new RuntimeException("此单不属于此企业");
         }
-
-        return 0;
     }
 
     /**
