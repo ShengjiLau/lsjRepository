@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
-import com.lcdt.contract.dao.OrderApprovalMapper;
+import com.lcdt.contract.dao.*;
+import com.lcdt.contract.dto.CustomerOrderStatusParams;
 import com.lcdt.contract.dto.OrderProductRelationshipParams;
 import com.lcdt.contract.model.OrderApproval;
 import com.lcdt.contract.notify.ContractAttachment;
@@ -48,10 +49,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.lcdt.contract.dao.ConditionQueryMapper;
-import com.lcdt.contract.dao.OrderMapper;
-import com.lcdt.contract.dao.OrderProductMapper;
-import com.lcdt.contract.dao.PaymentApplicationMapper;
 import com.lcdt.contract.model.Order;
 import com.lcdt.contract.model.OrderProduct;
 import com.lcdt.contract.model.PaymentApplication;
@@ -750,7 +747,7 @@ public class OrderServiceImpl implements OrderService {
         purchaseOrder.setCompanyId(SecurityInfoGetter.getCompanyId());
         purchaseOrder.setCreateUserId(SecurityInfoGetter.getUser().getUserId());
         purchaseOrder.setCreateTime(new Date());
-        purchaseOrder.setOrderType(OrderVO.SALES_ORDER);
+        purchaseOrder.setOrderType(OrderVO.CST＿SALES_ORDER);
         purchaseOrder.setGroupId(salesOrder.getGroupId());
 /*      purchaseOrder.setReceiveWarehouse(salesOrder.getReceiveWarehouse());
         purchaseOrder.setWarehouseId(salesOrder.getWarehouseId());*/
@@ -785,11 +782,12 @@ public class OrderServiceImpl implements OrderService {
             for (OrderProduct salesOrderProduct: salesOrderProductList) {
                 OrderProduct purchaseOrderProduct = new OrderProduct();
                 BeanUtils.copyProperties(salesOrderProduct, purchaseOrderProduct);
-                purchaseOrderProduct.setPrice(null);
+                //purchaseOrderProduct.setPrice(null);
                 purchaseOrderProduct.setOpId(null);
                 purchaseOrderProduct.setOrderId(purchaseOrder.getOrderId());
                 purchaseOrderProductList.add(purchaseOrderProduct);
             }
+
             nonautomaticMapper.insertOrderProductByBatch(purchaseOrderProductList);
 
             //匹配商品
@@ -816,6 +814,31 @@ public class OrderServiceImpl implements OrderService {
 
 
         return result;
+    }
+
+    @Override
+    public int modifyCustomerOrderStatus(CustomerOrderStatusParams params) {
+        OrderDto orderDto=selectByPrimaryKey(params.getOrderId());
+        if(params.getCompanyId().equals(orderDto.getCompanyId())){
+            //如果是接收，先要判断商品是否都匹配
+            if(params.getCustomerOrderStatus().equals(OrderVO.CUSTOMER_ORDER_HAVE_RECEIVE)){
+                List<OrderProduct> orderProductList=orderDto.getOrderProductList();
+                if(null != orderProductList && !orderProductList.isEmpty()){
+                    orderProductList.forEach(product->{
+                        OrderProductRelationshipDao orderProductRelationshipDao=orderProductRelationshipService.queryRelationshipDao(product.getOpId(),orderDto.getCompanyId());
+                        if(null==orderProductRelationshipDao || null==orderProductRelationshipDao.getGoodsInfo() || !orderProductRelationshipDao.getIsPair()){
+                            throw new RuntimeException("商品未匹配全，请先匹配商品");
+                        }
+                    });
+                }
+            }
+            orderDto.setCustomerOrderStatus(params.getCustomerOrderStatus());
+            orderMapper.updateByPrimaryKey(orderDto);
+        }else{
+            throw new RuntimeException("此单不属于此企业");
+        }
+
+        return 0;
     }
 
     /**

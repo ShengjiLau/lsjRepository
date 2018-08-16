@@ -33,7 +33,9 @@ public class PayOrder implements ResponseData,Serializable{
 
     private Integer balance;
 
+
     Integer productPackageId;
+
 
     public Integer getProductPackageId() {
         return productPackageId;

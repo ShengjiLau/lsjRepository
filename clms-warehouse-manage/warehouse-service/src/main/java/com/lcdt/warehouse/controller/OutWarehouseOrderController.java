@@ -284,7 +284,7 @@ public class OutWarehouseOrderController {
                     }
 
                 }
-                String fileName = "出库单.xlsx";
+                String fileName = "出库单-"+outWhOrderDto.getOutorderNo()+".xlsx";
                 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("gbk"), "iso-8859-1") + "\"");
                 response.setContentType("application/octet-stream;charset=UTF-8");
                 OutputStream ouputStream = response.getOutputStream();

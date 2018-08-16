@@ -14,4 +14,6 @@ public interface OrderProductRelationshipMapper {
     List<OrderProductRelationship> selectAll();
 
     int updateByPrimaryKey(OrderProductRelationship record);
+
+    OrderProductRelationshipDao selectByOpId(Long opId);
 }

@@ -218,7 +218,7 @@
       </if>
 
       <if test="createPhone != null and createPhone != ''">
-        and c.create_phone = #{createPhone}
+        and u.phone = #{createPhone}
       </if>
 
       <if test="shortName != null and shortName != ''">

@@ -21,10 +21,17 @@ public class OrderVO {
 	public static final short IS_DELETED = 0;
 	
 	/**
-	 * 订单类型：销售订单
+	 * 订单类型：我的销售订单
 	 */
 	public static final short SALES_ORDER = 1;
-	
+
+
+	/**
+	 * 订单类型：客户销售订单
+	 */
+	public static final short CST＿SALES_ORDER = 2;
+
+
 	/**
 	 * 订单类型：采购订单
 	 */
@@ -52,8 +59,16 @@ public class OrderVO {
 	
 	
 	public static final Integer ZERO_INTEGER = 0;
-	
-	
+
+
+
+	/**
+	 * 订单类型：客户销售单状态
+	 */
+	public static final short CUSTOMER_ORDER_CANCEL = 0;
+	public static final short CUSTOMER_ORDER_NONE_RECEIVE = 1;
+	public static final short CUSTOMER_ORDER_HAVE_RECEIVE = 2;
+
 	
 	
 

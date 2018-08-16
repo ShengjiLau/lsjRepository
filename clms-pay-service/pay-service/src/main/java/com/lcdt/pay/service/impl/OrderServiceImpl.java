@@ -234,6 +234,7 @@ public class OrderServiceImpl implements OrderService{
         public static final Integer BALANCEPAY = 0;
         public static final Integer WECHATPAY = 2;
         public static final Integer OFFLINEPAY = 3;
+        public static final Integer ADMIN_PAY = 4;
     }
 
 }

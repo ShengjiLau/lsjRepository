@@ -30,7 +30,7 @@ public class Order implements Serializable {
 	@ApiModelProperty(value="采购/销售单号")
     private String orderNo;
 
-	@ApiModelProperty(value="订单类型(采购:0 or 销售:1)")
+	@ApiModelProperty(value="订单类型(采购:0 or 我的销售:1 or 客户销售2)")
 	@NotNull(message="订单类型不可为空")
     private Short orderType;
 
