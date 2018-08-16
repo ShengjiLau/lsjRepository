@@ -19,6 +19,7 @@ import com.lcdt.pay.service.impl.ProductCountServiceImpl;
 import com.lcdt.pay.utils.CommonUtils;
 import com.lcdt.pay.web.admin.dto.BalanceLogDto;
 import com.lcdt.pay.web.admin.dto.PayOrderDto;
+import com.lcdt.pay.web.admin.dto.ProductCountLogDto;
 import com.lcdt.userinfo.dto.CompanyQueryDto;
 import com.lcdt.userinfo.model.Company;
 import com.lcdt.userinfo.service.CompanyService;
@@ -112,7 +113,14 @@ public class PayManageApi {
     public PageResultDto serviceCountLogs(Integer pageNo, Integer pageSize,@RequestParam(required = false) Long companyId, String serviceName, Date begin,Date end,Integer logtype){
         PageHelper.startPage(pageNo, pageSize);
         final List<ProductCountLog> productCountLogs = logMapper.selectByProductNameCompanyId(companyId, serviceName, begin, end, logtype);
-        return new PageResultDto(productCountLogs);
+        final ArrayList<ProductCountLogDto> productCountLogDtos = new ArrayList<>();
+        for (ProductCountLog log : productCountLogs) {
+            final ProductCountLogDto productCountLogDto = new ProductCountLogDto();
+            BeanUtils.copyProperties(log, productCountLogDto);
+            productCountLogDto.setCompany(companyService.selectById(log.getCompanyId()));
+            productCountLogDtos.add(productCountLogDto);
+        }
+        return new PageResultDto(productCountLogDtos);
     }
 
     @RequestMapping(value = "/balancelog",method = RequestMethod.POST)
