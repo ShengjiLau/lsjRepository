@@ -113,4 +113,24 @@
     from t_waybill_position_setting
     where waybill_id = #{waybillId,jdbcType=BIGINT} and company_id=#{companyId,jdbcType=BIGINT}
   </select>
+
+  <select id="selectDriverPositionSetting" resultMap="BaseResultMap">
+    select driver_phone,company_id
+    from t_waybill_position_setting
+    <where>
+      waybill_id is null and is_deleted=0
+      <if test="fixedTime!=null and fixedTime!=''">
+        and find_in_set(#{fixedTime,jdbcType=VARCHAR},fixed_time)
+      </if>
+      <if test="fixedInterval!=null and fixedInterval!=''">
+        and fixed_interval = #{fixedInterval,jdbcType=INTEGER}
+      </if>
+      <if test="wpsType!=null and wpsType!=''">
+        and wps_type = #{wpsType,jdbcType=SMALLINT}
+      </if>
+      <if test="frequencyType!=null and frequencyType!=''">
+        and frequency_type = #{frequencyType,jdbcType=SMALLINT}
+      </if>
+    </where>
+  </select>
 </mapper>

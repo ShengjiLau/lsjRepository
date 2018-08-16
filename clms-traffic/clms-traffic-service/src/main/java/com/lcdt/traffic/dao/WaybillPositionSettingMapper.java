@@ -70,4 +70,11 @@ public interface WaybillPositionSettingMapper {
      * @return
      */
     List<WaybillPositionSetting> selectByDriverPhoneAndCompanyId(@Param("driverPhone") String driverPhone,@Param("companyId") Long companyId);
+
+    /**
+     * 获取司机定位列表
+     * @param map
+     * @return
+     */
+    List<WaybillPositionSetting> selectDriverPositionSetting(Map map);
 }

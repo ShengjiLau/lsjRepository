@@ -9,6 +9,7 @@ import com.lcdt.traffic.model.OwnDriver;
 import com.lcdt.traffic.model.OwnVehicle;
 import com.lcdt.traffic.model.PlanDetail;
 import com.lcdt.traffic.model.WaybillPlan;
+import com.lcdt.traffic.service.OwnDriverService;
 import com.lcdt.traffic.service.TrafficRpc;
 import com.lcdt.traffic.service.WaybillService;
 import com.lcdt.traffic.util.RegisterUtils;
@@ -58,9 +59,13 @@ public class TrafficRpcImpl implements TrafficRpc {
     @Autowired
     private PlanDetailMapper planDetailMapper; //计划详细
 
+    @Autowired
+    private OwnDriverService ownDriverService;
+
     @Override
     public void waybillPositionTimer(Map map) {
         waybillService.queryWaybillListToPoPosition(map);
+        ownDriverService.driverLocation(map);
     }
 
 
