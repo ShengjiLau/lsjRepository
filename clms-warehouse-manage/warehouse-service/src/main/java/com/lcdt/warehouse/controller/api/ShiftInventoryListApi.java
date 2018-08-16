@@ -189,7 +189,7 @@ public class ShiftInventoryListApi {
 							 SheetUtilGoods.setCell(4, shiftGoodsListDTO.getBaseUnit());
 							 SheetUtilGoods.setCell(5, shiftGoodsListDTO.getGoodsBatch());
 							 SheetUtilGoods.setCell(6, shiftGoodsListDTO.getStorageLocationCode());
-							 SheetUtilGoods.setCell(7, shiftGoodsDO.getShiftNum().doubleValue());
+							 SheetUtilGoods.setCell(7, shiftGoodsDO.getShiftNum() == null ? null : shiftGoodsDO.getShiftNum() .doubleValue());
 							 SheetUtilGoods.setCell(8, shiftGoodsDO.getRemark());
 							 goodsRow ++;
 						 }
