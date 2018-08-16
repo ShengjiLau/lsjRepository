@@ -55,4 +55,58 @@
     set mark = #{mark,jdbcType=VARCHAR}
     where prc_id = #{prcId,jdbcType=BIGINT}
   </update>
+  <resultMap id="BaseResultMap" type="com.lcdt.traffic.model.PricingRuleCheck">
+    <id column="prc_id" jdbcType="BIGINT" property="prcId" />
+    <result column="mark" jdbcType="VARCHAR" property="mark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    prc_id, mark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_pricing_rule_check
+    where prc_id = #{prcId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_pricing_rule_check
+    where prc_id = #{prcId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.lcdt.traffic.model.PricingRuleCheck">
+    insert into t_pricing_rule_check (prc_id, mark)
+    values (#{prcId,jdbcType=BIGINT}, #{mark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.lcdt.traffic.model.PricingRuleCheck">
+    insert into t_pricing_rule_check
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="prcId != null">
+        prc_id,
+      </if>
+      <if test="mark != null">
+        mark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="prcId != null">
+        #{prcId,jdbcType=BIGINT},
+      </if>
+      <if test="mark != null">
+        #{mark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.lcdt.traffic.model.PricingRuleCheck">
+    update t_pricing_rule_check
+    <set>
+      <if test="mark != null">
+        mark = #{mark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where prc_id = #{prcId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.lcdt.traffic.model.PricingRuleCheck">
+    update t_pricing_rule_check
+    set mark = #{mark,jdbcType=VARCHAR}
+    where prc_id = #{prcId,jdbcType=BIGINT}
+  </update>
 </mapper>
