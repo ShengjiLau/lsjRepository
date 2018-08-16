@@ -11,6 +11,10 @@ public class PricingRule {
 
     private Short ruleUnit;
 
+    private String itemIds;
+
+    private String customerIds;
+
     private Long createId;
 
     private String createName;
@@ -51,6 +55,22 @@ public class PricingRule {
 
     public void setRuleUnit(Short ruleUnit) {
         this.ruleUnit = ruleUnit;
+    }
+
+    public String getItemIds() {
+        return itemIds;
+    }
+
+    public void setItemIds(String itemIds) {
+        this.itemIds = itemIds == null ? null : itemIds.trim();
+    }
+
+    public String getCustomerIds() {
+        return customerIds;
+    }
+
+    public void setCustomerIds(String customerIds) {
+        this.customerIds = customerIds == null ? null : customerIds.trim();
     }
 
     public Long getCreateId() {
