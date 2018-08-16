@@ -168,7 +168,7 @@ public class PayManageApi {
     @ApiOperation("公司余额充值")
     public String balanceTopup(Long companyId, Integer num) {
         //充值
-        companyBalanceService.adminRecharge(companyId,num,String.valueOf(SecurityInfoGetter.getUser().getUserId()));
+        companyBalanceService.adminRecharge(companyId,num,SecurityInfoGetter.getUser());
         final JSONObject jsonObject = new JSONObject();
         jsonObject.put("message", "操作成功");
         jsonObject.put("code", 0);
