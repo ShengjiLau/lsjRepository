@@ -41,6 +41,17 @@ public class WaybillPositionSettingServiceImpl implements WaybillPositionSetting
     }
 
     @Override
+    public int modifyDriverPositionSetting(WaybillPositionSettingDto dto) {
+        List<WaybillPositionSetting> list=waybillPositionSettingMapper.selectByDriverPhoneAndCompanyId(dto.getDriverPhone(),dto.getCompanyId());
+        if(null != list && !list.isEmpty()){
+            dto.setWpsId(list.get(0).getWpsId());
+            return modifyWaybillPositionSetting(dto);
+        }else{
+            return addWaybillPositionSetting(dto);
+        }
+    }
+
+    @Override
     public WaybillPositionSetting queryWaybillPositionSetting(Map map) {
         return waybillPositionSettingMapper.selectByWpsIdAndXCompanyId(map);
     }
@@ -63,6 +74,18 @@ public class WaybillPositionSettingServiceImpl implements WaybillPositionSetting
         }
         PageHelper.startPage(pageNo,pageSize);
         resultList=waybillPositionSettingMapper.selectByWaybillIdAndXCompanyId(map);
+        page=new PageInfo(resultList);
+        return page;
+    }
+
+    @Override
+    public PageInfo<List<WaybillPositionSetting>> queryDriverPositionSettingList(String driverPhone, Long companyId) {
+        List<WaybillPositionSetting> resultList = null;
+        PageInfo page = null;
+        int pageNo = 1;
+        int pageSize = 0; //0表示所有
+        PageHelper.startPage(pageNo,pageSize);
+        resultList=waybillPositionSettingMapper.selectByDriverPhoneAndCompanyId(driverPhone,companyId);
         page=new PageInfo(resultList);
         return page;
     }

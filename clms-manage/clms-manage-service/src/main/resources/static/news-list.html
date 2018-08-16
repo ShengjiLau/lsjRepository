@@ -51,16 +51,16 @@
                 <div >
                     <div class="list-img">
                         <span th:if="${notice.coverImageUrl}">
-                            <a th:href="@{/front/news.html(id=${notice.noticeId})}"><img th:src="${notice.coverImageUrl}"></a>
+                            <a th:href="@{/portal/news.html(id=${notice.noticeId})}"><img th:src="${notice.coverImageUrl}"></a>
                         </span>
                     </div>
                     <div class="list-content">
-                        <p class="title"><a th:href="@{/front/news.html(id=${notice.noticeId})}"><span th:text="${notice.noticeTitle}"></span></a></p>
+                        <p class="title"><a th:href="@{/portal/news.html(id=${notice.noticeId})}"><span th:text="${notice.noticeTitle}"></span></a></p>
                         <p class="content">
                             <span class="label label-default" th:text="${notice.categoryName}"></span>
                             <!--<span class="label label-default">签约新闻</span>-->
                             <span th:text="${{notice.publishTime}}"></span>
-                            <a th:href="@{/front/news.html(id=${notice.noticeId})}">查看更多</a>
+                            <a th:href="@{/portal/news.html(id=${notice.noticeId})}">查看更多</a>
                         </p>
                     </div>
                 </div>
@@ -69,13 +69,13 @@
           <nav aria-label="Page navigation">
               <ul class="pagination" th:each="page:${pageNums}">
                   <li th:if="${page.isPrevious||page.isPrevious=='true'}">
-                      <a th:href="'/front/news-list.html?start='+${page.num}" aria-label="Previous">
+                      <a th:href="'/portal/news-list.html?start='+${page.num}" aria-label="Previous">
                           <span aria-hidden="true">&laquo;</span>
                       </a>
                   </li>
-                  <li th:if="${!page.isPrevious&&page.isPrevious!='true'&&!page.isNext&&page.isNext!='false'}" th:class="${page.isCurrent}?'active':''"><a th:href="'/front/news-list.html?start='+${page.num}"><span th:text="${page.num}"></span></a></li>
+                  <li th:if="${!page.isPrevious&&page.isPrevious!='true'&&!page.isNext&&page.isNext!='false'}" th:class="${page.isCurrent}?'active':''"><a th:href="'/portal/news-list.html?start='+${page.num}"><span th:text="${page.num}"></span></a></li>
                   <li th:if="${page.isNext||page.isNext=='true'}">
-                      <a th:href="'/front/news-list.html?start='+${page.num}" aria-label="Next">
+                      <a th:href="'/portal/news-list.html?start='+${page.num}" aria-label="Next">
                           <span aria-hidden="true">&raquo;</span>
                       </a>
                   </li>
