@@ -341,7 +341,12 @@ public class TransferInventoryListServiceImpl implements TransferInventoryListSe
         inventoryLog.setLogTime(new Date());
         inventoryLog.setInventoryId(inventory.getInvertoryId());
         inventoryLog.setOrderId(transferInventoryListDTO.getTransfersId());
-        inventoryLog.setType(InventoryBusinessType.TRANSFER_ORDER);
+        if (0 == transferGoodsDO.getIsMaterial()) {
+        	inventoryLog.setType(InventoryBusinessType.TRANSFER_ORDER_MATERIAL);
+        }else {
+        	inventoryLog.setType(InventoryBusinessType.TRANSFER_ORDER_PRODUCT);
+        }
+        
         logMapper.saveLog(inventoryLog);    		
 	}
 	
