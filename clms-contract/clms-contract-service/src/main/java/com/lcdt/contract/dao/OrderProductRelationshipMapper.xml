@@ -34,7 +34,7 @@
       goods_id = #{goodsId,jdbcType=BIGINT},
       update_date = CURRENT_TIMESTAMP,
       update_name = #{updateName,jdbcType=VARCHAR},
-      company_id = #{companyId,jdbcType=BIGINT}
+      company_id = #{companyId,jdbcType=BIGINT},
       is_pair = #{isPair,jdbcType=TINYINT}
     where relationship_id = #{relationshipId,jdbcType=BIGINT}
   </update>

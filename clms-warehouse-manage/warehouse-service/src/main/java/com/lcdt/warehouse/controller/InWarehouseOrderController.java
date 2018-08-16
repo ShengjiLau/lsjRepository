@@ -282,7 +282,7 @@ public class InWarehouseOrderController {
                     }
 
                 }
-                String fileName ="入库单.xlsx";
+                String fileName ="入库单-"+orderDeatil.getInOrderCode()+".xlsx";
                 response.setHeader("Content-Disposition", "attachment; filename=\"" + new String(fileName.getBytes("gbk"),"iso-8859-1") + "\"");
                 response.setContentType("application/octet-stream;charset=UTF-8");
                 OutputStream ouputStream = response.getOutputStream();
