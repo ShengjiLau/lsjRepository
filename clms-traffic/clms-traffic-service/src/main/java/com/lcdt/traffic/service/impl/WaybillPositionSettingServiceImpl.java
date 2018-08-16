@@ -45,6 +45,7 @@ public class WaybillPositionSettingServiceImpl implements WaybillPositionSetting
         List<WaybillPositionSetting> list=waybillPositionSettingMapper.selectByDriverPhoneAndCompanyId(dto.getDriverPhone(),dto.getCompanyId());
         if(null != list && !list.isEmpty()){
             dto.setWpsId(list.get(0).getWpsId());
+            dto.setIsDeleted((short)0);
             return modifyWaybillPositionSetting(dto);
         }else{
             return addWaybillPositionSetting(dto);
@@ -88,5 +89,16 @@ public class WaybillPositionSettingServiceImpl implements WaybillPositionSetting
         resultList=waybillPositionSettingMapper.selectByDriverPhoneAndCompanyId(driverPhone,companyId);
         page=new PageInfo(resultList);
         return page;
+    }
+
+    @Override
+    public int cancelDriverPositionSetting(String driverPhone, Long companyId) {
+        List<WaybillPositionSetting> list=waybillPositionSettingMapper.selectByDriverPhoneAndCompanyId(driverPhone,companyId);
+        if(null != list && !list.isEmpty()){
+            WaybillPositionSetting waybillPositionSetting=list.get(0);
+            waybillPositionSetting.setIsDeleted((short)1);
+            return waybillPositionSettingMapper.updateByPrimaryKey(waybillPositionSetting);
+        }
+        return 0;
     }
 }

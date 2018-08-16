@@ -54,4 +54,14 @@ public interface WaybillPositionSettingService {
      * @return
      */
     PageInfo<List<WaybillPositionSetting>> queryDriverPositionSettingList(String driverPhone,Long companyId);
+
+    /**
+     * 司机取消定位设置
+     * @param driverPhone
+     * @param companyId
+     * @return
+     */
+    int cancelDriverPositionSetting(String driverPhone,Long companyId);
+
+
 }

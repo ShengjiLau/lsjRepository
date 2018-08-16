@@ -105,6 +105,23 @@ public class WaybillPositionSettingApi {
         return pageBaseDto;
     }
 
+    @ApiOperation("司机管理--定位设置取消")
+    @RequestMapping(value = "/driver/cancel", method = RequestMethod.POST)
+//    @PreAuthorize("hasRole('ROLE_SYS_ADMIN') or hasAuthority('traffic_own_waybillpositionsetting')")
+    public JSONObject cancelDriverPositionSetting(@ApiParam(value = "司机手机号", required = true) @RequestParam String driverPhone) {
+        Long companyId = SecurityInfoGetter.getCompanyId();
+        int result = waybillPositionSettingService.cancelDriverPositionSetting(driverPhone,companyId);
+        if (result > 0) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 0);
+            jsonObject.put("message", "取消成功");
+            return jsonObject;
+        } else {
+            throw new RuntimeException("取消失败");
+        }
+    }
+
+
     private JSONObject addWaybillPositionSetting(WaybillPositionSettingDto dto){
         Long companyId = SecurityInfoGetter.getCompanyId();
         User loginUser = SecurityInfoGetter.getUser();

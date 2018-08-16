@@ -216,7 +216,7 @@ public class AllotApi {
 					 SheetUtilsGoods.setCell(4, allotProduct.getUnit());
 					 SheetUtilsGoods.setCell(5, allotProduct.getBatchNum());
 					 SheetUtilsGoods.setCell(6, allotProduct.getWarehouseLocCode());
-					 SheetUtilsGoods.setCell(7, allotProduct.getAllotNum().doubleValue());
+					 SheetUtilsGoods.setCell(7, allotProduct.getAllotNum() == null ? null : allotProduct.getAllotNum().doubleValue());
 					 SheetUtilsGoods.setCell(8, allotProduct.getRemark());
 					 goodsRow ++;
 				 }

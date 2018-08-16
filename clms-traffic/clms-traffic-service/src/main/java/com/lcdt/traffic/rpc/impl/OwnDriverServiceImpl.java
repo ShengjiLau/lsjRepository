@@ -2,17 +2,20 @@ package com.lcdt.traffic.rpc.impl;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.lcdt.clms.security.helper.SecurityInfoGetter;
+import com.lcdt.notify.model.TimerQuartzLog;
+import com.lcdt.notify.rpcservice.TimerQuartzLogService;
+import com.lcdt.notify.vo.TimerQuartzLogVo;
 import com.lcdt.traffic.dao.DriverGroupRelationshipMapper;
 import com.lcdt.traffic.dao.OwnDriverCertificateMapper;
 import com.lcdt.traffic.dao.OwnDriverMapper;
+import com.lcdt.traffic.dao.WaybillPositionSettingMapper;
 import com.lcdt.traffic.dto.OwnDriverDto;
-import com.lcdt.traffic.model.DriverGroupRelationship;
-import com.lcdt.traffic.model.OwnDriver;
-import com.lcdt.traffic.model.OwnDriverCertificate;
-import com.lcdt.traffic.model.OwnDriverDao;
+import com.lcdt.traffic.model.*;
+import com.lcdt.traffic.service.LocationService;
 import com.lcdt.traffic.service.OwnDriverService;
 import com.lcdt.traffic.util.RegisterUtils;
 import com.lcdt.userinfo.dto.RegisterDto;
@@ -51,6 +54,15 @@ public class OwnDriverServiceImpl implements OwnDriverService {
 
     @Reference
     public DriverService driverService;
+
+    @Autowired
+    private LocationService locationService;
+
+    @Reference
+    private TimerQuartzLogService timerQuartzLogService;
+
+    @Autowired
+    private WaybillPositionSettingMapper waybillPositionSettingMapper;
 
     @Override
     public int addDriver(OwnDriverDto ownDriverDto) {
@@ -274,6 +286,41 @@ public class OwnDriverServiceImpl implements OwnDriverService {
     @Override
     public List<OwnDriver> driverListByGroupId(Long companyId, String driverGroupId){
         return ownDriverMapper.selectDriverByGroupIds(companyId,driverGroupId);
+    }
+
+    @Override
+    public void driverLocation(Map map) {
+        //查询出需要定位的运单
+        List<WaybillPositionSetting> list = waybillPositionSettingMapper.selectDriverPositionSetting(map);
+        if (list != null && list.size() > 0) {
+            //多线程并行处理需要定位的运单
+            list.parallelStream().forEach(positionSetting -> {
+                //定位
+                JSONObject jsonObject = locationService.queryLocation(positionSetting.getCompanyId(), positionSetting.getDriverPhone(),null,null,null);
+                logger.info("定位公司的companyId：" + positionSetting.getCompanyId() + "； driverPhone：" +positionSetting.getDriverPhone());
+
+                //new 一个定位日志对象
+                TimerQuartzLog timerQuartzLog = new TimerQuartzLog();
+                //判断是否定位成功
+                if (jsonObject.getInteger("code") == 0) {
+                    timerQuartzLog.setExecuteResult(true);
+                } else {
+                    timerQuartzLog.setExecuteResult(false);
+                }
+                //赋值
+                timerQuartzLog.setBusinessCode(positionSetting.getDriverPhone())
+                        .setBusinessType(TimerQuartzLogVo.TRAFFIC_SERVICE)
+                        .setExecuteDesc(jsonObject.getString("message"))
+                        .setCompanyId(positionSetting.getCompanyId())
+                        .setTimerDate(new Date())
+                        .setCreateDate(new Date());
+
+                if(timerQuartzLogService.add(timerQuartzLog)>0){
+                    logger.info("新增定时日志成功");
+                }
+
+            });
+        }
     }
 
 
